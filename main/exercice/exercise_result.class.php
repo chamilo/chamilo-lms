@@ -91,6 +91,7 @@ class ExerciseResult
 		$TBL_TRACK_EXERCISES    	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 		$TBL_TRACK_HOTPOTATOES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
         $TBL_TRACK_ATTEMPT_RECORDING= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+        $TBL_TABLE_LP_MAIN = Database::get_course_table(TABLE_LP_MAIN);
 
     	$cid             = api_get_course_id();
         $course_id       = api_get_course_int_id();
@@ -114,15 +115,17 @@ class ExerciseResult
                         te.start_date as exstart,
                         steps_counter as exstep,
                         exe_user_id as excruid,
-                        te.exe_duration as duration
-                FROM $TBL_EXERCISES  AS ce INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.id) INNER JOIN
-                     $TBL_USER  AS user ON (user.user_id = exe_user_id)
+                        te.exe_duration as duration,
+                        te.orig_lp_id as orig_lp_id,
+                        tlm.name as lp_name
+                FROM $TBL_EXERCISES  AS ce 
+                INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.id) 
+                INNER JOIN $TBL_USER  AS user ON (user.user_id = exe_user_id)
+                LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm ON tlm.id = te.orig_lp_id AND tlm.c_id = ce.c_id
                 WHERE   ce.c_id = $course_id AND
                         te.status != 'incomplete' AND
                         te.exe_cours_id='" . Database :: escape_string($cid) . "'  $user_id_and  $session_id_and AND
-                        ce.active <>-1 AND
-                        orig_lp_id = 0 AND
-                        orig_lp_item_id = 0";
+                        ce.active <>-1";
             $hpsql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").",
                     email,
                     tth.exe_name,
@@ -149,15 +152,18 @@ class ExerciseResult
                     steps_counter as exstep,
                     exe_user_id as excruid,
                     te.exe_duration as duration,
-                    ce.results_disabled as exdisabled
-                        FROM $TBL_EXERCISES  AS ce INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
-                        WHERE   ce.c_id = $course_id AND
-                                te.status != 'incomplete' AND
-                                te.exe_cours_id='" . Database :: escape_string($cid) . "'  $user_id_and $session_id_and AND
-                                ce.active <>-1 AND
-                                orig_lp_id = 0 AND
-                                orig_lp_item_id = 0
-                        ORDER BY userpart2, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
+                    ce.results_disabled as exdisabled,
+                    te.orig_lp_id as orig_lp_id,
+                    tlm.name as lp_name
+                    FROM $TBL_EXERCISES  AS ce 
+                    INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.id) 
+                    INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
+                    LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm ON tlm.id = te.orig_lp_id AND tlm.c_id = ce.c_id
+                    WHERE   ce.c_id = $course_id AND
+                            te.status != 'incomplete' AND
+                            te.exe_cours_id='" . Database :: escape_string($cid) . "'  $user_id_and $session_id_and AND
+                            ce.active <>-1 AND
+                    ORDER BY userpart2, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
 
             $hpsql = "SELECT '', exe_name, exe_result , exe_weighting, exe_date
                             FROM $TBL_TRACK_HOTPOTATOES
@@ -224,6 +230,9 @@ class ExerciseResult
 				$return[$i]['result']  = $results[$i]['exresult'];
 				$return[$i]['max']     = $results[$i]['exweight'];
                 $return[$i]['status']  = $revised ? get_lang('Validated') : get_lang('NotValidated');
+                $return[$i]['lp_id'] = $results[$i]['orig_lp_id'];
+                $return[$i]['lp_name'] = $results[$i]['lp_name'];
+                
 			}
 		}
 
@@ -262,12 +271,12 @@ class ExerciseResult
 	public function exportCompleteReportCSV($document_path='',$user_id=null, $export_user_fields = false, $export_filter = 0, $exercise_id = 0, $hotpotato_name = null) {
 		global $charset;
 		$this->_getExercisesReporting($document_path,$user_id, $export_filter, $exercise_id, $hotpotato_name);
+		
 		$filename = 'exercise_results_'.date('YmdGis').'.csv';
 		if(!empty($user_id)) {
 			$filename = 'exercise_results_user_'.$user_id.'_'.date('YmdGis').'.csv';
 		}
 		$data = '';
-
 
         if (api_is_western_name_order()) {
             if(!empty($this->results[0]['first_name'])) {
@@ -303,6 +312,7 @@ class ExerciseResult
 		$data .= get_lang('Score').';';
 		$data .= get_lang('Total').';';
         $data .= get_lang('Status').';';
+        $data .= get_lang('ToolLearnpath').';';
 		$data .= "\n";
 
 		//results
@@ -334,6 +344,7 @@ class ExerciseResult
 			$data .= str_replace("\r\n",'  ',$row['result']).';';
 			$data .= str_replace("\r\n",'  ',$row['max']).';';
             $data .= str_replace("\r\n",'  ',$row['status']).';';
+            $data .= str_replace("\r\n",'  ',$row['lp_name']).';';
 			$data .= "\n";
 		}
 
@@ -432,6 +443,8 @@ class ExerciseResult
 		$worksheet->write($line,$column, get_lang('Total'));
 		$column++;
         $worksheet->write($line,$column, get_lang('Status'));
+		$column++;
+        $worksheet->write($line,$column, get_lang('ToolLearnpath'));
 		$line++;
 
 		foreach ($this->results as $row) {
@@ -478,6 +491,8 @@ class ExerciseResult
 			$worksheet->write($line,$column,$row['max']);
 			$column++;
             $worksheet->write($line,$column,$row['status']);
+			$column++;
+            $worksheet->write($line,$column,$row['lp_name']);
 			$line++;
 		}
 		//output the results

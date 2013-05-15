@@ -13,20 +13,70 @@
  * Base transaction log class.
  */
 abstract class TransactionLog {
+  /**
+   * Represents the local branch, as stored in branch_transaction.branch_id.
+   */
   const BRANCH_LOCAL = 1;
+  /**
+   * Represents the local transaction, as stored in branch_transaction.transaction_id.
+   *
+   * This value means it is originated in this chamilo installation.
+   */
   const TRANSACTION_LOCAL = 0;
+  /**
+   * branch_transaction.status_id for local transactions.
+   */
   const STATUS_LOCAL = 0;
+  /**
+   * branch_transaction.status_id for import pending transactions.
+   */
   const STATUS_TO_BE_EXECUTED = 1;
+  /**
+   * branch_transaction.status_id for successfully imported transactions.
+   */
   const STATUS_SUCCESSFUL = 2;
+  /**
+   * branch_transaction.status_id for failed imported transactions.
+   */
   const STATUS_FAILED = 4;
+  /**
+   * branch_transaction.status_id for abandoned transactions.
+   *
+   * i.e. after some retries?
+   */
   const STATUS_ABANDONNED = 5;
 
+  /**
+   * A local place to store the branch transaction table name.
+   */
   protected static $table;
+  /**
+   * A local place to store the branch data transaction table name.
+   */
   protected static $data_table;
+  /**
+   * The action the transaction is performing.
+   *
+   * This will be normally declared on a child class.
+   */
   public $action;
+  /**
+   * The name of the related controller class.
+   */
   protected $controller_class = 'TransactionLogController';
+  /**
+   * A place to store an instace of the related controller class.
+   */
   public $controller;
 
+  /**
+   * Basic building contructor.
+   *
+   * @param array $data
+   *   An array with some values to initialize the object. One of the
+   *   following: id, branch_id, transaction_id, item_id, orig_id, dest_id,
+   *   info, status_id, data.
+   */
   public function __construct($data) {
     if (empty($this->action)) {
       throw new Exception('No action set at the creation of the transaction class.');
@@ -57,7 +107,7 @@ abstract class TransactionLog {
   }
 
   /**
-   * Adds a transaction to the database.
+   * Persists a transaction to the database.
    */
   public function save() {
     $transaction_row = array();
@@ -87,6 +137,9 @@ abstract class TransactionLog {
     }
   }
 
+  /**
+   * Persists data to the transaction data table if needed.
+   */
   public function saveData() {
     $data = $this->loadData();
     if (empty($this->data)) {
@@ -106,6 +159,9 @@ abstract class TransactionLog {
 
   /**
    * Loading for data table.
+   *
+   * @return array
+   *   Branch transaction data as array corresponding to current object.
    */
   public function loadData() {
     if (empty($this->id)) {
@@ -118,6 +174,12 @@ abstract class TransactionLog {
     }
   }
 
+  /**
+   * Retrieves transaction settings.
+   *
+   * @return array
+   *   Transaction log setting values identified by its action as key.
+   */
   public static function getTransactionSettings($reset = FALSE) {
     static $settings;
     if (isset($settings) && !$reset) {
@@ -136,7 +198,13 @@ abstract class TransactionLog {
  * Controller class for transactions.
  */
 class TransactionLogController {
+  /**
+   * A local place to store the branch transaction table name.
+   */
   protected $table;
+  /**
+   * A local place to store the branch transaction data table name.
+   */
   protected $data_table;
 
   public function __construct() {
@@ -146,6 +214,13 @@ class TransactionLogController {
 
   /**
    * General load method.
+   *
+   * @param array $db_fields
+   *   An array containing equal conditions to combine wih AND to add to where.
+   *   i.e array('branch_id' => 1) means WHERE 'branch_id' = 1.
+   *
+   * @return array
+   *   A list of TransactionLog object that match passed conditions.
    */
   public function load($db_fields) {
     foreach ($db_fields as $db_field => $db_value) {
@@ -162,6 +237,12 @@ class TransactionLogController {
 
   /**
    * Loads by id.
+   *
+   * @param int
+   *   branch_transaction.id
+   *
+   * @return boolean|TransactionLog
+   *   FALSE if not found, or the corresponding object.
    */
   public function load_by_id($id) {
     $transactions = $this->load(array('id' => $id));
@@ -173,6 +254,14 @@ class TransactionLogController {
 
   /**
    * Load by branch and transaction.
+   *
+   * @param int $branch_id
+   *   The branch_transaction.branch_id to search.
+   * @param string $transaction_id
+   *   The branch_transaction.transaction_id to search.
+   *
+   * @return boolean|TransactionLog
+   *   FALSE if not found, or the corresponding object.
    */
   public function load_by_branch_and_transaction($branch_id, $transaction_id) {
     $transactions = $this->load(array('branch_id' => $branch_id, 'transaction_id' => $transaction_id));
@@ -183,13 +272,36 @@ class TransactionLogController {
   }
 }
 
+/**
+ * Exercise tool attempt transaction.
+ */
 class ExerciseAttemptTransactionLog extends TransactionLog {
+  /**
+   * {@inheritdoc}
+   */
   public $action = 'exercise_attempt';
+
+  /**
+   * {@inheritdoc}
+   */
   public $controller_class = 'ExerciseAttemptTransactionLogController';
 }
 
+/**
+ * Controller for exercise tool attempt transactions.
+ */
 class ExerciseAttemptTransactionLogController extends TransactionLogController {
+  /**
+   * {@inheritdoc}
+   */
   public $class = 'ExerciseAttemptTransactionLog';
+
+  /**
+   * Retrieves an individual exercise attempt transaction.
+   *
+   * @return boolean|ExerciseAttemptTransactionLog
+   *   FALSE if not found, or the corresponding object.
+   */
   public function load_exercise_attempt($exercise_id, $attempt_id, $branch_id = TransactionLog::BRANCH_LOCAL) {
     $exercise_attempt_id = sprintf('%s:%s', $exercise_id, $attempt_id);
     $transactions = $this->load(array('branch_id' => $branch_id, 'item_id' => $exercise_attempt_id));

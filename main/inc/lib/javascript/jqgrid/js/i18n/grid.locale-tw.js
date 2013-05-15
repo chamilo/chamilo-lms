@@ -20,10 +20,8 @@ $.extend($.jgrid,{
 		caption: "搜尋...",
 		Find: "搜尋",
 		Reset: "重設",
-		odata : ['等於 ', '不等於 ', '小於 ', '小於等於 ','大於 ','大於等於 ', '開始於 ','不開始於 ','在其中 ','不在其中 ','結束於 ','不結束於 ','包含 ','不包含 '],
-		groupOps: [	{ op: "AND", text: "所有" },	{ op: "OR",  text: "任一" }	],
-		matchText: " 匹配",
-		rulesText: " 規則"
+		odata: [{ oper:'eq', text:"等於 "},{ oper:'ne', text:"不等於 "},{ oper:'lt', text:"小於 "},{ oper:'le', text:"小於等於 "},{ oper:'gt', text:"大於 "},{ oper:'ge', text:"大於等於 "},{ oper:'bw', text:"開始於 "},{ oper:'bn', text:"不開始於 "},{ oper:'in', text:"在其中 "},{ oper:'ni', text:"不在其中 "},{ oper:'ew', text:"結束於 "},{ oper:'en', text:"不結束於 "},{ oper:'cn', text:"包含 "},{ oper:'nc', text:"不包含 "}],
+		groupOps: [	{ op: "AND", text: "所有" },	{ op: "OR",  text: "任一" }	]
 	},
 	edit : {
 		addCaption: "新增記錄",
@@ -105,6 +103,7 @@ $.extend($.jgrid,{
 			S: function (j) {return j < 11 || j > 13 ? ['st', 'nd', 'rd', 'th'][Math.min((j - 1) % 10, 3)] : 'th'},
 			srcformat: 'Y-m-d',
 			newformat: 'm-d-Y',
+			parseRe : /[Tt\\\/:_;.,\t\s-]/,
 			masks : {
 				ISO8601Long:"Y-m-d H:i:s",
 				ISO8601Short:"Y-m-d",

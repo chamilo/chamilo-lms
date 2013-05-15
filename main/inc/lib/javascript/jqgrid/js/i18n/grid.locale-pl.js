@@ -24,10 +24,8 @@ $.extend($.jgrid,{
 		caption: "Wyszukiwanie...",
 		Find: "Szukaj",
 		Reset: "Czyść",
-		odata : ['dokładnie', 'różne od', 'mniejsze od', 'mniejsze lub równe', 'większe od', 'większe lub równe', 'zaczyna się od', 'nie zaczyna się od', 'jest w', 'nie jest w', 'kończy się na', 'nie kończy się na', 'zawiera', 'nie zawiera'],
-		groupOps: [	{ op: "AND", text: "oraz" },	{ op: "OR",  text: "lub" }	],
-		matchText: " pasuje",
-		rulesText: " reguły"
+		odata: [{ oper:'eq', text:"dokładnie"},{ oper:'ne', text:"różne od"},{ oper:'lt', text:"mniejsze od"},{ oper:'le', text:"mniejsze lub równe"},{ oper:'gt', text:"większe od"},{ oper:'ge', text:"większe lub równe"},{ oper:'bw', text:"zaczyna się od"},{ oper:'bn', text:"nie zaczyna się od"},{ oper:'in', text:"jest w"},{ oper:'ni', text:"nie jest w"},{ oper:'ew', text:"kończy się na"},{ oper:'en', text:"nie kończy się na"},{ oper:'cn', text:"zawiera"},{ oper:'nc', text:"nie zawiera"}],
+		groupOps: [	{ op: "AND", text: "oraz" },	{ op: "OR",  text: "lub" }	]
 	},
 	edit : {
 		addCaption: "Dodaj rekord",
@@ -108,6 +106,7 @@ $.extend($.jgrid,{
 			S: function (j) {return '';},
 			srcformat: 'Y-m-d',
 			newformat: 'd.m.Y',
+			parseRe : /[Tt\\\/:_;.,\t\s-]/,
 			masks : {
 				ISO8601Long: "Y-m-d H:i:s",
 				ISO8601Short: "Y-m-d",

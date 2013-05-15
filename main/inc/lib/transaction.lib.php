@@ -138,8 +138,6 @@ abstract class TransactionLog {
 class TransactionLogController {
   protected $table;
   protected $data_table;
-  protected $action;
-  protected $class;
 
   public function __construct() {
     $this->table = Database::get_main_table(TABLE_BRANCH_TRANSACTION);

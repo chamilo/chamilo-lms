@@ -114,6 +114,14 @@ $settingCourseConditions = function (Request $request) use ($cidReset, $app) {
     }
 };
 
+$userCourseAdmin = function(Request $request) use ($app) {
+    if (api_is_allowed_to_edit()) {
+        return null;
+    } else {
+        return $app->abort(401);
+    }
+};
+
 /** Checks user permissions inside a course teacher? coach? etc */
 $userPermissionsInsideACourse = function (Request $request) use ($app) {
 
@@ -125,7 +133,6 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
     $is_platformAdmin = api_is_platform_admin();
     $courseReset      = Session::read('courseReset');
 
-
     //$app['monolog']->addDebug($courseReset);
     //$app['monolog']->addDebug($courseId);
 
@@ -135,7 +142,6 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
     $is_courseTutor  = false;
     $is_courseCoach  = false;
     $is_sessionAdmin = false;
-    //Session::erase('_courseUser');
 
     if ($courseReset) {
 
@@ -159,9 +165,7 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
                     $sessionId
                 ) || $user_pass_open_course;
                 if (!$user_is_subscribed) {
-                    $url = api_get_path(
-                        WEB_CODE_PATH
-                    ).'course_info/legal.php?course_code='.$courseInfo['code'].'&session_id='.$sessionId;
+                    $url = api_get_path(WEB_CODE_PATH).'course_info/legal.php?course_code='.$courseInfo['code'].'&session_id='.$sessionId;
                     header('Location: '.$url);
                     exit;
                 }
@@ -442,7 +446,8 @@ $app->match('/courses/{cidReq}/{id_session}/', 'course_home.controller:indexActi
     ->assert('id_session', '\d+')
     ->assert('type', '.+')
     ->before($settingCourseConditions)
-    ->before($userPermissionsInsideACourse);
+    ->before($userPermissionsInsideACourse)
+    ->bind('course');
 
 $app->match('/courses/{cidReq}/', 'course_home.controller:indexAction', 'GET|POST')
     ->assert('type', '.+')
@@ -545,7 +550,56 @@ $app->match('/editor/connector', 'editor.controller:connectorAction', 'GET|POST'
     ->bind('editor_connector');
 
 /** Exercises */
-$app->match('/exercise/question-pool', 'exercise_manager.controller:questionPoolAction', 'POST')
+$app->match('courses/{cidReq}/{id_session}/exercise/question-pool', 'exercise_manager.controller:questionPoolAction', 'POST')
     ->before($settingCourseConditions)
     ->before($userPermissionsInsideACourse)
-    ->bind('admin_category_delete');
+    ->bind('exercise_question_pool_global');
+
+$app->match('courses/{cidReq}/{id_session}/exercise/{exerciseId}/question-pool', 'exercise_manager.controller:questionPoolAction', 'GET|POST')
+    ->assert('exerciseId', '\d+')
+    ->before($settingCourseConditions)
+    ->before($userCourseAdmin)
+    ->before($userPermissionsInsideACourse)
+    ->bind('exercise_question_pool');
+
+$app->match('courses/{cidReq}/{id_session}/exercise/{exerciseId}/copy-question/{questionId}', 'exercise_manager.controller:copyQuestionAction', 'GET|POST')
+    ->assert('questionId', '\d+')
+    ->assert('exerciseId', '\d+')
+    ->before($settingCourseConditions)
+    ->before($userCourseAdmin)
+    ->before($userPermissionsInsideACourse)
+    ->bind('exercise_copy_question');
+
+/** Course home instead of courses/MATHS the new URL is web/courses/MATHS  */
+$app->match('/courses/{cidReq}/{id_session}/exercise/question/{id}', 'exercise_manager.controller:getQuestionAction', 'GET')
+    ->assert('id_session', '\d+')
+    ->assert('id', '\d+')
+    ->assert('type', '.+')
+    ->before($settingCourseConditions)
+    ->before($userPermissionsInsideACourse)
+    ->before($userCourseAdmin)
+    ->bind('question_show');
+
+$app->match('/courses/{cidReq}/{id_session}/exercise/{exerciseId}/question/{id}', 'exercise_manager.controller:getQuestionAction', 'GET')
+    ->assert('id_session', '\d+')
+    ->assert('exerciseId', '\d+')
+    ->assert('id', '\d+')
+    ->assert('type', '.+')
+    ->before($settingCourseConditions)
+    ->before($userPermissionsInsideACourse)
+    ->before($userCourseAdmin)
+    ->bind('exercise_question_show');
+
+$app->match('/courses/{cidReq}/{id_session}/exercise/{exerciseId}/dashboard', 'exercise_manager.controller:dashboardAction', 'GET')
+    ->assert('id_session', '\d+')
+    ->assert('exerciseId', '\d+')
+    ->assert('type', '.+')
+    ->before($settingCourseConditions)
+    ->before($userPermissionsInsideACourse)
+    ->before($userCourseAdmin)
+    ->bind('exercise_dashboard');
+
+$app->match('/courses/{cidReq}/{id_session}/exercise/question/{id}/edit', 'exercise_manager.controller:editQuestionAction', 'GET|POST')
+    ->assert('type', '.+')
+    ->before($adminAndQuestionManagerCondition)
+    ->bind('exercise_question_edit');

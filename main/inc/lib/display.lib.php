@@ -18,9 +18,9 @@
  */
 class Display
 {
-    /* The main template */
-    static $global_template;
-    static $preview_style = null;
+    /** The main template */
+    public static $global_template;
+    public static $preview_style = null;
 
     public function __construct()
     {

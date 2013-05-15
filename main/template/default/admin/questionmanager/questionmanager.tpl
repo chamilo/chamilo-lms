@@ -6,11 +6,11 @@
                 <h4>{{ 'Admin'  | get_lang }}</h4>
                 <ul>
                     <li>
-                        <a href="{{ app.url_generator.generate('admin_questions') }}">
+                        <a href="{{ url('admin_questions') }}">
                         {{ 'Questions' | get_lang }}</a>
                     </li>
                     <li><a href="{{ _p.web }}main/admin/extra_fields.php?type=question">{{ 'ExtraFields' | get_lang }}</a></li>
-                    <li><a href="{{ app.url_generator.generate('admin_category_new')}}">{{ 'AddACategory' | get_lang }}</a></li>
+                    <li><a href="{{ url('admin_category_new')}}">{{ 'AddACategory' | get_lang }}</a></li>
                 </ul>
 
             </div>

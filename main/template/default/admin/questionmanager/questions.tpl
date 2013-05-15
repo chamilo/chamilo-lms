@@ -124,12 +124,12 @@
         <h3>{{  category.title }}
 
         {% if category.cId == 0 %}
-            <a href="{{ app.url_generator.generate('admin_category_edit', {id : category.iid}) }}">
+            <a href="{{ url('admin_category_edit', {id : category.iid}) }}">
                 <img src="{{ "edit.png"|icon(22) }}">
             </a>
         {% endif %}
         {% if category_children == 0 %}
-            &nbsp; <a href="{{ app.url_generator.generate('admin_category_delete', {id : category.iid}) }}">
+            &nbsp; <a href="{{ url('admin_category_delete', {id : category.iid}) }}">
                 <img src="{{ "delete.png"|icon(22) }}">
             </a>
         {% endif %}

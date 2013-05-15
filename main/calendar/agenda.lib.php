@@ -481,7 +481,7 @@ class Agenda
             $group_memberships = GroupManager::get_group_ids($course_id, api_get_user_id());
             $user_id = api_get_user_id();
         } else {
-            $group_memberships = array_keys($group_name_list);
+            $group_memberships = GroupManager::get_group_ids($course_id, $user_id);
         }
 
         $tlb_course_agenda = Database::get_course_table(TABLE_AGENDA);
@@ -492,13 +492,17 @@ class Agenda
         }
 
         $session_id = intval($session_id);
-
+       
         if (is_array($group_memberships) && count($group_memberships) > 0) {
             if (api_is_allowed_to_edit()) {
-                if (!empty($user_id)) {
-                    $where_condition = "( ip.to_user_id = $user_id AND ip.to_group_id is null OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
+                if (!empty($group_id)){
+                    $where_condition = "( ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) "; 
                 } else {
-                    $where_condition = "( ip.to_group_id is null OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
+                    if (!empty($user_id)) {
+                        $where_condition = "( ip.to_user_id = $user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
+                    } else {
+                        $where_condition = "( ip.to_group_id is null OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
+                    }
                 }
             } else {
                 $where_condition = "( ip.to_user_id = $user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
@@ -516,7 +520,11 @@ class Agenda
                     GROUP BY id";
         } else {
             if (api_is_allowed_to_edit()) {
-                $where_condition = "";
+                if ($user_id == 0) {
+                    $where_condition = "";
+                } else {
+                    $where_condition = "( ip.to_user_id=".$user_id. ") AND ";
+                }
             } else {
                 $where_condition = "( ip.to_user_id=$user_id OR ip.to_group_id='0') AND ";
             }

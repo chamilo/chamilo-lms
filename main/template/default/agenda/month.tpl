@@ -179,10 +179,34 @@ $(document).ready(function() {
 							$.ajax({
 								url: url+'&'+params,
 								success:function(data) {
-									calendar.fullCalendar("refetchEvents");
-									calendar.fullCalendar("rerenderEvents");
+									var user = $('#users_to_send_id').val();
+                                    if (user.length > 1) {
+                                        user = 0;
+                                    } else {
+                                        user = user[0];
+                                    }
+                                    var user_length = String(user).length;
+                                    if (String(user).substring(0,1) == 'G') {
+                                        var user_id = String(user).substring(6,user_length);
+                                        var  user_id = "G:"+user_id;
+                                    } else {
+                                        var user_id = String(user).substring(5,user_length);
+                                    }
+                                    var temp = "&user_id="+user_id;
+                                    var position =String(window.location).indexOf("&user");
+                                    var url_length = String(window.location).length;
+                                    var url = String(window.location).substring(0,position)+temp;
+                                    if (position > 0) {
+                                     window.location.replace(url);
+                                    } else {
+                                        url = String(window.location)+temp;
+                                        window.location.replace(url);
+                                    }
+                                	//calendar.fullCalendar("refetchEvents");
+									//calendar.fullCalendar("rerenderEvents");
 									$("#dialog-form").dialog("close");
-								}
+										
+								}							
 							});
 						}
 					},

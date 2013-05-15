@@ -71,6 +71,7 @@ class QuestionManagerController
             $params = $form->exportValues();
             $params['question_id'] = $id;
             $field_value->save_field_values($params);
+            $app['template']->assign('message', \Display::return_message(get_lang('ItemUpdated'), 'success'));
         }
 
         $app['template']->assign('question', $question);
@@ -334,15 +335,13 @@ class QuestionManagerController
             $categoryId = $objcat->addCategoryInBDD();
             if ($categoryId) {
                 $message = \Display::return_message(get_lang('AddCategoryDone'), 'confirmation');
-                $url     = $app['url_generator']->generate('admin_category_show', array('id' => $categoryId));
-
+                //$url = $app['url_generator']->generate('admin_category_show', array('id' => $categoryId));
+                $url = $app['url_generator']->generate('admin_questions');
                 return $app->redirect($url);
             } else {
                 $message = \Display::return_message(get_lang('AddCategoryNameAlreadyExists'), 'warning');
             }
         }
-        //$app['template']->assign('message', $message);
-
         $app['template']->assign('form', $form->toHtml());
         $response = $app['template']->render_template('admin/questionmanager/edit_category.tpl');
 

@@ -104,7 +104,7 @@ class Testcategory
         }
 
         // Only admins can add global categories
-        if ($this->type == 'global' && empty($course_id) && !api_is_platform_admin()) {
+        if ($this->type == 'global' && empty($course_id) && (!api_is_platform_admin() && !api_is_question_manager())) {
             return false;
         }
 

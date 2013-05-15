@@ -270,6 +270,8 @@ class Template
     {
         //Setting course id
         $this->course_id = api_get_course_int_id();
+        $this->app['course_code'] = api_get_course_id();
+        $this->app['session_id'] = api_get_session_id();
     }
 
     /**

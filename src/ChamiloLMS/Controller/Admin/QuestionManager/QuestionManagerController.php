@@ -25,7 +25,7 @@ class QuestionManagerController
     }
 
     /**
-     * Edits a question
+     * Edits a question for the question manager
      *
      * @param Application $app
      * @param int $id
@@ -59,21 +59,21 @@ class QuestionManagerController
 
         // Creating a new form
         $form = new \FormValidator('edit_question', 'post', $url);
-        $question->createForm($form);
-        $form->freeze();
-        $question->createAnswersForm($form);
 
-        $submitQuestion = $app['request']->get('submitQuestion');
+        $extraFields = new \ExtraField('question');
+        $extraFields->add_elements($form, $id);
+
+        $form->addElement('button', 'submit', get_lang('Update'));
 
         // If form was submitted.
-        if ($form->validate() && isset($submitQuestion)) {
-            // Save question.
-            $question->processCreation($form, $exercise);
-
-            // Save answers.
-            $question->processAnswersCreation($form);
+        if ($form->validate()) {
+            $field_value = new \ExtraFieldValue('question');
+            $params = $form->exportValues();
+            $params['question_id'] = $id;
+            $field_value->save_field_values($params);
         }
 
+        $app['template']->assign('question', $question);
         $app['template']->assign('form', $form->toHtml());
         $response = $app['template']->render_template('admin/questionmanager/edit_question.tpl');
 

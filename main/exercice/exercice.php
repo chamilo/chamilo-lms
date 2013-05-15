@@ -414,7 +414,8 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
         echo Display::return_icon('folder_global_category.png', get_lang('QuestionGlobalCategory'), array(), ICON_SIZE_MEDIUM);
         echo '</a>';
     }
-    echo '<a href="question_pool.php">';
+
+    echo '<a href="'.api_get_path(WEB_PUBLIC_PATH).'courses/'.api_get_course_path().'/'.api_get_session_id().'/exercise/question-pool">';
     echo Display::return_icon('database.png', get_lang('QuestionPool'), array('style' => 'width:32px'));
     echo '</a>';
 

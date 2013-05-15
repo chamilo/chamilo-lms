@@ -65,9 +65,12 @@ switch ($action) {
         if (!in_array($sord, array('asc','desc'))) {
             $sord = 'desc';
         }
+
         // get index row - i.e. user click to sort $sord = $_GET['sord'];
         // get the direction
-        if (!$sidx) $sidx = 1;
+        if (!$sidx) {
+            $sidx = 1;
+        }
 
         $track_exercise        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $user_table            = Database::get_main_table(TABLE_MAIN_USER);
@@ -127,7 +130,7 @@ switch ($action) {
 
         $result = Database::query($sql);
         $results = array();
-        while ($row = Database::fetch_array($result,'ASSOC')){
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
             $results[] = $row;
         }
 

@@ -1304,16 +1304,17 @@ EOF;
         $condition_array = array();
 
         foreach ($filters->rules as $rule) {
+
             if (strpos($rule->field, $stringToSearch) === false) {
                 //normal fields
                 $field = $rule->field;
-                if (!empty($rule->data) && $rule->data != -1) {
+
+                if (isset($rule->data) && $rule->data != -1) {
                     $condition_array[] = get_where_clause($field, $rule->op, $rule->data);
                 }
             } else {
-                //Extra fields
+                // Extra fields
 
-                //normal
                 if (strpos($rule->field, '_second') === false) {
                     //No _second
                     $original_field = str_replace($stringToSearch, '', $rule->field);
@@ -1329,12 +1330,13 @@ EOF;
                             $data = explode('#', $rule->data);
                             $rule->data = $data[1];
                         }
-                        if (!empty($rule->data)) {
+
+                        if (!isset($rule->data)) {
                             $condition_array[] = ' ('.get_where_clause($rule->field, $rule->op, $rule->data).') ';
                             $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
                         }
                     } else {
-                        if (!empty($rule->data)) {
+                        if (isset($rule->data)) {
                             if ($rule->data == -1) {
                                 continue;
                             }
@@ -1350,7 +1352,10 @@ EOF;
                     $my_field = str_replace('_second', '', $rule->field);
                     $original_field = str_replace($stringToSearch, '', $my_field);
                     $field_option = $this->get_handler_field_info_by_field_variable($original_field);
-                    $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
+                    $extra_fields[] = array(
+                        'field' => $rule->field,
+                        'id' => $field_option['id']
+                    );
                 }
             }
         }

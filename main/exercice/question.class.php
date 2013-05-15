@@ -44,6 +44,7 @@ abstract class Question
     public $submitClass;
     public $submitText;
     public $setDefaultQuestionValues = false;
+    public $c_id = null;
 
     public static $questionTypes = array(
         UNIQUE_ANSWER                          => array('unique_answer.class.php', 'UniqueAnswer'),
@@ -154,7 +155,6 @@ abstract class Question
         $TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
-        //$sql = "SELECT * FROM $TBL_QUESTIONS WHERE iid = $id AND c_id = $course_id";
         $sql = "SELECT * FROM $TBL_QUESTIONS WHERE iid = $id";
 
         $result = Database::query($sql);
@@ -178,8 +178,8 @@ abstract class Question
                 $objQuestion->parent_id     = $object->parent_id;
                 $objQuestion->category_list = Testcategory::getCategoryForQuestion($id);
                 $objQuestion->exercise      = $exercise;
+                $objQuestion->c_id          = $object->c_id;
 
-                //$sql = "SELECT exercice_id FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id = $id";
                 $sql = "SELECT exercice_id FROM $TBL_EXERCICE_QUESTION WHERE question_id = $id";
                 $result_exercise_list = Database::query($sql);
 
@@ -1680,10 +1680,13 @@ abstract class Question
             echo Display::return_icon('database_na.png', get_lang('GetExistingQuestion'));
         } else {
             if ($feedback_type == 1) {
-                echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&type=1&fromExercise='.$exerciseId.'">';
+                //echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&type=1&fromExercise='.$exerciseId.'">';
             } else {
-                echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&fromExercise='.$exerciseId.'">';
+                //echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&fromExercise='.$exerciseId.'">';
             }
+
+            echo $url = '<a href="'.api_get_path(WEB_PUBLIC_PATH).'courses/'.api_get_course_path().'/'.api_get_session_id().'/exercise/'.$exerciseId.'/question-pool">';
+
             echo Display::return_icon('database.png', get_lang('GetExistingQuestion'));
         }
         echo '</a>';
@@ -1991,9 +1994,10 @@ abstract class Question
 
     /**
      * Get question columns needed for the new question pool page
+     * @param int course code
      * @return array
      */
-    public static function getQuestionColumns()
+    public static function getQuestionColumns($courseCode = null)
     {
         // The order is important you need to check the the $column variable in the model.ajax.php file
         //$columns = array('id', get_lang('Name'), get_lang('Description'));
@@ -2022,23 +2026,23 @@ abstract class Question
             )*/
         );
 
+        // Extra field rules.
         $extraField = new \ExtraField('question');
-
         $rules = $extraField->getRules($columns, $columnModel);
 
-        // Exercise rules
-        self::getRules($rules, $columns, $columnModel);
+        // Exercise rules.
+        self::getRules($courseCode, $rules, $columns, $columnModel);
 
         $columns[] = get_lang('Actions');
 
-         $columnModel[] = array(
-             'name'      => 'actions',
-             'index'     => 'actions',
-             'width'     => '30',
-             'align'     => 'left',
-             'formatter' => 'action_formatter',
-             'sortable'  => 'false'
-         );
+        $columnModel[] = array(
+            'name'      => 'actions',
+            'index'     => 'actions',
+            'width'     => '30',
+            'align'     => 'left',
+            'formatter' => 'action_formatter',
+            'sortable'  => 'false'
+        );
 
         foreach ($columnModel as $col_model) {
             $simple_column_name[] = $col_model['name'];
@@ -2059,7 +2063,7 @@ abstract class Question
      * @param array $options
      * @return array
      */
-    public static function getQuestions($categoryId, $options, $get_count = false)
+    public static function getQuestions($categoryId, $exerciseId, $courseId, $options, $get_count = false)
     {
         $questionTable = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
@@ -2106,11 +2110,10 @@ abstract class Question
         $where = $options['where'];
 
         $newQuestionPoolField = array();
-        foreach ($options['question'] as $question) {
-            if (isset($questionPoolFields[$question['field']])) {
-                $newQuestionPoolField[$question['field']] = $questionPoolFields[$question['field']];
-                if ($question['data'] == -1) {
-
+        if (isset($options['question'])) {
+            foreach ($options['question'] as $question) {
+                if (isset($questionPoolFields[$question['field']])) {
+                    $newQuestionPoolField[$question['field']] = $questionPoolFields[$question['field']];
                 }
             }
         }
@@ -2127,7 +2130,6 @@ abstract class Question
                 $inject_question_fields .= $option['inject_fields'];
             }
         }
-        //var_dump($inject_question_fields);
 
         $options['where'] = $where;
 
@@ -2148,22 +2150,40 @@ abstract class Question
             $select = " SELECT s.*, $inject_extra_fields $inject_question_fields 1 ";
         }
 
-        $categoryCondition = null;
+        $extraCondition = null;
 
         if (!empty($categoryId)) {
             $categoryRelQuestionTable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-            $categoryCondition = " INNER JOIN $categoryRelQuestionTable c ON (s.iid = c.question_id)";
+            $extraCondition = " INNER JOIN $categoryRelQuestionTable c ON (s.iid = c.question_id)";
             $categoryId = intval($categoryId);
             $where .= " AND category_id = $categoryId ";
         }
 
-        $query = " $select FROM $questionTable s $inject_joins $categoryCondition WHERE 1=1 $where $inject_where $order $limit";
+        if (!empty($exerciseId)) {
+            $exerciseRelQuestionTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+            $extraCondition .= " INNER JOIN $exerciseRelQuestionTable e ON (s.iid = e.question_id)";
+            $exerciseId = intval($exerciseId);
+            $where .= " AND exercice_id = $exerciseId ";
+        }
+
+        if (!empty($courseId)) {
+            $courseId = intval($courseId);
+            $where .= " AND s.c_id = $courseId ";
+        }
+
+        $query = " $select FROM $questionTable s $inject_joins $extraCondition WHERE 1=1 $where $inject_where $order $limit";
         //echo $query.'<br />';
 
         $result = Database::query($query);
         $questions = array();
         if (Database::num_rows($result)) {
             $questions = Database::store_result($result, 'ASSOC');
+            foreach ($questions as &$question) {
+                if (empty($question['c_id'])) {
+                    /*var_dump($question);
+                    $question['actions'] = 'ddd';*/
+                }
+            }
             if ($get_count) {
                 return $questions[0]['total_rows'];
             }
@@ -2176,7 +2196,14 @@ abstract class Question
         return Display::label($title, 'warning');
     }
 
-    public static function getRules(&$rules, &$columns, &$column_model)
+    /**
+     * @param $courseCode
+     * @param $rules
+     * @param $columns
+     * @param $column_model
+     * @return array
+     */
+    public static function getRules($courseCode, &$rules, &$columns, &$column_model)
     {
         // sessions
         // course
@@ -2185,43 +2212,47 @@ abstract class Question
         // difficult
         // type
 
-        // Session
-        $sessionList = SessionManager::get_sessions_by_general_coach(api_get_user_id());
-        $fields = array();
-        if (!empty($sessionList)) {
-            $new_options = array();
-            $new_options[] = "-1:".get_lang('All');
-            foreach ($sessionList as $session) {
-                $new_options[] = "{$session['id']}:{$session['name']}";
+        if (empty($courseCode)) {
+
+            // Session
+            $sessionList = SessionManager::get_sessions_by_general_coach(api_get_user_id());
+            $fields = array();
+            if (!empty($sessionList)) {
+                $new_options = array();
+                $new_options[] = "-1:".get_lang('All');
+                foreach ($sessionList as $session) {
+                    $new_options[] = "{$session['id']}:{$session['name']}";
+                }
+                $string = implode(';', $new_options);
+                $fields[] = array(
+                    'field_display_text' => get_lang('Session'),
+                    'field_variable' => 'session_id',
+                    'field_type' => ExtraField::FIELD_TYPE_SELECT,
+                    'field_default_value' => null,
+                    'field_options' => $string
+                );
             }
-            $string = implode(';', $new_options);
-            $fields[] = array(
-                'field_display_text' => get_lang('Session'),
-                'field_variable' => 'session_id',
-                'field_type' => ExtraField::FIELD_TYPE_SELECT,
-                'field_default_value' => null,
-                'field_options' => $string
-            );
-        }
 
-        // Courses
+            // Courses
+            $courseList = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());
 
-        $courseList = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());
-
-        if (!empty($courseList)) {
-            $new_options = array();
-            $new_options[] = "-1:".get_lang('All');
-            foreach ($courseList as $course) {
-                $new_options[] = "{$course['id']}:{$course['title']}";
+            if (!empty($courseList)) {
+                $new_options = array();
+                $new_options[] = "-1:".get_lang('All');
+                foreach ($courseList as $course) {
+                    $new_options[] = "{$course['id']}:{$course['title']}";
+                }
+                $string = implode(';', $new_options);
+                $fields[] = array(
+                    'field_display_text' => get_lang('Course'),
+                    'field_variable' => 'c_id',
+                    'field_type' => ExtraField::FIELD_TYPE_SELECT,
+                    'field_default_value' => null,
+                    'field_options' => $string
+                );
             }
-            $string = implode(';', $new_options);
-            $fields[] = array(
-                'field_display_text' => get_lang('Course'),
-                'field_variable' => 'c_id',
-                'field_type' => ExtraField::FIELD_TYPE_SELECT,
-                'field_default_value' => null,
-                'field_options' => $string
-            );
+        } else {
+            $courseList = array(api_get_course_info());
         }
 
         // Categories
@@ -2275,6 +2306,7 @@ abstract class Question
         if (!empty($exerciseList)) {
             $new_options = array();
             $new_options[] = "-1:".get_lang('All');
+            $new_options[] = "0:".get_lang('Orphan');
             foreach ($exerciseList as $exercise) {
                 $new_options[] = "{$exercise['iid']}:{$exercise['title']}";
             }
@@ -2287,6 +2319,7 @@ abstract class Question
                 'field_options' => $string
             );
         }
+
 
         // Question type
         $questionList = Question::get_question_type_list();
@@ -2333,6 +2366,7 @@ abstract class Question
                 if (in_array($field['field_type'], array(ExtraField::FIELD_TYPE_SELECT, ExtraField::FIELD_TYPE_DOUBLE_SELECT))) {
                     $type                   = 'select';
                     $search_options['sopt'] = array('eq', 'ne'); //equal not equal
+                    //$search_options['sopt'] = array('cn', 'nc'); //contains not contains
                 } else {
                     $search_options['sopt'] = array('cn', 'nc'); //contains not contains
                 }
@@ -2351,11 +2385,13 @@ abstract class Question
                     'searchoptions' => $search_options
                 );
                 $columns[] = $field['field_display_text'];
-                $rules[] = array('field' => 'question_'.$field['field_variable'], 'op' => 'cn');
+                $rules[] = array(
+                    'field' => 'question_'.$field['field_variable'],
+                    'op' => 'eq'
+                );
             }
         }
 
         return $rules;
     }
-
 }

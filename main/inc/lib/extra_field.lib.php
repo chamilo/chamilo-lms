@@ -411,7 +411,7 @@ class ExtraField extends Model
         $session_field_values->delete_all_values_by_field_id($id);
     }
 
-    static function set_extra_fields_in_form(
+    public static function set_extra_fields_in_form(
         $form,
         $extra_data,
         $form_name,
@@ -549,9 +549,10 @@ class ExtraField extends Model
                             $get_lang_variables = true;
                         }
                         $options = array();
+                        $options[''] = get_lang('SelectAnOption');
 
                         if (!empty($field_details['options'])) {
-                            foreach ($field_details['options'] as $option_id => $option_details) {
+                            foreach ($field_details['options'] as $option_details) {
                                 if ($get_lang_variables) {
                                     $options[$option_details['option_value']] = get_lang(
                                         $option_details['option_display_text']
@@ -565,14 +566,16 @@ class ExtraField extends Model
                         if ($get_lang_variables) {
                             $field_details['field_display_text'] = get_lang($field_details['field_display_text']);
                         }
+
                         //chzn-select doesn't work for sessions??
                         $form->addElement(
                             'select',
                             'extra_'.$field_details['field_variable'],
                             $field_details['field_display_text'],
                             $options,
-                            array('class' => '', 'id' => 'extra_'.$field_details['field_variable'])
+                            array('id' => 'extra_'.$field_details['field_variable'])
                         );
+
                         if (!$admin_permissions) {
                             if ($field_details['field_visible'] == 0) {
                                 $form->freeze('extra_'.$field_details['field_variable']);

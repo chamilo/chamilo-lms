@@ -204,7 +204,7 @@ if (isset($_SESSION['oLP'])) {
     $_SESSION['oLP']->message = ''; // Should use ->clear_message() method but doesn't work.
 }
 
-if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
+if (isset($_SESSION['studentview']) && $_SESSION['studentview'] == 'studentview') {
     if ($_REQUEST['action'] != 'list' AND $_REQUEST['action'] != 'view') {
         if (!empty($_REQUEST['lp_id'])) {
             $_REQUEST['action'] = 'view';

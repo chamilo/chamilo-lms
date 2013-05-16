@@ -263,5 +263,7 @@ ALTER TABLE c_quiz_category MODIFY COLUMN parent_id int default null;
 
 ALTER TABLE track_e_course_access MODIFY COLUMN course_access_id bigint unsigned auto_increment;
 
+CREATE TABLE extra_field_option_rel_field_option(id INT auto_increment, role_id INT, field_id INT, field_option_id INT, related_field_option_id INT, PRIMARY KEY(id));
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.006' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.007' WHERE variable = 'chamilo_database_version';

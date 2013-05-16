@@ -3496,5 +3496,7 @@ ALTER TABLE question_field_options ADD INDEX idx_question_field_options_field_id
 ALTER TABLE question_field_values ADD INDEX idx_question_field_values_question_id(question_id);
 ALTER TABLE question_field_values ADD INDEX idx_question_field_values_field_id(field_id);
 
+CREATE TABLE extra_field_option_rel_field_option(id INT auto_increment, role_id INT, field_id INT, field_option_id INT, related_field_option_id INT, PRIMARY KEY(id));
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.006' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.007' WHERE variable = 'chamilo_database_version';

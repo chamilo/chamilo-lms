@@ -81,10 +81,25 @@ $htmlHeadXtra[]='<script>
             $("#" + hiddenName).attr("value", 1);
         }
     }
+
     function changeStatus(obj) {
         var roleId = $(obj).find(":selected").val();
-        window.location.replace("'.api_get_self().'?'.$paramsNoRole.'&roleId="+roleId);
+        if (roleId != 0) {
+            window.location.replace("'.api_get_self().'?'.$paramsNoRole.'&roleId="+roleId);
+        }
     }
+    $().ready( function() {
+        $(".select_all").on("click", function() {
+            $("#workflow :checkbox").prop("checked", 1);
+            $("#workflow :hidden").prop("value", 1);
+            return false;
+        });
+        $(".unselect_all").on("click", function() {
+            $("#workflow :checkbox").prop("checked", 0);
+            $("#workflow :hidden").prop("value", 0);
+            return false;
+        });
+    });
 </script>';
 
 // The header.
@@ -109,6 +124,8 @@ $row++;
 
 $form = new FormValidator('workflow', 'post', api_get_self().'?'.$params);
 $options = api_get_user_roles();
+$options[0] = get_lang('SelectAnOption');
+ksort($options);
 $form->addElement('select', 'status', get_lang('SelectStatus'), $options, array('onclick' => 'changeStatus(this)'));
 
 $checks = $app['orm.em']->getRepository('Entity\ExtraFieldOptionRelFieldOption')->findBy(array('fieldId' => $field_id, 'roleId' => $roleId));
@@ -146,7 +163,12 @@ foreach ($result as $item) {
 
 if (!empty($roleId)) {
     $form->addElement('html', $table->toHtml());
-    $form->addElement('button', 'submit', get_lang('Save'));
+    $group = array();
+    $group[]= $form->createElement('button', 'submit', get_lang('Save'));
+    $group[]= $form->createElement('button', 'select_all', get_lang('SelectAll'), array('class' => 'btn select_all'));
+    $group[]= $form->createElement('button', 'unselect_all', get_lang('UnSelectAll'), array('class' => 'btn unselect_all'));
+    $form->addGroup($group, '', null, ' ');
+
     $form->setDefaults(array('status' => $roleId));
 } else {
     $form->addElement('button', 'submit', get_lang('Edit'));

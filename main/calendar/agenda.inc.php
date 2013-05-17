@@ -29,7 +29,7 @@ $(function() {
         var position =String(window.location).indexOf("&user");
         var url_length = String(window.location).length;
         var url = String(window.location).substring(0,position)+temp;
-        if (position > 0){
+        if (position > 0) {
             window.location.replace(url);
         } else {
             url = String(window.location)+temp;
@@ -1016,9 +1016,8 @@ function show_to($filter = 0, $id = null)
     return construct_to_select_form($group_list, $user_list, $filter, $id);
 }
 
-function construct_to_select_form($group_list = null, $user_list = null, $filter = 0, $id = null)
-{
-   $result = '<form class="form-search">';
+function construct_to_select_form($group_list = null, $user_list = null, $filter = 0, $id = null) {
+    $result = '<form class="form-search">';
     $result .= '<select data-placeholder= "'.get_lang('Everyone').'" name="sel_to" class="chzn-select" id="selected_form_id_search">';
 
     // adding the groups to the select form
@@ -1028,6 +1027,7 @@ function construct_to_select_form($group_list = null, $user_list = null, $filter
         $result .= '<optgroup label="'.get_lang('Groups').'">';
         $this_group_name = count($group_list);
         foreach ($group_list as $this_group) {
+            // Groups use a 'G:' prefix
             $group_filter = 'G:'.$this_group['id'];
             $selected = $group_filter == $filter ? "selected" : null;
             $result .= "<option value=G:".$this_group['id']." ".$selected.">".$this_group['name']."</option>";

@@ -3450,7 +3450,7 @@ CREATE TABLE user_course_category (
   user_id int unsigned NOT NULL default 0,
   title text NOT NULL,
   sort int,
-  PRIMARY KEY  (id)
+  PRIMARY KEY(id)
 );
 
 ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_user (user);
@@ -3500,7 +3500,21 @@ ALTER TABLE question_field_options ADD INDEX idx_question_field_options_field_id
 ALTER TABLE question_field_values ADD INDEX idx_question_field_values_question_id(question_id);
 ALTER TABLE question_field_values ADD INDEX idx_question_field_values_field_id(field_id);
 
+DROP TABLE IF EXISTS extra_field_option_rel_field_option;
 CREATE TABLE extra_field_option_rel_field_option(id INT auto_increment, role_id INT, field_id INT, field_option_id INT, related_field_option_id INT, PRIMARY KEY(id));
 
+DROP TABLE IF EXISTS ext_log_entries;
+CREATE TABLE ext_log_entries (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  action varchar(255) DEFAULT NULL,
+  logged_at datetime DEFAULT NULL,
+  object_id varchar(64) DEFAULT NULL,
+  object_class varchar(255) DEFAULT NULL,
+  version int(11) DEFAULT NULL,
+  data varchar(255) DEFAULT NULL,
+  username varchar(255) DEFAULT NULL,
+  PRIMARY KEY (id)
+) DEFAULT CHARSET=utf8;
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.008' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.009' WHERE variable = 'chamilo_database_version';

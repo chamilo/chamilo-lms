@@ -265,10 +265,12 @@ ALTER TABLE track_e_course_access MODIFY COLUMN course_access_id bigint unsigned
 
 CREATE TABLE extra_field_option_rel_field_option(id INT auto_increment, role_id INT, field_id INT, field_option_id INT, related_field_option_id INT, PRIMARY KEY(id));
 
+CREATE TABLE ext_log_entries (id int(11) NOT NULL AUTO_INCREMENT, action varchar(255) DEFAULT NULL, logged_at datetime DEFAULT NULL, object_id varchar(64) DEFAULT NULL, object_class varchar(255) DEFAULT NULL, version int(11) DEFAULT NULL, data varchar(255) DEFAULT NULL, username varchar(255) DEFAULT NULL, PRIMARY KEY (id)) DEFAULT CHARSET=utf8;
+
 ALTER TABLE user_field ADD COLUMN field_loggeable int default 0;
 ALTER TABLE session_field ADD COLUMN field_loggeable int default 0;
 ALTER TABLE course_field ADD COLUMN field_loggeable int default 0;
 ALTER TABLE question_field ADD COLUMN field_loggeable int default 0;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.008' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.009' WHERE variable = 'chamilo_database_version';

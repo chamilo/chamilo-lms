@@ -1,25 +1,21 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *    This library provides functions for the access_url management.
- *    Include/require it in your code to use its functionality.
- *
- * @package chamilo.library
- */
-/**
+ * This library provides functions for the access_url management.
+ * Include/require it in your code to use its functionality.
  * @package chamilo.library
  */
 class UrlManager
 {
     /**
-     * Creates a new url access to Dokeos
+     * Creates a new url access
      *
      * @author Julio Montoya <gugli100@gmail.com>,
      *
-     * @param    string    The URL of the site
-     * @param    string  The description of the site
-     * @param    int        is active or not
-     * @param  int     the user_id of the owner
+     * @param string The URL of the site
+     * @param string The description of the site
+     * @param int is active or not
+     * @param int the user_id of the owner
      * @param int The type of URL (1=multiple-access-url, 2=sincro-server, 3=sincro-client)
      * @param array If the type is different than 1, then there might be extra URL parameters to take into account
      * @return boolean if success
@@ -52,35 +48,35 @@ class UrlManager
                 " access_url_id = $id ".
                 (!empty($extra_params['ip']) ? ", branch_ip = '".Database::escape_string($extra_params['ip'])."'" : "").
                 (!empty($extra_params['name']) ? ", branch_name = '".Database::escape_string(
-                    $extra_params['name']
-                )."'" : "").
+                        $extra_params['name']
+                    )."'" : "").
                 (!empty($extra_params['last_sync']) ? ", last_sync_trans_id = '".Database::escape_string(
-                    $extra_params['last_sync']
-                )."'" : "").
+                        $extra_params['last_sync']
+                    )."'" : "").
                 (!empty($extra_params['dwn_speed']) ? ", dwn_speed = '".Database::escape_string(
-                    $extra_params['dwn_speed']
-                )."'" : "").
+                        $extra_params['dwn_speed']
+                    )."'" : "").
                 (!empty($extra_params['up_speed']) ? ", up_speed = '".Database::escape_string(
-                    $extra_params['up_speed']
-                )."'" : "").
+                        $extra_params['up_speed']
+                    )."'" : "").
                 (!empty($extra_params['delay']) ? ", delay = '".Database::escape_string(
-                    $extra_params['delay']
-                )."'" : "").
+                        $extra_params['delay']
+                    )."'" : "").
                 (!empty($extra_params['admin_mail']) ? ", admin_mail = '".Database::escape_string(
-                    $extra_params['admin_mail']
-                )."'" : "").
+                        $extra_params['admin_mail']
+                    )."'" : "").
                 (!empty($extra_params['admin_name']) ? ", admin_name = '".Database::escape_string(
-                    $extra_params['admin_name']
-                )."'" : "").
+                        $extra_params['admin_name']
+                    )."'" : "").
                 (!empty($extra_params['admin_phone']) ? ", admin_phone = '".Database::escape_string(
-                    $extra_params['admin_phone']
-                )."'" : "").
+                        $extra_params['admin_phone']
+                    )."'" : "").
                 (!empty($extra_params['latitude']) ? ", latitude = '".Database::escape_string(
-                    $extra_params['latitude']
-                )."'" : "").
+                        $extra_params['latitude']
+                    )."'" : "").
                 (!empty($extra_params['longitude']) ? ", longitude = '".Database::escape_string(
-                    $extra_params['longitude']
-                )."'" : "").
+                        $extra_params['longitude']
+                    )."'" : "").
                 ", last_sync_trans_date = '".api_get_utc_datetime()."'";
             $result = $result && Database::query($sql);
         }
@@ -219,8 +215,8 @@ class UrlManager
     {
         $table_access_url = Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
         $sql              = "SELECT id, url, description, active, url_type FROM $table_access_url WHERE id = ".Database::escape_string(
-            $url_id
-        );
+                $url_id
+            );
         $res              = Database::query($sql);
         $row              = Database::fetch_array($res);
         if ($row['url_type'] > 1) {
@@ -339,8 +335,8 @@ class UrlManager
         }
         if (($status_db == '1' OR $status_db == '0') AND is_numeric($url_id)) {
             $sql    = "UPDATE $url_table SET active='".Database::escape_string(
-                $status_db
-            )."' WHERE id='".Database::escape_string($url_id)."'";
+                    $status_db
+                )."' WHERE id='".Database::escape_string($url_id)."'";
             $result = Database::query($sql);
         }
     }
@@ -356,8 +352,8 @@ class UrlManager
     {
         $table_url_rel_user = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $sql                = "SELECT user_id FROM $table_url_rel_user WHERE access_url_id = ".Database::escape_string(
-            $url_id
-        )." AND  user_id = ".Database::escape_string($user_id)." ";
+                $url_id
+            )." AND  user_id = ".Database::escape_string($user_id)." ";
         $result             = Database::query($sql);
         $num                = Database::num_rows($result);
 
@@ -375,9 +371,12 @@ class UrlManager
     {
         $table_url_rel_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql                  = "SELECT c_id FROM $table_url_rel_course
-                                WHERE access_url_id = ".Database::escape_string($url_id)." AND c_id = '".Database::escape_string($course_id)."'";
+                                WHERE access_url_id = ".Database::escape_string(
+                $url_id
+            )." AND c_id = '".Database::escape_string($course_id)."'";
         $result               = Database::query($sql);
         $num                  = Database::num_rows($result);
+
         return $num;
     }
 
@@ -395,8 +394,8 @@ class UrlManager
         $session_id            = intval($session_id);
         $url_id                = intval($url_id);
         $sql                   = "SELECT session_id FROM $table_url_rel_session WHERE access_url_id = ".Database::escape_string(
-            $url_id
-        )." AND session_id = ".Database::escape_string($session_id);
+                $url_id
+            )." AND session_id = ".Database::escape_string($session_id);
         $result                = Database::query($sql);
         $num                   = Database::num_rows($result);
 
@@ -422,8 +421,8 @@ class UrlManager
                     if ($count == 0) {
                         $sql    = "INSERT INTO $table_url_rel_user
 		               			SET user_id = ".Database::escape_string(
-                            $user_id
-                        ).", access_url_id = ".Database::escape_string($url_id);
+                                $user_id
+                            ).", access_url_id = ".Database::escape_string($url_id);
                         $result = Database::query($sql);
                         if ($result) {
                             $result_array[$url_id][$user_id] = 1;
@@ -456,7 +455,9 @@ class UrlManager
                     $count = UrlManager::relation_url_course_exist($courseId, $url_id);
                     if ($count == 0) {
                         $sql    = "INSERT INTO $table_url_rel_course
-		               			   SET c_id = '".Database::escape_string($courseId)."', access_url_id = ".Database::escape_string($url_id);
+		               			   SET c_id = '".Database::escape_string(
+                                $courseId
+                            )."', access_url_id = ".Database::escape_string($url_id);
                         $result = Database::query($sql);
                         if ($result) {
                             $result_array[$url_id][$courseId] = 1;
@@ -491,8 +492,8 @@ class UrlManager
                     if ($count == 0) {
                         $sql    = "INSERT INTO $table_url_rel_session
 		               			SET session_id = ".Database::escape_string(
-                            $session_id
-                        ).", access_url_id = ".Database::escape_string($url_id);
+                                $session_id
+                            ).", access_url_id = ".Database::escape_string($url_id);
                         $result = Database::query($sql);
                         if ($result) {
                             $result_array[$url_id][$session_id] = 1;
@@ -524,8 +525,8 @@ class UrlManager
         $result = true;
         if (empty($count)) {
             $sql    = "INSERT INTO $table_url_rel_user (user_id, access_url_id)  VALUES ('".Database::escape_string(
-                $user_id
-            )."', '".Database::escape_string($url_id)."') ";
+                    $user_id
+                )."', '".Database::escape_string($url_id)."') ";
             $result = Database::query($sql);
         }
 
@@ -542,7 +543,9 @@ class UrlManager
         $result = false;
         if (empty($count)) {
             $sql    = "INSERT INTO $table_url_rel_course
-           			    SET c_id = '".Database::escape_string($courseId)."', access_url_id = ".Database::escape_string($url_id);
+           			    SET c_id = '".Database::escape_string(
+                    $courseId
+                )."', access_url_id = ".Database::escape_string($url_id);
             $result = Database::query($sql);
         }
 
@@ -568,8 +571,8 @@ class UrlManager
             $url_id = intval($url_id);
             $sql    = "INSERT INTO $table_url_rel_session
            			SET session_id = ".Database::escape_string(
-                $session_id
-            ).", access_url_id = ".Database::escape_string($url_id);
+                    $session_id
+                ).", access_url_id = ".Database::escape_string($url_id);
             $result = Database::query($sql);
         }
 
@@ -590,8 +593,8 @@ class UrlManager
         $result             = true;
         if (!empty($user_id) && !empty($url_id)) {
             $sql    = "DELETE FROM $table_url_rel_user WHERE user_id = ".Database::escape_string(
-                $user_id
-            )." AND access_url_id = ".Database::escape_string($url_id);
+                    $user_id
+                )." AND access_url_id = ".Database::escape_string($url_id);
             $result = Database::query($sql);
         }
 
@@ -608,7 +611,9 @@ class UrlManager
     public static function delete_url_rel_course($courseId, $url_id)
     {
         $table_url_rel_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql                  = "DELETE FROM $table_url_rel_course WHERE c_id = '".Database::escape_string($courseId)."' AND access_url_id=".Database::escape_string($url_id)."  ";
+        $sql                  = "DELETE FROM $table_url_rel_course WHERE c_id = '".Database::escape_string(
+                $courseId
+            )."' AND access_url_id=".Database::escape_string($url_id)."  ";
         $result               = Database::query($sql);
 
         return $result;
@@ -625,8 +630,8 @@ class UrlManager
     {
         $table_url_rel_session = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $sql                   = "DELETE FROM $table_url_rel_session WHERE session_id = ".Database::escape_string(
-            $session_id
-        )." AND access_url_id=".Database::escape_string($url_id)."  ";
+                $session_id
+            )." AND access_url_id=".Database::escape_string($url_id)."  ";
         $result                = Database::query($sql, 'ASSOC');
 
         return $result;
@@ -728,8 +733,8 @@ class UrlManager
         $table_url_rel_session = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
         $sql               = "SELECT session_id FROM $table_url_rel_session WHERE access_url_id=".Database::escape_string(
-            $access_url_id
-        );
+                $access_url_id
+            );
         $result            = Database::query($sql);
         $existing_sessions = array();
 

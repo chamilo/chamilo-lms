@@ -664,8 +664,13 @@ class ExtraField extends Model
                             array('id' => 'extra_'.$field_details['field_variable'])
                         );
 
-
                         if ($optionsExists && $field_details['field_loggeable'] && !empty($defaultValueId)) {
+
+                            $form->addElement(
+                                'textarea',
+                                'extra_'.$field_details['field_variable'].'_comment',
+                                $field_details['field_display_text'].' '.get_lang('Comment')
+                            );
 
                             /*$extraField = new Extrafield($field_details['field_type']);
                             $link = Display::url();*/
@@ -673,35 +678,40 @@ class ExtraField extends Model
                             $repo = $app['orm.em']->getRepository($extraFieldValue->entityName);
                             $repoLog = $app['orm.em']->getRepository('Gedmo\Loggable\Entity\LogEntry');
                             $newEntity = $repo->findOneBy(
-                            array(
-                                $this->handlerEntityId => $itemId,
-                                'fieldId' => $field_details['id']
-                            ));
-
-
+                                array(
+                                    $this->handlerEntityId => $itemId,
+                                    'fieldId' => $field_details['id']
+                                )
+                            );
+                            // @todo move this in a function inside the class
                             if ($newEntity) {
                                 $logs = $repoLog->getLogEntries($newEntity);
                                 if (!empty($logs)) {
-                                    $html = get_lang('LatestChanges').'<br />';
+                                    $html = '<b>'.get_lang('LatestChanges').'</b><br /><br />';
 
                                     $table = new HTML_Table(array('class' => 'data_table'));
                                     $table->setHeaderContents(0, 0, get_lang('Value'));
-                                    $table->setHeaderContents(0, 1, get_lang('ModifyDate'));
-                                    $table->setHeaderContents(0, 2, get_lang('Username'));
+                                    $table->setHeaderContents(0, 1, get_lang('Comment'));
+                                    $table->setHeaderContents(0, 2, get_lang('ModifyDate'));
+                                    $table->setHeaderContents(0, 3, get_lang('Username'));
                                     $row = 1;
                                     foreach ($logs as $log) {
                                         $column = 0;
                                         $data = $log->getData();
-                                        $table->setCellContents($row, $column, $data['fieldValue']);
+                                        $fieldValue = isset($data['fieldValue']) ? $data['fieldValue'] : null;
+                                        $comment = isset($data['comment']) ? $data['comment'] : null;
+
+                                        $table->setCellContents($row, $column, $fieldValue);
+                                        $column++;
+                                        $table->setCellContents($row, $column, $comment);
                                         $column++;
                                         $table->setCellContents($row, $column, api_get_local_time($log->getLoggedAt()->format('Y-m-d H:i:s')));
                                         $column++;
                                         $table->setCellContents($row, $column, $log->getUsername());
                                         $row++;
                                     }
-                                    $form->addElement('label', null, $table->toHtml());
+                                    $form->addElement('label', null, $html.$table->toHtml());
                                 }
-
                             }
                         }
 

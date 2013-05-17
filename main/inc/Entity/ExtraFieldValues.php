@@ -43,6 +43,37 @@ class ExtraFieldValues
      */
     private $userId;
 
+    /**
+     * @var string
+     * @Gedmo\Versioned
+     *
+     * @ORM\Column(name="comment", type="string", precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $comment;
+
+     /**
+     * Set comment
+     *
+     * @param string $comment
+     * @return ExtraFieldValues
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get comment
+     *
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
 
     /**
      * Get id

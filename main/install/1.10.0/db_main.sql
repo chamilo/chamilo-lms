@@ -242,11 +242,12 @@ CREATE TABLE IF NOT EXISTS course_field_options (
 
 DROP TABLE IF EXISTS course_field_values;
 CREATE TABLE IF NOT EXISTS course_field_values(
-    id  int NOT NULL auto_increment,
+    id bigint NOT NULL auto_increment,
     course_code varchar(40) NOT NULL,
     field_id int NOT NULL,
     field_value text,
     user_id INT unsigned NOT NULL default 0,
+    comment VARCHAR(100) default '',
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -571,11 +572,12 @@ CREATE TABLE IF NOT EXISTS session_field_options(
 
 DROP TABLE IF EXISTS session_field_values;
 CREATE TABLE IF NOT EXISTS session_field_values(
-    id  int NOT NULL auto_increment,
+    id bigint NOT NULL auto_increment,
     session_id int NOT NULL,
     field_id int NOT NULL,
     field_value text,
     user_id INT unsigned NOT NULL default 0,
+    comment VARCHAR(100) default '',
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -1490,6 +1492,7 @@ CREATE TABLE IF NOT EXISTS user_field_values(
     field_id int NOT NULL,
     field_value	text,
     author_id INT unsigned NOT NULL default 0,
+    comment VARCHAR(100) default '',
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -2593,11 +2596,11 @@ CREATE TABLE IF NOT EXISTS specific_field (
 
 DROP TABLE IF EXISTS specific_field_values;
 CREATE TABLE IF NOT EXISTS specific_field_values (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-    course_code VARCHAR(40) NOT NULL ,
-    tool_id VARCHAR(100) NOT NULL ,
-    ref_id INT NOT NULL ,
-    field_id INT NOT NULL ,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    course_code VARCHAR(40) NOT NULL,
+    tool_id VARCHAR(100) NOT NULL,
+    ref_id INT NOT NULL,
+    field_id INT NOT NULL,
     value VARCHAR(200) NOT NULL
 );
 ALTER TABLE specific_field ADD CONSTRAINT unique_specific_field__code UNIQUE (code);
@@ -3487,11 +3490,12 @@ CREATE TABLE IF NOT EXISTS question_field_options(
 
 DROP TABLE IF EXISTS question_field_values;
 CREATE TABLE IF NOT EXISTS question_field_values(
-    id  int NOT NULL auto_increment,
+    id bigint NOT NULL auto_increment,
     question_id int NOT NULL,
     field_id int NOT NULL,
     field_value text,
     user_id INT unsigned NOT NULL default 0,
+    comment VARCHAR(100) default '',
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -3517,4 +3521,4 @@ CREATE TABLE ext_log_entries (
 ) DEFAULT CHARSET=utf8;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.009' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.010' WHERE variable = 'chamilo_database_version';

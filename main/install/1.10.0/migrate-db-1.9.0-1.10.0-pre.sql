@@ -272,5 +272,10 @@ ALTER TABLE session_field ADD COLUMN field_loggeable int default 0;
 ALTER TABLE course_field ADD COLUMN field_loggeable int default 0;
 ALTER TABLE question_field ADD COLUMN field_loggeable int default 0;
 
+ALTER TABLE user_field_values ADD COLUMN comment VARCHAR(100) default '';
+ALTER TABLE session_field_values ADD COLUMN comment VARCHAR(100) default '';
+ALTER TABLE course_field_values ADD COLUMN comment VARCHAR(100) default '';
+ALTER TABLE question_field_values ADD COLUMN comment VARCHAR(100) default '';
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.009' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.010' WHERE variable = 'chamilo_database_version';

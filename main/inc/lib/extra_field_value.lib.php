@@ -13,8 +13,9 @@
 class ExtraFieldValue extends Model
 {
     public $type = null;
-    public $columns = array('id', 'field_id', 'field_value', 'tms');
-    public $handler_id = null;//session_id, course_code, user_id
+    public $columns = array('id', 'field_id', 'field_value', 'tms', 'comment');
+    /** @var string session_id, course_code, user_id, question id */
+    public $handler_id = null;
     public $entityName;
 
     /**
@@ -87,17 +88,20 @@ class ExtraFieldValue extends Model
         if (empty($params[$this->handler_id])) {
             return false;
         }
-        //Parse params
+        // Parse params.
         foreach ($params as $key => $value) {
             if (substr($key, 0, 6) == 'extra_') {
                 // An extra field.
                 $field_variable = substr($key, 6);
                 $extra_field_info = $extra_field->get_handler_field_info_by_field_variable($field_variable);
                 if ($extra_field_info) {
+                    $commentVariable = 'extra_'.$field_variable.'_comment';
+                    $comment = isset($params[$commentVariable]) ? $params[$commentVariable] : null;
                     $new_params = array(
                         $this->handler_id   => $params[$this->handler_id],
                         'field_id'          => $extra_field_info['id'],
-                        'field_value'       => $value
+                        'field_value'       => $value,
+                        'comment'           => $comment
                     );
                     self::save($new_params);
                 }
@@ -207,12 +211,14 @@ class ExtraFieldValue extends Model
                             break;
                     }
                     if (isset($extraFieldValue)) {
+                        $extraFieldValue->setComment($params['comment']);
                         $extraFieldValue->setFieldValue($params['field_value']);
                         $extraFieldValue->setFieldId($params['field_id']);
                         $extraFieldValue->setTms(api_get_utc_datetime(null, false, true));
                         $app['orm.em']->persist($extraFieldValue);
                         $app['orm.em']->flush();
                     }
+
                 } else {
                     return parent::save($params, $show_query);
                 }
@@ -244,8 +250,9 @@ class ExtraFieldValue extends Model
                             $extraFieldValue->setSessionId($params[$this->handler_id]);
                             break;
                     }
-                    if (isset($extraFieldValue)) {
 
+                    if (isset($extraFieldValue)) {
+                        $extraFieldValue->setComment($params['comment']);
                         $extraFieldValue->setFieldValue($params['field_value']);
                         $extraFieldValue->setFieldId($params['field_id']);
                         $extraFieldValue->setTms(api_get_utc_datetime(null, false, true));

@@ -42,7 +42,11 @@
         {# topbar #}
         {% include app.template_style ~ "/layout/topbar.tpl" %}
 
-        <div id="main" class="container">
+        {% if app.full_width == 1 %}
+            <div id="main" class="container-fluid">
+        {% else %}
+            <div id="main" class="container">
+        {% endif %}
             <header>
                 <div class="row">
                     <div id="header_left" class="span4">
@@ -97,7 +101,12 @@
                 {{ breadcrumb }}
             </header>
 
-            <div id="top_main_content" class="row">
+
+            {% if app.full_width == 1 %}
+                <div id="top_main_content" class="row-fluid">
+            {% else %}
+                <div id="top_main_content" class="row">
+            {% endif %}
             {# course navigation links/shortcuts need to be activated by the admin #}
             {% include app.template_style ~ "/layout/course_navigation.tpl" %}
 {% endif %}

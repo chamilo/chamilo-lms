@@ -2,7 +2,11 @@
 {% if show_toolbar == 1 %}
     <div id="topbar" class="navbar navbar-fixed-top">
         <div class="navbar-inner">
-            <div class="container">
+            {% if app.full_width == 1 %}
+                <div id="main" class="container-fluid">
+            {% else %}
+                <div id="main" class="container">
+            {% endif %}
                 <a class="brand" href="{{ _p.web }}">
                     {{ "siteName" | get_setting }}
                 </a>

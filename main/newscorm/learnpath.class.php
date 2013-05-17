@@ -5851,9 +5851,7 @@ class learnpath
                 // No edit for this item types
                 if (!in_array($arrLP[$i]['item_type'], array('sco', 'asset'))) {
                     if (!in_array($arrLP[$i]['item_type'], array('dokeos_chapter', 'dokeos_module'))) {
-                        $edit_icon .= '<a href="'.api_get_self().'?cidReq='.Security :: remove_XSS(
-                            $_GET['cidReq']
-                        ).'&amp;action=edit_item&amp;view=build&amp;id='.$arrLP[$i]['id'].'&amp;lp_id='.$this->lp_id.'&amp;path_item='.$arrLP[$i]['path'].'">';
+                        $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=edit_item&amp;view=build&amp;id='.$arrLP[$i]['id'].'&amp;lp_id='.$this->lp_id.'&amp;path_item='.$arrLP[$i]['path'].'">';
                         $edit_icon .= Display::return_icon(
                             'edit.png',
                             get_lang('LearnpathEditModule'),
@@ -5875,9 +5873,7 @@ class learnpath
                     }
                 }
 
-                $delete_icon .= ' <a href="'.api_get_self().'?cidReq='.Security :: remove_XSS(
-                    $_GET['cidReq']
-                ).'&amp;action=delete_item&amp;id='.$arrLP[$i]['id'].'&amp;lp_id='.$this->lp_id.'" onClick="return confirmation(\''.addslashes(
+                $delete_icon .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=delete_item&amp;id='.$arrLP[$i]['id'].'&amp;lp_id='.$this->lp_id.'" onClick="return confirmation(\''.addslashes(
                     $title
                 ).'\');">';
                 $delete_icon .= Display::return_icon(
@@ -5888,9 +5884,7 @@ class learnpath
                 );
                 $delete_icon .= '</a>';
 
-                $url = api_get_self().'?cidReq='.Security::remove_XSS(
-                    $_GET['cidReq']
-                ).'&view=build&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
+                $url = api_get_self().'?'.api_get_cidreq().'&view=build&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
 
                 if (!in_array($arrLP[$i]['item_type'], array('dokeos_chapter', 'dokeos_module', 'dir'))) {
                     $prerequisities_icon = Display::url(
@@ -9090,15 +9084,13 @@ class learnpath
         }
 
         while ($row_quiz = Database :: fetch_array($res_quiz)) {
-            $return .= '<li class="lp_resource_element" data_id="'.$row_quiz['id'].'" data_type="quiz" title="'.$row_quiz['title'].'" >';
-
+            $return .= '<li class="lp_resource_element" data_id="'.$row_quiz['iid'].'" data_type="quiz" title="'.$row_quiz['title'].'" >';
             $return .= '<a class="moved" href="#">';
             $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
             $return .= '</a> ';
-
             $return .= '<img alt="" src="../img/quizz_small.gif" style="margin-right:5px;" title="" />';
             $return .= '<a href="'.api_get_self().'?'.api_get_cidreq(
-            ).'&amp;action=add_item&amp;type='.TOOL_QUIZ.'&amp;file='.$row_quiz['id'].'&amp;lp_id='.$this->lp_id.'">'.
+            ).'&amp;action=add_item&amp;type='.TOOL_QUIZ.'&amp;file='.$row_quiz['iid'].'&amp;lp_id='.$this->lp_id.'">'.
                 Security :: remove_XSS(Text::cut($row_quiz['title'], 80)).
                 '</a>';
             $return .= '</li>';

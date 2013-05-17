@@ -64,6 +64,7 @@ class Exercise
     public $force_edit_exercise_in_lp = false;
     public $categories;
     public $categories_grouping = true;
+    public $fastExerciseEdition = false;
 
     /**
      * Constructor of the class
@@ -101,6 +102,7 @@ class Exercise
         }
         $this->course_id = $course_info['real_id'];
         $this->course = $course_info;
+        $this->fastExerciseEdition = api_get_course_setting('allow_fast_exercise_edition') == 1 ? true : false;
     }
 
     /**
@@ -1148,27 +1150,24 @@ class Exercise
             get_lang('ExerciseName'),
             array('class' => 'span6', 'id' => 'exercise_title')
         );
-        //$form->applyFilter('exerciseTitle','html_filter');
 
-        $form->addElement(
-            'advanced_settings',
-            '
-			<a href="javascript://" onclick=" return show_media()">
-				<span id="media_icon">
-					'.Display::return_icon('looknfeel.png').' '.addslashes(
-                api_htmlentities(get_lang('ExerciseDescription'))
-            ).'
-					</span>
-			</a>
-		'
-        );
+        //if ($this->fastExerciseEdition == false) {
+            $form->addElement(
+                'advanced_settings',
+                '<a href="javascript://" onclick=" return show_media()">
+                    <span id="media_icon">
+                        '.Display::return_icon('looknfeel.png').' '.addslashes(
+                    api_htmlentities(get_lang('ExerciseDescription'))
+                ).'
+                        </span>
+                </a>'
+            );
+        //}
 
         $editor_config = array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '150');
         if (is_array($type)) {
             $editor_config = array_merge($editor_config, $type);
         }
-
-
         $form->addElement('html', '<div class="HideFCKEditor" id="HiddenFCKexerciseDescription" >');
         $form->add_html_editor('exerciseDescription', get_lang('ExerciseDescription'), false, false, $editor_config);
         $form->addElement('html', '</div>');
@@ -4583,6 +4582,19 @@ class Exercise
     }
 
     /**
+     * Returns an array with the media list
+     * @example there's 1 question with iid 5 that belongs to the media question with iid = 100
+     * <code>
+     * array (size=2)
+     *  999 =>
+     *    array (size=3)
+     *      0 => int 7
+     *      1 => int 6
+     *      2 => int 3254
+     *  100 =>
+     *   array (size=1)
+     *      0 => int 5
+     *  </code>
      * @return array
      */
     function get_media_list()
@@ -4593,11 +4605,11 @@ class Exercise
         if (!empty($question_list)) {
             foreach ($question_list as $questionId) {
                 $objQuestionTmp = Question::read($questionId);
-
+                // if a media question exists
                 if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {
                     $media_questions[$objQuestionTmp->parent_id][] = $objQuestionTmp->id;
                 } else {
-                    //Always the last item
+                    // Always the last item
                     $media_questions[999][] = $objQuestionTmp->id;
                 }
             }

@@ -114,6 +114,12 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 }
 
 function return_block($title, $content) {
-    $html = '<div class="row"><div class="span12"><div class="page-header"><h3>'.$title.'</h3></div></div></div><div class="row">'.$content.'</div>';
+    global $app;
+    $rowDiv = '<div class="row">';
+    if ($app['full_width']) {
+        $rowDiv = '<div class="row-fluid">';
+    }
+    $html = $rowDiv.'<div class="span12">
+                <div class="page-header"><h3>'.$title.'</h3></div></div></div>'.$rowDiv.$content.'</div>';
     return $html;
 }

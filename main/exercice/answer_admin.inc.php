@@ -147,11 +147,7 @@ if ($submitAnswers || $buttonBack) {
             } else {
                 // adds the answer into the object
                 $objAnswer->createAnswer($reponse[$i], $goodAnswer, $comment[$i], $weighting[$i], $i);
-                //added
-                //if($_REQUEST['myid']==1)
                 $mainurl = "admin.php";
-                //	else
-                //  $mainurl="question_pool.php";
                 ?>
                 <script>
                     window.location.href='<?php echo $mainurl; ?>';
@@ -220,10 +216,7 @@ if ($submitAnswers || $buttonBack) {
                     $objAnswer->createAnswer($reponse, 0, '', 0, '');
                     $objAnswer->save();
                     //added
-                    //if($_REQUEST['myid']==1)
                     $mainurl = "admin.php";
-                    //	else
-                    //  $mainurl="question_pool.php";
                     ?>
                     <script>
                         window.location.href='<?php echo $mainurl; ?>';
@@ -330,14 +323,9 @@ if ($submitAnswers || $buttonBack) {
                     // sets the total weighting of the question
                     $objQuestion->updateWeighting($weighting);
                     $objQuestion->save($exerciseId);
-
                     $editQuestion = $questionId;
-
                     unset($modifyAnswers); //added
-                    //if($_REQUEST['myid']==1)
                     $mainurl = "admin.php";
-                    //	else
-                    //  $mainurl="question_pool.php";
                     ?>
                     <script>
                         window.location.href='<?php echo $mainurl; ?>';
@@ -411,11 +399,7 @@ if ($submitAnswers || $buttonBack) {
                 else {
                     // adds the answer into the object
                     $objAnswer->createAnswer($match[$i], $sel[$i], '', $weighting[$i], $i);
-                    //added
-                    //if($_REQUEST['myid']==1)
                     $mainurl = "admin.php";
-                    //else
-                    //$mainurl="question_pool.php";
                     ?>
                     <script>
                         window.location.href='<?php echo $mainurl; ?>';

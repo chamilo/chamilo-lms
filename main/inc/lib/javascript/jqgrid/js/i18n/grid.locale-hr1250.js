@@ -1,8 +1,9 @@
 ;(function($){
 /**
- * jqGrid Translation
- * Tony Tomov tony@trirand.com
- * http://trirand.com/blog/ 
+ * jqGrid Croatian Translation (charset windows-1250)
+ * Version 1.0.1 (developed for jQuery Grid 4.4)
+ * msajko@gmail.com
+ * 
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
@@ -16,13 +17,11 @@ $.extend($.jgrid,{
 		pgtext : "Stranica {0} od {1}"
 	},
 	search : {
-		caption: "pretra�ivanje...",
-		Find: "Tra�i",
+		caption: "Tra�i...",
+		Find: "Pretra�ivanje",
 		Reset: "Poni�ti",
-		odata : ['jednak', 'nije identi�an', 'manje', 'manje ili identi�no','ve�e','ve�e ili identi�no', 'po�inje sa','ne po�inje sa ','je u','nije u','zavr�ava sa','ne zavr�ava sa','sadr�i','ne sadr�i'],
-		groupOps: [	{ op: "U", text: "sve" },	{ op: "ILI",  text: "bilo koji" }	],
-		matchText: " podudata se",
-		rulesText: " pravila"
+		odata : [{ oper:'eq', text:'jednak'}, { oper:'ne', text:'nije identi�an'}, { oper:'lt', text:'manje'}, { oper:'le', text:'manje ili identi�no'},{ oper:'gt', text:'ve�e'},{ oper:'ge', text:'ve�e ili identi�no'}, { oper:'bw', text:'po�inje sa'},{ oper:'bn', text:'ne po�inje sa '},{ oper:'in', text:'je u'},{ oper:'ni', text:'nije u'},{ oper:'ew', text:'zavr�ava sa'},{ oper:'en', text:'ne zavr�ava sa'},{ oper:'cn', text:'sadr�i'},{ oper:'nc', text:'ne sadr�i'}],
+		groupOps: [	{ op: "I", text: "sve" },	{ op: "ILI",  text: "bilo koji" }	]
 	},
 	edit : {
 		addCaption: "Dodaj zapis",
@@ -37,8 +36,8 @@ $.extend($.jgrid,{
 		msg: {
 			required:"Polje je obavezno",
 			number:"Molim, unesite ispravan broj",
-			minValue:"vrijednost mora biti ve�a ili identi�na ",
-			maxValue:"vrijednost mora biti manja ili identi�na",
+			minValue:"Vrijednost mora biti ve�a ili identi�na ",
+			maxValue:"Vrijednost mora biti manja ili identi�na",
 			email: "neispravan e-mail",
 			integer: "Molim, unjeti ispravan cijeli broj (integer)",
 			date: "Molim, unjeti ispravan datum ",
@@ -61,13 +60,13 @@ $.extend($.jgrid,{
 		bCancel: "Odustani"
 	},
 	nav : {
-		edittext: "",
+		edittext: " ",
 		edittitle: "Promijeni obilje�eni red",
-		addtext:"",
+		addtext:" ",
 		addtitle: "Dodaj novi red",
-		deltext: "",
+		deltext: " ",
 		deltitle: "Obri�i obilje�eni red",
-		searchtext: "",
+		searchtext: " ",
 		searchtitle: "Potra�i zapise",
 		refreshtext: "",
 		refreshtitle: "Ponovo preuzmi podatke",
@@ -85,12 +84,12 @@ $.extend($.jgrid,{
 		errcap : "Gre�ka",
 		nourl : "Nedostaje URL",
 		norecords: "Bez zapisa za obradu",
-		model : "Duljina colNames <> colModel!"
+		model : "colNames i colModel imaju razli�itu duljinu!"
 	},
 	formatter : {
-		integer : {thousandsSeparator: " ", defaultValue: '0'},
-		number : {decimalSeparator:".", thousandsSeparator: " ", decimalPlaces: 2, defaultValue: '0.00'},
-		currency : {decimalSeparator:".", thousandsSeparator: " ", decimalPlaces: 2, prefix: "", suffix:"", defaultValue: '0.00'},
+		integer : {thousandsSeparator: ".", defaultValue: '0'},
+		number : {decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 2, defaultValue: '0,00'},
+		currency : {decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 2, prefix: "", suffix:" Kn", defaultValue: '0,00'},
 		date : {
 			dayNames:   [
 				"Ned", "Pon", "Uto", "Sri", "�et", "Pet", "Sub",
@@ -104,18 +103,52 @@ $.extend($.jgrid,{
 			S: function (j) {return ''},
 			srcformat: 'Y-m-d',
 			newformat: 'd.m.Y.',
+			parseRe : /[Tt\\\/:_;.,\t\s-]/,
 			masks : {
-				ISO8601Long:"Y-m-d H:i:s",
-				ISO8601Short:"Y-m-d",
-				ShortDate: "j.n.Y.",
-				LongDate: "l, j. F Y",
-				FullDateTime: "l, d. F Y G:i:s",
-				MonthDay: "d. F",
-				ShortTime: "G:i",
-				LongTime: "G:i:s",
+				// see http://php.net/manual/en/function.date.php for PHP format used in jqGrid
+				// and see http://docs.jquery.com/UI/Datepicker/formatDate
+				// and https://github.com/jquery/globalize#dates for alternative formats used frequently
+				ISO8601Long: "Y-m-d H:i:s",
+				ISO8601Short: "Y-m-d",
+				// short date:
+				//    d - Day of the month, 2 digits with leading zeros
+				//    m - Numeric representation of a month, with leading zeros
+				//    Y - A full numeric representation of a year, 4 digits
+				ShortDate: "d.m.Y.",	// in jQuery UI Datepicker: "dd.mm.yy."
+				// long date:
+				//    l - A full textual representation of the day of the week
+				//    j - Day of the month without leading zeros
+				//    F - A full textual representation of a month
+				//    Y - A full numeric representation of a year, 4 digits
+				LongDate: "l, j. F Y", // in jQuery UI Datepicker: "dddd, d. MMMM yyyy"
+				// long date with long time:
+				//    l - A full textual representation of the day of the week
+				//    j - Day of the month without leading zeros
+				//    F - A full textual representation of a month
+				//    Y - A full numeric representation of a year, 4 digits
+				//    H - 24-hour format of an hour with leading zeros
+				//    i - Minutes with leading zeros
+				//    s - Seconds, with leading zeros
+				FullDateTime: "l, j. F Y H:i:s", // in jQuery UI Datepicker: "dddd, d. MMMM yyyy HH:mm:ss"
+				// month day:
+				//    d - Day of the month, 2 digits with leading zeros
+				//    F - A full textual representation of a month
+				MonthDay: "d F", // in jQuery UI Datepicker: "dd MMMM"
+				// short time (without seconds)
+				//    H - 24-hour format of an hour with leading zeros
+				//    i - Minutes with leading zeros
+				ShortTime: "H:i", // in jQuery UI Datepicker: "HH:mm"
+				// long time (with seconds)
+				//    H - 24-hour format of an hour with leading zeros
+				//    i - Minutes with leading zeros
+				//    s - Seconds, with leading zeros
+				LongTime: "H:i:s", // in jQuery UI Datepicker: "HH:mm:ss"
 				SortableDateTime: "Y-m-d\\TH:i:s",
 				UniversalSortableDateTime: "Y-m-d H:i:sO",
-				YearMonth: "F, Y"
+				// month with year
+				//    F - A full textual representation of a month
+				//    Y - A full numeric representation of a year, 4 digits
+				YearMonth: "F Y" // in jQuery UI Datepicker: "MMMM yyyy"
 			},
 			reformatAfterEdit : false
 		},

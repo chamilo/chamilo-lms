@@ -60,7 +60,6 @@ define('TOOL_INTERACTION',              'toolinteraction');
 define('TOOL_COURSE_PLUGIN',            'toolcourseplugin'); //all plugins that can be enabled in courses
 define('TOOL_ADMIN',                    'tooladmin');
 define('TOOL_ADMIN_PLATFORM',           'tooladminplatform');
-
 define('TOOL_STUDENT_VIEW',              'toolstudentview');
 define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
 

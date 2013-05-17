@@ -10,6 +10,24 @@
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 
+// Monolog
+if (is_writable($app['sys_temp_path'])) {
+
+    /** Adding Monolog service provider Monolog  use examples
+    $app['monolog']->addDebug('Testing the Monolog logging.');
+    $app['monolog']->addInfo('Testing the Monolog logging.');
+    $app['monolog']->addError('Testing the Monolog logging.');
+     */
+
+    $app->register(
+        new Silex\Provider\MonologServiceProvider(),
+        array(
+            'monolog.logfile' => $app['chamilo.log'],
+            'monolog.name' => 'chamilo',
+        )
+    );
+}
+
 //Setting HttpCacheService provider in order to use do: $app['http_cache']->run();
 /*
 $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
@@ -85,36 +103,6 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
 ));*/
 
 
-// Developer tools
-if (is_writable($app['sys_temp_path'])) {
-    if ($app['debug']) {
-        // Adding symfony2 web profiler (memory, time, logs, etc)
-        if (api_get_setting('allow_web_profiler') == 'true') {
-            $app->register($p = new Silex\Provider\WebProfilerServiceProvider(), array(
-                'profiler.cache_dir' => $app['profiler.cache_dir'],
-            ));
-            $app->mount('/_profiler', $p);
-        }
-
-        //$app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
-        //}
-    }
-
-    /** Adding Monolog service provider Monolog  use examples
-    $app['monolog']->addDebug('Testing the Monolog logging.');
-    $app['monolog']->addInfo('Testing the Monolog logging.');
-    $app['monolog']->addError('Testing the Monolog logging.');
-     */
-
-    $app->register(
-        new Silex\Provider\MonologServiceProvider(),
-        array(
-            'monolog.logfile' => $app['chamilo.log'],
-            'monolog.name' => 'chamilo',
-        )
-    );
-
-}
 // Setting Controllers as services provider
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
@@ -234,37 +222,6 @@ if (isset($app['configuration']['main_database'])) {
             ),
         ),
     ));
-
-    // Temporal fix to load gedmo libs
-
-    $sortableGroup = new Gedmo\Mapping\Annotation\SortableGroup(array());
-    $sortablePosition = new Gedmo\Mapping\Annotation\SortablePosition(array());
-    $tree = new Gedmo\Mapping\Annotation\Tree(array());
-    $tree = new Gedmo\Mapping\Annotation\TreeParent(array());
-    $tree = new Gedmo\Mapping\Annotation\TreeLeft(array());
-    $tree = new Gedmo\Mapping\Annotation\TreeRight(array());
-    $tree = new Gedmo\Mapping\Annotation\TreeRoot(array());
-    $tree = new Gedmo\Mapping\Annotation\TreeLevel(array());
-    $tree = new Gedmo\Mapping\Annotation\Versioned(array());
-    $tree = new Gedmo\Mapping\Annotation\Loggable(array());
-    $tree = new Gedmo\Loggable\Entity\LogEntry();
-
-    // Setting Doctrine2 extensions
-    $timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
-    $app['db.event_manager']->addEventSubscriber($timestampableListener);
-
-    $sluggableListener = new \Gedmo\Sluggable\SluggableListener();
-    $app['db.event_manager']->addEventSubscriber($sluggableListener);
-
-    $sortableListener = new Gedmo\Sortable\SortableListener();
-    $app['db.event_manager']->addEventSubscriber($sortableListener);
-
-    $treeListener = new \Gedmo\Tree\TreeListener();
-    //$treeListener->setAnnotationReader($cachedAnnotationReader);
-    $app['db.event_manager']->addEventSubscriber($treeListener);
-
-    $loggableListener = new \Gedmo\Loggable\LoggableListener();
-    $app['db.event_manager']->addEventSubscriber($loggableListener);
 }
 
 // Setting Twig as a service provider
@@ -307,6 +264,22 @@ $app['twig'] = $app->share(
         return $twig;
     })
 );
+
+
+// Developer tools
+if (is_writable($app['sys_temp_path'])) {
+    if ($app['debug']) {
+        // Adding symfony2 web profiler (memory, time, logs, etc)
+        if (api_get_setting('allow_web_profiler') == 'true') {
+            $app->register($p = new Silex\Provider\WebProfilerServiceProvider(), array(
+                'profiler.cache_dir' => $app['profiler.cache_dir'],
+            ));
+            $app->mount('/_profiler', $p);
+        }
+        //$app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
+        //}
+    }
+}
 
 // Registering Menu service provider (too gently creating menus with the URLgenerator provider)
 $app->register(new \Knp\Menu\Silex\KnpMenuServiceProvider());
@@ -479,5 +452,11 @@ $app['editor.controller'] = $app->share(
 $app['question_manager.controller'] = $app->share(
     function () use ($app) {
         return new ChamiloLMS\Controller\Admin\QuestionManager\QuestionManagerController();
+    }
+);
+
+$app['exercise_manager.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\ExerciseController();
     }
 );

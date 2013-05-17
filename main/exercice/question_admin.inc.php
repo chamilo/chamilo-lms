@@ -48,11 +48,6 @@ if (is_object($objQuestion)) {
     // form title
     $form->addElement('header', $objQuestion->submitText.': '.$form_title_extra);
 
-    if ($fastEdition) {
-        //$form->setAllowRichEditorInForm(false);
-        //$form->setAllowedRichEditorList(array('questionDescription'));
-    }
-
     // question form elements
     $objQuestion->createForm($form);
 

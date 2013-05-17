@@ -1,27 +1,30 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	This class provides basic methods to implement a CRUD for a new table in the database see examples in: career.lib.php and promotion.lib.php
-*	Include/require it in your code to use its features.
-*	@package chamilo.library
-*/
+ *    This class provides basic methods to implement a CRUD for a new table in the database see examples in: career.lib.php and promotion.lib.php
+ *    Include/require it in your code to use its features.
+ * @package chamilo.library
+ */
 /**
  * Class
  * @package chamilo.library
  */
-class Model {
+class Model
+{
 
     public $table;
     public $columns;
     public $required;
-    public $is_course_model =false;
+    public $is_course_model = false;
 
     // var $pk; some day this will be implemented
 
-	public function __construct() {
-	}
+    public function __construct()
+    {
+    }
 
-    public function set($id) {
+    public function set($id)
+    {
         /*$data = self::get($id);
         foreach ($data as $key => $value) {
             if (in_array($key, $this->columns)) {
@@ -33,8 +36,9 @@ class Model {
     /**
      * Useful finder - experimental akelos like only use in notification.lib.php send function
      */
-    public function find($type, $options = null) {
-        switch($type) {
+    public function find($type, $options = null)
+    {
+        switch ($type) {
             case 'all':
                 return self::get_all($options);
                 break;
@@ -47,87 +51,110 @@ class Model {
     /**
      * Delets an item
      */
-    public function delete($id) {
-        if (empty($id) or $id != strval(intval($id))) { return false; }
+    public function delete($id)
+    {
+        if (empty($id) or $id != strval(intval($id))) {
+            return false;
+        }
         $params = array('id = ?' => $id);
         if ($this->is_course_model) {
             $course_id = api_get_course_int_id();
-            $params = array('id = ? AND c_id = ?' => array($id, $course_id));
+            $params    = array('id = ? AND c_id = ?' => array($id, $course_id));
         }
         // Database table definition
-        $result = Database :: delete($this->table,$params );
-        if ($result != 1){
+        $result = Database :: delete($this->table, $params);
+        if ($result != 1) {
             return false;
         }
+
         return true;
     }
 
-    private function clean_parameters($params){
+    private function clean_parameters($params)
+    {
         $clean_params = array();
         if (!empty($params)) {
-            foreach($params as $key=>$value) {
+            foreach ($params as $key => $value) {
                 if (in_array($key, $this->columns)) {
                     $clean_params[$key] = $value;
                 }
             }
         }
+
         return $clean_params;
     }
 
     /**
      * Displays the title + grid
      */
-    public function display() {
+    public function display()
+    {
     }
 
     /**
      * Gets an element
      */
-    public function get($id) {
-        if (empty($id)) { return array(); }
-        $params = array('id = ?'=>intval($id));
+    public function get($id)
+    {
+        if (empty($id)) {
+            return array();
+        }
+        $params = array('id = ?' => intval($id));
         if ($this->is_course_model) {
             $course_id = api_get_course_int_id();
-            $params = array('id = ? AND c_id = ?' => array($id, $course_id));
+            $params    = array('id = ? AND c_id = ?' => array($id, $course_id));
         }
-        $result = Database::select('*',$this->table, array('where' => $params),'first');
+        $result = Database::select('*', $this->table, array('where' => $params), 'first');
+
         return $result;
     }
 
-    public function get_all($options = null) {
+    public function get_all($options = null)
+    {
         return Database::select('*', $this->table, $options);
     }
 
-     public function get_first($options = null) {
+    public function get_first($options = null)
+    {
         return Database::select('*', $this->table, $options, 'first');
     }
 
-    public function get_all_for_export($options = null) {
+    public function get_all_for_export($options = null)
+    {
         return Database::select('name, description', $this->table, $options);
     }
 
     /**
      * Get the count of elements
      */
-    public function get_count() {
-        $row = Database::select('count(*) as count', $this->table, array('where' => array('parent_id = ?' => '0')),'first');
+    public function get_count()
+    {
+        $row = Database::select(
+            'count(*) as count',
+            $this->table,
+            array('where' => array('parent_id = ?' => '0')),
+            'first'
+        );
+
         return $row['count'];
     }
 
     /**
      * a little bit of javascript to display
      */
-	public function javascript() {
-	}
+    public function javascript()
+    {
+    }
 
-	/**
-	 * Saves an element into the DB
-	 *
-	 * @param array $values
-	 * @return bool
-	 *
-	 */
-	public function save($params, $show_query = false) {
+    /**
+     * Saves an element into the DB
+     *
+     * @param array $values
+     * @return bool
+     *
+     */
+    public function save($params, $show_query = false)
+    {
         $params = $this->clean_parameters($params);
 
         if ($this->is_course_model) {
@@ -155,12 +182,13 @@ class Model {
 
         if (!empty($params)) {
             $id = Database::insert($this->table, $params, $show_query);
-    		if (is_numeric($id)){
-    			return $id;
-    		}
+            if (is_numeric($id)) {
+                return $id;
+            }
         }
+
         return false;
-	}
+    }
 
     /**
      * Updates the obj in the database. The $params['id'] must exist in order to update a record
@@ -168,7 +196,8 @@ class Model {
      * @param array $values
      *
      */
-    public function update($params) {
+    public function update($params)
+    {
         $params = $this->clean_parameters($params);
 
         if ($this->is_course_model) {
@@ -190,12 +219,13 @@ class Model {
             $id = intval($params['id']);
             unset($params['id']); //To not overwrite the id
             if (is_numeric($id)) {
-                $result = Database::update($this->table, $params, array('id = ?'=>$id));
-                if ($result){
+                $result = Database::update($this->table, $params, array('id = ?' => $id));
+                if ($result) {
                     return true;
                 }
             }
         }
+
         return false;
     }
 }

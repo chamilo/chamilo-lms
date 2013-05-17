@@ -194,6 +194,7 @@ require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/dev.php';
 
 // Classic way of render pages or the Controller approach
 $app['classic_layout'] = false;
+$app['full_width'] = false;
 $app['breadcrumb'] = array();
 
 // The script is allowed? This setting is modified when calling api_is_not_allowed()
@@ -211,6 +212,11 @@ $app['template_style'] = 'default';
 
 // Default layout
 $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
+
+// Start session after the internationalization library has been initialized
+
+// @todo use silex session provider instead of a custom class
+Chamilo::session()->start($alreadyInstalled);
 
 /** Including service providers */
 require_once 'services.php';
@@ -309,11 +315,6 @@ $app->error(
 // Preserving the value of the global variable $charset.
 $charset_initial_value = $charset;
 
-// Start session after the internationalization library has been initialized
-
-// @todo use silex session provider instead of a custom class
-Chamilo::session()->start($alreadyInstalled);
-
 // Loading chamilo settings
 /* @todo create a service provider to load plugins.
   Check how bolt add extensions (including twig templates, config with yml)*/
@@ -407,51 +408,52 @@ if (isset($this_script) && $this_script == 'sub_language') {
 
     $english_language_array = $parent_language_array = $sub_language_array = array();
 
-    if (!empty($language_files_to_load))
-    foreach ($language_files_to_load as $language_file_item) {
-        $lang_list_pre = array_keys($GLOBALS);
-        //loading english
-        $path = $langPath.'english/'.$language_file_item.'.inc.php';
-        if (file_exists($path)) {
-            include $path;
-        }
-
-        $lang_list_post = array_keys($GLOBALS);
-        $lang_list_result = array_diff($lang_list_post, $lang_list_pre);
-        unset($lang_list_pre);
-
-        //  english language array
-        $english_language_array[$language_file_item] = compact($lang_list_result);
-
-        //cleaning the variables
-        foreach ($lang_list_result as $item) {
-            unset(${$item});
-        }
-        $parent_file = $langPath.$parent_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
-
-        if (file_exists($parent_file) && is_file($parent_file)) {
-            include_once $parent_file;
-        }
-        //  parent language array
-        $parent_language_array[$language_file_item] = compact($lang_list_result);
-
-        //cleaning the variables
-        foreach ($lang_list_result as $item) {
-            unset(${$item});
-        }
-        if (!empty($sub_language)) {
-            $sub_file = $langPath.$sub_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
-            if (file_exists($sub_file) && is_file($sub_file)) {
-                include $sub_file;
+    if (!empty($language_files_to_load)) {
+        foreach ($language_files_to_load as $language_file_item) {
+            $lang_list_pre = array_keys($GLOBALS);
+            //loading english
+            $path = $langPath.'english/'.$language_file_item.'.inc.php';
+            if (file_exists($path)) {
+                include $path;
             }
-        }
 
-        //  sub language array
-        $sub_language_array[$language_file_item] = compact($lang_list_result);
+            $lang_list_post = array_keys($GLOBALS);
+            $lang_list_result = array_diff($lang_list_post, $lang_list_pre);
+            unset($lang_list_pre);
 
-        //cleaning the variables
-        foreach ($lang_list_result as $item) {
-            unset(${$item});
+            //  english language array
+            $english_language_array[$language_file_item] = compact($lang_list_result);
+
+            //cleaning the variables
+            foreach ($lang_list_result as $item) {
+                unset(${$item});
+            }
+            $parent_file = $langPath.$parent_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
+
+            if (file_exists($parent_file) && is_file($parent_file)) {
+                include_once $parent_file;
+            }
+            //  parent language array
+            $parent_language_array[$language_file_item] = compact($lang_list_result);
+
+            //cleaning the variables
+            foreach ($lang_list_result as $item) {
+                unset(${$item});
+            }
+            if (!empty($sub_language)) {
+                $sub_file = $langPath.$sub_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
+                if (file_exists($sub_file) && is_file($sub_file)) {
+                    include $sub_file;
+                }
+            }
+
+            //  sub language array
+            $sub_language_array[$language_file_item] = compact($lang_list_result);
+
+            //cleaning the variables
+            foreach ($lang_list_result as $item) {
+                unset(${$item});
+            }
         }
     }
 }
@@ -660,6 +662,47 @@ $app['is_admin'] = false;
 
 /** Including routes */
 require_once 'routes.php';
+
+
+// Setting gedmo extensions
+
+if (isset($app['configuration']['main_database']) && isset($app['db.event_manager'])) {
+
+    $sortableGroup = new Gedmo\Mapping\Annotation\SortableGroup(array());
+    $sortablePosition = new Gedmo\Mapping\Annotation\SortablePosition(array());
+    $tree = new Gedmo\Mapping\Annotation\Tree(array());
+    $tree = new Gedmo\Mapping\Annotation\TreeParent(array());
+    $tree = new Gedmo\Mapping\Annotation\TreeLeft(array());
+    $tree = new Gedmo\Mapping\Annotation\TreeRight(array());
+    $tree = new Gedmo\Mapping\Annotation\TreeRoot(array());
+    $tree = new Gedmo\Mapping\Annotation\TreeLevel(array());
+    $tree = new Gedmo\Mapping\Annotation\Versioned(array());
+    $tree = new Gedmo\Mapping\Annotation\Loggable(array());
+    $tree = new Gedmo\Loggable\Entity\LogEntry();
+
+    // Setting Doctrine2 extensions
+    $timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
+    $app['db.event_manager']->addEventSubscriber($timestampableListener);
+
+    $sluggableListener = new \Gedmo\Sluggable\SluggableListener();
+    $app['db.event_manager']->addEventSubscriber($sluggableListener);
+
+    $sortableListener = new Gedmo\Sortable\SortableListener();
+    $app['db.event_manager']->addEventSubscriber($sortableListener);
+
+    $treeListener = new \Gedmo\Tree\TreeListener();
+    //$treeListener->setAnnotationReader($cachedAnnotationReader);
+    $app['db.event_manager']->addEventSubscriber($treeListener);
+
+    $loggableListener = new \Gedmo\Loggable\LoggableListener();
+    $userInfo = api_get_user_info();
+
+    if (isset($userInfo) && !empty($userInfo['username'])) {
+        $loggableListener->setUsername($userInfo['username']);
+    }
+
+    $app['db.event_manager']->addEventSubscriber($loggableListener);
+}
 
 //Fixes uses of $_course in the scripts
 $_course = api_get_course_info();

@@ -13,7 +13,15 @@ require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script();
+$type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
+
+if ($type == 'question') {
+    if (!(api_is_platform_admin() || api_is_question_manager())) {
+        api_not_allowed(true);
+    }
+} else {
+    api_protect_admin_script();
+}
 
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -25,7 +33,6 @@ $tool_name = null;
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 $field_id = isset($_GET['field_id']) ? $_GET['field_id'] : null;
-$type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 
 if (empty($field_id)) {
     api_not_allowed();
@@ -41,18 +48,18 @@ $check = Security::check_token('request');
 $token = Security::get_token();
 
 if ($action == 'add') {
-    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type,'name' => get_lang('ExtraFields'));
+    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type,'name' => $extra_field->pageName);
     $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],'name' => $extra_field_info['field_display_text']);
     $interbreadcrumb[]=array('url' => 'extra_field_options.php?type='.$extra_field->type.'&field_id='.$extra_field_info['id'], 'name' => get_lang('EditExtraFieldOptions'));
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Add'));
 } elseif ($action == 'edit') {
-    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type,'name' => get_lang('ExtraFields'));
+    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type,'name' => $extra_field->pageName);
     $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],'name' => $extra_field_info['field_display_text']);
     $interbreadcrumb[]=array('url' => 'extra_field_options.php?type='.$extra_field->type.'&field_id='.$extra_field_info['id'], 'name' => get_lang('EditExtraFieldOptions'));
 
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Edit'));
 } else {
-    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type,'name' => get_lang('ExtraFields'));
+    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type,'name' => $extra_field->pageName);
     $interbreadcrumb[]=array('url' =>  'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],'name' => $extra_field_info['field_display_text']);
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('EditExtraFieldOptions'));
 }

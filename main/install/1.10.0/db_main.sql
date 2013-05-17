@@ -213,6 +213,7 @@ CREATE TABLE IF NOT EXISTS course_field (
     field_visible tinyint default 0,
     field_changeable tinyint default 0,
     field_filter tinyint default 0,
+    field_loggeable int default 0,
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -241,11 +242,12 @@ CREATE TABLE IF NOT EXISTS course_field_options (
 
 DROP TABLE IF EXISTS course_field_values;
 CREATE TABLE IF NOT EXISTS course_field_values(
-    id  int NOT NULL auto_increment,
+    id bigint NOT NULL auto_increment,
     course_code varchar(40) NOT NULL,
     field_id int NOT NULL,
     field_value text,
     user_id INT unsigned NOT NULL default 0,
+    comment VARCHAR(100) default '',
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -552,6 +554,7 @@ CREATE TABLE IF NOT EXISTS session_field (
     field_visible tinyint default 0,
     field_changeable tinyint default 0,
     field_filter tinyint default 0,
+    field_loggeable int default 0,
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -569,11 +572,12 @@ CREATE TABLE IF NOT EXISTS session_field_options(
 
 DROP TABLE IF EXISTS session_field_values;
 CREATE TABLE IF NOT EXISTS session_field_values(
-    id  int NOT NULL auto_increment,
+    id bigint NOT NULL auto_increment,
     session_id int NOT NULL,
     field_id int NOT NULL,
     field_value text,
     user_id INT unsigned NOT NULL default 0,
+    comment VARCHAR(100) default '',
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -1471,6 +1475,7 @@ CREATE TABLE IF NOT EXISTS user_field (
     field_visible tinyint default 0,
     field_changeable tinyint default 0,
     field_filter tinyint default 0,
+    field_loggeable int default 0,
     tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -1493,6 +1498,7 @@ CREATE TABLE IF NOT EXISTS user_field_values(
     field_id int NOT NULL,
     field_value	text,
     author_id INT unsigned NOT NULL default 0,
+    comment VARCHAR(100) default '',
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -2596,11 +2602,11 @@ CREATE TABLE IF NOT EXISTS specific_field (
 
 DROP TABLE IF EXISTS specific_field_values;
 CREATE TABLE IF NOT EXISTS specific_field_values (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-    course_code VARCHAR(40) NOT NULL ,
-    tool_id VARCHAR(100) NOT NULL ,
-    ref_id INT NOT NULL ,
-    field_id INT NOT NULL ,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    course_code VARCHAR(40) NOT NULL,
+    tool_id VARCHAR(100) NOT NULL,
+    ref_id INT NOT NULL,
+    field_id INT NOT NULL,
     value VARCHAR(200) NOT NULL
 );
 ALTER TABLE specific_field ADD CONSTRAINT unique_specific_field__code UNIQUE (code);
@@ -3453,7 +3459,7 @@ CREATE TABLE user_course_category (
   user_id int unsigned NOT NULL default 0,
   title text NOT NULL,
   sort int,
-  PRIMARY KEY  (id)
+  PRIMARY KEY(id)
 );
 
 ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_user (user);
@@ -3472,6 +3478,7 @@ CREATE TABLE IF NOT EXISTS question_field (
     field_visible tinyint default 0,
     field_changeable tinyint default 0,
     field_filter tinyint default 0,
+    field_loggeable int default 0,
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -3489,11 +3496,12 @@ CREATE TABLE IF NOT EXISTS question_field_options(
 
 DROP TABLE IF EXISTS question_field_values;
 CREATE TABLE IF NOT EXISTS question_field_values(
-    id  int NOT NULL auto_increment,
+    id bigint NOT NULL auto_increment,
     question_id int NOT NULL,
     field_id int NOT NULL,
     field_value text,
     user_id INT unsigned NOT NULL default 0,
+    comment VARCHAR(100) default '',
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -3502,5 +3510,21 @@ ALTER TABLE question_field_options ADD INDEX idx_question_field_options_field_id
 ALTER TABLE question_field_values ADD INDEX idx_question_field_values_question_id(question_id);
 ALTER TABLE question_field_values ADD INDEX idx_question_field_values_field_id(field_id);
 
+DROP TABLE IF EXISTS extra_field_option_rel_field_option;
+CREATE TABLE extra_field_option_rel_field_option(id INT auto_increment, role_id INT, field_id INT, field_option_id INT, related_field_option_id INT, PRIMARY KEY(id));
+
+DROP TABLE IF EXISTS ext_log_entries;
+CREATE TABLE ext_log_entries (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  action varchar(255) DEFAULT NULL,
+  logged_at datetime DEFAULT NULL,
+  object_id varchar(64) DEFAULT NULL,
+  object_class varchar(255) DEFAULT NULL,
+  version int(11) DEFAULT NULL,
+  data varchar(255) DEFAULT NULL,
+  username varchar(255) DEFAULT NULL,
+  PRIMARY KEY (id)
+) DEFAULT CHARSET=utf8;
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.006' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.010' WHERE variable = 'chamilo_database_version';

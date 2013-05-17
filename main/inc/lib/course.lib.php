@@ -2519,6 +2519,12 @@ class CourseManager
      * @todo use Twig
      */
     public static function course_item_html($params, $is_sub_content = false) {
+        global $app;
+        if ($app['full_width']) {
+            $rowDiv = '<div class="row-fluid">';
+        } else {
+            $rowDiv = '<div class="row">';
+        }
         $html = '';
         $class = "well course-box";
         if ($is_sub_content) {
@@ -2528,9 +2534,9 @@ class CourseManager
             $class .= " session-item";
         }
         $html .= '<div class="'.$class.'">';
-            $html .= '<div class="row">';
+            $html .= $rowDiv;
             $html .= '<div class="span7">';
-                $html .= ' <div class="row">';
+                $html .= $rowDiv;
                     $html .= '<div class="span1 course-box-thumbnail-box">';
                     if (!empty($params['link'])) {
                         $html .= '<a class="thumbnail" href="'.$params['link'].'">';
@@ -3252,8 +3258,9 @@ class CourseManager
      * @todo move code for what's new icons to a separate function to clear things up
      * @todo add a parameter user_id so that it is possible to show the courselist of other users (=generalisation). This will prevent having to write a new function for this.
      */
-    public static function get_logged_user_course_html($course, $session_id = 0, $load_dirs = false) {
-        $course_info = api_get_course_info($course['code']);
+    public static function get_logged_user_course_html($course, $session_id = 0, $load_dirs = false)
+    {
+        $course_info = api_get_course_info_by_id($course['id']);
         $course_info['id_session'] = $session_id;
 
         // Display course entry.

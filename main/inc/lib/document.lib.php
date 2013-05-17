@@ -3271,9 +3271,7 @@ class DocumentManager
                         // Show the "image name" not the filename of the image.
                         if ($lp_id) {
                             //LP URL
-                            $url = api_get_self().'?cidReq='.Security::remove_XSS(
-                                $_GET['cidReq']
-                            ).'&amp;action=add_item&amp;type='.TOOL_DOCUMENT.'&amp;file='.$key.'&amp;lp_id='.$lp_id;
+                            $url = api_get_self().'?cidReq='.$course_info['code'].'&amp;action=add_item&amp;type='.TOOL_DOCUMENT.'&amp;file='.$key.'&amp;lp_id='.$lp_id;
                             if (!empty($overwrite_url)) {
                                 $url = $overwrite_url.'&document_id='.$key;
                             }

@@ -2,9 +2,9 @@
 {% block left_column %}
     <script>
         function loadQuestions(id) {
-            var categoryUrl = '{{ app.url_generator.generate('admin_questions_get_categories', {id : ':s'}) }}';
+            var categoryUrl = '{{ url('admin_questions_get_categories', {id : ':s'}) }}';
             categoryUrl = categoryUrl.replace(':s', id);
-            var questionContentUrl = '{{ app.url_generator.generate('admin_get_questions_by_category', {categoryId : ':s'}) }}';
+            var questionContentUrl = '{{ url('admin_get_questions_by_category', {categoryId : ':s'}) }}';
             questionContentUrl = questionContentUrl.replace(':s', id);
             $('.questions').load(questionContentUrl);
             var parent = $('.load_categories li #'+id).parent();

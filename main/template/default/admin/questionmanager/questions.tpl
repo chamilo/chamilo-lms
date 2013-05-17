@@ -121,8 +121,21 @@
 
 <div class="questions">
     {% if category %}
-        <h3>{{  category.title }}</h3>
+        <h3>{{  category.title }}
+
+        {% if category.cId == 0 %}
+            <a href="{{ url('admin_category_edit', {id : category.iid}) }}">
+                <img src="{{ "edit.png"|icon(22) }}">
+            </a>
+        {% endif %}
+        {% if category_children == 0 %}
+            &nbsp; <a href="{{ url('admin_category_delete', {id : category.iid}) }}">
+                <img src="{{ "delete.png"|icon(22) }}">
+            </a>
+        {% endif %}
+        </h3>
     {% endif %}
+    <div class="clear"></div>
 
     {{ grid }}
 </div>

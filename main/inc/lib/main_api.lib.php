@@ -3574,8 +3574,9 @@ function api_get_language_from_type($lang_type)
             break;
         case 'course_lang':
             $_course = api_get_course_info();
-            if (isset($_course['language']) && !empty($_course['language']) )
+            if (isset($_course['language']) && !empty($_course['language'])) {
                 $language = $_course['language'];
+            }
             break;
         default :
             $language = false;
@@ -6821,12 +6822,19 @@ function api_get_language_interface() {
             $language_interface = $courseInfo['language'];
         }
 
+        //error_log('$language_interface: '.$language_interface);
+
         // Lang priorities could be: course_lang, user_profil_lang, user_selected_lang , platform_lang
 
         $language_priority1 = api_get_setting('languagePriority1');
         $language_priority2 = api_get_setting('languagePriority2');
         $language_priority3 = api_get_setting('languagePriority3');
         $language_priority4 = api_get_setting('languagePriority4');
+
+        /*error_log('$language_interface1: '.$language_priority1);
+        error_log('$language_interface2: '.$language_priority2);
+        error_log('$language_interface3: '.$language_priority3);
+        error_log('$language_interface4: '.$language_priority4);*/
 
         if (!empty($language_priority4) && api_get_language_from_type($language_priority4) !== false) {
             $language_interface = api_get_language_from_type($language_priority4);

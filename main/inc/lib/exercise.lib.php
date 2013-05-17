@@ -25,7 +25,8 @@ class ExerciseLib
      * @param int   current item from the list of questions
      * @param int   number of total questions
      * */
-    public static function showQuestion($objQuestionTmp, $only_questions = false, $origin = false, $current_item = '', $show_title = true, $freeze = false, $user_choice = array(), $show_comment = false, $exercise_feedback = null, $show_answers = false) {
+    public static function showQuestion($objQuestionTmp, $only_questions = false, $origin = false, $current_item = '', $show_title = true, $freeze = false, $user_choice = array(), $show_comment = false, $exercise_feedback = null, $show_answers = false)
+    {
         // Text direction for the current language
         //$is_ltr_text_direction = api_get_text_direction() != 'rtl';
         // Change false to true in the following line to enable answer hinting
@@ -35,6 +36,8 @@ class ExerciseLib
             // Question not found
             return false;
         }
+
+        $html = null;
 
         $questionId = $objQuestionTmp->id;
 
@@ -53,19 +56,19 @@ class ExerciseLib
             if (!$only_questions) {
                 $questionDescription = $objQuestionTmp->selectDescription();
                 if ($show_title) {
-                    echo Testcategory::getCategoryNamesForQuestion($objQuestionTmp->id);
-                    echo Display::div($current_item.'. '.$objQuestionTmp->selectTitle(), array('class' => 'question_title'));
+                    $html .= Testcategory::getCategoryNamesForQuestion($objQuestionTmp->id);
+                    $html .= Display::div($current_item.'. '.$objQuestionTmp->selectTitle(), array('class' => 'question_title'));
                 }
                 if (!empty($questionDescription)) {
-                    echo Display::div($questionDescription, array('class' => 'question_description'));
+                    $html .= Display::div($questionDescription, array('class' => 'question_description'));
                 }
             }
 
             if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION)) && $freeze) {
-                return '';
+                return null;
             }
 
-            echo '<div class="question_options">';
+            $html .= '<div class="question_options">';
             // construction of the Answer object (also gets all answers details)
             $objAnswerTmp = new Answer($questionId);
 
@@ -126,9 +129,7 @@ class ExerciseLib
                 $num_suggestions = ($nbrAnswers - $j) + 1;
             } elseif ($answerType == FREE_ANSWER) {
                 $fck_content = isset($user_choice[0]) && !empty($user_choice[0]['answer']) ? $user_choice[0]['answer'] : null;
-
                 $oFCKeditor = new FCKeditor("choice[".$questionId."]");
-
                 $oFCKeditor->ToolbarSet = 'TestFreeAnswer';
                 $oFCKeditor->Width = '100%';
                 $oFCKeditor->Height = '200';
@@ -156,7 +157,7 @@ class ExerciseLib
                     }
 
                     $nano = new Nanogong($params);
-                    echo $nano->show_button();
+                    $s .= $nano->show_button();
                 }
 
                 $oFCKeditor = new FCKeditor("choice[".$questionId."]");
@@ -181,7 +182,7 @@ class ExerciseLib
                     $header .= Display::tag('th', get_lang('Feedback'));
                 }
                 $s .= '<table class="data_table">';
-                $s.= Display::tag('tr', $header, array('style' => 'text-align:left;'));
+                $s .= Display::tag('tr', $header, array('style' => 'text-align:left;'));
             }
 
             if ($show_comment) {
@@ -455,7 +456,7 @@ class ExerciseLib
                     // TODO: replace $answerId by $numAnswer
 
                     if ($lines_count == 1) {
-                        echo $objAnswerTmp->getJs();
+                        $s .= $objAnswerTmp->getJs();
                     }
                     if ($answerCorrect != 0) {
                         // only show elements to be answered (not the contents of
@@ -634,7 +635,6 @@ class ExerciseLib
 
                 $counterAnswer = 1;
                 foreach ($objAnswerTmp->answer as $answerId => $answer_item) {
-                //for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                     $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                     $windowId = $questionId.'_'.$counterAnswer;
                     if ($answerCorrect == 0) {
@@ -656,11 +656,8 @@ class ExerciseLib
             // destruction of the Question object
             unset($objQuestionTmp);
 
-            if ($origin != 'export') {
-                echo $s;
-            } else {
-                return $s;
-            }
+            $html .= $s;
+            return $html;
         } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
             // Question is a HOT_SPOT
             //checking document/images visibility
@@ -679,17 +676,16 @@ class ExerciseLib
             $questionDescription = $objQuestionTmp->selectDescription();
 
             if ($freeze) {
-                echo Display::img($objQuestionTmp->selectPicturePath());
-                return;
+                $s .= Display::img($objQuestionTmp->selectPicturePath());
+                $html .= $s;
+                return $html;
             }
 
             // Get the answers, make a list
             $objAnswerTmp = new Answer($questionId);
-            $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 
             // get answers of hotpost
             $answers_hotspot = array();
-            //for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             foreach ($objAnswerTmp->answer as $answerId => $answer_item) {
                 //$answers = $objAnswerTmp->selectAnswerByAutoId($objAnswerTmp->selectAutoId($answerId));
                 $answers_hotspot[$answerId] = $objAnswerTmp->selectAnswer($answerId);
@@ -716,16 +712,16 @@ class ExerciseLib
 
             if (!$only_questions) {
                 if ($show_title) {
-                    echo Testcategory::getCategoryNamesForQuestion($objQuestionTmp->id);
-                    echo '<div class="question_title">'.$current_item.'. '.$questionName.'</div>';
+                    $html .=  Testcategory::getCategoryNamesForQuestion($objQuestionTmp->id);
+                    $html .=  '<div class="question_title">'.$current_item.'. '.$questionName.'</div>';
                 }
                 //@todo I need to the get the feedback type
-                echo '<input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'" />';
-                echo '<table class="exercise_questions" >
+                $html .=  '<input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'" />';
+                $html .=  '<table class="exercise_questions" >
                       <tr>
                         <td valign="top" colspan="2">';
-                echo $questionDescription;
-                echo '</td></tr>';
+                $html .=  $questionDescription;
+                $html .=  '</td></tr>';
             }
             $canClick = isset($_GET['editQuestion']) ? '0' : (isset($_GET['modifyAnswers']) ? '0' : '1');
 
@@ -841,7 +837,6 @@ class ExerciseLib
                             </script>';
             $s .= '<tr><td valign="top" colspan="2" width="520"><table><tr><td width="520">
                         <script>
-                            <!--
                             // Version check based upon the values entered above in "Globals"
                             var hasReqestedVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
 
@@ -858,14 +853,14 @@ class ExerciseLib
                                     + "<a href=\"http://www.macromedia.com/go/getflash/\">Get Flash<\/a>";
                                 document.write(alternateContent);  // insert non-flash content
                             }
-                            // -->
                         </script>
                         </td>
                         <td valign="top" align="left">'.$answer_list.'</td></tr>
                         </table>
             </td></tr>';
-            echo $s;
-            echo '</table>';
+            $html .= $s;
+            $html .= '</table>';
+            return $html;
         }
         return $nbrAnswers;
     }
@@ -1568,13 +1563,12 @@ class ExerciseLib
 
     /**
      * Getting all active exercises from a course from a session (if a session_id is provided we will show all the exercises in the course + all exercises in the session)
-     * @param   array   course data
-     * @param   int     session id
-     * @param		int			course c_id
+     * @param   int session id
+     * @param   int course c_id
      * @return  array   array with exercise data
      * modified by Hubert Borderiou
      */
-    public static function get_all_exercises_for_course_id($course_info = null, $session_id = 0, $course_id = 0)
+    public static function get_all_exercises_for_course_id($session_id = 0, $course_id = 0)
     {
         $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
         if ($session_id == -1) {
@@ -2674,7 +2668,7 @@ class ExerciseLib
         echo '<div id="question_div_'.$questionId.'" class="main_question '.$remind_highlight.'" >';
 
         // Shows the question + possible answers
-        ExerciseLib::showQuestion($question_obj, false, $origin, $i, true, false, $user_choice, false);
+        echo ExerciseLib::showQuestion($question_obj, false, $origin, $i, true, false, $user_choice, false);
 
         // Button save and continue
         switch ($objExercise->type) {

@@ -11,9 +11,16 @@ $language_file = array('admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
-$this_section = SECTION_PLATFORM_ADMIN;
+$extraFieldType =  isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 
-api_protect_admin_script();
+$this_section = SECTION_PLATFORM_ADMIN;
+if ($extraFieldType == 'question') {
+    if (!(api_is_platform_admin() || api_is_question_manager())) {
+        api_not_allowed(true);
+    }
+} else {
+    api_protect_admin_script();
+}
 
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -24,8 +31,6 @@ $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'
 $tool_name = null;
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
-
-$extraFieldType =  isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 
 if (!in_array($extraFieldType, ExtraField::getValidExtraFieldTypes())) {
     api_not_allowed();

@@ -108,6 +108,7 @@ $search_oper     = isset($_REQUEST['searchOper'])   ? $_REQUEST['searchOper']   
 $search_string   = isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] : false;
 
 $extra_fields = array();
+$questionFields = array();
 
 if ($_REQUEST['_search'] == 'true') {
     $where_condition = ' 1 = 1 ';
@@ -120,7 +121,6 @@ if ($_REQUEST['_search'] == 'true') {
 
     // for now
     if (!empty($filters)) {
-
         switch($action) {
             case 'get_questions':
                 $type = 'question';
@@ -130,10 +130,25 @@ if ($_REQUEST['_search'] == 'true') {
                 break;
         }
 
+        // Extra field.
+
         $extraField = new ExtraField($type);
-        $result = $extraField->getExtraFieldRules($filters);
+        $result = $extraField->getExtraFieldRules($filters, 'extra_');
+
         $extra_fields = $result['extra_fields'];
         $condition_array = $result['condition_array'];
+
+        if (!empty($condition_array)) {
+            $where_condition .= ' AND ( ';
+            $where_condition .= implode($filters->groupOp, $condition_array);
+            $where_condition .= ' ) ';
+        }
+
+        // Question field
+
+        $resultQuestion = $extraField->getExtraFieldRules($filters, 'question_');
+        $questionFields = $resultQuestion['extra_fields'];
+        $condition_array = $resultQuestion['condition_array'];
 
         if (!empty($condition_array)) {
             $where_condition .= ' AND ( ';
@@ -155,14 +170,13 @@ if (!$sidx) {
 switch ($action) {
     case 'get_questions':
         $categoryId = isset($_REQUEST['categoryId']) ? $_REQUEST['categoryId'] : null;
+        $exerciseId = isset($_REQUEST['exerciseId']) ? $_REQUEST['exerciseId'] : null;
+        $courseId = isset($_REQUEST['courseId']) ? $_REQUEST['courseId'] : null;
         /** @var \Doctrine\ORM\EntityManager $em */
         /*$em = $app['orm.em'];
         $repo = $em->getRepository('Entity\CQuizQuestionRelCategory');
         $count = $repo->getCountQuestionByCategory($categoryId);*/
-        if (isset($_REQUEST['categoryId'])) {
-            $categoryId = intval($_REQUEST['categoryId']);
-        }
-        $count = Question::getQuestions($categoryId, array('where'=> $where_condition, 'extra' => $extra_fields), true);
+        $count = Question::getQuestions($categoryId, $exerciseId, $courseId, array('where'=> $where_condition, 'extra' => $extra_fields, 'question' => $questionFields), true);
         break;
     case 'get_user_list_plugin_widescale':
         $count = UserManager::get_user_data(null, null, null, null, true);
@@ -324,9 +338,15 @@ switch ($action) {
         /** @var \Entity\CQuizCategory $category */
         /*$category = $repo->find($categoryId);
         $questions = $category->getQuestions();*/
-        $columns = Question::getQuestionColumns();
+        $columns = Question::getQuestionColumns(api_get_course_id(), $questionFields);
         $columns = $columns['simple_column_name'];
-        $result = Question::getQuestions($categoryId, array('where'=> $where_condition, 'order'=>"$sidx $sord", 'extra' => $extra_fields, 'limit'=> "$start , $limit"));
+        $result = Question::getQuestions($categoryId, $exerciseId, $courseId, array(
+            'where'=> $where_condition,
+            'order'=>"$sidx $sord",
+            'extra' => $extra_fields,
+            'question' => $questionFields,
+            'limit'=> "$start , $limit")
+        );
 
         break;
     case 'get_user_list_plugin_widescale':
@@ -623,19 +643,19 @@ switch ($action) {
             $result = $new_result;
         }*/
         break;
-      case 'get_usergroups_teacher':
+    case 'get_usergroups_teacher':
         $columns = array('name', 'users', 'actions');
         $options = array('order'=>"name $sord", 'LIMIT'=> "$start , $limit");
         $options['course_id'] = $course_id;
         switch ($type) {
-            case 'not_registered':
-                $options['where'] = array(" (course_id IS NULL OR course_id != ?) " => $course_id);
-                $result = $obj->get_usergroup_not_in_course($options);
-                break;
-            case 'registered':
-                $options['where'] = array(" usergroup.course_id = ? " =>  $course_id);
-                $result = $obj->get_usergroup_in_course($options);
-                break;
+        case 'not_registered':
+            $options['where'] = array(" (course_id IS NULL OR course_id != ?) " => $course_id);
+            $result = $obj->get_usergroup_not_in_course($options);
+            break;
+        case 'registered':
+            $options['where'] = array(" usergroup.course_id = ? " =>  $course_id);
+            $result = $obj->get_usergroup_in_course($options);
+            break;
         }
         $new_result = array();
 
@@ -656,13 +676,12 @@ switch ($action) {
             }
             $result = $new_result;
         }
-        if(!in_array($sidx, $columns)) {
+        if (!in_array($sidx, $columns)) {
             $sidx = 'name';
         }
         //Multidimensional sort
-          ArrayClass::msort($result, $sidx);
+        ArrayClass::msort($result, $sidx);
         break;
-
     default:
         exit;
 }

@@ -201,10 +201,7 @@ ALTER TABLE track_e_lastaccess ADD COLUMN c_id int unsigned NOT NULL default 0;
 ALTER TABLE track_e_access ADD COLUMN c_id int unsigned NOT NULL default 0;
 ALTER TABLE track_e_downloads ADD COLUMN c_id int unsigned NOT NULL default 0;
 ALTER TABLE track_e_links ADD COLUMN c_id int unsigned NOT NULL default 0;
-
-ALTER TABLE track_e_course_access MODIFY COLUMN course_access_id bigint unsigned;
-
-ALTER TABLE track_e_lastaccess ADD INDEX ( c_id, access_user_id ) ;
+ALTER TABLE track_e_lastaccess ADD INDEX (c_id, access_user_id);
 
 ALTER TABLE c_quiz ADD COLUMN autolaunch int DEFAULT 0;
 RENAME TABLE c_quiz_question_category TO c_quiz_category;
@@ -263,7 +260,6 @@ ALTER TABLE c_quiz_category ADD COLUMN lft int;
 ALTER TABLE c_quiz_category ADD COLUMN rgt int;
 ALTER TABLE c_quiz_category ADD COLUMN root int;
 ALTER TABLE c_quiz_category MODIFY COLUMN parent_id int default null;
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('use_virtual_keyboard', NULL, 'radio', 'Platform', 'false', 'ShowVirtualKeyboardTitle', 'ShowVirtualKeyboardComment', NULL, NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('use_virtual_keyboard', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('use_virtual_keyboard', 'false', 'No');
@@ -274,6 +270,20 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('disable_co
 
 ALTER TABLE track_e_course_access MODIFY COLUMN course_access_id bigint unsigned auto_increment;
 
+CREATE TABLE extra_field_option_rel_field_option(id INT auto_increment, role_id INT, field_id INT, field_option_id INT, related_field_option_id INT, PRIMARY KEY(id));
+
+CREATE TABLE ext_log_entries (id int(11) NOT NULL AUTO_INCREMENT, action varchar(255) DEFAULT NULL, logged_at datetime DEFAULT NULL, object_id varchar(64) DEFAULT NULL, object_class varchar(255) DEFAULT NULL, version int(11) DEFAULT NULL, data varchar(255) DEFAULT NULL, username varchar(255) DEFAULT NULL, PRIMARY KEY (id)) DEFAULT CHARSET=utf8;
+
+ALTER TABLE user_field ADD COLUMN field_loggeable int default 0;
+ALTER TABLE session_field ADD COLUMN field_loggeable int default 0;
+ALTER TABLE course_field ADD COLUMN field_loggeable int default 0;
+ALTER TABLE question_field ADD COLUMN field_loggeable int default 0;
+
+ALTER TABLE user_field_values ADD COLUMN comment VARCHAR(100) default '';
+ALTER TABLE session_field_values ADD COLUMN comment VARCHAR(100) default '';
+ALTER TABLE course_field_values ADD COLUMN comment VARCHAR(100) default '';
+ALTER TABLE question_field_values ADD COLUMN comment VARCHAR(100) default '';
+
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.006' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.010' WHERE variable = 'chamilo_database_version';

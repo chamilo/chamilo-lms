@@ -13,6 +13,8 @@
 
 /*	   INIT SECTION */
 
+use \ChamiloSession as Session;
+
 // Language files that need to be included
 $language_file = array('create_course', 'course_info', 'admin', 'gradebook', 'document');
 require_once '../inc/global.inc.php';
@@ -32,7 +34,8 @@ $currentCourseRepository    = $_course['path'];
 $is_allowedToEdit 			= api_is_course_admin() || api_is_platform_admin();
 
 $course_code 				= api_get_course_id();
-$courseId = api_get_course_int_id();
+$_course                    = api_get_course_info($course_code);
+$courseId                   = api_get_course_int_id();
 $course_access_settings 	= CourseManager :: get_access_settings($course_code);
 
 //LOGIC FUNCTIONS
@@ -379,9 +382,7 @@ $all_course_information =  CourseManager::get_course_information($_course['sysCo
 $values = array();
 
 $values['title']                        = $_course['name'];
-//$values['visual_code']                  = $_course['official_code'];
 $values['category_code']                = $_course['categoryCode'];
-//$values['tutor_name']                 = $_course['titular'];
 $values['course_language']              = $_course['language'];
 $values['department_name']              = $_course['extLink']['name'];
 $values['department_url']               = $_course['extLink']['url'];
@@ -447,6 +448,7 @@ if ($form->validate() && is_settings_editable()) {
     }
     unset($value);
     $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
+
     $sql = "UPDATE $table_course SET
         title 				    = '".$update_values['title']."',
         course_language 	    = '".$update_values['course_language']."',
@@ -465,7 +467,7 @@ if ($form->validate() && is_settings_editable()) {
     // Update course_settings table - this assumes those records exist, otherwise triggers an error
     $table_course_setting = Database::get_course_table(TABLE_COURSE_SETTING);
 
-    foreach ($update_values as $key =>$value) {
+    foreach ($update_values as $key => $value) {
         //We do not update variables that were already saved in the TABLE_MAIN_COURSE table
         if (!in_array($key, $update_in_course_table)) {
             $data = api_get_course_setting($key);
@@ -486,9 +488,8 @@ if ($form->validate() && is_settings_editable()) {
         }
     }
     $app_plugin->save_course_settings($update_values);
-    $cidReset = true;
-    $cidReq = $course_code;
-    require '../inc/local.inc.php';
+    $courseInfo = api_get_course_info($course_code);
+    Session::write('_course', $courseInfo);
     header('Location: infocours.php?action=show_message&cidReq='.$course_code);
     exit;
 }

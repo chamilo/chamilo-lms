@@ -31,8 +31,6 @@ if ((navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.us
 }
 {% endraw %}
 
-
-
 function setCheckbox(value, table_id) {
     checkboxes = $("#"+table_id+" input:checkbox");
     $.each(checkboxes, function(index, checkbox) {
@@ -256,16 +254,13 @@ $(function() {
         }
 
         // load remote content
-        dialog.load(
-                        url,
-                        {},
-                        function(responseText, textStatus, XMLHttpRequest) {
-                                dialog.dialog({
-                                        modal       : true,
-                                        width       : width_value,
-                                        height      : height_value,
-                                        resizable   : resizable_value
-                                });
+        dialog.load(url,{}, function(responseText, textStatus, XMLHttpRequest) {
+            dialog.dialog({
+                modal       : true,
+                width       : width_value,
+                height      : height_value,
+                resizable   : resizable_value
+            });
         });
         //prevent the browser to follow the link
         return false;
@@ -274,7 +269,7 @@ $(function() {
     //old jquery.menu.js
     $('#navigation a').stop().animate({
         'marginLeft':'50px'
-    },1000);
+    }, 1000);
 
     $('#navigation > li').hover(
         function () {
@@ -308,4 +303,6 @@ $(function() {
     });*/
 });
 </script>
+{% block extraHead %}
+{% endblock %}
 {{ header_extra_content }}

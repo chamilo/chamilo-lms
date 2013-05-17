@@ -61,7 +61,7 @@ $htmlHeadXtra[] = '
                                 }
                             });
                         }
-                    },
+                    }
                 });
             }
         });
@@ -112,37 +112,13 @@ function edit_category_form($in_action, $type = 'simple') {
     $in_action = Security::remove_XSS($in_action);
     if (isset($_GET['category_id']) && is_numeric($_GET['category_id'])) {
         $category_id = Security::remove_XSS($_GET['category_id']);
+
         $objcat = new Testcategory($category_id);
 
         // initiate the object
         $form = new FormValidator('note', 'post', api_get_self().'?action='.$in_action.'&category_id='.$category_id."&type=".$type);
 
-        // settting the form elements
-        $form->addElement('header', get_lang('EditCategory'));
-        $form->addElement('hidden', 'category_id');
-        $form->addElement('text', 'category_name', get_lang('CategoryName'), array('class' => 'span6'));
-        $form->add_html_editor('category_description', get_lang('CategoryDescription'), false, false, array('ToolbarSet' => 'test_category', 'Width' => '90%', 'Height' => '200'));
-        $category_parent_list = array();
-
-        if (!empty($objcat->parent_id)) {
-            $parent_cat = new Testcategory($objcat->parent_id);
-            $category_parent_list = array($parent_cat->id => $parent_cat->name);
-            echo '<script>$(function() { $("#parent_id").trigger("addItem",[{"title": "'.$parent_cat->name.'", "value": "'.$parent_cat->id.'"}]); });</script>';
-        }
-
-        $form->addElement('select', 'parent_id', get_lang('Parent'), $category_parent_list, array('id' => 'parent_id'));
-        $form->addElement('style_submit_button', 'SubmitNote', get_lang('ModifyCategory'), 'class="add"');
-
-        // setting the defaults
-        $defaults = array();
-        $defaults["category_id"] = $objcat->id;
-        $defaults["category_name"] = $objcat->name;
-        $defaults["category_description"] = $objcat->description;
-        $defaults["parent_id"] = $objcat->parent_id;
-        $form->setDefaults($defaults);
-
-        // setting the rules
-        $form->addRule('category_name', get_lang('ThisFieldIsRequired'), 'required');
+        $objcat->getForm($form, 'edit');
 
         // The validation or display
         if ($form->validate()) {

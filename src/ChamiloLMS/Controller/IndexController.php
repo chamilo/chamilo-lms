@@ -186,6 +186,8 @@ class IndexController extends CommonController
                 }
             }
         }*/
+        $response = null;
+        return new Response($response, 200, array());
     }
 
     /**
@@ -280,9 +282,9 @@ class IndexController extends CommonController
             'text',
             'login',
             get_lang('UserName'),
-            array('class' => 'span2 autocapitalize_off virtualkey', 'autofocus' => 'autofocus')
+            array('class' => 'input-medium autocapitalize_off virtualkey', 'autofocus' => 'autofocus')
         );
-        $form->addElement('password', 'password', get_lang('Pass'), array('class' => 'span2 virtualkey'));
+        $form->addElement('password', 'password', get_lang('Pass'), array('class' => 'input-medium virtualkey'));
         $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));
         $html = $form->return_form();
         if (api_get_setting('openid_authentication') == 'true') {
@@ -290,7 +292,7 @@ class IndexController extends CommonController
             $html .= '<div>'.openid_form().'</div>';
         }
 
-        /* Verify if settings is active to set keyboard. Included extra class in form input elements */
+        /** Verify if settings is active to set keyboard. Included extra class in form input elements */
 
         if (api_get_setting('use_virtual_keyboard') == 'true') {
             $html .= "<script> $(function(){ $('.virtualkey').keyboard();}); </script>";

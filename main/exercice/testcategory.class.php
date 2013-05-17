@@ -14,12 +14,13 @@ class Testcategory
     public $category_array_tree;
     public $type;
     public $course_id;
+    public $c_id; // from db
 
-	/**
-	 * Constructor of the class Category
-	 * @author - Hubert Borderiou
-	 * If you give an in_id and no in_name, you get info concerning the category of id=in_id
-	 * otherwise, you've got an category objet avec your in_id, in_name, in_descr
+    /**
+     * Constructor of the class Category
+     * @author - Hubert Borderiou
+     * If you give an in_id and no in_name, you get info concerning the category of id=in_id
+     * otherwise, you've got an category objet avec your in_id, in_name, in_descr
      * @todo fix this function
      *
      * @param int $in_id
@@ -61,12 +62,11 @@ class Testcategory
 	}
 
     /**
-     * Return the Testcategory object with id=in_id
-     * @param int $id
-     * @return bool
-     * @assert () === false
-	 */
-
+    * Return the Testcategory object with id=in_id
+    * @param int $id
+    * @return bool
+    * @assert () === false
+    */
     public function getCategory($id)
     {
 		$t_cattable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
@@ -80,16 +80,17 @@ class Testcategory
             $this->title = $this->name = $row['title'];
 			$this->description = $row['description'];
             $this->parent_id = $row['parent_id'];
+            $this->c_id = $row['c_id'];
         } else {
             return false;
 		}
 	}
 
     /**
-     * Add Testcategory in the database if name doesn't already exists
-     *
-	 */
-	public function addCategoryInBDD()
+    * Add Testcategory in the database if name doesn't already exists
+    *
+    */
+    public function addCategoryInBDD()
     {
         $t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $v_name = Database::escape_string($this->name);
@@ -103,7 +104,7 @@ class Testcategory
         }
 
         // Only admins can add global categories
-        if ($this->type == 'global' && empty($course_id) && !api_is_platform_admin()) {
+        if ($this->type == 'global' && empty($course_id) && (!api_is_platform_admin() && !api_is_question_manager())) {
             return false;
         }
 
@@ -145,7 +146,7 @@ class Testcategory
      */
     public function modifyCategory()
     {
-        // @todo inject the app in the claas
+        // @todo inject the app in the class
         global $app;
         $category = $app['orm.em']->find('\Entity\CQuizCategory', $this->id);
         if (!$category) {
@@ -184,20 +185,6 @@ class Testcategory
         } else {
             return false;
         }
-
-        /*
-        $sql = "UPDATE $t_cattable SET
-                    title = '$v_name',
-                    description = '$v_description',
-                    parent_id = '$parent_id'
-                WHERE iid = '$v_id'";
-        Database::query($sql);*/
-        /*
-		if (Database::affected_rows() <= 0) {
-			return false;
-        } else {
-			return true;
-		}*/
     }
 
 
@@ -217,7 +204,7 @@ class Testcategory
         //Only admins can delete global categories
         $courseId = $category->getCId();
         //Only admins can delete global categories
-        if (empty($courseId) && !api_is_platform_admin()) {
+        if (empty($courseId) && !api_is_platform_admin() || api_is_question_manager()) {
             return false;
         }
 
@@ -255,7 +242,8 @@ class Testcategory
      * @return array
      * @assert() === false
      */
-    public function get_categories_by_keyword($tag) {
+    public function get_categories_by_keyword($tag)
+    {
         if (empty($tag)) {
             return false;
         }
@@ -287,7 +275,6 @@ class Testcategory
         $where_condition .= $course_condition;
         $order_clause = " ORDER BY title";
         $sql .= $where_condition.$order_clause;
-
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             return Database::store_result($result, 'ASSOC');
@@ -324,10 +311,8 @@ class Testcategory
 	If in_field=="" Return an array of all category objects in the database
 	Otherwise, return an array of all in_field value in the database (in_field = id or name or description)
 	 */
-	public static function getCategoryListInfo($in_field = "", $courseId = null) {
-		if (empty($courseId) || $courseId=="") {
-            $courseId = api_get_course_int_id();
-		}
+	public static function getCategoryListInfo($in_field = "", $courseId = null)
+    {
         $courseId = intval($courseId);
 		$t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
 		$in_field = Database::escape_string($in_field);
@@ -645,7 +630,8 @@ class Testcategory
 	 * hubert.borderiou 07-04-2011
 	 * question witout categories are not counted
 	 */
-	public static function getNumberOfQuestionRandomByCategory($exercise_id, $in_nbrandom) {
+	public static function getNumberOfQuestionRandomByCategory($exercise_id, $in_nbrandom)
+    {
 		$nbquestionresult = 0;
 		$list_categories = Testcategory::getListOfCategoriesIDForTest($exercise_id);
 
@@ -672,10 +658,8 @@ class Testcategory
 	 * tabresult[0] = get_lang('NoCategory');
 	 *
 	 */
-	static function getCategoriesIdAndName($in_courseid = "") {
-		if (empty($in_courseid) || $in_courseid=="") {
-			$in_courseid = api_get_course_int_id();
-		}
+	static function getCategoriesIdAndName($in_courseid = 0)
+    {
 	 	$tabcatobject = Testcategory::getCategoryListInfo("", $in_courseid);
 	 	$tabresult = array("0"=>get_lang('NoCategorySelected'));
 	 	for ($i=0; $i < count($tabcatobject); $i++) {
@@ -689,7 +673,8 @@ class Testcategory
      * $categories[1][30] = 10, array with category id = 1 and question_id = 10
      * A question has "n" categories
 	 */
-    static function getQuestionsByCat($exerciseId, $check_in_question_list = array()) {
+    static function getQuestionsByCat($exerciseId, $check_in_question_list = array())
+    {
         $categories = array();
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
@@ -899,6 +884,7 @@ class Testcategory
      */
     public static function get_stats_table_by_attempt($exercise_id, $category_list = array())
     {
+        global $app;
         if (empty($category_list)) {
             return null;
         }
@@ -922,12 +908,10 @@ class Testcategory
             $total = $category_list['total'];
             unset($category_list['total']);
         }
-        global $app;
         $em = $app['orm.em'];
         $repo = $em->getRepository('Entity\CQuizCategory');
 
         $redefineCategoryList = array();
-
 
         if (!empty($category_list) && count($category_list) > 1) {
             $globalCategoryScore = array();
@@ -1145,7 +1129,49 @@ class Testcategory
                     $this->create_tree_array($array, $array[$i]['iid'], $depth, $tmp);
                 }
             }
-
         }
+    }
+
+    public function getForm(& $form, $action = 'new') {
+
+        switch($action) {
+            case 'new':
+                $header = get_lang('AddACategory');
+                $submit = get_lang('AddTestCategory');
+                break;
+            case 'edit':
+                $header = get_lang('EditCategory');
+                $submit = get_lang('ModifyCategory');
+                break;
+        }
+
+         // settting the form elements
+        $form->addElement('header', $header);
+        $form->addElement('hidden', 'category_id');
+        $form->addElement('text', 'category_name', get_lang('CategoryName'), array('class' => 'span6'));
+        $form->add_html_editor('category_description', get_lang('CategoryDescription'), false, false, array('ToolbarSet' => 'test_category', 'Width' => '90%', 'Height' => '200'));
+        $category_parent_list = array();
+
+        $script = null;
+        if (!empty($this->parent_id)) {
+            $parent_cat = new Testcategory($this->parent_id);
+            $category_parent_list = array($parent_cat->id => $parent_cat->name);
+            $script .= '<script>$(function() { $("#parent_id").trigger("addItem",[{"title": "'.$parent_cat->name.'", "value": "'.$parent_cat->id.'"}]); });</script>';
+        }
+        $form->addElement('html', $script);
+
+        $form->addElement('select', 'parent_id', get_lang('Parent'), $category_parent_list, array('id' => 'parent_id'));
+        $form->addElement('style_submit_button', 'SubmitNote', $submit, 'class="add"');
+
+        // setting the defaults
+        $defaults = array();
+        $defaults["category_id"] = $this->id;
+        $defaults["category_name"] = $this->name;
+        $defaults["category_description"] = $this->description;
+        $defaults["parent_id"] = $this->parent_id;
+        $form->setDefaults($defaults);
+
+        // setting the rules
+        $form->addRule('category_name', get_lang('ThisFieldIsRequired'), 'required');
     }
 }

@@ -239,12 +239,9 @@ $form->addElement('select', 'session_category_id', get_lang('SessionCategory'), 
 
 //Extra fields
 $extra_field = new ExtraField('session');
-$extra = $extra_field->add_elements($form, $id);
+$extra = $extra_field->addElements($form, $id);
 
-
-$htmlHeadXtra[] ='
-<script>
-
+$htmlHeadXtra[] ='<script>
 $(function() {
     '.$extra['jquery_ready_content'].'
 });

@@ -3,6 +3,7 @@
 namespace Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * ExtraFieldValues
@@ -28,18 +29,51 @@ class ExtraFieldValues
     private $fieldId;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="field_value", type="text", precision=0, scale=0, nullable=true, unique=false)
-     */
-    private $fieldValue;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="tms", type="datetime", precision=0, scale=0, nullable=false, unique=false)
      */
     private $tms;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="user_id", type="string", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $userId;
+
+    /**
+     * @var string
+     * @Gedmo\Versioned
+     *
+     * @ORM\Column(name="comment", type="string", precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $comment;
+
+     /**
+     * Set comment
+     *
+     * @param string $comment
+     * @return ExtraFieldValues
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get comment
+     *
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
 
     /**
      * Get id
@@ -97,28 +131,7 @@ class ExtraFieldValues
         return $this->fieldId;
     }
 
-    /**
-     * Set fieldValue
-     *
-     * @param string $fieldValue
-     * @return ExtraFieldValues
-     */
-    public function setFieldValue($fieldValue)
-    {
-        $this->fieldValue = $fieldValue;
 
-        return $this;
-    }
-
-    /**
-     * Get fieldValue
-     *
-     * @return string
-     */
-    public function getFieldValue()
-    {
-        return $this->fieldValue;
-    }
 
     /**
      * Set tms
@@ -141,5 +154,27 @@ class ExtraFieldValues
     public function getTms()
     {
         return $this->tms;
+    }
+
+     /**
+     * Set questionId
+     *
+     * @param integer $questionId
+     * @return QuestionFieldValues
+     */
+    public function setUserId($id)
+    {
+        $this->userId = $id;
+        return $this;
+    }
+
+    /**
+     * Get questionId
+     *
+     * @return integer
+     */
+    public function getUserId()
+    {
+        return $this->userId;
     }
 }

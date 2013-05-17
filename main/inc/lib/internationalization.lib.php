@@ -619,7 +619,7 @@ function _api_get_timezone()
  * @author Julio Montoya - Adding the 2nd parameter
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
-function api_get_utc_datetime($time = null, $return_null_if_invalid_date = false)
+function api_get_utc_datetime($time = null, $return_null_if_invalid_date = false, $returnObj = false)
 {
     $from_timezone = _api_get_timezone();
 
@@ -627,6 +627,9 @@ function api_get_utc_datetime($time = null, $return_null_if_invalid_date = false
     if (is_null($time) || empty($time) || $time == '0000-00-00 00:00:00') {
         if ($return_null_if_invalid_date) {
             return null;
+        }
+        if ($returnObj) {
+            return $date = new DateTime(gmdate('Y-m-d H:i:s'));
         }
         return gmdate('Y-m-d H:i:s');
     }
@@ -638,7 +641,11 @@ function api_get_utc_datetime($time = null, $return_null_if_invalid_date = false
     try {
         $date = new DateTime($time, new DateTimezone($from_timezone));
         $date->setTimezone(new DateTimeZone($to_timezone));
-        return $date->format('Y-m-d H:i:s');
+        if ($returnObj) {
+            return $date;
+        } else {
+            return $date->format('Y-m-d H:i:s');
+        }
     } catch (Exception $e) {
         return null;
     }

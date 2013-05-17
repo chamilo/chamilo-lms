@@ -290,7 +290,8 @@ if (!$user_data['platform_admin']) {
 
 
 // EXTRA FIELDS
-$return_params = ExtraField::set_extra_fields_in_form($form, $extra_data, 'user_edit', true, $user_id, 'user');
+$extraField = new ExtraField('user');
+$return_params = $extraField->set_extra_fields_in_form($form, $extra_data, 'user_edit', true, $user_id);
 $jquery_ready_content = $return_params['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function

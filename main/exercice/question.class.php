@@ -1518,7 +1518,7 @@ abstract class Question
 
             // Inject question extra fields!
             $extraFields = new ExtraField('question');
-            $extraFields->add_elements($form, $this->id);
+            $extraFields->addElements($form, $this->id);
 
             if ($this->exercise->fastExerciseEdition == false) {
                 $form->addElement('html', '</div>');

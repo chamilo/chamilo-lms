@@ -265,5 +265,10 @@ ALTER TABLE track_e_course_access MODIFY COLUMN course_access_id bigint unsigned
 
 CREATE TABLE extra_field_option_rel_field_option(id INT auto_increment, role_id INT, field_id INT, field_option_id INT, related_field_option_id INT, PRIMARY KEY(id));
 
+ALTER TABLE user_field ADD COLUMN field_loggeable int default 0;
+ALTER TABLE session_field ADD COLUMN field_loggeable int default 0;
+ALTER TABLE course_field ADD COLUMN field_loggeable int default 0;
+ALTER TABLE question_field ADD COLUMN field_loggeable int default 0;
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.007' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.008' WHERE variable = 'chamilo_database_version';

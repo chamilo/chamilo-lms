@@ -16,6 +16,7 @@ class ExtraField extends Model
         'field_visible',
         'field_changeable',
         'field_filter',
+        'field_loggeable',
         'tms'
     );
 
@@ -1100,6 +1101,12 @@ EOF;
         $group[] = $form->createElement('radio', 'field_filter', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'field_filter', null, get_lang('No'), 0);
         $form->addGroup($group, '', get_lang('FieldFilter'), '', false);
+
+        $group   = array();
+        $group[] = $form->createElement('radio', 'field_loggeable', null, get_lang('Yes'), 1);
+        $group[] = $form->createElement('radio', 'field_loggeable', null, get_lang('No'), 0);
+        $form->addGroup($group, '', get_lang('FieldLoggeable'), '', false);
+
 
         $form->addElement('text', 'field_order', get_lang('FieldOrder'), array('class' => 'span1'));
 

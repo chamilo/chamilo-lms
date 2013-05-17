@@ -213,6 +213,7 @@ CREATE TABLE IF NOT EXISTS course_field (
     field_visible tinyint default 0,
     field_changeable tinyint default 0,
     field_filter tinyint default 0,
+    field_loggeable int default 0,
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -552,6 +553,7 @@ CREATE TABLE IF NOT EXISTS session_field (
     field_visible tinyint default 0,
     field_changeable tinyint default 0,
     field_filter tinyint default 0,
+    field_loggeable int default 0,
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -1465,6 +1467,7 @@ CREATE TABLE IF NOT EXISTS user_field (
     field_visible tinyint default 0,
     field_changeable tinyint default 0,
     field_filter tinyint default 0,
+    field_loggeable int default 0,
     tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -3466,6 +3469,7 @@ CREATE TABLE IF NOT EXISTS question_field (
     field_visible tinyint default 0,
     field_changeable tinyint default 0,
     field_filter tinyint default 0,
+    field_loggeable int default 0,
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -3499,4 +3503,4 @@ ALTER TABLE question_field_values ADD INDEX idx_question_field_values_field_id(f
 CREATE TABLE extra_field_option_rel_field_option(id INT auto_increment, role_id INT, field_id INT, field_option_id INT, related_field_option_id INT, PRIMARY KEY(id));
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.007' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.008' WHERE variable = 'chamilo_database_version';

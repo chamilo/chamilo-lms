@@ -222,37 +222,6 @@ if (isset($app['configuration']['main_database'])) {
             ),
         ),
     ));
-
-    // Temporal fix to load gedmo libs
-
-    $sortableGroup = new Gedmo\Mapping\Annotation\SortableGroup(array());
-    $sortablePosition = new Gedmo\Mapping\Annotation\SortablePosition(array());
-    $tree = new Gedmo\Mapping\Annotation\Tree(array());
-    $tree = new Gedmo\Mapping\Annotation\TreeParent(array());
-    $tree = new Gedmo\Mapping\Annotation\TreeLeft(array());
-    $tree = new Gedmo\Mapping\Annotation\TreeRight(array());
-    $tree = new Gedmo\Mapping\Annotation\TreeRoot(array());
-    $tree = new Gedmo\Mapping\Annotation\TreeLevel(array());
-    $tree = new Gedmo\Mapping\Annotation\Versioned(array());
-    $tree = new Gedmo\Mapping\Annotation\Loggable(array());
-    $tree = new Gedmo\Loggable\Entity\LogEntry();
-
-    // Setting Doctrine2 extensions
-    $timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
-    $app['db.event_manager']->addEventSubscriber($timestampableListener);
-
-    $sluggableListener = new \Gedmo\Sluggable\SluggableListener();
-    $app['db.event_manager']->addEventSubscriber($sluggableListener);
-
-    $sortableListener = new Gedmo\Sortable\SortableListener();
-    $app['db.event_manager']->addEventSubscriber($sortableListener);
-
-    $treeListener = new \Gedmo\Tree\TreeListener();
-    //$treeListener->setAnnotationReader($cachedAnnotationReader);
-    $app['db.event_manager']->addEventSubscriber($treeListener);
-
-    $loggableListener = new \Gedmo\Loggable\LoggableListener();
-    $app['db.event_manager']->addEventSubscriber($loggableListener);
 }
 
 // Setting Twig as a service provider

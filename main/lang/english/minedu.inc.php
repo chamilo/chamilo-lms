@@ -10,4 +10,8 @@ $Answered = "Answered";
 $Unanswered = "Unanswered";
 $ToReview = "To be reviewed";
 $CurrentQuestion = "Current question";
+$LogTransactions = "Log Transactions";
+$LogTransactionsForExerciseAttempts = "Log Transactions for Exercise tool attempts.";
+$LogTransactionsForExerciseAttemptsText = "Log Exercise attempts.";
+$LogTransactionsForExerciseAttemptsComment = "When enabled, exercise attempts will be saved as transactions. ";
 ?>

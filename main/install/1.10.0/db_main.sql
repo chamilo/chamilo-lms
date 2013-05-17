@@ -927,7 +927,8 @@ VALUES
 ('allow_teachers_to_create_sessions', NULL,'radio','Session','false','AllowTeachersToCreateSessionsTitle','AllowTeachersToCreateSessionsComment', NULL, NULL, 0),
 ('use_virtual_keyboard', NULL, 'radio', 'Platform', 'false','ShowVirtualKeyboardTitle','ShowVirtualKeyboardComment', NULL, NULL, 1),
 ('disable_copy_paste', NULL, 'radio', 'Platform', 'false','DisableCopyPasteTitle','DisableCopyPasteComment', NULL, NULL, 1),
-('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.001','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.010','DatabaseVersion','', NULL, NULL, 0),
+('log_transactions','exercise_attempt','checkbox','LogTransactions','false','LogTransactionsForExerciseAttempts','LogTransactionsForExerciseAttemptsComment',NULL,'LogTransactionsForExerciseAttemptsText', 1);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -2602,11 +2603,11 @@ CREATE TABLE IF NOT EXISTS specific_field (
 
 DROP TABLE IF EXISTS specific_field_values;
 CREATE TABLE IF NOT EXISTS specific_field_values (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    course_code VARCHAR(40) NOT NULL,
-    tool_id VARCHAR(100) NOT NULL,
-    ref_id INT NOT NULL,
-    field_id INT NOT NULL,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+    course_code VARCHAR(40) NOT NULL ,
+    tool_id VARCHAR(100) NOT NULL ,
+    ref_id INT NOT NULL ,
+    field_id INT NOT NULL ,
     value VARCHAR(200) NOT NULL
 );
 ALTER TABLE specific_field ADD CONSTRAINT unique_specific_field__code UNIQUE (code);
@@ -3063,6 +3064,7 @@ CREATE TABLE branch_sync(
   last_sync_trans_date datetime,
   last_sync_type char(20) default 'full'
 );
+INSERT INTO branch_sync (id, access_url_id, branch_name, branch_ip) VALUES (1, 1, 'Local', '127.0.0.1');
 
 DROP TABLE IF EXISTS branch_sync_log;
 CREATE TABLE branch_sync_log(
@@ -3084,7 +3086,7 @@ INSERT INTO branch_transaction_status VALUES (1, 'To be executed'), (2, 'Execute
 
 DROP TABLE IF EXISTS branch_transaction;
 CREATE TABLE branch_transaction (
-    id bigint unsigned not null AUTO_INCREMENT,
+    id bigint unsigned not null PRIMARY KEY AUTO_INCREMENT,
     transaction_id bigint unsigned,
     branch_id int not null default 0,
     action char(20),
@@ -3094,8 +3096,12 @@ CREATE TABLE branch_transaction (
     info char(20),
     status_id tinyint not null default 0,
     time_insert datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-    time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-    PRIMARY KEY (id, transaction_id, branch_id)
+    time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
+);
+
+CREATE TABLE IF NOT EXISTS branch_transaction_data (
+    id bigint unsigned NOT NULL PRIMARY KEY,
+    data text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
 );
 
 -- Stats database
@@ -3459,7 +3465,7 @@ CREATE TABLE user_course_category (
   user_id int unsigned NOT NULL default 0,
   title text NOT NULL,
   sort int,
-  PRIMARY KEY(id)
+  PRIMARY KEY  (id)
 );
 
 ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_user (user);

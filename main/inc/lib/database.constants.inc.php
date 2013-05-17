@@ -359,3 +359,4 @@ define('TABLE_BRANCH_SYNC_LOG',              'branch_sync_log');
 
 define('TABLE_BRANCH_TRANSACTION',           'branch_transaction');
 define('TABLE_BRANCH_TRANSACTION_STATUS',    'branch_transaction_status');
+define('TABLE_BRANCH_TRANSACTION_DATA',      'branch_transaction_data');

@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+/**
+ * Class ExtraField
+ */
 class ExtraField extends Model
 {
     public $columns = array(
@@ -178,6 +181,8 @@ class ExtraField extends Model
     }
 
     /**
+     * Add elements to a form
+     *
      * @param FormValidator $form
      * @param int $item_id
      * @return array|bool
@@ -194,7 +199,7 @@ class ExtraField extends Model
                 $form->setDefaults($extra_data);
             }
         }
-        $extra_fields = self::get_all();
+        $extra_fields = self::get_all(null, 'option_order');
 
         $extra = ExtraField::set_extra_fields_in_form(
             $form,
@@ -209,12 +214,17 @@ class ExtraField extends Model
         return $extra;
     }
 
-
+    /**
+     *
+     * @param int $item_id (session_id, question_id, course id)
+     * @return array
+     */
     public function get_handler_extra_data($item_id)
     {
         if (empty($item_id)) {
             return array();
         }
+
         $extra_data   = array();
         $fields       = self::get_all();
         $field_values = new ExtraFieldValue($this->type);
@@ -239,12 +249,14 @@ class ExtraField extends Model
                         case ExtraField::FIELD_TYPE_RADIO:
                             $extra_data['extra_'.$field['field_variable']]['extra_'.$field['field_variable']] = $field_value;
                             break;
-                        /*case ExtraField::FIELD_TYPE_DATETIME:
-                            break;*/
                         default:
                             $extra_data['extra_'.$field['field_variable']] = $field_value;
                             break;
-
+                    }
+                } else {
+                    // Set default values
+                    if (isset($field['field_default_value']) && !empty($field['field_default_value'])) {
+                        $extra_data['extra_'.$field['field_variable']] = $field['field_default_value'];
                     }
                 }
             }
@@ -411,6 +423,17 @@ class ExtraField extends Model
         $session_field_values->delete_all_values_by_field_id($id);
     }
 
+    /**
+     *
+     * @param FormValidator $form
+     * @param array $extra_data
+     * @param string $form_name
+     * @param bool $admin_permissions
+     * @param null $user_id
+     * @param string $type
+     * @param null $extra
+     * @return array
+     */
     public static function set_extra_fields_in_form(
         $form,
         $extra_data,
@@ -431,6 +454,27 @@ class ExtraField extends Model
 
         if (!empty($extra)) {
             foreach ($extra as $field_details) {
+
+                // Getting default value id if is set
+                $defaultValueId = null;
+                if (isset($field_details['options']) && !empty($field_details['options'])) {
+                    $valueToFind = null;
+                    if (isset($field_details['field_default_value'])) {
+                        $valueToFind = $field_details['field_default_value'];
+                    }
+                    // If a value is found we override the default value
+                    if (isset($extra_data['extra_'.$field_details['field_variable']])) {
+                        $valueToFind = $extra_data['extra_'.$field_details['field_variable']];
+                    }
+
+                    foreach ($field_details['options'] as $option) {
+                        if ($option['option_value'] == $valueToFind) {
+                            $defaultValueId = $option['id'];
+                        }
+                    }
+
+
+                }
 
                 if (!$admin_permissions) {
                     if ($field_details['field_visible'] == 0) {
@@ -548,17 +592,59 @@ class ExtraField extends Model
                         ) {
                             $get_lang_variables = true;
                         }
+
+                        // Get extra field workflow
+                        $userInfo = api_get_user_info();
+
+                        $addOptions = array();
+
+                        global $app;
+                        $optionsExists = $app['orm.em']->getRepository('Entity\ExtraFieldOptionRelFieldOption')->
+                            findOneBy(array('fieldId' => $field_details['id']));
+
+                        if ($optionsExists) {
+                            if (isset($userInfo['status']) && !empty($userInfo['status'])) {
+
+                                $fieldWorkFlow = $app['orm.em']->getRepository('Entity\ExtraFieldOptionRelFieldOption')
+                                ->findBy(
+                                    array(
+                                        'fieldId' => $field_details['id'],
+                                        'relatedFieldOptionId' => $defaultValueId,
+                                        'roleId' => $userInfo['status']
+                                    )
+                                );
+                                foreach ($fieldWorkFlow as $item) {
+                                    $addOptions[] = $item->getFieldOptionId();
+                                }
+                            }
+                        }
+
                         $options = array();
-                        $options[''] = get_lang('SelectAnOption');
+                        if (empty($defaultValueId)) {
+                            $options[''] = get_lang('SelectAnOption');
+                        }
 
                         if (!empty($field_details['options'])) {
                             foreach ($field_details['options'] as $option_details) {
                                 if ($get_lang_variables) {
-                                    $options[$option_details['option_value']] = get_lang(
-                                        $option_details['option_display_text']
-                                    );
+                                    $options[$option_details['option_value']] = get_lang($option_details['option_display_text']);
                                 } else {
-                                    $options[$option_details['option_value']] = $option_details['option_display_text'];
+                                    if ($optionsExists) {
+                                        // Adding always the default value
+                                        if ($option_details['id'] == $defaultValueId) {
+                                            $options[$option_details['option_value']] = $option_details['option_display_text'];
+                                        } else {
+                                            if (isset($addOptions) && !empty($addOptions)) {
+                                                // Parsing filters
+                                                if (in_array($option_details['id'], $addOptions)) {
+                                                    $options[$option_details['option_value']] = $option_details['option_display_text'];
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        // Normal behaviour
+                                        $options[$option_details['option_value']] = $option_details['option_display_text'];
+                                    }
                                 }
                             }
                         }
@@ -963,10 +1049,6 @@ EOF;
             array('id' => 'field_type', 'class' => 'chzn-select', 'data-placeholder' => get_lang('Select'))
         );
         $form->addElement('label', get_lang('Example'), '<div id="example">-</div>');
-
-        //$form->addElement('advanced_settings','<a class="btn btn-show" id="advanced_parameters" href="javascript://">'.get_lang('AdvancedParameters').'</a>');
-        //$form->addElement('html','<div id="options" style="display:none">');
-
         $form->addElement('text', 'field_variable', get_lang('FieldLabel'), array('class' => 'span5'));
         $form->addElement(
             'text',
@@ -985,6 +1067,15 @@ EOF;
                     'extra_field_options.php?type='.$this->type.'&field_id='.$id
                 );
                 $form->addElement('label', null, $url);
+
+                if ($defaults['field_type'] ==  ExtraField::FIELD_TYPE_SELECT) {
+                    $urlWorkFlow = Display::url(
+                        get_lang('EditExtraFieldWorkFlow'),
+                        'extra_field_workflow.php?type='.$this->type.'&field_id='.$id
+                    );
+                    $form->addElement('label', null, $urlWorkFlow);
+                }
+
                 $form->freeze('field_options');
             }
         }

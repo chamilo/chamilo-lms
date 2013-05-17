@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "e74ad1b117e2ffbd98726ac3eca804e9",
+    "hash": "54c36a45b11a629bdf718cf7952d430c",
     "packages": [
         {
             "name": "bt51/gaufrette-serviceprovider",
@@ -729,6 +729,55 @@
                 "image processing"
             ],
             "time": "2013-04-29 19:10:37"
+        },
+        {
+            "name": "jbroadway/urlify",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jbroadway/urlify.git",
+                "reference": "064241f45d198239b589c657ea22966f95c80d96"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jbroadway/urlify/zipball/064241f45d198239b589c657ea22966f95c80d96",
+                "reference": "064241f45d198239b589c657ea22966f95c80d96",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "URLify": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Johnny Broadway",
+                    "email": "johnny@johnnybroadway.com",
+                    "homepage": "http://www.johnnybroadway.com/"
+                }
+            ],
+            "description": "PHP port of URLify.js from the Django project. Transliterates non-ascii characters for use in URLs.",
+            "homepage": "https://github.com/jbroadway/urlify",
+            "keywords": [
+                "encode",
+                "iconv",
+                "link",
+                "slug",
+                "translit",
+                "transliterate",
+                "transliteration",
+                "url",
+                "urlify"
+            ],
+            "time": "2013-04-08 13:21:42"
         },
         {
             "name": "jmontoyaa/phpqrcode",
@@ -3008,6 +3057,7 @@
         "knplabs/gaufrette": 20,
         "bt51/gaufrette-serviceprovider": 20,
         "neutron/silex-filesystem-provider": 20,
+        "jbroadway/urlify": 20,
         "symfony/browser-kit": 20,
         "silex/web-profiler": 20,
         "natxet/cssmin": 20,

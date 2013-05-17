@@ -70,7 +70,8 @@
         "jmontoyaa/phpqrcode": "dev-master",
         "knplabs/gaufrette": "0.2.*@dev",
         "bt51/gaufrette-serviceprovider": "dev-master",
-        "neutron/silex-filesystem-provider": "dev-master"
+        "neutron/silex-filesystem-provider": "dev-master",
+        "jbroadway/urlify": "dev-master"
     },
     "require-dev": {
         "symfony/browser-kit": "2.3.*@dev",

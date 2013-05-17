@@ -486,7 +486,7 @@ class Answer {
                 $flag = 1;
 			    $sql.="($c_id, '$i','$questionId','$answer','$correct','$comment','$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
             } else {
-                $this->updateAnswers($answer, $correct, $comment, $weighting, $position, $destination);
+                $this->updateAnswers($answer, $comment, $weighting, $position, $destination);
             }
         }
 		if ($flag == 1) {

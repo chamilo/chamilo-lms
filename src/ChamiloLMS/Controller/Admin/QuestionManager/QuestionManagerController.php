@@ -72,6 +72,9 @@ class QuestionManagerController
             $params['question_id'] = $id;
             $field_value->save_field_values($params);
             $app['template']->assign('message', \Display::return_message(get_lang('ItemUpdated'), 'success'));
+            $url = $app['url_generator']->generate('admin_questions_edit', array('id' => $id));
+
+            return $app->redirect($url);
         }
 
         $app['template']->assign('question', $question);

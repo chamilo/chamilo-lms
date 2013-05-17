@@ -83,7 +83,9 @@ $htmlHeadXtra[]='<script>
     }
     function changeStatus(obj) {
         var roleId = $(obj).find(":selected").val();
-        window.location.replace("'.api_get_self().'?'.$paramsNoRole.'&roleId="+roleId);
+        if (roleId != 0) {
+            window.location.replace("'.api_get_self().'?'.$paramsNoRole.'&roleId="+roleId);
+        }
     }
 </script>';
 
@@ -109,6 +111,8 @@ $row++;
 
 $form = new FormValidator('workflow', 'post', api_get_self().'?'.$params);
 $options = api_get_user_roles();
+$options[0] = get_lang('SelectAnOption');
+arsort($options);
 $form->addElement('select', 'status', get_lang('SelectStatus'), $options, array('onclick' => 'changeStatus(this)'));
 
 $checks = $app['orm.em']->getRepository('Entity\ExtraFieldOptionRelFieldOption')->findBy(array('fieldId' => $field_id, 'roleId' => $roleId));

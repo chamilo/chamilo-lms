@@ -194,9 +194,7 @@ require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/dev.php';
 
 // Classic way of render pages or the Controller approach
 $app['classic_layout'] = false;
-
 $app['full_width'] = false;
-
 $app['breadcrumb'] = array();
 
 // The script is allowed? This setting is modified when calling api_is_not_allowed()

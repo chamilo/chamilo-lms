@@ -135,6 +135,9 @@ sudo mkdir mapping generated repository
 You can add a Namespace if you want to with: --namespace "Entity"
 sudo php5 doctrine.php orm:convert-mapping --force --from-database --namespace "Entity" annotation mapping
 
+with no namepsace
+sudo php5 doctrine.php orm:convert-mapping --force --from-database annotation mapping
+
 
 1. Generate entities
 

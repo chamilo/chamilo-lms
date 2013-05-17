@@ -1471,7 +1471,6 @@ abstract class Question
             $form->addElement('html', '</div>');
         }
 
-
         // hidden values
         $my_id = isset($_REQUEST['myid']) ? intval($_REQUEST['myid']) : null;
         $form->addElement('hidden', 'myid', $my_id);
@@ -1518,7 +1517,6 @@ abstract class Question
             $form->addElement('select', 'parent_id', get_lang('AttachToMedia'), $course_medias);
 
             // Inject question extra fields!
-            //Extra fields
             $extraFields = new ExtraField('question');
             $extraFields->add_elements($form, $this->id);
 
@@ -1527,7 +1525,7 @@ abstract class Question
             }
         }
 
-        //@todo why we need this condition??
+        // @todo why we need this condition??
         if ($this->setDefaultQuestionValues) {
             switch ($answerType) {
                 case 1:

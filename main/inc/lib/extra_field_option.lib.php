@@ -198,12 +198,15 @@ class ExtraFieldOption extends Model
             if (!empty($list)) {
                 foreach ($list as $option) {
                     $option_info = self::get_field_option_by_field_and_option($field_id, $option);
+                    // Use URLify only for new items
+                    $optionValue = URLify::filter($option);
+                    $option = trim($option);
 
                     if ($option_info == false) {
                         $order      = self::get_max_order($field_id);
                         $new_params = array(
                             'field_id'            => $field_id,
-                            'option_value'        => $option,
+                            'option_value'        => $optionValue,
                             'option_display_text' => $option,
                             'option_order'        => $order,
                             'tms'                 => $time,
@@ -330,13 +333,11 @@ class ExtraFieldOption extends Model
     {
         $field_id = intval($field_id);
 
-        $sql = "SELECT * FROM {$this->table}
-                WHERE field_id = $field_id ";
+        $sql = "SELECT * FROM {$this->table} WHERE field_id = $field_id ";
 
         if (!empty($ordered_by)) {
             $sql .= " ORDER BY $ordered_by ";
         }
-
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             if ($add_id_in_array) {
@@ -521,7 +522,4 @@ class ExtraFieldOption extends Model
 
         return $form;
     }
-
-
-
 }

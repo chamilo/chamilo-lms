@@ -15,6 +15,7 @@ class ExtraFieldValue extends Model
     public $type = null;
     public $columns = array('id', 'field_id', 'field_value', 'tms');
     public $handler_id = null;//session_id, course_code, user_id
+    public $entityName;
 
     /**
      * Formats the necessary elements for the given datatype
@@ -33,21 +34,25 @@ class ExtraFieldValue extends Model
                 $this->table = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
                 $this->table_handler_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
                 $this->author_id = 'user_id';
+                $this->entityName = 'Entity\CourseFieldValues';
                 break;
             case 'user':
                 $this->table = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
                 $this->table_handler_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);
                 $this->author_id = 'author_id';
+                $this->entityName = 'Entity\UserFieldValues';
                 break;
             case 'session':
                 $this->table = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
                 $this->table_handler_field = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
                 $this->author_id = 'user_id';
+                $this->entityName = 'Entity\SessionFieldValues';
                 break;
             case 'question':
                 $this->table = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD_VALUES);
                 $this->table_handler_field = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD);
                 $this->author_id = 'user_id';
+                $this->entityName = 'Entity\QuestionFieldValues';
                 break;
             default:
                 //unmanaged datatype, return false to let the caller know it
@@ -84,7 +89,8 @@ class ExtraFieldValue extends Model
         }
         //Parse params
         foreach ($params as $key => $value) {
-            if (substr($key, 0, 6) == 'extra_') { //an extra field
+            if (substr($key, 0, 6) == 'extra_') {
+                // An extra field.
                 $field_variable = substr($key, 6);
                 $extra_field_info = $extra_field->get_handler_field_info_by_field_variable($field_variable);
                 if ($extra_field_info) {
@@ -163,18 +169,94 @@ class ExtraFieldValue extends Model
                             $value_to_insert = null;
                         }
                     }
+                    break;
                 default:
                     break;
             }
 
             $field_values = self::get_values_by_handler_and_field_id($params[$this->handler_id], $params['field_id']);
-            if ($field_values) {
-                self::delete_values_by_handler_and_field_id($params[$this->handler_id], $params['field_id']);
-            }
+
             $params['field_value'] = $value_to_insert;
             $params['tms'] = api_get_utc_datetime();
             $params[$this->author_id] = api_get_user_id();
-            return parent::save($params, $show_query);
+
+            // Insert
+            if (empty($field_values)) {
+                if ($extra_field_info['field_loggeable'] == 1) {
+                    global $app;
+                    switch($this->type) {
+                        case 'question':
+                            $extraFieldValue = new Entity\QuestionFieldValues();
+                            $extraFieldValue->setUserId(api_get_user_id());
+                            $extraFieldValue->setQuestionId($params[$this->handler_id]);
+                            break;
+                        case 'course':
+                            $extraFieldValue = new Entity\CourseFieldValues();
+                            $extraFieldValue->setUserId(api_get_user_id());
+                            $extraFieldValue->setQuestionId($params[$this->handler_id]);
+                            break;
+                        case 'user':
+                            $extraFieldValue = new Entity\UserFieldValues();
+                            $extraFieldValue->setUserId($params[$this->handler_id]);
+                            $extraFieldValue->setAuthorId(api_get_user_id());
+                            break;
+                        case 'session':
+                            $extraFieldValue = new Entity\SessionFieldValues();
+                            $extraFieldValue->setUserId(api_get_user_id());
+                            $extraFieldValue->setSessionId($params[$this->handler_id]);
+                            break;
+                    }
+                    if (isset($extraFieldValue)) {
+                        $extraFieldValue->setFieldValue($params['field_value']);
+                        $extraFieldValue->setFieldId($params['field_id']);
+                        $extraFieldValue->setTms(api_get_utc_datetime(null, false, true));
+                        $app['orm.em']->persist($extraFieldValue);
+                        $app['orm.em']->flush();
+                    }
+                } else {
+                    return parent::save($params, $show_query);
+                }
+            } else {
+                //self::delete_values_by_handler_and_field_id($params[$this->handler_id], $params['field_id']);
+
+                // Update
+                if ($extra_field_info['field_loggeable'] == 1) {
+                    global $app;
+                    switch($this->type) {
+                        case 'question':
+                            $extraFieldValue = $app['orm.em']->getRepository('Entity\QuestionFieldValues')->find($field_values['id']);
+                            $extraFieldValue->setUserId(api_get_user_id());
+                            $extraFieldValue->setQuestionId($params[$this->handler_id]);
+                            break;
+                        case 'course':
+                            $extraFieldValue = $app['orm.em']->getRepository('Entity\CourseFieldValues')->find($field_values['id']);
+                            $extraFieldValue->setUserId(api_get_user_id());
+                            $extraFieldValue->setCourseCode($params[$this->handler_id]);
+                            break;
+                        case 'user':
+                            $extraFieldValue = $app['orm.em']->getRepository('Entity\UserFieldValues')->find($field_values['id']);
+                            $extraFieldValue->setUserId(api_get_user_id());
+                            $extraFieldValue->setAuthorId(api_get_user_id());
+                            break;
+                        case 'session':
+                            $extraFieldValue = $app['orm.em']->getRepository('Entity\SessionFieldValues')->find($field_values['id']);
+                            $extraFieldValue->setUserId(api_get_user_id());
+                            $extraFieldValue->setSessionId($params[$this->handler_id]);
+                            break;
+                    }
+                    if (isset($extraFieldValue)) {
+
+                        $extraFieldValue->setFieldValue($params['field_value']);
+                        $extraFieldValue->setFieldId($params['field_id']);
+                        $extraFieldValue->setTms(api_get_utc_datetime(null, false, true));
+                        $app['orm.em']->persist($extraFieldValue);
+                        $app['orm.em']->flush();
+                    }
+                } else {
+                    $params['id'] = $field_values['id'];
+                    return parent::update($params, $show_query);
+                }
+            }
         }
     }
 

@@ -6,33 +6,20 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * QuestionFieldValues
+ * CourseFieldValues
  *
- * @ORM\Table(name="question_field_values")
+ * @ORM\Table(name="course_field_values")
  * @ORM\Entity
- * @Gedmo\Loggable
  */
-class QuestionFieldValues extends ExtraFieldValues
+class CourseFieldValues extends ExtraFieldValues
 {
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="question_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="course_code", type="string", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $questionId;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="CQuizQuestion")
-     * @ORM\JoinColumn(name="question_id", referencedColumnName="iid")
-     */
-    //private $question;
-
-    /**
-     * @ORM\OneToOne(targetEntity="QuestionField")
-     * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
-     */
-    //private $field;
+    private $courseCode;
 
     /**
      * @var string
@@ -42,7 +29,7 @@ class QuestionFieldValues extends ExtraFieldValues
      */
     private $fieldValue;
 
-     /**
+    /**
      * Set fieldValue
      *
      * @param string $fieldValue
@@ -71,9 +58,9 @@ class QuestionFieldValues extends ExtraFieldValues
      * @param integer $questionId
      * @return QuestionFieldValues
      */
-    public function setQuestionId($questionId)
+    public function setCourseCode($code)
     {
-        $this->questionId = $questionId;
+        $this->courseCode = $code;
         return $this;
     }
 
@@ -82,8 +69,8 @@ class QuestionFieldValues extends ExtraFieldValues
      *
      * @return integer
      */
-    public function getQuestionId()
+    public function getCourseCode()
     {
-        return $this->questionId;
+        return $this->courseCode;
     }
 }

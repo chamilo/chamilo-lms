@@ -50,6 +50,7 @@ class ExtraField extends Model
                 //Used for the model
                 $this->table      = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
                 $this->handler_id = 'course_code';
+                $this->handlerEntityId = 'courseCode';
                 $this->primaryKey = 'id';
                 break;
             case 'user':
@@ -59,6 +60,7 @@ class ExtraField extends Model
                 //Used for the model
                 $this->table      = Database::get_main_table(TABLE_MAIN_USER_FIELD);
                 $this->handler_id = 'user_id';
+                $this->handlerEntityId = 'userId';
                 $this->primaryKey = 'user_id';
                 break;
             case 'session':
@@ -68,6 +70,7 @@ class ExtraField extends Model
                 //Used for the model
                 $this->table      = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
                 $this->handler_id = 'session_id';
+                $this->handlerEntityId = 'sessionId';
                 $this->primaryKey = 'id';
                 break;
             case 'question':
@@ -77,6 +80,7 @@ class ExtraField extends Model
                 //Used for the model
                 $this->table      = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD);
                 $this->handler_id = 'question_id';
+                $this->handlerEntityId = 'questionId';
                 $this->primaryKey = 'iid';
                 break;
         }
@@ -188,7 +192,7 @@ class ExtraField extends Model
      * @param int $item_id
      * @return array|bool
      */
-    public function add_elements($form, $item_id = null)
+    public function addElements($form, $item_id = null)
     {
         if (empty($form)) {
             return false;
@@ -200,16 +204,16 @@ class ExtraField extends Model
                 $form->setDefaults($extra_data);
             }
         }
-        $extra_fields = self::get_all(null, 'option_order');
+        $extra_fields = $this->get_all(null, 'option_order');
 
-        $extra = ExtraField::set_extra_fields_in_form(
+        $extra = $this->set_extra_fields_in_form(
             $form,
             $extra_data,
             $this->type.'_field',
             false,
             false,
-            $this->type,
-            $extra_fields
+            $extra_fields,
+            $item_id
         );
 
         return $extra;
@@ -425,7 +429,6 @@ class ExtraField extends Model
     }
 
     /**
-     *
      * @param FormValidator $form
      * @param array $extra_data
      * @param string $form_name
@@ -435,16 +438,17 @@ class ExtraField extends Model
      * @param null $extra
      * @return array
      */
-    public static function set_extra_fields_in_form(
+    public function set_extra_fields_in_form(
         $form,
         $extra_data,
         $form_name,
         $admin_permissions = false,
         $user_id = null,
-        $type = 'user',
-        $extra = null
+        $extra = null,
+        $itemId = null
     ) {
         $user_id = intval($user_id);
+        $type = $this->type;
 
         // User extra fields
         if ($type == 'user') {
@@ -473,8 +477,6 @@ class ExtraField extends Model
                             $defaultValueId = $option['id'];
                         }
                     }
-
-
                 }
 
                 if (!$admin_permissions) {
@@ -547,7 +549,6 @@ class ExtraField extends Model
                         break;
                     case ExtraField::FIELD_TYPE_CHECKBOX:
                         $group = array();
-
                         if (isset($field_details['options']) && !empty($field_details['options'])) {
                             foreach ($field_details['options'] as $option_details) {
                                 $options[$option_details['option_value']] = $option_details['option_display_text'];
@@ -654,7 +655,7 @@ class ExtraField extends Model
                             $field_details['field_display_text'] = get_lang($field_details['field_display_text']);
                         }
 
-                        //chzn-select doesn't work for sessions??
+                        // chzn-select doesn't work for sessions??
                         $form->addElement(
                             'select',
                             'extra_'.$field_details['field_variable'],
@@ -662,6 +663,47 @@ class ExtraField extends Model
                             $options,
                             array('id' => 'extra_'.$field_details['field_variable'])
                         );
+
+
+                        if ($optionsExists && $field_details['field_loggeable'] && !empty($defaultValueId)) {
+
+                            /*$extraField = new Extrafield($field_details['field_type']);
+                            $link = Display::url();*/
+                            $extraFieldValue = new ExtraFieldValue($this->type);
+                            $repo = $app['orm.em']->getRepository($extraFieldValue->entityName);
+                            $repoLog = $app['orm.em']->getRepository('Gedmo\Loggable\Entity\LogEntry');
+                            $newEntity = $repo->findOneBy(
+                            array(
+                                $this->handlerEntityId => $itemId,
+                                'fieldId' => $field_details['id']
+                            ));
+
+
+                            if ($newEntity) {
+                                $logs = $repoLog->getLogEntries($newEntity);
+                                if (!empty($logs)) {
+                                    $html = get_lang('LatestChanges').'<br />';
+
+                                    $table = new HTML_Table(array('class' => 'data_table'));
+                                    $table->setHeaderContents(0, 0, get_lang('Value'));
+                                    $table->setHeaderContents(0, 1, get_lang('ModifyDate'));
+                                    $table->setHeaderContents(0, 2, get_lang('Username'));
+                                    $row = 1;
+                                    foreach ($logs as $log) {
+                                        $column = 0;
+                                        $data = $log->getData();
+                                        $table->setCellContents($row, $column, $data['fieldValue']);
+                                        $column++;
+                                        $table->setCellContents($row, $column, api_get_local_time($log->getLoggedAt()->format('Y-m-d H:i:s')));
+                                        $column++;
+                                        $table->setCellContents($row, $column, $log->getUsername());
+                                        $row++;
+                                    }
+                                    $form->addElement('label', null, $table->toHtml());
+                                }
+
+                            }
+                        }
 
                         if (!$admin_permissions) {
                             if ($field_details['field_visible'] == 0) {

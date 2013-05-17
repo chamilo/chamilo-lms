@@ -61,7 +61,7 @@ class QuestionManagerController
         $form = new \FormValidator('edit_question', 'post', $url);
 
         $extraFields = new \ExtraField('question');
-        $extraFields->add_elements($form, $id);
+        $extraFields->addElements($form, $id);
 
         $form->addElement('button', 'submit', get_lang('Update'));
 

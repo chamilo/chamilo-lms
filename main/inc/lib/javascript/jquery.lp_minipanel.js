@@ -41,7 +41,7 @@ function toogle_minipanel() {
 }
 
 var left_width = 292;  // (relative) hide_bar position
-var left_widht_mini = 20;  // (relative) hide_bar position
+var left_width_mini = 20;  // (relative) hide_bar position
 
 $(document).ready(function() {
 

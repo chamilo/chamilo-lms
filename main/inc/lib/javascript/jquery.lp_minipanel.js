@@ -52,14 +52,14 @@ $(document).ready(function() {
 
     //Adding effects to hide bar
     $('#hide_bar table').hover(function () {        
-    	if ($('#hide_bar').position().left == 292)
+    	if ($('#hide_bar').position().left >= 292)
     		$(this).css('backgroundImage','url(../img/hide1.png)').css('backgroundColor','#888888');
-    	else if($('#hide_bar').position().left == 0)
+    	else if($('#hide_bar').position().left <= 20)
     		$(this).css('backgroundImage','url(../img/hide3.png)').css('backgroundColor','#888888');    	
         },function (){
             if($('#hide_bar').position().left == left_width)
               $(this).css('backgroundImage','url(../img/hide0.png)').css('backgroundColor','#EEEEEE');
-            else if($('#hide_bar').position().left == 0)
+            else if($('#hide_bar').position().left <= 20)
               $(this).css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
         }
     );
@@ -69,7 +69,7 @@ $(document).ready(function() {
     // Adding funcionality
     $( "#hide_bar" ).click(function() {                
         $('#hide_bar table').toggle(function() {
-            if ($('#hide_bar').position().left == left_width) {
+            if ($('#hide_bar').position().left >= left_width) {
                 toogle_minipanel();             
             }
         },

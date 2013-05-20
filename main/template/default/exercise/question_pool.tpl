@@ -38,6 +38,7 @@
             grid.showCol(key);
         };
     }
+
     var second_filters = [];
 
     $(function () {
@@ -59,14 +60,24 @@
                     filters = jQuery.parseJSON(postdata.filters);
                     clean_cols(grid, added_cols);
                     added_cols = [];
-                    $.each(filters, function(key, value){
-                        //console.log('key: ' + key );
+                    $.each(filters, function(key, value) {
+                        /*console.log('key: ' + key );
+                        console.log('value: ' + value );*/
 
                         if (key == 'rules') {
                             $.each(value, function(subkey, subvalue) {
-
                                 if (subvalue.data == undefined) {
+                                    return;
                                 }
+                                if (subvalue.data && subvalue.data == -1) {
+                                    return;
+                                }
+
+                                /*console.log('subkey: ' + subkey );
+                                console.log('subvalue: ' + subvalue );
+                                console.log(subvalue);
+                                console.log('subvalue.field: ' + subvalue );
+                                console.log(subvalue.field);*/
 
                                 //if (added_cols[value.field] == undefined) {
                                     added_cols[subvalue.field] = subvalue.field;
@@ -86,10 +97,10 @@
         original_cols = grid.jqGrid('getGridParam', 'colModel');
 
         grid.jqGrid('navGrid','#questions_pager',
-            {edit:false,add:false,del:false},
-            {height:280,reloadAfterSubmit:false}, // edit options
-            {height:280,reloadAfterSubmit:false}, // add options
-            {reloadAfterSubmit:false},// del options
+            { edit:false, add:false, del:false },
+            { height:280, reloadAfterSubmit:false }, // edit options
+            { height:280, reloadAfterSubmit:false }, // add options
+            { reloadAfterSubmit:false },// del options
             prmSearch
         );
 

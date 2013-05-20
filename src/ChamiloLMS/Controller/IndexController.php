@@ -24,7 +24,9 @@ class IndexController extends CommonController
     public function logoutAction(Application $app)
     {
         $userId = api_get_user_id();
+
         \Online::logout($userId, true);
+        // the Online::logout function already does a redirect
         //return $app->redirect($app['url_generator']->generate('index'));
     }
 
@@ -46,6 +48,7 @@ class IndexController extends CommonController
         $loginError = $app['request']->get('error');
 
         $extraJS = array();
+
         //@todo improve this JS includes should be added using twig
         $extraJS[] = api_get_jquery_libraries_js(array('bxslider'));
         $extraJS[] = '<script>
@@ -110,6 +113,7 @@ class IndexController extends CommonController
             $app['template']->assign('course_category_block', $app['page_controller']->return_courses_in_categories());
         }
 
+        // @todo Custom Facebook connection lib could be replaced with opauth
         // Facebook connection, if activated
         if (api_is_facebook_auth_activated() && !api_get_user_id()) {
             facebook_connect();
@@ -169,6 +173,10 @@ class IndexController extends CommonController
         return new Response($response, 200, array());
     }
 
+    /**
+     * @param Application $app
+     * @return Response
+     */
     public function loginAction(Application $app)
     {
         /*$username = $app['request']->get('login');
@@ -314,7 +322,8 @@ class IndexController extends CommonController
      * Gets a document from the data/courses/MATHS/document/file.jpg to the user
      * @todo check permissions
      * @param Application $app
-     * @param $courseCode
+     * @param string $courseCode
+     * @param string $file
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
      */
     public function getDocumentAction(Application $app, $courseCode, $file)
@@ -330,6 +339,7 @@ class IndexController extends CommonController
     /**
      * Gets a document from the data/default_platform_document/* folder
      * @param Application $app
+     * @param string $file
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
      */
     public function getDefaultPlatformDocumentAction(Application $app, $file)

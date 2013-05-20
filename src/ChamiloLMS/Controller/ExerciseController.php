@@ -7,6 +7,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use \ChamiloSession as Session;
 
 /**
  * @package ChamiloLMS.Controller
@@ -23,8 +24,9 @@ class ExerciseController
 
     /**
      * @param Application $app
-     * @param $exerciseId
-     * @param $questionId
+     * @param int $exerciseId
+     * @param int $questionId
+     * @return Response
      */
     public function copyQuestionAction(Application $app, $exerciseId, $questionId)
     {
@@ -33,7 +35,7 @@ class ExerciseController
         if ($question) {
             $question->updateTitle($question->selectTitle().' - '.get_lang('Copy'));
             //Duplicating the source question, in the current course
-            $courseInfo = api_get_course_int_id();
+            $courseInfo = api_get_course_info();
             $newId = $question->duplicate($courseInfo);
             // Reading new question
             $newQuestion = \Question::read($newId);
@@ -44,7 +46,12 @@ class ExerciseController
             $newAnswer->read();
             //Duplicating the Answers in the current course
             $newAnswer->duplicate($newId);
-            $params = array('cidReq' => api_get_course_id(), 'id_session' => api_get_session_id(), 'id' => $newId, 'exerciseId' => $exerciseId);
+            $params = array(
+                'cidReq' => api_get_course_id(),
+                'id_session' => api_get_session_id(),
+                'id' => $newId,
+                'exerciseId' => $exerciseId
+            );
             $url = $app['url_generator']->generate('exercise_question_show', $params);
             return $app->redirect($url);
         }
@@ -52,6 +59,39 @@ class ExerciseController
 
     /**
      * @param Application $app
+     * @param int $exerciseId
+     * @param int $questionId
+     * @return Response
+     */
+    public function reuseQuestionAction(Application $app, $exerciseId, $questionId)
+    {
+        /** @var \Question $question */
+        $question = \Question::read($questionId);
+
+        if ($question) {
+            // adds the exercise ID represented by $fromExercise into the list of exercises for the current question
+            $question->addToList($exerciseId);
+
+            $objExercise = new \Exercise();
+            $objExercise->read($exerciseId);
+            // adds the question ID represented by $recup into the list of questions for the current exercise
+            $objExercise->addToList($exerciseId);
+            Session::write('objExercise', $objExercise);
+            $params = array(
+                'cidReq' => api_get_course_id(),
+                'id_session' => api_get_session_id(),
+                'id' => $questionId,
+                'exerciseId' => $exerciseId
+            );
+            $url = $app['url_generator']->generate('exercise_question_show', $params);
+            return $app->redirect($url);
+        }
+    }
+
+    /**
+     * @param Application $app
+     * @param string $cidReq
+     * @param int $exerciseId
      * @return Response
      */
     public function questionPoolAction(Application $app, $cidReq = null, $exerciseId = null)
@@ -60,29 +100,27 @@ class ExerciseController
         //@todo improve this JS includes should be added using twig
         $extraJS[]      = api_get_jqgrid_js();
         $app['extraJS'] = $extraJS;
-        //$questions = $category->getQuestions();
-
-        /*$questionFields = $em->getRepository('Entity\QuestionField')->findAll();
-        $rules = array();
-        foreach ($questionFields as $extraField) {
-            $extraField->getFieldVariable();
-            $rules[] = ;
-        }*/
 
         $questionColumns = \Question::getQuestionColumns($cidReq);
+
+        //$questionColumns = \Question::getQuestionColumns($cidReq, null, null, true);
         $columnModel     = $questionColumns['column_model'];
         $columns         = $questionColumns['columns'];
         $rules           = $questionColumns['rules'];
 
         $grid = \Display::grid_html('questions');
 
-        //jqgrid will use this URL to do the selects
+        // jqgrid will use this URL to do the selects
         $extraConditions = null;
         if (!empty($cidReq)) {
             $extraConditions = "courseId=".api_get_course_int_id();
         }
 
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_questions&'.$extraConditions;
+        if (!empty($exerciseId)) {
+            $extraConditions .= "&exerciseId=".$exerciseId;
+        }
+
+        $url = $app['url_generator']->generate('model_ajax').'?a=get_questions&'.$extraConditions;
 
         $extraParams['postData'] = array(
             'filters' => array(
@@ -91,28 +129,12 @@ class ExerciseController
             )
         );
 
-        // Autowidth.
+        // Auto-width.
         $extraParams['autowidth'] = 'true';
 
         // Height auto.
         $extraParams['height'] = 'auto';
         $token                 = null;
-
-        $courseURL = $app['url_generator']->generate('course', array('cidReq' => api_get_course_id(), 'id_session' => api_get_session_id()));
-
-        $exerciseId = intval($exerciseId);
-        if (empty($exerciseId)) {
-            $actionLinks = 'function action_formatter(cellvalue, options, rowObject) {
-                return \' <a target="_blank" href="'.$courseURL.'exercise/question/\'+rowObject[0]+\'">'.\Display::return_icon('preview.gif',get_lang('View'),'', ICON_SIZE_SMALL).'</a>'.
-                         ' <a href="'.$courseURL.'exercise/question/\'+rowObject[0]+\'/edit">'.\Display::return_icon('edit.png',get_lang('Edit'),'', ICON_SIZE_SMALL).'</a>'.'\';
-            }';
-        } else {
-            $actionLinks = 'function action_formatter(cellvalue, options, rowObject) {
-                return \' <a target="_blank" href="'.$courseURL.'exercise/'.$exerciseId.'/question/\'+rowObject[0]+\'">'.\Display::return_icon('preview.gif',get_lang('View'),'', ICON_SIZE_SMALL).'</a>'.
-                         ' <a href=\"'.$courseURL.'exercise/'.$exerciseId.'/copy-question/\'+rowObject[0]+\'">'.\Display::return_icon('copy.png',get_lang('Copy'),'', ICON_SIZE_SMALL).'</a>'.
-                         ' <a href="'.$courseURL.'exercise/question/\'+rowObject[0]+\'/edit">'.\Display::return_icon('edit.png',get_lang('Edit'),'', ICON_SIZE_SMALL).'</a>'.'\';
-            }';
-        }
 
         $js = \Display::grid_js(
             'questions',
@@ -121,7 +143,7 @@ class ExerciseController
             $columnModel,
             $extraParams,
             array(),
-            $actionLinks,
+            null,
             true
         );
         $app['template']->assign('grid', $grid);
@@ -134,6 +156,9 @@ class ExerciseController
 
     /**
      * @param Application $app
+     * @param int $id
+     * @param int $exerciseId
+     * @return Response|void
      */
     public function getQuestionAction(Application $app, $id, $exerciseId = null)
     {

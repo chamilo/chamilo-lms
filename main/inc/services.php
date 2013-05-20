@@ -460,3 +460,11 @@ $app['exercise_manager.controller'] = $app->share(
         return new ChamiloLMS\Controller\ExerciseController();
     }
 );
+
+$app['model_ajax.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\ModelAjaxController();
+    }
+);
+
+

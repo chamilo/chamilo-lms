@@ -40,14 +40,15 @@ class Connector
      * @param  \elFinder   $elfinder  elFinder instance
      * @return void|true
      **/
-    function logger($cmd, $result, $args, $elfinder) {
+    function logger($cmd, $result, $args, $elfinder)
+    {
         // do something here
         //echo $cmd;
 
         $courseInfo = api_get_course_info();
 
         error_log($cmd);
-        error_log(print_r($result,1));
+        error_log(print_r($result, 1));
         //error_log(print_r($args,1));
         //error_log(print_r($elfinder,1));
 
@@ -131,7 +132,11 @@ class Connector
         }
     }
 
-    function getOperations() {
+    /**
+     * @return array
+     */
+    function getOperations()
+    {
         $opts = array(
             //'debug' => true,
             'bind' => array(
@@ -195,7 +200,7 @@ class Connector
             //'uploadDeny' => array('text/x-php'),
             'uploadOrder' => array('allow'), // only executes allow
             'disabled' => array (
-                'duplicate','rename', 'mkdir', 'mkfile', 'copy', 'cut', 'paste', 'edit', 'extract', 'archive', 'help', 'resize'
+                'duplicate', 'rename', 'mkdir', 'mkfile', 'copy', 'cut', 'paste', 'edit', 'extract', 'archive', 'help', 'resize'
             )
         );
 

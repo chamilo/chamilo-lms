@@ -194,10 +194,8 @@ function add_category_form($in_action, $type = 'simple')
         $check = Security::check_token('post');
         if ($check) {
             $values = $form->getSubmitValues();
-            $v_name = Security::remove_XSS($values['category_name'], COURSEMANAGER);
-            $v_description = Security::remove_XSS($values['category_description'], COURSEMANAGER);
             $parent_id = isset($values['parent_id']) && isset($values['parent_id'][0]) ? $values['parent_id'][0] : null;
-            $objcat = new Testcategory(0, $v_name, $v_description, $parent_id, $type, api_get_course_int_id());
+            $objcat = new Testcategory(0, $values['category_name'], $values['category_description'], $parent_id, $type, api_get_course_int_id());
             if ($objcat->addCategoryInBDD()) {
                 Display::display_confirmation_message(get_lang('AddCategoryDone'));
             } else {

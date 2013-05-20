@@ -1603,6 +1603,7 @@ function api_format_course_array($course_data) {
     $_course['registration_code']     = !empty($course_data['registration_code']) ? sha1($course_data['registration_code']) : null;
     $_course['disk_quota']            = $course_data['disk_quota'];
     $_course['course_public_url']     = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/index.php';
+    $_course['course_web_public_url']     = api_get_path(WEB_PUBLIC_PATH).'courses/'.$course_data['directory'].'/';
     $_course['course_sys_data']       = api_get_path(SYS_DATA_PATH).'courses/'.$course_data['directory'].'/';
 
     $_course['user_status_in_course'] = CourseManager::get_user_in_course_status(api_get_user_id(), $_course['code']);

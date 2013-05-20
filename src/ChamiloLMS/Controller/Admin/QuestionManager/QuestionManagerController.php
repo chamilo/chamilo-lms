@@ -6,11 +6,10 @@ namespace ChamiloLMS\Controller\Admin\QuestionManager;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
-use Pagerfanta\Adapter\DoctrineCollectionAdapter;
-use Pagerfanta\Pagerfanta;
 
 /**
  * Class QuestionManagerController
+ * @todo reduce controller size
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
@@ -163,7 +162,7 @@ class QuestionManagerController
         $grid = \Display::grid_html('questions');
 
         //jqgrid will use this URL to do the selects
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_questions&categoryId='.$categoryId;
+        $url = $app['url_generator']->generate('model_ajax').'?a=get_questions&categoryId='.$categoryId;
 
         $extraParams['postData'] = array(
             'filters' => array(
@@ -191,7 +190,7 @@ class QuestionManagerController
         $testCategory = new \Testcategory($categoryId);
         $count = $testCategory->getCategoryQuestionsNumber();
 
-        $js    = \Display::grid_js(
+        $js = \Display::grid_js(
             'questions',
             $url,
             $columns,
@@ -310,7 +309,6 @@ class QuestionManagerController
      * New category
      *
      * @param Application $app
-     * @param int $id
      * @return Response
      */
     public function newCategoryAction(Application $app)
@@ -362,8 +360,8 @@ class QuestionManagerController
     {
         $extraJS = array();
         //@todo improve this JS includes should be added using twig
-        $extraJS[]      = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
-        $extraJS[]      = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript"></script>';
+        $extraJS[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+        $extraJS[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript"></script>';
         $app['extraJS'] = $extraJS;
 
         $objcat = new \Testcategory($id);
@@ -379,7 +377,13 @@ class QuestionManagerController
         $message = null;
         if ($form->validate()) {
             $values = $form->getSubmitValues();
-            $objcat = new \Testcategory($id, $values['category_name'], $values['category_description'], $values['parent_id'], 'global');
+            $objcat = new \Testcategory(
+                $id,
+                $values['category_name'],
+                $values['category_description'],
+                $values['parent_id'],
+                'global'
+            );
             if ($objcat->modifyCategory()) {
                 $message = \Display::return_message(get_lang('MofidfyCategoryDone'), 'confirmation');
             } else {
@@ -398,6 +402,8 @@ class QuestionManagerController
     /**
      * @param Application $app
      * @param int $id
+     *
+     * @return Response
      */
     public function deleteCategoryAction(Application $app, $id)
     {

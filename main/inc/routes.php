@@ -513,6 +513,11 @@ $app->match('/admin/questionmanager/questions/{id}/edit', 'question_manager.cont
     ->before($adminAndQuestionManagerCondition)
     ->bind('admin_questions_edit');
 
+$app->match('/admin/questionmanager/questions/{id}', 'exercise_manager.controller:getQuestionAction', 'GET|POST')
+    ->assert('type', '.+')
+    ->before($adminAndQuestionManagerCondition)
+    ->bind('admin_questions_show');
+
 $app->get('/admin/questionmanager/questions/get-categories/{id}', 'question_manager.controller:getCategoriesAction')
     ->before($adminAndQuestionManagerCondition)
     ->bind('admin_questions_get_categories');
@@ -570,6 +575,14 @@ $app->match('courses/{cidReq}/{id_session}/exercise/{exerciseId}/copy-question/{
     ->before($userPermissionsInsideACourse)
     ->bind('exercise_copy_question');
 
+$app->match('courses/{cidReq}/{id_session}/exercise/{exerciseId}/reuse-question/{questionId}', 'exercise_manager.controller:reuseQuestionAction', 'GET|POST')
+    ->assert('questionId', '\d+')
+    ->assert('exerciseId', '\d+')
+    ->before($settingCourseConditions)
+    ->before($userCourseAdmin)
+    ->before($userPermissionsInsideACourse)
+    ->bind('exercise_reuse_question');
+
 /** Course home instead of courses/MATHS the new URL is web/courses/MATHS  */
 $app->match('/courses/{cidReq}/{id_session}/exercise/question/{id}', 'exercise_manager.controller:getQuestionAction', 'GET')
     ->assert('id_session', '\d+')
@@ -601,5 +614,13 @@ $app->match('/courses/{cidReq}/{id_session}/exercise/{exerciseId}/dashboard', 'e
 
 $app->match('/courses/{cidReq}/{id_session}/exercise/question/{id}/edit', 'exercise_manager.controller:editQuestionAction', 'GET|POST')
     ->assert('type', '.+')
-    ->before($adminAndQuestionManagerCondition)
+    ->before($settingCourseConditions)
+    ->before($userPermissionsInsideACourse)
+    ->before($userCourseAdmin)
     ->bind('exercise_question_edit');
+
+$app->match('/ajax', 'model_ajax.controller:indexAction', 'GET')
+    ->assert('type', '.+')
+    ->bind('model_ajax');
+
+

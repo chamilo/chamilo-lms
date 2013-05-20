@@ -20,26 +20,47 @@ class ExtraField extends Model
         'tms'
     );
 
-    CONST FIELD_TYPE_TEXT            = 1;
-    CONST FIELD_TYPE_TEXTAREA        = 2;
-    CONST FIELD_TYPE_RADIO           = 3;
-    CONST FIELD_TYPE_SELECT          = 4;
-    CONST FIELD_TYPE_SELECT_MULTIPLE = 5;
-    CONST FIELD_TYPE_DATE            = 6;
-    CONST FIELD_TYPE_DATETIME        = 7;
-    CONST FIELD_TYPE_DOUBLE_SELECT   = 8;
-    CONST FIELD_TYPE_DIVIDER         = 9;
-    CONST FIELD_TYPE_TAG             = 10;
-    CONST FIELD_TYPE_TIMEZONE        = 11;
-    CONST FIELD_TYPE_SOCIAL_PROFILE  = 12;
-    CONST FIELD_TYPE_CHECKBOX        = 13;
+
+    public $ops = array(
+        'eq' => '=',        //equal
+        'ne' => '<>',       //not equal
+        'lt' => '<',        //less than
+        'le' => '<=',       //less than or equal
+        'gt' => '>',        //greater than
+        'ge' => '>=',       //greater than or equal
+        'bw' => 'LIKE',     //begins with
+        'bn' => 'NOT LIKE', //doesn't begin with
+        'in' => 'LIKE',     //is in
+        'ni' => 'NOT LIKE', //is not in
+        'ew' => 'LIKE',     //ends with
+        'en' => 'NOT LIKE', //doesn't end with
+        'cn' => 'LIKE',     //contains
+        'nc' => 'NOT LIKE'  //doesn't contain
+    );
+
+    const FIELD_TYPE_TEXT            = 1;
+    const FIELD_TYPE_TEXTAREA        = 2;
+    const FIELD_TYPE_RADIO           = 3;
+    const FIELD_TYPE_SELECT          = 4;
+    const FIELD_TYPE_SELECT_MULTIPLE = 5;
+    const FIELD_TYPE_DATE            = 6;
+    const FIELD_TYPE_DATETIME        = 7;
+    const FIELD_TYPE_DOUBLE_SELECT   = 8;
+    const FIELD_TYPE_DIVIDER         = 9;
+    const FIELD_TYPE_TAG             = 10;
+    const FIELD_TYPE_TIMEZONE        = 11;
+    const FIELD_TYPE_SOCIAL_PROFILE  = 12;
+    const FIELD_TYPE_CHECKBOX        = 13;
 
     public $type = 'user'; //or session or course
     public $handler_id = 'user_id';
     public $pageName;
     public $pageUrl;
 
-    function __construct($type)
+    /**
+     * @param string $type
+     */
+    public function __construct($type)
     {
         $this->type = $type;
         switch ($this->type) {
@@ -1216,10 +1237,18 @@ EOF;
         }';
     }
 
-    public function getRules(&$columns, &$column_model)
+    /**
+     * @param array $columns
+     * @param array  $column_model
+     * @param array  $extraFields
+     * @return array
+     */
+    public function getRules(&$columns, &$column_model, $extraFields = array(), $checkExtraFieldExistence = false)
     {
-        $fields           = $this->get_all(
-            array('field_visible = ? AND field_filter = ?' => array(1, 1)),
+        $fields = $this->get_all(
+            array('field_visible = ? AND field_filter = ?'
+                  => array(1, 1)
+            ),
             'option_display_text'
         );
         $extraFieldOption = new ExtraFieldOption($this->type);
@@ -1227,6 +1256,17 @@ EOF;
         $rules = array();
         if (!empty($fields)) {
             foreach ($fields as $field) {
+
+                /*if ($checkExtraFieldExistence) {
+                    if (empty($extraFields)) {
+                        continue;
+                    } else {
+                        if (!in_array('extra_'.$field['field_variable'], $extraFields)) {
+                            continue;
+                        }
+                    }
+                }*/
+
                 $search_options = array();
                 $type           = 'text';
                 if (in_array($field['field_type'], array(self::FIELD_TYPE_SELECT, self::FIELD_TYPE_DOUBLE_SELECT))) {
@@ -1250,7 +1290,6 @@ EOF;
                             foreach ($option as $sub_option) {
                                 if ($sub_option['option_value'] == 0) {
                                     $first_options[] = $sub_option['field_id'].'#'.$sub_option['id'].':'.$sub_option['option_display_text'];
-                                } else {
                                 }
                             }
                         }
@@ -1295,7 +1334,6 @@ EOF;
                         'option_display_text'
                     );
                 }
-
                 $column_model[] = array(
                     'name'          => 'extra_'.$field['field_variable'],
                     'index'         => 'extra_'.$field['field_variable'],
@@ -1441,6 +1479,34 @@ EOF;
         );
     }
 
+
+    //@todo move this in the display_class or somewhere else
+    /**
+     * @param $col
+     * @param $oper
+     * @param $val
+     * @return string
+     */
+    public function get_where_clause($col, $oper, $val)
+    {
+
+        if (empty($col)) {
+            return '';
+        }
+        if ($oper == 'bw' || $oper == 'bn') {
+            $val .= '%';
+        }
+        if ($oper == 'ew' || $oper == 'en') {
+            $val = '%'.$val;
+        }
+        if ($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') {
+            $val = '%'.$val.'%';
+        }
+        $val = \Database::escape_string($val);
+
+        return " $col {$this->ops[$oper]} '$val' ";
+    }
+
     public function getExtraFieldRules($filters, $stringToSearch = 'extra_')
     {
         $extra_fields = array();
@@ -1465,7 +1531,7 @@ EOF;
                 $field = $rule->field;
 
                 if (isset($rule->data) && $rule->data != -1) {
-                    $condition_array[] = get_where_clause($field, $rule->op, $rule->data);
+                    $condition_array[] = $this->get_where_clause($field, $rule->op, $rule->data);
                 }
             } else {
                 // Extra fields
@@ -1487,7 +1553,7 @@ EOF;
                         }
 
                         if (!isset($rule->data)) {
-                            $condition_array[] = ' ('.get_where_clause($rule->field, $rule->op, $rule->data).') ';
+                            $condition_array[] = ' ('.$this->get_where_clause($rule->field, $rule->op, $rule->data).') ';
                             $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
                         }
                     } else {
@@ -1495,7 +1561,7 @@ EOF;
                             if ($rule->data == -1) {
                                 continue;
                             }
-                            $condition_array[] = ' ('.get_where_clause($rule->field, $rule->op, $rule->data).') ';
+                            $condition_array[] = ' ('.$this->get_where_clause($rule->field, $rule->op, $rule->data).') ';
                             $extra_fields[] = array(
                                 'field' => $rule->field,
                                 'id' => $field_option['id'],

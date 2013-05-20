@@ -1032,8 +1032,8 @@ abstract class Question
      * adds an exercise into the exercise list
      *
      * @author - Olivier Brouckaert
-     * @param - integer $exerciseId - exercise ID
-     * @param - boolean $fromSave - comming from $this->save() or not
+     * @param integer $exerciseId - exercise ID
+     * @param boolean $fromSave - coming from $this->save() or not
      */
     function addToList($exerciseId, $fromSave = false)
     {
@@ -1202,8 +1202,6 @@ abstract class Question
     {
         if (empty($course_info)) {
             $course_info = $this->course;
-        } else {
-            $course_info = $course_info;
         }
         $TBL_QUESTIONS        = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $TBL_QUESTION_OPTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
@@ -1995,7 +1993,7 @@ abstract class Question
      * @param int course code
      * @return array
      */
-    public static function getQuestionColumns($courseCode = null, $questionFields = array())
+    public static function getQuestionColumns($courseCode = null, $extraFields = array(), $questionFields = array(), $checkFields = false)
     {
         // The order is important you need to check the the $column variable in the model.ajax.php file
         //$columns = array('id', get_lang('Name'), get_lang('Description'));
@@ -2023,23 +2021,23 @@ abstract class Question
                 'sortable' => 'false'
             )*/
         );
-
+        //var_dump($extraFields, $questionFields);
         // Extra field rules.
         $extraField = new \ExtraField('question');
-        $rules = $extraField->getRules($columns, $columnModel);
+
+        $rules = $extraField->getRules($columns, $columnModel, $extraFields, $checkFields);
 
         // Exercise rules.
-        self::getRules($courseCode, $rules, $columns, $columnModel, $questionFields);
+        self::getRules($courseCode, $rules, $columns, $columnModel, $questionFields, $checkFields);
 
+        // Adding actions.
         $columns[] = get_lang('Actions');
-
         $columnModel[] = array(
             'name'      => 'actions',
             'index'     => 'actions',
             'width'     => '30',
-            'align'     => 'left',
-            'formatter' => 'action_formatter',
-            'sortable'  => 'false'
+          //  'align'     => 'left',
+           // 'sortable'  => 'false'
         );
 
         foreach ($columnModel as $col) {
@@ -2061,7 +2059,7 @@ abstract class Question
      * @param array $options
      * @return array
      */
-    public static function getQuestions($categoryId, $exerciseId, $courseId, $options, $get_count = false)
+    public static function getQuestions($app, $categoryId, $exerciseId, $courseId, $options, $get_count = false)
     {
         $questionTable = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
@@ -2150,6 +2148,8 @@ abstract class Question
 
         $extraCondition = null;
 
+        // Used by the question manager
+
         if (!empty($categoryId)) {
             $categoryRelQuestionTable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
             $extraCondition = " INNER JOIN $categoryRelQuestionTable c ON (s.iid = c.question_id)";
@@ -2157,12 +2157,12 @@ abstract class Question
             $where .= " AND category_id = $categoryId ";
         }
 
-        if (!empty($exerciseId)) {
+        /*if (!empty($exerciseId)) {
             $exerciseRelQuestionTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $extraCondition .= " INNER JOIN $exerciseRelQuestionTable e ON (s.iid = e.question_id)";
             $exerciseId = intval($exerciseId);
             $where .= " AND exercice_id = $exerciseId ";
-        }
+        }*/
 
         if (!empty($courseId)) {
             $courseId = intval($courseId);
@@ -2171,13 +2171,123 @@ abstract class Question
 
         $query = " $select FROM $questionTable s $inject_joins $extraCondition WHERE 1=1 $where $inject_where $order $limit";
         //echo $query.'<br />';
+        //var_dump($extraCondition);
+        //var_dump($where);
 
         $result = Database::query($query);
         $questions = array();
+
+        $exerciseList = null;
+        if (!empty($exerciseId)) {
+            $exercise = new Exercise();
+            $exercise->read($exerciseId);
+            $exerciseList = $exercise->questionList;
+        }
+
         if (Database::num_rows($result)) {
             $questions = Database::store_result($result, 'ASSOC');
+
             if ($get_count) {
                 return $questions[0]['total_rows'];
+            }
+
+            $previewIcon = Display::return_icon('preview.gif', get_lang('View'), array(), ICON_SIZE_SMALL);
+            $copyIcon = Display::return_icon('copy.png', get_lang('Copy'), array(), ICON_SIZE_SMALL);
+            $reuseIcon = Display::return_icon('view_more_stats.gif', get_lang('InsertALinkToThisQuestionInTheExercise'), array(), ICON_SIZE_SMALL);
+            $editIcon = Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL);
+            //$deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL);
+            //var_dump($exerciseId);
+            // Including actions
+            foreach ($questions as &$question) {
+
+                if (empty($exerciseId)) {
+
+                    // View.
+                    $actions = Display::url(
+                        $previewIcon,
+                        $app['url_generator']->generate(
+                            'admin_questions_show',
+                            array(
+                                'id' => $question['iid']
+                            )
+                        )
+                    );
+
+                    // Edit.
+                    $actions .= Display::url(
+                        $editIcon,
+                        $app['url_generator']->generate(
+                            'admin_questions_edit',
+                            array(
+                                'id' => $question['iid']
+                            )
+                        )
+                    );
+
+                } else {
+
+                    // View.
+                    $actions = Display::url(
+                        $previewIcon,
+                        $app['url_generator']->generate(
+                            'question_show',
+                            array(
+                                'cidReq' => api_get_course_id(),
+                                'id_session' => api_get_session_id(),
+                                'exerciseId' => $exerciseId,
+                                'id' => $question['iid']
+                            )
+                        )
+                    );
+
+                    if (isset($exerciseList) && !empty($exerciseList) && (in_array($question['iid'], $exerciseList))) {
+                        // Copy.
+                        //$actions .= $copyIconDisabled;
+                    } else {
+
+                        // Copy.
+                        $actions .= Display::url(
+                            $copyIcon,
+                            $app['url_generator']->generate(
+                                'exercise_copy_question',
+                                array(
+                                    'cidReq' => api_get_course_id(),
+                                    'id_session' => api_get_session_id(),
+                                    'questionId' => $question['iid'],
+                                    'exerciseId' => $exerciseId
+                                )
+                            )
+                        );
+
+                         // Reuse.
+                        $actions .= Display::url(
+                            $reuseIcon,
+                            $app['url_generator']->generate(
+                                'exercise_reuse_question',
+                                array(
+                                    'cidReq' => api_get_course_id(),
+                                    'id_session' => api_get_session_id(),
+                                    'questionId' => $question['iid'],
+                                    'exerciseId' => $exerciseId
+                                )
+                            )
+                        );
+                    }
+
+                    // Edit.
+                    $actions .= Display::url(
+                        $editIcon,
+                        $app['url_generator']->generate(
+                            'exercise_question_edit',
+                            array(
+                                'cidReq' => api_get_course_id(),
+                                'id_session' => api_get_session_id(),
+                                'id' => $question['iid']
+                            )
+                        )
+                    );
+                }
+                $question['actions'] = $actions;
             }
         }
         return $questions;
@@ -2189,13 +2299,13 @@ abstract class Question
     }
 
     /**
-     * @param $courseCode
-     * @param $rules
-     * @param $columns
-     * @param $column_model
+     * @param string $courseCode
+     * @param array $rules
+     * @param array $columns
+     * @param array $column_model
      * @return array
      */
-    public static function getRules($courseCode, &$rules, &$columns, &$column_model, $questionFields)
+    public static function getRules($courseCode, &$rules, &$columns, &$column_model, $questionFields, $checkFields = false)
     {
         // sessions
         // course
@@ -2203,7 +2313,6 @@ abstract class Question
         // exercises
         // difficult
         // type
-
         if (empty($courseCode)) {
 
             // Session
@@ -2358,13 +2467,9 @@ abstract class Question
             }
         }
 
+
         if (!empty($fields)) {
             foreach ($fields as $field) {
-                if (isset($questionFields) && !empty($questionFields)) {
-                    if (!in_array('question_'.$field['field_variable'], $questionFieldsKeys)) {
-                        continue;
-                    }
-                }
 
                 $search_options = array();
                 $type           = 'text';
@@ -2390,6 +2495,7 @@ abstract class Question
                     'searchoptions' => $search_options
                 );
                 $columns[] = $field['field_display_text'];
+
                 $rules[] = array(
                     'field' => 'question_'.$field['field_variable'],
                     'op' => 'eq'

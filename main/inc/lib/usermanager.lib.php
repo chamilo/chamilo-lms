@@ -46,8 +46,13 @@ class UserManager
      * Empty constructor. This class is mostly static.
      */
     public function __construct () {
+
     }
 
+    /**
+     * @param array $params
+     * @return array
+     */
     static function clean_params($params) {
         $clean_params = array();
         foreach ($params as $key => $value) {
@@ -220,8 +225,26 @@ class UserManager
      * @assert ('Sam','Gamegie',5,'sam@example.com','jo','jo') > 1
      * @assert ('Pippin','Took',null,null,'jo','jo') === false
      */
-    public static function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language = '', $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1, $hr_dept_id = 0, $extra = null, $encrypt_method = '', $send_mail = false) {
-        global $_user, $_configuration;
+    public static function create_user(
+        $firstName,
+        $lastName,
+        $status,
+        $email,
+        $loginName,
+        $password,
+        $official_code = '',
+        $language = '',
+        $phone = '',
+        $picture_uri = '',
+        $auth_source = PLATFORM_AUTH_SOURCE,
+        $expiration_date = '0000-00-00 00:00:00',
+        $active = 1,
+        $hr_dept_id = 0,
+        $extra = null,
+        $encrypt_method = '',
+        $send_mail = false
+    ) {
+        global $_configuration;
         $original_password = $password;
         $access_url_id = 1;
 
@@ -256,11 +279,8 @@ class UserManager
             $language = api_get_setting('platformLanguage');
         }
 
-        if ($_user['user_id']) {
-            $creator_id = intval($_user['user_id']);
-        } else {
-            $creator_id = '';
-        }
+        $creator_id = api_get_user_id();
+
         // First check wether the login already exists
         if (!self::is_username_available($loginName)) {
             return api_set_failure('login-pass already taken');
@@ -357,7 +377,7 @@ class UserManager
 
         if (is_array($extra) && count($extra) > 0) {
             $res = true;
-            foreach($extra as $fname => $fvalue) {
+            foreach ($extra as $fname => $fvalue) {
                 $res = $res && self::update_extra_field_value($return, $fname, $fvalue);
             }
         }
@@ -367,14 +387,14 @@ class UserManager
 
     /**
      * Can user be deleted? This function checks whether there's a course
-         * in which the given user is the
+     * in which the given user is the
      * only course administrator. If that is the case, the user can't be
      * deleted because the course would remain without a course admin.
      * @param int $user_id The user id
      * @return boolean true if user can be deleted
-         * @assert (null) === false
-         * @assert (-1) === false
-         * @assert ('abc') === false
+     * @assert (null) === false
+     * @assert (-1) === false
+     * @assert ('abc') === false
      */
     public static function can_delete_user($user_id)
     {
@@ -415,10 +435,13 @@ class UserManager
     public static function delete_user($user_id)
     {
 
-        if ($user_id != strval(intval($user_id)))
+        if ($user_id != strval(intval($user_id))) {
             return false;
-        if ($user_id === false)
+        }
+
+        if ($user_id === false) {
             return false;
+        }
 
         if (!self::can_delete_user($user_id)) {
             return false;
@@ -469,7 +492,6 @@ class UserManager
         // Delete user picture
         // TODO: Logic about api_get_setting('split_users_upload_directory') === 'true' , a user has 4 differnt sized photos to be deleted.
 
-        $user_info = api_get_user_info($user_id);
         if (strlen($user_info['picture_uri']) > 0) {
             $img_path = api_get_path(SYS_DATA_PATH).'upload/users/'.$user_id.'/'.$user_info['picture_uri'];
             if (file_exists($img_path))
@@ -2214,7 +2236,8 @@ class UserManager
         return $data;
     }
 
-    static function getCategories($user_id, $is_time_over = false, $get_count = false, $reverse_order = false, $start = 0, $maxPerPage = null, $categoryFilter = null) {
+    static function getCategories($user_id, $is_time_over = false, $get_count = false, $reverse_order = false, $start = 0, $maxPerPage = null, $categoryFilter = null)
+    {
         $tableSessionCategory = Database :: get_main_table(TABLE_MAIN_SESSION_CATEGORY);
         $tableSession = Database :: get_main_table(TABLE_MAIN_SESSION);
         $tableSessionUser = Database :: get_main_table(TABLE_MAIN_SESSION_USER);

@@ -41,7 +41,7 @@ function toogle_minipanel() {
 }
 
 var left_width = 292;  // (relative) hide_bar position
-var left_widht_mini = 20;  // (relative) hide_bar position
+var left_width_mini = 20;  // (relative) hide_bar position
 
 $(document).ready(function() {
 
@@ -60,7 +60,7 @@ $(document).ready(function() {
         },function (){
             if($('#hide_bar').position().left >= left_width)
               $(this).css('backgroundImage','url(../img/hide0.png)').css('backgroundColor','#EEEEEE');
-            else if($('#hide_bar').position().left <= 20)
+            else if($('#hide_bar').position().left <= left_width_mini)
               $(this).css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
         }
     );

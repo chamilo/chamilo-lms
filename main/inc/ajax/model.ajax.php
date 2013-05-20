@@ -1,7 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-//@todo this could be integrated in the inc/lib/model.lib.php + try to clean this file
+// @todo this could be integrated in the inc/lib/model.lib.php + try to clean this file
+// @todo this file was rewrote in the model ajax controller
 
 $language_file = array('admin', 'exercice', 'gradebook', 'tracking');
 
@@ -172,10 +173,6 @@ switch ($action) {
         $categoryId = isset($_REQUEST['categoryId']) ? $_REQUEST['categoryId'] : null;
         $exerciseId = isset($_REQUEST['exerciseId']) ? $_REQUEST['exerciseId'] : null;
         $courseId = isset($_REQUEST['courseId']) ? $_REQUEST['courseId'] : null;
-        /** @var \Doctrine\ORM\EntityManager $em */
-        /*$em = $app['orm.em'];
-        $repo = $em->getRepository('Entity\CQuizQuestionRelCategory');
-        $count = $repo->getCountQuestionByCategory($categoryId);*/
         $count = Question::getQuestions($categoryId, $exerciseId, $courseId, array('where'=> $where_condition, 'extra' => $extra_fields, 'question' => $questionFields), true);
         break;
     case 'get_user_list_plugin_widescale':
@@ -340,12 +337,17 @@ switch ($action) {
         $questions = $category->getQuestions();*/
         $columns = Question::getQuestionColumns(api_get_course_id(), $questionFields);
         $columns = $columns['simple_column_name'];
-        $result = Question::getQuestions($categoryId, $exerciseId, $courseId, array(
-            'where'=> $where_condition,
-            'order'=>"$sidx $sord",
-            'extra' => $extra_fields,
-            'question' => $questionFields,
-            'limit'=> "$start , $limit")
+        $result = Question::getQuestions(
+            $categoryId,
+            $exerciseId,
+            $courseId,
+            array(
+                'where'=> $where_condition,
+                'order'=>"$sidx $sord",
+                'extra' => $extra_fields,
+                'question' => $questionFields,
+                'limit'=> "$start , $limit"
+            )
         );
 
         break;

@@ -623,6 +623,10 @@ class DocumentManager {
             //condition for the session
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id);
+            $show_users_condition = "";
+            if (api_get_setting('show_users_folders') == 'false') {
+                $show_users_condition = "AND docs.path NOT LIKE '%shared_folder%'";
+            }
             if ($to_group_id <> 0) {
                $sql = "SELECT DISTINCT docs.id, path
                     FROM $TABLE_ITEMPROPERTY  AS last INNER JOIN $TABLE_DOCUMENT  AS docs
@@ -639,8 +643,9 @@ class DocumentManager {
                         WHERE
                                 docs.filetype 		= 'folder' AND
                                 last.to_group_id	= 0  AND
-                                last.visibility 	<> 2 $condition_session ";
-                }
+                                last.visibility 	<> 2
+                                $show_users_condition $condition_session ";
+            }
 
             $result = Database::query($sql);
 

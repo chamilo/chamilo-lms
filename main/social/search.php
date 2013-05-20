@@ -164,25 +164,15 @@ if ($query !='') {
         $results .=  Display::page_subheader(get_lang('Users'));
         $results .= '<ul class="thumbnails">';
         foreach($users as $user) {
-<<<<<<< HEAD
-            $send_inv = '';
-=======
             $send_inv = '<button class="btn btn-mini btn-inv-off">'.get_lang('SendInvitation').'</button>';
->>>>>>> dff6077291ee83557bedcaa35b605d89f3898481
             $relation_type =  intval(SocialManager::get_relation_between_contacts(api_get_user_id(), $user['user_id'] ));
             $user_info = api_get_user_info($user['user_id'], true);
             $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$user['user_id'];
             //Show send invitation icon if they are not friends yet
             if ($relation_type != 3 && $relation_type != 4 && $user['user_id'] != api_get_user_id()) {
-<<<<<<< HEAD
-                $send_inv = '<a href="javascript:void(0);" onclick="javascript:send_invitation_to_user(\''.$user['user_id'].'\');"/>'.Display::span('', array('class' => 'send_inv_in_text', 'title' => get_lang('SendInvitation'))).'</a>';
-            }
-            $send_msg = '<a href="javascript:void(0);" onclick="javascript:send_message_to_user(\''.$user['user_id'].'\');"/>'.Display::span('', array('class' => 'send_msg_in_text', 'title' => get_lang('SendMessage'))).'</a>';
-=======
                 $send_inv = '<a href="javascript:void(0);" onclick="javascript:send_invitation_to_user(\''.$user['user_id'].'\');"/><button class="btn btn-mini btn-inv">'.get_lang('SendInvitation').'</button></a>';
             }
             $send_msg = '<a href="javascript:void(0);" onclick="javascript:send_message_to_user(\''.$user['user_id'].'\');"/><button class="btn btn-mini btn-msg">'.get_lang('SendMessage').'</button></a>';
->>>>>>> dff6077291ee83557bedcaa35b605d89f3898481
             if (empty($user['picture_uri'])) {
                 $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
                 $img = '<img src="'.$picture['file'].'">';
@@ -196,14 +186,9 @@ if ($query !='') {
                 $status_icon = Display::span('', array('class' => 'offline_user_in_text'));
             }
             $user['tag'] = isset($user['tag']) ? $user['tag'] : null;
-<<<<<<< HEAD
-            $user_info['complete_name'] = Display::url($status_icon.$user_info['complete_name'], $url).'<br />'.$user['tag'].$send_inv.$send_msg;
-            $results .= '<li class="span3"><div class="thumbnail">'.$img.'<div class="caption">'.$user_info['complete_name'].$user['tag'].'</div</div></li>';
-=======
             $user_info['complete_name'] = Display::url($status_icon.$user_info['complete_name'], $url).'<br />'.$user['tag'];
             $invitations = $user['tag'].$send_inv.$send_msg;
             $results .= '<li class="span3 ">'.$user_info['complete_name'].'<div class="left">'.$img.'</div><div class="btn-invitations">'.$invitations.'</div></li>';
->>>>>>> dff6077291ee83557bedcaa35b605d89f3898481
         }
         $results .='</ul></div></div>';
         $social_right_content .=  $results;

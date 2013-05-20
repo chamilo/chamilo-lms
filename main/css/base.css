@@ -4783,3 +4783,31 @@ i.size-32.icon-new-work{
 #learning_path_left_zone .no-border {
     border: 0px;
 }
+
+.btn-invitations {
+    margin-left: 120px;
+}
+.btn-msg {
+  background: url("send_msg.png") no-repeat left center;
+  padding: 2px 6px;
+  padding-left: 18px;
+  font-size: 11px;
+  line-height: 14px;
+  background-color: #e6e6e6;
+}
+.btn-inv {
+  background: url("send_inv.png") no-repeat left center;
+  padding: 2px;
+  padding-left: 22px;
+  font-size: 11px;
+  line-height: 14px;
+  background-color: #e6e6e6;
+}
+.btn-inv-off {
+  background: url("send_inv_off.png") no-repeat left center;
+  padding: 2px;
+  padding-left: 22px;
+  font-size: 11px;
+  line-height: 14px;
+  background-color: #e6e6e6;
+}

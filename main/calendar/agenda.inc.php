@@ -963,7 +963,7 @@ function show_to_form($to_already_selected)
  */
 function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected = array())
 {
-    echo '<select data-placeholder="'.get_lang('Select').'" style="width:150px;" class="chzn-select" id="selected_form_id_search" name="selected_form[]" multiple="multiple">';
+    echo '<select data-placeholder="'.get_lang('Select').'" style="width:150px;" class="chzn-select" id="selected_form_id" name="selected_form[]" multiple="multiple">';
 
     // Adding the groups to the select form
     if (isset($to_already_selected) && $to_already_selected === 'everyone') {

@@ -71,11 +71,11 @@ class Testcategory
     public function getCategory($id)
     {
         $t_cattable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $in_id = Database::escape_string($id);
+        $id = Database::escape_string($id);
         $sql = "SELECT * FROM $t_cattable WHERE iid = $id ";
         $res = Database::query($sql);
-        $numrows = Database::num_rows($res);
-        if ($numrows > 0) {
+        $numRows = Database::num_rows($res);
+        if ($numRows > 0) {
             $row = Database::fetch_array($res);
             $this->id = $row['iid'];
             $this->title = $this->name = $row['title'];
@@ -96,7 +96,6 @@ class Testcategory
         $t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $v_name = Database::escape_string($this->name);
         $parent_id = intval($this->parent_id);
-
         $course_id = $this->course_id;
         $courseCondition = " AND c_id = $course_id ";
         if ($this->type == 'global') {
@@ -221,7 +220,8 @@ class Testcategory
      * @param int $course_id
      * @return bool
      */
-    public function get_category_by_title($title , $course_id = 0) {
+    public function get_category_by_title($title , $course_id = 0)
+    {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $course_id = intval($course_id);
         $title = Database::escape_string($title);
@@ -302,15 +302,17 @@ class Testcategory
 		return 0;
 	}
 
-	public function display($in_color="#E0EBF5") {
+	public function display($in_color="#E0EBF5")
+    {
 		echo "<textarea style='background-color:$in_color; width:60%; height:100px;'>";
 		print_r($this);
 		echo "</textarea>";
 	}
 
-	/** return an array of all Category objects in the database
-	If in_field=="" Return an array of all category objects in the database
-	Otherwise, return an array of all in_field value in the database (in_field = id or name or description)
+	/**
+     * return an array of all Category objects in the database
+	 * If in_field=="" Return an array of all category objects in the database
+	 * Otherwise, return an array of all in_field value in the database (in_field = id or name or description)
 	 */
 	public static function getCategoryListInfo($in_field = "", $courseId = null)
     {
@@ -336,7 +338,6 @@ class Testcategory
 		}
 		return $tabres;
 	}
-
 
 	/**
 	 Return the testcategory id for question with question_id = $in_questionid
@@ -401,8 +402,8 @@ class Testcategory
         $course_id = intval($course_id);
 
         $sql = "SELECT c.title, c.iid FROM $t_cattable qc INNER JOIN $table_category c
-                    ON (qc.category_id = c.iid AND qc.c_id = $course_id)
-                     WHERE question_id = '$question_id' ";
+                ON (qc.category_id = c.iid AND qc.c_id = $course_id)
+                WHERE question_id = '$question_id' ";
 		$res = Database::query($sql);
 		if (Database::num_rows($res) > 0) {
             while ($row = Database::fetch_array($res)) {
@@ -424,7 +425,8 @@ class Testcategory
      * @assert (null) === false
      * @assert (-1) === false
 	 */
-    public static function isQuestionHasCategory($question_id) {
+    public static function isQuestionHasCategory($question_id)
+    {
         $category_list = Testcategory::getCategoryForQuestion($question_id);
 		if (!empty($category_list)) {
 			return true;
@@ -439,7 +441,8 @@ class Testcategory
 	 In this version, a question has only 1 category.
 	 Return the category id, "" if none
 	 */
-    public static function getCategoryNameForQuestion($catid, $course_id = null) {
+    public static function getCategoryNameForQuestion($catid, $course_id = null)
+    {
 		if (empty($course_id) || $course_id == "") {
 			$course_id = api_get_course_int_id();
 		}

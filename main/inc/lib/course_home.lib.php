@@ -613,6 +613,7 @@ class CourseHome
             $lnk = '';
             foreach ($all_tools_list as & $tool) {
                 $item = array();
+                $studentview = false;
 
                 $tool['original_link'] = $tool['link'];
 
@@ -623,6 +624,9 @@ class CourseHome
                       } */
                     // check if the published learnpath is visible for student
                     $published_lp_id = self::get_published_lp_id_from_link($tool['link']);
+                    if (api_is_allowed_to_edit(null, true)) {
+                        $studentview = true;
+                    }
                     if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($published_lp_id, api_get_user_id())) {
                         continue;
                     }
@@ -744,6 +748,9 @@ class CourseHome
 
                 // Validation when belongs to a session
                 $session_img = api_get_session_image($tool['session_id'], $_user['status']);
+                if ($studentview) {
+                    $tool_link_params['href'] .= '&isStudentView=true';
+                }
                 $item['url_params'] = $tool_link_params;
                 $item['icon'] = Display::url($icon, $tool_link_params['href'], $tool_link_params);
                 $item['tool'] = $tool;
@@ -774,9 +781,6 @@ class CourseHome
 
                         switch ($image) {
                             case 'scormbuilder.png':
-                                if (api_is_allowed_to_edit(null, true)) {
-                                    $item['url_params']['href'] .= '&isStudentView=true';
-                                }
                                 $image = $original_image;
                                 $lp_id = self::get_published_lp_id_from_link($item['link']);
                                 if ($lp_id) {

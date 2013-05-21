@@ -178,7 +178,7 @@ if ($query !='') {
                 $img = '<img src="'.$picture['file'].'">';
             } else {
                 $picture = UserManager::get_picture_user($user['user_id'], $user['picture_uri'], 50, USER_IMAGE_SIZE_ORIGINAL );
-                $img = '<img src="'.$picture['file'].'">';
+                $img = '<img src="'.$picture['file'].'" width="100" height="100">';
             }
             if ($user_info['user_is_online']) {
                 $status_icon = Display::span('', array('class' => 'online_user_in_text'));
@@ -186,7 +186,7 @@ if ($query !='') {
                 $status_icon = Display::span('', array('class' => 'offline_user_in_text'));
             }
             $user['tag'] = isset($user['tag']) ? $user['tag'] : null;
-            $user_info['complete_name'] = Display::url($status_icon.$user_info['complete_name'], $url).'<br />'.$user['tag'];
+            $user_info['complete_name'] = Display::url($status_icon.$user_info['complete_name'], $url).'<br /><br />'.$user['tag'];
             $invitations = $user['tag'].$send_inv.$send_msg;
             $results .= '<li class="span3 ">'.$user_info['complete_name'].'<div class="left">'.$img.'</div><div class="btn-invitations">'.$invitations.'</div></li>';
         }

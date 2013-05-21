@@ -476,9 +476,10 @@ class Exercise
                         ON (e.question_id = q.iid AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
 					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'
 					ORDER BY question_order";
-
             $limitCondition = null;
             if (!empty($start) && !empty($limit)) {
+                $start = intval($start);
+                $limit = intval($limit);
                 $limitCondition = " LIMIT $start, $limit";
             }
             $sql .= $limitCondition;
@@ -1164,27 +1165,12 @@ class Exercise
             get_lang('ExerciseName'),
             array('class' => 'span6', 'id' => 'exercise_title')
         );
-
-        //if ($this->fastExerciseEdition == false) {
-            $form->addElement(
-                'advanced_settings',
-                '<a href="javascript://" onclick=" return show_media()">
-                    <span id="media_icon">
-                        '.Display::return_icon('looknfeel.png').' '.addslashes(
-                    api_htmlentities(get_lang('ExerciseDescription'))
-                ).'
-                        </span>
-                </a>'
-            );
-        //}
-
         $editor_config = array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '150');
         if (is_array($type)) {
             $editor_config = array_merge($editor_config, $type);
         }
-        $form->addElement('html', '<div class="HideFCKEditor" id="HiddenFCKexerciseDescription" >');
+
         $form->add_html_editor('exerciseDescription', get_lang('ExerciseDescription'), false, false, $editor_config);
-        $form->addElement('html', '</div>');
 
         $form->addElement('advanced_settings',
             '<a href="javascript://" onclick=" return advanced_parameters()">

@@ -41,6 +41,7 @@ class Testcategory
 			$this->description = $tmpobj->description;
             $this->parent_id = $tmpobj->parent_id;
             $this->parent_path = $this->name;
+            $this->c_id = $tmpobj->c_id;
 
             if (!empty($tmpobj->parent_id)) {
                 $category = new Testcategory($tmpobj->parent_id);
@@ -69,22 +70,22 @@ class Testcategory
     */
     public function getCategory($id)
     {
-		$t_cattable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-		$in_id = Database::escape_string($id);
+        $t_cattable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+        $in_id = Database::escape_string($id);
         $sql = "SELECT * FROM $t_cattable WHERE iid = $id ";
-		$res = Database::query($sql);
-		$numrows = Database::num_rows($res);
-		if ($numrows > 0) {
-			$row = Database::fetch_array($res);
+        $res = Database::query($sql);
+        $numrows = Database::num_rows($res);
+        if ($numrows > 0) {
+            $row = Database::fetch_array($res);
             $this->id = $row['iid'];
             $this->title = $this->name = $row['title'];
-			$this->description = $row['description'];
+            $this->description = $row['description'];
             $this->parent_id = $row['parent_id'];
             $this->c_id = $row['c_id'];
         } else {
             return false;
-		}
-	}
+        }
+    }
 
     /**
     * Add Testcategory in the database if name doesn't already exists
@@ -457,12 +458,14 @@ class Testcategory
 	}
 
 	/**
-	 * return the list of differents categories ID for a test
-	 * input : test_id
-	 * return : array of category id (integer)
+	 * return the list of different categories ID for a test
+	 * @param int exercise id
+     * @param bool group category
+	 * @return array of category id (integer)
 	 * @author hubert.borderiou 07-04-2011, Julio Montoya
 	 */
-    public static function getListOfCategoriesIDForTest($exercise_id, $grouped_by_category = true) {
+    public static function getListOfCategoriesIDForTest($exercise_id, $grouped_by_category = true)
+    {
 		// parcourir les questions d'un test, recup les categories uniques dans un tableau
 		$categories_in_exercise = array();
         $exercise = new Exercise();
@@ -482,7 +485,8 @@ class Testcategory
         return $categories_in_exercise;
     }
 
-    public static function getListOfCategoriesIDForTestObject($exercise_obj) {
+    public static function getListOfCategoriesIDForTestObject($exercise_obj)
+    {
         // parcourir les questions d'un test, recup les categories uniques dans un tableau
         $categories_in_exercise = array();
         $question_list = $exercise_obj->selectQuestionList();
@@ -555,10 +559,11 @@ class Testcategory
 
 
     /**
-	 * return the list of differents categories NAME for a test
-	 * input : test_id
-	 * return : array of string
-	 * hubert.borderiou 07-04-2011
+	 * Return the list of differents categories NAME for a test
+	 * @param int exercise id
+     * @param bool
+	 * @return array of string
+	 *
      * @author function rewrote by jmontoya
 	 */
     public static function getListOfCategoriesNameForTest($exercise_id, $grouped_by_category = true) {
@@ -569,7 +574,8 @@ class Testcategory
             if (!empty($cat->id)) {
                 $result[$cat->id] = array(
                     'title' => $cat->name,
-                    'parent_id' => $cat->parent_id
+                    'parent_id' => $cat->parent_id,
+                    'c_id' => $cat->c_id
                 );
 		    }
         }
@@ -825,13 +831,16 @@ class Testcategory
             if (!isset($all_categories[$category_id])) {
                 $category_name = get_lang('Untitled');
                 $parentId = null;
+                $cId = null;
             } else {
                 $parentId = $all_categories[$category_id]['parent_id'];
+                $cId = $all_categories[$category_id]['c_id'];
                 $category_name = Text::cut($all_categories[$category_id]['title'], 15);
             }
             $category_list_to_render[] = array(
                 'title' => $category_name,
-                'parent_id' => $parentId
+                'parent_id' => $parentId,
+                'c_id' => $cId
             );
         }
         $html = self::draw_category_label($category_list_to_render, 'label');
@@ -844,6 +853,7 @@ class Testcategory
      * @return null|string
      */
     public static function draw_category_label($category_list, $type = 'label') {
+
         $new_category_list = array();
         foreach ($category_list as $category) {
             $category_name = $category['title'];
@@ -851,10 +861,19 @@ class Testcategory
             switch ($type) {
                 case 'label':
                     // Global cat
-                    $parentId = isset($category['parent_id']) ? $category['parent_id'] : null;
+                    /*
+                    $parentId = isset($category['parent_id']) && !empty($category['parent_id']) ? $category['parent_id'] : null;
                     if (empty($parentId)) {
                         $new_category_list[] = Display::label($category_name, 'info');
                     } else {
+                        // Local cat
+                        $new_category_list[] = Display::label($category_name, 'success');
+                    }*/
+                    $courseId = isset($category['c_id']) && !empty($category['c_id']) ? $category['c_id'] : null;
+                    if (empty($courseId)) {
+                        $new_category_list[] = Display::label($category_name, 'info');
+                    } else {
+                        // Local cat
                         $new_category_list[] = Display::label($category_name, 'success');
                     }
                     break;

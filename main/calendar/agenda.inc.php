@@ -1017,17 +1017,16 @@ function show_to($filter = 0, $id = null)
 }
 
 function construct_to_select_form($group_list = null, $user_list = null, $filter = 0, $id = null) {
-    $result = '<form class="form-search">';
-    $result .= '<select data-placeholder= "'.get_lang('Everyone').'" name="sel_to" class="chzn-select" id="selected_form_id_search">';
+    $result = '<form class="form-search" style="margin-top:3px;">';
+    $result .= '<select data-placeholder= "'.get_lang('FilterAll').'" name="sel_to" class="chzn-select" id="selected_form_id_search">';
 
     // adding the groups to the select form
     $result .= '<option value=""></option>';
-    $result .= '<option value="0">'.get_lang('Everyone').'</option>';
+    $result .= '<option value="0">'.get_lang('FilterAll').'</option>';
     if (is_array($group_list)) {
-        $result .= '<optgroup label="'.get_lang('Groups').'">';
+        $result .= '<optgroup label="'.get_lang('FilterByGroup').'">';
         $this_group_name = count($group_list);
         foreach ($group_list as $this_group) {
-            // Groups use a 'G:' prefix
             $group_filter = 'G:'.$this_group['id'];
             $selected = $group_filter == $filter ? "selected" : null;
             $result .= "<option value=G:".$this_group['id']." ".$selected.">".$this_group['name']."</option>";
@@ -1037,7 +1036,7 @@ function construct_to_select_form($group_list = null, $user_list = null, $filter
     
     // adding the individual users to the select form
     if (!empty($user_list)) {
-        $result .= '<optgroup label="'.get_lang('Users').'">';
+        $result .= '<optgroup label="'.get_lang('FilterByUser').'">';
         foreach ($user_list as $this_user) {
             $username = api_htmlentities(sprintf(get_lang('LoginX'), $this_user['username']), ENT_QUOTES);
             $user_info = api_get_person_name($this_user['firstname'], $this_user['lastname']).' ('.$this_user['username'].')';

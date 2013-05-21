@@ -271,9 +271,12 @@ if (is_writable($app['sys_temp_path'])) {
     if ($app['debug']) {
         // Adding symfony2 web profiler (memory, time, logs, etc)
         if (api_get_setting('allow_web_profiler') == 'true') {
-            $app->register($p = new Silex\Provider\WebProfilerServiceProvider(), array(
-                'profiler.cache_dir' => $app['profiler.cache_dir'],
-            ));
+            $app->register(
+                $p = new Silex\Provider\WebProfilerServiceProvider(),
+                array(
+                    'profiler.cache_dir' => $app['profiler.cache_dir'],
+                )
+            );
             $app->mount('/_profiler', $p);
         }
         //$app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
@@ -281,8 +284,6 @@ if (is_writable($app['sys_temp_path'])) {
     }
 }
 
-// Registering Menu service provider (too gently creating menus with the URLgenerator provider)
-$app->register(new \Knp\Menu\Silex\KnpMenuServiceProvider());
 
 // Pagerfanta settings (Pagination using Doctrine2, arrays, etc)
 use FranMoreno\Silex\Provider\PagerfantaServiceProvider;
@@ -302,13 +303,15 @@ $app['pagerfanta.view.options'] = array(
     'default_view'  => 'twitter_bootstrap' // the pagination style
 );
 
+// Registering Menu service provider (too gently creating menus with the URLgenerator provider)
+$app->register(new \Knp\Menu\Silex\KnpMenuServiceProvider());
+
 // @todo use a app['image_processor'] setting
 define('IMAGE_PROCESSOR', 'gd'); // imagick or gd strings
 
 // Setting the Imagine service provider to deal with image transformations used in social group.
 $app->register(new Grom\Silex\ImagineServiceProvider(), array(
-    'imagine.factory' => 'Gd',
-    //'imagine.base_path' => __DIR__.'/vendor/imagine',
+    'imagine.factory' => 'Gd'
 ));
 
 // Prompts Doctrine SQL queries using monolog

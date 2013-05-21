@@ -98,10 +98,12 @@
                 {% include app.template_style ~ "/layout/menu.tpl" %}
 
                 {# breadcrumb #}
-                {{ breadcrumb }}
+                {% if app.breadcrumbs %}
+                    {{ app.breadcrumbs }}
+                {% else %}
+                    {{ breadcrumb }}
+                {% endif %}
             </header>
-
-
             {% if app.full_width == 1 %}
                 <div id="top_main_content" class="row-fluid">
             {% else %}

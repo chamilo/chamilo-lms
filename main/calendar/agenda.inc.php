@@ -26,8 +26,15 @@ $(function() {
     setFocus();
     $("#selected_form_id_search").change(function() {
         var temp ="&user_id="+$("#selected_form_id_search").val();
-        url = window.location+temp;
-        window.location.replace(url);
+        var position =String(window.location).indexOf("&user");
+        var url_length = String(window.location).length;
+        var url = String(window.location).substring(0,position)+temp;
+        if (position > 0){
+            window.location.replace(url);
+        } else {
+            url = String(window.location)+temp;
+            window.location.replace(url);
+        }    
     });
 });
 </script>';
@@ -956,7 +963,7 @@ function show_to_form($to_already_selected)
  */
 function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected = array())
 {
-    echo '<select data-placeholder="'.get_lang('Select').'" style="width:150px;" class="chzn-select" id="selected_form_id" name="selected_form[]" multiple="multiple">';
+    echo '<select data-placeholder="'.get_lang('Select').'" style="width:150px;" class="chzn-select" id="selected_form_id_search" name="selected_form[]" multiple="multiple">';
 
     // Adding the groups to the select form
     if (isset($to_already_selected) && $to_already_selected === 'everyone') {
@@ -1011,18 +1018,26 @@ function show_to($filter = 0, $id = null)
 
 function construct_to_select_form($group_list = null, $user_list = null, $filter = 0, $id = null)
 {
-    $result = '<form class="form-search">';
-    if (empty($id)) {
-        $id = 'selected_form_id';
-    }
-    $result .= '<select data-placeholder= "'.get_lang('Everyone').'" name="sel_to" class="chzn-select" id="'.$id.'">';
+   $result = '<form class="form-search" margin-top:3px;>';
+    $result .= '<select data-placeholder= "'.get_lang('FilterAll').'" name="sel_to" class="chzn-select" id="selected_form_id_search">';
 
     // adding the groups to the select form
     $result .= '<option value=""></option>';
-    $result .= '<option value="0">'.get_lang('Everyone').'</option>';
+    $result .= '<option value="0">'.get_lang('FilterAll').'</option>';
+    if (is_array($group_list)) {
+        $result .= '<optgroup label="'.get_lang('FilterByGroup').'">';
+        $this_group_name = count($group_list);
+        foreach ($group_list as $this_group) {
+            $group_filter = 'G:'.$this_group['id'];
+            $selected = $group_filter == $filter ? "selected" : null;
+            $result .= "<option value=G:".$this_group['id']." ".$selected.">".$this_group['name']."</option>";
+        }
+        $result .= "</optgroup>";
+    }
+    
     // adding the individual users to the select form
     if (!empty($user_list)) {
-        $result .= '<optgroup label="'.get_lang('Users').'">';
+        $result .= '<optgroup label="'.get_lang('FilterByUser').'">';
         foreach ($user_list as $this_user) {
             $username = api_htmlentities(sprintf(get_lang('LoginX'), $this_user['username']), ENT_QUOTES);
             $user_info = api_get_person_name($this_user['firstname'], $this_user['lastname']).' ('.$this_user['username'].')';

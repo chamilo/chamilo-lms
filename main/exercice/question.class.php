@@ -806,7 +806,7 @@ abstract class Question
      * @author - Olivier Brouckaert
      * @param - integer $exerciseId - exercise ID if saving in an exercise
      */
-    function save($exerciseId = 0)
+    public function save($exerciseId = 0)
     {
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -1337,6 +1337,10 @@ abstract class Question
      */
     public function createForm(&$form, $fck_config = 0)
     {
+        $maxCategories = 20;
+        if (isset($this->parent_id) && !empty($this->parent_id)) {
+            $maxCategories = 1;
+        }
         $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?1=1';
         $js = null;
         if ($this->type != MEDIA_QUESTION) {
@@ -1370,35 +1374,25 @@ abstract class Question
 
             $(function() {
                 $("#category_id").fcbkcomplete({
-                       json_url: "'.$url.'&a=search_category_parent&type=all&",
-                       maxitems: 20,
-                       addontab: false,
-                       input_min_size: 1,
-                       cache: false,
-                       complete_text:"'.get_lang('StartToType').'",
-                       firstselected: false,
-                       onselect: check,
-                       filter_selected: true,
-                       newel: true
-                   });
+                    json_url: "'.$url.'&a=search_category_parent&type=all&",
+                    maxitems: "'.$maxCategories.'" ,
+                    addontab: false,
+                    input_min_size: 1,
+                    cache: false,
+                    complete_text:"'.get_lang('StartToType').'",
+                    firstselected: false,
+                    onselect: check,
+                    filter_selected: true,
+                    newel: true
+                });
+
             });
+
+
             </script>';
         }
 
         $js .= '<script>
-			// hack to hide http://cksource.com/forums/viewtopic.php?f=6&t=8700
-
-			function FCKeditor_OnComplete( editorInstance ) {
-			   if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name )) {
-			      HideFCKEditorByInstanceName (editorInstance.Name);
-			   }
-			}
-
-			function HideFCKEditorByInstanceName ( editorInstanceName ) {
-			   if (document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className == "HideFCKEditor" ) {
-			      document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className = "media";
-			      }
-			}
 
 			function show_media(){
 				var my_display = document.getElementById(\'HiddenFCKquestionDescription\').style.display;
@@ -1452,22 +1446,7 @@ abstract class Question
             $editor_config['UserStatus'] = 'student';
         }
 
-        if ($this->exercise->fastExerciseEdition == false) {
-
-            $form->addElement(
-                'advanced_settings',
-                '<a href="javascript://" onclick=" return show_media()"><span id="media_icon">
-                    '.Display::return_icon('looknfeel.png').'&nbsp;'.get_lang('EnrichQuestion').'</span></a>
-            '
-            );
-            $form->addElement('html', '<div class="HideFCKEditor" id="HiddenFCKquestionDescription" >');
-        }
-
         $form->add_html_editor('questionDescription', get_lang('QuestionDescription'), false, false, $editor_config);
-
-        if ($this->exercise->fastExerciseEdition == false) {
-            $form->addElement('html', '</div>');
-        }
 
         // hidden values
         $my_id = isset($_REQUEST['myid']) ? intval($_REQUEST['myid']) : null;
@@ -1480,8 +1459,15 @@ abstract class Question
                 $form->addElement('html', '<div id="advanced_params_options" style="display:none;">');
             }
 
+            // Level (difficulty).
             $select_level = Question::get_default_levels();
             $form->addElement('select', 'questionLevel', get_lang('Difficulty'), $select_level);
+
+            // Media question.
+            $course_medias = Question::prepare_course_media_select(api_get_course_int_id());
+            $form->addElement('select', 'parent_id', get_lang('AttachToMedia'), $course_medias);
+
+            // Categories.
             $categoryJS = null;
             if (!empty($this->category_list)) {
                 $trigger = '';
@@ -1493,7 +1479,7 @@ abstract class Question
                         }
                     }
                 }
-                $categoryJS .= '<script>$(function() { '.$trigger.'  });</script>';
+                $categoryJS .= '<script>$(function() { '.$trigger.' });</script>';
             }
             $form->addElement('html', $categoryJS);
 
@@ -1505,16 +1491,7 @@ abstract class Question
                 array('id' => 'category_id')
             );
 
-            // Categories
-            //$tabCat = Testcategory::getCategoriesIdAndName();
-            //$form->addElement('select', 'questionCategory', get_lang('Category'), $tabCat);
-
-            //Medias
-            $course_medias = Question::prepare_course_media_select(api_get_course_int_id());
-
-            $form->addElement('select', 'parent_id', get_lang('AttachToMedia'), $course_medias);
-
-            // Inject question extra fields!
+            // Extra fields. (Injecting question extra fields!)
             $extraFields = new ExtraField('question');
             $extraFields->addElements($form, $this->id);
 

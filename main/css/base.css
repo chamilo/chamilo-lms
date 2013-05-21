@@ -4806,24 +4806,30 @@ i.size-32.icon-new-work{
 }
 .btn-msg {
   background: url("send_msg.png") no-repeat left center;
+  background-position: 3px;
   padding: 2px 6px;
-  padding-left: 18px;
+  padding-left: 23px;
+  margin-bottom: 10px;
   font-size: 11px;
   line-height: 14px;
   background-color: #e6e6e6;
 }
 .btn-inv {
   background: url("send_inv.png") no-repeat left center;
+  background-position: 3px;
   padding: 2px;
-  padding-left: 22px;
+  padding-left: 27px;
+  margin-bottom: 10px;
   font-size: 11px;
   line-height: 14px;
   background-color: #e6e6e6;
 }
 .btn-inv-off {
   background: url("send_inv_off.png") no-repeat left center;
+  background-position: 3px;
   padding: 2px;
-  padding-left: 22px;
+  padding-left: 27px;
+  margin-bottom: 10px;
   font-size: 11px;
   line-height: 14px;
   background-color: #e6e6e6;

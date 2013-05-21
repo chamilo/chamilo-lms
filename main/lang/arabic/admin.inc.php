@@ -750,4 +750,9 @@ $CannotMakeFieldChangeable = "لايمكن جعل الحقل قابلا للتغ
 $CannotMakeFieldUnchangeable = "لايمكن جعل الحقل قابلا للتغيير";
 $FieldDeleted = "تم حذف الحقل";
 $CannotDeleteField = "لا يستطيع حذف الحقل";
+$GoToCourseAfterLoginTitle = "الذهاب الي المقرر يعد التسجيل";
+$GoToCourseAfterLoginComment = "الذهاب الي المقرر يعد تسجيل المستخدم";
+$GroupList = "قائمة المجموعات";
+$MessagesSent = "عدد الرسائل المرسلة";
+$MessagesReceived = "عدد الرسائل المستقبلة";
 ?>

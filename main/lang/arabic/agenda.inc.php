@@ -60,5 +60,12 @@ $RepeatType = "كرر النوع";
 $RepeatDaily = "يوميا";
 $RepeatWeekly = "أسبوعيا";
 $RepeatMonthlyByDate = "شهريا، حسب التاريخ";
+$RepeatMonthlyByDay = "شهري او يومي";
+$RepeatMonthlyByDayR = "شهري, يومي او محظور";
+$RepeatYearly = "سنوي";
+$RepeatEnd = "تكرار تاريخ الانتهاء";
+$RepeatedEventViewOriginalEvent = "اظهار الحدث الاصلي";
+$ICalFileImport = "استيراد لبربد Outlook";
 $AllUsersOfThePlatform = "جميع مستخدمي البرنامج";
+$AllEvents = "كل الاحداث";
 ?>

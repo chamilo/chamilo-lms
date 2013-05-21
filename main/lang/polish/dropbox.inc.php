@@ -65,6 +65,7 @@ $Feedback = "Komentarz";
 $CloseFeedback = "Zamknij komentarz";
 $AddNewFeedback = "Dodaj komentarz";
 $DropboxFeedbackStored = "Komentarz został zapisany";
+$AllUsersHaveDeletedTheFileAndWillNotSeeFeedback = "Wszyscy użytkownicy usunęli plik, więc nikt nie zobaczy komentarza, który dodajesz.";
 $PleaseTypeText = "Wpisz tekst";
 $YouAreNotAllowedToDownloadThisFile = "Nie masz uprawnień do pobrania tego pliku";
 $CheckAtLeastOneFile = "Sprawdź przynajmniej jeden plik.";

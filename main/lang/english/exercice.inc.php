@@ -362,6 +362,7 @@ $ExerciseAttempted = "A learner attempted an exercise";
 $MultipleSelectCombination = "Exact Selection";
 $MultipleAnswerCombination = "Exact answers combination";
 $ExerciceExpiredTimeMessage = "The exercise time limit has expired";
+$AllQuestionsMustHaveACategory = "All questions must have a category to use the random-by-category mode.";
 $NoMedia = "Not linked to media";
 $AttachToMedia = "Attach to media";
 $ExamModeWithFinalScoreShowOnlyFinalScoreWithCategoriesIfAvailable = "Show only final score, with categories if available";

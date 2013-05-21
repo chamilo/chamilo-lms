@@ -17,4 +17,5 @@ $CourseWikiPages = "صفحات الدرس في الويكي";
 $GroupWikiPages = "صفحات المجموعة في الموسوعة";
 $NoWikiPageTitle = "لايوجد عنوات لهاته الصفحة";
 $WikiDiffAddedLine = "تمت إضافة خط";
+$Visits = "الزيارات";
 ?>

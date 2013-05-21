@@ -550,6 +550,7 @@ $AddCategory = "اضافه کردن دسته";
 $NoExercises = "هیچ تستی وجود ندارد";
 $Exercise = "تست ها";
 $Result = "نتیجه";
+$LoginSuccessfulGoToX = "ورود موفقیت آمیز بود. بروید به %s";
 $FckMp3Autostart = "شروع اتوماتیک فایل صوتی";
 $Learner = "دانشجو";
 $IntroductionTextUpdated = "معرفی بروز رسانی شد";
@@ -572,6 +573,7 @@ $NoOfficialCode = "بدون کد";
 $Owner = "مالک";
 $DisplayOrder = "ترتیب نمایش";
 $SearchFeatureDoIndexDocument = "متن سند ایندکس شود؟";
+$SearchFeatureDocumentLanguage = "زبان مدارک برای ایندکس سازی";
 $With = "عرض";
 $GeneralCoach = "مربی عمومی";
 $SaveDocument = "ذخیره سند";
@@ -733,11 +735,26 @@ $AssessmentInformation = "نمومه سؤالات، معیارهای ارزشی�
 $langNameOfLang['bosnian'] = "بسنی";
 $langNameOfLang['czech'] = "چک";
 $langNameOfLang['dari'] = "دری";
+$langNameOfLang['dutch_corporate'] = "هلندی شرکت ها";
 $langNameOfLang['english_org'] = "انگلیسی برای سازمان ها";
+$langNameOfLang['georgian'] = "گرجستانی";
+$langNameOfLang['hebrew'] = "عبری";
 $langNameOfLang['korean'] = "کره ای";
+$langNameOfLang['latvian'] = "لتونی";
+$langNameOfLang['lithuanian'] = "لیتوانی";
+$langNameOfLang['macedonian'] = "مقدونی";
+$langNameOfLang['norwegian'] = "نروژی";
 $langNameOfLang['pashto'] = "پشتو";
 $langNameOfLang['persian'] = "فارسی";
+$langNameOfLang['quechua_cusco'] = "کچوا";
+$langNameOfLang['romanian'] = "رومانی";
+$langNameOfLang['serbian'] = "صربستانی";
+$langNameOfLang['slovak'] = "اسلواکی";
+$langNameOfLang['swahili'] = "سواحیلی";
+$langNameOfLang['trad_chinese'] = "چینی سنتی";
+$ChamiloInstallation = "نصب چامیلو";
 $langNameOfLang['ukrainian'] = "اوکراین";
+$langNameOfLang['yoruba'] = "یوروبا";
 $New = "جدید";
 $AddAdditionalProfileField = "اضافه کردن گزینه مشخصات کاربر";
 $InvitationDenied = "دعوتنامه رد شد";
@@ -760,6 +777,7 @@ $SeeBlog = "بلاگ را ببینید";
 $Blog = "بلاگ";
 $BlogPosts = "مطالب بلاگ";
 $BlogComments = "دیدگاه های بلاگ";
+$ThereAreNotExtrafieldsAvailable = "هیچ گزینه اضافی در درسترس نیست";
 $InstallChamilo = "نصب چامیلو";
 $ChamiloURL = "آدرس چامیلو";
 $EditProfile = "ویرایش مشخصات";
@@ -859,9 +877,11 @@ $SkillsImport = "درون ریزی مهارت ها";
 $SkillsYouAcquired = "مهارت های بدست آورده";
 $SkillsSearchedFor = "مهارت های جستجو شده";
 $SkillsYouCanLearn = "مهارت هایی که قادر به آموختن هستید";
+$Legend = "افسانه";
 $ClickToZoom = "برای زوم کردن کلیک کنید";
 $ManageSkills = "مدیریت مهارت ها";
 $Categories = "دسته بندی ها";
+$StartDateMustBeBeforeTheEndDate = "تاریخ شروع باید قبل از شاریخ پایان باشد";
 $SkillRoot = "روت";
 $SkillInfo = "اطلاعات مهارت";
 $GetNewSkills = "بدست آوردن مهارت های جدید";
@@ -873,6 +893,8 @@ $AddSkillToProfileSearch = "افزودن مهارت به مشخصه جستجو";
 $ShortCode = "کد کوتاه";
 $CreateChildSkill = "ایجاد زیر شاخه مهارت";
 $SearchProfileMatches = "جستجوی مطابقت های مشخصه";
+$IsThisWhatYouWereLookingFor = "آیا این همان چیزیست که دنبالش می گردید؟";
+$WhatSkillsAreYouLookingFor = "دنبال چه مهارت هایی می گردید؟";
 $ProfileSearch = "جستجوی مشخصات";
 $here = "اینجا";
 $ImportUsers = "درون ریزی کاربران";
@@ -913,14 +935,17 @@ $ContactInformationHasBeenSent = "اطلاعات تماس ارسال شد";
 $CompanyActivity = "فعالیت شرکت شما";
 $DateUnLock = "باز کردن تاریخ";
 $DateLock = "قفل کردن تاریخ";
+$GoToStudentDetails = "رفتن به جزئیات دانشجو";
 $RepeatDate = "تکرار تاریخ";
 $HaveFun = "موفق باشید،";
 $ClearSearchResults = "پاکسازی نتایج جستجو";
 $TestServerMode = "حالت سرور تست";
+$PageExecutionTimeWas = "زمان بارگذاری صفحه";
 $MemoryUsage = "استفاده از حافظه";
 $MemoryUsagePeak = "کداکثر استفاده از حافظه";
 $Seconds = "ثانیه ها";
 $ProtectedDocument = "اسناد محافظت شده";
+$ConnectionsLastMonth = "ارتباطات ماه قبل";
 $TotalStudents = "کلیه دانشجویان";
 $FilteringWithScoreX = "فیلتر توسط امتیاز %s";
 $ExamTaken = "گذرانده شده";
@@ -930,6 +955,11 @@ $ExamFail = "رد شدن";
 $ExamTracking = "پیگیری آزمون";
 $NoAttempt = "هیچ تلاشی نشده است";
 $PassExam = "گذراندن";
+$CreateCourseRequest = "ساخت یک درخواست درس";
+$TermsAndConditions = "شرایط و ضوابط";
+$ReadTermsAndConditions = "مطالعه شرایط و ضوابط";
+$IAcceptTermsAndConditions = "بنده شرایط و ضوابط را مطالعه کرده ام و آنها را قبول می کنم";
+$YouHaveToAcceptTermsAndConditions = "شما باید برای ادامه مراحل شرایط و ضوابط ما را قبول کنید.";
 $FillWithExemplaryContent = "با محتوای آزمایشی پر شود";
 $ToolVideoconference = "ویدیو کنفرانس";
 $SelectSVGEditImage = "انتخاب یک تصویر";
@@ -973,6 +1003,8 @@ $MyStatistics = "آمار من";
 $FromDateXToDateY = "از %s تا %s";
 $CourseThematicAdvance = "روند پیشرفت درس";
 $Clean = "پاک";
+$MailNotifyInvitation = "در صورت دریافت دعوتنامه جدید از طریق ایمیل اطلاع رسانی شود";
+$MailNotifyMessage = "در صورت دریافت پیام شخصی جدید از طریق ایمیل اطلاع رسانی شود";
 $Simple = "ساده";
 $Multiple = "چندگانه";
 $Installed = "نصب شده";
@@ -998,6 +1030,7 @@ $Postpone = "به تعویق انداختن";
 $Uploaded = "آپلود شد.";
 $Saved = "ذخیره شد.";
 $Reset = "تنظیم مجدد";
+$EmailSentFromDokeos = "ایمیل از طریق سیستم ارسال شد";
 $DecreaseFontSize = "کوچک کردن اندازه فونت";
 $ResetFontSize = "بازگردانی اندازه فونت";
 $IncreaseFontSize = "بزرگ کردن اندازه فونت";

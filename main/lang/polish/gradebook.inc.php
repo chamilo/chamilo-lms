@@ -4,9 +4,11 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifyEvaluation = "Zapisz ocenę";
 $CreateLink = "Dodaj aktywność do oceny";
+$AddResultNoStudents = "Brak studentów, aby dodać wyniki za";
 $FlatView = "Widok listy";
 $ScoreEdit = "Ranking umiejętności";
 $ScoringSystem = "Ranking umiejętności";
+$EnableScoreColor = "Włącz progi kompetencyjne";
 $Below = "Poniżej";
 $WillColorRed = "Ocena będzie w kolorze czerwonym";
 $EnableScoringSystem = "Włącz ranking umiejętności";
@@ -86,6 +88,7 @@ $GradebookWelcomeMessage = "Witamy w systemie ocen. Narzędzie to pozwala na oce
 $CreateAllCat = "Utwórz wszystkie kategorie szkolenia";
 $AddAllCat = "Dodano wszystkie kategorie";
 $StatsStudent = "Statystyki dla";
+$Results = "Wyniki i informacje zwrotne";
 $Certificates = "Certyfikaty";
 $Certificate = "Certyfikat";
 $ChooseUser = "Wybierz użytkowników do tej oceny";

@@ -362,6 +362,7 @@ $ExerciseAttempted = "Un apprenant a passé un exercice";
 $MultipleSelectCombination = "Combinaison exacte";
 $MultipleAnswerCombination = "Combinaison exacte";
 $ExerciceExpiredTimeMessage = "Durée maximum de l'exercice expirée";
+$AllQuestionsMustHaveACategory = "Toutes les questions doivent être assignées à une catégorie pour pouvoir utiliser le mode aléatoire par catégorie.";
 $NoMedia = "Non lié à un média";
 $AttachToMedia = "Attacher à un média";
 $ExamModeWithFinalScoreShowOnlyFinalScoreWithCategoriesIfAvailable = "Montrer seulement le score finale, par catégories si disponibles";

@@ -66,4 +66,10 @@ $FolderCreated = "تم إنشاء مجلد جديد";
 $LinkAdded = "تمت إضافة رابط جديد";
 $AnnouncementAdded = "لقد تم إضافة الإعلان بنجاح";
 $AgendaAdded = "إضافة موضوع الأجندة";
+$LoginEnter = "تسجيل الدخول";
+$Messages = "الرسائل";
+$Inbox = "صندوق الرسائل";
+$Comppose = "أنشاء رسالة";
+$PendingInvitations = "دعوات مؤجلة";
+$Profile = "الملف الشخصي";
 ?>

@@ -36,5 +36,9 @@ $WriteAMessage = "Napisz wiadomość";
 $AlreadyReadMessage = "Wiadomość przeczytana";
 $UnReadMessage = "Wiadomość nieprzeczytana";
 $MessageSent = "Wiadomość wysłana";
+$MailMarkSelectedAsUnread = "Zaznacz jako nieprzeczytane";
+$MailMarkSelectedAsRead = "Zaznacz jako przeczytane";
 $YouShouldWriteAMessage = "Napisz wiadomość";
+$SelectedMessagesUnRead = "Wybrane wiadomości zostały oznaczone jako nieprzeczytane";
+$SelectedMessagesRead = "Wybrane wiadomości zostały oznaczone jako przeczytane";
 ?>

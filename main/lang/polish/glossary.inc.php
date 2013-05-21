@@ -24,6 +24,7 @@ $GlossaryTermAlreadyExistsYouShouldEditIt = "To wyrażenie już istnieje w słow
 $GlossaryManagement = "Zarządzanie słownikiem";
 $TermMoved = "Wyrażenie zostało przeniesione";
 $ShowGlossaryInExtraToolsTitle = "Pokaż wyrażenia w dodatkowych narzędziach";
+$ShowGlossaryInExtraToolsComment = "Tutaj możesz skonfigurować jak dodawać wyrażenia słowniczka do dodatkowych narzędzi, takich jak ścieżki edukacyjne i ćwiczenia";
 $ImportGlossary = "Import słownika";
 $ReplaceGlossary = "Zamień słownik";
 $CannotDeleteGlossary = "Nie można skasować słownika";

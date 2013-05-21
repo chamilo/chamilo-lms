@@ -70,4 +70,5 @@ $SubmitRegistrationCode = " ارسل رمز التسجيل";
 $CourseCategoryDeleted = " تم حذف تصنيف المقرر";
 $CategorySortingDone = " تم ترتيب التصنيف";
 $CourseCategoryEditStored = " تم تحديث التصنيف";
+$Compose = "انشاء رسالة";
 ?>

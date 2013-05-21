@@ -1304,6 +1304,7 @@ CREATE TABLE c_quiz (
   display_category_name int(11) NOT NULL DEFAULT '1',
   pass_percentage int(11) DEFAULT NULL,
   autolaunch INT DEFAULT 0,
+  end_button int NOT NULL DEFAULT 0,
   PRIMARY KEY (iid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

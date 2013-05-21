@@ -65,6 +65,7 @@ class Exercise
     public $categories;
     public $categories_grouping = true;
     public $fastExerciseEdition = false;
+    public $endButton = 0;
 
     /**
      * Constructor of the class
@@ -149,6 +150,7 @@ class Exercise
             $this->display_category_name = $object->display_category_name;
             $this->pass_percentage = $object->pass_percentage;
             $this->is_gradebook_locked = api_resource_is_locked_by_gradebook($id, LINK_EXERCISE);
+            $this->endButton = $object->end_button;
 
             $this->review_answers = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;
             $sql = "SELECT max_score FROM $table_lp_item
@@ -288,28 +290,33 @@ class Exercise
      * Returns the exercise type
      *
      * @author - Olivier Brouckaert
-     * @return - integer - exercise type
+     * @return integer - exercise type
      */
-    function selectType()
+    public function selectType()
     {
         return $this->type;
     }
 
     /**
      * @author - hubert borderiou 30-11-11
-     * @return - integer : do we display the question category name for students
+     * @return integer : do we display the question category name for students
      */
-    function selectDisplayCategoryName()
+    public function selectDisplayCategoryName()
     {
         return $this->display_category_name;
     }
 
     /**
-     * @return null
+     * @return string
      */
     function selectPassPercentage()
     {
         return $this->pass_percentage;
+    }
+
+    public function selectEndButton()
+    {
+        return $this->endButton;
     }
 
     /**
@@ -776,6 +783,11 @@ class Exercise
         $this->pass_percentage = $value;
     }
 
+    public function updateEndButton($value)
+    {
+        $this->endButton = intval($value);
+    }
+
     /**
      * @param array $categories
      */
@@ -971,6 +983,7 @@ class Exercise
         	        text_when_finished = '".Database::escape_string($text_when_finished)."',
         	        display_category_name = '".Database::escape_string($display_category_name)."',
                     pass_percentage = '".Database::escape_string($pass_percentage)."',
+                    end_button = '".$this->selectEndButton()."',
 					results_disabled='".Database::escape_string($results_disabled)."'";
             }
             $sql .= " WHERE iid = ".Database::escape_string($id)." AND c_id = {$this->course_id}";
@@ -1078,7 +1091,7 @@ class Exercise
      * @param - integer $questionId - question ID
      * @return - boolean - true if the question has been removed, otherwise false
      */
-    function removeFromList($questionId)
+    public function removeFromList($questionId)
     {
         // searches the position of the question ID in the list
         $pos = array_search($questionId, $this->questionList);
@@ -1108,7 +1121,7 @@ class Exercise
      *
      * @author - Olivier Brouckaert
      */
-    function delete()
+    public function delete()
     {
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
         $sql = "UPDATE $TBL_EXERCICES
@@ -1125,8 +1138,9 @@ class Exercise
     /**
      * Creates the form to create / edit an exercise
      * @param FormValidator $form the formvalidator instance (by reference)
+     * @param string
      */
-    function createForm($form, $type = 'full')
+    public function createForm($form, $type = 'full')
     {
         global $id;
 
@@ -1408,7 +1422,7 @@ class Exercise
                 }
             }
 
-            // number of random question
+            // Number of random question.
 
             $max = ($this->id > 0) ? $this->selectNbrQuestions() : 10;
             $option = range(0, $max);
@@ -1422,13 +1436,13 @@ class Exercise
                 array('id' => 'randomQuestions', 'class' => 'chzn-select')
             );
 
-            //random answers
+            // Random answers.
             $radios_random_answers = array();
             $radios_random_answers[] = $form->createElement('radio', 'randomAnswers', null, get_lang('Yes'), '1');
             $radios_random_answers[] = $form->createElement('radio', 'randomAnswers', null, get_lang('No'), '0');
             $form->addGroup($radios_random_answers, null, get_lang('RandomAnswers'), '');
 
-            //randow by category
+            // Random by category.
             $form->addElement('html', '<div class="clear">&nbsp;</div>');
             $radiocat = array();
             $radiocat[] = $form->createElement(
@@ -1443,7 +1457,7 @@ class Exercise
             $form->addGroup($radiocat, null, get_lang('RandomQuestionByCategory'), '');
             $form->addElement('html', '<div class="clear">&nbsp;</div>');
 
-            // add the radio display the category name for student
+            // Category name .
             $radio_display_cat_name = array();
             $radio_display_cat_name[] = $form->createElement(
                 'radio',
@@ -1461,7 +1475,7 @@ class Exercise
             );
             $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'), '');
 
-            //Attempts
+            // Attempts.
             $attempt_option = range(0, 10);
             $attempt_option[0] = get_lang('Infinite');
 
@@ -1473,7 +1487,7 @@ class Exercise
                 array('id' => 'exerciseAttempts', 'class' => 'chzn-select')
             );
 
-            // Exercice time limit
+            // Exercise time limit.
             $form->addElement(
                 'checkbox',
                 'activate_start_date_check',
@@ -1482,18 +1496,17 @@ class Exercise
                 array('onclick' => 'activate_start_date()')
             );
 
-            $var = Exercise::selectTimeLimit();
-
+            //$var = Exercise::selectTimeLimit();
+            // Start time.
             if (($this->start_time != '0000-00-00 00:00:00')) {
                 $form->addElement('html', '<div id="start_date_div" style="display:block;">');
             } else {
                 $form->addElement('html', '<div id="start_date_div" style="display:none;">');
             }
-
             $form->addElement('datepicker', 'start_time', '', array('form_name' => 'exercise_admin'), 5);
-
             $form->addElement('html', '</div>');
 
+            // End time.
             $form->addElement(
                 'checkbox',
                 'activate_end_date_check',
@@ -1507,11 +1520,10 @@ class Exercise
             } else {
                 $form->addElement('html', '<div id="end_date_div" style="display:none;">');
             }
-
             $form->addElement('datepicker', 'end_time', '', array('form_name' => 'exercise_admin'), 5);
             $form->addElement('html', '</div>');
 
-            //$check_option=$this->selectType();
+            // Propagate negative values.
             $diplay = 'block';
             $form->addElement('checkbox', 'propagate_neg', null, get_lang('PropagateNegativeResults'));
             $form->addElement('html', '<div class="clear">&nbsp;</div>');
@@ -1519,9 +1531,7 @@ class Exercise
 
             $form->addElement('html', '<div id="divtimecontrol"  style="display:'.$diplay.';">');
 
-            //Timer control
-            //$time_hours_option = range(0,12);
-            //$time_minutes_option = range(0,59);
+            // Timer control.
             $form->addElement(
                 'checkbox',
                 'enabletimercontrol',
@@ -1540,6 +1550,7 @@ class Exercise
             } else {
                 $form->addElement('html', '<div id="timercontrol" style="display:none;">');
             }
+
             $form->addElement(
                 'text',
                 'enabletimercontroltotalminutes',
@@ -1548,6 +1559,7 @@ class Exercise
             );
             $form->addElement('html', '</div>');
 
+            // Pass percentage.
             $form->addElement(
                 'text',
                 'pass_percentage',
@@ -1556,8 +1568,16 @@ class Exercise
             );
             $form->addRule('pass_percentage', get_lang('Numeric'), 'numeric');
 
-            // add the text_when_finished textbox
+            // Text when ending an exam
             $form->add_html_editor('text_when_finished', get_lang('TextWhenFinished'), false, false, $editor_config);
+
+            // Exam end button.
+            $group = array();
+            $group[] = $form->createElement('radio', 'end_button', null, get_lang('ExerciseEndButtonCourseHome'), '0');
+            $group[] = $form->createElement('radio', 'end_button', null, get_lang('ExerciseEndButtonExerciseHome'), '1');
+            $group[] = $form->createElement('radio', 'end_button', null, get_lang('ExerciseEndButtonDisconnect'), '2');
+            $form->addGroup($group, null, get_lang('ExerciseEndButton'));
+            $form->addElement('html', '<div class="clear">&nbsp;</div>');
 
             $defaults = array();
 
@@ -1592,7 +1612,7 @@ class Exercise
             $form->addElement('html', '</div>');
         }
 
-        //Category selection
+        // Category selection.
         $cat = new Testcategory();
 
         $cat_form = $cat->return_category_form($this);
@@ -1634,6 +1654,8 @@ class Exercise
                 $defaults['text_when_finished'] = $this->selectTextWhenFinished(); //
                 $defaults['display_category_name'] = $this->selectDisplayCategoryName(); //
                 $defaults['pass_percentage'] = $this->selectPassPercentage();
+                $defaults['end_button'] = $this->selectEndButton();
+
 
                 if (($this->start_time != '0000-00-00 00:00:00')) {
                     $defaults['activate_start_date_check'] = 1;
@@ -1687,7 +1709,6 @@ class Exercise
      */
     function processCreation($form, $type = '')
     {
-
         $this->updateTitle($form->getSubmitValue('exerciseTitle'));
         $this->updateDescription($form->getSubmitValue('exerciseDescription'));
         $this->updateAttempts($form->getSubmitValue('exerciseAttempts'));
@@ -1704,6 +1725,7 @@ class Exercise
         $this->updateReviewAnswers($form->getSubmitValue('review_answers'));
         $this->updatePassPercentage($form->getSubmitValue('pass_percentage'));
         $this->updateCategories($form->getSubmitValue('category'));
+        $this->updateEndButton($form->getSubmitValue('end_button'));
 
         if ($form->getSubmitValue('activate_start_date_check') == 1) {
             $start_time = $form->getSubmitValue('start_time');
@@ -5125,7 +5147,8 @@ class Exercise
     /**
      * @param array $categories
      */
-    function save_categories_in_exercise($categories) {
+    function save_categories_in_exercise($categories)
+    {
         if (!empty($categories) && !empty($this->id)) {
             $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
             $sql = "DELETE FROM $table WHERE exercise_id = {$this->id} AND c_id = {$this->course_id}";
@@ -5142,5 +5165,28 @@ class Exercise
                 }
             }
         }
+    }
+
+    /**
+     * Returns a HTML link when the exercise ends (exercise result page)
+     * @return string
+     */
+    public function returnEndButtonHTML()
+    {
+        $endButtonSetting = $this->selectEndButton();
+        $html = '';
+        switch ($endButtonSetting) {
+            case '0':
+                $html = Display::url(get_lang('ReturnToCourseHomepage'), api_get_course_url(), array('class' => 'btn btn-large'));
+                break;
+            case '1':
+                $html = Display::url(get_lang('ReturnToExerciseList'), api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq(), array('class' => 'btn btn-large'));
+                break;
+            case '2':
+                $html = Display::url(get_lang('Logout'), api_get_path(WEB_PUBLIC_PATH).'logout', array('class' => 'btn btn-large'));
+                break;
+        }
+        return $html;
+
     }
 }

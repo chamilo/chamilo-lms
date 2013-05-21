@@ -60,8 +60,8 @@ if (empty($remind_list)) {
 $exe_id = isset($_REQUEST['exe_id']) ? intval($_REQUEST['exe_id']) : 0;
 
 if (empty($objExercise)) {
-    //Redirect to the exercise overview
-    //Check if the exe_id exists
+    // Redirect to the exercise overview
+    // Check if the exe_id exists
     $objExercise = new Exercise();
     $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
     if (!empty($exercise_stat_info) && isset($exercise_stat_info['exe_exo_id'])) {
@@ -112,13 +112,13 @@ $learnpath_item_id = $exercise_stat_info['orig_lp_item_id'];
 $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
 
 if ($origin == 'learnpath') {
-    ?>
+?>
     <form method="GET" action="exercice.php?<?php echo api_get_cidreq() ?>">
         <input type="hidden" name="origin" 					value="<?php echo $origin; ?>" />
         <input type="hidden" name="learnpath_id" 			value="<?php echo $learnpath_id; ?>" />
         <input type="hidden" name="learnpath_item_id" 		value="<?php echo $learnpath_item_id; ?>" />
         <input type="hidden" name="learnpath_item_view_id"  value="<?php echo $learnpath_item_view_id; ?>" />
-        <?php
+<?php
 }
 
 $i = $total_score = $total_weight = 0;
@@ -156,7 +156,8 @@ ExerciseLib::delete_chat_exercise_session($exe_id);
 
 if ($origin != 'learnpath') {
     echo '<hr>';
-    echo Display::url(get_lang('ReturnToCourseHomepage'), api_get_course_url(), array('class' => 'btn btn-large'));
+
+    echo $objExercise->returnEndButtonHTML();
 
     if (api_is_allowed_to_session_edit()) {
         Session::erase('objExercise');

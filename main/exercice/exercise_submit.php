@@ -1089,7 +1089,6 @@ if (!empty($error)) {
 
     echo '<script>
             $(function() {
-    			//$(".exercise_save_now_button").hide();
     		    $(".main_question").mouseover(function() {
     		    	//$(this).find(".exercise_save_now_button").show();
     		    	//$(this).addClass("question_highlight");
@@ -1145,7 +1144,7 @@ if (!empty($error)) {
            		//3. Hotspots
            		var hotspot = $(\'*[name*="hotspot[\'+question_id+\']"]\').serialize();
 
-           		//Checking FCK
+           		// Checking FCK
            		if (typeof(FCKeditorAPI) !== "undefined") {
     				var oEditor = FCKeditorAPI.GetInstance("choice["+question_id+"]") ;
     				var fck_content = "";
@@ -1165,7 +1164,7 @@ if (!empty($error)) {
 
            		// Only for the first time
 
-          		$("#save_for_now_"+question_id).html("  '.addslashes(Display::return_icon('loading1.gif')).'");
+          		$("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('loading1.gif')).'");
 
                 $.ajax({
                     type:"post",

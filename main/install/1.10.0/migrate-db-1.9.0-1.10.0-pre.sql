@@ -279,6 +279,7 @@ ALTER TABLE user_field_values ADD COLUMN comment VARCHAR(100) default '';
 ALTER TABLE session_field_values ADD COLUMN comment VARCHAR(100) default '';
 ALTER TABLE course_field_values ADD COLUMN comment VARCHAR(100) default '';
 ALTER TABLE question_field_values ADD COLUMN comment VARCHAR(100) default '';
+ALTER TABLE c_quiz ADD COLUMN end_button int NOT NULL default 0;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.011' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.012' WHERE variable = 'chamilo_database_version';

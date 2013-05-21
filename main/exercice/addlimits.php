@@ -19,18 +19,15 @@ require_once 'question.class.php';
 require_once 'answer.class.php';
 
 // name of the language file that needs to be included
-$language_file='exercice';
+$language_file = 'exercice';
 
 /*	section (for the tabs) */
-$this_section=SECTION_COURSES;
+$this_section = SECTION_COURSES;
 
 api_protect_course_script();
 
 $dsp_percent = false;
 $debug=0;
-if($debug>0) {
-	echo str_repeat('&nbsp;',0).'Entered exercise_result.php'."<br />\n";exervar_dump($_POST);
-}
 // general parameters passed via POST/GET
 if ( empty ( $origin ) )
 {

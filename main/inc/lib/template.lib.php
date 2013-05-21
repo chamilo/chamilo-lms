@@ -322,6 +322,7 @@ class Template
             'web_img' => api_get_path(WEB_IMG_PATH),
             'web_plugin' => api_get_path(WEB_PLUGIN_PATH),
             'web_lib' => api_get_path(WEB_LIBRARY_PATH),
+            'public_web' => api_get_path(WEB_PUBLIC_PATH)
         );
 
         $this->assign('_p', $_p);

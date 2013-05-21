@@ -299,14 +299,6 @@ if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
     $interbreadcrumb[] = array("url" => "#", "name" => $objExercise->name);
 }
 
-// shows a link to go back to the question pool
-if (!$exerciseId && $nameTools != get_lang('ExerciseManagement')) {
-    $interbreadcrumb[] = array(
-        "url" => "question_pool.php?fromExercise=$fromExercise",
-        "name" => get_lang('QuestionPool')
-    );
-}
-
 // if the question is duplicated, disable the link of tool name
 if (!empty($modifyIn) && $modifyIn == 'thisExercise') {
     if ($buttonBack) {
@@ -360,10 +352,7 @@ $(function() {
     });
 });
 
-
 </script>';
-
-
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';

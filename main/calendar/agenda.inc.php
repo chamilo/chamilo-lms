@@ -1018,7 +1018,7 @@ function show_to($filter = 0, $id = null)
 
 function construct_to_select_form($group_list = null, $user_list = null, $filter = 0, $id = null)
 {
-   $result = '<form class="form-search" margin-top:3px;>';
+   $result = '<form class="form-search" style="margin-top:3px;">';
     $result .= '<select data-placeholder= "'.get_lang('FilterAll').'" name="sel_to" class="chzn-select" id="selected_form_id_search">';
 
     // adding the groups to the select form

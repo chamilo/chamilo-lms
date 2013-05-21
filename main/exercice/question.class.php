@@ -1338,9 +1338,6 @@ abstract class Question
     public function createForm(&$form, $fck_config = 0)
     {
         $maxCategories = 20;
-        if (isset($this->parent_id) && !empty($this->parent_id)) {
-            $maxCategories = 1;
-        }
         $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?1=1';
         $js = null;
         if ($this->type != MEDIA_QUESTION) {
@@ -1350,15 +1347,41 @@ abstract class Question
                     var id = $(this).val();
                     var name = $(this).text();
                     if (id != "" ) {
+
+                        // if a media question was selected
+                        $("#parent_id option:selected").each(function() {
+                            var questionId = $(this).val();
+                            if (questionId != 0) {
+                                $.ajax({
+                                    async: false,
+                                    dataType: "json",
+                                    url: "'.$url.'&a=get_categories_by_media&questionId='.$this->id.'&exerciseId='.$this->exercise->id.'",
+                                    data: "mediaId="+questionId,
+                                    success: function(data) {
+                                        if (data.value == id) {
+                                            //console.log(data.value);
+                                        } else {
+                                            alert("'.addslashes(get_lang('YouCantAddAnotherCategory')).'");
+                                            $(".holder li").each(function () {
+                                                if ($(this).attr("rel") == id) {
+                                                    $(this).remove();
+                                                }
+                                            });
+                                        }
+                                    },
+                                });
+                            }
+                        });
+
                         $.ajax({
                             async: false,
                             url: "'.$url.'&a=exercise_category_exists",
                             data: "id="+id,
                             success: function(return_value) {
                                 if (return_value == 0 ) {
-                                    alert("'.get_lang('CategoryDoesNotExists').'");
-                                    //Deleting select option tag
-                                    $("#parent_id").find("option").remove();
+                                    alert("'.addslashes(get_lang('CategoryDoesNotExists')).'");
+                                    // Deleting select option tag
+                                    // $("#parent_id").find("option").remove();
 
                                     $(".holder li").each(function () {
                                         if ($(this).attr("rel") == id) {
@@ -1386,7 +1409,37 @@ abstract class Question
                     newel: true
                 });
 
+                $("#parent_id").change(function(){
+                    $("#parent_id option:selected").each(function() {
+                        var questionId = $(this).val();
+                        $.ajax({
+                            async: false,
+                            dataType: "json",
+                            url: "'.$url.'&a=get_categories_by_media&questionId='.$this->id.'&exerciseId='.$this->exercise->id.'",
+                            data: "mediaId="+questionId,
+                            success: function(data) {
+                                var all = $("#category_id").trigger("selectAll");
+                                all.each(function(index, value) {
+                                    var selected = $(value).find("option:selected");
+                                    selected.each(function( indexSelect, valueSelect) {
+                                        valueToRemove = $(valueSelect).val();
+                                        $("#category_id").trigger("removeItem",[{ "value" : valueToRemove}]);
+                                    });
+                                });
+
+                                if (data != 0) {
+                                    $("#category_id").trigger("addItem",[{"title": data.title, "value": data.value}]);
+                                }
+                            },
+                        });
+
+                    });
+                });
+
+
             });
+
+
 
 
             </script>';
@@ -1394,7 +1447,7 @@ abstract class Question
 
         $js .= '<script>
 
-			function show_media(){
+            function show_media(){
 				var my_display = document.getElementById(\'HiddenFCKquestionDescription\').style.display;
 				if (my_display== \'none\' || my_display == \'\') {
 				document.getElementById(\'HiddenFCKquestionDescription\').style.display = \'block\';
@@ -1429,7 +1482,7 @@ abstract class Question
         $form->addElement('text', 'questionName', get_lang('Question'), array('class' => 'span6'));
         $form->addRule('questionName', get_lang('GiveQuestion'), 'required');
 
-        // default content
+        // Default content.
         $isContent = isset($_REQUEST['isContent']) ? intval($_REQUEST['isContent']) : null;
 
         // Question type
@@ -1465,7 +1518,7 @@ abstract class Question
 
             // Media question.
             $course_medias = Question::prepare_course_media_select(api_get_course_int_id());
-            $form->addElement('select', 'parent_id', get_lang('AttachToMedia'), $course_medias);
+            $form->addElement('select', 'parent_id', get_lang('AttachToMedia'), $course_medias, array('id' => 'parent_id'));
 
             // Categories.
             $categoryJS = null;
@@ -1556,7 +1609,7 @@ abstract class Question
      * @param FormValidator $form the formvalidator instance
      * @param Exercise $objExercise the Exercise instance
      */
-    function processCreation($form, $objExercise = null)
+    public function processCreation($form, $objExercise = null)
     {
         $this->updateParentId($form->getSubmitValue('parent_id'));
         $this->updateTitle($form->getSubmitValue('questionName'));
@@ -1597,7 +1650,7 @@ abstract class Question
     /**
      * Displays the menu of question types
      */
-    static function display_type_menu($objExercise)
+    public static function display_type_menu($objExercise)
     {
         $feedback_type = $objExercise->feedback_type;
         $exerciseId    = $objExercise->id;
@@ -1668,7 +1721,7 @@ abstract class Question
         echo '</div>';
     }
 
-    static function saveQuestionOption($question_id, $name, $course_id, $position = 0)
+    public static function saveQuestionOption($question_id, $name, $course_id, $position = 0)
     {
         $TBL_EXERCICE_QUESTION_OPTION = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
         $params['question_id']        = intval($question_id);
@@ -1681,7 +1734,7 @@ abstract class Question
         return $last_id;
     }
 
-    static function deleteAllQuestionOptions($question_id, $course_id)
+    public static function deleteAllQuestionOptions($question_id, $course_id)
     {
         $TBL_EXERCICE_QUESTION_OPTION = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
         Database::delete(
@@ -1690,7 +1743,7 @@ abstract class Question
         );
     }
 
-    static function updateQuestionOption($id, $params, $course_id)
+    public static function updateQuestionOption($id, $params, $course_id)
     {
         $TBL_EXERCICE_QUESTION_OPTION = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
         $result                       = Database::update(
@@ -1702,7 +1755,7 @@ abstract class Question
         return $result;
     }
 
-    static function readQuestionOption($question_id, $course_id)
+    public static function readQuestionOption($question_id, $course_id)
     {
         $TBL_EXERCICE_QUESTION_OPTION = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
         $result                       = Database::select(
@@ -1734,7 +1787,7 @@ abstract class Question
      *
      * @return string
      */
-    function return_header($feedback_type = null, $counter = null, $score = null, $show_media)
+    public function return_header($feedback_type = null, $counter = null, $score = null, $show_media)
     {
         $counterLabel = '';
         if (!empty($counter)) {
@@ -1806,22 +1859,20 @@ abstract class Question
 
         // Insert the new question
         $sql = "INSERT INTO $tbl_quiz_question (c_id, question, ponderation, position, type, level)
-                VALUES ($course_id, '".Database::escape_string(
-            $question_name
-        )."', '$max_score', $max_position, $type, $level)";
+                VALUES ($course_id, '".Database::escape_string($question_name)."', '$max_score', $max_position, $type, $level)";
         Database::query($sql);
         // Get the question ID
         $question_id = Database::get_last_insert_id();
 
         // Get the max question_order
-        $sql           = "SELECT max(question_order) as max_order "
-            ."FROM $tbl_quiz_rel_question WHERE c_id = $course_id AND exercice_id = $quiz_id ";
+        $sql = "SELECT max(question_order) as max_order FROM $tbl_quiz_rel_question
+                WHERE c_id = $course_id AND exercice_id = $quiz_id ";
         $rs_max_order  = Database::query($sql);
         $row_max_order = Database::fetch_object($rs_max_order);
         $max_order     = $row_max_order->max_order + 1;
         // Attach questions to quiz
-        $sql = "INSERT INTO $tbl_quiz_rel_question (c_id, question_id, exercice_id, question_order)"
-            ." VALUES($course_id, $question_id, $quiz_id, $max_order)";
+        $sql = "INSERT INTO $tbl_quiz_rel_question (c_id, question_id, exercice_id, question_order)
+                VALUES ($course_id, $question_id, $quiz_id, $max_order)";
         Database::query($sql);
 
         return $question_id;
@@ -1829,7 +1880,7 @@ abstract class Question
 
     /**
      * return the image filename of the question type
-     *
+     * @todo don't use eval
      */
     public function get_type_icon_html()
     {
@@ -1847,7 +1898,7 @@ abstract class Question
      * Get course medias
      * @param int course id
      */
-    static function get_course_medias(
+    public static function get_course_medias(
         $course_id,
         $start = 0,
         $limit = 100,
@@ -1877,7 +1928,7 @@ abstract class Question
      * Get count course medias
      * @param int course id
      */
-    static function get_count_course_medias($course_id)
+    public static function get_count_course_medias($course_id)
     {
         $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $result         = Database::select(
@@ -1894,7 +1945,7 @@ abstract class Question
         return 0;
     }
 
-    static function prepare_course_media_select($course_id)
+    public static function prepare_course_media_select($course_id)
     {
         $medias        = self::get_course_medias($course_id);
         $media_list    = array();
@@ -1909,7 +1960,7 @@ abstract class Question
         return $media_list;
     }
 
-    static function get_default_levels()
+    public static function get_default_levels()
     {
         $select_level = array(
             1 => 1,
@@ -1922,7 +1973,7 @@ abstract class Question
         return $select_level;
     }
 
-    function show_media_content()
+    public function show_media_content()
     {
         $html = null;
         if ($this->parent_id != 0) {
@@ -2480,5 +2531,101 @@ abstract class Question
             }
         }
         return $rules;
+    }
+
+    /**
+     * @param $exerciseId
+     * @param $mediaId
+     * @return array|bool
+     */
+    public function getQuestionsPerMediaWithCategories($exerciseId, $mediaId)
+    {
+        $exerciseId = intval($exerciseId);
+        $mediaId = intval($mediaId);
+        $questionTable = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $questionRelExerciseTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+
+        $sql = "SELECT * FROM $questionTable q INNER JOIN $questionRelExerciseTable r ON (q.iid = r.question_id)
+                WHERE (r.exercice_id = $exerciseId AND q.parent_id = $mediaId) ";
+
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+            return Database::store_result($result);
+        }
+        return false;
+    }
+
+    /**
+     * @param int $exerciseId
+     * @param int $mediaId
+     * @return array
+     */
+    public function getQuestionCategoriesOfMediaQuestions($exerciseId, $mediaId)
+    {
+        $questions = $this->getQuestionsPerMediaWithCategories($exerciseId, $mediaId);
+        $questionCategoryList = array();
+        if (!empty($questions)) {
+            foreach ($questions as $question) {
+                $categories = TestCategory::getCategoryForQuestionWithCategoryData($question['iid']);
+                if (!empty($categories)) {
+                    foreach ($categories as $category) {
+                        $questionCategoryList[$question['iid']][] = $category['iid'];
+                    }
+                }
+            }
+        }
+        return $questionCategoryList;
+    }
+
+    /**
+     * @param int $exerciseId
+     * @param int $mediaId
+     * @return array
+     */
+    public function allQuestionWithMediaHaveTheSameCategory($exerciseId, $mediaId, $categoryListToCompare = array(), $ignoreQuestionId = null, $returnCategoryId = false)
+    {
+        $questions = $this->getQuestionCategoriesOfMediaQuestions($exerciseId, $mediaId);
+        $result = false;
+        $categoryId = null;
+        if (empty($questions)) {
+            $result = true;
+        } else {
+            $tempArray = array();
+            foreach ($questions as $categories) {
+                $diff = array_diff($tempArray, $categories);
+                $categoryId = $categories[0];
+                $tempArray = $categories;
+                if (empty($diff)) {
+                    $result = true;
+                    continue;
+                } else {
+                    $result = false;
+                    break;
+                }
+            }
+        }
+
+        if (isset($categoryListToCompare) && !empty($categoryListToCompare)) {
+            $result = false;
+            foreach ($questions as $questionId => $categories) {
+                if ($ignoreQuestionId == $questionId) {
+                    continue;
+                }
+                $diff = array_diff($categoryListToCompare, $categories);
+                $categoryId = $categories[0];
+                if (empty($diff)) {
+                    $result = true;
+                    continue;
+                } else {
+                    $result = false;
+                    break;
+                }
+            }
+        }
+
+        if ($returnCategoryId) {
+            return $categoryId;
+        }
+        return $result;
     }
 }

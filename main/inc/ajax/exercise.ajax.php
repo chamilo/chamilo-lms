@@ -14,12 +14,37 @@ api_protect_course_script(true);
 $action = $_REQUEST['a'];
 $course_id = api_get_course_int_id();
 
-if ($debug) error_log("$action ajax call");
+if ($debug) {
+    error_log("$action ajax call");
+}
 
 $session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : api_get_session_id();
 $course_code = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : api_get_course_id();
 
 switch ($action) {
+    case 'get_categories_by_media':
+        $questionId = $_REQUEST['questionId'];
+        $id = $_REQUEST['mediaId'];
+        $exerciseId = $_REQUEST['exerciseId'];
+        $question = Question::read($questionId);
+        if (empty($id)) {
+            echo 0;
+            break;
+        }
+        $categoryId = $question->allQuestionWithMediaHaveTheSameCategory($exerciseId, $id, null, null, true);
+
+        if (!empty($categoryId)) {
+            $category = new Testcategory($categoryId);
+            echo json_encode(
+                array(
+                    'title' => $category->title,
+                    'value' => $category->id
+                )
+            );
+        } else {
+            echo 0;
+        }
+        break;
     case 'exercise_category_exists':
         $category = new Testcategory();
         $category->getCategory($_REQUEST['id']);

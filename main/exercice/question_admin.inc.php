@@ -12,7 +12,6 @@
  */
 
 $course_id = api_get_course_int_id();
-
 // INIT QUESTION
 if (isset($_GET['editQuestion'])) {
     $objQuestion = Question::read($_GET['editQuestion'], null, $objExercise);
@@ -55,32 +54,78 @@ if (is_object($objQuestion)) {
     $objQuestion->createAnswersForm($form);
 
     // this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
+
     if ($objExercise->edit_exercise_in_lp == false) {
         $form->freeze();
     }
 
-    // FORM VALIDATION
+    // Form validation
+    //$result = $objQuestion->allQuestionWithMediaHaveTheSameCategory($exerciseId, 100);
 
     if (isset($_POST['submitQuestion']) && $form->validate()) {
+        // Media is selected?
+        $parentId = $form->getSubmitValue('parent_id');
+        $categories = $form->getSubmitValue('questionCategory');
+        $process = true;
+        $message = null;
 
-        // Question
-        $objQuestion->processCreation($form, $objExercise);
+        // A media question was sent
+        if (isset($parentId) && !empty($parentId)) {
+            // No allowing 2 categories if a media was selected
+            $tryAgain = Display::url(
+                get_lang('TryAgain'),
+                api_get_path(WEB_CODE_PATH).'exercice/admin.php?exerciseId='.$exerciseId.'&myid=1&editQuestion='.$objQuestion->id.'&'.api_get_cidreq(),
+                array('class' => 'btn')
+            );
 
-        // Answers
-        $objQuestion->processAnswersCreation($form);
+            if (isset($categories) && !empty($categories)) {
 
-        // TODO: maybe here is the better place to index this tool, including answers text
+                if (count($categories) > 1) {
+                    $message = Display::display_warning_message(get_lang('WhenUsingAMediaQuestionYouCantAddMoreThanOneCategory'));
+                    $message .= ' '.$tryAgain;
 
-        // redirect
-        if ($objQuestion->type != HOT_SPOT && $objQuestion->type != HOT_SPOT_DELINEATION) {
-            if (isset($_GET['editQuestion'])) {
-                echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemUpdated"</script>';
+                    $process = false;
+                }
+
+                $result = $objQuestion->allQuestionWithMediaHaveTheSameCategory($exerciseId, $parentId, $categories, $objQuestion->id);
+
+                if ($result == false) {
+                    $message = Display::display_warning_message(get_lang('TheSelectedCategoryDoesNotMatchWithTheOtherQuestionWithTheSameMediaQuestion'));
+                    $message .= ' '.$tryAgain;
+                    $process = false;
+                }
             } else {
-                //New question
-                echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemAdded"</script>';
+                if (!empty($objQuestion->category_list)) {
+                    $message = Display::display_warning_message(get_lang('YouMustProvideACategoryBecauseTheCurrentCategoryDoesNotMatchOtherMediaQuestions'));
+                    $message .= ' '.$tryAgain;
+                    $process = false;
+                }
+            }
+        }
+
+        if ($process) {
+
+            // Question
+            $objQuestion->processCreation($form, $objExercise);
+
+            // Answers
+            $objQuestion->processAnswersCreation($form);
+
+            // TODO: maybe here is the better place to index this tool, including answers text
+
+            // redirect
+            if ($objQuestion->type != HOT_SPOT && $objQuestion->type != HOT_SPOT_DELINEATION) {
+                if (isset($_GET['editQuestion'])) {
+                    echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemUpdated"</script>';
+                } else {
+                    //New question
+                    echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemAdded"</script>';
+                }
+            } else {
+                echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';
             }
         } else {
-            echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';
+            echo $message;
         }
     } else {
 

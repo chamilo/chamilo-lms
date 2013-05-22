@@ -1334,7 +1334,7 @@ abstract class Question
      */
     public function createForm(&$form, $fck_config = array())
     {
-        $maxCategories = 20;
+        $maxCategories = 1;
         $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?1=1';
         $js = null;
 

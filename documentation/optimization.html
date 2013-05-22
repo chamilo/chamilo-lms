@@ -95,6 +95,44 @@ if(!empty($_course['id'])) {
 }
 </pre>
 Note that, as xCache is a shared caching system, it is very important to prefix your variables with a domain name or some kind of identifier, otherwise it would end up in disaster if you use a shared server for several portals.<br />
+If you use php5-memcache, then this piece of code would look like this (you need to adjust depending on your settings):
+<pre>
+    global $_configuration;
+    $_course    = api_get_course_info();
+    $course_id  = api_get_course_id();
+    $user_id    = api_get_user_id();
+
+    $html = '';
+    $xc = method_exists('Memcache','add');
+    if ($xc) {
+        // Make sure the server is available
+        $xm = new Memcache;
+        $xm->addServer('localhost', 11211);
+        $xc = $xc && ($xm->getServerStatus('localhost',11211)!=0);
+        // The following concatenates the name of the database + the id of the
+        // access url to make it a unique variable prefix for the variables to
+        // be stored
+        $xs = $_configuration['main_database'].'_'.$_configuration['access_url'].'_';
+    }
+    $number = 0;
+    if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting('showonline', 'users') == 'true' AND $user_id) OR (api_get_setting('showonline', 'course') == 'true' AND $user_id AND $course_id)) {
+        if ($xc && $xm->get($xs.'wio_count_simple')) {
+            $number = $xm->get($xs.'wio_count_simple');
+        } else {
+            $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
+            $xm->set($xs.'wio_count_simple',$number,0,30);
+        }
+
+        $number_online_in_course = 0;
+        if(!empty($_course['id'])) {
+            if ($xc && $xm->get($xs.'wio_count_simple_'.$_course['id'])) {
+                $number_online_in_course = $xm->get($xs.'wio_count_simple_'.$_course['id']);
+            } else {
+                $number_online_in_course = who_is_online_in_this_course_count($user_id, api_get_setting('time_limit_whosonline'), $_course['id']);
+                $xm->set($xs.'wio_count_simple_'.$_course['id'],$number_online_in_course,0,30);
+            }
+        }
+</pre>
 <br />
 An optional additional caching mechanism you may use is the realpath_cache_size and realpath_cache_ttl php.ini parameters. See <a href="http://php.net/manual/en/ini.core.php">the PHP documentation</a> for more details.
 <br />

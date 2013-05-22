@@ -457,10 +457,10 @@ class Exercise
 
     /**
      *
-     * @param $start
-     * @param $limit
-     * @param $sidx
-     * @param $sord
+     * @param int $start
+     * @param int $limit
+     * @param int $sidx
+     * @param string $sord
      * @param array $where_condition
      */
     public function getQuestionList($start, $limit, $sidx, $sord, $where_condition = array())

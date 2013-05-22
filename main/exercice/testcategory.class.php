@@ -838,7 +838,7 @@ class Testcategory
             } else {
                 $parentId = $all_categories[$category_id]['parent_id'];
                 $cId = $all_categories[$category_id]['c_id'];
-                $category_name = Text::cut($all_categories[$category_id]['title'], 15);
+                $category_name = $all_categories[$category_id]['title'];
             }
             $category_list_to_render[] = array(
                 'title' => $category_name,
@@ -860,6 +860,7 @@ class Testcategory
         $new_category_list = array();
         foreach ($category_list as $category) {
             $category_name = $category['title'];
+            $category_name_cut = Text::cut($category['title'], 20);
 
             switch ($type) {
                 case 'label':
@@ -874,10 +875,10 @@ class Testcategory
                     }*/
                     $courseId = isset($category['c_id']) && !empty($category['c_id']) ? $category['c_id'] : null;
                     if (empty($courseId)) {
-                        $new_category_list[] = Display::label($category_name, 'info');
+                        $new_category_list[] = Display::label($category_name_cut, 'info', $category_name);
                     } else {
                         // Local cat
-                        $new_category_list[] = Display::label($category_name, 'success');
+                        $new_category_list[] = Display::label($category_name_cut, 'success', $category_name);
                     }
                     break;
                 case 'header':

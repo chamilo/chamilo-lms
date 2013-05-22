@@ -5888,23 +5888,16 @@ function api_get_jquery_libraries_js($libraries) {
  * @author 	Julio Montoya <gugli100@gmail.com>
  */
 function api_get_course_url($course_code = null, $session_id = null) {
-    $session_url = '';
     if (empty($course_code)) {
         $course_info = api_get_course_info();
     } else {
         $course_info = api_get_course_info($course_code);
     }
     if (empty($session_id)) {
-        $session_url = 'index.php?id_session='.api_get_session_id();
+        $session_url = '?id_session='.api_get_session_id();
     } else {
-        $session_url = 'index.php?id_session='.intval($session_id);
+        $session_url = '?id_session='.intval($session_id);
     }
-    /*
-    if (empty($group_id)) {
-        $group_url = '&gidReq='.api_get_group_id();
-    } else {
-        $group_url = '&gidReq='.intval($group_id);
-    }*/
     if (!empty($course_info['path'])) {
         return api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php'.$session_url;
     }

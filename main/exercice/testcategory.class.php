@@ -525,11 +525,9 @@ class Testcategory
                 $newMediaList[$questionId] = $mediaId;
             }
         }
-
         foreach ($questionList as $question_id) {
             //var_dump($question_id);
             $categoryList = Testcategory::getCategoryForQuestion($question_id);
-            //var_dump($categoryList);
 
             foreach ($categoryList as $categoryId) {
                 if (!isset($categoriesWithQuestion[$categoryId])) {
@@ -546,6 +544,7 @@ class Testcategory
                             $categoryEntity = $parentsLoaded[$cat['parent_id']];
                         }
                         $path = $repo->getPath($categoryEntity);
+
                         if (isset($path) && isset($path[0])) {
                             $categoryId = $path[0]->getIid();
                             $cat['id'] = $categoryId;
@@ -558,12 +557,13 @@ class Testcategory
                         $temp = isset($categoriesWithQuestion[$categoryId]) ? $categoriesWithQuestion[$categoryId]['question_list'] : array();
                         $categoriesWithQuestion[$categoryId] = $cat;
                         $categoriesWithQuestion[$categoryId]['question_list'] = $temp;
-                        $categoriesWithQuestion[$categoryId]['media_question'] = $newMediaList[$question_id];
+                        $categoriesWithQuestion[$categoryId]['media_question'] = isset($newMediaList[$question_id]) ? $newMediaList[$question_id] : 999;
                     } else {
                         $categoriesWithQuestion[$categoryId] = $cat;
-                        $categoriesWithQuestion[$categoryId]['media_question'] = $newMediaList[$question_id];
+                        $categoriesWithQuestion[$categoryId]['media_question'] = isset($newMediaList[$question_id]) ? $newMediaList[$question_id] : 999;
                     }
                 }
+
                 $categoriesWithQuestion[$categoryId]['question_list'][] = (int)$question_id;
             }
         }
@@ -727,7 +727,8 @@ class Testcategory
 	/**
      * Return an array of X elements of an array
 	 */
-    public static function getNElementsFromArray($array, $random_number) {
+    public static function getNElementsFromArray($array, $random_number)
+    {
         shuffle($array);
         if ($random_number < count($array)) {
             $array = array_slice($array, 0, $random_number);

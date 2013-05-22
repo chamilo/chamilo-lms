@@ -163,6 +163,7 @@ if ($origin != 'learnpath') {
         Session::erase('objExercise');
         Session::erase('exe_id');
         Session::erase('categoryList');
+        Session::erase('question_list_flatten');
     }
 
     Display::display_footer();

@@ -1562,6 +1562,11 @@ class Display
         return $div;
     }
 
+    /**
+     * @param $count
+     * @param string $type
+     * @return null|string
+     */
     public static function badge($count, $type = "warning")
     {
         $class = '';
@@ -1590,6 +1595,10 @@ class Display
         return null;
     }
 
+    /**
+     * @param array $badge_list
+     * @return string
+     */
     public static function badge_group($badge_list)
     {
         $html = '<div class="badge-group">';
@@ -1600,6 +1609,12 @@ class Display
         return $html;
     }
 
+    /**
+     * @param string $content
+     * @param string $type
+     * @param string $full_content
+     * @return string
+     */
     public static function label($content, $type = null, $full_content = null)
     {
         $class = '';
@@ -1655,7 +1670,9 @@ class Display
     }
 
     /**
-     * Prints a tooltip
+     * @param string $text
+     * @param string $tip
+     * @return string
      */
     public static function tip($text, $tip)
     {
@@ -1665,6 +1682,12 @@ class Display
         return self::span($text, array('class' => 'boot-tooltip', 'title' => strip_tags($tip)));
     }
 
+    /**
+     * @param array $items
+     * @param string $type
+     * @param string $id
+     * @return null|string
+     */
     public static function generate_accordion($items, $type = 'jquery', $id = null)
     {
         $html = null;
@@ -1726,7 +1749,7 @@ class Display
      * @param string $link
      * @return string
      */
-    static function progress_pagination_bar($list, $current, $conditions = array(), $link = null, $counter = null)
+    public static function progress_pagination_bar($list, $current, $conditions = array(), $link = null, $counter = null)
     {
         if (empty($counter)) {
             $counter = 1;
@@ -1789,14 +1812,15 @@ class Display
      * @param array $mediaQuestions
      * @param int $current
      * @param array $conditions
-     * @param null $link
-     * @return null|string
+     * @param string $link
+     * @return string
      */
-    static function progress_pagination_bar_with_categories($categories, $mediaQuestions, $current, $conditions = array(), $link = null)
+    public static function progress_pagination_bar_with_categories($categories, $mediaQuestions, $current, $conditions = array(), $link = null)
     {
         $counter = 0;
         $totalTemp = 0;
         $html = null;
+        var_dump($categories);
         if (!empty($categories)) {
             foreach ($categories as $category) {
                 $list = $category['question_list'];

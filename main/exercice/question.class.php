@@ -465,13 +465,12 @@ abstract class Question
             $res                       = Database::query($sql);
             $row                       = Database::fetch_array($res);
             if ($row['nb'] > 0) {
-                $sql = "UPDATE $TBL_QUESTION_REL_CATEGORY SET category_id= $category_id WHERE question_id=$question_id AND c_id=".api_get_course_int_id(
-                );
-                $res = Database::query($sql);
+                $sql = "UPDATE $TBL_QUESTION_REL_CATEGORY SET category_id= $category_id
+                        WHERE question_id=$question_id AND c_id=".api_get_course_int_id();
+                Database::query($sql);
             } else {
-                $sql = "INSERT INTO $TBL_QUESTION_REL_CATEGORY VALUES (".api_get_course_int_id(
-                ).", $question_id, $category_id)";
-                $res = Database::query($sql);
+                $sql = "INSERT INTO $TBL_QUESTION_REL_CATEGORY VALUES (".api_get_course_int_id().", $question_id, $category_id)";
+                Database::query($sql);
             }
         }
     }
@@ -548,10 +547,10 @@ abstract class Question
     /**
      * Adds a picture to the question
      *
-     * @author - Olivier Brouckaert
-     * @param - string $Picture - temporary path of the picture to upload
-     * @param - string $PictureName - Name of the picture
-     * @return - boolean - true if uploaded, otherwise false
+     * @author Olivier Brouckaert
+     * @param string $Picture - temporary path of the picture to upload
+     * @param string $PictureName - Name of the picture
+     * @return bool - true if uploaded, otherwise false
      */
     public function uploadPicture($Picture, $PictureName, $picturePath = null)
     {
@@ -601,11 +600,11 @@ abstract class Question
      * Resizes a picture || Warning!: can only be called after uploadPicture, or if picture is already available in object.
      *
      * @author - Toon Keppens
-     * @param - string $Dimension - Resizing happens proportional according to given dimension: height|width|any
-     * @param - integer $Max - Maximum size
-     * @return - boolean - true if success, false if failed
+     * @param string $Dimension - Resizing happens proportional according to given dimension: height|width|any
+     * @param integer $Max - Maximum size
+     * @return boolean - true if success, false if failed
      */
-    function resizePicture($Dimension, $Max)
+    public function resizePicture($Dimension, $Max)
     {
         global $picturePath;
 
@@ -664,12 +663,12 @@ abstract class Question
     }
 
     /**
-     * deletes the picture
+     * Deletes the picture
      *
-     * @author - Olivier Brouckaert
-     * @return - boolean - true if removed, otherwise false
+     * @author Olivier Brouckaert
+     * @return boolean - true if removed, otherwise false
      */
-    function removePicture()
+    public function removePicture()
     {
         global $picturePath;
 
@@ -688,10 +687,10 @@ abstract class Question
      * Exports a picture to another question
      *
      * @author - Olivier Brouckaert
-     * @param - integer $questionId - ID of the target question
-     * @return - boolean - true if copied, otherwise false
+     * @param integer $questionId - ID of the target question
+     * @return boolean - true if copied, otherwise false
      */
-    function exportPicture($questionId, $course_info)
+    public function exportPicture($questionId, $course_info)
     {
         $course_id        = $course_info['real_id'];
         $TBL_QUESTIONS    = Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -706,9 +705,8 @@ abstract class Question
             $result    = @copy($source_path.'/'.$this->picture, $destination_path.'/'.$picture) ? true : false;
             //If copy was correct then add to the database
             if ($result) {
-                $sql = "UPDATE $TBL_QUESTIONS SET picture='".Database::escape_string(
-                    $picture
-                )."' WHERE c_id = $course_id AND iid='".intval($questionId)."'";
+                $sql = "UPDATE $TBL_QUESTIONS SET picture='".Database::escape_string($picture)."'
+                        WHERE c_id = $course_id AND iid='".intval($questionId)."'";
                 Database::query($sql);
 
                 $document_id = FileManager::add_document(
@@ -775,10 +773,10 @@ abstract class Question
      * Temporary pictures are used when we don't want to save a picture right after a form submission.
      * For example, if we first show a confirmation box.
      *
-     * @author - Olivier Brouckaert
-     * @return - boolean - true if moved, otherwise false
+     * @author Olivier Brouckaert
+     * @return boolean - true if moved, otherwise false
      */
-    function getTmpPicture()
+    public function getTmpPicture()
     {
         global $picturePath;
 
@@ -803,8 +801,8 @@ abstract class Question
      * updates the question in the data base
      * if an exercise ID is provided, we add that exercise ID into the exercise list
      *
-     * @author - Olivier Brouckaert
-     * @param - integer $exerciseId - exercise ID if saving in an exercise
+     * @author Olivier Brouckaert
+     * @param integer $exerciseId - exercise ID if saving in an exercise
      */
     public function save($exerciseId = 0)
     {
@@ -826,15 +824,15 @@ abstract class Question
         // Question already exists
         if (!empty($id)) {
             $sql = "UPDATE $TBL_QUESTIONS SET
-					question 	='".Database::escape_string($question)."',
-					description	='".Database::escape_string($description)."',
-					ponderation	='".Database::escape_string($weighting)."',
-					position	='".Database::escape_string($position)."',
-					type		='".Database::escape_string($type)."',
-					picture		='".Database::escape_string($picture)."',
-                    extra       ='".Database::escape_string($extra)."',
-					level		='".Database::escape_string($level)."',
-                    parent_id   = ".$this->parent_id."
+                        question 	='".Database::escape_string($question)."',
+                        description	='".Database::escape_string($description)."',
+                        ponderation	='".Database::escape_string($weighting)."',
+                        position	='".Database::escape_string($position)."',
+                        type		='".Database::escape_string($type)."',
+                        picture		='".Database::escape_string($picture)."',
+                        extra       ='".Database::escape_string($extra)."',
+                        level		='".Database::escape_string($level)."',
+                        parent_id   = ".$this->parent_id."
                     WHERE iid = '".Database::escape_string($id)."'";
             //WHERE c_id = $c_id AND iid = '".Database::escape_string($id)."'";
 
@@ -906,7 +904,12 @@ abstract class Question
         }
     }
 
-    function search_engine_edit($exerciseId, $addQs = false, $rmQs = false)
+    /**
+     * @param $exerciseId
+     * @param bool $addQs
+     * @param bool $rmQs
+     */
+    public function search_engine_edit($exerciseId, $addQs = false, $rmQs = false)
     {
         // update search engine and its values table if enabled
         if (api_get_setting('search_enabled') == 'true' && extension_loaded('xapian')) {
@@ -1035,7 +1038,7 @@ abstract class Question
      * @param integer $exerciseId - exercise ID
      * @param boolean $fromSave - coming from $this->save() or not
      */
-    function addToList($exerciseId, $fromSave = false)
+    public function addToList($exerciseId, $fromSave = false)
     {
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $id                    = $this->id;
@@ -1060,13 +1063,13 @@ abstract class Question
     }
 
     /**
-     * removes an exercise from the exercise list
+     * Removes an exercise from the exercise list
      *
-     * @author - Olivier Brouckaert
-     * @param - integer $exerciseId - exercise ID
-     * @return - boolean - true if removed, otherwise false
+     * @author Olivier Brouckaert
+     * @param integer $exerciseId - exercise ID
+     * @return boolean - true if removed, otherwise false
      */
-    function removeFromList($exerciseId)
+    public function removeFromList($exerciseId)
     {
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
@@ -1084,24 +1087,20 @@ abstract class Question
             // deletes the position in the array containing the wanted exercise ID
             unset($this->exerciseList[$pos]);
             //update order of other elements
-            $sql = "SELECT question_order FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id='".Database::escape_string(
-                $id
-            )."' AND exercice_id='".Database::escape_string($exerciseId)."'";
+            $sql = "SELECT question_order FROM $TBL_EXERCICE_QUESTION
+                    WHERE c_id = $course_id AND question_id='".Database::escape_string($id)."' AND exercice_id='".Database::escape_string($exerciseId)."'";
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 $row = Database::fetch_array($res);
                 if (!empty($row['question_order'])) {
                     $sql = "UPDATE $TBL_EXERCICE_QUESTION SET question_order = question_order-1
-                            WHERE c_id = $course_id AND exercice_id='".Database::escape_string(
-                        $exerciseId
-                    )."' AND question_order > ".$row['question_order'];
-                    $res = Database::query($sql);
+                            WHERE c_id = $course_id AND exercice_id='".Database::escape_string($exerciseId)."' AND question_order > ".$row['question_order'];
+                    Database::query($sql);
                 }
             }
 
-            $sql = "DELETE FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id='".Database::escape_string(
-                $id
-            )."' AND exercice_id='".Database::escape_string($exerciseId)."'";
+            $sql = "DELETE FROM $TBL_EXERCICE_QUESTION
+            WHERE c_id = $course_id AND question_id='".Database::escape_string($id)."' AND exercice_id='".Database::escape_string($exerciseId)."'";
             Database::query($sql);
 
             return true;
@@ -1113,10 +1112,10 @@ abstract class Question
      * the parameter tells if the question is removed from all exercises (value = 0),
      * or just from one exercise (value = exercise ID)
      *
-     * @author - Olivier Brouckaert
-     * @param - integer $deleteFromEx - exercise ID if the question is only removed from one exercise
+     * @author Olivier Brouckaert
+     * @param integer $deleteFromEx - exercise ID if the question is only removed from one exercise
      */
-    function delete($deleteFromEx = 0)
+    public function delete($deleteFromEx = 0)
     {
         $course_id = api_get_course_int_id();
 
@@ -1198,7 +1197,7 @@ abstract class Question
      * @return int     ID of the new question
      */
 
-    function duplicate($course_info = null)
+    public function duplicate($course_info = null)
     {
         if (empty($course_info)) {
             $course_info = $this->course;
@@ -1208,11 +1207,6 @@ abstract class Question
 
         $question    = $this->question;
         $description = $this->description;
-        $weighting   = $this->weighting;
-        $position    = $this->position;
-        $type        = $this->type;
-        $level       = intval($this->level);
-        $extra       = $this->extra;
 
         //Using the same method used in the course copy to transform URLs
 
@@ -1265,12 +1259,12 @@ abstract class Question
         return $new_question_id;
     }
 
-    function get_categories_from_question()
+    public function get_categories_from_question()
     {
         return Testcategory::getCategoryForQuestion($this->id);
     }
 
-    function duplicate_category_question($question_id, $course_id)
+    public function duplicate_category_question($question_id, $course_id)
     {
         $question   = Question::read($question_id, $course_id);
         $categories = $this->get_categories_from_question();
@@ -1279,14 +1273,14 @@ abstract class Question
         }
     }
 
-    function get_question_type_name()
+    public function get_question_type_name()
     {
         $key = self::$questionTypes[$this->type];
 
         return get_lang($key[1]);
     }
 
-    static function get_question_type($type)
+    public static function get_question_type($type)
     {
         if ($type == ORAL_EXPRESSION && api_get_setting('enable_nanogong') != 'true') {
             return null;
@@ -1295,7 +1289,7 @@ abstract class Question
         return self::$questionTypes[$type];
     }
 
-    static function get_question_type_list()
+    public static function get_question_type_list()
     {
         if (api_get_setting('enable_nanogong') != 'true') {
             self::$questionTypes[ORAL_EXPRESSION] = null;
@@ -1308,9 +1302,10 @@ abstract class Question
     /**
      * Returns an instance of the class corresponding to the type
      * @param integer $type the type of the question
-     * @return an instance of a Question subclass (or of Questionc class by default)
+     * @param \Exercise
+     * @return \Question an instance of a Question subclass (or of Questionc class by default)
      */
-    static function getInstance($type, Exercise $exercise = null)
+    public static function getInstance($type, Exercise $exercise = null)
     {
         if (!is_null($type)) {
             list($file_name, $class_name) = self::get_question_type($type);
@@ -1333,43 +1328,35 @@ abstract class Question
      * Creates the form to create / edit a question
      * A subclass can redifine this function to add fields...
      *
-     * @param FormValidator $form the formvalidator instance (by reference)
+     * @param \FormValidator $form the formvalidator instance (by reference)
+     * @param array $fck_config
      */
-    public function createForm(&$form, $fck_config = 0)
+    public function createForm(&$form, $fck_config = array())
     {
         $maxCategories = 20;
         $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?1=1';
         $js = null;
+
         if ($this->type != MEDIA_QUESTION) {
             $js = '<script>
+
             function check() {
+                var counter = 0;
                 $("#category_id option:selected").each(function() {
                     var id = $(this).val();
                     var name = $(this).text();
                     if (id != "" ) {
-
                         // if a media question was selected
                         $("#parent_id option:selected").each(function() {
                             var questionId = $(this).val();
                             if (questionId != 0) {
-                                $.ajax({
-                                    async: false,
-                                    dataType: "json",
-                                    url: "'.$url.'&a=get_categories_by_media&questionId='.$this->id.'&exerciseId='.$this->exercise->id.'",
-                                    data: "mediaId="+questionId,
-                                    success: function(data) {
-                                        if (data.value == id) {
-                                            //console.log(data.value);
-                                        } else {
-                                            alert("'.addslashes(get_lang('YouCantAddAnotherCategory')).'");
-                                            $(".holder li").each(function () {
-                                                if ($(this).attr("rel") == id) {
-                                                    $(this).remove();
-                                                }
-                                            });
-                                        }
-                                    },
-                                });
+                                //console.log(counter);
+                                //console.log(questionId);
+                                if (counter >= 1) {
+                                    alert("'.addslashes(get_lang('YouCantAddAnotherCategory')).'");
+                                    $("#category_id").trigger("removeItem",[{ "value" : id}]);
+                                    return;
+                                }
                             }
                         });
 
@@ -1392,6 +1379,7 @@ abstract class Question
                             },
                         });
                     }
+                    counter++;
                 });
             }
 
@@ -1409,75 +1397,71 @@ abstract class Question
                     newel: true
                 });
 
+                // Change select media
                 $("#parent_id").change(function(){
                     $("#parent_id option:selected").each(function() {
                         var questionId = $(this).val();
-                        $.ajax({
-                            async: false,
-                            dataType: "json",
-                            url: "'.$url.'&a=get_categories_by_media&questionId='.$this->id.'&exerciseId='.$this->exercise->id.'",
-                            data: "mediaId="+questionId,
-                            success: function(data) {
-                                var all = $("#category_id").trigger("selectAll");
-                                all.each(function(index, value) {
-                                    var selected = $(value).find("option:selected");
-                                    selected.each(function( indexSelect, valueSelect) {
-                                        valueToRemove = $(valueSelect).val();
-                                        $("#category_id").trigger("removeItem",[{ "value" : valueToRemove}]);
-                                    });
+                        if (questionId != 0) {
+                            $.ajax({
+                                async: false,
+                                dataType: "json",
+                                url: "'.$url.'&a=get_categories_by_media&questionId='.$this->id.'&exerciseId='.$this->exercise->id.'",
+                                data: "mediaId="+questionId,
+                                success: function(data) {
+                                    if (data != -1) {
+                                        var all = $("#category_id").trigger("selectAll");
+                                        all.each(function(index, value) {
+                                            var selected = $(value).find("option:selected");
+                                            selected.each(function( indexSelect, valueSelect) {
+                                                valueToRemove = $(valueSelect).val();
+                                                $("#category_id").trigger("removeItem",[{ "value" : valueToRemove}]);
+                                            });
+                                        });
+
+                                        if (data != 0) {
+                                            $("#category_id").trigger("addItem",[{"title": data.title, "value": data.value}]);
+                                        }
+                                    }
+
+
+                                },
+                            });
+                        } else {
+                            // Removes all items
+                            var all = $("#category_id").trigger("selectAll");
+                            all.each(function(index, value) {
+                                var selected = $(value).find("option:selected");
+                                selected.each(function( indexSelect, valueSelect) {
+                                    valueToRemove = $(valueSelect).val();
+                                    $("#category_id").trigger("removeItem", [{ "value" : valueToRemove}]);
                                 });
-
-                                if (data != 0) {
-                                    $("#category_id").trigger("addItem",[{"title": data.title, "value": data.value}]);
-                                }
-                            },
-                        });
-
+                            });
+                        }
                     });
                 });
-
-
             });
 
 
+            // hub 13-12-2010
+            function visiblerDevisibler(in_id) {
+                if (document.getElementById(in_id)) {
 
-
+                    if (document.getElementById(in_id).style.display == "none") {
+                        document.getElementById(in_id).style.display = "block";
+                        if (document.getElementById(in_id+"Img")) {
+                            document.getElementById(in_id+"Img").html = "'.addslashes(Display::return_icon('div_hide.gif')).'";
+                        }
+                    } else {
+                        document.getElementById(in_id).style.display = "none";
+                        if (document.getElementById(in_id+"Img")) {
+                            document.getElementById(in_id+"Img").html = "dsdsds'.addslashes(Display::return_icon('div_show.gif')).'";
+                        }
+                    }
+                }
+            }
             </script>';
+            $form->addElement('html', $js);
         }
-
-        $js .= '<script>
-
-            function show_media(){
-				var my_display = document.getElementById(\'HiddenFCKquestionDescription\').style.display;
-				if (my_display== \'none\' || my_display == \'\') {
-				document.getElementById(\'HiddenFCKquestionDescription\').style.display = \'block\';
-				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;'.Display::return_icon('looknfeelna.png').'&nbsp;'.get_lang('EnrichQuestion').'\';
-			} else {
-				document.getElementById(\'HiddenFCKquestionDescription\').style.display = \'none\';
-				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;'.Display::return_icon('looknfeel.png').'&nbsp;'.get_lang('EnrichQuestion').'\';
-			}
-		}
-
-		// hub 13-12-2010
-		function visiblerDevisibler(in_id) {
-			if (document.getElementById(in_id)) {
-
-				if (document.getElementById(in_id).style.display == "none") {
-					document.getElementById(in_id).style.display = "block";
-					if (document.getElementById(in_id+"Img")) {
-						document.getElementById(in_id+"Img").html = "'.addslashes(Display::return_icon('div_hide.gif')).'";
-					}
-				} else {
-					document.getElementById(in_id).style.display = "none";
-					if (document.getElementById(in_id+"Img")) {
-						document.getElementById(in_id+"Img").html = "dsdsds'.addslashes(Display::return_icon('div_show.gif')).'";
-					}
-				}
-			}
-		}
-		</script>';
-
-        $form->addElement('html', $js);
         // question name
         $form->addElement('text', 'questionName', get_lang('Question'), array('class' => 'span6'));
         $form->addRule('questionName', get_lang('GiveQuestion'), 'required');
@@ -2578,6 +2562,7 @@ abstract class Question
     }
 
     /**
+     * Check if the media sent matches other medias sent before
      * @param int $exerciseId
      * @param int $mediaId
      * @return array

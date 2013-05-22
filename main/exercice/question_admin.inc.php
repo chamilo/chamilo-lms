@@ -71,6 +71,7 @@ if (is_object($objQuestion)) {
 
         // A media question was sent
         if (isset($parentId) && !empty($parentId)) {
+
             // No allowing 2 categories if a media was selected
             $tryAgain = Display::url(
                 get_lang('TryAgain'),
@@ -87,12 +88,18 @@ if (is_object($objQuestion)) {
                     $process = false;
                 }
 
-                $result = $objQuestion->allQuestionWithMediaHaveTheSameCategory($exerciseId, $parentId, $categories, $objQuestion->id);
+                // If media exists
+                $questionCategoriesOfMediaQuestions = $objQuestion->getQuestionCategoriesOfMediaQuestions($exerciseId, $parentId);
 
-                if ($result == false) {
-                    $message = Display::display_warning_message(get_lang('TheSelectedCategoryDoesNotMatchWithTheOtherQuestionWithTheSameMediaQuestion'));
-                    $message .= ' '.$tryAgain;
-                    $process = false;
+                if (!empty($questionCategoriesOfMediaQuestions)) {
+                    // Check if the media sent matches other medias sent before
+                    $result = $objQuestion->allQuestionWithMediaHaveTheSameCategory($exerciseId, $parentId, $categories, $objQuestion->id);
+
+                    if ($result == false) {
+                        $message = Display::display_warning_message(get_lang('TheSelectedCategoryDoesNotMatchWithTheOtherQuestionWithTheSameMediaQuestion'));
+                        $message .= ' '.$tryAgain;
+                        $process = false;
+                    }
                 }
             } else {
                 if (!empty($objQuestion->category_list)) {

@@ -31,6 +31,7 @@ switch ($action) {
             echo 0;
             break;
         }
+
         $categoryId = $question->allQuestionWithMediaHaveTheSameCategory($exerciseId, $id, null, null, true);
 
         if (!empty($categoryId)) {
@@ -42,7 +43,7 @@ switch ($action) {
                 )
             );
         } else {
-            echo 0;
+            echo -1;
         }
         break;
     case 'exercise_category_exists':

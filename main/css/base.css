@@ -5164,7 +5164,7 @@ i.size-32.icon-new-work {
     color:#999999;
 }
 
-.pagination .remind a {
+.pagination .remind a, .pagination .remind a:hover {
     /* text-decoration: underline; */
     background-color: #f89406
 }

@@ -10,6 +10,8 @@
 /**
  * Code
  */
+use \ChamiloSession as Session;
+
 define('ALL_ON_ONE_PAGE', 1);
 define('ONE_PER_PAGE', 2);
 
@@ -324,7 +326,7 @@ class Exercise
      * @return - : modify object to update the switch display_category_name
      * $in_txt is an integer 0 or 1
      */
-    function updateDisplayCategoryName($text)
+    public function updateDisplayCategoryName($text)
     {
         $this->display_category_name = $text;
     }
@@ -333,16 +335,16 @@ class Exercise
      * @author - hubert borderiou 28-11-11
      * @return - html text : the text to display ay the end of the test.
      */
-    function selectTextWhenFinished()
+    public function selectTextWhenFinished()
     {
         return $this->text_when_finished;
     }
 
     /**
-     * @author - hubert borderiou 28-11-11
-     * @return - html text : update the text to display ay the end of the test.
+     * @author Hubert borderiou 28-11-11
+     * @return string html text : update the text to display ay the end of the test.
      */
-    function updateTextWhenFinished($text)
+    public function updateTextWhenFinished($text)
     {
         $this->text_when_finished = $text;
     }
@@ -350,9 +352,9 @@ class Exercise
     /**
      * return 1 or 2 if randomByCat
      * @author - hubert borderiou
-     * @return - integer - quiz random by category
+     * @return integer - quiz random by category
      */
-    function selectRandomByCat()
+    public function selectRandomByCat()
     {
         return $this->randomByCat;
     }
@@ -361,11 +363,12 @@ class Exercise
      * return 0 if no random by cat
      * return 1 if random by cat, categories shuffled
      * return 2 if random by cat, categories sorted by alphabetic order
-     * @author - hubert borderiou
+     * @author Hubert borderiou
      *
-     * @return - integer - quiz random by category
+     * @return integer - quiz random by category
      */
-    function isRandomByCat() {
+    public function isRandomByCat()
+    {
         $res = EXERCISE_CATEGORY_RANDOM_DISABLED;
         if ($this->randomByCat == EXERCISE_CATEGORY_RANDOM_SHUFFLED) {
             $res = EXERCISE_CATEGORY_RANDOM_SHUFFLED;
@@ -378,10 +381,10 @@ class Exercise
 
     /**
      * Sets the random by category value
-     * @author - Julio Montoya
+     * @author Julio Montoya
      * @param int random by category
      */
-    function updateRandomByCat($random)
+    public function updateRandomByCat($random)
     {
         if (in_array($random, array(EXERCISE_CATEGORY_RANDOM_SHUFFLED, EXERCISE_CATEGORY_RANDOM_ORDERED, EXERCISE_CATEGORY_RANDOM_DISABLED))) {
             $this->randomByCat = $random;
@@ -397,7 +400,7 @@ class Exercise
      *
      * @return int results disabled exercise
      */
-    function selectResultsDisabled()
+    public function selectResultsDisabled()
     {
         return $this->results_disabled;
     }
@@ -409,7 +412,7 @@ class Exercise
      *
      * @return bool - 0 if not random, otherwise the draws
      */
-    function isRandom()
+    public function isRandom()
     {
         if ($this->random > 0 || $this->random == -1) {
             return true;
@@ -423,7 +426,7 @@ class Exercise
      *
      * @author - Juan Carlos Raï¿½a
      */
-    function selectRandomAnswers()
+    public function selectRandomAnswers()
     {
         return $this->random_answers;
     }
@@ -431,7 +434,7 @@ class Exercise
     /**
      * Same as isRandom() but has a name applied to values different than 0 or 1
      */
-    function getShuffle()
+    public function getShuffle()
     {
         return $this->random;
     }
@@ -442,7 +445,7 @@ class Exercise
      * @author - Olivier Brouckaert
      * @return - boolean - true if enabled, otherwise false
      */
-    function selectStatus()
+    public function selectStatus()
     {
         return $this->active;
     }
@@ -451,7 +454,7 @@ class Exercise
      * If false the question list will be managed as always if true the question will be filtered depending of the exercise settings (table c_quiz_rel_category)
      * @param bool active or inactive grouping
      **/
-    function setCategoriesGrouping($status) {
+    public function setCategoriesGrouping($status) {
         $this->categories_grouping = (bool) $status;
     }
 
@@ -653,12 +656,13 @@ class Exercise
     /**
      * Selects questions randomly in the question list
      *
-     * @author - Olivier Brouckaert
+     * @author Olivier Brouckaert, Modified by Hubert Borderiou 15 nov 2011
+     * @param array
      * @return array - if the exercise is not set to take questions randomly, returns the question list
      *                   without randomizing, otherwise, returns the list with questions selected randomly
-     * Modified by Hubert Borderiou 15 nov 2011
+     *
      */
-    function selectRandomList($question_list)
+    public function selectRandomList($question_list)
     {
         $nbQuestions = $this->selectNbrQuestions();
 
@@ -4740,7 +4744,8 @@ class Exercise
     }
 
     /**
-     * Get list of questions depending of the category random settings, exercise random settings, exercise categories settings
+     * Get list of questions depending of the category random settings, exercise random settings, and
+     * exercise categories settings
      */
     function get_validated_question_list()
     {
@@ -4759,15 +4764,15 @@ class Exercise
                 break;
             case EXERCISE_CATEGORY_RANDOM_DISABLED:
                 // Randomized array
-                if ($this->isRandom()) {
+                /*if ($this->isRandom()) {
                     $question_list = $this->selectRandomList($question_list);
-                }
+                }*/
                 break;
             case EXERCISE_CATEGORY_RANDOM_ORDERED:
+
                 if (!$this->isRandom()) {
                     //break;
                 }
-
 
                 /**
                  *  Get questions by category for this exercise
@@ -4776,7 +4781,7 @@ class Exercise
                  *  value is the array of question id of this category
                  */
 
-                //Getting questions by category
+                // Getting questions by category.
                 $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list);
 
                 /**
@@ -4800,7 +4805,7 @@ class Exercise
                     $number_of_random_question = count($question_list);
                 }
 
-                //Only 1 question per category
+                // Only 1 question per category
                 /*
                 if (!empty($questions_by_category)) {
                     $one_question_per_category = array();
@@ -4852,6 +4857,10 @@ class Exercise
      **/
     public function transform_question_list_with_medias($question_list, $expand_media_questions = false)
     {
+        $questionFlatten = Session::read('question_list_flatten');
+        if (!empty($questionFlatten)) {
+            return $questionFlatten;
+        }
         $new_question_list = array();
         if (!empty($question_list)) {
             $media_questions = $this->get_media_list();
@@ -4889,7 +4898,7 @@ class Exercise
                 $new_question_list = $question_list;
             }
         }
-
+        Session::write('question_list_flatten', $new_question_list);
         return $new_question_list;
     }
 
@@ -5175,5 +5184,60 @@ class Exercise
         }
         return $html;
 
+    }
+
+    public function getProgressPagination($exe_id, $questionList, $my_remind_list, $reminder, $remind_question_id, $questionListFlatten, $mediaQuestions, $url, $current_question)
+    {
+
+        $exercise_result = get_answered_questions_from_attempt($exe_id, $this);
+
+        $fixedRemindList = array();
+        if (!empty($my_remind_list)) {
+            foreach ($questionList as $questionId) {
+                if (in_array($questionId, $my_remind_list)) {
+                    $fixedRemindList[] = $questionId;
+                }
+            }
+        }
+
+        if (isset($reminder) && $reminder == 2) {
+            $values = array_flip($questionList);
+            if (!empty($current_question)) {
+                $current_question = isset($values[$remind_question_id]) ? $values[$remind_question_id] + 1 : $values[$fixedRemindList[0]] +1;
+            }
+        }
+
+        $categoryList = Session::read('categoryList');
+        $categoryList = null;
+
+        if (empty($categoryList)) {
+            $categoryList = Testcategory::getListOfCategoriesWithQuestionForTestObject($this, $questionListFlatten, $mediaQuestions);
+            Session::write('categoryList', $categoryList);
+        }
+        $html = '<div class="row">';
+        $html .= '<div class="span2">';
+
+        $reviewAnswerLabel = null;
+        if ($this->review_answers) {
+            $reviewAnswerLabel = Display::label(get_lang('ToReview'), 'warning').'<br />';
+        }
+        $html .= Display::label(get_lang('Answered'), 'success').'<br />'.Display::label(get_lang('Unanswered')).'<br />'.$reviewAnswerLabel.Display::label(get_lang('CurrentQuestion'), 'info');
+        $html .= '</div>';
+
+        $conditions = array();
+        $conditions[] = array("class" => 'answered', 'items' => $exercise_result);
+        $conditions[] = array("class" => 'remind', 'mode' => 'overwrite', 'items' => $my_remind_list);
+
+        $link = $url.'&num=';
+
+        $html .= '<div class="span10">';
+        if (!empty($categoryList)) {
+            $html .= Display::progress_pagination_bar_with_categories($questionList, $categoryList, $current_question, $conditions, $link);
+        } else {
+            $html .= Display::progress_pagination_bar($questionList, $current_question, $conditions, $link);
+        }
+        $html .= '</div>';
+        $html .= '</div>';
+        return $html;
     }
 }

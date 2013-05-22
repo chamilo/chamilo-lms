@@ -1758,27 +1758,34 @@ class Display
         $pagination_size = 'pagination-mini';
         $html = '<div class="exercise_pagination pagination '.$pagination_size.'"><ul>';
         $cleanCounter = 1;
+
+        $defaultClass = "before";
+
         foreach ($list as $item_id) {
-            //$class = "active";
-            if ($counter < $current) {
-                //    $class = "before";
-            }
-            $class = "before";
+            $class = $defaultClass;
 
             foreach ($conditions as $condition) {
                 $array = $condition['items'];
                 $class_to_applied = $condition['class'];
                 $type = isset($condition['type']) ? $condition['type'] : 'positive';
+                $mode = isset($condition['mode']) ? $condition['mode'] : 'add';
                 switch ($type) {
                     case 'positive':
                         if (in_array($item_id, $array)) {
-                            $class .= " $class_to_applied";
+                            if ($mode == 'overwrite') {
+                                $class = " $defaultClass $class_to_applied";
+                            } else {
+                                $class .= " $class_to_applied";
+                            }
                         }
-
                         break;
                     case 'negative':
                         if (!in_array($item_id, $array)) {
-                            $class .= " $class_to_applied";
+                            if ($mode == 'overwrite') {
+                                $class = " $defaultClass $class_to_applied";
+                            } else {
+                                $class .= " $class_to_applied";
+                            }
                         }
                         break;
                 }
@@ -1786,10 +1793,6 @@ class Display
 
             if ($current == $counter) {
                 $class = "before current";
-            }
-
-            if ($counter > $current) {
-                //$class = "after";
             }
 
             if (empty($link)) {
@@ -1849,7 +1852,6 @@ class Display
                 $html .= '<div class="row">';
                 $html .= '<div class="span2">'.$category['name'].'</div>';
                 $html .= '<div class="span8">';
-
                 $html .= self::progress_pagination_bar($questionList, $current, $conditions, $link, $counter, $useLetters, $fixValue);
                 $html .= '</div>';
                 $html .= '</div>';

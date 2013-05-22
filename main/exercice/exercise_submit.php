@@ -370,7 +370,7 @@ if (api_is_allowed_to_edit(null,true) && isset($_GET['preview']) && $_GET['previ
 // 1. Loading the $objExercise variable
 if (!isset($_SESSION['objExercise']) || $_SESSION['objExercise']->id != $_REQUEST['exerciseId']) {
     // Construction of Exercise
-    /** @var Exercise $objExercise */
+    /** @var \Exercise $objExercise */
     $objExercise = new Exercise();
     if ($debug) {error_log('1. Setting the $objExercise variable'); };
     unset($_SESSION['questionList']);
@@ -513,8 +513,6 @@ if (!isset($_SESSION['questionList'])) {
 
 //Fix in order to get the correct question list
 $questionListFlatten = $objExercise->transform_question_list_with_medias($questionList, true);
-
-Session::write('question_list_flatten', $questionListFlatten);
 
 $clock_expired_time = null;
 if (empty($exercise_stat_info)) {
@@ -861,55 +859,17 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 }
 
 if ($objExercise->type == ONE_PER_PAGE) {
-    $exercise_result = get_answered_questions_from_attempt($exe_id, $objExercise);
-
-    $fixedRemindList = array();
-    if (!empty($my_remind_list)) {
-        foreach ($questionList as $questionId) {
-            if (in_array($questionId, $my_remind_list)) {
-                $fixedRemindList[] = $questionId;
-            }
-        }
-    }
-
-    if (isset($reminder) && $reminder == 2) {
-        $values = array_flip($questionList);
-        $current_question = isset($values[$remind_question_id]) ? $values[$remind_question_id] + 1 : $values[$fixedRemindList[0]] +1;
-    }
-
-    $categoryList = Session::read('categoryList');
-    $categoryList = null;
-
-    if (empty($categoryList)) {
-        $categoryList = Testcategory::getListOfCategoriesWithQuestionForTestObject($objExercise, $questionListFlatten, $mediaQuestions);
-        Session::write('categoryList', $categoryList);
-    }
-
-    echo '<div class="row">';
-    echo '<div class="span2">';
-
-    $reviewAnswerLabel = null;
-    if ($objExercise->review_answers) {
-        $reviewAnswerLabel = Display::label(get_lang('ToReview'), 'warning').'<br />';
-    }
-    echo Display::label(get_lang('Answered'), 'success').'<br />'.Display::label(get_lang('Unanswered')).'<br />'.$reviewAnswerLabel.Display::label(get_lang('CurrentQuestion'), 'info');
-    echo '</div>';
-
-    $conditions = array();
-    $conditions[] = array("class" => 'remind', 'items' => $my_remind_list);
-    $conditions[] = array("class" => 'answered', 'items' => $exercise_result);
-    $link = api_get_self().'?'.$params.'&num=';
-
-    //var_dump($categoryList);
-
-    echo '<div class="span10">';
-    if (!empty($categoryList)) {
-        echo Display::progress_pagination_bar_with_categories($questionList, $categoryList, $current_question, $conditions, $link);
-    } else {
-        echo Display::progress_pagination_bar($questionList, $current_question, $conditions, $link);
-    }
-    echo '</div>';
-    echo '</div>';
+    echo $objExercise->getProgressPagination(
+        $exe_id,
+        $questionList,
+        $my_remind_list,
+        $reminder,
+        $remind_question_id,
+        $questionListFlatten,
+        $mediaQuestions,
+        api_get_self().'?'.$params,
+        $current_question
+    );
 }
 
 $is_visible_return = $objExercise->is_visible($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);

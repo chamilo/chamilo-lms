@@ -852,7 +852,9 @@ class Display {
             $obj->url       = $url;
         }
 
-        $column_names = array_map("utf8_encode", $column_names);
+        //This line should only be used/modified in case of having characters
+        // encoding problems - see #6159
+        //$column_names = array_map("utf8_encode", $column_names);
 
         $obj->colNames      = $column_names;
         $obj->colModel      = $column_model;

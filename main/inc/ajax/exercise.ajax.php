@@ -9,6 +9,8 @@ require_once '../../exercice/question.class.php';
 require_once '../../exercice/answer.class.php';
 require_once '../global.inc.php';
 
+use \ChamiloSession as Session;
+
 api_protect_course_script(true);
 
 $action = $_REQUEST['a'];
@@ -282,8 +284,7 @@ switch ($action) {
 
             // Question info.
             $question_id             = intval($_REQUEST['question_id']);
-
-            $question_list           = $_SESSION['question_list_flatten'];
+            $question_list           = Session::read('question_list_flatten');
 
             // If exercise or question is not set then exit.
             if (empty($question_list) || empty($objExercise)) {
@@ -316,7 +317,7 @@ switch ($action) {
                 // Fixing reminder order
                 $fixedRemindList = array();
                 if (!empty($bd_reminder_list)) {
-                    foreach($question_list as $questionId) {
+                    foreach ($question_list as $questionId) {
                         if (in_array($questionId, $bd_reminder_list)) {
                             $fixedRemindList[] = $questionId;
                         }
@@ -325,30 +326,29 @@ switch ($action) {
 
                 $bd_reminder_list = $fixedRemindList;
 
-            	if (empty($remind_list)) {
-            		$remind_list = $bd_reminder_list;
+                if (empty($remind_list)) {
+                    $remind_list = $bd_reminder_list;
 
-            		$new_list = array();
-            		foreach($bd_reminder_list as $item) {
-            			if ($item != $question_id) {
-            				$new_list[] = $item;
-            			}
-            		}
-            		$remind_list = $new_list;
-            	} else {
-            		if (isset($remind_list[0])) {
-            			if (!in_array($remind_list[0], $bd_reminder_list)) {
-            				array_push($bd_reminder_list, $remind_list[0]);
-            			}
-            			$remind_list = $bd_reminder_list;
-            		}
-            	}
+                    $new_list = array();
+                    foreach ($bd_reminder_list as $item) {
+                        if ($item != $question_id) {
+                            $new_list[] = $item;
+                        }
+                    }
+                    $remind_list = $new_list;
+                } else {
+                    if (isset($remind_list[0])) {
+                        if (!in_array($remind_list[0], $bd_reminder_list)) {
+                            array_push($bd_reminder_list, $remind_list[0]);
+                        }
+                        $remind_list = $bd_reminder_list;
+                    }
+                }
             }
 
-
-            //No exe id? Can't save answer.
+            // No exe id? Can't save answer.
             if (empty($exe_id)) {
-                //Fires an error
+                // Fires an error.
                 echo 'error';
                 exit;
             } else {
@@ -367,7 +367,7 @@ switch ($action) {
 
             unset($objQuestionTmp);
 
-            //Looping the question list
+            // Looping the question list
 
             if ($debug) error_log("Looping question list".print_r($question_list, 1));
             if ($debug) error_log("Trying to save question: $question_id ");

@@ -551,7 +551,6 @@ class Exercise
                         ON (e.question_id= q.iid)
 					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'
 					ORDER BY question_order";
-            //var_dump($sql);
             $result = Database::query($sql);
 
             // Fills the array with the question ID for this exercise
@@ -3165,8 +3164,6 @@ class Exercise
                                 $i_answer_correct_answer = $objAnswerTmp->getAnswerIdFromList($i_answer_correct_answer);
                             }
 
-                            //var_dump($s_user_answer, $i_answer_correct_answer);
-
                             $user_answer = '';
                             if (!empty($s_user_answer)) {
                                 if ($s_user_answer == $i_answer_correct_answer) {
@@ -3214,7 +3211,6 @@ class Exercise
                             if ($answerType == MATCHING) {
                                 $answerCorrect = $objAnswerTmp->getAnswerIdFromList($answerCorrect);
                                 $matchingKey = $numAnswer;
-                                //var_dump($answer_matching, $numAnswer);
                             }
 
                             if ($answerCorrect == $choice[$numAnswer]) {
@@ -3875,7 +3871,6 @@ class Exercise
 
         //Fixes multiple answer question in order to be exact
         if ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
-            //var_dump($answer_correct_array, $real_answers);
             $diff = @array_diff($answer_correct_array, $real_answers);
             //var_dump($diff);
             /*
@@ -3894,12 +3889,7 @@ class Exercise
                 error_log("answer_correct_array: ".print_r($answer_correct_array, 1)."");
                 error_log("real_answers: ".print_r($real_answers, 1)."");
             }
-
-            /* if ($correct_answer == false) {
-              $questionScore = 0;
-              } */
-
-            //This makes the result non exact
+            // This makes the result non exact
             if (!empty($diff)) {
                 //$questionScore = 0;
             }
@@ -4613,7 +4603,8 @@ class Exercise
     function get_media_list()
     {
         $media_questions = array();
-        $question_list = $this->get_validated_question_list();
+        //$question_list = $this->get_validated_question_list();
+        $question_list = $this->selectQuestionList(true);
 
         if (!empty($question_list)) {
             foreach ($question_list as $questionId) {
@@ -4857,10 +4848,6 @@ class Exercise
      **/
     public function transform_question_list_with_medias($question_list, $expand_media_questions = false)
     {
-        $questionFlatten = Session::read('question_list_flatten');
-        if (!empty($questionFlatten)) {
-            return $questionFlatten;
-        }
         $new_question_list = array();
         if (!empty($question_list)) {
             $media_questions = $this->get_media_list();
@@ -4898,7 +4885,6 @@ class Exercise
                 $new_question_list = $question_list;
             }
         }
-        Session::write('question_list_flatten', $new_question_list);
         return $new_question_list;
     }
 
@@ -5186,9 +5172,20 @@ class Exercise
 
     }
 
+    /**
+     * @param int $exe_id
+     * @param array $questionList
+     * @param array $my_remind_list
+     * @param int $reminder
+     * @param int $remind_question_id
+     * @param array $questionListFlatten
+     * @param array $mediaQuestions
+     * @param string $url
+     * @param int $current_question
+     * @return string
+     */
     public function getProgressPagination($exe_id, $questionList, $my_remind_list, $reminder, $remind_question_id, $questionListFlatten, $mediaQuestions, $url, $current_question)
     {
-
         $exercise_result = get_answered_questions_from_attempt($exe_id, $this);
 
         $fixedRemindList = array();
@@ -5214,6 +5211,7 @@ class Exercise
             $categoryList = Testcategory::getListOfCategoriesWithQuestionForTestObject($this, $questionListFlatten, $mediaQuestions);
             Session::write('categoryList', $categoryList);
         }
+
         $html = '<div class="row">';
         $html .= '<div class="span2">';
 
@@ -5221,7 +5219,12 @@ class Exercise
         if ($this->review_answers) {
             $reviewAnswerLabel = Display::label(get_lang('ToReview'), 'warning').'<br />';
         }
-        $html .= Display::label(get_lang('Answered'), 'success').'<br />'.Display::label(get_lang('Unanswered')).'<br />'.$reviewAnswerLabel.Display::label(get_lang('CurrentQuestion'), 'info');
+        $currentAnswerLabel = null;
+        if (!empty($current_question)) {
+            $currentAnswerLabel = Display::label(get_lang('CurrentQuestion'), 'info');
+        }
+        $html .= Display::label(get_lang('Answered'), 'success').'<br />'.Display::label(get_lang('Unanswered')).'<br />'.
+                 $reviewAnswerLabel.$currentAnswerLabel;
         $html .= '</div>';
 
         $conditions = array();

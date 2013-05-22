@@ -525,8 +525,8 @@ class Testcategory
                 $newMediaList[$questionId] = $mediaId;
             }
         }
+
         foreach ($questionList as $question_id) {
-            //var_dump($question_id);
             $categoryList = Testcategory::getCategoryForQuestion($question_id);
 
             foreach ($categoryList as $categoryId) {

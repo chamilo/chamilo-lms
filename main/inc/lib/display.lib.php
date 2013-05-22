@@ -1761,6 +1761,13 @@ class Display
 
         $defaultClass = "before";
 
+        $affectAllItems = false;
+        if ($addLetters && $fixValue) {
+            if ($current == $fixValue) {
+                $affectAllItems = true;
+            }
+        }
+
         foreach ($list as $item_id) {
             $class = $defaultClass;
 
@@ -1791,8 +1798,22 @@ class Display
                 }
             }
 
-            if ($current == $counter) {
-                $class = "before current";
+            if ($addLetters && $fixValue) {
+                $current = $counter;
+                if ($affectAllItems) {
+                    if ($current == $counter) {
+                        //if ($class == $defaultClass) {
+                            $class = "before current";
+                        //}
+                    }
+                } else {
+
+                }
+            } else {
+                // Default behaviour
+                if ($current == $counter) {
+                    $class = "before current";
+                }
             }
 
             if (empty($link)) {
@@ -1843,6 +1864,7 @@ class Display
 
                 $useLetters = false;
                 $fixValue = null;
+
                 if ($mediaQuestionId != 999) {
                     $useLetters = true;
                     $fixValue = $counter;
@@ -1852,7 +1874,15 @@ class Display
                 $html .= '<div class="row">';
                 $html .= '<div class="span2">'.$category['name'].'</div>';
                 $html .= '<div class="span8">';
-                $html .= self::progress_pagination_bar($questionList, $current, $conditions, $link, $counter, $useLetters, $fixValue);
+                $html .= self::progress_pagination_bar(
+                    $questionList,
+                    $current,
+                    $conditions,
+                    $link,
+                    $counter,
+                    $useLetters,
+                    $fixValue
+                );
                 $html .= '</div>';
                 $html .= '</div>';
 
@@ -1871,7 +1901,7 @@ class Display
     /**
      * @param int $current
      * @param int $total
-     * @return null
+     * @return string
      */
     public static function paginationIndicator($current, $total)
     {

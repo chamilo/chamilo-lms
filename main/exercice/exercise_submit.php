@@ -513,6 +513,7 @@ if (!isset($_SESSION['questionList'])) {
 
 //Fix in order to get the correct question list
 $questionListFlatten = $objExercise->transform_question_list_with_medias($questionList, true);
+Session::write('question_list_flatten', $questionListFlatten);
 
 $clock_expired_time = null;
 if (empty($exercise_stat_info)) {
@@ -545,7 +546,7 @@ if (empty($exercise_stat_info)) {
     if ($debug)  error_log("5  exercise_stat_info[] exists getting exe_id: $exe_id ");
 }
 
-//Array to check in order to block the chat
+// Array to check in order to block the chat
 ExerciseLib::create_chat_exercise_session($exe_id);
 
 if ($debug) { error_log('6. $objExercise->get_stat_track_exercise_info function called::  '.print_r($exercise_stat_info, 1)); };
@@ -831,7 +832,6 @@ if (!empty ($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
 if (!empty ($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[]= array ('url' => '../gradebook/' . Security::remove_XSS($_SESSION['gradebook_dest']),'name' => get_lang('ToolGradebook'));
 }
-
 $interbreadcrumb[]= array ("url" => "exercice.php?gradebook=$gradebook",	"name" => get_lang('Exercices'));
 $interbreadcrumb[]= array ("url" => "#","name" => $objExercise->name);
 
@@ -1230,7 +1230,7 @@ if (!empty($error)) {
          <input type="hidden" name="learnpath_item_id" 		value="'.$learnpath_item_id . '" />
          <input type="hidden" name="learnpath_item_view_id" value="'.$learnpath_item_view_id . '" />';
 
-	//Show list of questions
+	// Show list of questions.
     $attempt_list = array();
     if (isset($exe_id)) {
         $attempt_list = get_all_exercise_event_by_exe_id($exe_id);

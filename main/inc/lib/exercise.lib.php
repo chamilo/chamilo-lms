@@ -2578,7 +2578,7 @@ class ExerciseLib
                 }
             }
 
-            //Medias question render
+            // Media question render
             if (isset($media_questions) && !empty($media_questions) && isset($media_questions[$questionId])) {
                 $media_question_list = $media_questions[$questionId];
                 $objQuestionTmp = Question::read($questionId);
@@ -2607,12 +2607,12 @@ class ExerciseLib
                     $i++;
                 }
             } else {
-                //Normal question render
+                // Normal question render.
                 self::render_question($objExercise, $questionId, $attempt_list, $remind_list, $i, $current_question, null, null, $questionList, $current_question);
                 $i++;
             }
 
-            // for sequential exercises
+            // For sequential exercises.
             if ($objExercise->type == ONE_PER_PAGE) {
                 // quits the loop
                 break;
@@ -2661,7 +2661,7 @@ class ExerciseLib
             $remind_highlight = ' remind_highlight ';
         }
 
-        //Showing the question
+        // Showing the question
 
         $exercise_actions  = null;
 

@@ -509,26 +509,35 @@ class Testcategory
 
     /**
      * @param Exercise $exercise_obj
-     * @return array
+     * @return array question list (flatten not grouped by Medias)
      */
-    public static function getListOfCategoriesWithQuestionForTestObject($exercise_obj, $question_list)
+    public static function getListOfCategoriesWithQuestionForTestObject($exercise_obj, $questionList, $mediaQuestions)
     {
-        //$question_list = $exercise_obj->selectQuestionList();
         $categoriesWithQuestion = array();
         $parentsLoaded = array();
         global $app;
         $em = $app['orm.em'];
         $repo = $em->getRepository('Entity\CQuizCategory');
 
-        // the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ???
-        foreach ($question_list as $question_id) {
-            $category_list = Testcategory::getCategoryForQuestion($question_id);
-            foreach ($category_list as $categoryId) {
+        $newMediaList = array();
+        foreach ($mediaQuestions as $mediaId => $questionMediaList) {
+            foreach ($questionMediaList as $questionId) {
+                $newMediaList[$questionId] = $mediaId;
+            }
+        }
+
+        foreach ($questionList as $question_id) {
+            //var_dump($question_id);
+            $categoryList = Testcategory::getCategoryForQuestion($question_id);
+            //var_dump($categoryList);
+
+            foreach ($categoryList as $categoryId) {
                 if (!isset($categoriesWithQuestion[$categoryId])) {
                     $cat = new Testcategory($categoryId);
                     $cat = (array)$cat;
                     $cat['iid'] = $cat['id'];
                     $cat['name'] = $cat['title'];
+
                     if (!empty($cat['parent_id'])) {
                         if (!isset($parentsLoaded[$cat['parent_id']])) {
                             $categoryEntity = $em->find('Entity\CQuizCategory', $cat['parent_id']);
@@ -549,14 +558,15 @@ class Testcategory
                         $temp = isset($categoriesWithQuestion[$categoryId]) ? $categoriesWithQuestion[$categoryId]['question_list'] : array();
                         $categoriesWithQuestion[$categoryId] = $cat;
                         $categoriesWithQuestion[$categoryId]['question_list'] = $temp;
+                        $categoriesWithQuestion[$categoryId]['media_question'] = $newMediaList[$question_id];
                     } else {
                         $categoriesWithQuestion[$categoryId] = $cat;
+                        $categoriesWithQuestion[$categoryId]['media_question'] = $newMediaList[$question_id];
                     }
                 }
                 $categoriesWithQuestion[$categoryId]['question_list'][] = (int)$question_id;
             }
         }
-
         return $categoriesWithQuestion;
     }
 

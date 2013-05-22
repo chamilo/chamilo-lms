@@ -473,7 +473,7 @@ class Exercise
 
             $sql = "SELECT q.iid
                     FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
-                        ON (e.question_id = q.iid AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
+                        ON (e.question_id = q.iid AND e.c_id = ".$this->course_id.")
 					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'
 					ORDER BY question_order";
             $limitCondition = null;
@@ -533,21 +533,22 @@ class Exercise
             $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
-            //Getting question_order count (to verify that the question list is correct and all question_order's were set)
+            // Getting question_order count (to verify that the question list is correct and all question_order's were set)
             $sql = "SELECT DISTINCT e.question_order
                     FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
                         ON (e.question_id = q.iid)
-					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'";
+					WHERE e.exercice_id	= ".Database::escape_string($this->id);
             $result = Database::query($sql);
 
             $count_question_orders = Database::num_rows($result);
 
-            //Getting question list from the order (question list interface drag n drop)
+            // Getting question list from the order (question list interface drag n drop).
             $sql = "SELECT e.question_id, e.question_order
                     FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
                         ON (e.question_id= q.iid)
 					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'
 					ORDER BY question_order";
+            //var_dump($sql);
             $result = Database::query($sql);
 
             // Fills the array with the question ID for this exercise
@@ -4613,7 +4614,7 @@ class Exercise
         if (!empty($question_list)) {
             foreach ($question_list as $questionId) {
                 $objQuestionTmp = Question::read($questionId);
-                // if a media question exists
+                // If a media question exists
                 if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {
                     $media_questions[$objQuestionTmp->parent_id][] = $objQuestionTmp->id;
                 } else {
@@ -4744,7 +4745,7 @@ class Exercise
     function get_validated_question_list()
     {
         // Getting current question list
-        $question_list = $this->selectQuestionList();
+        $question_list = $this->selectQuestionList(true);
 
         // Getting random by category setting
         $random_by_category = $this->isRandomByCat();

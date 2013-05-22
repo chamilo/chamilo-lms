@@ -24,15 +24,15 @@ $course_code = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : api_get_course
 switch ($action) {
     case 'get_categories_by_media':
         $questionId = $_REQUEST['questionId'];
-        $id = $_REQUEST['mediaId'];
+        $mediaId = $_REQUEST['mediaId'];
         $exerciseId = $_REQUEST['exerciseId'];
         $question = Question::read($questionId);
-        if (empty($id)) {
+
+        if (empty($mediaId)) {
             echo 0;
             break;
         }
-
-        $categoryId = $question->allQuestionWithMediaHaveTheSameCategory($exerciseId, $id, null, null, true);
+        $categoryId = $question->allQuestionWithMediaHaveTheSameCategory($exerciseId, $mediaId, null, null, true);
 
         if (!empty($categoryId)) {
             $category = new Testcategory($categoryId);

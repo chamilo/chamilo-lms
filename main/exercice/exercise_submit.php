@@ -64,8 +64,7 @@ $htmlHeadXtra[]= api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock
 $htmlHeadXtra[]= api_get_js('epiclock/javascript/jquery.dateformat.min.js');
 $htmlHeadXtra[]= api_get_js('epiclock/javascript/jquery.epiclock.min.js');
 $htmlHeadXtra[]= api_get_js('epiclock/renderers/minute/epiclock.minute.js');
-$htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
-
+$htmlHeadXtra[]= api_get_js('d3/jquery.xcolor.js');
 $htmlHeadXtra[]= '<script>
 
 var recycle_icon = "<a href=\'#\' class=\'ui-icon ui-icon-refresh\'>Recycle image</a>";
@@ -329,7 +328,6 @@ jsPlumb.ready(function() {
 	}
 });
 
-
 $(function(){
     $(".highlight_image").on("click", function() {
         $(this).parent().find(".highlight_image").each(function(index){
@@ -354,16 +352,12 @@ $origin 				= isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origi
 $reminder 				= isset($_REQUEST['reminder']) ? intval($_REQUEST['reminder']) : 0;
 $remind_question_id 	= isset($_REQUEST['remind_question_id']) ? intval($_REQUEST['remind_question_id']) : 0;
 $exerciseId				= isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : 0;
-
-$formSent = isset($_REQUEST['formSent']) ? $_REQUEST['formSent'] : null;
-$exerciseResult = isset($_REQUEST['exerciseResult']) ? $_REQUEST['exerciseResult'] : null;
+$formSent               = isset($_REQUEST['formSent']) ? $_REQUEST['formSent'] : null;
+$exerciseResult         = isset($_REQUEST['exerciseResult']) ? $_REQUEST['exerciseResult'] : null;
+$choice                 = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
+$choice                 = empty($choice) ? isset($_REQUEST['choice2']) ? $_REQUEST['choice2'] : null : null;
 $exerciseResultCoordinates = isset($_REQUEST['exerciseResultCoordinates']) ? $_REQUEST['exerciseResultCoordinates'] : null;
-
-$choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
-$choice = empty($choice) ? isset($_REQUEST['choice2']) ? $_REQUEST['choice2'] : null : null;
-
-//From submit modal
-$current_question = isset($_REQUEST['num']) ? intval($_REQUEST['num']) : null;
+$current_question       = isset($_REQUEST['num']) ? intval($_REQUEST['num']) : null;
 
 //Error message
 $error = '';
@@ -466,7 +460,7 @@ if ($objExercise->selectAttempts() > 0) {
 							$attempt_html .= Display::div(get_lang('Score').' '.$marks, array('id'=>'question_score'));
 						}
 					}
-					$score =  ExerciseLib::show_score($last_attempt_info['exe_result'], $last_attempt_info['exe_weighting']);
+					$score = ExerciseLib::show_score($last_attempt_info['exe_result'], $last_attempt_info['exe_weighting']);
 					$attempt_html .= Display::div(get_lang('YourTotalScore').' '.$score, array('id'=>'question_score'));
 				} else {
 					$attempt_html .= Display::return_message(sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()), 'warning', false);
@@ -485,8 +479,9 @@ if ($objExercise->selectAttempts() > 0) {
 		}
 
 		echo $attempt_html;
-		if ($origin != 'learnpath')
+		if ($origin != 'learnpath') {
 			Display :: display_footer();
+        }
 		exit;
 	}
 }
@@ -517,17 +512,16 @@ if (!isset($_SESSION['questionList'])) {
 }
 
 //Fix in order to get the correct question list
-$question_list_flatten = $objExercise->transform_question_list_with_medias($questionList, true);
+$questionListFlatten = $objExercise->transform_question_list_with_medias($questionList, true);
 
-Session::write('question_list_flatten', $question_list_flatten);
+Session::write('question_list_flatten', $questionListFlatten);
 
 $clock_expired_time = null;
 if (empty($exercise_stat_info)) {
     if ($debug)  error_log('5  $exercise_stat_info is empty ');
 	$total_weight = 0;
-	//$questionList = $objExercise->get_question_list(true);
 
-	foreach ($question_list_flatten as $question_id) {
+	foreach ($questionListFlatten as $question_id) {
 		$objQuestionTmp = Question::read($question_id);
 		$total_weight += floatval($objQuestionTmp->weighting);
 	}
@@ -545,7 +539,7 @@ if (empty($exercise_stat_info)) {
 		$_SESSION['expired_time'][$current_expired_time_key] 	 = $clock_expired_time;
 		if ($debug) { error_log('5.4. Setting the $_SESSION[expired_time]: '.$_SESSION['expired_time'][$current_expired_time_key] ); };
 	}
-	$exe_id = $objExercise->save_stat_track_exercise_info($clock_expired_time, $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $question_list_flatten, $total_weight);
+	$exe_id = $objExercise->save_stat_track_exercise_info($clock_expired_time, $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $questionListFlatten, $total_weight);
 	$exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
     if ($debug)  error_log("5.5  Creating a new attempt exercise_stat_info[] exe_id : $exe_id");
 } else {
@@ -868,10 +862,6 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 
 if ($objExercise->type == ONE_PER_PAGE) {
     $exercise_result = get_answered_questions_from_attempt($exe_id, $objExercise);
-    $conditions = array();
-    $conditions[] = array("class" => 'remind', 'items' => $my_remind_list);
-    $conditions[] = array("class" => 'answered', 'items' => $exercise_result);
-    $link = api_get_self().'?'.$params.'&num=';
 
     $fixedRemindList = array();
     if (!empty($my_remind_list)) {
@@ -888,10 +878,10 @@ if ($objExercise->type == ONE_PER_PAGE) {
     }
 
     $categoryList = Session::read('categoryList');
-    //$categoryList = null;
+    $categoryList = null;
 
     if (empty($categoryList)) {
-        $categoryList = Testcategory::getListOfCategoriesWithQuestionForTestObject($objExercise, $questionList);
+        $categoryList = Testcategory::getListOfCategoriesWithQuestionForTestObject($objExercise, $questionListFlatten, $mediaQuestions);
         Session::write('categoryList', $categoryList);
     }
 
@@ -905,10 +895,16 @@ if ($objExercise->type == ONE_PER_PAGE) {
     echo Display::label(get_lang('Answered'), 'success').'<br />'.Display::label(get_lang('Unanswered')).'<br />'.$reviewAnswerLabel.Display::label(get_lang('CurrentQuestion'), 'info');
     echo '</div>';
 
+    $conditions = array();
+    $conditions[] = array("class" => 'remind', 'items' => $my_remind_list);
+    $conditions[] = array("class" => 'answered', 'items' => $exercise_result);
+    $link = api_get_self().'?'.$params.'&num=';
+
+    //var_dump($categoryList);
+
     echo '<div class="span10">';
     if (!empty($categoryList)) {
-        //var_dump($categoryList, $mediaQuestions);
-        echo Display::progress_pagination_bar_with_categories($categoryList, $mediaQuestions, $current_question, $conditions, $link);
+        echo Display::progress_pagination_bar_with_categories($questionList, $categoryList, $current_question, $conditions, $link);
     } else {
         echo Display::progress_pagination_bar($questionList, $current_question, $conditions, $link);
     }

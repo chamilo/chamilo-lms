@@ -64,6 +64,7 @@ if ($time_control) {
     $htmlHeadXtra[] = $objExercise->show_time_control_js($time_left);
 }
 
+$exe_id = null;
 if (isset($_SESSION['exe_id'])) {
 	$exe_id = intval($_SESSION['exe_id']);
 }

@@ -80,6 +80,7 @@ $column_model = array(
 
 //Autowidth
 $extra_params['autowidth'] = 'true';
+
 //height auto
 $extra_params['height'] = 'auto';
 
@@ -102,6 +103,10 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
                 // grid definition see the $career->display() function
                 echo Display::grid_js('question_list', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
             ?>
+
+            $("#question_list").jqGrid('navGrid','#question_list_pager',
+                {search:false, edit:false, add:false, del:false, refresh:true}
+            );
         });
     </script>
 
@@ -115,7 +120,7 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
 
 <?php
 
-Question :: display_type_menu($objExercise);
+Question::display_type_menu($objExercise);
 echo Question::getMediaLabels();
 
 echo '<br/><div style="clear:both;"></div>';

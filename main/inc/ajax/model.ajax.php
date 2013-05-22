@@ -169,12 +169,6 @@ if (!$sidx) {
 //@todo rework this
 
 switch ($action) {
-    case 'get_questions':
-        $categoryId = isset($_REQUEST['categoryId']) ? $_REQUEST['categoryId'] : null;
-        $exerciseId = isset($_REQUEST['exerciseId']) ? $_REQUEST['exerciseId'] : null;
-        $courseId = isset($_REQUEST['courseId']) ? $_REQUEST['courseId'] : null;
-        $count = Question::getQuestions($categoryId, $exerciseId, $courseId, array('where'=> $where_condition, 'extra' => $extra_fields, 'question' => $questionFields), true);
-        break;
     case 'get_user_list_plugin_widescale':
         $count = UserManager::get_user_data(null, null, null, null, true);
         break;
@@ -315,42 +309,6 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit
 $columns = array();
 
 switch ($action) {
-    case 'get_questions':
-        // @todo implement a class that manages jqgrid petitions
-        /** @var \Entity\Repository\CQuizQuestionRepository $repo */
-        /*$repo = $em->getRepository('Entity\CQuizQuestion');
-        var_dump($where_condition, $extra_fields);
-        $qb = $repo->getQuestionsByCategory($categoryId);
-        if (!empty($sidx) && strlen($sidx) > 1) {
-            $sidx = 'q.'.$sidx;
-            $sord = strtoupper($sord);
-            $qb->addOrderBy($sidx, $sord);
-        }
-        $qb->getFirstResult($start);
-        $qb->getMaxResults($limit);
-        $query = $qb->getQuery();
-        //echo $qb->getQuery()->getSQL();
-        $questions = $query->getResult();*/
-
-        /** @var \Entity\CQuizCategory $category */
-        /*$category = $repo->find($categoryId);
-        $questions = $category->getQuestions();*/
-        $columns = Question::getQuestionColumns(api_get_course_id(), $questionFields);
-        $columns = $columns['simple_column_name'];
-        $result = Question::getQuestions(
-            $categoryId,
-            $exerciseId,
-            $courseId,
-            array(
-                'where'=> $where_condition,
-                'order'=>"$sidx $sord",
-                'extra' => $extra_fields,
-                'question' => $questionFields,
-                'limit'=> "$start , $limit"
-            )
-        );
-
-        break;
     case 'get_user_list_plugin_widescale':
         $columns = array('username', 'firstname', 'lastname', 'exam_password');
         $column_names = array(get_lang('Username'), get_lang('Firstname'), get_lang('Lastname'), get_lang('Password'));
@@ -709,8 +667,7 @@ $allowed_actions = array(
     'get_user_course_report_resumed',
     'get_group_reporting',
     'get_question_list',
-    'get_user_list_plugin_widescale',
-    'get_questions'
+    'get_user_list_plugin_widescale'
 );
 
 //5. Creating an obj to return a json

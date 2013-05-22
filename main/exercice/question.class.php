@@ -367,8 +367,8 @@ abstract class Question
     /**
      * changes the question weighting
      *
-     * @author - Olivier Brouckaert
-     * @param - integer $weighting - question weighting
+     * @author Olivier Brouckaert
+     * @param integer $weighting - question weighting
      */
     public function updateWeighting($weighting)
     {
@@ -376,8 +376,8 @@ abstract class Question
     }
 
     /**
-     * @author - Hubert Borderiou 12-10-2011
-     * @param - array of category $in_category
+     * @author Hubert Borderiou 12-10-2011
+     * @param array of category $in_category
      */
     public function updateCategory($category_list)
     {
@@ -385,8 +385,8 @@ abstract class Question
     }
 
     /**
-     * @author - Hubert Borderiou 12-10-2011
-     * @param - interger $in_positive
+     * @author Hubert Borderiou 12-10-2011
+     * @param interger $in_positive
      */
     public function updateScoreAlwaysPositive($in_positive)
     {
@@ -394,8 +394,8 @@ abstract class Question
     }
 
     /**
-     * @author - Hubert Borderiou 12-10-2011
-     * @param - interger $in_positive
+     * @author Hubert Borderiou 12-10-2011
+     * @param interger $in_positive
      */
     public function updateUncheckedMayScore($in_positive)
     {
@@ -408,8 +408,8 @@ abstract class Question
      * A question can have n categories
      * if category is empty, then question has no category then delete the category entry
      *
-     * @param  - int $in_positive
-     * @author - Julio Montoya - Adding multiple cat support
+     * @param  array category list
+     * @author Julio Montoya - Adding multiple cat support
      */
     public function saveCategories($category_list)
     {
@@ -441,6 +441,8 @@ abstract class Question
                     Database::query($sql);
                 }
             }
+        } else {
+            $this->deleteCategory();
         }
     }
 
@@ -476,10 +478,8 @@ abstract class Question
     }
 
     /**
+     * Deletes any category entry for question id
      * @author hubert borderiou 12-10-2011
-     * delete any category entry for question id
-     * @param : none
-     * delte the category for question
      */
     public function deleteCategory()
     {
@@ -491,10 +491,10 @@ abstract class Question
     }
 
     /**
-     * changes the question position
+     * Changes the question position
      *
-     * @author - Olivier Brouckaert
-     * @param - integer $position - question position
+     * @author Olivier Brouckaert
+     * @param integer $position - question position
      */
     public function updatePosition($position)
     {
@@ -502,10 +502,10 @@ abstract class Question
     }
 
     /**
-     * changes the question level
+     * Changes the question level
      *
-     * @author - Nicolas Raynaud
-     * @param - integer $level - question level
+     * @author Nicolas Raynaud
+     * @param integer $level - question level
      */
     public function updateLevel($level)
     {
@@ -516,8 +516,8 @@ abstract class Question
      * changes the answer type. If the user changes the type from "unique answer" to "multiple answers"
      * (or conversely) answers are not deleted, otherwise yes
      *
-     * @author - Olivier Brouckaert
-     * @param - integer $type - answer type
+     * @author Olivier Brouckaert
+     * @param integer $type - answer type
      */
     public function updateType($type)
     {
@@ -550,6 +550,7 @@ abstract class Question
      * @author Olivier Brouckaert
      * @param string $Picture - temporary path of the picture to upload
      * @param string $PictureName - Name of the picture
+     * @param string
      * @return bool - true if uploaded, otherwise false
      */
     public function uploadPicture($Picture, $PictureName, $picturePath = null)
@@ -1422,11 +1423,10 @@ abstract class Question
                                             $("#category_id").trigger("addItem",[{"title": data.title, "value": data.value}]);
                                         }
                                     }
-
-
                                 },
                             });
                         } else {
+
                             // Removes all items
                             var all = $("#category_id").trigger("selectAll");
                             all.each(function(index, value) {
@@ -1440,7 +1440,6 @@ abstract class Question
                     });
                 });
             });
-
 
             // hub 13-12-2010
             function visiblerDevisibler(in_id) {
@@ -1694,9 +1693,7 @@ abstract class Question
             } else {
                 //echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&fromExercise='.$exerciseId.'">';
             }
-
             echo $url = '<a href="'.api_get_path(WEB_PUBLIC_PATH).'courses/'.api_get_course_path().'/'.api_get_session_id().'/exercise/'.$exerciseId.'/question-pool">';
-
             echo Display::return_icon('database.png', get_lang('GetExistingQuestion'));
         }
         echo '</a>';
@@ -2008,7 +2005,6 @@ abstract class Question
     public static function getQuestionColumns($courseCode = null, $extraFields = array(), $questionFields = array(), $checkFields = false)
     {
         // The order is important you need to check the the $column variable in the model.ajax.php file
-        //$columns = array('id', get_lang('Name'), get_lang('Description'));
         $columns = array('id', get_lang('Name'));
 
         // Column config.
@@ -2024,14 +2020,7 @@ abstract class Question
                 'index' => 'question',
                 'width' => '200',
                 'align' => 'left'
-            ),
-            /* array(
-                'name'     => 'description',
-                'index'    => 'description',
-                'width'    => '100',
-                'align'    => 'left',
-                'sortable' => 'false'
-            )*/
+            )
         );
         //var_dump($extraFields, $questionFields);
         // Extra field rules.
@@ -2047,9 +2036,7 @@ abstract class Question
         $columnModel[] = array(
             'name'      => 'actions',
             'index'     => 'actions',
-            'width'     => '30',
-          //  'align'     => 'left',
-           // 'sortable'  => 'false'
+            'width'     => '30'
         );
 
         foreach ($columnModel as $col) {
@@ -2479,7 +2466,6 @@ abstract class Question
             }
         }
 
-
         if (!empty($fields)) {
             foreach ($fields as $field) {
 
@@ -2518,6 +2504,7 @@ abstract class Question
     }
 
     /**
+     *
      * @param $exerciseId
      * @param $mediaId
      * @return array|bool
@@ -2529,12 +2516,12 @@ abstract class Question
         $questionTable = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $questionRelExerciseTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
-        $sql = "SELECT * FROM $questionTable q INNER JOIN $questionRelExerciseTable r ON (q.iid = r.question_id)
+        $sql = "SELECT q.* FROM $questionTable q INNER JOIN $questionRelExerciseTable r ON (q.iid = r.question_id)
                 WHERE (r.exercice_id = $exerciseId AND q.parent_id = $mediaId) ";
 
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
-            return Database::store_result($result);
+            return Database::store_result($result, 'ASSOC');
         }
         return false;
     }
@@ -2570,6 +2557,7 @@ abstract class Question
     public function allQuestionWithMediaHaveTheSameCategory($exerciseId, $mediaId, $categoryListToCompare = array(), $ignoreQuestionId = null, $returnCategoryId = false)
     {
         $questions = $this->getQuestionCategoriesOfMediaQuestions($exerciseId, $mediaId);
+
         $result = false;
         $categoryId = null;
         if (empty($questions)) {

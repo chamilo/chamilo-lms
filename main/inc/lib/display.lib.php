@@ -1727,7 +1727,7 @@ class Display
     /**
      * @todo use twig
      */
-    static function group_button($title, $elements)
+    public static function group_button($title, $elements)
     {
         $html = '<div class="btn-toolbar">
             <div class="btn-group">
@@ -1749,17 +1749,17 @@ class Display
      * @param string $link
      * @return string
      */
-    public static function progress_pagination_bar($list, $current, $conditions = array(), $link = null, $counter = null)
+    public static function progress_pagination_bar($list, $current, $conditions = array(), $link = null, $counter = null, $addLetters = false, $fixValue = null)
     {
         if (empty($counter)) {
             $counter = 1;
         }
+        $fixedCounter = $counter;
         $pagination_size = 'pagination-mini';
-
-        //$html = '<div class="exercise_pagination pagination '.$pagination_size.' pagination-centered"><ul>';
         $html = '<div class="exercise_pagination pagination '.$pagination_size.'"><ul>';
+        $cleanCounter = 1;
         foreach ($list as $item_id) {
-            $class = "active";
+            //$class = "active";
             if ($counter < $current) {
                 //    $class = "before";
             }
@@ -1795,11 +1795,20 @@ class Display
             if (empty($link)) {
                 $link_to_show = "#";
             } else {
-                $link_counter = $counter -1;
+                $link_counter = $counter - 1;
                 $link_to_show = $link.$link_counter;
             }
-            $html .= '<li class = "'.$class.'"><a href="'.$link_to_show.'">'.$counter.'</a></li>';
+
+            $label = $counter;
+
+            if ($addLetters) {
+                $label = $fixValue.' '.chr(96 + $cleanCounter);
+                $link_to_show = $link.($fixedCounter - 1);
+            }
+
+            $html .= '<li class = "'.$class.'"><a href="'.$link_to_show.'">'.$label.'</a></li>';
             $counter++;
+            $cleanCounter++;
         }
         $html .= '</ul></div>';
         return $html;
@@ -1808,6 +1817,7 @@ class Display
     /**
      * Shows a list of numbers that represents the question to answer in a exercise
      *
+     * @param array $questionList unflatten question list with medias
      * @param array $categories
      * @param array $mediaQuestions
      * @param int $current
@@ -1815,30 +1825,40 @@ class Display
      * @param string $link
      * @return string
      */
-    public static function progress_pagination_bar_with_categories($categories, $mediaQuestions, $current, $conditions = array(), $link = null)
+    public static function progress_pagination_bar_with_categories($unflattenQuestionList, $categories, $current, $conditions = array(), $link = null)
     {
-        $counter = 0;
-        $totalTemp = 0;
+        $counter = 1;
         $html = null;
-        var_dump($categories);
+        $mediaUsedCounter = 0;
+        //var_dump($categories);
         if (!empty($categories)) {
             foreach ($categories as $category) {
-                $list = $category['question_list'];
+                //var_dump($counter);
+                $questionList = $category['question_list'];
+                // In this category there are media questions
+                $mediaQuestionId = $category['media_question'];
 
-                if ($counter > 0) {
-                    $total = $totalTemp + 1;
-                } else {
-                    $total = 0;
+                $useLetters = false;
+                $fixValue = null;
+                if ($mediaQuestionId != 999) {
+                    $useLetters = true;
+                    $fixValue = $counter;
+                    $mediaUsedCounter++;
                 }
+
                 $html .= '<div class="row">';
                 $html .= '<div class="span2">'.$category['name'].'</div>';
                 $html .= '<div class="span8">';
 
-                $html .= self::progress_pagination_bar($list, $current, $conditions, $link, $total);
+                $html .= self::progress_pagination_bar($questionList, $current, $conditions, $link, $counter, $useLetters, $fixValue);
                 $html .= '</div>';
                 $html .= '</div>';
 
-                $totalTemp = $totalTemp + count($list);
+                if ($mediaQuestionId != 999) {
+                    $fixValue = $counter + count($questionList);
+                } else {
+                    $counter = $counter + count($questionList)- 1;
+                }
                 $counter++;
             }
         }

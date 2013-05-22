@@ -150,10 +150,6 @@ $exercise_result = get_answered_questions_from_attempt($exe_id, $objExercise);
 $remind_list = $exercise_stat_info['questions_to_check'];
 $remind_list = explode(',', $remind_list);
 
-echo Display::label(get_lang('QuestionWithNoAnswer'), 'warning');
-echo '<hr>';
-echo '<div class="clear"></div><br />';
-
 $table = '<div class="row">';
 
 $counter = 0;
@@ -247,10 +243,33 @@ foreach ($question_list as $questionId) {
 $table .= "</div>";
 $table .= "</div>";
 
+/*echo Display::label(get_lang('QuestionWithNoAnswer'), 'warning');
+echo '<hr>';
+echo '<div class="clear"></div><br />';
 echo Display::div($table, array('class' => 'span12'));
-
+*/
 $exercise_actions = Display::url(get_lang('EndTest'), 'javascript://', array('onclick' => 'final_submit();', 'class' => 'btn btn-warning'));
-$exercise_actions .= '&nbsp;'.Display::url(get_lang('ReviewQuestions'), 'javascript://', array('onclick' => 'review_questions();', 'class' => 'btn btn-success'));
+
+//$exercise_actions .= '&nbsp;'.Display::url(get_lang('ReviewQuestions'), 'javascript://', array('onclick' => 'review_questions();', 'class' => 'btn btn-success'));
+
+$questionList = explode(',', $exercise_stat_info['data_tracking']);
+
+$questionListFlatten = $objExercise->transform_question_list_with_medias($questionList, true);
+$mediaQuestions = $objExercise->get_media_list();
+
+$params = "exe_id=$exe_id&exerciseId=$exerciseId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();
+$url = api_get_path(WEB_CODE_PATH).'exercice/exercise_submit.php?'.$params;
+
+echo $objExercise->getProgressPagination($exe_id,
+    $questionList,
+    $remind_list,
+    2,
+    null,
+    $questionListFlatten,
+    $mediaQuestions,
+    $url,
+    null
+);
 
 echo Display::div('', array('class' => 'clear'));
 echo Display::div($exercise_actions, array('class' => 'form-actions'));

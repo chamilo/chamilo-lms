@@ -26,10 +26,19 @@ legend {
 
 #header_right {
     text-align: right;
+    float: right;
+    
+
 }
 
 #header_right #notifications {
     padding:40px 0px 0px 0px;
+}
+
+#header_right #notifications li {
+    width:60px;
+    text-align: right;
+
 }
 
 header #logo {
@@ -163,6 +172,16 @@ header #logo {
     text-shadow : none;
 }
 
+#main .nav .dropdown {
+  width:150px;
+  text-align: right;
+   
+} 
+ 
+#main .nav .dropdown:nth-child(n) {
+  width:auto;
+}
+
 header {
     margin-bottom: 11px;
 }
@@ -175,6 +194,14 @@ header {
     text-shadow:none;
     font-size: 13px;
 }
+
+.breadcrumb li img {
+  width: 0%;
+ }
+ 
+ .breadcrumb li img:nth-child(n) {
+  width: auto;
+ }
 
 /* To fix the increase/decrease buttons */
 label, input, button, select, textarea, p {

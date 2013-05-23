@@ -1432,7 +1432,6 @@ DROP TABLE IF EXISTS c_quiz_rel_category;
 CREATE TABLE c_quiz_rel_category (
   iid bigint unsigned NOT NULL AUTO_INCREMENT,
   c_id int(11) NOT NULL,
-  question_id int(11) NOT NULL,
   category_id int(11) NOT NULL,
   exercise_id int unsigned NOT NULL,
   count_questions int NOT NULL default 0,

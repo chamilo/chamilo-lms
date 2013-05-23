@@ -54,7 +54,23 @@ switch ($action) {
         if (empty($category->id)) {
             echo 0;
         } else {
-            echo 1;
+            $courseId = api_get_course_int_id();
+            if (isset($courseId)) {
+                // Global
+                if ($category->c_id == 0) {
+                    echo 1;
+                    exit;
+                } else {
+                    // Local
+                    if ($category->c_id == $courseId) {
+                        echo 1;
+                        exit;
+                    }
+                }
+            } else {
+                echo 0;
+                exit;
+            }
         }
         break;
     case 'search_category_parent':
@@ -62,12 +78,19 @@ switch ($action) {
 
         $cat = new Testcategory(null, null, null, null, $type);
         $items = $cat->get_categories_by_keyword($_REQUEST['tag']);
+        $courseId = api_get_course_int_id();
 
         $json_items = array();
         if (!empty($items)) {
             foreach ($items as $item) {
                 if ($item['c_id'] == 0) {
                     $item['title'] .= " [".get_lang('Global')."]";
+                } else {
+                    if (isset($courseId)) {
+                        if ($item['c_id'] != $item['c_id']) {
+                            continue;
+                        }
+                    }
                 }
                 $json_items[] = array(
                     'key' => $item['iid'],
@@ -377,6 +400,7 @@ switch ($action) {
                 if ($type == 'simple' && $question_id != $my_question_id) {
                     continue;
                 }
+
                 if ($debug) error_log("Saving question_id = $my_question_id ");
 
                 $my_choice = $choice[$my_question_id];
@@ -395,7 +419,7 @@ switch ($action) {
                     $total_weight += $objQuestionTmp->selectWeighting();
                 }
 
-            	//this variable commes from exercise_submit_modal.php
+            	// This variable commes from exercise_submit_modal.php
                 $hotspot_delineation_result = null;
                 if (isset($_SESSION['hotspot_delineation_result']) && isset($_SESSION['hotspot_delineation_result'][$objExercise->selectId()])) {
             	    $hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$my_question_id];
@@ -423,7 +447,19 @@ switch ($action) {
 
             	// We're inside *one* question. Go through each possible answer for this question
 
-            	$result = $objExercise->manage_answer($exe_id, $my_question_id, $my_choice, 'exercise_result', $hot_spot_coordinates, true, false, false, $objExercise->selectPropagateNeg(), $hotspot_delineation_result, true);
+            	$result = $objExercise->manage_answer(
+                    $exe_id,
+                    $my_question_id,
+                    $my_choice,
+                    'exercise_result',
+                    $hot_spot_coordinates,
+                    true,
+                    false,
+                    false,
+                    $objExercise->selectPropagateNeg(),
+                    $hotspot_delineation_result,
+                    true
+                );
 
                 //Adding the new score
                 $total_score += $result['score'];

@@ -26,10 +26,19 @@ legend {
 
 #header_right {
     text-align: right;
+    float: right;
+    
+
 }
 
 #header_right #notifications {
     padding:40px 0px 0px 0px;
+}
+
+#header_right #notifications li {
+    width:60px;
+    text-align: right;
+
 }
 
 header #logo {
@@ -163,6 +172,16 @@ header #logo {
     text-shadow : none;
 }
 
+#main .nav .dropdown {
+  width:150px;
+  text-align: right;
+   
+} 
+ 
+#main .nav .dropdown:nth-child(n) {
+  width:auto;
+}
+
 header {
     margin-bottom: 11px;
 }
@@ -175,6 +194,14 @@ header {
     text-shadow:none;
     font-size: 13px;
 }
+
+.breadcrumb li img {
+  width: 0%;
+ }
+ 
+ .breadcrumb li img:nth-child(n) {
+  width: auto;
+ }
 
 /* To fix the increase/decrease buttons */
 label, input, button, select, textarea, p {
@@ -2054,6 +2081,10 @@ input.maininput:focus {
     margin-bottom: 20px;
 }
 
+#course_tools .content a {
+    font-size: 12px;
+}
+
 .big_icon img {
     padding:5px;
     -moz-border-radius:10px;
@@ -3450,7 +3481,20 @@ a:active{
     display: inline-block;
     margin-right: 4px;
 }
-
+.send_msg_in_text {
+    background: url("send_msg.png") no-repeat scroll right center transparent;
+    height: 16px;
+    width: 17px;
+    display: inline-block;
+    margin-right: 4px;
+}
+.send_inv_in_text {
+    background: url("send_inv.png") no-repeat scroll right center transparent;
+    height: 16px;
+    width: 17px;
+    display: inline-block;
+    margin-right: 4px;
+}
 .teacher_online {
     background: url("teacher.png") no-repeat scroll right center transparent;
     height: 16px;
@@ -4782,4 +4826,38 @@ i.size-32.icon-new-work{
 }
 #learning_path_left_zone .no-border {
     border: 0px;
+}
+
+.btn-invitations {
+    margin-left: 120px;
+}
+.btn-msg {
+  background: url("send_msg.png") no-repeat left center;
+  background-position: 3px;
+  padding: 2px 6px;
+  padding-left: 23px;
+  margin-bottom: 10px;
+  font-size: 11px;
+  line-height: 14px;
+  background-color: #e6e6e6;
+}
+.btn-inv {
+  background: url("send_inv.png") no-repeat left center;
+  background-position: 3px;
+  padding: 2px;
+  padding-left: 27px;
+  margin-bottom: 10px;
+  font-size: 11px;
+  line-height: 14px;
+  background-color: #e6e6e6;
+}
+.btn-inv-off {
+  background: url("send_inv_off.png") no-repeat left center;
+  background-position: 3px;
+  padding: 2px;
+  padding-left: 27px;
+  margin-bottom: 10px;
+  font-size: 11px;
+  line-height: 14px;
+  background-color: #e6e6e6;
 }

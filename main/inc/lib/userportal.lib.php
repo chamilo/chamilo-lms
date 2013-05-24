@@ -847,7 +847,6 @@ class IndexManager {
 
 	/**
 	 * The most important function here, prints the session and course list (user_portal.php)
-error_log(__LINE__);
 	 *
 	 * */
 	function return_courses_and_sessions($user_id) {
@@ -861,6 +860,7 @@ error_log(__LINE__);
             //Load sessions in category
 			$session_categories = UserManager::get_sessions_by_category($user_id, false);
 		}
+
 
         $html = '';
 
@@ -890,6 +890,7 @@ error_log(__LINE__);
 		if (is_array($session_categories)) {
             foreach ($session_categories as $session_category) {
                 $session_category_id = $session_category['session_category']['id'];
+
                 // Sessions and courses that are not in a session category
                 if ($session_category_id == 0) {
 
@@ -974,13 +975,12 @@ error_log(__LINE__);
                     $html_sessions = '';
                     foreach ($session_category['sessions'] as $session) {
                         $session_id = $session['session_id'];
-                        //var_dump($session);var_dump($session_category);
+
                         // Don't show empty sessions.
                         if (count($session['courses']) < 1) {
                             continue;
                         }
                         $date_session_start             = $session['date_start'];
-                        //api_get_session_visibility($session_id);
                         $days_access_before_beginning   = $session['nb_days_access_before_beginning'];
                         $days_access_after_end  = $session['nb_days_access_after_end'];
                         $date_session_end = $session['date_end'];
@@ -990,17 +990,25 @@ error_log(__LINE__);
 
                         foreach ($session['courses'] as $course) {
                             $is_coach_course = api_is_coach($session_id, $course['code']);
+
                             $dif_time_after = 0;
+                            $allowed_time = 0;
                             if ($is_coach_course) {
-                                $allowed_time = api_strtotime($date_session_start) - ($days_access_before_beginning*86400);
-                                if ($session_now > $date_session_end) {
+                                // 24 hours = 86400
+                                if ($date_session_start != '0000-00-00') {
+                                    $allowed_time = api_strtotime($date_session_start) - ($days_access_before_beginning*86400);
+                                }
+                                if ($date_session_end != '0000-00-00') {
+                                    if ($session_now > $date_session_end) {
                                         $dif_time_after = $session_now - api_strtotime($date_session_end);
                                         $dif_time_after = round($dif_time_after/86400);
+                                    }
                                 }
                             } else {
                                 $allowed_time = api_strtotime($date_session_start);
                             }
-                            if ($session_now > $allowed_time && $days_access_after_end >= $dif_time_after-1) {
+
+                            if ($session_now > $allowed_time && $days_access_after_end >= $dif_time_after - 1) {
                                 if (api_get_setting('hide_courses_in_sessions') == 'false') {
                                     $c = CourseManager :: get_logged_user_course_html($course, $session_id, 'session_course_item');
                                     $html_courses_session .= $c[1];

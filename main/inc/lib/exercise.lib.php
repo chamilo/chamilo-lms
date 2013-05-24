@@ -2353,11 +2353,6 @@ class ExerciseLib
                 error_log('Looping question_list '.print_r($question_list, 1));
             }
 
-            $media_questions = $objExercise->getMediaList();
-            $media_is_activated = $objExercise->media_is_activated($media_questions);
-
-            $medias_showed = array();
-
             foreach ($question_list as $questionId) {
 
                 // Creates a temporary Question object
@@ -2388,9 +2383,11 @@ class ExerciseLib
 
                 // Category report
                 $category_was_added_for_this_test = false;
+                $categoryExerciseList = $objExercise->getListOfCategoriesWithQuestionForTest();
 
-                if (isset($objQuestionTmp->category_list) && !empty($objQuestionTmp->category_list)) {
-                    foreach ($objQuestionTmp->category_list as $category_id) {
+                $category_list = array();
+                if (isset($categoryExerciseList) && !empty($categoryExerciseList)) {
+                    foreach ($categoryExerciseList as $category_id => $categoryInfo) {
                         if (!isset($category_list[$category_id])) {
                             $category_list[$category_id] = array();
                             $category_list[$category_id]['score'] = 0;
@@ -2574,15 +2571,6 @@ class ExerciseLib
     public static function render_question_list($objExercise, $questionListFlatten, $questionList, $current_question, $exerciseResult, $attempt_list, $remind_list)
     {
         $mediaQuestions = $objExercise->getMediaList();
-        /* $newMediaList = array();
-        if (!empty($mediaQuestions)) {
-            foreach ($mediaQuestions as $mediaId => $questionMediaList) {
-                foreach ($questionMediaList as $questionId) {
-                    $newMediaList[$questionId] = $mediaId;
-                }
-            }
-        }*/
-
         $i = 0;
 
         // Normal question list render

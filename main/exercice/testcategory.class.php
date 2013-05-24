@@ -689,6 +689,10 @@ class Testcategory
      */
     public static function getNElementsFromArray($array, $numberOfElements, $randomize)
     {
+        if (empty($numberOfElements)) {
+            return array();
+        }
+
         if (!empty($array)) {
             if ($randomize) {
                 shuffle($array);

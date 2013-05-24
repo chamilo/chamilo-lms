@@ -352,7 +352,7 @@ if (!isset($_SESSION['objExercise']) || $_SESSION['objExercise']->id != $_REQUES
     }
 }
 
-// $objExercise = new Exercise(); $objExercise->read($exerciseId);
+$objExercise = new Exercise(); $objExercise->read($exerciseId);
 
 //2. Checking if $objExercise is set
 if (!isset($objExercise) && isset($_SESSION['objExercise'])) {
@@ -456,8 +456,8 @@ if ($objExercise->selectAttempts() > 0) {
 // 5. Getting user exercise info (if the user took the exam before) - generating exe_id
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
 
-//if (1) {
-if (!isset($_SESSION['questionList'])) {
+if (1) {
+//if (!isset($_SESSION['questionList'])) {
     // Selects the list of question ID
     $questionList = $objExercise->getQuestionList();
 
@@ -899,6 +899,7 @@ if ($time_control) {
 }
 
 if (!empty($objExercise->description)) {
+    echo '<br />';
     echo Display::generate_accordion(array(array('title' => get_lang('ExerciseDescriptionLabel'), 'content' => $objExercise->description)), 'jquery', 'description_content');
 }
 

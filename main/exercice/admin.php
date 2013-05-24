@@ -256,11 +256,11 @@ if (!empty($clone_question) && !empty($objExercise->id)) {
     $new_question_obj->addToList($exerciseId);
 
     // This should be moved to the duplicate function
-    $new_answer_obj = new Answer($clone_question);
+    $new_answer_obj = new Answer($clone_question, null, $objExercise);
     $new_answer_obj->read();
     $new_answer_obj->duplicate($new_id);
 
-    //Reloading tne $objExercise obj
+    // Reloading tne $objExercise obj
     $objExercise->read($objExercise->id);
 
     header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id);

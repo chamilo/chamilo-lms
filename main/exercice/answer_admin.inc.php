@@ -55,7 +55,7 @@ if ($modifyIn) {
 
         // construction of the duplicated Answers
 
-        $objAnswer = new Answer($questionId);
+        $objAnswer = new Answer($questionId, null, $objExercise);
     }
     if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION || $answerType == GLOBAL_MULTIPLE_ANSWER) {
         $correct = unserialize($correct);
@@ -510,7 +510,7 @@ if ($modifyAnswers) {
     }
 
     // construction of the Answer object
-    $objAnswer = new Answer($questionId);
+    $objAnswer = new Answer($questionId, null, $objExercise);
 
     Session::write('objAnswer', $objAnswer);
     if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {

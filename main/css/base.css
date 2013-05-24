@@ -4829,13 +4829,13 @@ i.size-32.icon-new-work{
 }
 
 .btn-invitations {
-    margin-left: 120px;
+    margin-left: 110px;
 }
 .btn-msg {
   background: url("send_msg.png") no-repeat left center;
   background-position: 3px;
-  padding: 2px 6px;
-  padding-left: 23px;
+  padding: 2px 4px;
+  padding-left: 22px;
   margin-bottom: 10px;
   font-size: 11px;
   line-height: 14px;
@@ -4844,8 +4844,8 @@ i.size-32.icon-new-work{
 .btn-inv {
   background: url("send_inv.png") no-repeat left center;
   background-position: 3px;
-  padding: 2px;
-  padding-left: 27px;
+  padding: 2px 4px;
+  padding-left: 22px;
   margin-bottom: 10px;
   font-size: 11px;
   line-height: 14px;
@@ -4854,8 +4854,8 @@ i.size-32.icon-new-work{
 .btn-inv-off {
   background: url("send_inv_off.png") no-repeat left center;
   background-position: 3px;
-  padding: 2px;
-  padding-left: 27px;
+  padding: 2px 4px;
+  padding-left: 22px;
   margin-bottom: 10px;
   font-size: 11px;
   line-height: 14px;

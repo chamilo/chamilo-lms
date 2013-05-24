@@ -43,7 +43,8 @@ $htmlHeadXtra[] = '<script>
                     success: function(return_value) {
                         if (return_value == 0 ) {
                             alert("'.get_lang('CategoryDoesNotExists').'");
-                            //Deleting select option tag
+
+                            // Deleting select option tag
                             $("#category_id").find("option").remove();
 
                             $(".holder li").each(function () {
@@ -68,7 +69,7 @@ $htmlHeadXtra[] = '<script>
             addontab: false,
             input_min_size: 1,
             cache: false,
-            complete_text:"'.get_lang('StartToType').'",
+            complete_text: "'.get_lang('StartToType').'",
             firstselected: false,
             onselect: check,
             oncreate: add_item,
@@ -196,7 +197,6 @@ window.onload=advanced_parameters;
 
 $objExercise = new Exercise();
 $objExercise->setCategoriesGrouping(false);
-
 $course_id = api_get_course_int_id();
 
 //INIT FORM
@@ -213,16 +213,16 @@ $objExercise->createForm($form);
 
 // VALIDATE FORM
 if ($form->validate()) {
-	$objExercise->processCreation($form);
-	if ($form->getSubmitValue('edit') == 'true') {
-	    $message = 'ExerciseEdited';
-	} else {
-	    $message = 'ExerciseAdded';
-	}
-	$exercise_id = $objExercise->id;
-	Session::erase('objExercise');
-	header('Location:admin.php?message='.$message.'&exerciseId='.$exercise_id.'&'.api_get_cidreq());
-	exit;
+    $objExercise->processCreation($form);
+    if ($form->getSubmitValue('edit') == 'true') {
+        $message = 'ExerciseEdited';
+    } else {
+        $message = 'ExerciseAdded';
+    }
+    $exercise_id = $objExercise->id;
+    Session::erase('objExercise');
+    header('Location:admin.php?message='.$message.'&exerciseId='.$exercise_id.'&'.api_get_cidreq());
+    exit;
 } else {
     // DISPLAY FORM
 	if (isset($_SESSION['gradebook'])) {

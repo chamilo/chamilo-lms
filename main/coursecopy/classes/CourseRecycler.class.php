@@ -303,14 +303,15 @@ class CourseRecycler
     /**
      * Recycle quizzes - doesn't remove the questions and their answers, as they might still be used later
      */
-    function recycle_quizzes() {
+    function recycle_quizzes()
+    {
         if ($this->course->has_resources(RESOURCE_QUIZ)) {
             $table_qui_que = Database :: get_course_table(TABLE_QUIZ_QUESTION);
             $table_qui_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
             $table_qui 	   = Database :: get_course_table(TABLE_QUIZ_TEST);
             $table_rel 	   = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $table_qui_que_opt = Database :: get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-            $table_qui_que_cat = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+            $table_qui_que_cat = Database :: get_course_table(TABLE_QUIZ_CATEGORY);
             $table_qui_que_rel_cat = Database :: get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 
             $ids = array_keys($this->course->resources[RESOURCE_QUIZ]);

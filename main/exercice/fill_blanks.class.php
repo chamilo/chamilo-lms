@@ -41,7 +41,7 @@ class FillBlanks extends Question
      * function which redifines Question::createAnswersForm
      * @param \Formvalidator instance
      */
-    function createAnswersForm($form)
+    public function createAnswersForm($form)
     {
         $defaults     = array();
         $a_weightings = null;

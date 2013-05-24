@@ -203,7 +203,7 @@ define('TABLE_QUIZ_ORDER',                  'quiz_order');
 define('TABLE_QUIZ_ANSWER',                 'quiz_answer');
 define('TABLE_QUIZ_TEST_QUESTION',          'quiz_rel_question');
 define('TABLE_QUIZ_QUESTION_OPTION',        'quiz_question_option');
-define('TABLE_QUIZ_QUESTION_CATEGORY',      'quiz_category');
+define('TABLE_QUIZ_CATEGORY',               'quiz_category');
 define('TABLE_QUIZ_QUESTION_REL_CATEGORY',  'quiz_question_rel_category');
 define('TABLE_QUIZ_REL_CATEGORY',           'quiz_rel_category');
 

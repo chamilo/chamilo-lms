@@ -547,7 +547,9 @@ class IndexManager {
 //	                    $courses_list_string .= ' - ';
 //				}
                     if (api_get_setting('display_teacher_in_courselist') == 'true') {
-						$course_details[] = $course['tutor_name'];
+                        if (!empty($course['tutor_name'])) {
+						    $course_details[] = $course['tutor_name'];
+                        }
 	                }
 	                if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] != api_get_setting('platformLanguage')) {
 						$course_details[] = $course['course_language'];
@@ -564,7 +566,7 @@ class IndexManager {
                         $courses_list_string .= '<input type="hidden" name="subscribe" value="'.$course['code'].'" />';
                         $courses_list_string .= '<input type="image" name="unsub" src="main/img/enroll.gif" alt="'.get_lang('Subscribe').'" />'.get_lang('Subscribe').'</form>';
                             */
-                        $courses_list_string .= '<a class="btn btn-primary" href="main/auth/courses.php?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;category_code='.Security::remove_XSS($_GET['category']).'">'.get_lang('Subscribe').'</a><br />';
+                        $courses_list_string .= '&nbsp;<a class="btn btn-primary" href="main/auth/courses.php?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;category_code='.Security::remove_XSS($_GET['category']).'">'.get_lang('Subscribe').'</a><br />';
 
                         } else {
                             $courses_list_string .= '<br />'.get_lang('SubscribingNotAllowed');

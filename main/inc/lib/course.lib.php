@@ -3967,8 +3967,8 @@ class CourseManager {
         if (!api_is_anonymous($uid) &&
             !$is_admin &&
             (
-                ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) ||
-                $course['visibility'] == COURSE_VISIBILITY_REGISTERED && $course['subscribe'] == SUBSCRIBE_ALLOWED
+                ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
+                //$course['visibility'] == COURSE_VISIBILITY_REGISTERED && $course['subscribe'] == SUBSCRIBE_ALLOWED
             ) &&
             $course['subscribe'] == SUBSCRIBE_ALLOWED &&
             (!in_array($course['real_id'], $user_courses) || empty($user_courses))

@@ -559,7 +559,7 @@ class IndexManager {
 					// We display a subscription link if:
 	                // 1. it is allowed to register for the course and if the course is not already in the courselist of the user and if the user is identiefied
 	                // 2.
-                    if ($user_identified && !in_array($course['code'], $courses_of_user)) {
+                    if ($user_identified && !array_key_exists($course['code'], $courses_of_user)) {
                         if ($course['subscribe'] == '1') {
                         /*$courses_list_string .= '<form action="main/auth/courses.php?action=subscribe&category='.Security::remove_XSS($_GET['category']).'" method="post">';
                         $courses_list_string .= '<input type="hidden" name="sec_token" value="'.$stok.'">';

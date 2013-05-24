@@ -1543,7 +1543,8 @@ function delete_attempt_hotspot($exe_id, $user_id, $courseId, $question_id)
     Database::query($sql);
 }
 
-function get_answered_questions_from_attempt($exe_id, $objExercise) {
+function get_answered_questions_from_attempt($exe_id, $objExercise)
+{
     $attempt_list = get_all_exercise_event_by_exe_id($exe_id);
     $exercise_result = array();
     if (!empty($attempt_list)) {

@@ -14,7 +14,7 @@
  * Code
  */
 // name of the language file that needs to be included
-
+exit;
 use \ChamiloSession as Session;
 
 $language_file = 'exercice';
@@ -285,7 +285,7 @@ $TBL_EXERCICE_QUESTION      = Database::get_course_table(TABLE_QUIZ_TEST_QUESTIO
 $TBL_EXERCICES              = Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_QUESTIONS              = Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_REPONSES               = Database::get_course_table(TABLE_QUIZ_ANSWER);
-$TBL_CATEGORY               = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);		// hub 13-10-2011
+$TBL_CATEGORY               = Database::get_course_table(TABLE_QUIZ_CATEGORY);		// hub 13-10-2011
 $TBL_COURSE_REL_CATEGORY	= Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);  // hub 13-10-2011
 
 // Get course categories for the selected course

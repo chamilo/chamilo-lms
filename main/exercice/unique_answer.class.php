@@ -104,7 +104,7 @@ class UniqueAnswer extends Question
         }
         $form->addElement('hidden', 'nb_answers');
 
-        //Feedback SELECT
+        // Feedback SELECT
         $question_list      = $obj_ex->selectQuestionList();
         $select_question    = array();
         $select_question[0] = get_lang('SelectTargetQuestion');

@@ -339,30 +339,8 @@ class ModelAjaxController
 
         switch ($action) {
             case 'get_questions':
-                // @todo implement a class that manages jqgrid petitions
-                /** @var \Entity\Repository\CQuizQuestionRepository $repo */
-                /*$repo = $em->getRepository('Entity\CQuizQuestion');
-                var_dump($where_condition, $extra_fields);
-                $qb = $repo->getQuestionsByCategory($categoryId);
-                if (!empty($sidx) && strlen($sidx) > 1) {
-                    $sidx = 'q.'.$sidx;
-                    $sord = strtoupper($sord);
-                    $qb->addOrderBy($sidx, $sord);
-                }
-                $qb->getFirstResult($start);
-                $qb->getMaxResults($limit);
-                $query = $qb->getQuery();
-                //echo $qb->getQuery()->getSQL();
-                $questions = $query->getResult();*/
-
-                /** @var \Entity\CQuizCategory $category */
-                /*$category = $repo->find($categoryId);
-                $questions = $category->getQuestions();*/
-
                 $columns = \Question::getQuestionColumns(api_get_course_id(), $extra_fields, $questionFields, true);
-//                var_dump($columns);
                 $columns = $columns['simple_column_name'];
-
                 $result = \Question::getQuestions(
                     $app,
                     $categoryId,
@@ -387,7 +365,7 @@ class ModelAjaxController
             case 'get_question_list':
                 if (isset($exercise) && !empty($exercise)) {
                     $columns = array('question', 'type', 'category', 'level', 'score', 'actions');
-                    $result = $exercise->getQuestionList($start, $limit, $sidx, $sord, $where_condition);
+                    $result = $exercise->getQuestionListPagination($start, $limit, $sidx, $sord, $where_condition);
                 }
                 break;
             case 'get_group_reporting':

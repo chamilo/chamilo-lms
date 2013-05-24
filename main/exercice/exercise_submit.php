@@ -899,16 +899,7 @@ if ($time_control) {
 }
 
 if (!empty($objExercise->description)) {
-    echo "<script>
-        $(function() {
-            $('#description_content').accordion({
-                changestart: function(event, ui) {
-                    $('#collapse1').html('".addslashes($objExercise->description)."');
-                }
-            });
-         });
-        </script>";
-    echo Display::generate_accordion(array(array('title' => get_lang('ExerciseDescriptionLabel'), 'content' => null)), 'jquery', 'description_content');
+    echo Display::generate_accordion(array(array('title' => get_lang('ExerciseDescriptionLabel'), 'content' => $objExercise->description)), 'jquery', 'description_content');
 }
 
 if ($origin != 'learnpath') {

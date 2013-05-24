@@ -58,7 +58,7 @@ $_status_list[ANONYMOUS]        = 'anonymous';      // 6
 // COURSE VISIBILITY CONSTANTS
 /** only visible for course admin */
 define('COURSE_VISIBILITY_CLOSED', 0);
-/** only visible for users registered in the course*/
+/** only visible for users registered in the course */
 define('COURSE_VISIBILITY_REGISTERED', 1);
 /** Open for all registered users on the platform */
 define('COURSE_VISIBILITY_OPEN_PLATFORM', 2);

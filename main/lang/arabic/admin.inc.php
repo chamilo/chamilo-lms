@@ -755,4 +755,5 @@ $GoToCourseAfterLoginComment = "الذهاب الي المقرر يعد تسجي
 $GroupList = "قائمة المجموعات";
 $MessagesSent = "عدد الرسائل المرسلة";
 $MessagesReceived = "عدد الرسائل المستقبلة";
+$phone = "الهاتف";
 ?>

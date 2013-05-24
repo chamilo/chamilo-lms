@@ -83,4 +83,6 @@ $MakeVisible = "جعله مرئي";
 $DeleteCompleteThread = "حذف الموضوع بشكل كامل؟";
 $PostDeletedSpecial = "الرسالة الخاصة محذوفة";
 $ThreadDeleted = "الموضوع محذوف";
+$NextMessage = "الرسالة التالية";
+$ForumCategories = " اقسام المنتدي";
 ?>

@@ -75,6 +75,7 @@ $AgendaSortChronologicallyDown = "Sortuj Terminarz chronologicznie (malejąco)";
 $ItemForUserSelection = "Lista wyboru użytkowników";
 $IsNotiCalFormatFile = "Ten plik nie jest w formacie iCal";
 $RepeatEvent = "Powtórz zdarzenie";
+$AllDay = "Cały dzień";
 $SessionCalendar = "Kalendarz sesji";
 $RepeatDate = "Powtórz datę";
 $EndDateMustBeMoreThanStartDate = "Data końcowa musi być późniejsza niż data rozpoczęcia";

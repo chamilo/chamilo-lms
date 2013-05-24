@@ -362,6 +362,7 @@ $ExerciseAttempted = "Tečajnik je izvedel poskus reševanja testa";
 $MultipleSelectCombination = "Točna izbira";
 $MultipleAnswerCombination = "Kombinacija odgovorov točne izbire";
 $ExerciceExpiredTimeMessage = "Čas predviden za ta test je potekel";
+$AllQuestionsMustHaveACategory = "Za uporabo načina naključne izbire vprašanj po kategorijah, mora vsakemu izmed vprašanj biti dodeljena kategorija.";
 $NoMedia = "Ni povezave na medije";
 $AttachToMedia = "Pripni k medijem";
 $ExamModeWithFinalScoreShowOnlyFinalScoreWithCategoriesIfAvailable = "Prikaži zgolj končne rezultate, s kategorijami, če so te na voljo";

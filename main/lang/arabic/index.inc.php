@@ -71,5 +71,10 @@ $Messages = "الرسائل";
 $Inbox = "صندوق الرسائل";
 $Comppose = "أنشاء رسالة";
 $PendingInvitations = "دعوات مؤجلة";
+$YouDoNotHaveAnySessionInItsHistory = "لا بوجد محاضرات في سجل محاضراتك";
+$GoAheadAndBrowseOurCourseCatalogXOnceRegisteredYouWillSeeTheCourseHereX = "فضلا تصفح قائمة الدورات للتسجيل في احداها
+عندما يتم التسجيل ستظهر الدورة بدلا من هذه الرسالة";
+$HelloXAsYouCanSeeYourCourseListIsEmpty = "السلام علبكم اخي الكريم
+لا يوجد دورات في قائمتك وذلك تعدم تسجيلك في اي منها";
 $Profile = "الملف الشخصي";
 ?>

@@ -1210,6 +1210,7 @@ $ServerPortInfo = "Puerto del servidor";
 $ServerUserAgentInfo = "Su agente de usuario como es recibido por el servidor";
 $ServerSoftwareInfo = "Software ejecutándose como un servidor web";
 $UnameInfo = "Información del sistema sobre el que está funcionando el servidor";
+$AdminLoginAsAllowedTitle = "Funcionalidad \"Conectarse como...\"";
 $AssignSessionsToX = "Asignar sesiones a %s";
 $AssignCoursesToSessionsAdministrator = "Asignar cursos al administrador de sesiones";
 $AssignCoursesToPlatformAdministrator = "Asignar cursos al administrador de la plataforma";

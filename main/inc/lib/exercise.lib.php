@@ -25,8 +25,18 @@ class ExerciseLib
      * @param int   current item from the list of questions
      * @param int   number of total questions
      * */
-    public static function showQuestion($objQuestionTmp, $only_questions = false, $origin = false, $current_item = '', $show_title = true, $freeze = false, $user_choice = array(), $show_comment = false, $exercise_feedback = null, $show_answers = false)
-    {
+    public static function showQuestion(
+        $objQuestionTmp,
+        $only_questions = false,
+        $origin = false,
+        $current_item = '',
+        $show_title = true,
+        $freeze = false,
+        $user_choice = array(),
+        $show_comment = false,
+        $exercise_feedback = null,
+        $show_answers = false
+    ) {
         // Text direction for the current language
         //$is_ltr_text_direction = api_get_text_direction() != 'rtl';
         // Change false to true in the following line to enable answer hinting
@@ -136,7 +146,7 @@ class ExerciseLib
                 $oFCKeditor->Value = $fck_content;
                 $s .= $oFCKeditor->CreateHtml();
             } elseif ($answerType == ORAL_EXPRESSION) {
-                //Add nanog
+                // Add nanogong
                 if (api_get_setting('enable_nanogong') == 'true') {
 
                     //@todo pass this as a parameter
@@ -204,8 +214,6 @@ class ExerciseLib
                 }
             }
 
-            //for ($answerId=1; $answerId <= $nbrAnswers; $answerId++) {
-
             foreach ($objAnswerTmp->answer as $answerId => $answer_item) {
                 $answer = $objAnswerTmp->selectAnswer($answerId);
                 $answerCorrect = $objAnswerTmp->isCorrect($answerId);
@@ -217,6 +225,7 @@ class ExerciseLib
                 $attributes = array();
                 // Unique answer
                 if (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION))) {
+
                     $input_id = 'choice-'.$questionId.'-'.$answerId;
                     if (isset($user_choice[0]['answer']) && $user_choice[0]['answer'] == $numAnswer) {
                         $attributes = array('id' => $input_id, 'checked' => 1, 'selected' => 1);
@@ -261,6 +270,7 @@ class ExerciseLib
                     } else {
                         $s .= $answer_input;
                     }
+
                 } elseif (in_array($answerType, array(MULTIPLE_ANSWER, MULTIPLE_ANSWER_TRUE_FALSE, GLOBAL_MULTIPLE_ANSWER))) {
                     $input_id = 'choice-'.$questionId.'-'.$answerId;
                     $answer = Security::remove_XSS($answer, STUDENT);
@@ -336,6 +346,7 @@ class ExerciseLib
                         }
                         $s.='</tr>';
                     }
+
                 } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
 
                     // multiple answers
@@ -723,140 +734,140 @@ class ExerciseLib
                 $html .=  $questionDescription;
                 $html .=  '</td></tr>';
             }
+
             $canClick = isset($_GET['editQuestion']) ? '0' : (isset($_GET['modifyAnswers']) ? '0' : '1');
 
-            $s .= '<script type="text/javascript" src="../plugin/hotspot/JavaScriptFlashGateway.js"></script>
-                            <script src="../plugin/hotspot/hotspot.js" type="text/javascript" ></script>
-                            <script type="text/javascript">
-                            <!--
-                            // Globals
-                            // Major version of Flash required
-                            var requiredMajorVersion = 7;
-                            // Minor version of Flash required
-                            var requiredMinorVersion = 0;
-                            // Minor version of Flash required
-                            var requiredRevision = 0;
-                            // the version of javascript supported
-                            var jsVersion = 1.0;
-                            // -->
-                            </script>
-                            <script language="VBScript" type="text/vbscript">
-                            <!-- // Visual basic helper required to detect Flash Player ActiveX control version information
-                            Function VBGetSwfVer(i)
-                              on error resume next
-                              Dim swControl, swVersion
-                              swVersion = 0
+            $s .= ' <script type="text/javascript" src="../plugin/hotspot/JavaScriptFlashGateway.js"></script>
+                    <script src="../plugin/hotspot/hotspot.js" type="text/javascript" ></script>
+                    <script type="text/javascript">
+                    <!--
+                    // Globals
+                    // Major version of Flash required
+                    var requiredMajorVersion = 7;
+                    // Minor version of Flash required
+                    var requiredMinorVersion = 0;
+                    // Minor version of Flash required
+                    var requiredRevision = 0;
+                    // the version of javascript supported
+                    var jsVersion = 1.0;
+                    // -->
+                    </script>
+                    <script language="VBScript" type="text/vbscript">
+                    <!-- // Visual basic helper required to detect Flash Player ActiveX control version information
+                    Function VBGetSwfVer(i)
+                      on error resume next
+                      Dim swControl, swVersion
+                      swVersion = 0
 
-                              set swControl = CreateObject("ShockwaveFlash.ShockwaveFlash." + CStr(i))
-                              if (IsObject(swControl)) then
-                                swVersion = swControl.GetVariable("$version")
-                              end if
-                              VBGetSwfVer = swVersion
-                            End Function
-                            // -->
-                            </script>
+                      set swControl = CreateObject("ShockwaveFlash.ShockwaveFlash." + CStr(i))
+                      if (IsObject(swControl)) then
+                        swVersion = swControl.GetVariable("$version")
+                      end if
+                      VBGetSwfVer = swVersion
+                    End Function
+                    // -->
+                    </script>
 
-                            <script language="JavaScript1.1" type="text/javascript">
-                            <!-- // Detect Client Browser type
-                            var isIE  = (navigator.appVersion.indexOf("MSIE") != -1) ? true : false;
-                            var isWin = (navigator.appVersion.toLowerCase().indexOf("win") != -1) ? true : false;
-                            var isOpera = (navigator.userAgent.indexOf("Opera") != -1) ? true : false;
-                            jsVersion = 1.1;
-                            // JavaScript helper required to detect Flash Player PlugIn version information
-                            function JSGetSwfVer(i) {
-                                // NS/Opera version >= 3 check for Flash plugin in plugin array
-                                if (navigator.plugins != null && navigator.plugins.length > 0) {
-                                    if (navigator.plugins["Shockwave Flash 2.0"] || navigator.plugins["Shockwave Flash"]) {
-                                        var swVer2 = navigator.plugins["Shockwave Flash 2.0"] ? " 2.0" : "";
-                                        var flashDescription = navigator.plugins["Shockwave Flash" + swVer2].description;
-                                        descArray = flashDescription.split(" ");
-                                        tempArrayMajor = descArray[2].split(".");
-                                        versionMajor = tempArrayMajor[0];
-                                        versionMinor = tempArrayMajor[1];
-                                        if ( descArray[3] != "" ) {
-                                            tempArrayMinor = descArray[3].split("r");
-                                        } else {
-                                            tempArrayMinor = descArray[4].split("r");
-                                        }
-                                        versionRevision = tempArrayMinor[1] > 0 ? tempArrayMinor[1] : 0;
-                                        flashVer = versionMajor + "." + versionMinor + "." + versionRevision;
-                                    } else {
-                                        flashVer = -1;
-                                    }
+                    <script language="JavaScript1.1" type="text/javascript">
+                    <!-- // Detect Client Browser type
+                    var isIE  = (navigator.appVersion.indexOf("MSIE") != -1) ? true : false;
+                    var isWin = (navigator.appVersion.toLowerCase().indexOf("win") != -1) ? true : false;
+                    var isOpera = (navigator.userAgent.indexOf("Opera") != -1) ? true : false;
+                    jsVersion = 1.1;
+                    // JavaScript helper required to detect Flash Player PlugIn version information
+                    function JSGetSwfVer(i) {
+                        // NS/Opera version >= 3 check for Flash plugin in plugin array
+                        if (navigator.plugins != null && navigator.plugins.length > 0) {
+                            if (navigator.plugins["Shockwave Flash 2.0"] || navigator.plugins["Shockwave Flash"]) {
+                                var swVer2 = navigator.plugins["Shockwave Flash 2.0"] ? " 2.0" : "";
+                                var flashDescription = navigator.plugins["Shockwave Flash" + swVer2].description;
+                                descArray = flashDescription.split(" ");
+                                tempArrayMajor = descArray[2].split(".");
+                                versionMajor = tempArrayMajor[0];
+                                versionMinor = tempArrayMajor[1];
+                                if ( descArray[3] != "" ) {
+                                    tempArrayMinor = descArray[3].split("r");
+                                } else {
+                                    tempArrayMinor = descArray[4].split("r");
                                 }
-                                // MSN/WebTV 2.6 supports Flash 4
-                                else if (navigator.userAgent.toLowerCase().indexOf("webtv/2.6") != -1) flashVer = 4;
-                                // WebTV 2.5 supports Flash 3
-                                else if (navigator.userAgent.toLowerCase().indexOf("webtv/2.5") != -1) flashVer = 3;
-                                // older WebTV supports Flash 2
-                                else if (navigator.userAgent.toLowerCase().indexOf("webtv") != -1) flashVer = 2;
-                                // Can\'t detect in all other cases
-                                else
-                                {
-                                    flashVer = -1;
-                                }
-                                return flashVer;
+                                versionRevision = tempArrayMinor[1] > 0 ? tempArrayMinor[1] : 0;
+                                flashVer = versionMajor + "." + versionMinor + "." + versionRevision;
+                            } else {
+                                flashVer = -1;
                             }
-                            // When called with reqMajorVer, reqMinorVer, reqRevision returns true if that version or greater is available
+                        }
+                        // MSN/WebTV 2.6 supports Flash 4
+                        else if (navigator.userAgent.toLowerCase().indexOf("webtv/2.6") != -1) flashVer = 4;
+                        // WebTV 2.5 supports Flash 3
+                        else if (navigator.userAgent.toLowerCase().indexOf("webtv/2.5") != -1) flashVer = 3;
+                        // older WebTV supports Flash 2
+                        else if (navigator.userAgent.toLowerCase().indexOf("webtv") != -1) flashVer = 2;
+                        // Can\'t detect in all other cases
+                        else {
+                            flashVer = -1;
+                        }
+                        return flashVer;
+                    }
+                    // When called with reqMajorVer, reqMinorVer, reqRevision returns true if that version or greater is available
 
-                            function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision) {
-                                reqVer = parseFloat(reqMajorVer + "." + reqRevision);
-                                // loop backwards through the versions until we find the newest version
-                                for (i=25;i>0;i--) {
-                                    if (isIE && isWin && !isOpera) {
-                                        versionStr = VBGetSwfVer(i);
-                                    } else {
-                                        versionStr = JSGetSwfVer(i);
-                                    }
-                                    if (versionStr == -1 ) {
-                                        return false;
-                                    } else if (versionStr != 0) {
-                                        if(isIE && isWin && !isOpera) {
-                                            tempArray         = versionStr.split(" ");
-                                            tempString        = tempArray[1];
-                                            versionArray      = tempString .split(",");
-                                        } else {
-                                            versionArray      = versionStr.split(".");
-                                        }
-                                        versionMajor      = versionArray[0];
-                                        versionMinor      = versionArray[1];
-                                        versionRevision   = versionArray[2];
+                    function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision) {
+                        reqVer = parseFloat(reqMajorVer + "." + reqRevision);
+                        // loop backwards through the versions until we find the newest version
+                        for (i=25;i>0;i--) {
+                            if (isIE && isWin && !isOpera) {
+                                versionStr = VBGetSwfVer(i);
+                            } else {
+                                versionStr = JSGetSwfVer(i);
+                            }
+                            if (versionStr == -1 ) {
+                                return false;
+                            } else if (versionStr != 0) {
+                                if(isIE && isWin && !isOpera) {
+                                    tempArray         = versionStr.split(" ");
+                                    tempString        = tempArray[1];
+                                    versionArray      = tempString .split(",");
+                                } else {
+                                    versionArray      = versionStr.split(".");
+                                }
+                                versionMajor      = versionArray[0];
+                                versionMinor      = versionArray[1];
+                                versionRevision   = versionArray[2];
 
-                                        versionString     = versionMajor + "." + versionRevision;   // 7.0r24 == 7.24
-                                        versionNum        = parseFloat(versionString);
-                                        // is the major.revision >= requested major.revision AND the minor version >= requested minor
-                                        if ( (versionMajor > reqMajorVer) && (versionNum >= reqVer) ) {
-                                            return true;
-                                        } else {
-                                            return ((versionNum >= reqVer && versionMinor >= reqMinorVer) ? true : false );
-                                        }
-                                    }
+                                versionString     = versionMajor + "." + versionRevision;   // 7.0r24 == 7.24
+                                versionNum        = parseFloat(versionString);
+                                // is the major.revision >= requested major.revision AND the minor version >= requested minor
+                                if ( (versionMajor > reqMajorVer) && (versionNum >= reqVer) ) {
+                                    return true;
+                                } else {
+                                    return ((versionNum >= reqVer && versionMinor >= reqMinorVer) ? true : false );
                                 }
                             }
-                            // -->
-                            </script>';
+                        }
+                    }
+                    // -->
+                    </script>';
             $s .= '<tr><td valign="top" colspan="2" width="520"><table><tr><td width="520">
-                        <script>
-                            // Version check based upon the values entered above in "Globals"
-                            var hasReqestedVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
+                    <script>
+                        // Version check based upon the values entered above in "Globals"
+                        var hasReqestedVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
 
-                            // Check to see if the version meets the requirements for playback
-                            if (hasReqestedVersion) {  // if we\'ve detected an acceptable version
-                                var oeTags = \'<object type="application/x-shockwave-flash" data="../plugin/hotspot/'.$swf_file.'.swf?modifyAnswers='.$questionId.'&amp;canClick:'.$canClick.'" width="600" height="'.$swf_height.'">\'
-                                            + \'<param name="wmode" value="transparent">\'
-                                            + \'<param name="movie" value="../plugin/hotspot/'.$swf_file.'.swf?modifyAnswers='.$questionId.'&amp;canClick:'.$canClick.'" />\'
-                                            + \'<\/object>\';
-                                document.write(oeTags);   // embed the Flash Content SWF when all tests are passed
-                            } else {  // flash is too old or we can\'t detect the plugin
-                                var alternateContent = "Error<br \/>"
-                                    + "Hotspots requires Macromedia Flash 7.<br \/>"
-                                    + "<a href=\"http://www.macromedia.com/go/getflash/\">Get Flash<\/a>";
-                                document.write(alternateContent);  // insert non-flash content
-                            }
-                        </script>
-                        </td>
-                        <td valign="top" align="left">'.$answer_list.'</td></tr>
-                        </table>
+                        // Check to see if the version meets the requirements for playback
+                        if (hasReqestedVersion) {  // if we\'ve detected an acceptable version
+                            var oeTags = \'<object type="application/x-shockwave-flash" data="../plugin/hotspot/'.$swf_file.'.swf?modifyAnswers='.$questionId.'&amp;canClick:'.$canClick.'" width="600" height="'.$swf_height.'">\'
+                                        + \'<param name="wmode" value="transparent">\'
+                                        + \'<param name="movie" value="../plugin/hotspot/'.$swf_file.'.swf?modifyAnswers='.$questionId.'&amp;canClick:'.$canClick.'" />\'
+                                        + \'<\/object>\';
+                            document.write(oeTags);   // embed the Flash Content SWF when all tests are passed
+                        } else {  // flash is too old or we can\'t detect the plugin
+                            var alternateContent = "Error<br \/>"
+                                + "Hotspots requires Macromedia Flash 7.<br \/>"
+                                + "<a href=\"http://www.macromedia.com/go/getflash/\">Get Flash<\/a>";
+                            document.write(alternateContent);  // insert non-flash content
+                        }
+                    </script>
+                    </td>
+                    <td valign="top" align="left">'.$answer_list.'</td></tr>
+                    </table>
             </td></tr>';
             $html .= $s;
             $html .= '</table>';
@@ -2293,7 +2304,7 @@ class ExerciseLib
         } else {
             //Try getting the question list only if save result is off
             if ($save_user_result == false) {
-                $question_list = $objExercise->get_validated_question_list();
+                $question_list = $objExercise->selectQuestionList();
             }
             error_log("Data tracking is empty! exe_id: $exe_id");
         }
@@ -2342,7 +2353,7 @@ class ExerciseLib
                 error_log('Looping question_list '.print_r($question_list, 1));
             }
 
-            $media_questions = $objExercise->get_media_list();
+            $media_questions = $objExercise->getMediaList();
             $media_is_activated = $objExercise->media_is_activated($media_questions);
 
             $medias_showed = array();
@@ -2551,27 +2562,42 @@ class ExerciseLib
     }
 
 
-    public static function render_question_list($objExercise, $questionList, $current_question, $exerciseResult, $attempt_list, $remind_list, $media_questions = array()) {
+    /**
+     * @param \Exercise $objExercise
+     * @param array $questionListFlatten
+     * @param array $questionList
+     * @param int $current_question
+     * @param array $exerciseResult
+     * @param array $attempt_list
+     * @param array $remind_list
+     */
+    public static function render_question_list($objExercise, $questionListFlatten, $questionList, $current_question, $exerciseResult, $attempt_list, $remind_list)
+    {
+        $mediaQuestions = $objExercise->getMediaList();
+        /* $newMediaList = array();
+        if (!empty($mediaQuestions)) {
+            foreach ($mediaQuestions as $mediaId => $questionMediaList) {
+                foreach ($questionMediaList as $questionId) {
+                    $newMediaList[$questionId] = $mediaId;
+                }
+            }
+        }*/
 
-        $i = 1;
-        //Normal question list render
+        $i = 0;
+
+        // Normal question list render
         foreach ($questionList as $questionId) {
-            // for sequential exercises
+            $i++;
+            // For sequential exercises
             if ($objExercise->type == ONE_PER_PAGE) {
-                // if it is not the right question, goes to the next loop iteration
+                // If it is not the right question, goes to the next loop iteration
                 if ($current_question != $i) {
-                    $i++;
                     continue;
                 } else {
                     if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
                         // if the user has already answered this question
                         if (isset($exerciseResult[$questionId])) {
-                            // construction of the Question object
-                            $objQuestionTmp = Question::read($questionId);
-                            // destruction of the Question object
-                            unset ($objQuestionTmp);
                             Display::display_normal_message(get_lang('AlreadyAnswered'));
-                            $i++;
                             break;
                         }
                     }
@@ -2579,8 +2605,10 @@ class ExerciseLib
             }
 
             // Media question render
-            if (isset($media_questions) && !empty($media_questions) && isset($media_questions[$questionId])) {
-                $media_question_list = $media_questions[$questionId];
+
+            if (isset($mediaQuestions[$questionId]) && $mediaQuestions[$questionId] != 999) {
+
+                $media_question_list = $mediaQuestions[$questionId];
                 $objQuestionTmp = Question::read($questionId);
 
                 $counter = 1;
@@ -2597,19 +2625,49 @@ class ExerciseLib
                             if ($counter == $count_of_questions_inside_media) {
                                 $last_question_in_media = true;
                             }
-                            self::render_question($objExercise, $my_question_id, $attempt_list, $remind_list, chr($letterCounter), $current_question, $media_question_list, $last_question_in_media, $questionList, $current_question);
+                            self::render_question(
+                                $objExercise,
+                                $my_question_id,
+                                $attempt_list,
+                                $remind_list,
+                                chr($letterCounter),
+                                $current_question,
+                                $media_question_list,
+                                $last_question_in_media,
+                                $questionList
+                            );
                             $letterCounter++;
                             $counter++;
                         }
                     }
                 } else {
-                    self::render_question($objExercise, $questionId, $attempt_list, $remind_list, $i, $current_question, null, null, $questionList, $current_question);
+                    self::render_question(
+                        $objExercise,
+                        $questionId,
+                        $attempt_list,
+                        $remind_list,
+                        $i,
+                        $current_question,
+                        null,
+                        null,
+                        $questionList
+                    );
                     $i++;
                 }
             } else {
+                //var_dump($i, $questionId, $current_question);
                 // Normal question render.
-                self::render_question($objExercise, $questionId, $attempt_list, $remind_list, $i, $current_question, null, null, $questionList, $current_question);
-                $i++;
+                self::render_question(
+                    $objExercise,
+                    $questionId,
+                    $attempt_list,
+                    $remind_list,
+                    $i,
+                    $current_question,
+                    null,
+                    null,
+                    $questionList
+                );
             }
 
             // For sequential exercises.
@@ -2635,10 +2693,11 @@ class ExerciseLib
         $current_question,
         $questions_in_media = array(),
         $last_question_in_media = false,
-        $realQuestionList,
-        $realCurrentQuestion
+        $realQuestionList
     ) {
+
         global $origin;
+
         $question_obj = Question::read($questionId);
         $user_choice = isset($attempt_list[$questionId]) ? $attempt_list[$questionId] : null;
 
@@ -2706,10 +2765,10 @@ class ExerciseLib
         $paginator = null;
         if ($objExercise->type == ONE_PER_PAGE) {
             if (empty($questions_in_media)) {
-                $paginator = Display::paginationIndicator($realCurrentQuestion, count($realQuestionList));
+                $paginator = Display::paginationIndicator($current_question, count($realQuestionList));
             } else {
                 if ($last_question_in_media) {
-                    $paginator = Display::paginationIndicator($realCurrentQuestion, count($realQuestionList));
+                    $paginator = Display::paginationIndicator($current_question, count($realQuestionList));
                 }
             }
         }
@@ -2725,7 +2784,8 @@ class ExerciseLib
      * @param int $exeId
      * @param Datetime $last_attempt_date
      */
-    function update_attempt_date($exeId, $last_attempt_date) {
+    public static function update_attempt_date($exeId, $last_attempt_date)
+    {
         $exercice_attemp_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $exeId = intval($exeId);
         $last_attempt_date = Database::escape_string($last_attempt_date);

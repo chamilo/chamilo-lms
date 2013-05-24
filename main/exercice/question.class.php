@@ -1351,8 +1351,6 @@ abstract class Question
                         $("#parent_id option:selected").each(function() {
                             var questionId = $(this).val();
                             if (questionId != 0) {
-                                //console.log(counter);
-                                //console.log(questionId);
                                 if (counter >= 1) {
                                     alert("'.addslashes(get_lang('YouCantAddAnotherCategory')).'");
                                     $("#category_id").trigger("removeItem",[{ "value" : id}]);
@@ -1369,7 +1367,7 @@ abstract class Question
                                 if (return_value == 0 ) {
                                     alert("'.addslashes(get_lang('CategoryDoesNotExists')).'");
                                     // Deleting select option tag
-                                    // $("#parent_id").find("option").remove();
+                                    $("#category_id").find("option").remove();
 
                                     $(".holder li").each(function () {
                                         if ($(this).attr("rel") == id) {
@@ -1727,11 +1725,7 @@ abstract class Question
     public static function updateQuestionOption($id, $params, $course_id)
     {
         $TBL_EXERCICE_QUESTION_OPTION = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-        $result                       = Database::update(
-            $TBL_EXERCICE_QUESTION_OPTION,
-            $params,
-            array('c_id = ? AND id = ?' => array($course_id, $id))
-        );
+        $result = Database::update($TBL_EXERCICE_QUESTION_OPTION, $params, array('c_id = ? AND id = ?' => array($course_id, $id)));
 
         return $result;
     }
@@ -1739,11 +1733,9 @@ abstract class Question
     public static function readQuestionOption($question_id, $course_id)
     {
         $TBL_EXERCICE_QUESTION_OPTION = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-        $result                       = Database::select(
-            '*',
-            $TBL_EXERCICE_QUESTION_OPTION,
-            array(
-                'where' => array('c_id = ? AND question_id = ?' => array($course_id, $question_id)),
+        $result = Database::select('*', $TBL_EXERCICE_QUESTION_OPTION, array(
+            'where' => array(
+                'c_id = ? AND question_id = ?' => array($course_id, $question_id)),
                 'order' => 'iid ASC'
             )
         );
@@ -1762,9 +1754,10 @@ abstract class Question
     /**
      * Shows question title an description
      *
-     * @param type $feedback_type
-     * @param type $counter
+     * @param int $feedback_type
+     * @param int $counter
      * @param type $score
+     * @param bool $show_media
      *
      * @return string
      */
@@ -2072,7 +2065,7 @@ abstract class Question
             ),
             'question_category_id' => array(
                 'innerjoin' => " INNER JOIN ".Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY)." as quiz_rel_cat ON (quiz_rel_cat.question_id = s.iid)
-                                 INNER JOIN ".Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY)." as cat ON (cat.iid = quiz_rel_cat.category_id)
+                                 INNER JOIN ".Database::get_course_table(TABLE_QUIZ_CATEGORY)." as cat ON (cat.iid = quiz_rel_cat.category_id)
                 ",
                 'where' =>  'quiz_rel_cat.category_id',
                 'inject_fields' => 'cat.title as question_category_id, ',

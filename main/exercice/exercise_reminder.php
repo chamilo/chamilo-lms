@@ -255,18 +255,18 @@ $exercise_actions = Display::url(get_lang('EndTest'), 'javascript://', array('on
 $questionList = explode(',', $exercise_stat_info['data_tracking']);
 
 $questionListFlatten = $objExercise->transform_question_list_with_medias($questionList, true);
-$mediaQuestions = $objExercise->get_media_list();
+$mediaQuestions = $objExercise->getMediaList($questionList);
 
 $params = "exe_id=$exe_id&exerciseId=$exerciseId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();
 $url = api_get_path(WEB_CODE_PATH).'exercice/exercise_submit.php?'.$params;
 
-echo $objExercise->getProgressPagination($exe_id,
+echo $objExercise->getProgressPagination(
+    $exe_id,
     $questionList,
+    $questionListFlatten,
     $remind_list,
     2,
     null,
-    $questionListFlatten,
-    $mediaQuestions,
     $url,
     null
 );

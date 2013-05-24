@@ -68,6 +68,8 @@ class Exercise
     public $categories_grouping = true;
     public $fastExerciseEdition = false;
     public $endButton = 0;
+    public $categoryWithQuestionList;
+    public $mediaList;
 
     /**
      * Constructor of the class
@@ -111,9 +113,9 @@ class Exercise
     /**
      * Reads exercise informations from the data base
      *
-     * @author - Olivier Brouckaert
-     * @param - int $id - exercise ID
-     * @return - boolean - true if exercise exists, otherwise false
+     * @author Olivier Brouckaert
+     * @param int $id - exercise ID
+     * @return boolean - true if exercise exists, otherwise false
      */
     public function read($id)
     {
@@ -121,8 +123,8 @@ class Exercise
             return false;
         }
         global $_configuration;
-        $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
 
+        $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
         $table_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $id = intval($id);
         $sql = "SELECT * FROM $TBL_EXERCICES WHERE c_id = ".$this->course_id." AND iid = ".$id;
@@ -180,11 +182,13 @@ class Exercise
                 $this->start_time = $object->start_time;
             }
 
-            //control time
+            // Control time
             $this->expired_time = $object->expired_time;
 
-            //Checking if question_order is correctly set
+            // Checking if question_order is correctly set
             $this->questionList = $this->selectQuestionList(true);
+
+            $this->setMediaList();
 
             //overload questions list with recorded questions list
             //load questions only for exercises of type 'one question per page'
@@ -386,7 +390,12 @@ class Exercise
      */
     public function updateRandomByCat($random)
     {
-        if (in_array($random, array(EXERCISE_CATEGORY_RANDOM_SHUFFLED, EXERCISE_CATEGORY_RANDOM_ORDERED, EXERCISE_CATEGORY_RANDOM_DISABLED))) {
+        if (in_array($random, array(
+                EXERCISE_CATEGORY_RANDOM_SHUFFLED,
+                EXERCISE_CATEGORY_RANDOM_ORDERED,
+                EXERCISE_CATEGORY_RANDOM_DISABLED
+            )
+        )) {
             $this->randomByCat = $random;
         } else {
             $this->randomByCat = EXERCISE_CATEGORY_RANDOM_DISABLED;
@@ -451,10 +460,12 @@ class Exercise
     }
 
     /**
-     * If false the question list will be managed as always if true the question will be filtered depending of the exercise settings (table c_quiz_rel_category)
+     * If false the question list will be managed as always if true the question will be filtered
+     * depending of the exercise settings (table c_quiz_rel_category)
      * @param bool active or inactive grouping
      **/
-    public function setCategoriesGrouping($status) {
+    public function setCategoriesGrouping($status)
+    {
         $this->categories_grouping = (bool) $status;
     }
 
@@ -466,7 +477,7 @@ class Exercise
      * @param string $sord
      * @param array $where_condition
      */
-    public function getQuestionList($start, $limit, $sidx, $sord, $where_condition = array())
+    public function getQuestionListPagination($start, $limit, $sidx, $sord, $where_condition = array())
     {
         if (!empty($this->id)) {
             $category_list = Testcategory::getListOfCategoriesNameForTest($this->id, false);
@@ -525,110 +536,269 @@ class Exercise
     }
 
     /**
-     * returns the array with the question ID list
-     *
-     * @author - Olivier Brouckaert
-     * @return - array - question ID list
+     * Gets the question list ordered by the question_order setting (drag and drop)
+     * @return array
      */
-    function selectQuestionList($from_db = false)
+    private function getQuestionOrderedList()
     {
-        if ($from_db && !empty($this->id)) {
-            $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-            $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $questionList = array();
 
-            // Getting question_order count (to verify that the question list is correct and all question_order's were set)
-            $sql = "SELECT DISTINCT e.question_order
-                    FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
-                        ON (e.question_id = q.iid)
-					WHERE e.exercice_id	= ".Database::escape_string($this->id);
-            $result = Database::query($sql);
+        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
-            $count_question_orders = Database::num_rows($result);
+        // Getting question_order to verify that the question list is correct and all question_order's were set
+        $sql = "SELECT DISTINCT e.question_order
+                FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
+                    ON (e.question_id = q.iid)
+                WHERE e.exercice_id	= ".Database::escape_string($this->id);
+        $result = Database::query($sql);
 
-            // Getting question list from the order (question list interface drag n drop).
-            $sql = "SELECT e.question_id, e.question_order
-                    FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
-                        ON (e.question_id= q.iid)
-					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'
-					ORDER BY question_order";
-            $result = Database::query($sql);
+        $count_question_orders = Database::num_rows($result);
 
-            // Fills the array with the question ID for this exercise
-            // the key of the array is the question position
+        // Getting question list from the order (question list drag n drop interface ).
+        $sql = "SELECT e.question_id, e.question_order
+                FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
+                    ON (e.question_id= q.iid)
+                WHERE e.exercice_id	= '".Database::escape_string($this->id)."'
+                ORDER BY question_order";
+        $result = Database::query($sql);
+
+        // Fills the array with the question ID for this exercise
+        // the key of the array is the question position
+        $temp_question_list = array();
+
+        $counter = 1;
+        while ($new_object = Database::fetch_object($result)) {
+            // Correct order.
+            $questionList[$new_object->question_order] = $new_object->question_id;
+            // Just in case we save the order in other array
+            $temp_question_list[$counter] = $new_object->question_id;
+            $counter++;
+        }
+
+        if (!empty($temp_question_list)) {
+            /* If both array don't match it means that question_order was not correctly set
+               for all questions using the default mysql order */
+            if (count($temp_question_list) != $count_question_orders) {
+                $questionList = $temp_question_list;
+            }
+        }
+
+        return $questionList;
+    }
+
+    /**
+     * Select N values from the questions per category array
+     * @param array $question_list
+     * @param array $questions_by_category per category
+     * @return array
+     */
+    private function pickQuestionsPerCategory($question_list, $questions_by_category)
+    {
+        if (!empty($questions_by_category)) {
+            // Sets random per category
+            $numberOfQuestions = $this->random;
+            $randomize = true;
+
+            // If random is not set then take the max value, this value could be set to 1000 or 9999
+            if ($this->random == -1 || empty($this->random)) {
+                $numberOfQuestions = count($question_list);
+                $randomize = false;
+            }
+
             $temp_question_list = array();
-            $question_list = array();
 
-            $counter = 1;
-            while ($new_object = Database::fetch_object($result)) {
-                //Correct order
-                $question_list[$new_object->question_order] = $new_object->question_id;
-                //Just in case we save the order in other array
-                $temp_question_list[$counter] = $new_object->question_id;
-                $counter++;
+            while (list($category_id, $categoryQuestionList) = each($questions_by_category)) {
+                $elements = Testcategory::getNElementsFromArray($categoryQuestionList, $numberOfQuestions, $randomize);
+                $temp_question_list[] = $elements;
             }
 
+            // Keeps the
+            $temp_question_list = ArrayClass::array_flatten($temp_question_list);
             if (!empty($temp_question_list)) {
-                //If both array don't match it means that question_order was not correctly set for all questions using the default mysql order
-                if (count($temp_question_list) != $count_question_orders) {
-                    $question_list = $temp_question_list;
+                $question_list = $temp_question_list;
+            }
+        }
+
+        return $question_list;
+    }
+
+    /**
+     * Selecting question list depending in the exercise-category
+     * relationship (category table in exercise settings)
+     *
+     * @param $question_list
+     * @return array
+     */
+    public function getQuestionListWithCategoryListFilteredByCategorySettings($question_list)
+    {
+        $result = array();
+        $result['question_list'] = array();
+        $result['category_with_questions_list'] = array();
+
+        $randomByCategory = $this->isRandomByCat();
+        $categoriesAddedInExercise = array();
+
+        switch ($randomByCategory) {
+            case EXERCISE_CATEGORY_RANDOM_DISABLED: // 0
+                break;
+            case EXERCISE_CATEGORY_RANDOM_SHUFFLED: // 1
+                $cat = new Testcategory();
+                $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id']);
+
+                if (!empty($categoriesAddedInExercise)) {
+                    shuffle($categoriesAddedInExercise);
                 }
+                break;
+            case EXERCISE_CATEGORY_RANDOM_ORDERED: // 2
+                $cat = new Testcategory();
+                $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'title DESC');
+                break;
+        }
+
+        // Checking if the "category rel exercise" was set
+        $totalCategoriesRelExercise = 0;
+
+        if (!empty($categoriesAddedInExercise)) {
+            foreach ($categoriesAddedInExercise as $category_info) {
+                $totalCategoriesRelExercise += intval($category_info['count_questions']);
+            }
+        }
+
+        // "Category rel exercise" is empty we search now for the "category rel question" relationships
+        if (empty($totalCategoriesRelExercise)) {
+            $randomByCategory = $this->isRandomByCat();
+            switch ($randomByCategory) {
+                case EXERCISE_CATEGORY_RANDOM_DISABLED: // 0
+                    // No category order to apply check the random
+                    $question_list = $this->selectRandomList($question_list);
+                    break;
+                case EXERCISE_CATEGORY_RANDOM_SHUFFLED: // 1
+                    // Getting questions by category in an exercise with shuffling mode ON
+                    $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, null, true);
+                    $question_list = $this->pickQuestionsPerCategory($question_list, $questions_by_category);
+                    break;
+                case EXERCISE_CATEGORY_RANDOM_ORDERED: // 2
+                    // Getting questions by category in an exercise ordered by category title
+                    $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list);
+                    $question_list = $this->pickQuestionsPerCategory($question_list, $questions_by_category);
+                    break;
             }
 
-            if ($this->categories_grouping) {
-                //Selecting question list depending in categories
+        } else {
+            // Reorder questions depending of the category settings
 
-                $random_by_category = $this->isRandomByCat();
+            if (!empty($categoriesAddedInExercise)) {
+                // Checking if the category rel exercise settings was set (category table in the exercise settings)
 
-                $categories_added_in_exercise = array();
+                $categories_in_questions = Testcategory::getQuestionsByCat($this->id);
 
-                switch ($random_by_category) {
-                    case EXERCISE_CATEGORY_RANDOM_SHUFFLED:
-                    case EXERCISE_CATEGORY_RANDOM_DISABLED:
-                        $cat = new Testcategory();
-                        //$categories_added_in_exercise = $this->get_categories_with_name_in_exercise();
-                        $categories_added_in_exercise = $cat->get_category_exercise_tree($this->id, $this->course['real_id']);
-                        if (!empty($categories_added_in_exercise)) {
-                            shuffle($categories_added_in_exercise);
-                        }
-                        break;
-                    case EXERCISE_CATEGORY_RANDOM_ORDERED:
-                        $cat = new Testcategory();
-                        $categories_added_in_exercise = $cat->get_category_exercise_tree($this->id, $this->course['real_id'], 'title DESC');
-                        break;
-                }
+                // Parsing question according the category rel exercise settings
+                $question_list_based_in_categories = array();
+                $question_id_added_already = array();
 
-                if (!empty($categories_added_in_exercise)) {
-                    $question_list_based_in_categories = array();
-                    $categories_in_questions = Testcategory::getQuestionsByCat($this->id);
-                    $question_id_added_already = array();
+                foreach ($categoriesAddedInExercise as $category_info) {
+                    $category_id = $category_info['category_id'];
+                    if (isset($categories_in_questions[$category_id])) {
+                        // How many question will be picked from this category.
+                        $count = $category_info['count_questions'];
 
-                    foreach ($categories_added_in_exercise as $category_info) {
-                        $category_id = $category_info['category_id'];
-                        if (isset($categories_in_questions[$category_id])) {
-                            //How many question will be picked from this category
-                            $count = $category_info['count_questions'];
+                        if (!empty($count)) {
+                            // Question list for this category
 
-                            if (!empty($count)) {
-                                //Question list for this category
-                                $questions_for_this_category = $categories_in_questions[$category_id];
+                            $questions_for_this_category = $categories_in_questions[$category_id];
 
-                                //Removing questions already added $questions_for_this_category (due multiple categories by question)
-                                $questions_for_this_category = array_diff($questions_for_this_category, $question_id_added_already);
+                            // Removing questions already added $questions_for_this_category (due multiple categories by question)
+                            $questions_for_this_category = array_diff($questions_for_this_category, $question_id_added_already);
 
-                                if (!empty($questions_for_this_category)) {
-                                    //Getting X number of questions for this category
+                            if (!empty($questions_for_this_category)) {
+                                // Getting X number of questions for this category
+                                if ($count != -1) {
                                     $question_list_for_category = array_slice($questions_for_this_category, 0, $count);
-                                    $question_list_based_in_categories[$category_id] = $question_list_for_category;
-                                    $question_id_added_already = array_merge($question_id_added_already, $question_list_for_category);
+                                } else {
+                                    // All questions
+                                    $question_list_for_category = $questions_for_this_category;
                                 }
+                                $question_list_based_in_categories[$category_id] = $question_list_for_category;
+                                $question_id_added_already = array_merge($question_id_added_already, $question_list_for_category);
                             }
                         }
                     }
+                }
+                if (!empty($question_list_based_in_categories)) {
+                    $question_list = ArrayClass::array_flatten($question_list_based_in_categories);
+                }
+            }
+        }
 
-                    if (!empty($question_list_based_in_categories)) {
-                        $question_list = ArrayClass::array_flatten($question_list_based_in_categories);
+        $result['question_list'] = isset($question_list) ? $question_list : array();
+        $result['category_with_questions_list'] = isset($questions_by_category) ? $questions_by_category : array();
+
+
+        if (!empty($result['category_with_questions_list'])) {
+            global $app;
+            $em = $app['orm.em'];
+            $repo = $em->getRepository('Entity\CQuizCategory');
+
+            $newCategoryList = array();
+
+            foreach ($result['category_with_questions_list'] as $categoryId => $questionList) {
+
+                $cat = new Testcategory($categoryId);
+                $cat = (array)$cat;
+                $cat['iid'] = $cat['id'];
+                $cat['name'] = $cat['title'];
+
+                $categoryParentInfo = null;
+
+                if (!empty($cat['parent_id'])) {
+                    if (!isset($parentsLoaded[$cat['parent_id']])) {
+                        $categoryEntity = $em->find('Entity\CQuizCategory', $cat['parent_id']);
+                        $parentsLoaded[$cat['parent_id']] = $categoryEntity;
+                    } else {
+                        $categoryEntity = $parentsLoaded[$cat['parent_id']];
+                    }
+                    $path = $repo->getPath($categoryEntity);
+                    if (isset($path) && isset($path[0])) {
+                        $categoryParentId = $path[0]->getIid();
+
+                        $categoryParentInfo['id'] = $categoryParentId;
+                        $categoryParentInfo['iid'] = $categoryParentId;
+                        $categoryParentInfo['parent_path'] = null;
+                        $categoryParentInfo['title'] = $path[0]->getTitle();
+                        $categoryParentInfo['name'] = $path[0]->getTitle();
+                        $categoryParentInfo['parent_id'] = null;
                     }
                 }
+                $cat['parent_info'] = $categoryParentInfo;
+                $newCategoryList[$categoryId] = array(
+                    'category' => $cat,
+                    'question_list' => $questionList
+                );
+            }
+            $result['category_with_questions_list'] = $newCategoryList;
+        }
+        return $result;
+    }
+
+    /**
+     * Returns the array with the question ID list ordered by question order,
+     *
+     * @author Olivier Brouckaert
+     * @param bool $from_db
+     * @return array question ID list
+     */
+    public function selectQuestionList($from_db = false)
+    {
+        if ($from_db && !empty($this->id)) {
+
+            // The question list is now ordered with the question_order parameter (normal behaviour)
+            $question_list = $this->getQuestionOrderedList();
+
+            if ($this->categories_grouping) {
+                $result = $this->getQuestionListWithCategoryListFilteredByCategorySettings($question_list);
+                $this->categoryWithQuestionList = $result['category_with_questions_list'];
+                $question_list = $result['question_list'];
             }
             return $question_list;
         }
@@ -642,38 +812,39 @@ class Exercise
      * @author - Olivier Brouckaert
      * @return integer - number of questions
      */
-    function selectNbrQuestions()
+    public function selectNbrQuestions()
     {
         return sizeof($this->questionList);
     }
 
-    function selectPropagateNeg()
+    public function selectPropagateNeg()
     {
         return $this->propagate_neg;
     }
 
     /**
      * Selects questions randomly in the question list
+     * If the exercise is not set to take questions randomly, returns the question list
+     * without randomizing, otherwise, returns the list with questions selected randomly
      *
      * @author Olivier Brouckaert, Modified by Hubert Borderiou 15 nov 2011
-     * @param array
-     * @return array - if the exercise is not set to take questions randomly, returns the question list
-     *                   without randomizing, otherwise, returns the list with questions selected randomly
+     * @param array question list
+     * @return array question list modified or unmodified
      *
      */
     public function selectRandomList($question_list)
     {
         $nbQuestions = $this->selectNbrQuestions();
 
-        //Not a random exercise, or if there are not at least 2 questions
+        // Not a random exercise, or if there are not at least 2 questions
         if ($this->random == 0 || $nbQuestions < 2) {
             return $question_list;
         }
+
         if ($nbQuestions != 0) {
             shuffle($question_list);
             $my_random_list = array_combine(range(1, $nbQuestions), $question_list);
             $my_question_list = array();
-            // $this->random == -1 if random with all questions
             if ($this->random > 0) {
                 $i = 0;
                 foreach ($my_random_list as $item) {
@@ -687,7 +858,6 @@ class Exercise
             } else {
                 $my_question_list = $my_random_list;
             }
-
             return $my_question_list;
         }
     }
@@ -922,7 +1092,7 @@ class Exercise
      *
      * @author - Olivier Brouckaert
      */
-    function save($type_e = '')
+    public function save($type_e = '')
     {
         $_course = api_get_course_info();
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -1039,15 +1209,15 @@ class Exercise
                 $this->search_engine_save();
             }
         }
-
         $this->save_categories_in_exercise($this->categories);
 
         // Updates the question position.
         $this->update_question_positions();
     }
 
-    /* Updates question position */
-
+    /**
+     * Updates question position
+     */
     public function update_question_positions()
     {
         $quiz_question_table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -1056,7 +1226,7 @@ class Exercise
         if (!empty($question_list) && !empty($this->course_id) && !empty($this->id)) {
             foreach ($question_list as $position => $questionId) {
                 $sql = "UPDATE $quiz_question_table SET question_order ='".intval($position)."'".
-                    "WHERE c_id = ".$this->course_id." AND question_id = ".intval($questionId)." AND exercice_id = ".$this->id;
+                "WHERE c_id = ".$this->course_id." AND question_id = ".intval($questionId)." AND exercice_id = ".$this->id;
                 Database::query($sql);
             }
         }
@@ -1065,11 +1235,11 @@ class Exercise
     /**
      * Adds a question into the question list
      *
-     * @author - Olivier Brouckaert
-     * @param - integer $questionId - question ID
-     * @return - boolean - true if the question has been added, otherwise false
+     * @author Olivier Brouckaert
+     * @param integer $questionId - question ID
+     * @return boolean - true if the question has been added, otherwise false
      */
-    function addToList($questionId)
+    public function addToList($questionId)
     {
         // checks if the question ID is not in the list
         if (!$this->isInList($questionId)) {
@@ -1147,8 +1317,6 @@ class Exercise
      */
     public function createForm($form, $type = 'full')
     {
-        global $id;
-
         if (empty($type)) {
             $type = 'full';
         }
@@ -1413,7 +1581,6 @@ class Exercise
             }
 
             // Number of random question.
-
             $max = ($this->id > 0) ? $this->selectNbrQuestions() : 10;
             $option = range(0, $max);
             $option[0] = get_lang('No');
@@ -1447,7 +1614,7 @@ class Exercise
             $form->addGroup($radiocat, null, get_lang('RandomQuestionByCategory'), '');
             $form->addElement('html', '<div class="clear">&nbsp;</div>');
 
-            // Category name .
+            // Category name.
             $radio_display_cat_name = array();
             $radio_display_cat_name[] = $form->createElement(
                 'radio',
@@ -1486,7 +1653,6 @@ class Exercise
                 array('onclick' => 'activate_start_date()')
             );
 
-            //$var = Exercise::selectTimeLimit();
             // Start time.
             if (($this->start_time != '0000-00-00 00:00:00')) {
                 $form->addElement('html', '<div id="start_date_div" style="display:block;">');
@@ -1514,14 +1680,14 @@ class Exercise
             $form->addElement('html', '</div>');
 
             // Propagate negative values.
-            $diplay = 'block';
+            $display = 'block';
             $form->addElement('checkbox', 'propagate_neg', null, get_lang('PropagateNegativeResults'));
             $form->addElement('html', '<div class="clear">&nbsp;</div>');
             $form->addElement('checkbox', 'review_answers', null, get_lang('ReviewAnswers'));
 
-            $form->addElement('html', '<div id="divtimecontrol"  style="display:'.$diplay.';">');
+            $form->addElement('html', '<div id="divtimecontrol"  style="display:'.$display.';">');
 
-            // Timer control.
+            // Exercise timer.
             $form->addElement(
                 'checkbox',
                 'enabletimercontrol',
@@ -1604,7 +1770,6 @@ class Exercise
 
         // Category selection.
         $cat = new Testcategory();
-
         $cat_form = $cat->return_category_form($this);
         $form->addElement('html', $cat_form);
 
@@ -1756,7 +1921,7 @@ class Exercise
         $this->save($type);
     }
 
-    function search_engine_save()
+    public function search_engine_save()
     {
         if ($_POST['index_document'] != 1) {
             return;
@@ -2163,7 +2328,8 @@ class Exercise
      * Copy exercise categories to a new exercise
      * @params obj exercise object
      */
-    function copy_exercise_categories($new_exercise_obj) {
+    function copy_exercise_categories($new_exercise_obj)
+    {
         $categories = $this->get_categories_in_exercise();
         if ($categories) {
             $cat_list = array();
@@ -2654,7 +2820,7 @@ class Exercise
         unset($objQuestionTmp);
 
         // Construction of the Answer object
-        $objAnswerTmp = new Answer($questionId);
+        $objAnswerTmp = new Answer($questionId, null, $this);
         $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 
         if ($debug) {
@@ -3872,7 +4038,6 @@ class Exercise
         //Fixes multiple answer question in order to be exact
         if ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
             $diff = @array_diff($answer_correct_array, $real_answers);
-            //var_dump($diff);
             /*
              * All good answers or nothing works like exact
               $counter = 1;
@@ -4586,6 +4751,7 @@ class Exercise
 
     /**
      * Returns an array with the media list
+     * @param array question list
      * @example there's 1 question with iid 5 that belongs to the media question with iid = 100
      * <code>
      * array (size=2)
@@ -4600,15 +4766,15 @@ class Exercise
      *  </code>
      * @return array
      */
-    function get_media_list()
+    function setMediaList()
     {
         $media_questions = array();
-        //$question_list = $this->get_validated_question_list();
-        $question_list = $this->selectQuestionList(true);
+        $question_list = $this->questionList;
 
         if (!empty($question_list)) {
             foreach ($question_list as $questionId) {
                 $objQuestionTmp = Question::read($questionId);
+
                 // If a media question exists
                 if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {
                     $media_questions[$objQuestionTmp->parent_id][] = $objQuestionTmp->id;
@@ -4618,23 +4784,28 @@ class Exercise
                 }
             }
         }
+        $this->mediaList = $media_questions;
+    }
 
-        return $media_questions;
+    public function getMediaList()
+    {
+        return $this->mediaList;
     }
 
     /**
-     * @param array $media_list
+      *Is media question activated
      * @return bool
      */
-    function media_is_activated($media_list)
+    public function media_is_activated()
     {
+        $mediaQuestions = $this->getMediaList();
         $active = false;
-        if (isset($media_list) && !empty($media_list)) {
-            $media_count = count($media_list);
+        if (isset($mediaQuestions) && !empty($mediaQuestions)) {
+            $media_count = count($mediaQuestions);
             if ($media_count > 1) {
                 return true;
             } elseif ($media_count == 1) {
-                if (isset($media_list[999])) {
+                if (isset($mediaQuestions[999])) {
                     return false;
                 } else {
                     return true;
@@ -4646,198 +4817,16 @@ class Exercise
     }
 
     /**
-     * @deprecated
-     * @return array
-     */
-    function get_validated_question_list_2()
-    {
-        $question_list = array();
-        $is_random_by_category = $this->isRandomByCat();
-
-        if ($is_random_by_category == 0) {
-            if ($this->isRandom()) {
-                $question_list = $this->selectRandomList();
-            } else {
-                $question_list = $this->selectQuestionList();
-            }
-        } else {
-            if ($this->isRandom()) {
-
-                // USE question categories
-
-                /* Get questions by category for this exercice
-                  we have to choice $objExercise->random question in each array values of $questions_in_category
-                  key of $tabCategoryQuestions are the categopy id (0 for not in a category)
-                  value is the array of question id of this category
-                 */
-                $temp_question_list = array();
-
-                //Getting questions by category
-                $questions_in_category = Testcategory::getQuestionsByCat($this->id);
-
-                //$isRandomByCategory = $this->selectRandomByCat();
-
-                // on tri les catÃ©gories en fonction du terme entre [] en tÃªte de la description de la catÃ©gorie
-                /*
-                 * ex de catÃ©gories :
-                 * [biologie] MaÃ®triser les mÃ©canismes de base de la gÃ©nÃ©tique
-                 * [biologie] Relier les moyens de dÃ©fenses et les agents infectieux
-                 * [biologie] Savoir oÃ¹ est produite l'Ã©nergie dans les cellules et sous quelle forme
-                 * [chimie] Classer les molÃ©cules suivant leur pouvoir oxydant ou rÃ©ducteur
-                 * [chimie] ConnaÃ®tre la dÃ©finition de la thÃ©orie acide/base selon BrÃ¶nsted
-                 * [chimie] ConnaÃ®tre les charges des particules
-                 * On veut dans l'ordre des groupes dÃ©finis par le terme entre crochet au dÃ©but du titre de la catÃ©gorie
-                 */
-
-                // If test option is Grouped By Categories
-
-                /*if ($isRandomByCategory == 2) {
-                    $questions_in_category = Testcategory::sortTabByBracketLabel($questions_in_category);
-                }*/
-
-                $number_of_random_question = $this->random;
-                if ($this->random == -1) {
-                    $number_of_random_question = count($this->questionList);
-                }
-
-                //Only 1 question can have a category
-                if (!empty($questions_in_category)) {
-                    $one_question_per_category = array();
-                    $questions_added = array();
-                    foreach ($questions_in_category as $category_id => $question_list) {
-                        foreach ($question_list as $question_id) {
-                            if (!in_array($question_id, $questions_added)) {
-                                $one_question_per_category[$category_id][] = $question_id;
-                                $questions_added[] = $question_id;
-                            }
-                        }
-                    }
-                    $questions_in_category = $one_question_per_category;
-                }
-
-                while (list($category_id, $question_id) = each($questions_in_category)) {
-                    $elements = Testcategory::getNElementsFromArray($question_id, $number_of_random_question);
-                    $temp_question_list = array_merge($temp_question_list, $elements);
-                }
-
-                // shuffle the question list if test is not grouped by categories
-                if ($isRandomByCategory == 1) {
-                    shuffle($temp_question_list); // or not
-                }
-                $question_list = $temp_question_list;
-            } else {
-                // Problem, random by category has been selected and we have no $this->isRandom nnumber of question selected
-                // Should not happened
-            }
-        }
-
-        return $question_list;
-    }
-
-    /**
-     * Get list of questions depending of the category random settings, exercise random settings, and
-     * exercise categories settings
-     */
-    function get_validated_question_list()
-    {
-        // Getting current question list
-        $question_list = $this->selectQuestionList(true);
-
-        // Getting random by category setting
-        $random_by_category = $this->isRandomByCat();
-
-        switch ($random_by_category) {
-            case EXERCISE_CATEGORY_RANDOM_SHUFFLED:
-                // Randomized array
-                if ($this->isRandom()) {
-                    $question_list = $this->selectRandomList($question_list);
-                }
-                break;
-            case EXERCISE_CATEGORY_RANDOM_DISABLED:
-                // Randomized array
-                /*if ($this->isRandom()) {
-                    $question_list = $this->selectRandomList($question_list);
-                }*/
-                break;
-            case EXERCISE_CATEGORY_RANDOM_ORDERED:
-
-                if (!$this->isRandom()) {
-                    //break;
-                }
-
-                /**
-                 *  Get questions by category for this exercise
-                 *  we have to choice $objExercise->random question in each array values of $questions_by_category
-                 *  key of $tabCategoryQuestions are the category id (0 for not in a category)
-                 *  value is the array of question id of this category
-                 */
-
-                // Getting questions by category.
-                $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list);
-
-                /**
-                 * The order is based in the category in this case [biology] is first that [maths]
-
-                 * Example:
-                 * [biology] Question 1
-                 * [biology] Question 2
-                 * [biology] Question 3
-                 * [maths] Question 1
-                 * [maths] Question 2
-                 */
-
-                // If test option is Grouped By Categories
-                //if ($random_by_category == EXERCISE_CATEGORY_RANDOM_ORDERED) {
-                    //$questions_by_category = Testcategory::sortCategoriesQuestionByName($questions_by_category);
-                //}
-
-                $number_of_random_question = $this->random;
-                if ($this->random == -1 || empty($this->random)) {
-                    $number_of_random_question = count($question_list);
-                }
-
-                // Only 1 question per category
-                /*
-                if (!empty($questions_by_category)) {
-                    $one_question_per_category = array();
-                    $questions_added = array();
-                    foreach ($questions_by_category as $category_id => $question_list) {
-                        foreach ($question_list as $question_id) {
-                            if (!in_array($question_id, $questions_added)) {
-                                $one_question_per_category[$category_id][] = $question_id;
-                                $questions_added[] = $question_id;
-                            }
-                        }
-                    }
-                    $questions_by_category = $one_question_per_category;
-                }*/
-
-                $temp_question_list = array();
-                while (list($category_id, $question_list) = each($questions_by_category)) {
-                    $elements = Testcategory::getNElementsFromArray($question_list, $number_of_random_question);
-                    $temp_question_list = array_merge($temp_question_list, $elements);
-                }
-
-                // shuffle the question list if test is not grouped by categories
-                //if ($random_by_category == EXERCISE_CATEGORY_RANDOM_SHUFFLED) {
-                    //shuffle($temp_question_list);
-                //}
-                $question_list = $temp_question_list;
-                break;
-        }
-        return $question_list;
-    }
-
-
-    /**
      * Gets question list from the exercise
-     * @params bool expand or not question list (true show all questions, false show media question id instead of the question ids)
+     * @params bool Expand or not question list
+     * (true show all questions, false show media question id instead of the question ids)
+     * @return array unflatten question list (no medias)
      */
-    function get_question_list($expand_media_questions = false)
+    public function getQuestionList($expand_media_questions = false)
     {
-        $question_list = $this->get_validated_question_list();
-        $question_list = $this->transform_question_list_with_medias($question_list, $expand_media_questions);
-        return $question_list;
+        $questionList = $this->selectQuestionList();
+        $questionList = $this->transform_question_list_with_medias($questionList, $expand_media_questions);
+        return $questionList;
     }
 
     /**
@@ -4850,7 +4839,8 @@ class Exercise
     {
         $new_question_list = array();
         if (!empty($question_list)) {
-            $media_questions = $this->get_media_list();
+            $media_questions = $this->getMediaList();
+
             $media_active = $this->media_is_activated($media_questions);
 
             if ($media_active) {
@@ -5040,7 +5030,7 @@ class Exercise
     {
         //Real question count
         $question_count = 0;
-        $question_list = $this->get_question_list();
+        $question_list = $this->getQuestionList();
         if (!empty($question_list)) {
             $question_count = count($question_list);
         }
@@ -5071,7 +5061,8 @@ class Exercise
     /**
      * @return bool
      */
-    function get_categories_in_exercise() {
+    public function get_categories_in_exercise()
+    {
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         if (!empty($this->id)) {
             $sql = "SELECT * FROM $table WHERE exercise_id = {$this->id} AND c_id = {$this->course_id} ";
@@ -5094,8 +5085,9 @@ class Exercise
     public function get_categories_with_name_in_exercise($order = null)
     {
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
-        $table_category = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $sql = "SELECT * FROM $table qc INNER JOIN $table_category c ON (category_id = c.iid) WHERE exercise_id = {$this->id} AND qc.c_id = {$this->course_id} ";
+        $table_category = Database::get_course_table(TABLE_QUIZ_CATEGORY);
+        $sql = "SELECT * FROM $table qc INNER JOIN $table_category c ON (category_id = c.iid)
+                WHERE exercise_id = {$this->id} AND qc.c_id = {$this->course_id} ";
         if (!empty($order)) {
             $sql .= "ORDER BY $order ";
         }
@@ -5112,11 +5104,12 @@ class Exercise
     /**
      * Get total number of question that will be parsed when using the category/exercise
      */
-    function getNumberQuestionExerciseCategory()
+    public function getNumberQuestionExerciseCategory()
     {
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         if (!empty($this->id)) {
-            $sql = "SELECT SUM(count_questions) count_questions FROM $table WHERE exercise_id = {$this->id} AND c_id = {$this->course_id}";
+            $sql = "SELECT SUM(count_questions) count_questions FROM $table
+                    WHERE exercise_id = {$this->id} AND c_id = {$this->course_id}";
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
@@ -5127,13 +5120,15 @@ class Exercise
     }
 
     /**
+     * Save categories in the TABLE_QUIZ_REL_CATEGORY table
      * @param array $categories
      */
-    function save_categories_in_exercise($categories)
+    public function save_categories_in_exercise($categories)
     {
         if (!empty($categories) && !empty($this->id)) {
             $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
             $sql = "DELETE FROM $table WHERE exercise_id = {$this->id} AND c_id = {$this->course_id}";
+            error_log($sql);
             Database::query($sql);
             if (!empty($categories)) {
                 foreach ($categories as $category_id => $count_questions) {
@@ -5184,23 +5179,24 @@ class Exercise
      * @param int $current_question
      * @return string
      */
-    public function getProgressPagination($exe_id, $questionList, $my_remind_list, $reminder, $remind_question_id, $questionListFlatten, $mediaQuestions, $url, $current_question)
+    public function getProgressPagination($exe_id, $questionList, $questionListFlatten, $remindList, $reminder, $remindQuestionId, $url, $current_question)
     {
+        $mediaQuestions = $this->getMediaList();
         $exercise_result = get_answered_questions_from_attempt($exe_id, $this);
 
         $fixedRemindList = array();
-        if (!empty($my_remind_list)) {
-            foreach ($questionList as $questionId) {
-                if (in_array($questionId, $my_remind_list)) {
+        if (!empty($remindList)) {
+            foreach ($questionListFlatten as $questionId) {
+                if (in_array($questionId, $remindList)) {
                     $fixedRemindList[] = $questionId;
                 }
             }
         }
 
         if (isset($reminder) && $reminder == 2) {
-            $values = array_flip($questionList);
+            $values = array_flip($questionListFlatten);
             if (!empty($current_question)) {
-                $current_question = isset($values[$remind_question_id]) ? $values[$remind_question_id] + 1 : $values[$fixedRemindList[0]] +1;
+                $current_question = isset($values[$remindQuestionId]) ? $values[$remindQuestionId] + 1 : $values[$fixedRemindList[0]] +1;
             }
         }
 
@@ -5208,9 +5204,12 @@ class Exercise
         $categoryList = null;
 
         if (empty($categoryList)) {
-            $categoryList = Testcategory::getListOfCategoriesWithQuestionForTestObject($this, $questionListFlatten, $mediaQuestions);
+            $categoryList = $this->getListOfCategoriesWithQuestionForTest($mediaQuestions);
+            //var_dump($categoryList);
             Session::write('categoryList', $categoryList);
         }
+
+        //var_dump($categoryList);
 
         $html = '<div class="row">';
         $html .= '<div class="span2">';
@@ -5229,18 +5228,95 @@ class Exercise
 
         $conditions = array();
         $conditions[] = array("class" => 'answered', 'items' => $exercise_result);
-        $conditions[] = array("class" => 'remind', 'mode' => 'overwrite', 'items' => $my_remind_list);
+        $conditions[] = array("class" => 'remind', 'mode' => 'overwrite', 'items' => $remindList);
 
         $link = $url.'&num=';
 
         $html .= '<div class="span10">';
         if (!empty($categoryList)) {
-            $html .= Display::progress_pagination_bar_with_categories($questionList, $categoryList, $current_question, $conditions, $link);
+            $html .= Display::progress_pagination_bar_with_categories($questionListFlatten, $categoryList, $current_question, $conditions, $link);
         } else {
-            $html .= Display::progress_pagination_bar($questionList, $current_question, $conditions, $link);
+            $html .= Display::progress_pagination_bar($questionListFlatten, $current_question, $conditions, $link);
         }
         $html .= '</div>';
         $html .= '</div>';
         return $html;
     }
+
+
+    /**
+     * @param array media question array
+     * @return array question list (flatten not grouped by Medias)
+     */
+    public function getListOfCategoriesWithQuestionForTest($mediaQuestions)
+    {
+        $newMediaList = array();
+        foreach ($mediaQuestions as $mediaId => $questionMediaList) {
+            foreach ($questionMediaList as $questionId) {
+                $newMediaList[$questionId] = $mediaId;
+            }
+        }
+        $categoryList = $this->categoryWithQuestionList;
+        $categoriesWithQuestion = array();
+        foreach ($categoryList as $categoryId => $category) {
+            $categoriesWithQuestion[$categoryId] = $category['category'];
+            $categoriesWithQuestion[$categoryId]['question_list'] = $category['question_list'];
+
+            if (!empty($newMediaList)) {
+                foreach ($category['question_list'] as $questionId) {
+                    if (isset($newMediaList[$questionId])) {
+                       $categoriesWithQuestion[$categoryId]['media_question'] = $newMediaList[$questionId];
+                    }  else {
+                       $categoriesWithQuestion[$categoryId]['media_question'] = 999;
+                    }
+                }
+            }
+        }
+        return $categoriesWithQuestion;
+
+
+        foreach ($questionList as $question_id) {
+            $categoryList = Testcategory::getCategoryForQuestion($question_id);
+
+            foreach ($categoryList as $categoryId) {
+                if (!isset($categoriesWithQuestion[$categoryId])) {
+                    $cat = new Testcategory($categoryId);
+                    $cat = (array)$cat;
+                    $cat['iid'] = $cat['id'];
+                    $cat['name'] = $cat['title'];
+
+                    if (!empty($cat['parent_id'])) {
+                        if (!isset($parentsLoaded[$cat['parent_id']])) {
+                            $categoryEntity = $em->find('Entity\CQuizCategory', $cat['parent_id']);
+                            $parentsLoaded[$cat['parent_id']] = $categoryEntity;
+                        } else {
+                            $categoryEntity = $parentsLoaded[$cat['parent_id']];
+                        }
+                        $path = $repo->getPath($categoryEntity);
+
+                        if (isset($path) && isset($path[0])) {
+                            $categoryId = $path[0]->getIid();
+                            $cat['id'] = $categoryId;
+                            $cat['iid'] = $categoryId;
+                            $cat['parent_path'] = null;
+                            $cat['title'] = $path[0]->getTitle();
+                            $cat['name'] = $path[0]->getTitle();
+                            $cat['parent_id'] = null;
+                        }
+                        $temp = isset($categoriesWithQuestion[$categoryId]) ? $categoriesWithQuestion[$categoryId]['question_list'] : array();
+                        $categoriesWithQuestion[$categoryId] = $cat;
+                        $categoriesWithQuestion[$categoryId]['question_list'] = $temp;
+                        $categoriesWithQuestion[$categoryId]['media_question'] = isset($newMediaList[$question_id]) ? $newMediaList[$question_id] : 999;
+                    } else {
+                        $categoriesWithQuestion[$categoryId] = $cat;
+                        $categoriesWithQuestion[$categoryId]['media_question'] = isset($newMediaList[$question_id]) ? $newMediaList[$question_id] : 999;
+                    }
+                }
+
+                $categoriesWithQuestion[$categoryId]['question_list'][] = (int)$question_id;
+            }
+        }
+        return $categoriesWithQuestion;
+    }
+
 }

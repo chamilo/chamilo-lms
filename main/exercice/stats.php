@@ -26,7 +26,7 @@ if (empty($session_id)) {
 }
 $count_students = count($students);
 
-$question_list = $objExercise->get_validated_question_list();
+$question_list = $objExercise->selectQuestionList();
 
 $data = array();
 //Question title 	# of students who tool it 	Lowest score 	Average 	Highest score 	Maximum score

@@ -1749,30 +1749,31 @@ class Display
      * @param string $link
      * @return string
      */
-    public static function progress_pagination_bar($list, $current, $conditions = array(), $link = null, $counter = null, $addLetters = false, $fixValue = null)
+    public static function progress_pagination_bar($questionList, $current, $conditions = array(), $link = null, $counter = null, $addLetters = false, $fixValue = null)
     {
         if (empty($counter)) {
             $counter = 1;
         }
+
         $fixedCounter = $counter;
         $pagination_size = 'pagination-mini';
         $html = '<div class="exercise_pagination pagination '.$pagination_size.'"><ul>';
         $cleanCounter = 1;
-
         $defaultClass = "before";
 
         $affectAllItems = false;
+
         if ($addLetters && $fixValue) {
             if ($current == $fixValue) {
                 $affectAllItems = true;
             }
         }
 
-        foreach ($list as $item_id) {
+        foreach ($questionList as $item_id) {
             $class = $defaultClass;
 
             foreach ($conditions as $condition) {
-                $array = $condition['items'];
+                $array = isset($condition['items']) ? $condition['items'] : array();
                 $class_to_applied = $condition['class'];
                 $type = isset($condition['type']) ? $condition['type'] : 'positive';
                 $mode = isset($condition['mode']) ? $condition['mode'] : 'add';
@@ -1806,8 +1807,6 @@ class Display
                             $class = "before current";
                         //}
                     }
-                } else {
-
                 }
             } else {
                 // Default behaviour
@@ -1830,7 +1829,7 @@ class Display
                 $link_to_show = $link.($fixedCounter - 1);
             }
 
-            $html .= '<li class = "'.$class.'"><a href="'.$link_to_show.'">'.$label.'</a></li>';
+            $html .= '<li class = "'.$class.'"><a href="'.$link_to_show.'">'.$label.' '.$item_id.' </a></li>';
             $counter++;
             $cleanCounter++;
         }
@@ -1849,12 +1848,12 @@ class Display
      * @param string $link
      * @return string
      */
-    public static function progress_pagination_bar_with_categories($unflattenQuestionList, $categories, $current, $conditions = array(), $link = null)
+    public static function progress_pagination_bar_with_categories($flattenQuestionList, $categories, $current, $conditions = array(), $link = null)
     {
         $counter = 1;
         $html = null;
         $mediaUsedCounter = 0;
-        //var_dump($categories);
+
         if (!empty($categories)) {
             foreach ($categories as $category) {
                 //var_dump($counter);
@@ -1871,8 +1870,14 @@ class Display
                     $mediaUsedCounter++;
                 }
 
+                $categoryName = $category['name'];
+
+                if (isset($category['parent_info'])) {
+                    $categoryName  = $category['parent_info']['title'];
+                }
+
                 $html .= '<div class="row">';
-                $html .= '<div class="span2">'.$category['name'].'</div>';
+                $html .= '<div class="span2">'.$categoryName.'</div>';
                 $html .= '<div class="span8">';
                 $html .= self::progress_pagination_bar(
                     $questionList,

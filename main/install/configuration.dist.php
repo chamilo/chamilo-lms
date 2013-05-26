@@ -142,6 +142,8 @@ $_configuration['security_key'] = '{SECURITY_KEY}';
 $_configuration['password_encryption'] = '{ENCRYPT_PASSWORD}';
 //Deny the elimination of users
 $_configuration['deny_delete_users'] = false;
+//Prevent all admins from using the "login_as" feature
+$_configuration['login_as_forbidden_globally'] = false;
 
 /** Multiple URL */
 // Activation for multi-url access

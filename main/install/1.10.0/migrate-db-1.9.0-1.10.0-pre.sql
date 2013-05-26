@@ -73,6 +73,9 @@ ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_use
 
 ALTER TABLE session_rel_user ADD INDEX idx_session_rel_user_id_user_moved (id_user, moved_to);
 
+INSERT INTO settings_current(variable, type, category, selected_value, title, comment, access_url, access_url_changeable, access_url_locked) values ('login_as_allowed','radio','security','true','AdminLoginAsAllowedTitle','AdminLoginAsAllowedComment', 1, 0, 1);
+INSERT INTO settings_options(variable, value, display_text) values ('login_as_allowed','true','Yes'),('login_as_allowed','false','No');
+
 -- Courses changes c_XXX
 
 -- ALTER TABLE c_lp_item ADD INDEX idx_c_lp_item_cid_lp_id (c_id, lp_id);
@@ -283,4 +286,4 @@ ALTER TABLE question_field_values ADD COLUMN comment VARCHAR(100) default '';
 ALTER TABLE c_quiz ADD COLUMN end_button int NOT NULL default 0;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.013' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.014' WHERE variable = 'chamilo_database_version';

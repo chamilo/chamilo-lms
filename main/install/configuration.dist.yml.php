@@ -42,5 +42,7 @@ $_configuration['session_lifetime']  = 3600;
 //$_configuration['multiple_access_urls']					= true;
 //Deny the elimination of users
 $_configuration['deny_delete_users'] = false;
+//Prevent all admins from using the "login_as" feature
+$_configuration['login_as_forbidden_globally'] = false;
 // Version settings
 $_configuration['system_version']    = '1.10';

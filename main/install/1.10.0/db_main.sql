@@ -925,7 +925,8 @@ VALUES
 ('settings_latest_update', NULL, NULL, NULL, '', '','', NULL, NULL, 0),
 ('user_name_order', NULL, 'textfield', 'Platform', '', 'UserNameOrderTitle', 'UserNameOrderComment', NULL, NULL, 1),
 ('allow_teachers_to_create_sessions', NULL,'radio','Session','false','AllowTeachersToCreateSessionsTitle','AllowTeachersToCreateSessionsComment', NULL, NULL, 0),
-('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.001','DatabaseVersion','', NULL, NULL, 0);
+('login_as_allowed',NULL,'radio','Security','true','AdminLoginAsAllowedTitle','AdminLoginAsAllowedComment', 1, 0, 1);
+('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.001','DatabaseVersion','', NULL, NULL, 0); -- base value, updated at end of file. Don't change here
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -1276,7 +1277,9 @@ VALUES
 ('session_page_enabled', 'true', 'Yes'),
 ('session_page_enabled', 'false', 'No'),
 ('allow_teachers_to_create_sessions', 'true', 'Yes'),
-('allow_teachers_to_create_sessions', 'false', 'No');
+('allow_teachers_to_create_sessions', 'false', 'No'),
+('login_as_allowed','true','Yes'),
+('login_as_allowed','false','No');
 
 
 UNLOCK TABLES;
@@ -3521,4 +3524,4 @@ CREATE TABLE ext_log_entries (
 ) DEFAULT CHARSET=utf8;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.013' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.014' WHERE variable = 'chamilo_database_version';

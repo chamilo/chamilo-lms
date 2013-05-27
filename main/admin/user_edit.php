@@ -204,16 +204,15 @@ if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0
         $form->addGroup($group, 'password', null, '', false);
     }
 }
+
 $form->addElement('radio', 'reset_password', null, get_lang('AutoGeneratePassword'), 1);
-$group = array();
-$group[] = $form->createElement('radio', 'reset_password', null, null, 2);
-$group[] = $form->createElement(
-    'password',
-    'password',
-    null,
-    array('onkeydown' => 'javascript: password_switch_radio_button();')
-);
-$form->addGroup($group, 'password', null, '', false);
+// before giving the form to reset the password, check the corresponding param
+if (api_is_global_platform_admin() or api_get_setting('admins_can_set_users_pass')==='true') {
+    $group = array();
+    $group[] =$form->createElement('radio', 'reset_password', null, null, 2);
+    $group[] =$form->createElement('password', 'password', null, array('onkeydown' => 'javascript: password_switch_radio_button();'));
+    $form->addGroup($group, 'password', null, '', false);
+}
 
 // Status.
 $status = api_get_user_roles();

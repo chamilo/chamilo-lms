@@ -75,6 +75,8 @@ ALTER TABLE session_rel_user ADD INDEX idx_session_rel_user_id_user_moved (id_us
 
 INSERT INTO settings_current(variable, type, category, selected_value, title, comment, access_url, access_url_changeable, access_url_locked) values ('login_as_allowed','radio','security','true','AdminLoginAsAllowedTitle','AdminLoginAsAllowedComment', 1, 0, 1);
 INSERT INTO settings_options(variable, value, display_text) values ('login_as_allowed','true','Yes'),('login_as_allowed','false','No');
+insert into settings_current(variable, type, category, selected_value, title, comment, access_url, access_url_changeable, access_url_locked) values ('admins_can_set_users_pass','radio','security','true','AdminsCanChangeUsersPassTitle','AdminsCanChangeUsersPassComment', 1, 0, 1);
+insert into settings_options(variable, value, display_text) values('admins_can_set_users_pass','true','Yes'),('admins_can_set_users_pass','false','No');
 
 -- Courses changes c_XXX
 
@@ -286,4 +288,4 @@ ALTER TABLE question_field_values ADD COLUMN comment VARCHAR(100) default '';
 ALTER TABLE c_quiz ADD COLUMN end_button int NOT NULL default 0;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.014' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.015' WHERE variable = 'chamilo_database_version';

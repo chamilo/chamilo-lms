@@ -708,15 +708,16 @@ switch ($action) {
                 $emailsubject = "[" . api_get_setting('siteName') . "] ".get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$_course['name']."  ";
 
                 foreach ($user_list as $user_data) {
-                    $user_id = $user_data['user_id'];
+                    $to_user_id = $user_data['user_id'];
                     $emailbody = get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$_course['name']."\n";
-                    //$emailbody .= get_lang('WorkName')." : ".substr($my_cur_dir_path, 0, -1)."\n";
-                    $emailbody .= get_lang('UserName')." : ".api_get_person_name($user_data['firstname'], $user_data['lastname'])."\n";
+                    $user_id = api_get_user_id();
+                    $user_info = api_get_user_info($user_id);
+                    $emailbody .= get_lang('UserName')." : ".api_get_person_name($user_info['firstname'], $user_info['lastname'])."\n";
                     $emailbody .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";
                     $emailbody .= get_lang('WorkName')." : ".$title."\n\n".get_lang('DownloadLink')."\n";
                     $url = api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()."&amp;id=".$work_id;
                     
-                    MessageManager::send_message_simple($user_id, $emailsubject, $emailbody);
+                    MessageManager::send_message_simple($to_user_id, $emailsubject, $emailbody);
                 }
             }
             $message = get_lang('DocAdd');

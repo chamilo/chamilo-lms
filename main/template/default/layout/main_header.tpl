@@ -51,7 +51,12 @@
                 <div class="row">
                     <div id="header_left" class="span4">
                         {# logo #}
-                        {{ logo }}
+
+                        <div id="logo">
+                            <a href="{{ _p.web }}">
+                                <img title="{{ "siteName" | get_setting }}" src="{{ _p.web_css }}/{{ app.theme }}/images/header-logo.png" />
+                            </a>
+                        </div>
 
                         {# plugin_header left #}
                         {% if plugin_header_left is not null %}
@@ -60,6 +65,7 @@
                             </div>
                         {% endif %}
                     </div>
+
                     <div id="header_center" class="span3">
                         {# plugin_header center #}
                         {% if plugin_header_center is not null %}

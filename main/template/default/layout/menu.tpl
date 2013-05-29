@@ -39,7 +39,6 @@
                                 {{ message_link }}
                             </li>
                         </ul>
-
                     <li>
                         <a id="logout_button" class="logout" title="{{ "Logout"|get_lang }}" href="{{ logout_link }}" >
                             <img src="{{ "exit.png"|icon(22) }}">

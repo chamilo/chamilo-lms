@@ -1,6 +1,6 @@
 <?php
+/* For licensing terms, see /license.txt */
 
-// include the prod configuration
 require __DIR__.'/prod.php';
 
 error_reporting(-1);

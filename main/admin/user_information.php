@@ -36,11 +36,24 @@ if ( isset($_GET['action']) ) {
             break;
     }
 }
-//only allow platform admins to login_as, or session admins only for students (not teachers nor other admins)
+//only allow platform admins to login_as, or session admins only for students
+// (not teachers nor other admins), and only if all options confirm it
+// $_configuration['login_as_forbidden_globally'], defined in configuration.php,
+// is the master key to these conditions
 $statusname = api_get_status_langvars();
 $login_as_icon = '';
-if (api_is_platform_admin() || (api_is_session_admin() && $row['6'] == $statusname[STUDENT])) {
-        $login_as_icon = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$user['user_id'].'&amp;sec_token='.Security::getCurrentToken().'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>';
+if (empty($_configuration['login_as_forbidden_globally']) &&
+    (api_is_global_platform_admin() ||
+        (api_get_setting('login_as_allowed') === 'true' &&
+            (api_is_platform_admin() ||
+                (api_is_session_admin() &&
+                    (api_is_session_admin() && $row['6'] == $statusname[STUDENT])
+                )
+            )
+        )
+    )
+) {
+    $login_as_icon = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$user['user_id'].'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>';
 }
 echo '<div class="actions"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.intval($_GET['user_id']).'" title="'.get_lang('Reporting').'">'.Display::return_icon('statistics.png',get_lang('Reporting'),'',  ICON_SIZE_MEDIUM).'</a>'.$login_as_icon.'</div>';
 

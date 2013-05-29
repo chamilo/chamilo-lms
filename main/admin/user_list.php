@@ -174,7 +174,7 @@ function login_user($user_id) {
     $user_info = api_get_user_info($user_id);
 
     // check if the user is allowed to 'login_as'
-    $can_login_as = (api_is_platform_admin() OR (api_is_session_admin() && $user_info['status'] == 5 ));
+    $can_login_as = empty($_configuration['login_as_forbidden_globally']) && (api_is_global_platform_admin() || (api_get_setting('login_as_allowed') === 'true' && (api_is_platform_admin() OR (api_is_session_admin() && $user_info['status'] == 5 ))));
     if (!$can_login_as) { return false; }
 
 	$firstname  = $user_info['firstname'];
@@ -475,21 +475,36 @@ function modify_filter($user_id, $url_params, $row) {
 		}
 	}
 
-    //only allow platform admins to login_as, or session admins only for students (not teachers nor other admins)
-    if (api_is_platform_admin() || (api_is_session_admin() && $current_user_status_label == $statusname[STUDENT])) {
-    	if (!$user_is_anonymous) {
+    //only allow platform admins to login_as, or session admins only for
+    // students (not teachers nor other admins), and only if all options
+    // match to say this user has the permission to do so
+    // $_configuration['login_as_forbidden_globally'], defined in
+    // configuration.php, is the master key to these conditions
+    global $_configuration;
+    if (empty($_configuration['login_as_forbidden_globally']) &&
+        (api_is_global_platform_admin() ||
+            (api_get_setting('login_as_allowed') === 'true' &&
+                (api_is_platform_admin() ||
+                    (api_is_session_admin() &&
+                        $current_user_status_label == $statusname[STUDENT]
+                    )
+                )
+            )
+        )
+    ) {
+        if (!$user_is_anonymous) {
             if (api_global_admin_can_edit_admin($user_id)) {
-                $result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.Security::getCurrentToken().'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
+                // everything looks good, show "login as" link
+                $result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
             } else {
+                // if this user in particular can't be edited, show disabled
                 $result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';
             }
-            //$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.Security::getCurrentToken().'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
-    	} else {
-    		$result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';
-    	}
-    } else {
-    	$result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';
-    }
+        } else {
+            // if anonymous user but other users show the option, show disabled
+            $result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';
+        }
+    } // Else don't show anything, because the option is not available at all
 
 	if ($current_user_status_label != $statusname[STUDENT]) {
 		$result .= Display::return_icon('statistics_na.gif', get_lang('Reporting')).'&nbsp;&nbsp;';

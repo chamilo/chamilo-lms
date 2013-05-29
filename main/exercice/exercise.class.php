@@ -5329,16 +5329,18 @@ class Exercise
      */
     public function progressExercisePaginationBarWithCategories($categories, $current, $conditions = array(), $link = null)
     {
-        $offset = 0;
         $html = null;
         $counterNoMedias = 0;
+        $nextValue = 0;
+        $wasMedia = false;
+        $before = array();
+
         if (!empty($categories)) {
 
             foreach ($categories as $category) {
                 $questionList = $category['question_list'];
                 // Check if in this category there questions added in a media
                 $mediaQuestionId = $category['media_question'];
-
                 $isMedia = false;
                 $fixedValue = null;
 
@@ -5357,11 +5359,16 @@ class Exercise
                 $html .= '<div class="span2">'.$categoryName.'</div>';
                 $html .= '<div class="span8">';
 
+                if (!empty($nextValue)) {
+                    if ($wasMedia) {
+                        $nextValue = $nextValue - count($before) -1;
+                    }
+                }
+
                 $html .= Display::progressPaginationBar(
+                    $nextValue,
                     $questionList,
                     $current,
-                    $offset,
-                    $counterNoMedias,
                     $fixedValue,
                     $conditions,
                     $link,
@@ -5370,13 +5377,22 @@ class Exercise
                 );
                 $html .= '</div>';
                 $html .= '</div>';
-                $offset += count($questionList);
 
                 if ($mediaQuestionId == 999) {
                     $counterNoMedias += count($questionList);
                 } else {
                     $counterNoMedias++;
                 }
+
+                $nextValue += count($questionList);
+                $before = count($questionList);
+
+                if ($mediaQuestionId != 999) {
+                    $wasMedia = true;
+                } else {
+                    $wasMedia = false;
+                }
+
             }
         }
         return $html;

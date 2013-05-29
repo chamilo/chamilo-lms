@@ -1163,7 +1163,7 @@ function get_exercise_results_by_attempt($exe_id)
  * @return  array   with the results
  *
  */
-function get_exercise_results_by_user($user_id, $exercise_id, $courseId, $session_id = 0, $lp_id = 0, $lp_item_id = 0, $order = null)
+function getExerciseResultsByUser($user_id, $exercise_id, $courseId, $session_id = 0, $lp_id = 0, $lp_item_id = 0, $order = null)
 {
     $table_track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $table_track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -1478,7 +1478,7 @@ function get_comments($exe_id, $question_id)
  * @param int $exe_id
  * @return array
  */
-function get_all_exercise_event_by_exe_id($exe_id)
+function getAllExerciseEventByExeId($exe_id)
 {
     $table_track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $exe_id = intval($exe_id);
@@ -1486,10 +1486,11 @@ function get_all_exercise_event_by_exe_id($exe_id)
 
     $sql = "SELECT * FROM $table_track_attempt WHERE exe_id = $exe_id ORDER BY position";
     $res_question = Database::query($sql);
-    if (Database::num_rows($res_question))
+    if (Database::num_rows($res_question)) {
         while ($row_q = Database::fetch_array($res_question, 'ASSOC')) {
             $list[$row_q['question_id']][] = $row_q;
         }
+    }
     return $list;
 }
 
@@ -1545,7 +1546,7 @@ function delete_attempt_hotspot($exe_id, $user_id, $courseId, $question_id)
 
 function get_answered_questions_from_attempt($exe_id, $objExercise)
 {
-    $attempt_list = get_all_exercise_event_by_exe_id($exe_id);
+    $attempt_list = getAllExerciseEventByExeId($exe_id);
     $exercise_result = array();
     if (!empty($attempt_list)) {
         foreach ($attempt_list as $question_id => $options) {

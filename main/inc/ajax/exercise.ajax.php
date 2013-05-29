@@ -330,7 +330,7 @@ switch ($action) {
                 $total_score   = $exercise_stat_info['exe_result'];
 
                 //Getting the list of attempts
-                $attempt_list  = get_all_exercise_event_by_exe_id($exe_id);
+                $attempt_list  = getAllExerciseEventByExeId($exe_id);
             }
 
             // Updating Reminder algorythm.

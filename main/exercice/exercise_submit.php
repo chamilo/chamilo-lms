@@ -1052,16 +1052,13 @@ if (!empty($error)) {
            		//3. Hotspots
            		var hotspot = $(\'*[name*="hotspot[\'+question_id+\']"]\').serialize();
 
-           		// Checking FCK
-           		if (typeof(FCKeditorAPI) !== "undefined") {
-    				var oEditor = FCKeditorAPI.GetInstance("choice["+question_id+"]") ;
-    				var fck_content = "";
-    				if (oEditor) {
-               			fck_content = oEditor.GetHTML();
-               			my_choice = {};
-               			my_choice["choice["+question_id+"]"] = fck_content;
-               			my_choice = $.param(my_choice);
-               		}
+                var ckeditor = CKEDITOR.instances[\'choice[\'+question_id+\']\'];
+
+                if (ckeditor) {
+                    value = ckeditor.getData();
+                    my_choice = {};
+                    my_choice["choice["+question_id+"]"] = value;
+                    my_choice = $.param(my_choice);
                 }
 
                 if ($(\'input[name="remind_list[\'+question_id+\']"]\').is(\':checked\')) {

@@ -1795,7 +1795,7 @@ class Display
      * @param $fixValue
      * @return string
      */
-    static function parsePaginationItem($item_id, $isCurrent, $conditions, $link, $nextValue, $isMedia = false, $localCounter = null, $fixedValue = null)
+    static function parsePaginationItem($itemId, $isCurrent, $conditions, $link, $nextValue, $isMedia = false, $localCounter = null, $fixedValue = null)
     {
         $defaultClass = "before";
         $class = $defaultClass;
@@ -1807,7 +1807,7 @@ class Display
             $mode = isset($condition['mode']) ? $condition['mode'] : 'add';
             switch ($type) {
                 case 'positive':
-                    if (in_array($item_id, $array)) {
+                    if (in_array($itemId, $array)) {
                         if ($mode == 'overwrite') {
                             $class = " $defaultClass $class_to_applied";
                         } else {
@@ -1816,7 +1816,7 @@ class Display
                     }
                     break;
                 case 'negative':
-                    if (!in_array($item_id, $array)) {
+                    if (!in_array($itemId, $array)) {
                         if ($mode == 'overwrite') {
                             $class = " $defaultClass $class_to_applied";
                         } else {
@@ -1845,7 +1845,7 @@ class Display
 
         if ($isMedia) {
             $label = ($fixedValue + 1) .' '.chr(97 + $localCounter);
-            $link_to_show = $link.($fixedValue);
+            $link_to_show = $link.$fixedValue.'#questionanchor'.$itemId;
         }
 
         return  '<li class = "'.$class.'"><a href="'.$link_to_show.'">'.$label.' </a></li>';

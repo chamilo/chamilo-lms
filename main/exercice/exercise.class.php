@@ -5538,6 +5538,7 @@ class Exercise
 
         $exercise_actions  = null;
 
+        echo '<a id="questionanchor'.$questionId.'"></a><br />';
         echo '<div id="question_div_'.$questionId.'" class="main_question '.$remind_highlight.'" >';
 
         // Shows the question + possible answers
@@ -5588,7 +5589,6 @@ class Exercise
         }
 
         echo '<div class="row"><div class="pull-right">'.$paginator.'</div></div>';
-
         echo Display::div($exercise_actions, array('class'=>'form-actions'));
         echo '</div>';
     }

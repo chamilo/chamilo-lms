@@ -352,7 +352,7 @@ if (!isset($_SESSION['objExercise']) || $_SESSION['objExercise']->id != $_REQUES
     }
 }
 
-$objExercise = new Exercise(); $objExercise->read($exerciseId);
+// $objExercise = new Exercise(); $objExercise->read($exerciseId);
 
 //2. Checking if $objExercise is set
 if (!isset($objExercise) && isset($_SESSION['objExercise'])) {
@@ -455,8 +455,8 @@ if ($objExercise->selectAttempts() > 0) {
 // 5. Getting user exercise info (if the user took the exam before) - generating exe_id
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
 
-if (1) {
-//if (!isset($_SESSION['questionList'])) {
+//if (1) {
+if (!isset($_SESSION['questionList'])) {
     // Selects the list of question ID
     $questionList = $objExercise->getQuestionList();
 
@@ -475,10 +475,8 @@ if (1) {
 	}
 }
 
-// var_dump($questionList);
 //Fix in order to get the correct question list
-$questionListFlatten = $objExercise->transform_question_list_with_medias($questionList, true);
-// var_dump($questionListFlatten);
+$questionListFlatten = $objExercise->transformQuestionListWithMedias($questionList, true);
 
 Session::write('question_list_flatten', $questionListFlatten);
 
@@ -822,7 +820,6 @@ if (api_is_course_admin() && $origin != 'learnpath') {
     }
     echo '</div>';
 }
-//var_dump($questionList);var_dump($questionListFlatten);
 if ($objExercise->type == ONE_PER_PAGE) {
     echo $objExercise->getProgressPagination(
         $exe_id,

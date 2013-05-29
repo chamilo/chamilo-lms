@@ -4849,7 +4849,7 @@ class Exercise
     public function getQuestionList($expand_media_questions = false)
     {
         $questionList = $this->selectQuestionList();
-        $questionList = $this->transform_question_list_with_medias($questionList, $expand_media_questions);
+        $questionList = $this->transformQuestionListWithMedias($questionList, $expand_media_questions);
         return $questionList;
     }
 
@@ -4859,7 +4859,7 @@ class Exercise
      * @params bool expand or not question list (true show all questions, false show media question id instead of the question ids)
      *
      **/
-    public function transform_question_list_with_medias($question_list, $expand_media_questions = false)
+    public function transformQuestionListWithMedias($question_list, $expand_media_questions = false)
     {
         $new_question_list = array();
         if (!empty($question_list)) {
@@ -5333,7 +5333,7 @@ class Exercise
         $counterNoMedias = 0;
         $nextValue = 0;
         $wasMedia = false;
-        $before = array();
+        $before = 0;
 
         if (!empty($categories)) {
 
@@ -5361,10 +5361,9 @@ class Exercise
 
                 if (!empty($nextValue)) {
                     if ($wasMedia) {
-                        $nextValue = $nextValue - count($before) -1;
+                        $nextValue = $nextValue - $before + 1;
                     }
                 }
-
                 $html .= Display::progressPaginationBar(
                     $nextValue,
                     $questionList,

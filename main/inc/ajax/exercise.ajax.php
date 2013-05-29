@@ -12,24 +12,68 @@ require_once '../global.inc.php';
 // @todo: Is this really needed? see 33cd962f077ed8c2e4b696bdd18b54db00890ef2
 require_once api_get_path(LIBRARY_PATH).'transaction.lib.php';
 
+use \ChamiloSession as Session;
+
 api_protect_course_script(true);
 
 $action = $_REQUEST['a'];
 $course_id = api_get_course_int_id();
 
-if ($debug) error_log("$action ajax call");
+if ($debug) {
+    error_log("$action ajax call");
+}
 
 $session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : api_get_session_id();
 $course_code = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : api_get_course_id();
 
 switch ($action) {
+    case 'get_categories_by_media':
+        $questionId = $_REQUEST['questionId'];
+        $mediaId = $_REQUEST['mediaId'];
+        $exerciseId = $_REQUEST['exerciseId'];
+        $question = Question::read($questionId);
+
+        if (empty($mediaId)) {
+            echo 0;
+            break;
+        }
+        $categoryId = $question->allQuestionWithMediaHaveTheSameCategory($exerciseId, $mediaId, null, null, true);
+
+        if (!empty($categoryId)) {
+            $category = new Testcategory($categoryId);
+            echo json_encode(
+                array(
+                    'title' => $category->title,
+                    'value' => $category->id
+                )
+            );
+        } else {
+            echo -1;
+        }
+        break;
     case 'exercise_category_exists':
         $category = new Testcategory();
         $category->getCategory($_REQUEST['id']);
         if (empty($category->id)) {
             echo 0;
         } else {
-            echo 1;
+            $courseId = api_get_course_int_id();
+            if (isset($courseId)) {
+                // Global
+                if ($category->c_id == 0) {
+                    echo 1;
+                    exit;
+                } else {
+                    // Local
+                    if ($category->c_id == $courseId) {
+                        echo 1;
+                        exit;
+                    }
+                }
+            } else {
+                echo 0;
+                exit;
+            }
         }
         break;
     case 'search_category_parent':
@@ -37,12 +81,19 @@ switch ($action) {
 
         $cat = new Testcategory(null, null, null, null, $type);
         $items = $cat->get_categories_by_keyword($_REQUEST['tag']);
+        $courseId = api_get_course_int_id();
 
         $json_items = array();
         if (!empty($items)) {
             foreach ($items as $item) {
                 if ($item['c_id'] == 0) {
                     $item['title'] .= " [".get_lang('Global')."]";
+                } else {
+                    if (isset($courseId)) {
+                        if ($item['c_id'] != $item['c_id']) {
+                            continue;
+                        }
+                    }
                 }
                 $json_items[] = array(
                     'key' => $item['iid'],
@@ -259,8 +310,7 @@ switch ($action) {
 
             // Question info.
             $question_id             = intval($_REQUEST['question_id']);
-
-            $question_list           = $_SESSION['question_list_flatten'];
+            $question_list           = Session::read('question_list_flatten');
 
             // If exercise or question is not set then exit.
             if (empty($question_list) || empty($objExercise)) {
@@ -283,7 +333,7 @@ switch ($action) {
                 $total_score   = $exercise_stat_info['exe_result'];
 
                 //Getting the list of attempts
-                $attempt_list  = get_all_exercise_event_by_exe_id($exe_id);
+                $attempt_list  = getAllExerciseEventByExeId($exe_id);
             }
 
             // Updating Reminder algorythm.
@@ -293,7 +343,7 @@ switch ($action) {
                 // Fixing reminder order
                 $fixedRemindList = array();
                 if (!empty($bd_reminder_list)) {
-                    foreach($question_list as $questionId) {
+                    foreach ($question_list as $questionId) {
                         if (in_array($questionId, $bd_reminder_list)) {
                             $fixedRemindList[] = $questionId;
                         }
@@ -302,30 +352,29 @@ switch ($action) {
 
                 $bd_reminder_list = $fixedRemindList;
 
-            	if (empty($remind_list)) {
-            		$remind_list = $bd_reminder_list;
+                if (empty($remind_list)) {
+                    $remind_list = $bd_reminder_list;
 
-            		$new_list = array();
-            		foreach($bd_reminder_list as $item) {
-            			if ($item != $question_id) {
-            				$new_list[] = $item;
-            			}
-            		}
-            		$remind_list = $new_list;
-            	} else {
-            		if (isset($remind_list[0])) {
-            			if (!in_array($remind_list[0], $bd_reminder_list)) {
-            				array_push($bd_reminder_list, $remind_list[0]);
-            			}
-            			$remind_list = $bd_reminder_list;
-            		}
-            	}
+                    $new_list = array();
+                    foreach ($bd_reminder_list as $item) {
+                        if ($item != $question_id) {
+                            $new_list[] = $item;
+                        }
+                    }
+                    $remind_list = $new_list;
+                } else {
+                    if (isset($remind_list[0])) {
+                        if (!in_array($remind_list[0], $bd_reminder_list)) {
+                            array_push($bd_reminder_list, $remind_list[0]);
+                        }
+                        $remind_list = $bd_reminder_list;
+                    }
+                }
             }
 
-
-            //No exe id? Can't save answer.
+            // No exe id? Can't save answer.
             if (empty($exe_id)) {
-                //Fires an error
+                // Fires an error.
                 echo 'error';
                 exit;
             } else {
@@ -344,7 +393,7 @@ switch ($action) {
 
             unset($objQuestionTmp);
 
-            //Looping the question list
+            // Looping the question list
 
             if ($debug) error_log("Looping question list".print_r($question_list, 1));
             if ($debug) error_log("Trying to save question: $question_id ");
@@ -354,6 +403,7 @@ switch ($action) {
                 if ($type == 'simple' && $question_id != $my_question_id) {
                     continue;
                 }
+
                 if ($debug) error_log("Saving question_id = $my_question_id ");
 
                 $my_choice = $choice[$my_question_id];
@@ -372,7 +422,7 @@ switch ($action) {
                     $total_weight += $objQuestionTmp->selectWeighting();
                 }
 
-            	//this variable commes from exercise_submit_modal.php
+            	// This variable commes from exercise_submit_modal.php
                 $hotspot_delineation_result = null;
                 if (isset($_SESSION['hotspot_delineation_result']) && isset($_SESSION['hotspot_delineation_result'][$objExercise->selectId()])) {
             	    $hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$my_question_id];
@@ -400,7 +450,19 @@ switch ($action) {
 
             	// We're inside *one* question. Go through each possible answer for this question
 
-            	$result = $objExercise->manage_answer($exe_id, $my_question_id, $my_choice, 'exercise_result', $hot_spot_coordinates, true, false, false, $objExercise->selectPropagateNeg(), $hotspot_delineation_result, true);
+            	$result = $objExercise->manage_answer(
+                    $exe_id,
+                    $my_question_id,
+                    $my_choice,
+                    'exercise_result',
+                    $hot_spot_coordinates,
+                    true,
+                    false,
+                    false,
+                    $objExercise->selectPropagateNeg(),
+                    $hotspot_delineation_result,
+                    true
+                );
 
                 //Adding the new score
                 $total_score += $result['score'];

@@ -22,16 +22,11 @@ class TestQuestionDescription
             array('name' => 'colors'),
             array('name' => 'tools'),
             array('name' => 'others'),
-            array('name' => 'about')
+            //array('name' => 'about')
         );
 
         //$config['width'] = '100';
         //$config['height'] = '200';
-
-
         return $config;
     }
 }
-
-
-

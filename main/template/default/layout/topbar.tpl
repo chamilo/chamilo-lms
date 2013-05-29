@@ -81,7 +81,7 @@
                                     <li><a href="{{ _p.web_main }}social/invitations.php">{{ "PendingInvitations"|get_lang }}</a></li> -->
                                 </ul>
                             </li>
-                            <li><a href="{{  _p.web }}index.php?logout=logout">{{ "Logout"|get_lang }}</a></li>
+                            <li><a href="{{ _p.public_web }}logout">{{ "Logout"|get_lang }}</a></li>
                         </ul>
                     </div> <!-- /nav collapse -->
                 {% endif %}

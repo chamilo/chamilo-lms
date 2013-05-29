@@ -1,14 +1,15 @@
 -- This script updates the databases structure before migrating the data from
--- version 1.9.0 (or version 1.9.2, 1.9.4) to version 1.10.0
--- it is intended as a standalone script, however, because of the multiple
--- databases related difficulties, it should be parsed by a PHP script in
--- order to connect to and update the right databases.
--- There is one line per query, allowing the PHP function file() to read
+-- version 1.9.0 (or version 1.9.2, .4, .6 or .8) to version 1.10.0
+-- It is intended as a standalone script. Because of the relatively recent
+-- migration to a single-database structure, it is still recommended to let
+-- it be parsed by Chamilo installation scripts. We will modify this message
+-- once we have ensured it works properly through direct SQL execution.
+-- There is one line per query now, allowing the PHP function file() to read
 -- all lines separately into an array. The xxMAINxx-type markers are there
 -- to tell the PHP script which database we're talking about.
--- By always using the keyword "TABLE" in the queries, we should be able
--- to retrieve and modify the table name from the PHP script if needed, which
--- will allow us to deal with the unique-database-type installations
+-- For version tracking easiness, we recommend you define all new queries
+-- at the end of the corresponding section. We will re-order them previous
+-- to the stable release in order to optimize the migration.
 
 -- xxMAINxx
 
@@ -71,6 +72,11 @@ ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_use
 ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_course_id (c_id);
 
 ALTER TABLE session_rel_user ADD INDEX idx_session_rel_user_id_user_moved (id_user, moved_to);
+
+INSERT INTO settings_current(variable, type, category, selected_value, title, comment, access_url, access_url_changeable, access_url_locked) values ('login_as_allowed','radio','security','true','AdminLoginAsAllowedTitle','AdminLoginAsAllowedComment', 1, 0, 1);
+INSERT INTO settings_options(variable, value, display_text) values ('login_as_allowed','true','Yes'),('login_as_allowed','false','No');
+insert into settings_current(variable, type, category, selected_value, title, comment, access_url, access_url_changeable, access_url_locked) values ('admins_can_set_users_pass','radio','security','true','AdminsCanChangeUsersPassTitle','AdminsCanChangeUsersPassComment', 1, 0, 1);
+insert into settings_options(variable, value, display_text) values('admins_can_set_users_pass','true','Yes'),('admins_can_set_users_pass','false','No');
 
 -- Courses changes c_XXX
 
@@ -288,6 +294,7 @@ ALTER TABLE user_field_values ADD COLUMN comment VARCHAR(100) default '';
 ALTER TABLE session_field_values ADD COLUMN comment VARCHAR(100) default '';
 ALTER TABLE course_field_values ADD COLUMN comment VARCHAR(100) default '';
 ALTER TABLE question_field_values ADD COLUMN comment VARCHAR(100) default '';
+ALTER TABLE c_quiz ADD COLUMN end_button int NOT NULL default 0;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.011' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.015' WHERE variable = 'chamilo_database_version';

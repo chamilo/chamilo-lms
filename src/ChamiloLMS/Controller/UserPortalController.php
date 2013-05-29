@@ -22,7 +22,7 @@ class UserPortalController extends CommonController
      *
      * @return Response|void
      */
-    function indexAction(Application $app, $type = 'courses', $filter = 'current', $page = 1)
+    public function indexAction(Application $app, $type = 'courses', $filter = 'current', $page = 1)
     {
         $this->cidReset();
 
@@ -45,7 +45,6 @@ class UserPortalController extends CommonController
 
         /** var $pageController \PageController */
         $pageController = $app['page_controller'];
-
 
         switch ($type) {
             case 'sessions':
@@ -104,7 +103,7 @@ class UserPortalController extends CommonController
     /**
      * Redirects after login
      */
-    function redirectAfterLogin()
+    public function redirectAfterLogin()
     {
         // Get the courses list
         $personal_course_list = \UserManager::get_personal_session_course_list(api_get_user_id());
@@ -146,7 +145,7 @@ class UserPortalController extends CommonController
         }
     }
 
-    function check_last_login()
+    public function check_last_login()
     {
         /**
          * @todo This piece of code should probably move to local.inc.php where the actual login procedure is handled.
@@ -184,5 +183,4 @@ class UserPortalController extends CommonController
             event_open();
         }
     }
-
 }

@@ -43,7 +43,7 @@ $TBL_TRACK_EXERCICES    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_
 $TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 // General parameters passed via POST/GET
-if ($debug) { error_log('Entered exercise_result.php: '.print_r($_POST,1)); }
+if ($debug) { error_log('Entered exercise_show.php: '.print_r($_POST,1)); }
 
 if ( empty ( $formSent ) ) {            $formSent       = isset($_REQUEST['formSent']) ? $_REQUEST['formSent'] : null; }
 if ( empty ( $exerciseResult ) ) {      $exerciseResult = isset($_SESSION['exerciseResult']) ? $_SESSION['exerciseResult'] : null; }

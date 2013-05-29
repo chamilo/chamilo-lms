@@ -123,13 +123,13 @@ if (!$inATest) {
     echo "<div style='clear:both'>&nbsp;</div>";
 
     echo '<div id="question_list">';
-	if ($nbrQuestions) {
-        //Always getting list from DB
+    if ($nbrQuestions) {
+        // Always getting list from DB.
+
         $objExercise->setCategoriesGrouping(false);
         $questionList = $objExercise->selectQuestionList(true);
 
-        // Style for columns
-
+        // Style for columns.
         $styleQuestion = "width:50%; float:left;";
         $styleType = "width:4%; float:left; padding-top:4px; text-align:center;";
         $styleCat = "width:22%; float:left; padding-top:8px; text-align:center;";

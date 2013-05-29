@@ -31,16 +31,12 @@ $this_section = SECTION_COURSES;
 // notice for unauthorized people.
 api_protect_course_script(true);
 
-if($debug>0){error_log('Entered exercise_result.php: '.print_r($_POST,1));}
-
-// general parameters passed via POST/GET
+// General parameters passed via POST/GET
 if ( empty ( $origin ) ) {                  $origin                 = Security::remove_XSS($_REQUEST['origin']);}
 if ( empty ( $learnpath_id ) ) {            $learnpath_id           = intval($_REQUEST['learnpath_id']);}
 if ( empty ( $learnpath_item_id ) ) {       $learnpath_item_id      = intval($_REQUEST['learnpath_item_id']);}
 if ( empty ( $learnpath_item_view_id ) ) {  $learnpath_item_view_id = intval($_REQUEST['learnpath_item_view_id']);}
-
 if ( empty ($exerciseId)) {  $exerciseId = intval($_REQUEST['exerciseId']);}
-
 if ( empty ($objExercise)) { $objExercise = $_SESSION['objExercise'];}
 
 if (!$objExercise) {
@@ -54,20 +50,21 @@ $time_control = false;
 $clock_expired_time = ExerciseLib::get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
 
 if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
-	$time_control = true;
+    $time_control = true;
 }
 
 if ($time_control) {
     // Get time left for exipiring time
     $time_left = api_strtotime($clock_expired_time,'UTC') - time();
-	$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
+    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
     $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
     $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
-	$htmlHeadXtra[] = $objExercise->show_time_control_js($time_left);
+    $htmlHeadXtra[] = $objExercise->show_time_control_js($time_left);
 }
 
+$exe_id = null;
 if (isset($_SESSION['exe_id'])) {
 	$exe_id = intval($_SESSION['exe_id']);
 }
@@ -148,14 +145,10 @@ echo '<script>
 		}
 </script>';
 
-$exercise_result = get_answered_questions_from_attempt($exe_id, $objExercise);
+$exercise_result = getAnsweredQuestionsFromAttempt($exe_id, $objExercise);
 
 $remind_list = $exercise_stat_info['questions_to_check'];
 $remind_list = explode(',', $remind_list);
-
-echo Display::label(get_lang('QuestionWithNoAnswer'), 'warning');
-echo '<hr>';
-echo '<div class="clear"></div><br />';
 
 $table = '<div class="row">';
 
@@ -250,10 +243,33 @@ foreach ($question_list as $questionId) {
 $table .= "</div>";
 $table .= "</div>";
 
+/*echo Display::label(get_lang('QuestionWithNoAnswer'), 'warning');
+echo '<hr>';
+echo '<div class="clear"></div><br />';
 echo Display::div($table, array('class' => 'span12'));
-
+*/
 $exercise_actions = Display::url(get_lang('EndTest'), 'javascript://', array('onclick' => 'final_submit();', 'class' => 'btn btn-warning'));
-$exercise_actions .= '&nbsp;'.Display::url(get_lang('ReviewQuestions'), 'javascript://', array('onclick' => 'review_questions();', 'class' => 'btn btn-success'));
+
+//$exercise_actions .= '&nbsp;'.Display::url(get_lang('ReviewQuestions'), 'javascript://', array('onclick' => 'review_questions();', 'class' => 'btn btn-success'));
+
+$questionList = explode(',', $exercise_stat_info['data_tracking']);
+
+$questionListFlatten = $objExercise->transform_question_list_with_medias($questionList, true);
+$mediaQuestions = $objExercise->getMediaList($questionList);
+
+$params = "exe_id=$exe_id&exerciseId=$exerciseId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();
+$url = api_get_path(WEB_CODE_PATH).'exercice/exercise_submit.php?'.$params;
+
+echo $objExercise->getProgressPagination(
+    $exe_id,
+    $questionList,
+    $questionListFlatten,
+    $remind_list,
+    2,
+    null,
+    $url,
+    null
+);
 
 echo Display::div('', array('class' => 'clear'));
 echo Display::div($exercise_actions, array('class' => 'form-actions'));

@@ -141,6 +141,7 @@ $aType = array(
 );
 
 $fastEdition = api_get_course_setting('allow_fast_exercise_edition') == 1 ? true : false;
+//$fastEdition = false;
 
 if ($fastEdition) {
     $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -255,11 +256,11 @@ if (!empty($clone_question) && !empty($objExercise->id)) {
     $new_question_obj->addToList($exerciseId);
 
     // This should be moved to the duplicate function
-    $new_answer_obj = new Answer($clone_question);
+    $new_answer_obj = new Answer($clone_question, null, $objExercise);
     $new_answer_obj->read();
     $new_answer_obj->duplicate($new_id);
 
-    //Reloading tne $objExercise obj
+    // Reloading tne $objExercise obj
     $objExercise->read($objExercise->id);
 
     header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id);
@@ -296,14 +297,6 @@ if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
     $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$objExercise->id, "name" => $objExercise->name);
 } else {
     $interbreadcrumb[] = array("url" => "#", "name" => $objExercise->name);
-}
-
-// shows a link to go back to the question pool
-if (!$exerciseId && $nameTools != get_lang('ExerciseManagement')) {
-    $interbreadcrumb[] = array(
-        "url" => "question_pool.php?fromExercise=$fromExercise",
-        "name" => get_lang('QuestionPool')
-    );
 }
 
 // if the question is duplicated, disable the link of tool name
@@ -359,10 +352,7 @@ $(function() {
     });
 });
 
-
 </script>';
-
-
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';

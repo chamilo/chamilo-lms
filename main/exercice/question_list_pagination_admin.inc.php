@@ -56,21 +56,21 @@ $column_model = array(
     array(
         'name'     => 'level',
         'index'    => 'level',
-        'width'    => '100',
+        'width'    => '50',
         'align'    => 'left',
         'sortable' => 'false'
     ),
     array(
         'name'     => 'score',
         'index'    => 'score',
-        'width'    => '100',
+        'width'    => '50',
         'align'    => 'left',
         'sortable' => 'false'
     ),
     array(
         'name'      => 'actions',
         'index'     => 'actions',
-        'width'     => '100',
+        'width'     => '50',
         'align'     => 'left',
         'formatter' => 'action_formatter',
         'sortable'  => 'false'
@@ -80,6 +80,7 @@ $column_model = array(
 
 //Autowidth
 $extra_params['autowidth'] = 'true';
+
 //height auto
 $extra_params['height'] = 'auto';
 
@@ -91,7 +92,7 @@ if ($objExercise->edit_exercise_in_lp == true) {
 }
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-    return \'<a href="?fromExercise='.$exerciseId.'&myid=1&cidReq='.$courseCode.'&editQuestion=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
+    return \'<a href="?exerciseId='.$exerciseId.'&myid=1&cidReq='.$courseCode.'&editQuestion=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
     '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;" href="?cidReq='.$courseCode.'&sec_token='.$token.'&clone_question=\'+options.rowId+\'">'.Display::return_icon('cd.gif',get_lang('Copy'), '',ICON_SIZE_SMALL).'</a>'.
     $delete_link.'\';
 }';
@@ -102,6 +103,10 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
                 // grid definition see the $career->display() function
                 echo Display::grid_js('question_list', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
             ?>
+
+            $("#question_list").jqGrid('navGrid','#question_list_pager',
+                {search:false, edit:false, add:false, del:false, refresh:true}
+            );
         });
     </script>
 
@@ -115,7 +120,7 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
 
 <?php
 
-Question :: display_type_menu($objExercise);
+Question::display_type_menu($objExercise);
 echo Question::getMediaLabels();
 
 echo '<br/><div style="clear:both;"></div>';

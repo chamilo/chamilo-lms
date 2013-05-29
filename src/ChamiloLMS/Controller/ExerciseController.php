@@ -9,11 +9,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use \ChamiloSession as Session;
 
+
 /**
  * @package ChamiloLMS.Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class ExerciseController
+class ExerciseController extends CommonController
 {
 
     public function dashboardAction(Application $app, $exerciseId)
@@ -100,6 +101,52 @@ class ExerciseController
         //@todo improve this JS includes should be added using twig
         $extraJS[]      = api_get_jqgrid_js();
         $app['extraJS'] = $extraJS;
+
+        // @todo this should be auto
+
+        if (empty($exerciseId)) {
+            $breadcrumbs = array(
+                array(
+                    'name' => get_lang('Exercise'),
+                    'url' => array(
+                        'uri' => api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq()
+                    )
+                ),
+                array(
+                    'name' => get_lang('QuestionPool'),
+                    'url' => array(
+                        'route' => 'exercise_question_pool_global',
+                        'routeParameters' => array(
+                            'cidReq' => api_get_course_id(),
+                            'id_session' => api_get_session_id(),
+                            //'exerciseId' => $exerciseId,
+                        )
+                    )
+                )
+            );
+        } else {
+            $breadcrumbs = array(
+                array(
+                    'name' => get_lang('Exercise'),
+                    'url' => array(
+                        'uri' => api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidreq().'&exerciseId'.$exerciseId
+                    )
+                ),
+                array(
+                    'name' => get_lang('QuestionPool'),
+                    'url' => array(
+                        'route' => 'exercise_question_pool',
+                        'routeParameters' => array(
+                            'cidReq' => api_get_course_id(),
+                            'id_session' => api_get_session_id(),
+                            'exerciseId' => $exerciseId,
+                        )
+                    )
+                )
+            );
+        }
+
+        $this->setBreadcrumb($app, $breadcrumbs);
 
         $questionColumns = \Question::getQuestionColumns($cidReq);
 
@@ -212,7 +259,14 @@ class ExerciseController
         $question->setDefaultValues = true;
 
         // Generating edit URL.
-        $url = $app['url_generator']->generate('exercise_question_edit', array('cidReq' => api_get_course_id(), 'id_session' => api_get_session_id(), 'id' => $id));
+        $url = $app['url_generator']->generate(
+            'exercise_question_edit',
+            array(
+                'cidReq' => api_get_course_id(),
+                'id_session' => api_get_session_id(),
+                'id' => $id
+            )
+        );
 
         // Creating a new form
         $form = new \FormValidator('edit_question', 'post', $url);
@@ -229,7 +283,14 @@ class ExerciseController
             // Save answers.
             $question->processAnswersCreation($form);
 
-            $url = $app['url_generator']->generate('exercise_question_show', array('cidReq' => api_get_course_id(), 'id_session' => api_get_session_id(), 'id' => $id));
+            $url = $app['url_generator']->generate(
+                'exercise_question_show',
+                array(
+                    'cidReq' => api_get_course_id(),
+                    'id_session' => api_get_session_id(),
+                    'id' => $id
+                )
+            );
             return $app->redirect($url);
         }
 

@@ -70,9 +70,9 @@ class MultipleAnswer extends Question {
 		$defaults = array();
 		$correct = 0;
 		if(!empty($this -> id))	{
-			$answer = new Answer($this -> id);
-			$answer -> read();
-			if(count($answer->nbrAnswers)>0 && !$form->isSubmitted()) {
+			$answer = new Answer($this->id);
+			$answer->read();
+			if (count($answer->nbrAnswers)>0 && !$form->isSubmitted()) {
 				$nb_answers = $answer->nbrAnswers;
 			}
 		}

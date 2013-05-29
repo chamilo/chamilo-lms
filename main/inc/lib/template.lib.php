@@ -44,14 +44,15 @@ class Template
         $this->app['classic_layout'] = true;
         $this->navigation_array = $this->returnNavigationArray();
 
-        //just in case
+        // Just in case
         global $tool_name;
 
-        //Page title
+        // Page title
         $this->title = isset($app['title']) ? $app['title'] : $tool_name;
         $this->show_learnpath = $app['template.show_learnpath'];
 
-        // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui
+        /* Current themes: cupertino, smoothness, ui-lightness.
+           Find the themes folder in main/inc/lib/javascript/jquery-ui */
         $this->jquery_ui_theme = 'smoothness';
 
         //Setting system variables
@@ -80,7 +81,6 @@ class Template
 
         //header and footer are showed by default
         $this->setFooter($app['template.show_footer']);
-
         $this->setHeader($app['template.show_header']);
 
         $this->setHeaderParameters();
@@ -322,6 +322,7 @@ class Template
             'web_img' => api_get_path(WEB_IMG_PATH),
             'web_plugin' => api_get_path(WEB_PLUGIN_PATH),
             'web_lib' => api_get_path(WEB_LIBRARY_PATH),
+            'public_web' => api_get_path(WEB_PUBLIC_PATH)
         );
 
         $this->assign('_p', $_p);
@@ -338,7 +339,7 @@ class Template
 
     /**
      * Set theme, include CSS files  */
-    private function set_css_files()
+    private function setCssFiles()
     {
         global $disable_js_and_css_files;
         $css = array();
@@ -348,6 +349,8 @@ class Template
         if (!empty($this->preview_theme)) {
             $this->theme = $this->preview_theme;
         }
+
+        $this->app['theme'] = $this->theme;
 
         $cssPath = api_get_path(WEB_CSS_PATH);
 
@@ -417,14 +420,14 @@ class Template
         }
 
         // Logo
-        $logo = $this->returnLogo($this->theme);
-        $this->assign('logo', $logo);
+        /*$logo = $this->returnLogo($this->theme);
+        $this->assign('logo', $logo);*/
     }
 
     /**
      *
      */
-    private function set_js_files()
+    private function setJsFiles()
     {
         global $disable_js_and_css_files, $htmlHeadXtra;
         //JS files
@@ -545,8 +548,8 @@ class Template
         $this->assign('title_string', $title_string);
 
         //Setting the theme and CSS files
-        $this->set_css_files();
-        $this->set_js_files();
+        $this->setCSSFiles();
+        $this->setJsFiles();
 
         // Implementation of prefetch.
         // See http://cdn.chamilo.org/main/img/online.png for details
@@ -852,7 +855,7 @@ class Template
         return $menu;
     }
 
-    function returnNavigationLinks()
+    public function returnNavigationLinks()
     {
         $html = '';
 
@@ -877,7 +880,7 @@ class Template
         return $html;
     }
 
-    function render_layout($layout = null)
+    public function render_layout($layout = null)
     {
         if (empty($layout)) {
             $layout = $this->app['default_layout'];
@@ -885,7 +888,7 @@ class Template
         return $this->app['twig']->render($this->app['template_style'].'/layout/'.$layout);
     }
 
-    function render_template($template, $elements = array())
+    public function render_template($template, $elements = array())
     {
         return $this->app['twig']->render($this->app['template_style'].'/'.$template, $elements);
     }
@@ -990,7 +993,12 @@ class Template
         return $navigation;
     }
 
-    function returnLogo($theme)
+    /**
+     * @param string $theme
+     * @deprecated the logo is wrote in the main_header.tpl file
+     * @return string
+     */
+    public function returnLogo($theme)
     {
         $_course = api_get_course_info();
         $html = '';
@@ -1025,25 +1033,10 @@ class Template
             }
         }
 
-        /* //  Course title section
-         if (!empty($_cid) and $_cid != -1 and isset($_course)) {
-             //Put the name of the course in the header
-             $html .= '<div id="my_courses">';
-             $html .= '</div>';
-         } elseif (isset($nameTools) && $language_file != 'course_home') {
-             //Put the name of the user-tools in the header
-             if (!isset($user_id)) {
-                 //echo '<div id="my_courses"></div>';
-             } elseif (!$noPHP_SELF) {
-                 $html .= '<div id="my_courses"><a href="'.api_get_self().'?'.api_get_cidreq(). '" target="_top">'.$nameTools.'</a></div>';
-             } else {
-                 $html .= '<div id="my_courses">'.$nameTools.'</div>';
-             }
-         }*/
         return $html;
     }
 
-    function returnNotificationMenu()
+    public function returnNotificationMenu()
     {
         $_course = api_get_course_info();
         $course_id = api_get_course_id();
@@ -1261,7 +1254,6 @@ class Template
 
     /**
      * Return breadcrumb
-     * @param array $interbreadcrumb
      * @return string
      */
     public function returnBreadcrumb()

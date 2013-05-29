@@ -890,7 +890,7 @@ if ($modifyAnswers) {
                             $option_lp = '<option value="0" selected="selected" >' . get_lang('SelectTargetLP') . '</option>' . $option_lp;
                         }
 
-                        //Feedback SELECT
+                        // Feedback SELECT
 
                         $question_list = $objExercise->selectQuestionList();
                         $option_feed = '';

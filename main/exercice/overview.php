@@ -93,7 +93,7 @@ if (isset($_GET['preview'])) {
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, 0);
 $attempt_list = null;
 if (isset($exercise_stat_info['exe_id'])) {
-	$attempt_list = get_all_exercise_event_by_exe_id($exercise_stat_info['exe_id']);
+	$attempt_list = getAllExerciseEventByExeId($exercise_stat_info['exe_id']);
 }
 
 //1. Check if this is a new attempt or a previous
@@ -124,7 +124,7 @@ if ($visible_return['value'] == false) {
     }
 }
 
-$attempts = get_exercise_results_by_user(api_get_user_id(), $objExercise->id, api_get_course_int_id(), api_get_session_id(), $learnpath_id, $learnpath_item_id, 'desc');
+$attempts = getExerciseResultsByUser(api_get_user_id(), $objExercise->id, api_get_course_int_id(), api_get_session_id(), $learnpath_id, $learnpath_item_id, 'desc');
 $counter = count($attempts);
 
 $my_attempt_array = array();

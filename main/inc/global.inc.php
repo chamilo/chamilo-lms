@@ -153,25 +153,6 @@ if ($alreadyInstalled) {
     $userPasswordCrypted = (!empty($_configuration['password_encryption']) ? $_configuration['password_encryption'] : 'sha1');
 }
 
-/* Retrieving all the chamilo config settings for multiple URLs feature*/
-if (isset($_configuration['multiple_access_urls']) && !empty($_configuration['multiple_access_urls'])) {
-    $_configuration['access_url'] = 1;
-    $access_urls = api_get_access_urls();
-
-    $protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
-    $request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
-    $request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
-
-    foreach ($access_urls as & $details) {
-        if ($request_url1 == $details['url'] or $request_url2 == $details['url']) {
-            $_configuration['access_url'] = $details['id'];
-        }
-    }
-} else {
-    $_configuration['access_url'] = 1;
-}
-
-$app['configuration'] = $_configuration;
 
 // Ensure that _configuration is in the global scope before loading
 // main_api.lib.php. This is particularly helpful for unit tests
@@ -218,16 +199,13 @@ $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
 // @todo use silex session provider instead of a custom class
 Chamilo::session()->start($alreadyInstalled);
 
-/** Including service providers */
-require_once 'services.php';
-
 // Connect to the server database and select the main chamilo database.
 if (!($conn_return = @Database::connect(
     array(
-        'server' => $app['configuration']['db_host'],
-        'username' => $app['configuration']['db_user'],
-        'password' => $app['configuration']['db_password'],
-        'persistent' => isset($app['configuration']['db_persistent_connection']) ? $app['configuration']['db_persistent_connection'] : null
+        'server' => $_configuration['db_host'],
+        'username' => $_configuration['db_user'],
+        'password' => $_configuration['db_password'],
+        'persistent' => isset($_configuration['db_persistent_connection']) ? $_configuration['db_persistent_connection'] : null
         // When $app['configuration']['db_persistent_connection'] is set, it is expected to be a boolean type.
     )
 ))
@@ -240,41 +218,42 @@ if (!$app['configuration']['db_host']) {
     //$app->abort(500, "Database is unavailable"); //error 3
 }*/
 
+/* Retrieving all the chamilo config settings for multiple URLs feature*/
+if (isset($_configuration['multiple_access_urls']) && !empty($_configuration['multiple_access_urls'])) {
+    $_configuration['access_url'] = 1;
+    $access_urls = api_get_access_urls();
+
+    $protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
+    $request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
+    $request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
+
+    foreach ($access_urls as & $details) {
+        if ($request_url1 == $details['url'] or $request_url2 == $details['url']) {
+            $_configuration['access_url'] = $details['id'];
+        }
+    }
+} else {
+    $_configuration['access_url'] = 1;
+}
+
+$app['configuration'] = $_configuration;
+
+/** Including service providers */
+require_once 'services.php';
+
 $charset = 'UTF-8';
 $checkConnection = false;
 
 if (isset($app['configuration']['main_database'])) {
     // The system has not been designed to use special SQL modes that were introduced since MySQL 5.
     Database::query("set session sql_mode='';");
-
     $checkConnection = @Database::select_db($app['configuration']['main_database'], $conn_return);
 
     if ($checkConnection) {
 
         // Initialization of the database encoding to be used.
-        Database::query("SET SESSION character_set_server='utf8';");
-        Database::query("SET SESSION collation_server='utf8_general_ci';");
-
-        /*   Initialization of the default encodings */
-
-        // The platform's character set must be retrieved at this early moment.
-        /*$sql = "SELECT selected_value FROM settings_current WHERE variable = 'platform_charset';";
-
-        $result = Database::query($sql);
-        while ($row = @Database::fetch_array($result)) {
-            $charset = $row[0];
-        }
-        if (empty($charset)) {
-            $charset = 'UTF-8';
-        }*/
-        //Charset is UTF-8
-        /*
-        if (api_is_utf8($charset)) {
-            // See Bug #1802: For UTF-8 systems we prefer to use "SET NAMES 'utf8'" statement in order to avoid a bizarre problem with Chinese language.
-            Database::query("SET NAMES 'utf8';");
-        } else {
-            Database::query("SET CHARACTER SET '".Database::to_db_encoding($charset)."';");
-        }*/
+        Database::query("SET SESSION character_set_server = 'utf8';");
+        Database::query("SET SESSION collation_server = 'utf8_general_ci';");
         Database::query("SET NAMES 'utf8';");
     }
 }
@@ -317,7 +296,7 @@ $charset_initial_value = $charset;
 
 // Loading chamilo settings
 /* @todo create a service provider to load plugins.
-  Check how bolt add extensions (including twig templates, config with yml)*/
+   Check how bolt add extensions (including twig templates, config with yml)*/
 $_plugins = array();
 if ($alreadyInstalled && $checkConnection) {
     $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));

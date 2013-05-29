@@ -33,7 +33,7 @@ class Draggable extends Matching
     }
 
     /**
-     * function which redifines Question::createAnswersForm
+     * Function which redefines Question::createAnswersForm
      * @param the formvalidator instance
      */
     public function createAnswersForm($form)
@@ -60,7 +60,7 @@ class Draggable extends Matching
 
         } else {
             if (!empty($this->id)) {
-                $answer = new Answer($this->id);
+                $answer = new Answer($this->id, api_get_course_int_id());
                 $answer->read();
                 if (count($answer->nbrAnswers) > 0) {
                     $nb_matches = $nb_options = 0;

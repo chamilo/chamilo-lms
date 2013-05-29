@@ -279,29 +279,5 @@ if ($list_type == 'complete') {
 }
 echo '</div>';
 
-/*
-$form = new FormValidator('search');
-
-$form->addElement('header', get_lang('Filter'));
-
-$form->addElement('text', 'start_date_start', get_lang('Between'), array('id' =>'start_date_start'));
-$form->addElement('text', 'start_date_end', get_lang('And'), array('id' =>'start_date_end'));
-$renderer = $form->defaultRenderer();
-
-$renderer->setElementTemplate(get_lang('StartDate').' {label} {element}', 'start_date_start');
-$renderer->setElementTemplate('{label} {element}', 'start_date_end');
-
-$form->addElement('html', '<div class="clear"></div>');
-
-$form->addElement('text', 'end_date_start', get_lang('Between'), array('id' =>'end_date_start'));
-$form->addElement('text', 'end_date_end', get_lang('And'), array('id' =>'end_date_end'));
-
-$renderer->setElementTemplate(get_lang('EndDate').' {label} {element}', 'end_date_start');
-$renderer->setElementTemplate('{label} {element}', 'end_date_end');
-
-$options = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());
-$form->addElement('select', 'course', get_lang('Course'), $options);
-$form->addElement('button', 'submit', get_lang('Search'), array('id' => 'search_button'));*/
-
 echo Display::grid_html('sessions');
 Display::display_footer();

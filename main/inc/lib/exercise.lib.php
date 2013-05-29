@@ -27,8 +27,18 @@ class ExerciseLib
      * @param int   current item from the list of questions
      * @param int   number of total questions
      * */
-    public static function showQuestion($objQuestionTmp, $only_questions = false, $origin = false, $current_item = '', $show_title = true, $freeze = false, $user_choice = array(), $show_comment = false, $exercise_feedback = null, $show_answers = false)
-    {
+    public static function showQuestion(
+        $objQuestionTmp,
+        $only_questions = false,
+        $origin = false,
+        $current_item = '',
+        $show_title = true,
+        $freeze = false,
+        $user_choice = array(),
+        $show_comment = false,
+        $exercise_feedback = null,
+        $show_answers = false
+    ) {
         // Text direction for the current language
         //$is_ltr_text_direction = api_get_text_direction() != 'rtl';
         // Change false to true in the following line to enable answer hinting
@@ -138,7 +148,7 @@ class ExerciseLib
                 $oFCKeditor->Value = $fck_content;
                 $s .= $oFCKeditor->CreateHtml();
             } elseif ($answerType == ORAL_EXPRESSION) {
-                //Add nanog
+                // Add nanogong
                 if (api_get_setting('enable_nanogong') == 'true') {
 
                     //@todo pass this as a parameter
@@ -177,7 +187,7 @@ class ExerciseLib
 
             if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE || $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
                 $header = Display::tag('th', get_lang('Options'));
-                foreach ($objQuestionTmp->options as $key => $item) {
+                foreach ($objQuestionTmp->options as $item) {
                     $header .= Display::tag('th', $item);
                 }
                 if ($show_comment) {
@@ -206,8 +216,6 @@ class ExerciseLib
                 }
             }
 
-            //for ($answerId=1; $answerId <= $nbrAnswers; $answerId++) {
-
             foreach ($objAnswerTmp->answer as $answerId => $answer_item) {
                 $answer = $objAnswerTmp->selectAnswer($answerId);
                 $answerCorrect = $objAnswerTmp->isCorrect($answerId);
@@ -219,6 +227,7 @@ class ExerciseLib
                 $attributes = array();
                 // Unique answer
                 if (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION))) {
+
                     $input_id = 'choice-'.$questionId.'-'.$answerId;
                     if (isset($user_choice[0]['answer']) && $user_choice[0]['answer'] == $numAnswer) {
                         $attributes = array('id' => $input_id, 'checked' => 1, 'selected' => 1);
@@ -263,6 +272,7 @@ class ExerciseLib
                     } else {
                         $s .= $answer_input;
                     }
+
                 } elseif (in_array($answerType, array(MULTIPLE_ANSWER, MULTIPLE_ANSWER_TRUE_FALSE, GLOBAL_MULTIPLE_ANSWER))) {
                     $input_id = 'choice-'.$questionId.'-'.$answerId;
                     $answer = Security::remove_XSS($answer, STUDENT);
@@ -338,6 +348,7 @@ class ExerciseLib
                         }
                         $s.='</tr>';
                     }
+
                 } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
 
                     // multiple answers
@@ -719,146 +730,146 @@ class ExerciseLib
                 }
                 //@todo I need to the get the feedback type
                 $html .=  '<input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'" />';
-                $html .=  '<table class="exercise_questions" >
-                      <tr>
-                        <td valign="top" colspan="2">';
+                $html .=  '<table class="exercise_questions">
+                           <tr>
+                            <td valign="top" colspan="2">';
                 $html .=  $questionDescription;
                 $html .=  '</td></tr>';
             }
+
             $canClick = isset($_GET['editQuestion']) ? '0' : (isset($_GET['modifyAnswers']) ? '0' : '1');
 
-            $s .= '<script type="text/javascript" src="../plugin/hotspot/JavaScriptFlashGateway.js"></script>
-                            <script src="../plugin/hotspot/hotspot.js" type="text/javascript" ></script>
-                            <script type="text/javascript">
-                            <!--
-                            // Globals
-                            // Major version of Flash required
-                            var requiredMajorVersion = 7;
-                            // Minor version of Flash required
-                            var requiredMinorVersion = 0;
-                            // Minor version of Flash required
-                            var requiredRevision = 0;
-                            // the version of javascript supported
-                            var jsVersion = 1.0;
-                            // -->
-                            </script>
-                            <script language="VBScript" type="text/vbscript">
-                            <!-- // Visual basic helper required to detect Flash Player ActiveX control version information
-                            Function VBGetSwfVer(i)
-                              on error resume next
-                              Dim swControl, swVersion
-                              swVersion = 0
+            $s .= ' <script type="text/javascript" src="../plugin/hotspot/JavaScriptFlashGateway.js"></script>
+                    <script src="../plugin/hotspot/hotspot.js" type="text/javascript" ></script>
+                    <script type="text/javascript">
+                    <!--
+                    // Globals
+                    // Major version of Flash required
+                    var requiredMajorVersion = 7;
+                    // Minor version of Flash required
+                    var requiredMinorVersion = 0;
+                    // Minor version of Flash required
+                    var requiredRevision = 0;
+                    // the version of javascript supported
+                    var jsVersion = 1.0;
+                    // -->
+                    </script>
+                    <script language="VBScript" type="text/vbscript">
+                    <!-- // Visual basic helper required to detect Flash Player ActiveX control version information
+                    Function VBGetSwfVer(i)
+                      on error resume next
+                      Dim swControl, swVersion
+                      swVersion = 0
 
-                              set swControl = CreateObject("ShockwaveFlash.ShockwaveFlash." + CStr(i))
-                              if (IsObject(swControl)) then
-                                swVersion = swControl.GetVariable("$version")
-                              end if
-                              VBGetSwfVer = swVersion
-                            End Function
-                            // -->
-                            </script>
+                      set swControl = CreateObject("ShockwaveFlash.ShockwaveFlash." + CStr(i))
+                      if (IsObject(swControl)) then
+                        swVersion = swControl.GetVariable("$version")
+                      end if
+                      VBGetSwfVer = swVersion
+                    End Function
+                    // -->
+                    </script>
 
-                            <script language="JavaScript1.1" type="text/javascript">
-                            <!-- // Detect Client Browser type
-                            var isIE  = (navigator.appVersion.indexOf("MSIE") != -1) ? true : false;
-                            var isWin = (navigator.appVersion.toLowerCase().indexOf("win") != -1) ? true : false;
-                            var isOpera = (navigator.userAgent.indexOf("Opera") != -1) ? true : false;
-                            jsVersion = 1.1;
-                            // JavaScript helper required to detect Flash Player PlugIn version information
-                            function JSGetSwfVer(i) {
-                                // NS/Opera version >= 3 check for Flash plugin in plugin array
-                                if (navigator.plugins != null && navigator.plugins.length > 0) {
-                                    if (navigator.plugins["Shockwave Flash 2.0"] || navigator.plugins["Shockwave Flash"]) {
-                                        var swVer2 = navigator.plugins["Shockwave Flash 2.0"] ? " 2.0" : "";
-                                        var flashDescription = navigator.plugins["Shockwave Flash" + swVer2].description;
-                                        descArray = flashDescription.split(" ");
-                                        tempArrayMajor = descArray[2].split(".");
-                                        versionMajor = tempArrayMajor[0];
-                                        versionMinor = tempArrayMajor[1];
-                                        if ( descArray[3] != "" ) {
-                                            tempArrayMinor = descArray[3].split("r");
-                                        } else {
-                                            tempArrayMinor = descArray[4].split("r");
-                                        }
-                                        versionRevision = tempArrayMinor[1] > 0 ? tempArrayMinor[1] : 0;
-                                        flashVer = versionMajor + "." + versionMinor + "." + versionRevision;
-                                    } else {
-                                        flashVer = -1;
-                                    }
+                    <script language="JavaScript1.1" type="text/javascript">
+                    <!-- // Detect Client Browser type
+                    var isIE  = (navigator.appVersion.indexOf("MSIE") != -1) ? true : false;
+                    var isWin = (navigator.appVersion.toLowerCase().indexOf("win") != -1) ? true : false;
+                    var isOpera = (navigator.userAgent.indexOf("Opera") != -1) ? true : false;
+                    jsVersion = 1.1;
+                    // JavaScript helper required to detect Flash Player PlugIn version information
+                    function JSGetSwfVer(i) {
+                        // NS/Opera version >= 3 check for Flash plugin in plugin array
+                        if (navigator.plugins != null && navigator.plugins.length > 0) {
+                            if (navigator.plugins["Shockwave Flash 2.0"] || navigator.plugins["Shockwave Flash"]) {
+                                var swVer2 = navigator.plugins["Shockwave Flash 2.0"] ? " 2.0" : "";
+                                var flashDescription = navigator.plugins["Shockwave Flash" + swVer2].description;
+                                descArray = flashDescription.split(" ");
+                                tempArrayMajor = descArray[2].split(".");
+                                versionMajor = tempArrayMajor[0];
+                                versionMinor = tempArrayMajor[1];
+                                if ( descArray[3] != "" ) {
+                                    tempArrayMinor = descArray[3].split("r");
+                                } else {
+                                    tempArrayMinor = descArray[4].split("r");
                                 }
-                                // MSN/WebTV 2.6 supports Flash 4
-                                else if (navigator.userAgent.toLowerCase().indexOf("webtv/2.6") != -1) flashVer = 4;
-                                // WebTV 2.5 supports Flash 3
-                                else if (navigator.userAgent.toLowerCase().indexOf("webtv/2.5") != -1) flashVer = 3;
-                                // older WebTV supports Flash 2
-                                else if (navigator.userAgent.toLowerCase().indexOf("webtv") != -1) flashVer = 2;
-                                // Can\'t detect in all other cases
-                                else
-                                {
-                                    flashVer = -1;
-                                }
-                                return flashVer;
+                                versionRevision = tempArrayMinor[1] > 0 ? tempArrayMinor[1] : 0;
+                                flashVer = versionMajor + "." + versionMinor + "." + versionRevision;
+                            } else {
+                                flashVer = -1;
                             }
-                            // When called with reqMajorVer, reqMinorVer, reqRevision returns true if that version or greater is available
+                        }
+                        // MSN/WebTV 2.6 supports Flash 4
+                        else if (navigator.userAgent.toLowerCase().indexOf("webtv/2.6") != -1) flashVer = 4;
+                        // WebTV 2.5 supports Flash 3
+                        else if (navigator.userAgent.toLowerCase().indexOf("webtv/2.5") != -1) flashVer = 3;
+                        // older WebTV supports Flash 2
+                        else if (navigator.userAgent.toLowerCase().indexOf("webtv") != -1) flashVer = 2;
+                        // Can\'t detect in all other cases
+                        else {
+                            flashVer = -1;
+                        }
+                        return flashVer;
+                    }
+                    // When called with reqMajorVer, reqMinorVer, reqRevision returns true if that version or greater is available
 
-                            function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision) {
-                                reqVer = parseFloat(reqMajorVer + "." + reqRevision);
-                                // loop backwards through the versions until we find the newest version
-                                for (i=25;i>0;i--) {
-                                    if (isIE && isWin && !isOpera) {
-                                        versionStr = VBGetSwfVer(i);
-                                    } else {
-                                        versionStr = JSGetSwfVer(i);
-                                    }
-                                    if (versionStr == -1 ) {
-                                        return false;
-                                    } else if (versionStr != 0) {
-                                        if(isIE && isWin && !isOpera) {
-                                            tempArray         = versionStr.split(" ");
-                                            tempString        = tempArray[1];
-                                            versionArray      = tempString .split(",");
-                                        } else {
-                                            versionArray      = versionStr.split(".");
-                                        }
-                                        versionMajor      = versionArray[0];
-                                        versionMinor      = versionArray[1];
-                                        versionRevision   = versionArray[2];
+                    function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision) {
+                        reqVer = parseFloat(reqMajorVer + "." + reqRevision);
+                        // loop backwards through the versions until we find the newest version
+                        for (i=25;i>0;i--) {
+                            if (isIE && isWin && !isOpera) {
+                                versionStr = VBGetSwfVer(i);
+                            } else {
+                                versionStr = JSGetSwfVer(i);
+                            }
+                            if (versionStr == -1 ) {
+                                return false;
+                            } else if (versionStr != 0) {
+                                if(isIE && isWin && !isOpera) {
+                                    tempArray         = versionStr.split(" ");
+                                    tempString        = tempArray[1];
+                                    versionArray      = tempString .split(",");
+                                } else {
+                                    versionArray      = versionStr.split(".");
+                                }
+                                versionMajor      = versionArray[0];
+                                versionMinor      = versionArray[1];
+                                versionRevision   = versionArray[2];
 
-                                        versionString     = versionMajor + "." + versionRevision;   // 7.0r24 == 7.24
-                                        versionNum        = parseFloat(versionString);
-                                        // is the major.revision >= requested major.revision AND the minor version >= requested minor
-                                        if ( (versionMajor > reqMajorVer) && (versionNum >= reqVer) ) {
-                                            return true;
-                                        } else {
-                                            return ((versionNum >= reqVer && versionMinor >= reqMinorVer) ? true : false );
-                                        }
-                                    }
+                                versionString     = versionMajor + "." + versionRevision;   // 7.0r24 == 7.24
+                                versionNum        = parseFloat(versionString);
+                                // is the major.revision >= requested major.revision AND the minor version >= requested minor
+                                if ( (versionMajor > reqMajorVer) && (versionNum >= reqVer) ) {
+                                    return true;
+                                } else {
+                                    return ((versionNum >= reqVer && versionMinor >= reqMinorVer) ? true : false );
                                 }
                             }
-                            // -->
-                            </script>';
+                        }
+                    }
+                    // -->
+                    </script>';
             $s .= '<tr><td valign="top" colspan="2" width="520"><table><tr><td width="520">
-                        <script>
-                            // Version check based upon the values entered above in "Globals"
-                            var hasReqestedVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
+                    <script>
+                        // Version check based upon the values entered above in "Globals"
+                        var hasReqestedVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
 
-                            // Check to see if the version meets the requirements for playback
-                            if (hasReqestedVersion) {  // if we\'ve detected an acceptable version
-                                var oeTags = \'<object type="application/x-shockwave-flash" data="../plugin/hotspot/'.$swf_file.'.swf?modifyAnswers='.$questionId.'&amp;canClick:'.$canClick.'" width="600" height="'.$swf_height.'">\'
-                                            + \'<param name="wmode" value="transparent">\'
-                                            + \'<param name="movie" value="../plugin/hotspot/'.$swf_file.'.swf?modifyAnswers='.$questionId.'&amp;canClick:'.$canClick.'" />\'
-                                            + \'<\/object>\';
-                                document.write(oeTags);   // embed the Flash Content SWF when all tests are passed
-                            } else {  // flash is too old or we can\'t detect the plugin
-                                var alternateContent = "Error<br \/>"
-                                    + "Hotspots requires Macromedia Flash 7.<br \/>"
-                                    + "<a href=\"http://www.macromedia.com/go/getflash/\">Get Flash<\/a>";
-                                document.write(alternateContent);  // insert non-flash content
-                            }
-                        </script>
-                        </td>
-                        <td valign="top" align="left">'.$answer_list.'</td></tr>
-                        </table>
+                        // Check to see if the version meets the requirements for playback
+                        if (hasReqestedVersion) {  // if we\'ve detected an acceptable version
+                            var oeTags = \'<object type="application/x-shockwave-flash" data="../plugin/hotspot/'.$swf_file.'.swf?modifyAnswers='.$questionId.'&amp;canClick:'.$canClick.'" width="600" height="'.$swf_height.'">\'
+                                        + \'<param name="wmode" value="transparent">\'
+                                        + \'<param name="movie" value="../plugin/hotspot/'.$swf_file.'.swf?modifyAnswers='.$questionId.'&amp;canClick:'.$canClick.'" />\'
+                                        + \'<\/object>\';
+                            document.write(oeTags);   // embed the Flash Content SWF when all tests are passed
+                        } else {  // flash is too old or we can\'t detect the plugin
+                            var alternateContent = "Error<br \/>"
+                                + "Hotspots requires Macromedia Flash 7.<br \/>"
+                                + "<a href=\"http://www.macromedia.com/go/getflash/\">Get Flash<\/a>";
+                            document.write(alternateContent);  // insert non-flash content
+                        }
+                    </script>
+                    </td>
+                    <td valign="top" align="left">'.$answer_list.'</td></tr>
+                    </table>
             </td></tr>';
             $html .= $s;
             $html .= '</table>';
@@ -2295,7 +2306,7 @@ class ExerciseLib
         } else {
             //Try getting the question list only if save result is off
             if ($save_user_result == false) {
-                $question_list = $objExercise->get_validated_question_list();
+                $question_list = $objExercise->selectQuestionList();
             }
             error_log("Data tracking is empty! exe_id: $exe_id");
         }
@@ -2320,7 +2331,7 @@ class ExerciseLib
 
         if ($show_results || $show_only_score) {
             $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
-            //Shows exercise header
+            // Shows exercise header.
             echo $objExercise->show_exercise_result_header($user_info['complete_name'], api_convert_and_format_date($exercise_stat_info['start_date'], DATE_TIME_FORMAT_LONG), $exercise_stat_info['duration']);
         }
 
@@ -2343,11 +2354,6 @@ class ExerciseLib
             if ($debug) {
                 error_log('Looping question_list '.print_r($question_list, 1));
             }
-
-            $media_questions = $objExercise->get_media_list();
-            $media_is_activated = $objExercise->media_is_activated($media_questions);
-
-            $medias_showed = array();
 
             foreach ($question_list as $questionId) {
 
@@ -2379,9 +2385,11 @@ class ExerciseLib
 
                 // Category report
                 $category_was_added_for_this_test = false;
+                $categoryExerciseList = $objExercise->getListOfCategoriesWithQuestionForTest();
 
-                if (isset($objQuestionTmp->category_list) && !empty($objQuestionTmp->category_list)) {
-                    foreach ($objQuestionTmp->category_list as $category_id) {
+                $category_list = array();
+                if (isset($categoryExerciseList) && !empty($categoryExerciseList)) {
+                    foreach ($categoryExerciseList as $category_id => $categoryInfo) {
                         if (!isset($category_list[$category_id])) {
                             $category_list[$category_id] = array();
                             $category_list[$category_id]['score'] = 0;
@@ -2570,181 +2578,13 @@ class ExerciseLib
     }
 
 
-    public static function render_question_list($objExercise, $questionList, $current_question, $exerciseResult, $attempt_list, $remind_list, $media_questions = array()) {
-
-        $i = 1;
-        //Normal question list render
-        foreach ($questionList as $questionId) {
-            // for sequential exercises
-            if ($objExercise->type == ONE_PER_PAGE) {
-                // if it is not the right question, goes to the next loop iteration
-                if ($current_question != $i) {
-                    $i++;
-                    continue;
-                } else {
-                    if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
-                        // if the user has already answered this question
-                        if (isset($exerciseResult[$questionId])) {
-                            // construction of the Question object
-                            $objQuestionTmp = Question::read($questionId);
-                            // destruction of the Question object
-                            unset ($objQuestionTmp);
-                            Display::display_normal_message(get_lang('AlreadyAnswered'));
-                            $i++;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            //Medias question render
-            if (isset($media_questions) && !empty($media_questions) && isset($media_questions[$questionId])) {
-                $media_question_list = $media_questions[$questionId];
-                $objQuestionTmp = Question::read($questionId);
-
-                $counter = 1;
-                if ($objQuestionTmp->type == MEDIA_QUESTION) {
-                    echo $objQuestionTmp->show_media_content();
-
-                    $count_of_questions_inside_media = count($media_question_list);
-
-                    //Show questions that belongs to a media
-                    if (!empty($media_question_list)) {
-                        $letterCounter = 97;
-                        foreach ($media_question_list as $my_question_id) {
-                            $last_question_in_media = false;
-                            if ($counter == $count_of_questions_inside_media) {
-                                $last_question_in_media = true;
-                            }
-                            self::render_question($objExercise, $my_question_id, $attempt_list, $remind_list, chr($letterCounter), $current_question, $media_question_list, $last_question_in_media, $questionList, $current_question);
-                            $letterCounter++;
-                            $counter++;
-                        }
-                    }
-                } else {
-                    self::render_question($objExercise, $questionId, $attempt_list, $remind_list, $i, $current_question, null, null, $questionList, $current_question);
-                    $i++;
-                }
-            } else {
-                //Normal question render
-                self::render_question($objExercise, $questionId, $attempt_list, $remind_list, $i, $current_question, null, null, $questionList, $current_question);
-                $i++;
-            }
-
-            // for sequential exercises
-            if ($objExercise->type == ONE_PER_PAGE) {
-                // quits the loop
-                break;
-            }
-        }
-        // end foreach()
-
-        if ($objExercise->type == ALL_ON_ONE_PAGE) {
-            $exercise_actions =  $objExercise->show_button($questionId, $current_question);
-            echo Display::div($exercise_actions, array('class'=>'exercise_actions'));
-        }
-    }
-
-    public static function render_question(
-        Exercise $objExercise,
-        $questionId,
-        $attempt_list,
-        $remind_list,
-        $i,
-        $current_question,
-        $questions_in_media = array(),
-        $last_question_in_media = false,
-        $realQuestionList,
-        $realCurrentQuestion
-    ) {
-        global $origin;
-        $question_obj = Question::read($questionId);
-        $user_choice = isset($attempt_list[$questionId]) ? $attempt_list[$questionId] : null;
-
-        $remind_highlight = null;
-
-        //Hides questions when reviewing a ALL_ON_ONE_PAGE exercise see #4542 no_remind_highlight class hide with jquery
-        if ($objExercise->type == ALL_ON_ONE_PAGE && isset($_GET['reminder']) && $_GET['reminder'] == 2) {
-            $remind_highlight = 'no_remind_highlight';
-            if (in_array($question_obj->type, Question::question_type_no_review())) {
-                return null;
-            }
-        }
-
-        $attributes = array('id' =>'remind_list['.$questionId.']');
-
-        $is_remind_on = false;
-        if (in_array($questionId, $remind_list)) {
-            $is_remind_on = true;
-            $attributes['checked'] = 1;
-            $remind_highlight = ' remind_highlight ';
-        }
-
-        //Showing the question
-
-        $exercise_actions  = null;
-
-        echo '<div id="question_div_'.$questionId.'" class="main_question '.$remind_highlight.'" >';
-
-        // Shows the question + possible answers
-        echo ExerciseLib::showQuestion($question_obj, false, $origin, $i, true, false, $user_choice, false);
-
-        // Button save and continue
-        switch ($objExercise->type) {
-            case ONE_PER_PAGE:
-                $exercise_actions .= $objExercise->show_button($questionId, $current_question, null, $remind_list);
-                break;
-            case ALL_ON_ONE_PAGE :
-                $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
-                $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
-                $exercise_actions  .= Display::div($button, array('class'=>'exercise_save_now_button'));
-                break;
-        }
-
-        if (!empty($questions_in_media)) {
-            $count_of_questions_inside_media = count($questions_in_media);
-            if ($count_of_questions_inside_media > 1) {
-                $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\', false, false); ">'.get_lang('SaveForNow').'</a>';
-                $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
-                $exercise_actions  = Display::div($button, array('class'=>'exercise_save_now_button'));
-            }
-
-            if ($last_question_in_media && $objExercise->type == ONE_PER_PAGE) {
-                $exercise_actions = $objExercise->show_button($questionId, $current_question, $questions_in_media);
-            }
-        }
-
-        // Checkbox review answers
-        if ($objExercise->review_answers && !in_array($question_obj->type, Question::question_type_no_review())) {
-            $remind_question_div = Display::tag('label', Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes).get_lang('ReviewQuestionLater'), array('class' => 'checkbox', 'for' =>'remind_list['.$questionId.']'));
-            $exercise_actions   .= Display::div($remind_question_div, array('class'=>'exercise_save_now_button'));
-        }
-
-        echo Display::div(' ', array('class'=>'clear'));
-
-        $paginator = null;
-        if ($objExercise->type == ONE_PER_PAGE) {
-            if (empty($questions_in_media)) {
-                $paginator = Display::paginationIndicator($realCurrentQuestion, count($realQuestionList));
-            } else {
-                if ($last_question_in_media) {
-                    $paginator = Display::paginationIndicator($realCurrentQuestion, count($realQuestionList));
-                }
-            }
-        }
-
-        echo '<div class="row"><div class="pull-right">'.$paginator.'</div></div>';
-
-        echo Display::div($exercise_actions, array('class'=>'form-actions'));
-        echo '</div>';
-    }
-
     /**
      * Update attempt date
      * @param int $exeId
      * @param Datetime $last_attempt_date
      */
-    function update_attempt_date($exeId, $last_attempt_date) {
+    public static function update_attempt_date($exeId, $last_attempt_date)
+    {
         $exercice_attemp_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $exeId = intval($exeId);
         $last_attempt_date = Database::escape_string($last_attempt_date);

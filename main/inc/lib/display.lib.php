@@ -1562,6 +1562,11 @@ class Display
         return $div;
     }
 
+    /**
+     * @param $count
+     * @param string $type
+     * @return null|string
+     */
     public static function badge($count, $type = "warning")
     {
         $class = '';
@@ -1590,6 +1595,10 @@ class Display
         return null;
     }
 
+    /**
+     * @param array $badge_list
+     * @return string
+     */
     public static function badge_group($badge_list)
     {
         $html = '<div class="badge-group">';
@@ -1600,6 +1609,12 @@ class Display
         return $html;
     }
 
+    /**
+     * @param string $content
+     * @param string $type
+     * @param string $full_content
+     * @return string
+     */
     public static function label($content, $type = null, $full_content = null)
     {
         $class = '';
@@ -1655,7 +1670,9 @@ class Display
     }
 
     /**
-     * Prints a tooltip
+     * @param string $text
+     * @param string $tip
+     * @return string
      */
     public static function tip($text, $tip)
     {
@@ -1665,6 +1682,12 @@ class Display
         return self::span($text, array('class' => 'boot-tooltip', 'title' => strip_tags($tip)));
     }
 
+    /**
+     * @param array $items
+     * @param string $type
+     * @param string $id
+     * @return null|string
+     */
     public static function generate_accordion($items, $type = 'jquery', $id = null)
     {
         $html = null;
@@ -1704,7 +1727,7 @@ class Display
     /**
      * @todo use twig
      */
-    static function group_button($title, $elements)
+    public static function group_button($title, $elements)
     {
         $html = '<div class="btn-toolbar">
             <div class="btn-group">
@@ -1714,7 +1737,7 @@ class Display
             $html .= Display::tag('li', Display::url($item['title'], $item['href']));
         }
         $html .= '</ul>
-            </div> </div>';
+            </div></div>';
         return $html;
     }
 
@@ -1726,106 +1749,114 @@ class Display
      * @param string $link
      * @return string
      */
-    static function progress_pagination_bar($list, $current, $conditions = array(), $link = null, $counter = null)
+    public static function progressPaginationBar($nextValue, $list, $current, $fixedValue = null, $conditions = array(), $link = null, $isMedia = false, $addHeaders = true)
     {
-        if (empty($counter)) {
-            $counter = 1;
+        if ($addHeaders) {
+            $pagination_size = 'pagination-mini';
+            $html = '<div class="exercise_pagination pagination '.$pagination_size.'"><ul>';
+        } else {
+            $html = null;
         }
-        $pagination_size = 'pagination-mini';
+        $affectAllItems = false;
 
-        //$html = '<div class="exercise_pagination pagination '.$pagination_size.' pagination-centered"><ul>';
-        $html = '<div class="exercise_pagination pagination '.$pagination_size.'"><ul>';
-        foreach ($list as $item_id) {
-            $class = "active";
-            if ($counter < $current) {
-                //    $class = "before";
-            }
-            $class = "before";
+        if ($isMedia && $fixedValue && $nextValue + 1 == $current) {
+            $affectAllItems = true;
+        }
 
-            foreach ($conditions as $condition) {
-                $array = $condition['items'];
-                $class_to_applied = $condition['class'];
-                $type = isset($condition['type']) ? $condition['type'] : 'positive';
-                switch ($type) {
-                    case 'positive':
-                        if (in_array($item_id, $array)) {
-                            $class .= " $class_to_applied";
-                        }
+        $localCounter = 0;
 
-                        break;
-                    case 'negative':
-                        if (!in_array($item_id, $array)) {
-                            $class .= " $class_to_applied";
-                        }
-                        break;
+        foreach ($list as $itemId) {
+            $isCurrent = false;
+            if ($affectAllItems) {
+                $isCurrent = true;
+            } else {
+                if (!$isMedia) {
+                    $isCurrent = $current == ($localCounter + $nextValue + 1) ? true : false;
                 }
             }
+            if ($isCurrent) {
 
-            if ($current == $counter) {
-                $class = "before current";
             }
-
-            if ($counter > $current) {
-                //$class = "after";
-            }
-
-            if (empty($link)) {
-                $link_to_show = "#";
-            } else {
-                $link_counter = $counter -1;
-                $link_to_show = $link.$link_counter;
-            }
-            $html .= '<li class = "'.$class.'"><a href="'.$link_to_show.'">'.$counter.'</a></li>';
-            $counter++;
+            $html .= self::parsePaginationItem($itemId, $isCurrent, $conditions, $link, $nextValue, $isMedia, $localCounter, $fixedValue);
+            $localCounter++;
         }
-        $html .= '</ul></div>';
+
+        if ($addHeaders) {
+            $html .= '</ul></div>';
+        }
         return $html;
     }
 
     /**
-     * Shows a list of numbers that represents the question to answer in a exercise
-     *
-     * @param array $categories
-     * @param array $mediaQuestions
-     * @param int $current
+     * @param int $item_id
+     * @param bool $isCurrent
      * @param array $conditions
-     * @param null $link
-     * @return null|string
+     * @param $addLetters
+     * @param $fixValue
+     * @return string
      */
-    static function progress_pagination_bar_with_categories($categories, $mediaQuestions, $current, $conditions = array(), $link = null)
+    static function parsePaginationItem($item_id, $isCurrent, $conditions, $link, $nextValue, $isMedia = false, $localCounter = null, $fixedValue = null)
     {
-        $counter = 0;
-        $totalTemp = 0;
-        $html = null;
-        if (!empty($categories)) {
-            foreach ($categories as $category) {
-                $list = $category['question_list'];
+        $defaultClass = "before";
+        $class = $defaultClass;
 
-                if ($counter > 0) {
-                    $total = $totalTemp + 1;
-                } else {
-                    $total = 0;
-                }
-                $html .= '<div class="row">';
-                $html .= '<div class="span2">'.$category['name'].'</div>';
-                $html .= '<div class="span8">';
-
-                $html .= self::progress_pagination_bar($list, $current, $conditions, $link, $total);
-                $html .= '</div>';
-                $html .= '</div>';
-
-                $totalTemp = $totalTemp + count($list);
-                $counter++;
+        foreach ($conditions as $condition) {
+            $array = isset($condition['items']) ? $condition['items'] : array();
+            $class_to_applied = $condition['class'];
+            $type = isset($condition['type']) ? $condition['type'] : 'positive';
+            $mode = isset($condition['mode']) ? $condition['mode'] : 'add';
+            switch ($type) {
+                case 'positive':
+                    if (in_array($item_id, $array)) {
+                        if ($mode == 'overwrite') {
+                            $class = " $defaultClass $class_to_applied";
+                        } else {
+                            $class .= " $class_to_applied";
+                        }
+                    }
+                    break;
+                case 'negative':
+                    if (!in_array($item_id, $array)) {
+                        if ($mode == 'overwrite') {
+                            $class = " $defaultClass $class_to_applied";
+                        } else {
+                            $class .= " $class_to_applied";
+                        }
+                    }
+                    break;
             }
         }
 
-        return $html;
+        if ($isCurrent) {
+            $class = "before current";
+        }
+
+        if ($isMedia && $isCurrent) {
+            $class = "before current";
+        }
+
+        if (empty($link)) {
+            $link_to_show = "#";
+        } else {
+            $link_counter = $nextValue + $localCounter;
+            $link_to_show = $link.$link_counter;
+        }
+        $label = $nextValue + $localCounter + 1;
+
+        if ($isMedia) {
+            $label = ($fixedValue + 1) .' '.chr(97 + $localCounter);
+            $link_to_show = $link.($fixedValue);
+        }
+
+        return  '<li class = "'.$class.'"><a href="'.$link_to_show.'">'.$label.' </a></li>';
+        //return  '<li class = "'.$class.'"><a href="'.$link_to_show.'">'.$label.'</a></li>';
     }
+
 
     /**
      * @param int $current
      * @param int $total
-     * @return null
+     * @return string
      */
     public static function paginationIndicator($current, $total)
     {

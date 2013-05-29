@@ -430,12 +430,12 @@ $app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexActi
 
 //->assert('type', '.+'); //allowing slash "/"
 
-/**  Logout */
+/** Logout */
 $app->get('/logout', 'index.controller:logoutAction')
     ->bind('logout')
     ->after($cleanCourseSession);
 
-/**  Login */
+/** Login */
 $app->get('/login', 'index.controller:loginAction')
     ->bind('login')
     ->after($cleanCourseSession);

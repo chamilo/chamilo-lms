@@ -928,6 +928,8 @@ VALUES
 ('use_virtual_keyboard', NULL, 'radio', 'Platform', 'false','ShowVirtualKeyboardTitle','ShowVirtualKeyboardComment', NULL, NULL, 1),
 ('disable_copy_paste', NULL, 'radio', 'Platform', 'false','DisableCopyPasteTitle','DisableCopyPasteComment', NULL, NULL, 1),
 ('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.010','DatabaseVersion','', NULL, NULL, 0),
+('login_as_allowed',NULL,'radio','Security','true','AdminLoginAsAllowedTitle','AdminLoginAsAllowedComment', 1, 0, 1),
+('admins_can_set_users_pass','radio','security','true','AdminsCanChangeUsersPassTitle','AdminsCanChangeUsersPassComment', 1, 0, 1),
 ('log_transactions','exercise_attempt','checkbox','LogTransactions','false','LogTransactionsForExerciseAttempts','LogTransactionsForExerciseAttemptsComment',NULL,'LogTransactionsForExerciseAttemptsText', 1);
 
 UNLOCK TABLES;
@@ -1283,7 +1285,11 @@ VALUES
 ('use_virtual_keyboard', 'true', 'Yes'),
 ('use_virtual_keyboard', 'false', 'No'),
 ('disable_copy_paste', 'true', 'Yes'),
-('disable_copy_paste', 'false', 'No');
+('disable_copy_paste', 'false', 'No'),
+('login_as_allowed','true','Yes'),
+('login_as_allowed','false','No'),
+('admins_can_set_users_pass','true','Yes'),
+('admins_can_set_users_pass','false','No');
 
 
 UNLOCK TABLES;
@@ -2603,11 +2609,11 @@ CREATE TABLE IF NOT EXISTS specific_field (
 
 DROP TABLE IF EXISTS specific_field_values;
 CREATE TABLE IF NOT EXISTS specific_field_values (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-    course_code VARCHAR(40) NOT NULL ,
-    tool_id VARCHAR(100) NOT NULL ,
-    ref_id INT NOT NULL ,
-    field_id INT NOT NULL ,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    course_code VARCHAR(40) NOT NULL,
+    tool_id VARCHAR(100) NOT NULL,
+    ref_id INT NOT NULL,
+    field_id INT NOT NULL,
     value VARCHAR(200) NOT NULL
 );
 ALTER TABLE specific_field ADD CONSTRAINT unique_specific_field__code UNIQUE (code);
@@ -3465,7 +3471,7 @@ CREATE TABLE user_course_category (
   user_id int unsigned NOT NULL default 0,
   title text NOT NULL,
   sort int,
-  PRIMARY KEY  (id)
+  PRIMARY KEY(id)
 );
 
 ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_user (user);
@@ -3533,4 +3539,4 @@ CREATE TABLE ext_log_entries (
 ) DEFAULT CHARSET=utf8;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.011' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.015' WHERE variable = 'chamilo_database_version';

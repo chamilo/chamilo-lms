@@ -535,7 +535,6 @@ if (!empty($exercise_list)) {
                 $my_exercise_id = $row['iid'];
 
                 $exercise_obj = new Exercise();
-                //$exercise_obj->setCategoriesGrouping(true);
                 $exercise_obj->read($my_exercise_id);
 
                 $locked = $exercise_obj->is_gradebook_locked;

@@ -13,10 +13,10 @@
  * Code
  */
 // name of the language file that needs to be included
-$language_file='exercice';
+$language_file = 'exercice';
 
 // name of the language file that needs to be included
-include('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 
 // including additional libraries
 require_once 'exercise.class.php';
@@ -25,7 +25,6 @@ require_once 'answer.class.php';
 
 //debug param. 0: no display - 1: debug display
 $debug=0;
-if($debug>0){echo str_repeat('&nbsp;',0).'Entered exercise_result.php'."<br />\n";var_dump($_POST);}
 
 // general parameters passed via POST/GET
 $my_course_code = $_GET['cid'];

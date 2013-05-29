@@ -1544,7 +1544,7 @@ function delete_attempt_hotspot($exe_id, $user_id, $courseId, $question_id)
     Database::query($sql);
 }
 
-function get_answered_questions_from_attempt($exe_id, $objExercise)
+function getAnsweredQuestionsFromAttempt($exe_id, $objExercise)
 {
     $attempt_list = getAllExerciseEventByExeId($exe_id);
     $exercise_result = array();

@@ -1737,7 +1737,7 @@ class Display
             $html .= Display::tag('li', Display::url($item['title'], $item['href']));
         }
         $html .= '</ul>
-            </div> </div>';
+            </div></div>';
         return $html;
     }
 
@@ -1749,159 +1749,101 @@ class Display
      * @param string $link
      * @return string
      */
-    public static function progress_pagination_bar($questionList, $current, $conditions = array(), $link = null, $counter = null, $addLetters = false, $fixValue = null)
+    public static function progressPaginationBar($list, $current, $offset = 0, $counterNoMedias = 0, $fixedValue = null, $conditions = array(), $link = null, $isMedia = false, $addHeaders = true)
     {
-        if (empty($counter)) {
-            $counter = 1;
+        if ($addHeaders) {
+            $pagination_size = 'pagination-mini';
+            $html = '<div class="exercise_pagination pagination '.$pagination_size.'"><ul>';
+        } else {
+            $html = null;
         }
-
-        $fixedCounter = $counter;
-        $pagination_size = 'pagination-mini';
-        $html = '<div class="exercise_pagination pagination '.$pagination_size.'"><ul>';
-        $cleanCounter = 1;
-        $defaultClass = "before";
 
         $affectAllItems = false;
-
-        if ($addLetters && $fixValue) {
-            if ($current == $fixValue) {
-                $affectAllItems = true;
-            }
+        if ($isMedia && $fixedValue && $offset + 1 == $current) {
+            $affectAllItems = true;
         }
 
-        foreach ($questionList as $item_id) {
-            $class = $defaultClass;
-
-            foreach ($conditions as $condition) {
-                $array = isset($condition['items']) ? $condition['items'] : array();
-                $class_to_applied = $condition['class'];
-                $type = isset($condition['type']) ? $condition['type'] : 'positive';
-                $mode = isset($condition['mode']) ? $condition['mode'] : 'add';
-                switch ($type) {
-                    case 'positive':
-                        if (in_array($item_id, $array)) {
-                            if ($mode == 'overwrite') {
-                                $class = " $defaultClass $class_to_applied";
-                            } else {
-                                $class .= " $class_to_applied";
-                            }
-                        }
-                        break;
-                    case 'negative':
-                        if (!in_array($item_id, $array)) {
-                            if ($mode == 'overwrite') {
-                                $class = " $defaultClass $class_to_applied";
-                            } else {
-                                $class .= " $class_to_applied";
-                            }
-                        }
-                        break;
-                }
-            }
-
-            if ($addLetters && $fixValue) {
-                $current = $counter;
-                if ($affectAllItems) {
-                    if ($current == $counter) {
-                        //if ($class == $defaultClass) {
-                            $class = "before current";
-                        //}
-                    }
-                }
+        $localCounter = 0;
+        foreach ($list as $itemId) {
+            if ($affectAllItems) {
+                $isCurrent = true;
             } else {
-                // Default behaviour
-                if ($current == $counter) {
-                    $class = "before current";
-                }
+                $isCurrent = $current == $localCounter + $offset + 1? true : false;
             }
 
-            if (empty($link)) {
-                $link_to_show = "#";
-            } else {
-                $link_counter = $counter - 1;
-                $link_to_show = $link.$link_counter;
-            }
-
-            $label = $counter;
-
-            if ($addLetters) {
-                $label = $fixValue.' '.chr(96 + $cleanCounter);
-                $link_to_show = $link.($fixedCounter - 1);
-            }
-
-            $html .= '<li class = "'.$class.'"><a href="'.$link_to_show.'">'.$label.' '.$item_id.' </a></li>';
-            $counter++;
-            $cleanCounter++;
+            $html .= self::parsePaginationItem($itemId, $isCurrent, $conditions, $link, $localCounter + $offset, $localCounter + $counterNoMedias, $isMedia, $localCounter, $fixedValue);
+            $localCounter++;
         }
-        $html .= '</ul></div>';
+
+        if ($addHeaders) {
+            $html .= '</ul></div>';
+        }
         return $html;
     }
 
     /**
-     * Shows a list of numbers that represents the question to answer in a exercise
-     *
-     * @param array $questionList unflatten question list with medias
-     * @param array $categories
-     * @param array $mediaQuestions
-     * @param int $current
+     * @param int $item_id
+     * @param bool $isCurrent
      * @param array $conditions
-     * @param string $link
+     * @param $addLetters
+     * @param $fixValue
      * @return string
      */
-    public static function progress_pagination_bar_with_categories($flattenQuestionList, $categories, $current, $conditions = array(), $link = null)
+    static function parsePaginationItem($item_id, $isCurrent, $conditions, $link, $counter, $counterNoMedias, $isMedia = false, $localCounter = null, $fixedValue = null)
     {
-        $counter = 1;
-        $html = null;
-        $mediaUsedCounter = 0;
+        $defaultClass = "before";
+        $class = $defaultClass;
 
-        if (!empty($categories)) {
-            foreach ($categories as $category) {
-                //var_dump($counter);
-                $questionList = $category['question_list'];
-                // In this category there are media questions
-                $mediaQuestionId = $category['media_question'];
-
-                $useLetters = false;
-                $fixValue = null;
-
-                if ($mediaQuestionId != 999) {
-                    $useLetters = true;
-                    $fixValue = $counter;
-                    $mediaUsedCounter++;
-                }
-
-                $categoryName = $category['name'];
-
-                if (isset($category['parent_info'])) {
-                    $categoryName  = $category['parent_info']['title'];
-                }
-
-                $html .= '<div class="row">';
-                $html .= '<div class="span2">'.$categoryName.'</div>';
-                $html .= '<div class="span8">';
-                $html .= self::progress_pagination_bar(
-                    $questionList,
-                    $current,
-                    $conditions,
-                    $link,
-                    $counter,
-                    $useLetters,
-                    $fixValue
-                );
-                $html .= '</div>';
-                $html .= '</div>';
-
-                if ($mediaQuestionId != 999) {
-                    $fixValue = $counter + count($questionList);
-                } else {
-                    $counter = $counter + count($questionList)- 1;
-                }
-                $counter++;
+        foreach ($conditions as $condition) {
+            $array = isset($condition['items']) ? $condition['items'] : array();
+            $class_to_applied = $condition['class'];
+            $type = isset($condition['type']) ? $condition['type'] : 'positive';
+            $mode = isset($condition['mode']) ? $condition['mode'] : 'add';
+            switch ($type) {
+                case 'positive':
+                    if (in_array($item_id, $array)) {
+                        if ($mode == 'overwrite') {
+                            $class = " $defaultClass $class_to_applied";
+                        } else {
+                            $class .= " $class_to_applied";
+                        }
+                    }
+                    break;
+                case 'negative':
+                    if (!in_array($item_id, $array)) {
+                        if ($mode == 'overwrite') {
+                            $class = " $defaultClass $class_to_applied";
+                        } else {
+                            $class .= " $class_to_applied";
+                        }
+                    }
+                    break;
             }
         }
 
-        return $html;
+        if ($isCurrent) {
+            $class = "before current";
+        }
+
+        if ($isMedia && $isCurrent) {
+            $class = "before current";
+        }
+
+        if (empty($link)) {
+            $link_to_show = "#";
+        } else {
+            $link_counter = $counterNoMedias;
+            $link_to_show = $link.$link_counter;
+        }
+        $label = $counter;
+
+        if ($isMedia) {
+            $label = $fixedValue.' '.chr(97 + $localCounter);
+            $link_to_show = $link.($fixedValue);
+        }
+        return  '<li class = "'.$class.'"><a href="'.$link_to_show.'">'.$label.' - '.$item_id.' - '.$counter.' </a></li>';
     }
+
 
     /**
      * @param int $current

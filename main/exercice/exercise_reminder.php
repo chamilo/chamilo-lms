@@ -145,7 +145,7 @@ echo '<script>
 		}
 </script>';
 
-$exercise_result = get_answered_questions_from_attempt($exe_id, $objExercise);
+$exercise_result = getAnsweredQuestionsFromAttempt($exe_id, $objExercise);
 
 $remind_list = $exercise_stat_info['questions_to_check'];
 $remind_list = explode(',', $remind_list);

@@ -185,7 +185,7 @@ class ExerciseLib
 
             if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE || $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
                 $header = Display::tag('th', get_lang('Options'));
-                foreach ($objQuestionTmp->options as $key => $item) {
+                foreach ($objQuestionTmp->options as $item) {
                     $header .= Display::tag('th', $item);
                 }
                 if ($show_comment) {
@@ -728,9 +728,9 @@ class ExerciseLib
                 }
                 //@todo I need to the get the feedback type
                 $html .=  '<input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'" />';
-                $html .=  '<table class="exercise_questions" >
-                      <tr>
-                        <td valign="top" colspan="2">';
+                $html .=  '<table class="exercise_questions">
+                           <tr>
+                            <td valign="top" colspan="2">';
                 $html .=  $questionDescription;
                 $html .=  '</td></tr>';
             }
@@ -2329,7 +2329,7 @@ class ExerciseLib
 
         if ($show_results || $show_only_score) {
             $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
-            //Shows exercise header
+            // Shows exercise header.
             echo $objExercise->show_exercise_result_header($user_info['complete_name'], api_convert_and_format_date($exercise_stat_info['start_date'], DATE_TIME_FORMAT_LONG), $exercise_stat_info['duration']);
         }
 
@@ -2558,214 +2558,6 @@ class ExerciseLib
         return $ribbon;
     }
 
-
-    /**
-     * @param \Exercise $objExercise
-     * @param array $questionListFlatten
-     * @param array $questionList
-     * @param int $current_question
-     * @param array $exerciseResult
-     * @param array $attempt_list
-     * @param array $remind_list
-     */
-    public static function render_question_list($objExercise, $questionListFlatten, $questionList, $current_question, $exerciseResult, $attempt_list, $remind_list)
-    {
-        $mediaQuestions = $objExercise->getMediaList();
-        $i = 0;
-
-        // Normal question list render
-        foreach ($questionList as $questionId) {
-            $i++;
-            // For sequential exercises
-            if ($objExercise->type == ONE_PER_PAGE) {
-                // If it is not the right question, goes to the next loop iteration
-                if ($current_question != $i) {
-                    continue;
-                } else {
-                    if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
-                        // if the user has already answered this question
-                        if (isset($exerciseResult[$questionId])) {
-                            Display::display_normal_message(get_lang('AlreadyAnswered'));
-                            break;
-                        }
-                    }
-                }
-            }
-
-            // Media question render
-
-            if (isset($mediaQuestions[$questionId]) && $mediaQuestions[$questionId] != 999) {
-
-                $media_question_list = $mediaQuestions[$questionId];
-                $objQuestionTmp = Question::read($questionId);
-
-                $counter = 1;
-                if ($objQuestionTmp->type == MEDIA_QUESTION) {
-                    echo $objQuestionTmp->show_media_content();
-
-                    $count_of_questions_inside_media = count($media_question_list);
-
-                    //Show questions that belongs to a media
-                    if (!empty($media_question_list)) {
-                        $letterCounter = 97;
-                        foreach ($media_question_list as $my_question_id) {
-                            $last_question_in_media = false;
-                            if ($counter == $count_of_questions_inside_media) {
-                                $last_question_in_media = true;
-                            }
-                            self::render_question(
-                                $objExercise,
-                                $my_question_id,
-                                $attempt_list,
-                                $remind_list,
-                                chr($letterCounter),
-                                $current_question,
-                                $media_question_list,
-                                $last_question_in_media,
-                                $questionList
-                            );
-                            $letterCounter++;
-                            $counter++;
-                        }
-                    }
-                } else {
-                    self::render_question(
-                        $objExercise,
-                        $questionId,
-                        $attempt_list,
-                        $remind_list,
-                        $i,
-                        $current_question,
-                        null,
-                        null,
-                        $questionList
-                    );
-                    $i++;
-                }
-            } else {
-                //var_dump($i, $questionId, $current_question);
-                // Normal question render.
-                self::render_question(
-                    $objExercise,
-                    $questionId,
-                    $attempt_list,
-                    $remind_list,
-                    $i,
-                    $current_question,
-                    null,
-                    null,
-                    $questionList
-                );
-            }
-
-            // For sequential exercises.
-            if ($objExercise->type == ONE_PER_PAGE) {
-                // quits the loop
-                break;
-            }
-        }
-        // end foreach()
-
-        if ($objExercise->type == ALL_ON_ONE_PAGE) {
-            $exercise_actions =  $objExercise->show_button($questionId, $current_question);
-            echo Display::div($exercise_actions, array('class'=>'exercise_actions'));
-        }
-    }
-
-    public static function render_question(
-        Exercise $objExercise,
-        $questionId,
-        $attempt_list,
-        $remind_list,
-        $i,
-        $current_question,
-        $questions_in_media = array(),
-        $last_question_in_media = false,
-        $realQuestionList
-    ) {
-
-        global $origin;
-
-        $question_obj = Question::read($questionId);
-        $user_choice = isset($attempt_list[$questionId]) ? $attempt_list[$questionId] : null;
-
-        $remind_highlight = null;
-
-        //Hides questions when reviewing a ALL_ON_ONE_PAGE exercise see #4542 no_remind_highlight class hide with jquery
-        if ($objExercise->type == ALL_ON_ONE_PAGE && isset($_GET['reminder']) && $_GET['reminder'] == 2) {
-            $remind_highlight = 'no_remind_highlight';
-            if (in_array($question_obj->type, Question::question_type_no_review())) {
-                return null;
-            }
-        }
-
-        $attributes = array('id' =>'remind_list['.$questionId.']');
-
-        $is_remind_on = false;
-        if (in_array($questionId, $remind_list)) {
-            $is_remind_on = true;
-            $attributes['checked'] = 1;
-            $remind_highlight = ' remind_highlight ';
-        }
-
-        // Showing the question
-
-        $exercise_actions  = null;
-
-        echo '<div id="question_div_'.$questionId.'" class="main_question '.$remind_highlight.'" >';
-
-        // Shows the question + possible answers
-        echo ExerciseLib::showQuestion($question_obj, false, $origin, $i, true, false, $user_choice, false);
-
-        // Button save and continue
-        switch ($objExercise->type) {
-            case ONE_PER_PAGE:
-                $exercise_actions .= $objExercise->show_button($questionId, $current_question, null, $remind_list);
-                break;
-            case ALL_ON_ONE_PAGE :
-                $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
-                $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
-                $exercise_actions  .= Display::div($button, array('class'=>'exercise_save_now_button'));
-                break;
-        }
-
-        if (!empty($questions_in_media)) {
-            $count_of_questions_inside_media = count($questions_in_media);
-            if ($count_of_questions_inside_media > 1) {
-                $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\', false, false); ">'.get_lang('SaveForNow').'</a>';
-                $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
-                $exercise_actions  = Display::div($button, array('class'=>'exercise_save_now_button'));
-            }
-
-            if ($last_question_in_media && $objExercise->type == ONE_PER_PAGE) {
-                $exercise_actions = $objExercise->show_button($questionId, $current_question, $questions_in_media);
-            }
-        }
-
-        // Checkbox review answers
-        if ($objExercise->review_answers && !in_array($question_obj->type, Question::question_type_no_review())) {
-            $remind_question_div = Display::tag('label', Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes).get_lang('ReviewQuestionLater'), array('class' => 'checkbox', 'for' =>'remind_list['.$questionId.']'));
-            $exercise_actions   .= Display::div($remind_question_div, array('class'=>'exercise_save_now_button'));
-        }
-
-        echo Display::div(' ', array('class'=>'clear'));
-
-        $paginator = null;
-        if ($objExercise->type == ONE_PER_PAGE) {
-            if (empty($questions_in_media)) {
-                $paginator = Display::paginationIndicator($current_question, count($realQuestionList));
-            } else {
-                if ($last_question_in_media) {
-                    $paginator = Display::paginationIndicator($current_question, count($realQuestionList));
-                }
-            }
-        }
-
-        echo '<div class="row"><div class="pull-right">'.$paginator.'</div></div>';
-
-        echo Display::div($exercise_actions, array('class'=>'form-actions'));
-        echo '</div>';
-    }
 
     /**
      * Update attempt date

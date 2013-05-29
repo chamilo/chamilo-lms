@@ -14,7 +14,7 @@
 /**
  *    QUESTION CLASS
  *
- *    This class allows to instantiate an object of type Question
+ *  This class allows to instantiate an object of type Question
  *
  * @author Olivier Brouckaert, original author
  * @author Patrick Cool, LaTeX support
@@ -1794,7 +1794,7 @@ abstract class Question
         }
         $header .= Display::page_subheader2($counterLabel.". ".$question_title);
         $header .= Display::div(
-            '<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.$score['result'].' </h4>',
+            '<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div><h4>'.$score['result'].' </h4>',
             array('class' => 'ribbon')
         );
         $header .= Display::div($this->description, array('id' => 'question_description'));

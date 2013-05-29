@@ -371,8 +371,8 @@ if (!is_object($objExercise)) {
 if ($objExercise->review_answers) {
 	if ($remind_question_id == -1) {
         $paramsReminder = "exerciseId=$exerciseId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();
-		header('Location: exercise_reminder.php?'.$paramsReminder);
-		exit;
+        header('Location: exercise_reminder.php?'.$paramsReminder);
+        exit;
 	}
 }
 
@@ -391,8 +391,8 @@ if ($debug) error_log("4. current_expired_time_key: $current_expired_time_key ")
 $_SESSION['duration_time'][$current_expired_time_key] = $current_timestamp;
 
 if ($time_control) {
-	//Get the expired time of the current exercice in track_e_exercices
-	$total_seconds = $objExercise->expired_time * 60;
+    // Get the expired time of the current exercise in track_e_exercices.
+    $total_seconds = $objExercise->expired_time * 60;
 }
 
 $show_clock = true;
@@ -408,13 +408,12 @@ if ($objExercise->selectAttempts() > 0) {
 			if ($objExercise->results_disabled == 0 && $origin != 'learnpath') {
 
 				//Showing latest attempt according with task BT#1628
-				$exercise_stat_info = get_exercise_results_by_user($user_id, $exerciseId, api_get_course_int_id(), api_get_session_id());
+				$exercise_stat_info = getExerciseResultsByUser($user_id, $exerciseId, api_get_course_int_id(), api_get_session_id());
 
 				if (!empty($exercise_stat_info)) {
 					$max_exe_id = max(array_keys($exercise_stat_info));
 					$last_attempt_info = $exercise_stat_info[$max_exe_id];
 					$attempt_html .= Display::div(get_lang('Date').': '.api_get_local_time($last_attempt_info['exe_date']), array('id'=>''));
-
 					$attempt_html .= Display::return_message(sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()), 'warning', false);
 
 					if (!empty($last_attempt_info['question_list'])) {
@@ -476,10 +475,10 @@ if (1) {
 	}
 }
 
-//var_dump($questionList);
+// var_dump($questionList);
 //Fix in order to get the correct question list
 $questionListFlatten = $objExercise->transform_question_list_with_medias($questionList, true);
-//var_dump($questionListFlatten);
+// var_dump($questionListFlatten);
 
 Session::write('question_list_flatten', $questionListFlatten);
 
@@ -1189,15 +1188,14 @@ if (!empty($error)) {
 	// Show list of questions.
     $attempt_list = array();
     if (isset($exe_id)) {
-        $attempt_list = get_all_exercise_event_by_exe_id($exe_id);
+        $attempt_list = getAllExerciseEventByExeId($exe_id);
     }
 
     $remind_list  = array();
     if (isset($exercise_stat_info['questions_to_check']) && !empty($exercise_stat_info['questions_to_check'])) {
         $remind_list = explode(',', $exercise_stat_info['questions_to_check']);
     }
-
-    ExerciseLib::render_question_list($objExercise, $questionListFlatten, $questionList, $current_question, $exerciseResult, $attempt_list, $remind_list);
+    $objExercise->renderQuestionList($questionList, $current_question, $exerciseResult, $attempt_list, $remind_list);
 
     echo '</form>';
 }

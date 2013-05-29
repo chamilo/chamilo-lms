@@ -209,15 +209,16 @@ if (isset($app['configuration']['main_database'])) {
                     If false, more advanced notations and aliasing via use will work.
                     (Example: use Doctrine\ORM\Mapping AS ORM, @ORM\Entity)*/
                     'use_simple_annotation_reader' => false,
-                    "type" => "annotation",
-                    "namespace" => "Entity",
-                    "path" => api_get_path(INCLUDE_PATH).'Entity',
+                    'type' => 'annotation',
+                    'namespace' => 'Entity',
+                    'path' => api_get_path(INCLUDE_PATH).'Entity',
+                    // 'orm.default_cache' =>
                 ),
                 array(
                     'use_simple_annotation_reader' => false,
-                    "type" => "annotation",
-                    "namespace" => "Gedmo",
-                    "path" => api_get_path(SYS_PATH).'vendors/gedmo/doctrine-extensions/lib/Gedmo',
+                    'type' => 'annotation',
+                    'namespace' => 'Gedmo',
+                    'path' => api_get_path(SYS_PATH).'vendors/gedmo/doctrine-extensions/lib/Gedmo',
                 )
             ),
         ),

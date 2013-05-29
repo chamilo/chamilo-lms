@@ -4792,6 +4792,25 @@ class Exercise
         $this->mediaList = $media_questions;
     }
 
+    /**
+     * Returns an array with this form
+     * array (size=3)
+          999 =>
+            array (size=3)
+              0 => int 3422
+              1 => int 3423
+              2 => int 3424
+          100 =>
+            array (size=2)
+              0 => int 3469
+              1 => int 3470
+          101 =>
+            array (size=1)
+              0 => int 3482
+     * The array inside the key 999 means the question list that belongs to the media id = 999,
+     * this case is special because 999 means "no media".
+     * @return array
+     */
     public function getMediaList()
     {
         return $this->mediaList;
@@ -4935,11 +4954,10 @@ class Exercise
             if (empty($exercise_info['questions_to_check'])) {
                 if ($action == 'add') {
                     $sql = "UPDATE $track_exercises SET questions_to_check = '$question_id' WHERE exe_id = $exe_id ";
-                    $result = Database::query($sql);
+                    Database::query($sql);
                 }
             } else {
                 $remind_list = explode(',', $exercise_info['questions_to_check']);
-
                 $remind_list_string = '';
                 if ($action == 'add') {
                     if (!in_array($question_id, $remind_list)) {
@@ -5175,18 +5193,17 @@ class Exercise
     /**
      * @param int $exe_id
      * @param array $questionList
-     * @param array $my_remind_list
-     * @param int $reminder
-     * @param int $remind_question_id
      * @param array $questionListFlatten
-     * @param array $mediaQuestions
+     * @param array $remindList
+     * @param int $reminder
+     * @param array $remindQuestionId
      * @param string $url
      * @param int $current_question
      * @return string
      */
     public function getProgressPagination($exe_id, $questionList, $questionListFlatten, $remindList, $reminder, $remindQuestionId, $url, $current_question)
     {
-        $exercise_result = get_answered_questions_from_attempt($exe_id, $this);
+        $exercise_result = getAnsweredQuestionsFromAttempt($exe_id, $this);
 
         $fixedRemindList = array();
         if (!empty($remindList)) {
@@ -5237,9 +5254,9 @@ class Exercise
 
         $html .= '<div class="span10">';
         if (!empty($categoryList)) {
-            $html .= Display::progress_pagination_bar_with_categories($questionListFlatten, $categoryList, $current_question, $conditions, $link);
+            $html .= $this->progressExercisePaginationBarWithCategories($categoryList, $current_question, $conditions, $link);
         } else {
-            $html .= Display::progress_pagination_bar($questionListFlatten, $current_question, $conditions, $link);
+            $html .= $this->progressExercisePaginationBar($questionList, $current_question, $conditions, $link);
         }
         $html .= '</div>';
         $html .= '</div>';
@@ -5278,6 +5295,287 @@ class Exercise
             }
         }
         return $categoriesWithQuestion;
+    }
+
+    public function progressExercisePaginationBar($questionList, $currentQuestion, $conditions, $link)
+    {
+        $mediaQuestions = $this->getMediaList();
+
+        $html = '<div class="exercise_pagination pagination pagination-mini "><ul>';
+        $counter = 0;
+        foreach ($questionList as $questionId) {
+            $isCurrent = $currentQuestion == ($counter + 1) ? true : false;
+            if (isset($mediaQuestions) && isset($mediaQuestions[$questionId])) {
+                $html .= Display::progressPaginationBar($mediaQuestions[$questionId], $currentQuestion, $conditions, $link, $counter + 1, true, true, false, $isCurrent);
+            } else {
+                $html .= Display::parsePaginationItem($questionId, $isCurrent, $conditions, $link, $counter+1);
+            }
+            $counter++;
+        }
+        $html .= '</ul></div>';
+        return $html;
+    }
+
+
+    /**
+     *  Shows a list of numbers that represents the question to answer in a exercise
+     *
+     * @param array $categories
+     * @param array $mediaQuestions
+     * @param int $current
+     * @param array $conditions
+     * @param string $link
+     * @return string
+     */
+    public function progressExercisePaginationBarWithCategories($categories, $current, $conditions = array(), $link = null)
+    {
+        $offset = 0;
+        $html = null;
+        $counterNoMedias = 0;
+        if (!empty($categories)) {
+
+            foreach ($categories as $category) {
+                $questionList = $category['question_list'];
+                // Check if in this category there questions added in a media
+                $mediaQuestionId = $category['media_question'];
+
+                $isMedia = false;
+                $fixedValue = null;
+
+                // Media exists!
+                if ($mediaQuestionId != 999) {
+                    $isMedia = true;
+                    $fixedValue = $counterNoMedias;
+                }
+
+                $categoryName = $category['name'];
+
+                if (isset($category['parent_info'])) {
+                    $categoryName  = $category['parent_info']['title'];
+                }
+                $html .= '<div class="row">';
+                $html .= '<div class="span2">'.$categoryName.'</div>';
+                $html .= '<div class="span8">';
+
+                $html .= Display::progressPaginationBar(
+                    $questionList,
+                    $current,
+                    $offset,
+                    $counterNoMedias,
+                    $fixedValue,
+                    $conditions,
+                    $link,
+                    $isMedia,
+                    true
+                );
+                $html .= '</div>';
+                $html .= '</div>';
+                $offset += count($questionList);
+
+                if ($mediaQuestionId == 999) {
+                    $counterNoMedias += count($questionList);
+                } else {
+                    $counterNoMedias++;
+                }
+            }
+        }
+        return $html;
+    }
+
+    /**
+     * Renders a question list
+     *
+     * @param array $questionList
+     * @param int $currentQuestion
+     * @param array $exerciseResult
+     * @param array $attemptList
+     * @param array $remindList
+     */
+    public function renderQuestionList($questionList, $currentQuestion, $exerciseResult, $attemptList, $remindList)
+    {
+        $mediaQuestions = $this->getMediaList();
+        $i = 0;
+
+        // Normal question list render
+        foreach ($questionList as $questionId) {
+            $i++;
+            // For sequential exercises
+            if ($this->type == ONE_PER_PAGE) {
+                // If it is not the right question, goes to the next loop iteration
+                if ($currentQuestion != $i) {
+                    continue;
+                } else {
+                    if ($this->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                        // if the user has already answered this question
+                        if (isset($exerciseResult[$questionId])) {
+                            Display::display_normal_message(get_lang('AlreadyAnswered'));
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // The $questionList contains the media id we check if this questionId is a media question type
+
+            if (isset($mediaQuestions[$questionId]) && $mediaQuestions[$questionId] != 999) {
+                // The question belongs to a media
+
+                $mediaQuestionList = $mediaQuestions[$questionId];
+                $objQuestionTmp = Question::read($questionId);
+
+                $counter = 1;
+                if ($objQuestionTmp->type == MEDIA_QUESTION) {
+                    echo $objQuestionTmp->show_media_content();
+
+                    $countQuestionsInsideMedia = count($mediaQuestionList);
+
+                    // Show questions that belongs to a media
+                    if (!empty($mediaQuestionList)) {
+                        // In order to parse media questions we use letters a, b, c, etc.
+                        $letterCounter = 97;
+                        foreach ($mediaQuestionList as $questionIdInsideMedia) {
+                            $isLastQuestionInMedia = false;
+                            if ($counter == $countQuestionsInsideMedia) {
+                                $isLastQuestionInMedia = true;
+                            }
+                            $this->renderQuestion(
+                                $questionIdInsideMedia,
+                                $attemptList,
+                                $remindList,
+                                chr($letterCounter),
+                                $currentQuestion,
+                                $mediaQuestionList,
+                                $isLastQuestionInMedia,
+                                $questionList
+                            );
+                            $letterCounter++;
+                            $counter++;
+                        }
+                    }
+                } else {
+                    $this->renderQuestion(
+                        $questionId,
+                        $attemptList,
+                        $remindList,
+                        $i,
+                        $currentQuestion,
+                        null,
+                        null,
+                        $questionList
+                    );
+                    $i++;
+                }
+            } else {
+                //var_dump($i, $questionId, $currentQuestion);
+                // Normal question render.
+                $this->renderQuestion($questionId, $attemptList, $remindList, $i, $currentQuestion, null, null, $questionList);
+            }
+
+            // For sequential exercises.
+            if ($this->type == ONE_PER_PAGE) {
+                // quits the loop
+                break;
+            }
+        }
+        // end foreach()
+
+        if ($this->type == ALL_ON_ONE_PAGE) {
+            $exercise_actions =  $this->show_button($questionId, $currentQuestion);
+            echo Display::div($exercise_actions, array('class'=>'exercise_actions'));
+        }
+    }
+
+    public function renderQuestion(
+        $questionId,
+        $attemptList,
+        $remindList,
+        $i,
+        $current_question,
+        $questions_in_media = array(),
+        $last_question_in_media = false,
+        $realQuestionList
+    ) {
+
+        global $origin;
+        $question_obj = Question::read($questionId);
+        $user_choice = isset($attemptList[$questionId]) ? $attemptList[$questionId] : null;
+
+        $remind_highlight = null;
+
+        //Hides questions when reviewing a ALL_ON_ONE_PAGE exercise see #4542 no_remind_highlight class hide with jquery
+        if ($this->type == ALL_ON_ONE_PAGE && isset($_GET['reminder']) && $_GET['reminder'] == 2) {
+            $remind_highlight = 'no_remind_highlight';
+            if (in_array($question_obj->type, Question::question_type_no_review())) {
+                return null;
+            }
+        }
+
+        $attributes = array('id' =>'remind_list['.$questionId.']');
+
+        $is_remind_on = false;
+        if (in_array($questionId, $remindList)) {
+            $is_remind_on = true;
+            $attributes['checked'] = 1;
+            $remind_highlight = ' remind_highlight ';
+        }
+
+        // Showing the question
+
+        $exercise_actions  = null;
+
+        echo '<div id="question_div_'.$questionId.'" class="main_question '.$remind_highlight.'" >';
+
+        // Shows the question + possible answers
+        echo ExerciseLib::showQuestion($question_obj, false, $origin, $i, true, false, $user_choice, false);
+
+        // Button save and continue
+        switch ($this->type) {
+            case ONE_PER_PAGE:
+                $exercise_actions .= $this->show_button($questionId, $current_question, null, $remindList);
+                break;
+            case ALL_ON_ONE_PAGE :
+                $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
+                $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
+                $exercise_actions  .= Display::div($button, array('class'=>'exercise_save_now_button'));
+                break;
+        }
+
+        if (!empty($questions_in_media)) {
+            $count_of_questions_inside_media = count($questions_in_media);
+            if ($count_of_questions_inside_media > 1) {
+                $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\', false, false); ">'.get_lang('SaveForNow').'</a>';
+                $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
+                $exercise_actions  = Display::div($button, array('class'=>'exercise_save_now_button'));
+            }
+
+            if ($last_question_in_media && $this->type == ONE_PER_PAGE) {
+                $exercise_actions = $this->show_button($questionId, $current_question, $questions_in_media);
+            }
+        }
+
+        // Checkbox review answers
+        if ($this->review_answers && !in_array($question_obj->type, Question::question_type_no_review())) {
+            $remind_question_div = Display::tag('label', Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes).get_lang('ReviewQuestionLater'), array('class' => 'checkbox', 'for' =>'remind_list['.$questionId.']'));
+            $exercise_actions   .= Display::div($remind_question_div, array('class'=>'exercise_save_now_button'));
+        }
+
+        echo Display::div(' ', array('class'=>'clear'));
+
+        $paginator = null;
+        if ($this->type == ONE_PER_PAGE) {
+            if (empty($questions_in_media)) {
+                $paginator = Display::paginationIndicator($current_question, count($realQuestionList));
+            } else {
+                if ($last_question_in_media) {
+                    $paginator = Display::paginationIndicator($current_question, count($realQuestionList));
+                }
+            }
+        }
+
+        echo '<div class="row"><div class="pull-right">'.$paginator.'</div></div>';
+
+        echo Display::div($exercise_actions, array('class'=>'form-actions'));
+        echo '</div>';
     }
 
 }

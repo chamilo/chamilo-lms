@@ -197,7 +197,6 @@ class Answer
         if ($question_type['type'] == UNIQUE_ANSWER_NO_OPTION && !empty($doubt_data)) {
             $i = $doubt_data->iid;
             $this->id[$i] = $doubt_data->iid;
-
             $this->answer[$i]      = $doubt_data->answer;
             $this->correct[$i]     = $doubt_data->correct;
             $this->comment[$i]     = $doubt_data->comment;
@@ -329,7 +328,7 @@ class Answer
                 }
 
                 $list[] = array(
-                    'iid'            => $i,
+                    'iid'           => $i,
                     'answer'        => $this->answer[$i],
                     'comment'       => $this->comment[$i],
                     'grade'         => $this->weighting[$i],
@@ -385,10 +384,11 @@ class Answer
      */
     public function isCorrect($id)
     {
-        return $this->correct[$id];
+        return isset($this->correct[$id]) ? $this->correct[$id] : null;
     }
 
-    public function getAnswerIdFromList($answer_id) {
+    public function getAnswerIdFromList($answer_id)
+    {
         $counter = 1;
         foreach ($this->answer as $my_answer_id => $item) {
             if ($answer_id == $my_answer_id) {
@@ -398,7 +398,8 @@ class Answer
         }
     }
 
-    public function getRealAnswerIdFromList($answer_id) {
+    public function getRealAnswerIdFromList($answer_id)
+    {
         $counter = 1;
         foreach ($this->answer as $my_answer_id => $item) {
             if ($answer_id == $counter) {
@@ -408,7 +409,8 @@ class Answer
         }
     }
 
-    public function getCorrectAnswerPosition($correct_id) {
+    public function getCorrectAnswerPosition($correct_id)
+    {
         $counter = 1;
         foreach ($this->correct as $my_correct_id => $item) {
             if ($correct_id == $my_correct_id) {
@@ -427,7 +429,7 @@ class Answer
      */
     public function selectComment($id)
     {
-        return $this->comment[$id];
+        return isset($this->comment[$id]) ? $this->comment[$id] : null;
     }
 
     /**
@@ -439,7 +441,7 @@ class Answer
      */
     public function selectWeighting($id)
     {
-        return $this->weighting[$id];
+        return isset($this->weighting[$id]) ? $this->weighting[$id] : null;
     }
 
     /**
@@ -451,7 +453,7 @@ class Answer
      */
     public function selectPosition($id)
     {
-        return $this->position[$id];
+        return isset($this->position[$id]) ? $this->position[$id] : null;
     }
 
     /**

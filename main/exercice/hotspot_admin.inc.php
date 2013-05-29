@@ -838,7 +838,6 @@ if ($modifyAnswers) {
                                     $oFCKeditor->Height = '100';
                                     $oFCKeditor->Value = $content;
                                     $return = $oFCKeditor->CreateHtml();
-                                    /* <td align="left"><textarea wrap="virtual" rows="1" cols="25" name="comment[<?php echo $i; ?>]" style="width: 100%"><?php echo api_htmlentities($comment[$i], ENT_QUOTES, api_get_system_encoding()); ?></textarea></td> */
                                     ?>
                                     <td>&nbsp;</td>
                                     <td align="left" ><?php echo $return; ?></td>
@@ -853,15 +852,15 @@ if ($modifyAnswers) {
                                             ?>
                                             <input type="hidden" name="weighting[<?php echo $i; ?>]" class="span3" value="0" />
                                 <?php } else { ?>
-                                            <input type="text" name="weighting[<?php echo $i; ?>]" class="span3" value="<?php echo (isset($weighting[$i]) ? $weighting[$i] : 10); ?>" />
+                                        <input type="text" name="weighting[<?php echo $i; ?>]" class="span3" value="<?php echo (isset($weighting[$i]) ? $weighting[$i] : 10); ?>" />
                                 <?php
                                 }
                             }
                             if ($answerType == HOT_SPOT) {
                                 ?>
-                                        <input type="text" name="weighting[<?php echo $i; ?>]" class="span3" value="<?php echo (isset($weighting[$i]) ? $weighting[$i] : 10); ?>" />
-                                        <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]); ?>" />
-                                        <input type="hidden" name="hotspot_type[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_type[$i]) ? 'square' : $hotspot_type[$i]); ?>" />
+                                <input type="text" name="weighting[<?php echo $i; ?>]" class="span3" value="<?php echo (isset($weighting[$i]) ? $weighting[$i] : 10); ?>" />
+                                <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]); ?>" />
+                                <input type="hidden" name="hotspot_type[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_type[$i]) ? 'square' : $hotspot_type[$i]); ?>" />
                                 <?php
                             }
                             ?>

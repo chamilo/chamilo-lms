@@ -254,7 +254,7 @@ $exercise_actions = Display::url(get_lang('EndTest'), 'javascript://', array('on
 
 $questionList = explode(',', $exercise_stat_info['data_tracking']);
 
-$questionListFlatten = $objExercise->transform_question_list_with_medias($questionList, true);
+$questionListFlatten = $objExercise->transformQuestionListWithMedias($questionList, true);
 $mediaQuestions = $objExercise->getMediaList($questionList);
 
 $params = "exe_id=$exe_id&exerciseId=$exerciseId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();

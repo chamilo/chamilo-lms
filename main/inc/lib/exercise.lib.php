@@ -61,10 +61,14 @@ class ExerciseLib
         $pictureName = $objQuestionTmp->selectPicture();
 
         $s = null;
+        // @todo use a formvalidator
+        $form = new FormValidator('question');
+        $renderer = $form->defaultRenderer();
+        $form_template = '{content}';
+        $renderer->setFormTemplate($form_template);
 
         if ($answerType != HOT_SPOT && $answerType != HOT_SPOT_DELINEATION) {
             // Question is not a hotspot
-
             if (!$only_questions) {
                 $questionDescription = $objQuestionTmp->selectDescription();
                 if ($show_title) {
@@ -140,13 +144,10 @@ class ExerciseLib
                 }
                 $num_suggestions = ($nbrAnswers - $j) + 1;
             } elseif ($answerType == FREE_ANSWER) {
-                $fck_content = isset($user_choice[0]) && !empty($user_choice[0]['answer']) ? $user_choice[0]['answer'] : null;
-                $oFCKeditor = new FCKeditor("choice[".$questionId."]");
-                $oFCKeditor->ToolbarSet = 'TestFreeAnswer';
-                $oFCKeditor->Width = '100%';
-                $oFCKeditor->Height = '200';
-                $oFCKeditor->Value = $fck_content;
-                $s .= $oFCKeditor->CreateHtml();
+                $content = isset($user_choice[0]) && !empty($user_choice[0]['answer']) ? $user_choice[0]['answer'] : null;
+                $form->addElement('html_editor', "choice[".$questionId."]", null, array('id' => "choice[".$questionId."]"), array('ToolbarSet' => 'TestFreeAnswer'));
+                $form->setDefaults(array("choice[".$questionId."]" => $content));
+                $s .= $form->return_form();
             } elseif ($answerType == ORAL_EXPRESSION) {
                 // Add nanogong
                 if (api_get_setting('enable_nanogong') == 'true') {
@@ -172,13 +173,9 @@ class ExerciseLib
                     $s .= $nano->show_button();
                 }
 
-                $oFCKeditor = new FCKeditor("choice[".$questionId."]");
-                $oFCKeditor->ToolbarSet = 'TestFreeAnswer';
-                $oFCKeditor->Width = '100%';
-                $oFCKeditor->Height = '150';
-                $oFCKeditor->ToolbarStartExpanded = false;
-                $oFCKeditor->Value = '';
-                $s .= $oFCKeditor->CreateHtml();
+                $form->addElement('html_editor', "choice[".$questionId."]", null, array('id' => "choice[".$questionId."]"), array('ToolbarSet' => 'TestFreeAnswer'));
+                //$form->setDefaults(array("choice[".$questionId."]" => $content));
+                $s .= $form->return_form();
             }
 
             // Now navigate through the possible answers, using the max number of
@@ -243,7 +240,6 @@ class ExerciseLib
                     }
 
                     $answer = Security::remove_XSS($answer, STUDENT);
-
                     $s .= Display::input('hidden', 'choice2['.$questionId.']', '0');
 
                     $answer_input = null;

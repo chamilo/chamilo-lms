@@ -69,7 +69,7 @@
                         {% endif %}
 
                         <ul class="nav pull-right">
-                            <li><a href="{{ _p.web_main }}social/home.php"><img src="{{ _u.avatar_small }}"/></a></li>
+                            <li><a href="{{ _p.web_main }}social/home.php"><img src="{{ _u.avatar_small }}" /></a></li>
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ _u.complete_name }}<b class="caret"></b></a>
                                 <ul class="dropdown-menu">

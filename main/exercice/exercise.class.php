@@ -1349,7 +1349,8 @@ class Exercise
 
         $form->add_html_editor('exerciseDescription', get_lang('ExerciseDescription'), false, false, $editor_config);
 
-        $form->addElement('advanced_settings',
+        $form->addElement(
+            'advanced_settings',
             '<a href="javascript://" onclick=" return advanced_parameters()">
                 <span id="img_plus_and_minus">
                 <div style="vertical-align:top;" >
@@ -4849,7 +4850,7 @@ class Exercise
     public function getQuestionList($expand_media_questions = false)
     {
         $questionList = $this->selectQuestionList();
-        $questionList = $this->transform_question_list_with_medias($questionList, $expand_media_questions);
+        $questionList = $this->transformQuestionListWithMedias($questionList, $expand_media_questions);
         return $questionList;
     }
 
@@ -4859,7 +4860,7 @@ class Exercise
      * @params bool expand or not question list (true show all questions, false show media question id instead of the question ids)
      *
      **/
-    public function transform_question_list_with_medias($question_list, $expand_media_questions = false)
+    public function transformQuestionListWithMedias($question_list, $expand_media_questions = false)
     {
         $new_question_list = array();
         if (!empty($question_list)) {
@@ -5191,6 +5192,9 @@ class Exercise
     }
 
     /**
+     * Gets a list of numbers with links to the questions, like a pagination. If there are categories associated,
+     * the list is organized by categories.
+     *
      * @param int $exe_id
      * @param array $questionList
      * @param array $questionListFlatten
@@ -5301,14 +5305,15 @@ class Exercise
     {
         $mediaQuestions = $this->getMediaList();
 
-        $html = '<div class="exercise_pagination pagination pagination-mini "><ul>';
+        $html = '<div class="exercise_pagination pagination pagination-mini"><ul>';
         $counter = 0;
         foreach ($questionList as $questionId) {
             $isCurrent = $currentQuestion == ($counter + 1) ? true : false;
             if (isset($mediaQuestions) && isset($mediaQuestions[$questionId])) {
                 $html .= Display::progressPaginationBar($mediaQuestions[$questionId], $currentQuestion, $conditions, $link, $counter + 1, true, true, false, $isCurrent);
             } else {
-                $html .= Display::parsePaginationItem($questionId, $isCurrent, $conditions, $link, $counter+1);
+                $html .= Display::parsePaginationItem($questionId, $isCurrent, $conditions, $link, $counter);
+
             }
             $counter++;
         }
@@ -5333,7 +5338,7 @@ class Exercise
         $counterNoMedias = 0;
         $nextValue = 0;
         $wasMedia = false;
-        $before = array();
+        $before = 0;
 
         if (!empty($categories)) {
 
@@ -5361,10 +5366,9 @@ class Exercise
 
                 if (!empty($nextValue)) {
                     if ($wasMedia) {
-                        $nextValue = $nextValue - count($before) -1;
+                        $nextValue = $nextValue - $before + 1;
                     }
                 }
-
                 $html .= Display::progressPaginationBar(
                     $nextValue,
                     $questionList,
@@ -5527,10 +5531,7 @@ class Exercise
         }
 
         $attributes = array('id' =>'remind_list['.$questionId.']');
-
-        $is_remind_on = false;
         if (in_array($questionId, $remindList)) {
-            $is_remind_on = true;
             $attributes['checked'] = 1;
             $remind_highlight = ' remind_highlight ';
         }
@@ -5539,6 +5540,7 @@ class Exercise
 
         $exercise_actions  = null;
 
+        echo '<a id="questionanchor'.$questionId.'"></a><br />';
         echo '<div id="question_div_'.$questionId.'" class="main_question '.$remind_highlight.'" >';
 
         // Shows the question + possible answers
@@ -5589,7 +5591,6 @@ class Exercise
         }
 
         echo '<div class="row"><div class="pull-right">'.$paginator.'</div></div>';
-
         echo Display::div($exercise_actions, array('class'=>'form-actions'));
         echo '</div>';
     }

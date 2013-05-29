@@ -39,7 +39,7 @@ class FormValidator extends HTML_QuickForm
      * @param array form_data
      * @return FormValidator
      */
-    static function create($form_data)
+    public static function create($form_data)
     {
         if (empty($form_data)) {
             return null;
@@ -90,7 +90,7 @@ class FormValidator extends HTML_QuickForm
         return $result;
     }
 
-    var $with_progress_bar = false;
+    public $with_progress_bar = false;
 
     /**
      * Constructor
@@ -102,7 +102,7 @@ class FormValidator extends HTML_QuickForm
      * @param bool $track_submit (optional)		Whether to track if the form was
      * submitted by adding a special hidden field (default = true)
      */
-    function __construct($form_name, $method = 'post', $action = '', $target = '', $attributes = null, $track_submit = true)
+    public function __construct($form_name, $method = 'post', $action = '', $target = '', $attributes = null, $track_submit = true)
     {
         //Default form class
         if (is_array($attributes) && !isset($attributes['class']) || empty($attributes)) {
@@ -227,7 +227,7 @@ EOT;
      * @param boolean $required	(optional)		Is the form-element required (default=true)
      * @param array $attributes (optional)		List of attributes for the form-element
      */
-    function add_textfield($name, $label, $required = true, $attributes = array())
+    public function add_textfield($name, $label, $required = true, $attributes = array())
     {
         $this->addElement('text', $name, $label, $attributes);
         $this->applyFilter($name, 'trim');
@@ -236,27 +236,27 @@ EOT;
         }
     }
 
-    function add_hidden($name, $value)
+    public function add_hidden($name, $value)
     {
         $this->addElement('hidden', $name, $value);
     }
 
-    function add_textarea($name, $label, $attributes = array())
+    public function add_textarea($name, $label, $attributes = array())
     {
         $this->addElement('textarea', $name, $label, $attributes);
     }
 
-    function add_button($name, $label, $attributes = array())
+    public function add_button($name, $label, $attributes = array())
     {
         $this->addElement('button', $name, $label, $attributes);
     }
 
-    function add_checkbox($name, $label, $trailer = '', $attributes = array())
+    public function add_checkbox($name, $label, $trailer = '', $attributes = array())
     {
         $this->addElement('checkbox', $name, $label, $trailer, $attributes);
     }
 
-    function add_radio($name, $label, $options = '')
+    public function add_radio($name, $label, $options = '')
     {
         $group = array();
         foreach ($options as $key => $value) {
@@ -265,27 +265,27 @@ EOT;
         $this->addGroup($group, $name, $label);
     }
 
-    function add_select($name, $label, $options = '', $attributes = array())
+    public function add_select($name, $label, $options = '', $attributes = array())
     {
         $this->addElement('select', $name, $label, $options, $attributes);
     }
 
-    function add_label($label, $text)
+    public function add_label($label, $text)
     {
         $this->addElement('label', $label, $text);
     }
 
-    function add_header($text)
+    public function add_header($text)
     {
         $this->addElement('header', $text);
     }
 
-    function add_file($name, $label, $attributes = array())
+    public function add_file($name, $label, $attributes = array())
     {
         $this->addElement('file', $name, $label, $attributes);
     }
 
-    function add_html($snippet)
+    public function add_html($snippet)
     {
         $this->addElement('html', $snippet);
     }
@@ -301,7 +301,7 @@ EOT;
      * @param boolean $full_page (optional)		When it is true, the editor loads completed html code for a full page.
      * @param array $editor_config (optional)	Configuration settings for the online editor.
      */
-    function add_html_editor($name, $label, $required = true, $full_page = false, $config = null)
+    public function add_html_editor($name, $label, $required = true, $full_page = false, $config = null)
     {
         $this->addElement('html_editor', $name, $label, 'rows="15" cols="80"', $config);
         $this->applyFilter($name, 'trim');
@@ -347,7 +347,7 @@ EOT;
      * @param string $label						The label for the form-element
      * @param string $name						The element name
      */
-    function add_datepicker($name, $label)
+    public function add_datepicker($name, $label)
     {
         $this->addElement('datepicker', $name, $label, array('form_name' => $this->getAttribute('name')));
         $this->_elements[$this->_elementIndex[$name]]->setLocalOption('minYear', 1900); // TODO: Now - 9 years
@@ -360,7 +360,7 @@ EOT;
      * @param string $label						The label for the form-element
      * @param string $name						The element name
      */
-    function add_datepickerdate($name, $label)
+    public function add_datepickerdate($name, $label)
     {
         $this->addElement('datepickerdate', $name, $label, array('form_name' => $this->getAttribute('name')));
         $this->_elements[$this->_elementIndex[$name]]->setLocalOption('minYear', 1900); // TODO: Now - 9 years
@@ -374,7 +374,7 @@ EOT;
      * @param string $label						The label for the form-element
      * @param string $name						The element name
      */
-    function add_timewindow($name_1, $name_2, $label_1, $label_2)
+    public function add_timewindow($name_1, $name_2, $label_1, $label_2)
     {
         $this->add_datepicker($name_1, $label_1);
         $this->add_datepicker($name_2, $label_2);
@@ -384,7 +384,7 @@ EOT;
     /**
      * Adds a button to the form to add resources.
      */
-    function add_resource_button()
+    public function add_resource_button()
     {
         $group = array();
         $group[] = $this->createElement('static', 'add_resource_img', null, '<img src="' . api_get_path(WEB_IMG_PATH) . 'attachment.gif" alt="' . get_lang('Attachment') . '"/>');
@@ -403,7 +403,7 @@ EOT;
      * @param string $label (optional)			Custom label to be shown
      * submits the form and the start of the progress bar.
      */
-    function add_progress_bar($delay = 2, $label = '')
+    public function add_progress_bar($delay = 2, $label = '')
     {
         if (empty($label)) {
             $label = get_lang('PleaseStandBy');
@@ -421,7 +421,7 @@ EOT;
      * @param int $delay (optional)						The frequency of the xajax call
      * @param bool $wait_after_upload (optional)
      */
-    function add_real_progress_bar($upload_id, $element_after, $delay = 2, $wait_after_upload = false)
+    public function add_real_progress_bar($upload_id, $element_after, $delay = 2, $wait_after_upload = false)
     {
 
         if (!function_exists('uploadprogress_get_info')) {
@@ -486,7 +486,7 @@ EOT;
      * @param array $element					The array of elements
      * @param string $message					The message displayed
      */
-    function add_multiple_required_rule($elements, $message)
+    public function add_multiple_required_rule($elements, $message)
     {
         $this->_required[] = $elements[0];
         $this->addRule($elements, $message, 'multiple_required');
@@ -497,7 +497,7 @@ EOT;
      * If an element in the form didn't validate, an error message is showed
      * asking the user to complete the form.
      */
-    function display()
+    public function display()
     {
         echo $this->return_form();
     }
@@ -511,7 +511,7 @@ EOT;
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, august 2006
      */
-    function return_form()
+    public function return_form()
     {
         $error = false;
         foreach ($this->_elements as $element) {
@@ -531,9 +531,9 @@ EOT;
         }
         return $return_value;
     }
-
-
 }
+
+// @todo remove this!
 
 /**
  * Cleans HTML text

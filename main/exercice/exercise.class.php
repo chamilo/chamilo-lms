@@ -5301,14 +5301,15 @@ class Exercise
     {
         $mediaQuestions = $this->getMediaList();
 
-        $html = '<div class="exercise_pagination pagination pagination-mini "><ul>';
+        $html = '<div class="exercise_pagination pagination pagination-mini"><ul>';
         $counter = 0;
         foreach ($questionList as $questionId) {
             $isCurrent = $currentQuestion == ($counter + 1) ? true : false;
             if (isset($mediaQuestions) && isset($mediaQuestions[$questionId])) {
                 $html .= Display::progressPaginationBar($mediaQuestions[$questionId], $currentQuestion, $conditions, $link, $counter + 1, true, true, false, $isCurrent);
             } else {
-                $html .= Display::parsePaginationItem($questionId, $isCurrent, $conditions, $link, $counter+1);
+                $html .= Display::parsePaginationItem($questionId, $isCurrent, $conditions, $link, $counter);
+
             }
             $counter++;
         }

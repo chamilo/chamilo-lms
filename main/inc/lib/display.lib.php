@@ -1795,7 +1795,7 @@ class Display
      * @param $fixValue
      * @return string
      */
-    static function parsePaginationItem($itemId, $isCurrent, $conditions, $link, $nextValue, $isMedia = false, $localCounter = null, $fixedValue = null)
+    static function parsePaginationItem($itemId, $isCurrent, $conditions, $link, $nextValue = 0, $isMedia = false, $localCounter = null, $fixedValue = null)
     {
         $defaultClass = "before";
         $class = $defaultClass;

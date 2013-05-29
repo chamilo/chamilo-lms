@@ -860,7 +860,7 @@ function api_get_cdn_path($web_path) {
  *
  */
 function api_is_cas_activated() {
-    return api_get_setting(cas_activate) == "true";
+    return api_get_setting('cas_activate') == "true";
 }
 
 /**
@@ -1355,8 +1355,8 @@ function api_get_user_info($user_id = '', $check_if_user_is_online = false, $sho
 
 /**
  * Finds all the information about a user from username instead of user id
- * @param $username (string): the username
- * @return $user_info (array): user_id, lastname, firstname, username, email, ...
+ * @param string $username the username
+ * @return array $user_info user_id, lastname, firstname, username, email, ...
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 function api_get_user_info_from_username($username = '') {
@@ -2508,7 +2508,10 @@ function api_is_session_in_category($session_id, $category_name) {
     $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
     $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 
-    $sql = "select 1 FROM $tbl_session WHERE $session_id IN (SELECT s.id FROM $tbl_session s, $tbl_session_category sc  WHERE s.session_category_id = sc.id AND sc.name LIKE '%$category_name' )";
+    $sql = "SELECT 1 FROM $tbl_session
+            WHERE $session_id IN (
+                SELECT s.id FROM $tbl_session s, $tbl_session_category sc
+                WHERE s.session_category_id = sc.id AND sc.name LIKE '%$category_name' )";
     $rs = Database::query($sql);
 
     if (Database::num_rows($rs) > 0) {
@@ -4460,7 +4463,8 @@ function api_set_settings_category($category, $value = null, $access_url = 1, $f
  * Gets all available access urls in an array (as in the database)
  * @return array    An array of database records
  */
-function api_get_access_urls($from = 0, $to = 1000000, $order = 'url', $direction = 'ASC') {
+function api_get_access_urls($from = 0, $to = 1000000, $order = 'url', $direction = 'ASC')
+{
     $t_au = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
     $from = (int) $from;
     $to = (int) $to;
@@ -4477,7 +4481,8 @@ function api_get_access_urls($from = 0, $to = 1000000, $order = 'url', $directio
  * @return array Array with all the info (url, description, active, created_by, tms) from the access_url table
  * @author Julio Montoya Armas
  */
-function api_get_access_url($id) {
+function api_get_access_url($id)
+{
     global $_configuration;
     $id = Database::escape_string(intval($id));
     // Calling the Database:: library dont work this is handmade.
@@ -6750,7 +6755,8 @@ function api_set_login_language($lang) {
     }
 }
 
-function api_get_language_selected_in_login() {
+function api_get_language_selected_in_login()
+{
     $language = api_get_setting('platformLanguage');
     if (isset($_SESSION['user_language_choice']) && !empty($_SESSION['user_language_choice'])) {
         $language = $_SESSION['user_language_choice'];
@@ -6758,7 +6764,8 @@ function api_get_language_selected_in_login() {
     return $language;
 }
 
-function api_get_user_language() {
+function api_get_user_language()
+{
     $user_language = null;
 
     if (!api_is_anonymous()) {
@@ -6787,7 +6794,8 @@ function api_get_user_language() {
     return $user_language;
 }
 
-function api_get_language_interface() {
+function api_get_language_interface()
+{
     global $app;
     $valid_languages = array();
 
@@ -6868,7 +6876,8 @@ function api_get_web_default_course_document()
     return api_get_path(WEB_PATH).'app/data/default_course_document/';
 }
 
-function load_translations($app) {
+function load_translations($app)
+{
 
 }
 
@@ -6877,7 +6886,8 @@ function load_translations($app) {
  * Get user roles
  * @return array
  */
-function api_get_user_roles() {
+function api_get_user_roles()
+{
     // Status
     $status = array();
     $status[COURSEMANAGER] = get_lang('Teacher');

@@ -847,7 +847,7 @@ function api_get_cdn_path($web_path) {
                 if (in_array($ext,$exts)) {
                     //Use host as defined in $_configuration['cdn'], without
                     // trailing slash
-                    return str_replace($web_root,$host.'/',$web_path);
+                    return str_replace($web_root, $host.'/',$web_path);
                 }
             }
         }

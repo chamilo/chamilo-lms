@@ -1349,7 +1349,8 @@ class Exercise
 
         $form->add_html_editor('exerciseDescription', get_lang('ExerciseDescription'), false, false, $editor_config);
 
-        $form->addElement('advanced_settings',
+        $form->addElement(
+            'advanced_settings',
             '<a href="javascript://" onclick=" return advanced_parameters()">
                 <span id="img_plus_and_minus">
                 <div style="vertical-align:top;" >
@@ -5191,6 +5192,9 @@ class Exercise
     }
 
     /**
+     * Gets a list of numbers with links to the questions, like a pagination. If there are categories associated,
+     * the list is organized by categories.
+     *
      * @param int $exe_id
      * @param array $questionList
      * @param array $questionListFlatten
@@ -5527,10 +5531,7 @@ class Exercise
         }
 
         $attributes = array('id' =>'remind_list['.$questionId.']');
-
-        $is_remind_on = false;
         if (in_array($questionId, $remindList)) {
-            $is_remind_on = true;
             $attributes['checked'] = 1;
             $remind_highlight = ' remind_highlight ';
         }

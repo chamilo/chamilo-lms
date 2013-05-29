@@ -716,6 +716,7 @@ switch ($action) {
                     $emailbody .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";
                     $emailbody .= get_lang('WorkName')." : ".$title."\n\n".get_lang('DownloadLink')."\n";
                     $url = api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()."&amp;id=".$work_id;
+                    $emailbody .= $url;
                     
                     MessageManager::send_message_simple($to_user_id, $emailsubject, $emailbody);
                 }

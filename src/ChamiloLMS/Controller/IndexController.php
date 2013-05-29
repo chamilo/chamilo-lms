@@ -38,6 +38,8 @@ class IndexController extends CommonController
     public function indexAction(Application $app)
     {
         $this->cidReset();
+        /** @var \Template $template */
+        $template = $app['template'];
 
         /*
         var_dump($app['request']->getBaseUrl());
@@ -110,7 +112,7 @@ class IndexController extends CommonController
         }
 
         if (api_get_setting('display_categories_on_homepage') == 'true') {
-            $app['template']->assign('course_category_block', $app['page_controller']->return_courses_in_categories());
+            $template->assign('course_category_block', $app['page_controller']->return_courses_in_categories());
         }
 
         // @todo Custom Facebook connection lib could be replaced with opauth
@@ -144,18 +146,14 @@ class IndexController extends CommonController
             $announcementsBlock = $app['page_controller']->return_announcements();
         }
 
-        $app['template']->assign('hot_courses', $hotCourses);
-        $app['template']->assign('announcements_block', $announcementsBlock);
+        $template->assign('hot_courses', $hotCourses);
+        $template->assign('announcements_block', $announcementsBlock);
 
         // Homepage
-        $app['template']->assign('home_page_block', $app['page_controller']->returnHomePage());
+        $template->assign('home_page_block', $app['page_controller']->returnHomePage());
 
         // Navigation links
-        $navLinks = $app['template']->returnNavigationLinks();
-
-        $app['template']->assign('navigation_course_links', $navLinks);
-        $app['template']->assign('main_navigation_block', $navLinks);
-
+        $app['page_controller']->returnNavigationLinks($template->getNavigationLinks());
         $app['page_controller']->return_notice();
         $app['page_controller']->return_help();
 
@@ -164,10 +162,10 @@ class IndexController extends CommonController
         }
 
         if (!empty($loginError)) {
-            $app['template']->assign('login_failed', $this->handleLoginFailed($loginError));
+            $template->assign('login_failed', $this->handleLoginFailed($loginError));
         }
 
-        $response = $app['template']->render_layout('layout_2_col.tpl');
+        $response = $template->render_layout('layout_2_col.tpl');
 
         //return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
         return new Response($response, 200, array());

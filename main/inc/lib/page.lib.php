@@ -293,6 +293,7 @@ class PageController
             'elements' => $content,
             'content'  => isset($params['content']) ? $params['content'] : null
         );
+
         $app['template']->assign($id, $block_menu);
     }
 
@@ -1428,4 +1429,25 @@ class PageController
         $tpl->assign('count_courses', $count_courses);
         $tpl->assign('welcome_to_course_block', 1);
     }
+
+     /**
+     * @param array
+     */
+    public function returnNavigationLinks($items)
+    {
+        // Main navigation section.
+        // Tabs that are deactivated are added here.
+        if (!empty($items)) {
+            $content = '<ul class="nav nav-list">';
+            foreach ($items as $section => $navigation_info) {
+                $current = isset($GLOBALS['this_section']) && $section == $GLOBALS['this_section'] ? ' id="current"' : '';
+                $content .= '<li '.$current.'>';
+                $content .= '<a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a>';
+                $content .= '</li>';
+            }
+            $content .= '</ul>';
+            $this->show_right_block(get_lang('MainNavigation'), null, 'navigation_block', array('content' => $content));
+        }
+    }
+
 }

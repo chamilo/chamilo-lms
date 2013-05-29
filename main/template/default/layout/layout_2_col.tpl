@@ -42,7 +42,7 @@
             {% include app.template_style ~ "/index/help_block.tpl" %}
 
             {#  Links that are not added in the tabs #}
-            {{ navigation_course_links }}
+            {% include app.template_style ~ "/index/navigation_block.tpl" %}
 
             {#  Reservation block  #}
             {{ reservation_block }}

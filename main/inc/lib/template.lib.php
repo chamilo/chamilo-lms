@@ -18,7 +18,7 @@ class Template
     public $show_header;
     public $show_footer;
     public $help;
-    public $menu_navigation = array(); //Used in the userportal.lib.php function: return_navigation_course_links()
+    public $menu_navigation = array();
     public $show_learnpath = false; // This is a learnpath section or not?
     public $plugin = null;
     public $course_id = null;
@@ -843,29 +843,17 @@ class Template
         return $menu;
     }
 
-    public function returnNavigationLinks()
+    /**
+     *
+     * @return string
+     */
+    public function getNavigationLinks()
     {
-        $html = '';
-
         // Deleting the myprofile link.
         if (api_get_setting('allow_social_tool') == 'true') {
             unset($this->menu_navigation['myprofile']);
         }
-
-        // Main navigation section.
-        // Tabs that are deactivated are added here.
-        if (!empty($this->menu_navigation)) {
-            $content = '<ul class="nav nav-list">';
-            foreach ($this->menu_navigation as $section => $navigation_info) {
-                $current = isset($GLOBALS['this_section']) && $section == $GLOBALS['this_section'] ? ' id="current"' : '';
-                $content .= '<li'.$current.'>';
-                $content .= '<a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a>';
-                $content .= '</li>';
-            }
-            $content .= '</ul>';
-            $html = $this->app['page_controller']->show_right_block(get_lang('MainNavigation'), $content, 'navigation_link_block');
-        }
-        return $html;
+        return $this->menu_navigation;
     }
 
     public function render_layout($layout = null)

@@ -181,19 +181,6 @@ $app['breadcrumb'] = array();
 // The script is allowed? This setting is modified when calling api_is_not_allowed()
 $app['allowed'] = true;
 
-// Template settings loaded in template.lib.php
-$app['template.show_header'] = true;
-$app['template.show_footer'] = true;
-$app['template.show_learnpath'] = false;
-$app['template.hide_global_chat'] = true;
-$app['template.load_plugins'] = true;
-
-// Default template style
-$app['template_style'] = 'default';
-
-// Default layout
-$app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
-
 // Start session after the internationalization library has been initialized
 
 // @todo use silex session provider instead of a custom class
@@ -218,6 +205,22 @@ if (!$app['configuration']['db_host']) {
     //$app->abort(500, "Database is unavailable"); //error 3
 }*/
 
+$checkConnection = false;
+
+if (isset($_configuration['main_database'])) {
+    // The system has not been designed to use special SQL modes that were introduced since MySQL 5.
+    Database::query("set session sql_mode='';");
+    $checkConnection = @Database::select_db($_configuration['main_database'], $conn_return);
+
+    if ($checkConnection) {
+
+        // Initialization of the database encoding to be used.
+        Database::query("SET SESSION character_set_server = 'utf8';");
+        Database::query("SET SESSION collation_server = 'utf8_general_ci';");
+        Database::query("SET NAMES 'utf8';");
+    }
+}
+
 /* Retrieving all the chamilo config settings for multiple URLs feature*/
 if (isset($_configuration['multiple_access_urls']) && !empty($_configuration['multiple_access_urls'])) {
     $_configuration['access_url'] = 1;
@@ -236,27 +239,51 @@ if (isset($_configuration['multiple_access_urls']) && !empty($_configuration['mu
     $_configuration['access_url'] = 1;
 }
 
+// Loading chamilo settings
+/* @todo create a service provider to load plugins.
+   Check how bolt add extensions (including twig templates, config with yml)*/
+$_plugins = array();
+if ($alreadyInstalled && $checkConnection) {
+    $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
+    $settings_latest_update = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
+
+    $_setting = isset($_SESSION['_setting']) ? $_SESSION['_setting'] : null;
+    $_plugins = isset($_SESSION['_plugins']) ? $_SESSION['_plugins'] : null;
+
+    if (empty($_setting)) {
+        api_set_settings_and_plugins();
+    } else {
+        if (isset($_setting['settings_latest_update']) && $_setting['settings_latest_update'] != $settings_latest_update) {
+            api_set_settings_and_plugins();
+            $_setting = isset($_SESSION['_setting']) ? $_SESSION['_setting'] : null;
+            $_plugins = isset($_SESSION['_plugins']) ? $_SESSION['_plugins'] : null;
+        }
+    }
+}
+$app['plugins'] = $_plugins;
+
+// Template settings loaded in template.lib.php
+$app['template.show_header'] = true;
+$app['template.show_footer'] = true;
+$app['template.show_learnpath'] = false;
+$app['template.hide_global_chat'] = true;
+$app['template.load_plugins'] = true;
+
+// Default template style
+$templateStyle = api_get_setting('template');
+$templateStyle = isset($templateStyle) && !empty($templateStyle) ? $templateStyle : 'default';
+$app['template_style'] = $templateStyle;
+
+// Default layout
+$app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
+
 $app['configuration'] = $_configuration;
 
 /** Including service providers */
 require_once 'services.php';
 
 $charset = 'UTF-8';
-$checkConnection = false;
 
-if (isset($app['configuration']['main_database'])) {
-    // The system has not been designed to use special SQL modes that were introduced since MySQL 5.
-    Database::query("set session sql_mode='';");
-    $checkConnection = @Database::select_db($app['configuration']['main_database'], $conn_return);
-
-    if ($checkConnection) {
-
-        // Initialization of the database encoding to be used.
-        Database::query("SET SESSION character_set_server = 'utf8';");
-        Database::query("SET SESSION collation_server = 'utf8_general_ci';");
-        Database::query("SET NAMES 'utf8';");
-    }
-}
 
 // Manage Chamilo error messages
 $app->error(
@@ -294,29 +321,6 @@ $app->error(
 // Preserving the value of the global variable $charset.
 $charset_initial_value = $charset;
 
-// Loading chamilo settings
-/* @todo create a service provider to load plugins.
-   Check how bolt add extensions (including twig templates, config with yml)*/
-$_plugins = array();
-if ($alreadyInstalled && $checkConnection) {
-    $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
-
-    $settings_latest_update = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
-
-    $_setting = isset($_SESSION['_setting']) ? $_SESSION['_setting'] : null;
-    $_plugins = isset($_SESSION['_plugins']) ? $_SESSION['_plugins'] : null;
-
-    if (empty($_setting)) {
-        api_set_settings_and_plugins();
-    } else {
-        if (isset($_setting['settings_latest_update']) && $_setting['settings_latest_update'] != $settings_latest_update) {
-            api_set_settings_and_plugins();
-            $_setting = isset($_SESSION['_setting']) ? $_SESSION['_setting'] : null;
-            $_plugins = isset($_SESSION['_plugins']) ? $_SESSION['_plugins'] : null;
-        }
-    }
-}
-$app['plugins'] = $_plugins;
 
 // Section (tabs in the main chamilo menu)
 $app['this_section'] = SECTION_GLOBAL;

@@ -927,6 +927,7 @@ VALUES
 ('allow_teachers_to_create_sessions', NULL,'radio','Session','false','AllowTeachersToCreateSessionsTitle','AllowTeachersToCreateSessionsComment', NULL, NULL, 0),
 ('login_as_allowed',NULL,'radio','Security','true','AdminLoginAsAllowedTitle','AdminLoginAsAllowedComment', 1, 0, 1),
 ('admins_can_set_users_pass','radio','security','true','AdminsCanChangeUsersPassTitle','AdminsCanChangeUsersPassComment', 1, 0, 1),
+('template', NULL, 'text', 'stylesheets', 'default', 'DefaultTemplateTitle', 'DefaultTemplateComment', NULL, NULL, 1),
 ('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.001','DatabaseVersion','', NULL, NULL, 0); -- base value, updated at end of file. Don't change here
 
 UNLOCK TABLES;
@@ -3526,4 +3527,4 @@ CREATE TABLE ext_log_entries (
 ) DEFAULT CHARSET=utf8;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.015' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.016' WHERE variable = 'chamilo_database_version';

@@ -307,7 +307,9 @@ class Template
         $this->assign('_u', $user_info);
     }
 
-    /** Set system parameters */
+    /**
+     * Set system parameters
+     */
     private function setSystemParameters()
     {
         global $_configuration;
@@ -338,14 +340,17 @@ class Template
     }
 
     /**
-     * Set theme, include CSS files  */
+     * Set theme, include CSS files
+     */
     private function setCssFiles()
     {
         global $disable_js_and_css_files;
         $css = array();
 
         $this->theme = api_get_visual_theme();
-
+        if (isset($_POST['style']) && api_is_platform_admin()) {
+            $this->preview_theme = $_POST['style'];
+        }
         if (!empty($this->preview_theme)) {
             $this->theme = $this->preview_theme;
         }
@@ -354,18 +359,19 @@ class Template
 
         $cssPath = api_get_path(WEB_CSS_PATH);
 
-        //Base CSS
+        // Base CSS.
         $css[] = api_get_cdn_path($cssPath.'base.css');
-        //Compressed version of default + all CSS files
-        //$css[] = api_get_cdn_path(api_get_path(WEB_PATH).'web/css/'.$this->theme.'/style.css');
+        // Compressed version of default + all CSS files
+        // @todo use assetic to compress files
+        // $css[] = api_get_cdn_path(api_get_path(WEB_PATH).'web/css/'.$this->theme.'/style.css');
 
-        //Default theme CSS
+        // Default theme CSS.
         $css[] = api_get_cdn_path($cssPath.$this->theme.'/default.css');
         $css[] = api_get_cdn_path($cssPath.'bootstrap-responsive.css');
         $css[] = api_get_cdn_path($cssPath.'responsive.css');
         $css[] = api_get_cdn_path($cssPath.'font_awesome/font-awesome.css');
 
-        //Extra CSS files
+        // Extra CSS files.
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
 
@@ -414,14 +420,10 @@ class Template
             $style_print = api_get_css(api_get_cdn_path($cssPath.$this->theme.'/print.css'), 'print');
             $this->assign('css_style_print', $style_print);
         }
-
-        // Logo
-        /*$logo = $this->returnLogo($this->theme);
-        $this->assign('logo', $logo);*/
     }
 
     /**
-     *
+     * Sets JS files
      */
     private function setJsFiles()
     {
@@ -536,7 +538,7 @@ class Template
         $this->assign('title_string', $title_string);
 
         //Setting the theme and CSS files
-        $this->setCSSFiles();
+        $this->setCssFiles();
         $this->setJsFiles();
 
         // Implementation of prefetch.

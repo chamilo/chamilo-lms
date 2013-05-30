@@ -184,11 +184,12 @@ function handle_plugins() {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Julio Montoya <gugli100@gmail.com>, Chamilo
 */
-function handle_stylesheets() {
+function handle_stylesheets()
+{
     global $_configuration;
 
     // Current style.
-    $currentstyle = api_get_setting('stylesheets');
+    $currentStyle = api_get_setting('stylesheets');
 
     $is_style_changeable = false;
 
@@ -203,7 +204,6 @@ function handle_stylesheets() {
     }
 
     $form = new FormValidator('stylesheet_upload', 'post', 'settings.php?category=Stylesheets#tabs-2');
-    //$form->addElement('header', get_lang('UploadNewStylesheet'));
     $form->addElement('text', 'name_stylesheet', get_lang('NameStylesheet'), array('size' => '40', 'maxlength' => '40'));
     $form->addRule('name_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
     $form->addElement('file', 'new_stylesheet', get_lang('UploadNewStylesheet'));
@@ -211,6 +211,7 @@ function handle_stylesheets() {
 
     $form->addRule('new_stylesheet', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);
     $form->addRule('new_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
+
     $form->addElement('style_submit_button', 'stylesheet_upload', get_lang('Upload'), array('class'=>'save'));
 
     $show_upload_form = false;
@@ -238,6 +239,7 @@ function handle_stylesheets() {
             // Add event to the system log.
             $user_id = api_get_user_id();
             $category = $_GET['category'];
+
             event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
 
             if ($result) {
@@ -268,21 +270,14 @@ function handle_stylesheets() {
                         $selected = $style_dir;
                         $safe_style_dir = $style_dir;
                     } else {
-                        if (!isset($_POST['style'])  && ($currentstyle == $style_dir || ($style_dir == 'chamilo' && !$currentstyle))) {
+                        if (!isset($_POST['style']) && ($currentStyle == $style_dir || ($style_dir == 'chamilo' && !$currentStyle))) {
                             $selected = $style_dir;
-                        } else {
-                            $selected = '';
                         }
                     }
                     $show_name = ucwords(str_replace('_', ' ', $style_dir));
-
                     if ($is_style_changeable) {
-                        $list_of_styles[$style_dir] = "<option value=\"".$style_dir."\" ".$selected." /> $show_name </option>";
+                        $list_of_styles[$style_dir] = '<option value="'.$style_dir.'" /> '.$show_name.'</option>';
                         $list_of_names[$style_dir]  = $show_name;
-                        //echo "<input type=\"radio\" name=\"style\" value=\"".$style_dir."\" ".$selected." onClick=\"parent.preview.location='style_preview.php?style=".$style_dir."';\"/>";
-                        //echo '<a href="style_preview.php?style='.$style_dir.'" target="preview">'.$show_name.'</a>';
-                    } else {
-                        //echo '<a href="style_preview.php?style='.$style_dir.'" target="preview">'.$show_name.'</a>';
                     }
                     $counter++;
                 }
@@ -291,15 +286,16 @@ function handle_stylesheets() {
         @closedir($handle);
     }
 
-    //Sort styles in alphabetical order
+    // Sort styles in alphabetical order
     asort($list_of_names);
     $select_list = array();
-    foreach ($list_of_names as $style_dir=>$item) {
+    foreach ($list_of_names as $style_dir => $item) {
         $select_list[$style_dir] = strip_tags($list_of_styles[$style_dir]);
     }
 
     $form_change->addElement('select', 'style', get_lang('NameStylesheet'), $select_list);
-    $form_change->setDefaults('style', $selected);
+
+    $form_change->setDefaults(array('style' => $selected));
 
     if ($form_change->validate()) {
         // Submit stylesheets.
@@ -315,8 +311,12 @@ function handle_stylesheets() {
                 // Remove path prefix except the style name and put file on disk
                 $zip->create($dir, PCLZIP_OPT_REMOVE_PATH, substr($dir,0,-strlen($safe_style_dir)));
             }
-            $str = '<a class="btn btn-primary btn-large" href="' . api_get_path(WEB_CODE_PATH) . 'course_info/download.php?archive=' . str_replace(api_get_path(SYS_ARCHIVE_PATH), '', $arch) . '">'.get_lang('ClickHereToDownloadTheFile').'</a>';
-            Display::display_normal_message($str,false);
+            $str = '<a class="btn btn-primary btn-large" href="'.api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.str_replace(api_get_path(SYS_ARCHIVE_PATH), '', $arch) . '">'.get_lang('ClickHereToDownloadTheFile').'</a>';
+            Display::display_normal_message($str, false);
+        }
+        if (isset($_POST['preview'])) {
+            global $app;
+            $app['template']->preview_theme = 'academica';
         }
     }
 
@@ -886,7 +886,7 @@ function add_edit_template() {
         // Setting the information of the template that we are editing.
         $form->setDefaults($defaults);
     }
-    // Settting the form elements: the submit button.
+    // Setting the form elements: the submit button.
     $form->addElement('style_submit_button' , 'submit', get_lang('Ok') ,'class="save"');
 
     // Setting the rules: the required fields.
@@ -1055,7 +1055,7 @@ function update_gradebook_score_display_custom_values($values) {
 
 function generate_settings_form($settings, $settings_by_access_list) {
     global $_configuration, $settings_to_avoid, $convert_byte_to_mega_list;
-    $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
     $form = new FormValidator('settings', 'post', 'settings.php?category='.Security::remove_XSS($_GET['category']));
 
@@ -1071,12 +1071,12 @@ function generate_settings_form($settings, $settings_by_access_list) {
     }
 
     $default_values = array();
-
     $url_info = api_get_access_url($url_id);
 
-    $i = 0;
     foreach ($settings as $row) {
-    	if (in_array($row['variable'], array_keys($settings_to_avoid))) { continue; }
+    	if (in_array($row['variable'], array_keys($settings_to_avoid))) {
+            continue;
+        }
 
         if (!empty($_configuration['multiple_access_urls'])) {
             if (api_is_global_platform_admin()) {
@@ -1129,6 +1129,7 @@ function generate_settings_form($settings, $settings_by_access_list) {
         }
 
         switch ($row['type']) {
+            case 'text':
             case 'textfield':
                 if (in_array($row['variable'], $convert_byte_to_mega_list)) {
                     $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment']), get_lang('MB')), array('class' => 'span1', 'maxlength' => '8'));

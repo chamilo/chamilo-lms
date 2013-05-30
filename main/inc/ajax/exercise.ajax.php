@@ -24,6 +24,32 @@ $session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) :
 $course_code = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : api_get_course_id();
 
 switch ($action) {
+    case 'get_question':
+        /** @var Exercise $objExercise */
+        $objExercise = $_SESSION['objExercise'];
+
+        $questionId = $_REQUEST['questionId'];
+        $attemptList = isset($_REQUEST['attemptList']) ? $_REQUEST['attemptList'] : null;
+        $remindList = isset($_REQUEST['remindList']) ? $_REQUEST['remindList'] : null;
+
+        $i = $_REQUEST['i'];
+        $current_question = $_REQUEST['current_question'];
+        $questions_in_media = $_REQUEST['questions_in_media'];
+        $last_question_in_media = $_REQUEST['last_question_in_media'];
+        $realQuestionList = isset($_REQUEST['realQuestionList']) ? $_REQUEST['realQuestionList'] : null;
+
+        $objExercise->renderQuestion(
+            $questionId,
+            $attemptList,
+            $remindList,
+            $i,
+            $current_question,
+            $questions_in_media,
+            $last_question_in_media,
+            $realQuestionList,
+            false
+        );
+        break;
     case 'get_categories_by_media':
         $questionId = $_REQUEST['questionId'];
         $mediaId = $_REQUEST['mediaId'];
@@ -151,7 +177,7 @@ switch ($action) {
         }
 
         $start = $limit * $page - $limit;
-        if ($start < 0 ) {
+        if ($start < 0) {
             $start = 0;
         }
 
@@ -254,7 +280,10 @@ switch ($action) {
             $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $counter = 1;
             foreach ($new_question_list as $new_order_id) {
-                Database::update($TBL_QUESTIONS, array('question_order' => $counter), array('question_id = ? AND c_id = ? AND exercice_id = ? '=>array(intval($new_order_id), $course_id, $exercise_id)));
+                Database::update(
+                    $TBL_QUESTIONS,
+                    array('question_order' => $counter),
+                    array('question_id = ? AND c_id = ? AND exercice_id = ? '=> array(intval($new_order_id), $course_id, $exercise_id)));
                 $counter++;
             }
             Display::display_confirmation_message(get_lang('Saved'));
@@ -335,7 +364,7 @@ switch ($action) {
 
             // Updating Reminder algorythm.
             if ($objExercise->type == ONE_PER_PAGE) {
-            	$bd_reminder_list = explode(',', $exercise_stat_info['questions_to_check']);
+                $bd_reminder_list = explode(',', $exercise_stat_info['questions_to_check']);
 
                 // Fixing reminder order
                 $fixedRemindList = array();
@@ -518,6 +547,7 @@ switch ($action) {
         }
         echo 'ok';
         break;
+
     default:
         echo '';
 }

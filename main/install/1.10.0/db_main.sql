@@ -2667,20 +2667,6 @@ CREATE TABLE IF NOT EXISTS user_rel_tag (
     PRIMARY KEY  (id)
 );
 
-
--- DROP TABLE IF EXISTS group_rel_group;
--- CREATE TABLE IF NOT EXISTS group_rel_group (
---	id int NOT NULL AUTO_INCREMENT,
---	group_id int NOT NULL,
---	subgroup_id int NOT NULL,
---	relation_type int NOT NULL,
---	PRIMARY KEY (id)
--- );
-
--- ALTER TABLE group_rel_group ADD INDEX ( group_id );
--- ALTER TABLE group_rel_group ADD INDEX ( subgroup_id );
--- ALTER TABLE group_rel_group ADD INDEX ( relation_type );
-
 DROP TABLE IF EXISTS announcement_rel_group;
 CREATE TABLE IF NOT EXISTS announcement_rel_group (
   id INT unsigned NOT NULL auto_increment,
@@ -3385,7 +3371,7 @@ CREATE TABLE track_e_item_property (
 
 ALTER TABLE track_e_course_access ADD INDEX (user_id);
 ALTER TABLE track_e_course_access ADD INDEX (login_course_date);
-ALTER TABLE track_e_course_access ADD INDEX (course_code);
+ALTER TABLE track_e_course_access ADD INDEX (c_id);
 ALTER TABLE track_e_course_access ADD INDEX (session_id);
 ALTER TABLE track_e_access ADD INDEX (access_session_id);
 
@@ -3542,4 +3528,4 @@ CREATE TABLE ext_log_entries (
 ) DEFAULT CHARSET=utf8;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.017' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.018' WHERE variable = 'chamilo_database_version';

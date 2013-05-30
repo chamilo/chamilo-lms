@@ -623,7 +623,6 @@ function load_database_script($db_script)
 
 function parse_sql_queries($sql_text)
 {
-
     //split in array of sql strings
     $sql_instructions = array();
     split_sql_file($sql_instructions, $sql_text);
@@ -2481,14 +2480,14 @@ function get_countries_list_from_array($combo = false)
 }
 
 /**
- * Lockis settings that can't be changed in other portals
+ * Locking settings that can't be changed in other portals
  */
 function locking_settings()
 {
     $access_url_locked_settings = api_get_locked_settings();
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     foreach ($access_url_locked_settings as $setting) {
-        $sql = "UPDATE $table SET access_url_locked = 1 WHERE variable  = '$setting'";
+        $sql = "UPDATE $table SET access_url_locked = 1 WHERE variable = '$setting'";
         Database::query($sql);
     }
 }
@@ -2499,14 +2498,10 @@ function update_dir_and_files_permissions()
     $permissions_for_new_directories = isset($_SESSION['permissions_for_new_directories']) ? $_SESSION['permissions_for_new_directories'] : 0770;
     $permissions_for_new_files = isset($_SESSION['permissions_for_new_files']) ? $_SESSION['permissions_for_new_files'] : 0660;
     // use decoct() to store as string
-    $sql = "UPDATE $table SET selected_value = '0".decoct(
-        $permissions_for_new_directories
-    )."' WHERE variable  = 'permissions_for_new_directories'";
+    $sql = "UPDATE $table SET selected_value = '0".decoct($permissions_for_new_directories)."' WHERE variable  = 'permissions_for_new_directories'";
     Database::query($sql);
 
-    $sql = "UPDATE $table SET selected_value = '0".decoct(
-        $permissions_for_new_files
-    )."' WHERE variable  = 'permissions_for_new_files'";
+    $sql = "UPDATE $table SET selected_value = '0".decoct($permissions_for_new_files)."' WHERE variable  = 'permissions_for_new_files'";
     Database::query($sql);
 
     unset($_SESSION['permissions_for_new_directories']);

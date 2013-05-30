@@ -15,7 +15,8 @@
  * This function allows easy activating and inactivating of regions
  * @author Julio Montoya <gugli100@gmail.com> Beeznest 2012
  */
-function handle_regions() {
+function handle_regions()
+{
 
     if (isset($_POST['submit_plugins'])) {
         store_regions();
@@ -89,7 +90,8 @@ function handle_regions() {
     echo '<button class="save" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button></form>';
 }
 
-function handle_extensions() {
+function handle_extensions()
+{
     echo Display::page_subheader(get_lang('ConfigureExtensions'));
     echo '<a class="btn" href="configure_extensions.php?display=ppt2lp">'.get_lang('Ppt2lp').'</a>';
 
@@ -100,7 +102,8 @@ function handle_extensions() {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Julio Montoya <gugli100@gmail.com> Beeznest 2012
  */
-function handle_plugins() {
+function handle_plugins()
+{
     $plugin_obj = new AppPlugin();
 
      if (isset($_POST['submit_plugins'])) {
@@ -309,7 +312,7 @@ function handle_stylesheets()
             if (is_dir($dir)) {
                 $zip = new PclZip($arch);
                 // Remove path prefix except the style name and put file on disk
-                $zip->create($dir, PCLZIP_OPT_REMOVE_PATH, substr($dir,0,-strlen($safe_style_dir)));
+                $zip->create($dir, PCLZIP_OPT_REMOVE_PATH, substr($dir, 0, -strlen($safe_style_dir)));
             }
             $str = '<a class="btn btn-primary btn-large" href="'.api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.str_replace(api_get_path(SYS_ARCHIVE_PATH), '', $arch) . '">'.get_lang('ClickHereToDownloadTheFile').'</a>';
             Display::display_normal_message($str, false);
@@ -351,7 +354,8 @@ function handle_stylesheets()
  * @version May 2008
  * @since Dokeos 1.8.5
  */
-function upload_stylesheet($values, $picture) {
+function upload_stylesheet($values, $picture)
+{
     $result = false;
     // Valid name for the stylesheet folder.
     $style_name = api_preg_replace('/[^A-Za-z0-9]/', '', $values['name_stylesheet']);
@@ -440,7 +444,11 @@ function upload_stylesheet($values, $picture) {
     return $result;
 }
 
-function store_regions() {
+/**
+ *
+ */
+function store_regions()
+{
      $plugin_obj = new AppPlugin();
 
     // Get a list of all current 'Plugins' settings
@@ -455,7 +463,6 @@ function store_regions() {
         }
     }
     $shortlist_installed = array_flip(array_flip($shortlist_installed));
-
     $plugin_list = $plugin_obj->read_plugins_from_path();
 
     foreach ($plugin_list as $plugin) {
@@ -464,7 +471,7 @@ function store_regions() {
             if (!empty($areas_to_installed)) {
                 $plugin_obj->remove_all_regions($plugin);
                 foreach ($areas_to_installed as $region) {
-                    if (!empty($region) && $region != '-1' ) {
+                    if (!empty($region) && $region != '-1') {
                         $plugin_obj->add_to_region($plugin, $region);
                     }
                 }
@@ -477,7 +484,8 @@ function store_regions() {
  * This function allows easy activating and inactivating of plugins
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-function store_plugins() {
+function store_plugins()
+{
     $plugin_obj = new AppPlugin();
 
     // Get a list of all current 'Plugins' settings
@@ -506,7 +514,8 @@ function store_plugins() {
  * This function allows the platform admin to choose which should be the default stylesheet
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-function store_stylesheets() {
+function store_stylesheets()
+{
     // Insert the stylesheet.
     $style = Database::escape_string($_POST['style']);
     if (is_style($style)) {
@@ -521,7 +530,8 @@ function store_stylesheets() {
  * @param string    Style
  * @return bool     True if this style is recognized, false otherwise
  */
-function is_style($style) {
+function is_style($style)
+{
     $dir = api_get_path(SYS_PATH).'main/css/';
     $dirs = scandir($dir);
     $style = str_replace(array('/', '\\'), array('', ''), $style); // Avoid slashes or backslashes.
@@ -536,7 +546,8 @@ function is_style($style) {
  * TODO: support for multiple site. aka $_configuration['access_url'] == 1
  * @author Marco Villegas <marvil07@gmail.com>
  */
-function handle_search() {
+function handle_search()
+{
     global $SettingsStored, $_configuration;
 
     require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
@@ -934,7 +945,7 @@ function add_edit_template() {
            if ($_GET['action'] == 'add') {
                $content_template = '<head>{CSS}<style type="text/css">.text{font-weight: normal;}</style></head><body>'.Database::escape_string($values['template_text']).'</body>';
                $sql = "INSERT INTO $table_system_template (title, content, image) VALUES ('".Database::escape_string($values['title'])."','".$content_template."','".Database::escape_string($new_file_name)."')";
-               $result = Database::query($sql);
+               Database::query($sql);
 
                // Display a feedback message.
                Display::display_confirmation_message(get_lang('TemplateAdded'));
@@ -946,7 +957,7 @@ function add_edit_template() {
                    $sql .= ", image = '".Database::escape_string($new_file_name)."'";
                }
                $sql .= " WHERE id='".Database::escape_string($_GET['id'])."'";
-               $result = Database::query($sql);
+               Database::query($sql);
 
                // Display a feedback message.
                Display::display_confirmation_message(get_lang('TemplateEdited'));
@@ -992,30 +1003,7 @@ function delete_template($id) {
     // Display a feedback message.
     Display::display_confirmation_message(get_lang('TemplateDeleted'));
 }
-
-/**
- * Returns the list of timezone identifiers used to populate the select
- *
- * @return array List of timezone identifiers
- *
- * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
- * @since Chamilo 1.8.7
- */
-function select_timezone_value() {
-    return api_get_timezones();
-}
-
-/**
- * Returns an array containing the list of options used to populate the gradebook_number_decimals variable
- *
- * @return array List of gradebook_number_decimals options
- *
- * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
- */
-function select_gradebook_number_decimals() {
-    return array('0', '1', '2');
-}
-
+/*
 function select_gradebook_default_grade_model_id() {
     $grade_model = new GradeModel();
     $models = $grade_model->get_all();
@@ -1027,7 +1015,7 @@ function select_gradebook_default_grade_model_id() {
         }
     }
     return $options;
-}
+}*/
 
 /**
  * Updates the gradebook score custom values using the scoredisplay class of the
@@ -1037,6 +1025,7 @@ function select_gradebook_default_grade_model_id() {
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
+/*
 function update_gradebook_score_display_custom_values($values) {
     require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/scoredisplay.class.php';
     $scoredisplay = ScoreDisplay::instance();
@@ -1051,7 +1040,7 @@ function update_gradebook_score_display_custom_values($values) {
         }
     }
     $scoredisplay->update_custom_score_display_settings($final);
-}
+}*/
 
 function generate_settings_form($settings, $settings_by_access_list) {
     global $_configuration, $settings_to_avoid, $convert_byte_to_mega_list;
@@ -1301,7 +1290,8 @@ function generate_settings_form($settings, $settings_by_access_list) {
  * @param string $search
  * @return array
  */
-function search_setting($search) {
+function search_setting($search)
+{
     if (empty($search)) {
         return array();
     }

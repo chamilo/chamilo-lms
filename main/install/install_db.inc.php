@@ -20,15 +20,15 @@ if (!defined('SYSTEM_INSTALLATION')) {
 $urlForm = api_add_trailing_slash($urlForm);
 
 switch ($encryptPassForm) {
-	case 'md5' :
-		$passToStore = md5($passForm);
+    case 'md5':
+        $passToStore = md5($passForm);
 		break;
-	case 'sha1' :
-		$passToStore = sha1($passForm);
-		break;
-	case 'none' :
-		$passToStore = $passForm;
-		break;
+    case 'sha1':
+        $passToStore = sha1($passForm);
+        break;
+    case 'none':
+        $passToStore = $passForm;
+        break;
 }
 
 $dbPrefixForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbPrefixForm);
@@ -76,7 +76,7 @@ if (!defined('CLI_INSTALLATION')) {
 	if (database_exists($mysqlMainDb)) {
         $create_database = false;
     }
-	//Create database
+	// Create database.
 	if ($create_database) {
         $charset_clause = ' DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci';
 		$sql = "CREATE DATABASE IF NOT EXISTS `$mysqlMainDb` $charset_clause";
@@ -129,6 +129,7 @@ $app['monolog']->addInfo("fill_track_countries_table");
 fill_track_countries_table($track_countries_table);
 
 $app['monolog']->addInfo("locking_settings");
+
 locking_settings();
 
 update_dir_and_files_permissions();

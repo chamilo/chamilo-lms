@@ -839,17 +839,18 @@ if (@$_POST['step2']) {
         database_server_connect();
         // Initialization of the database connection encoding intentionaly is not done.
         // This is the old style for connecting to the database server, that is implemented here.
-
-        // Inializing global variables that are to be used by the included scripts.
+        // Initializing global variables that are to be used by the included scripts.
         $dblist = Database::get_databases();
         $perm = api_get_permissions_for_new_directories();
         $perm_file = api_get_permissions_for_new_files();
 
+        // We guess
         if (empty($my_old_version)) {
             $my_old_version = '1.8.6.2';
-        } //we guess
+        }
 
         $_configuration['main_database'] = $dbNameForm;
+
         $app['monolog']->addInfo('Starting migration process from old version: '.$my_old_version.' ('.time().')');
 
         if (isset($userPasswordCrypted)) {
@@ -890,14 +891,14 @@ if (@$_POST['step2']) {
             case '1.6.5':
                 include 'update-db-1.6.x-1.8.0.inc.php';
                 include 'update-files-1.6.x-1.8.0.inc.php';
-            //intentionally no break to continue processing
+                // Intentionally no break to continue processing
             case '1.8':
             case '1.8.0':
                 include 'update-db-1.8.0-1.8.2.inc.php';
-            //intentionally no break to continue processing
+                // Intentionally no break to continue processing
             case '1.8.2':
                 include 'update-db-1.8.2-1.8.3.inc.php';
-            //intentionally no break to continue processing
+                // Intentionally no break to continue processing
             case '1.8.3':
                 include 'update-db-1.8.3-1.8.4.inc.php';
                 include 'update-files-1.8.3-1.8.4.inc.php';
@@ -947,6 +948,9 @@ if (@$_POST['step2']) {
         }
         movingFilesInDataFolder();
     } else {
+
+        $_configuration['main_database'] = $dbNameForm;
+
         set_file_folder_permissions();
         database_server_connect();
 

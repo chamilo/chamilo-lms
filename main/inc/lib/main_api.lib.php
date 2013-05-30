@@ -3611,7 +3611,8 @@ function api_get_visual_theme() {
     static $visual_theme;
 
     if (!isset($visual_theme)) {
-        $platform_theme = api_get_setting('stylesheets');   // Plataform's theme.
+        // Platform's theme.
+        $platform_theme = api_get_setting('stylesheets');
 
         $visual_theme = $platform_theme;
 
@@ -3620,8 +3621,9 @@ function api_get_visual_theme() {
             if (isset($user_info['theme'])) {
                 $user_theme = $user_info['theme'];
                 if (!empty($user_theme)) {
-                $visual_theme = $user_theme;                // User's theme.
-             }
+                    // User's theme.
+                    $visual_theme = $user_theme;
+                }
             }
         }
 
@@ -3632,16 +3634,19 @@ function api_get_visual_theme() {
 
                 if (!empty($course_theme) && $course_theme != -1) {
                     if (!empty($course_theme)) {
-                        $visual_theme = $course_theme;      // Course's theme.
+                        // Course's theme.
+                        $visual_theme = $course_theme;
                     }
                 }
 
                 $allow_lp_theme = api_get_course_setting('allow_learning_path_theme');
                 if ($allow_lp_theme == 1) {
-                    global $lp_theme_css, $lp_theme_config; // These variables come from the file lp_controller.php.
+                    // These variables come from the file lp_controller.php.
+                    global $lp_theme_css, $lp_theme_config;
+                    // LP's theme.
                     if (!$lp_theme_config) {
                         if (!empty($lp_theme_css)) {
-                            $visual_theme = $lp_theme_css;  // LP's theme.
+                            $visual_theme = $lp_theme_css;
                         }
                     }
                 }

@@ -1457,7 +1457,8 @@ function api_get_anonymous_id() {
  */
 function api_get_cidreq($add_session_id = true, $add_group_id = true) {
     $courseCode = api_get_course_id();
-    $url = empty($courseCode) || $courseCode == -1 ? '' : 'cidReq='.htmlspecialchars($courseCode);
+    $courseId = api_get_course_int_id();
+    $url = empty($courseCode) || $courseCode == -1 ? '' : 'cidReq='.htmlspecialchars($courseCode).'&courseId='.$courseId;
     if ($add_session_id) {
         if (!empty($url)) {
             $url .= api_get_session_id() == 0 ? '&id_session=0' : '&id_session='.api_get_session_id();

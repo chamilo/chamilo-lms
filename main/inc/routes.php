@@ -452,7 +452,21 @@ $app->match('/courses/{cidReq}/{id_session}/', 'course_home.controller:indexActi
 $app->match('/courses/{cidReq}/', 'course_home.controller:indexAction', 'GET|POST')
     ->assert('type', '.+')
     ->before($settingCourseConditions)
-    ->before($userPermissionsInsideACourse); //allowing slash "/"
+    ->before($userPermissionsInsideACourse);
+
+// Introduction
+$app->match('/introduction/edit/{tool}', 'introduction_tool.controller:editAction', 'GET|POST')
+    ->assert('type', '.+')
+    ->before($settingCourseConditions)
+    ->before($userPermissionsInsideACourse)
+     ->bind('introduction_edit');
+
+$app->match('/introduction/delete/{tool}', 'introduction_tool.controller:deleteAction', 'GET|POST')
+    ->assert('type', '.+')
+    ->before($settingCourseConditions)
+    ->before($userPermissionsInsideACourse)
+    ->bind('introduction_delete');
+
 
 /**  Course documents */
 $app->get('/data/courses/{courseCode}/document/{file}', 'index.controller:getDocumentAction')

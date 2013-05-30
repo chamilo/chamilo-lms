@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class UserPortalController
  * @package ChamiloLMS\Controller
+ * @todo Improve this class in order to use better helpers and not just call the page_controller service
  * @author Julio Montoya <gugli100@gmail.com>
  */
 class UserPortalController extends CommonController

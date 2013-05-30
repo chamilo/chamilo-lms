@@ -429,6 +429,18 @@ $app['course_home.controller'] = $app->share(
     }
 );
 
+$app['course_home.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\CourseHomeController();
+    }
+);
+
+$app['introduction_tool.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\IntroductionToolController();
+    }
+);
+
 $app['certificate.controller'] = $app->share(
     function () use ($app) {
         return new ChamiloLMS\Controller\CertificateController();
@@ -470,5 +482,4 @@ $app['model_ajax.controller'] = $app->share(
         return new ChamiloLMS\Controller\ModelAjaxController();
     }
 );
-
 

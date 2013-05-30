@@ -28,10 +28,10 @@ function fill_exe() {
     foreach ($courses as $i => $course) {
         $res = 0;
         //first check that the first item doesn't exist already
-    	$output[$i]['line-init'] = $course['title'];
+        $output[$i]['line-init'] = $course['title'];
         $res = CourseManager::create_course($course);
-    	$output[$i]['line-info'] = ($res ? $res : get_lang('NotInserted'));
-    	$i++;
+        $output[$i]['line-info'] = ($res ? $res : get_lang('NotInserted'));
+        $i++;
         if (is_array($res)) {
             //now insert an exercise
             foreach ($course['exes'] as $exe) {
@@ -51,7 +51,7 @@ function fill_exe() {
                 $objExercise->review_answers = $exe['review_answers'];
                 $objExercise->save();
                 $id = $objExercise->id;
-    		if (!empty($id)) {
+                if (!empty($id)) {
                     $qi = 0;
                     while ($qi < $qc) {
                         foreach ($qst as $q) {

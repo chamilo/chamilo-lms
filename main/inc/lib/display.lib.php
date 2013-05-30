@@ -38,7 +38,7 @@ class Display
         $app['title'] = $tool_name;
 
         if ($app['allowed'] == true) {
-            ob_start(array($app['template'], 'manage_display'));
+            ob_start(array($app['template'], 'manageDisplay'));
         } else {
             $app->run();
             exit;

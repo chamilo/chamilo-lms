@@ -73,10 +73,10 @@ ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_use
 
 ALTER TABLE session_rel_user ADD INDEX idx_session_rel_user_id_user_moved (id_user, moved_to);
 
-INSERT INTO settings_current(variable, type, category, selected_value, title, comment, access_url, access_url_changeable, access_url_locked) values ('login_as_allowed','radio','security','true','AdminLoginAsAllowedTitle','AdminLoginAsAllowedComment', 1, 0, 1);
-INSERT INTO settings_options(variable, value, display_text) values ('login_as_allowed','true','Yes'),('login_as_allowed','false','No');
-insert into settings_current(variable, type, category, selected_value, title, comment, access_url, access_url_changeable, access_url_locked) values ('admins_can_set_users_pass','radio','security','true','AdminsCanChangeUsersPassTitle','AdminsCanChangeUsersPassComment', 1, 0, 1);
-insert into settings_options(variable, value, display_text) values('admins_can_set_users_pass','true','Yes'),('admins_can_set_users_pass','false','No');
+INSERT INTO settings_current(variable, type, subkey, category, selected_value, title, comment, access_url, access_url_changeable, access_url_locked) VALUES ('login_as_allowed', NULL, 'radio', 'security', 'true','AdminLoginAsAllowedTitle', 'AdminLoginAsAllowedComment', 1, 0, 1);
+INSERT INTO settings_options(variable, value, display_text) VALUES ('login_as_allowed','true','Yes'),('login_as_allowed','false','No');
+INSERT into settings_current(variable, type, subkey, category, selected_value, title, comment, access_url, access_url_changeable, access_url_locked) VALUES ('admins_can_set_users_pass', NULL, 'radio', 'security', 'true', 'AdminsCanChangeUsersPassTitle', 'AdminsCanChangeUsersPassComment', 1, 0, 1);
+INSERT into settings_options(variable, value, display_text) VALUES('admins_can_set_users_pass','true','Yes'),('admins_can_set_users_pass','false','No');
 
 -- Courses changes c_XXX
 
@@ -296,5 +296,7 @@ ALTER TABLE course_field_values ADD COLUMN comment VARCHAR(100) default '';
 ALTER TABLE question_field_values ADD COLUMN comment VARCHAR(100) default '';
 ALTER TABLE c_quiz ADD COLUMN end_button int NOT NULL default 0;
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('template', NULL, 'text', 'stylesheets', 'default', 'DefaultTemplateTitle', 'DefaultTemplateComment', NULL, NULL, 1);
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.015' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.017' WHERE variable = 'chamilo_database_version';

@@ -40,9 +40,10 @@ api_protect_admin_script();
 
 // Settings to avoid
 $settings_to_avoid = array(
+    'stylesheets' => '', // handled by the handle_stylesheet() function
     'use_session_mode' => 'true',
     'gradebook_enable' => 'false',
-    'example_material_course_creation' => 'true' // ON by default - now we have this option when  we create a course
+    'example_material_course_creation' => 'true' // ON by default - now we have this option when we create a course
 );
 
 $convert_byte_to_mega_list = array(
@@ -51,10 +52,6 @@ $convert_byte_to_mega_list = array(
     'default_document_quotum',
     'default_group_quotum'
 );
-
-if (isset($_POST['style'])) {
-    Display::$preview_style = $_POST['style'];
-}
 
 // Database table definitions.
 $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
@@ -252,15 +249,10 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                 continue;
             }
             $key = Database::escape_string($key);
-            $sql = "UPDATE $table_settings_current SET selected_value = 'false' WHERE variable = '".$key."' AND access_url = ".intval(
-                $url_id
-            )."  AND type IN ('checkbox', 'radio') ";
+            $sql = "UPDATE $table_settings_current SET selected_value = 'false'
+                    WHERE variable = '".$key."' AND access_url = ".intval($url_id)." AND type IN ('checkbox', 'radio') ";
             $res = Database::query($sql);
         }
-
-        /*foreach($settings_to_avoid as $key => $value) {
-            api_set_setting($key, $value, null, null, $_configuration['access_url']);
-        }*/
 
         // Save the settings.
         $keys = array();
@@ -555,6 +547,7 @@ if (!empty($_GET['category'])) {
         case 'Stylesheets':
             // Displaying the extensions: Stylesheets.
             handle_stylesheets();
+            $form->display();
             break;
         case 'Search':
             handle_search();

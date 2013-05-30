@@ -929,8 +929,10 @@ VALUES
 ('disable_copy_paste', NULL, 'radio', 'Platform', 'false','DisableCopyPasteTitle','DisableCopyPasteComment', NULL, NULL, 1),
 ('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.010','DatabaseVersion','', NULL, NULL, 0),
 ('login_as_allowed',NULL,'radio','Security','true','AdminLoginAsAllowedTitle','AdminLoginAsAllowedComment', 1, 0, 1),
-('admins_can_set_users_pass','radio','security','true','AdminsCanChangeUsersPassTitle','AdminsCanChangeUsersPassComment', 1, 0, 1),
-('log_transactions','exercise_attempt','checkbox','LogTransactions','false','LogTransactionsForExerciseAttempts','LogTransactionsForExerciseAttemptsComment',NULL,'LogTransactionsForExerciseAttemptsText', 1);
+('admins_can_set_users_pass', NULL, 'radio', 'security', 'true', 'AdminsCanChangeUsersPassTitle', 'AdminsCanChangeUsersPassComment', 1, 0, 1),
+('template', NULL, 'text', 'stylesheets', 'default', 'DefaultTemplateTitle', 'DefaultTemplateComment', NULL, NULL, 1),
+('log_transactions','exercise_attempt','checkbox','LogTransactions','false','LogTransactionsForExerciseAttempts','LogTransactionsForExerciseAttemptsComment',NULL,'LogTransactionsForExerciseAttemptsText', 1),
+('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.001','DatabaseVersion','', NULL, NULL, 0); -- base value, updated at end of file. Don't change here
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -1290,7 +1292,6 @@ VALUES
 ('login_as_allowed','false','No'),
 ('admins_can_set_users_pass','true','Yes'),
 ('admins_can_set_users_pass','false','No');
-
 
 UNLOCK TABLES;
 
@@ -3092,7 +3093,7 @@ INSERT INTO branch_transaction_status VALUES (1, 'To be executed'), (2, 'Execute
 
 DROP TABLE IF EXISTS branch_transaction;
 CREATE TABLE branch_transaction (
-    id bigint unsigned not null PRIMARY KEY AUTO_INCREMENT,
+    id bigint unsigned not null AUTO_INCREMENT,
     transaction_id bigint unsigned,
     branch_id int not null default 0,
     action char(20),
@@ -3102,8 +3103,10 @@ CREATE TABLE branch_transaction (
     info char(20),
     status_id tinyint not null default 0,
     time_insert datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-    time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
+    time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+    PRIMARY KEY (id, transaction_id, branch_id)
 );
+
 
 CREATE TABLE IF NOT EXISTS branch_transaction_data (
     id bigint unsigned NOT NULL PRIMARY KEY,
@@ -3539,4 +3542,4 @@ CREATE TABLE ext_log_entries (
 ) DEFAULT CHARSET=utf8;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.015' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.017' WHERE variable = 'chamilo_database_version';

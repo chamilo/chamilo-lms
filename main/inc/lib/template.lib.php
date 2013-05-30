@@ -260,6 +260,10 @@ class Template
         $this->assign('show_course_navigation_menu', $show_course_navigation_menu);
     }
 
+    /**
+     * @param string $name
+     * @return string
+     */
     public function get_template($name)
     {
         return $this->app['template_style'].'/'.$name;
@@ -307,7 +311,9 @@ class Template
         $this->assign('_u', $user_info);
     }
 
-    /** Set system parameters */
+    /**
+     * Set system parameters
+     */
     private function setSystemParameters()
     {
         global $_configuration;
@@ -338,14 +344,17 @@ class Template
     }
 
     /**
-     * Set theme, include CSS files  */
+     * Set theme, include CSS files
+     */
     private function setCssFiles()
     {
         global $disable_js_and_css_files;
         $css = array();
 
         $this->theme = api_get_visual_theme();
-
+        if (isset($_POST['style']) && api_is_platform_admin()) {
+            $this->preview_theme = $_POST['style'];
+        }
         if (!empty($this->preview_theme)) {
             $this->theme = $this->preview_theme;
         }
@@ -354,18 +363,19 @@ class Template
 
         $cssPath = api_get_path(WEB_CSS_PATH);
 
-        //Base CSS
+        // Base CSS.
         $css[] = api_get_cdn_path($cssPath.'base.css');
-        //Compressed version of default + all CSS files
-        //$css[] = api_get_cdn_path(api_get_path(WEB_PATH).'web/css/'.$this->theme.'/style.css');
+        // Compressed version of default + all CSS files
+        // @todo use assetic to compress files
+        // $css[] = api_get_cdn_path(api_get_path(WEB_PATH).'web/css/'.$this->theme.'/style.css');
 
-        //Default theme CSS
+        // Default theme CSS.
         $css[] = api_get_cdn_path($cssPath.$this->theme.'/default.css');
         $css[] = api_get_cdn_path($cssPath.'bootstrap-responsive.css');
         $css[] = api_get_cdn_path($cssPath.'responsive.css');
         $css[] = api_get_cdn_path($cssPath.'font_awesome/font-awesome.css');
 
-        //Extra CSS files
+        // Extra CSS files.
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
 
@@ -418,14 +428,10 @@ class Template
             $style_print = api_get_css(api_get_cdn_path($cssPath.$this->theme.'/print.css'), 'print');
             $this->assign('css_style_print', $style_print);
         }
-
-        // Logo
-        /*$logo = $this->returnLogo($this->theme);
-        $this->assign('logo', $logo);*/
     }
 
     /**
-     *
+     * Sets JS files
      */
     private function setJsFiles()
     {
@@ -548,7 +554,7 @@ class Template
         $this->assign('title_string', $title_string);
 
         //Setting the theme and CSS files
-        $this->setCSSFiles();
+        $this->setCssFiles();
         $this->setJsFiles();
 
         // Implementation of prefetch.
@@ -618,7 +624,7 @@ class Template
         $this->assign('portal_name', $portal_name);
 
         //Menu
-        $menu = $this->return_menu();
+        $menu = $this->returnMenu();
 
         $this->assign('menu', $menu);
 
@@ -711,19 +717,7 @@ class Template
         }
     }
 
-    function show_header_template()
-    {
-        $tpl = $this->get_template('layout/show_header.tpl');
-        $this->display($tpl);
-    }
-
-    public function show_footer_template()
-    {
-        $tpl = $this->get_template('layout/show_footer.tpl');
-        $this->display($tpl);
-    }
-
-    public function manage_display($content)
+    public function manageDisplay($content)
     {
         //$this->assign('content', $content);
     }
@@ -742,6 +736,10 @@ class Template
         return null;
     }
 
+    /**
+     * @param string $template
+     * @return mixed
+     */
     public function fetch($template = null)
     {
         $template = $this->app['twig']->loadTemplate($template);
@@ -763,19 +761,10 @@ class Template
         $this->app->run();
     }
 
-    function show_page_loaded_info()
-    {
-        //@todo will be removed before a stable release
-        $mtime = microtime();
-        $mtime = explode(" ", $mtime);
-        $mtime = $mtime[1] + $mtime[0];
-        error_log('--------------------------------------------------------');
-        error_log("Page loaded in:".($mtime - START));
-        error_log("memory_get_usage: ".Text::format_file_size(memory_get_usage(true)));
-        error_log("memory_get_peak_usage: ".Text::format_file_size(memory_get_peak_usage(true)));
-    }
-
-    function return_menu()
+    /**
+     * @return null|string
+     */
+    public function returnMenu()
     {
         $navigation = $this->navigation_array;
         $navigation = $navigation['navigation'];
@@ -868,6 +857,10 @@ class Template
         return $this->menu_navigation;
     }
 
+    /**
+     * @param string $layout
+     * @return mixed
+     */
     public function render_layout($layout = null)
     {
         if (empty($layout)) {
@@ -876,6 +869,11 @@ class Template
         return $this->app['twig']->render($this->app['template_style'].'/layout/'.$layout);
     }
 
+    /**
+     * @param string $template
+     * @param array $elements
+     * @return mixed
+     */
     public function render_template($template, $elements = array())
     {
         return $this->app['twig']->render($this->app['template_style'].'/'.$template, $elements);
@@ -890,10 +888,9 @@ class Template
      * @return array containing all the possible tabs
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      */
-    function getTabs()
+    public function getTabs()
     {
         $_course = api_get_course_info();
-
         $navigation = array();
 
         // Campus Homepage
@@ -1024,6 +1021,9 @@ class Template
         return $html;
     }
 
+    /**
+     * @return string
+     */
     public function returnNotificationMenu()
     {
         $_course = api_get_course_info();
@@ -1110,6 +1110,9 @@ class Template
         return $html;
     }
 
+    /**
+     * @return array
+     */
     public function returnNavigationArray()
     {
         $navigation = array();
@@ -1124,7 +1127,6 @@ class Template
         }
 
         if (api_get_user_id() && !api_is_anonymous()) {
-
             // My Courses
             if (api_get_setting('show_tabs', 'my_courses') == 'true') {
                 $navigation['mycourses'] = $possible_tabs['mycourses'];
@@ -1232,11 +1234,13 @@ class Template
                 }
             }
         }
+
         $return = array(
             'menu_navigation' => $menu_navigation,
             'navigation' => $navigation,
             'possible_tabs' => $possible_tabs
         );
+
         return $return;
     }
 
@@ -1306,8 +1310,9 @@ class Template
             $navigation[] = $navigation_item;
         }
 
-        // part 2: Interbreadcrumbs.
-        //If there is an array $interbreadcrumb defined then these have to appear before the last breadcrumb (which is the tool itself)
+        // Part 2: Interbreadcrumbs.
+        // If there is an array $interbreadcrumb defined then these have to appear before the last breadcrumb
+        // (which is the tool itself)
         if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {
             foreach ($interbreadcrumb as $breadcrumb_step) {
                 if ($breadcrumb_step['url'] != '#') {

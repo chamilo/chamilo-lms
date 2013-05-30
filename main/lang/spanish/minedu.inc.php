@@ -14,4 +14,10 @@ $LogTransactions = "Registrar Transacciones";
 $LogTransactionsForExerciseAttempts = "Registrar transacciones de los intentos de la herramienta de ejercicios.";
 $LogTransactionsForExerciseAttemptsText = "Registrar intentos de ejercicios.";
 $LogTransactionsForExerciseAttemptsComment = "Cuando está habilitado, se guardarán los intentos de solución de los ejercicios como transacciones.";
+$AllowFastExerciseEdition = "Activar la edición rápida de preguntas";
+$ExerciseAutoLaunch = "Lanzamiento automático de exámenes";
+$ExerciseEndButton = "Botón de fin del examen";
+$ExerciseEndButtonCourseHome = "Regresar a la página principal del curso";
+$ExerciseEndButtonExerciseHome = "Regresar a la lista de exámenes";
+$ExerciseEndButtonDisconnect = "Desconectar el usuario";
 ?>

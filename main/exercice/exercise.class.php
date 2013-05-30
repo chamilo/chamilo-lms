@@ -798,14 +798,15 @@ class Exercise
         if ($from_db && !empty($this->id)) {
 
             // The question list is now ordered with the question_order parameter (normal behaviour)
-            $question_list = $this->getQuestionOrderedList();
+            $questionList = $this->getQuestionOrderedList();
 
             if ($this->categories_grouping) {
-                $result = $this->getQuestionListWithCategoryListFilteredByCategorySettings($question_list);
+                $result = $this->getQuestionListWithCategoryListFilteredByCategorySettings($questionList);
+
                 $this->categoryWithQuestionList = $result['category_with_questions_list'];
-                $question_list = $result['question_list'];
+                $questionList = $result['question_list'];
             }
-            return $question_list;
+            return $questionList;
         }
 
         return $this->questionList;
@@ -2491,7 +2492,7 @@ class Exercise
                     }
 
                     //Next question
-                    if (!empty($questions_in_media)) {
+                    if (isset($questions_in_media) && !empty($questions_in_media) && is_array($questions_in_media)) {
                         $questions_in_media = "['".implode("','", $questions_in_media)."']";
                         $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_question_list('.$questions_in_media.'); ">'.$label.'</a>';
                     } else {
@@ -5307,15 +5308,43 @@ class Exercise
 
         $html = '<div class="exercise_pagination pagination pagination-mini"><ul>';
         $counter = 0;
+        $nextValue = 0;
+        $wasMedia = false;
+        $before = 0;
+        $counterNoMedias = 0;
         foreach ($questionList as $questionId) {
-            $isCurrent = $currentQuestion == ($counter + 1) ? true : false;
-            if (isset($mediaQuestions) && isset($mediaQuestions[$questionId])) {
-                $html .= Display::progressPaginationBar($mediaQuestions[$questionId], $currentQuestion, $conditions, $link, $counter + 1, true, true, false, $isCurrent);
-            } else {
-                $html .= Display::parsePaginationItem($questionId, $isCurrent, $conditions, $link, $counter);
+            $isCurrent = $currentQuestion == ($counterNoMedias + 1) ? true : false;
 
+            if (!empty($nextValue)) {
+                if ($wasMedia) {
+                    $nextValue = $nextValue - $before + 1;
+                }
             }
-            $counter++;
+
+            if (isset($mediaQuestions) && isset($mediaQuestions[$questionId])) {
+                $fixedValue = $counterNoMedias;
+
+                $html .= Display::progressPaginationBar(
+                    $nextValue,
+                    $mediaQuestions[$questionId],
+                    $currentQuestion,
+                    $fixedValue,
+                    $conditions,
+                    $link,
+                    true,
+                    true
+                );
+                $counter += count($mediaQuestions[$questionId]);
+                $before = count($questionList);
+                $wasMedia = true;
+                $nextValue += count($questionList);
+            } else {
+                $html .= Display::parsePaginationItem($questionId, $isCurrent, $conditions, $link, $counter - 1);
+                $counter++;
+                $nextValue++;
+                $wasMedia = false;
+            }
+            $counterNoMedias++;
         }
         $html .= '</ul></div>';
         return $html;
@@ -5326,7 +5355,6 @@ class Exercise
      *  Shows a list of numbers that represents the question to answer in a exercise
      *
      * @param array $categories
-     * @param array $mediaQuestions
      * @param int $current
      * @param array $conditions
      * @param string $link
@@ -5513,8 +5541,41 @@ class Exercise
         $current_question,
         $questions_in_media = array(),
         $last_question_in_media = false,
-        $realQuestionList
+        $realQuestionList,
+        $generateJS = true
     ) {
+        $generateJS = false;
+
+        if ($generateJS) {
+            $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=get_question&id='.$questionId;
+            $params = array(
+                'questionId' => $questionId,
+                'attemptList'=> $attemptList,
+                'remindList' => $remindList,
+                'i' => $i,
+                'current_question' => $current_question,
+                'questions_in_media' => $questions_in_media,
+                'last_question_in_media' => $last_question_in_media
+            );
+            $params = json_encode($params);
+
+            $script = '<script>
+            $(function(){
+                var params = '.$params.';
+                $.ajax({
+                    type: "GET",
+                    async: false,
+                    data: params,
+                    url: "'.$url.'",
+                    success: function(return_value) {
+                        $("#ajaxquestiondiv'.$questionId.'").html(return_value);
+                    }
+                });
+            });
+            </script>
+            <div id="ajaxquestiondiv'.$questionId.'"></div>';
+            echo $script;
+        }
 
         global $origin;
         $question_obj = Question::read($questionId);
@@ -5531,7 +5592,7 @@ class Exercise
         }
 
         $attributes = array('id' =>'remind_list['.$questionId.']');
-        if (in_array($questionId, $remindList)) {
+        if (is_array($remindList) && in_array($questionId, $remindList)) {
             $attributes['checked'] = 1;
             $remind_highlight = ' remind_highlight ';
         }

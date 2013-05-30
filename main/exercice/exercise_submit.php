@@ -593,7 +593,7 @@ $time_left = api_strtotime($clock_expired_time,'UTC') - time();
  * The time control feature is enable here - this feature is enable for a jquery plugin called epiclock
  * for more details of how it works see this link : http://eric.garside.name/docs.html?p=epiclock
  */
-if ($time_control) { //Sends the exercice form when the expired time is finished
+if ($time_control) { //Sends the exercise form when the expired time is finished
 	$htmlHeadXtra[] = $objExercise->show_time_control_js($time_left);
 }
 
@@ -613,7 +613,7 @@ if ($formSent && isset($_POST)) {
         $exerciseResultCoordinates = array();
     }
 
-    // Only for hotspot
+    // Only for hot spot
     if (!isset($choice) && isset($_REQUEST['hidden_hotspot_id'])) {
         $hotspot_id = (int)($_REQUEST['hidden_hotspot_id']);
         $choice     = array($hotspot_id => '');
@@ -624,7 +624,7 @@ if ($formSent && isset($_POST)) {
     // if the user has answered at least one question
     if (is_array($choice)) {
         if ($debug) { error_log('9.1. $choice is an array '.print_r($choice, 1)); }
-        // Also store hotspot spots in the session ($exerciseResultCoordinates
+        // Also store hot spot spots in the session ($exerciseResultCoordinates
         // will be stored in the session at the end of this script)
 
         if (isset($_POST['hotspot'])) {

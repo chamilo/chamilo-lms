@@ -1870,10 +1870,15 @@ class Display
 
     /**
      *
+     * @param int $nextValue
      * @param array $list
      * @param int $current
+     * @param int $fixedValue
      * @param array $conditions
      * @param string $link
+     * @param bool $isMedia
+     * @param bool $addHeaders
+
      * @return string
      */
     public static function progressPaginationBar($nextValue, $list, $current, $fixedValue = null, $conditions = array(), $link = null, $isMedia = false, $addHeaders = true)
@@ -1884,14 +1889,14 @@ class Display
         } else {
             $html = null;
         }
+
         $affectAllItems = false;
 
-        if ($isMedia && $fixedValue && $nextValue + 1 == $current) {
+        if ($isMedia && isset($fixedValue) && ($nextValue + 1 == $current)) {
             $affectAllItems = true;
         }
 
         $localCounter = 0;
-
         foreach ($list as $itemId) {
             $isCurrent = false;
             if ($affectAllItems) {
@@ -1900,9 +1905,6 @@ class Display
                 if (!$isMedia) {
                     $isCurrent = $current == ($localCounter + $nextValue + 1) ? true : false;
                 }
-            }
-            if ($isCurrent) {
-
             }
             $html .= self::parsePaginationItem($itemId, $isCurrent, $conditions, $link, $nextValue, $isMedia, $localCounter, $fixedValue);
             $localCounter++;
@@ -1915,11 +1917,15 @@ class Display
     }
 
     /**
-     * @param int $item_id
+     *
+     * @param int $itemId
      * @param bool $isCurrent
      * @param array $conditions
-     * @param $addLetters
-     * @param $fixValue
+     * @param string $link
+     * @param int $nextValue
+     * @param bool $isMedia
+     * @param int $localCounter
+     * @param int $fixedValue
      * @return string
      */
     static function parsePaginationItem($itemId, $isCurrent, $conditions, $link, $nextValue = 0, $isMedia = false, $localCounter = null, $fixedValue = null)
@@ -1965,9 +1971,9 @@ class Display
         if (empty($link)) {
             $link_to_show = "#";
         } else {
-            $link_counter = $nextValue + $localCounter;
-            $link_to_show = $link.$link_counter;
+            $link_to_show = $link.($nextValue + $localCounter);
         }
+
         $label = $nextValue + $localCounter + 1;
 
         if ($isMedia) {
@@ -1976,7 +1982,6 @@ class Display
         }
 
         return  '<li class = "'.$class.'"><a href="'.$link_to_show.'">'.$label.' </a></li>';
-        //return  '<li class = "'.$class.'"><a href="'.$link_to_show.'">'.$label.'</a></li>';
     }
 
 

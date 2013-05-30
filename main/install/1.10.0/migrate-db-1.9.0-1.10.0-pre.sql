@@ -290,4 +290,4 @@ ALTER TABLE c_quiz ADD COLUMN end_button int NOT NULL default 0;
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('template', NULL, 'text', 'stylesheets', 'default', 'DefaultTemplateTitle', 'DefaultTemplateComment', NULL, NULL, 1);
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.017' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.018' WHERE variable = 'chamilo_database_version';

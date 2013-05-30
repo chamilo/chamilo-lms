@@ -33,7 +33,6 @@ ALTER TABLE track_e_downloads DROP COLUMN  down_cours_id;
 
 ALTER TABLE track_e_links DROP COLUMN  links_cours_id;
 
-
 ALTER TABLE session DROP COLUMN date_start;
 ALTER TABLE session DROP COLUMN date_end;
 

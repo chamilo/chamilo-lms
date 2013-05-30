@@ -6,7 +6,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class LearnpathController
+ * Class CourseHomeController
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */

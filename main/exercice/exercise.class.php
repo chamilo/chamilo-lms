@@ -3514,72 +3514,62 @@ class Exercise
                         )
                         ) {
 
-                                ExerciseShowFunctions::display_unique_or_multiple_answer(
-                                    $answerType,
-                                    $studentChoice,
-                                    $answer,
-                                    $answerComment,
-                                    $answerCorrect,
-                                    0,
-                                    0,
-                                    0
-                                );
+                            ExerciseShowFunctions::display_unique_or_multiple_answer(
+                                $answerType,
+                                $studentChoice,
+                                $answer,
+                                $answerComment,
+                                $answerCorrect,
+                                0,
+                                0,
+                                0
+                            );
 
                         } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
-
-                                ExerciseShowFunctions::display_multiple_answer_true_false(
-                                    $answerType,
-                                    $studentChoice,
-                                    $answer,
-                                    $answerComment,
-                                    $answerCorrect,
-                                    0,
-                                    $questionId,
-                                    0
-                                );
+                            ExerciseShowFunctions::display_multiple_answer_true_false(
+                                $answerType,
+                                $studentChoice,
+                                $answer,
+                                $answerComment,
+                                $answerCorrect,
+                                0,
+                                $questionId,
+                                0
+                            );
 
                         } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
-
-                                ExerciseShowFunctions::display_multiple_answer_combination_true_false(
-                                    $answerType,
-                                    $studentChoice,
-                                    $answer,
-                                    $answerComment,
-                                    $answerCorrect,
-                                    0,
-                                    0,
-                                    0
-                                );
-
+                            ExerciseShowFunctions::display_multiple_answer_combination_true_false(
+                                $answerType,
+                                $studentChoice,
+                                $answer,
+                                $answerComment,
+                                $answerCorrect,
+                                0,
+                                0,
+                                0
+                            );
                         } elseif ($answerType == FILL_IN_BLANKS) {
-
-                                ExerciseShowFunctions::display_fill_in_blanks_answer($answer, 0, 0);
-
+                            ExerciseShowFunctions::display_fill_in_blanks_answer($answer, 0, 0);
                         } elseif ($answerType == FREE_ANSWER) {
-
-                                ExerciseShowFunctions::display_free_answer(
-                                    $choice,
-                                    $exeId,
-                                    $questionId,
-                                    $questionScore
-                                );
-
+                            ExerciseShowFunctions::display_free_answer(
+                                $choice,
+                                $exeId,
+                                $questionId,
+                                $questionScore
+                            );
                         } elseif ($answerType == ORAL_EXPRESSION) {
                             // to store the details of open questions in an array to be used in mail
-
-                                ExerciseShowFunctions::display_oral_expression_answer($choice, 0, 0, $nano);
+                            ExerciseShowFunctions::display_oral_expression_answer($choice, 0, 0, $nano);
 
                         } elseif ($answerType == HOT_SPOT) {
                             ExerciseShowFunctions::display_hotspot_answer($counter, $answer, $studentChoice, $answerComment);
                         } elseif ($answerType == HOT_SPOT_ORDER) {
-//                            if ($origin != 'learnpath') {
-                                ExerciseShowFunctions::display_hotspot_order_answer(
-                                    $answerId,
-                                    $answer,
-                                    $studentChoice,
-                                    $answerComment
-                                );
-//                            }
+                            ExerciseShowFunctions::display_hotspot_order_answer(
+                                $answerId,
+                                $answer,
+                                $studentChoice,
+                                $answerComment
+                            );
                         } elseif ($answerType == HOT_SPOT_DELINEATION) {
                             $user_answer = $_SESSION['exerciseResultCoordinates'][$questionId];
 
@@ -4017,15 +4007,6 @@ class Exercise
         if ($debug) {
             error_log('<-- end answer loop -->');
         }
-
-        // destruction of Answer
-        /*
-          if (!$saved_results && $answerType == HOT_SPOT) {
-          $queryfree      = "SELECT marks FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($exeId)."' and question_id= '".Database::escape_string($questionId)."'";
-          $resfree        = Database::query($queryfree);
-          $questionScore  = Database::result($resfree,0,"marks");
-          } */
-
         $final_answer = true;
         foreach ($real_answers as $my_answer) {
             if (!$my_answer) {
@@ -4356,17 +4337,15 @@ class Exercise
      * @param int $exe_id
      * @return null
      */
-    function send_notification_for_open_questions($question_list_answers, $origin, $exe_id)
+    public function sendNotificationForOpenQuestions($question_list_answers, $origin, $exe_id)
     {
         if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1) {
             return null;
         }
         // Email configuration settings
-        $coursecode = api_get_course_id();
         $course_info = api_get_course_info(api_get_course_id());
 
-        $url_email = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?'.api_get_cidreq(
-        ).'&id_session='.api_get_session_id().'&id='.$exe_id.'&action=qualify';
+        $url_email = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&id='.$exe_id.'&action=qualify';
         $user_info = UserManager::get_user_info_by_id(api_get_user_id());
 
         $msg = '<p>'.get_lang('OpenQuestionsAttempted').' :</p>
@@ -4442,7 +4421,7 @@ class Exercise
         }
     }
 
-    function send_notification_for_oral_questions($question_list_answers, $origin, $exe_id)
+    public function sendNotificationForOralQuestions($question_list_answers, $origin, $exe_id)
     {
         if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1) {
             return null;

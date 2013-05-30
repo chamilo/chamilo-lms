@@ -2510,10 +2510,10 @@ class ExerciseLib
                 update_event_exercise($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $exercise_stat_info['exe_duration'], '', array());
             }
 
-            // Send notification ..
+            // Send notification.
             if (!api_is_allowed_to_edit(null, true)) {
-                $objExercise->send_notification_for_open_questions($question_list_answers, $origin, $exe_id);
-                $objExercise->send_notification_for_oral_questions($question_list_answers, $origin, $exe_id);
+                $objExercise->sendNotificationForOpenQuestions($question_list_answers, $origin, $exe_id);
+                $objExercise->sendNotificationForOralQuestions($question_list_answers, $origin, $exe_id);
             }
         }
     }

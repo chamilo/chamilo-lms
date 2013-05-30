@@ -70,6 +70,7 @@ class Exercise
     public $endButton = 0;
     public $categoryWithQuestionList;
     public $mediaList;
+    public $loadQuestionAJAX = false;
 
     /**
      * Constructor of the class
@@ -5544,9 +5545,11 @@ class Exercise
         $realQuestionList,
         $generateJS = true
     ) {
-        $generateJS = false;
 
-        if ($generateJS) {
+        // With this option on the question is loaded via AJAX
+        //$generateJS = true;
+
+        if ($generateJS && $this->loadQuestionAJAX) {
             $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=get_question&id='.$questionId;
             $params = array(
                 'questionId' => $questionId,
@@ -5575,85 +5578,86 @@ class Exercise
             </script>
             <div id="ajaxquestiondiv'.$questionId.'"></div>';
             echo $script;
-        }
+        } else {
 
-        global $origin;
-        $question_obj = Question::read($questionId);
-        $user_choice = isset($attemptList[$questionId]) ? $attemptList[$questionId] : null;
+            global $origin;
+            $question_obj = Question::read($questionId);
+            $user_choice = isset($attemptList[$questionId]) ? $attemptList[$questionId] : null;
 
-        $remind_highlight = null;
+            $remind_highlight = null;
 
-        //Hides questions when reviewing a ALL_ON_ONE_PAGE exercise see #4542 no_remind_highlight class hide with jquery
-        if ($this->type == ALL_ON_ONE_PAGE && isset($_GET['reminder']) && $_GET['reminder'] == 2) {
-            $remind_highlight = 'no_remind_highlight';
-            if (in_array($question_obj->type, Question::question_type_no_review())) {
-                return null;
-            }
-        }
-
-        $attributes = array('id' =>'remind_list['.$questionId.']');
-        if (is_array($remindList) && in_array($questionId, $remindList)) {
-            $attributes['checked'] = 1;
-            $remind_highlight = ' remind_highlight ';
-        }
-
-        // Showing the question
-
-        $exercise_actions  = null;
-
-        echo '<a id="questionanchor'.$questionId.'"></a><br />';
-        echo '<div id="question_div_'.$questionId.'" class="main_question '.$remind_highlight.'" >';
-
-        // Shows the question + possible answers
-        echo ExerciseLib::showQuestion($question_obj, false, $origin, $i, true, false, $user_choice, false);
-
-        // Button save and continue
-        switch ($this->type) {
-            case ONE_PER_PAGE:
-                $exercise_actions .= $this->show_button($questionId, $current_question, null, $remindList);
-                break;
-            case ALL_ON_ONE_PAGE :
-                $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
-                $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
-                $exercise_actions  .= Display::div($button, array('class'=>'exercise_save_now_button'));
-                break;
-        }
-
-        if (!empty($questions_in_media)) {
-            $count_of_questions_inside_media = count($questions_in_media);
-            if ($count_of_questions_inside_media > 1) {
-                $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\', false, false); ">'.get_lang('SaveForNow').'</a>';
-                $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
-                $exercise_actions  = Display::div($button, array('class'=>'exercise_save_now_button'));
-            }
-
-            if ($last_question_in_media && $this->type == ONE_PER_PAGE) {
-                $exercise_actions = $this->show_button($questionId, $current_question, $questions_in_media);
-            }
-        }
-
-        // Checkbox review answers
-        if ($this->review_answers && !in_array($question_obj->type, Question::question_type_no_review())) {
-            $remind_question_div = Display::tag('label', Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes).get_lang('ReviewQuestionLater'), array('class' => 'checkbox', 'for' =>'remind_list['.$questionId.']'));
-            $exercise_actions   .= Display::div($remind_question_div, array('class'=>'exercise_save_now_button'));
-        }
-
-        echo Display::div(' ', array('class'=>'clear'));
-
-        $paginator = null;
-        if ($this->type == ONE_PER_PAGE) {
-            if (empty($questions_in_media)) {
-                $paginator = Display::paginationIndicator($current_question, count($realQuestionList));
-            } else {
-                if ($last_question_in_media) {
-                    $paginator = Display::paginationIndicator($current_question, count($realQuestionList));
+            //Hides questions when reviewing a ALL_ON_ONE_PAGE exercise see #4542 no_remind_highlight class hide with jquery
+            if ($this->type == ALL_ON_ONE_PAGE && isset($_GET['reminder']) && $_GET['reminder'] == 2) {
+                $remind_highlight = 'no_remind_highlight';
+                if (in_array($question_obj->type, Question::question_type_no_review())) {
+                    return null;
                 }
             }
-        }
 
-        echo '<div class="row"><div class="pull-right">'.$paginator.'</div></div>';
-        echo Display::div($exercise_actions, array('class'=>'form-actions'));
-        echo '</div>';
+            $attributes = array('id' =>'remind_list['.$questionId.']');
+            if (is_array($remindList) && in_array($questionId, $remindList)) {
+                $attributes['checked'] = 1;
+                $remind_highlight = ' remind_highlight ';
+            }
+
+            // Showing the question
+
+            $exercise_actions  = null;
+
+            echo '<a id="questionanchor'.$questionId.'"></a><br />';
+            echo '<div id="question_div_'.$questionId.'" class="main_question '.$remind_highlight.'" >';
+
+            // Shows the question + possible answers
+            echo ExerciseLib::showQuestion($question_obj, false, $origin, $i, true, false, $user_choice, false);
+
+            // Button save and continue
+            switch ($this->type) {
+                case ONE_PER_PAGE:
+                    $exercise_actions .= $this->show_button($questionId, $current_question, null, $remindList);
+                    break;
+                case ALL_ON_ONE_PAGE :
+                    $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
+                    $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
+                    $exercise_actions  .= Display::div($button, array('class'=>'exercise_save_now_button'));
+                    break;
+            }
+
+            if (!empty($questions_in_media)) {
+                $count_of_questions_inside_media = count($questions_in_media);
+                if ($count_of_questions_inside_media > 1) {
+                    $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\', false, false); ">'.get_lang('SaveForNow').'</a>';
+                    $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
+                    $exercise_actions  = Display::div($button, array('class'=>'exercise_save_now_button'));
+                }
+
+                if ($last_question_in_media && $this->type == ONE_PER_PAGE) {
+                    $exercise_actions = $this->show_button($questionId, $current_question, $questions_in_media);
+                }
+            }
+
+            // Checkbox review answers
+            if ($this->review_answers && !in_array($question_obj->type, Question::question_type_no_review())) {
+                $remind_question_div = Display::tag('label', Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes).get_lang('ReviewQuestionLater'), array('class' => 'checkbox', 'for' =>'remind_list['.$questionId.']'));
+                $exercise_actions   .= Display::div($remind_question_div, array('class'=>'exercise_save_now_button'));
+            }
+
+            echo Display::div(' ', array('class'=>'clear'));
+
+            $paginator = null;
+            if ($this->type == ONE_PER_PAGE) {
+                if (empty($questions_in_media)) {
+                    $paginator = Display::paginationIndicator($current_question, count($realQuestionList));
+                } else {
+                    if ($last_question_in_media) {
+                        $paginator = Display::paginationIndicator($current_question, count($realQuestionList));
+                    }
+                }
+            }
+
+            echo '<div class="row"><div class="pull-right">'.$paginator.'</div></div>';
+            echo Display::div($exercise_actions, array('class'=>'form-actions'));
+            echo '</div>';
+        }
     }
 
 }

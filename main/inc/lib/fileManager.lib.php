@@ -991,7 +991,7 @@ class FileManager
                                     );
 
                                     //Redo visibility
-                                    api_set_default_visibility(TOOL_DOCUMENT, $document_id);
+                                    api_set_default_visibility($_course, TOOL_DOCUMENT, $document_id);
                                 }
                                 // If the file is in a folder, we need to update all parent folders
                                 self::item_property_update_on_folder($_course, $upload_path, $user_id);
@@ -1611,7 +1611,7 @@ class FileManager
             $document_id = Database::insert_id();
             if ($document_id) {
                 if ($save_visibility) {
-                    api_set_default_visibility($document_id, TOOL_DOCUMENT, $group_id);
+                    api_set_default_visibility($_course, $document_id, TOOL_DOCUMENT, $group_id);
                 }
             }
 

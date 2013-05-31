@@ -535,13 +535,13 @@ if (!empty($exercise_list)) {
                 $my_exercise_id = $row['iid'];
 
                 $exercise_obj = new Exercise();
-                $exercise_obj->read($my_exercise_id);
+                $exercise_obj->read($my_exercise_id, false);
 
                 $locked = $exercise_obj->is_gradebook_locked;
 
                 //echo '<div  id="tabs-'.$i.'">';
                 $i++;
-                //validacion when belongs to a session
+                // Validation when belongs to a session
                 $session_img = api_get_session_image($row['session_id'], $_user['status']);
 
                 $time_limits = false;
@@ -705,6 +705,7 @@ if (!empty($exercise_list)) {
                     }
 
                     // Number of questions
+                    /*
                     $random_label = null;
                     if ($row['random'] > 0 || $row['random'] == -1) {
                         // if random == -1 means use random questions with all questions
@@ -720,16 +721,7 @@ if (!empty($exercise_list)) {
                             if ($nbQuestionsTotal != $real_question_count) {
                                 $warning = Display::return_icon('warning.png', get_lang('CheckThatYouHaveEnoughQuestionsInYourCategories'));
                             }
-
-                            //$nbQuestionsTotal = Testcategory::getNumberOfQuestionRandomByCategory($my_exercise_id, $random_number_of_question);
-
                             $number_of_questions = $nbQuestionsTotal." ".$warning;
-                            //$number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang("QuestionsLowerCase") : get_lang("QuestionLowerCase");
-                            /*
-                            $number_of_questions .= " - ";
-                            $number_of_questions .= min(Testcategory::getNumberMaxQuestionByCat($my_exercise_id), $random_number_of_question).' '.get_lang('QuestionByCategory');
-                             *
-                             */
                         } else {
                             $random_label = ' ('.get_lang('Random').') ';
                             $number_of_questions = $random_number_of_question.' '.$random_label;
@@ -740,7 +732,9 @@ if (!empty($exercise_list)) {
                         }
                     } else {
                         $number_of_questions = $rowi;
-                    }
+                    }*/
+
+                    $number_of_questions = $exercise_obj->getQuestionCount();
 
                     //Attempts
                     //$attempts = get_count_exam_results($my_exercise_id).' '.get_lang('Attempts');
@@ -990,7 +984,6 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                 api_htmlentities(get_lang('AreYouSureToDelete'), ENT_QUOTES, $charset).' '.$title."?"
             ).'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
 
-            //$actions .='<img src="../img/lp_quiz_na.gif" border="0" title="'.get_lang('NotMarkActivity').'" alt="" />';
             $item .= Display::tag('td', $actions);
             echo Display::tag('tr', $item, array('class' => $class));
         } else {

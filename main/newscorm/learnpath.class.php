@@ -797,7 +797,7 @@ class learnpath
                     $course_info = api_get_course_info();
                     // Insert into item_property.
                     api_item_property_update($course_info, TOOL_LEARNPATH, $id, 'LearnpathAdded', api_get_user_id());
-                    api_set_default_visibility($id, TOOL_LEARNPATH);
+                    api_set_default_visibility($course_info, $id, TOOL_LEARNPATH);
 
                     return $id;
                 }

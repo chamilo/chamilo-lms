@@ -68,7 +68,7 @@ $exe_id = null;
 if (isset($_SESSION['exe_id'])) {
 	$exe_id = intval($_SESSION['exe_id']);
 }
-$exercise_stat_info	= $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
+$exercise_stat_info	= $objExercise->getStatTrackExerciseInfoByExeId($exe_id);
 if (!empty($exercise_stat_info['data_tracking'])) {
 	$question_list = explode(',', $exercise_stat_info['data_tracking']);
 }

@@ -15,7 +15,7 @@
 
 // deletes a question from the exercise (not from the data base)
 if ($deleteQuestion) {
-	// if the question exists
+	// If the question exists
 	if ($objQuestionTmp = Question::read($deleteQuestion)) {
 		$objQuestionTmp->delete($exerciseId);
 

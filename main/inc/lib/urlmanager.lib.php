@@ -611,10 +611,9 @@ class UrlManager
     public static function delete_url_rel_course($courseId, $url_id)
     {
         $table_url_rel_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql                  = "DELETE FROM $table_url_rel_course WHERE c_id = '".Database::escape_string(
-                $courseId
-            )."' AND access_url_id=".Database::escape_string($url_id)."  ";
-        $result               = Database::query($sql);
+        $sql                  = "DELETE FROM $table_url_rel_course
+                                 WHERE c_id = '".Database::escape_string($courseId)."' AND access_url_id=".Database::escape_string($url_id)."  ";
+        $result = Database::query($sql);
 
         return $result;
     }

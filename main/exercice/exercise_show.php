@@ -295,39 +295,39 @@ foreach ($questionList as $questionId) {
     switch ($answerType) {
     }*/
 	if ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
-        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());
+        $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore   = $question_result['score'];
         $totalScore      += $question_result['score'];
 	} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
 		$choice = array();
-        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());
+        $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];
 	} elseif ($answerType == UNIQUE_ANSWER || $answerType ==  UNIQUE_ANSWER_NO_OPTION) {
-        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());
+        $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];
 		echo '</table>';
 	} elseif ($answerType == FILL_IN_BLANKS) {
-        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());
+        $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];
 	} elseif ($answerType == GLOBAL_MULTIPLE_ANSWER) {
-        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());
+        $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];
 	} elseif ($answerType == FREE_ANSWER) {
         $answer = $str;
-        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());
+        $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];
 	} elseif ($answerType == ORAL_EXPRESSION) {
 		$answer = $str;
-		$question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());
+		$question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
 		$questionScore   = $question_result['score'];
 		$totalScore     += $question_result['score'];
 	} elseif ($answerType == MATCHING || $answerType == DRAGGABLE) {
-        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());
+        $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];
 	} elseif ($answerType == HOT_SPOT) {
@@ -337,7 +337,7 @@ foreach ($questionList as $questionId) {
                     <td valign="top" align="center" style="padding-left:0px;" >
                         <table border="1" bordercolor="#A4A4A4" style="border-collapse: collapse;" width="552">';
 		}
-        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());
+        $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore  = $question_result['score'];
         $totalScore    += $question_result['score'];
 
@@ -354,7 +354,7 @@ foreach ($questionList as $questionId) {
         }
 	} else if($answerType == HOT_SPOT_DELINEATION) {
 
-        $question_result  = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg(), 'database');
+        $question_result  = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
 
         $questionScore    = $question_result['score'];
         $totalScore      += $question_result['score'];
@@ -680,7 +680,7 @@ if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])))
 	    if ($objExercise->selectPropagateNeg() == 0 && $my_total_score_temp < 0) {
 	        $my_total_score_temp = 0;
 	    }
-        $total_score_text .= ExerciseLib::get_question_ribbon($objExercise, $my_total_score_temp, $totalWeighting, true);
+        $total_score_text .= $objExercise->get_question_ribbon($my_total_score_temp, $totalWeighting, true);
         $total_score_text .= '</div>';
 	}
 }

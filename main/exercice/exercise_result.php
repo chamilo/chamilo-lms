@@ -63,7 +63,7 @@ if (empty($objExercise)) {
     // Redirect to the exercise overview
     // Check if the exe_id exists
     $objExercise = new Exercise();
-    $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
+    $exercise_stat_info = $objExercise->getStatTrackExerciseInfoByExeId($exe_id);
     if (!empty($exercise_stat_info) && isset($exercise_stat_info['exe_exo_id'])) {
         header("Location: overview.php?exerciseId=".$exercise_stat_info['exe_exo_id']);
         exit;
@@ -101,7 +101,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 }
 
 $feedback_type = $objExercise->feedback_type;
-$exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
+$exercise_stat_info = $objExercise->getStatTrackExerciseInfoByExeId($exe_id);
 
 if (!empty($exercise_stat_info['data_tracking'])) {
     $question_list = explode(',', $exercise_stat_info['data_tracking']);
@@ -139,7 +139,7 @@ if ($objExercise->selectAttempts() > 0) {
 Display::display_normal_message(get_lang('Saved').'<br />', false);
 
 // Display questions.
-ExerciseLib::display_question_list_by_attempt($objExercise, $exe_id, true);
+$objExercise->displayQuestionListByAttempt($exe_id, true);
 
 // If is not valid.
 $session_control_key = ExerciseLib::get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);

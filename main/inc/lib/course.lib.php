@@ -1513,12 +1513,11 @@ class CourseManager
      * course.
      *
      * @param string The code of the course to delete
-     * @todo When deleting a virtual course: unsubscribe users from that virtual
      * course from the groups in the real course if they are not subscribed in
      * that real course.
-     * @todo Remove globals
      */
-    public static function delete_course($code) {
+    public static function delete_course($code)
+    {
 
         $table_course                       = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_user                  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -1543,8 +1542,34 @@ class CourseManager
         $table_stats_uploads        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
 
         $courseInfo = api_get_course_info($code);
+
+        if (empty($courseInfo)) {
+            return false;
+        }
+
+        self::create_database_dump($courseInfo);
+
         $code = Database::escape_string($code);
         $courseId = $courseInfo['real_id'];
+
+        $course_tables = self::get_course_tables();
+
+        // Cleaning c_x tables
+        if (!empty($courseInfo['id'])) {
+            foreach($course_tables as $table) {
+                $table = Database::get_course_table($table);
+                $sql = "DELETE FROM $table WHERE c_id = $courseId ";
+                Database::query($sql);
+            }
+        }
+
+        if (!empty($courseInfo['directory'])) {
+            $course_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'];
+            $archive_dir = api_get_path(SYS_ARCHIVE_PATH).$courseInfo['directory'].'_'.time();
+            if (is_dir($course_dir)) {
+                rename($course_dir, $archive_dir);
+            }
+        }
 
         // Unsubscribe all classes from the course
         $sql = "DELETE FROM $table_course_class WHERE course_code='".$code."'";
@@ -1609,16 +1634,16 @@ class CourseManager
 
         // delete extra course fields
         $t_cf         = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $t_cfv         = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+        $t_cfv        = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 
         $sql = "SELECT distinct field_id FROM $t_cfv WHERE course_code = '$code'";
         $res_field_ids = @Database::query($sql);
-
+        $field_ids = array();
         while($row_field_id = Database::fetch_row($res_field_ids)){
             $field_ids[] = $row_field_id[0];
         }
 
-        //delete from table_course_field_value from a given course_code
+        // Delete from table_course_field_value from a given course_code
 
         $sql_course_field_value = "DELETE FROM $t_cfv WHERE course_code = '$code'";
         @Database::query($sql_course_field_value);
@@ -1630,7 +1655,7 @@ class CourseManager
             $field_all_ids[] = $row_field_all_id[0];
         }
 
-        if (is_array($field_ids) && count($field_ids) > 0) {
+        if (isset($field_ids) && is_array($field_ids) && count($field_ids) > 0) {
             foreach ($field_ids as $field_id) {
                 // check if field id is used into table field value
                 if (is_array($field_all_ids)) {
@@ -1651,26 +1676,22 @@ class CourseManager
 
     /**
      * Creates a file called mysql_dump.sql in the course folder
-     * @param $course_code The code of the course
-     * @todo Implementation for single database
+     * @param array course info
+     * @return
      */
-    public static function create_database_dump($course_code) {
-        global $_configuration;
-
-        $sql_dump = '';
-        $course_code    = Database::escape_string($course_code);
-        $table_course   = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT * FROM $table_course WHERE code = '$course_code'";
-        $res = Database::query($sql);
-        $course = Database::fetch_array($res);
-
+    public static function create_database_dump($courseInfo)
+    {
+        $sql_dump = null;
+        if (empty($courseInfo)) {
+            return null;
+        }
         $course_tables = self::get_course_tables();
 
-        if (!empty($course['id'])) {
-            //Cleaning c_x tables
-            foreach($course_tables as $table) {
+        if (!empty($courseInfo['real_id'])) {
+            // Cleaning c_x tables
+            foreach ($course_tables as $table) {
                 $table = Database::get_course_table($table);
-                $sql = "SELECT * FROM $table WHERE c_id = {$course['id']} ";
+                $sql = "SELECT * FROM $table WHERE c_id = {$courseInfo['real_id']} ";
                 $res_table = Database::query($sql);
 
                 while ($row = Database::fetch_array($res_table, 'ASSOC')) {
@@ -1683,14 +1704,12 @@ class CourseManager
             }
         }
 
-        if (is_dir(api_get_path(SYS_COURSE_PATH).$course['directory'])) {
-            $file_name = api_get_path(SYS_COURSE_PATH).$course['directory'].'/mysql_dump.sql';
+        if (is_dir(api_get_path(SYS_COURSE_PATH).$courseInfo['directory'])) {
+            $file_name = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/mysql_dump.sql';
             $handle = fopen($file_name, 'a+');
             if ($handle !== false) {
                 fwrite($handle, $sql_dump);
                 fclose($handle);
-            } else {
-                //TODO trigger exception in a try-catch
             }
         }
     }
@@ -3946,7 +3965,8 @@ class CourseManager
     /**
      * Initializes a file repository for a newly created course.
      */
-    static function prepare_course_repository($course_repository, $course_code) {
+    static function prepare_course_repository($course_repository, $course_code)
+    {
 
         $perm = api_get_permissions_for_new_directories();
         $perm_file = api_get_permissions_for_new_files();
@@ -4029,26 +4049,14 @@ class CourseManager
 
                        php_flag zlib.output_compression off");
         fclose($fp);
-
-        // Build index.php of the course.
-        /*
-        $fd = fopen($cp . '/index.php', 'w');
-
-        // str_replace() removes \r that cause squares to appear at the end of each line
-        //@todo fix the harcoded include
-        $string = str_replace("\r", "", "<?" . "php
-        \$cidReq = \"$course_code\";
-        \$dbname = \"$course_code\";
-
-        include(\"".api_get_path(SYS_CODE_PATH)."course_home/course_home.php\");
-        ?>");
-        fwrite($fd, $string);
-        @chmod($cp . '/index.php',$perm_file);
-        */
         return 0;
     }
 
-    static function get_course_tables() {
+    /**
+     * Get current courses
+     * */
+    static function get_course_tables()
+    {
         $tables = array();
 
         $tables[]= 'tool';
@@ -4090,7 +4098,7 @@ class CourseManager
         $tables[]= 'quiz_question';
         $tables[]= 'quiz_answer';
         $tables[]= 'quiz_question_option';
-        $tables[]= 'quiz_question_category';
+        $tables[]= 'quiz_category';
         $tables[]= 'quiz_question_rel_category';
         $tables[]= 'dropbox_post';
         $tables[]= 'dropbox_file';
@@ -4276,7 +4284,7 @@ class CourseManager
         Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '".TOOL_COURSE_SETTING . "','course_info/infocours.php','reference.gif','$visible_for_course_admin','1','', 'NO','_self','admin','0')");
         Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '".TOOL_COURSE_MAINTENANCE."','course_info/maintenance.php','backup.gif','$visible_for_course_admin','1','','NO','_self', 'admin','0')");
 
-        /*    course_setting table (courseinfo tool)   */
+        /* Course_setting table (courseinfo tool)   */
 
         Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'email_alert_manager_on_new_doc',0,'work')");
         Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'email_alert_on_new_doc_dropbox',0,'dropbox')");
@@ -4294,7 +4302,8 @@ class CourseManager
         Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'enable_lp_auto_launch',0,'learning_path')");
         Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'pdf_export_watermark_text','','learning_path')");
         Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_public_certificates','','certificates')");
-        Database::query(" INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_fast_exercise_edition', 0 ,'exercise')");
+        Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_fast_exercise_edition', 0 ,'exercise')");
+        Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'enable_exercise_auto_launch', 0 ,'exercise')");
 
         /* Course homepage tools for platform admin only */
 
@@ -4478,14 +4487,13 @@ class CourseManager
 
             /* Agenda tool */
 
-            Database::query("INSERT INTO $TABLETOOLAGENDA  VALUES ($course_id, NULL, '".Database::escape_string(get_lang('AgendaCreationTitle')) . "', '".Database::escape_string(get_lang('AgendaCreationContenu')) . "', now(), now(), NULL, 0, 0)");
+            Database::query("INSERT INTO $TABLETOOLAGENDA VALUES ($course_id, NULL, '".Database::escape_string(get_lang('AgendaCreationTitle')) . "', '".Database::escape_string(get_lang('AgendaCreationContenu')) . "', now(), now(), NULL, 0, 0)");
             // We need to add the item properties too!
             $insert_id = Database :: insert_id();
             $sql = "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id, '" . TOOL_CALENDAR_EVENT . "',1,NOW(),NOW(),$insert_id,'AgendaAdded',1,0,NULL,1)";
             Database::query($sql);
 
             /*  Links tool */
-
             $add_google_link_sql = "INSERT INTO $TABLETOOLLINK  (c_id, url, title, description, category_id, display_order, on_homepage, target)
                     VALUES ($course_id, 'http://www.google.com','Google','".Database::escape_string(get_lang('Google')) . "','0','0','0','_self')";
             Database::query($add_google_link_sql);
@@ -4505,7 +4513,7 @@ class CourseManager
             $sql = "INSERT INTO $TABLEITEMPROPERTY  (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('" . TOOL_LINK . "',1,NOW(),NOW(),$insert_id,'LinkAdded',1,0,NULL,1)";
             Database::query($sql);
 
-            /* Annoucement tool */
+            /* Announcement tool */
 
             $sql = "INSERT INTO $TABLETOOLANNOUNCEMENTS  (c_id, title,content,end_date,display_order,email_sent)
                     VALUES ($course_id, '".Database::escape_string(get_lang('AnnouncementExampleTitle')) . "', '".Database::escape_string(get_lang('AnnouncementEx')) . "', NOW(), '1','0')";
@@ -4513,7 +4521,7 @@ class CourseManager
 
             // We need to add the item properties too!
             $insert_id = Database :: insert_id();
-            $sql = "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
+            $sql = "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
                     VALUES ($course_id, '" . TOOL_ANNOUNCEMENT . "',1,NOW(),NOW(),$insert_id,'AnnouncementAdded',1,0,NULL,1)";
             Database::query($sql);
 
@@ -4523,35 +4531,42 @@ class CourseManager
                             <img src="'.api_get_path(REL_CODE_PATH).'img/mascot.png" alt="Mr. Chamilo" title="Mr. Chamilo" />
                             <h2>'.Database::escape_string(get_lang('IntroductionText')).'</h2>
                          </p>';
-            Database::query("INSERT INTO $TABLEINTROS  VALUES ($course_id, '" . TOOL_COURSE_HOMEPAGE . "','".$intro_text."', 0)");
-            Database::query("INSERT INTO $TABLEINTROS  VALUES ($course_id, '" . TOOL_STUDENTPUBLICATION . "','".Database::escape_string(get_lang('IntroductionTwo')) . "', 0)");
+            Database::query("INSERT INTO $TABLEINTROS VALUES ($course_id, '" . TOOL_COURSE_HOMEPAGE . "','".$intro_text."', 0)");
+            Database::query("INSERT INTO $TABLEINTROS VALUES ($course_id, '" . TOOL_STUDENTPUBLICATION . "','".Database::escape_string(get_lang('IntroductionTwo')) . "', 0)");
 
             // Wiki intro
             $intro_wiki='<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"></td><td valign="top" align="left">'.Database::escape_string(get_lang('IntroductionWiki')).'</td></tr></table>';
-            Database::query("INSERT INTO $TABLEINTROS  VALUES ($course_id, '" . TOOL_WIKI . "','".$intro_wiki. "', 0)");
+            Database::query("INSERT INTO $TABLEINTROS VALUES ($course_id, '" . TOOL_WIKI . "','".$intro_wiki. "', 0)");
 
             /*  Exercise tool */
 
-            Database::query("INSERT INTO $TABLEQUIZANSWERSLIST (c_id, id, question_id, answer, correct, comment, ponderation, position) VALUES ($course_id, '1', '1', '".Database::escape_string(get_lang('Ridiculise')) . "', '0', '".Database::escape_string(get_lang('NoPsychology')) . "', '-5', '1')");
-            Database::query("INSERT INTO $TABLEQUIZANSWERSLIST (c_id, id, question_id, answer, correct, comment, ponderation, position) VALUES ($course_id,  '2', '1', '".Database::escape_string(get_lang('AdmitError')) . "', '0', '".Database::escape_string(get_lang('NoSeduction')) . "', '-5', '2')");
-            Database::query("INSERT INTO $TABLEQUIZANSWERSLIST (c_id, id, question_id, answer, correct, comment, ponderation, position) VALUES ($course_id,  '3', '1', '".Database::escape_string(get_lang('Force')) . "', '1', '".Database::escape_string(get_lang('Indeed')) . "', '5', '3')");
-            Database::query("INSERT INTO $TABLEQUIZANSWERSLIST (c_id, id, question_id, answer, correct, comment, ponderation, position) VALUES ($course_id,  '4', '1', '".Database::escape_string(get_lang('Contradiction')) . "', '1', '".Database::escape_string(get_lang('NotFalse')) . "', '5', '4')");
+            $html = Database::escape_string('<table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                                <tr><td width="110" valign="top" align="left">
+                                                <img src="'.api_get_path(WEB_CODE_PATH).'default_course_document/images/mr_dokeos/thinking.jpg"></td><td valign="top" align="left">'.get_lang('Antique').'
+                                            </td></tr></table>');
 
-            $html=Database::escape_string('<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"><img src="'.api_get_path(WEB_CODE_PATH).'default_course_document/images/mr_dokeos/thinking.jpg"></td><td valign="top" align="left">'.get_lang('Antique').'</td></tr></table>');
-
-            Database::query('INSERT INTO '.$TABLEQUIZ .
-              ' (c_id, title, description, type, random, random_answers, active, results_disabled ) ' .
-              ' VALUES ('.$course_id.', "'.Database::escape_string(get_lang('ExerciceEx')) . '",' .
-              ' "'.$html.'", "1", "0", "0", "1", "0")');
+            // Insert exercise
+            Database::query('INSERT INTO '.$TABLEQUIZ .' (c_id, title, description, type, random, random_answers, active, results_disabled ) ' .
+              ' VALUES ('.$course_id.', "'.Database::escape_string(get_lang('ExerciceEx')) . '", "'.$html.'", "1", "0", "0", "1", "0")');
             $exercise_id = Database :: insert_id();
-            Database::query("INSERT INTO $TABLEQUIZQUESTIONLIST  (c_id, id, question, description, ponderation, position, type, picture, level)
-                            VALUES ( '.$course_id.', '1', '".Database::escape_string(get_lang('SocraticIrony')) . "', '".Database::escape_string(get_lang('ManyAnswers')) . "', '10', '1', '2','',1)");
-            Database::query("INSERT INTO $TABLEQUIZQUESTION  (c_id, question_id, exercice_id, question_order) VALUES ('.$course_id.', 1,1,1)");
+
+            // Insert question
+            Database::query("INSERT INTO $TABLEQUIZQUESTIONLIST (c_id, question, description, ponderation, position, type, picture, level)
+                            VALUES ( '.$course_id.', '".Database::escape_string(get_lang('SocraticIrony')) . "', '".Database::escape_string(get_lang('ManyAnswers')) . "', '10', '1', '2','',1)");
+            $questionId = Database :: insert_id();
+            Database::query("INSERT INTO $TABLEQUIZQUESTION  (c_id, question_id, exercice_id, question_order) VALUES ($course_id,$questionId , $exercise_id, 1)");
+
+            // Insert answers
+            Database::query("INSERT INTO $TABLEQUIZANSWERSLIST (c_id, question_id, answer, correct, comment, ponderation, position) VALUES ($course_id, '$questionId', '".Database::escape_string(get_lang('Ridiculise')) . "', '0', '".Database::escape_string(get_lang('NoPsychology')) . "', '-5', '1')");
+            Database::query("INSERT INTO $TABLEQUIZANSWERSLIST (c_id, question_id, answer, correct, comment, ponderation, position) VALUES ($course_id, '$questionId', '".Database::escape_string(get_lang('AdmitError')) . "', '0', '".Database::escape_string(get_lang('NoSeduction')) . "', '-5', '2')");
+            Database::query("INSERT INTO $TABLEQUIZANSWERSLIST (c_id, question_id, answer, correct, comment, ponderation, position) VALUES ($course_id, '$questionId', '".Database::escape_string(get_lang('Force')) . "', '1', '".Database::escape_string(get_lang('Indeed')) . "', '5', '3')");
+            Database::query("INSERT INTO $TABLEQUIZANSWERSLIST (c_id, question_id, answer, correct, comment, ponderation, position) VALUES ($course_id, '$questionId', '".Database::escape_string(get_lang('Contradiction')) . "', '1', '".Database::escape_string(get_lang('NotFalse')) . "', '5', '4')");
 
             /* Forum tool */
 
             Database::query("INSERT INTO $TABLEFORUMCATEGORIES VALUES ($course_id, 1,'".Database::escape_string(get_lang('ExampleForumCategory'))."', '', 1, 0, 0)");
             $insert_id = Database :: insert_id();
+
             Database::query("INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
                             VALUES ($course_id, 'forum_category',1,NOW(),NOW(),$insert_id,'ForumCategoryAdded',1,0,NULL,1)");
 
@@ -4564,6 +4579,7 @@ class CourseManager
             Database::query("INSERT INTO $TABLEFORUMTHREADS (c_id, thread_id, thread_title, forum_id, thread_replies, thread_poster_id, thread_poster_name, thread_views, thread_last_post, thread_date, locked, thread_qualify_max, session_id)
                             VALUES ($course_id, 1, '".Database::escape_string(get_lang('ExampleThread'))."', 1, 0, 1, '', 0, 1, NOW(), 0, 10, 0)");
             $insert_id = Database :: insert_id();
+
             Database::query("INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
                             VALUES ($course_id, 'forum_thread',1,NOW(),NOW(),$insert_id,'ForumThreadAdded',1,0,NULL,1)");
 

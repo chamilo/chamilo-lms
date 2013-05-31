@@ -70,6 +70,10 @@ class Testcategory
     */
     public function getCategory($id)
     {
+        if (empty($id)) {
+            return false;
+        }
+
         $t_cattable = Database::get_course_table(TABLE_QUIZ_CATEGORY);
         $id = Database::escape_string($id);
         $sql = "SELECT * FROM $t_cattable WHERE iid = $id ";
@@ -460,6 +464,7 @@ class Testcategory
 		return $result;
 	}
 
+
 	/**
 	 * return the list of different categories ID for a test
 	 * @param int exercise id
@@ -472,9 +477,18 @@ class Testcategory
 		// parcourir les questions d'un test, recup les categories uniques dans un tableau
 		$categories_in_exercise = array();
         $exercise = new Exercise();
-        $exercise->setCategoriesGrouping($grouped_by_category);
-        $exercise->read($exercise_id);
-        $question_list = $exercise->selectQuestionList();
+        $exercise->read($exercise_id, false);
+        $categories_in_exercise = $exercise->getQuestionWithCategories();
+        $categories = array();
+        if (!empty($categories_in_exercise)) {
+            foreach($categories_in_exercise as $category) {
+                $category['id'] = $category['iid'];
+                $categories[$category['iid']] = $category;
+            }
+        }
+        return $categories;
+
+        /*
 		// the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ???
         foreach ($question_list as $question_id) {
             $category_list = Testcategory::getCategoryForQuestion($question_id);
@@ -485,7 +499,7 @@ class Testcategory
         if (!empty($categories_in_exercise)) {
             $categories_in_exercise = array_unique(array_filter($categories_in_exercise));
         }
-        return $categories_in_exercise;
+        return $categories_in_exercise;*/
     }
 
     public static function getListOfCategoriesIDForTestObject($exercise_obj)
@@ -517,16 +531,19 @@ class Testcategory
 	 *
      * @author function rewrote by jmontoya
 	 */
-    public static function getListOfCategoriesNameForTest($exercise_id, $grouped_by_category = true) {
+    public static function getListOfCategoriesNameForTest($exercise_id, $grouped_by_category = true)
+    {
         $result = array();
         $categories = self::getListOfCategoriesIDForTest($exercise_id, $grouped_by_category);
-        foreach ($categories as $cat_id) {
-            $cat = new Testcategory($cat_id);
-            if (!empty($cat->id)) {
-                $result[$cat->id] = array(
-                    'title' => $cat->name,
-                    'parent_id' => $cat->parent_id,
-                    'c_id' => $cat->c_id
+
+        foreach ($categories as $catInfo) {
+            $categoryId = $catInfo['iid'];
+            ///$cat = new Testcategory($cat_id);
+            if (!empty($categoryId)) {
+                $result[$categoryId] = array(
+                    'title' => $catInfo['title'],
+                    'parent_id' =>  $catInfo['parent_id'],
+                    'c_id' => $catInfo['c_id']
                 );
 		    }
         }

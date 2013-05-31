@@ -3207,7 +3207,6 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
     // Update if possible
     $set_type = '';
 
-
     switch ($lastedit_type) {
         case 'delete' : // delete = make item only visible for the platform admin.
             $visibility = '2';
@@ -3288,7 +3287,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
                     WHERE $filter";
     }
 
-    $res = Database::query($sql);
+    Database::query($sql);
     // Insert if no entries are found (can only happen in case of $lastedit_type switch is 'default').
     if (Database::affected_rows() == 0) {
         $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type,   lastedit_user_id, to_user_id, to_group_id, visibility, start_visible, end_visible, id_session)
@@ -3315,7 +3314,6 @@ function api_get_item_property_by_tool($tool, $course_code, $session_id = null) 
 
     // Definition of tables.
     $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-    $session_condition = '';
     $session_id = intval($session_id);
     $session_condition = ' AND id_session = '.$session_id;
     $course_id	 = $course_info['real_id'];
@@ -4862,7 +4860,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
                         WHERE   id_user  = '$userid'
                         AND     c_id = '$courseId'
                         LIMIT 1";
-
+                $result = Database::query($sql);
                 if (Database::num_rows($result) > 0) {
                     // This user haa got a recorded state for this course.
                     while ($row = Database::fetch_array($result)) {

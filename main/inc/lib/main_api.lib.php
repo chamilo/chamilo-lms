@@ -6179,7 +6179,7 @@ function api_is_global_chat_enabled(){
 /**
  * @todo Fix tool_visible_by_default_at_creation labels
  */
-function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
+function api_set_default_visibility($courseInfo, $item_id, $tool_id, $group_id = null) {
     $original_tool_id = $tool_id;
 
     switch ($tool_id) {
@@ -6215,13 +6215,13 @@ function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
         if (empty($group_id)) {
             $group_id = api_get_group_id();
         }
-        api_item_property_update(api_get_course_info(), $original_tool_id, $item_id, $visibility, api_get_user_id(), $group_id, null, null, null, api_get_session_id());
+        api_item_property_update($courseInfo, $original_tool_id, $item_id, $visibility, api_get_user_id(), $group_id, null, null, null, api_get_session_id());
 
         //Fixes default visibility for tests
 
         switch ($original_tool_id) {
             case TOOL_QUIZ:
-                $objExerciseTmp = new Exercise();
+                $objExerciseTmp = new Exercise($courseInfo['real_id']);
                 $objExerciseTmp->read($item_id);
                 if ($visibility == 'visible') {
                     $objExerciseTmp->enable();

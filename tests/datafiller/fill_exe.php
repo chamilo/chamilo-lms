@@ -27,16 +27,16 @@ function fill_exe()
     require_once $lib.'exercice/question.class.php';
     require_once $lib.'exercice/answer.class.php';
     foreach ($courses as $i => $course) {
-        $res = 0;
         //first check that the first item doesn't exist already
         $output[$i]['line-init'] = $course['title'];
-        $res                     = CourseManager::create_course($course);
+        $res = CourseManager::create_course($course);
         $output[$i]['line-info'] = ($res ? $res : get_lang('NotInserted'));
         $i++;
         if (is_array($res)) {
             //now insert an exercise
             foreach ($course['exes'] as $exe) {
-                $objExercise                   = new Exercise();
+
+                $objExercise                   = new Exercise($res['real_id']);
                 $objExercise->id               = 0;
                 $objExercise->course_id        = $res['real_id'];
                 $objExercise->exercise         = $exe['title'];

@@ -1236,7 +1236,7 @@ class Exercise
 
             // insert into the item_property table
             api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'QuizAdded', api_get_user_id());
-            api_set_default_visibility($this->id, TOOL_QUIZ);
+            api_set_default_visibility($this->course, $this->id, TOOL_QUIZ);
 
             if (api_get_setting('search_enabled') == 'true' && extension_loaded('xapian')) {
                 $this->search_engine_save();

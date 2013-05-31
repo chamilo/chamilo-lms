@@ -58,6 +58,7 @@ function addlinkcategory($type) {
 	$ok = true;
 
     $course_id = api_get_course_int_id();
+    $courseInfo = api_get_course_info();
 
 	if ($type == 'link') {
 		$tbl_link = Database :: get_course_table(TABLE_LINK);
@@ -118,7 +119,7 @@ function addlinkcategory($type) {
 			$link_id = Database :: insert_id();
 
             if ($link_id) {
-                api_set_default_visibility($link_id, TOOL_LINK);
+                api_set_default_visibility($courseInfo, $link_id, TOOL_LINK);
             }
 
 			if ((api_get_setting('search_enabled') == 'true') && $link_id && extension_loaded('xapian')) {

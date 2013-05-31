@@ -481,7 +481,6 @@ function show_edit_forumcategory_form($inputvalues = array())
 function store_forumcategory($values)
 {
     $_course = api_get_course_info();
-    global $_user;
 
     $course_id = api_get_course_int_id();
 
@@ -528,7 +527,7 @@ function store_forumcategory($values)
                 'ForumCategoryAdded',
                 api_get_user_id()
             );
-            api_set_default_visibility($last_id, TOOL_FORUM_CATEGORY);
+            api_set_default_visibility($_course, $last_id, TOOL_FORUM_CATEGORY);
         }
         $return_message = get_lang('ForumCategoryAdded');
     }
@@ -710,7 +709,7 @@ function store_forum($values)
         $last_id = Database::insert_id();
         if ($last_id > 0) {
             api_item_property_update($_course, TOOL_FORUM, $last_id, 'ForumAdded', api_get_user_id(), $group_id);
-            api_set_default_visibility($last_id, TOOL_FORUM, $group_id);
+            api_set_default_visibility($_course, $last_id, TOOL_FORUM, $group_id);
         }
         $return_message = get_lang('ForumAdded');
     }
@@ -2180,7 +2179,7 @@ function store_thread($values)
             // to make the thread visible AND the post.
 
             //Default behaviour
-            api_set_default_visibility($last_thread_id, TOOL_FORUM_THREAD);
+            api_set_default_visibility($_course, $last_thread_id, TOOL_FORUM_THREAD);
 
             if ($visible == 0) {
                 api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id, 'invisible', api_get_user_id());

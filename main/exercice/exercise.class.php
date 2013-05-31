@@ -130,7 +130,6 @@ class Exercise
         $id = intval($id);
         $sql = "SELECT * FROM $TBL_EXERCICES WHERE c_id = ".$this->course_id." AND iid = ".$id;
         $result = Database::query($sql);
-
         // if the exercise has been found
         if ($object = Database::fetch_object($result)) {
             $this->id = $id;
@@ -1103,7 +1102,6 @@ class Exercise
     {
         $_course = api_get_course_info();
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-
         $id = $this->id;
         $exercise = $this->exercise;
         $description = $this->description;
@@ -1210,7 +1208,7 @@ class Exercise
 
             // insert into the item_property table
             api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'QuizAdded', api_get_user_id());
-            api_set_default_visibility($this->id, TOOL_QUIZ);
+            api_set_default_visibility($this->id, TOOL_QUIZ, null, $this->course_id);
 
             if (api_get_setting('search_enabled') == 'true' && extension_loaded('xapian')) {
                 $this->search_engine_save();
@@ -4585,6 +4583,7 @@ class Exercise
     public function get_exercise_result($exe_id)
     {
         $result = array();
+        $totalScore = 0;
         $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($exe_id);
         if (!empty($track_exercise_info)) {
             $objExercise = new Exercise();
@@ -5133,7 +5132,10 @@ class Exercise
         if (!empty($categories) && !empty($this->id)) {
             $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
             $sql = "DELETE FROM $table WHERE exercise_id = {$this->id} AND c_id = {$this->course_id}";
-            error_log($sql);
+            global $debug;
+            if ($debug) {
+                error_log($sql);
+            }
             Database::query($sql);
             if (!empty($categories)) {
                 foreach ($categories as $category_id => $count_questions) {

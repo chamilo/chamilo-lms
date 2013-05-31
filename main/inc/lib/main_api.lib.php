@@ -6177,11 +6177,19 @@ function api_is_global_chat_enabled(){
 }
 
 /**
+ * This function sets the default visibility for any given content, using the
+ * default visibility setting of the corresponding tool. For example, if we
+ * create a new quiz and call this function, if the quiz tool is
+ * invisible/disabled at course creation, the quiz itself will be set to
+ * invisible.
+ * @param int The ID of the item in its own table
+ * @param string The string identifier of the tool
+ * @param int The group ID, in case we want to specify it
+ * @param int The integer course ID, in case we cannot get it from the context
  * @todo Fix tool_visible_by_default_at_creation labels
  */
-function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
+function api_set_default_visibility($item_id, $tool_id, $group_id = null, $course_id = null) {
     $original_tool_id = $tool_id;
-
     switch ($tool_id) {
         case TOOL_LINK:
             $tool_id = 'links';
@@ -6215,13 +6223,20 @@ function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
         if (empty($group_id)) {
             $group_id = api_get_group_id();
         }
-        api_item_property_update(api_get_course_info(), $original_tool_id, $item_id, $visibility, api_get_user_id(), $group_id, null, null, null, api_get_session_id());
+        if (empty($course_id)) {
+            $course = api_get_course_info();
+            $course_id = $course['id'];
+        } else {
+            $course = api_get_course_info_by_id($course_id);
+        }
+
+        api_item_property_update($course, $original_tool_id, $item_id, $visibility, api_get_user_id(), $group_id, null, null, null, api_get_session_id());
 
         //Fixes default visibility for tests
 
         switch ($original_tool_id) {
             case TOOL_QUIZ:
-                $objExerciseTmp = new Exercise();
+                $objExerciseTmp = new Exercise($course_id);
                 $objExerciseTmp->read($item_id);
                 if ($visibility == 'visible') {
                     $objExerciseTmp->enable();

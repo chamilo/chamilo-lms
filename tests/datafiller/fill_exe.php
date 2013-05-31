@@ -64,10 +64,15 @@ function fill_exe()
                             $question->type        = $q['type'];
                             $question->course      = $res;
                             $r                     = $question->save($id);
+
                             if ($r === false) {
                                 continue;
                             }
                             $qid = $question->id;
+
+                            $objExercise->addToList($qid);
+                            $objExercise->update_question_positions();
+
                             $aid = 1;
                             foreach ($q['answers'] as $asw) {
                                 $answer = new UniqueAnswer($qid);

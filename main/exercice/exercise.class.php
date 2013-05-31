@@ -71,6 +71,7 @@ class Exercise
     public $categoryWithQuestionList;
     public $mediaList;
     public $loadQuestionAJAX = false;
+    public $emailNotificationTemplate = null;
 
     /**
      * Constructor of the class
@@ -109,6 +110,7 @@ class Exercise
         $this->course_id = $course_info['real_id'];
         $this->course = $course_info;
         $this->fastExerciseEdition = api_get_course_setting('allow_fast_exercise_edition') == 1 ? true : false;
+        $this->emailAlert = api_get_course_setting('email_alert_manager_on_new_quiz') == 1 ? true : false;
     }
 
     /**
@@ -156,6 +158,7 @@ class Exercise
             $this->pass_percentage = $object->pass_percentage;
             $this->is_gradebook_locked = api_resource_is_locked_by_gradebook($id, LINK_EXERCISE);
             $this->endButton = $object->end_button;
+            $this->emailNotificationTemplate = $object->email_notification_template;
 
             $this->review_answers = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;
             $sql = "SELECT max_score FROM $table_lp_item
@@ -316,19 +319,30 @@ class Exercise
     /**
      * @return string
      */
-    function selectPassPercentage()
+    public function selectPassPercentage()
     {
         return $this->pass_percentage;
     }
 
+    /**
+     * @return string
+     */
+    public function selectEmailNotificationTemplate()
+    {
+        return $this->emailNotificationTemplate;
+    }
+
+    /**
+     * @return int
+     */
     public function selectEndButton()
     {
         return $this->endButton;
     }
 
     /**
-     * @author - hubert borderiou 30-11-11
-     * @return - : modify object to update the switch display_category_name
+     * @author Hubert borderiou 30-11-11
+     * @return modify object to update the switch display_category_name
      * $in_txt is an integer 0 or 1
      */
     public function updateDisplayCategoryName($text)
@@ -338,7 +352,7 @@ class Exercise
 
     /**
      * @author - hubert borderiou 28-11-11
-     * @return - html text : the text to display ay the end of the test.
+     * @return string html text : the text to display ay the end of the test.
      */
     public function selectTextWhenFinished()
     {
@@ -965,6 +979,14 @@ class Exercise
         $this->pass_percentage = $value;
     }
 
+    /**
+     * @param $text
+     */
+    public function updateEmailNotificationTemplate($text)
+    {
+        $this->emailNotificationTemplate = $text;
+    }
+
     public function updateEndButton($value)
     {
         $this->endButton = intval($value);
@@ -1166,6 +1188,7 @@ class Exercise
         	        display_category_name = '".Database::escape_string($display_category_name)."',
                     pass_percentage = '".Database::escape_string($pass_percentage)."',
                     end_button = '".$this->selectEndButton()."',
+                    email_notification_template = '".Database::escape_string($this->selectEmailNotificationTemplate())."',
 					results_disabled='".Database::escape_string($results_disabled)."'";
             }
             $sql .= " WHERE iid = ".Database::escape_string($id)." AND c_id = {$this->course_id}";
@@ -1180,11 +1203,12 @@ class Exercise
         } else {
             // Creates a new exercise
             $sql = "INSERT INTO $TBL_EXERCICES (c_id, start_time, end_time, title, description, sound, type, random, random_answers, active,
-                                                results_disabled, max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category,
-                                                text_when_finished, display_category_name, pass_percentage)
+                                                max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category,
+                                                text_when_finished, display_category_name, pass_percentage, end_button, email_notification_template, results_disabled)
 					VALUES(
 						".$this->course_id.",
-						'$start_time','$end_time',
+						'$start_time',
+                        '$end_time',
 						'".Database::escape_string($exercise)."',
 						'".Database::escape_string($description)."',
 						'".Database::escape_string($sound)."',
@@ -1192,7 +1216,6 @@ class Exercise
 						'".Database::escape_string($random)."',
 						'".Database::escape_string($random_answers)."',
 						'".Database::escape_string($active)."',
-						'".Database::escape_string($results_disabled)."',
 						'".Database::escape_string($attempts)."',
 						'".Database::escape_string($feedback_type)."',
 						'".Database::escape_string($expired_time)."',
@@ -1201,7 +1224,10 @@ class Exercise
 						'".Database::escape_string($randomByCat)."',
 						'".Database::escape_string($text_when_finished)."',
 						'".Database::escape_string($display_category_name)."',
-                        '".Database::escape_string($pass_percentage)."'
+                        '".Database::escape_string($pass_percentage)."',
+                        '".Database::escape_string($this->selectEndButton())."',
+                        '".Database::escape_string($this->selectEmailNotificationTemplate())."',
+                        '".Database::escape_string($results_disabled)."'
 						)";
             Database::query($sql);
             $this->id = Database::insert_id();
@@ -1772,6 +1798,13 @@ class Exercise
                 }
             }
 
+            if ($this->emailAlert) {
+
+                // Text when ending an exam
+                $form->add_html_editor('email_notification_template', array(get_lang('EmailNotificationTemplate'), get_lang('EmailNotificationTemplateDescription')), null, false, $editor_config);
+            }
+
+
             $form->addElement('html', '</div>'); //End advanced setting
             $form->addElement('html', '</div>');
         }
@@ -1813,12 +1846,12 @@ class Exercise
                 $defaults['results_disabled'] = $this->selectResultsDisabled();
                 $defaults['propagate_neg'] = $this->selectPropagateNeg();
                 $defaults['review_answers'] = $this->review_answers;
-                $defaults['randomByCat'] = $this->selectRandomByCat(); //
-                $defaults['text_when_finished'] = $this->selectTextWhenFinished(); //
-                $defaults['display_category_name'] = $this->selectDisplayCategoryName(); //
+                $defaults['randomByCat'] = $this->selectRandomByCat();
+                $defaults['text_when_finished'] = $this->selectTextWhenFinished();
+                $defaults['display_category_name'] = $this->selectDisplayCategoryName();
                 $defaults['pass_percentage'] = $this->selectPassPercentage();
                 $defaults['end_button'] = $this->selectEndButton();
-
+                $defaults['email_notification_template'] = $this->selectEmailNotificationTemplate();
 
                 if (($this->start_time != '0000-00-00 00:00:00')) {
                     $defaults['activate_start_date_check'] = 1;
@@ -1889,6 +1922,7 @@ class Exercise
         $this->updatePassPercentage($form->getSubmitValue('pass_percentage'));
         $this->updateCategories($form->getSubmitValue('category'));
         $this->updateEndButton($form->getSubmitValue('end_button'));
+        $this->updateEmailNotificationTemplate($form->getSubmitValue('email_notification_template'));
 
         if ($form->getSubmitValue('activate_start_date_check') == 1) {
             $start_time = $form->getSubmitValue('start_time');
@@ -4330,6 +4364,11 @@ class Exercise
         return $return_array;
     }
 
+    public function sendCustomNotification($exeId)
+    {
+        $this->emailAlertContent;
+    }
+
     /**
      * Sends a notification when a user ends an examn
      * @param array $question_list_answers
@@ -4339,7 +4378,7 @@ class Exercise
      */
     public function sendNotificationForOpenQuestions($question_list_answers, $origin, $exe_id)
     {
-        if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1) {
+        if ($this->emailAlert == false) {
             return null;
         }
         // Email configuration settings
@@ -4423,7 +4462,7 @@ class Exercise
 
     public function sendNotificationForOralQuestions($question_list_answers, $origin, $exe_id)
     {
-        if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1) {
+        if ($this->emailAlert == false) {
             return null;
         }
         // Email configuration settings
@@ -5638,5 +5677,4 @@ class Exercise
             echo '</div>';
         }
     }
-
 }

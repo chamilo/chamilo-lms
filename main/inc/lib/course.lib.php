@@ -1513,12 +1513,11 @@ class CourseManager
      * course.
      *
      * @param string The code of the course to delete
-     * @todo When deleting a virtual course: unsubscribe users from that virtual
      * course from the groups in the real course if they are not subscribed in
      * that real course.
-     * @todo Remove globals
      */
-    public static function delete_course($code) {
+    public static function delete_course($code)
+    {
 
         $table_course                       = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_user                  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -1543,8 +1542,34 @@ class CourseManager
         $table_stats_uploads        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
 
         $courseInfo = api_get_course_info($code);
+
+        if (empty($courseInfo)) {
+            return false;
+        }
+
+        self::create_database_dump($courseInfo);
+
         $code = Database::escape_string($code);
         $courseId = $courseInfo['real_id'];
+
+        $course_tables = self::get_course_tables();
+
+        // Cleaning c_x tables
+        if (!empty($courseInfo['id'])) {
+            foreach($course_tables as $table) {
+                $table = Database::get_course_table($table);
+                $sql = "DELETE FROM $table WHERE c_id = $courseId ";
+                Database::query($sql);
+            }
+        }
+
+        if (!empty($courseInfo['directory'])) {
+            $course_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'];
+            $archive_dir = api_get_path(SYS_ARCHIVE_PATH).$courseInfo['directory'].'_'.time();
+            if (is_dir($course_dir)) {
+                rename($course_dir, $archive_dir);
+            }
+        }
 
         // Unsubscribe all classes from the course
         $sql = "DELETE FROM $table_course_class WHERE course_code='".$code."'";
@@ -1609,7 +1634,7 @@ class CourseManager
 
         // delete extra course fields
         $t_cf         = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $t_cfv         = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+        $t_cfv        = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 
         $sql = "SELECT distinct field_id FROM $t_cfv WHERE course_code = '$code'";
         $res_field_ids = @Database::query($sql);
@@ -1618,7 +1643,7 @@ class CourseManager
             $field_ids[] = $row_field_id[0];
         }
 
-        //delete from table_course_field_value from a given course_code
+        // Delete from table_course_field_value from a given course_code
 
         $sql_course_field_value = "DELETE FROM $t_cfv WHERE course_code = '$code'";
         @Database::query($sql_course_field_value);
@@ -1651,26 +1676,22 @@ class CourseManager
 
     /**
      * Creates a file called mysql_dump.sql in the course folder
-     * @param $course_code The code of the course
-     * @todo Implementation for single database
+     * @param array course info
+     * @return
      */
-    public static function create_database_dump($course_code) {
-        global $_configuration;
-
-        $sql_dump = '';
-        $course_code    = Database::escape_string($course_code);
-        $table_course   = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT * FROM $table_course WHERE code = '$course_code'";
-        $res = Database::query($sql);
-        $course = Database::fetch_array($res);
-
+    public static function create_database_dump($courseInfo)
+    {
+        $sql_dump = null;
+        if (empty($courseInfo)) {
+            return null;
+        }
         $course_tables = self::get_course_tables();
 
-        if (!empty($course['id'])) {
-            //Cleaning c_x tables
-            foreach($course_tables as $table) {
+        if (!empty($courseInfo['real_id'])) {
+            // Cleaning c_x tables
+            foreach ($course_tables as $table) {
                 $table = Database::get_course_table($table);
-                $sql = "SELECT * FROM $table WHERE c_id = {$course['id']} ";
+                $sql = "SELECT * FROM $table WHERE c_id = {$courseInfo['real_id']} ";
                 $res_table = Database::query($sql);
 
                 while ($row = Database::fetch_array($res_table, 'ASSOC')) {
@@ -1683,14 +1704,12 @@ class CourseManager
             }
         }
 
-        if (is_dir(api_get_path(SYS_COURSE_PATH).$course['directory'])) {
-            $file_name = api_get_path(SYS_COURSE_PATH).$course['directory'].'/mysql_dump.sql';
+        if (is_dir(api_get_path(SYS_COURSE_PATH).$courseInfo['directory'])) {
+            $file_name = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/mysql_dump.sql';
             $handle = fopen($file_name, 'a+');
             if ($handle !== false) {
                 fwrite($handle, $sql_dump);
                 fclose($handle);
-            } else {
-                //TODO trigger exception in a try-catch
             }
         }
     }
@@ -3946,7 +3965,8 @@ class CourseManager
     /**
      * Initializes a file repository for a newly created course.
      */
-    static function prepare_course_repository($course_repository, $course_code) {
+    static function prepare_course_repository($course_repository, $course_code)
+    {
 
         $perm = api_get_permissions_for_new_directories();
         $perm_file = api_get_permissions_for_new_files();
@@ -4029,26 +4049,14 @@ class CourseManager
 
                        php_flag zlib.output_compression off");
         fclose($fp);
-
-        // Build index.php of the course.
-        /*
-        $fd = fopen($cp . '/index.php', 'w');
-
-        // str_replace() removes \r that cause squares to appear at the end of each line
-        //@todo fix the harcoded include
-        $string = str_replace("\r", "", "<?" . "php
-        \$cidReq = \"$course_code\";
-        \$dbname = \"$course_code\";
-
-        include(\"".api_get_path(SYS_CODE_PATH)."course_home/course_home.php\");
-        ?>");
-        fwrite($fd, $string);
-        @chmod($cp . '/index.php',$perm_file);
-        */
         return 0;
     }
 
-    static function get_course_tables() {
+    /**
+     * Get current courses
+     * */
+    static function get_course_tables()
+    {
         $tables = array();
 
         $tables[]= 'tool';
@@ -4090,7 +4098,7 @@ class CourseManager
         $tables[]= 'quiz_question';
         $tables[]= 'quiz_answer';
         $tables[]= 'quiz_question_option';
-        $tables[]= 'quiz_question_category';
+        $tables[]= 'quiz_category';
         $tables[]= 'quiz_question_rel_category';
         $tables[]= 'dropbox_post';
         $tables[]= 'dropbox_file';

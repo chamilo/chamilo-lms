@@ -1613,7 +1613,7 @@ class CourseManager
 
         $sql = "SELECT distinct field_id FROM $t_cfv WHERE course_code = '$code'";
         $res_field_ids = @Database::query($sql);
-
+        $field_ids = array();
         while($row_field_id = Database::fetch_row($res_field_ids)){
             $field_ids[] = $row_field_id[0];
         }
@@ -1630,7 +1630,7 @@ class CourseManager
             $field_all_ids[] = $row_field_all_id[0];
         }
 
-        if (is_array($field_ids) && count($field_ids) > 0) {
+        if (isset($field_ids) && is_array($field_ids) && count($field_ids) > 0) {
             foreach ($field_ids as $field_id) {
                 // check if field id is used into table field value
                 if (is_array($field_all_ids)) {

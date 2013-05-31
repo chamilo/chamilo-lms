@@ -44,22 +44,16 @@ class UniqueAnswer extends Question
      */
     public function createAnswersForm($form)
     {
+
         // Getting the exercise list
         $obj_ex = $this->exercise;
 
         $editor_config = array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '125');
 
         //this line define how many question by default appear when creating a choice question
-        $nb_answers = isset($_POST['nb_answers']) ? (int)$_POST['nb_answers'] : 4; // The previous default value was 2. See task #1759.
+        // The previous default value was 2. See task #1759.
+        $nb_answers = isset($_POST['nb_answers']) ? (int)$_POST['nb_answers'] : 4;
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
-
-        /*
-             Types of Feedback
-             $feedback_option[0]=get_lang('Feedback');
-            $feedback_option[1]=get_lang('DirectFeedback');
-            $feedback_option[2]=get_lang('NoFeedback');
-         */
-
         $feedback_title = '';
         $comment_title  = '';
 
@@ -72,6 +66,8 @@ class UniqueAnswer extends Question
             $comment_title           = '<th width="500px" >'.get_lang('Comment').'</th>';
             $feedback_title          = '<th width="350px" >'.get_lang('Scenario').'</th>';
         }
+
+
 
         $html = '<table class="data_table">
                 <tr style="text-align: center;">
@@ -102,27 +98,10 @@ class UniqueAnswer extends Question
                 $nb_answers = $answer->nbrAnswers;
             }
         }
+
         $form->addElement('hidden', 'nb_answers');
 
-        // Feedback SELECT
-        $question_list      = $obj_ex->selectQuestionList();
-        $select_question    = array();
-        $select_question[0] = get_lang('SelectTargetQuestion');
 
-        if (is_array($question_list)) {
-            foreach ($question_list as $key => $questionid) {
-                //To avoid warning messages
-                if (!is_numeric($questionid)) {
-                    continue;
-                }
-                $question = Question::read($questionid);
-
-                if ($question) {
-                    $select_question[$questionid] = 'Q'.$key.' :'.Text::cut($question->selectTitle(), 20);
-                }
-            }
-        }
-        $select_question[-1] = get_lang('ExitTest');
 
         $list            = new LearnpathList(api_get_user_id());
         $flat_list       = $list->get_flat_list();
@@ -139,6 +118,8 @@ class UniqueAnswer extends Question
             $nb_answers = 1;
             Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
         }
+
+
 
         for ($i = 1; $i <= $nb_answers; ++$i) {
             $form->addElement('html', '<tr>');
@@ -223,6 +204,9 @@ class UniqueAnswer extends Question
             $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
             if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
+
+
+
                 // feedback
                 $form->addElement(
                     'html_editor',
@@ -232,6 +216,29 @@ class UniqueAnswer extends Question
                     $editor_config
                 );
             } elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+
+                // Feedback SELECT
+
+                $question_list      = $obj_ex->selectQuestionList();
+                $select_question    = array();
+                $select_question[0] = get_lang('SelectTargetQuestion');
+                // @todo improve this loop if you have 5000 questions it will blow!
+                if (is_array($question_list)) {
+                    foreach ($question_list as $key => $questionid) {
+                        //To avoid warning messages
+                        if (!is_numeric($questionid)) {
+                            continue;
+                        }
+                        $question = Question::read($questionid);
+
+                        if ($question) {
+                            $select_question[$questionid] = 'Q'.$key.' :'.Text::cut($question->selectTitle(), 20);
+                        }
+                    }
+                }
+
+                $select_question[-1] = get_lang('ExitTest');
+
                 $form->addElement(
                     'html_editor',
                     'comment['.$i.']',

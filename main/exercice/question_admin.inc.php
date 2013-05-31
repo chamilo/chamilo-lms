@@ -59,6 +59,7 @@ if (is_object($objQuestion)) {
         $form->freeze();
     }
 
+
     // Form validation
     //$result = $objQuestion->allQuestionWithMediaHaveTheSameCategory($exerciseId, 100);
 

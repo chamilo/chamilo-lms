@@ -5457,12 +5457,12 @@ class Exercise
                     true,
                     true
                 );
-                $counter += count($mediaQuestions[$questionId]);
+                $counter += count($mediaQuestions[$questionId]) - 1 ;
                 $before = count($questionList);
                 $wasMedia = true;
                 $nextValue += count($questionList);
             } else {
-                $html .= Display::parsePaginationItem($questionId, $isCurrent, $conditions, $link, $counter - 1);
+                $html .= Display::parsePaginationItem($questionId, $isCurrent, $conditions, $link, $counter);
                 $counter++;
                 $nextValue++;
                 $wasMedia = false;

@@ -1332,6 +1332,7 @@ CREATE TABLE c_quiz_answer (
   answer_code char(10) DEFAULT '',
   PRIMARY KEY (iid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+ALTER TABLE c_quiz_answer ADD INDEX idx_cqa_qid (question_id);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

@@ -235,6 +235,7 @@ ALTER TABLE c_quiz_answer MODIFY c_id INT NOT NULL;
 ALTER TABLE c_quiz_answer MODIFY id_auto INT NOT NULL;
 ALTER TABLE c_quiz_answer DROP PRIMARY KEY;
 ALTER TABLE c_quiz_answer ADD COLUMN iid INT unsigned NOT NULL auto_increment PRIMARY KEY;
+ALTER TABLE c_quiz_answer ADD INDEX idx_cqa_qid (question_id);
 
 ALTER TABLE c_quiz_question_option MODIFY id INT NOT NULL;
 ALTER TABLE c_quiz_question_option MODIFY c_id INT NOT NULL;
@@ -291,4 +292,4 @@ ALTER TABLE c_quiz ADD COLUMN end_button int NOT NULL default 0;
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('template', NULL, 'text', 'stylesheets', 'default', 'DefaultTemplateTitle', 'DefaultTemplateComment', NULL, NULL, 1);
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.018' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.019' WHERE variable = 'chamilo_database_version';

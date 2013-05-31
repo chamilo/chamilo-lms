@@ -90,7 +90,7 @@ if (isset($_GET['preview'])) {
 	$extra_params = '&preview=1';
 }
 
-$exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, 0);
+$exercise_stat_info = $objExercise->getStatTrackExerciseInfo($learnpath_id, $learnpath_item_id, 0);
 $attempt_list = null;
 if (isset($exercise_stat_info['exe_id'])) {
 	$attempt_list = getAllExerciseEventByExeId($exercise_stat_info['exe_id']);

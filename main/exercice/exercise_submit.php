@@ -453,7 +453,7 @@ if ($objExercise->selectAttempts() > 0) {
 }
 
 // 5. Getting user exercise info (if the user took the exam before) - generating exe_id
-$exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
+$exercise_stat_info = $objExercise->getStatTrackExerciseInfo($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
 
 //if (1) {
 if (!isset($_SESSION['questionList'])) {
@@ -504,7 +504,7 @@ if (empty($exercise_stat_info)) {
 		if ($debug) { error_log('5.4. Setting the $_SESSION[expired_time]: '.$_SESSION['expired_time'][$current_expired_time_key] ); };
 	}
 	$exe_id = $objExercise->save_stat_track_exercise_info($clock_expired_time, $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $questionListFlatten, $total_weight);
-	$exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
+	$exercise_stat_info = $objExercise->getStatTrackExerciseInfo($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
     if ($debug)  error_log("5.5  Creating a new attempt exercise_stat_info[] exe_id : $exe_id");
 } else {
 	$exe_id = $exercise_stat_info['exe_id'];
@@ -514,7 +514,7 @@ if (empty($exercise_stat_info)) {
 // Array to check in order to block the chat
 ExerciseLib::create_chat_exercise_session($exe_id);
 
-if ($debug) { error_log('6. $objExercise->get_stat_track_exercise_info function called::  '.print_r($exercise_stat_info, 1)); };
+if ($debug) { error_log('6. $objExercise->getStatTrackExerciseInfo function called::  '.print_r($exercise_stat_info, 1)); };
 
 if (!empty($exercise_stat_info['questions_to_check'])) {
 	$my_remind_list = $exercise_stat_info['questions_to_check'];
@@ -649,8 +649,8 @@ if ($formSent && isset($_POST)) {
                     $choice = $exerciseResult[$questionId];
                     if (isset($exe_id)) {
                     	//Manage the question and answer attempts
-                        if ($debug) { error_log('8.3. manage_answer exe_id: '.$exe_id.' - $questionId: '.$questionId.' Choice'.print_r($choice,1)); }
-                    	$objExercise->manage_answer($exe_id, $questionId, $choice,'exercise_show',$exerciseResultCoordinates, true, false,false, $objExercise->propagate_neg);
+                        if ($debug) { error_log('8.3. manageAnswers exe_id: '.$exe_id.' - $questionId: '.$questionId.' Choice'.print_r($choice,1)); }
+                    	$objExercise->manageAnswers($exe_id, $questionId, $choice,'exercise_show',$exerciseResultCoordinates, true, false,false);
                     }
                     //END of saving and qualifying
                 }

@@ -134,21 +134,14 @@ $form->setDefaults($values);
 if ($form->validate()) {
     $course          = $form->exportValues();
     //$tutor_name      = $teachers[$course['tutor_id']];
-    $teacher_id      = $course['tutor_id'];
-    $course_teachers = $course['course_teachers'];
-
+    $course['user_id']      = isset($course['tutor_id']) ? $course['tutor_id'] : null;
+    $course['teachers']  = isset($course['course_teachers']) ? $course['course_teachers'] : null;
     $course['disk_quota'] = $course['disk_quota']*1024*1024;
-
     $course['exemplary_content']    = empty($course['exemplary_content']) ? false : true;
-    $course['teachers']             = $course_teachers;
     //$course['tutor_name']           = $tutor_name;
-    $course['user_id']              = $teacher_id;
     $course['wanted_code']          = $course['visual_code'];
-
     $course['gradebook_model_id']   = isset($course['gradebook_model_id']) ? $course['gradebook_model_id'] : null;
-
     $course_info = CourseManager::create_course($course);
-
     header('Location: course_list.php'.($course_info===false?'?action=show_msg&warn='.api_get_last_failure():''));
     exit;
 }

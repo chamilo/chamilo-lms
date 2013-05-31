@@ -95,6 +95,7 @@ ALTER TABLE session ADD INDEX idx_id_coach (id_coach);
 ALTER TABLE session ADD INDEX idx_id_session_admin_id (session_admin_id);
 
 ALTER TABLE c_quiz_question ADD COLUMN parent_id INT unsigned NOT NULL DEFAULT 0;
+ALTER TABLE c_quiz ADD COLUMN email_notification_template TEXT DEFAULT '';
 
 CREATE TABLE IF NOT EXISTS gradebook_evaluation_type(id INT unsigned PRIMARY KEY NOT NULL AUTO_INCREMENT, name varchar(255), external_id INT unsigned NOT NULL DEFAULT 0);
 

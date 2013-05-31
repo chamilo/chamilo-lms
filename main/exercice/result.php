@@ -71,6 +71,6 @@ if ($show_headers) {
 	Display::display_reduced_header();
 }
 
-ExerciseLib::display_question_list_by_attempt($objExercise, $id, false);
+$objExercise->displayQuestionListByAttempt($id, false);
 
 Display::display_footer();

@@ -17,7 +17,8 @@ class ExerciseLink extends AbstractLink
     private $exercise_data = null;
 
     // CONSTRUCTORS
-    function __construct() {
+    function __construct()
+    {
     	parent::__construct();
     	$this->set_type(LINK_EXERCISE);
     }
@@ -28,8 +29,10 @@ class ExerciseLink extends AbstractLink
 	 * Generate an array of exercises that a teacher hasn't created a link for.
 	 * @return array 2-dimensional array - every element contains 2 subelements (id, name)
 	 */
-    public function get_not_created_links() {
+    public function get_not_created_links()
+    {
         return false;
+
     	if (empty($this->course_code)) {
             die('Error in get_not_created_links() : course code not set');
     	}
@@ -55,7 +58,8 @@ class ExerciseLink extends AbstractLink
 	 * Generate an array of all exercises available.
 	 * @return array 2-dimensional array - every element contains 2 subelements (id, name)
 	 */
-    public function get_all_links() {
+    public function get_all_links()
+    {
     	if (empty($this->course_code)) {
     		die('Error in get_not_created_links() : course code not set');
     	}
@@ -69,10 +73,6 @@ class ExerciseLink extends AbstractLink
 		$sql = 'SELECT id,title from '.$this->get_exercise_table().'
 				WHERE c_id = '.$this->course_id.' AND active=1  '.$session_condition;
 
-
-  /*      $sql = 'SELECT id,title from '.$this->get_exercise_table().'
-				WHERE c_id = '.$this->course_id.' AND active=1 AND session_id='.api_get_session_id().'';
-	*/
 		$result = Database::query($sql);
 		$cats = array();
 		while ($data=Database::fetch_array($result)) {
@@ -98,28 +98,29 @@ class ExerciseLink extends AbstractLink
 
     /**
 	 * Get the score of this exercise. Only the first attempts are taken into account.
-	 * @param $stud_id student id (default: all students who have results - then the average is returned)
+	 * @param int $stud_id student id (default: all students who have results - then the average is returned)
 	 * @return	array (score, max) if student is given
 	 * 			array (sum of scores, number of scores) otherwise
 	 * 			or null if no scores available
 	 */
-    public function calc_score($stud_id = null) {
+    public function calc_score($stud_id = null)
+    {
     	$tbl_stats = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    	//$tbl_stats_e_attempt_recording = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
-        //the following query should be similar (in conditions) to the one used in exercice/exercice.php, look for note-query-exe-results marker
+        // The following query should be similar (in conditions)
+        // to the one used in exercice/exercice.php, look for note-query-exe-results marker
         $session_id = api_get_session_id();
 		$sql = "SELECT * FROM $tbl_stats
                 WHERE   exe_exo_id      = ".intval($this->get_ref_id())." AND
                         orig_lp_id      = 0 AND
                         orig_lp_item_id = 0 AND
                         status      <> 'incomplete' AND
-                        session_id = $session_id
-                ";
+                        session_id = $session_id";
 
 		if (isset($stud_id)) {
     		$sql .= " AND c_id = '{$this->course_id}' AND
                       exe_user_id = '$stud_id' ";
     	}
+
 		$sql .= ' ORDER BY exe_id DESC';
         $scores = Database::query($sql);
 

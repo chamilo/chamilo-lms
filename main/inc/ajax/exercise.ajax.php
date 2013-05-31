@@ -348,7 +348,7 @@ switch ($action) {
             }
 
             // Getting information of the current exercise.
-            $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
+            $exercise_stat_info = $objExercise->getStatTrackExerciseInfoByExeId($exe_id);
 
             $exercise_id = $exercise_stat_info['exe_exo_id'];
 
@@ -459,7 +459,16 @@ switch ($action) {
 
                 if ($type == 'simple') {
                     //Getting old attempt in order to decrees the total score
-                    $old_result = $objExercise->manage_answer($exe_id, $my_question_id, null, 'exercise_show', array(), false, true, false, $objExercise->selectPropagateNeg());
+                    $old_result = $objExercise->manageAnswers(
+                        $exe_id,
+                        $my_question_id,
+                        null,
+                        'exercise_show',
+                        array(),
+                        false,
+                        true,
+                        false
+                    );
 
                     //Removing old score
                     $total_score = $total_score - $old_result['score'];
@@ -479,7 +488,7 @@ switch ($action) {
 
             	// We're inside *one* question. Go through each possible answer for this question
 
-            	$result = $objExercise->manage_answer(
+            	$result = $objExercise->manageAnswers(
                     $exe_id,
                     $my_question_id,
                     $my_choice,
@@ -488,9 +497,7 @@ switch ($action) {
                     true,
                     false,
                     false,
-                    $objExercise->selectPropagateNeg(),
-                    $hotspot_delineation_result,
-                    true
+                    $hotspot_delineation_result
                 );
 
                 //Adding the new score
@@ -503,7 +510,7 @@ switch ($action) {
                 $now = time();
 
                 if ($type == 'all') {
-                    $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
+                    $exercise_stat_info = $objExercise->getStatTrackExerciseInfoByExeId($exe_id);
                 }
 
                 $key = ExerciseLib::get_time_control_key($exercise_id, $exercise_stat_info['orig_lp_id'], $exercise_stat_info['orig_lp_item_id']);

@@ -1123,7 +1123,7 @@ class Exercise
      */
     public function save($type_e = '')
     {
-        $_course = api_get_course_info();
+        $_course = $this->course;
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
 
         $id = $this->id;

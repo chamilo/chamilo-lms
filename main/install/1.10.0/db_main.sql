@@ -3513,4 +3513,4 @@ CREATE TABLE ext_log_entries (
 ) DEFAULT CHARSET=utf8;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.020' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.021' WHERE variable = 'chamilo_database_version';

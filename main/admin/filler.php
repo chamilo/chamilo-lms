@@ -1,12 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	Index of the admin tools
-*
-*	@package chamilo.admin
-*/
+ *    Index of the admin tools
+ *
+ * @package chamilo.admin
+ */
 // name of the language file that needs to be included <br />
-$language_file = array('admin','tracking','create_course');
+$language_file = array('admin', 'tracking', 'create_course');
 
 // resetting the course id
 $cidReset = true;
@@ -23,7 +23,7 @@ api_protect_admin_script(true);
 $nameTools = get_lang('PlatformAdmin');
 
 // setting breadcrumbs
-$interbreadcrumb[] = array ("url" => 'index.php', "name" => $nameTools);
+$interbreadcrumb[] = array("url" => 'index.php', "name" => $nameTools);
 
 // setting the name of the tool
 $nameTools = get_lang('DataFiller');
@@ -31,8 +31,8 @@ $nameTools = get_lang('DataFiller');
 $output = array();
 if (!empty($_GET['fill'])) {
     switch ($_GET['fill']) {
-    	case 'users':
-        	require api_get_path(SYS_TEST_PATH).'datafiller/fill_users.php';
+        case 'users':
+            require api_get_path(SYS_TEST_PATH).'datafiller/fill_users.php';
             $output = fill_users();
             break;
         case 'courses':
@@ -52,29 +52,31 @@ if (!empty($_GET['fill'])) {
 Display::display_header($nameTools);
 
 $result = '';
-if (count($output)>0) {
+if (count($output) > 0) {
     $result = '<div class="filler-report">'."\n";
     $result .= '<h3>'.$output[0]['title'].'</h3>'."\n";
     $result .= '<table>';
     foreach ($output as $line) {
         $result .= '<tr>';
-	    $result .= '<td class="filler-report-data-init">'.$line['line-init'].' </td><td class="filler-report-data">'.$line['line-info'].'</td>';
-	    $result .= '</tr>';
+        $result .= '<td class="filler-report-data-init">'.$line['line-init'].' </td><td class="filler-report-data">'.$line['line-info'].'</td>';
+        $result .= '</tr>';
     }
     $result .= '</table>';
     $result .= '</div>';
-    Display::display_normal_message($result,false);
+    Display::display_normal_message($result, false);
 }
 ?>
-<div class="well_border">
-  <h4><?php Display::display_icon('bug.gif', 'DataFiller'); echo ' '.api_ucfirst(get_lang('DataFiller'));?></h4>
-  <div><?php echo get_lang('ThisSectionIsOnlyVisibleOnSourceInstalls');?></div>
-  <ul>
-    <li><a href="filler.php?fill=users"><?php echo get_lang('FillUsers');?></a></li>
-    <li><a href="filler.php?fill=courses"><?php echo get_lang('FillCourses');?></a></li>
-    <li><a href="filler.php?fill=exe"><?php echo get_lang('FillExercises');?></a></li>
-  </ul>
-</div>
+    <div class="well_border">
+        <h4><?php Display::display_icon('bug.gif', 'DataFiller');
+            echo ' '.api_ucfirst(get_lang('DataFiller')); ?></h4>
+
+        <div><?php echo get_lang('ThisSectionIsOnlyVisibleOnSourceInstalls'); ?></div>
+        <ul>
+            <li><a href="filler.php?fill=users"><?php echo get_lang('FillUsers'); ?></a></li>
+            <li><a href="filler.php?fill=courses"><?php echo get_lang('FillCourses'); ?></a></li>
+            <li><a href="filler.php?fill=exe"><?php echo get_lang('FillExercises'); ?></a></li>
+        </ul>
+    </div>
 <?php
 /* FOOTER */
 Display::display_footer();

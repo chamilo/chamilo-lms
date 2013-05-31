@@ -1,5 +1,6 @@
 <?php
 /**
+ * Comes at the end of every script if loaded from php config
  * @package chamilo.profiling
  */
 /**

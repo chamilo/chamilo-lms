@@ -156,7 +156,7 @@ function get_course_visibility_icon($v) {
 if (isset ($_POST['action'])) {
     switch ($_POST['action']) {
         // Delete selected courses
-        case 'delete_courses' :
+        case 'delete_courses':
             $course_codes = $_POST['course'];
             if (count($course_codes) > 0) {
                 foreach ($course_codes as $course_code) {
@@ -225,7 +225,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
         }
     }
     if (isset ($_GET['delete_course'])) {
-        CourseManager :: delete_course($_GET['delete_course']);
+        CourseManager::delete_course($_GET['delete_course']);
         $obj_cat = new Category();
         $obj_cat->update_category_delete($_GET['delete_course']);
 

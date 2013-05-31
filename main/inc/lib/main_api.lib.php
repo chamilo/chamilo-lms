@@ -3207,7 +3207,6 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
     // Update if possible
     $set_type = '';
 
-
     switch ($lastedit_type) {
         case 'delete' : // delete = make item only visible for the platform admin.
             $visibility = '2';
@@ -3288,7 +3287,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
                     WHERE $filter";
     }
 
-    $res = Database::query($sql);
+    Database::query($sql);
     // Insert if no entries are found (can only happen in case of $lastedit_type switch is 'default').
     if (Database::affected_rows() == 0) {
         $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type,   lastedit_user_id, to_user_id, to_group_id, visibility, start_visible, end_visible, id_session)
@@ -3315,7 +3314,6 @@ function api_get_item_property_by_tool($tool, $course_code, $session_id = null) 
 
     // Definition of tables.
     $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-    $session_condition = '';
     $session_id = intval($session_id);
     $session_condition = ' AND id_session = '.$session_id;
     $course_id	 = $course_info['real_id'];
@@ -4862,7 +4860,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
                         WHERE   id_user  = '$userid'
                         AND     c_id = '$courseId'
                         LIMIT 1";
-
+                $result = Database::query($sql);
                 if (Database::num_rows($result) > 0) {
                     // This user haa got a recorded state for this course.
                     while ($row = Database::fetch_array($result)) {
@@ -6179,7 +6177,7 @@ function api_is_global_chat_enabled(){
 /**
  * @todo Fix tool_visible_by_default_at_creation labels
  */
-function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
+function api_set_default_visibility($courseInfo, $item_id, $tool_id, $group_id = null) {
     $original_tool_id = $tool_id;
 
     switch ($tool_id) {
@@ -6215,13 +6213,13 @@ function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
         if (empty($group_id)) {
             $group_id = api_get_group_id();
         }
-        api_item_property_update(api_get_course_info(), $original_tool_id, $item_id, $visibility, api_get_user_id(), $group_id, null, null, null, api_get_session_id());
+        api_item_property_update($courseInfo, $original_tool_id, $item_id, $visibility, api_get_user_id(), $group_id, null, null, null, api_get_session_id());
 
         //Fixes default visibility for tests
 
         switch ($original_tool_id) {
             case TOOL_QUIZ:
-                $objExerciseTmp = new Exercise();
+                $objExerciseTmp = new Exercise($courseInfo['real_id']);
                 $objExerciseTmp->read($item_id);
                 if ($visibility == 'visible') {
                     $objExerciseTmp->enable();

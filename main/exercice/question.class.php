@@ -1051,9 +1051,7 @@ abstract class Question
             $count = $new_exercise->selectNbrQuestions();
             $count++;
             $sql = "INSERT INTO $TBL_EXERCICE_QUESTION (c_id, question_id, exercice_id, question_order) VALUES
-				 ({$this->course['real_id']}, '".Database::escape_string($id)."','".Database::escape_string(
-                $exerciseId
-            )."', '$count' )";
+				 ({$this->course['real_id']}, '".Database::escape_string($id)."','".Database::escape_string($exerciseId)."', '$count' )";
             Database::query($sql);
 
             // we do not want to reindex if we had just saved adnd indexed the question
@@ -1583,7 +1581,6 @@ abstract class Question
             $form->setDefaults($defaults);
         }
     }
-
 
     /**
      * function which process the creation of questions

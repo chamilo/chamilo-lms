@@ -696,20 +696,18 @@ class Exercise
         $categoriesAddedInExercise = array();
 
         // Order/random categories
+        $cat = new Testcategory();
 
         switch ($randomByCategory) {
             case EXERCISE_CATEGORY_RANDOM_DISABLED: // 0
                 break;
             case EXERCISE_CATEGORY_RANDOM_SHUFFLED: // 1
-                $cat = new Testcategory();
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id']);
-
                 if (!empty($categoriesAddedInExercise)) {
                     shuffle($categoriesAddedInExercise);
                 }
                 break;
             case EXERCISE_CATEGORY_RANDOM_ORDERED: // 2
-                $cat = new Testcategory();
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'title DESC');
                 break;
         }
@@ -726,14 +724,14 @@ class Exercise
         // "Category rel exercise" is empty we search now for the "category rel question" relationships
         if (empty($totalCategoriesRelExercise)) {
             switch ($randomByCategory) {
-                case EXERCISE_CATEGORY_RANDOM_DISABLED: // 0
-                    // No category order to apply check the random
-                    $question_list = $this->selectRandomList($question_list);
-                    break;
                 case EXERCISE_CATEGORY_RANDOM_SHUFFLED: // 1
                     // Getting questions by category in an exercise with shuffling mode ON
                     $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, null, true);
                     $question_list = $this->pickQuestionsPerCategory($question_list, $questions_by_category);
+                    break;
+                case EXERCISE_CATEGORY_RANDOM_DISABLED: // 0
+                    // No category order to apply check the random
+                    $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list);
                     break;
                 case EXERCISE_CATEGORY_RANDOM_ORDERED: // 2
                     // Getting questions by category in an exercise ordered by category title
@@ -741,13 +739,11 @@ class Exercise
                     $question_list = $this->pickQuestionsPerCategory($question_list, $questions_by_category);
                     break;
             }
-
         } else {
             // Reorder questions depending of the category settings
             switch ($randomByCategory) {
                 case EXERCISE_CATEGORY_RANDOM_DISABLED: // 0
                     // No category order to apply check the random
-                    $question_list = $this->selectRandomList($question_list);
                     break;
                 case EXERCISE_CATEGORY_RANDOM_SHUFFLED: // 1
                     // Getting questions by category in an exercise with shuffling mode ON
@@ -776,12 +772,10 @@ class Exercise
 
             $questions_by_category = $this->pickQuestionsPerCategory($question_list, $questions_by_category, $categoryCountArray, false);
             $question_list = ArrayClass::array_flatten($questions_by_category);
-
         }
 
         $result['question_list'] = isset($question_list) ? $question_list : array();
         $result['category_with_questions_list'] = isset($questions_by_category) ? $questions_by_category : array();
-
 
         if (!empty($result['category_with_questions_list'])) {
             global $app;
@@ -840,12 +834,17 @@ class Exercise
     {
         if ($from_db && !empty($this->id)) {
 
-            // The question list is now ordered with the question_order parameter (normal behaviour)
-            $questionList = $this->getQuestionOrderedList();
+            $nbQuestions = $this->getQuestionCount();
+
+            // Not a random exercise, or if there are not at least 2 questions
+            if ($this->random == 0 || $nbQuestions < 2) {
+                $questionList = $this->getQuestionOrderedList();
+            } else {
+                $questionList = $this->selectRandomList();
+            }
 
             if ($this->categories_grouping) {
                 $result = $this->getQuestionListWithCategoryListFilteredByCategorySettings($questionList);
-
                 $this->categoryWithQuestionList = $result['category_with_questions_list'];
                 $questionList = $result['question_list'];
             }
@@ -881,34 +880,26 @@ class Exercise
      * @return array question list modified or unmodified
      *
      */
-    public function selectRandomList($question_list)
+    public function selectRandomList()
     {
-        $nbQuestions = $this->selectNbrQuestions();
+        $random = isset($this->random) && !empty($this->random) ? $this->random : 0;
 
-        // Not a random exercise, or if there are not at least 2 questions
-        if ($this->random == 0 || $nbQuestions < 2) {
-            return $question_list;
-        }
+        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
-        if ($nbQuestions != 0) {
-            shuffle($question_list);
-            $my_random_list = array_combine(range(1, $nbQuestions), $question_list);
-            $my_question_list = array();
-            if ($this->random > 0) {
-                $i = 0;
-                foreach ($my_random_list as $item) {
-                    if ($i < $this->random) {
-                        $my_question_list[$i] = $item;
-                    } else {
-                        break;
-                    }
-                    $i++;
-                }
-            } else {
-                $my_question_list = $my_random_list;
-            }
-            return $my_question_list;
+        // @todo improve this query
+        $sql = "SELECT e.question_id
+                FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS q
+                    ON (e.question_id= q.iid)
+                WHERE e.c_id = {$this->course_id} AND e.exercice_id	= '".Database::escape_string($this->id)."'
+                ORDER BY RAND()
+                LIMIT $random ";
+        $result = Database::query($sql);
+        $questionList = array();
+        while ($row = Database::fetch_object($result)) {
+            $questionList[] = $row->question_id;
         }
+        return $questionList;
     }
 
     /**
@@ -5206,9 +5197,9 @@ class Exercise
     {
         //Real question count
         $question_count = 0;
-        $question_list = $this->getQuestionList();
-        if (!empty($question_list)) {
-            $question_count = count($question_list);
+        $questionList = $this->questionList;
+        if (!empty($questionList)) {
+            $question_count = count($questionList);
         }
 
         return $question_count;
@@ -5602,6 +5593,7 @@ class Exercise
         foreach ($questionList as $questionId) {
             $i++;
             // For sequential exercises
+
             if ($this->type == ONE_PER_PAGE) {
                 // If it is not the right question, goes to the next loop iteration
                 if ($currentQuestion != $i) {
@@ -5620,8 +5612,8 @@ class Exercise
             // The $questionList contains the media id we check if this questionId is a media question type
 
             if (isset($mediaQuestions[$questionId]) && $mediaQuestions[$questionId] != 999) {
-                // The question belongs to a media
 
+                // The question belongs to a media
                 $mediaQuestionList = $mediaQuestions[$questionId];
                 $objQuestionTmp = Question::read($questionId);
 
@@ -5668,7 +5660,6 @@ class Exercise
                     $i++;
                 }
             } else {
-                //var_dump($i, $questionId, $currentQuestion);
                 // Normal question render.
                 $this->renderQuestion($questionId, $attemptList, $remindList, $i, $currentQuestion, null, null, $questionList);
             }
@@ -5713,6 +5704,7 @@ class Exercise
 
         // With this option on the question is loaded via AJAX
         //$generateJS = true;
+        //$this->loadQuestionAJAX = true;
 
         if ($generateJS && $this->loadQuestionAJAX) {
             $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=get_question&id='.$questionId;

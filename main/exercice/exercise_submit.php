@@ -353,6 +353,7 @@ if (!isset($_SESSION['objExercise']) || $_SESSION['objExercise']->id != $_REQUES
     }
 }
 
+
 // $objExercise = new Exercise(); $objExercise->read($exerciseId);
 
 //2. Checking if $objExercise is set
@@ -482,6 +483,7 @@ $questionListFlatten = $objExercise->transformQuestionListWithMedias($questionLi
 Session::write('question_list_flatten', $questionListFlatten);
 
 $clock_expired_time = null;
+
 if (empty($exercise_stat_info)) {
     if ($debug)  error_log('5  $exercise_stat_info is empty ');
 	$total_weight = 0;
@@ -531,6 +533,7 @@ if ($reminder == 2 && empty($my_remind_list)) {
 	header('Location: exercise_reminder.php?'.$params);
 	exit;
 }
+
 
 /*
  * 7. Loading Time control parameters
@@ -587,7 +590,7 @@ if ($time_control) {
     if ($debug) { error_log("7. No time control"); };
 }
 
-// Get time left for exipiring time
+// Get time left for expiring time
 $time_left = api_strtotime($clock_expired_time,'UTC') - time();
 
 /*
@@ -821,6 +824,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
     }
     echo '</div>';
 }
+
 if ($objExercise->type == ONE_PER_PAGE) {
     echo $objExercise->getProgressPagination(
         $exe_id,
@@ -973,19 +977,20 @@ if (!empty($error)) {
     $i = 0;
     if (!empty($questionList)) {
         foreach ($questionList as $questionId) {
-            $objQuestionTmp = Question::read($questionId);
             // for sequential exercises
             if ($objExercise->type == ONE_PER_PAGE) {
                 // if it is not the right question, goes to the next loop iteration
                 if ($current_question != $i) {
                     continue;
                 } else {
+                    $objQuestionTmp = Question::read($questionId);
                     if ($objQuestionTmp->selectType() == HOT_SPOT || $objQuestionTmp->selectType() == HOT_SPOT_DELINEATION) {
                         $number_of_hotspot_questions++;
                     }
                     break;
                 }
             } else {
+                $objQuestionTmp = Question::read($questionId);
                 if ($objQuestionTmp->selectType() == HOT_SPOT || $objQuestionTmp->selectType() == HOT_SPOT_DELINEATION) {
                     $number_of_hotspot_questions++;
                 }
@@ -993,6 +998,8 @@ if (!empty($error)) {
             $i++;
         }
     }
+
+
     if ($number_of_hotspot_questions > 0) {
         $onsubmit = "onsubmit=\"return validateFlashVar('" . $number_of_hotspot_questions . "', '" . get_lang('HotspotValidateError1') . "', '" . get_lang('HotspotValidateError2') . "');\"";
     }
@@ -1186,7 +1193,7 @@ if (!empty($error)) {
         $attempt_list = getAllExerciseEventByExeId($exe_id);
     }
 
-    $remind_list  = array();
+    $remind_list = array();
     if (isset($exercise_stat_info['questions_to_check']) && !empty($exercise_stat_info['questions_to_check'])) {
         $remind_list = explode(',', $exercise_stat_info['questions_to_check']);
     }

@@ -84,6 +84,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+
+
 // get vars from GET
 if (empty($exerciseId)) {
     $exerciseId = isset($_GET['exerciseId'])?intval($_GET['exerciseId']):'0';
@@ -181,7 +183,7 @@ if (!is_object($objExercise)) {
 
     // creation of a new exercise if wrong or not specified exercise ID
     if ($exerciseId) {
-        $objExercise->read($exerciseId);
+        $objExercise->read($exerciseId, false);
     }
     // saves the object into the session
     Session::write('objExercise', $objExercise);
@@ -194,8 +196,7 @@ if (!isset($fromExercise) or !$fromExercise) {
         $modifyExercise = 'yes';
     }
 }
-
-$nbrQuestions = $objExercise->selectNbrQuestions();
+$nbrQuestions = $objExercise->getQuestionCount();
 
 // Initializes the Question object
 if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
@@ -563,6 +564,7 @@ if ($inATest) {
     }
 }
 
+
 if (isset($_GET['message'])) {
     if (in_array($_GET['message'], array('ExerciseStored', 'ItemUpdated', 'ItemAdded'))) {
         Display::display_confirmation_message(get_lang($_GET['message']));
@@ -581,17 +583,6 @@ if ($newQuestion || $editQuestion) {
     // Create/Edit question.
     require 'question_admin.inc.php';
 }
-/*
-$q = new \Entity\CQuizQuestion();
-$q->setQuestion('test');
-$q->setCId(1);
-$q->setPonderation(1);
-$q->setPosition(1);
-$q->setType(1);
-$q->setLevel(1);
-$q->setParentId(1);
-$app['orm.em']->persist($q);
-$app['orm.em']->flush();*/
 
 if (isset($_GET['hotspotadmin'])) {
     if (!is_object($objQuestion)) {

@@ -1457,6 +1457,7 @@ abstract class Question
             </script>';
             $form->addElement('html', $js);
         }
+
         // question name
         $form->addElement('text', 'questionName', get_lang('Question'), array('class' => 'span6'));
         $form->addRule('questionName', get_lang('GiveQuestion'), 'required');
@@ -1485,6 +1486,7 @@ abstract class Question
         $form->addElement('hidden', 'myid', $my_id);
 
         if ($this->type != MEDIA_QUESTION) {
+
             if ($this->exercise->fastExerciseEdition == false) {
                 // Advanced parameters
                 $form->addElement('advanced_settings', '<a class="btn btn-show advanced_parameters" id="advanced_params" href="javascript://">'.get_lang('AdvancedParameters').'</a>');
@@ -1496,11 +1498,13 @@ abstract class Question
             $form->addElement('select', 'questionLevel', get_lang('Difficulty'), $select_level);
 
             // Media question.
+
             $course_medias = Question::prepare_course_media_select(api_get_course_int_id());
             $form->addElement('select', 'parent_id', get_lang('AttachToMedia'), $course_medias, array('id' => 'parent_id'));
 
             // Categories.
             $categoryJS = null;
+
             if (!empty($this->category_list)) {
                 $trigger = '';
                 foreach ($this->category_list as $category_id) {
@@ -1523,6 +1527,8 @@ abstract class Question
                 array('id' => 'category_id')
             );
 
+
+
             // Extra fields. (Injecting question extra fields!)
             $extraFields = new ExtraField('question');
             $extraFields->addElements($form, $this->id);
@@ -1531,6 +1537,7 @@ abstract class Question
                 $form->addElement('html', '</div>');
             }
         }
+
 
         // @todo why we need this condition??
         if ($this->setDefaultQuestionValues) {
@@ -1580,6 +1587,7 @@ abstract class Question
         if ($this->setDefaultValues) {
             $form->setDefaults($defaults);
         }
+
     }
 
     /**

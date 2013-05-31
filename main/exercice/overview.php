@@ -32,7 +32,7 @@ $exercise_id = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) 
 $objExercise = new Exercise();
 $result = $objExercise->read($exercise_id);
 if (!$result) {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 $gradebook 			= isset($_GET['gradebook'])             ? Security :: remove_XSS($_GET['gradebook']) : null;
@@ -63,9 +63,9 @@ if ($time_control) {
 }
 
 if ($origin != 'learnpath') {
-	Display::display_header();
+    Display::display_header();
 } else {
-	Display::display_reduced_header();
+    Display::display_reduced_header();
 }
 
 $html = '';
@@ -73,12 +73,13 @@ $message = '';
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 $edit_link = '';
-if ($is_allowed_to_edit ) {
-	$edit_link = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&exerciseId='.$objExercise->id);
+if ($is_allowed_to_edit) {
+    $url = api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&exerciseId='.$objExercise->id;
+	$edit_link = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), $url);
 }
 
 //Exercise name
-$html .= Display::page_header( $objExercise->name.' '.$edit_link);
+$html .= Display::page_subheader($objExercise->name.' '.$edit_link);
 
 //Exercise description
 if (!empty($objExercise->description)) {
@@ -87,13 +88,13 @@ if (!empty($objExercise->description)) {
 
 $extra_params = '';
 if (isset($_GET['preview'])) {
-	$extra_params = '&preview=1';
+    $extra_params = '&preview=1';
 }
 
 $exercise_stat_info = $objExercise->getStatTrackExerciseInfo($learnpath_id, $learnpath_item_id, 0);
 $attempt_list = null;
 if (isset($exercise_stat_info['exe_id'])) {
-	$attempt_list = getAllExerciseEventByExeId($exercise_stat_info['exe_id']);
+    $attempt_list = getAllExerciseEventByExeId($exercise_stat_info['exe_id']);
 }
 
 //1. Check if this is a new attempt or a previous

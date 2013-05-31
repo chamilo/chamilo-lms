@@ -518,8 +518,7 @@ if ($inATest) {
             ICON_SIZE_MEDIUM
         ).'</a>';
     } else {
-        echo '<a href="exercise_admin.php?'.api_get_cidreq(
-        ).'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon(
+        echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon(
             'settings.png',
             get_lang('ModifyExercise'),
             '',
@@ -527,6 +526,8 @@ if ($inATest) {
         ).'</a>';
     }
 
+    // @todo if you have 5000 questions this will slow down everything
+    /*
     $maxScoreAllQuestions = 0;
     if (!empty($objExercise->questionList)) {
         foreach ($objExercise->questionList as $q) {
@@ -536,11 +537,7 @@ if ($inATest) {
             }
         }
     }
-    echo '<span style="float:right">'.sprintf(
-        get_lang('XQuestionsWithTotalScoreY'),
-        $objExercise->selectNbrQuestions(),
-        $maxScoreAllQuestions
-    ).'</span>';
+    echo '<span style="float:right">'.sprintf(get_lang('XQuestionsWithTotalScoreY'), $objExercise->selectNbrQuestions(), $maxScoreAllQuestions ).'</span>';*/
     echo '</div>';
 } else {
     if (isset($_GET['newQuestion'])) {

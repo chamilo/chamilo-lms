@@ -97,26 +97,6 @@ class UniqueAnswerImage extends UniqueAnswer
         }
         $form->addElement('hidden', 'nb_answers');
 
-        //Feedback SELECT
-        $question_list      = $obj_ex->selectQuestionList();
-        $select_question    = array();
-        $select_question[0] = get_lang('SelectTargetQuestion');
-
-        if (is_array($question_list)) {
-            foreach ($question_list as $key => $questionid) {
-                //To avoid warning messages
-                if (!is_numeric($questionid)) {
-                    continue;
-                }
-                $question = Question::read($questionid);
-
-                if ($question) {
-                    $select_question[$questionid] = 'Q'.$key.' :'.Text::cut($question->selectTitle(), 20);
-                }
-            }
-        }
-        $select_question[-1] = get_lang('ExitTest');
-
         $list            = new LearnpathList(api_get_user_id());
         $flat_list       = $list->get_flat_list();
         $select_lp_id    = array();

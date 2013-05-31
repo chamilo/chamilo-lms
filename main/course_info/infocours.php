@@ -393,7 +393,7 @@ $values['course_registration_password'] = $all_course_information['registration_
 $values['legal']                        = $all_course_information['legal'];
 $values['activate_legal']               = $all_course_information['activate_legal'];
 // Get send_mail_setting (auth)from table
-$values['email_alert_to_teacher_on_new_user_in_course']= api_get_course_setting('email_alert_to_teacher_on_new_user_in_course');
+$values['email_alert_to_teacher_on_new_user_in_course'] = api_get_course_setting('email_alert_to_teacher_on_new_user_in_course');
 // Get send_mail_setting (work)from table
 $values['email_alert_manager_on_new_doc']           = api_get_course_setting('email_alert_manager_on_new_doc');
 // Get send_mail_setting (dropbox) from table
@@ -418,10 +418,10 @@ $values['allow_user_view_user_list']                = api_get_course_setting('al
 $values['display_info_advance_inside_homecourse']   = api_get_course_setting('display_info_advance_inside_homecourse');
 $values['email_alert_students_on_new_homework']     = api_get_course_setting('email_alert_students_on_new_homework');
 $values['enable_lp_auto_launch']                    = api_get_course_setting('enable_lp_auto_launch');
-$values['enable_exercise_auto_launch']              = api_get_course_setting('enable_exercise_auto_launch');
 $values['pdf_export_watermark_text']                = api_get_course_setting('pdf_export_watermark_text');
 $values['allow_public_certificates']                = api_get_course_setting('allow_public_certificates');
 $values['allow_fast_exercise_edition']              = api_get_course_setting('allow_fast_exercise_edition') == 1 ? 1 : 0;
+$values['enable_exercise_auto_launch']              = api_get_course_setting('enable_exercise_auto_launch') == -1 ? 0 : api_get_course_setting('enable_exercise_auto_launch') ;
 
 $app_plugin->set_course_settings_defaults($values);
 

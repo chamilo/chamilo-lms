@@ -335,7 +335,7 @@ switch ($action) {
             $objExercise             = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;
 
             // Question info.
-            $question_id             = intval($_REQUEST['question_id']);
+            $question_id             = isset($_REQUEST['question_id']) ? intval($_REQUEST['question_id']) : null;
             $question_list           = Session::read('question_list_flatten');
 
             // If exercise or question is not set then exit.

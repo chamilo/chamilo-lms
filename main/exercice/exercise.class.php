@@ -1337,7 +1337,7 @@ class Exercise
         } else {
             // dont reduce the number of random question if we use random by category option, or if
             // random all questions
-            if ($this->isRandom() && $this->isRandomByCat() == EXERCISE_RANDOM_DISABLED) {
+            if ($this->isRandom() && $this->isRandomByCat() == EXERCISE_CATEGORY_RANDOM_DISABLED) {
                 if (count($this->questionList) >= $this->random && $this->random > 0) {
                     $this->random -= 1;
                     $this->save();

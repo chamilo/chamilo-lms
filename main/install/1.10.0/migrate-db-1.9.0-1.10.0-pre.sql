@@ -247,6 +247,7 @@ ALTER TABLE c_quiz_rel_question MODIFY question_id INT NOT NULL;
 ALTER TABLE c_quiz_rel_question MODIFY exercice_id INT NOT NULL;
 ALTER TABLE c_quiz_rel_question DROP PRIMARY KEY;
 ALTER TABLE c_quiz_rel_question ADD COLUMN iid INT unsigned NOT NULL auto_increment PRIMARY KEY;
+ALTER TABLE c_quiz_rel_question ADD INDEX idx_cqrq_id (question_id);
 
 ALTER TABLE c_quiz_category MODIFY id INT NOT NULL;
 ALTER TABLE c_quiz_category MODIFY c_id INT NOT NULL;

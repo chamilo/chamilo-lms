@@ -1456,6 +1456,7 @@ CREATE TABLE c_quiz_rel_question (
   question_order int(10) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (iid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+ALTER TABLE c_quiz_rel_question ADD INDEX idx_cqrq_id (question_id);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

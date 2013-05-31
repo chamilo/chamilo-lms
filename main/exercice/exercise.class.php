@@ -72,6 +72,7 @@ class Exercise
     public $mediaList;
     public $loadQuestionAJAX = false;
     public $emailNotificationTemplate = null;
+    public $countQuestions = 0;
 
     /**
      * Constructor of the class
@@ -120,7 +121,7 @@ class Exercise
      * @param int $id - exercise ID
      * @return boolean - true if exercise exists, otherwise false
      */
-    public function read($id)
+    public function read($id, $parseQuestionList = true)
     {
         if (empty($this->course_id)) {
             return false;
@@ -189,10 +190,13 @@ class Exercise
             // Control time
             $this->expired_time = $object->expired_time;
 
-            // Checking if question_order is correctly set
-            $this->questionList = $this->selectQuestionList(true);
+            if ($parseQuestionList) {
 
-            $this->setMediaList();
+                // Checking if question_order is correctly set
+                $this->questionList = $this->selectQuestionList(true);
+
+                $this->setMediaList();
+            }
 
             //overload questions list with recorded questions list
             //load questions only for exercises of type 'one question per page'
@@ -496,23 +500,25 @@ class Exercise
     {
         if (!empty($this->id)) {
             $category_list = Testcategory::getListOfCategoriesNameForTest($this->id, false);
+            //$category_list = Testcategory::getListOfCategoriesIDForTestObject($this);
 
             $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
             $sql = "SELECT q.iid
                     FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
-                        ON (e.question_id = q.iid AND e.c_id = ".$this->course_id.")
+                        ON (e.question_id = q.iid AND e.c_id = ".$this->course_id." )
 					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'
 					ORDER BY question_order";
+
             $limitCondition = null;
-            if (!empty($start) && !empty($limit)) {
+
+            if (isset($start) && isset($limit)) {
                 $start = intval($start);
                 $limit = intval($limit);
                 $limitCondition = " LIMIT $start, $limit";
             }
             $sql .= $limitCondition;
-
             $result = Database::query($sql);
             $questions = array();
             if (Database::num_rows($result)) {
@@ -551,6 +557,28 @@ class Exercise
     }
 
     /**
+     * @return int
+     */
+    public function getQuestionCount()
+    {
+        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $sql = "SELECT count(e.iid) as count
+                FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS q
+                    ON (e.question_id = q.iid)
+                WHERE e.c_id = {$this->course_id} AND e.exercice_id	= ".Database::escape_string($this->id);
+        $result = Database::query($sql);
+
+        $count = 0;
+        if (Database::num_rows($result)) {
+            $row = Database::fetch_array($result);
+            $count = $row['count'];
+        }
+
+        return $count;
+    }
+
+    /**
      * Gets the question list ordered by the question_order setting (drag and drop)
      * @return array
      */
@@ -563,18 +591,19 @@ class Exercise
 
         // Getting question_order to verify that the question list is correct and all question_order's were set
         $sql = "SELECT DISTINCT e.question_order
-                FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
+                FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS q
                     ON (e.question_id = q.iid)
-                WHERE e.exercice_id	= ".Database::escape_string($this->id);
+                WHERE e.c_id = {$this->course_id} AND e.exercice_id	= ".Database::escape_string($this->id);
+
         $result = Database::query($sql);
 
         $count_question_orders = Database::num_rows($result);
 
         // Getting question list from the order (question list drag n drop interface ).
         $sql = "SELECT e.question_id, e.question_order
-                FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
+                FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS q
                     ON (e.question_id= q.iid)
-                WHERE e.exercice_id	= '".Database::escape_string($this->id)."'
+                WHERE e.c_id = {$this->course_id} AND e.exercice_id	= '".Database::escape_string($this->id)."'
                 ORDER BY question_order";
         $result = Database::query($sql);
 
@@ -6100,6 +6129,30 @@ class Exercise
         }
         $ribbon .= '</div>';
         return $ribbon;
+    }
+
+    public function getQuestionWithCategories()
+    {
+        $categoryTable = Database::get_course_table(TABLE_QUIZ_CATEGORY);
+        $categoryRelTable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
+        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $sql = "SELECT DISTINCT cat.*
+                FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS q
+                    ON (e.question_id = q.iid and e.c_id = {$this->course_id})
+                    INNER JOIN $categoryRelTable catRel
+                    ON (catRel.question_id = e.question_id)
+                    INNER JOIN $categoryTable cat
+                    ON (cat.iid = catRel.category_id)
+                WHERE e.c_id = {$this->course_id} AND e.exercice_id	= ".Database::escape_string($this->id);
+
+        $result = Database::query($sql);
+        $categoriesInExercise = array();
+        if (Database::num_rows($result)) {
+            $categoriesInExercise = Database::store_result($result, 'ASSOC');
+        }
+        return $categoriesInExercise;
+
     }
 
 }

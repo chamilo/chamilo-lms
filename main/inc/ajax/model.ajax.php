@@ -176,8 +176,8 @@ switch ($action) {
         require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
         $exerciseId = isset($_REQUEST['exerciseId']) ? $_REQUEST['exerciseId'] : null;
         $exercise = new Exercise(api_get_course_int_id());
-        $exercise->read($exerciseId);
-        $count = $exercise->selectNbrQuestions();
+        $exercise->read($exerciseId, false);
+        $count = $exercise->getQuestionCount();
         break;
     case 'get_group_reporting':
         $course_id = isset($_REQUEST['course_id']) ? $_REQUEST['course_id'] : null;

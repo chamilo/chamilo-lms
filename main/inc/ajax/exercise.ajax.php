@@ -432,7 +432,7 @@ switch ($action) {
 
                 if ($debug) error_log("Saving question_id = $my_question_id ");
 
-                $my_choice = $choice[$my_question_id];
+                $my_choice = isset($choice[$my_question_id]) ? $choice[$my_question_id] : null;
 
                 if ($debug) error_log("my_choice = ".print_r($my_choice, 1)."");
 

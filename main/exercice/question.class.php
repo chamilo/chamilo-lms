@@ -1981,13 +1981,13 @@ abstract class Question
         $courseMedias = Question::prepare_course_media_select(api_get_course_int_id());
         $labels = null;
         if (!empty($courseMedias)) {
-            $labels .= get_lang('MediaQuestion').' ';
+            $labels .= get_lang('MediaQuestions').'<br />';
             foreach ($courseMedias as $mediaId => $media) {
                 $editLink  = '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='.MEDIA_QUESTION.'&myid=1&editQuestion='.$mediaId.'">'.Display::return_icon('edit.png',get_lang('Modify'), array(), ICON_SIZE_SMALL).'</a>';
                 $deleteLink = '<a id="delete_'.$mediaId.'" class="opener"  href="'.api_get_self().'?'.api_get_cidreq().'&deleteQuestion='.$mediaId.'" >'.Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
 
                 if (!empty($mediaId)) {
-                    $labels .= self::getMediaLabel($media).''.$editLink.$deleteLink.' ';
+                    $labels .= self::getMediaLabel($media).''.$editLink.$deleteLink.'<br />';
                 }
             }
         }

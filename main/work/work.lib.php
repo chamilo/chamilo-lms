@@ -1661,9 +1661,8 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 $work['username'] = Display::div($work['username'], array('class' => $class));
                 
                 if (strlen($work['title']) > 30) {
-                    $short_title = substr($work['title'],0,30).'...';
-                    $see_title = '<a title="'.$work['title'].'">'.get_lang('CompleteTitle').'</a>';
-                    $work['title'] = Display::div($short_title, array('class' => $class)).$see_title;
+                    $short_title = substr($work['title'],0,27).'...';
+                    $work['title'] = Display::span($short_title, array('class' => $class, 'title' => $work['title']));
                 } else {
                     $work['title'] = Display::div($work['title'], array('class' => $class));
                 }

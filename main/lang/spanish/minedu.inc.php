@@ -20,4 +20,5 @@ $ExerciseEndButton = "Botón de fin del examen";
 $ExerciseEndButtonCourseHome = "Regresar a la página principal del curso";
 $ExerciseEndButtonExerciseHome = "Regresar a la lista de exámenes";
 $ExerciseEndButtonDisconnect = "Desconectar el usuario";
-?>
+$MediaQuestions = "Ítemes de tipo medio (estos se vinculan desde las preguntas)";
+$MediaQuestion = "Ítem de tipo medio";

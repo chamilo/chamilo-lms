@@ -104,10 +104,10 @@ $htmlHeadXtra[] = '<script>
         var my_display = document.getElementById(\'HiddenFCKexerciseDescription\').style.display;
             if(my_display== \'none\' || my_display == \'\') {
                 document.getElementById(\'HiddenFCKexerciseDescription\').style.display = \'block\';
-                document.getElementById(\'media_icon\').innerHTML=\' '.Display::return_icon('looknfeel.png').' '.addslashes(api_htmlentities(get_lang('ExerciseDescription'))).'\';
+                document.getElementById(\'media_icon\').innerHTML=\' '.Display::return_icon('media-question.png').' '.addslashes(api_htmlentities(get_lang('ExerciseDescription'))).'\';
             } else {
                 document.getElementById(\'HiddenFCKexerciseDescription\').style.display = \'none\';
-                document.getElementById(\'media_icon\').innerHTML=\'  '.Display::return_icon('looknfeel.png').' '.addslashes(api_htmlentities(get_lang('ExerciseDescription'))).'\';
+                document.getElementById(\'media_icon\').innerHTML=\'  '.Display::return_icon('media-question.png').' '.addslashes(api_htmlentities(get_lang('ExerciseDescription'))).'\';
             }
     }
 

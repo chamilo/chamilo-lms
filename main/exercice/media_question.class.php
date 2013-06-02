@@ -3,7 +3,7 @@
 
 class MediaQuestion extends Question
 {
-	static $typePicture = 'looknfeel.png';
+	static $typePicture = 'media-question.png';
 	static $explanationLangVar = 'MediaQuestion';
 
     function __construct()

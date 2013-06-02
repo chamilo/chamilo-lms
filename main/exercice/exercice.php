@@ -419,7 +419,9 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
     echo Display::return_icon('database.png', get_lang('QuestionPool'), array('style' => 'width:32px'));
     echo '</a>';
 
-    echo Display::url(Display::return_icon('looknfeel.png', get_lang('Media')), 'media.php?'.api_get_cidreq());
+    echo '<a href="media.php?'.api_get_cidreq().'">';
+    echo Display::return_icon('media.png', get_lang('Media'), array(), ICON_SIZE_MEDIUM);
+    echo '</a>';
     // end question category
     echo '<a href="hotpotatoes.php?'.api_get_cidreq().'">'.Display :: return_icon(
         'import_hotpotatoes.png',

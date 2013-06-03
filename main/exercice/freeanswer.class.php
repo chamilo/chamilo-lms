@@ -24,7 +24,7 @@ class FreeAnswer extends Question
     /**
      * Constructor
      */
-    function __construct()
+    public function __construct()
     {
         parent::question();
         $this->type      = FREE_ANSWER;
@@ -32,10 +32,10 @@ class FreeAnswer extends Question
     }
 
     /**
-     * function which redifines Question::createAnswersForm
-     * @param the formvalidator instance
+     * function which redefines Question::createAnswersForm
+     * @param FormValidator instance
      */
-    function createAnswersForm($form)
+    public function createAnswersForm($form)
     {
         $form->addElement('text', 'weighting', get_lang('Weighting'), array('class' => 'span1'));
         // setting the save button here and not in the question class.php
@@ -51,9 +51,9 @@ class FreeAnswer extends Question
 
     /**
      * abstract function which creates the form to create / edit the answers of the question
-     * @param the formvalidator instance
+     * @param FormValidator instance
      */
-    function processAnswersCreation($form)
+    public function processAnswersCreation($form)
     {
         $this->weighting = $form->getSubmitValue('weighting');
         $this->save();

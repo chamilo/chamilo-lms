@@ -7,20 +7,22 @@ class GlobalMultipleAnswer extends Question
     static $typePicture = 'mcmagl.gif';
     static $explanationLangVar = 'GlobalMultipleAnswer';
 
-    /* Constructor */
-
-    function GlobalMultipleAnswer() {
+    /**
+     *
+     */
+    public function GlobalMultipleAnswer()
+    {
         parent::question();
-        $this->type = GLOBAL_MULTIPLE_ANSWER;
+        $this->type      = GLOBAL_MULTIPLE_ANSWER;
         $this->isContent = $this->getIsContent();
     }
 
     /**
-     * function which redifines Question::createAnswersForm
-     * @param the formvalidator instance
-     * @param the answers number to display
+     * function which redefines Question::createAnswersForm
+     * @param FormValidator instance
      */
-    function createAnswersForm($form) {
+    public function createAnswersForm($form)
+    {
 
         $nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4;
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
@@ -31,27 +33,27 @@ class GlobalMultipleAnswer extends Question
         $html = '<table class="data_table">
                 <tr>
                     <th width="10px">
-                        ' . get_lang('Number') . '
+                        '.get_lang('Number').'
                     </th>
                     <th width="10px">
-                        ' . get_lang('True') . '
+                        '.get_lang('True').'
                     </th>
                     <th width="50%">
-                        ' . get_lang('Answer') . '
+                        '.get_lang('Answer').'
                     </th>';
 
         // Espace entre l'entete et les r�ponses
         if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
-            $html .='<th>' . get_lang('Comment') . '</th>';
+            $html .= '<th>'.get_lang('Comment').'</th>';
         }
-        $html .='</tr>';
+        $html .= '</tr>';
 
 
-        $form->addElement('label', get_lang('Answers') . '<br />'.Display::return_icon('fill_field.png'), $html);
+        $form->addElement('label', get_lang('Answers').'<br />'.Display::return_icon('fill_field.png'), $html);
 
         /* Initialiation variable */
         $defaults = array();
-        $correct = 0;
+        $correct  = 0;
 
         /* Mise en variable du nombre de reponse */
         if (!empty($this->id)) {
@@ -81,10 +83,10 @@ class GlobalMultipleAnswer extends Question
         /* boucle pour sauvegarder les donn�es dans le tableau defaults */
         for ($i = 1; $i <= $nb_answers; ++$i) {
             /* si la reponse est de type objet */
-            if (is_object($answer)) {
+            if (isset($answer) && is_object($answer)) {
                 $answer_id = $answer->getRealAnswerIdFromList($i);
 
-                $defaults['answer['.$i.']'] = $answer->answer[$answer_id];
+                $defaults['answer['.$i.']']  = $answer->answer[$answer_id];
                 $defaults['comment['.$i.']'] = $answer->comment[$answer_id];
                 $defaults['correct['.$i.']'] = $answer->correct[$answer_id];
 
@@ -96,31 +98,56 @@ class GlobalMultipleAnswer extends Question
             }
             //------------- Fin
             //------------- Debut si un des scores par reponse est egal � 0 : la coche vaut 1 (coch�)
-            if ($scoreA == 0)
+            if ($scoreA == 0) {
                 $defaults['pts'] = 1;
-            else
+            } else {
                 $defaults['pts'] = 0;
+            }
 
             $renderer = & $form->defaultRenderer();
 
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct['.$i.']');
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter['.$i.']');
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'comment['.$i.']');
+            $renderer->setElementTemplate(
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
+                'correct['.$i.']'
+            );
+            $renderer->setElementTemplate(
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
+                'counter['.$i.']'
+            );
+            $renderer->setElementTemplate(
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
+                'answer['.$i.']'
+            );
+            $renderer->setElementTemplate(
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
+                'comment['.$i.']'
+            );
             //$renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'weighting['.$i.']');
 
-            $answer_number = $form->addElement('text', 'counter[' . $i . ']', null, 'value="' . $i . '"');
+            $answer_number = $form->addElement('text', 'counter['.$i.']', null, 'value="'.$i.'"');
             $answer_number->freeze();
 
-            $form->addElement('checkbox', 'correct[' . $i . ']', null, null, 'class="checkbox"');
-            $boxes_names[] = 'correct[' . $i . ']';
+            $form->addElement('checkbox', 'correct['.$i.']', null, null, 'class="checkbox"');
+            $boxes_names[] = 'correct['.$i.']';
 
-            $form->addElement('html_editor', 'answer[' . $i . ']', null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
-            $form->addRule('answer[' . $i . ']', get_lang('ThisFieldIsRequired'), 'required');
+            $form->addElement(
+                'html_editor',
+                'answer['.$i.']',
+                null,
+                'style="vertical-align:middle"',
+                array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100')
+            );
+            $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
             // show comment when feedback is enable
             if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
-                $form->addElement('html_editor', 'comment[' . $i . ']', null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
+                $form->addElement(
+                    'html_editor',
+                    'comment['.$i.']',
+                    null,
+                    'style="vertical-align:middle"',
+                    array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100')
+                );
             }
 
             $form->addElement('html', '</tr>');
@@ -151,11 +178,16 @@ class GlobalMultipleAnswer extends Question
             if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
                 $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="minus"');
                 $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="plus"');
-                $form->addElement('submit', 'submitQuestion', $this->submitText, 'class="' . $this->submitClass . '"');
+                $form->addElement('submit', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
             } else {
                 $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'), 'class="minus"');
                 $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'), 'class="plus"');
-                $form->addElement('style_submit_button', 'submitQuestion', $this->submitText, 'class="' . $this->submitClass . '"');
+                $form->addElement(
+                    'style_submit_button',
+                    'submitQuestion',
+                    $this->submitText,
+                    'class="'.$this->submitClass.'"'
+                );
                 // setting the save button here and not in the question class.php
             }
         }
@@ -182,10 +214,11 @@ class GlobalMultipleAnswer extends Question
      * @param the formvalidator instance
      * @param the answers number to display
      */
-    function processAnswersCreation($form) {
+    function processAnswersCreation($form)
+    {
         $questionWeighting = $nbrGoodAnswers = 0;
-        $objAnswer = new Answer($this->id);
-        $nb_answers = $form->getSubmitValue('nb_answers');
+        $objAnswer         = new Answer($this->id);
+        $nb_answers        = $form->getSubmitValue('nb_answers');
 
         // Score total
         $answer_score = trim($form->getSubmitValue('weighting[1]'));
@@ -193,7 +226,7 @@ class GlobalMultipleAnswer extends Question
         // Reponses correctes
         $nbr_corrects = 0;
         for ($i = 1; $i <= $nb_answers; $i++) {
-            $goodAnswer = trim($form->getSubmitValue('correct[' . $i . ']'));
+            $goodAnswer = trim($form->getSubmitValue('correct['.$i.']'));
             if ($goodAnswer) {
                 $nbr_corrects++;
             }
@@ -212,17 +245,18 @@ class GlobalMultipleAnswer extends Question
         $test = $form->getSubmitValue('pts');
 
         for ($i = 1; $i <= $nb_answers; $i++) {
-            $answer = trim($form->getSubmitValue('answer[' . $i . ']'));
-            $comment = trim($form->getSubmitValue('comment[' . $i . ']'));
-            $goodAnswer = trim($form->getSubmitValue('correct[' . $i . ']'));
+            $answer     = trim($form->getSubmitValue('answer['.$i.']'));
+            $comment    = trim($form->getSubmitValue('comment['.$i.']'));
+            $goodAnswer = trim($form->getSubmitValue('correct['.$i.']'));
 
             if ($goodAnswer) {
                 $weighting = abs($answer_score);
             } else {
                 if ($test == 1) {
                     $weighting = 0;
-                }else
+                } else {
                     $weighting = -abs($answer_score);
+                }
             }
 
             $objAnswer->createAnswer($answer, $goodAnswer, $comment, $weighting, $i);
@@ -235,19 +269,21 @@ class GlobalMultipleAnswer extends Question
         $this->save();
     }
 
-    function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false) {
+    function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false)
+    {
         $header = parent::return_header($feedback_type, $counter, $score, $show_media);
-        $header .= '<table class="'.$this->question_table_class .'">
+        $header .= '<table class="'.$this->question_table_class.'">
         <tr>
-            <th>' . get_lang("Choice") . '</th>
-            <th>' . get_lang("ExpectedChoice") . '</th>
-            <th>' . get_lang("Answer") . '</th>';
+            <th>'.get_lang("Choice").'</th>
+            <th>'.get_lang("ExpectedChoice").'</th>
+            <th>'.get_lang("Answer").'</th>';
         if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
-            $header .= '<th>' . get_lang("Comment") . '</th>';
+            $header .= '<th>'.get_lang("Comment").'</th>';
         } else {
             $header .= '<th>&nbsp;</th>';
         }
         $header .= '</tr>';
+
         return $header;
     }
 }

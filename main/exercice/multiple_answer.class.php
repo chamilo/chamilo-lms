@@ -135,24 +135,42 @@ class MultipleAnswer extends Question
             $form->addElement('checkbox', 'correct['.$i.']', null, null, 'class="checkbox" style="margin-left: 0em;"');
             $boxes_names[] = 'correct['.$i.']';
 
-            $form->addElement(
-                'html_editor',
-                'answer['.$i.']',
-                null,
-                'style="vertical-align:middle"',
-                array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100')
-            );
-            $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
-
-            // show comment when feedback is enable
-            if (!empty($obj_ex) && $obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            if ($obj_ex->fastEdition) {
+                $form->addElement(
+                    'textarea',
+                    'answer['.$i.']',
+                    null,
+                    $this->textareaSettings
+                );
+            } else {
                 $form->addElement(
                     'html_editor',
-                    'comment['.$i.']',
+                    'answer['.$i.']',
                     null,
                     'style="vertical-align:middle"',
                     array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100')
                 );
+            }
+            $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
+
+            // show comment when feedback is enable
+            if (!empty($obj_ex) && $obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+                if ($obj_ex->fastEdition) {
+                    $form->addElement(
+                        'textarea',
+                        'comment['.$i.']',
+                        null,
+                        $this->textareaSettings
+                    );
+                } else {
+                    $form->addElement(
+                        'html_editor',
+                        'comment['.$i.']',
+                        null,
+                        'style="vertical-align:middle"',
+                        array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100')
+                    );
+                }
             }
 
             $form->addElement('text', 'weighting['.$i.']', null, array('class' => "span1", 'value' => '0'));

@@ -39,15 +39,13 @@ class UniqueAnswer extends Question
 
     /**
      * function which redifines Question::createAnswersForm
-     * @param the formvalidator instance
-     * @param the answers number to display
+     * @param FormValidator instance
      */
     public function createAnswersForm($form)
     {
-
         // Getting the exercise list
+        /** @var Exercise $obj_ex */
         $obj_ex = $this->exercise;
-
         $editor_config = array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '125');
 
         //this line define how many question by default appear when creating a choice question
@@ -66,8 +64,6 @@ class UniqueAnswer extends Question
             $comment_title           = '<th width="500px" >'.get_lang('Comment').'</th>';
             $feedback_title          = '<th width="350px" >'.get_lang('Scenario').'</th>';
         }
-
-
 
         $html = '<table class="data_table">
                 <tr style="text-align: center;">
@@ -101,8 +97,6 @@ class UniqueAnswer extends Question
 
         $form->addElement('hidden', 'nb_answers');
 
-
-
         $list            = new LearnpathList(api_get_user_id());
         $flat_list       = $list->get_flat_list();
         $select_lp_id    = array();
@@ -118,8 +112,6 @@ class UniqueAnswer extends Question
             $nb_answers = 1;
             Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
         }
-
-
 
         for ($i = 1; $i <= $nb_answers; ++$i) {
             $form->addElement('html', '<tr>');
@@ -199,22 +191,35 @@ class UniqueAnswer extends Question
             $answer_number->freeze();
 
             $form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
-            $form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
+
+            if ($obj_ex->fastEdition) {
+                $form->addElement('textarea', 'answer['.$i.']', null, $this->textareaSettings);
+            } else {
+                $form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
+            }
 
             $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
             if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
 
-
-
-                // feedback
-                $form->addElement(
-                    'html_editor',
-                    'comment['.$i.']',
-                    null,
-                    'style="vertical-align:middle"',
-                    $editor_config
-                );
+                if ($obj_ex->fastEdition) {
+                    // feedback
+                    $form->addElement(
+                        'textarea',
+                        'comment['.$i.']',
+                        null,
+                        $this->textareaSettings
+                    );
+                } else {
+                    // feedback
+                    $form->addElement(
+                        'html_editor',
+                        'comment['.$i.']',
+                        null,
+                        'style="vertical-align:middle"',
+                        $editor_config
+                    );
+                }
             } elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
 
                 // Feedback SELECT
@@ -246,6 +251,7 @@ class UniqueAnswer extends Question
                     'style="vertical-align:middle"',
                     $editor_config
                 );
+
                 // Direct feedback
 
                 //Adding extra feedback fields

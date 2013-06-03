@@ -119,9 +119,11 @@ if (empty($modifyExercise)) {
 
 delete_all_incomplete_attempts(api_get_user_id(), $exerciseId, api_get_course_int_id(), api_get_session_id());
 
-// get from session
+/** @var Exercise $objExercise */
 $objExercise = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : 0;
+/** @var Question $objQuestion */
 $objQuestion = isset($_SESSION['objQuestion']) ? $_SESSION['objQuestion'] : 0;
+/** @var Answer $objAnswer */
 $objAnswer = isset($_SESSION['objAnswer'])?$_SESSION['objAnswer']:0;
 
 // document path
@@ -141,13 +143,6 @@ $aType = array(
     get_lang('Matching'),
     get_lang('FreeAnswer')
 );
-
-$fastEdition = api_get_course_setting('allow_fast_exercise_edition') == 1 ? true : false;
-//$fastEdition = false;
-
-if ($fastEdition) {
-    $htmlHeadXtra[] = api_get_jqgrid_js();
-}
 
 // tables used in the exercise tool
 
@@ -187,6 +182,10 @@ if (!is_object($objExercise)) {
     }
     // saves the object into the session
     Session::write('objExercise', $objExercise);
+}
+
+if ($objExercise->fastEdition) {
+    $htmlHeadXtra[] = api_get_jqgrid_js();
 }
 
 // Doesn't select the exercise ID if we come from the question pool
@@ -600,7 +599,8 @@ if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspot
         Display::display_normal_message(get_lang('AllQuestionsMustHaveACategory'));
     }
     // Question list (drag n drop view)
-    if ($fastEdition) {
+    // @todo this bad do not require files like this
+    if ($objExercise->fastEdition) {
         require 'question_list_pagination_admin.inc.php';
     } else {
         require 'question_list_admin.inc.php';

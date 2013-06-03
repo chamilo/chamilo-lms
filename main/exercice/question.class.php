@@ -45,6 +45,8 @@ abstract class Question
     public $submitText;
     public $setDefaultQuestionValues = false;
     public $c_id = null;
+    // if fastEdition is on
+    public $textareaSettings = ' cols="50" rows="5" ';
 
     public static $questionTypes = array(
         UNIQUE_ANSWER                          => array('unique_answer.class.php', 'UniqueAnswer'),
@@ -1622,15 +1624,15 @@ abstract class Question
 
     /**
      * abstract function which creates the form to create / edit the answers of the question
-     * @param the formvalidator instance
+     * @param FormValidator instance
      */
-    abstract function createAnswersForm($form);
+    abstract public function createAnswersForm($form);
 
     /**
      * abstract function which process the creation of answers
-     * @param the formvalidator instance
+     * @param FormValidator instance
      */
-    abstract function processAnswersCreation($form);
+    abstract public function processAnswersCreation($form);
 
 
     /**
@@ -1735,6 +1737,11 @@ abstract class Question
         return $result;
     }
 
+    /**
+     * @param int $question_id
+     * @param int $course_id
+     * @return array
+     */
     public static function readQuestionOption($question_id, $course_id)
     {
         $TBL_EXERCICE_QUESTION_OPTION = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);

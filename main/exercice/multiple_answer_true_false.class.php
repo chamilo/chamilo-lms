@@ -115,7 +115,7 @@ class MultipleAnswerTrueFalse extends Question
             $answer_number = $form->addElement('text', 'counter['.$i.']', null, 'value="'.$i.'"');
             $answer_number->freeze();
 
-            if (is_object($answer)) {
+            if (isset($answer) && is_object($answer)) {
 
                 $answer_id = $answer->getRealAnswerIdFromList($i);
 
@@ -143,28 +143,46 @@ class MultipleAnswerTrueFalse extends Question
                 $defaults['comment['.$i.']'] = '';
                 $defaults['correct['.$i.']'] = '';
             }
-
-
             $boxes_names[] = 'correct['.$i.']';
 
-            $form->addElement(
-                'html_editor',
-                'answer['.$i.']',
-                null,
-                'style="vertical-align:middle"',
-                array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100')
-            );
-            $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
-
-            // show comment when feedback is enable
-            if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            if ($obj_ex->fastEdition) {
+                $form->addElement(
+                    'textarea',
+                    'answer['.$i.']',
+                    null,
+                    $this->textareaSettings
+                );
+            } else {
                 $form->addElement(
                     'html_editor',
-                    'comment['.$i.']',
+                    'answer['.$i.']',
                     null,
                     'style="vertical-align:middle"',
                     array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100')
                 );
+            }
+
+            $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
+
+            // show comment when feedback is enable
+            if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+                if ($obj_ex->fastEdition) {
+                   $form->addElement(
+                        'textarea',
+                        'comment['.$i.']',
+                        null,
+                        $this->textareaSettings
+                    );
+                } else {
+                    $form->addElement(
+                        'html_editor',
+                        'comment['.$i.']',
+                        null,
+                        'style="vertical-align:middle"',
+                        array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100')
+                    );
+                }
+
             }
             $form->addElement('html', '</tr>');
         }

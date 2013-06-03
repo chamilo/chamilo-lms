@@ -30,7 +30,7 @@ class FillBlanks extends Question
     /**
      * Constructor
      */
-    function FillBlanks()
+    public function FillBlanks()
     {
         parent::question();
         $this->type      = FILL_IN_BLANKS;
@@ -39,7 +39,7 @@ class FillBlanks extends Question
 
     /**
      * function which redifines Question::createAnswersForm
-     * @param \Formvalidator instance
+     * @param \FormValidator instance
      */
     public function createAnswersForm($form)
     {

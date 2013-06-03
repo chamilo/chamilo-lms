@@ -6,19 +6,19 @@ class MediaQuestion extends Question
 	static $typePicture = 'media-question.png';
 	static $explanationLangVar = 'MediaQuestion';
 
-    function __construct()
+    public function __construct()
     {
         parent::question();
 		$this->type = MEDIA_QUESTION;
     }
 
-    function processAnswersCreation($form)
+    public function processAnswersCreation($form)
     {
         $params = $form->getSubmitValues();
         $this->saveMedia($params);
     }
 
-    function saveMedia($params)
+    public function saveMedia($params)
     {
         $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $new_params = array(
@@ -36,7 +36,7 @@ class MediaQuestion extends Question
         }
     }
 
-    function createAnswersForm ($form)
+    public function createAnswersForm ($form)
     {
         $form->addElement('button', 'submitQuestion', get_lang('Save'));
     }

@@ -133,6 +133,7 @@ class Exercise
         $id = intval($id);
         $sql = "SELECT * FROM $TBL_EXERCICES WHERE c_id = ".$this->course_id." AND iid = ".$id;
         $result = Database::query($sql);
+
         // if the exercise has been found
         if ($object = Database::fetch_object($result)) {
             $this->id = $id;
@@ -1150,6 +1151,7 @@ class Exercise
     {
         $_course = $this->course;
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
+
         $id = $this->id;
         $exercise = $this->exercise;
         $description = $this->description;
@@ -5301,10 +5303,6 @@ class Exercise
         if (!empty($categories) && !empty($this->id)) {
             $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
             $sql = "DELETE FROM $table WHERE exercise_id = {$this->id} AND c_id = {$this->course_id}";
-            global $debug;
-            if ($debug) {
-                error_log($sql);
-            }
             Database::query($sql);
             if (!empty($categories)) {
                 foreach ($categories as $category_id => $count_questions) {

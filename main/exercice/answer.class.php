@@ -591,7 +591,7 @@ class Answer
                 // No need to add the c_id because the answers are unique per question
                 $sql = "INSERT INTO $table_quiz_answer (question_id, answer, correct, comment, ponderation, position, hotspot_coordinates, hotspot_type, destination) VALUES ";
                 $sql.= "('$questionId','$answer','$correct','$comment','$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination')";
-                error_log($sql);
+
                 Database::query($sql);
                 $latest_insert_id = Database::insert_id();
             }

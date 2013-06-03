@@ -1602,7 +1602,7 @@ abstract class Question
             $this->save($objExercise->id);
 
             $field_value = new ExtraFieldValue('question');
-            $params = $form->exportValues();
+            $params = $form->getSubmitValues();
             $params['question_id'] = $this->id;
             $field_value->save_field_values($params);
 

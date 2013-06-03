@@ -120,7 +120,7 @@ class ExtraFieldValue extends Model
     {
         $extra_field = new ExtraField($this->type);
 
-        //Setting value to insert
+        // Setting value to insert.
         $value = $params['field_value'];
 
         $value_to_insert = null;
@@ -211,12 +211,14 @@ class ExtraFieldValue extends Model
                             break;
                     }
                     if (isset($extraFieldValue)) {
-                        $extraFieldValue->setComment($params['comment']);
-                        $extraFieldValue->setFieldValue($params['field_value']);
-                        $extraFieldValue->setFieldId($params['field_id']);
-                        $extraFieldValue->setTms(api_get_utc_datetime(null, false, true));
-                        $app['orm.em']->persist($extraFieldValue);
-                        $app['orm.em']->flush();
+                        if (!empty($params['field_value'])) {
+                            $extraFieldValue->setComment($params['comment']);
+                            $extraFieldValue->setFieldValue($params['field_value']);
+                            $extraFieldValue->setFieldId($params['field_id']);
+                            $extraFieldValue->setTms(api_get_utc_datetime(null, false, true));
+                            $app['orm.em']->persist($extraFieldValue);
+                            $app['orm.em']->flush();
+                        }
                     }
 
                 } else {
@@ -252,12 +254,25 @@ class ExtraFieldValue extends Model
                     }
 
                     if (isset($extraFieldValue)) {
-                        $extraFieldValue->setComment($params['comment']);
-                        $extraFieldValue->setFieldValue($params['field_value']);
-                        $extraFieldValue->setFieldId($params['field_id']);
-                        $extraFieldValue->setTms(api_get_utc_datetime(null, false, true));
-                        $app['orm.em']->persist($extraFieldValue);
-                        $app['orm.em']->flush();
+                        if (!empty($params['field_value'])) {
+
+                            /*
+                             *  If the field value is similar to the previous value then the comment will be the same
+                                in order to no save in the log an empty record
+                            */
+                            if ($extraFieldValue->getFieldValue() == $params['field_value']) {
+                                if (empty($params['comment'])) {
+                                    $params['comment'] = $extraFieldValue->getComment();
+                                }
+                            }
+
+                            $extraFieldValue->setComment($params['comment']);
+                            $extraFieldValue->setFieldValue($params['field_value']);
+                            $extraFieldValue->setFieldId($params['field_id']);
+                            $extraFieldValue->setTms(api_get_utc_datetime(null, false, true));
+                            $app['orm.em']->persist($extraFieldValue);
+                            $app['orm.em']->flush();
+                        }
                     }
                 } else {
                     $params['id'] = $field_values['id'];

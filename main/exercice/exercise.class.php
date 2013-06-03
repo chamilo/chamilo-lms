@@ -4772,6 +4772,7 @@ class Exercise
     {
         $result = array();
         $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($exe_id);
+        $totalScore = 0;
         if (!empty($track_exercise_info)) {
             $objExercise = new Exercise();
             $objExercise->read($track_exercise_info['exe_exo_id']);
@@ -4789,7 +4790,7 @@ class Exercise
                     true,
                     false
                 );
-                $questionScore = $question_result['score'];
+                // $questionScore = $question_result['score'];
                 $totalScore += $question_result['score'];
             }
 

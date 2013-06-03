@@ -367,17 +367,16 @@ function update_event_exercise($exeid, $exo_id, $score, $weight, $session_id, $l
 /**
  * This function creates an empty Exercise in STATISTIC_TRACK_E_EXERCICES table.
  * After that in exercise_result.php we call the update_event_exercise() to update the exercise
- * @return $id the last id registered, or false on error
+ * @return int $id the last id registered, or false on error
  * @author Julio Montoya <gugli100@gmail.com>
  * @desc Record result of user when an exercice was done
  * @deprecated this function seems to be deprecated
  */
-function create_event_exercice($exo_id)
+function createEventExercise($exo_id)
 {
     if (empty($exo_id) or (intval($exo_id) != $exo_id)) {
         return false;
     }
-    //error_log('create_event_exercice');
     $tbl_track_exe = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $tbl_exe = Database::get_course_table(TABLE_QUIZ_TEST);
     $uid = api_get_user_id();
@@ -433,7 +432,7 @@ function create_event_exercice($exo_id)
  * @param	integer	Position
  * @return	boolean	Result of the insert query
  */
-function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $exercise_id = 0, $nano = null)
+function saveExerciseAttempt($score, $answer, $question_id, $exe_id, $position, $exercise_id = 0, $nano = null)
 {
     global $debug, $learnpath_id, $learnpath_item_id;
     $score = Database::escape_string($score);
@@ -446,22 +445,19 @@ function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $ex
 
     $TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-    if ($debug)
-        error_log("----- entering exercise_attempt() function ------");
-
-    if ($debug)
+    if ($debug) {
+        error_log("----- entering saveExerciseAttempt() function ------");
         error_log("answer: $answer");
-    if ($debug)
         error_log("score: $score");
-    if ($debug)
         error_log("question_id : $question_id");
-    if ($debug)
         error_log("position: $position");
+    }
 
-    //Validation in case of fraud with actived control time
+    //Validation in case of fraud with active control time
     if (!ExerciseLib::exercise_time_control_is_valid($exercise_id, $learnpath_id, $learnpath_item_id)) {
-        if ($debug)
+        if ($debug) {
             error_log("exercise_time_control_is_valid is false");
+        }
         $score = 0;
         $answer = 0;
     }
@@ -544,7 +540,7 @@ function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $ex
  * @return	boolean	Result of the insert query
  * @uses Course code and user_id from global scope $_cid and $_user
  */
-function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $coords, $exerciseId = 0)
+function saveExerciseAttemptHotspot($exe_id, $question_id, $answer_id, $correct, $coords, $exerciseId = 0)
 {
     global $safe_lp_id, $safe_lp_item_id;
 
@@ -823,7 +819,7 @@ function eventType_mod($etId, $users, $message, $subject)
  * @param int $exe_id
  * @return mixed
  */
-function get_last_attempt_date_of_exercise($exe_id)
+function getLastAttemptDateOfExercise($exe_id)
 {
     $exe_id = intval($exe_id);
     $track_attempts = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -832,6 +828,25 @@ function get_last_attempt_date_of_exercise($exe_id)
     $row_last_attempt = Database::fetch_array($rs_last_attempt);
     $last_attempt_date = $row_last_attempt['last_attempt_date']; //Get the date of last attempt
     return $last_attempt_date;
+}
+
+/**
+ * Gets the last attempt of an exercise based in the exe_id
+ * @param int $exe_id
+ * @return mixed
+ */
+function getLatestQuestionIdFromAttempt($exe_id)
+{
+    $exe_id = intval($exe_id);
+    $track_attempts = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $sql = 'SELECT question_id FROM '.$track_attempts.' WHERE exe_id='.$exe_id.' ORDER BY tms DESC LIMIT 1';
+    $result = Database::query($sql);
+    if (Database::num_rows($result)) {
+        $row = Database::fetch_array($result);
+        return $row['question_id'];
+    } else {
+        return false;
+    }
 }
 
 /**

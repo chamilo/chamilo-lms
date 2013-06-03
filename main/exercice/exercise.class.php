@@ -49,7 +49,10 @@ class Exercise
     public $feedback_type;
     public $end_time;
     public $start_time;
-    public $questionList;
+    /* show media id */
+    public $questionList; // medias as id
+    /* including question list of the media */
+    public $questionListUncompressed;
     public $results_disabled;
     public $expired_time;
     public $course;
@@ -119,7 +122,7 @@ class Exercise
      *
      * @author Olivier Brouckaert
      * @param int $id - exercise ID
-     * @param parse exercise question list
+     * @param bool parse exercise question list
      * @return boolean - true if exercise exists, otherwise false
      */
     public function read($id, $parseQuestionList = true)
@@ -192,11 +195,7 @@ class Exercise
             $this->expired_time = $object->expired_time;
 
             if ($parseQuestionList) {
-
-                // Checking if question_order is correctly set
-                $this->questionList = $this->selectQuestionList(true);
-
-                $this->setMediaList();
+                $this->setQuestionList();
             }
 
             //overload questions list with recorded questions list
@@ -629,7 +628,6 @@ class Exercise
                 $questionList = $temp_question_list;
             }
         }
-
         return $questionList;
     }
 
@@ -828,13 +826,13 @@ class Exercise
     }
 
     /**
-     * Returns the array with the question ID list ordered by question order (with the uncompressed media list)
+     * Returns the array with the question ID list ordered by question order (including question list in medias)
      *
      * @author Olivier Brouckaert
      * @param bool $from_db
      * @return array question ID list
      */
-    public function selectQuestionList($from_db = false)
+    private function selectQuestionList($from_db = false)
     {
         if ($from_db && !empty($this->id)) {
 
@@ -852,6 +850,7 @@ class Exercise
                 $this->categoryWithQuestionList = $result['category_with_questions_list'];
                 $questionList = $result['question_list'];
             }
+
             return $questionList;
         }
 
@@ -4258,24 +4257,24 @@ class Exercise
                         if ($final_answer == 0) {
                             $questionScore = 0;
                         }
-                        exercise_attempt($questionScore, 1, $quesId, $exeId, 0); // we always insert the answer_id 1 = delineation
+                        saveExerciseAttempt($questionScore, 1, $quesId, $exeId, 0); // we always insert the answer_id 1 = delineation
                         //in delineation mode, get the answer from $hotspot_delineation_result[1]
-                        exercise_attempt_hotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList(1), $hotspot_delineation_result[1], $exerciseResultCoordinates[$quesId]);
+                        saveExerciseAttemptHotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList(1), $hotspot_delineation_result[1], $exerciseResultCoordinates[$quesId]);
                     } else {
                         if ($final_answer == 0) {
                             $questionScore = 0;
                             $answer = 0;
-                            exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
+                            saveExerciseAttempt($questionScore, $answer, $quesId, $exeId, 0);
                             if (is_array($exerciseResultCoordinates[$quesId])) {
                                 foreach ($exerciseResultCoordinates[$quesId] as $idx => $val) {
-                                    exercise_attempt_hotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList($idx), 0, $val);
+                                    saveExerciseAttemptHotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList($idx), 0, $val);
                                 }
                             }
                         } else {
-                            exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
+                            saveExerciseAttempt($questionScore, $answer, $quesId, $exeId, 0);
                             if (is_array($exerciseResultCoordinates[$quesId])) {
                                 foreach ($exerciseResultCoordinates[$quesId] as $idx => $val) {
-                                    exercise_attempt_hotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList($idx), $choice[$idx], $val);
+                                    saveExerciseAttemptHotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList($idx), $choice[$idx], $val);
                                 }
                             }
                         }
@@ -4335,13 +4334,13 @@ class Exercise
                     $reply = array_keys($choice);
                     for ($i = 0; $i < sizeof($reply); $i++) {
                         $ans = $reply[$i];
-                        exercise_attempt($questionScore, $ans.':'.$choice[$ans], $quesId, $exeId, $i, $this->id);
+                        saveExerciseAttempt($questionScore, $ans.':'.$choice[$ans], $quesId, $exeId, $i, $this->id);
                         if ($debug) {
                             error_log('result =>'.$questionScore.' '.$ans.':'.$choice[$ans]);
                         }
                     }
                 } else {
-                    exercise_attempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
+                    saveExerciseAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
                 }
             } elseif ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
                 if ($choice != 0) {
@@ -4352,46 +4351,46 @@ class Exercise
                     }
                     for ($i = 0; $i < sizeof($reply); $i++) {
                         $ans = $reply[$i];
-                        exercise_attempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
+                        saveExerciseAttempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
                     }
                 } else {
-                    exercise_attempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
+                    saveExerciseAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
                 }
             } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
                 if ($choice != 0) {
                     $reply = array_keys($choice);
                     for ($i = 0; $i < sizeof($reply); $i++) {
                         $ans = $reply[$i];
-                        exercise_attempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
+                        saveExerciseAttempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
                     }
                 } else {
-                    exercise_attempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
+                    saveExerciseAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
                 }
             } elseif ($answerType == MATCHING || $answerType == DRAGGABLE) {
                 if (isset($matching)) {
                     foreach ($matching as $j => $val) {
-                        exercise_attempt($questionScore, $val, $quesId, $exeId, $j, $this->id);
+                        saveExerciseAttempt($questionScore, $val, $quesId, $exeId, $j, $this->id);
                     }
                 }
             } elseif ($answerType == FREE_ANSWER) {
                 $answer = $choice;
-                exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                saveExerciseAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
             } elseif ($answerType == ORAL_EXPRESSION) {
                 $answer = $choice;
-                exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id, $nano);
+                saveExerciseAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id, $nano);
             } elseif ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_IMAGE || $answerType == UNIQUE_ANSWER_NO_OPTION) {
                 $answer = $choice;
-                exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                saveExerciseAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
                 //            } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
             } elseif ($answerType == HOT_SPOT) {
-                exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                saveExerciseAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
                 if (isset($exerciseResultCoordinates[$questionId]) && !empty($exerciseResultCoordinates[$questionId])) {
                     foreach ($exerciseResultCoordinates[$questionId] as $idx => $val) {
-                        exercise_attempt_hotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList($idx), $choice[$idx], $val, $this->id);
+                        saveExerciseAttemptHotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList($idx), $choice[$idx], $val, $this->id);
                     }
                 }
             } else {
-                exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                saveExerciseAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
             }
         }
 
@@ -4948,25 +4947,23 @@ class Exercise
      *  </code>
      * @return array
      */
-    function setMediaList()
+    private function setMediaList($questionList)
     {
-        $media_questions = array();
-        $question_list = $this->questionList;
-
-        if (!empty($question_list)) {
-            foreach ($question_list as $questionId) {
+        $mediaList= array();
+        if (!empty($questionList)) {
+            foreach ($questionList as $questionId) {
                 $objQuestionTmp = Question::read($questionId);
 
                 // If a media question exists
                 if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {
-                    $media_questions[$objQuestionTmp->parent_id][] = $objQuestionTmp->id;
+                    $mediaList[$objQuestionTmp->parent_id][] = $objQuestionTmp->id;
                 } else {
                     // Always the last item
-                    $media_questions[999][] = $objQuestionTmp->id;
+                    $mediaList[999][] = $objQuestionTmp->id;
                 }
             }
         }
-        $this->mediaList = $media_questions;
+        $this->mediaList = $mediaList;
     }
 
     /**
@@ -4997,7 +4994,7 @@ class Exercise
       *Is media question activated
      * @return bool
      */
-    public function media_is_activated()
+    public function mediaIsActivated()
     {
         $mediaQuestions = $this->getMediaList();
         $active = false;
@@ -5013,21 +5010,36 @@ class Exercise
                 }
             }
         }
-
         return $active;
     }
 
     /**
      * Gets question list from the exercise
-     * @params bool Expand or not question list
      * (true show all questions, false show media question id instead of the question ids)
-     * @return array unflatten question list (no medias)
      */
-    public function getQuestionList($expand_media_questions = false)
+    public function getQuestionList()
     {
-        $questionList = $this->selectQuestionList();
-        $questionList = $this->transformQuestionListWithMedias($questionList, $expand_media_questions);
-        return $questionList;
+        return $this->questionList;
+    }
+
+    public function getQuestionListWithMediasCompressed()
+    {
+        return $this->questionList;
+    }
+
+    public function getQuestionListWithMediasUncompressed()
+    {
+        return $this->questionListUncompressed;
+    }
+
+    public function setQuestionList()
+    {
+        //Getting question list
+        $questionList = $this->selectQuestionList(true);
+        $this->setMediaList($questionList);
+
+        $this->questionList = $this->transformQuestionListWithMedias($questionList, false);
+        $this->questionListUncompressed = $this->transformQuestionListWithMedias($questionList, true);
     }
 
     /**
@@ -5042,7 +5054,7 @@ class Exercise
         if (!empty($question_list)) {
             $media_questions = $this->getMediaList();
 
-            $media_active = $this->media_is_activated($media_questions);
+            $media_active = $this->mediaIsActivated($media_questions);
 
             if ($media_active) {
                 $counter = 1;
@@ -5208,7 +5220,7 @@ class Exercise
     /**
      * @return string
      */
-    function return_time_left_div()
+    public function returnTimeLeftDiv()
     {
         $html = '<div id="clock_warning" style="display:none">'.Display::return_message(
             get_lang('ReachedTimeLimit'),
@@ -5228,7 +5240,6 @@ class Exercise
      */
     public function getCountUncompressedQuestionList()
     {
-        //Real question count
         $question_count = 0;
         $questionList = $this->questionList;
         if (!empty($questionList)) {
@@ -5243,6 +5254,53 @@ class Exercise
      * @return int
      */
     public function getCountCompressedQuestionList()
+    {
+        $mediaQuestions = $this->getMediaList();
+        $questionCount = 0;
+        foreach ($mediaQuestions as $mediaKey => $questionList) {
+            if ($mediaKey == 999) {
+                $questionCount += count($questionList);
+            } else {
+                $questionCount++;
+            }
+        }
+        return $questionCount;
+    }
+
+    /**
+     * Gets the position of a questionId in the question list
+     * @param $questionId
+     * @return int
+     */
+    public function getPositionInCompressedQuestionList($questionId)
+    {
+        $questionList = $this->getQuestionListWithMediasCompressed();
+        $mediaQuestions = $this->getMediaList();
+        $position = 1;
+        foreach ($questionList as $id) {
+            if (isset($mediaQuestions[$id]) && in_array($questionId, $mediaQuestions[$id])) {
+                $mediaQuestionList = $mediaQuestions[$id];
+                if (in_array($questionId, $mediaQuestionList)) {
+                    return $position;
+                } else {
+                    $position++;
+                }
+            } else {
+                if ($id == $questionId) {
+                    return $position;
+                } else {
+                    $position++;
+                }
+            }
+        }
+        return 1;
+    }
+
+    /**
+     * Get question list (excluding question ids of the media)
+     * @return int
+     */
+    public function getPositionOfQuestionInCompresedQuestionList()
     {
         $mediaQuestions = $this->getMediaList();
         $questionCount = 0;

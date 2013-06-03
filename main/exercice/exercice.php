@@ -709,7 +709,7 @@ if (!empty($exercise_list)) {
 
                         if ($row['random_by_category'] > 0) {
                             $nbQuestionsTotal = $exercise_obj->getNumberQuestionExerciseCategory();
-                            $real_question_count = count($exercise_obj->selectQuestionList());
+                            //$real_question_count = count($exercise_obj->selectQuestionList());
                             $warning = null;
                             if ($nbQuestionsTotal != $real_question_count) {
                                 $warning = Display::return_icon('warning.png', get_lang('CheckThatYouHaveEnoughQuestionsInYourCategories'));

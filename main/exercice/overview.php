@@ -226,7 +226,7 @@ if ($objExercise->selectAttempts()) {
 }
 
 if ($time_control) {
-    $html.= $objExercise->return_time_left_div();
+    $html.= $objExercise->returnTimeLeftDiv();
 }
 
 $html .=  $message;

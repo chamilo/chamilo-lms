@@ -336,7 +336,7 @@ switch ($action) {
 
             // Question info.
             $question_id             = isset($_REQUEST['question_id']) ? intval($_REQUEST['question_id']) : null;
-            $question_list           = Session::read('question_list_flatten');
+            $question_list           = Session::read('question_list_uncompressed');
 
             // If exercise or question is not set then exit.
             if (empty($question_list) || empty($objExercise)) {
@@ -421,8 +421,10 @@ switch ($action) {
 
             // Looping the question list
 
-            if ($debug) error_log("Looping question list".print_r($question_list, 1));
-            if ($debug) error_log("Trying to save question: $question_id ");
+            if ($debug) {
+                error_log("Looping question list".print_r($question_list, 1));
+                error_log("Trying to save question: $question_id ");
+            }
 
             foreach ($question_list as $my_question_id) {
 

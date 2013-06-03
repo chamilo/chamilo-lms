@@ -737,6 +737,9 @@ if (!empty($exercise_list)) {
                     }*/
 
                     $number_of_questions = $exercise_obj->getQuestionCount();
+                    if ($row['random'] > 0 || $row['random'] != -1) {
+                        $number_of_questions = $number_of_questions.' ('.$row['random'].' '.get_lang('Random').') ';
+                    }
 
                     //Attempts
                     //$attempts = get_count_exam_results($my_exercise_id).' '.get_lang('Attempts');

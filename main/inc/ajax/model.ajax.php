@@ -316,7 +316,8 @@ switch ($action) {
         break;
     case 'get_question_list':
         if (isset($exercise) && !empty($exercise)) {
-            $columns = array('question', 'type', 'category', 'level', 'score', 'actions');
+            //$columns = array('question', 'type', 'category', 'level', 'score', 'actions');
+            $columns = array('question', 'type', 'category', 'score', 'actions');
             $result = $exercise->getQuestionListPagination($start, $limit, $sidx, $sord, $where_condition);
         }
         break;

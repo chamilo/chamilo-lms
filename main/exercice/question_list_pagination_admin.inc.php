@@ -34,7 +34,8 @@ $token = Security::get_token();
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_question_list&exerciseId='.$exerciseId;
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns = array(get_lang('Questions'), get_lang('Type'), get_lang('Category'), get_lang('Difficulty'), get_lang('Score'), get_lang('Actions'));
+//$columns = array(get_lang('Questions'), get_lang('Type'), get_lang('Category'), get_lang('Difficulty'), get_lang('Score'), get_lang('Actions'));
+$columns = array(get_lang('Questions'), get_lang('Type'), get_lang('Category'), get_lang('Score'), get_lang('Actions'));
 
 //Column config
 $column_model = array(
@@ -53,13 +54,13 @@ $column_model = array(
         'align'    => 'left',
         'sortable' => 'false'
     ),
-    array(
+    /*array(
         'name'     => 'level',
         'index'    => 'level',
         'width'    => '50',
         'align'    => 'left',
         'sortable' => 'false'
-    ),
+    ),*/
     array(
         'name'     => 'score',
         'index'    => 'score',

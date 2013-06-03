@@ -1496,8 +1496,8 @@ abstract class Question
             }
 
             // Level (difficulty).
-            $select_level = Question::get_default_levels();
-            $form->addElement('select', 'questionLevel', get_lang('Difficulty'), $select_level);
+            /*$select_level = Question::get_default_levels();
+            $form->addElement('select', 'questionLevel', get_lang('Difficulty'), $select_level);*/
 
             // Media question.
 

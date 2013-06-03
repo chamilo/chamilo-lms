@@ -227,29 +227,27 @@ $group = array();
 $group[]=$form->createElement('radio', 'email_alert_to_teacher_on_new_user_in_course', get_lang('NewUserEmailAlert'), get_lang('NewUserEmailAlertEnable'), 1);
 $group[]=$form->createElement('radio', 'email_alert_to_teacher_on_new_user_in_course', null, get_lang('NewUserEmailAlertToTeacharAndTutor'), 2);
 $group[]=$form->createElement('radio', 'email_alert_to_teacher_on_new_user_in_course', null, get_lang('NewUserEmailAlertDisable'), 0);
-$form->addGroup($group, '', array(get_lang("NewUserEmailAlert")), '');
+$form->addGroup($group, '', array(Display::return_icon('user.png', get_lang('NewUserEmailAlert'))));
 
 $group = array();
 $group[]=$form->createElement('radio', 'email_alert_students_on_new_homework', get_lang('NewHomeworkEmailAlert'), get_lang('NewHomeworkEmailAlertEnable'), 1);
 $group[]=$form->createElement('radio', 'email_alert_students_on_new_homework', null, get_lang('NewHomeworkEmailAlertDisable'), 0);
-$form->addGroup($group, '', array(get_lang("NewHomeworkEmailAlert")), '');
+$form->addGroup($group, '', array(Display::return_icon('work.png', get_lang("NewHomeworkEmailAlert"))));
 
 $group = array();
 $group[]=$form->createElement('radio', 'email_alert_manager_on_new_doc', get_lang('WorkEmailAlert'), get_lang('WorkEmailAlertActivate'), 1);
 $group[]=$form->createElement('radio', 'email_alert_manager_on_new_doc', null, get_lang('WorkEmailAlertDeactivate'), 0);
-$form->addGroup($group, '', array(get_lang("WorkEmailAlert")), '');
-
+$form->addGroup($group, '', array(Display::return_icon('work.png', get_lang("WorkEmailAlert"))));
 
 $group = array();
 $group[]=$form->createElement('radio', 'email_alert_on_new_doc_dropbox', get_lang('DropboxEmailAlert'), get_lang('DropboxEmailAlertActivate'), 1);
 $group[]=$form->createElement('radio', 'email_alert_on_new_doc_dropbox', null, get_lang('DropboxEmailAlertDeactivate'), 0);
-$form->addGroup($group, '', array(get_lang("DropboxEmailAlert")), '');
+$form->addGroup($group, '', array(Display::return_icon('dropbox.png', get_lang("DropboxEmailAlert"))));
 
 $group = array();
 $group[]=$form->createElement('radio', 'email_alert_manager_on_new_quiz', get_lang('QuizEmailAlert'), get_lang('QuizEmailAlertActivate'), 1);
 $group[]=$form->createElement('radio', 'email_alert_manager_on_new_quiz', null, get_lang('QuizEmailAlertDeactivate'), 0);
-$form->addGroup($group, '', array(get_lang("QuizEmailAlert")), '');
-
+$form->addGroup($group, '', array(Display::return_icon('quiz.png', get_lang("QuizEmailAlert"))));
 
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 

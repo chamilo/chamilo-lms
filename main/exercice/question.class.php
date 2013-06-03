@@ -1661,6 +1661,10 @@ abstract class Question
         echo '<ul class="question_menu">';
 
         foreach ($question_type_custom_list as $i => $a_type) {
+            //Skip other question types, just for minedu
+            if (!in_array($a_type[1],array('MediaQuestion','UniqueAnswer'))) {
+                continue;
+            }
             // include the class of the type
             require_once $a_type[0];
             // get the picture of the type and the langvar which describes it

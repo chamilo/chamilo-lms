@@ -2376,7 +2376,8 @@ function api_get_user_platform_status($user_id = false) {
     return $status;
 }
 
-function api_is_course_session_coach($user_id, $courseId, $session_id) {
+function api_is_course_session_coach($user_id, $courseId, $session_id)
+{
     $session_table 						= Database::get_main_table(TABLE_MAIN_SESSION);
     $session_rel_course_rel_user_table  = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
@@ -2384,8 +2385,8 @@ function api_is_course_session_coach($user_id, $courseId, $session_id) {
     $session_id = intval($session_id);
     $courseId = Database::escape_string($courseId);
 
-    $sql = "SELECT DISTINCT id
-				FROM $session_table INNER JOIN $session_rel_course_rel_user_table session_rc_ru
+    $sql = "SELECT DISTINCT session.id
+				FROM $session_table session INNER JOIN $session_rel_course_rel_user_table session_rc_ru
 	            ON session.id = session_rc_ru.id_session
 	            WHERE   session_rc_ru.id_user = '".$user_id."'  AND
                         session_rc_ru.c_id = '$courseId' AND

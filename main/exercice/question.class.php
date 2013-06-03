@@ -1570,11 +1570,6 @@ abstract class Question
         $defaults['questionCategory']    = $this->category_list;
         $defaults['parent_id']           = $this->parent_id;
 
-        //Came from he question pool
-        if (isset($_GET['fromExercise'])) {
-            $form->setDefaults($defaults);
-        }
-
         if (!empty($_REQUEST['myid'])) {
             $form->setDefaults($defaults);
         } else {

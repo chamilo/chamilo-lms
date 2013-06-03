@@ -1,4 +1,8 @@
 <?php
+
+// A new question pool code was added
+exit;
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -14,7 +18,7 @@
  * Code
  */
 // name of the language file that needs to be included
-exit;
+
 use \ChamiloSession as Session;
 
 $language_file = 'exercice';

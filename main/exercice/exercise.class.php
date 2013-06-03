@@ -66,7 +66,6 @@ class Exercise
     public $force_edit_exercise_in_lp = false;
     public $categories;
     public $categories_grouping = true;
-    public $fastExerciseEdition = false;
     public $endButton = 0;
     public $categoryWithQuestionList;
     public $mediaList;
@@ -111,7 +110,7 @@ class Exercise
         }
         $this->course_id = $course_info['real_id'];
         $this->course = $course_info;
-        $this->fastExerciseEdition = api_get_course_setting('allow_fast_exercise_edition') == 1 ? true : false;
+        $this->fastEdition = api_get_course_setting('allow_fast_exercise_edition') == 1 ? true : false;
         $this->emailAlert = api_get_course_setting('email_alert_manager_on_new_quiz') == 1 ? true : false;
     }
 
@@ -173,7 +172,6 @@ class Exercise
             }
 
             $this->force_edit_exercise_in_lp = isset($_configuration['force_edit_exercise_in_lp']) ? $_configuration['force_edit_exercise_in_lp'] : false;
-            $this->fastEdition = api_get_course_setting('allow_fast_exercise_edition') == 1 ? true : false;
 
             if ($this->exercise_was_added_in_lp) {
                 $this->edit_exercise_in_lp = $this->force_edit_exercise_in_lp == true;

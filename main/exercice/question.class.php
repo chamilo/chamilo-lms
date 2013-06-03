@@ -1489,7 +1489,7 @@ abstract class Question
 
         if ($this->type != MEDIA_QUESTION) {
 
-            if ($this->exercise->fastExerciseEdition == false) {
+            if ($this->exercise->fastEdition == false) {
                 // Advanced parameters
                 $form->addElement('advanced_settings', '<a class="btn btn-show advanced_parameters" id="advanced_params" href="javascript://">'.get_lang('AdvancedParameters').'</a>');
                 $form->addElement('html', '<div id="advanced_params_options" style="display:none;">');
@@ -1529,17 +1529,14 @@ abstract class Question
                 array('id' => 'category_id')
             );
 
-
-
             // Extra fields. (Injecting question extra fields!)
             $extraFields = new ExtraField('question');
             $extraFields->addElements($form, $this->id);
 
-            if ($this->exercise->fastExerciseEdition == false) {
+            if ($this->exercise->fastEdition == false) {
                 $form->addElement('html', '</div>');
             }
         }
-
 
         // @todo why we need this condition??
         if ($this->setDefaultQuestionValues) {

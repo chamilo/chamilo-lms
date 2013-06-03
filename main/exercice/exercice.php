@@ -204,7 +204,7 @@ if ($is_allowedToEdit) {
         if ($objExerciseTmp->read($exerciseId)) {
             if ($check) {
                 switch ($choice) {
-                    case 'delete' : // deletes an exercise
+                    case 'delete': // deletes an exercise
                         if ($exercise_action_locked == false) {
                             $objExerciseTmp->delete();
                             require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
@@ -220,7 +220,7 @@ if ($is_allowedToEdit) {
                             Display :: display_confirmation_message(get_lang('ExerciseDeleted'));
                         }
                         break;
-                    case 'enable' : // enables an exercise
+                    case 'enable': // enables an exercise
                         $objExerciseTmp->enable();
                         $objExerciseTmp->save();
                         api_item_property_update(
@@ -233,7 +233,7 @@ if ($is_allowedToEdit) {
                         // "WHAT'S NEW" notification: update table item_property (previously last_tooledit)
                         Display :: display_confirmation_message(get_lang('VisibilityChanged'));
                         break;
-                    case 'disable' : // disables an exercise
+                    case 'disable': // disables an exercise
                         $objExerciseTmp->disable();
                         $objExerciseTmp->save();
                         api_item_property_update(
@@ -245,17 +245,17 @@ if ($is_allowedToEdit) {
                         );
                         Display :: display_confirmation_message(get_lang('VisibilityChanged'));
                         break;
-                    case 'disable_results' : //disable the results for the learners
+                    case 'disable_results': //disable the results for the learners
                         $objExerciseTmp->disable_results();
                         $objExerciseTmp->save();
                         Display :: display_confirmation_message(get_lang('ResultsDisabled'));
                         break;
-                    case 'enable_results' : //disable the results for the learners
+                    case 'enable_results': //disable the results for the learners
                         $objExerciseTmp->enable_results();
                         $objExerciseTmp->save();
                         Display :: display_confirmation_message(get_lang('ResultsEnabled'));
                         break;
-                    case 'clean_results' : //clean student results
+                    case 'clean_results': //clean student results
                         if ($exercise_action_locked == false) {
                             $quantity_results_deleted = $objExerciseTmp->clean_results();
                             Display :: display_confirmation_message(
@@ -263,7 +263,7 @@ if ($is_allowedToEdit) {
                             );
                         }
                         break;
-                    case 'copy_exercise' :
+                    case 'copy_exercise':
                         $objExerciseTmp->copy_exercise();
                         Display :: display_confirmation_message(get_lang('ExerciseCopied'));
                         break;
@@ -281,7 +281,7 @@ if ($is_allowedToEdit) {
 
     if (!empty($hpchoice)) {
         switch ($hpchoice) {
-            case 'delete' : // deletes an exercise
+            case 'delete': // deletes an exercise
                 $imgparams = array();
                 $imgcount = 0;
                 GetImgParams($file, $documentPath, $imgparams, $imgcount);
@@ -294,7 +294,7 @@ if ($is_allowedToEdit) {
                 if (FileManager::my_delete($documentPath.$file)) {
                     FileManager::update_db_info("delete", $file);
                 }
-                // hotpotatoes folder may contains several tests so don't delete folder if not empty : http://support.chamilo.org/issues/2165
+                // hotpotatoes folder may contains several tests so don't delete folder if not empty : #2165
                 if (!(strstr($uploadPath, DIR_HOTPOTATOES) && !FileManager::folder_is_empty(
                     $documentPath.$uploadPath."/".$fld."/"
                 ))
@@ -302,27 +302,21 @@ if ($is_allowedToEdit) {
                     FileManager::my_delete($documentPath.$uploadPath."/".$fld."/");
                 }
                 break;
-            case 'enable' : // enables an exercise
+            case 'enable': // enables an exercise
                 $newVisibilityStatus = "1"; //"visible"
-                $query = "SELECT id FROM $TBL_DOCUMENT WHERE c_id = $course_id AND path='".Database :: escape_string(
-                    $file
-                )."'";
+                $query = "SELECT id FROM $TBL_DOCUMENT WHERE c_id = $course_id AND path='".Database :: escape_string($file)."'";
                 $res = Database::query($query);
                 $row = Database :: fetch_array($res, 'ASSOC');
                 api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'visible', $_user['user_id']);
-                //$dialogBox = get_lang('ViMod');
-
                 break;
-            case 'disable' : // disables an exercise
+            case 'disable': // disables an exercise
                 $newVisibilityStatus = "0"; //"invisible"
-                $query = "SELECT id FROM $TBL_DOCUMENT WHERE c_id = $course_id AND path='".Database :: escape_string(
-                    $file
-                )."'";
+                $query = "SELECT id FROM $TBL_DOCUMENT WHERE c_id = $course_id AND path='".Database :: escape_string($file)."'";
                 $res = Database::query($query);
                 $row = Database :: fetch_array($res, 'ASSOC');
                 api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'invisible', $_user['user_id']);
                 break;
-            default :
+            default:
                 break;
         }
     }
@@ -346,7 +340,6 @@ $course_code = api_get_course_id();
 $courseId = api_get_course_int_id();
 $session_id = api_get_session_id();
 $condition_session = api_get_session_condition($session_id, true, true);
-
 
 // Only for administrators
 if ($is_allowedToEdit) {
@@ -372,11 +365,9 @@ if (Database :: num_rows($result_total)) {
     $total_exercises = $result_total['count'];
 }
 
-//get HotPotatoes files (active and inactive)
+// Get HotPotatoes files (active and inactive)
 if ($is_allowedToEdit) {
-    $sql = "SELECT * FROM $TBL_DOCUMENT WHERE c_id = $course_id AND path LIKE '".Database :: escape_string(
-        $uploadPath
-    )."/%/%'";
+    $sql = "SELECT * FROM $TBL_DOCUMENT WHERE c_id = $course_id AND path LIKE '".Database :: escape_string($uploadPath)."/%/%'";
     $res = Database::query($sql);
     $hp_count = Database :: num_rows($res);
 } else {
@@ -737,7 +728,7 @@ if (!empty($exercise_list)) {
                     }*/
 
                     $number_of_questions = $exercise_obj->getQuestionCount();
-                    if ($row['random'] > 0 || $row['random'] != -1) {
+                    if ($row['random'] > 0 && $row['random'] != -1) {
                         $number_of_questions = $number_of_questions.' ('.$row['random'].' '.get_lang('Random').') ';
                     }
 

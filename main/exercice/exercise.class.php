@@ -49,7 +49,7 @@ class Exercise
     public $feedback_type;
     public $end_time;
     public $start_time;
-    public $questionList; // array with the list of this exercise's questions
+    public $questionList;
     public $results_disabled;
     public $expired_time;
     public $course;
@@ -115,10 +115,11 @@ class Exercise
     }
 
     /**
-     * Reads exercise informations from the data base
+     * Reads exercise information from the database
      *
      * @author Olivier Brouckaert
      * @param int $id - exercise ID
+     * @param parse exercise question list
      * @return boolean - true if exercise exists, otherwise false
      */
     public function read($id, $parseQuestionList = true)
@@ -557,6 +558,7 @@ class Exercise
     }
 
     /**
+     * Get question count per exercise from DB (any special treatment)
      * @return int
      */
     public function getQuestionCount()
@@ -635,7 +637,8 @@ class Exercise
      * Select N values from the questions per category array
      * @param array $question_list
      * @param array $questions_by_category per category
-     * @param int custom N value
+     * @param array
+     * @param bool flat result
      * @return array
      */
     private function pickQuestionsPerCategory($question_list, $questions_by_category, $categoryCountArray = array(), $flatResult = true)
@@ -684,7 +687,7 @@ class Exercise
      * Selecting question list depending in the exercise-category
      * relationship (category table in exercise settings)
      *
-     * @param $question_list
+     * @param array $question_list
      * @return array
      */
     public function getQuestionListWithCategoryListFilteredByCategorySettings($question_list)
@@ -825,7 +828,7 @@ class Exercise
     }
 
     /**
-     * Returns the array with the question ID list ordered by question order,
+     * Returns the array with the question ID list ordered by question order (with the uncompressed media list)
      *
      * @author Olivier Brouckaert
      * @param bool $from_db
@@ -917,7 +920,7 @@ class Exercise
      *
      * @return boolean - true if in the list, otherwise false
      */
-    function isInList($questionId)
+    public function isInList($questionId)
     {
         if (is_array($this->questionList)) {
             return in_array($questionId, $this->questionList);
@@ -932,7 +935,7 @@ class Exercise
      * @author - Olivier Brouckaert
      * @param - string $title - exercise title
      */
-    function updateTitle($title)
+    public function updateTitle($title)
     {
         $this->exercise = $title;
     }
@@ -942,12 +945,12 @@ class Exercise
      *
      * @param - numeric $attempts - exercise max attempts
      */
-    function updateAttempts($attempts)
+    public function updateAttempts($attempts)
     {
         $this->attempts = $attempts;
     }
 
-    function updateActive($active)
+    public function updateActive($active)
     {
         $this->active = $active;
     }
@@ -957,7 +960,7 @@ class Exercise
      *
      * @param - numeric $attempts - exercise max attempts
      */
-    function updateFeedbackType($feedback_type)
+    public function updateFeedbackType($feedback_type)
     {
         $this->feedback_type = $feedback_type;
     }
@@ -968,7 +971,7 @@ class Exercise
      * @author - Olivier Brouckaert
      * @param - string $description - exercise description
      */
-    function updateDescription($description)
+    public function updateDescription($description)
     {
         $this->description = $description;
     }
@@ -979,12 +982,12 @@ class Exercise
      * @author - Isaac flores
      * @param - int The expired time of the quiz
      */
-    function updateExpiredTime($expired_time)
+    public function updateExpiredTime($expired_time)
     {
         $this->expired_time = $expired_time;
     }
 
-    function updatePropagateNegative($value)
+    public function updatePropagateNegative($value)
     {
         $this->propagate_neg = $value;
     }
@@ -992,7 +995,7 @@ class Exercise
     /**
      * @param $value
      */
-    function updateReviewAnswers($value)
+    public function updateReviewAnswers($value)
     {
         $this->review_answers = (isset($value) && $value) ? true : false;
     }
@@ -1000,7 +1003,7 @@ class Exercise
     /**
      * @param $value
      */
-    function updatePassPercentage($value)
+    public function updatePassPercentage($value)
     {
         $this->pass_percentage = $value;
     }
@@ -1021,7 +1024,7 @@ class Exercise
     /**
      * @param array $categories
      */
-    function updateCategories($categories)
+    public function updateCategories($categories)
     {
         if (!empty($categories)) {
             $categories = array_map('intval', $categories);
@@ -1036,7 +1039,7 @@ class Exercise
      * @param - string $sound - exercise sound file
      * @param - string $delete - ask to delete the file
      */
-    function updateSound($sound, $delete)
+    public function updateSound($sound, $delete)
     {
         global $audioPath, $documentPath;
         $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
@@ -1079,7 +1082,7 @@ class Exercise
      * @author - Olivier Brouckaert
      * @param - integer $type - exercise type
      */
-    function updateType($type)
+    public function updateType($type)
     {
         $this->type = $type;
     }
@@ -1091,7 +1094,7 @@ class Exercise
      * @author - Olivier Brouckaert
      * @param - integer $random - 0 if not random, otherwise the draws
      */
-    function setRandom($random)
+    public function setRandom($random)
     {
         $this->random = $random;
     }
@@ -1102,7 +1105,7 @@ class Exercise
      * @author - Juan Carlos Raï¿½a
      * @param - integer $random_answers - random answers
      */
-    function updateRandomAnswers($random_answers)
+    public function updateRandomAnswers($random_answers)
     {
         $this->random_answers = $random_answers;
     }
@@ -1112,7 +1115,7 @@ class Exercise
      *
      * @author - Olivier Brouckaert
      */
-    function enable()
+    public function enable()
     {
         $this->active = 1;
     }
@@ -1122,22 +1125,22 @@ class Exercise
      *
      * @author - Olivier Brouckaert
      */
-    function disable()
+    public function disable()
     {
         $this->active = 0;
     }
 
-    function disable_results()
+    public function disable_results()
     {
         $this->results_disabled = true;
     }
 
-    function enable_results()
+    public function enable_results()
     {
         $this->results_disabled = false;
     }
 
-    function updateResultsDisabled($results_disabled)
+    public function updateResultsDisabled($results_disabled)
     {
         $this->results_disabled = intval($results_disabled);
     }
@@ -1170,7 +1173,7 @@ class Exercise
         $pass_percentage = intval($this->pass_percentage);
         $session_id = api_get_session_id();
 
-        //If direct we do not show results
+        // If direct we do not show results
         if ($feedback_type == EXERCISE_FEEDBACK_TYPE_DIRECT) {
             $results_disabled = 0;
         } else {
@@ -1258,7 +1261,7 @@ class Exercise
             Database::query($sql);
             $this->id = Database::insert_id();
 
-            $this->add_exercise_to_order_table();
+            $this->addExerciseToOrderTable();
 
             // insert into the item_property table
             api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'QuizAdded', api_get_user_id());
@@ -1322,8 +1325,8 @@ class Exercise
      * removes a question from the question list
      *
      * @author - Olivier Brouckaert
-     * @param - integer $questionId - question ID
-     * @return - boolean - true if the question has been removed, otherwise false
+     * @param integer $questionId - question ID
+     * @return boolean - true if the question has been removed, otherwise false
      */
     public function removeFromList($questionId)
     {
@@ -2122,7 +2125,7 @@ class Exercise
         }
     }
 
-    function search_engine_delete()
+    public function search_engine_delete()
     {
         // remove from search engine if enabled
         if (api_get_setting('search_enabled') == 'true' && extension_loaded('xapian')) {
@@ -2161,7 +2164,7 @@ class Exercise
         }
     }
 
-    function selectExpiredTime()
+    public function selectExpiredTime()
     {
         return $this->expired_time;
     }
@@ -2172,7 +2175,7 @@ class Exercise
      * Works with exercises in sessions
      * @return int quantity of user's exercises deleted
      */
-    function clean_results()
+    public function clean_results()
     {
         $table_track_e_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $table_track_e_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -2209,7 +2212,11 @@ class Exercise
         return $i;
     }
 
-    function get_last_exercise_order()
+    /**
+     * Gets the latest exercise order
+     * @return int
+     */
+    public function getLastExerciseOrder()
     {
         $table = Database::get_course_table(TABLE_QUIZ_ORDER);
         $course_id = intval($this->course_id);
@@ -2224,10 +2231,18 @@ class Exercise
         return 0;
     }
 
-    function get_exercise_order()
+    /**
+     * Get exercise order
+     * @return mixed
+     */
+    public function getExerciseOrder()
     {
         $table = Database::get_course_table(TABLE_QUIZ_ORDER);
-        $sql = "SELECT exercise_order FROM $table WHERE exercise_id = {$this->id}";
+        $courseId = $this->course_id;
+        $sessionId = api_get_session_id();
+
+        $sql = "SELECT exercise_order FROM $table
+                WHERE exercise_id = {$this->id} AND c_id = $courseId AND session_id  = $sessionId ";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result);
@@ -2237,10 +2252,13 @@ class Exercise
         return false;
     }
 
-    function add_exercise_to_order_table()
+    /**
+     * Add the exercise to the exercise order table
+     */
+    public function addExerciseToOrderTable()
     {
         $table = Database::get_course_table(TABLE_QUIZ_ORDER);
-        $last_order = $this->get_last_exercise_order();
+        $last_order = $this->getLastExerciseOrder();
         $course_id = $this->course_id;
 
         if ($last_order == 0) {
@@ -2254,7 +2272,7 @@ class Exercise
                 )
             );
         } else {
-            $current_exercise_order = $this->get_exercise_order();
+            $current_exercise_order = $this->getExerciseOrder();
             if ($current_exercise_order == false) {
                 Database::insert(
                     $table,
@@ -2269,11 +2287,11 @@ class Exercise
         }
     }
 
-    function update_exercise_list_order($new_exercise_list, $course_id, $session_id)
+    public function update_exercise_list_order($new_exercise_list, $course_id, $session_id)
     {
         $table = Database::get_course_table(TABLE_QUIZ_ORDER);
         $counter = 1;
-        //Drop all
+        // Drop all
         $session_id = intval($session_id);
         $course_id = intval($course_id);
 
@@ -2520,10 +2538,17 @@ class Exercise
         return $id;
     }
 
+    /**
+     * @param int $question_id
+     * @param int $questionNum
+     * @param array $questions_in_media
+     * @param array $remindList
+     * @return string
+     */
     public function show_button($question_id, $questionNum, $questions_in_media = array(), $remindList = array())
     {
         global $origin, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;
-        $nbrQuestions = $this->get_count_question_list();
+        $nbrQuestions = $this->getCountCompressedQuestionList();
 
         $all_button = $html = $label = '';
         $hotspot_get = isset($_POST['hotspot']) ? Security::remove_XSS($_POST['hotspot']) : null;
@@ -4757,6 +4782,7 @@ class Exercise
         $result = array();
         $totalScore = 0;
         $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($exe_id);
+        $totalScore = 0;
         if (!empty($track_exercise_info)) {
             $objExercise = new Exercise();
             $objExercise->read($track_exercise_info['exe_exo_id']);
@@ -4774,7 +4800,7 @@ class Exercise
                     true,
                     false
                 );
-                $questionScore = $question_result['score'];
+                // $questionScore = $question_result['score'];
                 $totalScore += $question_result['score'];
             }
 
@@ -5163,7 +5189,6 @@ class Exercise
         $teacher_answer_list = $this->fill_in_blank_answer_to_array($answer);
         $result = '';
         if (!empty($teacher_answer_list)) {
-            $i = 0;
             foreach ($teacher_answer_list as $teacher_item) {
                 $value = null;
                 //Cleaning student answer list
@@ -5199,9 +5224,10 @@ class Exercise
     }
 
     /**
+     * Get question list (including question ids of the media)
      * @return int
      */
-    function get_count_question_list()
+    public function getCountUncompressedQuestionList()
     {
         //Real question count
         $question_count = 0;
@@ -5214,6 +5240,24 @@ class Exercise
     }
 
     /**
+     * Get question list (excluding question ids of the media)
+     * @return int
+     */
+    public function getCountCompressedQuestionList()
+    {
+        $mediaQuestions = $this->getMediaList();
+        $questionCount = 0;
+        foreach ($mediaQuestions as $mediaKey => $questionList) {
+            if ($mediaKey == 999) {
+                $questionCount += count($questionList);
+            } else {
+                $questionCount++;
+            }
+        }
+        return $questionCount;
+    }
+
+    /**
      * @return array
      */
     function get_exercise_list_ordered()
@@ -5221,7 +5265,9 @@ class Exercise
         $table_exercise_order = Database::get_course_table(TABLE_QUIZ_ORDER);
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
-        $sql = "SELECT exercise_id, exercise_order FROM $table_exercise_order WHERE c_id = $course_id AND session_id = $session_id ORDER BY exercise_order";
+        $sql = "SELECT exercise_id, exercise_order FROM $table_exercise_order
+                       WHERE c_id = $course_id AND session_id = $session_id ORDER BY exercise_order";
+
         $result = Database::query($sql);
         $list = array();
         if (Database::num_rows($result)) {
@@ -5582,7 +5628,7 @@ class Exercise
     /**
      * Renders a question list
      *
-     * @param array $questionList
+     * @param array $questionList (with media questions compressed)
      * @param int $currentQuestion
      * @param array $exerciseResult
      * @param array $attemptList
@@ -5593,7 +5639,7 @@ class Exercise
         $mediaQuestions = $this->getMediaList();
         $i = 0;
 
-        // Normal question list render
+        // Normal question list render (medias compressed)
         foreach ($questionList as $questionId) {
             $i++;
             // For sequential exercises
@@ -5779,7 +5825,7 @@ class Exercise
                 case ALL_ON_ONE_PAGE :
                     $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
                     $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
-                    $exercise_actions  .= Display::div($button, array('class'=>'exercise_save_now_button'));
+                    $exercise_actions .= Display::div($button, array('class'=>'exercise_save_now_button'));
                     break;
             }
 
@@ -5788,7 +5834,7 @@ class Exercise
                 if ($count_of_questions_inside_media > 1) {
                     $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\', false, false); ">'.get_lang('SaveForNow').'</a>';
                     $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
-                    $exercise_actions  = Display::div($button, array('class'=>'exercise_save_now_button'));
+                    $exercise_actions = Display::div($button, array('class'=>'exercise_save_now_button'));
                 }
 
                 if ($last_question_in_media && $this->type == ONE_PER_PAGE) {
@@ -5804,18 +5850,18 @@ class Exercise
 
             echo Display::div(' ', array('class'=>'clear'));
 
-            $paginator = null;
+            $paginationCounter = null;
             if ($this->type == ONE_PER_PAGE) {
                 if (empty($questions_in_media)) {
-                    $paginator = Display::paginationIndicator($current_question, count($realQuestionList));
+                    $paginationCounter = Display::paginationIndicator($current_question, count($realQuestionList));
                 } else {
                     if ($last_question_in_media) {
-                        $paginator = Display::paginationIndicator($current_question, count($realQuestionList));
+                        $paginationCounter = Display::paginationIndicator($current_question, count($realQuestionList));
                     }
                 }
             }
 
-            echo '<div class="row"><div class="pull-right">'.$paginator.'</div></div>';
+            echo '<div class="row"><div class="pull-right">'.$paginationCounter.'</div></div>';
             echo Display::div($exercise_actions, array('class'=>'form-actions'));
             echo '</div>';
         }

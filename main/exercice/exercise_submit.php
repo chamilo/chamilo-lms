@@ -336,7 +336,7 @@ if (api_is_allowed_to_edit(null,true) && isset($_GET['preview']) && $_GET['previ
 // 1. Loading the $objExercise variable
 if (!isset($_SESSION['objExercise']) || $_SESSION['objExercise']->id != $_REQUEST['exerciseId']) {
     // Construction of Exercise
-    /** @var \Exercise $objExercise */
+    /** @var Exercise $objExercise */
     $objExercise = new Exercise();
     if ($debug) {error_log('1. Setting the $objExercise variable'); };
     unset($_SESSION['questionList']);
@@ -397,11 +397,14 @@ if ($time_control) {
     $total_seconds = $objExercise->expired_time * 60;
 }
 
+$exercise_title	= $objExercise->selectTitle();
+$exercise_sound = $objExercise->selectSound();
+
 $show_clock = true;
 $user_id = api_get_user_id();
 if ($objExercise->selectAttempts() > 0) {
-	$attempt_html = null;
-	$attempt_count = get_attempt_count($user_id, $exerciseId, $learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
+    $attempt_html = null;
+    $attempt_count = get_attempt_count($user_id, $exerciseId, $learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
 
 	if ($attempt_count >= $objExercise->selectAttempts()) {
 		$show_clock = false;
@@ -601,12 +604,9 @@ if ($time_control) { //Sends the exercise form when the expired time is finished
 	$htmlHeadXtra[] = $objExercise->show_time_control_js($time_left);
 }
 
-$exercise_title	= $objExercise->selectTitle();
-$exercise_sound = $objExercise->selectSound();
-
 if ($debug) error_log('8. Question list loaded '.print_r($questionList, 1));
 
-$question_count = $objExercise->get_count_question_list();
+$question_count = $objExercise->getCountCompressedQuestionList();
 
 if ($formSent && isset($_POST)) {
     if ($debug) { error_log('9. $formSent was sent'); }
@@ -1177,16 +1177,6 @@ if (!empty($error)) {
             }
 		</script>';
 
-    echo '<form id="exercise_form" method="post" action="'.api_get_self().'?'.api_get_cidreq().'&autocomplete=off&gradebook='.$gradebook."&exerciseId=" . $exerciseId .'" name="frm_exercise" '.$onsubmit.'>
-         <input type="hidden" name="formSent"				value="1" />
-         <input type="hidden" name="exerciseId" 			value="'.$exerciseId . '" />
-         <input type="hidden" name="num" 					value="'.$current_question.'" id="num_current_id" />
-         <input type="hidden" name="exe_id" 				value="'.$exe_id . '" />
-         <input type="hidden" name="origin" 				value="'.$origin . '" />
-         <input type="hidden" name="learnpath_id" 			value="'.$learnpath_id . '" />
-         <input type="hidden" name="learnpath_item_id" 		value="'.$learnpath_item_id . '" />
-         <input type="hidden" name="learnpath_item_view_id" value="'.$learnpath_item_view_id . '" />';
-
 	// Show list of questions.
     $attempt_list = array();
     if (isset($exe_id)) {
@@ -1197,6 +1187,17 @@ if (!empty($error)) {
     if (isset($exercise_stat_info['questions_to_check']) && !empty($exercise_stat_info['questions_to_check'])) {
         $remind_list = explode(',', $exercise_stat_info['questions_to_check']);
     }
+
+    echo '<form id="exercise_form" method="post" action="'.api_get_self().'?'.api_get_cidreq().'&autocomplete=off&gradebook='.$gradebook."&exerciseId=".$exerciseId .'" name="frm_exercise" '.$onsubmit.'>
+     <input type="hidden" name="formSent"				value="1" />
+     <input type="hidden" name="exerciseId" 			value="'.$exerciseId . '" />
+     <input type="hidden" name="num" 					value="'.$current_question.'" id="num_current_id" />
+     <input type="hidden" name="exe_id" 				value="'.$exe_id . '" />
+     <input type="hidden" name="origin" 				value="'.$origin . '" />
+     <input type="hidden" name="learnpath_id" 			value="'.$learnpath_id . '" />
+     <input type="hidden" name="learnpath_item_id" 		value="'.$learnpath_item_id . '" />
+     <input type="hidden" name="learnpath_item_view_id" value="'.$learnpath_item_view_id . '" />';
+
     $objExercise->renderQuestionList($questionList, $current_question, $exerciseResult, $attempt_list, $remind_list);
 
     echo '</form>';

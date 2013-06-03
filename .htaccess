@@ -3,7 +3,7 @@
     Options +FollowSymLinks
 
     RewriteEngine On
-    RewriteBase /
+    RewriteBase /chamilogits
 
     # Courses home
     RewriteCond %{QUERY_STRING} ^id_session=0

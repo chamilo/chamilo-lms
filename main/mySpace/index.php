@@ -164,18 +164,20 @@ echo '</span>';
     
 if (!empty($session_id)) {
 	echo '<a href="index.php">'.Display::return_icon('back.png', get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
-    if (api_get_setting('add_users_by_coach') == 'true') {
-	    if (!api_is_platform_admin()) {
-		    if (!$is_coach) {
-			    api_not_allowed(true);
-		    } else {
-			    echo "<div align=\"right\">";
-	            echo '<a href="user_import.php?id_session='.$session_id.'&action=export&amp;type=xml">'.Display::return_icon('excel.gif', get_lang('ImportUserList')).'&nbsp;'.get_lang('ImportUserList').'</a>';
-	            echo "</div><br />";
-		    }
+    if (!api_is_platform_admin()) {
+        if (api_get_setting('add_users_by_coach') == 'true') {
+	        if ($is_coach) {
+		        echo "<div align=\"right\">";
+                echo '<a href="user_import.php?id_session='.$session_id.'&action=export&amp;type=xml">'.Display::return_icon('excel.gif', get_lang('ImportUserList')).'&nbsp;'.get_lang('ImportUserList').'</a>';
+                echo "</div><br />";
+	        }
 	    }
+	       
+    } else {
+        echo "<div align=\"right\">";
+        echo '<a href="user_import.php?id_session='.$session_id.'&action=export&amp;type=xml">'.Display::return_icon('excel.gif', get_lang('ImportUserList')).'&nbsp;'.get_lang('ImportUserList').'</a>';
+        echo "</div><br />";
     }
-
 } else {
 	echo Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );
 } 

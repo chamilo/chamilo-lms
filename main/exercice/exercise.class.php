@@ -73,6 +73,7 @@ class Exercise
     public $loadQuestionAJAX = false;
     public $emailNotificationTemplate = null;
     public $countQuestions = 0;
+    public $fastEdition = false;
 
     /**
      * Constructor of the class
@@ -172,6 +173,7 @@ class Exercise
             }
 
             $this->force_edit_exercise_in_lp = isset($_configuration['force_edit_exercise_in_lp']) ? $_configuration['force_edit_exercise_in_lp'] : false;
+            $this->fastEdition = api_get_course_setting('allow_fast_exercise_edition') == 1 ? true : false;
 
             if ($this->exercise_was_added_in_lp) {
                 $this->edit_exercise_in_lp = $this->force_edit_exercise_in_lp == true;

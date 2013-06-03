@@ -12,11 +12,6 @@
 /**
  * Code
  */
-
-/**
- * Matching questions type class
- * @package chamilo.exercise
- */
 class Draggable extends Matching
 {
     static $typePicture = 'matching.gif';
@@ -25,7 +20,7 @@ class Draggable extends Matching
     /**
      * Constructor
      */
-    function Draggable()
+    public function Draggable()
     {
         parent::question();
         $this->type      = DRAGGABLE;
@@ -34,7 +29,7 @@ class Draggable extends Matching
 
     /**
      * Function which redefines Question::createAnswersForm
-     * @param the formvalidator instance
+     * @param FormValidator instance
      */
     public function createAnswersForm($form)
     {
@@ -168,7 +163,7 @@ class Draggable extends Matching
 
     /**
      * abstract function which creates the form to create / edit the answers of the question
-     * @param the formvalidator instance
+     * @param FormValidator instance
      */
     public function processAnswersCreation($form)
     {

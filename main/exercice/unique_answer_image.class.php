@@ -1,15 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
-/**
- *    File containing the UNIQUE_ANSWER class.
- * @package chamilo.exercise
- * @author Eric Marguin
- */
-/**
- * Code
- */
-
 /**
  *
  *    This class allows to instantiate an object of type UNIQUE_ANSWER_IMAGE
@@ -29,7 +19,7 @@ class UniqueAnswerImage extends UniqueAnswer
     /**
      * Constructor
      */
-    function UniqueAnswerImage()
+    public function UniqueAnswerImage()
     {
         //this is highly important
         parent::question();
@@ -39,10 +29,10 @@ class UniqueAnswerImage extends UniqueAnswer
 
     /**
      * function which redifines Question::createAnswersForm
-     * @param the formvalidator instance
-     * @param the answers number to display
+     * @param FormValidator instance
+
      */
-    function createAnswersForm($form)
+    public function createAnswersForm($form)
     {
         // Getting the exercise list
         $obj_ex = $this->exercise;
@@ -183,20 +173,38 @@ class UniqueAnswerImage extends UniqueAnswer
             $answer_number->freeze();
 
             $form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
+
             $form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
+            /*
+            if ($obj_ex->fastEdition) {
+                $form->addElement('textarea', 'answer['.$i.']', null, $this->textareaSettings);
+            } else {
+                $form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
+            }*/
 
             $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
             if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
-                // feedback
-                $form->addElement(
-                    'html_editor',
-                    'comment['.$i.']',
-                    null,
-                    'style="vertical-align:middle"',
-                    $editor_config
-                );
+                if ($obj_ex->fastEdition) {
+                    // feedback
+                    $form->addElement(
+                        'textarea',
+                        'comment['.$i.']',
+                        null,
+                        $this->textareaSettings
+                    );
+                } else {
+                    // feedback
+                    $form->addElement(
+                        'html_editor',
+                        'comment['.$i.']',
+                        null,
+                        'style="vertical-align:middle"',
+                        $editor_config
+                    );
+                }
             } elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+
                 $form->addElement(
                     'html_editor',
                     'comment['.$i.']',
@@ -282,10 +290,9 @@ class UniqueAnswerImage extends UniqueAnswer
 
     /**
      * abstract function which creates the form to create / edit the answers of the question
-     * @param the formvalidator instance
-     * @param the answers number to display
+     * @param FormValidator instance
      */
-    function processAnswersCreation($form)
+    public function processAnswersCreation($form)
     {
 
         $questionWeighting = $nbrGoodAnswers = 0;
@@ -307,9 +314,6 @@ class UniqueAnswerImage extends UniqueAnswer
             $lp          = $scenario['lp'.$i];
             $destination = $scenario['destination'.$i];
             $url         = trim($scenario['url'.$i]);
-
-
-
             $goodAnswer = ($correct == $i) ? true : false;
 
             if ($goodAnswer) {
@@ -349,7 +353,14 @@ class UniqueAnswerImage extends UniqueAnswer
         $this->save();
     }
 
-    function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false)
+    /**
+     * @param int $feedback_type
+     * @param int $counter
+     * @param int $score
+     * @param bool $show_media
+     * @return string
+     */
+    public function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false)
     {
         return parent::return_header($feedback_type, $counter, $score, $show_media);
     }

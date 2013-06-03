@@ -115,10 +115,11 @@ class Exercise
     }
 
     /**
-     * Reads exercise informations from the data base
+     * Reads exercise information from the database
      *
      * @author Olivier Brouckaert
      * @param int $id - exercise ID
+     * @param parse exercise question list
      * @return boolean - true if exercise exists, otherwise false
      */
     public function read($id, $parseQuestionList = true)
@@ -1258,7 +1259,7 @@ class Exercise
             Database::query($sql);
             $this->id = Database::insert_id();
 
-            $this->add_exercise_to_order_table();
+            $this->addExerciseToOrderTable();
 
             // insert into the item_property table
             api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'QuizAdded', api_get_user_id());
@@ -2122,7 +2123,7 @@ class Exercise
         }
     }
 
-    function search_engine_delete()
+    public function search_engine_delete()
     {
         // remove from search engine if enabled
         if (api_get_setting('search_enabled') == 'true' && extension_loaded('xapian')) {
@@ -2161,7 +2162,7 @@ class Exercise
         }
     }
 
-    function selectExpiredTime()
+    public function selectExpiredTime()
     {
         return $this->expired_time;
     }
@@ -2172,7 +2173,7 @@ class Exercise
      * Works with exercises in sessions
      * @return int quantity of user's exercises deleted
      */
-    function clean_results()
+    public function clean_results()
     {
         $table_track_e_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $table_track_e_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -2209,7 +2210,11 @@ class Exercise
         return $i;
     }
 
-    function get_last_exercise_order()
+    /**
+     * Gets the latest exercise order
+     * @return int
+     */
+    public function getLastExerciseOrder()
     {
         $table = Database::get_course_table(TABLE_QUIZ_ORDER);
         $course_id = intval($this->course_id);
@@ -2224,10 +2229,18 @@ class Exercise
         return 0;
     }
 
-    function get_exercise_order()
+    /**
+     * Get exercise order
+     * @return mixed
+     */
+    public function getExerciseOrder()
     {
         $table = Database::get_course_table(TABLE_QUIZ_ORDER);
-        $sql = "SELECT exercise_order FROM $table WHERE exercise_id = {$this->id}";
+        $courseId = $this->course_id;
+        $sessionId = api_get_session_id();
+
+        $sql = "SELECT exercise_order FROM $table
+                WHERE exercise_id = {$this->id} AND c_id = $courseId AND session_id  = $sessionId ";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result);
@@ -2237,10 +2250,13 @@ class Exercise
         return false;
     }
 
-    function add_exercise_to_order_table()
+    /**
+     * Add the exercise to the exercise order table
+     */
+    public function addExerciseToOrderTable()
     {
         $table = Database::get_course_table(TABLE_QUIZ_ORDER);
-        $last_order = $this->get_last_exercise_order();
+        $last_order = $this->getLastExerciseOrder();
         $course_id = $this->course_id;
 
         if ($last_order == 0) {
@@ -2254,7 +2270,7 @@ class Exercise
                 )
             );
         } else {
-            $current_exercise_order = $this->get_exercise_order();
+            $current_exercise_order = $this->getExerciseOrder();
             if ($current_exercise_order == false) {
                 Database::insert(
                     $table,
@@ -2269,11 +2285,11 @@ class Exercise
         }
     }
 
-    function update_exercise_list_order($new_exercise_list, $course_id, $session_id)
+    public function update_exercise_list_order($new_exercise_list, $course_id, $session_id)
     {
         $table = Database::get_course_table(TABLE_QUIZ_ORDER);
         $counter = 1;
-        //Drop all
+        // Drop all
         $session_id = intval($session_id);
         $course_id = intval($course_id);
 
@@ -5220,7 +5236,9 @@ class Exercise
         $table_exercise_order = Database::get_course_table(TABLE_QUIZ_ORDER);
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
-        $sql = "SELECT exercise_id, exercise_order FROM $table_exercise_order WHERE c_id = $course_id AND session_id = $session_id ORDER BY exercise_order";
+        $sql = "SELECT exercise_id, exercise_order FROM $table_exercise_order
+                       WHERE c_id = $course_id AND session_id = $session_id ORDER BY exercise_order";
+
         $result = Database::query($sql);
         $list = array();
         if (Database::num_rows($result)) {

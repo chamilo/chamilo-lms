@@ -1506,7 +1506,7 @@ class CourseRestorer
                     $exercise->read($new_id);
 
                     if ($new_id != -1) {
-                        $exercise->add_exercise_to_order_table();
+                        $exercise->addExerciseToOrderTable();
                     }
 
                     $this->course->resources[RESOURCE_QUIZ][$id]->obj->destination_id = $new_id;

@@ -4,7 +4,6 @@
  * Responses to AJAX calls
  */
 
-use ChamiloSession as Session;
 require_once '../../exercice/exercise.class.php';
 require_once '../../exercice/question.class.php';
 require_once '../../exercice/answer.class.php';

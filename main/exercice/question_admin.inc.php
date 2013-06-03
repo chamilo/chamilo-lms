@@ -37,7 +37,14 @@ if (is_object($objQuestion)) {
         $objQuestion->submitText  = get_lang('AddQuestionToExercise');
     }
 
-    if (!isset($_GET['fromExercise'])) {
+    /*if (!isset($_GET['fromExercise'])) {
+        $objQuestion->setDefaultQuestionValues = true;
+    }*/
+
+    // This condition depends of the exercice/question_create.php page that sets the "isContent" value
+    if (isset($_REQUEST['newQuestion']) && $_REQUEST['newQuestion'] == 'yes' &&
+        (isset($_REQUEST['isContent']) && $_REQUEST['isContent'] == '1')
+    ) {
         $objQuestion->setDefaultQuestionValues = true;
     }
 

@@ -111,9 +111,6 @@ if (empty($clone_question)) {
 if (empty($questionId)) {
     $questionId = isset($_SESSION['questionId'])?$_SESSION['questionId']:0;
 }
-if (empty($modifyExercise)) {
-    $modifyExercise = isset($_GET['modifyExercise'])?$_GET['modifyExercise']:0;
-}
 
 // Cleaning all incomplete attempts of the admin/teacher to avoid weird problems when changing the exercise settings, number of questions, etc
 
@@ -188,13 +185,6 @@ if ($objExercise->fastEdition) {
     $htmlHeadXtra[] = api_get_jqgrid_js();
 }
 
-// Doesn't select the exercise ID if we come from the question pool
-if (!isset($fromExercise) or !$fromExercise) {
-    // gets the right exercise ID, and if 0 creates a new exercise
-    if (!$exerciseId = $objExercise->selectId()) {
-        $modifyExercise = 'yes';
-    }
-}
 $nbrQuestions = $objExercise->getQuestionCount();
 
 // Initializes the Question object

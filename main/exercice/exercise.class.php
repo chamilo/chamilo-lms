@@ -882,18 +882,24 @@ class Exercise
      */
     public function selectRandomList()
     {
+        $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+
         $random = isset($this->random) && !empty($this->random) ? $this->random : 0;
 
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $randomLimit = "LIMIT $random";
+        // Random all questions so no limit
+        if ($random == -1) {
+            $randomLimit = null;
+        }
 
         // @todo improve this query
         $sql = "SELECT e.question_id
-                FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS q
+                FROM $TBL_EXERCISE_QUESTION e INNER JOIN $TBL_QUESTIONS q
                     ON (e.question_id= q.iid)
                 WHERE e.c_id = {$this->course_id} AND e.exercice_id	= '".Database::escape_string($this->id)."'
                 ORDER BY RAND()
-                LIMIT $random ";
+                $randomLimit ";
         $result = Database::query($sql);
         $questionList = array();
         while ($row = Database::fetch_object($result)) {

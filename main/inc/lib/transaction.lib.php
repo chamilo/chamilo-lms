@@ -378,6 +378,48 @@ class ExerciseAttemptTransactionLog extends TransactionLog {
    * {@inheritdoc}
    */
   public $controller_class = 'ExerciseAttemptTransactionLogController';
+
+  /**
+   * {@inheritdoc}
+   */
+  public function export() {
+    throw new TransactionExportException('Unimplemented export method on ' . __CLASS__);
+    // @fixme Actually do exporting.
+    if (empty($this->item_id)) {
+      throw new TransactionExportException('Undefined item_id');
+    }
+    list($exercise_id, $attempt_id) = explode(':', $this->item_id);
+    if (empty($this->data['course_id'])) {
+      throw new TransactionExportException('Undefined course_id');
+    }
+    $exercise = new Exercise($this->data['course_id']);
+    if (!$exercise->read($exercise_id)) {
+      throw new TransactionExportException(sprintf('The included exercise id "%d" on course with id "%d" does not currently exists on the database.', $exercise_id, $this->data['course_id']));
+    }
+    $attempt = $exercise->getStatTrackExerciseInfoByExeId($attempt_id);
+    if (empty($attempt)) {
+      throw new TransactionExportException(sprintf('There is no data associated with exe_id "%d" on the database.', $attempt_id));
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function import() {
+    throw new TransactionImportException('Unimplemented import method on ' . __CLASS__);
+    // @fixme Actually do importing.
+    if ($this->status_id == TransactionLog::STATUS_LOCAL) {
+      return FALSE;
+    }
+    if (empty($this->data['course_id'])) {
+      throw new TransactionImportException('Undefined course_id');
+    }
+    $exercise = new Exercise($this->data['course_id']);
+    if (!$exercise->read($exercise_id)) {
+      throw new TransactionImportException(sprintf('The included exercise id "%d" on course with id "%d" does not currently exists on the database.', $exercise_id, $this->data['course_id']));
+    }
+    // See Exercise::save_stat_track_exercise_info().
+  }
 }
 
 /**

@@ -229,6 +229,32 @@ abstract class TransactionLog {
     }
     return $settings;
   }
+
+  /**
+   * Import this transaction to the system.
+   *
+   * @trows TransactionImportException
+   *   If any step for re-creating the element fails, an exception should be
+   *   raised.
+   */
+  abstract public function import();
+
+  /**
+   * Export this transaction out of the system.
+   *
+   * Notice that local transaction does not always contain all the needed
+   * information to reproduce the element on another (branch) system. This
+   * method takes care about the missing parts not stored to avoid duplication.
+   *
+   * @trows TransactionExportException
+   *   If any step for exporting the element fails, an exception should be
+   *   raised.
+   *
+   * @return mixed
+   *   String representing this transaction as expected by corresponding
+   *   controller importtoLog() or FALSE if export failed.
+   */
+  abstract public function export();
 }
 
 /**
@@ -311,6 +337,32 @@ class TransactionLogController {
     }
     return array_shift($transactions);
   }
+
+  /**
+   * Adds the information to the transaction tables.
+   *
+   * @param array $transaction_data
+   *   A set of transaction arrays. Each of them as required by
+   *   TransactionLog::__construct().
+   */
+  public function importToLog($transaction_data) {
+    foreach ($transaction_data as $item) {
+      $transaction = new $this->class($item);
+      $transaction->save();
+    }
+  }
+}
+
+/**
+ * A custom exception for transaction imports.
+ */
+class TransactionImportException extends Exception {
+}
+
+/**
+ * A custom exception for transaction exports.
+ */
+class TransactionExportException extends Exception {
 }
 
 /**

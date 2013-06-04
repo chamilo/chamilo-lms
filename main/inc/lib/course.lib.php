@@ -355,10 +355,13 @@ class CourseManager
      */
     public static function unsubscribe_user($user_id, $courseId, $session_id = 0)
     {
-        if (!isset($user_id)) { return false; }
+        if (!isset($user_id)) {
+            return false;
+        }
         if (!is_array($user_id)) {
             $user_id = array($user_id);
         }
+
         if (count($user_id) == 0) {
             return false;
         }
@@ -375,7 +378,7 @@ class CourseManager
         //Cleaning the $user_id variable
         if (is_array($user_id)) {
             $new_user_id_list = array();
-            foreach($user_id as $my_user_id) {
+            foreach ($user_id as $my_user_id) {
                 $new_user_id_list[]= intval($my_user_id);
             }
             $new_user_id_list = array_filter($new_user_id_list);
@@ -3367,7 +3370,8 @@ class CourseManager
      *
      * @return     array
      */
-    public static function copy_course_simple($new_title, $source_course_code, $source_session_id = 0, $destination_session_id = 0, $params = array()) {
+    public static function copy_course_simple($new_title, $source_course_code, $source_session_id = 0, $destination_session_id = 0, $params = array())
+    {
         $source_course_info = api_get_course_info($source_course_code);
         if (!empty($source_course_info)) {
             $new_course_code = self::generate_nice_next_course_code($source_course_code);

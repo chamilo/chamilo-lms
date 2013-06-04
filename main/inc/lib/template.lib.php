@@ -373,7 +373,7 @@ class Template
         $css[] = api_get_cdn_path($cssPath.$this->theme.'/default.css');
         $css[] = api_get_cdn_path($cssPath.'bootstrap-responsive.css');
         $css[] = api_get_cdn_path($cssPath.'responsive.css');
-        $css[] = api_get_cdn_path($cssPath.'font_awesome/font-awesome.css');
+        $css[] = api_get_cdn_path($cssPath.'font_awesome/css/font-awesome.css');
 
         // Extra CSS files.
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css';

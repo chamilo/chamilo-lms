@@ -245,6 +245,8 @@ class FlatViewTable extends SortableTable
                 foreach($resource_list as $key=>$resource) {
                     $new_resource_list = $new_resource_list_name = array();
                     $DataSet = new pData();
+                    // Reverse array, otherwise we get highest values first
+                    $resource = array_reverse($resource,true);
                     foreach ($resource as $name=>$cant) {
                         $DataSet->AddPoint($cant,"Serie".$j);
                         $DataSet->SetSerieName(strip_tags($name),"Serie".$j);

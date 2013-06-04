@@ -1559,7 +1559,7 @@ class CourseManager
 
         // Cleaning c_x tables
         if (!empty($courseInfo['id'])) {
-            foreach($course_tables as $table) {
+            foreach ($course_tables as $table) {
                 $table = Database::get_course_table($table);
                 $sql = "DELETE FROM $table WHERE c_id = $courseId ";
                 Database::query($sql);
@@ -1654,6 +1654,7 @@ class CourseManager
         $sql = "SELECT distinct field_id FROM $t_cfv";
         $res_field_all_ids = @Database::query($sql);
 
+        $field_all_ids = array();
         while($row_field_all_id = Database::fetch_row($res_field_all_ids)){
             $field_all_ids[] = $row_field_all_id[0];
         }
@@ -1661,7 +1662,7 @@ class CourseManager
         if (isset($field_ids) && is_array($field_ids) && count($field_ids) > 0) {
             foreach ($field_ids as $field_id) {
                 // check if field id is used into table field value
-                if (is_array($field_all_ids)) {
+                if (!empty($field_all_ids) && is_array($field_all_ids)) {
                     if (in_array($field_id, $field_all_ids)) {
                         continue;
                     } else {

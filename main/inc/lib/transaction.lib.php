@@ -68,6 +68,40 @@ abstract class TransactionLog {
    * A place to store an instace of the related controller class.
    */
   public $controller;
+  /**
+   * Transaction identifier.
+   */
+  public $id;
+  /**
+   * Branch id this transaction comes from.
+   *
+   * Use TransactionLog::BRANCH_LOCAL for local transactions.
+   */
+  public $branch_id;
+  /**
+   * The remote system branch transaction id.
+   *
+   * Use TransactionLog::TRANSACTION_LOCAL for local transactions.
+   */
+  public $transaction_id;
+  /**
+   * The id of the element represented by this transaction.
+   */
+  public $item_id;
+  /**
+   * The status of the transaction.
+   *
+   * Use TransactionLog::STATUS_LOCAL for local transactions.
+   */
+  public $status_id;
+  /**
+   * Extra information for the transaction.
+   *
+   * This will be serialized and stored on transaction data table.
+   *
+   * @var array
+   */
+  public $data;
 
   /**
    * Basic building contructor.
@@ -89,11 +123,14 @@ abstract class TransactionLog {
       'branch_id' => TransactionLog::BRANCH_LOCAL,
       'transaction_id' => TransactionLog::TRANSACTION_LOCAL,
       'item_id' => FALSE,
+      'status_id' => TransactionLog::STATUS_LOCAL,
+      'data' => array(),
+      // @todo The following fields are legacy fields from initial migration
+      // implementation and probably need to be removed from the object and
+      // the table soon.
       'orig_id' => NULL,
       'dest_id' => NULL,
       'info' => NULL,
-      'status_id' => TransactionLog::STATUS_LOCAL,
-      'data' => array(),
     );
     foreach ($fields as $field => $default_value) {
       if (isset($data[$field])) {
@@ -206,6 +243,10 @@ class TransactionLogController {
    * A local place to store the branch transaction data table name.
    */
   protected $data_table;
+  /**
+   * The associated transaction class name.
+   */
+  public $class;
 
   public function __construct() {
     $this->table = Database::get_main_table(TABLE_BRANCH_TRANSACTION);

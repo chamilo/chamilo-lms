@@ -319,9 +319,9 @@ class FlatViewTable extends SortableTable
                             //------------------
                             //echo 'not in cache';
                             $Cache->WriteToCache($graph_id,$DataSet->GetData(),$Test);
-                            ob_start();
-                            $Test->Stroke();
-                            ob_end_clean();
+                            //ob_start();
+                            //$Test->Stroke();
+                            //ob_end_clean();
                             $img_file = $Cache->GetHash($graph_id,$DataSet->GetData());
                         }
                         echo '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'" >';

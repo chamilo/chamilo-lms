@@ -44,7 +44,7 @@
 <p><i>Note: most #wxyz references are issue numbers you can find in <a href="http://support.chamilo.org/projects/chamilo-18/issues" target="_blank">our public bug tracking system</a>. Some references marked BT#xyz are developments made externally for BeezNest customers and integrated into Chamilo. The details of these tasks cannot be seen for confidentiality reasons, but the code change is public and can be reviewed by anyone.</i></p>
 <p>&nbsp;</p>
 
-<h1>Chamilo 1.9.6 - Rochefort, 3rd of June, 2013</h1>
+<h1>Chamilo 1.9.6 - Rochefort, 4th of June, 2013</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.6 is a minor stable version with security patches and a series of improvements on top of 1.9.4.</p>
 <h3>Release name</h3>
@@ -77,6 +77,7 @@
   <li>Authorize .psd files uploads in custom stylesheet uploads to avoid frustration (#6038)</li>
   <li>Updated logo of all Chamilo styles with the new logo</li>
   <li>Improved visualization of very long assignments titles (cut at 27 chars)(#6163)</li>
+  <li>Reverted the order of columns in gradebook flat view graphics (linked to #5883 but not exactly the topic)</li>
 </ul>
 <h3>Debugging</h3>
 <ul>
@@ -123,6 +124,7 @@
   <li>Fixed course subcategories not showing after adding new course on same category (#5850)</li>
   <li>Fixed learning path view in student mode (#5855)</li>
   <li>Removed double course code info in admin courses list (#5865)</li>
+  <li>Fixed bug preventing the printing of the gradebook flat view page (#5883)</li>
   <li>Fixed bug in BigBlueButton videoconference plugin to enable audio (#5884)</li>
   <li>Fixed several issues in recording of videoconference sessions (#5885)</li>
   <li>Fixed bug preventing the update of users picture (#5903)</li>
@@ -164,6 +166,7 @@
   <li>Fixed issue in Portuguese date format (#6054)</li>
   <li>Fixed security issue with reset password e-mail (#6113)</li>
   <li>Fixed warning in gradebook (#6122)</li>
+  <li>Fixed bug preventing session coach to import users in his session even when authorized by admin (#6141)</li>
   <li>Fixed display issue in long HotPotatoes tests (#6150)</li>
   <li>Fixed learning path student view issue created from improvements to user experience (#6154)</li>
   <li>Fixed bug with jqgrid column titles character set not showing properly (#6159)</li>

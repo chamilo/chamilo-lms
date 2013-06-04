@@ -35,6 +35,7 @@ $DirDelete = "Usuń katalog";
 $ValidateChanges = "Sprawdź zmiany";
 $FolderUpdated = "Folder zaktualizowany";
 $EndsAt = "Kończy się (zamknięcie)";
+$QualificationOfAssignment = "Ocena zadania";
 $MakeQualifiable = "Dodaj do dziennika ocen";
 $QualificationNumberOver = "Wynik";
 $DatesAvailables = "Dostępne daty";

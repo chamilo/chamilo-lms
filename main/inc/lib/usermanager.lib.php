@@ -499,7 +499,7 @@ class UserManager
         }
 
         // Delete the personal course categories
-        $course_cat_table = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $course_cat_table = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "DELETE FROM $course_cat_table WHERE user_id = '".$user_id."'";
         Database::query($sql);
 
@@ -512,7 +512,7 @@ class UserManager
         Database::query($sql);
 
         // Delete the personal agenda-items from this user
-        $agenda_table = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
+        $agenda_table = Database :: get_main_table(TABLE_PERSONAL_AGENDA);
         $sql = "DELETE FROM $agenda_table WHERE user = '".$user_id."'";
         Database::query($sql);
 
@@ -2600,7 +2600,7 @@ class UserManager
         }
 
         //Courses in which we are subscribed out of any session
-        $tbl_user_course_category = Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $tbl_user_course_category = Database :: get_main_table(TABLE_USER_COURSE_CATEGORY);
 
         $personal_course_list_sql = "SELECT course.code,
                                             course_rel_user.status course_rel_status,
@@ -3339,7 +3339,7 @@ class UserManager
             //the tag doesn't exist
             $sql = "INSERT INTO $table_user_tag (tag, field_id,count) VALUES ('$tag','$field_id', count + 1)";
             $result = Database::query($sql);
-            $last_insert_id = Database::get_last_insert_id();
+            $last_insert_id = Database::insert_id();
         } else {
             //the tag exists we update it
             $sql = "UPDATE $table_user_tag SET count = count + 1 WHERE id  = $tag_id";
@@ -3565,7 +3565,7 @@ class UserManager
         $tbl_course                 = Database :: get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_field             = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
         $tbl_course_field_value        = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-        $tbl_user_course_category   = Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $tbl_user_course_category   = Database :: get_main_table(TABLE_USER_COURSE_CATEGORY);
 
         //we filter the courses from the URL
         $join_access_url=$where_access_url='';

@@ -1223,7 +1223,7 @@ class Attendance
 					date_time		= '".Database::escape_string($this->date_time)."',
 					attendance_id 	= '$attendance_id'";
 			Database::query($sql);
-            $cal_id = Database::get_last_insert_id();
+            $cal_id = Database::insert_id();
 			$affected_rows = Database::affected_rows();
 		}
 

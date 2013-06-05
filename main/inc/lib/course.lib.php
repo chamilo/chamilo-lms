@@ -1474,7 +1474,7 @@ class CourseManager
      * @return  array   List of groups info
      */
     public static function get_group_list_of_course($course_code, $session_id = 0, $in_get_empty_group = 0) {
-        $course_info = Database::get_course_info($course_code);
+        $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
         $group_list = array();
         $session_id != 0 ? $session_condition = ' WHERE g.session_id IN(1,'.intval($session_id).')' : $session_condition = ' WHERE g.session_id = 0';
@@ -1937,7 +1937,7 @@ class CourseManager
         $codes = array();
         $tbl_course                 = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_user            = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_user_course_category   = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $tbl_user_course_category   = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
 
         $special_course_list = self::get_special_course_list();
 
@@ -2731,7 +2731,7 @@ class CourseManager
     }
 
     public static function displayPersonalCourseCategories($user_id, $filter, $load_dirs, $getCount, $start = null, $maxPerPage = null) {
-        $tableUserCourseCategory = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $tableUserCourseCategory = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
 
         // Table definitions
         $TABLECOURS                     = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -3061,7 +3061,7 @@ class CourseManager
         $html = null;
 
         // Step 1: We get all the categories of the user
-        $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $tucc = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "SELECT id, title FROM $tucc WHERE user_id='".$user_id."' ORDER BY sort ASC";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
@@ -3226,7 +3226,7 @@ class CourseManager
     function get_user_course_categories() {
         global $_user;
         $output = array();
-        $table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $table_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "SELECT * FROM ".$table_category." WHERE user_id='".Database::escape_string($_user['user_id'])."'";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
@@ -4733,9 +4733,8 @@ class CourseManager
                 unsubscribe     = '".intval($unsubscribe) . "',
                 visual_code     = '".Database :: escape_string($visual_code) . "'";
             Database::query($sql);
-            //error_log($sql);
-
-            $course_id  = Database::get_last_insert_id();
+            
+            $course_id  = Database::insert_id();
 
             if ($course_id) {
 
@@ -4853,6 +4852,37 @@ class CourseManager
             return false;
         }
     }
+
+    /**
+     * @return a list (array) of all courses.
+     * This function was originally in the Database class
+     */
+    public static function get_course_list()
+    {
+        $table = Database::get_main_table(TABLE_MAIN_COURSE);
+
+        return Database::store_result(Database::query("SELECT *, id as real_id FROM $table"));
+    }
+
+
+    /**
+     * Returns course code from a given gradebook category's id
+     * @param int  Category ID
+     * @return string  Course code
+     */
+    public static function get_course_by_category($category_id)
+    {
+        $category_id = intval($category_id);
+        $info = Database::fetch_array(
+            Database::query(
+                'SELECT course_code FROM '.Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY).' WHERE id='.$category_id
+            ),
+            'ASSOC'
+        );
+
+        return $info ? $info['course_code'] : false;
+    }
+
 
 
 } //end class CourseManager

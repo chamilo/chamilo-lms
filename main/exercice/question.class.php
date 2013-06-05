@@ -1840,7 +1840,7 @@ abstract class Question
                 VALUES ($course_id, '".Database::escape_string($question_name)."', '$max_score', $max_position, $type, $level)";
         Database::query($sql);
         // Get the question ID
-        $question_id = Database::get_last_insert_id();
+        $question_id = Database::insert_id();
 
         // Get the max question_order
         $sql = "SELECT max(question_order) as max_order FROM $tbl_quiz_rel_question

@@ -925,7 +925,7 @@ class CourseBuilder
 	function build_session_course(){
 		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-		$list_course = Database::get_course_list();
+		$list_course = CourseManager::get_course_list();
 		$list = array();
 		foreach($list_course as $_course) {
 			$this->course = new Course();

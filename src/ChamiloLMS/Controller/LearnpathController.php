@@ -54,7 +54,7 @@ class LearnpathController
 
         $app['breadcrumb'] = $breadcrumb;
 
-        //Find session
+        // Find session.
         $sessionId = api_get_session_id();
         $session = null;
         if (!empty($sessionId)) {

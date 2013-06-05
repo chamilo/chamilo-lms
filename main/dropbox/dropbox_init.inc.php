@@ -64,7 +64,7 @@ require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';  // we use
 $user_id = api_get_user_id();
 $course_code = api_get_course_id();
 $courseId = api_get_course_int_id();
-$course_info = Database::get_course_info($course_code);
+$course_info = api_get_course_info($course_code);
 
 $session_id = api_get_session_id();
 if (empty($session_id)) {

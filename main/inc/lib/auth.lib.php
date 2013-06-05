@@ -96,7 +96,7 @@ class AuthLib {
      */
     public function get_user_course_categories() {
         $user_id = api_get_user_id();
-        $table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $table_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "SELECT * FROM " . $table_category . " WHERE user_id=$user_id ORDER BY sort ASC";
         $result = Database::query($sql);
         $output = array();
@@ -118,7 +118,7 @@ class AuthLib {
         // table definitions
         $TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $TABLE_USER_COURSE_CATEGORY = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $TABLE_USER_COURSE_CATEGORY = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $TABLE_COURSE_FIELD = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
         $TABLE_COURSE_FIELD_VALUE = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 
@@ -248,7 +248,7 @@ class AuthLib {
     public function move_category($direction, $category2move) {
 
         // the database definition of the table that stores the user defined course categories
-        $table_user_defined_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $table_user_defined_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
 
         $current_user_id = api_get_user_id();
         $user_coursecategories = $this->get_user_course_categories();
@@ -287,7 +287,7 @@ class AuthLib {
      */
     public function get_user_course_categories_info() {
         $current_user_id = api_get_user_id();
-        $table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $table_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "SELECT * FROM " . $table_category . " WHERE user_id='" . $current_user_id . "' ORDER BY sort ASC";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
@@ -307,7 +307,7 @@ class AuthLib {
         $title = Database::escape_string($title);
         $category_id = intval($category_id);
         $result = false;
-        $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $tucc = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $sql_update = "UPDATE $tucc SET title='" . api_htmlentities($title, ENT_QUOTES, api_get_system_encoding()) . "' WHERE id='" . $category_id . "'";
         Database::query($sql_update);
         if (Database::affected_rows()) {
@@ -323,7 +323,7 @@ class AuthLib {
      */
     public function delete_course_category($category_id) {
         $current_user_id = api_get_user_id();
-        $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $tucc = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $category_id = intval($category_id);
         $result = false;
@@ -373,7 +373,7 @@ class AuthLib {
      */
     public function store_course_category($category_title) {
 
-        $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $tucc = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
 
         // protect data
         $current_user_id = api_get_user_id();

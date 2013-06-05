@@ -226,7 +226,6 @@ class Tracking
         $sql = 'SELECT login_date FROM '.$tbl_track_login.'
                         WHERE login_user_id = '.intval($student_id).'
                         ORDER BY login_date DESC LIMIT 0,1';
-
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
             if ($last_login_date = Database::result($rs, 0, 0)) {

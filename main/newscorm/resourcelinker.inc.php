@@ -2086,8 +2086,6 @@ function showorhide_addresourcelink($type, $id)
  */
 function rl_get_html_resource_link($course_code, $type, $id, $style = '', $new_window = true)
 {
-    $_course = Database::get_course_info($course_code);
-
     $course_id = api_get_course_int_id();
 
     // Styling the link of the added resource
@@ -2334,7 +2332,7 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
  */
 function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
 {
-    $_course = Database::get_course_info($course_code);
+    $_course = api_get_course_info($course_code);
     $course_id = $_course['real_id'];
     $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 

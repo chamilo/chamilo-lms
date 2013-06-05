@@ -29,10 +29,9 @@ class UserPortalController extends CommonController
 
         //@todo Use filters like "after/before|finish" to manage user access
         api_block_anonymous_users();
-
         //Abort request because the user is not allowed here - @todo use filters
         if ($app['allowed'] == false) {
-            return $app->abort(403);
+            return $app->abort(403, 'Not allowed');
         }
 
         // Check if a user is enrolled only in one course for going directly to the course after the login.

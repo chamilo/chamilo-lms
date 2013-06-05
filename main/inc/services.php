@@ -382,6 +382,12 @@ class ChamiloServiceProvider implements ServiceProviderInterface
             $pageController = new PageController($app);
             return $pageController;
         });
+
+        // Mail template generator
+        $app['mail_generator'] = $app->share(function () use ($app) {
+            $mailGenerator = new ChamiloLMS\Component\Mail\MailGenerator($app['twig'], $app['mailer']);
+            return $mailGenerator;
+        });
     }
 
     public function boot(Application $app)
@@ -482,4 +488,3 @@ $app['model_ajax.controller'] = $app->share(
         return new ChamiloLMS\Controller\ModelAjaxController();
     }
 );
-

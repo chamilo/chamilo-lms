@@ -1,4 +1,5 @@
 {% block subject %}
+    You have new email!
 {% endblock %}
 
 {% block html_template %}

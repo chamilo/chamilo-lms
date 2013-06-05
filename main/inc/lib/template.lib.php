@@ -40,7 +40,6 @@ class Template
             //ugly fix just for now
             $this->app = &$app;
         }
-
         $this->app['classic_layout'] = true;
         $this->navigation_array = $this->returnNavigationArray();
 

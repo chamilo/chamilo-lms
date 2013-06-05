@@ -15,9 +15,13 @@
     RewriteRule ^courses/(.*)/index.php$ web/courses/$1? [R,L]
     RewriteRule ^courses/(.*)/$ web/courses/$1? [R,L]
 
-   # Courses documents
-    # courses/MATHS/document/folder1/picture.jpg --> courses/MATHS/document/?file=folder1/picture.jpg
+    # Courses documents
+    # courses/MATHS/document/folder1/picture.jpg --> web/data/courses/MATHS/document/folder1/picture.jpg
     RewriteRule ^courses/(.*)/document/(.*)$ web/data/courses/$1/document/$2 [R,L]
+
+    # SCORM documents
+    # courses/MATHS/scorm/folder1/picture.jpg --> web/data/courses/MATHS/scorm/folder1/picture.jpg
+    RewriteRule ^courses/(.*)/scorm/(.*)$ web/data/courses/$1/scorm/$2 [R,L]
 
     # Certificates
     # Redirection: certificates/index.php?id=123 -> web/certificates/123

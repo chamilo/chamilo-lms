@@ -467,9 +467,13 @@ $app->match('/introduction/delete/{tool}', 'introduction_tool.controller:deleteA
     ->before($userPermissionsInsideACourse)
     ->bind('introduction_delete');
 
-
-/**  Course documents */
+/** Course documents */
 $app->get('/data/courses/{courseCode}/document/{file}', 'index.controller:getDocumentAction')
+    ->assert('file', '.+')
+    ->assert('type', '.+');
+
+/** Scorm documents */
+$app->get('/data/courses/{courseCode}/scorm/{file}', 'index.controller:getScormDocumentAction')
     ->assert('file', '.+')
     ->assert('type', '.+');
 
@@ -636,5 +640,4 @@ $app->match('/courses/{cidReq}/{id_session}/exercise/question/{id}/edit', 'exerc
 $app->match('/ajax', 'model_ajax.controller:indexAction', 'GET')
     ->assert('type', '.+')
     ->bind('model_ajax');
-
 

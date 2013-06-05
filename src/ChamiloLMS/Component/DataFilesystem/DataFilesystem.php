@@ -29,17 +29,19 @@ class DataFilesystem
      * @return SplFileInfo
      * @throws \InvalidArgumentException
      */
-    public function get($file) {
-
+    public function get($file)
+    {
         $file = new SplFileInfo($this->path.$file, null, null);
         $filesystem = new Filesystem();
         if ($filesystem->exists($file)) {
             return $file;
         } else {
-            throw new \InvalidArgumentException(sprintf(
-                'The file "%s" does not exists .',
-                $file
-            ));
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'The file "%s" does not exists .',
+                    $file
+                )
+            );
         }
     }
 
@@ -54,4 +56,18 @@ class DataFilesystem
         $file = 'courses/'.$courseCode.'/document/'.$file;
         return $this->get($file);
     }
+
+     /**
+     * Gets a file from the data/courses/MATHS/scorm directory
+     * @param $courseCode
+     * @param $file
+     * @return SplFileInfo
+     */
+    public function getCourseScormDocument($courseCode, $file)
+    {
+        $file = 'courses/'.$courseCode.'/scorm/'.$file;
+        return $this->get($file);
+    }
+
+
 }

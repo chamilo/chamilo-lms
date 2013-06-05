@@ -1829,10 +1829,17 @@ class Exercise
             if ($this->emailAlert) {
 
                 // Text when ending an exam
-                $form->add_html_editor('email_notification_template', array(get_lang('EmailNotificationTemplate'), get_lang('EmailNotificationTemplateDescription')), null, false, $editor_config);
+                $form->add_html_editor(
+                    'email_notification_template',
+                    array(get_lang('EmailNotificationTemplate'), get_lang('EmailNotificationTemplateDescription')),
+                    null,
+                    false,
+                    $editor_config
+                );
             }
 
-            $form->addElement('html', '</div>'); //End advanced setting
+            // End advanced setting.
+            $form->addElement('html', '</div>');
             $form->addElement('html', '</div>');
         }
 
@@ -4457,7 +4464,7 @@ class Exercise
             } else {
                 global $app;
                 $twig = $app['twig'];
-                $template = 'default/exercise/exercise_notification.tpl';
+                $template = 'default/mail/exercise/end_exercise_notification.tpl';
             }
 
             $userInfo = UserManager::get_user_info_by_id($trackExerciseInfo['exe_user_id']);

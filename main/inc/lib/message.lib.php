@@ -193,7 +193,8 @@ class MessageManager
         $edit_message_id = intval($edit_message_id);
         $topic_id = intval($topic_id);
 
-        //Saving the user id for the chamilo inbox, if the sender is null we asume that the current user is the one that sent the message
+        /* Saving the user id for the chamilo inbox,
+          if the sender is null we asume that the current user is the one that sent the message */
         if (empty($sender_id)) {
             $user_sender_id = api_get_user_id();
         } else {
@@ -207,7 +208,7 @@ class MessageManager
             }
         }
 
-        // validating fields
+        // Validating fields
         if (empty($subject) && empty($group_id)) {
             return get_lang('YouShouldWriteASubject');
         } else {
@@ -221,7 +222,7 @@ class MessageManager
 
         $inbox_last_id = null;
 
-        //Just in case we replace the and \n and \n\r while saving in the DB
+        // Just in case we replace the and \n and \n\r while saving in the DB.
         $content = str_replace(array("\n", "\n\r"), '<br />', $content);
 
         $now = api_get_utc_datetime();
@@ -287,7 +288,7 @@ class MessageManager
                 }
             }
 
-            //Load user settings
+            // Load user settings.
             $notification = new Notification();
             $sender_info = array();
 
@@ -310,7 +311,7 @@ class MessageManager
 
                 $user_list = $usergroup->get_users_by_group($group_id, false, array(), 0, 1000);
 
-                //Adding more sens to the message group
+                // Adding sense to the message group.
                 $subject = sprintf(get_lang('ThereIsANewMessageInTheGroupX'), $group_info['name']);
 
                 $new_user_list = array();
@@ -351,6 +352,20 @@ class MessageManager
             null,
             $sender_id
         );
+    }
+
+    /**
+     * @param string $template
+     * @param array $params
+     * @param int $receiverUserId
+     * @param int $senderId
+     */
+    public static function sendMessageUsingTemplate($template, $params, $receiverUserId, $senderId = null)
+    {
+        // Inject $app in the constructor of this class
+        global $app;
+        $result = $app['mail_generator']->getMessage($template, $params);
+        return self::send_message_simple($receiverUserId, $result['subject'], $result['body'], $senderId);
     }
 
     /**
@@ -567,7 +582,7 @@ class MessageManager
         )." AND id='".intval($message_id)."'";
         $result = Database::query($query);
     }
-    
+
     public static function update_message_status($user_id, $message_id)
     {
         if ($message_id != strval(intval($message_id)) || $user_id != strval(intval($user_id))) {

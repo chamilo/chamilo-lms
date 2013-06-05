@@ -1,6 +1,7 @@
 <?php
 
 namespace ChamiloLMS\Command\Database;
+
 use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Yaml\Parser;
 use Doctrine\DBAL\Migrations\Tools\Console\Command\AbstractCommand;

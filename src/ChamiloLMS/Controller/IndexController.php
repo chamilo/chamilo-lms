@@ -42,9 +42,12 @@ class IndexController extends CommonController
         $template = $app['template'];
 
         /*
-        var_dump($app['request']->getBaseUrl());
-        var_dump($app['request']->getHttpHost());
-        var_dump($app['request']->getRequestUri());
+        $params['yolo'] = array(
+            'subject' => 'subject julito',
+            'content' => 'content julito',
+            'user' => 'julito'
+        );
+        \MessageManager::sendMessageUsingTemplate('sample/sample.tpl', $params, 1);
         */
 
         $loginError = $app['request']->get('error');

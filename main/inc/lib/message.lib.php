@@ -184,7 +184,8 @@ class MessageManager
         $parent_id = 0,
         $edit_message_id = 0,
         $topic_id = 0,
-        $sender_id = null
+        $sender_id = null,
+        $text_content = null
     ) {
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $group_id = intval($group_id);
@@ -301,7 +302,8 @@ class MessageManager
                     array($receiver_user_id),
                     $subject,
                     $content,
-                    $sender_info
+                    $sender_info,
+                    $text_content
                 );
             } else {
                 $usergroup = new UserGroup();
@@ -325,7 +327,8 @@ class MessageManager
                     $new_user_list,
                     $subject,
                     $content,
-                    $group_info
+                    $group_info,
+                    $text_content
                 );
             }
 
@@ -338,19 +341,20 @@ class MessageManager
     /**
      * A handy way to send message
      */
-    public static function send_message_simple($receiver_user_id, $subject, $message, $sender_id = null)
+    public static function send_message_simple($receiver_user_id, $subject, $htmlBody, $sender_id = null, $textBody = null)
     {
         return MessageManager::send_message(
             $receiver_user_id,
             $subject,
-            $message,
+            $htmlBody,
             null,
             null,
             null,
             null,
             null,
             null,
-            $sender_id
+            $sender_id,
+            $textBody
         );
     }
 
@@ -365,7 +369,7 @@ class MessageManager
         // Inject $app in the constructor of this class
         global $app;
         $result = $app['mail_generator']->getMessage($template, $params);
-        return self::send_message_simple($receiverUserId, $result['subject'], $result['body'], $senderId);
+        return self::send_message_simple($receiverUserId, $result['subject'], $result['html_body'], $senderId, $result['text_body']);
     }
 
     /**
@@ -921,10 +925,9 @@ class MessageManager
         ) : '').'</div>
 		        ';
         $social_link = '';
-        if ($_GET['f'] == 'social') {
+        if (isset($_GET['f']) && $_GET['f'] == 'social') {
             $social_link = 'f=social';
         }
-
 
         if ($source == 'outbox') {
             $message_content .= '<a href="outbox.php?'.$social_link.'">'.Display::return_icon(

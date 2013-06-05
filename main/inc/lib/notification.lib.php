@@ -146,7 +146,7 @@ class Notification extends Model
      * @param    string    content of the message
      * @param    array    result of api_get_user_info() or UserGroup->get()
      */
-    public function save_notification($type, $user_list, $title, $content, $sender_info = array())
+    public function save_notification($type, $user_list, $title, $content, $sender_info = array(), $text_content = null)
     {
         $this->type = intval($type);
         $content    = $this->format_content($content, $sender_info);
@@ -221,7 +221,10 @@ class Notification extends Model
                                     Security::filter_terms($content),
                                     $sender_info['complete_name'],
                                     $sender_info['email'],
-                                    $extra_headers
+                                    $extra_headers,
+                                    array(),
+                                    null,
+                                    $text_content
                                 );
                             } else {
                                 api_mail_html(
@@ -230,7 +233,10 @@ class Notification extends Model
                                     Security::filter_terms($title),
                                     Security::filter_terms($content),
                                     $sender_info['complete_name'],
-                                    $sender_info['email']
+                                    $sender_info['email'],
+                                    array(),
+                                    null,
+                                    $text_content
                                 );
                             }
                         }
@@ -254,9 +260,11 @@ class Notification extends Model
      * Formats the content in order to add the welcome message, the notification preference, etc
      * @param    string    the content
      * @param    array    result of api_get_user_info() or UserGroup->get()
+     * @todo create new templates based in Twig
      * */
     public function format_content($content, $sender_info)
     {
+        return $content;
         $new_message_text = $link_to_new_message = '';
 
         switch ($this->type) {
@@ -310,9 +318,7 @@ class Notification extends Model
                         $new_message_text .= '<br />'.get_lang('User').': '.$sender_name;
                     }
                 }
-                $group_url           = api_get_path(
-                        WEB_CODE_PATH
-                    ).'social/group_topics.php?id='.$sender_info['group_info']['id'].'&topic_id='.$sender_info['group_info']['topic_id'].'&msg_id='.$sender_info['group_info']['msg_id'].'&topics_page_nr='.$topic_page;
+                $group_url = api_get_path(WEB_CODE_PATH).'social/group_topics.php?id='.$sender_info['group_info']['id'].'&topic_id='.$sender_info['group_info']['topic_id'].'&msg_id='.$sender_info['group_info']['msg_id'].'&topics_page_nr='.$topic_page;
                 $link_to_new_message = Display::url(get_lang('SeeMessage'), $group_url);
                 break;
         }

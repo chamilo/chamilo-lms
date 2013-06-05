@@ -41,14 +41,13 @@ class IndexController extends CommonController
         /** @var \Template $template */
         $template = $app['template'];
 
-        /*
-        $params['yolo'] = array(
+        /*$params['yolo'] = array(
             'subject' => 'subject julito',
+            'title' => 'Title',
             'content' => 'content julito',
             'user' => 'julito'
         );
-        \MessageManager::sendMessageUsingTemplate('sample/sample.tpl', $params, 1);
-        */
+        \MessageManager::sendMessageUsingTemplate('sample/sample.tpl', $params, 1);*/
 
         $loginError = $app['request']->get('error');
 

@@ -6550,7 +6550,18 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
  * @return          returns true if mail was sent
  * @see             class.phpmailer.php
  */
-function api_mail_html($recipient_name, $recipient_email, $subject, $body, $sender_name = '', $sender_email = '', $extra_headers = null, $data_file = array(), $embedded_image = false) {
+function api_mail_html(
+    $recipient_name,
+    $recipient_email,
+    $subject,
+    $body,
+    $sender_name = '',
+    $sender_email = '',
+    $extra_headers = null,
+    $data_file = array(),
+    $embedded_image = false,
+    $text_body = null
+    ) {
     global $app;
 
     $reply_to_mail = $sender_email;
@@ -6561,11 +6572,19 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $body, $send
         $reply_to_name = $extra_headers['reply_to']['name'];
     }
 
-    //$mail->AltBody = strip_tags(str_replace('<br />',"\n", api_html_entity_decode($message)));
+    // Forcing the conversion.
+    if (strpos($body, '<html>') === false) {
+        $htmlBody = str_replace(array("\n\r", "\n", "\r"), '<br />', $body);
+        $htmlBody = '<html><head></head><body>'.$htmlBody.'</body></html>';
+    } else {
+        $htmlBody = $body;
+    }
 
-    //Forcing the conversion
-    $htmlBody = str_replace(array("\n\r", "\n", "\r"), '<br />', $body);
-    $htmlBody = '<html><head></head><body>'.$htmlBody.'</body></html>';
+    if (!empty($text_body)) {
+        $textBody = $text_body;
+    } else {
+        $textBody = $body;
+    }
 
     try {
         $message = \Swift_Message::newInstance()
@@ -6574,7 +6593,7 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $body, $send
             ->setTo(array($recipient_email => $recipient_name))
             ->setReplyTo(array($reply_to_mail => $reply_to_name))
             ->setBody($htmlBody, 'text/html')
-            ->addPart($body, 'text/plain')
+            ->addPart($textBody, 'text/plain')
             ->setEncoder(Swift_Encoding::get8BitEncoding());
         if (!empty($data_file)) {
             // Attach it to the message

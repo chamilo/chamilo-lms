@@ -41,7 +41,7 @@ class IndexController extends CommonController
         /** @var \Template $template */
         $template = $app['template'];
 
-        /*$params['yolo'] = array(
+        /*$params['data'] = array(
             'subject' => 'subject julito',
             'title' => 'Title',
             'content' => 'content julito',
@@ -72,6 +72,10 @@ class IndexController extends CommonController
         $request = $app['request'];
         $app['languages_file'] = array('courses', 'index', 'admin');
         $app['cidReset'] = true;
+
+        //var_dump($app['dbs']['mysql_read']->fetchAssoc('SELECT * FROM course'));
+        //$result = $app['orm.em']->find('Entity\Course', 2);
+
 
         // Testing translation using translator
         //echo $app['translator']->trans('Wiki Search Results');

@@ -1090,7 +1090,7 @@ function api_protect_admin_script($allow_sessions_admins = false) {
 function api_block_anonymous_users($print_headers = true)
 {
     $_user = Session::read('_user');
-    if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
+    if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'])) {
         api_not_allowed($print_headers);
         return false;
     }
@@ -1252,6 +1252,9 @@ function _api_format_user($user, $add_password = false) {
     $result['status']           = $user['status'];
     $result['auth_source']      = $user['auth_source'];
     $result['active']           = $user['active'];
+    $result['expiration_date']  = $user['expiration_date'];
+    $result['registration_date']  = $user['registration_date'];
+    $result['creator_id']       = $user['creator_id'];
 
     if (isset($user['username'])) {
         $result['username']         = $user['username'];
@@ -1313,6 +1316,8 @@ function _api_format_user($user, $add_password = false) {
         $result['password'] = $user['password'];
     }
 
+    $result['extra_fields'] = isset($user['extra_fields']) ? $user['extra_fields'] : array();
+
     return $result;
 }
 
@@ -1347,7 +1352,6 @@ function api_get_user_info($user_id = '', $check_if_user_is_online = false, $sho
             $result_array['user_is_online_in_chat'] = $user_online_in_chat;
 		}
         $user = _api_format_user($result_array, $show_password);
-
 
         if ($add_extra_values) {
             $extra_field_values = new ExtraField('user');

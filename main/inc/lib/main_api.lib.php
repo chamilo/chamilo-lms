@@ -255,7 +255,9 @@ define('WEB_TEMPLATE_PATH', 'WEB_TEMPLATE_PATH');
 define('SYS_TEMPLATE_PATH', 'SYS_TEMPLATE_PATH');
 
 // 1.10 new paths
+
 define('WEB_PUBLIC_PATH', 'WEB_PUBLIC_PATH');
+define('SYS_WEB_PATH', 'SYS_WEB_PATH');
 define('SYS_PATH', 'SYS_PATH');
 define('SYS_DATA_PATH', 'SYS_DATA_PATH');
 define('SYS_LOG_PATH', 'SYS_LOG_PATH');
@@ -474,7 +476,8 @@ define ('SKILL_TYPE_BOTH',          'both');
  * api_get_path(SYS_LOG_PATH)                   /var/www/chamilo/logs/
  * api_get_path(SYS_DATA_PATH)                  /var/www/chamilo/data/
  * api_get_path(SYS_CONFIG_PATH)                /var/www/chamilo/config/
-
+ * api_get_path(SYS_WEB_PATH)                   /var/www/chamilo/web/
+ *
  * api_get_path(SYS_COURSE_PATH)                /var/www/chamilo/data/courses/
  * api_get_path(SYS_CODE_PATH)                  /var/www/chamilo/main/
  * api_get_path(SYS_CSS_PATH)                   /var/www/chamilo/main/css
@@ -522,6 +525,7 @@ function api_get_path($path_type, $path = null) {
         WEB_PATH                => '',
         SYS_PATH                => '',
         SYS_DATA_PATH           => 'data/',
+        SYS_WEB_PATH            => 'web/',
         SYS_CONFIG_PATH         => 'config/',
         SYS_LOG_PATH            => 'logs/',
         REL_PATH                => '',
@@ -654,6 +658,7 @@ function api_get_path($path_type, $path = null) {
 
         //update data path to get it from config file if defined
         $paths[SYS_DATA_PATH]           = $root_sys.'data/';
+        $paths[SYS_WEB_PATH]            = $root_sys.'web/';
         $paths[SYS_LOG_PATH]            = $root_sys.'logs/';
         $paths[SYS_CONFIG_PATH]         = $root_sys.'config/';
 
@@ -1604,7 +1609,7 @@ function api_format_course_array($course_data) {
     $_course['registration_code']     = !empty($course_data['registration_code']) ? sha1($course_data['registration_code']) : null;
     $_course['disk_quota']            = $course_data['disk_quota'];
     $_course['course_public_url']     = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/index.php';
-    $_course['course_web_public_url']     = api_get_path(WEB_PUBLIC_PATH).'courses/'.$course_data['directory'].'/';
+    $_course['course_web_public_url'] = api_get_path(WEB_PUBLIC_PATH).'courses/'.$course_data['directory'].'/';
     $_course['course_sys_data']       = api_get_path(SYS_DATA_PATH).'courses/'.$course_data['directory'].'/';
 
     $_course['user_status_in_course'] = CourseManager::get_user_in_course_status(api_get_user_id(), $_course['code']);
@@ -2940,6 +2945,7 @@ function api_not_found($print_headers = false) {
  */
 function api_not_allowed($print_headers = false, $message = null) {
     global $app;
+
     if (api_get_setting('sso_authentication') === 'true') {
         global $osso;
         if ($osso) {
@@ -2984,6 +2990,7 @@ function api_not_allowed($print_headers = false, $message = null) {
 
     $app['template']->assign('content', $msg);
     $app['allowed'] = true;
+
 
     if (($user_id!=0 && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {
         // if the access is not authorized and there is some login information
@@ -3360,7 +3367,7 @@ function api_get_item_property_id($course_code, $tool, $ref) {
  */
 
 function api_track_item_property_update($tool, $ref, $title, $content, $progress) {
-    $tbl_stats_item_property = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
+    $tbl_stats_item_property = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
     $course_id = api_get_real_course_id(); //numeric
     $course_code = api_get_course_id(); //alphanumeric
     $item_property_id = api_get_item_property_id($course_code, $tool, $ref);
@@ -3382,7 +3389,7 @@ function api_track_item_property_update($tool, $ref, $title, $content, $progress
 }
 
 function api_get_track_item_property_history($tool, $ref) {
-    $tbl_stats_item_property = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
+    $tbl_stats_item_property = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
     $course_id = api_get_real_course_id(); //numeric
     $course_code = api_get_course_id(); //alphanumeric
     $item_property_id = api_get_item_property_id($course_code, $tool, $ref);

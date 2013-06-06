@@ -134,13 +134,13 @@ switch ($action) {
 
         // The validation or display
         if ($form->validate()) {
-            if ($check) {
+            //if ($check) {
                 $values = $form->exportValues();
                 $res    = $obj->save($values);
                 if ($res) {
                     Display::display_confirmation_message(get_lang('ItemAdded'));
                 }
-            }
+            //}
             $obj->display();
         } else {
             echo '<div class="actions">';
@@ -158,11 +158,11 @@ switch ($action) {
 
         // The validation or display
         if ($form->validate()) {
-            if ($check) {
+            //if ($check) {
                 $values = $form->exportValues();
                 $res    = $obj->update($values);
-                Display::display_confirmation_message(sprintf(get_lang('ItemUpdated'), $values['name']), false);
-            }
+                Display::display_confirmation_message(sprintf(get_lang('ItemUpdated'), $values['field_variable']), false);
+            //}
             $obj->display();
         } else {
             echo '<div class="actions">';
@@ -175,12 +175,12 @@ switch ($action) {
         break;
     case 'delete':
         // Action handling: delete
-        if ($check) {
+        //if ($check) {
             $res = $obj->delete($_GET['id']);
             if ($res) {
                 Display::display_confirmation_message(get_lang('ItemDeleted'));
             }
-        }
+        //}
         $obj->display();
         break;
     default:

@@ -574,6 +574,14 @@ a.tag {
     margin:0px 0px 10px 0px;    */
 }
 
+.course-box h5 {
+    font-size: 12px;
+    overflow-x : auto;
+    overflow-y: scroll;
+    max-height:70px;
+    padding: 5px;
+}
+
 .session_box_title {
     margin-bottom: 7px;
 }
@@ -2795,8 +2803,6 @@ div.admin_section h4 {
     border-color: #ccc transparent transparent transparent;
 }
 
-
-
 .ribbon .rib::before {left: 0;}
 .ribbon .rib::after {right: 0;}
 
@@ -4861,3 +4867,4 @@ i.size-32.icon-new-work{
   line-height: 14px;
   background-color: #e6e6e6;
 }
+

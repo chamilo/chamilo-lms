@@ -1517,6 +1517,7 @@ function api_get_course_info($course_code = null, $add_extra_values = false, $ad
                  LEFT JOIN $course_cat_table
                  ON course.category_code =  course_category.code
                  WHERE course.code = '$course_code'";
+
         $result = Database::query($sql);
         $_course = array();
         if (Database::num_rows($result) > 0) {
@@ -2426,6 +2427,7 @@ function api_is_course_session_coach($user_id, $courseId, $session_id)
  * Checks whether the current user is a course or session coach
  * @param int - optional, session id
  * @param string - optional, course code
+ * @todo this function is called many times and hits in the DB
  * @return boolean True if current user is a course or session coach
  */
 function api_is_coach($session_id = 0, $courseId = null) {
@@ -2474,8 +2476,8 @@ function api_is_coach($session_id = 0, $courseId = null) {
 	if (!empty($session_id)) {
 	    $sql = "SELECT DISTINCT id
 	         	FROM $session_table
-	         	WHERE   session.id_coach =  '".$user_id."' AND
-                        id = '$session_id'";
+	         	WHERE session.id_coach =  '".$user_id."' AND
+                      id = '$session_id'";
 	    $result = Database::query($sql);
 	    if (!empty($sessionIsCoach)) {
 	    	$sessionIsCoach = array_merge($sessionIsCoach , Database::store_result($result));
@@ -2483,7 +2485,8 @@ function api_is_coach($session_id = 0, $courseId = null) {
 	    	$sessionIsCoach = Database::store_result($result);
 	    }
 	}
-    return (count($sessionIsCoach) > 0);
+    $result = count($sessionIsCoach) > 0;
+    return $result;
 }
 
 /**

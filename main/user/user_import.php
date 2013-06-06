@@ -56,7 +56,13 @@ if ($form->validate()) {
         if (!empty($users)) { 
             
             foreach ($users as $user_data) {
-                $username = $user_data['username'];
+                $username = "";
+                if (array_key_exists("username", $user_data)) {
+                    $username = $user_data['username'];
+                }
+                else if (array_key_exists("Username", $user_data)) {
+                    $username = $user_data['Username'];
+                }
                 $user_id = UserManager::get_user_id_from_username($username);                
                 $user_info = api_get_user_info($user_id);
                 if ($user_id && !empty($user_info)) {

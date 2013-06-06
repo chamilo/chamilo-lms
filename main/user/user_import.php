@@ -26,7 +26,7 @@ $form = new FormValidator('user_import','post','user_import.php');
 $form->addElement('header', $tool_name);
 $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
 
-$form->addElement('checkbox', 'unsubscribe_users', null, get_lang('UnsubscribeUsersAlreadyAddedInCourse'));
+//$form->addElement('checkbox', 'unsubscribe_users', null, get_lang('UnsubscribeUsersAlreadyAddedInCourse'));
 
 $form->addElement('style_submit_button', 'submit', get_lang('Import'), 'class="save"');
 
@@ -62,6 +62,9 @@ if ($form->validate()) {
                 }
                 else if (array_key_exists("Username", $user_data)) {
                     $username = $user_data['Username'];
+                }
+                else if (array_key_exists(get_lang("Username"), $user_data)) {
+                    $username = $user_data[get_lang("Username")];
                 }
                 $user_id = UserManager::get_user_id_from_username($username);                
                 $user_info = api_get_user_info($user_id);

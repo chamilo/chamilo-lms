@@ -10,6 +10,7 @@
  */
 class Thematic
 {
+    private $course;
 	private $thematic_id;
 	private $thematic_title;
 	private $thematic_content;
@@ -25,23 +26,29 @@ class Thematic
 	private $course_int_id;
     private $session_id;
 
-	public function __construct() {
-		//$this->course_int_id = api_get_course_int_id();
+	public function __construct($courseInfo)
+    {
+		$this->course = $courseInfo;
+        $this->course_int_id = $courseInfo['real_id'];
 	}
 
-    public function set_course_int_id($course_id) {
+    public function set_course_int_id($course_id)
+    {
         $this->course_int_id = intval($course_id);
     }
 
-    public function set_session_id($session_id) {
+    public function set_session_id($session_id)
+    {
         $this->session_id = intval($session_id);
     }
 
-    public function get_session_id() {
+    public function get_session_id()
+    {
         return isset($this->session_id) ? $this->session_id : api_get_session_id();
     }
 
-    public function get_course_int_id() {
+    public function get_course_int_id()
+    {
         return isset($this->course_int_id) ? $this->course_int_id : api_get_course_int_id();
     }
 
@@ -72,7 +79,8 @@ class Thematic
 	 * @param   string  Order (ASC,DESC)
 	 * @see SortableTable#get_table_data($from)
 	 */
-	public function get_thematic_data($from, $number_of_items, $column, $direction) {
+	public function get_thematic_data($from, $number_of_items, $column, $direction)
+    {
 		$tbl_thematic = Database :: get_course_table(TABLE_THEMATIC);
         $condition_session = '';
         if (!api_get_session_id()) {
@@ -152,7 +160,8 @@ class Thematic
 	 * Get the maximum display order of the thematic item
 	 * @return int	Maximum display order
 	 */
-	public function get_max_thematic_item($use_session = true) {
+	public function get_max_thematic_item($use_session = true)
+    {
 		// Database table definition
 		$tbl_thematic   = Database :: get_course_table(TABLE_THEMATIC);
 		$session_id     = $this->get_session_id();
@@ -239,8 +248,7 @@ class Thematic
 
 	 	// set current course and session
 	 	$tbl_thematic   = Database :: get_course_table(TABLE_THEMATIC);
-        $course_info    = api_get_course_info($course_code);
-        $course_id      = $course_info['real_id'];
+        $course_id      = $this->course_int_id;
 
 	 	if (isset($session_id)) {
 	 		$session_id = intval($session_id);
@@ -249,7 +257,6 @@ class Thematic
 	 	}
 
 	    $data = array();
-	    $condition = '';
 	    if (isset($thematic_id)) {
 	    	$thematic_id = intval($thematic_id);
 	    	$condition = " WHERE id = $thematic_id AND active = 1 ";
@@ -275,7 +282,8 @@ class Thematic
 		return $data;
 	 }
 
-    public function get_thematic_by_title($title) {
+    public function get_thematic_by_title($title)
+    {
         $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
         $course_id = $this->get_course_int_id();
         $session_id = $this->get_session_id();
@@ -305,8 +313,7 @@ class Thematic
         $course_id = $this->get_course_int_id();
         $session_id = $this->get_session_id();
         $user_id = api_get_user_id();
-
-        $course_info = api_get_course_info_by_id($course_id);
+        $course_info = $this->course;
 
 		// protect data
 		$id = intval($this->thematic_id);
@@ -345,12 +352,13 @@ class Thematic
 	 * @param	int|array	One or many thematic ids
 	 * @return	int			Affected rows
 	 */
-	public function thematic_destroy($thematic_id) {
+	public function thematic_destroy($thematic_id)
+    {
 		$tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
 		$affected_rows = 0;
 		$user_id = api_get_user_id();
 		$course_id = $this->get_course_int_id();
-        $course_info = api_get_course_info_by_id($course_id);
+        $course_info = $this->course;
 
 		if (is_array($thematic_id)) {
 			foreach ($thematic_id as $id) {
@@ -378,9 +386,11 @@ class Thematic
 		return $affected_rows;
 	}
 
-	public function copy($thematic_id) {
-	    $thematic = self::get_thematic_list($thematic_id, api_get_course_id(), 0);
-	    $thematic_copy = new Thematic();
+	public function copy($thematic_id)
+    {
+        $courseInfo = $this->course;
+	    $thematic = self::get_thematic_list($thematic_id, null, 0);
+	    $thematic_copy = new Thematic($courseInfo);
 	    $thematic_copy->set_thematic_attributes('', $thematic['title'].' - '.get_lang('Copy'), $thematic['content'], api_get_session_id());
 
 	    $new_thematic_id = $thematic_copy->thematic_save();
@@ -388,7 +398,7 @@ class Thematic
             $thematic_advanced = self::get_thematic_advance_by_thematic_id($thematic_id);
             if(!empty($thematic_advanced)) {
                 foreach($thematic_advanced as $item) {
-                    $thematic = new Thematic();
+                    $thematic = new Thematic($courseInfo);
                     $thematic->set_thematic_advance_attributes(0, $new_thematic_id,  0, $item['content'], $item['start_date'], $item['duration']);
                     $thematic->thematic_advance_save();
                 }
@@ -396,7 +406,7 @@ class Thematic
             $thematic_plan = self::get_thematic_plan_data($thematic_id);
             if (!empty($thematic_plan)) {
                 foreach ($thematic_plan as $item) {
-                    $thematic = new Thematic();
+                    $thematic = new Thematic($courseInfo);
                     $thematic->set_thematic_plan_attributes($new_thematic_id, $item['title'], $item['description'], $item['description_type']);
                     $thematic->thematic_plan_save();
                 }
@@ -483,7 +493,7 @@ class Thematic
 	 */
 	 public function get_thematic_advance_by_thematic_id($thematic_id, $course_code = null) {
 
-	    $course_info = api_get_course_info($course_code);
+	    $course_info = $this->course;
         $course_id = $course_info['real_id'];
 
 	 	// set current course
@@ -589,8 +599,8 @@ class Thematic
 	 * @param	string	Course code (optional)
 	 * @return	array	data
 	 */
-	 public function get_thematic_advance_list($thematic_advance_id = null, $course_code = null, $force_session_id = false) {	 	// set current course
-	    $course_info = api_get_course_info($course_code);
+	 public function get_thematic_advance_list($thematic_advance_id = null, $course_code = null, $force_session_id = false)
+     {
         $tbl_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
 
         $data = array();
@@ -601,12 +611,14 @@ class Thematic
 	 		$condition = " AND a.id = $thematic_advance_id ";
 	 	}
 
-        $course_id = $course_info['real_id'];
-	 	$sql = "SELECT * FROM $tbl_thematic_advance a WHERE  c_id = $course_id $condition  ORDER BY start_date ";
+        $course_id = $this->course_int_id;
+        $course_code = $this->course['code'];
+
+	 	$sql = "SELECT * FROM $tbl_thematic_advance a WHERE c_id = $course_id $condition ORDER BY start_date ";
 
         $elements =  array();
 	 	if ($force_session_id) {
-    	 	$list = api_get_item_property_by_tool('thematic_advance', $course_info['code'], api_get_session_id());
+    	 	$list = api_get_item_property_by_tool('thematic_advance', $course_code, api_get_session_id());
     	 	foreach($list as $value) {
     	 	    $elements[$value['ref']]= $value;
     	 	}
@@ -657,7 +669,7 @@ class Thematic
 		$duration	      = intval($this->duration);
         $user_id          = api_get_user_id();
         $course_id        = $this->get_course_int_id();
-        $course_info      = api_get_course_info_by_id($course_id);
+        $course_info      = $this->course;
 
 		if (empty($id)) {
 			// Insert
@@ -686,7 +698,7 @@ class Thematic
 	 * @return	int		Affected rows
 	 */
 	public function thematic_advance_destroy($thematic_advance_id) {
-        $_course = api_get_course_info();
+        $_course = $this->course;
 		$course_id = $this->get_course_int_id();
 
 		// definition database table
@@ -731,9 +743,10 @@ class Thematic
 			//$description_type = intval($description_type);
 			//$condition .= " AND description_type = $description_type ";
 		}
+        $courseCode = $this->course['code'];
 
-		$items_from_course  = api_get_item_property_by_tool('thematic_plan', api_get_course_id(), 0);
-	    $items_from_session = api_get_item_property_by_tool('thematic_plan', api_get_course_id(), api_get_session_id());
+		$items_from_course  = api_get_item_property_by_tool('thematic_plan', $courseCode, 0);
+	    $items_from_session = api_get_item_property_by_tool('thematic_plan', $courseCode, api_get_session_id());
 
 		$thematic_plan_complete_list  = array();
 		$thematic_plan_id_list = array();
@@ -824,7 +837,7 @@ class Thematic
         $course_id   = $this->get_course_int_id();
         $session_id  = $this->get_session_id();
 
-        $course_info = api_get_course_info_by_id($course_id);
+        $course_info = $this->course;
 		$list        = api_get_item_property_by_tool('thematic_plan', $course_info['code'], $session_id);
 
 		$elements_to_show = array();
@@ -877,7 +890,7 @@ class Thematic
 		$description_type = intval($description_type);
         $user_id = api_get_user_id();
         $course_id = $this->get_course_int_id();
-        $course_info = api_get_course_info_by_id($course_id);
+        $course_info = $this->course;
 
         // get thematic plan id
         $thematic_plan_data = $this->get_thematic_plan_data($thematic_id, $description_type);
@@ -897,7 +910,7 @@ class Thematic
         $course_id = $this->get_course_int_id();
         $tbl_thematic_plan = Database::get_course_table(TABLE_THEMATIC_PLAN);
         $thematic_plan_id = $this->thematic_plan_id;
-        $course_info = api_get_course_info_by_id($course_id);
+        $course_info = $this->course;
 
         if (empty($thematic_plan_id)) {
             return false;
@@ -945,10 +958,11 @@ class Thematic
 	 * @param 	int		Thematic id
 	 * @return	int		Affected rows
 	 */
-	public function update_done_thematic_advances($thematic_advance_id) {
-        $_course = api_get_course_info();
-		$thematic_data         = $this->get_thematic_list(null, api_get_course_id());
-		$thematic_advance_data = $this->get_thematic_advance_list(null, api_get_course_id(), true);
+	public function update_done_thematic_advances($thematic_advance_id)
+    {
+
+		$thematic_data         = $this->get_thematic_list();
+		$thematic_advance_data = $this->get_thematic_advance_list(null, null, true);
 		$tbl_thematic_advance  = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
 
 		$affected_rows = 0;
@@ -969,7 +983,6 @@ class Thematic
 		$a_thematic_advance_ids = array();
         $course_id = $this->get_course_int_id();
 
-
 		if (!empty($thematic_data)) {
 			foreach ($thematic_data as $thematic) {
 			    $my_affected_rows = 0;
@@ -977,7 +990,7 @@ class Thematic
 				if (!empty($thematic_advance_data[$thematic['id']])) {
 					foreach ($thematic_advance_data[$thematic['id']] as $thematic_advance) {
 
-						$item_info = api_get_item_property_info(api_get_course_int_id(), 'thematic_advance', $thematic_advance['id']);
+						$item_info = api_get_item_property_info($course_id, 'thematic_advance', $thematic_advance['id']);
 
 						if ($item_info['id_session'] == api_get_session_id()) {
 
@@ -989,7 +1002,7 @@ class Thematic
     						$my_affected_rows = Database::affected_rows();
     						$affected_rows += $my_affected_rows;
                             //if ($my_affected_rows) {
-                                api_item_property_update($_course, 'thematic_advance', $thematic_advance['id'], "ThematicAdvanceDone", $user_id);
+                                api_item_property_update($this->course, 'thematic_advance', $thematic_advance['id'], "ThematicAdvanceDone", $user_id);
                             //}
     						if ($thematic_advance['id'] == $thematic_advance_id) {
     							break 2;
@@ -1032,8 +1045,7 @@ class Thematic
 	 * Get last done thematic advance from thematic details interface
 	 * @return	int		Last done thematic advance id
 	 */
-	public function get_last_done_thematic_advance() {
-        $courseCode = api_get_course_id();
+	public function get_last_done_thematic_advance($courseCode = null) {
 
         if (!empty($courseCode)) {
             $thematic_data          = $this->get_thematic_list();
@@ -1098,14 +1110,12 @@ class Thematic
 	 * @param	int		Session id	(optional)
 	 * @return 	float	Average of thematic advances
 	 */
-	public function get_total_average_of_thematic_advances($course_code = null, $session_id = null) {
-        if (empty($course_code)) {
-			$course_code = api_get_course_id();
-		}
+	public function get_total_average_of_thematic_advances($course_code = null, $session_id = null)
+    {
 	    if (api_get_session_id()) {
-		    $thematic_data = $this->get_thematic_list(null, $course_code );
+		    $thematic_data = $this->get_thematic_list(null, null);
 	    } else {
-	        $thematic_data = $this->get_thematic_list(null, $course_code, 0);
+	        $thematic_data = $this->get_thematic_list(null, null, 0);
 	    }
 		$new_thematic_data = array();
 		if (!empty($thematic_data)) {
@@ -1115,7 +1125,7 @@ class Thematic
     		$thematic_data = $new_thematic_data;
 		}
 
-		$thematic_advance_data = $this->get_thematic_advance_list(null, $course_code, true);
+		$thematic_advance_data = $this->get_thematic_advance_list(null, null, true);
 		$a_average_of_advances_by_thematic = array();
 		$total_average = 0;
 		if (!empty($thematic_data)) {

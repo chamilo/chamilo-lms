@@ -15,14 +15,17 @@
 /**
  * Thematic Controller script. Prepares the common background variables to give to the scripts corresponding to
  * the requested action
+ * @todo use a proper controller in src/ChamiloLMS
  * @package chamilo.course_progress
  */
-class ThematicController {
+class ThematicController
+{
 
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->toolname = 'course_progress';
         $this->view = new View($this->toolname);
     }
@@ -32,8 +35,10 @@ class ThematicController {
      * @param 	string	Action
      * render to thematic.php
      */
-    public function thematic($action) {
-        $thematic = new Thematic();
+    public function thematic($action)
+    {
+        $courseInfo = api_get_course_info();
+        $thematic = new Thematic($courseInfo);
         $data = array();
         $error = false;
 
@@ -222,7 +227,7 @@ class ThematicController {
                 }
                 $data['total_average_of_advances'] = $thematic->get_average_of_advances_by_thematic($thematic_id);
             } else {
-                $thematic_data = $thematic->get_thematic_list(null, api_get_course_id(), api_get_session_id());
+                $thematic_data = $thematic->get_thematic_list(null, null, api_get_session_id());
                 $data['max_thematic_item'] = $thematic->get_max_thematic_item();
                 $data['last_done_thematic_advance'] = $thematic->get_last_done_thematic_advance();
                 $data['total_average_of_advances'] = $thematic->get_total_average_of_thematic_advances();
@@ -258,8 +263,10 @@ class ThematicController {
      * @param 	string	Action
      * render to thematic_plan.php
      */
-    public function thematic_plan($action) {
-        $thematic = new Thematic();
+    public function thematic_plan($action)
+    {
+        $courseInfo = api_get_course_info();
+        $thematic = new Thematic($courseInfo);
 
         $data = array();
         $error = false;
@@ -361,8 +368,10 @@ class ThematicController {
      * @param 	string	Action
      * render to thematic_advance.php
      */
-    public function thematic_advance($action) {
-        $thematic = new Thematic();
+    public function thematic_advance($action)
+    {
+        $courseInfo = api_get_course_info();
+        $thematic = new Thematic($courseInfo);
         $attendance = new Attendance();
         $data = array();
 

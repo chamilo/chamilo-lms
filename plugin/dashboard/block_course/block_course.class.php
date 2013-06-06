@@ -144,14 +144,14 @@ class BlockCourse extends Block {
 	 * Get course information data
 	 * @return array
 	 */
-	function get_course_information_data() {
+	function get_course_information_data()
+    {
 		$tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 		$course_data = array();
 		$courses = $this->courses;
 
-		$thematic = new Thematic();
-
 		foreach ($courses as $row_course) {
+            $thematic = new Thematic($row_course);
 			$course_code = $row_course['code'];
             $courseId = $row_course['real_id'];
 

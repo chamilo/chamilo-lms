@@ -977,7 +977,8 @@ class CourseBuilder
 	/**
 	* Build the Surveys
 	*/
-	function build_thematic($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
+	function build_thematic($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array())
+    {
 		$table_thematic			= Database :: get_course_table(TABLE_THEMATIC);
 		$table_thematic_advance = Database :: get_course_table(TABLE_THEMATIC_ADVANCE);
 		$table_thematic_plan    = Database :: get_course_table(TABLE_THEMATIC_PLAN);
@@ -991,10 +992,12 @@ class CourseBuilder
 
 		$course_id = api_get_course_int_id();
 
+        $courseInfo = api_get_course_info();
+
 		$sql = "SELECT * FROM $table_thematic WHERE c_id = $course_id $session_condition ";
 		$db_result = Database::query($sql);
 		while ($row = Database::fetch_array($db_result,'ASSOC')) {
-			$thematic = new Thematic($row);
+			$thematic = new Thematic($courseInfo);
 			$sql = 'SELECT * FROM '.$table_thematic_advance.' WHERE c_id = '.$course_id.' AND thematic_id = '.$row['id'];
 
 			$result = Database::query($sql);

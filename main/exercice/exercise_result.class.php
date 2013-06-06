@@ -87,9 +87,9 @@ class ExerciseResult
 
     	$TBL_EXERCISES          = Database::get_course_table(TABLE_QUIZ_TEST);
 		$TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
-		$TBL_TRACK_EXERCISES    	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-		$TBL_TRACK_HOTPOTATOES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-        $TBL_TRACK_ATTEMPT_RECORDING = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+		$TBL_TRACK_EXERCISES    	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+		$TBL_TRACK_HOTPOTATOES	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+        $TBL_TRACK_ATTEMPT_RECORDING = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 
     	$cid             = api_get_course_id();
         $course_id       = api_get_course_int_id();
@@ -438,7 +438,7 @@ class ExerciseResult
 		foreach ($this->results as $row) {
 			$column = 0;
 
-            if ($with_column_user) {               
+            if ($with_column_user) {
 
                 if (api_is_western_name_order()) {
                     $worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset));

@@ -1310,7 +1310,7 @@ class Display
      */
     public static function show_notification($course_info)
     {
-        $t_track_e_access = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+        $t_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
         $user_id          = api_get_user_id();
 
         $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);

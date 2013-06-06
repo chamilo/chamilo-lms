@@ -3231,22 +3231,9 @@ class learnpath
                 $html .= stripslashes($title);
             }
 
-            /*$tbl_track_e_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-            $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-            $user_id = api_get_user_id();
-
-            $sql = "SELECT path  FROM $tbl_track_e_exercises, $tbl_lp_item
-                    WHERE   c_id = $courseId AND
-                            path =   '" . $item['path'] . "' AND
-                            exe_user_id =  '$user_id' AND
-                            c_id = '$course_code' AND
-                            path = exe_exo_id AND
-                            status <> 'incomplete'";
-            $result = Database::query($sql);
-            $count = Database :: num_rows($result);*/
             if ($item['type'] == 'quiz') {
-                error_log("1-->>>>>>>>>>>>>>>>");
-                error_log($item['status']);
+                // error_log("1-->>>>>>>>>>>>>>>>");
+                // error_log($item['status']);
                 if ($item['status'] == 'completed') {
                     $html .= "&nbsp;<img id='toc_img_".$item['id']."' src='".$icon_name[$item['status']]."' alt='".substr(
                         $item['status'],

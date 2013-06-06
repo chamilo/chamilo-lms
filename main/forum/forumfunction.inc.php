@@ -3274,7 +3274,7 @@ function get_whats_new()
     $_course = api_get_course_info();
 
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
-    $tracking_last_tool_access = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+    $tracking_last_tool_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
 
     // Note: This has to be replaced by the tool constant later. But temporarily bb_forum is used since this is the only thing that is in the tracking currently.
     //$tool = TOOL_FORUM;

@@ -92,8 +92,8 @@ class GradeBookResult
 		$return = array();
     	$TBL_EXERCISES          = Database::get_course_table(TABLE_QUIZ_TEST);
     	$TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
-		$TBL_TRACK_EXERCISES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-		$TBL_TRACK_HOTPOTATOES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+		$TBL_TRACK_EXERCISES	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+		$TBL_TRACK_HOTPOTATOES	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 
     	$cid = api_get_course_id();
     	$course_id = api_get_course_int_id();

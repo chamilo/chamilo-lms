@@ -2183,8 +2183,8 @@ class Exercise
      */
     public function clean_results()
     {
-        $table_track_e_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-        $table_track_e_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $table_track_e_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $table_track_e_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         $sql = "SELECT exe_id FROM $table_track_e_exercises
 					   WHERE 	c_id = '".api_get_course_int_id()."' AND
@@ -2464,7 +2464,7 @@ class Exercise
         $lp_item_view_id = 0,
         $status = 'incomplete'
     ) {
-        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         if (empty($lp_id)) {
             $lp_id = 0;
         }
@@ -2511,7 +2511,7 @@ class Exercise
         $questionList = array(),
         $weight = 0
     ) {
-        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $safe_lp_id = intval($safe_lp_id);
         $safe_lp_item_id = intval($safe_lp_item_id);
         $safe_lp_item_view_id = intval($safe_lp_item_view_id);
@@ -2890,7 +2890,7 @@ class Exercise
 
         $questionId = intval($questionId);
         $exeId = intval($exeId);
-        $TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $table_ans = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
         // Creates a temporary Question object
@@ -3502,7 +3502,7 @@ class Exercise
                 case HOT_SPOT :
                     if ($from_database) {
                         if ($show_result) {
-                            $TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+                            $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
                             $query = "SELECT hotspot_correct
                                      FROM ".$TBL_TRACK_HOTSPOT."
                                      WHERE  hotspot_exe_id = '".$exeId."' and
@@ -3544,7 +3544,7 @@ class Exercise
                 case HOT_SPOT_DELINEATION :
                     if ($from_database) {
                         // getting the user answer
-                        $TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+                        $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
                         $query = "SELECT hotspot_correct, hotspot_coordinate
                                   FROM ".$TBL_TRACK_HOTSPOT."
                                   WHERE hotspot_exe_id = '".$exeId."' AND
@@ -4406,7 +4406,7 @@ class Exercise
         }
 
         if ($saved_results) {
-            $stat_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+            $stat_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
             $sql_update = 'UPDATE '.$stat_table.' SET exe_result = exe_result + '.floatval($questionScore).' WHERE exe_id = '.$exeId;
             if ($debug) {
                 error_log($sql_update);
@@ -5104,7 +5104,7 @@ class Exercise
      */
     public function getStatTrackExerciseInfoByExeId($exe_id)
     {
-        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $exe_id = intval($exe_id);
         $sql_track = "SELECT * FROM $track_exercises WHERE exe_id = $exe_id ";
         $result = Database::query($sql_track);
@@ -5144,7 +5144,7 @@ class Exercise
         $exercise_info = self::getStatTrackExerciseInfoByExeId($exe_id);
         $question_id = intval($question_id);
         $exe_id = intval($exe_id);
-        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         if ($exercise_info) {
 
             if (empty($exercise_info['questions_to_check'])) {

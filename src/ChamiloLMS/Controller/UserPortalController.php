@@ -153,7 +153,7 @@ class UserPortalController extends CommonController
         if (!empty($_POST['submitAuth'])) {
             // The user has been already authenticated, we are now to find the last login of the user.
             if (!empty($this->user_id)) {
-                $track_login_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+                $track_login_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
                 $sql_last_login = "SELECT login_date
                                     FROM $track_login_table
                                     WHERE login_user_id = '".$this->user_id."'

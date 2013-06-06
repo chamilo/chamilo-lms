@@ -4005,7 +4005,7 @@ class UserManager
 
      */
     public static function delete_inactive_student($student_id, $years = 2, $warning_message = false, $return_timestamp = false) {
-        $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $sql = 'SELECT login_date FROM ' . $tbl_track_login . ' WHERE login_user_id = ' . intval($student_id) . ' ORDER BY login_date DESC LIMIT 0,1';
         if (empty($years)) {
             $years = 1;

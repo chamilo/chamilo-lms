@@ -1532,17 +1532,17 @@ class CourseManager
         $table_course_survey_question       = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
         $table_course_survey_question_option= Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
 
-        $table_stats_hotpots        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-        $table_stats_attempt        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $table_stats_exercises      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-        $table_stats_access         = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-        $table_stats_lastaccess     = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-        $table_stats_course_access  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $table_stats_online         = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-        $table_stats_default        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
-        $table_stats_downloads      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
-        $table_stats_links          = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
-        $table_stats_uploads        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
+        $table_stats_hotpots        = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+        $table_stats_attempt        = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $table_stats_exercises      = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $table_stats_access         = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+        $table_stats_lastaccess     = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+        $table_stats_course_access  = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $table_stats_online         = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+        $table_stats_default        = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+        $table_stats_downloads      = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
+        $table_stats_links          = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LINKS);
+        $table_stats_uploads        = Database::get_main_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
 
         $courseInfo = api_get_course_info($code);
 
@@ -4733,7 +4733,7 @@ class CourseManager
                 unsubscribe     = '".intval($unsubscribe) . "',
                 visual_code     = '".Database :: escape_string($visual_code) . "'";
             Database::query($sql);
-            
+
             $course_id  = Database::insert_id();
 
             if ($course_id) {

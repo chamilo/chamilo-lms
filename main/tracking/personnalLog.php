@@ -42,9 +42,9 @@ td {border-bottom: thin dashed gray;}
 $view = preg_replace('/[^01]/','',$_REQUEST['view']);
 
 $TABLECOURSUSER			= Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$TABLETRACK_ACCESS      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-$TABLETRACK_LOGIN 		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-$TABLETRACK_EXERCICES   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TABLETRACK_ACCESS      = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+$TABLETRACK_LOGIN 		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+$TABLETRACK_EXERCICES   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 
 $limitOfDisplayedLogins = 25; // number of logins to display
 include(api_get_path(LIBRARY_PATH)."statsUtils.lib.inc.php");

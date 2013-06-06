@@ -29,7 +29,7 @@ class Online {
     {
         $_course = api_get_course_info();
         $uid = (int) $uid;
-        $online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+        $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
         if (!empty($uid)) {
             $login_ip = '';
             if(!empty($_SERVER['REMOTE_ADDR'])) {
@@ -62,7 +62,7 @@ class Online {
         global $extAuthSource;
 
         // Database table definition
-        $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
         if (empty($user_id)) {
             $user_id = api_get_user_id();
@@ -125,7 +125,7 @@ class Online {
      * @return bool
      */
     static function loginDelete($user_id) {
-        $online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+        $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
         $user_id = intval($user_id);
         if (empty($user_id)) {
             return false;
@@ -136,7 +136,7 @@ class Online {
     }
 
     static function user_is_online($user_id) {
-        $track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+        $track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
         $table_user			= Database::get_main_table(TABLE_MAIN_USER);
 
 
@@ -193,7 +193,7 @@ class Online {
 
         $online_time 		= time() - $time_limit*60;
         $current_date		= api_get_utc_datetime($online_time);
-        $track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+        $track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
         $friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $table_user			= Database::get_main_table(TABLE_MAIN_USER);
         $query              = '';
@@ -267,7 +267,7 @@ class Online {
         } else {
             $time_limit = intval($time_limit);
         }
-        $track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+        $track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
         $friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $table_user			= Database::get_main_table(TABLE_MAIN_USER);
         $query = '';
@@ -339,7 +339,7 @@ class Online {
 
         $online_time 		= time() - $time_limit*60;
         $current_date		= api_get_utc_datetime($online_time);
-        $track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+        $track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
         $course_code        = Database::escape_string($course_code);
 
         $from            = intval($from);
@@ -369,7 +369,7 @@ class Online {
 
     static function who_is_online_in_this_course_count($uid, $time_limit, $coursecode=null) {
         if(empty($coursecode)) return false;
-        $track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+        $track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
         $coursecode = Database::escape_string($coursecode);
         $time_limit = Database::escape_string($time_limit);
 

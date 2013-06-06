@@ -61,7 +61,7 @@ class MySpace {
 	static function get_connections_to_course($user_id, $courseId, $session_id = 0) {
 
 		// Database table definitions
-	    $tbl_track_course 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+	    $tbl_track_course 	= Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
 		// protect data
 		$user_id     = intval($user_id);
@@ -86,7 +86,7 @@ class MySpace {
 
     static function get_connections_from_course_list($user_id, $course_list, $session_id = 0) {
 		// Database table definitions
-	    $tbl_track_course 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+	    $tbl_track_course 	= Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         if (empty($course_list)) {
             return false;
         }
@@ -1051,7 +1051,7 @@ class MySpace {
 	 */
 	function exercises_results($user_id, $courseId, $session_id = false) {
 		$sql = 'SELECT exe_result , exe_weighting
-			FROM '.Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES)."
+			FROM '.Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES)."
 			WHERE c_id = '".Database::escape_string($courseId)."'
 			AND exe_user_id = '".Database::escape_string($user_id)."'";
 		if ($session_id !== false) {
@@ -1812,7 +1812,7 @@ class MySpace {
 
 function get_stats($user_id, $courseId, $start_date = null, $end_date = null) {
     // Database table definitions
-    $tbl_track_course   = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+    $tbl_track_course   = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
     $strg_sd    = "";
     $strg_ed    = "";
@@ -1864,7 +1864,7 @@ function add_day_to($end_date) {
  */
 function get_connections_to_course_by_date($user_id, $courseId, $start_date, $end_date) {
     // Database table definitions
-    $tbl_track_course   = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+    $tbl_track_course   = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
     $user_id = intval($user_id);
     if (!empty($course_info)) {

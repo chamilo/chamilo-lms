@@ -597,12 +597,13 @@ function _api_get_timezone()
     // If allowed by the administrator
     $use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
 
-    if ($use_users_timezone == 'true' && !empty($userId)) {
+    if ($use_users_timezone == 'true' && !empty($userId) && !api_is_anonymous()) {
+        $userInfo = api_get_user_info();
+        $extraFields = $userInfo['extra_fields'];
         // Get the timezone based on user preference, if it exists
-        $timezone_user = UserManager::get_extra_user_data_by_field($userId, 'timezone');
-
-        if (isset($timezone_user['timezone']) && $timezone_user['timezone'] != null) {
-            $to_timezone = $timezone_user['timezone'];
+        // $timezone_user = UserManager::get_extra_user_data_by_field($userId, 'timezone');
+        if (isset($extraFields['extra_timezone']) && $extraFields['extra_timezone'] != null) {
+            $to_timezone = $extraFields['extra_timezone'];
         }
     }
 

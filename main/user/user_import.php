@@ -26,7 +26,7 @@ $form = new FormValidator('user_import','post','user_import.php');
 $form->addElement('header', $tool_name);
 $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
 
-//$form->addElement('checkbox', 'unsubscribe_users', null, get_lang('UnsubscribeUsersAlreadyAddedInCourse'));
+$form->addElement('checkbox', 'unsubscribe_users', null, get_lang('UnsubscribeUsersAlreadyAddedInCourse'));
 
 $form->addElement('style_submit_button', 'submit', get_lang('Import'), 'class="save"');
 

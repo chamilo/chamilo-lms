@@ -158,7 +158,6 @@ if (!empty($_SESSION['_user']['user_id']) && !$login) {
                 if (($password == $uData['password'] or $cas_login) and (trim($login) == $uData['username'])) {
 
                     $uData = api_get_user_info($uData['user_id'], false, false, true);
-                    var_dump($uData);
                     $extraFields = $uData['extra_fields'];
                     // $update_type = UserManager::get_extra_user_data_by_field($uData['user_id'], 'update_type');
                     $update_type = isset($extraFields['extra_update_type']) ? $extraFields['extra_update_type'] : null;
@@ -471,7 +470,7 @@ if (isset($uidReset) && $uidReset) {   // session data refresh requested
     $is_allowedCreateCourse = false;
 
     if (isset($_user['user_id']) && $_user['user_id'] && !api_is_anonymous()) {
-    // a uid is given (log in succeeded)
+        // a uid is given (log in succeeded)
         $user_table     = Database::get_main_table(TABLE_MAIN_USER);
         $admin_table    = Database::get_main_table(TABLE_MAIN_ADMIN);
         $track_e_login  = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);

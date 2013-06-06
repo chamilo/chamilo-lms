@@ -1423,14 +1423,20 @@ function api_get_course_path($course_code = null) {
  */
 function api_get_course_setting($setting_name, $course_code = null) {
     $course_info = api_get_course_info($course_code);
-	$table 		 = Database::get_course_table(TABLE_COURSE_SETTING);
-    $setting_name = Database::escape_string($setting_name);
-    if (!empty($course_info['real_id']) && !empty($setting_name)) {
-        $sql = "SELECT value FROM $table WHERE c_id = {$course_info['real_id']} AND variable = '$setting_name'";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            $row = Database::fetch_array($res);
-            return $row['value'];
+
+    if (isset($course_info['settings']) && isset($course_info['settings'][$setting_name])) {
+        return $course_info['settings'][$setting_name]['value'];
+    } else {
+        //var_dump($course_info);
+        $table 		 = Database::get_course_table(TABLE_COURSE_SETTING);
+        $setting_name = Database::escape_string($setting_name);
+        if (!empty($course_info['real_id']) && !empty($setting_name)) {
+            $sql = "SELECT value FROM $table WHERE c_id = {$course_info['real_id']} AND variable = '$setting_name'";
+            $res = Database::query($sql);
+            if (Database::num_rows($res) > 0) {
+                $row = Database::fetch_array($res);
+                return $row['value'];
+            }
         }
     }
     return -1;
@@ -1501,7 +1507,7 @@ function api_get_cidreq($add_session_id = true, $add_group_id = true) {
  * particular course, not specially the current one.
  * @todo    Same behaviour as api_get_user_info so that api_get_course_id becomes absolete too.
  */
-function api_get_course_info($course_code = null, $add_extra_values = false) {
+function api_get_course_info($course_code = null, $add_extra_values = false, $addCourseSettings = false) {
     if (!empty($course_code)) {
         $course_code        = Database::escape_string($course_code);
         $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -1520,6 +1526,11 @@ function api_get_course_info($course_code = null, $add_extra_values = false) {
                 $extra_field_values = new ExtraField('course');
                 $course_data['extra_fields'] = $extra_field_values->get_handler_extra_data($course_code);
             }
+
+            if ($addCourseSettings) {
+                $course_data['settings'] = CourseManager::getCourseSettings($course_data['id']);
+            }
+
             $_course = api_format_course_array($course_data);
         }
         return $_course;
@@ -1564,6 +1575,11 @@ function api_get_course_info_by_id($id = null, $add_extra_values = false) {
     return $_course;
 }
 
+/**
+ * Sets the course array
+ * @param array  $course_data course info
+ * @return array
+ */
 function api_format_course_array($course_data) {
 
     if (empty($course_data)) {
@@ -1624,9 +1640,10 @@ function api_format_course_array($course_data) {
         $url_image = api_get_path(WEB_IMG_PATH).'without_picture.png';
     }
     $_course['course_image'] = $url_image;
+    $_course['extra_fields'] = isset($course_data['extra_fields']) ? $course_data['extra_fields'] : array();
+    $_course['settings'] = isset($course_data['settings']) ? $course_data['settings'] : array();
 
     return $_course;
-
 }
 
 /* STRING MANAGEMENT */

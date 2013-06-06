@@ -4883,6 +4883,23 @@ class CourseManager
         return $info ? $info['course_code'] : false;
     }
 
-
+    /**
+     * @param $courseId
+     * @return array
+     */
+    public static function getCourseSettings($courseId)
+    {
+        $settingTable = Database::get_course_table(TABLE_COURSE_SETTING);
+        $courseId = intval($courseId);
+        $sql = "SELECT * FROM $settingTable WHERE c_id = $courseId";
+        $result = Database::query($sql);
+        $settings = array();
+        if (Database::num_rows($result)) {
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
+                $settings[$row['variable']] = $row;
+            }
+        }
+        return $settings;
+    }
 
 } //end class CourseManager

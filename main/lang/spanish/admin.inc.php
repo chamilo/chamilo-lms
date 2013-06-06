@@ -1210,6 +1210,7 @@ $ServerPortInfo = "Puerto del servidor";
 $ServerUserAgentInfo = "Su agente de usuario como es recibido por el servidor";
 $ServerSoftwareInfo = "Software ejecutándose como un servidor web";
 $UnameInfo = "Información del sistema sobre el que está funcionando el servidor";
+$AdminLoginAsAllowedComment = "Si activada, permite a los usuarios con los privilegios correspondientes de usar la funcionalidad \"Conectarse como...\" para conectarse como otro usuario. Esta funcionalidad es particularmente útil en caso de uso de la funcionalidad de multi-urls, cuando no es deseable que los administradores de portales individuales puedan usar esta funcionalidad. Es importante saber que existe un parámetro maestro en el archivo de configuración que permite bloquear esta opción por completo.";
 $AdminLoginAsAllowedTitle = "Funcionalidad \"Conectarse como...\"";
 $AssignSessionsToX = "Asignar sesiones a %s";
 $AssignCoursesToSessionsAdministrator = "Asignar cursos al administrador de sesiones";

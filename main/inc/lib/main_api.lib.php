@@ -3519,12 +3519,10 @@ function api_display_language_form($hide_if_no_choice = false) {
  *  array['folder'] = An array with the corresponding names of the language-folders in the filesystem
  */
 function api_get_languages() {
-    global $app;
-
-    if (isset($app['api_get_languages'])) {
-        return $app['api_get_languages'];
+    $language_list = Session::read('api_get_languages');
+    if (isset($language_list) && !empty($language_list)) {
+        return $language_list;
     }
-
     $tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
     $sql = "SELECT * FROM $tbl_language WHERE available = '1' ORDER BY original_name ASC";
 
@@ -3534,7 +3532,7 @@ function api_get_languages() {
         $language_list['name'][] = $row['original_name'];
         $language_list['folder'][] = $row['dokeos_folder'];
     }
-    $app['api_get_languages'] = $language_list;
+    Session::write('api_get_languages', $language_list);
     return $language_list;
 }
 

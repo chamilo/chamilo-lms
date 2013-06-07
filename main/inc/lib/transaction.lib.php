@@ -418,7 +418,10 @@ class ExerciseAttemptTransactionLog extends TransactionLog {
     if (!$exercise->read($exercise_id)) {
       throw new TransactionImportException(sprintf('The included exercise id "%d" on course with id "%d" does not currently exists on the database.', $exercise_id, $this->data['course_id']));
     }
-    // See Exercise::save_stat_track_exercise_info().
+    // @todo Decide what to use to create the attempt:
+    // - exercise_attempt($score, $answer, $question_id, $exe_id, $position, $exercise_id = 0, $nano = null)
+    // - $objExercise->manageAnswers($exeId, $questionId, $choice, $from = 'exercise_show', $exerciseResultCoordinates = array(), $saved_results = true, $from_database = false, $show_result = true, $hotspot_delineation_result = array())
+    // on fail throw new TransactionImportException(sprintf('Could not create exercise attempt: %s.', print_r($this, 1)));
   }
 }
 

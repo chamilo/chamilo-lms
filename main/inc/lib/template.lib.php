@@ -362,33 +362,35 @@ class Template
 
         $cssPath = api_get_path(WEB_CSS_PATH);
 
-        // Base CSS.
-        $css[] = api_get_cdn_path($cssPath.'base.css');
-        // Compressed version of default + all CSS files
-        // @todo use assetic to compress files
-        // $css[] = api_get_cdn_path(api_get_path(WEB_PATH).'web/css/'.$this->theme.'/style.css');
+        if (isset($this->app['assetic']) &&  $this->app['assetic']) {
+            $css[] = api_get_path(WEB_PUBLIC_PATH).'css/'.$this->theme.'/style.css';
 
-        // Default theme CSS.
-        $css[] = api_get_cdn_path($cssPath.$this->theme.'/default.css');
-        $css[] = api_get_cdn_path($cssPath.'bootstrap-responsive.css');
-        $css[] = api_get_cdn_path($cssPath.'responsive.css');
+        } else {
+            // Base CSS.
+            $css[] = api_get_cdn_path($cssPath.'base.css');
+
+            // Default theme CSS.
+            $css[] = api_get_cdn_path($cssPath.$this->theme.'/default.css');
+            $css[] = api_get_cdn_path($cssPath.'bootstrap-responsive.css');
+            $css[] = api_get_cdn_path($cssPath.'responsive.css');
+
+            // Extra CSS files.
+            if ($this->show_learnpath) {
+                $css[] = $cssPath.$this->theme.'/learnpath.css';
+                $css[] = $cssPath.$this->theme.'/scorm.css';
+            }
+
+            if (api_is_global_chat_enabled()) {
+                $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
+            }
+
+            $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/'.$this->jquery_ui_theme.'/jquery-ui-custom.css';
+            $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/default.css';
+        }
+
         $css[] = api_get_cdn_path($cssPath.'font_awesome/css/font-awesome.css');
-
-        // Extra CSS files.
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
-
-        if ($this->show_learnpath) {
-            $css[] = $cssPath.$this->theme.'/learnpath.css';
-            $css[] = $cssPath.$this->theme.'/scorm.css';
-        }
-
-        if (api_is_global_chat_enabled()) {
-            $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
-        }
-
-        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/'.$this->jquery_ui_theme.'/jquery-ui-custom.css';
-        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/default.css';
 
         $css_file_to_string = null;
         foreach ($css as $file) {
@@ -443,7 +445,6 @@ class Template
             //'tinymce/tinymce.min.js',
             'bootstrap/bootstrap.js',
         );
-
 
         if (api_is_global_chat_enabled()) {
             //Do not include the global chat in LP
@@ -699,7 +700,6 @@ class Template
                     }
                     $teacher_data .= $label.' : '.ArrayClass::array_to_string($teachers_parsed, CourseManager::USER_SEPARATOR);
                 }
-                $this->assign('teachers', $teacher_data);
             }
         }
     }

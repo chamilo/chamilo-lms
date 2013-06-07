@@ -403,6 +403,12 @@ footer .container .row {
     padding-top: 50px;
 }
 
+footer #footer_left {
+    overflow-y : auto;
+    max-height:50px;
+    padding: 5px;
+}
+
 #footer_right #admin_name, #footer_right #software_name{
     text-align:right;
 }
@@ -573,11 +579,11 @@ a.tag {
     /*padding:5px 10px 5px 10px;
     margin:0px 0px 10px 0px;    */
 }
-
+#course_category li,
+#hot_courses h5,
 .course-box h5 {
     font-size: 12px;
-    overflow-x : auto;
-    overflow-y: scroll;
+    overflow-y : auto;
     max-height:70px;
     padding: 5px;
 }

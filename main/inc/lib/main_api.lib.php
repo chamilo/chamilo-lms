@@ -1170,6 +1170,7 @@ function api_get_user_id() {
  * @param int       User ID
  * @param boolean   Whether to get session courses or not - NOT YET IMPLEMENTED
  * @return array    Array of courses in the form [0]=>('code'=>xxx,'db'=>xxx,'dir'=>xxx,'status'=>d)
+ * @deprecated use the UserManager or CourseManager class
  */
 function api_get_user_courses($userid, $fetch_session = true) {
     if ($userid != strval(intval($userid))) { return array(); } //get out if not integer
@@ -1333,7 +1334,7 @@ function api_get_user_info($user_id = '', $check_if_user_is_online = false, $sho
         $_user = Session::read('_user');
         return _api_format_user($_user);
     }
-    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE user_id='".Database::escape_string($user_id)."'";
+    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE user_id = '".Database::escape_string($user_id)."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
@@ -1507,7 +1508,8 @@ function api_get_cidreq($add_session_id = true, $add_group_id = true) {
  * particular course, not specially the current one.
  * @todo    Same behaviour as api_get_user_info so that api_get_course_id becomes absolete too.
  */
-function api_get_course_info($course_code = null, $add_extra_values = false, $addCourseSettings = false) {
+function api_get_course_info($course_code = null, $add_extra_values = false, $addCourseSettings = false)
+{
     if (!empty($course_code)) {
         $course_code        = Database::escape_string($course_code);
         $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -1531,6 +1533,9 @@ function api_get_course_info($course_code = null, $add_extra_values = false, $ad
             if ($addCourseSettings) {
                 $course_data['settings'] = CourseManager::getCourseSettings($course_data['id']);
             }
+
+            $course_data['teacher_list'] = CourseManager::get_teacher_list_from_course_code($course_data['id']);
+            $course_data['teacher_list_formatted'] = CourseManager::formatUserListToString($course_data['teacher_list'], null, true);
 
             $_course = api_format_course_array($course_data);
         }
@@ -1642,7 +1647,9 @@ function api_format_course_array($course_data) {
     }
     $_course['course_image'] = $url_image;
     $_course['extra_fields'] = isset($course_data['extra_fields']) ? $course_data['extra_fields'] : array();
-    $_course['settings'] = isset($course_data['settings']) ? $course_data['settings'] : array();
+    $_course['settings']     = isset($course_data['settings']) ? $course_data['settings'] : array();
+    $_course['teacher_list'] = isset($course_data['teacher_list']) ? $course_data['teacher_list'] : array();
+    $_course['teacher_list_formatted'] = isset($course_data['teacher_list_formatted']) ? $course_data['teacher_list_formatted'] : array();
 
     return $_course;
 }
@@ -3319,9 +3326,9 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
                     WHERE $filter";
     }
 
-    Database::query($sql);
+    $result = Database::query($sql);
     // Insert if no entries are found (can only happen in case of $lastedit_type switch is 'default').
-    if (Database::affected_rows() == 0) {
+    if (Database::affected_rows($result) == 0) {
         $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type,   lastedit_user_id, to_user_id, to_group_id, visibility, start_visible, end_visible, id_session)
                 VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_user_id', '$to_group_id', '$visibility', '$start_visible', '$end_visible', '$session_id')";
 
@@ -3405,8 +3412,8 @@ function api_track_item_property_update($tool, $ref, $title, $content, $progress
                 lastedit_date       = '".api_get_utc_datetime()."',
                 lastedit_user_id    = '".api_get_user_id()."',
                 session_id          = '".api_get_session_id()."'";
-        Database::query($sql);
-        $affected_rows = Database::affected_rows();
+        $result = Database::query($sql);
+        $affected_rows = Database::affected_rows($result);
         return $affected_rows;
     }
     return false;
@@ -3543,7 +3550,7 @@ function api_display_language_form($hide_if_no_choice = false) {
  *  array['folder'] = An array with the corresponding names of the language-folders in the filesystem
  */
 function api_get_languages() {
-    $language_list = Session::read('api_get_languages');
+    $language_list = Session::read('_setting.api_get_languages');
     if (isset($language_list) && !empty($language_list)) {
         return $language_list;
     }
@@ -3556,7 +3563,7 @@ function api_get_languages() {
         $language_list['name'][] = $row['original_name'];
         $language_list['folder'][] = $row['dokeos_folder'];
     }
-    Session::write('api_get_languages', $language_list);
+    Session::write('_setting.api_get_languages', $language_list);
     return $language_list;
 }
 

@@ -685,21 +685,14 @@ class Template
         if (api_get_setting('show_teacher_data') == 'true') {
             // course manager
             if (isset($courseId) && $courseId != -1 && !empty($courseId)) {
-                $teacher_data = '';
-                $mail = CourseManager::get_emails_of_tutors_to_course($courseId);
-                if (!empty($mail)) {
-                    $teachers_parsed = array();
-                    foreach ($mail as $value) {
-                        foreach ($value as $email => $name) {
-                            $teachers_parsed[] = Display::encrypted_mailto_link($email, $name);
-                        }
-                    }
-                    $label = get_lang('Teacher');
-                    if (count($mail) > 1) {
-                        $label = get_lang('Teachers');
-                    }
-                    $teacher_data .= $label.' : '.ArrayClass::array_to_string($teachers_parsed, CourseManager::USER_SEPARATOR);
+                $courseInfo = api_get_course_info();
+                $teacher_data = null;
+                $label = get_lang('Teacher');
+                if (count($courseInfo['teacher_list']) > 1) {
+                    $label = get_lang('Teachers');
                 }
+                $teacher_data .= $label.' : '.$courseInfo['teacher_list_formatted'];
+                $this->assign('teachers', $teacher_data);
             }
         }
     }

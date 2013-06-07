@@ -6,7 +6,8 @@
  *	@package chamilo.library
  */
 /**
- *	@package chamilo.library
+ * @todo use the SessionServiceProvider
+ * @package chamilo.library
  */
 class SessionHandler {
 

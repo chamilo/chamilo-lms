@@ -208,14 +208,14 @@ $url_list = UrlManager::get_url_data();
 <select name="access_url_id" onchange="javascript:send();">
 <option value="0"> <?php echo get_lang('SelectUrl')?></option>
 	<?php
-	$url_selected='';
+	$url_selected = '';
 	foreach ($url_list as $url_obj) {
 
 		$checked = '';
 		if (!empty($access_url_id)) {
 			if ($url_obj['id'] == $access_url_id) {
 			    $checked = 'selected=true';
-			    $url_selected =	$url_obj['id'];
+			    $url_selected = $url_obj['url'];
 			}
 		}
 		if ($url_obj['active']==1) {

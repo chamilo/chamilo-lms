@@ -6374,8 +6374,8 @@ function api_set_settings_and_plugins()
     if ($access_url_id != 1) {
         $url_info = api_get_access_url($_configuration['access_url']);
         if ($url_info['active'] == 1) {
-            $settings_by_access = & api_get_settings(null, 'list', $_configuration['access_url'], 1);
-            foreach ($settings_by_access as & $row) {
+            $settings_by_access = api_get_settings(null, 'list', $_configuration['access_url'], 1);
+            foreach ($settings_by_access as $row) {
                 if (empty($row['variable'])) {
                     $row['variable'] = 0;
                 }

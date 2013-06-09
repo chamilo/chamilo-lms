@@ -14,6 +14,7 @@
 {{ css_style_print }}
 {{ js_file_to_string }}
 {{ extra_headers }}
+{% block header_end %}{% endblock header_end %}
 <script>
 // This is a patch for the "__flash__removeCallback" bug, see FS#4378.
 {% raw %}

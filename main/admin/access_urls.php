@@ -36,43 +36,44 @@ $url_list = UrlManager::get_url_data();
 if (isset ($_GET['action'])) {
     if ($_GET['action'] == 'show_message') {
         Display :: display_normal_message(Security::remove_XSS(stripslashes($_GET['message'])));
-    }
-    $check = Security::check_token('get');
-    if ($check) {
-        $url_id=Database::escape_string($_GET['url_id']);
+    } else {
+        $check = Security::check_token('get');
+        if ($check) {
+            $url_id = Database::escape_string($_GET['url_id']);
 
-        switch ($_GET['action']) {
-            case 'delete_url' :
-                $result = UrlManager::delete($url_id);
-                if ($result) {
-                    Display :: display_normal_message(get_lang('URLDeleted'));
-                } else {
-                    Display :: display_error_message(get_lang('CannotDeleteURL'));
-                }
-                break;
-            case 'lock' :
-                UrlManager::set_url_status('lock',$url_id);
-                Display :: display_normal_message(get_lang('URLInactive'));
-                break;
-            case 'unlock';
-                UrlManager::set_url_status('unlock',$url_id);
-                Display :: display_normal_message(get_lang('URLActive'));
-                break;
-            case 'register';
-                // we are going to register the admin
-                if(api_is_platform_admin()) {
-                    if($current_access_url_id!=-1) {
-                        $url_str = '';
-                        foreach($url_list as $my_url) {
-                            if (!in_array($my_url['id'],$my_user_url_list)){
-                                UrlManager::add_user_to_url(api_get_user_id(),$my_url['id']);
-                                $url_str.=$my_url['url'].' <br />';
-                            }
-                        }
-                        Display :: display_normal_message(get_lang('AdminUserRegisteredToThisURL').': '.$url_str.'<br />',false);
+            switch ($_GET['action']) {
+                case 'delete_url' :
+                    $result = UrlManager::delete($url_id);
+                    if ($result) {
+                        Display :: display_normal_message(get_lang('URLDeleted'));
+                    } else {
+                        Display :: display_error_message(get_lang('CannotDeleteURL'));
                     }
-                }
-                break;
+                    break;
+                case 'lock' :
+                    UrlManager::set_url_status('lock',$url_id);
+                    Display :: display_normal_message(get_lang('URLInactive'));
+                    break;
+                case 'unlock';
+                    UrlManager::set_url_status('unlock',$url_id);
+                    Display :: display_normal_message(get_lang('URLActive'));
+                    break;
+                case 'register';
+                    // we are going to register the admin
+                    if(api_is_platform_admin()) {
+                        if($current_access_url_id!=-1) {
+                            $url_str = '';
+                            foreach($url_list as $my_url) {
+                                if (!in_array($my_url['id'],$my_user_url_list)){
+                                    UrlManager::add_user_to_url(api_get_user_id(),$my_url['id']);
+                                    $url_str.=$my_url['url'].' <br />';
+                                }
+                            }
+                            Display :: display_normal_message(get_lang('AdminUserRegisteredToThisURL').': '.$url_str.'<br />',false);
+                        }
+                    }
+                    break;
+            }
         }
     }
     Security::clear_token();

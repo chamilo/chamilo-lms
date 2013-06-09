@@ -587,6 +587,7 @@ function api_get_path($path_type, $path = null) {
         if (isset($_configuration['access_url']) &&  $_configuration['access_url'] != 1) {
             //we look into the DB the function api_get_access_url
             $url_info = api_get_access_url($_configuration['access_url']);
+
             $root_web = $url_info['active'] == 1 ? $url_info['url'] : $_configuration['root_web'];
             $load_new_config = true;
         }
@@ -603,7 +604,7 @@ function api_get_path($path_type, $path = null) {
         // Developers might use the function api_get_path() directly or indirectly (this is difficult to be traced), at the moment when
         // configuration has not been created yet. This is why this function should be upgraded to return correct results in this case.
 
-        //if (defined('SYSTEM_INSTALLATION') && SYSTEM_INSTALLATION) {
+        //if (defined('SYSTEM_INSTALLATION') && SYSTEM_INSTALLATION) 
 
         if (empty($root_web)) {
 
@@ -713,6 +714,7 @@ function api_get_path($path_type, $path = null) {
                 WEB_ARCHIVE_PATH        => 'archive/',
                 WEB_LIBRARY_PATH        => 'inc/lib/',
                 WEB_AJAX_PATH           => 'inc/ajax/',
+                WEB_PUBLIC_PATH         => 'web/',
             );
 
             $root_web = api_add_trailing_slash($root_web);
@@ -731,6 +733,7 @@ function api_get_path($path_type, $path = null) {
             $paths[WEB_ARCHIVE_PATH]        = $paths[WEB_PATH].$web_paths[WEB_ARCHIVE_PATH];
             $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$web_paths[WEB_LIBRARY_PATH];
             $paths[WEB_AJAX_PATH]           = $paths[WEB_CODE_PATH].$web_paths[WEB_AJAX_PATH];
+            $paths[WEB_PUBLIC_PATH]         = $paths[WEB_PATH].$web_paths[WEB_PUBLIC_PATH];
         }
     }
 

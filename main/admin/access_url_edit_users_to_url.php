@@ -161,33 +161,33 @@ if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
 $nosessionUsersList = $sessionUsersList = array();
 $ajax_search = $add_type == 'unique' ? true : false;
 
-if($ajax_search) {
-	$Users=UrlManager::get_url_rel_user_data($access_url_id);
-	foreach($Users as $user) {
+if ($ajax_search) {
+	$Users = UrlManager::get_url_rel_user_data($access_url_id);
+	foreach ($Users as $user) {
 		$sessionUsersList[$user['user_id']] = $user ;
 	}
 } else {
-	$Users=UrlManager::get_url_rel_user_data();
-	foreach($Users as $user) {
-		if($user['access_url_id'] == $access_url_id) {
+	$Users = UrlManager::get_url_rel_user_data();
+	foreach ($Users as $user) {
+		if ($user['access_url_id'] == $access_url_id) {
 			$sessionUsersList[$user['user_id']] = $user ;
 		}
 	}
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
-	$sql="SELECT u.user_id, lastname, firstname, username
-	  	  	FROM $tbl_user u WHERE status <> ".ANONYMOUS." ".
+	$sql = "SELECT u.user_id, lastname, firstname, username ".
+	  	  	" FROM $tbl_user u WHERE status <> ".ANONYMOUS." ".
 			$order_clause;
-	$result=Database::query($sql);
-	$Users=Database::store_result($result);
+	$result = Database::query($sql);
+	$Users = Database::store_result($result);
 	$user_list_leys = array_keys($sessionUsersList);
-	foreach($Users as $user) {
+	foreach ($Users as $user) {
 		if (!in_array($user['user_id'],$user_list_leys))
 			$nosessionUsersList[$user['user_id']] = $user ;
 	}
 }
 
 
-if($add_type == 'multiple') {
+if ($add_type == 'multiple') {
 	$link_add_type_unique = '<a href="'.api_get_self().'?add_type=unique&access_url_id='.$access_url_id.'">'.get_lang('SessionAddTypeUnique').'</a>';
 	$link_add_type_multiple = get_lang('SessionAddTypeMultiple');
 } else {
@@ -231,7 +231,7 @@ $url_list = UrlManager::get_url_data();
 <input type="hidden" name="add_type" value = "<?php echo $add_type ?>" />
 
 <?php
-if(!empty($errorMsg)) {
+if (!empty($errorMsg)) {
 	Display::display_normal_message($errorMsg); //main API
 }
 ?>
@@ -258,7 +258,7 @@ if(!empty($errorMsg)) {
   <td align="center">
   <div id="content_source">
   	  <?php
-  	  if($ajax_search) {
+  	  if ($ajax_search) {
   	  	?>
 		<input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,document.formulaire.access_url_id.options[document.formulaire.access_url_id.selectedIndex].value)" />
 		<div id="ajax_list_users"></div>
@@ -267,7 +267,7 @@ if(!empty($errorMsg)) {
   	  ?>
 	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:380px;">
 		<?php
-		foreach($nosessionUsersList as $enreg) {
+		foreach ($nosessionUsersList as $enreg) {
 		?>
 			<option value="<?php echo $enreg['user_id']; ?>"><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
 			<?php
@@ -283,7 +283,7 @@ if(!empty($errorMsg)) {
   </td>
   <td width="10%" valign="middle" align="center">
   <?php
-  if($ajax_search) {
+  if ($ajax_search) {
 	?>
 	<button class="arrowl" type="button" onclick="remove_item(document.getElementById('destination_users'))"> </button>
   	<?php
@@ -301,7 +301,7 @@ if(!empty($errorMsg)) {
   <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:380px;">
 
 <?php
-foreach($sessionUsersList as $enreg) {
+foreach ($sessionUsersList as $enreg) {
 ?>
 	<option value="<?php echo $enreg['user_id']; ?>"><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
 
@@ -317,7 +317,7 @@ unset($sessionUsersList);
 	<td colspan="3" align="center">
 		<br />
 		<?php
-		if(isset($_GET['add']))
+		if (isset($_GET['add']))
 			echo '<button class="save" type="button" onclick="valide()" >'.get_lang('AddUsersToURL').'</button>';
 		else
 			echo '<button class="save" type="button" onclick="valide()" >'.get_lang('EditUsersToURL').'</button>';

@@ -333,7 +333,7 @@ if (api_is_allowed_to_edit(null,true) && isset($_GET['preview']) && $_GET['previ
 }
 
 // 1. Loading the $objExercise variable
-if (!isset($_SESSION['objExercise']) || $_SESSION['objExercise']->id != $_REQUEST['exerciseId']) {
+if (!isset($_SESSION['objExercise']) || isset($_SESSION['objExercise']->id) && ($_SESSION['objExercise']->id != $_REQUEST['exerciseId'])) {
     // Construction of Exercise
     /** @var Exercise $objExercise */
     $objExercise = new Exercise();

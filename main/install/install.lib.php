@@ -12,7 +12,7 @@
 
 /* CONSTANTS */
 
-define('SYSTEM_MAIN_DATABASE_FILE', $new_version.'/db_main.sql');
+//define('SYSTEM_MAIN_DATABASE_FILE', $new_version.'/db_main.sql');
 define('COUNTRY_DATA_FILENAME', 'country_data.csv');
 define('COURSES_HTACCESS_FILENAME', 'htaccess.dist');
 define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
@@ -976,53 +976,41 @@ function display_language_selection()
  * @param array $update_from_version_8 The different subversions from version 1.8
  * @param array $update_from_version_6 The different subversions from version 1.6
  *
- * @author unknow
+ * @author Julio Montoya
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
-function display_requirements(
-    $installType,
-    $badUpdatePath,
-    $updatePath = '',
-    $update_from_version_8 = array(),
-    $update_from_version_6 = array()
-) {
-    global $_setting;
-    echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Requirements')."</h2></div>";
-    echo '<div class="RequirementText">';
-    echo '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
-    echo get_lang('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">'.get_lang(
-        'ReadTheInstallGuide'
-    ).'</a>.<br />'."\n";
+function display_requirements($app, $installType)
+{
+    $html = null;
+    $html .= '<div class="RequirementText">';
+    $html .= '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
+    $html .= get_lang('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">'.get_lang('ReadTheInstallGuide').'</a>.<br />';
 
     if ($installType == 'update') {
-        echo get_lang('IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog').'<br />';
+        $html .= get_lang('IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog').'<br />';
     }
-    echo '</div>';
+    $html .= '</div>';
 
     //  SERVER REQUIREMENTS
-    echo '<div class="RequirementHeading"><h2>'.get_lang('ServerRequirements').'</h2>';
-    echo '<div class="RequirementText">'.get_lang('ServerRequirementsInfo').'</div>';
-    echo '<div class="RequirementContent">';
-    echo '<table class="table">
+    $html .= '<div class="RequirementHeading"><h3>'.get_lang('ServerRequirements').'</h3>';
+    $html .= '<div class="RequirementText">'.get_lang('ServerRequirementsInfo').'</div>';
+    $html .= '<div class="RequirementContent">';
+    $html .= '<table class="table">
             <tr>
                 <td class="requirements-item">'.get_lang('PHPVersion').' >= '.REQUIRED_PHP_VERSION.'</td>
                 <td class="requirements-value">';
     if (phpversion() < REQUIRED_PHP_VERSION) {
-        echo '<strong><font color="red">'.get_lang('PHPVersionError').'</font></strong>';
+        $html .= '<strong><font color="red">'.get_lang('PHPVersionError').'</font></strong>';
     } else {
-        echo '<strong><font color="green">'.get_lang('PHPVersionOK').' '.phpversion().'</font></strong>';
+        $html .= '<strong><font color="green">'.get_lang('PHPVersionOK').' '.phpversion().'</font></strong>';
     }
-    echo '</td>
+    $html .= '</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.session.php" target="_blank">Session</a> '.get_lang(
         'support'
     ).'</td>
-                <td class="requirements-value">'.check_extension(
-        'session',
-        get_lang('Yes'),
-        get_lang('ExtensionSessionsNotAvailable')
-    ).'</td>
+            <td class="requirements-value">'.check_extension('session',get_lang('Yes'), get_lang('ExtensionSessionsNotAvailable')).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.mysql.php" target="_blank">MySQL</a> '.get_lang(
@@ -1125,16 +1113,16 @@ function display_requirements(
             </tr>
 
           </table>';
-    echo '  </div>';
-    echo '</div>';
+    $html .= '  </div>';
+    $html .= '</div>';
 
     // RECOMMENDED SETTINGS
     // Note: these are the settings for Joomla, does this also apply for Chamilo?
     // Note: also add upload_max_filesize here so that large uploads are possible
-    echo '<div class="RequirementHeading"><h2>'.get_lang('RecommendedSettings').'</h2>';
-    echo '<div class="RequirementText">'.get_lang('RecommendedSettingsInfo').'</div>';
-    echo '<div class="RequirementContent">';
-    echo '<table class="table">
+    $html .= '<div class="RequirementHeading"><h3>'.get_lang('RecommendedSettings').'</h3>';
+    $html .= '<div class="RequirementText">'.get_lang('RecommendedSettingsInfo').'</div>';
+    $html .= '<div class="RequirementContent">';
+    $html .= '<table class="table">
             <tr>
                 <th>'.get_lang('Setting').'</th>
                 <th>'.get_lang('Recommended').'</th>
@@ -1187,10 +1175,7 @@ function display_requirements(
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.upload-max-filesize">Maximum upload file size</a></td>
-                <td class="requirements-recommended">'.Display::label(
-        '>= '.REQUIRED_MIN_UPLOAD_MAX_FILESIZE.'M',
-        'success'
-    ).'</td>
+                <td class="requirements-recommended">'.Display::label('>= '.REQUIRED_MIN_UPLOAD_MAX_FILESIZE.'M','success').'</td>
                 <td class="requirements-value">'.compare_setting_values(
         ini_get('upload_max_filesize'),
         REQUIRED_MIN_UPLOAD_MAX_FILESIZE
@@ -1213,20 +1198,24 @@ function display_requirements(
     ).'</td>
             </tr>
           </table>';
-    echo '  </div>';
-    echo '</div>';
+    $html .= '  </div>';
+    $html .= '</div>';
 
     // DIRECTORY AND FILE PERMISSIONS
-    echo '<div class="RequirementHeading"><h2>'.get_lang('DirectoryAndFilePermissions').'</h2>';
-    echo '<div class="RequirementText">'.get_lang('DirectoryAndFilePermissionsInfo').'</div>';
-    echo '<div class="RequirementContent">';
+    $html .= '<div class="RequirementHeading"><h3>'.get_lang('DirectoryAndFilePermissions').'</h3>';
+    $html .= '<div class="RequirementText">'.get_lang('DirectoryAndFilePermissionsInfo').'</div>';
+    $html .= '<div class="RequirementContent">';
 
     $course_attempt_name = '__XxTestxX__';
     $course_dir = api_get_path(SYS_COURSE_PATH).$course_attempt_name;
 
-    //Just in case
-    @unlink($course_dir.'/test.txt');
-    @rmdir($course_dir);
+    // Just in case.
+    if (is_file($course_dir.'/test.txt')) {
+        unlink($course_dir.'/test.txt');
+    }
+    if (is_dir($course_dir)) {
+        rmdir($course_dir);
+    }
 
     $perms_dir = array(0777, 0755, 0775, 0770, 0750, 0700);
     $perms_fil = array(0666, 0644, 0664, 0660, 0640, 0600);
@@ -1236,6 +1225,7 @@ function display_requirements(
     $dir_perm_verified = 0777;
     foreach ($perms_dir as $perm) {
         $r = @mkdir($course_dir, $perm);
+
         if ($r === true) {
             $dir_perm_verified = $perm;
             $course_test_was_created = true;
@@ -1264,15 +1254,15 @@ function display_requirements(
     @unlink($course_dir.'/test.php');
     @rmdir($course_dir);
 
-    $_SESSION['permissions_for_new_directories'] = $_setting['permissions_for_new_directories'] = $dir_perm_verified;
-    $_SESSION['permissions_for_new_files'] = $_setting['permissions_for_new_files'] = $fil_perm_verified;
+    $app['session']->set('permissions_for_new_directories', decoct($dir_perm_verified));
+    $app['session']->set('permissions_for_new_files', decoct($fil_perm_verified));
 
     $dir_perm = Display::label('0'.decoct($dir_perm_verified), 'info');
     $file_perm = Display::label('0'.decoct($fil_perm_verified), 'info');
 
     $course_test_was_created  = ($course_test_was_created == true && $file_course_test_was_created == true) ? Display::label(get_lang('Yes'), 'success') : Display::label(get_lang('No'), 'important');
 
-    echo '<table class="table">
+    $html .= '<table class="table">
             <tr>
                 <td class="requirements-item">chamilo/config</td>
                 <td class="requirements-value">'.check_writable_root_path('config/').'</td>
@@ -1306,175 +1296,127 @@ function display_requirements(
                 <td class="requirements-value">'.$file_perm.' </td>
             </tr>';
 
-    /*  <tr>
-                <td class="requirements-item">chamilo/main/css/</td>
-                <td class="requirements-value">'.check_writable('css/', true).' ('.get_lang(
-        'SuggestionOnlyToEnableCSSUploadFeature'
-    ).')</td>
-            </tr>
-            <tr>
-                <td class="requirements-item">chamilo/main/lang/</td>
-                <td class="requirements-value">'.check_writable('lang/', true).' ('.get_lang(
-        'SuggestionOnlyToEnableSubLanguageFeature'
-    ).')</td>
-            </tr>*/
+    $html .= '    </table>';
+    $html .= '  </div>';
+    $html .= '</div>';
 
-    echo '    </table>';
-    echo '  </div>';
-    echo '</div>';
+    $error = false;
+    // First, attempt to set writing permissions if we don't have them yet
+    $perm = $app['session']->get('permissions_for_new_directories');
+    $perm_file = $app['session']->get('permissions_for_new_files');
 
-    if ($installType == 'update' && (empty($updatePath) || $badUpdatePath)) {
-        if ($badUpdatePath) {
-            ?>
-        <div class="error-message">
-            <?php echo get_lang('Error'); ?>!<br/>
-            Chamilo <?php echo (isset($_POST['step2_update_6']) ? implode('|', $update_from_version_6) : implode(
-            '|',
-            $update_from_version_8
-        )).' '.get_lang('HasNotBeenFoundInThatDir'); ?>.
-        </div>
-        <?php
-        } else {
-            echo '<br />';
-        }
-        ?>
-    <table border="0" cellpadding="5" align="center">
-        <tr>
-            <td><?php echo get_lang('OldVersionRootPath'); ?>:</td>
-            <td><input type="text" name="updatePath" size="50"
-                       value="<?php echo ($badUpdatePath && !empty($updatePath)) ? htmlentities(
-                           $updatePath
-                       ) : api_get_path(SYS_SERVER_ROOT_PATH).'old_version/'; ?>"/></td>
-        </tr>
-        <tr>
-            <td colspan="2" align="center">
-                <button type="submit" class="back" name="step1"
-                        value="&lt; <?php echo get_lang('Back'); ?>"><?php echo get_lang('Back'); ?></button>
-                <input type="hidden" name="is_executable" id="is_executable" value="-"/>
-                <button type="submit" class="btn next"
-                        name="<?php echo (isset($_POST['step2_update_6']) ? 'step2_update_6' : 'step2_update_8'); ?>"
-                        value="<?php echo get_lang('Next'); ?> &gt;"><?php echo get_lang('Next'); ?></button>
-            </td>
-        </tr>
-    </table>
-    <?php
-    } else {
-        $error = false;
-        // First, attempt to set writing permissions if we don't have them yet
-        $perm = api_get_permissions_for_new_directories();
-        $perm_file = api_get_permissions_for_new_files();
+    $notwritable = array();
 
-        $notwritable = array();
-        $curdir = getcwd();
-
-        $checked_writable = api_get_path(SYS_CONFIG_PATH);
-        if (!is_writable($checked_writable)) {
-            $notwritable[] = $checked_writable;
-            @chmod($checked_writable, $perm);
-        }
-
-        $checked_writable = api_get_path(SYS_DATA_PATH);
-        if (!is_writable($checked_writable)) {
-            $notwritable[] = $checked_writable;
-            @chmod($checked_writable, $perm);
-        }
-
-        $checked_writable = api_get_path(SYS_CODE_PATH).'default_course_document/images/';
-        if (!is_writable($checked_writable)) {
-            $notwritable[] = $checked_writable;
-            @chmod($checked_writable, $perm);
-        }
-
-        $checked_writable = api_get_path(SYS_ARCHIVE_PATH);
-        if (!is_writable($checked_writable)) {
-            $notwritable[] = $checked_writable;
-            @chmod($checked_writable, $perm);
-        }
-
-        $checked_writable = api_get_path(SYS_LOG_PATH);
-        if (!is_writable($checked_writable)) {
-            $notwritable[] = $checked_writable;
-            @chmod($checked_writable, $perm);
-        }
-
-        /*$checked_writable = api_get_path(SYS_COURSE_PATH);
-        if (!is_writable($checked_writable)) {
-            $notwritable[] = $checked_writable;
-            @chmod($checked_writable, $perm);
-        }*/
-
-        if ($course_test_was_created == false || $file_course_test_was_created == false) {
-            $error = true;
-        }
-
-        /*$checked_writable = api_get_path(SYS_PATH).'home/';
-        if (!is_writable($checked_writable)) {
-            $notwritable[] = realpath($checked_writable);
-            @chmod($checked_writable, $perm);
-        }*/
-
-        /*$checked_writable = api_get_path(CONFIGURATION_PATH).'configuration.php';
-        if (file_exists($checked_writable) && !is_writable($checked_writable)) {
-            $notwritable[] = $checked_writable;
-            @chmod($checked_writable, $perm_file);
-        }*/
-
-        // Second, if this fails, report an error
-
-        // The user would have to adjust the permissions manually
-
-        if (count($notwritable) > 0) {
-            $error = true;
-            echo '<div class="error-message">';
-            echo '<center><h3>'.get_lang('Warning').'</h3></center>';
-            printf(
-                get_lang('NoWritePermissionPleaseReadInstallGuide'),
-                '</font>
-	            <a href="../../documentation/installation_guide.html" target="blank">',
-                '</a> <font color="red">'
-            );
-            echo '</div>';
-
-            echo '<ul>';
-            foreach ($notwritable as $value) {
-                echo '<li>'.$value.'</li>';
-            }
-            echo '</ul>';
-
-        } // Check wether a Chamilo configuration file already exists.
-        elseif (file_exists(api_get_path(CONFIGURATION_PATH).'configuration.php')) {
-            echo '<div class="warning-message"><h4><center>';
-            echo get_lang('WarningExistingDokeosInstallationDetected');
-            echo '</center></h4></div>';
-        }
-
-        // And now display the choice buttons (go back or install)
-        ?>
-        <p align="center" style="padding-top:15px">
-        <button type="submit" name="step1" class="back" onclick="javascript: window.location='index.php'; return false;"
-                value="&lt; <?php echo get_lang('Previous'); ?>"><?php echo get_lang('Previous'); ?></button>
-        <button type="submit" name="step2_install" class="add"value="<?php echo get_lang("NewInstallation"); ?>" <?php if ($error) {
-            echo 'disabled="disabled"';
-        } ?> ><?php echo get_lang('NewInstallation'); ?></button>
-        <input type="hidden" name="is_executable" id="is_executable" value="-"/>
-        <?php
-        // Real code
-        echo '<button type="submit" class="save" name="step2_update_8" value="Upgrade from Dokeos 1.8.x"';
-        if ($error) {
-            echo ' disabled="disabled"';
-        }
-        // Temporary code for alpha version, disabling upgrade
-        //echo '<input type="submit" name="step2_update" value="Upgrading is not possible in this beta version"';
-        //echo ' disabled="disabled"';
-        //end temp code
-        echo ' >'.get_lang('UpgradeFromDokeos18x').'</button>';
-        echo ' <button type="submit" class="save" name="step2_update_6" value="Upgrade from Dokeos 1.6.x"';
-        if ($error) {
-            echo ' disabled="disabled"';
-        }
-        echo ' >'.get_lang('UpgradeFromDokeos16x').'</button>';
-        echo '</p>';
+    $checked_writable = api_get_path(SYS_CONFIG_PATH);
+    if (!is_writable($checked_writable)) {
+        $notwritable[] = $checked_writable;
+        @chmod($checked_writable, $perm);
     }
+
+    $checked_writable = api_get_path(SYS_DATA_PATH);
+    if (!is_writable($checked_writable)) {
+        $notwritable[] = $checked_writable;
+        @chmod($checked_writable, $perm);
+    }
+
+    $checked_writable = api_get_path(SYS_CODE_PATH).'default_course_document/images/';
+    if (!is_writable($checked_writable)) {
+        $notwritable[] = $checked_writable;
+        @chmod($checked_writable, $perm);
+    }
+
+    $checked_writable = api_get_path(SYS_ARCHIVE_PATH);
+    if (!is_writable($checked_writable)) {
+        $notwritable[] = $checked_writable;
+        @chmod($checked_writable, $perm);
+    }
+
+    $checked_writable = api_get_path(SYS_LOG_PATH);
+    if (!is_writable($checked_writable)) {
+        $notwritable[] = $checked_writable;
+        @chmod($checked_writable, $perm);
+    }
+
+    /*$checked_writable = api_get_path(SYS_COURSE_PATH);
+    if (!is_writable($checked_writable)) {
+        $notwritable[] = $checked_writable;
+        @chmod($checked_writable, $perm);
+    }*/
+
+    if ($course_test_was_created == false || $file_course_test_was_created == false) {
+        $error = true;
+    }
+
+    /*$checked_writable = api_get_path(SYS_PATH).'home/';
+    if (!is_writable($checked_writable)) {
+        $notwritable[] = realpath($checked_writable);
+        @chmod($checked_writable, $perm);
+    }*/
+
+    /*$checked_writable = api_get_path(CONFIGURATION_PATH).'configuration.php';
+    if (file_exists($checked_writable) && !is_writable($checked_writable)) {
+        $notwritable[] = $checked_writable;
+        @chmod($checked_writable, $perm_file);
+    }*/
+
+    // Second, if this fails, report an error
+
+    // The user would have to adjust the permissions manually
+
+    if (count($notwritable) > 0) {
+        $error = true;
+        $html .= '<div class="error-message">';
+        $html .= '<center><h3>'.get_lang('Warning').'</h3></center>';
+        printf(
+            get_lang('NoWritePermissionPleaseReadInstallGuide'),
+            '</font>
+            <a href="../../documentation/installation_guide.html" target="blank">',
+            '</a> <font color="red">'
+        );
+        $html .= '</div>';
+
+        $html .= '<ul>';
+        foreach ($notwritable as $value) {
+            $html .= '<li>'.$value.'</li>';
+        }
+        $html .= '</ul>';
+    }  elseif (file_exists(api_get_path(CONFIGURATION_PATH).'configuration.php')) {
+        // Check wether a Chamilo configuration file already exists.
+        $html .= '<div class="warning-message"><h4><center>';
+        $html .= get_lang('WarningExistingDokeosInstallationDetected');
+        $html .= '</center></h4></div>';
+    }
+
+    /*
+    // And now display the choice buttons (go back or install)
+    ?>
+    <p align="center" style="padding-top:15px">
+    <button type="submit" name="step1" class="back" onclick="javascript: window.location='index.php'; return false;"
+            value="&lt; <?php echo get_lang('Previous'); ?>"><?php echo get_lang('Previous'); ?></button>
+    <button type="submit" name="step2_install" class="add"value="<?php echo get_lang("NewInstallation"); ?>" <?php if ($error) {
+        echo 'disabled="disabled"';
+    } ?> ><?php echo get_lang('NewInstallation'); ?></button>
+    <input type="hidden" name="is_executable" id="is_executable" value="-"/>
+    <?php
+    // Real code
+    echo '<button type="submit" class="save" name="step2_update_8" value="Upgrade from Dokeos 1.8.x"';
+    if ($error) {
+        echo ' disabled="disabled"';
+    }
+    // Temporary code for alpha version, disabling upgrade
+    //echo '<input type="submit" name="step2_update" value="Upgrading is not possible in this beta version"';
+    //echo ' disabled="disabled"';
+    //end temp code
+    echo ' >'.get_lang('UpgradeFromDokeos18x').'</button>';
+    echo ' <button type="submit" class="save" name="step2_update_6" value="Upgrade from Dokeos 1.6.x"';
+    if ($error) {
+        echo ' disabled="disabled"';
+    }
+    echo ' >'.get_lang('UpgradeFromDokeos16x').'</button>';
+    echo '</p>';*/
+
+    return $html;
+
 }
 
 /**

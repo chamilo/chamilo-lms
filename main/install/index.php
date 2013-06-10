@@ -8,7 +8,11 @@
  */
 
 require_once __DIR__.'/../../vendor/autoload.php';
+require_once 'install.lib.php';
+require_once '../inc/lib/main_api.lib.php';
+
 error_reporting(-1);
+
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 use Silex\Application;
 use Symfony\Component\Console\Output\Output;
@@ -27,8 +31,6 @@ class BufferedOutput extends Output
     }
 }
 
-
-
 $app = new Application();
 
 $app['root_sys'] = dirname(dirname(__DIR__)).'/';
@@ -40,7 +42,6 @@ $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new Silex\Provider\FormServiceProvider());
 $app->register(new Silex\Provider\SessionServiceProvider());
 $app->register(new Silex\Provider\DoctrineServiceProvider());
-
 $app->register(new Silex\Provider\TranslationServiceProvider());
 $app['translator'] = $app->share($app->extend('translator', function($translator, $app) {
     /*$translator->addLoader('yaml', new YamlFileLoader());
@@ -79,6 +80,12 @@ $app->register(new ConsoleServiceProvider(), array(
     'console.version'           => '1.0.0',
     'console.project_directory' => __DIR__.'/..'
 ));
+
+function get_lang($variable) {
+    global $app;
+    return $app['translator']->trans($variable);
+}
+
 
 // Adding commands
 /** @var \Knp\Provider\ConsoleServiceProvider\ConsoleApplication $console */
@@ -123,11 +130,19 @@ $app->match('/requirements', function() use($app) {
         ->add('send', 'submit')
         ->getForm();
 
+    $req = display_requirements($app, 'new');
+
     if ('POST' == $request->getMethod()) {
          $url = $app['url_generator']->generate('check-database');
          return $app->redirect($url);
     }
-    return $app['twig']->render('requirements.tpl', array('form' => $form->createView()));
+    return $app['twig']->render(
+        'requirements.tpl',
+        array(
+            'form' => $form->createView(),
+            'requirements' => $req
+        )
+    );
 })->bind('requirements');
 
 
@@ -190,6 +205,17 @@ $app->match('/portal-settings', function() use($app) {
     $builder  = $app['form.factory']->createBuilder('form');
 
     $data = $command->getPortalSettingsParams();
+    $permissionNewDir = $app['session']->get('permissions_for_new_directories');
+
+    if ($permissionNewDir) {
+        $data['permissions_for_new_directories']['attributes']['data'] = $permissionNewDir;
+    }
+
+    $permissionNewFiles = $app['session']->get('permissions_for_new_files');
+    if ($permissionNewFiles) {
+        $data['permissions_for_new_files']['attributes']['data'] = $permissionNewFiles;
+    }
+
     foreach ($data as $key => $value) {
         $value['attributes'] = isset($value['attributes']) && is_array($value['attributes']) ? $value['attributes'] : array();
         $builder->add($key, $value['type'], $value['attributes']);

@@ -8,6 +8,251 @@ use Doctrine\DBAL\Migrations\Tools\Console\Command\AbstractCommand;
 
 class CommonCommand extends AbstractCommand
 {
+    public $portalSettings;
+    public $databaseSettings;
+    public $adminSettings;
+    public $rootSys;
+
+    /**
+     * @param array $portalSettings
+     */
+    public function setPortalSettings(array $portalSettings)
+    {
+        $this->portalSettings = $portalSettings;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPortalSettings()
+    {
+        return $this->portalSettings;
+    }
+
+    /**
+     * @param array $databaseSettings
+     */
+    public function setDatabaseSettings(array $databaseSettings)
+    {
+        $this->databaseSettings = $databaseSettings;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDatabaseSettings()
+    {
+        return $this->databaseSettings;
+    }
+
+    /**
+     * @param array $adminSettings
+     */
+    public function setAdminSettings(array $adminSettings)
+    {
+        $this->adminSettings = $adminSettings;
+    }
+
+    public function getAdminSettings()
+    {
+        return $this->adminSettings;
+    }
+
+    /**
+     * @param string $path
+     */
+    public function setRootSys($path)
+    {
+        $this->rootSys = $path;
+    }
+
+    /**
+     * @return string
+     */
+
+    public function getRootSys()
+    {
+        return $this->rootSys;
+    }
+
+    /**
+     * Gets the version name folders located in main/install
+     *
+     * @return array
+     */
+    public function getAvailableVersions()
+    {
+        $installPath = $this->getRootSys().'main/install';
+        $dir = new \DirectoryIterator($installPath);
+        $dirList = array();
+        foreach ($dir as $fileInfo) {
+            if ($fileInfo->isDir() && !$fileInfo->isDot()) {
+                $dirList[] = $fileInfo->getFilename();
+            }
+        }
+
+        return $dirList;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAdminSettingsParams()
+    {
+        return array(
+            'firstname' => array(
+                'attributes' => array(
+                    'label' => 'Firstname',
+                    'data' =>  'John'
+                ),
+                'type' => 'text'
+            ),
+            'lastname' =>  array(
+                'attributes' => array(
+                    'label' => 'Lastname',
+                    'data' =>  'Doe'
+                ),
+                'type' => 'text'
+            ),
+            'username' => array(
+                'attributes' => array(
+                    'label' => 'Username',
+                    'data' =>  'admin'
+                ),
+                'type' => 'text'
+            ),
+            'password' => array(
+                'attributes' => array(
+                    'label' => 'Password',
+                    'data' =>  ''
+                ),
+                'type' => 'password'
+            ),
+            'email' => array(
+                'attributes' => array(
+                    'label' => 'Password',
+                    'data' =>  'admin@example.org'
+                ),
+                'type' => 'email'
+            ),
+            'language' => array(
+                'attributes' => array(
+                    'label' => 'Language',
+                    'data' =>  'english'
+                ),
+                'type' => 'text'
+            ),
+            'phone' => array(
+                'attributes' => array(
+                    'label' => 'Phone',
+                    'data' =>  '123456'
+                ),
+                'type' => 'text'
+            )
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function getPortalSettingsParams()
+    {
+        return array(
+            'sitename' => array(
+                'attributes' => array(
+                    'label' => 'Site name',
+                    'data' => 'Campus Chamilo',
+                ),
+                'type' => 'text'
+            ),
+            'institution' => array(
+                'attributes' => array(
+                    'data' => 'Chamilo',
+                ),
+                'type' => 'text'
+            ),
+            'institution_url' => array(
+                'attributes' => array(
+                    'label' => 'URL',
+                    'data' => 'http://localhost/',
+                ),
+                'type' => 'text'
+            ),
+            'encrypt_method' => array(
+                'attributes' => array(
+                    'choices' => array('sha1', 'md5', 'none'),
+                    'data' => 'sha1'
+                ),
+
+                'type' => 'choice'
+            ),
+            'permissions_for_new_directories' => array(
+                'attributes' => array(
+                    'data' => '0777',
+                ),
+                'type' => 'text'
+            ),
+            'permissions_for_new_files' => array(
+                'attributes' => array(
+                    'data' => '0666',
+                ),
+                'type' => 'text'
+            ),
+
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function getDatabaseSettingsParams()
+    {
+        return array(
+            'driver' => array(
+                'attributes' => array(
+                    'choices' =>
+                        array(
+                            'pdo_mysql' => 'pdo_mysql',
+                            'pdo_sqlite' => 'pdo_sqlite',
+                            'pdo_pgsql' => 'pdo_pgsql',
+                            'pdo_oci' => 'pdo_oci',
+                            'ibm_db2' => 'ibm_db2',
+                            'pdo_ibm' => 'pdo_ibm',
+                            'pdo_sqlsrv' => 'pdo_sqlsrv'
+                        ),
+                    'data' => 'pdo_mysql'
+                ),
+                'type' => 'choice'
+            ),
+            'host' => array(
+                'attributes' => array(
+                    'label' => 'Host',
+                    'data' => 'localhost',
+                ),
+                'type' => 'text'
+            ),
+            'dbname' => array(
+                'attributes' => array(
+                    'data' => 'chamilo',
+                ),
+                'type' => 'text'
+            ),
+            'user' => array(
+                'attributes' => array(
+                    'label' => 'URL',
+                    'data' => 'root',
+                ),
+                'type' => 'text'
+            ),
+            'password' => array(
+                'attributes' => array(
+                    'label' => 'Password',
+                    'data' => 'root',
+                ),
+                'type' => 'password'
+            )
+        );
+    }
     /**
      * Gets the installation version path
      *
@@ -144,6 +389,8 @@ class CommonCommand extends AbstractCommand
     /**
      * Writes the configuration file a yml file
      * @param string $version
+     * @return bool
+     *
      */
     public function writeConfiguration($version)
     {
@@ -163,7 +410,7 @@ class CommonCommand extends AbstractCommand
         $configuration['main_database'] = $databaseSettings['dbname'];
         $configuration['driver'] = $databaseSettings['driver'];
 
-        $configuration['root_web'] = $portalSettings['url'];
+        $configuration['root_web'] = $portalSettings['institution_url'];
         $configuration['root_sys'] = $this->getRootSys();
 
         $configuration['security_key']      = md5(uniqid(rand().time()));
@@ -204,7 +451,7 @@ class CommonCommand extends AbstractCommand
         $config['{DATABASE_MAIN}'] = $configuration['main_database'];
         $config['{DATABASE_DRIVER}'] = $configuration['driver'];
 
-        $config['{ROOT_WEB}'] = $portalSettings['url'];
+        $config['{ROOT_WEB}'] = $portalSettings['institution_url'];
         $config['{ROOT_SYS}'] = $this->getRootSys();
 
         //$config['{URL_APPEND_PATH}'] = $urlAppendPath;

@@ -17,10 +17,6 @@ use Symfony\Component\Yaml\Dumper;
 class InstallCommand extends CommonCommand
 {
     public $commandLine = true;
-    public $portalSettings;
-    public $databaseSettings;
-    public $adminSettings;
-    public $rootSys;
 
 
     /**
@@ -39,197 +35,6 @@ class InstallCommand extends CommonCommand
             ->addArgument('version', InputArgument::REQUIRED, 'The version to migrate to.', null)
             ->addArgument('path', InputArgument::OPTIONAL, 'The path to the chamilo folder');
     }
-
-    public function setPortalSettings($portalSettings)
-    {
-        $this->portalSettings = $portalSettings;
-    }
-
-    public function getPortalSettings()
-    {
-        return $this->portalSettings;
-    }
-
-    public function setDatabaseSettings($databaseSettings)
-    {
-        $this->databaseSettings = $databaseSettings;
-    }
-
-    public function getDatabaseSettings()
-    {
-        return $this->databaseSettings;
-    }
-
-    public function setAdminSettings($adminSettings)
-    {
-        $this->adminSettings = $adminSettings;
-    }
-
-    public function getAdminSettings()
-    {
-        return $this->adminSettings;
-    }
-
-    public function setRootSys($path)
-    {
-        $this->rootSys = $path;
-    }
-
-    public function getRootSys()
-    {
-        return $this->rootSys;
-    }
-
-    /**
-     * Gets the version name folders located in main/install
-     *
-     * @return array
-     */
-    public function getAvailableVersions()
-    {
-        $installPath = $this->getRootSys().'main/install';
-        $dir = new \DirectoryIterator($installPath);
-        $dirList = array();
-        foreach ($dir as $fileInfo) {
-            if ($fileInfo->isDir() && !$fileInfo->isDot()) {
-                $dirList[] = $fileInfo->getFilename();
-            }
-        }
-
-        return $dirList;
-    }
-
-    public function getAdminSettingsParams()
-    {
-        return array(
-            'firstname' => array(
-                'attributes' => array(
-                    'label' => 'Firstname',
-                    'data' =>  'John'
-                ),
-                'type' => 'text'
-            ),
-            'lastname' =>  array(
-                'attributes' => array(
-                    'label' => 'Lastname',
-                    'data' =>  'Doe'
-                ),
-                'type' => 'text'
-            ),
-            'username' => array(
-                'attributes' => array(
-                    'label' => 'Username',
-                    'data' =>  'admin'
-                ),
-                'type' => 'text'
-            ),
-            'password' => array(
-                'attributes' => array(
-                    'label' => 'Password',
-                    'data' =>  ''
-                ),
-                'type' => 'password'
-            ),
-            'email' => array(
-                'attributes' => array(
-                    'label' => 'Password',
-                    'data' =>  'admin@example.org'
-                ),
-                'type' => 'email'
-            ),
-            'language' => array(
-                'attributes' => array(
-                    'label' => 'Language',
-                    'data' =>  'english'
-                ),
-                'type' => 'text'
-            ),
-            'phone' => array(
-                'attributes' => array(
-                    'label' => 'Phone',
-                    'data' =>  '123456'
-                ),
-                'type' => 'text'
-            )
-        );
-    }
-
-    public function getPortalSettingsParams()
-    {
-        return array(
-            'name' => array(
-                'attributes' => array(
-                    'data' => 'Chamilo',
-                ),
-                'type' => 'text'
-            ),
-            'url' => array(
-                'attributes' => array(
-                    'label' => 'URL',
-                    'data' => 'http://',
-                ),
-                'type' => 'text'
-            ),
-            'encrypt_method' => array(
-                'attributes' => array(
-                    'choices' => array('sha1', 'md5', 'none'),
-                    'data' => 'sha1'
-                ),
-
-                'type' => 'choice'
-            )
-        );
-    }
-
-    public function getDatabaseSettingsParams()
-    {
-        return array(
-            'driver' => array(
-                'attributes' => array(
-                    'choices' =>
-                        array(
-                            'pdo_mysql' => 'pdo_mysql',
-                            'pdo_sqlite' => 'pdo_sqlite',
-                            'pdo_pgsql' => 'pdo_pgsql',
-                            'pdo_oci' => 'pdo_oci',
-                            'ibm_db2' => 'ibm_db2',
-                            'pdo_ibm' => 'pdo_ibm',
-                            'pdo_sqlsrv' => 'pdo_sqlsrv'
-                        ),
-                    'data' => 'pdo_mysql'
-                ),
-                'type' => 'choice'
-            ),
-            'host' => array(
-                'attributes' => array(
-                    'label' => 'Host',
-                    'data' => 'localhost',
-                ),
-                'type' => 'text'
-            ),
-            'dbname' => array(
-                'attributes' => array(
-                    'data' => 'chamilo',
-                ),
-                'type' => 'text'
-            ),
-            'user' => array(
-                'attributes' => array(
-                    'label' => 'URL',
-                    'data' => 'root',
-                ),
-                'type' => 'text'
-            ),
-            'password' => array(
-                'attributes' => array(
-                    'label' => 'Password',
-                    'data' => 'root',
-                ),
-                'type' => 'password'
-            )
-        );
-    }
-
 
     /**
      * Executes a command via CLI
@@ -318,11 +123,6 @@ class InstallCommand extends CommonCommand
             'system_version',
         );
 
-        // Getting default configuration parameters in the $_configuration array
-        // require_once $configurationPath.'../../install/configuration.dist.yml.php';
-
-        $newConfigurationArray = array();
-
         if ($this->commandLine) {
 
             // Ask for portal settings
@@ -402,19 +202,25 @@ class InstallCommand extends CommonCommand
 
                 //@todo ask this during installation
 
-                $adminInfo = $this->adminSettings;
+                $adminInfo = $this->getAdminSettings();
+                $portalSettings = $this->getPortalSettings();
 
-                api_set_setting('Institution', 'Portal');
-                api_set_setting('InstitutionUrl', 'Portal');
-                api_set_setting('siteName', 'Campus');
                 api_set_setting('emailAdministrator', $adminInfo['email']);
                 api_set_setting('administratorSurname', $adminInfo['lastname']);
                 api_set_setting('administratorName', $adminInfo['firstname']);
                 api_set_setting('platformLanguage', $adminInfo['language']);
+
                 api_set_setting('allow_registration', '1');
                 api_set_setting('allow_registration_as_teacher', '1');
 
-                $versionInfo = $this->getAvailableVersionInfo($version);
+                api_set_setting('permissions_for_new_directories', $portalSettings['permissions_for_new_directories']);
+                api_set_setting('permissions_for_new_files', $portalSettings['permissions_for_new_files']);
+
+                api_set_setting('Institution', $portalSettings['institution']);
+                api_set_setting('InstitutionUrl', $portalSettings['institution_url']);
+                api_set_setting('siteName', $portalSettings['sitename']);
+
+                //$versionInfo = $this->getAvailableVersionInfo($version);
 
                 // Optional run Doctrine migrations from src/database/migrations
                 /* $command = $this->getApplication()->find('migrations:migrate');

@@ -192,24 +192,6 @@ $app['allowed'] = true;
 // @todo use silex session provider instead of a custom class
 Chamilo::session()->start($alreadyInstalled);
 
-// Retrieving all the chamilo config settings for multiple URLs feature
-if (isset($_configuration['multiple_access_urls']) && !empty($_configuration['multiple_access_urls'])) {
-    $_configuration['access_url'] = 1;
-    $access_urls = api_get_access_urls();
-
-    $protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
-    $request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
-    $request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
-
-    foreach ($access_urls as & $details) {
-        if ($request_url1 == $details['url'] or $request_url2 == $details['url']) {
-            $_configuration['access_url'] = $details['id'];
-        }
-    }
-} else {
-    $_configuration['access_url'] = 1;
-}
-
 // Loading chamilo settings
 /* @todo create a service provider to load plugins.
    Check how bolt add extensions (including twig templates, config with yml)*/
@@ -231,6 +213,24 @@ if ($alreadyInstalled) {
 
     // Setting the static database class
     $database = $app['database'];
+
+    // Retrieving all the chamilo config settings for multiple URLs feature
+    if (isset($_configuration['multiple_access_urls']) && !empty($_configuration['multiple_access_urls'])) {
+        $_configuration['access_url'] = 1;
+        $access_urls = api_get_access_urls();
+
+        $protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
+        $request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
+        $request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
+
+        foreach ($access_urls as & $details) {
+            if ($request_url1 == $details['url'] or $request_url2 == $details['url']) {
+                $_configuration['access_url'] = $details['id'];
+            }
+        }
+    } else {
+        $_configuration['access_url'] = 1;
+    }
 
     $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
 

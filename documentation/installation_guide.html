@@ -120,8 +120,13 @@ If you are using Apache, and due to new friendly URL features added in 1.10, you
     allow from all
   &lt;/Directory&gt;
 </pre>
+<p>
 In particular, the "AllowOverride All" clause is the one that matters. This will allow PHP to send the user from one page to another freely, thus allowing for more user-friendly URLs.<br />
-Once you've made sure "AllowOverride" says "All", you can safely save the file, get out of it and reload the web server (<i>sudo service apache2 reload</i> under Debian/Ubuntu, or click right on the WAMP/XAMP/EasyPHP icon and "reload web server" under Windows).
+Once you've made sure "AllowOverride" says "All", you can safely save the file, get out of it and reload the web server (<i>sudo service apache2 reload</i> under Debian/Ubuntu, or click right on the WAMP/XAMP/EasyPHP icon and "reload web server" under Windows).</p>
+<p>
+Please note that, if you are using Chamilo in a subdirectory (for example, you load it in your browser as http://localhost/chamilo/ or http://yoursite.com/chamilo/, you will also need to alter the .htaccess file in the root directory of Chamilo, <b>before</b> you proceed with the installation.<br />
+On the RewriteBase line, where it normally says "/", change it to whatever subdirectory you are using. In the same case as above, your RewriteBase will have to say "chamilo/" (without the quotes).
+</p>
 <h3>Downloading and installing Chamilo</h3>
 <ol>
   <li><a href="http://www.chamilo.org/download">Download Chamilo LMS</a></li>

@@ -168,9 +168,11 @@ $app['languages_file'] = array();
 $app['installed'] = $alreadyInstalled;
 $app['app.theme'] = 'chamilo';
 
-// Loading $app settings
-$app['debug'] = isset($configuration['debug']) ? $configuration['debug'] : false;
+// Debug now relies in the configuration.php file
 
+$app['debug'] = isset($_configuration['debug']) ? $_configuration['debug'] : false;
+
+// Loading $app settings depending of the debug option
 if ($app['debug']) {
     require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/dev.php';
 } else {

@@ -40,6 +40,17 @@ class IndexController extends CommonController
         $this->cidReset();
         /** @var \Template $template */
         $template = $app['template'];
+        // Testing new Database with doctrine embeded
+        /* $sql = "SELECT * FROM user WHERE user_id = 1 ORDER BY RAND()";
+        $result = \Database::query($sql);
+        $result = \Database::fetch_object($result);
+        var_dump($result);*/
+
+        //var_dump(\Database::get_client_info());
+
+        /*$sql = "INSERT INTO user (username, lastname, firstname) VALUES ('111s11', '123', '123'); ";
+        $a = \Database::query($sql);
+        var_dump($app['dbs']['mysql_read']->lastInsertId());*/
 
         /*$params['data'] = array(
             'subject' => 'subject julito',
@@ -215,7 +226,7 @@ class IndexController extends CommonController
         if (!empty($_POST['submitAuth'])) {
             // The user has been already authenticated, we are now to find the last login of the user.
             if (!empty($this->user_id)) {
-                $track_login_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+                $track_login_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
                 $sql_last_login = "SELECT login_date
                                     FROM $track_login_table
                                     WHERE login_user_id = '".$this->user_id."'

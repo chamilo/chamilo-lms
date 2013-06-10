@@ -256,6 +256,7 @@ class Security
      */
     public static function remove_XSS($var, $user_status = ANONYMOUS, $filter_terms = false)
     {
+        // return $var;
         if ($filter_terms) {
             $var = self::filter_terms($var);
         }

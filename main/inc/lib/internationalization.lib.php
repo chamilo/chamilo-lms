@@ -159,12 +159,13 @@ function get_lang($variable, $reserved = null, $language = null)
         global $langstats;
         $langstats->add_use($variable, '');
     }
-    if (!isset ($used_lang_vars)) {
+    if (!isset($used_lang_vars)) {
         $used_lang_vars = array();
     }
 
     // Caching results from some API functions, for speed.
     static $initialized, $encoding, $is_utf8_encoding, $langpath, $test_server_mode, $show_special_markup;
+
     if (!isset($initialized)) {
         $encoding = api_get_system_encoding();
         $is_utf8_encoding = api_is_utf8($encoding);
@@ -195,7 +196,6 @@ function get_lang($variable, $reserved = null, $language = null)
         $used_lang_vars[$variable.$lang_postfix] = $ret;
         return $ret;
     }
-
 
     $_api_is_translated = false;
 
@@ -287,7 +287,7 @@ function get_lang($variable, $reserved = null, $language = null)
         $_api_is_translated = false;
         $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
     }
-    //return $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);
+
     $ret = $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);
     $used_lang_vars[$variable.$lang_postfix] = $ret;
     return $ret;
@@ -418,13 +418,18 @@ function api_get_language_isocode($language = null, $default_code = 'en')
     if (empty($language)) {
         $language = api_get_interface_language(false, true);
     }
+
+    // Try session
+    /*if (empty($iso_code)) {
+        $iso_code = Session::read('_setting.api_get_language_isocode');
+    }*/
+
     if (!isset($iso_code[$language])) {
         if (!class_exists('Database')) {
             return $default_code; // This might happen, in case of calling this function early during the global initialization.
         }
-        $sql_result = Database::query(
-            "SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." WHERE dokeos_folder = '$language'"
-        );
+        $sql = "SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." WHERE dokeos_folder = '$language'";
+        $sql_result = Database::query($sql);
         if (Database::num_rows($sql_result)) {
             $result = Database::fetch_array($sql_result);
             $iso_code[$language] = trim($result['isocode']);
@@ -435,7 +440,9 @@ function api_get_language_isocode($language = null, $default_code = 'en')
         if (empty($iso_code[$language])) {
             $iso_code[$language] = $default_code;
         }
+        //Session::write('_setting.api_get_language_isocode', $iso_code);
     }
+
     return $iso_code[$language];
 }
 

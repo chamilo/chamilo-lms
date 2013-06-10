@@ -702,8 +702,11 @@ class Template
         //$this->assign('content', $content);
     }
 
-    /* Sets the plugin content in a template variable */
-   private function set_plugin_region($plugin_region)
+    /**
+     * Sets the plugin content in a template variable
+     * @param string
+     */
+    private function set_plugin_region($plugin_region)
     {
         if (!empty($plugin_region)) {
             $region_content = $this->plugin->load_region($this->app['plugins'], $plugin_region, $this, $this->force_plugin_load);

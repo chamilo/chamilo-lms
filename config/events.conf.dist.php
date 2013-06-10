@@ -63,4 +63,4 @@ $event_config = array(
 );
 
 
-@include 'events.conf.local.php';
+//@include 'events.conf.local.php';

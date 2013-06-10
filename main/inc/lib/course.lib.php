@@ -127,8 +127,11 @@ class CourseManager
      * @return array Array of course attributes
      * @assert () === false
      */
-    static function update($params) {
-        if (!is_array($params) or count($params)<1) { return false; }
+    static function update($params)
+    {
+        if (!is_array($params) or count($params)<1) {
+            return false;
+        }
         $course_user_table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
 
@@ -179,7 +182,9 @@ class CourseManager
         //Delete only teacher relations that doesn't match the selected teachers
         $cond='';
         if (count($teachers)>0) {
-            foreach($teachers as $key) $cond.=" AND user_id<>'".$key."'";
+            foreach($teachers as $key) {
+                $cond.=" AND user_id<>'".$key."'";
+            }
         }
         $sql = 'DELETE FROM '.$course_user_table.' WHERE c_id = "'.Database::escape_string($courseInfo['real_id']).'" AND status="1"'.$cond;
         Database::query($sql);
@@ -217,6 +222,7 @@ class CourseManager
         Database::query($sql);
 
         $course_info = api_get_course_info($course_code);
+
         return $course_info;
     }
 
@@ -1347,12 +1353,22 @@ class CourseManager
      * @param bool $add_link_to_profile
      * @return string
      */
-    public static function get_teacher_list_from_course_code_to_string($courseId, $separator = self::USER_SEPARATOR, $add_link_to_profile = false) {
+    public static function get_teacher_list_from_course_code_to_string($courseId, $separator = null, $add_link_to_profile = false)
+    {
         $teacher_list = self::get_teacher_list_from_course_code($courseId);
+
+        return self::formatUserListToString($teacher_list, $separator, $add_link_to_profile);
+    }
+
+    public static function formatUserListToString($userList, $separator = null, $add_link_to_profile = false)
+    {
+        if (empty($separator)) {
+            $separator = self::USER_SEPARATOR;
+        }
         $teacher_string = '';
         $list = array();
-        if (!empty($teacher_list)) {
-            foreach($teacher_list as $teacher) {
+        if (!empty($userList)) {
+            foreach($userList as $teacher) {
                 $teacher_name = api_get_person_name($teacher['firstname'], $teacher['lastname']);
                 if ($add_link_to_profile) {
                     $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&resizable=0&height=300&user_id='.$teacher['user_id'];
@@ -1764,10 +1780,10 @@ class CourseManager
                     $course_sort = $courses['sort'];
 
                     if ($counter == 0) {
-                        $sql = 'UPDATE '.$TABLECOURSUSER.' SET sort = sort+1 WHERE user_id= "'.$user_id.'" AND relation_type<>'.COURSE_RELATION_TYPE_RRHH.' AND user_course_cat="0" AND sort > "'.$course_sort.'"';
+                        $sql = 'UPDATE '.$TABLECOURSUSER.' SET sort = sort+1 WHERE user_id = "'.$user_id.'" AND relation_type<>'.COURSE_RELATION_TYPE_RRHH.' AND user_course_cat="0" AND sort > "'.$course_sort.'"';
                         $course_sort++;
                     } else {
-                        $sql = 'UPDATE '.$TABLECOURSUSER.' SET sort = sort+1 WHERE user_id= "'.$user_id.'" AND relation_type<>'.COURSE_RELATION_TYPE_RRHH.' AND user_course_cat="0" AND sort >= "'.$course_sort.'"';
+                        $sql = 'UPDATE '.$TABLECOURSUSER.' SET sort = sort+1 WHERE user_id = "'.$user_id.'" AND relation_type<>'.COURSE_RELATION_TYPE_RRHH.' AND user_course_cat="0" AND sort >= "'.$course_sort.'"';
                     }
 
                     Database::query($sql);
@@ -2030,29 +2046,6 @@ class CourseManager
             $result[] = $virtual_course;
         }
         return $result;
-    }
-
-    /**
-     * Get emails of tutors to course
-     * @param string Visual code
-     * @return array List of emails of tutors to course
-     * @author Carlos Vargas <carlos.vargas@dokeos.com>, Dokeos Latino
-     * */
-    public static function get_emails_of_tutors_to_course($courseId)
-    {
-        $list = array();
-        $courseId = intval($courseId);
-        $res = Database::query("SELECT user_id FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                WHERE c_id = '".$courseId."' AND status=1");
-        while ($list_users = Database::fetch_array($res)) {
-            $result = Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_USER)."
-                    WHERE user_id=".$list_users['user_id']);
-            while ($row_user = Database::fetch_array($result)){
-                $name_teacher = api_get_person_name($row_user['firstname'], $row_user['lastname']);
-                $list[] = array($row_user['email'] => $name_teacher);
-            }
-        }
-        return $list;
     }
 
     /**
@@ -2442,8 +2435,8 @@ class CourseManager
             foreach ($courses_list as $courseId) {
                 $courseId = Database::escape_string($courseId);
                 $insert_sql = "INSERT IGNORE INTO $tbl_course_rel_user(c_id, user_id, status, relation_type) VALUES('$courseId', $hr_manager_id, '".DRH."', '".COURSE_RELATION_TYPE_RRHH."')";
-                Database::query($insert_sql);
-                if (Database::affected_rows()) {
+                $result = Database::query($insert_sql);
+                if (Database::affected_rows($result)) {
                     $affected_rows++;
                 }
             }
@@ -3024,7 +3017,7 @@ class CourseManager
                 $course_title .= ' ('.$course_info['visual_code'].') ';
             }
             if (api_get_setting('display_teacher_in_courselist') == 'true') {
-                $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['real_id'], self::USER_SEPARATOR, true);
+                $teachers = $course_info['teacher_list_formatted'];
             }
 
             $params['link'] = $course_title_url;

@@ -297,10 +297,11 @@ $app['twig'] = $app->share(
 
 
 // Developer tools
+
 if (is_writable($app['sys_temp_path'])) {
     if ($app['debug']) {
         // Adding symfony2 web profiler (memory, time, logs, etc)
-        if (api_get_setting('allow_web_profiler') == 'true') {
+        //if (api_get_setting('allow_web_profiler') == 'true') {
             $app->register(
                 $p = new Silex\Provider\WebProfilerServiceProvider(),
                 array(
@@ -308,7 +309,7 @@ if (is_writable($app['sys_temp_path'])) {
                 )
             );
             $app->mount('/_profiler', $p);
-        }
+        //}
         $app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
         //}
     }

@@ -25,7 +25,7 @@ class Accessurleditcoursestourl
      * @assert () === false
      */
 
-    function search_courses($needle, $id)
+    public static function search_courses($needle, $id)
     {
         global $tbl_course;
         $xajax_response = new XajaxResponse();

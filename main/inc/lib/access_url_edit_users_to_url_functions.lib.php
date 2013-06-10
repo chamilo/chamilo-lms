@@ -29,7 +29,7 @@ class Accessurledituserstourl
      * @return string Xajax response block
      * @assert () === false
      */
-    function search_users($needle, $id)
+    public static function search_users($needle, $id)
     {
         global $tbl_user, $tbl_access_url_rel_user;
         $xajax_response = new XajaxResponse();

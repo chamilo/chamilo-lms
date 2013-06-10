@@ -1,17 +1,3 @@
-{% extends "jquery_mobile/layout/layout_1_col.tpl" %}
+{# Load the template basis from the default template #}
+{% extends app.template_style ~ "/../default/layout/social_layout.tpl" %}
 
-{% block content %}
-    <div class="row">
-        <div class="span3">
-            {{ social_left_content }}
-            {{ social_left_menu }}
-        </div>
-        <div class="span9">
-            <div class="row">
-                <span id="message_ajax_reponse" class="span9"></span>
-                {{ social_right_content }}
-                <div id="display_response_id" class="span9"></div>
-            </div>
-        </div>
-    </div>
-{% endblock %}

@@ -3,6 +3,8 @@
 
 /**
  * Chamilo installation
+ * This script could be loaded via browser using the URL: main/install/index.php
+ * or via CM
  *
  * @package chamilo.install
  */

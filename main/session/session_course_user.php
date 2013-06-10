@@ -78,8 +78,8 @@ if ($_POST['formSent']) {
             $courseId = Database::escape_string($courseId);
 			$sql_delete = "DELETE FROM $tbl_session_rel_course_rel_user
 							WHERE id_user='".$id_user."' AND c_id ='".$courseId."' AND id_session = $id_session";
-			Database::query($sql_delete);
-			if (Database::affected_rows()) {
+			$result = Database::query($sql_delete);
+			if (Database::affected_rows($result)) {
 				//update session rel course table
 				$sql_update  = "UPDATE $tbl_session_rel_course SET nbr_users= nbr_users - 1 WHERE id_session='$id_session' AND c_id = '$courseId'";
 				Database::query($sql_update);
@@ -91,8 +91,8 @@ if ($_POST['formSent']) {
 		if(!in_array($existingCourse['id'], $CourseList)) {
             $courseId = Database::escape_string($existingCourse['id']);
 			$sql_insert = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,c_id,id_user) VALUES('$id_session','$courseId','$id_user')";
-			Database::query($sql_insert);
-			if (Database::affected_rows()) {
+			$result = Database::query($sql_insert);
+			if (Database::affected_rows($result)) {
 				//update session rel course table
 				$sql_update  = "UPDATE $tbl_session_rel_course SET nbr_users= nbr_users + 1 WHERE id_session='$id_session' AND c_id='$courseId'";
 				Database::query($sql_update);

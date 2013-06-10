@@ -17,7 +17,7 @@ class CommonCommand extends AbstractCommand
      */
     public function getInstallationPath($version)
     {
-        return api_get_path(SYS_PATH).'main/install/'.$version.'/';
+        return __DIR__.'/../../../../main/install/'.$version.'/';
     }
 
     /**
@@ -141,26 +141,86 @@ class CommonCommand extends AbstractCommand
         return api_get_path(SYS_PATH).'src/ChamiloLMS/Migrations/migrations.yml';
     }
 
-
     /**
      * Writes the configuration file a yml file
-     * @param $newConfigurationArray
-     * @param $version
+     * @param string $version
      */
-    public function writeConfiguration($newConfigurationArray, $version)
+    public function writeConfiguration($version)
     {
-        $configurationPath = $this->getHelper('configuration')->getConfigurationPath();
+        $portalSettings = $this->getPortalSettings();
+        $databaseSettings = $this->getDatabaseSettings();
 
-        $newConfigurationArray['system_version'] = $version;
-        $newConfigurationArray['db_glue'] = '`.`';
-        $newConfigurationArray['db_prefix'] = '';
+        $configurationPath = $this->getHelper('configuration')->getNewConfigurationPath();
 
+        // Creates a YML File
+
+        $configuration = array();
+        $configuration['system_version'] = $version;
+
+        $configuration['db_host'] = $databaseSettings['host'];
+        $configuration['db_user'] = $databaseSettings['user'];
+        $configuration['db_password'] = $databaseSettings['password'];
+        $configuration['main_database'] = $databaseSettings['dbname'];
+        $configuration['driver'] = $databaseSettings['driver'];
+
+        $configuration['root_web'] = $portalSettings['url'];
+        $configuration['root_sys'] = $this->getRootSys();
+
+        $configuration['security_key']      = md5(uniqid(rand().time()));
+
+        // Hash function method
+        $configuration['password_encryption']      = $portalSettings['encrypt_method'];
+        // You may have to restart your web server if you change this
+        $configuration['session_stored_in_db']     = false;
+        // Session lifetime
+        $configuration['session_lifetime']         = 3600;
+        // Activation for multi-url access
+        $_configuration['multiple_access_urls']   = false;
+        //Deny the elimination of users
+        $configuration['deny_delete_users']        = false;
+        //Prevent all admins from using the "login_as" feature
+        $configuration['login_as_forbidden_globally'] = false;
+        // Version settings
+        $configuration['system_version']           = '1.10.0';
+
+        /*
         $dumper = new Dumper();
-        $yaml = $dumper->dump($newConfigurationArray, 2); //inline
-        $newConfigurationFile = $configurationPath.'../../../config/configuration.yml';
+        $yaml = $dumper->dump($configuration, 2);
+
+        $newConfigurationFile = $configurationPath.'configuration.yml';
         file_put_contents($newConfigurationFile, $yaml);
 
-        return file_exists($newConfigurationFile);
+        return file_exists($newConfigurationFile);*/
+
+        // Create a configuration.php
+        $configurationPath.'configuration.dist.php';
+
+        $contents = file_get_contents($configurationPath.'configuration.dist.php');
+
+        $configuration['{DATE_GENERATED}'] = date('r');
+        $config['{DATABASE_HOST}'] = $configuration['db_host'];
+        $config['{DATABASE_USER}'] = $configuration['db_user'];
+        $config['{DATABASE_PASSWORD}'] = $configuration['db_password'];
+        $config['{DATABASE_MAIN}'] = $configuration['main_database'];
+        $config['{DATABASE_DRIVER}'] = $configuration['driver'];
+
+        $config['{ROOT_WEB}'] = $portalSettings['url'];
+        $config['{ROOT_SYS}'] = $this->getRootSys();
+
+        //$config['{URL_APPEND_PATH}'] = $urlAppendPath;
+        $config['{SECURITY_KEY}'] = $configuration['security_key'];
+        $config['{ENCRYPT_PASSWORD}'] = $configuration['password_encryption'];
+
+        $config['SESSION_LIFETIME'] = 3600;
+        $config['{NEW_VERSION}'] = $this->getLatestVersion();
+        $config['NEW_VERSION_STABLE'] = 'true';
+
+        foreach ($config as $key => $value) {
+            $contents = str_replace($key, $value, $contents);
+        }
+        $newConfigurationFile = $configurationPath.'configuration.php';
+
+        return file_put_contents($newConfigurationFile, $contents);
     }
 
 
@@ -195,6 +255,90 @@ class CommonCommand extends AbstractCommand
         file_put_contents($newConfigurationFile, $yaml);
 
         return file_exists($newConfigurationFile);
+    }
+
+    /**
+     * Gets the SQL files relation with versions
+     * @return array
+     */
+    public function getDatabaseMap()
+    {
+
+        $defaultCourseData = array(
+            array(
+                'name' => 'course1',
+                'sql' => array(
+                    'db_course1.sql',
+                ),
+            ),
+            array(
+                'name' => 'course2',
+                'sql' => array(
+                    'db_course2.sql'
+                )
+            ),
+        );
+
+        return array(
+            '1.8.7' => array(
+                'section' => array(
+                    'main' => array(
+                        array(
+                            'name' => 'chamilo',
+                            'sql' => array(
+                                'db_main.sql',
+                                'db_stats.sql',
+                                'db_user.sql'
+                            ),
+                        ),
+                    ),
+                    'course' => $defaultCourseData
+                ),
+            ),
+            '1.8.8' => array(
+                'section' => array(
+                    'main' => array(
+                        array(
+                            'name' => 'chamilo',
+                            'sql' => array(
+                                'db_main.sql',
+                                'db_stats.sql',
+                                'db_user.sql'
+                            ),
+                        ),
+                    ),
+                    'course' => $defaultCourseData
+                ),
+            ),
+            '1.9.0' => array(
+                'section' => array(
+                    'main' => array(
+                        array(
+                            'name' => 'chamilo',
+                            'sql' => array(
+                                'db_course.sql',
+                                'db_main.sql',
+                                'db_stats.sql',
+                                'db_user.sql'
+                            ),
+                        ),
+                    ),
+                )
+            ),
+            '1.10.0' => array(
+                'section' => array(
+                    'main' => array(
+                        array(
+                            'name' => 'chamilo',
+                            'sql' => array(
+                                'db_course.sql',
+                                'db_main.sql'
+                            ),
+                        ),
+                    ),
+                )
+            )
+        );
     }
 
 }

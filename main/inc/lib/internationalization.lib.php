@@ -170,7 +170,7 @@ function get_lang($variable, $reserved = null, $language = null)
         $encoding = api_get_system_encoding();
         $is_utf8_encoding = api_is_utf8($encoding);
         $langpath = api_get_path(SYS_LANG_PATH);
-        $test_server_mode = api_get_setting('server_type') == 'test';
+        $test_server_mode = $app['debug'] == true;
         //$test_server_mode = false;
         $show_special_markup = api_get_setting('hide_dltt_markup') != 'true' || $test_server_mode;
         $initialized = true;

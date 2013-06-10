@@ -95,8 +95,6 @@ $console->add(new \Doctrine\DBAL\Tools\Console\Command\RunSqlCommand());
 $console->add(new \Doctrine\DBAL\Tools\Console\Command\ImportCommand());
 $console->add(new \Doctrine\DBAL\Migrations\Tools\Console\Command\MigrateCommand());
 
-
-//$console->run();
 // Controllers
 
 $app->match('/', function() use($app) {
@@ -197,6 +195,7 @@ $app->match('/check-database', function() use($app) {
 })->bind('check-database');
 
 $app->match('/portal-settings', function() use($app) {
+    /** @var Request $request */
     $request = $app['request'];
 
     /** @var \ChamiloLMS\Command\Database\InstallCommand $command */
@@ -205,6 +204,7 @@ $app->match('/portal-settings', function() use($app) {
     $builder  = $app['form.factory']->createBuilder('form');
 
     $data = $command->getPortalSettingsParams();
+    $data['institution_url']['attributes']['data'] = str_replace('main/install/', '', $request->getUriForPath('/'));
     $permissionNewDir = $app['session']->get('permissions_for_new_directories');
 
     if ($permissionNewDir) {

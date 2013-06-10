@@ -309,7 +309,7 @@ if (is_writable($app['sys_temp_path'])) {
             );
             $app->mount('/_profiler', $p);
         }
-        //$app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
+        $app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
         //}
     }
 }

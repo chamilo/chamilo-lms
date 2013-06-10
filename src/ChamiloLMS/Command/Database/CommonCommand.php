@@ -180,7 +180,11 @@ class CommonCommand extends AbstractCommand
             ),
             'encrypt_method' => array(
                 'attributes' => array(
-                    'choices' => array('sha1', 'md5', 'none'),
+                    'choices' => array(
+                        'sha1' => 'sha1',
+                        'md5' => 'md5',
+                        'none' => 'none'
+                    ),
                     'data' => 'sha1'
                 ),
 

@@ -559,10 +559,10 @@ class Database
      */
     public static function select_db($database_name, $connection = null)
     {
-        return self::use_default_connection($connection) ? mysql_select_db($database_name) : mysql_select_db(
+        /*return self::use_default_connection($connection) ? mysql_select_db($database_name) : mysql_select_db(
             $database_name,
             $connection
-        );
+        );*/
     }
 
     /**

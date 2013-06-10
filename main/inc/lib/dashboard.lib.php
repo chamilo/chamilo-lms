@@ -232,12 +232,10 @@ class DashboardManager {
 					$ins = "INSERT INTO $tbl_block(name, description, path, controller) VALUES ('$plugin_name', '$plugin_description', '$plugin_path', '$plugin_controller')";
 					Database::query($ins);
 				}
-				$affected_rows = Database::affected_rows();
+				// $affected_rows = Database::affected_rows();
 			}
-
 		}
-
-		return $affected_rows;
+		return true;
 	}
 
 	/**

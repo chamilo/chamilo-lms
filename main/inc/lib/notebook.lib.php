@@ -70,7 +70,7 @@ class NotebookManager {
             //insert into item_property
             api_item_property_update(api_get_course_info(), TOOL_NOTEBOOK, $id, 'NotebookAdded', api_get_user_id());
         }
-        $affected_rows = Database::affected_rows();
+        $affected_rows = Database::affected_rows($result);
         if (!empty($affected_rows)) {
             return $id;
         }
@@ -127,7 +127,7 @@ class NotebookManager {
 
         //update item_property (update)
         api_item_property_update(api_get_course_info(), TOOL_NOTEBOOK, $values['notebook_id'], 'NotebookUpdated', api_get_user_id());
-        $affected_rows = Database::affected_rows();
+        $affected_rows = Database::affected_rows($result);
         if (!empty($affected_rows)) {
             return true;
         }
@@ -144,7 +144,7 @@ class NotebookManager {
 
         $sql = "DELETE FROM $t_notebook WHERE c_id = $course_id AND notebook_id='" . intval($notebook_id) . "' AND user_id = '" . api_get_user_id() . "'";
         $result = Database::query($sql);
-        $affected_rows = Database::affected_rows();
+        $affected_rows = Database::affected_rows($result);
         if ($affected_rows != 1) {
             return false;
         }

@@ -4506,9 +4506,9 @@ class learnpath
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new name : '.$this->name, 0);
         }
-        Database::query($sql);
+        $result = Database::query($sql);
         // If the lp is visible on the homepage, change his name there.
-        if (Database::affected_rows()) {
+        if (Database::affected_rows($result)) {
             $session_id = api_get_session_id();
             $session_condition = api_get_session_condition($session_id);
             $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);

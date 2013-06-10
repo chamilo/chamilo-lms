@@ -1906,8 +1906,8 @@ class UserManager
             // deleting the answer of the user who has chosen this option
             $sql_delete_option_value = "DELETE FROM $table_field_options_values
                                         WHERE field_id = '".Database::escape_string($fieldid)."' AND field_value = '".Database::escape_string($row['option_value'])."'";
-            Database::query($sql_delete_option_value);
-            $return['deleted_option_values'] = $return['deleted_option_values'] + Database::affected_rows();
+            $result = Database::query($sql_delete_option_value);
+            $return['deleted_option_values'] = $return['deleted_option_values'] + Database::affected_rows($result);
         }
 
         // we now try to find the field options that are newly added
@@ -3792,8 +3792,8 @@ class UserManager
             foreach ($users_id as $user_id) {
                 $user_id = intval($user_id);
                 $insert_sql = "INSERT IGNORE INTO $tbl_user_rel_user(user_id, friend_user_id, relation_type) VALUES('$user_id', $hr_dept_id, '".USER_RELATION_TYPE_RRHH."')";
-                Database::query($insert_sql);
-                $affected_rows = Database::affected_rows();
+                $result = Database::query($insert_sql);
+                $affected_rows = Database::affected_rows($result);
             }
         }
         return $affected_rows;

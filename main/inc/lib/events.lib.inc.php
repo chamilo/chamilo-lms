@@ -112,9 +112,9 @@ function event_access_course()
     // added for "what's new" notification
     $sql = "UPDATE $TABLETRACK_LASTACCESS  SET access_date = '$now'
         	WHERE access_user_id = $user_id AND c_id = '$courseId' AND access_tool IS NULL AND access_session_id=".$id_session;
-    Database::query($sql);
+    $result = Database::query($sql);
 
-    if (Database::affected_rows() == 0) {
+    if (Database::affected_rows($result) == 0) {
         $sql = "INSERT INTO $TABLETRACK_LASTACCESS (access_user_id, c_id, access_date, access_session_id)
         		VALUES (".$user_id.", '".$courseId."', '$now', '".$id_session."')";
         Database::query($sql);
@@ -179,8 +179,8 @@ function event_access_tool($tool, $id_session = 0)
     $sql = "UPDATE $TABLETRACK_LASTACCESS
         	SET access_date = '$reallyNow'
         	WHERE access_user_id = ".$user_id." AND c_id = '".$courseId."' AND access_tool = '".$tool."' AND access_session_id=".$id_session;
-    Database::query($sql);
-    if (Database::affected_rows() == 0) {
+    $result = Database::query($sql);
+    if (Database::affected_rows($result) == 0) {
         $sql = "INSERT INTO $TABLETRACK_LASTACCESS (access_user_id, c_id, access_tool, access_date, access_session_id)
         		VALUES (".$user_id.", '".$courseId."' , '$tool', '$reallyNow', $id_session)";
         Database::query($sql);

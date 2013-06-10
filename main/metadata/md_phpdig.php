@@ -104,13 +104,12 @@ function remove_engine_entries($url, $path, $file = '')
 
     while ($row = Database::fetch_array($result))
     {
-        Database::query("DELETE FROM " . PHPDIG_DB_PREFIX .
+        $result = Database::query("DELETE FROM " . PHPDIG_DB_PREFIX .
             "engine WHERE spider_id=" . (int)$row['spider_id']);  // delete all references to keywords
-        $aff .= ' +' . Database::affected_rows();
+        $aff .= ' +' . Database::affected_rows($result);
     }
 
-    Database::query("DELETE FROM " . PHPDIG_DB_PREFIX .
-        "spider WHERE site_id=" . $site_id . $and_path);  // delete page
+    Database::query("DELETE FROM " . PHPDIG_DB_PREFIX ."spider WHERE site_id=" . $site_id . $and_path);  // delete page
 
     echo htmlspecialchars($url . $path . $file, ENT_QUOTES, $charset), ' (site_id ',
         $site_id, '): ', Database::affected_rows(), $aff,

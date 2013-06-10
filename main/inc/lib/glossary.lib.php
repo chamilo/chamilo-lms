@@ -306,7 +306,7 @@ class GlossaryManager
             $glossary_id
         )."'";
         $result = Database::query($sql);
-        if ($result === false or Database::affected_rows() < 1) {
+        if ($result === false or Database::affected_rows($result) < 1) {
             return false;
         }
         //update item_property (delete)

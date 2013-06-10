@@ -1635,8 +1635,8 @@ class MySpace {
 			foreach ($users as $user) {
 				$userid = intval($user['id']);
 				$sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,c_id,id_user) VALUES('$id_session','$enreg_course','$userid')";
-				Database::query($sql);
-				if (Database::affected_rows()) {
+				$result = Database::query($sql);
+				if (Database::affected_rows($result)) {
 					$nbr_users++;
 				}
 				$new_users[] = $user;

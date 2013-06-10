@@ -327,9 +327,9 @@ class Thematic
 			// insert
 			$sql = "INSERT INTO $tbl_thematic (c_id, title, content, active, display_order, session_id)
 					VALUES ($course_id, '$title', '$content', 1, ".(intval($max_thematic_item)+1).", $session_id) ";
-			Database::query($sql);
+			$result = Database::query($sql);
 			$last_id = Database::insert_id();
-			if (Database::affected_rows()) {
+			if (Database::affected_rows($result)) {
 				// save inside item property table
 				$last_id = Database::insert_id();
 				api_item_property_update($course_info, 'thematic', $last_id, "ThematicAdded", $user_id);
@@ -337,9 +337,9 @@ class Thematic
 		} else {
 			// update
 			$sql = "UPDATE $tbl_thematic SET title = '$title', content = '$content', session_id = $session_id WHERE id = $id AND c_id = $course_id";
-			Database::query($sql);
+			$result = Database::query($sql);
 			$last_id = $id;
-			if (Database::affected_rows()) {
+			if (Database::affected_rows($result)) {
 				// save inside item property table
 				api_item_property_update($course_info, 'thematic', $last_id, "ThematicUpdated", $user_id);
 			}
@@ -364,8 +364,8 @@ class Thematic
 			foreach ($thematic_id as $id) {
 				$id	= intval($id);
 				$sql = "UPDATE $tbl_thematic SET active = 0 WHERE c_id = $course_id AND id = $id";
-				Database::query($sql);
-				$affected_rows += Database::affected_rows();
+				$result = Database::query($sql);
+				$affected_rows += Database::affected_rows($result);
 				if (!empty($affected_rows)) {
 					// update row item property table
                      api_item_property_update($course_info, 'thematic', $id,"ThematicDeleted", $user_id);
@@ -375,8 +375,8 @@ class Thematic
 		} else  {
 			$thematic_id	= intval($thematic_id);
 			$sql = "UPDATE $tbl_thematic SET active = 0 WHERE c_id = $course_id AND id = $thematic_id";
-			Database::query($sql);
-			$affected_rows = Database::affected_rows();
+			$result = Database::query($sql);
+			$affected_rows = Database::affected_rows($result);
 			if (!empty($affected_rows)) {
 				// update row item property table
 				//api_item_property_update($_course, TOOL_COURSE_PROGRESS, $thematic_id,"delete", $user_id);
@@ -675,17 +675,17 @@ class Thematic
 			// Insert
 			$sql = "INSERT INTO $tbl_thematic_advance (c_id, thematic_id, attendance_id, content, start_date, duration)
 					VALUES ($course_id, $tematic_id, $attendance_id, '$content', '".api_get_utc_datetime($start_date)."', '$duration') ";
-			Database::query($sql);
+			$result = Database::query($sql);
 			$last_id = Database::insert_id();
-            if (Database::affected_rows()) {
+            if (Database::affected_rows($result)) {
                 api_item_property_update($course_info, 'thematic_advance', $last_id,"ThematicAdvanceAdded", $user_id);
             }
 		} else {
 			// update
 			$sql = "UPDATE $tbl_thematic_advance SET thematic_id = '$tematic_id', attendance_id = '$attendance_id', content = '$content', start_date = '".api_get_utc_datetime($start_date)."', duration = '$duration'
                     WHERE c_id = $course_id AND id = $id ";
-			Database::query($sql);
-            if (Database::affected_rows()) {
+			$result = Database::query($sql);
+            if (Database::affected_rows($result)) {
                 api_item_property_update($course_info, 'thematic_advance', $id, "ThematicAdvanceUpdated", $user_id);
             }
 		}
@@ -709,8 +709,8 @@ class Thematic
         $user_id = api_get_user_id();
 
 		$sql = "DELETE FROM $tbl_thematic_advance WHERE c_id = $course_id AND id = $thematic_advance_id ";
-		Database::query($sql);
-		$affected_rows = Database::affected_rows();
+		$result = Database::query($sql);
+		$affected_rows = Database::affected_rows($result);
         if ($affected_rows) {
             api_item_property_update($_course, 'thematic_advance', $thematic_advance_id,"ThematicAdvanceDeleted", $user_id);
         }
@@ -856,8 +856,8 @@ class Thematic
                         title = '$title',
                         description = '$description'
                     WHERE c_id = $course_id AND id = $thematic_plan_id";
-            Database::query($upd);
-            $affected_rows = Database::affected_rows();
+            $result = Database::query($upd);
+            $affected_rows = Database::affected_rows($result);
             if ($affected_rows) {
                 api_item_property_update($course_info, 'thematic_plan', $thematic_plan_id, "ThematicPlanUpdated", $user_id);
             }
@@ -865,9 +865,9 @@ class Thematic
             // insert
             $ins = "INSERT INTO $tbl_thematic_plan (c_id, thematic_id, title, description, description_type)
                     VALUES ($course_id, $thematic_id, '$title', '$description', $description_type) ";
-            Database::query($ins);
+            $result = Database::query($ins);
             $last_id = Database::insert_id();
-            $affected_rows = Database::affected_rows();
+            $affected_rows = Database::affected_rows($result);
             if ($affected_rows) {
                 api_item_property_update($course_info, 'thematic_plan', $last_id,"ThematicPlanAdded", $user_id);
             }
@@ -898,8 +898,8 @@ class Thematic
 
         // delete
 		$sql = "DELETE FROM $tbl_thematic_plan WHERE c_id = $course_id AND thematic_id = $thematic_id AND description_type = $description_type ";
-		Database::query($sql);
-		$affected_rows = Database::affected_rows();
+		$result = Database::query($sql);
+		$affected_rows = Database::affected_rows($result);
         if ($affected_rows) {
             api_item_property_update($course_info, 'thematic_plan', $thematic_plan_id, "ThematicPlanDeleted", $user_id);
         }
@@ -998,8 +998,8 @@ class Thematic
 
     						// update done thematic for previous advances ((done_advance = 1))
     						$upd = "UPDATE $tbl_thematic_advance SET done_advance = 1 WHERE c_id = $course_id AND id = ".$thematic_advance['id']." ";
-    						Database::query($upd);
-    						$my_affected_rows = Database::affected_rows();
+    						$result = Database::query($upd);
+    						$my_affected_rows = Database::affected_rows($result);
     						$affected_rows += $my_affected_rows;
                             //if ($my_affected_rows) {
                                 api_item_property_update($this->course, 'thematic_advance', $thematic_advance['id'], "ThematicAdvanceDone", $user_id);

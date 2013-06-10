@@ -200,9 +200,9 @@ class CourseDescription
 				content 			= '".Database::escape_string($this->content)."',
 				progress 			= '".intval($this->progress)."',
 				session_id = '".intval($this->session_id)."' ";
-		Database::query($sql);
+		$result = Database::query($sql);
 		$last_id = Database::insert_id();
-		$affected_rows = Database::affected_rows();
+		$affected_rows = Database::affected_rows($result);
 		if ($last_id > 0) {
 			//insert into item_property
 			api_item_property_update(api_get_course_info(), TOOL_COURSE_DESCRIPTION, $last_id, 'CourseDescriptionAdded', api_get_user_id());
@@ -233,8 +233,8 @@ class CourseDescription
 			 	lastedit_date 		= '".date('Y-m-d H:i:s')."',
 			 	lastedit_user_id 	= '".api_get_user_id()."',
 			 	session_id			= '".intval($this->session_id)."'";
-		Database::query($sql);
-		$affected_rows = Database::affected_rows();
+		$result = Database::query($sql);
+		$affected_rows = Database::affected_rows($result);
 		return $affected_rows;
 	}
 
@@ -253,8 +253,8 @@ class CourseDescription
 						session_id  = '".$this->session_id."' AND
 						c_id = ".api_get_course_int_id()."
 						";
-		Database::query($sql);
-		$affected_rows = Database::affected_rows();
+		$result = Database::query($sql);
+		$affected_rows = Database::affected_rows($result);
 
 		if ($this->id > 0) {
 			//insert into item_property
@@ -271,8 +271,8 @@ class CourseDescription
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 		$course_id = api_get_course_int_id();
 		$sql = "DELETE FROM $tbl_course_description WHERE c_id = $course_id AND id = '".intval($this->id)."' AND session_id = '".intval($this->session_id)."'";
-		Database::query($sql);
-		$affected_rows = Database::affected_rows();
+		$result = Database::query($sql);
+		$affected_rows = Database::affected_rows($result);
 		if ($this->id > 0) {
 			//insert into item_property
 			api_item_property_update(api_get_course_info(), TOOL_COURSE_DESCRIPTION, $this->id, 'CourseDescriptionDeleted', api_get_user_id());

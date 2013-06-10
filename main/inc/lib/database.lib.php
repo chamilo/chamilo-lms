@@ -151,7 +151,7 @@ class Database
         if ($result === false) {
             return array();
         }
-        return $result->fetch();
+        return $result->fetch(PDO::FETCH_BOTH);
 
         /*return $option == 'ASSOC' ? mysql_fetch_array($result, MYSQL_ASSOC) : ($option == 'NUM' ? mysql_fetch_array(
             $result,

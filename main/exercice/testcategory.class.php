@@ -502,11 +502,11 @@ class Testcategory
         return $categories_in_exercise;*/
     }
 
-    public static function getListOfCategoriesIDForTestObject($exercise_obj)
+    public static function getListOfCategoriesIDForTestObject(Exercise $exercise_obj)
     {
         // parcourir les questions d'un test, recup les categories uniques dans un tableau
         $categories_in_exercise = array();
-        $question_list = $exercise_obj->selectQuestionList();
+        $question_list = $exercise_obj->getQuestionList();
 
         // the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ???
         foreach ($question_list as $question_id) {
@@ -554,7 +554,7 @@ class Testcategory
      * @param Exercise $exercise_obj
      * @return array
      */
-    public static function getListOfCategoriesForTest($exercise_obj) {
+    public static function getListOfCategoriesForTest(Exercise $exercise_obj) {
         $result = array();
         $categories = self::getListOfCategoriesIDForTestObject($exercise_obj);
         foreach ($categories as $cat_id) {
@@ -583,11 +583,12 @@ class Testcategory
 	 * return : integer
 	 * hubert.borderiou 07-04-2011
 	 */
-	public static function getNumberOfQuestionsInCategoryForTest($exercise_id, $category_id) {
+	public static function getNumberOfQuestionsInCategoryForTest($exercise_id, $category_id)
+    {
 		$number_questions_in_category = 0;
 		$exercise = new Exercise();
 		$exercise->read($exercise_id);
-		$question_list = $exercise->selectQuestionList();
+		$question_list = $exercise->getQuestionList();
 		// the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ? ? ?
         foreach ($question_list as $question_id) {
             $category_in_question = Testcategory::getCategoryForQuestion($question_id);

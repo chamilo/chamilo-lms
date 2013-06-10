@@ -127,7 +127,7 @@ if (!$inATest) {
         // Always getting list from DB.
 
         $objExercise->setCategoriesGrouping(false);
-        $questionList = $objExercise->selectQuestionList(true);
+        $questionList = $objExercise->getQuestionList();
 
         // Style for columns.
         $styleQuestion = "width:50%; float:left;";
@@ -139,8 +139,8 @@ if (!$inATest) {
         $category_list = Testcategory::getListOfCategoriesNameForTest($objExercise->id, false);
 
         if (is_array($questionList)) {
-			foreach ($questionList as $id) {
-				// To avoid warning messages
+            foreach ($questionList as $id) {
+				// To avoid warning messages.
 				if (!is_numeric($id)) {
 					continue;
 				}

@@ -106,7 +106,10 @@ class ExtraField extends Model
                 break;
         }
         $this->pageUrl  = 'extra_fields.php?type='.$this->type;
-        $this->pageName = get_lang(ucwords($this->type).'Fields'); // Example QuestionFields
+        // Example QuestionFields
+        // @todo error while installing
+        // $this->pageName = get_lang(ucwords($this->type).'Fields');
+        $this->pageName = ucwords($this->type).'Fields';
     }
 
     static function getValidExtraFieldTypes()
@@ -1091,7 +1094,6 @@ EOF;
         );
 
     }
-
 
     public function return_form($url, $action)
     {

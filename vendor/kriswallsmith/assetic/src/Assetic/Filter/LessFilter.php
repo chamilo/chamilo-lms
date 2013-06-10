@@ -3,7 +3,7 @@
 /*
  * This file is part of the Assetic package, an OpenSky project.
  *
- * (c) 2010-2012 OpenSky Project Inc
+ * (c) 2010-2013 OpenSky Project Inc
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,18 +12,38 @@
 namespace Assetic\Filter;
 
 use Assetic\Asset\AssetInterface;
-use Assetic\Util\ProcessBuilder;
+use Assetic\Exception\FilterException;
+use Assetic\Factory\AssetFactory;
+use Assetic\Util\LessUtils;
 
 /**
  * Loads LESS files.
  *
+ * @link http://lesscss.org/
  * @author Kris Wallsmith <kris.wallsmith@gmail.com>
  */
-class LessFilter implements FilterInterface
+class LessFilter extends BaseNodeFilter implements DependencyExtractorInterface
 {
     private $nodeBin;
-    private $nodePaths;
-    private $compress;
+
+    /**
+     * @var array
+     */
+    private $treeOptions;
+
+    /**
+     * @var array
+     */
+    private $parserOptions;
+
+    /**
+     * Load Paths
+     *
+     * A list of paths which less will search for includes.
+     *
+     * @var array
+     */
+    protected $loadPaths = array();
 
     /**
      * Constructor.
@@ -34,12 +54,50 @@ class LessFilter implements FilterInterface
     public function __construct($nodeBin = '/usr/bin/node', array $nodePaths = array())
     {
         $this->nodeBin = $nodeBin;
-        $this->nodePaths = $nodePaths;
+        $this->setNodePaths($nodePaths);
+        $this->treeOptions = array();
+        $this->parserOptions = array();
     }
 
+    /**
+     * @param bool $compress
+     */
     public function setCompress($compress)
     {
-        $this->compress = $compress;
+        $this->addTreeOption('compress', $compress);
+    }
+
+    public function setLoadPaths(array $loadPaths)
+    {
+        $this->loadPaths = $loadPaths;
+    }
+
+    /**
+     * Adds a path where less will search for includes
+     *
+     * @param string $path Load path (absolute)
+     */
+    public function addLoadPath($path)
+    {
+        $this->loadPaths[] = $path;
+    }
+
+    /**
+     * @param string $code
+     * @param string $value
+     */
+    public function addTreeOption($code, $value)
+    {
+        $this->treeOptions[$code] = $value;
+    }
+
+    /**
+     * @param string $code
+     * @param string $value
+     */
+    public function addParserOption($code, $value)
+    {
+        $this->parserOptions[$code] = $value;
     }
 
     public function filterLoad(AssetInterface $asset)
@@ -68,39 +126,31 @@ EOF;
         $path = $asset->getSourcePath();
 
         // parser options
-        $parserOptions = array();
+        $parserOptions = $this->parserOptions;
         if ($root && $path) {
             $parserOptions['paths'] = array(dirname($root.'/'.$path));
             $parserOptions['filename'] = basename($path);
         }
 
-        // tree options
-        $treeOptions = array();
-        if (null !== $this->compress) {
-            $treeOptions['compress'] = $this->compress;
+        foreach ($this->loadPaths as $loadPath) {
+            $parserOptions['paths'][] = $loadPath;
         }
 
-        $pb = new ProcessBuilder();
-        $pb->inheritEnvironmentVariables();
-
-        // node.js configuration
-        if (0 < count($this->nodePaths)) {
-            $pb->setEnv('NODE_PATH', implode(':', $this->nodePaths));
-        }
+        $pb = $this->createProcessBuilder();
 
         $pb->add($this->nodeBin)->add($input = tempnam(sys_get_temp_dir(), 'assetic_less'));
         file_put_contents($input, sprintf($format,
             json_encode($parserOptions),
             json_encode($asset->getContent()),
-            json_encode($treeOptions)
+            json_encode($this->treeOptions)
         ));
 
         $proc = $pb->getProcess();
         $code = $proc->run();
         unlink($input);
 
-        if (0 < $code) {
-            throw new \RuntimeException($proc->getErrorOutput());
+        if (0 !== $code) {
+            throw FilterException::fromProcess($proc)->setInput($asset->getContent());
         }
 
         $asset->setContent($proc->getOutput());
@@ -108,5 +158,49 @@ EOF;
 
     public function filterDump(AssetInterface $asset)
     {
+    }
+
+    /**
+     * @todo support for @import-once
+     * @todo support for @import (less) "lib.css"
+     */
+    public function getChildren(AssetFactory $factory, $content, $loadPath = null)
+    {
+        $loadPaths = $this->loadPaths;
+        if (null !== $loadPath) {
+            $loadPaths[] = $loadPath;
+        }
+
+        if (empty($loadPaths)) {
+            return array();
+        }
+
+        $children = array();
+        foreach (LessUtils::extractImports($content) as $reference) {
+            if ('.css' === substr($reference, -4)) {
+                // skip normal css imports
+                // todo: skip imports with media queries
+                continue;
+            }
+
+            if ('.less' !== substr($reference, -5)) {
+                $reference .= '.less';
+            }
+
+            foreach ($loadPaths as $loadPath) {
+                if (file_exists($file = $loadPath.'/'.$reference)) {
+                    $coll = $factory->createAsset($file, array(), array('root' => $loadPath));
+                    foreach ($coll as $leaf) {
+                        $leaf->ensureFilter($this);
+                        $children[] = $leaf;
+                        goto next_reference;
+                    }
+                }
+            }
+
+            next_reference:
+        }
+
+        return $children;
     }
 }

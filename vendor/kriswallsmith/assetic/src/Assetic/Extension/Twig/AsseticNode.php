@@ -3,7 +3,7 @@
 /*
  * This file is part of the Assetic package, an OpenSky project.
  *
- * (c) 2010-2012 OpenSky Project Inc
+ * (c) 2010-2013 OpenSky Project Inc
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -24,14 +24,14 @@ class AsseticNode extends \Twig_Node
      *  * combine:  Whether to combine assets
      *  * var_name: The name of the variable to expose to the body node
      *
-     * @param AssetInterface     $asset      The asset
-     * @param Twig_NodeInterface $body       The body node
-     * @param array              $inputs     An array of input strings
-     * @param array              $filters    An array of filter strings
-     * @param string             $name       The name of the asset
-     * @param array              $attributes An array of attributes
-     * @param integer            $lineno     The line number
-     * @param string             $tag        The tag name
+     * @param AssetInterface      $asset      The asset
+     * @param \Twig_NodeInterface $body       The body node
+     * @param array               $inputs     An array of input strings
+     * @param array               $filters    An array of filter strings
+     * @param string              $name       The name of the asset
+     * @param array               $attributes An array of attributes
+     * @param integer             $lineno     The line number
+     * @param string              $tag        The tag name
      */
     public function __construct(AssetInterface $asset, \Twig_NodeInterface $body, array $inputs, array $filters, $name, array $attributes = array(), $lineno = 0, $tag = null)
     {
@@ -101,6 +101,22 @@ class AsseticNode extends \Twig_Node
 
     protected function compileAsset(\Twig_Compiler $compiler, AssetInterface $asset, $name)
     {
+        if ($vars = $asset->getVars()) {
+            $compiler->write("// check variable conditions\n");
+
+            foreach ($vars as $var) {
+                $compiler
+                    ->write("if (!isset(\$context['assetic']['vars']['$var'])) {\n")
+                    ->indent()
+                    ->write("throw new \RuntimeException(sprintf('The asset \"".$name."\" expected variable \"".$var."\" to be set, but got only these vars: %s. Did you set-up a value supplier?', isset(\$context['assetic']['vars']) && \$context['assetic']['vars'] ? implode(', ', \$context['assetic']['vars']) : '# none #'));\n")
+                    ->outdent()
+                    ->write("}\n")
+                ;
+            }
+
+            $compiler->raw("\n");
+        }
+
         $compiler
             ->write("// asset \"$name\"\n")
             ->write('$context[')
@@ -118,6 +134,33 @@ class AsseticNode extends \Twig_Node
 
     protected function compileAssetUrl(\Twig_Compiler $compiler, AssetInterface $asset, $name)
     {
-        $compiler->repr($asset->getTargetPath());
+        if (!$vars = $asset->getVars()) {
+            $compiler->repr($asset->getTargetPath());
+
+            return;
+        }
+
+        $compiler
+            ->raw("strtr(")
+            ->string($asset->getTargetPath())
+            ->raw(", array(");
+        ;
+
+        $first = true;
+        foreach ($vars as $var) {
+            if (!$first) {
+                $compiler->raw(", ");
+            }
+            $first = false;
+
+            $compiler
+                ->string("{".$var."}")
+                ->raw(" => \$context['assetic']['vars']['$var']")
+            ;
+        }
+
+        $compiler
+            ->raw("))")
+        ;
     }
 }

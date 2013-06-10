@@ -31,7 +31,7 @@ class Xml extends BaseXml
 
         $xml = $xml->children(self::GEDMO_NAMESPACE_URI);
 
-        if ($xmlDoctrine->getName() == 'entity' || $xmlDoctrine->getName() == 'mapped-superclass') {
+        if ($xmlDoctrine->getName() == 'entity' || $xmlDoctrine->getName() == 'document' || $xmlDoctrine->getName() == 'mapped-superclass') {
             if (isset($xml->loggable)) {
                 /**
                  * @var SimpleXMLElement $data;
@@ -56,6 +56,9 @@ class Xml extends BaseXml
         }
         if (isset($xmlDoctrine->{'one-to-one'})) {
             $this->inspectElementForVersioned($xmlDoctrine->{'one-to-one'}, $config, $meta);
+        }
+        if (isset($xmlDoctrine->{'reference-one'})) {
+            $this->inspectElementForVersioned($xmlDoctrine->{'reference-one'}, $config, $meta);
         }
 
         if (!$meta->isMappedSuperclass && $config) {

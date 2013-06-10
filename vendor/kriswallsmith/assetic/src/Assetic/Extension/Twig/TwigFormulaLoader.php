@@ -3,7 +3,7 @@
 /*
  * This file is part of the Assetic package, an OpenSky project.
  *
- * (c) 2010-2012 OpenSky Project Inc
+ * (c) 2010-2013 OpenSky Project Inc
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -43,6 +43,8 @@ class TwigFormulaLoader implements FormulaLoaderInterface
     /**
      * Loads assets from the supplied node.
      *
+     * @param \Twig_Node $node
+     *
      * @return array An array of asset formulae indexed by name
      */
     private function loadNode(\Twig_Node $node)
@@ -58,6 +60,7 @@ class TwigFormulaLoader implements FormulaLoaderInterface
                     'name'    => $node->getAttribute('name'),
                     'debug'   => $node->getAttribute('debug'),
                     'combine' => $node->getAttribute('combine'),
+                    'vars'    => $node->getAttribute('vars'),
                 ),
             );
         } elseif ($node instanceof \Twig_Node_Expression_Function) {

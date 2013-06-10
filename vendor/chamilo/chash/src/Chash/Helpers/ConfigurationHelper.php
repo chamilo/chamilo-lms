@@ -59,6 +59,29 @@ class ConfigurationHelper extends Helper
     }
 
     /**
+     * Get configuration file
+     * @param string $path
+     * @return bool|string
+     */
+    public function getNewConfigurationPath($path = null)
+    {
+        if (empty($path)) {
+            $chamiloPath = getcwd();
+        } else {
+            $chamiloPath = $path;
+        }
+
+        while (!is_dir($chamiloPath.'/config/') && $chamiloPath != '/') {
+            $chamiloPath = realpath($chamiloPath.'/..');
+        }
+        if (is_dir($chamiloPath.'/config/')) {
+            return $dir = realpath($chamiloPath.'/config/').'/';
+        }
+        return false;
+    }
+
+
+    /**
      * Reads the Chamilo configuration file.
      * Merges the configuration.php with the configuration.yml if it exists
      * @param null $path

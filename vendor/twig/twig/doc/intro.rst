@@ -129,7 +129,7 @@ installation.
 If you have installed Twig via Composer you can take advantage of Composer's
 autoload mechanism by replacing the previous snippet for::
 
-    require_once '/path/to/vendor/autoload.php'
+    require_once '/path/to/vendor/autoload.php';
 
 .. note::
 
@@ -161,4 +161,4 @@ filesystem loader::
 
 .. _`download page`: https://github.com/fabpot/Twig/tags
 .. _`online documentation`: http://getcomposer.org/doc
-.. _`pre-build DLL`: https://github.com/stealth35/stealth35.github.com/downloads
+.. _`pre-built DLL`: https://github.com/stealth35/stealth35.github.com/downloads

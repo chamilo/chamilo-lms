@@ -3,7 +3,7 @@
 /*
  * This file is part of the Assetic package, an OpenSky project.
  *
- * (c) 2010-2012 OpenSky Project Inc
+ * (c) 2010-2013 OpenSky Project Inc
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,6 +12,7 @@
 namespace Assetic\Asset;
 
 use Assetic\Filter\FilterInterface;
+use Assetic\Util\VarUtils;
 
 /**
  * Represents an asset loaded via an HTTP request.
@@ -26,12 +27,14 @@ class HttpAsset extends BaseAsset
     /**
      * Constructor.
      *
-     * @param string $sourceUrl The source URL
-     * @param array  $filters   An array of filters
+     * @param string  $sourceUrl    The source URL
+     * @param array   $filters      An array of filters
+     * @param Boolean $ignoreErrors
+     * @param array   $vars
      *
-     * @throws InvalidArgumentException If the first argument is not an URL
+     * @throws \InvalidArgumentException If the first argument is not an URL
      */
-    public function __construct($sourceUrl, $filters = array(), $ignoreErrors = false)
+    public function __construct($sourceUrl, $filters = array(), $ignoreErrors = false, array $vars = array())
     {
         if (0 === strpos($sourceUrl, '//')) {
             $sourceUrl = 'http:'.$sourceUrl;
@@ -45,17 +48,17 @@ class HttpAsset extends BaseAsset
         list($scheme, $url) = explode('://', $sourceUrl, 2);
         list($host, $path) = explode('/', $url, 2);
 
-        parent::__construct($filters, $scheme.'://'.$host, $path);
+        parent::__construct($filters, $scheme.'://'.$host, $path, $vars);
     }
 
     public function load(FilterInterface $additionalFilter = null)
     {
-        if (false === $content = @file_get_contents($this->sourceUrl)) {
-            if ($this->ignoreErrors) {
-                return;
-            } else {
-                throw new \RuntimeException(sprintf('Unable to load asset from URL "%s"', $this->sourceUrl));
-            }
+        $content = @file_get_contents(
+            VarUtils::resolve($this->sourceUrl, $this->getVars(), $this->getValues())
+        );
+
+        if (false === $content && !$this->ignoreErrors) {
+            throw new \RuntimeException(sprintf('Unable to load asset from URL "%s"', $this->sourceUrl));
         }
 
         $this->doLoad($content, $additionalFilter);

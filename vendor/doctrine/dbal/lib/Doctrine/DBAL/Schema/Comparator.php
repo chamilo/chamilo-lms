@@ -295,9 +295,11 @@ class Comparator
                 $removedColumnName = strtolower($removedColumn->getName());
                 $addedColumnName = strtolower($addedColumn->getName());
 
-                $tableDifferences->renamedColumns[$removedColumnName] = $addedColumn;
-                unset($tableDifferences->addedColumns[$addedColumnName]);
-                unset($tableDifferences->removedColumns[$removedColumnName]);
+                if ( ! isset($tableDifferences->renamedColumns[$removedColumnName])) {
+                    $tableDifferences->renamedColumns[$removedColumnName] = $addedColumn;
+                    unset($tableDifferences->addedColumns[$addedColumnName]);
+                    unset($tableDifferences->removedColumns[$removedColumnName]);
+                }
             }
         }
     }
@@ -317,7 +319,7 @@ class Comparator
             return true;
         }
 
-        if (strtolower($key1->getForeignTableName()) != strtolower($key2->getForeignTableName())) {
+        if ($key1->getUnqualifiedForeignTableName() !== $key2->getUnqualifiedForeignTableName()) {
             return true;
         }
 

@@ -35,6 +35,10 @@ class Filesystem
      */
     public function copy($originFile, $targetFile, $override = false)
     {
+        if (stream_is_local($originFile) && !is_file($originFile)) {
+            throw new IOException(sprintf('Failed to copy %s because file not exists', $originFile));
+        }
+
         $this->mkdir(dirname($targetFile));
 
         if (!$override && is_file($targetFile)) {
@@ -44,7 +48,15 @@ class Filesystem
         }
 
         if ($doCopy) {
-            if (true !== @copy($originFile, $targetFile)) {
+            // https://bugs.php.net/bug.php?id=64634
+            $source = fopen($originFile, 'r');
+            $target = fopen($targetFile, 'w+');
+            stream_copy_to_stream($source, $target);
+            fclose($source);
+            fclose($target);
+            unset($source, $target);
+
+            if (!is_file($targetFile)) {
                 throw new IOException(sprintf('Failed to copy %s to %s', $originFile, $targetFile));
             }
         }
@@ -100,12 +112,9 @@ class Filesystem
      */
     public function touch($files, $time = null, $atime = null)
     {
-        if (null === $time) {
-            $time = time();
-        }
-
         foreach ($this->toIterator($files) as $file) {
-            if (true !== @touch($file, $time, $atime)) {
+            $touch = $time ? @touch($file, $time, $atime) : @touch($file);
+            if (true !== $touch) {
                 throw new IOException(sprintf('Failed to touch %s', $file));
             }
         }
@@ -227,16 +236,17 @@ class Filesystem
     /**
      * Renames a file.
      *
-     * @param string $origin The origin filename
-     * @param string $target The new filename
+     * @param string  $origin    The origin filename
+     * @param string  $target    The new filename
+     * @param Boolean $overwrite Whether to overwrite the target if it already exists
      *
      * @throws IOException When target file already exists
      * @throws IOException When origin cannot be renamed
      */
-    public function rename($origin, $target)
+    public function rename($origin, $target, $overwrite = false)
     {
         // we check that target does not exist
-        if (is_readable($target)) {
+        if (!$overwrite && is_readable($target)) {
             throw new IOException(sprintf('Cannot rename because the target "%s" already exist.', $target));
         }
 
@@ -321,7 +331,7 @@ class Filesystem
         $endPathRemainder = implode('/', array_slice($endPathArr, $index));
 
         // Construct $endPath from traversing to the common path, then to the remaining $endPath
-        $relativePath = $traverser . (strlen($endPathRemainder) > 0 ? $endPathRemainder . '/' : '');
+        $relativePath = $traverser.(strlen($endPathRemainder) > 0 ? $endPathRemainder.'/' : '');
 
         return (strlen($relativePath) === 0) ? './' : $relativePath;
     }
@@ -429,5 +439,33 @@ class Filesystem
         }
 
         return $files;
+    }
+
+    /**
+     * Atomically dumps content into a file.
+     *
+     * @param  string  $filename The file to be written to.
+     * @param  string  $content  The data to write into the file.
+     * @param  integer $mode     The file mode (octal).
+     * @throws IOException       If the file cannot be written to.
+     */
+    public function dumpFile($filename, $content, $mode = 0666)
+    {
+        $dir = dirname($filename);
+
+        if (!is_dir($dir)) {
+            $this->mkdir($dir);
+        } elseif (!is_writable($dir)) {
+            throw new IOException(sprintf('Unable to write in the %s directory\n', $dir));
+        }
+
+        $tmpFile = tempnam($dir, basename($filename));
+
+        if (false === @file_put_contents($tmpFile, $content)) {
+            throw new IOException(sprintf('Failed to write file "%s".', $filename));
+        }
+
+        $this->rename($tmpFile, $filename, true);
+        $this->chmod($filename, $mode);
     }
 }

@@ -10,7 +10,7 @@
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 
-// Monolog
+// Monolog.
 if (is_writable($app['sys_temp_path'])) {
 
     /** Adding Monolog service provider Monolog  use examples
@@ -183,46 +183,75 @@ $app['form.extensions'] = $app->share($app->extend('form.extensions', function (
 // Setting Doctrine service provider (DBAL)
 if (isset($app['configuration']['main_database'])) {
 
-    $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
-        'db.options' => array(
-            'driver' => 'pdo_mysql',
-            'dbname' => $app['configuration']['main_database'],
-            'user' => $app['configuration']['db_user'],
-            'password' => $app['configuration']['db_password'],
-            'host' => $app['configuration']['db_host'],
-            'charset'   => 'utf8',
-            /*'driverOptions' => array(
-                1002 => 'SET NAMES utf8'
-            )*/
+    if (isset($app['configuration']['db.options'])) {
+
+    }
+
+    $app->register(
+        new Silex\Provider\DoctrineServiceProvider(),
+        array(
+            'dbs.options' => array(
+                'mysql_read' => array(
+                    'driver' => 'pdo_mysql',
+                    'host' => $app['configuration']['db_host'],
+                    'dbname' => $app['configuration']['main_database'],
+                    'user' => $app['configuration']['db_user'],
+                    'password' => $app['configuration']['db_password'],
+                    'charset'   => 'utf8',
+                    //'priority' => '1'
+                ),
+                'mysql_write' => array(
+                    'driver' => 'pdo_mysql',
+                    'host' => $app['configuration']['db_host'],
+                    'dbname' => $app['configuration']['main_database'],
+                    'user' => $app['configuration']['db_user'],
+                    'password' => $app['configuration']['db_password'],
+                    'charset'   => 'utf8',
+                    //'priority' => '2'
+                ),
+            )
         )
-    ));
+    );
+
+    $mappings = array(
+        array(
+            /* If true, only simple notations like @Entity will work.
+            If false, more advanced notations and aliasing via use will work.
+            (Example: use Doctrine\ORM\Mapping AS ORM, @ORM\Entity)*/
+            'use_simple_annotation_reader' => false,
+            'type' => 'annotation',
+            'namespace' => 'Entity',
+            'path' => api_get_path(INCLUDE_PATH).'Entity',
+            // 'orm.default_cache' =>
+        ),
+        array(
+            'use_simple_annotation_reader' => false,
+            'type' => 'annotation',
+            'namespace' => 'Gedmo',
+            'path' => api_get_path(SYS_PATH).'vendors/gedmo/doctrine-extensions/lib/Gedmo',
+        )
+    );
 
     // Setting Doctrine ORM
-    $app->register(new Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider, array(
-        'orm.auto_generate_proxies' => true,
-        "orm.proxies_dir" => $app['db.orm.proxies_dir'],
-        //'orm.proxies_namespace' => '\Doctrine\ORM\Proxy\Proxy',
-        "orm.em.options" => array(
-            "mappings" => array(
-                array(
-                    /* If true, only simple notations like @Entity will work.
-                    If false, more advanced notations and aliasing via use will work.
-                    (Example: use Doctrine\ORM\Mapping AS ORM, @ORM\Entity)*/
-                    'use_simple_annotation_reader' => false,
-                    'type' => 'annotation',
-                    'namespace' => 'Entity',
-                    'path' => api_get_path(INCLUDE_PATH).'Entity',
-                    // 'orm.default_cache' =>
-                ),
-                array(
-                    'use_simple_annotation_reader' => false,
-                    'type' => 'annotation',
-                    'namespace' => 'Gedmo',
-                    'path' => api_get_path(SYS_PATH).'vendors/gedmo/doctrine-extensions/lib/Gedmo',
-                )
+    $app->register(
+        new Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider,
+        array(
+            'orm.auto_generate_proxies' => true,
+            'orm.proxies_dir' => $app['db.orm.proxies_dir'],
+            //'orm.proxies_namespace' => '\Doctrine\ORM\Proxy\Proxy',
+            'orm.ems.default' => 'mysql_read',
+            'orm.ems.options' => array(
+               'mysql_read' => array(
+                   'connection' => 'mysql_read',
+                   'mappings' => $mappings,
+               ),
+               'mysql_write' => array(
+                   'connection' => 'mysql_write',
+                   'mappings' => $mappings,
+               ),
             ),
-        ),
-    ));
+        )
+    );
 }
 
 // Setting Twig as a service provider
@@ -285,7 +314,6 @@ if (is_writable($app['sys_temp_path'])) {
     }
 }
 
-
 // Pagerfanta settings (Pagination using Doctrine2, arrays, etc)
 use FranMoreno\Silex\Provider\PagerfantaServiceProvider;
 $app->register(new PagerfantaServiceProvider());
@@ -315,7 +343,7 @@ $app->register(new Grom\Silex\ImagineServiceProvider(), array(
     'imagine.factory' => 'Gd'
 ));
 
-// Prompts Doctrine SQL queries using monolog
+// Prompts Doctrine SQL queries using Monolog.
 if ($app['debug'] && isset($app['configuration']['main_database'])) {
     $logger = new Doctrine\DBAL\Logging\DebugStack();
     $app['db.config']->setSQLLogger($logger);
@@ -323,11 +351,17 @@ if ($app['debug'] && isset($app['configuration']['main_database'])) {
     $app->after(function() use ($app, $logger) {
         // Log all queries as DEBUG.
         foreach ($logger->queries as $query) {
-            $app['monolog']->debug($query['sql'], array('params' =>$query['params'], 'types' => $query['types']));
+            $app['monolog']->debug(
+                $query['sql'],
+                array(
+                    'params' => $query['params'],
+                    'types'  => $query['types'],
+                    'executionMS' => $query['executionMS']
+                )
+            );
         }
     });
 }
-
 
 // Email service provider
 $app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(
@@ -341,10 +375,54 @@ $app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(
     )
 ));
 
-//if (isset($platform_email['SMTP_MAILER']) && $platform_email['SMTP_MAILER'] == 'smtp') {
+// Mailer
 $app['mailer'] = $app->share(function ($app) {
     return new \Swift_Mailer($app['swiftmailer.transport']);
 });
+
+// Assetic service provider.
+
+if (isset($app['assetic.enabled']) && $app['assetic.enabled']) {
+
+    $app->register(new SilexAssetic\AsseticServiceProvider(), array(
+        'assetic.options' => array(
+            'debug'            => $app['debug'],
+            'auto_dump_assets' => $app['debug'],
+        )
+    ));
+
+    // Less filter
+    $app['assetic.filter_manager'] = $app->share(
+        $app->extend('assetic.filter_manager', function($fm, $app) {
+            $fm->set('lessphp', new Assetic\Filter\LessphpFilter());
+
+            return $fm;
+        })
+    );
+
+    $app['assetic.asset_manager'] = $app->share(
+        $app->extend('assetic.asset_manager', function($am, $app) {
+            $am->set('styles', new Assetic\Asset\AssetCache(
+                new Assetic\Asset\GlobAsset(
+                    $app['assetic.input.path_to_css'],
+                    array($app['assetic.filter_manager']->get('lessphp'))
+                ),
+                new Assetic\Cache\FilesystemCache($app['assetic.path_to_cache'])
+            ));
+
+            $am->get('styles')->setTargetPath($app['assetic.output.path_to_css']);
+
+            $am->set('scripts', new Assetic\Asset\AssetCache(
+                new Assetic\Asset\GlobAsset($app['assetic.input.path_to_js']),
+                new Assetic\Cache\FilesystemCache($app['assetic.path_to_cache'])
+            ));
+            $am->get('scripts')->setTargetPath($app['assetic.output.path_to_js']);
+
+            return $am;
+        })
+    );
+}
+
 
 // Gaufrette service provider (to manage files/dirs) (not used yet)
 /*
@@ -355,9 +433,8 @@ $app->register(new GaufretteServiceProvider(), array(
 ));
 */
 
-// Use symfony2 filesystem instead of custom scripts
-use Neutron\Silex\Provider\FilesystemServiceProvider;
-$app->register(new FilesystemServiceProvider());
+// Use Symfony2 filesystem instead of custom scripts
+$app->register(new Neutron\Silex\Provider\FilesystemServiceProvider());
 
 /** Chamilo service provider */
 
@@ -388,10 +465,17 @@ class ChamiloServiceProvider implements ServiceProviderInterface
             $mailGenerator = new ChamiloLMS\Component\Mail\MailGenerator($app['twig'], $app['mailer']);
             return $mailGenerator;
         });
+
+        // Database
+        $app['database'] = $app->share(function () use ($app) {
+            $db = new Database($app['db']);
+            return $db;
+        });
     }
 
     public function boot(Application $app)
     {
+
     }
 }
 

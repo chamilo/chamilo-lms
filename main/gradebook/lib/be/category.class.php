@@ -1176,6 +1176,16 @@ class Category implements GradebookItem
      * @return  array   Array of subcategories
      */
     public function get_subcategories ($stud_id = null, $course_code = null, $session_id = null, $order = null) {
+        if (!empty ($session_id)) {
+             $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+             $sql_session = 'SELECT * FROM '.$tbl_grade_categories. 'WHERE session_id = '.$session_id;
+             $result_session = Database::query($sql_session);
+             if (Database::num_rows($result_session) > 0) {
+                 $data_session = Database::fetch_array($result_session);
+                 $parent_id = $data_session['id'];
+                 return Category::load(null, null, null, $parent_id, null, null, $order);
+             }
+         }
         // 1 student
          if (isset($stud_id)) {
             // special case: this is the root

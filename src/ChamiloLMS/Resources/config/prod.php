@@ -57,8 +57,8 @@ $app['temp.paths']->folders[] = $app['temp.path'].'temp';
 $app['assetic.enabled'] = false;
 
 if ($app['assetic.enabled']) {
-
-    $app['assetic.path_to_cache'] = $app['temp.path'] . DIRECTORY_SEPARATOR . 'assetic';
+    // Assetic cache folder.
+    $app['assetic.path_to_cache'] = $app['temp.path'].DIRECTORY_SEPARATOR.'assetic';
 
     $app['temp.paths']->folders[] = $app['assetic.path_to_cache'];
 
@@ -101,21 +101,10 @@ if ($app['assetic.enabled']) {
     $app['assetic.filter.yui_compressor.path'] = '/usr/share/yui-compressor/yui-compressor.jar';
 
     // Create directories.
-    if (!is_dir($app['assetic.path_to_web'])) {
-        mkdir($app['assetic.path_to_web'], api_get_permissions_for_new_directories());
-    }
-
-    if (!is_dir($app['assetic.path_to_web'].'/css')) {
-        mkdir($app['assetic.path_to_web'].'/css', api_get_permissions_for_new_directories());
-    }
-
-    if (!is_dir($app['assetic.path_to_web'].'/css/'.$app['app.theme'])) {
-        mkdir($app['assetic.path_to_web'].'/css/'.$app['app.theme'], api_get_permissions_for_new_directories());
-    }
-
-    if (!is_dir($app['assetic.path_to_web'].'/js')) {
-        mkdir($app['assetic.path_to_web'].'/js', api_get_permissions_for_new_directories());
-    }
+    $app['temp.paths']->folders[] = $app['assetic.path_to_web'];
+    $app['temp.paths']->folders[] = $app['assetic.path_to_web'].'/css';
+    $app['temp.paths']->folders[] = $app['assetic.path_to_web'].'/css/'.$app['app.theme'];
+    $app['temp.paths']->folders[] = $app['assetic.path_to_web'].'/js';
 }
 
 // Loop in the folder array and create temp folders
@@ -128,7 +117,7 @@ foreach ($app['temp.paths']->folders as $folder) {
 
 // Monolog log file
 $app['chamilo.log'] = $app['sys_log_path'].'/chamilo.log';
-
+// If the chamilo.lig is not writable try to delete it
 if (is_file($app['chamilo.log']) && !is_writable($app['chamilo.log'])) {
     unlink($app['chamilo.log']);
 }

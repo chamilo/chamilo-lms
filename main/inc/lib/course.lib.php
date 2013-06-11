@@ -30,9 +30,11 @@ class CourseManager
      * @param   array   with the columns in the main.course table
      * @param   mixed   false if the course was not created, array with the course info
      * @return mixed False on error, or an array with course attributes on success
+     * @todo remove globals
      * @assert () === false
      */
-    static function create_course($params) {
+    static function create_course($params)
+    {
         global $_configuration;
 
         // Check portal limits
@@ -233,7 +235,8 @@ class CourseManager
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @assert (array(1,2,3)) === false
      */
-    public static function get_course_information($course_code) {
+    public static function get_course_information($course_code)
+    {
         return Database::fetch_array(Database::query(
             "SELECT *, id as real_id FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
             WHERE code='".Database::escape_string($course_code)."'"),'ASSOC'
@@ -247,7 +250,8 @@ class CourseManager
      * @return an array with all the fields of the course table
      * @assert (-1) === false
      */
-    public static function get_course_information_by_id($course_id) {
+    public static function get_course_information_by_id($course_id)
+    {
         return Database::select('*, id as real_id', Database::get_main_table(TABLE_MAIN_COURSE), array('where'=>array('id = ?' =>intval($course_id))),'first');
     }
 
@@ -262,7 +266,8 @@ class CourseManager
      * @return mixed Array of courses details, or false on error
      * @assert (array(1,2,3)) === false
      */
-    public static function get_courses_list($from = 0, $howmany = 0, $orderby = 1, $orderdirection = 'ASC', $visibility = -1, $startwith = '') {
+    public static function get_courses_list($from = 0, $howmany = 0, $orderby = 1, $orderdirection = 'ASC', $visibility = -1, $startwith = '')
+    {
 
         $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." ";
         if (!empty($startwith)) {
@@ -314,7 +319,8 @@ class CourseManager
      * @return an array with int fields "visibility", "subscribe", "unsubscribe"
      * @assert () === false
      */
-    public static function get_access_settings($course_code) {
+    public static function get_access_settings($course_code)
+    {
         return Database::fetch_array(Database::query(
             "SELECT visibility, subscribe, unsubscribe from ".Database::get_main_table(TABLE_MAIN_COURSE)."
             WHERE code = '".Database::escape_string($course_code)."'")
@@ -329,7 +335,8 @@ class CourseManager
      * @return int the status of the user in that course
      * @assert () === false
      */
-    public static function get_user_in_course_status($user_id, $courseId) {
+    public static function get_user_in_course_status($user_id, $courseId)
+    {
         $result = Database::fetch_array(Database::query(
             "SELECT status FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
             WHERE c_id = '".Database::escape_string($courseId)."' AND user_id = ".Database::escape_string($user_id))
@@ -343,7 +350,8 @@ class CourseManager
      * @return mixed The tutor ID
      * @assert () === false
      */
-    public static function get_tutor_in_course_status($user_id, $courseId) {
+    public static function get_tutor_in_course_status($user_id, $courseId)
+    {
         $result = Database::fetch_array(Database::query(
                 "SELECT tutor_id FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                 WHERE c_id = '".Database::escape_string($courseId)."' AND user_id = ".Database::escape_string($user_id))
@@ -486,7 +494,8 @@ class CourseManager
      * @return  bool    True on success, false on failure
      * @see add_user_to_course
      */
-    public static function subscribe_user($user_id, $course_code, $status = STUDENT, $session_id = 0) {
+    public static function subscribe_user($user_id, $course_code, $status = STUDENT, $session_id = 0)
+    {
 
         if ($user_id != strval(intval($user_id))) {
             return false; //detected possible SQL injection
@@ -4619,7 +4628,8 @@ class CourseManager
      * @return int      0
      * @todo use an array called $params instead of lots of params
      */
-    static function register_course($params) {
+    static function register_course($params)
+    {
         global $error_msg, $firstExpirationDelay;
 
         $title              = $params['title'];
@@ -4725,8 +4735,8 @@ class CourseManager
                 subscribe       = '".intval($subscribe) . "',
                 unsubscribe     = '".intval($unsubscribe) . "',
                 visual_code     = '".Database :: escape_string($visual_code) . "'";
-            Database::query($sql);
 
+            Database::query($sql);
             $course_id  = Database::insert_id();
 
             if ($course_id) {

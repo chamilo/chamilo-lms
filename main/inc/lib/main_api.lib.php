@@ -608,7 +608,7 @@ function api_get_path($path_type, $path = null) {
         // Developers might use the function api_get_path() directly or indirectly (this is difficult to be traced), at the moment when
         // configuration has not been created yet. This is why this function should be upgraded to return correct results in this case.
 
-        //if (defined('SYSTEM_INSTALLATION') && SYSTEM_INSTALLATION) 
+        //if (defined('SYSTEM_INSTALLATION') && SYSTEM_INSTALLATION)
 
         if (empty($root_web)) {
 
@@ -5063,18 +5063,29 @@ function api_create_include_path_setting() {
     return api_get_path(LIBRARY_PATH).'pear';
 }
 
-/** Gets the current access_url id of the Chamilo Platform
+/**
+ * Gets the current access_url id of the Chamilo Platform
  * @author Julio Montoya <gugli100@gmail.com>
+ * @param bool $fromDatabase
  * @return int access_url_id of the current Chamilo Installation
  */
-function api_get_current_access_url_id() {
-    $access_url_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-    $path = Database::escape_string(api_get_path(WEB_PATH));
-    $sql = "SELECT id FROM $access_url_table WHERE url = '".$path."'";
-    $result = Database::query($sql);
-    if (Database::num_rows($result) > 0) {
-        $access_url_id = Database::result($result, 0, 0);
-        return $access_url_id;
+function api_get_current_access_url_id($fromDatabase = false)
+{
+    $urlId = Session::read('current_url_id');
+
+    if ($fromDatabase) {
+        $access_url_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
+        $path = Database::escape_string(api_get_path(WEB_PATH));
+        $sql = "SELECT id FROM $access_url_table WHERE url = '".$path."'";
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
+            $access_url_id = Database::result($result, 0, 0);
+            return $access_url_id;
+        }
+    }
+
+    if (!empty($urlId)) {
+        return $urlId;
     }
     //if the url in WEB_PATH was not found, it can only mean that there is
     // either a configuration problem or the first URL has not been defined yet

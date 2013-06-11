@@ -233,7 +233,7 @@ class InstallCommand extends CommonCommand
                     require_once $this->getRootSys().'main/inc/lib/main_api.lib.php';
 
                     // In order to use the Database class
-                    $database = new \Database($this->getHelper('db')->getConnection());
+                    $database = new \Database($this->getHelper('db')->getConnection(), null);
 
                     $this->createAdminUser($output);
 

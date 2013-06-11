@@ -21,22 +21,19 @@ class Database
      * @var \Doctrine\DBAL\Connection
      */
     private static $db;
-    private static $dbs;
 
     private static $connectionRead;
     private static $connectionWrite;
-
 
     /**
      * Constructor
      *
      * @param $db \Doctrine\DBAL\Connection
-     * @param $dbs
+     * @param array $dbs
      */
     public function __construct($db, $dbs)
     {
         self::$db = $db;
-        self::$dbs = $dbs;
 
         // Using read/write connections see the services.php file
         self::$connectionRead = isset($dbs['db_read']) ? $dbs['db_read'] : $db;

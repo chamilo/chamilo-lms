@@ -33,7 +33,7 @@ class CourseManager
      * @todo remove globals
      * @assert () === false
      */
-    static function create_course($params)
+    public static function create_course($params)
     {
         global $_configuration;
 
@@ -129,7 +129,7 @@ class CourseManager
      * @return array Array of course attributes
      * @assert () === false
      */
-    static function update($params)
+    public static function update($params)
     {
         if (!is_array($params) or count($params)<1) {
             return false;
@@ -1546,7 +1546,6 @@ class CourseManager
      */
     public static function delete_course($code)
     {
-
         $table_course                       = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_user                  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $table_course_class                 = Database::get_main_table(TABLE_MAIN_COURSE_CLASS);
@@ -1728,7 +1727,7 @@ class CourseManager
                     foreach ($row as $key => $value) {
                         $row_to_save[$key] = $key."='".Database::escape_string($row[$key])."'";
                     }
-                    $sql_dump .= "\nINSERT INTO $table SET ".implode(', ', $row_to_save).';';
+                    $sql_dump .= "INSERT INTO $table SET ".implode(', ', $row_to_save).';';
                 }
             }
         }
@@ -2892,7 +2891,8 @@ class CourseManager
         return $html;
     }
 
-    static function displayCourses($user_id, $filter, $load_dirs, $getCount, $start = null, $maxPerPage = null) {
+    static function displayCourses($user_id, $filter, $load_dirs, $getCount, $start = null, $maxPerPage = null)
+    {
 
         // Table definitions
         $TABLECOURS                     = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -3087,7 +3087,8 @@ class CourseManager
      * @param bool      Whether to show the document quick-loader or not
      *  @return void
      */
-    public static function display_courses_in_category($user_category_id, $load_dirs = false) {
+    public static function display_courses_in_category($user_category_id, $load_dirs = false)
+    {
         $user_id = api_get_user_id();
         // Table definitions
         $TABLECOURS                     = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -3225,11 +3226,11 @@ class CourseManager
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @return array containing all the titles of the user defined courses with the id as key of the array
      */
-    function get_user_course_categories() {
-        global $_user;
+    function get_user_course_categories()
+    {
         $output = array();
         $table_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
-        $sql = "SELECT * FROM ".$table_category." WHERE user_id='".Database::escape_string($_user['user_id'])."'";
+        $sql = "SELECT * FROM ".$table_category." WHERE user_id='".Database::escape_string(api_get_user_id())."'";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             $output[$row['id']] = $row['title'];
@@ -3399,8 +3400,8 @@ class CourseManager
      * if the course code doest not exist in the DB the same course code will be returned
      * @return string    wanted unused code
      */
-    public static function generate_nice_next_course_code($wanted_code) {
-        require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
+    public static function generate_nice_next_course_code($wanted_code)
+    {
         $course_code_ok = !self::course_code_exists($wanted_code);
         if (!$course_code_ok) {
            $wanted_code = self::generate_course_code($wanted_code);
@@ -3431,7 +3432,8 @@ class CourseManager
      * @param int session id
      * @return boolean
      */
-    public static function is_user_accepted_legal($user_id, $courseInfo, $session_id = null) {
+    public static function is_user_accepted_legal($user_id, $courseInfo, $session_id = null)
+    {
         $user_id    = intval($user_id);
         $course_code = $courseInfo['code'];
         $course_id = $courseInfo['real_id'];
@@ -3471,7 +3473,8 @@ class CourseManager
      * @param   string course code
      * @param   int session id
      */
-    function save_user_legal($user_id, $courseInfo, $session_id = null) {
+    function save_user_legal($user_id, $courseInfo, $session_id = null)
+    {
 
         $user_id    = intval($user_id);
         $course_code  = $courseInfo['code'];
@@ -3563,7 +3566,8 @@ class CourseManager
      * @param id    url id
      *
      **/
-    public static function update_course_ranking($course_id = null, $session_id = null, $url_id = null, $points_to_add = null, $add_access = true, $add_user = true) {
+    public static function update_course_ranking($course_id = null, $session_id = null, $url_id = null, $points_to_add = null, $add_access = true, $add_user = true)
+    {
         //Course catalog stats modifications see #4191
         $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
 
@@ -3628,7 +3632,8 @@ class CourseManager
      *
      */
 
-    public static function add_course_vote($user_id, $vote, $course_id, $session_id = null, $url_id = null) {
+    public static function add_course_vote($user_id, $vote, $course_id, $session_id = null, $url_id = null)
+    {
         $table_user_course_vote     = Database::get_main_table(TABLE_MAIN_USER_REL_COURSE_VOTE);
         $course_id  = empty($course_id) ? api_get_course_int_id() : intval($course_id);
 
@@ -3706,7 +3711,8 @@ class CourseManager
      * @param   int number of days
      * @param   int number of hottest courses
      */
-    public static function return_hot_courses($days = 30, $limit = 5) {
+    public static function return_hot_courses($days = 30, $limit = 5)
+    {
         $urlId = api_get_current_access_url_id();
         $limit  = intval($limit);
 
@@ -3799,7 +3805,6 @@ class CourseManager
 
     /**
      *
-     *
      * @return ResultSet
      */
     static function list_inactive_courses($ceiling, $visibility_level = COURSE_VISIBILITY_REGISTERED) {
@@ -3831,7 +3836,8 @@ class CourseManager
      * @param int Access URL ID (optional)
      * @return int Number of courses
      */
-    public static function count_courses($access_url_id = null) {
+    public static function count_courses($access_url_id = null)
+    {
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql = "SELECT count(id) FROM $table_course c";
@@ -3851,7 +3857,8 @@ class CourseManager
      * @param array  List of courses to which the user is subscribed (if not provided, will be generated)
      * @return mixed 'enter' for a link to go to the course or 'register' for a link to subscribe, or false if no access
      */
-    static function get_access_link_by_user($uid, $course, $user_courses = array()) {
+    static function get_access_link_by_user($uid, $course, $user_courses = array())
+    {
         if (empty($uid) or empty($course)) { return false; }
         if (empty($user_courses)) {
             // get the array of courses to which the user is subscribed
@@ -3913,7 +3920,8 @@ class CourseManager
      * @return array    An array with the needed keys ['currentCourseCode'], ['currentCourseId'], ['currentCourseDbName'], ['currentCourseRepository']
      * @todo Eliminate the global variables.
      */
-    static function define_course_keys($wanted_code, $prefix_for_all = '', $prefix_for_base_name = '', $prefix_for_path = '', $add_unique_prefix = false, $use_code_indepedent_keys = true) {
+    static function define_course_keys($wanted_code, $prefix_for_all = '', $prefix_for_base_name = '', $prefix_for_path = '', $add_unique_prefix = false, $use_code_indepedent_keys = true)
+    {
         global $prefixAntiNumber, $_configuration;
         $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
         $wanted_code = self::generate_course_code($wanted_code);
@@ -4188,7 +4196,13 @@ class CourseManager
         return $files;
     }
 
-    static function sort_pictures($files, $type) {
+    /**
+     * @param $files
+     * @param $type
+     * @return array
+     */
+    static function sort_pictures($files, $type)
+    {
         $pictures = array();
         foreach ($files as $key => $value){
             if (isset($value[$type]) && !empty($value[$type])) {
@@ -4202,7 +4216,8 @@ class CourseManager
      * Fills the course database with some required content and example content.
      * @version 1.2
      */
-    static function fill_db_course($course_id, $course_repository, $language, $fill_with_exemplary_content = null) {
+    static function fill_db_course($course_id, $course_repository, $language, $fill_with_exemplary_content = null)
+    {
         if (is_null($fill_with_exemplary_content)) {
             $fill_with_exemplary_content = api_get_setting('example_material_course_creation') != 'false';
         }

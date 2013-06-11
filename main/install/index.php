@@ -112,7 +112,7 @@ $app->match('/', function() use($app) {
             'choices'   => $languages,
             'required'  => true,
         ))
-        ->add('send', 'submit')
+        ->add('continue', 'submit')
         ->getForm();
 
      if ('POST' == $request->getMethod()) {
@@ -123,11 +123,10 @@ $app->match('/', function() use($app) {
     return $app['twig']->render('index.tpl', array('form' => $form->createView()));
 })->bind('welcome');
 
-
 $app->match('/requirements', function() use($app) {
     $request = $app['request'];
     $form = $app['form.factory']->createBuilder('form')
-        ->add('send', 'submit')
+        ->add('continue', 'submit')
         ->getForm();
 
     $req = display_requirements($app, 'new');
@@ -158,7 +157,13 @@ $app->match('/check-database', function() use($app) {
         $builder->add($key, $value['type'], $value['attributes']);
     }
 
-    $builder->add('send', 'submit');
+    /*$builder->add('create_database', 'choice', array(
+            'choices' => array('1' => 'Yes', '0' => 'No'),
+            'data' => 'Yes'
+        )
+    );*/
+
+    $builder->add('check', 'submit');
     $form = $builder->getForm();
 
     if ('POST' == $request->getMethod()) {
@@ -166,15 +171,30 @@ $app->match('/check-database', function() use($app) {
 
         if ($form->isValid()) {
             $parameters = $form->getData();
-            $config = new \Doctrine\DBAL\Configuration();
-            $conn = \Doctrine\DBAL\DriverManager::getConnection($parameters, $config);
+
+            /** @var \ChamiloLMS\Command\Database\InstallCommand $command */
+            $command = $app['console']->get('chamilo:install');
+            $command->setDatabaseSettings($parameters);
+
+            $connection = $command->getUserAccessConnectionToHost();
 
             try {
-                $connect = $conn->connect();
-                $sm = $conn->getSchemaManager();
+                $connect = $connection->connect();
+                $sm = $connection->getSchemaManager();
                 $databases = $sm->listDatabases();
-                if (in_array($parameters['database'], $databases)) {
-                    $app['session']->getFlashBag()->add('warning', 'The database is %s being used');
+
+                if (in_array($parameters['dbname'], $databases)) {
+                    $message = $app['translator']->trans(
+                        'The database %s being used and is going to be deleted!!',
+                        array('%s' => $parameters['dbname'])
+                    );
+                    $app['session']->getFlashBag()->add('warning', $message);
+                } else {
+                    $message = $app['translator']->trans(
+                        'A database %s is going to be created',
+                        array('%s' => $parameters['dbname'])
+                    );
+                    $app['session']->getFlashBag()->add('warning', $message);
                 }
 
                 $app['session']->getFlashBag()->add('success', 'Connection ok!');
@@ -223,7 +243,7 @@ $app->match('/portal-settings', function() use($app) {
         $builder->add($key, $value['type'], $value['attributes']);
     }
 
-    $builder->add('send', 'submit');
+    $builder->add('continue', 'submit');
     $form = $builder->getForm();
 
     if ('POST' == $request->getMethod()) {
@@ -252,7 +272,7 @@ $app->match('/admin-settings', function() use($app) {
     foreach ($data as $key => $value) {
         $builder->add($key, $value['type'], $value['attributes']);
     }
-    $builder->add('send', 'submit');
+    $builder->add('continue', 'submit');
     $form = $builder->getForm();
 
     if ('POST' == $request->getMethod()) {
@@ -279,7 +299,7 @@ $app->match('/resume', function() use($app) {
     if (!empty($portalSettings) && !empty($databaseSettings) && !empty($adminSettings)) {
 
         $form = $app['form.factory']->createBuilder('form', $data)
-            ->add('send', 'submit', array('label' => 'Continue'))
+            ->add('install', 'submit', array('label' => 'Continue'))
             ->getForm();
 
         if ('POST' == $request->getMethod()) {

@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace ChamiloLMS\Command\Database;
 
@@ -124,7 +125,7 @@ class CommonCommand extends AbstractCommand
             'password' => array(
                 'attributes' => array(
                     'label' => 'Password',
-                    'data' =>  ''
+                    'data' =>  'admin'
                 ),
                 'type' => 'password'
             ),
@@ -218,11 +219,11 @@ class CommonCommand extends AbstractCommand
                         array(
                             'pdo_mysql' => 'pdo_mysql',
                             'pdo_sqlite' => 'pdo_sqlite',
-                            'pdo_pgsql' => 'pdo_pgsql',
-                            'pdo_oci' => 'pdo_oci',
+                            'pdo_pgsql' => 'pdo_pgsql'
+                            /*'pdo_oci' => 'pdo_oci',
                             'ibm_db2' => 'ibm_db2',
                             'pdo_ibm' => 'pdo_ibm',
-                            'pdo_sqlsrv' => 'pdo_sqlsrv'
+                            'pdo_sqlsrv' => 'pdo_sqlsrv'*/
                         ),
                     'data' => 'pdo_mysql'
                 ),

@@ -52,6 +52,7 @@ $TBL_LP_ITEM_VIEW = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 $course_id = api_get_course_int_id();
 $exercise_id = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : null;
 $filter_user = isset($_REQUEST['filter_by_user']) ? intval($_REQUEST['filter_by_user']) : null;
+$gradebook = isset($_REQUEST['gradebook']) ? Security::remove_XSS($_REQUEST['gradebook']) : null;
 
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 
@@ -63,6 +64,7 @@ if (!$is_allowedToEdit) {
     api_not_allowed(true);
 }
 
+// @todo check if the $parameters is used
 if (!empty($exercise_id)) {
     $parameters['exerciseId'] = $exercise_id;
 }
@@ -77,10 +79,9 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
         if (isset($_REQUEST['extra_data']) && $_REQUEST['extra_data'] == 1) {
             $load_extra_data = true;
         }
-
         require_once 'exercise_result.class.php';
         switch ($_GET['export_format']) {
-            case 'xls' :
+            case 'xls':
                 $export = new ExerciseResult();
                 $export->exportCompleteReportXLS(
                     $documentPath,
@@ -92,8 +93,8 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
                 );
                 exit;
                 break;
-            case 'csv' :
-            default :
+            case 'csv':
+            default:
                 $export = new ExerciseResult();
                 $export->exportCompleteReportCSV(
                     $documentPath,
@@ -112,10 +113,7 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
 }
 
 //Send student email @todo move this code in a class, library
-if (isset($_REQUEST['comments']) && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_GET['exeid'] == strval(
-    intval($_GET['exeid'])
-)
-) {
+if (isset($_REQUEST['comments']) && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_GET['exeid'] == strval(intval($_GET['exeid']))) {
     $id = intval($_GET['exeid']); //filtered by post-condition
     $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
     if (empty($track_exercise_info)) {
@@ -257,35 +255,20 @@ if (isset($origin) && $origin == 'learnpath') {
     if ($is_allowedToEdit) {
         // the form
         if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
-            $actions .= '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'">'.Display :: return_icon(
-                'back.png',
-                get_lang('GoBackToQuestionList'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).'</a>';
-            $actions .= '<a href="live_stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon(
-                'activity_monitor.png',
-                get_lang('LiveResults'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).'</a>';
-            $actions .= '<a href="stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon(
-                'statistics.png',
-                get_lang('ReportByQuestion'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).'</a>';
-            $actions .= '<a id="export_opener" href="'.api_get_self(
-            ).'?export_report=1&hotpotato_name='.Security::remove_XSS($_GET['path']).'&exerciseId='.intval(
-                $_GET['exerciseId']
-            ).'" >'.
+            // @todo check if $path is used
+            $path = isset($_GET['path']) ? Security::remove_XSS($_GET['path']) : null;
+
+            $actions .= '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'">'.Display :: return_icon('back.png',get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
+            $actions .= '<a href="live_stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon('activity_monitor.png',get_lang('LiveResults'), '', ICON_SIZE_MEDIUM ).'</a>';
+            $actions .= '<a href="stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon('statistics.png',get_lang('ReportByQuestion'), '', ICON_SIZE_MEDIUM).'</a>';
+            $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&hotpotato_name='.$path.'&exerciseId='.intval($_GET['exerciseId']).'" >'.
                 Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
         }
     }
 }
 
 //Deleting an attempt
-if (($is_allowedToEdit || $is_tutor || api_is_coach()) && $_GET['delete'] == 'delete' && !empty ($_GET['did']) && $locked == false
+if (($is_allowedToEdit || $is_tutor || api_is_coach()) && isset($_GET['delete']) && $_GET['delete'] == 'delete' && !empty ($_GET['did']) && $locked == false
 ) {
     $exe_id = intval($_GET['did']);
     if (!empty($exe_id)) {

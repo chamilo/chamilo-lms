@@ -208,6 +208,7 @@ class CommonCommand extends AbstractCommand
     }
 
     /**
+     * Database parameters that are going to be parsed during the console/browser installation
      * @return array
      */
     public function getDatabaseSettingsParams()
@@ -219,11 +220,11 @@ class CommonCommand extends AbstractCommand
                         array(
                             'pdo_mysql' => 'pdo_mysql',
                             'pdo_sqlite' => 'pdo_sqlite',
-                            'pdo_pgsql' => 'pdo_pgsql'
-                            /*'pdo_oci' => 'pdo_oci',
+                            'pdo_pgsql' => 'pdo_pgsql',
+                            'pdo_oci' => 'pdo_oci',
                             'ibm_db2' => 'ibm_db2',
                             'pdo_ibm' => 'pdo_ibm',
-                            'pdo_sqlsrv' => 'pdo_sqlsrv'*/
+                            'pdo_sqlsrv' => 'pdo_sqlsrv'
                         ),
                     'data' => 'pdo_mysql'
                 ),

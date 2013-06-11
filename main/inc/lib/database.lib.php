@@ -363,7 +363,6 @@ class Database
     public static function query($query)
     {
         $isWriteQuery = self::isWriteQuery($query);
-        var_dump($isWriteQuery);
         if ($isWriteQuery) {
             $connection = self::$connectionWrite;
         } else {

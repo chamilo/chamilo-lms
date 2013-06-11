@@ -1022,3 +1022,7 @@ if (empty($exercise_list) && $hotpotatoes_exist == false) {
 if ($origin != 'learnpath') { //so we are not in learnpath tool
     Display :: display_footer();
 }
+
+Session::erase('objExercise', $objExercise);
+Session::erase('objQuestion', $objQuestion);
+Session::erase('objAnswer', $objAnswer);

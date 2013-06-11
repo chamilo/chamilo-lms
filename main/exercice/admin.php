@@ -84,9 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-
-
-// get vars from GET
+// Get vars from GET
 if (empty($exerciseId)) {
     $exerciseId = isset($_GET['exerciseId'])?intval($_GET['exerciseId']):'0';
 }
@@ -173,10 +171,9 @@ if (!empty($_GET['action']) && $_GET['action'] == 'exportqti2' && !empty($_GET['
 if (!is_object($objExercise)) {
     // construction of the Exercise object
     $objExercise = new Exercise();
-
     // creation of a new exercise if wrong or not specified exercise ID
     if ($exerciseId) {
-        $objExercise->read($exerciseId, false);
+        $objExercise->read($exerciseId, true);
     }
     // saves the object into the session
     Session::write('objExercise', $objExercise);

@@ -301,7 +301,20 @@ class IndexController extends CommonController
         /** Verify if settings is active to set keyboard. Included extra class in form input elements */
 
         if (api_get_setting('use_virtual_keyboard') == 'true') {
-            $html .= "<script> $(function(){ $('.virtualkey').keyboard();}); </script>";
+            $html .= "<script> $(function(){ $('.virtualkey').keyboard(
+                     {
+                       layout:'custom',
+                       customLayout: {
+                         'default': [
+                           '1 2 3 4 5 6 7 8 9 0 {bksp}',
+                           'q w e r t y u i o p',
+                           'a s d f g h j k l',
+                           'z x c v b n m',
+                           '{cancel} {accept}'
+                         ]
+                       }
+                     }
+                     );}); </script>";
         }
         return $html;
     }

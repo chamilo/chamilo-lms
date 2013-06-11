@@ -231,7 +231,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
                 break;
         }
     }
-    if (isset ($_GET['delete_course'])) {
+    if (isset($_GET['delete_course'])) {
         CourseManager::delete_course($_GET['delete_course']);
         $obj_cat = new Category();
         $obj_cat->update_category_delete($_GET['delete_course']);

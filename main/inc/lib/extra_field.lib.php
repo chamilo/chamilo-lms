@@ -698,8 +698,6 @@ class ExtraField extends Model
                                 $field_details['field_display_text'].' '.get_lang('Comment')
                             );
 
-                            /*$extraField = new Extrafield($field_details['field_type']);
-                            $link = Display::url();*/
                             $extraFieldValue = new ExtraFieldValue($this->type);
                             $repo = $app['orm.em']->getRepository($extraFieldValue->entityName);
                             $repoLog = $app['orm.em']->getRepository('Gedmo\Loggable\Entity\LogEntry');

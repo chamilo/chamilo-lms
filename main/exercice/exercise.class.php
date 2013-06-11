@@ -4975,6 +4975,8 @@ class Exercise
 
     /**
      * Returns an array with this form
+     * @example
+     * <code>
      * array (size=3)
           999 =>
             array (size=3)
@@ -4988,6 +4990,7 @@ class Exercise
           101 =>
             array (size=1)
               0 => int 3482
+     * </code>
      * The array inside the key 999 means the question list that belongs to the media id = 999,
      * this case is special because 999 means "no media".
      * @return array
@@ -4998,7 +5001,7 @@ class Exercise
     }
 
     /**
-      *Is media question activated
+     * Is media question activated
      * @return bool
      */
     public function mediaIsActivated()
@@ -5023,25 +5026,56 @@ class Exercise
     /**
      * Gets question list from the exercise
      * (true show all questions, false show media question id instead of the question ids)
+     * @return array
      */
     public function getQuestionList()
     {
         return $this->questionList;
     }
 
+    /**
+     * Question list with medias compressed like this
+     * @example
+     * <code>
+     * array(
+     *      question_id,
+     *      question_id,
+     *      media_id, <- this media id contains question ids
+     *      question_id,
+     * )
+     * </code>
+     * @return array
+     */
     public function getQuestionListWithMediasCompressed()
     {
         return $this->questionList;
     }
 
+    /**
+     * Question list with medias uncompressed like this
+     * @example
+     * <code>
+     * array(
+     *      question_id,
+     *      question_id,
+     *      question_id, <- belongs to a media id
+     *      question_id, <- belongs to a media id
+     *      question_id,
+     * )
+     * </code>
+     * @return array
+     */
     public function getQuestionListWithMediasUncompressed()
     {
         return $this->questionListUncompressed;
     }
 
+    /**
+     * Sets the question list when the exercise->read() is executed created depending of a parameter
+     */
     public function setQuestionList()
     {
-        //Getting question list
+        // Getting question list.
         $questionList = $this->selectQuestionList(true);
         $this->setMediaList($questionList);
 

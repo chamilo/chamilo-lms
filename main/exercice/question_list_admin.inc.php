@@ -109,6 +109,7 @@ echo Question::getMediaLabels();
 
 // If we are in a test.
 $inATest = isset($exerciseId) && $exerciseId > 0;
+
 if (!$inATest) {
 	echo "<p class='warning-message'>".get_lang("ChoiceQuestionType")."</p>";
 } else {
@@ -123,6 +124,7 @@ if (!$inATest) {
     echo "<div style='clear:both'>&nbsp;</div>";
 
     echo '<div id="question_list">';
+
     if ($nbrQuestions) {
         // Always getting list from DB.
 

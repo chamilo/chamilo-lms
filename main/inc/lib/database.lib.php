@@ -3,13 +3,8 @@
 /**
  *  This is the main database library for Chamilo.
  *  Include/require it in your code to use its functionality.
- *  Because this library contains all the basic database calls, it could be
- *  replaced by another library for say, PostgreSQL, to actually use Chamilo
- *  with another database (this is not ready yet because a lot of code still
- *  uses the MySQL database functions extensively).
  *
- *  If trying to replicate the database layer, don't forget to look for "sql"
- *  named functions in main_api.lib.php
+ *  This library now uses a Doctrine DBAL Silex service provider
  *
  * @package chamilo.library
  */
@@ -130,13 +125,14 @@ class Database
         return $string;
         //return self::$db->quote($string);
         //$conn->quote
+        /*
         return get_magic_quotes_gpc()
             ? (self::use_default_connection($connection)
                 ? mysql_real_escape_string(stripslashes($string))
                 : mysql_real_escape_string(stripslashes($string), $connection))
             : (self::use_default_connection($connection)
                 ? mysql_real_escape_string($string)
-                : mysql_real_escape_string($string, $connection));
+                : mysql_real_escape_string($string, $connection));*/
     }
 
     /**
@@ -300,7 +296,6 @@ class Database
         }
 
         return null;
-
         /*return self::num_rows($resource) > 0 ? (!empty($field) ? mysql_result($resource, $row, $field) : mysql_result(
             $resource,
             $row

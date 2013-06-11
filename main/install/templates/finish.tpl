@@ -1,10 +1,10 @@
 {% extends 'layout.tpl' %}
 
 {% block content %}
-    Congratulations!
-
+    <h3>Congratulations Chamilo is now installed!</h3>
 
     Output info:
+    <br />
     <br />
     <pre>
     {% autoescape false %}

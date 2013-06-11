@@ -216,7 +216,8 @@ class Security
         return $token;
     }
 
-    public static function getCurrentToken() {
+    public static function getCurrentToken()
+    {
         return isset($_SESSION['sec_token']) ? $_SESSION['sec_token'] : null;
     }
 

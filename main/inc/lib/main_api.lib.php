@@ -590,8 +590,7 @@ function api_get_path($path_type, $path = null) {
     if ($path_type == WEB_PATH) {
         if (isset($_configuration['access_url']) &&  $_configuration['access_url'] != 1) {
             //we look into the DB the function api_get_access_url
-            $url_info = api_get_access_url($_configuration['access_url']);
-
+            $url_info = api_get_current_access_url_info();
             $root_web = $url_info['active'] == 1 ? $url_info['url'] : $_configuration['root_web'];
             $load_new_config = true;
         }
@@ -4527,19 +4526,23 @@ function api_get_access_urls($from = 0, $to = 1000000, $order = 'url', $directio
  */
 function api_get_access_url($id)
 {
-    global $_configuration;
-    $id = Database::escape_string(intval($id));
-    // Calling the Database:: library dont work this is handmade.
-    //$table_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-    $table = 'access_url';
-    $database = $_configuration['main_database'];
-    $table_access_url =  "".$database.".".$table."";
-    $sql = "SELECT url, description, active, created_by, tms
-            FROM $table_access_url WHERE id = '$id' ";
+    $id = intval($id);
+    $table_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+    $sql = "SELECT url, description, active, created_by, tms FROM $table_access_url WHERE id = '$id' ";
     $res = Database::query($sql);
-    $result = @Database::fetch_array($res);
+    $result = Database::fetch_array($res);
     return $result;
 }
+
+/**
+ * Gets the current url info
+ */
+function api_get_current_access_url_info()
+{
+    $userInfo = Session::read('url_info');
+    return $userInfo;
+}
+
 
 /**
  * Adds an access URL into the database
@@ -5064,33 +5067,36 @@ function api_create_include_path_setting() {
 }
 
 /**
- * Gets the current access_url id of the Chamilo Platform
+ * Gets the current access_url id of the Chamilo Platform loaded in the session
  * @author Julio Montoya <gugli100@gmail.com>
- * @param bool $fromDatabase
  * @return int access_url_id of the current Chamilo Installation
  */
-function api_get_current_access_url_id($fromDatabase = false)
+function api_get_current_access_url_id()
 {
-    $urlId = Session::read('current_url_id');
+    $urlId = Session::read('url_id');
 
-    if ($fromDatabase) {
-        $access_url_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-        $path = Database::escape_string(api_get_path(WEB_PATH));
-        $sql = "SELECT id FROM $access_url_table WHERE url = '".$path."'";
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            $access_url_id = Database::result($result, 0, 0);
-            return $access_url_id;
-        }
-    }
-
-    if (!empty($urlId)) {
+    if (empty($urlId)) {
+        return 1;
+    } else {
         return $urlId;
     }
-    //if the url in WEB_PATH was not found, it can only mean that there is
-    // either a configuration problem or the first URL has not been defined yet
-    // (by default it is http://localhost/). Thus the more sensible thing we can
-    // do is return 1 (the main URL) as the user cannot hack this value anyway
+}
+
+/**
+ * Gets the current access_url id of the api_get_path(WEB_PATH) Chamilo Platform
+ * @author Julio Montoya <gugli100@gmail.com>
+ * @return int access_url_id of the current Chamilo Installation
+ */
+function api_get_access_url_id_from_web_path()
+{
+    $access_url_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
+    $path = Database::escape_string(api_get_path(WEB_PATH));
+    $sql = "SELECT id FROM $access_url_table WHERE url = '".$path."'";
+    $result = Database::query($sql);
+    if (Database::num_rows($result) > 0) {
+        $access_url_id = Database::result($result, 0, 0);
+        return $access_url_id;
+    }
     return 1;
 }
 
@@ -5890,9 +5896,9 @@ function api_get_unique_id() {
 
 function api_get_home_path() {
 	$home = 'home/';
-	if (api_get_multiple_access_url()) {
-		$access_url_id = api_get_current_access_url_id();
-		$url_info      = api_get_access_url($access_url_id);
+    $access_url_id = api_get_current_access_url_id();
+	if (api_get_multiple_access_url() && $access_url_id != -1) {
+		$url_info      = api_get_current_access_url_info();
 		$url           = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
 		$clean_url     = replace_dangerous_char($url);
 		$clean_url     = str_replace('/', '-', $clean_url);
@@ -6318,7 +6324,7 @@ function api_set_settings_and_plugins()
     $settings_by_access_list = array();
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != 1) {
-        $url_info = api_get_access_url($_configuration['access_url']);
+        $url_info = api_get_current_access_url_info();
         if ($url_info['active'] == 1) {
             $settings_by_access = api_get_settings(null, 'list', $_configuration['access_url'], 1);
             foreach ($settings_by_access as $row) {

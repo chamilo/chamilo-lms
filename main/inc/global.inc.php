@@ -216,7 +216,7 @@ if ($alreadyInstalled) {
 
     // Retrieving all the chamilo config settings for multiple URLs feature
     $_configuration['access_url'] = 1;
-    if (isset($_configuration['multiple_access_urls']) && !empty($_configuration['multiple_access_urls'])) {
+    if (api_get_multiple_access_url()) {
         $access_urls = api_get_access_urls();
         $protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
         $request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
@@ -227,12 +227,13 @@ if ($alreadyInstalled) {
                 $_configuration['access_url'] = $details['id'];
             }
         }
+        Session::write('url_id', $_configuration['access_url']);
+        Session::write('url_info', api_get_current_access_url_info($_configuration['access_url']));
+    } else {
+        Session::write('url_id', -1);
     }
 
-    Session::write('current_url_id', $_configuration['access_url']);
-
     $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
-
     $settings_latest_update = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
 
     $_setting = isset($_SESSION['_setting']) ? $_SESSION['_setting'] : null;

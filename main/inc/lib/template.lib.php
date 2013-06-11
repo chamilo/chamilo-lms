@@ -564,7 +564,7 @@ class Template
         if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
-                $url_info = api_get_access_url($access_url_id);
+                $url_info = api_get_current_access_url_info();
                 $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
                 $clean_url = replace_dangerous_char($url);
                 $clean_url = str_replace('/', '-', $clean_url);
@@ -755,12 +755,12 @@ class Template
         // Displaying the tabs
         $lang = api_get_user_language();
 
-        //Preparing home folder for multiple urls
+        // Preparing home folder for multiple urls
 
         if (api_get_multiple_access_url()) {
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
-                $url_info = api_get_access_url($access_url_id);
+                $url_info = api_get_current_access_url_info();
                 $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
                 $clean_url = replace_dangerous_char($url);
                 $clean_url = str_replace('/', '-', $clean_url);

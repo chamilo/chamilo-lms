@@ -28,16 +28,11 @@ class Login
      */
     public static function get_user_account_list($user, $reset = false, $by_username = false)
     {
-        global $_configuration;
-        //$portal_url = $_configuration['root_web'];
         $portal_url = api_get_path(WEB_PATH);
 
-        if ($_configuration['multiple_access_urls']) {
-            $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1) {
-                $url = api_get_access_url($access_url_id);
-                $portal_url = $url['url'];
-            }
+        if (api_is_multiple_url_enabled()) {
+            $url = api_get_current_access_url_info();
+            $portal_url = $url['url'];
         }
 
         if ($reset) {

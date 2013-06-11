@@ -295,7 +295,6 @@ $app['twig'] = $app->share(
     })
 );
 
-
 // Developer tools
 
 if (is_writable($app['sys_temp_path'])) {
@@ -345,7 +344,7 @@ $app->register(new Grom\Silex\ImagineServiceProvider(), array(
 ));
 
 // Prompts Doctrine SQL queries using Monolog.
-if ($app['debug'] && isset($app['configuration']['main_database'])) {
+if ($app['debug']) {
     $logger = new Doctrine\DBAL\Logging\DebugStack();
     $app['db.config']->setSQLLogger($logger);
 

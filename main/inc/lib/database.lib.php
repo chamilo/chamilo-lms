@@ -21,15 +21,26 @@ class Database
      * @var \Doctrine\DBAL\Connection
      */
     private static $db;
+    private static $dbs;
+
+    private static $connectionRead;
+    private static $connectionWrite;
+
 
     /**
      * Constructor
      *
      * @param $db \Doctrine\DBAL\Connection
+     * @param $dbs
      */
-    public function __construct($db)
+    public function __construct($db, $dbs)
     {
         self::$db = $db;
+        self::$dbs = $dbs;
+
+        // Using read/write connections see the services.php file
+        self::$connectionRead = isset($dbs['db_read']) ? $dbs['db_read'] : $db;
+        self::$connectionWrite = isset($dbs['db_write']) ? $dbs['db_write'] : $db;
     }
 
     /* Variable use only in the installation process to log errors. See the Database::query function */
@@ -197,64 +208,6 @@ class Database
     }
 
     /**
-     * Frees all the memory associated with the provided result identifier.
-     * @return bool        Returns TRUE on success or FALSE on failure.
-     * Notes: Use this method if you are concerned about how much memory is being used for queries that return large result sets.
-     * Anyway, all associated result memory is automatically freed at the end of the script's execution.
-     */
-    public static function free_result(\Doctrine\DBAL\Driver\Statement $result)
-    {
-        $result->closeCursor();
-        //return mysql_free_result($result);
-    }
-
-    /**
-     * Returns the database client library version.
-     * @return strung        Returns a string that represents the client library version.
-     */
-    public static function get_client_info()
-    {
-        return 'get_client_info';
-        //self::$db->
-        // return mysql_get_client_info();
-    }
-
-    /**
-     * Returns information about the type of the current connection and the server host name.
-     * @param resource $connection (optional)    The database server connection, for detailed description see the method query().
-     * @return string/boolean                    Returns string data on success or FALSE on failure.
-     */
-    public static function get_host_info($connection = null)
-    {
-        return self::$db->getHost();
-        //return self::use_default_connection($connection) ? mysql_get_host_info() : mysql_get_host_info($connection);
-    }
-
-    /**
-     * Retrieves database client/server protocol version.
-     * @param resource $connection (optional)    The database server connection, for detailed description see the method query().
-     * @return int/boolean                        Returns the protocol version on success or FALSE on failure.
-     */
-    public static function get_proto_info($connection = null)
-    {
-        return 'get_proto_info';
-        //return self::use_default_connection($connection) ? mysql_get_proto_info() : mysql_get_proto_info($connection);
-    }
-
-    /**
-     * Retrieves the database server version.
-     * @param resource $connection (optional)    The database server connection, for detailed description see the method query().
-     * @return string/boolean                    Returns the MySQL server version on success or FALSE on failure.
-     */
-    public static function get_server_info($connection = null)
-    {
-        return 'get_server_info';
-        //self::$db->get
-        //PDO::getAttribute(PDO::ATTR_SERVER_VERSION)
-        return self::use_default_connection($connection) ? mysql_get_server_info() : mysql_get_server_info($connection);
-    }
-
-    /**
      * Gets the ID of the last item inserted into the database
      * This should be updated to use ADODB at some point
      * @param resource $connection (optional)    The database server connection, for detailed description see the method query().
@@ -262,7 +215,7 @@ class Database
      */
     public static function insert_id($connection = null)
     {
-        return self::$db->lastInsertId();
+        return self::$connectionWrite->lastInsertId();
         //return self::use_default_connection($connection) ? mysql_insert_id() : mysql_insert_id($connection);
     }
 
@@ -303,6 +256,18 @@ class Database
     }
 
 
+    /**
+     * Frees all the memory associated with the provided result identifier.
+     * @return bool        Returns TRUE on success or FALSE on failure.
+     * Notes: Use this method if you are concerned about how much memory is being used for queries that return large result sets.
+     * Anyway, all associated result memory is automatically freed at the end of the script's execution.
+     */
+    public static function free_result(\Doctrine\DBAL\Driver\Statement $result)
+    {
+        $result->closeCursor();
+        //return mysql_free_result($result);
+    }
+
     /*
         Query methods
         These methods execute a query and return the result(s).
@@ -318,7 +283,6 @@ class Database
         $obj = self::fetch_object(self::query("SELECT COUNT(*) AS n FROM $table"));
         return $obj->n;
     }
-
 
     /**
      * Returns a list of tables within a database. The list may contain all of the
@@ -375,34 +339,38 @@ class Database
     }
 
     /**
+     * Detects if a query is going to save something in the database
+     * @param string $query
+     * @return bool
+     */
+    public static function isWriteQuery($query)
+    {
+        $isWriteQuery = preg_match("/UPDATE(.*) FROM/i", $query) ||
+            preg_match("/INSERT INTO/i", $query) ||
+            preg_match("/REPLACE INTO/i", $query) ||
+            preg_match("/DELETE FROM/i", $query);
+        return $isWriteQuery;
+    }
+
+    /**
      * This method returns a resource
      * Documentation has been added by Arthur Portugal
      * Some adaptations have been implemented by Ivan Tcholakov, 2009, 2010
-     * @author Olivier Brouckaert
-     * @param string $query                        The SQL query
-     * @param resource $connection (optional)    The database server (MySQL) connection.
-     *                                             If it is not specified, the connection opened by mysql_connect() is assumed.
-     *                                             If no connection is found, the server will try to create one as if mysql_connect() was called with no arguments.
-     *                                             If no connection is found or established, an E_WARNING level error is generated.
-     * @param string $file (optional)            On error it shows the file in which the error has been trigerred (use the "magic" constant __FILE__ as input parameter)
-     * @param string $line (optional)            On error it shows the line in which the error has been trigerred (use the "magic" constant __LINE__ as input parameter)
-     * @return resource                            The returned result from the query
-     * Note: The parameter $connection could be skipped. Here are examples of this method usage:
-     * Database::query($query);
-     * $result = Database::query($query);
-     * Database::query($query, $connection);
-     * $result = Database::query($query, $connection);
-     * The following ways for calling this method are obsolete:
-     * Database::query($query, __FILE__, __LINE__);
-     * $result = Database::query($query, __FILE__, __LINE__);
-     * Database::query($query, $connection, __FILE__, __LINE__);
-     * $result = Database::query($query, $connection, __FILE__, __LINE__);
+     * @author Julio Montoya
+     * @param string $query The SQL query
+     * @return \Doctrine\DBAL\Driver\Statement
      */
-    public static function query($query, $connection = null, $file = null, $line = null)
+    public static function query($query)
     {
-        // @todo change to read/write database
-        //$params = $app['dbs']['mysql_read']->getParams();
-        return self::$db->executeQuery($query);
+        $isWriteQuery = self::isWriteQuery($query);
+        var_dump($isWriteQuery);
+        if ($isWriteQuery) {
+            $connection = self::$connectionWrite;
+        } else {
+            $connection = self::$connectionRead;
+        }
+
+        return $connection->executeQuery($query);
 
         /*
         $use_default_connection = self::use_default_connection($connection);

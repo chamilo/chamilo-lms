@@ -183,33 +183,37 @@ $app['form.extensions'] = $app->share($app->extend('form.extensions', function (
 // Setting Doctrine service provider (DBAL)
 if (isset($app['configuration']['main_database'])) {
 
-    if (isset($app['configuration']['db.options'])) {
+    /* The database connection can be override if you set $app['configuration']['db.options'] in configuration.php */
+    $defaultDatabaseOptions = array(
+        'db_read' => array(
+            'driver' => 'pdo_mysql',
+            'host' => $app['configuration']['db_host'],
+            'dbname' => $app['configuration']['main_database'],
+            'user' => $app['configuration']['db_user'],
+            'password' => $app['configuration']['db_password'],
+            'charset'   => 'utf8',
+            //'priority' => '1'
+        ),
+        'db_write' => array(
+            'driver' => 'pdo_mysql',
+            'host' => $app['configuration']['db_host'],
+            'dbname' => $app['configuration']['main_database'],
+            'user' => $app['configuration']['db_user'],
+            'password' => $app['configuration']['db_password'],
+            'charset'   => 'utf8',
+            //'priority' => '2'
+        ),
+    );
 
+    // Could be set in the $_configuration array
+    if (isset($app['configuration']['db.options'])) {
+        $defaultDatabaseOptions = $app['configuration']['db.options'];
     }
 
     $app->register(
         new Silex\Provider\DoctrineServiceProvider(),
         array(
-            'dbs.options' => array(
-                'mysql_read' => array(
-                    'driver' => 'pdo_mysql',
-                    'host' => $app['configuration']['db_host'],
-                    'dbname' => $app['configuration']['main_database'],
-                    'user' => $app['configuration']['db_user'],
-                    'password' => $app['configuration']['db_password'],
-                    'charset'   => 'utf8',
-                    //'priority' => '1'
-                ),
-                'mysql_write' => array(
-                    'driver' => 'pdo_mysql',
-                    'host' => $app['configuration']['db_host'],
-                    'dbname' => $app['configuration']['main_database'],
-                    'user' => $app['configuration']['db_user'],
-                    'password' => $app['configuration']['db_password'],
-                    'charset'   => 'utf8',
-                    //'priority' => '2'
-                ),
-            )
+            'dbs.options' => $defaultDatabaseOptions
         )
     );
 
@@ -466,7 +470,7 @@ class ChamiloServiceProvider implements ServiceProviderInterface
 
         // Database
         $app['database'] = $app->share(function () use ($app) {
-            $db = new Database($app['db']);
+            $db = new Database($app['db'], $app['dbs']);
             return $db;
         });
     }

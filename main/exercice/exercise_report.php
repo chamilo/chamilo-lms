@@ -164,26 +164,34 @@ if (isset($_REQUEST['comments']) && $_REQUEST['comments'] == 'update' && ($is_al
     }
 
     for ($i = 0; $i < $loop_in_track; $i++) {
-        $my_marks = Database::escape_string($_POST['marks_'.$array_content_id_exe[$i]]);
-        $contain_comments = Database::escape_string($_POST['comments_'.$array_content_id_exe[$i]]);
+        $my_marks = null;
+        if (isset($_POST['marks_'.$array_content_id_exe[$i]])) {
+            $my_marks = Database::escape_string($_POST['marks_'.$array_content_id_exe[$i]]);
+        }
+
+        $contain_comments = null;
+        if (isset($_POST['comments_'.$array_content_id_exe[$i]])) {
+            $contain_comments = Database::escape_string($_POST['comments_'.$array_content_id_exe[$i]]);
+        }
+
         if (isset($contain_comments)) {
             $my_comments = Database::escape_string($_POST['comments_'.$array_content_id_exe[$i]]);
         } else {
             $my_comments = '';
         }
         $my_questionid = intval($array_content_id_exe[$i]);
-        $sql = "SELECT question from $TBL_QUESTIONS WHERE c_id = $course_id AND id = '$my_questionid'";
+        $sql = "SELECT question from $TBL_QUESTIONS WHERE c_id = $course_id AND iid = '$my_questionid'";
 
         $result = Database::query($sql);
         Database::result($result, 0, "question");
 
-        $query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks', teacher_comment = '$my_comments' WHERE question_id = ".$my_questionid." AND exe_id=".$id;
+        $query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks', teacher_comment = '$my_comments'
+                  WHERE question_id = ".$my_questionid." AND exe_id=".$id;
         Database::query($query);
 
         //Saving results in the track recording table
         $recording_changes = 'INSERT INTO '.$TBL_TRACK_ATTEMPT_RECORDING.' (exe_id, question_id, marks, insert_date, author, teacher_comment)
-                              VALUES ('."'$id','".$my_questionid."','$my_marks','".api_get_utc_datetime(
-        )."','".api_get_user_id()."'".',"'.$my_comments.'")';
+                              VALUES ('."'$id','".$my_questionid."','$my_marks','".api_get_utc_datetime()."','".api_get_user_id()."'".',"'.$my_comments.'")';
         Database::query($recording_changes);
     }
 

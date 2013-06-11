@@ -126,14 +126,14 @@ class Testcategory
             $category->setDescription($this->description);
 
             if (!empty($parent_id)) {
-                $parent = $app['orm.em']->find('\Entity\CQuizCategory', $parent_id);
+                $parent = $app['orm.ems']['db_write']->find('\Entity\CQuizCategory', $parent_id);
                 if ($parent) {
                     $category->setParent($parent);
                 }
             }
             $category->setCId($course_id);
-            $app['orm.em']->persist($category);
-            $app['orm.em']->flush();
+            $app['orm.ems']['db_write']->persist($category);
+            $app['orm.ems']['db_write']->flush();
 
             if ($category->getIid()) {
                 return $category->getIid();
@@ -152,7 +152,7 @@ class Testcategory
     {
         // @todo inject the app in the class
         global $app;
-        $category = $app['orm.em']->find('\Entity\CQuizCategory', $this->id);
+        $category = $app['orm.ems']['db_write']->find('\Entity\CQuizCategory', $this->id);
         if (!$category) {
             return false;
         }
@@ -171,7 +171,7 @@ class Testcategory
                 if ($this->id == $parentId) {
                     continue;
                 }
-                $parent = $app['orm.em']->find('\Entity\CQuizCategory', $parentId);
+                $parent = $app['orm.ems']['db_write']->find('\Entity\CQuizCategory', $parentId);
                 if ($parent) {
                     $category->setParent($parent);
                 }
@@ -181,8 +181,8 @@ class Testcategory
             $category->setParent(null);
         }
 
-        $app['orm.em']->persist($category);
-        $app['orm.em']->flush();
+        $app['orm.ems']['db_write']->persist($category);
+        $app['orm.ems']['db_write']->flush();
 
         if ($category->getIid()) {
             return $category->getIid();
@@ -200,7 +200,7 @@ class Testcategory
     public function removeCategory()
     {
         global $app;
-        $category = $app['orm.em']->find('\Entity\CQuizCategory', $this->id);
+        $category = $app['orm.ems']['db_write']->find('\Entity\CQuizCategory', $this->id);
         if (!$category) {
             return false;
         }
@@ -212,9 +212,10 @@ class Testcategory
             return false;
         }
 
-        $repo = $app['orm.em']->getRepository('Entity\CQuizCategory');
+        $repo = $app['orm.ems']['db_write']->getRepository('Entity\CQuizCategory');
         $repo->removeFromTree($category);
-        $app['orm.em']->clear(); // clear cached nodes
+        // clear cached nodes
+        $app['orm.ems']['db_write']->clear();
         return true;
     }
 

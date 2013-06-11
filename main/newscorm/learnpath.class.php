@@ -10518,7 +10518,7 @@ EOD;
     static function create_category($params)
     {
         global $app;
-        $em = $app['orm.em'];
+        $em = $app['orm.ems']['db_write'];
         $item = new Entity\CLpCategory();
         $item->setName($params['name']);
         $item->setCId($params['c_id']);
@@ -10529,7 +10529,7 @@ EOD;
     static function update_category($params)
     {
         global $app;
-        $em = $app['orm.em'];
+        $em = $app['orm.ems']['db_write'];
         $item = $em->find('Entity\CLpCategory', $params['id']);
         if ($item) {
             $item->setName($params['name']);
@@ -10542,7 +10542,7 @@ EOD;
     static function move_up_category($id)
     {
         global $app;
-        $em = $app['orm.em'];
+        $em = $app['orm.ems']['db_write'];
         $item = $em->find('Entity\CLpCategory', $id);
         if ($item) {
             $position = $item->getPosition() - 1;
@@ -10555,7 +10555,7 @@ EOD;
     static function move_down_category($id)
     {
         global $app;
-        $em = $app['orm.em'];
+        $em = $app['orm.ems']['db_write'];
         $item = $em->find('Entity\CLpCategory', $id);
         if ($item) {
             $position = $item->getPosition() + 1;
@@ -10616,7 +10616,7 @@ EOD;
     static function delete_category($id)
     {
         global $app;
-        $em = $app['orm.em'];
+        $em = $app['orm.ems']['db_write'];
         $item = $em->find('Entity\CLpCategory', $id);
         if ($item) {
 
@@ -10626,16 +10626,15 @@ EOD;
             $query->setParameter('catId', $item->getId());
             $lps = $query->getResult();
 
-            //Setting category = 0
+            // Setting category = 0.
             if ($lps) {
                 foreach ($lps as $lpItem) {
                     $lpItem->setCategoryId(0);
                 }
             }
 
-            //Removing category
+            // Removing category.
             $em->remove($item);
-
             $em->flush();
         }
     }

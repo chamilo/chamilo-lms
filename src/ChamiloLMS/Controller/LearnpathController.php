@@ -61,21 +61,21 @@ class LearnpathController
             $session = $app['orm.em']->getRepository('Entity\Session')->find($sessionId);
         }
 
-        //Find course
+        // Find course.
         $course = $app['orm.em']->getRepository('Entity\Course')->find($courseId);
 
-        //Getting subscribe users to the course
+        // Getting subscribe users to the course.
         $subscribedUsers = $app['orm.em']->getRepository('Entity\Course')->getSubscribedStudents($course);
         $subscribedUsers = $subscribedUsers->getQuery();
         $subscribedUsers = $subscribedUsers->execute();
 
-        //Getting all users in a nice format
+        // Getting all users in a nice format.
         $choices = array();
         foreach ($subscribedUsers as $user) {
             $choices[$user->getUserId()] = $user->getCompleteNameWithClasses();
         }
 
-        //Getting subscribed users to a LP
+        // Getting subscribed users to a LP.
         $subscribedUsersInLp = $app['orm.em']->getRepository('Entity\CItemProperty')->getUsersSubscribedToItem(
             'learnpath',
             $lpId,

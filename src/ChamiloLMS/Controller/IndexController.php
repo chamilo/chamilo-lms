@@ -46,7 +46,6 @@ class IndexController extends CommonController
         $result = \Database::fetch_object($result);
         var_dump($result);*/
 
-        //var_dump(\Database::get_client_info());
 
         /*$sql = "INSERT INTO user (username, lastname, firstname) VALUES ('111s11', '123', '123'); ";
         $a = \Database::query($sql);

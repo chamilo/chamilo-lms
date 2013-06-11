@@ -183,7 +183,8 @@ $app['form.extensions'] = $app->share($app->extend('form.extensions', function (
 // Setting Doctrine service provider (DBAL)
 if (isset($app['configuration']['main_database'])) {
 
-    /* The database connection can be override if you set $app['configuration']['db.options'] in configuration.php */
+    /* The database connection can be overwritten if you set $_configuration['db.options']
+       in configuration.php like this : */
     $defaultDatabaseOptions = array(
         'db_read' => array(
             'driver' => 'pdo_mysql',

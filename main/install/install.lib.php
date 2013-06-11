@@ -1858,10 +1858,7 @@ function display_database_settings_form(
                 <td colspan="2">
                     <?php echo $database_exists_text ?>
                     <div id="db_status" class="confirmation-message">
-                        Database host: <strong><?php echo Database::get_host_info(); ?></strong><br/>
-                        Database server version: <strong><?php echo Database::get_server_info(); ?></strong><br/>
-                        Database client version: <strong><?php echo Database::get_client_info(); ?></strong><br/>
-                        Database protocol version: <strong><?php echo Database::get_proto_info(); ?></strong>
+
 
                         <div style="clear:both;"></div>
                     </div>

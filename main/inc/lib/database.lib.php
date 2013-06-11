@@ -111,9 +111,9 @@ class Database
      * @param resource $connection (optional)    The database server connection, for detailed description see the method query().
      * @return int                                Returns the number of affected rows on success, and -1 if the last query failed.
      */
-    public static function affected_rows($connection = null)
+    public static function affected_rows(\Doctrine\DBAL\Driver\Statement $result = null)
     {
-        return $connection->rowCount();
+        return $result->rowCount();
         //return self::use_default_connection($connection) ? mysql_affected_rows() : mysql_affected_rows($connection);
     }
 
@@ -165,7 +165,7 @@ class Database
      * @param resource $result    The result from a call to sql_query (e.g. Database::query).
      * @return array            Returns an associative array that corresponds to the fetched row and moves the internal data pointer ahead.
      */
-    public static function fetch_assoc($result)
+    public static function fetch_assoc(\Doctrine\DBAL\Driver\Statement $result)
     {
         return $result->fetch(PDO::FETCH_ASSOC);
         //return mysql_fetch_assoc($result);
@@ -179,7 +179,7 @@ class Database
      * @return    object        Object of class StdClass or the required class, containing the query result row
      * @author    Yannick Warnier <yannick.warnier@dokeos.com>
      */
-    public static function fetch_object($result, $class = null, $params = null)
+    public static function fetch_object(\Doctrine\DBAL\Driver\Statement $result, $class = null, $params = null)
     {
         return $result->fetchObject();
 
@@ -194,7 +194,7 @@ class Database
      * @param resource        The result from a call to sql_query (see Database::query()).
      * @return array        Array of results as returned by php (mysql_fetch_row)
      */
-    public static function fetch_row($result)
+    public static function fetch_row(\Doctrine\DBAL\Driver\Statement $result)
     {
         return $result->fetch(PDO::FETCH_NUM);
         //return mysql_fetch_row($result);
@@ -206,7 +206,7 @@ class Database
      * Notes: Use this method if you are concerned about how much memory is being used for queries that return large result sets.
      * Anyway, all associated result memory is automatically freed at the end of the script's execution.
      */
-    public static function free_result($result)
+    public static function free_result(\Doctrine\DBAL\Driver\Statement $result)
     {
         $result->closeCursor();
         //return mysql_free_result($result);
@@ -277,7 +277,7 @@ class Database
      * @return integer        The number of rows contained in this result
      * @author Yannick Warnier <yannick.warnier@dokeos.com>
      **/
-    public static function num_rows($result)
+    public static function num_rows(\Doctrine\DBAL\Driver\Statement $result)
     {
         //var_dump($result->rowCount());
         return $result->rowCount();
@@ -292,10 +292,14 @@ class Database
      * @param    string        Optional field name or number
      * @return    mixed        One cell of the result, or FALSE on error
      */
-    public static function result( \Doctrine\DBAL\Driver\PDOStatement $resource, $row, $field = 0)
+    public static function result(\Doctrine\DBAL\Driver\Statement $resource, $row, $field = 0)
     {
-        $result = $resource->fetchAll(PDO::FETCH_BOTH);
-        return $result[$row][$field];
+        if ($resource->rowCount() > 0) {
+            $result = $resource->fetchAll(PDO::FETCH_BOTH);
+            return $result[$row][$field];
+        }
+
+        return null;
 
         /*return self::num_rows($resource) > 0 ? (!empty($field) ? mysql_result($resource, $row, $field) : mysql_result(
             $resource,
@@ -615,25 +619,27 @@ class Database
      */
     public static function insert($table_name, $attributes, $show_query = false)
     {
-        return self::$db->insert($table_name, $attributes);
-        /*
+        // return self::$db->insert($table_name, $attributes);
+
         if (empty($attributes) || empty($table_name)) {
             return false;
         }
+
         $filtred_attributes = array();
         foreach ($attributes as $key => $value) {
             $filtred_attributes[$key] = "'".self::escape_string($value)."'";
         }
-        $params = array_keys(
-            $filtred_attributes
-        ); //@todo check if the field exists in the table we should use a describe of that table
+
+        //@todo check if the field exists in the table we should use a describe of that table
+        $params = array_keys($filtred_attributes);
         $values = array_values($filtred_attributes);
         if (!empty($params) && !empty($values)) {
             $sql = 'INSERT INTO '.$table_name.' ('.implode(', ', $params).') VALUES ('.implode(', ', $values).')';
             $result = self::query($sql);
             //error_log($sql);
+
             if ($show_query) {
-                //var_dump($sql);
+
                 error_log($sql);
             }
             if (!$result) {
@@ -643,7 +649,7 @@ class Database
             return self::insert_id();
         }
 
-        return false;*/
+        return false;
     }
 
     /**

@@ -105,14 +105,15 @@ if (empty($modifyQuestion)) {
 if (empty($deleteQuestion)) {
     $deleteQuestion = isset($_GET['deleteQuestion'])?$_GET['deleteQuestion']:0;
 }
-if (empty($clone_question)) {
-    $clone_question = isset($_GET['clone_question'])?$_GET['clone_question']:0;
-}
+
+$clone_question = isset($_REQUEST['clone_question']) ? $_REQUEST['clone_question']:0;
+
 if (empty($questionId)) {
     $questionId = isset($_SESSION['questionId'])?$_SESSION['questionId']:0;
 }
 
-// Cleaning all incomplete attempts of the admin/teacher to avoid weird problems when changing the exercise settings, number of questions, etc
+/* Cleaning all incomplete attempts of the admin/teacher to avoid weird problems
+    when changing the exercise settings, number of questions, etc */
 
 delete_all_incomplete_attempts(api_get_user_id(), $exerciseId, api_get_course_int_id(), api_get_session_id());
 
@@ -121,7 +122,7 @@ $objExercise = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : 0;
 /** @var Question $objQuestion */
 $objQuestion = isset($_SESSION['objQuestion']) ? $_SESSION['objQuestion'] : 0;
 /** @var Answer $objAnswer */
-$objAnswer = isset($_SESSION['objAnswer'])?$_SESSION['objAnswer']:0;
+$objAnswer = isset($_SESSION['objAnswer']) ? $_SESSION['objAnswer'] : 0;
 
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
@@ -236,14 +237,15 @@ if (!empty($cancelQuestion)) {
     }
 }
 
-if (!empty($clone_question) && !empty($objExercise->id)) {
-    $old_question_obj = Question::read($clone_question, api_get_course_int_id());
 
+if (!empty($clone_question) && !empty($objExercise->id)) {
+
+    $old_question_obj = Question::read($clone_question, api_get_course_int_id());
     $old_question_obj->question = $old_question_obj->question.' - '.get_lang('Copy');
 
     $new_id = $old_question_obj->duplicate();
     $new_question_obj = Question::read($new_id, api_get_course_int_id());
-    $new_question_obj->addToList($exerciseId);
+    $new_question_obj->addToList($objExercise->id);
 
     // This should be moved to the duplicate function
     $new_answer_obj = new Answer($clone_question, null, $objExercise);

@@ -299,7 +299,7 @@ $app['twig'] = $app->share(
 
 if (is_writable($app['sys_temp_path'])) {
     if ($app['debug'] && $app['show_profiler']) {
-        // Adding symfony2 web profiler (memory, time, logs, etc)
+        // Adding Symfony2 web profiler (memory, time, logs, etc)
         $app->register(
             $p = new Silex\Provider\WebProfilerServiceProvider(),
             array(
@@ -307,6 +307,7 @@ if (is_writable($app['sys_temp_path'])) {
             )
         );
         $app->mount('/_profiler', $p);
+        // PHP errors for cool kids
         $app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
     }
 }

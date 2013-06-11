@@ -4,7 +4,7 @@
 /**
  * This is a code library for Chamilo.
  * It is included by default in every Chamilo file (through including the global.inc.php)
- *
+ * @todo transform this in a class!
  * @package chamilo.library
  */
 

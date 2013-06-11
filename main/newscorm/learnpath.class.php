@@ -446,7 +446,7 @@ class learnpath
         $previous = intval($previous);
         $type = Database::escape_string($type);
         $id = intval($id);
-        $max_time_allowed = Database::escape_string(htmlentities($max_time_allowed));
+        $max_time_allowed = Database::escape_string($max_time_allowed);
         if (empty ($max_time_allowed)) {
             $max_time_allowed = 0;
         }
@@ -589,8 +589,8 @@ class learnpath
 
         $res_ins = Database::query($sql_ins);
 
-        if ($res_ins > 0) {
-            $new_item_id = Database :: insert_id($res_ins);
+        if ($res_ins) {
+            $new_item_id = Database::insert_id();
 
             // Update the item that should come after the new item.
             $sql_update_next = "

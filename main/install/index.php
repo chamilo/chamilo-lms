@@ -90,12 +90,72 @@ function get_lang($variable) {
 
 
 // Adding commands
-/** @var \Knp\Provider\ConsoleServiceProvider\ConsoleApplication $console */
+/** @var Knp\Console\Application $console */
 $console = $app['console'];
-$console->add(new ChamiloLMS\Command\Database\InstallCommand());
-$console->add(new \Doctrine\DBAL\Tools\Console\Command\RunSqlCommand());
-$console->add(new \Doctrine\DBAL\Tools\Console\Command\ImportCommand());
-$console->add(new \Doctrine\DBAL\Migrations\Tools\Console\Command\MigrateCommand());
+
+$console->addCommands(
+    array(
+        // DBAL Commands
+        new \Doctrine\DBAL\Tools\Console\Command\RunSqlCommand(),
+        new \Doctrine\DBAL\Tools\Console\Command\ImportCommand(),
+
+
+        // Migrations Commands
+        new \Doctrine\DBAL\Migrations\Tools\Console\Command\DiffCommand(),
+        new \Doctrine\DBAL\Migrations\Tools\Console\Command\ExecuteCommand(),
+        new \Doctrine\DBAL\Migrations\Tools\Console\Command\GenerateCommand(),
+        new \Doctrine\DBAL\Migrations\Tools\Console\Command\MigrateCommand(),
+        new \Doctrine\DBAL\Migrations\Tools\Console\Command\StatusCommand(),
+        new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand(),
+
+        // Chamilo commands
+        new ChamiloLMS\Command\Database\UpgradeCommand(),
+        new ChamiloLMS\Command\Database\InstallCommand(),
+        new ChamiloLMS\Command\Database\StatusCommand(),
+        new ChamiloLMS\Command\Database\SetupCommand(),
+
+        // Chash commands
+        new Chash\Command\Database\RunSQLCommand(),
+        new Chash\Command\Database\DumpCommand(),
+        new Chash\Command\Database\RestoreCommand(),
+        new Chash\Command\Database\SQLCountCommand(),
+        new Chash\Command\Database\FullBackupCommand(),
+        new Chash\Command\Database\DropDatabaseCommand(),
+        new Chash\Command\Files\CleanTempFolderCommand(),
+        new Chash\Command\Files\CleanConfigFiles(),
+        new Chash\Command\Translation\ExportLanguageCommand(),
+        new Chash\Command\Translation\ImportLanguageCommand()
+    )
+);
+
+$helpers = array(
+    'configuration' => new Chash\Helpers\ConfigurationHelper()
+);
+
+$helperSet = $console->getHelperSet();
+foreach ($helpers as $name => $helper) {
+    $helperSet->set($helper, $name);
+}
+
+/*
+    // Chamilo commands
+    new ChamiloLMS\Command\Database\UpgradeCommand(),
+    new ChamiloLMS\Command\Database\InstallCommand(),
+    new ChamiloLMS\Command\Database\StatusCommand(),
+    new ChamiloLMS\Command\Database\SetupCommand(),
+
+    // Chash commands
+    new Chash\Command\Database\RunSQLCommand(),
+    new Chash\Command\Database\DumpCommand(),
+    new Chash\Command\Database\RestoreCommand(),
+    new Chash\Command\Database\SQLCountCommand(),
+    new Chash\Command\Database\FullBackupCommand(),
+    new Chash\Command\Database\DropDatabaseCommand(),
+    new Chash\Command\Files\CleanTempFolderCommand(),
+    new Chash\Command\Files\CleanConfigFiles(),
+    new Chash\Command\Translation\ExportLanguageCommand(),
+    new Chash\Command\Translation\ImportLanguageCommand()
+        */
 
 // Controllers
 

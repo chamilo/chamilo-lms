@@ -244,14 +244,14 @@ if (isset($app['configuration']['main_database'])) {
             'orm.auto_generate_proxies' => true,
             'orm.proxies_dir' => $app['db.orm.proxies_dir'],
             //'orm.proxies_namespace' => '\Doctrine\ORM\Proxy\Proxy',
-            'orm.ems.default' => 'mysql_read',
+            'orm.ems.default' => 'db_read',
             'orm.ems.options' => array(
-               'mysql_read' => array(
-                   'connection' => 'mysql_read',
+               'db_read' => array(
+                   'connection' => 'db_read',
                    'mappings' => $mappings,
                ),
-               'mysql_write' => array(
-                   'connection' => 'mysql_write',
+               'db_write' => array(
+                   'connection' => 'db_write',
                    'mappings' => $mappings,
                ),
             ),

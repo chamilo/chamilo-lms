@@ -627,17 +627,26 @@ if (isset($app['configuration']['main_database']) && isset($app['db.event_manage
 
     // Setting Doctrine2 extensions
     $timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
-    $app['db.event_manager']->addEventSubscriber($timestampableListener);
+    // $app['db.event_manager']->addEventSubscriber($timestampableListener);
+    $app['dbs.event_manager']['db_read']->addEventSubscriber($timestampableListener);
+    $app['dbs.event_manager']['db_write']->addEventSubscriber($timestampableListener);
 
     $sluggableListener = new \Gedmo\Sluggable\SluggableListener();
-    $app['db.event_manager']->addEventSubscriber($sluggableListener);
+    // $app['db.event_manager']->addEventSubscriber($sluggableListener);
+    $app['dbs.event_manager']['db_read']->addEventSubscriber($sluggableListener);
+    $app['dbs.event_manager']['db_write']->addEventSubscriber($sluggableListener);
+
 
     $sortableListener = new Gedmo\Sortable\SortableListener();
-    $app['db.event_manager']->addEventSubscriber($sortableListener);
+    // $app['db.event_manager']->addEventSubscriber($sortableListener);
+    $app['dbs.event_manager']['db_read']->addEventSubscriber($sortableListener);
+    $app['dbs.event_manager']['db_write']->addEventSubscriber($sortableListener);
 
     $treeListener = new \Gedmo\Tree\TreeListener();
     //$treeListener->setAnnotationReader($cachedAnnotationReader);
-    $app['db.event_manager']->addEventSubscriber($treeListener);
+    // $app['db.event_manager']->addEventSubscriber($treeListener);
+    $app['dbs.event_manager']['db_read']->addEventSubscriber($treeListener);
+    $app['dbs.event_manager']['db_write']->addEventSubscriber($treeListener);
 
     $loggableListener = new \Gedmo\Loggable\LoggableListener();
     $userInfo = api_get_user_info();
@@ -645,8 +654,9 @@ if (isset($app['configuration']['main_database']) && isset($app['db.event_manage
     if (isset($userInfo) && !empty($userInfo['username'])) {
         $loggableListener->setUsername($userInfo['username']);
     }
-
-    $app['db.event_manager']->addEventSubscriber($loggableListener);
+    //$app['db.event_manager']->addEventSubscriber($loggableListener);
+    $app['dbs.event_manager']['db_read']->addEventSubscriber($loggableListener);
+    $app['dbs.event_manager']['db_write']->addEventSubscriber($loggableListener);
 }
 
 // Fixes uses of $_course in the scripts.

@@ -291,8 +291,7 @@ if ($_GET['view']) {
                         Display::display_normal_message($is_being_edited, false);
 
                     } else {
-                         $escaped_content = mysql_real_escape_string($current_row['content']);
-                         Display::display_confirmation_message(restore_wikipage($current_row['page_id'], $current_row['reflink'], $current_row['title'], $escaped_content, $current_row['group_id'], $current_row['assignment'], $current_row['progress'], $current_row['version'], $last_row['version'], $current_row['linksto']).': <a href="index.php?cidReq='.$_course['id'].'&action=showpage&amp;title='.api_htmlentities(urlencode($last_row['reflink'])).'&session_id='.$last_row['session_id'].'&group_id='.$last_row['group_id'].'">'.api_htmlentities($last_row['title']).'</a>',false);
+                         Display::display_confirmation_message(restore_wikipage($current_row['page_id'], $current_row['reflink'], mysql_real_escape_string($current_row['title']), mysql_real_escape_string($current_row['content']), $current_row['group_id'], $current_row['assignment'], $current_row['progress'], $current_row['version'], $last_row['version'], $current_row['linksto']).': <a href="index.php?cidReq='.$_course['id'].'&action=showpage&amp;title='.api_htmlentities(urlencode($last_row['reflink'])).'&session_id='.$last_row['session_id'].'&group_id='.$last_row['group_id'].'">'.api_htmlentities($last_row['title']).'</a>',false);
                     }
                 }
             }

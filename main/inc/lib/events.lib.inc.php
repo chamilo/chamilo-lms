@@ -433,15 +433,13 @@ function create_event_exercice($exo_id)
  * @param	integer	Position
  * @return	boolean	Result of the insert query
  */
-function exercise_attempt($score, $answer, $question_id, $exe_id = NULL, $position, $exercise_id = 0, $nano = null)
+function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $exercise_id = 0, $nano = null)
 {
     global $debug, $learnpath_id, $learnpath_item_id;
     $score = Database::escape_string($score);
     $answer = Database::escape_string($answer);
     $question_id = Database::escape_string($question_id);
-    if (!empty($exe_id)) {
-      $exe_id = Database::escape_string($exe_id);
-    }
+    $exe_id = Database::escape_string($exe_id);
     $position = Database::escape_string($position);
     $now = api_get_utc_datetime();
     $user_id = api_get_user_id();
@@ -483,21 +481,10 @@ function exercise_attempt($score, $answer, $question_id, $exe_id = NULL, $positi
     $courseId = api_get_course_int_id();
     $session_id = api_get_session_id();
 
-    if (!empty($question_id) && !empty($user_id)) {
-      $attempt = array(
-        'user_id' => $user_id,
-        'question_id' => $question_id,
-        'answer' => $answer,
-        'marks' => $marks,
-        'c_id' => $courseId,
-        'session_id' => $session_id,
-        'position' => $position,
-        'tms' => $now,
-        'filename' => $file,
-      );
+    if (!empty($question_id) && !empty($exe_id) && !empty($user_id)) {
 
-      if (!empty($exe_id)) {
-        // Check if attempt exists
+        //Check if attempt exists
+
         $sql = "SELECT exe_id FROM $TBL_TRACK_ATTEMPT
                 WHERE c_id = $courseId AND
                       session_id = $session_id AND
@@ -512,34 +499,38 @@ function exercise_attempt($score, $answer, $question_id, $exe_id = NULL, $positi
             //The attempt already exist do not update use  update_event_exercise() instead
             return false;
         }
-        $attempt['exe_id'] = $exe_id;
-      }
 
-      if ($debug) {
-        error_log("Saving question attempt: ");
-        error_log(print_r($attempt, 1));
-      }
+        $sql = "INSERT INTO $TBL_TRACK_ATTEMPT (exe_id, user_id, question_id, answer, marks, c_id, session_id, position, tms, filename)
+                  VALUES (
+                  ".$exe_id.",
+                  ".$user_id.",
+                   '".$question_id."',
+                   '".$answer."',
+                   '".$score."',
+                   '".$courseId."',
+                   '".$session_id."',
+                   '".$position."',
+                   '".$now."',
+                   '".$file."'
+                )";
 
-      $attempt_id = Database::insert($TBL_TRACK_ATTEMPT, $attempt);
-
-      if (defined('ENABLED_LIVE_EXERCISE_TRACKING') && ($attempt_id)) {
-        $recording_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
         if ($debug) {
-          error_log("Saving e attempt recording ");
+            error_log("Saving question attempt: ");
+            error_log($sql);
         }
-        $attempt_recording = array(
-          'exe_id' => $attempt_id,
-          'question_id' => $question_id,
-          'marks' => $marks,
-          'insert_date' => api_get_utc_datetime(),
-          'author' => '',
-          'session_id' => api_get_session_id(),
-        );
-        Database::insert($recording_table, $attempt_recording);
-      }
-      return $attempt_id;
+
+        $res = Database::query($sql);
+        if (defined('ENABLED_LIVE_EXERCISE_TRACKING')) {
+            $recording_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+            if ($debug) {
+                error_log("Saving e attempt recording ");
+            }
+            $recording_changes = "INSERT INTO $recording_table (exe_id, question_id, marks, insert_date, author, session_id) VALUES ('$exe_id','$question_id','$score','".api_get_utc_datetime()."','', '".api_get_session_id()."') ";
+            Database::query($recording_changes);
+        }
+        return $res;
     } else {
-      return false;
+        return false;
     }
 }
 

@@ -168,9 +168,10 @@ $app['languages_file'] = array();
 $app['installed'] = $alreadyInstalled;
 $app['app.theme'] = 'chamilo';
 
-// Debug now relies in the configuration.php file
+// Developer options relies in the configuration.php file
 
 $app['debug'] = isset($_configuration['debug']) ? $_configuration['debug'] : false;
+$app['show_profiler'] = isset($_configuration['show_profiler']) ? $_configuration['show_profiler'] : false;
 
 // Loading $app settings depending of the debug option
 if ($app['debug']) {

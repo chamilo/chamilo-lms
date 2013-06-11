@@ -27,14 +27,13 @@
  */
 // Host
 $_configuration['db_host']     = '{DATABASE_HOST}';
-// username
+// Username
 $_configuration['db_user']     = '{DATABASE_USER}';
-// password
+// Password
 $_configuration['db_password'] = '{DATABASE_PASSWORD}';
-
+// Driver
 $_configuration['db_driver']   = '{DATABASE_DRIVER}';
-
-// chamilo database
+// Database name
 $_configuration['main_database'] = '{DATABASE_MAIN}';
 
 /** Directory settings */
@@ -145,11 +144,11 @@ $_configuration['login_as_forbidden_globally'] = false;
 //$_configuration['multiple_access_urls'] = true;
 
 /** Chamilo version settings */
+$_configuration['system_version']    = '{NEW_VERSION}';
+$_configuration['system_stable']     = NEW_VERSION_STABLE;
 $_configuration['software_name']     = 'Chamilo';
 $_configuration['software_url']	     = 'http://www.chamilo.org/';
 
+/** Chamilo dev settings */
 $_configuration['debug']             = false;
-
-// Version settings
-$_configuration['system_version']    = '{NEW_VERSION}';
-$_configuration['system_stable']     = NEW_VERSION_STABLE;
+$_configuration['show_profiler']     = false;

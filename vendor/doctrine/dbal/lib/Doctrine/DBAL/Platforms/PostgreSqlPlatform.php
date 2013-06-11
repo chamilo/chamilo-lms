@@ -254,7 +254,7 @@ class PostgreSqlPlatform extends AbstractPlatform
             list($schema, $table) = explode(".", $table);
             $schema = "'" . $schema . "'";
         } else {
-            $schema = "ANY(string_to_array((select setting from pg_catalog.pg_settings where name = 'search_path'),','))";
+            $schema = "ANY(string_to_array((select replace(setting,'\"\$user\"',user) from pg_catalog.pg_settings where name = 'search_path'),','))";
         }
         $whereClause .= "$classAlias.relname = '" . $table . "' AND $namespaceAlias.nspname = $schema";
 
@@ -269,8 +269,8 @@ class PostgreSqlPlatform extends AbstractPlatform
                     t.typname AS type,
                     format_type(a.atttypid, a.atttypmod) AS complete_type,
                     (SELECT t1.typname FROM pg_catalog.pg_type t1 WHERE t1.oid = t.typbasetype) AS domain_type,
-                    (SELECT format_type(t2.typbasetype, t2.typtypmod) FROM pg_catalog.pg_type t2
-                     WHERE t2.typtype = 'd' AND t2.typname = format_type(a.atttypid, a.atttypmod)) AS domain_complete_type,
+                    (SELECT format_type(t2.typbasetype, t2.typtypmod) FROM
+                      pg_catalog.pg_type t2 WHERE t2.typtype = 'd' AND t2.oid = a.atttypid) AS domain_complete_type,
                     a.attnotnull AS isnotnull,
                     (SELECT 't'
                      FROM pg_index
@@ -463,7 +463,7 @@ class PostgreSqlPlatform extends AbstractPlatform
         if ($sequence instanceof \Doctrine\DBAL\Schema\Sequence) {
             $sequence = $sequence->getQuotedName($this);
         }
-        return 'DROP SEQUENCE ' . $sequence;
+        return 'DROP SEQUENCE ' . $sequence . ' CASCADE';
     }
 
     /**

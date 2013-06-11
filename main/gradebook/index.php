@@ -731,7 +731,7 @@ $no_qualification = false;
 if ($category != '0') {
 	$cat = new Category();
 	$category_id   = intval($_GET['selectcat']);
-	$course_id     = Database::get_course_by_category($category_id);
+	$course_id     = CourseManager::get_course_by_category($category_id);
 	$show_message  = $cat->show_message_resource_delete($course_id);
 
 	if ($show_message == '') {

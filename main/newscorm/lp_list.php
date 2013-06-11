@@ -120,7 +120,7 @@ if (!empty($categories_temp)) {
     $categories = array_merge($categories, $categories_temp);
 }
 
-$test_mode = api_get_setting('server_type');
+$test_mode = $app['debug'];
 
 $lp_showed = false;
 $total = count($categories);
@@ -177,11 +177,10 @@ foreach ($categories as $item) {
         }
         echo '</tr>';
 
-    $test_mode      = api_get_setting('server_type');
         $max = count($flat_list);
         $counter = 0;
         $current = 0;
-    $autolunch_exists = false;
+        $autolunch_exists = false;
         foreach ($flat_list as $id => $details) {
 
             // Validation when belongs to a session

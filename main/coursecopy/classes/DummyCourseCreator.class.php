@@ -48,7 +48,7 @@ class DummyCourseCreator
 		$this->default_property['start_visible'] = '0000-00-00 00:00:00';
 		$this->default_property['end_visible'] =  '0000-00-00 00:00:00';
 
-		$course = Database::get_course_info($course_code);
+		$course = api_get_course_info($course_code);
 		$this->course = new Course();
 		$tmp_path = api_get_path(SYS_COURSE_PATH).$course['directory'].'/document/tmp_'.uniqid('');
 		@mkdir($tmp_path, api_get_permissions_for_new_directories(), true);

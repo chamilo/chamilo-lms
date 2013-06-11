@@ -16,7 +16,7 @@ include_once($__dir . '/../../inc/global.inc.php');
 
 require_once $__dir . 'config.php';
 
-if (api_get_setting('server_type') == 'test')
+if ($app['debug'])
 {
     include_once $__dir . '/test/shibboleth_test_helper.class.php';
     include_once $__dir . '/test/shibboleth_test.class.php';

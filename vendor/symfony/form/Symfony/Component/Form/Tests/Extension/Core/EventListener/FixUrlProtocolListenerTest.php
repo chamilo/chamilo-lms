@@ -11,8 +11,8 @@
 
 namespace Symfony\Component\Form\Tests\Extension\Core\EventListener;
 
+use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\Extension\Core\EventListener\FixUrlProtocolListener;
-use Symfony\Component\Form\Test\DeprecationErrorHandler;
 
 class FixUrlProtocolListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,10 +27,10 @@ class FixUrlProtocolListenerTest extends \PHPUnit_Framework_TestCase
     {
         $data = "www.symfony.com";
         $form = $this->getMock('Symfony\Component\Form\Test\FormInterface');
-        $event = DeprecationErrorHandler::getFormEvent($form, $data);
+        $event = new FormEvent($form, $data);
 
         $filter = new FixUrlProtocolListener('http');
-        $filter->onBind($event);
+        $filter->onSubmit($event);
 
         $this->assertEquals('http://www.symfony.com', $event->getData());
     }
@@ -39,10 +39,10 @@ class FixUrlProtocolListenerTest extends \PHPUnit_Framework_TestCase
     {
         $data = "http://www.symfony.com";
         $form = $this->getMock('Symfony\Component\Form\Test\FormInterface');
-        $event = DeprecationErrorHandler::getFormEvent($form, $data);
+        $event = new FormEvent($form, $data);
 
         $filter = new FixUrlProtocolListener('http');
-        $filter->onBind($event);
+        $filter->onSubmit($event);
 
         $this->assertEquals('http://www.symfony.com', $event->getData());
     }
@@ -51,10 +51,10 @@ class FixUrlProtocolListenerTest extends \PHPUnit_Framework_TestCase
     {
         $data = "ftp://www.symfony.com";
         $form = $this->getMock('Symfony\Component\Form\Test\FormInterface');
-        $event = DeprecationErrorHandler::getFormEvent($form, $data);
+        $event = new FormEvent($form, $data);
 
         $filter = new FixUrlProtocolListener('http');
-        $filter->onBind($event);
+        $filter->onSubmit($event);
 
         $this->assertEquals('ftp://www.symfony.com', $event->getData());
     }

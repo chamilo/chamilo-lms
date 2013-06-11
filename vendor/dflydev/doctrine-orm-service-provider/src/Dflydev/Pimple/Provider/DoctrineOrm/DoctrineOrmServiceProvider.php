@@ -91,11 +91,13 @@ class DoctrineOrmServiceProvider
                     $config = $app['orm.ems.config'][$name];
                 }
 
-                $ems[$name] = EntityManager::create(
-                    $app['dbs'][$options['connection']],
-                    $config,
-                    $app['dbs.event_manager'][$options['connection']]
-                );
+                $ems[$name] = $app->share(function ($ems) use ($app, $options, $config) {
+                    return EntityManager::create(
+                        $app['dbs'][$options['connection']],
+                        $config,
+                        $app['dbs.event_manager'][$options['connection']]
+                    );
+                });
             }
 
             return $ems;

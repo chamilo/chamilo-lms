@@ -343,7 +343,7 @@ function delete_user_fields($field_id) {
     // delete the fields
     $sql = "DELETE FROM $table_user_field WHERE id = '" . Database::escape_string($field_id) . "'";
     $result = Database::query($sql);
-    if (Database::affected_rows() == 1) {
+    if (Database::affected_rows($result) == 1) {
         // delete the field options
         $sql = "DELETE FROM $table_user_field_options WHERE field_id = '" . Database::escape_string($field_id) . "'";
         $result = Database::query($sql);

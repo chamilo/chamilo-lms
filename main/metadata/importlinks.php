@@ -134,7 +134,8 @@ if (isset($lcn))  // category_title
 
     if (count($lceids) && count($uceids))
     {
-        $mdStore->mds_delete_many($uceids); $ufos = Database::affected_rows();
+        $mdStore->mds_delete_many($uceids);
+        $ufos = Database::affected_rows();
     }
 
     $interbreadcrumb[]= array(

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Assetic package, an OpenSky project.
  *
- * (c) 2010-2012 OpenSky Project Inc
+ * (c) 2010-2013 OpenSky Project Inc
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,8 @@
 namespace Assetic\Filter;
 
 use Assetic\Asset\AssetInterface;
-use Assetic\Util\ProcessBuilder;
+use Assetic\Exception\FilterException;
+use Assetic\Factory\AssetFactory;
 
 /**
  * Runs assets through Sprockets.
@@ -24,7 +25,7 @@ use Assetic\Util\ProcessBuilder;
  *
  * @author Kris Wallsmith <kris.wallsmith@gmail.com>
  */
-class SprocketsFilter implements FilterInterface
+class SprocketsFilter extends BaseProcessFilter implements DependencyExtractorInterface
 {
     private $sprocketsLib;
     private $rubyBin;
@@ -101,7 +102,7 @@ EOF;
             $more
         ));
 
-        $pb = new ProcessBuilder(array(
+        $pb = $this->createProcessBuilder(array(
             $this->rubyBin,
             $input,
         ));
@@ -111,8 +112,8 @@ EOF;
         unlink($tmpAsset);
         unlink($input);
 
-        if (0 < $code) {
-            throw new \RuntimeException($proc->getErrorOutput());
+        if (0 !== $code) {
+            throw FilterException::fromProcess($proc)->setInput($asset->getContent());
         }
 
         $asset->setContent($proc->getOutput());
@@ -120,6 +121,12 @@ EOF;
 
     public function filterDump(AssetInterface $asset)
     {
+    }
+
+    public function getChildren(AssetFactory $factory, $content, $loadPath = null)
+    {
+        // todo
+        return array();
     }
 
     private function getHack(AssetInterface $asset)

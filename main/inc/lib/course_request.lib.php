@@ -107,7 +107,7 @@ class CourseRequestManager {
         if (!$result_sql) {
             return false;
         }
-        $last_insert_id = Database::get_last_insert_id();
+        $last_insert_id = Database::insert_id();
 
         // E-mail notifications.
 

@@ -95,7 +95,7 @@ if(isset($_SESSION['exerciseResultCoordinates']) && $from_db==0) {
 	}
 } else {
 	// get it from db
-	$tbl_track_e_hotspot = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+	$tbl_track_e_hotspot = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 	$sql = "SELECT hotspot_coordinate
             FROM $tbl_track_e_hotspot
             WHERE   hotspot_question_id = $questionId AND

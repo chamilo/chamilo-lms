@@ -250,27 +250,12 @@ function update_user_course_properties($user_id, $course_code, $properties)
 
 	$result = Database::query($sql);
 
-	if (Database::affected_rows() > 0)
-	{
+	if (Database::affected_rows($result) > 0) {
 		return true;
-	}
-	else
-	{
+	} else {
 		return false;
 	}
 }
-
-
-
-
-
-/*----------------------------------------
-     CATEGORIES CONTENT TREATMENT
- --------------------------------------*/
-
-
-
-
 
 /**
  * fill a bloc for information category

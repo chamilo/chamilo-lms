@@ -175,7 +175,9 @@ if (is_array($a_courses)) {
 
 		$rs = Database::query($sql);
 		$users = array();
-		while ($row = Database::fetch_array($rs)) { $users[] = $row['user_id']; }
+		while ($row = Database::fetch_array($rs)) {
+            $users[] = $row['user_id'];
+        }
 
 		if (count($users) > 0) {
 			$nb_students_in_course = count($users);
@@ -202,7 +204,7 @@ if (is_array($a_courses)) {
 		}
 
 		$tematic_advance_progress = 0;
-		$thematic = new Thematic();
+		$thematic = new Thematic($course);
 		$tematic_advance = $thematic->get_total_average_of_thematic_advances($course_code, $id_session);
 
 		if (!empty($tematic_advance)) {

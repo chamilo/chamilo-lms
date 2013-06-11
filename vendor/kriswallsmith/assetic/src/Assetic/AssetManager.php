@@ -3,7 +3,7 @@
 /*
  * This file is part of the Assetic package, an OpenSky project.
  *
- * (c) 2010-2012 OpenSky Project Inc
+ * (c) 2010-2013 OpenSky Project Inc
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -29,7 +29,7 @@ class AssetManager
      *
      * @return AssetInterface The asset
      *
-     * @throws InvalidArgumentException If there is no asset by that name
+     * @throws \InvalidArgumentException If there is no asset by that name
      */
     public function get($name)
     {
@@ -57,6 +57,8 @@ class AssetManager
      *
      * @param string         $name  The asset name
      * @param AssetInterface $asset The asset
+     *
+     * @throws \InvalidArgumentException If the asset name is invalid
      */
     public function set($name, AssetInterface $asset)
     {
@@ -75,5 +77,13 @@ class AssetManager
     public function getNames()
     {
         return array_keys($this->assets);
+    }
+
+    /**
+     * Clears all assets.
+     */
+    public function clear()
+    {
+        $this->assets = array();
     }
 }

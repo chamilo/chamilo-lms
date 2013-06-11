@@ -32,7 +32,7 @@ class UserPortalController extends CommonController
 
         //Abort request because the user is not allowed here - @todo use filters
         if ($app['allowed'] == false) {
-            return $app->abort(403);
+            return $app->abort(403, 'Not allowed');
         }
 
         // Check if a user is enrolled only in one course for going directly to the course after the login.
@@ -44,30 +44,30 @@ class UserPortalController extends CommonController
         $items = null;
         $type = str_replace('/', '', $type);
 
-        /** var $pageController \PageController */
+        /** @var \PageController $pageController */
         $pageController = $app['page_controller'];
 
         switch ($type) {
             case 'sessions':
-                $items = $app['page_controller']->returnSessions(api_get_user_id(), $filter, $page);
+                $items = $pageController->returnSessions(api_get_user_id(), $filter, $page);
                 break;
             case 'sessioncategories':
-                $items = $app['page_controller']->returnSessionsCategories(api_get_user_id(), $filter, $page);
+                $items = $pageController->returnSessionsCategories(api_get_user_id(), $filter, $page);
                 break;
             case 'courses':
-                $items = $app['page_controller']->returnCourses(api_get_user_id(), $filter, $page);
+                $items = $pageController->returnCourses(api_get_user_id(), $filter, $page);
                 break;
             case 'mycoursecategories':
-                $items = $app['page_controller']->returnMyCourseCategories(api_get_user_id(), $filter, $page);
+                $items = $pageController->returnMyCourseCategories(api_get_user_id(), $filter, $page);
                 break;
             case 'specialcourses':
-                $items = $app['page_controller']->returnSpecialCourses(api_get_user_id(), $filter, $page);
+                $items = $pageController->returnSpecialCourses(api_get_user_id(), $filter, $page);
                 break;
         }
 
         //Show the chamilo mascot
         if (empty($items) && empty($filter)) {
-            $app['page_controller']->return_welcome_to_course_block($app['template']);
+            $pageController->return_welcome_to_course_block($app['template']);
         }
 
         /*
@@ -78,16 +78,16 @@ class UserPortalController extends CommonController
         };
         $app['knp_menu.menus'] = array('main' => 'my_main_menu');*/
         $app['template']->assign('content', $items);
-        $app['page_controller']->getSectionCourseBlock();
-        $app['page_controller']->return_profile_block();
-        $app['page_controller']->return_user_image_block();
-        $app['page_controller']->return_course_block($filter);
-        $app['page_controller']->return_reservation_block();
-        $app['page_controller']->returnNavigationLinks($app['template']->getNavigationLinks());
+        $pageController->getSectionCourseBlock();
+        $pageController->return_profile_block();
+        $pageController->return_user_image_block();
+        $pageController->return_course_block($filter);
+        $pageController->return_reservation_block();
+        $pageController->returnNavigationLinks($app['template']->getNavigationLinks());
 
-        $app['template']->assign('search_block', $app['page_controller']->return_search_block());
-        $app['template']->assign('classes_block', $app['page_controller']->return_classes_block());
-        $app['page_controller']->return_skills_links();
+        $app['template']->assign('search_block', $pageController->return_search_block());
+        $app['template']->assign('classes_block', $pageController->return_classes_block());
+        $pageController->return_skills_links();
 
         // Deleting the session_id.
         Session::erase('session_id');
@@ -154,7 +154,7 @@ class UserPortalController extends CommonController
         if (!empty($_POST['submitAuth'])) {
             // The user has been already authenticated, we are now to find the last login of the user.
             if (!empty($this->user_id)) {
-                $track_login_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+                $track_login_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
                 $sql_last_login = "SELECT login_date
                                     FROM $track_login_table
                                     WHERE login_user_id = '".$this->user_id."'

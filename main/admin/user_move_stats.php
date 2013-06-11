@@ -118,10 +118,10 @@ if (isset($_REQUEST['load_ajax'])) {
 
                 //Begin with the import process
 
-                $TABLETRACK_EXERCICES       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-                $TBL_TRACK_ATTEMPT          = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-                $TBL_TRACK_E_COURSE_ACCESS  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-                $TBL_TRACK_E_LAST_ACCESS    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+                $TABLETRACK_EXERCICES       = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+                $TBL_TRACK_ATTEMPT          = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+                $TBL_TRACK_E_COURSE_ACCESS  = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+                $TBL_TRACK_E_LAST_ACCESS    = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
 
                 $TBL_LP_VIEW                = Database::get_course_table(TABLE_LP_VIEW);
                 $TBL_NOTEBOOK               = Database::get_course_table(TABLE_NOTEBOOK);
@@ -588,7 +588,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
  </script>';
 
 function get_courses_list_by_user_id_based_in_exercises($user_id) {
-    $TABLETRACK_EXERCICES       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $TABLETRACK_EXERCICES       = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $user_id = intval($user_id);
     $sql = "SELECT DISTINCT exe_user_id, c_id, session_id as id_session
     FROM $TABLETRACK_EXERCICES WHERE exe_user_id = $user_id

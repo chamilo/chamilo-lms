@@ -28,16 +28,11 @@ class Login
      */
     public static function get_user_account_list($user, $reset = false, $by_username = false)
     {
-        global $_configuration;
-        //$portal_url = $_configuration['root_web'];
         $portal_url = api_get_path(WEB_PATH);
 
-        if ($_configuration['multiple_access_urls']) {
-            $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1) {
-                $url = api_get_access_url($access_url_id);
-                $portal_url = $url['url'];
-            }
+        if (api_is_multiple_url_enabled()) {
+            $url = api_get_current_access_url_info();
+            $portal_url = $url['url'];
         }
 
         if ($reset) {
@@ -228,7 +223,7 @@ class Login
                 // a uid is given (log in succeeded)
                 $user_table = Database::get_main_table(TABLE_MAIN_USER);
                 $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
-                $track_e_login = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+                $track_e_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
                 $sql = "SELECT user.*, a.user_id is_admin, UNIX_TIMESTAMP(login.login_date) login_date
                         FROM $user_table
@@ -458,7 +453,7 @@ class Login
                     }
 
                     if ($save_course_access) {
-                        $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+                        $course_tracking_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
                         /*
                          * When $_configuration['session_lifetime'] is too big 100 hours (in order to let users take exercises with no problems)

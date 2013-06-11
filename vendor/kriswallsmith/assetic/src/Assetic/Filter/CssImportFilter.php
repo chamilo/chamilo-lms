@@ -3,7 +3,7 @@
 /*
  * This file is part of the Assetic package, an OpenSky project.
  *
- * (c) 2010-2012 OpenSky Project Inc
+ * (c) 2010-2013 OpenSky Project Inc
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,13 +14,14 @@ namespace Assetic\Filter;
 use Assetic\Asset\AssetInterface;
 use Assetic\Asset\FileAsset;
 use Assetic\Asset\HttpAsset;
+use Assetic\Factory\AssetFactory;
 
 /**
  * Inlines imported stylesheets.
  *
  * @author Kris Wallsmith <kris.wallsmith@gmail.com>
  */
-class CssImportFilter extends BaseCssFilter
+class CssImportFilter extends BaseCssFilter implements DependencyExtractorInterface
 {
     private $importFilter;
 
@@ -102,5 +103,11 @@ class CssImportFilter extends BaseCssFilter
 
     public function filterDump(AssetInterface $asset)
     {
+    }
+
+    public function getChildren(AssetFactory $factory, $content, $loadPath = null)
+    {
+        // todo
+        return array();
     }
 }

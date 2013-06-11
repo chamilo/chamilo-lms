@@ -58,10 +58,12 @@ class PostgreSqlSchemaManager extends AbstractSchemaManager
     {
         $params = $this->_conn->getParams();
         $schema = explode(",", $this->_conn->fetchColumn('SHOW search_path'));
+
         if (isset($params['user'])) {
             $schema = str_replace('"$user"', $params['user'], $schema);
         }
-        return $schema;
+
+        return array_map('trim', $schema);
     }
 
     /**
@@ -254,6 +256,10 @@ class PostgreSqlSchemaManager extends AbstractSchemaManager
             $tableColumn['sequence'] = $matches[1];
             $tableColumn['default'] = null;
             $autoincrement = true;
+        }
+
+        if (preg_match("/^'(.*)'::.*$/", $tableColumn['default'], $matches)) {
+            $tableColumn['default'] = $matches[1];
         }
 
         if (stripos($tableColumn['default'], 'NULL') === 0) {

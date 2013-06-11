@@ -87,9 +87,9 @@ class ExerciseResult
 
     	$TBL_EXERCISES          = Database::get_course_table(TABLE_QUIZ_TEST);
 		$TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
-		$TBL_TRACK_EXERCISES    	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-		$TBL_TRACK_HOTPOTATOES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-        $TBL_TRACK_ATTEMPT_RECORDING = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+		$TBL_TRACK_EXERCISES    	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+		$TBL_TRACK_HOTPOTATOES	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+        $TBL_TRACK_ATTEMPT_RECORDING = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 
     	$cid             = api_get_course_id();
         $course_id       = api_get_course_int_id();
@@ -115,7 +115,7 @@ class ExerciseResult
                         steps_counter as exstep,
                         exe_user_id as excruid,
                         te.exe_duration as duration
-                FROM $TBL_EXERCISES  AS ce INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.id) INNER JOIN
+                FROM $TBL_EXERCISES  AS ce INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.iid) INNER JOIN
                      $TBL_USER  AS user ON (user.user_id = exe_user_id)
                 WHERE   ce.c_id = $course_id AND
                         te.status != 'incomplete' AND
@@ -150,7 +150,7 @@ class ExerciseResult
                     exe_user_id as excruid,
                     te.exe_duration as duration,
                     ce.results_disabled as exdisabled
-                        FROM $TBL_EXERCISES  AS ce INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.id)
+                        FROM $TBL_EXERCISES  AS ce INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.iid)
                         INNER JOIN $TBL_USER  AS user ON (user.user_id = exe_user_id)
                         WHERE   ce.c_id = $course_id AND
                                 te.status != 'incomplete' AND
@@ -438,7 +438,7 @@ class ExerciseResult
 		foreach ($this->results as $row) {
 			$column = 0;
 
-            if ($with_column_user) {               
+            if ($with_column_user) {
 
                 if (api_is_western_name_order()) {
                     $worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset));

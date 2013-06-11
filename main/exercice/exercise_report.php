@@ -44,14 +44,15 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_drh();
 $is_tutor = api_is_allowed_to_edit(true);
 
 $TBL_QUESTIONS = Database :: get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_TRACK_EXERCICES = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-$TBL_TRACK_ATTEMPT = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-$TBL_TRACK_ATTEMPT_RECORDING = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+$TBL_TRACK_EXERCICES = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TBL_TRACK_ATTEMPT = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+$TBL_TRACK_ATTEMPT_RECORDING = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 $TBL_LP_ITEM_VIEW = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 
 $course_id = api_get_course_int_id();
 $exercise_id = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : null;
 $filter_user = isset($_REQUEST['filter_by_user']) ? intval($_REQUEST['filter_by_user']) : null;
+$gradebook = isset($_REQUEST['gradebook']) ? Security::remove_XSS($_REQUEST['gradebook']) : null;
 
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 
@@ -63,6 +64,7 @@ if (!$is_allowedToEdit) {
     api_not_allowed(true);
 }
 
+// @todo check if the $parameters is used
 if (!empty($exercise_id)) {
     $parameters['exerciseId'] = $exercise_id;
 }
@@ -77,10 +79,9 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
         if (isset($_REQUEST['extra_data']) && $_REQUEST['extra_data'] == 1) {
             $load_extra_data = true;
         }
-
         require_once 'exercise_result.class.php';
         switch ($_GET['export_format']) {
-            case 'xls' :
+            case 'xls':
                 $export = new ExerciseResult();
                 $export->exportCompleteReportXLS(
                     $documentPath,
@@ -92,8 +93,8 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
                 );
                 exit;
                 break;
-            case 'csv' :
-            default :
+            case 'csv':
+            default:
                 $export = new ExerciseResult();
                 $export->exportCompleteReportCSV(
                     $documentPath,
@@ -112,10 +113,7 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
 }
 
 //Send student email @todo move this code in a class, library
-if (isset($_REQUEST['comments']) && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_GET['exeid'] == strval(
-    intval($_GET['exeid'])
-)
-) {
+if (isset($_REQUEST['comments']) && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_GET['exeid'] == strval(intval($_GET['exeid']))) {
     $id = intval($_GET['exeid']); //filtered by post-condition
     $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
     if (empty($track_exercise_info)) {
@@ -164,26 +162,34 @@ if (isset($_REQUEST['comments']) && $_REQUEST['comments'] == 'update' && ($is_al
     }
 
     for ($i = 0; $i < $loop_in_track; $i++) {
-        $my_marks = Database::escape_string($_POST['marks_'.$array_content_id_exe[$i]]);
-        $contain_comments = Database::escape_string($_POST['comments_'.$array_content_id_exe[$i]]);
+        $my_marks = null;
+        if (isset($_POST['marks_'.$array_content_id_exe[$i]])) {
+            $my_marks = Database::escape_string($_POST['marks_'.$array_content_id_exe[$i]]);
+        }
+
+        $contain_comments = null;
+        if (isset($_POST['comments_'.$array_content_id_exe[$i]])) {
+            $contain_comments = Database::escape_string($_POST['comments_'.$array_content_id_exe[$i]]);
+        }
+
         if (isset($contain_comments)) {
             $my_comments = Database::escape_string($_POST['comments_'.$array_content_id_exe[$i]]);
         } else {
             $my_comments = '';
         }
         $my_questionid = intval($array_content_id_exe[$i]);
-        $sql = "SELECT question from $TBL_QUESTIONS WHERE c_id = $course_id AND id = '$my_questionid'";
+        $sql = "SELECT question from $TBL_QUESTIONS WHERE c_id = $course_id AND iid = '$my_questionid'";
 
         $result = Database::query($sql);
         Database::result($result, 0, "question");
 
-        $query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks', teacher_comment = '$my_comments' WHERE question_id = ".$my_questionid." AND exe_id=".$id;
+        $query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks', teacher_comment = '$my_comments'
+                  WHERE question_id = ".$my_questionid." AND exe_id=".$id;
         Database::query($query);
 
         //Saving results in the track recording table
         $recording_changes = 'INSERT INTO '.$TBL_TRACK_ATTEMPT_RECORDING.' (exe_id, question_id, marks, insert_date, author, teacher_comment)
-                              VALUES ('."'$id','".$my_questionid."','$my_marks','".api_get_utc_datetime(
-        )."','".api_get_user_id()."'".',"'.$my_comments.'")';
+                              VALUES ('."'$id','".$my_questionid."','$my_marks','".api_get_utc_datetime()."','".api_get_user_id()."'".',"'.$my_comments.'")';
         Database::query($recording_changes);
     }
 
@@ -249,35 +255,20 @@ if (isset($origin) && $origin == 'learnpath') {
     if ($is_allowedToEdit) {
         // the form
         if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
-            $actions .= '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'">'.Display :: return_icon(
-                'back.png',
-                get_lang('GoBackToQuestionList'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).'</a>';
-            $actions .= '<a href="live_stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon(
-                'activity_monitor.png',
-                get_lang('LiveResults'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).'</a>';
-            $actions .= '<a href="stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon(
-                'statistics.png',
-                get_lang('ReportByQuestion'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).'</a>';
-            $actions .= '<a id="export_opener" href="'.api_get_self(
-            ).'?export_report=1&hotpotato_name='.Security::remove_XSS($_GET['path']).'&exerciseId='.intval(
-                $_GET['exerciseId']
-            ).'" >'.
+            // @todo check if $path is used
+            $path = isset($_GET['path']) ? Security::remove_XSS($_GET['path']) : null;
+
+            $actions .= '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'">'.Display :: return_icon('back.png',get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
+            $actions .= '<a href="live_stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon('activity_monitor.png',get_lang('LiveResults'), '', ICON_SIZE_MEDIUM ).'</a>';
+            $actions .= '<a href="stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon('statistics.png',get_lang('ReportByQuestion'), '', ICON_SIZE_MEDIUM).'</a>';
+            $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&hotpotato_name='.$path.'&exerciseId='.intval($_GET['exerciseId']).'" >'.
                 Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
         }
     }
 }
 
 //Deleting an attempt
-if (($is_allowedToEdit || $is_tutor || api_is_coach()) && $_GET['delete'] == 'delete' && !empty ($_GET['did']) && $locked == false
+if (($is_allowedToEdit || $is_tutor || api_is_coach()) && isset($_GET['delete']) && $_GET['delete'] == 'delete' && !empty ($_GET['did']) && $locked == false
 ) {
     $exe_id = intval($_GET['did']);
     if (!empty($exe_id)) {

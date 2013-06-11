@@ -149,9 +149,9 @@ switch ($action) {
             $sidx = 1;
         }
 
-        $track_exercise        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercise        = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $user_table            = Database::get_main_table(TABLE_MAIN_USER);
-        $track_attempt         = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $track_attempt         = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         $minutes        = intval($_REQUEST['minutes']);
         $now            = time() - 60*$minutes; //1 hour

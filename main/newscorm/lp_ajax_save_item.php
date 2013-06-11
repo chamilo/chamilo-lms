@@ -251,7 +251,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
 
     if (!isset($_SESSION['login_as'])) {
         // If $_SESSION['login_as'] is set, then the user is an admin logged as the user.
-        $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
         $sql_last_connection = "SELECT login_id, login_date
             FROM $tbl_track_login

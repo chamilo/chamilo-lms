@@ -3,42 +3,42 @@
 namespace CourseDescription;
 
 /**
- * Object Model for the "Course Description" database table. Allows to 
- * 
+ * Object Model for the "Course Description" database table. Allows to
+ *
  *      - query database
  *      - create/insert new course descriptions
  *      - update/edit course descriptions
  *      - delete course descriptions
- * 
- * Course descriptions used to provide descriptions for course/sessions. 
+ *
+ * Course descriptions used to provide descriptions for course/sessions.
  * A course/session can have several descriptions associated to it from various types.
  * Course descriptions are primarily made primarily of
- * 
+ *
  *      - a title
  *      - some content
  *      - a type (for ex: info, objectives, etc)
- * 
+ *
  * Usage:
- *      
+ *
  *      Create
- * 
+ *
  *      $des = new CourseDescription();
  *      $des->set_title('...');
  *      $des->set_content('...');
  *      $des->set_description_type(...);
  *      $des->insert();
- * 
+ *
  *      Update
- * 
+ *
  *      $des = CourseDescription::get_by_id(..., ...);
  *      $des->set_title('...');
  *      $des->update();
- * 
+ *
  *      Delete
- * 
+ *
  *      $des = CourseDescription::get_by_id(..., ...);
  *      $des->delete();
- * 
+ *
  * @package chamilo.course_description
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Laurent Opprecht <laurent@opprecht.info> for the University of Geneva
@@ -49,8 +49,8 @@ class CourseDescription
 
     /**
      * Return the repository.
-     * 
-     * @return \CourseDescription\CourseDescriptionRepository 
+     *
+     * @return \CourseDescription\CourseDescriptionRepository
      */
     public static function repository()
     {
@@ -59,7 +59,7 @@ class CourseDescription
 
     /**
      * Returns the list of all available types
-     * 
+     *
      * @return array
      */
     public static function get_types()
@@ -69,7 +69,7 @@ class CourseDescription
 
 //    /**
 //     * Deprecated (still used by web services)
-//     * 
+//     *
 //     * @param int Course id
 //     * @deprecated use get_descriptions_by_course
 //     * @return array Array of CourseDescriptions
@@ -153,7 +153,7 @@ class CourseDescription
 
 //    /**
 //     * Insert the course description object into the course_description table.
-//     * 
+//     *
 //     * @return bool True on success, false on failure
 //     */
 //    public function insert()
@@ -168,11 +168,11 @@ class CourseDescription
 //
 //        $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 //        $sql = "INSERT IGNORE INTO $table SET
-//				c_id 				= $course_id, 
-//				description_type	= $description_type, 
-//				title 				= '$title', 
-//				content 			= '$content', 
-//				progress 			= $progress, 
+//				c_id 				= $course_id,
+//				description_type	= $description_type,
+//				title 				= '$title',
+//				content 			= '$content',
+//				progress 			= $progress,
 //				session_id          = $session_id";
 //
 //        Database::query($sql);
@@ -184,7 +184,7 @@ class CourseDescription
 //        $this->id = $id;
 //
 //        /**
-//         * @todo: course info should come from c_id 
+//         * @todo: course info should come from c_id
 //         */
 //        api_item_property_update(api_get_course_info(), TOOL_COURSE_DESCRIPTION, $id, 'CourseDescriptionAdded', api_get_user_id());
 //
@@ -192,13 +192,13 @@ class CourseDescription
 //    }
 //    /**
 //     * Insert a row like history inside track_e_item_property table
-//     * 
+//     *
 //     * @param 	int 	description type
 //     * @return  int		affected rows
 //     */
 //    public function insert_stats($description_type)
 //    {
-//        $tbl_stats_item_property = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
+//        $tbl_stats_item_property = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
 //        $description_id = $this->get_id_by_description_type($description_type);
 //        $course_id = api_get_real_course_id();
 //        $course_code = api_get_course_id();
@@ -219,7 +219,7 @@ class CourseDescription
 //    }
 //    /**
 //     * Update a course description object to the database.
-//     * 
+//     *
 //     * @return bool True on success, false on failure.
 //     */
 //    public function update()
@@ -234,11 +234,11 @@ class CourseDescription
 //        $session_id = $this->get_session_id();
 //
 //        $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-//        $sql = "UPDATE $table SET  
-//						title       = '$title', 
-//						content     = '$content', 
-//						progress    = $progress 
-//				WHERE 	id          = $id AND 
+//        $sql = "UPDATE $table SET
+//						title       = '$title',
+//						content     = '$content',
+//						progress    = $progress
+//				WHERE 	id          = $id AND
 //						c_id = $course_id ";
 //
 //        Database::query($sql);
@@ -247,7 +247,7 @@ class CourseDescription
 //        if ($result) {
 //            //insert into item_property
 //            /**
-//             * @todo: course info should come from c_id 
+//             * @todo: course info should come from c_id
 //             */
 //            api_item_property_update(api_get_course_info(), TOOL_COURSE_DESCRIPTION, $this->id, 'CourseDescriptionUpdated', api_get_user_id());
 //        }
@@ -255,7 +255,7 @@ class CourseDescription
 //    }
 //    /**
 //     * Delete a course description object from the database.
-//     * 
+//     *
 //     * @return bool True on success false on failure
 //     */
 //    public function delete()
@@ -269,7 +269,7 @@ class CourseDescription
 //        $result = (bool) Database::affected_rows();
 //        if ($result) {
 //            /**
-//             * @todo: should get course info from $this->c_id 
+//             * @todo: should get course info from $this->c_id
 //             */
 //            api_item_property_update(api_get_course_info(), TOOL_COURSE_DESCRIPTION, $this->id, 'CourseDescriptionDeleted', api_get_user_id());
 //        }
@@ -341,8 +341,8 @@ class CourseDescription
 //    }
 
     /**
-     * The course id. 
-     * 
+     * The course id.
+     *
      * @see get_course() property to get access to the course object
      * @return int
      */
@@ -361,7 +361,7 @@ class CourseDescription
 
     /**
      * The id of the object.
-     * 
+     *
      * @return int
      */
     public function get_id()
@@ -370,7 +370,7 @@ class CourseDescription
     }
 
     /**
-     * 
+     *
      * @return void
      */
     public function set_id($value)
@@ -380,7 +380,7 @@ class CourseDescription
 
     /**
      * The title of the course description.
-     * 
+     *
      * @return string
      */
     public function get_title()
@@ -389,7 +389,7 @@ class CourseDescription
     }
 
     /**
-     * 
+     *
      * @return void
      */
     public function set_title($title)
@@ -407,7 +407,7 @@ class CourseDescription
     }
 
     /**
-     * 
+     *
      * @return void
      */
     public function set_content($content)
@@ -417,7 +417,7 @@ class CourseDescription
 
     /**
      * The session id the object is associated with.
-     * 
+     *
      * @return int
      */
     public function get_session_id()
@@ -426,7 +426,7 @@ class CourseDescription
     }
 
     /**
-     * 
+     *
      * @return void
      */
     public function set_session_id($value)
@@ -437,7 +437,7 @@ class CourseDescription
     /**
      * The type of the course description. Should match one of the id returns
      * by CourseDescription::get_types().
-     * 
+     *
      * @return int
      */
     public function get_description_type()
@@ -446,7 +446,7 @@ class CourseDescription
     }
 
     /**
-     * 
+     *
      * @return void
      */
     public function set_description_type($value)
@@ -464,7 +464,7 @@ class CourseDescription
     }
 
     /**
-     * 
+     *
      * @return void
      */
     public function set_progress($value)
@@ -474,8 +474,8 @@ class CourseDescription
 
     /**
      * Return one type from its id
-     * 
-     * @return \CourseDescription\CourseDescriptionType 
+     *
+     * @return \CourseDescription\CourseDescriptionType
      */
     public function get_type()
     {
@@ -504,7 +504,7 @@ class CourseDescription
 
     /**
      * The item property this object is associated with.
-     * 
+     *
      * @return \Model\ItemProperty
      */
     public function get_item_property()
@@ -521,12 +521,12 @@ class CourseDescription
 
 //
 ///**
-// * The common routes (urls) for course description objects: 
-// * 
+// * The common routes (urls) for course description objects:
+// *
 // *      - create new course description
 // *      - edit course description
-// *      - delete course description 
-// * 
+// *      - delete course description
+// *
 // * @author Laurent Opprecht <laurent@opprecht.info> for the University of Geneva
 // * @licence /license.txt
 // */
@@ -535,7 +535,7 @@ class CourseDescription
 //
 //    /**
 //     *
-//     * @return CourseDescriptionRoutes 
+//     * @return CourseDescriptionRoutes
 //     */
 //    public static function instance()
 //    {
@@ -553,7 +553,7 @@ class CourseDescription
 //
 //    /**
 //     * Returns the url used to create a new course description from a specific type.
-//     * 
+//     *
 //     * @param CourseDescriptionType $type
 //     * @param bool $html True to html escape the url, false otherwise.
 //     * @return string
@@ -573,10 +573,10 @@ class CourseDescription
 //
 //    /**
 //     * The url to edit a course description object
-//     * 
+//     *
 //     * @param CourseDescription $description
 //     * @param bool $html True to html escape the url, false otherwise.
-//     * @return string  
+//     * @return string
 //     */
 //    function edit($description, $html = true)
 //    {
@@ -592,9 +592,9 @@ class CourseDescription
 //
 //    /**
 //     * The index route to list all course descriptions for the current course/session
-//     * 
+//     *
 //     * @param bool $html True to html escape the url, false otherwise.
-//     * @return type 
+//     * @return type
 //     */
 //    function index($html = true)
 //    {
@@ -605,10 +605,10 @@ class CourseDescription
 //
 //    /**
 //     * Url to delete a course description object.
-//     * 
+//     *
 //     * @param CourseDescription $description
 //     * @param bool $html True to html escape the url, false otherwise.
-//     * @return string  
+//     * @return string
 //     */
 //    function delete($description, $html = true)
 //    {

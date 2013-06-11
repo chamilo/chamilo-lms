@@ -11,8 +11,8 @@
 
 namespace Symfony\Component\Form\Tests\Extension\Core\EventListener;
 
+use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\Extension\Core\EventListener\TrimListener;
-use Symfony\Component\Form\Test\DeprecationErrorHandler;
 
 class TrimListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,10 +27,10 @@ class TrimListenerTest extends \PHPUnit_Framework_TestCase
     {
         $data = " Foo! ";
         $form = $this->getMock('Symfony\Component\Form\Test\FormInterface');
-        $event = DeprecationErrorHandler::getFormEvent($form, $data);
+        $event = new FormEvent($form, $data);
 
         $filter = new TrimListener();
-        $filter->preBind($event);
+        $filter->preSubmit($event);
 
         $this->assertEquals('Foo!', $event->getData());
     }
@@ -39,10 +39,10 @@ class TrimListenerTest extends \PHPUnit_Framework_TestCase
     {
         $data = 1234;
         $form = $this->getMock('Symfony\Component\Form\Test\FormInterface');
-        $event = DeprecationErrorHandler::getFormEvent($form, $data);
+        $event = new FormEvent($form, $data);
 
         $filter = new TrimListener();
-        $filter->preBind($event);
+        $filter->preSubmit($event);
 
         $this->assertSame(1234, $event->getData());
     }
@@ -60,10 +60,10 @@ class TrimListenerTest extends \PHPUnit_Framework_TestCase
         $data = $data."ab\ncd".$data;
 
         $form  = $this->getMock('Symfony\Component\Form\Test\FormInterface');
-        $event = DeprecationErrorHandler::getFormEvent($form, $data);
+        $event = new FormEvent($form, $data);
 
         $filter = new TrimListener();
-        $filter->preBind($event);
+        $filter->preSubmit($event);
 
         $this->assertSame("ab\ncd", $event->getData(), 'TrimListener should trim character(s): '.implode(', ', $chars));
     }

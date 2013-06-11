@@ -43,7 +43,7 @@ switch ($_REQUEST['action']) {
 		}
 		break;
 	case "stackgetall":
-		if (storage_can_set($_REQUEST['svuser'])) 
+		if (storage_can_set($_REQUEST['svuser']))
 			print storage_stack_getall($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey']);
 		break;
 	case "getposition":
@@ -91,7 +91,7 @@ function storage_get($sv_user, $sv_course, $sv_sco, $sv_key) {
 		return null;
 	}
 }
-			
+
 function storage_get_leaders($sv_user, $sv_course, $sv_sco, $sv_key, $sv_asc, $sv_length) {
 
 	// get leaders
@@ -122,12 +122,12 @@ function storage_get_leaders($sv_user, $sv_course, $sv_sco, $sv_key, $sv_asc, $s
 //				$row["values"][$dataRow["variable"]] = $dataRow["value"];
 //		}
 		$result[] = $row;
-	} 
+	}
 	return json_encode($result);
 }
 
 function storage_get_position($sv_user, $sv_course, $sv_sco, $sv_key, $sv_asc, $sv_length) {
-	$sql = "select count(list.user_id) as position 
+	$sql = "select count(list.user_id) as position
 		from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES)." search,
 			".Database::get_main_table(TABLE_TRACK_STORED_VALUES)." list
 		where search.user_id= '$sv_user'
@@ -156,7 +156,7 @@ function storage_set($sv_user, $sv_course, $sv_sco, $sv_key, $sv_value) {
 		values
 		('$sv_user','$sv_sco','$sv_course','$sv_key','$sv_value')";
 	$res = Database::query($sql);
-	return Database::affected_rows();
+	return Database::affected_rows($res);
 }
 
 function storage_getall($sv_user, $sv_course, $sv_sco) {
@@ -179,7 +179,7 @@ function storage_getall($sv_user, $sv_course, $sv_sco) {
 function storage_stack_push($sv_user, $sv_course, $sv_sco, $sv_key, $sv_value) {
 	$sv_value = Database::escape_string($sv_value);
 	Database::query("start transaction");
-	$sqlorder = "select ifnull((select max(stack_order) 
+	$sqlorder = "select ifnull((select max(stack_order)
 		from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES_STACK)."
 		where user_id= '$sv_user'
 		and sco_id='$sv_sco'

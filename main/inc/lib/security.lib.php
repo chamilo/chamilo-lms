@@ -216,7 +216,8 @@ class Security
         return $token;
     }
 
-    public static function getCurrentToken() {
+    public static function getCurrentToken()
+    {
         return isset($_SESSION['sec_token']) ? $_SESSION['sec_token'] : null;
     }
 
@@ -256,6 +257,7 @@ class Security
      */
     public static function remove_XSS($var, $user_status = ANONYMOUS, $filter_terms = false)
     {
+        // return $var;
         if ($filter_terms) {
             $var = self::filter_terms($var);
         }

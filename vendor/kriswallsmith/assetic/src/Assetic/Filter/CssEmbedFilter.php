@@ -3,7 +3,7 @@
 /*
  * This file is part of the Assetic package, an OpenSky project.
  *
- * (c) 2010-2012 OpenSky Project Inc
+ * (c) 2010-2013 OpenSky Project Inc
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,15 +12,16 @@
 namespace Assetic\Filter;
 
 use Assetic\Asset\AssetInterface;
-use Assetic\Filter\FilterInterface;
-use Assetic\Util\ProcessBuilder;
+use Assetic\Exception\FilterException;
+use Assetic\Factory\AssetFactory;
 
 /**
  * CSSEmbed filter
  *
+ * @link https://github.com/nzakas/cssembed
  * @author Maxime Thirouin <maxime.thirouin@gmail.com>
  */
-class CssEmbedFilter implements FilterInterface
+class CssEmbedFilter extends BaseProcessFilter implements DependencyExtractorInterface
 {
     private $jarPath;
     private $javaPath;
@@ -79,7 +80,7 @@ class CssEmbedFilter implements FilterInterface
 
     public function filterDump(AssetInterface $asset)
     {
-        $pb = new ProcessBuilder(array(
+        $pb = $this->createProcessBuilder(array(
             $this->javaPath,
             '-jar',
             $this->jarPath,
@@ -129,10 +130,16 @@ class CssEmbedFilter implements FilterInterface
         $code = $proc->run();
         unlink($input);
 
-        if (0 < $code) {
-            throw new \RuntimeException($proc->getErrorOutput());
+        if (0 !== $code) {
+            throw FilterException::fromProcess($proc)->setInput($asset->getContent());
         }
 
         $asset->setContent($proc->getOutput());
+    }
+
+    public function getChildren(AssetFactory $factory, $content, $loadPath = null)
+    {
+        // todo
+        return array();
     }
 }

@@ -362,33 +362,35 @@ class Template
 
         $cssPath = api_get_path(WEB_CSS_PATH);
 
-        // Base CSS.
-        $css[] = api_get_cdn_path($cssPath.'base.css');
-        // Compressed version of default + all CSS files
-        // @todo use assetic to compress files
-        // $css[] = api_get_cdn_path(api_get_path(WEB_PATH).'web/css/'.$this->theme.'/style.css');
+        if (isset($this->app['assetic']) &&  $this->app['assetic']) {
+            $css[] = api_get_path(WEB_PUBLIC_PATH).'css/'.$this->theme.'/style.css';
 
-        // Default theme CSS.
-        $css[] = api_get_cdn_path($cssPath.$this->theme.'/default.css');
-        $css[] = api_get_cdn_path($cssPath.'bootstrap-responsive.css');
-        $css[] = api_get_cdn_path($cssPath.'responsive.css');
+        } else {
+            // Base CSS.
+            $css[] = api_get_cdn_path($cssPath.'base.css');
+
+            // Default theme CSS.
+            $css[] = api_get_cdn_path($cssPath.$this->theme.'/default.css');
+            $css[] = api_get_cdn_path($cssPath.'bootstrap-responsive.css');
+            $css[] = api_get_cdn_path($cssPath.'responsive.css');
+
+            // Extra CSS files.
+            if ($this->show_learnpath) {
+                $css[] = $cssPath.$this->theme.'/learnpath.css';
+                $css[] = $cssPath.$this->theme.'/scorm.css';
+            }
+
+            if (api_is_global_chat_enabled()) {
+                $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
+            }
+
+            $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/'.$this->jquery_ui_theme.'/jquery-ui-custom.css';
+            $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/default.css';
+        }
+
         $css[] = api_get_cdn_path($cssPath.'font_awesome/css/font-awesome.css');
-
-        // Extra CSS files.
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
-
-        if ($this->show_learnpath) {
-            $css[] = $cssPath.$this->theme.'/learnpath.css';
-            $css[] = $cssPath.$this->theme.'/scorm.css';
-        }
-
-        if (api_is_global_chat_enabled()) {
-            $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
-        }
-
-        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/'.$this->jquery_ui_theme.'/jquery-ui-custom.css';
-        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/default.css';
 
         $css_file_to_string = null;
         foreach ($css as $file) {
@@ -443,7 +445,6 @@ class Template
             //'tinymce/tinymce.min.js',
             'bootstrap/bootstrap.js',
         );
-
 
         if (api_is_global_chat_enabled()) {
             //Do not include the global chat in LP
@@ -563,7 +564,7 @@ class Template
         if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
-                $url_info = api_get_access_url($access_url_id);
+                $url_info = api_get_current_access_url_info();
                 $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
                 $clean_url = replace_dangerous_char($url);
                 $clean_url = str_replace('/', '-', $clean_url);
@@ -684,21 +685,13 @@ class Template
         if (api_get_setting('show_teacher_data') == 'true') {
             // course manager
             if (isset($courseId) && $courseId != -1 && !empty($courseId)) {
-                $teacher_data = '';
-                $mail = CourseManager::get_emails_of_tutors_to_course($courseId);
-                if (!empty($mail)) {
-                    $teachers_parsed = array();
-                    foreach ($mail as $value) {
-                        foreach ($value as $email => $name) {
-                            $teachers_parsed[] = Display::encrypted_mailto_link($email, $name);
-                        }
-                    }
-                    $label = get_lang('Teacher');
-                    if (count($mail) > 1) {
-                        $label = get_lang('Teachers');
-                    }
-                    $teacher_data .= $label.' : '.ArrayClass::array_to_string($teachers_parsed, CourseManager::USER_SEPARATOR);
+                $courseInfo = api_get_course_info();
+                $teacher_data = null;
+                $label = get_lang('Teacher');
+                if (count($courseInfo['teacher_list']) > 1) {
+                    $label = get_lang('Teachers');
                 }
+                $teacher_data .= $label.' : '.$courseInfo['teacher_list_formatted'];
                 $this->assign('teachers', $teacher_data);
             }
         }
@@ -709,8 +702,11 @@ class Template
         //$this->assign('content', $content);
     }
 
-    /* Sets the plugin content in a template variable */
-   private function set_plugin_region($plugin_region)
+    /**
+     * Sets the plugin content in a template variable
+     * @param string
+     */
+    private function set_plugin_region($plugin_region)
     {
         if (!empty($plugin_region)) {
             $region_content = $this->plugin->load_region($this->app['plugins'], $plugin_region, $this, $this->force_plugin_load);
@@ -759,12 +755,12 @@ class Template
         // Displaying the tabs
         $lang = api_get_user_language();
 
-        //Preparing home folder for multiple urls
+        // Preparing home folder for multiple urls
 
         if (api_get_multiple_access_url()) {
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
-                $url_info = api_get_access_url($access_url_id);
+                $url_info = api_get_current_access_url_info();
                 $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
                 $clean_url = replace_dangerous_char($url);
                 $clean_url = str_replace('/', '-', $clean_url);

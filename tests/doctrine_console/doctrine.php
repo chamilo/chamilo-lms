@@ -42,13 +42,13 @@ $cli->addCommands(array(
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\StatusCommand(),
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand(),
 
-    //Chamilo commands
+    // Chamilo commands
     new ChamiloLMS\Command\Database\UpgradeCommand(),
     new ChamiloLMS\Command\Database\InstallCommand(),
     new ChamiloLMS\Command\Database\StatusCommand(),
     new ChamiloLMS\Command\Database\SetupCommand(),
 
-    //Chash commands
+    // Chash commands
     new Chash\Command\Database\RunSQLCommand(),
     new Chash\Command\Database\DumpCommand(),
     new Chash\Command\Database\RestoreCommand(),

@@ -109,6 +109,7 @@ echo Question::getMediaLabels();
 
 // If we are in a test.
 $inATest = isset($exerciseId) && $exerciseId > 0;
+
 if (!$inATest) {
 	echo "<p class='warning-message'>".get_lang("ChoiceQuestionType")."</p>";
 } else {
@@ -123,11 +124,12 @@ if (!$inATest) {
     echo "<div style='clear:both'>&nbsp;</div>";
 
     echo '<div id="question_list">';
+
     if ($nbrQuestions) {
         // Always getting list from DB.
 
         $objExercise->setCategoriesGrouping(false);
-        $questionList = $objExercise->selectQuestionList(true);
+        $questionList = $objExercise->getQuestionList();
 
         // Style for columns.
         $styleQuestion = "width:50%; float:left;";
@@ -139,8 +141,8 @@ if (!$inATest) {
         $category_list = Testcategory::getListOfCategoriesNameForTest($objExercise->id, false);
 
         if (is_array($questionList)) {
-			foreach ($questionList as $id) {
-				// To avoid warning messages
+            foreach ($questionList as $id) {
+				// To avoid warning messages.
 				if (!is_numeric($id)) {
 					continue;
 				}

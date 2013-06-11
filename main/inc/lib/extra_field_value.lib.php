@@ -216,8 +216,8 @@ class ExtraFieldValue extends Model
                             $extraFieldValue->setFieldValue($params['field_value']);
                             $extraFieldValue->setFieldId($params['field_id']);
                             $extraFieldValue->setTms(api_get_utc_datetime(null, false, true));
-                            $app['orm.em']->persist($extraFieldValue);
-                            $app['orm.em']->flush();
+                            $app['orm.ems']['db_write']->persist($extraFieldValue);
+                            $app['orm.ems']['db_write']->flush();
                         }
                     }
 
@@ -270,8 +270,8 @@ class ExtraFieldValue extends Model
                             $extraFieldValue->setFieldValue($params['field_value']);
                             $extraFieldValue->setFieldId($params['field_id']);
                             $extraFieldValue->setTms(api_get_utc_datetime(null, false, true));
-                            $app['orm.em']->persist($extraFieldValue);
-                            $app['orm.em']->flush();
+                            $app['orm.ems']['db_write']->persist($extraFieldValue);
+                            $app['orm.ems']['db_write']->flush();
                         }
                     }
                 } else {

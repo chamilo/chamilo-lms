@@ -7,7 +7,7 @@
  */
 /**
  * @todo use the SessionServiceProvider and not a "in house" class
- * @package chamilo.library
+ * @package chamilo.library *
  */
 class SessionHandler
 {
@@ -32,6 +32,7 @@ class SessionHandler
 
 		$this->connection_handler = false;
 	}
+
     // @todo use a dbal connection
 	public function sqlConnect() {
 

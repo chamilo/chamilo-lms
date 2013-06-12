@@ -688,22 +688,22 @@ class Database
     /**
      * Returns a list of tables within a database. The list may contain all of the
      * available table names or filtered table names by using a pattern.
-     * @param string $database (optional)        The name of the examined database. If it is omited, the current database is assumed, see Database::select_db().
+     * @param string $database (optional)        The name of the examined database.
      * @param string $pattern (optional)        A pattern for filtering table names as if it was needed for the SQL's LIKE clause, for example 'access_%'.
-     * @param resource $connection (optional)    The database server connection, for detailed description see the method query().
+     * @deprecated
      * @return array                            Returns in an array the retrieved list of table names.
      */
-    public static function get_tables($database = '', $pattern = '', $connection = null)
+    public static function get_tables($database = '', $pattern = '')
     {
         $result = array();
         $query = "SHOW TABLES";
         if (!empty($database)) {
-            $query .= " FROM `".self::escape_string($database, $connection)."`";
+            $query .= " FROM `".self::escape_string($database)."`";
         }
         if (!empty($pattern)) {
-            $query .= " LIKE '".self::escape_string($pattern, $connection)."'";
+            $query .= " LIKE '".self::escape_string($pattern)."'";
         }
-        $query_result = Database::query($query, $connection);
+        $query_result = Database::query($query);
         while ($row = Database::fetch_row($query_result)) {
             $result[] = $row[0];
         }

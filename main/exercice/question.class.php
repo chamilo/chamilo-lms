@@ -2058,7 +2058,12 @@ abstract class Question
 
     /**
      * Get all questions
-     * @param array $options
+     * @param Application $app
+     * @param $categoryId
+     * @param $exerciseId
+     * @param $courseId
+     * @param $options
+     * @param bool $get_count
      * @return array
      */
     public static function getQuestions($app, $categoryId, $exerciseId, $courseId, $options, $get_count = false)
@@ -2068,22 +2073,20 @@ abstract class Question
         $questionPoolFields = array(
             'question_session_id' => array(
                 'innerjoin' => " INNER JOIN ".Database::get_course_table(TABLE_QUIZ_TEST_QUESTION)." as quiz_rel_question_session ON (quiz_rel_question_session.question_id = s.iid)
-                 INNER JOIN  ".Database::get_course_table(TABLE_QUIZ_TEST)." as quizsession ON (quizsession.iid = quiz_rel_question_session.exercice_id)
-                 INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION)." session ON (session.id = quizsession.session_id)",
+                                 INNER JOIN ".Database::get_course_table(TABLE_QUIZ_TEST)." as quizsession ON (quizsession.iid = quiz_rel_question_session.exercice_id)
+                                 INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION)." session ON (session.id = quizsession.session_id)",
                 'where' => 'session_id',
                 'inject_fields' => 'session.name as question_session_id, ',
             ),
             'question_category_id' => array(
                 'innerjoin' => " INNER JOIN ".Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY)." as quiz_rel_cat ON (quiz_rel_cat.question_id = s.iid)
-                                 INNER JOIN ".Database::get_course_table(TABLE_QUIZ_CATEGORY)." as cat ON (cat.iid = quiz_rel_cat.category_id)
-                ",
+                                 INNER JOIN ".Database::get_course_table(TABLE_QUIZ_CATEGORY)." as cat ON (cat.iid = quiz_rel_cat.category_id)",
                 'where' =>  'quiz_rel_cat.category_id',
                 'inject_fields' => 'cat.title as question_category_id, ',
             ),
             'question_exercise_id' => array(
                 'innerjoin' => " INNER JOIN ".Database::get_course_table(TABLE_QUIZ_TEST_QUESTION)." as quiz_rel_question ON (quiz_rel_question.question_id = s.iid)
-                                 INNER JOIN ".Database::get_course_table(TABLE_QUIZ_TEST)." as quizexercise ON (quizexercise.iid = quiz_rel_question.exercice_id)
-                ",
+                                 INNER JOIN ".Database::get_course_table(TABLE_QUIZ_TEST)." as quizexercise ON (quizexercise.iid = quiz_rel_question.exercice_id) ",
                 'where' =>  'quiz_rel_question.exercice_id',
                 'inject_fields' => 'quizexercise.title as question_exercise_id, ',
             ),
@@ -2102,12 +2105,37 @@ abstract class Question
             )
         );
 
+        // Checking if you're looking for orphan questions.
+        $isOrphanQuestion = false;
+
+        if (isset($options['question'])) {
+            foreach ($options['question'] as $option) {
+                if (isset($option['field']) && $option['field'] == 'question_exercise_id') {
+                    if ($option['data'] == 0) {
+                        $isOrphanQuestion = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Special case for orphan questions.
+        if ($isOrphanQuestion) {
+            $questionPoolFields['question_exercise_id'] = array(
+                'innerjoin' => " LEFT JOIN ".Database::get_course_table(TABLE_QUIZ_TEST_QUESTION)." as quiz_rel_question ON (quiz_rel_question.question_id = s.iid)
+                                 LEFT JOIN ".Database::get_course_table(TABLE_QUIZ_TEST)." as quizexercise ON (quizexercise.iid = quiz_rel_question.exercice_id) ",
+                'where' =>  'quiz_rel_question.exercice_id',
+                'inject_fields' => 'quizexercise.title as question_exercise_id, ',
+            );
+        }
+
         $inject_extra_fields = null;
         $inject_joins = null;
 
         $where = $options['where'];
 
         $newQuestionPoolField = array();
+
         if (isset($options['question'])) {
             foreach ($options['question'] as $question) {
                 if (isset($questionPoolFields[$question['field']])) {
@@ -2119,6 +2147,7 @@ abstract class Question
         $inject_question_fields = null;
 
         $questionPoolFields = $newQuestionPoolField;
+        // Injecting inner joins.
         foreach ($questionPoolFields as $field => $option) {
             $where = str_replace($field, $option['where'], $where);
             if (isset($option['innerjoin']) && !empty($option['innerjoin'])) {
@@ -2166,10 +2195,18 @@ abstract class Question
             $where .= " AND exercice_id = $exerciseId ";
         }*/
 
+        // Orphan questions
+        if ($isOrphanQuestion) {
+            //$exerciseRelQuestionTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+            //$extraCondition .= " INNER JOIN $exerciseRelQuestionTable e ON (s.iid = e.question_id)";
+            $where .= " OR quizexercise.active = -1  OR quiz_rel_question.exercice_id IS NULL";
+        }
+
         if (!empty($courseId)) {
             $courseId = intval($courseId);
             $where .= " AND s.c_id = $courseId ";
         }
+        //var_dump($inject_joins);
 
         $query = " $select FROM $questionTable s $inject_joins $extraCondition WHERE 1=1 $where $inject_where $order $limit";
         //echo $query.'<br />';
@@ -2201,9 +2238,7 @@ abstract class Question
             //var_dump($exerciseId);
             // Including actions
             foreach ($questions as &$question) {
-
                 if (empty($exerciseId)) {
-
                     // View.
                     $actions = Display::url(
                         $previewIcon,
@@ -2225,9 +2260,7 @@ abstract class Question
                             )
                         )
                     );
-
                 } else {
-
                     // View.
                     $actions = Display::url(
                         $previewIcon,
@@ -2317,7 +2350,7 @@ abstract class Question
         // type
         if (empty($courseCode)) {
 
-            // Session
+            // Session.
             $sessionList = SessionManager::get_sessions_by_general_coach(api_get_user_id());
             $fields = array();
             if (!empty($sessionList)) {
@@ -2336,7 +2369,7 @@ abstract class Question
                 );
             }
 
-            // Courses
+            // Courses.
             $courseList = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());
 
             if (!empty($courseList)) {
@@ -2358,7 +2391,7 @@ abstract class Question
             $courseList = array(api_get_course_info());
         }
 
-        // Categories
+        // Categories.
         $string = null;
         if (!empty($courseList)) {
 
@@ -2403,7 +2436,7 @@ abstract class Question
         $course = api_get_course_int_id();
         $sessionId = api_get_session_id();
 
-        // Exercises
+        // Exercises.
         $exerciseList  = ExerciseLib::get_all_exercises_for_course_id($sessionId, $course);
 
         if (!empty($exerciseList)) {
@@ -2423,8 +2456,7 @@ abstract class Question
             );
         }
 
-
-        // Question type
+        // Question type.
         $questionList = Question::get_question_type_list();
 
         if (!empty($questionList)) {
@@ -2443,7 +2475,7 @@ abstract class Question
             );
         }
 
-        // Difficult
+        // Difficult.
         $levels = Question::get_default_levels();
 
         if (!empty($levels)) {
@@ -2471,7 +2503,6 @@ abstract class Question
 
         if (!empty($fields)) {
             foreach ($fields as $field) {
-
                 $search_options = array();
                 $type           = 'text';
                 if (in_array($field['field_type'], array(ExtraField::FIELD_TYPE_SELECT, ExtraField::FIELD_TYPE_DOUBLE_SELECT))) {
@@ -2496,7 +2527,6 @@ abstract class Question
                     'searchoptions' => $search_options
                 );
                 $columns[] = $field['field_display_text'];
-
                 $rules[] = array(
                     'field' => 'question_'.$field['field_variable'],
                     'op' => 'eq'

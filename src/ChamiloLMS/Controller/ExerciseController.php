@@ -129,7 +129,7 @@ class ExerciseController extends CommonController
                 array(
                     'name' => get_lang('Exercise'),
                     'url' => array(
-                        'uri' => api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidreq().'&exerciseId'.$exerciseId
+                        'uri' => api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidreq().'&exerciseId='.$exerciseId
                     )
                 ),
                 array(
@@ -150,7 +150,6 @@ class ExerciseController extends CommonController
 
         $questionColumns = \Question::getQuestionColumns($cidReq);
 
-        //$questionColumns = \Question::getQuestionColumns($cidReq, null, null, true);
         $columnModel     = $questionColumns['column_model'];
         $columns         = $questionColumns['columns'];
         $rules           = $questionColumns['rules'];

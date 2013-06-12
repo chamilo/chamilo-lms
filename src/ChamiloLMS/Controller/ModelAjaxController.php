@@ -37,7 +37,7 @@ class ModelAjaxController
      * @param $val
      * @return string
      */
-    function getWhereClause($col, $oper, $val)
+    private function getWhereClause($col, $oper, $val)
     {
 
         if (empty($col)) {
@@ -113,12 +113,14 @@ class ModelAjaxController
         }
 
         // Search features.
-        $where_condition = ""; //if there is no search request sent by jqgrid, $where should be empty
+
+        // If there is no search request sent by jqgrid, $where should be empty.
+        $where_condition = "";
         $operation       = $request->get('oper');
-        $export_format   = $request->get('export_format');// isset($_REQUEST['export_format'])  ? $_REQUEST['export_format']  : 'csv';
-        $search_field    = $request->get('searchField'); //isset($_REQUEST['searchField'])  ? $_REQUEST['searchField']  : false;
-        $search_oper     = $request->get('searchOper'); //isset($_REQUEST['searchOper'])   ? $_REQUEST['searchOper']   : false;
-        $search_string   = $request->get('searchString'); //isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] : false;
+        $export_format   = $request->get('export_format');
+        $search_field    = $request->get('searchField');
+        $search_oper     = $request->get('searchOper');
+        $search_string   = $request->get('searchString');
         $isSearch        = $request->get('_search');
         $filters         = $request->get('filters');
         $type            = $request->get('type');
@@ -160,7 +162,7 @@ class ModelAjaxController
                     $where_condition .= ' ) ';
                 }
 
-                // Question field
+                // Question field.
 
                 $resultQuestion = $extraField->getExtraFieldRules($filters, 'question_');
                 $questionFields = $resultQuestion['extra_fields'];
@@ -188,7 +190,7 @@ class ModelAjaxController
             case 'get_questions':
                 $categoryId = $request->get('categoryId');
                 $exerciseId = $request->get('exerciseId');
-                $courseId = $request->get('courseId'); //isset($_REQUEST['courseId']) ? $_REQUEST['courseId'] : null;
+                $courseId = $request->get('courseId');
                 $count = \Question::getQuestions(
                     $app,
                     $categoryId,

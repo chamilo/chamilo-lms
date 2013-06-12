@@ -150,7 +150,6 @@ class ExerciseController extends CommonController
 
         $questionColumns = \Question::getQuestionColumns($cidReq);
 
-        //$questionColumns = \Question::getQuestionColumns($cidReq, null, null, true);
         $columnModel     = $questionColumns['column_model'];
         $columns         = $questionColumns['columns'];
         $rules           = $questionColumns['rules'];

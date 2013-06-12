@@ -16,13 +16,24 @@
 class Database
 {
     /**
-     * The connection
+     * The main connection
      *
      * @var \Doctrine\DBAL\Connection
      */
     private static $db;
 
+    /**
+     * Read connection
+     *
+     * @var \Doctrine\DBAL\Connection
+     */
     private static $connectionRead;
+
+    /**
+     * Write connection
+     *
+     * @var \Doctrine\DBAL\Connection
+     */
     private static $connectionWrite;
 
     /**
@@ -80,13 +91,13 @@ class Database
     */
 
     /**
-     * A more generic method than the other get_main_xxx_table methods,
-     * This one returns the correct complete name of any table of the main
+     * This function returns the correct complete name of any table of the main
      * database of which you pass the short name as a parameter.
-     * Please, define table names as constants in this library and use them
+     * Define table names as constants in this library and use them
      * instead of directly using magic words in your tool code.
      *
      * @param string $short_table_name, the name of the table
+     * @return string
      */
     public static function get_main_table($short_table_name)
     {
@@ -94,15 +105,14 @@ class Database
     }
 
     /**
-     * A more generic method than the older get_course_xxx_table methods,
-     * This one can return the correct complete name of any course table of
+     * This method returns the correct complete name of any course table of
      * which you pass the short name as a parameter.
-     * Please, define table names as constants in this library and use them
+     * Define table names as constants in this library and use them
      * instead of directly using magic words in your tool code.
      *
      * @param string $short_table_name, the name of the table
-     * @param string $database_name, optional, name of the course database
-     * - if you don't specify this, you work on the current course.
+     * @return string
+     *
      */
     public static function get_course_table($short_table_name)
     {
@@ -111,8 +121,8 @@ class Database
 
     /**
      * Returns the number of affected rows in the last database operation.
-     * @param resource $connection (optional)    The database server connection, for detailed description see the method query().
-     * @return int                                Returns the number of affected rows on success, and -1 if the last query failed.
+     * @param \Doctrine\DBAL\Driver\Statement $result
+     * @return int
      */
     public static function affected_rows(\Doctrine\DBAL\Driver\Statement $result = null)
     {
@@ -122,25 +132,17 @@ class Database
 
     /**
      * Escapes a string to insert into the database as text
-     * @param string                            The string to escape
-     * @param resource $connection (optional)    The database server connection, for detailed description see the method query().
-     * @return string                            The escaped string
-     * @author Yannick Warnier <yannick.warnier@dokeos.com>
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     * @param string The string to escape
+     * @return string The escaped string
      */
-    public static function escape_string($string, $connection = null)
+    public static function escape_string($string)
     {
-        return $string;
+        //var_dump($string);
+        //var_dump(self::$db->quote($string));
         //return self::$db->quote($string);
-        //$conn->quote
-        /*
-        return get_magic_quotes_gpc()
-            ? (self::use_default_connection($connection)
-                ? mysql_real_escape_string(stripslashes($string))
-                : mysql_real_escape_string(stripslashes($string), $connection))
-            : (self::use_default_connection($connection)
-                ? mysql_real_escape_string($string)
-                : mysql_real_escape_string($string, $connection));*/
+        return $string;
+        //self::$db->query();
+        //return self::$db->quote($string);
     }
 
     /**
@@ -206,34 +208,27 @@ class Database
 
     /**
      * Gets the ID of the last item inserted into the database
-     * This should be updated to use ADODB at some point
-     * @param resource $connection (optional)    The database server connection, for detailed description see the method query().
-     * @return int                                The last ID as returned by the DB function
+     * @return int The last ID as returned by the DB function
      */
-    public static function insert_id($connection = null)
+    public static function insert_id()
     {
         return self::$connectionWrite->lastInsertId();
-        //return self::use_default_connection($connection) ? mysql_insert_id() : mysql_insert_id($connection);
     }
-
 
     /**
      * Gets the number of rows from the last query result - help achieving database independence
-     * @param resource        The result
-     * @return integer        The number of rows contained in this result
-     * @author Yannick Warnier <yannick.warnier@dokeos.com>
+     * @param \Doctrine\DBAL\Driver\Statement
+     * @return integer The number of rows contained in this result
      **/
     public static function num_rows(\Doctrine\DBAL\Driver\Statement $result)
     {
-        //var_dump($result->rowCount());
         return $result->rowCount();
-        // return is_resource($result) ? mysql_num_rows($result) : false;
     }
 
     /**
      * Acts as the relative *_result() function of most DB drivers and fetches a
      * specific line and a field
-     * @param    resource    The database resource to get data from
+     * @param    \Doctrine\DBAL\Driver\Statement     The database resource to get data from
      * @param    integer        The row number
      * @param    string        Optional field name or number
      * @return    mixed        One cell of the result, or FALSE on error
@@ -246,10 +241,6 @@ class Database
         }
 
         return null;
-        /*return self::num_rows($resource) > 0 ? (!empty($field) ? mysql_result($resource, $row, $field) : mysql_result(
-            $resource,
-            $row
-        )) : null;*/
     }
 
 
@@ -311,32 +302,16 @@ class Database
     /**
      * Returns a list of databases created on the server. The list may contain all of the
      * available database names or filtered database names by using a pattern.
-     * @param string $pattern (optional)        A pattern for filtering database names as if it was needed for the SQL's LIKE clause, for example 'chamilo_%'.
-     * @param resource $connection (optional)    The database server connection, for detailed description see the method query().
-     * @return array                            Returns in an array the retrieved list of database names.
+     * @return array Returns in an array the retrieved list of database names.
      */
-    public static function get_databases($pattern = '', $connection = null)
+    public static function get_databases()
     {
         $sm = self::$db->getSchemaManager();
         return $sm->listDatabases();
-
-        /*
-        $result = array();
-        $query_result = Database::query(!empty($pattern) ? "SHOW DATABASES LIKE '".self::escape_string(
-                $pattern,
-                $connection
-            )."'" : "SHOW DATABASES",
-            $connection
-        );
-        while ($row = Database::fetch_row($query_result)) {
-            $result[] = $row[0];
-        }
-        return $result;
-        */
     }
 
     /**
-     * Detects if a query is going to save something in the database
+     * Detects if a query is going to modify something in the database in order to use the write connection
      * @param string $query
      * @return bool
      */
@@ -350,9 +325,7 @@ class Database
     }
 
     /**
-     * This method returns a resource
-     * Documentation has been added by Arthur Portugal
-     * Some adaptations have been implemented by Ivan Tcholakov, 2009, 2010
+     * Executes a query in the database
      * @author Julio Montoya
      * @param string $query The SQL query
      * @return \Doctrine\DBAL\Driver\Statement
@@ -514,29 +487,12 @@ class Database
     }
 
     /**
-     * Selects a database.
-     * @param string $database_name                The name of the database that is to be selected.
-     * @param resource $connection (optional)    The database server connection, for detailed description see the method query().
-     * @deprecated
-     * @return bool                                Returns TRUE on success or FALSE on failure.
-     */
-    public static function select_db($database_name, $connection = null)
-    {
-        /*return self::use_default_connection($connection) ? mysql_select_db($database_name) : mysql_select_db(
-            $database_name,
-            $connection
-        );*/
-    }
-
-    /**
      * Stores a query result into an array.
-     *
-     * @author Olivier Brouckaert
-     * @param  resource $result - the return value of the query
+     * @param  \Doctrine\DBAL\Driver\Statement $result - the return value of the query
      * @param  option BOTH, ASSOC, or NUM
      * @return array - the value returned by the query
      */
-    public static function store_result($result, $option = 'BOTH')
+    public static function store_result(\Doctrine\DBAL\Driver\Statement $result, $option = 'BOTH')
     {
         return $result->fetchAll();
         /*
@@ -559,6 +515,7 @@ class Database
      *    Structures a database and table name to ready them
      *    for querying. The database parameter is considered not glued,
      *    just plain e.g. COURSE001
+     *   @todo not sure if we need this now
      */
     private static function format_table_name($database, $table)
     {
@@ -567,47 +524,22 @@ class Database
         return $table_name;
     }
 
-
     /*
         New useful DB functions
     */
 
     /**
-     * Experimental useful database insert
-     * @todo lot of stuff to do here
+     * Executes an inserto in the database (dbal already escape strings)
+     * @param string table name
+     * @array array An array of field and values
+     * @return int the id of the latest executed query
      */
     public static function insert($table_name, $attributes, $show_query = false)
     {
-        // return self::$db->insert($table_name, $attributes);
-
-        if (empty($attributes) || empty($table_name)) {
-            return false;
-        }
-
-        $filtred_attributes = array();
-        foreach ($attributes as $key => $value) {
-            $filtred_attributes[$key] = "'".self::escape_string($value)."'";
-        }
-
-        //@todo check if the field exists in the table we should use a describe of that table
-        $params = array_keys($filtred_attributes);
-        $values = array_values($filtred_attributes);
-        if (!empty($params) && !empty($values)) {
-            $sql = 'INSERT INTO '.$table_name.' ('.implode(', ', $params).') VALUES ('.implode(', ', $values).')';
-            $result = self::query($sql);
-            //error_log($sql);
-
-            if ($show_query) {
-
-                error_log($sql);
-            }
-            if (!$result) {
-                error_log("Error in query: $sql");
-            }
-
+        $result = self::$connectionWrite->insert($table_name, $attributes);
+        if ($result) {
             return self::insert_id();
         }
-
         return false;
     }
 
@@ -659,6 +591,7 @@ class Database
      * Parses WHERE/ORDER conditions i.e array('where'=>array('id = ?' =>'4'), 'order'=>'id DESC'))
      * @todo known issues, it doesn't work when using LIKE conditions example: array('where'=>array('course_code LIKE "?%"'))
      * @param array
+     * @return string
      * @todo lot of stuff to do here
      */
     static function parse_conditions($conditions)
@@ -757,18 +690,17 @@ class Database
         return $return_value;
     }
 
-    public static function parse_where_conditions($coditions)
+    public static function parse_where_conditions($conditions)
     {
-        return self::parse_conditions(array('where' => $coditions));
+        return self::parse_conditions(array('where' => $conditions));
     }
 
     /**
-     * Experimental useful database update
-     * @todo lot of stuff to do here
+     * Deletes an item depending of conditions
      */
     public static function delete($table_name, $where_conditions, $show_query = false)
     {
-        // return self::$db->delete($table_name, $where_conditions);
+        //return self::$connectionWrite->delete($table_name, $where_conditions);
 
         $where_return = self::parse_where_conditions($where_conditions);
         $sql = "DELETE FROM $table_name $where_return ";

@@ -304,6 +304,7 @@ class Database
             The problem here is that the function escape_string() calls the quote function that adds a "'" string.
             Instead of this we're adding a identifier __@__ so we can identify those cases and replace with a simple '
         */
+        //error_log($query);
         $query = str_replace(
             array(
                 "\"_@_'",
@@ -315,17 +316,10 @@ class Database
             "'",
             $query
         );
+        //error_log($query);
         return $connection->executeQuery($query);
 
         /*
-        $use_default_connection = self::use_default_connection($connection);
-        if ($use_default_connection) {
-            // Let us do parameter shifting, thus the method would be similar
-            // (in regard to parameter order) to the original function mysql_query().
-            $line = $file;
-            $file = $connection;
-            $connection = null;
-        }
         //@todo remove this before the stable release
 
         //Check if the table contains a c_ (means a course id)
@@ -385,80 +379,6 @@ class Database
                 //error_log($message);
             }
         }
-
-        if (!($result = $use_default_connection ? @mysql_query($query) : @mysql_query($query, $connection))) {
-            $backtrace = debug_backtrace(); // Retrieving information about the caller statement.
-            if (isset($backtrace[0])) {
-                $caller = & $backtrace[0];
-            } else {
-                $caller = array();
-            }
-            if (isset($backtrace[1])) {
-                $owner = & $backtrace[1];
-            } else {
-                $owner = array();
-            }
-            if (empty($file)) {
-                $file = $caller['file'];
-            }
-            if (empty($line) && $line !== false) {
-                $line = $caller['line'];
-            }
-            $type = isset($owner['type']) ? $owner['type'] : null;
-            $function = $owner['function'];
-            $class = isset($owner['class']) ? $owner['class'] : null;
-            $server_type = api_get_setting('server_type');
-            if (!empty($line) && !empty($server_type) && $server_type != 'production') {
-                $info = '<pre>'.
-                    '<strong>DATABASE ERROR #'.self::errno($connection).':</strong><br /> '.
-                    self::error($connection).'<br />'.
-                    '<strong>QUERY       :</strong><br /> '.
-                    $query.'<br />'.
-                    '<strong>FILE        :</strong><br /> '.
-                    (empty($file) ? ' unknown ' : $file).'<br />'.
-                    '<strong>LINE        :</strong><br /> '.
-                    (empty($line) ? ' unknown ' : $line).'<br />';
-                if (empty($type)) {
-                    if (!empty($function)) {
-                        $info .= '<strong>FUNCTION    :</strong><br /> '.$function;
-                    }
-                } else {
-                    if (!empty($class) && !empty($function)) {
-                        $info .= '<strong>CLASS       :</strong><br /> '.$class.'<br />';
-                        $info .= '<strong>METHOD      :</strong><br /> '.$function;
-                    }
-                }
-                $info .= '</pre>';
-                echo $info;
-            }
-
-            if (isset(self::$log_queries) && self::$log_queries) {
-                error_log("----------------  SQL error ---------------- ");
-                error_log($query);
-
-                error_log('error #'.self::errno($connection));
-                error_log('error: '.self::error($connection));
-
-                $info = 'FILE: '.(empty($file) ? ' unknown ' : $file);
-                $info .= ' +'.(empty($line) ? ' unknown ' : $line);
-                error_log($info);
-
-                if (empty($type)) {
-                    if (!empty($function)) {
-                        $info = 'FUNCTION: '.$function;
-                        error_log($info);
-                    }
-                } else {
-                    if (!empty($class) && !empty($function)) {
-                        $info = 'CLASS: '.$class.' METHOD: '.$function;
-                        error_log($info);
-                    }
-                }
-                error_log("---------------- end ----------------");
-            }
-        }
-
-        return $result;
         */
     }
 
@@ -529,6 +449,8 @@ class Database
      */
     public static function select($columns, $table_name, $conditions = array(), $type_result = 'all', $option = 'ASSOC')
     {
+        //$qb = self::$db->createQueryBuilder();
+
         $conditions = self::parse_conditions($conditions);
 
         //@todo we could do a describe here to check the columns ...
@@ -542,6 +464,11 @@ class Database
                 $clean_columns = (string)$columns;
             }
         }
+
+        /*$qb->select($clean_columns);
+        $qb->from($table_name, 'table');
+        $qb->orderBy('table.' . $sort_order, 'ASC');*/
+
         $sql = "SELECT $clean_columns FROM $table_name $conditions";
         //var_dump($sql);
 
@@ -621,7 +548,8 @@ class Database
 
                     if (!empty($order_array)) {
                         // 'order' => 'id desc, name desc'
-                        $order_array = self::escape_string($order_array);
+                        $order_array = $order_array;
+
                         $new_order_array = explode(',', $order_array);
                         $temp_value = array();
 
@@ -644,10 +572,9 @@ class Database
                         }
                         if (!empty($temp_value)) {
                             $return_value .= ' ORDER BY '.implode(', ', $temp_value);
-                        } else {
-                            //$return_value .= '';
                         }
                     }
+
                     break;
                 case 'limit':
                     $limit_array = explode(',', $condition_data);

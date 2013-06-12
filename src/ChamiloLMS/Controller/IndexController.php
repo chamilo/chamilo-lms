@@ -64,10 +64,6 @@ class IndexController extends CommonController
         $app['languages_file'] = array('courses', 'index', 'admin');
         $app['cidReset'] = true;
 
-        //var_dump($app['dbs']['mysql_read']->fetchAssoc('SELECT * FROM course'));
-        //$result = $app['orm.em']->find('Entity\Course', 2);
-
-
         // Testing translation using translator
         //echo $app['translator']->trans('Wiki Search Results');
         //echo $app['translator']->trans('Profile');
@@ -88,11 +84,6 @@ class IndexController extends CommonController
           }
           exit; */
 
-        //$app['orm.em']->find('Course', 1);
-        //var_dump($app['orm.ems']['mysql']);
-        // Defines wether or not anonymous visitors can see a list of the courses on the Chamilo homepage that are open to the world.
-        //$_setting['display_courses_to_anonymous_users'] = 'true';
-        // Delete session neccesary for legal terms
 
         if (api_get_setting('allow_terms_conditions') == 'true') {
             unset($_SESSION['term_and_condition']);

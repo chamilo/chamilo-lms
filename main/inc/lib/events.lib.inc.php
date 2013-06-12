@@ -430,18 +430,62 @@ function createEventExercise($exo_id)
  * @param	integer	Question ID
  * @param	integer Exercise ID
  * @param	integer	Position
+ * @param	integer	Exercise ID (from c_quiz)
+ * @param	string  Filename (for audio answers - using nanogong)
+ * @param	integer ID of the user who's going to get this score. Default value of null means "get from context".
+ * @param	integer	Course ID (from the "id" column of course table). Default value of null means "get from context".
+ * @param	integer	Session ID (from the session table). Default value of null means "get from context".
+ * @param	integer	Learnpath ID (from c_lp table). Default value of null means "get from context".
+ * @param	integer	Learnpath item ID (from the c_lp_item table). Default value of null means "get from context".
  * @return	boolean	Result of the insert query
  */
-function saveExerciseAttempt($score, $answer, $question_id, $exe_id, $position, $exercise_id = 0, $nano = null)
-{
-    global $debug, $learnpath_id, $learnpath_item_id;
+function saveExerciseAttempt(
+    $score,
+    $answer,
+    $question_id,
+    $exe_id,
+    $position,
+    $exercise_id = 0,
+    $nano = null,
+    $user_id = null,
+    $course_id = null,
+    $session_id = null,
+    $learnpath_id = null,
+    $learnpath_item_id = null
+) {
+    global $debug;
+
     $score = Database::escape_string($score);
     $answer = Database::escape_string($answer);
     $question_id = Database::escape_string($question_id);
     $exe_id = Database::escape_string($exe_id);
     $position = Database::escape_string($position);
     $now = api_get_utc_datetime();
-    $user_id = api_get_user_id();
+
+    // check user_id or get from context
+    if (empty($user_id) or intval($user_id) != $user_id) {
+        $user_id = api_get_user_id();
+        // anonymous
+        if (empty($user_id)) {
+            $user_id = api_get_anonymous_id();
+        }
+    }
+    // check course_id or get from context
+    if (empty($course_id) or intval($course_id) != $course_id) {
+        $course_id = api_get_course_int_id();
+    }
+    // check session_id or get from context
+    if (empty($session_id) or intval($session_id) != $session_id) {
+        $session_id = api_get_session_id();
+    }
+    // check learnpath_id or get from context
+    if (empty($learnpath_id)) {
+        global $learnpath_id;
+    }
+    // check learnpath_item_id or get from context
+    if (empty($learnpath_item_id)) {
+        global $learnpath_item_id;
+    }
 
     $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
@@ -461,28 +505,29 @@ function saveExerciseAttempt($score, $answer, $question_id, $exe_id, $position, 
         $score = 0;
         $answer = 0;
     }
-
-    if (!empty($user_id)) {
-        $user_id = "'".$user_id."'";
-    } else {
-        // anonymous
-        $user_id = api_get_anonymous_id();
-    }
-
     $file = '';
     if (isset($nano)) {
         $file = Database::escape_string(basename($nano->load_filename_if_exists(false)));
     }
 
-    $courseId = api_get_course_int_id();
-    $session_id = api_get_session_id();
-
     if (!empty($question_id) && !empty($exe_id) && !empty($user_id)) {
+        $attempt = array(
+            'user_id' => $user_id,
+            'question_id' => $question_id,
+            'answer' => $answer,
+            'marks' => $score,
+            'c_id' => $course_id,
+            'session_id' => $session_id,
+            'position' => $position,
+            'tms' => $now,
+            'filename' => $file,
+        );
 
-        //Check if attempt exists
+
+        // Check if attempt exists.
 
         $sql = "SELECT exe_id FROM $TBL_TRACK_ATTEMPT
-                WHERE c_id = $courseId AND
+                WHERE c_id = $course_id AND
                       session_id = $session_id AND
                       exe_id = $exe_id AND
                       user_id = $user_id AND
@@ -490,41 +535,39 @@ function saveExerciseAttempt($score, $answer, $question_id, $exe_id, $position, 
                       position = $position";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
-            if ($debug)
+            if ($debug) {
                 error_log("Attempt already exist: exe_id: $exe_id - user_id:$user_id - question_id:$question_id");
+            }
             //The attempt already exist do not update use  update_event_exercise() instead
             return false;
+        } else {
+            $attempt['exe_id'] = $exe_id;
         }
-
-        $sql = "INSERT INTO $TBL_TRACK_ATTEMPT (exe_id, user_id, question_id, answer, marks, c_id, session_id, position, tms, filename)
-                  VALUES (
-                  ".$exe_id.",
-                  ".$user_id.",
-                   '".$question_id."',
-                   '".$answer."',
-                   '".$score."',
-                   '".$courseId."',
-                   '".$session_id."',
-                   '".$position."',
-                   '".$now."',
-                   '".$file."'
-                )";
 
         if ($debug) {
             error_log("Saving question attempt: ");
             error_log($sql);
         }
 
-        $res = Database::query($sql);
+        $attempt_id = Database::insert($TBL_TRACK_ATTEMPT, $attempt);
+
         if (defined('ENABLED_LIVE_EXERCISE_TRACKING')) {
             $recording_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
             if ($debug) {
                 error_log("Saving e attempt recording ");
             }
-            $recording_changes = "INSERT INTO $recording_table (exe_id, question_id, marks, insert_date, author, session_id) VALUES ('$exe_id','$question_id','$score','".api_get_utc_datetime()."','', '".api_get_session_id()."') ";
-            Database::query($recording_changes);
+            $attempt_recording = array(
+                'exe_id' => $attempt_id,
+                'question_id' => $question_id,
+                'marks' => $score,
+                'insert_date' => $now,
+                'author' => '',
+                'session_id' => $session_id,
+            );
+            Database::insert($recording_table, $attempt_recording);
+
         }
-        return $res;
+        return $attempt_id;
     } else {
         return false;
     }

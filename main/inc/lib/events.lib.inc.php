@@ -430,7 +430,7 @@ function createEventExercise($exo_id)
  * @param	integer	Question ID
  * @param	integer Exercise ID
  * @param	integer	Position
- * @param	integer	Exercise ID (from c_quiz)
+ * @param	integer Exercise attempt ID (from track_e_exercise)
  * @param	string  Filename (for audio answers - using nanogong)
  * @param	integer ID of the user who's going to get this score. Default value of null means "get from context".
  * @param	integer	Course ID (from the "id" column of course table). Default value of null means "get from context".

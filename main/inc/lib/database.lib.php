@@ -279,7 +279,10 @@ class Database
            SELECT * FROM user WHERE id = ''1'' instead of
            SELECT * FROM user WHERE id = '1'
         */
-        $string = '_@_'.self::$db->quote($string).'_@_';
+        // $string = '_@_'.self::$db->quote($string).'_@_';
+
+        $string = self::$db->quote($string);
+        return trim($string, "'");
         return $string;
     }
 
@@ -297,15 +300,18 @@ class Database
         } else {
             $connection = self::$connectionRead;
         }
-        /* Chamilo queries are formed in many ways:
+        /* The solution below does not work because there are some case where we use the "LIKE" option like this:
+            $sql  = 'SELECT * FROM user WHERE id LIKE "%'.Database::escape_string($id).' %" ;
+
+            Chamilo queries are formed in many ways:
             $sql  = "SELECT * FROM user WHERE id = '".Database::escape_string($id)."'; or
             $sql  = 'SELECT * FROM user WHERE id = '.Database::escape_string($id).';
 
             The problem here is that the function escape_string() calls the quote function that adds a "'" string.
             Instead of this we're adding a identifier __@__ so we can identify those cases and replace with a simple '
         */
-        //error_log($query);
-        $query = str_replace(
+        //var_dump($query);
+        /*$query = str_replace(
             array(
                 "\"_@_'",
                 "'_@_\"",
@@ -315,8 +321,8 @@ class Database
             ),
             "'",
             $query
-        );
-        //error_log($query);
+        );*/
+        //var_dump($query);
         return $connection->executeQuery($query);
 
         /*
@@ -415,9 +421,11 @@ class Database
      */
     private static function format_table_name($database, $table)
     {
-        $glue = '`.`';
+        /*$glue = '`.`';
         $table_name = '`'.$database.$glue.$table.'`';
-        return $table_name;
+        */
+        return $table;
+        //return $table_name;
     }
 
     /*

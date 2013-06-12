@@ -250,9 +250,9 @@ abstract class TransactionLog {
    *   If any step for exporting the element fails, an exception should be
    *   raised.
    *
-   * @return mixed
-   *   String representing this transaction as expected by corresponding
-   *   controller importtoLog() or FALSE if export failed.
+   * @return string
+   *   JSON string representing this transaction as expected by corresponding
+   *   import().
    */
   abstract public function export();
 }
@@ -290,6 +290,7 @@ class TransactionLogController {
    *   A list of TransactionLog object that match passed conditions.
    */
   public function load($db_fields) {
+    $class_name = $this->class;
     foreach ($db_fields as $db_field => $db_value) {
       $conditions[] = "$db_field = ?";
       $values[] = $db_value;
@@ -297,7 +298,7 @@ class TransactionLogController {
     $results = Database::select('*', $this->table, array('where' => array(implode(' AND ', $conditions) => $values)));
     $objects = array();
     foreach ($results as $result) {
-      $objects[] = new $this->class($result);
+      $objects[] = new $class_name($result);
     }
     return $objects;
   }
@@ -341,15 +342,23 @@ class TransactionLogController {
   /**
    * Adds the information to the transaction tables.
    *
-   * @param array $transaction_data
-   *   A set of transaction arrays. Each of them as required by
-   *   TransactionLog::__construct().
+   * @param array $exported_transactions
+   *   A set of transactions to import. Each of them as provided by the
+   *   corresponding transaction object export().
+   *
+   * @return array
+   *   A set of transaction ids correctly added.
    */
-  public function importToLog($transaction_data) {
-    foreach ($transaction_data as $item) {
-      $transaction = new $this->class($item);
+  public function importToLog($exported_transactions) {
+    $class_name = $this->class;
+    $added_transactions = array();
+    foreach ($exported_transactions as $exported_transaction) {
+      $transaction_data = json_decode($exported_transaction, TRUE);
+      $transaction = new $class_name($transaction_data);
       $transaction->save();
+      $added_transactions[] = $transaction->id;
     }
+    return $added_transactions;
   }
 }
 
@@ -369,6 +378,16 @@ class TransactionExportException extends Exception {
  * Exercise tool attempt transaction.
  */
 class ExerciseAttemptTransactionLog extends TransactionLog {
+  /**
+   * {@inheritdoc}
+   *
+   * Exercise attempts have the following data depending on its scope:
+   * - Normal transaction:
+   *   - 'question_order': Question order list as in session questionList.
+   * - Exported transaction:
+   *   - 'course_id': Course identifier.
+   */
+  public $data;
   /**
    * {@inheritdoc}
    */
@@ -394,12 +413,16 @@ class ExerciseAttemptTransactionLog extends TransactionLog {
     }
     $exercise = new Exercise($this->data['course_id']);
     if (!$exercise->read($exercise_id)) {
-      throw new TransactionExportException(sprintf('The included exercise id "%d" on course with id "%d" does not currently exists on the database.', $exercise_id, $this->data['course_id']));
+      throw new TransactionExportException(sprintf('The included exercise id "%d" on course with id "%d" does not currently exist on the database.', $exercise_id, $this->data['course_id']));
     }
-    $attempt = $exercise->getStatTrackExerciseInfoByExeId($attempt_id);
-    if (empty($attempt)) {
-      throw new TransactionExportException(sprintf('There is no data associated with exe_id "%d" on the database.', $attempt_id));
+    $exercise_stat_info = $exercise->getStatTrackExerciseInfoByExeId($attempt_id);
+    if (empty($exercise_stat_info)) {
+      throw new TransactionExportException(sprintf('There is no exercise stat information associated with exe_id "%d" on the database.', $attempt_id));
     }
+    // Prepare the export.
+    $content = (array) $this;
+    // @fixme Export data required on exercise_attempt().
+    return json_encode($content);
   }
 
   /**
@@ -411,16 +434,27 @@ class ExerciseAttemptTransactionLog extends TransactionLog {
     if ($this->status_id == TransactionLog::STATUS_LOCAL) {
       return FALSE;
     }
+    if (empty($this->item_id)) {
+      throw new TransactionImportException('Undefined item_id');
+    }
+    list($exercise_id, $attempt_id) = explode(':', $this->item_id);
     if (empty($this->data['course_id'])) {
       throw new TransactionImportException('Undefined course_id');
     }
     $exercise = new Exercise($this->data['course_id']);
     if (!$exercise->read($exercise_id)) {
-      throw new TransactionImportException(sprintf('The included exercise id "%d" on course with id "%d" does not currently exists on the database.', $exercise_id, $this->data['course_id']));
+      throw new TransactionImportException(sprintf('The included exercise id "%d" on course with id "%d" does not currently exist on the database.', $exercise_id, $this->data['course_id']));
     }
-    // @todo Decide what to use to create the attempt:
-    // - exercise_attempt($score, $answer, $question_id, $exe_id, $position, $exercise_id = 0, $nano = null)
-    // - $objExercise->manageAnswers($exeId, $questionId, $choice, $from = 'exercise_show', $exerciseResultCoordinates = array(), $saved_results = true, $from_database = false, $show_result = true, $hotspot_delineation_result = array())
+    // First, create the exercise attempt to obtain an id in this system.
+    // @todo For now using default values except for question list. Review if that's OK.
+    $exe_id = $exercise->save_stat_track_exercise_info(0, 0, 0, 0, $this->data['question_order'], 0);
+    if (!$exe_id) {
+      throw new TransactionImportException(sprintf('Could not create exercise stat information correctly on course with id "%d" for exercise_id "%d"', $this->data['course_id'], $exercise_id));
+    }
+
+    // Use exercise_attempt($score, $answer, $question_id, $exe_id, $position, $exercise_id = 0, $nano = null, $user_id = null, $course_id = null, $session_id = null, $learnpath_id = null, $learnpath_item_id = null)
+    // @fixme Complete the saving process.
+    //$exe_id = exercise_attempt($score, $answer, $question_id, $exe_id, $position, $exercise_id = 0, $nano = null, $user_id = null, $this->data['course_id']);
     // on fail throw new TransactionImportException(sprintf('Could not create exercise attempt: %s.', print_r($this, 1)));
   }
 }

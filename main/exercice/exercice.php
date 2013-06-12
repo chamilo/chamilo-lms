@@ -1023,6 +1023,6 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
     Display :: display_footer();
 }
 
-Session::erase('objExercise', $objExercise);
-Session::erase('objQuestion', $objQuestion);
-Session::erase('objAnswer', $objAnswer);
+Session::erase('objExercise');
+Session::erase('objQuestion');
+Session::erase('objAnswer');

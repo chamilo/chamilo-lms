@@ -65,6 +65,7 @@ class Database
 
     /**
      * Returns the name of the main database.
+     * @return string
      */
     public static function get_main_database()
     {
@@ -77,6 +78,7 @@ class Database
      *    In single database, this can be e.g. an underscore so we just fake
      *    there are multiple databases and the code can be written independent
      *    of the single / multiple database setting.
+     *    @return string
      */
     public static function get_database_glue()
     {
@@ -173,15 +175,16 @@ class Database
 
     /**
      * Gets the next row of the result of the SQL query (as returned by Database::query) in an object form
-     * @param    resource    The result from a call to sql_query (e.g. Database::query)
+     * @param    \Doctrine\DBAL\Driver\Statement    The result from a call to Database::query())
      * @param    string        Optional class name to instanciate
      * @param    array        Optional array of parameters
      * @return    object        Object of class StdClass or the required class, containing the query result row
      * @author    Yannick Warnier <yannick.warnier@dokeos.com>
      */
-    public static function fetch_object(\Doctrine\DBAL\Driver\Statement $result, $class = null, $params = null)
+    public static function fetch_object(\Doctrine\DBAL\Driver\Statement $result)
     {
-        return $result->fetchObject();
+        //return $result->fetch(\Doctrine\ORM\Query::HYDRATE_OBJECT);
+        return $result->fetch(PDO::FETCH_OBJ);
 
         /*return !empty($class) ? (is_array($params) ? mysql_fetch_object($result, $class, $params) : mysql_fetch_object(
             $result,
@@ -191,8 +194,8 @@ class Database
 
     /**
      * Gets the array from a SQL result (as returned by Database::query) - help achieving database independence
-     * @param resource        The result from a call to sql_query (see Database::query()).
-     * @return array        Array of results as returned by php (mysql_fetch_row)
+     * @param  \Doctrine\DBAL\Driver\Statement    The result from a call to Database::query())
+     * @return array        Array of results as returned by php
      */
     public static function fetch_row(\Doctrine\DBAL\Driver\Statement $result)
     {
@@ -237,7 +240,6 @@ class Database
         return null;
     }
 
-
     /**
      * Frees all the memory associated with the provided result identifier.
      * @return bool        Returns TRUE on success or FALSE on failure.
@@ -249,7 +251,6 @@ class Database
         $result->closeCursor();
         //return mysql_free_result($result);
     }
-
 
     /**
      * Detects if a query is going to modify something in the database in order to use the write connection
@@ -433,9 +434,10 @@ class Database
     */
 
     /**
-     * Executes an inserto in the database (dbal already escape strings)
+     * Executes an insert to in the database (dbal already escape strings)
      * @param string table name
-     * @array array An array of field and values
+     * @param array An array of field and values
+     * @param bool show query
      * @return int the id of the latest executed query
      */
     public static function insert($table_name, $attributes, $show_query = false)
@@ -608,6 +610,10 @@ class Database
 
     /**
      * Deletes an item depending of conditions
+     * @param string $table_name
+     * @param array $where_conditions
+     * @param bool $show_query
+     * @return int
      */
     public static function delete($table_name, $where_conditions, $show_query = false)
     {
@@ -630,8 +636,10 @@ class Database
     /**
      * Experimental useful database update
      * @param    string    table name use Database::get_main_table
-     * @param    array    array with values to updates, keys are the fields in the database: Example: $params['name'] = 'Julio'; $params['lastname'] = 'Montoya';
+     * @param    array    array with values to updates, keys are the fields in the database:
+     * @example: $params['name'] = 'Julio'; $params['lastname'] = 'Montoya';
      * @param    array    where conditions i.e array('id = ?' =>'4')
+     * @param bool show query
      * @todo lot of stuff to do here
      */
     public static function update($table_name, $attributes, $where_conditions = array(), $show_query = false)

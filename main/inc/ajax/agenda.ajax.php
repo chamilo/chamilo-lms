@@ -26,7 +26,7 @@ $user_id = api_get_user_id();
 $is_group_tutor = GroupManager::is_tutor_of_group($user_id, $group_id);
 
 $agenda = new Agenda();
-$agenda->type = $type; //course,admin or personal
+$agenda->setType($type); //course,admin or personal
 
 switch ($action) {
     case 'add_event':

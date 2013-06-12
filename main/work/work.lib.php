@@ -1616,12 +1616,17 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
 			$is_author  = false;
             $can_read   = false;
 
+            $owner_id = $work['user_id'];
 
-			$item_property_data = api_get_item_property_info(api_get_course_int_id(), 'work', $item_id, api_get_session_id());
+            /* Because a bug found when saving items using the api_item_property_update()
+               the field $item_property_data['insert_user_id'] is not reliable. */
 
-			if (!$is_allowed_to_edit && $item_property_data['insert_user_id'] == api_get_user_id()) {
+			// $item_property_data = api_get_item_property_info(api_get_course_int_id(), 'work', $item_id, api_get_session_id());
+			//if (!$is_allowed_to_edit && $item_property_data['insert_user_id'] == api_get_user_id()) {
+            if (!$is_allowed_to_edit && $owner_id == api_get_user_id()) {
 				$is_author = true;
 			}
+
             if ($course_info['show_score'] == 0 ) {
                 $can_read = true;
             }

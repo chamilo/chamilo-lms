@@ -40,25 +40,6 @@ class IndexController extends CommonController
         $this->cidReset();
         /** @var \Template $template */
         $template = $app['template'];
-        // Testing new Database with doctrine embeded
-        /* $sql = "SELECT * FROM user WHERE user_id = 1 ORDER BY RAND()";
-        $result = \Database::query($sql);
-        $result = \Database::fetch_object($result);
-        var_dump($result);*/
-
-
-        /*$sql = "INSERT INTO user (username, lastname, firstname) VALUES ('111s11', '123', '123'); ";
-        $a = \Database::query($sql);
-        var_dump($app['dbs']['mysql_read']->lastInsertId());*/
-
-        /*$params['data'] = array(
-            'subject' => 'subject julito',
-            'title' => 'Title',
-            'content' => 'content julito',
-            'user' => 'julito'
-        );
-        \MessageManager::sendMessageUsingTemplate('sample/sample.tpl', $params, 1);*/
-
         $loginError = $app['request']->get('error');
 
         $extraJS = array();

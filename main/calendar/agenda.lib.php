@@ -4,6 +4,7 @@
 /**
  * @author: Julio Montoya <gugli100@gmail.com>
  * Class Agenda
+ * @todo move this in main/inc/lib and update composer autoload
  */
 class Agenda
 {

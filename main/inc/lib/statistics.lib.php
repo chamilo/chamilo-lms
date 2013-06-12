@@ -129,7 +129,7 @@ class Statistics {
     static function get_number_of_activities() {
         // Database table definitions
         global $_configuration;
-        $track_e_default  = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+        $track_e_default  = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id = api_get_current_access_url_id();
@@ -154,7 +154,7 @@ class Statistics {
      */
     static function get_activities_data($from, $number_of_items, $column, $direction) {
         global $dateTimeFormatLong, $_configuration;
-        $track_e_default    		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+        $track_e_default    		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
         $table_user 				= Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table	= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id 			= api_get_current_access_url_id();
@@ -320,7 +320,7 @@ class Statistics {
      */
     static function print_login_stats($type)
     {
-        $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id = api_get_current_access_url_id();
         if (api_is_multiple_url_enabled()) {
@@ -395,7 +395,7 @@ class Statistics {
     static function print_recent_login_stats()
     {
         $total_logins = array();
-        $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id = api_get_current_access_url_id();
         if (api_is_multiple_url_enabled()) {
@@ -422,7 +422,7 @@ class Statistics {
     static function print_tool_stats()
     {
         $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
-        $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
         $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
 
@@ -572,7 +572,7 @@ class Statistics {
         $form->display();
         $values = $form->exportValues();
         $date_diff = $values['date_diff'];
-        $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
         $tableCourse  = Database::get_main_table(TABLE_MAIN_COURSE);
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT access_date, c.code FROM $table s , $access_url_rel_course_table u, $tableCourse c
@@ -696,7 +696,7 @@ class Statistics {
      */
     static function print_users_not_logged_in_stats() {
         $total_logins = array();
-        $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id = api_get_current_access_url_id();
         $total = self::count_users();

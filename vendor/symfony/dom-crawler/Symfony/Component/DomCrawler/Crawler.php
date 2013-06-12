@@ -25,7 +25,7 @@ class Crawler extends \SplObjectStorage
     /**
      * @var string The current URI or the base href value
      */
-    private $uri;
+    protected $uri;
 
     /**
      * Constructor.
@@ -58,7 +58,9 @@ class Crawler extends \SplObjectStorage
      * This method uses the appropriate specialized add*() method based
      * on the type of the argument.
      *
-     * @param null|\DOMNodeList|array|\DOMNode $node A node
+     * @param \DOMNodeList|\DOMNode|array|string|null $node A node
+     *
+     * @throws \InvalidArgumentException When node is not the expected type.
      *
      * @api
      */
@@ -66,12 +68,14 @@ class Crawler extends \SplObjectStorage
     {
         if ($node instanceof \DOMNodeList) {
             $this->addNodeList($node);
+        } elseif ($node instanceof \DOMNode) {
+            $this->addNode($node);
         } elseif (is_array($node)) {
             $this->addNodes($node);
         } elseif (is_string($node)) {
             $this->addContent($node);
-        } elseif (is_object($node)) {
-            $this->addNode($node);
+        } elseif (null !== $node) {
+            throw new \InvalidArgumentException(sprintf('Expecting a DOMNodeList or DOMNode instance, an array, a string, or null, but got "%s".', is_object($node) ? get_class($node) : gettype($node)));
         }
     }
 
@@ -147,7 +151,14 @@ class Crawler extends \SplObjectStorage
 
         $baseHref = current($base);
         if (count($base) && !empty($baseHref)) {
-            $this->uri = $baseHref;
+            if ($this->uri) {
+                $linkNode = $dom->createElement('a');
+                $linkNode->setAttribute('href', $baseHref);
+                $link = new Link($linkNode, $this->uri);
+                $this->uri = $link->getUri();
+            } else {
+                $this->uri = $baseHref;
+            }
         }
     }
 
@@ -264,13 +275,13 @@ class Crawler extends \SplObjectStorage
     /**
      * Calls an anonymous function on each node of the list.
      *
-     * The anonymous function receives the position and the node as arguments.
+     * The anonymous function receives the position and the node wrapped
+     * in a Crawler instance as arguments.
      *
      * Example:
      *
-     *     $crawler->filter('h1')->each(function ($node, $i)
-     *     {
-     *       return $node->nodeValue;
+     *     $crawler->filter('h1')->each(function ($node, $i) {
+     *         return $node->text();
      *     });
      *
      * @param \Closure $closure An anonymous function
@@ -283,7 +294,7 @@ class Crawler extends \SplObjectStorage
     {
         $data = array();
         foreach ($this as $i => $node) {
-            $data[] = $closure($node, $i);
+            $data[] = $closure(new static($node, $this->uri), $i);
         }
 
         return $data;
@@ -304,7 +315,7 @@ class Crawler extends \SplObjectStorage
     {
         $nodes = array();
         foreach ($this as $i => $node) {
-            if (false !== $closure($node, $i)) {
+            if (false !== $closure(new static($node, $this->uri), $i)) {
                 $nodes[] = $node;
             }
         }
@@ -432,7 +443,9 @@ class Crawler extends \SplObjectStorage
             throw new \InvalidArgumentException('The current node list is empty.');
         }
 
-        return new static($this->sibling($this->getNode(0)->firstChild), $this->uri);
+        $node = $this->getNode(0)->firstChild;
+
+        return new static($node ? $this->sibling($node) : array(), $this->uri);
     }
 
     /**
@@ -471,6 +484,35 @@ class Crawler extends \SplObjectStorage
         }
 
         return $this->getNode(0)->nodeValue;
+    }
+
+    /**
+     * Returns the first node of the list as HTML.
+     *
+     * @return string The node html
+     *
+     * @throws \InvalidArgumentException When current node is empty
+     */
+    public function html()
+    {
+        if (!count($this)) {
+            throw new \InvalidArgumentException('The current node list is empty.');
+        }
+
+        $html = '';
+        foreach ($this->getNode(0)->childNodes as $child) {
+            if (version_compare(PHP_VERSION, '5.3.6', '>=')) {
+                // node parameter was added to the saveHTML() method in PHP 5.3.6
+                // @see http://php.net/manual/en/domdocument.savehtml.php
+                $html .= $child->ownerDocument->saveHTML($child);
+            } else {
+                $document = new \DOMDocument('1.0', 'UTF-8');
+                $document->appendChild($document->importNode($child, true));
+                $html .= rtrim($document->saveHTML());
+            }
+        }
+
+        return $html;
     }
 
     /**
@@ -566,7 +608,7 @@ class Crawler extends \SplObjectStorage
      */
     public function selectLink($value)
     {
-        $xpath  = sprintf('//a[contains(concat(\' \', normalize-space(string(.)), \' \'), %s)] ', static::xpathLiteral(' '.$value.' ')).
+        $xpath = sprintf('//a[contains(concat(\' \', normalize-space(string(.)), \' \'), %s)] ', static::xpathLiteral(' '.$value.' ')).
                             sprintf('| //a/img[contains(concat(\' \', normalize-space(string(@alt)), \' \'), %s)]/ancestor::a', static::xpathLiteral(' '.$value.' '));
 
         return $this->filterXPath($xpath);
@@ -676,7 +718,6 @@ class Crawler extends \SplObjectStorage
      * @param string $s String to be escaped
      *
      * @return string Converted string
-     *
      */
     public static function xpathLiteral($s)
     {
@@ -704,7 +745,7 @@ class Crawler extends \SplObjectStorage
         return sprintf("concat(%s)", implode($parts, ', '));
     }
 
-    private function getNode($position)
+    protected function getNode($position)
     {
         foreach ($this as $i => $node) {
             if ($i == $position) {
@@ -717,7 +758,7 @@ class Crawler extends \SplObjectStorage
         // @codeCoverageIgnoreEnd
     }
 
-    private function sibling($node, $siblingDir = 'nextSibling')
+    protected function sibling($node, $siblingDir = 'nextSibling')
     {
         $nodes = array();
 

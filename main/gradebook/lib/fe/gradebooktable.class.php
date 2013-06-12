@@ -520,7 +520,7 @@ class GradebookTable extends SortableTable {
 			// evaluation
 			case 'E' :
 				$cat = new Category();
-				$course_id = Database::get_course_by_category($_GET['selectcat']);
+				$course_id = CourseManager::get_course_by_category($_GET['selectcat']);
 
 				$show_message = $cat->show_message_resource_delete($course_id);
 
@@ -557,7 +557,7 @@ class GradebookTable extends SortableTable {
 			// link
 			case 'L' :
 				$cat 			= new Category();
-				$course_id	 	= Database::get_course_by_category($_GET['selectcat']);
+				$course_id	 	= CourseManager::get_course_by_category($_GET['selectcat']);
 				$show_message	= $cat->show_message_resource_delete($course_id);
 
 				$url = $item->get_link();

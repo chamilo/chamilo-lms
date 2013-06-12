@@ -277,8 +277,8 @@ class Attendance
 					attendance_qualify_title = '$title_gradebook',
 					attendance_weight = '$weight_calification',
 					session_id = '$session_id'";
-		Database::query($sql);
-		$affected_rows = Database::affected_rows();
+		$result = Database::query($sql);
+		$affected_rows = Database::affected_rows($result);
 		$last_id = 0;
 		if (!empty($affected_rows)) {
 			// save inside item property table
@@ -361,8 +361,8 @@ class Attendance
 			foreach ($attendance_id as $id) {
 				$id	= intval($id);
 				$sql = "UPDATE $tbl_attendance SET active = 1 WHERE c_id = $course_id AND id = '$id'";
-				Database::query($sql);
-				$affected_rows = Database::affected_rows();
+				$result = Database::query($sql);
+				$affected_rows = Database::affected_rows($result);
 				if (!empty($affected_rows)) {
 					// update row item property table
 					api_item_property_update($course_info, TOOL_ATTENDANCE, $id,"restore", $user_id);
@@ -371,8 +371,8 @@ class Attendance
 		} else  {
 			$attendance_id	= intval($attendance_id);
 			$sql = "UPDATE $tbl_attendance SET active = 1 WHERE c_id = $course_id AND id = '$attendance_id'";
-			Database::query($sql);
-			$affected_rows = Database::affected_rows();
+			$result = Database::query($sql);
+			$affected_rows = Database::affected_rows($result);
 			if (!empty($affected_rows)) {
 				// update row item property table
 				api_item_property_update($course_info, TOOL_ATTENDANCE, $attendance_id,"restore", $user_id);
@@ -397,8 +397,8 @@ class Attendance
 			foreach ($attendance_id as $id) {
 				$id	= intval($id);
 				$sql = "UPDATE $tbl_attendance SET active = 0 WHERE c_id = $course_id AND id = '$id'";
-				Database::query($sql);
-				$affected_rows = Database::affected_rows();
+				$result = Database::query($sql);
+				$affected_rows = Database::affected_rows($result);
 				if (!empty($affected_rows)) {
 					// update row item property table
 					api_item_property_update($course_info, TOOL_ATTENDANCE, $id,"delete", $user_id);
@@ -407,8 +407,8 @@ class Attendance
 		} else  {
 			$attendance_id	= intval($attendance_id);
 			$sql = "UPDATE $tbl_attendance SET active = 0 WHERE c_id = $course_id AND id = '$attendance_id'";
-			Database::query($sql);
-			$affected_rows = Database::affected_rows();
+			$result = Database::query($sql);
+			$affected_rows = Database::affected_rows($result);
 			if (!empty($affected_rows)) {
 				// update row item property table
 				api_item_property_update($course_info, TOOL_ATTENDANCE, $attendance_id,"delete", $user_id);
@@ -428,8 +428,8 @@ class Attendance
         $attendance_id = intval($attendance_id);
         $locked = ($lock)?1:0;
         $upd = "UPDATE $tbl_attendance SET locked = $locked WHERE c_id = $course_id AND id = $attendance_id";
-        Database::query($upd);
-        $affected_rows = Database::affected_rows();
+        $result = Database::query($upd);
+        $affected_rows = Database::affected_rows($result);
         if ($affected_rows && $lock) {
             //save attendance sheet log
             $lastedit_type = self::LOCKED_ATTENDANCE_LOG_TYPE;
@@ -575,13 +575,13 @@ class Attendance
                             user_id 				= '$uid',
                             attendance_calendar_id 	= '$calendar_id',
                             presence 				= $presence";
-                    Database::query($sql);
-                    $affected_rows += Database::affected_rows();
+                    $result = Database::query($sql);
+                    $affected_rows += Database::affected_rows($result);
                 } else {
                     $sql = "UPDATE $tbl_attendance_sheet SET presence = $presence
                             WHERE c_id = $course_id AND user_id ='$uid' AND attendance_calendar_id = '$calendar_id'";
-                    Database::query($sql);
-                    $affected_rows += Database::affected_rows();
+                    $result = Database::query($sql);
+                    $affected_rows += Database::affected_rows($result);
                 }
             }
         }
@@ -765,8 +765,8 @@ class Attendance
         // save data
         $ins = "INSERT INTO $tbl_attendance_sheet_log(c_id, attendance_id, lastedit_date, lastedit_type, lastedit_user_id, calendar_date_value)
                 VALUES ($course_id, $attendance_id, '$lastedit_date', '$lastedit_type', $lastedit_user_id, '$calendar_date_value')";
-        Database::query($ins);
-        return Database::affected_rows();
+        $result = Database::query($ins);
+        return Database::affected_rows($result);
    }
 
 	/**
@@ -1222,9 +1222,9 @@ class Attendance
 					c_id			= $course_id,
 					date_time		= '".Database::escape_string($this->date_time)."',
 					attendance_id 	= '$attendance_id'";
-			Database::query($sql);
-            $cal_id = Database::get_last_insert_id();
-			$affected_rows = Database::affected_rows();
+			$result = Database::query($sql);
+            $cal_id = Database::insert_id();
+			$affected_rows = Database::affected_rows($result);
 		}
 
         // update locked attendance
@@ -1336,8 +1336,8 @@ class Attendance
 		$rs = Database::query($sql);
 		if (Database::num_rows($rs) == 0) {
 			$sql = "UPDATE $tbl_attendance_calendar SET date_time='".Database::escape_string($this->date_time)."' WHERE c_id = $course_id AND id = '".intval($calendar_id)."'";
-			Database::query($sql);
-			$affected_rows = Database::affected_rows();
+			$result = Database::query($sql);
+			$affected_rows = Database::affected_rows($result);
 		}
 
         // update locked attendance
@@ -1379,7 +1379,7 @@ class Attendance
 					Database::query($sql);
 					// delete data from attendance calendar
 					$sql = "DELETE FROM $tbl_attendance_calendar WHERE c_id = $course_id AND id = '".intval($cal['id'])."'";
-					Database::query($sql);
+					$result = Database::query($sql);
 				}
 			}
 		} else {
@@ -1388,10 +1388,10 @@ class Attendance
 			Database::query($sql);
 			// delete data from attendance calendar
 			$sql = "DELETE FROM $tbl_attendance_calendar WHERE c_id = $course_id AND id = '".intval($calendar_id)."'";
-			Database::query($sql);
+			$result = Database::query($sql);
 		}
 
-		$affected_rows = Database::affected_rows();
+		$affected_rows = Database::affected_rows($result);
 		// update users' results
 		$this->update_users_results($user_ids, $attendance_id);
 

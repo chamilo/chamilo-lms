@@ -85,7 +85,7 @@ class ExerciseLink extends AbstractLink
      * Has anyone done this exercise yet ?
      */
     public function has_results() {
-    	$tbl_stats = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    	$tbl_stats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $session_id = api_get_session_id();
 		$sql = 'SELECT count(exe_id) AS number FROM '.$tbl_stats."
                 WHERE   session_id = $session_id AND
@@ -105,7 +105,7 @@ class ExerciseLink extends AbstractLink
 	 */
     public function calc_score($stud_id = null)
     {
-    	$tbl_stats = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    	$tbl_stats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         // The following query should be similar (in conditions)
         // to the one used in exercice/exercice.php, look for note-query-exe-results marker
         $session_id = api_get_session_id();

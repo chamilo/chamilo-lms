@@ -4,7 +4,7 @@
 /**
  * This is a code library for Chamilo.
  * It is included by default in every Chamilo file (through including the global.inc.php)
- *
+ * @todo transform this in a class!
  * @package chamilo.library
  */
 
@@ -255,7 +255,9 @@ define('WEB_TEMPLATE_PATH', 'WEB_TEMPLATE_PATH');
 define('SYS_TEMPLATE_PATH', 'SYS_TEMPLATE_PATH');
 
 // 1.10 new paths
+
 define('WEB_PUBLIC_PATH', 'WEB_PUBLIC_PATH');
+define('SYS_WEB_PATH', 'SYS_WEB_PATH');
 define('SYS_PATH', 'SYS_PATH');
 define('SYS_DATA_PATH', 'SYS_DATA_PATH');
 define('SYS_LOG_PATH', 'SYS_LOG_PATH');
@@ -474,7 +476,8 @@ define ('SKILL_TYPE_BOTH',          'both');
  * api_get_path(SYS_LOG_PATH)                   /var/www/chamilo/logs/
  * api_get_path(SYS_DATA_PATH)                  /var/www/chamilo/data/
  * api_get_path(SYS_CONFIG_PATH)                /var/www/chamilo/config/
-
+ * api_get_path(SYS_WEB_PATH)                   /var/www/chamilo/web/
+ *
  * api_get_path(SYS_COURSE_PATH)                /var/www/chamilo/data/courses/
  * api_get_path(SYS_CODE_PATH)                  /var/www/chamilo/main/
  * api_get_path(SYS_CSS_PATH)                   /var/www/chamilo/main/css
@@ -522,6 +525,7 @@ function api_get_path($path_type, $path = null) {
         WEB_PATH                => '',
         SYS_PATH                => '',
         SYS_DATA_PATH           => 'data/',
+        SYS_WEB_PATH            => 'web/',
         SYS_CONFIG_PATH         => 'config/',
         SYS_LOG_PATH            => 'logs/',
         REL_PATH                => '',
@@ -586,7 +590,7 @@ function api_get_path($path_type, $path = null) {
     if ($path_type == WEB_PATH) {
         if (isset($_configuration['access_url']) &&  $_configuration['access_url'] != 1) {
             //we look into the DB the function api_get_access_url
-            $url_info = api_get_access_url($_configuration['access_url']);
+            $url_info = api_get_current_access_url_info();
             $root_web = $url_info['active'] == 1 ? $url_info['url'] : $_configuration['root_web'];
             $load_new_config = true;
         }
@@ -603,7 +607,7 @@ function api_get_path($path_type, $path = null) {
         // Developers might use the function api_get_path() directly or indirectly (this is difficult to be traced), at the moment when
         // configuration has not been created yet. This is why this function should be upgraded to return correct results in this case.
 
-        //if (defined('SYSTEM_INSTALLATION') && SYSTEM_INSTALLATION) {
+        //if (defined('SYSTEM_INSTALLATION') && SYSTEM_INSTALLATION)
 
         if (empty($root_web)) {
 
@@ -654,6 +658,7 @@ function api_get_path($path_type, $path = null) {
 
         //update data path to get it from config file if defined
         $paths[SYS_DATA_PATH]           = $root_sys.'data/';
+        $paths[SYS_WEB_PATH]            = $root_sys.'web/';
         $paths[SYS_LOG_PATH]            = $root_sys.'logs/';
         $paths[SYS_CONFIG_PATH]         = $root_sys.'config/';
 
@@ -713,6 +718,7 @@ function api_get_path($path_type, $path = null) {
                 WEB_ARCHIVE_PATH        => 'archive/',
                 WEB_LIBRARY_PATH        => 'inc/lib/',
                 WEB_AJAX_PATH           => 'inc/ajax/',
+                WEB_PUBLIC_PATH         => 'web/',
             );
 
             $root_web = api_add_trailing_slash($root_web);
@@ -731,6 +737,7 @@ function api_get_path($path_type, $path = null) {
             $paths[WEB_ARCHIVE_PATH]        = $paths[WEB_PATH].$web_paths[WEB_ARCHIVE_PATH];
             $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$web_paths[WEB_LIBRARY_PATH];
             $paths[WEB_AJAX_PATH]           = $paths[WEB_CODE_PATH].$web_paths[WEB_AJAX_PATH];
+            $paths[WEB_PUBLIC_PATH]         = $paths[WEB_PATH].$web_paths[WEB_PUBLIC_PATH];
         }
     }
 
@@ -1085,7 +1092,7 @@ function api_protect_admin_script($allow_sessions_admins = false) {
 function api_block_anonymous_users($print_headers = true)
 {
     $_user = Session::read('_user');
-    if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
+    if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'])) {
         api_not_allowed($print_headers);
         return false;
     }
@@ -1165,6 +1172,7 @@ function api_get_user_id() {
  * @param int       User ID
  * @param boolean   Whether to get session courses or not - NOT YET IMPLEMENTED
  * @return array    Array of courses in the form [0]=>('code'=>xxx,'db'=>xxx,'dir'=>xxx,'status'=>d)
+ * @deprecated use the UserManager or CourseManager class
  */
 function api_get_user_courses($userid, $fetch_session = true) {
     if ($userid != strval(intval($userid))) { return array(); } //get out if not integer
@@ -1247,6 +1255,9 @@ function _api_format_user($user, $add_password = false) {
     $result['status']           = $user['status'];
     $result['auth_source']      = $user['auth_source'];
     $result['active']           = $user['active'];
+    $result['expiration_date']  = $user['expiration_date'];
+    $result['registration_date']  = $user['registration_date'];
+    $result['creator_id']       = $user['creator_id'];
 
     if (isset($user['username'])) {
         $result['username']         = $user['username'];
@@ -1308,6 +1319,8 @@ function _api_format_user($user, $add_password = false) {
         $result['password'] = $user['password'];
     }
 
+    $result['extra_fields'] = isset($user['extra_fields']) ? $user['extra_fields'] : array();
+
     return $result;
 }
 
@@ -1323,7 +1336,7 @@ function api_get_user_info($user_id = '', $check_if_user_is_online = false, $sho
         $_user = Session::read('_user');
         return _api_format_user($_user);
     }
-    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE user_id='".Database::escape_string($user_id)."'";
+    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE user_id = '".Database::escape_string($user_id)."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
@@ -1342,7 +1355,6 @@ function api_get_user_info($user_id = '', $check_if_user_is_online = false, $sho
             $result_array['user_is_online_in_chat'] = $user_online_in_chat;
 		}
         $user = _api_format_user($result_array, $show_password);
-
 
         if ($add_extra_values) {
             $extra_field_values = new ExtraField('user');
@@ -1414,14 +1426,20 @@ function api_get_course_path($course_code = null) {
  */
 function api_get_course_setting($setting_name, $course_code = null) {
     $course_info = api_get_course_info($course_code);
-	$table 		 = Database::get_course_table(TABLE_COURSE_SETTING);
-    $setting_name = Database::escape_string($setting_name);
-    if (!empty($course_info['real_id']) && !empty($setting_name)) {
-        $sql = "SELECT value FROM $table WHERE c_id = {$course_info['real_id']} AND variable = '$setting_name'";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            $row = Database::fetch_array($res);
-            return $row['value'];
+
+    if (isset($course_info['settings']) && isset($course_info['settings'][$setting_name])) {
+        return $course_info['settings'][$setting_name]['value'];
+    } else {
+        //var_dump($course_info);
+        $table 		 = Database::get_course_table(TABLE_COURSE_SETTING);
+        $setting_name = Database::escape_string($setting_name);
+        if (!empty($course_info['real_id']) && !empty($setting_name)) {
+            $sql = "SELECT value FROM $table WHERE c_id = {$course_info['real_id']} AND variable = '$setting_name'";
+            $res = Database::query($sql);
+            if (Database::num_rows($res) > 0) {
+                $row = Database::fetch_array($res);
+                return $row['value'];
+            }
         }
     }
     return -1;
@@ -1492,7 +1510,8 @@ function api_get_cidreq($add_session_id = true, $add_group_id = true) {
  * particular course, not specially the current one.
  * @todo    Same behaviour as api_get_user_info so that api_get_course_id becomes absolete too.
  */
-function api_get_course_info($course_code = null, $add_extra_values = false) {
+function api_get_course_info($course_code = null, $add_extra_values = false, $addCourseSettings = false)
+{
     if (!empty($course_code)) {
         $course_code        = Database::escape_string($course_code);
         $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -1502,6 +1521,7 @@ function api_get_course_info($course_code = null, $add_extra_values = false) {
                  LEFT JOIN $course_cat_table
                  ON course.category_code =  course_category.code
                  WHERE course.code = '$course_code'";
+
         $result = Database::query($sql);
         $_course = array();
         if (Database::num_rows($result) > 0) {
@@ -1511,6 +1531,14 @@ function api_get_course_info($course_code = null, $add_extra_values = false) {
                 $extra_field_values = new ExtraField('course');
                 $course_data['extra_fields'] = $extra_field_values->get_handler_extra_data($course_code);
             }
+
+            if ($addCourseSettings) {
+                $course_data['settings'] = CourseManager::getCourseSettings($course_data['id']);
+            }
+
+            $course_data['teacher_list'] = CourseManager::get_teacher_list_from_course_code($course_data['id']);
+            $course_data['teacher_list_formatted'] = CourseManager::formatUserListToString($course_data['teacher_list'], null, true);
+
             $_course = api_format_course_array($course_data);
         }
         return $_course;
@@ -1555,6 +1583,11 @@ function api_get_course_info_by_id($id = null, $add_extra_values = false) {
     return $_course;
 }
 
+/**
+ * Sets the course array
+ * @param array  $course_data course info
+ * @return array
+ */
 function api_format_course_array($course_data) {
 
     if (empty($course_data)) {
@@ -1604,7 +1637,7 @@ function api_format_course_array($course_data) {
     $_course['registration_code']     = !empty($course_data['registration_code']) ? sha1($course_data['registration_code']) : null;
     $_course['disk_quota']            = $course_data['disk_quota'];
     $_course['course_public_url']     = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/index.php';
-    $_course['course_web_public_url']     = api_get_path(WEB_PUBLIC_PATH).'courses/'.$course_data['directory'].'/';
+    $_course['course_web_public_url'] = api_get_path(WEB_PUBLIC_PATH).'courses/'.$course_data['directory'].'/';
     $_course['course_sys_data']       = api_get_path(SYS_DATA_PATH).'courses/'.$course_data['directory'].'/';
 
     $_course['user_status_in_course'] = CourseManager::get_user_in_course_status(api_get_user_id(), $_course['code']);
@@ -1615,9 +1648,12 @@ function api_format_course_array($course_data) {
         $url_image = api_get_path(WEB_IMG_PATH).'without_picture.png';
     }
     $_course['course_image'] = $url_image;
+    $_course['extra_fields'] = isset($course_data['extra_fields']) ? $course_data['extra_fields'] : array();
+    $_course['settings']     = isset($course_data['settings']) ? $course_data['settings'] : array();
+    $_course['teacher_list'] = isset($course_data['teacher_list']) ? $course_data['teacher_list'] : array();
+    $_course['teacher_list_formatted'] = isset($course_data['teacher_list_formatted']) ? $course_data['teacher_list_formatted'] : array();
 
     return $_course;
-
 }
 
 /* STRING MANAGEMENT */
@@ -2400,6 +2436,7 @@ function api_is_course_session_coach($user_id, $courseId, $session_id)
  * Checks whether the current user is a course or session coach
  * @param int - optional, session id
  * @param string - optional, course code
+ * @todo this function is called many times and hits in the DB
  * @return boolean True if current user is a course or session coach
  */
 function api_is_coach($session_id = 0, $courseId = null) {
@@ -2448,8 +2485,8 @@ function api_is_coach($session_id = 0, $courseId = null) {
 	if (!empty($session_id)) {
 	    $sql = "SELECT DISTINCT id
 	         	FROM $session_table
-	         	WHERE   session.id_coach =  '".$user_id."' AND
-                        id = '$session_id'";
+	         	WHERE session.id_coach =  '".$user_id."' AND
+                      id = '$session_id'";
 	    $result = Database::query($sql);
 	    if (!empty($sessionIsCoach)) {
 	    	$sessionIsCoach = array_merge($sessionIsCoach , Database::store_result($result));
@@ -2457,7 +2494,8 @@ function api_is_coach($session_id = 0, $courseId = null) {
 	    	$sessionIsCoach = Database::store_result($result);
 	    }
 	}
-    return (count($sessionIsCoach) > 0);
+    $result = count($sessionIsCoach) > 0;
+    return $result;
 }
 
 /**
@@ -2940,6 +2978,7 @@ function api_not_found($print_headers = false) {
  */
 function api_not_allowed($print_headers = false, $message = null) {
     global $app;
+
     if (api_get_setting('sso_authentication') === 'true') {
         global $osso;
         if ($osso) {
@@ -2984,6 +3023,7 @@ function api_not_allowed($print_headers = false, $message = null) {
 
     $app['template']->assign('content', $msg);
     $app['allowed'] = true;
+
 
     if (($user_id!=0 && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {
         // if the access is not authorized and there is some login information
@@ -3288,9 +3328,9 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
                     WHERE $filter";
     }
 
-    Database::query($sql);
+    $result = Database::query($sql);
     // Insert if no entries are found (can only happen in case of $lastedit_type switch is 'default').
-    if (Database::affected_rows() == 0) {
+    if (Database::affected_rows($result) == 0) {
         $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type,   lastedit_user_id, to_user_id, to_group_id, visibility, start_visible, end_visible, id_session)
                 VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_user_id', '$to_group_id', '$visibility', '$start_visible', '$end_visible', '$session_id')";
 
@@ -3360,7 +3400,7 @@ function api_get_item_property_id($course_code, $tool, $ref) {
  */
 
 function api_track_item_property_update($tool, $ref, $title, $content, $progress) {
-    $tbl_stats_item_property = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
+    $tbl_stats_item_property = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
     $course_id = api_get_real_course_id(); //numeric
     $course_code = api_get_course_id(); //alphanumeric
     $item_property_id = api_get_item_property_id($course_code, $tool, $ref);
@@ -3374,15 +3414,15 @@ function api_track_item_property_update($tool, $ref, $title, $content, $progress
                 lastedit_date       = '".api_get_utc_datetime()."',
                 lastedit_user_id    = '".api_get_user_id()."',
                 session_id          = '".api_get_session_id()."'";
-        Database::query($sql);
-        $affected_rows = Database::affected_rows();
+        $result = Database::query($sql);
+        $affected_rows = Database::affected_rows($result);
         return $affected_rows;
     }
     return false;
 }
 
 function api_get_track_item_property_history($tool, $ref) {
-    $tbl_stats_item_property = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
+    $tbl_stats_item_property = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
     $course_id = api_get_real_course_id(); //numeric
     $course_code = api_get_course_id(); //alphanumeric
     $item_property_id = api_get_item_property_id($course_code, $tool, $ref);
@@ -3512,12 +3552,10 @@ function api_display_language_form($hide_if_no_choice = false) {
  *  array['folder'] = An array with the corresponding names of the language-folders in the filesystem
  */
 function api_get_languages() {
-    global $app;
-
-    if (isset($app['api_get_languages'])) {
-        return $app['api_get_languages'];
+    $language_list = Session::read('_setting.api_get_languages');
+    if (isset($language_list) && !empty($language_list)) {
+        return $language_list;
     }
-
     $tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
     $sql = "SELECT * FROM $tbl_language WHERE available = '1' ORDER BY original_name ASC";
 
@@ -3527,7 +3565,7 @@ function api_get_languages() {
         $language_list['name'][] = $row['original_name'];
         $language_list['folder'][] = $row['dokeos_folder'];
     }
-    $app['api_get_languages'] = $language_list;
+    Session::write('_setting.api_get_languages', $language_list);
     return $language_list;
 }
 
@@ -4488,19 +4526,23 @@ function api_get_access_urls($from = 0, $to = 1000000, $order = 'url', $directio
  */
 function api_get_access_url($id)
 {
-    global $_configuration;
-    $id = Database::escape_string(intval($id));
-    // Calling the Database:: library dont work this is handmade.
-    //$table_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-    $table = 'access_url';
-    $database = $_configuration['main_database'];
-    $table_access_url =  "".$database.".".$table."";
-    $sql = "SELECT url, description, active, created_by, tms
-            FROM $table_access_url WHERE id = '$id' ";
+    $id = intval($id);
+    $table_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+    $sql = "SELECT url, description, active, created_by, tms FROM $table_access_url WHERE id = '$id' ";
     $res = Database::query($sql);
-    $result = @Database::fetch_array($res);
+    $result = Database::fetch_array($res);
     return $result;
 }
+
+/**
+ * Gets the current url info
+ */
+function api_get_current_access_url_info()
+{
+    $userInfo = Session::read('url_info');
+    return $userInfo;
+}
+
 
 /**
  * Adds an access URL into the database
@@ -5024,11 +5066,29 @@ function api_create_include_path_setting() {
     return api_get_path(LIBRARY_PATH).'pear';
 }
 
-/** Gets the current access_url id of the Chamilo Platform
+/**
+ * Gets the current access_url id of the Chamilo Platform loaded in the session
  * @author Julio Montoya <gugli100@gmail.com>
  * @return int access_url_id of the current Chamilo Installation
  */
-function api_get_current_access_url_id() {
+function api_get_current_access_url_id()
+{
+    $urlId = Session::read('url_id');
+
+    if (empty($urlId)) {
+        return 1;
+    } else {
+        return $urlId;
+    }
+}
+
+/**
+ * Gets the current access_url id of the api_get_path(WEB_PATH) Chamilo Platform
+ * @author Julio Montoya <gugli100@gmail.com>
+ * @return int access_url_id of the current Chamilo Installation
+ */
+function api_get_access_url_id_from_web_path()
+{
     $access_url_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
     $path = Database::escape_string(api_get_path(WEB_PATH));
     $sql = "SELECT id FROM $access_url_table WHERE url = '".$path."'";
@@ -5037,10 +5097,6 @@ function api_get_current_access_url_id() {
         $access_url_id = Database::result($result, 0, 0);
         return $access_url_id;
     }
-    //if the url in WEB_PATH was not found, it can only mean that there is
-    // either a configuration problem or the first URL has not been defined yet
-    // (by default it is http://localhost/). Thus the more sensible thing we can
-    // do is return 1 (the main URL) as the user cannot hack this value anyway
     return 1;
 }
 
@@ -5377,110 +5433,6 @@ function is_allowed_to_edit() {
     return api_is_allowed_to_edit();
 }
 
-
-/**
- *
- * Send an email.
- *
- * Wrapper function for the standard php mail() function. Change this function
- * to your needs. The parameters must follow the same rules as the standard php
- * mail() function. Please look at the documentation on http://php.net/manual/en/function.mail.php
- * @param string $to
- * @param string $subject
- * @param string $message
- * @param string $additional_headers
- * @param string $additional_parameters
- * @author Ivan Tcholakov, 04-OCT-2009, a reworked version of this function.
- * @deprecated use api_mail_html
- * @link http://www.dokeos.com/forum/viewtopic.php?t=15557
- */
-function api_send_mail($to, $subject, $message, $additional_headers = null, $additional_parameters = null) {
-
-    require_once api_get_path(LIBRARY_PATH).'phpmailer/class.phpmailer.php';
-
-    if (empty($platform_email['SMTP_FROM_NAME'])) {
-        $platform_email['SMTP_FROM_NAME'] = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-    }
-
-    if (empty($platform_email['SMTP_FROM_EMAIL'])) {
-        $platform_email['SMTP_FROM_EMAIL'] = api_get_setting('emailAdministrator');
-    }
-
-    $matches = array();
-    if (preg_match('/([^<]*)<(.+)>/si', $to, $matches)) {
-        $recipient_name = trim($matches[1]);
-        $recipient_email = trim($matches[2]);
-    } else {
-        $recipient_name = '';
-        $recipient_email = trim($to);
-    }
-
-    $sender_name = '';
-    $sender_email = '';
-    $extra_headers = $additional_headers;
-
-    // Regular expression to test for valid email address.
-    // This should actually be revised to use the complete RFC3696 description.
-    // http://tools.ietf.org/html/rfc3696#section-3
-    //$regexp = "^[0-9a-z_\.+-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,3})$"; // Deprecated, 13-OCT-2010.
-
-    $mail = new PHPMailer();
-    $mail->CharSet = $platform_email['SMTP_CHARSET'];
-    $mail->Mailer = $platform_email['SMTP_MAILER'];
-    $mail->Host = $platform_email['SMTP_HOST'];
-    $mail->Port = $platform_email['SMTP_PORT'];
-
-    if ($platform_email['SMTP_AUTH']) {
-        $mail->SMTPAuth = 1;
-        $mail->Username = $platform_email['SMTP_USER'];
-        $mail->Password = $platform_email['SMTP_PASS'];
-    }
-
-    $mail->Priority = 3; // 5 = low, 1 = high
-    $mail->AddCustomHeader('Errors-To: '.$platform_email['SMTP_FROM_EMAIL']);
-    $mail->IsHTML(0);
-    $mail->SMTPKeepAlive = true;
-
-    // Attachments.
-    // $mail->AddAttachment($path);
-    // $mail->AddAttachment($path, $filename);
-
-    if ($sender_email != '') {
-        $mail->From = $sender_email;
-        $mail->Sender = $sender_email;
-        //$mail->ConfirmReadingTo = $sender_email; // Disposition-Notification
-    } else {
-        $mail->From = $platform_email['SMTP_FROM_EMAIL'];
-        $mail->Sender = $platform_email['SMTP_FROM_EMAIL'];
-        //$mail->ConfirmReadingTo = $platform_email['SMTP_FROM_EMAIL']; // Disposition-Notification
-    }
-
-    if ($sender_name != '') {
-        $mail->FromName = $sender_name;
-    } else {
-        $mail->FromName = $platform_email['SMTP_FROM_NAME'];
-    }
-    $mail->Subject = $subject;
-    $mail->Body = $message;
-    // Only valid address are to be accepted.
-    //if (eregi( $regexp, $recipient_email )) { // Deprecated, 13-OCT-2010.
-    if (api_valid_email($recipient_email)) {
-        $mail->AddAddress($recipient_email, $recipient_name);
-    }
-
-    if ($extra_headers != '') {
-        $mail->AddCustomHeader($extra_headers);
-    }
-
-    // Send mail.
-    if (!$mail->Send()) {
-        return 0;
-    }
-
-    // Clear all the addresses.
-    $mail->ClearAddresses();
-    return 1;
-}
 
 /**
  * Function used to protect a "global" admin script.
@@ -5944,9 +5896,9 @@ function api_get_unique_id() {
 
 function api_get_home_path() {
 	$home = 'home/';
-	if (api_get_multiple_access_url()) {
-		$access_url_id = api_get_current_access_url_id();
-		$url_info      = api_get_access_url($access_url_id);
+    $access_url_id = api_get_current_access_url_id();
+	if (api_get_multiple_access_url() && $access_url_id != -1) {
+		$url_info      = api_get_current_access_url_info();
 		$url           = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
 		$clean_url     = replace_dangerous_char($url);
 		$clean_url     = str_replace('/', '-', $clean_url);
@@ -6380,10 +6332,10 @@ function api_set_settings_and_plugins()
     $settings_by_access_list = array();
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != 1) {
-        $url_info = api_get_access_url($_configuration['access_url']);
+        $url_info = api_get_current_access_url_info();
         if ($url_info['active'] == 1) {
-            $settings_by_access = & api_get_settings(null, 'list', $_configuration['access_url'], 1);
-            foreach ($settings_by_access as & $row) {
+            $settings_by_access = api_get_settings(null, 'list', $_configuration['access_url'], 1);
+            foreach ($settings_by_access as $row) {
                 if (empty($row['variable'])) {
                     $row['variable'] = 0;
                 }
@@ -6558,7 +6510,18 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
  * @return          returns true if mail was sent
  * @see             class.phpmailer.php
  */
-function api_mail_html($recipient_name, $recipient_email, $subject, $body, $sender_name = '', $sender_email = '', $extra_headers = null, $data_file = array(), $embedded_image = false) {
+function api_mail_html(
+    $recipient_name,
+    $recipient_email,
+    $subject,
+    $body,
+    $sender_name = '',
+    $sender_email = '',
+    $extra_headers = null,
+    $data_file = array(),
+    $embedded_image = false,
+    $text_body = null
+    ) {
     global $app;
 
     $reply_to_mail = $sender_email;
@@ -6569,11 +6532,19 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $body, $send
         $reply_to_name = $extra_headers['reply_to']['name'];
     }
 
-    //$mail->AltBody = strip_tags(str_replace('<br />',"\n", api_html_entity_decode($message)));
+    // Forcing the conversion.
+    if (strpos($body, '<html>') === false) {
+        $htmlBody = str_replace(array("\n\r", "\n", "\r"), '<br />', $body);
+        $htmlBody = '<html><head></head><body>'.$htmlBody.'</body></html>';
+    } else {
+        $htmlBody = $body;
+    }
 
-    //Forcing the conversion
-    $htmlBody = str_replace(array("\n\r", "\n", "\r"), '<br />', $body);
-    $htmlBody = '<html><head></head><body>'.$htmlBody.'</body></html>';
+    if (!empty($text_body)) {
+        $textBody = $text_body;
+    } else {
+        $textBody = $body;
+    }
 
     try {
         $message = \Swift_Message::newInstance()
@@ -6582,7 +6553,7 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $body, $send
             ->setTo(array($recipient_email => $recipient_name))
             ->setReplyTo(array($reply_to_mail => $reply_to_name))
             ->setBody($htmlBody, 'text/html')
-            ->addPart($body, 'text/plain')
+            ->addPart($textBody, 'text/plain')
             ->setEncoder(Swift_Encoding::get8BitEncoding());
         if (!empty($data_file)) {
             // Attach it to the message

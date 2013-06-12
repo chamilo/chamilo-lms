@@ -48,7 +48,7 @@ $TBL_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
 $TBL_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 $TBL_EXERCICE_QUESTION = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
-$TBL_TRACK_EXERCICES = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TBL_TRACK_EXERCICES = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
@@ -709,7 +709,7 @@ if (!empty($exercise_list)) {
 
                         if ($row['random_by_category'] > 0) {
                             $nbQuestionsTotal = $exercise_obj->getNumberQuestionExerciseCategory();
-                            $real_question_count = count($exercise_obj->selectQuestionList());
+                            //$real_question_count = count($exercise_obj->selectQuestionList());
                             $warning = null;
                             if ($nbQuestionsTotal != $real_question_count) {
                                 $warning = Display::return_icon('warning.png', get_lang('CheckThatYouHaveEnoughQuestionsInYourCategories'));
@@ -1022,3 +1022,7 @@ if (empty($exercise_list) && $hotpotatoes_exist == false) {
 if ($origin != 'learnpath') { //so we are not in learnpath tool
     Display :: display_footer();
 }
+
+Session::erase('objExercise');
+Session::erase('objQuestion');
+Session::erase('objAnswer');

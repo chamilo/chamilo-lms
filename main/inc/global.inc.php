@@ -47,7 +47,7 @@ $app = new Application();
     $app->register(new Igorw\Silex\ConfigServiceProvider($settingsFile));
 */
 
-/** Loading configuration file */
+/** Reading configuration files */
 // Reading configuration file from main/inc/conf/configuration.php or app/config/configuration.yml
 $configurationFilePath = $includePath.'/conf/configuration.php';
 $configurationYMLFile = $includePath.'/../../config/configuration.yml';
@@ -81,9 +81,7 @@ if (file_exists($configurationYMLFile)) {
     }
 }
 
-/**  End loading configuration file */
-
-/**  Setting Chamilo paths */
+/** Setting Chamilo paths */
 
 $app['root_sys'] = isset($_configuration['root_sys']) ? $_configuration['root_sys'] : dirname(dirname(__DIR__)).'/';
 $app['sys_data_path'] = isset($_configuration['sys_data_path']) ? $_configuration['sys_data_path'] : $app['root_sys'].'data/';
@@ -91,33 +89,10 @@ $app['sys_config_path'] = isset($_configuration['sys_config_path']) ? $_configur
 $app['sys_temp_path'] = isset($_configuration['sys_temp_path']) ? $_configuration['sys_temp_path'] : $app['root_sys'].'temp/';
 $app['sys_log_path'] = isset($_configuration['sys_log_path']) ? $_configuration['sys_log_path'] : $app['root_sys'].'logs/';
 
-/** Including legacy libs */
-
-// Include the main Chamilo platform library file.
-require_once $includePath.'/lib/main_api.lib.php';
-
-// Setting url_append
-$urlInfo = isset($_configuration['root_web']) ? parse_url($_configuration['root_web']) : null;
-$_configuration['url_append'] = null;
-if (isset($urlInfo['path'])) {
-    $_configuration['url_append'] = '/'.basename($urlInfo['path']);
-}
-
-// Do not over-use this variable. It is only for this scripts local use.
-$libPath = $includePath.'/lib/';
-
-// Database constants
-require_once $libPath.'database.constants.inc.php';
-
-// @todo Rewrite the events.lib.inc.php in a class
-require_once $libPath.'events.lib.inc.php';
-
-// Load allowed tag definitions for kses and/or HTMLPurifier.
-require_once $libPath.'formvalidator/Rule/allowed_tags.inc.php';
-
-/** Loading config files */
+/** Loading config files (mail, auth, profile) */
 
 if ($alreadyInstalled) {
+
     $configPath = $app['sys_config_path'];
 
     $confFiles = array(
@@ -136,7 +111,7 @@ if ($alreadyInstalled) {
 
     // Fixing $_configuration array
 
-    //Fixes bug in Chamilo 1.8.7.1 array was not set
+    // Fixes bug in Chamilo 1.8.7.1 array was not set
     $administrator['email'] = isset($administrator['email']) ? $administrator['email'] : 'admin@example.com';
     $administrator['name'] = isset($administrator['name']) ? $administrator['name'] : 'Admin';
 
@@ -153,6 +128,29 @@ if ($alreadyInstalled) {
     $userPasswordCrypted = (!empty($_configuration['password_encryption']) ? $_configuration['password_encryption'] : 'sha1');
 }
 
+/** End loading config files */
+
+/** Including legacy libs */
+require_once $includePath.'/lib/main_api.lib.php';
+
+// Setting $_configuration['url_append']
+$urlInfo = isset($_configuration['root_web']) ? parse_url($_configuration['root_web']) : null;
+$_configuration['url_append'] = null;
+if (isset($urlInfo['path'])) {
+    $_configuration['url_append'] = '/'.basename($urlInfo['path']);
+}
+
+$libPath = $includePath.'/lib/';
+$langPath = api_get_path(SYS_LANG_PATH);
+
+// Database constants
+require_once $libPath.'database.constants.inc.php';
+
+// @todo Rewrite the events.lib.inc.php in a class
+require_once $libPath.'events.lib.inc.php';
+
+// Load allowed tag definitions for kses and/or HTMLPurifier.
+require_once $libPath.'formvalidator/Rule/allowed_tags.inc.php';
 
 // Ensure that _configuration is in the global scope before loading
 // main_api.lib.php. This is particularly helpful for unit tests
@@ -168,10 +166,19 @@ $app['configuration_file'] = $configurationFilePath;
 $app['configuration_yml_file'] = $configurationYMLFile;
 $app['languages_file'] = array();
 $app['installed'] = $alreadyInstalled;
+$app['app.theme'] = 'chamilo';
 
-// Loading $app settings
-//require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/prod.php';
-require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/dev.php';
+// Developer options relies in the configuration.php file
+
+$app['debug'] = isset($_configuration['debug']) ? $_configuration['debug'] : false;
+$app['show_profiler'] = isset($_configuration['show_profiler']) ? $_configuration['show_profiler'] : false;
+
+// Loading $app settings depending of the debug option
+if ($app['debug']) {
+    require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/dev.php';
+} else {
+    require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/prod.php';
+}
 
 // Classic way of render pages or the Controller approach
 $app['classic_layout'] = false;
@@ -186,64 +193,47 @@ $app['allowed'] = true;
 // @todo use silex session provider instead of a custom class
 Chamilo::session()->start($alreadyInstalled);
 
-// Connect to the server database and select the main chamilo database.
-if (!($conn_return = @Database::connect(
-    array(
-        'server' => $_configuration['db_host'],
-        'username' => $_configuration['db_user'],
-        'password' => $_configuration['db_password'],
-        'persistent' => isset($_configuration['db_persistent_connection']) ? $_configuration['db_persistent_connection'] : null
-        // When $app['configuration']['db_persistent_connection'] is set, it is expected to be a boolean type.
-    )
-))
-) {
-    //$app->abort(500, "Database is unavailable"); //error 3
-}
-
-/*
-if (!$app['configuration']['db_host']) {
-    //$app->abort(500, "Database is unavailable"); //error 3
-}*/
-
-$checkConnection = false;
-
-if (isset($_configuration['main_database'])) {
-    // The system has not been designed to use special SQL modes that were introduced since MySQL 5.
-    Database::query("set session sql_mode='';");
-    $checkConnection = @Database::select_db($_configuration['main_database'], $conn_return);
-
-    if ($checkConnection) {
-
-        // Initialization of the database encoding to be used.
-        Database::query("SET SESSION character_set_server = 'utf8';");
-        Database::query("SET SESSION collation_server = 'utf8_general_ci';");
-        Database::query("SET NAMES 'utf8';");
-    }
-}
-
-/* Retrieving all the chamilo config settings for multiple URLs feature*/
-if (isset($_configuration['multiple_access_urls']) && !empty($_configuration['multiple_access_urls'])) {
-    $_configuration['access_url'] = 1;
-    $access_urls = api_get_access_urls();
-
-    $protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
-    $request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
-    $request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
-
-    foreach ($access_urls as & $details) {
-        if ($request_url1 == $details['url'] or $request_url2 == $details['url']) {
-            $_configuration['access_url'] = $details['id'];
-        }
-    }
-} else {
-    $_configuration['access_url'] = 1;
-}
-
 // Loading chamilo settings
 /* @todo create a service provider to load plugins.
    Check how bolt add extensions (including twig templates, config with yml)*/
+
+// Template settings loaded in template.lib.php
+$app['template.show_header'] = true;
+$app['template.show_footer'] = true;
+$app['template.show_learnpath'] = false;
+$app['template.hide_global_chat'] = true;
+$app['template.load_plugins'] = true;
+
+$app['configuration'] = $_configuration;
+
+/** Including service providers */
+require_once 'services.php';
+
 $_plugins = array();
-if ($alreadyInstalled && $checkConnection) {
+if ($alreadyInstalled) {
+
+    // Setting the static database class
+    $database = $app['database'];
+
+    // Retrieving all the chamilo config settings for multiple URLs feature
+    $_configuration['access_url'] = 1;
+    if (api_get_multiple_access_url()) {
+        $access_urls = api_get_access_urls();
+        $protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
+        $request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
+        $request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
+
+        foreach ($access_urls as & $details) {
+            if ($request_url1 == $details['url'] or $request_url2 == $details['url']) {
+                $_configuration['access_url'] = $details['id'];
+            }
+        }
+        Session::write('url_id', $_configuration['access_url']);
+        Session::write('url_info', api_get_current_access_url_info($_configuration['access_url']));
+    } else {
+        Session::write('url_id', -1);
+    }
+
     $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
     $settings_latest_update = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
 
@@ -259,38 +249,39 @@ if ($alreadyInstalled && $checkConnection) {
             $_plugins = isset($_SESSION['_plugins']) ? $_SESSION['_plugins'] : null;
         }
     }
+
+    // Default template style
+    $templateStyle = api_get_setting('template');
+    $templateStyle = isset($templateStyle) && !empty($templateStyle) ? $templateStyle : 'default';
+    $app['template_style'] = $templateStyle;
+
+    // Default layout
+    $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
+
+    $app['plugins'] = $_plugins;
 }
-$app['plugins'] = $_plugins;
-
-// Template settings loaded in template.lib.php
-$app['template.show_header'] = true;
-$app['template.show_footer'] = true;
-$app['template.show_learnpath'] = false;
-$app['template.hide_global_chat'] = true;
-$app['template.load_plugins'] = true;
-
-// Default template style
-$templateStyle = api_get_setting('template');
-$templateStyle = isset($templateStyle) && !empty($templateStyle) ? $templateStyle : 'default';
-$app['template_style'] = $templateStyle;
-
-// Default layout
-$app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
-
-$app['configuration'] = $_configuration;
-
-/** Including service providers */
-require_once 'services.php';
 
 $charset = 'UTF-8';
-
 
 // Manage Chamilo error messages
 $app->error(
     function (\Exception $e, $code) use ($app) {
+
         if ($app['debug']) {
             //return;
         }
+
+        /*if ($e instanceof PDOException and count($app['dbal_logger']->queries)) {
+            // We want to log the query as an ERROR for PDO exceptions.
+            $query = array_pop($app['dbal_logger']->queries);
+            $app['monolog']->err(
+                'sql-error:'.$query['sql'],
+                array(
+                    'params' => $query['params'],
+                    'types' => $query['types']
+                )
+            );
+        }*/
 
         if (isset($code)) {
             switch ($code) {
@@ -321,7 +312,6 @@ $app->error(
 // Preserving the value of the global variable $charset.
 $charset_initial_value = $charset;
 
-
 // Section (tabs in the main chamilo menu)
 $app['this_section'] = SECTION_GLOBAL;
 
@@ -330,115 +320,111 @@ require_once $libPath.'internationalization.lib.php';
 // Functions for internal use behind this API
 require_once $libPath.'internationalization_internal.lib.php';
 
-// Setting languages
-$app['api_get_languages'] = api_get_languages();
-
 // Checking if we have a valid language. If not we set it to the platform language.
 if ($alreadyInstalled) {
+    // Setting languages
+    $app['api_get_languages'] = api_get_languages();
     $app['language_interface'] = $language_interface = api_get_language_interface();
-} else {
-    $app['language_interface'] = $language_interface = 'english';
-}
 
-// Initialization of the internationalization library.
-api_initialize_internationalization();
+    // Initialization of the internationalization library.
+    api_initialize_internationalization();
 
-// Initialization of the default encoding that will be used by the multibyte string routines in the internationalization library.
-api_set_internationalization_default_encoding($charset);
+    // Initialization of the default encoding that will be used by the multibyte string routines in the internationalization library.
+    api_set_internationalization_default_encoding($charset);
 
-// include the local (contextual) parameters of this course or section
-require $includePath.'/local.inc.php';
+    // include the local (contextual) parameters of this course or section
+    require $includePath.'/local.inc.php';
 
-// reconfigure templat now we know the user
-$app['template.hide_global_chat'] = !api_is_global_chat_enabled();
+    // reconfigure template now we know the user
+    $app['template.hide_global_chat'] = !api_is_global_chat_enabled();
 
-/**	Loading languages and sublanguages **/
-// @todo improve the language loading
+    /**	Loading languages and sublanguages **/
+    // @todo improve the language loading
 
-// if we use the javascript version (without go button) we receive a get
-// if we use the non-javascript version (with the go button) we receive a post
+    // if we use the javascript version (without go button) we receive a get
+    // if we use the non-javascript version (with the go button) we receive a post
 
-// Include all files (first english and then current interface language)
-$app['this_script'] = isset($this_script) ? $this_script : null;
+    // Include all files (first english and then current interface language)
+    $app['this_script'] = isset($this_script) ? $this_script : null;
 
-// Sometimes the variable $language_interface is changed
-// temporarily for achieving translation in different language.
-// We need to save the genuine value of this variable and
-// to use it within the function get_lang(...).
-$language_interface_initial_value = $language_interface;
+    // Sometimes the variable $language_interface is changed
+    // temporarily for achieving translation in different language.
+    // We need to save the genuine value of this variable and
+    // to use it within the function get_lang(...).
+    $language_interface_initial_value = $language_interface;
 
-$langPath = api_get_path(SYS_LANG_PATH);
+    $this_script = $app['this_script'];
 
-$this_script = $app['this_script'];
-$language_interface = $app['language_interface'];
+    /* This will only work if we are in the page to edit a sub_language */
+    if (isset($this_script) && $this_script == 'sub_language') {
+        require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
+        // getting the arrays of files i.e notification, trad4all, etc
+        $language_files_to_load = SubLanguageManager:: get_lang_folder_files_list(
+            api_get_path(SYS_LANG_PATH).'english',
+            true
+        );
+        //getting parent info
+        $languageId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+        $parent_language = SubLanguageManager::get_all_information_of_language($languageId);
 
-/* This will only work if we are in the page to edit a sub_language */
-if (isset($this_script) && $this_script == 'sub_language') {
-    require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
-    // getting the arrays of files i.e notification, trad4all, etc
-    $language_files_to_load = SubLanguageManager:: get_lang_folder_files_list(
-        api_get_path(SYS_LANG_PATH).'english',
-        true
-    );
-    //getting parent info
-    $languageId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
-    $parent_language = SubLanguageManager::get_all_information_of_language($languageId);
+        $subLanguageId = isset($_REQUEST['sub_language_id']) ? $_REQUEST['sub_language_id'] : null;
 
-    $subLanguageId = isset($_REQUEST['sub_language_id']) ? $_REQUEST['sub_language_id'] : null;
+        //getting sub language info
+        $sub_language = SubLanguageManager::get_all_information_of_language($subLanguageId);
 
-    //getting sub language info
-    $sub_language = SubLanguageManager::get_all_information_of_language($subLanguageId);
+        $english_language_array = $parent_language_array = $sub_language_array = array();
 
-    $english_language_array = $parent_language_array = $sub_language_array = array();
-
-    if (!empty($language_files_to_load)) {
-        foreach ($language_files_to_load as $language_file_item) {
-            $lang_list_pre = array_keys($GLOBALS);
-            //loading english
-            $path = $langPath.'english/'.$language_file_item.'.inc.php';
-            if (file_exists($path)) {
-                include $path;
-            }
-
-            $lang_list_post = array_keys($GLOBALS);
-            $lang_list_result = array_diff($lang_list_post, $lang_list_pre);
-            unset($lang_list_pre);
-
-            //  english language array
-            $english_language_array[$language_file_item] = compact($lang_list_result);
-
-            //cleaning the variables
-            foreach ($lang_list_result as $item) {
-                unset(${$item});
-            }
-            $parent_file = $langPath.$parent_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
-
-            if (file_exists($parent_file) && is_file($parent_file)) {
-                include_once $parent_file;
-            }
-            //  parent language array
-            $parent_language_array[$language_file_item] = compact($lang_list_result);
-
-            //cleaning the variables
-            foreach ($lang_list_result as $item) {
-                unset(${$item});
-            }
-            if (!empty($sub_language)) {
-                $sub_file = $langPath.$sub_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
-                if (file_exists($sub_file) && is_file($sub_file)) {
-                    include $sub_file;
+        if (!empty($language_files_to_load)) {
+            foreach ($language_files_to_load as $language_file_item) {
+                $lang_list_pre = array_keys($GLOBALS);
+                //loading english
+                $path = $langPath.'english/'.$language_file_item.'.inc.php';
+                if (file_exists($path)) {
+                    include $path;
                 }
-            }
 
-            //  sub language array
-            $sub_language_array[$language_file_item] = compact($lang_list_result);
+                $lang_list_post = array_keys($GLOBALS);
+                $lang_list_result = array_diff($lang_list_post, $lang_list_pre);
+                unset($lang_list_pre);
 
-            //cleaning the variables
-            foreach ($lang_list_result as $item) {
-                unset(${$item});
+                //  english language array
+                $english_language_array[$language_file_item] = compact($lang_list_result);
+
+                //cleaning the variables
+                foreach ($lang_list_result as $item) {
+                    unset(${$item});
+                }
+                $parent_file = $langPath.$parent_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
+
+                if (file_exists($parent_file) && is_file($parent_file)) {
+                    include_once $parent_file;
+                }
+                //  parent language array
+                $parent_language_array[$language_file_item] = compact($lang_list_result);
+
+                //cleaning the variables
+                foreach ($lang_list_result as $item) {
+                    unset(${$item});
+                }
+                if (!empty($sub_language)) {
+                    $sub_file = $langPath.$sub_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
+                    if (file_exists($sub_file) && is_file($sub_file)) {
+                        include $sub_file;
+                    }
+                }
+
+                //  sub language array
+                $sub_language_array[$language_file_item] = compact($lang_list_result);
+
+                //cleaning the variables
+                foreach ($lang_list_result as $item) {
+                    unset(${$item});
+                }
             }
         }
     }
+} else {
+    $app['language_interface'] = $language_interface = $language_interface_initial_value = 'english';
 }
 
 /**
@@ -528,11 +514,10 @@ if (api_get_setting('login_is_email') == 'true') {
 /** A "before" middleware allows you to tweak the Request before the controller is executed */
 
 $app->before(
-    function () use ($app, $checkConnection) {
-
+    function () use ($app) {
         if (!file_exists($app['configuration_file']) && !file_exists($app['configuration_yml_file'])) {
             return new RedirectResponse(api_get_path(WEB_CODE_PATH).'install');
-            $app->abort(500, "Incorrect PHP version");
+            $app->abort(500, "Configuration file was not found");
         }
 
         //Check the PHP version
@@ -540,23 +525,13 @@ $app->before(
             $app->abort(500, "Incorrect PHP version");
         }
 
-        if ($checkConnection == false) {
-            $app->abort(500, "Database not available");
-        }
-
         if (!is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
             $app->abort(500, "temp folder must be writable");
         }
 
         // Check and modify the date of user in the track.e.online table
-
-        //if ($checkConnection && !$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
         Online::loginCheck(api_get_user_id());
-        //}
-
         //$app['request']->getSession()->start();
-        //var_dump($app['cidReset']);
-
     }
 );
 
@@ -587,13 +562,17 @@ $text_dir = api_get_text_direction();
 // Update of the logout_date field in the table track_e_login (needed for the calculation of the total connection time)
 
 /** "Login as user" custom script */
+// @todo move this code in a controller
 if (!isset($_SESSION['login_as']) && isset($_user)) {
     // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
 
-    $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-    $sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".$_user["user_id"]."' ORDER BY login_date DESC LIMIT 0,1";
+    $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+    $sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login
+                            WHERE login_user_id = '".api_get_user_id()."'
+                            ORDER BY login_date DESC LIMIT 0,1";
 
     $q_last_connection = Database::query($sql_last_connection);
+
     if (Database::num_rows($q_last_connection) > 0) {
         $i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
 
@@ -607,8 +586,8 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
             $q_last_connection = Database::query($sql_last_connection);
             $i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
         }
-
-        $s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
+        $now = api_get_utc_datetime();
+        $s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date = '$now' WHERE login_id = $i_id_last_connection";
         Database::query($s_sql_update_logout_date);
     } else {
         // it isn't, we should create a fresh entry
@@ -646,8 +625,7 @@ $app['is_admin'] = false;
 /** Including routes */
 require_once 'routes.php';
 
-
-// Setting gedmo extensions
+// Setting doctrine2 extensions
 
 if (isset($app['configuration']['main_database']) && isset($app['db.event_manager'])) {
 
@@ -665,17 +643,26 @@ if (isset($app['configuration']['main_database']) && isset($app['db.event_manage
 
     // Setting Doctrine2 extensions
     $timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
-    $app['db.event_manager']->addEventSubscriber($timestampableListener);
+    // $app['db.event_manager']->addEventSubscriber($timestampableListener);
+    $app['dbs.event_manager']['db_read']->addEventSubscriber($timestampableListener);
+    $app['dbs.event_manager']['db_write']->addEventSubscriber($timestampableListener);
 
     $sluggableListener = new \Gedmo\Sluggable\SluggableListener();
-    $app['db.event_manager']->addEventSubscriber($sluggableListener);
+    // $app['db.event_manager']->addEventSubscriber($sluggableListener);
+    $app['dbs.event_manager']['db_read']->addEventSubscriber($sluggableListener);
+    $app['dbs.event_manager']['db_write']->addEventSubscriber($sluggableListener);
+
 
     $sortableListener = new Gedmo\Sortable\SortableListener();
-    $app['db.event_manager']->addEventSubscriber($sortableListener);
+    // $app['db.event_manager']->addEventSubscriber($sortableListener);
+    $app['dbs.event_manager']['db_read']->addEventSubscriber($sortableListener);
+    $app['dbs.event_manager']['db_write']->addEventSubscriber($sortableListener);
 
     $treeListener = new \Gedmo\Tree\TreeListener();
     //$treeListener->setAnnotationReader($cachedAnnotationReader);
-    $app['db.event_manager']->addEventSubscriber($treeListener);
+    // $app['db.event_manager']->addEventSubscriber($treeListener);
+    $app['dbs.event_manager']['db_read']->addEventSubscriber($treeListener);
+    $app['dbs.event_manager']['db_write']->addEventSubscriber($treeListener);
 
     $loggableListener = new \Gedmo\Loggable\LoggableListener();
     $userInfo = api_get_user_info();
@@ -683,11 +670,12 @@ if (isset($app['configuration']['main_database']) && isset($app['db.event_manage
     if (isset($userInfo) && !empty($userInfo['username'])) {
         $loggableListener->setUsername($userInfo['username']);
     }
-
-    $app['db.event_manager']->addEventSubscriber($loggableListener);
+    //$app['db.event_manager']->addEventSubscriber($loggableListener);
+    $app['dbs.event_manager']['db_read']->addEventSubscriber($loggableListener);
+    $app['dbs.event_manager']['db_write']->addEventSubscriber($loggableListener);
 }
 
-//Fixes uses of $_course in the scripts
+// Fixes uses of $_course in the scripts.
 $_course = api_get_course_info();
 $_cid = api_get_course_id();
 

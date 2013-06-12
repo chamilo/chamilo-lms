@@ -54,7 +54,7 @@ $settingCourseConditions = function (Request $request) use ($cidReset, $app) {
 
     if ($courseReset) {
         if (!empty($cidReq) && $cidReq != -1) {
-            $courseInfo = api_get_course_info($cidReq);
+            $courseInfo = api_get_course_info($cidReq, true, true);
 
             if (!empty($courseInfo)) {
                 $courseCode = $courseInfo['code'];
@@ -173,7 +173,7 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
 
             //Check if user is subscribed in a course
             $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-            $sql               = "SELECT * FROM $course_user_table WHERE   user_id  = '".$userId."' AND
+            $sql               = "SELECT * FROM $course_user_table WHERE user_id  = '".$userId."' AND
                                   relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND c_id = ".api_get_course_int_id();
 
             $result = Database::query($sql);
@@ -467,9 +467,13 @@ $app->match('/introduction/delete/{tool}', 'introduction_tool.controller:deleteA
     ->before($userPermissionsInsideACourse)
     ->bind('introduction_delete');
 
-
-/**  Course documents */
+/** Course documents */
 $app->get('/data/courses/{courseCode}/document/{file}', 'index.controller:getDocumentAction')
+    ->assert('file', '.+')
+    ->assert('type', '.+');
+
+/** Scorm documents */
+$app->get('/data/courses/{courseCode}/scorm/{file}', 'index.controller:getScormDocumentAction')
     ->assert('file', '.+')
     ->assert('type', '.+');
 
@@ -636,5 +640,4 @@ $app->match('/courses/{cidReq}/{id_session}/exercise/question/{id}/edit', 'exerc
 $app->match('/ajax', 'model_ajax.controller:indexAction', 'GET')
     ->assert('type', '.+')
     ->bind('model_ajax');
-
 

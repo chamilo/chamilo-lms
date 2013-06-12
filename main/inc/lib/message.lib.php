@@ -184,7 +184,8 @@ class MessageManager
         $parent_id = 0,
         $edit_message_id = 0,
         $topic_id = 0,
-        $sender_id = null
+        $sender_id = null,
+        $text_content = null
     ) {
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $group_id = intval($group_id);
@@ -193,7 +194,8 @@ class MessageManager
         $edit_message_id = intval($edit_message_id);
         $topic_id = intval($topic_id);
 
-        //Saving the user id for the chamilo inbox, if the sender is null we asume that the current user is the one that sent the message
+        /* Saving the user id for the chamilo inbox,
+          if the sender is null we asume that the current user is the one that sent the message */
         if (empty($sender_id)) {
             $user_sender_id = api_get_user_id();
         } else {
@@ -207,7 +209,7 @@ class MessageManager
             }
         }
 
-        // validating fields
+        // Validating fields
         if (empty($subject) && empty($group_id)) {
             return get_lang('YouShouldWriteASubject');
         } else {
@@ -221,7 +223,7 @@ class MessageManager
 
         $inbox_last_id = null;
 
-        //Just in case we replace the and \n and \n\r while saving in the DB
+        // Just in case we replace the and \n and \n\r while saving in the DB.
         $content = str_replace(array("\n", "\n\r"), '<br />', $content);
 
         $now = api_get_utc_datetime();
@@ -287,7 +289,7 @@ class MessageManager
                 }
             }
 
-            //Load user settings
+            // Load user settings.
             $notification = new Notification();
             $sender_info = array();
 
@@ -300,7 +302,8 @@ class MessageManager
                     array($receiver_user_id),
                     $subject,
                     $content,
-                    $sender_info
+                    $sender_info,
+                    $text_content
                 );
             } else {
                 $usergroup = new UserGroup();
@@ -310,7 +313,7 @@ class MessageManager
 
                 $user_list = $usergroup->get_users_by_group($group_id, false, array(), 0, 1000);
 
-                //Adding more sens to the message group
+                // Adding sense to the message group.
                 $subject = sprintf(get_lang('ThereIsANewMessageInTheGroupX'), $group_info['name']);
 
                 $new_user_list = array();
@@ -324,7 +327,8 @@ class MessageManager
                     $new_user_list,
                     $subject,
                     $content,
-                    $group_info
+                    $group_info,
+                    $text_content
                 );
             }
 
@@ -337,20 +341,35 @@ class MessageManager
     /**
      * A handy way to send message
      */
-    public static function send_message_simple($receiver_user_id, $subject, $message, $sender_id = null)
+    public static function send_message_simple($receiver_user_id, $subject, $htmlBody, $sender_id = null, $textBody = null)
     {
         return MessageManager::send_message(
             $receiver_user_id,
             $subject,
-            $message,
+            $htmlBody,
             null,
             null,
             null,
             null,
             null,
             null,
-            $sender_id
+            $sender_id,
+            $textBody
         );
+    }
+
+    /**
+     * @param string $template
+     * @param array $params
+     * @param int $receiverUserId
+     * @param int $senderId
+     */
+    public static function sendMessageUsingTemplate($template, $params, $receiverUserId, $senderId = null)
+    {
+        // Inject $app in the constructor of this class
+        global $app;
+        $result = $app['mail_generator']->getMessage($template, $params);
+        return self::send_message_simple($receiverUserId, $result['subject'], $result['html_body'], $senderId, $result['text_body']);
     }
 
     /**
@@ -567,7 +586,7 @@ class MessageManager
         )." AND id='".intval($message_id)."'";
         $result = Database::query($query);
     }
-    
+
     public static function update_message_status($user_id, $message_id)
     {
         if ($message_id != strval(intval($message_id)) || $user_id != strval(intval($user_id))) {
@@ -906,10 +925,9 @@ class MessageManager
         ) : '').'</div>
 		        ';
         $social_link = '';
-        if ($_GET['f'] == 'social') {
+        if (isset($_GET['f']) && $_GET['f'] == 'social') {
             $social_link = 'f=social';
         }
-
 
         if ($source == 'outbox') {
             $message_content .= '<a href="outbox.php?'.$social_link.'">'.Display::return_icon(

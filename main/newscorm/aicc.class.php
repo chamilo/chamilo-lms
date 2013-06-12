@@ -793,7 +793,7 @@ class aicc extends learnpath
         require_once 'learnpath_functions.inc.php';
         $course_id = api_get_course_int_id();
         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-        $_course = Database::get_course_info(api_get_course_id());
+        $_course = api_get_course_info(api_get_course_id());
 
         $sql = "SELECT * FROM $tbl_lp WHERE c_id = ".$course_id." id=".$lp_id;
         $result = Database::query($sql);

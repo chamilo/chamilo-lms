@@ -1005,13 +1005,6 @@ class AnnouncementManager
     public static function to_javascript()
     {
         $www = api_get_path(WEB_PATH);
-        /*
-         * Do not allow this kind of behaviour. js minifieds should be manage by the template class or assetic or whatever see #4757 for more info
-          if (api_get_setting('server_type') == 'test') {
-          $src = $www . 'main/announcements/resources/js/main.js';
-          } else {
-          $src = $www . 'main/announcements/resources/js/main.min.js';
-          } */
         $src = $www.'main/announcements/resources/js/main.js';
         $result = Javascript::tag($src);
         $root = Chamilo::url();

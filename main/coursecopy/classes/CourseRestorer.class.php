@@ -2447,7 +2447,7 @@ class CourseRestorer
                     $glossary->description
                 )."', display_order='".self::DBUTF8escapestring($glossary->display_order)."' $condition_session ";
                 Database::query($sql);
-                $my_id = Database::get_last_insert_id();
+                $my_id = Database::insert_id();
                 api_item_property_update(
                     $this->destination_course_info,
                     TOOL_GLOSSARY,

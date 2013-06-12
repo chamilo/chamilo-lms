@@ -344,7 +344,7 @@ class UserManager
                 if (api_is_multiple_url_enabled()) {
                     $access_url_id = api_get_current_access_url_id();
                     if ($access_url_id != -1) {
-                        $url = api_get_access_url($access_url_id);
+                        $url = api_get_current_access_url_info();
                         $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstName, $lastName)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $loginName ."\n". get_lang('Pass')." : ".stripslashes($original_password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
                     }
                 } else {
@@ -499,7 +499,7 @@ class UserManager
         }
 
         // Delete the personal course categories
-        $course_cat_table = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $course_cat_table = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "DELETE FROM $course_cat_table WHERE user_id = '".$user_id."'";
         Database::query($sql);
 
@@ -512,7 +512,7 @@ class UserManager
         Database::query($sql);
 
         // Delete the personal agenda-items from this user
-        $agenda_table = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
+        $agenda_table = Database :: get_main_table(TABLE_PERSONAL_AGENDA);
         $sql = "DELETE FROM $agenda_table WHERE user = '".$user_id."'";
         Database::query($sql);
 
@@ -761,7 +761,7 @@ class UserManager
             if ($_configuration['multiple_access_urls']) {
                 $access_url_id = api_get_current_access_url_id();
                 if ($access_url_id != -1) {
-                    $url = api_get_access_url($access_url_id);
+                    $url = api_get_current_access_url_info();
                     $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $username . (($reset_password > 0) ? "\n". get_lang('Pass')." : ".stripslashes($original_password) : "") . "\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
                 }
             } else {
@@ -1906,8 +1906,8 @@ class UserManager
             // deleting the answer of the user who has chosen this option
             $sql_delete_option_value = "DELETE FROM $table_field_options_values
                                         WHERE field_id = '".Database::escape_string($fieldid)."' AND field_value = '".Database::escape_string($row['option_value'])."'";
-            Database::query($sql_delete_option_value);
-            $return['deleted_option_values'] = $return['deleted_option_values'] + Database::affected_rows();
+            $result = Database::query($sql_delete_option_value);
+            $return['deleted_option_values'] = $return['deleted_option_values'] + Database::affected_rows($result);
         }
 
         // we now try to find the field options that are newly added
@@ -2600,7 +2600,7 @@ class UserManager
         }
 
         //Courses in which we are subscribed out of any session
-        $tbl_user_course_category = Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $tbl_user_course_category = Database :: get_main_table(TABLE_USER_COURSE_CATEGORY);
 
         $personal_course_list_sql = "SELECT course.code,
                                             course_rel_user.status course_rel_status,
@@ -3339,7 +3339,7 @@ class UserManager
             //the tag doesn't exist
             $sql = "INSERT INTO $table_user_tag (tag, field_id,count) VALUES ('$tag','$field_id', count + 1)";
             $result = Database::query($sql);
-            $last_insert_id = Database::get_last_insert_id();
+            $last_insert_id = Database::insert_id();
         } else {
             //the tag exists we update it
             $sql = "UPDATE $table_user_tag SET count = count + 1 WHERE id  = $tag_id";
@@ -3565,7 +3565,7 @@ class UserManager
         $tbl_course                 = Database :: get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_field             = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
         $tbl_course_field_value        = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-        $tbl_user_course_category   = Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $tbl_user_course_category   = Database :: get_main_table(TABLE_USER_COURSE_CATEGORY);
 
         //we filter the courses from the URL
         $join_access_url=$where_access_url='';
@@ -3792,8 +3792,8 @@ class UserManager
             foreach ($users_id as $user_id) {
                 $user_id = intval($user_id);
                 $insert_sql = "INSERT IGNORE INTO $tbl_user_rel_user(user_id, friend_user_id, relation_type) VALUES('$user_id', $hr_dept_id, '".USER_RELATION_TYPE_RRHH."')";
-                Database::query($insert_sql);
-                $affected_rows = Database::affected_rows();
+                $result = Database::query($insert_sql);
+                $affected_rows = Database::affected_rows($result);
             }
         }
         return $affected_rows;
@@ -3985,7 +3985,7 @@ class UserManager
         if (empty($url1)) {
             $url = $url2;
             if (empty($url)) {
-                $url = api_get_access_url(api_get_current_access_url_id());
+                $url = api_get_current_access_url_info();
                 $url = $url[0];
             }
         }
@@ -4005,7 +4005,7 @@ class UserManager
 
      */
     public static function delete_inactive_student($student_id, $years = 2, $warning_message = false, $return_timestamp = false) {
-        $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $sql = 'SELECT login_date FROM ' . $tbl_track_login . ' WHERE login_user_id = ' . intval($student_id) . ' ORDER BY login_date DESC LIMIT 0,1';
         if (empty($years)) {
             $years = 1;

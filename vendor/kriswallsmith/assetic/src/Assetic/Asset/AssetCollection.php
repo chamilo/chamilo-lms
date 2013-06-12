@@ -3,7 +3,7 @@
 /*
  * This file is part of the Assetic package, an OpenSky project.
  *
- * (c) 2010-2012 OpenSky Project Inc
+ * (c) 2010-2013 OpenSky Project Inc
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,6 +11,8 @@
 
 namespace Assetic\Asset;
 
+use Assetic\Asset\Iterator\AssetCollectionFilterIterator;
+use Assetic\Asset\Iterator\AssetCollectionIterator;
 use Assetic\Filter\FilterCollection;
 use Assetic\Filter\FilterInterface;
 
@@ -19,7 +21,7 @@ use Assetic\Filter\FilterInterface;
  *
  * @author Kris Wallsmith <kris.wallsmith@gmail.com>
  */
-class AssetCollection implements AssetInterface, \IteratorAggregate
+class AssetCollection implements \IteratorAggregate, AssetCollectionInterface
 {
     private $assets;
     private $filters;
@@ -27,6 +29,8 @@ class AssetCollection implements AssetInterface, \IteratorAggregate
     private $targetPath;
     private $content;
     private $clones;
+    private $vars;
+    private $values;
 
     /**
      * Constructor.
@@ -34,8 +38,9 @@ class AssetCollection implements AssetInterface, \IteratorAggregate
      * @param array  $assets     Assets for the current collection
      * @param array  $filters    Filters for the current collection
      * @param string $sourceRoot The root directory
+     * @param array  $vars
      */
-    public function __construct($assets = array(), $filters = array(), $sourceRoot = null)
+    public function __construct($assets = array(), $filters = array(), $sourceRoot = null, array $vars = array())
     {
         $this->assets = array();
         foreach ($assets as $asset) {
@@ -45,21 +50,69 @@ class AssetCollection implements AssetInterface, \IteratorAggregate
         $this->filters = new FilterCollection($filters);
         $this->sourceRoot = $sourceRoot;
         $this->clones = new \SplObjectStorage();
+        $this->vars = $vars;
+        $this->values = array();
     }
 
-    /**
-     * Adds an asset to the current collection.
-     *
-     * @param AssetInterface $asset An asset
-     */
-    public function add(AssetInterface $asset)
+    public function __clone()
     {
-        $this->assets[] = $asset;
+        $this->filters = clone $this->filters;
+        $this->clones = new \SplObjectStorage();
     }
 
     public function all()
     {
         return $this->assets;
+    }
+
+    public function add(AssetInterface $asset)
+    {
+        $this->assets[] = $asset;
+    }
+
+    public function removeLeaf(AssetInterface $needle, $graceful = false)
+    {
+        foreach ($this->assets as $i => $asset) {
+            $clone = isset($this->clones[$asset]) ? $this->clones[$asset] : null;
+            if (in_array($needle, array($asset, $clone), true)) {
+                unset($this->clones[$asset], $this->assets[$i]);
+
+                return true;
+            }
+
+            if ($asset instanceof AssetCollectionInterface && $asset->removeLeaf($needle, true)) {
+                return true;
+            }
+        }
+
+        if ($graceful) {
+            return false;
+        }
+
+        throw new \InvalidArgumentException('Leaf not found.');
+    }
+
+    public function replaceLeaf(AssetInterface $needle, AssetInterface $replacement, $graceful = false)
+    {
+        foreach ($this->assets as $i => $asset) {
+            $clone = isset($this->clones[$asset]) ? $this->clones[$asset] : null;
+            if (in_array($needle, array($asset, $clone), true)) {
+                unset($this->clones[$asset]);
+                $this->assets[$i] = $replacement;
+
+                return true;
+            }
+
+            if ($asset instanceof AssetCollectionInterface && $asset->replaceLeaf($needle, $replacement, true)) {
+                return true;
+            }
+        }
+
+        if ($graceful) {
+            return false;
+        }
+
+        throw new \InvalidArgumentException('Leaf not found.');
     }
 
     public function ensureFilter(FilterInterface $filter)
@@ -140,11 +193,15 @@ class AssetCollection implements AssetInterface, \IteratorAggregate
             return;
         }
 
-        $mapper = function (AssetInterface $asset) {
-            return $asset->getLastModified();
-        };
+        $mtime = 0;
+        foreach ($this as $asset) {
+            $assetMtime = $asset->getLastModified();
+            if ($assetMtime > $mtime) {
+                $mtime = $assetMtime;
+            }
+        }
 
-        return max(array_map($mapper, $this->assets));
+        return $mtime;
     }
 
     /**
@@ -154,173 +211,23 @@ class AssetCollection implements AssetInterface, \IteratorAggregate
     {
         return new \RecursiveIteratorIterator(new AssetCollectionFilterIterator(new AssetCollectionIterator($this, $this->clones)));
     }
-}
 
-/**
- * Asset collection filter iterator.
- *
- * The filter iterator is responsible for de-duplication of leaf assets based
- * on both strict equality and source URL.
- *
- * @author Kris Wallsmith <kris.wallsmith@gmail.com>
- * @access private
- */
-class AssetCollectionFilterIterator extends \RecursiveFilterIterator
-{
-    private $visited;
-    private $sources;
-
-    /**
-     * Constructor.
-     *
-     * @param AssetCollectionIterator $iterator The inner iterator
-     * @param array                   $visited  An array of visited asset objects
-     * @param array                   $sources  An array of visited source strings
-     */
-    public function __construct(AssetCollectionIterator $iterator, array $visited = array(), array $sources = array())
+    public function getVars()
     {
-        parent::__construct($iterator);
-
-        $this->visited = $visited;
-        $this->sources = $sources;
+        return $this->vars;
     }
 
-    /**
-     * Determines whether the current asset is a duplicate.
-     *
-     * De-duplication is performed based on either strict equality or by
-     * matching sources.
-     *
-     * @return Boolean Returns true if we have not seen this asset yet
-     */
-    public function accept()
+    public function setValues(array $values)
     {
-        $asset = $this->getInnerIterator()->current(true);
-        $duplicate = false;
+        $this->values = $values;
 
-        // check strict equality
-        if (in_array($asset, $this->visited, true)) {
-            $duplicate = true;
-        } else {
-            $this->visited[] = $asset;
-        }
-
-        // check source
-        $sourceRoot = $asset->getSourceRoot();
-        $sourcePath = $asset->getSourcePath();
-        if ($sourceRoot && $sourcePath) {
-            $source = $sourceRoot.'/'.$sourcePath;
-            if (in_array($source, $this->sources)) {
-                $duplicate = true;
-            } else {
-                $this->sources[] = $source;
-            }
-        }
-
-        return !$duplicate;
-    }
-
-    /**
-     * Passes visited objects and source URLs to the child iterator.
-     */
-    public function getChildren()
-    {
-        return new self($this->getInnerIterator()->getChildren(), $this->visited, $this->sources);
-    }
-}
-
-/**
- * Iterates over an asset collection.
- *
- * The iterator is responsible for cascading filters and target URL patterns
- * from parent to child assets.
- *
- * @author Kris Wallsmith <kris.wallsmith@gmail.com>
- * @access private
- */
-class AssetCollectionIterator implements \RecursiveIterator
-{
-    private $assets;
-    private $filters;
-    private $output;
-    private $clones;
-
-    public function __construct(AssetCollection $coll, \SplObjectStorage $clones)
-    {
-        $this->assets  = $coll->all();
-        $this->filters = $coll->getFilters();
-        $this->output  = $coll->getTargetPath();
-        $this->clones  = $clones;
-
-        if (false === $pos = strpos($this->output, '.')) {
-            $this->output .= '_*';
-        } else {
-            $this->output = substr($this->output, 0, $pos).'_*'.substr($this->output, $pos);
+        foreach ($this as $asset) {
+            $asset->setValues(array_intersect_key($values, array_flip($asset->getVars())));
         }
     }
 
-    /**
-     * Returns a copy of the current asset with filters and a target URL applied.
-     *
-     * @param Boolean $raw Returns the unmodified asset if true
-     */
-    public function current($raw = false)
+    public function getValues()
     {
-        $asset = current($this->assets);
-
-        if ($raw) {
-            return $asset;
-        }
-
-        // clone once
-        if (!isset($this->clones[$asset])) {
-            $clone = $this->clones[$asset] = clone $asset;
-
-            // generate a target path based on asset name
-            $name = sprintf('%s_%d', pathinfo($asset->getSourcePath(), PATHINFO_FILENAME) ?: 'part', $this->key() + 1);
-            $clone->setTargetPath(str_replace('*', $name, $this->output));
-        } else {
-            $clone = $this->clones[$asset];
-        }
-
-        // cascade filters
-        foreach ($this->filters as $filter) {
-            $clone->ensureFilter($filter);
-        }
-
-        return $clone;
-    }
-
-    public function key()
-    {
-        return key($this->assets);
-    }
-
-    public function next()
-    {
-        return next($this->assets);
-    }
-
-    public function rewind()
-    {
-        return reset($this->assets);
-    }
-
-    public function valid()
-    {
-        return false !== current($this->assets);
-    }
-
-    public function hasChildren()
-    {
-        return current($this->assets) instanceof AssetCollection;
-    }
-
-    /**
-     * @uses current()
-     */
-    public function getChildren()
-    {
-        return new self($this->current(), $this->clones);
+        return $this->values;
     }
 }

@@ -40,13 +40,6 @@ class IndexController extends CommonController
         $this->cidReset();
         /** @var \Template $template */
         $template = $app['template'];
-
-        /*
-        var_dump($app['request']->getBaseUrl());
-        var_dump($app['request']->getHttpHost());
-        var_dump($app['request']->getRequestUri());
-        */
-
         $loginError = $app['request']->get('error');
 
         $extraJS = array();
@@ -91,11 +84,6 @@ class IndexController extends CommonController
           }
           exit; */
 
-        //$app['orm.em']->find('Course', 1);
-        //var_dump($app['orm.ems']['mysql']);
-        // Defines wether or not anonymous visitors can see a list of the courses on the Chamilo homepage that are open to the world.
-        //$_setting['display_courses_to_anonymous_users'] = 'true';
-        // Delete session neccesary for legal terms
 
         if (api_get_setting('allow_terms_conditions') == 'true') {
             unset($_SESSION['term_and_condition']);
@@ -209,7 +197,7 @@ class IndexController extends CommonController
         if (!empty($_POST['submitAuth'])) {
             // The user has been already authenticated, we are now to find the last login of the user.
             if (!empty($this->user_id)) {
-                $track_login_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+                $track_login_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
                 $sql_last_login = "SELECT login_date
                                     FROM $track_login_table
                                     WHERE login_user_id = '".$this->user_id."'
@@ -347,6 +335,24 @@ class IndexController extends CommonController
     {
         try {
             $file = $app['chamilo.filesystem']->getCourseDocument($courseCode, $file);
+            return $app->sendFile($file->getPathname());
+        } catch (\InvalidArgumentException $e) {
+            return $app->abort(404, 'File not found');
+        }
+    }
+
+    /**
+     * Gets a document from the data/courses/MATHS/scorm/file.jpg to the user
+     * @todo check permissions
+     * @param Application $app
+     * @param string $courseCode
+     * @param string $file
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
+     */
+    public function getScormDocumentAction(Application $app, $courseCode, $file)
+    {
+        try {
+            $file = $app['chamilo.filesystem']->getCourseScormDocument($courseCode, $file);
             return $app->sendFile($file->getPathname());
         } catch (\InvalidArgumentException $e) {
             return $app->abort(404, 'File not found');

@@ -61,7 +61,7 @@ class MySpace {
 	static function get_connections_to_course($user_id, $courseId, $session_id = 0) {
 
 		// Database table definitions
-	    $tbl_track_course 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+	    $tbl_track_course 	= Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
 		// protect data
 		$user_id     = intval($user_id);
@@ -86,7 +86,7 @@ class MySpace {
 
     static function get_connections_from_course_list($user_id, $course_list, $session_id = 0) {
 		// Database table definitions
-	    $tbl_track_course 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+	    $tbl_track_course 	= Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         if (empty($course_list)) {
             return false;
         }
@@ -1051,7 +1051,7 @@ class MySpace {
 	 */
 	function exercises_results($user_id, $courseId, $session_id = false) {
 		$sql = 'SELECT exe_result , exe_weighting
-			FROM '.Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES)."
+			FROM '.Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES)."
 			WHERE c_id = '".Database::escape_string($courseId)."'
 			AND exe_user_id = '".Database::escape_string($user_id)."'";
 		if ($session_id !== false) {
@@ -1635,8 +1635,8 @@ class MySpace {
 			foreach ($users as $user) {
 				$userid = intval($user['id']);
 				$sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,c_id,id_user) VALUES('$id_session','$enreg_course','$userid')";
-				Database::query($sql);
-				if (Database::affected_rows()) {
+				$result = Database::query($sql);
+				if (Database::affected_rows($result)) {
 					$nbr_users++;
 				}
 				$new_users[] = $user;
@@ -1680,7 +1680,7 @@ class MySpace {
                 $emailbody = get_lang('Dear').' '.api_get_person_name($user['FirstName'], $user['LastName']).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : $user[UserName]\n".get_lang('Pass')." : $user[Password]\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path(WEB_PATH)." \n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator');
                 //$emailheaders = 'From: '.api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS).' <'.api_get_setting('emailAdministrator').">\n";
                 //$emailheaders .= 'Reply-To: '.api_get_setting('emailAdministrator');
-                //@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
+
                 api_mail_html($emailto, $recipient_email, $emailsubject, $emailbody, $from, $fromEmail);
 
                 if (($user['added_at_platform'] == 1  && $user['added_at_session'] == 1) || $user['added_at_session'] == 1) {
@@ -1812,7 +1812,7 @@ class MySpace {
 
 function get_stats($user_id, $courseId, $start_date = null, $end_date = null) {
     // Database table definitions
-    $tbl_track_course   = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+    $tbl_track_course   = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
     $strg_sd    = "";
     $strg_ed    = "";
@@ -1864,7 +1864,7 @@ function add_day_to($end_date) {
  */
 function get_connections_to_course_by_date($user_id, $courseId, $start_date, $end_date) {
     // Database table definitions
-    $tbl_track_course   = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+    $tbl_track_course   = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
     $user_id = intval($user_id);
     if (!empty($course_info)) {

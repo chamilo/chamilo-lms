@@ -114,6 +114,7 @@ class Display
         global $charset;
         $is_allowed_to_edit = api_is_allowed_to_edit();
         $moduleId = $tool;
+        $courseInfo = api_get_course_info();
         $introduction_section = null;
 
         if (api_get_setting('enable_tool_introduction') == 'true' || $tool == TOOL_COURSE_HOMEPAGE) {
@@ -146,7 +147,7 @@ class Display
             $thematic_description_html = '';
 
             if ($tool == TOOL_COURSE_HOMEPAGE) {
-                $thematic = new Thematic();
+                $thematic = new Thematic($courseInfo);
                 $thematic->set_course_int_id(api_get_course_int_id());
                 if (api_get_course_setting('display_info_advance_inside_homecourse') == '1') {
                     $information_title = get_lang('InfoAboutLastDoneAdvance');
@@ -205,7 +206,7 @@ class Display
             $introduction_section .= '<div class="row"><div class="span12">';
             $introduction_section .=  $thematic_description_html;
 
-            if (!empty($intro_content))	{
+            if (!empty($intro_content)) {
                 $introduction_section .=  $intro_content;
             }
             $introduction_section .=  '</div>';
@@ -1310,7 +1311,7 @@ class Display
      */
     public static function show_notification($course_info)
     {
-        $t_track_e_access = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+        $t_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
         $user_id          = api_get_user_id();
 
         $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);

@@ -66,7 +66,6 @@ if (is_object($objQuestion)) {
         $form->freeze();
     }
 
-
     // Form validation
     //$result = $objQuestion->allQuestionWithMediaHaveTheSameCategory($exerciseId, 100);
 
@@ -92,7 +91,6 @@ if (is_object($objQuestion)) {
                 if (count($categories) > 1) {
                     $message = Display::display_warning_message(get_lang('WhenUsingAMediaQuestionYouCantAddMoreThanOneCategory'));
                     $message .= ' '.$tryAgain;
-
                     $process = false;
                 }
 

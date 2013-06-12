@@ -189,16 +189,6 @@ class DateType extends AbstractType
             return $options['widget'] === 'single_text' ? DateType::HTML5_FORMAT : DateType::DEFAULT_FORMAT;
         };
 
-        // BC until Symfony 2.3
-        $modelTimezone = function (Options $options) {
-            return $options['data_timezone'];
-        };
-
-        // BC until Symfony 2.3
-        $viewTimezone = function (Options $options) {
-            return $options['user_timezone'];
-        };
-
         $resolver->setDefaults(array(
             'years'          => range(date('Y') - 5, date('Y') + 5),
             'months'         => range(1, 12),
@@ -206,11 +196,8 @@ class DateType extends AbstractType
             'widget'         => 'choice',
             'input'          => 'datetime',
             'format'         => $format,
-            'model_timezone' => $modelTimezone,
-            'view_timezone'  => $viewTimezone,
-            // Deprecated timezone options
-            'data_timezone'  => null,
-            'user_timezone'  => null,
+            'model_timezone' => null,
+            'view_timezone'  => null,
             'empty_value'    => $emptyValue,
             // Don't modify \DateTime classes by reference, we treat
             // them like immutable value objects
@@ -250,14 +237,6 @@ class DateType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
-    {
-        return 'field';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'date';
@@ -268,7 +247,11 @@ class DateType extends AbstractType
         $pattern = $formatter->getPattern();
         $timezone = $formatter->getTimezoneId();
 
-        $formatter->setTimezoneId(\DateTimeZone::UTC);
+        if (version_compare(\PHP_VERSION, '5.5.0-dev', '>=')) {
+            $formatter->setTimeZone(\DateTimeZone::UTC);
+        } else {
+            $formatter->setTimeZoneId(\DateTimeZone::UTC);
+        }
 
         if (preg_match($regex, $pattern, $matches)) {
             $formatter->setPattern($matches[0]);
@@ -282,7 +265,11 @@ class DateType extends AbstractType
             $formatter->setPattern($pattern);
         }
 
-        $formatter->setTimezoneId($timezone);
+        if (version_compare(\PHP_VERSION, '5.5.0-dev', '>=')) {
+            $formatter->setTimeZone($timezone);
+        } else {
+            $formatter->setTimeZoneId($timezone);
+        }
 
         return $timestamps;
     }

@@ -64,7 +64,7 @@ echo Display::page_header(get_lang('UserOnlineListSession'));
 							course.code,
 							".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." as name,
 							user.email
-					FROM ".Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS)." AS last_access
+					FROM ".Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS)." AS last_access
 					INNER JOIN ".Database::get_main_table(TABLE_MAIN_USER)." AS user
 					    ON user.user_id = last_access.access_user_id
 					INNER JOIN ".Database::get_main_table(TABLE_MAIN_COURSE)." AS course

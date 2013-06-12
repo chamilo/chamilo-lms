@@ -1,4 +1,4 @@
-<footer> <!-- start of #footer section -->
+<footer{% block footer_open_attributes %}{% endblock footer_open_attributes %}> <!-- start of #footer section -->
     <div class="container">
         <div class="row">
             <div id="footer_left" class="span4">

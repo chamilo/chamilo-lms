@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace ChamiloLMS\Command\Database;
 
@@ -16,116 +17,23 @@ use Symfony\Component\Yaml\Dumper;
  */
 class InstallCommand extends CommonCommand
 {
+    public $commandLine = true;
+
+    /**
+     * @return string
+     */
+    public function getLatestVersion()
+    {
+        return '1.10.0';
+    }
+
     protected function configure()
     {
         $this
             ->setName('chamilo:install')
             ->setDescription('Execute a Chamilo installation to a specified version')
             ->addArgument('version', InputArgument::REQUIRED, 'The version to migrate to.', null)
-            ->addOption('path', null, InputOption::VALUE_OPTIONAL, 'The path to the chamilo folder');
-    }
-
-    /**
-     * Gets the SQL files relation with versions
-     * @return array
-     */
-    public function getDatabaseMap()
-    {
-
-        $defaultCourseData = array(
-            array(
-                'name' => 'course1',
-                'sql' => array(
-                    'db_course1.sql',
-                ),
-            ),
-            array(
-                'name' => 'course2',
-                'sql' => array(
-                    'db_course2.sql'
-                )
-            ),
-        );
-
-        return array(
-            '1.8.7' => array(
-                'section' => array(
-                    'main' => array(
-                        array(
-                            'name' => 'chamilo',
-                            'sql' => array(
-                                'db_main.sql',
-                                'db_stats.sql',
-                                'db_user.sql'
-                            ),
-                        ),
-                    ),
-                    'course' => $defaultCourseData
-                ),
-            ),
-            '1.8.8' => array(
-                'section' => array(
-                    'main' => array(
-                        array(
-                            'name' => 'chamilo',
-                            'sql' => array(
-                                'db_main.sql',
-                                'db_stats.sql',
-                                'db_user.sql'
-                            ),
-                        ),
-                    ),
-                    'course' => $defaultCourseData
-                ),
-            ),
-            '1.9.0' => array(
-                'section' => array(
-                    'main' => array(
-                        array(
-                            'name' => 'chamilo',
-                            'sql' => array(
-                                'db_course.sql',
-                                'db_main.sql',
-                                'db_stats.sql',
-                                'db_user.sql'
-                            ),
-                        ),
-                    ),
-                )
-            ),
-            '1.10.0' => array(
-                'section' => array(
-                    'main' => array(
-                        array(
-                            'name' => 'chamilo',
-                            'sql' => array(
-                                'db_course.sql',
-                                'db_main.sql'
-                            ),
-                        ),
-                    ),
-                )
-            )
-        );
-    }
-
-    /**
-     * Gets the version name folders located in main/install
-     *
-     * @return array
-     */
-    public function getAvailableVersions()
-    {
-        $installPath = api_get_path(SYS_PATH).'main/install';
-        $dir = new \DirectoryIterator($installPath);
-        $dirList = array();
-        foreach ($dir as $fileInfo) {
-            if ($fileInfo->isDir() && !$fileInfo->isDot()) {
-                $dirList[] = $fileInfo->getFilename();
-            }
-        }
-
-        return $dirList;
+            ->addArgument('path', InputArgument::OPTIONAL, 'The path to the chamilo folder');
     }
 
     /**
@@ -138,12 +46,24 @@ class InstallCommand extends CommonCommand
      */
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $path = $input->getOption('path');
-        $configurationPath = $this->getHelper('configuration')->getConfigurationPath($path);
+        if (PHP_SAPI != 'cli') {
+            $this->commandLine = false;
+        }
+
+        // Arguments
+        $path = $input->getArgument('path');
+        $version = $input->getArgument('version');
+
+        // Setting configuration helper
+        $this->getApplication()->getHelperSet()->set(new \Chash\Helpers\ConfigurationHelper(), 'configuration');
+
+        //$configurationPath = $this->getHelper('configuration')->getConfigurationPath($path);
+
+        // Getting the new config folder
+        $configurationPath = $this->getHelper('configuration')->getNewConfigurationPath($path);
+        $this->setRootSys(realpath($configurationPath.'/../').'/');
 
         $dialog = $this->getHelperSet()->get('dialog');
-
-        $version = $input->getArgument('version');
 
         $defaultVersion = $this->getLatestVersion();
 
@@ -155,19 +75,19 @@ class InstallCommand extends CommonCommand
 
         if (!is_writable($configurationPath)) {
             $output->writeln("<comment>Folder ".$configurationPath." must be writable</comment>");
-            exit;
+            return false;
         }
 
         $sqlFolder = $this->getInstallationPath($version);
 
         if (!is_dir($sqlFolder)) {
             $output->writeln("<comment>Sorry you can't install that version of Chamilo :( Supported versions:</comment> <info>".implode(', ', $this->getAvailableVersions()));
-            exit;
+            return false;
         }
 
         if (file_exists($configurationPath.'configuration.php') || file_exists($configurationPath.'configuration.yml')) {
             $output->writeln("<comment>There's a Chamilo portal here ".$configurationPath." you must run</comment> <info>chamilo:setup </info><comment>if you want a fresh install.</comment>");
-            exit;
+            return false;
             /*
             if (!$dialog->askConfirmation(
                 $output,
@@ -202,107 +122,173 @@ class InstallCommand extends CommonCommand
             'deny_delete_users',
             'system_version',
         );
-        // Getting default configuration parameters in the $_configuration array
-        require_once api_get_path(SYS_PATH).'main/install/configuration.dist.yml.php';
 
-        $newConfigurationArray = array();
+        if ($this->commandLine) {
 
-        foreach ($_configuration as $key => $value) {
-            if (in_array($key, $avoidVariables)) {
-                $newConfigurationArray[$key] = $value;
-                continue;
-            }
-            if (!is_array($value)) {
+            // Ask for portal settings
+
+            $params = $this->getPortalSettingsParams();
+            $total = count($params);
+            $portalSettings = array();
+
+            $output->writeln("<comment>Portal settings (".$total.") </comment>");
+
+            $counter = 1;
+            foreach ($params as $key => $value) {
                 $data = $dialog->ask(
                     $output,
-                    "Please enter the value of the $key ($value): ",
-                    $value
+                    "($counter/$total) Please enter the value of the $key (".$value['attributes']['data']."): ",
+                    $value['attributes']['data']
                 );
-                $newConfigurationArray[$key] = $data;
-            } else {
-                $newConfigurationArray[$key] = $value;
+                $counter++;
+                $portalSettings[$key] = $data;
             }
+            $this->setPortalSettings($portalSettings);
+
+            // Ask for admin settings
+            $output->writeln("<comment>Admin settings: </comment>");
+            $params = $this->getAdminSettingsParams();
+            $total = count($params);
+            $adminSettings = array();
+
+            foreach ($params as $key => $value) {
+                $data = $dialog->ask(
+                    $output,
+                    "($counter/$total) Please enter the value of the $key (".$value['attributes']['data']."): ",
+                    $value['attributes']['data']
+                );
+                $counter++;
+                $adminSettings[$key] = $data;
+            }
+            $this->setAdminSettings($adminSettings);
+
+            // Ask for db settings
+            $output->writeln("<comment>Database settings: </comment>");
+            $params = $this->getDatabaseSettingsParams();
+            $total = count($params);
+            $databaseSettings = array();
+
+            foreach ($params as $key => $value) {
+                $data = $dialog->ask(
+                    $output,
+                    "($counter/$total) Please enter the value of the $key (".$value['attributes']['data']."): ",
+                    $value['attributes']['data']
+                );
+                $counter++;
+                $databaseSettings[$key] = $data;
+            }
+            $this->setDatabaseSettings($databaseSettings);
         }
 
-        $testConnection = $this->testDatabaseConnection($newConfigurationArray['db_host'], $newConfigurationArray['db_user'], $newConfigurationArray['db_password']);
+        $databaseSettings = $this->getDatabaseSettings();
 
-        if ($testConnection == 1) {
-            $output->writeln("<comment>Connection enabled for user: </comment><info>".$newConfigurationArray['db_user']);
+        $connectionToHost = $this->getUserAccessConnectionToHost();
+        $connectionToHostConnect = $connectionToHost->connect();
+        if ($connectionToHostConnect) {
+            $output->writeln("<comment>Connection enabled for user: </comment><info>".$databaseSettings['user']);
         } else {
-            $output->writeln("<error>No access to the database for user:</error><info>".$newConfigurationArray['db_user']."</info>");
-            exit;
+            $output->writeln("<error>No access to the database for user:</error><info>".$databaseSettings['user']."</info>");
+            return false;
         }
 
-        $configurationWasSaved = $this->writeConfiguration($newConfigurationArray, $version);
 
-        if ($configurationWasSaved) {
-            global $app;
+        if ($this->commandLine) {
+            $databases = $connectionToHost->listDatabases();
+            if (in_array($databaseSettings['dbname'], $databases)) {
+                $dialog = $this->getHelperSet()->get('dialog');
 
-            $app['chamilo.log'] = $app['log.path'].'/chamilo_install.log';
-
-            //Installing database
-            $result = $this->install($version, $newConfigurationArray, $output);
-
-            if ($result) {
-                $this->setDatabaseSettings($newConfigurationArray, $newConfigurationArray['main_database']);
-
-                global $_configuration;
-                $_configuration = $newConfigurationArray;
-
-                $this->createAdminUser($newConfigurationArray, $output);
-
-                //@todo ask this during installation
-
-                $adminInfo = $this->getDefaultAdminUser();
-
-                api_set_setting('Institution', 'Portal');
-                api_set_setting('InstitutionUrl', 'Portal');
-                api_set_setting('siteName', 'Campus');
-                api_set_setting('emailAdministrator', $adminInfo['email']);
-                api_set_setting('administratorSurname', $adminInfo['lastname']);
-                api_set_setting('administratorName', $adminInfo['firstname']);
-                api_set_setting('platformLanguage', $adminInfo['language']);
-                api_set_setting('allow_registration', '1');
-                api_set_setting('allow_registration_as_teacher', '1');
-
-                $versionInfo = $this->getAvailableVersionInfo($version);
-
-                $command = $this->getApplication()->find('migrations:migrate');
-                $arguments = array(
-                    'command' => 'migrations:migrate',
-                    'version' => $versionInfo['hook_to_doctrine_version'],
-                    '--configuration' => $this->getMigrationConfigurationFile()
-                );
-
-                $output->writeln("<comment>Executing migrations:migrate ".$versionInfo['hook_to_doctrine_version']." --configuration=".$this->getMigrationConfigurationFile()."<comment>");
-
-                $input = new ArrayInput($arguments);
-
-                $command->run($input, $output);
-                //$output->writeln("<comment>Migration ended succesfully</comment>");
-
-                $output->writeln("<comment>Chamilo was successfully installed. Go to your browser and enter:</comment> <info>".$newConfigurationArray['root_web']);
+                if (!$dialog->askConfirmation(
+                    $output,
+                    '<comment>The database '.$databaseSettings['dbname'].' exists and is going to be dropped! </comment></info> <question>Are you sure?</question>(y/N)',
+                    false
+                )
+                ) {
+                    return;
+                }
             }
         }
-    }
 
-    /**
-     * Default admin info
-     * @return array
-     */
-    public function getDefaultAdminUser()
-    {
-        $adminUser = array(
-            'lastname' => 'Julio',
-            'firstname' => 'Montoya',
-            'username' => 'admin',
-            'password' => 'admin',
-            'email' => 'admin@example.org',
-            'language' => 'english',
-            'phone' => '6666666'
-        );
+        // When installing always drop the current database
 
-        return $adminUser;
+        $sm = $connectionToHost->getSchemaManager();
+        $sm->dropAndCreateDatabase($databaseSettings['dbname']);
+        $connectionToDatabase = $this->getUserAccessConnectionToDatabase();
+        $connect = $connectionToDatabase->connect();
+        if ($connect) {
+
+            $output->writeln("<comment>Connection to database '".$databaseSettings['dbname']."' established.</comment>");
+
+            $configurationWasSaved = $this->writeConfiguration($version);
+
+            if ($configurationWasSaved) {
+
+                // $app['chamilo.log'] = $app['log.path'].'/chamilo_install.log';
+
+                // Installing database
+                $result = $this->install($version, $output);
+
+                if ($result) {
+
+                    require_once $this->getRootSys().'main/inc/lib/database.constants.inc.php';
+                    require_once $this->getRootSys().'main/inc/lib/main_api.lib.php';
+
+                    // In order to use the Database class
+                    $database = new \Database($this->getHelper('db')->getConnection(), null);
+
+                    $this->createAdminUser($output);
+
+                    //@todo ask this during installation
+
+                    $adminInfo = $this->getAdminSettings();
+                    $portalSettings = $this->getPortalSettings();
+
+                    api_set_setting('emailAdministrator', $adminInfo['email']);
+                    api_set_setting('administratorSurname', $adminInfo['lastname']);
+                    api_set_setting('administratorName', $adminInfo['firstname']);
+                    api_set_setting('platformLanguage', $adminInfo['language']);
+
+                    api_set_setting('allow_registration', '1');
+                    api_set_setting('allow_registration_as_teacher', '1');
+
+                    api_set_setting('permissions_for_new_directories', $portalSettings['permissions_for_new_directories']);
+                    api_set_setting('permissions_for_new_files', $portalSettings['permissions_for_new_files']);
+
+                    api_set_setting('Institution', $portalSettings['institution']);
+                    api_set_setting('InstitutionUrl', $portalSettings['institution_url']);
+                    api_set_setting('siteName', $portalSettings['sitename']);
+
+                    //$versionInfo = $this->getAvailableVersionInfo($version);
+
+                    // Optional run Doctrine migrations from src/database/migrations
+                    /* $command = $this->getApplication()->find('migrations:migrate');
+                    $definition = $command->getDefinition();
+
+                    $arguments = array(
+                        'command' => 'migrations:migrate',
+                        'version' => $versionInfo['hook_to_doctrine_version'],
+                        '--configuration' => $this->getMigrationConfigurationFile()
+                    );
+                    $output->writeln("<comment>Executing migrations:migrate ".$versionInfo['hook_to_doctrine_version']." --configuration=".$this->getMigrationConfigurationFile()."<comment>");
+
+                    $input = new ArrayInput($arguments, $definition);
+                    $return = $command->run($input, $output);
+                    */
+                    //$output->writeln("<comment>Migration ended succesfully</comment>");
+
+                    //$output->writeln("<comment>Chamilo was successfully installed. Go to your browser and enter:</comment> <info>".$newConfigurationArray['root_web']);
+                    return true;
+                } else {
+                    $output->writeln("<comment>There was an error during installation.</comment>");
+                    return false;
+                }
+            } else {
+                $output->writeln("<comment>Configuration file was not saved</comment>");
+                return false;
+            }
+        } else {
+            $output->writeln("<comment>Can't create database '".$databaseSettings['dbname']."' </comment>");
+            return false;
+        }
     }
 
     /**
@@ -313,33 +299,19 @@ class InstallCommand extends CommonCommand
      *
      * @return bool
      */
-    public function createAdminUser($newConfigurationArray, $output)
+    public function createAdminUser($output)
     {
-        $dialog = $this->getHelperSet()->get('dialog');
-
-        //Creating admin user
-        $adminUser = $this->getDefaultAdminUser();
-
-        $output->writeln("<comment>Creating an admin User</comment>");
-        $userInfo = array();
-        foreach ($adminUser as $key => $value) {
-            $data = $dialog->ask(
-                $output,
-                "Please enter the $key ($value): ",
-                $value
-            );
-            $userInfo[$key] = $data;
-        }
-
         //By default admin is = 1 so we update it
-        $userId = $userInfo['user_id'] = 1;
+
+        $userInfo = $this->getAdminSettings();
+        $userInfo['user_id'] = 1;
         $userInfo['auth_source'] = 'platform';
-        $userInfo['password'] = api_get_encrypted_password($userInfo['password']);
+        $userInfo['password'] = $this->encryptPassword($this->portalSettings['encrypt_method'], $userInfo['password']);
 
         $result = \UserManager::update($userInfo);
         if ($result) {
             \UserManager::add_user_as_admin($userInfo['user_id']);
-            $output->writeln("<comment>User admin created with id: $userId</comment>");
+            $output->writeln("<comment>User admin created with id: 1</comment>");
 
             return true;
         }
@@ -347,29 +319,20 @@ class InstallCommand extends CommonCommand
         return false;
     }
 
-    /**
-     * @return string
-     */
-    public function getLatestVersion()
+    private function setDoctrineSettings()
     {
-        return '1.10';
-    }
+        $config = new \Doctrine\ORM\Configuration();
+        $config->setMetadataCacheImpl(new \Doctrine\Common\Cache\ArrayCache);
+        $reader = new AnnotationReader();
 
-    private function setDatabaseSettings($configuration, $databaseName)
-    {
-        // @todo remove this config global. loaded in config-console.php
-        global $config;
-        $defaultConnection = array(
-            'driver'    => 'pdo_mysql',
-            'dbname'    => $databaseName,
-            'user'      => $configuration['db_user'],
-            'password'  => $configuration['db_password'],
-            'host'      => $configuration['db_host'],
-        );
+        $driverImpl = new \Doctrine\ORM\Mapping\Driver\AnnotationDriver($reader, array());
+        $config->setMetadataDriverImpl($driverImpl);
+        $config->setProxyDir(__DIR__ . '/Proxies');
+        $config->setProxyNamespace('Proxies');
 
-        $em = \Doctrine\ORM\EntityManager::create($defaultConnection, $config);
+        $em = \Doctrine\ORM\EntityManager::create($this->getDatabaseSettings(), $config);
 
-        //Fixes some errors
+        // Fixes some errors
         $platform = $em->getConnection()->getDatabasePlatform();
         $platform->registerDoctrineTypeMapping('enum', 'string');
         $platform->registerDoctrineTypeMapping('set', 'string');
@@ -377,18 +340,12 @@ class InstallCommand extends CommonCommand
         $helpers = array(
             'db' => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($em->getConnection()),
             'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em),
+            'configuration' => new \Chash\Helpers\ConfigurationHelper()
         );
 
         foreach ($helpers as $name => $helper) {
             $this->getApplication()->getHelperSet()->set($helper, $name);
         }
-
-        $conn_return = \Database::connect(array(
-            'server' => $configuration['db_host'],
-            'username' => $configuration['db_user'],
-            'password' => $configuration['db_password']
-        ));
-        $checkConnection = \Database::select_db($databaseName, $conn_return);
     }
 
     /**
@@ -399,8 +356,9 @@ class InstallCommand extends CommonCommand
      * @param $output
      * @return bool
      */
-    public function install($version, $_configuration, $output)
+    public function install($version, $output)
     {
+        $this->setDoctrineSettings();
         $sqlFolder = $this->getInstallationPath($version);
 
         $databaseMap = $this->getDatabaseMap();
@@ -416,37 +374,28 @@ class InstallCommand extends CommonCommand
 
                     $output->writeln("<comment>Creating database</comment> <info>$databaseName ... </info>");
 
-                    $result = $this->dropAndCreateDatabase($databaseName);
-
-                    $this->setDatabaseSettings($_configuration, $databaseName);
-
                     // Fixing db list
                     foreach ($dbList as &$db) {
                         $db = $sqlFolder.$db;
                     }
 
-                    //Importing files
-                    if ($result) {
+                    $command = $this->getApplication()->find('dbal:import');
 
-                        $command = $this->getApplication()->find('dbal:import');
+                    //Importing sql files
+                    $arguments = array(
+                        'command' => 'dbal:import',
+                        'file' =>  $dbList
+                    );
+                    $input = new ArrayInput($arguments);
+                    $command->run($input, $output);
 
-                        //Importing sql files
-                        $arguments = array(
-                            'command' => 'dbal:import',
-                            'file' =>  $dbList
-                        );
-                        $input = new ArrayInput($arguments);
-                        $command->run($input, $output);
-
-                        //Getting extra information about the installation
-                        $output->writeln("<comment>Database </comment><info>$databaseName </info><comment>process ended!</comment>");
-                    }
+                    //Getting extra information about the installation
+                    $output->writeln("<comment>Database </comment><info>$databaseName </info><comment>process ended!</comment>");
                 }
             }
 
             if (isset($sections) && isset($sections['course'])) {
                 //@todo fix this
-                $this->setDatabaseSettings($_configuration, $sections['main'][0]['name']);
                 foreach ($sections['course'] as $courseInfo) {
                     $databaseName = $courseInfo['name'];
                     $output->writeln("Inserting course database in chamilo: <info>$databaseName</info>");
@@ -454,12 +403,48 @@ class InstallCommand extends CommonCommand
                 }
             }
 
-            $output->writeln("<comment>Check your installation status with </comment><info>chamilo:status</info>");
+            if ($this->commandLine) {
+                $output->writeln("<comment>Check your installation status with </comment><info>chamilo:status</info>");
+            }
 
             return true;
         }
 
         return false;
+    }
+
+     /**
+     *
+     * In step 3. Tests establishing connection to the database server.
+     * If it's a single database environment the function checks if the database exist.
+     * If the database doesn't exist we check the creation permissions.
+     *
+     * @return int      1 when there is no problem;
+     *                  0 when a new database is impossible to be created, then the single/multiple database configuration is impossible too
+     *                 -1 when there is no connection established.
+     */
+    public function testDatabaseConnection()
+    {
+        $conn = $this->testUserAccessConnection();
+        $connect = $conn->connect();
+        return $connect;
+    }
+
+    public function getUserAccessConnectionToHost()
+    {
+        $config = new \Doctrine\DBAL\Configuration();
+        $databaseConnection = $this->getDatabaseSettings();
+        $databaseConnection['dbname'] = null;
+        $conn = \Doctrine\DBAL\DriverManager::getConnection($databaseConnection, $config);
+        return $conn;
+    }
+
+    public function getUserAccessConnectionToDatabase()
+    {
+        $config = new \Doctrine\DBAL\Configuration();
+        $databaseConnection = $this->getDatabaseSettings();
+        $conn = \Doctrine\DBAL\DriverManager::getConnection($databaseConnection, $config);
+        return $conn;
     }
 
     /**
@@ -486,15 +471,6 @@ class InstallCommand extends CommonCommand
      */
     public function dropAndCreateDatabase($databaseName)
     {
-        /*
-        $command = $this->getApplication()->find('orm:schema-tool:create');
-        $arguments = array(
-            'command' => 'orm:schema-tool:create',
-        );
-        $input     = new ArrayInput($arguments);
-        $command->run($input, $output);
-        exit;
-        */
 
         $this->dropDatabase($databaseName);
         $result = \Database::query("CREATE DATABASE IF NOT EXISTS ".mysql_real_escape_string($databaseName)." DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci");
@@ -515,29 +491,24 @@ class InstallCommand extends CommonCommand
         \Database::query("DROP DATABASE ".mysql_real_escape_string($name)."");
     }
 
-    /**
-     *
-     * In step 3. Tests establishing connection to the database server.
-     * If it's a single database environment the function checks if the database exist.
-     * If the database doesn't exist we check the creation permissions.
-     *
-     * @return int      1 when there is no problem;
-     *                  0 when a new database is impossible to be created, then the single/multiple database configuration is impossible too
-     *                 -1 when there is no connection established.
-     */
-    public function testDatabaseConnection($dbHostForm, $dbUsernameForm, $dbPassForm)
-    {
-        $dbConnect = -1;
-        //Checking user credentials
-        if (@\Database::connect(
-            array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm)
-        ) !== false
-        ) {
-            $dbConnect = 1;
-        } else {
-            $dbConnect = -1;
-        }
 
-        return $dbConnect; //return 1, if no problems, "0" if, in case we can't create a new DB and "-1" if there is no connection.
+
+    /**
+     * This function gets the hash in md5 or sha1 (it depends in the platform config) of a given password
+     * @param  string password
+     * @return string password with the applied hash
+     */
+    function encryptPassword($encryptionMode, $password, $salt = '') {
+
+        switch ($encryptionMode) {
+            case 'sha1':
+                return empty($salt) ? sha1($password) : sha1($password.$salt);
+            case 'none':
+                return $password;
+            case 'md5':
+            default:
+                return empty($salt) ? md5($password)  : md5($password.$salt);
+        }
     }
+
 }

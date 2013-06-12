@@ -1,7 +1,13 @@
 # Chamilo
 
 main/inc/conf
-config/*
+config/auth.conf.php
+config/configuration.php
+config/events.conf.php
+config/mail.conf.php
+config/portfolio.conf.php
+config/profile.conf.php
+
 temp/*
 data/*
 !data/upload/users

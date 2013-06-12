@@ -25,7 +25,7 @@ if (isset($_GET['export'])) {
     $export_to_xls = true;
 }
 
-$tbl_stats_exercices     = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$tbl_stats_exercices     = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 
 if (api_is_platform_admin() && empty($_GET['cidReq'])) {
     $global = true;

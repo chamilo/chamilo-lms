@@ -12,5 +12,5 @@
         {% endif %}
         <div class="span12">
             {% include app.template_style ~ "/layout/page_body.tpl" %}
-            <section id="main_content">
+            {% block main_content_section_block %}<section id="main_content">{% endblock main_content_section_block %}
 {% endif %}

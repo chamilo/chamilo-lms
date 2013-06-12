@@ -19,6 +19,10 @@ FileManager::set_default_settings($upload_path, $filename, $filetype="file", $gl
 @version 1.1, July 2004
  * @package chamilo.library
  */
+
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Filesystem\Filesystem;
+
 class FileManager
 {
     /**
@@ -1204,16 +1208,33 @@ class FileManager
     /**
      * Computes the size already occupied by a directory and is subdirectories
      *
-     * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
-     * @param  - dir_path (string) - size of the file in byte
-     * @return - int - return the directory size in bytes
+     * @param string dir_path (string) - size of the file in byte
+     * @return int - return the directory size in bytes
      */
     static function dir_total_space($dir_path)
     {
+        $fs = new Filesystem();
+        if (!empty($dir_path) && $fs->exists($dir_path)) {
+            $finder = new Finder();
+            $finder->files()->in($dir_path);
+            $sumSize = 0;
 
+            foreach ($finder as $file) {
+                // Print the absolute path
+                //var_dump($file->getRelativePathname());
+                $sumSize += $file->getSize();
+            }
+            return $sumSize;
+        }
+        return 0;
+        /*
+        // author - Hugues Peeters <peeters@ipm.ucl.ac.be>
         $save_dir = getcwd();
         chdir($dir_path);
         $handle = opendir($dir_path);
+        $sumSize = 0;
+
+        $dirList = array();
 
         while ($element = readdir($handle)) {
             if ($element == '.' || $element == '..') {
@@ -1231,12 +1252,12 @@ class FileManager
 
         if (sizeof($dirList) > 0) {
             foreach ($dirList as $j) {
-                $sizeDir = self::dir_total_space($j); // Recursivity
+                $sizeDir = self::dir_total_space($j, 0); // Recursivity
                 $sumSize += $sizeDir;
             }
         }
         chdir($save_dir); // Return to initial position
-        return $sumSize;
+        return $sumSize;*/
     }
 
 

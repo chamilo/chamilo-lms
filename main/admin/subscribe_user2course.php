@@ -70,10 +70,10 @@ if (is_array($extra_field_list)) {
 }
 
 /* React on POSTed request */
-if ($_POST['form_sent']) {
+if (!empty($_POST['form_sent'])) {
     $form_sent = $_POST['form_sent'];
-    $users = is_array($_POST['UserList']) ? $_POST['UserList'] : array() ;
-    $courses = is_array($_POST['CourseList']) ? $_POST['CourseList'] : array() ;
+    $users = (isset($_POST['UserList']) && is_array($_POST['UserList']) ? $_POST['UserList'] : array());
+    $courses = (isset($_POST['CourseList']) && is_array($_POST['CourseList']) ? $_POST['CourseList'] : array());
     $first_letter_user = $_POST['firstLetterUser'];
     $first_letter_course = $_POST['firstLetterCourse'];
 
@@ -125,6 +125,7 @@ if (is_array($extra_field_list)) {
     }
 }
 
+$where_filter ='';
 if ($use_extra_fields) {
     $final_result = array();
     if (count($extra_field_result)>1) {
@@ -137,7 +138,6 @@ if ($use_extra_fields) {
         $final_result = $extra_field_result[0];
     }
 
-    $where_filter ='';
     if ($_configuration['multiple_access_urls']) {
         if (is_array($final_result) && count($final_result)>0) {
             $where_filter = " AND u.user_id IN  ('".implode("','",$final_result)."') ";
@@ -198,7 +198,8 @@ $db_courses = Database::store_result($result);
 unset($result);
 
 if (api_is_multiple_url_enabled()) {
-    $tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+    $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != -1){
         $sqlNbCours = "	SELECT course_rel_user.course_code, course.title

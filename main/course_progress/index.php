@@ -60,9 +60,10 @@ if (isset($_GET['thematic_id'])) {
 if (isset($_GET['description_type'])) {
 	$description_type = intval($_GET['description_type']);
 }
+$courseInfo = api_get_course_info();
 
 // instance thematic object for using like library here
-$thematic = new Thematic();
+$thematic = new Thematic($courseInfo);
 
 // thematic controller object
 $thematic_controller = new ThematicController();

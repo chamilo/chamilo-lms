@@ -198,18 +198,18 @@ if ($form->validate()) {
                         $extraFieldOptionRelFieldOption->setFieldOptionId($subItemId);
                         $extraFieldOptionRelFieldOption->setRelatedFieldOptionId($id);
                         $extraFieldOptionRelFieldOption->setRoleId($roleId);
-                        $app['orm.em']->persist($extraFieldOptionRelFieldOption);
+                        $app['orm.ems']['db_write']->persist($extraFieldOptionRelFieldOption);
                     }
                 } else {
 
                     if ($extraFieldOptionRelFieldOption) {
-                        $app['orm.em']->remove($extraFieldOptionRelFieldOption);
+                        $app['orm.ems']['db_write']->remove($extraFieldOptionRelFieldOption);
                     }
                 }
 
             }
         }
-        $app['orm.em']->flush();
+        $app['orm.ems']['db_write']->flush();
         header('Location:'.api_get_self().'?'.$params);
         exit;
     }

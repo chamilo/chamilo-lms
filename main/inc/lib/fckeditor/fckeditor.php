@@ -182,10 +182,10 @@ class FCKeditor
         $HtmlValue = htmlspecialchars( $this->Value ) ;
         $Html = '' ;
         if ( FCKeditor::IsCompatible() ) {
-            if ( api_get_setting('server_type') == 'test' )
+            /*if ( api_get_setting('server_type') == 'test' )
                 $File = 'fckeditor.original.html' ;
-            else
-                $File = 'fckeditor.html' ;
+            else*/
+            $File = 'fckeditor.html' ;
 
             $Link = "{$this->BasePath}editor/{$File}?InstanceName={$this->InstanceName}" ;
 

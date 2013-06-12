@@ -130,7 +130,6 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
             //Database::query($sql);
             $mainConnection->executeQuery($sql);
             $id = $mainConnection->lastInsertId('id');
-            //$id = Database::get_last_insert_id();
             $oldGroups[$group['id']] = $id;
         }
     }

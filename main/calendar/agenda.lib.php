@@ -2,22 +2,26 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @author: Julio Montoya <gugli100@gmail.com> Implementing a real agenda lib
+ * @author: Julio Montoya <gugli100@gmail.com>
+ * Class Agenda
+ * @todo move this in main/inc/lib and update composer autoload
  */
-
 class Agenda
 {
     public $events = array();
-    public $type = 'personal'; // personal, admin or course
+    public $type = 'personal';
 
+    /**
+     *
+     */
     public function __construct()
     {
         //Table definitions
         $this->tbl_global_agenda   = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
-        $this->tbl_personal_agenda = Database::get_user_personal_table(TABLE_PERSONAL_AGENDA);
+        $this->tbl_personal_agenda = Database::get_main_table(TABLE_PERSONAL_AGENDA);
         $this->tbl_course_agenda   = Database::get_course_table(TABLE_AGENDA);
 
-        //Setting the course object if we are in a course
+        // Setting the course object if we are in a course
         $this->course = null;
         $course_info  = api_get_course_info();
         if (!empty($course_info)) {
@@ -34,6 +38,19 @@ class Agenda
         $this->event_personal_color = 'steel blue'; //steel blue
     }
 
+    /**
+     * Agenda type: personal, admin or course
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * Sets course info
+     * @param array $course_info
+     */
     public function set_course($course_info)
     {
         $this->course = $course_info;
@@ -168,8 +185,8 @@ class Agenda
 
 
     /**
-     * @param agenda_id
-     * @sent agenda event to
+     * @param int id
+     * @param array sent to
      **/
 
     public function store_agenda_item_as_announcement($item_id, $sent_to = array())
@@ -270,6 +287,9 @@ class Agenda
         }
     }
 
+    /**
+     * @param int $id
+     */
     public function delete_event($id)
     {
         switch ($this->type) {
@@ -363,6 +383,12 @@ class Agenda
         return '';
     }
 
+    /**
+     * @param int $id
+     * @param int $day_delta
+     * @param int $minute_delta
+     * @return int
+     */
     public function resize_event($id, $day_delta, $minute_delta)
     {
         // we convert the hour delta into minutes and add the minute delta
@@ -394,6 +420,12 @@ class Agenda
 
     }
 
+    /**
+     * @param int $id
+     * @param int $day_delta
+     * @param int $minute_delta
+     * @return int
+     */
     public function move_event($id, $day_delta, $minute_delta)
     {
         // we convert the hour delta into minutes and add the minute delta
@@ -524,6 +556,15 @@ class Agenda
         return $my_events;
     }
 
+    /**
+     * @param int $start
+     * @param int $end
+     * @param array $course_info
+     * @param int $group_id
+     * @param int $session_id
+     * @param int $user_id
+     * @return array
+     */
     public function get_course_events($start, $end, $course_info, $group_id = 0, $session_id = 0, $user_id = 0)
     {
         $course_id  = $course_info['real_id'];
@@ -749,6 +790,11 @@ class Agenda
         return $this->events;
     }
 
+    /**
+     * @param int $start
+     * @param int $end
+     * @return array
+     */
     public function get_platform_events($start, $end)
     {
         $start = intval($start);
@@ -801,6 +847,7 @@ class Agenda
     /**
      * Format needed for the Fullcalendar js lib
      * @param string UTC time
+     * @return string
      */
     public function format_event_date($utc_time)
     {
@@ -810,7 +857,7 @@ class Agenda
     /**
      * this function shows the form with the user that were not selected
      * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @return html code
+     * @return string html code
      */
     static function construct_not_selected_select_form(
         $group_list = null,
@@ -926,7 +973,8 @@ class Agenda
      * This public function separates the users from the groups
      * users have a value USER:XXX (with XXX the dokeos id
      * groups have a value GROUP:YYY (with YYY the group id)
-     * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     * @param array
      * @return array
      */
     public function separate_users_groups($to)
@@ -960,6 +1008,9 @@ class Agenda
         return $send_to;
     }
 
+    /**
+     * @param array $params
+     */
     static function show_form($params = array())
     {
         $form = new FormValidator('add_event', 'POST', api_get_self().'?'.api_get_cidreq(), null, array('enctype' => 'multipart/form-data'));
@@ -1031,7 +1082,10 @@ class Agenda
         $form->display();
     }
 
-
+    /**
+     * @param array $form
+     * @param $to_already_selected
+     */
     public static function show_to_form($form, $to_already_selected)
     {
         $order = 'lastname';

@@ -407,7 +407,7 @@ class QuestionManagerController
      */
     public function deleteCategoryAction(Application $app, $id)
     {
-        $repo     = $app['orm.em']->getRepository('Entity\CQuizCategory');
+        $repo     = $app['orm.ems']['db_write']->getRepository('Entity\CQuizCategory');
         $category = $repo->find($id);
         if (empty($category)) {
             $app->abort(404);

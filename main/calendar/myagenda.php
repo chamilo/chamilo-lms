@@ -31,11 +31,11 @@ if (!empty ($course_path)) {
 $htmlHeadXtra[] = to_javascript();
 $htmlHeadXtra[] = "<script src=\"tbl_change.js\" type=\"text/javascript\" language=\"javascript\"></script>";
 $htmlHeadXtra[] = "<script>
-$(function() {  
-    $(\".dialog\").dialog(\"destroy\");        
+$(function() {
+    $(\".dialog\").dialog(\"destroy\");
     $(\".dialog\").dialog({
             autoOpen: false,
-            show: \"blind\",                
+            show: \"blind\",
             resizable: false,
             height:300,
             width:550,
@@ -62,7 +62,7 @@ $TABLECOURS 		= Database :: get_main_table(TABLE_MAIN_COURSE);
 $TABLECOURSUSER 	= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLEAGENDA 		= Database :: get_course_table(TABLE_AGENDA);
 $TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-$tbl_personal_agenda= Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
+$tbl_personal_agenda= Database :: get_main_table(TABLE_PERSONAL_AGENDA);
 
 // the variables for the days and the months
 // Defining the shorts for the days
@@ -141,7 +141,7 @@ if (isset($_user['user_id'])) {
 	// getting all the courses that this user is subscribed to
 	//$courses_dbs = get_all_courses_of_user();
 	$my_course_list = CourseManager::get_courses_list_by_user_id(api_get_user_id(), true);
-	
+
 	if (!is_array($my_course_list)) {
 		// this is for the special case if the user has no courses (otherwise you get an error)
 		$my_course_list = array();
@@ -178,13 +178,13 @@ if (isset($_user['user_id'])) {
 	}
 	echo "</div>";
 
-	$agendaitems = get_myagendaitems(api_get_user_id(), $my_course_list, $month, $year);	
+	$agendaitems = get_myagendaitems(api_get_user_id(), $my_course_list, $month, $year);
 	$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
-	
+
 	if (api_get_setting('allow_personal_agenda') == 'true') {
 		$agendaitems = get_personal_agenda_items(api_get_user_id(), $agendaitems, $day, $month, $year, $week, "month_view");
 	}
-	
+
 	if ($process != 'month_view') {
 	    echo "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">";
     	echo "<tr>";
@@ -196,26 +196,26 @@ if (isset($_user['user_id'])) {
     	// OlivierB : the image has a white background, which causes trouble if the portal has another background color. Image should be transparent. ----> echo "<td width=\"20\" background=\"../img/verticalruler.gif\">&nbsp;</td>";
     	echo "<td width=\"8\">&nbsp;</td>";
     	// the main area: day, week, month view
-    	echo "<td valign=\"top\">";   
+    	echo "<td valign=\"top\">";
 	}
-	
+
 	switch ($process) {
-		case 'month_view' :			
+		case 'month_view' :
 			display_mymonthcalendar(api_get_user_id(), $agendaitems, $month, $year, array(), $monthName);
 			break;
 		case 'week_view' :
-			$agendaitems = get_week_agendaitems($my_course_list, $month, $year, $week);						
-			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "week_view");			
+			$agendaitems = get_week_agendaitems($my_course_list, $month, $year, $week);
+			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "week_view");
 			if (api_get_setting("allow_personal_agenda") == "true") {
 				$agendaitems = get_personal_agenda_items(api_get_user_id(), $agendaitems, $day, $month, $year, $week, "week_view");
 			}
 			display_weekcalendar($agendaitems, $month, $year, array(), $monthName);
 			break;
 		case 'day_view' :
-			$agendaitems = get_day_agendaitems($my_course_list, $month, $year, $day);								
-			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "day_view");			
+			$agendaitems = get_day_agendaitems($my_course_list, $month, $year, $day);
+			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "day_view");
 			if (api_get_setting('allow_personal_agenda') == 'true') {
-				$agendaitems = get_personal_agenda_items(api_get_user_id(), $agendaitems, $day, $month, $year, $week, "day_view");				
+				$agendaitems = get_personal_agenda_items(api_get_user_id(), $agendaitems, $day, $month, $year, $week, "day_view");
 			}
 			display_daycalendar($agendaitems, $day, $month, $year, array(), $monthName);
 			break;

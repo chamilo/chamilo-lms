@@ -45,6 +45,4 @@ if (isset($_GET['error'])) {
     echo '<br /><br />';
     Display::display_normal_message(get_lang('ExerciseFinished'));
 }
-?>
-</body>
-</html>
+Display::display_footer();

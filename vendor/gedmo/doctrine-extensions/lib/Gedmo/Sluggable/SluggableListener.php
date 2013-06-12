@@ -279,7 +279,8 @@ class SluggableListener extends MappedEventSubscriber
             if (!$options['updatable'] && !$isInsert && (!isset($changeSet[$slugField]) || $slug === '__id__')) {
                 continue;
             }
-            $oldSlug = $slug;
+            // must fetch the old slug from changeset, since $object holds the new version
+            $oldSlug = isset($changeSet[$slugField]) ? $changeSet[$slugField][0] : $slug;
             $needToChangeSlug = false;
             // if slug is null or set to empty, regenerate it, or needs an update
             if (empty($slug) || $slug === '__id__' || !isset($changeSet[$slugField])) {
@@ -496,7 +497,9 @@ class SluggableListener extends MappedEventSubscriber
             $config['previouslyEnabled'] = $enabled;
 
             if ($config['disabled']) {
-                $collection->disable($name);
+                if ($enabled) {
+                    $collection->disable($name);
+                }
             } else {
                 $collection->enable($name);
             }

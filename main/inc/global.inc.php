@@ -266,9 +266,22 @@ $charset = 'UTF-8';
 // Manage Chamilo error messages
 $app->error(
     function (\Exception $e, $code) use ($app) {
+
         if ($app['debug']) {
             //return;
         }
+
+        /*if ($e instanceof PDOException and count($app['dbal_logger']->queries)) {
+            // We want to log the query as an ERROR for PDO exceptions.
+            $query = array_pop($app['dbal_logger']->queries);
+            $app['monolog']->err(
+                'sql-error:'.$query['sql'],
+                array(
+                    'params' => $query['params'],
+                    'types' => $query['types']
+                )
+            );
+        }*/
 
         if (isset($code)) {
             switch ($code) {
@@ -518,7 +531,6 @@ $app->before(
         // Check and modify the date of user in the track.e.online table
         Online::loginCheck(api_get_user_id());
         //$app['request']->getSession()->start();
-        //var_dump($app['cidReset']);
     }
 );
 
@@ -554,9 +566,12 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
     // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
 
     $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-    $sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".$_user["user_id"]."' ORDER BY login_date DESC LIMIT 0,1";
+    $sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login
+                            WHERE login_user_id = '".api_get_user_id()."'
+                            ORDER BY login_date DESC LIMIT 0,1";
 
     $q_last_connection = Database::query($sql_last_connection);
+
     if (Database::num_rows($q_last_connection) > 0) {
         $i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
 

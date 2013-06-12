@@ -347,10 +347,14 @@ $app->register(new Grom\Silex\ImagineServiceProvider(), array(
 ));
 
 // Prompts Doctrine SQL queries using Monolog.
-if ($app['debug']) {
-    $logger = new Doctrine\DBAL\Logging\DebugStack();
-    $app['db.config']->setSQLLogger($logger);
 
+$app['dbal_logger'] = $app->share(function() {
+    return new Doctrine\DBAL\Logging\DebugStack();
+});
+
+if ($app['debug']) {
+    $logger = $app['dbal_logger'];
+    $app['db.config']->setSQLLogger($logger);
     $app->after(function() use ($app, $logger) {
         // Log all queries as DEBUG.
         foreach ($logger->queries as $query) {

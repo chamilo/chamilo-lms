@@ -464,36 +464,6 @@ class InstallCommand extends CommonCommand
     }
 
     /**
-     * Creates a Database
-     * @todo use doctrine?
-     *
-     * @return resource
-     */
-    public function dropAndCreateDatabase($databaseName)
-    {
-
-        $this->dropDatabase($databaseName);
-        $result = \Database::query("CREATE DATABASE IF NOT EXISTS ".mysql_real_escape_string($databaseName)." DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci");
-
-        if ($result) {
-            return \Database::select_db($databaseName);
-        }
-
-        return false;
-    }
-
-    /**
-     * Drops a database
-     * @param string $name
-     */
-    public function dropDatabase($name)
-    {
-        \Database::query("DROP DATABASE ".mysql_real_escape_string($name)."");
-    }
-
-
-
-    /**
      * This function gets the hash in md5 or sha1 (it depends in the platform config) of a given password
      * @param  string password
      * @return string password with the applied hash

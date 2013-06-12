@@ -51,6 +51,15 @@ class Database
         self::$connectionWrite = isset($dbs['db_write']) ? $dbs['db_write'] : $db;
     }
 
+    /**
+     * Return current connection
+     * @return \Doctrine\DBAL\Connection
+     */
+    public function getConnection()
+    {
+        return self::$db;
+    }
+
     /* Variable use only in the installation process to log errors. See the Database::query function */
     // static $log_queries = false;
 
@@ -128,21 +137,6 @@ class Database
     {
         return $result->rowCount();
         //return self::use_default_connection($connection) ? mysql_affected_rows() : mysql_affected_rows($connection);
-    }
-
-    /**
-     * Escapes a string to insert into the database as text
-     * @param string The string to escape
-     * @return string The escaped string
-     */
-    public static function escape_string($string)
-    {
-        //var_dump($string);
-        //var_dump(self::$db->quote($string));
-        //return self::$db->quote($string);
-        return $string;
-        //self::$db->query();
-        //return self::$db->quote($string);
     }
 
     /**
@@ -256,59 +250,6 @@ class Database
         //return mysql_free_result($result);
     }
 
-    /*
-        Query methods
-        These methods execute a query and return the result(s).
-    */
-
-    /**
-     * Counts the number of rows in a table
-     * @param string $table The table of which the rows should be counted
-     * @return int The number of rows in the given table.
-     */
-    public static function count_rows($table)
-    {
-        $obj = self::fetch_object(self::query("SELECT COUNT(*) AS n FROM $table"));
-        return $obj->n;
-    }
-
-    /**
-     * Returns a list of tables within a database. The list may contain all of the
-     * available table names or filtered table names by using a pattern.
-     * @param string $database (optional)        The name of the examined database. If it is omited, the current database is assumed, see Database::select_db().
-     * @param string $pattern (optional)        A pattern for filtering table names as if it was needed for the SQL's LIKE clause, for example 'access_%'.
-     * @param resource $connection (optional)    The database server connection, for detailed description see the method query().
-     * @return array                            Returns in an array the retrieved list of table names.
-     */
-    public static function get_tables($database = '', $pattern = '', $connection = null)
-    {
-        $result = array();
-        $query = "SHOW TABLES";
-        if (!empty($database)) {
-            $query .= " FROM `".self::escape_string($database, $connection)."`";
-        }
-        if (!empty($pattern)) {
-            $query .= " LIKE '".self::escape_string($pattern, $connection)."'";
-        }
-        $query_result = Database::query($query, $connection);
-        while ($row = Database::fetch_row($query_result)) {
-            $result[] = $row[0];
-        }
-
-        return $result;
-    }
-
-
-    /**
-     * Returns a list of databases created on the server. The list may contain all of the
-     * available database names or filtered database names by using a pattern.
-     * @return array Returns in an array the retrieved list of database names.
-     */
-    public static function get_databases()
-    {
-        $sm = self::$db->getSchemaManager();
-        return $sm->listDatabases();
-    }
 
     /**
      * Detects if a query is going to modify something in the database in order to use the write connection
@@ -325,6 +266,24 @@ class Database
     }
 
     /**
+     * Escapes a string to insert into the database as text
+     * @param string The string to escape
+     * @return string The escaped string
+     */
+    public static function escape_string($string)
+    {
+        /* The pdo::quote function adds a "'" character we need to remove that '
+           because in Chamilo, developers builds a query like this:
+           $sql = "SELECT * FROM $table WHERE id = 'Database::escape_string($id)'";
+           otherwise we will have an error because the query will be:
+           SELECT * FROM user WHERE id = ''1'' instead of
+           SELECT * FROM user WHERE id = '1'
+        */
+        $string = '_@_'.self::$db->quote($string).'_@_';
+        return $string;
+    }
+
+    /**
      * Executes a query in the database
      * @author Julio Montoya
      * @param string $query The SQL query
@@ -338,7 +297,24 @@ class Database
         } else {
             $connection = self::$connectionRead;
         }
+        /* Chamilo queries are formed in many ways:
+            $sql  = "SELECT * FROM user WHERE id = '".Database::escape_string($id)."'; or
+            $sql  = 'SELECT * FROM user WHERE id = '.Database::escape_string($id).';
 
+            The problem here is that the function escape_string() calls the quote function that adds a "'" string.
+            Instead of this we're adding a identifier __@__ so we can identify those cases and replace with a simple '
+        */
+        $query = str_replace(
+            array(
+                "\"_@_'",
+                "'_@_\"",
+                "'_@_'",
+                "_@_'",
+                "'_@_",
+            ),
+            "'",
+            $query
+        );
         return $connection->executeQuery($query);
 
         /*
@@ -755,5 +731,60 @@ class Database
         }
 
         return false;
+    }
+
+
+    /*
+        Query methods
+        These methods execute a query and return the result(s).
+    */
+
+    /**
+     * Counts the number of rows in a table
+     * @param string $table The table of which the rows should be counted
+     * @return int The number of rows in the given table.
+     */
+    public static function count_rows($table)
+    {
+        $obj = self::fetch_object(self::query("SELECT COUNT(*) AS n FROM $table"));
+        return $obj->n;
+    }
+
+    /**
+     * Returns a list of tables within a database. The list may contain all of the
+     * available table names or filtered table names by using a pattern.
+     * @param string $database (optional)        The name of the examined database. If it is omited, the current database is assumed, see Database::select_db().
+     * @param string $pattern (optional)        A pattern for filtering table names as if it was needed for the SQL's LIKE clause, for example 'access_%'.
+     * @param resource $connection (optional)    The database server connection, for detailed description see the method query().
+     * @return array                            Returns in an array the retrieved list of table names.
+     */
+    public static function get_tables($database = '', $pattern = '', $connection = null)
+    {
+        $result = array();
+        $query = "SHOW TABLES";
+        if (!empty($database)) {
+            $query .= " FROM `".self::escape_string($database, $connection)."`";
+        }
+        if (!empty($pattern)) {
+            $query .= " LIKE '".self::escape_string($pattern, $connection)."'";
+        }
+        $query_result = Database::query($query, $connection);
+        while ($row = Database::fetch_row($query_result)) {
+            $result[] = $row[0];
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * Returns a list of databases created on the server. The list may contain all of the
+     * available database names or filtered database names by using a pattern.
+     * @return array Returns in an array the retrieved list of database names.
+     */
+    public static function get_databases()
+    {
+        $sm = self::$db->getSchemaManager();
+        return $sm->listDatabases();
     }
 }

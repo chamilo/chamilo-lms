@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-$app['debug'] = false;
-
 $app['app.title'] = '';
 $app['jquery_ui_theme'] = 'smoothness';
 
@@ -37,9 +35,9 @@ define('PCLZIP_TEMPORARY_DIR', $app['temp.path'].'pclzip');
 $app['temp.paths']->folders[] = PCLZIP_TEMPORARY_DIR;
 
 // MPDF temp libs.
-define("_MPDF_TEMP_PATH", $app['temp.path'].'/mpdf');
-define("_JPGRAPH_PATH", $app['temp.path'].'/mpdf');
-define("_MPDF_TTFONTDATAPATH", $app['temp.path'].'/mpdf');
+define("_MPDF_TEMP_PATH", $app['temp.path'].'mpdf');
+define("_JPGRAPH_PATH", $app['temp.path'].'mpdf');
+define("_MPDF_TTFONTDATAPATH", $app['temp.path'].'mpdf');
 
 $app['temp.paths']->folders[] = _MPDF_TEMP_PATH;
 
@@ -54,18 +52,17 @@ $app['temp.paths']->folders[] = $app['temp.path'].'temp';
 
 // Assetic.
 
-$app['assetic.enabled'] = false;
-
 if ($app['assetic.enabled']) {
     // Assetic cache folder.
-    $app['assetic.path_to_cache'] = $app['temp.path'].DIRECTORY_SEPARATOR.'assetic';
+    $app['assetic.path_to_cache'] = $app['temp.path'].'assetic';
 
     $app['temp.paths']->folders[] = $app['assetic.path_to_cache'];
 
     // Location where to dump all generated files
-
     $app['assetic.path_to_web'] = api_get_path(SYS_PATH).'web';
-    $app['assetic.input.path_to_assets'] = $app['assetic.path_to_web'].$app['app.theme'];
+
+    // web/chamilo
+    $app['assetic.input.path_to_assets'] = $app['assetic.path_to_web'];
     $css_path = api_get_path(SYS_CSS_PATH);
 
     $app['assetic.input.path_to_css'] = array(
@@ -100,23 +97,23 @@ if ($app['assetic.enabled']) {
     $app['assetic.output.path_to_js'] = 'js/script.js';
     $app['assetic.filter.yui_compressor.path'] = '/usr/share/yui-compressor/yui-compressor.jar';
 
-    // Create directories.
-    $app['temp.paths']->folders[] = $app['assetic.path_to_web'];
-    $app['temp.paths']->folders[] = $app['assetic.path_to_web'].'/css';
-    $app['temp.paths']->folders[] = $app['assetic.path_to_web'].'/css/'.$app['app.theme'];
-    $app['temp.paths']->folders[] = $app['assetic.path_to_web'].'/js';
-}
+    //if ($app['assetic.auto_dump_assets']) {
 
-// Loop in the folder array and create temp folders
+        // Create directories.
+        $app['temp.paths']->folders[] = $app['assetic.path_to_web'];
+        $app['temp.paths']->folders[] = $app['assetic.path_to_web'].'/css';
+        $app['temp.paths']->folders[] = $app['assetic.path_to_web'].'/css/'.$app['app.theme'];
+        $app['temp.paths']->folders[] = $app['assetic.path_to_web'].'/js';
 
-foreach ($app['temp.paths']->folders as $folder) {
-    if (!is_dir($folder)) {
-        @mkdir($folder, api_get_permissions_for_new_directories());
-    }
+        $app['temp.paths']->copyFolders = array(
+            $app['root_sys'].'main/css/'.$app['app.theme'] => $app['assetic.path_to_web'].'/css/'.$app['app.theme']
+        );
+    //}
 }
 
 // Monolog log file
 $app['chamilo.log'] = $app['sys_log_path'].'/chamilo.log';
+
 // If the chamilo.lig is not writable try to delete it
 if (is_file($app['chamilo.log']) && !is_writable($app['chamilo.log'])) {
     unlink($app['chamilo.log']);

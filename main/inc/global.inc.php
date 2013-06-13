@@ -173,6 +173,11 @@ $app['app.theme'] = 'chamilo';
 $app['debug'] = isset($_configuration['debug']) ? $_configuration['debug'] : false;
 $app['show_profiler'] = isset($_configuration['show_profiler']) ? $_configuration['show_profiler'] : false;
 
+// Enables assetic in order to load 1 compressed stylesheet or split files
+$app['assetic.enabled'] = false;
+// Dumps assets
+$app['assetic.auto_dump_assets'] = false;
+
 // Loading $app settings depending of the debug option
 if ($app['debug']) {
     require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/dev.php';
@@ -526,6 +531,13 @@ $app->before(
 
         if (!is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
             $app->abort(500, "temp folder must be writable");
+        }
+
+        // Loop in the folder array and create temp folders.
+        $app['chamilo.filesystem']->createFolders($app['temp.paths']->folders);
+
+        if ($app['assetic.auto_dump_assets']) {
+            $app['chamilo.filesystem']->copyFolders($app['temp.paths']->copyFolders);
         }
 
         // Check and modify the date of user in the track.e.online table

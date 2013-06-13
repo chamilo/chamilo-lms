@@ -12,22 +12,23 @@
 $app = require_once '../main/inc/global.inc.php';
 
 /**
- * In order to execute Chamilo, you need a call to $app->run().
- * $app->run(); shows a page depending of the URL for example when entering 
- * in "/web/index"
- * Chamilo will render the controller IndexController->indexAction(). This is 
- * because a router was assigned at the end of global.inc.php:
+ * In order to execute Chamilo, you need to call the $app->run() method.
+ * This method renders a page depending of the URL, for example when entering
+ * to "/web/index" Chamilo will call the controller "IndexController->indexAction()". This is
+ * because a router was assigned in the router.php file
+ *
  *   $app->get('/index', 'index.controller:indexAction')->bind('index');
- * 
- * The "index.controller:indexAction" string is transformed (due a 
- * controller - service approach) into 
- * ChamiloLMS\Controller\IndexController->indexAction() see more 
+ *
+ * The "index.controller:indexAction" string is transformed (due a
+ * controller - service approach) into the method:
+ * ChamiloLMS\Controller\IndexController->indexAction() see more
  * at: http://silex.sensiolabs.org/doc/providers/service_controller.html
- * The class is loaded automatically (no require_once needed) thanks to the 
+ * The class is loaded automatically (no require_once needed) thanks to the
  * namespace ChamiloLMS added in Composer.
  * The location of the file is src\ChamiloLMS\Controller\IndexController.php
  * following the PSR-1 standards.
 */
-/** @var Application */
+
+/** @var \Silex\Application $app */
 $app->run();
 //$app['http_cache']->run();

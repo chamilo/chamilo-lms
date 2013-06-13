@@ -39,7 +39,7 @@ $app['root_sys'] = dirname(dirname(__DIR__)).'/';
 
 // Registering services
 
-$app['debug'] = true;
+$app['debug'] = false;
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new Silex\Provider\FormServiceProvider());
 $app->register(new Silex\Provider\SessionServiceProvider());
@@ -69,7 +69,8 @@ $app->register(
             'charset' => 'utf-8',
             'strict_variables' => false,
             'autoescape' => true,
-            'cache' => $app['debug'] ? false : $app['twig.cache.path'],
+            //'cache' => $app['debug'] ? false : $app['twig.cache.path'],
+            'cache' => false, // no cache during installation sorry
             'optimizations' => -1, // turn on optimizations with -1
         )
     )
@@ -426,17 +427,29 @@ $app->get('/finish', function() use($app) {
     return $app['twig']->render('finish.tpl', array('output' => $output));
 })->bind('finish');
 
+// Middlewares.
+$app->before(
+    function () use ($app) {
+        if (file_exists($app['root_sys'].'config/configuration.php') || file_exists($app['root_sys'].'config/configuration.yml')) {
+            return $app->abort(500, "A Chamilo installation was found. You can't reinstall.");
+        }
+    }
+);
 
-$app->error(function (\Exception $e, $code) {
+// Errors
+$app->error(function (\Exception $e, $code) use ($app) {
     switch ($code) {
         case 404:
             $message = 'The requested page could not be found.';
             break;
         default:
-            $message = 'We are sorry, but something went terribly wrong.';
+            // $message = 'We are sorry, but something went terribly wrong.';
+            $message = $e->getMessage();
     }
+    $app['twig']->addGlobal('code', $code);
+    $app['twig']->addGlobal('message', $message);
 
-    return new Response($message);
+    return $app['twig']->render('error.tpl');
 });
 
 if (PHP_SAPI == 'cli') {

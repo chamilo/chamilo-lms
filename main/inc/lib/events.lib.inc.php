@@ -428,11 +428,11 @@ function createEventExercise($exo_id)
  * @param	float	Score achieved
  * @param	string	Answer given
  * @param	integer	Question ID
- * @param	integer Exercise attempt ID (from track_e_exercise)
+ * @param	integer Exercise attempt ID a.k.a exe_id (from track_e_exercise)
  * @param	integer	Position
- * @param	integer Exercise attempt ID (from track_e_exercise)
+ * @param	integer Exercise ID
  * @param	string  Filename (for audio answers - using nanogong)
- * @param	integer ID of the user who's going to get this score. Default value of null means "get from context".
+ * @param	integer User ID The user who's going to get this score. Default value of null means "get from context".
  * @param	integer	Course ID (from the "id" column of course table). Default value of null means "get from context".
  * @param	integer	Session ID (from the session table). Default value of null means "get from context".
  * @param	integer	Learnpath ID (from c_lp table). Default value of null means "get from context".
@@ -454,15 +454,17 @@ function saveExerciseAttempt(
     $learnpath_item_id = null
 ) {
     global $debug;
+
     $score = Database::escape_string($score);
     $answer = Database::escape_string($answer);
     $question_id = Database::escape_string($question_id);
     $exe_id = Database::escape_string($exe_id);
     $position = Database::escape_string($position);
     $now = api_get_utc_datetime();
+
     // check user_id or get from context
     if (empty($user_id) or intval($user_id) != $user_id) {
-    $user_id = api_get_user_id();
+        $user_id = api_get_user_id();
         // anonymous
         if (empty($user_id)) {
             $user_id = api_get_anonymous_id();
@@ -503,12 +505,10 @@ function saveExerciseAttempt(
         $score = 0;
         $answer = 0;
     }
-
     $file = '';
     if (isset($nano)) {
         $file = Database::escape_string(basename($nano->load_filename_if_exists(false)));
     }
-
 
     if (!empty($question_id) && !empty($exe_id) && !empty($user_id)) {
         $attempt = array(
@@ -544,13 +544,13 @@ function saveExerciseAttempt(
             $attempt['exe_id'] = $exe_id;
         }
 
-
         if ($debug) {
             error_log("Saving question attempt: ");
             error_log($sql);
         }
 
         $attempt_id = Database::insert($TBL_TRACK_ATTEMPT, $attempt);
+
         if (defined('ENABLED_LIVE_EXERCISE_TRACKING')) {
             $recording_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
             if ($debug) {
@@ -565,6 +565,7 @@ function saveExerciseAttempt(
                 'session_id' => $session_id,
             );
             Database::insert($recording_table, $attempt_recording);
+
         }
         return $attempt_id;
     } else {
@@ -752,7 +753,7 @@ function get_event_users($event_name)
 
 function get_events_by_user_and_type($user_id, $event_type)
 {
-    $TABLETRACK_DEFAULT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+    $TABLETRACK_DEFAULT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
     $user_id = intval($user_id);
     $event_type = Database::escape_string($event_type);
 
@@ -861,15 +862,34 @@ function eventType_mod($etId, $users, $message, $subject)
  * @param int $exe_id
  * @return mixed
  */
-function get_last_attempt_date_of_exercise($exe_id)
+function getLastAttemptDateOfExercise($exe_id)
 {
     $exe_id = intval($exe_id);
-    $track_attempts = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $track_attempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $sql_track_attempt = 'SELECT max(tms) as last_attempt_date FROM '.$track_attempts.' WHERE exe_id='.$exe_id;
     $rs_last_attempt = Database::query($sql_track_attempt);
     $row_last_attempt = Database::fetch_array($rs_last_attempt);
     $last_attempt_date = $row_last_attempt['last_attempt_date']; //Get the date of last attempt
     return $last_attempt_date;
+}
+
+/**
+ * Gets the last attempt of an exercise based in the exe_id
+ * @param int $exe_id
+ * @return mixed
+ */
+function getLatestQuestionIdFromAttempt($exe_id)
+{
+    $exe_id = intval($exe_id);
+    $track_attempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $sql = 'SELECT question_id FROM '.$track_attempts.' WHERE exe_id='.$exe_id.' ORDER BY tms DESC LIMIT 1';
+    $result = Database::query($sql);
+    if (Database::num_rows($result)) {
+        $row = Database::fetch_array($result);
+        return $row['question_id'];
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -882,7 +902,7 @@ function get_last_attempt_date_of_exercise($exe_id)
  */
 function get_attempt_count($user_id, $exerciseId, $lp_id, $lp_item_id, $lp_item_view_id)
 {
-    $stat_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $stat_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $user_id = intval($user_id);
     $exerciseId = intval($exerciseId);
     $lp_id = intval($lp_id);
@@ -910,7 +930,7 @@ function get_attempt_count($user_id, $exerciseId, $lp_id, $lp_item_id, $lp_item_
 
 function get_attempt_count_not_finished($user_id, $exerciseId, $lp_id, $lp_item_id)
 {
-    $stat_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $stat_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $user_id = intval($user_id);
     $exerciseId = intval($exerciseId);
     $lp_id = intval($lp_id);
@@ -951,9 +971,9 @@ function delete_student_lp_events($user_id, $lp_id, $course, $session_id)
         $course_id = api_get_course_int_id();
     }
 
-    $track_e_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $track_attempts = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-    $recording_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+    $track_e_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $track_attempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $recording_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 
     $user_id = intval($user_id);
     $lp_id = intval($lp_id);
@@ -1007,7 +1027,7 @@ function delete_student_lp_events($user_id, $lp_id, $course, $session_id)
  */
 function delete_all_incomplete_attempts($user_id, $exercise_id, $course_id, $session_id = 0)
 {
-    $track_e_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $track_e_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $user_id = intval($user_id);
     $exercise_id = intval($exercise_id);
     $course_id = intval($course_id);
@@ -1033,8 +1053,8 @@ function delete_all_incomplete_attempts($user_id, $exercise_id, $course_id, $ses
  */
 function get_all_exercise_results($exercise_id, $courseId, $session_id = 0, $load_question_list = true, $user_id = null)
 {
-    $TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $TABLETRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $courseId = intval($courseId);
     $exercise_id = intval($exercise_id);
     $session_id = intval($session_id);
@@ -1077,8 +1097,8 @@ function get_all_exercise_results($exercise_id, $courseId, $session_id = 0, $loa
  */
 function get_all_exercise_results_by_course($courseId, $session_id = 0, $get_count = true)
 {
-    $table_track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $table_track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $courseId = intval($courseId);
     $session_id = intval($session_id);
 
@@ -1121,8 +1141,8 @@ function get_all_exercise_results_by_course($courseId, $session_id = 0, $get_cou
  */
 function get_all_exercise_results_by_user($user_id, $courseId, $session_id = 0)
 {
-    $table_track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $table_track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $courseId = intval($courseId);
     $session_id = intval($session_id);
     $user_id = intval($user_id);
@@ -1160,9 +1180,9 @@ function get_all_exercise_results_by_user($user_id, $courseId, $session_id = 0)
  */
 function get_exercise_results_by_attempt($exe_id)
 {
-    $table_track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $table_track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-    $table_track_attempt_recording = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+    $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $table_track_attempt_recording = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
     $exe_id = intval($exe_id);
 
     $sql = "SELECT * FROM $table_track_exercises WHERE status = '' AND exe_id = $exe_id";
@@ -1203,9 +1223,9 @@ function get_exercise_results_by_attempt($exe_id)
  */
 function getExerciseResultsByUser($user_id, $exercise_id, $courseId, $session_id = 0, $lp_id = 0, $lp_item_id = 0, $order = null)
 {
-    $table_track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $table_track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-    $table_track_attempt_recording = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+    $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $table_track_attempt_recording = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
     $courseId = intval($courseId);
     $exercise_id = intval($exercise_id);
     $session_id = intval($session_id);
@@ -1257,7 +1277,7 @@ function getExerciseResultsByUser($user_id, $exercise_id, $courseId, $session_id
  */
 function count_exercise_attempts_by_user($user_id, $exercise_id, $courseId, $session_id = 0)
 {
-    $TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $TABLETRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $courseId = intval($courseId);
     $exercise_id = intval($exercise_id);
     $session_id = intval($session_id);
@@ -1292,8 +1312,8 @@ function count_exercise_attempts_by_user($user_id, $exercise_id, $courseId, $ses
  */
 function get_best_exercise_results_by_user($exercise_id, $courseId, $session_id = 0)
 {
-    $table_track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $table_track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $courseId = intval($courseId);
     $exercise_id = intval($exercise_id);
     $session_id = intval($session_id);
@@ -1341,7 +1361,7 @@ function get_best_exercise_results_by_user($exercise_id, $courseId, $session_id 
  */
 function get_best_attempt_exercise_results_per_user($user_id, $exercise_id, $courseId, $session_id = 0)
 {
-    $table_track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $courseId = intval($courseId);
     $exercise_id = intval($exercise_id);
     $session_id = intval($session_id);
@@ -1391,8 +1411,8 @@ function get_best_attempt_exercise_results_per_user($user_id, $exercise_id, $cou
  */
 function count_exercise_result_not_validated($exercise_id, $courseId, $session_id = 0)
 {
-    $table_track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $table_track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+    $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
     $courseId = intval($courseId);
     $session_id = intval($session_id);
     $exercise_id = intval($exercise_id);
@@ -1422,7 +1442,7 @@ function count_exercise_result_not_validated($exercise_id, $courseId, $session_i
  */
 function get_count_exercises_attempted_by_course($courseId, $session_id = 0)
 {
-    $table_track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $courseId = intval($courseId);
     $session_id = intval($session_id);
 
@@ -1451,8 +1471,8 @@ function get_count_exercises_attempted_by_course($courseId, $session_id = 0)
  */
 function get_all_exercise_event_from_lp($exercise_id, $courseId, $session_id = 0)
 {
-    $table_track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $table_track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $courseId = intval($courseId);
     $exercise_id = intval($exercise_id);
     $session_id = intval($session_id);
@@ -1503,7 +1523,7 @@ function get_all_exercises_from_lp($lp_id, $course_id)
  */
 function get_comments($exe_id, $question_id)
 {
-    $table_track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $sql = "SELECT teacher_comment FROM ".$table_track_attempt."
             WHERE exe_id='".Database::escape_string($exe_id)."' AND question_id = '".Database::escape_string($question_id)."'
             ORDER by question_id";
@@ -1518,7 +1538,7 @@ function get_comments($exe_id, $question_id)
  */
 function getAllExerciseEventByExeId($exe_id)
 {
-    $table_track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $exe_id = intval($exe_id);
     $list = array();
 
@@ -1542,7 +1562,7 @@ function getAllExerciseEventByExeId($exe_id)
  */
 function delete_attempt($exe_id, $user_id, $courseId, $session_id, $question_id)
 {
-    $table_track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
     $exe_id = intval($exe_id);
     $user_id = intval($user_id);
@@ -1567,7 +1587,7 @@ function delete_attempt($exe_id, $user_id, $courseId, $session_id, $question_id)
  */
 function delete_attempt_hotspot($exe_id, $user_id, $courseId, $question_id)
 {
-    $table_track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+    $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 
     $exe_id = intval($exe_id);
     $user_id = intval($user_id);
@@ -1617,7 +1637,7 @@ function getAnsweredQuestionsFromAttempt($exe_id, $objExercise)
  */
 function event_course_login($courseId, $user_id, $session_id)
 {
-    $course_tracking_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+    $course_tracking_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
     $time = api_get_datetime();
 
     $courseId = Database::escape_string($courseId);

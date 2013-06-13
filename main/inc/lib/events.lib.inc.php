@@ -428,11 +428,11 @@ function createEventExercise($exo_id)
  * @param	float	Score achieved
  * @param	string	Answer given
  * @param	integer	Question ID
- * @param	integer Exercise ID
+ * @param	integer Exercise attempt ID a.k.a exe_id (from track_e_exercise)
  * @param	integer	Position
- * @param	integer Exercise attempt ID (from track_e_exercise)
+ * @param	integer Exercise ID
  * @param	string  Filename (for audio answers - using nanogong)
- * @param	integer ID of the user who's going to get this score. Default value of null means "get from context".
+ * @param	integer User ID The user who's going to get this score. Default value of null means "get from context".
  * @param	integer	Course ID (from the "id" column of course table). Default value of null means "get from context".
  * @param	integer	Session ID (from the session table). Default value of null means "get from context".
  * @param	integer	Learnpath ID (from c_lp table). Default value of null means "get from context".

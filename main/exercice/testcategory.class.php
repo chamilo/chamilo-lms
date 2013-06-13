@@ -126,14 +126,14 @@ class Testcategory
             $category->setDescription($this->description);
 
             if (!empty($parent_id)) {
-                $parent = $app['orm.em']->find('\Entity\CQuizCategory', $parent_id);
+                $parent = $app['orm.ems']['db_write']->find('\Entity\CQuizCategory', $parent_id);
                 if ($parent) {
                     $category->setParent($parent);
                 }
             }
             $category->setCId($course_id);
-            $app['orm.em']->persist($category);
-            $app['orm.em']->flush();
+            $app['orm.ems']['db_write']->persist($category);
+            $app['orm.ems']['db_write']->flush();
 
             if ($category->getIid()) {
                 return $category->getIid();
@@ -152,7 +152,7 @@ class Testcategory
     {
         // @todo inject the app in the class
         global $app;
-        $category = $app['orm.em']->find('\Entity\CQuizCategory', $this->id);
+        $category = $app['orm.ems']['db_write']->find('\Entity\CQuizCategory', $this->id);
         if (!$category) {
             return false;
         }
@@ -171,7 +171,7 @@ class Testcategory
                 if ($this->id == $parentId) {
                     continue;
                 }
-                $parent = $app['orm.em']->find('\Entity\CQuizCategory', $parentId);
+                $parent = $app['orm.ems']['db_write']->find('\Entity\CQuizCategory', $parentId);
                 if ($parent) {
                     $category->setParent($parent);
                 }
@@ -181,8 +181,8 @@ class Testcategory
             $category->setParent(null);
         }
 
-        $app['orm.em']->persist($category);
-        $app['orm.em']->flush();
+        $app['orm.ems']['db_write']->persist($category);
+        $app['orm.ems']['db_write']->flush();
 
         if ($category->getIid()) {
             return $category->getIid();
@@ -200,7 +200,7 @@ class Testcategory
     public function removeCategory()
     {
         global $app;
-        $category = $app['orm.em']->find('\Entity\CQuizCategory', $this->id);
+        $category = $app['orm.ems']['db_write']->find('\Entity\CQuizCategory', $this->id);
         if (!$category) {
             return false;
         }
@@ -212,9 +212,10 @@ class Testcategory
             return false;
         }
 
-        $repo = $app['orm.em']->getRepository('Entity\CQuizCategory');
+        $repo = $app['orm.ems']['db_write']->getRepository('Entity\CQuizCategory');
         $repo->removeFromTree($category);
-        $app['orm.em']->clear(); // clear cached nodes
+        // clear cached nodes
+        $app['orm.ems']['db_write']->clear();
         return true;
     }
 
@@ -502,11 +503,11 @@ class Testcategory
         return $categories_in_exercise;*/
     }
 
-    public static function getListOfCategoriesIDForTestObject($exercise_obj)
+    public static function getListOfCategoriesIDForTestObject(Exercise $exercise_obj)
     {
         // parcourir les questions d'un test, recup les categories uniques dans un tableau
         $categories_in_exercise = array();
-        $question_list = $exercise_obj->selectQuestionList();
+        $question_list = $exercise_obj->getQuestionList();
 
         // the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ???
         foreach ($question_list as $question_id) {
@@ -554,7 +555,7 @@ class Testcategory
      * @param Exercise $exercise_obj
      * @return array
      */
-    public static function getListOfCategoriesForTest($exercise_obj) {
+    public static function getListOfCategoriesForTest(Exercise $exercise_obj) {
         $result = array();
         $categories = self::getListOfCategoriesIDForTestObject($exercise_obj);
         foreach ($categories as $cat_id) {
@@ -583,11 +584,12 @@ class Testcategory
 	 * return : integer
 	 * hubert.borderiou 07-04-2011
 	 */
-	public static function getNumberOfQuestionsInCategoryForTest($exercise_id, $category_id) {
+	public static function getNumberOfQuestionsInCategoryForTest($exercise_id, $category_id)
+    {
 		$number_questions_in_category = 0;
 		$exercise = new Exercise();
 		$exercise->read($exercise_id);
-		$question_list = $exercise->selectQuestionList();
+		$question_list = $exercise->getQuestionList();
 		// the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ? ? ?
         foreach ($question_list as $question_id) {
             $category_in_question = Testcategory::getCategoryForQuestion($question_id);
@@ -762,7 +764,7 @@ class Testcategory
 		* If no question for this category, return ""
 	*/
 	public static function getCatScoreForExeidForUserid($in_cat_id, $in_exe_id, $in_user_id) {
-		$tbl_track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+		$tbl_track_attempt		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 		$tbl_question_rel_category = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         $in_cat_id = intval($in_cat_id);
         $in_exe_id = intval($in_exe_id);

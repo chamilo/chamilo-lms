@@ -3,7 +3,7 @@
 /*
  * This file is part of the Assetic package, an OpenSky project.
  *
- * (c) 2010-2012 OpenSky Project Inc
+ * (c) 2010-2013 OpenSky Project Inc
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -35,6 +35,12 @@ abstract class BaseCompilerFilter implements FilterInterface
     const LEVEL_DEFAULT = 'DEFAULT';
     const LEVEL_VERBOSE = 'VERBOSE';
 
+    // languages
+    const LANGUAGE_ECMASCRIPT3 = 'ECMASCRIPT3';
+    const LANGUAGE_ECMASCRIPT5 = 'ECMASCRIPT5';
+    const LANGUAGE_ECMASCRIPT5_STRICT = 'ECMASCRIPT5_STRICT';
+
+    protected $timeout;
     protected $compilationLevel;
     protected $jsExterns;
     protected $externsUrl;
@@ -42,6 +48,12 @@ abstract class BaseCompilerFilter implements FilterInterface
     protected $formatting;
     protected $useClosureLibrary;
     protected $warningLevel;
+    protected $language;
+
+    public function setTimeout($timeout)
+    {
+        $this->timeout = $timeout;
+    }
 
     public function setCompilationLevel($compilationLevel)
     {
@@ -76,6 +88,11 @@ abstract class BaseCompilerFilter implements FilterInterface
     public function setWarningLevel($warningLevel)
     {
         $this->warningLevel = $warningLevel;
+    }
+
+    public function setLanguage($language)
+    {
+        $this->language = $language;
     }
 
     public function filterLoad(AssetInterface $asset)

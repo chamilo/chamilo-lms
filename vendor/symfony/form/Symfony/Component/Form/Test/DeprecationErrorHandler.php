@@ -1,8 +1,16 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Symfony\Component\Form\Test;
 
-use Symfony\Component\Form\FormInterface as NonTestFormInterface;
 use Symfony\Component\Form\FormEvent;
 
 class DeprecationErrorHandler
@@ -25,12 +33,10 @@ class DeprecationErrorHandler
         return false;
     }
 
-    public static function getFormEvent(NonTestFormInterface $form, $data)
+    public static function preBind($listener, FormEvent $event)
     {
         set_error_handler(array('Symfony\Component\Form\Test\DeprecationErrorHandler', 'handle'));
-        $event = new FormEvent($form, $data);
+        $listener->preBind($event);
         restore_error_handler();
-
-        return $event;
     }
 }

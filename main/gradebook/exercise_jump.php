@@ -18,7 +18,7 @@ api_block_anonymous_users();
 $this_section=SECTION_COURSES;
 
 $course_code = api_get_course_id();
-$course_info = Database::get_course_info($course_code);
+$course_info = api_get_course_info($course_code);
 $course_title = $course_info['title'];
 $course_code = $return_result['code'];
 $gradebook = Security::remove_XSS($_GET['gradebook']);

@@ -34,7 +34,7 @@ $(function() {
         } else {
             url = String(window.location)+temp;
             window.location.replace(url);
-        }    
+        }
     });
 });
 </script>';
@@ -289,7 +289,7 @@ function get_calendar_items($select_month, $select_year, $select_day = false)
 
     //Check my personal calendar items
     if (api_get_setting('allow_personal_agenda') == 'true' && empty($_SESSION['user']) && empty($_SESSION['group'])) {
-        $tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
+        $tbl_personal_agenda = Database :: get_main_table(TABLE_PERSONAL_AGENDA);
         // 1. creating the SQL statement for getting the personal agenda items in MONTH view
         $sql = "SELECT id, title, text as content , date as start_date, enddate as end_date, parent_event_id FROM ".$tbl_personal_agenda."
                 WHERE user='".api_get_user_id()."' ".$show_all_current_personal;
@@ -1120,7 +1120,7 @@ function construct_to_select_form($group_list = null, $user_list = null, $filter
         }
         $result .= "</optgroup>";
     }
-    
+
     // adding the individual users to the select form
     if (!empty($user_list)) {
         $result .= '<optgroup label="'.get_lang('FilterByUser').'">';

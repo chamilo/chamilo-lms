@@ -39,8 +39,8 @@ class ClassManager
 	function create_class($name) {
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$sql = "INSERT INTO $table_class SET name='".Database::escape_string($name)."'";
-		Database::query($sql);
-		return Database::affected_rows() == 1;
+		$result = Database::query($sql);
+		return Database::affected_rows($result) == 1;
 	}
 	/**
 	 * Check if a classname is allready in use

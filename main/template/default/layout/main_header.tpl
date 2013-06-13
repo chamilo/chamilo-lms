@@ -42,11 +42,13 @@
         {# topbar #}
         {% include app.template_style ~ "/layout/topbar.tpl" %}
 
+        {% block main_div_container %}
         {% if app.full_width == 1 %}
             <div id="main" class="container-fluid">
         {% else %}
             <div id="main" class="container">
         {% endif %}
+        {% endblock main_div_container %}
             <header>
                 <div class="row">
                     <div id="header_left" class="span4">

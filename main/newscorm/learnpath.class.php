@@ -7,6 +7,7 @@
  * @package chamilo.learnpath
  * @author    Yannick Warnier <ywarnier@beeznest.org>
  * @author    Julio Montoya   <gugli100@gmail.com> Several improvements and fixes
+ * @todo this file is too big, need a refactor more than 10000 lines!
  */
 /**
  * Defines the learnpath parent class
@@ -391,7 +392,7 @@ class learnpath
                             0
                         );
                     }
-                    $res_ins = Database::query($sql_ins);
+                    Database::query($sql_ins);
                 }
             }
         }
@@ -446,7 +447,7 @@ class learnpath
         $previous = intval($previous);
         $type = Database::escape_string($type);
         $id = intval($id);
-        $max_time_allowed = Database::escape_string(htmlentities($max_time_allowed));
+        $max_time_allowed = Database::escape_string($max_time_allowed);
         if (empty ($max_time_allowed)) {
             $max_time_allowed = 0;
         }
@@ -500,8 +501,8 @@ class learnpath
         if ($type == 'quiz') {
             $sql = 'SELECT SUM(ponderation)
 					FROM '.Database :: get_course_table(TABLE_QUIZ_QUESTION).' as quiz_question
-                    INNER JOIN  '.Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION).' as quiz_rel_question
-                    ON quiz_question.id = quiz_rel_question.question_id
+                    INNER JOIN '.Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION).' as quiz_rel_question
+                    ON quiz_question.iid = quiz_rel_question.question_id
                     WHERE   quiz_rel_question.exercice_id = '.$id." AND
 	            			quiz_question.c_id = $course_id AND
 	            			quiz_rel_question.c_id = $course_id ";
@@ -589,8 +590,8 @@ class learnpath
 
         $res_ins = Database::query($sql_ins);
 
-        if ($res_ins > 0) {
-            $new_item_id = Database :: insert_id($res_ins);
+        if ($res_ins) {
+            $new_item_id = Database::insert_id();
 
             // Update the item that should come after the new item.
             $sql_update_next = "
@@ -3231,22 +3232,9 @@ class learnpath
                 $html .= stripslashes($title);
             }
 
-            /*$tbl_track_e_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-            $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-            $user_id = api_get_user_id();
-
-            $sql = "SELECT path  FROM $tbl_track_e_exercises, $tbl_lp_item
-                    WHERE   c_id = $courseId AND
-                            path =   '" . $item['path'] . "' AND
-                            exe_user_id =  '$user_id' AND
-                            c_id = '$course_code' AND
-                            path = exe_exo_id AND
-                            status <> 'incomplete'";
-            $result = Database::query($sql);
-            $count = Database :: num_rows($result);*/
             if ($item['type'] == 'quiz') {
-                error_log("1-->>>>>>>>>>>>>>>>");
-                error_log($item['status']);
+                // error_log("1-->>>>>>>>>>>>>>>>");
+                // error_log($item['status']);
                 if ($item['status'] == 'completed') {
                     $html .= "&nbsp;<img id='toc_img_".$item['id']."' src='".$icon_name[$item['status']]."' alt='".substr(
                         $item['status'],
@@ -4519,9 +4507,9 @@ class learnpath
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new name : '.$this->name, 0);
         }
-        Database::query($sql);
+        $result = Database::query($sql);
         // If the lp is visible on the homepage, change his name there.
-        if (Database::affected_rows()) {
+        if (Database::affected_rows($result)) {
             $session_id = api_get_session_id();
             $session_condition = api_get_session_condition($session_id);
             $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);
@@ -9135,9 +9123,7 @@ class learnpath
 
                 $return .= '<img alt="" src="../img/lp_link.gif" style="margin-right:5px;" title="" />';
 
-                $return .= '<a href="'.api_get_self().'?cidReq='.Security :: remove_XSS(
-                    $_GET['cidReq']
-                ).'&amp;action=add_item&amp;type='.TOOL_LINK.'&amp;file='.$row_link['id'].'&amp;lp_id='.$this->lp_id.'">'.
+                $return .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=add_item&amp;type='.TOOL_LINK.'&amp;file='.$row_link['id'].'&amp;lp_id='.$this->lp_id.'">'.
                     $row_link['title'].
                     '</a>';
                 $return .= '</li>';
@@ -9215,9 +9201,7 @@ class learnpath
                 $return .= '<a style="cursor:hand" onclick="javascript: toggle_forum('.$forum['forum_id'].')" style="vertical-align:middle">
                                 <img src="'.api_get_path(WEB_IMG_PATH).'add.gif" id="forum_'.$forum['forum_id'].'_opener" align="absbottom" />
                             </a>
-                            <a href="'.api_get_self().'?cidReq='.Security :: remove_XSS(
-                    $_GET['cidReq']
-                ).'&amp;action=add_item&amp;type='.TOOL_FORUM.'&amp;forum_id='.$forum['forum_id'].'&amp;lp_id='.$this->lp_id.'" style="vertical-align:middle">'.Security :: remove_XSS(
+                            <a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=add_item&amp;type='.TOOL_FORUM.'&amp;forum_id='.$forum['forum_id'].'&amp;lp_id='.$this->lp_id.'" style="vertical-align:middle">'.Security :: remove_XSS(
                     $forum['forum_title']
                 ).'</a>';
             }
@@ -9235,9 +9219,7 @@ class learnpath
 
                     $return .= Display::return_icon('forumthread.png', get_lang('Thread'), array(), ICON_SIZE_TINY);
 
-                    $return .= '<a href="'.api_get_self().'?cidReq='.Security :: remove_XSS(
-                        $_GET['cidReq']
-                    ).'&amp;action=add_item&amp;type='.TOOL_THREAD.'&amp;thread_id='.$thread['thread_id'].'&amp;lp_id='.$this->lp_id.'">'.Security :: remove_XSS(
+                    $return .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=add_item&amp;type='.TOOL_THREAD.'&amp;thread_id='.$thread['thread_id'].'&amp;lp_id='.$this->lp_id.'">'.Security :: remove_XSS(
                         $thread['thread_title']
                     ).'</a>';
                     $return .= '</li>';
@@ -10531,7 +10513,7 @@ EOD;
     static function create_category($params)
     {
         global $app;
-        $em = $app['orm.em'];
+        $em = $app['orm.ems']['db_write'];
         $item = new Entity\CLpCategory();
         $item->setName($params['name']);
         $item->setCId($params['c_id']);
@@ -10542,7 +10524,7 @@ EOD;
     static function update_category($params)
     {
         global $app;
-        $em = $app['orm.em'];
+        $em = $app['orm.ems']['db_write'];
         $item = $em->find('Entity\CLpCategory', $params['id']);
         if ($item) {
             $item->setName($params['name']);
@@ -10555,7 +10537,7 @@ EOD;
     static function move_up_category($id)
     {
         global $app;
-        $em = $app['orm.em'];
+        $em = $app['orm.ems']['db_write'];
         $item = $em->find('Entity\CLpCategory', $id);
         if ($item) {
             $position = $item->getPosition() - 1;
@@ -10568,7 +10550,7 @@ EOD;
     static function move_down_category($id)
     {
         global $app;
-        $em = $app['orm.em'];
+        $em = $app['orm.ems']['db_write'];
         $item = $em->find('Entity\CLpCategory', $id);
         if ($item) {
             $position = $item->getPosition() + 1;
@@ -10629,7 +10611,7 @@ EOD;
     static function delete_category($id)
     {
         global $app;
-        $em = $app['orm.em'];
+        $em = $app['orm.ems']['db_write'];
         $item = $em->find('Entity\CLpCategory', $id);
         if ($item) {
 
@@ -10639,16 +10621,15 @@ EOD;
             $query->setParameter('catId', $item->getId());
             $lps = $query->getResult();
 
-            //Setting category = 0
+            // Setting category = 0.
             if ($lps) {
                 foreach ($lps as $lpItem) {
                     $lpItem->setCategoryId(0);
                 }
             }
 
-            //Removing category
+            // Removing category.
             $em->remove($item);
-
             $em->flush();
         }
     }

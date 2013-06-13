@@ -6,9 +6,11 @@
  *	@package chamilo.library
  */
 /**
- *	@package chamilo.library
+ * @todo use the SessionServiceProvider and not a "in house" class
+ * @package chamilo.library *
  */
-class SessionHandler {
+class SessionHandler
+{
 
 	// TODO: Hm, these variables are public.
 	public $connection;
@@ -31,6 +33,7 @@ class SessionHandler {
 		$this->connection_handler = false;
 	}
 
+    // @todo use a dbal connection
 	public function sqlConnect() {
 
 		if (!$this->connection_handler) {

@@ -334,7 +334,7 @@ if (api_is_allowed_to_edit(null,true) && isset($_GET['preview']) && $_GET['previ
 }
 
 // 1. Loading the $objExercise variable
-if (!isset($_SESSION['objExercise']) || $_SESSION['objExercise']->id != $_REQUEST['exerciseId']) {
+if (!isset($_SESSION['objExercise']) || isset($_SESSION['objExercise']) && ($_SESSION['objExercise']->id != $_REQUEST['exerciseId'])) {
     // Construction of Exercise
     /** @var Exercise $objExercise */
     $objExercise = new Exercise();
@@ -352,7 +352,6 @@ if (!isset($_SESSION['objExercise']) || $_SESSION['objExercise']->id != $_REQUES
         if ($debug) { error_log('1.1. $_SESSION[objExercise] was unset - set now - end'); };
     }
 }
-
 
 // $objExercise = new Exercise(); $objExercise->read($exerciseId);
 
@@ -388,7 +387,9 @@ if ($objExercise->expired_time != 0) {
 
 //Generating the time control key for the user
 $current_expired_time_key = ExerciseLib::get_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
-if ($debug) error_log("4. current_expired_time_key: $current_expired_time_key ");
+if ($debug) {
+    error_log("4. current_expired_time_key: $current_expired_time_key ");
+}
 
 $_SESSION['duration_time'][$current_expired_time_key] = $current_timestamp;
 
@@ -466,7 +467,7 @@ if (!isset($_SESSION['questionList'])) {
     $questionList = $objExercise->getQuestionList();
 
     // Media questions.
-    $media_is_activated = $objExercise->media_is_activated();
+    $media_is_activated = $objExercise->mediaIsActivated();
 
     //Getting order from random
     if ($media_is_activated == false && $objExercise->isRandom() && isset($exercise_stat_info) && !empty($exercise_stat_info['data_tracking'])) {
@@ -481,9 +482,9 @@ if (!isset($_SESSION['questionList'])) {
 }
 
 //Fix in order to get the correct question list
-$questionListFlatten = $objExercise->transformQuestionListWithMedias($questionList, true);
+$questionListUncompressed = $objExercise->getQuestionListWithMediasUncompressed();
 
-Session::write('question_list_flatten', $questionListFlatten);
+Session::write('question_list_uncompressed', $questionListUncompressed);
 
 $clock_expired_time = null;
 
@@ -491,7 +492,7 @@ if (empty($exercise_stat_info)) {
     if ($debug)  error_log('5  $exercise_stat_info is empty ');
 	$total_weight = 0;
 
-	foreach ($questionListFlatten as $question_id) {
+	foreach ($questionListUncompressed as $question_id) {
 		$objQuestionTmp = Question::read($question_id);
 		$total_weight += floatval($objQuestionTmp->weighting);
 	}
@@ -509,7 +510,7 @@ if (empty($exercise_stat_info)) {
 		$_SESSION['expired_time'][$current_expired_time_key] 	 = $clock_expired_time;
 		if ($debug) { error_log('5.4. Setting the $_SESSION[expired_time]: '.$_SESSION['expired_time'][$current_expired_time_key] ); };
 	}
-	$exe_id = $objExercise->save_stat_track_exercise_info($clock_expired_time, $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $questionListFlatten, $total_weight);
+	$exe_id = $objExercise->save_stat_track_exercise_info($clock_expired_time, $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $questionListUncompressed, $total_weight);
 	$exercise_stat_info = $objExercise->getStatTrackExerciseInfo($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
     if ($debug)  error_log("5.5  Creating a new attempt exercise_stat_info[] exe_id : $exe_id");
 } else {
@@ -537,7 +538,6 @@ if ($reminder == 2 && empty($my_remind_list)) {
 	exit;
 }
 
-
 /*
  * 7. Loading Time control parameters
  * If the expired time is major that zero(0) then the expired time is compute on this time.
@@ -555,7 +555,7 @@ if ($time_control) {
 	        $expired_time_of_this_attempt = $exercise_stat_info['expired_time_control'];
 			if ($debug) {error_log('7.5 $expired_time_of_this_attempt: '.$expired_time_of_this_attempt); }
 	        //Get the last attempt of an exercice
-	    	$last_attempt_date = get_last_attempt_date_of_exercise($exercise_stat_info['exe_id']);
+	    	$last_attempt_date = getLastAttemptDateOfExercise($exercise_stat_info['exe_id']);
 
 	    	//This means that the user enters the exam but do not answer the first question we get the date from the track_e_exercises not from the track_et_attempt see #2069
 	    	if (empty($last_attempt_date)) {
@@ -600,7 +600,8 @@ $time_left = api_strtotime($clock_expired_time,'UTC') - time();
  * The time control feature is enable here - this feature is enable for a jquery plugin called epiclock
  * for more details of how it works see this link : http://eric.garside.name/docs.html?p=epiclock
  */
-if ($time_control) { //Sends the exercise form when the expired time is finished
+if ($time_control) {
+    //Sends the exercise form when the expired time is finished
 	$htmlHeadXtra[] = $objExercise->show_time_control_js($time_left);
 }
 
@@ -664,7 +665,6 @@ if ($formSent && isset($_POST)) {
         if ($debug) { error_log('9.4.  $exerciseResult '.print_r($exerciseResult,1)); }
     }
 
-
     // the script "exercise_result.php" will take the variable $exerciseResult from the session
     Session::write('exerciseResult',$exerciseResult);
     //Session::write('remind_list', $remind_list);
@@ -721,14 +721,15 @@ if ($formSent && isset($_POST)) {
     if ($debug) { error_log('9. $formSent was NOT sent'); }
 }
 
-// if questionNum comes from POST and not from GET
-
-if (!$current_question || $_REQUEST['num']) {
-    if (!$current_question) {
-        $current_question = 1;
-    } else {
-        $current_question++;
+// Getting the latest questionId
+$latestQuestionId = getLatestQuestionIdFromAttempt($exe_id);
+if (is_null($current_question)) {
+    $current_question = 1;
+    if ($latestQuestionId) {
+        $current_question = $objExercise->getPositionInCompressedQuestionList($latestQuestionId);
     }
+} else {
+    $current_question++;
 }
 
 if ($question_count != 0) {
@@ -829,7 +830,7 @@ if ($objExercise->type == ONE_PER_PAGE) {
     echo $objExercise->getProgressPagination(
         $exe_id,
         $questionList,
-        $questionListFlatten,
+        $questionListUncompressed,
         $my_remind_list,
         $reminder,
         $remind_question_id,
@@ -895,7 +896,7 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) && $_custom['exercise
 
 //Timer control
 if ($time_control) {
-    echo $objExercise->return_time_left_div();
+    echo $objExercise->returnTimeLeftDiv();
 	echo '<div style="display:none" class="warning-message" id="expired-message-id">'.get_lang('ExerciceExpiredTimeMessage').'</div>';
 }
 
@@ -998,7 +999,6 @@ if (!empty($error)) {
             $i++;
         }
     }
-
 
     if ($number_of_hotspot_questions > 0) {
         $onsubmit = "onsubmit=\"return validateFlashVar('" . $number_of_hotspot_questions . "', '" . get_lang('HotspotValidateError1') . "', '" . get_lang('HotspotValidateError2') . "');\"";
@@ -1197,7 +1197,6 @@ if (!empty($error)) {
      <input type="hidden" name="learnpath_id" 			value="'.$learnpath_id . '" />
      <input type="hidden" name="learnpath_item_id" 		value="'.$learnpath_item_id . '" />
      <input type="hidden" name="learnpath_item_view_id" value="'.$learnpath_item_view_id . '" />';
-
     $objExercise->renderQuestionList($questionList, $current_question, $exerciseResult, $attempt_list, $remind_list);
 
     echo '</form>';

@@ -563,7 +563,7 @@ class MigrationCustom {
                 $course_info = api_get_course_info($course_data['code']);
 
                 if (!empty($course_data)) {
-                    $thematic = new Thematic();
+                    $thematic = new Thematic($course_info);
                     $thematic->set_course_int_id($course_info['real_id']);
                     $thematic->set_session_id($session_id);
                     $thematic_info = $thematic->get_thematic_by_title($data['thematic']);

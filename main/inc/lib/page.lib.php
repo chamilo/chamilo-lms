@@ -953,7 +953,7 @@ class PageController
     /**
      * The most important function here, prints the session and course list (user_portal.php)
      *
-     * @param int User ID
+     * @param int User id
      * @param string filter
      * @param int page
      * @return string HTML list of sessions and courses
@@ -971,7 +971,6 @@ class PageController
         $start    = ($page - 1) * $this->maxPerPage;
 
         $nbResults = CourseManager::displayCourses($user_id, $filter, $loadDirs, true);
-
         $html = CourseManager::displayCourses($user_id, $filter, $loadDirs, false, $start, $this->maxPerPage);
         if (!empty($html)) {
 

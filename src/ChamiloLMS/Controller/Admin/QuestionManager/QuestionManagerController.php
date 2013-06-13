@@ -34,12 +34,8 @@ class QuestionManagerController
     {
         $extraJS = array();
         //@todo improve this JS includes should be added using twig
-        $extraJS[]      = '<link href="'.api_get_path(
-            WEB_LIBRARY_PATH
-        ).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
-        $extraJS[]      = '<script src="'.api_get_path(
-            WEB_LIBRARY_PATH
-        ).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
+        $extraJS[]      = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+        $extraJS[]      = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
         $app['extraJS'] = $extraJS;
 
         // Setting exercise obj.
@@ -61,8 +57,15 @@ class QuestionManagerController
 
         $extraFields = new \ExtraField('question');
         $extraFields->addElements($form, $id);
+        // Validating if there are extra fields to modify.
+        if (count($form->_elements) > 1) {
+            $form->addElement('button', 'submit', get_lang('Update'));
 
-        $form->addElement('button', 'submit', get_lang('Update'));
+            $app['template']->assign('question', $question);
+            $app['template']->assign('form', $form->toHtml());
+        } else {
+            $app['template']->assign('message', \Display::return_message(get_lang('ThereAreNotExtrafieldsAvailable'), 'warning'));
+        }
 
         // If form was submitted.
         if ($form->validate()) {
@@ -76,8 +79,6 @@ class QuestionManagerController
             return $app->redirect($url);
         }
 
-        $app['template']->assign('question', $question);
-        $app['template']->assign('form', $form->toHtml());
         $response = $app['template']->render_template('admin/questionmanager/edit_question.tpl');
 
         return new Response($response, 200, array());
@@ -145,14 +146,6 @@ class QuestionManagerController
 
         /** @var \Entity\CQuizCategory $category */
         $category = $repo->find($categoryId);
-        //$questions = $category->getQuestions();
-
-        /*$questionFields = $em->getRepository('Entity\QuestionField')->findAll();
-        $rules = array();
-        foreach ($questionFields as $extraField) {
-            $extraField->getFieldVariable();
-            $rules[] = ;
-        }*/
 
         $questionColumns = \Question::getQuestionColumns();
         $columnModel     = $questionColumns['column_model'];
@@ -407,7 +400,7 @@ class QuestionManagerController
      */
     public function deleteCategoryAction(Application $app, $id)
     {
-        $repo     = $app['orm.em']->getRepository('Entity\CQuizCategory');
+        $repo     = $app['orm.ems']['db_write']->getRepository('Entity\CQuizCategory');
         $category = $repo->find($id);
         if (empty($category)) {
             $app->abort(404);

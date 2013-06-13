@@ -100,7 +100,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 echo Display::page_subheader2(get_lang('QuestionsToReview'));
 
 if ($time_control) {
-    echo $objExercise->return_time_left_div();
+    echo $objExercise->returnTimeLeftDiv();
 }
 
 echo Display::div('', array('id' => 'message'));

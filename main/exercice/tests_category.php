@@ -116,7 +116,7 @@ function edit_category_form($in_action, $type = 'simple') {
         $objcat = new Testcategory($category_id);
 
         // initiate the object
-        $form = new FormValidator('note', 'post', api_get_self().'?action='.$in_action.'&category_id='.$category_id."&type=".$type);
+        $form = new FormValidator('note', 'post', api_get_self().'?'.api_get_cidreq().'&action='.$in_action.'&category_id='.$category_id."&type=".$type);
 
         $objcat->getForm($form, 'edit');
 
@@ -125,9 +125,9 @@ function edit_category_form($in_action, $type = 'simple') {
             $check = Security::check_token('post');
             if ($check) {
                 $values = $form->getSubmitValues();
-                $v_id = Security::remove_XSS($values['category_id']);
-                $v_name = Security::remove_XSS($values['category_name'], COURSEMANAGER);
-                $v_description = Security::remove_XSS($values['category_description'], COURSEMANAGER);
+                $v_id = $values['category_id'];
+                $v_name = $values['category_name'];
+                $v_description = $values['category_description'];
                 $parent_id = isset($values['parent_id']) ? $values['parent_id'] : null;
                 $objcat = new Testcategory($v_id, $v_name, $v_description, $parent_id, $type);
                 if ($objcat->modifyCategory()) {
@@ -179,7 +179,7 @@ function add_category_form($in_action, $type = 'simple')
 {
     $in_action = Security::remove_XSS($in_action);
     // Initiate the object
-    $form = new FormValidator('note', 'post', api_get_self().'?action='.$in_action."&type=".$type);
+    $form = new FormValidator('note', 'post', api_get_self().'?'.api_get_cidreq().'&action='.$in_action."&type=".$type);
     // Setting the form elements
     $form->addElement('header', get_lang('AddACategory'));
     $form->addElement('text', 'category_name', get_lang('CategoryName'), array('class' => 'span6'));
@@ -223,7 +223,7 @@ function display_add_category($type) {
     if ($type == 'global') {
         $icon = "folder_global_category_new.png";
     }
-    echo '<a href="'.api_get_self().'?action=addcategory&type='.$type.'">'.Display::return_icon($icon, get_lang('AddACategory'), array(), ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addcategory&type='.$type.'">'.Display::return_icon($icon, get_lang('AddACategory'), array(), ICON_SIZE_MEDIUM).'</a>';
     echo '</div>';
     echo "<br/>";
     if ($type == 'simple') {

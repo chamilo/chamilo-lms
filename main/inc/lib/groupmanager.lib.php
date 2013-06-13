@@ -420,9 +420,9 @@ class GroupManager
             "' , '",
             $group_ids
         )."')";
-        Database::query($sql2);
+        $result = Database::query($sql2);
 
-        return Database::affected_rows();
+        return Database::affected_rows($result);
     }
 
     /**
@@ -1477,7 +1477,7 @@ class GroupManager
         $user_id = Database::escape_string($user_id);
 
         $sql = "SELECT tutor_id FROM ".$course_user_table."
-		        WHERE user_id='".$user_id."' AND c_id ='".api_get_course_int_id()."'"."AND tutor_id=1";
+		        WHERE user_id = '".$user_id."' AND c_id ='".api_get_course_int_id()."'"."AND tutor_id=1";
         $db_result = Database::query($sql);
         $result = (Database::num_rows($db_result) > 0);
 

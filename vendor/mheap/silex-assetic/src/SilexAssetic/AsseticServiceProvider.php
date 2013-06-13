@@ -28,9 +28,9 @@ class AsseticServiceProvider implements ServiceProviderInterface
          */
         $app['assetic'] = $app->share(function () use ($app) {
             $app['assetic.options'] = array_replace(array(
-                'debug'              => false,
+                'debug'              => isset($app['debug']) ? $app['debug'] : false,
                 'formulae_cache_dir' => null,
-                'auto_dump_assets'   => true,
+                'auto_dump_assets'   => isset($app['debug']) ? !$app['debug'] : true,
             ), $app['assetic.options']);
 
             // initializing lazy asset manager
@@ -166,7 +166,6 @@ class AsseticServiceProvider implements ServiceProviderInterface
                 !$app['assetic.options']['auto_dump_assets']) {
                 return;
             }
-
             $helper = $app['assetic.dumper'];
             if (isset($app['twig'])) {
                 $helper->addTwigAssets();

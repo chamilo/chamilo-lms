@@ -536,8 +536,14 @@ class scorm extends learnpath
                 0
             );
         }
-        $course_rel_dir = api_get_course_path().'/scorm'; // scorm dir web path starting from /courses
+        // scorm dir web path starting from /courses
+        $course_rel_dir = api_get_course_path().'/scorm';
         $course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_rel_dir; // Absolute system path for this course.
+
+        if (!is_dir($course_sys_dir)) {
+            mkdir($course_sys_dir, api_get_permissions_for_new_directories());
+        }
+
         $current_dir = replace_dangerous_char(trim($current_dir), 'strict'); // Current dir we are in, inside scorm/
         if ($this->debug > 1) {
             error_log('New LP - import_package() - current_dir = '.$current_dir, 0);
@@ -562,23 +568,22 @@ class scorm extends learnpath
         if ($this->debug > 1) {
             error_log("New LP - subdir is first set to : ".$this->subdir, 0);
         }
-
         $zipFile = new PclZip($zip_file_path);
 
         // Check the zip content (real size and file extension).
-
         $zipContentArray = $zipFile->listContent();
 
         $package_type = '';
         $at_root = false;
         $manifest = '';
+        $realFileSize = 0;
         $manifest_list = array();
 
         // The following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?).
         foreach ($zipContentArray as $thisContent) {
-            $thisContent['filename'];
+            $file = $thisContent['filename'];
             //error_log('Looking at  '.$thisContent['filename'], 0);
-            if (preg_match('~.(php.*|phtml)$~i', $thisContent['filename'])) {
+            if (preg_match('~.(php.*|phtml)$~i', $file)) {
                 $this->set_error_msg("File $file contains a PHP script");
                 //return api_failure::set_failure('php_file_in_zip_file');
             } elseif (stristr($thisContent['filename'], 'imsmanifest.xml')) {
@@ -616,22 +621,13 @@ class scorm extends learnpath
         if ($this->debug > 1) {
             error_log('New LP - Package type is now '.$package_type, 0);
         }
-
-        if ($package_type == '') // && defined('CHECK_FOR_SCORM') && CHECK_FOR_SCORM)
-        {
+        // && defined('CHECK_FOR_SCORM') && CHECK_FOR_SCORM)
+        if ($package_type == '') {
             if ($this->debug > 1) {
                 error_log('New LP - Package type is empty', 0);
             }
 
             return api_failure::set_failure('not_scorm_content');
-        }
-
-        if (!FileManager::enough_size($realFileSize, $course_sys_dir, $maxFilledSpace)) {
-            if ($this->debug > 1) {
-                error_log('New LP - Not enough space to store package', 0);
-            }
-
-            return api_failure::set_failure('not_enough_space');
         }
 
         // It happens on Linux that $new_dir sometimes doesn't start with '/'
@@ -643,6 +639,13 @@ class scorm extends learnpath
             $new_dir = substr($new_dir, 0, -1);
         }
 
+        $isDir = is_dir($course_sys_dir.$new_dir);
+
+        if ($isDir == false) {
+            mkdir($course_sys_dir.$new_dir, api_get_permissions_for_new_directories());
+            $isDir = is_dir($course_sys_dir.$new_dir);
+        }
+
         /* Uncompressing phase */
 
         /*
@@ -651,11 +654,15 @@ class scorm extends learnpath
             - parse & change relative html links
             - make sure the filenames are secure (filter funny characters or php extensions)
         */
-        if (is_dir($course_sys_dir.$new_dir) OR @mkdir(
-            $course_sys_dir.$new_dir,
-            api_get_permissions_for_new_directories()
-        )
-        ) {
+        if ($isDir) {
+
+            if (!FileManager::enough_size($realFileSize, $course_sys_dir, $maxFilledSpace)) {
+                if ($this->debug > 1) {
+                    error_log('New LP - Not enough space to store package', 0);
+                }
+
+                return api_failure::set_failure('not_enough_space');
+            }
 
             // PHP method - slower...
             if ($this->debug >= 1) {
@@ -708,10 +715,9 @@ class scorm extends learnpath
                         if ($this->debug >= 1) {
                             error_log('and:  '.$file, 0);
                         }
-
                         if ($safe_file != $file) {
-                            //@rename($course_sys_dir.$new_dir, $course_sys_dir.'/'.$safe_file);
                             $mydir = dirname($course_sys_dir.$new_dir.$safe_file);
+
 
                             if (!is_dir($mydir)) {
                                 $mysubdirs = split('/', $mydir);
@@ -892,7 +898,7 @@ class scorm extends learnpath
         require_once 'learnpath_functions.inc.php';
         $course_id = api_get_course_int_id();
         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-        $_course = Database::get_course_info(api_get_course_id());
+        $_course = api_get_course_info(api_get_course_id());
 
         $sql = "SELECT * FROM $tbl_lp WHERE c_id = ".$course_id." AND id=".$lp_id;
         $result = Database::query($sql);

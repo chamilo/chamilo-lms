@@ -1637,9 +1637,7 @@ function get_agendaitems($month, $year)
 
     //databases of the courses
     $TABLEAGENDA = Database :: get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
-    //$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
-    //$group_memberships = GroupManager :: get_group_ids(Database::get_current_course_database(), $_user['user_id']);
     // if the user is administrator of that course we show all the agenda items
     //if (api_is_allowed_to_edit())
     //{

@@ -766,9 +766,8 @@ class Rsys {
 					$inhoud = str_replace('#BEGIN#', $einddatum, $inhoud);
 					$titel = str_replace('#NAME#', $item_name, get_lang('ReservationUnavailable'));
 				}
-
-
-				api_send_mail($user_info['mail'], $titel, $inhoud);
+				//api_send_mail($user_info['mail'], $titel, $inhoud);
+                api_mail_html(null, $user_info['mail'], $titel, $inhoud);
 			}
 		}
 	}
@@ -1136,7 +1135,7 @@ class Rsys {
 			$result = Database::query($sql);
 			while ($array = Database::fetch_array($result, 'NUM')) {
 				$user_info = api_get_user_info($array[1]);
-				api_send_mail($user_info['mail'], str_replace('#NAME#', $array[2], get_lang("ReservationDeleteTitle")), str_replace('#START#', $array[3], str_replace('#END#', $array[4], str_replace('#NAME#', $array[2], get_lang("ReservationDeleteMessage")))));
+				//api_send_mail($user_info['mail'], str_replace('#NAME#', $array[2], get_lang("ReservationDeleteTitle")), str_replace('#START#', $array[3], str_replace('#END#', $array[4], str_replace('#NAME#', $array[2], get_lang("ReservationDeleteMessage")))));
 				$sql = "DELETE FROM ".Rsys :: getTable("subscription")." WHERE dummy='".$array[0]."'";
 				Database::query($sql);
 			}
@@ -1393,7 +1392,7 @@ class Rsys {
 
 		$inhoud = str_replace('#BEGIN', $begin_datum, $inhoud);
 		$inhoud = str_replace('#END', $eind_datum, $inhoud);
-		api_send_mail($user_info['mail'], $titel, $inhoud);
+		//api_send_mail($user_info['mail'], $titel, $inhoud);
 	}
 
 	/*
@@ -1502,7 +1501,7 @@ class Rsys {
 			$user_info = api_get_user_info();
 			$titel = str_replace('#ITEM#', $result[0][1], get_lang("ReservationMadeTitle"));
 			$inhoud = str_replace('#ITEM#', $result[0][1], str_replace('#START#', $result[0][2], str_replace('#END#', $result[0][3], get_lang("ReservationMadeMessage"))));
-			api_send_mail($user_info['mail'], $titel, $inhoud);
+			//api_send_mail($user_info['mail'], $titel, $inhoud);
 			return 0;
 		}
 		return 1;

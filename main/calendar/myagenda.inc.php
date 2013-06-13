@@ -327,7 +327,7 @@ function display_myminimonthcalendar($agendaitems, $month, $year, $monthName) {
 function show_new_personal_item_form($id = "") {
 	global $year, $MonthsLong;
 
-	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
+	$tbl_personal_agenda = Database :: get_main_table(TABLE_PERSONAL_AGENDA);
 
 	// we construct the default time and date data (used if we are not editing a personal agenda item)
 	//$today = getdate();
@@ -517,7 +517,7 @@ function show_new_personal_item_form($id = "") {
  */
 function store_personal_item($day, $month, $year, $hour, $minute, $title, $content, $id = "") {
 
-	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
+	$tbl_personal_agenda = Database :: get_main_table(TABLE_PERSONAL_AGENDA);
 
 	//constructing the date
 	$date = $year."-".$month."-".$day." ".$hour.":".$minute.":00";
@@ -598,7 +598,7 @@ function get_courses_of_user() {
  * This function retrieves all the personal agenda items and add them to the agenda items found by the other functions.
  */
 function get_personal_agenda_items($user_id, $agendaitems, $day = "", $month = "", $year = "", $week = "", $type) {
-	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
+	$tbl_personal_agenda = Database :: get_main_table(TABLE_PERSONAL_AGENDA);
 	$user_id = intval($user_id);
 
 	// 1. creating the SQL statement for getting the personal agenda items in MONTH view
@@ -700,7 +700,7 @@ function get_personal_agenda_items($user_id, $agendaitems, $day = "", $month = "
  * @return 	array	The results of the database query, or null if not found
  */
 function get_personal_agenda_item($id) {
-	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
+	$tbl_personal_agenda = Database :: get_main_table(TABLE_PERSONAL_AGENDA);
 	$id = Database::escape_string($id);
 	// make sure events of the personal agenda can only be seen by the user himself
 	$user = api_get_user_id();
@@ -720,7 +720,7 @@ function get_personal_agenda_item($id) {
 function show_personal_agenda() {
 	global $MonthsLong, $charset;
 
-	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
+	$tbl_personal_agenda = Database :: get_main_table(TABLE_PERSONAL_AGENDA);
 
 	// The SQL statement that retrieves all the personal agenda items of this user
 	$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".api_get_user_id()."' ORDER BY date DESC";
@@ -824,7 +824,7 @@ function show_personal_agenda() {
 function show_simple_personal_agenda($user_id) {
 	global $MonthsLong, $charset;
 
-	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
+	$tbl_personal_agenda = Database :: get_main_table(TABLE_PERSONAL_AGENDA);
 
 	// The SQL statement that retrieves all the personal agenda items of this user
 	$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$user_id."' ORDER BY date DESC";
@@ -885,7 +885,7 @@ function show_simple_personal_agenda($user_id) {
  * does not belong to him/her
  */
 function delete_personal_agenda($id) {
-	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
+	$tbl_personal_agenda = Database :: get_main_table(TABLE_PERSONAL_AGENDA);
 
 	if ($id != strval(intval($id))) {
 		return false; //potential SQL injection

@@ -13,7 +13,6 @@ class Connector
      */
     public function __construct()
     {
-
     }
 
     /**
@@ -24,7 +23,7 @@ class Connector
      * @param  string  $path  file path relative to volume root directory started with directory separator
      * @return bool|null
      **/
-    function access($attr, $path, $data, $volume) {
+    public function access($attr, $path, $data, $volume) {
         //error_log($path); error_log($attr);
     	return strpos(basename($path), '.') === 0       // if file/folder begins with '.' (dot)
     		? !($attr == 'read' || $attr == 'write')    // set read+write to false, other (locked+hidden) set to true
@@ -135,7 +134,7 @@ class Connector
     /**
      * @return array
      */
-    function getOperations()
+    public function getOperations()
     {
         $opts = array(
             //'debug' => true,
@@ -149,7 +148,7 @@ class Connector
         $userId = api_get_user_id();
 
         $commonAttributes = array(
-            // hide dangerous files
+            // Hiding dangerous files
             array(
                 'pattern' => '/\.(php|py|pl|sh|xml)$/i',
                 'read' => false,
@@ -157,9 +156,31 @@ class Connector
                 'hidden' => true,
                 'locked' => false
             ),
-            // Hide _DELETED_ files
+            // Hiding _DELETED_ files
             array(
                 'pattern' => '/_DELETED_/',
+                'read' => false,
+                'write' => false,
+                'hidden' => true,
+                'locked' => false
+            ),
+            // Hiding thumbnails
+            array(
+                'pattern' => '/.tmb/',
+                'read' => false,
+                'write' => false,
+                'hidden' => true,
+                'locked' => false
+            ),
+            array(
+                'pattern' => '/.thumbs/',
+                'read' => false,
+                'write' => false,
+                'hidden' => true,
+                'locked' => false
+            ),
+            array(
+                'pattern' => '/.quarantine/',
                 'read' => false,
                 'write' => false,
                 'hidden' => true,

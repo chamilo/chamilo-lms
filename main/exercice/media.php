@@ -110,3 +110,4 @@ $items = array(
 );
 echo Display::actions($items);
 echo Display::grid_html('medias');
+Display::display_footer();

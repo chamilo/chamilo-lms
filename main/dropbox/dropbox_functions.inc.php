@@ -1363,7 +1363,7 @@ function get_last_tool_access($tool, $courseId = '', $user_id = '')
     }
 
     // the table where the last tool access is stored (=track_e_lastaccess)
-    $table_last_access = Database::get_statistic_table('track_e_lastaccess');
+    $table_last_access = Database::get_main_table('track_e_lastaccess');
 
     $sql = "SELECT access_date FROM $table_last_access WHERE access_user_id='".Database::escape_string($user_id)."'
 				AND c_id ='".Database::escape_string($courseId)."'

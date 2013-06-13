@@ -106,7 +106,7 @@ if (!empty($_SESSION['_user']['user_id']) && !$login) {
             }
 
             if (isset($_POST['legal_accept_type']) && $legal_option===true) {
-                $cond_array = explode(':',$_POST['legal_accept_type']);
+                $cond_array = explode(':', $_POST['legal_accept_type']);
                 if (!empty($cond_array[0]) && !empty($cond_array[1])){
                     $time = time();
                     $condition_to_save = intval($cond_array[0]).':'.intval($cond_array[1]).':'.$time;
@@ -123,13 +123,13 @@ if (!empty($_SESSION['_user']['user_id']) && !$login) {
         $cas_activated = false;
     }
 
-    $cas_login=false;
-    if ($cas_activated AND !isset($_user['user_id']) and !isset($_POST['login'])) {
+    $cas_login = false;
+    if ($cas_activated AND !isset($_user['user_id']) AND !isset($_POST['login'])) {
         require_once api_get_path(SYS_PATH).'main/auth/cas/authcas.php';
         $cas_login = cas_is_authenticated();
     }
 
-    if ((isset($_POST['login']) AND isset($_POST['password']) ) OR ($cas_login))  {
+    if ((isset($_POST['login']) AND isset($_POST['password']) ) OR ($cas_login)) {
 
         // $login && $password are given to log in
         if ( $cas_login  && empty($_POST['login']) ) {
@@ -141,9 +141,8 @@ if (!empty($_SESSION['_user']['user_id']) && !$login) {
 
         //Lookup the user in the main database
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT * FROM $user_table
+        $sql = "SELECT user_id, username, auth_source, password FROM $user_table
                 WHERE username = '".Database::escape_string($login)."'";
-
         $result = Database::query($sql);
 
         // @todo use a UserProvider
@@ -156,15 +155,16 @@ if (!empty($_SESSION['_user']['user_id']) && !$login) {
                 $password = api_get_encrypted_password(trim(stripslashes($password)));
 
                 // Check the user's password
-                if (($password == $uData['password'] OR $cas_login) AND (trim($login) == $uData['username'])) {
-                    $update_type = UserManager::get_extra_user_data_by_field($uData['user_id'], 'update_type');
-                    $update_type= $update_type['update_type'];
+                if (($password == $uData['password'] or $cas_login) and (trim($login) == $uData['username'])) {
+
+                    $uData = api_get_user_info($uData['user_id'], false, false, true);
+                    $extraFields = $uData['extra_fields'];
+                    // $update_type = UserManager::get_extra_user_data_by_field($uData['user_id'], 'update_type');
+                    $update_type = isset($extraFields['extra_update_type']) ? $extraFields['extra_update_type'] : null;
 
                     if (!empty($extAuthSource[$update_type]['updateUser']) && file_exists($extAuthSource[$update_type]['updateUser'])) {
                         include_once $extAuthSource[$update_type]['updateUser'];
                     }
-
-                    unset($uData['password']);
 
                     // Check if the account is active (not locked)
                     if ($uData['active'] == '1') {
@@ -186,7 +186,7 @@ if (!empty($_SESSION['_user']['user_id']) && !$login) {
 
                                 if ($my_user_is_admin === false) {
 
-                                    if (is_array($my_url_list) && count($my_url_list) > 0 ) {
+                                    if (is_array($my_url_list) && count($my_url_list) > 0) {
                                         // the user have the permissions to enter at this site
                                         if (in_array($current_access_url_id, $my_url_list)) {
                                             ConditionalLogin::check_conditions($uData);
@@ -202,8 +202,10 @@ if (!empty($_SESSION['_user']['user_id']) && !$login) {
                                         Session::erase('_uid');
                                         $errorMessage = 'access_url_inactive';
                                     }
-                                } else { //Only admins of the "main" (first) Chamilo portal can login wherever they want
-                                    if (in_array(1, $my_url_list)) { //Check if this admin have the access_url_id = 1 which means the principal
+                                } else {
+                                    //Only admins of the "main" (first) Chamilo portal can login wherever they want
+                                    //Check if this admin have the access_url_id = 1 which means the principal
+                                    if (in_array(1, $my_url_list)) {
                                         ConditionalLogin::check_conditions($uData);
                                         Session::write('_user', $uData);
                                     } else {
@@ -380,7 +382,7 @@ if (!empty($_SESSION['_user']['user_id']) && !$login) {
                         $uData = Database::fetch_array($result);
 
                         if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
-                            //the authentification of this user is managed by Chamilo itself
+                            // the authentification of this user is managed by Chamilo itself
 
                             // check if the account is active (not locked)
                             if ($uData['active']=='1') {
@@ -388,7 +390,7 @@ if (!empty($_SESSION['_user']['user_id']) && !$login) {
                                 if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
                                     $_user['user_id'] = $uData['user_id'];
                                     $_user['status']  = $uData['status'];
-                                    Session::write('_user',$_user);
+                                    Session::write('_user', $_user);
                                 } else {
                                     $loginFailed = true;
                                     Session::erase('_uid');
@@ -450,10 +452,11 @@ if (!empty($cidReq) && (!isset($_SESSION['_cid']) or (isset($_SESSION['_cid']) &
     $gidReset = true;    // As groups depend from courses, group id is reset
 }
 
-//Setting app user variable
+// Setting app user variable
 $_user = Session::read('_user');
+
 if ($_user && !isset($_user['complete_name'])) {
-    $_user = api_get_user_info(api_get_user_id());
+    $_user = api_get_user_info(api_get_user_id(), false, false, true);
     Session::write('_user', $_user);
 }
 
@@ -467,10 +470,10 @@ if (isset($uidReset) && $uidReset) {   // session data refresh requested
     $is_allowedCreateCourse = false;
 
     if (isset($_user['user_id']) && $_user['user_id'] && !api_is_anonymous()) {
-    // a uid is given (log in succeeded)
+        // a uid is given (log in succeeded)
         $user_table     = Database::get_main_table(TABLE_MAIN_USER);
         $admin_table    = Database::get_main_table(TABLE_MAIN_ADMIN);
-        $track_e_login  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $track_e_login  = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
         $sql = "SELECT user.*, a.user_id is_admin, login.login_date
             FROM $user_table
@@ -525,7 +528,7 @@ if (!isset($_SESSION['login_as'])) {
     }
 
     if ($save_course_access) {
-        $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $course_tracking_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
         /*
         * When $_configuration['session_lifetime'] is too big 100 hours (in order to let users take exercises with no problems)

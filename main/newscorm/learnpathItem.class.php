@@ -1877,7 +1877,7 @@ class learnpathItem
                                             if ($returnstatus) {
                                                 //AND origin_lp_item_id = '.$user_id.'
                                                 $sql = 'SELECT exe_result, exe_weighting
-														FROM '.Database :: get_statistic_table(
+														FROM '.Database :: get_main_table(
                                                     TABLE_STATISTIC_TRACK_E_EXERCICES
                                                 ).'
 														WHERE 	exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.'
@@ -1907,7 +1907,7 @@ class learnpathItem
                                             // 3. for multiple attempts we check that there are minimun 1 item completed.
                                             // Checking in the database.
                                             $sql = 'SELECT exe_result, exe_weighting
-													FROM '.Database :: get_statistic_table(
+													FROM '.Database :: get_main_table(
                                                 TABLE_STATISTIC_TRACK_E_EXERCICES
                                             ).'
 													WHERE	exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.'
@@ -3082,7 +3082,7 @@ class learnpathItem
                         $my_status = ' ';
                         $total_time = ' ';
                         if (!empty($_REQUEST['exeId'])) {
-                            $TBL_TRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+                            $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 
                             $safe_exe_id = Database::escape_string($_REQUEST['exeId']);
                             $sql = 'SELECT start_date,exe_date FROM '.$TBL_TRACK_EXERCICES.' WHERE exe_id = '.(int)$safe_exe_id;

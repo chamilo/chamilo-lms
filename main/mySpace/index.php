@@ -619,7 +619,7 @@ if ($is_platform_admin && $view == 'admin' && $display != 'yourstudents') {
 			);
 		}
 
-		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+		$tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
 		$sqlCoachs = "SELECT DISTINCT scu.id_user as id_coach, user_id, lastname, firstname, MAX(login_date) as login_date
 			FROM $tbl_user, $tbl_session_course_user scu, $tbl_track_login

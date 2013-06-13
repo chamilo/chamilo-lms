@@ -41,6 +41,7 @@ api_protect_admin_script();
 // Settings to avoid
 $settings_to_avoid = array(
     'stylesheets' => '', // handled by the handle_stylesheet() function
+    'server_type',
     'use_session_mode' => 'true',
     'gradebook_enable' => 'false',
     'example_material_course_creation' => 'true' // ON by default - now we have this option when we create a course

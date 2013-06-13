@@ -243,7 +243,7 @@ class PagerfantaTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(50));
     }
 
-    public function testGetNbPagesShouldReturnTheNbResultsFromTheAdapter()
+    public function testGetNbResultsShouldReturnTheNbResultsFromTheAdapter()
     {
         $this->setAdapterNbResultsAny(20);
 
@@ -272,6 +272,13 @@ class PagerfantaTest extends \PHPUnit_Framework_TestCase
         $this->pagerfanta->setMaxPerPage(15);
 
         $this->assertSame(7, $this->pagerfanta->getNbPages());
+    }
+
+    public function testGetNbPagesShouldReturn1WhenThereAreNoResults()
+    {
+        $this->setAdapterNbResultsAny(0);
+
+        $this->assertSame(1, $this->pagerfanta->getNbPages());
     }
 
     /**
@@ -463,6 +470,42 @@ class PagerfantaTest extends \PHPUnit_Framework_TestCase
 
         $this->pagerfanta->getCurrentPageResults();
         $this->assertSame($currentPageResults, $this->pagerfanta->getCurrentPageResults());
+    }
+
+    public function testGetCurrentPageOffsetStart()
+    {
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(10);
+        $this->pagerfanta->setCurrentPage(2);
+
+        $this->assertSame(11, $this->pagerfanta->getCurrentPageOffsetStart());
+    }
+
+    public function testGetCurrentPageOffsetStartWith0NbResults()
+    {
+        $this->setAdapterNbResultsAny(0);
+        $this->pagerfanta->setMaxPerPage(10);
+        $this->pagerfanta->setCurrentPage(1);
+
+        $this->assertSame(0, $this->pagerfanta->getCurrentPageOffsetStart());
+    }
+
+    public function testGetCurrentPageOffsetEnd()
+    {
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(10);
+        $this->pagerfanta->setCurrentPage(2);
+
+        $this->assertSame(20, $this->pagerfanta->getCurrentPageOffsetEnd());
+    }
+
+    public function testGetCurrentPageOffsetEndOnEndPage()
+    {
+        $this->setAdapterNbResultsAny(90);
+        $this->pagerfanta->setMaxPerPage(20);
+        $this->pagerfanta->setCurrentPage(5);
+
+        $this->assertSame(90, $this->pagerfanta->getCurrentPageOffsetEnd());
     }
 
     public function testHaveToPaginateReturnsTrueWhenTheNumberOfResultsIsGreaterThanTheMaxPerPage()

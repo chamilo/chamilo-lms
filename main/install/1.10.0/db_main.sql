@@ -633,7 +633,6 @@ VALUES
 ('homepage_view',NULL,'radio','Course','activity_big','HomepageViewTitle','HomepageViewComment',NULL,NULL, 1),
 ('show_toolshortcuts',NULL,'radio','Course','false','ShowToolShortcutsTitle','ShowToolShortcutsComment',NULL,NULL, 0),
 ('allow_group_categories',NULL,'radio','Course','false','AllowGroupCategories','AllowGroupCategoriesComment',NULL,NULL, 0),
-('server_type',NULL,'radio','Platform','production','ServerStatusTitle','ServerStatusComment',NULL,NULL, 0),
 ('platformLanguage',NULL,'link','Languages','{PLATFORMLANGUAGE}','PlatformLanguageTitle','PlatformLanguageComment',NULL,NULL, 0),
 ('showonline','world','checkbox','Platform','true','ShowOnlineTitle','ShowOnlineComment',NULL,'ShowOnlineWorld', 0),
 ('showonline','users','checkbox','Platform','true','ShowOnlineTitle','ShowOnlineComment',NULL,'ShowOnlineUsers', 0),
@@ -976,8 +975,6 @@ VALUES
 ('show_toolshortcuts','false','No'),
 ('allow_group_categories','true','Yes'),
 ('allow_group_categories','false','No'),
-('server_type','production','ProductionServer'),
-('server_type','test','TestServer'),
 ('allow_name_change','true','Yes'),
 ('allow_name_change','false','No'),
 ('allow_officialcode_change','true','Yes'),
@@ -3528,4 +3525,4 @@ CREATE TABLE ext_log_entries (
 ) DEFAULT CHARSET=utf8;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.021' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.022' WHERE variable = 'chamilo_database_version';

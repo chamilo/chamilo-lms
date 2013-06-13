@@ -3,7 +3,7 @@
 /*
  * This file is part of the Assetic package, an OpenSky project.
  *
- * (c) 2010-2012 OpenSky Project Inc
+ * (c) 2010-2013 OpenSky Project Inc
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,23 +12,31 @@
 namespace Assetic\Filter;
 
 use Assetic\Asset\AssetInterface;
-use Assetic\Util\ProcessBuilder;
+use Assetic\Exception\FilterException;
 
 /**
  * Compiles CoffeeScript into Javascript.
  *
- * @link http://jashkenas.github.com/coffee-script/
+ * @link http://coffeescript.org/
  * @author Kris Wallsmith <kris.wallsmith@gmail.com>
  */
-class CoffeeScriptFilter implements FilterInterface
+class CoffeeScriptFilter extends BaseNodeFilter
 {
-    private $coffeePath;
-    private $nodePath;
+    private $coffeeBin;
+    private $nodeBin;
 
-    public function __construct($coffeePath = '/usr/bin/coffee', $nodePath = '/usr/bin/node')
+    // coffee options
+    private $bare;
+
+    public function __construct($coffeeBin = '/usr/bin/coffee', $nodeBin = null)
     {
-        $this->coffeePath = $coffeePath;
-        $this->nodePath = $nodePath;
+        $this->coffeeBin = $coffeeBin;
+        $this->nodeBin = $nodeBin;
+    }
+
+    public function setBare($bare)
+    {
+        $this->bare = $bare;
     }
 
     public function filterLoad(AssetInterface $asset)
@@ -36,19 +44,23 @@ class CoffeeScriptFilter implements FilterInterface
         $input = tempnam(sys_get_temp_dir(), 'assetic_coffeescript');
         file_put_contents($input, $asset->getContent());
 
-        $pb = new ProcessBuilder(array(
-            $this->nodePath,
-            $this->coffeePath,
-            '-cp',
-            $input,
-        ));
+        $pb = $this->createProcessBuilder($this->nodeBin
+            ? array($this->nodeBin, $this->coffeeBin)
+            : array($this->coffeeBin));
 
+        $pb->add('-cp');
+
+        if ($this->bare) {
+            $pb->add('--bare');
+        }
+
+        $pb->add($input);
         $proc = $pb->getProcess();
         $code = $proc->run();
         unlink($input);
 
-        if (0 < $code) {
-            throw new \RuntimeException($proc->getErrorOutput());
+        if (0 !== $code) {
+            throw FilterException::fromProcess($proc)->setInput($asset->getContent());
         }
 
         $asset->setContent($proc->getOutput());

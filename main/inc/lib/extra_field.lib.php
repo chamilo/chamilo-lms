@@ -106,7 +106,10 @@ class ExtraField extends Model
                 break;
         }
         $this->pageUrl  = 'extra_fields.php?type='.$this->type;
-        $this->pageName = get_lang(ucwords($this->type).'Fields'); // Example QuestionFields
+        // Example QuestionFields
+        // @todo error while installing
+        // $this->pageName = get_lang(ucwords($this->type).'Fields');
+        $this->pageName = ucwords($this->type).'Fields';
     }
 
     static function getValidExtraFieldTypes()
@@ -695,8 +698,6 @@ class ExtraField extends Model
                                 $field_details['field_display_text'].' '.get_lang('Comment')
                             );
 
-                            /*$extraField = new Extrafield($field_details['field_type']);
-                            $link = Display::url();*/
                             $extraFieldValue = new ExtraFieldValue($this->type);
                             $repo = $app['orm.em']->getRepository($extraFieldValue->entityName);
                             $repoLog = $app['orm.em']->getRepository('Gedmo\Loggable\Entity\LogEntry');
@@ -1091,7 +1092,6 @@ EOF;
         );
 
     }
-
 
     public function return_form($url, $action)
     {

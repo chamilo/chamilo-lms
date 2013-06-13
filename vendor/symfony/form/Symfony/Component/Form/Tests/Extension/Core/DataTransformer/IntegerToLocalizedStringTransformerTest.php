@@ -12,12 +12,16 @@
 namespace Symfony\Component\Form\Tests\Extension\Core\DataTransformer;
 
 use Symfony\Component\Form\Extension\Core\DataTransformer\IntegerToLocalizedStringTransformer;
+use Symfony\Component\Intl\Util\IntlTestHelper;
 
-class IntegerToLocalizedStringTransformerTest extends LocalizedTestCase
+class IntegerToLocalizedStringTransformerTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
         parent::setUp();
+
+        // Since we test against "de_AT", we need the full implementation
+        IntlTestHelper::requireFullIntl($this);
 
         \Locale::setDefault('de_AT');
     }
@@ -32,7 +36,7 @@ class IntegerToLocalizedStringTransformerTest extends LocalizedTestCase
         $this->assertEquals(12345, $transformer->reverseTransform('12345,912'));
     }
 
-    public function testReverseTransform_empty()
+    public function testReverseTransformEmpty()
     {
         $transformer = new IntegerToLocalizedStringTransformer();
 
@@ -50,7 +54,7 @@ class IntegerToLocalizedStringTransformerTest extends LocalizedTestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Form\Exception\UnexpectedTypeException
+     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
      */
     public function testReverseTransformExpectsString()
     {

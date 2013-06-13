@@ -389,12 +389,12 @@ $app['mailer'] = $app->share(function ($app) {
 
 // Assetic service provider.
 
-if (isset($app['assetic.enabled']) && $app['assetic.enabled']) {
+if ($app['assetic.enabled']) {
 
     $app->register(new SilexAssetic\AsseticServiceProvider(), array(
         'assetic.options' => array(
             'debug'            => $app['debug'],
-            'auto_dump_assets' => $app['debug'],
+            'auto_dump_assets' => $app['assetic.auto_dump_assets'],
         )
     ));
 
@@ -455,9 +455,20 @@ class ChamiloServiceProvider implements ServiceProviderInterface
             return $template;
         });
 
+        $app['paths'] = $app->share(function () use ($app) {
+            return array(
+                //'root_web' => $app['root_web'],
+                'root_sys' => $app['root_sys'],
+                'sys_data_path' => $app['sys_data_path'],
+                'sys_config_path' => $app['sys_config_path'],
+                'sys_temp_path' => $app['sys_temp_path'],
+                'sys_log_path' => $app['sys_log_path']
+            );
+        });
+
         // Chamilo data filesystem
         $app['chamilo.filesystem'] = $app->share(function () use ($app) {
-            $filesystem = new ChamiloLMS\Component\DataFilesystem\DataFilesystem($app['sys_data_path']);
+            $filesystem = new ChamiloLMS\Component\DataFilesystem\DataFilesystem($app['paths'], $app['filesystem']);
             return $filesystem;
         });
 

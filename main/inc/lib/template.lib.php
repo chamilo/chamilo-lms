@@ -362,9 +362,9 @@ class Template
 
         $cssPath = api_get_path(WEB_CSS_PATH);
 
-        if (isset($this->app['assetic']) &&  $this->app['assetic']) {
+        // Loads only 1 css file
+        if ($this->app['assetic.enabled']) {
             $css[] = api_get_path(WEB_PUBLIC_PATH).'css/'.$this->theme.'/style.css';
-
         } else {
             // Base CSS.
             $css[] = api_get_cdn_path($cssPath.'base.css');
@@ -433,46 +433,57 @@ class Template
     private function setJsFiles()
     {
         global $disable_js_and_css_files, $htmlHeadXtra;
-        //JS files
-        $js_files = array(
-            'modernizr.js',
-            'jquery.min.js',
-            'chosen/chosen.jquery.min.js',
-            'jquery-ui/'.$this->jquery_ui_theme.'/jquery-ui-custom.min.js',
-            //'jquery-ui/jquery.ui.touch-punch.js',
-            'thickbox.js',
-            'ckeditor/ckeditor.js',
-            //'tinymce/tinymce.min.js',
-            'bootstrap/bootstrap.js',
-        );
+
+        $jsFolder = api_get_path(WEB_LIBRARY_PATH).'javascript/';
+
+        if ($this->app['assetic.enabled']) {
+            $js_files = array(
+                api_get_path(WEB_PATH).'web/js/script.js',
+                $jsFolder.'chosen/chosen.jquery.min.js',
+                $jsFolder.'thickbox.js',
+                $jsFolder.'ckeditor/ckeditor.js',
+            );
+        } else {
+            //JS files
+            $js_files = array(
+                $jsFolder.'modernizr.js',
+                $jsFolder.'jquery.min.js',
+                $jsFolder.'chosen/chosen.jquery.min.js',
+                $jsFolder.'jquery-ui/'.$this->jquery_ui_theme.'/jquery-ui-custom.min.js',
+                //$jsFolder.'jquery-ui/jquery.ui.touch-punch.js',
+                $jsFolder.'thickbox.js',
+                $jsFolder.'ckeditor/ckeditor.js',
+                //$jsFolder.'tinymce/tinymce.min.js',
+                $jsFolder.'bootstrap/bootstrap.js',
+            );
+        }
 
         if (api_is_global_chat_enabled()) {
             //Do not include the global chat in LP
             if ($this->show_learnpath == false && $this->show_footer == true && $this->app['template.hide_global_chat'] == false) {
-                $js_files[] = 'chat/js/chat.js';
+                $js_files[] = $jsFolder.'chat/js/chat.js';
             }
         }
 
         if (api_get_setting('accessibility_font_resize') == 'true') {
-            $js_files[] = 'fontresize.js';
+            $js_files[] = $jsFolder.'fontresize.js';
         }
 
         if (api_get_setting('include_asciimathml_script') == 'true') {
-            $js_files[] = 'asciimath/ASCIIMathML.js';
+            $js_files[] = $jsFolder.'asciimath/ASCIIMathML.js';
         }
 
         $js_file_to_string = null;
 
         foreach ($js_files as $js_file) {
-            $js_file_to_string .= api_get_js($js_file);
+            $js_file_to_string .= api_get_js_simple($js_file);
         }
 
-        //Loading email_editor js
+        // Loading email_editor js.
         if (!api_is_anonymous() && api_get_setting('allow_email_editor') == 'true') {
             $js_file_to_string .= $this->fetch($this->app['template_style'].'/mail_editor/email_link.js.tpl');
         }
 
-        //$js_file_to_string = api_get_js_simple(api_get_path(WEB_PATH).'web/js/script.js').$js_file_to_string;
 
         if (!$disable_js_and_css_files) {
             $this->assign('js_file_to_string', $js_file_to_string);
@@ -1408,5 +1419,19 @@ class Template
             }
         }
         return $html;
+    }
+
+    /**
+     * Returns a list of directories inside CSS
+     * @return array
+     */
+    public function getStyleSheetFolderList()
+    {
+        $dirs = $this->app['chamilo.filesystem']->getStyleSheetFolders();
+        $themes = array();
+        foreach ($dirs as $dir) {
+            $themes[] = $dir->getFilename();
+        }
+        return $themes;
     }
 }

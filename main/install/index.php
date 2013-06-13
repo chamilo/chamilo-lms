@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+set_time_limit(0);
+
 /**
  * Chamilo installation
  * This script could be loaded via browser using the URL: main/install/index.php
@@ -15,8 +17,6 @@ require_once '../inc/lib/main_api.lib.php';
 
 error_reporting(-1);
 
-use Symfony\Component\Translation\Loader\YamlFileLoader;
-use Silex\Application;
 use Symfony\Component\Console\Output\Output;
 
 class BufferedOutput extends Output
@@ -33,7 +33,7 @@ class BufferedOutput extends Output
     }
 }
 
-$app = new Application();
+$app = new Silex\Application();
 
 $app['root_sys'] = dirname(dirname(__DIR__)).'/';
 
@@ -46,7 +46,7 @@ $app->register(new Silex\Provider\SessionServiceProvider());
 $app->register(new Silex\Provider\DoctrineServiceProvider());
 $app->register(new Silex\Provider\TranslationServiceProvider());
 $app['translator'] = $app->share($app->extend('translator', function($translator, $app) {
-    /*$translator->addLoader('yaml', new YamlFileLoader());
+    /*$translator->addLoader('yaml', new Symfony\Component\Translation\Loader\YamlFileLoader());
     $translator->addResource('yaml', __DIR__.'/lang/fr.yml', 'fr');
     $translator->addResource('yaml', __DIR__.'/lang/en.yml', 'en');
     $translator->addResource('yaml', __DIR__.'/lang/es.yml', 'es');*/
@@ -88,19 +88,17 @@ function get_lang($variable) {
     return $app['translator']->trans($variable);
 }
 
-
-// Adding commands
+// Adding commands.
 /** @var Knp\Console\Application $console */
 $console = $app['console'];
 
 $console->addCommands(
     array(
-        // DBAL Commands
+        // DBAL Commands.
         new \Doctrine\DBAL\Tools\Console\Command\RunSqlCommand(),
         new \Doctrine\DBAL\Tools\Console\Command\ImportCommand(),
 
-
-        // Migrations Commands
+        // Migrations Commands.
         new \Doctrine\DBAL\Migrations\Tools\Console\Command\DiffCommand(),
         new \Doctrine\DBAL\Migrations\Tools\Console\Command\ExecuteCommand(),
         new \Doctrine\DBAL\Migrations\Tools\Console\Command\GenerateCommand(),
@@ -108,14 +106,14 @@ $console->addCommands(
         new \Doctrine\DBAL\Migrations\Tools\Console\Command\StatusCommand(),
         new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand(),
 
-        // Chamilo commands
+        // Chamilo commands.
         new ChamiloLMS\Command\Database\UpgradeCommand(),
         new ChamiloLMS\Command\Database\InstallCommand(),
         new ChamiloLMS\Command\Database\StatusCommand(),
         new ChamiloLMS\Command\Database\SetupCommand(),
 
-        // Chash commands
-        new Chash\Command\Database\RunSQLCommand(),
+        // Chash commands.
+        /*new Chash\Command\Database\RunSQLCommand(),
         new Chash\Command\Database\DumpCommand(),
         new Chash\Command\Database\RestoreCommand(),
         new Chash\Command\Database\SQLCountCommand(),
@@ -124,7 +122,7 @@ $console->addCommands(
         new Chash\Command\Files\CleanTempFolderCommand(),
         new Chash\Command\Files\CleanConfigFiles(),
         new Chash\Command\Translation\ExportLanguageCommand(),
-        new Chash\Command\Translation\ImportLanguageCommand()
+        new Chash\Command\Translation\ImportLanguageCommand()*/
     )
 );
 

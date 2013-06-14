@@ -76,8 +76,8 @@ $cli->addCommands(
         //new ChamiloLMS\Command\Database\InstallExtendCommand(),
         new ChamiloLMS\Command\Database\StatusCommand(),
         new ChamiloLMS\Command\Database\SetupCommand(),
-
         new ChamiloLMS\Command\Template\AsseticDumpCommand(),
+        new ChamiloLMS\Command\Translation\ExportLanguagesCommand(),
 
         // Chash commands.
         new Chash\Command\Database\RunSQLCommand(),

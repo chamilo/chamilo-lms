@@ -317,12 +317,10 @@ foreach ($questionList as $questionId) {
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];
 	} elseif ($answerType == FREE_ANSWER) {
-        $answer = $str;
         $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];
 	} elseif ($answerType == ORAL_EXPRESSION) {
-		$answer = $str;
 		$question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
 		$questionScore   = $question_result['score'];
 		$totalScore     += $question_result['score'];

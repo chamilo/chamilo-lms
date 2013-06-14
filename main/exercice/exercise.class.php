@@ -3017,9 +3017,9 @@ class Exercise
 
             switch ($answerType) {
                 // for unique answer
-                case UNIQUE_ANSWER :
-                case UNIQUE_ANSWER_IMAGE :
-                case UNIQUE_ANSWER_NO_OPTION :
+                case UNIQUE_ANSWER:
+                case UNIQUE_ANSWER_IMAGE:
+                case UNIQUE_ANSWER_NO_OPTION:
                     if ($from_database) {
                         $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
                         $resultans = Database::query($queryans);
@@ -3038,8 +3038,8 @@ class Exercise
                         }
                     }
                     break;
-                // for multiple answers
-                case MULTIPLE_ANSWER_TRUE_FALSE :
+                    // for multiple answers
+                case MULTIPLE_ANSWER_TRUE_FALSE:
                     if ($from_database) {
                         $choice = array();
                         $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = ".$exeId." AND question_id = ".$questionId;
@@ -3073,7 +3073,7 @@ class Exercise
                     }
                     $totalScore = $questionScore;
                     break;
-                case MULTIPLE_ANSWER : //2
+                case MULTIPLE_ANSWER: //2
                     if ($from_database) {
                         $choice = array();
                         $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
@@ -3340,22 +3340,30 @@ class Exercise
                     }
                     break;
                 // for free answer
-                case FREE_ANSWER :
+                case FREE_ANSWER:
                     if ($from_database) {
                         $query = "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
                         $resq = Database::query($query);
-                        $choice = Database::result($resq, 0, 'answer');
-                        $choice = str_replace('\r\n', '', $choice);
-                        $choice = stripslashes($choice);
-                        $questionScore = Database::result($resq, 0, "marks");
+                        $questionScore = 0;
+                        $choice = null;
+                        if ($resq) {
+                            $row = Database::fetch_array($resq);
+                            $choice = $row['answer'];
+                            $questionScore = $row['marks'];
+                            $choice = str_replace('\r\n', '', $choice);
+                            $choice = stripslashes($choice);
+                        }
+
                         if ($questionScore == -1) {
                             $totalScore += 0;
                         } else {
                             $totalScore += $questionScore;
                         }
+
                         if ($questionScore == '') {
                             $questionScore = 0;
                         }
+
                         $arrques = $questionName;
                         $arrans = $choice;
                     } else {

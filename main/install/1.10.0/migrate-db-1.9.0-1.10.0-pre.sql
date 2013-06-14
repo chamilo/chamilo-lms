@@ -293,5 +293,9 @@ ALTER TABLE c_quiz ADD COLUMN end_button int NOT NULL default 0;
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('template', NULL, 'text', 'stylesheets', 'default', 'DefaultTemplateTitle', 'DefaultTemplateComment', NULL, NULL, 1);
 
+ALTER TABLE user ADD COLUMN salt VARCHAR(255) DEFAULT NULL;
+CREATE TABLE roles (id INT auto_increment, name VARCHAR(255), role VARCHAR(255) unique, PRIMARY KEY(id));
+CREATE TABLE users_roles (user_id INT NOT NULL, role_id INT NOT NULL, PRIMARY KEY(user_id, role_id));
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.022' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.023' WHERE variable = 'chamilo_database_version';

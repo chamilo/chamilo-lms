@@ -342,12 +342,12 @@ define('GROUP_PERMISSION_OPEN'	, '1');
 define('GROUP_PERMISSION_CLOSED', '2');
 
 // Group user permissions
-define('GROUP_USER_PERMISSION_ADMIN'	,                           '1'); // the admin of a group
+define('GROUP_USER_PERMISSION_ADMIN',                               '1'); // the admin of a group
 define('GROUP_USER_PERMISSION_READER',                              '2'); // a normal user
 define('GROUP_USER_PERMISSION_PENDING_INVITATION',                  '3'); // When an admin/moderator invites a user
 define('GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER',     '4'); // an user joins a group
 define('GROUP_USER_PERMISSION_MODERATOR',                           '5'); // a moderator
-define('GROUP_USER_PERMISSION_ANONYMOUS'	,                           '6'); // an anonymous user
+define('GROUP_USER_PERMISSION_ANONYMOUS',                           '6'); // an anonymous user
 define('GROUP_USER_PERMISSION_HRM',                                 '7'); // a human resources manager
 
 define('GROUP_IMAGE_SIZE_ORIGINAL',	1);
@@ -4291,16 +4291,18 @@ function api_status_key($status) {
 }
 
 /**
- * Gets the status langvars list
+ * Gets the status translated list
  * @return array the list of status with their translations
  */
-function api_get_status_langvars() {
+function api_get_status_langvars()
+{
     return array(
         COURSEMANAGER   => get_lang('Teacher', ''),
         SESSIONADMIN    => get_lang('SessionsAdmin', ''),
         DRH             => get_lang('Drh', ''),
         STUDENT         => get_lang('Student', ''),
-        ANONYMOUS       => get_lang('Anonymous', '')
+        ANONYMOUS       => get_lang('Anonymous', ''),
+        QUESTION_MANAGER => get_lang('SessionManager')
     );
 }
 

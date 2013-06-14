@@ -6232,15 +6232,11 @@ class Exercise
                 require_once api_get_path(LIBRARY_PATH).'transaction.lib.php';
                 $log_transactions_settings = TransactionLog::getTransactionSettings();
                 if (isset($log_transactions_settings['exercise_attempt'])) {
-                  $exercise_attempt_id = sprintf('%s:%s', $this->selectId(), $exercise_stat_info['exe_id']);
                   $transaction_controller = new ExerciseAttemptTransactionLogController();
-                  $transaction = $transaction_controller->load_exercise_attempt($this->selectId(), $exercise_stat_info['exe_id']);
+                  $transaction = $transaction_controller->load_exercise_attempt($exercise_stat_info['exe_id']);
                   if (!$transaction) {
                     $transaction_data = array(
-                      'item_id' => $exercise_attempt_id,
-                      'data' => array(
-                        'question_order' => implode(',', Session::read('questionList')),
-                      ),
+                      'item_id' => $exercise_stat_info['exe_id'],
                     );
                     $transaction = new ExerciseAttemptTransactionLog($transaction_data);
                   }

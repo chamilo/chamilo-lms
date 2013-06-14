@@ -111,33 +111,51 @@ $app->register(new Silex\Provider\ValidatorServiceProvider());
 
 // Implements Symfony2 translator (needed when using forms in Twig)
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
-    'locale' => 'en',
-    'locale_fallback' => 'en'
+    'locale' => 'es',
+    'locale_fallback' => 'es'
 ));
 
-// Handling po files
-
-/*
+// Handling po files (gettext)
 use Symfony\Component\Translation\Loader\PoFileLoader;
-use Symfony\Component\Translation\Dumper\PoFileDumper;
+use Symfony\Component\Translation\Loader\MoFileLoader;
+use Symfony\Component\Finder\Finder;
 
-$app['translator'] = $app->share($app->extend('translator', function($translator, $app) {
-$translator->addLoader('pofile', new PoFileLoader());
+$app['translator.cache.enabled'] = true;
 
-$language = api_get_language_interface();
-$iterator = new FilesystemIterator(api_get_path(SYS_PATH).'resources/locale/'.$language);
-$filter = new RegexIterator($iterator, '/\.(po)$/');
+//$app['translator'] = $app->share($app->extend('translator', function($translator, $app) {
+    /** @var Symfony\Component\Translation\Translator $translator  */
+/*    if ($app['translator.cache.enabled']) {
 
-foreach ($filter as $entry) {
-//$domain = $entry->getBasename('.inc.po');
-$locale = api_get_language_isocode($language); //'es_ES';
-//$translator->addResource('pofile', $entry->getPathname(), $locale, $domain);
-$translator->addResource('pofile', $entry->getPathname(), $locale, 'messages');
-}
-return $translator;
+        $locale = $translator->getLocale();
+        //$phpFileDumper = new Symfony\Component\Translation\Dumper\PhpFileDumper();
+        $dumper = new Symfony\Component\Translation\Dumper\MoFileDumper();
+        $catalogue = new Symfony\Component\Translation\MessageCatalogue($locale);
+        $catalogue->add(array('foo' => 'bar'));
+        $dumper->dump($catalogue, array('path' => $app['sys_temp_path']));
+
+    } else {
+
+        $translator->addLoader('pofile', new PoFileLoader());
+
+        $finder = new Finder();
+        $files = $finder->files()->name('*.po')->in(api_get_path(SYS_PATH).'temp/langs/');
+        //$language = api_get_language_interface();
+        // @var SplFileInfo $entry
+        foreach ($files as $entry) {
+            $domain = basename($entry->getPath());
+            $code = $entry->getBasename('.po');
+            //$domain = $entry->getBasename('.inc.po');
+            //$locale = api_get_language_isocode($language); //'es_ES';
+            //if ($domain == 'admin') {
+              //  var_dump($entry->getPathname());
+                //$translator->addResource('pofile', $entry->getPathname(), $code, $domain);
+                $translator->addResource('pofile', $entry->getPathname(), $code);
+            //}
+            //$translator->addResource('pofile', $entry->getPathname(), $locale, 'messages');
+        }
+        return $translator;
+    }
 }));
-
-//$app['translator.domains'] = array();
 */
 
 // Form provider

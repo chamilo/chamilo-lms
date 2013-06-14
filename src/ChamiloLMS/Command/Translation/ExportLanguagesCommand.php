@@ -34,14 +34,19 @@ class ExportLanguagesCommand extends Command
      */
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $languageList = array('spanish');
+        $languageList = array('english', 'spanish', 'french');
+        //$languageList = array('spanish');
         foreach ($languageList as $lang) {
-            $output->writeln('<info>Generating lang po files for $lang</info>');
+            $output->writeln("<info>Generating lang po files for: $lang</info>");
             $this->convertLanguageToGettext($lang, $output);
         }
     }
 
-    private function convertLanguageToGettext($destinationLanguage, $output)
+    /**
+     * @param string $destinationLanguage chamilo language 'spanish', 'french', etc
+     * @param $output
+     */
+    private function convertLanguageToGettext($destinationLanguage, Console\Output\OutputInterface $output)
     {
         /** @var \Silex\Application $app */
         $app = $this->getApplication()->getSilexApplication();
@@ -57,7 +62,6 @@ class ExportLanguagesCommand extends Command
         $englishPath = $app['paths']['root_sys'].'main/lang/english/';
 
         // Translate this language.
-
         $toLanguagePath = $app['paths']['root_sys'].'main/lang/'.$destinationLanguage;
 
         if (is_dir($englishPath)) {
@@ -67,6 +71,13 @@ class ExportLanguagesCommand extends Command
                     if ($info['extension'] != 'php') {
                         continue;
                     }
+                    $info['filename'] = explode('.', $info['filename']);
+                    $info['filename'] = $info['filename'][0];
+
+                    if ($info['filename'] != 'admin') {
+                        //continue;
+                    }
+
                     $translations = array();
                     $filename = $englishPath.'/'.$file;
                     $po = file($filename);
@@ -79,17 +90,26 @@ class ExportLanguagesCommand extends Command
                         if ($pos) {
                             $variable = (substr($line, 1, $pos-1));
                             $variable = trim($variable);
+
                             require $filename;
                             $my_variable_in_english = $$variable;
                             require $toLanguagePath.'/'.$file;
                             $my_variable = $$variable;
-                            $translations[] = array('msgid' =>$my_variable_in_english, 'msgstr' =>$my_variable);
+
+                            if (strpos($variable, 'langNameOfLang') === false) {
+
+                                $translations[] = array(
+                                    'msgid'  => $variable,
+                                    'msgstr' => $my_variable
+                                );
+                            } else {
+                                continue;
+                            }
                         }
                     }
 
                     //var_dump($translations);
-                    $info['filename'] = explode('.', $info['filename']);
-                    $info['filename'] = $info['filename'][0];
+
 
                     if (!is_dir($tempPath.'/'.$info['filename'])) {
                         mkdir($tempPath.'/'.$info['filename']);
@@ -98,10 +118,16 @@ class ExportLanguagesCommand extends Command
 
                     $new_po_file = $tempPath.'/'.$info['filename'].'/'.$isocode.'.po';
                     $fp = fopen($new_po_file, 'w');
-
+                    $header = 'msgid ""'."\n".'msgstr ""'."\n".'"Content-Type: text/plain; charset=utf-8 \n"';
+                    fwrite($fp, $header);
+                    fwrite($fp, "\n\n");
                     foreach ($translations as $item) {
                         $line = 'msgid "'.addslashes($item['msgid']).'"'."\n";
-                        $line .= 'msgstr "'.addslashes($item['msgstr']).'"'."\n\n";
+
+                        $translated = $item['msgstr'];
+                        $translated = addslashes($translated);
+                        $translated = str_replace(array("\\'"), "'", $translated);
+                        $line .= 'msgstr "'.$translated.'"'."\n\n";
                         fwrite($fp, $line);
                     }
                     fclose($fp);

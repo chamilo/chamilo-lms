@@ -1,0 +1,14 @@
+[db]
+host = "127.0.0.1"
+dbname = "mydatabase"
+user = "root"
+password = ""
+
+[myproject]
+param2 = "456"
+param3 = "456"
+param4 = [4, 5, 6]
+param5 = "456"
+
+[keys]
+set = [1, 2, 3, 4]

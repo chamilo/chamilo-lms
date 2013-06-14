@@ -196,6 +196,8 @@ class ProgressHelper extends Helper
                     }
                     break;
                 case OutputInterface::VERBOSITY_VERBOSE:
+                case OutputInterface::VERBOSITY_VERY_VERBOSE:
+                case OutputInterface::VERBOSITY_DEBUG:
                     $this->format = self::FORMAT_VERBOSE_NOMAX;
                     if ($this->max > 0) {
                         $this->format = self::FORMAT_VERBOSE;
@@ -285,6 +287,18 @@ class ProgressHelper extends Helper
             $message = str_replace("%{$name}%", $value, $message);
         }
         $this->overwrite($this->output, $message);
+    }
+
+    /**
+     * Removes the progress bar from the current line.
+     *
+     * This is useful if you wish to write some output
+     * while a progress bar is running.
+     * Call display() to show the progress bar again.
+     */
+    public function clear()
+    {
+        $this->overwrite($this->output, '');
     }
 
     /**
@@ -415,7 +429,7 @@ class ProgressHelper extends Helper
      * Overwrites a previous message to the output.
      *
      * @param OutputInterface $output   An Output instance
-     * @param string          $messages The message
+     * @param string          $message  The message
      */
     private function overwrite(OutputInterface $output, $message)
     {

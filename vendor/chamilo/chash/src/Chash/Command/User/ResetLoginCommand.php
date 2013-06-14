@@ -14,8 +14,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  * it for.
  */
 /**
+ * Class ResetLoginCommand
  * Returns a password reset link for the given username (user will receive
  * an e-mail with new login + password)
+ * @package Chash\Command\User
  */
 class ResetLoginCommand extends CommonChamiloUserCommand
 {
@@ -27,12 +29,17 @@ class ResetLoginCommand extends CommonChamiloUserCommand
             ->setName('user:reset_login')
             ->setDescription('Outputs login link for given username')
             ->addArgument(
-                'username', 
+                'username',
                 InputArgument::REQUIRED,
                 'Allows you to specify a username to login as'
             );
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);

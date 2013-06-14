@@ -17,10 +17,15 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
+ * Class PlatformLanguageCommand
  * Definition of the translation:platform_language command
+ * @package Chash\Command\Translation
  */
 class PlatformLanguageCommand extends CommonChamiloDatabaseCommand
 {
+    /**
+     *
+     */
     protected function configure()
     {
         parent::configure();
@@ -35,6 +40,11 @@ class PlatformLanguageCommand extends CommonChamiloDatabaseCommand
             );
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);

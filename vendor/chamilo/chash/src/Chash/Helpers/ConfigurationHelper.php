@@ -5,10 +5,17 @@ namespace Chash\Helpers;
 use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Yaml\Parser;
 
+/**
+ * Class ConfigurationHelper
+ * @package Chash\Helpers
+ */
 class ConfigurationHelper extends Helper
 {
     protected $configuration;
 
+    /**
+     *
+     */
     public function __construct()
     {
 
@@ -105,7 +112,7 @@ class ConfigurationHelper extends Helper
                 $yaml = new Parser();
                 $_configurationYML = $yaml->parse(file_get_contents($confYML));
                 if (isset($_configurationYML) && !empty($_configurationYML)) {
-                    if (isset($_configuration) && !empty($_configuration) ) {
+                    if (isset($_configuration) && !empty($_configuration)) {
                         $_configuration = array_merge($_configuration, $_configurationYML);
                     } else {
                         $_configuration = $_configurationYML;
@@ -128,6 +135,9 @@ class ConfigurationHelper extends Helper
         $this->configuration = $configuration;
     }
 
+    /**
+     * @return array
+     */
     public function getConfigFiles()
     {
         $configFiles = array();
@@ -190,7 +200,7 @@ class ConfigurationHelper extends Helper
      * Gets an array with all the databases (particularly useful for Chamilo <1.9)
      * @return mixed Array of databases
      */
-    function getAllDatabases()
+    public function getAllDatabases()
     {
         $_configuration = $this->getConfiguration();
         $dbs            = array();
@@ -240,6 +250,9 @@ class ConfigurationHelper extends Helper
         return $dbs;
     }
 
+    /**
+     * @return array|bool|mixed
+     */
     public function getConfiguration()
     {
         if (empty($this->configuration)) {
@@ -248,6 +261,9 @@ class ConfigurationHelper extends Helper
         return $this->configuration;
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'configuration';

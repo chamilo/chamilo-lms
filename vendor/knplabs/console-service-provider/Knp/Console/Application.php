@@ -9,7 +9,7 @@ class Application extends BaseApplication
 {
     private $silexApplication;
 
-    private $rootDirectory;
+    private $projectDirectory;
 
     public function __construct(SilexApplication $application, $projectDirectory, $name = 'UNKNOWN', $version = 'UNKNOWN')
     {

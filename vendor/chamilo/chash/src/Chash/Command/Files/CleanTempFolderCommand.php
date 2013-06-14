@@ -16,6 +16,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CleanTempFolderCommand extends CommonChamiloDatabaseCommand
 {
+    /**
+     *
+     */
     protected function configure()
     {
         parent::configure();
@@ -24,6 +27,11 @@ class CleanTempFolderCommand extends CommonChamiloDatabaseCommand
             ->setDescription('Cleans the archives directory');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return bool|int|null|void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);

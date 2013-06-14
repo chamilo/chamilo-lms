@@ -78,7 +78,7 @@
     },
     "require-dev": {
         "symfony/browser-kit": "2.3.*@dev",
-        "symfony/web-profiler-bundle": "~2.2",
+        "symfony/web-profiler-bundle": "~2.3",
         "silex/web-profiler": "1.0.x-dev",
         "natxet/CssMin": "dev-master",
         "leafo/lessphp": "dev-master",

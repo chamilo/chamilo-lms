@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "b680b8d12a37364d317894421b4f9d04",
+    "hash": "af868d382e8f6bc6798594cbaa058c24",
     "packages": [
         {
             "name": "bt51/gaufrette-serviceprovider",

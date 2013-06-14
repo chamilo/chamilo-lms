@@ -409,7 +409,7 @@ switch ($action) {
             }
         }
 
-        $form = new FormValidator('form', 'POST', api_get_self() . "?action=upload&id=".$work_id."&gradebook=".Security::remove_XSS($_GET['gradebook'])."&origin=$origin", '', array('enctype' => "multipart/form-data"));
+        $form = new FormValidator('form', 'POST', api_get_self()."?".api_get_cidreq()."&action=upload&id=".$work_id."&gradebook=".Security::remove_XSS($_GET['gradebook'])."&origin=$origin", '', array('enctype' => "multipart/form-data"));
 
         // form title
         if ($item_id) {
@@ -717,7 +717,7 @@ switch ($action) {
                     $emailbody .= get_lang('WorkName')." : ".$title."\n\n".get_lang('DownloadLink')."\n";
                     $url = api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()."&amp;id=".$work_id;
                     $emailbody .= $url;
-                    
+
                     MessageManager::send_message_simple($to_user_id, $emailsubject, $emailbody);
                 }
             }

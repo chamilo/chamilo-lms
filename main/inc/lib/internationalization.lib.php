@@ -124,21 +124,23 @@ $_api_is_translated_call = false;
  */
 function get_lang($variable, $reserved = null, $language = null)
 {
-    /**
-     *  In order to use $app['translator']
-    global $app;
+    // In order to use $app['translator']
+    /*global $app;
     if ($app['debug']) {
         //return $variable;
     }
+    //var_dump($variable);
     $translated = $app['translator']->trans($variable);
+    //var_dump($translated);
     if ($translated == $variable) {
         $translated = $app['translator']->trans("lang$variable");
         if ($translated == "lang$variable") {
             return $variable;
         }
     }
-    return $translated;*/
-    global $app;
+
+    return $translated;
+    global $app;*/
 
     $language_interface = isset($app['language_interface']) ? $app['language_interface'] : api_get_language_interface();
 

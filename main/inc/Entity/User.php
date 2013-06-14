@@ -5,6 +5,7 @@ namespace Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
  * EntityUser
@@ -12,7 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="Entity\Repository\UserRepository")
  */
-class User
+class User implements AdvancedUserInterface
 {
     /**
      * @var integer
@@ -222,6 +223,20 @@ class User
     private $classes;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Role", inversedBy="users")
+     * @ORM\JoinTable(name="users_roles",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="user_id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
+     *      )
+     */
+    private $roles;
+
+     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $salt;
+
+    /**
      *
      */
     public function __construct()
@@ -229,6 +244,131 @@ class User
         $this->courses = new ArrayCollection();
         $this->items = new ArrayCollection();
         $this->classes = new ArrayCollection();
+        $this->roles = new ArrayCollection();
+        $this->salt = sha1(uniqid(null, true));
+    }
+
+    /**
+     * @param $username
+     * @return mixed
+     * @throws UsernameNotFoundException
+     */
+    public function loadUserByUsername($username)
+    {
+        $q = $this
+            ->createQueryBuilder('u')
+            ->where('u.username = :username OR u.email = :email')
+            ->setParameter('username', $username)
+            ->setParameter('email', $username)
+            ->getQuery();
+
+        try {
+            $user = $q->getSingleResult();
+        } catch (NoResultException $e) {
+            throw new UsernameNotFoundException(
+                sprintf('Unable to find an active admin User identified by "%s".', $username),
+                null,
+                0,
+                $e
+            );
+        }
+
+        return $user;
+    }
+
+    /**
+     * @param UserInterface $user
+     * @return mixed
+     * @throws UnsupportedUserException
+     */
+    public function refreshUser(UserInterface $user)
+    {
+        $class = get_class($user);
+        if (!$this->supportsClass($class)) {
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $class));
+        }
+
+        return $this->loadUserByUsername($user->getUsername());
+    }
+
+    /**
+     * @param $class
+     * @return bool
+     */
+    public function supportsClass($class)
+    {
+        return $this->getEntityName() === $class || is_subclass_of($class, $this->getEntityName());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRoles()
+    {
+        return $this->roles->toArray();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function eraseCredentials()
+    {
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isEnabled()
+    {
+        return $this->getActive() == 1;
+    }
+
+    /**
+     * Set salt
+     *
+     * @param string $lastname
+     *
+     * @return EntityUser
+     */
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+
+        return $this;
+    }
+
+    /**
+     * Get salt
+     *
+     * @return string
+     */
+    public function getSalt()
+    {
+        return $this->salt;
     }
 
     /**

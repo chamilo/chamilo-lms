@@ -104,6 +104,7 @@ switch ($action) {
 
         $cat = new Testcategory(null, null, null, null, $type);
         $items = $cat->get_categories_by_keyword($_REQUEST['tag']);
+
         $courseId = api_get_course_int_id();
 
         $json_items = array();

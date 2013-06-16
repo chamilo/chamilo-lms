@@ -2724,7 +2724,7 @@ function register_course($params) {
     $tutor_name         = $params['tutor_name'];
     //$description        = $params['description'];
 
-    $category_code      = $params['category_code'];
+    $category_code      = $params['course_category'];
     $course_language    = isset($params['course_language']) && !empty($params['course_language']) ? $params['course_language'] : api_get_setting('platformLanguage');
     $user_id            = empty($params['user_id']) ? api_get_user_id() : intval($params['user_id']);
     $department_name    = $params['department_name'];

@@ -95,7 +95,7 @@ class ExportLanguagesCommand extends Command
                             $my_variable_in_english = $$variable;
                             require $toLanguagePath.'/'.$file;
                             $my_variable = $$variable;
-
+                            /** This fixes a notice due an array in the lang files */
                             if (strpos($variable, 'langNameOfLang') === false) {
 
                                 $translations[] = array(

@@ -145,12 +145,11 @@ values. Consider changing the admin password to remember it.&nbsp;</li>
 The following directories need to be readable, writeable and executable by your web server. 
 <span class="muted">This usually requires no specific action on Windows servers, but will require a "chmod" under Linux and Mac. See instructions below.</span><br />Replace [chamilo] with the directory where your Chamilo installation is located):
 <ul>
-  <li>[chamilo]/main/inc/conf/</li>
-  <li>[chamilo]/main/upload/users/</li>
-  <li>[chamilo]/main/default_course_document/images/</li>
-  <li>[chamilo]/archive/</li>
-  <li>[chamilo]/courses/</li>
-  <li>[chamilo]/home/</li>
+  <li>[chamilo]/config</li>
+  <li>[chamilo]/data</li>
+  <li>[chamilo]/logs</li>
+  <li>[chamilo]/temp</li>
+  <li>[chamilo]/main/default_course_document/images</li>
 </ul>
 Optionally, you can do the same to the following directories if you want to
 enable CSS styles package upload and sub-language definition:
@@ -177,7 +176,7 @@ right-clicking on them).</p>
 <p>The following directory needs to be readable and writeable for the web browser
 <em>only</em> during the installation process:</p>
 <ul>
-  <li>chamilo/main/inc/conf/ (if present)</li>
+  <li>[chamilo]/config (if present)</li>
 </ul>
 
 <p>On Linux, Mac OS X and BSD operating systems you can use the <em>chmod
@@ -205,7 +204,7 @@ in production), the login and password for MySQL will probably remain empty.</p>
 
   <li><strong>Protect your configuration directory: </strong>
 make sure no one (but you) can overwrite it. You can find the config directory in 
-<em>(chamilo folder)</em>/main/inc/conf.
+<em>(chamilo folder)</em>/config
 Make it read-only (windows/xwindows: right-click the file to edit the
 properties. linux/bsd/macosx: use the chmod 0555 command). The config
 file is created by your web server (Apache + PHP, usually) so you may 
@@ -456,12 +455,11 @@ choose "Configure the homepage" in the Chamilo administration section.</p>
 
 The following directories need to be readable, writeable and executable for the web server:
 <ul>
-  <li>chamilo/main/inc/conf/</li>
-  <li>chamilo/main/upload/users/</li>
+  <li>chamilo/config</li>
+  <li>chamilo/data</li>
+  <li>chamilo/logs</li>
+  <li>chamilo/temp</li>
   <li>chamilo/main/default_course_document/</li>
-  <li>chamilo/archive/</li>
-  <li>chamilo/courses/</li>
-  <li>chamilo/home/</li>
 </ul>
 
 On Linux, Mac OS X and BSD operating systems you can quick-fix this using the

@@ -6,14 +6,16 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
- * EntityUser
+ * User
  *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="Entity\Repository\UserRepository")
  */
-class User implements AdvancedUserInterface
+class User implements AdvancedUserInterface, UserProviderInterface
 {
     /**
      * @var integer
@@ -216,7 +218,6 @@ class User implements AdvancedUserInterface
      **/
     private $items;
 
-
     /**
      * @ORM\OneToMany(targetEntity="UsergroupRelUser", mappedBy="user")
      **/
@@ -224,9 +225,10 @@ class User implements AdvancedUserInterface
 
     /**
      * @ORM\ManyToMany(targetEntity="Role", inversedBy="users")
-     * @ORM\JoinTable(name="users_roles",
-     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="user_id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
+     * @ORM\JoinTable(
+     *          name="users_roles",
+     *          joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="user_id")},
+     *          inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
      *      )
      */
     private $roles;
@@ -249,12 +251,13 @@ class User implements AdvancedUserInterface
     }
 
     /**
-     * @param $username
+     * @param string $username
      * @return mixed
      * @throws UsernameNotFoundException
      */
     public function loadUserByUsername($username)
     {
+        //var_dump($username);exit;
         $q = $this
             ->createQueryBuilder('u')
             ->where('u.username = :username OR u.email = :email')
@@ -292,7 +295,7 @@ class User implements AdvancedUserInterface
     }
 
     /**
-     * @param $class
+     * @param string $class
      * @return bool
      */
     public function supportsClass($class)
@@ -305,7 +308,8 @@ class User implements AdvancedUserInterface
      */
     public function getRoles()
     {
-        return $this->roles->toArray();
+        //return $this->roles->toArray();
+        return $this->roles;
     }
 
     /**
@@ -350,9 +354,9 @@ class User implements AdvancedUserInterface
     /**
      * Set salt
      *
-     * @param string $lastname
+     * @param string $salt
      *
-     * @return EntityUser
+     * @return User
      */
     public function setSalt($salt)
     {
@@ -440,7 +444,7 @@ class User implements AdvancedUserInterface
      *
      * @param string $lastname
      *
-     * @return EntityUser
+     * @return User
      */
     public function setLastname($lastname)
     {
@@ -464,7 +468,7 @@ class User implements AdvancedUserInterface
      *
      * @param string $firstname
      *
-     * @return EntityUser
+     * @return User
      */
     public function setFirstname($firstname)
     {
@@ -487,7 +491,7 @@ class User implements AdvancedUserInterface
      * Set username
      *
      * @param string $username
-     * @return EntityUser
+     * @return User
      */
     public function setUsername($username)
     {
@@ -510,7 +514,7 @@ class User implements AdvancedUserInterface
      * Set password
      *
      * @param string $password
-     * @return EntityUser
+     * @return User
      */
     public function setPassword($password)
     {
@@ -533,7 +537,7 @@ class User implements AdvancedUserInterface
      * Set authSource
      *
      * @param string $authSource
-     * @return EntityUser
+     * @return User
      */
     public function setAuthSource($authSource)
     {
@@ -556,7 +560,7 @@ class User implements AdvancedUserInterface
      * Set email
      *
      * @param string $email
-     * @return EntityUser
+     * @return User
      */
     public function setEmail($email)
     {
@@ -579,7 +583,7 @@ class User implements AdvancedUserInterface
      * Set status
      *
      * @param boolean $status
-     * @return EntityUser
+     * @return User
      */
     public function setStatus($status)
     {
@@ -602,7 +606,7 @@ class User implements AdvancedUserInterface
      * Set officialCode
      *
      * @param string $officialCode
-     * @return EntityUser
+     * @return User
      */
     public function setOfficialCode($officialCode)
     {
@@ -625,7 +629,7 @@ class User implements AdvancedUserInterface
      * Set phone
      *
      * @param string $phone
-     * @return EntityUser
+     * @return User
      */
     public function setPhone($phone)
     {
@@ -648,7 +652,7 @@ class User implements AdvancedUserInterface
      * Set pictureUri
      *
      * @param string $pictureUri
-     * @return EntityUser
+     * @return User
      */
     public function setPictureUri($pictureUri)
     {
@@ -671,7 +675,7 @@ class User implements AdvancedUserInterface
      * Set creatorId
      *
      * @param integer $creatorId
-     * @return EntityUser
+     * @return User
      */
     public function setCreatorId($creatorId)
     {
@@ -694,7 +698,7 @@ class User implements AdvancedUserInterface
      * Set competences
      *
      * @param string $competences
-     * @return EntityUser
+     * @return User
      */
     public function setCompetences($competences)
     {
@@ -717,7 +721,7 @@ class User implements AdvancedUserInterface
      * Set diplomas
      *
      * @param string $diplomas
-     * @return EntityUser
+     * @return User
      */
     public function setDiplomas($diplomas)
     {
@@ -740,7 +744,7 @@ class User implements AdvancedUserInterface
      * Set openarea
      *
      * @param string $openarea
-     * @return EntityUser
+     * @return User
      */
     public function setOpenarea($openarea)
     {
@@ -763,7 +767,7 @@ class User implements AdvancedUserInterface
      * Set teach
      *
      * @param string $teach
-     * @return EntityUser
+     * @return User
      */
     public function setTeach($teach)
     {
@@ -786,7 +790,7 @@ class User implements AdvancedUserInterface
      * Set productions
      *
      * @param string $productions
-     * @return EntityUser
+     * @return User
      */
     public function setProductions($productions)
     {
@@ -809,7 +813,7 @@ class User implements AdvancedUserInterface
      * Set chatcallUserId
      *
      * @param integer $chatcallUserId
-     * @return EntityUser
+     * @return User
      */
     public function setChatcallUserId($chatcallUserId)
     {
@@ -832,7 +836,7 @@ class User implements AdvancedUserInterface
      * Set chatcallDate
      *
      * @param \DateTime $chatcallDate
-     * @return EntityUser
+     * @return User
      */
     public function setChatcallDate($chatcallDate)
     {
@@ -855,7 +859,7 @@ class User implements AdvancedUserInterface
      * Set chatcallText
      *
      * @param string $chatcallText
-     * @return EntityUser
+     * @return User
      */
     public function setChatcallText($chatcallText)
     {
@@ -878,7 +882,7 @@ class User implements AdvancedUserInterface
      * Set language
      *
      * @param string $language
-     * @return EntityUser
+     * @return User
      */
     public function setLanguage($language)
     {
@@ -901,7 +905,7 @@ class User implements AdvancedUserInterface
      * Set registrationDate
      *
      * @param \DateTime $registrationDate
-     * @return EntityUser
+     * @return User
      */
     public function setRegistrationDate($registrationDate)
     {
@@ -924,7 +928,7 @@ class User implements AdvancedUserInterface
      * Set expirationDate
      *
      * @param \DateTime $expirationDate
-     * @return EntityUser
+     * @return User
      */
     public function setExpirationDate($expirationDate)
     {
@@ -947,7 +951,7 @@ class User implements AdvancedUserInterface
      * Set active
      *
      * @param boolean $active
-     * @return EntityUser
+     * @return User
      */
     public function setActive($active)
     {
@@ -970,7 +974,7 @@ class User implements AdvancedUserInterface
      * Set openid
      *
      * @param string $openid
-     * @return EntityUser
+     * @return User
      */
     public function setOpenid($openid)
     {
@@ -993,7 +997,7 @@ class User implements AdvancedUserInterface
      * Set theme
      *
      * @param string $theme
-     * @return EntityUser
+     * @return User
      */
     public function setTheme($theme)
     {
@@ -1016,7 +1020,7 @@ class User implements AdvancedUserInterface
      * Set hrDeptId
      *
      * @param integer $hrDeptId
-     * @return EntityUser
+     * @return User
      */
     public function setHrDeptId($hrDeptId)
     {

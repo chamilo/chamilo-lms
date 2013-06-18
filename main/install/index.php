@@ -21,10 +21,15 @@ use Symfony\Component\Console\Output\Output;
 
 class BufferedOutput extends Output
 {
+    public $messages = array();
+    public $lastMessage = null;
+
     public function doWrite($message, $newline)
     {
         //$this->buffer .= $message. ($newline ? PHP_EOL: '');
         $this->buffer .= $message. '<br />';
+        $this->messages[] = $message;
+        $this->lastMessage = $message;
     }
 
     public function getBuffer()
@@ -136,25 +141,11 @@ foreach ($helpers as $name => $helper) {
     $helperSet->set($helper, $name);
 }
 
-/*
-    // Chamilo commands
-    new ChamiloLMS\Command\Database\UpgradeCommand(),
-    new ChamiloLMS\Command\Database\InstallCommand(),
-    new ChamiloLMS\Command\Database\StatusCommand(),
-    new ChamiloLMS\Command\Database\SetupCommand(),
-
-    // Chash commands
-    new Chash\Command\Database\RunSQLCommand(),
-    new Chash\Command\Database\DumpCommand(),
-    new Chash\Command\Database\RestoreCommand(),
-    new Chash\Command\Database\SQLCountCommand(),
-    new Chash\Command\Database\FullBackupCommand(),
-    new Chash\Command\Database\DropDatabaseCommand(),
-    new Chash\Command\Files\CleanTempFolderCommand(),
-    new Chash\Command\Files\CleanConfigFiles(),
-    new Chash\Command\Translation\ExportLanguageCommand(),
-    new Chash\Command\Translation\ImportLanguageCommand()
-        */
+$blockInstallation = function() use($app) {
+    if (file_exists($app['root_sys'].'config/configuration.php') || file_exists($app['root_sys'].'config/configuration.yml')) {
+        return $app->abort(500, "A Chamilo installation was found. You can't reinstall.");
+    }
+};
 
 // Controllers
 
@@ -180,7 +171,9 @@ $app->match('/', function() use($app) {
      }
 
     return $app['twig']->render('index.tpl', array('form' => $form->createView()));
-})->bind('welcome');
+})
+->bind('welcome')
+->before($blockInstallation);
 
 $app->match('/requirements', function() use($app) {
     $request = $app['request'];
@@ -241,6 +234,17 @@ $app->match('/check-database', function() use($app) {
                 $connect = $connection->connect();
                 $sm = $connection->getSchemaManager();
                 $databases = $sm->listDatabases();
+
+                /*if ($result == false) {
+                    $message = $app['translator']->trans(
+                        'The database name is not correct: %s',
+                        array('%s' => $parameters['dbname'])
+                    );
+                    $app['session']->getFlashBag()->add('error', $message);
+
+                    $url = $app['url_generator']->generate('check-database');
+                    return $app->redirect($url);
+                }*/
 
                 if (in_array($parameters['dbname'], $databases)) {
                     $message = $app['translator']->trans(
@@ -319,7 +323,7 @@ $app->match('/portal-settings', function() use($app) {
 
 })->bind('portal-settings');
 
-
+// Admin settings.
 $app->match('/admin-settings', function() use($app) {
     $request = $app['request'];
 
@@ -332,6 +336,7 @@ $app->match('/admin-settings', function() use($app) {
         $builder->add($key, $value['type'], $value['attributes']);
     }
     $builder->add('continue', 'submit');
+
     $form = $builder->getForm();
 
     if ('POST' == $request->getMethod()) {
@@ -347,6 +352,8 @@ $app->match('/admin-settings', function() use($app) {
     return $app['twig']->render('settings.tpl', array('form' => $form->createView()));
 
 })->bind('admin-settings');
+
+// Resume before installing.
 
 $app->match('/resume', function() use($app) {
     $request = $app['request'];
@@ -382,6 +389,8 @@ $app->match('/resume', function() use($app) {
     }
 })->bind('resume');
 
+// Installation process.
+
 $app->match('/installing', function() use($app) {
 
     $portalSettings = $app['session']->get('portal_settings');
@@ -402,26 +411,28 @@ $app->match('/installing', function() use($app) {
     );
 
     $output = new BufferedOutput();
-
     $command->setPortalSettings($portalSettings);
     $command->setDatabaseSettings($databaseSettings);
     $command->setAdminSettings($adminSettings);
 
     $result = $command->run($input, $output);
 
-    if ($result == 0) {
+    if ($result == 1) {
         $output = $output->getBuffer();
         $app['session']->getFlashBag()->add('success', 'Installation finished');
         $app['session']->set('output', $output);
         $url = $app['url_generator']->generate('finish');
         return $app->redirect($url);
     } else {
-        $app['session']->getFlashBag()->add('error', 'There was an error during installation');
+        $app['session']->getFlashBag()->add('error', 'There was an error during installation, please check your settings.');
+        $app['session']->getFlashBag()->add('error', $output->lastMessage);
+
         $url = $app['url_generator']->generate('check-database');
         return $app->redirect($url);
     }
 })->bind('installing');
 
+// Finish installation.
 $app->get('/finish', function() use($app) {
     $output = $app['session']->get('output');
     return $app['twig']->render('finish.tpl', array('output' => $output));
@@ -430,9 +441,6 @@ $app->get('/finish', function() use($app) {
 // Middlewares.
 $app->before(
     function () use ($app) {
-        if (file_exists($app['root_sys'].'config/configuration.php') || file_exists($app['root_sys'].'config/configuration.yml')) {
-            return $app->abort(500, "A Chamilo installation was found. You can't reinstall.");
-        }
     }
 );
 

@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Finder\Finder;
+
 /**
  * @package ChamiloLMS.Controller
  * @author Julio Montoya <gugli100@gmail.com>
@@ -41,8 +42,37 @@ class IndexController extends CommonController
         /** @var \Template $template */
         $template = $app['template'];
         $loginError = $app['request']->get('error');
-
         $extraJS = array();
+
+        /** @var \Entity\User $user */
+        /*$em = $app['orm.ems']['db_write'];
+        $user = $em->getRepository('Entity\User')->find(6);
+        $role = $em->getRepository('Entity\Role')->findOneByRole('ROLE_STUDENT');
+        $user->getRoles()->add($role);
+        $em->persist($user);
+        $em->flush();*/
+
+
+        //$user->roles->add($status);
+        /*$roles = $user->getRoles();
+        foreach ($roles as $role) {
+
+        }*/
+        /*
+        $token = $app['security']->getToken();
+        if (null !== $token) {
+            $user = $token->getUser();
+            var_dump($user );
+        }*/
+
+        // $countries = Intl::getRegionBundle()->getCountryNames('es');
+        //var_dump($countries);
+
+        /*$formatter = new \IntlDateFormatter(\Locale::getDefault(), \IntlDateFormatter::NONE, \IntlDateFormatter::NONE);
+        //http://userguide.icu-project.org/formatparse/datetime for date formats
+        $formatter->setPattern("EEEE d MMMM Y");
+        echo $formatter->format(time());*/
+
 
         //@todo improve this JS includes should be added using twig
         $extraJS[] = api_get_jquery_libraries_js(array('bxslider'));
@@ -63,6 +93,11 @@ class IndexController extends CommonController
         $request = $app['request'];
         $app['languages_file'] = array('courses', 'index', 'admin');
         $app['cidReset'] = true;
+        /*
+        $sql = 'SELECT * from user WHERE user_id = 1';
+        var_dump($sql);
+        $result = \Database::query($sql);
+        var_dump(\Database::fetch_object($result));*/
 
         // Testing translation using translator
         //echo $app['translator']->trans('Wiki Search Results');
@@ -165,23 +200,16 @@ class IndexController extends CommonController
      */
     public function loginAction(Application $app)
     {
-        /*$username = $app['request']->get('login');
-        $password = $app['request']->get('password');
+        /*$request = $app['request'];
+        $app['template']->assign('error', $app['security.last_error']($request));
+        $response = $app['template']->render_template('auth/login.tpl');
 
-        $user_table = \Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT * FROM $user_table WHERE username = ?";
-        $userInfo = $app['db']->fetchAssoc($sql, array($username));
+        return new Response($response, 200, array());*/
+    }
 
-        if ($userInfo) {
-            if ($userInfo['auth_source'] == PLATFORM_AUTH_SOURCE) {
-                if ($password == $userInfo['password'] AND trim($username) == $userInfo['username']) {
-                    unset($userInfo['password']);
+    public function loginCheckAction(Application $app)
+    {
 
-                }
-            }
-        }*/
-        $response = null;
-        return new Response($response, 200, array());
     }
 
     /**

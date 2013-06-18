@@ -209,12 +209,6 @@ $app->match('/check-database', function() use($app) {
         $builder->add($key, $value['type'], $value['attributes']);
     }
 
-    /*$builder->add('create_database', 'choice', array(
-            'choices' => array('1' => 'Yes', '0' => 'No'),
-            'data' => 'Yes'
-        )
-    );*/
-
     $builder->add('check', 'submit');
     $form = $builder->getForm();
 
@@ -248,13 +242,13 @@ $app->match('/check-database', function() use($app) {
 
                 if (in_array($parameters['dbname'], $databases)) {
                     $message = $app['translator']->trans(
-                        'The database %s being used and is going to be deleted!!',
+                        'The database "%s" being used and is going to be deleted!!',
                         array('%s' => $parameters['dbname'])
                     );
                     $app['session']->getFlashBag()->add('warning', $message);
                 } else {
                     $message = $app['translator']->trans(
-                        'A database %s is going to be created',
+                        'A database "%s" is going to be created',
                         array('%s' => $parameters['dbname'])
                     );
                     $app['session']->getFlashBag()->add('warning', $message);
@@ -435,6 +429,17 @@ $app->match('/installing', function() use($app) {
 // Finish installation.
 $app->get('/finish', function() use($app) {
     $output = $app['session']->get('output');
+    $message = $app['translator']->trans(
+        'To protect your site, make the whole %s directory read-only (chmod 0555 on Linux)',
+        array('%s' => $app['root_sys'].'config')
+    );
+    $app['session']->getFlashBag()->add('warning', $message);
+
+    $message = $app['translator']->trans(
+        'Delete the %s directory.',
+        array('%s' => $app['root_sys'].'install')
+    );
+    $app['session']->getFlashBag()->add('warning', $message);
     return $app['twig']->render('finish.tpl', array('output' => $output));
 })->bind('finish');
 

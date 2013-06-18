@@ -71,6 +71,13 @@ CREATE TABLE users_roles (
   PRIMARY KEY(user_id, role_id)
 );
 
+INSERT INTO roles (name, role) VALUES('Admin', 'ROLE_ADMIN');
+INSERT INTO roles (name, role) VALUES('Teacher', 'ROLE_TEACHER');
+INSERT INTO roles (name, role) VALUES('Student', 'ROLE_STUDENT');
+INSERT INTO roles (name, role) VALUES('Anonymous', 'ROLE_ANONYMOUS');
+INSERT INTO roles (name, role) VALUES('RRHH', 'ROLE_RRHH');
+INSERT INTO roles (name, role) VALUES('Question Manager', 'ROLE_QUESTION_MANAGER');
+
 --
 -- Table structure for table admin
 --
@@ -3525,4 +3532,4 @@ CREATE TABLE ext_log_entries (
 ) DEFAULT CHARSET=utf8;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.023' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.024' WHERE variable = 'chamilo_database_version';

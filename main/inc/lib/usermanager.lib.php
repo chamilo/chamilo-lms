@@ -78,7 +78,7 @@ class UserManager
             $access_url_id = api_get_current_access_url_id();
         }
 
-        //Hosting verifications
+        // Hosting verifications
         $status = isset($params['status']) ? $params['status'] : STUDENT;
 
         if (api_get_setting('login_is_email') == 'true') {
@@ -163,6 +163,16 @@ class UserManager
                 UrlManager::add_user_to_url($user_id, 1);
             }
 
+            /* global $app;
+            $em = $app['orm.ems']['db_write'];
+            // @var Entity\User $user
+            $user = $em->getRepository('Entity\User')->findOneById($user_id);
+            $status = $em->getRepository('Entity\Role')->findOneById($status);
+            $user->roles->add($status);
+            $em->persist($user);
+            $em->flush();*/
+
+
             //saving extra fields
             $field_value = new ExtraFieldValue('user');
             $params['user_id'] = $user_id;
@@ -184,7 +194,8 @@ class UserManager
      * @param type $params
      * @return boolean
      */
-    public static function update($params) {
+    public static function update($params)
+    {
         $table = Database::get_main_table(TABLE_MAIN_USER);
         if (empty($params['user_id'])) {
             return false;
@@ -333,6 +344,15 @@ class UserManager
                 //we are adding by default the access_url_user table with access_url_id = 1
                 UrlManager::add_user_to_url($return, 1);
             }
+
+            global $app;
+            /** @var Entity\User $user */
+            $em = $app['orm.ems']['db_write'];
+            $user = $em->getRepository('Entity\User')->find($return);
+            $role = $em->getRepository('Entity\Role')->findOneByRole('ROLE_STUDENT');
+            $user->getRoles()->add($role);
+            $em->persist($user);
+            $em->flush();
 
             if (!empty($email) && $send_mail) {
                 $recipient_name = api_get_person_name($firstName, $lastName, null, PERSON_NAME_EMAIL_ADDRESS);

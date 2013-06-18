@@ -414,9 +414,7 @@ $app->match('/index', 'index.controller:indexAction', 'GET|POST')
     ->after($afterLogin)
     ->bind('index');
 
-// web/login
-/*$app->match('/login', 'index.controller:loginAction', 'GET|POST')
-->bind('login');*/
+
 
 
 /** Userportal */
@@ -439,6 +437,9 @@ $app->get('/logout', 'index.controller:logoutAction')
 $app->get('/login', 'index.controller:loginAction')
     ->bind('login')
     ->after($cleanCourseSession);
+
+$app->match('/admin/login-check', 'index.controller:checkLoginAction', 'GET|POST')
+->bind('login_check');
 
 
 /** Course home instead of courses/MATHS the new URL is web/courses/MATHS  */
@@ -513,6 +514,12 @@ $app->match('/data/upload/users/{file}', 'index.controller:getUserFile', 'GET|PO
 $app->get('/data/upload/groups/{groupId}/{file}', 'index.controller:getGroupFile')
     ->assert('file', '.+')
     ->assert('type', '.+');
+
+/** Admin - admin */
+$app->get('/admin/administrator/roles', 'role.controller:IndexAction')
+    ->assert('type', '.+')
+    ->before($adminAndQuestionManagerCondition)
+    ->bind('admin_administrator_roles');
 
 /** Question manager - admin */
 
@@ -636,6 +643,45 @@ $app->match('/courses/{cidReq}/{id_session}/exercise/question/{id}/edit', 'exerc
     ->before($userPermissionsInsideACourse)
     ->before($userCourseAdmin)
     ->bind('exercise_question_edit');
+
+$app->match('/admin/administrator/roles/', 'role.controller:indexAction', 'GET')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_roles');
+
+$app->match('/admin/administrator/roles/{id}', 'role.controller:readAction', 'GET')
+    ->assert('type', '.+')
+    ->assert('id', '\d+')
+    ->bind('admin_administrator_roles_read');
+
+$app->match('/admin/administrator/roles/add', 'role.controller:addAction', 'GET')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_roles_add');
+
+$app->match('/admin/administrator/roles/create', 'role.controller:createAction', 'POST')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_roles_create');
+
+
+$app->match('/admin/administrator/roles/{id}/edit', 'role.controller:editAction', 'POST')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_roles_edit');
+
+$app->match('/admin/administrator/roles/{id}/update', 'role.controller:updateAction', 'POST')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_roles_update');
+
+$app->match('/admin/administrator/roles/{id}/delete', 'role.controller:deleteAction', 'DELETE')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_roles_delete');
+
+
+
+
+// Takes a lot of time to load
+//$app->mount('/roles', 'exercise_manager.controller:getProvider');
+
+// Takes a lot of time to load
+//$app->mount('/roles', new ChamiloLMS\Provider\ReflectionControllerProvider('role.controller'));
 
 $app->match('/ajax', 'model_ajax.controller:indexAction', 'GET')
     ->assert('type', '.+')

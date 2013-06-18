@@ -6313,7 +6313,8 @@ function api_coach_can_edit_view_results($courseId = null, $session_id = null) {
     }
 }
 
-function api_get_js_simple($file) {
+function api_get_js_simple($file)
+{
     return '<script type="text/javascript" src="'.$file.'"></script>'."\n";
 }
 
@@ -6868,6 +6869,15 @@ function load_translations($app)
  */
 function api_get_user_roles()
 {
+    /*global $app;
+    $em = $app['orm.ems']['db_write'];
+    $roles = $em->getRepository('Entity\Role')->findAll();
+    $userRoles = array();
+    foreach ($roles as $role) {
+        $userRoles[$role->getId()] = $role->getName();
+    }
+    return $userRoles;*/
+
     // Status
     $status = array();
     $status[COURSEMANAGER] = get_lang('Teacher');

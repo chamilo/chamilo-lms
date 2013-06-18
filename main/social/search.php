@@ -157,22 +157,19 @@ if ($query !='') {
     }
 
     $results = '<div id="online_grid_container"><div class="span9">';
-    //$list_friends = SocialManager::get_friends(api_get_user_id());
-    //$count = count($list_friends);
-    //$list_friends = $list_friends[0];
-     if (is_array($users) && count($users)> 0) {
+    if (is_array($users) && count($users)> 0) {
         $results .=  Display::page_subheader(get_lang('Users'));
         $results .= '<ul class="thumbnails">';
         foreach($users as $user) {
-            $send_inv = '<button class="btn btn-mini btn-inv-off">'.get_lang('SendInvitation').'</button>';
+            $send_inv = '<button class="btn btn-mini disabled ">'.get_lang('SendInvitation').'</button><br /><br />';
             $relation_type =  intval(SocialManager::get_relation_between_contacts(api_get_user_id(), $user['user_id'] ));
             $user_info = api_get_user_info($user['user_id'], true);
             $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$user['user_id'];
             //Show send invitation icon if they are not friends yet
             if ($relation_type != 3 && $relation_type != 4 && $user['user_id'] != api_get_user_id()) {
-                $send_inv = '<a href="javascript:void(0);" onclick="javascript:send_invitation_to_user(\''.$user['user_id'].'\');"/><button class="btn btn-mini btn-inv">'.get_lang('SendInvitation').'</button></a>';
+                $send_inv = '<a href="javascript:void(0);" onclick="javascript:send_invitation_to_user(\''.$user['user_id'].'\');"/><button class="btn btn-mini">'.get_lang('SendInvitation').'</button></a><br /><br />';
             }
-            $send_msg = '<a href="javascript:void(0);" onclick="javascript:send_message_to_user(\''.$user['user_id'].'\');"/><button class="btn btn-mini btn-msg">'.get_lang('SendMessage').'</button></a>';
+            $send_msg = '<a href="javascript:void(0);" onclick="javascript:send_message_to_user(\''.$user['user_id'].'\');"/><button class="btn btn-mini">'.get_lang('SendMessage').'</button></a>';
             if (empty($user['picture_uri'])) {
                 $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
                 $img = '<img src="'.$picture['file'].'">';

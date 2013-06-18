@@ -66,6 +66,7 @@ $NumCommentsScore = "Liczba komentarzy wynosi:";
 $AddPagesLocked = "Dodatkowa opcja została tymczasowo wyłączona przez trenera";
 $ShowLinksPages = "Pokaż strony, które zawierają linki do tej strony";
 $MoreWikiOptions = "Więcej opcji Wiki";
+$DefaultTitle = "Strona główna";
 $DiscussNotAvailable = "Dyskusja niedostępna";
 $Print = "Drukuj";
 $Version = "Wersja";

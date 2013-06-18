@@ -245,6 +245,8 @@ class FlatViewTable extends SortableTable
                 foreach($resource_list as $key=>$resource) {
                     $new_resource_list = $new_resource_list_name = array();
                     $DataSet = new pData();
+                    // Reverse array, otherwise we get highest values first
+                    $resource = array_reverse($resource,true);
                     foreach ($resource as $name=>$cant) {
                         $DataSet->AddPoint($cant,"Serie".$j);
                         $DataSet->SetSerieName(strip_tags($name),"Serie".$j);
@@ -319,9 +321,9 @@ class FlatViewTable extends SortableTable
                             //------------------
                             //echo 'not in cache';
                             $Cache->WriteToCache($graph_id,$DataSet->GetData(),$Test);
-                            ob_start();
-                            $Test->Stroke();
-                            ob_end_clean();
+                            //ob_start();
+                            //$Test->Stroke();
+                            //ob_end_clean();
                             $img_file = $Cache->GetHash($graph_id,$DataSet->GetData());
                         }
                         echo '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'" >';

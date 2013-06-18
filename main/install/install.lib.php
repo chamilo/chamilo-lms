@@ -1265,23 +1265,27 @@ function display_requirements($app, $installType)
 
     $html .= '<table class="table">
             <tr>
-                <td class="requirements-item">chamilo/config</td>
+                <td class="requirements-item">[chamilo]/config</td>
                 <td class="requirements-value">'.check_writable_root_path('config/').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">chamilo/data</td>
+                <td class="requirements-item">[chamilo]/data</td>
                 <td class="requirements-value">'.check_writable_root_path('data').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">chamilo/logs</td>
+                <td class="requirements-item">[chamilo]/logs</td>
                 <td class="requirements-value">'.check_writable_root_path('logs').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">chamilo/temp</td>
+                <td class="requirements-item">[chamilo]/temp</td>
                 <td class="requirements-value">'.check_writable_root_path('temp').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">chamilo/main/default_course_document/images/</td>
+                <td class="requirements-item">[chamilo]/temp/twig</td>
+                <td class="requirements-value">'.check_writable_root_path('temp').'</td>
+            </tr>
+            <tr>
+                <td class="requirements-item">[chamilo]/main/default_course_document/images/</td>
                 <td class="requirements-value">'.check_writable('default_course_document/images/').'</td>
             </tr>
             <tr>

@@ -20,15 +20,15 @@
             <ul class="nav">
                 <li><a href="index.html">Home</a></li>
                 <li ><a href="readme.html">About</a></li>
-                <li ><a href="license.html">License</a></li>            
-                <li><a href="credits.html">Credits</a></li>            
-                <li><a href="dependencies.html">Dependencies</a></li>            
+                <li ><a href="license.html">License</a></li>
+                <li><a href="credits.html">Credits</a></li>
+                <li><a href="dependencies.html">Dependencies</a></li>
                 <li><a href="changelog.html">Changelog</a></li>
-            </ul>        
+            </ul>
             </div><!--/.nav-collapse -->
         </div>
     </div>
-</div>    
+</div>
 
 
 <div class="container">
@@ -36,25 +36,18 @@
     <li>
         <a href="index.html">Documentación</a>
         <span class="divider">/</span>
-    </li>    
+    </li>
     <li>Guía de Instalación</li>
-</ul>   
+</ul>
 <h1>Chamilo 1.9 - Guía de Instalación</h1>
 
 <p>Gracias por descargar Chamilo, la suite de aprendizaje de código abierto profesional.</p>
-<ul>  
+<ul>
   <li>Prueba Chamilo en <a href="http://campus.chamilo.org">nuesto Campus libre</a></li>
 </ul>
-
-
 <p>Esta guía explica como instalar Chamilo LIBRE. Por favor, léala completamente antes de proceder con la instalación.</p>
-
-
-
 <h2><b>Contenidos</b></h2>
-
 <ol>
-
   <li><a href="#1._Pre-requisites">Prerrequisitos</a></li>
   <li><a href="#2._Installation_of_Chamilo_LMS">Instalación de Chamilo LMS</a></li>
   <li><a href="#3._Upgrade_from_a_previous_version_of">Actualizar desde una versión previa de Chamilo o Dok€os</a></li>
@@ -127,12 +120,10 @@ Los siguientes directorios necesitan tener permisos de lectura, escritura y ejec
 <p>
 Remplace [chamilo] por el directorio en el cual está ubicado su Chamilo:
 <ul>
-  <li>[chamilo]/main/inc/conf/</li>
-  <li>[chamilo]/main/upload/users/</li>
-  <li>[chamilo]/main/default_course_document/images/</li>
-  <li>[chamilo]/archive/</li>
-  <li>[chamilo]/courses/</li>
-  <li>[chamilo]/home/</li>
+  <li>[chamilo]/config/</li>
+  <li>[chamilo]/data/</li>
+  <li>[chamilo]/temp/</li>
+  <li>[chamilo]/logs/</li>
 </ul>
 Opcionalmente, puede hacer lo mismo a los directorios siguientes si desea
 activar la subida de paquetes de estilos CSS y la definición de sub-idiomas:
@@ -145,7 +136,7 @@ activar la subida de paquetes de estilos CSS y la definición de sub-idiomas:
 <p>
 Desde Chamilo 1.8.8, también puede habilitar funciones de indexación de texto completo que requieren la instalación de la extensión del módulo PHP php5-xapian. Si usted hace uso de él, usted tendrá que permitir que el sistema pueda escribir en el directorio searchdb:
 <ul>
-<li>[chamilo]/searchdb</li>
+<li>[chamilo]/data/searchdb</li>
 </ul>
 </p>
 <p>
@@ -190,7 +181,7 @@ seleccione "Configurar la página de inicio" en la sección de administración d
   <li><strong>Proteger su directorio de instalación: </strong>si el (directorio de Chamilo) directorio /main/install sigue accesible, alguien podría instalar de nuevo sobre la versión existente (usted puede perder sus datos de esta manera). Por ello es muy importante que mueva el directorio a algún lugar fuera de los directorios web para que no se encuentre accesible, cambie su nombre, bórrelo completamente o edite sus propiedades para que nadie pueda leerlo o ejecutarlo.</li>
 
   <li><strong>Para mayor seguridad: </strong> hacer que todos los archivos posean permisos de escritura facilita la instalación y resuelve muchas dudas a las personas con poca experiencia en administración. Sin embargo, es más seguro hacer que el propietario de los archivos y carpetas de Chamilo sea un usuario distinto y conceder sólo al servidor web permisos de lectura sobre todos los ficheros, y permisos de escritura a los directorios previamente mencionados. De esta manera, estos archivos sólo necesitan ser accesibles y escribibles por el propietario el proceso Apache, no por el mundo entero. También sería recomendable hacer que todos los directorios con permisos de escritura rechazaran la interpretación de los archivos PHP ( a excepción de la raíz de los directorios de cursos). No dude en contratar a un administrador con experiencia para hacer eso, puede que sea un poco más caro ahora, pero estará feliz de no tener que perder todos sus datos por el ataque de un hacker a su sitio.</li>
-  
+
   <li><strong>Configurar su instalación de Chamilo: </strong>
 en la sección de administración de Chamilo, usted puede usar las Opciones de Configuración de Chamilo para ajustar el comportamiento de su instalación.</li>
 
@@ -213,11 +204,11 @@ Para obtener lo mejor de Chamilo, necesita ajustar la configuración de PHP. Con
 </ul>
 </p>
 <div class="code">
-			  max_execution_time = 300 ;Tiempo máximo de ejecucion para cada script, en segundos<br />
-			  max_input_time = 600 ;Tiempo máximo que cada script que puede emplear para analizar los datos solicitados<br />
-			  memory_limit = 256M ;Maxima cantidad de memoria que un script puede consumir (128MB)<br />
-			  post_max_size = 100M<br />
-			  upload_max_filesize = 100M
+    max_execution_time = 300 ;Tiempo máximo de ejecucion para cada script, en segundos<br />
+    max_input_time = 600 ;Tiempo máximo que cada script que puede emplear para analizar los datos solicitados<br />
+    memory_limit = 256M ;Maxima cantidad de memoria que un script puede consumir (128MB)<br />
+    post_max_size = 100M<br />
+    upload_max_filesize = 100M
 </div>
 
 <p>
@@ -259,7 +250,7 @@ date.timezone = 'America/Lima'
 <li>php-ctype</li>
 <li>php-gd</li>
 <li>php-iconv</li>
-<li>php-json</li> 
+<li>php-json</li>
 <li>php-mbstring</li>
 <li>php-intl</li>
 <li>php-curl</li>
@@ -369,7 +360,7 @@ directorio actual de la versión antigua</li>
 </p>
 <p>
 <em> NOTA: </em> La actualización desde 1.6.x a 1.9.x implica una revisión de
-los gráficos y estilos personalizados. La nueva versión usa un completo nuevo conjunto 
+los gráficos y estilos personalizados. La nueva versión usa un completo nuevo conjunto
 de iconos y estilos, lo cual significa que aquellos provenientes de la versión 1.6 no pueden ser
 simplemente reusados. La buena noticia es que la versión 1.9.x le permite crear
 su propio estilo en un directorio css separado, el cual se puede reusar en
@@ -603,9 +594,9 @@ Usted puede habilitar la escritura de ecuaciones matemáticas dentro del editor 
 	(existe un FCKConfig.ToolbarSets por herramienta). Por ejemplo:
 	        <div class="code">FCKConfig.ToolbarSets["Test"] = [<br />
 	['Bold','Italic','Underline','StrikeThrough','Subscript','Superscript','Link','Unlink','ImageManager','MP3','OrderedList','UnorderedList','Table','mimetex']<br />
-	
+
 	] ;</div>
-	
+
 	        Usted puede agregarlo a todas las herramientas, o sólo a alguna de ellas (por ej., documentos y ejercicios)<br />
 	        <br />
 			</li>
@@ -617,34 +608,34 @@ Usted puede habilitar la escritura de ecuaciones matemáticas dentro del editor 
     <li>6. Realice estos cambios:
 
 	<i>Agregar el directorio cgi-bin correspondiente a su configuración de Apache puede ser realizada de esta manera, en Apache 2:</i>
-	
+
 	<div class="code">
 			  ScriptAlias /cgi-bin/ /var/www/cgi-bin/<br />
-	
+
 	  &lt;Directory "/var/www/cgi-bin"&gt;<br />
-	
+
 	        &nbsp;&nbsp;AllowOverride None<br />
-	
+
 	        &nbsp;&nbsp;Options ExecCGI -MultiViews +SymLinksIfOwnerMatch<br />
-	
+
 	        &nbsp;&nbsp;Order allow,deny<br />
-	
+
 	        &nbsp;&nbsp;Allow from all<br />
-	
+
 	  &lt;/Directory&gt;<br />
-	
+
 		</div>
-	
-	
+
+
 	<i>Agregar un enlace simbólico bajo Windows, puede ser realizado mediante la creación de un
 	acceso directo al archivo mimetex.exe desde el directorio cgi-bin, o bajo
 	Linux usando el siguiente comando:</i>
-	
+
 	<div class="code">ln -s /var/www/chamilo/main/inc/lib/mimetex/mimetex.cgi /var/www/cgi-bin/mimetex.cgi</div>
 	<p>Si no quiere modificar su Apache, alternativamente a  este punto 6: copie mimetex.exe (para Windows) o mimetex.cgi (para Linux) en su cgi-bin/ </p>
 	<p>&nbsp;</p>
 	</li>
-	
+
 	<li>7. Asegurarse que el archivo mimetex.cgi (o mimetex.exe) ha sido subido al servidor usando el formato BINARY. Es posible que el servidor de un error 500 cuando se intenta entrar a cgi-bin/mimetex.cgi a pesar de que los permisos están correctos.
 	   Probar volviendo a subir el archivo usando FTP (ASCII format) o si no usando el "administrador de archivos" o CPanel. Si el error persiste contactar con el administrador del servidor para habilitar el acceso público del archivo cgi-bin/mimetex.cgi.
 	</li>

@@ -183,6 +183,7 @@ class Database
      */
     public static function fetch_object(\Doctrine\DBAL\Driver\Statement $result)
     {
+        // Waiting for http://www.doctrine-project.org/jira/browse/DBAL-544 in order to know which constant use.
         //return $result->fetch(\Doctrine\ORM\Query::HYDRATE_OBJECT);
         return $result->fetch(PDO::FETCH_OBJ);
 

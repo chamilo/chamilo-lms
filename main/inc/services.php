@@ -36,72 +36,35 @@ $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
 
 // Session provider
 //$app->register(new Silex\ProviderSessionServiceProvider());
-
 /*
-Implements a UserProvider to login users
-
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\User;
-use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Doctrine\DBAL\Connection;
-
-class UserProvider implements UserProviderInterface
-{
-    private $conn;
-
-    public function __construct(Connection $conn)
-    {
-        $this->conn = $conn;
-    }
-
-    public function loadUserByUsername($username)
-    {
-        $stmt = $this->conn->executeQuery('SELECT * FROM users WHERE username = ?', array(strtolower($username)));
-
-        if (!$user = $stmt->fetch()) {
-            throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
-        }
-        $roles = 'student';
-        echo $user['username'];exit;
-        return new User($user['username'], $user['password'], explode(',', $roles), true, true, true, true);
-    }
-
-    public function refreshUser(UserInterface $user)
-    {
-        if (!$user instanceof User) {
-        throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
-    }
-
-    public function supportsClass($class)
-    {
-        return $class === 'Symfony\Component\Security\Core\User\User';
-    }
-}
-
 $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     'security.firewalls' => array(
+        'login' => array(
+            'pattern' => '^/login$',
+        ),
         'secured' => array(
-        'pattern' => '^/admin/',
-        'form'    => array(
-        'login_path' => '/login',
-        'check_path' => '/admin/login_check'
-    ),
-    'logout' => array('path' => '/logout', 'target' => '/'),
-    'users' => $app->share(function() use ($app) {
-        return new UserProvider($app['db']);
-    })
-    )
+            'pattern' => '^.*$',
+            'form'    => array(
+                'login_path' => '/login',
+                'check_path' => '/admin/login_check'
+//                 'username_parameter' => 'form[username]',
+//                 'password_parameter' => 'form[password]',
+            ),
+            'logout' => array('path' => '/logout', 'target' => '/'),
+            'users' => $app->share(function() use ($app) {
+                return new Entity\User();
+            })
+        )
     ),
     'security.role_hierarchy'=> array(
-        'ROLE_ADMIN' => array('ROLE_EDITOR'),
-        "ROLE_EDITOR" => array('ROLE_WRITER'),
-        "ROLE_WRITER" => array('ROLE_USER'),
-        "ROLE_USER" => array("ROLE_SUSCRIBER"),
-)
+        'ROLE_ADMIN' => array('ROLE_TEACHER'),
+        "ROLE_TEACHER" => array('ROLE_STUDENT'),
+        "ROLE_STUDENT" => array('ROLE_STUDENT'),
+        "ROLE_ANONYMOUS" => array("ROLE_ANONYMOUS"),
+        "ROLE_RRHH" => array("ROLE_RRHH"),
+        "ROLE_QUESTION_MANAGER" => array("ROLE_QUESTION_MANAGER")
+    )
 ));*/
-
 
 // Setting Controllers as services provider
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
@@ -600,6 +563,12 @@ $app['question_manager.controller'] = $app->share(
 $app['exercise_manager.controller'] = $app->share(
     function () use ($app) {
         return new ChamiloLMS\Controller\ExerciseController();
+    }
+);
+
+$app['role.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\Administrator\RoleController($app);
     }
 );
 

@@ -153,7 +153,7 @@ class Database
         if ($result === false) {
             return array();
         }
-        return $result->fetch(PDO::FETCH_BOTH);
+        return $result->fetch(self::customOptionToDoctrineOption($option));
 
         /*return $option == 'ASSOC' ? mysql_fetch_array($result, MYSQL_ASSOC) : ($option == 'NUM' ? mysql_fetch_array(
             $result,
@@ -389,6 +389,22 @@ class Database
         */
     }
 
+    public static function customOptionToDoctrineOption($option)
+    {
+        switch($option) {
+            case 'ASSOC':
+                return PDO::FETCH_ASSOC;
+                break;
+            case 'NUM':
+                return PDO::FETCH_NUM;
+                break;
+            case 'BOTH':
+            default:
+                return PDO::FETCH_BOTH;
+                break;
+        }
+    }
+
     /**
      * Stores a query result into an array.
      * @param  \Doctrine\DBAL\Driver\Statement $result - the return value of the query
@@ -397,8 +413,9 @@ class Database
      */
     public static function store_result(\Doctrine\DBAL\Driver\Statement $result, $option = 'BOTH')
     {
-        return $result->fetchAll();
+        return $result->fetchAll(self::customOptionToDoctrineOption($option));
         /*
+        var_dump($a );
         $array = array();
         if ($result !== false) { // For isolation from database engine's behaviour.
             while ($row = self::fetch_array($result, $option)) {

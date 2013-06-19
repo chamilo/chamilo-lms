@@ -13,12 +13,13 @@ use Silex\ServiceProviderInterface;
 // Monolog.
 if (is_writable($app['sys_temp_path'])) {
 
-    /** Adding Monolog service provider Monolog  use examples
-    $app['monolog']->addDebug('Testing the Monolog logging.');
-    $app['monolog']->addInfo('Testing the Monolog logging.');
-    $app['monolog']->addError('Testing the Monolog logging.');
+    /**
+     *  Adding Monolog service provider.
+     *  Examples:
+     *  $app['monolog']->addDebug('Testing the Monolog logging.');
+     *  $app['monolog']->addInfo('Testing the Monolog logging.');
+     *  $app['monolog']->addError('Testing the Monolog logging.');
      */
-
     $app->register(
         new Silex\Provider\MonologServiceProvider(),
         array(
@@ -41,19 +42,31 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     'security.firewalls' => array(
         'login' => array(
             'pattern' => '^/login$',
+            'anonymous' => true
         ),
         'secured' => array(
-            'pattern' => '^.*$',
+            'http' => true,
+            'pattern' => '^/admin/.*$',
             'form'    => array(
                 'login_path' => '/login',
-                'check_path' => '/admin/login_check'
-//                 'username_parameter' => 'form[username]',
-//                 'password_parameter' => 'form[password]',
+                'check_path' => '/admin/login_check',
             ),
-            'logout' => array('path' => '/logout', 'target' => '/'),
+            'logout' => array(
+                'path' => '/logout',
+                'target' => '/'
+            ),
             'users' => $app->share(function() use ($app) {
-                return new Entity\User();
-            })
+                $user = new Entity\User();
+                $user->setEntityManager($app['orm.em']);
+                //$user->loadUserByUsername('admin');
+                return $user;
+
+            }),
+            'anonymous' => false
+        ),
+        'classic' => array(
+            'pattern' => '^/.*$',
+            'anonymous' => true
         )
     ),
     'security.role_hierarchy'=> array(
@@ -64,7 +77,23 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
         "ROLE_RRHH" => array("ROLE_RRHH"),
         "ROLE_QUESTION_MANAGER" => array("ROLE_QUESTION_MANAGER")
     )
-));*/
+));
+
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+$app['security.encoder.digest'] = $app->share(function($app) {
+    // use the sha1 algorithm
+    // don't base64 encode the password
+    // use only 1 iteration
+    return new MessageDigestPasswordEncoder('sha1', false, 1);
+});
+*/
+
+/*
+ *
+ *
+$app['security.access_manager'] = $app->share(function($app) {
+    return new AccessDecisionManager($app['security.voters'], 'unanimous');
+});*/
 
 // Setting Controllers as services provider
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
@@ -330,11 +359,11 @@ $app->register(new Grom\Silex\ImagineServiceProvider(), array(
 // Prompts Doctrine SQL queries using Monolog.
 
 $app['dbal_logger'] = $app->share(function() {
-    return new Doctrine\DBAL\Logging\DebugStack();
+    //return new Doctrine\DBAL\Logging\DebugStack();
 });
 
 if ($app['debug']) {
-    $logger = $app['dbal_logger'];
+    /*$logger = $app['dbal_logger'];
     $app['db.config']->setSQLLogger($logger);
     $app->after(function() use ($app, $logger) {
         // Log all queries as DEBUG.
@@ -348,7 +377,7 @@ if ($app['debug']) {
                 )
             );
         }
-    });
+    });*/
 }
 
 // Email service provider

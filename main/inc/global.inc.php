@@ -271,23 +271,9 @@ $charset = 'UTF-8';
 // Manage Chamilo error messages
 $app->error(
     function (\Exception $e, $code) use ($app) {
-
         if ($app['debug']) {
             //return;
         }
-
-        /*if ($e instanceof PDOException and count($app['dbal_logger']->queries)) {
-            // We want to log the query as an ERROR for PDO exceptions.
-            $query = array_pop($app['dbal_logger']->queries);
-            $app['monolog']->err(
-                'sql-error:'.$query['sql'],
-                array(
-                    'params' => $query['params'],
-                    'types' => $query['types']
-                )
-            );
-        }*/
-
         if (isset($code)) {
             switch ($code) {
                 case 401:

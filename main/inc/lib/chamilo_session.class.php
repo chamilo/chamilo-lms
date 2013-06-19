@@ -21,6 +21,7 @@
 
 /**
  * ChamiloSession class definition
+ * @todo replace this class with the Silex - SessionServiceProvider
  */
 class ChamiloSession extends System\Session
 {

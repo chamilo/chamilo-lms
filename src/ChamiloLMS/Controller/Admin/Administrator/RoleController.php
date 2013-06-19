@@ -49,12 +49,17 @@ class RoleController extends BaseController
     {
         $roleRepo = $this->getRepository();
         $role = $roleRepo->findOneById($id);
-        $form = $this->get('form.factory')->create(new RoleType(), $role);
+        if ($role) {
+            $form = $this->get('form.factory')->create(new RoleType(), $role);
 
-        $template = $this->get('template');
-        $template->assign('form', $form->createView());
-        $response = $template->render_template('admin/administrator/role/edit.tpl');
-        return new Response($response, 200, array());
+            $template = $this->get('template');
+            $template->assign('role', $role);
+            $template->assign('form', $form->createView());
+            $response = $template->render_template('admin/administrator/role/edit.tpl');
+            return new Response($response, 200, array());
+        } else {
+            return $this->createNotFoundException();
+        }
     }
 
     public function addAction()

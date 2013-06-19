@@ -537,14 +537,6 @@ class UserManager
         if ($user_info['active'] != $active) {
             $change_active = 1;
         }        
-        /*$sql_active = "SELECT * FROM $table_user WHERE user_id='$user_id' ";
-        $return_active = Database::query($sql_active);
-        if (Database::num_rows($return_active) > 0) {
-            $result_active = Database::fetch_array($return_active);
-            if ($result_active['active'] != $active) {    
-                $activate = 1;
-            }
-        }*/
         $sql = "UPDATE $table_user SET
                 lastname='".Database::escape_string($lastname)."',
                 firstname='".Database::escape_string($firstname)."',

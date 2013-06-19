@@ -16,5 +16,5 @@ if (extension_loaded('xhprof')) {
     $profiler_url = sprintf($url.'tests/xhprof/xhprof_html/index.php?run=%s&source=%s', $run_id, $profiler_namespace);
     $xhprof =  '<br /><a class="btn btn-primary" href="'. $profiler_url .'" target="_blank">xhprof profiler output</a><br /><br />';
     echo $xhprof;
-    error_log($run_id);
+    error_log("xhprof runid: $run_id");
 }

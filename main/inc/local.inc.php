@@ -925,12 +925,12 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset))
                                " cu.id_session  = '".$session_id."' ".
                                "LIMIT 1";
                         $result = Database::query($sql);
-    
+
                         if (Database::num_rows($result)) {
                             $row = Database::fetch_array($result, 'ASSOC');
-    
+
                             $session_course_status = $row['status'];
-    
+
                             switch ($session_course_status) {
                                 case '2': // coach - teacher
                                     $_courseUser['role'] = 'Professor';
@@ -938,7 +938,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset))
                                     $is_courseTutor      = true;
                                     $is_courseCoach      = true;
                                     $is_sessionAdmin     = false;
-    
+
                                     if (api_get_setting('extend_rights_for_coach') == 'true') {
                                         $is_courseAdmin = true;
                                     } else {
@@ -953,7 +953,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset))
                                     $is_courseAdmin      = false;
                                     $is_courseCoach      = false;
                                     $is_sessionAdmin     = false;
-    
+
                                     Session::write('_courseUser', $_courseUser);
                                     break;
                                 default:
@@ -1053,9 +1053,15 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset))
     }
 
     // save the states
-    Session::write('is_courseAdmin', $is_courseAdmin);
-    Session::write('is_courseMember', $is_courseMember);
-    Session::write('is_courseTutor', $is_courseTutor);
+    if (isset($is_courseAdmin)) {
+        Session::write('is_courseAdmin', $is_courseAdmin);
+    }
+    if (isset($is_courseMember)) {
+        Session::write('is_courseMember', $is_courseMember);
+    }
+    if (isset($is_courseTutor)) {
+        Session::write('is_courseTutor', $is_courseTutor);
+    }
     Session::write('is_courseCoach', $is_courseCoach);
     Session::write('is_allowed_in_course', $is_allowed_in_course);
     Session::write('is_sessionAdmin', $is_sessionAdmin);

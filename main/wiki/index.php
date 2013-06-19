@@ -291,7 +291,7 @@ if ($_GET['view']) {
                         Display::display_normal_message($is_being_edited, false);
 
                     } else {
-                         Display::display_confirmation_message(restore_wikipage($current_row['page_id'], $current_row['reflink'], mysql_real_escape_string($current_row['title']), mysql_real_escape_string($current_row['content']), $current_row['group_id'], $current_row['assignment'], $current_row['progress'], $current_row['version'], $last_row['version'], $current_row['linksto']).': <a href="index.php?cidReq='.$_course['id'].'&action=showpage&amp;title='.api_htmlentities(urlencode($last_row['reflink'])).'&session_id='.$last_row['session_id'].'&group_id='.$last_row['group_id'].'">'.api_htmlentities($last_row['title']).'</a>',false);
+                         Display::display_confirmation_message(restore_wikipage($current_row['page_id'], $current_row['reflink'], api_htmlentities($current_row['title']), api_htmlentities($current_row['content']), $current_row['group_id'], $current_row['assignment'], $current_row['progress'], $current_row['version'], $last_row['version'], $current_row['linksto']).': <a href="index.php?cidReq='.$_course['id'].'&action=showpage&amp;title='.api_htmlentities(urlencode($last_row['reflink'])).'&session_id='.$last_row['session_id'].'&group_id='.$last_row['group_id'].'">'.api_htmlentities($last_row['title']).'</a>',false);
                     }
                 }
             }
@@ -1680,9 +1680,9 @@ if ($_GET['action']=='edit') {
         $title=get_lang('DefaultTitle');
         $page_id=0;
     } else {
-        $content=$row['content'];
-        $title=$row['title'];
-        $page_id=$row['page_id'];
+        $content = api_html_entity_decode($row['content']);
+        $title = api_html_entity_decode($row['title']);
+        $page_id = $row['page_id'];
     }
 
     //Only teachers and platform admin can edit the index page. Only teachers and platform admin can edit an assignment teacher. And users in groups

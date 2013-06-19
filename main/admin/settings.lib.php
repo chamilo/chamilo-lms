@@ -1042,7 +1042,13 @@ function update_gradebook_score_display_custom_values($values) {
     $scoredisplay->update_custom_score_display_settings($final);
 }*/
 
-function generate_settings_form($settings, $settings_by_access_list) {
+/**
+ * @param array $settings
+ * @param array $settings_by_access_list
+ * @return FormValidator
+ */
+function generate_settings_form($settings, $settings_by_access_list)
+{
     global $_configuration, $settings_to_avoid, $convert_byte_to_mega_list;
     $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
@@ -1052,7 +1058,7 @@ function generate_settings_form($settings, $settings_by_access_list) {
 
     $url_id = api_get_current_access_url_id();
 
-    if (!empty($_configuration['multiple_access_urls']) && api_is_global_platform_admin() && $url_id == 1) {
+    if (api_is_multiple_url_enabled() && api_is_global_platform_admin() && $url_id == 1) {
         $group = array();
         $group[] = $form->createElement('button', 'mark_all', get_lang('MarkAll'));
         $group[] = $form->createElement('button', 'unmark_all', get_lang('UnmarkAll'));
@@ -1061,13 +1067,14 @@ function generate_settings_form($settings, $settings_by_access_list) {
 
     $default_values = array();
     $url_info = api_get_access_url($url_id);
-
+    $settingsToAvoidKeys = array_filter(array_keys($settings_to_avoid));
     foreach ($settings as $row) {
-    	if (in_array($row['variable'], array_keys($settings_to_avoid))) {
+
+    	if (in_array($row['variable'], $settingsToAvoidKeys)) {
             continue;
         }
 
-        if (!empty($_configuration['multiple_access_urls'])) {
+        if (api_is_multiple_url_enabled()) {
             if (api_is_global_platform_admin()) {
                 if ($row['access_url_locked'] == 0) {
                     if ($url_id == 1) {
@@ -1108,10 +1115,11 @@ function generate_settings_form($settings, $settings_by_access_list) {
                 if (empty($row['category']))
                     $row['category'] = 0;
 
-                if (is_array($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ])) {
+                if (is_array($settings_by_access_list[$row['variable']][ $row['subkey']][ $row['category']])) {
                     // We are sure that the other site have a selected value.
-                    if ($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ]['selected_value'] != '')
-                        $row['selected_value'] =$settings_by_access_list[$row['variable']] [$row['subkey']] [ $row['category'] ]['selected_value'];
+                    if ($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ]['selected_value'] != '') {
+                        $row['selected_value'] = $settings_by_access_list[$row['variable']][$row['subkey']][ $row['category']]['selected_value'];
+                    }
                 }
                 // There is no else{} statement because we load the default $row['selected_value'] of the main Chamilo site.
             }

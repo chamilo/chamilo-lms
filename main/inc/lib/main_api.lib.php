@@ -4583,7 +4583,8 @@ function api_add_access_url($u, $d = '', $a = 1) {
  * @param int       Access URL's ID. Optional. Uses 1 by default, which is the unique URL
  * @return array    Array of database results for the current settings of the current access URL
  */
-function api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0) {
+function api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0)
+{
     $t_cs = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $access_url = (int) $access_url;
     $where_condition = '';

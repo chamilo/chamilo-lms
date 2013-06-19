@@ -40,7 +40,7 @@ $course_code_redirect = isset($_REQUEST['c']) && !empty($_REQUEST['c']) ? $_REQU
 $exercise_redirect = isset($_REQUEST['e']) && !empty($_REQUEST['e']) ? $_REQUEST['e'] : null;
 
 if (!empty($course_code_redirect)) {
-    Session::write('course_redirect',   $course_code_redirect);
+    Session::write('course_redirect', $course_code_redirect);
     Session::write('exercise_redirect', $exercise_redirect);
 }
 

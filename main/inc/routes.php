@@ -414,9 +414,6 @@ $app->match('/index', 'index.controller:indexAction', 'GET|POST')
     ->after($afterLogin)
     ->bind('index');
 
-
-
-
 /** Userportal */
 $app->get('/userportal', 'userPortal.controller:indexAction');
 $app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexAction')
@@ -429,6 +426,7 @@ $app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexActi
 //->assert('type', '.+'); //allowing slash "/"
 
 /** Logout */
+
 $app->get('/logout', 'index.controller:logoutAction')
     ->bind('logout')
     ->after($cleanCourseSession);

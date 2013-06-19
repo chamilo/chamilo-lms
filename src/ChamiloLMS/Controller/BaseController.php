@@ -2,7 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 namespace ChamiloLMS\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\NoResultException;
@@ -33,6 +35,12 @@ abstract class BaseController
     public function redirect($redirect)
     {
         return $this->app->redirect($redirect);
+    }
+
+
+    public function createNotFoundException($message = 'Not Found', \Exception $previous = null)
+    {
+        return $this->app->abort(404, $message);
     }
 
     /**

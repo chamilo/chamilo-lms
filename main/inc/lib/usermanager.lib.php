@@ -350,7 +350,7 @@ class UserManager
             $em = $app['orm.ems']['db_write'];
             $user = $em->getRepository('Entity\User')->find($return);
             $role = $em->getRepository('Entity\Role')->findOneByRole('ROLE_STUDENT');
-            $user->getRoles()->add($role);
+            $user->getRolesObj()->add($role);
             $em->persist($user);
             $em->flush();
 

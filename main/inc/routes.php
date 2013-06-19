@@ -434,12 +434,11 @@ $app->get('/logout', 'index.controller:logoutAction')
     ->after($cleanCourseSession);
 
 /** Login */
-$app->get('/login', 'index.controller:loginAction')
-    ->bind('login')
-    ->after($cleanCourseSession);
+$app->match('/login', 'index.controller:loginAction', 'GET|POST')
+    ->bind('login');
 
-$app->match('/admin/login-check', 'index.controller:checkLoginAction', 'GET|POST')
-->bind('login_check');
+/*$app->match('/admin/login-check', 'index.controller:checkLoginAction', 'GET|POST')
+->bind('login_check');*/
 
 
 /** Course home instead of courses/MATHS the new URL is web/courses/MATHS  */

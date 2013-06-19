@@ -27,6 +27,7 @@ class IndexController extends CommonController
         $userId = api_get_user_id();
 
         \Online::logout($userId, true);
+
         // the Online::logout function already does a redirect
         //return $app->redirect($app['url_generator']->generate('index'));
     }
@@ -43,27 +44,30 @@ class IndexController extends CommonController
         $template = $app['template'];
         $loginError = $app['request']->get('error');
         $extraJS = array();
-
-        /** @var \Entity\User $user */
-        /*$em = $app['orm.ems']['db_write'];
-        $user = $em->getRepository('Entity\User')->find(6);
-        $role = $em->getRepository('Entity\Role')->findOneByRole('ROLE_STUDENT');
-        $user->getRoles()->add($role);
-        $em->persist($user);
-        $em->flush();*/
-
-
-        //$user->roles->add($status);
-        /*$roles = $user->getRoles();
-        foreach ($roles as $role) {
-
-        }*/
         /*
         $token = $app['security']->getToken();
         if (null !== $token) {
             $user = $token->getUser();
             var_dump($user );
+        }
+        if ($app['security']->isGranted('ROLE_ADMIN')) {
         }*/
+
+        /** @var \Entity\User $user */
+        /*$em = $app['orm.ems']['db_write'];
+        $user = $em->getRepository('Entity\User')->find(6);
+        $role = $em->getRepository('Entity\Role')->findOneByRole('ROLE_STUDENT');
+        $user->getRolesObj()->add($role);
+        $em->persist($user);
+        $em->flush();*/
+
+
+        //$user->roles->add($status);
+        /*$roles = $user->getRolesObj();
+        foreach ($roles as $role) {
+
+        }*/
+
 
         // $countries = Intl::getRegionBundle()->getCountryNames('es');
         //var_dump($countries);
@@ -200,11 +204,11 @@ class IndexController extends CommonController
      */
     public function loginAction(Application $app)
     {
-        /*$request = $app['request'];
+        $request = $app['request'];
         $app['template']->assign('error', $app['security.last_error']($request));
         $response = $app['template']->render_template('auth/login.tpl');
 
-        return new Response($response, 200, array());*/
+        return new Response($response, 200, array());
     }
 
     public function loginCheckAction(Application $app)

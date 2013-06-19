@@ -196,7 +196,19 @@ $app['allowed'] = true;
 // Start session after the internationalization library has been initialized
 
 // @todo use silex session provider instead of a custom class
-Chamilo::session()->start($alreadyInstalled);
+//Chamilo::session()->start($alreadyInstalled);
+
+$app->register(new Silex\Provider\SessionServiceProvider());
+
+// Session settings
+$app['session.storage.options'] = array(
+    'name' => 'chamilo_session',
+    //'cookie_lifetime' => 30, //Cookie lifetime
+    //'cookie_path' => null, //Cookie path
+    //'cookie_domain' => null, //Cookie domain
+    //'cookie_secure' => null, //Cookie secure (HTTPS)
+    'cookie_httponly' => true //Whether the cookie is http only
+);
 
 // Loading chamilo settings
 /* @todo create a service provider to load plugins.
@@ -237,9 +249,8 @@ if ($alreadyInstalled) {
         Session::write('url_id', $_configuration['access_url']);
         Session::write('url_info', api_get_current_access_url_info($_configuration['access_url']));
     } else {
-        Session::write('url_id', -1);
+        Session::write('url_id', 1);
     }
-
 
     $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
     $settings_latest_update = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
@@ -505,6 +516,7 @@ if (api_get_setting('login_is_email') == 'true') {
 /** A "before" middleware allows you to tweak the Request before the controller is executed */
 
 $app->before(
+
     function () use ($app) {
         if (!file_exists($app['configuration_file']) && !file_exists($app['configuration_yml_file'])) {
             return new RedirectResponse(api_get_path(WEB_CODE_PATH).'install');
@@ -521,15 +533,18 @@ $app->before(
         }
 
         // Loop in the folder array and create temp folders.
-        $app['chamilo.filesystem']->createFolders($app['temp.paths']->folders);
+        /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem  $filesystem */
+        $filesystem = $app['chamilo.filesystem'];
+        // @todo improvement create temp folders during installation not everytime
+        $filesystem->createFolders($app['temp.paths']->folders);
 
         if ($app['assetic.auto_dump_assets']) {
-            $app['chamilo.filesystem']->copyFolders($app['temp.paths']->copyFolders);
+            $filesystem->copyFolders($app['temp.paths']->copyFolders);
         }
 
         // Check and modify the date of user in the track.e.online table
         Online::loginCheck(api_get_user_id());
-        //$app['request']->getSession()->start();
+        $app['request']->getSession()->start();
     }
 );
 
@@ -626,7 +641,7 @@ require_once 'routes.php';
 // Setting doctrine2 extensions
 
 if (isset($app['configuration']['main_database']) && isset($app['db.event_manager'])) {
-
+    // @todo improvement do not create every time this objects
     $sortableGroup = new Gedmo\Mapping\Annotation\SortableGroup(array());
     $sortablePosition = new Gedmo\Mapping\Annotation\SortablePosition(array());
     $tree = new Gedmo\Mapping\Annotation\Tree(array());
@@ -676,5 +691,5 @@ if (isset($app['configuration']['main_database']) && isset($app['db.event_manage
 // Fixes uses of $_course in the scripts.
 $_course = api_get_course_info();
 $_cid = api_get_course_id();
-
 return $app;
+

@@ -245,38 +245,31 @@ e-mail setting in <em>[chamilo]</em>/config/mail.conf.php.</li>
 
 Chamilo LMS requires the following PHP extensions:
 <ul>
-	<li>PCRE</li>
-	<li>zlib</li>
-	<li>session</li>
-	<li>mbstring</li>
-	<li>iconv</li>
-	<li>json</li>
-</ul>
-
-It also requires the following PHP modules:
-<ul>
-	<li>gd</li>
-	<li>imagick</li>
-	<li>mysql or mysqlnd</li>
+	<li><a href="http://www.php.net/manual/en/pcre.installation.php" target="_blank">PCRE</a> (enabled by default since PHP 4.2)</li>
+	<li><a hrer="http://www.php.net/manual/en/session.installation.php" target="_blank">session</a> (enabled by default since the creation of PHP)</li>
+	<li><a href="http://www.php.net/manual/en/json.installation.php" target="_blank">json</a> (enabled by default since PHP 5.2)</li>
+	<li><a href="http://www.php.net/manual/en/image.installation.php" target="_blank">gd</a> (not enabled by default)</li>
+	<li><a href="http://www.php.net/manual/en/mysql.installation.php" target="_blank">mysql</a> or <a href="http://www.php.net/manual/en/mysqlnd.install.php" target="_blank">mysqlnd</a> (neither of these is enabled by default, but we recommend mysqlnd for higher efficiency, mysql also being deprecated starting from PHP 5.5)</li>
+	<li><a href="http://www.php.net/manual/en/mbstring.installation.php" target="_blank">mbstring</a> (not enabled by default)</li>
+	<li><a href="http://www.php.net/manual/en/zlib.installation.php" target="_blank">zlib</a> (NOT enabled by default)</li>
 </ul>
 
 And optionally (for more features) the following PHP modules:
 <ul>
-	<li>ldap</li>
-	<li>curl</li>
-	<li>xapian</li>
-	<li></li>
+	<li><a href="http://www.php.net/manual/en/curl.installation.php" target="_blank">curl</a> (required for links checking in the links tool)</li>
+	<li><a href="http://www.php.net/manual/en/iconv.installation.php" target="_blank">iconv</a> (enabled by default, it is used as a second option to mbstring, required above, but Symfony components depend on mbstring only, so this recommendation might be removed in the future)</li>
+	<li><a href="http://www.php.net/manual/en/ldap.installation.php" target="_blank">ldap</a> (required only if you use LDAP authentication)</li>
+	<li><a href="http://xapian.org/download" target="_blank">xapian</a> (required only to use the text indexing feature - see further down this installation guide for install instructions)</li>
+	<li><a href="http://www.php.net/manual/en/imagick.installation.php" target="_blank">imagick</a> (generates better images thumbnails when using the text indexing feature requiring the Xapian extension)</li>
 </ul>
 
 To get the best out of Chamilo, you need to finetune your PHP settings. Consider : <br />
-
 <ul>
-
   <li>Editing php.ini file (on Windows can be located at 
   <span style="font-weight: bold;">C:\xampp\php\php.ini</span>, 
   on Ubuntu : 
   <span style="font-weight: bold;">/etc/php5/apache2/php.ini</span></li>
-  <li>search the word "_max" and increase the two values to optimise the server</li>
+  <li>search the word "_max" and increase the two values (post_max_size and upload_max_filesize) to optimise the server</li>
   <li>we recommend the following values : </li>
 </ul>
 
@@ -289,8 +282,7 @@ To get the best out of Chamilo, you need to finetune your PHP settings. Consider
   <li>session.cookie_httponly = On</li>
 </ul>
 
-<p>Some users could meet problems if their PHP settings don't match
-these ones:</p>
+<p>Some users could meet problems if their PHP settings don't match the following:</p>
 
 <ul>
   <li>short_open_tag       = Off</li>

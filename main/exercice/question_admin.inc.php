@@ -12,15 +12,16 @@
  */
 
 $course_id = api_get_course_int_id();
+
 // INIT QUESTION
 if (isset($_GET['editQuestion'])) {
     $objQuestion = Question::read($_GET['editQuestion'], null, $objExercise);
     $action      = api_get_self()."?".api_get_cidreq(
-    )."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id."&exerciseId=$exerciseId";
+    )."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id."&exerciseId=$objExercise->id";
 } else {
     $objQuestion = Question::getInstance($_REQUEST['answerType'], $objExercise);
     $action      = api_get_self()."?".api_get_cidreq(
-    )."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion."&exerciseId=$exerciseId";
+    )."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion."&exerciseId=$objExercise->id";
 }
 
 /** @var Question $objQuestion */

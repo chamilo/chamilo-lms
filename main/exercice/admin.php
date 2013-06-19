@@ -116,11 +116,11 @@ if (empty($questionId)) {
 delete_all_incomplete_attempts(api_get_user_id(), $exerciseId, api_get_course_int_id(), api_get_session_id());
 
 /** @var Exercise $objExercise */
-$objExercise = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : 0;
+$objExercise = Session::read('objExercise');
 /** @var Question $objQuestion */
-$objQuestion = isset($_SESSION['objQuestion']) ? $_SESSION['objQuestion'] : 0;
+$objQuestion = Session::read('objQuestion');
 /** @var Answer $objAnswer */
-$objAnswer = isset($_SESSION['objAnswer']) ? $_SESSION['objAnswer'] : 0;
+$objAnswer = Session::read('objAnswer');
 
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
@@ -234,7 +234,6 @@ if (!empty($cancelQuestion)) {
     }
 }
 
-
 if (!empty($clone_question) && !empty($objExercise->id)) {
 
     $old_question_obj = Question::read($clone_question, api_get_course_int_id());
@@ -296,6 +295,7 @@ if (!empty($modifyIn) && $modifyIn == 'thisExercise') {
         $noPHP_SELF = true;
     }
 }
+
 $htmlHeadXtra[] = '<script>
 
 function multiple_answer_true_false_onchange(variable) {

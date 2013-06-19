@@ -21,28 +21,39 @@
     {
         var currentTime = new Date().valueOf();
         var dist = epClock.time+epClock.__offset - currentTime;
-       
+
         //Sets the value to the clock very important!
         element.text(value);
-        
+
         var div_clock = $('#exercise_clock_warning');
-        
+
         // 60000 = 60 seconds
+
+        // Green
+        if (dist > 180000) {  // 5min
+            if (!(div_clock.hasClass('time_warning_three'))) {
+                div_clock.addClass('time_warning_three');
+            }
+        }
+
+        // Yellow
         if (dist <= 180000) {  //3min
+            div_clock.removeClass('time_warning_three');
             if (!(div_clock.hasClass('time_warning_two'))) {
                 div_clock.addClass('time_warning_two');
             }
         }
-        
+
+        // Red
         if (dist <= 60000) { //1min
             div_clock.removeClass('time_warning_two');
-            if (!(div_clock.hasClass('time_warning_one'))) {                
+            if (!(div_clock.hasClass('time_warning_one'))) {
                 div_clock.addClass('time_warning_one');
-            }            
+            }
         }
     },
     function ()
     {
        epClock = this;
-    });	
+    });
 }(jQuery));

@@ -2692,7 +2692,8 @@ class Exercise
 			$(document).ready(function() {
 
 				var current_time = new Date().getTime();
-                var time_left    = parseInt(".$time_left."); // time in seconds when using minutes there are some seconds lost
+				// Time in seconds. When using minutes there are some seconds lost.
+                var time_left    = parseInt(".$time_left.");
 				var expired_time = current_time + (time_left*1000);
 				var expired_date = get_expired_date_string(expired_time);
 

@@ -278,7 +278,7 @@ class UserManager
         }
 
         $firstName     = Security::remove_XSS($firstName);
-        $lastName    = Security::remove_XSS($lastName);
+        $lastName      = Security::remove_XSS($lastName);
         $loginName     = Security::remove_XSS($loginName);
         $phone         = Security::remove_XSS($phone);
 
@@ -297,12 +297,10 @@ class UserManager
             return api_set_failure('login-pass already taken');
         }
 
-        //$password = "PLACEHOLDER";
-
         if (empty($encrypt_method)) {
             $password = api_get_encrypted_password($password);
         } else {
-            if ($_configuration['password_encryption'] === $encrypt_method ) {
+            if ($_configuration['password_encryption'] === $encrypt_method) {
                 if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
                     return api_set_failure('encrypt_method invalid');
                 } else if ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/', $password)) {
@@ -371,7 +369,6 @@ class UserManager
                     $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstName, $lastName)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $loginName ."\n". get_lang('Pass')." : ".stripslashes($original_password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
                 }
 
-
                 /* MANAGE EVENT WITH MAIL */
                 if (EventsMail::check_if_using_class('user_registration')) {
                     $values["about_user"] = $return;
@@ -389,9 +386,7 @@ class UserManager
             $user_info = api_get_user_info($return);
             event_system(LOG_USER_CREATE, LOG_USER_ID, $return, api_get_utc_datetime(), $user_id_manager);
             event_system(LOG_USER_CREATE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager);
-
         } else {
-            $return = false;
             return api_set_failure('error inserting in Database');
         }
 

@@ -6,8 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
  * User
@@ -15,7 +13,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="Entity\Repository\UserRepository")
  */
-class User implements AdvancedUserInterface, UserProviderInterface
+class User implements AdvancedUserInterface
 {
     /**
      * @var integer
@@ -238,8 +236,6 @@ class User implements AdvancedUserInterface, UserProviderInterface
      */
     private $salt;
 
-    private $em;
-
     /**
      *
      */
@@ -250,93 +246,6 @@ class User implements AdvancedUserInterface, UserProviderInterface
         $this->classes = new ArrayCollection();
         $this->roles = new ArrayCollection();
         $this->salt = sha1(uniqid(null, true));
-    }
-
-    /**
-     * Needed in order to use the security component
-     * @param \Doctrine\ORM\EntityManager $em
-     */
-    public function setEntityManager($em)
-    {
-        $this->em = $em;
-    }
-
-    /**
-     * @param string $username
-     * @return mixed
-     * @throws UsernameNotFoundException
-     */
-    public function loadUserByUsername($username)
-    {
-        $q = $this->em
-            ->createQueryBuilder('u')
-            ->select('u')
-            ->from('Entity\User', 'u')
-            ->where('u.username = :username OR u.email = :email')
-            ->setParameter('username', $username)
-            ->setParameter('email', $username)
-            ->getQuery();
-
-        try {
-            $user = $q->getSingleResult();
-
-        } catch (NoResultException $e) {
-            throw new UsernameNotFoundException(
-                sprintf('Unable to find an active admin User identified by "%s".', $username),
-                null,
-                0,
-                $e
-            );
-        }
-        return $user;
-    }
-
-    /**
-     * @param UserInterface $user
-     * @return mixed
-     * @throws UnsupportedUserException
-     */
-    public function refreshUser(UserInterface $user)
-    {
-        $class = get_class($user);
-        if (!$this->supportsClass($class)) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $class));
-        }
-
-        return $this->loadUserByUsername($user->getUsername());
-    }
-
-    /**
-     * @param string $class
-     * @return bool
-     */
-    public function supportsClass($class)
-    {
-        return $this->getEntityName() === $class || is_subclass_of($class, $this->getEntityName());
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getRoles()
-    {
-        return $this->roles->toArray();
-    }
-
-    /**
-     *
-     * @return ArrayCollection
-     */
-    public function getRolesObj()
-    {
-        return $this->roles;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function eraseCredentials()
-    {
     }
 
     /**
@@ -370,6 +279,33 @@ class User implements AdvancedUserInterface, UserProviderInterface
     {
         return $this->getActive() == 1;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function eraseCredentials()
+    {
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function getRoles()
+    {
+        return $this->roles->toArray();
+    }
+
+    /**
+     *
+     * @return ArrayCollection
+     */
+    public function getRolesObj()
+    {
+        return $this->roles;
+    }
+
+
 
     /**
      * Set salt

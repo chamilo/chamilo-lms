@@ -41,7 +41,7 @@ api_protect_admin_script();
 // Settings to avoid
 $settings_to_avoid = array(
     'stylesheets' => '', // handled by the handle_stylesheet() function
-    'server_type',
+    'server_type' => '',
     'use_session_mode' => 'true',
     'gradebook_enable' => 'false',
     'example_material_course_creation' => 'true' // ON by default - now we have this option when we create a course
@@ -93,10 +93,14 @@ $form_search_html = $form_search->return_form();
 $url_id = api_get_current_access_url_id();
 
 $settings = null;
-
+/**
+ * @param string $category
+ * @return array
+ */
 function get_settings($category = null)
 {
     $url_id = api_get_current_access_url_id();
+
     $settings_by_access_list = array();
 
     if ($url_id == 1) {
@@ -129,19 +133,24 @@ function get_settings($category = null)
             }
         }
     }
+
     if (isset($category) && $category == 'search_setting') {
         if (!empty($_REQUEST['search_field'])) {
             $settings = search_setting($_REQUEST['search_field']);
         }
     }
 
-    return array('settings' => $settings, 'settings_by_access_list' => $settings_by_access_list);
+    return array(
+        'settings' => $settings,
+        'settings_by_access_list' => $settings_by_access_list
+    );
 }
 
 // Build the form.
 if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', 'stylesheets', 'Search'))) {
     $my_category = isset($_GET['category']) ? $_GET['category'] : null;
     $settings_array = get_settings($my_category);
+
     $settings = $settings_array['settings'];
     $settings_by_access_list = $settings_array['settings_by_access_list'];
     $form = generate_settings_form($settings, $settings_by_access_list);

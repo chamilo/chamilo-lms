@@ -238,6 +238,8 @@ class User implements AdvancedUserInterface, UserProviderInterface
      */
     private $salt;
 
+    private $em;
+
     /**
      *
      */
@@ -251,15 +253,25 @@ class User implements AdvancedUserInterface, UserProviderInterface
     }
 
     /**
+     * Needed in order to use the security component
+     * @param \Doctrine\ORM\EntityManager $em
+     */
+    public function setEntityManager($em)
+    {
+        $this->em = $em;
+    }
+
+    /**
      * @param string $username
      * @return mixed
      * @throws UsernameNotFoundException
      */
     public function loadUserByUsername($username)
     {
-        //var_dump($username);exit;
-        $q = $this
+        $q = $this->em
             ->createQueryBuilder('u')
+            ->select('u')
+            ->from('Entity\User', 'u')
             ->where('u.username = :username OR u.email = :email')
             ->setParameter('username', $username)
             ->setParameter('email', $username)
@@ -267,6 +279,7 @@ class User implements AdvancedUserInterface, UserProviderInterface
 
         try {
             $user = $q->getSingleResult();
+
         } catch (NoResultException $e) {
             throw new UsernameNotFoundException(
                 sprintf('Unable to find an active admin User identified by "%s".', $username),
@@ -275,7 +288,6 @@ class User implements AdvancedUserInterface, UserProviderInterface
                 $e
             );
         }
-
         return $user;
     }
 
@@ -308,7 +320,15 @@ class User implements AdvancedUserInterface, UserProviderInterface
      */
     public function getRoles()
     {
-        //return $this->roles->toArray();
+        return $this->roles->toArray();
+    }
+
+    /**
+     *
+     * @return ArrayCollection
+     */
+    public function getRolesObj()
+    {
         return $this->roles;
     }
 

@@ -222,6 +222,7 @@ if ($alreadyInstalled) {
 
     // Retrieving all the chamilo config settings for multiple URLs feature
     $_configuration['access_url'] = 1;
+
     if (api_get_multiple_access_url()) {
         $access_urls = api_get_access_urls();
         $protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
@@ -239,21 +240,21 @@ if ($alreadyInstalled) {
         Session::write('url_id', -1);
     }
 
+
     $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
     $settings_latest_update = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
 
-    $_setting = isset($_SESSION['_setting']) ? $_SESSION['_setting'] : null;
-    $_plugins = isset($_SESSION['_plugins']) ? $_SESSION['_plugins'] : null;
-
+    $_setting = Session::read('_setting');
     if (empty($_setting)) {
         api_set_settings_and_plugins();
     } else {
         if (isset($_setting['settings_latest_update']) && $_setting['settings_latest_update'] != $settings_latest_update) {
             api_set_settings_and_plugins();
-            $_setting = isset($_SESSION['_setting']) ? $_SESSION['_setting'] : null;
-            $_plugins = isset($_SESSION['_plugins']) ? $_SESSION['_plugins'] : null;
         }
     }
+
+    $_setting = Session::read('_setting');
+    $_plugins = Session::read('_plugins');
 
     // Default template style
     $templateStyle = api_get_setting('template');

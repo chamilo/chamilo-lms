@@ -6778,17 +6778,12 @@ function api_get_user_language()
 function api_get_language_interface()
 {
     global $app;
-    $valid_languages = array();
 
-    if ($app['installed']) {
-        $valid_languages = api_get_languages();
-    }
-
+    $valid_languages = api_get_languages();
     $user_language = api_get_user_language();
 
     $courseInfo = api_get_course_info();
     $language_interface = 'english';
-
     $languageFromLogin = api_get_language_selected_in_login();
 
     if (!empty($languageFromLogin)) {
@@ -6798,7 +6793,10 @@ function api_get_language_interface()
     if (!empty($valid_languages)) {
 
         // User language or platform lang
-        $language_interface = $user_language;
+        //platformLanguage
+        //if (!empty($user_language)) {
+            $language_interface = $user_language;
+        //}
 
         // Course language
         if (!empty($courseInfo) && isset($courseInfo['language'])) {

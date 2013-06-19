@@ -428,9 +428,6 @@ function api_get_language_isocode($language = null, $default_code = 'en')
     }*/
 
     if (!isset($iso_code[$language])) {
-        if (!class_exists('Database')) {
-            return $default_code; // This might happen, in case of calling this function early during the global initialization.
-        }
         $sql = "SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." WHERE dokeos_folder = '$language'";
         $sql_result = Database::query($sql);
         if (Database::num_rows($sql_result)) {

@@ -25,8 +25,8 @@ class IndexController extends CommonController
     public function logoutAction(Application $app)
     {
         $userId = api_get_user_id();
-
         \Online::logout($userId, true);
+
 
         // the Online::logout function already does a redirect
         //return $app->redirect($app['url_generator']->generate('index'));
@@ -44,6 +44,17 @@ class IndexController extends CommonController
         $template = $app['template'];
         $loginError = $app['request']->get('error');
         $extraJS = array();
+
+        /*\ChamiloSession::write('name', 'clara');
+        var_dump(\ChamiloSession::read('name'));
+        var_dump($_SESSION['name']);*/
+
+        //var_dump(\ChamiloSession::read('aaa'));
+
+        /*\ChamiloSession::write('name', 'clar');
+        echo \ChamiloSession::read('name');
+        $app['session']->set('name', 'julio');
+        echo $app['session']->get('name');*/
         /*
         $token = $app['security']->getToken();
         if (null !== $token) {
@@ -61,13 +72,10 @@ class IndexController extends CommonController
         $em->persist($user);
         $em->flush();*/
 
-
         //$user->roles->add($status);
         /*$roles = $user->getRolesObj();
         foreach ($roles as $role) {
-
         }*/
-
 
         // $countries = Intl::getRegionBundle()->getCountryNames('es');
         //var_dump($countries);
@@ -76,7 +84,6 @@ class IndexController extends CommonController
         //http://userguide.icu-project.org/formatparse/datetime for date formats
         $formatter->setPattern("EEEE d MMMM Y");
         echo $formatter->format(time());*/
-
 
         //@todo improve this JS includes should be added using twig
         $extraJS[] = api_get_jquery_libraries_js(array('bxslider'));
@@ -122,8 +129,6 @@ class IndexController extends CommonController
           echo $course->getCode() . "\n";
           }
           exit; */
-
-
         if (api_get_setting('allow_terms_conditions') == 'true') {
             unset($_SESSION['term_and_condition']);
         }
@@ -209,11 +214,6 @@ class IndexController extends CommonController
         $response = $app['template']->render_template('auth/login.tpl');
 
         return new Response($response, 200, array());
-    }
-
-    public function loginCheckAction(Application $app)
-    {
-
     }
 
     /**

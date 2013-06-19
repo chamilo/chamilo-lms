@@ -347,7 +347,7 @@ if ($is_allowedToTrack) {
                             "INNER JOIN $table_user u " .
                             "ON u.user_id = sd.user_id " .
                             "WHERE sd.c_id = $course_id AND sd.lp_id=$contentId group by u.user_id";
-                    //error_log($sql2,0);
+
                     $result2 = Database::query($sql2);
 
                     if (Database::num_rows($result2) > 0) {

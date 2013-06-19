@@ -566,7 +566,6 @@ if (!isset($_SESSION['login_as'])) {
                 //We update the course tracking table
                 $sql = "UPDATE $course_tracking_table  SET logout_course_date = '$time', counter = counter+1
                         WHERE course_access_id = ".intval($i_course_access_id)." AND session_id = ".api_get_session_id();
-                //error_log($sql);
                 Database::query($sql);
             } else {
                 $sql="INSERT INTO $course_tracking_table (c_id, user_id, login_course_date, logout_course_date, counter, session_id)" .

@@ -1,20 +1,17 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Legal class
- *
- * @version 1.0
- * @package chamilo.legal
- *
-*/
-/**
- * Class
  * @package chamilo.legal
  */
-class LegalManager {
-	private function __construct () {
+class LegalManager
+{
+	private function __construct ()
+    {
 		//void
 	}
+
 	/**
 	 * Add a new Term and Condition
 	 * @param int language id
@@ -23,7 +20,8 @@ class LegalManager {
 	 * @param string explain changes
 	 * @return boolean sucess
 	 */
-	public static function add ($language, $content, $type, $changes) {
+	public static function add ($language, $content, $type, $changes)
+    {
 		$legal_table = Database::get_main_table(TABLE_MAIN_LEGAL);
 		$last = self::get_last_condition($language);
 		$language = Database::escape_string($language);

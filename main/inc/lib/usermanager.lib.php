@@ -1148,11 +1148,10 @@ class UserManager
      * @param     string     The username
      * @return array All user information as an associative array
      */
-    public static function get_user_info_simple($username) {
+    public static function get_user_info_simple($username)
+    {
         static $user_list = array();
-        //error_log($sql);
         if (isset($user_list[$username])) {
-            //error_log('loaded with static');
             return $user_list[$username];
         }
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);

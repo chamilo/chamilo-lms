@@ -384,7 +384,6 @@ class Database
                 $message .= $query;
                 echo $message;
                 echo '</pre>';
-                //error_log($message);
             }
         }
         */

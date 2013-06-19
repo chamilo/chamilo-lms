@@ -83,7 +83,9 @@
         "natxet/CssMin": "dev-master",
         "leafo/lessphp": "dev-master",
         "mheap/silex-assetic": "1.0.*@dev",
-        "filp/whoops": "dev-master"
+        "filp/whoops": "dev-master",
+        "symfony/monolog-bridge": "~2.3",
+        "sensio/framework-extra-bundle": "2.3.*@dev"
     },
     "scripts": {
         "post-install-cmd": "ChamiloLMS\\Composer\\Tasks::postInstall",

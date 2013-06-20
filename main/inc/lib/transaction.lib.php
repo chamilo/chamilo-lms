@@ -182,7 +182,7 @@ abstract class TransactionLog {
    * Persists data to the transaction data table if needed.
    */
   public function saveData() {
-    $data = $this->loadData();
+    $this->loadData();
     if (empty($this->data)) {
       // Nothing to save.
       return;
@@ -199,19 +199,18 @@ abstract class TransactionLog {
   }
 
   /**
-   * Loading for data table.
-   *
-   * @return array
-   *   Branch transaction data as array corresponding to current object.
+   * Loads information from data table into the object.
    */
   public function loadData() {
     if (empty($this->id)) {
-      // No id, no data.
-      return array();
+      return;
     }
-    $results = Database::select('id', self::$data_table, array('where' => array('id = ?' => array($this->id))));
+    $results = Database::select('data', self::$data_table, array('where' => array('id = ?' => array($this->id))));
     foreach ($results as $id => $result) {
       $results[$id]['data'] = unserialize($results[$id]['data']);
+      if (!empty($results[$id]['data'])) {
+        $this->data = $results[$id]['data'];
+      }
     }
   }
 

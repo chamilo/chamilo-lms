@@ -86,7 +86,7 @@ if (api_is_multiple_url_enabled()) {
     }
 } else {
     $homep_new = '';
-    $homep = api_get_path(SYS_PATH).'home/'; //homep for Home Path
+    $homep = api_get_path(SYS_DATA_PATH).'home/'; //homep for Home Path
 }
 
 $topf 	 = 'register_top'; //topf for Top File

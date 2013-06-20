@@ -153,6 +153,8 @@ define('LOG_COURSE_DELETE',                     'course_deleted');
 define('LOG_COURSE_CREATE',                     'course_created');
 define('LOG_USER_DELETE',                       'user_deleted');
 define('LOG_USER_CREATE',                       'user_created');
+define('LOG_USER_ENABLE',                       'user_enable');
+define('LOG_USER_DISABLE',                      'user_disable');
 define('LOG_SESSION_CREATE',                    'session_created');
 define('LOG_SESSION_DELETE',                    'session_deleted');
 define('LOG_SESSION_CATEGORY_CREATE',           'session_category_created');
@@ -1070,6 +1072,7 @@ function _api_format_user($user, $add_password = false) {
     $result['user_id']          = $user_id;
     $result['official_code']    = $user['official_code'];
     $result['status']           = $user['status'];
+    $result['active']           = $user['active'];
     $result['auth_source']      = $user['auth_source'];
 
     if (isset($user['username'])) {

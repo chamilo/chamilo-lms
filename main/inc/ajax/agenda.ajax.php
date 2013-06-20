@@ -3,7 +3,7 @@
 /**
  * Responses to AJAX calls
  */
-$type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin')) ? $_REQUEST['type'] : 'personal';
+$type = isset($_GET['type']) && in_array($_GET['type'], array('personal', 'course', 'admin')) ? $_GET['type'] : 'personal';
 
 if ($type == 'personal') {
     $cidReset = true; // fixes #5162
@@ -14,7 +14,7 @@ require_once '../global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php';
 
-$action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
+$action = isset($_GET['a']) ? $_GET['a'] : null;
 
 if ($type == 'course') {
     api_protect_course_script(true);
@@ -80,7 +80,7 @@ switch ($action) {
             $uid = intval($user_id);
         }
         */
-        $events = $agenda->get_events($_REQUEST['start'], $_REQUEST['end'], api_get_course_int_id(), $group_id, $user_id);
+        $events = $agenda->get_events($_GET['start'], $_GET['end'], api_get_course_int_id(), $group_id, $user_id);
         echo $events;
         break;
     case 'get_user_agenda':

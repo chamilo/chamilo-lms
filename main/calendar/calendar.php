@@ -95,7 +95,7 @@ table.calendar td
     } // end if
 /* ]]> */
 </script>
-<script type="text/javascript" src="tbl_change.js"></script>
+<script src="<?php echo api_get_path(WEB_LIBRARY_PATH).'javascript/calendar/tbl_change.js'; ?>"></script>
 <script type="text/javascript">
 /* <![CDATA[ */
 var month_names = new Array(

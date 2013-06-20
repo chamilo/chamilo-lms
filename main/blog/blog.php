@@ -194,7 +194,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post')
 /*
 	DISPLAY
 */
-$htmlHeadXtra[] = '<script src="tbl_change.js" type="text/javascript"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/calendar/tbl_change.js"></script>';
 
 // Set bredcrumb
 switch ($current_page)

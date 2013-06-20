@@ -2497,16 +2497,18 @@ function show_add_form($id = '', $type = null)
 {
     $showImg = Display::return_icon('div_show.gif');
     $hideImg = Display::return_icon('div_hide.gif');
-
-    global $MonthsLong;
+    $MonthsLong = api_get_months_long();
     $htmlHeadXtra[] = to_javascript();
     // the default values for the forms
-    if (isset($_GET['originalresource']) && $_GET['originalresource'] !== 'no') {
+    //if (isset(!$_GET['originalresource']) && $_GET['originalresource'] !== 'no') {
+    if (!isset($_GET['originalresource'])) {
         $day = date('d');
         $month = date('m');
         $year = date('Y');
         $hours = 9;
         $minutes = '00';
+        $title = null;
+        $content = null;
 
         $end_day = date('d');
         $end_month = date('m');
@@ -2537,6 +2539,8 @@ function show_add_form($id = '', $type = null)
         $to = $form_elements['to'];
         $repeat = $form_elements['repeat'];
     }
+
+
 
     //	switching the send to all/send to groups/send to users
     if (isset($_POST['To']) && $_POST['To']) {
@@ -2622,15 +2626,12 @@ function show_add_form($id = '', $type = null)
     $origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : null;
     $course_url = empty($course_info) ? null : api_get_cidreq();
     ?>
-
-<!-- START OF THE FORM  -->
-
     <form class="form-horizontal" enctype="multipart/form-data"  action="<?php echo api_get_self().'?type='.Security::remove_XSS($type).'&origin='.$origin.'&'.$course_url."&sort=asc&toolgroup=".api_get_group_id().'&action='.Security::remove_XSS($_GET['action']); ?>" method="post" name="new_calendar_item">
         <input type="hidden" name="id" value="<?php if (isset($id)) echo $id; ?>" />
         <input type="hidden" name="action" value="<?php if (isset($_GET['action'])) echo $_GET['action']; ?>" />
         <input type="hidden" name="id_attach" value="<?php echo isset($_REQUEST['id_attach']) ? intval($_REQUEST['id_attach']) : null; ?>" />
-<input type="hidden" name="sort" value="asc"/>
-<input type="hidden" name="submit_event" value="ok"/>
+        <input type="hidden" name="sort" value="asc"/>
+        <input type="hidden" name="submit_event" value="ok"/>
     <?php
     // The form title
     if (isset($id) AND $id <> '') {
@@ -2655,8 +2656,6 @@ function show_add_form($id = '', $type = null)
 							</div>
 						</div>';
 
-
-
     // selecting the users / groups
     $group_id = api_get_group_id();
     if (empty($id)) {
@@ -2672,7 +2671,7 @@ function show_add_form($id = '', $type = null)
         show_to_form($to);
         echo '</div>
 				</div>';
-    }
+        }
     }
 
     // start date and time

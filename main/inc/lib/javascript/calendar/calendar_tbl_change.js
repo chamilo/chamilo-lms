@@ -13,13 +13,13 @@ var clock_set = 0;
  * @param   string      field name
  */
 function openCalendar(form, field) {
-    window.open("./calendar.php", "calendar", "width=260,height=250,status=no,toolbar=no");
-	day = eval("document." + form + "." + field + "day.options["+ "document." + form + "." + field + "day.selectedIndex].value");
+    window.open("./calendar_view.php", "calendar", "width=260,height=250,status=no");
+    day = eval("document." + form + "." + field + "day.options["+ "document." + form + "." + field + "day.selectedIndex].value");
     month = eval("document." + form + "." + field + "month.options["+ "document." + form + "." + field + "month.selectedIndex].value");
-   	month = month-1;
+    month = month-1;
     year = eval("document." + form + "." + field + "year.options["+ "document." + form + "." + field + "year.selectedIndex].value");
-	formName = form;
-	fieldName =field;
+    formName = form;
+    fieldName =field;
 }
 
 /**
@@ -58,9 +58,9 @@ function formatNum4(i) {
  */
 function initCalendar() {
     if (!year && !month && !day) {
-		day = window.opener.day;
-		month = window.opener.month;
-		year  = window.opener.year;
+        day = window.opener.day;
+        month = window.opener.month;
+        year  = window.opener.year;
         if (isNaN(year) || isNaN(month) || isNaN(day) || day == 0) {
             dt      = new Date();
             year    = dt.getFullYear();
@@ -147,13 +147,13 @@ function initCalendar() {
  * @param   string     date text
  */
 function returnDate(d,m,y) {
-	cmd = "window.opener.document."+window.opener.formName+"."+window.opener.fieldName+"day.selectedIndex = "+(d-1);
-	eval(cmd);
-	cmd = "window.opener.document."+window.opener.formName+"."+window.opener.fieldName+"month.selectedIndex = "+m;
-	eval(cmd);
-	date = new Date();
-	year = date.getFullYear()-1;
-	cmd = "window.opener.document."+window.opener.formName+"."+window.opener.fieldName+"year.selectedIndex = "+(y-year);
-	eval(cmd);
+    cmd = "window.opener.document."+window.opener.formName+"."+window.opener.fieldName+"day.selectedIndex = "+(d-1);
+    eval(cmd);
+    cmd = "window.opener.document."+window.opener.formName+"."+window.opener.fieldName+"month.selectedIndex = "+m;
+    eval(cmd);
+    date = new Date();
+    year = date.getFullYear()-1;
+    cmd = "window.opener.document."+window.opener.formName+"."+window.opener.fieldName+"year.selectedIndex = "+(y-year);
+    eval(cmd);
     window.close();
 }

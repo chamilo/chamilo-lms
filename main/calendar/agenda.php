@@ -41,7 +41,7 @@ if (empty($action)) {
 
 /* 	Resource linker */
 $_SESSION['source_type'] = 'Agenda';
-require_once '../resourcelinker/resourcelinker.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 
 if (!empty($addresources)) {
     // When the "Add Resource" button is clicked we store all the form data into a session

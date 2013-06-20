@@ -648,7 +648,10 @@ function display_monthcalendar($month, $year, $agenda_items)
  */
 function to_javascript()
 {
-    return "<script type=\"text/javascript\" language=\"javascript\">
+    $showImg = Display::return_icon('div_show.gif');
+    $hideImg = Display::return_icon('div_hide.gif');
+
+    return "<script type=\"text/javascript\">
 $(function() {
     //js used when generating images on the fly see function Tracking::show_course_detail()
     $(\".dialog\").dialog(\"destroy\");
@@ -667,8 +670,6 @@ $(function() {
         return false;
     });
 });
-
-<!-- Begin javascript menu swapper
 
 function move(fbox,	tbox)
 {
@@ -768,23 +769,23 @@ function move(fbox,	tbox)
 
 function checkDate(month, day, year)
 {
-  var monthLength =
+    var monthLength =
     new Array(31,28,31,30,31,30,31,31,30,31,30,31);
 
-  if (!day || !month || !year)
+    if (!day || !month || !year)
     return false;
 
-  // check for bisestile year
-  if (year/4 == parseInt(year/4))
+    // check for bisestile year
+    if (year/4 == parseInt(year/4))
     monthLength[1] = 29;
 
-  if (month < 1 || month > 12)
+    if (month < 1 || month > 12)
     return false;
 
-  if (day > monthLength[month-1])
+    if (day > monthLength[month-1])
     return false;
 
-  return true;
+    return true;
 }
 
 function mktime() {
@@ -820,79 +821,76 @@ function validate() {
 }
 
 function selectAll(cbList,bSelect,showwarning) {
-		var start_day = document.new_calendar_item.fday.value;
-		var start_month = document.new_calendar_item.fmonth.value;
-		var start_year = document.new_calendar_item.fyear.value;
-		var start_hour = document.new_calendar_item.fhour.value;
-		var start_minute = document.new_calendar_item.fminute.value;
-		var start_date = mktime(start_hour,start_minute,0,start_month,start_day,start_year)
+    var start_day = document.new_calendar_item.fday.value;
+    var start_month = document.new_calendar_item.fmonth.value;
+    var start_year = document.new_calendar_item.fyear.value;
+    var start_hour = document.new_calendar_item.fhour.value;
+    var start_minute = document.new_calendar_item.fminute.value;
+    var start_date = mktime(start_hour,start_minute,0,start_month,start_day,start_year)
 
-		var ends_day = document.new_calendar_item.end_fday.value;
-		var ends_month = document.new_calendar_item.end_fmonth.value;
-		var ends_year = document.new_calendar_item.end_fyear.value;
-		var ends_hour = document.new_calendar_item.end_fhour.value;
-		var ends_minute = document.new_calendar_item.end_fminute.value;
-		var ends_date = mktime(ends_hour,ends_minute,0,ends_month,ends_day,ends_year)
+    var ends_day = document.new_calendar_item.end_fday.value;
+    var ends_month = document.new_calendar_item.end_fmonth.value;
+    var ends_year = document.new_calendar_item.end_fyear.value;
+    var ends_hour = document.new_calendar_item.end_fhour.value;
+    var ends_minute = document.new_calendar_item.end_fminute.value;
+    var ends_date = mktime(ends_hour,ends_minute,0,ends_month,ends_day,ends_year)
 
-		msg_err1 = document.getElementById(\"err_date\");
-		msg_err2 = document.getElementById(\"err_start_date\");
-		msg_err3 = document.getElementById(\"err_end_date\");
-		msg_err4 = document.getElementById(\"err_title\");
-
-
-		var error = false;
-
-		if (start_date > ends_date) {
-			if ($('#empty_end_date').is(':checked')) {
-				msg_err1.innerHTML=\"\";
-				msg_err2.innerHTML=\"\";
-				msg_err3.innerHTML=\"\";
-
-			} else {
-				error = true;
-				msg_err1.style.display =\"block\";
-				msg_err1.innerHTML=\"".get_lang('EndDateCannotBeBeforeTheStartDate')."\";
-				msg_err2.innerHTML=\"\";
-				msg_err3.innerHTML=\"\";
-			}
-		}
-
-		if (!checkDate(start_month,start_day,start_year)) {
-			msg_err2.style.display =\"block\";
-			msg_err2.innerHTML=\"".get_lang('InvalidDate')."\";
-			msg_err1.innerHTML=\"\";
-			msg_err3.innerHTML=\"\";
-			error = true;
-		}
-
-		if (!checkDate(ends_month,ends_day,ends_year)) {
-			msg_err3.style.display =\"block\";
-			msg_err3.innerHTML=\"".get_lang('InvalidDate')."\";
-			msg_err1.innerHTML=\"\";msg_err2.innerHTML=\"\";
-			error = true;
-		}
-
-		if (document.new_calendar_item.title.value == '') {
-			msg_err4.style.display =\"block\";
-			msg_err4.innerHTML=\"".get_lang('FieldRequired')."\";
-			msg_err1.innerHTML=\"\";msg_err2.innerHTML=\"\";msg_err3.innerHTML=\"\";
-			error = true;
-		}
-		if (error == false) {
-            if (cbList) {
-    			if (cbList.length <	1) {
-    				if (!confirm(\"".get_lang('Send2All')."\")) {
-    					return false;
-    				}
-    			}
-    			for	(var i=0; i<cbList.length; i++)
-    			cbList[i].selected = cbList[i].checked = bSelect;
-			}
-			document.new_calendar_item.submit();
-		}
+    msg_err1 = document.getElementById(\"err_date\");
+    msg_err2 = document.getElementById(\"err_start_date\");
+    msg_err3 = document.getElementById(\"err_end_date\");
+    msg_err4 = document.getElementById(\"err_title\");
 
 
+    var error = false;
 
+    if (start_date > ends_date) {
+        if ($('#empty_end_date').is(':checked')) {
+            msg_err1.innerHTML=\"\";
+            msg_err2.innerHTML=\"\";
+            msg_err3.innerHTML=\"\";
+
+        } else {
+            error = true;
+            msg_err1.style.display =\"block\";
+            msg_err1.innerHTML=\"".get_lang('EndDateCannotBeBeforeTheStartDate')."\";
+            msg_err2.innerHTML=\"\";
+            msg_err3.innerHTML=\"\";
+        }
+    }
+
+    if (!checkDate(start_month,start_day,start_year)) {
+        msg_err2.style.display =\"block\";
+        msg_err2.innerHTML=\"".get_lang('InvalidDate')."\";
+        msg_err1.innerHTML=\"\";
+        msg_err3.innerHTML=\"\";
+        error = true;
+    }
+
+    if (!checkDate(ends_month,ends_day,ends_year)) {
+        msg_err3.style.display =\"block\";
+        msg_err3.innerHTML=\"".get_lang('InvalidDate')."\";
+        msg_err1.innerHTML=\"\";msg_err2.innerHTML=\"\";
+        error = true;
+    }
+
+    if (document.new_calendar_item.title.value == '') {
+        msg_err4.style.display =\"block\";
+        msg_err4.innerHTML=\"".get_lang('FieldRequired')."\";
+        msg_err1.innerHTML=\"\";msg_err2.innerHTML=\"\";msg_err3.innerHTML=\"\";
+        error = true;
+    }
+    if (error == false) {
+        if (cbList) {
+            if (cbList.length <	1) {
+                if (!confirm(\"".get_lang('Send2All')."\")) {
+                    return false;
+                }
+            }
+            for	(var i=0; i<cbList.length; i++)
+            cbList[i].selected = cbList[i].checked = bSelect;
+        }
+        document.new_calendar_item.submit();
+    }
 }
 
 function reverseAll(cbList)
@@ -905,43 +903,41 @@ function reverseAll(cbList)
 }
 
 function plus_attachment() {
-				if (document.getElementById('options').style.display == 'none') {
-					document.getElementById('options').style.display = 'block';
-					document.getElementById('plus').innerHTML='&nbsp;<img style=\"vertical-align:middle;\" src=\"../img/div_hide.gif\" alt=\"\" />&nbsp;".get_lang(
-        'AddAnAttachment'
-    )."';
-				} else {
-				document.getElementById('options').style.display = 'none';
-				document.getElementById('plus').innerHTML='&nbsp;<img style=\"vertical-align:middle;\" src=\"../img/div_show.gif\" alt=\"\" />&nbsp;".get_lang(
-        'AddAnAttachment'
-    )."';
-				}
+    if (document.getElementById('options').style.display == 'none') {
+        document.getElementById('options').style.display = 'block';
+        document.getElementById('plus').innerHTML='&nbsp;".$hideImg."&nbsp;".get_lang(
+'AddAnAttachment'
+)."';
+    } else {
+    document.getElementById('options').style.display = 'none';
+    document.getElementById('plus').innerHTML='&nbsp;".$showImg."&nbsp;".get_lang(
+'AddAnAttachment'
+)."';
+    }
 }
 
 function plus_repeated_event() {
-				if (document.getElementById('options2').style.display == 'none') {
-					document.getElementById('options2').style.display = 'block';
-					document.getElementById('plus2').innerHTML='&nbsp;<img style=\"vertical-align:middle;\" src=\"../img/div_hide.gif\" alt=\"\" />&nbsp;".get_lang(
-        'RepeatEvent'
+    if (document.getElementById('options2').style.display == 'none') {
+        document.getElementById('options2').style.display = 'block';
+        document.getElementById('plus2').innerHTML='&nbsp;".$hideImg."&nbsp;".get_lang(
+    'RepeatEvent'
     )."';
-				} else {
-				document.getElementById('options2').style.display = 'none';
-				document.getElementById('plus2').innerHTML='&nbsp;<img style=\"vertical-align:middle;\" src=\"../img/div_show.gif\" alt=\"\" />&nbsp;".get_lang(
-        'RepeatEvent'
+    } else {
+    document.getElementById('options2').style.display = 'none';
+    document.getElementById('plus2').innerHTML='&nbsp;".$showImg."&nbsp;".get_lang(
+    'RepeatEvent'
     )."';
-				}
+    }
 }
 
 /*
 function plus_ical() {
-				if (document.getElementById('icalform').style.display == 'none') {
-					document.getElementById('icalform').style.display = 'block';
-					document.getElementById('plusical').innerHTML='';
-				}
+    if (document.getElementById('icalform').style.display == 'none') {
+        document.getElementById('icalform').style.display = 'block';
+        document.getElementById('plusical').innerHTML='';
+    }
 }
 */
-
-//	End	-->
 </script>";
 }
 
@@ -952,15 +948,12 @@ function plus_ical() {
  */
 function user_group_filter_javascript()
 {
-    return "<script language=\"JavaScript\" type=\"text/JavaScript\">
-	<!--
+    return "<script type=\"text/JavaScript\">
 	function MM_jumpMenu(targ,selObj,restore){
 	  eval(targ+\".location='\"+selObj.options[selObj.selectedIndex].value+\"'\");
 	  if (restore) selObj.selectedIndex=0;
 	}
-	//-->
-	</script>
-	";
+	</script>";
 }
 
 /**
@@ -1670,6 +1663,7 @@ function load_edit_users($tool, $id)
 
     $sql = "SELECT * FROM $TABLE_ITEM_PROPERTY WHERE c_id = $course_id AND tool='$tool' AND ref='$id'";
     $result = Database::query($sql) or die(Database::error());
+    $to = array();
     while ($row = Database::fetch_array($result)) {
         $to_group = $row['to_group_id'];
         switch ($to_group) {
@@ -2501,11 +2495,13 @@ function display_one_agenda_item($agenda_id)
  */
 function show_add_form($id = '', $type = null)
 {
+    $showImg = Display::return_icon('div_show.gif');
+    $hideImg = Display::return_icon('div_hide.gif');
 
     global $MonthsLong;
     $htmlHeadXtra[] = to_javascript();
     // the default values for the forms
-    if ($_GET['originalresource'] !== 'no') {
+    if (isset($_GET['originalresource']) && $_GET['originalresource'] !== 'no') {
         $day = date('d');
         $month = date('m');
         $year = date('Y');
@@ -2523,7 +2519,7 @@ function show_add_form($id = '', $type = null)
         // When we clicked on the button to add resources we stored every form information into a session and now we
         // are doing the opposite thing: getting the information out of the session and putting it into variables to
         // display it in the forms.
-        $form_elements = $_SESSION['formelements'];
+        $form_elements = isset($_SESSION['formelements']) ? $_SESSION['formelements'] : null;
         $day = $form_elements['day'];
         $month = $form_elements['month'];
         $year = $form_elements['year'];
@@ -2893,7 +2889,7 @@ function show_add_form($id = '', $type = null)
 					<label class="control-label"></label>
 					<div class="controls">
 					<a href="javascript://" onclick="return plus_repeated_event();"><span id="plus2">
-	                       <img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('RepeatEvent').'</span>
+	                      '.$showImg.'&nbsp;'.get_lang('RepeatEvent').'</span>
 	                    </a>';
         ?>
     <table id="options2" style="display: none;">
@@ -3008,7 +3004,7 @@ function show_add_form($id = '', $type = null)
     echo '</div>
 			</div>';
 
-            if ($agendaObj->type == 'course') {
+            if (isset($agendaObj) && $agendaObj->type == 'course') {
 
     // File attachment
     echo '	<div class="control-group">

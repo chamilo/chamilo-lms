@@ -68,7 +68,7 @@ if ($view == "00000010")
 $interbreadcrumb[] = array("url" => api_get_self() . "?view=0000000", "name" => get_lang('ToolName'));
 
 include(api_get_path(LIBRARY_PATH) . "statsUtils.lib.inc.php");
-include("../resourcelinker/resourcelinker.inc.php");
+require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 
 $is_allowedToTrack = api_is_course_admin() || api_is_platform_admin() || api_is_drh();
 

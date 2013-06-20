@@ -37,6 +37,7 @@ require_once 'answer.class.php';
 $language_file = 'exercice';
 
 require_once '../inc/global.inc.php';
+$urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
 $current_course_tool  = TOOL_QUIZ;
 
 $nameTools = get_lang('Quiz');
@@ -363,7 +364,7 @@ if (!isset($objExercise) && isset($_SESSION['objExercise'])) {
 //3. $objExercise is not set, then return to the exercise list
 if (!is_object($objExercise)) {
 	if ($debug) {error_log('3. $objExercise was not set, kill the script'); };
-    header('Location: exercice.php');
+    header('Location: '.$urlMainExercise.'exercice.php');
     exit;
 }
 
@@ -371,7 +372,7 @@ if (!is_object($objExercise)) {
 if ($objExercise->review_answers) {
 	if ($remind_question_id == -1) {
         $paramsReminder = "exerciseId=$exerciseId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();
-        header('Location: exercise_reminder.php?'.$paramsReminder);
+        header('Location: '.$urlMainExercise.'exercise_reminder.php?'.$paramsReminder);
         exit;
 	}
 }
@@ -534,7 +535,7 @@ if ($debug) { error_log("6.1 params: $params"); };
 
 if ($reminder == 2 && empty($my_remind_list)) {
     if ($debug) { error_log("6.2 calling the exercise_reminder.php "); };
-	header('Location: exercise_reminder.php?'.$params);
+	header('Location: '.$urlMainExercise.'exercise_reminder.php?'.$params);
 	exit;
 }
 
@@ -714,7 +715,7 @@ if ($formSent && isset($_POST)) {
             }
         } else {
             if ($debug) { error_log('10. Redirecting to exercise_submit.php'); }
-            header("Location: exercise_submit.php?".api_get_cidreq()."&exerciseId=$exerciseId&origin=$origin");
+            header("Location: ".$urlMainExercise."exercise_submit.php?".api_get_cidreq()."&exerciseId=$exerciseId&origin=$origin");
             exit;
         }
     }
@@ -802,7 +803,7 @@ if (!empty ($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
 if (!empty ($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[]= array ('url' => '../gradebook/' . Security::remove_XSS($_SESSION['gradebook_dest']),'name' => get_lang('ToolGradebook'));
 }
-$interbreadcrumb[]= array ("url" => "exercice.php?gradebook=$gradebook",	"name" => get_lang('Exercices'));
+$interbreadcrumb[]= array ("url" => $urlMainExercise."exercice.php?gradebook=$gradebook",	"name" => get_lang('Exercices'));
 $interbreadcrumb[]= array ("url" => "#","name" => $objExercise->name);
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
@@ -821,7 +822,7 @@ $show_quiz_edition = $objExercise->added_in_lp();
 if (api_is_course_admin() && $origin != 'learnpath') {
     echo '<div class="actions">';
     if ($show_quiz_edition == false) {
-    	echo '<a href="exercise_admin.php?' . api_get_cidreq() . '&modifyExercise=yes&exerciseId=' . $objExercise->id . '">'.Display :: return_icon('settings.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
+    	echo '<a href="'.$urlMainExercise.'exercise_admin.php?' . api_get_cidreq() . '&modifyExercise=yes&exerciseId=' . $objExercise->id . '">'.Display :: return_icon('settings.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
     } else {
     	echo '<a href="#">'.Display::return_icon('settings_na.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
     }
@@ -955,7 +956,7 @@ if ($reminder == 2)  {
     } else {
     	if ($objExercise->review_answers) {
             if ($debug) { error_log('. redirecting to exercise_reminder.php '); }
-	    	header("Location: exercise_reminder.php?$params");
+	    	header("Location: ".$urlMainExercise."exercise_reminder.php?$params");
 	    	exit;
     	}
     }
@@ -972,7 +973,8 @@ if (!empty($error)) {
     Display :: display_error_message($error, false);
 } else {
     if (!empty($exercise_sound)) {
-        echo "<a href=\"../document/download.php?doc_url=%2Faudio%2F".Security::remove_XSS($exercise_sound)."\" target=\"_blank\">", "<img src=\"../img/sound.gif\" border=\"0\" align=\"absmiddle\" alt=", get_lang('Sound') . "\" /></a>";
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'document/download.php?doc_url=%2Faudio%2F'.Security::remove_XSS($exercise_sound).'" target="_blank">
+        '.Display::return_icon('sound.gif', get_lang('Sound')).'</a>';
     }
 
     // Get number of hotspot questions for javascript validation
@@ -1038,8 +1040,8 @@ if (!empty($error)) {
                     save_now(question_id, null, false);
                 });
                 var url = "";
-                if ('.$reminder.' == 1 ) {
-                    url = "exercise_reminder.php?'.$params.'&num='.$current_question.'";
+                if ('.$reminder.' == 1) {
+                    url = "'.$urlMainExercise.'exercise_reminder.php?'.$params.'&num='.$current_question.'";
                 } else if ('.$reminder.' == 2 ) {
                     url = "'.$urlMainExercise.'exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'&reminder=2";
                 } else {
@@ -1095,8 +1097,8 @@ if (!empty($error)) {
                         } else if (return_value == "one_per_page") {
 
                             var url = "";
-                            if ('.$reminder.' == 1 ) {
-                                url = "exercise_reminder.php?'.$params.'&num='.$current_question.'";
+                            if ('.$reminder.' == 1) {
+                                url = "'.$urlMainExercise.'exercise_reminder.php?'.$params.'&num='.$current_question.'";
                             } else if ('.$reminder.' == 2 ) {
                                 url = "'.$urlMainExercise.'exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'&reminder=2";
                             } else {

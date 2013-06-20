@@ -18,6 +18,7 @@ $language_file = array('exercice');
 // including the global library
 require_once '../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
+$urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
 
 // Setting the tabs
 $this_section = SECTION_COURSES;
@@ -27,7 +28,7 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 // Access control
 api_protect_course_script(true, false, true);
 
-$urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
+
 
 // including additional libraries
 require_once 'exercise.class.php';

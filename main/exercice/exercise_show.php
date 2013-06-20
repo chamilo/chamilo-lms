@@ -24,6 +24,7 @@ require_once 'exercise.class.php';
 require_once 'question.class.php'; //also defines answer type constants
 require_once 'answer.class.php';
 require_once '../inc/global.inc.php';
+$urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
 
 if (empty($origin) ) {
     $origin = isset($_REQUEST['origin']) ? $_REQUEST['origin'] : null;
@@ -113,8 +114,8 @@ if (!empty($gradebook) && $gradebook=='view') {
 
 $fromlink = '';
 
-$interbreadcrumb[]= array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
-$interbreadcrumb[]= array("url" => "overview.php?exerciseId=".$exercise_id.'&id_session='.api_get_session_id(),"name" => $objExercise->name);
+$interbreadcrumb[]= array("url" => $urlMainExercise."exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
+$interbreadcrumb[]= array("url" => $urlMainExercise."overview.php?exerciseId=".$exercise_id.'&id_session='.api_get_session_id(),"name" => $objExercise->name);
 $interbreadcrumb[]= array("url" => "#","name" => get_lang('Result'));
 
 $this_section = SECTION_COURSES;
@@ -175,7 +176,8 @@ if (!empty($track_exercise_info)) {
 			    echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
                       <tr>
                         <td colspan="2">';
-				Display::display_warning_message(get_lang('ThankYouForPassingTheTest').'<br /><br /><a href="exercice.php">'.(get_lang('BackToExercisesList')).'</a>', false);
+				Display::display_warning_message(get_lang('ThankYouForPassingTheTest').'<br /><br />
+				<a href="'.$urlMainExercise.'exercice.php">'.(get_lang('BackToExercisesList')).'</a>', false);
 				echo '</td>
 				</tr>
 				</table>';
@@ -703,14 +705,14 @@ if (is_array($arrid) && is_array($arrmarks)) {
 
 if ($is_allowedToEdit && $locked == false && !api_is_drh()) {
 	if (in_array($origin, array('tracking_course','user_course','correct_exercise_in_lp'))) {
-		echo '<form name="myform" id="myform" action="exercise_report.php?exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
+		echo '<form name="myform" id="myform" action="'.$urlMainExercise.'exercise_report.php?exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
 		echo '<input type = "hidden" name="lp_item_id"       value="'.$learnpath_id.'">';
 		echo '<input type = "hidden" name="lp_item_view_id"  value="'.$lp_item_view_id.'">';
 		echo '<input type = "hidden" name="student_id"       value="'.$student_id.'">';
 		echo '<input type = "hidden" name="total_score"      value="'.$totalScore.'"> ';
 		echo '<input type = "hidden" name="my_exe_exo_id"    value="'.$exercise_id.'"> ';
 	} else {
-		echo ' <form name="myform" id="myform" action="exercise_report.php?exerciseId='.$exercise_id.'&filter=1&comments=update&exeid='.$id.'" method="post">';
+		echo ' <form name="myform" id="myform" action="'.$urlMainExercise.'exercise_report.php?exerciseId='.$exercise_id.'&filter=1&comments=update&exeid='.$id.'" method="post">';
 	}
 	if ($origin !='learnpath' && $origin!='student_progress') {
 

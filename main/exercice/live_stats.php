@@ -23,7 +23,7 @@ if (!$result) {
 	api_not_allowed(true);
 }
 
-$interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook", "name" => get_lang('Exercices'));
+$interbreadcrumb[] = array ("url" => "exercice.php", "name" => get_lang('Exercices'));
 $interbreadcrumb[] = array ("url" => "admin.php?exerciseId=$exercise_id","name" => $objExercise->name);
 
 //Add the JS needed to use the jqgrid
@@ -72,7 +72,7 @@ function refreshGrid() {
 
 $(function() {
     <?php
-        echo Display::grid_js('live_stats',  $url, $columns, $column_model, $extra_params, array(), $action_links,true);
+        echo Display::grid_js('live_stats',  $url, $columns, $column_model, $extra_params, array(), null, true);
     ?>
     refreshGrid();
 });

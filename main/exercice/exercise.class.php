@@ -2662,7 +2662,7 @@ class Exercise
 
                 $('#counter_to_redirect').epiclock({
                     mode: $.epiclock.modes.countdown,
-                    offset: {seconds: 5},
+                    offset: { seconds: 5 },
                     format: 's'
                 }).bind('timer', function () {
                     send_form();
@@ -2684,7 +2684,7 @@ class Exercise
                 $('#exercise_form').hide();
                 $('#expired-message-id').show();
 
-                //Fixes bug #5263
+                // Fixes bug #5263.
                 $('#num_current_id').attr('value', '".$this->selectNbrQuestions()."');
                 open_clock_warning();
             }
@@ -2705,6 +2705,7 @@ class Exercise
                 }).bind('timer', function () {
                     onExpiredTimeExercise();
                 });
+
 	       		$('#submit_save').click(function () {});
 	    });
 	    </script>";
@@ -5268,6 +5269,7 @@ class Exercise
     }
 
     /**
+     * Returns a time limit message
      * @return string
      */
     public function returnTimeLeftDiv()

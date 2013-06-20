@@ -65,7 +65,8 @@ $show_announcement_list = true;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 // Form was posted?
-if (isset ($_POST['action'])) {
+$action_todo = false;
+if (isset($_POST['action'])) {
     $action_todo = true;
 }
 

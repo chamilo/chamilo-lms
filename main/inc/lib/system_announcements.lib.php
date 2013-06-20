@@ -272,9 +272,8 @@ class SystemAnnouncementManager {
 		$now = api_get_utc_datetime();
 		$sql = "SELECT *, IF( '$now'  >= date_start AND '$now' <= date_end, '1', '0') AS visible FROM $db_table";
 
-		global $_configuration;
 		$current_access_url_id = 1;
-		if ($_configuration['multiple_access_urls']) {
+		if (api_is_multiple_url_enabled()) {
 			$current_access_url_id = api_get_current_access_url_id();
 		}
 		$sql .= " WHERE access_url_id = '$current_access_url_id' ";

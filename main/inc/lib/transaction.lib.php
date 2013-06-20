@@ -187,7 +187,7 @@ abstract class TransactionLog {
       // Nothing to save.
       return;
     }
-    Database::delete(self::$data_table, array('where' => array('id = ?' => $this->id)));
+    Database::delete(self::$data_table, array('id = ?' => $this->id));
     Database::insert(self::$data_table, array('id' => $this->id, 'data' => serialize($this->data)));
   }
 
@@ -195,7 +195,7 @@ abstract class TransactionLog {
    * Deletes a transaction by id.
    */
   public function delete() {
-    return Database::delete(self::$table, array('where' => array('id = ?' => $this->id)));
+    return Database::delete(self::$table, array('id = ?' => $this->id));
   }
 
   /**

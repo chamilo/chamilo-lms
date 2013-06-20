@@ -386,6 +386,9 @@ class TransactionLogController {
     foreach ($exported_transactions as $exported_transaction) {
       $transaction_data = json_decode($exported_transaction, TRUE);
       $class_name = $transaction_actions_map[$transaction_data['action']]['class'];
+      // Set the right id in the new system.
+      $transaction_data['transaction_id'] = $transaction_data['id'];
+      unset($transaction_data['id']);
       $transaction = new $class_name($transaction_data);
       $transaction->save();
       $added_transactions[] = $transaction->id;
@@ -457,7 +460,6 @@ class ExerciseAttemptTransactionLog extends TransactionLog {
   /**
    * {@inheritdoc}
    * @todo Review.
-   * @todo Import Log?
    */
   public function import() {
     if ($this->status_id == TransactionLog::STATUS_LOCAL) {

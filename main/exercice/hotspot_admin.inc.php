@@ -66,7 +66,7 @@ if ($modifyIn) {
     unset($buttonBack);
 }
 
-$hotspot_admin_url = api_get_path(WEB_CODE_PATH) . 'exercice/admin.php?' . api_get_cidreq() . '&exerciseId=' . $exerciseId;
+$hotspot_admin_url = api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidreq().'&exerciseId='.$exerciseId;
 
 // the answer form has been submitted
 if ($submitAnswers || $buttonBack) {

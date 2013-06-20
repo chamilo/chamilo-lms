@@ -529,6 +529,7 @@ if (!empty($exercise_stat_info['questions_to_check'])) {
 }
 if ($debug) { error_log("6.0 my_remind_list array: ".print_r($my_remind_list, 1)); }
 $params = "exe_id=$exe_id&exerciseId=$exerciseId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();
+
 if ($debug) { error_log("6.1 params: $params"); };
 
 if ($reminder == 2 && empty($my_remind_list)) {
@@ -607,6 +608,8 @@ if ($time_control) {
 if ($debug) error_log('8. Question list loaded '.print_r($questionList, 1));
 
 $question_count = $objExercise->getCountCompressedQuestionList();
+
+$urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
 
 if ($formSent && isset($_POST)) {
     if ($debug) { error_log('9. $formSent was sent'); }
@@ -691,7 +694,7 @@ if ($formSent && isset($_POST)) {
                         }
                     }
                 }
-                header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
+                header("Location: ".$urlMainExercise."exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
                 exit;
             } else {
                 //Time control is only enabled for ONE PER PAGE
@@ -706,7 +709,7 @@ if ($formSent && isset($_POST)) {
                     }
                 }
                 if ($debug) { error_log('10. Redirecting to exercise_show.php'); }
-                header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
+                header("Location: ".$urlMainExercise."exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
                 exit;
             }
         } else {
@@ -768,10 +771,10 @@ if ($question_count != 0) {
 	                }
 	            }
 	            if ($objExercise->review_answers) {
-	            	header('Location: exercise_reminder.php?'.$params);
+	            	header('Location: '.$urlMainExercise.'exercise_reminder.php?'.$params);
 	            	exit;
 	            } else {
-	            	header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
+	            	header("Location: ".$urlMainExercise."exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
                     exit;
 	            }
 	        }
@@ -959,10 +962,11 @@ if ($reminder == 2)  {
 }
 
 if ($objExercise->review_answers) {
-	$script_php = 'exercise_reminder.php';
+	$script_php = $urlMainExercise.'exercise_reminder.php';
 } else {
-	$script_php = 'exercise_result.php';
+	$script_php = $urlMainExercise.'exercise_result.php';
 }
+
 
 if (!empty($error)) {
     Display :: display_error_message($error, false);
@@ -1019,12 +1023,12 @@ if (!empty($error)) {
     		});
 
 			function previous_question(question_num) {
-				url = "exercise_submit.php?'.$params.'&num="+question_num;
+				url = "'.$urlMainExercise.'exercise_submit.php?'.$params.'&num="+question_num;
 				window.location = url;
 			}
 
             function previous_question_and_save(previous_question_id, question_id_to_save) {
-                url = "exercise_submit.php?'.$params.'&num="+previous_question_id;
+                url = "'.$urlMainExercise.'exercise_submit.php?'.$params.'&num="+previous_question_id;
                 //Save the current question
                 save_now(question_id_to_save, url);
             }
@@ -1037,9 +1041,9 @@ if (!empty($error)) {
                 if ('.$reminder.' == 1 ) {
                     url = "exercise_reminder.php?'.$params.'&num='.$current_question.'";
                 } else if ('.$reminder.' == 2 ) {
-                    url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'&reminder=2";
+                    url = "'.$urlMainExercise.'exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'&reminder=2";
                 } else {
-                    url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'";
+                    url = "'.$urlMainExercise.'exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'";
                 }
                 //$("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('save.png', get_lang('Saved'), array(), ICON_SIZE_SMALL)).'");
                 window.location = url;
@@ -1079,7 +1083,7 @@ if (!empty($error)) {
           		$("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('loading1.gif')).'");
 
                 $.ajax({
-                    type:"post",
+                    type : "post",
                     async: false,
                     url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=save_exercise_by_now",
                     data: "'.$params.'&type=simple&question_id="+question_id+"&"+my_choice+"&"+hotspot+"&"+remind_list,
@@ -1094,9 +1098,9 @@ if (!empty($error)) {
                             if ('.$reminder.' == 1 ) {
                                 url = "exercise_reminder.php?'.$params.'&num='.$current_question.'";
                             } else if ('.$reminder.' == 2 ) {
-                                url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'&reminder=2";
+                                url = "'.$urlMainExercise.'exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'&reminder=2";
                             } else {
-                                url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'";
+                                url = "'.$urlMainExercise.'exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'";
                             }
 
                             if (url_extra) {
@@ -1187,7 +1191,7 @@ if (!empty($error)) {
         $remind_list = explode(',', $exercise_stat_info['questions_to_check']);
     }
 
-    echo '<form id="exercise_form" method="post" action="'.api_get_self().'?'.api_get_cidreq().'&autocomplete=off&gradebook='.$gradebook."&exerciseId=".$exerciseId .'" name="frm_exercise" '.$onsubmit.'>
+    echo '<form id="exercise_form" method="post" action="'.api_get_path(WEB_CODE_PATH).'exercice/exercise_submit.php?'.api_get_cidreq().'&autocomplete=off&gradebook='.$gradebook."&exerciseId=".$exerciseId .'" name="frm_exercise" '.$onsubmit.'>
      <input type="hidden" name="formSent"				value="1" />
      <input type="hidden" name="exerciseId" 			value="'.$exerciseId . '" />
      <input type="hidden" name="num" 					value="'.$current_question.'" id="num_current_id" />
@@ -1197,7 +1201,6 @@ if (!empty($error)) {
      <input type="hidden" name="learnpath_item_id" 		value="'.$learnpath_item_id . '" />
      <input type="hidden" name="learnpath_item_view_id" value="'.$learnpath_item_view_id . '" />';
     $objExercise->renderQuestionList($questionList, $current_question, $exerciseResult, $attempt_list, $remind_list);
-
     echo '</form>';
 }
 

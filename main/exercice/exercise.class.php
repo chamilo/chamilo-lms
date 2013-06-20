@@ -5272,13 +5272,11 @@ class Exercise
      */
     public function returnTimeLeftDiv()
     {
-        $html = '<div id="clock_warning" style="display:none">'.Display::return_message(
-            get_lang('ReachedTimeLimit'),
-            'warning'
-        ).' '.sprintf(
-            get_lang('YouWillBeRedirectedInXSeconds'),
+        $message = Display::return_message(
+            get_lang('ReachedTimeLimit'), 'warning' ).' '.sprintf(get_lang('YouWillBeRedirectedInXSeconds'),
             '<span id="counter_to_redirect" class="red_alert"></span>'
-        ).'</div>';
+        );
+        $html = '<div id="clock_warning" style="display:none">'.$message.'</div>';
         $html .= '<div class="row"><div class="pull-right"><div id="exercise_clock_warning" class="well count_down"></div></div></div>';
 
         return $html;

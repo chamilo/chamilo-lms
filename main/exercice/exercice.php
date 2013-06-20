@@ -22,7 +22,7 @@ $language_file = array('exercice', 'tracking');
 require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 
-require_once '../gradebook/lib/be.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
 
 // Setting the tabs
 $this_section = SECTION_COURSES;
@@ -627,7 +627,8 @@ if (!empty($exercise_list)) {
                         $class_tip = 'link_tooltip';
                     }
                     //$class_tip = 'exercise_link';
-                    $url = $move.'<a '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$my_exercise_id.'" href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$my_exercise_id.'"><img src="../img/quiz.gif" /> '.$title.' </a>';
+                    $urlOverview =  'overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$my_exercise_id;
+                    $url = $move.'<a '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$my_exercise_id.'" href="'.$urlOverview.'">'.Display::return_icon('quiz.gif').' '.$title.' </a>';
 
                     $item = Display::tag('td', $url.' '.$session_img.$lp_blocked);
 

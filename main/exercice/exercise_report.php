@@ -17,7 +17,7 @@ $language_file = array('exercice');
 
 // including the global library
 require_once '../inc/global.inc.php';
-require_once '../gradebook/lib/be.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
 
 // Setting the tabs
 $this_section = SECTION_COURSES;
@@ -26,6 +26,8 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // Access control
 api_protect_course_script(true, false, true);
+
+$urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
 
 // including additional libraries
 require_once 'exercise.class.php';
@@ -223,7 +225,7 @@ if (isset($_REQUEST['comments']) && $_REQUEST['comments'] == 'update' && ($is_al
         MessageManager::send_message_simple($student_id, $subject, $message, api_get_user_id());
     }
 
-    //Updating LP score here
+    // Updating LP score here
     if (in_array($origin, array('tracking_course', 'user_course', 'correct_exercise_in_lp'))) {
         $sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '".floatval(
             $tot
@@ -231,12 +233,12 @@ if (isset($_REQUEST['comments']) && $_REQUEST['comments'] == 'update' && ($is_al
         Database::query($sql_update_score);
         if ($origin == 'tracking_course') {
             //Redirect to the course detail in lp
-            header('location: exercice.php?course='.Security :: remove_XSS($_GET['course']));
+            header('Location: '.$urlMainExercise.'exercice.php?course='.Security :: remove_XSS($_GET['course']));
             exit;
         } else {
-            //Redirect to the reporting
+            // Redirect to the reporting
             header(
-                'location: ../mySpace/myStudents.php?origin='.$origin.'&student='.$student_id.'&details=true&course='.$course_id.'&session_id='.$session_id
+                'Location: '.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?origin='.$origin.'&student='.$student_id.'&details=true&course='.$course_id.'&session_id='.$session_id
             );
             exit;
         }

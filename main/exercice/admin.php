@@ -58,6 +58,8 @@ require_once 'answer.class.php';
 $language_file = 'exercice';
 
 require_once '../inc/global.inc.php';
+$urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
+
 $current_course_tool = TOOL_QUIZ;
 $this_section = SECTION_COURSES;
 
@@ -215,7 +217,7 @@ if (!empty($cancelExercise)) {
     } else {
         // new exercise
         // goes back to the exercise list
-        header('Location: exercice.php');
+        header('Location: '.$urlMainExercise.'exercice.php');
         exit();
     }
 }
@@ -225,7 +227,7 @@ if (!empty($cancelQuestion)) {
     // if we are creating a new question from the question pool
     if (!$exerciseId && !$questionId) {
         // goes back to the question pool
-        header('Location: question_pool.php');
+        header('Location: '.$urlMainExercise.'question_pool.php');
         exit();
     } else {
         // goes back to the question viewing
@@ -251,7 +253,7 @@ if (!empty($clone_question) && !empty($objExercise->id)) {
     // Reloading tne $objExercise obj
     $objExercise->read($objExercise->id);
 
-    header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id);
+    header('Location: '.$urlMainExercise.'admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id);
     exit;
 }
 
@@ -280,9 +282,9 @@ if (!empty($gradebook) && $gradebook == 'view') {
     );
 }
 
-$interbreadcrumb[] = array("url" => "exercice.php", "name" => get_lang('Exercices'));
+$interbreadcrumb[] = array("url" => $urlMainExercise."exercice.php", "name" => get_lang('Exercices'));
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
-    $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$objExercise->id, "name" => $objExercise->name);
+    $interbreadcrumb[] = array("url" => $urlMainExercise."admin.php?exerciseId=".$objExercise->id, "name" => $objExercise->name);
 } else {
     $interbreadcrumb[] = array("url" => "#", "name" => $objExercise->name);
 }
@@ -471,7 +473,7 @@ $inATest = isset($exerciseId) && $exerciseId > 0;
 if ($inATest) {
     echo '<div class="actions">';
     if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid'])) {
-        echo '<a href="admin.php?exerciseId='.$exerciseId.'">'.Display::return_icon(
+        echo '<a href="'.$urlMainExercise.'admin.php?exerciseId='.$exerciseId.'">'.Display::return_icon(
             'back.png',
             get_lang('GoBackToQuestionList'),
             '',
@@ -480,14 +482,14 @@ if ($inATest) {
     }
 
     if (!isset($_GET['hotspotadmin']) && !isset($_GET['newQuestion']) && !isset($_GET['myid']) && !isset($_GET['editQuestion'])) {
-        echo '<a href="exercice.php?'.api_get_cidReq().'">'.Display::return_icon(
+        echo '<a href="'.$urlMainExercise.'exercice.php?'.api_get_cidReq().'">'.Display::return_icon(
             'back.png',
             get_lang('BackToExercisesList'),
             '',
             ICON_SIZE_MEDIUM
         ).'</a>';
     }
-    echo '<a href="overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&preview=1">'.Display::return_icon(
+    echo '<a href="'.$urlMainExercise.'overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&preview=1">'.Display::return_icon(
         'preview_view.png',
         get_lang('Preview'),
         '',
@@ -496,7 +498,7 @@ if ($inATest) {
 
     echo Display::url(
         Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_MEDIUM),
-        'exercise_report.php?'.api_get_cidReq().'&exerciseId='.$objExercise->id
+        $urlMainExercise.'exercise_report.php?'.api_get_cidReq().'&exerciseId='.$objExercise->id
     );
 
     if ($objExercise->edit_exercise_in_lp == false) {
@@ -507,7 +509,7 @@ if ($inATest) {
             ICON_SIZE_MEDIUM
         ).'</a>';
     } else {
-        echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon(
+        echo '<a href="'.$urlMainExercise.'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon(
             'settings.png',
             get_lang('ModifyExercise'),
             '',
@@ -532,7 +534,7 @@ if ($inATest) {
     if (isset($_GET['newQuestion'])) {
         // we are in create a new question from question pool not in a test
         echo '<div class="actions">';
-        echo '<a href="admin.php?'.api_get_cidreq().'">.'.Display::return_icon(
+        echo '<a href="'.$urlMainExercise.'admin.php?'.api_get_cidreq().'">.'.Display::return_icon(
             'back.png',
             get_lang('GoBackToQuestionList'),
             '',
@@ -542,7 +544,7 @@ if ($inATest) {
     } else {
         // If we are in question_poolbut not in an test, go back to question create in pool
         echo '<div class="actions">';
-        echo '<a href="question_pool.php">'.Display::return_icon(
+        echo '<a href="'.$urlMainExercise.'question_pool.php">'.Display::return_icon(
             'back.png',
             get_lang('GoBackToQuestionList'),
             '',

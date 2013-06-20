@@ -730,7 +730,7 @@ if ($origin =='student_progress') { ?>
 <?php
 } else if($origin=='myprogress') {
 ?>
-	<button type="button" class="save" onclick="top.location.href='../auth/my_progress.php?course=<?php echo api_get_course_id()?>'" value="<?php echo get_lang('Finish'); ?>" >
+	<button type="button" class="save" onclick="top.location.href='<?php echo api_get_path(WEB_CODE_PATH); ?>auth/my_progress.php?course=<?php echo api_get_course_id()?>'" value="<?php echo get_lang('Finish'); ?>" >
         <?php echo get_lang('Finish');?>
     </button>
 <?php
@@ -742,7 +742,7 @@ if ($origin != 'learnpath') {
 } else {
 	if (!isset($_GET['fb_type'])) {
 		$lp_mode =  $_SESSION['lp_mode'];
-		$url = '../newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$feedback_type;
+		$url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$feedback_type;
 		$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';
 		echo '<script type="text/javascript">'.$href.'</script>';
 

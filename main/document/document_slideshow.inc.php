@@ -70,8 +70,10 @@ $image_files_only = sort_files($array_to_search);
 $_SESSION['image_files_only'] = $image_files_only;
 
 function sort_files($table) {
-
 	global $tablename_direction, $accepted_extensions;
+    if (!is_array($accepted_extensions)) {
+        $accepted_extensions = array();
+    }
 	$temp = array();
 
 	foreach ($table as & $file_array) {

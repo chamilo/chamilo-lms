@@ -931,6 +931,7 @@ VALUES
 ('admins_can_set_users_pass', NULL, 'radio', 'security', 'true', 'AdminsCanChangeUsersPassTitle', 'AdminsCanChangeUsersPassComment', 1, 0, 1),
 ('template', NULL, 'text', 'stylesheets', 'default', 'DefaultTemplateTitle', 'DefaultTemplateComment', NULL, NULL, 1),
 ('log_transactions','exercise_attempt','checkbox','LogTransactions','false','LogTransactionsForExerciseAttempts','LogTransactionsForExerciseAttemptsComment',NULL,'LogTransactionsForExerciseAttemptsText', 1),
+('transaction_action_map','exercise_attempt','text','TransactionMapping','a:2:{s:5:"class";s:29:"ExerciseAttemptTransactionLog";s:10:"controller";s:39:"ExerciseAttemptTransactionLogController";}','TransactionMapForExerciseAttempts','TransactionMapForExerciseAttemptsComment',NULL,'TransactionMapForExerciseAttemptsText', 1),
 ('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.001','DatabaseVersion','', NULL, NULL, 0); -- base value, updated at end of file. Don't change here
 
 UNLOCK TABLES;
@@ -3525,4 +3526,4 @@ CREATE TABLE ext_log_entries (
 ) DEFAULT CHARSET=utf8;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.022' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.023' WHERE variable = 'chamilo_database_version';

@@ -61,13 +61,9 @@ abstract class TransactionLog {
    */
   public $action;
   /**
-   * The name of the related controller class.
-   */
-  protected $controller_class = 'TransactionLogController';
-  /**
    * A place to store an instace of the related controller class.
    */
-  public $controller;
+  protected $controller;
   /**
    * Transaction identifier.
    */
@@ -140,7 +136,15 @@ abstract class TransactionLog {
         $this->$field = $default_value;
       }
     }
-    $this->controller = new $this->controller_class();
+  }
+
+  public function getController() {
+    if (empty($this->controller)) {
+      $transaction_actions_map = TransactionLog::getTransactionMappingSettings($this->action);
+      $controller_class = $transaction_actions_map['controller'];
+      $this->controller = new $controller_class();
+    }
+    return $this->controller;
   }
 
   /**
@@ -231,6 +235,36 @@ abstract class TransactionLog {
   }
 
   /**
+   * Retrieves transaction mapping settings.
+   *
+   * @return array
+   *   Every item is an array of mapping settings, keyed by transaction action,
+   *   with the following keys:
+   *   - class: The transaction class name associated with this action.
+   *   - controller: The transaction controller class name associated with this
+   *     action.
+   */
+  public static function getTransactionMappingSettings($action = NULL, $reset = FALSE) {
+    static $settings;
+    if (isset($settings) && !$reset) {
+      if (!empty($action)) {
+        return $settings[$action];
+      }
+      return $settings;
+    }
+    $settings = array();
+    $transaction_mapping_settings = api_get_settings('TransactionMapping');
+    foreach ($transaction_mapping_settings as $setting) {
+      $maps = unserialize($setting['selected_value']);
+      $settings[$setting['subkey']] = $maps;
+    }
+    if (!empty($action)) {
+      return $settings[$action];
+    }
+    return $settings;
+  }
+
+  /**
    * Import this transaction to the system.
    *
    * @trows TransactionImportException
@@ -269,10 +303,6 @@ class TransactionLogController {
    * A local place to store the branch transaction data table name.
    */
   protected $data_table;
-  /**
-   * The associated transaction class name.
-   */
-  public $class;
 
   public function __construct() {
     $this->table = Database::get_main_table(TABLE_BRANCH_TRANSACTION);
@@ -290,7 +320,7 @@ class TransactionLogController {
    *   A list of TransactionLog object that match passed conditions.
    */
   public function load($db_fields) {
-    $class_name = $this->class;
+    $transaction_actions_map = TransactionLog::getTransactionMappingSettings();
     foreach ($db_fields as $db_field => $db_value) {
       $conditions[] = "$db_field = ?";
       $values[] = $db_value;
@@ -298,6 +328,7 @@ class TransactionLogController {
     $results = Database::select('*', $this->table, array('where' => array(implode(' AND ', $conditions) => $values)));
     $objects = array();
     foreach ($results as $result) {
+      $class_name = $transaction_actions_map[$result['action']]['class'];
       $objects[] = new $class_name($result);
     }
     return $objects;
@@ -350,10 +381,11 @@ class TransactionLogController {
    *   A set of transaction ids correctly added.
    */
   public function importToLog($exported_transactions) {
-    $class_name = $this->class;
+    $transaction_actions_map = TransactionLog::getTransactionMappingSettings();
     $added_transactions = array();
     foreach ($exported_transactions as $exported_transaction) {
       $transaction_data = json_decode($exported_transaction, TRUE);
+      $class_name = $transaction_actions_map[$transaction_data['action']]['class'];
       $transaction = new $class_name($transaction_data);
       $transaction->save();
       $added_transactions[] = $transaction->id;
@@ -392,11 +424,6 @@ class ExerciseAttemptTransactionLog extends TransactionLog {
    * {@inheritdoc}
    */
   public $action = 'exercise_attempt';
-
-  /**
-   * {@inheritdoc}
-   */
-  public $controller_class = 'ExerciseAttemptTransactionLogController';
 
   /**
    * {@inheritdoc}
@@ -502,11 +529,6 @@ class ExerciseAttemptTransactionLog extends TransactionLog {
  * Controller for exercise tool attempt transactions.
  */
 class ExerciseAttemptTransactionLogController extends TransactionLogController {
-  /**
-   * {@inheritdoc}
-   */
-  public $class = 'ExerciseAttemptTransactionLog';
-
   /**
    * Retrieves an individual exercise attempt transaction.
    *

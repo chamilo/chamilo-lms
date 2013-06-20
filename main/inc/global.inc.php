@@ -236,7 +236,7 @@ if ($alreadyInstalled) {
         Session::write('url_id', $_configuration['access_url']);
         Session::write('url_info', api_get_current_access_url_info($_configuration['access_url']));
     } else {
-        Session::write('url_id', -1);
+        Session::write('url_id', 1);
     }
 
     $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));

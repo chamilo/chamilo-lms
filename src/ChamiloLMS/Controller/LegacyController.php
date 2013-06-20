@@ -5,6 +5,8 @@ namespace ChamiloLMS\Controller;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use \ChamiloSession as Session;
 
 /**
  * Class LegacyController
@@ -12,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class LegacyController// extends Controller
+class LegacyController extends CommonController
 {
     public $section;
     public $language_files = array('courses', 'index', 'admin');
@@ -39,6 +41,74 @@ class LegacyController// extends Controller
             //assign('content', already done in display::display_header() and display_footer()
         } else {
             return $app->redirect('index');
+        }
+
+        return new Response($response, 200, array());
+    }
+
+     /**
+     * Handles default Chamilo scripts handled by Display::display_header() and display_footer()
+     *
+     * @param \Silex\Application $app
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response|void
+     */
+    public function includeAction(Application $app, $file)
+    {
+        /** @var  Request $request */
+        $request = $app['request'];
+
+        // get.
+        $_GET = $request->query->all();
+        // post.
+        $_POST = $request->request->all();
+        // echo $request->getMethod();
+
+        //$_REQUEST = $request->request->all();
+
+        // Getting language section
+        $info = pathinfo($file);
+        $section = $info['dirname'];
+
+        if ($section == 'admin') {
+            $this->cidReset();
+        }
+
+        $mainPath = $app['paths']['sys_root'].'main/';
+        if (is_file($mainPath.$file)) {
+
+            // Default values
+            $_course = api_get_course_info();
+            $_user = api_get_user_info();
+            $charset = 'UTF-8';
+            $debug = $app['debug'];
+            $text_dir = api_get_text_direction();
+
+            // Loading file
+            ob_start();
+            require_once '../inc/global.inc.php';
+            require_once $mainPath.$file;
+            $out = ob_get_contents();
+            ob_end_clean();
+
+            //var_dump($htmlHeadXtra);
+            if (isset($htmlHeadXtra)) {
+                $app['template']->addJsFiles($htmlHeadXtra);
+            }
+
+            if (isset($interbreadcrumb)) {
+                $app['template']->setBreadcrumb($interbreadcrumb);
+                $app['template']->loadBreadcrumbToTemplate();
+            }
+
+            if (isset($tpl)) {
+                $response = $app['twig']->render($app['default_layout']);
+            } else {
+                $app['template']->assign('content', $out);
+                $response = $app['twig']->render($app['default_layout']);
+            }
+        } else {
+            return $app->abort(404, 'File not found');
         }
 
         return new Response($response, 200, array());

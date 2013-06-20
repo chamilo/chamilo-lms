@@ -689,7 +689,8 @@ function api_get_path($path_type, $path = null) {
         $paths[WEB_CSS_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_CSS_PATH];
         $paths[WEB_IMG_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_IMG_PATH];
         $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
-        $paths[WEB_AJAX_PATH]           = $paths[WEB_CODE_PATH].$paths[WEB_AJAX_PATH];
+        //$paths[WEB_AJAX_PATH]           = $paths[WEB_CODE_PATH].$paths[WEB_AJAX_PATH];
+        $paths[WEB_AJAX_PATH]           = $paths[WEB_PUBLIC_PATH].'main/'.$paths[WEB_AJAX_PATH];
 
         $paths[WEB_PLUGIN_PATH]         = $paths[WEB_PATH].$paths[WEB_PLUGIN_PATH];
         $paths[WEB_ARCHIVE_PATH]        = $paths[WEB_PATH].$paths[WEB_ARCHIVE_PATH];
@@ -2229,9 +2230,11 @@ function api_delete_settings_params($params) {
  * @return string   Escaped version of $_SERVER['PHP_SELF']
  */
 function api_get_self() {
-    return htmlentities($_SERVER['PHP_SELF']);
+    $urlInfo = parse_url($_SERVER['REQUEST_URI']);
+    return $urlInfo['path'];
+    //return $_SERVER['REQUEST_URI'];
+    //return htmlentities($_SERVER['PHP_SELF']);
 }
-
 
 /* USER PERMISSIONS */
 

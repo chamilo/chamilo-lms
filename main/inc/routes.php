@@ -399,15 +399,28 @@ $afterLogin = function (Request $request) use ($app) {
 };
 
 /** Legacy controller */
-$app->get('/', 'legacy.controller:classicAction')
+$app->match('/', 'legacy.controller:classicAction', 'GET|POST')
     ->before($userAccessConditions)
     ->before($settingCourseConditions)
     ->before($userPermissionsInsideACourse);
 
-$app->post('/', 'legacy.controller:classicAction')
-    ->before($userAccessConditions)
-    ->before($settingCourseConditions)
-    ->before($userPermissionsInsideACourse);
+$checkLangs = function (Request $request) use ($app) {
+    /*$file = $request->get('file');
+    $info = pathinfo($file);
+    $section = $info['dirname'];*/
+};
+
+/** main files */
+$app->match('/main/{file}', 'legacy.controller:includeAction', 'GET|POST')
+    ->before($checkLangs)
+    ->before(
+        function() use ($app) {
+            // Do not load breadcrumbs
+            $app['template']->loadBreadcrumb = false;
+        })
+    ->assert('file', '.+')
+    ->assert('type', '.+');
+
 
 /** web/index */
 $app->match('/index', 'index.controller:indexAction', 'GET|POST')

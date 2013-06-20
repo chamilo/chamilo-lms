@@ -84,6 +84,7 @@ if (file_exists($configurationYMLFile)) {
 /** Setting Chamilo paths */
 
 $app['root_sys'] = isset($_configuration['root_sys']) ? $_configuration['root_sys'] : dirname(dirname(__DIR__)).'/';
+$app['sys_root'] = $app['root_sys'];
 $app['sys_data_path'] = isset($_configuration['sys_data_path']) ? $_configuration['sys_data_path'] : $app['root_sys'].'data/';
 $app['sys_config_path'] = isset($_configuration['sys_config_path']) ? $_configuration['sys_config_path'] : $app['root_sys'].'config/';
 $app['sys_temp_path'] = isset($_configuration['sys_temp_path']) ? $_configuration['sys_temp_path'] : $app['root_sys'].'temp/';
@@ -446,6 +447,7 @@ $language_files[] = 'accessibility';
 $language_files[] = 'index';
 $language_files[] = 'courses';
 $language_files[] = 'course_home';
+$language_files[] = 'exercice';
 
 if (isset($language_file)) {
     if (!is_array($language_file)) {

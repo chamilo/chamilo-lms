@@ -30,7 +30,7 @@ if (!empty($_course['language'])) {
         require_once $resource_linker_file;
     }
 }
-require_once '../exercice/hotpotatoes.lib.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
 
 /* FUNCTIONS */
 

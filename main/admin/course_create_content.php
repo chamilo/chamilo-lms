@@ -23,7 +23,8 @@ Display::display_header($tool_name);
 if (api_get_setting('server_type') != 'test') {
     echo get_lang('DummyCourseOnlyOnTestServer');
 } elseif (isset($_POST['action'])) {
-    require_once('../coursecopy/classes/DummyCourseCreator.class.php');
+    require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/DummyCourseCreator.class.php';
+
     $dcc = new DummyCourseCreator();
     $dcc->create_dummy_course($_POST['course_code']);
     echo get_lang('Done');

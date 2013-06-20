@@ -62,7 +62,7 @@ $nameTools = get_lang('adminHP');
 Display::display_header($nameTools,"Exercise");
 
 /** @todo probably wrong !!!! */
-require_once api_get_path(SYS_CODE_PATH).'/exercice/hotpotatoes.lib.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
 
 $urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
 ?>

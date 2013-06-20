@@ -449,7 +449,10 @@ function user_filter($name, $params, $row) {
  */
 function modify_filter($user_id, $url_params, $row) {
 	global $charset, $_admins_list, $delete_user_available;
-	$is_admin   = in_array($user_id,$_admins_list);
+    $is_admin = false;
+    if (is_array($_admins_list)) {
+	    $is_admin   = in_array($user_id,$_admins_list);
+    }
 	$statusname = api_get_status_langvars();
 	$user_is_anonymous = false;
     $current_user_status_label = $row['7'];
@@ -732,7 +735,7 @@ while ($row_admin = Database::fetch_row($res_admin)) {
 	$_admins_list[] = $row_admin[0];
 }
 
-// display advaced search form
+// display advanced search form
 $form = new FormValidator('advanced_search','get');
 
 $form->addElement('html','<div id="advanced_search_form" style="display:none;">');
@@ -906,4 +909,4 @@ $tpl = $app['template'];
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $form.$table_result.$extra_search_options);
-$tpl->display_one_col_template();
+//$tpl->display_one_col_template();

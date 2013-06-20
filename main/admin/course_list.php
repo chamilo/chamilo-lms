@@ -16,13 +16,15 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-require_once '../gradebook/lib/be/gradebookitem.class.php';
-require_once '../gradebook/lib/be/category.class.php';
+
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/category.class.php';
 
 /**
  * Get the number of courses which will be displayed
  */
-function get_number_of_courses() {
+function get_number_of_courses()
+{
     $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
     $sql = "SELECT COUNT(code) AS total_number_of_items FROM $course_table course";
 

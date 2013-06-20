@@ -727,7 +727,6 @@ class Template
                 $this->assign('plugin_'.$plugin_region, null);
             }
         }
-        return null;
     }
 
     /**

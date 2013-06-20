@@ -26,19 +26,19 @@ class LegacyController// extends Controller
      */
     public function classicAction(Application $app)
     {
-        //User is not allowed
+        // User is not allowed.
         if ($app['allowed'] == false) {
             return $app->abort(403);
         }
 
-        //Rendering page
+        // Rendering page.
         $response = $app['twig']->render($app['default_layout']);
 
-        //Classic style
+        // Classic style.
         if ($app['classic_layout'] == true) {
             //assign('content', already done in display::display_header() and display_footer()
         } else {
-           return $app->redirect('index');
+            return $app->redirect('index');
         }
 
         return new Response($response, 200, array());

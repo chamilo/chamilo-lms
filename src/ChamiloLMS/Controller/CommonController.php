@@ -6,7 +6,6 @@ use \ChamiloSession as Session;
 use Silex\Application;
 use Knp\Menu\Matcher\Matcher;
 
-
 /**
  * @package ChamiloLMS.CommonController
  * @author Julio Montoya <gugli100@gmail.com>
@@ -21,10 +20,11 @@ class CommonController
     */
     public function __construct()
     {
+
     }
 
     /**
-     *
+     * Reset course session
      */
     public function cidReset()
     {

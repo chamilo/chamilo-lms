@@ -6,10 +6,12 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Doctrine\ORM\NoResultException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
 /**
- * UserRepository
- *
+ * Class UserRepository
+ * @package Entity\Repository
  */
 class UserRepository extends EntityRepository implements UserProviderInterface
 {
@@ -33,7 +35,6 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         } catch (NoResultException $e) {
             throw new UsernameNotFoundException(
                 sprintf('Unable to find an active admin User identified by "%s".', $username),
-                null,
                 0,
                 $e
             );
@@ -43,7 +44,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
 
     /**
      * @param UserInterface $user
-     * @return mixed
+     * @return \Entity\User
      * @throws UnsupportedUserException
      */
     public function refreshUser(UserInterface $user)

@@ -461,9 +461,9 @@ class ExerciseAttemptTransactionLog extends TransactionLog {
    * @todo Review.
    */
   public function import() {
-    if ($this->status_id == TransactionLog::STATUS_LOCAL) {
+    if ($this->branch_id == TransactionLog::BRANCH_LOCAL) {
       // Do not allow importing local transactions.
-      return FALSE;
+      throw new TransactionImportException('Cannot import a local transaction');
     }
 
     // Review basic information.
@@ -492,7 +492,7 @@ class ExerciseAttemptTransactionLog extends TransactionLog {
       throw new TransactionImportException(sprintf('The included course id "%d" does not currently exist in the database.', $course_id));
     }
     if (empty($stat_info['exe_exo_id'])) {
-      throw new TransactionImportException('Undefined course id on stat information.');
+      throw new TransactionImportException('Undefined exercise id on stat information.');
     }
     $exercise_id = $stat_info['exe_exo_id'];
     $exercise = new Exercise($course_id);

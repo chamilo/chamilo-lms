@@ -57,18 +57,21 @@ required information to install it.</p>
 <a name="dependencies"></a>
 <h2>Dependencies - client-side</h2>
 <ul>
-  <li>Any modern browser (IE6 *excluded*). Safari is known to have small issues with the WYSIWYG editor.</li>
+  <li>Any modern browser (IE6 *excluded*). Safari is known to have minor issues with the WYSIWYG editor.</li>
   <li>Optional: Flash plugin (only required for a few features)</li>
 </ul>
 <h2>Dependencies - server-side</h2>
 <ul>
   <li> Apache 2+</li>
-  <li> PHP 5.3 or 5.4 with MySQL bindings and php-gd extension to allow Chamilo to resize pictures. The 
-  new components we have included from the Symfony framework highly depend on namespaces, a feature that appeared in PHP 5.3.0+</li>
+  <li> PHP 5.3 or 5.4 with MySQL bindings (mysqlnd is recommended) and php-gd extension to allow Chamilo to resize pictures. The 
+  new components we have included from the Symfony framework highly depend on namespaces, a feature that appeared in PHP 5.3.0</li>
   <li> MySQL 5.1+ or any version of MariaDB database server</li>
   <li>php5-intl</li>
+  <li>php5-imagick</li>
   <li>php5-curl (only required for a feature in the links tool)</li>
   <li>php5-mcrypt (only required for a feature in the survey tool)</li>
+  <li>php5-ldap (only required for connection to a LDAP server)</li>
+  <li>php5-xapian (only required for full-text indexing and search)</li>
 </ul><br />
 <a name="included_dependencies"></a>
 <h2>Included Dependencies</h2>

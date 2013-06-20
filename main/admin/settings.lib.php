@@ -1047,9 +1047,9 @@ function update_gradebook_score_display_custom_values($values) {
  * @param array $settings_by_access_list
  * @return FormValidator
  */
-function generate_settings_form($settings, $settings_by_access_list)
+function generate_settings_form($settings, $settings_by_access_list, $settings_to_avoid, $convert_byte_to_mega_list)
 {
-    global $_configuration, $settings_to_avoid, $convert_byte_to_mega_list;
+    global $_configuration;
     $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
     $form = new FormValidator('settings', 'post', 'settings.php?category='.Security::remove_XSS($_GET['category']));

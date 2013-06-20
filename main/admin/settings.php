@@ -153,7 +153,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 
     $settings = $settings_array['settings'];
     $settings_by_access_list = $settings_array['settings_by_access_list'];
-    $form = generate_settings_form($settings, $settings_by_access_list);
+    $form = generate_settings_form($settings, $settings_by_access_list, $settings_to_avoid, $convert_byte_to_mega_list);
 
     $message = array();
 
@@ -199,7 +199,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                 $settings_array = get_settings($my_category);
                 $settings = $settings_array['settings'];
                 $settings_by_access_list = $settings_array['settings_by_access_list'];
-                $form = generate_settings_form($settings, $settings_by_access_list);
+                $form = generate_settings_form($settings, $settings_by_access_list, $settings_to_avoid, $convert_byte_to_mega_list);
             }
         }
         $pdf_export_watermark_path = $_FILES['pdf_export_watermark_path'];

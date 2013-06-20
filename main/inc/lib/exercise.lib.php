@@ -1915,9 +1915,11 @@ class ExerciseLib
                 FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
                 WHERE 	exe_exo_id 		= $exercise_id AND
                         e.c_id 	= $courseId AND
-                        a.c_id = $courseId
+                        a.c_id = $courseId AND
                         e.session_id 	= $session_id AND
-                        question_id 	= $question_id AND status = '' LIMIT 1";
+                        question_id 	= $question_id AND
+                        status = ''
+                LIMIT 1";
         $result = Database::query($sql);
         $return = array();
         if ($result) {

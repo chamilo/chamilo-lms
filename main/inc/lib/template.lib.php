@@ -27,6 +27,7 @@ class Template
     public $jquery_ui_theme;
     public $force_plugin_load = true;
     public $navigation_array;
+    public $loadBreadcrumb = true;
 
     /**
      * @param Application $app
@@ -63,20 +64,8 @@ class Template
         //Setting course variables
         $this->setCourseParameters();
 
-        //Using global because all scripts have this variable
         global $interbreadcrumb;
-
-        if (isset($this->app['breadcrumb']) && !empty($this->app['breadcrumb'])) {
-            if (empty($interbreadcrumb)) {
-                $interbreadcrumb = $this->app['breadcrumb'];
-            } else {
-                $interbreadcrumb = array_merge($interbreadcrumb, $this->app['breadcrumb']);
-            }
-        }
-
-        if (!empty($interbreadcrumb)) {
-            $this->app['breadcrumb'] = $interbreadcrumb;
-        }
+        $this->setBreadcrumb($interbreadcrumb);
 
         //header and footer are showed by default
         $this->setFooter($app['template.show_footer']);
@@ -106,6 +95,25 @@ class Template
                     $this->plugin->load_plugin_lang_variables($course_plugin);
                 }
             }
+        }
+    }
+
+    /**
+     * @param array $interbreadcrumb
+     */
+    function setBreadcrumb($interbreadcrumb)
+    {
+
+        if (isset($this->app['breadcrumb']) && !empty($this->app['breadcrumb'])) {
+            if (empty($interbreadcrumb)) {
+                $interbreadcrumb = $this->app['breadcrumb'];
+            } else {
+                $interbreadcrumb = array_merge($interbreadcrumb, $this->app['breadcrumb']);
+            }
+        }
+
+        if (!empty($interbreadcrumb)) {
+            $this->app['breadcrumb'] = $interbreadcrumb;
         }
     }
 
@@ -170,6 +178,7 @@ class Template
     {
         $tpl = $this->get_template('layout/layout_1_col.tpl');
         $this->display($tpl);
+
     }
 
     /**
@@ -427,6 +436,23 @@ class Template
         }
     }
 
+    public function addJsFiles($htmlHeadXtra)
+    {
+        $extra_headers = null;
+        if (isset($htmlHeadXtra) && $htmlHeadXtra) {
+            foreach ($htmlHeadXtra as $this_html_head) {
+                $extra_headers .= $this_html_head."\n";
+            }
+        }
+
+        if (isset($this->app['extraJS'])) {
+            foreach ($this->app['extraJS'] as $this_html_head) {
+                $extra_headers .= $this_html_head."\n";
+            }
+        }
+        $this->assign('extra_headers', $extra_headers);
+    }
+
     /**
      * Sets JS files
      */
@@ -622,22 +648,31 @@ class Template
 
         $this->assign('portal_name', $portal_name);
 
-        //Menu
+        // Menu.
         $menu = $this->returnMenu();
 
         $this->assign('menu', $menu);
 
-        //Breadcrumb
-        $breadcrumb = $this->returnBreadcrumb();
+        // Breadcrumb
+        if ($this->loadBreadcrumb) {
+            $this->loadBreadcrumbToTemplate();
+        }
 
-        $this->assign('breadcrumb', $breadcrumb);
-
-        //Extra content
+        // Extra content
         $extra_header = null;
         if (!api_is_platform_admin()) {
             $extra_header = trim(api_get_setting('header_extra_content'));
         }
         $this->assign('header_extra_content', $extra_header);
+    }
+
+    /**
+     *
+     */
+    public function loadBreadcrumbToTemplate()
+    {
+        $breadcrumb = $this->returnBreadcrumb();
+        $this->assign('breadcrumb', $breadcrumb);
     }
 
     /**
@@ -751,7 +786,7 @@ class Template
         if (!empty($template)) {
             $this->app['default_layout'] = $template;
         }
-        $this->app->run();
+        //$this->app->run();
     }
 
     /**
@@ -959,7 +994,7 @@ class Template
 
         // Platform administration
         if (api_is_platform_admin(true)) {
-            $navigation['platform_admin']['url'] = api_get_path(WEB_CODE_PATH).'admin/';
+            $navigation['platform_admin']['url'] = api_get_path(WEB_CODE_PATH).'admin/index.php';
             $navigation['platform_admin']['title'] = get_lang('PlatformAdmin');
         }
 
@@ -1104,6 +1139,8 @@ class Template
     }
 
     /**
+     * Gets the main menu
+     *
      * @return array
      */
     public function returnNavigationArray()
@@ -1336,14 +1373,13 @@ class Template
                 } elseif ($breadcrumb_step['name'] == 'gallery') {
                     $navigation_item['title'] = get_lang('Gallery');
                 }
-                //Fixes breadcrumb title now we applied the Security::remove_XSS and we cut the string depending of the MAX_LENGTH_BREADCRUMB value
+                // Fixes breadcrumb title now we applied the Security::remove_XSS and we cut the string depending of the MAX_LENGTH_BREADCRUMB value
 
                 $navigation_item['title'] = Text::cut($navigation_item['title'], MAX_LENGTH_BREADCRUMB);
                 $navigation_item['title'] = Security::remove_XSS($navigation_item['title']);
                 $navigation[] = $navigation_item;
             }
         }
-
 
         // part 3: The tool itself. If we are on the course homepage we do not want to display the title of the course because this
         // is the same as the first part of the breadcrumbs (see part 1)

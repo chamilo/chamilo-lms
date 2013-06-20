@@ -427,7 +427,6 @@ class ExerciseAttemptTransactionLog extends TransactionLog {
 
   /**
    * {@inheritdoc}
-   * @todo Review.
    */
   public function export() {
     if (empty($this->item_id)) {
@@ -443,6 +442,8 @@ class ExerciseAttemptTransactionLog extends TransactionLog {
     if (empty($exercise_stat_info)) {
       throw new TransactionExportException(sprintf('There is no exercise stat information associated with exe_id "%d" in the database.', $attempt_id));
     }
+    // Exercise read expects course id set.
+    $exercise->course_id = $exercise_stat_info['c_id'];
     if (!$exercise->read($exercise_stat_info['exe_exo_id'])) {
       throw new TransactionExportException(sprintf('The associated exercise id "%d" does not currently exist in the database.', $exercise_stat_info['exe_exo_id']));
     }
@@ -494,6 +495,8 @@ class ExerciseAttemptTransactionLog extends TransactionLog {
     }
     $exercise_id = $stat_info['exe_exo_id'];
     $exercise = new Exercise($course_id);
+    // Exercise read expects course id set.
+    $exercise->course_id = $course_id;
     if (!$exercise->read($exercise_id)) {
       throw new TransactionImportException(sprintf('The included exercise id "%d" on course with id "%d" does not currently exist in the database.', $exercise_id, $course_id));
     }

@@ -18,7 +18,7 @@ use Pagerfanta\View\TwitterBootstrapView;
 
 class PageController
 {
-    public $maxPerPage = 2;
+    public $maxPerPage = 5;
     private $app;
 
     public function __construct(Application $app)

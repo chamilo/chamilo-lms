@@ -321,7 +321,6 @@ class Security
         }
     }
 
-
     /**
      *
      * Filter content

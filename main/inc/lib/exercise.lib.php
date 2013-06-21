@@ -237,7 +237,7 @@ class ExerciseLib
                         }
                     }
 
-                    $answer = Security::remove_XSS($answer, STUDENT);
+                    $answer = Security::remove_XSS($answer);
                     $s .= Display::input('hidden', 'choice2['.$questionId.']', '0');
 
                     $answer_input = null;

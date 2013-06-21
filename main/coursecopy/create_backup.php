@@ -55,6 +55,7 @@ echo Display::page_header($nameTools);
 if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (isset($_POST['backup_option']) && $_POST['backup_option'] == 'full_backup')) {
     if (isset ($_POST['action']) && $_POST['action'] == 'course_select_form') {
         $course = CourseSelectForm::get_posted_course();
+
     } else {
         $cb = new CourseBuilder();
         $course = $cb->build();

@@ -1469,7 +1469,7 @@ class CourseRestorer
                         'c_id' => $this->destination_course_id,
                         'title' => self::DBUTF8($quiz->title),
                         'description' => self::DBUTF8($quiz->description),
-                        'type' => $quiz->type,
+                        'type' => $quiz->quiz_type,
                         'random' => $quiz->random,
                         'active' => $quiz->active,
                         'sound' => self::DBUTF8($doc),
@@ -1506,17 +1506,16 @@ class CourseRestorer
                     $new_id = -1;
                 }
 
-                if ($new_id) {
+                if ($new_id && $new_id != -1) {
                     // Updates the question position
                     $exercise = new Exercise($this->destination_course_id);
                     $exercise->read($new_id);
 
-                    if ($new_id != -1) {
-                        $exercise->addExerciseToOrderTable();
-                    }
-
+                    $exercise->addExerciseToOrderTable();
                     $this->course->resources[RESOURCE_QUIZ][$id]->obj->destination_id = $new_id;
+
                     $order = 0;
+
                     if (!empty($quiz->question_ids)) {
                         foreach ($quiz->question_ids as $index => $question_id) {
                             $qid = $this->restore_quiz_question($question_id);
@@ -1582,7 +1581,11 @@ class CourseRestorer
             $table_options = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
 
             // check resources inside html from fckeditor tool and copy correct urls into recipient course
-			$question->description = DocumentManager::replace_urls_inside_content_html_from_copy_course($question->description, $this->course->code, $this->course->destination_path);
+			$question->description = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                $question->description,
+                $this->course->code,
+                $this->course->destination_path
+            );
 
             $parent_id = 0;
 
@@ -1609,7 +1612,7 @@ class CourseRestorer
                     description = '".self::DBUTF8escapestring($question->description)."',
                     ponderation = '".self::DBUTF8escapestring($question->ponderation)."',
                     position = '".self::DBUTF8escapestring($question->position)."',
-                    type='".self::DBUTF8escapestring($question->type)."',
+                    type='".self::DBUTF8escapestring($question->quiz_type)."',
                     picture='".self::DBUTF8escapestring($question->picture)."',
                     level='".self::DBUTF8escapestring($question->level)."',
                     parent_id ='".$parent_id."',
@@ -1735,7 +1738,6 @@ class CourseRestorer
                             $question_option_id = Database::insert($table_options, $item);
                             $new_options[$obj->obj->iid] = $question_option_id;
                         }
-                        //var_dump($new_options, $correct_answers);
                         foreach ($correct_answers as $answer_id => $correct_answer) {
                             $params = array();
                             $params['correct'] = $new_options[$correct_answer];
@@ -1749,26 +1751,20 @@ class CourseRestorer
                 $cats = array();
                 foreach ($question->categories as $cat) {
                     $new_category = new Testcategory($cat['category_id']);
-                   /* $new_category = new Testcategory($cat['category_id']);
-                    var_dump($new_category->title, $cat['title']);
-                    if ($new_category && $new_category->title == $cat['title']) {
-                        $cats[] = $cat['category_id'];
-                    } else {*/
-                        $new_category = $new_category->get_category_by_title($cat['title'], $this->destination_course_id);
-                        if (empty($new_category)) {
-                            //Create a new category in this portal
-                            if ($cat['category_id'] == 0) {
-                                $category_c_id = 0;
-                            } else {
-                                $category_c_id = $this->destination_course_id;
-                            }
-                            $new_cat = new Testcategory(null, $cat['title'], $cat['description'], null, 'simple', $category_c_id);
-                            $new_cat_id = $new_cat->addCategoryInBDD();
-                            $cats[] = $new_cat_id;
+                    $new_category = $new_category->get_category_by_title($cat['title'], $this->destination_course_id);
+                    if (empty($new_category)) {
+                        //Create a new category in this portal
+                        if ($cat['category_id'] == 0) {
+                            $category_c_id = 0;
                         } else {
-                            $cats[] = $new_category['iid'];
+                            $category_c_id = $this->destination_course_id;
                         }
-                    //}
+                        $new_cat = new Testcategory(null, $cat['title'], $cat['description'], null, 'simple', $category_c_id);
+                        $new_cat_id = $new_cat->addCategoryInBDD();
+                        $cats[] = $new_cat_id;
+                    } else {
+                        $cats[] = $new_category['iid'];
+                    }
                 }
 
                 $question = Question::read($new_id, $this->destination_course_id);

@@ -43,12 +43,12 @@ $htmlHeadXtra[] = '<script>
     function advanced_parameters() {
         if(document.getElementById(\'options\').style.display == \'none\') {
             document.getElementById(\'options\').style.display = \'block\';
-            document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang(
+            document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif').'&nbsp;'.get_lang(
     'AdvancedParameters'
 ).'\';
         } else {
             document.getElementById(\'options\').style.display = \'none\';
-            document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang(
+            document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif').'&nbsp;'.get_lang(
     'AdvancedParameters'
 ).'\';
         }
@@ -87,7 +87,7 @@ $form->addElement(
 $form->applyFilter('title', 'html_filter');
 $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
-$advanced = '<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang(
+$advanced = '<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" >'.Display::return_icon('div_show.gif').'&nbsp;'.get_lang(
     'AdvancedParameters'
 ).'</div></span></a>';
 $form->addElement('advanced_settings', $advanced);
@@ -265,7 +265,6 @@ if ($form->validate()) {
 
                 $template = $tpl->get_template('create_course/add_course.tpl');
                 $tpl->display($template);
-                exit;
             } else {
                 $message = Display :: return_message(get_lang('CourseCreationFailed'), 'error', false);
                 // Display the form.
@@ -315,4 +314,3 @@ if ($form->validate()) {
 
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);
-$tpl->display();

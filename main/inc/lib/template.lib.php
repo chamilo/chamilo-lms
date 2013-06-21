@@ -786,7 +786,6 @@ class Template
         if (!empty($template)) {
             $this->app['default_layout'] = $template;
         }
-        //$this->app->run();
     }
 
     /**

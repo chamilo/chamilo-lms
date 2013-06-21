@@ -1464,12 +1464,11 @@ class CourseRestorer
                         $quiz->start_time = null;
                         $quiz->end_time = null;
                     }
-
                     $params = array(
                         'c_id' => $this->destination_course_id,
                         'title' => self::DBUTF8($quiz->title),
                         'description' => self::DBUTF8($quiz->description),
-                        'type' => $quiz->quiz_type,
+                        'type' => isset($quiz->quiz_type) ? $quiz->quiz_type : $quiz->type,
                         'random' => $quiz->random,
                         'active' => $quiz->active,
                         'sound' => self::DBUTF8($doc),

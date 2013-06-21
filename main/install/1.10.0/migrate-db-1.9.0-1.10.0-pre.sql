@@ -303,7 +303,7 @@ ALTER TABLE c_quiz ADD COLUMN end_button int NOT NULL default 0;
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('template', NULL, 'text', 'stylesheets', 'default', 'DefaultTemplateTitle', 'DefaultTemplateComment', NULL, NULL, 1);
 
 -- Add new configuration setting for action/transaction mapping.
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('transaction_action_map','exercise_attempt','text','TransactionMapping','a:2:{s:5:"class";s:29:"ExerciseAttemptTransactionLog";s:10:"controller";s:39:"ExerciseAttemptTransactionLogController";}','TransactionMapForExerciseAttempts','TransactionMapForExerciseAttemptsComment',NULL,'TransactionMapForExerciseAttemptsText', 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('transaction_action_map','exercise_attempt','text','TransactionMapping','a:3:{s:5:"class";s:29:"ExerciseAttemptTransactionLog";s:10:"controller";s:39:"ExerciseAttemptTransactionLogController";s:12:"max_attempts";i:3;}','TransactionMapForExerciseAttempts','TransactionMapForExerciseAttemptsComment',NULL,'TransactionMapForExerciseAttemptsText', 1);
 
 -- Rename the transaction import log table and change its structure.
 RENAME TABLE branch_sync_log TO branch_transaction_log;

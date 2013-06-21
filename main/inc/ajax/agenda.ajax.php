@@ -8,9 +8,6 @@ $type = isset($_GET['type']) && in_array($_GET['type'], array('personal', 'cours
 if ($type == 'personal') {
     $cidReset = true; // fixes #5162
 }
-
-require_once '../global.inc.php';
-
 require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php';
 

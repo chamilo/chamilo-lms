@@ -126,7 +126,7 @@ class UserPortalController extends CommonController
             $course_info = $personal_course_list[$key[0]];
             $id_session = isset($course_info['id_session']) ? $course_info['id_session'] : 0;
 
-            $url = api_get_path(WEB_CODE_PATH).'session/?session_id='.$id_session;
+            $url = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$id_session;
             header('location:'.$url);
             exit;
         }

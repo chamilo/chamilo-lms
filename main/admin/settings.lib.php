@@ -1136,34 +1136,6 @@ function generate_settings_form($settings, $settings_by_access_list, $settings_t
                     $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), array('maxlength' => '5'));
                     $form->applyFilter($row['variable'], 'html_filter');
                     $default_values[$row['variable']] = $row['selected_value'];
-
-                    // For platform character set selection: Conversion of the textfield to a select box with valid values.
-                } elseif ($row['variable'] == 'platform_charset') {
-                    // @todo remove this?
-                    $current_system_encoding = api_refine_encoding_id(trim($row['selected_value']));
-                    $valid_encodings = array_flip(api_get_valid_encodings());
-                    if (!isset($valid_encodings[$current_system_encoding])) {
-                        $is_alias_encoding = false;
-                        foreach ($valid_encodings as $encoding) {
-                            if (api_equal_encodings($encoding, $current_system_encoding)) {
-                                $is_alias_encoding = true;
-                                $current_system_encoding = $encoding;
-                                break;
-                            }
-                        }
-                        if (!$is_alias_encoding) {
-                            $valid_encodings[$current_system_encoding] = $current_system_encoding;
-                        }
-                    }
-                    foreach ($valid_encodings as $key => &$encoding) {
-                        if (api_is_encoding_supported($key) && Database::is_encoding_supported($key)) {
-                            $encoding = $key;
-                        } else {
-                            unset($valid_encodings[$key]);
-                        }
-                    }
-                    $form->addElement('select', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), $valid_encodings);
-                    $default_values[$row['variable']] = $current_system_encoding;
                 } else {
                     $hideme['class'] = 'span4';
                     $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), $hideme);

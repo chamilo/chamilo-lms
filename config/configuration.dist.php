@@ -152,6 +152,6 @@ $_configuration['software_url']	     = 'http://www.chamilo.org/';
 /** Chamilo dev settings */
 // Generate twig templates in every request, prompts SQL errors.
 $_configuration['debug']             = false;
-
+$_configuration['platform_charset']  = 'utf-8';
 // Show a useful toolbar with memory used, loaded time, request, session, logs information.
 $_configuration['show_profiler']     = false;

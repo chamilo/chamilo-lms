@@ -87,7 +87,11 @@ class CourseRestorer
     {
         $this->course = $course;
         $course_info = api_get_course_info($this->course->code);
-        $this->course_origin_id = $course_info['real_id'];
+        if (!empty($course_info)) {
+            $this->course_origin_id = $course_info['real_id'];
+        } else {
+            $this->course_origin_id = null;
+        }
         $this->file_option = FILE_RENAME;
         $this->set_tools_invisible_by_default = false;
         $this->skip_content = array();
@@ -1603,7 +1607,7 @@ class CourseRestorer
                     description = '".self::DBUTF8escapestring($question->description)."',
                     ponderation = '".self::DBUTF8escapestring($question->ponderation)."',
                     position = '".self::DBUTF8escapestring($question->position)."',
-                    type='".self::DBUTF8escapestring($question->quiz_type)."',
+                    type='".self::DBUTF8escapestring($question->type)."',
                     picture='".self::DBUTF8escapestring($question->picture)."',
                     level='".self::DBUTF8escapestring($question->level)."',
                     parent_id ='".$parent_id."',
@@ -1633,7 +1637,7 @@ class CourseRestorer
                 }
             }
 
-            if ($question->quiz_type == MATCHING) {
+            if ($question->type == MATCHING) {
                 $temp = array();
                 $matching_list = array();
                 $matching_to_update = array();
@@ -1694,7 +1698,7 @@ class CourseRestorer
             $course_id = api_get_course_int_id();
 
             //Moving quiz_question_options
-            if ($question->quiz_type == MULTIPLE_ANSWER_TRUE_FALSE) {
+            if ($question->type == MULTIPLE_ANSWER_TRUE_FALSE) {
                 $question_option_list = Question::readQuestionOption($id, $course_id);
 
                 //Question copied from the current platform

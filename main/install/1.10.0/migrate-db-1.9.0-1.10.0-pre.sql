@@ -305,5 +305,12 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 -- Add new configuration setting for action/transaction mapping.
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('transaction_action_map','exercise_attempt','text','TransactionMapping','a:2:{s:5:"class";s:29:"ExerciseAttemptTransactionLog";s:10:"controller";s:39:"ExerciseAttemptTransactionLogController";}','TransactionMapForExerciseAttempts','TransactionMapForExerciseAttemptsComment',NULL,'TransactionMapForExerciseAttemptsText', 1);
 
+-- Rename the transaction import log table and change its structure.
+RENAME TABLE branch_sync_log TO branch_transaction_log;
+ALTER TABLE branch_transaction_log CHANGE sync_trans_id transaction_id bigint unsigned not null default 0;
+ALTER TABLE branch_transaction_log DROP branch_sync_id, DROP sync_type;
+ALTER TABLE branch_transaction_log CHANGE sync_trans_date import_time DATETIME NULL DEFAULT NULL;
+ALTER TABLE branch_transaction_log ADD message MEDIUMTEXT NOT NULL;
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.023' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.024' WHERE variable = 'chamilo_database_version';

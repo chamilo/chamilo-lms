@@ -3057,13 +3057,12 @@ CREATE TABLE branch_sync(
 );
 INSERT INTO branch_sync (id, access_url_id, branch_name, branch_ip) VALUES (1, 1, 'Local', '127.0.0.1');
 
-DROP TABLE IF EXISTS branch_sync_log;
-CREATE TABLE branch_sync_log(
+DROP TABLE IF EXISTS branch_transaction_log;
+CREATE TABLE branch_transaction_log(
   id bigint unsigned not null AUTO_INCREMENT PRIMARY KEY,
-  branch_sync_id int unsigned not null,
-  sync_trans_id bigint unsigned default 0,
-  sync_trans_date datetime,
-  sync_type char(20)
+  transaction_id bigint unsigned not null default 0,
+  import_time datetime,
+  message mediumtext not null
 );
 
 
@@ -3526,4 +3525,4 @@ CREATE TABLE ext_log_entries (
 ) DEFAULT CHARSET=utf8;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.023' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.024' WHERE variable = 'chamilo_database_version';

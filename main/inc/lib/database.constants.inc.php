@@ -354,9 +354,9 @@ define('TABLE_TIMELINE',                    'timeline');
 define('TABLE_GRADE_MODEL',                  'grade_model');
 define('TABLE_GRADE_MODEL_COMPONENTS',       'grade_components');
 
+// Transaction related tables
 define('TABLE_BRANCH_SYNC',                  'branch_sync');
-define('TABLE_BRANCH_SYNC_LOG',              'branch_sync_log');
-
 define('TABLE_BRANCH_TRANSACTION',           'branch_transaction');
 define('TABLE_BRANCH_TRANSACTION_STATUS',    'branch_transaction_status');
 define('TABLE_BRANCH_TRANSACTION_DATA',      'branch_transaction_data');
+define('TABLE_BRANCH_TRANSACTION_LOG',       'branch_transaction_log');

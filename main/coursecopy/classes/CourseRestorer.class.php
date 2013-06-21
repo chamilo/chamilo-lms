@@ -87,7 +87,11 @@ class CourseRestorer
     {
         $this->course = $course;
         $course_info = api_get_course_info($this->course->code);
-        $this->course_origin_id = $course_info['real_id'];
+        if (!empty($course_info)) {
+            $this->course_origin_id = $course_info['real_id'];
+        } else {
+            $this->course_origin_id = null;
+        }
         $this->file_option = FILE_RENAME;
         $this->set_tools_invisible_by_default = false;
         $this->skip_content = array();
@@ -1463,7 +1467,7 @@ class CourseRestorer
                         'c_id' => $this->destination_course_id,
                         'title' => self::DBUTF8($quiz->title),
                         'description' => self::DBUTF8($quiz->description),
-                        'type' => $quiz->quiz_type,
+                        'type' => $quiz->type,
                         'random' => $quiz->random,
                         'active' => $quiz->active,
                         'sound' => self::DBUTF8($doc),

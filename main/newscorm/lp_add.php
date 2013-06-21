@@ -29,6 +29,10 @@ $language_file = 'learnpath';
 /* Header and action code */
 
 $currentstyle = api_get_setting('stylesheets');
+
+$showImg = Display::return_icon('div_show.gif');
+$hideImg = Display::return_icon('div_hide.gif');
+
 $htmlHeadXtra[] = '<script>
 function setFocus(){
     $("#learnpath_title").focus();
@@ -41,10 +45,10 @@ $(document).ready(function () {
 function advanced_parameters() {
     if(document.getElementById(\'options\').style.display == \'none\') {
         document.getElementById(\'options\').style.display = \'block\';
-        document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+        document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.$hideImg.'&nbsp;'.get_lang('AdvancedParameters').'\';
     } else {
         document.getElementById(\'options\').style.display = \'none\';
-        document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+        document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.$showImg.'&nbsp;'.get_lang('AdvancedParameters').'\';
     }
 }
 
@@ -127,7 +131,7 @@ $form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
 $form->addElement('hidden', 'post_time', time());
 $form->addElement('hidden', 'action', 'add_lp');
 
-$advanced = '<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>';
+$advanced = '<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" >&nbsp;'.$showImg.'&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>';
 $form -> addElement('advanced_settings',$advanced);
 $form -> addElement('html','<div id="options" style="display:none">');
 

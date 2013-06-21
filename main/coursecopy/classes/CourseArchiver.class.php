@@ -89,7 +89,7 @@ class CourseArchiver
         }
 
         // Copy all scorm documents to the temp-dir
-        if (is_array($course->resources[RESOURCE_SCORM])) {
+        if (isset($course->resources[RESOURCE_SCORM]) && is_array($course->resources[RESOURCE_SCORM])) {
             foreach ($course->resources[RESOURCE_SCORM] as $id => $document) {
                 $doc_dir = dirname($backup_dir . $document->path);
                 @mkdir($doc_dir, $perm_dirs, true);
@@ -97,16 +97,16 @@ class CourseArchiver
             }
         }
 
-        //Copy calendar attachments
+        // Copy calendar attachments
 
-        if (is_array($course->resources[RESOURCE_EVENT])) {
+        if (isset($course->resources[RESOURCE_EVENT]) && is_array($course->resources[RESOURCE_EVENT])) {
             $doc_dir = dirname($backup_dir . '/upload/calendar/');
             @mkdir($doc_dir, $perm_dirs, true);
             FileManager::copyDirTo($course->path . 'upload/calendar/', $doc_dir, false);
         }
 
         //Copy learningpath author image
-        if (is_array($course->resources[RESOURCE_LEARNPATH])) {
+        if (isset($course->resources[RESOURCE_LEARNPATH]) && is_array($course->resources[RESOURCE_LEARNPATH])) {
             $doc_dir = dirname($backup_dir . '/upload/learning_path/');
             @mkdir($doc_dir, $perm_dirs, true);
             FileManager::copyDirTo($course->path . 'upload/learning_path/', $doc_dir, false);
@@ -114,7 +114,7 @@ class CourseArchiver
 
         //Copy announcements attachments
 
-        if (is_array($course->resources[RESOURCE_ANNOUNCEMENT])) {
+        if (isset($course->resources[RESOURCE_ANNOUNCEMENT]) && is_array($course->resources[RESOURCE_ANNOUNCEMENT])) {
             $doc_dir = dirname($backup_dir . '/upload/announcements/');
             @mkdir($doc_dir, $perm_dirs, true);
             FileManager::copyDirTo($course->path . 'upload/announcements/', $doc_dir, false);

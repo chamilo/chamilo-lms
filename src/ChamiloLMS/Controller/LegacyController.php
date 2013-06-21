@@ -83,6 +83,8 @@ class LegacyController extends CommonController
             $charset = 'UTF-8';
             $debug = $app['debug'];
             $text_dir = api_get_text_direction();
+            $is_platformAdmin = api_is_platform_admin();
+            $_cid = api_get_course_id();
 
             // Loading file
             ob_start();

@@ -76,7 +76,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
         echo get_lang('NoResourcesToBackup');
     } else {
 
-        $form = new FormValidator('create_backup_form', 'post');
+        $form = new FormValidator('create_backup_form', 'post', api_get_self().'?'.api_get_cidreq());
         $form->addElement('header', get_lang('SelectOptionForBackup'));
 
         $form->addElement('radio', 'backup_option', '', get_lang('CreateFullBackup'), 'full_backup');

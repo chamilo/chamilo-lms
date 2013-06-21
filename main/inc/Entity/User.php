@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="Entity\Repository\UserRepository")
  */
-class User implements AdvancedUserInterface
+class User implements AdvancedUserInterface, \Serializable
 {
     /**
      * @var integer
@@ -222,6 +222,7 @@ class User implements AdvancedUserInterface
     private $classes;
 
     /**
+     * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="Role", inversedBy="users")
      * @ORM\JoinTable(
      *          name="users_roles",
@@ -236,6 +237,8 @@ class User implements AdvancedUserInterface
      */
     private $salt;
 
+    private $isActive;
+
     /**
      *
      */
@@ -246,7 +249,14 @@ class User implements AdvancedUserInterface
         $this->classes = new ArrayCollection();
         $this->roles = new ArrayCollection();
         $this->salt = sha1(uniqid(null, true));
+        $this->isActive = true;
     }
+
+    public function getIsActive()
+    {
+        return $this->active == 1;
+    }
+
 
     /**
      * @inheritDoc
@@ -287,13 +297,46 @@ class User implements AdvancedUserInterface
     {
     }
 
-
     /**
      * @inheritDoc
      */
     public function getRoles()
     {
         return $this->roles->toArray();
+    }
+
+    /**
+     * @see https://github.com/symfony/symfony/issues/3691
+     * @see \Serializable::serialize()
+     */
+    public function serialize()
+    {
+        /*
+         * ! Don't serialize $roles field !
+         */
+        return \serialize(array(
+            $this->userId,
+            $this->username,
+            $this->email,
+            $this->salt,
+            $this->password,
+            $this->isActive
+        ));
+    }
+
+    /**
+     * @see \Serializable::unserialize()
+     */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->userId,
+            $this->username,
+            $this->email,
+            $this->salt,
+            $this->password,
+            $this->isActive
+        ) = \unserialize($serialized);
     }
 
     /**

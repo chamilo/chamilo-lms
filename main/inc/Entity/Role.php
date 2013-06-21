@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="roles")
  * @ORM\Entity()
  */
-class Role extends SymfonyRole
+class Role extends SymfonyRole implements \Serializable
 {
     /**
      * @ORM\Column(name="id", type="integer")
@@ -93,6 +93,31 @@ class Role extends SymfonyRole
         $this->name = $name;
 
         return $this;
+    }
+
+     /**
+     * @see \Serializable::serialize()
+     */
+    public function serialize()
+    {
+        /*
+         * ! Don't serialize $users field !
+         */
+        return \serialize(array(
+            $this->id,
+            $this->role
+        ));
+    }
+
+    /**
+     * @see \Serializable::unserialize()
+     */
+    public function unserialize($serialized)
+    {
+        list(
+            $this->id,
+            $this->role
+        ) = \unserialize($serialized);
     }
 
 

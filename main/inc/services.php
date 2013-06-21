@@ -20,13 +20,15 @@ if (is_writable($app['sys_temp_path'])) {
      *  $app['monolog']->addInfo('Testing the Monolog logging.');
      *  $app['monolog']->addError('Testing the Monolog logging.');
      */
-    $app->register(
-        new Silex\Provider\MonologServiceProvider(),
-        array(
-            'monolog.logfile' => $app['chamilo.log'],
-            'monolog.name' => 'chamilo',
-        )
-    );
+    //if ($app['debug']) {
+        $app->register(
+            new Silex\Provider\MonologServiceProvider(),
+            array(
+                'monolog.logfile' => $app['chamilo.log'],
+                'monolog.name' => 'chamilo',
+            )
+        );
+    //}
 }
 
 //Setting HttpCacheService provider in order to use do: $app['http_cache']->run();
@@ -35,8 +37,7 @@ $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
     'http_cache.cache_dir' => $app['http_cache.cache_dir'].'/',
 ));*/
 
-// Session provider
-//$app->register(new Silex\ProviderSessionServiceProvider());
+// http://symfony.com/doc/master/reference/configuration/security.html
 /*
 $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     'security.firewalls' => array(
@@ -45,22 +46,21 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
             'anonymous' => true
         ),
         'secured' => array(
-            'http' => true,
-            'pattern' => '^/admin/.*$',
+            //'http' => true,
+            'pattern' => '^/secured',
             'form'    => array(
                 'login_path' => '/login',
-                'check_path' => '/admin/login_check',
+                'check_path' => '/secured/login_check',
+                'default_target_path' => 'admin/',
+                'username_parameter' => 'username',
+                'password_parameter' => 'password',
             ),
             'logout' => array(
-                'path' => '/logout',
+                'logout_path' => '/secured/logout',
                 'target' => '/'
             ),
             'users' => $app->share(function() use ($app) {
-                $user = new Entity\User();
-                $user->setEntityManager($app['orm.em']);
-                //$user->loadUserByUsername('admin');
-                return $user;
-
+                return $app['orm.em']->getRepository('Entity\User');
             }),
             'anonymous' => false
         ),
@@ -89,7 +89,6 @@ $app['security.encoder.digest'] = $app->share(function($app) {
 */
 
 /*
- *
  *
 $app['security.access_manager'] = $app->share(function($app) {
     return new AccessDecisionManager($app['security.voters'], 'unanimous');
@@ -469,6 +468,7 @@ class ChamiloServiceProvider implements ServiceProviderInterface
             return array(
                 //'root_web' => $app['root_web'],
                 'root_sys' => $app['root_sys'],
+                'sys_root' => $app['root_sys'], // just an alias
                 'sys_data_path' => $app['sys_data_path'],
                 'sys_config_path' => $app['sys_config_path'],
                 'sys_temp_path' => $app['sys_temp_path'],

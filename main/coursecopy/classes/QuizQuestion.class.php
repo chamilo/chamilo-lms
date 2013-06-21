@@ -81,7 +81,7 @@ class QuizQuestion extends Resource
         $this->question = $question;
         $this->description = $description;
         $this->ponderation = $ponderation;
-        $this->quiz_type = $type;
+        $this->type = $type;
         $this->position = $position;
         $this->picture = $picture;
         $this->level = $level;

@@ -19,11 +19,11 @@ define('FOLDER','folder');
  */
 class Document extends Resource
 {
-	var $path;
-	var $comment;
-	var $file_type;
-	var $size;
-	var $title;
+	public $path;
+	public $comment;
+	public $file_type;
+	public $size;
+	public $title;
 	/**
 	 * Create a new Document
 	 * @param int $id

@@ -351,23 +351,23 @@ class CourseRecycler
 
                 //@todo fix query in order to use iid
                 $sql = " (
-                    SELECT q.id FROM $table_qui_que q
+                    SELECT q.iid FROM $table_qui_que q
                     INNER JOIN $table_rel r
                     ON (q.c_id = r.c_id AND q.iid = r.question_id)
                     INNER JOIN $table_qui ex
                     ON (ex.iid = r.exercice_id AND ex.c_id = r.c_id )
-                    WHERE ex.c_id = ".$this->course_id." AND (ex.active = '-1' OR ex.id = '-1')
+                    WHERE ex.c_id = ".$this->course_id." AND (ex.active = '-1' OR ex.iid = '-1')
                 )
                 UNION
                 (
-                    SELECT q.id FROM $table_qui_que q
+                    SELECT q.iid FROM $table_qui_que q
                     LEFT OUTER JOIN $table_rel r
                     ON (q.c_id = r.c_id AND q.iid = r.question_id)
                     WHERE q.c_id = ".$this->course_id." AND r.question_id is null
                 )
                 UNION
                 (
-                    SELECT q.id FROM $table_qui_que q
+                    SELECT q.iid FROM $table_qui_que q
                     INNER JOIN $table_rel r
                     ON (q.c_id = r.c_id AND q.iid = r.question_id)
                     WHERE r.c_id = ".$this->course_id." AND r.exercice_id = '-1' OR r.exercice_id = '0'

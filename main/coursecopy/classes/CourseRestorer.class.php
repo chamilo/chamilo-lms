@@ -1463,7 +1463,7 @@ class CourseRestorer
                         'c_id' => $this->destination_course_id,
                         'title' => self::DBUTF8($quiz->title),
                         'description' => self::DBUTF8($quiz->description),
-                        'type' => $quiz->quiz_type,
+                        'type' => $quiz->type,
                         'random' => $quiz->random,
                         'active' => $quiz->active,
                         'sound' => self::DBUTF8($doc),

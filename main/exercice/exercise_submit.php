@@ -43,7 +43,7 @@ $current_course_tool  = TOOL_QUIZ;
 $nameTools = get_lang('Quiz');
 
 $this_section = SECTION_COURSES;
-$debug = true;
+$debug = false;
 if ($debug) {
     error_log('--- Enter to the exercise_submit.php ---- ');
     error_log('0. POST variables : '.print_r($_POST,1));

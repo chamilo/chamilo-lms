@@ -533,7 +533,7 @@ $_SESSION['image_files_only'] = '';
 $image_files_only = '';
 
 if ($is_certificate_mode) {
-    $interbreadcrumb[] = array('url' => '../gradebook/index.php', 'name' => get_lang('Gradebook'));
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'gradebook/index.php', 'name' => get_lang('Gradebook'));
 } else {
     if ((isset($_GET['id']) && $_GET['id'] != 0) || isset($_GET['curdirpath']) || isset($_GET['createdir'])) {
         $interbreadcrumb[] = array('url' => 'document.php', 'name' => get_lang('Documents'));

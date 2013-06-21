@@ -1057,7 +1057,7 @@ class learnpath
         $this->update_display_order(); // Updates the display order of all lps.
         api_item_property_update(api_get_course_info(), TOOL_LEARNPATH, $this->lp_id, 'delete', api_get_user_id());
 
-        require_once '../gradebook/lib/be.inc.php';
+        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
 
         // Delete link of gradebook tool
         //$tbl_grade_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);

@@ -28,13 +28,19 @@
         var div_clock = $('#exercise_clock_warning');
         
         // 60000 = 60 seconds
-        if (dist <= 180000) {  //3min
+        // Special changes to 20' and 5' for MINEDU
+        if (dist > 1200000) {  //>20min
+            if (!(div_clock.hasClass('time_warning_three'))) {
+                div_clock.addClass('time_warning_three');
+            }
+        }
+        if (dist <= 1200000) {  //20min
             if (!(div_clock.hasClass('time_warning_two'))) {
                 div_clock.addClass('time_warning_two');
             }
         }
         
-        if (dist <= 60000) { //1min
+        if (dist <= 300000) { //5min
             div_clock.removeClass('time_warning_two');
             if (!(div_clock.hasClass('time_warning_one'))) {                
                 div_clock.addClass('time_warning_one');

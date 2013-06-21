@@ -138,11 +138,13 @@ class CourseRestorer
             $this->destination_course_info = $course_info;
             $this->course->destination_path = $course_info['path'];
         }
+
         $this->destination_course_id = $course_info['real_id'];
 
-        //Getting first teacher (for the forums)
+        // Getting first teacher (for the forums)
         $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['real_id']);
         $this->first_teacher_id = api_get_user_id();
+
         if (!empty($teacher_list)) {
             foreach ($teacher_list as $teacher) {
                 $this->first_teacher_id = $teacher['user_id'];
@@ -1663,7 +1665,6 @@ class CourseRestorer
                     $new_answer_id = Database::insert_id();
                     $matching_list[$answer['iid']] = $new_answer_id;
 				}
-                //var_dump($matching_list, $matching_to_update);
                 foreach ($matching_to_update as $old_answer_id => $old_correct_id) {
                     $new_correct = $matching_list[$old_correct_id];
                     $new_fixed_id = $matching_list[$old_answer_id];

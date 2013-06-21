@@ -78,10 +78,8 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 
         $form = new FormValidator('create_backup_form', 'post', api_get_self().'?'.api_get_cidreq());
         $form->addElement('header', get_lang('SelectOptionForBackup'));
-
         $form->addElement('radio', 'backup_option', '', get_lang('CreateFullBackup'), 'full_backup');
         $form->addElement('radio', 'backup_option', '', get_lang('LetMeSelectItems'), 'select_items');
-
         $form->addElement('style_submit_button', null, get_lang('CreateBackup'), 'class="save"');
 
         $form->add_progress_bar();
@@ -102,5 +100,4 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
     }
 }
 
-/*	FOOTER */
 Display::display_footer();

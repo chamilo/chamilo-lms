@@ -1139,6 +1139,7 @@ function generate_settings_form($settings, $settings_by_access_list, $settings_t
 
                     // For platform character set selection: Conversion of the textfield to a select box with valid values.
                 } elseif ($row['variable'] == 'platform_charset') {
+                    // @todo remove this?
                     $current_system_encoding = api_refine_encoding_id(trim($row['selected_value']));
                     $valid_encodings = array_flip(api_get_valid_encodings());
                     if (!isset($valid_encodings[$current_system_encoding])) {

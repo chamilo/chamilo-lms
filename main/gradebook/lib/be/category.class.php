@@ -162,7 +162,29 @@ class Category implements GradebookItem
     }
 
     // CRUD FUNCTIONS
-
+     public static function load_session_categories($id = null, $session_id = null) {
+          
+        if ( isset($id) && (int)$id === 0 ) {
+            $cats = array();
+            $cats[] = Category::create_root_category();
+            return $cats;
+        }
+        $cat = array();
+        $cats = array();
+        if (!empty ($session_id)) {
+             $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+             $sql_session = 'SELECT id FROM '.$tbl_grade_categories. ' WHERE session_id = '.$session_id;
+             $result_session = Database::query($sql_session);
+             if (Database::num_rows($result_session) > 0) {
+                 $data_session = Database::fetch_array($result_session);
+                 $parent_id = $data_session['id'];
+                 $cat = Category::load($parent_id);
+                 $cats = Category::load(null, null, null, $parent_id, null, null, $order);
+                 return array_merge($cat,$cats);
+             }
+         }
+     }
+                  
     /**
      * Retrieve categories and return them as an array of Category objects
      * @param int      category id
@@ -1178,7 +1200,7 @@ class Category implements GradebookItem
     public function get_subcategories ($stud_id = null, $course_code = null, $session_id = null, $order = null) {
         if (!empty ($session_id)) {
              $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-             $sql_session = 'SELECT * FROM '.$tbl_grade_categories. 'WHERE session_id = '.$session_id;
+             $sql_session = 'SELECT id FROM '.$tbl_grade_categories. ' WHERE session_id = '.$session_id;
              $result_session = Database::query($sql_session);
              if (Database::num_rows($result_session) > 0) {
                  $data_session = Database::fetch_array($result_session);
@@ -1263,7 +1285,7 @@ class Category implements GradebookItem
                 foreach ($subcats as $subcat) {
                     $subevals = $subcat->get_evaluations($stud_id, true, $course_code);
                     //$this->debugprint($subevals);
-                    $evals = array_merge($evals, $subevals);
+                    $evals = $subevals;
                 }
             }
         }

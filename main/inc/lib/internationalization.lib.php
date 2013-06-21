@@ -167,14 +167,12 @@ function get_lang($variable, $reserved = null, $language = null)
     }
 
     // Caching results from some API functions, for speed.
-    static $initialized, $encoding, $is_utf8_encoding, $langpath, $test_server_mode, $show_special_markup;
+    static $initialized, $encoding, $is_utf8_encoding, $test_server_mode, $show_special_markup;
 
     if (!isset($initialized)) {
         $encoding = api_get_system_encoding();
         $is_utf8_encoding = api_is_utf8($encoding);
-        $langpath = api_get_path(SYS_LANG_PATH);
         $test_server_mode = $app['debug'] == true;
-        //$test_server_mode = false;
         $show_special_markup = api_get_setting('hide_dltt_markup') != 'true' || $test_server_mode;
         $initialized = true;
     }
@@ -192,13 +190,13 @@ function get_lang($variable, $reserved = null, $language = null)
     static $cache;
 
     // Looking up into the cache for existing translation.
-    if (isset($cache[$language][$variable]) && !$_api_is_translated_call) {
+    /*if (isset($cache[$language][$variable]) && !$_api_is_translated_call) {
         // There is a previously saved translation, returning it.
         //return $cache[$language][$variable];
         $ret = $cache[$language][$variable];
         $used_lang_vars[$variable.$lang_postfix] = $ret;
         return $ret;
-    }
+    }*/
 
     $_api_is_translated = false;
 
@@ -207,35 +205,10 @@ function get_lang($variable, $reserved = null, $language = null)
     // - from a local variable after reloading the language files - on test server mode or when requested language is different than the genuine interface language.
     $read_global_variables = $is_interface_language && !$test_server_mode && !$_api_is_translated_call;
 
-    // Reloading the language files when it is necessary.
-
-    if (!$read_global_variables) {
-        global $language_files;
-        if (isset($language_files)) {
-            $parent_language = null;
-            if (api_get_setting('allow_use_sub_language') == 'true') {
-                require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
-                $parent_language = SubLanguageManager::get_parent_language_path($language);
-            }
-            if (!is_array($language_files)) {
-                if (isset($parent_language)) {
-                    @include "$langpath$parent_language/$language_files.inc.php";
-                }
-                @include "$langpath$language/$language_files.inc.php";
-            } else {
-                foreach ($language_files as &$language_file) {
-                    if (isset($parent_language)) {
-                        @include "$langpath$parent_language/$language_file.inc.php";
-                    }
-                    @include "$langpath$language/$language_file.inc.php";
-                }
-            }
-        }
-    }
-
     // Translation mode for production servers.
 
     if (!$test_server_mode) {
+        //$read_global_variables = true;
         if ($read_global_variables) {
             if (isset($GLOBALS[$variable])) {
                 $langvar = $GLOBALS[$variable];
@@ -249,6 +222,7 @@ function get_lang($variable, $reserved = null, $language = null)
         } else {
             if (isset($$variable)) {
                 $langvar = $$variable;
+
                 $_api_is_translated = true;
             } elseif (isset(${"lang$variable"})) {
                 $langvar = ${"lang$variable"};
@@ -257,6 +231,7 @@ function get_lang($variable, $reserved = null, $language = null)
                 $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
             }
         }
+
         if (empty($langvar) || !is_string($langvar)) {
             $_api_is_translated = false;
             $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
@@ -3779,13 +3754,13 @@ function api_is_latin1($encoding, $strict = false)
 
 /**
  * This function returns the encoding, currently used by the system.
- * @return string    The system's encoding.
- * Note: The value of api_get_setting('platform_charset') is tried to be returned first,
- * on the second place the global variable $charset is tried to be returned. If for some
- * reason both attempts fail, then the libraly's internal value will be returned.
+ * @return string    The system's encoding, set in the configuration file
  */
 function api_get_system_encoding()
 {
+    global $configuration;
+    return isset($configuration['platform_charset']) ? $configuration['platform_charset'] : 'utf-8';
+    /*
     static $system_encoding;
     if (!isset($system_encoding)) {
         $encoding_setting = api_get_setting('platform_charset');
@@ -3798,7 +3773,7 @@ function api_get_system_encoding()
         }
         $system_encoding = $encoding_setting;
     }
-    return $system_encoding;
+    return $system_encoding;*/
 }
 
 /**

@@ -23,7 +23,7 @@ class CourseArchiver
         if ($handle = @ opendir($dir)) {
             while (($file = readdir($handle)) !== false) {
                 if ($file != "." && $file != ".." && strpos($file, 'CourseArchiver_') === 0 && is_dir($dir . '/' . $file)) {
-                    rmdirr($dir . '/' . $file);
+                    api_rmdirr($dir . '/' . $file);
                 }
             }
             closedir($handle);
@@ -124,7 +124,7 @@ class CourseArchiver
         $zip->create($zip_dir . $tmp_dir_name, PCLZIP_OPT_REMOVE_PATH, $zip_dir . $tmp_dir_name . '/');
         //$zip->deleteByIndex(0);
         // Remove the temp-dir.
-        rmdirr($backup_dir);
+        api_rmdirr($backup_dir);
         return $zip_file;
     }
 

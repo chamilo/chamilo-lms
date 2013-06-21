@@ -79,7 +79,7 @@ class CourseRecycler
         if ($this->course->has_resources(RESOURCE_DOCUMENT)) {
             $table = Database :: get_course_table(TABLE_DOCUMENT);
             foreach ($this->course->resources[RESOURCE_DOCUMENT] as $id => $document) {
-                rmdirr($this->course->backup_path.'/'.$document->path);
+                api_rmdirr($this->course->backup_path.'/'.$document->path);
             }
             $ids = implode(',', (array_keys($this->course->resources[RESOURCE_DOCUMENT])));
             $sql = "DELETE FROM ".$table." WHERE c_id = ".$this->course_id." AND id IN(".$ids.")";
@@ -446,7 +446,7 @@ class CourseRecycler
                     {
                         // The directory trat contains files of the SCORM package is to be deleted.
                         $scorm_package_dir = realpath($this->course->path . 'scorm/' . $learnpath->path);
-                        rmdirr($scorm_package_dir);
+                        api_rmdirr($scorm_package_dir);
                     }
                 }
 

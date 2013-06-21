@@ -744,7 +744,7 @@ class SocialManager extends UserManager {
             $user_object = Database::fetch_object($result);
             $alt  = $userInfo['complete_name'].($curretUserId == $user_id ? '&nbsp;('.get_lang('Me').')' : '');
 
-            $status = get_status_from_code($user_object->status);
+            $status = api_get_status_from_code($user_object->status);
 
             $interbreadcrumb[] = array('url' => SocialManager::getUserOnlineLink(), 'name' => get_lang('UsersOnLineList'));
 

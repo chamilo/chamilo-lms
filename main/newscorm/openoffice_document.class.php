@@ -49,7 +49,7 @@ abstract class OpenofficeDocument extends learnpath
         $this->base_work_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
         ///learning_path/ppt_dirname directory
         $this->created_dir = substr($result['dir'], 0, strlen($result['dir']) - 1);
-        $this->file_path = $this->created_dir.'/'.replace_dangerous_char($file['name'], 'strict');
+        $this->file_path = $this->created_dir.'/'.api_replace_dangerous_char($file['name'], 'strict');
 
         //var_dump($this->file_name, $this->file_path, $this->base_work_dir, $this->created_dir);
 
@@ -84,7 +84,7 @@ abstract class OpenofficeDocument extends learnpath
             //var_dump( $this->base_work_dir.$this->created_dir.$this->file_path);
             $perm = api_get_setting('permissions_for_new_files');
 
-            if (IS_WINDOWS_OS) { // IS_WINDOWS_OS has been defined in main_api.lib.php
+            if (IS_WINDOWS_OS) { // IS_WINDOWS_OS has been defined in api.lib.php
                 $converter_path = str_replace('/', '\\', api_get_path(SYS_PATH).'main/inc/lib/ppt2png');
                 $class_path = $converter_path.';'.$converter_path.'/jodconverter-2.2.2.jar;'.$converter_path.'/jodconverter-cli-2.2.2.jar';
                 //$cmd = 'java -cp "'.$class_path.'" DokeosConverter';

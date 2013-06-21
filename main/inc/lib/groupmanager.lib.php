@@ -226,7 +226,7 @@ class GroupManager
         Database::update($table_group, array('id' => $lastId), array('iid = ? ' => $lastId));
 
         if ($lastId) {
-            $desired_dir_name = '/'.replace_dangerous_char($name, 'strict').'_groupdocs';
+            $desired_dir_name = '/'.api_replace_dangerous_char($name, 'strict').'_groupdocs';
             $my_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository.'/document';
             $unique_name = FileManager::create_unexisting_directory(
                 $_course,

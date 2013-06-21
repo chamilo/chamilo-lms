@@ -564,7 +564,7 @@ class CourseRestorer
 
                                         $path_title = '/'.$new_base_foldername.'/'.$document_path[2];
 
-                                        copy_folder_course_session(
+                                        api_copy_folder_course_session(
                                             $basedir_dest_path,
                                             $base_path_document,
                                             $session_id,
@@ -841,7 +841,7 @@ class CourseRestorer
                 if (file_exists($path.$document->path)) {
                     switch ($this->file_option) {
                         case FILE_OVERWRITE :
-                            rmdirr($path.$document->path);
+                            api_rmdirr($path.$document->path);
                             FileManager::copyDirTo(
                                 $this->course->backup_path.'/'.$document->path,
                                 $path.dirname($document->path),

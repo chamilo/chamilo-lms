@@ -1419,7 +1419,7 @@ class Display
         // Show all tool icons where there is something new.
         $retvalue = '&nbsp;';
         while (list($key, $notification) = each($notifications)) {
-            $lastDate = date('d/m/Y H:i', convert_sql_date($notification['lastedit_date']));
+            $lastDate = date('d/m/Y H:i', api_convert_sql_date($notification['lastedit_date']));
             $type     = $notification['lastedit_type'];
             if (empty($course_info['id_session'])) {
                 $my_course['id_session'] = 0;

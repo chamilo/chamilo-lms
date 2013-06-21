@@ -603,7 +603,7 @@ class Template
             if ($access_url_id != -1) {
                 $url_info = api_get_current_access_url_info();
                 $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
-                $clean_url = replace_dangerous_char($url);
+                $clean_url = api_replace_dangerous_char($url);
                 $clean_url = str_replace('/', '-', $clean_url);
                 $clean_url .= '/';
                 $homep = api_get_path(REL_PATH).'home/'.$clean_url; //homep for Home Path
@@ -806,7 +806,7 @@ class Template
             if ($access_url_id != -1) {
                 $url_info = api_get_current_access_url_info();
                 $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
-                $clean_url = replace_dangerous_char($url);
+                $clean_url = api_replace_dangerous_char($url);
                 $clean_url = str_replace('/', '-', $clean_url);
                 $clean_url .= '/';
                 $homep = api_get_path(SYS_DATA_PATH).'home/'.$clean_url; //homep for Home Path

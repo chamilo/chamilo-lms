@@ -102,8 +102,9 @@ if (!isset($coursesAlreadyVisited[$course_code])) {
 
 $show_autolaunch_exercise_warning = false;
 
-//Exercise auto-launch
+// Exercise auto-launch
 $auto_launch = api_get_course_setting('enable_exercise_auto_launch');
+
 if (!empty($auto_launch)) {
     $session_id = api_get_session_id();
      //Exercise list

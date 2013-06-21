@@ -347,7 +347,7 @@ function document_exists($filename)
     global $filepath;
     $filename = addslashes(trim($filename));
     $filename = Security::remove_XSS($filename);
-    $filename = replace_dangerous_char($filename);
+    $filename = api_replace_dangerous_char($filename);
     $filename = FileManager::disable_dangerous_file($filename);
 
     return !file_exists($filepath.$filename.'.html');
@@ -518,7 +518,7 @@ if ($form->validate()) {
     $filename = $values['title'];
     $filename = addslashes(trim($filename));
     $filename = Security::remove_XSS($filename);
-    $filename = replace_dangerous_char($filename);
+    $filename = api_replace_dangerous_char($filename);
     $filename = FileManager::disable_dangerous_file($filename);
 
     //Setting the title

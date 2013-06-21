@@ -490,7 +490,7 @@ if (isset($uidReset) && $uidReset) {   // session data refresh requested
             // Extracting the user data
 
             $uData = Database::fetch_array($result);
-            $_user = _api_format_user($uData, false);
+            $_user = api_format_user($uData, false);
             $_user['lastLogin']        = api_strtotime($uData['login_date'], 'UTC');
             $is_platformAdmin           = (bool) (! is_null( $uData['is_admin']));
             $is_allowedCreateCourse     = (bool) (($uData ['status'] == COURSEMANAGER) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == DRH));

@@ -91,7 +91,7 @@ if (isset($_POST['submitWork'])) {
             // Try to add an extension to the file if it hasn't got one
             $dropbox_filename = FileManager::add_ext_on_mime($dropbox_filename, $dropbox_filetype);
             // Replace dangerous characters
-            $dropbox_filename = replace_dangerous_char($dropbox_filename);
+            $dropbox_filename = api_replace_dangerous_char($dropbox_filename);
             // Transform any .php file in .phps fo security
             $dropbox_filename = FileManager::php2phps($dropbox_filename);
             if (!FileManager::filter_extension($dropbox_filename)) {

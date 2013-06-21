@@ -1046,7 +1046,7 @@ class learnpath
                             $path = substr($path, 0, -1); // Remove "." at the end.
                         }
                         //exec('rm -rf ' . $course_scorm_dir . $path); // See Bug #5208, this is not OS-portable way.
-                        rmdirr($course_scorm_dir.$path);
+                        api_rmdirr($course_scorm_dir.$path);
                     }
                 }
             }
@@ -6198,7 +6198,7 @@ class learnpath
         //Creating LP folder
         if ($folder) {
             //Limits title size
-            $title = api_substr(replace_dangerous_char($lp_name), 0, 80);
+            $title = api_substr(api_replace_dangerous_char($lp_name), 0, 80);
             $dir = $dir.$title;
             $filepath = api_get_path(SYS_COURSE_PATH).$course['path'].'/document';
             if (!is_dir($filepath.'/'.$dir)) {
@@ -6262,9 +6262,9 @@ class learnpath
             $dir = '/';
         }
 
-        // stripslashes() before calling replace_dangerous_char() because $_POST['title']
+        // stripslashes() before calling api_replace_dangerous_char() because $_POST['title']
         // is already escaped twice when it gets here.
-        $title = replace_dangerous_char(stripslashes($_POST['title']));
+        $title = api_replace_dangerous_char(stripslashes($_POST['title']));
         $title = FileManager::disable_dangerous_file($title);
 
         $filename = $title;
@@ -9299,7 +9299,7 @@ class learnpath
             $dest_path_to_lp = substr($this->path, -1) == '.' ? substr($this->path, 0, -1) : $this->path;
             $dest_path_to_scorm_folder = str_replace('//', '/', $temp_zip_dir.'/scorm/'.$dest_path_to_lp);
             mkdir($dest_path_to_scorm_folder, api_get_permissions_for_new_directories(), true);
-            $zip_files_dist = copyr(
+            $zip_files_dist = api_copyr(
                 $current_course_path.'/scorm/'.$this->path,
                 $dest_path_to_scorm_folder,
                 array('imsmanifest'),
@@ -10211,7 +10211,7 @@ EOD;
             }
         }
         // Send file to client
-        $name = replace_dangerous_char($this->get_name()).'.zip';
+        $name = api_replace_dangerous_char($this->get_name()).'.zip';
         DocumentManager::file_send_for_download($temp_zip_file, true, $name);
     }
 
@@ -10270,7 +10270,7 @@ EOD;
     {
         $path_bits = explode('/', dirname($path));
 
-        // IS_WINDOWS_OS has been defined in main_api.lib.php
+        // IS_WINDOWS_OS has been defined in api.lib.php
         $path_built = IS_WINDOWS_OS ? '' : '/';
 
         foreach ($path_bits as $bit) {

@@ -544,7 +544,7 @@ class scorm extends learnpath
             mkdir($course_sys_dir, api_get_permissions_for_new_directories());
         }
 
-        $current_dir = replace_dangerous_char(trim($current_dir), 'strict'); // Current dir we are in, inside scorm/
+        $current_dir = api_replace_dangerous_char(trim($current_dir), 'strict'); // Current dir we are in, inside scorm/
         if ($this->debug > 1) {
             error_log('New LP - import_package() - current_dir = '.$current_dir, 0);
         }
@@ -563,7 +563,7 @@ class scorm extends learnpath
         if ($this->debug > 1) {
             error_log("New LP - base file name is : ".$file_base_name, 0);
         }
-        $new_dir = replace_dangerous_char(trim($file_base_name), 'strict');
+        $new_dir = api_replace_dangerous_char(trim($file_base_name), 'strict');
         $this->subdir = $new_dir;
         if ($this->debug > 1) {
             error_log("New LP - subdir is first set to : ".$this->subdir, 0);

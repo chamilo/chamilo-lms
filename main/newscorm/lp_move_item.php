@@ -21,7 +21,7 @@ api_protect_course_script();
 
 /* Libraries */
 
-// The main_api.lib.php, database.lib.php and display.lib.php
+// The api.lib.php, database.lib.php and display.lib.php
 // libraries are included by default.
 
 include 'learnpath_functions.inc.php';

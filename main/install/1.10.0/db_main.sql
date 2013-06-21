@@ -3082,7 +3082,6 @@ CREATE TABLE branch_transaction (
     action char(20),
     item_id char(36),
     dest_id char(36),
-    info char(20),
     status_id tinyint not null default 0,
     time_insert datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
     time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00',

@@ -109,7 +109,7 @@ while ($cat = Database::fetch_array($res)) {
 $linebreak = '<div class="row"><div class="label"></div><div class="formw" style="border-bottom:1px dashed grey"></div></div>';
 
 // Build the form
-$form = new FormValidator('update_course', 'post', 'action', api_get_self().'?'.api_get_cidreq());
+$form = new FormValidator('update_course', 'post', api_get_self().'?'.api_get_cidreq());
 
 // COURSE SETTINGS
 $form->addElement('html', '<div><h3>'.Display::return_icon('settings.png', Security::remove_XSS(get_lang('CourseSettings')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('CourseSettings')).'</h3><div>');

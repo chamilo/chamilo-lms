@@ -4834,7 +4834,12 @@ class Exercise
 
     /**
      * Checks if the exercise is visible due a lot of conditions - visibility, time limits, student attempts
-     * @return bool true if is active
+     *
+     * @param int $lp_id
+     * @param int $lp_item_id
+     * @param int $lp_item_view_id
+     * @param bool $filter_by_admin
+     * @return array
      */
     public function is_visible($lp_id = 0, $lp_item_id = 0, $lp_item_view_id = 0, $filter_by_admin = true)
     {
@@ -5082,7 +5087,7 @@ class Exercise
     }
 
     /**
-     * Sets the question list when the exercise->read() is executed created depending of a parameter
+     * Sets the question list when the exercise->read() is executed
      */
     public function setQuestionList()
     {

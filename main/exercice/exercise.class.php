@@ -2658,6 +2658,7 @@ class Exercise
                         send_form();
                     }
                 });
+
                 $('#clock_warning').dialog('open');
 
                 $('#counter_to_redirect').epiclock({
@@ -2674,7 +2675,7 @@ class Exercise
                 if ($('#exercise_form').length) {
                     $('#exercise_form').submit();
                 } else {
-                    //In reminder
+                    // In reminder
                     final_submit();
                 }
             }

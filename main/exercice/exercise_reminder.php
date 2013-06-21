@@ -111,7 +111,7 @@ echo '<script>
 		lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});
 
         function final_submit() {
-        	//Normal inputs
+        	// Normal inputs
         	window.location = "'.$urlMainExercise.'exercise_result.php?origin='.$origin.'&exe_id='.$exe_id.'&" + lp_data;
 		}
 

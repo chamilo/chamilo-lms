@@ -1285,7 +1285,7 @@ class Category implements GradebookItem
                 foreach ($subcats as $subcat) {
                     $subevals = $subcat->get_evaluations($stud_id, true, $course_code);
                     //$this->debugprint($subevals);
-                    $evals = $subevals;
+                    $evals = array_merge($evals, $subevals); 
                 }
             }
         }

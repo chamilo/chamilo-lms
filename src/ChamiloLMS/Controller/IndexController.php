@@ -40,10 +40,16 @@ class IndexController extends CommonController
     public function indexAction(Application $app)
     {
         $this->cidReset();
+
         /** @var \Template $template */
         $template = $app['template'];
         $loginError = $app['request']->get('error');
         $extraJS = array();
+        /*
+        $token = $app['security']->getToken();
+        if (null !== $token) {
+            $user = $token->getUser();
+        }*/
 
         /*\ChamiloSession::write('name', 'clara');
         var_dump(\ChamiloSession::read('name'));

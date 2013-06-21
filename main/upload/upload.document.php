@@ -16,7 +16,7 @@
 	Libraries
 */
 
-//many useful functions in main_api.lib.php, by default included
+//many useful functions in api.lib.php, by default included
 if (!function_exists('api_get_path')) {
     header('location: upload.php');
     die;
@@ -146,7 +146,7 @@ if (isset($_POST['submit_image'])) {
 //they want to create a directory
 if (isset($_POST['create_dir']) && $_POST['dirname'] != '') {
     $added_slash = ($path == '/') ? '' : '/';
-    $dir_name = $path.$added_slash.replace_dangerous_char($_POST['dirname']);
+    $dir_name = $path.$added_slash.api_replace_dangerous_char($_POST['dirname']);
     $created_dir = FileManager::create_unexisting_directory(
         $_course,
         $_user['user_id'],

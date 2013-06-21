@@ -132,7 +132,7 @@ if ($alreadyInstalled) {
 /** End loading config files */
 
 /** Including legacy libs */
-require_once $includePath.'/lib/main_api.lib.php';
+require_once $includePath.'/lib/api.lib.php';
 
 // Setting $_configuration['url_append']
 $urlInfo = isset($_configuration['root_web']) ? parse_url($_configuration['root_web']) : null;
@@ -154,7 +154,7 @@ require_once $libPath.'events.lib.inc.php';
 require_once $libPath.'formvalidator/Rule/allowed_tags.inc.php';
 
 // Ensure that _configuration is in the global scope before loading
-// main_api.lib.php. This is particularly helpful for unit tests
+// api.lib.php. This is particularly helpful for unit tests
 // @todo do not use $GLOBALS
 /*if (!isset($GLOBALS['_configuration'])) {
     $GLOBALS['_configuration'] = $_configuration;
@@ -594,7 +594,7 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
         // is the latest logout_date still relevant?
         $sql_logout_date = "SELECT logout_date FROM $tbl_track_login WHERE login_id = $i_id_last_connection";
         $q_logout_date = Database::query($sql_logout_date);
-        $res_logout_date = convert_sql_date(Database::result($q_logout_date, 0, 'logout_date'));
+        $res_logout_date = api_convert_sql_date(Database::result($q_logout_date, 0, 'logout_date'));
 
         if ($res_logout_date < time() - $app['configuration']['session_lifetime']) {
             // now that it's created, we can get its ID and carry on

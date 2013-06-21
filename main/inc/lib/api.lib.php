@@ -586,7 +586,7 @@ function api_get_path($path_type, $path = null) {
 
     $load_new_config = false;
 
-    // To avoid that the api_get_access_url() function fails since global.inc.php also calls the main_api.lib.php
+    // To avoid that the api_get_access_url() function fails since global.inc.php also calls the api.lib.php
     if ($path_type == WEB_PATH) {
         if (isset($_configuration['access_url']) &&  $_configuration['access_url'] != 1) {
             //we look into the DB the function api_get_access_url
@@ -1204,7 +1204,7 @@ function api_get_user_courses($userid, $fetch_session = true) {
  *
  * @return array user info
  */
-function _api_format_user($user, $add_password = false) {
+function api_format_user($user, $add_password = false) {
     $result = array();
 
     //If user is anonymous we don't have anything to provide
@@ -1337,7 +1337,7 @@ function _api_format_user($user, $add_password = false) {
 function api_get_user_info($user_id = '', $check_if_user_is_online = false, $show_password = false, $add_extra_values = false) {
     if (empty($user_id)) {
         $_user = Session::read('_user');
-        return _api_format_user($_user);
+        return api_format_user($_user);
     }
     $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE user_id = '".Database::escape_string($user_id)."'";
     $result = Database::query($sql);
@@ -1357,7 +1357,7 @@ function api_get_user_info($user_id = '', $check_if_user_is_online = false, $sho
             }
             $result_array['user_is_online_in_chat'] = $user_online_in_chat;
 		}
-        $user = _api_format_user($result_array, $show_password);
+        $user = api_format_user($result_array, $show_password);
 
         if ($add_extra_values) {
             $extra_field_values = new ExtraField('user');
@@ -1380,7 +1380,7 @@ function api_get_user_info_from_username($username = '') {
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
-        return _api_format_user($result_array);
+        return api_format_user($result_array);
     }
     return false;
 }
@@ -1788,7 +1788,7 @@ function api_clear_anonymous($db_check = false) {
  * @author Noel Dieschburg
  * @param the int status code
  */
-function get_status_from_code($status_code) {
+function api_get_status_from_code($status_code) {
     switch ($status_code) {
         case STUDENT:
             return get_lang('Student', '');
@@ -3106,7 +3106,7 @@ function api_not_allowed($print_headers = false, $message = null) {
  * @version October 2003
  * @desc convert sql date to unix timestamp
  */
-function convert_sql_date($last_post_datetime) {
+function api_convert_sql_date($last_post_datetime) {
     list ($last_post_date, $last_post_time) = explode(' ', $last_post_datetime);
     list ($year, $month, $day) = explode('-', $last_post_date);
     list ($hour, $min, $sec) = explode(':', $last_post_time);
@@ -3824,7 +3824,7 @@ function api_max_sort_value($user_course_category, $user_id) {
  * @return boolean true or false
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
-function string_2_boolean($string) {
+function api_string_2_boolean($string) {
     if ($string == 'true') {
         return true;
     }
@@ -3948,7 +3948,7 @@ function api_get_permissions_for_new_files() {
  * @author      Yannick Warnier, adaptation for the Chamilo LMS, April, 2008
  * @author      Ivan Tcholakov, a sanity check about Directory class creation has been added, September, 2009
  */
-function rmdirr($dirname, $delete_only_content_in_folder = false) {
+function api_rmdirr($dirname, $delete_only_content_in_folder = false) {
 	$res = true;
 
     // A sanity check.
@@ -3977,7 +3977,7 @@ function rmdirr($dirname, $delete_only_content_in_folder = false) {
             }
 
             // Recurse.
-            rmdirr("$dirname/$entry");
+            api_rmdirr("$dirname/$entry");
         }
     }
 
@@ -4004,7 +4004,7 @@ function rmdirr($dirname, $delete_only_content_in_folder = false) {
  * @param an array of excluded file_name (without extension)
  * @param copied_files the returned array of copied files
  */
-function copyr($source, $dest, $exclude = array(), $copied_files = array()) {
+function api_copyr($source, $dest, $exclude = array(), $copied_files = array()) {
     if (empty($dest)) { return false; }
     // Simple copy for a file
     if (is_file($source)) {
@@ -4033,7 +4033,7 @@ function copyr($source, $dest, $exclude = array(), $copied_files = array()) {
 
         // Deep copy directories.
         if ($dest !== "$source/$entry") {
-            $files = copyr("$source/$entry", "$dest/$entry", $exclude, $copied_files);
+            $files = api_copyr("$source/$entry", "$dest/$entry", $exclude, $copied_files);
         }
     }
     // Clean up.
@@ -4042,7 +4042,7 @@ function copyr($source, $dest, $exclude = array(), $copied_files = array()) {
 }
 
 // TODO: Using DIRECTORY_SEPARATOR is not recommended, this is an obsolete approach. Documentation header to be added here.
-function copy_folder_course_session($pathname, $base_path_document, $session_id, $course_info, $document, $source_course_id) {
+function api_copy_folder_course_session($pathname, $base_path_document, $session_id, $course_info, $document, $source_course_id) {
     $table = Database :: get_course_table(TABLE_DOCUMENT);
     $session_id = intval($session_id);
     $source_course_id = intval($source_course_id);
@@ -4054,7 +4054,7 @@ function copy_folder_course_session($pathname, $base_path_document, $session_id,
 
     // Ensure that a file with the same name does not already exist.
     if (is_file($pathname)) {
-        trigger_error('copy_folder_course_session(): File exists', E_USER_WARNING);
+        trigger_error('api_copy_folder_course_session(): File exists', E_USER_WARNING);
         return false;
     }
 
@@ -4185,7 +4185,7 @@ function api_chmod_R($path, $filemode) {
  * @return
  *   The info array.
  */
-function parse_info_file($filename) {
+function api_parse_info_file($filename) {
     $info = array();
 
     if (!file_exists($filename)) {
@@ -4992,7 +4992,7 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
  * @return string                           The cleaned filename.
  */
 
-function replace_dangerous_char($filename, $strict = 'loose') {
+function api_replace_dangerous_char($filename, $strict = 'loose') {
     // Safe replacements for some non-letter characters.
     static $search  = array("\0", ' ', "\t", "\n", "\r", "\x0B", '/', "\\", '"', "'", '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#', '+', '&', '%');
     static $replace = array('',   '_', '_',  '_',  '_',  '_',    '-', '-',  '-', '_', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
@@ -5435,7 +5435,7 @@ function api_get_tool_information_by_name($name) {
 /* DEPRECATED FUNCTIONS */
 
 /**
- * deprecated: use api_is_allowed_to_edit() instead
+ * @deprecated: use api_is_allowed_to_edit() instead
  */
 function is_allowed_to_edit() {
     return api_is_allowed_to_edit();
@@ -5719,7 +5719,7 @@ function api_get_jqgrid_js() {
     return api_get_jquery_libraries_js(array('jqgrid'));
 }
 
-function get_available_jquery_ui_languages() {
+function api_get_available_jquery_ui_languages() {
     //see http://jqueryui.com/demos/datepicker/#localization
     return array(
         'af',//Afrikaans
@@ -5809,7 +5809,7 @@ function api_get_jquery_libraries_js($libraries) {
     if (in_array('jquery-ui-i18n', $libraries)) {
         $js .= api_get_js('jquery-ui/jquery-ui-i18n.min.js');
 
-        if (!in_array($isocode, get_available_jquery_ui_languages())) {
+        if (!in_array($isocode, api_get_available_jquery_ui_languages())) {
             $isocode = 'en';
         }
         if ($isocode == 'en') {
@@ -5908,7 +5908,7 @@ function api_get_home_path() {
 	if (api_get_multiple_access_url() && $access_url_id != -1) {
 		$url_info      = api_get_current_access_url_info();
 		$url           = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
-		$clean_url     = replace_dangerous_char($url);
+		$clean_url     = api_replace_dangerous_char($url);
 		$clean_url     = str_replace('/', '-', $clean_url);
 		$clean_url     .= '/';
 		// if $clean_url ==  "localhost/" means that the multiple URL was not well configured we don't rename the $home variable
@@ -6264,7 +6264,7 @@ function api_get_roles_to_string($roles) {
     $role_names = array();
     if (!empty($roles)) {
         foreach ($roles as $role) {
-            $role_names[] = get_status_from_code($role);
+            $role_names[] = api_get_status_from_code($role);
         }
     }
     if (!empty($role_names)) {
@@ -6273,22 +6273,6 @@ function api_get_roles_to_string($roles) {
     return null;
 }
 
-function role_actions() {
-    return array(
-        'course' => array(
-            'create',
-            'read',
-            'edit',
-            'delete'
-        ),
-        'admin' => array(
-            'create',
-            'read',
-            'edit',
-            'delete'
-        )
-    );
-}
 
 function api_coach_can_edit_view_results($courseId = null, $session_id = null) {
     $user_id = api_get_user_id();
@@ -6846,9 +6830,6 @@ function api_get_language_interface()
     return $language_interface;
 }
 
-function getConfigurationArray($confPath) {
-}
-
 function api_get_default_course_document()
 {
     return api_get_path(SYS_PATH).'app/data/default_course_document/';
@@ -6859,11 +6840,6 @@ function api_get_web_default_course_document()
     return api_get_path(WEB_PATH).'app/data/default_course_document/';
 }
 
-function load_translations($app)
-{
-
-}
-
 
 /**
  * Get user roles
@@ -6871,14 +6847,14 @@ function load_translations($app)
  */
 function api_get_user_roles()
 {
-    /*global $app;
-    $em = $app['orm.ems']['db_write'];
+    global $app;
+    $em = $app['orm.ems']['db_read'];
     $roles = $em->getRepository('Entity\Role')->findAll();
     $userRoles = array();
     foreach ($roles as $role) {
         $userRoles[$role->getId()] = $role->getName();
     }
-    return $userRoles;*/
+    return $userRoles;
 
     // Status
     $status = array();

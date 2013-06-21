@@ -2,7 +2,7 @@
 /* See license terms in /license.txt */
 /**
  * Library for language translation from Chamilo language files to XML for videoconference
- * @uses main_api.lib.php for api_get_path()
+ * @uses api.lib.php for api_get_path()
  */
 /**
  * This function reads a Chamilo language file and transforms it into XML,

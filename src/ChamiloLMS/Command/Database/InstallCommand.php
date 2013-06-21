@@ -245,7 +245,7 @@ class InstallCommand extends CommonCommand
                 if ($result) {
 
                     require_once $this->getRootSys().'main/inc/lib/database.constants.inc.php';
-                    require_once $this->getRootSys().'main/inc/lib/main_api.lib.php';
+                    require_once $this->getRootSys().'main/inc/lib/api.lib.php';
 
                     // In order to use the Database class
                     $database = new \Database($this->getHelper('db')->getConnection(), null);

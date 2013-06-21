@@ -13,7 +13,7 @@ set_time_limit(0);
 
 require_once __DIR__.'/../../vendor/autoload.php';
 require_once 'install.lib.php';
-require_once '../inc/lib/main_api.lib.php';
+require_once '../inc/lib/api.lib.php';
 
 error_reporting(-1);
 

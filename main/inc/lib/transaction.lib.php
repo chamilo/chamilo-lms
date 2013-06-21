@@ -388,6 +388,7 @@ class TransactionLogController {
       // Set the right id in the new system.
       $transaction_data['transaction_id'] = $transaction_data['id'];
       unset($transaction_data['id']);
+      $transaction_data['status_id'] = TransactionLog::STATUS_TO_BE_EXECUTED;
       $transaction = new $class_name($transaction_data);
       $transaction->save();
       $added_transactions[] = $transaction->id;

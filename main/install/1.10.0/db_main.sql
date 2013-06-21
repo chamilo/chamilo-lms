@@ -3081,7 +3081,6 @@ CREATE TABLE branch_transaction (
     branch_id int not null default 0,
     action char(20),
     item_id char(36),
-    orig_id char(36),
     dest_id char(36),
     info char(20),
     status_id tinyint not null default 0,

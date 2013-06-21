@@ -312,5 +312,8 @@ ALTER TABLE branch_transaction_log DROP branch_sync_id, DROP sync_type;
 ALTER TABLE branch_transaction_log CHANGE sync_trans_date import_time DATETIME NULL DEFAULT NULL;
 ALTER TABLE branch_transaction_log ADD message MEDIUMTEXT NOT NULL;
 
+-- Remove orig_id in favor of item_id.
+ALTER TABLE branch_transaction DROP orig_id;
+
 -- Do not move this
 UPDATE settings_current SET selected_value = '1.10.0.024' WHERE variable = 'chamilo_database_version';

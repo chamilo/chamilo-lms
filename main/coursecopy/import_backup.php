@@ -57,10 +57,10 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
     if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
         // Partial backup here we recover the documents posted
         $course = CourseSelectForm::get_posted_course();
-
     } else {
-        if ($_POST['backup_type'] == 'server') {
-            $filename = $_POST['backup_server'];
+        $backupServer = isset($_POST['backup_server']) ? $_POST['backup_server'] : null;
+        if ($backupServer == 'server') {
+            $filename = $backupServer;
             $delete_file = false;
         } else {
             if ($_FILES['backup']['error'] == 0) {
@@ -80,7 +80,6 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
             $course = CourseArchiver::read_course($filename, $delete_file);
         }
     }
-
 
     if (!$error && $course->has_resources()) {
 
@@ -139,7 +138,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
     $backups = CourseArchiver::get_available_backups($user);
     $backups_available = count($backups) > 0;
 
-    $form = new FormValidator('import_backup_form', 'post', 'import_backup.php', '', 'multipart/form-data');
+    $form = new FormValidator('import_backup_form', 'post', api_get_path(WEB_CODE_PATH).'coursecopy/import_backup.php', '', 'multipart/form-data');
     $form->addElement('header', get_lang('SelectBackupFile'));
     $renderer = $form->defaultRenderer();
     $renderer->setElementTemplate('<div>{element}</div> ');
@@ -199,7 +198,6 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
     );
 
     $form->addElement('html', '<br /><br />');
-
     $form->addElement('html', get_lang('SameFilename'));
     $form->addElement('html', '<br /><br />');
     $form->addElement(

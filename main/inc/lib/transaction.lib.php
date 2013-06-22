@@ -459,6 +459,30 @@ class TransactionLogController {
   }
 
   /**
+   * Imports pending transactions to the system.
+   *
+   * @param int $limit
+   *   The maximum number of transactions to import into the system.
+   *
+   * @return array
+   *   See TransactionLogController::importToSystem().
+   */
+  public function importPendingToSystem($limit = 10) {
+    // Sadly multiple values are not supported by Database::select(), aka IN
+    // operation.
+    $transaction_actions_map = TransactionLog::getTransactionMappingSettings();
+    $sql = sprintf('SELECT * FROM %s WHERE branch_id != %d AND status_id IN (%d, %d) LIMIT %d', $this->table, TransactionLog::BRANCH_LOCAL, TransactionLog::STATUS_TO_BE_EXECUTED, TransactionLog::STATUS_FAILED, $limit);
+    $result = Database::query($sql);
+    $transactions = array();
+    while ($row = $result->fetch()) {
+      $class_name = $transaction_actions_map[$row['action']]['class'];
+      $transactions[$row['id']] = new $class_name($row);
+      $transactions[$row['id']]->loadData();
+    }
+    return $this->importToSystem($transactions);
+  }
+
+  /**
    * Adds an entry on transaction import log table.
    *
    * @param array $log_entry

@@ -302,10 +302,15 @@ class TransactionLogController {
    * A local place to store the branch transaction data table name.
    */
   protected $data_table;
+  /**
+   * A local place to store the branch transaction data table name.
+   */
+  protected $log_table;
 
   public function __construct() {
     $this->table = Database::get_main_table(TABLE_BRANCH_TRANSACTION);
     $this->data_table = Database::get_main_table(TABLE_BRANCH_TRANSACTION_DATA);
+    $this->log_table = Database::get_main_table(TABLE_BRANCH_TRANSACTION_LOG);
   }
 
   /**
@@ -394,6 +399,85 @@ class TransactionLogController {
       $added_transactions[] = $transaction->id;
     }
     return $added_transactions;
+  }
+
+  /**
+   * Imports the passed transactions to the current system.
+   *
+   * @param array $transactions
+   *   A set of TransactionLog objects to import.
+   *
+   * @return array
+   *   Two keys are provided:
+   *   - 'success': A set of transaction ids correctly added.
+   *   - 'fail': A set of transaction ids that failed to be added.
+   */
+  public function importToSystem($transactions) {
+    $imported_ids = array(
+      'success' => array(),
+      'fail' => array(),
+    );
+    $transaction_actions_map = TransactionLog::getTransactionMappingSettings();
+    $max_possible_attempts = 3;
+    foreach ($transactions as $transaction) {
+      $log_entry = array('transaction_id' => $transaction->id);
+      if ($transaction->status_id == TransactionLog::STATUS_ABANDONNED) {
+        $log_entry['message'] = 'Skipped import of abandoned transaction.';
+        self::addImportLog($log_entry);
+        $imported_ids['fail'][] = $transaction->id;
+        continue;
+      }
+      if (isset($transaction_actions_map[$transaction->action]['max_attempts'])) {
+        $max_possible_attempts = $transaction_actions_map[$transaction->action]['max_attempts'];
+      }
+      // @todo Move to group query outside of the loop if performance is not enough.
+      $row = Database::select('count(id) as import_attempts', $this->log_table, array('where' => array('transaction_id = ?' => array($transaction->id))));
+      $row = array_shift($row);
+      if ($row['import_attempts'] >= $max_possible_attempts) {
+        $log_entry['message'] = sprintf('Reached maximum number of import attempts: "%d" attempts of "%d".', $row['import_attempts'], $max_possible_attempts);
+        self::addImportLog($log_entry);
+        $transaction->status_id = TransactionLog::STATUS_ABANDONNED;
+        $transaction->save();
+        $imported_ids['fail'][] = $transaction->id;
+        continue;
+      }
+      try {
+        $transaction->import();
+        $log_entry['message'] = 'Successfully imported.';
+        $transaction->status_id = TransactionLog::STATUS_SUCCESSFUL;
+        $imported_ids['success'][] = $transaction->id;
+      }
+      catch (Exception $import_exception) {
+        $log_entry['message'] = $import_exception->getMessage();
+        $transaction->status_id = TransactionLog::STATUS_FAILED;
+        $imported_ids['fail'][] = $transaction->id;
+      }
+      self::addImportLog($log_entry);
+      $transaction->save();
+    }
+    return $imported_ids;
+  }
+
+  /**
+   * Adds an entry on transaction import log table.
+   *
+   * @param array $log_entry
+   *   An array with the following keys:
+   *   - 'transaction_id': The related transaction id.
+   *   - 'import_time': (optional) The time of the import or current time if
+   *     not provided.
+   *   - 'message': (optional) The related message. Usually from exception
+   *     messages or manual strings on success.
+   *
+   * @return int
+   *   The id of the inserted log, as provided by Database::insert().
+   */
+  public function addImportLog($log_entry) {
+    $log_entry += array(
+      'import_time' => api_get_utc_datetime(),
+      'message' => '',
+    );
+    return Database::insert($this->log_table, $log_entry);
   }
 }
 

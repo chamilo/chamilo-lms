@@ -47,6 +47,7 @@
   <li><a href="#5.Users-upload-directories">Users upload directories</a></li>
   <li><a href="#6.Zlib-compression">Zlib compressed output</a></li>
   <li><a href="#7.High-numbers-memory">Memory considerations for high numbers of users</a></li>
+  <li><a href="#8.Avoid-non-fixed-values">Avoiding non-fixed values</a></li>
 </ol>
 
 <h2><a name="1.Using-XCache"></a>1. Using xCache or APC</h2>
@@ -247,6 +248,19 @@ Don't have time or resources to optimize your Chamilo installation yourself? Hir
 Some administration scripts *have to* handle lists of all users, and this might have a considerable impact on portals with very high numbers of users. For example, the main/admin/add_users_to_session.php script that handles the registration of users into a specific session, if used with the (non-default) full list of users, will devour about 3KB per user, which, for 100,000 users, translates into the need for around 300MB of RAM just to show this page, and to around 3GB for 1,000,000 users.<br />
 This mode is not loaded by default, but could still be selected, leading to a "Fatal error: Allowed memory size ... exhausted" message.<br />
 The only non-scripted solution here is to allow for the corresponding amount of RAM for your PHP configuration (<em>memory_limit = 300M</em>) or your specific VirtualHost if you use mod-php5 (<em>php_value memory_limit 300M</em>).<br/>
+<hr />
+<h2><a name="#8.Avoid-non-fixed-values"></a>Avoiding non-fixed values</h2>
+Many things in Chamilo are written focusing on the ease of use, even for the administrator. Sometimes, these settings are weighing a little bit more on the system. This is the case, between others, of the mail.conf.php file (being loaded unconditionally) and its CONSTANT "IS_WINDOWS_OS", which is defined by a function call (api_is_windows_os()) at the beginning of main_api.lib.php.
+
+The definition of this constant (which is executed at *every* page load) can easily be avoided, and the only place where it is used inconditionally (mail.conf.php) can be modified to set the line as you expect it (depending on whether you use sendmail/exim or smtp).
+<pre>
+$platform_email['SMTP_MAILER']       = 'smtp';
+</pre>
+or
+<pre>
+$platform_email['SMTP_MAILER']       = 'mail';
+</pre>
+In fact, the complete loading of mail.conf.php can also be avoided if loaded conditionally (with <i>require_once</i>) when sending an e-mail (which is the only case where it is useful).
 <hr />
 <h2>Authors</h2>
 <ul>

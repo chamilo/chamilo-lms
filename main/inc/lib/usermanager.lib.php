@@ -533,7 +533,10 @@ class UserManager
         if (!in_array($language, $languages['folder'])) {
             $language = api_get_setting('platformLanguage');
         }
-
+        $change_active = 0;
+        if ($user_info['active'] != $active) {
+            $change_active = 1;
+        }        
         $sql = "UPDATE $table_user SET
                 lastname='".Database::escape_string($lastname)."',
                 firstname='".Database::escape_string($firstname)."',
@@ -573,6 +576,15 @@ class UserManager
         }
         $sql .= " WHERE user_id='$user_id'";
         $return = Database::query($sql);
+        if ($change_active == 1 && $return) {
+           $user_info = api_get_user_info($user_id);
+           if ($active == 1) {
+                $event_title = LOG_USER_ENABLE;
+           } else {
+                $event_title = LOG_USER_DISABLE;
+           }
+           event_system($event_title, LOG_USER_ID, $user_id, api_get_utc_datetime(), null, null); 
+        }
         if (is_array($extra) && count($extra) > 0) {
             $res = true;
             foreach ($extra as $fname => $fvalue) {

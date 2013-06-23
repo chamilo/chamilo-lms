@@ -981,7 +981,7 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
 	$title 		= Database::fetch_row($result);
 	global $gradebook;
     //@todo use formvalidator please!
-	$form = '<form class="form-horizontal" name="move_to_form" action="'.api_get_self().'?gradebook='.$gradebook.'&curdirpath='.Security::remove_XSS($curdirpath).'" method="POST">';
+	$form = '<form class="form-horizontal" name="move_to_form" action="'.api_get_self().'?'.api_get_cidreq().'&gradebook='.$gradebook.'&curdirpath='.Security::remove_XSS($curdirpath).'" method="POST">';
 	$form .= '<legend>'.get_lang('MoveFile').' - '.Security::remove_XSS($title[0]).'</legend>';
 	$form .= '<input type="hidden" name="item_id" value="'.$move_file.'" />';
 	$form .= '<input type="hidden" name="action" value="move_to" />';

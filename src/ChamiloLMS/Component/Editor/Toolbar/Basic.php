@@ -54,7 +54,9 @@ class Basic
             array('name' => 'styles'),
             array('name' => 'colors'),
             array('name' => 'tools'),
-            array('name' => 'others')
+            array('name' => 'others'),
+            array('name' => 'allMedias')
+
         );
 
         // file manager (elfinder)
@@ -69,7 +71,8 @@ class Basic
         filebrowserImageUploadUrl
         filebrowserUploadUrl*/
 
-        $config['extraPlugins'] = 'oembed';
+        $config['extraPlugins'] = 'oembed,video';
+
 
         if (isset($this->config)) {
             $this->config = array_merge($config, $this->config);

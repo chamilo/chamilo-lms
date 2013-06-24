@@ -373,7 +373,7 @@ $cleanCourseSession = function (Request $request) use ($app) {
 
 $adminAndQuestionManagerCondition = function (Request $request) use ($app) {
     if (!(api_is_platform_admin() || api_is_question_manager())) {
-        $app->abort(401);
+        //$app->abort(401);
     }
     return null;
 };
@@ -451,7 +451,6 @@ $app->match('/login', 'index.controller:loginAction', 'GET|POST')
 /*$app->match('/admin/login-check', 'index.controller:checkLoginAction', 'GET|POST')
 ->bind('login_check');*/
 
-
 /** Course home instead of courses/MATHS the new URL is web/courses/MATHS  */
 $app->match('/courses/{cidReq}/{id_session}/', 'course_home.controller:indexAction', 'GET|POST')
     ->assert('id_session', '\d+')
@@ -460,6 +459,12 @@ $app->match('/courses/{cidReq}/{id_session}/', 'course_home.controller:indexActi
     ->before($userPermissionsInsideACourse)
     ->bind('course');
 
+$app->match('/courses/{cidReq}', 'course_home.controller:indexAction', 'GET|POST')
+    ->assert('type', '.+')
+    ->before($settingCourseConditions)
+    ->before($userPermissionsInsideACourse);
+
+// @todo this is the same as above but with out slash (otherwise we will have an httpexception)
 $app->match('/courses/{cidReq}/', 'course_home.controller:indexAction', 'GET|POST')
     ->assert('type', '.+')
     ->before($settingCourseConditions)
@@ -530,6 +535,11 @@ $app->get('/admin/administrator/roles', 'role.controller:IndexAction')
     ->assert('type', '.+')
     ->before($adminAndQuestionManagerCondition)
     ->bind('admin_administrator_roles');
+
+
+$app->get('/admin/dashboard', 'index.controller:dashboardAction')
+    ->assert('type', '.+')
+    ->bind('admin_dashboard');
 
 /** Question manager - admin */
 

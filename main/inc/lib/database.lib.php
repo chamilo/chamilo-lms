@@ -153,7 +153,7 @@ class Database
         if ($result === false) {
             return array();
         }
-        return $result->fetch(PDO::FETCH_BOTH);
+        return $result->fetch(self::customOptionToDoctrineOption($option));
 
         /*return $option == 'ASSOC' ? mysql_fetch_array($result, MYSQL_ASSOC) : ($option == 'NUM' ? mysql_fetch_array(
             $result,
@@ -183,6 +183,7 @@ class Database
      */
     public static function fetch_object(\Doctrine\DBAL\Driver\Statement $result)
     {
+        // Waiting for http://www.doctrine-project.org/jira/browse/DBAL-544 in order to know which constant use.
         //return $result->fetch(\Doctrine\ORM\Query::HYDRATE_OBJECT);
         return $result->fetch(PDO::FETCH_OBJ);
 
@@ -382,10 +383,25 @@ class Database
                 $message .= $query;
                 echo $message;
                 echo '</pre>';
-                //error_log($message);
             }
         }
         */
+    }
+
+    public static function customOptionToDoctrineOption($option)
+    {
+        switch($option) {
+            case 'ASSOC':
+                return PDO::FETCH_ASSOC;
+                break;
+            case 'NUM':
+                return PDO::FETCH_NUM;
+                break;
+            case 'BOTH':
+            default:
+                return PDO::FETCH_BOTH;
+                break;
+        }
     }
 
     /**
@@ -396,8 +412,9 @@ class Database
      */
     public static function store_result(\Doctrine\DBAL\Driver\Statement $result, $option = 'BOTH')
     {
-        return $result->fetchAll();
+        return $result->fetchAll(self::customOptionToDoctrineOption($option));
         /*
+        var_dump($a );
         $array = array();
         if ($result !== false) { // For isolation from database engine's behaviour.
             while ($row = self::fetch_array($result, $option)) {

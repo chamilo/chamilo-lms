@@ -597,7 +597,7 @@ switch ($action) {
                     );
 
                     // Replace dangerous characters
-                    $new_file_name = replace_dangerous_char($new_file_name, 'strict');
+                    $new_file_name = api_replace_dangerous_char($new_file_name, 'strict');
 
                     // Transform any .php file in .phps fo security
                     $new_file_name = FileManager::php2phps($new_file_name);
@@ -906,7 +906,7 @@ switch ($action) {
             if ($form->validate()) {
 
                 $directory = Security::remove_XSS($_POST['new_dir']);
-                $directory = replace_dangerous_char($directory);
+                $directory = api_replace_dangerous_char($directory);
                 $directory = FileManager::disable_dangerous_file($directory);
                 $dir_name = $curdirpath.$directory;
                 $created_dir = create_unexisting_work_directory($base_work_dir, $dir_name);

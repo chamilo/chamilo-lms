@@ -50,7 +50,7 @@ $extension = strtolower($extension[sizeof($extension) - 1]);
 //a bit title security
 $filename = addslashes(trim($file));
 $filename = Security::remove_XSS($filename);
-$filename = replace_dangerous_char($filename, 'strict');
+$filename = api_replace_dangerous_char($filename, 'strict');
 $filename = FileManager::disable_dangerous_file($filename);
 
 //a bit mime security

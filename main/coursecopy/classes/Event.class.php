@@ -18,39 +18,39 @@ class Event extends Resource
 	/**
 	 * The title
 	 */
-	var $title;
+	public $title;
 	/**
 	 * The content
 	 */
-	var $content;
+	public $content;
 	/**
 	 * The start date
 	 */
-	var $start_date;
+	public $start_date;
 	/**
 	 * The end date
 	 */
-	var $end_date;
+	public $end_date;
 	/**
 	 * The attachment path
 	 */
-	var $attachment_path;
-	
+	public $attachment_path;
+
 	/**
 	 * The attachment filename
 	 */
-	var $attachment_filename;
+	public $attachment_filename;
 	/**
 	 * The attachment size
 	 */
-	var $attachment_size;
-	
+	public $attachment_size;
+
 	/**
 	 * The attachment comment
 	 */
-	var $attachment_comment;
-	
-	
+	public $attachment_comment;
+
+
 	/**
 	 * Create a new Event
 	 * @param int $id
@@ -62,19 +62,19 @@ class Event extends Resource
 	 */
 	function Event($id, $title, $content, $start_date, $end_date, $attachment_path = null, $attachment_filename= null, $attachment_size= null, $attachment_comment= null, $all_day = 0) {
 		parent::Resource($id,RESOURCE_EVENT);
-		
+
 		$this->title 				= $title;
 		$this->content 				= $content;
 		$this->start_date 			= $start_date;
 		$this->end_date 			= $end_date;
         $this->all_day              = $all_day;
-		
+
 		$this->attachment_path 		= $attachment_path;
 		$this->attachment_filename	= $attachment_filename;
 		$this->attachment_size		= $attachment_size;
-		$this->attachment_comment	= $attachment_comment;		
+		$this->attachment_comment	= $attachment_comment;
 	}
-    
+
 	/**
 	 * Show this Event
 	 */

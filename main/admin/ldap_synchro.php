@@ -13,11 +13,10 @@ $language_file = 'admin';
 
 $cidReset = true;
 
-require('../inc/global.inc.php');
+require '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
-require_once($libpath.'formvalidator/FormValidator.class.php');
-require_once($libpath.'usermanager.lib.php');
-require_once('../auth/ldap/authldap.php');
+require_once api_get_path(SYS_CODE_PATH).'auth/ldap/authldap.php';
+
 $annee_base = date('Y');
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;

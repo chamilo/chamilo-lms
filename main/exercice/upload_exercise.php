@@ -302,15 +302,14 @@ function lp_upload_quiz_action_handling()
             $_SESSION['oLP']->add_item($parent, $previous, TOOL_QUIZ, $quiz_id, ($quiz_title), '');
             // Redirect to home page for add more content
             header(
-                'location: ../newscorm/lp_controller.php?'.api_get_cidreq(
+                'Location: '.api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq(
                 ).'&action=add_item&type=step&lp_id='.Security::remove_XSS(
                     $_GET['lp_id']
                 ).'&session_id='.api_get_session_id()
             );
             exit;
         } else {
-            //  header('location: exercice.php?' . api_get_cidreq());
-            echo '<script>window.location.href = "admin.php?'.api_get_cidReq(
+            echo '<script>window.location.href = "'.api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidReq(
             ).'&exerciseId='.$quiz_id.'&session_id='.api_get_session_id().'"</script>';
         }
     }

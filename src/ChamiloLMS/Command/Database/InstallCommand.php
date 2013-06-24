@@ -61,6 +61,7 @@ class InstallCommand extends CommonCommand
 
         // Getting the new config folder
         $configurationPath = $this->getHelper('configuration')->getNewConfigurationPath($path);
+
         $this->setRootSys(realpath($configurationPath.'/../').'/');
 
         $dialog = $this->getHelperSet()->get('dialog');
@@ -71,23 +72,31 @@ class InstallCommand extends CommonCommand
             $version = $defaultVersion;
         }
 
-        $output->writeln("<comment>Welcome to the Chamilo $version installation process.</comment>");
+        if ($this->commandLine) {
+            $output->writeln("<comment>Welcome to the Chamilo $version installation process.</comment>");
+        } else {
+            $output->writeln("<comment>Chamilo installation process. </comment>");
+        }
 
         if (!is_writable($configurationPath)) {
             $output->writeln("<comment>Folder ".$configurationPath." must be writable</comment>");
-            return false;
+            return 0;
         }
 
         $sqlFolder = $this->getInstallationPath($version);
 
         if (!is_dir($sqlFolder)) {
             $output->writeln("<comment>Sorry you can't install that version of Chamilo :( Supported versions:</comment> <info>".implode(', ', $this->getAvailableVersions()));
-            return false;
+            return 0;
         }
 
         if (file_exists($configurationPath.'configuration.php') || file_exists($configurationPath.'configuration.yml')) {
-            $output->writeln("<comment>There's a Chamilo portal here ".$configurationPath." you must run</comment> <info>chamilo:setup </info><comment>if you want a fresh install.</comment>");
-            return false;
+            if ($this->commandLine) {
+                $output->writeln("<comment>There's a Chamilo portal here ".$configurationPath." you must run</comment> <info>chamilo:setup </info><comment>if you want a fresh install.</comment>");
+            } else {
+                $output->writeln("<comment>There's a Chamilo portal here ".$configurationPath." </comment>");
+            }
+            return 0;
             /*
             if (!$dialog->askConfirmation(
                 $output,
@@ -95,7 +104,7 @@ class InstallCommand extends CommonCommand
                 false
             )
             ) {
-                return;
+                return 0;
             }
 
             if (!$dialog->askConfirmation(
@@ -104,7 +113,7 @@ class InstallCommand extends CommonCommand
                 false
             )
             ) {
-                return;
+                return 0;
             }
             $this->cleanInstallation($output);*/
         }
@@ -184,13 +193,13 @@ class InstallCommand extends CommonCommand
 
         $connectionToHost = $this->getUserAccessConnectionToHost();
         $connectionToHostConnect = $connectionToHost->connect();
+
         if ($connectionToHostConnect) {
             $output->writeln("<comment>Connection enabled for user: </comment><info>".$databaseSettings['user']);
         } else {
             $output->writeln("<error>No access to the database for user:</error><info>".$databaseSettings['user']."</info>");
-            return false;
+            return 0;
         }
-
 
         if ($this->commandLine) {
             $databases = $connectionToHost->listDatabases();
@@ -203,17 +212,23 @@ class InstallCommand extends CommonCommand
                     false
                 )
                 ) {
-                    return;
+                    return 0;
                 }
             }
         }
 
         // When installing always drop the current database
+        try {
+            $sm = $connectionToHost->getSchemaManager();
+            $sm->dropAndCreateDatabase($databaseSettings['dbname']);
+            $connectionToDatabase = $this->getUserAccessConnectionToDatabase();
+            $connect = $connectionToDatabase->connect();
+        } catch (\Exception $e) {
+            $output->writeln(sprintf('<error>Could not create database for connection named <comment>%s</comment></error>', $databaseSettings['dbname']));
+            $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
+            return 0;
+        }
 
-        $sm = $connectionToHost->getSchemaManager();
-        $sm->dropAndCreateDatabase($databaseSettings['dbname']);
-        $connectionToDatabase = $this->getUserAccessConnectionToDatabase();
-        $connect = $connectionToDatabase->connect();
         if ($connect) {
 
             $output->writeln("<comment>Connection to database '".$databaseSettings['dbname']."' established.</comment>");
@@ -230,7 +245,7 @@ class InstallCommand extends CommonCommand
                 if ($result) {
 
                     require_once $this->getRootSys().'main/inc/lib/database.constants.inc.php';
-                    require_once $this->getRootSys().'main/inc/lib/main_api.lib.php';
+                    require_once $this->getRootSys().'main/inc/lib/api.lib.php';
 
                     // In order to use the Database class
                     $database = new \Database($this->getHelper('db')->getConnection(), null);
@@ -276,18 +291,18 @@ class InstallCommand extends CommonCommand
                     //$output->writeln("<comment>Migration ended succesfully</comment>");
 
                     //$output->writeln("<comment>Chamilo was successfully installed. Go to your browser and enter:</comment> <info>".$newConfigurationArray['root_web']);
-                    return true;
+                    return 1;
                 } else {
                     $output->writeln("<comment>There was an error during installation.</comment>");
-                    return false;
+                    return 0;
                 }
             } else {
                 $output->writeln("<comment>Configuration file was not saved</comment>");
-                return false;
+                return 0;
             }
         } else {
             $output->writeln("<comment>Can't create database '".$databaseSettings['dbname']."' </comment>");
-            return false;
+            return 0;
         }
     }
 

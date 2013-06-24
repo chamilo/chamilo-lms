@@ -4,4 +4,6 @@
     RewriteEngine On
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+    # The previous redirection doesn't work on MAMP. Use next line instead
+    #RewriteRule ^ web/index.php [L]
 </IfModule>

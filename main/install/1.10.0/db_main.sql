@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS user (
   openid varchar(255) DEFAULT NULL,
   theme varchar(255) DEFAULT NULL,
   hr_dept_id int unsigned NOT NULL default 0,
+  salt VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY  (user_id),
   UNIQUE KEY username (username)
 );
@@ -55,6 +56,27 @@ INSERT INTO user (lastname, firstname, username, password, auth_source, email, s
 INSERT INTO user (lastname, firstname, username, password, auth_source, email, status, official_code, creator_id, registration_date, expiration_date,active,openid,language) VALUES ('Anonymous', 'Joe', '', '', 'platform', 'anonymous@localhost', 6, 'anonymous', 1, NOW(), '0000-00-00 00:00:00', 1,NULL,'{ADMINLANGUAGE}');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE user ENABLE KEYS */;
+
+
+CREATE TABLE roles (
+  id INT auto_increment,
+  name VARCHAR(255),
+  role VARCHAR(255) UNIQUE,
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE users_roles (
+  user_id INT NOT NULL,
+  role_id INT NOT NULL,
+  PRIMARY KEY(user_id, role_id)
+);
+
+INSERT INTO roles (name, role) VALUES('Admin', 'ROLE_ADMIN');
+INSERT INTO roles (name, role) VALUES('Teacher', 'ROLE_TEACHER');
+INSERT INTO roles (name, role) VALUES('Student', 'ROLE_STUDENT');
+INSERT INTO roles (name, role) VALUES('Anonymous', 'ROLE_ANONYMOUS');
+INSERT INTO roles (name, role) VALUES('RRHH', 'ROLE_RRHH');
+INSERT INTO roles (name, role) VALUES('Question Manager', 'ROLE_QUESTION_MANAGER');
 
 --
 -- Table structure for table admin
@@ -481,12 +503,12 @@ CREATE TABLE IF NOT EXISTS session (
   visibility int NOT NULL default 1,
   session_category_id int NOT NULL,
   promotion_id INT NOT NULL,
-  display_start_date datetime NOT NULL default '0000-00-00 00:00:00',
-  display_end_date datetime NOT NULL default '0000-00-00 00:00:00',
-  access_start_date datetime NOT NULL default '0000-00-00 00:00:00',
-  access_end_date datetime NOT NULL default '0000-00-00 00:00:00',
-  coach_access_start_date datetime NOT NULL default '0000-00-00 00:00:00',
-  coach_access_end_date datetime NOT NULL default '0000-00-00 00:00:00',
+  display_start_date datetime default '0000-00-00 00:00:00',
+  display_end_date datetime default '0000-00-00 00:00:00',
+  access_start_date datetime default '0000-00-00 00:00:00',
+  access_end_date datetime default '0000-00-00 00:00:00',
+  coach_access_start_date datetime default '0000-00-00 00:00:00',
+  coach_access_end_date datetime default '0000-00-00 00:00:00',
   PRIMARY KEY (id),
   UNIQUE KEY name (name)
 );
@@ -947,7 +969,7 @@ CREATE TABLE IF NOT EXISTS settings_options (
   variable varchar(255) default NULL,
   value varchar(255) default NULL,
   display_text varchar(255) NOT NULL default '',
-  PRIMARY KEY  (id),
+  PRIMARY KEY (id),
   UNIQUE KEY id (id)
 );
 
@@ -3523,4 +3545,4 @@ CREATE TABLE ext_log_entries (
 ) DEFAULT CHARSET=utf8;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.024' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.026' WHERE variable = 'chamilo_database_version';

@@ -23,7 +23,7 @@ class CourseArchiver
         if ($handle = @ opendir($dir)) {
             while (($file = readdir($handle)) !== false) {
                 if ($file != "." && $file != ".." && strpos($file, 'CourseArchiver_') === 0 && is_dir($dir . '/' . $file)) {
-                    rmdirr($dir . '/' . $file);
+                    api_rmdirr($dir . '/' . $file);
                 }
             }
             closedir($handle);
@@ -34,7 +34,8 @@ class CourseArchiver
      * Write a course and all its resources to a zip-file.
      * @return string A pointer to the zip-file
      */
-    static function write_course($course) {
+    static function write_course($course)
+    {
         $perm_dirs = api_get_permissions_for_new_directories();
 
         CourseArchiver::clean_backup_dir();
@@ -71,11 +72,10 @@ class CourseArchiver
             error_log(__FILE__ . ' line ' . __LINE__ . ': ' . (ini_get('track_errors') != false ? $php_errormsg : 'error not recorded because track_errors is off in your php.ini'), 0);
         }
 
-        //Documents
 
         // Copy all documents to the temp-dir
-        if (is_array($course->resources[RESOURCE_DOCUMENT])) {
-            foreach ($course->resources[RESOURCE_DOCUMENT] as $id => $document) {
+        if (isset($course->resources[RESOURCE_DOCUMENT]) && is_array($course->resources[RESOURCE_DOCUMENT])) {
+            foreach ($course->resources[RESOURCE_DOCUMENT] as $document) {
                 if ($document->file_type == DOCUMENT) {
                     $doc_dir = $backup_dir . $document->path;
                     @mkdir(dirname($doc_dir), $perm_dirs, true);
@@ -89,32 +89,32 @@ class CourseArchiver
         }
 
         // Copy all scorm documents to the temp-dir
-        if (is_array($course->resources[RESOURCE_SCORM])) {
-            foreach ($course->resources[RESOURCE_SCORM] as $id => $document) {
+        if (isset($course->resources[RESOURCE_SCORM]) && is_array($course->resources[RESOURCE_SCORM])) {
+            foreach ($course->resources[RESOURCE_SCORM] as $document) {
                 $doc_dir = dirname($backup_dir . $document->path);
                 @mkdir($doc_dir, $perm_dirs, true);
                 FileManager::copyDirTo($course->path . $document->path, $doc_dir, false);
             }
         }
 
-        //Copy calendar attachments
+        // Copy calendar attachments.
 
-        if (is_array($course->resources[RESOURCE_EVENT])) {
+        if (isset($course->resources[RESOURCE_EVENT]) && is_array($course->resources[RESOURCE_EVENT])) {
             $doc_dir = dirname($backup_dir . '/upload/calendar/');
             @mkdir($doc_dir, $perm_dirs, true);
             FileManager::copyDirTo($course->path . 'upload/calendar/', $doc_dir, false);
         }
 
-        //Copy learningpath author image
-        if (is_array($course->resources[RESOURCE_LEARNPATH])) {
+        // Copy Learning path author image.
+        if (isset($course->resources[RESOURCE_LEARNPATH]) && is_array($course->resources[RESOURCE_LEARNPATH])) {
             $doc_dir = dirname($backup_dir . '/upload/learning_path/');
             @mkdir($doc_dir, $perm_dirs, true);
             FileManager::copyDirTo($course->path . 'upload/learning_path/', $doc_dir, false);
         }
 
-        //Copy announcements attachments
+        // Copy announcements attachments.
 
-        if (is_array($course->resources[RESOURCE_ANNOUNCEMENT])) {
+        if (isset($course->resources[RESOURCE_ANNOUNCEMENT]) && is_array($course->resources[RESOURCE_ANNOUNCEMENT])) {
             $doc_dir = dirname($backup_dir . '/upload/announcements/');
             @mkdir($doc_dir, $perm_dirs, true);
             FileManager::copyDirTo($course->path . 'upload/announcements/', $doc_dir, false);
@@ -125,8 +125,8 @@ class CourseArchiver
         $zip->create($zip_dir . $tmp_dir_name, PCLZIP_OPT_REMOVE_PATH, $zip_dir . $tmp_dir_name . '/');
         //$zip->deleteByIndex(0);
         // Remove the temp-dir.
-        rmdirr($backup_dir);
-        return '' . $zip_file;
+        api_rmdirr($backup_dir);
+        return $zip_file;
     }
 
     /**
@@ -174,28 +174,36 @@ class CourseArchiver
      * @param boolean $delete Delete the file after reading the course?
      * @todo Check if the archive is a correct Chamilo-export
      */
-    static function read_course($filename, $delete = false) {
+    static function read_course($filename, $delete = false)
+    {
         CourseArchiver::clean_backup_dir();
         // Create a temp directory
         $tmp_dir_name = 'CourseArchiver_' . uniqid('');
-        $unzip_dir = api_get_path(SYS_ARCHIVE_PATH) . '' . $tmp_dir_name;
-        @mkdir($unzip_dir, api_get_permissions_for_new_directories(), true);
-        @copy(api_get_path(SYS_ARCHIVE_PATH) . '' . $filename, $unzip_dir . '/backup.zip');
+        $unzip_dir = api_get_path(SYS_ARCHIVE_PATH).$tmp_dir_name;
+        mkdir($unzip_dir, api_get_permissions_for_new_directories(), true);
+        copy(api_get_path(SYS_ARCHIVE_PATH).$filename, $unzip_dir.'/backup.zip');
         // unzip the archive
         $zip = new PclZip($unzip_dir . '/backup.zip');
-        @chdir($unzip_dir);
-        $zip->extract(PCLZIP_OPT_TEMP_FILE_ON);
+        chdir($unzip_dir);
+        $list = $zip->extract(PCLZIP_OPT_TEMP_FILE_ON);
+
+        if ($list == 0) {
+            /*global $app;
+            $errorMessage = $zip->errorInfo(true);
+            $app['session']->getFlashBag()->add('warning', $errorMessage);*/
+        }
         // remove the archive-file
         if ($delete) {
-            @unlink(api_get_path(SYS_ARCHIVE_PATH) . '' . $filename);
+            if (file_exists(api_get_path(SYS_ARCHIVE_PATH).$filename)) {
+                unlink(api_get_path(SYS_ARCHIVE_PATH).$filename);
         }
-        // read the course
+        }
+
+        // Read the course
         if (!is_file('course_info.dat')) {
             return new Course();
         }
-        $fp = @fopen('course_info.dat', "r");
-        $contents = @fread($fp, filesize('course_info.dat'));
-        @fclose($fp);
+        $contents = file_get_contents('course_info.dat');
         // CourseCopyLearnpath class appeared in Chamilo 1.8.7, it is the former Learnpath class in the "Copy course" tool.
         // For backward comaptibility with archives created on Chamilo 1.8.6.2 or older systems, we have to do the following:
         // Before unserialization, if class name "Learnpath" was found, it should be renamed as "CourseCopyLearnpath".

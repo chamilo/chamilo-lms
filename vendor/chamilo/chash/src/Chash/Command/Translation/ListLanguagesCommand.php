@@ -17,7 +17,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
+ * Class ListLanguagesCommand
  * Definition of the translation:list command
+ * @package Chash\Command\Translation
  */
 class ListLanguagesCommand extends CommonChamiloDatabaseCommand
 {
@@ -35,6 +37,11 @@ class ListLanguagesCommand extends CommonChamiloDatabaseCommand
             );
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);

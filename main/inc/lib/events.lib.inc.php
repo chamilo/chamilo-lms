@@ -35,8 +35,9 @@ function event_open()
     if ($pos === false && $referer != '') {
         $ip = api_get_real_ip();
         $remhost = @ getHostByAddr($ip);
-        if ($remhost == $ip)
+        if ($remhost == $ip) {
             $remhost = "Unknown"; // don't change this
+        }
         $reallyNow = api_get_utc_datetime();
         $sql = "INSERT INTO ".$TABLETRACK_OPEN."
         		(open_remote_host,
@@ -46,7 +47,7 @@ function event_open()
         		VALUES
         		('".$remhost."',
         		 '".Database::escape_string($_SERVER['HTTP_USER_AGENT'])."', '".Database::escape_string($referer)."', '$reallyNow')";
-        $res = Database::query($sql);
+        Database::query($sql);
     }
     return 1;
 }
@@ -119,7 +120,7 @@ function event_access_course()
         		VALUES (".$user_id.", '".$courseId."', '$now', '".$id_session."')";
         Database::query($sql);
     }
-    // end "what's new" notification
+
     return 1;
 }
 
@@ -439,7 +440,7 @@ function createEventExercise($exo_id)
  * @param	integer	Learnpath item ID (from the c_lp_item table). Default value of null means "get from context".
  * @return	boolean	Result of the insert query
  */
-function saveExerciseAttempt(
+function saveQuestionAttempt(
     $score,
     $answer,
     $question_id,
@@ -490,7 +491,7 @@ function saveExerciseAttempt(
     $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
     if ($debug) {
-        error_log("----- entering saveExerciseAttempt() function ------");
+        error_log("----- entering saveQuestionAttempt() function ------");
         error_log("answer: $answer");
         error_log("score: $score");
         error_log("question_id : $question_id");

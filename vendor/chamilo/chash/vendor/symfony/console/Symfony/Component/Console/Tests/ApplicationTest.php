@@ -24,7 +24,7 @@ use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\ApplicationTester;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
-use Symfony\Component\Console\Event\ConsoleForExceptionEvent;
+use Symfony\Component\Console\Event\ConsoleExceptionEvent;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -146,6 +146,18 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Symfony\Component\Console\Command\HelpCommand', $command, '->get() returns the help command if --help is provided as the input');
     }
 
+    public function testSilentHelp()
+    {
+        $application = new Application();
+        $application->setAutoExit(false);
+        $application->setCatchExceptions(false);
+
+        $tester = new ApplicationTester($application);
+        $tester->run(array('-h' => true, '-q' => true), array('decorated' => false));
+
+        $this->assertEmpty($tester->getDisplay(true));
+    }
+
     /**
      * @expectedException        \InvalidArgumentException
      * @expectedExceptionMessage The command "foofoo" does not exist.
@@ -230,6 +242,16 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             array('a', 'Command "a" is ambiguous (afoobar, afoobar1 and 1 more).'),
             array('foo:b', 'Command "foo:b" is ambiguous (foo:bar, foo:bar1).')
         );
+    }
+
+    public function testFindCommandEqualNamespace()
+    {
+        $application = new Application();
+        $application->add(new \Foo3Command());
+        $application->add(new \Foo4Command());
+
+        $this->assertInstanceOf('Foo3Command', $application->find('foo3:bar'), '->find() returns the good command even if a namespace has same name');
+        $this->assertInstanceOf('Foo4Command', $application->find('foo3:bar:toh'), '->find() returns a command even if its namespace equals another command name');
     }
 
     /**
@@ -502,8 +524,26 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $tester->run(array('command' => 'list', '--verbose' => true));
         $this->assertSame(Output::VERBOSITY_VERBOSE, $tester->getOutput()->getVerbosity(), '->run() sets the output to verbose if --verbose is passed');
 
+        $tester->run(array('command' => 'list', '--verbose' => 1));
+        $this->assertSame(Output::VERBOSITY_VERBOSE, $tester->getOutput()->getVerbosity(), '->run() sets the output to verbose if --verbose=1 is passed');
+
+        $tester->run(array('command' => 'list', '--verbose' => 2));
+        $this->assertSame(Output::VERBOSITY_VERY_VERBOSE, $tester->getOutput()->getVerbosity(), '->run() sets the output to very verbose if --verbose=2 is passed');
+
+        $tester->run(array('command' => 'list', '--verbose' => 3));
+        $this->assertSame(Output::VERBOSITY_DEBUG, $tester->getOutput()->getVerbosity(), '->run() sets the output to debug if --verbose=3 is passed');
+
+        $tester->run(array('command' => 'list', '--verbose' => 4));
+        $this->assertSame(Output::VERBOSITY_VERBOSE, $tester->getOutput()->getVerbosity(), '->run() sets the output to verbose if unknown --verbose level is passed');
+
         $tester->run(array('command' => 'list', '-v' => true));
         $this->assertSame(Output::VERBOSITY_VERBOSE, $tester->getOutput()->getVerbosity(), '->run() sets the output to verbose if -v is passed');
+
+        $tester->run(array('command' => 'list', '-vv' => true));
+        $this->assertSame(Output::VERBOSITY_VERY_VERBOSE, $tester->getOutput()->getVerbosity(), '->run() sets the output to verbose if -v is passed');
+
+        $tester->run(array('command' => 'list', '-vvv' => true));
+        $this->assertSame(Output::VERBOSITY_DEBUG, $tester->getOutput()->getVerbosity(), '->run() sets the output to verbose if -v is passed');
 
         $application = new Application();
         $application->setAutoExit(false);
@@ -516,6 +556,36 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
         $tester->run(array('command' => 'foo:bar', '-n' => true), array('decorated' => false));
         $this->assertSame('called'.PHP_EOL, $tester->getDisplay(), '->run() does not call interact() if -n is passed');
+    }
+
+    public function testRunReturnsIntegerExitCode()
+    {
+        $exception = new \Exception('', 4);
+
+        $application = $this->getMock('Symfony\Component\Console\Application', array('doRun'));
+        $application->setAutoExit(false);
+        $application->expects($this->once())
+             ->method('doRun')
+             ->will($this->throwException($exception));
+
+        $exitCode = $application->run(new ArrayInput(array()), new NullOutput());
+
+        $this->assertSame(4, $exitCode, '->run() returns integer exit code extracted from raised exception');
+    }
+
+    public function testRunReturnsExitCodeOneForExceptionCodeZero()
+    {
+        $exception = new \Exception('', 0);
+
+        $application = $this->getMock('Symfony\Component\Console\Application', array('doRun'));
+        $application->setAutoExit(false);
+        $application->expects($this->once())
+             ->method('doRun')
+             ->will($this->throwException($exception));
+
+        $exitCode = $application->run(new ArrayInput(array()), new NullOutput());
+
+        $this->assertSame(1, $exitCode, '->run() returns exit code 1 when exception code is 0');
     }
 
     /**
@@ -733,7 +803,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
             $event->setExitCode(128);
         });
-        $dispatcher->addListener('console.exception', function (ConsoleForExceptionEvent $event) {
+        $dispatcher->addListener('console.exception', function (ConsoleExceptionEvent $event) {
             $event->getOutput()->writeln('caught.');
 
             $event->setException(new \LogicException('caught.', $event->getExitCode(), $event->getException()));

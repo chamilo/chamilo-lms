@@ -322,7 +322,7 @@ function SanitizeFileName($sNewFileName, $sMimeType = null)
 
     // Remove \ / | : ? * " < >
     //$sNewFileName = preg_replace( '/\\\\|\\/|\\||\\:|\\?|\\*|"|<|>|[[:cntrl:]]/', '_', $sNewFileName ) ;
-    $sNewFileName = replace_dangerous_char($sNewFileName, 'strict');
+    $sNewFileName = api_replace_dangerous_char($sNewFileName, 'strict');
 
     $sNewFileName = FileManager::php2phps($sNewFileName);
 

@@ -38,10 +38,10 @@ class Display
         $app['title'] = $tool_name;
 
         if ($app['allowed'] == true) {
-            ob_start(array($app['template'], 'manageDisplay'));
+            //ob_start(array($app['template'], 'manageDisplay'));
         } else {
-            $app->run();
-            exit;
+            //$app->run();
+            //exit;
         }
     }
 
@@ -50,11 +50,11 @@ class Display
      */
     public static function display_footer()
     {
-        global $app;
-        $out = ob_get_contents();
-        ob_end_clean();
-        $app['template']->assign('content', $out);
-        $app->run();
+        //global $app;
+        //$out = ob_get_contents();
+        //ob_end_clean();
+        //$app['template']->assign('content', $out);
+        //$app->run();
     }
 
     /**
@@ -1419,7 +1419,7 @@ class Display
         // Show all tool icons where there is something new.
         $retvalue = '&nbsp;';
         while (list($key, $notification) = each($notifications)) {
-            $lastDate = date('d/m/Y H:i', convert_sql_date($notification['lastedit_date']));
+            $lastDate = date('d/m/Y H:i', api_convert_sql_date($notification['lastedit_date']));
             $type     = $notification['lastedit_type'];
             if (empty($course_info['id_session'])) {
                 $my_course['id_session'] = 0;

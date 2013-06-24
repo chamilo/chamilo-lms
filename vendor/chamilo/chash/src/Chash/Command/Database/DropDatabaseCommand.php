@@ -8,8 +8,15 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class DropDatabaseCommand
+ * @package Chash\Command\Database
+ */
 class DropDatabaseCommand extends CommonChamiloDatabaseCommand
 {
+    /**
+     *
+     */
     protected function configure()
     {
         parent::configure();
@@ -19,6 +26,11 @@ class DropDatabaseCommand extends CommonChamiloDatabaseCommand
             ->setDescription('Drops all databases from the current Chamilo install');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);

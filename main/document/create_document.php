@@ -293,7 +293,7 @@ if (!$is_certificate_mode) {
         "name" => get_lang('Documents')
     );
 } else {
-    $interbreadcrumb[] = array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 }
 if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder(
     $_user['user_id'],
@@ -347,7 +347,7 @@ function document_exists($filename)
     global $filepath;
     $filename = addslashes(trim($filename));
     $filename = Security::remove_XSS($filename);
-    $filename = replace_dangerous_char($filename);
+    $filename = api_replace_dangerous_char($filename);
     $filename = FileManager::disable_dangerous_file($filename);
 
     return !file_exists($filepath.$filename.'.html');
@@ -518,7 +518,7 @@ if ($form->validate()) {
     $filename = $values['title'];
     $filename = addslashes(trim($filename));
     $filename = Security::remove_XSS($filename);
-    $filename = replace_dangerous_char($filename);
+    $filename = api_replace_dangerous_char($filename);
     $filename = FileManager::disable_dangerous_file($filename);
 
     //Setting the title

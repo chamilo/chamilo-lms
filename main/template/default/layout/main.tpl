@@ -2,6 +2,9 @@
 {% include app.template_style ~ "/layout/main_header.tpl" %}
 {% endblock %}
 {% block body %}
+    {% block content %}
+    {% endblock %}
+
 	{% if show_sniff == 1 %}
 	 	{% include app.template_style ~ "/layout/sniff.tpl" %}
 	{% endif %}

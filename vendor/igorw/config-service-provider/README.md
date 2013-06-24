@@ -1,6 +1,7 @@
 # ConfigServiceProvider
 
-A JSON/Yaml-based config ServiceProvider for [Silex](http://silex.sensiolabs.org).
+A config ServiceProvider for [Silex](http://silex.sensiolabs.org) with support
+for php, json, yaml, and toml.
 
 ## Usage
 
@@ -51,13 +52,42 @@ Now you can use the pattern in your configuration file.
         "xsl.path": "%data_path%/xsl"
     }
 
-### Using Yaml instead of JSON
+You can also specify replacements inside the config file by using a key with
+`%foo%` notation:
+
+    {
+        "%root_path%": "../..",
+        "xsl.path": "%root_path%/xsl"
+    }
+
+### Using Yaml
 
 To use Yaml instead of JSON, just pass a file that ends on `.yml`:
 
     $app->register(new Igorw\Silex\ConfigServiceProvider(__DIR__."/../config/services.yml"));
 
-Note, you will have to require the `2.1.*` of the `symfony/yaml` package.
+Note, you will have to require the `~2.1` of the `symfony/yaml` package.
+
+### Using TOML
+
+To use [TOML](https://github.com/mojombo/toml) instead of any of the other supported formats,
+just pass a file that ends on `.toml`:
+
+    $app->register(new Igorw\Silex\ConfigServiceProvider(__DIR__."/../config/services.toml"));
+
+Note, you will have to require the `~0.1` of the `jamesmoss/toml` package and you are using
+a bleeding edge configuration format, as the spec of TOML is still subject to change.
+
+### Using plain PHP
+
+If reading the config file on every request becomes a performance problem in
+production, you can use a plain PHP file instead, and it will get cached by
+APC.
+
+You'll have to rewrite your config to be a PHP file that returns the array of
+config data, and also make sure it ends with `.php`:
+
+    $app->register(new Igorw\Silex\ConfigServiceProvider(__DIR__."/../config/prod.php"));
 
 ### Multiple config files
 

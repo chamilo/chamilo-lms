@@ -62,7 +62,7 @@ class DummyCourseCreator
 		$cr = new CourseRestorer($this->course);
 		$cr->set_file_option(FILE_OVERWRITE);
 		$cr->restore($course_code);
-		rmdirr($tmp_path);
+		api_rmdirr($tmp_path);
 	}
 	/**
 	 * Create dummy documents

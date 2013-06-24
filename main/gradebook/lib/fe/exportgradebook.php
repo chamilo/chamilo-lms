@@ -205,7 +205,7 @@ function export_pdf_attendance($headers_table, $data_table, $headers_pdf, $foote
     } else {
         $mpdf->WriteHTML($html);
     }
-    $mpdf->Output(replace_dangerous_char($title_pdf.'.pdf'), 'D');
+    $mpdf->Output(api_replace_dangerous_char($title_pdf.'.pdf'), 'D');
     exit;
 }
 

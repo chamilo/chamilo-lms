@@ -79,7 +79,7 @@ class CourseRecycler
         if ($this->course->has_resources(RESOURCE_DOCUMENT)) {
             $table = Database :: get_course_table(TABLE_DOCUMENT);
             foreach ($this->course->resources[RESOURCE_DOCUMENT] as $id => $document) {
-                rmdirr($this->course->backup_path.'/'.$document->path);
+                api_rmdirr($this->course->backup_path.'/'.$document->path);
             }
             $ids = implode(',', (array_keys($this->course->resources[RESOURCE_DOCUMENT])));
             $sql = "DELETE FROM ".$table." WHERE c_id = ".$this->course_id." AND id IN(".$ids.")";
@@ -351,23 +351,23 @@ class CourseRecycler
 
                 //@todo fix query in order to use iid
                 $sql = " (
-                    SELECT q.id FROM $table_qui_que q
+                    SELECT q.iid FROM $table_qui_que q
                     INNER JOIN $table_rel r
                     ON (q.c_id = r.c_id AND q.iid = r.question_id)
                     INNER JOIN $table_qui ex
                     ON (ex.iid = r.exercice_id AND ex.c_id = r.c_id )
-                    WHERE ex.c_id = ".$this->course_id." AND (ex.active = '-1' OR ex.id = '-1')
+                    WHERE ex.c_id = ".$this->course_id." AND (ex.active = '-1' OR ex.iid = '-1')
                 )
                 UNION
                 (
-                    SELECT q.id FROM $table_qui_que q
+                    SELECT q.iid FROM $table_qui_que q
                     LEFT OUTER JOIN $table_rel r
                     ON (q.c_id = r.c_id AND q.iid = r.question_id)
                     WHERE q.c_id = ".$this->course_id." AND r.question_id is null
                 )
                 UNION
                 (
-                    SELECT q.id FROM $table_qui_que q
+                    SELECT q.iid FROM $table_qui_que q
                     INNER JOIN $table_rel r
                     ON (q.c_id = r.c_id AND q.iid = r.question_id)
                     WHERE r.c_id = ".$this->course_id." AND r.exercice_id = '-1' OR r.exercice_id = '0'
@@ -446,7 +446,7 @@ class CourseRecycler
                     {
                         // The directory trat contains files of the SCORM package is to be deleted.
                         $scorm_package_dir = realpath($this->course->path . 'scorm/' . $learnpath->path);
-                        rmdirr($scorm_package_dir);
+                        api_rmdirr($scorm_package_dir);
                     }
                 }
 

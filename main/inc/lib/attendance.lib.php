@@ -661,7 +661,6 @@ class Attendance
             $this->save_attendance_sheet_log(intval($row[3]), $date_now, $lastedit_type, $lastedit_user_id, $row[5]);
         }
         $sql = substr($sql,0,-1);
-        //error_log($sql);
         $r = Database::query($sql);
         $users_absent = array_diff($user_ids, $user_results);
         $affected_rows = Database::affected_rows($r);

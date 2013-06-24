@@ -187,16 +187,22 @@ class ExerciseShowFunctions {
 	 */
 	static function display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
 		global $feedback_type;
+        // radio_on.gif/radio_off.gif
+
+        $imageType = (in_array($answerType, array(UNIQUE_ANSWER,UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION))) ? 'radio' : 'checkbox';
+        $image = $imageType.($studentChoice ? '_on' : '_off');
+        $image .= '.gif';
+
+        $imageAnswer = $imageType.($answerCorrect ? '_on' : '_off');
+        $imageAnswer .= '.gif';
 
 		?>
 		<tr>
 		<td width="5%">
-			<img src="../img/<?php echo (in_array($answerType, array(UNIQUE_ANSWER,UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION))) ? 'radio':'checkbox'; echo $studentChoice?'_on':'_off'; ?>.gif"
-			border="0" alt="" />
+            <?php Display::display_icon($image); ?>
 		</td>
 		<td width="5%">
-			<img src="../img/<?php echo (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION))) ? 'radio':'checkbox'; echo $answerCorrect?'_on':'_off'; ?>.gif"
-			border="0" alt=" " />
+            <?php Display::display_icon($imageAnswer); ?>
 		</td>
 		<td width="40%">
 			<?php
@@ -240,16 +246,23 @@ class ExerciseShowFunctions {
 
     static function display_unique_image_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
         global $feedback_type;
+
+        $imageType = (in_array($answerType, array(UNIQUE_ANSWER,UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION))) ? 'radio' : 'checkbox';
+        $image = $imageType.($studentChoice ? '_on' : '_off');
+        $image .= '.gif';
+
+        $imageAnswer = $imageType.($answerCorrect ? '_on' : '_off');
+        $imageAnswer .= '.gif';
+
         ?>
     <tr>
-        <td width="5%">
-            <img src="../img/<?php echo (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION))) ? 'radio':'checkbox'; echo $studentChoice?'_on':'_off'; ?>.gif"
-                 border="0" alt="" />
-        </td>
-        <td width="5%">
-            <img src="../img/<?php echo (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION))) ? 'radio':'checkbox'; echo $answerCorrect?'_on':'_off'; ?>.gif"
-                 border="0" alt=" " />
-        </td>
+        <tr>
+		<td width="5%">
+            <?php Display::display_icon($image); ?>
+		</td>
+		<td width="5%">
+            <?php Display::display_icon($imageAnswer); ?>
+		</td>
         <td width="40%">
             <?php
             echo $answer;

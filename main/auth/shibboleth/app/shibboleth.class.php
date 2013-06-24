@@ -97,13 +97,13 @@ class Shibboleth
 
             /*
              * Tests if the user tried to login directly in a protected course before to come here
-             * (this variable could be set in the modified code of /chamilo/inc/lib/main_api.lib.php)
+             * (this variable could be set in the modified code of /chamilo/inc/lib/api.lib.php)
              *
              * Note:
              *       this part was added to give the possibility to access Chamilo directly on a course URL from a link diplayed in a portal.
              *       This is not a direct Shibboleth related functionnality, but this could be used in a shibbolethized
              *       Dokeos installation, mainly if you have a SSO system in your network.
-             *       Please note that the file /claroline/inc/lib/main_api.lib.php must be adapted to your Shibboleth settings
+             *       Please note that the file /claroline/inc/lib/api.lib.php must be adapted to your Shibboleth settings
              *       If any interest or question, please contact Nicolas.Rod_at_adm.unige.ch
              *
              */

@@ -153,7 +153,6 @@ class CourseBuilder
             $this->build_glossary();
             $this->build_thematic();
             $this->build_attendance();*/
-
 		}
 
 		//TABLE_LINKED_RESOURCES is the "resource" course table, which is deprecated, apparently
@@ -276,7 +275,8 @@ class CourseBuilder
 	/**
 	 * Build the forums
 	 */
-	function build_forums($session_id = 0, $course_code = null, $with_base_content = false, $id_list = array()) {
+	function build_forums($session_id = 0, $course_code = null, $with_base_content = false, $id_list = array())
+    {
         $course_info 	= api_get_course_info($course_code);
 		$course_id 		= $course_info['real_id'];
 
@@ -294,7 +294,8 @@ class CourseBuilder
 	/**
 	 * Build a forum-category
 	 */
-	function build_forum_category($session_id = 0, $course_code = null, $with_base_content = false, $id_list = array()) {
+	function build_forum_category($session_id = 0, $course_code = null, $with_base_content = false, $id_list = array())
+    {
 		$table = Database :: get_course_table(TABLE_FORUM_CATEGORY);
         $course_info 	= api_get_course_info($course_code);
 		$course_id 		= $course_info['real_id'];
@@ -310,7 +311,8 @@ class CourseBuilder
 	/**
 	 * Build the forum-topics
 	 */
-	function build_forum_topics($session_id = 0, $course_code = null, $with_base_content = false, $id_list = array()) {
+	function build_forum_topics($session_id = 0, $course_code = null, $with_base_content = false, $id_list = array())
+    {
 		$table = Database :: get_course_table(TABLE_FORUM_THREAD);
 		$course_info 	= api_get_course_info($course_code);
 		$course_id 		= $course_info['real_id'];
@@ -328,7 +330,8 @@ class CourseBuilder
 	 * Build the forum-posts
 	 * TODO: All tree structure of posts should be built, attachments for example.
 	 */
-    function build_forum_posts($thread_id = null, $forum_id = null, $only_first_post = false) {
+    function build_forum_posts($thread_id = null, $forum_id = null, $only_first_post = false)
+    {
 		$table = Database :: get_course_table(TABLE_FORUM_POST);
 		$course_id = api_get_course_int_id();
 		$sql = "SELECT * FROM $table WHERE c_id = $course_id ";
@@ -348,7 +351,8 @@ class CourseBuilder
 	/**
 	 * Build the links
 	 */
-	function build_links($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
+	function build_links($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array())
+    {
 		$course_info = api_get_course_info($course_code);
 		$course_id 		= $course_info['real_id'];
 
@@ -393,7 +397,8 @@ class CourseBuilder
 	/**
 	 * Build tool intro
 	 */
-	function build_tool_intro($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
+	function build_tool_intro($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array())
+    {
 		$table = Database :: get_course_table(TABLE_TOOL_INTRO);
 		$course_id = api_get_course_int_id();
 		$sql = "SELECT * FROM $table WHERE c_id = $course_id ";
@@ -407,7 +412,8 @@ class CourseBuilder
 	/**
 	 * Build a link category
 	 */
-	function build_link_category($id, $course_code = '') {
+	function build_link_category($id, $course_code = '')
+    {
 		$course_info = api_get_course_info($course_code);
 		$course_id 		= $course_info['real_id'];
 
@@ -426,7 +432,8 @@ class CourseBuilder
 	/**
 	 * Build the Quizzes
 	 */
-	function build_quizzes($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
+	function build_quizzes($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array())
+    {
 		$course_info = api_get_course_info($course_code);
 		$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST);
 		$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -477,7 +484,8 @@ class CourseBuilder
 	/**
 	 * Build the Quiz-Questions
 	 */
-	function build_quiz_questions($course_code = null) {
+	function build_quiz_questions($course_code = null)
+    {
 		$course_info = api_get_course_info($course_code);
 		$course_id   = $course_info['real_id'];
 
@@ -603,7 +611,8 @@ class CourseBuilder
 	/**
 	 * Build the orphan questions
 	 */
-	function build_quiz_orphan_questions() {
+	function build_quiz_orphan_questions()
+    {
 		$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST);
 		$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$table_que = Database :: get_course_table(TABLE_QUIZ_QUESTION);
@@ -642,7 +651,8 @@ class CourseBuilder
 	/**
 	 * Build the Surveys
 	 */
-	function build_surveys($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
+	function build_surveys($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array())
+    {
 		$table_survey = Database :: get_course_table(TABLE_SURVEY);
 		$table_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$course_id = api_get_course_int_id();

@@ -215,7 +215,7 @@ class FileManager
         $path = dirname($file_path);
         $old_file_name = basename($file_path);
 
-        $new_file_name = replace_dangerous_char($new_file_name);
+        $new_file_name = api_replace_dangerous_char($new_file_name);
 
         // If no extension, take the old one
         if ((strpos($new_file_name, '.') === false) && ($dotpos = strrpos($old_file_name, '.'))) {
@@ -921,7 +921,7 @@ class FileManager
             return false;
         } else {
             // Clean up the name, only ASCII characters should stay. (and strict)
-            $clean_name = replace_dangerous_char($uploaded_file['name'], 'strict');
+            $clean_name = api_replace_dangerous_char($uploaded_file['name'], 'strict');
 
             // No "dangerous" files
             $clean_name = self::disable_dangerous_file($clean_name);
@@ -1525,7 +1525,7 @@ class FileManager
         foreach ($path_array as $key => & $val) {
             // We don't want to lose the dots in ././folder/file (cfr. zipfile)
             if ($val != '.') {
-                $val = self::disable_dangerous_file(replace_dangerous_char($val));
+                $val = self::disable_dangerous_file(api_replace_dangerous_char($val));
             }
         }
         // Join the "cleaned" path (modified in-place as passed by reference)
@@ -2069,7 +2069,7 @@ class FileManager
                 // Directory?
                 if (is_dir($completepath)) {
                     $title = self::get_document_title($file);
-                    $safe_file = replace_dangerous_char($file);
+                    $safe_file = api_replace_dangerous_char($file);
                     @rename($path.'/'.$file, $path.'/'.$safe_file);
                     // If we can't find the file, add it
                     if (!DocumentManager::get_document_id($_course, $current_path.'/'.$safe_file)) {
@@ -2098,7 +2098,7 @@ class FileManager
                     );
                 } else {
                     //Rename
-                    $safe_file = self::disable_dangerous_file(replace_dangerous_char($file, 'strict'));
+                    $safe_file = self::disable_dangerous_file(api_replace_dangerous_char($file, 'strict'));
                     @rename($base_work_dir.$current_path.'/'.$file, $base_work_dir.$current_path.'/'.$safe_file);
                     $document_id = DocumentManager::get_document_id($_course, $current_path.'/'.$safe_file);
                     if (!$document_id) {

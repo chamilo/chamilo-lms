@@ -5152,12 +5152,13 @@ i.size-32.icon-new-work {
 
 .pagination .current a {
     cursor: default;
+    color:white !important;
     background-color: #3a87ad !important;
 }
 
 .pagination .before a, .pagination .before a:hover {
-    background-color: #999;
-    color: white;
+    background-color: #EEECE1;
+    color: #0D0D0C;
 }
 
 .pagination .after a, .pagination .after a:hover {
@@ -5167,7 +5168,8 @@ i.size-32.icon-new-work {
 
 .pagination .remind a, .pagination .remind a:hover {
     /* text-decoration: underline; */
-    background-color: #f89406
+    background-color: #f89406;
+    color:white;
 }
 
 .pagination .not_answered a , .pagination .not_answered a:hover {
@@ -5176,6 +5178,7 @@ i.size-32.icon-new-work {
 
 .pagination .answered a , .pagination .answered a:hover {
     background-color: green;
+    color: white;
 }
 
 .exercise_reminder_item {

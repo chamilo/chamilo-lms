@@ -144,7 +144,7 @@ if (isset($_POST['save_audio'])) {
             // Add extension to files without one (if possible).
             $file_name = FileManager::add_ext_on_mime($file_name, $_FILES[$key]['type']);
 
-            $clean_name = replace_dangerous_char($file_name);
+            $clean_name = api_replace_dangerous_char($file_name);
             // No "dangerous" files.
             $clean_name = FileManager::disable_dangerous_file($clean_name);
 

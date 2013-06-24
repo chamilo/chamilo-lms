@@ -16,6 +16,8 @@
 $language_file='exercice';
 
 require_once '../inc/global.inc.php';
+$urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
+
 $this_section=SECTION_COURSES;
 api_protect_course_script(true);
 
@@ -30,7 +32,7 @@ $is_allowedToEdit = api_is_allowed_to_edit(null,true);
 $is_tutor = api_is_allowed_to_edit(true);
 
 if(!$is_allowedToEdit){
-	header('Location: /main/exercice/exercice.php?cidReq='.Security::remove_XSS($_GET['cidReq']));
+	header('Location: '.$urlMainExercise.'exercice.php?cidReq='.Security::remove_XSS($_GET['cidReq']));
 	exit;
 }
 

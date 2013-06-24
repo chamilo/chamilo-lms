@@ -29,7 +29,8 @@ if (!empty ($course_path)) {
 }
 // this loads the javascript that is needed for the date popup selection
 $htmlHeadXtra[] = to_javascript();
-$htmlHeadXtra[] = "<script src=\"tbl_change.js\" type=\"text/javascript\" language=\"javascript\"></script>";
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/calendar/tbl_change.js" type="text/javascript" ></script>';
+
 $htmlHeadXtra[] = "<script>
 $(function() {
     $(\".dialog\").dialog(\"destroy\");

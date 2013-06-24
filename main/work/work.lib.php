@@ -824,7 +824,7 @@ function display_student_publications_list(
                         $values = $form_folder->exportValues();
                         $work_id = $values['work_id'];
 
-                        $dir_name = replace_dangerous_char($values['dir_name']);
+                        $dir_name = api_replace_dangerous_char($values['dir_name']);
                         $dir_name = FileManager::disable_dangerous_file($dir_name);
 
                         $edit_check = false;
@@ -1174,7 +1174,7 @@ function get_subdirs_list($basedir = '', $recurse = 0)
     $dirs_list = array();
     $dh = opendir($basedir);
     while ($entry = readdir($dh)) {
-        $entry = replace_dangerous_char($entry);
+        $entry = api_replace_dangerous_char($entry);
         $entry = FileManager::disable_dangerous_file($entry);
         if (is_dir($basedir.$entry) && $entry != '..' && $entry != '.') {
             $dirs_list[] = $entry;
@@ -1484,7 +1484,7 @@ function update_dir_name($work_data, $new_name, $title)
         global $base_work_dir;
 
         $new_name = Security::remove_XSS($new_name);
-        $new_name = replace_dangerous_char($new_name);
+        $new_name = api_replace_dangerous_char($new_name);
         $new_name = FileManager::disable_dangerous_file($new_name);
         FileManager::my_rename($base_work_dir.'/'.$path, $new_name);
         $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);

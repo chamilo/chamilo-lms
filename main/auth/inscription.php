@@ -40,7 +40,7 @@ $course_code_redirect = isset($_REQUEST['c']) && !empty($_REQUEST['c']) ? $_REQU
 $exercise_redirect = isset($_REQUEST['e']) && !empty($_REQUEST['e']) ? $_REQUEST['e'] : null;
 
 if (!empty($course_code_redirect)) {
-    Session::write('course_redirect',   $course_code_redirect);
+    Session::write('course_redirect', $course_code_redirect);
     Session::write('exercise_redirect', $exercise_redirect);
 }
 
@@ -236,7 +236,7 @@ if (!CustomPages::enabled()) {
         if ($access_url_id != -1) {
             $url_info = api_get_access_url($access_url_id);
             $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
-            $clean_url = replace_dangerous_char($url);
+            $clean_url = api_replace_dangerous_char($url);
             $clean_url = str_replace('/', '-', $clean_url);
             $clean_url .= '/';
             $home_old  = api_get_path(SYS_PATH).'home/';

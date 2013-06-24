@@ -4,10 +4,10 @@
  * Responses to AJAX calls
  */
 
-require_once '../../exercice/exercise.class.php';
-require_once '../../exercice/question.class.php';
-require_once '../../exercice/answer.class.php';
-require_once '../global.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/answer.class.php';
+
 // @todo: Is this really needed? see 33cd962f077ed8c2e4b696bdd18b54db00890ef2
 require_once api_get_path(LIBRARY_PATH).'transaction.lib.php';
 
@@ -516,8 +516,16 @@ switch ($action) {
 
                 $key = ExerciseLib::get_time_control_key($exercise_id, $exercise_stat_info['orig_lp_id'], $exercise_stat_info['orig_lp_item_id']);
 
-                if (isset($_SESSION['duration_time'][$key]) && !empty($_SESSION['duration_time'][$key])) {
-                    $duration = $now - $_SESSION['duration_time'][$key];
+                /*$durationTime = array(
+                    'duration_time' => array(
+                        $key => time()
+                    )
+                );*/
+
+                $durationTime = Session::read('duration_time');
+
+                if (isset($durationTime[$key]) && !empty($durationTime[$key])) {
+                    $duration = $now - $durationTime[$key];
 
                     if (!empty($exercise_stat_info['exe_duration'])) {
                         $duration += $exercise_stat_info['exe_duration'];
@@ -529,7 +537,12 @@ switch ($action) {
                     }
                 }
 
-                $_SESSION['duration_time'][$key] = time();
+                $durationTime = array(
+                    $key => time()
+                );
+
+                Session::write('duration_time', $durationTime);
+                // $_SESSION['duration_time'][$key] = time();
 
                 update_event_exercise(
                     $exe_id,

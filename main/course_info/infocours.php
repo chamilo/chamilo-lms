@@ -109,7 +109,7 @@ while ($cat = Database::fetch_array($res)) {
 $linebreak = '<div class="row"><div class="label"></div><div class="formw" style="border-bottom:1px dashed grey"></div></div>';
 
 // Build the form
-$form = new FormValidator('update_course');
+$form = new FormValidator('update_course', 'post', api_get_self().'?'.api_get_cidreq());
 
 // COURSE SETTINGS
 $form->addElement('html', '<div><h3>'.Display::return_icon('settings.png', Security::remove_XSS(get_lang('CourseSettings')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('CourseSettings')).'</h3><div>');
@@ -160,7 +160,6 @@ $form->applyFilter('department_name', 'trim');
 
 $form->add_textfield('department_url', get_lang('DepartmentUrl'), false, array('class' => 'span5'));
 //$form->addRule('tutor_name', get_lang('ThisFieldIsRequired'), 'required');
-
 
 // Picture
 $form->addElement('file', 'picture', get_lang('AddPicture'));
@@ -430,7 +429,7 @@ $form->setDefaults($values);
 if ($form->validate() && is_settings_editable()) {
     $update_values = $form->exportValues();
 
-    $pdf_export_watermark_path = $_FILES['pdf_export_watermark_path'];
+    $pdf_export_watermark_path = isset($_FILES['pdf_export_watermark_path']) ? $_FILES['pdf_export_watermark_path'] : null;
 
     if (!empty($pdf_export_watermark_path['name'])) {
         $pdf_export_watermark_path_result = PDF::upload_watermark($pdf_export_watermark_path['name'], $pdf_export_watermark_path['tmp_name'], $course_code);
@@ -438,13 +437,14 @@ if ($form->validate() && is_settings_editable()) {
     }
 
     //Variables that will be saved in the TABLE_MAIN_COURSE table
-    $update_in_course_table = array('title', 'course_language','category_code','department_name', 'department_url','visibility',
-    								'subscribe', 'unsubscribe','tutor_name','course_registration_password', 'legal', 'activate_legal');
+    $update_in_course_table = array(
+        'title', 'course_language','category_code','department_name', 'department_url','visibility',
+        'subscribe', 'unsubscribe','tutor_name','course_registration_password', 'legal', 'activate_legal'
+    );
 
-    foreach ($update_values as $index =>$value) {
+    foreach ($update_values as $index => $value) {
         $update_values[$index] = Database::escape_string($value);
     }
-    unset($value);
     $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 
     $sql = "UPDATE $table_course SET
@@ -460,6 +460,7 @@ if ($form->validate() && is_settings_editable()) {
         activate_legal          = '".$update_values['activate_legal']."',
         registration_code 	    = '".$update_values['course_registration_password']."'
         WHERE code = '".$course_code."'";
+
     Database::query($sql);
 
     // Update course_settings table - this assumes those records exist, otherwise triggers an error

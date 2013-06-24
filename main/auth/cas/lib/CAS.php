@@ -3,10 +3,10 @@
 /*
  * Copyright © 2003-2010, The ESUP-Portail consortium & the JA-SIG Collaborative.
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  *     * Redistributions of source code must retain the above copyright notice,
  *       this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright notice,
@@ -276,7 +276,7 @@ define('DEFAULT_DEBUG_DIR', '/tmp/');
 $GLOBALS['PHPCAS_CLIENT'] = null;
 
 /**
- * This global variable is used to store where the initializer is called from 
+ * This global variable is used to store where the initializer is called from
  * (to print a comprehensive error in case of multiple calls).
  *
  * @hideinitializer
@@ -334,7 +334,7 @@ include_once (dirname(__FILE__) . '/CAS/client.php');
  * @ingroup public
  * @author Pascal Aubry <pascal.aubry at univ-rennes1.fr>
  *
- * \internal All its methods access the same object ($PHPCAS_CLIENT, declared 
+ * \internal All its methods access the same object ($PHPCAS_CLIENT, declared
  * at the end of CAS/client.php).
  */
 
@@ -501,7 +501,7 @@ class phpCAS {
 	 */
 
 	/**
-	 * This method is a wrapper for debug_backtrace() that is not available 
+	 * This method is a wrapper for debug_backtrace() that is not available
 	 * in all PHP versions (>= 4.3.0 only)
 	 */
 	function backtrace() {
@@ -634,7 +634,7 @@ class phpCAS {
 	 */
 
 	/**
-	 * This method is used to set the language used by phpCAS. 
+	 * This method is used to set the language used by phpCAS.
 	 * @note Can be called only once.
 	 *
 	 * @param $lang a string representing the language.
@@ -722,7 +722,7 @@ class phpCAS {
 
 	/**
 	 * This method is used to tell phpCAS to store the response of the
-	 * CAS server to PGT requests onto the filesystem. 
+	 * CAS server to PGT requests onto the filesystem.
 	 *
 	 * @param $format the format used to store the PGT's (`plain' and `xml' allowed)
 	 * @param $path the path where the PGT's should be stored
@@ -752,9 +752,9 @@ class phpCAS {
 
 	/**
 	 * This method is used to tell phpCAS to store the response of the
-	 * CAS server to PGT requests into a database. 
-	 * @note The connection to the database is done only when needed. 
-	 * As a consequence, bad parameters are detected only when 
+	 * CAS server to PGT requests into a database.
+	 * @note The connection to the database is done only when needed.
+	 * As a consequence, bad parameters are detected only when
 	 * initializing PGT storage, except in debug mode.
 	 *
 	 * @param $user the user to access the data with
@@ -814,7 +814,7 @@ class phpCAS {
 
 	/**
 	 * This method is used to access an HTTP[S] service.
-	 * 
+	 *
 	 * @param $url the service to access.
 	 * @param $err_code an error code Possible values are PHPCAS_SERVICE_OK (on
 	 * success), PHPCAS_SERVICE_PT_NO_SERVER_RESPONSE, PHPCAS_SERVICE_PT_BAD_SERVER_RESPONSE,
@@ -853,7 +853,7 @@ class phpCAS {
 
 	/**
 	 * This method is used to access an IMAP/POP3/NNTP service.
-	 * 
+	 *
 	 * @param $url a string giving the URL of the service, including the mailing box
 	 * for IMAP URLs, as accepted by imap_open().
 	 * @param $service a string giving for CAS retrieve Proxy ticket
@@ -908,7 +908,7 @@ class phpCAS {
 	 */
 
 	/**
-	 * Set the times authentication will be cached before really accessing the CAS server in gateway mode: 
+	 * Set the times authentication will be cached before really accessing the CAS server in gateway mode:
 	 * - -1: check only once, and then never again (until you pree login)
 	 * - 0: always check
 	 * - n: check every "n" time
@@ -954,8 +954,8 @@ class phpCAS {
 	}
 
 	/**
-	 * This method is called to force authentication if the user was not already 
-	 * authenticated. If the user is not authenticated, halt by redirecting to 
+	 * This method is called to force authentication if the user was not already
+	 * authenticated. If the user is not authenticated, halt by redirecting to
 	 * the CAS server.
 	 */
 	function forceAuthentication() {

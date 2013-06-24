@@ -3,6 +3,7 @@
 /**
  * When a user login, the function LoginRedirection::redirect is called.
  * When this function is called all user info has already been registered in $_user session variable
+ * @todo Use the LoginSuccessHandler
  * */
 Class LoginRedirection {
 

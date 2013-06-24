@@ -84,6 +84,7 @@ if (file_exists($configurationYMLFile)) {
 /** Setting Chamilo paths */
 
 $app['root_sys'] = isset($_configuration['root_sys']) ? $_configuration['root_sys'] : dirname(dirname(__DIR__)).'/';
+$app['sys_root'] = $app['root_sys'];
 $app['sys_data_path'] = isset($_configuration['sys_data_path']) ? $_configuration['sys_data_path'] : $app['root_sys'].'data/';
 $app['sys_config_path'] = isset($_configuration['sys_config_path']) ? $_configuration['sys_config_path'] : $app['root_sys'].'config/';
 $app['sys_temp_path'] = isset($_configuration['sys_temp_path']) ? $_configuration['sys_temp_path'] : $app['root_sys'].'temp/';
@@ -131,7 +132,7 @@ if ($alreadyInstalled) {
 /** End loading config files */
 
 /** Including legacy libs */
-require_once $includePath.'/lib/main_api.lib.php';
+require_once $includePath.'/lib/api.lib.php';
 
 // Setting $_configuration['url_append']
 $urlInfo = isset($_configuration['root_web']) ? parse_url($_configuration['root_web']) : null;
@@ -153,7 +154,7 @@ require_once $libPath.'events.lib.inc.php';
 require_once $libPath.'formvalidator/Rule/allowed_tags.inc.php';
 
 // Ensure that _configuration is in the global scope before loading
-// main_api.lib.php. This is particularly helpful for unit tests
+// api.lib.php. This is particularly helpful for unit tests
 // @todo do not use $GLOBALS
 /*if (!isset($GLOBALS['_configuration'])) {
     $GLOBALS['_configuration'] = $_configuration;
@@ -196,7 +197,19 @@ $app['allowed'] = true;
 // Start session after the internationalization library has been initialized
 
 // @todo use silex session provider instead of a custom class
-Chamilo::session()->start($alreadyInstalled);
+//Chamilo::session()->start($alreadyInstalled);
+
+$app->register(new Silex\Provider\SessionServiceProvider());
+
+// Session settings
+$app['session.storage.options'] = array(
+    'name' => 'chamilo_session',
+    //'cookie_lifetime' => 30, //Cookie lifetime
+    //'cookie_path' => null, //Cookie path
+    //'cookie_domain' => null, //Cookie domain
+    //'cookie_secure' => null, //Cookie secure (HTTPS)
+    'cookie_httponly' => true //Whether the cookie is http only
+);
 
 // Loading chamilo settings
 /* @todo create a service provider to load plugins.
@@ -222,6 +235,7 @@ if ($alreadyInstalled) {
 
     // Retrieving all the chamilo config settings for multiple URLs feature
     $_configuration['access_url'] = 1;
+
     if (api_get_multiple_access_url()) {
         $access_urls = api_get_access_urls();
         $protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
@@ -236,24 +250,23 @@ if ($alreadyInstalled) {
         Session::write('url_id', $_configuration['access_url']);
         Session::write('url_info', api_get_current_access_url_info($_configuration['access_url']));
     } else {
-        Session::write('url_id', -1);
+        Session::write('url_id', 1);
     }
 
     $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
     $settings_latest_update = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
 
-    $_setting = isset($_SESSION['_setting']) ? $_SESSION['_setting'] : null;
-    $_plugins = isset($_SESSION['_plugins']) ? $_SESSION['_plugins'] : null;
-
+    $_setting = Session::read('_setting');
     if (empty($_setting)) {
         api_set_settings_and_plugins();
     } else {
         if (isset($_setting['settings_latest_update']) && $_setting['settings_latest_update'] != $settings_latest_update) {
             api_set_settings_and_plugins();
-            $_setting = isset($_SESSION['_setting']) ? $_SESSION['_setting'] : null;
-            $_plugins = isset($_SESSION['_plugins']) ? $_SESSION['_plugins'] : null;
         }
     }
+
+    $_setting = Session::read('_setting');
+    $_plugins = Session::read('_plugins');
 
     // Default template style
     $templateStyle = api_get_setting('template');
@@ -271,23 +284,9 @@ $charset = 'UTF-8';
 // Manage Chamilo error messages
 $app->error(
     function (\Exception $e, $code) use ($app) {
-
         if ($app['debug']) {
             //return;
         }
-
-        /*if ($e instanceof PDOException and count($app['dbal_logger']->queries)) {
-            // We want to log the query as an ERROR for PDO exceptions.
-            $query = array_pop($app['dbal_logger']->queries);
-            $app['monolog']->err(
-                'sql-error:'.$query['sql'],
-                array(
-                    'params' => $query['params'],
-                    'types' => $query['types']
-                )
-            );
-        }*/
-
         if (isset($code)) {
             switch ($code) {
                 case 401:
@@ -338,7 +337,12 @@ if ($alreadyInstalled) {
     api_set_internationalization_default_encoding($charset);
 
     // include the local (contextual) parameters of this course or section
-    require $includePath.'/local.inc.php';
+    $cidReset = isset($cidReset) ? Database::escape_string($cidReset) : '';
+
+    // $cidReset can be set in URL-parameter
+    $cidReset = (isset($_GET['cidReq']) && ((isset($_SESSION['_cid']) && $_GET['cidReq'] != $_SESSION['_cid']) || (!isset($_SESSION['_cid'])))) ? Database::escape_string($_GET["cidReq"]) : $cidReset;
+
+    // require $includePath.'/local.inc.php';
 
     // reconfigure template now we know the user
     $app['template.hide_global_chat'] = !api_is_global_chat_enabled();
@@ -449,6 +453,7 @@ $language_files[] = 'minedu';
 $language_files[] = 'index';
 $language_files[] = 'courses';
 $language_files[] = 'course_home';
+$language_files[] = 'exercice';
 
 if (isset($language_file)) {
     if (!is_array($language_file)) {
@@ -519,6 +524,7 @@ if (api_get_setting('login_is_email') == 'true') {
 /** A "before" middleware allows you to tweak the Request before the controller is executed */
 
 $app->before(
+
     function () use ($app) {
         if (!file_exists($app['configuration_file']) && !file_exists($app['configuration_yml_file'])) {
             return new RedirectResponse(api_get_path(WEB_CODE_PATH).'install');
@@ -535,15 +541,49 @@ $app->before(
         }
 
         // Loop in the folder array and create temp folders.
-        $app['chamilo.filesystem']->createFolders($app['temp.paths']->folders);
+        /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem  $filesystem */
+        $filesystem = $app['chamilo.filesystem'];
+        // @todo improvement create temp folders during installation not everytime
+        $filesystem->createFolders($app['temp.paths']->folders);
 
         if ($app['assetic.auto_dump_assets']) {
-            $app['chamilo.filesystem']->copyFolders($app['temp.paths']->copyFolders);
+            $filesystem->copyFolders($app['temp.paths']->copyFolders);
         }
 
         // Check and modify the date of user in the track.e.online table
         Online::loginCheck(api_get_user_id());
-        //$app['request']->getSession()->start();
+
+        $app['request']->getSession()->start();
+
+        //var_dump($app['security']->isGranted('IS_AUTHENTICATED_FULLY'));
+
+        if ($app['security']->isGranted('IS_AUTHENTICATED_FULLY')) {
+
+            $token = $app['security']->getToken();
+            if (null !== $token) {
+                $user = $token->getUser();
+            }
+            $userInfo = api_get_user_info($user->getUserId());
+            $userInfo['is_anonymous'] = false;
+
+            Session::write('_user', $userInfo);
+            $app['current_user'] = $userInfo;
+
+            if ($app['security']->isGranted('ROLE_ADMIN')) {
+                Session::write('is_platformAdmin', true);
+            }
+
+            if ($app['security']->isGranted('ROLE_TEACHER')) {
+                Session::write('is_allowedCreateCourse', true);
+            }
+
+        } else {
+            Session::erase('_user');
+            Session::erase('is_platformAdmin');
+            Session::erase('is_allowedCreateCourse');
+        }
+
+        //Session::write('_user', $uData);
     }
 );
 
@@ -591,7 +631,7 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
         // is the latest logout_date still relevant?
         $sql_logout_date = "SELECT logout_date FROM $tbl_track_login WHERE login_id = $i_id_last_connection";
         $q_logout_date = Database::query($sql_logout_date);
-        $res_logout_date = convert_sql_date(Database::result($q_logout_date, 0, 'logout_date'));
+        $res_logout_date = api_convert_sql_date(Database::result($q_logout_date, 0, 'logout_date'));
 
         if ($res_logout_date < time() - $app['configuration']['session_lifetime']) {
             // now that it's created, we can get its ID and carry on
@@ -640,7 +680,7 @@ require_once 'routes.php';
 // Setting doctrine2 extensions
 
 if (isset($app['configuration']['main_database']) && isset($app['db.event_manager'])) {
-
+    // @todo improvement do not create every time this objects
     $sortableGroup = new Gedmo\Mapping\Annotation\SortableGroup(array());
     $sortablePosition = new Gedmo\Mapping\Annotation\SortablePosition(array());
     $tree = new Gedmo\Mapping\Annotation\Tree(array());
@@ -690,5 +730,5 @@ if (isset($app['configuration']['main_database']) && isset($app['db.event_manage
 // Fixes uses of $_course in the scripts.
 $_course = api_get_course_info();
 $_cid = api_get_course_id();
-
 return $app;
+

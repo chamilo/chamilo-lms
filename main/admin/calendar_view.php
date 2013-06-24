@@ -90,8 +90,10 @@ table.calendar .monthyear a:hover
 	background-color: #ffff00;
 }
 </style>
+
+<script src=<?php echo api_get_path(WEB_LIBRARY_PATH).'javascript/calendar/calendar_tbl_change.js'; ?>" type="text/javascript" ></script>
+
 <script type="text/javascript">
-<!--
     /* added 2004-06-10 by Michael Keck
      *       we need this for Backwards-Compatibility and resolving problems
      *       with non DOM browsers, which may have problems with css 2 (like NC 4)
@@ -120,11 +122,6 @@ table.calendar .monthyear a:hover
             }
         } // end if... else if...
     } // end if
-//-->
-</script>
-<script type="text/javascript" src="calendar_tbl_change.js"></script>
-<script type="text/javascript">
-<!--
 var month_names = new Array(
 <?php
 foreach($MonthsLong as $index => $month)
@@ -141,7 +138,6 @@ foreach($DaysShort as $index => $day)
 }
 ?>
 "");
-//-->
 </script>
 </head>
 <body onLoad="initCalendar();">

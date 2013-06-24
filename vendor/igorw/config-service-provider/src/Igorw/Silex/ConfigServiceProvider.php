@@ -13,14 +13,14 @@ namespace Igorw\Silex;
 
 use Silex\Application;
 use Silex\ServiceProviderInterface;
-use Symfony\Component\Yaml\Yaml;
 
 class ConfigServiceProvider implements ServiceProviderInterface
 {
     private $filename;
     private $replacements = array();
+    private $driver;
 
-    public function __construct($filename, array $replacements = array())
+    public function __construct($filename, array $replacements = array(), ConfigDriver $driver = null)
     {
         $this->filename = $filename;
 
@@ -29,19 +29,52 @@ class ConfigServiceProvider implements ServiceProviderInterface
                 $this->replacements['%'.$key.'%'] = $value;
             }
         }
+
+        $this->driver = $driver ?: new ChainConfigDriver(array(
+            new PhpConfigDriver(),
+            new YamlConfigDriver(),
+            new JsonConfigDriver(),
+            new TomlConfigDriver(),
+        ));
     }
 
     public function register(Application $app)
     {
         $config = $this->readConfig();
 
-        foreach ($config as $name => $value) {
-            $app[$name] = $this->doReplacements($value);
-        }
+        foreach ($config as $name => $value)
+            if ('%' === substr($name, 0, 1))
+                $this->replacements[$name] = (string) $value;
+
+        $this->merge($app, $config);
     }
 
     public function boot(Application $app)
     {
+    }
+
+    private function merge(Application $app, array $config)
+    {
+        foreach ($config as $name => $value) {
+            if (isset($app[$name]) && is_array($value)) {
+                $app[$name] = $this->mergeRecursively($app[$name], $value);
+            } else {
+                $app[$name] = $this->doReplacements($value);
+            }
+        }
+    }
+
+    private function mergeRecursively(array $currentValue, array $newValue)
+    {
+        foreach ($newValue as $name => $value) {
+            if (is_array($value) && isset($currentValue[$name])) {
+                $currentValue[$name] = $this->mergeRecursively($currentValue[$name], $value);
+            } else {
+                $currentValue[$name] = $this->doReplacements($value);
+            }
+        }
+
+        return $currentValue;
     }
 
     private function doReplacements($value)
@@ -58,14 +91,16 @@ class ConfigServiceProvider implements ServiceProviderInterface
             return $value;
         }
 
-        return strtr($value, $this->replacements);
+        if (is_string($value)) {
+            return strtr($value, $this->replacements);
+        }
+
+        return $value;
     }
 
     private function readConfig()
     {
-        $format = pathinfo($this->filename, PATHINFO_EXTENSION);
-
-        if (!$this->filename || !$format) {
+        if (!$this->filename) {
             throw new \RuntimeException('A valid configuration file must be passed before reading the config.');
         }
 
@@ -74,19 +109,11 @@ class ConfigServiceProvider implements ServiceProviderInterface
                 sprintf("The config file '%s' does not exist.", $this->filename));
         }
 
-        if ('yml' === $format) {
-            if (!class_exists('Symfony\\Component\\Yaml\\Yaml')) {
-                throw new \RuntimeException('Unable to read yaml as the Symfony Yaml Component is not installed.');
-            }
-            return Yaml::parse($this->filename);
-        }
-
-        if ('json' === $format) {
-            return json_decode(file_get_contents($this->filename), true);
+        if ($this->driver->supports($this->filename)) {
+            return $this->driver->load($this->filename);
         }
 
         throw new \InvalidArgumentException(
-                sprintf("The config file '%s' appears has invalid format '%s'.", $this->filename, $format));
+                sprintf("The config file '%s' appears to have an invalid format.", $this->filename));
     }
-
 }

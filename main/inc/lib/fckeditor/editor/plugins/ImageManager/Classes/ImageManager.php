@@ -543,7 +543,7 @@ class ImageManager
             return false;
         }
 
-        $file['name'] = replace_dangerous_char($file['name'], 'strict');
+        $file['name'] = api_replace_dangerous_char($file['name'], 'strict');
         $file_name = $file['name'];
         $extension = explode('.', $file_name);
         $count = count($extension);

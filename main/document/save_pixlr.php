@@ -70,7 +70,7 @@ $contents = file_get_contents($urlcontents_to_save);//replace line 45.
 //a bit title security
 $filename = addslashes(trim($filename));
 $filename = Security::remove_XSS($filename);
-$filename = replace_dangerous_char($filename, 'strict');
+$filename = api_replace_dangerous_char($filename, 'strict');
 $filename = FileManager::disable_dangerous_file($filename);
 
 if (strlen(trim($filename)) == 0) {

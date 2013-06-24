@@ -27,6 +27,7 @@ class Template
     public $jquery_ui_theme;
     public $force_plugin_load = true;
     public $navigation_array;
+    public $loadBreadcrumb = true;
 
     /**
      * @param Application $app
@@ -54,29 +55,17 @@ class Template
            Find the themes folder in main/inc/lib/javascript/jquery-ui */
         $this->jquery_ui_theme = 'smoothness';
 
-        //Setting system variables
+        // Setting system variables.
         $this->setSystemParameters();
 
-        //Setting user variables
+        // Setting user variables.
         $this->setUserParameters();
 
-        //Setting course variables
+        // Setting course variables.
         $this->setCourseParameters();
 
-        //Using global because all scripts have this variable
         global $interbreadcrumb;
-
-        if (isset($this->app['breadcrumb']) && !empty($this->app['breadcrumb'])) {
-            if (empty($interbreadcrumb)) {
-                $interbreadcrumb = $this->app['breadcrumb'];
-            } else {
-                $interbreadcrumb = array_merge($interbreadcrumb, $this->app['breadcrumb']);
-            }
-        }
-
-        if (!empty($interbreadcrumb)) {
-            $this->app['breadcrumb'] = $interbreadcrumb;
-        }
+        $this->setBreadcrumb($interbreadcrumb);
 
         //header and footer are showed by default
         $this->setFooter($app['template.show_footer']);
@@ -106,6 +95,25 @@ class Template
                     $this->plugin->load_plugin_lang_variables($course_plugin);
                 }
             }
+        }
+    }
+
+    /**
+     * @param array $interbreadcrumb
+     */
+    function setBreadcrumb($interbreadcrumb)
+    {
+
+        if (isset($this->app['breadcrumb']) && !empty($this->app['breadcrumb'])) {
+            if (empty($interbreadcrumb)) {
+                $interbreadcrumb = $this->app['breadcrumb'];
+            } else {
+                $interbreadcrumb = array_merge($interbreadcrumb, $this->app['breadcrumb']);
+            }
+        }
+
+        if (!empty($interbreadcrumb)) {
+            $this->app['breadcrumb'] = $interbreadcrumb;
         }
     }
 
@@ -170,6 +178,7 @@ class Template
     {
         $tpl = $this->get_template('layout/layout_1_col.tpl');
         $this->display($tpl);
+
     }
 
     /**
@@ -285,10 +294,11 @@ class Template
         $user_info = array();
         $user_info['logged'] = 0;
         $this->user_is_logged_in = false;
-        if (api_user_is_login()) {
-            $user_info = $this->app['current_user'];
-            $user_info['logged'] = 1;
+        $user_info = isset($this->app['current_user']) ? $this->app['current_user'] : null;
 
+        if (api_user_is_login() && !empty($user_info)) {
+
+            $user_info['logged'] = 1;
             $user_info['is_admin'] = 0;
             if (api_is_platform_admin()) {
                 $user_info['is_admin'] = 1;
@@ -429,6 +439,23 @@ class Template
             $style_print = api_get_css(api_get_cdn_path($cssPath.$this->theme.'/print.css'), 'print');
             $this->assign('css_style_print', $style_print);
         }
+    }
+
+    public function addJsFiles($htmlHeadXtra)
+    {
+        $extra_headers = null;
+        if (isset($htmlHeadXtra) && $htmlHeadXtra) {
+            foreach ($htmlHeadXtra as $this_html_head) {
+                $extra_headers .= $this_html_head."\n";
+            }
+        }
+
+        if (isset($this->app['extraJS'])) {
+            foreach ($this->app['extraJS'] as $this_html_head) {
+                $extra_headers .= $this_html_head."\n";
+            }
+        }
+        $this->assign('extra_headers', $extra_headers);
     }
 
     /**
@@ -589,7 +616,7 @@ class Template
             if ($access_url_id != -1) {
                 $url_info = api_get_current_access_url_info();
                 $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
-                $clean_url = replace_dangerous_char($url);
+                $clean_url = api_replace_dangerous_char($url);
                 $clean_url = str_replace('/', '-', $clean_url);
                 $clean_url .= '/';
                 $homep = api_get_path(REL_PATH).'home/'.$clean_url; //homep for Home Path
@@ -634,22 +661,31 @@ class Template
 
         $this->assign('portal_name', $portal_name);
 
-        //Menu
+        // Menu.
         $menu = $this->returnMenu();
 
         $this->assign('menu', $menu);
 
-        //Breadcrumb
-        $breadcrumb = $this->returnBreadcrumb();
+        // Breadcrumb
+        if ($this->loadBreadcrumb) {
+            $this->loadBreadcrumbToTemplate();
+        }
 
-        $this->assign('breadcrumb', $breadcrumb);
-
-        //Extra content
+        // Extra content
         $extra_header = null;
         if (!api_is_platform_admin()) {
             $extra_header = trim(api_get_setting('header_extra_content'));
         }
         $this->assign('header_extra_content', $extra_header);
+    }
+
+    /**
+     *
+     */
+    public function loadBreadcrumbToTemplate()
+    {
+        $breadcrumb = $this->returnBreadcrumb();
+        $this->assign('breadcrumb', $breadcrumb);
     }
 
     /**
@@ -739,7 +775,6 @@ class Template
                 $this->assign('plugin_'.$plugin_region, null);
             }
         }
-        return null;
     }
 
     /**
@@ -764,7 +799,6 @@ class Template
         if (!empty($template)) {
             $this->app['default_layout'] = $template;
         }
-        $this->app->run();
     }
 
     /**
@@ -785,7 +819,7 @@ class Template
             if ($access_url_id != -1) {
                 $url_info = api_get_current_access_url_info();
                 $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
-                $clean_url = replace_dangerous_char($url);
+                $clean_url = api_replace_dangerous_char($url);
                 $clean_url = str_replace('/', '-', $clean_url);
                 $clean_url .= '/';
                 $homep = api_get_path(SYS_DATA_PATH).'home/'.$clean_url; //homep for Home Path
@@ -972,7 +1006,7 @@ class Template
 
         // Platform administration
         if (api_is_platform_admin(true)) {
-            $navigation['platform_admin']['url'] = api_get_path(WEB_CODE_PATH).'admin/';
+            $navigation['platform_admin']['url'] = api_get_path(WEB_CODE_PATH).'admin/index.php';
             $navigation['platform_admin']['title'] = get_lang('PlatformAdmin');
         }
 
@@ -1117,6 +1151,8 @@ class Template
     }
 
     /**
+     * Gets the main menu
+     *
      * @return array
      */
     public function returnNavigationArray()
@@ -1349,14 +1385,13 @@ class Template
                 } elseif ($breadcrumb_step['name'] == 'gallery') {
                     $navigation_item['title'] = get_lang('Gallery');
                 }
-                //Fixes breadcrumb title now we applied the Security::remove_XSS and we cut the string depending of the MAX_LENGTH_BREADCRUMB value
+                // Fixes breadcrumb title now we applied the Security::remove_XSS and we cut the string depending of the MAX_LENGTH_BREADCRUMB value
 
                 $navigation_item['title'] = Text::cut($navigation_item['title'], MAX_LENGTH_BREADCRUMB);
                 $navigation_item['title'] = Security::remove_XSS($navigation_item['title']);
                 $navigation[] = $navigation_item;
             }
         }
-
 
         // part 3: The tool itself. If we are on the course homepage we do not want to display the title of the course because this
         // is the same as the first part of the breadcrumbs (see part 1)

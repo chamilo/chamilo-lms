@@ -30,7 +30,7 @@ if (!empty($_course['language'])) {
         require_once $resource_linker_file;
     }
 }
-require_once '../exercice/hotpotatoes.lib.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
 
 /* FUNCTIONS */
 
@@ -368,7 +368,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
         $type = 'Link';
     }
 
-    // YW switched litteral tool names to use of constants declared in main_api.lib.php
+    // YW switched litteral tool names to use of constants declared in api.lib.php
     switch ($type) {
         case TOOL_CALENDAR_EVENT:
         case 'Agenda':
@@ -2078,7 +2078,7 @@ function showorhide_addresourcelink($type, $id)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Yannick Warnier <ywarnier@beeznest.org>, Dokeos - rebranding
  * @param string     Course code
- * @param string     The tool type (using constants declared in main_api.lib.php)
+ * @param string     The tool type (using constants declared in api.lib.php)
  * @param integer     The resource ID
  * @param string    Resource style (e.g. when a resource is hidden => the added resources should also be styled like they are hidden)
  * @param boolean    Open in a new window (true) or in the current frame/window (false)?
@@ -2327,7 +2327,7 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
  *
  * @author Yannick Warnier <ywarnier@beeznest.org>, Dokeos - rebranding
  * @param string     Course code
- * @param string     The tool type (using constants declared in main_api.lib.php)
+ * @param string     The tool type (using constants declared in api.lib.php)
  * @param integer     The resource ID
  */
 function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)

@@ -533,7 +533,7 @@ $_SESSION['image_files_only'] = '';
 $image_files_only = '';
 
 if ($is_certificate_mode) {
-    $interbreadcrumb[] = array('url' => '../gradebook/index.php', 'name' => get_lang('Gradebook'));
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'gradebook/index.php', 'name' => get_lang('Gradebook'));
 } else {
     if ((isset($_GET['id']) && $_GET['id'] != 0) || isset($_GET['curdirpath']) || isset($_GET['createdir'])) {
         $interbreadcrumb[] = array('url' => 'document.php', 'name' => get_lang('Documents'));
@@ -892,7 +892,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
                 $curdirpath = $document_data['path'];
             }
             $added_slash = ($curdirpath == '/') ? '' : '/';
-            $dir_name = $curdirpath.$added_slash.replace_dangerous_char($post_dir_name);
+            $dir_name = $curdirpath.$added_slash.api_replace_dangerous_char($post_dir_name);
             $dir_name = FileManager::disable_dangerous_file($dir_name);
             $dir_check = $base_work_dir.$dir_name;
 

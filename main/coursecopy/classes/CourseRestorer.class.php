@@ -87,7 +87,11 @@ class CourseRestorer
     {
         $this->course = $course;
         $course_info = api_get_course_info($this->course->code);
-        $this->course_origin_id = $course_info['real_id'];
+        if (!empty($course_info)) {
+            $this->course_origin_id = $course_info['real_id'];
+        } else {
+            $this->course_origin_id = null;
+        }
         $this->file_option = FILE_RENAME;
         $this->set_tools_invisible_by_default = false;
         $this->skip_content = array();
@@ -134,11 +138,13 @@ class CourseRestorer
             $this->destination_course_info = $course_info;
             $this->course->destination_path = $course_info['path'];
         }
+
         $this->destination_course_id = $course_info['real_id'];
 
-        //Getting first teacher (for the forums)
+        // Getting first teacher (for the forums)
         $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['real_id']);
         $this->first_teacher_id = api_get_user_id();
+
         if (!empty($teacher_list)) {
             foreach ($teacher_list as $teacher) {
                 $this->first_teacher_id = $teacher['user_id'];
@@ -558,7 +564,7 @@ class CourseRestorer
 
                                         $path_title = '/'.$new_base_foldername.'/'.$document_path[2];
 
-                                        copy_folder_course_session(
+                                        api_copy_folder_course_session(
                                             $basedir_dest_path,
                                             $base_path_document,
                                             $session_id,
@@ -835,7 +841,7 @@ class CourseRestorer
                 if (file_exists($path.$document->path)) {
                     switch ($this->file_option) {
                         case FILE_OVERWRITE :
-                            rmdirr($path.$document->path);
+                            api_rmdirr($path.$document->path);
                             FileManager::copyDirTo(
                                 $this->course->backup_path.'/'.$document->path,
                                 $path.dirname($document->path),
@@ -1458,12 +1464,11 @@ class CourseRestorer
                         $quiz->start_time = null;
                         $quiz->end_time = null;
                     }
-
                     $params = array(
                         'c_id' => $this->destination_course_id,
                         'title' => self::DBUTF8($quiz->title),
                         'description' => self::DBUTF8($quiz->description),
-                        'type' => $quiz->quiz_type,
+                        'type' => isset($quiz->quiz_type) ? $quiz->quiz_type : $quiz->type,
                         'random' => $quiz->random,
                         'active' => $quiz->active,
                         'sound' => self::DBUTF8($doc),
@@ -1500,17 +1505,16 @@ class CourseRestorer
                     $new_id = -1;
                 }
 
-                if ($new_id) {
+                if ($new_id && $new_id != -1) {
                     // Updates the question position
                     $exercise = new Exercise($this->destination_course_id);
                     $exercise->read($new_id);
 
-                    if ($new_id != -1) {
-                        $exercise->addExerciseToOrderTable();
-                    }
-
+                    $exercise->addExerciseToOrderTable();
                     $this->course->resources[RESOURCE_QUIZ][$id]->obj->destination_id = $new_id;
+
                     $order = 0;
+
                     if (!empty($quiz->question_ids)) {
                         foreach ($quiz->question_ids as $index => $question_id) {
                             $qid = $this->restore_quiz_question($question_id);
@@ -1576,7 +1580,11 @@ class CourseRestorer
             $table_options = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
 
             // check resources inside html from fckeditor tool and copy correct urls into recipient course
-			$question->description = DocumentManager::replace_urls_inside_content_html_from_copy_course($question->description, $this->course->code, $this->course->destination_path);
+			$question->description = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                $question->description,
+                $this->course->code,
+                $this->course->destination_path
+            );
 
             $parent_id = 0;
 
@@ -1633,7 +1641,7 @@ class CourseRestorer
                 }
             }
 
-            if ($question->quiz_type == MATCHING) {
+            if ($question->type == MATCHING) {
                 $temp = array();
                 $matching_list = array();
                 $matching_to_update = array();
@@ -1659,7 +1667,6 @@ class CourseRestorer
                     $new_answer_id = Database::insert_id();
                     $matching_list[$answer['iid']] = $new_answer_id;
 				}
-                //var_dump($matching_list, $matching_to_update);
                 foreach ($matching_to_update as $old_answer_id => $old_correct_id) {
                     $new_correct = $matching_list[$old_correct_id];
                     $new_fixed_id = $matching_list[$old_answer_id];
@@ -1694,7 +1701,7 @@ class CourseRestorer
             $course_id = api_get_course_int_id();
 
             //Moving quiz_question_options
-            if ($question->quiz_type == MULTIPLE_ANSWER_TRUE_FALSE) {
+            if ($question->type == MULTIPLE_ANSWER_TRUE_FALSE) {
                 $question_option_list = Question::readQuestionOption($id, $course_id);
 
                 //Question copied from the current platform
@@ -1730,7 +1737,6 @@ class CourseRestorer
                             $question_option_id = Database::insert($table_options, $item);
                             $new_options[$obj->obj->iid] = $question_option_id;
                         }
-                        //var_dump($new_options, $correct_answers);
                         foreach ($correct_answers as $answer_id => $correct_answer) {
                             $params = array();
                             $params['correct'] = $new_options[$correct_answer];
@@ -1744,26 +1750,20 @@ class CourseRestorer
                 $cats = array();
                 foreach ($question->categories as $cat) {
                     $new_category = new Testcategory($cat['category_id']);
-                   /* $new_category = new Testcategory($cat['category_id']);
-                    var_dump($new_category->title, $cat['title']);
-                    if ($new_category && $new_category->title == $cat['title']) {
-                        $cats[] = $cat['category_id'];
-                    } else {*/
-                        $new_category = $new_category->get_category_by_title($cat['title'], $this->destination_course_id);
-                        if (empty($new_category)) {
-                            //Create a new category in this portal
-                            if ($cat['category_id'] == 0) {
-                                $category_c_id = 0;
-                            } else {
-                                $category_c_id = $this->destination_course_id;
-                            }
-                            $new_cat = new Testcategory(null, $cat['title'], $cat['description'], null, 'simple', $category_c_id);
-                            $new_cat_id = $new_cat->addCategoryInBDD();
-                            $cats[] = $new_cat_id;
+                    $new_category = $new_category->get_category_by_title($cat['title'], $this->destination_course_id);
+                    if (empty($new_category)) {
+                        //Create a new category in this portal
+                        if ($cat['category_id'] == 0) {
+                            $category_c_id = 0;
                         } else {
-                            $cats[] = $new_category['iid'];
+                            $category_c_id = $this->destination_course_id;
                         }
-                    //}
+                        $new_cat = new Testcategory(null, $cat['title'], $cat['description'], null, 'simple', $category_c_id);
+                        $new_cat_id = $new_cat->addCategoryInBDD();
+                        $cats[] = $new_cat_id;
+                    } else {
+                        $cats[] = $new_category['iid'];
+                    }
                 }
 
                 $question = Question::read($new_id, $this->destination_course_id);

@@ -9,6 +9,7 @@ config/portfolio.conf.php
 config/profile.conf.php
 
 temp/*
+!temp/twig/PLACEHOLDER
 data/*
 !data/upload/users
 logs/*

@@ -25,15 +25,15 @@
 /**
  * Database settings
  */
-// Host
+// Host.
 $_configuration['db_host']     = '{DATABASE_HOST}';
-// Username
+// Username.
 $_configuration['db_user']     = '{DATABASE_USER}';
-// Password
+// Password.
 $_configuration['db_password'] = '{DATABASE_PASSWORD}';
-// Driver
+// Driver.
 $_configuration['db_driver']   = '{DATABASE_DRIVER}';
-// Database name
+// Database name.
 $_configuration['main_database'] = '{DATABASE_MAIN}';
 
 /** Directory settings */
@@ -114,33 +114,33 @@ $_configuration[1]['hosting_limit_disk_space'] = 0;
 $_configuration['cdn_enable'] = false;
 // The following setting will be ignored if the previous one is set to false
 $_configuration['cdn'] = array(
-  //You can define several CDNs and split them by extensions
-  //Replace the following by your full CDN URL, which should point to
-  // your Chamilo's root directory. DO NOT INCLUDE a final slash! (won't work)
-  'http://cdn.chamilo.org' => array('.css','.js','.jpg','.jpeg','.png','.gif','.avi','.flv'),
-  // copy the line above and modify following your needs
+    //You can define several CDNs and split them by extensions
+    //Replace the following by your full CDN URL, which should point to
+    // your Chamilo's root directory. DO NOT INCLUDE a final slash! (won't work)
+    'http://cdn.chamilo.org' => array('.css','.js','.jpg','.jpeg','.png','.gif','.avi','.flv'),
+    // copy the line above and modify following your needs
 );
 
 /**
  * Session settings
  */
-// You may have to restart your web server if you change this
+// You may have to restart your web server if you change this.
 $_configuration['session_stored_in_db'] = false;
 // Session lifetime
 $_configuration['session_lifetime'] = SESSION_LIFETIME;
 
 /** Security */
-// Security word for password recovery
+// Security word for password recovery.
 $_configuration['security_key'] = '{SECURITY_KEY}';
-// Hash function method
+// Hash function method.
 $_configuration['password_encryption'] = '{ENCRYPT_PASSWORD}';
-//Deny the elimination of users
+//Deny the elimination of users.
 $_configuration['deny_delete_users'] = false;
-//Prevent all admins from using the "login_as" feature
+//Prevent all admins from using the "login_as" feature.
 $_configuration['login_as_forbidden_globally'] = false;
 
 /** Multiple URL */
-// Activation for multi-url access
+// Activation for multi-url access.
 //$_configuration['multiple_access_urls'] = true;
 
 /** Chamilo version settings */
@@ -150,5 +150,8 @@ $_configuration['software_name']     = 'Chamilo';
 $_configuration['software_url']	     = 'http://www.chamilo.org/';
 
 /** Chamilo dev settings */
+// Generate twig templates in every request, prompts SQL errors.
 $_configuration['debug']             = false;
+$_configuration['platform_charset']  = 'utf-8';
+// Show a useful toolbar with memory used, loaded time, request, session, logs information.
 $_configuration['show_profiler']     = false;

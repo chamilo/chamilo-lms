@@ -55,13 +55,13 @@ class Template
            Find the themes folder in main/inc/lib/javascript/jquery-ui */
         $this->jquery_ui_theme = 'smoothness';
 
-        //Setting system variables
+        // Setting system variables.
         $this->setSystemParameters();
 
-        //Setting user variables
+        // Setting user variables.
         $this->setUserParameters();
 
-        //Setting course variables
+        // Setting course variables.
         $this->setCourseParameters();
 
         global $interbreadcrumb;
@@ -294,10 +294,11 @@ class Template
         $user_info = array();
         $user_info['logged'] = 0;
         $this->user_is_logged_in = false;
-        if (api_user_is_login()) {
-            $user_info = $this->app['current_user'];
-            $user_info['logged'] = 1;
+        $user_info = isset($this->app['current_user']) ? $this->app['current_user'] : null;
 
+        if (api_user_is_login() && !empty($user_info)) {
+
+            $user_info['logged'] = 1;
             $user_info['is_admin'] = 0;
             if (api_is_platform_admin()) {
                 $user_info['is_admin'] = 1;

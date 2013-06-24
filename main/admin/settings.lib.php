@@ -1003,7 +1003,31 @@ function delete_template($id) {
     // Display a feedback message.
     Display::display_confirmation_message(get_lang('TemplateDeleted'));
 }
-/*
+
+/**
+ * Returns the list of timezone identifiers used to populate the select
+ * This function is called through a call_user_func() in the generate_settings_form function.
+ * @return array List of timezone identifiers
+ *
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ * @since Chamilo 1.8.7
+ */
+function select_timezone_value() {
+    return api_get_timezones();
+}
+
+/**
+ * Returns an array containing the list of options used to populate the gradebook_number_decimals variable
+ * This function is called through a call_user_func() in the generate_settings_form function.
+ * @return array List of gradebook_number_decimals options
+ *
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ */
+function select_gradebook_number_decimals() {
+    return array('0', '1', '2');
+}
+
+
 function select_gradebook_default_grade_model_id() {
     $grade_model = new GradeModel();
     $models = $grade_model->get_all();
@@ -1015,7 +1039,7 @@ function select_gradebook_default_grade_model_id() {
         }
     }
     return $options;
-}*/
+}
 
 /**
  * Updates the gradebook score custom values using the scoredisplay class of the
@@ -1025,7 +1049,6 @@ function select_gradebook_default_grade_model_id() {
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
-/*
 function update_gradebook_score_display_custom_values($values) {
     require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/scoredisplay.class.php';
     $scoredisplay = ScoreDisplay::instance();
@@ -1040,7 +1063,7 @@ function update_gradebook_score_display_custom_values($values) {
         }
     }
     $scoredisplay->update_custom_score_display_settings($final);
-}*/
+}
 
 /**
  * @param array $settings

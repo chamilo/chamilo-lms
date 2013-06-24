@@ -337,7 +337,12 @@ if ($alreadyInstalled) {
     api_set_internationalization_default_encoding($charset);
 
     // include the local (contextual) parameters of this course or section
-    require $includePath.'/local.inc.php';
+    $cidReset = isset($cidReset) ? Database::escape_string($cidReset) : '';
+
+    // $cidReset can be set in URL-parameter
+    $cidReset = (isset($_GET['cidReq']) && ((isset($_SESSION['_cid']) && $_GET['cidReq'] != $_SESSION['_cid']) || (!isset($_SESSION['_cid'])))) ? Database::escape_string($_GET["cidReq"]) : $cidReset;
+
+    // require $includePath.'/local.inc.php';
 
     // reconfigure template now we know the user
     $app['template.hide_global_chat'] = !api_is_global_chat_enabled();
@@ -546,7 +551,37 @@ $app->before(
 
         // Check and modify the date of user in the track.e.online table
         Online::loginCheck(api_get_user_id());
+
         $app['request']->getSession()->start();
+
+        //var_dump($app['security']->isGranted('IS_AUTHENTICATED_FULLY'));
+
+        if ($app['security']->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $token = $app['security']->getToken();
+            if (null !== $token) {
+                $user = $token->getUser();
+            }
+            $userInfo = api_get_user_info($user->getUserId());
+            $userInfo['is_anonymous'] = false;
+
+            Session::write('_user', $userInfo);
+            $app['current_user'] = $userInfo;
+
+            if ($app['security']->isGranted('ROLE_ADMIN')) {
+                Session::write('is_platformAdmin', true);
+            }
+
+            if ($app['security']->isGranted('ROLE_TEACHER')) {
+                Session::write('is_allowedCreateCourse', true);
+            }
+
+        } else {
+            Session::erase('_user');
+            Session::erase('is_platformAdmin');
+            Session::erase('is_allowedCreateCourse');
+        }
+
+        //Session::write('_user', $uData);
     }
 );
 

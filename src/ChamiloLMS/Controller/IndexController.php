@@ -27,7 +27,6 @@ class IndexController extends CommonController
         $userId = api_get_user_id();
         \Online::logout($userId, true);
 
-
         // the Online::logout function already does a redirect
         //return $app->redirect($app['url_generator']->generate('index'));
     }
@@ -138,7 +137,6 @@ class IndexController extends CommonController
         if (api_get_setting('allow_terms_conditions') == 'true') {
             unset($_SESSION['term_and_condition']);
         }
-
         // If we are not logged in and custompages activated
         if (!api_get_user_id() && \CustomPages::enabled()) {
             $loggedOut = $request->get('loggedout');
@@ -309,20 +307,23 @@ class IndexController extends CommonController
           return $app['template']->assign('form', $form->createView());
          */
 
-        $form = new \FormValidator('formLogin', 'POST', $app['url_generator']->generate('index'), null, array('class' => 'form-vertical'));
+        $form = new \FormValidator('formLogin', 'POST', $app['url_generator']->generate('admin_login_check'), null, array('class' => 'form-vertical'));
         $form->addElement(
             'text',
-            'login',
+            'username',
             get_lang('UserName'),
-            array('class' => 'input-medium autocapitalize_off', 'autofocus' => 'autofocus')
+            array(
+                'class' => 'input-medium autocapitalize_off',
+                'autofocus' => 'autofocus'
+            )
         );
         $form->addElement('password', 'password', get_lang('Pass'), array('class' => 'input-medium '));
         $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));
         $html = $form->return_form();
-        if (api_get_setting('openid_authentication') == 'true') {
+        /*if (api_get_setting('openid_authentication') == 'true') {
             include_once 'main/auth/openid/login.php';
             $html .= '<div>'.openid_form().'</div>';
-        }
+        }*/
         return $html;
     }
 
@@ -465,5 +466,16 @@ class IndexController extends CommonController
             }
         }
         return \Display::return_message($message, 'error');
+    }
+
+    function dashboardAction(Application $app)
+    {
+        $template = $app['template'];
+
+        $template->assign('content', 'welcome!');
+        $response = $template->render_layout('layout_2_col.tpl');
+
+        //return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
+        return new Response($response, 200, array());
     }
 }

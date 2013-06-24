@@ -23,6 +23,8 @@
     </section>
 {% endif %}
 
+{% include app.template_style ~ "/layout/messages.tpl" %}
+
 {#  Welcome to course block  #}
 {% if welcome_to_course_block %}
     <section id="welcome_to_course">

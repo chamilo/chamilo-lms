@@ -9,7 +9,6 @@
 // name of the language file that needs to be included
 $language_file = array ('registration','admin');
 $cidReset = true;
-require_once '../inc/global.inc.php';
 
 global $_configuration;
 
@@ -410,7 +409,7 @@ function get_user_data($from, $number_of_items, $column, $direction, $get_count 
 		}
         if ($user[7] == 1 && $user[10] != '0000-00-00 00:00:00') {
             // check expiration date
-            $expiration_time = convert_sql_date($user[10]);
+            $expiration_time = api_convert_sql_date($user[10]);
             // if expiration date is passed, store a special value for active field
             if ($expiration_time < $t) {
         	   $user[7] = '-1';
@@ -462,8 +461,9 @@ function modify_filter($user_id, $url_params, $row) {
 	}
 	$result = '';
 	if (!$user_is_anonymous) {
+        $icon = Display::return_icon('course.gif', get_lang('Courses'), array('onmouseout' =>'"clear_course_list (\'div_'.$user_id.'\')" '));
 		$result .= '<a href="javascript:void(0)" onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')" >
-					<img onmouseout="clear_course_list (\'div_'.$user_id.'\')" src="../img/course.gif" title="'.get_lang('Courses').'" alt="'.get_lang('Courses').'"/>
+					'.$icon.'
 					<div class="blackboard_hide" id="div_'.$user_id.'">&nbsp;&nbsp;</div>
 					</a>&nbsp;&nbsp;';
 	} else {
@@ -508,6 +508,9 @@ function modify_filter($user_id, $url_params, $row) {
             $result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';
         }
     } // Else don't show anything, because the option is not available at all
+
+
+    $result .= Display::url('<i class="icon-key icon-large"></i>', 'roles');
 
 	if ($current_user_status_label != $statusname[STUDENT]) {
 		$result .= Display::return_icon('statistics_na.gif', get_lang('Reporting')).'&nbsp;&nbsp;';

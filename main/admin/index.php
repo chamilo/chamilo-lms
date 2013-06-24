@@ -7,6 +7,7 @@
 /**
  * Code
  */
+
 // Language files that need to be included.
 $language_file = array('admin', 'tracking','coursebackup');
 

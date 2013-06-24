@@ -45,7 +45,8 @@ class UserManager
     /**
      * Empty constructor. This class is mostly static.
      */
-    public function __construct () {
+    public function __construct ()
+    {
 
     }
 
@@ -344,10 +345,16 @@ class UserManager
             }
 
             global $app;
+            // Adding user
             /** @var Entity\User $user */
             $em = $app['orm.ems']['db_write'];
             $user = $em->getRepository('Entity\User')->find($return);
-            $role = $em->getRepository('Entity\Role')->findOneByRole('ROLE_STUDENT');
+            $role = $em->getRepository('Entity\Role')->find($status);
+
+            if ($role->getRole() == 'ROLE_ADMIN') {
+                UserManager::add_user_as_admin($return);
+            }
+
             $user->getRolesObj()->add($role);
             $em->persist($user);
             $em->flush();
@@ -1347,7 +1354,7 @@ class UserManager
             $filename = in_array($old_extension, $allowed_types) ? substr($old_file, 0, -strlen($old_extension)) : $old_file;
             $filename = (substr($filename, -1) == '.') ? $filename.$extension : $filename.'.'.$extension;
         } else {
-            $filename = replace_dangerous_char($filename);
+            $filename = api_replace_dangerous_char($filename);
             if (PREFIX_IMAGE_FILENAME_WITH_UID) {
                 $filename = uniqid('').'_'.$filename;
             }

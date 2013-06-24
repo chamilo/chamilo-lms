@@ -38,44 +38,35 @@ $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
 ));*/
 
 // http://symfony.com/doc/master/reference/configuration/security.html
-/*
+
 $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     'security.firewalls' => array(
         'login' => array(
             'pattern' => '^/login$',
             'anonymous' => true
         ),
-        'secured' => array(
+        'admin' => array(
             //'http' => true,
-            'pattern' => '^/secured',
+            'pattern' => '^/.*$',
             'form'    => array(
                 'login_path' => '/login',
-                'check_path' => '/secured/login_check',
-                'default_target_path' => 'admin/',
+                'check_path' => '/admin/login_check',
+                'default_target_path' => '/userportal',
                 'username_parameter' => 'username',
                 'password_parameter' => 'password',
             ),
             'logout' => array(
-                'logout_path' => '/secured/logout',
+                'logout_path' => '/admin/logout',
                 'target' => '/'
             ),
             'users' => $app->share(function() use ($app) {
                 return $app['orm.em']->getRepository('Entity\User');
             }),
-            'anonymous' => false
-        ),
-        'classic' => array(
-            'pattern' => '^/.*$',
             'anonymous' => true
-        )
-    ),
-    'security.role_hierarchy'=> array(
-        'ROLE_ADMIN' => array('ROLE_TEACHER'),
-        "ROLE_TEACHER" => array('ROLE_STUDENT'),
-        "ROLE_STUDENT" => array('ROLE_STUDENT'),
-        "ROLE_ANONYMOUS" => array("ROLE_ANONYMOUS"),
-        "ROLE_RRHH" => array("ROLE_RRHH"),
-        "ROLE_QUESTION_MANAGER" => array("ROLE_QUESTION_MANAGER")
+        ),/*
+        'classic' => array(
+            'pattern' => '^/.*$'
+        )*/
     )
 ));
 
@@ -86,10 +77,25 @@ $app['security.encoder.digest'] = $app->share(function($app) {
     // use only 1 iteration
     return new MessageDigestPasswordEncoder('sha1', false, 1);
 });
-*/
 
-/*
- *
+$app['security.role_hierarchy'] = array(
+    'ROLE_ADMIN' => array('ROLE_QUESTION_MANAGER', 'ROLE_TEACHER', 'ROLE_ALLOWED_TO_SWITCH'),
+    'ROLE_TEACHER' => array('ROLE_STUDENT'),
+    'ROLE_RRHH' => array('ROLE_TEACHER'),
+    'ROLE_QUESTION_MANAGER' => array('ROLE_QUESTION_MANAGER'),
+    'ROLE_STUDENT' => array('ROLE_STUDENT'),
+    'ROLE_ANONYMOUS' => array('ROLE_ANONYMOUS')
+);
+
+$app['security.access_rules'] = array(
+    array('^/admin/administrator', 'ROLE_ADMIN'),
+    array('^/admin/questionmanager', 'ROLE_QUESTION_MANAGER'),
+    array('^/main/admin/.*', 'ROLE_ADMIN'),
+    array('^/main/.*', array('ROLE_STUDENT'))
+    //array('^.*$', 'ROLE_USER'),
+);
+
+/**
 $app['security.access_manager'] = $app->share(function($app) {
     return new AccessDecisionManager($app['security.voters'], 'unanimous');
 });*/

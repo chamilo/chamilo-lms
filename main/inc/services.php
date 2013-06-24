@@ -71,7 +71,7 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
 ));
 
 // Registering Password encoder
-// @todo fix harcoded sha1 value
+// @todo fix hardcoded sha1 value
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 $app['security.encoder.digest'] = $app->share(function($app) {
     // use the sha1 algorithm
@@ -88,6 +88,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+/**
+ * Class LoginSuccessHandler
+ * @todo move in a class inside the ChamiloLMS namespace
+ */
 class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 {
     protected $router;
@@ -122,12 +126,26 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 
         $response = null;
         //$session = $request->getSession();
+        /* Possible values: index.php, user_portal.php, main/auth/courses.php */
         $pageAfterLogin = api_get_setting('page_after_login');
 
         //error_log($session->get('page_after_login'));
         if ($this->security->isGranted('ROLE_STUDENT') && !empty($pageAfterLogin)) {
-            $url = api_get_path(WEB_PUBLIC_PATH).$pageAfterLogin;
-            $response = new RedirectResponse($url);
+            $url = null;
+            switch($pageAfterLogin) {
+                case 'index.php':
+                    $url = $this->router->generate('index');
+                    break;
+                case 'user_portal.php':
+                    $url = $this->router->generate('userportal');
+                    break;
+                case 'main/auth/courses.php':
+                    $url = api_get_path(WEB_PUBLIC_PATH).$pageAfterLogin;
+                    break;
+            }
+            if (!empty($url)) {
+                $response = new RedirectResponse($url);
+            }
         }
 
         // Redirect the user to where they were before the login process begun.

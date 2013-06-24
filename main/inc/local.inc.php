@@ -65,8 +65,6 @@ $logging_in = false;
 $errorMessage = null;
 $loginFailed = true;
 
-return;
-
 if (!empty($_SESSION['_user']['user_id']) && !$login) {
     // uid is in session => login already done, continue with this value
     $_user['user_id'] = $_SESSION['_user']['user_id'];

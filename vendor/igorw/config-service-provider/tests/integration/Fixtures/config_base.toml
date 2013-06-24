@@ -1,0 +1,10 @@
+[db]
+driver = "pdo_mysql"
+charset = "utf8"
+
+[myproject]
+param1 = "123"
+param2 = "123"
+param4 = [1, 2, 3]
+
+[keys]

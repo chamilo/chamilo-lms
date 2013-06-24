@@ -81,7 +81,6 @@ class GroupManager
     public static function get_group_list($category = null, $course_code = null)
     {
         $my_user_id = api_get_user_id();
-
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
         $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
@@ -92,13 +91,17 @@ class GroupManager
         $my_status_of_user_in_course = CourseManager::get_user_in_course_status($my_user_id, $course_info['code']);
 
         $is_student_in_session = false;
-        if (is_null($my_status_of_user_in_course) || $my_status_of_user_in_course == '') { //into session
+        // User is subscribed in session
+        if (is_null($my_status_of_user_in_course) || $my_status_of_user_in_course == '') {
             if ($session_id > 0) {
                 $is_student_in_session = true;
             }
         }
+        $sql = null;
 
-        //COURSEMANAGER or STUDENT
+        // @todo fix the conditions below
+
+        // COURSEMANAGER or STUDENT
         if ($my_status_of_user_in_course == COURSEMANAGER || api_is_allowed_to_edit(null, true) || api_is_drh()) {
             $sql = "SELECT g.id ,
 						g.name ,
@@ -114,7 +117,7 @@ class GroupManager
 					LEFT JOIN $table_group_user ug
 					ON (ug.group_id = g.id AND ug.user_id = '".api_get_user_id(
             )."' AND ug.c_id = $course_id AND g.c_id = $course_id)";
-        } elseif ($my_status_of_user_in_course == STUDENT || $is_student_in_session === true || $_SESSION['studentview'] == 'studentview') {
+        } elseif ($my_status_of_user_in_course == STUDENT || $is_student_in_session === true) {
             $sql = "SELECT g.id,
 						g.name,
 						g.description,
@@ -127,8 +130,14 @@ class GroupManager
 						ug.user_id is_member
 					FROM $table_group g
 					LEFT JOIN $table_group_user ug
-					ON (ug.group_id = g.id AND ug.user_id = '".api_get_user_id(
-            )."' AND ug.c_id = $course_id AND g.c_id = $course_id)";
+					ON (ug.group_id = g.id AND
+					    ug.user_id = '".api_get_user_id()."' AND
+					    ug.c_id = $course_id AND
+					    g.c_id = $course_id )";
+        }
+
+        if (empty($sql)) {
+            return array();
         }
 
         $sql .= " WHERE 1=1 ";
@@ -157,8 +166,9 @@ class GroupManager
         }
 
         $groups = array();
-        $thisGroup = array();
+
         while ($thisGroup = Database::fetch_array($groupList)) {
+            $thisGroup = array();
             $thisGroup['number_of_members'] = count(self::get_subscribed_users($thisGroup['id']));
 
             if ($thisGroup['session_id'] != 0) {

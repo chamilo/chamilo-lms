@@ -28,6 +28,16 @@ class RoleController extends BaseController
      */
     public function indexAction()
     {
+        $token = $this->get('security')->getToken();
+
+        if (null !== $token) {
+            $user = $token->getUser();
+        }
+
+        if ($this->get('security')->isGranted('ROLE_ADMIN')) {
+            //var_dump('granted');
+        }
+
         $items = parent::listAction('array');
         $template = $this->get('template');
         $template->assign('items', $items);
@@ -48,9 +58,24 @@ class RoleController extends BaseController
     public function editAction($id)
     {
         $roleRepo = $this->getRepository();
+        $request = $this->getRequest();
+
         $role = $roleRepo->findOneById($id);
+
         if ($role) {
             $form = $this->get('form.factory')->create(new RoleType(), $role);
+
+            if ($request->getMethod() == 'POST') {
+                $form->bind($this->getRequest());
+
+                if ($form->isValid()) {
+                    $role = $form->getData();
+                    parent::updateAction($role);
+                    $this->get('session')->getFlashBag()->add('success', "Updated");
+                    $url = $this->get('url_generator')->generate('admin_administrator_roles');
+                    return $this->redirect($url);
+                }
+            }
 
             $template = $this->get('template');
             $template->assign('role', $role);
@@ -64,19 +89,21 @@ class RoleController extends BaseController
 
     public function addAction()
     {
+        $request = $this->getRequest();
         $form = $this->get('form.factory')->create(new RoleType());
 
-        $form->bind($this->getRequest());
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $role = $form->getData();
+                parent::createAction($role);
+                $this->get('session')->getFlashBag()->add('success', "Added");
 
-        if ($form->isValid()) {
-            $em = $this->get('orm.em');
-            $role = $form->getData();
-            $em->persist($role);
-            $em->flush();
-
-            $params = array('id' => $role->getId());
-            $url = $this->get('url_generator')->generate('admin_administrator_roles_read', $params);
-            return $this->redirect($url);
+                // $params = array('id' => $role->getId());
+                // $url = $this->get('url_generator')->generate('admin_administrator_roles_read', $params);
+                $url = $this->get('url_generator')->generate('admin_administrator_roles');
+                return $this->redirect($url);
+            }
         }
 
         $template = $this->get('template');
@@ -85,13 +112,15 @@ class RoleController extends BaseController
         return new Response($response, 200, array());
     }
 
-    /**
-     * @Route("", name="api_events_create")
-     * @Method({"POST"})
-     */
-    public function createAction()
+    public function deleteAction($id)
     {
-        return parent::createAction();
+        $result = parent::deleteAction($id);
+        if ($result) {
+            $url = $this->get('url_generator')->generate('admin_administrator_roles');
+            $this->get('session')->getFlashBag()->add('success', "Deleted");
+
+            return $this->redirect($url);
+        }
     }
 
     /**

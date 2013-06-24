@@ -11,8 +11,6 @@ class RoleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        //$role = new Entity\Role();
-
         $builder->add('name', 'text');
         $builder->add('role', 'text');
         $builder->add('submit', 'submit');
@@ -20,9 +18,11 @@ class RoleType extends AbstractType
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'Entity\Role'
-        ));
+        $resolver->setDefaults(
+            array(
+                'data_class' => 'Entity\Role'
+            )
+        );
     }
 
     public function getName()

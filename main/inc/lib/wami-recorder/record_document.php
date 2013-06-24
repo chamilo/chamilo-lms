@@ -26,7 +26,7 @@ if ($wamiuserid != api_get_user_id() || api_get_user_id() == 0 || $wamiuserid ==
 $waminame = Security::remove_XSS($waminame);
 $waminame = Database::escape_string($waminame);
 $waminame = addslashes(trim($waminame));
-$waminame = replace_dangerous_char($waminame, 'strict');
+$waminame = api_replace_dangerous_char($waminame, 'strict');
 $waminame = FileManager::disable_dangerous_file($waminame);
 $wamidir = Security::remove_XSS($wamidir);
 

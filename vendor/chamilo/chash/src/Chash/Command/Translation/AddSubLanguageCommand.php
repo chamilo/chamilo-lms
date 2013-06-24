@@ -17,7 +17,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
+ * Class AddSubLanguageCommand
  * Definition of the translation:add_sub_language command
+ * @package Chash\Command\Translation
  */
 class AddSubLanguageCommand extends CommonChamiloDatabaseCommand
 {
@@ -40,6 +42,11 @@ class AddSubLanguageCommand extends CommonChamiloDatabaseCommand
             );
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);

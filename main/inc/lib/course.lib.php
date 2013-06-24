@@ -113,8 +113,6 @@ class CourseManager
                     return $course_info;
                 }
             } else {
-                //error_log('Course already exists with params: '.$params['code']);
-                //error_log(print_r($params, 1));
                 //Course already exists
                 if (isset($params['return_item_if_already_exists']) && $params['return_item_if_already_exists']) {
                     return $course_info;
@@ -2236,7 +2234,6 @@ class CourseManager
                 $rowcfv = Database::fetch_array($rescfv);
                 if ($rowcfv['field_value'] != $fvalues) {
                     $sqlu = "UPDATE $t_cfv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowcfv['id'];
-                    //error_log('UM::update_extra_field_value: '.$sqlu);
                     $resu = Database::query($sqlu);
                     return ($resu ? true : false);
                 }
@@ -2244,7 +2241,6 @@ class CourseManager
             } else {
                 $sqli = "INSERT INTO $t_cfv (course_code,field_id,field_value,tms) " .
                     "VALUES ('$course_code',".$rowcf['id'].",'$fvalues',FROM_UNIXTIME($tms))";
-                //error_log('UM::update_extra_field_value: '.$sqli);
                 $resi = Database::query($sqli);
                 return ($resi ? true : false);
             }

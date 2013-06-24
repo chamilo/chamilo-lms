@@ -46,8 +46,8 @@ class Connector
 
         $courseInfo = api_get_course_info();
 
-        error_log($cmd);
-        error_log(print_r($result, 1));
+        /*error_log($cmd);
+        error_log(print_r($result, 1));*/
         //error_log(print_r($args,1));
         //error_log(print_r($elfinder,1));
 
@@ -66,7 +66,7 @@ class Connector
                     foreach ($result['added'] as $file) {
                         $name = $file['name'];
                         $webalized = \URLify::filter($file['name'], 80);
-                        error_log($webalized);
+                        //error_log($webalized);
                         if (strcmp($name, $webalized) != 0) {
                             $arg = array('target' => $file['hash'], 'name' => $webalized);
                             $elfinder->exec('rename', $arg);
@@ -74,7 +74,7 @@ class Connector
 
                         $realPath = $elfinder->realpath($file['hash']);
 
-                        error_log($realPath);
+                        //error_log($realPath);
                         if (!empty($realPath)) {
                             // Getting file info
                             $info = $elfinder->exec('file', array('target' => $file['hash']));

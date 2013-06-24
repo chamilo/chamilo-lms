@@ -21,7 +21,6 @@ if ($type == 'personal') {
 }
 
 require_once '../inc/global.inc.php';
-require_once 'agenda.lib.php';
 require_once 'agenda.inc.php';
 
 $current_course_tool  = TOOL_CALENDAR_EVENT;

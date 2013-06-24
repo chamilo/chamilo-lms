@@ -1,7 +1,7 @@
 {
     "name": "chamilo/chamilo-lms",
     "type": "project",
-    "homepage": "www.chamilo.org",
+    "homepage": "http://www.chamilo.org",
     "license": "GPL-3.0",
     "support": {
         "forum": "http://www.chamilo.org/forum",
@@ -35,10 +35,6 @@
         {
             "type": "vcs",
             "url": "https://github.com/jmontoyaa/silex-pagerfanta-provider"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/ThePixelDeveloper/ConsoleServiceProvider"
         }
     ],
     "require": {
@@ -54,6 +50,10 @@
         "symfony/translation": "~2.3",
         "symfony/dependency-injection": "~2.3",
         "monolog/monolog" : ">=1.0.0",
+        "symfony/config": "~2.3",
+        "symfony/yaml": "~2.3",
+        "symfony/locale": "~2.3",
+        "symfony/monolog-bridge": "~2.3",
         "twig/twig": ">=1.8,<2.0-dev",
         "dflydev/doctrine-orm-service-provider": "1.0.*@dev",
         "doctrine/migrations": "dev-master",
@@ -62,7 +62,7 @@
         "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
         "pagerfanta/pagerfanta": "dev-master",
         "franmomu/silex-pagerfanta-provider": "2.3.*@dev",
-        "igorw/config-service-provider": "1.0.*@dev",
+        "igorw/config-service-provider": "1.2.*@dev",
         "mpdf/mpdf": "v5.6.1",
         "ezyang/htmlpurifier": "v4.5.0",
         "realityking/pchart": "dev-master",
@@ -79,12 +79,13 @@
     },
     "require-dev": {
         "symfony/browser-kit": "2.3.*@dev",
-        "symfony/web-profiler-bundle": "~2.2",
+        "symfony/web-profiler-bundle": "~2.3",
         "silex/web-profiler": "1.0.x-dev",
         "natxet/CssMin": "dev-master",
         "leafo/lessphp": "dev-master",
         "mheap/silex-assetic": "1.0.*@dev",
-        "filp/whoops": "dev-master"
+        "filp/whoops": "dev-master",
+        "sensio/framework-extra-bundle": "2.3.*@dev"
     },
     "scripts": {
         "post-install-cmd": "ChamiloLMS\\Composer\\Tasks::postInstall",

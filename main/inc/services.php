@@ -13,19 +13,22 @@ use Silex\ServiceProviderInterface;
 // Monolog.
 if (is_writable($app['sys_temp_path'])) {
 
-    /** Adding Monolog service provider Monolog  use examples
-    $app['monolog']->addDebug('Testing the Monolog logging.');
-    $app['monolog']->addInfo('Testing the Monolog logging.');
-    $app['monolog']->addError('Testing the Monolog logging.');
+    /**
+     *  Adding Monolog service provider.
+     *  Examples:
+     *  $app['monolog']->addDebug('Testing the Monolog logging.');
+     *  $app['monolog']->addInfo('Testing the Monolog logging.');
+     *  $app['monolog']->addError('Testing the Monolog logging.');
      */
-
-    $app->register(
-        new Silex\Provider\MonologServiceProvider(),
-        array(
-            'monolog.logfile' => $app['chamilo.log'],
-            'monolog.name' => 'chamilo',
-        )
-    );
+    //if ($app['debug']) {
+        $app->register(
+            new Silex\Provider\MonologServiceProvider(),
+            array(
+                'monolog.logfile' => $app['chamilo.log'],
+                'monolog.name' => 'chamilo',
+            )
+        );
+    //}
 }
 
 //Setting HttpCacheService provider in order to use do: $app['http_cache']->run();
@@ -34,74 +37,137 @@ $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
     'http_cache.cache_dir' => $app['http_cache.cache_dir'].'/',
 ));*/
 
-// Session provider
-//$app->register(new Silex\ProviderSessionServiceProvider());
-
-/*
-Implements a UserProvider to login users
-
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\User;
-use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Doctrine\DBAL\Connection;
-
-class UserProvider implements UserProviderInterface
-{
-    private $conn;
-
-    public function __construct(Connection $conn)
-    {
-        $this->conn = $conn;
-    }
-
-    public function loadUserByUsername($username)
-    {
-        $stmt = $this->conn->executeQuery('SELECT * FROM users WHERE username = ?', array(strtolower($username)));
-
-        if (!$user = $stmt->fetch()) {
-            throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
-        }
-        $roles = 'student';
-        echo $user['username'];exit;
-        return new User($user['username'], $user['password'], explode(',', $roles), true, true, true, true);
-    }
-
-    public function refreshUser(UserInterface $user)
-    {
-        if (!$user instanceof User) {
-        throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
-    }
-
-    public function supportsClass($class)
-    {
-        return $class === 'Symfony\Component\Security\Core\User\User';
-    }
-}
+// http://symfony.com/doc/master/reference/configuration/security.html
 
 $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     'security.firewalls' => array(
-        'secured' => array(
-        'pattern' => '^/admin/',
-        'form'    => array(
-        'login_path' => '/login',
-        'check_path' => '/admin/login_check'
-    ),
-    'logout' => array('path' => '/logout', 'target' => '/'),
-    'users' => $app->share(function() use ($app) {
-        return new UserProvider($app['db']);
-    })
+        'login' => array(
+            'pattern' => '^/login$',
+            'anonymous' => true
+        ),
+        'admin' => array(
+            //'http' => true,
+            'pattern' => '^/.*$',
+            'form'    => array(
+                'login_path' => '/login',
+                'check_path' => '/admin/login_check',
+                'default_target_path' => '/userportal',
+                'username_parameter' => 'username',
+                'password_parameter' => 'password',
+            ),
+            'logout' => array(
+                'logout_path' => '/admin/logout',
+                'target' => '/'
+            ),
+            'users' => $app->share(function() use ($app) {
+                return $app['orm.em']->getRepository('Entity\User');
+            }),
+            'anonymous' => true
+        ),/*
+        'classic' => array(
+            'pattern' => '^/.*$'
+        )*/
     )
-    ),
-    'security.role_hierarchy'=> array(
-        'ROLE_ADMIN' => array('ROLE_EDITOR'),
-        "ROLE_EDITOR" => array('ROLE_WRITER'),
-        "ROLE_WRITER" => array('ROLE_USER'),
-        "ROLE_USER" => array("ROLE_SUSCRIBER"),
-)
-));*/
+));
 
+// Registering Password encoder
+// @todo fix harcoded sha1 value
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+$app['security.encoder.digest'] = $app->share(function($app) {
+    // use the sha1 algorithm
+    // don't base64 encode the password
+    // use only 1 iteration
+    return new MessageDigestPasswordEncoder('sha1', false, 1);
+});
+
+use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Router;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
+class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
+{
+    protected $router;
+    protected $security;
+
+    /**
+     * @param UrlGeneratorInterface $urlGenerator
+     * @param SecurityContext $security
+     */
+    public function __construct(UrlGeneratorInterface $urlGenerator, SecurityContext $security)
+    {
+        $this->router = $urlGenerator;
+        $this->security = $security;
+    }
+
+    /**
+     * @param Request $request
+     * @param TokenInterface $token
+     * @return null|RedirectResponse|\Symfony\Component\Security\Http\Authentication\Response
+     */
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token)
+    {
+        /*if ($this->security->isGranted('ROLE_SUPER_ADMIN')) {
+            $response = new RedirectResponse($this->router->generate('category_index'));
+        } elseif ($this->security->isGranted('ROLE_ADMIN')) {
+            $response = new RedirectResponse($this->router->generate('category_index'));
+        } elseif ($this->security->isGranted('ROLE_USER')) {
+            // redirect the user to where they were before the login process begun.
+            $referer_url = $request->headers->get('referer');
+            $response = new RedirectResponse($referer_url);
+        }*/
+
+        $response = null;
+        //$session = $request->getSession();
+        $pageAfterLogin = api_get_setting('page_after_login');
+
+        //error_log($session->get('page_after_login'));
+        if ($this->security->isGranted('ROLE_STUDENT') && !empty($pageAfterLogin)) {
+            $url = api_get_path(WEB_PUBLIC_PATH).$pageAfterLogin;
+            $response = new RedirectResponse($url);
+        }
+
+        // Redirect the user to where they were before the login process begun.
+        if (empty($response)) {
+            $refererUrl = $request->headers->get('referer');
+            $response = new RedirectResponse($refererUrl);
+        }
+
+        return $response;
+    }
+}
+
+// Registering success login redirection
+$app['security.authentication.success_handler.admin'] = $app->share(function($app) {
+    return new LoginSuccessHandler($app['url_generator'], $app['security']);
+});
+
+// Role hierarchy
+$app['security.role_hierarchy'] = array(
+    'ROLE_ADMIN' => array('ROLE_QUESTION_MANAGER', 'ROLE_TEACHER', 'ROLE_ALLOWED_TO_SWITCH'),
+    'ROLE_TEACHER' => array('ROLE_STUDENT'),
+    'ROLE_RRHH' => array('ROLE_TEACHER'),
+    'ROLE_QUESTION_MANAGER' => array('ROLE_QUESTION_MANAGER'),
+    'ROLE_STUDENT' => array('ROLE_STUDENT'),
+    'ROLE_ANONYMOUS' => array('ROLE_ANONYMOUS')
+);
+
+// Role rules
+$app['security.access_rules'] = array(
+    array('^/admin/administrator', 'ROLE_ADMIN'),
+    array('^/admin/questionmanager', 'ROLE_QUESTION_MANAGER'),
+    array('^/main/admin/.*', 'ROLE_ADMIN'),
+    array('^/main/.*', array('ROLE_STUDENT'))
+    //array('^.*$', 'ROLE_USER'),
+);
+
+/**
+$app['security.access_manager'] = $app->share(function($app) {
+    return new AccessDecisionManager($app['security.voters'], 'unanimous');
+});*/
 
 // Setting Controllers as services provider
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
@@ -111,33 +177,51 @@ $app->register(new Silex\Provider\ValidatorServiceProvider());
 
 // Implements Symfony2 translator (needed when using forms in Twig)
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
-    'locale' => 'en',
-    'locale_fallback' => 'en'
+    'locale' => 'es',
+    'locale_fallback' => 'es'
 ));
 
-// Handling po files
-
-/*
+// Handling po files (gettext)
 use Symfony\Component\Translation\Loader\PoFileLoader;
-use Symfony\Component\Translation\Dumper\PoFileDumper;
+use Symfony\Component\Translation\Loader\MoFileLoader;
+use Symfony\Component\Finder\Finder;
 
-$app['translator'] = $app->share($app->extend('translator', function($translator, $app) {
-$translator->addLoader('pofile', new PoFileLoader());
+$app['translator.cache.enabled'] = true;
 
-$language = api_get_language_interface();
-$iterator = new FilesystemIterator(api_get_path(SYS_PATH).'resources/locale/'.$language);
-$filter = new RegexIterator($iterator, '/\.(po)$/');
+//$app['translator'] = $app->share($app->extend('translator', function($translator, $app) {
+    /** @var Symfony\Component\Translation\Translator $translator  */
+/*    if ($app['translator.cache.enabled']) {
 
-foreach ($filter as $entry) {
-//$domain = $entry->getBasename('.inc.po');
-$locale = api_get_language_isocode($language); //'es_ES';
-//$translator->addResource('pofile', $entry->getPathname(), $locale, $domain);
-$translator->addResource('pofile', $entry->getPathname(), $locale, 'messages');
-}
-return $translator;
+        $locale = $translator->getLocale();
+        //$phpFileDumper = new Symfony\Component\Translation\Dumper\PhpFileDumper();
+        $dumper = new Symfony\Component\Translation\Dumper\MoFileDumper();
+        $catalogue = new Symfony\Component\Translation\MessageCatalogue($locale);
+        $catalogue->add(array('foo' => 'bar'));
+        $dumper->dump($catalogue, array('path' => $app['sys_temp_path']));
+
+    } else {
+
+        $translator->addLoader('pofile', new PoFileLoader());
+
+        $finder = new Finder();
+        $files = $finder->files()->name('*.po')->in(api_get_path(SYS_PATH).'temp/langs/');
+        //$language = api_get_language_interface();
+        // @var SplFileInfo $entry
+        foreach ($files as $entry) {
+            $domain = basename($entry->getPath());
+            $code = $entry->getBasename('.po');
+            //$domain = $entry->getBasename('.inc.po');
+            //$locale = api_get_language_isocode($language); //'es_ES';
+            //if ($domain == 'admin') {
+              //  var_dump($entry->getPathname());
+                //$translator->addResource('pofile', $entry->getPathname(), $code, $domain);
+                $translator->addResource('pofile', $entry->getPathname(), $code);
+            //}
+            //$translator->addResource('pofile', $entry->getPathname(), $locale, 'messages');
+        }
+        return $translator;
+    }
 }));
-
-//$app['translator.domains'] = array();
 */
 
 // Form provider
@@ -349,11 +433,11 @@ $app->register(new Grom\Silex\ImagineServiceProvider(), array(
 // Prompts Doctrine SQL queries using Monolog.
 
 $app['dbal_logger'] = $app->share(function() {
-    return new Doctrine\DBAL\Logging\DebugStack();
+    //return new Doctrine\DBAL\Logging\DebugStack();
 });
 
 if ($app['debug']) {
-    $logger = $app['dbal_logger'];
+    /*$logger = $app['dbal_logger'];
     $app['db.config']->setSQLLogger($logger);
     $app->after(function() use ($app, $logger) {
         // Log all queries as DEBUG.
@@ -367,7 +451,7 @@ if ($app['debug']) {
                 )
             );
         }
-    });
+    });*/
 }
 
 // Email service provider
@@ -459,6 +543,7 @@ class ChamiloServiceProvider implements ServiceProviderInterface
             return array(
                 //'root_web' => $app['root_web'],
                 'root_sys' => $app['root_sys'],
+                'sys_root' => $app['root_sys'], // just an alias
                 'sys_data_path' => $app['sys_data_path'],
                 'sys_config_path' => $app['sys_config_path'],
                 'sys_temp_path' => $app['sys_temp_path'],
@@ -582,6 +667,12 @@ $app['question_manager.controller'] = $app->share(
 $app['exercise_manager.controller'] = $app->share(
     function () use ($app) {
         return new ChamiloLMS\Controller\ExerciseController();
+    }
+);
+
+$app['role.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\Administrator\RoleController($app);
     }
 );
 

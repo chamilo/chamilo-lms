@@ -5,14 +5,15 @@ namespace Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
- * EntityUser
+ * User
  *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="Entity\Repository\UserRepository")
  */
-class User
+class User implements AdvancedUserInterface, \Serializable
 {
     /**
      * @var integer
@@ -215,11 +216,28 @@ class User
      **/
     private $items;
 
-
     /**
      * @ORM\OneToMany(targetEntity="UsergroupRelUser", mappedBy="user")
      **/
     private $classes;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\ManyToMany(targetEntity="Role", inversedBy="users")
+     * @ORM\JoinTable(
+     *          name="users_roles",
+     *          joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="user_id")},
+     *          inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
+     *      )
+     */
+    private $roles;
+
+     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $salt;
+
+    private $isActive;
 
     /**
      *
@@ -229,6 +247,131 @@ class User
         $this->courses = new ArrayCollection();
         $this->items = new ArrayCollection();
         $this->classes = new ArrayCollection();
+        $this->roles = new ArrayCollection();
+        $this->salt = sha1(uniqid(null, true));
+        $this->isActive = true;
+    }
+
+    public function getIsActive()
+    {
+        return $this->active == 1;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isEnabled()
+    {
+        return $this->getActive() == 1;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function eraseCredentials()
+    {
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRoles()
+    {
+        return $this->roles->toArray();
+    }
+
+    /**
+     * @see https://github.com/symfony/symfony/issues/3691
+     * @see \Serializable::serialize()
+     */
+    public function serialize()
+    {
+        /*
+         * ! Don't serialize $roles field !
+         */
+        return \serialize(array(
+            $this->userId,
+            $this->username,
+            $this->email,
+            $this->salt,
+            $this->password,
+            $this->isActive
+        ));
+    }
+
+    /**
+     * @see \Serializable::unserialize()
+     */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->userId,
+            $this->username,
+            $this->email,
+            $this->salt,
+            $this->password,
+            $this->isActive
+        ) = \unserialize($serialized);
+    }
+
+    /**
+     *
+     * @return ArrayCollection
+     */
+    public function getRolesObj()
+    {
+        return $this->roles;
+    }
+
+
+
+    /**
+     * Set salt
+     *
+     * @param string $salt
+     *
+     * @return User
+     */
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+
+        return $this;
+    }
+
+    /**
+     * Get salt
+     *
+     * @return string
+     */
+    public function getSalt()
+    {
+        return $this->salt;
     }
 
     /**
@@ -300,7 +443,7 @@ class User
      *
      * @param string $lastname
      *
-     * @return EntityUser
+     * @return User
      */
     public function setLastname($lastname)
     {
@@ -324,7 +467,7 @@ class User
      *
      * @param string $firstname
      *
-     * @return EntityUser
+     * @return User
      */
     public function setFirstname($firstname)
     {
@@ -347,7 +490,7 @@ class User
      * Set username
      *
      * @param string $username
-     * @return EntityUser
+     * @return User
      */
     public function setUsername($username)
     {
@@ -370,7 +513,7 @@ class User
      * Set password
      *
      * @param string $password
-     * @return EntityUser
+     * @return User
      */
     public function setPassword($password)
     {
@@ -393,7 +536,7 @@ class User
      * Set authSource
      *
      * @param string $authSource
-     * @return EntityUser
+     * @return User
      */
     public function setAuthSource($authSource)
     {
@@ -416,7 +559,7 @@ class User
      * Set email
      *
      * @param string $email
-     * @return EntityUser
+     * @return User
      */
     public function setEmail($email)
     {
@@ -439,7 +582,7 @@ class User
      * Set status
      *
      * @param boolean $status
-     * @return EntityUser
+     * @return User
      */
     public function setStatus($status)
     {
@@ -462,7 +605,7 @@ class User
      * Set officialCode
      *
      * @param string $officialCode
-     * @return EntityUser
+     * @return User
      */
     public function setOfficialCode($officialCode)
     {
@@ -485,7 +628,7 @@ class User
      * Set phone
      *
      * @param string $phone
-     * @return EntityUser
+     * @return User
      */
     public function setPhone($phone)
     {
@@ -508,7 +651,7 @@ class User
      * Set pictureUri
      *
      * @param string $pictureUri
-     * @return EntityUser
+     * @return User
      */
     public function setPictureUri($pictureUri)
     {
@@ -531,7 +674,7 @@ class User
      * Set creatorId
      *
      * @param integer $creatorId
-     * @return EntityUser
+     * @return User
      */
     public function setCreatorId($creatorId)
     {
@@ -554,7 +697,7 @@ class User
      * Set competences
      *
      * @param string $competences
-     * @return EntityUser
+     * @return User
      */
     public function setCompetences($competences)
     {
@@ -577,7 +720,7 @@ class User
      * Set diplomas
      *
      * @param string $diplomas
-     * @return EntityUser
+     * @return User
      */
     public function setDiplomas($diplomas)
     {
@@ -600,7 +743,7 @@ class User
      * Set openarea
      *
      * @param string $openarea
-     * @return EntityUser
+     * @return User
      */
     public function setOpenarea($openarea)
     {
@@ -623,7 +766,7 @@ class User
      * Set teach
      *
      * @param string $teach
-     * @return EntityUser
+     * @return User
      */
     public function setTeach($teach)
     {
@@ -646,7 +789,7 @@ class User
      * Set productions
      *
      * @param string $productions
-     * @return EntityUser
+     * @return User
      */
     public function setProductions($productions)
     {
@@ -669,7 +812,7 @@ class User
      * Set chatcallUserId
      *
      * @param integer $chatcallUserId
-     * @return EntityUser
+     * @return User
      */
     public function setChatcallUserId($chatcallUserId)
     {
@@ -692,7 +835,7 @@ class User
      * Set chatcallDate
      *
      * @param \DateTime $chatcallDate
-     * @return EntityUser
+     * @return User
      */
     public function setChatcallDate($chatcallDate)
     {
@@ -715,7 +858,7 @@ class User
      * Set chatcallText
      *
      * @param string $chatcallText
-     * @return EntityUser
+     * @return User
      */
     public function setChatcallText($chatcallText)
     {
@@ -738,7 +881,7 @@ class User
      * Set language
      *
      * @param string $language
-     * @return EntityUser
+     * @return User
      */
     public function setLanguage($language)
     {
@@ -761,7 +904,7 @@ class User
      * Set registrationDate
      *
      * @param \DateTime $registrationDate
-     * @return EntityUser
+     * @return User
      */
     public function setRegistrationDate($registrationDate)
     {
@@ -784,7 +927,7 @@ class User
      * Set expirationDate
      *
      * @param \DateTime $expirationDate
-     * @return EntityUser
+     * @return User
      */
     public function setExpirationDate($expirationDate)
     {
@@ -807,7 +950,7 @@ class User
      * Set active
      *
      * @param boolean $active
-     * @return EntityUser
+     * @return User
      */
     public function setActive($active)
     {
@@ -830,7 +973,7 @@ class User
      * Set openid
      *
      * @param string $openid
-     * @return EntityUser
+     * @return User
      */
     public function setOpenid($openid)
     {
@@ -853,7 +996,7 @@ class User
      * Set theme
      *
      * @param string $theme
-     * @return EntityUser
+     * @return User
      */
     public function setTheme($theme)
     {
@@ -876,7 +1019,7 @@ class User
      * Set hrDeptId
      *
      * @param integer $hrDeptId
-     * @return EntityUser
+     * @return User
      */
     public function setHrDeptId($hrDeptId)
     {

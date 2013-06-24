@@ -31,12 +31,12 @@ ALTER TABLE session_rel_user ADD COLUMN moved_to INT NOT NULL DEFAULT 0;
 ALTER TABLE session_rel_user ADD COLUMN moved_status INT NOT NULL DEFAULT 0;
 ALTER TABLE session_rel_user ADD COLUMN moved_at datetime NOT NULL default '0000-00-00 00:00:00';
 
-ALTER TABLE session ADD COLUMN display_start_date datetime NOT NULL default '0000-00-00 00:00:00';
-ALTER TABLE session ADD COLUMN display_end_date datetime NOT NULL default '0000-00-00 00:00:00';
-ALTER TABLE session ADD COLUMN access_start_date datetime NOT NULL default '0000-00-00 00:00:00';
-ALTER TABLE session ADD COLUMN access_end_date datetime NOT NULL default '0000-00-00 00:00:00';
-ALTER TABLE session ADD COLUMN coach_access_start_date datetime NOT NULL default '0000-00-00 00:00:00';
-ALTER TABLE session ADD COLUMN coach_access_end_date datetime NOT NULL default '0000-00-00 00:00:00';
+ALTER TABLE session ADD COLUMN display_start_date datetime default '0000-00-00 00:00:00';
+ALTER TABLE session ADD COLUMN display_end_date datetime default '0000-00-00 00:00:00';
+ALTER TABLE session ADD COLUMN access_start_date datetime default '0000-00-00 00:00:00';
+ALTER TABLE session ADD COLUMN access_end_date datetime default '0000-00-00 00:00:00';
+ALTER TABLE session ADD COLUMN coach_access_start_date datetime default '0000-00-00 00:00:00';
+ALTER TABLE session ADD COLUMN coach_access_end_date datetime default '0000-00-00 00:00:00';
 
 ALTER TABLE grade_components ADD COLUMN prefix VARCHAR(255) DEFAULT NULL;
 ALTER TABLE grade_components ADD COLUMN exclusions INT DEFAULT 0;
@@ -302,5 +302,20 @@ ALTER TABLE c_quiz ADD COLUMN end_button int NOT NULL default 0;
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('template', NULL, 'text', 'stylesheets', 'default', 'DefaultTemplateTitle', 'DefaultTemplateComment', NULL, NULL, 1);
 
+ALTER TABLE user ADD COLUMN salt VARCHAR(255) DEFAULT NULL;
+CREATE TABLE roles (id INT auto_increment, name VARCHAR(255), role VARCHAR(255) unique, PRIMARY KEY(id));
+CREATE TABLE users_roles (user_id INT NOT NULL, role_id INT NOT NULL, PRIMARY KEY(user_id, role_id));
+
+INSERT INTO roles (name, role) VALUES('Admin', 'ROLE_ADMIN');
+INSERT INTO roles (name, role) VALUES('Teacher', 'ROLE_TEACHER');
+INSERT INTO roles (name, role) VALUES('Student', 'ROLE_STUDENT');
+INSERT INTO roles (name, role) VALUES('Anonymous', 'ROLE_ANONYMOUS');
+INSERT INTO roles (name, role) VALUES('RRHH', 'ROLE_RRHH');
+INSERT INTO roles (name, role) VALUES('Question Manager', 'ROLE_QUESTION_MANAGER');
+
+-- Admin
+INSERT INTO users_roles VALUES (1, 1);
+
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.022' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.025' WHERE variable = 'chamilo_database_version';

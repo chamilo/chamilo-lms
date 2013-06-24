@@ -9,7 +9,7 @@
 $language_file = array('admin', 'tracking');
 $cidReset = true;
 
-require_once '../../inc/global.inc.php';
+// require_once '../../inc/global.inc.php';
 api_protect_admin_script();
 
 $interbreadcrumb[] = array('url' => '../index.php', 'name' => get_lang('PlatformAdmin'));
@@ -63,8 +63,11 @@ foreach ($tools as $section => $items) {
 echo '</tr></table>';
 
 $course_categories = Statistics::get_course_categories();
-echo '<br/><br/>';//@todo: spaces between elements should be handled in the css, br should be removed if only there for presentation
-switch ($_REQUEST['report']) {
+echo '<br/><br/>';
+//@todo: spaces between elements should be handled in the css, br should be removed if only there for presentation
+$report = isset($_GET['report']) ? $_GET['report'] : null;
+
+switch ($report) {
     case 'courses':
         // total amount of courses
         foreach ($course_categories as $code => $name) {
@@ -81,7 +84,7 @@ switch ($_REQUEST['report']) {
         break;
     case 'courselastvisit':
         Statistics::print_course_last_visit();
-        break;    
+        break;
     case 'users':
         // total amount of users
         Statistics::print_stats(
@@ -115,10 +118,10 @@ switch ($_REQUEST['report']) {
         break;
     case 'zombies':
         ZombieReport::create(array('report' => 'zombies'))->display();
-        break;    
+        break;
     case 'activities':
         Statistics::print_activities_stats();
-        break;    
+        break;
     case 'messagesent':
         $messages_sent = Statistics::get_messages('sent');
         Statistics::print_stats(get_lang('MessagesSent'), $messages_sent);

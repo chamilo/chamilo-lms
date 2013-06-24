@@ -1007,30 +1007,16 @@ function display_requirements($app, $installType)
     $html .= '</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.session.php" target="_blank">Session</a> '.get_lang(
-        'support'
-    ).'</td>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.session.php" target="_blank">Session</a> '.get_lang('support').'</td>
             <td class="requirements-value">'.check_extension('session',get_lang('Yes'), get_lang('ExtensionSessionsNotAvailable')).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.mysql.php" target="_blank">MySQL</a> '.get_lang(
-        'support'
-    ).'</td>
-                <td class="requirements-value">'.check_extension(
-        'mysql',
-        get_lang('Yes'),
-        get_lang('ExtensionMySQLNotAvailable')
-    ).'</td>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.mysql.php" target="_blank">MySQL</a> '.get_lang('support').'</td>
+                <td class="requirements-value">'.check_extension('mysql', get_lang('Yes'), get_lang('ExtensionMySQLNotAvailable') ).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.zlib.php" target="_blank">Zlib</a> '.get_lang(
-        'support'
-    ).'</td>
-                <td class="requirements-value">'.check_extension(
-        'zlib',
-        get_lang('Yes'),
-        get_lang('ExtensionZlibNotAvailable')
-    ).'</td>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.zlib.php" target="_blank">Zlib</a> '.get_lang('support').'</td>
+                <td class="requirements-value">'.check_extension('zlib', get_lang('Yes'), get_lang('ExtensionZlibNotAvailable')    ).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.pcre.php" target="_blank">Perl-compatible regular expressions</a> '.get_lang(
@@ -1081,6 +1067,16 @@ function display_requirements($app, $installType)
         get_lang('ExtensionGDNotAvailable')
     ).'</td>
             </tr>
+
+
+             <tr>
+                <td class="requirements-item"><a href="http://php.net/manual/fr/book.imagick.php" target="_blank">ImageMagick</a> '.get_lang(
+        'support'
+    ).' ('.get_lang('Optional').')</td>
+                <td class="requirements-value">'.check_extension('imagick', get_lang('Yes'), get_lang('No'), true).'</td>
+            </tr>
+
+
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.json.php" target="_blank">JSON</a> '.get_lang(
         'support'
@@ -1111,6 +1107,11 @@ function display_requirements($app, $installType)
     ).' ('.get_lang('Optional').')</td>
                 <td class="requirements-value">'.check_extension('curl', get_lang('Yes'), get_lang('No'), true).'</td>
             </tr>
+
+
+
+
+
 
           </table>';
     $html .= '  </div>';
@@ -1264,23 +1265,27 @@ function display_requirements($app, $installType)
 
     $html .= '<table class="table">
             <tr>
-                <td class="requirements-item">chamilo/config</td>
+                <td class="requirements-item">[chamilo]/config</td>
                 <td class="requirements-value">'.check_writable_root_path('config/').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">chamilo/data</td>
+                <td class="requirements-item">[chamilo]/data</td>
                 <td class="requirements-value">'.check_writable_root_path('data').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">chamilo/logs</td>
+                <td class="requirements-item">[chamilo]/logs</td>
                 <td class="requirements-value">'.check_writable_root_path('logs').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">chamilo/temp</td>
+                <td class="requirements-item">[chamilo]/temp</td>
                 <td class="requirements-value">'.check_writable_root_path('temp').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">chamilo/main/default_course_document/images/</td>
+                <td class="requirements-item">[chamilo]/temp/twig</td>
+                <td class="requirements-value">'.check_writable_root_path('temp').'</td>
+            </tr>
+            <tr>
+                <td class="requirements-item">[chamilo]/main/default_course_document/images/</td>
                 <td class="requirements-value">'.check_writable('default_course_document/images/').'</td>
             </tr>
             <tr>
@@ -1796,7 +1801,7 @@ function display_database_settings_form(
             //Database Name fix replace weird chars
             if ($installType != INSTALL_TYPE_UPDATE) {
                 $dbNameForm = str_replace(array('-', '*', '$', ' ', '.'), '', $dbNameForm);
-                $dbNameForm = replace_dangerous_char($dbNameForm);
+                $dbNameForm = api_replace_dangerous_char($dbNameForm);
             }
 
             display_database_parameter(

@@ -408,7 +408,7 @@ foreach ($categories as $item) {
                 if ($details['lp_type'] == 1) {
                     $dsp_disk = Display::url(Display::return_icon('cd.gif', get_lang('Export'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id");
                 } elseif ($details['lp_type'] == 2) {
-                    $dsp_disk = Display::url(Display::return_icon('cd.gif', get_lang('Export'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".replace_dangerous_char($name, 'strict').".zip");
+                    $dsp_disk = Display::url(Display::return_icon('cd.gif', get_lang('Export'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".api_replace_dangerous_char($name, 'strict').".zip");
                 } else {
                     $dsp_disk = Display::return_icon('cd_gray.gif', get_lang('Export'), array(), ICON_SIZE_SMALL);
                 }

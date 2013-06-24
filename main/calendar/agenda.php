@@ -41,7 +41,7 @@ if (empty($action)) {
 
 /* 	Resource linker */
 $_SESSION['source_type'] = 'Agenda';
-require_once '../resourcelinker/resourcelinker.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 
 if (!empty($addresources)) {
     // When the "Add Resource" button is clicked we store all the form data into a session
@@ -122,7 +122,7 @@ $htmlHeadXtra[] = to_javascript();
 $htmlHeadXtra[] = user_group_filter_javascript();
 
 // this loads the javascript that is needed for the date popup selection
-$htmlHeadXtra[] = "<script src=\"tbl_change.js\" type=\"text/javascript\" language=\"javascript\"></script>";
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/calendar/tbl_change.js" type="text/javascript" ></script>';
 
 // setting the name of the tool
 $nameTools = get_lang('Agenda'); // language variable in trad4all.inc.php

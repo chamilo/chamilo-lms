@@ -30,7 +30,7 @@ if ($webcamuserid != api_get_user_id() || api_get_user_id() == 0 || $webcamuseri
 $webcamname = Security::remove_XSS($webcamname);
 $webcamname = Database::escape_string($webcamname);
 $webcamname = addslashes(trim($webcamname));
-$webcamname = replace_dangerous_char($webcamname, 'strict');
+$webcamname = api_replace_dangerous_char($webcamname, 'strict');
 $webcamname = FileManager::disable_dangerous_file($webcamname);
 $webcamdir = Security::remove_XSS($webcamdir);
 

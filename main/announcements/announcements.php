@@ -29,6 +29,23 @@ $use_anonymous = true;
 // setting the global file that gets the general configuration, the databases, the languages, ...
 require_once '../inc/global.inc.php';
 
+$showImg = Display::return_icon('div_show.gif');
+$hideImg = Display::return_icon('div_hide.gif');
+
+$htmlHeadXtra[] = "
+<script>
+function plus_attachment() {
+    'use strict';
+    if (document.getElementById('options').style.display == 'none') {
+        document.getElementById('options').style.display = 'block';
+        document.getElementById('plus').innerHTML = '&nbsp;".$hideImg."&nbsp;' + lang.AddAnAttachment;
+    } else {
+        document.getElementById('options').style.display = 'none';
+        document.getElementById('plus').innerHTML = '&nbsp;".$showImg."&nbsp;' + lang.AddAnAttachment;
+    }
+}
+</script>";
+
 /* 	Sessions */
 
 $ctok = Security::getCurrentToken();
@@ -790,7 +807,7 @@ if ($display_form) {
     //File attachment
     echo '	<div class="control-group">
 				<div class="controls">
-				    <a href="javascript://" onclick="return plus_attachment();"><span id="plus"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang(
+				    <a href="javascript://" onclick="return plus_attachment();"><span id="plus">'.$showImg.'&nbsp;'.get_lang(
         'AddAnAttachment'
     ).'</span></a>
 				    <br />

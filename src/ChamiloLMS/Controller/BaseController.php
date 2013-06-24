@@ -1,9 +1,13 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 namespace ChamiloLMS\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\NoResultException;
 use Silex\Application;
@@ -18,30 +22,11 @@ abstract class BaseController
     protected $app;
 
     /**
-     * @param $app
+     * @param Application $app
      */
-    public function __construct($app)
+    public function __construct(Application $app)
     {
         $this->app = $app;
-    }
-
-    public function getRequest()
-    {
-        return $this->get('request');
-    }
-
-    public function redirect($redirect)
-    {
-        return $this->app->redirect($redirect);
-    }
-
-    /**
-     * @param string $item
-     * @return mixed
-     */
-    public function get($item)
-    {
-        return $this->app[$item];
     }
 
     /**
@@ -61,8 +46,43 @@ abstract class BaseController
     abstract protected function getNewEntity();
 
     /**
-     * Base "list" action.
      *
+     * @return Request
+     */
+    public function getRequest()
+    {
+        return $this->get('request');
+    }
+
+    public function redirect($redirect)
+    {
+        return $this->app->redirect($redirect);
+    }
+
+
+    public function createNotFoundException($message = 'Not Found', \Exception $previous = null)
+    {
+        return $this->app->abort(404, $message);
+    }
+
+    /**
+     * @param string $item
+     * @return mixed
+     */
+    public function get($item)
+    {
+        return $this->app[$item];
+    }
+
+    public function getManager()
+    {
+        return $this->app['orm.em'];
+    }
+
+
+    /**
+     * Base "list" action.
+     * @param format
      * @return JsonResponse
      */
     protected function listAction($format = 'json')
@@ -108,17 +128,13 @@ abstract class BaseController
      *
      * @return JsonResponse|NotFoundHttpException
      */
-    protected function createAction()
+    protected function createAction($object)
     {
-        $json = $this->getDataFromRequest();
-
-
-        $object = $this->updateEntity($this->getNewEntity(), $json);
-
         if (false === $object) {
             throw new \Exception('Unable to create the entity');
         }
-        $em = $this->getDoctrine()->getManager();
+
+        $em = $this->getManager();
         $em->persist($object);
         $em->flush();
 
@@ -132,7 +148,7 @@ abstract class BaseController
      */
     protected function createJsonAction()
     {
-        $json = $this->getDataFromRequest();
+        $json = $this->getJsonDataFromRequest();
 
         if (false === $json) {
             throw new \Exception('Invalid JSON');
@@ -143,55 +159,50 @@ abstract class BaseController
         if (false === $object) {
             throw new \Exception('Unable to create the entity');
         }
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getManager();
         $em->persist($object);
         $em->flush();
 
         return new JsonResponse($this->getEntityForJson($object->getId()));
     }
 
+
     /**
      * Base "upload" action.
-     *
+     * @param int id
      * @return JsonResponse|NotFoundHttpException
      */
-    protected function updateAction($id)
+    protected function updateAction($object)
     {
-        $object = $this->getEntity($id);
         if (false === $object) {
             return $this->createNotFoundException();
         }
-        $json = $this->getDataFromRequest();
-        if (false === $json) {
-            throw new \Exception('Invalid JSON');
-        }
-        if (false === $this->updateEntity($object, $json)) {
-            throw new \Exception('Unable to update the entity');
-        }
-        $this->getDoctrine()->getManager()->flush($object);
+        $this->getManager()->flush($object);
 
         return new JsonResponse($this->getEntityForJson($object->getId()));
     }
 
     /**
      * Base "upload" action.
-     *
+     * @param int id
      * @return JsonResponse|NotFoundHttpException
      */
-    protected function updateJsonAction($id)
+    protected function updateJsonAction($id, $data)
     {
         $object = $this->getEntity($id);
         if (false === $object) {
             return $this->createNotFoundException();
         }
-        $json = $this->getDataFromRequest();
+
+        $json = $this->getJsonDataFromRequest();
+
         if (false === $json) {
             throw new \Exception('Invalid JSON');
         }
         if (false === $this->updateEntity($object, $json)) {
             throw new \Exception('Unable to update the entity');
         }
-        $this->getDoctrine()->getManager()->flush($object);
+        $this->getManager()->flush($object);
 
         return new JsonResponse($this->getEntityForJson($object->getId()));
     }
@@ -207,7 +218,7 @@ abstract class BaseController
         if (false === $object) {
             return $this->createNotFoundException();
         }
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getManager();
         $em->remove($object);
         $em->flush();
 
@@ -256,9 +267,9 @@ abstract class BaseController
      *
      * @return string|boolean
      */
-    protected function getDataFromRequest()
+    protected function getJsonDataFromRequest()
     {
-        $data = $this->get("request")->getContent();
+        $data = $this->getRequest()->getContent();
         if (!$data) {
             return false;
         }
@@ -271,15 +282,17 @@ abstract class BaseController
      * Returns the entity, or FALSE in case of error.
      *
      * @param Object $entity
-     * @param string $json
+     * @param string $data
      * @return Object|boolean
      */
-    protected function updateEntity($entity, $json)
+    protected function updateEntity($entity, $data)
     {
-        $data = json_decode($json);
+        $data = json_decode($data, true);
+
         if ($data == null) {
             return false;
         }
+
         foreach ($data as $name => $value) {
             if ($name != 'id') {
                 $setter = 'set'.ucfirst($name);
@@ -291,4 +304,5 @@ abstract class BaseController
 
         return $entity;
     }
+
 }

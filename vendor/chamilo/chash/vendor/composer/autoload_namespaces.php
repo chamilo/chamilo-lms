@@ -6,7 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Symfony\\Component\\Yaml' => $vendorDir . '/symfony/yaml',
-    'Symfony\\Component\\Console\\' => $vendorDir . '/symfony/console',
-    'Chash' => $baseDir . '/src',
+    'Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
+    'Symfony\\Component\\Console\\' => array($vendorDir . '/symfony/console'),
+    'Chash' => array($baseDir . '/src'),
 );

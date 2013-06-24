@@ -5,7 +5,7 @@
  * courses directories, configuration files and all other temp directories.
  * It only works when launched from the command line and requires Chamilo to
  * be installed (otherwise it will not find the references as to the paths and
- * databases to delete). It only wipes out stuff and directories it knows are 
+ * databases to delete). It only wipes out stuff and directories it knows are
  * created by Chamilo though, so don't worry about your own files if you didn't
  * store them in variable Chamilo directories.
  * Requires Chamilo LMS 1.9 or greater
@@ -32,7 +32,7 @@ if (!file_exists(dirname(__FILE__).'/../main/inc/global.inc.php')) {
 }
 
 if (!is_file(dirname(__FILE__).'/../main/inc/conf/configuration.php')) {
-    echo "  This script will only work on an already installed version of Chamilo. The \n", "main/inc/conf/configuration.php file could not be found, which is understood\n", "as Chamilo not being installed.\n";    
+    echo "  This script will only work on an already installed version of Chamilo. The \n", "main/inc/conf/configuration.php file could not be found, which is understood\n", "as Chamilo not being installed.\n";
     exit;
 }
 
@@ -51,8 +51,8 @@ $homepath = api_get_path(SYS_PATH).'home';
 
 $clean_dirs = array(
     api_get_path(SYS_COURSE_PATH),              //courses
-    api_get_path(SYS_CODE_PATH).'inc/conf/',    
-    api_get_path(SYS_CODE_PATH).'upload/users/', 
+    api_get_path(SYS_CODE_PATH).'inc/conf/',
+    api_get_path(SYS_CODE_PATH).'upload/users/',
     api_get_path(SYS_ARCHIVE_PATH)
 );
 // With all this, we will still be missing custom languages and CSS dirs
@@ -68,15 +68,15 @@ foreach ($clean_dirs as $dir) {
         if (substr($entry,0,1) == '.' or strcmp($entry,'htaccess')===0 or strcmp($entry,'index.html')===0 or substr($entry,-9,9)=='.dist.php') {
             //skip files that are part of the Chamilo installation
         } else {
-            if ($dir == $homepath and 
-                ((is_dir($homepath.$entry) and $entry == 'default_platform_document') 
+            if ($dir == $homepath and
+                ((is_dir($homepath.$entry) and $entry == 'default_platform_document')
                 or (!is_dir($homepath.$entry) and substr($entry,-5)=='.html') and strlen($entry)<=17)
             ) {
             //skip
-            } else {                
+            } else {
                 if (is_dir($dir.$entry)) {
                     //echo "Removing ".$dir.$entry."\n";
-                    rmdirr($dir.$entry);
+                    api_rmdirr($dir.$entry);
                 } else {
                     //echo "Removing ".$dir.$entry."\n";
                     unlink($dir.$entry);

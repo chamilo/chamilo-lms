@@ -257,6 +257,7 @@ class Security
      */
     public static function remove_XSS($var, $user_status = ANONYMOUS, $filter_terms = false)
     {
+        // @todo improvement - HTMLpurifier eats server memory ~ 3M
         // return $var;
         if ($filter_terms) {
             $var = self::filter_terms($var);
@@ -319,7 +320,6 @@ class Security
             return $purifier[$user_status]->purify($var);
         }
     }
-
 
     /**
      *

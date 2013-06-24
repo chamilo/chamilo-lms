@@ -1038,10 +1038,10 @@ class Testcategory
     }
 
     /**
-     * @param $exercise_obj
+     * @param Exercise $exercise_obj
      * @return string
      */
-    public function return_category_form($exercise_obj)
+    public function return_category_form(Exercise $exercise_obj)
     {
         $categories = $this->getListOfCategoriesForTest($exercise_obj);
 

@@ -181,6 +181,9 @@ class ExerciseResult
             $hpresults[] = $rowx;
 		}
 
+        $filter_by_not_revised = false;
+        $filter_by_revised = false;
+
 		if ($filter) {
 			switch ($filter) {
 				case 1 :
@@ -207,8 +210,13 @@ class ExerciseResult
 				if (Database :: num_rows($query) > 0)
                     $revised = true;
 
-				if ($filter_by_not_revised && $revised) continue;
-				if ($filter_by_revised && !$revised) continue;
+				if ($filter_by_not_revised && $revised) {
+                    continue;
+                }
+
+				if ($filter_by_revised && !$revised) {
+                    continue;
+                }
 
 				$return[$i] = array();
 

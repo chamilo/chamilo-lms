@@ -100,7 +100,7 @@ if (!empty($_GET['sort']) and ($allow_individual_calendar_status=="show"))
 $htmlHeadXtra[] = to_javascript();
 
 // this loads the javascript that is needed for the date popup selection
-$htmlHeadXtra[] = "<script src=\"calendar_tbl_change.js\" type=\"text/javascript\" language=\"javascript\"></script>";
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/calendar/calendar_tbl_change.js" type="text/javascript" ></script>';
 
 // setting the name of the tool
 $nameTools = get_lang('GlobalAgenda'); // language variable in trad4all.inc.php
@@ -124,7 +124,7 @@ $TABLEAGENDA 			= Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
 $tbl_user       		= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_courseUser 		= Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-/* 
+/*
   			ACCESS RIGHTS
 */
 // permission stuff - also used by loading from global in agenda.inc.php
@@ -185,12 +185,12 @@ echo '<div class="sort" style="float:right">';
 echo '</div>';
 if (api_is_allowed_to_edit(false,true)) {
 	switch ($_GET['action']) {
-		case "add":            
-            if ($_POST['submit_event']) {		        
+		case "add":
+            if ($_POST['submit_event']) {
 			    $event_start    = (int) $_POST['fyear'].'-'.(int) $_POST['fmonth'].'-'.(int) $_POST['fday'].' '.(int) $_POST['fhour'].':'.(int) $_POST['fminute'].':00';
                 $event_stop     = (int) $_POST['end_fyear'].'-'.(int) $_POST['end_fmonth'].'-'.(int) $_POST['end_fday'].' '.(int) $_POST['end_fhour'].':'.(int) $_POST['end_fminute'].':00';
-                
-				$id = agenda_add_item($_POST['title'],$_POST['content'],$event_start,$event_stop);           
+
+				$id = agenda_add_item($_POST['title'],$_POST['content'],$event_start,$event_stop);
 				display_agenda_items();
 			} else {
 				show_add_form();
@@ -200,7 +200,7 @@ if (api_is_allowed_to_edit(false,true)) {
 		case "edit":
 			if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, intval($_REQUEST['id']) ) ) )
 			{ // a coach can only delete an element belonging to his session
-				if ($_POST['submit_event']) {		
+				if ($_POST['submit_event']) {
 			        $my_id_attach = (int)$_REQUEST['id_attach'];
 					$my_file_comment = Database::escape_string($_REQUEST['file_comment']);
 					store_edited_agenda_item($my_id_attach,$my_file_comment);

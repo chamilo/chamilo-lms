@@ -15,6 +15,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class RestoreCommand extends CommonChamiloDatabaseCommand
 {
+    /**
+     *
+     */
     protected function configure()
     {
         parent::configure();
@@ -31,6 +34,11 @@ class RestoreCommand extends CommonChamiloDatabaseCommand
             );
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);

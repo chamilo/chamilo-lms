@@ -17,6 +17,8 @@ if (!is_object($objQuestion)) {
     $objQuestion = Question :: read($_GET['modifyAnswers']);
 }
 
+$urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
+
 $questionName = $objQuestion->selectTitle();
 $answerType = $objQuestion->selectType();
 $pictureName = $objQuestion->selectPicture();
@@ -147,7 +149,7 @@ if ($submitAnswers || $buttonBack) {
             } else {
                 // adds the answer into the object
                 $objAnswer->createAnswer($reponse[$i], $goodAnswer, $comment[$i], $weighting[$i], $i);
-                $mainurl = "admin.php";
+                $mainurl = $urlMainExercise."admin.php";
                 ?>
                 <script>
                     window.location.href='<?php echo $mainurl; ?>';
@@ -216,7 +218,7 @@ if ($submitAnswers || $buttonBack) {
                     $objAnswer->createAnswer($reponse, 0, '', 0, '');
                     $objAnswer->save();
                     //added
-                    $mainurl = "admin.php";
+                    $mainurl = $urlMainExercise."admin.php";
                     ?>
                     <script>
                         window.location.href='<?php echo $mainurl; ?>';
@@ -325,7 +327,7 @@ if ($submitAnswers || $buttonBack) {
                     $objQuestion->save($exerciseId);
                     $editQuestion = $questionId;
                     unset($modifyAnswers); //added
-                    $mainurl = "admin.php";
+                    $mainurl = $urlMainExercise."admin.php";
                     ?>
                     <script>
                         window.location.href='<?php echo $mainurl; ?>';
@@ -399,7 +401,7 @@ if ($submitAnswers || $buttonBack) {
                 else {
                     // adds the answer into the object
                     $objAnswer->createAnswer($match[$i], $sel[$i], '', $weighting[$i], $i);
-                    $mainurl = "admin.php";
+                    $mainurl = $urlMainExercise."admin.php";
                     ?>
                     <script>
                         window.location.href='<?php echo $mainurl; ?>';

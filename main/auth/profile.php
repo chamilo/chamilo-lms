@@ -398,7 +398,7 @@ function upload_user_production($user_id)
     if (!file_exists($production_repository)) {
         @mkdir($production_repository, api_get_permissions_for_new_directories(), true);
     }
-    $filename = replace_dangerous_char($_FILES['production']['name']);
+    $filename = api_replace_dangerous_char($_FILES['production']['name']);
     $filename = FileManager::disable_dangerous_file($filename);
 
     if (FileManager::filter_extension($filename)) {

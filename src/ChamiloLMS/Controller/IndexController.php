@@ -24,8 +24,8 @@ class IndexController extends CommonController
     public function logoutAction(Application $app)
     {
         $userId = api_get_user_id();
-
         \Online::logout($userId, true);
+
         // the Online::logout function already does a redirect
         //return $app->redirect($app['url_generator']->generate('index'));
     }
@@ -165,22 +165,10 @@ class IndexController extends CommonController
      */
     public function loginAction(Application $app)
     {
-        /*$username = $app['request']->get('login');
-        $password = $app['request']->get('password');
+        $request = $app['request'];
+        $app['template']->assign('error', $app['security.last_error']($request));
+        $response = $app['template']->render_template('auth/login.tpl');
 
-        $user_table = \Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT * FROM $user_table WHERE username = ?";
-        $userInfo = $app['db']->fetchAssoc($sql, array($username));
-
-        if ($userInfo) {
-            if ($userInfo['auth_source'] == PLATFORM_AUTH_SOURCE) {
-                if ($password == $userInfo['password'] AND trim($username) == $userInfo['username']) {
-                    unset($userInfo['password']);
-
-                }
-            }
-        }*/
-        $response = null;
         return new Response($response, 200, array());
     }
 
@@ -271,20 +259,24 @@ class IndexController extends CommonController
           return $app['template']->assign('form', $form->createView());
          */
 
-        $form = new \FormValidator('formLogin', 'POST', $app['url_generator']->generate('index'), null, array('class' => 'form-vertical'));
+        $form = new \FormValidator('formLogin', 'POST', $app['url_generator']->generate('admin_login_check'), null, array('class' => 'form-vertical'));
         $form->addElement(
             'text',
-            'login',
+            'username',
             get_lang('UserName'),
-            array('class' => 'input-medium autocapitalize_off virtualkey', 'autofocus' => 'autofocus')
+            array(
+                'class' => 'input-medium autocapitalize_off virtualkey',
+                'autofocus' => 'autofocus'
+            )
         );
         $form->addElement('password', 'password', get_lang('Pass'), array('class' => 'input-medium virtualkey'));
         $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));
         $html = $form->return_form();
-        if (api_get_setting('openid_authentication') == 'true') {
+        /*if (api_get_setting('openid_authentication') == 'true') {
             include_once 'main/auth/openid/login.php';
             $html .= '<div>'.openid_form().'</div>';
-        }
+        }*/
+
 
         /** Verify if settings is active to set keyboard. Included extra class in form input elements */
 
@@ -304,6 +296,7 @@ class IndexController extends CommonController
                      }
                      );}); </script>";
         }
+
         return $html;
     }
 

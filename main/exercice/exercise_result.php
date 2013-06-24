@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  * 	Exercise result
- * 	This script gets informations from the script "exercise_submit.php",
+ * 	This script gets information from the script "exercise_submit.php",
  * 	through the session, and calculates the score of the student for
  * 	that exercise.
  * 	Then it shows the results on the screen.
@@ -169,7 +169,7 @@ if ($origin != 'learnpath') {
     Display::display_footer();
 } else {
     $lp_mode = $_SESSION['lp_mode'];
-    $url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->feedback_type;
+    $url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->feedback_type;
     $href = ($lp_mode == 'fullscreen') ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'"';
 
     if (api_is_allowed_to_session_edit()) {

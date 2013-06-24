@@ -77,11 +77,11 @@ class Resource
      */
     function Resource($id, $type)
     {
-        $this->source_id        = $id;
-        $this->type             = $type;
-        $this->destination_id   = -1;
+        $this->source_id = $id;
+        $this->type = $type;
+        $this->destination_id = -1;
         $this->linked_resources = array();
-        $this->item_properties  = array();
+        $this->item_properties = array();
     }
 
     /**
@@ -111,7 +111,6 @@ class Resource
         ) {
             return in_array($resource->get_id(), $this->linked_resources[$resource->get_type()]);
         }
-
         return false;
     }
 
@@ -136,8 +135,8 @@ class Resource
     /**
      * Get the constant which defines the tool of this resource. This is
      * used in the item_properties table.
-     * @param bool $for_item_property_table (optional)    Added by Ivan, 29-AUG-2009: A parameter for resolving differencies between defined TOOL_* constants and hardcoded strings that are stored in the database.
-     * Example: The constant TOOL_THREAD is defined in the main_api.lib.php with the value 'thread', but the "Forums" tool records in the field 'tool' in the item property table the hardcoded value 'forum_thread'.
+     * @param bool $for_item_property_table (optional)	Added by Ivan, 29-AUG-2009: A parameter for resolving differencies between defined TOOL_* constants and hardcoded strings that are stored in the database.
+     * Example: The constant TOOL_THREAD is defined in the api.lib.php with the value 'thread', but the "Forums" tool records in the field 'tool' in the item property table the hardcoded value 'forum_thread'.
      * @todo once the RESOURCE_* constants are replaced by the globally
      * defined TOOL_* constants, this function will be replaced by get_type()
      */
@@ -157,14 +156,13 @@ class Resource
             case RESOURCE_ANNOUNCEMENT:
                 return TOOL_ANNOUNCEMENT;
             case RESOURCE_FORUMCATEGORY:
-                return 'forum_category'; // Ivan, 29-AUG-2009: A constant like TOOL_FORUM_CATEGORY is missing in main_api.lib.php. Such a constant has been defined in the forum tool for local needs.
+                return 'forum_category'; // Ivan, 29-AUG-2009: A constant like TOOL_FORUM_CATEGORY is missing in api.lib.php. Such a constant has been defined in the forum tool for local needs.
             case RESOURCE_FORUM:
                 return TOOL_FORUM;
             case RESOURCE_FORUMTOPIC:
                 if ($for_item_property_table) {
                     return 'forum_thread'; // Ivan, 29-AUG-2009: A hardcoded value that the "Forums" tool stores in the item property table.
                 }
-
                 return TOOL_THREAD;
             case RESOURCE_FORUMPOST:
                 return TOOL_POST;

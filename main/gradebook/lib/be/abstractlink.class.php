@@ -287,7 +287,6 @@ abstract class AbstractLink implements GradebookItem {
 		} else {
 			$name_log=$arreval['course_code'];
 		}
-		//error_log($name_log);
 		$sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,created_at,weight,visible,type,user_id_log)
 			  VALUES('".Database::escape_string($arreval['id'])."','".Database::escape_string($name_log)."','".Database::escape_string($description_log)."','".Database::escape_string($current_date_server)."','".Database::escape_string($arreval['weight'])."','".Database::escape_string($arreval['visible'])."','Link',".api_get_user_id().")";
 

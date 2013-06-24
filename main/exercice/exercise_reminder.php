@@ -105,12 +105,14 @@ if ($time_control) {
 
 echo Display::div('', array('id' => 'message'));
 
+$urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
+
 echo '<script>
 		lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});
 
         function final_submit() {
-        	//Normal inputs
-        	window.location = "exercise_result.php?origin='.$origin.'&exe_id='.$exe_id.'&" + lp_data;
+        	// Normal inputs
+        	window.location = "'.$urlMainExercise.'exercise_result.php?origin='.$origin.'&exe_id='.$exe_id.'&" + lp_data;
 		}
 
 		function review_questions() {
@@ -126,7 +128,7 @@ echo '<script>
 				$("#message").addClass("warning-message");
 				$("#message").html("'.addslashes(get_lang('SelectAQuestionToReview')).'");
 			}
-			window.location = "exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&reminder=2&origin='.$origin.'&" + lp_data;
+			window.location = "'.$urlMainExercise.'exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&reminder=2&origin='.$origin.'&" + lp_data;
 		}
 
 		function save_remind_item(obj, question_id) {
@@ -187,7 +189,7 @@ foreach ($question_list as $questionId) {
     }
 
     $checkbox = Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes);
-    $url = 'exercise_submit.php?exerciseId='.$objExercise->id.'&num='.$counter.'&reminder=1';
+    $url = $urlMainExercise.'exercise_submit.php?exerciseId='.$objExercise->id.'&num='.$counter.'&reminder=1';
 
     $counter++;
     if ($objExercise->type == ONE_PER_PAGE) {

@@ -1003,7 +1003,28 @@ function delete_template($id) {
     // Display a feedback message.
     Display::display_confirmation_message(get_lang('TemplateDeleted'));
 }
-/*
+/**
+ * Returns the list of timezone identifiers used to populate the select
+ * This function is called through a call_user_func() in the generate_settings_form function.
+ * @return array List of timezone identifiers
+ *
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ * @since Chamilo 1.8.7
+ */
+function select_timezone_value() {
+    return api_get_timezones();
+}
+
+/**
+ * Returns an array containing the list of options used to populate the gradebook_number_decimals variable
+ * This function is called through a call_user_func() in the generate_settings_form function.
+ * @return array List of gradebook_number_decimals options
+ *
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ */
+function select_gradebook_number_decimals() {
+    return array('0', '1', '2');
+}
 function select_gradebook_default_grade_model_id() {
     $grade_model = new GradeModel();
     $models = $grade_model->get_all();
@@ -1015,7 +1036,7 @@ function select_gradebook_default_grade_model_id() {
         }
     }
     return $options;
-}*/
+}
 
 /**
  * Updates the gradebook score custom values using the scoredisplay class of the
@@ -1025,7 +1046,6 @@ function select_gradebook_default_grade_model_id() {
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
-/*
 function update_gradebook_score_display_custom_values($values) {
     require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/scoredisplay.class.php';
     $scoredisplay = ScoreDisplay::instance();
@@ -1040,16 +1060,16 @@ function update_gradebook_score_display_custom_values($values) {
         }
     }
     $scoredisplay->update_custom_score_display_settings($final);
-}*/
+}
 
 /**
  * @param array $settings
  * @param array $settings_by_access_list
  * @return FormValidator
  */
-function generate_settings_form($settings, $settings_by_access_list)
+function generate_settings_form($settings, $settings_by_access_list, $settings_to_avoid, $convert_byte_to_mega_list)
 {
-    global $_configuration, $settings_to_avoid, $convert_byte_to_mega_list;
+    global $_configuration;
     $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
     $form = new FormValidator('settings', 'post', 'settings.php?category='.Security::remove_XSS($_GET['category']));
@@ -1115,10 +1135,10 @@ function generate_settings_form($settings, $settings_by_access_list)
                 if (empty($row['category']))
                     $row['category'] = 0;
 
-                if (is_array($settings_by_access_list[$row['variable']][ $row['subkey']][ $row['category']])) {
+                if (is_array($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ])) {
                     // We are sure that the other site have a selected value.
                     if ($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ]['selected_value'] != '') {
-                        $row['selected_value'] = $settings_by_access_list[$row['variable']][$row['subkey']][ $row['category']]['selected_value'];
+                        $row['selected_value'] =$settings_by_access_list[$row['variable']] [$row['subkey']] [ $row['category'] ]['selected_value'];
                     }
                 }
                 // There is no else{} statement because we load the default $row['selected_value'] of the main Chamilo site.
@@ -1137,32 +1157,6 @@ function generate_settings_form($settings, $settings_by_access_list)
                     $form->applyFilter($row['variable'], 'html_filter');
                     $default_values[$row['variable']] = $row['selected_value'];
 
-                    // For platform character set selection: Conversion of the textfield to a select box with valid values.
-                } elseif ($row['variable'] == 'platform_charset') {
-                    $current_system_encoding = api_refine_encoding_id(trim($row['selected_value']));
-                    $valid_encodings = array_flip(api_get_valid_encodings());
-                    if (!isset($valid_encodings[$current_system_encoding])) {
-                        $is_alias_encoding = false;
-                        foreach ($valid_encodings as $encoding) {
-                            if (api_equal_encodings($encoding, $current_system_encoding)) {
-                                $is_alias_encoding = true;
-                                $current_system_encoding = $encoding;
-                                break;
-                            }
-                        }
-                        if (!$is_alias_encoding) {
-                            $valid_encodings[$current_system_encoding] = $current_system_encoding;
-                        }
-                    }
-                    foreach ($valid_encodings as $key => &$encoding) {
-                        if (api_is_encoding_supported($key) && Database::is_encoding_supported($key)) {
-                            $encoding = $key;
-                        } else {
-                            unset($valid_encodings[$key]);
-                        }
-                    }
-                    $form->addElement('select', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), $valid_encodings);
-                    $default_values[$row['variable']] = $current_system_encoding;
                 } else {
                     $hideme['class'] = 'span4';
                     $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), $hideme);

@@ -62,8 +62,9 @@ $nameTools = get_lang('adminHP');
 Display::display_header($nameTools,"Exercise");
 
 /** @todo probably wrong !!!! */
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/hotpotatoes.lib.php');
+require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
 
+$urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
 ?>
 
 <h4>
@@ -75,14 +76,13 @@ if (isset($newName)) {
     if ($newName!="") {
         //alter database record for that test
         SetComment($hotpotatoesName,$newName);
-        echo "<script language='Javascript' type='text/javascript'> window.location='exercice.php'; </script>";
+        echo "<script type='text/javascript'>window.location='".$urlMainExercise."exercice.php'; </script>";
     }
 }
 
-echo "<form action=\"".api_get_self()."\" method='post' name='form1'>";
+echo "<form action=\"".$urlMainExercise."adminhp.php\" method='post' name='form1'>";
 echo "<input type=\"hidden\" name=\"hotpotatoesName\" value=\"$hotpotatoesName\">";
 echo "<input type=\"text\" name=\"newName\" value=\"";
-
 
 $lstrComment = "";
 $lstrComment = GetComment($hotpotatoesName);

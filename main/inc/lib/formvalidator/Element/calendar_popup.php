@@ -103,7 +103,7 @@ table.calendar td a div:hover
 	background-color: #ffff00;
 }
 
-table.calendar .monthyear a {	
+table.calendar .monthyear a {
 	text-align: center;
 	/* color: #ffffff; */
 }
@@ -147,7 +147,7 @@ table.calendar .monthyear a:hover
     } // end if
 /* ]]> */
 </script>
-<script type="text/javascript" src="tbl_change.js.php"></script>
+<script src="<?php echo api_get_path(WEB_LIBRARY_PATH).'javascript/calendar/tbl_change.js'; ?>"></script>
 <script type="text/javascript">
 /* <![CDATA[ */
 var month_names = new Array(

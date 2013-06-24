@@ -12,15 +12,18 @@
  */
 
 $course_id = api_get_course_int_id();
+
+$urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
+
 // INIT QUESTION
 if (isset($_GET['editQuestion'])) {
     $objQuestion = Question::read($_GET['editQuestion'], null, $objExercise);
     $action      = api_get_self()."?".api_get_cidreq(
-    )."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id."&exerciseId=$exerciseId";
+    )."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id."&exerciseId=$objExercise->id";
 } else {
     $objQuestion = Question::getInstance($_REQUEST['answerType'], $objExercise);
     $action      = api_get_self()."?".api_get_cidreq(
-    )."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion."&exerciseId=$exerciseId";
+    )."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion."&exerciseId=$objExercise->id";
 }
 
 /** @var Question $objQuestion */
@@ -129,13 +132,13 @@ if (is_object($objQuestion)) {
             // redirect
             if ($objQuestion->type != HOT_SPOT && $objQuestion->type != HOT_SPOT_DELINEATION) {
                 if (isset($_GET['editQuestion'])) {
-                    echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemUpdated"</script>';
+                    echo '<script type="text/javascript">window.location.href="'.$urlMainExercise.'admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemUpdated"</script>';
                 } else {
                     //New question
-                    echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemAdded"</script>';
+                    echo '<script type="text/javascript">window.location.href="'.$urlMainExercise.'admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemAdded"</script>';
                 }
             } else {
-                echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';
+                echo '<script type="text/javascript">window.location.href="'.$urlMainExercise.'admin.php?exerciseId='.$exerciseId.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';
             }
         } else {
             echo $message;

@@ -6,7 +6,7 @@
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  * @license see /license.txt
  *
- * @todo use $app->redirect
+ * @todo use the LoginSuccessHandler class
  */
 class Redirect {
 

@@ -79,7 +79,7 @@ require_once $libdir.'notebook.lib.php';
 
 /**This files need be inside a buffering to clean the objects*/
 ob_start();
-require_once $libdir.'main_api.lib.php';
+require_once $libdir.'api.lib.php';
 require_once $libdir.'add_course.lib.inc.php';
 require_once $libdir.'geometry.lib.php';
 ob_end_clean();
@@ -203,7 +203,7 @@ class TestManager
             while (false !== ($file = readdir($handle))) {
                 if (strpos($file, $course_code) !== false) {
                     if (is_dir($path.'/'.$file)) {
-                        rmdirr($path.'/'.$file);
+                        api_rmdirr($path.'/'.$file);
                     }
                 }
             }

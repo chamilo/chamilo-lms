@@ -113,7 +113,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
 
             if ($finish == 0) {
                 // Generate new test folder if on first step of file upload.
-                $filename = replace_dangerous_char(trim($_FILES['userFile']['name']), 'strict');
+                $filename = api_replace_dangerous_char(trim($_FILES['userFile']['name']), 'strict');
                 $fld = GenerateHpFolder($document_sys_path.$uploadPath.'/');
 
                 //$doc_id = FileManager::add_document($_course, '/HotPotatoes_files/'.$fld, 'folder', 0, $fld);

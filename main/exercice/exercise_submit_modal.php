@@ -28,6 +28,8 @@ if (empty ($exerciseResult)) {
     $exerciseResult = $_SESSION['exerciseResult'];
 }
 
+$urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
+
 if (empty($exerciseResultCoordinates)) {
     $exerciseResultCoordinates = $_REQUEST['exerciseResultCoordinates'];
 }
@@ -108,7 +110,7 @@ if (empty($choice_value)) {
 	";
 	// IMPORTANT
 	//this is the real redirect function
-	echo 'window.location.href = "exercise_submit_modal.php?learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&hotspotcoord="+ hotspotcoord + "&hotspot="+ hotspot + "&choice="+ choice_js + "&exerciseId='.$exerciseId.'&num='.$questionNum.'&exerciseType='.$exerciseType.'&origin='.$origin.'&gradebook='.$gradebook.'";</script>';
+	echo 'window.location.href = "'.$urlMainExercise.'exercise_submit_modal.php?learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&hotspotcoord="+ hotspotcoord + "&hotspot="+ hotspot + "&choice="+ choice_js + "&exerciseId='.$exerciseId.'&num='.$questionNum.'&exerciseType='.$exerciseType.'&origin='.$origin.'&gradebook='.$gradebook.'";</script>';
 }
 
 $choice = array();
@@ -514,16 +516,14 @@ if ($destinationid==-1) {
 		$links.= Display :: return_icon('quiz.gif', '', array ('style' => 'padding-left:0px;padding-right:5px;')).'<a onclick="SendEx('.$num_value_array[0].');" href="#">'.get_lang('GoToQuestion').' '.$num_value_array[0].'</a><br /><br />';
 	}
 }
-
 echo '<script>
 		function SendEx(num) {
-
 		  	if (num == -1) {
-		  		self.parent.window.location.href = "exercise_result.php?take_session=1&exerciseId='.$exerciseId.'&num="+num+"&exerciseType='.$exerciseType.'&origin='.$origin.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
+		  		self.parent.window.location.href = "'.$urlMainExercise.'exercise_result.php?take_session=1&exerciseId='.$exerciseId.'&num="+num+"&exerciseType='.$exerciseType.'&origin='.$origin.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
 		   		self.parent.tb_remove();
 		  	} else {
                 num -= 1;
-		  		self.parent.window.location.href = "exercise_submit.php?tryagain=1&exerciseId='.$exerciseId.'&num="+num+"&exerciseType='.$exerciseType.'&origin='.$origin.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
+		  		self.parent.window.location.href = "'.$urlMainExercise.'exercise_submit.php?tryagain=1&exerciseId='.$exerciseId.'&num="+num+"&exerciseType='.$exerciseType.'&origin='.$origin.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
 		   		self.parent.tb_remove();
 		  	}
 		}
@@ -567,7 +567,7 @@ if ($links!='') {
 } else {
 	$questionNum++;
 	echo '<script>
-			self.parent.window.location.href = "exercise_submit.php?exerciseId='.$exerciseId.'&num='.$questionNum.'&exerciseType='.$exerciseType.'&origin='.$origin.'";
+			self.parent.window.location.href = "'.$urlMainExercise.'exercise_submit.php?exerciseId='.$exerciseId.'&num='.$questionNum.'&exerciseType='.$exerciseType.'&origin='.$origin.'";
    			//self.parent.tb_remove();
  	 	</script>';
 }

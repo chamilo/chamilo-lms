@@ -13,9 +13,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Clean the archives directory, leaving only index.html, twig and Serializer
  * @return bool True on success, false on error
  */
-
 class CleanConfigFiles extends CommonChamiloDatabaseCommand
 {
+    /**
+     *
+     */
     protected function configure()
     {
         parent::configure();
@@ -24,6 +26,11 @@ class CleanConfigFiles extends CommonChamiloDatabaseCommand
             ->setDescription('Cleans the config files to help you re-install');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);

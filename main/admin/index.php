@@ -7,6 +7,7 @@
 /**
  * Code
  */
+
 // Language files that need to be included.
 $language_file = array('admin', 'tracking','coursebackup');
 
@@ -86,7 +87,9 @@ if (api_is_platform_admin()) {
 	if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
 		$items[] = array('url'=>'ldap_users_list.php', 	'label' => get_lang('ImportLDAPUsersIntoPlatform'));
 	}
-	$items[] = array('url'=>'user_fields.php', 	'label' => get_lang('ManageUserFields'));
+	// $items[] = array('url'=>'user_fields.php', 	'label' => get_lang('ManageUserFields'));
+    $items[] = array('url'=>'extra_fields.php?type=user', 	'label' => get_lang('ManageUserFields'));
+    $items[] = array('url'=> api_get_path(WEB_PUBLIC_PATH).'admin/administrator/roles', 	'label' => get_lang('Roles'));
 } else {
  	$items = array(
  		array('url'=>'user_list.php', 	'label' => get_lang('UserList')),

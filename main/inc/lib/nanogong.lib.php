@@ -313,7 +313,6 @@ class Nanogong
                     if (move_uploaded_file($_FILES['file']['tmp_name'], $this->store_path.$file_name)) {
                         $this->store_filename = $this->store_path.$file_name;
 
-                        //error_log('saved');
                         return 1;
                     }
                 }

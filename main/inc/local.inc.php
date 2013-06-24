@@ -490,7 +490,7 @@ if (isset($uidReset) && $uidReset) {   // session data refresh requested
             // Extracting the user data
 
             $uData = Database::fetch_array($result);
-            $_user = _api_format_user($uData, false);
+            $_user = api_format_user($uData, false);
             $_user['lastLogin']        = api_strtotime($uData['login_date'], 'UTC');
             $is_platformAdmin           = (bool) (! is_null( $uData['is_admin']));
             $is_allowedCreateCourse     = (bool) (($uData ['status'] == COURSEMANAGER) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == DRH));
@@ -566,7 +566,6 @@ if (!isset($_SESSION['login_as'])) {
                 //We update the course tracking table
                 $sql = "UPDATE $course_tracking_table  SET logout_course_date = '$time', counter = counter+1
                         WHERE course_access_id = ".intval($i_course_access_id)." AND session_id = ".api_get_session_id();
-                //error_log($sql);
                 Database::query($sql);
             } else {
                 $sql="INSERT INTO $course_tracking_table (c_id, user_id, login_course_date, logout_course_date, counter, session_id)" .

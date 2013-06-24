@@ -210,6 +210,7 @@ if (isset($drh_list) && is_array($drh_list)) {
 }
 $form->addElement('html', '</div>');
 
+/*
 if (api_is_platform_admin()) {
     // Platform admin
     $group = array();
@@ -219,7 +220,7 @@ if (api_is_platform_admin()) {
     $form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.';">');
     $form->addGroup($group, 'admin', get_lang('PlatformAdmin'), '&nbsp;');
     $form->addElement('html', '</div>');
-}
+}*/
 
 $form->addElement('select_language', 'language', get_lang('Language'), null);
 
@@ -383,9 +384,7 @@ if ($form->validate()) {
                     UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
                 }
             }
-            if ($platform_admin) {
-                UserManager::add_user_as_admin($user_id);
-            }
+
             $message = get_lang('UserAdded');
         }
         if (isset($user['submit_plus'])) {

@@ -15,6 +15,9 @@
     RewriteRule ^courses/(.*)/index.php$ web/courses/$1? [R,L]
     RewriteRule ^courses/(.*)/$ web/courses/$1? [R,L]
 
+    # PHP Main files are redirected to the "web/main" zone
+    RewriteRule ^main/(.*)\.php web/main/$1.php [R,L]
+
     # Courses documents
     # courses/MATHS/document/folder1/picture.jpg --> web/data/courses/MATHS/document/folder1/picture.jpg
     RewriteRule ^courses/(.*)/document/(.*)$ web/data/courses/$1/document/$2 [R,L]

@@ -10,10 +10,13 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Returns the current mail configuration 
+ * Returns the current mail configuration
  */
 class MailConfCommand extends CommonChamiloDatabaseCommand
 {
+    /**
+     *
+     */
     protected function configure()
     {
         parent::configure();
@@ -22,6 +25,11 @@ class MailConfCommand extends CommonChamiloDatabaseCommand
             ->setDescription('Returns the current mail config');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);

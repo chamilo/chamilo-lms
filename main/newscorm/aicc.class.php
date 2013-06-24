@@ -398,7 +398,7 @@ class aicc extends learnpath
         }
         $course_rel_dir = api_get_course_path().'/scorm'; // Scorm dir web path starting from /courses
         $course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_rel_dir; // The absolute system path of this course.
-        $current_dir = replace_dangerous_char(trim($current_dir), 'strict'); // Current dir we are in, inside scorm/
+        $current_dir = api_replace_dangerous_char(trim($current_dir), 'strict'); // Current dir we are in, inside scorm/
         if ($this->debug > 0) {
             error_log('New LP - aicc::import_package() - Current_dir = '.$current_dir, 0);
         }
@@ -417,7 +417,7 @@ class aicc extends learnpath
         if ($this->debug > 0) {
             error_log('New LP - aicc::import_package() - Base file name is : '.$file_base_name, 0);
         }
-        $new_dir = replace_dangerous_char(trim($file_base_name), 'strict');
+        $new_dir = api_replace_dangerous_char(trim($file_base_name), 'strict');
         $this->subdir = $new_dir;
         if ($this->debug > 0) {
             error_log('New LP - aicc::import_package() - Subdir is first set to : '.$this->subdir, 0);

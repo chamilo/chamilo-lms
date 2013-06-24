@@ -21,6 +21,7 @@ return array(
     'AddCourseToSession' => $baseDir . '/main/inc/lib/add_courses_to_session_functions.lib.php',
     'AddManySessionToCategoryFunctions' => $baseDir . '/main/inc/lib/add_many_session_to_category_functions.lib.php',
     'AdminPage' => $baseDir . '/main/admin/admin_page.class.php',
+    'Agenda' => $baseDir . '/main/inc/lib/agenda.lib.php',
     'AjaxController' => $baseDir . '/main/inc/lib/ajax_controller.class.php',
     'Announcement' => $baseDir . '/main/coursecopy/classes/Announcement.class.php',
     'AnnouncementEmail' => $baseDir . '/main/inc/lib/announcement_email.class.php',

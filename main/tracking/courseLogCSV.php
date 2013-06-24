@@ -68,7 +68,7 @@ if ($view == "00000010")
 $interbreadcrumb[] = array("url" => api_get_self() . "?view=0000000", "name" => get_lang('ToolName'));
 
 include(api_get_path(LIBRARY_PATH) . "statsUtils.lib.inc.php");
-include("../resourcelinker/resourcelinker.inc.php");
+require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 
 $is_allowedToTrack = api_is_course_admin() || api_is_platform_admin() || api_is_drh();
 
@@ -347,7 +347,7 @@ if ($is_allowedToTrack) {
                             "INNER JOIN $table_user u " .
                             "ON u.user_id = sd.user_id " .
                             "WHERE sd.c_id = $course_id AND sd.lp_id=$contentId group by u.user_id";
-                    //error_log($sql2,0);
+
                     $result2 = Database::query($sql2);
 
                     if (Database::num_rows($result2) > 0) {
@@ -404,7 +404,7 @@ if ($is_allowedToTrack) {
     //header('Content-Type: application/force-download');
     header('Content-length: ' . $len);
     $filename = api_html_entity_decode(str_replace(":", "", str_replace(" ", "_", $title[0] . '_' . $title[1] . '.csv')));
-    $filename = replace_dangerous_char($filename);
+    $filename = api_replace_dangerous_char($filename);
     if (preg_match("/MSIE 5.5/", $_SERVER['HTTP_USER_AGENT'])) {
         header('Content-Disposition: filename= ' . $filename);
     } else {

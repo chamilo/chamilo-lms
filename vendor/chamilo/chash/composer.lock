@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "1bea5cc52d392819dc48a5b9caa6a96b",
+    "hash": "821d09d18496b569c8eede1ef8903d84",
     "packages": [
         {
             "name": "symfony/console",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "74049e36e2e73ca2ec069c9be86d01ba422d44ea"
+                "reference": "699ccfc18fff7912c08021de878477f0724850b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/74049e36e2e73ca2ec069c9be86d01ba422d44ea",
-                "reference": "74049e36e2e73ca2ec069c9be86d01ba422d44ea",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/699ccfc18fff7912c08021de878477f0724850b3",
+                "reference": "699ccfc18fff7912c08021de878477f0724850b3",
                 "shasum": ""
             },
             "require": {
@@ -26,10 +26,13 @@
             "require-dev": {
                 "symfony/event-dispatcher": ">=2.1,<3.0"
             },
+            "suggest": {
+                "symfony/event-dispatcher": ""
+            },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.3-dev"
+                    "dev-master": "2.4-dev"
                 }
             },
             "autoload": {
@@ -53,30 +56,35 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2013-04-13 14:06:01"
+            "time": "2013-06-11 07:15:38"
         },
         {
             "name": "symfony/yaml",
-            "version": "2.1.x-dev",
+            "version": "dev-master",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "4ef80f5c5081ad9a7e08184fc9f25c62d87e408c"
+                "reference": "82100c7732c95452702d11433aad50988700d36c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/4ef80f5c5081ad9a7e08184fc9f25c62d87e408c",
-                "reference": "4ef80f5c5081ad9a7e08184fc9f25c62d87e408c",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/82100c7732c95452702d11433aad50988700d36c",
+                "reference": "82100c7732c95452702d11433aad50988700d36c",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.4-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
-                    "Symfony\\Component\\Yaml": ""
+                    "Symfony\\Component\\Yaml\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -95,7 +103,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2013-04-12 10:27:36"
+            "time": "2013-05-16 07:54:39"
         }
     ],
     "packages-dev": [
@@ -105,9 +113,9 @@
 
     ],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "symfony/console": 20
-    },
+    "stability-flags": [
+
+    ],
     "platform": {
         "php": ">=5.3.2"
     },

@@ -2658,11 +2658,12 @@ class Exercise
                         send_form();
                     }
                 });
+
                 $('#clock_warning').dialog('open');
 
                 $('#counter_to_redirect').epiclock({
                     mode: $.epiclock.modes.countdown,
-                    offset: {seconds: 5},
+                    offset: { seconds: 5 },
                     format: 's'
                 }).bind('timer', function () {
                     send_form();
@@ -2674,7 +2675,7 @@ class Exercise
                 if ($('#exercise_form').length) {
                     $('#exercise_form').submit();
                 } else {
-                    //In reminder
+                    // In reminder
                     final_submit();
                 }
             }
@@ -2684,7 +2685,7 @@ class Exercise
                 $('#exercise_form').hide();
                 $('#expired-message-id').show();
 
-                //Fixes bug #5263
+                // Fixes bug #5263.
                 $('#num_current_id').attr('value', '".$this->selectNbrQuestions()."');
                 open_clock_warning();
             }
@@ -2692,7 +2693,8 @@ class Exercise
 			$(document).ready(function() {
 
 				var current_time = new Date().getTime();
-                var time_left    = parseInt(".$time_left."); // time in seconds when using minutes there are some seconds lost
+				// Time in seconds. When using minutes there are some seconds lost.
+                var time_left    = parseInt(".$time_left.");
 				var expired_time = current_time + (time_left*1000);
 				var expired_date = get_expired_date_string(expired_time);
 
@@ -2704,6 +2706,7 @@ class Exercise
                 }).bind('timer', function () {
                     onExpiredTimeExercise();
                 });
+
 	       		$('#submit_save').click(function () {});
 	    });
 	    </script>";
@@ -3017,9 +3020,9 @@ class Exercise
 
             switch ($answerType) {
                 // for unique answer
-                case UNIQUE_ANSWER :
-                case UNIQUE_ANSWER_IMAGE :
-                case UNIQUE_ANSWER_NO_OPTION :
+                case UNIQUE_ANSWER:
+                case UNIQUE_ANSWER_IMAGE:
+                case UNIQUE_ANSWER_NO_OPTION:
                     if ($from_database) {
                         $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
                         $resultans = Database::query($queryans);
@@ -3038,8 +3041,8 @@ class Exercise
                         }
                     }
                     break;
-                // for multiple answers
-                case MULTIPLE_ANSWER_TRUE_FALSE :
+                    // for multiple answers
+                case MULTIPLE_ANSWER_TRUE_FALSE:
                     if ($from_database) {
                         $choice = array();
                         $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = ".$exeId." AND question_id = ".$questionId;
@@ -3073,7 +3076,7 @@ class Exercise
                     }
                     $totalScore = $questionScore;
                     break;
-                case MULTIPLE_ANSWER : //2
+                case MULTIPLE_ANSWER: //2
                     if ($from_database) {
                         $choice = array();
                         $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
@@ -3340,22 +3343,30 @@ class Exercise
                     }
                     break;
                 // for free answer
-                case FREE_ANSWER :
+                case FREE_ANSWER:
                     if ($from_database) {
                         $query = "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
                         $resq = Database::query($query);
-                        $choice = Database::result($resq, 0, 'answer');
-                        $choice = str_replace('\r\n', '', $choice);
-                        $choice = stripslashes($choice);
-                        $questionScore = Database::result($resq, 0, "marks");
+                        $questionScore = 0;
+                        $choice = null;
+                        if ($resq) {
+                            $row = Database::fetch_array($resq);
+                            $choice = $row['answer'];
+                            $questionScore = $row['marks'];
+                            $choice = str_replace('\r\n', '', $choice);
+                            $choice = stripslashes($choice);
+                        }
+
                         if ($questionScore == -1) {
                             $totalScore += 0;
                         } else {
                             $totalScore += $questionScore;
                         }
+
                         if ($questionScore == '') {
                             $questionScore = 0;
                         }
+
                         $arrques = $questionName;
                         $arrans = $choice;
                     } else {
@@ -4264,21 +4275,21 @@ class Exercise
                         if ($final_answer == 0) {
                             $questionScore = 0;
                         }
-                        saveExerciseAttempt($questionScore, 1, $quesId, $exeId, 0); // we always insert the answer_id 1 = delineation
+                        saveQuestionAttempt($questionScore, 1, $quesId, $exeId, 0); // we always insert the answer_id 1 = delineation
                         //in delineation mode, get the answer from $hotspot_delineation_result[1]
                         saveExerciseAttemptHotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList(1), $hotspot_delineation_result[1], $exerciseResultCoordinates[$quesId]);
                     } else {
                         if ($final_answer == 0) {
                             $questionScore = 0;
                             $answer = 0;
-                            saveExerciseAttempt($questionScore, $answer, $quesId, $exeId, 0);
+                            saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0);
                             if (is_array($exerciseResultCoordinates[$quesId])) {
                                 foreach ($exerciseResultCoordinates[$quesId] as $idx => $val) {
                                     saveExerciseAttemptHotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList($idx), 0, $val);
                                 }
                             }
                         } else {
-                            saveExerciseAttempt($questionScore, $answer, $quesId, $exeId, 0);
+                            saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0);
                             if (is_array($exerciseResultCoordinates[$quesId])) {
                                 foreach ($exerciseResultCoordinates[$quesId] as $idx => $val) {
                                     saveExerciseAttemptHotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList($idx), $choice[$idx], $val);
@@ -4341,13 +4352,13 @@ class Exercise
                     $reply = array_keys($choice);
                     for ($i = 0; $i < sizeof($reply); $i++) {
                         $ans = $reply[$i];
-                        saveExerciseAttempt($questionScore, $ans.':'.$choice[$ans], $quesId, $exeId, $i, $this->id);
+                        saveQuestionAttempt($questionScore, $ans.':'.$choice[$ans], $quesId, $exeId, $i, $this->id);
                         if ($debug) {
                             error_log('result =>'.$questionScore.' '.$ans.':'.$choice[$ans]);
                         }
                     }
                 } else {
-                    saveExerciseAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
+                    saveQuestionAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
                 }
             } elseif ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
                 if ($choice != 0) {
@@ -4358,46 +4369,46 @@ class Exercise
                     }
                     for ($i = 0; $i < sizeof($reply); $i++) {
                         $ans = $reply[$i];
-                        saveExerciseAttempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
+                        saveQuestionAttempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
                     }
                 } else {
-                    saveExerciseAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
+                    saveQuestionAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
                 }
             } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
                 if ($choice != 0) {
                     $reply = array_keys($choice);
                     for ($i = 0; $i < sizeof($reply); $i++) {
                         $ans = $reply[$i];
-                        saveExerciseAttempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
+                        saveQuestionAttempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
                     }
                 } else {
-                    saveExerciseAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
+                    saveQuestionAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
                 }
             } elseif ($answerType == MATCHING || $answerType == DRAGGABLE) {
                 if (isset($matching)) {
                     foreach ($matching as $j => $val) {
-                        saveExerciseAttempt($questionScore, $val, $quesId, $exeId, $j, $this->id);
+                        saveQuestionAttempt($questionScore, $val, $quesId, $exeId, $j, $this->id);
                     }
                 }
             } elseif ($answerType == FREE_ANSWER) {
                 $answer = $choice;
-                saveExerciseAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
             } elseif ($answerType == ORAL_EXPRESSION) {
                 $answer = $choice;
-                saveExerciseAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id, $nano);
+                saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id, $nano);
             } elseif ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_IMAGE || $answerType == UNIQUE_ANSWER_NO_OPTION) {
                 $answer = $choice;
-                saveExerciseAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
                 //            } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
             } elseif ($answerType == HOT_SPOT) {
-                saveExerciseAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
                 if (isset($exerciseResultCoordinates[$questionId]) && !empty($exerciseResultCoordinates[$questionId])) {
                     foreach ($exerciseResultCoordinates[$questionId] as $idx => $val) {
                         saveExerciseAttemptHotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList($idx), $choice[$idx], $val, $this->id);
                     }
                 }
             } else {
-                saveExerciseAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
             }
         }
 
@@ -4824,7 +4835,12 @@ class Exercise
 
     /**
      * Checks if the exercise is visible due a lot of conditions - visibility, time limits, student attempts
-     * @return bool true if is active
+     *
+     * @param int $lp_id
+     * @param int $lp_item_id
+     * @param int $lp_item_view_id
+     * @param bool $filter_by_admin
+     * @return array
      */
     public function is_visible($lp_id = 0, $lp_item_id = 0, $lp_item_view_id = 0, $filter_by_admin = true)
     {
@@ -5072,7 +5088,7 @@ class Exercise
     }
 
     /**
-     * Sets the question list when the exercise->read() is executed created depending of a parameter
+     * Sets the question list when the exercise->read() is executed
      */
     public function setQuestionList()
     {
@@ -5260,17 +5276,16 @@ class Exercise
     }
 
     /**
+     * Returns a time limit message
      * @return string
      */
     public function returnTimeLeftDiv()
     {
-        $html = '<div id="clock_warning" style="display:none">'.Display::return_message(
-            get_lang('ReachedTimeLimit'),
-            'warning'
-        ).' '.sprintf(
-            get_lang('YouWillBeRedirectedInXSeconds'),
+        $message = Display::return_message(
+            get_lang('ReachedTimeLimit'), 'warning' ).' '.sprintf(get_lang('YouWillBeRedirectedInXSeconds'),
             '<span id="counter_to_redirect" class="red_alert"></span>'
-        ).'</div>';
+        );
+        $html = '<div id="clock_warning" style="display:none">'.$message.'</div>';
         $html .= '<div class="row"><div class="pull-right"><div id="exercise_clock_warning" class="well count_down"></div></div></div>';
 
         return $html;

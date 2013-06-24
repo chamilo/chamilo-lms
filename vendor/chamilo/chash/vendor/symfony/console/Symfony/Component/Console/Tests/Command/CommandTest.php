@@ -198,6 +198,29 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(3, $command->getDefinition()->getArgumentCount(), '->mergeApplicationDefinition() does not try to merge twice the application arguments and options');
     }
 
+    public function testMergeApplicationDefinitionWithoutArgsThenWithArgsAddsArgs()
+    {
+        $application1 = new Application();
+        $application1->getDefinition()->addArguments(array(new InputArgument('foo')));
+        $application1->getDefinition()->addOptions(array(new InputOption('bar')));
+        $command = new \TestCommand();
+        $command->setApplication($application1);
+        $command->setDefinition($definition = new InputDefinition(array()));
+
+        $r = new \ReflectionObject($command);
+        $m = $r->getMethod('mergeApplicationDefinition');
+        $m->setAccessible(true);
+        $m->invoke($command, false);
+        $this->assertTrue($command->getDefinition()->hasOption('bar'), '->mergeApplicationDefinition(false) merges the application and the commmand options');
+        $this->assertFalse($command->getDefinition()->hasArgument('foo'), '->mergeApplicationDefinition(false) does not merge the application arguments');
+
+        $m->invoke($command, true);
+        $this->assertTrue($command->getDefinition()->hasArgument('foo'), '->mergeApplicationDefinition(true) merges the application arguments and the command arguments');
+
+        $m->invoke($command);
+        $this->assertEquals(2, $command->getDefinition()->getArgumentCount(), '->mergeApplicationDefinition() does not try to merge twice the application arguments');
+    }
+
     public function testRunInteractive()
     {
         $tester = new CommandTester(new \TestCommand());
@@ -235,6 +258,20 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $command = new \TestCommand();
         $tester = new CommandTester($command);
         $tester->execute(array('--bar' => true));
+    }
+
+    public function testRunReturnsIntegerExitCode()
+    {
+        $command = new \TestCommand();
+        $exitCode = $command->run(new StringInput(''), new NullOutput());
+        $this->assertSame(0, $exitCode, '->run() returns integer exit code (treats null as 0)');
+
+        $command = $this->getMock('TestCommand', array('execute'));
+        $command->expects($this->once())
+             ->method('execute')
+             ->will($this->returnValue('2.3'));
+        $exitCode = $command->run(new StringInput(''), new NullOutput());
+        $this->assertSame(2, $exitCode, '->run() returns integer exit code (casts numeric to int)');
     }
 
     public function testRunReturnsAlwaysInteger()

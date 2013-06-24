@@ -26,7 +26,7 @@ if (empty($session_id)) {
 }
 $count_students = count($students);
 
-$question_list = $objExercise->selectQuestionList();
+$question_list = $objExercise->getQuestionList();
 
 $data = array();
 //Question title 	# of students who tool it 	Lowest score 	Average 	Highest score 	Maximum score
@@ -100,7 +100,7 @@ if (!empty($question_list)) {
     $id = 0;
 	foreach ($question_list as $question_id) {
 		$question_obj = Question::read($question_id);
-		$exercise_stats = get_student_stats_by_question($question_id, $exercise_id, api_get_course_int_id(), api_get_session_id());
+		$exercise_stats = ExerciseLib::get_student_stats_by_question($question_id, $exercise_id, api_get_course_int_id(), api_get_session_id());
 
         $answer = new Answer($question_id);
 		$answer_count = $answer->selectNbrAnswers();
@@ -114,7 +114,7 @@ if (!empty($question_list)) {
             //$data[$id]['name'] .=$answer_count;
             //Overwriting values depending of the question
             switch ($question_obj->type) {
-                case FILL_IN_BLANKS :
+                case FILL_IN_BLANKS:
                     $answer_info_db = $answer_info;
                     $answer_info = substr($answer_info, 0, strpos($answer_info, '::'));
                     $correct_answer = $is_correct;

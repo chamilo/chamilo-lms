@@ -174,7 +174,8 @@ class xajax
 		$this->aFunctions = array();
 		$this->aObjects = array();
 		$this->aFunctionIncludeFiles = array();
-		$this->sRequestURI = $sRequestURI;
+        $this->sRequestURI = $sRequestURI;
+
 		if ($this->sRequestURI == "")
 			$this->sRequestURI = $this->_detectURI();
 		$this->sWrapperPrefix = $sWrapperPrefix;
@@ -811,6 +812,7 @@ class xajax
 		if ($sJsFile == NULL) $sJsFile = "xajax_js/xajax.js";
 
 		if ($sJsURI != "" && substr($sJsURI, -1) != "/") $sJsURI .= "/";
+        $sJsURI = api_get_path(WEB_LIBRARY_PATH).'xajax/';
 
 		$html = "\t<script type=\"text/javascript\" src=\"" . $sJsURI . $sJsFile . "\"></script>\n";
 		$html .= "\t<script type=\"text/javascript\">\n";

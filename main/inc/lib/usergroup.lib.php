@@ -533,7 +533,7 @@ class UserGroup extends Model
             $filename = in_array($old_extension, $allowed_types) ? substr($old_file, 0, -strlen($old_extension)) : $old_file;
             $filename = (substr($filename, -1) == '.') ? $filename.$extension : $filename.'.'.$extension;
         } else {
-            $filename = replace_dangerous_char($filename);
+            $filename = api_replace_dangerous_char($filename);
             if (PREFIX_IMAGE_FILENAME_WITH_UID) {
                 $filename = uniqid('').'_'.$filename;
             }

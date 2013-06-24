@@ -131,7 +131,7 @@ class CommonCommand extends AbstractCommand
             ),
             'email' => array(
                 'attributes' => array(
-                    'label' => 'Password',
+                    'label' => 'Email',
                     'data' =>  'admin@example.org'
                 ),
                 'type' => 'email'
@@ -239,13 +239,14 @@ class CommonCommand extends AbstractCommand
             ),
             'dbname' => array(
                 'attributes' => array(
+                    'label' => 'Database name',
                     'data' => 'chamilo',
                 ),
                 'type' => 'text'
             ),
             'user' => array(
                 'attributes' => array(
-                    'label' => 'URL',
+                    'label' => 'User',
                     'data' => 'root',
                 ),
                 'type' => 'text'

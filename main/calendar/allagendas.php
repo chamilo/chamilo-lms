@@ -49,7 +49,6 @@ if (!empty ($course_path)) {
 	$interbreadcrumb[] = array ('url' => api_get_path(WEB_COURSE_PATH).urlencode($course_path).'/index.php', 'name' => Security::remove_XSS($_GET['courseCode']));
 }
 // this loads the javascript that is needed for the date popup selection
-//$htmlHeadXtra[] = "<script src=\"tbl_change.js\" type=\"text/javascript\" language=\"javascript\"></script>";
 
 // showing the header
 Display::display_header(get_lang('MyAgenda'));

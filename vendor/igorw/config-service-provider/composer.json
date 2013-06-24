@@ -1,6 +1,6 @@
 {
     "name": "igorw/config-service-provider",
-    "description": "A JSON/Yaml-based config ServiceProvider for Silex.",
+    "description": "A config ServiceProvider for Silex with support for php, json and yaml.",
     "keywords": ["silex"],
     "license": "MIT",
     "authors": [
@@ -14,20 +14,22 @@
         }
     ],
     "require": {
-        "silex/silex": "1.0.*@dev"
+        "silex/silex": "~1.0"
     },
     "require-dev": {
-        "symfony/yaml": "2.1.*@dev"
+        "symfony/yaml": "~2.1",
+        "jamesmoss/toml": "~0.1"
     },
     "suggest": {
-        "symfony/yaml": "2.1.*"
+        "symfony/yaml": "~2.1",
+        "jamesmoss/toml": "~0.1"
     },
     "autoload": {
         "psr-0": { "Igorw\\Silex": "src" }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0"
+            "dev-master": "1.2-dev"
         }
     }
 }

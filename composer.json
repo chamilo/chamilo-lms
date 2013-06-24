@@ -53,6 +53,7 @@
         "symfony/config": "~2.3",
         "symfony/yaml": "~2.3",
         "symfony/locale": "~2.3",
+        "symfony/monolog-bridge": "~2.3",
         "twig/twig": ">=1.8,<2.0-dev",
         "dflydev/doctrine-orm-service-provider": "1.0.*@dev",
         "doctrine/migrations": "dev-master",
@@ -84,7 +85,6 @@
         "leafo/lessphp": "dev-master",
         "mheap/silex-assetic": "1.0.*@dev",
         "filp/whoops": "dev-master",
-        "symfony/monolog-bridge": "~2.3",
         "sensio/framework-extra-bundle": "2.3.*@dev"
     },
     "scripts": {

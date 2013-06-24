@@ -32,6 +32,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
 
         try {
             $user = $q->getSingleResult();
+            // api_format_user_from_obj($user);
         } catch (NoResultException $e) {
             throw new UsernameNotFoundException(
                 sprintf('Unable to find an active admin User identified by "%s".', $username),
@@ -49,11 +50,12 @@ class UserRepository extends EntityRepository implements UserProviderInterface
      */
     public function refreshUser(UserInterface $user)
     {
+        return $user;
+
         $class = get_class($user);
         if (!$this->supportsClass($class)) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $class));
         }
-
         return $this->loadUserByUsername($user->getUsername());
     }
 

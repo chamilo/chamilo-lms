@@ -1195,6 +1195,12 @@ function api_get_user_courses($userid, $fetch_session = true) {
     return $courses;
 }
 
+function api_format_user_from_obj($user)
+{
+    $user = (array) $user;
+    //$user = api_format_user($user);
+    //Session::write($user);
+}
 /**
  * Formats user information into a standard array
  * This function should be only used inside api_get_user_info()
@@ -1269,18 +1275,24 @@ function api_format_user($user, $add_password = false) {
     $result['theme']            = $user['theme'];
     $result['language']         = $user['language'];
 
-    if (!isset($user['lastLogin']) && !isset($user['last_login'])) {
-        $timestamp = Tracking::get_last_connection_date($result['user_id'], false, true);
-        // Convert the timestamp back into a datetime
-        // NOTE: this timestamp has ALREADY been converted to the local timezone in the get_last_connection_date function
-        $last_login = date('Y-m-d H:i:s', $timestamp);
-    } else {
-        if (isset($user['lastLogin'])) {
-            $last_login = $user['lastLogin'];
+    if (!empty($result['user_id'])) {
+
+        if (!isset($user['lastLogin']) && !isset($user['last_login'])) {
+            $timestamp = Tracking::get_last_connection_date($result['user_id'], false, true);
+            // Convert the timestamp back into a datetime
+            // NOTE: this timestamp has ALREADY been converted to the local timezone in the get_last_connection_date function
+            $last_login = date('Y-m-d H:i:s', $timestamp);
         } else {
-            $last_login = $user['last_login'];
+            if (isset($user['lastLogin'])) {
+                $last_login = $user['lastLogin'];
+            } else {
+                $last_login = $user['last_login'];
+            }
         }
+    } else {
+        $last_login = api_get_utc_datetime();
     }
+
     $result['last_login'] = $last_login;
     // Kept for historical reasons
     $result['lastLogin'] = $last_login;
@@ -2246,7 +2258,8 @@ function api_get_self() {
  * @see usermanager::is_admin(user_id) for a user-id specific function
  */
 function api_is_platform_admin($allow_sessions_admins = false) {
-    if (isset($_SESSION['is_platformAdmin']) && $_SESSION['is_platformAdmin']) {
+    $isAdmin = Session::read('is_platformAdmin');
+    if ($isAdmin) {
         return true;
     }
     $_user = api_get_user_info();
@@ -3028,7 +3041,6 @@ function api_not_allowed($print_headers = false, $message = null) {
 
     $app['template']->assign('content', $msg);
     $app['allowed'] = true;
-
 
     if (($user_id!=0 && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {
         // if the access is not authorized and there is some login information

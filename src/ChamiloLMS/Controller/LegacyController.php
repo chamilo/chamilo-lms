@@ -75,6 +75,7 @@ class LegacyController extends CommonController
         }
 
         $mainPath = $app['paths']['sys_root'].'main/';
+
         if (is_file($mainPath.$file)) {
 
             // Default values
@@ -93,7 +94,6 @@ class LegacyController extends CommonController
             $out = ob_get_contents();
             ob_end_clean();
 
-            //var_dump($htmlHeadXtra);
             if (isset($htmlHeadXtra)) {
                 $app['template']->addJsFiles($htmlHeadXtra);
             }

@@ -557,6 +557,7 @@ $app->before(
         //var_dump($app['security']->isGranted('IS_AUTHENTICATED_FULLY'));
 
         if ($app['security']->isGranted('IS_AUTHENTICATED_FULLY')) {
+
             $token = $app['security']->getToken();
             if (null !== $token) {
                 $user = $token->getUser();

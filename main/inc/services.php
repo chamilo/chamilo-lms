@@ -70,6 +70,8 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     )
 ));
 
+// Registering Password encoder
+// @todo fix harcoded sha1 value
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 $app['security.encoder.digest'] = $app->share(function($app) {
     // use the sha1 algorithm
@@ -78,6 +80,72 @@ $app['security.encoder.digest'] = $app->share(function($app) {
     return new MessageDigestPasswordEncoder('sha1', false, 1);
 });
 
+use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Router;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
+class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
+{
+    protected $router;
+    protected $security;
+
+    /**
+     * @param UrlGeneratorInterface $urlGenerator
+     * @param SecurityContext $security
+     */
+    public function __construct(UrlGeneratorInterface $urlGenerator, SecurityContext $security)
+    {
+        $this->router = $urlGenerator;
+        $this->security = $security;
+    }
+
+    /**
+     * @param Request $request
+     * @param TokenInterface $token
+     * @return null|RedirectResponse|\Symfony\Component\Security\Http\Authentication\Response
+     */
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token)
+    {
+        /*if ($this->security->isGranted('ROLE_SUPER_ADMIN')) {
+            $response = new RedirectResponse($this->router->generate('category_index'));
+        } elseif ($this->security->isGranted('ROLE_ADMIN')) {
+            $response = new RedirectResponse($this->router->generate('category_index'));
+        } elseif ($this->security->isGranted('ROLE_USER')) {
+            // redirect the user to where they were before the login process begun.
+            $referer_url = $request->headers->get('referer');
+            $response = new RedirectResponse($referer_url);
+        }*/
+
+        $response = null;
+        //$session = $request->getSession();
+        $pageAfterLogin = api_get_setting('page_after_login');
+
+        //error_log($session->get('page_after_login'));
+        if ($this->security->isGranted('ROLE_STUDENT') && !empty($pageAfterLogin)) {
+            $url = api_get_path(WEB_PUBLIC_PATH).$pageAfterLogin;
+            $response = new RedirectResponse($url);
+        }
+
+        // Redirect the user to where they were before the login process begun.
+        if (empty($response)) {
+            $refererUrl = $request->headers->get('referer');
+            $response = new RedirectResponse($refererUrl);
+        }
+
+        return $response;
+    }
+}
+
+// Registering success login redirection
+$app['security.authentication.success_handler.admin'] = $app->share(function($app) {
+    return new LoginSuccessHandler($app['url_generator'], $app['security']);
+});
+
+// Role hierarchy
 $app['security.role_hierarchy'] = array(
     'ROLE_ADMIN' => array('ROLE_QUESTION_MANAGER', 'ROLE_TEACHER', 'ROLE_ALLOWED_TO_SWITCH'),
     'ROLE_TEACHER' => array('ROLE_STUDENT'),
@@ -87,6 +155,7 @@ $app['security.role_hierarchy'] = array(
     'ROLE_ANONYMOUS' => array('ROLE_ANONYMOUS')
 );
 
+// Role rules
 $app['security.access_rules'] = array(
     array('^/admin/administrator', 'ROLE_ADMIN'),
     array('^/admin/questionmanager', 'ROLE_QUESTION_MANAGER'),

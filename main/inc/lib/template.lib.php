@@ -624,10 +624,11 @@ class Template
         $notification = $this->returnNotificationMenu();
         $this->assign('notification_menu', $notification);
 
-        //Preparing values for the menu
+        // Preparing values for the menu
 
-        //Logout link
-        $this->assign('logout_link', api_get_path(WEB_PUBLIC_PATH).'logout');
+        // Logout link
+        // See the SecurityServiceProvider definition
+        $this->assign('logout_link', $this->app['url_generator']->generate('admin_logout'));
 
         //Profile link
         if (api_get_setting('allow_social_tool') == 'true') {

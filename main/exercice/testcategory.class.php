@@ -1043,7 +1043,6 @@ class Testcategory
      */
     public function return_category_form($exercise_obj)
     {
-
         $categories = $this->getListOfCategoriesForTest($exercise_obj);
 
         $saved_categories = $exercise_obj->get_categories_in_exercise();
@@ -1052,7 +1051,7 @@ class Testcategory
         if (!empty($categories)) {
             $nbQuestionsTotal = $exercise_obj->getNumberQuestionExerciseCategory();
             $exercise_obj->setCategoriesGrouping(true);
-            $real_question_count = count($exercise_obj->selectQuestionList(true));
+            $real_question_count = count($exercise_obj->getQuestionList());
 
             $warning = null;
             if ($nbQuestionsTotal != $real_question_count) {

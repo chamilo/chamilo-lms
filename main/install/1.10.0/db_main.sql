@@ -503,12 +503,12 @@ CREATE TABLE IF NOT EXISTS session (
   visibility int NOT NULL default 1,
   session_category_id int NOT NULL,
   promotion_id INT NOT NULL,
-  display_start_date datetime NOT NULL default '0000-00-00 00:00:00',
-  display_end_date datetime NOT NULL default '0000-00-00 00:00:00',
-  access_start_date datetime NOT NULL default '0000-00-00 00:00:00',
-  access_end_date datetime NOT NULL default '0000-00-00 00:00:00',
-  coach_access_start_date datetime NOT NULL default '0000-00-00 00:00:00',
-  coach_access_end_date datetime NOT NULL default '0000-00-00 00:00:00',
+  display_start_date datetime default '0000-00-00 00:00:00',
+  display_end_date datetime default '0000-00-00 00:00:00',
+  access_start_date datetime default '0000-00-00 00:00:00',
+  access_end_date datetime default '0000-00-00 00:00:00',
+  coach_access_start_date datetime default '0000-00-00 00:00:00',
+  coach_access_end_date datetime default '0000-00-00 00:00:00',
   PRIMARY KEY (id),
   UNIQUE KEY name (name)
 );
@@ -3532,4 +3532,4 @@ CREATE TABLE ext_log_entries (
 ) DEFAULT CHARSET=utf8;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.024' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.025' WHERE variable = 'chamilo_database_version';

@@ -31,12 +31,12 @@ ALTER TABLE session_rel_user ADD COLUMN moved_to INT NOT NULL DEFAULT 0;
 ALTER TABLE session_rel_user ADD COLUMN moved_status INT NOT NULL DEFAULT 0;
 ALTER TABLE session_rel_user ADD COLUMN moved_at datetime NOT NULL default '0000-00-00 00:00:00';
 
-ALTER TABLE session ADD COLUMN display_start_date datetime NOT NULL default '0000-00-00 00:00:00';
-ALTER TABLE session ADD COLUMN display_end_date datetime NOT NULL default '0000-00-00 00:00:00';
-ALTER TABLE session ADD COLUMN access_start_date datetime NOT NULL default '0000-00-00 00:00:00';
-ALTER TABLE session ADD COLUMN access_end_date datetime NOT NULL default '0000-00-00 00:00:00';
-ALTER TABLE session ADD COLUMN coach_access_start_date datetime NOT NULL default '0000-00-00 00:00:00';
-ALTER TABLE session ADD COLUMN coach_access_end_date datetime NOT NULL default '0000-00-00 00:00:00';
+ALTER TABLE session ADD COLUMN display_start_date datetime default '0000-00-00 00:00:00';
+ALTER TABLE session ADD COLUMN display_end_date datetime default '0000-00-00 00:00:00';
+ALTER TABLE session ADD COLUMN access_start_date datetime default '0000-00-00 00:00:00';
+ALTER TABLE session ADD COLUMN access_end_date datetime default '0000-00-00 00:00:00';
+ALTER TABLE session ADD COLUMN coach_access_start_date datetime default '0000-00-00 00:00:00';
+ALTER TABLE session ADD COLUMN coach_access_end_date datetime default '0000-00-00 00:00:00';
 
 ALTER TABLE grade_components ADD COLUMN prefix VARCHAR(255) DEFAULT NULL;
 ALTER TABLE grade_components ADD COLUMN exclusions INT DEFAULT 0;
@@ -309,4 +309,4 @@ INSERT INTO users_roles VALUES (1, 1);
 
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.024' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.025' WHERE variable = 'chamilo_database_version';

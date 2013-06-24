@@ -19,7 +19,8 @@ require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_QUIZ;
 
 // Clear the exercise session just in case
-if (isset($_SESSION['objExercise'])) {
+$objExercise = Session::read('objExercise');
+if (isset($objExercise)) {
     Session::erase('objExercise');
 }
 

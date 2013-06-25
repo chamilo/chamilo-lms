@@ -233,9 +233,8 @@ abstract class TransactionLog {
    * @return array
    *   Every item is an array of mapping settings, keyed by transaction action,
    *   with the following keys:
-   *   - class: The transaction class name associated with this action.
-   *   - controller: The transaction controller class name associated with this
-   *     action.
+   *   - max_attempts: Maximum number of attempts for trying to import the
+   *     transaction into the system.
    */
   public static function getTransactionMappingSettings($action = NULL, $reset = FALSE) {
     static $settings;

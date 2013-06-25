@@ -41,6 +41,7 @@ class RoleController extends BaseController
         $items = parent::listAction('array');
         $template = $this->get('template');
         $template->assign('items', $items);
+        $template->assign('links', $this->generateLinks());
         $response = $template->render_template('admin/administrator/role/list.tpl');
         return new Response($response, 200, array());
     }
@@ -52,6 +53,8 @@ class RoleController extends BaseController
      */
     public function readAction($id)
     {
+        $template = $this->get('template');
+        $template->assign('links', $this->generateLinks());
         return parent::readAction($id);
     }
 
@@ -77,9 +80,11 @@ class RoleController extends BaseController
                 }
             }
 
+
             $template = $this->get('template');
             $template->assign('role', $role);
             $template->assign('form', $form->createView());
+            $template->assign('links', $this->generateLinks());
             $response = $template->render_template('admin/administrator/role/edit.tpl');
             return new Response($response, 200, array());
         } else {
@@ -107,9 +112,25 @@ class RoleController extends BaseController
         }
 
         $template = $this->get('template');
+        $template->assign('links', $this->generateLinks());
         $template->assign('form', $form->createView());
         $response = $template->render_template('admin/administrator/role/add.tpl');
         return new Response($response, 200, array());
+    }
+
+    /**
+     * Return an array with the string that are going to be generating by twig.
+     * @return array
+     */
+    private function generateLinks()
+    {
+        return array(
+            'create_link' => 'admin_administrator_roles_add',
+            'read_link' => 'admin_administrator_roles_read',
+            'update_link' => 'admin_administrator_roles_edit',
+            'delete_link' => 'admin_administrator_roles_delete',
+            'list_link' => 'admin_administrator_roles'
+        );
     }
 
     public function deleteAction($id)

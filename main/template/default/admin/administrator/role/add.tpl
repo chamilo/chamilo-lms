@@ -1,2 +1,5 @@
-{% include app.template_style ~ "/admin/administrator/role/settings.tpl" %}
-{% include app.template_style ~ "/default_actions/add.tpl"  %}
+{% extends app.template_style ~ "/layout/layout_1_col.tpl" %}
+{% block content %}
+    {% import app.template_style ~ "/default_actions/settings.tpl" as actions %}
+    {{ actions.add(form, links) }}
+{% endblock %}

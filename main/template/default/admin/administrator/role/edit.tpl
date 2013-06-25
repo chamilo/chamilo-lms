@@ -1,6 +1,5 @@
 {% extends app.template_style ~ "/layout/layout_1_col.tpl" %}
 {% block content %}
-    <form action="{{ url('admin_administrator_roles_edit', {id : role.id}) }}" method = "post" {{ form_enctype(form) }}>
-        {{ form_widget(form) }}
-    </form>
+    {% import app.template_style ~ "/default_actions/settings.tpl" as actions %}
+    {{ actions.edit(form, links) }}
 {% endblock %}

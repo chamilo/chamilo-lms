@@ -10,15 +10,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Entity;
-use ChamiloLMS\Form\RoleType;
+use ChamiloLMS\Form\QuestionScoreNameType;
 
 /**
- * Class RoleController
+ * Class QuestionScoreController
  * @todo @route and @method function don't work yet
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class RoleController extends BaseController
+class QuestionScoreName extends BaseController
 {
     /**
      *
@@ -32,7 +32,7 @@ class RoleController extends BaseController
         $template = $this->get('template');
         $template->assign('items', $items);
         $template->assign('links', $this->generateLinks());
-        $response = $template->render_template('admin/administrator/role/list.tpl');
+        $response = $template->render_template('admin/administrator/question_score_name/list.tpl');
         return new Response($response, 200, array());
     }
 
@@ -45,37 +45,40 @@ class RoleController extends BaseController
     {
         $template = $this->get('template');
         $template->assign('links', $this->generateLinks());
-        return parent::readAction($id);
+        $item = parent::getEntity($id);
+        $template->assign('item', $item);
+        $response = $template->render_template('admin/administrator/question_score_name/read.tpl');
+        return new Response($response, 200, array());
     }
 
     public function editAction($id)
     {
-        $roleRepo = $this->getRepository();
+        $repo = $this->getRepository();
         $request = $this->getRequest();
 
-        $role = $roleRepo->findOneById($id);
+        $item = $repo->findOneById($id);
 
-        if ($role) {
-            $form = $this->get('form.factory')->create(new RoleType(), $role);
+        if ($item) {
+            $form = $this->get('form.factory')->create(new QuestionScoreNameType(), $item);
 
             if ($request->getMethod() == 'POST') {
                 $form->bind($this->getRequest());
 
                 if ($form->isValid()) {
-                    $role = $form->getData();
-                    parent::updateAction($role);
+                    $item = $form->getData();
+                    parent::updateAction($item);
                     $this->get('session')->getFlashBag()->add('success', "Updated");
-                    $url = $this->get('url_generator')->generate('admin_administrator_roles');
+                    $url = $this->get('url_generator')->generate('admin_administrator_question_score_names');
                     return $this->redirect($url);
                 }
             }
 
 
             $template = $this->get('template');
-            $template->assign('item', $role);
+            $template->assign('item', $item);
             $template->assign('form', $form->createView());
             $template->assign('links', $this->generateLinks());
-            $response = $template->render_template('admin/administrator/role/edit.tpl');
+            $response = $template->render_template('admin/administrator/question_score_name/edit.tpl');
             return new Response($response, 200, array());
         } else {
             return $this->createNotFoundException();
@@ -85,15 +88,15 @@ class RoleController extends BaseController
     public function addAction()
     {
         $request = $this->getRequest();
-        $form = $this->get('form.factory')->create(new RoleType());
+        $form = $this->get('form.factory')->create(new QuestionScoreNameType());
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
             if ($form->isValid()) {
-                $role = $form->getData();
-                parent::createAction($role);
+                $item = $form->getData();
+                parent::createAction($item);
                 $this->get('session')->getFlashBag()->add('success', "Added");
-                $url = $this->get('url_generator')->generate('admin_administrator_roles');
+                $url = $this->get('url_generator')->generate('admin_administrator_question_score_names');
                 return $this->redirect($url);
             }
         }
@@ -101,8 +104,19 @@ class RoleController extends BaseController
         $template = $this->get('template');
         $template->assign('links', $this->generateLinks());
         $template->assign('form', $form->createView());
-        $response = $template->render_template('admin/administrator/role/add.tpl');
+        $response = $template->render_template('admin/administrator/question_score_name/add.tpl');
         return new Response($response, 200, array());
+    }
+
+    public function deleteAction($id)
+    {
+        $result = parent::deleteAction($id);
+        if ($result) {
+            $url = $this->get('url_generator')->generate('admin_administrator_question_score_names');
+            $this->get('session')->getFlashBag()->add('success', "Deleted");
+
+            return $this->redirect($url);
+        }
     }
 
     /**
@@ -112,23 +126,12 @@ class RoleController extends BaseController
     private function generateLinks()
     {
         return array(
-            'create_link' => 'admin_administrator_roles_add',
-            'read_link' => 'admin_administrator_roles_read',
-            'update_link' => 'admin_administrator_roles_edit',
-            'delete_link' => 'admin_administrator_roles_delete',
-            'list_link' => 'admin_administrator_roles'
+            'create_link' => 'admin_administrator_question_score_names_add',
+            'read_link' => 'admin_administrator_question_score_names_read',
+            'update_link' => 'admin_administrator_question_score_names_edit',
+            'delete_link' => 'admin_administrator_question_score_names_delete',
+            'list_link' => 'admin_administrator_question_score_names'
         );
-    }
-
-    public function deleteAction($id)
-    {
-        $result = parent::deleteAction($id);
-        if ($result) {
-            $url = $this->get('url_generator')->generate('admin_administrator_roles');
-            $this->get('session')->getFlashBag()->add('success', "Deleted");
-
-            return $this->redirect($url);
-        }
     }
 
     /**
@@ -137,7 +140,7 @@ class RoleController extends BaseController
      */
     protected function getRepository()
     {
-        return $this->get('orm.em')->getRepository('Entity\Role');
+        return $this->get('orm.em')->getRepository('Entity\QuestionScoreName');
     }
 
     /**
@@ -146,6 +149,6 @@ class RoleController extends BaseController
      */
     protected function getNewEntity()
     {
-        return new Entity\Role();
+        return new Entity\QuestionScoreName();
     }
 }

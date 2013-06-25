@@ -307,6 +307,8 @@ INSERT INTO roles (name, role) VALUES('Question Manager', 'ROLE_QUESTION_MANAGER
 -- Admin
 INSERT INTO users_roles VALUES (1, 1);
 
+CREATE TABLE question_score_name (id int NOT NULL AUTO_INCREMENT,  score varchar(255) DEFAULT NULL,  name varchar(255) DEFAULT NULL,  description TEXT DEFAULT NULL,  question_score_id INT NOT NULL,  PRIMARY KEY (id)) DEFAULT CHARSET=utf8;
+CREATE TABLE question_score (  id int NOT NULL AUTO_INCREMENT,  name varchar(255) DEFAULT NULL,  PRIMARY KEY (id)) DEFAULT CHARSET=utf8;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.025' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.026' WHERE variable = 'chamilo_database_version';

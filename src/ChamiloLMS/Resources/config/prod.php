@@ -22,7 +22,7 @@ $app['temp.paths']->folders[] = $app['twig.cache.path'] = $app['temp.path'].'twi
 $app['temp.paths']->folders[] = $app['http_cache.cache_dir'] = $app['temp.path'].'http';
 
 // Doctrine ORM.
-$app['temp.paths']->folders[] = $app['db.orm.proxies_dir'] = $app['temp.path'].'proxies_dir';
+$app['temp.paths']->folders[] = $app['db.orm.proxies_dir'] = $app['temp.path'].'Proxies';
 
 // Symfony2 Web profiler.
 $app['temp.paths']->folders[] = $app['profiler.cache_dir'] = $app['temp.path'].'profiler';

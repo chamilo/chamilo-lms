@@ -530,12 +530,7 @@ $app->get('/data/upload/groups/{groupId}/{file}', 'index.controller:getGroupFile
     ->assert('file', '.+')
     ->assert('type', '.+');
 
-/** Admin - admin */
-$app->get('/admin/administrator/roles', 'role.controller:IndexAction')
-    ->assert('type', '.+')
-    ->before($adminAndQuestionManagerCondition)
-    ->bind('admin_administrator_roles');
-
+/** Admin */
 
 $app->get('/admin/dashboard', 'index.controller:dashboardAction')
     ->assert('type', '.+')
@@ -664,6 +659,13 @@ $app->match('/courses/{cidReq}/{id_session}/exercise/question/{id}/edit', 'exerc
     ->before($userCourseAdmin)
     ->bind('exercise_question_edit');
 
+// Roles
+// @todo improve route creation
+
+$app->match('/admin/administrator/', 'admin.controller:indexAction', 'GET')
+    ->assert('type', '.+')
+    ->bind('admin_administrator');
+
 $app->match('/admin/administrator/roles/', 'role.controller:indexAction', 'GET')
     ->assert('type', '.+')
     ->bind('admin_administrator_roles');
@@ -681,7 +683,6 @@ $app->match('/admin/administrator/roles/create', 'role.controller:createAction',
     ->assert('type', '.+')
     ->bind('admin_administrator_roles_create');
 
-
 $app->match('/admin/administrator/roles/{id}/edit', 'role.controller:editAction', 'POST')
     ->assert('type', '.+')
     ->bind('admin_administrator_roles_edit');
@@ -694,8 +695,65 @@ $app->match('/admin/administrator/roles/{id}/delete', 'role.controller:deleteAct
     ->assert('type', '.+')
     ->bind('admin_administrator_roles_delete');
 
+// Question score name
+$app->match('/admin/administrator/question_score_names/', 'question_score_name.controller:indexAction', 'GET')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_question_score_names');
 
+$app->match('/admin/administrator/question_score_names/{id}', 'question_score_name.controller:readAction', 'GET')
+    ->assert('type', '.+')
+    ->assert('id', '\d+')
+    ->bind('admin_administrator_question_score_names_read');
 
+$app->match('/admin/administrator/question_score_names/add', 'question_score_name.controller:addAction', 'GET')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_question_score_names_add');
+
+$app->match('/admin/administrator/question_score_names/create', 'question_score_name.controller:createAction', 'POST')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_question_score_names_create');
+
+$app->match('/admin/administrator/question_score_names/{id}/edit', 'question_score_name.controller:editAction', 'POST')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_question_score_names_edit');
+
+$app->match('/admin/administrator/question_score_names/{id}/update', 'question_score_name.controller:updateAction', 'POST')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_question_score_names_update');
+
+$app->match('/admin/administrator/question_score_names/{id}/delete', 'question_score_name.controller:deleteAction', 'DELETE')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_question_score_names_delete');
+
+// Question score
+$app->match('/admin/administrator/question_scores/', 'question_score.controller:indexAction', 'GET')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_question_scores');
+
+$app->match('/admin/administrator/question_scores/{id}', 'question_score.controller:readAction', 'GET')
+    ->assert('type', '.+')
+    ->assert('id', '\d+')
+    ->bind('admin_administrator_question_score_read');
+
+$app->match('/admin/administrator/question_scores/add', 'question_score.controller:addAction', 'GET')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_question_score_add');
+
+$app->match('/admin/administrator/question_scores/create', 'question_score.controller:createAction', 'POST')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_question_score_create');
+
+$app->match('/admin/administrator/question_scores/{id}/edit', 'question_score.controller:editAction', 'POST')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_question_score_edit');
+
+$app->match('/admin/administrator/question_scores/{id}/update', 'question_score.controller:updateAction', 'POST')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_question_score_update');
+
+$app->match('/admin/administrator/question_scores/{id}/delete', 'question_score.controller:deleteAction', 'DELETE')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_question_score_delete');
 
 // Takes a lot of time to load
 //$app->mount('/roles', 'exercise_manager.controller:getProvider');

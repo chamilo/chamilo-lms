@@ -1,5 +1,5 @@
 {% extends app.template_style ~ "/layout/layout_1_col.tpl" %}
 {% block content %}
     {% import app.template_style ~ "/default_actions/settings.tpl" as actions %}
-    {{ actions.list(items, links) }}
+    {{ actions.read(item, links) }}
 {% endblock %}

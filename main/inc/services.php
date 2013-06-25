@@ -20,7 +20,7 @@ if (is_writable($app['sys_temp_path'])) {
      *  $app['monolog']->addInfo('Testing the Monolog logging.');
      *  $app['monolog']->addError('Testing the Monolog logging.');
      */
-    //if ($app['debug']) {
+    if ($app['debug']) {
         $app->register(
             new Silex\Provider\MonologServiceProvider(),
             array(
@@ -28,7 +28,7 @@ if (is_writable($app['sys_temp_path'])) {
                 'monolog.name' => 'chamilo',
             )
         );
-    //}
+    }
 }
 
 //Setting HttpCacheService provider in order to use do: $app['http_cache']->run();
@@ -176,8 +176,8 @@ $app['security.role_hierarchy'] = array(
 // Role rules
 $app['security.access_rules'] = array(
     array('^/admin/administrator', 'ROLE_ADMIN'),
-    array('^/admin/questionmanager', 'ROLE_QUESTION_MANAGER'),
     array('^/main/admin/.*', 'ROLE_ADMIN'),
+    array('^/admin/questionmanager', 'ROLE_QUESTION_MANAGER'),
     array('^/main/.*', array('ROLE_STUDENT'))
     //array('^.*$', 'ROLE_USER'),
 );
@@ -405,7 +405,7 @@ $app['twig'] = $app->share(
 // Developer tools
 
 if (is_writable($app['sys_temp_path'])) {
-    if ($app['debug'] && $app['show_profiler']) {
+    if ($app['show_profiler']) {
         // Adding Symfony2 web profiler (memory, time, logs, etc)
         $app->register(
             $p = new Silex\Provider\WebProfilerServiceProvider(),
@@ -414,6 +414,7 @@ if (is_writable($app['sys_temp_path'])) {
             )
         );
         $app->mount('/_profiler', $p);
+
         // PHP errors for cool kids
         $app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
     }

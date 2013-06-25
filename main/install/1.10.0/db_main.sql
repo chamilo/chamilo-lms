@@ -3531,5 +3531,23 @@ CREATE TABLE ext_log_entries (
   PRIMARY KEY (id)
 ) DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS question_score_names;
+CREATE TABLE question_score_names (
+  id int NOT NULL AUTO_INCREMENT,
+  score varchar(255) DEFAULT NULL,
+  name varchar(255) DEFAULT NULL,
+  description TEXT DEFAULT NULL
+  question_score_id INT NOT NULL,
+  PRIMARY KEY (id)
+) DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS question_score;
+CREATE TABLE question_score (
+  id int NOT NULL AUTO_INCREMENT,
+  name varchar(255) DEFAULT NULL,
+  PRIMARY KEY (id)
+) DEFAULT CHARSET=utf8;
+
+
 -- Do not move this
 UPDATE settings_current SET selected_value = '1.10.0.025' WHERE variable = 'chamilo_database_version';

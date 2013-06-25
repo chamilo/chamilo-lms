@@ -542,6 +542,7 @@ $app->before(
         // Loop in the folder array and create temp folders.
         /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem  $filesystem */
         $filesystem = $app['chamilo.filesystem'];
+
         // @todo improvement create temp folders during installation not everytime
         $filesystem->createFolders($app['temp.paths']->folders);
 
@@ -679,6 +680,7 @@ require_once 'routes.php';
 // Setting doctrine2 extensions
 
 if (isset($app['configuration']['main_database']) && isset($app['db.event_manager'])) {
+
     // @todo improvement do not create every time this objects
     $sortableGroup = new Gedmo\Mapping\Annotation\SortableGroup(array());
     $sortablePosition = new Gedmo\Mapping\Annotation\SortablePosition(array());

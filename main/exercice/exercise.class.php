@@ -11,6 +11,8 @@
  * Code
  */
 use \ChamiloSession as Session;
+use \ChamiloLMS\Transaction\TransactionLog;
+use \ChamiloLMS\Transaction\TransactionLogController;
 
 define('ALL_ON_ONE_PAGE', 1);
 define('ONE_PER_PAGE', 2);
@@ -6243,20 +6245,19 @@ class Exercise
                     '',
                     array()
                   );
-                // @todo: Is this really needed? see 33cd962f077ed8c2e4b696bdd18b54db00890ef2
-                require_once api_get_path(LIBRARY_PATH).'transaction.lib.php';
                 $log_transactions_settings = TransactionLog::getTransactionSettings();
                 if (isset($log_transactions_settings['exercise_attempt'])) {
-                  $transaction_actions_map = TransactionLog::getTransactionMappingSettings('exercise_attempt');
-                  $controller_class = $transaction_actions_map['controller'];
-                  $transaction_class = $transaction_actions_map['class'];
-                  $transaction_controller = new $controller_class();
-                  $transaction = $transaction_controller->load_exercise_attempt($exercise_stat_info['exe_id']);
+                  $transaction_controller = new TransactionLogController();
+                  $transaction = $transaction_controller->loadOne(array(
+                    'action' => 'exercise_attempt',
+                    'branch_id' => TransactionLog::BRANCH_LOCAL,
+                    'item_id' => $exercise_stat_info['exe_id'],
+                  ));
                   if (!$transaction) {
                     $transaction_data = array(
                       'item_id' => $exercise_stat_info['exe_id'],
                     );
-                    $transaction = new $transaction_class($transaction_data);
+                    $transaction = $transaction_controller->createTransaction('exercise_attempt', $transaction_data);
                   }
                   $transaction->save();
                 }

@@ -3,6 +3,9 @@
 
 namespace ChamiloLMS\Transaction;
 
+use Database;
+use ChamiloLMS\Transaction\ExerciseAttemptTransactionLog;
+
 /**
  * Controller class for transactions.
  */
@@ -37,7 +40,6 @@ class TransactionLogController {
    *   A list of TransactionLog object that match passed conditions.
    */
   public function load($db_fields) {
-    $transaction_actions_map = TransactionLog::getTransactionMappingSettings();
     foreach ($db_fields as $db_field => $db_value) {
       $conditions[] = "$db_field = ?";
       $values[] = $db_value;
@@ -45,10 +47,26 @@ class TransactionLogController {
     $results = Database::select('*', $this->table, array('where' => array(implode(' AND ', $conditions) => $values)));
     $objects = array();
     foreach ($results as $result) {
-      $class_name = $transaction_actions_map[$result['action']]['class'];
-      $objects[] = new $class_name($result);
+      $objects[] = self::createTransaction($result['action'], $result);
     }
     return $objects;
+  }
+
+  /**
+   * Loads one transaction based on parameters.
+   *
+   * @param array $db_fields
+   *   See self::load().
+   *
+   * @return boolean|TransactionLog
+   *   FALSE if not found, or the corresponding object.
+   */
+  public function loadOne($db_fields) {
+    $transactions = $this->load($db_fields);
+    if (empty($transactions)) {
+      return FALSE;
+    }
+    return array_shift($transactions);
   }
 
   /**
@@ -61,11 +79,7 @@ class TransactionLogController {
    *   FALSE if not found, or the corresponding object.
    */
   public function load_by_id($id) {
-    $transactions = $this->load(array('id' => $id));
-    if (empty($transactions)) {
-      return FALSE;
-    }
-    return array_shift($transactions);
+    return $this->loadOne(array('id' => $id));
   }
 
   /**
@@ -98,16 +112,14 @@ class TransactionLogController {
    *   A set of transaction ids correctly added.
    */
   public function importToLog($exported_transactions) {
-    $transaction_actions_map = TransactionLog::getTransactionMappingSettings();
     $added_transactions = array();
     foreach ($exported_transactions as $exported_transaction) {
       $transaction_data = json_decode($exported_transaction, TRUE);
-      $class_name = $transaction_actions_map[$transaction_data['action']]['class'];
       // Set the right id in the new system.
       $transaction_data['transaction_id'] = $transaction_data['id'];
       unset($transaction_data['id']);
       $transaction_data['status_id'] = TransactionLog::STATUS_TO_BE_EXECUTED;
-      $transaction = new $class_name($transaction_data);
+      $transaction = self::createTransaction($transaction_data['action'], $transaction_data);
       $transaction->save();
       $added_transactions[] = $transaction->id;
     }
@@ -183,13 +195,11 @@ class TransactionLogController {
   public function importPendingToSystem($limit = 10) {
     // Sadly multiple values are not supported by Database::select(), aka IN
     // operation.
-    $transaction_actions_map = TransactionLog::getTransactionMappingSettings();
     $sql = sprintf('SELECT * FROM %s WHERE branch_id != %d AND status_id IN (%d, %d) LIMIT %d', $this->table, TransactionLog::BRANCH_LOCAL, TransactionLog::STATUS_TO_BE_EXECUTED, TransactionLog::STATUS_FAILED, $limit);
     $result = Database::query($sql);
     $transactions = array();
     while ($row = $result->fetch()) {
-      $class_name = $transaction_actions_map[$row['action']]['class'];
-      $transactions[$row['id']] = new $class_name($row);
+      $transactions[$row['id']] = self::createTransaction($row['action'], $row);
       $transactions[$row['id']]->loadData();
     }
     return $this->importToSystem($transactions);
@@ -215,5 +225,42 @@ class TransactionLogController {
       'message' => '',
     );
     return Database::insert($this->log_table, $log_entry);
+  }
+
+  /**
+   * Creates a new transaction object based on passed information.
+   *
+   * @param string $action
+   *   The action keyword mapped to the transaction class.
+   * @param array $data
+   *   See the action type constructor.
+   *
+   * @return TransactionLog
+   *   A transaction object.
+   */
+  public static function createTransaction($action, $data) {
+    $class_name = self::getTransactionClass($action);
+    return new $class_name($data);
+  }
+
+  /**
+   * Returns the class name related with the action passed.
+   *
+   * @param string $action
+   *   The action keyword mapped to the transaction class.
+   *
+   * @return string
+   *   The related transaction class name.
+   */
+  public static function getTransactionClass($action) {
+    // Do the mapping manually. It seems like it cannot be done dynamically
+    // because on PSR-0 we need to add a 'use' clause per used class, which php
+    // process on compiling, so it cannot be discovered and loaded in runtime.
+    // Instead all possible transaction classes are added at the start of this
+    // file.
+    $map = array(
+      'exercise_attempt' => 'ExerciseAttemptTransactionLog',
+    );
+    return '\ChamiloLMS\Transaction\\' . $map[$action];
   }
 }

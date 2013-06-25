@@ -3,6 +3,8 @@
 
 namespace ChamiloLMS\Transaction;
 
+use Database;
+
 /**
  * Base transaction log class.
  */
@@ -134,9 +136,7 @@ abstract class TransactionLog {
 
   public function getController() {
     if (empty($this->controller)) {
-      $transaction_actions_map = TransactionLog::getTransactionMappingSettings($this->action);
-      $controller_class = $transaction_actions_map['controller'];
-      $this->controller = new $controller_class();
+      $this->controller = new TransactionLogController();
     }
     return $this->controller;
   }

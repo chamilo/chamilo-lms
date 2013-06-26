@@ -114,13 +114,13 @@ $app['security.access_manager'] = $app->share(function($app) {
     return new AccessDecisionManager($app['security.voters'], 'unanimous');
 });*/
 
-// Setting Controllers as services provider
+// Setting Controllers as services provider.
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
-// Validator provider
+// Validator provider.
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 
-// Implements Symfony2 translator (needed when using forms in Twig)
+// Implements Symfony2 translator.
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'locale' => 'en',
     'locale_fallback' => 'en'
@@ -132,7 +132,9 @@ $app->register(new Silex\Provider\FormServiceProvider());
 // URL generator provider
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
+// Needed to use the "entity" option in symfony forms
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
+
 class ManagerRegistry extends AbstractManagerRegistry
 {
     protected $container;
@@ -222,7 +224,7 @@ if (isset($app['configuration']['main_database'])) {
         )
     );
 
-    // Setting Doctrine ORM
+    // Setting Doctrine ORM.
     $app->register(
         new Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider,
         array(
@@ -249,7 +251,7 @@ if (isset($app['configuration']['main_database'])) {
     );
 }
 
-// Setting Twig as a service provider
+// Setting Twig as a service provider.
 $app->register(
     new Silex\Provider\TwigServiceProvider(),
     array(
@@ -290,7 +292,7 @@ $app['twig'] = $app->share(
     })
 );
 
-// Developer tools
+// Developer tools.
 
 if (is_writable($app['sys_temp_path'])) {
     if ($app['show_profiler']) {
@@ -310,6 +312,7 @@ if (is_writable($app['sys_temp_path'])) {
 
 // Pagerfanta settings (Pagination using Doctrine2, arrays, etc)
 use FranMoreno\Silex\Provider\PagerfantaServiceProvider;
+
 $app->register(new PagerfantaServiceProvider());
 
 // Custom route params see https://github.com/franmomu/silex-pagerfanta-provider/pull/2
@@ -361,7 +364,7 @@ if ($app['debug']) {
     });*/
 }
 
-// Email service provider
+// Email service provider.
 $app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(
     'swiftmailer.options' => array(
         'host' => isset($platform_email['SMTP_HOST']) ? $platform_email['SMTP_HOST'] : null,
@@ -434,7 +437,7 @@ $app->register(new GaufretteServiceProvider(), array(
 // Use Symfony2 filesystem instead of custom scripts
 $app->register(new Neutron\Silex\Provider\FilesystemServiceProvider());
 
-/** Chamilo service provider */
+/** Chamilo service provider. */
 
 class ChamiloServiceProvider implements ServiceProviderInterface
 {
@@ -458,25 +461,25 @@ class ChamiloServiceProvider implements ServiceProviderInterface
             );
         });
 
-        // Chamilo data filesystem
+        // Chamilo data filesystem.
         $app['chamilo.filesystem'] = $app->share(function () use ($app) {
             $filesystem = new ChamiloLMS\Component\DataFilesystem\DataFilesystem($app['paths'], $app['filesystem']);
             return $filesystem;
         });
 
-        // Page controller class
+        // Page controller class.
         $app['page_controller'] = $app->share(function () use ($app) {
             $pageController = new PageController($app);
             return $pageController;
         });
 
-        // Mail template generator
+        // Mail template generator.
         $app['mail_generator'] = $app->share(function () use ($app) {
             $mailGenerator = new ChamiloLMS\Component\Mail\MailGenerator($app['twig'], $app['mailer']);
             return $mailGenerator;
         });
 
-        // Database
+        // Database.
         $app['database'] = $app->share(function () use ($app) {
             $db = new Database($app['db'], $app['dbs']);
             return $db;
@@ -489,7 +492,7 @@ class ChamiloServiceProvider implements ServiceProviderInterface
     }
 }
 
-// Registering Chamilo service provider
+// Registering Chamilo service provider.
 $app->register(new ChamiloServiceProvider(), array());
 
 // Controller as services definitions.

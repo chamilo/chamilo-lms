@@ -78,7 +78,7 @@ class TransactionLogController {
    * @return boolean|TransactionLog
    *   FALSE if not found, or the corresponding object.
    */
-  public function load_by_id($id) {
+  public function loadById($id) {
     return $this->loadOne(array('id' => $id));
   }
 

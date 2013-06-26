@@ -83,25 +83,6 @@ class TransactionLogController {
   }
 
   /**
-   * Load by branch and transaction.
-   *
-   * @param int $branch_id
-   *   The branch_transaction.branch_id to search.
-   * @param string $transaction_id
-   *   The branch_transaction.transaction_id to search.
-   *
-   * @return boolean|TransactionLog
-   *   FALSE if not found, or the corresponding object.
-   */
-  public function load_by_branch_and_transaction($branch_id, $transaction_id) {
-    $transactions = $this->load(array('branch_id' => $branch_id, 'transaction_id' => $transaction_id));
-    if (empty($transactions)) {
-      return FALSE;
-    }
-    return array_shift($transactions);
-  }
-
-  /**
    * Adds the information to the transaction tables.
    *
    * @param array $exported_transactions

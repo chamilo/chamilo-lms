@@ -1,0 +1,148 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8 \n"
+
+msgid "langSelectOptionForBackup"
+msgstr "Bitte wählen Sie eine Backup-Option."
+
+msgid "langLetMeSelectItems"
+msgstr "Kurs Komponenten auswählen"
+
+msgid "langCreateFullBackup"
+msgstr "Vollständiges Backup erstellen"
+
+msgid "langCreateBackup"
+msgstr "Backup erstellen"
+
+msgid "langBackupCreated"
+msgstr "Backup wurde erstellt. Sollte der Download nicht in wenigen Sekunden starten, klicken Sie bitte auf folgenden Link"
+
+msgid "langSelectBackupFile"
+msgstr "Backup Datei auswählen"
+
+msgid "langImportBackup"
+msgstr "Backup importieren"
+
+msgid "langImportFullBackup"
+msgstr "Vollständiges Backup importieren"
+
+msgid "langImportFinished"
+msgstr "Import beendet"
+
+msgid "langEvents"
+msgstr "Ereignisse"
+
+msgid "langAnnouncements"
+msgstr "Ankündigungen"
+
+msgid "langDocuments"
+msgstr "Dokumente"
+
+msgid "langTests"
+msgstr "Tests"
+
+msgid "langLearnpaths"
+msgstr "Lernpfade"
+
+msgid "langCopyCourse"
+msgstr "Kurs kopieren"
+
+msgid "langSelectItemsToCopy"
+msgstr "Teile für das Kopieren auswählen"
+
+msgid "langCopyFinished"
+msgstr "Kopieren abgeschlossen"
+
+msgid "langFullRecycle"
+msgstr "Vollständiges Entfernen"
+
+msgid "langRecycleCourse"
+msgstr "Kurs leeren"
+
+msgid "langRecycleFinished"
+msgstr "Entfernen beendet"
+
+msgid "langRecycleWarning"
+msgstr "Warnung: Mit diesem Tool werden einige Teile des Kurses gelöscht. Dies ist unumkehrbar. Es empfiehlt sich, vorher ein <a href=\"create_backup.php\">Backup</a> anzulegen."
+
+msgid "langSameFilename"
+msgstr "Was soll mit importierten Dateien passieren, die gleichlautend sind?"
+
+msgid "langSameFilenameSkip"
+msgstr "gleichlautende Dateien überspringen"
+
+msgid "langSameFilenameRename"
+msgstr "Datei umbenennen (d.h. datei.pdf wird zu datei_1.pdf)"
+
+msgid "langSameFilenameOverwrite"
+msgstr "Datei überschreiben"
+
+msgid "langSelectDestinationCourse"
+msgstr "Ziel-Kurs wählen"
+
+msgid "langFullCopy"
+msgstr "Vollständige Kopie"
+
+msgid "langCourseDescription"
+msgstr "Kursbeschreibung"
+
+msgid "langNoResourcesToBackup"
+msgstr "Keine Inhalte für Backup vorhanden"
+
+msgid "langNoResourcesInBackupFile"
+msgstr "Keine Inhalte in der Backup Datei"
+
+msgid "langSelectResources"
+msgstr "Inhalte auswählen"
+
+msgid "langNoResourcesToRecycles"
+msgstr "Keine Inhalte zu entfernen"
+
+msgid "langIncludeQuestionPool"
+msgstr "Fragen-Sammlung einbeziehen"
+
+msgid "langLocalFile"
+msgstr "lokale Datei"
+
+msgid "langServerFile"
+msgstr "Server Datei"
+
+msgid "langNoBackupsAvailable"
+msgstr "Kein Backup verfügbar"
+
+msgid "langNoDestinationCoursesAvailable"
+msgstr "Keine Kurse als Ziel verfügbar"
+
+msgid "langBackup"
+msgstr "Backup"
+
+msgid "langImportBackupInfo"
+msgstr "Backup importieren. Sie können ein Backup von Ihrer Festplatte oder auf dem Server wählen."
+
+msgid "langCreateBackupInfo"
+msgstr "Backup dieses Kurses erstellen. Sie können einzelne Inhalte wählen, die in das Backup aufgenommen wird."
+
+msgid "ToolIntro"
+msgstr "Werkzeug  Einleitung"
+
+msgid "UploadError"
+msgstr "Upload ist fehlgeschlagen, bitte maximale Dateigröße und Schreibrechte für Verzeichnisse prüfen"
+
+msgid "DocumentsWillBeAddedToo"
+msgstr "Dokmente werden ebenfalls hinzugefügt"
+
+msgid "ToExportLearnpathWithQuizYouHaveToSelectQuiz"
+msgstr "Beim Exportieren eines Lernpfads mit einem Test, muss man sicher stellen, dass zugehörige Tests im Export inbegriffen sind, daher müssen diese aus der Liste der Tests ausgewählt werden."
+
+msgid "ArchivesDirectoryNotWriteableContactAdmin"
+msgstr "Das Verzeichnis des Archivs, das von diesem Tool benutzt wird, ist nicht beschreibbar. Bitte den Plattform-Administrator benachrichtigen."
+
+msgid "DestinationCourse"
+msgstr "Ziel-Kurs"
+
+msgid "IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments"
+msgstr "Wenn Ihr Lernpfad Audio-Dateien beinhaltet, sollten Sie dieses auch in den Dokumenten auswählen"
+
+msgid "DontForgetToSelectTheMediaFilesIfYourResourceNeedIt"
+msgstr "Don't forget to select the media files if your resource need it"
+

@@ -13,14 +13,11 @@ $language_file = array('registration', 'index', 'tracking', 'admin');
 // resetting the course id
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
-
 // including additional libraries
 require_once 'myspace.lib.php';
 
 // the section (for the tabs)
 $this_section = SECTION_TRACKING;
-unset($_SESSION['this_section']);//for hmtl editor repository
 
 ob_start();
 
@@ -43,6 +40,7 @@ $title 				= null;
 
 // access control
 api_block_anonymous_users();
+
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 if (!$export_csv) {
@@ -176,7 +174,7 @@ $sessions = array();
 
 if (empty($session_id)) {
 
-	//Getting courses followed by a coach (No session courses)
+	// Getting courses followed by a coach (No session courses)
 	$courses = CourseManager::get_course_list_as_coach($user_id, false);
 
 	if (isset($courses[0])) {
@@ -407,19 +405,25 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
 	//Courses
 	if ($count_courses) {
 		echo Display::page_subheader($title);
-		$table = new SortableTable('courses_my_space', 'get_number_of_courses', array('MySpace','get_course_data'));
+
+        $data = MySpace::get_course_data(null, null, null, null, $courses, $csv_content, $charset);
+		$table = new SortableTable('courses_my_space', 'get_number_of_courses');
 		$parameters['view'] = 'teacher';
 		$parameters['class'] = 'data_table';
 		$table->set_additional_parameters($parameters);
-		$table -> set_header(0, get_lang('CourseTitle'), false);
-		$table -> set_header(1, get_lang('NbStudents'), false);
-		$table -> set_header(2, get_lang('AvgTimeSpentInTheCourse').' '.Display :: return_icon('info3.gif', get_lang('TimeOfActiveByTraining'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
-		$table -> set_header(3, get_lang('AvgStudentsProgress').' '.Display :: return_icon('info3.gif', get_lang('AvgAllUsersInAllCourses'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
-		$table -> set_header(4, get_lang('AvgCourseScore').' '.Display :: return_icon('info3.gif', get_lang('AvgAllUsersInAllCourses'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
-		$table -> set_header(5, get_lang('AvgExercisesScore').' '.Display :: return_icon('info3.gif', get_lang('AvgAllUsersInAllCourses'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
-		$table -> set_header(6, get_lang('AvgMessages'), false);
-		$table -> set_header(7, get_lang('AverageAssignments'), false);
-		$table -> set_header(8, get_lang('Details'), false);
+		$table->set_header(0, get_lang('CourseTitle'), false);
+		$table->set_header(1, get_lang('NbStudents'), false);
+		$table->set_header(2, get_lang('AvgTimeSpentInTheCourse').' '.Display :: return_icon('info3.gif', get_lang('TimeOfActiveByTraining'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
+		$table->set_header(3, get_lang('AvgStudentsProgress').' '.Display :: return_icon('info3.gif', get_lang('AvgAllUsersInAllCourses'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
+		$table->set_header(4, get_lang('AvgCourseScore').' '.Display :: return_icon('info3.gif', get_lang('AvgAllUsersInAllCourses'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
+		$table->set_header(5, get_lang('AvgExercisesScore').' '.Display :: return_icon('info3.gif', get_lang('AvgAllUsersInAllCourses'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
+		$table->set_header(6, get_lang('AvgMessages'), false);
+		$table->set_header(7, get_lang('AverageAssignments'), false);
+		$table->set_header(8, get_lang('Details'), false);
+
+        foreach ($data as $row) {
+			$table->addRow($row);
+		}
 
 		$csv_content[] = array (
 			get_lang('CourseTitle', ''),
@@ -431,6 +435,7 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
 			get_lang('AvgMessages', ''),
 			get_lang('AverageAssignments', '')
 		);
+
 		$table->display();
 	}
 
@@ -738,14 +743,9 @@ if ($is_platform_admin && $view == 'admin' && $display != 'yourstudents') {
 		}
 
 		foreach ($all_datas as $row) {
-			$table -> addRow($row, 'align="right"');
+			$table->addRow($row, 'align="right"');
 		}
-/*
-		$table -> updateColAttributes(0, array('align' => 'left'));
-		$table -> updateColAttributes(1, array('align' => 'left'));
-		$table -> updateColAttributes(3, array('align' => 'left'));
-		$table -> updateColAttributes(7, array('align' => 'center'));*/
-		$table -> display();
+		$table->display();
 	}
 }
 

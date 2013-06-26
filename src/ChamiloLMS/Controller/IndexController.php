@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Finder\Finder;
+
 /**
  * @package ChamiloLMS.Controller
  * @author Julio Montoya <gugli100@gmail.com>
@@ -37,11 +38,10 @@ class IndexController extends CommonController
      */
     public function indexAction(Application $app)
     {
-        $this->cidReset();
+
         /** @var \Template $template */
         $template = $app['template'];
         $loginError = $app['request']->get('error');
-
         $extraJS = array();
 
         //@todo improve this JS includes should be added using twig
@@ -83,12 +83,9 @@ class IndexController extends CommonController
           echo $course->getCode() . "\n";
           }
           exit; */
-
-
         if (api_get_setting('allow_terms_conditions') == 'true') {
             unset($_SESSION['term_and_condition']);
         }
-
         // If we are not logged in and custompages activated
         if (!api_get_user_id() && \CustomPages::enabled()) {
             $loggedOut = $request->get('loggedout');
@@ -276,8 +273,6 @@ class IndexController extends CommonController
             include_once 'main/auth/openid/login.php';
             $html .= '<div>'.openid_form().'</div>';
         }*/
-
-
         /** Verify if settings is active to set keyboard. Included extra class in form input elements */
 
         if (api_get_setting('use_virtual_keyboard') == 'true') {
@@ -296,7 +291,6 @@ class IndexController extends CommonController
                      }
                      );}); </script>";
         }
-
         return $html;
     }
 
@@ -439,5 +433,16 @@ class IndexController extends CommonController
             }
         }
         return \Display::return_message($message, 'error');
+    }
+
+    function dashboardAction(Application $app)
+    {
+        $template = $app['template'];
+
+        $template->assign('content', 'welcome!');
+        $response = $template->render_layout('layout_2_col.tpl');
+
+        //return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
+        return new Response($response, 200, array());
     }
 }

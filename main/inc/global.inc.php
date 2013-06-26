@@ -224,11 +224,12 @@ $app['template.load_plugins'] = true;
 
 $app['configuration'] = $_configuration;
 
-/** Including service providers */
-require_once 'services.php';
 
 $_plugins = array();
 if ($alreadyInstalled) {
+
+    /** Including service providers */
+    require_once 'services.php';
 
     // Setting the static database class
     $database = $app['database'];
@@ -325,6 +326,8 @@ require_once $libPath.'internationalization.lib.php';
 require_once $libPath.'internationalization_internal.lib.php';
 
 // Checking if we have a valid language. If not we set it to the platform language.
+$cidReset = null;
+
 if ($alreadyInstalled) {
     // Setting languages
     $app['api_get_languages'] = api_get_languages();
@@ -335,12 +338,6 @@ if ($alreadyInstalled) {
 
     // Initialization of the default encoding that will be used by the multibyte string routines in the internationalization library.
     api_set_internationalization_default_encoding($charset);
-
-    // include the local (contextual) parameters of this course or section
-    $cidReset = isset($cidReset) ? Database::escape_string($cidReset) : '';
-
-    // $cidReset can be set in URL-parameter
-    $cidReset = (isset($_GET['cidReq']) && ((isset($_SESSION['_cid']) && $_GET['cidReq'] != $_SESSION['_cid']) || (!isset($_SESSION['_cid'])))) ? Database::escape_string($_GET["cidReq"]) : $cidReset;
 
     // require $includePath.'/local.inc.php';
 

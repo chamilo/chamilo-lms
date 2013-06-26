@@ -33,6 +33,10 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
      */
     public function onLogoutSuccess(Request $request)
     {
+        // Chamilo logout
+        $userId = api_get_user_id();
+        \Online::logout($userId, false);
+
         $login = $this->router->generate('index');
         $response = new RedirectResponse($login);
         return $response;

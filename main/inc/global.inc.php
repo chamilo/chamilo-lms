@@ -641,6 +641,9 @@ $app->before(
                 case 'admin':
                     $languageFilesToAdd = array('admin');
                     break;
+                case 'document':
+                    $languageFilesToAdd = array('document');
+                    break;
                 case 'dashboard':
                     $languageFilesToAdd = array ('index', 'tracking', 'userInfo', 'admin', 'gradebook');
                     break;
@@ -655,6 +658,9 @@ $app->before(
                     break;
                 case 'session':
                     $languageFilesToAdd = array('admin', 'registration');
+                    break;
+                case 'user':
+                    $languageFilesToAdd = array('registration', 'admin', 'userInfo', 'registration');
                     break;
                 case 'social':
                     $languageFilesToAdd = array('userInfo');

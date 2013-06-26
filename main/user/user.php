@@ -584,7 +584,7 @@ function active_filter($active, $url_params, $row) {
 	}
 	$result = '';
 	if ($row[count($row)-1]<>$_user['user_id']) {  // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-		$result = '<center><img src="../img/icons/16/'.$image.'.png" border="0" style="vertical-align: middle;" alt="'.get_lang(ucfirst($action)).'" title="'.get_lang(ucfirst($action)).'"/></center>';
+		$result = Display::return_icon($image.'.png', get_lang(ucfirst($action)), array(), ICON_SIZE_TINY);
 	}
 	return $result;
 }

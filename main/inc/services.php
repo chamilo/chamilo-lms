@@ -80,87 +80,14 @@ $app['security.encoder.digest'] = $app->share(function($app) {
     return new MessageDigestPasswordEncoder('sha1', false, 1);
 });
 
-use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\SecurityContext;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Routing\Router;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
-/**
- * Class LoginSuccessHandler
- * @todo move in a class inside the ChamiloLMS namespace
- */
-class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
-{
-    protected $router;
-    protected $security;
-
-    /**
-     * @param UrlGeneratorInterface $urlGenerator
-     * @param SecurityContext $security
-     */
-    public function __construct(UrlGeneratorInterface $urlGenerator, SecurityContext $security)
-    {
-        $this->router = $urlGenerator;
-        $this->security = $security;
-    }
-
-    /**
-     * @param Request $request
-     * @param TokenInterface $token
-     * @return null|RedirectResponse|\Symfony\Component\Security\Http\Authentication\Response
-     */
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token)
-    {
-        /*if ($this->security->isGranted('ROLE_SUPER_ADMIN')) {
-            $response = new RedirectResponse($this->router->generate('category_index'));
-        } elseif ($this->security->isGranted('ROLE_ADMIN')) {
-            $response = new RedirectResponse($this->router->generate('category_index'));
-        } elseif ($this->security->isGranted('ROLE_USER')) {
-            // redirect the user to where they were before the login process begun.
-            $referer_url = $request->headers->get('referer');
-            $response = new RedirectResponse($referer_url);
-        }*/
-
-        $response = null;
-        //$session = $request->getSession();
-        /* Possible values: index.php, user_portal.php, main/auth/courses.php */
-        $pageAfterLogin = api_get_setting('page_after_login');
-
-        //error_log($session->get('page_after_login'));
-        if ($this->security->isGranted('ROLE_STUDENT') && !empty($pageAfterLogin)) {
-            $url = null;
-            switch($pageAfterLogin) {
-                case 'index.php':
-                    $url = $this->router->generate('index');
-                    break;
-                case 'user_portal.php':
-                    $url = $this->router->generate('userportal');
-                    break;
-                case 'main/auth/courses.php':
-                    $url = api_get_path(WEB_PUBLIC_PATH).$pageAfterLogin;
-                    break;
-            }
-            if (!empty($url)) {
-                $response = new RedirectResponse($url);
-            }
-        }
-
-        // Redirect the user to where they were before the login process begun.
-        if (empty($response)) {
-            $refererUrl = $request->headers->get('referer');
-            $response = new RedirectResponse($refererUrl);
-        }
-
-        return $response;
-    }
-}
-
-// Registering success login redirection
+// What to do when login success?
 $app['security.authentication.success_handler.admin'] = $app->share(function($app) {
-    return new LoginSuccessHandler($app['url_generator'], $app['security']);
+    return new ChamiloLMS\Component\Auth\LoginSuccessHandler($app['url_generator'], $app['security']);
+});
+
+// What to do when logout?
+$app['security.authentication.logout_handler.admin'] = $app->share(function($app) {
+    return new ChamiloLMS\Component\Auth\LogoutSuccessHandler($app['url_generator'], $app['security']);
 });
 
 // Role hierarchy
@@ -195,52 +122,9 @@ $app->register(new Silex\Provider\ValidatorServiceProvider());
 
 // Implements Symfony2 translator (needed when using forms in Twig)
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
-    'locale' => 'es',
-    'locale_fallback' => 'es'
+    'locale' => 'en',
+    'locale_fallback' => 'en'
 ));
-
-// Handling po files (gettext)
-use Symfony\Component\Translation\Loader\PoFileLoader;
-use Symfony\Component\Translation\Loader\MoFileLoader;
-use Symfony\Component\Finder\Finder;
-
-$app['translator.cache.enabled'] = true;
-
-//$app['translator'] = $app->share($app->extend('translator', function($translator, $app) {
-    /** @var Symfony\Component\Translation\Translator $translator  */
-/*    if ($app['translator.cache.enabled']) {
-
-        $locale = $translator->getLocale();
-        //$phpFileDumper = new Symfony\Component\Translation\Dumper\PhpFileDumper();
-        $dumper = new Symfony\Component\Translation\Dumper\MoFileDumper();
-        $catalogue = new Symfony\Component\Translation\MessageCatalogue($locale);
-        $catalogue->add(array('foo' => 'bar'));
-        $dumper->dump($catalogue, array('path' => $app['sys_temp_path']));
-
-    } else {
-
-        $translator->addLoader('pofile', new PoFileLoader());
-
-        $finder = new Finder();
-        $files = $finder->files()->name('*.po')->in(api_get_path(SYS_PATH).'temp/langs/');
-        //$language = api_get_language_interface();
-        // @var SplFileInfo $entry
-        foreach ($files as $entry) {
-            $domain = basename($entry->getPath());
-            $code = $entry->getBasename('.po');
-            //$domain = $entry->getBasename('.inc.po');
-            //$locale = api_get_language_isocode($language); //'es_ES';
-            //if ($domain == 'admin') {
-              //  var_dump($entry->getPathname());
-                //$translator->addResource('pofile', $entry->getPathname(), $code, $domain);
-                $translator->addResource('pofile', $entry->getPathname(), $code);
-            //}
-            //$translator->addResource('pofile', $entry->getPathname(), $locale, 'messages');
-        }
-        return $translator;
-    }
-}));
-*/
 
 // Form provider
 $app->register(new Silex\Provider\FormServiceProvider());

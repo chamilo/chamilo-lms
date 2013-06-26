@@ -2,26 +2,38 @@
 /* For licensing terms, see /license.txt */
 namespace ChamiloLMS\Controller;
 
-use \ChamiloSession as Session;
 use Silex\Application;
 use Knp\Menu\Matcher\Matcher;
+use ChamiloLMS\Controller\BaseController;
 
 /**
  * @package ChamiloLMS.CommonController
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class CommonController
+class CommonController extends BaseController
 {
-
     public $languageFiles = array();
 
-    /**
-     *
-    */
-    public function __construct()
+    public function __construct(Application $app)
     {
+        parent::__construct($app);
+        /* $this->app['language_files'] = $this->languageFiles;*/
+    }
+
+    function getRepository() {
 
     }
+
+    /**
+     * This method should return a new entity instance to be used for the "create" action.
+     *
+     * @abstract
+     * @return Object
+     */
+    function getNewEntity() {
+
+    }
+
 
     /**
      * @param Application $app

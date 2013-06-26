@@ -4,15 +4,6 @@
 use Symfony\Component\HttpFoundation\Request;
 use \ChamiloSession as Session;
 
-/**
- * All calls made in Chamilo (olds ones) are manage in the LegacyController::classicAction function located here:
- * src/ChamiloLMS/Controller/LegacyController.php
- */
-
-$userAccessConditions = function (Request $request) use ($app) {
-
-};
-
 /** Setting course session and group global values */
 $settingCourseConditions = function (Request $request) use ($cidReset, $app) {
 
@@ -388,47 +379,39 @@ $afterLogin = function (Request $request) use ($app) {
     }
 };
 
-$checkLangs = function (Request $request) use ($app) {
-    /*$file = $request->get('file');
+$removeCidReset = function (Request $request) use ($app) {
+    Session::erase('_cid');
+    Session::erase('_real_cid');
+    Session::erase('_course');
 
-    if (!empty($file )) {
-        $info = pathinfo($file);
-        $section = $info['dirname'];
-    }*/
+    if (!empty($_SESSION)) {
+        foreach ($_SESSION as $key => $item) {
+            if (strpos($key, 'lp_autolunch_') === false) {
+                continue;
+            } else {
+                if (isset($_SESSION[$key])) {
+                    Session::erase($key);
+                }
+            }
+        }
+    }
+
+    // Deleting session info.
+    Session::erase('id_session');
+    Session::erase('session_name');
+
+    // Deleting group info.
+    Session::erase('_gid');
 };
 
-
-$removeCidReset = function (Request $request) use ($app) {
+$removeCidResetDependingOfSection = function (Request $request) use ($app, $removeCidReset) {
     $file = $request->get('file');
     if (!empty($file)) {
         $info = pathinfo($file);
         $section = $info['dirname'];
 
         if ($section == 'admin') {
-
-            Session::erase('_cid');
-            Session::erase('_real_cid');
-            Session::erase('_course');
-
-            if (!empty($_SESSION)) {
-                foreach ($_SESSION as $key => $item) {
-                    if (strpos($key, 'lp_autolunch_') === false) {
-                        continue;
-                    } else {
-                        if (isset($_SESSION[$key])) {
-                            Session::erase($key);
-                        }
-                    }
-                }
-            }
-
-            // Deleting session info.
-
-            Session::erase('id_session');
-            Session::erase('session_name');
-
-            // Deleting group info.
-            Session::erase('_gid');
+            $removeCidReset($request);
         }
     }
 };
@@ -457,8 +440,7 @@ $app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexActi
 
 /** main files */
 $app->match('/main/{file}', 'legacy.controller:classicAction', 'GET|POST')
-    ->before($checkLangs)
-    ->before($removeCidReset)
+    ->before($removeCidResetDependingOfSection)
     ->before(
         function() use ($app) {
             // Do not load breadcrumbs
@@ -689,7 +671,7 @@ $app->match('/courses/{cidReq}/{id_session}/exercise/question/{id}/edit', 'exerc
     ->bind('exercise_question_edit');
 
 // Roles
-// @todo improve route creation
+// @todo improve route creation. Use mount() to write less
 
 $app->match('/admin/administrator/', 'admin.controller:indexAction', 'GET')
     ->assert('type', '.+')

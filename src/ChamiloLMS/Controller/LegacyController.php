@@ -55,7 +55,7 @@ class LegacyController extends CommonController
      */
     public function classicAction(Application $app, $file)
     {
-        /** @var  Request $request */
+        /** @var Request $request */
         $request = $app['request'];
 
         // get.
@@ -65,13 +65,7 @@ class LegacyController extends CommonController
         // echo $request->getMethod();
 
         //$_REQUEST = $request->request->all();
-
-        // Getting language section
-        /*$info = pathinfo($file);
-        $section = $info['dirname'];*/
-
         $mainPath = $app['paths']['sys_root'].'main/';
-
 
         if (is_file($mainPath.$file)) {
 
@@ -86,7 +80,6 @@ class LegacyController extends CommonController
 
             // Loading file
             ob_start();
-            require_once '../inc/global.inc.php';
             require_once $mainPath.$file;
             $out = ob_get_contents();
             ob_end_clean();

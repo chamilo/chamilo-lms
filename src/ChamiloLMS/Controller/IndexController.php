@@ -19,19 +19,6 @@ class IndexController extends CommonController
     public $languageFiles = array('courses', 'index', 'admin');
 
     /**
-     * Logouts a user
-     * @param Application $app
-     */
-    public function logoutAction(Application $app)
-    {
-        $userId = api_get_user_id();
-        \Online::logout($userId, true);
-
-        // the Online::logout function already does a redirect
-        //return $app->redirect($app['url_generator']->generate('index'));
-    }
-
-    /**
      * @param \Silex\Application $app
      *
      * @return \Symfony\Component\HttpFoundation\Response
@@ -40,8 +27,8 @@ class IndexController extends CommonController
     {
         /** @var \Template $template */
         $template = $app['template'];
-        $loginError = $app['request']->get('error');
         $extraJS = array();
+
         /*
         $token = $app['security']->getToken();
         if (null !== $token) {
@@ -105,8 +92,7 @@ class IndexController extends CommonController
         $app['this_section'] = SECTION_CAMPUS;
         $app['extraJS'] = $extraJS;
         $request = $app['request'];
-        $app['languages_file'] = array('courses', 'index', 'admin');
-        $app['cidReset'] = true;
+
         /*
         $sql = 'SELECT * from user WHERE user_id = 1';
         var_dump($sql);
@@ -135,6 +121,7 @@ class IndexController extends CommonController
         if (api_get_setting('allow_terms_conditions') == 'true') {
             unset($_SESSION['term_and_condition']);
         }
+
         // If we are not logged in and custompages activated
         if (!api_get_user_id() && \CustomPages::enabled()) {
             $loggedOut = $request->get('loggedout');
@@ -195,10 +182,6 @@ class IndexController extends CommonController
             $app['page_controller']->return_skills_links();
         }
 
-        if (!empty($loginError)) {
-            $template->assign('login_failed', $this->handleLoginFailed($loginError));
-        }
-
         $response = $template->render_layout('layout_2_col.tpl');
 
         //return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
@@ -214,8 +197,8 @@ class IndexController extends CommonController
         $request = $app['request'];
         $app['template']->assign('error', $app['security.last_error']($request));
         $response = $app['template']->render_template('auth/login.tpl');
-
-        return new Response($response, 200, array());
+        return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
+        //return new Response($response, 200, array());
     }
 
     /**

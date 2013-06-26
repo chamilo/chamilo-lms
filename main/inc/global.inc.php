@@ -194,11 +194,6 @@ $app['breadcrumb'] = array();
 // The script is allowed? This setting is modified when calling api_is_not_allowed()
 $app['allowed'] = true;
 
-// Start session after the internationalization library has been initialized
-
-// @todo use silex session provider instead of a custom class
-//Chamilo::session()->start($alreadyInstalled);
-
 $app->register(new Silex\Provider\SessionServiceProvider());
 
 // Session settings
@@ -323,7 +318,7 @@ $app['this_section'] = SECTION_GLOBAL;
 // Inclusion of internationalization libraries
 require_once $libPath.'internationalization.lib.php';
 // Functions for internal use behind this API
-require_once $libPath.'internationalization_internal.lib.php';
+//require_once $libPath.'internationalization_internal.lib.php';
 
 // Checking if we have a valid language. If not we set it to the platform language.
 $cidReset = null;
@@ -334,10 +329,10 @@ if ($alreadyInstalled) {
     $app['language_interface'] = $language_interface = api_get_language_interface();
 
     // Initialization of the internationalization library.
-    api_initialize_internationalization();
+    //api_initialize_internationalization();
 
     // Initialization of the default encoding that will be used by the multibyte string routines in the internationalization library.
-    api_set_internationalization_default_encoding($charset);
+    //api_set_internationalization_default_encoding($charset);
 
     // require $includePath.'/local.inc.php';
 
@@ -351,17 +346,18 @@ if ($alreadyInstalled) {
     // if we use the non-javascript version (with the go button) we receive a post
 
     // Include all files (first english and then current interface language)
-    $app['this_script'] = isset($this_script) ? $this_script : null;
+    //$app['this_script'] = isset($this_script) ? $this_script : null;
 
     // Sometimes the variable $language_interface is changed
     // temporarily for achieving translation in different language.
     // We need to save the genuine value of this variable and
     // to use it within the function get_lang(...).
-    $language_interface_initial_value = $language_interface;
+    //$language_interface_initial_value = $language_interface;
 
-    $this_script = $app['this_script'];
+    //$this_script = $app['this_script'];
 
     /* This will only work if we are in the page to edit a sub_language */
+    /*
     if (isset($this_script) && $this_script == 'sub_language') {
         require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
         // getting the arrays of files i.e notification, trad4all, etc
@@ -428,7 +424,7 @@ if ($alreadyInstalled) {
                 }
             }
         }
-    }
+    }*/
 } else {
     $app['language_interface'] = $language_interface = $language_interface_initial_value = 'english';
 }
@@ -439,7 +435,7 @@ if ($alreadyInstalled) {
  * - notification
  * - custom tool language files
  */
-
+/*
 $language_files = array();
 $language_files[] = 'trad4all';
 $language_files[] = 'notification';
@@ -498,7 +494,7 @@ if (is_array($language_files)) {
             }
         }
     }
-}
+}*/
 
 // End loading languages
 
@@ -518,6 +514,11 @@ if (api_get_setting('login_is_email') == 'true') {
 /** Silex Middlewares: */
 
 /** A "before" middleware allows you to tweak the Request before the controller is executed */
+
+// Handling po files (gettext)
+use Symfony\Component\Translation\Loader\PoFileLoader;
+use Symfony\Component\Translation\Loader\MoFileLoader;
+use Symfony\Component\Finder\Finder;
 
 $app->before(
 
@@ -540,6 +541,9 @@ $app->before(
         /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem  $filesystem */
         $filesystem = $app['chamilo.filesystem'];
 
+        /** @var Request $request */
+        $request = $app['request'];
+
         // @todo improvement create temp folders during installation not everytime
         $filesystem->createFolders($app['temp.paths']->folders);
 
@@ -550,16 +554,21 @@ $app->before(
         // Check and modify the date of user in the track.e.online table
         Online::loginCheck(api_get_user_id());
 
-        $app['request']->getSession()->start();
+        $request->getSession()->start();
 
         //var_dump($app['security']->isGranted('IS_AUTHENTICATED_FULLY'));
+
+        $user = null;
 
         if ($app['security']->isGranted('IS_AUTHENTICATED_FULLY')) {
 
             $token = $app['security']->getToken();
             if (null !== $token) {
+                /** @var Entity\User $user */
                 $user = $token->getUser();
             }
+
+            // For backward compatibility
             $userInfo = api_get_user_info($user->getUserId());
             $userInfo['is_anonymous'] = false;
 
@@ -580,7 +589,130 @@ $app->before(
             Session::erase('is_allowedCreateCourse');
         }
 
-        //Session::write('_user', $uData);
+        // Platform lang
+
+        $language = api_get_setting('platformLanguage');
+        $iso = api_get_language_isocode($language);
+        $app['translator']->setLocale($iso);
+
+        // From the login page
+        $language = $request->get('language');
+
+        if (!empty($language)) {
+            $iso = api_get_language_isocode($language);
+            $app['translator']->setLocale($iso);
+        }
+
+        // From the user
+        if ($user) {
+            $language = $user->getLanguage();
+            $iso = api_get_language_isocode($language);
+            $app['translator']->setLocale($iso);
+        }
+
+        // From the course
+        $courseInfo = api_get_course_info();
+        if ($courseInfo && !empty($courseInfo)) {
+            $iso = api_get_language_isocode($courseInfo['language']);
+            $app['translator']->setLocale($iso);
+        }
+
+        $file = $request->get('file');
+        $section = null;
+        if (!empty($file)) {
+            $info = pathinfo($file);
+            $section = $info['dirname'];
+        }
+
+        // Default langs
+        $languageFiles = array(
+            'trad4all',
+            'notification',
+            'accessibility'
+        );
+
+
+        $languageFilesToAdd = array();
+        /* Loading translations depending of the "section" folder after main
+          for example the section is exercice here: web/main/exercice/result.php
+        */
+        if (!empty($section)) {
+            switch($section) {
+                case 'admin':
+                    $languageFilesToAdd = array('admin');
+                    break;
+                case 'dashboard':
+                    $languageFilesToAdd = array ('index', 'tracking', 'userInfo', 'admin', 'gradebook');
+                    break;
+                case 'mySpace':
+                    $languageFilesToAdd = array('registration', 'index', 'tracking', 'admin');
+                    break;
+                case 'course_info':
+                    $languageFilesToAdd = array('admin', 'course_info');
+                    break;
+                case 'link':
+                    $languageFilesToAdd = array('link', 'admin');
+                    break;
+                case 'session':
+                    $languageFilesToAdd = array('admin', 'registration');
+                    break;
+                case 'social':
+                    $languageFilesToAdd = array('userInfo');
+                    break;
+                case 'exercice':
+                    $languageFilesToAdd = array('exercice');
+                    break;
+            }
+        } else {
+
+            $controllerName = $request->get('_controller');
+            // Work around to load languages:
+
+            switch($controllerName) {
+                case 'index.controller:indexAction':
+                case 'userPortal.controller::indexAction':
+                    $languageFilesToAdd = array('courses', 'index', 'admin');
+                    break;
+            }
+        }
+
+        $languageFiles = array_merge($languageFiles, $languageFilesToAdd);
+
+        $app['translator.cache.enabled'] = false;
+
+        $app['translator'] = $app->share($app->extend('translator', function($translator, $app) use ($languageFiles) {
+
+            $locale = $translator->getLocale();
+
+            // Creating regex to parse sections (admin, exercice, etc)
+            $languageFilesToString = '/'.implode('|', $languageFiles).'/';
+
+            /** @var Symfony\Component\Translation\Translator $translator  */
+            if ($app['translator.cache.enabled']) {
+
+                //$phpFileDumper = new Symfony\Component\Translation\Dumper\PhpFileDumper();
+                $dumper = new Symfony\Component\Translation\Dumper\MoFileDumper();
+                $catalogue = new Symfony\Component\Translation\MessageCatalogue($locale);
+                $catalogue->add(array('foo' => 'bar'));
+                $dumper->dump($catalogue, array('path' => $app['sys_temp_path']));
+
+            } else {
+                $translator->addLoader('pofile', new PoFileLoader());
+
+                $finder = new Finder();
+                $files = $finder->files()
+                    ->path($languageFilesToString)
+                    ->name('en.po')
+                    ->name($locale.'.po')
+                    ->in(api_get_path(SYS_PATH).'main/locale');
+
+                foreach ($files as $entry) {
+                    $code = $entry->getBasename('.po');
+                    $translator->addResource('pofile', $entry->getPathname(), $code);
+                }
+                return $translator;
+            }
+        }));
     }
 );
 

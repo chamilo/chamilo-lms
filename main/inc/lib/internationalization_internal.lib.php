@@ -168,34 +168,6 @@ function & _api_compare_n_grams(&$n_grams, $encoding, $max_delta = LANGUAGE_DETE
 }
 
 
-/**
- * Appendix to "Date and time formats"
- */
-
-/**
- * Returns an array of translated week days and months, short and normal names.
- * @param string $language (optional)	Language indentificator. If it is omited, the current interface language is assumed.
- * @return array						Returns a multidimensional array with translated week days and months.
- */
-function &_api_get_day_month_names($language = null) {
-    static $date_parts = array();
-    if (empty($language)) {
-        $language = api_get_interface_language();
-    }
-    if (!isset($date_parts[$language])) {
-        $week_day = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
-        $month = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
-        for ($i = 0; $i < 7; $i++) {
-            $date_parts[$language]['days_short'][] = get_lang($week_day[$i].'Short', '', $language);
-            $date_parts[$language]['days_long'][] = get_lang($week_day[$i].'Long', '', $language);
-        }
-        for ($i = 0; $i < 12; $i++) {
-            $date_parts[$language]['months_short'][] = get_lang($month[$i].'Short', '', $language);
-            $date_parts[$language]['months_long'][] = get_lang($month[$i].'Long', '', $language);
-        }
-    }
-    return $date_parts[$language];
-}
 
 
 /**
@@ -1104,33 +1076,6 @@ function _api_convert_encoding_supports($encoding) {
     return $supports[$encoding];
 }
 
-/**
- * Checks whether the specified encoding is supported by the html-entitiy related functions.
- * @param string $encoding	The specified encoding.
- * @return bool				Returns TRUE when the specified encoding is supported, FALSE othewise.
- */
-function _api_html_entity_supports($encoding) {
-    static $supports = array();
-    if (!isset($supports[$encoding])) {
-        // See http://php.net/manual/en/function.htmlentities.php
-        $html_entity_encodings = array(
-            'ISO-8859-1',
-            'ISO-8859-15',
-            'UTF-8',
-            'CP866',
-            'CP1251',
-            'CP1252',
-            'KOI8-R',
-            'BIG5', '950',
-            'GB2312', '936',
-            'BIG5-HKSCS',
-            'Shift_JIS', 'SJIS', '932',
-            'EUC-JP', 'EUCJP'
-        );
-        $supports[$encoding] = api_equal_encodings($encoding, $html_entity_encodings);
-    }
-    return $supports[$encoding];
-}
 
 
 /**

@@ -34,7 +34,7 @@ class ExportLanguagesCommand extends Command
      */
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $languageList = array('english', 'spanish', 'french');
+        $languageList = array('english', 'spanish', 'french', 'german', 'brazilian');
         //$languageList = array('spanish');
         foreach ($languageList as $lang) {
             $output->writeln("<info>Generating lang po files for: $lang</info>");
@@ -50,7 +50,9 @@ class ExportLanguagesCommand extends Command
     {
         /** @var \Silex\Application $app */
         $app = $this->getApplication()->getSilexApplication();
-        $tempPath = $app['paths']['sys_temp_path'].'langs';
+        //$tempPath = $app['paths']['sys_temp_path'].'langs';
+
+        $tempPath = $app['paths']['sys_root'].'main/locale';
 
         if (!is_dir($tempPath)) {
             mkdir($tempPath);

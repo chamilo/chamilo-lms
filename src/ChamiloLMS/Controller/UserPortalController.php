@@ -25,9 +25,7 @@ class UserPortalController extends CommonController
      */
     public function indexAction(Application $app, $type = 'courses', $filter = 'current', $page = 1)
     {
-        $this->cidReset();
-
-        //@todo Use filters like "after/before|finish" to manage user access
+        // @todo Use filters like "after/before|finish" to manage user access
         api_block_anonymous_users();
 
         //Abort request because the user is not allowed here - @todo use filters

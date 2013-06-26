@@ -923,20 +923,23 @@ class Template
         $navigation = array();
 
         // Campus Homepage
-        $navigation[SECTION_CAMPUS]['url'] = api_get_path(WEB_PATH).'index.php';
+        $navigation[SECTION_CAMPUS]['url'] = api_get_path(WEB_PUBLIC_PATH).'index';
         $navigation[SECTION_CAMPUS]['title'] = get_lang('CampusHomepage');
 
         // My Courses
-
+        /*
         if (api_is_allowed_to_create_course()) {
             // Link to my courses for teachers
-            $navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php?nosession=true';
+            $navigation['mycourses']['url'] = api_get_path(WEB_PUBLIC_PATH).'user_portal.php?nosession=true';
             $navigation['mycourses']['title'] = get_lang('MyCourses');
         } else {
             // Link to my courses for students
-            $navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php';
+            $navigation['mycourses']['url'] = api_get_path(WEB_PUBLIC_PATH).'user_portal.php';
             $navigation['mycourses']['title'] = get_lang('MyCourses');
-        }
+        }*/
+
+        $navigation['mycourses']['url'] = api_get_path(WEB_PUBLIC_PATH).'userportal';
+        $navigation['mycourses']['title'] = get_lang('MyCourses');
 
         // My Profile
         $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '');

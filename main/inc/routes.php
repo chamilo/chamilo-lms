@@ -361,16 +361,6 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
     }
 };
 
-/**
- * Removes course-session data
- * @param Request $request
- */
-$cleanCourseSession = function (Request $request) use ($app) {
-    Session::erase('_cid');
-    Session::erase('_real_cid');
-    Session::erase('_course');
-};
-
 $adminAndQuestionManagerCondition = function (Request $request) use ($app) {
     if (!(api_is_platform_admin() || api_is_question_manager())) {
         //$app->abort(401);
@@ -398,21 +388,77 @@ $afterLogin = function (Request $request) use ($app) {
     }
 };
 
-/** Legacy controller */
-$app->match('/', 'legacy.controller:classicAction', 'GET|POST')
-    ->before($userAccessConditions)
-    ->before($settingCourseConditions)
-    ->before($userPermissionsInsideACourse);
-
 $checkLangs = function (Request $request) use ($app) {
     /*$file = $request->get('file');
-    $info = pathinfo($file);
-    $section = $info['dirname'];*/
+
+    if (!empty($file )) {
+        $info = pathinfo($file);
+        $section = $info['dirname'];
+    }*/
 };
 
+
+$removeCidReset = function (Request $request) use ($app) {
+    $file = $request->get('file');
+    if (!empty($file)) {
+        $info = pathinfo($file);
+        $section = $info['dirname'];
+
+        if ($section == 'admin') {
+
+            Session::erase('_cid');
+            Session::erase('_real_cid');
+            Session::erase('_course');
+
+            if (!empty($_SESSION)) {
+                foreach ($_SESSION as $key => $item) {
+                    if (strpos($key, 'lp_autolunch_') === false) {
+                        continue;
+                    } else {
+                        if (isset($_SESSION[$key])) {
+                            Session::erase($key);
+                        }
+                    }
+                }
+            }
+
+            // Deleting session info.
+
+            Session::erase('id_session');
+            Session::erase('session_name');
+
+            // Deleting group info.
+            Session::erase('_gid');
+        }
+    }
+};
+
+/** / and /index paths */
+$app->match('/', 'index.controller:indexAction', 'GET')
+    ->assert('type', '.+') //allowing slash "/"
+    ->before($removeCidReset)
+    ->after($afterLogin);
+
+$app->match('/index', 'index.controller:indexAction', 'GET')
+    ->before($removeCidReset)
+    ->after($afterLogin)
+    ->bind('index');
+
+/** Userportal */
+$app->get('/userportal', 'userPortal.controller:indexAction')
+    ->before($removeCidReset);
+
+$app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexAction')
+    ->before($removeCidReset)
+    ->value('type', 'courses') //default values
+    ->value('filter', 'current')
+    ->value('page', '1')
+    ->bind('userportal');
+
 /** main files */
-$app->match('/main/{file}', 'legacy.controller:includeAction', 'GET|POST')
+$app->match('/main/{file}', 'legacy.controller:classicAction', 'GET|POST')
     ->before($checkLangs)
+    ->before($removeCidReset)
     ->before(
         function() use ($app) {
             // Do not load breadcrumbs
@@ -421,30 +467,13 @@ $app->match('/main/{file}', 'legacy.controller:includeAction', 'GET|POST')
     ->assert('file', '.+')
     ->assert('type', '.+');
 
+/** Logout already implemented by the the security service provider */
 
-/** web/index */
-$app->match('/index', 'index.controller:indexAction', 'GET|POST')
-    ->after($afterLogin)
-    ->bind('index');
-
-/** Userportal */
-$app->get('/userportal', 'userPortal.controller:indexAction');
-$app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexAction')
-    ->value('type', 'courses') //default values
-    ->value('filter', 'current')
-    ->value('page', '1')
-    ->bind('userportal')
-    ->after($cleanCourseSession);
-
-//->assert('type', '.+'); //allowing slash "/"
-
-/** Logout */
-
-$app->get('/logout', 'index.controller:logoutAction')
+/* $app->get('/logout', 'index.controller:logoutAction')
     ->bind('logout')
-    ->after($cleanCourseSession);
+    ->after($cleanCourseSession);*/
 
-/** Login */
+/** Login form */
 $app->match('/login', 'index.controller:loginAction', 'GET|POST')
     ->bind('login');
 
@@ -755,11 +784,15 @@ $app->match('/admin/administrator/question_scores/{id}/delete', 'question_score.
     ->assert('type', '.+')
     ->bind('admin_administrator_question_score_delete');
 
+/*new \ChamiloLMS\Controller\TestController($app);
+new \ChamiloLMS\Controller\TestController($app);*/
+
+
 // Takes a lot of time to load
 //$app->mount('/roles', 'exercise_manager.controller:getProvider');
 
 // Takes a lot of time to load
-//$app->mount('/roles', new ChamiloLMS\Provider\ReflectionControllerProvider('role.controller'));
+///$app->mount('/roles', new ChamiloLMS\Provider\ReflectionControllerProvider('role.controller'));
 
 $app->match('/ajax', 'model_ajax.controller:indexAction', 'GET')
     ->assert('type', '.+')

@@ -26,7 +26,7 @@ class LegacyController extends CommonController
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response|void
      */
-    public function classicAction(Application $app)
+    /*public function classicAction(Application $app)
     {
         // User is not allowed.
         if ($app['allowed'] == false) {
@@ -44,7 +44,7 @@ class LegacyController extends CommonController
         }
 
         return new Response($response, 200, array());
-    }
+    }*/
 
      /**
      * Handles default Chamilo scripts handled by Display::display_header() and display_footer()
@@ -53,7 +53,7 @@ class LegacyController extends CommonController
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response|void
      */
-    public function includeAction(Application $app, $file)
+    public function classicAction(Application $app, $file)
     {
         /** @var  Request $request */
         $request = $app['request'];
@@ -67,14 +67,11 @@ class LegacyController extends CommonController
         //$_REQUEST = $request->request->all();
 
         // Getting language section
-        $info = pathinfo($file);
-        $section = $info['dirname'];
-
-        if ($section == 'admin') {
-            $this->cidReset();
-        }
+        /*$info = pathinfo($file);
+        $section = $info['dirname'];*/
 
         $mainPath = $app['paths']['sys_root'].'main/';
+
 
         if (is_file($mainPath.$file)) {
 

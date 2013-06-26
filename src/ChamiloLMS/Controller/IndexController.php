@@ -38,8 +38,6 @@ class IndexController extends CommonController
      */
     public function indexAction(Application $app)
     {
-        $this->cidReset();
-
         /** @var \Template $template */
         $template = $app['template'];
         $loginError = $app['request']->get('error');

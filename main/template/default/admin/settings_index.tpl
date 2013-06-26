@@ -20,6 +20,9 @@ $(function() {
     <div class="row">
     {% for block_item in blocks %}
         <div id="tabs-{{loop.index}}" class="span6">
+        {% if block_item.label == 'VersionCheck'|get_lang %}
+               <div id="tabs-{{loop.index}}" class="admin-block-version">  
+        {% endif %}  
             <div class="well_border">
                 <h4>{{block_item.icon}} {{block_item.label}}</h4>                
                 <div style="list-style-type:none">
@@ -39,6 +42,9 @@ $(function() {
                     </div>
                 {% endif %}                
             </div>
+        {% if block_item.label == 'VersionCheck'|get_lang %}
+               </div>  
+        {% endif %}
         </div>        
     {% endfor %}
     </div>

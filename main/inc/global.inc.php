@@ -318,7 +318,7 @@ $app['this_section'] = SECTION_GLOBAL;
 // Inclusion of internationalization libraries
 require_once $libPath.'internationalization.lib.php';
 // Functions for internal use behind this API
-//require_once $libPath.'internationalization_internal.lib.php';
+require_once $libPath.'internationalization_internal.lib.php';
 
 // Checking if we have a valid language. If not we set it to the platform language.
 $cidReset = null;
@@ -511,9 +511,9 @@ if (api_get_setting('login_is_email') == 'true') {
 
 @define('USERNAME_MAX_LENGTH', $default_username_length);
 
-/** Silex Middlewares: */
+/** Silex Middlewares. */
 
-/** A "before" middleware allows you to tweak the Request before the controller is executed */
+/** A "before" middleware allows you to tweak the Request before the controller is executed. */
 
 // Handling po files (gettext)
 use Symfony\Component\Translation\Loader\PoFileLoader;

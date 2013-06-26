@@ -6,5 +6,6 @@ namespace ChamiloLMS\Transaction;
 /**
  * A custom exception for transaction imports.
  */
-class TransactionImportException extends \Exception {
+class TransactionImportException extends \Exception
+{
 }

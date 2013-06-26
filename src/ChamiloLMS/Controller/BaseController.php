@@ -113,14 +113,20 @@ abstract class BaseController
      * @param int $id
      * @return JsonResponse|NotFoundHttpException
      */
-    protected function readAction($id)
+    protected function readActionByFormat($id, $format = 'array')
     {
         $entityInstance = $this->getEntityForJson($id);
         if (false === $entityInstance) {
             return $this->createNotFoundException();
         }
+        switch($format) {
+            case 'json':
+                return new JsonResponse($entityInstance);
+            case 'array':
+                return $entityInstance;
+        }
 
-        return new JsonResponse($entityInstance);
+        return $entityInstance;
     }
 
     /**

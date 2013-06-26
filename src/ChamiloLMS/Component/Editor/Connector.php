@@ -212,7 +212,6 @@ class Connector
                 'application/vnd.ms-word',
                 'application/vnd.ms-excel',
                 'application/vnd.ms-powerpoint',
-                'application/vnd.ms-powerpoint',
                 'application/pdf',
                 'application/xml',
                 'application/vnd.oasis.opendocument.text',

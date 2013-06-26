@@ -20,7 +20,7 @@ if (is_writable($app['sys_temp_path'])) {
      *  $app['monolog']->addInfo('Testing the Monolog logging.');
      *  $app['monolog']->addError('Testing the Monolog logging.');
      */
-    //if ($app['debug']) {
+    if ($app['debug']) {
         $app->register(
             new Silex\Provider\MonologServiceProvider(),
             array(
@@ -28,7 +28,7 @@ if (is_writable($app['sys_temp_path'])) {
                 'monolog.name' => 'chamilo',
             )
         );
-    //}
+    }
 }
 
 //Setting HttpCacheService provider in order to use do: $app['http_cache']->run();
@@ -176,8 +176,8 @@ $app['security.role_hierarchy'] = array(
 // Role rules
 $app['security.access_rules'] = array(
     array('^/admin/administrator', 'ROLE_ADMIN'),
-    array('^/admin/questionmanager', 'ROLE_QUESTION_MANAGER'),
     array('^/main/admin/.*', 'ROLE_ADMIN'),
+    array('^/admin/questionmanager', 'ROLE_QUESTION_MANAGER'),
     array('^/main/.*', array('ROLE_STUDENT'))
     //array('^.*$', 'ROLE_USER'),
 );
@@ -248,7 +248,6 @@ $app->register(new Silex\Provider\FormServiceProvider());
 // URL generator provider
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
-/*
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
 class ManagerRegistry extends AbstractManagerRegistry
 {
@@ -276,11 +275,11 @@ class ManagerRegistry extends AbstractManagerRegistry
 }
 
 $app['form.extensions'] = $app->share($app->extend('form.extensions', function ($extensions, $app) {
-    $managerRegistry = new ManagerRegistry(null, array(), array('orm.em'), null, null, $app['orm.proxies_namespace']);
+    $managerRegistry = new ManagerRegistry(null, array('db'), array('orm.em'), null, null, $app['orm.proxies_namespace']);
     $managerRegistry->setContainer($app);
     $extensions[] = new \Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension($managerRegistry);
     return $extensions;
-}));*/
+}));
 
 // Setting Doctrine service provider (DBAL)
 if (isset($app['configuration']['main_database'])) {
@@ -343,9 +342,14 @@ if (isset($app['configuration']['main_database'])) {
     $app->register(
         new Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider,
         array(
+            // Doctrine2 ORM cache
+            /*'orm.default_cache' => 'apc', // array, apc, xcache, memcache, memcached
+            'metadata_cache' => 'apc',
+            'result_cache' => 'apc',*/
+            // Proxies
             'orm.auto_generate_proxies' => true,
             'orm.proxies_dir' => $app['db.orm.proxies_dir'],
-            //'orm.proxies_namespace' => '\Doctrine\ORM\Proxy\Proxy',
+            'orm.proxies_namespace' => 'Doctrine\ORM\Proxy\Proxy',
             'orm.ems.default' => 'db_read',
             'orm.ems.options' => array(
                'db_read' => array(
@@ -405,7 +409,7 @@ $app['twig'] = $app->share(
 // Developer tools
 
 if (is_writable($app['sys_temp_path'])) {
-    if ($app['debug'] && $app['show_profiler']) {
+    if ($app['show_profiler']) {
         // Adding Symfony2 web profiler (memory, time, logs, etc)
         $app->register(
             $p = new Silex\Provider\WebProfilerServiceProvider(),
@@ -414,6 +418,7 @@ if (is_writable($app['sys_temp_path'])) {
             )
         );
         $app->mount('/_profiler', $p);
+
         // PHP errors for cool kids
         $app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
     }
@@ -688,9 +693,26 @@ $app['exercise_manager.controller'] = $app->share(
     }
 );
 
+$app['admin.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\AdministratorController($app);
+    }
+);
 $app['role.controller'] = $app->share(
     function () use ($app) {
         return new ChamiloLMS\Controller\Admin\Administrator\RoleController($app);
+    }
+);
+
+$app['question_score.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\Administrator\QuestionScore($app);
+    }
+);
+
+$app['question_score_name.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\Administrator\QuestionScoreName($app);
     }
 );
 

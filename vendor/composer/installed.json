@@ -3499,5 +3499,226 @@
         ],
         "description": "Symfony Locale Component",
         "homepage": "http://symfony.com"
+    },
+    {
+        "name": "symfony/templating",
+        "version": "v2.3.1",
+        "version_normalized": "2.3.1.0",
+        "target-dir": "Symfony/Component/Templating",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Templating.git",
+            "reference": "v2.3.1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/Templating/zipball/v2.3.1",
+            "reference": "v2.3.1",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2013-04-17 05:31:37",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.3-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Templating\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Templating Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "symfony/framework-bundle",
+        "version": "v2.3.1",
+        "version_normalized": "2.3.1.0",
+        "target-dir": "Symfony/Bundle/FrameworkBundle",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/FrameworkBundle.git",
+            "reference": "v2.3.1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/FrameworkBundle/zipball/v2.3.1",
+            "reference": "v2.3.1",
+            "shasum": ""
+        },
+        "require": {
+            "doctrine/common": ">=2.2,<3.0",
+            "php": ">=5.3.3",
+            "symfony/config": ">=2.2,<3.0",
+            "symfony/dependency-injection": ">=2.2,<3.0",
+            "symfony/event-dispatcher": ">=2.1,<3.0",
+            "symfony/filesystem": ">=2.3,<3.0",
+            "symfony/http-kernel": ">=2.3,<3.0",
+            "symfony/routing": ">=2.2,<3.0",
+            "symfony/stopwatch": ">=2.3,<3.0",
+            "symfony/templating": ">=2.1,<3.0",
+            "symfony/translation": ">=2.3,<3.0"
+        },
+        "require-dev": {
+            "symfony/class-loader": ">=2.1,<3.0",
+            "symfony/finder": ">=2.0,<3.0",
+            "symfony/form": ">=2.3,<3.0",
+            "symfony/security": ">=2.3,<3.0",
+            "symfony/validator": ">=2.1,<3.0"
+        },
+        "suggest": {
+            "symfony/console": "",
+            "symfony/finder": "",
+            "symfony/form": "",
+            "symfony/validator": ""
+        },
+        "time": "2013-06-07 22:05:01",
+        "type": "symfony-bundle",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.3-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Bundle\\FrameworkBundle\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony FrameworkBundle",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "sensio/framework-extra-bundle",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "target-dir": "Sensio/Bundle/FrameworkExtraBundle",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/sensiolabs/SensioFrameworkExtraBundle.git",
+            "reference": "v2.3.1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/v2.3.1",
+            "reference": "v2.3.1",
+            "shasum": ""
+        },
+        "require": {
+            "doctrine/common": ">=2.2,<3.0",
+            "symfony/framework-bundle": ">=2.2,<3.0"
+        },
+        "time": "2013-06-02 16:13:20",
+        "type": "symfony-bundle",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.3.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Sensio\\Bundle\\FrameworkExtraBundle": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            }
+        ],
+        "description": "This bundle provides a way to configure your controllers with annotations",
+        "keywords": [
+            "annotations",
+            "controllers"
+        ]
+    },
+    {
+        "name": "symfony/monolog-bridge",
+        "version": "v2.3.1",
+        "version_normalized": "2.3.1.0",
+        "target-dir": "Symfony/Bridge/Monolog",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/MonologBridge.git",
+            "reference": "v2.3.1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/MonologBridge/zipball/v2.3.1",
+            "reference": "v2.3.1",
+            "shasum": ""
+        },
+        "require": {
+            "monolog/monolog": ">=1.3,<2.0",
+            "php": ">=5.3.3",
+            "symfony/http-kernel": ">=2.2,<3.0"
+        },
+        "time": "2013-05-24 13:05:33",
+        "type": "symfony-bridge",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.3-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Bridge\\Monolog\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Monolog Bridge",
+        "homepage": "http://symfony.com"
     }
 ]

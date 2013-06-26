@@ -957,7 +957,7 @@ class Template
         // Reporting
         if (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) {
             // Link to my space
-            $navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH).'mySpace/';
+            $navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH).'mySpace/index.php';
             $navigation['session_my_space']['title'] = get_lang('MySpace');
         } else {
             // Link to my progress

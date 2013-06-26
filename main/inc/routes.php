@@ -352,14 +352,6 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
     }
 };
 
-$adminAndQuestionManagerCondition = function (Request $request) use ($app) {
-    if (!(api_is_platform_admin() || api_is_question_manager())) {
-        //$app->abort(401);
-    }
-    return null;
-};
-
-
 /**
  * Deletes the exam_password user extra field *only* to students
  * @todo improve the login hook system
@@ -551,49 +543,39 @@ $app->get('/admin/dashboard', 'index.controller:dashboardAction')
 
 $app->get('/admin/questionmanager/', 'question_manager.controller:questionManagerIndexAction')
     ->assert('type', '.+')
-    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_questionmanager');
 
 $app->match('/admin/questionmanager/questions', 'question_manager.controller:questionsAction', 'GET|POST')
     ->assert('type', '.+')
-    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_questions');
 
 $app->match('/admin/questionmanager/questions/{id}/edit', 'question_manager.controller:editQuestionAction', 'GET|POST')
     ->assert('type', '.+')
-    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_questions_edit');
 
 $app->match('/admin/questionmanager/questions/{id}', 'exercise_manager.controller:getQuestionAction', 'GET|POST')
     ->assert('type', '.+')
-    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_questions_show');
 
 $app->get('/admin/questionmanager/questions/get-categories/{id}', 'question_manager.controller:getCategoriesAction')
-    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_questions_get_categories');
 
 $app->get('/admin/questionmanager/questions/get-questions-by-category/{categoryId}', 'question_manager.controller:getQuestionsByCategoryAction')
-    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_get_questions_by_category');
 
 $app->match('/admin/questionmanager/categories/{id}/edit', 'question_manager.controller:editCategoryAction', 'GET|POST')
     ->assert('type', '.+')
-    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_category_edit');
 
 $app->match('/admin/questionmanager/categories/{id}', 'question_manager.controller:showCategoryAction', 'GET')
     ->assert('id', '\d+')
     ->assert('type', '.+')
-    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_category_show');
 
 $app->match('/admin/questionmanager/categories/new', 'question_manager.controller:newCategoryAction', 'GET|POST')
-    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_category_new');
 
 $app->match('/admin/questionmanager/categories/{id}/delete', 'question_manager.controller:deleteCategoryAction', 'POST')
-    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_category_delete');
 
 /** Editor */

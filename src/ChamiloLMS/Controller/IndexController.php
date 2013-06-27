@@ -27,7 +27,6 @@ class IndexController extends CommonController
     {
         /** @var \Template $template */
         $template = $app['template'];
-        $extraJS = array();
 
         /*
         $token = $app['security']->getToken();
@@ -76,8 +75,9 @@ class IndexController extends CommonController
         echo $formatter->format(time());*/
 
         //@todo improve this JS includes should be added using twig
-        $extraJS[] = api_get_jquery_libraries_js(array('bxslider'));
-        $extraJS[] = '<script>
+        $app['extraJS'] = array(
+            api_get_jquery_libraries_js(array('bxslider')),
+            '<script>
             $(document).ready(function(){
                 $("#slider").bxSlider({
                     infiniteLoop	: true,
@@ -87,10 +87,10 @@ class IndexController extends CommonController
                 pause			: 10000
                 });
             });
-        </script>';
+            </script>'
+        );
 
         $app['this_section'] = SECTION_CAMPUS;
-        $app['extraJS'] = $extraJS;
         $request = $app['request'];
 
         /*

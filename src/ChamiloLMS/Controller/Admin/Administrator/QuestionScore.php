@@ -27,7 +27,16 @@ class QuestionScore extends CommonController
 
     public function readAction($id)
     {
-        return parent::readAction($id);
+        // return parent::readAction($id);
+        $template = $this->get('template');
+        $template->assign('links', $this->generateLinks());
+        $item = $this->getEntity($id);
+        $subItems = $item->getItems();
+
+        $template->assign('item', $item);
+        $template->assign('subitems', $subItems);
+        $response = $template->render_template($this->getTemplatePath().'read.tpl');
+        return new Response($response, 200, array());
     }
 
     public function addAction()

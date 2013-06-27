@@ -71,7 +71,6 @@ abstract class BaseController
         return $this->app->redirect($redirect);
     }
 
-
     public function createNotFoundException($message = 'Not Found', \Exception $previous = null)
     {
         return $this->app->abort(404, $message);
@@ -91,6 +90,11 @@ abstract class BaseController
         return $this->app['orm.em'];
     }
 
+    /**
+     * Converts an array of URL to absolute URLs
+     * @param $label
+     * @return mixed
+     */
     public function createUrl($label)
     {
         $links = $this->generateLinks();
@@ -101,8 +105,11 @@ abstract class BaseController
         return $url = $this->get('url_generator')->generate($links['list_link']);
     }
 
+    /**
+     * Array with links
+     * @return array
+     */
     abstract protected function generateLinks();
-
 
     // CRUD
 
@@ -120,6 +127,29 @@ abstract class BaseController
         return new Response($response, 200, array());
     }
 
+    public function addAction()
+    {
+        $request = $this->getRequest();
+        $form = $this->get('form.factory')->create($this->getFormType());
+
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $item = $form->getData();
+                $this->createAction($item);
+                $this->get('session')->getFlashBag()->add('success', "Added");
+                $url = $this->createUrl('list_link');
+                return $this->redirect($url);
+            }
+        }
+
+        $template = $this->get('template');
+        $template->assign('links', $this->generateLinks());
+        $template->assign('form', $form->createView());
+        $response = $template->render_template($this->getTemplatePath().'add.tpl');
+        return new Response($response, 200, array());
+    }
+
     /**
      *
      * @Route("/{id}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
@@ -129,7 +159,7 @@ abstract class BaseController
     {
         $template = $this->get('template');
         $template->assign('links', $this->generateLinks());
-        return parent::readAction($id);
+        return $this->readEntity($id);
     }
 
     public function editAction($id)
@@ -164,32 +194,10 @@ abstract class BaseController
         }
     }
 
-    public function addAction()
-    {
-        $request = $this->getRequest();
-        $form = $this->get('form.factory')->create($this->getFormType());
-
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $item = $form->getData();
-                $this->createAction($item);
-                $this->get('session')->getFlashBag()->add('success', "Added");
-                $url = $this->createUrl('list_link');
-                return $this->redirect($url);
-            }
-        }
-
-        $template = $this->get('template');
-        $template->assign('links', $this->generateLinks());
-        $template->assign('form', $form->createView());
-        $response = $template->render_template($this->getTemplatePath().'add.tpl');
-        return new Response($response, 200, array());
-    }
 
     public function deleteAction($id)
     {
-        $result = $this->removeAction($id);
+        $result = $this->removeEntity($id);
         if ($result) {
             $url = $this->createUrl('list_link');
             $this->get('session')->getFlashBag()->add('success', "Deleted");
@@ -198,12 +206,29 @@ abstract class BaseController
         }
     }
 
+
+    /**
+     * Base "read" action.
+     *
+     * @param int $id
+     * @return JsonResponse|NotFoundHttpException
+     */
+    protected function readEntity($id)
+    {
+        $entityInstance = $this->getEntityForJson($id);
+        if (false === $entityInstance) {
+            return $this->createNotFoundException();
+        }
+
+        return new JsonResponse($entityInstance);
+    }
+
     /**
      * Base "delete" action.
      *
      * @return JsonResponse|NotFoundHttpException
      */
-    protected function removeAction($id)
+    protected function removeEntity($id)
     {
         $object = $this->getEntity($id);
         if (false === $object) {

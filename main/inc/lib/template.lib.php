@@ -438,7 +438,7 @@ class Template
         }
     }
 
-    public function addJsFiles($htmlHeadXtra)
+    public function addJsFiles($htmlHeadXtra = array())
     {
         $extra_headers = null;
         if (isset($htmlHeadXtra) && $htmlHeadXtra) {
@@ -895,6 +895,8 @@ class Template
         return $this->menu_navigation;
     }
 
+    // Render Chamilo layouts:
+
     /**
      * @param string $layout
      * @return mixed
@@ -904,6 +906,7 @@ class Template
         if (empty($layout)) {
             $layout = $this->app['default_layout'];
         }
+        $this->addJsFiles();
         return $this->app['twig']->render($this->app['template_style'].'/layout/'.$layout);
     }
 
@@ -914,6 +917,7 @@ class Template
      */
     public function render_template($template, $elements = array())
     {
+        $this->addJsFiles();
         return $this->app['twig']->render($this->app['template_style'].'/'.$template, $elements);
     }
 

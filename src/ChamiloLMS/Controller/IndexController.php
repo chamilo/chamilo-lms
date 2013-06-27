@@ -27,7 +27,7 @@ class IndexController extends CommonController
     {
         /** @var \Template $template */
         $template = $app['template'];
-        $extraJS = array();
+
         /*
         $token = $app['security']->getToken();
         if (null !== $token) {
@@ -75,8 +75,9 @@ class IndexController extends CommonController
         echo $formatter->format(time());*/
 
         //@todo improve this JS includes should be added using twig
-        $extraJS[] = api_get_jquery_libraries_js(array('bxslider'));
-        $extraJS[] = '<script>
+        $app['extraJS'] = array(
+            api_get_jquery_libraries_js(array('bxslider')),
+            '<script>
             $(document).ready(function(){
                 $("#slider").bxSlider({
                     infiniteLoop	: true,
@@ -86,13 +87,12 @@ class IndexController extends CommonController
                 pause			: 10000
                 });
             });
-        </script>';
+            </script>'
+        );
 
         $app['this_section'] = SECTION_CAMPUS;
-        $app['extraJS'] = $extraJS;
         $request = $app['request'];
-        $app['languages_file'] = array('courses', 'index', 'admin');
-        $app['cidReset'] = true;
+
         /*
         $sql = 'SELECT * from user WHERE user_id = 1';
         var_dump($sql);
@@ -121,6 +121,7 @@ class IndexController extends CommonController
         if (api_get_setting('allow_terms_conditions') == 'true') {
             unset($_SESSION['term_and_condition']);
         }
+
         // If we are not logged in and custompages activated
         if (!api_get_user_id() && \CustomPages::enabled()) {
             $loggedOut = $request->get('loggedout');
@@ -181,7 +182,6 @@ class IndexController extends CommonController
             $app['page_controller']->return_skills_links();
         }
 
-
         $response = $template->render_layout('layout_2_col.tpl');
 
         //return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
@@ -197,7 +197,6 @@ class IndexController extends CommonController
         $request = $app['request'];
         $app['template']->assign('error', $app['security.last_error']($request));
         $response = $app['template']->render_template('auth/login.tpl');
-
         return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
         //return new Response($response, 200, array());
     }
@@ -306,7 +305,6 @@ class IndexController extends CommonController
             include_once 'main/auth/openid/login.php';
             $html .= '<div>'.openid_form().'</div>';
         }*/
-
         /** Verify if settings is active to set keyboard. Included extra class in form input elements */
 
         if (api_get_setting('use_virtual_keyboard') == 'true') {

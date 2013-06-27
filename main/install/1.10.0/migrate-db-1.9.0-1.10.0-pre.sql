@@ -312,4 +312,4 @@ CREATE TABLE question_score_name (id int NOT NULL AUTO_INCREMENT,  score varchar
 CREATE TABLE question_score (  id int NOT NULL AUTO_INCREMENT,  name varchar(255) DEFAULT NULL,  PRIMARY KEY (id)) DEFAULT CHARSET=utf8;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.027' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.028' WHERE variable = 'chamilo_database_version';

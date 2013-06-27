@@ -1306,6 +1306,7 @@ CREATE TABLE c_quiz (
   autolaunch INT DEFAULT 0,
   end_button int NOT NULL DEFAULT 0,
   email_notification_template text default '',
+  model_type INT default 1,
   PRIMARY KEY (iid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

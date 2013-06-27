@@ -3550,4 +3550,4 @@ CREATE TABLE question_score (
 
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.026' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.027' WHERE variable = 'chamilo_database_version';

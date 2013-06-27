@@ -81,10 +81,10 @@ $htmlHeadXtra[] = '<script>
 	function advanced_parameters() {
 		if(document.getElementById(\'options\').style.display == \'none\') {
 			document.getElementById(\'options\').style.display = \'block\';
-			document.getElementById(\'img_plus_and_minus\').innerHTML=\' '.Display::return_icon('div_hide.gif').' '.addslashes(api_htmlentities(get_lang('AdvancedParameters'))).'\';
+			document.getElementById(\'img_plus_and_minus\').innerHTML=\' '.Display::return_icon('div_hide.gif').' '.addslashes(get_lang('AdvancedParameters')).'\';
 		} else {
 			document.getElementById(\'options\').style.display = \'none\';
-			document.getElementById(\'img_plus_and_minus\').innerHTML=\' '.Display::return_icon('div_show.gif').' '.addslashes(api_htmlentities(get_lang('AdvancedParameters'))).'\';
+			document.getElementById(\'img_plus_and_minus\').innerHTML=\' '.Display::return_icon('div_show.gif').' '.addslashes(get_lang('AdvancedParameters')).'\';
 		}
 	}
 
@@ -190,7 +190,7 @@ function setFocus(){
 $(document).ready(function () {
     setFocus();
 });
-window.onload=advanced_parameters;
+window.onload = advanced_parameters;
 </script>';
 
 // INIT EXERCISE

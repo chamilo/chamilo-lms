@@ -1628,11 +1628,11 @@ abstract class Question
      */
     abstract public function processAnswersCreation($form);
 
-
     /**
      * Displays the menu of question types
+     * @param Exercise $objExercise
      */
-    public static function display_type_menu($objExercise)
+    public static function display_type_menu(Exercise $objExercise)
     {
         $feedback_type = $objExercise->feedback_type;
         $exerciseId    = $objExercise->id;
@@ -1643,6 +1643,7 @@ abstract class Question
         if (!isset($feedback_type)) {
             $feedback_type = 0;
         }
+
         if ($feedback_type == 1) {
             //2. but if it is a feedback DIRECT we only show the UNIQUE_ANSWER type that is currently available
             $question_type_custom_list = array(
@@ -1655,8 +1656,15 @@ abstract class Question
 
         echo '<div class="actionsbig">';
         echo '<ul class="question_menu">';
+        $modelType = $objExercise->getModelType();
 
         foreach ($question_type_custom_list as $i => $a_type) {
+            if ($modelType == EXERCISE_MODEL_TYPE_COMMITTEE) {
+                if ($a_type[1] != 'FreeAnswer') {
+                    continue;
+                }
+            }
+
             // include the class of the type
             require_once $a_type[0];
             // get the picture of the type and the langvar which describes it

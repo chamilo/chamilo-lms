@@ -17,23 +17,42 @@ class CommonController extends BaseController
     public function __construct(Application $app)
     {
         parent::__construct($app);
-        /* $this->app['language_files'] = $this->languageFiles;*/
-    }
-
-    protected function getRepository() {
-
     }
 
     /**
-     * This method should return a new entity instance to be used for the "create" action.
-     *
-     * @abstract
-     * @return Object
+     * {@inheritdoc}
      */
-    protected function getNewEntity() {
-
+    protected function getRepository()
+    {
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    protected function getNewEntity()
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getFormType()
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function generateLinks()
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getTemplatePath()
+    {
+    }
 
     /**
      * @param Application $app

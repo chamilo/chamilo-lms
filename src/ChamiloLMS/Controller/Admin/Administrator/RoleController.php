@@ -18,96 +18,36 @@ use ChamiloLMS\Form\RoleType;
  */
 class RoleController extends CommonController
 {
-    /**
-     *
-     * @param Application $app
-     * @Route("/")
-     * @Method({"GET"})
-     */
     public function indexAction()
     {
-        $items = parent::listAction('array');
-        $template = $this->get('template');
-        $template->assign('items', $items);
-        $template->assign('links', $this->generateLinks());
-        $response = $template->render_template('admin/administrator/role/list.tpl');
-        return new Response($response, 200, array());
+        return parent::indexAction();
     }
 
-    /**
-     *
-     * @Route("/{id}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
-     * @Method({"GET"})
-     */
     public function readAction($id)
     {
-        $template = $this->get('template');
-        $template->assign('links', $this->generateLinks());
         return parent::readAction($id);
-    }
-
-    public function editAction($id)
-    {
-        $roleRepo = $this->getRepository();
-        $request = $this->getRequest();
-
-        $role = $roleRepo->findOneById($id);
-
-        if ($role) {
-            $form = $this->get('form.factory')->create(new RoleType(), $role);
-
-            if ($request->getMethod() == 'POST') {
-                $form->bind($this->getRequest());
-
-                if ($form->isValid()) {
-                    $role = $form->getData();
-                    parent::updateAction($role);
-                    $this->get('session')->getFlashBag()->add('success', "Updated");
-                    $url = $this->get('url_generator')->generate('admin_administrator_roles');
-                    return $this->redirect($url);
-                }
-            }
-
-
-            $template = $this->get('template');
-            $template->assign('item', $role);
-            $template->assign('form', $form->createView());
-            $template->assign('links', $this->generateLinks());
-            $response = $template->render_template('admin/administrator/role/edit.tpl');
-            return new Response($response, 200, array());
-        } else {
-            return $this->createNotFoundException();
-        }
     }
 
     public function addAction()
     {
-        $request = $this->getRequest();
-        $form = $this->get('form.factory')->create(new RoleType());
+        return parent::addAction();
+    }
 
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $role = $form->getData();
-                parent::createAction($role);
-                $this->get('session')->getFlashBag()->add('success', "Added");
-                $url = $this->get('url_generator')->generate('admin_administrator_roles');
-                return $this->redirect($url);
-            }
-        }
+    public function editAction($id)
+    {
+        return parent::editAction($id);
+    }
 
-        $template = $this->get('template');
-        $template->assign('links', $this->generateLinks());
-        $template->assign('form', $form->createView());
-        $response = $template->render_template('admin/administrator/role/add.tpl');
-        return new Response($response, 200, array());
+    public function deleteAction($id)
+    {
+        return parent::deleteAction($id);
     }
 
     /**
      * Return an array with the string that are going to be generating by twig.
      * @return array
      */
-    private function generateLinks()
+    protected function generateLinks()
     {
         return array(
             'create_link' => 'admin_administrator_roles_add',
@@ -118,20 +58,16 @@ class RoleController extends CommonController
         );
     }
 
-    public function deleteAction($id)
+    /**
+    * {@inheritdoc}
+    */
+    protected function getTemplatePath()
     {
-        $result = parent::deleteAction($id);
-        if ($result) {
-            $url = $this->get('url_generator')->generate('admin_administrator_roles');
-            $this->get('session')->getFlashBag()->add('success', "Deleted");
-
-            return $this->redirect($url);
-        }
+        return 'admin/administrator/role/';
     }
 
     /**
-     * @see BaseController::getRepository()
-     * @return EntityRepository
+     * {@inheritdoc}
      */
     protected function getRepository()
     {
@@ -139,11 +75,18 @@ class RoleController extends CommonController
     }
 
     /**
-     * @see BaseController::getNewEntity()
-     * @return Object
+     * {@inheritdoc}
      */
     protected function getNewEntity()
     {
         return new Entity\Role();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getFormType()
+    {
+        return new RoleType();
     }
 }

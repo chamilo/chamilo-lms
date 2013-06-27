@@ -20,110 +20,36 @@ use ChamiloLMS\Form\QuestionScoreNameType;
  */
 class QuestionScoreName extends CommonController
 {
-    /**
-     *
-     * @param Application $app
-     * @Route("/")
-     * @Method({"GET"})
-     */
     public function indexAction()
     {
-        $items = parent::listAction('array');
-        $template = $this->get('template');
-        $template->assign('items', $items);
-        $template->assign('links', $this->generateLinks());
-        $response = $template->render_template('admin/administrator/question_score_name/list.tpl');
-        return new Response($response, 200, array());
+        return parent::indexAction();
     }
 
-    /**
-     *
-     * @Route("/{id}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
-     * @Method({"GET"})
-     */
     public function readAction($id)
     {
-        $template = $this->get('template');
-        $template->assign('links', $this->generateLinks());
-        $item = parent::getEntity($id);
-        $template->assign('item', $item);
-        $response = $template->render_template('admin/administrator/question_score_name/read.tpl');
-        return new Response($response, 200, array());
-    }
-
-    public function editAction($id)
-    {
-        $repo = $this->getRepository();
-        $request = $this->getRequest();
-
-        $item = $repo->findOneById($id);
-
-        if ($item) {
-            $form = $this->get('form.factory')->create(new QuestionScoreNameType(), $item);
-
-            if ($request->getMethod() == 'POST') {
-                $form->bind($this->getRequest());
-
-                if ($form->isValid()) {
-                    $item = $form->getData();
-                    parent::updateAction($item);
-                    $this->get('session')->getFlashBag()->add('success', "Updated");
-                    $url = $this->get('url_generator')->generate('admin_administrator_question_score_names');
-                    return $this->redirect($url);
-                }
-            }
-
-
-            $template = $this->get('template');
-            $template->assign('item', $item);
-            $template->assign('form', $form->createView());
-            $template->assign('links', $this->generateLinks());
-            $response = $template->render_template('admin/administrator/question_score_name/edit.tpl');
-            return new Response($response, 200, array());
-        } else {
-            return $this->createNotFoundException();
-        }
+        return parent::readAction($id);
     }
 
     public function addAction()
     {
-        $request = $this->getRequest();
-        $form = $this->get('form.factory')->create(new QuestionScoreNameType());
+        return parent::addAction();
+    }
 
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $item = $form->getData();
-                parent::createAction($item);
-                $this->get('session')->getFlashBag()->add('success', "Added");
-                $url = $this->get('url_generator')->generate('admin_administrator_question_score_names');
-                return $this->redirect($url);
-            }
-        }
-
-        $template = $this->get('template');
-        $template->assign('links', $this->generateLinks());
-        $template->assign('form', $form->createView());
-        $response = $template->render_template('admin/administrator/question_score_name/add.tpl');
-        return new Response($response, 200, array());
+    public function editAction($id)
+    {
+        return parent::editAction($id);
     }
 
     public function deleteAction($id)
     {
-        $result = parent::deleteAction($id);
-        if ($result) {
-            $url = $this->get('url_generator')->generate('admin_administrator_question_score_names');
-            $this->get('session')->getFlashBag()->add('success', "Deleted");
-
-            return $this->redirect($url);
-        }
+        return parent::deleteAction($id);
     }
 
     /**
      * Return an array with the string that are going to be generating by twig.
      * @return array
      */
-    private function generateLinks()
+    protected function generateLinks()
     {
         return array(
             'create_link' => 'admin_administrator_question_score_names_add',
@@ -135,20 +61,34 @@ class QuestionScoreName extends CommonController
     }
 
     /**
-     * @see BaseController::getRepository()
-     * @return EntityRepository
+     * {@inheritdoc}
      */
     protected function getRepository()
     {
         return $this->get('orm.em')->getRepository('Entity\QuestionScoreName');
     }
 
-    /**
-     * @see BaseController::getNewEntity()
-     * @return Object
+     /**
+     * {@inheritdoc}
      */
     protected function getNewEntity()
     {
         return new Entity\QuestionScoreName();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getFormType()
+    {
+        return new QuestionScoreNameType();
+    }
+
+    /**
+    * {@inheritdoc}
+    */
+    protected function getTemplatePath()
+    {
+        return 'admin/administrator/question_score_name/';
     }
 }

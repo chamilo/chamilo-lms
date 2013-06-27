@@ -2,15 +2,21 @@
     <a href="{{ url(links.create_link) }}">
         Add
     </a>
-    <hr />
+    <table class="table">
     {% for item in items %}
-        <a href="{{ url(links.read_link, { id: item.id }) }}">
-         {{ item.name }}
-        </a>
-        <a class="btn" href="{{ url(links.update_link, { id: item.id }) }}"> Edit</a>
-        <a class="btn" href="{{ url(links.delete_link, { id: item.id }) }}"> Delete</a>
-        <br />
+        <tr>
+            <td>
+                <a href="{{ url(links.read_link, { id: item.id }) }}">
+                {{ item.name }}
+                </a>
+            </td>
+            <td>
+                <a class="btn" href="{{ url(links.update_link, { id: item.id }) }}"> Edit</a>
+                <a class="btn" href="{{ url(links.delete_link, { id: item.id }) }}"> Delete</a>
+            </td>
+        </tr>
     {% endfor %}
+    </table>
 {% endmacro %}
 
 {% macro add(form, links) %}

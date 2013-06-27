@@ -538,14 +538,16 @@ $app->before(
         }
 
         // Loop in the folder array and create temp folders.
-        /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem  $filesystem */
+        /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem $filesystem */
         $filesystem = $app['chamilo.filesystem'];
 
         /** @var Request $request */
         $request = $app['request'];
 
-        // @todo improvement create temp folders during installation not everytime
-        $filesystem->createFolders($app['temp.paths']->folders);
+        // Creates temp folders for every request
+        if ($app['debug']) {
+            $filesystem->createFolders($app['temp.paths']->folders);
+        }
 
         if ($app['assetic.auto_dump_assets']) {
             $filesystem->copyFolders($app['temp.paths']->copyFolders);

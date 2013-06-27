@@ -23,7 +23,9 @@ class QuestionScore
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="QuestionScoreName", mappedBy="questionScore")
+     * cascade options remove: Cascades remove operations to the associated entities.
+     *                 detach: Cascades detach operations to the associated entities.
+     * @ORM\OneToMany(targetEntity="QuestionScoreName", mappedBy="questionScore", cascade={"persist", "remove"} )
      */
     private $items;
 

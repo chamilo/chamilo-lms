@@ -117,7 +117,7 @@ abstract class BaseController
      * @Route("/{id}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
      * @Method({"GET"})
      */
-    public function indexAction()
+    public function listingAction()
     {
         $items = $this->listAction('array');
         $template = $this->get('template');

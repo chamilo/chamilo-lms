@@ -653,7 +653,10 @@ $app->before(
                     $languageFilesToAdd = array('registration', 'index', 'tracking', 'admin');
                     break;
                 case 'course_info':
-                    $languageFilesToAdd = array('admin', 'course_info');
+                case 'course_home':
+                case 'course_description':
+                case 'create_course':
+                    $languageFilesToAdd = array('create_course', 'registration', 'admin', 'exercice', 'course_description', 'course_info');
                     break;
                 case 'link':
                     $languageFilesToAdd = array('link', 'admin');

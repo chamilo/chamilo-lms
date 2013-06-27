@@ -102,6 +102,7 @@ $app['security.role_hierarchy'] = array(
 
 // Role rules
 $app['security.access_rules'] = array(
+    //array('^/admin', 'ROLE_ADMIN', 'https'),
     array('^/admin/administrator', 'ROLE_ADMIN'),
     array('^/main/admin/.*', 'ROLE_ADMIN'),
     array('^/admin/questionmanager', 'ROLE_QUESTION_MANAGER'),

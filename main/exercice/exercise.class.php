@@ -1248,9 +1248,10 @@ class Exercise
             }
         } else {
             // Creates a new exercise
-            $sql = "INSERT INTO $TBL_EXERCICES (c_id, start_time, end_time, title, description, sound, type, random, random_answers, active,
-                                                max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category,
-                                                text_when_finished, display_category_name, pass_percentage, end_button, email_notification_template, results_disabled)
+            $sql = "INSERT INTO $TBL_EXERCICES (
+                        c_id, start_time, end_time, title, description, sound, type, random, random_answers, active,
+                        max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category,
+                        text_when_finished, display_category_name, pass_percentage, end_button, email_notification_template, results_disabled, model_type)
 					VALUES(
 						".$this->course_id.",
 						'$start_time',
@@ -1273,7 +1274,8 @@ class Exercise
                         '".Database::escape_string($pass_percentage)."',
                         '".Database::escape_string($this->selectEndButton())."',
                         '".Database::escape_string($this->selectEmailNotificationTemplate())."',
-                        '".Database::escape_string($results_disabled)."'
+                        '".Database::escape_string($results_disabled)."',
+                        '".Database::escape_string($this->getModelType())."'
 						)";
             Database::query($sql);
             $this->id = Database::insert_id();

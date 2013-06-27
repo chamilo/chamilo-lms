@@ -37,16 +37,20 @@ class FreeAnswer extends Question
      */
     public function createAnswersForm($form)
     {
-        $form->addElement('text', 'weighting', get_lang('Weighting'), array('class' => 'span1'));
-        // setting the save button here and not in the question class.php
-        $form->addElement('style_submit_button', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
-        if (!empty($this->id)) {
-            $form->setDefaults(array('weighting' => Text::float_format($this->weighting, 1)));
-        } else {
-            if ($this->isContent == 1) {
-                $form->setDefaults(array('weighting' => '10'));
+
+        if ($this->exercise->getModelType() == EXERCISE_MODEL_TYPE_NORMAL) {
+            $form->addElement('text', 'weighting', get_lang('Weighting'), array('class' => 'span1'));
+            if (!empty($this->id)) {
+                $form->setDefaults(array('weighting' => Text::float_format($this->weighting, 1)));
+            } else {
+                if ($this->isContent == 1) {
+                    $form->setDefaults(array('weighting' => '10'));
+                }
             }
         }
+
+        // Setting the save button here and not in the question class.php.
+        $form->addElement('style_submit_button', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
     }
 
     /**

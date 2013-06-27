@@ -95,11 +95,11 @@ abstract class BaseController
      * @param $label
      * @return mixed
      */
-    public function createUrl($label)
+    public function createUrl($label, $params = array())
     {
         $links = $this->generateLinks();
-        if (in_array($label, $links)) {
-            $url = $this->get('url_generator')->generate($links[$label]);
+        if (isset($links) && is_array($links) && isset($links[$label])) {
+            $url = $this->get('url_generator')->generate($links[$label], $params);
             return $url;
         }
         return $url = $this->get('url_generator')->generate($links['list_link']);

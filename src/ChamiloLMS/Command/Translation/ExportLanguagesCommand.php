@@ -17,7 +17,7 @@ use Symfony\Component\Finder\Finder;
 class ExportLanguagesCommand extends Command
 {
     /**
-     *
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -34,7 +34,7 @@ class ExportLanguagesCommand extends Command
      */
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $languageList = array('english', 'spanish', 'french', 'german', 'brazilian');
+        $languageList = array('english', 'spanish', 'french');
         //$languageList = array('spanish');
         foreach ($languageList as $lang) {
             $output->writeln("<info>Generating lang po files for: $lang</info>");

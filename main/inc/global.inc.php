@@ -672,8 +672,8 @@ $app->before(
         } else {
 
             $controllerName = $request->get('_controller');
-            // Work around to load languages:
 
+            // Work around to load languages:
             switch($controllerName) {
                 case 'index.controller:indexAction':
                 case 'userPortal.controller::indexAction':

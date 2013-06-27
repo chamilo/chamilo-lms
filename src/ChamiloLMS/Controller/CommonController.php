@@ -20,7 +20,7 @@ class CommonController extends BaseController
         /* $this->app['language_files'] = $this->languageFiles;*/
     }
 
-    function getRepository() {
+    protected function getRepository() {
 
     }
 
@@ -30,7 +30,7 @@ class CommonController extends BaseController
      * @abstract
      * @return Object
      */
-    function getNewEntity() {
+    protected function getNewEntity() {
 
     }
 

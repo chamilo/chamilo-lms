@@ -20,7 +20,7 @@ class RoleController extends CommonController
 {
     public function indexAction()
     {
-        return parent::indexAction();
+        return parent::listingAction();
     }
 
     public function readAction($id)

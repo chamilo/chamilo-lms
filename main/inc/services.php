@@ -80,87 +80,14 @@ $app['security.encoder.digest'] = $app->share(function($app) {
     return new MessageDigestPasswordEncoder('sha1', false, 1);
 });
 
-use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\SecurityContext;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Routing\Router;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
-/**
- * Class LoginSuccessHandler
- * @todo move in a class inside the ChamiloLMS namespace
- */
-class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
-{
-    protected $router;
-    protected $security;
-
-    /**
-     * @param UrlGeneratorInterface $urlGenerator
-     * @param SecurityContext $security
-     */
-    public function __construct(UrlGeneratorInterface $urlGenerator, SecurityContext $security)
-    {
-        $this->router = $urlGenerator;
-        $this->security = $security;
-    }
-
-    /**
-     * @param Request $request
-     * @param TokenInterface $token
-     * @return null|RedirectResponse|\Symfony\Component\Security\Http\Authentication\Response
-     */
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token)
-    {
-        /*if ($this->security->isGranted('ROLE_SUPER_ADMIN')) {
-            $response = new RedirectResponse($this->router->generate('category_index'));
-        } elseif ($this->security->isGranted('ROLE_ADMIN')) {
-            $response = new RedirectResponse($this->router->generate('category_index'));
-        } elseif ($this->security->isGranted('ROLE_USER')) {
-            // redirect the user to where they were before the login process begun.
-            $referer_url = $request->headers->get('referer');
-            $response = new RedirectResponse($referer_url);
-        }*/
-
-        $response = null;
-        //$session = $request->getSession();
-        /* Possible values: index.php, user_portal.php, main/auth/courses.php */
-        $pageAfterLogin = api_get_setting('page_after_login');
-
-        //error_log($session->get('page_after_login'));
-        if ($this->security->isGranted('ROLE_STUDENT') && !empty($pageAfterLogin)) {
-            $url = null;
-            switch($pageAfterLogin) {
-                case 'index.php':
-                    $url = $this->router->generate('index');
-                    break;
-                case 'user_portal.php':
-                    $url = $this->router->generate('userportal');
-                    break;
-                case 'main/auth/courses.php':
-                    $url = api_get_path(WEB_PUBLIC_PATH).$pageAfterLogin;
-                    break;
-            }
-            if (!empty($url)) {
-                $response = new RedirectResponse($url);
-            }
-        }
-
-        // Redirect the user to where they were before the login process begun.
-        if (empty($response)) {
-            $refererUrl = $request->headers->get('referer');
-            $response = new RedirectResponse($refererUrl);
-        }
-
-        return $response;
-    }
-}
-
-// Registering success login redirection
+// What to do when login success?
 $app['security.authentication.success_handler.admin'] = $app->share(function($app) {
-    return new LoginSuccessHandler($app['url_generator'], $app['security']);
+    return new ChamiloLMS\Component\Auth\LoginSuccessHandler($app['url_generator'], $app['security']);
+});
+
+// What to do when logout?
+$app['security.authentication.logout_handler.admin'] = $app->share(function($app) {
+    return new ChamiloLMS\Component\Auth\LogoutSuccessHandler($app['url_generator'], $app['security']);
 });
 
 // Role hierarchy
@@ -187,60 +114,17 @@ $app['security.access_manager'] = $app->share(function($app) {
     return new AccessDecisionManager($app['security.voters'], 'unanimous');
 });*/
 
-// Setting Controllers as services provider
+// Setting Controllers as services provider.
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
-// Validator provider
+// Validator provider.
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 
-// Implements Symfony2 translator (needed when using forms in Twig)
+// Implements Symfony2 translator.
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
-    'locale' => 'es',
-    'locale_fallback' => 'es'
+    'locale' => 'en',
+    'locale_fallback' => 'en'
 ));
-
-// Handling po files (gettext)
-use Symfony\Component\Translation\Loader\PoFileLoader;
-use Symfony\Component\Translation\Loader\MoFileLoader;
-use Symfony\Component\Finder\Finder;
-
-$app['translator.cache.enabled'] = true;
-
-//$app['translator'] = $app->share($app->extend('translator', function($translator, $app) {
-    /** @var Symfony\Component\Translation\Translator $translator  */
-/*    if ($app['translator.cache.enabled']) {
-
-        $locale = $translator->getLocale();
-        //$phpFileDumper = new Symfony\Component\Translation\Dumper\PhpFileDumper();
-        $dumper = new Symfony\Component\Translation\Dumper\MoFileDumper();
-        $catalogue = new Symfony\Component\Translation\MessageCatalogue($locale);
-        $catalogue->add(array('foo' => 'bar'));
-        $dumper->dump($catalogue, array('path' => $app['sys_temp_path']));
-
-    } else {
-
-        $translator->addLoader('pofile', new PoFileLoader());
-
-        $finder = new Finder();
-        $files = $finder->files()->name('*.po')->in(api_get_path(SYS_PATH).'temp/langs/');
-        //$language = api_get_language_interface();
-        // @var SplFileInfo $entry
-        foreach ($files as $entry) {
-            $domain = basename($entry->getPath());
-            $code = $entry->getBasename('.po');
-            //$domain = $entry->getBasename('.inc.po');
-            //$locale = api_get_language_isocode($language); //'es_ES';
-            //if ($domain == 'admin') {
-              //  var_dump($entry->getPathname());
-                //$translator->addResource('pofile', $entry->getPathname(), $code, $domain);
-                $translator->addResource('pofile', $entry->getPathname(), $code);
-            //}
-            //$translator->addResource('pofile', $entry->getPathname(), $locale, 'messages');
-        }
-        return $translator;
-    }
-}));
-*/
 
 // Form provider
 $app->register(new Silex\Provider\FormServiceProvider());
@@ -248,7 +132,9 @@ $app->register(new Silex\Provider\FormServiceProvider());
 // URL generator provider
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
+// Needed to use the "entity" option in symfony forms
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
+
 class ManagerRegistry extends AbstractManagerRegistry
 {
     protected $container;
@@ -338,7 +224,7 @@ if (isset($app['configuration']['main_database'])) {
         )
     );
 
-    // Setting Doctrine ORM
+    // Setting Doctrine ORM.
     $app->register(
         new Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider,
         array(
@@ -365,7 +251,7 @@ if (isset($app['configuration']['main_database'])) {
     );
 }
 
-// Setting Twig as a service provider
+// Setting Twig as a service provider.
 $app->register(
     new Silex\Provider\TwigServiceProvider(),
     array(
@@ -406,7 +292,7 @@ $app['twig'] = $app->share(
     })
 );
 
-// Developer tools
+// Developer tools.
 
 if (is_writable($app['sys_temp_path'])) {
     if ($app['show_profiler']) {
@@ -426,6 +312,7 @@ if (is_writable($app['sys_temp_path'])) {
 
 // Pagerfanta settings (Pagination using Doctrine2, arrays, etc)
 use FranMoreno\Silex\Provider\PagerfantaServiceProvider;
+
 $app->register(new PagerfantaServiceProvider());
 
 // Custom route params see https://github.com/franmomu/silex-pagerfanta-provider/pull/2
@@ -477,7 +364,7 @@ if ($app['debug']) {
     });*/
 }
 
-// Email service provider
+// Email service provider.
 $app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(
     'swiftmailer.options' => array(
         'host' => isset($platform_email['SMTP_HOST']) ? $platform_email['SMTP_HOST'] : null,
@@ -550,7 +437,7 @@ $app->register(new GaufretteServiceProvider(), array(
 // Use Symfony2 filesystem instead of custom scripts
 $app->register(new Neutron\Silex\Provider\FilesystemServiceProvider());
 
-/** Chamilo service provider */
+/** Chamilo service provider. */
 
 class ChamiloServiceProvider implements ServiceProviderInterface
 {
@@ -574,25 +461,25 @@ class ChamiloServiceProvider implements ServiceProviderInterface
             );
         });
 
-        // Chamilo data filesystem
+        // Chamilo data filesystem.
         $app['chamilo.filesystem'] = $app->share(function () use ($app) {
             $filesystem = new ChamiloLMS\Component\DataFilesystem\DataFilesystem($app['paths'], $app['filesystem']);
             return $filesystem;
         });
 
-        // Page controller class
+        // Page controller class.
         $app['page_controller'] = $app->share(function () use ($app) {
             $pageController = new PageController($app);
             return $pageController;
         });
 
-        // Mail template generator
+        // Mail template generator.
         $app['mail_generator'] = $app->share(function () use ($app) {
             $mailGenerator = new ChamiloLMS\Component\Mail\MailGenerator($app['twig'], $app['mailer']);
             return $mailGenerator;
         });
 
-        // Database
+        // Database.
         $app['database'] = $app->share(function () use ($app) {
             $db = new Database($app['db'], $app['dbs']);
             return $db;
@@ -605,10 +492,10 @@ class ChamiloServiceProvider implements ServiceProviderInterface
     }
 }
 
-// Registering Chamilo service provider
+// Registering Chamilo service provider.
 $app->register(new ChamiloServiceProvider(), array());
 
-// Controller as services definitions see
+// Controller as services definitions.
 $app['pages.controller'] = $app->share(
     function () use ($app) {
         return new PagesController($app['pages.repository']);
@@ -617,19 +504,20 @@ $app['pages.controller'] = $app->share(
 
 $app['index.controller'] = $app->share(
     function () use ($app) {
-        return new ChamiloLMS\Controller\IndexController();
+        $controller = new ChamiloLMS\Controller\IndexController($app);
+        return $controller;
     }
 );
 
 $app['legacy.controller'] = $app->share(
     function () use ($app) {
-        return new ChamiloLMS\Controller\LegacyController();
+        return new ChamiloLMS\Controller\LegacyController($app);
     }
 );
 
 $app['userPortal.controller'] = $app->share(
     function () use ($app) {
-        return new ChamiloLMS\Controller\UserPortalController();
+        return new ChamiloLMS\Controller\UserPortalController($app);
     }
 );
 
@@ -689,7 +577,7 @@ $app['question_manager.controller'] = $app->share(
 
 $app['exercise_manager.controller'] = $app->share(
     function () use ($app) {
-        return new ChamiloLMS\Controller\ExerciseController();
+        return new ChamiloLMS\Controller\ExerciseController($app);
     }
 );
 

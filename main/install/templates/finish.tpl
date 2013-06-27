@@ -4,7 +4,7 @@
     <h3>Congratulations Chamilo is now installed!</h3>
 
     <a class="btn btn-success btn-large btn-install" href= "{{ app.request.basepath }}../../../index.php" autofocus="autofocus">
-        GoToYourNewlyCreatedPortal
+        {{ 'Go to your newly created portal'|trans }}
     </a>
 
     <br />

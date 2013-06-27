@@ -1445,7 +1445,6 @@ function api_get_course_setting($setting_name, $course_code = null) {
     if (isset($course_info['settings']) && isset($course_info['settings'][$setting_name])) {
         return $course_info['settings'][$setting_name]['value'];
     } else {
-        //var_dump($course_info);
         $table 		 = Database::get_course_table(TABLE_COURSE_SETTING);
         $setting_name = Database::escape_string($setting_name);
         if (!empty($course_info['real_id']) && !empty($setting_name)) {
@@ -6785,8 +6784,6 @@ function api_get_user_language()
 
 function api_get_language_interface()
 {
-    global $app;
-
     $valid_languages = api_get_languages();
     $user_language = api_get_user_language();
 

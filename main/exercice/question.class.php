@@ -1631,8 +1631,9 @@ abstract class Question
 
     /**
      * Displays the menu of question types
+     * @param Exercise $objExercise
      */
-    public static function display_type_menu($objExercise)
+    public static function display_type_menu(Exercise $objExercise)
     {
         $feedback_type = $objExercise->feedback_type;
         $exerciseId    = $objExercise->id;
@@ -1655,8 +1656,14 @@ abstract class Question
 
         echo '<div class="actionsbig">';
         echo '<ul class="question_menu">';
+        $modelType = $objExercise->getModelType();
 
         foreach ($question_type_custom_list as $i => $a_type) {
+            if ($modelType == EXERCISE_MODEL_TYPE_COMMITTEE) {
+                if ($a_type[1] != 'FreeAnswer') {
+                    continue;
+                }
+            }
             //Skip other question types, just for minedu
             if (!in_array($a_type[1],array('MediaQuestion','UniqueAnswer'))) {
                 continue;

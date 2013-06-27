@@ -1,0 +1,289 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8 \n"
+
+msgid "langNewGroupCreate"
+msgstr "Neue Gruppe(n) erstellen"
+
+msgid "langGroupCreation"
+msgstr "Neue Gruppen erstellen"
+
+msgid "langCreate"
+msgstr "erstellen"
+
+msgid "langNewGroups"
+msgstr "Neue Gruppe(n)"
+
+msgid "langMax"
+msgstr "max. 12 Buchstaben, z.B. <i>ABCDEF123456</i>"
+
+msgid "langGroupPlacesThis"
+msgstr "Plätze (optional)"
+
+msgid "langGroupsAdded"
+msgstr "Gruppe(n) wurde(n) hinzugefügt"
+
+msgid "langGroupDel"
+msgstr "Gruppe gelöscht"
+
+msgid "langDocuments"
+msgstr "Dokumente"
+
+msgid "langExistingGroups"
+msgstr "Gruppen"
+
+msgid "langRegistered"
+msgstr "Registriert"
+
+msgid "langGroupAllowStudentRegistration"
+msgstr "Teilnehmer können sich selber in den Gruppen eintragen"
+
+msgid "langGroupTools"
+msgstr "Werkzeuge"
+
+msgid "langGroupDocument"
+msgstr "Dokumente"
+
+msgid "langGroupPropertiesModified"
+msgstr "Gruppeneinstellungen wurden verändert"
+
+msgid "langGroupSpace"
+msgstr "Gruppenbereich"
+
+msgid "langGroupName"
+msgstr "Name"
+
+msgid "langGroupDescription"
+msgstr "Beschreibung"
+
+msgid "langGroupMembers"
+msgstr "Mitglieder der Gruppe"
+
+msgid "langEditGroup"
+msgstr "Diese Gruppe bearbeiten"
+
+msgid "Optional"
+msgstr "(optional)"
+
+msgid "langGroupSettingsModified"
+msgstr "Gruppeneinstellungen wurden verändert"
+
+msgid "langGroupTooMuchMembers"
+msgstr "Die maximale Teilnehmerzahl wurde erreicht (Sie können die Zahl unten verändern). Die Gruppenzusammensetzung wurde nicht verändert"
+
+msgid "langGroupTutor"
+msgstr "Gruppenverantwortlicher"
+
+msgid "langGroupNoTutor"
+msgstr "(kein)"
+
+msgid "langGroupNone"
+msgstr "(keine)"
+
+msgid "langGroupNoneMasc"
+msgstr "(keine)"
+
+msgid "langAddTutors"
+msgstr "Verwaltung Teilnehmerliste"
+
+msgid "langMyGroup"
+msgstr "meine Gruppe"
+
+msgid "langOneMyGroups"
+msgstr "meine Supervision"
+
+msgid "langGroupSelfRegistration"
+msgstr "Registrierung"
+
+msgid "langGroupSelfRegInf"
+msgstr "registrieren"
+
+msgid "langRegIntoGroup"
+msgstr "Fügen Sie mich zu dieser Gruppe hinzu"
+
+msgid "langGroupNowMember"
+msgstr "Sie sind nun Mitglied dieser Gruppe"
+
+msgid "langPrivate"
+msgstr "Eingeschränkter Zugang, Einschreibung geschlossen (Die Seiten sind nur für angemeldete <a href=../user/user.php>Teilnehmer</a> zugänglich.)"
+
+msgid "langPublic"
+msgstr "Öffentlicher Zugriff auch ohne Anmeldung möglich"
+
+msgid "langPropModify"
+msgstr "Einstellungen verändern"
+
+msgid "langState"
+msgstr "Status"
+
+msgid "langGroupFilledGroups"
+msgstr "Gruppen wurden von Teilnehmer belegt."
+
+msgid "langSubscribed"
+msgstr "Teilnehmer, die diesen Kurs belegt haben"
+
+msgid "langStudentsNotInThisGroups"
+msgstr "Teilnehmer ist nicht in dieser Gruppe"
+
+msgid "langQtyOfUserCanSubscribe_PartBeforeNumber"
+msgstr "Ein Teilnehmer kann höchstens in"
+
+msgid "langQtyOfUserCanSubscribe_PartAfterNumber"
+msgstr " Gruppen Mitglied sein"
+
+msgid "langGroupLimit"
+msgstr "Gruppen-Limit"
+
+msgid "CreateGroup"
+msgstr "Gruppe(n) erstellen"
+
+msgid "ProceedToCreateGroup"
+msgstr "weiter zur Erstellung der Gruppe(n)"
+
+msgid "langStudentRegAllowed"
+msgstr "Teilnehmer können sich selber in den Gruppen eintragen"
+
+msgid "langGroupAllowStudentUnregistration"
+msgstr "Teilnehmer dürfen sich selbst aus Gruppen austragen"
+
+msgid "langAllGroups"
+msgstr "Alle Gruppen"
+
+msgid "langStudentUnsubscribe"
+msgstr "Tragen Sie mich aus dieser Gruppe aus"
+
+msgid "langStudentDeletesHimself"
+msgstr "Sie sind nun ausgetragen"
+
+msgid "langDefaultSettingsForNewGroups"
+msgstr "Standard Einstellungen für neue Gruppen"
+
+msgid "langSelectedGroupsDeleted"
+msgstr "Alle ausgewählten Gruppen wurden gelöscht"
+
+msgid "langSelectedGroupsEmptied"
+msgstr "Alle ausgewählten Gruppen sind nun leer"
+
+msgid "langGroupEmptied"
+msgstr "Die Gruppe hat keine Teilnehmer"
+
+msgid "langSelectedGroupsFilled"
+msgstr "Alle ausgewählten Gruppen wurden gefüllt"
+
+msgid "langGroupSelfUnRegInf"
+msgstr "Aus Gruppe abmelden"
+
+msgid "langSameForAll"
+msgstr "dasselbe für alle"
+
+msgid "langNoLimit"
+msgstr "Keine Begrenzung"
+
+msgid "langPleaseEnterValidNumber"
+msgstr "Bitte die gewünschte Anzahl an Gruppen eingeben"
+
+msgid "langCreateGroupsFromVirtualCourses"
+msgstr "Gruppen aus allen Teilnehmern der virtuellen Kursen anlegen"
+
+msgid "langCreateGroupsFromVirtualCoursesInfo"
+msgstr "Dieser Kurs ist eine Kombination eines wirklichen Kurses mir einem oder mehreren virtuellen Kursen. Wenn Sie den folgenen Button klicken, werden neue Gruppen gemäß dieses(dieser) Kurse (virutellen Kurse) angelegt. Alle Teilnehmer werden in die Gruppen eingetragen."
+
+msgid "langNoGroupsAvailable"
+msgstr "Es sind keine Gruppen verfügbar"
+
+msgid "langGroupsFromVirtualCourses"
+msgstr "Gruppe aus einem virtuellen Kurs"
+
+msgid "NotAvailable"
+msgstr "nicht verfügbar"
+
+msgid "CreateSubgroups"
+msgstr "Untergruppen erstellen"
+
+msgid "CreateSubgroupsInfo"
+msgstr "Diese Option erlaubt es, neue Gruppen auf Basis von existierenden Gruppen zu erstellen. Die gewünschte Anzahl von Gruppen angeben und die existierende Gruppe auswählen. Die gewünschte Anzahl von Gruppen wird erstellt, und die Teilnehmer der existierenden Gruppe werden in den neuen Gruppen angemeldet. Die existierende Gruppe bleibt unverändert."
+
+msgid "CreateNumberOfGroups"
+msgstr "Anzahl Gruppen erstellen"
+
+msgid "WithUsersFrom"
+msgstr "Gruppen mit Teilnehmern aus"
+
+msgid "CategoryDeleted"
+msgstr "Die Kategorie wurde gelöscht"
+
+msgid "Empty"
+msgstr "Leer"
+
+msgid "FillGroup"
+msgstr "Teilnehmer zu Gruppe hinzufügen"
+
+msgid "EmptyGroup"
+msgstr "Alle Teilnehmer aus Gruppe austragen"
+
+msgid "MaxGroupsPerUserInvalid"
+msgstr "Die angegebene Höchstzahl der Gruppen pro Teilnehmer ist ungültig. Es gibt zur Zeit Teilnehmer, die in mehr Gruppen angemeldet sind als diese Höchstzahl angibt"
+
+msgid "GroupOverview"
+msgstr "Übersicht der Gruppen"
+
+msgid "GroupCategory"
+msgstr "Gruppen-Kategorie"
+
+msgid "NoTitleGiven"
+msgstr "Bitte einen Titel angeben"
+
+msgid "InvalidMaxNumberOfMembers"
+msgstr "Bitte eine gültige Zahl für die maximale Teilnehmerzahl eingeben"
+
+msgid "CategoryOrderChanged"
+msgstr "Die Reihenfolge der Kategorien wurde verändert"
+
+msgid "Wiki"
+msgstr "Gruppen-Wiki"
+
+msgid "CategoryCreated"
+msgstr "Kategorie erstellt"
+
+msgid "GroupTutors"
+msgstr "Gruppen-Verantwortliche"
+
+msgid "GroupWork"
+msgstr "Ausarbeitungen"
+
+msgid "GroupCalendar"
+msgstr "Gruppen-Kalender"
+
+msgid "GroupAnnouncements"
+msgstr "Gruppen-Ankündigungen"
+
+msgid "NoCategoriesDefined"
+msgstr "Es wurden keine Kategorien definiert"
+
+msgid "GroupsFromClasses"
+msgstr "Gruppen aus Klassen"
+
+msgid "GroupsFromClassesInfo"
+msgstr "Mit dieser Option können Sie Gruppen auf der Grundlage von Klassen erstellen, die für den Kurs angemeldet sind"
+
+msgid "Group"
+msgstr "Gruppe"
+
+msgid "ForumOfGroup"
+msgstr "Forum der Gruppe:"
+
+msgid "BackToGroupList"
+msgstr "Zurück zur Gruppenliste"
+
+msgid "EditGroupCategory"
+msgstr "Gruppen-Kategorie bearbeiten"
+
+msgid "NoStudents"
+msgstr "Keine Kursteilnehmer"
+
+msgid "NoData"
+msgstr "Keine Daten verfügbar"
+
+msgid "AllGroups"
+msgstr "Alle Gruppen"
+

@@ -12,8 +12,12 @@
  */
 use \ChamiloSession as Session;
 
+// Page options
 define('ALL_ON_ONE_PAGE', 1);
 define('ONE_PER_PAGE', 2);
+
+define('EXERCISE_MODEL_TYPE_NORMAL', 1);
+define('EXERCISE_MODEL_TYPE_COMMITTEE', 2);
 
 define('EXERCISE_FEEDBACK_TYPE_END', 0); //Feedback 		 - show score and expected answers
 define('EXERCISE_FEEDBACK_TYPE_DIRECT', 1); //DirectFeedback - Do not show score nor answers
@@ -76,6 +80,7 @@ class Exercise
     public $emailNotificationTemplate = null;
     public $countQuestions = 0;
     public $fastEdition = false;
+    public $modelType = 1;
 
     /**
      * Constructor of the class
@@ -101,10 +106,11 @@ class Exercise
         $this->expired_time = '0000-00-00 00:00:00';
         $this->propagate_neg = 0;
         $this->review_answers = false;
-        $this->randomByCat = 0; //
-        $this->text_when_finished = ""; //
+        $this->randomByCat = 0;
+        $this->text_when_finished = "";
         $this->display_category_name = 0;
         $this->pass_percentage = null;
+        $this->modelType = 1;
 
         if (!empty($course_id)) {
             $course_info = api_get_course_info_by_id($course_id);
@@ -164,6 +170,7 @@ class Exercise
             $this->is_gradebook_locked = api_resource_is_locked_by_gradebook($id, LINK_EXERCISE);
             $this->endButton = $object->end_button;
             $this->emailNotificationTemplate = $object->email_notification_template;
+            $this->modelType = $object->model_type;
 
             $this->review_answers = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;
             $sql = "SELECT max_score FROM $table_lp_item
@@ -334,6 +341,11 @@ class Exercise
     public function selectEmailNotificationTemplate()
     {
         return $this->emailNotificationTemplate;
+    }
+
+    public function getModelType()
+    {
+        return $this->modelType;
     }
 
     /**
@@ -1020,6 +1032,11 @@ class Exercise
         $this->endButton = intval($value);
     }
 
+    public function setModelType($value)
+    {
+        $this->modelType = intval($value);
+    }
+
     /**
      * @param array $categories
      */
@@ -1217,6 +1234,7 @@ class Exercise
                     pass_percentage = '".Database::escape_string($pass_percentage)."',
                     end_button = '".$this->selectEndButton()."',
                     email_notification_template = '".Database::escape_string($this->selectEmailNotificationTemplate())."',
+                    model_type = '".$this->getModelType()."',
 					results_disabled='".Database::escape_string($results_disabled)."'";
             }
             $sql .= " WHERE iid = ".Database::escape_string($id)." AND c_id = {$this->course_id}";
@@ -1419,6 +1437,13 @@ class Exercise
         // style="" and not "display:none" to avoid #4029 Random and number of attempt menu empty
         $form->addElement('html', '<div id="options" style="">');
 
+        $radio = array(
+            $form->createElement('radio', 'model_type', null, get_lang('Normal'), EXERCISE_MODEL_TYPE_NORMAL),
+            $form->createElement('radio', 'model_type', null, get_lang('Committee'), EXERCISE_MODEL_TYPE_COMMITTEE)
+        );
+
+        $form->addGroup($radio, null, get_lang('ModelType'), '');
+
         if ($type == 'full') {
             //Can't modify a DirectFeedback question
             if ($this->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_DIRECT) {
@@ -1457,24 +1482,10 @@ class Exercise
                 );
                 $form->addGroup($radios_feedback, null, get_lang('FeedbackType'), '');
 
-                // test type
-                $radios = array();
-
-                $radios[] = $form->createElement(
-                    'radio',
-                    'exerciseType',
-                    null,
-                    get_lang('SimpleExercise'),
-                    '1',
-                    array('onclick' => 'check_per_page_all()', 'id' => 'option_page_all')
-                );
-                $radios[] = $form->createElement(
-                    'radio',
-                    'exerciseType',
-                    null,
-                    get_lang('SequentialExercise'),
-                    '2',
-                    array('onclick' => 'check_per_page_one()', 'id' => 'option_page_one')
+                // question
+                $radios = array(
+                    $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'), ALL_ON_ONE_PAGE, array('onclick' => 'check_per_page_all()', 'id' => 'option_page_all')),
+                    $form->createElement('radio', 'exerciseType', null, get_lang('SequentialExercise'), ONE_PER_PAGE, array('onclick' => 'check_per_page_one()', 'id' => 'option_page_one')),
                 );
 
                 $form->addGroup($radios, null, get_lang('QuestionsPerPage'), '');
@@ -1542,17 +1553,11 @@ class Exercise
                     );
                     $form->addGroup($radios_feedback, null, get_lang('FeedbackType'));
 
-
-                    //$form->addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"');
-                    // test type
-                    $radios = array();
-                    $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'), '1');
-                    $radios[] = $form->createElement(
-                        'radio',
-                        'exerciseType',
-                        null,
-                        get_lang('SequentialExercise'),
-                        '2'
+                    // Exercise type
+                    $radios = array(
+                        $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'), '1'),
+                        $form->createElement('radio', 'exerciseType', null, get_lang('SequentialExercise'), '2'),
+                        $form->createElement('radio', 'exerciseType', null, get_lang('Committee'), '3')
                     );
                     $form->addGroup($radios, null, get_lang('ExerciseType'));
 
@@ -1656,41 +1661,26 @@ class Exercise
             );
 
             // Random answers.
-            $radios_random_answers = array();
-            $radios_random_answers[] = $form->createElement('radio', 'randomAnswers', null, get_lang('Yes'), '1');
-            $radios_random_answers[] = $form->createElement('radio', 'randomAnswers', null, get_lang('No'), '0');
+            $radios_random_answers = array(
+                $form->createElement('radio', 'randomAnswers', null, get_lang('Yes'), '1'),
+                $form->createElement('radio', 'randomAnswers', null, get_lang('No'), '0')
+            );
             $form->addGroup($radios_random_answers, null, get_lang('RandomAnswers'), '');
 
             // Random by category.
             $form->addElement('html', '<div class="clear">&nbsp;</div>');
-            $radiocat = array();
-            $radiocat[] = $form->createElement(
-                'radio',
-                'randomByCat',
-                null,
-                get_lang('YesWithCategoriesShuffled'),
-                '1'
+            $radiocat = array(
+                $form->createElement('radio', 'randomByCat', null, get_lang('YesWithCategoriesShuffled'), '1'),
+                $form->createElement('radio', 'randomByCat', null, get_lang('YesWithCategoriesSorted'), '2'),
+                $form->createElement('radio', 'randomByCat', null, get_lang('No'), '0')
             );
-            $radiocat[] = $form->createElement('radio', 'randomByCat', null, get_lang('YesWithCategoriesSorted'), '2');
-            $radiocat[] = $form->createElement('radio', 'randomByCat', null, get_lang('No'), '0');
             $form->addGroup($radiocat, null, get_lang('RandomQuestionByCategory'), '');
             $form->addElement('html', '<div class="clear">&nbsp;</div>');
 
             // Category name.
-            $radio_display_cat_name = array();
-            $radio_display_cat_name[] = $form->createElement(
-                'radio',
-                'display_category_name',
-                null,
-                get_lang('Yes'),
-                '1'
-            );
-            $radio_display_cat_name[] = $form->createElement(
-                'radio',
-                'display_category_name',
-                null,
-                get_lang('No'),
-                '0'
+            $radio_display_cat_name = array(
+                $form->createElement('radio', 'display_category_name', null, get_lang('Yes'), '1' ),
+                $form->createElement('radio', 'display_category_name', null, get_lang('No'), '0' )
             );
             $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'), '');
 
@@ -1746,7 +1736,6 @@ class Exercise
             $form->addElement('checkbox', 'propagate_neg', null, get_lang('PropagateNegativeResults'));
             $form->addElement('html', '<div class="clear">&nbsp;</div>');
             $form->addElement('checkbox', 'review_answers', null, get_lang('ReviewAnswers'));
-
             $form->addElement('html', '<div id="divtimecontrol"  style="display:'.$display.';">');
 
             // Exercise timer.
@@ -1790,10 +1779,11 @@ class Exercise
             $form->add_html_editor('text_when_finished', get_lang('TextWhenFinished'), false, false, $editor_config);
 
             // Exam end button.
-            $group = array();
-            $group[] = $form->createElement('radio', 'end_button', null, get_lang('ExerciseEndButtonCourseHome'), '0');
-            $group[] = $form->createElement('radio', 'end_button', null, get_lang('ExerciseEndButtonExerciseHome'), '1');
-            $group[] = $form->createElement('radio', 'end_button', null, get_lang('ExerciseEndButtonDisconnect'), '2');
+            $group = array(
+                $form->createElement('radio', 'end_button', null, get_lang('ExerciseEndButtonCourseHome'), '0'),
+                $form->createElement('radio', 'end_button', null, get_lang('ExerciseEndButtonExerciseHome'), '1'),
+                $form->createElement('radio', 'end_button', null, get_lang('ExerciseEndButtonDisconnect'), '2')
+            );
             $form->addGroup($group, null, get_lang('ExerciseEndButton'));
             $form->addElement('html', '<div class="clear">&nbsp;</div>');
 
@@ -1886,6 +1876,7 @@ class Exercise
                 $defaults['pass_percentage'] = $this->selectPassPercentage();
                 $defaults['end_button'] = $this->selectEndButton();
                 $defaults['email_notification_template'] = $this->selectEmailNotificationTemplate();
+                $defaults['model_type'] = $this->getModelType();
 
                 if (($this->start_time != '0000-00-00 00:00:00')) {
                     $defaults['activate_start_date_check'] = 1;
@@ -1909,6 +1900,7 @@ class Exercise
                     $defaults['enabletimercontroltotalminutes'] = 0;
                 }
             } else {
+                $defaults['model_type'] = 1;
                 $defaults['exerciseType'] = 2;
                 $defaults['exerciseAttempts'] = 0;
                 $defaults['randomQuestions'] = 0;
@@ -1957,6 +1949,7 @@ class Exercise
         $this->updateCategories($form->getSubmitValue('category'));
         $this->updateEndButton($form->getSubmitValue('end_button'));
         $this->updateEmailNotificationTemplate($form->getSubmitValue('email_notification_template'));
+        $this->setModelType($form->getSubmitValue('model_type'));
 
         if ($form->getSubmitValue('activate_start_date_check') == 1) {
             $start_time = $form->getSubmitValue('start_time');
@@ -5936,7 +5929,7 @@ class Exercise
                 case ONE_PER_PAGE:
                     $exercise_actions .= $this->show_button($questionId, $current_question, null, $remindList);
                     break;
-                case ALL_ON_ONE_PAGE :
+                case ALL_ON_ONE_PAGE:
                     $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
                     $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
                     $exercise_actions .= Display::div($button, array('class'=>'exercise_save_now_button'));

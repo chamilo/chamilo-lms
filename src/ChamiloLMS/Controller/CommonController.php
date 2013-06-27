@@ -2,25 +2,56 @@
 /* For licensing terms, see /license.txt */
 namespace ChamiloLMS\Controller;
 
-use \ChamiloSession as Session;
 use Silex\Application;
 use Knp\Menu\Matcher\Matcher;
+use ChamiloLMS\Controller\BaseController;
 
 /**
  * @package ChamiloLMS.CommonController
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class CommonController
+class CommonController extends BaseController
 {
-
     public $languageFiles = array();
 
-    /**
-     *
-    */
-    public function __construct()
+    public function __construct(Application $app)
     {
+        parent::__construct($app);
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    protected function getRepository()
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getNewEntity()
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getFormType()
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function generateLinks()
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getTemplatePath()
+    {
     }
 
     /**

@@ -190,7 +190,6 @@ class InstallCommand extends CommonCommand
         }
 
         $databaseSettings = $this->getDatabaseSettings();
-
         $connectionToHost = $this->getUserAccessConnectionToHost();
         $connectionToHostConnect = $connectionToHost->connect();
 
@@ -271,6 +270,17 @@ class InstallCommand extends CommonCommand
                     api_set_setting('Institution', $portalSettings['institution']);
                     api_set_setting('InstitutionUrl', $portalSettings['institution_url']);
                     api_set_setting('siteName', $portalSettings['sitename']);
+
+                    // Injecting the chamilo application (because the configuration.php is now set)
+
+                    $app = require_once $this->getRootSys().'main/inc/global.inc.php';
+                    $filesystem = $app['chamilo.filesystem'];
+
+                    // Creating temp folders
+                    $filesystem->createFolders($app['temp.paths']->folders);
+                    $output->writeln("<comment>Temp folders were created.</comment>");
+
+                    //$app->run();
 
                     //$versionInfo = $this->getAvailableVersionInfo($version);
 

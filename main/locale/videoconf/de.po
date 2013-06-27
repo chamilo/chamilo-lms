@@ -1,0 +1,322 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8 \n"
+
+msgid "Camera"
+msgstr "Kamera"
+
+msgid "Microphone"
+msgstr "Mikrofon"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "DeleteStream"
+msgstr "Stream löschen"
+
+msgid "Progress"
+msgstr "Fortschritt"
+
+msgid "Play"
+msgstr "Abspielen"
+
+msgid "Stop"
+msgstr "Stop"
+
+msgid "Record"
+msgstr "Aufnahme"
+
+msgid "NoFileAvailable"
+msgstr "Keine Datei verfügbar"
+
+msgid "RecordingOnlyForTeachers"
+msgstr "Aufnahme nur für Kursleiter"
+
+msgid "UsersNow"
+msgstr "Benutzer momentan:"
+
+msgid "StartConference"
+msgstr "Konferenz beginnen"
+
+msgid "MyName"
+msgstr "Mein Name"
+
+msgid "OrganisationSVideoconference"
+msgstr "Chamilo Videokonferenz"
+
+msgid "ImportPresentation"
+msgstr "Präsentation importieren"
+
+msgid "RefreshList"
+msgstr "Liste aktualisieren"
+
+msgid "GoToTop"
+msgstr "Zum Beginn"
+
+msgid "NewPoll"
+msgstr "Neue Umfrage"
+
+msgid "CreateNewPoll"
+msgstr "Neue Umfrage für diesen Raum anlegen"
+
+msgid "Question"
+msgstr "Frage"
+
+msgid "PollType"
+msgstr "Umfragetyp:"
+
+msgid "Create"
+msgstr "Erstellen"
+
+msgid "InfoConnectedUsersGetNotifiedOfThisPoll"
+msgstr "Information: Jeder verbundene Benutzer in diesem Raum wird eine Benachrichtigung zu dieser neuen Umfrage erhalten"
+
+msgid "YesNo"
+msgstr "Ja / Nein"
+
+msgid "Numeric1To10"
+msgstr "Numerisch 1-10"
+
+msgid "Poll"
+msgstr "Umfrage"
+
+msgid "YouHaveToBecomeModeratorOfThisRoomToStartPolls"
+msgstr "Um Umfragen zu erstellen, muss man in diesem Raum ein Moderator sein"
+
+msgid "YourVoteHasBeenSent"
+msgstr "Ihre Stimme wurde abgeschickt"
+
+msgid "YouAlreadyVotedForThisPoll"
+msgstr "Sie haben in dieser Umfrage bereits abgestimmt"
+
+msgid "VoteButton"
+msgstr "Stimme"
+
+msgid "YourAnswer"
+msgstr "Ihre Antwort:"
+
+msgid "Yes"
+msgstr "ja"
+
+msgid "No"
+msgstr "nein"
+
+msgid "WantsToKnow"
+msgstr "möchte wissen:"
+
+msgid "PollResults"
+msgstr "Ergebnis der Umfrage:"
+
+msgid "Votes"
+msgstr "Stimmen:"
+
+msgid "Result"
+msgstr "Ergebnis"
+
+msgid "ThereIsNoPoll"
+msgstr "Es gibt keine Umfrage."
+
+msgid "MeetingMode"
+msgstr "Meeting (max. 4 Teilnehmer)"
+
+msgid "ConferenceMaxSeats"
+msgstr "Konferenz (max 50 Teilnehmer)"
+
+msgid "Mode"
+msgstr "Modus"
+
+msgid "RemainingSeats"
+msgstr "noch freie Plätze"
+
+msgid "AlreadyIn"
+msgstr "Bereits in"
+
+msgid "CheckIn"
+msgstr "Check in"
+
+msgid "TheModeratorHasLeft"
+msgstr "Der Moderator dieser Konferenz hat den Raum verlassen."
+
+msgid "SystemMessage"
+msgstr "Systemnachricht"
+
+msgid "ChooseDevices"
+msgstr "Geräte auswählen"
+
+msgid "ChooseCam"
+msgstr "Kamera auswählen:"
+
+msgid "ChooseMic"
+msgstr "Mikrofon auswählen:"
+
+msgid "OK"
+msgstr "Ok"
+
+msgid "YouHaveToReconnectSoThatTheChangesTakeEffect"
+msgstr "Man muss sich neu verbinden, damit die Änderungen gültig werden"
+
+msgid "ChangeSettings"
+msgstr "Einstellungen ändern"
+
+msgid "Course"
+msgstr "Kurs"
+
+msgid "CourseLanguage"
+msgstr "Kurssprache:"
+
+msgid "ConfirmClearWhiteboard"
+msgstr "Whiteboard löschen bestätigen"
+
+msgid "ShouldWitheboardBeClearedBeforeNewImage"
+msgstr "Soll das Whiteboard gelöscht werden, bevor ich ein neues Bild hinzufüge?"
+
+msgid "DontAskMeAgain"
+msgstr "Nicht mehr nachfragen"
+
+msgid "EditSettings"
+msgstr "Einstellungen bearbeiten"
+
+msgid "ShowConfirmationBeforeClearingWhiteboard"
+msgstr "Vorm Löschen des Whiteboards Bestätigung abfragen"
+
+msgid "UserInfo"
+msgstr "Benutzer Information"
+
+msgid "ClearDrawArea"
+msgstr "Zeichenfläche löschen"
+
+msgid "Undo"
+msgstr "Zurücknehmen"
+
+msgid "Redo"
+msgstr "Redo"
+
+msgid "SelectAnObject"
+msgstr "Objekt auswählen"
+
+msgid "Text"
+msgstr "Text"
+
+msgid "Paint"
+msgstr "Zeichnung"
+
+msgid "DrawLine"
+msgstr "Linie zeichnen"
+
+msgid "DrawUnderline"
+msgstr "Zeile unterstreichen"
+
+msgid "Rectangle"
+msgstr "Rechteck"
+
+msgid "Elipse"
+msgstr "Ellipse"
+
+msgid "Arrow"
+msgstr "Pfeil"
+
+msgid "DeleteChosenItem"
+msgstr "Ausgewähltes Teil löschen"
+
+msgid "ApplyForModeration"
+msgstr "Als Moderator bewerben"
+
+msgid "Apply"
+msgstr "Bewerben"
+
+msgid "BecomeModerator"
+msgstr "Moderator werden"
+
+msgid "Close"
+msgstr "schließen"
+
+msgid "Italic"
+msgstr "Kursiv"
+
+msgid "Bold"
+msgstr "Fett"
+
+msgid "Waiting"
+msgstr "Warten"
+
+msgid "AUserWantsToApplyForModeration"
+msgstr "Ein Benutzer will sich als Moderator bewerben"
+
+msgid "Accept"
+msgstr "Akzeptieren"
+
+msgid "Reject"
+msgstr "Ablehnen"
+
+msgid "SendingRequestToFollowingUsers"
+msgstr "Eine Anfrage an den folgenden Benutzer schicken"
+
+msgid "Accepted"
+msgstr "Angenommen"
+
+msgid "Rejected"
+msgstr "Abgelehnt"
+
+msgid "ChangeModerator"
+msgstr "Moderator ändern"
+
+msgid "YouAreNotModeratingThisCourse"
+msgstr "Sie moderieren diesen Kurs nicht!"
+
+msgid "Moderator"
+msgstr "Moderator:"
+
+msgid "ThisRoomIsFullPleaseTryAgain"
+msgstr "Dieser Raum ist voll. Versuchen Sie es bitte später erneut"
+
+msgid "Loading"
+msgstr "Lädt"
+
+msgid "PleaseWaitWhileLoadingImage"
+msgstr "Bitte warten, während das Bild lädt"
+
+msgid "SynchronisingConferenceMembers"
+msgstr "Teilnehmer der Konferenz synchronisieren"
+
+msgid "Trainer"
+msgstr "Kursleiter"
+
+msgid "Learner"
+msgstr "Teilnehmer"
+
+msgid "Chat"
+msgstr "Chat"
+
+msgid "Slides"
+msgstr "Slides"
+
+msgid "WaitingForParticipants"
+msgstr "Auf Teilnehmer warten"
+
+msgid "Send"
+msgstr "Senden"
+
+msgid "Browse"
+msgstr "Browse"
+
+msgid "Cancel"
+msgstr "Abbrechen"
+
+msgid "ChooseFile"
+msgstr "Datei zum Importieren auswählen"
+
+msgid "ConvertingDocument"
+msgstr "Dokument konvertieren"
+
+msgid "Disconnected"
+msgstr "Nicht verbunden"
+
+msgid "FineStroke"
+msgstr "dünn"
+
+msgid "MediumStroke"
+msgstr "mittel"
+
+msgid "ThickStroke"
+msgstr "dick"
+

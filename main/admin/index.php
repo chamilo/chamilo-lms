@@ -11,12 +11,6 @@
 // Language files that need to be included.
 $language_file = array('admin', 'tracking','coursebackup');
 
-// Resetting the course id.
-$cidReset = true;
-
-// Including some necessary chamilo files.
-require_once '../inc/global.inc.php';
-
 if (api_is_question_manager()) {
     header('Location: '.api_get_path(WEB_PUBLIC_PATH).'admin/questionmanager');
     exit;
@@ -312,8 +306,6 @@ if (api_is_platform_admin()) {
 }
 
 $app['template']->assign('blocks', $blocks);
-//$app['template']->display('default/admin/settings_index.tpl');
-//$app['default_layout'] = $app['template_style'].'/admin/settings_index.tpl';
 $app['template']->display('default/admin/settings_index.tpl');
 
 /**
@@ -358,11 +350,11 @@ function register_site() {
     $tbl_settings = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
     $sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='registered'";
-    $result = Database::query($sql);
+    Database::query($sql);
 
     if ($_POST['donotlistcampus']) {
         $sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='donotlistcampus'";
-        $result = Database::query($sql);
+        Database::query($sql);
     }
     // Reload the settings.
 }

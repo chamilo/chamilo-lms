@@ -4,15 +4,6 @@
 use Symfony\Component\HttpFoundation\Request;
 use \ChamiloSession as Session;
 
-/**
- * All calls made in Chamilo (olds ones) are manage in the LegacyController::classicAction function located here:
- * src/ChamiloLMS/Controller/LegacyController.php
- */
-
-$userAccessConditions = function (Request $request) use ($app) {
-
-};
-
 /** Setting course session and group global values */
 $settingCourseConditions = function (Request $request) use ($cidReset, $app) {
 
@@ -361,14 +352,6 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
     }
 };
 
-$adminAndQuestionManagerCondition = function (Request $request) use ($app) {
-    if (!(api_is_platform_admin() || api_is_question_manager())) {
-        //$app->abort(401);
-    }
-    return null;
-};
-
-
 /**
  * Deletes the exam_password user extra field *only* to students
  * @todo improve the login hook system
@@ -388,47 +371,39 @@ $afterLogin = function (Request $request) use ($app) {
     }
 };
 
-$checkLangs = function (Request $request) use ($app) {
-    /*$file = $request->get('file');
+$removeCidReset = function (Request $request) use ($app) {
+    Session::erase('_cid');
+    Session::erase('_real_cid');
+    Session::erase('_course');
 
-    if (!empty($file )) {
-        $info = pathinfo($file);
-        $section = $info['dirname'];
-    }*/
+    if (!empty($_SESSION)) {
+        foreach ($_SESSION as $key => $item) {
+            if (strpos($key, 'lp_autolunch_') === false) {
+                continue;
+            } else {
+                if (isset($_SESSION[$key])) {
+                    Session::erase($key);
+                }
+            }
+        }
+    }
+
+    // Deleting session info.
+    Session::erase('id_session');
+    Session::erase('session_name');
+
+    // Deleting group info.
+    Session::erase('_gid');
 };
 
-
-$removeCidReset = function (Request $request) use ($app) {
+$removeCidResetDependingOfSection = function (Request $request) use ($app, $removeCidReset) {
     $file = $request->get('file');
     if (!empty($file)) {
         $info = pathinfo($file);
         $section = $info['dirname'];
 
         if ($section == 'admin') {
-
-            Session::erase('_cid');
-            Session::erase('_real_cid');
-            Session::erase('_course');
-
-            if (!empty($_SESSION)) {
-                foreach ($_SESSION as $key => $item) {
-                    if (strpos($key, 'lp_autolunch_') === false) {
-                        continue;
-                    } else {
-                        if (isset($_SESSION[$key])) {
-                            Session::erase($key);
-                        }
-                    }
-                }
-            }
-
-            // Deleting session info.
-
-            Session::erase('id_session');
-            Session::erase('session_name');
-
-            // Deleting group info.
-            Session::erase('_gid');
+            $removeCidReset($request);
         }
     }
 };
@@ -457,8 +432,7 @@ $app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexActi
 
 /** main files */
 $app->match('/main/{file}', 'legacy.controller:classicAction', 'GET|POST')
-    ->before($checkLangs)
-    ->before($removeCidReset)
+    ->before($removeCidResetDependingOfSection)
     ->before(
         function() use ($app) {
             // Do not load breadcrumbs
@@ -569,49 +543,39 @@ $app->get('/admin/dashboard', 'index.controller:dashboardAction')
 
 $app->get('/admin/questionmanager/', 'question_manager.controller:questionManagerIndexAction')
     ->assert('type', '.+')
-    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_questionmanager');
 
 $app->match('/admin/questionmanager/questions', 'question_manager.controller:questionsAction', 'GET|POST')
     ->assert('type', '.+')
-    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_questions');
 
 $app->match('/admin/questionmanager/questions/{id}/edit', 'question_manager.controller:editQuestionAction', 'GET|POST')
     ->assert('type', '.+')
-    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_questions_edit');
 
 $app->match('/admin/questionmanager/questions/{id}', 'exercise_manager.controller:getQuestionAction', 'GET|POST')
     ->assert('type', '.+')
-    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_questions_show');
 
 $app->get('/admin/questionmanager/questions/get-categories/{id}', 'question_manager.controller:getCategoriesAction')
-    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_questions_get_categories');
 
 $app->get('/admin/questionmanager/questions/get-questions-by-category/{categoryId}', 'question_manager.controller:getQuestionsByCategoryAction')
-    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_get_questions_by_category');
 
 $app->match('/admin/questionmanager/categories/{id}/edit', 'question_manager.controller:editCategoryAction', 'GET|POST')
     ->assert('type', '.+')
-    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_category_edit');
 
 $app->match('/admin/questionmanager/categories/{id}', 'question_manager.controller:showCategoryAction', 'GET')
     ->assert('id', '\d+')
     ->assert('type', '.+')
-    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_category_show');
 
 $app->match('/admin/questionmanager/categories/new', 'question_manager.controller:newCategoryAction', 'GET|POST')
-    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_category_new');
 
 $app->match('/admin/questionmanager/categories/{id}/delete', 'question_manager.controller:deleteCategoryAction', 'POST')
-    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_category_delete');
 
 /** Editor */
@@ -689,7 +653,7 @@ $app->match('/courses/{cidReq}/{id_session}/exercise/question/{id}/edit', 'exerc
     ->bind('exercise_question_edit');
 
 // Roles
-// @todo improve route creation
+// @todo improve route creation. Use mount() to write less
 
 $app->match('/admin/administrator/', 'admin.controller:indexAction', 'GET')
     ->assert('type', '.+')

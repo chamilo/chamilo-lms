@@ -19,30 +19,60 @@ class IndexController extends CommonController
     public $languageFiles = array('courses', 'index', 'admin');
 
     /**
-     * Logouts a user
-     * @param Application $app
-     */
-    public function logoutAction(Application $app)
-    {
-        $userId = api_get_user_id();
-        \Online::logout($userId, true);
-
-        // the Online::logout function already does a redirect
-        //return $app->redirect($app['url_generator']->generate('index'));
-    }
-
-    /**
      * @param \Silex\Application $app
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Application $app)
     {
-
         /** @var \Template $template */
         $template = $app['template'];
-        $loginError = $app['request']->get('error');
         $extraJS = array();
+        /*
+        $token = $app['security']->getToken();
+        if (null !== $token) {
+            $user = $token->getUser();
+        }*/
+
+        /*\ChamiloSession::write('name', 'clara');
+        var_dump(\ChamiloSession::read('name'));
+        var_dump($_SESSION['name']);*/
+
+        //var_dump(\ChamiloSession::read('aaa'));
+
+        /*\ChamiloSession::write('name', 'clar');
+        echo \ChamiloSession::read('name');
+        $app['session']->set('name', 'julio');
+        echo $app['session']->get('name');*/
+        /*
+        $token = $app['security']->getToken();
+        if (null !== $token) {
+            $user = $token->getUser();
+            var_dump($user );
+        }
+        if ($app['security']->isGranted('ROLE_ADMIN')) {
+        }*/
+
+        /** @var \Entity\User $user */
+        /*$em = $app['orm.ems']['db_write'];
+        $user = $em->getRepository('Entity\User')->find(6);
+        $role = $em->getRepository('Entity\Role')->findOneByRole('ROLE_STUDENT');
+        $user->getRolesObj()->add($role);
+        $em->persist($user);
+        $em->flush();*/
+
+        //$user->roles->add($status);
+        /*$roles = $user->getRolesObj();
+        foreach ($roles as $role) {
+        }*/
+
+        // $countries = Intl::getRegionBundle()->getCountryNames('es');
+        //var_dump($countries);
+
+        /*$formatter = new \IntlDateFormatter(\Locale::getDefault(), \IntlDateFormatter::NONE, \IntlDateFormatter::NONE);
+        //http://userguide.icu-project.org/formatparse/datetime for date formats
+        $formatter->setPattern("EEEE d MMMM Y");
+        echo $formatter->format(time());*/
 
         //@todo improve this JS includes should be added using twig
         $extraJS[] = api_get_jquery_libraries_js(array('bxslider'));
@@ -63,6 +93,11 @@ class IndexController extends CommonController
         $request = $app['request'];
         $app['languages_file'] = array('courses', 'index', 'admin');
         $app['cidReset'] = true;
+        /*
+        $sql = 'SELECT * from user WHERE user_id = 1';
+        var_dump($sql);
+        $result = \Database::query($sql);
+        var_dump(\Database::fetch_object($result));*/
 
         // Testing translation using translator
         //echo $app['translator']->trans('Wiki Search Results');
@@ -146,9 +181,6 @@ class IndexController extends CommonController
             $app['page_controller']->return_skills_links();
         }
 
-        if (!empty($loginError)) {
-            $template->assign('login_failed', $this->handleLoginFailed($loginError));
-        }
 
         $response = $template->render_layout('layout_2_col.tpl');
 
@@ -166,7 +198,8 @@ class IndexController extends CommonController
         $app['template']->assign('error', $app['security.last_error']($request));
         $response = $app['template']->render_template('auth/login.tpl');
 
-        return new Response($response, 200, array());
+        return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
+        //return new Response($response, 200, array());
     }
 
     /**
@@ -266,13 +299,14 @@ class IndexController extends CommonController
                 'autofocus' => 'autofocus'
             )
         );
-        $form->addElement('password', 'password', get_lang('Pass'), array('class' => 'input-medium virtualkey'));
+        $form->addElement('password', 'password', get_lang('Pass'), array('class' => 'input-medium '));
         $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));
         $html = $form->return_form();
         /*if (api_get_setting('openid_authentication') == 'true') {
             include_once 'main/auth/openid/login.php';
             $html .= '<div>'.openid_form().'</div>';
         }*/
+
         /** Verify if settings is active to set keyboard. Included extra class in form input elements */
 
         if (api_get_setting('use_virtual_keyboard') == 'true') {

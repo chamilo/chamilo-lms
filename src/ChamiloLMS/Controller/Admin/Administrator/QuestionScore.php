@@ -3,7 +3,7 @@
 
 namespace ChamiloLMS\Controller\Admin\Administrator;
 
-use ChamiloLMS\Controller\BaseController;
+use ChamiloLMS\Controller\CommonController;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,114 +18,47 @@ use ChamiloLMS\Form\QuestionScoreType;
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class QuestionScore extends BaseController
+class QuestionScore extends CommonController
 {
-    /**
-     *
-     * @param Application $app
-     * @Route("/")
-     * @Method({"GET"})
-     */
     public function indexAction()
     {
-        $items = parent::listAction('array');
-        $template = $this->get('template');
-        $template->assign('items', $items);
-        $template->assign('links', $this->generateLinks());
-        $response = $template->render_template('admin/administrator/question_score/list.tpl');
-        return new Response($response, 200, array());
+        return parent::indexAction();
     }
 
-    /**
-     *
-     * @Route("/{id}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
-     * @Method({"GET"})
-     */
     public function readAction($id)
     {
+        // return parent::readAction($id);
         $template = $this->get('template');
         $template->assign('links', $this->generateLinks());
-        $item = parent::getEntity($id);
+        $item = $this->getEntity($id);
         $subItems = $item->getItems();
 
         $template->assign('item', $item);
         $template->assign('subitems', $subItems);
-        $response = $template->render_template('admin/administrator/question_score/read.tpl');
+        $response = $template->render_template($this->getTemplatePath().'read.tpl');
         return new Response($response, 200, array());
-    }
-
-    public function editAction($id)
-    {
-        $roleRepo = $this->getRepository();
-        $request = $this->getRequest();
-
-        $role = $roleRepo->findOneById($id);
-
-        if ($role) {
-            $form = $this->get('form.factory')->create(new QuestionScoreType(), $role);
-
-            if ($request->getMethod() == 'POST') {
-                $form->bind($this->getRequest());
-
-                if ($form->isValid()) {
-                    $role = $form->getData();
-                    parent::updateAction($role);
-                    $this->get('session')->getFlashBag()->add('success', "Updated");
-                    $url = $this->get('url_generator')->generate('admin_administrator_question_scores');
-                    return $this->redirect($url);
-                }
-            }
-
-            $template = $this->get('template');
-            $template->assign('item', $role);
-            $template->assign('form', $form->createView());
-            $template->assign('links', $this->generateLinks());
-            $response = $template->render_template('admin/administrator/question_score/edit.tpl');
-            return new Response($response, 200, array());
-        } else {
-            return $this->createNotFoundException();
-        }
     }
 
     public function addAction()
     {
-        $request = $this->getRequest();
-        $form = $this->get('form.factory')->create(new QuestionScoreType());
+        return parent::addAction();
+    }
 
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $role = $form->getData();
-                parent::createAction($role);
-                $this->get('session')->getFlashBag()->add('success', "Added");
-                $url = $this->get('url_generator')->generate('admin_administrator_question_scores');
-                return $this->redirect($url);
-            }
-        }
-
-        $template = $this->get('template');
-        $template->assign('links', $this->generateLinks());
-        $template->assign('form', $form->createView());
-        $response = $template->render_template('admin/administrator/question_score/add.tpl');
-        return new Response($response, 200, array());
+    public function editAction($id)
+    {
+        return parent::editAction($id);
     }
 
     public function deleteAction($id)
     {
-        $result = parent::deleteAction($id);
-        if ($result) {
-            $url = $this->get('url_generator')->generate('admin_administrator_question_scores');
-            $this->get('session')->getFlashBag()->add('success', "Deleted");
-
-            return $this->redirect($url);
-        }
+        return parent::deleteAction($id);
     }
 
     /**
      * Return an array with the string that are going to be generating by twig.
      * @return array
      */
-    private function generateLinks()
+    protected function generateLinks()
     {
         return array(
             'create_link' => 'admin_administrator_question_score_add',
@@ -137,9 +70,8 @@ class QuestionScore extends BaseController
         );
     }
 
-    /**
-     * @see BaseController::getRepository()
-     * @return EntityRepository
+   /**
+     * {@inheritdoc}
      */
     protected function getRepository()
     {
@@ -147,11 +79,26 @@ class QuestionScore extends BaseController
     }
 
     /**
-     * @see BaseController::getNewEntity()
-     * @return Object
+     * {@inheritdoc}
      */
     protected function getNewEntity()
     {
         return new Entity\QuestionScore();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getFormType()
+    {
+        return new QuestionScoreType();
+    }
+
+    /**
+    * {@inheritdoc}
+    */
+    protected function getTemplatePath()
+    {
+        return 'admin/administrator/question_score/';
     }
 }

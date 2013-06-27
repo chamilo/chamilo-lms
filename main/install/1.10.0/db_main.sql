@@ -71,6 +71,9 @@ CREATE TABLE users_roles (
   PRIMARY KEY(user_id, role_id)
 );
 
+-- Admin
+INSERT INTO users_roles VALUES (1, 1);
+
 INSERT INTO roles (name, role) VALUES('Admin', 'ROLE_ADMIN');
 INSERT INTO roles (name, role) VALUES('Teacher', 'ROLE_TEACHER');
 INSERT INTO roles (name, role) VALUES('Student', 'ROLE_STUDENT');
@@ -3563,4 +3566,4 @@ CREATE TABLE question_score (
 
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.026' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.028' WHERE variable = 'chamilo_database_version';

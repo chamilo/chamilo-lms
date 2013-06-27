@@ -64,10 +64,7 @@ class Template
         // Setting course variables.
         $this->setCourseParameters();
 
-        global $interbreadcrumb;
-        $this->setBreadcrumb($interbreadcrumb);
-
-        //header and footer are showed by default
+        // header and footer are showed by default
         $this->setFooter($app['template.show_footer']);
         $this->setHeader($app['template.show_header']);
 
@@ -101,7 +98,7 @@ class Template
     /**
      * @param array $interbreadcrumb
      */
-    function setBreadcrumb($interbreadcrumb)
+    public function setBreadcrumb($interbreadcrumb)
     {
 
         if (isset($this->app['breadcrumb']) && !empty($this->app['breadcrumb'])) {

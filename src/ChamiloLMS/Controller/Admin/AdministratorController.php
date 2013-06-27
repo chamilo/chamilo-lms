@@ -3,7 +3,7 @@
 
 namespace ChamiloLMS\Controller\Admin;
 
-use ChamiloLMS\Controller\BaseController;
+use ChamiloLMS\Controller\CommonController;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +18,7 @@ use ChamiloLMS\Form\QuestionScoreType;
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class AdministratorController extends BaseController
+class AdministratorController extends CommonController
 {
     /**
      *

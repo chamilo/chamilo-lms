@@ -1,4 +1,5 @@
 <?php
+
 namespace Entity;
 
 use Symfony\Component\Security\Core\Role\Role as SymfonyRole;
@@ -71,7 +72,6 @@ class Role extends SymfonyRole implements \Serializable
         return $this;
     }
 
-
     /**
      * Get name
      *
@@ -85,12 +85,12 @@ class Role extends SymfonyRole implements \Serializable
      /**
      * Set name
      *
-     * @param string $name
+     * @param string $role
      * @return Role
      */
-    public function setRole($name)
+    public function setRole($role)
     {
-        $this->name = $name;
+        $this->role = $role;
 
         return $this;
     }
@@ -119,6 +119,4 @@ class Role extends SymfonyRole implements \Serializable
             $this->role
         ) = \unserialize($serialized);
     }
-
-
 }

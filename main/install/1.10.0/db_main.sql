@@ -3078,7 +3078,13 @@ CREATE TABLE branch_sync(
   admin_phone varchar(250) default '',
   last_sync_trans_id bigint unsigned default 0,
   last_sync_trans_date datetime,
-  last_sync_type char(20) default 'full'
+  last_sync_type char(20) default 'full',
+  ssl_pub_key varchar(250) default '',
+  lft int unsigned,
+  rgt int unsigned,
+  lvl int unsigned,
+  root int unsigned,
+  parent_id int unsigned
 );
 INSERT INTO branch_sync (id, access_url_id, branch_name, branch_ip) VALUES (1, 1, 'Local', '127.0.0.1');
 
@@ -3113,11 +3119,31 @@ CREATE TABLE branch_transaction (
     PRIMARY KEY (id, transaction_id, branch_id)
 );
 
-
 CREATE TABLE IF NOT EXISTS branch_transaction_data (
     id bigint unsigned NOT NULL PRIMARY KEY,
     data text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
 );
+
+
+CREATE TABLE jury (
+  id int NOT NULL AUTO_INCREMENT,
+  name varchar(255) DEFAULT NULL,
+  branch_id int NULL,
+  opening_date datetime DEFAULT NULL,
+  closure_date datetime DEFAULT NULL,
+  opening_user_id int DEFAULT NULL,
+  closure_user_id int DEFAULT NULL,
+  exercise_id int NOT NULL,
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE jury_members (
+    id int NOT NULL AUTO_INCREMENT,
+    user_id int,
+    role_id int,
+    PRIMARY KEY(id)
+);
+
 
 -- Stats database
 

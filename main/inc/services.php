@@ -610,3 +610,9 @@ $app['model_ajax.controller'] = $app->share(
         return new ChamiloLMS\Controller\ModelAjaxController();
     }
 );
+
+$app['branch.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\Administrator\BranchController($app);
+    }
+);

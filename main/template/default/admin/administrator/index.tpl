@@ -11,6 +11,9 @@
     <li>
         <a href="{{ url('admin_administrator_roles') }}">Roles</a>
     </li>
+    <li>
+        <a href="{{ url('admin_administrator_branches') }}">Branches</a>
+    </li>
 </ul>
 
 {% endblock %}

@@ -659,6 +659,39 @@ $app->match('/admin/administrator/', 'admin.controller:indexAction', 'GET')
     ->assert('type', '.+')
     ->bind('admin_administrator');
 
+// Branches
+
+$app->match('/admin/administrator/branches/', 'branch.controller:indexAction', 'GET')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_branches');
+
+$app->match('/admin/administrator/branches/{id}', 'branch.controller:readAction', 'GET')
+    ->assert('type', '.+')
+    ->assert('id', '\d+')
+    ->bind('admin_administrator_branches_read');
+
+$app->match('/admin/administrator/branches/add', 'branch.controller:addAction', 'GET')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_branches_add');
+
+$app->match('/admin/administrator/branches/create', 'branch.controller:createAction', 'POST')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_branches_create');
+
+$app->match('/admin/administrator/branches/{id}/edit', 'branch.controller:editAction', 'POST')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_branches_edit');
+
+$app->match('/admin/administrator/branches/{id}/update', 'branch.controller:updateAction', 'POST')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_branches_update');
+
+$app->match('/admin/administrator/branches/{id}/delete', 'branch.controller:deleteAction', 'DELETE')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_branches_delete');
+
+// Roles
+
 $app->match('/admin/administrator/roles/', 'role.controller:indexAction', 'GET')
     ->assert('type', '.+')
     ->bind('admin_administrator_roles');

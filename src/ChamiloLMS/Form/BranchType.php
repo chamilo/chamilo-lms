@@ -28,6 +28,7 @@ class BranchType extends AbstractType
 
         $builder
             ->add('branch_name', 'text')
+            ->add('branch_type', 'choice', array('choices' => array('remote_child', 'local_child', 'local_parent', 'remote_parent')))
             //->add('parent_id', 'choice', array('choices'=> array(), 'required' => false))
             ->add('parent_id', 'text', array('required' => false, 'disabled' => $parentIdDisabled))
             //->add('parent_id', 'choice', array('choices'=> array(1 => 'jjaa',2=>'ddd'), 'required' => false))

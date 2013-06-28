@@ -129,6 +129,13 @@ class BranchSync
     private $sslPubKey;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="branch_type", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $branchType;
+
+    /**
      * @var integer
      * @Gedmo\TreeLeft
      * @ORM\Column(name="lft", type="integer", precision=0, scale=0, nullable=true, unique=false)
@@ -505,6 +512,29 @@ class BranchSync
     public function getSslPubKey()
     {
         return $this->sslPubKey;
+    }
+
+     /**
+     * Set sslPubKey
+     *
+     * @param string $sslPubKey
+     * @return BranchSync
+     */
+    public function setBranchType($branchType)
+    {
+        $this->branchType = $branchType;
+
+        return $this;
+    }
+
+    /**
+     * Get sslPubKey
+     *
+     * @return string
+     */
+    public function getBranchType()
+    {
+        return $this->branchType;
     }
 
     /**

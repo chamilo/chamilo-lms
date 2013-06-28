@@ -3080,6 +3080,7 @@ CREATE TABLE branch_sync(
   last_sync_trans_date datetime,
   last_sync_type char(20) default 'full',
   ssl_pub_key varchar(250) default '',
+  branch_type varchar(250) default null,
   lft int unsigned,
   rgt int unsigned,
   lvl int unsigned,

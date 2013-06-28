@@ -18,46 +18,59 @@ use ChamiloLMS\Form\QuestionScoreNameType;
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class QuestionScoreName extends CommonController
+class QuestionScoreNameController extends CommonController
 {
+    /**
+     * @Route("/")
+     * @Method({"GET"})
+     */
     public function indexAction()
     {
         return parent::listingAction();
     }
 
+    /**
+    *
+    * @Route("/{id}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Method({"GET"})
+    */
     public function readAction($id)
     {
         return parent::readAction($id);
     }
 
+    /**
+    * @Route("/add")
+    * @Method({"GET"})
+    */
     public function addAction()
     {
         return parent::addAction();
     }
 
+    /**
+    *
+    * @Route("/{id}/edit", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Method({"GET"})
+    */
     public function editAction($id)
     {
         return parent::editAction($id);
     }
 
+    /**
+    *
+    * @Route("/{id}/delete", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Method({"GET"})
+    */
     public function deleteAction($id)
     {
         return parent::deleteAction($id);
     }
 
-    /**
-     * Return an array with the string that are going to be generating by twig.
-     * @return array
-     */
-    protected function generateLinks()
+    protected function getControllerAlias()
     {
-        return array(
-            'create_link' => 'admin_administrator_question_score_names_add',
-            'read_link' => 'admin_administrator_question_score_names_read',
-            'update_link' => 'admin_administrator_question_score_names_edit',
-            'delete_link' => 'admin_administrator_question_score_names_delete',
-            'list_link' => 'admin_administrator_question_score_names'
-        );
+        return 'question_score_name.controller';
     }
 
     /**

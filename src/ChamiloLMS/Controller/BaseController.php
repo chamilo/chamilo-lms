@@ -13,6 +13,9 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\NoResultException;
 use Silex\Application;
 
+use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+
 /**
  * Each entity controller must extends this class.
  *
@@ -58,20 +61,26 @@ abstract class BaseController
     abstract protected function getTemplatePath();
 
     /**
+    * Returns the controller alias
+     * @example for QuestionScoreController: question_score_controller
+    */
+    abstract protected function getControllerAlias();
+
+    /**
      *
      * @return Request
      */
-    public function getRequest()
+    private function getRequest()
     {
         return $this->get('request');
     }
 
-    public function redirect($redirect)
+    private function redirect($redirect)
     {
         return $this->app->redirect($redirect);
     }
 
-    public function createNotFoundException($message = 'Not Found', \Exception $previous = null)
+    private function createNotFoundException($message = 'Not Found', \Exception $previous = null)
     {
         return $this->app->abort(404, $message);
     }
@@ -95,7 +104,7 @@ abstract class BaseController
      * @param $label
      * @return mixed
      */
-    public function createUrl($label, $params = array())
+    private function createUrl($label, $params = array())
     {
         $links = $this->generateLinks();
         if (isset($links) && is_array($links) && isset($links[$label])) {
@@ -114,7 +123,7 @@ abstract class BaseController
     // CRUD
 
     /**
-     * @Route("/{id}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+     * @Route("/")
      * @Method({"GET"})
      */
     public function listingAction()
@@ -127,6 +136,11 @@ abstract class BaseController
         return new Response($response, 200, array());
     }
 
+    /**
+     *
+     * @Route("/add")
+     * @Method({"GET"})
+     */
     public function addAction()
     {
         $request = $this->getRequest();

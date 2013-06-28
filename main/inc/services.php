@@ -595,13 +595,13 @@ $app['role.controller'] = $app->share(
 
 $app['question_score.controller'] = $app->share(
     function () use ($app) {
-        return new ChamiloLMS\Controller\Admin\Administrator\QuestionScore($app);
+        return new ChamiloLMS\Controller\Admin\Administrator\QuestionScoreController($app);
     }
 );
 
 $app['question_score_name.controller'] = $app->share(
     function () use ($app) {
-        return new ChamiloLMS\Controller\Admin\Administrator\QuestionScoreName($app);
+        return new ChamiloLMS\Controller\Admin\Administrator\QuestionScoreNameController($app);
     }
 );
 

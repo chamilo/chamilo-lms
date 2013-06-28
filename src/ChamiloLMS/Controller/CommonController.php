@@ -43,8 +43,16 @@ class CommonController extends BaseController
     /**
      * {@inheritdoc}
      */
+    protected function getControllerAlias() {
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function generateLinks()
     {
+        return $this->generateDefaultCrudRoutes();
     }
 
     /**
@@ -54,11 +62,24 @@ class CommonController extends BaseController
     {
     }
 
+    protected function generateDefaultCrudRoutes()
+    {
+        $className = $this->getControllerAlias();
+        return array(
+            'create_link' => $className.':addAction',
+            'read_link' => $className.':readAction',
+            'update_link' => $className.':editAction',
+            'delete_link' => $className.':deleteAction',
+            'list_link' => $className.':indexAction'
+        );
+    }
+
+
     /**
      * @param Application $app
      * @param array $breadcrumbs
      */
-    public function setBreadcrumb(Application $app, $breadcrumbs)
+    protected function setBreadcrumb(Application $app, $breadcrumbs)
     {
         $courseInfo = api_get_course_info();
 

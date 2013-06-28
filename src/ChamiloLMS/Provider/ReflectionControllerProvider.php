@@ -18,33 +18,44 @@ class ReflectionControllerProvider implements ControllerProviderInterface
 {
     private $controllerName;
 
-    function __construct($controllerName)
+    /**
+     * @param string $controllerName
+     */
+    public function __construct($controllerName)
     {
         $this->controllerName = $controllerName;
     }
 
-    function connect(Application $app)
+    /**
+     * @param Application $app
+     * @return \Silex\ControllerCollection
+     */
+    public function connect(Application $app)
     {
         /** @var \Silex\ControllerCollection $controllers */
         $controllers = $app['controllers_factory'];
 
-        //$reflection = new \ReflectionClass($this->class);
         $reflection = new \ReflectionClass($app[$this->controllerName]);
 
         $annotationReader = new AnnotationReader();
         //$classAnnotations = $annotationReader->getClassAnnotations($reflection);
         $routeAnnotation = new Route(array());
         $methodAnnotation = new Method(array());
+
         $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
 
         foreach ($methods as $method) {
             $methodName = $method->getName();
-            if (in_array($methodName, array('__construct'))) {
+            $controllerName = $this->controllerName.':'.$methodName;
+
+            if (in_array($methodName, array('__construct', 'get', 'getManager'))) {
                 continue;
             }
 
             /** @var Route $routeObject */
             $routeObject = $annotationReader->getMethodAnnotation($method, $routeAnnotation);
+            $req = $routeObject->getRequirements();
+            //$routeObject->setMethods();
 
             /** @var Method $routeObject */
             $methodObject = $annotationReader->getMethodAnnotation($method, $methodAnnotation);
@@ -54,18 +65,19 @@ class ReflectionControllerProvider implements ControllerProviderInterface
                 $methodsToString = implode('|', $methodObject->getMethods());
             }
 
-            $controllers->match($routeObject->getPath(), $this->controllerName.':'.$methodName, $methodsToString);
+            if ($routeObject) {
+                $match = $controllers->match($routeObject->getPath(), $controllerName, $methodsToString);
+                //var_dump($controllerName);
+                $match->bind($controllerName);
+                // setRequirements
+                if (!empty($req)) {
+                    foreach ($req as $key => $value) {
+                        $match->assert($key, $value);
+                    }
+                }
+            }
+
         }
-
         return $controllers;
-    }
-
-    private function adjustPath($path)
-    {
-        $path = lcfirst($path);
-        $path = ('index' === $path) ? '' : $path;
-        $path = '/'.$path;
-
-        return $path;
     }
 }

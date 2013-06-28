@@ -100,11 +100,12 @@ abstract class BaseController
     }
 
     /**
-     * Converts an array of URL to absolute URLs
-     * @param $label
+     * Converts an array of URL to absolute URLs using the url_generator service
+     * @param string $label
+     * @param array
      * @return mixed
      */
-    private function createUrl($label, $params = array())
+    protected function createUrl($label, $params = array())
     {
         $links = $this->generateLinks();
         if (isset($links) && is_array($links) && isset($links[$label])) {
@@ -120,7 +121,7 @@ abstract class BaseController
      */
     abstract protected function generateLinks();
 
-    // CRUD
+    // CRUD default actions
 
     /**
      * @Route("/")
@@ -176,6 +177,11 @@ abstract class BaseController
         return $this->readEntity($id);
     }
 
+    /**
+     *
+     * @Route("/{id}/edit", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+     * @Method({"GET"})
+     */
     public function editAction($id)
     {
         $repo = $this->getRepository();
@@ -208,7 +214,11 @@ abstract class BaseController
         }
     }
 
-
+    /**
+     *
+     * @Route("/{id/delete}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+     * @Method({"GET"})
+     */
     public function deleteAction($id)
     {
         $result = $this->removeEntity($id);
@@ -239,7 +249,7 @@ abstract class BaseController
 
     /**
      * Base "delete" action.
-     *
+     * @param int id
      * @return JsonResponse|NotFoundHttpException
      */
     protected function removeEntity($id)
@@ -256,7 +266,7 @@ abstract class BaseController
 
     /**
      * Base "list" action.
-     * @param format
+     * @param string format
      * @return JsonResponse
      */
     protected function listAction($format = 'json')
@@ -264,6 +274,10 @@ abstract class BaseController
         return $this->getList($format);
     }
 
+    /**
+     * @param string $format
+     * @return JsonResponse
+     */
     protected function getList($format = 'json')
     {
         $list = $this->getRepository()
@@ -285,6 +299,8 @@ abstract class BaseController
      * Base "read" action.
      *
      * @param int $id
+     * @param string format
+     *
      * @return JsonResponse|NotFoundHttpException
      */
     protected function readActionByFormat($id, $format = 'array')
@@ -345,7 +361,6 @@ abstract class BaseController
 
         return new JsonResponse($this->getEntityForJson($object->getId()));
     }
-
 
     /**
      * Base "upload" action.
@@ -467,5 +482,4 @@ abstract class BaseController
 
         return $entity;
     }
-
 }

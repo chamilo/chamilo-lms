@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Symfony\Component\HttpFoundation\Request;
-use \ChamiloSession as Session;
-
 /** Setting course session and group global values */
+use ChamiloSession as Session;
+use Symfony\Component\HttpFoundation\Request;
+
 $settingCourseConditions = function (Request $request) use ($cidReset, $app) {
 
     $cidReq    = $request->get('cidReq');
@@ -675,3 +675,4 @@ $app->match('/ajax', 'model_ajax.controller:indexAction', 'GET')
 // Ministerio routes:
 
 $app->mount('/admin/administrator/branches', new ChamiloLMS\Provider\ReflectionControllerProvider('branch.controller'));
+$app->mount('/admin/director/branches', new ChamiloLMS\Provider\ReflectionControllerProvider('branch_director.controller'));

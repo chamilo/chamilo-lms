@@ -7,10 +7,13 @@
  * @package chamilo.services
  */
 
+// Monolog.
+use Doctrine\Common\Persistence\AbstractManagerRegistry;
+use FranMoreno\Silex\Provider\PagerfantaServiceProvider;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
-// Monolog.
 if (is_writable($app['sys_temp_path'])) {
 
     /**
@@ -72,7 +75,6 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
 
 // Registering Password encoder
 // @todo fix hardcoded sha1 value
-use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 $app['security.encoder.digest'] = $app->share(function($app) {
     // use the sha1 algorithm
     // don't base64 encode the password
@@ -134,7 +136,6 @@ $app->register(new Silex\Provider\FormServiceProvider());
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
 // Needed to use the "entity" option in symfony forms
-use Doctrine\Common\Persistence\AbstractManagerRegistry;
 
 class ManagerRegistry extends AbstractManagerRegistry
 {
@@ -312,7 +313,6 @@ if (is_writable($app['sys_temp_path'])) {
 }
 
 // Pagerfanta settings (Pagination using Doctrine2, arrays, etc)
-use FranMoreno\Silex\Provider\PagerfantaServiceProvider;
 
 $app->register(new PagerfantaServiceProvider());
 
@@ -618,3 +618,10 @@ $app['branch.controller'] = $app->share(
         return new ChamiloLMS\Controller\Admin\Administrator\BranchController($app);
     }
 );
+
+$app['branch_director.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\Director\BranchDirectorController($app);
+    }
+);
+

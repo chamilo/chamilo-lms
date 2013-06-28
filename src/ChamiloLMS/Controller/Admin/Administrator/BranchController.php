@@ -23,13 +23,8 @@ class BranchController extends CommonController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction(Application $app)
+    public function indexAction()
     {
-        $app['extraJS'] = array(
-            '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>',
-            '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />'
-        );
-
         $options = array(
             'decorate' => true,
             'rootOpen' => '<ul>',
@@ -79,7 +74,36 @@ class BranchController extends CommonController
 
     public function addAction()
     {
+        $this->app['extraJS'] = array(
+            '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>',
+            '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />'
+        );
+
         return parent::addAction();
+    }
+
+    public function searchParentAction($keyword)
+    {
+        /** @var \EntityRepository $repo */
+        $qb = $this->getManager()->createQueryBuilder();
+
+        $qb->select(array('b'))
+           ->from('Entity\BranchSync', 'b')
+           ->where($qb->expr()->orX(
+               $qb->expr()->like('u.branchName', '')
+           ))
+           ->orderBy('u.surname', 'ASC'))
+
+        /** @var Entity\BranchSync $entity */
+        // $entity = $repo->findOneByBranchName($keyword);
+        $qb->expr()->like('u.branchName', '?2')
+        $qb->getQuery()->setParameter(2, '%' . $value . '%');
+
+        if ($entity) {
+            echo $entity->getId();
+        }
+
+        return new Response(null, 200, array());
     }
 
     public function editAction($id)

@@ -690,6 +690,12 @@ $app->match('/admin/administrator/branches/{id}/delete', 'branch.controller:dele
     ->assert('type', '.+')
     ->bind('admin_administrator_branches_delete');
 
+$app->match('/admin/administrator/branches/search/{keyword}', 'branch.controller:searchParentAction', 'DELETE')
+    ->assert('type', '.+')
+    ->bind('admin_administrator_branches_search');
+
+
+
 // Roles
 
 $app->match('/admin/administrator/roles/', 'role.controller:indexAction', 'GET')

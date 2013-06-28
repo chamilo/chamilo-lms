@@ -3,7 +3,7 @@
     <script>
 
         function check() {
-            $("#parent_id option:selected").each(function() {
+            $("#branch_parent_id option:selected").each(function() {
                 var id = $(this).val();
                 var name = $(this).text();
                 if (id != "" ) {
@@ -15,7 +15,7 @@
                             if (return_value == 0 ) {
                                 alert("{{ 'DontExist' }}");
                                 //Deleting select option tag
-                                $("#parent_id").find("option").remove();
+                                $("#branch_parent_id").find("option").remove();
 
                                 $(".holder li").each(function () {
                                     if ($(this).attr("rel") == id) {
@@ -29,7 +29,7 @@
             });
         }
         $(function() {
-            $("#parent_id").fcbkcomplete({
+            $("#branch_parent_id").fcbkcomplete({
                 json_url: "{{ _p.web_ajax }}&a=searchBranch",
                 maxitems: 1,
                 addontab: false,

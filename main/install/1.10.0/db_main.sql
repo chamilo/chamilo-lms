@@ -81,6 +81,11 @@ INSERT INTO roles (name, role) VALUES('Anonymous', 'ROLE_ANONYMOUS');
 INSERT INTO roles (name, role) VALUES('RRHH', 'ROLE_RRHH');
 INSERT INTO roles (name, role) VALUES('Question Manager', 'ROLE_QUESTION_MANAGER');
 
+INSERT INTO roles (name, role) VALUES('Jury president', 'ROLE_JURY_PRESIDENT');
+INSERT INTO roles (name, role) VALUES('Jury member', 'ROLE_JURY_MEMBER');
+INSERT INTO roles (name, role) VALUES('Director', 'ROLE_DIRECTOR');
+
+
 --
 -- Table structure for table admin
 --
@@ -3142,6 +3147,7 @@ CREATE TABLE jury_members (
     id int NOT NULL AUTO_INCREMENT,
     user_id int,
     role_id int,
+    jury_id int,
     PRIMARY KEY(id)
 );
 

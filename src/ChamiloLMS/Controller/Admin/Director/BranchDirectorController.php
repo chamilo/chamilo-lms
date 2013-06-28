@@ -5,6 +5,7 @@ namespace ChamiloLMS\Controller\Admin\Director;
 
 use ChamiloLMS\Controller\CommonController;
 use ChamiloLMS\Form\BranchType;
+use ChamiloLMS\Form\JuryType;
 use Entity;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
@@ -31,9 +32,8 @@ class BranchDirectorController extends CommonController
 
         if (null !== $token) {
             $user = $token->getUser();
+            $userId = $user->getUserId();
         }
-
-        $userId = $user->getUserId();
 
         $options = array(
             'decorate' => true,
@@ -43,7 +43,7 @@ class BranchDirectorController extends CommonController
             'childClose' => '</li>',
             'nodeDecorator' => function($row) {
                 //$addChildren = '<a class="btn" href="'.$this->createUrl('add_from_parent_link', array('id' => $row['id'])).'">Add children</a>';
-                $readLink = '<a href="'.$this->createUrl('read_link', array('id' => $row['id'])).'">'.$row['branchName'].'</a>';
+                $readLink = $row['branchName'].' <a class="btn" href="'.$this->createUrl('read_link', array('id' => $row['id'])).'">Assign users</a>';
                 return $readLink;
             }
             //'representationField' => 'slug',
@@ -76,15 +76,40 @@ class BranchDirectorController extends CommonController
     public function readAction($id)
     {
         $template = $this->get('template');
+        $request = $this->getRequest();
+
         $template->assign('links', $this->generateLinks());
         $repo = $this->getRepository();
+
         $item = $this->getEntity($id);
-        $children = $repo->children($item);
         $template->assign('item', $item);
-        $template->assign('subitems', $children);
+
+        $form = $this->get('form.factory')->create(new JuryType());
+
+        if ($request->getMethod() == 'POST') {
+            $form->bind($this->getRequest());
+
+            if ($form->isValid()) {
+
+            }
+        }
+
+        $template->assign('form', $form->createView());
         $response = $template->render_template($this->getTemplatePath().'read.tpl');
         return new Response($response, 200, array());
     }
+
+    private function saveUsers()
+    {
+
+    }
+
+    private function getUserFormType($users)
+    {
+
+    }
+
+
 
     protected function getControllerAlias()
     {
@@ -113,13 +138,5 @@ class BranchDirectorController extends CommonController
     protected function getNewEntity()
     {
         return new Entity\BranchSync();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getFormType()
-    {
-        return new BranchType();
     }
 }

@@ -30,7 +30,7 @@
         }
         $(function() {
             $("#branch_parent_id").fcbkcomplete({
-                json_url: "{{ _p.web_ajax }}&a=searchBranch",
+                json_url: "{{ url('branch.controller:searchAction') }}",
                 maxitems: 1,
                 addontab: false,
                 input_min_size: 1,

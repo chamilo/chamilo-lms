@@ -8,9 +8,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * BranchSync
  *
  * @ORM\Table(name="branch_sync")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Entity\Repository\BranchSyncRepository")
  * @Gedmo\Tree(type="nested")
- * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
+
  */
 class BranchSync
 {

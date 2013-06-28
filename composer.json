@@ -75,7 +75,8 @@
         "jmontoyaa/phpqrcode": "dev-master",
         "bt51/gaufrette-serviceprovider": "dev-master",
         "neutron/silex-filesystem-provider": "dev-master",
-        "jbroadway/urlify": "dev-master"
+        "jbroadway/urlify": "dev-master",
+        "sensio/framework-extra-bundle": "2.3.*@dev"
     },
     "require-dev": {
         "symfony/browser-kit": "2.3.*@dev",
@@ -84,8 +85,7 @@
         "natxet/CssMin": "dev-master",
         "leafo/lessphp": "dev-master",
         "mheap/silex-assetic": "1.0.*@dev",
-        "filp/whoops": "dev-master",
-        "sensio/framework-extra-bundle": "2.3.*@dev"
+        "filp/whoops": "dev-master"
     },
     "scripts": {
         "post-install-cmd": "ChamiloLMS\\Composer\\Tasks::postInstall",

@@ -147,7 +147,17 @@ class BranchController extends CommonController
     */
     public function deleteAction($id)
     {
-        return parent::deleteAction($id);
+        // Check if branch doesn't have children :(
+        $repo = $this->getRepository();
+        $item = $this->getEntity($id);
+        $children = $repo->children($item);
+        if (count($children) == 0) {
+            return parent::deleteAction($id);
+        } else {
+            $this->get('session')->getFlashBag()->add('warning', "This branch has children. Delete them first.");
+            $url = $this->createUrl('list_link');
+            return $this->redirect($url);
+        }
     }
 
     /**

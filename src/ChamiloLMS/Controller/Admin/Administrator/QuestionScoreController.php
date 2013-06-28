@@ -18,13 +18,22 @@ use ChamiloLMS\Form\QuestionScoreType;
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class QuestionScore extends CommonController
+class QuestionScoreController extends CommonController
 {
+    /**
+     * @Route("/")
+     * @Method({"GET"})
+     */
     public function indexAction()
     {
         return parent::listingAction();
     }
 
+    /**
+    *
+    * @Route("/{id}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Method({"GET"})
+    */
     public function readAction($id)
     {
         // return parent::readAction($id);
@@ -39,40 +48,53 @@ class QuestionScore extends CommonController
         return new Response($response, 200, array());
     }
 
+    /**
+    * @Route("/add")
+    * @Method({"GET"})
+    */
     public function addAction()
     {
         return parent::addAction();
     }
 
+    /**
+    *
+    * @Route("/{id}/edit", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Method({"GET"})
+    */
     public function editAction($id)
     {
         return parent::editAction($id);
     }
 
+    /**
+    *
+    * @Route("/{id}/delete", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Method({"GET"})
+    */
     public function deleteAction($id)
     {
         return parent::deleteAction($id);
     }
 
-    /**
-     * Return an array with the string that are going to be generating by twig.
-     * @return array
-     */
-    protected function generateLinks()
+    protected function generateDefaultCrudRoutes()
     {
-        return array(
-            'create_link' => 'admin_administrator_question_score_add',
-            'read_link' => 'admin_administrator_question_score_read',
-            'update_link' => 'admin_administrator_question_score_edit',
-            'delete_link' => 'admin_administrator_question_score_delete',
-            'list_link' => 'admin_administrator_question_scores',
-            'question_score_name_read_link' => 'admin_administrator_question_score_names_read'
-        );
+        $routes = parent::generateDefaultCrudRoutes();
+        $routes['question_score_name_read_link'] = 'question_score_name.controller:readAction';
+        return $routes ;
     }
 
-   /**
-     * {@inheritdoc}
-     */
+    /**
+    * {@inheritdoc}
+    */
+    protected function getControllerAlias()
+    {
+        return 'question_score.controller';
+    }
+
+    /**
+    * {@inheritdoc}
+    */
     protected function getRepository()
     {
         return $this->get('orm.em')->getRepository('Entity\QuestionScore');

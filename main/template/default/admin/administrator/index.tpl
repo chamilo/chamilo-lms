@@ -12,7 +12,7 @@
         <a href="{{ url('role.controller:indexAction') }}">Roles</a>
     </li>
     <li>
-        <a href="{{ url('admin_administrator_branches') }}">Branches</a>
+        <a href="{{ url('branch.controller:indexAction') }}">Branches</a>
     </li>
 </ul>
 

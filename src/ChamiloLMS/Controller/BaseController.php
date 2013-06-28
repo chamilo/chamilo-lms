@@ -67,20 +67,26 @@ abstract class BaseController
     abstract protected function getControllerAlias();
 
     /**
+     * Array with links
+     * @return array
+     */
+    abstract protected function generateLinks();
+
+    /**
      *
      * @return Request
      */
-    private function getRequest()
+    protected function getRequest()
     {
         return $this->get('request');
     }
 
-    private function redirect($redirect)
+    protected function redirect($redirect)
     {
         return $this->app->redirect($redirect);
     }
 
-    private function createNotFoundException($message = 'Not Found', \Exception $previous = null)
+    protected function createNotFoundException($message = 'Not Found', \Exception $previous = null)
     {
         return $this->app->abort(404, $message);
     }
@@ -89,12 +95,12 @@ abstract class BaseController
      * @param string $item
      * @return mixed
      */
-    public function get($item)
+    protected function get($item)
     {
         return $this->app[$item];
     }
 
-    public function getManager()
+    protected function getManager()
     {
         return $this->app['orm.em'];
     }
@@ -115,11 +121,6 @@ abstract class BaseController
         return $url = $this->get('url_generator')->generate($links['list_link']);
     }
 
-    /**
-     * Array with links
-     * @return array
-     */
-    abstract protected function generateLinks();
 
     // CRUD default actions
 
@@ -292,7 +293,6 @@ abstract class BaseController
                 return $list;
                 break;
         }
-
     }
 
     /**

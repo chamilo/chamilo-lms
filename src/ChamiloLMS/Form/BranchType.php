@@ -19,9 +19,18 @@ class BranchType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builderData = $builder->getData();
+
+        $parentIdDisabled = false;
+        if (!empty($builderData)) {
+            $parentIdDisabled = true;
+        }
+
         $builder
             ->add('branch_name', 'text')
-            ->add('parent_id', 'choice', array('required' => false))
+            //->add('parent_id', 'choice', array('choices'=> array(), 'required' => false))
+            ->add('parent_id', 'text', array('required' => false, 'disabled' => $parentIdDisabled))
+            //->add('parent_id', 'choice', array('choices'=> array(1 => 'jjaa',2=>'ddd'), 'required' => false))
             ->add('branch_ip', 'text')
             ->add('latitude', 'text')
             ->add('longitude', 'text')
@@ -42,6 +51,8 @@ class BranchType extends AbstractType
             ->add('last_sync_trans_id', 'text')
             ->add('access_url_id', 'text')
             ->add('submit', 'submit');
+
+
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

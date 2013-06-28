@@ -36,6 +36,11 @@ class Role extends SymfonyRole implements \Serializable
      */
     private $users;
 
+     /**
+     * @ORM\OneToMany(targetEntity="JuryMembers", mappedBy="role")
+     **/
+    private $rolesFromJury;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();

@@ -94,7 +94,7 @@ $app['security.authentication.logout_handler.admin'] = $app->share(function($app
 
 // Role hierarchy
 $app['security.role_hierarchy'] = array(
-    'ROLE_ADMIN' => array('ROLE_QUESTION_MANAGER', 'ROLE_TEACHER', 'ROLE_ALLOWED_TO_SWITCH'),
+    'ROLE_ADMIN' => array('ROLE_QUESTION_MANAGER', 'ROLE_TEACHER', 'ROLE_DIRECTOR', 'ROLE_JURY_PRESIDENT', 'ROLE_ALLOWED_TO_SWITCH'),
     'ROLE_TEACHER' => array('ROLE_STUDENT'),
     'ROLE_RRHH' => array('ROLE_TEACHER'),
     'ROLE_QUESTION_MANAGER' => array('ROLE_QUESTION_MANAGER'),
@@ -105,10 +105,13 @@ $app['security.role_hierarchy'] = array(
 // Role rules
 $app['security.access_rules'] = array(
     //array('^/admin', 'ROLE_ADMIN', 'https'),
-    array('^/admin/administrator', 'ROLE_ADMIN'),
+    array('^/admin/administrator', array('ROLE_ADMIN')),
     array('^/main/admin/.*', 'ROLE_ADMIN'),
     array('^/admin/questionmanager', 'ROLE_QUESTION_MANAGER'),
-    array('^/main/.*', array('ROLE_STUDENT'))
+    array('^/main/.*', array('ROLE_STUDENT')),
+    array('^/admin/director', 'ROLE_DIRECTOR'),
+    array('^/admin/jury_president', 'ROLE_JURY_PRESIDENT'),
+    array('^/admin/jury_member', 'ROLE_JURY_MEMBER')
     //array('^.*$', 'ROLE_USER'),
 );
 
@@ -624,4 +627,24 @@ $app['branch_director.controller'] = $app->share(
         return new ChamiloLMS\Controller\Admin\Director\BranchDirectorController($app);
     }
 );
+
+
+$app['jury.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\Administrator\JuryController($app);
+    }
+);
+
+$app['jury_president.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\JuryPresident\JuryPresidentController($app);
+    }
+);
+
+$app['jury_member.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\JuryMember\JuryMemberController($app);
+    }
+);
+
 

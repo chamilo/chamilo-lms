@@ -27,6 +27,7 @@
         {% endfor %}
         </tbody>
     </table>
-
     <a class="btn" href="">Cierre de proceso</a>
+
+      {{ form_widget(form) }}
 {% endblock %}

@@ -154,7 +154,8 @@ class BranchController extends CommonController
         if (count($children) == 0) {
             return parent::deleteAction($id);
         } else {
-            $this->get('session')->getFlashBag()->add('warning', "This branch has children. Delete them first.");
+            $this->get('session')->getFlashBag()->
+                add('warning', "Please remove all children of this node before you try to delete it.");
             $url = $this->createUrl('list_link');
             return $this->redirect($url);
         }

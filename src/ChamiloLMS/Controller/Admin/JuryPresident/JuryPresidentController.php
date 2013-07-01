@@ -5,6 +5,7 @@ namespace ChamiloLMS\Controller\Admin\JuryPresident;
 
 use ChamiloLMS\Controller\CommonController;
 use ChamiloLMS\Form\JuryType;
+use ChamiloLMS\Form\JuryUserType;
 use Entity;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
@@ -78,8 +79,10 @@ class JuryPresidentController extends CommonController
             $userId = $user->getUserId();
         }
 
-        $jury = $this->getRepository()->getJuryByPresidentId($userId);
+        $juryUserType = new JuryUserType();
+        $form = $this->get('form.factory')->create($juryUserType);
 
+        $jury = $this->getRepository()->getJuryByPresidentId($userId);
 
         $user1 = new Entity\User(); $user1->setFirstname('111');
         $user2 = new Entity\User(); $user2->setFirstname('222');
@@ -104,6 +107,7 @@ class JuryPresidentController extends CommonController
         $template = $this->get('template');
         $template->assign('members', $members);
         $template->assign('students', $users);
+        $template->assign('form', $form->createView());
         $response = $template->render_template($this->getTemplatePath().'assign_members.tpl');
         return new Response($response, 200, array());
     }

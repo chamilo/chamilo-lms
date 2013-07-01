@@ -11,18 +11,16 @@ class JuryUserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name', 'text');
-        $builder->add('lastname', 'text');
-        //$builder->add('DNI', 'text');
-        $builder->add('email', 'email');
-        //$builder->add('submit', 'submit');
+        $builder->add('members');
+
+        $builder->add('submit', 'submit');
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'Entity\User'
+                'data_class' => 'Entity\Jury'
             )
         );
     }

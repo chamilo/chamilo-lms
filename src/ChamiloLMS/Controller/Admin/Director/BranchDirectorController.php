@@ -50,14 +50,13 @@ class BranchDirectorController extends CommonController
             //'html' => true
         );
 
-        // @todo put this in a function
+        // @todo add director filters
         $repo = $this->getRepository();
 
         $query = $this->getManager()
             ->createQueryBuilder()
             ->select('node')
             ->from('Entity\BranchSync', 'node')
-            //->where('node.cId = 0')
             ->orderBy('node.root, node.lft', 'ASC')
             ->getQuery();
 

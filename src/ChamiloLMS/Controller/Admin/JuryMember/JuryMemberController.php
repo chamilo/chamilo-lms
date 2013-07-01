@@ -27,7 +27,8 @@ class JuryMemberController extends CommonController
     */
     public function indexAction()
     {
-
+        $response = $this->get('template')->render_template($this->getTemplatePath().'index.tpl');
+        return new Response($response, 200, array());
     }
 
     /**
@@ -57,8 +58,6 @@ class JuryMemberController extends CommonController
 
     }
 
-
-
     protected function getControllerAlias()
     {
         return 'jury_member.controller';
@@ -69,7 +68,7 @@ class JuryMemberController extends CommonController
     */
     protected function getTemplatePath()
     {
-        return 'admin/jury_president/jury/';
+        return 'admin/jury_member/';
     }
 
     /**

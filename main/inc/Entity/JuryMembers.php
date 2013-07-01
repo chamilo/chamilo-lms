@@ -54,7 +54,6 @@ class JuryMembers
      */
     private $jury;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="Role")
      * @ORM\JoinColumn(name="role_id", referencedColumnName="id")

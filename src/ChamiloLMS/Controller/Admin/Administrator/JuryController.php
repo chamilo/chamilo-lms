@@ -92,7 +92,7 @@ class JuryController extends CommonController
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', "Deleted");
 
-            $url = $this->get('url_generator')->generate('jury.controller:readAction', array('id' => $id));
+            $url = $this->get('url_generator')->generate('jury.controller:readAction', array('id' => $juryMembers->getJuryId()));
             return $this->redirect($url);
         }
     }

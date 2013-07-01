@@ -183,6 +183,7 @@ class BranchSync
      */
     private $children;
 
+
     /**
      *
      */

@@ -77,11 +77,23 @@ class Jury
     private $members;
 
     /**
+     * @ORM\OneToMany(targetEntity="TrackExercise", mappedBy="jury")
+     **/
+    private $exerciseAttempts;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="BranchSync")
+     * @ORM\JoinColumn(name="branch_id", referencedColumnName="id")
+     */
+    private $branch;
+
+    /**
      *
      */
     public function __construct()
     {
         $this->members = new ArrayCollection();
+        $this->exerciseAttempts = new ArrayCollection();
     }
 
     /**
@@ -92,6 +104,36 @@ class Jury
         return $this->members;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getExerciseAttempts()
+    {
+        return $this->exerciseAttempts;
+    }
+
+    /**
+     * Get branch
+     *
+     * @return string
+     */
+    public function getBranch()
+    {
+        return $this->branch;
+    }
+
+    /**
+     * Set branch
+     *
+     * @param BranchSync $branch
+     * @return Jury
+     */
+    public function setBranch(BranchSync $branch)
+    {
+        $this->branch = $branch;
+
+        return $this;
+    }
 
     /**
      * Get id

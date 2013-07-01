@@ -90,9 +90,9 @@ class JuryController extends CommonController
             $em = $this->getManager();
             $em->remove($juryMembers);
             $em->flush();
-            $url = $this->createUrl('list_link');
             $this->get('session')->getFlashBag()->add('success', "Deleted");
 
+            $url = $this->get('url_generator')->generate('jury.controller:readAction', array('id' => $id));
             return $this->redirect($url);
         }
     }
@@ -165,9 +165,10 @@ class JuryController extends CommonController
                 $em->flush();
 
                 $this->get('session')->getFlashBag()->add('success', "Saved");
+                $url = $this->get('url_generator')->generate('jury.controller:readAction', array('id' => $id));
+                return $this->redirect($url);
             }
         }
-
 
         $template = $this->get('template');
         $template->assign('jury_id', $id);

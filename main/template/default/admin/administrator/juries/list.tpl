@@ -12,7 +12,7 @@
                 </a>
             </td>
             <td>
-                <a class="btn" href="{{ url(links.add_members_link, { id: item.id }) }}"> {{ 'AddMembers' |trans }}</a>
+                <a class="btn" href="{{ url(links.add_members_link, { id: item.id }) }}"> {{ 'Add members' |trans }}</a>
                 <a class="btn" href="{{ url(links.update_link, { id: item.id }) }}"> {{ 'Edit' |trans }}</a>
                 <a class="btn" href="{{ url(links.delete_link, { id: item.id }) }}"> {{ 'Delete' |trans }}</a>
             </td>

@@ -11,7 +11,7 @@ class JuryUserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('members');
+        $builder->add('role_id');
 
         $builder->add('submit', 'submit');
     }

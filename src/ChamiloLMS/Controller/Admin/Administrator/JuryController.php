@@ -9,6 +9,10 @@ use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
 use Entity;
 use ChamiloLMS\Form\JuryType;
+use ChamiloLMS\Form\JuryUserType;
+use ChamiloLMS\Form\JuryMembersType;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
@@ -37,7 +41,14 @@ class JuryController extends CommonController
     */
     public function readAction($id)
     {
-        return parent::readAction($id);
+        $entity = $this->getEntity($id);
+
+        $template = $this->get('template');
+        $template->assign('item', $entity);
+        $template->assign('links', $this->generateDefaultCrudRoutes());
+
+        $response = $template->render_template($this->getTemplatePath().'read.tpl');
+        return new Response($response, 200, array());
     }
 
     /**
@@ -60,13 +71,116 @@ class JuryController extends CommonController
     }
 
     /**
-    *
     * @Route("/{id}/delete", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
     * @Method({"GET"})
     */
     public function deleteAction($id)
     {
         return parent::deleteAction($id);
+    }
+
+     /**
+    * @Route("/{id}/remove-member", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Method({"GET"})
+    */
+    public function removeMemberAction($id)
+    {
+        $juryMembers = $this->getManager()->getRepository('Entity\JuryMembers')->find($id);
+        if ($juryMembers) {
+            $em = $this->getManager();
+            $em->remove($juryMembers);
+            $em->flush();
+            $url = $this->createUrl('list_link');
+            $this->get('session')->getFlashBag()->add('success', "Deleted");
+
+            return $this->redirect($url);
+        }
+    }
+
+    /**
+    * @Route("/search-user/" )
+    * @Method({"GET"})
+    */
+    public function searchUserAction()
+    {
+        $request = $this->getRequest();
+        $keyword = $request->get('tag');
+        $repo = $this->get('orm.em')->getRepository('Entity\User');
+
+        $entities = $repo->searchUserByKeyword($keyword);
+        $data = array();
+        if ($entities) {
+            /** @var \Entity\User $entity */
+            foreach ($entities as $entity) {
+                $data[] = array(
+                    'key' => (string) $entity->getUserId(),
+                    'value' => $entity->getCompleteName(),
+                );
+            }
+        }
+        return new JsonResponse($data);
+    }
+
+    /**
+    * @Route("/{id}/add-members", requirements={"id" = "\d+"})
+    * @Method({"GET"})
+    */
+    public function addMembersAction(Application $app, $id)
+    {
+        $extraJS[]      = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+        $extraJS[]      = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
+        $app['extraJS'] = $extraJS;
+
+        $juryUserType = new JuryMembersType();
+        $juryMember =  new Entity\JuryMembers();
+        $juryMember->setJuryId($id);
+
+        $form = $this->get('form.factory')->create($juryUserType, $juryMember);
+
+        $request = $this->getRequest();
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
+            if ($form->isValid()) {
+                /** @var Entity\JuryMembers $item */
+                $item = $form->getData();
+
+                $userIdList = $item->getUserId();
+                $userId = ($userIdList[0]);
+                $user = $this->getManager()->getRepository('Entity\User')->find($userId);
+                if (!$user) {
+                    throw new \Exception('Unable to found User');
+                }
+
+                $jury = $this->getRepository()->find($id);
+
+                if (!$jury) {
+                    throw new \Exception('Unable to found Jury');
+                }
+
+                $juryMember->setUser($user);
+                $juryMember->setJury($jury);
+
+                $em = $this->getManager();
+                $em->persist($juryMember);
+                $em->flush();
+
+                $this->get('session')->getFlashBag()->add('success', "Saved");
+            }
+        }
+
+
+        $template = $this->get('template');
+        $template->assign('jury_id', $id);
+        $template->assign('form', $form->createView());
+        $response = $template->render_template($this->getTemplatePath().'add_members.tpl');
+        return new Response($response, 200, array());
+    }
+
+    protected function generateDefaultCrudRoutes()
+    {
+        $routes = parent::generateDefaultCrudRoutes();
+        $routes['add_members_link'] = 'jury.controller:addMembersAction';
+        return $routes ;
     }
 
     protected function getControllerAlias()

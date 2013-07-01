@@ -37,8 +37,22 @@ class JuryPresidentController extends CommonController
     * @Route("/open-jury")
     * @Method({"GET, POST"})
     */
-    public function openJuryAction()
+    public function openJuryAction(Application $app)
     {
+        $token = $app['security']->getToken();
+        if (null !== $token) {
+            $user = $token->getUser();
+        }
+
+        // @todo where is get this value?
+        $juryId = null;
+
+        /** @var Entity\Jury $jury */
+        $jury = $this->getEntity($juryId);
+        $jury->setOpeningDate(new \DateTime());
+        $jury->setOpeningUserId($user->getUserId());
+        $this->updateAction($jury);
+
         $this->get('session')->getFlashBag()->add('success', "Comité abierto");
         $url = $this->get('url_generator')->generate('jury_president.controller:indexAction');
         return $this->redirect($url);
@@ -48,8 +62,22 @@ class JuryPresidentController extends CommonController
     * @Route("/close-jury")
     * @Method({"GET, POST"})
     */
-    public function closeJuryAction()
+    public function closeJuryAction(Application $app)
     {
+        $token = $app['security']->getToken();
+        if (null !== $token) {
+            $user = $token->getUser();
+        }
+
+        // @todo where is get this value?
+        $juryId = null;
+
+        /** @var Entity\Jury $jury */
+        $jury = $this->getEntity($juryId);
+        $jury->setClosureDate(new \DateTime());
+        $jury->setClosureUserId($user->getUserId());
+        $this->updateAction($jury);
+
         $this->get('session')->getFlashBag()->add('success', "Comité cerrado");
         $url = $this->get('url_generator')->generate('jury_president.controller:indexAction');
         return $this->redirect($url);
@@ -59,8 +87,22 @@ class JuryPresidentController extends CommonController
     * @Route("/close-score")
     * @Method({"GET, POST"})
     */
-    public function closeScoreAction()
+    public function closeScoreAction(Application $app)
     {
+        $token = $app['security']->getToken();
+        if (null !== $token) {
+            $user = $token->getUser();
+        }
+
+        // @todo where is get this value?
+        $juryId = null;
+
+        /** @var Entity\Jury $jury */
+        $jury = $this->getEntity($juryId);
+
+        // @todo ???
+        $this->updateAction($jury);
+
         $this->get('session')->getFlashBag()->add('success', "Notas cerradas");
         $url = $this->get('url_generator')->generate('jury_president.controller:indexAction');
         return $this->redirect($url);

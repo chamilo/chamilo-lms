@@ -60,6 +60,32 @@ class JuryMembers
      */
     private $role;
 
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    public function setRole(Role $role)
+    {
+        $this->role = $role;
+    }
+
+    public function setJury(Jury $jury)
+    {
+        $this->jury = $jury;
+    }
+
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+    }
+
+
 
     /**
      * Get id

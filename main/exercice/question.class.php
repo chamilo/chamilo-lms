@@ -1663,10 +1663,11 @@ abstract class Question
                 if ($a_type[1] != 'FreeAnswer') {
                     continue;
                 }
-            }
-            //Skip other question types, just for minedu
-            if (!in_array($a_type[1],array('MediaQuestion','UniqueAnswer'))) {
-                continue;
+            } else {
+                //Skip other question types, just for minedu
+                if (!in_array($a_type[1],array('MediaQuestion','UniqueAnswer'))) {
+                    continue;
+                }
             }
             // include the class of the type
             require_once $a_type[0];

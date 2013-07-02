@@ -9159,8 +9159,8 @@ class learnpath
      */
     public function get_forums()
     {
-        require_once '../forum/forumfunction.inc.php';
-        require_once '../forum/forumconfig.inc.php';
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php';
 
         $a_forums = get_forums();
 

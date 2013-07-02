@@ -14,7 +14,7 @@ require_once 'lib/be.inc.php';
 require_once 'lib/gradebook_functions.inc.php';
 require_once 'lib/fe/linkform.class.php';
 require_once 'lib/fe/linkaddeditform.class.php';
-require_once '../forum/forumfunction.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
 api_protect_course_script();

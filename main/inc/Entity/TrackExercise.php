@@ -166,16 +166,26 @@ class TrackExercise
      */
     private $attempt;
 
-    public function getAttempt()
-    {
-        return $this->attempt;
-    }
-
+     /**
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="exe_user_id", referencedColumnName="user_id")
+     */
+    private $user;
 
      /**
      * @ORM\OneToMany(targetEntity="TrackExerciseAttemptJury", mappedBy="attempt")
      **/
     private $juryAttempts;
+
+    public function getAttempt()
+    {
+        return $this->attempt;
+    }
+
+    public function getUser()
+    {
+        return $this->user;
+    }
 
     public function getExercise()
     {

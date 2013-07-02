@@ -27,10 +27,10 @@
             {% endfor %}
             <td>Estado</td>
         </tr>
-        {% for student in students %}
+        {% for attempt in attempts %}
             <tr>
                 <td>
-                    Estudiante #{{ student }}
+                    Estudiante #{{ attempt.user.getUserId }}
                 </td>
                 {% for member in members %}
 
@@ -40,7 +40,7 @@
                         {% set memberHover = '' %}
                     {% endif %}
 
-                    {% if relations[student][member.user.userId] == 3 %}
+                    {% if relations[attempt.user.getUserId][member.user.userId] == 3 %}
                         {% set checked = 'checked="checked"' %}
                         <td class="{{ memberHover }}">
                             <div class="success">
@@ -50,15 +50,15 @@
                             <div>
                     {% endif %}
 
-                        <input {{ checked }} id="check_{{ student }}_{{ member.user.userId }}" type="checkbox">
+                        <input {{ checked }} id="check_{{ attempt.user.getUserId }}_{{ member.user.userId }}" type="checkbox">
                         </div>
                     </td>
                 {% endfor %}
                 <td>
-                    {% if my_status_for_student[student] %}
+                    {% if my_status_for_student[attempt.user.getUserId] %}
                         <a href="#" class="btn btn-success disabled">Evaluado</a>
                     {% else %}
-                        <a href="#" class="btn btn-warning">Evaluar</a>
+                        <a href="{{ url('jury_member.controller:scoreUserAction', { 'exeId': attempt.getExeId }) }}" class="btn btn-warning">Evaluar</a>
                     {% endif %}
                 </td>
             </tr>

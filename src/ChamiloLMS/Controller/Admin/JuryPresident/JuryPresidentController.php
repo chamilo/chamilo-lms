@@ -130,7 +130,7 @@ class JuryPresidentController extends CommonController
             return $this->redirect($url);
         }
 
-        // @todo add something
+        // @todo add to a repository
         // $students = $this->getRepository()->getStudentsByJury($jury->getId());
 
         $attempts = $jury->getExerciseAttempts();
@@ -142,8 +142,8 @@ class JuryPresidentController extends CommonController
         $myStatusForStudent = array();
         foreach ($attempts as $attempt) {
 
-            $studentId = $attempt->getExeUserId();
-            $students[] = $studentId;
+            $user = $attempt->getUser();
+            $students[] = $user;
             $juryAttempts = $attempt->getJuryAttempts();
 
             /** @var Entity\TrackExerciseAttemptJury $juryAttempt */
@@ -157,13 +157,12 @@ class JuryPresidentController extends CommonController
             }
 
             foreach ($tempAttempt as $memberId => $answerCount) {
-                $relations[$studentId][$memberId] = $answerCount;
-
+                $relations[$user->getUserId()][$memberId] = $answerCount;
                 if ($userId == $memberId) {
                     if ($answerCount == 3) {
-                        $myStatusForStudent[$studentId] = true;
+                        $myStatusForStudent[$user->getUserId()] = true;
                     } else {
-                        $myStatusForStudent[$studentId] = false;
+                        $myStatusForStudent[$user->getUserId()] = false;
                     }
                 }
             }
@@ -176,7 +175,8 @@ class JuryPresidentController extends CommonController
         $template->assign('relations', $relations);
         $template->assign('attempts', $attempts);
         $template->assign('members', $members);
-        $template->assign('students', $students);
+        //$template->assign('students', $students);
+        $template->assign('jury', $jury);
         $response = $template->render_template($this->getTemplatePath().'assign_members.tpl');
 
         return new Response($response, 200, array());

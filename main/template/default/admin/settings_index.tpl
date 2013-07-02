@@ -1,7 +1,13 @@
 <script>
-$(function() {
-    //$("#settings").tabs();
+$(document).ready(function() {
+    $.ajax({    
+        url:'{{web_admin_ajax_url}}?a=version',
+        success:function(version){
+            alert(version);
+        } 
+    });
 });
+    
 </script>
 
 <div id="settings">
@@ -33,11 +39,19 @@ $(function() {
                     </ul>    	
                 {% endif %}
                 
+                {% if block_item.label == 'VersionCheck'|get_lang %}
+                    <div class="admin-block-version"> 
+                {% endif %}
+                
+                {% if block_item.label == 'VersionCheck'|get_lang %}
+                    </div> 
+                {% endif %}
                 {% if block_item.extra is not null %}
                     <div>
                     {{ block_item.extra }}
                     </div>
-                {% endif %}                
+                {% endif %}
+                                
             </div>
         </div>        
     {% endfor %}

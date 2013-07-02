@@ -295,12 +295,14 @@ if (api_is_platform_admin()) {
     //Version check
     $blocks['version_check']['icon']  = Display::return_icon('logo.gif', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
 	$blocks['version_check']['label'] = get_lang('VersionCheck');
-	$blocks['version_check']['extra'] = version_check();
+	//$blocks['version_check']['extra'] = version_check();
     $blocks['version_check']['search_form'] = null;
     $blocks['version_check']['items'] = null;
 }
+$admin_ajax_url = api_get_path(WEB_AJAX_PATH).'admin.ajax.php';
 
 $tpl = new Template();
+$tpl->assign('web_admin_ajax_url', $admin_ajax_url);
 $tpl->assign('blocks', $blocks);
 $admin_template = $tpl->get_template('admin/settings_index.tpl');
 $content = $tpl->fetch($admin_template);
@@ -308,35 +310,7 @@ $tpl->assign('content', $content);
 $tpl->assign('message', $message);
 $tpl->display_one_col_template();
 
-/**
- * Displays either the text for the registration or the message that the installation is (not) up to date
- *
- * @return string html code
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version august 2006
- * @todo have a 6monthly re-registration
- */
-function version_check() {
-    $tbl_settings = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-    $sql = 'SELECT selected_value FROM  '.$tbl_settings.' WHERE variable="registered" ';
-    $result = Database::query($sql);
-    $row = Database::fetch_array($result, 'ASSOC');
 
-    // The site has not been registered yet.
-    $return = '';
-    if ($row['selected_value'] == 'false') {
-        $return .= get_lang('VersionCheckExplanation');
-        $return .= '<form class="well" action="'.api_get_self().'" id="VersionCheck" name="VersionCheck" method="post">';
-        $return .= '<label class="checkbox"><input type="checkbox" name="donotlistcampus" value="1" id="checkbox" />'.get_lang('HideCampusFromPublicPlatformsList');
-        $return .= '</label><button type="submit" class="btn btn-primary" name="Register" value="'.get_lang('EnableVersionCheck').'" id="register" >'.get_lang('EnableVersionCheck').'</button>';
-        $return .= '</form>';
-        check_system_version();
-    } else {
-        // site not registered. Call anyway
-        $return .= check_system_version();
-    }
-    return $return;
-}
 
 /**
  * This setting changes the registration status for the campus
@@ -359,62 +333,6 @@ function register_site() {
     // Reload the settings.
 }
 
-
-/**
- * Check if the current installation is up to date
- * The code is borrowed from phpBB and slighlty modified
- * @author The phpBB Group <support@phpbb.com> (the code)
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University (the modifications)
- * @author Yannick Warnier <ywarnier@beeznest.org> for the move to HTTP request
- * @copyright (C) 2001 The phpBB Group
- * @return language string with some layout (color)
- */
-function check_system_version() {
-    global $_configuration;
-    $system_version = trim($_configuration['system_version']); // the chamilo version of your installation
-
-    if (ini_get('allow_url_fopen') == 1) {
-        // The number of courses
-        $number_of_courses = statistics::count_courses();
-
-        // The number of users
-        $number_of_users = statistics::count_users();
-        $number_of_active_users = statistics::count_users(null,null,null,true);
-
-        $data = array(
-            'url' => api_get_path(WEB_PATH),
-            'campus' => api_get_setting('siteName'),
-            'contact' => api_get_setting('emailAdministrator'),
-            'version' => $system_version,
-            'numberofcourses' => $number_of_courses,
-            'numberofusers' => $number_of_users,
-            'numberofactiveusers' => $number_of_active_users,
-            //The donotlistcampus setting recovery should be improved to make
-            // it true by default - this does not affect numbers counting
-            'donotlistcampus' => api_get_setting('donotlistcampus'),
-            'organisation' => api_get_setting('Institution'),
-            'language' => api_get_setting('platformLanguage'),
-            'adminname' => api_get_setting('administratorName').' '.api_get_setting('administratorSurname'),
-        );
-
-        $res = _http_request('version.chamilo.org', 80, '/version.php', $data);
-
-        if ($res !== false) {
-            $version_info = $res;
-
-            if ($system_version != $version_info) {
-                $output = '<br /><span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Chamilo '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Chamilo '.$system_version. '</b>. '.str_replace('http://www.chamilo.org', '<a href="http://www.chamilo.org">http://www.chamilo.org</a>', get_lang('PleaseVisitOurWebsite')).'</span>';
-            } else {
-                $output = '<br /><span style="color:green">'.get_lang('VersionUpToDate').': Chamilo '.$version_info.'</span>';
-            }
-        } else {
-            $output = '<span style="color:red">' . get_lang('ImpossibleToContactVersionServerPleaseTryAgain') . '</span>';
-        }
-    } else {
-        $output = '<span style="color:red">' . get_lang('AllowurlfopenIsSetToOff') . '</span>';
-    }
-    return $output;
-}
 
 /**
  * Function to make an HTTP request through fsockopen (specialised for GET)

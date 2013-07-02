@@ -3274,6 +3274,8 @@ ALTER TABLE track_e_exercices ADD exe_duration int UNSIGNED NOT NULL default 0;
 ALTER TABLE track_e_exercices ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT  NOT NULL DEFAULT '';
+ALTER TABLE track_e_exercices ADD COLUMN jury_score float(6,2);
+ALTER TABLE track_e_exercices ADD COLUMN jury_id INT DEFAULT NULL;
 
 DROP TABLE IF EXISTS track_e_attempt;
 CREATE TABLE track_e_attempt (
@@ -3595,6 +3597,17 @@ CREATE TABLE question_score (
   id int NOT NULL AUTO_INCREMENT,
   name varchar(255) DEFAULT NULL,
   PRIMARY KEY (id)
+) DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS track_attempt_jury;
+CREATE TABLE track_attempt_jury(
+    id int NOT NULL AUTO_INCREMENT,
+    exe_id INT,
+    question_id INT,
+    score float(6,2),
+    jury_member_id INT,
+    question_score_name_id INT,
+    PRIMARY KEY (id)
 ) DEFAULT CHARSET=utf8;
 
 

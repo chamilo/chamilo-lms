@@ -39,13 +39,18 @@ class JuryRepository extends EntityRepository
         $wherePart = $qb->expr()->andx();
 
         //Get only users subscribed to this course
-        $wherePart->add($qb->expr()->eq('r.name', $qb->expr()->literal('ROLE_JURY_PRESIDENT')));
+        $wherePart->add($qb->expr()->eq('r.role', $qb->expr()->literal('ROLE_JURY_PRESIDENT')));
         $wherePart->add($qb->expr()->eq('c.userId', $userId));
 
         $qb->where($wherePart);
         $q = $qb->getQuery();
-        return $q->execute();
+        return $q->getSingleResult();
         //return $qb;
+    }
+
+    public function getExerciseAttemptsByJury($juryId)
+    {
+
     }
 
 }

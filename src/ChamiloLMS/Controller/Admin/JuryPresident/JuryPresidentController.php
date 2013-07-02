@@ -121,36 +121,64 @@ class JuryPresidentController extends CommonController
             $userId = $user->getUserId();
         }
 
-        $juryUserType = new JuryUserType();
-        $form = $this->get('form.factory')->create($juryUserType);
-
+        /** @var Entity\Jury $jury */
         $jury = $this->getRepository()->getJuryByPresidentId($userId);
 
-        $user1 = new Entity\User(); $user1->setFirstname('111');
-        $user2 = new Entity\User(); $user2->setFirstname('222');
-        $user3 = new Entity\User(); $user3->setFirstname('333');
+        if (!$jury) {
+            $this->get('session')->getFlashBag()->add('warning', "No tiene un comité asignado.");
+            $url = $this->get('url_generator')->generate('jury_president.controller:indexAction');
+            return $this->redirect($url);
+        }
 
-        $m1 = new Entity\User(); $m1->setFirstname('m 11');
-        $m2 = new Entity\User(); $m2->setFirstname('m 22');
-        $m3 = new Entity\User(); $m3->setFirstname('m 33');
+        // @todo add something
+        // $students = $this->getRepository()->getStudentsByJury($jury->getId());
 
-        $users = array(
-            $user1,
-            $user2,
-            $user3,
-        );
+        $attempts = $jury->getExerciseAttempts();
 
-        $members = array(
-            $m1,
-            $m2,
-            $m3
-        );
+        // @todo move logic in a repository
+        /** @var Entity\TrackExercise $attempt */
+        $students = array();
+        $relations = array();
+        $myStatusForStudent = array();
+        foreach ($attempts as $attempt) {
 
+            $studentId = $attempt->getExeUserId();
+            $students[] = $studentId;
+            $juryAttempts = $attempt->getJuryAttempts();
+
+            /** @var Entity\TrackExerciseAttemptJury $juryAttempt */
+            $tempAttempt = array();
+            foreach ($juryAttempts as $juryAttempt) {
+                if (!isset($tempAttempt[$juryAttempt->getJuryMemberId()])) {
+                    $tempAttempt[$juryAttempt->getJuryMemberId()] = 1;
+                } else {
+                    $tempAttempt[$juryAttempt->getJuryMemberId()]++;
+                }
+            }
+
+            foreach ($tempAttempt as $memberId => $answerCount) {
+                $relations[$studentId][$memberId] = $answerCount;
+
+                if ($userId == $memberId) {
+                    if ($answerCount == 3) {
+                        $myStatusForStudent[$studentId] = true;
+                    } else {
+                        $myStatusForStudent[$studentId] = false;
+                    }
+                }
+            }
+        }
+
+        $members = $jury->getMembers();
         $template = $this->get('template');
+
+        $template->assign('my_status_for_student', $myStatusForStudent);
+        $template->assign('relations', $relations);
+        $template->assign('attempts', $attempts);
         $template->assign('members', $members);
-        $template->assign('students', $users);
-        $template->assign('form', $form->createView());
+        $template->assign('students', $students);
         $response = $template->render_template($this->getTemplatePath().'assign_members.tpl');
+
         return new Response($response, 200, array());
     }
 

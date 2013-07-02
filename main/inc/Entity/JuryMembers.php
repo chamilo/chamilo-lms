@@ -85,8 +85,6 @@ class JuryMembers
         $this->user = $user;
     }
 
-
-
     /**
      * Get id
      *

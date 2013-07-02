@@ -5309,3 +5309,13 @@ i.size-32.icon-new-work {
     margin-bottom: 15px;
     padding: 7px 9px;
 }
+
+
+.table td div.success {
+    background-color: #98E57F;
+}
+
+
+.table td.hover {
+    background-color: rgba(255, 153, 0, 0.5);
+}

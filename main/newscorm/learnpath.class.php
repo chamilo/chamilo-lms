@@ -5751,12 +5751,12 @@ class learnpath
 
             $icon = '';
             if (file_exists('../img/lp_'.$icon_name.'.png')) {
-                $icon = '<img src="../img/lp_'.$icon_name.'.png" />';
+                $icon = Display::return_icon('lp_'.$icon_name.'.png');
             } else {
                 if (file_exists('../img/lp_'.$icon_name.'.gif')) {
-                    $icon = '<img src="../img/lp_'.$icon_name.'.gif"  />';
+                    $icon = Display::return_icon('lp_'.$icon_name.'.gif');
                 } else {
-                    $icon = '<img src="../img/folder_document.gif" />';
+                    $icon = Display::return_icon('folder_document.gif');
                 }
             }
 

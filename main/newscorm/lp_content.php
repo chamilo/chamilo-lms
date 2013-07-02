@@ -118,3 +118,4 @@ if ($debug > 0) {
 }
 
 header("Location: ".urldecode($src));
+exit;

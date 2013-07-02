@@ -16,3 +16,4 @@ function start_timer() {
     return $time; //"olms.asset_timer='$time'; olms.asset_timer_total = 0;";
 }
 echo start_timer();
+exit;

@@ -76,7 +76,9 @@ $user_id = api_get_user_id();
 $platform_theme = api_get_setting('stylesheets');
 $my_style = $platform_theme;
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.lp_minipanel.js" type="text/javascript" language="javascript"></script>';
+//$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/lp_minipanel/jquery.lp_minipanel.js" type="text/javascript"></script>';
+$htmlHeadXtra[] = $app['template']->fetch('default/javascript/newscorm/minipanel.tpl');
+
 $htmlHeadXtra[] = '<script>
 $(document).ready(function(){
 	$("div#log_content_cleaner").bind("click", function() {
@@ -286,7 +288,6 @@ $lp_theme_css = $_SESSION['oLP']->get_theme(
 if ($_SESSION['oLP']->mode == 'fullscreen') {
     $htmlHeadXtra[] = "<script>window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');</script>";
 }
-
 
 // Not in fullscreen mode.
 

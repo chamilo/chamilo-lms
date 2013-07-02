@@ -272,7 +272,7 @@ if ($add) {
                         $addedresource_item = TOOL_QUIZ;
                         //get title from tool-type table
                         $tooltable = Database::get_course_table(TABLE_QUIZ_TEST);
-                        $result = Database::query("SELECT * FROM $tooltable WHERE id=".$addedresourceid[$i]);
+                        $result = Database::query("SELECT * FROM $tooltable WHERE iid = ".$addedresourceid[$i]);
                         $myrow = Database::fetch_array($result);
                         $title = $myrow['title'];
                         break;
@@ -935,7 +935,7 @@ if ($content == 'Link') {
 
 if (($content == 'Exercise') || ($content == 'HotPotatoes')) {
     $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-    $result = Database::query("SELECT * FROM ".$TBL_EXERCICES." WHERE active='1' ORDER BY id ASC");
+    $result = Database::query("SELECT * FROM ".$TBL_EXERCICES." WHERE active='1' ORDER BY iid ASC");
     while ($myrow = Database::fetch_array($result)) {
         echo "<img src='../img/quiz.gif'>".$myrow['title']."<br />";
         showorhide_addresourcelink($content, $myrow["id"]);
@@ -946,7 +946,7 @@ if (($content == 'Exercise') || ($content == 'HotPotatoes')) {
         $uploadPath = '/HotPotatoes_files';
         $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-        $sql = "SELECT * FROM ".$TBL_DOCUMENT." WHERE (path LIKE '%htm%' OR path LIKE '%html%') AND path LIKE '".$uploadPath."/%/%' ORDER BY id ASC";
+        $sql = "SELECT * FROM ".$TBL_DOCUMENT." WHERE (path LIKE '%htm%' OR path LIKE '%html%') AND path LIKE '".$uploadPath."/%/%' ORDER BY iid ASC";
         $result = Database::query($sql);
         while ($myrow = Database::fetch_array($result)) {
             $path = $myrow['path'];

@@ -1950,36 +1950,27 @@ class learnpath
         if ($this->mode == 'fullscreen') {
             $navbar = '
                   <div class="buttons">
-                    <a href="lp_controller.php?action=stats&'.api_get_cidreq(
-                true
-            ).'&lp_id='.$lp_id.'" onClick="window.parent.API.save_asset();return true;" target="content_name_blank" title="stats" id="stats_link"><img border="0" src="../img/lp_stats.gif" title="'.get_lang(
-                'Reporting'
-            ).'"></a>
-                    <a href="" onClick="switch_item('.$mycurrentitemid.',\'previous\');return false;" title="previous"><img border="0" src="../img/lp_leftarrow.gif" title="'.get_lang(
-                'ScormPrevious'
-            ).'"></a>
-                    <a href="" onClick="switch_item('.$mycurrentitemid.',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="'.get_lang(
-                'ScormNext'
-            ).'"></a>.
-                    <a href="lp_controller.php?action=mode&mode=embedded" target="_top" title="embedded mode"><img border="0" src="../img/view_choose.gif" title="'.get_lang(
-                'ScormExitFullScreen'
-            ).'"></a>
-                  </div>';
+                    <a href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onClick="window.parent.API.save_asset();return true;" target="content_name_blank" title="stats" id="stats_link">
+                    '.Display::return_icon('lp_stats.gif', get_lang('Reporting')).'</a>
+                    <a href="" onClick="switch_item('.$mycurrentitemid.',\'previous\');return false;" title="previous">
+                    '.Display::return_icon('lp_leftarrow.gif', get_lang('ScormPrevious')).'</a>
+                    <a href="" onClick="switch_item('.$mycurrentitemid.',\'next\');return false;" title="next">
+                    '.Display::return_icon('lp_rightarrow.gif', get_lang('ScormNext')).' </a>
+                    <a href="lp_controller.php?action=mode&mode=embedded" target="_top" title="embedded mode">
+                    '.Display::return_icon('view_choose.gif', get_lang('ScormExitFullScreen')).'</a>
+                    </div>';
 
         } else {
             $navbar = '
                   <div class="buttons">
-                    <a href="lp_controller.php?action=stats&'.api_get_cidreq(
-                true
-            ).'&lp_id='.$lp_id.'" onClick="window.parent.API.save_asset();return true;" target="content_name" title="stats" id="stats_link"><img border="0" src="../img/lp_stats.gif" title="'.get_lang(
-                'Reporting'
-            ).'"></a>
-                    <a href="" onClick="switch_item('.$mycurrentitemid.',\'previous\');return false;" title="previous"><img border="0" src="../img/lp_leftarrow.gif" title="'.get_lang(
-                'ScormPrevious'
-            ).'"></a>
-                    <a href="" onClick="switch_item('.$mycurrentitemid.',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="'.get_lang(
-                'ScormNext'
-            ).'"></a>
+                    <a href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onClick="window.parent.API.save_asset();return true;" target="content_name" title="stats" id="stats_link">
+                        '.Display::return_icon('lp_stats.gif', get_lang('Reporting')).'
+                    </a>
+                    <a href="" onClick="switch_item('.$mycurrentitemid.',\'previous\');return false;" title="previous">
+                        '.Display::return_icon('lp_leftarrow.gif', get_lang('ScormPrevious')).'</a>
+                    <a href="" onClick="switch_item('.$mycurrentitemid.',\'next\');return false;" title="next"  >
+                    '.Display::return_icon('lp_rightarrow.gif', get_lang('ScormNext')).'
+                    </a>
                   </div>';
         }
 
@@ -2436,9 +2427,9 @@ class learnpath
 
         // Setting up the CSS path of the current style if exists.
         if (!empty ($lp_theme_css)) {
-            $css_path = api_get_path(WEB_CODE_PATH).'css/'.$lp_theme_css.'/images/';
+            //$css_path = api_get_path(WEB_CODE_PATH).'css/'.$lp_theme_css.'/images/';
         } else {
-            $css_path = '../img/';
+            //$css_path = '../img/';
         }
 
         //if ($this->debug > 0) { error_log('New LP - In learnpath::get_progress_bar()', 0); }
@@ -3203,10 +3194,10 @@ class learnpath
 
             // The anchor will let us center the TOC on the currently viewed item &^D
             if ($item['type'] != 'dokeos_module' && $item['type'] != 'dokeos_chapter') {
-                $html .= '<div class="'.$style_item.'" style="padding-left: '.($item['level'] * 1.5).'em; padding-right:'.($item['level'] / 2).'em"             title="'.$item['description'].'" >';
+                $html .= '<div class="'.$style_item.'" style="padding-left: '.($item['level'] * 1.5).'em; padding-right:'.($item['level'] / 2).'em"  title="'.$item['description'].'" >';
                 $html .= '<a name="atoc_'.$item['id'].'" />';
             } else {
-                $html .= '<div class="'.$style_item.'" style="padding-left: '.($item['level'] * 2).'em; padding-right:'.($item['level'] * 1.5).'em"             title="'.$item['description'].'" >';
+                $html .= '<div class="'.$style_item.'" style="padding-left: '.($item['level'] * 2).'em; padding-right:'.($item['level'] * 1.5).'em"  title="'.$item['description'].'" >';
             }
             $title = $item['title'];
             if (empty ($title)) {
@@ -3215,26 +3206,18 @@ class learnpath
 
             $title = Security::remove_XSS($title);
             if ($item['type'] != 'dokeos_chapter' && $item['type'] != 'dir' && $item['type'] != 'dokeos_module') {
-                //$html .= "<a href='lp_controller.php?".api_get_cidreq()."&action=content&lp_id=".$this->get_id()."&item_id=".$item['id']."' target='lp_content_frame_name'>".$title."</a>" ;
                 $url = $this->get_link('http', $item['id'], $toc_list);
-                //$html .= '<a href="'.$url.'" target="content_name" onClick="top.load_item('.$item['id'].',\''.$url.'\');">'.$title.'</a>' ;
-                //$html .= '<a href="" onClick="top.load_item('.$item['id'].',\''.$url.'\');return false;">'.$title.'</a>' ;
 
-                //<img align="absbottom" width="13" height="13" src="../img/lp_document.png">&nbsp;background:#aaa;
                 $html .= '<a href="" onClick="switch_item('.$mycurrentitemid.','.$item['id'].');'.'return false;" >'.stripslashes(
                     $title
                 ).'</a>';
             } elseif ($item['type'] == 'dokeos_module' || $item['type'] == 'dokeos_chapter') {
-                $html .= "<img align='absbottom' width='13' height='13' src='../img/lp_dokeos_module.png'>&nbsp;".stripslashes(
-                    $title
-                );
+                $html .= Display::return_icon('lp_dokeos_module.png', $title);
             } elseif ($item['type'] == 'dir') {
                 $html .= stripslashes($title);
             }
 
             if ($item['type'] == 'quiz') {
-                // error_log("1-->>>>>>>>>>>>>>>>");
-                // error_log($item['status']);
                 if ($item['status'] == 'completed') {
                     $html .= "&nbsp;<img id='toc_img_".$item['id']."' src='".$icon_name[$item['status']]."' alt='".substr(
                         $item['status'],
@@ -6710,7 +6693,8 @@ class learnpath
             $item_title = $extra_info['title'];
             $item_description = $extra_info['description'];
         } elseif (is_numeric($extra_info)) {
-            $sql_quiz = "SELECT title, description FROM ".$tbl_quiz." WHERE c_id = ".$course_id." AND id = ".$extra_info;
+            $sql_quiz = "SELECT title, description FROM ".$tbl_quiz."
+                         WHERE c_id = ".$course_id." AND iid = ".$extra_info;
 
             $result = Database::query($sql_quiz);
             $row = Database :: fetch_array($result);
@@ -6768,7 +6752,8 @@ class learnpath
             $legend .= Display :: return_warning_message(get_lang('Warning').' ! '.get_lang('WarningEditingDocument'));
         }
         $legend .= '</legend>';
-        $return .= '<div class="sectioncomment">';
+
+        $return = '<div class="sectioncomment">';
 
         $return .= '<form method="POST">';
         $return .= $legend;
@@ -6785,14 +6770,13 @@ class learnpath
 
         $return .= '<td class="label"><label for="idParent">'.get_lang('Parent').'</label></td>';
         $return .= '<td class="input">';
-
         $return .= '<select id="idParent" style="width:100%;" name="parent" onChange="javascript: load_cbo(this.value);" size="1">';
-
         $return .= '<option class="top" value="0">'.$this->name.'</option>';
 
         $arrHide = array(
             $id
         );
+
         //$parent_item_id = $_SESSION['parent_item_id'];
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
@@ -9048,10 +9032,8 @@ class learnpath
         $return = '<ul class="lp_resource">';
 
         $return .= '<li class="lp_resource_element">';
-        $return .= '<img alt="" src="../img/new_test_small.gif" style="margin-right:5px;" title="" />';
-        $return .= '<a href="'.api_get_path(
-            REL_CODE_PATH
-        ).'exercice/exercise_admin.php?lp_id='.$this->lp_id.'">'.get_lang('NewExercise').'</a>';
+        $return .= Display::return_icon('new_test_small.gif');
+        $return .= '<a href="'.api_get_path(REL_CODE_PATH).'exercice/exercise_admin.php?lp_id='.$this->lp_id.'">'.get_lang('NewExercise').'</a>';
         $return .= '</li>';
 
         // Display hotpotatoes
@@ -9062,7 +9044,7 @@ class learnpath
             $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
             $return .= '</a> ';
 
-            $return .= '<img src="../img/hotpotatoes_s.png" style="margin-right:5px;" title="" width="16px" />';
+            $return .= Display::return_icon('hotpotatoes_s.png');
             $return .= '<a href="'.api_get_self().'?'.api_get_cidreq(
             ).'&amp;action=add_item&amp;type='.TOOL_HOTPOTATOES.'&amp;file='.$row_hot['id'].'&amp;lp_id='.$this->lp_id.'">'.
                 ((!empty ($row_hot['comment'])) ? $row_hot['comment'] : Security :: remove_XSS(
@@ -9076,7 +9058,7 @@ class learnpath
             $return .= '<a class="moved" href="#">';
             $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
             $return .= '</a> ';
-            $return .= '<img alt="" src="../img/quizz_small.gif" style="margin-right:5px;" title="" />';
+            $return .= Display::return_icon('quizz_small.gif');
             $return .= '<a href="'.api_get_self().'?'.api_get_cidreq(
             ).'&amp;action=add_item&amp;type='.TOOL_QUIZ.'&amp;file='.$row_quiz['iid'].'&amp;lp_id='.$this->lp_id.'">'.
                 Security :: remove_XSS(Text::cut($row_quiz['title'], 80)).
@@ -9106,7 +9088,7 @@ class learnpath
 
         $return = '<ul class="lp_resource">';
         $return .= '<li class="lp_resource_element">';
-        $return .= '<img alt="" src="../img/linksnew.gif" style="margin-right:5px;width:16px" title="" />';
+        $return .= Display::return_icon('linksnew.gif');
         $return .= '<a href="'.api_get_path(REL_CODE_PATH).'link/link.php?'.api_get_cidreq(
         ).'&action=addlink&amp;lp_id='.$this->lp_id.'" title="'.get_lang('LinkAdd').'">'.get_lang('LinkAdd').'</a>';
         $return .= '</li>';
@@ -9121,7 +9103,7 @@ class learnpath
                 $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
                 $return .= '</a> ';
 
-                $return .= '<img alt="" src="../img/lp_link.gif" style="margin-right:5px;" title="" />';
+                $return .= Display::return_icon('lp_link.gif');
 
                 $return .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=add_item&amp;type='.TOOL_LINK.'&amp;file='.$row_link['id'].'&amp;lp_id='.$this->lp_id.'">'.
                     $row_link['title'].
@@ -9142,11 +9124,8 @@ class learnpath
     {
         $return = '<div class="lp_resource" >';
         $return .= '<div class="lp_resource_element">';
-        $return .= '<img align="left" alt="" src="../img/works_small.gif" style="margin-right:5px;" title="" />';
-        $return .= '<a href="'.api_get_self().'?'.api_get_cidreq(
-        ).'&amp;action=add_item&amp;type='.TOOL_STUDENTPUBLICATION.'&amp;lp_id='.$this->lp_id.'">'.get_lang(
-            'AddAssignmentPage'
-        ).'</a>';
+        $return .= Display::return_icon('works_small.gif');
+        $return .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=add_item&amp;type='.TOOL_STUDENTPUBLICATION.'&amp;lp_id='.$this->lp_id.'">'.get_lang('AddAssignmentPage').'</a>';
         $return .= '</div>';
         $return .= '</div>';
 
@@ -9168,11 +9147,9 @@ class learnpath
 
         //First add link
         $return .= '<li class="lp_resource_element">';
-        $return .= '<img alt="" src="../img/forum_new_small.gif" style="margin-right:5px;" title="" />';
-        $return .= '<a href="'.api_get_path(REL_CODE_PATH).'forum/index.php?'.api_get_cidreq(
-        ).'&action=add&amp;content=forum&amp;origin=learnpath&amp;lp_id='.$this->lp_id.'" title="'.get_lang(
-            'CreateANewForum'
-        ).'">'.get_lang('CreateANewForum').'</a>';
+        $return .= Display::return_icon('forum_new_small.gif');
+        $return .= '<a href="'.api_get_path(REL_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&action=add&amp;content=forum&amp;origin=learnpath&amp;lp_id='.$this->lp_id.'" title="'.get_lang('CreateANewForum').'">
+                    '.get_lang('CreateANewForum').'</a>';
         $return .= '</li>';
 
         $return .= '<script>
@@ -9196,7 +9173,7 @@ class learnpath
                 $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
                 $return .= ' </a>';
 
-                $return .= '<img alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />';
+                $return .= Display::return_icon('lp_forum.gif');
 
                 $return .= '<a style="cursor:hand" onclick="javascript: toggle_forum('.$forum['forum_id'].')" style="vertical-align:middle">
                                 <img src="'.api_get_path(WEB_IMG_PATH).'add.gif" id="forum_'.$forum['forum_id'].'_opener" align="absbottom" />

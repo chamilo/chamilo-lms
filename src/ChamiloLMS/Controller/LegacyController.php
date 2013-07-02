@@ -57,6 +57,12 @@ class LegacyController extends CommonController
             $out = ob_get_contents();
             ob_end_clean();
 
+            // Setting page header/footer conditions (important for LPs)
+            $app['template']->setFooter($app['template.show_footer']);
+            $app['template']->setHeader($app['template.show_header']);
+
+            //var_dump($app['template.show_header']);
+
             if (isset($htmlHeadXtra)) {
                 $app['template']->addJsFiles($htmlHeadXtra);
             }

@@ -460,7 +460,7 @@ if (is_array($list) && count($list) > 0) {
                 // Check results_disabled in quiz table.
                 $my_path = Database::escape_string($my_path);
 
-                $sql = "SELECT results_disabled FROM $TBL_QUIZ WHERE c_id = $course_id AND id ='" . (int) $my_path . "'";
+                $sql = "SELECT results_disabled FROM $TBL_QUIZ WHERE c_id = $course_id AND iid ='" . (int) $my_path . "'";
                 $res_result_disabled = Database::query($sql);
                 $row_result_disabled = Database::fetch_row($res_result_disabled);
 

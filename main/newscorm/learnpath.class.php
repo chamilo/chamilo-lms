@@ -3160,13 +3160,13 @@ class learnpath
         foreach ($toc_list as $item) {
             // TODO: Complete this
             $icon_name = array(
-                'not attempted' => '../img/notattempted.gif',
-                'incomplete' => '../img/incomplete.png',
-                'failed' => '../img/delete.png',
-                'completed' => '../img/completed.png',
-                'passed' => '../img/passed.png',
-                'succeeded' => '../img/succeeded.png',
-                'browsed' => '../img/completed.png',
+                'not attempted' => 'notattempted.gif',
+                'incomplete' => 'incomplete.png',
+                'failed' => 'delete.png',
+                'completed' => 'completed.png',
+                'passed' => 'passed.png',
+                'succeeded' => 'succeeded.png',
+                'browsed' => 'completed.png',
             );
 
             $style = 'scorm_item';
@@ -3219,25 +3219,17 @@ class learnpath
 
             if ($item['type'] == 'quiz') {
                 if ($item['status'] == 'completed') {
-                    $html .= "&nbsp;<img id='toc_img_".$item['id']."' src='".$icon_name[$item['status']]."' alt='".substr(
-                        $item['status'],
-                        0,
-                        1
-                    )."' width='14' />";
+                    $html .= "&nbsp;".Display::return_icon($icon_name[$item['status']], substr($item['status'], 0, 1), array('id' => "toc_img_".$item['id'], 'width' => '14'));
+                    //$html .= "&nbsp;<img id='toc_img_".$item['id']."' src='".$icon_name[$item['status']]."' alt='".substr($item['status'],0,1)."' width='14' />";
+
                 } else {
-                    $html .= "&nbsp;<img id='toc_img_".$item['id']."' src='".$icon_name['not attempted']."' alt='".substr(
-                        'not attempted',
-                        0,
-                        1
-                    )."' width='14' />";
+                    $html .= "&nbsp;".Display::return_icon($icon_name['not attempted'], substr('not attempted', 0, 1), array('id' => "toc_img_".$item['id'], 'width' => '14'));
+//                    $html .= "&nbsp;<img id='toc_img_".$item['id']."' src='".$icon_name['not attempted']."' alt='".substr('not attempted', 0, 1)."' width='14' />";
                 }
             } else {
                 if ($item['type'] != 'dokeos_chapter' && $item['type'] != 'dokeos_module' && $item['type'] != 'dir') {
-                    $html .= "&nbsp;<img id='toc_img_".$item['id']."' src='".$icon_name[$item['status']]."' alt='".substr(
-                        $item['status'],
-                        0,
-                        1
-                    )."' width='14' />";
+                    $html .= "&nbsp;".Display::return_icon($icon_name[$item['status']], substr($item['status'], 0, 1), array('id' => "toc_img_".$item['id'], 'width' => '14'));
+                    //$html .= "&nbsp;<img id='toc_img_".$item['id']."' src='".$icon_name[$item['status']]."' alt='".substr($item['status'], 0, 1)."' width='14' />";
                 }
             }
 

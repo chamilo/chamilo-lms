@@ -118,14 +118,14 @@ $htmlHeadXtra[] = '<script>
 chamilo_courseCode = "'.$course_code.'";
 </script>';
 // Document API
-$htmlHeadXtra[] = '<script src="js/documentapi.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_CODE_PATH).'newscorm/js/documentapi.js" type="text/javascript"></script>';
 // Storage API
 $htmlHeadXtra[] = '<script>
 var sv_user = \''.api_get_user_id().'\';
 var sv_course = chamilo_courseCode;
 var sv_sco = \''.intval($_REQUEST['lp_id']).'\';
 </script>'; // FIXME fetch sco and userid from a more reliable source directly in sotrageapi.js
-$htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'newscorm/js/storageapi.js"></script>';
 
 if ($debug) {
     error_log(" src: $src ");
@@ -146,7 +146,7 @@ if (!isset($src)) {
     switch ($lp_type) {
         case 1:
             $_SESSION['oLP']->stop_previous_item();
-            $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
+            $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_CODE_PATH).'newscorm/scorm_api.php" type="text/javascript"></script>';
             $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
             if ($prereq_check === true) {
                 $src = $_SESSION['oLP']->get_link('http', $lp_item_id, $get_toc_list);
@@ -165,7 +165,7 @@ if (!isset($src)) {
         case 2:
             // save old if asset
             $_SESSION['oLP']->stop_previous_item(); // save status manually if asset
-            $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
+            $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_CODE_PATH).'newscorm/scorm_api.php" type="text/javascript" language="javascript"></script>';
             $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
             if ($prereq_check === true) {
                 $src = $_SESSION['oLP']->get_link('http', $lp_item_id, $get_toc_list);
@@ -362,8 +362,8 @@ echo '<div id="header">
                 <tr>
                     <td>';
 echo '<a href="lp_controller.php?action=return_to_course_homepage&'.api_get_cidreq().'" target="_self" onclick="javascript: window.parent.API.save_asset();">
-                            <img src="../img/lp_arrow.gif" />
-                        </a>
+        '.Display::return_icon('lp_arrow.gif').'
+      </a>
                     </td>
                     <td>';
 if ($is_allowed_to_edit) {

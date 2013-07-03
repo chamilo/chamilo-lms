@@ -517,7 +517,9 @@ class CourseSelectForm
 	 * @param array $hidden_fiels Hidden fields to add to the form.
 	 * @param boolean the document array will be serialize. This is used in the course_copy.php file
 	 */
-	 function display_form_session_export($list_course, $hidden_fields = null, $avoid_serialize=false) {
+	 function display_form_session_export($list_course, $hidden_fields = null, $avoid_serialize = false)
+     {
+         $iconPath = api_get_path(WEB_IMG_PATH);
 ?>
 		<script>
 			function exp(item) {
@@ -561,8 +563,7 @@ class CourseSelectForm
 		<?php
 
 		//get destination course title
-		if(!empty($hidden_fields['destination_course'])) {
-			require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
+		if (!empty($hidden_fields['destination_course'])) {
 			$course_infos = CourseManager::get_course_information($hidden_fields['destination_course']);
 			echo '<h3>';
 				echo get_lang('DestinationCourse').' : '.$course_infos['title'];

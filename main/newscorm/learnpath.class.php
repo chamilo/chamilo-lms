@@ -5441,7 +5441,7 @@ class learnpath
                         'id' => $array[$i]['id'],
                         'item_type' => $array[$i]['item_type'],
                         'title' => $array[$i]['title'],
-                        'path' => $array[$i]['path'],
+                        'path' => isset($array[$i]['path']) ? $array[$i]['path'] : null,
                         'description' => $array[$i]['description'],
                         'parent_item_id' => $array[$i]['parent_item_id'],
                         'previous_item_id' => $array[$i]['previous_item_id'],
@@ -6059,6 +6059,8 @@ class learnpath
      */
     public function build_tree()
     {
+        $iconSysPath = api_get_path(SYS_CODE_PATH).'img/';
+        $iconWebPath = api_get_path(WEB_IMG_PATH);
         $course_id = api_get_course_int_id();
 
         $return = "<script type=\"text/javascript\">\n";
@@ -6104,21 +6106,22 @@ class learnpath
 
         $this->tree_array($arrLP);
         $arrLP = $this->arrMenu;
-        unset ($this->arrMenu);
+        unset($this->arrMenu);
         $title = '';
+
         for ($i = 0; $i < count($arrLP); $i++) {
             $title = addslashes($arrLP[$i]['title']);
             $menu_page = api_get_self().'?cidReq='.Security :: remove_XSS(
                 $_GET['cidReq']
             ).'&amp;action=view_item&amp;id='.$arrLP[$i]['id'].'&amp;lp_id='.$_SESSION['oLP']->lp_id;
             $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
-            if (file_exists('../img/lp_'.$icon_name.'.png')) {
-                $return .= "\tm.add(".$arrLP[$i]['id'].", ".$arrLP[$i]['parent_item_id'].", '".$title."', '".$menu_page."', '', '', '../img/lp_".$icon_name.".png', '../img/lp_".$icon_name.".png');\n";
+            if (file_exists($iconSysPath.'lp_'.$icon_name.'.png')) {
+                $return .= "\tm.add(".$arrLP[$i]['id'].", ".$arrLP[$i]['parent_item_id'].", '".$title."', '".$menu_page."', '', '', '".$iconWebPath."lp_".$icon_name.".png', '".$iconWebPath."lp_".$icon_name.".png');\n";
             } else {
-                if (file_exists('../img/lp_'.$icon_name.'.gif')) {
-                    $return .= "\tm.add(".$arrLP[$i]['id'].", ".$arrLP[$i]['parent_item_id'].", '".$title."', '".$menu_page."', '', '', '../img/lp_".$icon_name.".gif', '../img/lp_".$icon_name.".gif');\n";
+                if (file_exists($iconSysPath.'lp_'.$icon_name.'.gif')) {
+                    $return .= "\tm.add(".$arrLP[$i]['id'].", ".$arrLP[$i]['parent_item_id'].", '".$title."', '".$menu_page."', '', '', '".$iconWebPath."lp_".$icon_name.".gif', '".$iconWebPath."lp_".$icon_name.".gif');\n";
                 } else {
-                    $return .= "\tm.add(".$arrLP[$i]['id'].", ".$arrLP[$i]['parent_item_id'].", '".$title."', '".$menu_page."', '', '', '../img/folder_document.gif', '../img/folder_document.gif');\n";
+                    $return .= "\tm.add(".$arrLP[$i]['id'].", ".$arrLP[$i]['parent_item_id'].", '".$title."', '".$menu_page."', '', '', '".$iconWebPath."folder_document.gif', '".$iconWebPath."folder_document.gif');\n";
                 }
             }
             if ($menu < $arrLP[$i]['id']) {
@@ -8871,7 +8874,7 @@ class learnpath
         // Adding the none option to the prerequisites see http://www.chamilo.org/es/node/146
         $return .= '<tr >';
         $return .= '<td colspan="3" class="radio">';
-        $return .= '<input checked="checked" id="idNone" name="prerequisites"  style="margin-left:0px; margin-right:10px;" type="radio" />';
+        $return .= '<input checked="checked" id="idNone" name="prerequisites" style="margin-left:0px; margin-right:10px;" type="radio" />';
         $return .= '<label for="idNone">'.get_lang('None').'</label>';
         $return .= '</tr>';
 
@@ -8902,7 +8905,9 @@ class learnpath
         }
         $this->tree_array($arrLP);
         $arrLP = $this->arrMenu;
-        unset ($this->arrMenu);
+        unset($this->arrMenu);
+
+        $imgSysPath = api_get_path(SYS_CODE_PATH).'img/';
 
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['id'] == $item_id) {
@@ -8915,11 +8920,11 @@ class learnpath
             $depth_multi = $arrLP[$i]['depth'] * 10;
             $return .= '<input'.(($arrLP[$i]['id'] == $preq_id) ? ' checked="checked" ' : '').(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') ? ' disabled="disabled" ' : ' ').'id="id'.$arrLP[$i]['id'].'" name="prerequisites" style="margin-left:'.$depth_multi.'px; margin-right:10px;" type="radio" value="'.$arrLP[$i]['id'].'" />';
             $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
-            if (file_exists('../img/lp_'.$icon_name.'.png')) {
-                $return .= '<img alt="" src="../img/lp_'.$icon_name.'.png" style="margin-right:5px;" title="" />';
+            if (file_exists($imgSysPath.'lp_'.$icon_name.'.png')) {
+                $return .= Display::return_icon('lp_'.$icon_name.'.png');
             } else {
-                if (file_exists('../img/lp_'.$icon_name.'.gif')) {
-                    $return .= '<img alt="" src="../img/lp_'.$icon_name.'.gif" style="margin-right:5px;" title="" />';
+                if (file_exists($imgSysPath.'lp_'.$icon_name.'.gif')) {
+                    $return .= Display::return_icon('lp_'.$icon_name.'.gif');
                 } else {
                     $return .= Display::return_icon(
                         'folder_document.gif',

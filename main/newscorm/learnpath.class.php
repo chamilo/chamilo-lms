@@ -13,6 +13,7 @@
  * Defines the learnpath parent class
  * @package chamilo.learnpath
  */
+use \ChamiloSession as Session;
 
 class learnpath
 {
@@ -5726,6 +5727,8 @@ class learnpath
         $elements = array();
         $return_audio = null;
 
+        $iconSysPath = api_get_path(SYS_CODE_PATH).'img/';
+
         for ($i = 0; $i < count($arrLP); $i++) {
             $title = $arrLP[$i]['title'];
 
@@ -5748,10 +5751,10 @@ class learnpath
             $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
 
             $icon = '';
-            if (file_exists('../img/lp_'.$icon_name.'.png')) {
+            if (file_exists($iconSysPath.'lp_'.$icon_name.'.png')) {
                 $icon = Display::return_icon('lp_'.$icon_name.'.png');
             } else {
-                if (file_exists('../img/lp_'.$icon_name.'.gif')) {
+                if (file_exists($iconSysPath.'lp_'.$icon_name.'.gif')) {
                     $icon = Display::return_icon('lp_'.$icon_name.'.gif');
                 } else {
                     $icon = Display::return_icon('folder_document.gif');
@@ -7597,7 +7600,7 @@ class learnpath
 
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
 
-        unset ($this->arrMenu);
+        unset($this->arrMenu);
 
         $gradebook = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
 
@@ -7877,8 +7880,11 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu;
-        unset ($this->arrMenu);
+        $arrLP = null;
+        if (isset($this->arrMenu)) {
+            $arrLP = $this->arrMenu;
+            unset ($this->arrMenu);
+        }
 
         if ($action == 'add') {
             $return .= get_lang('CreateTheDocument');
@@ -7961,7 +7967,7 @@ class learnpath
         if (!empty($id)) {
             $parent_select->setSelected($parent);
         } else {
-            $parent_item_id = $_SESSION['parent_item_id'];
+            $parent_item_id = Session::read('parent_item_id');
             $parent_select->setSelected($parent_item_id);
         }
 
@@ -7970,6 +7976,8 @@ class learnpath
         }
 
         $arrHide = array();
+
+        $s_selected_position = null;
 
         //POSITION
         for ($i = 0; $i < count($arrLP); $i++) {
@@ -8623,15 +8631,18 @@ class learnpath
 
         $row = Database::fetch_assoc($result);
 
+        $webCodepath = api_get_path(WEB_CODE_PATH);
+
         $audio_player = null;
         // We display an audio player if needed.
         if (!empty($row['audio'])) {
-            $audio_player .= '<div class="lp_mediaplayer" id="container"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</div>';
-            $audio_player .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
+            $audio_player .= '<div class="lp_mediaplayer" id="container">
+                              <a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</div>';
+            $audio_player .= '<script type="text/javascript" src="'.$webCodepath.'inc/lib/mediaplayer/swfobject.js"></script>';
             $audio_player .= '<script>
-                                var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
+                                var s1 = new SWFObject("'.$webCodepath.'inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
                                 s1.addParam("allowscriptaccess","always");
-                                s1.addParam("flashvars","file=../../courses/'.$_course['path'].'/document/audio/'.$row['audio'].'&autostart=true");
+                                s1.addParam("flashvars","file='.api_get_path(WEB_PUBLIC_PATH).'courses/'.$_course['path'].'/document/audio/'.$row['audio'].'&autostart=true");
                                 s1.write("container");
                             </script>';
         }

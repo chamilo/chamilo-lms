@@ -5824,11 +5824,8 @@ class learnpath
                         );
                         $edit_icon .= '</a>';
                     } else {
-                        $edit_icon .= '<a href="'.api_get_self().'?cidReq='.Security :: remove_XSS(
-                            $_GET['cidReq']
-                        ).'&amp;action=edit_item&amp;id='.$arrLP[$i]['id'].'&amp;lp_id='.$this->lp_id.'&amp;path_item='.$arrLP[$i]['path'].'">';
-                        $edit_icon .= Display::return_icon(
-                            'edit.png',
+                        $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=edit_item&amp;id='.$arrLP[$i]['id'].'&amp;lp_id='.$this->lp_id.'&amp;path_item='.$arrLP[$i]['path'].'">';
+                        $edit_icon .= Display::return_icon('edit.png',
                             get_lang('LearnpathEditModule'),
                             array(),
                             ICON_SIZE_TINY

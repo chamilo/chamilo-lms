@@ -661,6 +661,9 @@ $app->before(
                 case 'coursecopy':
                     $languageFilesToAdd = array('exercice', 'coursebackup', 'admin');
                     break;
+                case 'group':
+                    $languageFilesToAdd = array('group');
+                    break;
                 case 'newscorm':
                     $languageFilesToAdd = array('course_home', 'scormdocument','document','scorm','learnpath','resourcelinker','registration','exercice');
                     break;

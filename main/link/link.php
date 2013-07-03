@@ -480,7 +480,7 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
 				echo '<tr>';
 					echo '<th width="81%" style="font-weight: bold; text-align:left;padding-left: 5px;">';
 					echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;urlview='.Security::remove_XSS($newurlview).'">';
-					echo '<img src="../img/icons/22/view_remove.png" />&nbsp;&nbsp;'.Security::remove_XSS($myrow['category_title']).'</a><br />&nbsp;&nbsp;&nbsp;'.$myrow['description'];
+					echo Display::return_icon('view_remove.png').'&nbsp;&nbsp;'.Security::remove_XSS($myrow['category_title']).'</a><br />&nbsp;&nbsp;&nbsp;'.$myrow['description'];
 					echo '</th>';
 					if (api_is_allowed_to_edit(null, true)) {
 						if ($session_id == $myrow['session_id']) {
@@ -501,7 +501,7 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
 				echo '<tr>';
 					echo '<th width="81%" style="font-weight: bold; text-align:left;padding-left: 5px;"><a href="'.api_get_self().'?'.api_get_cidreq().'&amp;urlview=';
 					echo is_array($view) ? implode('', $view) : $view;
-					echo '"><img src="../img/icons/22/view_tree.png" />&nbsp;&nbsp;'.Security::remove_XSS($myrow['category_title']).$session_img;
+					echo '">'.Display::return_icon('view_tree.png').' &nbsp;&nbsp;'.Security::remove_XSS($myrow['category_title']).$session_img;
 					echo'</a><br />&nbsp;&nbsp;&nbsp;';
 					echo $myrow['description'];
 					if (api_is_allowed_to_edit(null, true)) {

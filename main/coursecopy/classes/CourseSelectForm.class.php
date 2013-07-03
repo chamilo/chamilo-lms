@@ -16,7 +16,8 @@ class CourseSelectForm
 	 * @param array $hidden_fiels Hidden fields to add to the form.
 	 * @param boolean the document array will be serialize. This is used in the course_copy.php file
 	 */
-	static function display_form($course, $hidden_fields = null, $avoid_serialize=false) {
+	static function display_form($course, $hidden_fields = null, $avoid_serialize=false)
+    {
         global $charset;
 		$resource_titles[RESOURCE_EVENT]                = get_lang('Events');
 		$resource_titles[RESOURCE_ANNOUNCEMENT] 		= get_lang('Announcements');
@@ -34,17 +35,19 @@ class CourseSelectForm
 		$resource_titles[RESOURCE_WIKI]                 = get_lang('Wiki');
 		$resource_titles[RESOURCE_THEMATIC]             = get_lang('Thematic');
 		$resource_titles[RESOURCE_ATTENDANCE]           = get_lang('Attendance');
-?>
+
+        $iconPath = api_get_path(WEB_IMG_PATH);
+        ?>
 		<script>
 			function exp(item) {
 				el = document.getElementById('div_'+item);
 				if (el.style.display=='none'){
 					el.style.display='';
-					document.getElementById('img_'+item).src='../img/1.gif';
+					document.getElementById('img_'+item).src='<?php echo $iconPath; ?>1.gif';
 				}
 				else{
 					el.style.display='none';
-					document.getElementById('img_'+item).src='../img/0.gif';
+					document.getElementById('img_'+item).src='<?php echo $iconPath; ?>0.gif';
 				}
 			}
 
@@ -190,7 +193,7 @@ class CourseSelectForm
 					case RESOURCE_SCORM:
 						break;
                     default :
-						echo '<img id="img_'.$type.'" src="../img/1.gif" onclick="javascript:exp('."'$type'".');" />&nbsp;';
+						echo '<img id="img_'.$type.'" src="'.$iconPath.'1.gif" onclick="javascript:exp('."'$type'".');" />&nbsp;';
 						echo '<b onclick="javascript:exp('."'$type'".');" >'.$resource_titles[$type].'</b><br />';
 						echo '<div id="div_'.$type.'">';
 						if ($type == RESOURCE_LEARNPATH) {
@@ -229,7 +232,7 @@ class CourseSelectForm
         if (!empty($forum_categories)) {
             $type = RESOURCE_FORUMCATEGORY;
 
-            echo '<img id="img_'.$type.'" src="../img/1.gif" onclick="javascript:exp('."'$type'".');" />&nbsp;';
+            echo '<img id="img_'.$type.'" src="'.$iconPath.'1.gif" onclick="javascript:exp('."'$type'".');" />&nbsp;';
             echo '<b onclick="javascript:exp('."'$type'".');" >'.$resource_titles[RESOURCE_FORUM].'</b><br />';
             echo '<div id="div_'.$type.'">';
 
@@ -573,7 +576,7 @@ class CourseSelectForm
 		foreach ($list_course as $course){
 			foreach ($course->resources as $type => $resources) {
 				if (count($resources) > 0) {
-					echo '<img id="img_'.$course->code.'" src="../img/1.gif" onclick="javascript:exp('."'$course->code'".');" />';
+					echo '<img id="img_'.$course->code.'" src="'.$iconPath.'1.gif" onclick="javascript:exp('."'$course->code'".');" />';
 					echo '<b  onclick="javascript:exp('."'$course->code'".');" > '.$course->code.'</b><br />';
 					echo '<div id="div_'.$course->code.'">';
 					echo '<blockquote>';

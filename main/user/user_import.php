@@ -54,7 +54,7 @@ if ($form->validate()) {
         $clean_users    = array();
                 
         if (!empty($users)) { 
-            
+            $empty_line = 0;
             foreach ($users as $user_data) {
                 $username = $user_data['username'];
                 $user_id = UserManager::get_user_id_from_username($username);                
@@ -62,7 +62,11 @@ if ($form->validate()) {
                 if ($user_id && !empty($user_info)) {
                     $clean_users[$user_id] = $user_info;                    
                 } else {
-                    $invalid_users[] = $user_id;
+                    if ($username == '') {
+                        $empty_line = 1;
+                    } else {
+                        $invalid_users[] = $user_id;
+                    }
                 }
             }
             
@@ -116,7 +120,9 @@ if (!empty($message)) {
             Display::display_warning_message($message.': '.implode(', ', $user_to_show));
         }
     } else {
-        Display::display_error_message(get_lang('ErrorsWhenImportingFile'));
+        $empty_line_msg = ($empty_line == 0) ? get_lang('ErrorsWhenImportingFile'): get_lang('ErrorsWhenImportingFile').': '. get_lang('EmptyHeaderLine');
+        Display::display_error_message($empty_line_msg);
+
     }
 }
     

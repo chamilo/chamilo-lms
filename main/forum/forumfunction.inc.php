@@ -487,9 +487,7 @@ function store_forumcategory($values)
     $table_categories = Database::get_course_table(TABLE_FORUM_CATEGORY);
 
     // Find the max cat_order. The new forum category is added at the end => max cat_order + &
-    $sql = "SELECT MAX(cat_order) as sort_max FROM ".Database::escape_string(
-        $table_categories
-    )." WHERE c_id = $course_id";
+    $sql = "SELECT MAX(cat_order) as sort_max FROM $table_categories WHERE c_id = $course_id";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     $new_max = $row['sort_max'] + 1;
@@ -1183,7 +1181,7 @@ function move_up_down($content, $direction, $id)
 
     // The SQL statement
     if ($content == 'forumcategory') {
-        $sql = "SELECT * FROM".$table_categories." forum_categories, ".$table_item_property." item_properties
+        $sql = "SELECT * FROM ".$table_categories." forum_categories, ".$table_item_property." item_properties
                 WHERE
                 forum_categories.c_id = $course_id AND
                 item_properties.c_id = $course_id AND
@@ -1192,7 +1190,7 @@ function move_up_down($content, $direction, $id)
                 ORDER BY forum_categories.cat_order $sort_direction";
     }
     if ($content == 'forum') {
-        $sql = "SELECT * FROM".$table." WHERE c_id = $course_id AND forum_category='".Database::escape_string(
+        $sql = "SELECT * FROM ".$table." WHERE c_id = $course_id AND forum_category='".Database::escape_string(
             $forum_category
         )."' ORDER BY forum_order $sort_direction";
     }
@@ -1270,20 +1268,20 @@ function get_forum_categories($id = '')
     $condition_session .= "AND forum_categories.c_id = $course_id AND item_properties.c_id = $course_id";
 
     if ($id == '') {
-        $sql = "SELECT * FROM".$table_categories." forum_categories, ".$table_item_property." item_properties
+        $sql = "SELECT * FROM ".$table_categories." forum_categories, ".$table_item_property." item_properties
                     WHERE forum_categories.cat_id=item_properties.ref
                     AND item_properties.visibility=1
                     AND item_properties.tool='".TOOL_FORUM_CATEGORY."' $condition_session
                     ORDER BY forum_categories.cat_order ASC";
         if (is_allowed_to_edit()) {
-            $sql = "SELECT * FROM".$table_categories." forum_categories, ".$table_item_property." item_properties
+            $sql = "SELECT * FROM ".$table_categories." forum_categories, ".$table_item_property." item_properties
                     WHERE forum_categories.cat_id=item_properties.ref
                     AND item_properties.visibility<>2
                     AND item_properties.tool='".TOOL_FORUM_CATEGORY."' $condition_session
                     ORDER BY forum_categories.cat_order ASC";
         }
     } else {
-        $sql = "SELECT * FROM".$table_categories." forum_categories, ".$table_item_property." item_properties
+        $sql = "SELECT * FROM ".$table_categories." forum_categories, ".$table_item_property." item_properties
                 WHERE forum_categories.cat_id=item_properties.ref
                 AND item_properties.tool='".TOOL_FORUM_CATEGORY."'
                 AND forum_categories.cat_id='".Database::escape_string($id)."' $condition_session

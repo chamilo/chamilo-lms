@@ -1335,7 +1335,7 @@ class CourseManager
      *    Return user info array of all teacher-users registered in the specified real or virtual course
      *    This only returns the users that are registered in this actual course, not linked courses.
      *
-     *    @param string $course_code
+     *    @param int $courseId
      *    @return array with user id
      */
     public static function get_teacher_list_from_course_code($courseId)

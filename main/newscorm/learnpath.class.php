@@ -9253,7 +9253,8 @@ EOD;
         Database::query($sql);
     }
 
-    function set_previous_step_as_prerequisite_for_all_items() {
+    function set_previous_step_as_prerequisite_for_all_items()
+    {
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
         $course_id = $this->get_course_int_id();
         $lp_id = $this->get_id();
@@ -9264,13 +9265,16 @@ EOD;
             $old_type = null;
             foreach ($this->items as $item) {
                 if (!empty($old_id)) {
-                    $current_item_id = $item->get_id();
-                    if ($old_type == 'quiz') {
-                        $sql = "UPDATE $tbl_lp_item SET mastery_score = '$old_max' WHERE c_id = ".$course_id." AND lp_id = '$lp_id' AND id = '$old_id'";
+                    if (!in_array($old_type, array('dokeos_chapter', 'chapter'))) {
+                        $current_item_id = $item->get_id();
+                        if ($old_type == 'quiz') {
+                            $sql = "UPDATE $tbl_lp_item SET mastery_score = '$old_max' WHERE c_id = ".$course_id." AND lp_id = '$lp_id' AND id = '$old_id'";
+                            Database::query($sql);
+                        }
+
+                        $sql = "UPDATE $tbl_lp_item SET prerequisite = '$old_id' WHERE c_id = ".$course_id." AND lp_id = '$lp_id' AND id = '$current_item_id'";
                         Database::query($sql);
                     }
-                    $sql = "UPDATE $tbl_lp_item SET prerequisite = '$old_id' WHERE c_id = ".$course_id." AND lp_id = '$lp_id' AND id = '$current_item_id'";
-                    Database::query($sql);
                 }
                 $old_id = $item->get_id();
                 $old_max = $item->get_max();

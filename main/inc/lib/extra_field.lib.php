@@ -1257,16 +1257,6 @@ EOF;
         if (!empty($fields)) {
             foreach ($fields as $field) {
 
-                /*if ($checkExtraFieldExistence) {
-                    if (empty($extraFields)) {
-                        continue;
-                    } else {
-                        if (!in_array('extra_'.$field['field_variable'], $extraFields)) {
-                            continue;
-                        }
-                    }
-                }*/
-
                 $search_options = array();
                 $type           = 'text';
                 if (in_array($field['field_type'], array(self::FIELD_TYPE_SELECT, self::FIELD_TYPE_DOUBLE_SELECT))) {

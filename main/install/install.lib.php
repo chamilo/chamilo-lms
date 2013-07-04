@@ -1373,10 +1373,9 @@ function display_requirements($app, $installType)
     // The user would have to adjust the permissions manually
 
     if (count($notwritable) > 0) {
-        $error = true;
         $html .= '<div class="error-message">';
         $html .= '<center><h3>'.translate('Warning').'</h3></center>';
-        printf(
+        $html .=  sprintf(
             translate('NoWritePermissionPleaseReadInstallGuide'),
             '</font>
             <a href="../../documentation/installation_guide.html" target="blank">',

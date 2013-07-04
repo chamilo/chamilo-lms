@@ -9,8 +9,7 @@
             {{ plugin_content_top}}
         </div>
     {% endif %}
-
-    {% if show_header == true %}
+    {% if app.template.show_header == true %}
         <div class="span12">
     {% endif %}
 
@@ -24,7 +23,7 @@
             {% endif %}
         {% endblock %}
 
-    {% if show_header == true %}
+    {% if app.template.show_header == true %}
         &nbsp;
     </div>
     {% endif %}

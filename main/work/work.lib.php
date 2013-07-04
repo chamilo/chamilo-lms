@@ -625,10 +625,10 @@ function display_student_publications_list(
                     $form_folder->addElement(
                         'advanced_settings',
                         '<a href="javascript://" onclick="javascript: return plus();" >
-						 	  	                                 <span id="plus">&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />
-						 	  	                                 &nbsp;'.get_lang('AdvancedParameters').'
-						 	  	                                 </span>
-						 	  	                                 </a>'
+                         <span id="plus">&nbsp;'.Display::return_icon('div_show.gif').'
+                         &nbsp;'.get_lang('AdvancedParameters').'
+                         </span>
+                         </a>'
                     );
                     $form_folder->addElement('html', '<div id="options" style="display: none;">');
 

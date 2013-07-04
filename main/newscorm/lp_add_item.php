@@ -189,6 +189,8 @@ Display::display_header(null, 'Path');
 
 $suredel = trim(get_lang('AreYouSureToDelete'));
 //@todo move this somewhere else css/fix.css
+
+$iconUrl = api_get_path(WEB_CODE_PATH).'img/';
 ?>
 <style>
     #feedback { font-size: 1.4em; }
@@ -224,7 +226,7 @@ $(document).ready(function() {
     $("#hide_bar_template").toggle(
         function() {
             $("#lp_sidebar").hide();
-            $(this).css({'background-image' : 'url("../img/hide2.png")'})
+            $(this).css({'background-image' : 'url("<?php echo $iconUrl; ?>hide2.png")'})
             $("#doc_form").removeClass("span8");
             $("#doc_form").addClass("span11");
         },
@@ -232,7 +234,7 @@ $(document).ready(function() {
             $("#lp_sidebar").show();
             $("#doc_form").removeClass("span11");
             $("#doc_form").addClass("span8");
-            $(this).css('background-image', 'url("../img/hide0.png")');
+            $(this).css('background-image', 'url("<?php echo $iconUrl; ?>hide0.png")');
         }
     );
 });

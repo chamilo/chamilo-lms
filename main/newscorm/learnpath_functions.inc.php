@@ -1303,7 +1303,7 @@ function export_exercise($item_id)
         // Construction of Exercise.
         $objExercise = new Exercise();
 
-        $sql = "SELECT title,description,sound,type,random,active FROM $TBL_EXERCISES WHERE id='$exerciseId'";
+        $sql = "SELECT title,description,sound,type,random,active FROM $TBL_EXERCISES WHERE iid='$exerciseId'";
         // If the specified exercise doesn't exist or is disabled:
         if (!$objExercise->read($exerciseId) || (!$objExercise->selectStatus() && !api_is_allowed_to_edit(
         ) && ($origin != 'learnpath'))

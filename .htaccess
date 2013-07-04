@@ -16,6 +16,7 @@
     RewriteRule ^courses/(.*)/$ web/courses/$1? [R,L]
 
     # PHP Main files are redirected to the "web/main" zone
+    RewriteCond %{REQUEST_URI} !main/newscorm/scorm_api.php
     RewriteRule ^main/(.*)\.php web/main/$1.php [R,L]
 
     # Courses documents

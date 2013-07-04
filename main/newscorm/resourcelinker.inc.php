@@ -266,7 +266,7 @@ function display_addedresource_link($type, $id, $style = '')
             break;
         case 'Exercise':
             $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-            $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id=$id");
+            $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND iid = $id");
             $myrow = Database::fetch_array($result);
             echo '<img src="../img/quiz.gif" align="middle" /> <a href="../exercice/exercise_submit.php?exerciseId='.$myrow['id'].'"'.$styling.'>'.$myrow['title']."</a><br />\n";
             break;
@@ -602,11 +602,10 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                 )."</a>";
             }
             break;
-
-        case TOOL_QUIZ:
+        case TOOL_QUIZ :
         case 'Exercise':
             $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-            $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id=$id");
+            $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND iid = $id");
             $myrow = Database::fetch_array($result);
 
             if ($builder == 'builder') {
@@ -1599,10 +1598,9 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
                 $link .= $thelink;
             }
             break;
-
         case 'Exercise':
             $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-            $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id=$id");
+            $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND iid = $id");
             $myrow = Database::fetch_array($result);
 
             if ($builder == 'builder') {
@@ -1610,7 +1608,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
             }
             // This is needed for the exercise_submit.php can delete the session info about tests.
 
-            $sql = "select * from $tbl_lp_item where c_id = $course_id AND id=$id_in_path";
+            $sql = "select * from $tbl_lp_item where c_id = $course_id AND id = $id_in_path";
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
             if ($row['title'] != '') {
@@ -2124,7 +2122,7 @@ function rl_get_html_resource_link($course_code, $type, $id, $style = '', $new_w
             break;
         case TOOL_QUIZ:
             $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-            $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id=$id");
+            $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND iid = $id");
             $myrow = Database::fetch_array($result);
             $output = '<img src="../img/quiz.gif" align="middle" /> <a href="../exercice/exercise_submit.php?exerciseId='.$myrow['id'].'"'.$styling.' '.$target.'>'.$myrow['title']."</a><br />\n";
             break;
@@ -2236,14 +2234,13 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
         case TOOL_QUIZ:
             if (!empty($id)) {
                 $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-                $sql = "SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id=$id";
+                $sql = "SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND iid = $id";
                 $result = Database::query($sql);
                 $myrow = Database::fetch_array($result);
 
                 if ($row_item['title'] != '') {
                     $myrow['title'] = $row_item['title'];
                 }
-                //$link .= $main_dir_path.'exercice/exercise_submit.php?lp_init=1&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
                 $link .= $main_dir_path.'exercice/overview.php?cidReq='.$course_code.'&session_id='.$session_id.'&lp_init=1&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
             }
             break;
@@ -2369,7 +2366,7 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
             break;
         case TOOL_QUIZ:
             $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-            $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id=$id");
+            $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND iid = $id");
             $myrow = Database::fetch_array($result);
             $output = $myrow['title'];
             break;

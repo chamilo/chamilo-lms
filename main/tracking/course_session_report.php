@@ -105,11 +105,6 @@ if (!$export_to_xls) {
 	echo '<h2>'.get_lang('LPExerciseResultsBySession').'</h2>';
 	$form->display();
 	Display::display_normal_message(get_lang('StudentScoreAverageIsCalculatedBaseInAllLPsAndAllAttempts'));
-
-
-	//echo '<h3>'.sprintf(get_lang('FilteringWithScoreX'), $filter_score).'%</h3>';
-
-//	echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsXLS').'</a><br /><br />';
 }
 
 

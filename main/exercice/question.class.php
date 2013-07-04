@@ -2033,7 +2033,7 @@ abstract class Question
                 'align' => 'left'
             )
         );
-        //var_dump($extraFields, $questionFields);
+
         // Extra field rules.
         $extraField = new \ExtraField('question');
 
@@ -2067,10 +2067,10 @@ abstract class Question
     /**
      * Get all questions
      * @param Application $app
-     * @param $categoryId
-     * @param $exerciseId
-     * @param $courseId
-     * @param $options
+     * @param int $categoryId
+     * @param int $exerciseId
+     * @param int $courseId
+     * @param array $options
      * @param bool $get_count
      * @return array
      */
@@ -2207,13 +2207,28 @@ abstract class Question
         if ($isOrphanQuestion) {
             //$exerciseRelQuestionTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
             //$extraCondition .= " INNER JOIN $exerciseRelQuestionTable e ON (s.iid = e.question_id)";
-            $where .= " OR quizexercise.active = -1  OR quiz_rel_question.exercice_id IS NULL";
+            $where .= " OR quizexercise.active = -1 OR quiz_rel_question.exercice_id IS NULL";
         }
 
         if (!empty($courseId)) {
             $courseId = intval($courseId);
             $where .= " AND s.c_id = $courseId ";
         }
+
+        if (isset($options['question'])) {
+            $courseList = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());
+            foreach ($options['question'] as $questionOption) {
+                if ($questionOption['field'] == 'question_c_id') {
+                    if (isset($questionOption['data'])) {
+                        if (!isset($courseList[$questionOption['data']])) {
+                            return array();
+                        }
+                    }
+                }
+            }
+        }
+        //var_dump(CourseManager::get_teacher_list_from_course_code())
+
         //var_dump($inject_joins);
 
         $query = " $select FROM $questionTable s $inject_joins $extraCondition WHERE 1=1 $where $inject_where $order $limit";
@@ -2356,6 +2371,7 @@ abstract class Question
         // exercises
         // difficult
         // type
+
         if (empty($courseCode)) {
 
             // Session.
@@ -2377,26 +2393,29 @@ abstract class Question
                 );
             }
 
-            // Courses.
-            $courseList = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());
 
-            if (!empty($courseList)) {
-                $new_options = array();
-                $new_options[] = "-1:".get_lang('All');
-                foreach ($courseList as $course) {
-                    $new_options[] = "{$course['id']}:{$course['title']}";
-                }
-                $string = implode(';', $new_options);
-                $fields[] = array(
-                    'field_display_text' => get_lang('Course'),
-                    'field_variable' => 'c_id',
-                    'field_type' => ExtraField::FIELD_TYPE_SELECT,
-                    'field_default_value' => null,
-                    'field_options' => $string
-                );
-            }
         } else {
-            $courseList = array(api_get_course_info());
+            // $courseList = array(api_get_course_info());
+            //$courseList = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());
+        }
+
+        // Courses.
+        $courseList = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());
+
+        if (!empty($courseList)) {
+            $new_options = array();
+            $new_options[] = "-1:".get_lang('All');
+            foreach ($courseList as $course) {
+                $new_options[] = "{$course['id']}:{$course['title']}";
+            }
+            $string = implode(';', $new_options);
+            $fields[] = array(
+                'field_display_text' => get_lang('Course'),
+                'field_variable' => 'c_id',
+                'field_type' => ExtraField::FIELD_TYPE_SELECT,
+                'field_default_value' => null,
+                'field_options' => $string
+            );
         }
 
         // Categories.

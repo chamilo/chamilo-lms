@@ -15,16 +15,11 @@
  */
 // Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP
 
-// The api.lib.php, database.lib.php and display.lib.php
-// libraries are included by default.
-
 require_once '../inc/global.inc.php';
 require_once 'learnpath.class.php';
 require_once 'learnpathItem.class.php';
 require_once 'learnpath_functions.inc.php';
 require_once 'resourcelinker.inc.php';
-// Including the global initialization file.
-require_once '../inc/global.inc.php';
 
 api_protect_course_script();
 
@@ -155,11 +150,11 @@ if (is_object($_SESSION['oLP'])) {
                 echo $_SESSION['oLP']->display_item($id);
             echo '</div>';
             echo '</div>';
-            Display::display_footer();
             break;
         case 'preview_document':
+            $app['template.show_header'] = false;
+            $app['template.show_footer'] = false;
             echo $_SESSION['oLP']->display_item($id, null, false);
             break;
     }
-
 }

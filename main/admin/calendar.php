@@ -1,4 +1,6 @@
-<?php // $id: $
+<?php
+// @deprecated unused file
+exit;
 /* For licensing terms, see /license.txt */
 /**
 *	@package chamilo.admin

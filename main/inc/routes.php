@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/** Setting course session and group global values */
-use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\Request;
+use \ChamiloSession as Session;
 
+/** Setting course session and group global values */
 $settingCourseConditions = function (Request $request) use ($cidReset, $app) {
 
     $cidReq    = $request->get('cidReq');
@@ -652,25 +652,27 @@ $app->match('/courses/{cidReq}/{id_session}/exercise/question/{id}/edit', 'exerc
     ->before($userCourseAdmin)
     ->bind('exercise_question_edit');
 
-// Roles
-// @todo improve route creation. Use mount() to write less
-
 $app->match('/admin/administrator/', 'admin.controller:indexAction', 'GET')
     ->assert('type', '.+')
     ->bind('admin_administrator');
 
-$app->match('/admin/administrator/roles/', 'role.controller:indexAction', 'GET')
-    ->assert('type', '.+')
-    ->bind('admin_administrator_roles');
 
-// Takes a some time to load @todo improve this calls
-$app->mount('/admin/administrator/roles', new ChamiloLMS\Provider\ReflectionControllerProvider('role.controller'));
-$app->mount('/admin/administrator/question_scores', new ChamiloLMS\Provider\ReflectionControllerProvider('question_score.controller'));
-$app->mount('/admin/administrator/question_score_names', new ChamiloLMS\Provider\ReflectionControllerProvider('question_score_name.controller'));
 
 $app->match('/ajax', 'model_ajax.controller:indexAction', 'GET')
     ->assert('type', '.+')
     ->bind('model_ajax');
+
+
+// Roles
+// @todo improve route creation. Use mount() to write less
+
+if ($alreadyInstalled) {
+    // Takes a some time to load @todo improve this calls
+    $app->mount('/admin/administrator/roles', new ChamiloLMS\Provider\ReflectionControllerProvider('role.controller'));
+    $app->mount('/admin/administrator/question_scores', new ChamiloLMS\Provider\ReflectionControllerProvider('question_score.controller'));
+    $app->mount('/admin/administrator/question_score_names', new ChamiloLMS\Provider\ReflectionControllerProvider('question_score_name.controller'));
+}
+
 
 // Ministerio routes:
 

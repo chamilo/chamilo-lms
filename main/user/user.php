@@ -602,7 +602,8 @@ function modify_filter($user_id) {
 	$result = "";
 
 	if ($is_allowed_to_track) {
-		$result .= '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&amp;details=true&amp;course='.$_course['id'].'&amp;origin=user_course&amp;id_session='.api_get_session_id().'" title="'.get_lang('Tracking').'"  ><img border="0" alt="'.get_lang('Tracking').'" src="../img/icons/22/stats.png" /></a>';
+		$result .= '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&amp;details=true&amp;course='.$_course['id'].'&amp;origin=user_course&amp;id_session='.api_get_session_id().'" title="'.get_lang('Tracking').'"  >
+		'.Display::return_icon('stats.png', get_lang('Tracking')).'</a>';
 	}
 
     //if platform admin, show the login_as icon (this drastically shortens

@@ -506,6 +506,7 @@ switch ($action) {
                 $is_success = true;
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
                 header('Location: '.$url);
+                exit;
             }
             if (isset($_GET['view']) && $_GET['view'] == 'build') {
                 require 'lp_move_item.php';
@@ -1021,11 +1022,13 @@ switch ($action) {
         $_SESSION['oLP']->set_previous_step_as_prerequisite_for_all_items();
         $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id)."&message=ItemUpdated";
         header('Location: '.$url);
+        exit;
         break;
     case 'clear_prerequisites':
         $_SESSION['oLP']->clear_prerequisites();
         $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id)."&message=ItemUpdated";
         header('Location: '.$url);
+        exit;
         break;
     default:
         if ($debug > 0) error_log('New LP - default action triggered', 0);

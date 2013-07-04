@@ -313,8 +313,8 @@ CREATE TABLE question_score (  id int NOT NULL AUTO_INCREMENT,  name varchar(255
 
 
 
--- Add new configuration setting for action/transaction mapping.
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('transaction_action_map','exercise_attempt','text','TransactionMapping','a:3:{s:5:"class";s:29:"ExerciseAttemptTransactionLog";s:10:"controller";s:39:"ExerciseAttemptTransactionLogController";s:12:"max_attempts";i:3;}','TransactionMapForExerciseAttempts','TransactionMapForExerciseAttemptsComment',NULL,'TransactionMapForExerciseAttemptsText', 1);
+-- Add new configuration setting for action related transaction settings.
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('transaction_action_map','exercise_attempt','text','TransactionMapping','a:0:{}','TransactionMapForExerciseAttempts','TransactionMapForExerciseAttemptsComment',NULL,'TransactionMapForExerciseAttemptsText', 1);
 
 -- Rename the transaction import log table and change its structure.
 RENAME TABLE branch_sync_log TO branch_transaction_log;

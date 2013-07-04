@@ -83,8 +83,8 @@ INSERT INTO roles (name, role) VALUES('Question Manager', 'ROLE_QUESTION_MANAGER
 
 INSERT INTO roles (name, role) VALUES('Jury president', 'ROLE_JURY_PRESIDENT');
 INSERT INTO roles (name, role) VALUES('Jury member', 'ROLE_JURY_MEMBER');
+INSERT INTO roles (name, role) VALUES('Jury substitute', 'ROLE_JURY_SUBSTITUTE');
 INSERT INTO roles (name, role) VALUES('Director', 'ROLE_DIRECTOR');
-
 
 --
 -- Table structure for table admin
@@ -961,7 +961,7 @@ VALUES
 ('admins_can_set_users_pass', NULL, 'radio', 'security', 'true', 'AdminsCanChangeUsersPassTitle', 'AdminsCanChangeUsersPassComment', 1, 0, 1),
 ('template', NULL, 'text', 'stylesheets', 'default', 'DefaultTemplateTitle', 'DefaultTemplateComment', NULL, NULL, 1),
 ('log_transactions','exercise_attempt','checkbox','LogTransactions','false','LogTransactionsForExerciseAttempts','LogTransactionsForExerciseAttemptsComment',NULL,'LogTransactionsForExerciseAttemptsText', 1),
-('transaction_action_map','exercise_attempt','text','TransactionMapping','a:2:{s:5:"class";s:29:"ExerciseAttemptTransactionLog";s:10:"controller";s:39:"ExerciseAttemptTransactionLogController";}','TransactionMapForExerciseAttempts','TransactionMapForExerciseAttemptsComment',NULL,'TransactionMapForExerciseAttemptsText', 1),
+('transaction_action_map','exercise_attempt','text','TransactionMapping','a:0:{}','TransactionMapForExerciseAttempts','TransactionMapForExerciseAttemptsComment',NULL,'TransactionMapForExerciseAttemptsText', 1),
 ('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.001','DatabaseVersion','', NULL, NULL, 0); -- base value, updated at end of file. Don't change here
 
 UNLOCK TABLES;
@@ -3274,6 +3274,8 @@ ALTER TABLE track_e_exercices ADD exe_duration int UNSIGNED NOT NULL default 0;
 ALTER TABLE track_e_exercices ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT  NOT NULL DEFAULT '';
+ALTER TABLE track_e_exercices ADD COLUMN jury_score float(6,2);
+ALTER TABLE track_e_exercices ADD COLUMN jury_id INT DEFAULT NULL;
 
 DROP TABLE IF EXISTS track_e_attempt;
 CREATE TABLE track_e_attempt (
@@ -3595,6 +3597,17 @@ CREATE TABLE question_score (
   id int NOT NULL AUTO_INCREMENT,
   name varchar(255) DEFAULT NULL,
   PRIMARY KEY (id)
+) DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS track_attempt_jury;
+CREATE TABLE track_attempt_jury(
+    id int NOT NULL AUTO_INCREMENT,
+    exe_id INT,
+    question_id INT,
+    score float(6,2),
+    jury_member_id INT,
+    question_score_name_id INT,
+    PRIMARY KEY (id)
 ) DEFAULT CHARSET=utf8;
 
 

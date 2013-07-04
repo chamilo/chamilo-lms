@@ -8,10 +8,9 @@ require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/answer.class.php';
 
-// @todo: Is this really needed? see 33cd962f077ed8c2e4b696bdd18b54db00890ef2
-require_once api_get_path(LIBRARY_PATH).'transaction.lib.php';
-
 use \ChamiloSession as Session;
+use \ChamiloLMS\Transaction\TransactionLog;
+use \ChamiloLMS\Transaction\TransactionLogController;
 
 api_protect_course_script(true);
 
@@ -560,16 +559,17 @@ switch ($action) {
 
                 $log_transactions_settings = TransactionLog::getTransactionSettings();
                 if (isset($log_transactions_settings['exercise_attempt'])) {
-                  $transaction_actions_map = TransactionLog::getTransactionMappingSettings('exercise_attempt');
-                  $controller_class = $transaction_actions_map['controller'];
-                  $transaction_class = $transaction_actions_map['class'];
-                  $transaction_controller = new $controller_class();
-                  $transaction = $transaction_controller->load_exercise_attempt($exe_id);
+                  $transaction_controller = new TransactionLogController();
+                  $transaction = $transaction_controller->loadOne(array(
+                    'action' => 'exercise_attempt',
+                    'branch_id' => TransactionLog::BRANCH_LOCAL,
+                    'item_id' => $exe_id,
+                  ));
                   if (!$transaction) {
                     $transaction_data = array(
                       'item_id' => $exe_id,
                     );
-                    $transaction = new $transaction_class($transaction_data);
+                    $transaction = $transaction_controller->createTransaction('exercise_attempt', $transaction_data);
                   }
                   $transaction->save();
                 }

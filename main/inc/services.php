@@ -99,7 +99,10 @@ $app['security.role_hierarchy'] = array(
     'ROLE_RRHH' => array('ROLE_TEACHER'),
     'ROLE_QUESTION_MANAGER' => array('ROLE_QUESTION_MANAGER'),
     'ROLE_STUDENT' => array('ROLE_STUDENT'),
-    'ROLE_ANONYMOUS' => array('ROLE_ANONYMOUS')
+    'ROLE_ANONYMOUS' => array('ROLE_ANONYMOUS'),
+    'ROLE_JURY_PRESIDENT' => array('ROLE_JURY_PRESIDENT', 'ROLE_JURY_MEMBER', 'ROLE_JURY_SUBSTITUTE'),
+    'ROLE_JURY_SUBSTITUTE' => array('ROLE_JURY_SUBSTITUTE', 'ROLE_JURY_MEMBER'),
+    'ROLE_JURY_MEMBER' => array('ROLE_JURY_MEMBER')
 );
 
 // Role rules
@@ -111,7 +114,7 @@ $app['security.access_rules'] = array(
     array('^/main/.*', array('ROLE_STUDENT')),
     array('^/admin/director', 'ROLE_DIRECTOR'),
     array('^/admin/jury_president', 'ROLE_JURY_PRESIDENT'),
-    array('^/admin/jury_member', 'ROLE_JURY_MEMBER')
+    array('^/admin/jury_member', 'ROLE_JURY_MEMBER') //? jury subsitute??
     //array('^.*$', 'ROLE_USER'),
 );
 

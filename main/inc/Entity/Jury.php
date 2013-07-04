@@ -73,11 +73,12 @@ class Jury
 
     /**
      * @ORM\OneToMany(targetEntity="JuryMembers", mappedBy="jury")
+     * @ORM\OrderBy({"roleId" = "ASC"})
      **/
     private $members;
 
     /**
-     * @ORM\OneToMany(targetEntity="TrackExercise", mappedBy="jury")
+     * @ORM\OneToMany(targetEntity="TrackExercise", mappedBy="attempt")
      **/
     private $exerciseAttempts;
 

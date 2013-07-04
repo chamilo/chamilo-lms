@@ -671,15 +671,17 @@ if ($alreadyInstalled) {
     $app->mount('/admin/administrator/roles', new ChamiloLMS\Provider\ReflectionControllerProvider('role.controller'));
     $app->mount('/admin/administrator/question_scores', new ChamiloLMS\Provider\ReflectionControllerProvider('question_score.controller'));
     $app->mount('/admin/administrator/question_score_names', new ChamiloLMS\Provider\ReflectionControllerProvider('question_score_name.controller'));
+
+
+    // Ministerio routes:
+
+    $app->mount('/admin/administrator/branches', new ChamiloLMS\Provider\ReflectionControllerProvider('branch.controller'));
+    $app->mount('/admin/administrator/juries', new ChamiloLMS\Provider\ReflectionControllerProvider('jury.controller'));
+
+    $app->mount('/admin/director', new ChamiloLMS\Provider\ReflectionControllerProvider('branch_director.controller'));
+    $app->mount('/admin/jury_president', new ChamiloLMS\Provider\ReflectionControllerProvider('jury_president.controller'));
+    $app->mount('/admin/jury_member', new ChamiloLMS\Provider\ReflectionControllerProvider('jury_member.controller'));
+
 }
 
-
-// Ministerio routes:
-
-$app->mount('/admin/administrator/branches', new ChamiloLMS\Provider\ReflectionControllerProvider('branch.controller'));
-$app->mount('/admin/administrator/juries', new ChamiloLMS\Provider\ReflectionControllerProvider('jury.controller'));
-
-$app->mount('/admin/director', new ChamiloLMS\Provider\ReflectionControllerProvider('branch_director.controller'));
-$app->mount('/admin/jury_president', new ChamiloLMS\Provider\ReflectionControllerProvider('jury_president.controller'));
-$app->mount('/admin/jury_member', new ChamiloLMS\Provider\ReflectionControllerProvider('jury_member.controller'));
 

@@ -262,4 +262,42 @@ class TransactionLogController
 
         return '\ChamiloLMS\Transaction\\' . $map[$action];
     }
+
+    /**
+     * Exports a set of transactions to a file.
+     *
+     * @param string $filepath
+     *   The path to the file where the exported transactions will be stored.
+     * @param array $transactions
+     *   The list of TransactionLog objects to be exported.
+     *
+     * @return array
+     *   Two keys are provided:
+     *   - 'success': A set of transaction ids correctly added.
+     *   - 'fail': A set of transaction ids that failed to be added.
+     */
+    public function exportToFile($filepath, $transactions)
+    {
+        $transactions_to_persist = array();
+        $exported_ids = array(
+            'success' => array(),
+            'fail' => array(),
+        );
+
+        foreach ($transactions as $transaction) {
+            try {
+                $transaction->export();
+                $transactions_to_persist[] = $transaction;
+                $exported_ids['success'][] = $transaction->id;
+            } catch (Exception $export_exception) {
+                error_log($export_exception->getMessage());
+                $exported_ids['fail'][] = $transaction->id;
+            }
+        }
+
+        // @todo: Verify access before writing.
+        file_put_contents($filepath, json_encode($transactions_to_persist));
+
+        return $exported_ids;
+    }
 }

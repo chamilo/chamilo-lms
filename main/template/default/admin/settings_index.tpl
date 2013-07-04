@@ -2,12 +2,11 @@
 $(document).ready(function() {
     $.ajax({    
         url:'{{web_admin_ajax_url}}?a=version',
-        success:function(version){
-            alert(version);
+        success:function(version){
+            $(".admin-block-version").html(version);
         } 
     });
-});
-    
+});    
 </script>
 
 <div id="settings">

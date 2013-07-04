@@ -5,6 +5,7 @@
  */
 
 require_once '../global.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'admin/statistics/statistics.lib.php';
 
 api_protect_admin_script();
 
@@ -104,7 +105,7 @@ function check_system_version() {
 
         $res = _http_request('version.chamilo.org', 80, '/version.php', $data);
 
-        if ($res !== false) {
+        if ($res != 0) {
             $version_info = $res;
 
             if ($system_version != $version_info) {
@@ -119,4 +120,53 @@ function check_system_version() {
         $output = '<span style="color:red">' . get_lang('AllowurlfopenIsSetToOff') . '</span>';
     }
     return $output;
+}
+
+/**
+ * Function to make an HTTP request through fsockopen (specialised for GET)
+ * Derived from Jeremy Saintot: http://www.php.net/manual/en/function.fsockopen.php#101872
+ * @param string IP or hostname
+ * @param int    Target port
+ * @param string URI (defaults to '/')
+ * @param array  GET data
+ * @param float  Timeout
+ * @param bool   Include HTTP Request headers?
+ * @param bool   Include HTTP Response headers?
+ */
+function _http_request($ip, $port = 80, $uri = '/', $getdata = array(), $timeout = 1, $req_hdr = false, $res_hdr = false) {
+    $verb = 'GET';
+    $ret = '';
+    $getdata_str = count($getdata) ? '?' : '';
+
+    foreach ($getdata as $k => $v) {
+                $getdata_str .= urlencode($k) .'='. urlencode($v) . '&';
+    }
+
+    $crlf = "\r\n";
+    $req = $verb .' '. $uri . $getdata_str .' HTTP/1.1' . $crlf;
+    $req .= 'Host: '. $ip . $crlf;
+    $req .= 'User-Agent: Mozilla/5.0 Firefox/3.6.12' . $crlf;
+    $req .= 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' . $crlf;
+    $req .= 'Accept-Language: en-us,en;q=0.5' . $crlf;
+    $req .= 'Accept-Encoding: deflate' . $crlf;
+    $req .= 'Accept-Charset: utf-8;q=0.7,*;q=0.7' . $crlf;
+
+    $req .= $crlf;
+
+    if ($req_hdr) { $ret .= $req; }
+    if (($fp = @fsockopen($ip, $port, $errno, $errstr, $timeout)) == false) {
+        return "Error $errno: $errstr\n";
+    }
+
+    stream_set_timeout($fp, $timeout);
+    $r = @fwrite($fp, $req);
+    $line = @fread($fp,512);
+    $ret .= $line;
+    fclose($fp);
+
+    if (!$res_hdr) {
+        $ret = substr($ret, strpos($ret, "\r\n\r\n") + 4);
+    }
+
+    return trim($ret);
 }

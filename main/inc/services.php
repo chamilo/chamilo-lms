@@ -70,14 +70,14 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     )
 ));
 
-// Registering Password encoder
-// @todo fix hardcoded sha1 value
+// Registering Password encoder.
+// @todo test with the "none" encrypt method.
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 $app['security.encoder.digest'] = $app->share(function($app) {
     // use the sha1 algorithm
     // don't base64 encode the password
     // use only 1 iteration
-    return new MessageDigestPasswordEncoder('sha1', false, 1);
+    return new MessageDigestPasswordEncoder($app['configuration']['password_encryption'], false, 1);
 });
 
 // What to do when login success?

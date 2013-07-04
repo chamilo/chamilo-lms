@@ -3,6 +3,8 @@
 
 namespace ChamiloLMS\Transaction;
 
+use Exercise as Exercise;
+
 /**
  * Exercise tool attempt transaction.
  */

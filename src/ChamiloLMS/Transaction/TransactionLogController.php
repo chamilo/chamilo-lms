@@ -5,6 +5,7 @@ namespace ChamiloLMS\Transaction;
 
 use Database;
 use ChamiloLMS\Transaction\ExerciseAttemptTransactionLog;
+use Exception as Exception;
 
 /**
  * Controller class for transactions.

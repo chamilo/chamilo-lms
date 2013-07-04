@@ -46,12 +46,10 @@ class ExerciseAttemptTransactionLog extends TransactionLog
         if (!$exercise->read($exercise_stat_info['exe_exo_id'])) {
             throw new TransactionExportException(sprintf('The associated exercise id "%d" does not currently exist in the database.', $exercise_stat_info['exe_exo_id']));
         }
+
         // Prepare the export.
         $this->data['stat_info'] = $exercise_stat_info;
         $this->data['attempt_info'] = $attempt;
-        $content = (array) $this;
-
-        return json_encode($content);
     }
 
     /**

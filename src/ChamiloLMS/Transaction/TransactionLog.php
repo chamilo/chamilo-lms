@@ -288,10 +288,25 @@ abstract class TransactionLog
      * @trows TransactionExportException
      *   If any step for exporting the element fails, an exception should be
      *   raised.
+     */
+    abstract public function export();
+
+    /**
+     * Export the transaction thorugh export() and then convert it to JSON.
+     *
+     * @trows TransactionExportException
+     *   If any step for exporting the element fails, an exception should be
+     *   raised.
      *
      * @return string
      *   JSON string representing this transaction as expected by corresponding
      *   import().
      */
-    abstract public function export();
+    public function exportJson()
+    {
+        $this->export();
+        $content = (array) $this;
+
+        return json_encode($content);
+    }
 }

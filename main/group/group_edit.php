@@ -158,16 +158,7 @@ $possible_users = array();
 foreach ($complete_user_list as $userId => $user) {
     $possible_users[$userId] = $user;
 }
-/*
-$complete_user_list = GroupManager :: fill_groups_list($current_group['id']);
 
-usort($complete_user_list, 'sort_users');
-$possible_users = array();
-foreach ($complete_user_list as $index => $user) {
-    $possible_users[$user['user_id']] = api_get_person_name($user['firstname'],$user['lastname']).' ('.$user['username'].')';
-}
-
-*/
 // Group tutors
 $group_tutor_list = GroupManager :: get_subscribed_tutors($current_group['id']);
 $selected_users = array();
@@ -182,7 +173,6 @@ $group_tutors_element->setButtonAttributes('remove');
 // Group members
 $group_member_list = GroupManager :: get_subscribed_users($current_group['id']);
 
-
 $selected_users = array();
 foreach ($group_member_list as $userId => $userName) {
     $selected_users[] = $userId;
@@ -193,21 +183,8 @@ foreach ($group_member_list as $userId => $userName) {
 $possible_users = array();
 
 foreach ($complete_user_list as $userId => $userName) {
-    //if ($user['number_groups_left'] > 0 || in_array($userId, $selected_users)) {
-    //if (in_array($userId, $selected_users)) {
-        $possible_users[$userId] = $userName;
-    //}
+    $possible_users[$userId] = $userName;
 }
-
-/*
-foreach ($complete_user_list as $index => $user) {
-    if ($user['number_groups_left'] > 0 || in_array($user['user_id'], $selected_users)) {
-        $possible_users[$user['user_id']] = api_get_person_name(
-            $user['firstname'],
-            $user['lastname']
-        ).' ('.$user['username'].')';
-    }
-}*/
 
 $group_members_element = $form->addElement(
     'advmultiselect',
@@ -215,6 +192,7 @@ $group_members_element = $form->addElement(
     get_lang('GroupMembers'),
     $possible_users
 );
+
 $group_members_element->setButtonAttributes('add');
 $group_members_element->setButtonAttributes('remove');
 $form->addFormRule('check_group_members');

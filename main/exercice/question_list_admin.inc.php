@@ -129,7 +129,7 @@ if (!$inATest) {
         // Always getting list from DB.
 
         $objExercise->setCategoriesGrouping(false);
-        $questionList = $objExercise->getQuestionList();
+        $questionList = $objExercise->getQuestionListWithMediasUncompressed();
 
         // Style for columns.
         $styleQuestion = "width:50%; float:left;";

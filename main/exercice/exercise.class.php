@@ -5015,7 +5015,7 @@ class Exercise
     }
 
     /**
-     * Is media question activated
+     * Is media question activated?
      * @return bool
      */
     public function mediaIsActivated()
@@ -5039,7 +5039,7 @@ class Exercise
 
     /**
      * Gets question list from the exercise
-     * (true show all questions, false show media question id instead of the question ids)
+     *
      * @return array
      */
     public function getQuestionList()
@@ -5052,10 +5052,10 @@ class Exercise
      * @example
      * <code>
      * array(
-     *      question_id,
-     *      question_id,
+     *      question_id_1,
+     *      question_id_2,
      *      media_id, <- this media id contains question ids
-     *      question_id,
+     *      question_id_3,
      * )
      * </code>
      * @return array

@@ -557,6 +557,9 @@ if (!empty($_GET['category'])) {
         case 'Stylesheets':
             // Displaying the extensions: Stylesheets.
             handle_stylesheets();
+            if (isset($_POST)) {
+                api_set_setting_last_update();
+            }
             $form->display();
             break;
         case 'Search':

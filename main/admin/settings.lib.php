@@ -232,6 +232,8 @@ function handle_stylesheets()
         }
     }
 
+    // Stylesheet upload.
+
     if (isset($_POST['stylesheet_upload'])) {
         if ($form->validate()) {
             $values = $form->exportValues();

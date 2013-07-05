@@ -76,7 +76,6 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
 
 // Registering Password encoder.
 // @todo test with the "none" encrypt method.
-use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 $app['security.encoder.digest'] = $app->share(function($app) {
     // use the sha1 algorithm
     // don't base64 encode the password
@@ -144,7 +143,6 @@ $app->register(new Silex\Provider\FormServiceProvider());
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
 // Needed to use the "entity" option in symfony forms
-use Doctrine\Common\Persistence\AbstractManagerRegistry;
 
 class ManagerRegistry extends AbstractManagerRegistry
 {
@@ -322,7 +320,6 @@ if (is_writable($app['sys_temp_path'])) {
 }
 
 // Pagerfanta settings (Pagination using Doctrine2, arrays, etc)
-use FranMoreno\Silex\Provider\PagerfantaServiceProvider;
 
 $app->register(new PagerfantaServiceProvider());
 

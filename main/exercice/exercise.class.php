@@ -113,6 +113,7 @@ class Exercise
         $this->display_category_name = 0;
         $this->pass_percentage = null;
         $this->modelType = 1;
+        $this->endButton = 0;
 
         if (!empty($course_id)) {
             $course_info = api_get_course_info_by_id($course_id);
@@ -301,8 +302,8 @@ class Exercise
     /**
      * Returns the exercise sound file
      *
-     * @author - Olivier Brouckaert
-     * @return - string - exercise description
+     * @author Olivier Brouckaert
+     * @return string - exercise description
      */
     function selectSound()
     {
@@ -360,7 +361,7 @@ class Exercise
 
     /**
      * @author Hubert borderiou 30-11-11
-     * @return modify object to update the switch display_category_name
+     * @return void modify object to update the switch display_category_name
      * $in_txt is an integer 0 or 1
      */
     public function updateDisplayCategoryName($text)
@@ -1882,6 +1883,7 @@ class Exercise
                 $defaults['email_notification_template'] = $this->selectEmailNotificationTemplate();
                 $defaults['model_type'] = $this->getModelType();
 
+
                 if (($this->start_time != '0000-00-00 00:00:00')) {
                     $defaults['activate_start_date_check'] = 1;
                 }
@@ -1918,6 +1920,7 @@ class Exercise
                 $defaults['display_category_name'] = 1; //
                 $defaults['end_time'] = date('Y-m-d 12:00:00', time() + 84600);
                 $defaults['pass_percentage'] = '';
+                $defaults['end_button'] = $this->selectEndButton();
             }
         } else {
             $defaults['exerciseTitle'] = $this->selectTitle();
@@ -5015,7 +5018,7 @@ class Exercise
     }
 
     /**
-     * Is media question activated
+     * Is media question activated?
      * @return bool
      */
     public function mediaIsActivated()
@@ -5039,7 +5042,7 @@ class Exercise
 
     /**
      * Gets question list from the exercise
-     * (true show all questions, false show media question id instead of the question ids)
+     *
      * @return array
      */
     public function getQuestionList()
@@ -5052,10 +5055,10 @@ class Exercise
      * @example
      * <code>
      * array(
-     *      question_id,
-     *      question_id,
+     *      question_id_1,
+     *      question_id_2,
      *      media_id, <- this media id contains question ids
-     *      question_id,
+     *      question_id_3,
      * )
      * </code>
      * @return array

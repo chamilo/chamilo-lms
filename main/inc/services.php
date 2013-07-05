@@ -14,6 +14,7 @@ use Silex\Application;
 use Silex\ServiceProviderInterface;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
+// Monolog.
 if (is_writable($app['sys_temp_path'])) {
 
     /**
@@ -73,13 +74,14 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     )
 ));
 
-// Registering Password encoder
-// @todo fix hardcoded sha1 value
+// Registering Password encoder.
+// @todo test with the "none" encrypt method.
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 $app['security.encoder.digest'] = $app->share(function($app) {
     // use the sha1 algorithm
     // don't base64 encode the password
     // use only 1 iteration
-    return new MessageDigestPasswordEncoder('sha1', false, 1);
+    return new MessageDigestPasswordEncoder($app['configuration']['password_encryption'], false, 1);
 });
 
 // What to do when login success?
@@ -94,7 +96,7 @@ $app['security.authentication.logout_handler.admin'] = $app->share(function($app
 
 // Role hierarchy
 $app['security.role_hierarchy'] = array(
-    'ROLE_ADMIN' => array('ROLE_QUESTION_MANAGER', 'ROLE_TEACHER', 'ROLE_DIRECTOR', 'ROLE_JURY_PRESIDENT', 'ROLE_ALLOWED_TO_SWITCH'),
+    'ROLE_ADMIN' => array('ROLE_QUESTION_MANAGER', 'ROLE_TEACHER', 'ROLE_ALLOWED_TO_SWITCH'),
     'ROLE_TEACHER' => array('ROLE_STUDENT'),
     'ROLE_RRHH' => array('ROLE_TEACHER'),
     'ROLE_QUESTION_MANAGER' => array('ROLE_QUESTION_MANAGER'),
@@ -142,6 +144,7 @@ $app->register(new Silex\Provider\FormServiceProvider());
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
 // Needed to use the "entity" option in symfony forms
+use Doctrine\Common\Persistence\AbstractManagerRegistry;
 
 class ManagerRegistry extends AbstractManagerRegistry
 {
@@ -319,6 +322,7 @@ if (is_writable($app['sys_temp_path'])) {
 }
 
 // Pagerfanta settings (Pagination using Doctrine2, arrays, etc)
+use FranMoreno\Silex\Provider\PagerfantaServiceProvider;
 
 $app->register(new PagerfantaServiceProvider());
 

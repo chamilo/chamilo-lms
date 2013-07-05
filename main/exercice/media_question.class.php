@@ -12,12 +12,19 @@ class MediaQuestion extends Question
 		$this->type = MEDIA_QUESTION;
     }
 
+    /**
+     * @param \FormValidator $form
+     */
     public function processAnswersCreation($form)
     {
         $params = $form->getSubmitValues();
         $this->saveMedia($params);
     }
 
+    /**
+     * @param array $params
+     * @return int
+     */
     public function saveMedia($params)
     {
         $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -36,6 +43,9 @@ class MediaQuestion extends Question
         }
     }
 
+    /**
+     * @param \FormValidator $form
+     */
     public function createAnswersForm ($form)
     {
         $form->addElement('button', 'submitQuestion', get_lang('Save'));

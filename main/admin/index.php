@@ -295,18 +295,44 @@ if (api_is_platform_admin()) {
     //Version check
     $blocks['version_check']['icon']  = Display::return_icon('logo.png', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
 	$blocks['version_check']['label'] = get_lang('VersionCheck');
-	$blocks['version_check']['extra'] = version_check();
+	//$blocks['version_check']['extra'] = version_check();
     $blocks['version_check']['search_form'] = null;
     $blocks['version_check']['items'] = null;
 }
+$admin_ajax_url = api_get_path(WEB_AJAX_PATH).'admin.ajax.php';
 
 $tpl = new Template();
+$tpl->assign('web_admin_ajax_url', $admin_ajax_url);
 $tpl->assign('blocks', $blocks);
 $admin_template = $tpl->get_template('admin/settings_index.tpl');
 $content = $tpl->fetch($admin_template);
 $tpl->assign('content', $content);
 $tpl->assign('message', $message);
 $tpl->display_one_col_template();
+
+
+
+/**
+ * This setting changes the registration status for the campus
+ *
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @version August 2006
+ *
+ * @todo the $_settings should be reloaded here. => write api function for this and use this in global.inc.php also.
+ */
+function register_site() {
+    $tbl_settings = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+
+    $sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='registered'";
+    $result = Database::query($sql);
+
+    if ($_POST['donotlistcampus']) {
+        $sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='donotlistcampus'";
+        $result = Database::query($sql);
+    }
+    // Reload the settings.
+}
+
 
 /**
  * Displays either the text for the registration or the message that the installation is (not) up to date
@@ -337,28 +363,6 @@ function version_check() {
     }
     return $return;
 }
-
-/**
- * This setting changes the registration status for the campus
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version August 2006
- *
- * @todo the $_settings should be reloaded here. => write api function for this and use this in global.inc.php also.
- */
-function register_site() {
-    $tbl_settings = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-
-    $sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='registered'";
-    $result = Database::query($sql);
-
-    if ($_POST['donotlistcampus']) {
-        $sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='donotlistcampus'";
-        $result = Database::query($sql);
-    }
-    // Reload the settings.
-}
-
 
 /**
  * Check if the current installation is up to date

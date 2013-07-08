@@ -56,12 +56,14 @@ class ConfigurationHelper extends Helper
             $chamiloPath = $path;
         }
 
-        while (!is_dir($chamiloPath.'/main/inc/conf/') && $chamiloPath != '/') {
-            $chamiloPath = realpath($chamiloPath.'/..');
-        }
         if (is_dir($chamiloPath.'/main/inc/conf/')) {
             return $dir = realpath($chamiloPath.'/main/inc/conf/').'/';
         }
+
+        if (is_dir($chamiloPath.'/config/')) {
+            return $dir = realpath($chamiloPath.'/config/').'/';
+        }
+
         return false;
     }
 
@@ -78,9 +80,6 @@ class ConfigurationHelper extends Helper
             $chamiloPath = $path;
         }
 
-        while (!is_dir($chamiloPath.'/config/') && $chamiloPath != '/') {
-            $chamiloPath = realpath($chamiloPath.'/..');
-        }
         if (is_dir($chamiloPath.'/config/')) {
             return $dir = realpath($chamiloPath.'/config/').'/';
         }

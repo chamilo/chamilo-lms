@@ -71,11 +71,10 @@ $cli->addCommands(
         new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand(),
 
         // Chamilo commands.
-        new ChamiloLMS\Command\Database\UpgradeCommand(),
+        /*new ChamiloLMS\Command\Database\UpgradeCommand(),
         new ChamiloLMS\Command\Database\InstallCommand(),
-        //new ChamiloLMS\Command\Database\InstallExtendCommand(),
         new ChamiloLMS\Command\Database\StatusCommand(),
-        new ChamiloLMS\Command\Database\SetupCommand(),
+        new ChamiloLMS\Command\Database\SetupCommand(),*/
         new ChamiloLMS\Command\Template\AsseticDumpCommand(),
         new ChamiloLMS\Command\Translation\ExportLanguagesCommand(),
 

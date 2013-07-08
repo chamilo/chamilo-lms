@@ -516,37 +516,6 @@
         "homepage": "http://symfony.com"
     },
     {
-        "name": "chamilo/chash",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/chamilo/chash.git",
-            "reference": "0720bc4ab428494465ac6bab6532cb167704183f"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/chamilo/chash/zipball/0720bc4ab428494465ac6bab6532cb167704183f",
-            "reference": "0720bc4ab428494465ac6bab6532cb167704183f",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.2",
-            "symfony/console": ">=2.3,<3.0",
-            "symfony/yaml": ">=2.3,<3.0"
-        },
-        "time": "2013-06-14 09:54:38",
-        "type": "library",
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Chash": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "homepage": "http://www.chamilo.org"
-    },
-    {
         "name": "symfony/property-access",
         "version": "2.3.x-dev",
         "version_normalized": "2.3.9999999.9999999-dev",
@@ -3722,5 +3691,39 @@
             "annotations",
             "controllers"
         ]
+    },
+    {
+        "name": "chamilo/chash",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/chamilo/chash.git",
+            "reference": "8bce386a29778b6b02e3f5eda5d561f529db61ed"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/chamilo/chash/zipball/8bce386a29778b6b02e3f5eda5d561f529db61ed",
+            "reference": "8bce386a29778b6b02e3f5eda5d561f529db61ed",
+            "shasum": ""
+        },
+        "require": {
+            "doctrine/dbal": "~2.3",
+            "doctrine/migrations": "dev-master",
+            "doctrine/orm": "~2.3",
+            "php": ">=5.3.2",
+            "symfony/console": "~2.3",
+            "symfony/yaml": "~2.3"
+        },
+        "time": "2013-07-08 13:07:27",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Chash": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "homepage": "http://www.chamilo.org"
     }
 ]

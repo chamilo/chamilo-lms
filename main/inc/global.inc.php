@@ -243,36 +243,12 @@ if ($alreadyInstalled) {
                 $_configuration['access_url'] = $details['id'];
             }
         }
-        Session::write('url_id', $_configuration['access_url']);
-        Session::write('url_info', api_get_current_access_url_info($_configuration['access_url']));
+        //Session::write('url_id', $_configuration['access_url']);
+        //Session::write('url_info', api_get_current_access_url_info($_configuration['access_url']));
     } else {
-        Session::write('url_id', 1);
+        //Session::write('url_id', 1);
     }
 
-    $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
-    $settings_latest_update = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
-
-    $_setting = Session::read('_setting');
-    if (empty($_setting)) {
-        api_set_settings_and_plugins();
-    } else {
-        if (isset($_setting['settings_latest_update']) && $_setting['settings_latest_update'] != $settings_latest_update) {
-            api_set_settings_and_plugins();
-        }
-    }
-
-    $_setting = Session::read('_setting');
-    $_plugins = Session::read('_plugins');
-
-    // Default template style
-    $templateStyle = api_get_setting('template');
-    $templateStyle = isset($templateStyle) && !empty($templateStyle) ? $templateStyle : 'default';
-    $app['template_style'] = $templateStyle;
-
-    // Default layout
-    $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
-
-    $app['plugins'] = $_plugins;
 }
 
 $charset = 'UTF-8';
@@ -324,9 +300,6 @@ require_once $libPath.'internationalization_internal.lib.php';
 $cidReset = null;
 
 if ($alreadyInstalled) {
-    // Setting languages
-    $app['api_get_languages'] = api_get_languages();
-    $app['language_interface'] = $language_interface = api_get_language_interface();
 
     // Initialization of the internationalization library.
     //api_initialize_internationalization();
@@ -336,8 +309,7 @@ if ($alreadyInstalled) {
 
     // require $includePath.'/local.inc.php';
 
-    // reconfigure template now we know the user
-    $app['template.hide_global_chat'] = !api_is_global_chat_enabled();
+
 
     /**	Loading languages and sublanguages **/
     // @todo improve the language loading
@@ -552,11 +524,62 @@ $app->before(
         if ($app['assetic.auto_dump_assets']) {
             $filesystem->copyFolders($app['temp.paths']->copyFolders);
         }
+        $request->getSession()->start();
 
         // Check and modify the date of user in the track.e.online table
         Online::loginCheck(api_get_user_id());
 
-        $request->getSession()->start();
+        if (api_get_multiple_access_url()) {
+            Session::write('url_id', $app['configuration']['access_url']);
+            Session::write('url_info', api_get_current_access_url_info($app['configuration']['access_url']));
+        } else {
+            Session::write('url_id', 1);
+        }
+
+        $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
+        $settings_latest_update = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
+
+        $_setting = Session::read('_setting');
+        if (empty($_setting)) {
+            api_set_settings_and_plugins();
+        } else {
+            if (isset($_setting['settings_latest_update']) && $_setting['settings_latest_update'] != $settings_latest_update) {
+                api_set_settings_and_plugins();
+            }
+        }
+
+        $_setting = Session::read('_setting');
+        $_plugins = Session::read('_plugins');
+
+        // Default template style
+        $templateStyle = api_get_setting('template');
+        $templateStyle = isset($templateStyle) && !empty($templateStyle) ? $templateStyle : 'default';
+        $app['template_style'] = $templateStyle;
+
+        // Default layout
+        $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
+
+        $app['plugins'] = $_plugins;
+
+        // Setting languages
+        $app['api_get_languages'] = api_get_languages();
+        $app['language_interface'] = $language_interface = api_get_language_interface();
+
+
+        // reconfigure template now we know the user
+        $app['template.hide_global_chat'] = !api_is_global_chat_enabled();
+
+        /** Setting the course quota */
+        // @todo move this somewhere else
+
+        // Default quota for the course documents folder
+        $default_quota = api_get_setting('default_document_quotum');
+        // Just in case the setting is not correctly set
+        if (empty($default_quota)) {
+            $default_quota = 100000000;
+        }
+
+        define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
 
         //var_dump($app['security']->isGranted('IS_AUTHENTICATED_FULLY'));
 
@@ -646,8 +669,15 @@ $app->before(
                 if (!file_exists($filePath)) {
                     $filePath = api_get_path(SYS_PATH).'main/locale/en.po';
                 }
-
                 $translator->addResource('pofile', $filePath, $locale);
+
+                /*$translator->addLoader('mofile', new MoFileLoader());
+                $filePath = api_get_path(SYS_PATH).'main/locale/'.$locale.'.mo';
+                if (!file_exists($filePath)) {
+                    $filePath = api_get_path(SYS_PATH).'main/locale/en.mo';
+                }
+                $translator->addResource('mofile', $filePath, $locale);*/
+
                 return $translator;
             }
         }));
@@ -726,18 +756,6 @@ if (isset($app['configuration']['language_measure_frequency']) && $app['configur
     $langstats = new langstats();
 }
 
-/** Setting the course quota */
-// @todo move this somewhere else
-
-// Default quota for the course documents folder
-$default_quota = api_get_setting('default_document_quotum');
-// Just in case the setting is not correctly set
-if (empty($default_quota)) {
-    $default_quota = 100000000;
-}
-
-@define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
-
 /** Setting the is_admin key */
 $app['is_admin'] = false;
 
@@ -785,18 +803,18 @@ if (isset($app['configuration']['main_database']) && isset($app['db.event_manage
     $app['dbs.event_manager']['db_write']->addEventSubscriber($treeListener);
 
     $loggableListener = new \Gedmo\Loggable\LoggableListener();
-    $userInfo = api_get_user_info();
 
-    if (isset($userInfo) && !empty($userInfo['username'])) {
-        $loggableListener->setUsername($userInfo['username']);
+    if (PHP_SAPI != 'cli') {
+        $userInfo = api_get_user_info();
+
+        if (isset($userInfo) && !empty($userInfo['username'])) {
+            $loggableListener->setUsername($userInfo['username']);
+        }
     }
+
     //$app['db.event_manager']->addEventSubscriber($loggableListener);
     $app['dbs.event_manager']['db_read']->addEventSubscriber($loggableListener);
     $app['dbs.event_manager']['db_write']->addEventSubscriber($loggableListener);
 }
 
-// Fixes uses of $_course in the scripts.
-$_course = api_get_course_info();
-$_cid = api_get_course_id();
 return $app;
-

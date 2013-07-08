@@ -626,90 +626,14 @@ $app->before(
             $section = $info['dirname'];
         }
 
-        // Default langs
-        $languageFiles = array(
-            'trad4all',
-            'notification',
-            'accessibility'
-        );
-
-
-        $languageFilesToAdd = array();
-        /* Loading translations depending of the "section" folder after main
-          for example the section is exercice here: web/main/exercice/result.php
-        */
-        if (!empty($section)) {
-            switch($section) {
-                case 'admin':
-                    $languageFilesToAdd = array('admin');
-                    break;
-                case 'document':
-                    $languageFilesToAdd = array('document');
-                    break;
-                case 'dashboard':
-                    $languageFilesToAdd = array ('index', 'tracking', 'userInfo', 'admin', 'gradebook');
-                    break;
-                case 'mySpace':
-                    $languageFilesToAdd = array('registration', 'index', 'tracking', 'admin');
-                    break;
-                case 'course_info':
-                case 'course_home':
-                case 'course_description':
-                case 'create_course':
-                    $languageFilesToAdd = array('create_course', 'registration', 'admin', 'exercice', 'course_description', 'course_info');
-                    break;
-                case 'coursecopy':
-                    $languageFilesToAdd = array('exercice', 'coursebackup', 'admin');
-                    break;
-                case 'group':
-                    $languageFilesToAdd = array('group');
-                    break;
-                case 'newscorm':
-                    $languageFilesToAdd = array('course_home', 'scormdocument','document','scorm','learnpath','resourcelinker','registration','exercice');
-                    break;
-                case 'link':
-                    $languageFilesToAdd = array('link', 'admin');
-                    break;
-                case 'session':
-                    $languageFilesToAdd = array('admin', 'registration');
-                    break;
-                case 'user':
-                    $languageFilesToAdd = array('registration', 'admin', 'userInfo', 'registration');
-                    break;
-                case 'social':
-                    $languageFilesToAdd = array('userInfo');
-                    break;
-                case 'exercice':
-                    $languageFilesToAdd = array('exercice');
-                    break;
-            }
-        } else {
-
-            $controllerName = $request->get('_controller');
-
-            // Work around to load languages:
-            switch($controllerName) {
-                case 'index.controller:indexAction':
-                case 'userPortal.controller::indexAction':
-                    $languageFilesToAdd = array('courses', 'index', 'admin');
-                    break;
-            }
-        }
-
-        $languageFiles = array_merge($languageFiles, $languageFilesToAdd);
-
         $app['translator.cache.enabled'] = false;
 
-        $app['translator'] = $app->share($app->extend('translator', function($translator, $app) use ($languageFiles) {
+        $app['translator'] = $app->share($app->extend('translator', function($translator, $app) {
 
             $locale = $translator->getLocale();
 
-            // Creating regex to parse sections (admin, exercice, etc)
-            $languageFilesToString = '/'.implode('|', $languageFiles).'/';
-
             /** @var Symfony\Component\Translation\Translator $translator  */
             if ($app['translator.cache.enabled']) {
-
                 //$phpFileDumper = new Symfony\Component\Translation\Dumper\PhpFileDumper();
                 $dumper = new Symfony\Component\Translation\Dumper\MoFileDumper();
                 $catalogue = new Symfony\Component\Translation\MessageCatalogue($locale);
@@ -718,18 +642,12 @@ $app->before(
 
             } else {
                 $translator->addLoader('pofile', new PoFileLoader());
-
-                $finder = new Finder();
-                $files = $finder->files()
-                    ->path($languageFilesToString)
-                    ->name('en.po')
-                    ->name($locale.'.po')
-                    ->in(api_get_path(SYS_PATH).'main/locale');
-
-                foreach ($files as $entry) {
-                    $code = $entry->getBasename('.po');
-                    $translator->addResource('pofile', $entry->getPathname(), $code);
+                $filePath = api_get_path(SYS_PATH).'main/locale/'.$locale.'.po';
+                if (!file_exists($filePath)) {
+                    $filePath = api_get_path(SYS_PATH).'main/locale/en.po';
                 }
+
+                $translator->addResource('pofile', $filePath, $locale);
                 return $translator;
             }
         }));

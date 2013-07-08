@@ -2181,7 +2181,7 @@ function api_get_session_condition($session_id, $and = true, $with_base_content 
  * @author Bart Mollet
  */
 function api_get_setting($variable, $key = null) {
-    global $_setting;
+    $_setting = Session::read('_setting');
     if ($variable == 'header_extra_content') {
         $filename = api_get_path(SYS_PATH).api_get_home_path().'header_extra_content.txt';
         if (file_exists($filename)) {
@@ -2241,8 +2241,11 @@ function api_delete_settings_params($params) {
  * @return string   Escaped version of $_SERVER['PHP_SELF']
  */
 function api_get_self() {
-    $urlInfo = parse_url($_SERVER['REQUEST_URI']);
-    return $urlInfo['path'];
+    if (isset($_SERVER['REQUEST_URI'])) {
+        $urlInfo = parse_url($_SERVER['REQUEST_URI']);
+        return $urlInfo['path'];
+    }
+    return null;
     //return $_SERVER['REQUEST_URI'];
     //return htmlentities($_SERVER['PHP_SELF']);
 }
@@ -2520,7 +2523,7 @@ function api_is_coach($session_id = 0, $courseId = null) {
  * @return boolean True if current user is a course administrator
  */
 function api_is_session_admin() {
-    global $_user;
+    $_user = api_get_user_info();
     return isset($_user['status']) && $_user['status'] == SESSIONADMIN;
 }
 
@@ -2529,7 +2532,7 @@ function api_is_session_admin() {
  * @return boolean True if current user is a human resources manager
  */
 function api_is_drh() {
-    global $_user;
+    $_user = api_get_user_info();
     return isset($_user['status']) && $_user['status'] == DRH;
 }
 
@@ -2538,7 +2541,7 @@ function api_is_drh() {
  * @return boolean True if current user is a human resources manager
  */
 function api_is_student() {
-    global $_user;
+    $_user = api_get_user_info();
     return isset($_user['status']) && $_user['status'] == STUDENT;
 
 }
@@ -2547,7 +2550,7 @@ function api_is_student() {
  * @return boolean True if current user is a human resources manager
  */
 function api_is_teacher() {
-    global $_user;
+    $_user = api_get_user_info();
     return isset($_user['status']) && $_user['status'] == COURSEMANAGER;
 }
 
@@ -2864,7 +2867,7 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false) {
 */
 function api_is_allowed($tool, $action, $task_id = 0) {
     $_course = api_get_course_info();
-    global $_user;
+    $_user = api_get_user_info();
 
     if (api_is_course_admin()) {
         return true;
@@ -3848,8 +3851,9 @@ function api_string_2_boolean($string) {
 /**
  * Determines the number of plugins installed for a given location
  */
-function api_number_of_plugins($location) {
-    global $_plugins;
+function api_number_of_plugins($location)
+{
+    $_plugins = Session::read('_plugins');
     return isset($_plugins[$location]) && is_array($_plugins[$location]) ? count($_plugins[$location]) : 0;
 }
 
@@ -3858,8 +3862,9 @@ function api_number_of_plugins($location) {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @deprecated use AppPlugin::get_all_plugin_contents_by_region function
  */
-function api_plugin($location) {
-    global $_plugins;
+function api_plugin($location)
+{
+    $_plugins = Session::read('_plugins');
     if (isset($_plugins[$location]) && is_array($_plugins[$location])) {
         foreach ($_plugins[$location] as $this_plugin) {
             include api_get_path(SYS_PLUGIN_PATH)."$this_plugin/index.php";
@@ -4375,13 +4380,19 @@ function api_delete_setting_option($id) {
  * @param int       The access_url for which this parameter is valid
  */
 function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url = 1) {
-    if (empty($var)) { return false; }
+    if (empty($var)) {
+        return false;
+    }
     $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $var = Database::escape_string($var);
     $value = Database::escape_string($value);
     $access_url = (int)$access_url;
-    if (empty($access_url)) { $access_url = 1; }
+
+    if (empty($access_url)) {
+        $access_url = 1;
+    }
     $select = "SELECT id FROM $t_settings WHERE variable = '$var' ";
+
     if (!empty($subvar)) {
         $subvar = Database::escape_string($subvar);
         $select .= " AND subkey = '$subvar'";
@@ -4397,6 +4408,7 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
     }
 
     $res = Database::query($select);
+
     if (Database::num_rows($res) > 0) {
         // Found item for this access_url.
         $row = Database::fetch_array($res);
@@ -4796,7 +4808,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
     $cid = Database::escape_string($cid);
     $courseInfo = api_get_course_info($cid);
     $courseId = $courseInfo['real_id'];
-    global $is_platformAdmin;
+    $is_platformAdmin = api_is_platform_admin();
 
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
@@ -6316,7 +6328,6 @@ function api_get_js_simple($file)
 {
     return '<script type="text/javascript" src="'.$file.'"></script>'."\n";
 }
-
 
 function api_set_settings_and_plugins()
 {

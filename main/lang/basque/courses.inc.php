@@ -84,6 +84,7 @@ $Collapse = "Tolestu";
 $CourseDetails = "Ikastaroaren azalpena";
 $GroupPendingInvitations = "Taldearen zain dauden gonbiteak";
 $Compose = "Idatzi";
+$EmptyHeaderLine = "Badago bete gabeko lerro bat hautatutako fitxategiaren goiburuan";
 $EnrollToCourseXSuccessful = "Zure inskripzioa %s ikastaroan bete da.";
 $ThereAreNoCoursesInThisCategory = "Kategoria honetan ez dago ikastarorik";
 ?>

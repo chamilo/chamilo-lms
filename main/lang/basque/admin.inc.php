@@ -1267,4 +1267,503 @@ $CoursesInformation = "Ikastaroen informazioa";
 $SpecialExportsIntroduction = "Esportazio berezien gaitasunak urrats bakar batean ikastaro guztietako dokumentuak esportatzen laguntzen dio irakaskuntzako berrikusle akademikoari. Esportatu nahi dituzun ikastaroak aukeratzen utziko dizu beste aukera batek eta, modu berean, ikastaro hauetako saioetan dauden dokumentuak ere esportatuko dira. Neke handiko lana da eragiketa hau. Horrexegatik gomendatzen dizugu zure ataria jende askok erabiltzen duen ohiko orduetan ez abiaraztea. Egin ezazu une lasaietan. Eduki guztiak aldi berean behar ez badituzu, saiatu zaitez ikastaroaren barrutik ikastaro beraren mantenimendu tresnatik zuzenean esportatzen ikastaroko dokumentuak.";
 $AllowUserCourseSubscriptionByCourseAdminTitle = "Baimendu ikastaroko kudeatzaileari ikastaroan erabiltzailea inskribatzeko";
 $AllowUserCourseSubscriptionByCourseAdminComment = "Aukera hau aktibatzeak irakasleei beren ikastaroetan erabiltzaileak inskribatzen utziko die";
+$ConfigureDashboardPlugin = "Konfiguratu kontrol paneleko plugina";
+$EditBlocks = "Editatu blokeak";
+$SessionFields = "Saioaren eremuak";
+$SessionCoachEndDateComment = "Arduradun prestatzaileentzat saioa itxiko den data. Saioan sartzeko atzerapen gehigarriak ikasleei eginiko segimenduaren inguruko informazio adierazgarri guztia esportatzen utziko die.";
+$SessionCoachStartDateComment = "Arduradun prestatzaileentzat saioa eskuragarri egongo den data, horrela ikasleek konexioa eduki baino lehen prestatu dezaketeelarik.";
+$SessionEndDateComment = "Guztientzat saioa eskuragarri egoteari utziko dion data";
+$SessionStartDateComment = "Guztientzat saioa eskuragarri egongo den data";
+$SessionDisplayEndDateComment = "Saioaren inguruko informazioan, saioaren amaiera eguna erakutsiko deneko data";
+$SessionDisplayStartDateComment = "Saioaren inguruko informazioan, saioaren hasiera eguna erakutsiko deneko data";
+$SessionCoachEndDate = "Arduradun prestatzaileak sartzeko azken eguna";
+$SessionCoachStartDate = "Arduradun prestatzaileak sartzeko lehen eguna";
+$SessionEndDate = "Sartzeko azken eguna";
+$SessionStartDate = "Sartzeko lehen eguna";
+$SessionDisplayEndDate = "Erakusteko azken eguna";
+$SessionDisplayStartDate = "Erakusteko lehen eguna";
+$UserHasNoCourse = "Erabiltzaileak ez du izenik eman ikastaroetan";
+$SessionPageEnabledComment = "Aukera hau aktibaturik dagoenean, saioaren titulua saioaren orri berezi baterako lotura izango da. Desaktibaturik dagoenean, ordea, loturarik gabeko tituluaren testu soila izango da. Saioaren loturadun orria erabiltzaile batzuentzat nahasteko modukoa izan liteke eta, agian, errazagoa izateko, desaktibatu nahiko zenuke.";
+$SessionPageEnabledTitle = "Gaitu saioaren lotura ikastaro zerrendan";
+$ThisValueIsUsedInTheCourseURL = "Balio hau ikastaroaren URLn erabiltzen da";
+$ThereAreUsersUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersWithTheDefaultPortalLanguage = "Hizkuntza honetan ari diren erabiltzaileak badira. Ziur al zaude hizkuntza hau desgaitu nahi duzula eta erabiltzaile guzti hauei ezarri atariko hizkuntza lehenetsia?";
+$SessionTutorsCanSeeExpiredSessionsResultsComment = "Saioa amaitu ondoren, saioko arduradunek ikastaro txostenak ikusi al ditzakete?";
+$SessionTutorsCanSeeExpiredSessionsResultsTitle = "Saioko arduradunentzat txostenak ikusgai egon";
+$TheXMLImportLetYouAddMoreInfoAndCreateResources = "XML inportazioak informazio gehigarria gaineratzen eta baliabideak (ikastaroak, erabiltzaileak) sortzen utziko dizu. Aldiz, CSV inportazioak saioak sortuko ditu bakarrik eta hauei lehendik badiren baliabideak emango dizkio.";
+$ShowLinkBugNotificationTitle = "Erakutsi erroreen gaineko txostenerako lotura";
+$ShowLinkBugNotificationComment = "Erakutsi lotura bat goiburuan gure laguntza plataformari (http://support.chamilo.org) erroreen gaineko informazioa emateko. Lotura gainean klikatzean, erabiltzailea Chamilo laguntza plataformara berbideratuko da, eta bertako wiki orri batean erroreen inguruan informatzeko prozesua azalduta dago.";
+$DataFiller = "Bete datuak";
+$GradebookActivateScoreDisplayCustom = "Aktibatu gaitasun maila etiketatzea, puntuazioaren informazio pertsonalizatua ezartzeari begira";
+$GradebookScoreDisplayCustomValues = "Gaitasun mailen balio pertsonalizatuak";
+$GradebookNumberDecimals = "Hamartar kopurua";
+$GradebookNumberDecimalsComment = "Utzi puntuazioan onartuko diren hamartar kopurua ezartzen";
+$EditExtraFieldOptions = "Editatu estra eremuen aukerak";
+$ManageSessionFields = "Kudeatu saioaren eremuak";
+$EditSessionsToURL = "Editatu saioak URL baterako";
+$AddSessionsToURL = "Gehitu saioak URL bati";
+$SessionListIn = "Saio zerrenda hemen:";
+$FillUsers = "Bete erabiltzaileak";
+$ThisSectionIsOnlyVisibleOnSourceInstalls = "Atal hau instalazioetan iturburu kodetik bakarrik ikusgai egongo da, eta ez plataformaren bertsio egonkorren paketeetan. Honi esker, berehala sartu ahal izango dituzu azterketen datuak zure plataforman. Kontu handiz erabili (datuak benetan sartzen dira) eta garatzeko edo azterketa egiteko instalazioetan soilik.";
+$UsersFillingReport = "Erabiltzaileen datuak betetzearen inguruko txostena";
+$AllUsersAreAutomaticallyRegistered = "Erabiltzaile guztiak automatikoki erregistratuko dira";
+$AssignCoach = "Eman arduraduna";
+$chamilo = "chamilo";
+$php = "php";
+$Off = "Desaktibaturik";
+$minimum = "gutxienekoa";
+$webserver = "Web zerbitzaria";
+$mysql = "MySQL";
+$Social = "Gizarte";
+$BackupCreated = "Babeskopia sortu da";
+$NotInserted = "Ez da sartu";
+$phone = "Telefonoa";
+$ResetLP = "Berrezarri ikaskuntza ibilbidea";
+$LPWasReset = "Ikasleak berrezarri zuen ikaskuntza ibilbidea";
+$AnnouncementVisible = "Abisua ikusgai";
+$AnnouncementInvisible = "Abisua ikusezin";
+$GlossaryDeleted = "Glosarioa ezabatu da";
+$CourseDescriptionUpdated = "Ikastaro eguneratuaren deskripzioa";
+$SessionReadOnly = "Irakurtzeko soilik";
+$SessionAccessible = "Eskuragarria";
+$SessionNotAccessible = "Ez da eskuragarria";
+$GroupAdded = "Taldea gehitu da";
+$AddUsersToGroup = "Gehitu erabiltzaileak taldeari";
+$ErrorReadingZip = "Errorea ZIP fitxategia irakurtzean";
+$ErrorStylesheetFilesExtensionsInsideZip = "ZIP fitxategian onartutako luzapen bakarrak honako hauek dira: jpg, jpeg, png, gif eta css.";
+$MyTextHere = "Sartu testua hemen...";
+$FieldTypeSocialProfile = "Gizarte sarerako lotura";
+$AllowUsersCopyFilesTitle = "Baimendu erabiltzaileei ikastaro batetik fitxategiak kopiatzeko zure fitxategi pertsonalen espazioan";
+$AllowUsersCopyFilesComment = "Baimendu erabiltzaileei ikastaro batetik fitxategiak kopiatzeko zure fitxategi pertsonalen espazioan, Gizarte Sarea tresnaren bidez edo HTML editatzailearen bidez ikusgai egonik, ikastaro batetik kanpo daudenean";
+$ReviewCourseRequests = "Berrikusi etorri diren ikastaro eskaerak";
+$AcceptedCourseRequests = "Onartu diren ikastaro eskaerak";
+$RejectedCourseRequests = "Ezetsi diren ikastaro eskaerak";
+$BrowscapInfo = "Browscap gaitasunak nabigatzaileen eta hauen ahalmenen gaineko datu kantitate handia duen browscap.ini fitxategia kargatzen du, horrela, PHPren get_browser () gaitasuna erabili ahal izateko.";
+$EnableCourseValidation = "Ikastaroak balidatzea";
+$EnableCourseValidationComment = "\"Ikastaroak balidatzea\" gaitasuna aktibaturik dagoenean, irakasle batek ezingo du berak bakarrik sortu ikastaro bat. Aldiz, aurretik eskaera bat bete beharko du. Plataformako kudeatzaileak eskaera berrikusi eta onartuko du ala atzera botako du.
+Gaitasun hau mezu elektronikoen bidalketa automatikoan oinarritzen da; egiaztatu ezazu Chamilo instalazioak posta elektronikoaren zerbitzari bat eta horretan erabiltzeko kontu baten helbide elektronikoa badituela.";
+$CourseValidationTermsAndConditionsLink = "Ikastaroa balidatzea - termino eta baldintzetarako lotura";
+$CourseValidationTermsAndConditionsLinkComment = "Hauxe da ikastaro eskaera egiteko balio duen \"Terminoak eta Baldintzak\" dokumenturako URL. Helbidea hemen ezarrita badago, erabiltzaileak, ikastaro eskaera bidali baino lehen, termino eta baldintza hauek irakurri eta onartu beharko ditu.
+Chamiloren \"Terminoak eta Baldintzak\" modulua gaitzen baduzu eta bere URL erabili nahiago baduzu, orduan utzi bete gabe ezarpen hau.";
+$EnableSSOTitle = "Single Sign On (Erregistro bakarra)";
+$EnableSSOComment = "Single Sign On aktibatzeak plataforma honekin kanpotik autentifikazio zerbitzari baten bezero bezala konektatzeko aukera emango dizu, adibidez, Drupal-Chamilo plugin modulua duen edo antzeko konfigurazioko beste edozein zerbitzari duen Drupal webgune bat.";
+$SSOServerDomainTitle = "Single Sign On zerbitzariaren domeinua";
+$SSOServerDomainComment = "Single Sign On zerbitzariaren domeinua (Chamilo barruan automatikoki erregistratzen utziko dizun beste zerbitzariaren web helbidea). Horrela, hau beste zerbitzariaren helbidea izan beharko litzateke, hasieran protokoloa idatzi gabe eta amaieran barra gabe, esate baterako, www.example.com";
+$SSOServerAuthURITitle = "Single Sign On (Erregistro bakarra) zerbitzariaren autentifikazio URL";
+$SSOServerAuthURIComment = "Autentifikazioa egiaztatzea jasotzen duen orriaren helbidea. Adibidez, Drupal kasuan: /?q=user";
+$SSOServerUnAuthURITitle = "Single Sign On (Erregistro bakarra) zerbitzariaren saioa bukatzeko URL";
+$SSOServerUnAuthURIComment = "Erabiltzailea deskonektatzen duen orriaren helbidea zerbitzarian. Aukera hau erabilgarria da, baldin eta erabiltzaileek, Chamilotik deskonektatzean, automatikoki autentifikazio zerbitzutik ere deskonektatu nahi badituzu.";
+$SSOServerProtocolTitle = "Single Sign On (Erregistro bakarra) zerbitzariaren protokoloa";
+$SSOServerProtocolComment = "Single Sign On (Erregistro bakarra) zerbitzariaren domeinuari aurrezenbakia jartzeko protokolo katea (https:// erabiltzea gomendatzen dizugu, zure zerbitzariak gaitasun hau baliatu ahal badu, zeren eta segurtasunik gabeko protokoloak autentifikazio gaietarako arriskutsuak baitira)";
+$EnabledWirisTitle = "WIRIS editatzaile matematikoa";
+$EnabledWirisComment = "Aktibatu WIRIS editatzaile matematikoa. Plugin hau instalatuz gero, WIRIS editatzailea eta WIRIS CAS lortuko dituzu. 
+Aktibazioa ez da erabat gauzatuko, aldez aurretik WIRISen PHP plugin for FCKeditor deskargatu ez bada eta beraren edukiak konprimatu ez badira Chamiloren direktorioan: main/inc/lib/fckeditor/editor/plugins/fckeditor_wiris/ 
+Hau beharrezkoa da Wiris jabetzako softwarea delako eta Wirisen zerbitzuak komertzialak direlako. Pluginean doitzeak egiteko, editatu configuration.ini fitxategia edo ordezkatu bere edukia Chamilorekin batera datorren configuration.ini.default fitxategiaz.";
+$AllowSpellCheckTitle = "Zuzentzaile ortografikoa";
+$AllowSpellCheckComment = "Gaitu zuzentzaile ortografikoa";
+$EnabledSVGTitle = "Sortu eta editatu SVG fitxategiak";
+$EnabledSVGComment = "Aukera honi esker, online eta geruza askoko SVG fitxategiak sortu eta editatu ahal izango dituzu (Scalable Vector Graphics-Bektore Grafiko Eskalagarriak) eta, modu berean, png formatuko irudietara esportatu ahal izango dituzu.";
+$ForceWikiPasteAsPlainTextTitle = "Behartu Wikian testu arrunta gisa itsastera";
+$ForceWikiPasteAsPlainTextComment = "Gaitasun honek beste testu batzuetatik kopiatutako etiketa ezkutu, oker edo ez-estandar askok, edizio asko egin ondoren, azkenenan Wikiko testua hondatzea eragotziko du; baina editatzeko orduan gaitasun batzuk galaraziko ditu.";
+$EnabledGooglemapsTitle = "Aktibatu Google maps";
+$EnabledGooglemapsComment = "Aktibatu Google mapak sartzeko botoia. Aktibatzea ez da erabat gauzatuko, aldez aurretik, main/inc/lib/fckeditor/myconfig.php fitxategia editatu ez baduzu eta Google maps horretan dagoen API gakoa gehitu ez baduzu.";
+$EnabledImageMapsTitle = "Aktibatu Irudien mapak";
+$EnabledImageMapsComment = "Aktibatu Irudien mapak sartzeko botoia. Honek URLak irudi baten guneei lotzeko aukera emango dizu, gune elkarreragileak sortaraziz.";
+$CourseTool = "Ikastaroen tresna";
+$BigBlueButtonEnableTitle = "BigBlueButton bideokonferentzia tresna";
+$BigBlueButtonEnableComment = "Aukeratu beharko duzu ea gaitu nahi duzun ala ez BigBlueButton bideokonferentzia tresna. Behin gaitu ondoren, ikastaroaren tresna gehigarri gisa agertuko da ikastaro gutztien orri nagusian eta, horrela, irakasleak edozein momentutan konferentzia bat abiarazteko gai izango dira. Hala ere, ikasleek ezingo dute abiarazi, batean sartu baino ezingo dute. Ez baduzu BigBlueButton zerbitzaririk, mesedez, instalatu bat edo eskatu laguntza Chamilo hornitzaile ofizialei. BigBlueButton librea eta doanekoa da, baina hau instalatzeak ahalmen tekniko multzo bat eskatzen du, hain zuzen, guztion eskura ez dauden ahalmenak. Zure partez instalatatu dezakezu edo, bestela, profesionalen laguntza bilatu dezakezu edo haiek zuretzat instalatzea. Horrelako laguntzak, gehienetan, kosturen bat ekarriko dizu. Software librearen logika hutsean, guk zure lana errazagoa egiteko tresnak eskaintzen dizkizugu eta, horrela ere zailegia bada, zuri laguntzeko prest dauden profesionalak gomendatzen dizkizugu (Chamilo Hornitzaile Ofizialak).";
+$BigBlueButtonHostTitle = "BigBlueButton ostatu zerbitzaria";
+$BigBlueButtonHostComment = "Hauxe da zerbitzariaren izena, non BigBlueButton zerbitzaria exekutatzen ari den. Izan liteke tokiko ostatu bat (localhost), IP helbide bat (esaterako, 192.168.14.54) edo domeinu baten izena (esaterako, myvideo.com).";
+$BigBlueButtonSecuritySaltTitle = "BigBlueButton zerbitzariaren segurtasun gakoa";
+$BigBlueButtonSecuritySaltComment = "Hauxe da zure BigBlueButton zerbitzariaren segurtasun gakoa. Horrela, Chamilo instalazioa autentifikatu ahalko duzu. Ikusi BigBlueButton zerbitzariaren dokumentazioa, gakoa aurkitzeko.";
+$AsciiSvgTitle = "ASCIIsvg grafiko matematikoen editatzailea";
+$AsciiSvgComment = "ASCIIsvg grafiko matematikoen editatzailea aktibatzea";
+$Text2AudioTitle = "Gaitu testua audio hizketa bihurtzeko online zerbitzuak";
+$Text2AudioComment = "Testua audio hizketa bihurtzeko online tresna. Hizketa sintetizatzeko teknologia baliatzen du, zure ikastaroaren barruan  audio fitxategiak sortzeko.";
+$ShowUsersFoldersTitle = "Erakutsi erabiltzaileen karpetak dokumentuak tresnan";
+$ShowUsersFoldersComment = "Aukera honek irakasleei karpetak erakusteko edo ezkutatzeko modua eskuratuko dizu. Dokumentuak tresna bisitatzen duen edo web editatzailearen bitartez fitxategi bat bidaltzen duen erabiltzaile bakoitzarentzako sistemak sortzen dituen karpetak dira horiek. Karpeta hauek irakasleei erakusten badizkiezu, hauek ikasleentzako ikusgai edo ikusezin bihurtu ditzakete eta, horrela, ikasle bakoitzak ikastaroan espazio berezi bat edukitzeko aukera izango du eta ez da dokumentuak gordetzeko soilik izango. Aldiz, honi esker, bertan, ikasleek web orriak sortu eta editatu ahalko dituzte, pdf formara esportatu, marrazkiak egin, web txantiloi pertsonalizatuak egin eta fitxategiak bidali ahal izango dituzte, hala nola, direktorioak eta karpetak sortu, lekuz aldatu eta ezabatu, eta beren karpeten babeskopiak egin. Ikastaroko erabiltzaile bakoitzak dokumentuen kudeatzaile osoa edukiko du. Gainera, gogoratu edozein erabiltzailek ikusgai den fitxategia kopiatu ahalko duela dokumentuak tresnan dagoen edozein karpetatik (bera jabea izan ala ez izan) gizarte sareko dokumentuen area pertsonalera edo bere dokumentu zorrora, eta berarentzat eskuragarri egongo da, nahi badu, beste ikastaro batzuetan erabiltzeko.";
+$ShowDefaultFoldersTitle = "Erakutsi Dokumentuak tresnan besterik ezean eskura geratzen diren multimedia baliabideak dituzten karpeta guztiak";
+$ShowDefaultFoldersComment = "Besterik ezean eskainitako fitxategiak dituzten multimedia fitxategien karpetak, ikastaro hauetan erabili beharreko bideo, audio, irudi eta flash animazio kategorietan antolaturik. Dokumentuak tresnan ikusezin egingo bazenitu ere, baliabide hauek oraindik plataformako web editatzailean erabiltzen jarraitu dezakezu.";
+$ShowChatFolderTitle = "Erakutsi txat elkarrizketen karpeta bilduma";
+$ShowChatFolderComment = "Honek txatean egin diren saio guztiak biltzen dituen karpeta erakutsiko dio irakasleari. Irakasleak ikusgai ala ikusezin egin ditzake ikasleentzat eta geroan beste baliabide bat bezala erabili.";
+$EnabledStudentExport2PDFTitle = "Baimendu ikasleei web dokumentuak PDF formatura esportatzeko, dokumentuak eta wiki tresnetan";
+$EnabledStudentExport2PDFComment = "Gaitasun hau besterik ezarri ezean gaituta dago, baina zerbitzaria gainkargaturik badago, gehiegizko erabileraren eraginez, edo ikaskuntza ingurune berezietan, agian, ikastaro guztietarako desaktibatu nahiko zenuke.";
+$EnabledInsertHtmlTitle = "Baimendu widget aplikazioak sartzea";
+$EnabledInsertHtmlComment = "Gaitasun honi esker, zure webguneetan gehien estimatzen dituzun bideoak eta aplikazioak sartu ahalko dituzu, besteak beste, vimeo edo slideshare eta widget edo gadget mota guztiak";
+$IncludeAsciiMathMlTitle = "Kargatu ASCIIMathML.js fitxategia plataformako orri guztietarako";
+$IncludeAsciiMathMlComment = "Aktibatu ezarpen hau  ASCIIMathML programan oinarrituriko formula matematikoak eta ASCIIsvg programan oinarritutako grafiko matematikoak, Dokumentuak tresnan ez ezik, plataformeako beste tresnetan ere erakutsi nahi badituzu";
+$CourseHideToolsTitle = "Ezkutatu tresnak irakasleei";
+$CourseHideToolsComment = "Aukeratu irakasleei ezkutatu nahi dizkiezun tresnak. Horrela, tresnan sartzea debekaturik geldituko da.";
+$MoveUserStats = "Mugitu erabiltzaileen emaitzak prestakuntzako saio batetik/batera";
+$CompareUserResultsBetweenCoursesAndCoursesInASession = "Tresna aurreratu honek erabiltzaileen emaitzen gaineko segimendua eskuz hobetzeko aukera emango dizu, ikastaro eredu baten metodologiatik saio eredu baten metodologiara mugitzen garenean. Kasu gehienetan, ez dugu erabili beharko.
+Pantaila honetan, erabiltzaileen emaitzak alderatu ditzakezu, ikastaro autonomo baten testuinguruaren eta ikastaro berbera saio baten barruan duen testuinguruaren artean.
+Behin eta zein testuigurutan egin nahi duzun erabaki ondoren, ikasleen segimenduaren gaineko datak (ariketen emaitzak eta ikaskuntza ibilbideen gaineko segimendua) ikastaro batetik saio batera mugitu ahalko dituzu.";
+$PDFExportWatermarkEnableTitle = "Ur-markak PDF esportazioetan";
+$PDFExportWatermarkEnableComment = "Aukera hau gaituz gero, irudi edo testu bat kargatu ahalko duzu eta automatikoki ur-marka gisa gehituko zaizkie sistemaren barruan eginiko PDF esportazio guztietako dokumentuei";
+$AddWaterMark = "Kargatu ur-markaren irudia";
+$PDFExportWatermarkByCourseTitle = "Gaitu ur-markaren zehaztea ikastaro bakoitzeko";
+$PDFExportWatermarkByCourseComment = "Aukera hau aktibaturik dagoenean, irakasleek beren ur-markak zehaztu ahalko dituzte beren ikastaroetako dokumentuetan agertzeko";
+$PDFExportWatermarkTextTitle = "PDFrako ur-markaren testua";
+$PDFExportWatermarkTextComment = "Testu hau ur-marka gisa gehituko zaie PDF formatuan esportatu beharreko dokumentuei";
+$ExerciseMinScoreTitle = "Ariketen gutxieneko puntuazioa";
+$ExerciseMinScoreComment = "Gutxieneko puntuazioa ezartzen du (gehienetan, 0) plataforma barruko ariketa guztietarako. Horrela ezarriko dugu nola erakutsiko zaizkien azken emaitzak ikasleei eta irakasleei.";
+$ExerciseMaxScoreTitle = "Ariketen gehieneko puntuazioa";
+$ExerciseMaxScoreComment = "Gehieneko puntuazioa ezartzen du (gehienetan, 10, 20 edo 100) plataforma barruko ariketa guztietarako. Horrela ezarriko dugu nola erakutsiko zaizkien azken emaitzak ikasleei eta irakasleei.";
+$CareersAndPromotions = "Karrerak eta promozioak";
+$Careers = "Karrerak";
+$Promotions = "Promozioak";
+$Updated = "Eguneraketa ongi egin da";
+$Career = "Karrera";
+$SubscribeSessionsToPromotions = "Eman izena promoziorako saioetan";
+$SessionsInPlatform = "Inskripziorik gabeko saioak";
+$FirstLetterSessions = "Saioaren izenaren lehen letra";
+$SessionsInPromotion = "Saioak promozio honetan";
+$SubscribeSessionsToPromotion = "Eman izena promoziorako saioetan";
+$NoEndTime = "Amaiera datarik gabe";
+$SubscribeUsersToClass = "Inskribatu erabiltzaileak klasean";
+$SubscribeClassToCourses = "Inskribatu klasea ikastaroetan";
+$SubscribeClassToSessions = "Inskribatu klasea saioetan";
+$SessionsInGroup = "Saioak taldean";
+$CoursesInGroup = "Ikastaroak taldean";
+$UsersInGroup = "Erabiltzaileak taldean";
+$UsersInPlatform = "Erabiltzaileak plataforman";
+$YouNeedToCreateACareerFirst = "Karrera bat sortu beharko duzu, gero promozioak gehitu ahal izateko (promozioak karrerako azpi-elementuak baitira)";
+$OutputBufferingInfo = "Irteerako bufferra edo irteerako cachea aktibaturik dagoenean \"On\" dago eta deskatibaturik dagoenean, berriz, \"Off\". Modu berean, parametro hau balio oso baten bidez ere aktibatu daiteke (esaterako, 4096), irteerako cache memoriaren tamaina izan ohi delarik.";
+$LoadedExtension = "Luzapena kargatu da";
+$SubscribeGroupToSessions = "Inskribatu taldea saioetan";
+$SubscribeGroupToCourses = "Inskribatu taldea ikastaroetan";
+$CompareStats = "Alderatu estatistikak";
+$EnabledPixlrTitle = "Gaitu kanpoko Pixlr zerbitzuak";
+$EnabledPixlrComment = "Pixlr zerbitzuek argazkiak editatzeko, doitzeko eta iragazteko aukerak emango dizkizute, Photoshop gaitasunen antzeko gaitasunak edukiz. Bit-mapetan oinarritutako irudiak tratatzeko osagarri ideala da.";
+$PromotionXArchived = "%s promozioa gorde da artxiboan. Eragiketa honen eraginez, promozio honen barruan erregistratutako saio guztiak ikusezin bihurtu dira. Promozio hau artxibotik atereaz egin dezakezu atzera aldaketa honetan.";
+$PromotionXUnarchived = "%s promozioa atera da artxibotik. Eragiketa honen eraginez, promozio honen barruan erregistratutako saio guztiak ikusgai bihurtu dira. Promozio hau artxiboan gordez egin dezakezu atzera aldaketa honetan.";
+$CareerXArchived = "%s karrera gorde da artxiboan. Eragiketa honen eraginez, karrera bera, bere promozioak eta promozio hauen barruan erregistratutako saio guztiak ikusezin bihurtu dira. Karrera hau artxibotik atereaz egin dezakezu atzera aldaketa honetan.";
+$CareerXUnarchived = "%s karrera atera da artxibotik. Eragiketa honen eraginez, karrera bera, bere promozioak eta promozio hauen barruan erregistratutako saio guztiak ikusgai bihurtu dira. Karrera hau artxiboan gordez egin dezakezu atzera aldaketa honetan.";
+$RegistrationByUsersGroups = "Klase taldekako inskripzioa";
+$FillCourses = "Sortu ikastaroak";
+$FillSessions = "Sortu saioak";
+$Archived = "Artxibatu da";
+$Unarchived = "Artxibatu gabe";
+$StatsUsersDidNotLoginInLastPeriods = "Ez dago aldi baterako konektaturik";
+$LastXMonths = "Azken %i hilabete";
+$NeverConnected = "Inoiz ez konektaturik";
+$EnableAccessibilityFontResizeTitle = "Letra tipoaren tamaina aldatzeko gaitasuna";
+$EnableAccessibilityFontResizeComment = "Gaitu aukera hau letra tipoaren tamaina aldatzeko aukera sorta bat erakusteko, zure kanpuseko goiko eskuinaldean. Horrela, ikusmen arazoak ditzuten pertsonek errazago irakurri ahalko dituzte ikastaroen edukiak.";
+$GlobalEvent = "Plataformako gertaera";
+$SearchEnabledTitle = "Bilaketa testu osoan";
+$SearchEnabledComment = "Gaitasun honek zure atarira kargatutako dokumentu gehienak indexatzeko aukera emango dizu eta, horrela, erabiltzaileei bilatzeko gaitasuna eskainiko die.
+Gaitasun honek ez ditu lehendik kargatu ziren dokumentuak indexatuko, eta horrela garrantzitsua da (nahi izanez gero) inplementazioaren hasieran aktibatzea.
+Behin gaituz gero, erabiltzaile bakoitzaren ikastaro zerrendan bilaketa egiteko laukitxoa agertuko da. Termino jakin bat bilatuz gero, honi dagozkion dokumentuen, ariketen edo foroko gaien zerrenda ekarriko du, eduki horiek erabiltzaileentzako eskuragarritasunaren arabera iragazi direlarik.";
+$SpecificSearchFieldsAvailable = "Bilaketa pertsonalizatuaren eremu erabilgarriak";
+$XapianModuleInstalled = "Xapian modulua instalatu da";
+$ProgramsNeededToConvertFiles = "Kanpoko formatuetako fitxategiak indexatzeko beharrezko programak";
+$YouAreUsingChamiloInAWindowsPlatformSadlyYouCantConvertDocumentsInOrderToSearchTheContentUsingThisTool = "Windows plataforma batean erabiltzen ari zara Chamilo. Zoritxarrez, tresna hau baliatuz, ezin dira dokumentuak bihurtu, edukia indexatzen bilatzeari begira.";
+$HideCoursesInSessionsTitle = "Ezkutatu ikastaro zerrenda saioetan";
+$HideCoursesInSessionsComment = "Ikastaroen orrian, saio blokeak erakusten direnean, ezkutatu ikastaro zerrenda saioaren barruan (erakutsi itzazu saioen  pantaila espezifikoan soilik)";
+$ShowGroupsToUsersTitle = "Erakutsi klaseak erabiltzaileei";
+$ShowGroupsToUsersComment = "Erakutsi klaseak erabiltzaileei. Klaseak gaitasun bat dira erabiltzaile taldeak saio batean edo ikastaro batean zuzenean erregistratzeko edo erregistrotik kentzeko aukera ematen duena, horrela administrazio lana errazteko asmoz. Aukera hau hartzen duzunean, ikasleek ikusi ahalko dute zein klasetan dauden apuntaturik, gizarte sareko interfazearen bitartez.";
+$HomepageViewActivityBig = "Jardueraren bista handitua (iPad estiloa)";
+$EnableQuizScenarioTitle = "Gaitu ariketen agertokiak";
+$EnableQuizScenarioComment = "Gaitasun hau aktibatuz gero, agertoki motako ariketak sortzeko gai izango zara eta, horrela, ikasleari beste galdera batzuk egingo dizkiozu aurretik eman dituen erantzunen arabera. Irakasleak probaren agertoki osoa diseinatuko du, askotariko aukerak izanik, interfaze sinple, baina hedatuaren bitartez.";
+$EnableNanogongTitle = "Aktibatu grabagailua - Nanogong ahots erreproduzigailua";
+$EnableNanogongComment = "Nanogong grabagailua - ahots erreproduzigailua da eta, honen bidez, ahotsa grabatu eta plataformara bidali edo disko gogorrean deskargatu ahal izango duzu. Modu berean, zuk grabatutakoa erreproduzitzen utziko dizu. Ikasleek mikrofonoa eta bozgorailuak eta, lehen aldiz kargatzen denean, applet karga onartzea soilik beharko dituzte. Guztiz erabilgarria da hizkuntza ikasleentzat. Izan ere, irakasleak WAV fitxategi batean proposatutako ahoskera egokia entzun ondoren, euren ahotsa entzun ahalko baitute.";
+$ExerciseAndLPsAreInvisibleInTheNewCourse = "Ariketak eta ikaskuntza ibilbideak ikusezin konfiguratu dituzte ikastaro sortu berrietan. Ikusi ahal izateko, irakasleak aurretik onartu beharko du argitaratzea.";
+$YouMustChooseARelationType = "Harreman mota bat hautatu behar duzu";
+$SelectARelationType = "Harreman mota hautatzea";
+$AddUserToURL = "Gehitu erabiltzailea URL honi";
+$CourseBelongURL = "URLn erregistratutako ikastaroa";
+$AtLeastOneSessionAndOneURL = "Gutxienez, saio bat eta URL bat hautatu behar dituzu";
+$SelectURL = "Hautatu URL bat";
+$SessionsWereEdited = "Saioak eguneratu dira";
+$URLDeleted = "URL ezabatu da";
+$CannotDeleteURL = "Ezin da URL ezabatu";
+$CoursesInPlatform = "Ikastaroak plataforman";
+$UsersEdited = "Erabiltzaileak eguneratu dira";
+$CourseHome = "Ikastaroaren orri nagusia";
+$ComingSoon = "Laster...";
+$DummyCourseOnlyOnTestServer = "Demostrazio gisako ikastaro edukia - proba plataformetan soilik erabilgarri";
+$ThereAreNotSelectedCoursesOrCoursesListIsEmpty = "Ez da ikastarorik hautatu edo ikastaro zerrenda hutsik dago";
+$CodeTwiceInFile = "Kodea bi aldiz erabili da fitxategian. Ez dago baimenduta. Ikastaro kodeak bakarrak izan behar dira.";
+$CodeExists = "Kodea badago lehendik";
+$UnkownCategoryCourseCode = "Ez da kategoria aurkitu";
+$LinkedCourseTitle = "Ikastaro lotuaren titulua";
+$LinkedCourseCode = "Loturiko ikastaroaren kodea";
+$AssignUsersToSessionsAdministrator = "Eman erabiltzaileak saioen kudeatzaileari";
+$AssignedUsersListToSessionsAdministrator = "Eman erabiltzaile zerrenda saioen kudeatzaileari";
+$GroupDeleted = "Klasea kendu da";
+$CannotDeleteGroup = "Ezin izan zen klase hau kendu";
+$SomeGroupsNotDeleted = "Ezin izan zen klase hauetako batzuk kendu";
+$DontUnchek = "Ez desaktibatu";
+$Modified = "Editatu da";
+$SessionsList = "Saio zerrenda";
+$Promotion = "Promozioa";
+$UpdateSession = "Eguneratu saioa";
+$Path = "Ibilbidea";
+$SelectOptionExport = "Hautatu esportatzeko aukera";
+$FieldEdited = "Eremua gehitu da";
+$LanguageParentNotExist = "Ez dago guraso hizkuntzarik";
+$TheSubLanguageHasNotBeenRemoved = "Ez da azpi-lengoaia kendu";
+$ShowOrHide = "Erakutsi/Ezkutatu";
+$StatusCanNotBeChangedToHumanResourcesManager = "Giza Baliabideen Kudeatzaileak ezin du erabiltzaile honen egoera aldatu";
+$FieldTaken = "Eremua hartu da";
+$UsersSubscribedToSeveralCoursesBecauseOfVirtualCourses = "Hainbat ikastarotan inskribatutako erabiltzaileak ikastaro birtualak erabiltzearen bitartez";
+$NoUrlForThisUser = "Erabiltzaile honek ez du loturiko URLrik";
+$ExtraData = "Datu gehigarriak";
+$ExercisesInLp = "Ariketak ikaskuntza ibilbideetan";
+$Id = "Id";
+$ThereWasAnError = "Errorea gertatu da";
+$CantMoveToTheSameSession = "Ezin da saio berera mugitu hau";
+$StatsMoved = "Estatistikak lekuz aldatu dira";
+$UserInformationOfThisCourse = "Erabiltzailearen informazioa ikastaro honetarako";
+$OriginCourse = "Jatorrizko ikastaroa";
+$OriginSession = "Jatorrizko saioa";
+$DestinyCourse = "Helburuko ikastaroa";
+$DestinySession = "Helburuko saioa";
+$CourseDoesNotExistInThisSession = "Ikastaroa ez dago saio honetan. Kopia ikastaro batetik saio batean ikastaro berera beste saio batean soilik egin ahalko da.";
+$UserNotRegistered = "Erabiltzailea ez dago erresgistraturik";
+$ViewStats = "Ikusi estatistikak";
+$YouNeedToAddASessionCategoryFirst = "Lehenengoz, saio kategoria bat gehitu behar duzu";
+$InstallationGuide = "Instalazio gida";
+$ChangesInLastVersion = "Aldaketak azken bertsioan";
+$ContributorsList = "Laguntzaile zerrenda";
+$SecurityGuide = "Segurtasun gida";
+$OptimizationGuide = "Optimizazio gida";
+$FreeBusyCalendar = "Egutegia libre/okupaturik";
+$ExtensionCouldBeLoaded = "Luzapena eskuragarri dago";
+$ArchiveDirCleanup = "Artxibo direktorioa garbitzea";
+$ArchiveDirCleanupDescr = "Chamilok sortu diren aldi baterako fitxategi gehienen kopia bat gordetzen du (babeskopiak, esportazioak, kopiak eta abar), archive/ direktorioaren barruan. Denbora epe bat igaro ondoren, disko gogorrean oso espazio handia bete dezake, ezertarako balio ez duena. Klikatu azpiko botoia, eskuz zure archive direktorioa garbitzeko. Eragiketa hau automatikoki egin beharko litzateke Linuxen cron prozesu baten bidez, zure ingurunean ezin bada hau egin, noizean behin orri honetara etorri zaitezke direktoriotik aldi baterako fitxategi guztiak kentzeko.";
+$ArchiveDirCleanupProceedButton = "Ekin garbitzeari";
+$ArchiveDirCleanupSucceeded = "archive/ direktorioaren garbiketa ongi burutu da";
+$ArchiveDirCleanupFailed = "Kausaren bat dela medio (agian, ez dago baimenik), archive/ direktorioa ezin izan zen garbitu. Mesedez, garbitu ezazu eskuz zerbitzariarekin konektatzen eta chamilo/archive/ direktorioaren edukiak ezabatzen, .htaccess fitxategia izan ezik.";
+$LocalTimeUsingPortalTimezoneXIsY = "Tokiko ordua atariaren ordutegi gunean (%s) honako hau da: %s";
+$AllowTeacherChangeGradebookGradingModelTitle = "Utzi irakasleei ebaluazioen mailak ezartzeko eredua aldatzen";
+$AllowTeacherChangeGradebookGradingModelComment = "Aukera hau aktibatuz gero, irakasle bakoitzari bere(n) ikastaro(et)an erabili ohi den mailak ezartzeko eredua aldatzen utziko diozu. Aldaketa hau irakasleak berak ikastaroaren ebaluazaioak tresnaren barruan gauzatuko du.";
+$NumberOfSubEvaluations = "Azpi-ebaluazio kopurua";
+$AddNewModel = "Gehitu eredu berria";
+$GroupParentship = "Taldearen hurkotasuna";
+$NoParentship = "Hurkotasunik gabe";
+$NoCertificate = "Ziurtagiririk gabe";
+$ShowDocumentPreviewTitle = "Erakutsi dokumentuaren aurrebista";
+$ShowDocumentPreviewComment = "Erakutsi dokumentuen aurrebistak Dokumentuak tresnan. Modu honetan, dokumentu bat erakusteko, beste orri bat kargatu beharra baztertuko dugu, baina ezegonkorra izan liteke zerbitzari zahar batzuekin eta pantaila txikietan ez da egokia izango.";
+$CasMainActivateTitle = "Gaitu CAS autentifikazioa";
+$CasMainServerTitle = "CAS zerbitzari nagusia";
+$CasMainServerComment = "Hauxe da autentifikatzeko erabiliko den CAS zerbitzari nagusia (IP helbidea edo zerbitzari izena)";
+$CasMainServerURITitle = "CAS zerbitzari nagusiaren URI";
+$CasMainServerURIComment = "CAS zerbitzurako ibilbidea";
+$CasMainPortTitle = "CAS zerbitzari nagusiaren ataka";
+$CasMainPortComment = "CAS zerbitzari nagusiarekin konektatzeko ataka";
+$CasMainProtocolTitle = "CAS zerbitzari nagusiaren protokoloa";
+$CAS1Text = "CAS 1";
+$CAS2Text = "CAS 2";
+$SAMLText = "SAML";
+$CasMainProtocolComment = "Gu CAS zerbitzariarekin konektatzeko protokoloa";
+$CasUserAddActivateTitle = "Gaitu erabiltzaileak CAS bidez erregistratzea";
+$CasUserAddActivateComment = "Gaitu erabiltzaileak CAS bidez erregistratzea";
+$CasUserAddLoginAttributeTitle = "Gehitu CAS erabiltzailearen izena";
+$CasUserAddLoginAttributeComment = "Gehitu CAS erabiltzailea konektatzeko xehetasunak, erabiltzaile berria erregistratzen denean";
+$CasUserAddEmailAttributeTitle = "Gehitu CAS erabiltzailearen posta elektronikoa";
+$CasUserAddEmailAttributeComment = "Gehitu CAS erabiltzailearen posta elektronikoa, erabiltzaile berri bat erregistratzen denean";
+$CasUserAddFirstnameAttributeTitle = "Gehitu CAS erabiltzailearen izena";
+$CasUserAddFirstnameAttributeComment = "Gehitu CAS erabiltzailearen izena, erabiltzaile berri bat erregistratzen denean";
+$CasUserAddLastnameAttributeTitle = "Gehitu CAS erabiltzailearen deitura";
+$CasUserAddLastnameAttributeComment = "Gehitu CAS erabiltzailearen deitura, erabiltzaile berri bat erregistratzen denean";
+$ShowAdminToolbarTitle = "Erakutsi kudeaketako tresna barra";
+$ShowAdminToolbarComment = "Tresna barra global bat erakusten die orriaren goiko aldean erabiltzaileei, dagokien rolaren arabera. Tresna barra honek, Wordpress eta Googleren tresna barra beltzen oso antzekoa denak, izugarri bizkortu ditzake eragiketa konplikatuak eta ikaskuntza edukirako espazio erabilgarria handitzen du, baina erabiltzaile batzuentzat nahasteko modukoa izan liteke.";
+$AddInMenu = "Gehitu menuari";
+$AllowUsersToChangeEmailWithNoPasswordTitle = "Baimendu erabiltzaileei posta elektronikoko kontua aldatzeko, pasahitza eskatu behar gabe";
+$AllowUsersToChangeEmailWithNoPasswordComment = "Erabiltzailearen kontuaren informazioa aldatzen denean";
+$EnableHelpLinkTitle = "Gaitu laguntza emateko lotura";
+$EnableHelpLinkComment = "Laguntza emateko lotura pantailaren goiko eskuinaldean dago kokatuta";
+$BackToAdmin = "Itzuli kudeaketara";
+$AllowGlobalChatTitle = "Onartu txat globala";
+$HeaderExtraContentTitle = "Eduki gehigarria goiburuan";
+$HeaderExtraContentComment = "HTML kodea gehitu dezakezu meta etiketak bezala";
+$FooterExtraContentTitle = "Eduki gehigarria orri oinean";
+$AllowGlobalChatComment = "Erabiltzaileak elkarrekin mintzatu daitezke txat globalaren bidez";
+$FooterExtraContentComment = "HTML kodea gehitu dezakezu meta etiketak bezala";
+$CopyOnlySessionItems = "Kopiatu saioaren elementuak bakarrik";
+$FirstLetterCourseTitle = "Ikastaroaren tituluaren lehen letra";
+$UsersFoundInOtherPortals = "Beste atari batzuetan aurkitutako erabiltzaileak";
+$AddUserToMyURL = "Gehitu erabiltzailea nire atariari";
+$UsersDeleted = "Erabiltzaileak kendu dira";
+$UsersAdded = "Erabiltzaileak gehitu dira";
+$PluginArea = "Plugin area";
+$NoConfigurationSettingsForThisPlugin = "Ez da konfigurazioko ezarpenik aurkitu plugin honetarako";
+$Regions = "Eskualdeak";
+$CoursesDefaultCreationVisibilityTitle = "Besterik adierazi ezean, ikastaroa ikusgai";
+$CoursesDefaultCreationVisibilityComment = "Besterik adierazi ezean, ikastaro bat sortzen ari denean, ikastaroa ikusgai";
+$YouHaveEnteredTheCourseXInY = "Zu %s ikastaroan sartu zara %s an";
+$LoginIsEmailTitle = "Erabili posta elektronikoa erabiltzailearen izen gisa";
+$LoginIsEmailComment = "Erabili posta elektronikoa sistemarekin konektatzeko";
+$AllowBrowserSnifferTitle = "Aktibatu nabigatzaile ikertzailea";
+$AllowBrowserSnifferComment = "Horrela, Chamilorekin konektatzen diren nabigatzaileen ahalmenak ikusteko ikerlari bat aktibatuko da. Horrexegatik, erabiltzailearen esperientzia hobetuko da, eman beharreko erantzunak konektatzen den plataformaren nabigatzaile motari egokituz, baina erabiltzaileak plataforman sartzen diren bakoitzean hasierako orriaren karga astiroago ibiliko da.";
+$EnableWamiRecordTitle = "Aktibatu Wami-grabagailua";
+$EnableWamiRecordComment = "Wami-grabagailua ahotsa grabatzeko tresna da Flash-i loturik";
+$ChangeSharedSetting = "Aldatu ikusgaitasunaren konfigurazioa beste atari batzuetarako";
+$AllowHRSkillsManagementTitle = "Baimendu Giza Baliabideen gaitasunen kudeaketa";
+$AllowHRSkillsManagementComment = "Baimendu Giza Baliabideei gaitasunak kudeatzeko";
+$GradebookDefaultWeightTitle = "Ponderazio lehenetsia Nota koadernoan";
+$GradebookDefaultWeightComment = "Besterik ezean, ponderazio hau ikastaro guztietan erabiliko da";
+$TeachersCanChangeScoreSettingsTitle = "Irakasleek Nota koadernoaren puntuazioen ezarpenak aldatu ahalko dituzte";
+$TeachersCanChangeScoreSettingsComment = "Nota koadernoaren ezarpenak editatzen direnean";
+$GradebookEnableLockingTitle = "Gaitu ebaluazioen blokeaketa irakasleen aldetik";
+$GradebookEnableLockingComment = "Behin gaitu eta gero, aukera honek edozein ebaluazio blokeatzeko baimena emango die ikastaro bateko irakasleei. Hala ere, horrela irakasleak edozein emaitza aldatzea oztopatuko da, ebaluazioan erabilitako baliabideei dagokienez: azterketak, ikaskuntza ibilbideak, egin beharreko lanak, etab. Ebaluazio blokeatu bat desblokeatzeko baimena duen rol bakarra kudeatzailea da. Desblokeatzen saiatzean, irakasleak informazioa jasoko du posibilitate horretaz. Nota koadernoen blokeaketa eta desblokeaketa erregistratu egingo da jarduera garrantzitsuen gaineko sistemaren txostenean.";
+$LdapDescriptionComment = "
+
+   *LDAP autentifikazioa:
+    Ikusi azpian I.a, LDAP konfiguratzeko
+    Ikusi azpian II.a, LDAP autentifikazioa aktibatzeko
+
+
+   *Eguneratu erabiltzailearen atributuak, LDAP datuekin, CAS autentifikazioa egin ondoren (ikusi CAS konfigurazioa) :
+    Ikusi azpian I.a, LDAP konfiguratzeko
+    CASek kudeatzen du erabiltzailearen autentifikazioa, ez da LDAP aktibatzea eskatzen.
+
+
+
+
+I. LDAP konfigurazioa
+Editatu main/inc/conf/auth.conf.php konfigurazioa
+-> Editatu bektoreen balioak $extldap_config
+
+Parametroak honako hauek dira
+
+    *basearen domeinu katea (esate baterako: 'base_dn' => 'DC=cblue,DC=be')
+    *kudeatzailea bereizteko izena (e b : 'admin_dn' =>'CN=admin,dc=cblue,dc=be')
+    *kudeatzailearen pasahitza (e b : 'admin_password' => '123456')
+    *ldap zerbitzaria (e b : 'host' => array('1.2.3.4', '2.3.4.5', '3.4.5.6'))
+    *iragazkia (e b : 'filter' => '')
+    *ataka (e b : 'port' => 389)
+    *protokoloaren bertsioa (2 edo 3) (e b : 'protocol_version' => 3)
+    *erabiltzailea_bilatu (e b : 'user_search' => 'sAMAccountName=%username%')
+    *kodeketa (e b : 'encoding' => 'UTF-8')
+    *eguneratu_erabiltzaileinfo (e b : 'update_userinfo' => true) 
+
+-> Erabiltzailearen eta LDAP atributuen arteko korrespondentziak eguneratzeko, editatu bektoreak $extldap_user_correspondance
+Bektoreen balioak honakoak dira <chamilo_field> => >ldap_field>
+Bektoreen egitura  main/auth/external_login/ldap.conf.php  fitxategian azalduta dago
+
+
+II. Aktibatu LDAP autentifikazioa
+Editatu  main/inc/conf/configuration.php
+-> Iruzkinik gabeko lerroak
+$extAuthSource[\"extldap\"][\"login\"] =$_configuration['root_sys'].$_configuration['code_append'].\"auth/external_login/login.ldap.php\";
+$extAuthSource[\"extldap\"][\"newUser\"] =$_configuration['root_sys'].$_configuration['code_append'].\"auth/external_login/newUser.ldap.php\";
+
+N.B. : LDAP erabiltzaileek eta plataformako erabiltzaileek konektatzean eremu berberak erabiltzen dituzte.
+N.B. : LDAP aktibatzeak [LDAP] Kanpo autentifikazioa menua gehitzen du, erabiltzaileen \"gehitu edo aldatu\" orrietan.";
+$ShibbolethMainActivateTitle = "Shibboleth autentifikazioa";
+$ShibbolethMainActivateComment = "Lehehengo eta behin, Shibboleth konfiguratu beharko duzu zure web zerbitzarirako.
+
+Chamilorako konfiguratzeko
+editatu  main/auth/shibboleth/config/aai.class.php  fitxategia.
+
+Aldatu $result objektuen balioak, zure Shibboleth atributuen izenarekin:
+
+    $result->unique_id = 'mail';
+    $result->firstname = 'cn';
+    $result->lastname = 'uid';
+    $result->email = 'mail';
+    $result->language = '-';
+    $result->gender = '-';
+    $result->address = '-';
+    $result->staff_category = '-';
+    $result->home_organization_type = '-';
+    $result->home_organization = '-';
+    $result->affiliation = '-';
+    $result->persistent_id = '-';
+    ...
+
+
+Joan Plugin-era, 'Shibboleth Login' botoi konfiguragarria gehitzeko zure Chamilo kampuserako.";
+$LdapDescriptionTitle = "LDAP autentifikazioa";
+$FacebookMainActivateTitle = "Facebook autentifikazioa";
+$FacebookMainActivateComment = "Lehenengo eta behin, Facebook aplikazioa sortu beharko duzu (ikusi https://developers.facebook.com/apps) zure Facebook kontuarekin. Facebook Apps parametroetan, kokalekuaren URL balioak GET parametroa eduki beharko luke: 'action=fbconnect' (esate baterako, http://mychamilo.com/?action=fbconnect).
+
+Orduan,
+editatu   main/auth/external_login/facebook.conf.php  fitxategia
+
+eta sartu 'appId' eta 'secret' balioak $facebook_config  konfiguraziorako.
+
+Joan Plugin-era, 'Facebook Login' botoi konfiguragarria gehitzeko zure Chamilo kanpuserako.";
+$LanguagePriority1Title = "Lehentasuna duen hizkuntza 1";
+$LanguagePriority2Title = "Lehentasuna duen hizkuntza 2";
+$LanguagePriority3Title = "Lehentasuna duen hizkuntza 3";
+$LanguagePriority4Title = "Lehentasuna duen hizkuntza 4";
+$LanguagePriority5Title = "Lehentasuna duen hizkuntza 5";
+$LanguagePriority1Comment = "Lehentasunik handiena duen hizkuntza";
+$LanguagePriority2Comment = "Lehentasuna duen bigarren hizkuntza";
+$LanguagePriority3Comment = "Lehentasuna duen hirugarren hizkuntza";
+$LanguagePriority4Comment = "Lehentasuna duen laugarren hizkuntza";
+$LanguagePriority5Comment = "Lehentasunik txikiena duen hizkuntza";
+$UserLanguage = "Erabiltzailearen hizkuntza";
+$UserSelectedLanguage = "Erabiltzaileak hautatutako hizkuntza";
+$TeachersCanChangeGradeModelSettingsTitle = "Irakasleek Nota koadernoaren ereduaren ezarpenak aldatu ahal dituzte";
+$TeachersCanChangeGradeModelSettingsComment = "Nota koadernoa editatzen denean";
+$GradebookDefaultGradeModelTitle = "Nota eredu lehenetsia";
+$GradebookDefaultGradeModelComment = "Besterik ezean, balio hau hautatuko da ikastaro bat sortzen denean";
+$GradebookEnableGradeModelTitle = "Gaitu Nota koadernoaren eredua";
+$GradebookEnableGradeModelComment = "Gaitzen du nota koadernoaren kategoriak autosortzea, nota koadernoaren ereduen arabera";
+$AllowSessionAdminsToSeeAllSessionsTitle = "Baimendu saio kudeatzaileei saio gustiak ikusteko";
+$AllowSessionAdminsToSeeAllSessionsComment = "Aukera hau desaktibaturik dagoenean (aukera lehenetsia), saio kudeatzaileek beraiek sortu dituzten saioak soilik ikusi ahalko dituzte. Hau nahasteko modukoa izan daiteke ingurune ireki batean, bertan saio kudeatzaileek, agian, bi saioren artean laguntzeko denbora konpartitu behar dutelako.";
+$AllowSkillsToolTitle = "Aktibatu Gaitasunak tresna";
+$AllowSkillsToolComment = "Erabiltzaileek beren gaitasunak ikusi ahal dituzte gizarte sarean eta bloke batean orri nagusian";
+$AllowPublicCertificatesTitle = "Baimendu ziurtagiri publikoak";
+$AllowPublicCertificatesComment = "Atarian erregistratu gabeko erabiltzaileek ikusi ahal dituzte erabiltzaileen ziurtagiriak.";
+$EnableWebCamClipTitle = "Aktibatu Webcam Klipa";
+$EnableWebCamClipComment = "Webcam Klipak webcam baliatuz irudiak hartzeko baimena ematen die erabiltzaileei, baita zerbitzariari jpeg formatutan bidaltzeko ere.";
+$YouShouldCreateTermAndConditionsForAllAvailableLanguages = "Terminoak eta Baldintzak sortu beharko dituzu plataformako hizkuntza erabilgarri guztietarako";
+$ActivateEmailTemplateTitle = "Aktibatu posta elektronikoko abisuen txantiloiak";
+$ActivateEmailTemplateComment = "Zehaztu posta elektronikoko abisuen ereduak gertaera jakin batzuetarako, baita erabiltzaile jakin batzuentzat ere";
+$SystemManagement = "Sistemaren kudeaketa";
+$RemoveOldDatabaseMessage = "Kendu datu base zaharra";
+$RemoveOldTables = "Kendu taula zaharrak";
+$TotalSpaceUsedByPortalXLimitIsYMB = "%s atariak erabiltzen duen memoriaren muga, guztira, %s MB-koa da";
+$EventMessageManagement = "Gertaeren gaineko mezuen kudeaketa";
+$Events = "Gertaerak";
+$ToBeWarnedUserList = "Postaz abisatu beharreko erabiltzaile zerrenda";
+$HideCampusFromPublicPlatformsList = "Ezkutatu kanpusa plataforma zerrenda publikoan";
+$ChamiloOfficialServicesProviders = "Chamilo zerbitzuen hornitzaile ofizialak";
+$Reader = "Irakurgailua";
+$Zombies = "Zonbiak";
+$ActiveOnly = "Aktiboa soilik";
+$AuthenticationSource = "Atentifikazio iturburua";
+$RegisteredDate = "Erregistro data";
+$FilterTermsTitle = "Iragazi terminoak";
+$FilterTermsComment = "Eman termino zerrenda bat, bana linea bakoitzeko, web orrietan eta posta elektronikoko mezuetan ez agertzeko. Termino hauek beste honako hauek ordezkatuko dituzte: ***";
+$UseCustomPagesTitle = "Erabili orri pertsonalizatuak";
+$UseCustomPagesComment = "Aktibatu gaitasun hau, rolaren arabera, identifikazio (konexio) orri bereziak konfiguratzeko";
+$StudentPageAfterLoginTitle = "Konektatu ondoren, ikaslearen orria";
+$StudentPageAfterLoginComment = "Orri hau ikasle guztiei agertuko zaie, identifikatu eta konektatu ondoren";
+$TeacherPageAfterLoginTitle = "Konektatu ondoren, irakaslearen orria";
+$TeacherPageAfterLoginComment = "Identifikatu eta konektatu ondoren, irakasle guztiei orri hau kargatuko zaie";
+$DRHPageAfterLoginTitle = "Konektatu ondoren, Giza Baliabideen Zuzendariaren orria";
+$DRHPageAfterLoginComment = "Giza Baliabideen Zuzendariek identifikatu eta konektatu ondoren, orri hau kargatuko zaie";
+$StudentAutosubscribeTitle = "Ikasleak berak egiteko inskripzioa";
+$StudentAutosubscribeComment = "Ikasleak berak egiteko inskripzioa - oraindik ez dago erabilgarri";
+$TeacherAutosubscribeTitle = "Irakasleak berak egiteko inskripzioa";
+$TeacherAutosubscribeComment = "Irakasleak berak egiteko inskripzioa - oraindik ez dago erabilgarri";
+$DRHAutosubscribeTitle = "Giza Baliabideen Zuzendariak berak egiteko inskripzioa";
+$DRHAutosubscribeComment = "Giza Baliabideen Zuzendariak berak egiteko inskripzioa - oraindik ez dago erabilgarri";
+$ScormCumulativeSessionTimeTitle = "Saioaren denbora metatua SCORM ereduetarako";
+$ScormCumulativeSessionTimeComment = "Aktibatzen denean, SCORM ikaskuntza ibilbideetarako saioaren denbora metagarria izango da; bestela, azken eguneraketaren denbora soilik zenbatuko da.";
+$SessionAdminPageAfterLoginTitle = "Konektatu ondoren, saio kudeatzailearen orria";
+$SessionAdminPageAfterLoginComment = "Saio kudeatzaileak identifikatu eta konektatu ondoren, orri hau kargatuko da";
+$SessionadminAutosubscribeTitle = "Saio kudeatzaileak berak egiteko inskripzioa";
+$SessionadminAutosubscribeComment = "Saio kudeatzaileak berak egiteko inskripzioa - oraindik ez dago erabilgarri";
+$ToolVisibleByDefaultAtCreationTitle = "Ikastaroa sortzean, tresna hau ikusgai";
+$ToolVisibleByDefaultAtCreationComment = "Hautatu, ikastaroak sortzen direnean, ikusgai egongo diren tresnak - oraindik ez dago erabilgarri";
+$casAddUserActivatePlatform = "CAS konfiguratzeko barne ezarpena: Aktibatu erabiltzaileak gehitzeko plataforma";
+$casAddUserActivateLDAP = "CAS konfiguratzeko barne ezarpena: Aktibatu LDAP erabiltzaileak gehitzea";
+$UpdateUserInfoCasWithLdapTitle = "CAS konfiguratzeko barne ezarpena: Eguneratu erabiltzailearen informazioa LDAP-ekin";
+$UpdateUserInfoCasWithLdapComment = "CAS konfiguratzeko barne ezarpena: Eguneratu erabiltzailearen informazioa LDAP-ekin";
+$ShowAllUsers = "Erakutsi erabiltzaile guztiak";
+$ShowUsersNotAddedInTheURL = "Erakutsi URLri gehitu ez zaizkion erabiltzaileak";
+$UserNotAddedInURL = "URLri gehitu ez zaizkion erabiltzaileak";
+$UsersRegisteredInNoSession = "Saio batean ere ez erregistratutako erabiltzaileak";
+$CommandLineInterpreter = "Komando interpretatzailea online (CLI)";
+$PleaseVisitOurWebsite = "Mesedez, bisitatu Chamiloren webgunea: http://www.chamilo.org";
+$SpaceUsedOnSystemCannotBeMeasuredOnWindows = "Diskoan erabilitako espazioa ezin da modu egokian neurtu Windowsen oinarrituriko sistemetan";
+$XOldTablesDeleted = "%d taula zaharrak ezabatu dira";
+$XOldDatabasesDeleted = "%d datu base zaharrak ezabatu dira";
+$ExtensionShouldBeLoaded = "Luzapen hau kargatu beharko litzateke";
 ?>

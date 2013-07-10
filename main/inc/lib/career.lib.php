@@ -171,9 +171,10 @@ class Career extends Model {
         return $cid;
     }    
     
-     public function get_status($carrer_id) {
+     public function get_status($career_id) {
         $TBL_CAREER             = Database::get_main_table(TABLE_CAREER);
-        $sql 	= "SELECT status FROM $TBL_CAREER WHERE id = '$carrer_id'";
+        $career_id = intval($career_id);
+        $sql 	= "SELECT status FROM $TBL_CAREER WHERE id = '$career_id'";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             $data = Database::fetch_array($result);

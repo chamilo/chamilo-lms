@@ -117,12 +117,16 @@ switch ($action) {
         if ($form->validate()) {            
             if ($check) {
                 $values = $form->exportValues();
-                $career->update_all_promotion_status_by_career_id($values['id'],$values['status']);               
+                $career->update_all_promotion_status_by_career_id($values['id'],$values['status']);
+                $old_status = $career->get_status($values['id']);               
                 $res    = $career->update($values);
-                if ($values['status']) {
-                    Display::display_confirmation_message(sprintf(get_lang('CareerXUnarchived'), $values['name']), false);
-                } else {
-                    Display::display_confirmation_message(sprintf(get_lang('CareerXArchived'), $values['name']), false);
+                if ($res) {
+                    Display::display_confirmation_message(get_lang('CareerUpdated'));
+                    if ($values['status'] && !$old_status) {
+                        Display::display_confirmation_message(sprintf(get_lang('CareerXUnarchived'), $values['name']), false);
+                    } elseif (!$values['status'] && $old_status) {
+                        Display::display_confirmation_message(sprintf(get_lang('CareerXArchived'), $values['name']), false);
+                    }
                 }
             }            
             $career->display();

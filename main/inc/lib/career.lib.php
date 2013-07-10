@@ -171,7 +171,21 @@ class Career extends Model {
         return $cid;
     }    
     
-    public function save($params) {
+     public function get_status($carrer_id) {
+        $TBL_CAREER             = Database::get_main_table(TABLE_CAREER);
+        $sql 	= "SELECT status FROM $TBL_CAREER WHERE id = '$carrer_id'";
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
+            $data = Database::fetch_array($result);
+            return $data['status'];
+        } else {
+            return false;
+        }
+        
+    }
+        
+    
+    public function save($params, $show_query = false) {
 	    $id = parent::save($params);
 	    if (!empty($id)) {
 	    	event_system(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());

@@ -9260,25 +9260,43 @@ EOD;
         $lp_id = $this->get_id();
 
         if (!empty($this->items)) {
-            $old_id = null;
-            $old_max = 0;
-            $old_type = null;
+            $previous_item_id = null;
+            $previous_item_max = 0;
+            $previous_item_type = null;
+            $last_item_not_chapter = null;
+            $last_item_not_chapter_type = null;
+            $last_item_not_chapter_max = null;
             foreach ($this->items as $item) {
-                if (!empty($old_id)) {
-                    if (!in_array($old_type, array('dokeos_chapter', 'chapter'))) {
-                        $current_item_id = $item->get_id();
-                        if ($old_type == 'quiz') {
-                            $sql = "UPDATE $tbl_lp_item SET mastery_score = '$old_max' WHERE c_id = ".$course_id." AND lp_id = '$lp_id' AND id = '$old_id'";
+                // if there was a previous item... (otherwise jump to set it)
+                if (!empty($previous_item_id)) {
+                    $current_item_id = $item->get_id(); //save current id
+                    if (!in_array($item->get_type(), array('dokeos_chapter', 'chapter'))) {
+                        // Current item is not a folder, so it qualifies to get a prerequisites
+                        if ($last_item_not_chapter_type == 'quiz') {
+                            // if previous is quiz, mark its max score as default score to be achieved
+                            $sql = "UPDATE $tbl_lp_item SET mastery_score = '$last_item_not_chapter_max' WHERE c_id = ".$course_id." AND lp_id = '$lp_id' AND id = '$last_item_not_chapter'";
                             Database::query($sql);
                         }
-
-                        $sql = "UPDATE $tbl_lp_item SET prerequisite = '$old_id' WHERE c_id = ".$course_id." AND lp_id = '$lp_id' AND id = '$current_item_id'";
+                        // now simply update the prerequisite to set it to the last non-chapter item
+                        $sql = "UPDATE $tbl_lp_item SET prerequisite = '$last_item_not_chapter' WHERE c_id = ".$course_id." AND lp_id = '$lp_id' AND id = '$current_item_id'";
                         Database::query($sql);
+                        // record item as 'non-chapter' reference
+                        $last_item_not_chapter = $item->get_id();
+                        $last_item_not_chapter_type = $item->get_type();
+                        $last_item_not_chapter_max = $item->get_max();
+                    }
+                } else {
+                    if (!in_array($item->get_type(), array('dokeos_chapter', 'chapter'))) {
+                        // Current item is not a folder (but it is the first item) so record as last "non-chapter" item
+                        $last_item_not_chapter = $item->get_id();
+                        $last_item_not_chapter_type = $item->get_type();
+                        $last_item_not_chapter_max = $item->get_max();
                     }
                 }
-                $old_id = $item->get_id();
-                $old_max = $item->get_max();
-                $old_type = $item->get_type();
+                // Saving the item as "previous item" for the next loop
+                $previous_item_id = $item->get_id();
+                $previous_item_max = $item->get_max();
+                $previous_item_type = $item->get_type();
             }
         }
     }

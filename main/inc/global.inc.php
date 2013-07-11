@@ -470,19 +470,6 @@ if (is_array($language_files)) {
 
 // End loading languages
 
-// Specification for usernames:
-// 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
-// 2. Empty username is formally valid, but it is reserved for the anonymous user.
-// 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
-// @todo this should be configured somewhere else usermanager.class.php? a users.yml setting?
-
-$default_username_length = 40;
-if (api_get_setting('login_is_email') == 'true') {
-    $default_username_length = 100;
-}
-
-@define('USERNAME_MAX_LENGTH', $default_username_length);
-
 /** Silex Middlewares. */
 
 /** A "before" middleware allows you to tweak the Request before the controller is executed. */
@@ -509,12 +496,14 @@ $app->before(
             $app->abort(500, "temp folder must be writable");
         }
 
+        /** @var Request $request */
+        $request = $app['request'];
+
+        $request->getSession()->start();
+
         // Loop in the folder array and create temp folders.
         /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem $filesystem */
         $filesystem = $app['chamilo.filesystem'];
-
-        /** @var Request $request */
-        $request = $app['request'];
 
         // Creates temp folders for every request
         if ($app['debug']) {
@@ -524,7 +513,6 @@ $app->before(
         if ($app['assetic.auto_dump_assets']) {
             $filesystem->copyFolders($app['temp.paths']->copyFolders);
         }
-        $request->getSession()->start();
 
         // Check and modify the date of user in the track.e.online table
         Online::loginCheck(api_get_user_id());
@@ -565,7 +553,6 @@ $app->before(
         $app['api_get_languages'] = api_get_languages();
         $app['language_interface'] = $language_interface = api_get_language_interface();
 
-
         // reconfigure template now we know the user
         $app['template.hide_global_chat'] = !api_is_global_chat_enabled();
 
@@ -580,6 +567,18 @@ $app->before(
         }
 
         define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
+
+        // Specification for usernames:
+        // 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
+        // 2. Empty username is formally valid, but it is reserved for the anonymous user.
+        // 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
+
+        $default_username_length = 40;
+        if (api_get_setting('login_is_email') == 'true') {
+            $default_username_length = 100;
+        }
+
+        define('USERNAME_MAX_LENGTH', $default_username_length);
 
         //var_dump($app['security']->isGranted('IS_AUTHENTICATED_FULLY'));
 

@@ -847,7 +847,7 @@ class Exercise
      * @param bool $from_db
      * @return array question ID list
      */
-    private function selectQuestionList($from_db = false)
+    public function selectQuestionList($from_db = false)
     {
         if ($from_db && !empty($this->id)) {
 

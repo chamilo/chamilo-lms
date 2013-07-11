@@ -4272,7 +4272,8 @@ function api_get_version() {
  * @return string
  */
 function api_get_software_name() {
-    return 'Chamilo';
+    //return 'Chamilo';
+    return 'Desarrollo docente';
     /*global $_configuration;
     if (isset($_configuration['software_name']) && !empty($_configuration['software_name'])) {
         return $_configuration['software_name'];

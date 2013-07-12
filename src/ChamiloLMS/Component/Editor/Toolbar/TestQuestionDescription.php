@@ -8,7 +8,7 @@ class TestQuestionDescription
     public function getConfig()
     {
         $config['toolbarGroups'] = array(
-            array('name' => 'document',  'groups' =>array('mode', 'document', 'doctools')),
+            array('name' => 'document',  'groups' =>array('document', 'doctools')),
             array('name' => 'clipboard',    'groups' =>array('clipboard', 'undo', )),
             array('name' => 'editing',    'groups' =>array('clipboard', 'undo', )),
             //array('name' => 'forms',    'groups' =>array('clipboard', 'undo', )),
@@ -22,6 +22,7 @@ class TestQuestionDescription
             array('name' => 'colors'),
             array('name' => 'tools'),
             array('name' => 'others'),
+            array('name' => 'mode')
             //array('name' => 'about')
         );
 

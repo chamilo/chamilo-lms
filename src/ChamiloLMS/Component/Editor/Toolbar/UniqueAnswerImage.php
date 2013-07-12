@@ -21,7 +21,8 @@ class UniqueAnswerImage extends Basic
             array('name' => 'styles'),
             array('name' => 'colors'),
             array('name' => 'tools'),
-            array('name' => 'others')
+            array('name' => 'others'),
+            array('name' => 'mode')
         );
 
         $config['fullPage'] = 'true';

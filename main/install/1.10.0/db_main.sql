@@ -85,6 +85,8 @@ INSERT INTO roles (name, role) VALUES('Jury president', 'ROLE_JURY_PRESIDENT');
 INSERT INTO roles (name, role) VALUES('Jury member', 'ROLE_JURY_MEMBER');
 INSERT INTO roles (name, role) VALUES('Jury substitute', 'ROLE_JURY_SUBSTITUTE');
 INSERT INTO roles (name, role) VALUES('Director', 'ROLE_DIRECTOR');
+INSERT INTO roles (name, role) VALUES('Session Manager', 'ROLE_SESSION_MANAGER');
+
 
 --
 -- Table structure for table admin

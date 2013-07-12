@@ -2257,17 +2257,29 @@ function api_get_self() {
  * @see usermanager::is_admin(user_id) for a user-id specific function
  */
 function api_is_platform_admin($allow_sessions_admins = false) {
+    global $app;
     $isAdmin = Session::read('is_platformAdmin');
     if ($isAdmin) {
         return true;
     }
-    $_user = api_get_user_info();
-    return $allow_sessions_admins && isset($_user['status']) && $_user['status'] == SESSIONADMIN;
+    //$_user = api_get_user_info();
+
+    if ($app['security']->isGranted('ROLE_SESSION_MANAGER')) {
+        return true;
+    }
+    return false;
+    //  isset($_user['status']) && $_user['status'] == SESSIONADMIN;
+
 }
 
 function api_is_question_manager() {
-    $_user = api_get_user_info();
-    return isset($_user['status']) && $_user['status'] == QUESTION_MANAGER;
+    global $app;
+    if ($app['security']->isGranted('ROLE_QUESTION_MANAGER')) {
+        return true;
+    }
+    return false;
+    /*$_user = api_get_user_info();
+    return isset($_user['status']) && $_user['status'] == QUESTION_MANAGER;*/
 }
 
 /**

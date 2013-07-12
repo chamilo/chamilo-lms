@@ -9,8 +9,9 @@ class TestProposedAnswer
     {
 
         $config['toolbarGroups'] = array(
-            array('name' => 'basicstyles',    'groups' =>array('basicstyles', 'cleanup', )),
-            array('name' => 'paragraph',    'groups' =>array('list', 'indent', 'blocks', 'align' )),
+            array('name' => 'document',  'groups' => array('mode')),
+            array('name' => 'basicstyles',    'groups' => array('basicstyles', 'cleanup', )),
+            array('name' => 'paragraph',    'groups' => array('list', 'indent', 'blocks', 'align' )),
             array('name' => 'links'),
             array('name' => 'insert'),
             '/',

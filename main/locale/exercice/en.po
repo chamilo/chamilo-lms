@@ -1552,3 +1552,6 @@ msgstr "To be reviewed"
 
 msgid "CurrentQuestion"
 msgstr "Current question"
+
+msgid "MediaQuestions"
+msgstr "Shareable enunciates"

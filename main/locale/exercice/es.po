@@ -1553,3 +1553,5 @@ msgstr "Por revisar"
 msgid "CurrentQuestion"
 msgstr "Pregunta actual"
 
+msgid "MediaQuestions"
+msgstr "Enunciados compartidos"

@@ -11,10 +11,11 @@
 // Language files that need to be included.
 $language_file = array('admin', 'tracking','coursebackup');
 
+/*
 if (api_is_question_manager()) {
     header('Location: '.api_get_path(WEB_PUBLIC_PATH).'admin/questionmanager');
     exit;
-}
+}*/
 
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;

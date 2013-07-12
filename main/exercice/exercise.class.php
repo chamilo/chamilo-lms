@@ -524,10 +524,22 @@ class Exercise
                     FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
                         ON (e.question_id = q.iid AND e.c_id = ".$this->course_id." )
 					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'
-					ORDER BY question_order";
+					";
+
+            $orderCondition = "ORDER BY question_order";
+
+            if (!empty($sidx) && !empty($sord)) {
+                if ($sidx == 'question') {
+
+                    if (in_array(strtolower($sord), array('desc', 'asc'))) {
+                        $orderCondition = " ORDER BY q.$sidx $sord";
+                    }
+                }
+            }
+
+            $sql .= $orderCondition;
 
             $limitCondition = null;
-
             if (isset($start) && isset($limit)) {
                 $start = intval($start);
                 $limit = intval($limit);
@@ -807,6 +819,7 @@ class Exercise
                 $cat = (array)$cat;
                 $cat['iid'] = $cat['id'];
                 $cat['name'] = $cat['title'];
+
 
                 $categoryParentInfo = null;
 
@@ -1433,7 +1446,7 @@ class Exercise
             '<a href="javascript://" onclick=" return advanced_parameters()">
                 <span id="img_plus_and_minus">
                 <div style="vertical-align:top;" >
-                    '.Display::return_icon('div_show.gif').' '.addslashes(api_htmlentities(get_lang('AdvancedParameters'))).'</div>
+                    '.Display::return_icon('div_show.gif').' '.addslashes(get_lang('AdvancedParameters')).'</div>
                 </span>
             </a>'
         );
@@ -5660,6 +5673,20 @@ class Exercise
     }
 
 
+    function getFirstParent($catId)
+    {
+        global $app;
+        $em = $app['orm.em'];
+        /** @var Gedmo\Tree\Entity\Repository\NestedTreeRepository $repo */
+        $repo = $em->getRepository('Entity\CQuizCategory');
+        /** @var \Entity\CQuizCategory $category */
+        $category = $em->find('Entity\CQuizCategory', $catId);
+
+        $path = $repo->getPath($category);
+        return $path;
+    }
+
+
     /**
      *  Shows a list of numbers that represents the question to answer in a exercise
      *
@@ -5678,6 +5705,20 @@ class Exercise
         $before = 0;
 
         if (!empty($categories)) {
+
+            $newCategoryList = array();
+            foreach ($categories as $category) {
+
+                if (!isset($newCategoryList[$category['root']])) {
+                    $newCategoryList[$category['root']] = $category;
+                } else {
+                    $oldQuestionList = $newCategoryList[$category['root']]['question_list'];
+                    $category['question_list'] = array_merge($oldQuestionList , $category['question_list']);
+                    $newCategoryList[$category['root']] = $category;
+                }
+            }
+
+            $categories = $newCategoryList;
 
             foreach ($categories as $category) {
                 $questionList = $category['question_list'];

@@ -2021,10 +2021,12 @@ function api_get_session_date_validation($session_info, $course_code, $ignore_vi
 
     if ($session_info) {
 
-        //I don't care the field visibility because there are not limit dates
+        // I don't care the field visibility because there are not limit dates.
         if ($session_info['access_start_date'] == '0000-00-00 00:00:00' && $session_info['access_end_date'] == '0000-00-00 00:00:00') {
             return true;
         } else {
+
+            $accessStart = true;
 
             //If access_start_date is set
             if (!empty($session_info['access_start_date']) && $session_info['access_start_date'] != '0000-00-00 00:00:00') {
@@ -2032,19 +2034,22 @@ function api_get_session_date_validation($session_info, $course_code, $ignore_vi
                     $access = true;
                 } else {
                     $access = false;
+                    $accessStart = false;
                 }
             }
 
-            //if access_end_date is set
-            if (!empty($session_info['access_end_date']) && $session_info['access_end_date'] != '0000-00-00 00:00:00') {
-                //only if access_end_date said that it was ok
+            if ($accessStart == true) {
+                //if access_end_date is set
+                if (!empty($session_info['access_end_date']) && $session_info['access_end_date'] != '0000-00-00 00:00:00') {
+                    //only if access_end_date said that it was ok
 
-                if ($now <= api_strtotime($session_info['access_end_date'], 'UTC')) {
-                    //date still available
-                    $access = true;
-                } else {
-                    //session ends
-                    $access = false;
+                    if ($now <= api_strtotime($session_info['access_end_date'], 'UTC')) {
+                        //date still available
+                        $access = true;
+                    } else {
+                        //session ends
+                        $access = false;
+                    }
                 }
             }
         }
@@ -2257,17 +2262,29 @@ function api_get_self() {
  * @see usermanager::is_admin(user_id) for a user-id specific function
  */
 function api_is_platform_admin($allow_sessions_admins = false) {
+    global $app;
     $isAdmin = Session::read('is_platformAdmin');
     if ($isAdmin) {
         return true;
     }
-    $_user = api_get_user_info();
-    return $allow_sessions_admins && isset($_user['status']) && $_user['status'] == SESSIONADMIN;
+    //$_user = api_get_user_info();
+
+    if ($app['security']->isGranted('ROLE_SESSION_MANAGER')) {
+        return true;
+    }
+    return false;
+    //  isset($_user['status']) && $_user['status'] == SESSIONADMIN;
+
 }
 
 function api_is_question_manager() {
-    $_user = api_get_user_info();
-    return isset($_user['status']) && $_user['status'] == QUESTION_MANAGER;
+    global $app;
+    if ($app['security']->isGranted('ROLE_QUESTION_MANAGER')) {
+        return true;
+    }
+    return false;
+    /*$_user = api_get_user_info();
+    return isset($_user['status']) && $_user['status'] == QUESTION_MANAGER;*/
 }
 
 /**

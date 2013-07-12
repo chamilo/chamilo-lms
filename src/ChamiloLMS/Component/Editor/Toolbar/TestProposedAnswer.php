@@ -9,7 +9,7 @@ class TestProposedAnswer
     {
 
         $config['toolbarGroups'] = array(
-            array('name' => 'document',  'groups' =>array('mode')),
+            //array('name' => 'document'),
             array('name' => 'clipboard',    'groups' =>array('clipboard', 'undo', )),
             array('name' => 'basicstyles',    'groups' =>array('basicstyles', 'cleanup', )),
             array('name' => 'paragraph',    'groups' =>array('list', 'indent', 'blocks', 'align' )),
@@ -17,7 +17,8 @@ class TestProposedAnswer
             array('name' => 'insert'),
             '/',
             array('name' => 'styles'),
-            array('name' => 'colors')
+            array('name' => 'colors'),
+            array('name' => 'mode')
         );
 
         $config['toolbarCanCollapse'] = true;

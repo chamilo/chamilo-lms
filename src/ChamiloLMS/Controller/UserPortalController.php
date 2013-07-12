@@ -33,11 +33,6 @@ class UserPortalController extends CommonController
             return $app->abort(403, 'Not allowed');
         }
 
-        // Check if a user is enrolled only in one course for going directly to the course after the login.
-        if (api_get_setting('go_to_course_after_login') == 'true') {
-            $this->redirectAfterLogin();
-        }
-
         // Main courses and session list
         $items = null;
         $type = str_replace('/', '', $type);
@@ -119,7 +114,6 @@ class UserPortalController extends CommonController
         $count_of_sessions = count($my_session_list);
 
         if ($count_of_sessions == 1 && $count_of_courses_no_sessions == 0) {
-
             $key = array_keys($personal_course_list);
             $course_info = $personal_course_list[$key[0]];
             $id_session = isset($course_info['id_session']) ? $course_info['id_session'] : 0;

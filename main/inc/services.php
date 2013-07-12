@@ -96,6 +96,7 @@ $app['security.role_hierarchy'] = array(
     'ROLE_TEACHER' => array('ROLE_STUDENT'),
     'ROLE_RRHH' => array('ROLE_TEACHER'),
     'ROLE_QUESTION_MANAGER' => array('ROLE_QUESTION_MANAGER'),
+    'ROLE_SESSION_MANAGER' => array('ROLE_SESSION_MANAGER'),
     'ROLE_STUDENT' => array('ROLE_STUDENT'),
     'ROLE_ANONYMOUS' => array('ROLE_ANONYMOUS')
 );

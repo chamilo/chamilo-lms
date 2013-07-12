@@ -820,6 +820,7 @@ class Exercise
                 $cat['iid'] = $cat['id'];
                 $cat['name'] = $cat['title'];
 
+
                 $categoryParentInfo = null;
 
                 if (!empty($cat['parent_id'])) {
@@ -5672,6 +5673,20 @@ class Exercise
     }
 
 
+    function getFirstParent($catId)
+    {
+        global $app;
+        $em = $app['orm.em'];
+        /** @var Gedmo\Tree\Entity\Repository\NestedTreeRepository $repo */
+        $repo = $em->getRepository('Entity\CQuizCategory');
+        /** @var \Entity\CQuizCategory $category */
+        $category = $em->find('Entity\CQuizCategory', $catId);
+
+        $path = $repo->getPath($category);
+        return $path;
+    }
+
+
     /**
      *  Shows a list of numbers that represents the question to answer in a exercise
      *
@@ -5690,6 +5705,20 @@ class Exercise
         $before = 0;
 
         if (!empty($categories)) {
+
+            $newCategoryList = array();
+            foreach ($categories as $category) {
+
+                if (!isset($newCategoryList[$category['root']])) {
+                    $newCategoryList[$category['root']] = $category;
+                } else {
+                    $oldQuestionList = $newCategoryList[$category['root']]['question_list'];
+                    $category['question_list'] = array_merge($oldQuestionList , $category['question_list']);
+                    $newCategoryList[$category['root']] = $category;
+                }
+            }
+
+            $categories = $newCategoryList;
 
             foreach ($categories as $category) {
                 $questionList = $category['question_list'];

@@ -15,6 +15,7 @@ class Testcategory
     public $type;
     public $course_id;
     public $c_id; // from db
+    public $root;
 
     /**
      * Constructor of the class Category
@@ -42,6 +43,7 @@ class Testcategory
             $this->parent_id = $tmpobj->parent_id;
             $this->parent_path = $this->name;
             $this->c_id = $tmpobj->c_id;
+            $this->root = $tmpobj->root;
 
             if (!empty($tmpobj->parent_id)) {
                 $category = new Testcategory($tmpobj->parent_id);
@@ -86,6 +88,8 @@ class Testcategory
             $this->description = $row['description'];
             $this->parent_id = $row['parent_id'];
             $this->c_id = $row['c_id'];
+            $this->root = $row['root'];
+
         } else {
             return false;
         }

@@ -2622,7 +2622,7 @@ class UserManager
 
         //Courses in which we are subscribed out of any session
         $tbl_user_course_category = Database :: get_main_table(TABLE_USER_COURSE_CATEGORY);
-
+        //INNER JOIN $tbl_user_course_category user_course_category
         $personal_course_list_sql = "SELECT course.code,
                                             course_rel_user.status course_rel_status,
                                             course_rel_user.sort sort,
@@ -2630,7 +2630,7 @@ class UserManager
                                      FROM $tbl_course_user course_rel_user
                                         INNER JOIN $tbl_course course
                                         ON course.id = course_rel_user.c_id
-                                        INNER JOIN $tbl_user_course_category user_course_category
+                                        LEFT JOIN $tbl_user_course_category user_course_category
                                         ON course_rel_user.user_course_cat = user_course_category.id
                                      $join_access_url
                                      WHERE  course_rel_user.user_id = '".$user_id."' AND

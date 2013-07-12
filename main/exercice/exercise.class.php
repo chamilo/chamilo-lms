@@ -5709,7 +5709,7 @@ class Exercise
         $before = 0;
 
         if (!empty($categories)) {
-
+            /*
             $newCategoryList = array();
             foreach ($categories as $category) {
 
@@ -5720,9 +5720,9 @@ class Exercise
                     $category['question_list'] = array_merge($oldQuestionList , $category['question_list']);
                     $newCategoryList[$category['root']] = $category;
                 }
-            }
+            }*/
 
-            $categories = $newCategoryList;
+            //$categories = $newCategoryList;
 
             foreach ($categories as $category) {
                 $questionList = $category['question_list'];

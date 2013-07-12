@@ -1541,3 +1541,14 @@ msgstr "Problem recording? Upload your own audio file."
 msgid "AllQuestionsMustHaveACategory"
 msgstr "All questions must have a category"
 
+msgid "Answered"
+msgstr "Answered"
+
+msgid "Unanswered"
+msgstr "Unanswered"
+
+msgid "ToReview"
+msgstr "To be reviewed"
+
+msgid "CurrentQuestion"
+msgstr "Current question"

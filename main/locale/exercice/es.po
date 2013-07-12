@@ -1541,3 +1541,15 @@ msgstr "Tiene problemas para grabar? Mande su propio fichero audio."
 msgid "AllQuestionsMustHaveACategory"
 msgstr "Todas las preguntas deben de tener por lo menos una categoría asociada"
 
+msgid "Answered"
+msgstr "Respondida"
+
+msgid "Unanswered"
+msgstr "Sin responder"
+
+msgid "ToReview"
+msgstr "Por revisar"
+
+msgid "CurrentQuestion"
+msgstr "Pregunta actual"
+

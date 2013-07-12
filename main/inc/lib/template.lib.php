@@ -1001,11 +1001,12 @@ class Template
         if (api_is_platform_admin(true)) {
             $navigation['platform_admin']['url'] = api_get_path(WEB_CODE_PATH).'admin/index.php';
             $navigation['platform_admin']['title'] = get_lang('PlatformAdmin');
-        }
+        } else {
 
-        if (api_is_question_manager()) {
-            $navigation['question_manager']['url'] = api_get_path(WEB_PUBLIC_PATH).'admin/questionmanager';
-            $navigation['question_manager']['title'] = get_lang('PlatformAdmin');
+            if (api_is_question_manager()) {
+                $navigation['question_manager']['url'] = api_get_path(WEB_PUBLIC_PATH).'admin/questionmanager';
+                $navigation['question_manager']['title'] = get_lang('PlatformAdmin');
+            }
         }
 
         return $navigation;
@@ -1235,10 +1236,11 @@ class Template
                 } else {
                     $menu_navigation['platform_admin'] = $possible_tabs['platform_admin'];
                 }
-            }
+            } else {
 
-            if (api_is_question_manager()) {
-                $navigation['question_manager'] = $possible_tabs['question_manager'];
+                if (api_is_question_manager()) {
+                    $navigation['question_manager'] = $possible_tabs['question_manager'];
+                }
             }
 
 

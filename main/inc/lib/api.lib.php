@@ -6586,12 +6586,12 @@ function api_mail_html(
         $type->setValue('text/html');
         $type->setParameter('charset', 'utf-8');
 
-        $app['monolog']->addDebug($message);
+        //$app['monolog']->addDebug($message);
         $result = $app['mailer']->send($message);
 
         return $result;
     } catch (Exception $e) {
-        $app['monolog']->addDebug('Email address not valid:' . $e->getMessage());
+        //$app['monolog']->addDebug('Email address not valid:' . $e->getMessage());
     }
 
     return false;

@@ -485,10 +485,6 @@ class ChamiloServiceProvider implements ServiceProviderInterface
             $db = new Database($app['db'], $app['dbs']);
             return $db;
         });
-
-        $app['installer'] = $app->share(function () use ($app) {
-            return new ChamiloLMS\Component\Installer\Installer();
-        });
     }
 
     public function boot(Application $app)

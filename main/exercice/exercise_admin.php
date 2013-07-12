@@ -72,7 +72,7 @@ $htmlHeadXtra[] = '<script>
             complete_text: "'.get_lang('StartToType').'",
             firstselected: false,
             onselect: check,
-            oncreate: add_item,
+            //oncreate: add_item,
             filter_selected: true,
             newel: true
         });

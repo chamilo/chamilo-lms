@@ -2021,10 +2021,12 @@ function api_get_session_date_validation($session_info, $course_code, $ignore_vi
 
     if ($session_info) {
 
-        //I don't care the field visibility because there are not limit dates
+        // I don't care the field visibility because there are not limit dates.
         if ($session_info['access_start_date'] == '0000-00-00 00:00:00' && $session_info['access_end_date'] == '0000-00-00 00:00:00') {
             return true;
         } else {
+
+            $accessStart = true;
 
             //If access_start_date is set
             if (!empty($session_info['access_start_date']) && $session_info['access_start_date'] != '0000-00-00 00:00:00') {
@@ -2032,19 +2034,22 @@ function api_get_session_date_validation($session_info, $course_code, $ignore_vi
                     $access = true;
                 } else {
                     $access = false;
+                    $accessStart = false;
                 }
             }
 
-            //if access_end_date is set
-            if (!empty($session_info['access_end_date']) && $session_info['access_end_date'] != '0000-00-00 00:00:00') {
-                //only if access_end_date said that it was ok
+            if ($accessStart == true) {
+                //if access_end_date is set
+                if (!empty($session_info['access_end_date']) && $session_info['access_end_date'] != '0000-00-00 00:00:00') {
+                    //only if access_end_date said that it was ok
 
-                if ($now <= api_strtotime($session_info['access_end_date'], 'UTC')) {
-                    //date still available
-                    $access = true;
-                } else {
-                    //session ends
-                    $access = false;
+                    if ($now <= api_strtotime($session_info['access_end_date'], 'UTC')) {
+                        //date still available
+                        $access = true;
+                    } else {
+                        //session ends
+                        $access = false;
+                    }
                 }
             }
         }

@@ -1433,7 +1433,7 @@ class Exercise
             '<a href="javascript://" onclick=" return advanced_parameters()">
                 <span id="img_plus_and_minus">
                 <div style="vertical-align:top;" >
-                    '.Display::return_icon('div_show.gif').' '.addslashes(api_htmlentities(get_lang('AdvancedParameters'))).'</div>
+                    '.Display::return_icon('div_show.gif').' '.addslashes(get_lang('AdvancedParameters')).'</div>
                 </span>
             </a>'
         );

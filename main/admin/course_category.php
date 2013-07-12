@@ -29,7 +29,7 @@ $delError = 0;
 if (!empty($action)) {
     if ($action == 'delete') {
         if (api_get_multiple_access_url()) {
-            if (api_get_current_access_url_id() != 1) {
+            if (api_get_current_access_url_id() == 1) {
                 deleteNode($_GET['id']);
                 header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
                 exit();
@@ -101,73 +101,72 @@ if (empty($action)) {
 }
 
 if ($action == 'add' || $action == 'edit') {
-    if ((api_get_multiple_access_url() && api_get_current_access_url_id() != 1) || !api_get_multiple_access_url() ) {
-        
-?>          <div class="actions">
-                <a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>"><?php echo Display::return_icon('folder_up.png', get_lang("Back"), '', ICON_SIZE_MEDIUM);
-            if (!empty($category)) echo ' (' . Security::remove_XSS($category) . ')'; ?></a>
-            </div>
-            <?php
-            $form_title = ($action == 'add') ? get_lang('AddACategory') : get_lang('EditNode');
-            if (!empty($category)) {
-                $form_title .= ' ' . get_lang('Into') . ' ' . Security::remove_XSS($category);
-            }
-            $form = new FormValidator('course_category');
-            $form->addElement('header', '', $form_title);
-            $form->display();
+    if ((api_get_multiple_access_url() && api_get_current_access_url_id() == 1) || !api_get_multiple_access_url() ) { ?>
+        <div class="actions">
+        <a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>"><?php echo Display::return_icon('folder_up.png', get_lang("Back"), '', ICON_SIZE_MEDIUM);
+        if (!empty($category)) echo ' (' . Security::remove_XSS($category) . ')'; ?></a>
+        </div>
+        <?php
+        $form_title = ($action == 'add') ? get_lang('AddACategory') : get_lang('EditNode');
+        if (!empty($category)) {
+            $form_title .= ' ' . get_lang('Into') . ' ' . Security::remove_XSS($category);
+        }
+        $form = new FormValidator('course_category');
+        $form->addElement('header', '', $form_title);
+        $form->display();
+        ?>
+        <form method="post" action="<?php echo api_get_self(); ?>?action=<?php echo Security::remove_XSS($action); ?>&category=<?php echo Security::remove_XSS($category); ?>&amp;id=<?php echo Security::remove_XSS($_GET['id']); ?>">
+            <input type="hidden" name="formSent" value="1" />
+            <table border="0" cellpadding="5" cellspacing="0">
+        <?php
+        if (!empty($errorMsg)) {
             ?>
-            <form method="post" action="<?php echo api_get_self(); ?>?action=<?php echo Security::remove_XSS($action); ?>&category=<?php echo Security::remove_XSS($category); ?>&amp;id=<?php echo Security::remove_XSS($_GET['id']); ?>">
-                <input type="hidden" name="formSent" value="1" />
-                <table border="0" cellpadding="5" cellspacing="0">
+                    <tr>
+                        <td colspan="2">
+    
             <?php
-            if (!empty($errorMsg)) {
-                ?>
-                        <tr>
-                            <td colspan="2">
-        
-                <?php
-                Display::display_normal_message($errorMsg); //main API
-                ?>
-        
-                            </td>
-                        </tr>
-        
-                <?php
-            }
+            Display::display_normal_message($errorMsg); //main API
             ?>
-        
-                    <tr>
-                        <td nowrap="nowrap"><?php echo get_lang("CategoryCode"); ?> :</td>
-                        <td><input type="text" name="categoryCode" size="20" maxlength="20" value="<?php echo api_htmlentities(stripslashes($categoryCode), ENT_QUOTES, $charset); ?>" /></td>
-                    </tr>
-                    <tr>
-                        <td nowrap="nowrap"><?php echo get_lang("CategoryName"); ?> :</td>
-                        <td><input type="text" name="categoryName" size="20" maxlength="100" value="<?php echo api_htmlentities(stripslashes($categoryName), ENT_QUOTES, $charset); ?>" /></td>
-                    </tr>
-                    <tr>
-                        <td nowrap="nowrap"><?php echo get_lang("AllowCoursesInCategory"); ?></td>
-                        <td>
-                            <input class="checkbox" type="radio" name="canHaveCourses" value="0" <?php if (($action == 'edit' && !$canHaveCourses) || ($action == 'add' && $formSent && !$canHaveCourses)) echo 'checked="checked"'; ?> /><?php echo get_lang("No"); ?>
-                            <input class="checkbox" type="radio" name="canHaveCourses" value="1" <?php if (($action == 'edit' && $canHaveCourses) || ($action == 'add' && !$formSent || $canHaveCourses)) echo 'checked="checked"'; ?> /><?php echo get_lang("Yes"); ?>
+    
                         </td>
                     </tr>
-                    <tr>
-                        <td>&nbsp;</td>
+    
             <?php
-            if (isset($_GET['id']) && !empty($_GET['id'])) {
-                $class = "save";
-                $text = get_lang('CategoryMod');
-            } else {
-                $class = "add";
-                $text = get_lang('AddCategory');
-            }
-            ?>
-                        <td><button type="submit" class="<?php echo $class; ?>" value="<?php echo $text; ?>" ><?php echo $text; ?></button></td>
-                    </tr>
-                </table>
-            </form>
+        }
+        ?>
+    
+                <tr>
+                    <td nowrap="nowrap"><?php echo get_lang("CategoryCode"); ?> :</td>
+                    <td><input type="text" name="categoryCode" size="20" maxlength="20" value="<?php echo api_htmlentities(stripslashes($categoryCode), ENT_QUOTES, $charset); ?>" /></td>
+                </tr>
+                <tr>
+                    <td nowrap="nowrap"><?php echo get_lang("CategoryName"); ?> :</td>
+                    <td><input type="text" name="categoryName" size="20" maxlength="100" value="<?php echo api_htmlentities(stripslashes($categoryName), ENT_QUOTES, $charset); ?>" /></td>
+                </tr>
+                <tr>
+                    <td nowrap="nowrap"><?php echo get_lang("AllowCoursesInCategory"); ?></td>
+                    <td>
+                        <input class="checkbox" type="radio" name="canHaveCourses" value="0" <?php if (($action == 'edit' && !$canHaveCourses) || ($action == 'add' && $formSent && !$canHaveCourses)) echo 'checked="checked"'; ?> /><?php echo get_lang("No"); ?>
+                        <input class="checkbox" type="radio" name="canHaveCourses" value="1" <?php if (($action == 'edit' && $canHaveCourses) || ($action == 'add' && !$formSent || $canHaveCourses)) echo 'checked="checked"'; ?> /><?php echo get_lang("Yes"); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+        <?php
+        if (isset($_GET['id']) && !empty($_GET['id'])) {
+            $class = "save";
+            $text = get_lang('CategoryMod');
+        } else {
+            $class = "add";
+            $text = get_lang('AddCategory');
+        }
+        ?>
+                    <td><button type="submit" class="<?php echo $class; ?>" value="<?php echo $text; ?>" ><?php echo $text; ?></button></td>
+                </tr>
+            </table>
+        </form>
 
-<?php  } elseif (api_get_multiple_access_url() && api_get_current_access_url_id() == 1) {
+<?php  } elseif (api_get_multiple_access_url() && api_get_current_access_url_id() != 1) {
            Display :: display_error_message(get_lang('CourseCategoriesAreGlobal'));
        }
     

@@ -522,7 +522,21 @@ class Exercise
                     FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
                         ON (e.question_id = q.iid AND e.c_id = ".$this->course_id." )
 					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'
-					ORDER BY question_order";
+					";
+
+            $orderCondition = "ORDER BY question_order";
+
+            if (!empty($sidx) && !empty($sord)) {
+                if ($sidx == 'question') {
+
+                    if (in_array(strtolower($sord), array('desc', 'asc'))) {
+                        $orderCondition = " ORDER BY q.$sidx $sord";
+                    }
+                }
+            }
+
+            $sql .= $orderCondition;
+
 
             $limitCondition = null;
 

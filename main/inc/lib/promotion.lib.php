@@ -53,7 +53,7 @@ class Promotion extends Model {
 					case 'updated_at':
 						break;
 					case 'name':
-						$val .= ' '.get_lang('Copy');
+						$val .= ' '.get_lang('CopyLabelSuffix');
 						$new[$key] = $val;
 						break;
 					case 'created_at':
@@ -143,7 +143,7 @@ class Promotion extends Model {
         }
     }
     
-        
+   
     /**
      * Returns a Form validator Obj
      * @todo the form should be auto generated

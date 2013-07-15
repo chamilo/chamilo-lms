@@ -17,7 +17,7 @@ $current_access_url_id = api_get_current_access_url_id();
 // Blocks the possibility to delete a user
 $delete_user_available = true;
 if (isset($_configuration['deny_delete_users']) &&  $_configuration['deny_delete_users']) {
-	$delete_user_available = false;
+    $delete_user_available = false;
 }
 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=get_user_courses';
 
@@ -268,7 +268,9 @@ function get_number_of_users() {
  * @param   string  Order (ASC,DESC)
  * @see SortableTable#get_table_data($from)
  */
-function get_user_data($from, $number_of_items, $column, $direction, $get_count = false) {
+function get_user_data($from, $number_of_items, $column, $direction, $get_count = false)
+{
+    $roles = api_get_user_roles();
 
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
@@ -416,7 +418,7 @@ function get_user_data($from, $number_of_items, $column, $direction, $get_count 
             }
         }
         // forget about the expiration date field
-        $users[] = array($user[0], $photo, $user[1],$user[2], $user[3], $user[4], $user[5], $user[6], $user[7], api_get_local_time($user[9]), $user[0]);
+        $users[] = array($user[0], $photo, $user[1],$user[2], $user[3], $user[4], $user[5], $roles[$user[6]], $user[7], api_get_local_time($user[9]), $user[0]);
 	}
 	return $users;
 }
@@ -509,8 +511,7 @@ function modify_filter($user_id, $url_params, $row) {
         }
     } // Else don't show anything, because the option is not available at all
 
-
-    $result .= Display::url('<i class="icon-key icon-large"></i>', 'roles');
+    //$result .= Display::url('<i class="icon-key icon-large"></i>', 'roles');
 
 	if ($current_user_status_label != $statusname[STUDENT]) {
 		$result .= Display::return_icon('statistics_na.gif', get_lang('Reporting')).'&nbsp;&nbsp;';
@@ -598,19 +599,6 @@ function active_filter($active, $url_params, $row) {
 	return $result;
 }
 
-/**
- * Instead of displaying the integer of the status, we give a translation for the status
- *
- * @param integer $status
- * @return string translation
- *
- * @version march 2008
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
- */
-function status_filter($status) {
-	$statusname = api_get_status_langvars();
-	return $statusname[$status];
-}
 
 $action = isset($_REQUEST["action"]) ? $_REQUEST["action"] : null;
 
@@ -838,7 +826,7 @@ $table->set_header(10, get_lang('Action'), false, 'width="220px"');
 $table->set_column_filter(3, 'user_filter');
 $table->set_column_filter(4, 'user_filter');
 $table->set_column_filter(6, 'email_filter');
-$table->set_column_filter(7, 'status_filter');
+//$table->set_column_filter(7, 'status_filter');
 $table->set_column_filter(8, 'active_filter');
 $table->set_column_filter(10, 'modify_filter');
 

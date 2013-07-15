@@ -32,7 +32,6 @@ class UserRepository extends EntityRepository implements UserProviderInterface
 
         try {
             $user = $q->getSingleResult();
-            // api_format_user_from_obj($user);
         } catch (NoResultException $e) {
             throw new UsernameNotFoundException(
                 sprintf('Unable to find an active admin User identified by "%s".', $username),

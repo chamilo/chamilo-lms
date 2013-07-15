@@ -606,6 +606,21 @@ class Exercise
         return $count;
     }
 
+    public function getQuestionOrderedListByName()
+    {
+        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+
+          // Getting question list from the order (question list drag n drop interface ).
+        $sql = "SELECT e.question_id
+                FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS q
+                    ON (e.question_id= q.iid)
+                WHERE e.c_id = {$this->course_id} AND e.exercice_id	= '".Database::escape_string($this->id)."'
+                ORDER BY q.question";
+        $result = Database::query($sql);
+        return $result->fetchAll();
+    }
+
     /**
      * Gets the question list ordered by the question_order setting (drag and drop)
      * @return array

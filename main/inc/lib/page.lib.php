@@ -73,12 +73,15 @@ class PageController
         $show_create_link = false;
         $show_course_link = false;
 
-        if ((api_get_setting('allow_users_to_create_courses') == 'false' && !api_is_platform_admin()) || api_is_student(
-        )
-        ) {
+        $display_add_course_link = false;
+
+        if (api_get_setting('allow_users_to_create_courses') == 'false') {
             $display_add_course_link = false;
         } else {
-            $display_add_course_link = true;
+
+            if (api_is_teacher()) {
+                $display_add_course_link = true;
+            }
         }
 
         if ($display_add_course_link) {
@@ -92,6 +95,7 @@ class PageController
                 $show_course_link = true;
             }
         }
+
 
         // My account section
         $my_account_content = array();
@@ -114,6 +118,7 @@ class PageController
 
         //Course management
         if ($show_course_link) {
+
             if (!api_is_drh()) {
                 $my_account_content[] = array(
                     'href'  => api_get_path(WEB_CODE_PATH).'auth/courses.php',

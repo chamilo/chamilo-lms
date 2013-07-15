@@ -37,6 +37,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
     {
         $response = null;
         //$session = $request->getSession();
+
         /* Possible values: index.php, user_portal.php, main/auth/courses.php */
         $pageAfterLogin = api_get_setting('page_after_login');
 
@@ -57,6 +58,8 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                     break;
             }
         }
+
+        // Redirecting to a course or a session
 
         if (api_get_setting('go_to_course_after_login') == 'true') {
 
@@ -84,12 +87,8 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                 $id_session = isset($course_info['id_session']) ? $course_info['id_session'] : 0;
 
                 $url = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$id_session;
-                /*header('location:'.$url);
-                exit;*/
             }
 
-            //var_dump($count_of_sessions,$count_of_courses_no_sessions );exit;
-            //if (!isset($_SESSION['coursesAlreadyVisited']) && $count_of_sessions == 0 && $count_of_courses_no_sessions == 1) {
             if ($count_of_sessions == 0 && $count_of_courses_no_sessions == 1) {
                 $key = array_keys($personal_course_list);
 
@@ -98,13 +97,8 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                 $id_session = isset($course_info['id_session']) ? $course_info['id_session'] : 0;
 
                 $url = api_get_path(WEB_COURSE_PATH).$course_directory.'/index.php?id_session='.$id_session;
-                /*header('location:'.$url);
-                exit;*/
             }
         }
-
-
-
 
         if (!empty($url)) {
             $response = new RedirectResponse($url);

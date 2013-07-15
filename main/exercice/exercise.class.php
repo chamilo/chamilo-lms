@@ -5670,7 +5670,17 @@ class Exercise
         return $html;
     }
 
-
+    function getFirstParent($catId)
+    {
+        global $app;
+        $em = $app['orm.em'];
+        /** @var Gedmo\Tree\Entity\Repository\NestedTreeRepository $repo */
+        $repo = $em->getRepository('Entity\CQuizCategory');
+        /** @var \Entity\CQuizCategory $category */
+        $category = $em->find('Entity\CQuizCategory', $catId);
+        $path = $repo->getPath($category);
+        return $path;
+    }
     /**
      *  Shows a list of numbers that represents the question to answer in a exercise
      *
@@ -5689,6 +5699,18 @@ class Exercise
         $before = 0;
 
         if (!empty($categories)) {
+            $newCategoryList = array();
+
+            /*var_dump($categories);
+            foreach ($categories as $category) {
+                var_dump($this->getFirstParent($category['id']));
+                $newCategoryList = $category;
+                foreach ($categories as $category) {
+                    foreach ($categories as $category) {
+
+                    }
+                }
+            }*/
 
             foreach ($categories as $category) {
                 $questionList = $category['question_list'];

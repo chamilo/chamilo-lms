@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="robots" content="index, follow, all" />
+        <title>Alchemy\Zippy\Parser\GNUTarOutputParser | Zippy API</title>
+                    <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
+                            </head>
+        <body id="class">
+            <div class="header">
+        <ul>
+            <li><a href="../../../classes.html">Classes</a></li>
+                            <li><a href="../../../namespaces.html">Namespaces</a></li>
+                        <li><a href="../../../interfaces.html">Interfaces</a></li>
+            <li><a href="../../../doc-index.html">Index</a></li>
+            
+        </ul>
+
+        <div id="title">Zippy API</div>
+
+            <div class="type">Class</div>
+    <h1><a href="../../../Alchemy/Zippy/Parser.html">Alchemy\Zippy\Parser</a>\GNUTarOutputParser</h1>
+    </div>
+        <div class="content">
+                <p>class    <strong>GNUTarOutputParser</strong>        implements
+        <a href="../../../Alchemy/Zippy/Parser/ParserInterface.html"><abbr title="Alchemy\Zippy\Parser\ParserInterface">ParserInterface</abbr></a></p>
+
+            <div class="description">
+            <p>This class is responsable of parsing GNUTar command line output</p>
+            <p></p>
+        </div>
+    
+            <h2>Constants</h2>
+
+            <table>
+                    <tr>
+                <td>PERMISSIONS</td>
+                <td class="last">
+                    <p><em></em></p>
+                    <p></p>
+                </td>
+            </tr>
+                    <tr>
+                <td>OWNER</td>
+                <td class="last">
+                    <p><em></em></p>
+                    <p></p>
+                </td>
+            </tr>
+                    <tr>
+                <td>GROUP</td>
+                <td class="last">
+                    <p><em></em></p>
+                    <p></p>
+                </td>
+            </tr>
+                    <tr>
+                <td>FILESIZE</td>
+                <td class="last">
+                    <p><em></em></p>
+                    <p></p>
+                </td>
+            </tr>
+                    <tr>
+                <td>ISO_DATE</td>
+                <td class="last">
+                    <p><em></em></p>
+                    <p></p>
+                </td>
+            </tr>
+                    <tr>
+                <td>FILENAME</td>
+                <td class="last">
+                    <p><em></em></p>
+                    <p></p>
+                </td>
+            </tr>
+            </table>
+
+    
+    
+            <h2>Methods</h2>
+
+            <table>
+                    <tr>
+                <td class="type">
+                    Array
+                </td>
+                <td class="last">
+                    <a href="#method_parseFileListing">parseFileListing</a>(String $output)
+                    <p>Parses a file listing</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    String
+                </td>
+                <td class="last">
+                    <a href="#method_parseInflatorVersion">parseInflatorVersion</a>(String $output)
+                    <p>Parses the inflator binary version</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_parseDeflatorVersion">parseDeflatorVersion</a>($output)
+                    <p></p>
+                </td>
+                <td></td>
+            </tr>
+            </table>
+
+
+        <h2>Details</h2>
+
+                        <h3 id="method_parseFileListing">
+        <div class="location">at line 30</div>
+        <code>            public            Array
+    <strong>parseFileListing</strong>(String $output)</code>
+    </h3>
+    <div class="details">
+        <p>Parses a file listing</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>String</td>
+                <td>$output</td>
+                <td>The string to parse</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>Array</td>
+            <td>An array of Member properties (location, mtime, size &amp; is_dir)</td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/RuntimeException"><abbr title="RuntimeException">RuntimeException</abbr></a></td>
+                <td>In case the parsing process failed</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+                <h3 id="method_parseInflatorVersion">
+        <div class="location">at line 78</div>
+        <code>            public            String
+    <strong>parseInflatorVersion</strong>(String $output)</code>
+    </h3>
+    <div class="details">
+        <p>Parses the inflator binary version</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>String</td>
+                <td>$output</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>String</td>
+            <td>The version</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_parseDeflatorVersion">
+        <div class="location">at line 94</div>
+        <code>            public            
+    <strong>parseDeflatorVersion</strong>($output)</code>
+    </h3>
+    <div class="details">
+        <p></p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td></td>
+                <td>$output</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+    
+            </div>
+            <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/" target="_top">Sami, the API Documentation Generator</a>.
+    </div>
+    </body>
+</html>

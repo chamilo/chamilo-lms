@@ -72,10 +72,10 @@ class FullBackupCommand extends CommonChamiloDatabaseCommand
 
         if ($deleteTemp) {
             //Calling command
-            $command = $this->getApplication()->find('files:clean_archives');
+            $command = $this->getApplication()->find('files:clean_temp_folder');
 
             $arguments = array(
-                'command' => 'files:clean_archives'
+                'command' => 'files:clean_temp_folder'
             );
             $input     = new ArrayInput($arguments);
             $command->run($input, $output);

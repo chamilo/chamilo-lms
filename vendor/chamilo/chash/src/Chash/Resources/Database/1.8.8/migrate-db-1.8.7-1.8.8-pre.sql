@@ -201,31 +201,31 @@ ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_parent (parent_event_i
 ALTER TABLE user_course_category ADD INDEX idx_user_c_cat_uid (user_id);
 
 -- xxCOURSExx
-ALTER TABLE course_setting CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-ALTER TABLE forum_forum ADD start_time DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
-ALTER TABLE forum_forum ADD end_time DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
-ALTER TABLE wiki_mailcue ADD session_id smallint DEFAULT 0;
+ALTER TABLE {prefix}course_setting CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
+ALTER TABLE {prefix}forum_forum ADD start_time DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE {prefix}forum_forum ADD end_time DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE {prefix}wiki_mailcue ADD session_id smallint DEFAULT 0;
 
-ALTER TABLE lp ADD COLUMN use_max_score INT DEFAULT 1;
-ALTER TABLE lp_item MODIFY COLUMN max_score FLOAT UNSIGNED DEFAULT 100;
-ALTER TABLE tool MODIFY COLUMN category varchar(20) not null default 'authoring';
+ALTER TABLE {prefix}lp ADD COLUMN use_max_score INT DEFAULT 1;
+ALTER TABLE {prefix}lp_item MODIFY COLUMN max_score FLOAT UNSIGNED DEFAULT 100;
+ALTER TABLE {prefix}tool MODIFY COLUMN category varchar(20) not null default 'authoring';
 
-ALTER TABLE lp ADD COLUMN autolunch INT DEFAULT 0;
-ALTER TABLE lp ADD COLUMN created_on 	DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
-ALTER TABLE lp ADD COLUMN modified_on 	DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
-ALTER TABLE lp ADD COLUMN expired_on 	DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
-ALTER TABLE lp ADD COLUMN publicated_on DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE {prefix}lp ADD COLUMN autolunch INT DEFAULT 0;
+ALTER TABLE {prefix}lp ADD COLUMN created_on 	DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE {prefix}lp ADD COLUMN modified_on 	DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE {prefix}lp ADD COLUMN expired_on 	DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE {prefix}lp ADD COLUMN publicated_on DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
 
-CREATE TABLE quiz_question_option (id int NOT NULL, name varchar(255), position int unsigned NOT NULL, PRIMARY KEY (id));
-ALTER TABLE quiz_question ADD COLUMN extra varchar(255) DEFAULT NULL;
-ALTER TABLE quiz_question CHANGE question question TEXT NOT NULL;
+CREATE TABLE {prefix}quiz_question_option (id int NOT NULL, name varchar(255), position int unsigned NOT NULL, PRIMARY KEY (id));
+ALTER TABLE {prefix}quiz_question ADD COLUMN extra varchar(255) DEFAULT NULL;
+ALTER TABLE {prefix}quiz_question CHANGE question question TEXT NOT NULL;
 
-INSERT INTO course_setting(variable,value,category) VALUES ('enable_lp_auto_launch',0,'learning_path');
-INSERT INTO course_setting(variable,value,category) VALUES ('pdf_export_watermark_text','','course');
+INSERT INTO {prefix}course_setting(variable,value,category) VALUES ('enable_lp_auto_launch',0,'learning_path');
+INSERT INTO {prefix}course_setting(variable,value,category) VALUES ('pdf_export_watermark_text','','course');
 
-ALTER TABLE quiz ADD COLUMN propagate_neg INT NOT NULL DEFAULT 0;
-ALTER TABLE quiz_answer MODIFY COLUMN hotspot_type ENUM('square','circle','poly','delineation','oar');
+ALTER TABLE {prefix}quiz ADD COLUMN propagate_neg INT NOT NULL DEFAULT 0;
+ALTER TABLE {prefix}quiz_answer MODIFY COLUMN hotspot_type ENUM('square','circle','poly','delineation','oar');
 
-ALTER TABLE attendance ADD COLUMN locked int NOT NULL default 0;
-CREATE TABLE attendance_sheet_log (id INT  NOT NULL AUTO_INCREMENT, attendance_id INT  NOT NULL DEFAULT 0, lastedit_date DATETIME  NOT NULL DEFAULT '0000-00-00 00:00:00', lastedit_type VARCHAR(200)  NOT NULL, lastedit_user_id INT  NOT NULL DEFAULT 0, calendar_date_value DATETIME NULL, PRIMARY KEY (id));
+ALTER TABLE {prefix}attendance ADD COLUMN locked int NOT NULL default 0;
+CREATE TABLE {prefix}attendance_sheet_log (id INT  NOT NULL AUTO_INCREMENT, attendance_id INT  NOT NULL DEFAULT 0, lastedit_date DATETIME  NOT NULL DEFAULT '0000-00-00 00:00:00', lastedit_type VARCHAR(200)  NOT NULL, lastedit_user_id INT  NOT NULL DEFAULT 0, calendar_date_value DATETIME NULL, PRIMARY KEY (id));
 

@@ -4435,6 +4435,10 @@ class CssAtKeyframesStartToken extends aCssAtBlockStartToken
 	 */
 	public function __toString()
 	{
+		if ($this->AtRuleName === "-moz-keyframes")
+		{
+			return "@-moz-keyframes " . $this->Name . " {";
+		}
 		return "@" . $this->AtRuleName . " \"" . $this->Name . "\"{";
 	}
 }

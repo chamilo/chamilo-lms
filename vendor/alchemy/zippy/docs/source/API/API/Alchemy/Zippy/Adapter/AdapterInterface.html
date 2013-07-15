@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="robots" content="index, follow, all" />
+        <title>Alchemy\Zippy\Adapter\AdapterInterface | Zippy API</title>
+                    <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
+                            </head>
+        <body id="class">
+            <div class="header">
+        <ul>
+            <li><a href="../../../classes.html">Classes</a></li>
+                            <li><a href="../../../namespaces.html">Namespaces</a></li>
+                        <li><a href="../../../interfaces.html">Interfaces</a></li>
+            <li><a href="../../../doc-index.html">Index</a></li>
+            
+        </ul>
+
+        <div id="title">Zippy API</div>
+
+            <div class="type">Interface</div>
+    <h1><a href="../../../Alchemy/Zippy/Adapter.html">Alchemy\Zippy\Adapter</a>\AdapterInterface</h1>
+    </div>
+        <div class="content">
+                <p>interface    <strong>AdapterInterface</strong></p>
+
+    
+    
+    
+            <h2>Methods</h2>
+
+            <table>
+                    <tr>
+                <td class="type">
+                    <a href="../../../Alchemy/Zippy/Archive/ArchiveInterface.html"><abbr title="Alchemy\Zippy\Archive\ArchiveInterface">ArchiveInterface</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_open">open</a>(String $path)
+                    <p>Opens an archive</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <a href="../../../Alchemy/Zippy/Archive/ArchiveInterface.html"><abbr title="Alchemy\Zippy\Archive\ArchiveInterface">ArchiveInterface</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_create">create</a>(String $path, String|Array|<a href="http://php.net/Traversable"><abbr title="Traversable">Traversable</abbr></a>|null $files = null, Boolean $recursive = true)
+                    <p>Creates a new archive</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    Boolean
+                </td>
+                <td class="last">
+                    <a href="#method_isSupported">isSupported</a>()
+                    <p>Tests if the adapter is supported by the current environment</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    Array
+                </td>
+                <td class="last">
+                    <a href="#method_listMembers">listMembers</a>(String $path)
+                    <p>Returns the list of all archive members</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    Array
+                </td>
+                <td class="last">
+                    <a href="#method_add">add</a>($path, $files, $recursive = true)
+                    <p>Adds a file to the archive</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    static&nbsp;String
+                </td>
+                <td class="last">
+                    <a href="#method_getName">getName</a>()
+                    <p>Returns the adapter name</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    Array
+                </td>
+                <td class="last">
+                    <a href="#method_remove">remove</a>(String $path, String|Array|<a href="http://php.net/Traversable"><abbr title="Traversable">Traversable</abbr></a> $files)
+                    <p>Removes a member of the archive</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <a href="http://php.net/SplFileInfo"><abbr title="SplFileInfo">SplFileInfo</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_extract">extract</a>(String $path, String|null $to = null)
+                    <p>Extracts an entire archive</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <a href="http://php.net/SplFileInfo"><abbr title="SplFileInfo">SplFileInfo</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_extractMembers">extractMembers</a>(String $path, Array $members, String|null $to = null)
+                    <p>Extracts specific members of the archive</p>
+                </td>
+                <td></td>
+            </tr>
+            </table>
+
+
+        <h2>Details</h2>
+
+                        <h3 id="method_open">
+        <div class="location">at line 30</div>
+        <code>            public            <a href="../../../Alchemy/Zippy/Archive/ArchiveInterface.html"><abbr title="Alchemy\Zippy\Archive\ArchiveInterface">ArchiveInterface</abbr></a>
+    <strong>open</strong>(String $path)</code>
+    </h3>
+    <div class="details">
+        <p>Opens an archive</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>String</td>
+                <td>$path</td>
+                <td>The path to the archive</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="../../../Alchemy/Zippy/Archive/ArchiveInterface.html"><abbr title="Alchemy\Zippy\Archive\ArchiveInterface">ArchiveInterface</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/InvalidArgumentException"><abbr title="InvalidArgumentException">InvalidArgumentException</abbr></a></td>
+                <td>In case the provided path is not valid</td>
+            </tr>
+                    <tr>
+                <td><a href="http://php.net/RuntimeException"><abbr title="RuntimeException">RuntimeException</abbr></a></td>
+                <td>In case of failure</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+                <h3 id="method_create">
+        <div class="location">at line 48</div>
+        <code>            public            <a href="../../../Alchemy/Zippy/Archive/ArchiveInterface.html"><abbr title="Alchemy\Zippy\Archive\ArchiveInterface">ArchiveInterface</abbr></a>
+    <strong>create</strong>(String $path, String|Array|<a href="http://php.net/Traversable"><abbr title="Traversable">Traversable</abbr></a>|null $files = null, Boolean $recursive = true)</code>
+    </h3>
+    <div class="details">
+        <p>Creates a new archive</p>
+        <p>Please note some adapters can not create empty archives.<br />
+ They would throw a `NotSupportedException` in case you ask to create an archive without files</p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>String</td>
+                <td>$path</td>
+                <td>The path to the archive</td>
+            </tr>
+                    <tr>
+                <td>String|Array|<a href="http://php.net/Traversable"><abbr title="Traversable">Traversable</abbr></a>|null</td>
+                <td>$files</td>
+                <td>A filename, an array of files, or a \Traversable instance</td>
+            </tr>
+                    <tr>
+                <td>Boolean</td>
+                <td>$recursive</td>
+                <td>Whether to recurse or not in the provided directories</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="../../../Alchemy/Zippy/Archive/ArchiveInterface.html"><abbr title="Alchemy\Zippy\Archive\ArchiveInterface">ArchiveInterface</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/RuntimeException"><abbr title="RuntimeException">RuntimeException</abbr></a></td>
+                <td>In case of failure</td>
+            </tr>
+                    <tr>
+                <td><abbr title="NotSupportedException">NotSupportedException</abbr></td>
+                <td>In case the operation in not supported</td>
+            </tr>
+                    <tr>
+                <td><a href="http://php.net/InvalidArgumentException"><abbr title="InvalidArgumentException">InvalidArgumentException</abbr></a></td>
+                <td>In case no files could be added</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+                <h3 id="method_isSupported">
+        <div class="location">at line 55</div>
+        <code>            public            Boolean
+    <strong>isSupported</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Tests if the adapter is supported by the current environment</p>
+        <p></p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>Boolean</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_listMembers">
+        <div class="location">at line 66</div>
+        <code>            public            Array
+    <strong>listMembers</strong>(String $path)</code>
+    </h3>
+    <div class="details">
+        <p>Returns the list of all archive members</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>String</td>
+                <td>$path</td>
+                <td>The path to the archive</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>Array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/RuntimeException"><abbr title="RuntimeException">RuntimeException</abbr></a></td>
+                <td>In case of failure</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+                <h3 id="method_add">
+        <div class="location">at line 80</div>
+        <code>            public            Array
+    <strong>add</strong>($path, $files, $recursive = true)</code>
+    </h3>
+    <div class="details">
+        <p>Adds a file to the archive</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td></td>
+                <td>$path</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td></td>
+                <td>$files</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td></td>
+                <td>$recursive</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>Array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/RuntimeException"><abbr title="RuntimeException">RuntimeException</abbr></a></td>
+                <td>In case of failure</td>
+            </tr>
+                    <tr>
+                <td><a href="http://php.net/InvalidArgumentException"><abbr title="InvalidArgumentException">InvalidArgumentException</abbr></a></td>
+                <td>In case no files could be added</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+                <h3 id="method_getName">
+        <div class="location">at line 87</div>
+        <code>        static    public            String
+    <strong>getName</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Returns the adapter name</p>
+        <p></p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>String</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_remove">
+        <div class="location">at line 100</div>
+        <code>            public            Array
+    <strong>remove</strong>(String $path, String|Array|<a href="http://php.net/Traversable"><abbr title="Traversable">Traversable</abbr></a> $files)</code>
+    </h3>
+    <div class="details">
+        <p>Removes a member of the archive</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>String</td>
+                <td>$path</td>
+                <td>The path to the archive</td>
+            </tr>
+                    <tr>
+                <td>String|Array|<a href="http://php.net/Traversable"><abbr title="Traversable">Traversable</abbr></a></td>
+                <td>$files</td>
+                <td>A filename, an array of files, or a \Traversable instance</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>Array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/RuntimeException"><abbr title="RuntimeException">RuntimeException</abbr></a></td>
+                <td>In case of failure</td>
+            </tr>
+                    <tr>
+                <td><a href="http://php.net/InvalidArgumentException"><abbr title="InvalidArgumentException">InvalidArgumentException</abbr></a></td>
+                <td>In case no files could be removed</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+                <h3 id="method_extract">
+        <div class="location">at line 113</div>
+        <code>            public            <a href="http://php.net/SplFileInfo"><abbr title="SplFileInfo">SplFileInfo</abbr></a>
+    <strong>extract</strong>(String $path, String|null $to = null)</code>
+    </h3>
+    <div class="details">
+        <p>Extracts an entire archive</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>String</td>
+                <td>$path</td>
+                <td>The path to the archive</td>
+            </tr>
+                    <tr>
+                <td>String|null</td>
+                <td>$to</td>
+                <td>The path where to extract the archive</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="http://php.net/SplFileInfo"><abbr title="SplFileInfo">SplFileInfo</abbr></a></td>
+            <td>The extracted archive</td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/RuntimeException"><abbr title="RuntimeException">RuntimeException</abbr></a></td>
+                <td>In case of failure</td>
+            </tr>
+                    <tr>
+                <td><a href="http://php.net/InvalidArgumentException"><abbr title="InvalidArgumentException">InvalidArgumentException</abbr></a></td>
+                <td>In case the provided path where to extract the archive is not valid</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+                <h3 id="method_extractMembers">
+        <div class="location">at line 127</div>
+        <code>            public            <a href="http://php.net/SplFileInfo"><abbr title="SplFileInfo">SplFileInfo</abbr></a>
+    <strong>extractMembers</strong>(String $path, Array $members, String|null $to = null)</code>
+    </h3>
+    <div class="details">
+        <p>Extracts specific members of the archive</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>String</td>
+                <td>$path</td>
+                <td>The path to the archive</td>
+            </tr>
+                    <tr>
+                <td>Array</td>
+                <td>$members</td>
+                <td>An array of members</td>
+            </tr>
+                    <tr>
+                <td>String|null</td>
+                <td>$to</td>
+                <td>The path where to extract the members</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="http://php.net/SplFileInfo"><abbr title="SplFileInfo">SplFileInfo</abbr></a></td>
+            <td>The extracted archive</td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/RuntimeException"><abbr title="RuntimeException">RuntimeException</abbr></a></td>
+                <td>In case of failure</td>
+            </tr>
+                    <tr>
+                <td><a href="http://php.net/InvalidArgumentException"><abbr title="InvalidArgumentException">InvalidArgumentException</abbr></a></td>
+                <td>In case no members could be removed or provide extract target direcotry is not valid</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+    
+            </div>
+            <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/" target="_top">Sami, the API Documentation Generator</a>.
+    </div>
+    </body>
+</html>

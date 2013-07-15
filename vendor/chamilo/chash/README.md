@@ -24,17 +24,26 @@ which puts you directly into a MySQL client session.
 Building the chash.phar file
 ====================
 
-In order to generate the executable chash.phar file. You have to set first this php setting (in your cli php configuration file)
+In order to generate the executable chash.phar file. You have to set first this php setting (in your cli php configuration file).
 
     phar.readonly = Off
+
+You need to download the third parties libraries via composer:
+
+    composer update --no-dev --prefer-dist
 
 Then you can call the php createPhar.php file. A new chash.phar file will be created.
 
 Remember to add execution permissions to the phar file.
 
- Example:
+You need to have curl (in order to download packages)
+
+    apt-get install php5-curl
+
+Example:
 
     cd chash
+    composer update --no-dev
     php -d phar.readonly=0 createPhar.php
     chmod +x chash.phar
     sudo ln -s /path/to/chash.phar /usr/local/bin/chash
@@ -42,10 +51,10 @@ Remember to add execution permissions to the phar file.
 
     cd /var/www/chamilo
     chash
-    
+
 If you're using php 5.3 with suhosin the phar will not be executed you can try this:
 
-    php -d suhosin.executor.include.whitelist="phar" chash.phar 
+    php -d suhosin.executor.include.whitelist="phar" chash.phar
 
 or you can change this setting in your /etc/php5/cli/conf.d/suhosin.ini file (look for "executor"), although this might increase the vulnerability of your system.
 

@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.0.1 (2013-07-04)
+------------------
+
+* Fixed RedirectableUrlMatcher::redirect() when Silex is configured to use a logger
+* Make ``DoctrineServiceProvider`` multi-db support lazy.
+
 1.0.0 (2013-05-03)
 ------------------
 

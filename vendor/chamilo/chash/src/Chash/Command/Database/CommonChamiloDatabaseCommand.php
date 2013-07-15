@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Chash\Command\Installation\CommonCommand;
 
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
@@ -14,7 +15,7 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
  * Class CommonChamiloDatabaseCommand
  * @package Chash\Command\Database
  */
-class CommonChamiloDatabaseCommand extends Command
+class CommonChamiloDatabaseCommand extends CommonCommand
 {
     /**
      *
@@ -25,8 +26,14 @@ class CommonChamiloDatabaseCommand extends Command
             ->addOption(
                 'conf',
                 null,
+                InputOption::VALUE_OPTIONAL,
+                'The configuration.php file path. Example /var/www/chamilo/config/configuration.php'
+            )
+            ->addOption(
+                'dry-run',
+                null,
                 InputOption::VALUE_NONE,
-                'Set a configuration file'
+                'For tests'
             );
     }
 
@@ -37,7 +44,19 @@ class CommonChamiloDatabaseCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $configuration = $input->getOption('conf');
-        $this->getHelper('configuration')->readConfigurationFile($configuration);
+        $configurationFile = $input->getOption('conf');
+        $this->getConfigurationHelper()->setDryRun($input->getOption('dry-run'));
+        $configuration = $this->getConfigurationHelper()->readConfigurationFile($configurationFile);
+
+        if (empty($configuration)) {
+            $output->writeln('<error>The configuration file was not found.</error>');
+            $output->writeln('<comment>Try</comment> <info>prefix:command --conf=/var/www/chamilo/config/configuration.php</info>');
+            exit;
+        }
+
+        $this->setConfigurationArray($configuration);
+        $this->getConfigurationHelper()->setConfiguration($configuration);
+        $sysPath = $this->getConfigurationHelper()->getSysPathFromConfigurationFile($configurationFile);
+        $this->getConfigurationHelper()->setSysPath($sysPath);
     }
 }

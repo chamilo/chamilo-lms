@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-$update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
+$update = function($_configuration, \Doctrine\DBAL\Connection $mainConnection, $dryRun, $output, $app) {
 
     $mainConnection->beginTransaction();
 
@@ -14,8 +14,10 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
 
     //Fixes new changes in sessions
     $sql = "SELECT id, date_start, date_end, nb_days_access_before_beginning, nb_days_access_after_end FROM $session_table ";
-    $result = iDatabase::query($sql);
-    while ($session = Database::fetch_array($result)) {
+    $result = $mainConnection->executeQuery($sql);
+    $sessions = $result->fetchAll();
+
+    foreach ($sessions as $session) {
         $session_id = $session['id'];
 
         //Fixing date_start
@@ -51,8 +53,9 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
 
     //Fixes new changes session_rel_course
     $sql = "SELECT id_session, sc.course_code, c.id FROM $course_table c INNER JOIN $session_rel_course_table sc ON sc.course_code = c.code";
-    $result = iDatabase::query($sql);
-    while ($row = Database::fetch_array($result)) {
+    $result = $mainConnection->executeQuery($sql);
+    $rows = $result->fetchAll();
+    foreach ($rows as $row) {
         $sql = "UPDATE $session_rel_course_table SET c_id = {$row['id']}
                 WHERE course_code = '{$row['course_code']}' AND id_session = {$row['id_session']} ";
         $mainConnection->executeQuery($sql);
@@ -60,8 +63,9 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
 
     //Fixes new changes in session_rel_course_rel_user
     $sql = "SELECT id_session, sc.course_code, c.id FROM $course_table c INNER JOIN $session_rel_course_rel_user_table sc ON sc.course_code = c.code";
-    $result = iDatabase::query($sql);
-    while ($row = Database::fetch_array($result)) {
+    $result = $mainConnection->executeQuery($sql);
+    $rows = $result->fetchAll();
+    foreach ($rows as $row) {
         $sql = "UPDATE $session_rel_course_rel_user_table SET c_id = {$row['id']}
                 WHERE course_code = '{$row['course_code']}' AND id_session = {$row['id_session']} ";
         $mainConnection->executeQuery($sql);
@@ -69,8 +73,10 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
 
     //Updating c_quiz_order
     $teq = "$dbNameForm.c_quiz";
-    $seq = "SELECT c_id, session_id, id FROM $teq ORDER BY c_id, session_id, id";
-    $req = iDatabase::query($seq);
+    $sql = "SELECT c_id, session_id, id FROM $teq ORDER BY c_id, session_id, id";
+    $result = $mainConnection->executeQuery($sql);
+    $req = $result->fetchAll();
+
     $to = "$dbNameForm.c_quiz_order";
     $do = "DELETE FROM $to";
     $mainConnection->executeQuery($do);
@@ -78,7 +84,7 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
     $cid = 0;
     $temp_session_id = 0;
     $order = 1;
-    while ($row = Database::fetch_assoc($req)) {
+    foreach ($req as $row) {
         if ($row['c_id'] != $cid) {
             $cid = $row['c_id'];
             $temp_session_id = $row['session_id'];
@@ -96,38 +102,32 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
     //Fixing special course
     $output->writeln('Fixing special course');
     $sql = "SELECT id FROM $dbNameForm.course_field WHERE field_variable = 'special_course'";
-    $result = Database::query($sql);
-    $fieldData = Database::fetch_array($result, 'ASSOC');
+    $result = $mainConnection->executeQuery($sql);
+    $fieldData = $result->fetch();
     $id = $fieldData['id'];
 
     $sql = "INSERT INTO $dbNameForm.course_field_options (field_id, option_value, option_display_text, option_order)
             VALUES ('$id', '1', '".get_lang('Yes')."', '1')";
-    Database::query($sql);
+    $mainConnection->executeQuery($sql);
 
     $sql = "INSERT INTO $dbNameForm.course_field_options (field_id, option_value, option_display_text, option_order)
             VALUES ('$id', '0', '".get_lang('No')."', '2')";
-    Database::query($sql);
+    $mainConnection->executeQuery($sql);
 
     //Moving social group to class
-    $output->writeln('Fixing social groups');
+    $output->writeln('<comment>Fixing social groups.</comment>');
 
     $sql = "SELECT * FROM $dbNameForm.groups";
-    $result = Database::query($sql);
+    $result = $mainConnection->executeQuery($sql);
+    $groups = $result->fetchAll();
+
     $oldGroups = array();
-    if (Database::num_rows($result)) {
-        while ($group = Database::fetch_array($result, 'ASSOC')) {
 
-            $group['name'] = Database::escape_string($group['name']);
-            $group['description'] = Database::escape_string($group['description']);
-            $group['picture'] = Database::escape_string($group['picture_uri']);
-            $group['url'] = Database::escape_string($group['url']);
-            $group['visibility'] = Database::escape_string($group['visibility']);
-            $group['updated_on'] = Database::escape_string($group['updated_on']);
-            $group['created_on'] = Database::escape_string($group['created_on']);
-
+    if (!empty($groups )) {
+        foreach ($groups as $group) {
             $sql = "INSERT INTO $dbNameForm.usergroup (name, group_type, description, picture, url, visibility, updated_on, created_on)
                     VALUES ('{$group['name']}', '1', '{$group['description']}', '{$group['picture_uri']}', '{$group['url']}', '{$group['visibility']}', '{$group['updated_on']}', '{$group['created_on']}')";
-            //Database::query($sql);
+
             $mainConnection->executeQuery($sql);
             $id = $mainConnection->lastInsertId('id');
             $oldGroups[$group['id']] = $id;
@@ -136,21 +136,24 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
 
     if (!empty($oldGroups)) {
         $output->writeln('Moving group files');
+
         foreach ($oldGroups as $oldId => $newId) {
             $path = GroupPortalManager::get_group_picture_path_by_id($oldId, 'system');
             if (!empty($path)) {
-                var_dump($path['dir']);
+
                 $newPath = str_replace("groups/$oldId/", "groups/$newId/", $path['dir']);
                 $command = "mv {$path['dir']} $newPath ";
                 system($command);
                 $output->writeln("Moving files: $command");
             }
         }
-        $sql = "SELECT * FROM $dbNameForm.group_rel_user";
-        $result = Database::query($sql);
 
-        if (Database::num_rows($result)) {
-            while ($data = Database::fetch_array($result, 'ASSOC')) {
+        $sql = "SELECT * FROM $dbNameForm.group_rel_user";
+        $result = $mainConnection->executeQuery($sql);
+        $dataList = $result->fetchAll();
+
+        if (!empty($dataList)) {
+            foreach ($dataList as $data) {
                 if (isset($oldGroups[$data['group_id']])) {
                     $data['group_id'] = $oldGroups[$data['group_id']];
                     $sql = "INSERT INTO $dbNameForm.usergroup_rel_user (usergroup_id, user_id, relation_type)
@@ -161,10 +164,11 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
         }
 
         $sql = "SELECT * FROM $dbNameForm.group_rel_group";
-        $result = Database::query($sql);
+        $result = $mainConnection->executeQuery($sql);
+        $dataList = $result->fetchAll();
 
-        if (Database::num_rows($result)) {
-            while ($data = Database::fetch_array($result, 'ASSOC')) {
+        if (!empty($dataList)) {
+            foreach ($dataList as $data) {
                 if (isset($oldGroups[$data['group_id']]) && isset($oldGroups[$data['subgroup_id']])) {
                     $data['group_id'] = $oldGroups[$data['group_id']];
                     $data['subgroup_id'] = $oldGroups[$data['subgroup_id']];
@@ -176,10 +180,11 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
         }
 
         $sql = "SELECT * FROM $dbNameForm.announcement_rel_group";
-        $result = Database::query($sql);
+        $result = $mainConnection->executeQuery($sql);
+        $dataList = $result->fetchAll();
 
-        if (Database::num_rows($result)) {
-            while ($data = Database::fetch_array($result, 'ASSOC')) {
+        if (!empty($dataList)) {
+            foreach ($dataList as $data) {
                 if (isset($oldGroups[$data['group_id']])) {
                     //Deleting relation
                     $sql = "DELETE FROM announcement_rel_group WHERE id = {$data['id']}";
@@ -195,9 +200,10 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
         }
 
         $sql = "SELECT * FROM $dbNameForm.group_rel_tag";
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            while ($data = Database::fetch_array($result, 'ASSOC')) {
+        $result = $mainConnection->executeQuery($sql);
+        $dataList = $result->fetchAll();
+        if (!empty($dataList)) {
+            foreach ($dataList as $data) {
                 if (isset($oldGroups[$data['group_id']])) {
                     $data['group_id'] = $oldGroups[$data['group_id']];
                     $sql = "INSERT INTO $dbNameForm.usergroup_rel_tag (tag_id, usergroup_id)

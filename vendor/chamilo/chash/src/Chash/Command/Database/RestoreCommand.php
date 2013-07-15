@@ -44,7 +44,7 @@ class RestoreCommand extends CommonChamiloDatabaseCommand
         parent::execute($input, $output);
         $dumpPath = $input->getArgument('file');
         if (!is_dir($dumpPath) && file_exists($dumpPath)) {
-            $_configuration = $this->getHelper('configuration')->getConfiguration();
+            $_configuration = $this->getConfigurationArray();
 
             $output->writeln('<comment>Starting restoring database</comment>');
             $action = 'mysql -h '.$_configuration['db_host'].' -u '.$_configuration['db_user'].' -p'.$_configuration['db_password'].' '.$_configuration['main_database'].' < '.$dumpPath;

@@ -4,6 +4,7 @@ namespace Chash\Helpers;
 
 use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Class ConfigurationHelper
@@ -12,6 +13,8 @@ use Symfony\Component\Yaml\Parser;
 class ConfigurationHelper extends Helper
 {
     protected $configuration;
+    protected $sysPath;
+    protected $dryRun = false;
 
     /**
      *
@@ -19,6 +22,16 @@ class ConfigurationHelper extends Helper
     public function __construct()
     {
 
+    }
+
+    public function getDryRun()
+    {
+        return $this->dryRun;
+    }
+
+    public function setDryRun($dryRun)
+    {
+        $this->dryRun = $dryRun;
     }
 
     /**
@@ -40,13 +53,19 @@ class ConfigurationHelper extends Helper
             '1.9.8',
             '1.10.0'
         );
+
         return $versionList;
     }
 
     /**
-     * Get configuration file
-     * @param string $path
-     * @return bool|string
+     * Gets the configuration file path from the Chamilo installation
+     * <code>
+     * $configurationPath = $this->getConfigurationPath('/var/www/chamilo');
+     * // $configurationPath value is '/var/www/chamilo/config/'; or
+     * // $configurationPath value is '/var/www/chamilo/inc/conf/'; or
+     * </code>
+     * @param string $path the path of the Chamilo installation
+     * @return bool|string @example /var/www/chamilo/config/configuration.php
      */
     public function getConfigurationPath($path = null)
     {
@@ -55,22 +74,25 @@ class ConfigurationHelper extends Helper
         } else {
             $chamiloPath = $path;
         }
-
-        if (is_dir($chamiloPath.'/main/inc/conf/')) {
-            return $dir = realpath($chamiloPath.'/main/inc/conf/').'/';
+        if (is_dir($chamiloPath.'/main/inc/conf')) {
+            return realpath($chamiloPath.'/main/inc/conf/').'/';
         }
 
-        if (is_dir($chamiloPath.'/config/')) {
-            return $dir = realpath($chamiloPath.'/config/').'/';
+        if (is_dir($chamiloPath.'/config')) {
+            return realpath($chamiloPath.'/config/').'/';
         }
 
         return false;
     }
 
     /**
-     * Get configuration file
-     * @param string $path
-     * @return bool|string
+     * Get the new configuration file from the Chamilo installation
+     * <code>
+     * $newConfigurationPath = $this->getNewConfigurationPath('/var/www/chamilo');
+     * // $newConfigurationPath value is '/var/www/chamilo/config/configuration.php';
+     * </code>
+     * @param string $path the path of the Chamilo installation
+     * @return bool|string  @example /var/www/chamilo/config/configuration.php
      */
     public function getNewConfigurationPath($path = null)
     {
@@ -83,50 +105,135 @@ class ConfigurationHelper extends Helper
         if (is_dir($chamiloPath.'/config/')) {
             return $dir = realpath($chamiloPath.'/config/').'/';
         }
+
         return false;
     }
 
-
     /**
-     * Reads the Chamilo configuration file.
-     * Merges the configuration.php with the configuration.yml if it exists
-     * @param null $path
-     * @return array|bool|mixed
+     * Gets the configuration file path
+     * <code>
+     * $configurationPath = $this->getConfigurationFilePath('/var/www/chamilo')
+     * // $configurationPath value is '/var/www/chamilo/config/configuration.php'; or
+     * // $configurationPath value is '/var/www/chamilo/main/inc/conf/configuration.php';
+     * </code>
+     * @param string $path the path of the Chamilo installation
+     * @return bool|string returns
+     *
      */
-    public function readConfigurationFile($path = null)
+    public function getConfigurationFilePath($path = null)
     {
         $confPath = $this->getConfigurationPath($path);
 
         if (!empty($confPath)) {
-            $confFile = $confPath.'configuration.php';
 
-            $_configuration = array();
-
-            if (file_exists($confFile)) {
-                require $confFile;
+            if (file_exists($confPath.'configuration.php')) {
+                return $confPath.'configuration.php';
             }
 
-            $confYML = $confPath.'../../../app/config/configuration.yml';
-            if (file_exists($confYML)) {
-                $yaml = new Parser();
-                $_configurationYML = $yaml->parse(file_get_contents($confYML));
-                if (isset($_configurationYML) && !empty($_configurationYML)) {
-                    if (isset($_configuration) && !empty($_configuration)) {
-                        $_configuration = array_merge($_configuration, $_configurationYML);
-                    } else {
-                        $_configuration = $_configurationYML;
-                    }
-                }
+            if (file_exists($confPath.'configuration.yml')) {
+                return $confPath.'configuration.yml';
             }
-
-            return $_configuration;
         }
 
         return false;
     }
 
+
     /**
-     * Set configuration var
+     * Returns the $configuration array
+     * <code>
+     * $configuration = $this->getConfiguration('/var/www/chamilo');
+     * // $configuration contains the $_configuration array
+     * </code>
+     * @param string $path
+     *
+     * @return array|bool|mixed
+     */
+    public function getConfiguration($path = null)
+    {
+        if (empty($this->configuration)) {
+            $configurationFile = $this->getConfigurationFilePath($path);
+            if ($configurationFile) {
+                $this->configuration = $this->readConfigurationFile($configurationFile);
+            }
+        }
+        return $this->configuration;
+    }
+
+    /**
+     *
+     * <code>
+     * $sysPath = $this->getSysPathFromConfigurationFile('/var/www/chamilo/config/configuration.php');
+     * // $sysPath is '/var/www/chamilo/'
+     * </code>
+     * @param string $configurationFile
+     * @return string
+     */
+    public function getSysPathFromConfigurationFile($configurationFile)
+    {
+        if (empty($configurationFile)) {
+            return false;
+        }
+
+        $configurationPath = dirname($configurationFile);
+
+        // New structure
+        if (file_exists($configurationPath.'/../main/inc/global.inc.php')) {
+            return realpath($configurationPath.'/../').'/';
+        }
+
+        // Old structure
+        if (file_exists($configurationPath.'/../../inc/global.inc.php')) {
+            return realpath($configurationPath.'/../../../').'/';
+        }
+
+        return null;
+    }
+
+
+    /**
+     * Reads the Chamilo configuration file and returns the $_configuration array
+     * Merges the configuration.php with the configuration.yml if it exists
+     *
+     * @param string $configurationFile
+     * @return array|bool|mixed
+     */
+    public function readConfigurationFile($configurationFile = null)
+    {
+        if (!empty($configurationFile)) {
+
+            if (file_exists($configurationFile)) {
+                $confInfo = pathinfo($configurationFile);
+                switch ($confInfo['extension']) {
+                    case 'php':
+                        require $configurationFile;
+                        if (isset($_configuration)) {
+                            if (isset($userPasswordCrypted)) {
+                                $_configuration['password_encryption'] = $userPasswordCrypted;
+                            }
+                            return $_configuration;
+                        }
+                        break;
+                    case 'yml':
+                        $yaml = new Parser();
+                        $_configurationYML = $yaml->parse(file_get_contents($configurationFile));
+                        if (isset($configurationFile) && !empty($configurationFile)) {
+                            if (isset($_configuration) && !empty($_configuration)) {
+                                $_configuration = array_merge($_configuration, $_configurationYML);
+                            } else {
+                                $_configuration = $_configurationYML;
+                            }
+                        }
+                        return $_configuration;
+                        break;
+                }
+            }
+        }
+        return array();
+    }
+
+    /**
+     * Sets the configuration variable
      * @param $configuration
      */
     public function setConfiguration($configuration)
@@ -135,24 +242,45 @@ class ConfigurationHelper extends Helper
     }
 
     /**
+     * Get chamilo config files
      * @return array
      */
     public function getConfigFiles()
     {
-        $configFiles = array();
+        $finder = new Finder();
+        $sysPath = $this->getSysPath();
 
-        $_configuration = $this->getConfiguration();
+        $configFiles = array(
+            'auth.conf.php',
+            'configuration.php',
+            'configuration.yml',
+            'events.conf.php',
+            'mail.conf.php',
+            'portfolio.conf.php',
+            'profile.conf.php'
+        );
 
-        $sysPath = isset($_configuration['sys_path']) ? $_configuration['sys_path'] : null;
-
-        if (file_exists($sysPath.'main/inc/conf/configuration.php')) {
-            $configFiles[] = $sysPath.'main/inc/conf/configuration.php';
+        if (is_dir($sysPath.'main/inc/conf')) {
+            $finder->files()->in($sysPath.'main/inc/conf');
+            foreach ($configFiles as $config) {
+                if (file_exists($sysPath.'main/inc/conf/'.$config)) {
+                    $finder->files()->name($config);
+                }
+            }
+            $finder->files()->name('db_migration_status_*');
         }
 
-        if (file_exists($sysPath.'main/inc/conf/configuration.yml')) {
-            $configFiles[] = $sysPath.'main/inc/conf/configuration.yml';
+        if (is_dir($sysPath.'config')) {
+            $finder->files()->in($sysPath.'config');
+            foreach ($configFiles as $config) {
+                if (file_exists($sysPath.'config/'.$config)) {
+                    $finder->files()->name($config);
+                }
+            }
+            $finder->files()->name('db_migration_status_*');
         }
 
+        /*
         $versions = $this->chamiloVersions();
         foreach ($versions as $version) {
             $migrationFile = $sysPath."main/inc/conf/db_migration_status_".$version."_pre.yml";
@@ -164,17 +292,173 @@ class ConfigurationHelper extends Helper
                 $configFiles[] = $migrationFile;
             }
         }
-        return $configFiles;
+        */
+        return $finder;
+    }
+
+
+     /**
+     * @return array
+     */
+    public function getDataFiles()
+    {
+        $finder = new Finder();
+        $sysPath = $this->getSysPath();
+
+        if (is_dir($sysPath.'courses')) {
+            $finder->files()->in($sysPath.'courses/');
+            $finder->directories()->in($sysPath.'courses/');
+        }
+
+        if (is_dir($sysPath.'data/courses')) {
+            $finder->files()->in($sysPath.'data/courses/');
+            $finder->directories()->in($sysPath.'data/courses/');
+        }
+
+        return $finder;
+    }
+
+     /**
+     * @return array
+     */
+    public function getTempFiles()
+    {
+        $finder = new Finder();
+        $sysPath = $this->getSysPath();
+
+        if (is_dir($sysPath.'temp')) {
+            $finder->files()->in($sysPath.'temp');
+            $finder->directories()->in($sysPath.'temp');
+        }
+
+        if (is_dir($sysPath.'archive')) {
+            $finder->files()->in($sysPath.'archive');
+            $finder->directories()->in($sysPath.'archive');
+        }
+        return $finder;
+    }
+
+    public function getSysFolders()
+    {
+        $finder = new Finder();
+        $sysPath = $this->getSysPath();
+        $finder->directories()->in($sysPath);
+        return $finder;
+    }
+
+    public function getSysFiles()
+    {
+        $finder = new Finder();
+        $sysPath = $this->getSysPath();
+        $finder->files()->in($sysPath);
+        return $finder;
+    }
+
+
+    public function getDataFolders()
+    {
+        $finder = new Finder();
+        $sysPath = $this->getSysPath();
+        $finder->directories()->in($sysPath);
+        $finder->path('courses');
+        $finder->path('data/courses');
+        return $finder;
+
+    }
+
+    public function getConfigFolders()
+    {
+        $finder = new Finder();
+        $sysPath = $this->getSysPath();
+        $finder->directories()->in($sysPath);
+        $finder->path('main/inc/conf');
+        $finder->path('data/config');
+        return $finder;
+    }
+
+    public function getTempFolders()
+    {
+        $finder = new Finder();
+        $sysPath = $this->getSysPath();
+        $finder->directories()->in($sysPath);
+        $finder->path('archive');
+        $finder->path('data/temp');
+        return $finder;
+    }
+
+    public function setSysPath($sysPath)
+    {
+        $this->sysPath = $sysPath;
+    }
+
+    public function getTempFolderList()
+    {
+        // Copied from the resources/prod.php file in Chamilo
+
+        $sysPath = $this->getSysPath();
+
+        $tempPath = 'archive/';
+        if (is_dir($sysPath.'config')) {
+            $tempPath = 'data/temp/';
+        }
+
+        $app['temp.paths'] = new \stdClass();
+
+        //$app['temp.paths']->folders[] = $app['sys_data_path'];
+
+        // Monolog.
+        //$app['temp.paths']->folders[] = $app['sys_log_path'];
+        $app['temp.path'] = $this->getSysPath().$tempPath;
+        // Twig cache.
+        $app['temp.paths']->folders[] = $app['twig.cache.path'] = $app['temp.path'].'twig';
+
+        // Http cache
+        $app['temp.paths']->folders[] = $app['http_cache.cache_dir'] = $app['temp.path'].'http';
+
+        // Doctrine ORM.
+        $app['temp.paths']->folders[] = $app['db.orm.proxies_dir'] = $app['temp.path'].'Proxies';
+
+        // Symfony2 Web profiler.
+        $app['temp.paths']->folders[] = $app['profiler.cache_dir'] = $app['temp.path'].'profiler';
+
+        // HTMLPurifier.
+        $app['temp.paths']->folders[] = $app['htmlpurifier.serializer'] = $app['temp.path'].'serializer';
+
+        // PCLZIP temp dir.
+        //define('PCLZIP_TEMPORARY_DIR', $app['temp.path'].'pclzip');
+        $app['temp.paths']->folders[] = $app['temp.path'].'pclzip';
+
+        // MPDF temp libs.
+        //define("_MPDF_TEMP_PATH", $app['temp.path'].'mpdf');
+        //define("_JPGRAPH_PATH", $app['temp.path'].'mpdf');
+        //define("_MPDF_TTFONTDATAPATH", $app['temp.path'].'mpdf');
+
+        $app['temp.paths']->folders[] = $app['temp.path'].'mpdf';
+
+        // QR code.
+        //define('QR_LOG_DIR', $app['temp.path'].'qr');
+        //define('QR_CACHE_DIR', $app['temp.path'].'qr');
+
+        $app['temp.paths']->folders[] = $app['temp.path'].'qr';
+
+        // Chamilo Temp class @todo fix this
+        $app['temp.paths']->folders[] = $app['temp.path'].'temp';
+
+        return $app['temp.paths']->folders;
+    }
+
+    public function getSysPath()
+    {
+        return $this->sysPath;
     }
 
     /**
      * Connect to the database
      * @return object Database handler
      */
-    public function getConnection()
+    public function getConnection($path = null)
     {
-        $conf = $this->getConfiguration();
-
+        $conf = $this->getConfiguration($path);
         $dbh = false;
 
         if (isset($conf['db_host']) && isset($conf['db_host']) && isset($conf['db_password'])) {
@@ -189,7 +473,6 @@ class ConfigurationHelper extends Helper
             if (!$db) {
 
                 return false;
-                //die('Could not connect to database: '.mysql_error());
             }
         }
         return $dbh;
@@ -249,16 +532,6 @@ class ConfigurationHelper extends Helper
         return $dbs;
     }
 
-    /**
-     * @return array|bool|mixed
-     */
-    public function getConfiguration()
-    {
-        if (empty($this->configuration)) {
-            $this->configuration = $this->readConfigurationFile();
-        }
-        return $this->configuration;
-    }
 
     /**
      * @return string
@@ -267,4 +540,6 @@ class ConfigurationHelper extends Helper
     {
         return 'configuration';
     }
+
+
 }

@@ -431,6 +431,7 @@ function createEventExercise($exo_id)
  * @param	integer	Question ID
  * @param	integer Exercise attempt ID a.k.a exe_id (from track_e_exercise)
  * @param	integer	Position
+ * @param	bool update results?
  * @param	integer Exercise ID
  * @param	string  Filename (for audio answers - using nanogong)
  * @param	integer User ID The user who's going to get this score. Default value of null means "get from context".
@@ -447,6 +448,7 @@ function saveQuestionAttempt(
     $exe_id,
     $position,
     $exercise_id = 0,
+    $updateResults = false,
     $nano = null,
     $user_id = null,
     $course_id = null,
@@ -539,35 +541,63 @@ function saveQuestionAttempt(
             if ($debug) {
                 error_log("Attempt already exist: exe_id: $exe_id - user_id:$user_id - question_id:$question_id");
             }
-            //The attempt already exist do not update use  update_event_exercise() instead
-            return false;
+            if ($updateResults == false) {
+                // The attempt already exist do not update use  update_event_exercise() instead
+                return false;
+            }
         } else {
             $attempt['exe_id'] = $exe_id;
         }
 
         if ($debug) {
+            error_log("updateResults : $updateResults");
             error_log("Saving question attempt: ");
             error_log($sql);
         }
 
-        $attempt_id = Database::insert($TBL_TRACK_ATTEMPT, $attempt);
+        $recording_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 
-        if (defined('ENABLED_LIVE_EXERCISE_TRACKING')) {
-            $recording_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
-            if ($debug) {
-                error_log("Saving e attempt recording ");
+        if ($updateResults == false) {
+            $attempt_id = Database::insert($TBL_TRACK_ATTEMPT, $attempt);
+
+            if (defined('ENABLED_LIVE_EXERCISE_TRACKING')) {
+
+                if ($debug) {
+                    error_log("Saving e attempt recording ");
+                }
+                $attempt_recording = array(
+                    'exe_id' => $attempt_id,
+                    'question_id' => $question_id,
+                    'marks' => $score,
+                    'insert_date' => $now,
+                    'author' => '',
+                    'session_id' => $session_id,
+                );
+                Database::insert($recording_table, $attempt_recording);
             }
-            $attempt_recording = array(
-                'exe_id' => $attempt_id,
-                'question_id' => $question_id,
-                'marks' => $score,
-                'insert_date' => $now,
-                'author' => '',
-                'session_id' => $session_id,
-            );
-            Database::insert($recording_table, $attempt_recording);
+        } else {
+            Database::update($TBL_TRACK_ATTEMPT, $attempt,
+                array('exe_id = ? AND question_id = ? AND user_id = ? ' => array($exe_id, $question_id, $user_id)));
 
+            if (defined('ENABLED_LIVE_EXERCISE_TRACKING')) {
+
+                 $attempt_recording = array(
+                    'exe_id' => $exe_id,
+                    'question_id' => $question_id,
+                    'marks' => $score,
+                    'insert_date' => $now,
+                    'author' => '',
+                    'session_id' => $session_id,
+                );
+
+                Database::update($recording_table, $attempt_recording,
+                    array('exe_id = ? AND question_id = ? AND session_id = ? ' => array($exe_id, $question_id, $session_id))
+                );
+            }
+            $attempt_id = $exe_id;
         }
+
+
         return $attempt_id;
     } else {
         return false;
@@ -581,28 +611,48 @@ function saveQuestionAttempt(
  * @param	int		Answer ID
  * @param	int		Whether this answer is correct (1) or not (0)
  * @param	string	Coordinates of this point (e.g. 123;324)
+ * @param	bool update results?
  * @return	boolean	Result of the insert query
  * @uses Course code and user_id from global scope $_cid and $_user
  */
-function saveExerciseAttemptHotspot($exe_id, $question_id, $answer_id, $correct, $coords, $exerciseId = 0)
+function saveExerciseAttemptHotspot($exe_id, $question_id, $answer_id, $correct, $coords, $updateResults = false, $exerciseId = 0)
 {
     global $safe_lp_id, $safe_lp_item_id;
 
-    //Validation in case of fraud  with actived control time
-    if (!ExerciseLib::exercise_time_control_is_valid($exerciseId, $safe_lp_id, $safe_lp_item_id)) {
-        $correct = 0;
+    if ($updateResults == false) {
+        // Validation in case of fraud with activated control time
+        if (!ExerciseLib::exercise_time_control_is_valid($exerciseId, $safe_lp_id, $safe_lp_item_id)) {
+            $correct = 0;
+        }
     }
-
     $tbl_track_e_hotspot = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-    $sql = "INSERT INTO $tbl_track_e_hotspot (hotspot_user_id, c_id, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate)".
-        " VALUES ('".api_get_user_id()."',".
-        " '".api_get_course_int_id()."', ".
-        " '".Database :: escape_string($exe_id)."', ".
-        " '".Database :: escape_string($question_id)."',".
-        " '".Database :: escape_string($answer_id)."',".
-        " '".Database :: escape_string($correct)."',".
-        " '".Database :: escape_string($coords)."')";
-    return $result = Database::query($sql);
+    if ($updateResults) {
+        $params = array(
+            'hotspot_correct' => $correct,
+            'hotspot_coordinate' => $coords
+        );
+        Database::update($tbl_track_e_hotspot, $params,
+            array('hotspot_user_id = ? AND hotspot_exe_id = ? AND hotspot_question_id = ? AND hotspot_answer_id = ? ' => array(
+                api_get_user_id(),
+                $exe_id,
+                $question_id,
+                $answer_id,
+                $answer_id
+
+            )));
+
+    } else {
+
+        $sql = "INSERT INTO $tbl_track_e_hotspot (hotspot_user_id, c_id, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate)".
+            " VALUES ('".api_get_user_id()."',".
+            " '".api_get_course_int_id()."', ".
+            " '".Database :: escape_string($exe_id)."', ".
+            " '".Database :: escape_string($question_id)."',".
+            " '".Database :: escape_string($answer_id)."',".
+            " '".Database :: escape_string($correct)."',".
+            " '".Database :: escape_string($coords)."')";
+        return $result = Database::query($sql);
+    }
 }
 
 /**

@@ -28,8 +28,6 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 // Access control
 api_protect_course_script(true, false, true);
 
-
-
 // including additional libraries
 require_once 'exercise.class.php';
 require_once 'question.class.php';
@@ -266,6 +264,7 @@ if (isset($origin) && $origin == 'learnpath') {
             $actions .= '<a href="stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon('statistics.png',get_lang('ReportByQuestion'), '', ICON_SIZE_MEDIUM).'</a>';
             $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&hotpotato_name='.$path.'&exerciseId='.intval($_GET['exerciseId']).'" >'.
                 Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
+            $actions .= '<a href="recalculate_scores.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon('history.png',get_lang('RecalculateResults'), '', ICON_SIZE_MEDIUM).'</a>';
         }
     }
 }

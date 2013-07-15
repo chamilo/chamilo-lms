@@ -110,6 +110,13 @@ $console->addCommands(
         // Chash commands.
         new Chash\Command\Installation\UpgradeCommand(),
         new Chash\Command\Installation\InstallCommand(),
+
+        new Chash\Command\Files\CleanDataFilesCommand(),
+        new Chash\Command\Files\CleanTempFolderCommand(),
+        new Chash\Command\Files\CleanConfigFilesCommand(),
+        new Chash\Command\Files\MailConfCommand(),
+        new Chash\Command\Files\SetPermissionsAfterInstallCommand(),
+        new Chash\Command\Files\GenerateTempFileStructureCommand(),
     )
 );
 
@@ -340,7 +347,7 @@ $app->match('/resume', function() use($app) {
     if (!empty($portalSettings) && !empty($databaseSettings) && !empty($adminSettings)) {
 
         $form = $app['form.factory']->createBuilder('form', $data)
-            ->add('install', 'submit', array('label' => 'Continue'))
+            ->add('install', 'submit', array('label' => 'Install'))
             ->getForm();
 
         if ('POST' == $request->getMethod()) {

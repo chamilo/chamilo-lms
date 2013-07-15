@@ -49,6 +49,8 @@
         "symfony/validator": "~2.3",
         "symfony/translation": "~2.3",
         "symfony/dependency-injection": "~2.3",
+        "symfony/filesystem": "~2.3",
+        "symfony/finder": "~2.3",
         "monolog/monolog" : ">=1.0.0",
         "symfony/config": "~2.3",
         "symfony/yaml": "~2.3",
@@ -58,7 +60,6 @@
         "dflydev/doctrine-orm-service-provider": "1.0.*@dev",
         "doctrine/migrations": "dev-master",
         "gedmo/doctrine-extensions": "2.3.*@dev",
-        "chamilo/chash": "dev-master",
         "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
         "pagerfanta/pagerfanta": "dev-master",
         "franmomu/silex-pagerfanta-provider": "2.3.*@dev",
@@ -76,7 +77,10 @@
         "bt51/gaufrette-serviceprovider": "dev-master",
         "neutron/silex-filesystem-provider": "dev-master",
         "jbroadway/urlify": "dev-master",
-        "sensio/framework-extra-bundle": "2.3.*@dev"
+        "sensio/framework-extra-bundle": "2.3.*@dev",
+        "chamilo/chash": "dev-master",
+        "zendframework/zend-config": "2.3.*@dev",
+        "zendframework/zend-stdlib" : "2.3.*@dev"
     },
     "require-dev": {
         "symfony/browser-kit": "2.3.*@dev",
@@ -90,6 +94,5 @@
     "scripts": {
         "post-install-cmd": "ChamiloLMS\\Composer\\Tasks::postInstall",
         "post-update-cmd": "ChamiloLMS\\Composer\\Tasks::postUpdate"
-    },
-    "minimum-stability": "stable"
+    }
 }

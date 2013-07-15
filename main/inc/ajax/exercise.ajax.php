@@ -290,14 +290,14 @@ switch ($action) {
         }
         break;
     case 'add_question_to_reminder':
-    	$objExercise  = $_SESSION['objExercise'];
-    	if (empty($objExercise)) {
-    		echo 0;
-    		exit;
-    	} else {
-    		$objExercise->edit_question_to_remind($_REQUEST['exe_id'], $_REQUEST['question_id'], $_REQUEST['action']);
-    	}
-    	break;
+        $objExercise  = $_SESSION['objExercise'];
+        if (empty($objExercise)) {
+            echo 0;
+            exit;
+        } else {
+            $objExercise->edit_question_to_remind($_REQUEST['exe_id'], $_REQUEST['question_id'], $_REQUEST['action']);
+        }
+        break;
     case 'save_exercise_by_now':
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
@@ -332,6 +332,7 @@ switch ($action) {
             }
 
             // Exercise information.
+            /** @var \Exercise $objExercise */
             $objExercise             = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;
 
             // Question info.
@@ -354,15 +355,15 @@ switch ($action) {
             // First time here we create an attempt (getting the exe_id).
             if (empty($exercise_stat_info)) {
             } else {
-                //We know the user we get the exe_id
+                // We know the user we get the exe_id.
                 $exe_id        = $exercise_stat_info['exe_id'];
                 $total_score   = $exercise_stat_info['exe_result'];
 
-                //Getting the list of attempts
+                // Getting the list of attempts.
                 $attempt_list  = getAllExerciseEventByExeId($exe_id);
             }
 
-            // Updating Reminder algorythm.
+            // Updating Reminder algorythme.
             if ($objExercise->type == ONE_PER_PAGE) {
                 $bd_reminder_list = explode(',', $exercise_stat_info['questions_to_check']);
 
@@ -398,7 +399,7 @@ switch ($action) {
                 }
             }
 
-            // No exe id? Can't save answer.
+            // No exe id? Can't save answer!
             if (empty($exe_id)) {
                 // Fires an error.
                 echo 'error';
@@ -432,32 +433,33 @@ switch ($action) {
                     continue;
                 }
 
-                if ($debug) error_log("Saving question_id = $my_question_id ");
-
                 $my_choice = isset($choice[$my_question_id]) ? $choice[$my_question_id] : null;
 
-                if ($debug) error_log("my_choice = ".print_r($my_choice, 1)."");
+                if ($debug) {
+                    error_log("Saving question_id = $my_question_id ");
+                    error_log("my_choice = ".print_r($my_choice, 1)."");
+                }
 
-               // creates a temporary Question object
-            	$objQuestionTmp = Question::read($my_question_id, $course_id);
+                // creates a temporary Question object
+                $objQuestionTmp = Question::read($my_question_id, $course_id);
 
-            	//Getting free choice data
-            	if ($objQuestionTmp->type  == FREE_ANSWER && $type == 'all') {
-            	    $my_choice = isset($_REQUEST['free_choice'][$my_question_id]) && !empty($_REQUEST['free_choice'][$my_question_id])? $_REQUEST['free_choice'][$my_question_id]: null;
-            	}
+                //Getting free choice data
+                if ($objQuestionTmp->type  == FREE_ANSWER && $type == 'all') {
+                    $my_choice = isset($_REQUEST['free_choice'][$my_question_id]) && !empty($_REQUEST['free_choice'][$my_question_id])? $_REQUEST['free_choice'][$my_question_id]: null;
+                }
 
                 if ($type == 'all') {
                     $total_weight += $objQuestionTmp->selectWeighting();
                 }
 
-            	// This variable commes from exercise_submit_modal.php
+                // This variable came from exercise_submit_modal.php
                 $hotspot_delineation_result = null;
                 if (isset($_SESSION['hotspot_delineation_result']) && isset($_SESSION['hotspot_delineation_result'][$objExercise->selectId()])) {
             	    $hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$my_question_id];
                 }
 
                 if ($type == 'simple') {
-                    //Getting old attempt in order to decrees the total score
+                    // Getting old attempt in order to decrees the total score.
                     $old_result = $objExercise->manageAnswers(
                         $exe_id,
                         $my_question_id,
@@ -469,21 +471,27 @@ switch ($action) {
                         false
                     );
 
-                    //Removing old score
+                    // Removing old score.
                     $total_score = $total_score - $old_result['score'];
+                    if ($debug) {
+                        error_log("old score = ".$old_result['score']);
+                        error_log("total_score = ".$total_score."");
+                    }
                 }
 
                 // Deleting old attempt
                 if (isset($attempt_list) && !empty($attempt_list[$my_question_id])) {
-                    if ($debug) error_log("delete_attempt  exe_id : $exe_id, my_question_id: $my_question_id");
+                    if ($debug) {
+                        error_log("delete_attempt  exe_id : $exe_id, my_question_id: $my_question_id");
+                    }
                     delete_attempt($exe_id, api_get_user_id(), $course_id, $session_id, $my_question_id);
                     if ($objQuestionTmp->type  == HOT_SPOT) {
-            	        delete_attempt_hotspot($exe_id, api_get_user_id(), $course_id, $my_question_id);
+                        delete_attempt_hotspot($exe_id, api_get_user_id(), $course_id, $my_question_id);
                     }
                     if (isset($attempt_list[$my_question_id]) && isset($attempt_list[$my_question_id]['marks'])) {
-            	        $total_score  -= $attempt_list[$my_question_id]['marks'];
-            	    }
-            	}
+                        $total_score -= $attempt_list[$my_question_id]['marks'];
+                    }
+                }
 
             	// We're inside *one* question. Go through each possible answer for this question
 
@@ -502,8 +510,11 @@ switch ($action) {
                 //Adding the new score
                 $total_score += $result['score'];
 
-                if ($debug) error_log("total_score: $total_score ");
-                if ($debug) error_log("total_weight: $total_weight ");
+                if ($debug) {
+                    error_log("total_score: $total_score ");
+                    error_log("total_weight: $total_weight ");
+                }
+
 
                 $duration = 0;
                 $now = time();

@@ -48,9 +48,9 @@ class Answer
      * @author Olivier Brouckaert
      * @param  integer   Question ID that answers belong to
      * @param int course id
-     * @param \Exercise
+     * @param \Exercise obj
      */
-    public function Answer($questionId, $course_id = null, $exercise = null)
+    public function Answer($questionId, $course_id = null, \Exercise $exercise = null)
     {
         $this->questionId          = intval($questionId);
         $this->answer              = array();
@@ -115,9 +115,6 @@ class Answer
         $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $questionId = $this->questionId;
 
-        /*$sql = "SELECT id, id_auto, answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination  FROM
-		      $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id ='".$questionId."' ORDER BY position";
-        */
         $sql = "SELECT iid, answer, correct, comment, ponderation, position, hotspot_coordinates, hotspot_type, destination
                 FROM $TBL_ANSWER
                 WHERE question_id ='".$questionId."'
@@ -146,7 +143,7 @@ class Answer
     }
 
     /**
-     * reads answer informations from the data base ordered by parameter
+     * Reads answer information from the database ordered by parameter
      * @param    string    Field we want to order by
      * @param    string    DESC or ASC
      * @author     Frederic Vauthier
@@ -191,7 +188,6 @@ class Answer
             $this->weighting[$i]   = $object->ponderation;
             $this->position[$i]    = $object->position;
             $this->destination[$i] = $object->destination;
-            //$this->autoId[$i]      = $object->id_auto;
         }
 
         if ($question_type['type'] == UNIQUE_ANSWER_NO_OPTION && !empty($doubt_data)) {
@@ -203,8 +199,8 @@ class Answer
             $this->weighting[$i]   = $doubt_data->ponderation;
             $this->position[$i]    = $doubt_data->position;
             $this->destination[$i] = $doubt_data->destination;
-            //$this->autoId[$i]      = $doubt_data->id_auto;
         }
+
         $this->nbrAnswers = count($this->answer);
     }
 

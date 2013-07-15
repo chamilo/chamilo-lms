@@ -3009,11 +3009,12 @@ class Exercise
         $counter = 1;
 
         foreach ($answer_list as $answerId) {
+            /** @var \Answer $objAnswerTmp */
             $answer = $objAnswerTmp->selectAnswer($answerId);
             $answerComment = $objAnswerTmp->selectComment($answerId);
             $answerCorrect = $objAnswerTmp->isCorrect($answerId);
 
-            $answerIdFromList = $objAnswerTmp->getAnswerIdFromList($answerId);
+            //$answerIdFromList = $objAnswerTmp->getAnswerIdFromList($answerId);
             $answerWeighting = (float)$objAnswerTmp->selectWeighting($answerId);
 
             //$numAnswer = $objAnswerTmp->selectAutoId($answerId);

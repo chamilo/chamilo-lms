@@ -2264,30 +2264,76 @@ function api_get_self() {
  * false otherwise.
  * @see usermanager::is_admin(user_id) for a user-id specific function
  */
-function api_is_platform_admin($allow_sessions_admins = false) {
+function api_is_platform_admin($allow_sessions_admins = false)
+{
     global $app;
-    $isAdmin = Session::read('is_platformAdmin');
-    if ($isAdmin) {
+    if ($app['security']->isGranted('ROLE_ADMIN')) {
         return true;
     }
-    //$_user = api_get_user_info();
 
     if ($app['security']->isGranted('ROLE_SESSION_MANAGER')) {
         return true;
     }
     return false;
-    //  isset($_user['status']) && $_user['status'] == SESSIONADMIN;
-
 }
 
-function api_is_question_manager() {
+function api_is_question_manager()
+{
     global $app;
     if ($app['security']->isGranted('ROLE_QUESTION_MANAGER')) {
         return true;
     }
     return false;
-    /*$_user = api_get_user_info();
-    return isset($_user['status']) && $_user['status'] == QUESTION_MANAGER;*/
+}
+
+
+/**
+ * Checks whether the current user is a session administrator
+ * @return boolean True if current user is a course administrator
+ */
+function api_is_session_admin()
+{
+    global $app;
+    if ($app['security']->isGranted('ROLE_SESSION_MANAGER')) {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Checks whether the current user is a human resources manager
+ * @return boolean True if current user is a human resources manager
+ */
+function api_is_drh() {
+    global $app;
+    if ($app['security']->isGranted('ROLE_RRHH')) {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Checks whether the current user is a student
+ * @return boolean True if current user is a human resources manager
+ */
+function api_is_student() {
+    global $app;
+    if ($app['security']->isGranted('ROLE_STUDENT')) {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Checks whether the current user is a teacher
+ * @return boolean True if current user is a human resources manager
+ */
+function api_is_teacher() {
+    global $app;
+    if ($app['security']->isGranted('ROLE_TEACHER')) {
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -2316,6 +2362,7 @@ function api_is_platform_admin_by_id($user_id = null, $url = null) {
     $is_on_url = Database::num_rows($res) === 1;
     return $is_on_url;
 }
+
 /**
  * Returns the user's numeric status ID from the users table
  * @param int User ID. If none provided, will use current user
@@ -2535,41 +2582,6 @@ function api_is_coach($session_id = 0, $courseId = null) {
     return $result;
 }
 
-/**
- * Checks whether the current user is a session administrator
- * @return boolean True if current user is a course administrator
- */
-function api_is_session_admin() {
-    $_user = api_get_user_info();
-    return isset($_user['status']) && $_user['status'] == SESSIONADMIN;
-}
-
-/**
- * Checks whether the current user is a human resources manager
- * @return boolean True if current user is a human resources manager
- */
-function api_is_drh() {
-    $_user = api_get_user_info();
-    return isset($_user['status']) && $_user['status'] == DRH;
-}
-
-/**
- * Checks whether the current user is a student
- * @return boolean True if current user is a human resources manager
- */
-function api_is_student() {
-    $_user = api_get_user_info();
-    return isset($_user['status']) && $_user['status'] == STUDENT;
-
-}
-/**
- * Checks whether the current user is a teacher
- * @return boolean True if current user is a human resources manager
- */
-function api_is_teacher() {
-    $_user = api_get_user_info();
-    return isset($_user['status']) && $_user['status'] == COURSEMANAGER;
-}
 
 /**
  * This function checks whether a session is assigned into a category
@@ -6176,9 +6188,19 @@ function api_is_global_chat_enabled(){
 }
 
 /**
+ * This function sets the default visibility for any given content, using the
+ * default visibility setting of the corresponding tool. For example, if we
+ * create a new quiz and call this function, if the quiz tool is
+ * invisible/disabled at course creation, the quiz itself will be set to
+ * invisible.
+ * @param int The ID of the item in its own table
+ * @param string The string identifier of the tool
+ * @param int The group ID, in case we want to specify it
+ * @param int The integer course ID, in case we cannot get it from the context
  * @todo Fix tool_visible_by_default_at_creation labels
  */
-function api_set_default_visibility($courseInfo, $item_id, $tool_id, $group_id = null) {
+function api_set_default_visibility($courseInfo, $item_id, $tool_id, $group_id = null)
+{
     $original_tool_id = $tool_id;
 
     switch ($tool_id) {

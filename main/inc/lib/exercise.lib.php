@@ -15,6 +15,7 @@
  */
 
 use ChamiloSession as Session;
+
 class ExerciseLib
 {
     /**
@@ -2225,6 +2226,7 @@ class ExerciseLib
         return $return;
     }
 
+
     /**
        return the HTML code for a menu with students group
        @input : $in_name : is the name and the id of the <select>
@@ -2328,6 +2330,27 @@ class ExerciseLib
             $exerciseResult[$row['question_id']] = $row['answer'];
         }
         return $exerciseResult;
+    }
+
+
+    public static function getExerciseResults($exerciseId, $courseId, $sessionId)
+    {
+        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+        $exerciseId = intval($exerciseId);
+        $courseId = intval($courseId);
+        $sessionId = intval($sessionId);
+
+        $sql = "SELECT DISTINCT e.exe_id, e.data_tracking
+                FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
+                WHERE 	exe_exo_id 		= $exerciseId AND
+                        a.c_id = $courseId AND
+                        e.c_id = $courseId AND
+                        e.session_id 	= $sessionId AND
+                        status = ''";
+        $result = Database::query($sql);
+        return $result->fetchAll();
     }
 
 

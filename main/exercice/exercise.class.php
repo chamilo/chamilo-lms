@@ -2867,7 +2867,8 @@ class Exercise
         $saved_results = true,
         $from_database = false,
         $show_result = true,
-        $hotspot_delineation_result = array()
+        $hotspot_delineation_result = array(),
+        $updateResults = false
     ) {
         global $feedback_type, $debug;
         global $learnpath_id, $learnpath_item_id; //needed in order to use in the exercise_attempt() for the time
@@ -3119,7 +3120,7 @@ class Exercise
                         error_log("studentChoice: $studentChoice");
                     }
                     break;
-                case GLOBAL_MULTIPLE_ANSWER :
+                case GLOBAL_MULTIPLE_ANSWER:
                     if ($from_database) {
                         $choice = array();
                         $queryans = "SELECT answer FROM $TBL_TRACK_ATTEMPT WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
@@ -3523,7 +3524,7 @@ class Exercise
                         break;
                     }
                 // for hotspot with no order
-                case HOT_SPOT :
+                case HOT_SPOT:
                     if ($from_database) {
                         if ($show_result) {
                             $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
@@ -3554,7 +3555,7 @@ class Exercise
                     break;
                 // @todo never added to chamilo
                 //for hotspot with fixed order
-                case HOT_SPOT_ORDER :
+                case HOT_SPOT_ORDER:
                     $studentChoice = $choice['order'][$answerId];
                     if ($studentChoice == $answerId) {
                         $questionScore += $answerWeighting;
@@ -3564,8 +3565,8 @@ class Exercise
                         $studentChoice = false;
                     }
                     break;
-                // for hotspot with delineation
-                case HOT_SPOT_DELINEATION :
+                    // for hotspot with delineation
+                case HOT_SPOT_DELINEATION:
                     if ($from_database) {
                         // getting the user answer
                         $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
@@ -4288,24 +4289,24 @@ class Exercise
                         if ($final_answer == 0) {
                             $questionScore = 0;
                         }
-                        saveQuestionAttempt($questionScore, 1, $quesId, $exeId, 0); // we always insert the answer_id 1 = delineation
+                        saveQuestionAttempt($questionScore, 1, $quesId, $exeId, 0, null, $updateResults); // we always insert the answer_id 1 = delineation
                         //in delineation mode, get the answer from $hotspot_delineation_result[1]
-                        saveExerciseAttemptHotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList(1), $hotspot_delineation_result[1], $exerciseResultCoordinates[$quesId]);
+                        saveExerciseAttemptHotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList(1), $hotspot_delineation_result[1], $exerciseResultCoordinates[$quesId], $updateResults);
                     } else {
                         if ($final_answer == 0) {
                             $questionScore = 0;
                             $answer = 0;
-                            saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0);
+                            saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, null, $updateResults);
                             if (is_array($exerciseResultCoordinates[$quesId])) {
                                 foreach ($exerciseResultCoordinates[$quesId] as $idx => $val) {
-                                    saveExerciseAttemptHotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList($idx), 0, $val);
+                                    saveExerciseAttemptHotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList($idx), 0, $val, $updateResults);
                                 }
                             }
                         } else {
-                            saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0);
+                            saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, null, $updateResults);
                             if (is_array($exerciseResultCoordinates[$quesId])) {
                                 foreach ($exerciseResultCoordinates[$quesId] as $idx => $val) {
-                                    saveExerciseAttemptHotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList($idx), $choice[$idx], $val);
+                                    saveExerciseAttemptHotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList($idx), $choice[$idx], $val, $updateResults);
                                 }
                             }
                         }
@@ -4360,18 +4361,19 @@ class Exercise
             if (empty($choice)) {
                 $choice = 0;
             }
+
             if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE || $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
                 if ($choice != 0) {
                     $reply = array_keys($choice);
                     for ($i = 0; $i < sizeof($reply); $i++) {
                         $ans = $reply[$i];
-                        saveQuestionAttempt($questionScore, $ans.':'.$choice[$ans], $quesId, $exeId, $i, $this->id);
+                        saveQuestionAttempt($questionScore, $ans.':'.$choice[$ans], $quesId, $exeId, $i, $this->id, $updateResults);
                         if ($debug) {
                             error_log('result =>'.$questionScore.' '.$ans.':'.$choice[$ans]);
                         }
                     }
                 } else {
-                    saveQuestionAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
+                    saveQuestionAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id, $updateResults);
                 }
             } elseif ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
                 if ($choice != 0) {
@@ -4382,46 +4384,47 @@ class Exercise
                     }
                     for ($i = 0; $i < sizeof($reply); $i++) {
                         $ans = $reply[$i];
-                        saveQuestionAttempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
+                        saveQuestionAttempt($questionScore, $ans, $quesId, $exeId, $i, $this->id, $updateResults);
                     }
                 } else {
-                    saveQuestionAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
+                    saveQuestionAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id, $updateResults);
                 }
             } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
                 if ($choice != 0) {
                     $reply = array_keys($choice);
                     for ($i = 0; $i < sizeof($reply); $i++) {
                         $ans = $reply[$i];
-                        saveQuestionAttempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
+                        saveQuestionAttempt($questionScore, $ans, $quesId, $exeId, $i, $this->id, $updateResults);
                     }
                 } else {
-                    saveQuestionAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
+                    saveQuestionAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id, $updateResults);
                 }
             } elseif ($answerType == MATCHING || $answerType == DRAGGABLE) {
                 if (isset($matching)) {
                     foreach ($matching as $j => $val) {
-                        saveQuestionAttempt($questionScore, $val, $quesId, $exeId, $j, $this->id);
+                        saveQuestionAttempt($questionScore, $val, $quesId, $exeId, $j, $this->id, $updateResults);
                     }
                 }
             } elseif ($answerType == FREE_ANSWER) {
                 $answer = $choice;
-                saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id, $updateResults);
             } elseif ($answerType == ORAL_EXPRESSION) {
                 $answer = $choice;
-                saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id, $nano);
+                saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id, $updateResults, $nano);
             } elseif ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_IMAGE || $answerType == UNIQUE_ANSWER_NO_OPTION) {
                 $answer = $choice;
-                saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+
+                saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id, $updateResults);
                 //            } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
             } elseif ($answerType == HOT_SPOT) {
-                saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id, $updateResults);
                 if (isset($exerciseResultCoordinates[$questionId]) && !empty($exerciseResultCoordinates[$questionId])) {
                     foreach ($exerciseResultCoordinates[$questionId] as $idx => $val) {
-                        saveExerciseAttemptHotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList($idx), $choice[$idx], $val, $this->id);
+                        saveExerciseAttemptHotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList($idx), $choice[$idx], $val, $updateResults, $this->id);
                     }
                 }
             } else {
-                saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id, $updateResults);
             }
         }
 

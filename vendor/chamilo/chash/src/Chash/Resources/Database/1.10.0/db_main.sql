@@ -74,13 +74,15 @@ CREATE TABLE users_roles (
 -- Admin
 INSERT INTO users_roles VALUES (1, 1);
 
-INSERT INTO roles (name, role) VALUES('Admin', 'ROLE_ADMIN');
-INSERT INTO roles (name, role) VALUES('Teacher', 'ROLE_TEACHER');
-INSERT INTO roles (name, role) VALUES('Student', 'ROLE_STUDENT');
-INSERT INTO roles (name, role) VALUES('Anonymous', 'ROLE_ANONYMOUS');
-INSERT INTO roles (name, role) VALUES('RRHH', 'ROLE_RRHH');
-INSERT INTO roles (name, role) VALUES('Question Manager', 'ROLE_QUESTION_MANAGER');
-INSERT INTO roles (name, role) VALUES('Session Manager', 'ROLE_SESSION_MANAGER');
+
+INSERT INTO roles (id, name, role) VALUES('1', 'Teacher', 'ROLE_TEACHER');
+INSERT INTO roles (id, name, role) VALUES('4', 'RRHH', 'ROLE_RRHH');
+INSERT INTO roles (id, name, role) VALUES('3', 'Session Manager', 'ROLE_SESSION_MANAGER');
+INSERT INTO roles (id ,name, role) VALUES('5', 'Student', 'ROLE_STUDENT');
+INSERT INTO roles (id, name, role) VALUES('6', 'Anonymous', 'ROLE_ANONYMOUS');
+INSERT INTO roles (id, name, role) VALUES('11', 'Admin', 'ROLE_ADMIN');
+INSERT INTO roles (id, name, role) VALUES('17', 'Question Manager', 'ROLE_QUESTION_MANAGER');
+
 
 --
 -- Table structure for table admin

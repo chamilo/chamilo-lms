@@ -171,7 +171,7 @@ class Answer
         $question_type   = Database::fetch_array($result_question);
 
         $sql = "SELECT * FROM $TBL_ANSWER
-                WHERE c_id = {$this->course_id} AND question_id = '".$questionId."'
+                WHERE question_id = '".$questionId."'
 				ORDER BY $field $order";
         $result = Database::query($sql);
 

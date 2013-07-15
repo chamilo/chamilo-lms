@@ -2267,12 +2267,15 @@ function api_get_self() {
 function api_is_platform_admin($allow_sessions_admins = false)
 {
     global $app;
+
     if ($app['security']->isGranted('ROLE_ADMIN')) {
         return true;
     }
 
-    if ($app['security']->isGranted('ROLE_SESSION_MANAGER')) {
-        return true;
+    if ($allow_sessions_admins) {
+        if ($app['security']->isGranted('ROLE_SESSION_MANAGER')) {
+            return true;
+        }
     }
     return false;
 }
@@ -2824,6 +2827,7 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
 
     // Check if the student_view is enabled, and if so, if it is activated.
     if (api_get_setting('student_view_enabled') == 'true') {
+        $studentViewSession = Session::read('studentview');
         if (!empty($my_session_id)) {
             // Check if session visibility is read only for coachs
             if ($session_visibility == SESSION_VISIBLE_READ_ONLY) {
@@ -2835,11 +2839,11 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
                 $is_allowed = false;
             }
             if ($check_student_view) {
-                $is_allowed = $is_allowed && $_SESSION['studentview'] != 'studentview';
+                $is_allowed = $is_allowed && $studentViewSession != 'studentview';
             }
         } else {
             if ($check_student_view) {
-                $is_allowed = $is_courseAdmin && $_SESSION['studentview'] != 'studentview';
+                $is_allowed = $is_courseAdmin && $studentViewSession != 'studentview';
             } else {
                 $is_allowed = $is_courseAdmin;
             }

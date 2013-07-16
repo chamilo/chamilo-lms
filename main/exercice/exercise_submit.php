@@ -315,15 +315,6 @@ $(function(){
 
 // General parameters passed via POST/GET
 
-/*
-     <input type="hidden" name="formSent"				value="1" />
-     <input type="hidden" name="exerciseId" 			value="'.$exerciseId . '" />
-     <input type="hidden" name="num" 					value="'.$current_question.'" id="num_current_id" />
-     <input type="hidden" name="exe_id" 				value="'.$exe_id . '" />
-     <input type="hidden" name="origin" 				value="'.$origin . '" />
-     <input type="hidden" name="learnpath_id" 			value="'.$learnpath_id . '" />
-     <input type="hidden" name="learnpath_item_id" 		value="'.$learnpath_item_id . '" />
-     <input type="hidden" name="learnpath_item_view_id" value="'.$learnpath_item_view_id . '" />';*/
 
 // @todo check get and posts
 $learnpath_id 			= isset($_GET['learnpath_id']) ? intval($_GET['learnpath_id']) : 0;
@@ -353,14 +344,18 @@ $exerciseInSession = Session::read('objExercise');
 // 1. Loading the $objExercise variable
 if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSession->id != $_GET['exerciseId'])) {
     // Construction of Exercise
-    /** @var Exercise $objExercise */
+    /** @var \Exercise $objExercise */
     $objExercise = new Exercise();
-    if ($debug) {error_log('1. Setting the $objExercise variable'); };
+    if ($debug) {
+        error_log('1. Setting the $objExercise variable');
+    }
     Session::erase('questionList');
 
     // if the specified exercise doesn't exist or is disabled
     if (!$objExercise->read($exerciseId) || (!$objExercise->selectStatus() && !$is_allowedToEdit && ($origin != 'learnpath'))) {
-    	if ($debug) { error_log('1.1. Error while reading the exercise'); };
+    	if ($debug) {
+            error_log('1.1. Error while reading the exercise');
+        }
         unset ($objExercise);
         $error = get_lang('ExerciseNotFound');
     } else {
@@ -368,7 +363,7 @@ if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSessi
         Session::write('objExercise', $objExercise);
         if ($debug) {
             error_log('1.1. $exerciseInSession was unset - set now - end');
-        };
+        }
     }
 }
 
@@ -384,7 +379,7 @@ if (!isset($objExercise) && isset($exerciseInSession)) {
 if (!is_object($objExercise)) {
 	if ($debug) {
         error_log('3. $objExercise was not set, kill the script');
-    };
+    }
     header('Location: '.$urlMainExercise.'exercice.php');
     exit;
 }
@@ -433,9 +428,11 @@ if ($objExercise->selectAttempts() > 0) {
     $attempt_html = null;
     $attempt_count = get_attempt_count($user_id, $exerciseId, $learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
     $warningMessage = Display::return_message(
-        sprintf(get_lang('ReachedMaxAttempts'),
+        sprintf(
+            get_lang('ReachedMaxAttempts'),
         $exercise_title,
-        $objExercise->selectAttempts()),
+            $objExercise->selectAttempts()
+        ),
         'warning',
         false
     );
@@ -513,7 +510,9 @@ if (!isset($questionListInSession)) {
     	$questionList = explode(',', $exercise_stat_info['data_tracking']);
     }
     Session::write('questionList', $questionList);
-    if ($debug > 0) { error_log('$_SESSION[questionList] was set'); }
+    if ($debug > 0) {
+        error_log('$_SESSION[questionList] was set');
+    }
 } else {
 	if (isset($objExercise) && isset($exerciseInSession)) {
         $questionList = Session::read('questionList');
@@ -528,7 +527,9 @@ Session::write('question_list_uncompressed', $questionListUncompressed);
 $clock_expired_time = null;
 
 if (empty($exercise_stat_info)) {
-    if ($debug)  error_log('5  $exercise_stat_info is empty ');
+    if ($debug)  {
+        error_log('5  $exercise_stat_info is empty ');
+    }
 	$total_weight = 0;
 
 	foreach ($questionListUncompressed as $question_id) {

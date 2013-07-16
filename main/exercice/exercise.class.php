@@ -606,6 +606,20 @@ class Exercise
         return $count;
     }
 
+    public function getQuestionOrderedListByName()
+    {
+        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+
+          // Getting question list from the order (question list drag n drop interface ).
+        $sql = "SELECT e.question_id
+                FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS q
+                    ON (e.question_id= q.iid)
+                WHERE e.c_id = {$this->course_id} AND e.exercice_id	= '".Database::escape_string($this->id)."'
+                ORDER BY q.question";
+        $result = Database::query($sql);
+        return $result->fetchAll();
+    }
     /**
      * Gets the question list ordered by the question_order setting (drag and drop)
      * @return array
@@ -859,7 +873,7 @@ class Exercise
      * @param bool $from_db
      * @return array question ID list
      */
-    private function selectQuestionList($from_db = false)
+    public function selectQuestionList($from_db = false)
     {
         if ($from_db && !empty($this->id)) {
 
@@ -4290,7 +4304,7 @@ class Exercise
                         }
                         saveQuestionAttempt($questionScore, 1, $quesId, $exeId, 0, null, $updateResults); // we always insert the answer_id 1 = delineation
                         //in delineation mode, get the answer from $hotspot_delineation_result[1]
-                        saveExerciseAttemptHotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList(1), $hotspot_delineation_result[1], $exerciseResultCoordinates[$quesId], null, $updateResults);
+                        saveExerciseAttemptHotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList(1), $hotspot_delineation_result[1], $exerciseResultCoordinates[$quesId], $updateResults);
                     } else {
                         if ($final_answer == 0) {
                             $questionScore = 0;
@@ -4742,10 +4756,15 @@ class Exercise
             $array[] = array('title' => get_lang("User"), 'content' => $user_data);
         }
 
+        // Description can be very long and is generally meant to explain
+        //   rules *before* the exam. Leaving here to make display easier if
+        //   necessary
+        /*
         if (!empty($this->description)) {
             $array[] = array('title' => get_lang("Description"), 'content' => $this->description);
         }
 
+        */
         if (!empty($start_date)) {
             $array[] = array('title' => get_lang("StartDate"), 'content' => $start_date);
         }
@@ -5702,19 +5721,21 @@ class Exercise
         $before = 0;
 
         if (!empty($categories)) {
+            /*
             $newCategoryList = array();
 
-            /*var_dump($categories);
-            foreach ($categories as $category) {
-                var_dump($this->getFirstParent($category['id']));
-                $newCategoryList = $category;
-                foreach ($categories as $category) {
                     foreach ($categories as $category) {
 
-                    }
+                if (!isset($newCategoryList[$category['root']])) {
+                    $newCategoryList[$category['root']] = $category;
+                } else {
+                    $oldQuestionList = $newCategoryList[$category['root']]['question_list'];
+                    $category['question_list'] = array_merge($oldQuestionList , $category['question_list']);
+                    $newCategoryList[$category['root']] = $category;
                 }
             }*/
 
+            //$categories = $newCategoryList;
             foreach ($categories as $category) {
                 $questionList = $category['question_list'];
                 // Check if in this category there questions added in a media
@@ -6347,21 +6368,6 @@ class Exercise
         }
         return $categoriesInExercise;
 
-    }
-
-    public function getQuestionOrderedListByName()
-    {
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-
-          // Getting question list from the order (question list drag n drop interface ).
-        $sql = "SELECT e.question_id
-                FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS q
-                    ON (e.question_id= q.iid)
-                WHERE e.c_id = {$this->course_id} AND e.exercice_id	= '".Database::escape_string($this->id)."'
-                ORDER BY q.question";
-        $result = Database::query($sql);
-        return $result->fetchAll();
     }
 
 }

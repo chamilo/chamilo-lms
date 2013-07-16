@@ -14,6 +14,7 @@
  * Code
  */
 
+use ChamiloSession as Session;
 class ExerciseLib
 {
     /**
@@ -2295,6 +2296,56 @@ class ExerciseLib
         $sql = "UPDATE $exercice_attemp_table SET tms = '".api_get_utc_datetime()."'
                 WHERE exe_id = $exeId AND tms = '".$last_attempt_date."' ";
         Database::query($sql);
+    }
 
+    public static function getExerciseResult($trackExerciseInfo)
+    {
+        $TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_QUESTIONS         	= Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $TBL_TRACK_EXERCICES    = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $TBL_TRACK_ATTEMPT		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+        $query = "SELECT attempts.question_id, answer
+              FROM ".$TBL_TRACK_ATTEMPT." as attempts
+                INNER JOIN ".$TBL_TRACK_EXERCICES." AS stats_exercices
+                    ON stats_exercices.exe_id=attempts.exe_id
+                INNER JOIN ".$TBL_EXERCICE_QUESTION." AS quizz_rel_questions
+                    ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id AND
+                    quizz_rel_questions.question_id = attempts.question_id AND
+                    quizz_rel_questions.c_id=".$trackExerciseInfo['c_id']."
+                INNER JOIN ".$TBL_QUESTIONS." AS questions
+                    ON questions.iid=quizz_rel_questions.question_id AND
+                    questions.c_id = ".$trackExerciseInfo['c_id']."
+              WHERE attempts.exe_id='".$trackExerciseInfo['exe_id']."' AND user_id=".intval($trackExerciseInfo['exe_user_id'])."
+              GROUP BY quizz_rel_questions.question_order, attempts.question_id";
+
+        $result = Database::query($query);
+
+        $exerciseResult = array();
+        while ($row = Database::fetch_array($result)) {
+            $exerciseResult[$row['question_id']] = $row['answer'];
+    }
+        return $exerciseResult;
+    }
+
+
+    public static function getExerciseResults($exerciseId, $courseId, $sessionId)
+    {
+        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+        $exerciseId = intval($exerciseId);
+        $courseId = intval($courseId);
+        $sessionId = intval($sessionId);
+
+        $sql = "SELECT DISTINCT e.exe_id, e.data_tracking
+                FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
+                WHERE 	exe_exo_id 		= $exerciseId AND
+                        a.c_id = $courseId AND
+                        e.c_id = $courseId AND
+                        e.session_id 	= $sessionId AND
+                        status = ''";
+        $result = Database::query($sql);
+        return $result->fetchAll();
     }
 }

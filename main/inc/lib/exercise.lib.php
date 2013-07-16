@@ -15,6 +15,7 @@
  */
 
 use ChamiloSession as Session;
+
 class ExerciseLib
 {
     /**
@@ -270,7 +271,7 @@ class ExerciseLib
 
                 } elseif (in_array($answerType, array(MULTIPLE_ANSWER, MULTIPLE_ANSWER_TRUE_FALSE, GLOBAL_MULTIPLE_ANSWER))) {
                     $input_id = 'choice-'.$questionId.'-'.$answerId;
-                    $answer = Security::remove_XSS($answer, STUDENT);
+                    $answer = Security::remove_XSS($answer);
 
                     if (in_array($numAnswer, $user_choice_array)) {
                         $attributes = array('id' => $input_id, 'checked' => 1, 'selected' => 1);
@@ -362,7 +363,7 @@ class ExerciseLib
                         }
                     }
 
-                    $answer = Security::remove_XSS($answer, STUDENT);
+                    $answer = Security::remove_XSS($answer);
                     $answer_input = '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
                     $answer_input .= '<label class="checkbox">';
                     $answer_input .= Display::input('checkbox', 'choice['.$questionId.']['.$numAnswer.']', 1, $attributes);
@@ -391,7 +392,7 @@ class ExerciseLib
                             $my_choice[$item[0]] = $item[1];
                         }
                     }
-                    $answer = Security::remove_XSS($answer, STUDENT);
+                    $answer = Security::remove_XSS($answer);
                     $s .='<tr>';
                     $s .= Display::tag('td', $answer);
 

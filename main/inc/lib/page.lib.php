@@ -137,7 +137,7 @@ class PageController
                     );
                 }
             } else {
-                $my_account_content .= array(
+                $my_account_content[] = array(
                     'href'  => api_get_path(WEB_CODE_PATH).'dashboard/index.php',
                     'title' => get_lang('Dashboard')
                 );

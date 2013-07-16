@@ -5309,3 +5309,8 @@ i.size-32.icon-new-work {
     margin-bottom: 15px;
     padding: 7px 9px;
 }
+
+
+.question_no_title {
+    font-weight: bold;
+}

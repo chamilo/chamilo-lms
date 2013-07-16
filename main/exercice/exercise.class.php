@@ -97,6 +97,7 @@ class Exercise
     public $fastEdition = false;
     public $modelType = 1;
     public $questionSelectionType = EX_Q_SELECTION_ORDERED;
+    public $hideQuestionTitle = 0;
 
     /**
      * Constructor of the class
@@ -139,6 +140,7 @@ class Exercise
         $this->course = $course_info;
         $this->fastEdition = api_get_course_setting('allow_fast_exercise_edition') == 1 ? true : false;
         $this->emailAlert = api_get_course_setting('email_alert_manager_on_new_quiz') == 1 ? true : false;
+        $this->hideQuestionTitle = 0;
     }
 
     /**
@@ -190,6 +192,7 @@ class Exercise
             $this->emailNotificationTemplate = $object->email_notification_template;
             $this->modelType = $object->model_type;
             $this->questionSelectionType = $object->question_selection_type;
+            $this->hideQuestionTitle = $object->hide_question_title;
 
             $this->review_answers = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;
             $sql = "SELECT max_score FROM $table_lp_item
@@ -517,6 +520,16 @@ class Exercise
     public function setCategoriesGrouping($status)
     {
         $this->categories_grouping = (bool) $status;
+    }
+
+    public function getHideQuestionTitle()
+    {
+        return $this->hideQuestionTitle;
+    }
+
+    public function setHideQuestionTitle($value)
+    {
+        $this->hideQuestionTitle = intval($value);
     }
 
     /**
@@ -1305,6 +1318,7 @@ class Exercise
                     email_notification_template = '".Database::escape_string($this->selectEmailNotificationTemplate())."',
                     model_type = '".$this->getModelType()."',
                     question_selection_type = '".$this->getQuestionSelectionType()."',
+                    hide_question_title = '".$this->getHideQuestionTitle()."',
 					results_disabled='".Database::escape_string($results_disabled)."'";
             }
             $sql .= " WHERE iid = ".Database::escape_string($id)." AND c_id = {$this->course_id}";
@@ -1321,7 +1335,8 @@ class Exercise
             $sql = "INSERT INTO $TBL_EXERCICES (
                         c_id, start_time, end_time, title, description, sound, type, random, random_answers, active,
                         max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category,
-                        text_when_finished, display_category_name, pass_percentage, end_button, email_notification_template, results_disabled, model_type)
+                        text_when_finished, display_category_name, pass_percentage, end_button, email_notification_template,
+                        results_disabled, model_type, question_selection_type, hide_question_title)
 					VALUES(
 						".$this->course_id.",
 						'$start_time',
@@ -1345,7 +1360,9 @@ class Exercise
                         '".Database::escape_string($this->selectEndButton())."',
                         '".Database::escape_string($this->selectEmailNotificationTemplate())."',
                         '".Database::escape_string($results_disabled)."',
-                        '".Database::escape_string($this->getModelType())."'
+                        '".Database::escape_string($this->getModelType())."',
+                        '".Database::escape_string($this->getQuestionSelectionType())."',
+                        '".Database::escape_string($this->getHideQuestionTitle())."'
 						)";
             Database::query($sql);
             $this->id = Database::insert_id();
@@ -1820,6 +1837,14 @@ class Exercise
             );
             $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'), '');
 
+            // Hide question title
+
+            $group = array(
+                $form->createElement('radio', 'hide_question_title', null, get_lang('Yes'), '1'),
+                $form->createElement('radio', 'hide_question_title', null, get_lang('No'), '0')
+            );
+            $form->addGroup($group, null, get_lang('HideQuestionTitle'), '');
+
             // Attempts.
             $attempt_option = range(0, 10);
             $attempt_option[0] = get_lang('Infinite');
@@ -2010,8 +2035,7 @@ class Exercise
                 $defaults['email_notification_template'] = $this->selectEmailNotificationTemplate();
                 $defaults['model_type'] = $this->getModelType();
                 $defaults['question_selection_type'] = $this->getQuestionSelectionType();
-
-
+                $defaults['hide_question_title'] = $this->getHideQuestionTitle();
 
                 if (($this->start_time != '0000-00-00 00:00:00')) {
                     $defaults['activate_start_date_check'] = 1;
@@ -2050,6 +2074,8 @@ class Exercise
                 $defaults['end_time'] = date('Y-m-d 12:00:00', time() + 84600);
                 $defaults['pass_percentage'] = '';
                 $defaults['end_button'] = $this->selectEndButton();
+                $defaults['question_selection_type'] = 1;
+                $defaults['hide_question_title'] = 0;
             }
         } else {
             $defaults['exerciseTitle'] = $this->selectTitle();
@@ -2087,8 +2113,7 @@ class Exercise
         $this->updateEmailNotificationTemplate($form->getSubmitValue('email_notification_template'));
         $this->setModelType($form->getSubmitValue('model_type'));
         $this->setQuestionSelectionType($form->getSubmitValue('question_selection_type'));
-
-
+        $this->setHideQuestionTitle($form->getSubmitValue('hide_question_title'));
 
         if ($form->getSubmitValue('activate_start_date_check') == 1) {
             $start_time = $form->getSubmitValue('start_time');
@@ -6159,7 +6184,8 @@ class Exercise
             echo '<div id="question_div_'.$questionId.'" class="main_question '.$remind_highlight.'" >';
 
             // Shows the question + possible answers
-            echo ExerciseLib::showQuestion($question_obj, false, $origin, $i, true, false, $user_choice, false);
+            $showTitle = $this->getHideQuestionTitle() == 1 ? false : true;
+            echo ExerciseLib::showQuestion($question_obj, false, $origin, $i, $showTitle, false, $user_choice, false);
 
             // Button save and continue
             switch ($this->type) {

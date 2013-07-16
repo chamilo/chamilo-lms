@@ -61,7 +61,6 @@ class ExerciseLib
         $pictureName = $objQuestionTmp->selectPicture();
 
         $s = null;
-        // @todo use a formvalidator
         $form = new FormValidator('question');
         $renderer = $form->defaultRenderer();
         $form_template = '{content}';
@@ -74,6 +73,8 @@ class ExerciseLib
                 if ($show_title) {
                     $html .= Testcategory::getCategoryNamesForQuestion($objQuestionTmp->id);
                     $html .= Display::div($current_item.'. '.$objQuestionTmp->selectTitle(), array('class' => 'question_title'));
+                } else {
+                    $html .= Display::div($current_item.'. ', array('class' => 'question_no_title'));
                 }
                 if (!empty($questionDescription)) {
                     $html .= Display::div($questionDescription, array('class' => 'question_description'));
@@ -723,6 +724,8 @@ class ExerciseLib
                 if ($show_title) {
                     $html .=  Testcategory::getCategoryNamesForQuestion($objQuestionTmp->id);
                     $html .=  '<div class="question_title">'.$current_item.'. '.$questionName.'</div>';
+                } else {
+                    $html .= Display::div($current_item.'. ', array('class' => 'question_no_title'));
                 }
                 //@todo I need to the get the feedback type
                 $html .=  '<input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'" />';

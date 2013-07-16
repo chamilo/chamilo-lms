@@ -95,7 +95,7 @@ class Exercise
     public $countQuestions = 0;
     public $fastEdition = false;
     public $modelType = 1;
-    public $questionSelectionType = 1;
+    public $questionSelectionType = EX_Q_SELECTION_ORDERED;
 
     /**
      * Constructor of the class
@@ -126,7 +126,7 @@ class Exercise
         $this->display_category_name = 0;
         $this->pass_percentage = null;
         $this->modelType = 1;
-        $this->questionSelectionType = 1;
+        $this->questionSelectionType = EX_Q_SELECTION_ORDERED;
         $this->endButton = 0;
 
         if (!empty($course_id)) {
@@ -897,21 +897,19 @@ class Exercise
                     $questionList = $this->getQuestionOrderedList();
                     break;
                 case EX_Q_SELECTION_RANDOM:
-            // Not a random exercise, or if there are not at least 2 questions
-            if ($this->random == 0 || $nbQuestions < 2) {
-                $questionList = $this->getQuestionOrderedList();
-            } else {
-                $questionList = $this->selectRandomList();
-            }
+                      // Not a random exercise, or if there are not at least 2 questions
+                    if ($this->random == 0 || $nbQuestions < 2) {
+                        $questionList = $this->getQuestionOrderedList();
+                    } else {
+                        $questionList = $this->selectRandomList();
+                    }
                     break;
                 default:
                     $questionList = $this->getQuestionOrderedList();
                     $result = $this->getQuestionListWithCategoryListFilteredByCategorySettings($questionList, $questionSelectionType);
 
-            if ($this->categories_grouping) {
-                $result = $this->getQuestionListWithCategoryListFilteredByCategorySettings($questionList);
-                $this->categoryWithQuestionList = $result['category_with_questions_list'];
-                $questionList = $result['question_list'];
+                    $this->categoryWithQuestionList = $result['category_with_questions_list'];
+                    $questionList = $result['question_list'];
                     break;
             }
 
@@ -1727,12 +1725,12 @@ class Exercise
                 EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM => get_lang('OrderedCategoriesAlphabeticallyWithRandomQuestions'), // A 321 B 654 C 87
                 EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM => get_lang('RandomCategoriesWithRandomQuestions'), //C 87 B 654 A 321
 
-                EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED => get_lang('RandomCategoriesWithQuestionsOrderedNoQuestionGrouped'),
+                //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED => get_lang('RandomCategoriesWithQuestionsOrderedNoQuestionGrouped'),
                 /*    B 456 C 78 A 123
                         456 78 123
                         123 456 78
                 */
-                EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED => get_lang('RandomCategoriesWithRandomQuestionsNoQuestionGrouped'),
+                //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED => get_lang('RandomCategoriesWithRandomQuestionsNoQuestionGrouped'),
                 /*
                     A 123 B 456 C 78
                     B 456 C 78 A 123

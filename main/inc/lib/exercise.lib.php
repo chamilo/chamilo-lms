@@ -2302,7 +2302,7 @@ class ExerciseLib
         Database::query($sql);
     }
 
-    public static function getExercuseResult($trackExerciseInfo)
+    public static function getExerciseResult($trackExerciseInfo)
     {
         $TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS         	= Database::get_course_table(TABLE_QUIZ_QUESTION);

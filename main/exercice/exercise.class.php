@@ -3026,11 +3026,11 @@ class Exercise
         $counter = 1;
 
         foreach ($answer_list as $answerId) {
+            /** @var \Answer $objAnswerTmp */
             $answer = $objAnswerTmp->selectAnswer($answerId);
             $answerComment = $objAnswerTmp->selectComment($answerId);
             $answerCorrect = $objAnswerTmp->isCorrect($answerId);
 
-            $answerIdFromList = $objAnswerTmp->getAnswerIdFromList($answerId);
             $answerWeighting = (float)$objAnswerTmp->selectWeighting($answerId);
 
             //$numAnswer = $objAnswerTmp->selectAutoId($answerId);
@@ -4832,7 +4832,6 @@ class Exercise
     public function get_exercise_result($exe_id)
     {
         $result = array();
-        $totalScore = 0;
         $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($exe_id);
         $totalScore = 0;
         if (!empty($track_exercise_info)) {
@@ -5529,7 +5528,9 @@ class Exercise
                 $html = Display::url(get_lang('ReturnToExerciseList'), api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq(), array('class' => 'btn btn-large'));
                 break;
             case '2':
-                $html = Display::url(get_lang('Logout'), api_get_path(WEB_PUBLIC_PATH).'logout', array('class' => 'btn btn-large'));
+                global $app;
+                $url = $app['url_generator']->generate('admin_logout');
+                $html = Display::url(get_lang('Logout'), $url, array('class' => 'btn btn-large'));
                 break;
         }
         return $html;

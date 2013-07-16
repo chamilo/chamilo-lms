@@ -52,7 +52,7 @@ class JuryMemberController extends CommonController
         }
 
         $questionList = explode(',', $trackExercise['data_tracking']);
-        $exerciseResult = \ExerciseLib::getExercuseResult($trackExercise);
+        $exerciseResult = \ExerciseLib::getExerciseResult($trackExercise);
         $counter = 1;
 
         $objExercise = new \Exercise();

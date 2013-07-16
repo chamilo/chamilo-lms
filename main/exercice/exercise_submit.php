@@ -365,7 +365,7 @@ if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSessi
     }
 }
 
-$objExercise = new Exercise(); $objExercise->read($exerciseId);
+// $objExercise = new Exercise(); $objExercise->read($exerciseId);
 
 //2. Checking if $objExercise is set
 if (!isset($objExercise) && isset($exerciseInSession)) {

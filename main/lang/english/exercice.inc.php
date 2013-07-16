@@ -2,6 +2,11 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ToReview = "To be reviewed";
+$Unanswered = "Unanswered";
+$Answered = "Answered";
+$CurrentQuestion = "Current question";
+$MediaQuestions = "Shareable enunciates";
 $AddedToLPCannotBeAccessed = "This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.";
 $langExercice = "Test";
 $langActivate = "Show";
@@ -362,6 +367,7 @@ $ExerciseAttempted = "A learner attempted an exercise";
 $MultipleSelectCombination = "Exact Selection";
 $MultipleAnswerCombination = "Exact answers combination";
 $ExerciceExpiredTimeMessage = "The exercise time limit has expired";
+$AllQuestionsMustHaveACategory = "All questions must have a category to use the random-by-category mode.";
 $NoMedia = "Not linked to media";
 $AttachToMedia = "Attach to media";
 $ExamModeWithFinalScoreShowOnlyFinalScoreWithCategoriesIfAvailable = "Show only final score, with categories if available";
@@ -514,5 +520,4 @@ $NoNegativeScore = "No negative score";
 $GlobalMultipleAnswer = "Global multiple answer";
 $AllQuestionsShort = "All";
 $ProblemsRecordingUploadYourOwnAudioFile = "Problem recording? Upload your own audio file.";
-$AllQuestionsMustHaveACategory = "All questions must have a category";
 ?>

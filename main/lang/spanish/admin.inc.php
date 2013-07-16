@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CareerUpdated = "Carrera actualizada satisfactoriamente";
 $CasMainActivateComment = "Activar la autentificación CAS permitirá a usuarios autentificarse con sus credenciales CAS";
 $UsersRegisteredInAnyGroup = "Usuario registrado en ningun curso";
 $ShowHotCoursesComment = "La lista de los cursos con mayor prestigio será añadida a la página principal";
@@ -1071,6 +1072,7 @@ $EditTabs = "Editar Tabs";
 $YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill = "La evaluación necesita tener un certificado para poder relacionarlo a una competencia";
 $PlatformUnsubscribeTitle = "Permitir darse de baja de la plataforma";
 $PlatformUnsubscribeComment = "Al activar esta opción, se permitirá a cualquier usuario eliminar definitivamente su propia cuenta y todos los datos relacionados a la misma desde la plataforma. Esto es una acción radical, pero es necesario que los portales abiertos al público donde los usuarios pueden registrarse automáticamente. Una entrada adicional se publicará en el perfil del usuario de darse de baja después de la confirmación.";
+$PromotionUpdated = "Promoción actualizada satisfactoriamente";
 $BabyOrange = "Niños naranja";
 $BlueLagoon = "Laguna azul";
 $CoolBlue = "Azul fresco";
@@ -1210,6 +1212,9 @@ $ServerPortInfo = "Puerto del servidor";
 $ServerUserAgentInfo = "Su agente de usuario como es recibido por el servidor";
 $ServerSoftwareInfo = "Software ejecutándose como un servidor web";
 $UnameInfo = "Información del sistema sobre el que está funcionando el servidor";
+$AdminsCanChangeUsersPassTitle = "Los administradores pueden cambiar las contraseñas de los usuarios.";
+$AdminLoginAsAllowedComment = "Si activada, permite a los usuarios con los privilegios correspondientes de usar la funcionalidad \"Conectarse como...\" para conectarse como otro usuario. Esta funcionalidad es particularmente útil en caso de uso de la funcionalidad de multi-urls, cuando no es deseable que los administradores de portales individuales puedan usar esta funcionalidad. Es importante saber que existe un parámetro maestro en el archivo de configuración que permite bloquear esta opción por completo.";
+$AdminLoginAsAllowedTitle = "Funcionalidad \"Conectarse como...\"";
 $AssignSessionsToX = "Asignar sesiones a %s";
 $AssignCoursesToSessionsAdministrator = "Asignar cursos al administrador de sesiones";
 $AssignCoursesToPlatformAdministrator = "Asignar cursos al administrador de la plataforma";
@@ -1394,7 +1399,7 @@ $Careers = "Carreras";
 $Promotions = "Promociones";
 $Updated = "Actualización correcta";
 $Career = "Carrera";
-$SubscribeSessionsToPromotions = "Inscribirse en las sesiones de la promoción";
+$SubscribeSessionsToPromotions = "Inscribir sesiones en la promoción";
 $SessionsInPlatform = "Sesiones no asociadas";
 $FirstLetterSessions = "Primera letra del nombre de la sesión";
 $SessionsInPromotion = "Sesiones en esta promoción";

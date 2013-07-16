@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CareerUpdated = "Career updated successfully";
 $CasMainActivateComment = "Enabling CAS authentication will allow users to authenticate with their CAS credentials.<br/>Go to <a href='settings.php?category=CAS'>Plugin</a> to add a configurable 'CAS Login' button for your Chamilo campus.";
 $UsersRegisteredInAnyGroup = "Users registered in any group";
 $ShowHotCoursesComment = "The hot courses list will be added in the index page";
@@ -1075,6 +1076,7 @@ $EditTabs = "Edit Tabs";
 $YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill = "Your gradebook first needs a certificate in order to be linked to a skill";
 $PlatformUnsubscribeTitle = "Allow unsubscription from platform";
 $PlatformUnsubscribeComment = "By enabling this option, you allow any user to definitively remove his own account and all data related to it from the platform. This is quite a radical action, but it is necessary for portals opened to the public where users can auto-register. An additional entry will appear in the user profile to unsubscribe after confirmation.";
+$PromotionUpdated = "Promotion updated successfully";
 $BabyOrange = "Baby Orange";
 $BlueLagoon = "Blue lagoon";
 $CoolBlue = "Cool blue";
@@ -1214,6 +1216,10 @@ $ServerPortInfo = "Server port";
 $ServerUserAgentInfo = "Your user agent as received by the server";
 $ServerSoftwareInfo = "Software running as a web server";
 $UnameInfo = "Information on the system the current server is running on";
+$AdminsCanChangeUsersPassComment = "This feature is useful for the multi-URL scenario, where there is a difference between the global admin and the normal admins. In this case, selecting \"No\" will prevent normal admins to set other users' passwords, and will only allow them to ask for a password regeneration (thus sent by e-mail to the user). The global admin can still do it.";
+$AdminsCanChangeUsersPassTitle = "Admins can change users' passwords";
+$AdminLoginAsAllowedComment = "Allow users with the corresponding privileges to use the \"login as\" feature to connect using other users' account? This setting is most useful for multi-url configuration, where you don't think an administrator from a secondary URL should be able to connect as any user. Note that another setting is available in the configuration file to block all possibility for anyone to use this feature.";
+$AdminLoginAsAllowedTitle = "\"Login as\" feature";
 $AssignSessionsToX = "Assign sessions to %s";
 $AssignCoursesToSessionsAdministrator = "Assign courses to session's administrator";
 $AssignCoursesToPlatformAdministrator = "Assign courses to platform's administrator";

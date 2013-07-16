@@ -543,9 +543,6 @@ msgstr "Leyenda"
 msgid "langUserHasPermissionByRoleGroup"
 msgstr "El usuario tiene los permisos de su grupo"
 
-msgid "EditPost"
-msgstr "Editar artículo"
-
 msgid "AddBlog"
 msgstr "Crear un blog"
 
@@ -3175,6 +3172,12 @@ msgstr "Seleccionar un archivo de audio desde los documentos"
 
 
 
+msgid "CourseCategoriesAreGlobal"
+msgstr "Las categorías de cursos son globales en la configuración de múltiples portales, pero los cambios son permitidos solamente en la sesión administrativa del portal principal."
+
+msgid "UserIsNotATeacher"
+msgstr "El usuario no es un profesor."
+
 msgid "ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher"
 msgstr "Este item no es visible para un estudiante pero podrá acceder a él como profesor"
 
@@ -5527,6 +5530,21 @@ msgstr "Asignar sesiones de formación"
 msgid "Timezone"
 msgstr "Zona horaria"
 
+msgid "EmptyHeaderLine"
+msgstr "Existen líneas en blanco al inicio del fichero seleccionado"
+
+msgid "FilterByUser"
+msgstr "Filtrar por usuario"
+
+msgid "FilterByGroup"
+msgstr "Filtrar por grupo"
+
+msgid "FilterAll"
+msgstr "Filtro: Todos"
+
+msgid "PaginationXofY"
+msgstr "%s de %s"
+
 msgid "YouHaveToAddXAsAFriendFirst"
 msgstr "%s tiene que ser su amigo, primero"
 
@@ -7229,9 +7247,6 @@ msgstr "Mostrar columna"
 msgid "LegalAgreementAccepted"
 msgstr "Condiciones legales aceptadas"
 
-msgid "PaginationXofY"
-msgstr "%s de %s"
-
 
 
 msgid "lang_new_item"
@@ -8395,7 +8410,7 @@ msgstr "Adelante, pulsa %s para acceder al catálogo de cursos e inscribirte en 
 
 msgid "HelloXAsYouCanSeeYourCourseListIsEmpty"
 msgstr "Hola %s, te damos la bienvenida,<br />
-Como puedes ver, tu lista de cursos todavía está vacía. Esto es porque todavía no estás inscrito/a en algún curso."
+Como puedes ver, tu lista de cursos todavía está vacía. Esto es porque todavía no estás inscrito/a en ningún curso."
 
 msgid "PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses"
 msgstr "Permitanos un poco de tiempo para suscribirse a uno de nuestros cursos. Si considera que nos olvidamos de Ud., póngase en contacto con los administradores del portal. Puede encontrar sus datos de contacto en el pie de página."
@@ -9400,6 +9415,9 @@ msgid "SelectedMessagesRead"
 msgstr "Los mensajes seleccionados han sido marcados como leídos"
 
 
+
+msgid "CareerUpdated"
+msgstr "Carrera actualizada satisfactoriamente"
 
 msgid "CasMainActivateComment"
 msgstr "Activar la autentificación CAS permitirá a usuarios autentificarse con sus credenciales CAS"
@@ -12620,6 +12638,9 @@ msgstr "Permitir darse de baja de la plataforma"
 msgid "PlatformUnsubscribeComment"
 msgstr "Al activar esta opción, se permitirá a cualquier usuario eliminar definitivamente su propia cuenta y todos los datos relacionados a la misma desde la plataforma. Esto es una acción radical, pero es necesario que los portales abiertos al público donde los usuarios pueden registrarse automáticamente. Una entrada adicional se publicará en el perfil del usuario de darse de baja después de la confirmación."
 
+msgid "PromotionUpdated"
+msgstr "Promoción actualizada satisfactoriamente"
+
 msgid "BabyOrange"
 msgstr "Niños naranja"
 
@@ -13037,6 +13058,18 @@ msgstr "Software ejecutándose como un servidor web"
 
 msgid "UnameInfo"
 msgstr "Información del sistema sobre el que está funcionando el servidor"
+
+msgid "AdminsCanChangeUsersPassComment"
+msgstr "This feature is useful for the multi-URL scenario, where there is a difference between the global admin and the normal admins. In this case, selecting \"No\" will prevent normal admins to set other users' passwords, and will only allow them to ask for a password regeneration (thus sent by e-mail to the user). The global admin can still do it."
+
+msgid "AdminsCanChangeUsersPassTitle"
+msgstr "Los administradores pueden cambiar las contraseñas de los usuarios."
+
+msgid "AdminLoginAsAllowedComment"
+msgstr "Si activada, permite a los usuarios con los privilegios correspondientes de usar la funcionalidad \"Conectarse como...\" para conectarse como otro usuario. Esta funcionalidad es particularmente útil en caso de uso de la funcionalidad de multi-urls, cuando no es deseable que los administradores de portales individuales puedan usar esta funcionalidad. Es importante saber que existe un parámetro maestro en el archivo de configuración que permite bloquear esta opción por completo."
+
+msgid "AdminLoginAsAllowedTitle"
+msgstr "Funcionalidad \"Conectarse como...\""
 
 msgid "AssignSessionsToX"
 msgstr "Asignar sesiones a %s"
@@ -13579,7 +13612,7 @@ msgid "Career"
 msgstr "Carrera"
 
 msgid "SubscribeSessionsToPromotions"
-msgstr "Inscribirse en las sesiones de la promoción"
+msgstr "Inscribir sesiones en la promoción"
 
 msgid "SessionsInPlatform"
 msgstr "Sesiones no asociadas"
@@ -15713,6 +15746,9 @@ msgstr "Invitaciones pendientes de grupo"
 msgid "Compose"
 msgstr "Redactar"
 
+msgid "EmptyHeaderLine"
+msgstr "Exiten líneas en blanco al inicio del fichero seleccionado"
+
 msgid "EnrollToCourseXSuccessful"
 msgstr "Su inscripción en el curso %s se ha completado."
 
@@ -16223,6 +16259,21 @@ msgid "AcceptLegal"
 msgstr "Aceptar los términos legales"
 
 
+
+msgid "ToReview"
+msgstr "Por revisar"
+
+msgid "Unanswered"
+msgstr "Sin responder"
+
+msgid "Answered"
+msgstr "Respondida"
+
+msgid "CurrentQuestion"
+msgstr "Pregunta actual"
+
+msgid "MediaQuestions"
+msgstr "Enunciados compartidos"
 
 msgid "AddedToLPCannotBeAccessed"
 msgstr "Este ejercicio ha sido incluido en una secuencia de aprendizaje, por lo cual no podrá ser accesible directamente por los estudiantes desde aquí. Si quiere colocar el mismo ejercicio disponible a través de la herramienta ejercicios, haga una copia del ejercicio en cuestión pulsando sobre el icono de copia."
@@ -17304,6 +17355,9 @@ msgstr "Combinación exacta"
 msgid "ExerciceExpiredTimeMessage"
 msgstr "El tiempo de la evaluación ha terminado. Sin embargo las preguntas que ya respondió, serán consideradas en la evaluación del ejercicio."
 
+msgid "AllQuestionsMustHaveACategory"
+msgstr "Todas las preguntas deben de tener por lo menos una categoría asociada."
+
 msgid "NoMedia"
 msgstr "Sin vínculo a medio"
 
@@ -17759,9 +17813,6 @@ msgstr "Todas"
 
 msgid "ProblemsRecordingUploadYourOwnAudioFile"
 msgstr "Tiene problemas para grabar? Mande su propio fichero audio."
-
-msgid "AllQuestionsMustHaveACategory"
-msgstr "Todas las preguntas deben de tener por lo menos una categoría asociada"
 
 
 
@@ -20804,8 +20855,8 @@ msgstr "Inscribir"
 msgid "langQuit"
 msgstr "Salir"
 
-msgid "your_password_has_been_reset"
-msgstr "Su contraseña ha sido vuelta a generar"
+msgid "YourPasswordHasBeenReset"
+msgstr "Su contraseña ha sido generada nuevamente"
 
 msgid "langSex"
 msgstr "Sexo"

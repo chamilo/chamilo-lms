@@ -2,6 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CourseCategoriesAreGlobal = "Course categories are global over multiple portals configurations. Changes are only allowed in the main administrative portal.";
+$UserIsNotATeacher = "User is not a teacher";
 $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "This item is invisible for learner but you have access as teacher.";
 $DeleteAllAttendances = "Delete all created attendances";
 $Unsubscribe = "Unsubscribe";
@@ -841,6 +843,11 @@ $AssignUsers = "Assign users";
 $AssignCourses = "Assign courses";
 $AssignSessions = "Assign sessions";
 $Timezone = "Timezone";
+$EmptyHeaderLine = "There are empty lines in the header of selected file";
+$FilterByUser = "Filter by user";
+$FilterByGroup = "Filter by group";
+$FilterAll = "Filter: Everyone";
+$PaginationXofY = "%s of %s";
 $YouHaveToAddXAsAFriendFirst = "You have to add %s as a friend first";
 $Company = "Company";
 $GradebookExcellent = "Excellent";
@@ -1412,5 +1419,4 @@ $DataTableSearch = "Search";
 $HideColumn = "Hide column";
 $DisplayColumn = "Show column";
 $LegalAgreementAccepted = "Legal agreement accepted";
-$PaginationXofY = "%s of %s";
 ?>

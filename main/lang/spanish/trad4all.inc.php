@@ -2,6 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CourseCategoriesAreGlobal = "Las categorías de cursos son globales en la configuración de múltiples portales, pero los cambios son permitidos solamente en la sesión administrativa del portal principal.";
+$UserIsNotATeacher = "El usuario no es un profesor.";
 $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Este item no es visible para un estudiante pero podrá acceder a él como profesor";
 $DeleteAllAttendances = "Eliminar todas las asistencias creadas";
 $Unsubscribe = "Dar de baja";
@@ -841,6 +843,11 @@ $AssignUsers = "Asignar usuarios";
 $AssignCourses = "Asignar cursos";
 $AssignSessions = "Asignar sesiones de formación";
 $Timezone = "Zona horaria";
+$EmptyHeaderLine = "Existen líneas en blanco al inicio del fichero seleccionado";
+$FilterByUser = "Filtrar por usuario";
+$FilterByGroup = "Filtrar por grupo";
+$FilterAll = "Filtro: Todos";
+$PaginationXofY = "%s de %s";
 $YouHaveToAddXAsAFriendFirst = "%s tiene que ser su amigo, primero";
 $Company = "Empresa";
 $GradebookExcellent = "Excelente";
@@ -1417,5 +1424,4 @@ $DataTableSearch = "Buscar";
 $HideColumn = "Ocultar columna";
 $DisplayColumn = "Mostrar columna";
 $LegalAgreementAccepted = "Condiciones legales aceptadas";
-$PaginationXofY = "%s de %s";
 ?>

@@ -1,20 +1,13 @@
 msgid ""
 msgstr ""
-"Content-Type: text/plain; charset=utf-8\n"
-"Project-Id-Version: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: Julio Montoya <gugli100@gmail.com>\n"
-"Language-Team: \n"
-"MIME-Version: 1.0\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.4\n"
+"Content-Type: text/plain; charset=utf-8 \n"
 
 msgid "langHFor"
 msgstr "Forums Help"
 
 msgid "langForContent"
-msgstr "<p> The forum is an discussion tool for asynchronous written work.  In contrast to email, a forum is for public, or semi-public, group discussion. </p>To use the Chamilo forum, members can simply use their browser - they do not require separate client software. </p>To organize forums, clickon the Forums tool. Discussions are organized hierarchically according to the following structure: </ p><b> Category> Forum> Topic> Post</ b> </ p> To ensure members can participate in the forum tidily and effectively, it is essential in th first instance to create categories and forums; it's then up to the participants to create topics and posts. By default, the forum contains a single (public) category, an example topic and an example post. You can add forums to the category,  change its title or create other categories within which you could then create new forums. (Don't confuse categories and forums, and remember that a category that contains no forum is useless and is not displayed.)</p"
+msgstr "<p> The forum is an discussion tool for asynchronous written work.  In contrast to email, a forum is for public, or semi-public, group discussion. </p>To use the Chamilo forum, members can simply use their browser - they do not require separate client software. </p>To organize forums, clickon the Forums tool. Discussions are organized hierarchically according to the following structure: </ p><b> Category> Forum> Topic> Post</ b> </ p> To ensure members can participate in the forum tidily and effectively, it is essential in th first instance to create categories and forums; it's then up to the participants to create topics and posts. By default, the forum contains a single (public) category, an example topic and an example post. You can add forums to the category,  change its title or create other categories within which you could then create new forums. (Don't confuse categories and forums, and remember that a category that contains no forum is useless and is not displayed.)</p>
+<p>The forum description might include a list of its members, a definition of its purpose, a target a task, a theme etc.</p><p>Group forums should not be created via the Forum tool but instead via the Groups tool, where you can determinewhether your group forums should be private or public, at the same time providing a location for sharing groups of documents.</p><b> Teaching Tips</ b></ p> A learning forum is not quite the same as the forums you are used to seeing on the internet. For one thing, it is not possible for learners to alter their posts once they have been published as the course is logically archived to allow tracking of what has been said in the past. Furthermore, Chamilo forums allow for specific uses  relevant to teaching. For example, some teachers/trainers publish corrections directly within forums in the following way: <li> A learner is asked to post a report directly into the forum, </ li> The teacher corrects it by clicking Edit (yellow pencil) and marking it using the graphics editor (color, underlining, etc.) </ li> Finally, other learners benefit from viewing the corrections was made on the production of one of of them, </ li> Note that the same principle can be applied between learners, but will require his copying/pasting the message of his fellow student because students / trainees can not edit one another's posts. <. li> </ ul>"
 
 msgid "langHDropbox"
 msgstr "Dropbox Help"
@@ -156,6 +149,8 @@ msgstr "Project help"
 
 msgid "BlogsContent"
 msgstr "<p> The Project tool facilitates collaborative project work. </p> One way to use the tool is to use it to assign authors charged with keeping written reports on activities throughout the day/week. </p> Coupled with this is a task management tool through which you can assign a relevant task  to any of the designated authors (eg to report on the evolution of safety standards in the business). </p> An item representing new content is called an <i> article </i>. To create a new article, just follow the link in the menu prompting you to do. To edit (if you are the author of the article) or add a comment to an article, just click on the title of this article. </p>"
+
+
 
 msgid "ResourceAdded"
 msgstr "Resource added"
@@ -318,6 +313,8 @@ msgstr "Forum: reply"
 
 msgid "AgendaSortChronologicallyDown"
 msgstr "Descending"
+
+
 
 msgid "MyTasks"
 msgstr "My tasks"
@@ -547,9 +544,6 @@ msgstr "Legend"
 msgid "langUserHasPermissionByRoleGroup"
 msgstr "The user has rights of its group"
 
-msgid "EditPost"
-msgstr "Edit a task"
-
 msgid "AddBlog"
 msgstr "Create a new project"
 
@@ -618,6 +612,8 @@ msgstr "Blog Posts"
 
 msgid "BlogComments"
 msgstr "Blog comments"
+
+
 
 msgid "langProfessors"
 msgstr "Trainers"
@@ -1025,13 +1021,17 @@ msgid "CourseRequestAskInfoEmailSubject"
 msgstr "%s A request for additional information about the course request %s"
 
 msgid "CourseRequestAskInfoEmailText"
-msgstr "We have received your request for a new course with code %s. Before we consider it for approval, we need some additional information"
+msgstr "We have received your request for a new course with code %s. Before we consider it for approval, we need some additional information.
+
+Please, provide brief information about the course content (description), the objectives, the learners or the users that are to be involved in the proposed course. If it is applicable, mention the name of the institution or the unit on which behalf you made the course request."
 
 msgid "CourseRequestAcceptedEmailSubject"
 msgstr "%s The course request %s has been approved"
 
 msgid "CourseRequestAcceptedEmailText"
-msgstr "Your course request %s has been approved. A new course %s has been created and you are registered in it as a teacher"
+msgstr "Your course request %s has been approved. A new course %s has been created and you are registered in it as a teacher.
+
+You can access your newly created course from: %s"
 
 msgid "CourseRequestRejectedEmailSubject"
 msgstr "%s The course request %s has been rejected"
@@ -1062,6 +1062,8 @@ msgstr "The course request %s has not been updated due to internal error."
 
 msgid "CourseRequestUpdated"
 msgstr "The course request %s has been updated."
+
+
 
 msgid "ForumDeleted"
 msgstr "Forum deleted"
@@ -1503,6 +1505,8 @@ msgstr "You will be notified"
 
 msgid "ForumCategories"
 msgstr "Forum Categories"
+
+
 
 msgid "WikiSearchResults"
 msgstr "Wiki Search Results"
@@ -2197,6 +2201,8 @@ msgstr "Number of protected pages"
 msgid "WhoAndWhere"
 msgstr "Who and where"
 
+
+
 msgid "NewNote"
 msgstr "New note"
 
@@ -2287,6 +2293,8 @@ msgstr "Notes sorted by creation date ascendant"
 msgid "NotesSortedByCreationDateDESC"
 msgstr "Notes sorted by creation date downward"
 
+
+
 msgid "langExplanation"
 msgstr "Once you click on \"Create a course\", a course is created with a section for Tests, Project based learning, Assessments, Courses, Dropbox, Agenda and much more. Logging in as teacher provides you with editing privileges for this course."
 
@@ -2313,6 +2321,8 @@ msgstr "Page added"
 
 msgid "Choose"
 msgstr "Choose"
+
+
 
 msgid "langTool"
 msgstr "Document Metadata"
@@ -2355,6 +2365,8 @@ msgstr "Course keywords (bold = not used)"
 
 msgid "langTotalMDEs"
 msgstr "Total number of Links MD entries:"
+
+
 
 msgid "MoveTo"
 msgstr "Move to"
@@ -2984,7 +2996,8 @@ msgid "CreateFolder"
 msgstr "Create the folder"
 
 msgid "HelpDefaultDirDocuments"
-msgstr "INFORMATION VISIBLE TO THE TEACHER ONLY"
+msgstr "INFORMATION VISIBLE TO THE TEACHER ONLY:
+This folder contains the default archives. You can clear files or add new ones, but if a file is hidden when it is inserted in a web document, the students will not be able to see it in this document. When inserting a file in a web document, first make sure it is visible. The folders can remain hidden."
 
 msgid "HelpSharedFolder"
 msgstr "This folder contains the files that other learners (or yourself) sent into a course through the editor (if they didn't do it from the groups tool). By default, they will be visible by any trainer, but will be hidden from other learners (unless they access the files directly). If you make one user folder visible, other users will see all its content."
@@ -3005,7 +3018,8 @@ msgid "CertificateName"
 msgstr "Name"
 
 msgid "HelpFolderLearningPaths"
-msgstr "INFORMATION VISIBLE TO THE TEACHER ONLY"
+msgstr "INFORMATION VISIBLE TO THE TEACHER ONLY:
+This folder contains documents which are created by the Learning Path tool. Inside this folder you can edit the HTML file which are generated by importing content from the Learning Path, as the ones imported by Chamilo Rapid, for example. We recommend hiding this folder to your students."
 
 msgid "CopyToMyFiles"
 msgstr "Copy to my private file area"
@@ -3044,13 +3058,24 @@ msgid "UserFolder"
 msgstr "User folder"
 
 msgid "HelpUsersFolder"
-msgstr "INFORMATION VISIBLE TO THE TEACHER ONLY"
+msgstr "INFORMATION VISIBLE TO THE TEACHER ONLY:
+The users folder contains a folder for each user who has accessed it through the documents tool, or when any file has been sent in the course through the online editor. If neither circumstances has occurred, then no user folder will have been created. In the case of groups, files that are sent through the editor will be added in the folder of each group, which is only accessible by students from this group.
+<br /><br />
+The users folder and each of the included folders will be hidden by default in for all students, but each student can see the contents of his/her directory through the online editor. However, if a student knows the address of a file or folder of another student, he may be able to access it.
+<br /><br />
+If the folder of a student is visible, other students can see what it contains. In this case, the student that owns the folder can also (from the documents tool and only in his/her folder): create and edit web documents, convert a document into a template for personal use, create and edit drawings in SVG and PNG formats, record audio files in WAV format, make audio files in MP3 from a text, make snapshops from a webcam, send documents, create folders, move folders and files, delete folders and files, and download backup of his/her folder.
+<br /><br />
+Moreover, the documents tool is synchronized with the file manager of the online editor, so changes in the documents triggered in any one of these will affect both.
+<br /><br />
+As such, the user folder is not only a place to deposit files, it becomes a complete manager of the documents students use during the course. Also, remember that any user can copy a file that is visible from any folder in the documents tool (whether or not he is the owner) to his/her portfolios or personal documents area of social network, which will be available to him/her for use in other courses."
 
 msgid "HelpFolderChat"
-msgstr "INFORMATION VISIBLE TO THE TEACHER ONLY"
+msgstr "INFORMATION VISIBLE TO THE TEACHER ONLY:
+This folder contains all sessions that have been opened in the chat. Although the chat sessions can often be trivial, others can be really interesting and worthy of being incorporated as an additional work document. To do this without changing the visibility of this folder, make the file visible and link it from where you deem appropriate. It is not recommended to make this folder visible to all."
 
 msgid "HelpFolderCertificates"
-msgstr "INFORMATION VISIBLE TO THE TEACHER ONLY"
+msgstr "INFORMATION VISIBLE TO THE TEACHER ONLY:
+This folder contains the various certificates templates that have been created for the rating tool. It is not recommended to make this folder visible to all."
 
 msgid "DestinationDirectory"
 msgstr "Destination folder"
@@ -3147,6 +3172,14 @@ msgstr "Before you activate recording it is necessary a file name."
 
 msgid "SelectAnAudioFileFromDocuments"
 msgstr "Select an audio file from documents"
+
+
+
+msgid "CourseCategoriesAreGlobal"
+msgstr "Course categories are global over multiple portals configurations. Changes are only allowed in the main administrative portal."
+
+msgid "UserIsNotATeacher"
+msgstr "User is not a teacher"
 
 msgid "ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher"
 msgstr "This item is invisible for learner but you have access as teacher."
@@ -5500,6 +5533,21 @@ msgstr "Assign sessions"
 msgid "Timezone"
 msgstr "Timezone"
 
+msgid "EmptyHeaderLine"
+msgstr "There are empty lines in the header of selected file"
+
+msgid "FilterByUser"
+msgstr "Filter by user"
+
+msgid "FilterByGroup"
+msgstr "Filter by group"
+
+msgid "FilterAll"
+msgstr "Filter: Everyone"
+
+msgid "PaginationXofY"
+msgstr "%s of %s"
+
 msgid "YouHaveToAddXAsAFriendFirst"
 msgstr "You have to add %s as a friend first"
 
@@ -6086,7 +6134,14 @@ msgid "UserInactivedSinceX"
 msgstr "User inactive since %s"
 
 msgid "ContactInformationDescription"
-msgstr "Dear user,<br /"
+msgstr "Dear user,<br />
+<br />You are about to start using one of the best open-source e-learning platform on the market. Like many other open-source project, this project is backed up by a large community of students, teachers, developers and content creators who would like to promote the project better.<br />
+<br />
+By knowing a little bit more about you, one of our most important users, who will manage this e-learning system, we will be able to let people know that our software is used and let you know when we organize events that might be relevant to you.<br />
+<br />
+By filling this form, you accept that the Chamilo association or its members might send you information by e-mail about important events or updates in the Chamilo software or community. This will help the community grow as an organized entity where information flow, with a permanent respect of your time and your privacy.<br />
+<br />
+Please note that you are <b>not required</b> to fill this form. If you want to remain anonymous, we will loose the opportunity to offer you all the privileges of being a registered portal administrator, but we will respect your decision. Simply leave this form empty and click \"Next\".<br /><br />"
 
 msgid "CompanyActivity"
 msgstr "Your company's activity"
@@ -6701,7 +6756,8 @@ msgid "NoJava"
 msgstr "Your browser does not support Java"
 
 msgid "JavaSun24"
-msgstr "Your browser has a Java version not supported by this tool"
+msgstr "Your browser has a Java version not supported by this tool.
+To use it you have to install a Java Sun version higher than 24"
 
 msgid "NoMessageAnywere"
 msgstr "If you do not want to see this message again during this session, click here"
@@ -7189,8 +7245,7 @@ msgstr "Show column"
 msgid "LegalAgreementAccepted"
 msgstr "Legal agreement accepted"
 
-msgid "PaginationXofY"
-msgstr "%s of %s"
+
 
 msgid "lang_new_item"
 msgstr "new item added"
@@ -7287,6 +7342,8 @@ msgstr "Note deleted"
 
 msgid "LearnpathUpdated"
 msgstr "Learning path updated"
+
+
 
 msgid "Tools"
 msgstr "Tools"
@@ -7576,6 +7633,8 @@ msgstr "You already sent an assignment, you can't upload a new one"
 msgid "CantUploadDeleteYourPaperFirst"
 msgstr "You cannot upload this assignment. Please delete the previous one first."
 
+
+
 msgid "langSelectOptionForBackup"
 msgstr "Please select a backup-option"
 
@@ -7719,6 +7778,8 @@ msgstr "If your Learning paths have audio files included, you should select them
 
 msgid "DontForgetToSelectTheMediaFilesIfYourResourceNeedIt"
 msgstr "Don't forget to select the media files if your resource need it"
+
+
 
 msgid "langStatDB"
 msgstr "Tracking DB."
@@ -8116,11 +8177,15 @@ msgstr "Update process execution"
 msgid "PleaseWaitThisCouldTakeAWhile"
 msgstr "Please wait. This could take a while..."
 
+
+
 msgid "langMyAgenda"
 msgstr "Personal agenda"
 
 msgid "langToday"
 msgstr "Today"
+
+
 
 msgid "langInvalidId"
 msgstr "Login failed - incorrect login or password."
@@ -8342,13 +8407,16 @@ msgid "GoAheadAndBrowseOurCourseCatalogXOnceRegisteredYouWillSeeTheCourseHereX"
 msgstr "<p>Go ahead and browse our course catalog %s to register to any course you like. Once registered, you will see the course appear right %s, instead of this message.</p>"
 
 msgid "HelloXAsYouCanSeeYourCourseListIsEmpty"
-msgstr "<p>Hello <strong>%s</strong> and welcome,</p"
+msgstr "<p>Hello <strong>%s</strong> and welcome,</p>
+<p>As you can see, your courses list is still empty. That's because you are not registered to any course yet! </p>"
 
 msgid "PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses"
 msgstr "Please allow us a little time to subscribe you to one of our courses. If you think we forgot you, contact the portal administrators. You can usually find their contact details in the footer of this page."
 
 msgid "Profile"
 msgstr "Profile"
+
+
 
 msgid "langTooBig"
 msgstr "You didn't choose any file to send, or it is too big"
@@ -8370,6 +8438,8 @@ msgstr "Add a link"
 
 msgid "langEditLink"
 msgstr "Edit link"
+
+
 
 msgid "langMdCallingTool"
 msgstr "Documents"
@@ -8499,6 +8569,8 @@ msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/pla
 
 msgid "langLngResTypes"
 msgstr ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
+
+
 
 msgid "ModifyEvaluation"
 msgstr "Save assessment"
@@ -8645,7 +8717,17 @@ msgid "ScoringUpdated"
 msgstr "Skills ranking updated"
 
 msgid "CertificateWCertifiesStudentXFinishedCourseYWithGradeZ"
-msgstr "%s certifies tha"
+msgstr "%s certifies that
+
+ %s 
+
+has successfully completed the course 
+
+ '%s' 
+
+with a grade of
+
+ '%s'"
 
 msgid "CertificateMinScore"
 msgstr "Minimum certification score"
@@ -9211,6 +9293,8 @@ msgstr "The requested certificate exists on this portal, but it has not been mad
 msgid "ConfirmToUnlockElement"
 msgstr "Confirm to unlock element"
 
+
+
 msgid "Reports"
 msgstr "Rapports"
 
@@ -9309,6 +9393,8 @@ msgstr "Suivant"
 
 msgid "ReportTypeLink"
 msgstr "Lien"
+
+
 
 msgid "MessageEmptyMessageOrSubject"
 msgstr "Please provide a subject or message"
@@ -9427,6 +9513,11 @@ msgstr "Selected messages have been marked as unread"
 msgid "SelectedMessagesRead"
 msgstr "Selected messages have been marked as read"
 
+
+
+msgid "CareerUpdated"
+msgstr "Career updated successfully"
+
 msgid "CasMainActivateComment"
 msgstr "Enabling CAS authentication will allow users to authenticate with their CAS credentials.<br/>Go to <a href='settings.php?category=CAS'>Plugin</a> to add a configurable 'CAS Login' button for your Chamilo campus."
 
@@ -9446,7 +9537,23 @@ msgid "EnableIframeInclusionTitle"
 msgstr "Allow iframes in HTML Editor"
 
 msgid "MailTemplateRegistrationMessage"
-msgstr "Dear ((firstname)) ((lastname))"
+msgstr "Dear ((firstname)) ((lastname)),
+
+You are registered on
+((sitename)) with the following settings:
+
+Username :
+((username))
+Pass : ((password))
+
+The address of ((sitename)) is :
+((url))
+
+In case of trouble, contact us.
+
+Yours sincerely
+
+((admin_name)) ((admin_surname))."
 
 msgid "MailTemplateRegistrationTitle"
 msgstr "New user on ((sitename))"
@@ -12634,6 +12741,9 @@ msgstr "Allow unsubscription from platform"
 msgid "PlatformUnsubscribeComment"
 msgstr "By enabling this option, you allow any user to definitively remove his own account and all data related to it from the platform. This is quite a radical action, but it is necessary for portals opened to the public where users can auto-register. An additional entry will appear in the user profile to unsubscribe after confirmation."
 
+msgid "PromotionUpdated"
+msgstr "Promotion updated successfully"
+
 msgid "BabyOrange"
 msgstr "Baby Orange"
 
@@ -13051,6 +13161,18 @@ msgstr "Software running as a web server"
 msgid "UnameInfo"
 msgstr "Information on the system the current server is running on"
 
+msgid "AdminsCanChangeUsersPassComment"
+msgstr "This feature is useful for the multi-URL scenario, where there is a difference between the global admin and the normal admins. In this case, selecting \"No\" will prevent normal admins to set other users' passwords, and will only allow them to ask for a password regeneration (thus sent by e-mail to the user). The global admin can still do it."
+
+msgid "AdminsCanChangeUsersPassTitle"
+msgstr "Admins can change users' passwords"
+
+msgid "AdminLoginAsAllowedComment"
+msgstr "Allow users with the corresponding privileges to use the \"login as\" feature to connect using other users' account? This setting is most useful for multi-url configuration, where you don't think an administrator from a secondary URL should be able to connect as any user. Note that another setting is available in the configuration file to block all possibility for anyone to use this feature."
+
+msgid "AdminLoginAsAllowedTitle"
+msgstr "\"Login as\" feature"
+
 msgid "AssignSessionsToX"
 msgstr "Assign sessions to %s"
 
@@ -13463,7 +13585,8 @@ msgid "BigBlueButtonEnableTitle"
 msgstr "BigBlueButton videoconference tool"
 
 msgid "BigBlueButtonEnableComment"
-msgstr "Choose whether you want to enable the BigBlueButton videoconference tool. Once enabled, it will show as an additional course tool in all courses' homepage, and teachers will be able to launch a conference at any time. Learners will not be able to launch a conference, only join one. If you don't have a BigBlueButton server, please <a href=\"http://bigbluebutton.org/\" target=\"_blank\">set one up</a> or ask the <a href=\"http://www.chamilo.org/en/providers\" target=\"_blank\">Chamilo official providers</a> for a quote"
+msgstr "Choose whether you want to enable the BigBlueButton videoconference tool. Once enabled, it will show as an additional course tool in all courses' homepage, and teachers will be able to launch a conference at any time. Learners will not be able to launch a conference, only join one. If you don't have a BigBlueButton server, please <a href=\"http://bigbluebutton.org/\" target=\"_blank\">set one up</a> or ask the <a href=\"http://www.chamilo.org/en/providers\" target=\"_blank\">Chamilo official providers</a> for a quote.
+BigBlueButton is a free (as in freedom *and* beer), but its installation requires a set of technical skills that might not be immediately available to all. You can install it on your own or seek professional help to assist you or do it for you. This help, however, will generate a certain cost. In the pure logic of the free software, we offer you the tools to make your work easier and recommend professionals (the Chamilo Official Providers) that will be able to help you if this were too difficult."
 
 msgid "BigBlueButtonHostTitle"
 msgstr "BigBlueButton server host"
@@ -13535,7 +13658,9 @@ msgid "MoveUserStats"
 msgstr "Move users results from/to a session"
 
 msgid "CompareUserResultsBetweenCoursesAndCoursesInASession"
-msgstr "This advanced tool allows you to manually improve the tracking of users results when moving from courses methodology to sessions methodology. In most cases, you won't need to use it.<br /"
+msgstr "This advanced tool allows you to manually improve the tracking of users results when moving from courses methodology to sessions methodology. In most cases, you won't need to use it.<br />
+On this screen, you can compare results of users between the context of a standalone course, and the context of the same course inside a session.<br />
+Once you are sure about what to do, you can choose to move the tracking data of the students (exercises results and learning paths tracking) from a course to a session."
 
 msgid "PDFExportWatermarkEnableTitle"
 msgstr "Enable watermark in PDF export"
@@ -13697,7 +13822,9 @@ msgid "SearchEnabledTitle"
 msgstr "Fulltext search"
 
 msgid "SearchEnabledComment"
-msgstr "This feature allows you to index most of the documents uploaded to your portal, then provide a search feature for users.<br /"
+msgstr "This feature allows you to index most of the documents uploaded to your portal, then provide a search feature for users.<br />
+This feature will not index documents that have already been uploaded, so it is important to enable (if wanted) at the beginning of your implementation.<br />
+Once enabled, a search box will appear in the courses list of every user. Searching for a specific term will bring a list of corresponding documents, exercises or forum topics, filtered depending on the availability of these contents to the user."
 
 msgid "SpecificSearchFieldsAvailable"
 msgstr "Available custom search fields"
@@ -14422,6 +14549,8 @@ msgstr "%d old databases deleted"
 msgid "ExtensionShouldBeLoaded"
 msgstr "This extension should be loaded."
 
+
+
 msgid "AgendaAdd"
 msgstr "Add event"
 
@@ -14665,6 +14794,8 @@ msgstr "Disable end date"
 msgid "AllEvents"
 msgstr "All events"
 
+
+
 msgid "langChapter"
 msgstr "Section"
 
@@ -14799,6 +14930,8 @@ msgstr "Uncompress zip"
 
 msgid "ExportShort"
 msgstr "Export as SCORM"
+
+
 
 msgid "PublishSurvey"
 msgstr "Publish survey"
@@ -15404,7 +15537,9 @@ msgid "ThereAreNotQuestionsForthisSurvey"
 msgstr "There are not questions for this survey"
 
 msgid "GenerateSurveyAccessLinkExplanation"
-msgstr "By copying the link below and pasting it in an e-mail or on a website, you will allow any anonymous person to enter and answer this survey"
+msgstr "By copying the link below and pasting it in an e-mail or on a website, you will allow any anonymous person to enter and answer this survey.
+You can test this feature by clicking the link above and answering the survey.
+This is particularly useful if you want to allow anyone on a forum to answer you survey and you don't know their e-mail addresses."
 
 msgid "GenerateSurveyAccessLink"
 msgstr "Generate survey access link"
@@ -15435,6 +15570,8 @@ msgstr "Delete a survey group"
 
 msgid "ErrorOccurred"
 msgstr "An error occurred."
+
+
 
 msgid "AlreadyRegisteredToCourse"
 msgstr "Already registered in course"
@@ -15682,11 +15819,16 @@ msgstr "Group pending invitations"
 msgid "Compose"
 msgstr "Compose"
 
+msgid "EmptyHeaderLine"
+msgstr "There is an empty line in the header of selected file"
+
 msgid "EnrollToCourseXSuccessful"
 msgstr "You have been registered to course: %s"
 
 msgid "ThereAreNoCoursesInThisCategory"
 msgstr "No course at this category level"
+
+
 
 msgid "TermAddNew"
 msgstr "Add new glossary term"
@@ -15783,6 +15925,8 @@ msgstr "Term updated"
 
 msgid "DeleteAllGlossaryTerms"
 msgstr "Delete all terms"
+
+
 
 msgid "ModifInfo"
 msgstr "Settings"
@@ -16185,6 +16329,23 @@ msgstr "Legal agreement for this course"
 
 msgid "AcceptLegal"
 msgstr "Accept legal terms"
+
+
+
+msgid "ToReview"
+msgstr "To be reviewed"
+
+msgid "Unanswered"
+msgstr "Unanswered"
+
+msgid "Answered"
+msgstr "Answered"
+
+msgid "CurrentQuestion"
+msgstr "Current question"
+
+msgid "MediaQuestions"
+msgstr "Shareable enunciates"
 
 msgid "AddedToLPCannotBeAccessed"
 msgstr "This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon."
@@ -17266,6 +17427,9 @@ msgstr "Exact answers combination"
 msgid "ExerciceExpiredTimeMessage"
 msgstr "The exercise time limit has expired"
 
+msgid "AllQuestionsMustHaveACategory"
+msgstr "All questions must have a category to use the random-by-category mode."
+
 msgid "NoMedia"
 msgstr "Not linked to media"
 
@@ -17722,8 +17886,7 @@ msgstr "All"
 msgid "ProblemsRecordingUploadYourOwnAudioFile"
 msgstr "Problem recording? Upload your own audio file."
 
-msgid "AllQuestionsMustHaveACategory"
-msgstr "All questions must have a category"
+
 
 msgid "ViewModeImpress"
 msgstr "Current view mode: Impress"
@@ -18508,6 +18671,8 @@ msgstr "Terms for the search feature"
 msgid "PrerequisiteDeletedError"
 msgstr "Error: the element defined as prerequisite has been deleted."
 
+
+
 msgid "langActivate"
 msgstr "Show"
 
@@ -18597,6 +18762,8 @@ msgstr "The learning path auto-launch setting is ON. When learners enter this co
 
 msgid "ToolSearch"
 msgstr "Search"
+
+
 
 msgid "Upload"
 msgstr "Upload"
@@ -18901,6 +19068,8 @@ msgstr "Invalid group detected."
 msgid "OverviewOfFilesInThisZip"
 msgstr "Overview of diles in this Zip"
 
+
+
 msgid "Height"
 msgstr "Height"
 
@@ -18954,6 +19123,8 @@ msgstr "AUTO RESIZE (default)"
 
 msgid "ResizingAutoComment"
 msgstr "This slideshow will resize automatically to your screen size. This is the default option."
+
+
 
 msgid "nameTools"
 msgstr "obsolete language variable"
@@ -19053,6 +19224,8 @@ msgstr "New manifest file could not be opened (e.g. empty, too big)"
 
 msgid "langUploadMff"
 msgstr "Replace manifest file"
+
+
 
 msgid "Announcement"
 msgstr "Announcements"
@@ -19217,7 +19390,9 @@ msgid "ButtonPublishAnnouncement"
 msgstr "Send announcement"
 
 msgid "YourAccountIsActiveYouCanLoginAndCheckYourCourses"
-msgstr "Dear user"
+msgstr "Dear user, 
+
+Your account has now been activated on the platform. Please login and enjoy your courses."
 
 msgid "AddAsAnnouncement"
 msgstr "Add as an announcement"
@@ -19225,8 +19400,12 @@ msgstr "Add as an announcement"
 msgid "AnnouncementForGroup"
 msgstr "Announcement for a group"
 
+
+
 msgid "langScormBuilder"
 msgstr "Create a course (authoring tool)"
+
+
 
 msgid "langNewGroupCreate"
 msgstr "Create new group(s)"
@@ -19513,6 +19692,8 @@ msgstr "No data available"
 msgid "AllGroups"
 msgstr "All groups"
 
+
+
 msgid "langScormVersion"
 msgstr "version"
 
@@ -19680,6 +19861,8 @@ msgstr "The package you are uploading doesn't seem to be in SCORM format. Please
 
 msgid "HideTocFrame"
 msgstr "Hide table of contents frame"
+
+
 
 msgid "langLineNumber"
 msgstr "Line Number"
@@ -20281,6 +20464,8 @@ msgstr "If you want to unsubscribe completely from this campus and have all your
 msgid "UnsubscribeFromPlatformConfirm"
 msgstr "Yes, I want to remove this account completely. No data will remain on the server and I will be unable to login again, unless I create a completely new account."
 
+
+
 msgid "langMdCallingTool"
 msgstr "Documents"
 
@@ -20406,6 +20591,8 @@ msgstr " - duplicate categorynames were removed from the list!"
 
 msgid "langSLC"
 msgstr "Work with Links category named"
+
+
 
 msgid "langShouldBeCSVFormat"
 msgstr "File should be CSV format. Do not add spaces. Structure should be exactly :"
@@ -20630,7 +20817,8 @@ msgid "langAddress"
 msgstr "The address of"
 
 msgid "langSettings"
-msgstr "with the following settings "
+msgstr "with the following settings : 
+Login :"
 
 msgid "langYouAreReg"
 msgstr "You are registered on"
@@ -20740,7 +20928,7 @@ msgstr "Register"
 msgid "langQuit"
 msgstr "Quit"
 
-msgid "your_password_has_been_reset"
+msgid "YourPasswordHasBeenReset"
 msgstr "Your password has been reset"
 
 msgid "langSex"
@@ -20962,6 +21150,8 @@ msgstr "Upon reception"
 msgid "Daily"
 msgstr "Once a day"
 
+
+
 msgid "no_login"
 msgstr "The system was unable to log you in. Please contact your administrator."
 
@@ -21006,6 +21196,8 @@ msgstr "You are already logged in"
 
 msgid "Pass"
 msgstr "Password"
+
+
 
 msgid "select"
 msgstr "Select"
@@ -21066,6 +21258,8 @@ msgstr "Close delineation"
 
 msgid "oar"
 msgstr "Area at risk"
+
+
 
 msgid "Camera"
 msgstr "Camera"
@@ -21384,6 +21578,8 @@ msgstr "Medium"
 
 msgid "ThickStroke"
 msgstr "Thick"
+
+
 
 msgid "AssignSessionsTo"
 msgstr "Assign sessions to"
@@ -22372,6 +22568,8 @@ msgstr "Followed users"
 msgid "Timeline"
 msgstr "Timeline"
 
+
+
 msgid "ReservationPeriodToSmall"
 msgstr "The reservation period is to short."
 
@@ -22565,19 +22763,23 @@ msgid "ReservationMadeTitle"
 msgstr "Your booking of #ITEM# was successfull"
 
 msgid "ReservationMadeMessage"
-msgstr "Dear Sir/Madam"
+msgstr "Dear Sir/Madam,
+
+Your booking for #ITEM# from #START# until #END# is successfull."
 
 msgid "ReservationDeleteTitle"
 msgstr "A booking period of #NAME# has been deleted"
 
 msgid "ReservationDeleteMessage"
-msgstr "Dear Sir/Madam"
+msgstr "Dear Sir/Madam,
+The reservation period of #NAME# from #START# until #END# has been removed."
 
 msgid "OutPeriod"
 msgstr "Out period"
 
 msgid "ReservationFromUntilError"
-msgstr "The booking period from #START# until #END# hasn't been made because a part of the booking period is already taken"
+msgstr "The booking period from #START# until #END# hasn't been made because a part of the booking period is already taken.
+"
 
 msgid "Recurrence"
 msgstr "Recurrence"
@@ -22706,10 +22908,14 @@ msgid "ReservationDenied"
 msgstr "Your booking for #ITEM# was refused"
 
 msgid "ReservationForItemAccepted"
-msgstr "Dear Sir/Madam"
+msgstr "Dear Sir/Madam,
+
+Your reservation for #ITEM# from #BEGIN till #END has been accepted."
 
 msgid "ReservationForItemDenied"
-msgstr "Dear Sir/Madam"
+msgstr "Dear Sir/Madam,
+
+Your booking for #ITEM# from #BEGIN till #END has been rejected."
 
 msgid "ReservationCancelled"
 msgstr "Reservation cancelled, #NAME# is temporary unavailable"
@@ -22718,10 +22924,15 @@ msgid "ReservationActive"
 msgstr "Reservation is active again, #NAME# is available again"
 
 msgid "ReservationUnavailable"
-msgstr "Dear Sir/Madam"
+msgstr "Dear Sir/Madam,
+
+Resource #NAME# is temporarily unavailable so your booking from #BEGIN# till #END# has been cancelled.
+You will get an email when it is available again."
 
 msgid "ReservationAvailable"
-msgstr "Dear Sir/Madam"
+msgstr "Dear Sir/Madam,
+
+We wish to inform you that #NAME# is available again, so your reservation from #BEGIN# till #END# is active again."
 
 msgid "Resources"
 msgstr "Resources"
@@ -22936,6 +23147,8 @@ msgstr "Is the platform role not editable?"
 msgid "UserPermissions"
 msgstr "User's permissions"
 
+
+
 msgid "ClearContent"
 msgstr "<p><b>Trainer</b></p><p>Chamilo is a Learning and Knowledge Management System. It allows the trainer  to organize learning materials, training  and to manage the interaction with the participants. All this is made inside the web browser.</p><p>To use Chamilo as a trainer , you need a login and a password. Depending on the security settings of your portal, you an get these by self-registration (right hand menu) or from the central administration of your organization. Note that a login and a password will never contain spaces or accents and that they are case sensitive. Type your login/password, then create a training (top right) or use the course that has been created for you by the central administration of your organization.</p><p>To add a colleague as co-administrator of your course:<ol><li>If he/she is not yet registered in the system, register him/her and select 'trainer' as a profile,</li><li>If he/she is already registered in the system, temporarily open training subscription in Training settings and ask him/her to enroll in your course. Then edit his/her profile and give him/her trainer rights.</li></ol></p><p>Every Chamilo tool contains a contextual help represented by a red buoy. If you don't find there the good information, consider checking the Chamilo documentation page: <a href=\"http://www.chamilo.org/documentation.php\">http://www.chamilo.org/documentation.php</a> and download the trainer manual. in your own language or in English</p><p><b>Learner</b></p><p>This portal allows you to follow and participate to training, collaborative workshops etc. It has been created to promote active learning: project-based, problem-based, case-based learning, collaborative research etc.Your teachers have build learning areas that can present as simple documents folders or sophisticated self-learning or group learning sequences of activities.</p><p>Registration process can vary from one organization to the other. In some cases, self-registration is allowed. In others, you should get from the central administration a login and a password.</p>"
 
@@ -22965,6 +23178,8 @@ msgstr "Goto menu"
 
 msgid "WCAGGoContent"
 msgstr "Goto content"
+
+
 
 msgid "LinkMoved"
 msgstr "The link has been moved"
@@ -23015,7 +23230,8 @@ msgid "langCategoryDeleted"
 msgstr "The category and all its links have been deleted."
 
 msgid "langCategoryDelconfirm"
-msgstr "When deleting a category, all links of this category are also deleted"
+msgstr "When deleting a category, all links of this category are also deleted.
+Do you really want to delete this category and its links ?"
 
 msgid "langAllCategoryDel"
 msgstr "Delete all categories and all links"
@@ -23121,6 +23337,8 @@ msgstr "Open top"
 
 msgid "LinkTarget"
 msgstr "Link target"
+
+
 
 msgid "langOnlineConference"
 msgstr "Conference"
@@ -23295,6 +23513,8 @@ msgstr "Pause"
 
 msgid "Stop"
 msgstr "Stop"
+
+
 
 msgid "langCourseProgram"
 msgstr "Description"

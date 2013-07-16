@@ -2,6 +2,11 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ToReview = "Por revisar";
+$Unanswered = "Sin responder";
+$Answered = "Respondida";
+$CurrentQuestion = "Pregunta actual";
+$MediaQuestions = "Enunciados compartidos";
 $AddedToLPCannotBeAccessed = "Este ejercicio ha sido incluido en una secuencia de aprendizaje, por lo cual no podrá ser accesible directamente por los estudiantes desde aquí. Si quiere colocar el mismo ejercicio disponible a través de la herramienta ejercicios, haga una copia del ejercicio en cuestión pulsando sobre el icono de copia.";
 $langExercice = "Ejercicio";
 $langActivate = "Activar";
@@ -362,6 +367,7 @@ $ExerciseAttempted = "Un estudiante ha contestado una pregunta";
 $MultipleSelectCombination = "Combinación exacta";
 $MultipleAnswerCombination = "Combinación exacta";
 $ExerciceExpiredTimeMessage = "El tiempo de la evaluación ha terminado. Sin embargo las preguntas que ya respondió, serán consideradas en la evaluación del ejercicio.";
+$AllQuestionsMustHaveACategory = "Todas las preguntas deben de tener por lo menos una categoría asociada.";
 $NoMedia = "Sin vínculo a medio";
 $AttachToMedia = "Vincular a medio";
 $ExamModeWithFinalScoreShowOnlyFinalScoreWithCategoriesIfAvailable = "Mostrar solo el resultado final, con categorías si disponibles";
@@ -514,5 +520,4 @@ $NoNegativeScore = "Sin puntos negativos";
 $GlobalMultipleAnswer = "Respuesta múltiple global";
 $AllQuestionsShort = "Todas";
 $ProblemsRecordingUploadYourOwnAudioFile = "Tiene problemas para grabar? Mande su propio fichero audio.";
-$AllQuestionsMustHaveACategory = "Todas las preguntas deben de tener por lo menos una categoría asociada";
 ?>

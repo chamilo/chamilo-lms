@@ -543,9 +543,6 @@ msgstr "Légende"
 msgid "langUserHasPermissionByRoleGroup"
 msgstr "L'utilisateur a les droits de son groupe"
 
-msgid "EditPost"
-msgstr "Editer un article"
-
 msgid "AddBlog"
 msgstr "Créer un nouveau blog"
 
@@ -3170,6 +3167,12 @@ msgstr "Sélectionner un fichier audio à partir des documents"
 
 
 
+msgid "CourseCategoriesAreGlobal"
+msgstr "Course categories are global over multiple portals configurations. Changes are only allowed in the main administrative portal."
+
+msgid "UserIsNotATeacher"
+msgstr "User is not a teacher"
+
 msgid "ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher"
 msgstr "Cet élément est invisible pour les étudiants mais vous avez un accès enseignant."
 
@@ -5524,6 +5527,21 @@ msgstr "Assigner des sessions"
 msgid "Timezone"
 msgstr "Zones horaires"
 
+msgid "EmptyHeaderLine"
+msgstr "There are empty lines in the header of selected file"
+
+msgid "FilterByUser"
+msgstr "Filtrer par utilisateur"
+
+msgid "FilterByGroup"
+msgstr "Filtrer par groupe"
+
+msgid "FilterAll"
+msgstr "Filtre: Tout le monde"
+
+msgid "PaginationXofY"
+msgstr "%s sur %s"
+
 msgid "YouHaveToAddXAsAFriendFirst"
 msgstr "%s doit d'abord être votre ami(e)"
 
@@ -6679,7 +6697,7 @@ msgid "SupportedScormContentMakers"
 msgstr "Paquets SCORM supportés"
 
 msgid "Copy"
-msgstr "Copier"
+msgstr "Copie"
 
 msgid "EnableStartTime"
 msgstr "Activer date de début"
@@ -7217,9 +7235,6 @@ msgstr "Montrer la colonne"
 
 msgid "LegalAgreementAccepted"
 msgstr "Conditions légales acceptées"
-
-msgid "PaginationXofY"
-msgstr "%s of %s"
 
 
 
@@ -9484,18 +9499,21 @@ msgid "YouShouldWriteAMessage"
 msgstr "Vous devriez écrire un message"
 
 msgid "SelectedMessagesUnRead"
-msgstr "Selected messages have been marked as unread"
+msgstr "Les messages sélectionnés ont été marqués comme non lus"
 
 msgid "SelectedMessagesRead"
-msgstr "Selected messages have been marked as read"
+msgstr "Les messages sélectionnés ont été marqués comme lus"
 
 
+
+msgid "CareerUpdated"
+msgstr "Career updated successfully"
 
 msgid "CasMainActivateComment"
 msgstr "Activer l'authentification CAS permettra aux utilisateurs de s'identifier à l'aide de leur compte CAS<br/>Vous trouverez dans les <a href='settings.php?category=CAS'>Plugin</a> un bouton 'Login CAS', paramétrable, qui s'ajoutera sur la page d'accueil de votre campus Chamilo."
 
 msgid "UsersRegisteredInAnyGroup"
-msgstr "Utilisteurs enregistrés dans n'importe quel groupe"
+msgstr "Utilisateurs enregistrés dans n'importe quel groupe"
 
 msgid "ShowHotCoursesComment"
 msgstr "Affiche la liste des cours les plus utilisés (hot courses) sur la page d'accueil"
@@ -9504,10 +9522,10 @@ msgid "ShowHotCoursesTitle"
 msgstr "Afficher les cours les plus utilisés (hot courses)"
 
 msgid "EnableIframeInclusionComment"
-msgstr "Authoriser les balises iframe dans l'éditeur HTML améliore l'édition de documents mais peut représenter un risque pour la sécurité."
+msgstr "Autoriser les balises iframe dans l'éditeur HTML améliore l'édition de documents mais peut représenter un risque pour la sécurité."
 
 msgid "EnableIframeInclusionTitle"
-msgstr "Authoriser les balises iframe dans l'éditeur HTML."
+msgstr "Autoriser les balises iframe dans l'éditeur HTML."
 
 msgid "MailTemplateRegistrationMessage"
 msgstr "Cher(ère) ((firstname)) ((lastname)), Vous êtes inscrit(e) sur
@@ -10255,7 +10273,7 @@ msgid "InstitutionTitle"
 msgstr "Titre de l'institution"
 
 msgid "InstitutionComment"
-msgstr "Le nom de l'instituion (apparaît dans l'en-tête du côté droit)"
+msgstr "Le nom de l'institution (apparaît dans l'en-tête du côté droit)"
 
 msgid "InstitutionUrlTitle"
 msgstr "URL de l'institution"
@@ -10504,7 +10522,7 @@ msgid "NoCoursesForThisClass"
 msgstr "Cette classe n'est inscrite à aucun cours"
 
 msgid "langOpenToTheWorld"
-msgstr "Ouvert - accès autorisé pour tout le monde"
+msgstr "Public - accès autorisé pour tout le monde"
 
 msgid "OpenToThePlatform"
 msgstr "Ouvert - accès autorisé aux utilisateurs enregistrés sur la plateforme"
@@ -10864,13 +10882,13 @@ msgid "ImageResizeTitle"
 msgstr "Redimentionnez les images des utilisateurs."
 
 msgid "ImageResizeComment"
-msgstr "Les images téléchargés par les utilisateurs peuvent être redimensionnées si PHP a été compilé avec la <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">librairie GD</a>. Si ce n'est pas le cas, ce réglage n'a aucun effet."
+msgstr "Les images téléchargées par les utilisateurs peuvent être redimensionnées si PHP a été compilé avec la <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">librairie GD</a>. Si ce n'est pas le cas, ce réglage n'a aucun effet."
 
 msgid "MaxImageWidthTitle"
 msgstr "Largeur maximale des images"
 
 msgid "MaxImageWidthComment"
-msgstr "Largeur maximale en pixels pour les images téléchargés. Ce réglage n'a d'effet que si le redimensionnement des images a été activé."
+msgstr "Largeur maximale en pixels pour les images téléchargées. Ce réglage n'a d'effet que si le redimensionnement des images a été activé."
 
 msgid "MaxImageHeightTitle"
 msgstr "Hauteur maximale des images"
@@ -10915,19 +10933,19 @@ msgid "langVisioconf"
 msgstr "Vidéo-conférence"
 
 msgid "langVisioconfDescription"
-msgstr "Chamilo Live Conferencing® est un outil standardisé de vidéoconférence qui offre : diffusion de transparents, superposition avec un tableau blanc pour le dessin et l'écriture au vol, duplex audio et vidéo, demande de parole, discussion écrite par chat et liste des connectés. Il tourne dans le navigateur internet en Flash® et offre 3 modes : one2one, one2many et many2many."
+msgstr "Chamilo Live Conferencing® est un outil standardisé de vidéoconférence qui offre : diffusion de transparents, superposition avec un tableau blanc pour le dessin et l'écriture au vol, duplex audio et vidéo, demande de parole, discussion écrite par chat et liste des connectés. Il tourne dans le navigateur, en Flash®, et offre 3 modes : one2one, one2many et many2many."
 
 msgid "langPpt2lp"
 msgstr "Oogie"
 
 msgid "langPpt2lpDescription"
-msgstr "PowerPoint2LearningPath vous permet de transformer en quelques clics de souris une présentation PowerPoint ou OpenOffice en un parcours d'apprentissage."
+msgstr "PowerPoint2LearningPath vous permet de transformer en quelques clics de souris une présentation PowerPoint ou Libre/OpenOffice en un parcours d'apprentissage."
 
 msgid "langBandWidthStatistics"
 msgstr "Bandwidth statistics"
 
 msgid "langBandWidthStatisticsDescription"
-msgstr "MRTG vous permet de consulter les statistiques détaillées sur l'état de votre serveur sur les dernières 24 heures."
+msgstr "MRTG vous permet de consulter les statistiques détaillées de l'état de votre serveur sur les dernières 24 heures."
 
 msgid "ServerStatistics"
 msgstr "Statistiques du serveur"
@@ -11128,10 +11146,10 @@ msgid "SessionOverview"
 msgstr "Résumé de la session"
 
 msgid "SubscribeUserIfNotAllreadySubscribed"
-msgstr "Inscrire l'utilsateur si il n'est pas déjà inscrit"
+msgstr "Inscrire l'utilsateur s'il n'est pas déjà inscrit"
 
 msgid "UnsubscribeUserIfSubscriptionIsNotInFile"
-msgstr "Désinscrire l'utilisateur si il n'est pas dans le fichier"
+msgstr "Désinscrire l'utilisateur s'il n'est pas dans le fichier"
 
 msgid "DeleteSelectedSessions"
 msgstr "Supprimer les sessions sélectionnées"
@@ -11437,7 +11455,7 @@ msgid "ShowNumberOfCoursesComment"
 msgstr "Affiche le nombre de cours dans chaque catégorie dans la liste de cours de la page d'accueil"
 
 msgid "EphorusDescription"
-msgstr "Start using the Ephorus anti plagiarism service in Chamilo.<br /> 														<strong>With Ephorus, you will prevent internet plagiarism without any additional effort.</strong><br /> 														 You can use our unique open standard webservice to build your own integration or you can use one of our Chamilo-integration modules."
+msgstr "Start using the Ephorus anti plagiarism service in Chamilo.<br /> 														<strong>With Ephorus, you will prevent Internet plagiarism without any additional effort.</strong><br /> 														 You can use our unique open standard webservice to build your own integration or you can use one of our Chamilo-integration modules."
 
 msgid "EphorusLeadersInAntiPlagiarism"
 msgstr "<strong>Leaders in <br />anti plagiarism </strong>"
@@ -11524,7 +11542,7 @@ msgid "ExtendedProfileRegistrationRequiredTitle"
 msgstr "Champs du profil étendu demandés lors de l'enregistrement"
 
 msgid "ExtendedProfileRegistrationRequiredComment"
-msgstr "Lesquels des champs suivants du profil étendu sont requis lors de l'enregistrement des utilisateurs? Ceci nécessite que l'option du profil étendu à l'enregistrement soit activée et que les champs soient disponibles dans le formulaire d'inscription (voir ci-dessus)."
+msgstr "Quels champs du profil étendu sont requis lors de l'enregistrement des utilisateurs? Ceci nécessite que l'option du profil étendu à l'enregistrement soit activée et que les champs soient disponibles dans le formulaire d'inscription (voir ci-dessus)."
 
 msgid "NoReplyEmailAddress"
 msgstr "Adresse e-mail \"no-reply\""
@@ -11656,7 +11674,7 @@ msgid "GradebookScoreDisplayCustom"
 msgstr "Affichage paramétrable des scores"
 
 msgid "GradebookScoreDisplayCustomComment"
-msgstr "Cocher la case pour activer le paramétrage des notes (sélectionner quels notes seront donnés pour quels points obtenus)"
+msgstr "Cocher la case pour activer le paramétrage des notes (sélectionner quelles notes seront données pour quels points obtenus)"
 
 msgid "TabsGradebookEnableCustom"
 msgstr "Activer les notes paramétrables"
@@ -11665,7 +11683,7 @@ msgid "GradebookScoreDisplayColorSplit"
 msgstr "Limite de couleur des notes"
 
 msgid "GradebookScoreDisplayColorSplitComment"
-msgstr "Le pourcentage limite sous lequel les notes seront colorés en rouge"
+msgstr "Le pourcentage limite sous lequel les notes seront colorées en rouge"
 
 msgid "GradebookScoreDisplayUpperLimit"
 msgstr "Affichage de la limite supérieure"
@@ -11710,13 +11728,13 @@ msgid "DisplayUpcomingEventsTitle"
 msgstr "Afficher les événements à venir dans l'outil Agenda"
 
 msgid "DisplayUpcomingEventsComment"
-msgstr "Ce paramètre active ou désactive les évènements à venir qui apparaissent dans la colonne de gauche de l'outil Agenda du cours"
+msgstr "Ce paramètre active ou désactive les événements à venir qui apparaissent dans la colonne de gauche de l'outil Agenda du cours"
 
 msgid "NumberOfUpcomingEventsTitle"
-msgstr "Nombre d'évènements à venir qui doivent être affichés."
+msgstr "Nombre d'événements à venir qui doivent être affichés."
 
 msgid "NumberOfUpcomingEventsComment"
-msgstr "Le nombre d'évènements à venir à afficher dans l'agenda. Ceci nécessite que l'affichage des événements à venir soit activé."
+msgstr "Le nombre d'événements à venir à afficher dans l'agenda. Ceci nécessite que l'affichage des événements à venir soit activé."
 
 msgid "ShowClosedCoursesTitle"
 msgstr "Afficher les cours fermées sur la page de login et sur l'accueil du portail ?"
@@ -11740,7 +11758,7 @@ msgid "LDAPMainServerAddressTitle"
 msgstr "Adresse du serveur LDAP principal"
 
 msgid "LDAPMainServerAddressComment"
-msgstr "L'adresse IP ou l'url de votre serveur LDAP principal."
+msgstr "L'adresse IP ou l'URL de votre serveur LDAP principal."
 
 msgid "LDAPMainServerPortTitle"
 msgstr "Port du serveur LDAP principal."
@@ -11926,7 +11944,7 @@ msgid "VisioUseRtmptTitle"
 msgstr "Utiliser le protocole rtmpt"
 
 msgid "VisioUseRtmptComment"
-msgstr "Le protocole rtmpt permet l'accès à la vidéoconférence depuis un ordinateur protégé par un firewall. Cette solution ralentit toutefois le streaming audio et vidéo, et n'est donc pas recommandée si ce n'est pas nécessaire."
+msgstr "Le protocole rtmpt permet l'accès à la vidéoconférence depuis un ordinateur protégé par un pare-feu (firewall). Cette solution ralentit toutefois le streaming audio et vidéo, et n'est donc pas recommandée si ce n'est pas nécessaire."
 
 msgid "UploadNewStylesheet"
 msgstr "Fichier de la nouvelle feuille de style"
@@ -12211,7 +12229,7 @@ msgid "AddCoursesToURL"
 msgstr "Assigner des cours à un URL"
 
 msgid "EditCoursesToURL"
-msgstr "Modifier les cours d'une URL"
+msgstr "Modifier les cours d'un URL"
 
 msgid "AddCoursesToThatURL"
 msgstr "Assigner des cours à cet URL"
@@ -12622,7 +12640,7 @@ msgid "AddSessionsInCategories"
 msgstr "Ajouter sessions à catégories"
 
 msgid "ItIsRecommendedInstallImagickExtension"
-msgstr "Il est recommandé d'installer l'extension imagick de PHP pour obtenir de meilleurs résultats au niveau résolution des images réduites. Si cette extension n'est pas instalée, il sera fait usage, à sa place, de l'extension PHP-GD."
+msgstr "Il est recommandé d'installer l'extension imagick de PHP pour obtenir de meilleurs résultats au niveau résolution des images réduites. Si cette extension n'est pas installée, il sera fait usage, à sa place, de l'extension PHP-GD."
 
 msgid "EditSpecificSearchField"
 msgstr "Éditer le champ spécifique de recherche"
@@ -12679,7 +12697,7 @@ msgid "NumberOfSession"
 msgstr "Nombre de sessions"
 
 msgid "DeleteSelectedSessionCategory"
-msgstr "Supprimer seulement les catégopries sélectionnées sans sessions"
+msgstr "Supprimer seulement les catégories sélectionnées sans sessions"
 
 msgid "DeleteSelectedFullSessionCategory"
 msgstr "Supprimer les catégories sélectionnées avec leurs sessions"
@@ -12697,10 +12715,13 @@ msgid "YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill"
 msgstr "Votre carnet de notes doit d'abord être lié à un certificat pour pouvoir être attaché à une compétence"
 
 msgid "PlatformUnsubscribeTitle"
-msgstr "Authoriser les utilisateurs à se désinscrire de la plateforme"
+msgstr "Autoriser les utilisateurs à se désinscrire de la plateforme"
 
 msgid "PlatformUnsubscribeComment"
 msgstr "Quand les utilisateurs se désinscrivent toutes leurs données sont effacées de façon permanente."
+
+msgid "PromotionUpdated"
+msgstr "Promotion updated successfully"
 
 msgid "BabyOrange"
 msgstr "Petite Orange"
@@ -12926,7 +12947,7 @@ msgstr "Utiliser les zones de temps utilisateurs"
 
 msgid "UseUsersTimezoneComment"
 msgstr "Activer la possibilité pour les utilisateurs de sélectionner leur zone horaire. Le champ de zone horaire doit être rendu visible et modifiable dans les options de profiling du panneau d'administration avant que les utilisateurs ne puissent choisir leur propre zone.
-Une fois configurée, les utilisateurs pourront voir toutes les heures du portail (heure de remise des travaux, évènements, etc) converties dans leur propre zone horaire."
+Une fois configurée, les utilisateurs pourront voir toutes les heures du portail (heure de remise des travaux, événements, etc) converties dans leur propre zone horaire."
 
 msgid "FieldTypeTimezone"
 msgstr "Zone horaire"
@@ -13120,6 +13141,18 @@ msgstr "Logiciel utilisé comme serveur web"
 msgid "UnameInfo"
 msgstr "Information sur le système sur lequel le serveur web fonctionne"
 
+msgid "AdminsCanChangeUsersPassComment"
+msgstr "Cette fonctionnalité est utile dans le cas d'utilisation des multi-URLs, où il existe une différence entre l'administrateur global et les administrateurs de portails spécifiques. Dans ce cas, choisir \"Non\" empêchera les administrateurs de portails d'assigner un mot de passe spécifique aux utilisateurs. Ils ne seront autorisés qu'à demander une régénération automatique du mot de passe (envoyée par e-mail à l'utilisateur). L'administrateur global, lui, pourra continuer à utiliser l'option."
+
+msgid "AdminsCanChangeUsersPassTitle"
+msgstr "Modification de mots de passe par les administrateurs"
+
+msgid "AdminLoginAsAllowedComment"
+msgstr "Permet aux utilisateurs disposant des privilèges correspondants d'utiliser la fonctionnalité \"Se connecter en tant que ...\" un autre utilisateur. Ce paramètre est particulièrement utile pour les configurations multi-URL, pour lesquelles vous ne souhaitez pas qu'un administrateur d'une sous-URL puisse accéder au compte de n'importe quel utilisateur. Notez qu'un autre paramètre de configuration, prioritaire, est disponible dans le fichier de configuration pour bloquer cette fonctionnalité complètement."
+
+msgid "AdminLoginAsAllowedTitle"
+msgstr "Fonctionnalité \"Se connecter en tant que ...\""
+
 msgid "AssignSessionsToX"
 msgstr "Assigner des sessions à %s"
 
@@ -13187,7 +13220,7 @@ msgid "PortalCoursesLimitReached"
 msgstr "Désolé, cette installation de Chamilo est limitée en nombre de cours, et la limite a été atteinte. Pour augmenter le nombre de cours autorisés sur cette installation, veuillez contacter votre fournisseur ou, si l'option est disponible, passer à un plan supérieur."
 
 msgid "PortalTeachersLimitReached"
-msgstr "Désolé, cette installation de Chamilo est limitée en nombre de d'enseignants, et la limite a été atteinte. Pour augmenter le nombre d'enseignants autorisés sur cette installation, veuillez contacter votre fournisseur ou, si l'option est disponible, passer à un plan supérieur."
+msgstr "Désolé, cette installation de Chamilo est limitée en nombre d'enseignants, et la limite a été atteinte. Pour augmenter le nombre d'enseignants autorisés sur cette installation, veuillez contacter votre fournisseur ou, si l'option est disponible, passer à un plan supérieur."
 
 msgid "PortalUsersLimitReached"
 msgstr "Désolé, cette installation de Chamilo est limitée en nombre d'utilisateurs, et la limite a été atteinte. Pour augmenter le nombre d'utilisateurs autorisés sur cette installation, veuillez contacter votre fournisseur ou, si l'option est disponible, passer à un plan supérieur."
@@ -13517,7 +13550,7 @@ msgid "EnabledGooglemapsTitle"
 msgstr "Activer Google Maps"
 
 msgid "EnabledGooglemapsComment"
-msgstr "Activer le bouton d'insertion des cartes Google. L'activation ne se reéalisera pas si vous n'avez pas, auparavant, édité le fichier main/inc/lib/fckeditor/myconfig.php et ajouté une clef API de Google Maps."
+msgstr "Activer le bouton d'insertion des cartes Google. L'activation ne se réalisera pas si vous n'avez pas, auparavant, édité le fichier main/inc/lib/fckeditor/myconfig.php et ajouté une clef API de Google Maps."
 
 msgid "EnabledImageMapsTitle"
 msgstr "Activer les cartes sur images"
@@ -13532,7 +13565,7 @@ msgid "BigBlueButtonEnableTitle"
 msgstr "Outil de vidéoconférence BigBlueButton"
 
 msgid "BigBlueButtonEnableComment"
-msgstr "Choisissez si vous désirez activer l'outil de vidéoconférence BigBlueButton. Une fois activé, il apparaît comme un outil de cours additionnel dans toutes les pages d'accueil de cours, et les enseignants peuvent lancer une conférence à tout moment. Les étudiants ne peuvent pas lancer de conférence, seulement en rejoindre une.
+msgstr "Choisissez si vous désirez activer l'outil de vidéoconférence BigBlueButton. Une fois activé, il apparaît comme un outil de cours additionnel sur toutes les pages d'accueil de cours, et les enseignants peuvent lancer une conférence à tout moment. Les étudiants ne peuvent pas lancer de conférence, seulement en rejoindre.
 Si vous n'avez pas de serveur BigBlueButton fonctionnel, veuillez <a target=\"_blank\" href=\"http://bigbluebutton.org/\">en installer un</a> ou vous adresser aux <a target=\"_blank\" href=\"http://www.chamilo.org/en/providers\">fournisseurs officiels de Chamilo</a> pour pouvoir bénéficier de cette fonctionnalité.
 BigBlueButton est un logiciel libre et gratuit. Son installation requiert des compétences techniques particulières, ce qui demande un travail considérable et peut résulter coûteux si vous ne disposez pas desdites compétences.
 Dans la logique du développement durable de notre projet, nous vous offrons la possibilité d'installer vous-même la solution ou de vous faire aider par des professionnels à l'expérience démontrée."
@@ -13717,7 +13750,7 @@ msgid "CompareStats"
 msgstr "Comparer stats"
 
 msgid "EnabledPixlrTitle"
-msgstr "Avtiver les services externes de Pixlr"
+msgstr "Activer les services externes de Pixlr"
 
 msgid "EnabledPixlrComment"
 msgstr "Pixlr vous permet d'éditer, ajuster et filtrer vos photos avec des outils et une qualité similaire à celle de Photoshop. C'est le complément idéal pour traiter les images de type bitmap."
@@ -13726,7 +13759,7 @@ msgid "PromotionXArchived"
 msgstr "La promotion <i>%s</i> a été archivée. Cette action a pour conséquence de rendre invisibles toutes les sessions enregistrées dans cette promotion. Vous pouvez annuler cette action en la désarchivant."
 
 msgid "PromotionXUnarchived"
-msgstr "La promotion <i>%s</i> a été ré-activée. Cette action a pour conséquence de rendre visibles toutes les sessions enregistrées dans cette promotion. Vous pouvez annuler cette action en archivant la promotion."
+msgstr "La promotion <i>%s</i> a été réactivée. Cette action a pour conséquence de rendre visibles toutes les sessions enregistrées dans cette promotion. Vous pouvez annuler cette action en archivant la promotion."
 
 msgid "CareerXArchived"
 msgstr "La carrière <i>%s</i> a été archivée. Cette action a pour conséquence de rendre invisibles la carrière, les promotions qui y sont enregistrées et les sessions qui sont enregistrées dans celles-ci. Vous pouvez annuler cette action en la désarchivant."
@@ -13762,7 +13795,7 @@ msgid "EnableAccessibilityFontResizeTitle"
 msgstr "Redimensionnement des caractères"
 
 msgid "EnableAccessibilityFontResizeComment"
-msgstr "Activer cette option montrera une série d'options de redimensionnement des caractères dans le coin supérieur-droit de votre campus. Celles-ci permettront aux personnes à déficience visuelle de lire leurs contenus de cours plus facilement."
+msgstr "Activer cette option montrera une série d'options de redimensionnement des caractères dans le coin supérieur droit de votre campus. Celles-ci permettront aux personnes à déficience visuelle de lire leurs contenus de cours plus facilement."
 
 msgid "GlobalEvent"
 msgstr "Évènement global"
@@ -13772,7 +13805,7 @@ msgstr "Recherche full-text"
 
 msgid "SearchEnabledComment"
 msgstr "Cette fonctionnalité vous permet d'indexer la plupart des documents envoyés sur votre portail, et ainsi fournir à vos utilisateurs une fonctionnalité complète de recherche de contenus.<br />
-Cette fonctionnalité n'indexera pas les documents qui ont déjà été envoyés, c'est pourquoi il est important de l'activer au début d'une implémentarion.<br />
+Cette fonctionnalité n'indexera pas les documents qui ont déjà été envoyés, c'est pourquoi il est important de l'activer au début d'une implémentation.<br />
 Une fois activée, une boîte de recherche apparaîtra dans la liste de cours des utilisateurs. La recherche sur un terme spécifique générera une liste des documents, exercices ou sujets de forum correspondants, filtrés selon la disponibilité de ces contenus pour les utilisateurs."
 
 msgid "SpecificSearchFieldsAvailable"
@@ -13785,7 +13818,7 @@ msgid "ProgramsNeededToConvertFiles"
 msgstr "Programmes nécessaires pour indexer des fichiers de formats externes"
 
 msgid "YouAreUsingChamiloInAWindowsPlatformSadlyYouCantConvertDocumentsInOrderToSearchTheContentUsingThisTool"
-msgstr "Vous utilisez Chamilo sur une plateforme Windows. Lamentablement, il est impossible de convertir les documents sur cette architecture pour pouvoir ensuite les indexer et lancer des recherches sur leur contenu."
+msgstr "Vous utilisez Chamilo sur une plateforme Windows. Malheureusement, il est impossible de convertir les documents sur cette architecture pour pouvoir ensuite les indexer et lancer des recherches sur leur contenu."
 
 msgid "HideCoursesInSessionsTitle"
 msgstr "Cacher les cours dans les sessions"
@@ -14124,10 +14157,10 @@ msgid "AddInMenu"
 msgstr "Ajouter au menu"
 
 msgid "AllowUsersToChangeEmailWithNoPasswordTitle"
-msgstr "Authoriser les utilisateurs à changer leur email sans donner leur mot de passe."
+msgstr "Autoriser les utilisateurs à changer leur email sans donner leur mot de passe."
 
 msgid "AllowUsersToChangeEmailWithNoPasswordComment"
-msgstr "Authoriser les utilisateurs à changer leur email sans donner leur mot de passe."
+msgstr "Autoriser les utilisateurs à changer leur email sans donner leur mot de passe."
 
 msgid "EnableHelpLinkTitle"
 msgstr "Activer l'aide contextuelle"
@@ -14214,10 +14247,10 @@ msgid "ChangeSharedSetting"
 msgstr "Changer la visibilité pour les autres portails."
 
 msgid "AllowHRSkillsManagementTitle"
-msgstr "Authoriser la gestion de compétences RH"
+msgstr "Autoriser la gestion de compétences RH"
 
 msgid "AllowHRSkillsManagementComment"
-msgstr "Authoriser les RH de gérer les compétences."
+msgstr "Autoriser les RH à gérer les compétences."
 
 msgid "GradebookDefaultWeightTitle"
 msgstr "Poids par défaut du carnet de notes"
@@ -14232,7 +14265,7 @@ msgid "TeachersCanChangeScoreSettingsComment"
 msgstr "Permets aux enseignants de modifier les paramètres du carnet de notes"
 
 msgid "GradebookEnableLockingTitle"
-msgstr "Authoriser les enseignants à fermer les tests"
+msgstr "Autoriser les enseignants à fermer les tests"
 
 msgid "GradebookEnableLockingComment"
 msgstr "Une fois qu'un test est fermé il ne peut plus être modifier. Seul l'administrateur peut réouvrir un test qui a été fermé par un enseignant."
@@ -14292,7 +14325,7 @@ msgid "UserSelectedLanguage"
 msgstr "Langue choisie par l'utilisateur"
 
 msgid "TeachersCanChangeGradeModelSettingsTitle"
-msgstr "Les enseigants peuvent changer le model du carnet de notes"
+msgstr "Les enseignants peuvent changer le modèle du carnet de notes"
 
 msgid "TeachersCanChangeGradeModelSettingsComment"
 msgstr "Permet de modifier les paramètres des carnets de notes."
@@ -14301,16 +14334,16 @@ msgid "GradebookDefaultGradeModelTitle"
 msgstr "Modèle de note par défaut"
 
 msgid "GradebookDefaultGradeModelComment"
-msgstr "Valeur utilsée par défaut lors de la création d'un nouveau cours"
+msgstr "Valeur utilisée par défaut lors de la création d'un nouveau cours"
 
 msgid "GradebookEnableGradeModelTitle"
 msgstr "Activé les modèles de carnets de notes"
 
 msgid "GradebookEnableGradeModelComment"
-msgstr "Authorise la création automatique de catégories à l'intérieur d'un cours un fonction des modèles du carnet de notes."
+msgstr "Autorise la création automatique de catégories à l'intérieur d'un cours en fonction des modèles du carnet de notes."
 
 msgid "AllowSessionAdminsToSeeAllSessionsTitle"
-msgstr "Authoriser les administrateurs des sessions à voir toutes les sessions."
+msgstr "Autoriser les administrateurs des sessions à voir toutes les sessions."
 
 msgid "AllowSessionAdminsToSeeAllSessionsComment"
 msgstr "Quand cette option n'est pas activée les administrateurs de session n'ont accès qu'aux sessions qu'ils ont créés."
@@ -14319,7 +14352,7 @@ msgid "AllowSkillsToolTitle"
 msgstr "Activer l'outil compétences"
 
 msgid "AllowSkillsToolComment"
-msgstr "Les utilisateurs voient leurs compétences affichées dans le réseau sociaux et sur la page principale."
+msgstr "Les utilisateurs voient leurs compétences affichées dans le réseau social et sur la page principale."
 
 msgid "AllowPublicCertificatesTitle"
 msgstr "Rendre les certificats publics"
@@ -14331,7 +14364,7 @@ msgid "EnableWebCamClipTitle"
 msgstr "Activer la webcam"
 
 msgid "EnableWebCamClipComment"
-msgstr "La Webcam permet aux utilisateurs de capturer des images et de les envoyer au server en format jpeg."
+msgstr "La Webcam permet aux utilisateurs de capturer des images et de les envoyer au serveur au format JPEG."
 
 msgid "YouShouldCreateTermAndConditionsForAllAvailableLanguages"
 msgstr "Vous devez créer les Termes et conditions pour toutes les langues disponibles."
@@ -15766,6 +15799,9 @@ msgstr "Invitations de groupe en attente"
 msgid "Compose"
 msgstr "Composer"
 
+msgid "EmptyHeaderLine"
+msgstr "There is an empty line in the header of selected file"
+
 msgid "EnrollToCourseXSuccessful"
 msgstr "Vous avez été inscrit au cours %s"
 
@@ -16233,10 +16269,10 @@ msgid "DirectLink"
 msgstr "Lien direct"
 
 msgid "NewHomeworkEmailAlert"
-msgstr "Envoi d'e-mail aux utilisateurs lors de la création d'un travail"
+msgstr "Envoi d'e-mail aux utilisateurs lors de la création d'un nouveau travail"
 
 msgid "NewHomeworkEmailAlertEnable"
-msgstr "Activer l'envoi d'un courriel lors de la réception d'un nouveau travail"
+msgstr "Activer l'envoi d'un courriel lors de la réception d'un nouveau document dans l'outil travail"
 
 msgid "NewHomeworkEmailAlertDisable"
 msgstr "Désactiver l'envoi d'e-mail lors de la réception d'un travail"
@@ -16275,6 +16311,21 @@ msgid "AcceptLegal"
 msgstr "Accepter les termes légaux"
 
 
+
+msgid "ToReview"
+msgstr "To be reviewed"
+
+msgid "Unanswered"
+msgstr "Unanswered"
+
+msgid "Answered"
+msgstr "Answered"
+
+msgid "CurrentQuestion"
+msgstr "Current question"
+
+msgid "MediaQuestions"
+msgstr "Shareable enunciates"
 
 msgid "AddedToLPCannotBeAccessed"
 msgstr "Cet exercice fait partie d'un parcour d'apprentissage, il n'est donc pas accessible par les étudiants depuis cette page. Si vous voulez rendre cet exercice disponible depuis l'outil exercice vous devez en faire une copie en utilisant l'icône \"copie\""
@@ -17356,6 +17407,9 @@ msgstr "Combinaison exacte"
 msgid "ExerciceExpiredTimeMessage"
 msgstr "Durée maximum de l'exercice expirée"
 
+msgid "AllQuestionsMustHaveACategory"
+msgstr "Toutes les questions doivent être assignées à une catégorie pour pouvoir utiliser le mode aléatoire par catégorie."
+
 msgid "NoMedia"
 msgstr "Non lié à un média"
 
@@ -17811,9 +17865,6 @@ msgstr "Toutes"
 
 msgid "ProblemsRecordingUploadYourOwnAudioFile"
 msgstr "Problème pour enregistrer? Envoyez un fichier audio!"
-
-msgid "AllQuestionsMustHaveACategory"
-msgstr "All questions must have a category"
 
 
 
@@ -20858,7 +20909,7 @@ msgstr "Inscrire"
 msgid "langQuit"
 msgstr "Quitter"
 
-msgid "your_password_has_been_reset"
+msgid "YourPasswordHasBeenReset"
 msgstr "Votre mot de passe a été réinitialisé et vous a été envoyé par e-mail"
 
 msgid "langSex"

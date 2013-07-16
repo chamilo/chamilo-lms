@@ -70,15 +70,29 @@ class ExerciseLib
             // Question is not a hotspot
             if (!$only_questions) {
                 $questionDescription = $objQuestionTmp->selectDescription();
+
                 if ($show_title) {
                     $html .= Testcategory::getCategoryNamesForQuestion($objQuestionTmp->id);
                     $html .= Display::div($current_item.'. '.$objQuestionTmp->selectTitle(), array('class' => 'question_title'));
+                    if (!empty($questionDescription)) {
+                        $html .= Display::div($questionDescription, array('class' => 'question_description'));
+                    }
                 } else {
+                    $html .= '<div class="media">';
+                    $html .= '<div class="pull-left">';
+                    $html .= '<div class="media-object">';
                     $html .= Display::div($current_item.'. ', array('class' => 'question_no_title'));
+
+                    $html .= '</div>';
+                    $html .= '</div>';
+                    $html .= '<div class="media-body">';
+                    if (!empty($questionDescription)) {
+                        $html .= Display::div($questionDescription, array('class' => 'question_description'));
+                    }
+                    $html .= '</div>';
+                    $html .= '</div>';
                 }
-                if (!empty($questionDescription)) {
-                    $html .= Display::div($questionDescription, array('class' => 'question_description'));
-                }
+
             }
 
             if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION)) && $freeze) {
@@ -724,15 +738,29 @@ class ExerciseLib
                 if ($show_title) {
                     $html .=  Testcategory::getCategoryNamesForQuestion($objQuestionTmp->id);
                     $html .=  '<div class="question_title">'.$current_item.'. '.$questionName.'</div>';
+                    $html .=  $questionDescription;
                 } else {
+                    $html .= '<div class="media">';
+                    $html .= '<div class="pull-left">';
+                    $html .= '<div class="media-object">';
                     $html .= Display::div($current_item.'. ', array('class' => 'question_no_title'));
+
+                    $html .= '</div>';
+                    $html .= '</div>';
+                    $html .= '<div class="media-body">';
+                    if (!empty($questionDescription)) {
+                        $html .= Display::div($questionDescription, array('class' => 'question_description'));
+                    }
+                    $html .= '</div>';
+                    $html .= '</div>';
                 }
+
                 //@todo I need to the get the feedback type
                 $html .=  '<input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'" />';
                 $html .=  '<table class="exercise_questions">
                            <tr>
                             <td valign="top" colspan="2">';
-                $html .=  $questionDescription;
+
                 $html .=  '</td></tr>';
             }
 

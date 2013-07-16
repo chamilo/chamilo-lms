@@ -46,13 +46,13 @@ $this_section = SECTION_COURSES;
 $debug = false;
 if ($debug) {
     error_log('--- Enter to the exercise_submit.php ---- ');
-    error_log('0. POST variables : '.print_r($_POST,1));
+    error_log('0. POST variables : '.print_r($_POST, 1));
 }
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
 
-$is_allowedToEdit = api_is_allowed_to_edit(null,true);
+$is_allowedToEdit = api_is_allowed_to_edit(null, true);
 
 if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
     $htmlHeadXtra[] = api_get_js('glossary.js'); //Glossary
@@ -314,16 +314,6 @@ $(function(){
 
 // General parameters passed via POST/GET
 
-/*
-     <input type="hidden" name="formSent"				value="1" />
-     <input type="hidden" name="exerciseId" 			value="'.$exerciseId . '" />
-     <input type="hidden" name="num" 					value="'.$current_question.'" id="num_current_id" />
-     <input type="hidden" name="exe_id" 				value="'.$exe_id . '" />
-     <input type="hidden" name="origin" 				value="'.$origin . '" />
-     <input type="hidden" name="learnpath_id" 			value="'.$learnpath_id . '" />
-     <input type="hidden" name="learnpath_item_id" 		value="'.$learnpath_item_id . '" />
-     <input type="hidden" name="learnpath_item_view_id" value="'.$learnpath_item_view_id . '" />';*/
-
 // @todo check get and posts
 $learnpath_id 			= isset($_GET['learnpath_id']) ? intval($_GET['learnpath_id']) : 0;
 $learnpath_item_id 		= isset($_GET['learnpath_item_id']) ? intval($_GET['learnpath_item_id']) : 0;
@@ -344,7 +334,7 @@ $error = '';
 
 /*  Teacher takes an exam and want to see a preview,
 we delete the objExercise from the session in order to get the latest changes in the exercise */
-if (api_is_allowed_to_edit(null,true) && isset($_GET['preview']) && $_GET['preview'] == 1) {
+if (api_is_allowed_to_edit(null, true) && isset($_GET['preview']) && $_GET['preview'] == 1) {
     Session::erase('objExercise');
 }
 $exerciseInSession = Session::read('objExercise');
@@ -352,26 +342,30 @@ $exerciseInSession = Session::read('objExercise');
 // 1. Loading the $objExercise variable
 if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSession->id != $_GET['exerciseId'])) {
     // Construction of Exercise
-    /** @var Exercise $objExercise */
+    /** @var \Exercise $objExercise */
     $objExercise = new Exercise();
-    if ($debug) {error_log('1. Setting the $objExercise variable'); };
+    if ($debug) {
+        error_log('1. Setting the $objExercise variable');
+    }
     Session::erase('questionList');
 
     // if the specified exercise doesn't exist or is disabled
     if (!$objExercise->read($exerciseId) || (!$objExercise->selectStatus() && !$is_allowedToEdit && ($origin != 'learnpath'))) {
-    	if ($debug) { error_log('1.1. Error while reading the exercise'); };
-        unset ($objExercise);
+    	if ($debug) {
+            error_log('1.1. Error while reading the exercise');
+        }
+        unset($objExercise);
         $error = get_lang('ExerciseNotFound');
     } else {
         // Saves the object into the session
         Session::write('objExercise', $objExercise);
         if ($debug) {
             error_log('1.1. $exerciseInSession was unset - set now - end');
-        };
+        }
     }
 }
 
-// $objExercise = new Exercise(); $objExercise->read($exerciseId);
+$objExercise = new Exercise(); $objExercise->read($exerciseId);
 
 //2. Checking if $objExercise is set
 if (!isset($objExercise) && isset($exerciseInSession)) {
@@ -381,16 +375,16 @@ if (!isset($objExercise) && isset($exerciseInSession)) {
 
 //3. $objExercise is not set, then return to the exercise list
 if (!is_object($objExercise)) {
-	if ($debug) {
+    if ($debug) {
         error_log('3. $objExercise was not set, kill the script');
-    };
+    }
     header('Location: '.$urlMainExercise.'exercice.php');
     exit;
 }
 
 // If reminder ends we jump to the exercise_reminder
 if ($objExercise->review_answers) {
-	if ($remind_question_id == -1) {
+    if ($remind_question_id == -1) {
         $paramsReminder = "exerciseId=$exerciseId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();
         header('Location: '.$urlMainExercise.'exercise_reminder.php?'.$paramsReminder);
         exit;
@@ -433,67 +427,69 @@ if ($objExercise->selectAttempts() > 0) {
     $attempt_count = get_attempt_count($user_id, $exerciseId, $learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
 
     $warningMessage = Display::return_message(
-        sprintf(get_lang('ReachedMaxAttempts'),
-        $exercise_title,
-        $objExercise->selectAttempts()),
+        sprintf(
+            get_lang('ReachedMaxAttempts'),
+            $exercise_title,
+            $objExercise->selectAttempts()
+        ),
         'warning',
         false
     );
 
-	if ($attempt_count >= $objExercise->selectAttempts()) {
-		$show_clock = false;
-		if (!api_is_allowed_to_edit(null,true)) {
+    if ($attempt_count >= $objExercise->selectAttempts()) {
+        $show_clock = false;
+        if (!api_is_allowed_to_edit(null, true)) {
 
-			if ($objExercise->results_disabled == 0 && $origin != 'learnpath') {
+            if ($objExercise->results_disabled == 0 && $origin != 'learnpath') {
 
-				// Showing latest attempt according with task BT#1628.
-				$exercise_stat_info = getExerciseResultsByUser(
+                // Showing latest attempt according with task BT#1628.
+                $exercise_stat_info = getExerciseResultsByUser(
                     $user_id,
                     $exerciseId,
                     api_get_course_int_id(),
                     api_get_session_id()
                 );
 
-				if (!empty($exercise_stat_info)) {
-					$max_exe_id = max(array_keys($exercise_stat_info));
-					$last_attempt_info = $exercise_stat_info[$max_exe_id];
-					$attempt_html .= Display::div(get_lang('Date').': '.api_get_local_time($last_attempt_info['exe_date']), array('id'=>''));
-					$attempt_html .= $warningMessage;
+                if (!empty($exercise_stat_info)) {
+                    $max_exe_id = max(array_keys($exercise_stat_info));
+                    $last_attempt_info = $exercise_stat_info[$max_exe_id];
+                    $attempt_html .= Display::div(get_lang('Date').': '.api_get_local_time($last_attempt_info['exe_date']), array('id'=>''));
+                    $attempt_html .= $warningMessage;
 
-					if (!empty($last_attempt_info['question_list'])) {
-						foreach($last_attempt_info['question_list'] as $question_data) {
-							$question_id = $question_data['question_id'];
-							$marks       = $question_data['marks'];
+                    if (!empty($last_attempt_info['question_list'])) {
+                        foreach ($last_attempt_info['question_list'] as $question_data) {
+                            $question_id = $question_data['question_id'];
+                            $marks       = $question_data['marks'];
 
-							$question_info = Question::read($question_id);
-							$attempt_html .= Display::div($question_info->question, array('class'=>'question_title'));
-							$attempt_html .= Display::div(get_lang('Score').' '.$marks, array('id'=>'question_score'));
-						}
-					}
-					$score = ExerciseLib::show_score($last_attempt_info['exe_result'], $last_attempt_info['exe_weighting']);
-					$attempt_html .= Display::div(get_lang('YourTotalScore').' '.$score, array('id'=>'question_score'));
-				} else {
-					$attempt_html .= $warningMessage;
-				}
-			} else {
-				$attempt_html .= $warningMessage;
-			}
-		} else {
-			$attempt_html .= $warningMessage;
-		}
-
-		if ($origin == 'learnpath') {
-			Display :: display_reduced_header();
-		} else {
-			Display :: display_header($nameTools,'Exercises');
-		}
-
-		echo $attempt_html;
-		if ($origin != 'learnpath') {
-			Display :: display_footer();
+                            $question_info = Question::read($question_id);
+                            $attempt_html .= Display::div($question_info->question, array('class'=>'question_title'));
+                            $attempt_html .= Display::div(get_lang('Score').' '.$marks, array('id'=>'question_score'));
+                        }
+                    }
+                    $score = ExerciseLib::show_score($last_attempt_info['exe_result'], $last_attempt_info['exe_weighting']);
+                    $attempt_html .= Display::div(get_lang('YourTotalScore').' '.$score, array('id'=>'question_score'));
+                } else {
+                    $attempt_html .= $warningMessage;
+                }
+            } else {
+                $attempt_html .= $warningMessage;
+            }
+        } else {
+            $attempt_html .= $warningMessage;
         }
-		exit;
-	}
+
+        if ($origin == 'learnpath') {
+            Display::display_reduced_header();
+        } else {
+            Display::display_header($nameTools,'Exercises');
+        }
+
+        echo $attempt_html;
+        if ($origin != 'learnpath') {
+            Display::display_footer();
+        }
+        exit;
+    }
 }
 
 // 5. Getting user exercise info (if the user took the exam before) - generating exe_id
@@ -513,7 +509,9 @@ if (!isset($questionListInSession)) {
     	$questionList = explode(',', $exercise_stat_info['data_tracking']);
     }
     Session::write('questionList', $questionList);
-    if ($debug > 0) { error_log('$_SESSION[questionList] was set'); }
+    if ($debug > 0) {
+        error_log('$_SESSION[questionList] was set');
+    }
 } else {
 	if (isset($objExercise) && isset($exerciseInSession)) {
         $questionList = Session::read('questionList');
@@ -528,30 +526,32 @@ Session::write('question_list_uncompressed', $questionListUncompressed);
 $clock_expired_time = null;
 
 if (empty($exercise_stat_info)) {
-    if ($debug)  error_log('5  $exercise_stat_info is empty ');
-	$total_weight = 0;
+    if ($debug)  {
+        error_log('5  $exercise_stat_info is empty ');
+    }
+    $total_weight = 0;
 
-	foreach ($questionListUncompressed as $question_id) {
-		$objQuestionTmp = Question::read($question_id);
-		$total_weight += floatval($objQuestionTmp->weighting);
-	}
+    foreach ($questionListUncompressed as $question_id) {
+        $objQuestionTmp = Question::read($question_id);
+        $total_weight += floatval($objQuestionTmp->weighting);
+    }
 
-	if ($time_control) {
-		$expected_time = $current_timestamp + $total_seconds;
+    if ($time_control) {
+        $expected_time = $current_timestamp + $total_seconds;
 
-		if ($debug)  error_log('5.1. $current_timestamp '.$current_timestamp);
-		if ($debug)  error_log('5.2. $expected_time '.$expected_time);
+        if ($debug)  error_log('5.1. $current_timestamp '.$current_timestamp);
+        if ($debug)  error_log('5.2. $expected_time '.$expected_time);
 
-		$clock_expired_time = api_get_utc_datetime($expected_time);
-		if ($debug) error_log('5.3. $expected_time '.$clock_expired_time);
+        $clock_expired_time = api_get_utc_datetime($expected_time);
+        if ($debug) error_log('5.3. $expected_time '.$clock_expired_time);
 
-		//Sessions  that contain the expired time
-		$expiredTime = array(
+        //Sessions  that contain the expired time
+        $expiredTime = array(
             $current_expired_time_key => $clock_expired_time
         );
         Session::write('expired_time', $expiredTime);
-		if ($debug) { error_log('5.4. Setting the $expiredTime: '.$expiredTime[$current_expired_time_key] ); };
-	}
+        if ($debug) { error_log('5.4. Setting the $expiredTime: '.$expiredTime[$current_expired_time_key] ); };
+    }
 	$exe_id = $objExercise->save_stat_track_exercise_info($clock_expired_time, $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $questionListUncompressed, $total_weight);
 	$exercise_stat_info = $objExercise->getStatTrackExerciseInfo($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
     if ($debug)  error_log("5.5  Creating a new attempt exercise_stat_info[] exe_id : $exe_id");

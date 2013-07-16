@@ -54,7 +54,8 @@ class UserManager
      * @param array $params
      * @return array
      */
-    static function clean_params($params) {
+    static function clean_params($params)
+    {
         $clean_params = array();
         foreach ($params as $key => $value) {
             if (in_array($key, self::$columns)) {
@@ -70,7 +71,8 @@ class UserManager
      * @param array Array of user details (array('status'=>...,'username'=>..., ...))
      * @return mixed Array of user information
      */
-    public static function add($params) {
+    public static function add($params)
+    {
         global $_configuration;
 
         $access_url_id = 1;
@@ -148,6 +150,7 @@ class UserManager
                 return api_set_failure('encrypt_method invalid');
             }
         }
+
         $params['registration_date'] = api_get_utc_datetime();
 
         // Database table definition

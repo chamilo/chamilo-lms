@@ -547,6 +547,7 @@ if (empty($exercise_stat_info)) {
         $expiredTime = array(
             $current_expired_time_key => $clock_expired_time
         );
+        Session::write('expired_time', $expiredTime);
 
         if ($debug) {
             error_log('5.1. $current_timestamp '.$current_timestamp);

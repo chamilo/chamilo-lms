@@ -72,7 +72,19 @@ class Basic
         filebrowserImageUploadUrl
         filebrowserUploadUrl*/
 
+        //$config['extraPlugins'] = 'oembed,video,wordcount';
         $config['extraPlugins'] = 'oembed,video';
+
+        /*$config['wordcount'] = array(
+            // Whether or not you want to show the Word Count
+            'showWordCount' => true,
+            // Whether or not you want to show the Char Count
+            'showCharCount' => true,
+            // Option to limit the characters in the Editor
+            'charLimit' => 'unlimited',
+            // Option to limit the words in the Editor
+            'wordLimit' => 'unlimited'
+        );*/
 
         if (isset($this->config)) {
             $this->config = array_merge($config, $this->config);
@@ -84,5 +96,11 @@ class Basic
         //$config['height'] = '200';
         return $this->config;
     }
+
+    public function setLanguage($language)
+    {
+        $this->config['language'] = $language;
+    }
+
 }
 

@@ -5,10 +5,10 @@
  * This is a bootstrap file that loads all Chamilo dependencies including:
  *
  * - Chamilo settings in main/inc/configuration.php or main/inc/configuration.yml
- * - mysql database (Using Doctrine DBAL/ORM or the Classic way: Database::query())
+ * - Database (Using Doctrine DBAL/ORM)
  * - Templates (Using Twig)
- * - Loading language files (No Symfony component)
- * - Loading mail settings (SwiftMailer smtp/sendmail/mail)
+ * - Loading language files (Using Symfony component)
+ * - Loading mail settings (Using SwiftMailer smtp/sendmail/mail)
  * - Debug (Using Monolog)
  *
  * ALL Chamilo scripts must include this file in order to have the $app container
@@ -243,36 +243,12 @@ if ($alreadyInstalled) {
                 $_configuration['access_url'] = $details['id'];
             }
         }
-        Session::write('url_id', $_configuration['access_url']);
-        Session::write('url_info', api_get_current_access_url_info($_configuration['access_url']));
+        //Session::write('url_id', $_configuration['access_url']);
+        //Session::write('url_info', api_get_current_access_url_info($_configuration['access_url']));
     } else {
-        Session::write('url_id', 1);
+        //Session::write('url_id', 1);
     }
 
-    $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
-    $settings_latest_update = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
-
-    $_setting = Session::read('_setting');
-    if (empty($_setting)) {
-        api_set_settings_and_plugins();
-    } else {
-        if (isset($_setting['settings_latest_update']) && $_setting['settings_latest_update'] != $settings_latest_update) {
-            api_set_settings_and_plugins();
-        }
-    }
-
-    $_setting = Session::read('_setting');
-    $_plugins = Session::read('_plugins');
-
-    // Default template style
-    $templateStyle = api_get_setting('template');
-    $templateStyle = isset($templateStyle) && !empty($templateStyle) ? $templateStyle : 'default';
-    $app['template_style'] = $templateStyle;
-
-    // Default layout
-    $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
-
-    $app['plugins'] = $_plugins;
 }
 
 $charset = 'UTF-8';
@@ -324,9 +300,6 @@ require_once $libPath.'internationalization_internal.lib.php';
 $cidReset = null;
 
 if ($alreadyInstalled) {
-    // Setting languages
-    $app['api_get_languages'] = api_get_languages();
-    $app['language_interface'] = $language_interface = api_get_language_interface();
 
     // Initialization of the internationalization library.
     //api_initialize_internationalization();
@@ -336,8 +309,6 @@ if ($alreadyInstalled) {
 
     // require $includePath.'/local.inc.php';
 
-    // reconfigure template now we know the user
-    $app['template.hide_global_chat'] = !api_is_global_chat_enabled();
 
     /**	Loading languages and sublanguages **/
     // @todo improve the language loading
@@ -499,24 +470,11 @@ if (is_array($language_files)) {
 
 // End loading languages
 
-// Specification for usernames:
-// 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
-// 2. Empty username is formally valid, but it is reserved for the anonymous user.
-// 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
-// @todo this should be configured somewhere else usermanager.class.php? a users.yml setting?
-
-$default_username_length = 40;
-if (api_get_setting('login_is_email') == 'true') {
-    $default_username_length = 100;
-}
-
-@define('USERNAME_MAX_LENGTH', $default_username_length);
 
 /** Silex Middlewares. */
 
 /** A "before" middleware allows you to tweak the Request before the controller is executed. */
 
-// Handling po files (gettext)
 use Symfony\Component\Translation\Loader\PoFileLoader;
 use Symfony\Component\Translation\Loader\MoFileLoader;
 use Symfony\Component\Finder\Finder;
@@ -524,32 +482,36 @@ use Symfony\Component\Finder\Finder;
 $app->before(
 
     function () use ($app) {
+        // Checking configuration file
         if (!file_exists($app['configuration_file']) && !file_exists($app['configuration_yml_file'])) {
             return new RedirectResponse(api_get_path(WEB_CODE_PATH).'install');
             $app->abort(500, "Configuration file was not found");
         }
 
-        //Check the PHP version
+        // Check the PHP version.
         if (api_check_php_version() == false) {
             $app->abort(500, "Incorrect PHP version");
         }
 
+        // Checks temp folder permissions.
         if (!is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
             $app->abort(500, "temp folder must be writable");
         }
 
-        // Loop in the folder array and create temp folders.
-        /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem $filesystem */
-        $filesystem = $app['chamilo.filesystem'];
-
         /** @var Request $request */
         $request = $app['request'];
 
-        // Creates temp folders for every request
+        // Starting the session for more info see: http://silex.sensiolabs.org/doc/providers/session.html
+        $request->getSession()->start();
+        /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem $filesystem */
+        $filesystem = $app['chamilo.filesystem'];
+
         if ($app['debug']) {
+            // Creates temp folders for every request if debug is on.
             $filesystem->createFolders($app['temp.paths']->folders);
         }
 
+        // If assetic is enabled copy folders from theme inside web/
         if ($app['assetic.auto_dump_assets']) {
             $filesystem->copyFolders($app['temp.paths']->copyFolders);
         }
@@ -557,31 +519,95 @@ $app->before(
         // Check and modify the date of user in the track.e.online table
         Online::loginCheck(api_get_user_id());
 
-        $request->getSession()->start();
+        // Setting access_url id (multiple url feature)
 
-        //var_dump($app['security']->isGranted('IS_AUTHENTICATED_FULLY'));
+        if (api_get_multiple_access_url()) {
+            Session::write('url_id', $app['configuration']['access_url']);
+            Session::write('url_info', api_get_current_access_url_info($app['configuration']['access_url']));
+        } else {
+            Session::write('url_id', 1);
+        }
+
+        // Loading portal settings from DB
+        $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
+        $settings_latest_update = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
+
+        $_setting = Session::read('_setting');
+        if (empty($_setting)) {
+            api_set_settings_and_plugins();
+        } else {
+            if (isset($_setting['settings_latest_update']) && $_setting['settings_latest_update'] != $settings_latest_update) {
+                api_set_settings_and_plugins();
+            }
+        }
+
+        $_setting = Session::read('_setting');
+        $_plugins = Session::read('_plugins');
+
+        // Default template style.
+        $templateStyle = api_get_setting('template');
+        $templateStyle = isset($templateStyle) && !empty($templateStyle) ? $templateStyle : 'default';
+        $app['template_style'] = $templateStyle;
+
+        // Default layout.
+        $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
+
+        $app['plugins'] = $_plugins;
+
+        // Setting languages.
+        $app['api_get_languages'] = api_get_languages();
+        $app['language_interface'] = $language_interface = api_get_language_interface();
+
+        // Reconfigure template now that we know the user.
+        $app['template.hide_global_chat'] = !api_is_global_chat_enabled();
+
+        /** Setting the course quota */
+        // Default quota for the course documents folder
+        $default_quota = api_get_setting('default_document_quotum');
+        // Just in case the setting is not correctly set
+        if (empty($default_quota)) {
+            $default_quota = 100000000;
+        }
+
+        define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
+
+        // Specification for usernames:
+        // 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
+        // 2. Empty username is formally valid, but it is reserved for the anonymous user.
+        // 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
+
+        $default_username_length = 40;
+        if (api_get_setting('login_is_email') == 'true') {
+            $default_username_length = 100;
+        }
+
+        define('USERNAME_MAX_LENGTH', $default_username_length);
 
         $user = null;
 
+        /** Security component. */
         if ($app['security']->isGranted('IS_AUTHENTICATED_FULLY')) {
 
+            // Checking token in order to get the current user.
             $token = $app['security']->getToken();
             if (null !== $token) {
                 /** @var Entity\User $user */
                 $user = $token->getUser();
             }
 
-            // For backward compatibility
+            // For backward compatibility.
             $userInfo = api_get_user_info($user->getUserId());
             $userInfo['is_anonymous'] = false;
 
             Session::write('_user', $userInfo);
             $app['current_user'] = $userInfo;
 
+            // Setting admin permissions.
             if ($app['security']->isGranted('ROLE_ADMIN')) {
                 Session::write('is_platformAdmin', true);
             }
 
+            // Setting teachers permissions.
             if ($app['security']->isGranted('ROLE_TEACHER')) {
                 Session::write('is_allowedCreateCourse', true);
             }
@@ -592,6 +618,7 @@ $app->before(
             Session::erase('is_allowedCreateCourse');
         }
 
+        /** Translator component. */
         // Platform lang
 
         $language = api_get_setting('platformLanguage');
@@ -809,17 +836,6 @@ if (isset($app['configuration']['language_measure_frequency']) && $app['configur
     $langstats = new langstats();
 }
 
-/** Setting the course quota */
-// @todo move this somewhere else
-
-// Default quota for the course documents folder
-$default_quota = api_get_setting('default_document_quotum');
-// Just in case the setting is not correctly set
-if (empty($default_quota)) {
-    $default_quota = 100000000;
-}
-
-@define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
 
 /** Setting the is_admin key */
 $app['is_admin'] = false;
@@ -868,18 +884,17 @@ if (isset($app['configuration']['main_database']) && isset($app['db.event_manage
     $app['dbs.event_manager']['db_write']->addEventSubscriber($treeListener);
 
     $loggableListener = new \Gedmo\Loggable\LoggableListener();
-    $userInfo = api_get_user_info();
+    if (PHP_SAPI != 'cli') {
+        $userInfo = api_get_user_info();
 
-    if (isset($userInfo) && !empty($userInfo['username'])) {
-        $loggableListener->setUsername($userInfo['username']);
+        if (isset($userInfo) && !empty($userInfo['username'])) {
+            $loggableListener->setUsername($userInfo['username']);
+        }
     }
     //$app['db.event_manager']->addEventSubscriber($loggableListener);
     $app['dbs.event_manager']['db_read']->addEventSubscriber($loggableListener);
     $app['dbs.event_manager']['db_write']->addEventSubscriber($loggableListener);
 }
 
-// Fixes uses of $_course in the scripts.
-$_course = api_get_course_info();
-$_cid = api_get_course_id();
 return $app;
 

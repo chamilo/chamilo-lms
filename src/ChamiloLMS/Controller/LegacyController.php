@@ -23,6 +23,7 @@ class LegacyController extends CommonController
     * Handles default Chamilo scripts handled by Display::display_header() and display_footer()
     *
     * @param \Silex\Application $app
+    * @param string $file
     *
     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response|void
     */

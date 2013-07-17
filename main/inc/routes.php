@@ -372,6 +372,7 @@ $afterLogin = function (Request $request) use ($app) {
 };
 
 $removeCidReset = function (Request $request) use ($app) {
+    // Deleting course info.
     Session::erase('_cid');
     Session::erase('_real_cid');
     Session::erase('_course');
@@ -433,6 +434,7 @@ $app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexActi
 /** main files */
 $app->match('/main/{file}', 'legacy.controller:classicAction', 'GET|POST')
     ->before($removeCidResetDependingOfSection)
+    ->before($settingCourseConditions)
     ->before(
         function() use ($app) {
             // Do not load breadcrumbs

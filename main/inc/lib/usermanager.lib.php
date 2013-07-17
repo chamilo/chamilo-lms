@@ -54,7 +54,8 @@ class UserManager
      * @param array $params
      * @return array
      */
-    static function clean_params($params) {
+    static function clean_params($params)
+    {
         $clean_params = array();
         foreach ($params as $key => $value) {
             if (in_array($key, self::$columns)) {

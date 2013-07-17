@@ -794,7 +794,6 @@ class Exercise
         // Order/random categories
         $cat = new Testcategory();
 
-        // var_dump($questionSelectionType);
 
         // Setting category order.
         switch ($questionSelectionType) {
@@ -4869,7 +4868,7 @@ class Exercise
     }
 
     /**
-     * @param array $user_data
+     * @param string $user_data
      * @param string $start_date
      * @param int $duration
      * @return string
@@ -6182,7 +6181,7 @@ class Exercise
 
             // Shows the question + possible answers
             $showTitle = $this->getHideQuestionTitle() == 1 ? false : true;
-            echo ExerciseLib::showQuestion($question_obj, false, $origin, $i, $showTitle, false, $user_choice, false);
+            echo ExerciseLib::showQuestion($question_obj, false, $origin, $i, $showTitle, false, $user_choice, false, null, false, $this->getModelType());
 
             // Button save and continue
             switch ($this->type) {

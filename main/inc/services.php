@@ -75,7 +75,7 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
 ));
 
 // Registering Password encoder.
-// @todo test with the "none" encrypt method.
+
 $app['security.encoder.digest'] = $app->share(function($app) {
     // use the sha1 algorithm
     // don't base64 encode the password
@@ -316,7 +316,7 @@ if (is_writable($app['sys_temp_path'])) {
         $app->mount('/_profiler', $p);
 
         // PHP errors for cool kids
-        $app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
+        //$app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
     }
 }
 

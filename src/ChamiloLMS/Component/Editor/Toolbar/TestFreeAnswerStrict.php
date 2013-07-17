@@ -2,7 +2,7 @@
 
 namespace ChamiloLMS\Component\Editor\Toolbar;
 
-class TestFreeAnswer extends Basic
+class TestFreeAnswerStrict extends Basic
 {
 
     public function getConfig()
@@ -12,7 +12,7 @@ class TestFreeAnswer extends Basic
 //            array('name' => 'clipboard',    'groups' =>array('clipboard', 'undo', )),
             //array('name' => 'editing',    'groups' =>array('clipboard', 'undo', )),
             //array('name' => 'forms',    'groups' =>array('clipboard', 'undo', )),
-            '/',
+            /*'/',
             array('name' => 'basicstyles',    'groups' =>array('basicstyles', 'cleanup', )),
             array('name' => 'paragraph',    'groups' =>array('list', 'indent', 'blocks', 'align' )),
             array('name' => 'links'),
@@ -22,7 +22,7 @@ class TestFreeAnswer extends Basic
             array('name' => 'colors'),
             array('name' => 'tools'),
             array('name' => 'others'),
-            array('name' => 'mode')
+            array('name' => 'mode')*/
         );
 
         $config['fullPage'] = false;
@@ -40,8 +40,8 @@ class TestFreeAnswer extends Basic
             'wordLimit' => 'unlimited'
         );
 
+        $config['removePlugins'] = 'elementspath';
         //$config['height'] = '200';
-
         return $config;
     }
 }

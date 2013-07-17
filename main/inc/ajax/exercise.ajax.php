@@ -446,7 +446,7 @@ switch ($action) {
                // creates a temporary Question object
             	$objQuestionTmp = Question::read($my_question_id, $course_id);
 
-            	//Getting free choice data
+                // Getting free choice data.
             	if ($objQuestionTmp->type  == FREE_ANSWER && $type == 'all') {
             	    $my_choice = isset($_REQUEST['free_choice'][$my_question_id]) && !empty($_REQUEST['free_choice'][$my_question_id])? $_REQUEST['free_choice'][$my_question_id]: null;
             	}

@@ -196,9 +196,7 @@ if (!empty($track_exercise_info)) {
 
 	if (!(api_is_platform_admin() || api_is_course_admin()) ) {
 		if ($result_disabled == 1) {
-			//api_not_allowed();
 			$show_results = false;
-			//Display::display_warning_message(get_lang('CantViewResults'));
 			if ($origin != 'learnpath') {
 			    echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
                       <tr>
@@ -235,12 +233,17 @@ if ($origin == 'learnpath' && !isset($_GET['fb_type']) ) {
 if ($show_results || $show_only_total_score) {
     $user_info   = api_get_user_info($student_id);
     //Shows exercise header
-    echo $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']), api_convert_and_format_date($exercise_date));
+    echo $objExercise->show_exercise_result_header(
+        api_get_person_name($user_info['firstName'], $user_info['lastName']),
+        api_convert_and_format_date($exercise_date)
+    );
 }
 
 $i = $totalScore = $totalWeighting = 0;
 
-if($debug>0){error_log("ExerciseResult: ".print_r($exerciseResult,1)); error_log("QuestionList: ".print_r($questionList,1));}
+if ($debug>0) {
+    error_log("ExerciseResult: ".print_r($exerciseResult,1)); error_log("QuestionList: ".print_r($questionList,1));
+}
 
 $arrques = array();
 $arrans  = array();
@@ -306,6 +309,7 @@ $media_list = array();
 $category_list = array();
 $tempParentId = null;
 $mediaCounter = 0;
+$arrid = array();
 
 foreach ($questionList as $questionId) {
 
@@ -547,8 +551,8 @@ foreach ($questionList as $questionId) {
 			}
 			echo '</div>';
 
+            $arrid[] = $questionId;
             echo '<div id="'.$name.'" style="display:none">';
-			$arrid[] = $questionId;
 			$feedback_form = new FormValidator('frmcomments'.$questionId,'post','');
 			$feedback_form->addElement('html','<br>');
 			$renderer =& $feedback_form->defaultRenderer();
@@ -559,6 +563,11 @@ foreach ($questionList as $questionId) {
 			$feedback_form->addElement('html_editor', 'comments_'.$questionId, null, null, array('ToolbarSet' => 'TestAnswerFeedback', 'Width' => '100%', 'Height' => '120'));
 			$feedback_form->addElement('html','<br>');
 			$feedback_form->setDefaults($default);
+            $modelType = $objExercise->getModelType();
+
+            if ($modelType == EXERCISE_MODEL_TYPE_COMMITTEE) {
+                //$app['orm']->getRepository()
+            }
 			$feedback_form->display();
 			echo '</div>';
 

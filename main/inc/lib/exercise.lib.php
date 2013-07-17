@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  * Exercise library
- * @todo convert this lib into a static class
+ * @todo move this in exercise.class or question.class depending of the functions.
  *
  * shows a question and its answers
  * @package chamilo.exercise
@@ -20,7 +20,7 @@ class ExerciseLib
 {
     /**
      * Shows a question
-     *
+     * @todo move to the Exercise class
      * @param int   question id
      * @param bool  if true only show the questions, no exercise title
      * @param bool  origin i.e = learnpath
@@ -37,7 +37,8 @@ class ExerciseLib
         $user_choice = array(),
         $show_comment = false,
         $exercise_feedback = null,
-        $show_answers = false
+        $show_answers = false,
+        $modelType = null
     ) {
         // Text direction for the current language
         //$is_ltr_text_direction = api_get_text_direction() != 'rtl';
@@ -157,7 +158,11 @@ class ExerciseLib
                 $num_suggestions = ($nbrAnswers - $j) + 1;
             } elseif ($answerType == FREE_ANSWER) {
                 $content = isset($user_choice[0]) && !empty($user_choice[0]['answer']) ? $user_choice[0]['answer'] : null;
-                $form->addElement('html_editor', "choice[".$questionId."]", null, array('id' => "choice[".$questionId."]"), array('ToolbarSet' => 'TestFreeAnswer'));
+                $toolBar = 'TestFreeAnswer';
+                if ($modelType == EXERCISE_MODEL_TYPE_COMMITTEE) {
+                    $toolBar = 'TestFreeAnswerStrict';
+                }
+                $form->addElement('html_editor', "choice[".$questionId."]", null, array('id' => "choice[".$questionId."]"), array('ToolbarSet' => $toolBar));
                 $form->setDefaults(array("choice[".$questionId."]" => $content));
                 $s .= $form->return_form();
             } elseif ($answerType == ORAL_EXPRESSION) {

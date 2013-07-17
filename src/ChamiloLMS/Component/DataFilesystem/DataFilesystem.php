@@ -79,13 +79,17 @@ class DataFilesystem
      * Create folders
      * @param array $folderList
      * @param Console\Output\OutputInterface  $output
+     * @param string permissions
      */
-    public function createFolders(array $folderList, Console\Output\OutputInterface $output = null)
+    public function createFolders(array $folderList, Console\Output\OutputInterface $output = null, $folderPermissions = null)
     {
+        if (empty($folderPermissions)) {
+            $folderPermissions = api_get_permissions_for_new_directories();
+        }
         if (!empty($folderList)) {
             foreach ($folderList as $folder) {
                 if (!is_dir($folder)) {
-                    $this->fs->mkdir($folder, api_get_permissions_for_new_directories());
+                    $this->fs->mkdir($folder, $folderPermissions);
                     if ($output) {
                         $output->writeln("Folder <comment>'$folder'</comment> created");
                     }

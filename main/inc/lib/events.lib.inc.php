@@ -458,8 +458,9 @@ function saveQuestionAttempt(
 ) {
     global $debug;
 
-    $score = Database::escape_string($score);
-    $answer = Database::escape_string($answer);
+    //$score = Database::escape_string($score);
+    // $answer = Database::escape_string($answer);
+
     $question_id = Database::escape_string($question_id);
     $exe_id = Database::escape_string($exe_id);
     $position = Database::escape_string($position);
@@ -513,6 +514,7 @@ function saveQuestionAttempt(
     }
 
     if (!empty($question_id) && !empty($exe_id) && !empty($user_id)) {
+
         $attempt = array(
             'user_id' => $user_id,
             'question_id' => $question_id,
@@ -524,9 +526,6 @@ function saveQuestionAttempt(
             'tms' => $now,
             'filename' => $file,
         );
-
-
-
 
         // Check if attempt exists.
 

@@ -8719,11 +8719,11 @@ msgstr "Skills ranking updated"
 msgid "CertificateWCertifiesStudentXFinishedCourseYWithGradeZ"
 msgstr "%s certifies that
 
- %s 
+ %s
 
-has successfully completed the course 
+has successfully completed the course
 
- '%s' 
+ '%s'
 
 with a grade of
 
@@ -19454,7 +19454,7 @@ msgid "ButtonPublishAnnouncement"
 msgstr "Send announcement"
 
 msgid "YourAccountIsActiveYouCanLoginAndCheckYourCourses"
-msgstr "Dear user, 
+msgstr "Dear user,
 
 Your account has now been activated on the platform. Please login and enjoy your courses."
 
@@ -20881,7 +20881,7 @@ msgid "langAddress"
 msgstr "The address of"
 
 msgid "langSettings"
-msgstr "with the following settings : 
+msgstr "with the following settings :
 Login :"
 
 msgid "langYouAreReg"
@@ -23634,3 +23634,5 @@ msgstr "Description updated"
 msgid "CourseDescriptions"
 msgstr "Course descriptions"
 
+msgid "ZeroMeansNoQuestionWillBeSelectedMinusOneMeansThatAllQuestionsWillBeSelected"
+msgstr "-1 = All questions will be selected. 0 = No questions will be selected."

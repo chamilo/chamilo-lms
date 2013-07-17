@@ -4,7 +4,7 @@
  * Exercise class: This class allows to instantiate an object of type Exercise
  * @package chamilo.exercise
  * @author Olivier Brouckaert
- * @author Julio Montoya Cleaning exercises
+ * @author Julio Montoya Cleaning exercises, adding multiple categories, media questions, commitee
  * Modified by Hubert Borderiou #294
  */
 /**
@@ -734,7 +734,11 @@ class Exercise
                 if (isset($questions_by_category[$category_id])) {
                     // How many question will be picked from this category.
                     $count = $category_info['count_questions'];
-                    if ($count != -1) {
+
+                    // -1 means all questions
+                    if ($count == -1) {
+                        $categoryCountArray[$category_id] = 999;
+                    } else {
                         $categoryCountArray[$category_id] = $count;
                     }
                 }
@@ -808,6 +812,7 @@ class Exercise
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'title DESC', false, true);
                 $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise);
                 $question_list = $this->pickQuestionsPerCategory($categoriesAddedInExercise, $question_list, $questions_by_category, true, false);
+
                 break;
             case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED: // 4
             case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED: // 7
@@ -4625,8 +4630,8 @@ class Exercise
                 return false;
             }
 
-            if (0) {
-            //if (!empty($this->emailNotificationTemplate)) {
+            //if (0) {
+            if (!empty($this->emailNotificationTemplate)) {
                 $twig = new \Twig_Environment(new \Twig_Loader_String());
                 $twig->addFilter('var_dump', new Twig_Filter_Function('var_dump'));
                 $template = $this->emailNotificationTemplate;
@@ -6436,8 +6441,8 @@ class Exercise
                         $tempParentId = $objQuestionTmp->parent_id;
                     }
 
-                    //Shows question title an description
-                    $question_content .= $objQuestionTmp->return_header(null, $counterToShow, $score, $show_media);
+                    // Shows question title an description.
+                    $question_content .= $objQuestionTmp->return_header(null, $counterToShow, $score, $show_media, $this->getHideQuestionTitle());
 
                     // display question category, if any
                     $question_content .= Testcategory::getCategoryNamesForQuestion($questionId);

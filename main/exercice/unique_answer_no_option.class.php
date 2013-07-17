@@ -396,8 +396,12 @@ class UniqueAnswerNoOption extends Question
         $this -> save();
 	}
 
-	function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false) {
-	    $header = parent::return_header($feedback_type, $counter, $score, $show_media);
+    /**
+     * {@inheritdoc}
+     */
+	function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false, $hideTitle = 0)
+    {
+	    $header = parent::return_header($feedback_type, $counter, $score, $show_media, $hideTitle);
 	    $header .= '<table class="'.$this->question_table_class .'">
 			<tr>
 				<th>'.get_lang("Choice").'</th>

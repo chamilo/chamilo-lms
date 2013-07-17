@@ -340,8 +340,6 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['preview']) && $_GET['prev
 /** @var \Exercise $exerciseInSession */
 $exerciseInSession = Session::read('objExercise');
 
-
-
 // 1. Loading the $objExercise variable
 if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSession->id != $_GET['exerciseId'])) {
     // Construction of Exercise
@@ -369,11 +367,13 @@ if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSessi
     }
 }
 
-// $objExercise = new Exercise(); $objExercise->read($exerciseId);
+//$objExercise = new Exercise(); $objExercise->read($exerciseId);
 
 //2. Checking if $objExercise is set
 if (!isset($objExercise) && isset($exerciseInSession)) {
-	if ($debug) { error_log('2. Loading $objExercise from session'); };
+    if ($debug) {
+        error_log('2. Loading $objExercise from session');
+    }
     $objExercise = $exerciseInSession;
 }
 
@@ -403,7 +403,7 @@ if ($objExercise->expired_time != 0) {
     $time_control = true;
 }
 
-//Generating the time control key for the user
+// Generating the time control key for the user.
 $current_expired_time_key = ExerciseLib::get_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
 if ($debug) {
     error_log("4. current_expired_time_key: $current_expired_time_key");
@@ -485,7 +485,7 @@ if ($objExercise->selectAttempts() > 0) {
         if ($origin == 'learnpath') {
             Display::display_reduced_header();
         } else {
-            Display::display_header($nameTools,'Exercises');
+            Display::display_header($nameTools, 'Exercises');
         }
 
         echo $attempt_html;
@@ -517,9 +517,9 @@ if (!isset($questionListInSession)) {
         error_log('$_SESSION[questionList] was set');
     }
 } else {
-	if (isset($objExercise) && isset($exerciseInSession)) {
+    if (isset($objExercise) && isset($exerciseInSession)) {
         $questionList = Session::read('questionList');
-	}
+    }
 }
 
 //Fix in order to get the correct question list
@@ -530,7 +530,7 @@ Session::write('question_list_uncompressed', $questionListUncompressed);
 $clock_expired_time = null;
 
 if (empty($exercise_stat_info)) {
-    if ($debug)  {
+    if ($debug) {
         error_log('5  $exercise_stat_info is empty ');
     }
     $total_weight = 0;
@@ -542,19 +542,18 @@ if (empty($exercise_stat_info)) {
 
     if ($time_control) {
         $expected_time = $current_timestamp + $total_seconds;
-
-        if ($debug)  error_log('5.1. $current_timestamp '.$current_timestamp);
-        if ($debug)  error_log('5.2. $expected_time '.$expected_time);
-
         $clock_expired_time = api_get_utc_datetime($expected_time);
-        if ($debug) error_log('5.3. $expected_time '.$clock_expired_time);
-
         //Sessions  that contain the expired time
         $expiredTime = array(
             $current_expired_time_key => $clock_expired_time
         );
-        Session::write('expired_time', $expiredTime);
-        if ($debug) { error_log('5.4. Setting the $expiredTime: '.$expiredTime[$current_expired_time_key] ); };
+
+        if ($debug) {
+            error_log('5.1. $current_timestamp '.$current_timestamp);
+            error_log('5.2. $expected_time '.$expected_time);
+            error_log('5.3. $expected_time '.$clock_expired_time);
+            error_log('5.4. Setting the $expiredTime: '.$expiredTime[$current_expired_time_key]);
+        }
     }
 	$exe_id = $objExercise->save_stat_track_exercise_info($clock_expired_time, $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $questionListUncompressed, $total_weight);
 	$exercise_stat_info = $objExercise->getStatTrackExerciseInfo($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
@@ -567,13 +566,16 @@ if (empty($exercise_stat_info)) {
 // Array to check in order to block the chat
 ExerciseLib::create_chat_exercise_session($exe_id);
 
-if ($debug) { error_log('6. $objExercise->getStatTrackExerciseInfo function called::  '.print_r($exercise_stat_info, 1)); };
+if ($debug) {
+    error_log('6. $objExercise->getStatTrackExerciseInfo function called::  '.print_r($exercise_stat_info, 1));
+}
 
 if (!empty($exercise_stat_info['questions_to_check'])) {
 	$my_remind_list = $exercise_stat_info['questions_to_check'];
 	$my_remind_list = explode(',', $my_remind_list);
 	$my_remind_list = array_filter($my_remind_list);
 }
+
 if ($debug) { error_log("6.0 my_remind_list array: ".print_r($my_remind_list, 1)); }
 $params = "exe_id=$exe_id&exerciseId=$exerciseId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();
 
@@ -593,8 +595,10 @@ if ($reminder == 2 && empty($my_remind_list)) {
 if ($time_control) {
     $expiredTimeInSession = Session::read('expired_time');
 
-	if ($debug) error_log('7.1. Time control is enabled.');
-	if ($debug) error_log('7.2. $current_expired_time_key:'.$current_expired_time_key);
+	if ($debug) {
+        error_log('7.1. Time control is enabled.');
+        error_log('7.2. $current_expired_time_key:'.$current_expired_time_key);
+    }
     if (!isset($expiredTimeInSession[$current_expired_time_key])) {
         if ($debug) error_log('7.3. $expiredTimeInSession[$current_expired_time_key] not set.');
         //Timer - Get expired_time for a student
@@ -716,8 +720,10 @@ if ($formSent && isset($_POST)) {
                 }
             }
         }
-        if ($debug) { error_log('9.3. $choice is an array - end'); }
-        if ($debug) { error_log('9.4. $exerciseResult '.print_r($exerciseResult,1)); }
+        if ($debug) {
+            error_log('9.3. $choice is an array - end');
+            error_log('9.4. $exerciseResult '.print_r($exerciseResult,1));
+        }
     }
 
     // the script "exercise_result.php" will take the variable $exerciseResult from the session
@@ -950,7 +956,7 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) && $_custom['exercise
 	}
 }
 
-//Timer control
+// Timer control.
 if ($time_control) {
     echo $objExercise->returnTimeLeftDiv();
 	echo '<div style="display:none" class="warning-message" id="expired-message-id">'.get_lang('ExerciceExpiredTimeMessage').'</div>';
@@ -1023,7 +1029,7 @@ if ($objExercise->review_answers) {
 
 
 if (!empty($error)) {
-    Display :: display_error_message($error, false);
+    Display::display_error_message($error, false);
 } else {
     if (!empty($exercise_sound)) {
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'document/download.php?doc_url=%2Faudio%2F'.Security::remove_XSS($exercise_sound).'" target="_blank">

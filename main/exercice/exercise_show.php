@@ -285,6 +285,7 @@ foreach ($questionList as $questionId) {
 	$choice = $exerciseResult[$questionId];
 
 	// creates a temporary Question object
+    /** @var Question $objQuestionTmp */
 	$objQuestionTmp = Question::read($questionId);
 
 	$questionWeighting	= $objQuestionTmp->selectWeighting();
@@ -579,13 +580,6 @@ foreach ($questionList as $questionId) {
 
     $category_was_added_for_this_test = false;
 
-    // We use now category_list instead of a unique category
-    /*if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
-        $category_list[$objQuestionTmp->category]['score'] += $my_total_score;
-        $category_list[$objQuestionTmp->category]['total'] += $my_total_weight;
-        $category_was_added_for_this_test = true;
-    }*/
-
     if (isset($objQuestionTmp->category_list) && !empty($objQuestionTmp->category_list)) {
         foreach ($objQuestionTmp->category_list as $category_id) {
 
@@ -630,11 +624,8 @@ foreach ($questionList as $questionId) {
 	$i++;
 
     $contents = ob_get_clean();
-
     $question_content = '<div class="question_row">';
-
     $show_media = false;
-
     $counterToShow = $counter;
 
     if ($objQuestionTmp->parent_id != 0) {
@@ -653,9 +644,10 @@ foreach ($questionList as $questionId) {
     }
 
  	if ($show_results) {
-        //Shows question title an description
+        // Shows question title an description
+	    //$question_content .= $objQuestionTmp->return_header(null, $counterToShow, $score, $show_media, $mediaCounter, );
 
-	    $question_content .= $objQuestionTmp->return_header(null, $counterToShow, $score, $show_media, $mediaCounter);
+        $question_content .= $objQuestionTmp->return_header(null, $counterToShow, $score, $show_media, $objExercise->getHideQuestionTitle());
 
         // display question category, if any
  	    $question_content .= Testcategory::getCategoryNamesForQuestion($questionId);
@@ -712,7 +704,7 @@ if ($is_allowedToEdit && $locked == false && !api_is_drh()) {
 		echo '<input type = "hidden" name="total_score"      value="'.$totalScore.'"> ';
 		echo '<input type = "hidden" name="my_exe_exo_id"    value="'.$exercise_id.'"> ';
 	} else {
-		echo ' <form name="myform" id="myform" action="'.$urlMainExercise.'exercise_report.php?exerciseId='.$exercise_id.'&filter=1&comments=update&exeid='.$id.'" method="post">';
+		echo '<form name="myform" id="myform" action="'.$urlMainExercise.'exercise_report.php?exerciseId='.$exercise_id.'&filter=1&comments=update&exeid='.$id.'" method="post">';
 	}
 	if ($origin !='learnpath' && $origin!='student_progress') {
 

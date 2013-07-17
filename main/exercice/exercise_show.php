@@ -134,10 +134,15 @@ function showfck(sid,marksid) {
 	document.getElementById(comment).style.display='none';
 }
 
-function getFCK(vals,marksid) {
-	var f=document.getElementById('myform');
+$(function() {
+    $("#myform").submit(function() {
+        $("#result_from_ajax").html('<?php echo Display::return_icon('loading1.gif'); ?>');
 
-	var m_id = marksid.split(',');
+        var vals = $("#vals").val();
+        var marksid = $("#marksid").val();
+	var f=document.getElementById('myform');
+        var m_id = marksid.split(',');
+
 	for(var i=0;i<m_id.length;i++){
 		var oHidn = document.createElement("input");
 		oHidn.type = "hidden";
@@ -152,11 +157,33 @@ function getFCK(vals,marksid) {
 		var oHidden = document.createElement("input");
 		oHidden.type = "hidden";
 		oHidden.name = "comments_"+ids[k];
-		oEditor = FCKeditorAPI.GetInstance(oHidden.name) ;
-		oHidden.value = oEditor.GetXHTML(true);
+            //oEditor = FCKeditorAPI.GetInstance(oHidden.name) ;
+            var valueEditor = CKEDITOR.instances[oHidden.name].getData();
+            //console.log(oHidden.name);
+            oHidden.value = valueEditor;
 		f.appendChild(oHidden);
 	}
+        var params = $("#myform").serialize();
+
+        $.ajax({
+            type : "post",
+            url: "<?php echo api_get_path(WEB_AJAX_PATH); ?>exercise.ajax.php?a=correct_exercise_result",
+            data: "<?php ?>"+params,
+            success: function(data) {
+                if (data == 0) {
+                    $('#result_from_ajax').html('<?php echo addslashes(Display::return_message(get_lang('Error'), 'warning'))?>');
+                } else {
+                    $('#result_from_ajax').html('<?php echo addslashes(Display::return_message(get_lang('Saved'), 'success'))?>');
+                    $('.question_row').hide();
+                    $('#myform').hide();
+                    $('#correct_again').hide();
 }
+            }
+        });
+        return false;
+
+    });
+});
 </script>
 <?php
 $show_results           = true;
@@ -700,26 +727,34 @@ if (is_array($arrid) && is_array($arrmarks)) {
 }
 
 if ($is_allowedToEdit && $locked == false && !api_is_drh()) {
+    echo '<form name="myform" id="myform">';
 	if (in_array($origin, array('tracking_course','user_course','correct_exercise_in_lp'))) {
-		echo '<form name="myform" id="myform" action="'.$urlMainExercise.'exercise_report.php?exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
+        //'.$urlMainExercise.'exercise_report.php?exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'
 		echo '<input type = "hidden" name="lp_item_id"       value="'.$learnpath_id.'">';
 		echo '<input type = "hidden" name="lp_item_view_id"  value="'.$lp_item_view_id.'">';
 		echo '<input type = "hidden" name="student_id"       value="'.$student_id.'">';
 		echo '<input type = "hidden" name="total_score"      value="'.$totalScore.'"> ';
 		echo '<input type = "hidden" name="my_exe_exo_id"    value="'.$exercise_id.'"> ';
 	} else {
-		echo ' <form name="myform" id="myform" action="'.$urlMainExercise.'exercise_report.php?exerciseId='.$exercise_id.'&filter=1&comments=update&exeid='.$id.'" method="post">';
+        //action="'.$urlMainExercise.'exercise_report.php?exerciseId='.$exercise_id.'&filter=1&comments=update&exeid='.$id.'" method="post"
 	}
+    echo '<input type = "hidden" name="origin"       value="'.$origin.'">';
+    echo '<input type = "hidden" name="exeid"       value="'.$id.'">';
+    echo '<input type = "hidden" name="comments"       value="update">';
+
+    echo '<input id="vals" type = "hidden" name="vals"       value="'.$strids.'">';
+    echo '<input id="marksid" type = "hidden" name="marksid"       value="'.$marksid.'">';
 	if ($origin !='learnpath' && $origin!='student_progress') {
 
         echo '<label><input type= "checkbox" name="send_notification"> '.get_lang('SendEmail').'</label>';
 		?>
-		<button type="submit" class="btn btn-primary" value="<?php echo get_lang('Ok'); ?>" onclick="getFCK('<?php echo $strids; ?>','<?php echo $marksid; ?>');">
-            <?php echo get_lang('CorrectTest'); ?>
-        </button>
-		</form>
+        <input type="submit" class="btn btn-primary" value=" <?php echo get_lang('CorrectTest'); ?>">
 		<?php
 	}
+    echo '</form>
+        <div id="result_from_ajax">
+        </div>';
+    //echo '<div id="correct_again" style="display:none"><a href="'..'">'.get_lang('CorrectTest').'</div>';
 }
 
 //Came from lpstats in a lp

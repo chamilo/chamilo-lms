@@ -16332,6 +16332,70 @@ msgstr "Accept legal terms"
 
 
 
+msgid "EmailNotificationTemplateDescription"
+msgstr "You can customize the email sent to users when they finished the exercise. You can use tags like these:
+
+1. {{ student.username }}
+2. {{ student.firstname }}
+3. {{ student.lastname }}
+4. {{ student.official_code }}
+5. {{ exercise.title }}
+6. {{ exercise.start_time }}
+7. {{ exercise.end_time }}
+8. {{ course.title }}
+9. {{ course.code }}"
+
+msgid "EmailNotificationTemplate"
+msgstr "Email notification template"
+
+msgid "ExerciseEndButtonDisconnect"
+msgstr "Logout"
+
+msgid "ExerciseEndButtonExerciseHome"
+msgstr "Exercise list."
+
+msgid "ExerciseEndButtonCourseHome"
+msgstr "Course home"
+
+msgid "ExerciseEndButton"
+msgstr "Exercise end button"
+
+msgid "HideQuestionTitle"
+msgstr "Hide question title"
+
+msgid "QuestionSelection"
+msgstr "Question selection type"
+
+msgid "OrderedCategoriesByParentWithQuestionsRandom"
+msgstr "Ordered categories by parent with random questions"
+
+msgid "OrderedCategoriesByParentWithQuestionsOrdered"
+msgstr "Ordered categories by parent with questions ordered"
+
+msgid "RandomCategoriesWithRandomQuestionsNoQuestionGrouped"
+msgstr "Random categories with random questions (questions not grouped)"
+
+msgid "RandomCategoriesWithQuestionsOrderedNoQuestionGrouped"
+msgstr "Random categories with questions ordered (questions not grouped)"
+
+msgid "RandomCategoriesWithRandomQuestions"
+msgstr "Random categories with random questions"
+
+msgid "OrderedCategoriesAlphabeticallyWithRandomQuestions"
+msgstr "Ordered categories alphabetically with random questions"
+
+msgid "RandomCategoriesWithQuestionsOrdered"
+msgstr "Random categories with questions ordered"
+
+msgid "OrderedCategoriesAlphabeticallyWithQuestionsOrdered"
+msgstr "Ordered categories alphabetically with questions ordered"
+
+msgid "UsingCategories"
+msgstr "Using categories"
+
+msgid "OrderedByUser"
+msgstr "Ordered by user"
+
 msgid "ToReview"
 msgstr "To be reviewed"
 

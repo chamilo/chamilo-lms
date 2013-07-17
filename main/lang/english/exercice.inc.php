@@ -2,6 +2,34 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$EmailNotificationTemplateDescription = "You can customize the email sent to users when they finished the exercise. You can use tags like these:
+
+1. {{ student.username }}
+2. {{ student.firstname }}
+3. {{ student.lastname }}
+4. {{ student.official_code }}
+5. {{ exercise.title }}
+6. {{ exercise.start_time }}
+7. {{ exercise.end_time }}
+8. {{ course.title }}
+9. {{ course.code }}";
+$EmailNotificationTemplate = "Email notification template";
+$ExerciseEndButtonDisconnect = "Logout";
+$ExerciseEndButtonExerciseHome = "Exercise list.";
+$ExerciseEndButtonCourseHome = "Course home";
+$ExerciseEndButton = "Exercise end button";
+$HideQuestionTitle = "Hide question title";
+$QuestionSelection = "Question selection type";
+$OrderedCategoriesByParentWithQuestionsRandom = "Ordered categories by parent with random questions";
+$OrderedCategoriesByParentWithQuestionsOrdered = "Ordered categories by parent with questions ordered";
+$RandomCategoriesWithRandomQuestionsNoQuestionGrouped = "Random categories with random questions (questions not grouped)";
+$RandomCategoriesWithQuestionsOrderedNoQuestionGrouped = "Random categories with questions ordered (questions not grouped)";
+$RandomCategoriesWithRandomQuestions = "Random categories with random questions";
+$OrderedCategoriesAlphabeticallyWithRandomQuestions = "Ordered categories alphabetically with random questions";
+$RandomCategoriesWithQuestionsOrdered = "Random categories with questions ordered";
+$OrderedCategoriesAlphabeticallyWithQuestionsOrdered = "Ordered categories alphabetically with questions ordered";
+$UsingCategories = "Using categories";
+$OrderedByUser = "Ordered by user";
 $ToReview = "To be reviewed";
 $Unanswered = "Unanswered";
 $Answered = "Answered";

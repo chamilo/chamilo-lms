@@ -44,8 +44,8 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $user = $token->getUser();
         $userId = $user->getUserId();
 
+        $url = null;
         if ($this->security->isGranted('ROLE_STUDENT') && !empty($pageAfterLogin)) {
-            $url = null;
             switch($pageAfterLogin) {
                 case 'index.php':
                     $url = $this->router->generate('index');

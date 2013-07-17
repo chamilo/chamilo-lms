@@ -337,11 +337,15 @@ we delete the objExercise from the session in order to get the latest changes in
 if (api_is_allowed_to_edit(null, true) && isset($_GET['preview']) && $_GET['preview'] == 1) {
     Session::erase('objExercise');
 }
+/** @var \Exercise $exerciseInSession */
 $exerciseInSession = Session::read('objExercise');
+
+
 
 // 1. Loading the $objExercise variable
 if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSession->id != $_GET['exerciseId'])) {
     // Construction of Exercise
+
     /** @var \Exercise $objExercise */
     $objExercise = new Exercise();
     if ($debug) {
@@ -351,7 +355,7 @@ if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSessi
 
     // if the specified exercise doesn't exist or is disabled
     if (!$objExercise->read($exerciseId) || (!$objExercise->selectStatus() && !$is_allowedToEdit && ($origin != 'learnpath'))) {
-    	if ($debug) {
+        if ($debug) {
             error_log('1.1. Error while reading the exercise');
         }
         unset($objExercise);

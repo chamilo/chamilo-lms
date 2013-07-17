@@ -5310,7 +5310,20 @@ i.size-32.icon-new-work {
     padding: 7px 9px;
 }
 
-
 .question_no_title {
+    text-align: center;
+}
+
+.main_question .media .media-object {
     font-weight: bold;
+    background-color: #ccc;
+    width:32px;
+    height:32px;
+    padding:8px 2px 0px 2px;
+    border-radius: 5px;
+}
+
+.main_question .media .question_description {
+    padding-top: 5px;
+
 }

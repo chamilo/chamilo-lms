@@ -24,7 +24,7 @@ class Message extends Basic
             array('name' => 'others')
         );
 
-        $config['fullPage'] = 'true';
+        $config['fullPage'] = true;
         //$config['height'] = '200';
 
         return $config;

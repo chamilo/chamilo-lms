@@ -1041,7 +1041,10 @@ class Testcategory
             //$list = array();
              while ($row = Database::fetch_array($result, 'ASSOC')) {
                 if ($excludeCategoryWithNoQuestions) {
-                   if ($row['count_questions'] == 0 || $row['count_questions'] == -1) {
+                    //if ($row['count_questions'] == 0 || $row['count_questions'] == -1) {
+                    /*0 means no questions selected this options is also filtered in the function:
+                    Exercise::pickQuestionsPerCategory() */
+                    if ($row['count_questions'] == 0) {
                        continue;
             }
 
@@ -1094,12 +1097,13 @@ class Testcategory
                 $return .= Display::div($category['parent_path']);
                 $return .= '</td>';
                 $return .= '<td>';
-                $value = isset($saved_categories) && isset($saved_categories[$cat_id]) ? $saved_categories[$cat_id]['count_questions'] : 0;
+                $value = isset($saved_categories) && isset($saved_categories[$cat_id]) ? $saved_categories[$cat_id]['count_questions'] : -1;
                 $return .= '<input name="category['.$cat_id.']" value="' .$value.'" />';
                 $return .= '</td>';
                 $return .= '</tr>';
             }
             $return .= '</table>';
+            $return .= get_lang('ZeroMeansNoQuestionWillBeSelectedMinusOneMeansThatAllQuestionsWillBeSelected');
             return $return;
         }
     }

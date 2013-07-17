@@ -354,14 +354,10 @@ class UniqueAnswerImage extends UniqueAnswer
     }
 
     /**
-     * @param int $feedback_type
-     * @param int $counter
-     * @param int $score
-     * @param bool $show_media
-     * @return string
+     * {@inheritdoc}
      */
-    public function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false)
+    public function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false, $hideTitle = 0)
     {
-        return parent::return_header($feedback_type, $counter, $score, $show_media);
+        return parent::return_header($feedback_type, $counter, $score, $show_media, $hideTitle);
     }
 }

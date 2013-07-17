@@ -285,6 +285,7 @@ foreach ($questionList as $questionId) {
 	$choice = $exerciseResult[$questionId];
 
 	// creates a temporary Question object
+    /** @var Question $objQuestionTmp */
 	$objQuestionTmp = Question::read($questionId);
 
 	$questionWeighting	= $objQuestionTmp->selectWeighting();
@@ -579,12 +580,6 @@ foreach ($questionList as $questionId) {
 
     $category_was_added_for_this_test = false;
 
-    // We use now category_list instead of a unique category
-    /*if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
-        $category_list[$objQuestionTmp->category]['score'] += $my_total_score;
-        $category_list[$objQuestionTmp->category]['total'] += $my_total_weight;
-        $category_was_added_for_this_test = true;
-    }*/
 
     if (isset($objQuestionTmp->category_list) && !empty($objQuestionTmp->category_list)) {
         foreach ($objQuestionTmp->category_list as $category_id) {
@@ -654,8 +649,9 @@ foreach ($questionList as $questionId) {
 
  	if ($show_results) {
         //Shows question title an description
+	    //$question_content .= $objQuestionTmp->return_header(null, $counterToShow, $score, $show_media, $mediaCounter, );
 
-	    $question_content .= $objQuestionTmp->return_header(null, $counterToShow, $score, $show_media, $mediaCounter);
+        $question_content .= $objQuestionTmp->return_header(null, $counterToShow, $score, $show_media, $objExercise->getHideQuestionTitle());
 
         // display question category, if any
  	    $question_content .= Testcategory::getCategoryNamesForQuestion($questionId);

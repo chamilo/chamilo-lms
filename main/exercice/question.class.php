@@ -39,7 +39,8 @@ abstract class Question
     public static $explanationLangVar = '';
     public $question_table_class = 'table table-striped';
     public $editionMode = 'normal';
-    public $exercise; // exercise obj
+    /** @var  Exercise $exercise */
+    public $exercise;
     public $setDefaultValues = false;
     public $submitClass;
     public $submitText;
@@ -129,7 +130,7 @@ abstract class Question
     }
 
     /**
-     * Reads question informations from the data base
+     * Reads question information from the database
      *
      * @author Olivier Brouckaert
      * @param int $id - question ID
@@ -1774,14 +1775,15 @@ abstract class Question
      *
      * @param int $feedback_type
      * @param int $counter
-     * @param type $score
+     * @param array $score
      * @param bool $show_media
+     * @param int $hideTitle
      *
      * @return string
      */
-    public function return_header($feedback_type = null, $counter = null, $score = null, $show_media)
+    public function return_header($feedbackType = null, $counter = null, $score = null, $show_media = false, $hideTitle = 0)
     {
-        $counterLabel = '';
+        $counterLabel = null;
         if (!empty($counter)) {
             $counterLabel = $counter;
         }
@@ -1803,14 +1805,17 @@ abstract class Question
             }
         }
 
-        $question_title = $this->question;
 
         $header = null;
         // Display question category, if any
         if ($show_media) {
             $header .= $this->show_media_content();
         }
-        $header .= Display::page_subheader2($counterLabel.". ".$question_title);
+        if ($hideTitle == 1) {
+            $header .= Display::page_subheader2($counterLabel);
+        } else {
+            $header .= Display::page_subheader2($counterLabel.". ".$this->question);
+        }
         $header .= Display::div(
             '<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div><h4>'.$score['result'].' </h4>',
             array('class' => 'ribbon')

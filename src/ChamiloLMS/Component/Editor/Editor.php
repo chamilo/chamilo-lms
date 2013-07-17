@@ -47,13 +47,16 @@ class Editor
      */
     public $Config;
 
+    /** @var \Symfony\Component\Translation\Translator */
+    public $translator;
+
     /**
      * Main Constructor.
      * Refer to the _samples/php directory for examples.
      *
      * @param string $instanceName
      */
-    public function __construct($instanceName)
+    public function __construct($instanceName, \Symfony\Component\Translation\Translator $translator)
     {
         $this->InstanceName = $instanceName;
         $this->Width        = '100%';
@@ -61,6 +64,7 @@ class Editor
         $this->ToolbarSet   = 'Basic';
         $this->Value        = '';
         $this->Config       = array();
+        $this->translator = $translator;
     }
 
     /**
@@ -88,6 +92,7 @@ class Editor
     public function ckeditorReplace()
     {
         $toolbar  = new Toolbar\Basic($this->ToolbarSet);
+        $toolbar->setLanguage($this->translator->getLocale());
         $config   = $toolbar->getConfig();
         $js       = $this->to_js($config);
         $settings = null;
@@ -194,7 +199,7 @@ class Editor
                     return '[ '.implode(', ', $output).' ]';
                 }
             // Otherwise, fall through to convert the array as an object.
-            case 'object' :
+            case 'object':
                 $output = array();
                 foreach ($var as $k => $v) {
                     $output[] = $this->to_js(strval($k)).': '.$this->to_js($v);

@@ -52,9 +52,9 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
         $this->fullPage = false;
 
         $name = $this->getAttribute('name');
-
+        global $app;
         //$this->fck_editor = new FCKeditor($name);
-        $this->fck_editor = new ChamiloLMS\Component\Editor\Editor($name);
+        $this->fck_editor = new ChamiloLMS\Component\Editor\Editor($name, $app['translator']);
 
         $this->fck_editor->ToolbarSet = $fck_attribute['ToolbarSet'];
         $this->fck_editor->Width = !empty($fck_attribute['Width']) ? $fck_attribute['Width'] : '990';

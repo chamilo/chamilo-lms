@@ -26,7 +26,7 @@ require_once 'answer.class.php';
 require_once '../inc/global.inc.php';
 $urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
 
-if (empty($origin) ) {
+if (empty($origin)) {
     $origin = isset($_REQUEST['origin']) ? $_REQUEST['origin'] : null;
 }
 
@@ -60,7 +60,7 @@ if ( empty ( $action ) ) {              $action         = isset($_REQUEST['actio
 $id = intval($_REQUEST['id']); //exe id
 
 if (empty($id)) {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 if (api_is_course_session_coach(api_get_user_id(), api_get_course_int_id(), api_get_session_id())) {
@@ -68,7 +68,7 @@ if (api_is_course_session_coach(api_get_user_id(), api_get_course_int_id(), api_
         api_not_allowed(true);
     }
 }
-$is_allowedToEdit    = api_is_allowed_to_edit(null,true) || $is_courseTutor || api_is_session_admin() || api_is_drh();
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) || $is_courseTutor || api_is_session_admin() || api_is_drh();
 
 //Getting results from the exe_id. This variable also contain all the information about the exercise
 $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
@@ -89,7 +89,7 @@ $current_user_id    = api_get_user_id();
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 
 if (empty($objExercise)) {
-	$objExercise = new Exercise();
+    $objExercise = new Exercise();
     $objExercise->read($exercise_id);
 }
 $feedback_type = $objExercise->feedback_type;
@@ -98,7 +98,7 @@ $feedback_type = $objExercise->feedback_type;
 //Only users can see their own results
 if (!$is_allowedToEdit) {
     if ($student_id != $current_user_id) {
-    	api_not_allowed(true);
+        api_not_allowed(true);
     }
 }
 
@@ -194,56 +194,59 @@ $show_only_total_score  = false;
 
 // Avoiding the "Score 0/0" message  when the exe_id is not set
 if (!empty($track_exercise_info)) {
-	// if the results_disabled of the Quiz is 1 when block the script
-	$result_disabled		= $track_exercise_info['results_disabled'];
+    // if the results_disabled of the Quiz is 1 when block the script
+    $result_disabled = $track_exercise_info['results_disabled'];
 
-	if (!(api_is_platform_admin() || api_is_course_admin()) ) {
-		if ($result_disabled == 1) {
-			//api_not_allowed();
-			$show_results = false;
-			//Display::display_warning_message(get_lang('CantViewResults'));
-			if ($origin != 'learnpath') {
-			    echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    if (!(api_is_platform_admin() || api_is_course_admin()) ) {
+        if ($result_disabled == 1) {
+            $show_results = false;
+            if ($origin != 'learnpath') {
+                echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
                       <tr>
                         <td colspan="2">';
-				Display::display_warning_message(get_lang('ThankYouForPassingTheTest').'<br /><br />
-				<a href="'.$urlMainExercise.'exercice.php">'.(get_lang('BackToExercisesList')).'</a>', false);
-				echo '</td>
-				</tr>
-				</table>';
-			}
-		} elseif ($result_disabled == 2) {
-		    $show_results = false;
-		    $show_only_total_score = true;
-			if ($origin != 'learnpath') {
-			    echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
+                Display::display_warning_message(get_lang('ThankYouForPassingTheTest').'<br /><br />
+                <a href="'.$urlMainExercise.'exercice.php">'.(get_lang('BackToExercisesList')).'</a>', false);
+                echo '</td>
+                </tr>
+                </table>';
+            }
+        } elseif ($result_disabled == 2) {
+            $show_results = false;
+            $show_only_total_score = true;
+            if ($origin != 'learnpath') {
+                echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
                       <tr>
                         <td colspan="2">';
-				Display::display_warning_message(get_lang('ThankYouForPassingTheTest'), false);
-				echo '</td>
-				</tr>
-				</table>';
-			}
-		}
-	}
+                Display::display_warning_message(get_lang('ThankYouForPassingTheTest'), false);
+                echo '</td>
+                </tr>
+                </table>';
+            }
+        }
+    }
 } else {
-	Display::display_warning_message(get_lang('CantViewResults'));
-	$show_results = false;
+    Display::display_warning_message(get_lang('CantViewResults'));
+    $show_results = false;
 }
 
 if ($origin == 'learnpath' && !isset($_GET['fb_type']) ) {
-	$show_results = false;
+    $show_results = false;
 }
 
 if ($show_results || $show_only_total_score) {
     $user_info   = api_get_user_info($student_id);
-    //Shows exercise header
-    echo $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']), api_convert_and_format_date($exercise_date));
+    // Shows exercise header
+    echo $objExercise->show_exercise_result_header(
+        api_get_person_name($user_info['firstName'], $user_info['lastName']),
+        api_convert_and_format_date($exercise_date)
+    );
 }
 
 $i = $totalScore = $totalWeighting = 0;
 
-if($debug>0){error_log("ExerciseResult: ".print_r($exerciseResult,1)); error_log("QuestionList: ".print_r($questionList,1));}
+if ($debug>0) {
+    error_log("ExerciseResult: ".print_r($exerciseResult,1)); error_log("QuestionList: ".print_r($questionList,1));
+}
 
 $arrques = array();
 $arrans  = array();
@@ -268,13 +271,13 @@ $question_list_from_database = array();
 $exerciseResult = array();
 
 while ($row = Database::fetch_array($result)) {
-	$question_list_from_database[] = $row['question_id'];
-	$exerciseResult[$row['question_id']] = $row['answer'];
+    $question_list_from_database[] = $row['question_id'];
+    $exerciseResult[$row['question_id']] = $row['answer'];
 }
 
 //Fixing #2073 Fixing order of questions
 if (!empty($track_exercise_info['data_tracking'])) {
-	$temp_question_list = explode(',', $track_exercise_info['data_tracking']);
+    $temp_question_list = explode(',', $track_exercise_info['data_tracking']);
 
     //Getting question list from data_tracking
     if (!empty($temp_question_list)) {
@@ -309,19 +312,20 @@ $media_list = array();
 $category_list = array();
 $tempParentId = null;
 $mediaCounter = 0;
+$arrid = array();
 
 foreach ($questionList as $questionId) {
 
-	$choice = $exerciseResult[$questionId];
+    $choice = $exerciseResult[$questionId];
 
-	// creates a temporary Question object
+    // creates a temporary Question object
     /** @var Question $objQuestionTmp */
-	$objQuestionTmp = Question::read($questionId);
+    $objQuestionTmp = Question::read($questionId);
 
-	$questionWeighting	= $objQuestionTmp->selectWeighting();
-	$answerType			= $objQuestionTmp->selectType();
+    $questionWeighting	= $objQuestionTmp->selectWeighting();
+    $answerType			= $objQuestionTmp->selectType();
 
-	// Start buffer
+    // Start buffer
     ob_start();
 
     /* Use switch
@@ -537,8 +541,9 @@ foreach ($questionList as $questionId) {
 					$url_name = get_lang('AddComments');
 				}
 			}
+
             echo '<br />';
-            echo Display::url($url_name, 'javascript://', array('class' => 'btn', 'onclick'=>"showfck('".$name."', '".$marksname."');"));
+            echo Display::url($url_name, 'javascript://', array('class' => 'btn', 'onclick' => "showfck('".$name."', '".$marksname."');"));
 			echo '<br />';
 
             echo '<div id="feedback_'.$name.'" style="width:100%">';
@@ -550,8 +555,9 @@ foreach ($questionList as $questionId) {
 			}
 			echo '</div>';
 
+            $arrid[] = $questionId;
+
             echo '<div id="'.$name.'" style="display:none">';
-			$arrid[] = $questionId;
 			$feedback_form = new FormValidator('frmcomments'.$questionId,'post','');
 			$feedback_form->addElement('html','<br>');
 			$renderer =& $feedback_form->defaultRenderer();
@@ -562,6 +568,13 @@ foreach ($questionList as $questionId) {
 			$feedback_form->addElement('html_editor', 'comments_'.$questionId, null, null, array('ToolbarSet' => 'TestAnswerFeedback', 'Width' => '100%', 'Height' => '120'));
 			$feedback_form->addElement('html','<br>');
 			$feedback_form->setDefaults($default);
+
+            $modelType = $objExercise->getModelType();
+
+            if ($modelType == EXERCISE_MODEL_TYPE_COMMITTEE) {
+                //$app['orm']->getRepository()
+            }
+
 			$feedback_form->display();
 			echo '</div>';
 

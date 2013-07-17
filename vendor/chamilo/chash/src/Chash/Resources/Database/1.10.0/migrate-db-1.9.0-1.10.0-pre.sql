@@ -298,18 +298,22 @@ ALTER TABLE user ADD COLUMN salt VARCHAR(255) DEFAULT NULL;
 CREATE TABLE roles (id INT auto_increment, name VARCHAR(255), role VARCHAR(255) unique, PRIMARY KEY(id));
 CREATE TABLE users_roles (user_id INT NOT NULL, role_id INT NOT NULL, PRIMARY KEY(user_id, role_id));
 
-INSERT INTO roles (name, role) VALUES('Admin', 'ROLE_ADMIN');
-INSERT INTO roles (name, role) VALUES('Teacher', 'ROLE_TEACHER');
-INSERT INTO roles (name, role) VALUES('Student', 'ROLE_STUDENT');
-INSERT INTO roles (name, role) VALUES('Anonymous', 'ROLE_ANONYMOUS');
-INSERT INTO roles (name, role) VALUES('RRHH', 'ROLE_RRHH');
-INSERT INTO roles (name, role) VALUES('Question Manager', 'ROLE_QUESTION_MANAGER');
+INSERT INTO roles (id, name, role) VALUES('1', 'Teacher', 'ROLE_TEACHER');
+INSERT INTO roles (id, name, role) VALUES('4', 'RRHH', 'ROLE_RRHH');
+INSERT INTO roles (id, name, role) VALUES('3', 'Session Manager', 'ROLE_SESSION_MANAGER');
+INSERT INTO roles (id ,name, role) VALUES('5', 'Student', 'ROLE_STUDENT');
+INSERT INTO roles (id, name, role) VALUES('6', 'Anonymous', 'ROLE_ANONYMOUS');
+INSERT INTO roles (id, name, role) VALUES('11', 'Admin', 'ROLE_ADMIN');
+INSERT INTO roles (id, name, role) VALUES('17', 'Question Manager', 'ROLE_QUESTION_MANAGER');
+
+ALTER TABLE c_quiz ADD COLUMN question_selection_type INT DEFAULT 1;
+ALTER TABLE c_quiz ADD COLUMN hide_question_title INT DEFAULT 0;
 
 -- Admin
-INSERT INTO users_roles VALUES (1, 1);
+INSERT INTO users_roles VALUES (1, 11);
 
 CREATE TABLE question_score_name (id int NOT NULL AUTO_INCREMENT,  score varchar(255) DEFAULT NULL,  name varchar(255) DEFAULT NULL,  description TEXT DEFAULT NULL,  question_score_id INT NOT NULL,  PRIMARY KEY (id)) DEFAULT CHARSET=utf8;
 CREATE TABLE question_score (  id int NOT NULL AUTO_INCREMENT,  name varchar(255) DEFAULT NULL,  PRIMARY KEY (id)) DEFAULT CHARSET=utf8;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.028' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.030' WHERE variable = 'chamilo_database_version';

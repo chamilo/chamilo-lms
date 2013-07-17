@@ -20,9 +20,11 @@ class LegacyController extends CommonController
     public $language_files = array('courses', 'index', 'admin');
 
     /**
+    *
     * Handles default Chamilo scripts handled by Display::display_header() and display_footer()
     *
     * @param \Silex\Application $app
+    * @param string $file
     *
     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response|void
     */
@@ -35,6 +37,7 @@ class LegacyController extends CommonController
         $_GET = $request->query->all();
         // post.
         $_POST = $request->request->all();
+
         // echo $request->getMethod();
 
         //$_REQUEST = $request->request->all();

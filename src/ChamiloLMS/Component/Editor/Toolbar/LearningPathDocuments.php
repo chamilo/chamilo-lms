@@ -25,7 +25,7 @@ class LearningPathDocuments extends Basic
             array('name' => 'others')
         );
 
-        $config['fullPage'] = 'true';
+        $config['fullPage'] = true;
 
         return $config;
     }

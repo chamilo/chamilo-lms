@@ -25,7 +25,7 @@ class Documents extends Basic
             array('name' => 'mode')
         );
 
-        $config['fullPage'] = 'true';
+        $config['fullPage'] = true;
         //$config['height'] = '200';
 
         return $config;

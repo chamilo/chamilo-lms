@@ -74,7 +74,6 @@ class Basic
 
         $config['extraPlugins'] = 'oembed,video';
 
-
         if (isset($this->config)) {
             $this->config = array_merge($config, $this->config);
         } else {

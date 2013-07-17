@@ -21,10 +21,11 @@ class TestFreeAnswer extends Basic
             array('name' => 'styles'),
             array('name' => 'colors'),
             array('name' => 'tools'),
-            array('name' => 'others')
+            array('name' => 'others'),
+            array('name' => 'mode') // source
         );
 
-        $config['fullPage'] = 'true';
+        $config['fullPage'] = false;
         //$config['height'] = '200';
 
         return $config;

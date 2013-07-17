@@ -13,17 +13,17 @@
 
 // deletes a question from the exercise (not from the data base)
 if ($deleteQuestion) {
-	// if the question exists
-	if ($objQuestionTmp = Question::read($deleteQuestion)) {
-		$objQuestionTmp->delete($exerciseId);
+    // if the question exists
+    if ($objQuestionTmp = Question::read($deleteQuestion)) {
+        $objQuestionTmp->delete($exerciseId);
 
-		// if the question has been removed from the exercise
-		if ($objExercise->removeFromList($deleteQuestion)) {
-			$nbrQuestions--;
-		}
-	}
-	// destruction of the Question object
-	unset($objQuestionTmp);
+        // if the question has been removed from the exercise
+        if ($objExercise->removeFromList($deleteQuestion)) {
+            $nbrQuestions--;
+        }
+    }
+    // destruction of the Question object
+    unset($objQuestionTmp);
 }
 $ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&exercise_id=".intval($exerciseId);
 ?>
@@ -98,6 +98,9 @@ $(function() {
 
 // Filters the type of questions we can add.
 Question::display_type_menu($objExercise);
+// Re sets the question list
+$objExercise->setQuestionList();
+
 echo '<div style="clear:both;"></div>';
 echo '<div id="message"></div>';
 $token = Security::get_token();
@@ -111,7 +114,7 @@ echo Question::getMediaLabels();
 $inATest = isset($exerciseId) && $exerciseId > 0;
 
 if (!$inATest) {
-	echo "<p class='warning-message'>".get_lang("ChoiceQuestionType")."</p>";
+    echo "<p class='warning-message'>".get_lang("ChoiceQuestionType")."</p>";
 } else {
     // Title line
     echo "<div>";
@@ -142,31 +145,32 @@ if (!$inATest) {
 
         if (is_array($questionList)) {
             foreach ($questionList as $id) {
-				// To avoid warning messages.
-				if (!is_numeric($id)) {
-					continue;
-				}
-				$objQuestionTmp = Question :: read($id);
-				$question_class = get_class($objQuestionTmp);
+                // To avoid warning messages.
+                if (!is_numeric($id)) {
+                    continue;
+                }
+                /** @var Question $objQuestionTmp */
+                $objQuestionTmp = Question::read($id);
+                $question_class = get_class($objQuestionTmp);
 
-				$clone_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'">'.Display::return_icon('cd.gif',get_lang('Copy'), array(), ICON_SIZE_SMALL).'</a>';
-				$edit_link  = '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='.$objQuestionTmp->selectType().'&myid=1&editQuestion='.$id.'">'.Display::return_icon('edit.png',get_lang('Modify'), array(), ICON_SIZE_SMALL).'</a>';
-				if ($objExercise->edit_exercise_in_lp == true) {
-				     $delete_link = '<a id="delete_'.$id.'" class="opener"  href="'.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&deleteQuestion='.$id.'" >'.Display::return_icon('delete.png',get_lang('RemoveFromTest'), array(), ICON_SIZE_SMALL).'</a>';
-				}
-				$edit_link   = Display::tag('div', $edit_link,   array('style'=>'float:left; padding:0px; margin:0px'));
-				$clone_link  = Display::tag('div', $clone_link,  array('style'=>'float:left; padding:0px; margin:0px'));
-				$delete_link = Display::tag('div', $delete_link, array('style'=>'float:left; padding:0px; margin:0px'));
-				$actions     = Display::tag('div', $edit_link.$clone_link.$delete_link, array('class'=>'edition','style'=>'width:100px; right:10px;     margin-top: 0px;     position: absolute;     top: 10%;'));
+                $clone_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'">'.Display::return_icon('cd.gif',get_lang('Copy'), array(), ICON_SIZE_SMALL).'</a>';
+                $edit_link  = '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='.$objQuestionTmp->selectType().'&myid=1&editQuestion='.$id.'">'.Display::return_icon('edit.png',get_lang('Modify'), array(), ICON_SIZE_SMALL).'</a>';
+                if ($objExercise->edit_exercise_in_lp == true) {
+                     $delete_link = '<a id="delete_'.$id.'" class="opener"  href="'.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&deleteQuestion='.$id.'" >'.Display::return_icon('delete.png',get_lang('RemoveFromTest'), array(), ICON_SIZE_SMALL).'</a>';
+                }
+                $edit_link   = Display::tag('div', $edit_link,   array('style'=>'float:left; padding:0px; margin:0px'));
+                $clone_link  = Display::tag('div', $clone_link,  array('style'=>'float:left; padding:0px; margin:0px'));
+                $delete_link = Display::tag('div', $delete_link, array('style'=>'float:left; padding:0px; margin:0px'));
+                $actions     = Display::tag('div', $edit_link.$clone_link.$delete_link, array('class'=>'edition','style'=>'width:100px; right:10px;     margin-top: 0px;     position: absolute;     top: 10%;'));
 
                 $title = Security::remove_XSS($objQuestionTmp->selectTitle());
                 $move = Display::return_icon('all_directions.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));
 
                 // Question name
-				$questionName = Display::tag('div', '<a href="#" title = "'.$title.'">'.$move.' '.Text::cut($title, 42).'</a>', array('style'=>$styleQuestion));
+                $questionName = Display::tag('div', '<a href="#" title = "'.$title.'">'.$move.' '.Text::cut($title, 42).'</a>', array('style'=>$styleQuestion));
 
-				// Question type.
-				list($typeImg, $typeExpl) = $objQuestionTmp->get_type_icon_html();
+                // Question type.
+                list($typeImg, $typeExpl) = $objQuestionTmp->get_type_icon_html();
 
                 $question_media = null;
                 if (!empty($objQuestionTmp->parent_id)) {
@@ -174,18 +178,18 @@ if (!$inATest) {
                     $question_media  = ' '.Question::getMediaLabel($objQuestionMedia->question);
                 }
 
-				$questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, array(), ICON_SIZE_MEDIUM), array('style' => $styleType));
+                $questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, array(), ICON_SIZE_MEDIUM), array('style' => $styleType));
 
-				// Question category.
+                // Question category.
                 $category_labels = Testcategory::return_category_labels($objQuestionTmp->category_list, $category_list);
 
-				if (empty($category_labels)) {
-					$category_labels = "";
-				}
-				$questionCategory = Display::tag('div', '<a href="#" style="padding:0px; margin:0px;">'.$category_labels.$question_media.'</a>', array('style'=>$styleCat));
+                if (empty($category_labels)) {
+                    $category_labels = "";
+                }
+                $questionCategory = Display::tag('div', '<a href="#" style="padding:0px; margin:0px;">'.$category_labels.$question_media.'</a>', array('style'=>$styleCat));
 
-				// Question level.
-				$txtQuestionLevel = $objQuestionTmp->level;
+                // Question level.
+                $txtQuestionLevel = $objQuestionTmp->level;
                 if (empty($objQuestionTmp->level)) {
                     $txtQuestionLevel = '-';
                 }

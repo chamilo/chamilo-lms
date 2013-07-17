@@ -306,20 +306,20 @@ switch ($action) {
         if (api_is_allowed_to_session_edit()) {
 
             // "all" or "simple" strings means that there's one or all questions exercise type
-            $type                   = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
+            $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 
             // Questions choices
-            $choice                 = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
+            $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
 
             // Hotspot coordinates from all questions
-            $hot_spot_coordinates   = isset($_REQUEST['hotspot']) ? $_REQUEST['hotspot'] : null;
+            $hot_spot_coordinates = isset($_REQUEST['hotspot']) ? $_REQUEST['hotspot'] : null;
 
             // There is a reminder?
-            $remind_list            = isset($_REQUEST['remind_list']) && !empty($_REQUEST['remind_list'])? array_keys($_REQUEST['remind_list']) : null;
+            $remind_list = isset($_REQUEST['remind_list']) && !empty($_REQUEST['remind_list'])? array_keys($_REQUEST['remind_list']) : null;
 
             // Needed in manage_answer
-            $learnpath_id           = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : 0;
-            $learnpath_item_id      = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
+            $learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : 0;
+            $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
 
             // Attempt id
             $exe_id = $_REQUEST['exe_id'];
@@ -494,7 +494,7 @@ switch ($action) {
                     }
                 }
 
-            	// We're inside *one* question. Go through each possible answer for this question
+                // We're inside *one* question. Go through each possible answer for this question
 
                 $result = $objExercise->manageAnswers(
                     $exe_id,

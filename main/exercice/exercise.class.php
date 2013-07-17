@@ -799,9 +799,6 @@ class Exercise
 
         // Order/random categories
         $cat = new Testcategory();
-
-        // var_dump($questionSelectionType);
-
         // Setting category order.
         switch ($questionSelectionType) {
             case EX_Q_SELECTION_ORDERED: // 1
@@ -3269,7 +3266,7 @@ class Exercise
                         error_log("studentChoice: $studentChoice");
                     }
                     break;
-                case GLOBAL_MULTIPLE_ANSWER :
+                case GLOBAL_MULTIPLE_ANSWER:
                     if ($from_database) {
                         $choice = array();
                         $queryans = "SELECT answer FROM $TBL_TRACK_ATTEMPT WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
@@ -3367,7 +3364,7 @@ class Exercise
                     }
                     break;
                 // for fill in the blanks
-                case FILL_IN_BLANKS :
+                case FILL_IN_BLANKS:
                     // the question is encoded like this
                     // [A] B [C] D [E] F::10,10,10@1
                     // number 1 before the "@" means that is a switchable fill in blank question

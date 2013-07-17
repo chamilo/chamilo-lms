@@ -491,7 +491,6 @@ function saveQuestionAttempt(
     }
 
     $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-
     if ($debug) {
         error_log("----- entering saveQuestionAttempt() function ------");
         error_log("answer: $answer");
@@ -525,6 +524,8 @@ function saveQuestionAttempt(
             'tms' => $now,
             'filename' => $file,
         );
+
+
 
 
         // Check if attempt exists.

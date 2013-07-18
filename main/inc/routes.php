@@ -664,6 +664,7 @@ $app->match('/ajax', 'model_ajax.controller:indexAction', 'GET')
 
 // Roles
 // @todo improve route creation. Use mount() to write less
+/* @todo use Flint to manage controllers */
 
 if ($alreadyInstalled) {
     // Takes a some time to load @todo improve this calls

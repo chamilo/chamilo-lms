@@ -497,6 +497,9 @@ class ChamiloServiceProvider implements ServiceProviderInterface
 $app->register(new ChamiloServiceProvider(), array());
 
 // Controller as services definitions.
+
+/* @todo use Flint to manage controllers, routes */
+
 $app['pages.controller'] = $app->share(
     function () use ($app) {
         return new PagesController($app['pages.repository']);

@@ -3,6 +3,7 @@
 namespace Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * CurriculumItem
@@ -56,6 +57,16 @@ class CurriculumItem
     private $category;
 
     /**
+     * @ORM\OneToMany(targetEntity="CurriculumItemRelUser", mappedBy="item")
+     */
+    private $userItems;
+
+    public function __construct()
+    {
+        $this->userItems = new ArrayCollection();
+    }
+
+    /**
      *
      * @return CurriculumCategory
      */
@@ -63,6 +74,26 @@ class CurriculumItem
     {
         return $this->category;
     }
+
+    /**
+     *
+     * @return CurriculumCategory
+     */
+    public function getUserItems()
+    {
+        return $this->userItems;
+    }
+
+
+    /**
+     *
+     * @return CurriculumCategory
+     */
+    public function setUserItems($userItem)
+    {
+        $this->userItems = $userItem;
+    }
+
 
     /**
      * @param CurriculumCategory $category

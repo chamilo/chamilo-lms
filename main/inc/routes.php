@@ -674,7 +674,6 @@ if ($alreadyInstalled) {
     $app->mount('/admin/administrator/question_scores', new ChamiloLMS\Provider\ReflectionControllerProvider('question_score.controller'));
     $app->mount('/admin/administrator/question_score_names', new ChamiloLMS\Provider\ReflectionControllerProvider('question_score_name.controller'));
 
-
     // Ministerio routes:
 
     $app->mount('/admin/administrator/branches', new ChamiloLMS\Provider\ReflectionControllerProvider('branch.controller'));
@@ -683,6 +682,10 @@ if ($alreadyInstalled) {
     $app->mount('/admin/director', new ChamiloLMS\Provider\ReflectionControllerProvider('branch_director.controller'));
     $app->mount('/admin/jury_president', new ChamiloLMS\Provider\ReflectionControllerProvider('jury_president.controller'));
     $app->mount('/admin/jury_member', new ChamiloLMS\Provider\ReflectionControllerProvider('jury_member.controller'));
+
+    $app->mount('/tool/curriculum/category', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_category.controller'));
+    $app->mount('/tool/curriculum/item', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_item.controller'));
+    $app->mount('/tool/curriculum/user', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_user.controller'));
 
 }
 

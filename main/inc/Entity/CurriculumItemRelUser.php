@@ -49,6 +49,46 @@ class CurriculumItemRelUser
      */
     private $description;
 
+    /**
+     * @ORM\OneToMany(targetEntity="User", mappedBy="curriculumItems")
+     */
+    //private $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="User"))
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id", nullable=true)
+     */
+    private $user;
+
+     /**
+     * @ORM\ManyToOne(targetEntity="CurriculumItem")
+     * @ORM\JoinColumn(name="item_id", referencedColumnName="id", nullable=true)
+     */
+    private $item;
+
+
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    public function getItem()
+    {
+        return $this->item;
+    }
+
+    /**
+     * @param CurriculumItem $item
+     */
+    public function setItem(CurriculumItem $item)
+    {
+        $this->item = $item;
+    }
+
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+    }
 
     /**
      * Get id

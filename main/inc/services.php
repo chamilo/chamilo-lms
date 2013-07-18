@@ -110,11 +110,12 @@ $app['security.role_hierarchy'] = array(
 // Role rules
 $app['security.access_rules'] = array(
     //array('^/admin', 'ROLE_ADMIN', 'https'),
-    array('^/admin/administrator', array('ROLE_ADMIN')),
+    array('^/admin/administrator', 'ROLE_ADMIN'),
     array('^/main/admin/.*', 'ROLE_ADMIN'),
     array('^/admin/questionmanager', 'ROLE_QUESTION_MANAGER'),
     array('^/main/.*', array('ROLE_STUDENT')),
     array('^/admin/director', 'ROLE_DIRECTOR'),
+    array('^/tool/.*', array('ROLE_ADMIN','ROLE_TEACHER')),
     array('^/admin/jury_president', 'ROLE_JURY_PRESIDENT'),
     array('^/admin/jury_member', 'ROLE_JURY_MEMBER') //? jury subsitute??
     //array('^.*$', 'ROLE_USER'),
@@ -633,7 +634,6 @@ $app['branch_director.controller'] = $app->share(
     }
 );
 
-
 $app['jury.controller'] = $app->share(
     function () use ($app) {
         return new ChamiloLMS\Controller\Admin\Administrator\JuryController($app);
@@ -651,5 +651,25 @@ $app['jury_member.controller'] = $app->share(
         return new ChamiloLMS\Controller\Admin\JuryMember\JuryMemberController($app);
     }
 );
+
+$app['curriculum_category.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumCategoryController($app);
+    }
+);
+
+$app['curriculum_item.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumItemController($app);
+    }
+);
+
+$app['curriculum_user.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumUserController($app);
+    }
+);
+
+
 
 

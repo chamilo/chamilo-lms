@@ -43,8 +43,8 @@ class BranchType extends AbstractType
             ->add('admin_name', 'text')
             ->add('admin_phone', 'text', array('required' => false))
             ->add('last_sync_trans_date', 'datetime', array(
-                    'data' => new \DateTime()
-                    )
+                'data' => new \DateTime()
+                )
             )
             ->add('last_sync_type', 'text')
             ->add('last_sync_trans_id', 'text')

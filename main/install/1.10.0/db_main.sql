@@ -3621,7 +3621,7 @@ CREATE TABLE curriculum_category (
     title varchar(255),
     max_score int unsigned not null default 1,
     min_chars tinyint unsigned not null default 0, -- the minimum number of characters an item field in this category requires to be considered a valid submission (and generate score),
-    parent_id int unsigned not null default 0,
+    parent_id int unsigned DEFAULT NULL,
     lvl int default NULL,
     lft int default NULL,
     rgt int default NULL,

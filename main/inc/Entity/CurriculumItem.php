@@ -49,6 +49,28 @@ class CurriculumItem
      */
     private $maxRepeat;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="CurriculumCategory")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=true)
+     */
+    private $category;
+
+    /**
+     *
+     * @return CurriculumCategory
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param CurriculumCategory $category
+     */
+    public function setCategory(CurriculumCategory $category)
+    {
+        $this->category = $category;
+    }
 
     /**
      * Get id

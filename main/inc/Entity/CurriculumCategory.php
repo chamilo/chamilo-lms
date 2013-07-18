@@ -104,6 +104,22 @@ class CurriculumCategory
      */
     private $children;
 
+    /**
+     * @ORM\OneToMany(targetEntity="CurriculumItem", mappedBy="category")
+     */
+    private $items;
+
+    public function __construct()
+    {
+        $this->items = new ArrayCollection();
+    }
+
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+
     public function setParent(CurriculumCategory $parent = null)
     {
         $this->parent = $parent;

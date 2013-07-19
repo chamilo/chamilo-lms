@@ -92,10 +92,10 @@ $app['security.authentication.logout_handler.admin'] = $app->share(function($app
 // Role hierarchy
 $app['security.role_hierarchy'] = array(
     'ROLE_ADMIN' => array('ROLE_QUESTION_MANAGER', 'ROLE_SESSION_MANAGER', 'ROLE_TEACHER', 'ROLE_ALLOWED_TO_SWITCH'),
-    'ROLE_TEACHER' => array('ROLE_STUDENT'),
     'ROLE_RRHH' => array('ROLE_TEACHER'),
-    'ROLE_QUESTION_MANAGER' => array('ROLE_QUESTION_MANAGER'),
-    'ROLE_SESSION_MANAGER' => array('ROLE_SESSION_MANAGER'),
+    'ROLE_TEACHER' => array('ROLE_STUDENT'),
+    'ROLE_QUESTION_MANAGER' => array('ROLE_STUDENT', 'ROLE_QUESTION_MANAGER'),
+    'ROLE_SESSION_MANAGER' => array('ROLE_STUDENT', 'ROLE_SESSION_MANAGER'),
     'ROLE_STUDENT' => array('ROLE_STUDENT'),
     'ROLE_ANONYMOUS' => array('ROLE_ANONYMOUS')
 );
@@ -104,6 +104,9 @@ $app['security.role_hierarchy'] = array(
 $app['security.access_rules'] = array(
     //array('^/admin', 'ROLE_ADMIN', 'https'),
     array('^/admin/administrator', 'ROLE_ADMIN'),
+    array('^/main/admin/extra_fields.php', 'ROLE_QUESTION_MANAGER'),
+    array('^/main/admin/extra_field_options.php', 'ROLE_QUESTION_MANAGER'),
+    array('^/main/admin/extra_field_workflow.php', 'ROLE_QUESTION_MANAGER'),
     array('^/main/admin/.*', 'ROLE_ADMIN'),
     array('^/admin/questionmanager', 'ROLE_QUESTION_MANAGER'),
     array('^/main/.*', array('ROLE_STUDENT'))

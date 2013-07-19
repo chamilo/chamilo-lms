@@ -107,9 +107,8 @@ class ExtraField extends Model
         }
         $this->pageUrl  = 'extra_fields.php?type='.$this->type;
         // Example QuestionFields
-        // @todo error while installing
-        // $this->pageName = get_lang(ucwords($this->type).'Fields');
-        $this->pageName = ucwords($this->type).'Fields';
+        $this->pageName = get_lang(ucwords($this->type).'Fields');
+
     }
 
     static function getValidExtraFieldTypes()

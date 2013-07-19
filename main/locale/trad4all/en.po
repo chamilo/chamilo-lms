@@ -4075,3 +4075,6 @@ msgstr "Select role"
 msgid "SelectAnOption"
 msgstr "Please select an option"
 
+msgid "CurrentStatus"
+msgstr "Current status"
+

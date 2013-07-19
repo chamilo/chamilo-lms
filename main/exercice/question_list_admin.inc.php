@@ -98,6 +98,8 @@ $(function() {
 
 // Filters the type of questions we can add.
 Question::display_type_menu($objExercise);
+// Re sets the question list
+$objExercise->setQuestionList();
 echo '<div style="clear:both;"></div>';
 echo '<div id="message"></div>';
 $token = Security::get_token();
@@ -146,6 +148,7 @@ if (!$inATest) {
 				if (!is_numeric($id)) {
 					continue;
 				}
+                /** @var Question $objQuestionTmp */
 				$objQuestionTmp = Question :: read($id);
 				$question_class = get_class($objQuestionTmp);
 

@@ -8,7 +8,9 @@
  */
 class ExtraFieldOption extends Model
 {
-    public $columns = array('id', 'field_id', 'option_value', 'option_display_text', 'option_order', 'tms');
+    public $columns = array(
+        'id', 'field_id', 'option_value', 'option_display_text', 'option_order', 'priority', 'priority_message', 'tms'
+    );
 
     /**
      * Gets the table for the type of object for which we are using an extra field
@@ -475,6 +477,33 @@ class ExtraFieldOption extends Model
         echo Display::grid_html('extra_field_options');
     }
 
+    public function getPriorityOptions()
+    {
+        return  array(
+            '' => get_lang('SelectAnOption'),
+            1 => get_lang('Success'),
+            2 => get_lang('Info'),
+            3 => get_lang('Warning'),
+            4 => get_lang('Error'),
+        );
+    }
+
+    public function getPriorityMessageType($priority)
+    {
+        switch ($priority) {
+            case 1:
+                return 'success';
+            case 2:
+                return 'info';
+            case 3:
+                return 'warning';
+            case 4:
+                return 'error';
+        }
+        return null;
+
+    }
+
     /**
      * Returns an HTML form for the current field
      * @param string URL to send the form to (action=...)
@@ -501,6 +530,8 @@ class ExtraFieldOption extends Model
         $form->addElement('text', 'option_display_text', get_lang('Name'), array('class' => 'span5'));
         $form->addElement('text', 'option_value', get_lang('Value'), array('class' => 'span5'));
         $form->addElement('text', 'option_order', get_lang('Order'), array('class' => 'span2'));
+        $form->addElement('select', 'priority', get_lang('Priority'), $this->getPriorityOptions());
+        $form->addElement('textarea', 'priority_message', get_lang('PriorityMessage'));
 
         $defaults = array();
 

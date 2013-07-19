@@ -4066,3 +4066,6 @@ msgstr "Questions fields"
 msgid "FieldLoggeable"
 msgstr "Field changes should be logged"
 
+msgid "EditExtraFieldWorkFlow"
+msgstr "Edit this field's workflow"
+

@@ -3,69 +3,6 @@
 {% block body %}
 	{# Main content #}
 
-	{#  Left column  #}
-	<div class="span3 menu-column">
-        {% block left_column %}
-
-            {% if plugin_menu_top %}
-                <div id="plugin_menu_top">
-                    {{plugin_menu_top}}
-                </div>
-            {% endif %}
-
-            {# if user is not login show the login form #}
-            {% if _u.logged  == 0 %}
-                {% include app.template_style ~ "/layout/login_form.tpl" %}
-            {% endif %}
-
-            {#  course_session_block #}
-            {% include app.template_style ~ "/index/course_session_block.tpl" %}
-
-            {#  User picture  #}
-            {% include app.template_style ~ "/index/user_image_block.tpl" %}
-
-            {#  User Profile links #}
-            {% include app.template_style ~ "/index/profile_block.tpl" %}
-
-            {% include app.template_style ~ "/index/profile_social_block.tpl" %}
-
-            {#  Course block - admin #}
-            {% include app.template_style ~ "/index/course_block.tpl" %}
-
-            {#  Course block - teacher #}
-            {% include app.template_style ~ "/index/teacher_block.tpl" %}
-
-            {#  Notice  #}
-            {% include app.template_style ~ "/index/notice_block.tpl" %}
-
-            {#  Help #}
-            {% include app.template_style ~ "/index/help_block.tpl" %}
-
-            {#  Links that are not added in the tabs #}
-            {% include app.template_style ~ "/index/navigation_block.tpl" %}
-
-            {#  Reservation block  #}
-            {{ reservation_block }}
-
-            {#  Search (xapian) #}
-            {{ search_block }}
-
-            {#  Classes  #}
-            {{ classes_block }}
-
-            {#  Skills #}
-            {% include app.template_style ~ "/index/skills_block.tpl" %}
-
-            {#  Plugin courses sidebar  #}
-            {#  Plugins for footer section  #}
-
-            {% if plugin_menu_bottom %}
-                <div id="plugin_menu_bottom">
-                    {{ plugin_menu_bottom }}
-                </div>
-            {% endif %}
-        {% endblock %}
-	</div>
 	<div class="span9 content-column">
         {% block right_column %}
 

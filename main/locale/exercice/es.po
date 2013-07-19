@@ -1555,3 +1555,66 @@ msgstr "Pregunta actual"
 
 msgid "MediaQuestions"
 msgstr "Enunciados compartidos"
+
+
+
+
+msgid "EmailNotificationTemplateDescription"
+msgstr "Puede modificar el correo enviado a los usuarios al terminar el ejercicio. Puede usar los siguientes términos:<br />{{ student.username }}<br />{{ student.firstname }}<br />{{ student.lastname }}<br />{{ student.official_code }}<br />{{ exercise.title }}<br />{{ exercise.start_time }}<br />{{ exercise.end_time }}<br />{{ course.title }}<br />{{ course.code }}"
+
+msgid "EmailNotificationTemplate"
+msgstr "Plantilla del correo electrónico enviado al usuario al terminar el ejercicio."
+
+msgid "ExerciseEndButtonDisconnect"
+msgstr "Desconexión de la plataforma"
+
+msgid "ExerciseEndButtonExerciseHome"
+msgstr "Lista de ejercicios"
+
+msgid "ExerciseEndButtonCourseHome"
+msgstr "Página principal del curso"
+
+msgid "ExerciseEndButton"
+msgstr "Botón al terminar el ejercicio"
+
+msgid "HideQuestionTitle"
+msgstr "Ocultar el título de la pregunta"
+
+msgid "QuestionSelection"
+msgstr "Selección de preguntas"
+
+msgid "OrderedCategoriesByParentWithQuestionsRandom"
+msgstr "Categorías ordenadas según la categoría padre, con preguntas desordenadas"
+
+msgid "OrderedCategoriesByParentWithQuestionsOrdered"
+msgstr "Categorías ordenadas según la categoría padre, con preguntas ordenadas"
+
+msgid "RandomCategoriesWithRandomQuestionsNoQuestionGrouped"
+msgstr "Categorías tomadas al azar, con preguntas desordenadas, sin agrupar preguntas"
+
+msgid "RandomCategoriesWithQuestionsOrderedNoQuestionGrouped"
+msgstr "Categorías tomadas al azar, con preguntas ordenadas, sin agrupar preguntas"
+
+msgid "RandomCategoriesWithRandomQuestions"
+msgstr "Categorías tomadas al azar, con preguntas desordenadas"
+
+msgid "OrderedCategoriesAlphabeticallyWithRandomQuestions"
+msgstr "Categorías ordenadas (alfabéticamente), con preguntas desordenadas"
+
+msgid "RandomCategoriesWithQuestionsOrdered"
+msgstr "Categorías tomadas al azar, con preguntas ordenadas"
+
+msgid "OrderedCategoriesAlphabeticallyWithQuestionsOrdered"
+msgstr "Categorías ordenadas alfabéticamente, con preguntas ordenadas"
+
+msgid "UsingCategories"
+msgstr "Usando categorías"
+
+msgid "OrderedByUser"
+msgstr "Ordenado según la lista de preguntas"
+
+msgid "ToReview"
+msgstr "Por revisar"
+
+msgid "Unanswered"
+msgstr "Sin responder"

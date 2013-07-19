@@ -16,6 +16,7 @@ class CurriculumItemRelUserType extends AbstractType
     {
         $builder->add('description', 'text');
         $builder->add('item_id', 'hidden', array('attr' => array('value' => $this->itemId)));
+        //$builder->add('id', 'hidden');
         //$builder->add('user_id', 'hidden');
         //$builder->add('order_id', 'hidden');
         //$builder->add('submit', 'submit');

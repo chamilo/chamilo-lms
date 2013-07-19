@@ -27,8 +27,7 @@ class CurriculumUserController extends CommonController
      */
     public function indexAction()
     {
-        // @todo put this in a function
-        $repo = $this->getCurriculumCategoryRepository();
+        // $repo = $this->getCurriculumCategoryRepository();
 
         $query = $this->getManager()
             ->createQueryBuilder()
@@ -47,13 +46,14 @@ class CurriculumUserController extends CommonController
         foreach ($categories as $category) {
             /** @var \Entity\CurriculumItem $item */
             foreach ($category->getItems() as $item) {
-                //$userItems = $item->getUserItems();
-                //var_dump(get_class($userItems));
                 $formType = new CurriculumItemRelUserCollectionType($item->getId());
                 $form = $this->get('form.factory')->create($formType, $item);
                 $formList[$item->getId()] = $form->createView();
             }
         }
+
+        //$htmlTree = $repo->buildTree($query->getArrayResult(), $options);
+        //$this->get('template')->assign('tree', $htmlTree);
 
         $this->get('template')->assign('categories', $query->getResult());
         $this->get('template')->assign('links', $this->generateLinks());
@@ -73,28 +73,98 @@ class CurriculumUserController extends CommonController
         $request = $this->getRequest();
         $form = $this->get('form.factory')->create($this->getFormType());
         $token = $this->get('security')->getToken();
+        $user = $token->getUser();
+
+
+
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
 
             if ($form->isValid()) {
                 /** @var Entity\CurriculumItem $item */
-                $item = $form->getData();
+                $postedItem = $form->getData();
 
-                $user = $token->getUser();
+                /** @var Entity\CurriculumItemRelUser $curriculumItemRelUser  */
+                $postedItemId = null;
+                foreach ($postedItem->getUserItems() as $curriculumItemRelUser) {
+                    $postedItemId = $curriculumItemRelUser->getItemId();
+                    break;
+                }
+
+                 // Get user items
+
+                $query = $this->getManager()
+                    ->createQueryBuilder()
+                    ->select('node, i, u')
+                    ->from('Entity\CurriculumCategory', 'node')
+                    ->innerJoin('node.items', 'i')
+                    ->innerJoin('i.userItems', 'u')
+                    ->orderBy('node.root, node.lft', 'ASC')
+                    ->where('u.userId = :user_id AND i.id = :item_id')
+                    ->setParameter('user_id', $user->getUserId())
+                    ->setParameter('item_id', $postedItemId)
+                    ->getQuery();
+
+                $categories = $query->getResult();
+
+                /** @var \Entity\CurriculumCategory $category */
+                $alreadyAdded = array();
+                //$alreadyAddedObjects = array();
+                foreach ($categories as $category) {
+                    foreach ($category->getItems() as $item) {
+                        if ($item->getId() == $postedItemId) {
+                            // Now we can do stuff
+                            /** @var Entity\CurriculumItemRelUser $userItem */
+                            foreach ($item->getUserItems() as $userItem) {
+                                $alreadyAdded[md5($userItem->getDescription())] = $userItem;
+                            }
+                        }
+                    }
+                }
+
                 // @todo check this
                 $user = $this->get('orm.em')->getRepository('Entity\User')->find($user->getUserId());
 
                 $counter = 1;
+                $parsed = array();
+
                 /** @var Entity\CurriculumItemRelUser $curriculumItemRelUser  */
-                foreach ($item->getUserItems() as $curriculumItemRelUser) {
+                foreach ($postedItem->getUserItems() as $curriculumItemRelUser) {
                     $curriculumItemRelUser->setUser($user);
-                    //$item = new Entity\CurriculumItem();
-                    $item = $this->getCurriculumItemRepository()->find($curriculumItemRelUser->getItemId());
-                    $curriculumItemRelUser->setItem($item);
+                    $newItem = $this->getCurriculumItemRepository()->find($curriculumItemRelUser->getItemId());
+                    $curriculumItemRelUser->setItem($newItem);
                     $curriculumItemRelUser->setOrderId(strval($counter));
-                    $this->createAction($curriculumItemRelUser);
+                    $description = $curriculumItemRelUser->getDescription();
+
+                    if (empty($description)) {
+                        //error_log('skipeed');
+                        continue;
+                    }
+
+                    // @todo improve this
+                    if (!empty($alreadyAdded)) {
+                        $hash = md5($curriculumItemRelUser->getDescription());
+                        if (isset($alreadyAdded[$hash])) {
+                            $parsed[] = $hash;
+                            //$this->get('monolog')->addInfo($curriculumItemRelUser->getDescription());
+                            //error_log("aaa ->".$curriculumItemRelUser->getDescription());
+                            continue;
+                        } else {
+                            $this->createAction($curriculumItemRelUser);
+                        }
+                    } else {
+                        $this->createAction($curriculumItemRelUser);
+                    }
                     $counter++;
+                }
+
+                if (!empty($alreadyAdded)) {
+                    foreach ($alreadyAdded as $hash => $item) {
+                        if (!in_array($hash, $parsed)) {
+                            $this->removeEntity($item->getId());
+                        }
+                    }
                 }
             }
         }

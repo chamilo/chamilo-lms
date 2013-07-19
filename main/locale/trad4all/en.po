@@ -4063,3 +4063,6 @@ msgstr "Manage extra fields for questions"
 msgid "QuestionFields"
 msgstr "Questions fields"
 
+msgid "FieldLoggeable"
+msgstr "Field changes should be logged"
+

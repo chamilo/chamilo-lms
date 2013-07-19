@@ -540,7 +540,7 @@ class Exercise
      * @param string $sord
      * @param array $where_condition
      */
-    public function getQuestionListPagination($start, $limit, $sidx, $sord, $where_condition = array())
+    public function getQuestionListPagination($start, $limit, $sidx, $sord, $where_condition = array(), $extraFields = array())
     {
         if (!empty($this->id)) {
             $category_list = Testcategory::getListOfCategoriesNameForTest($this->id, false);
@@ -580,6 +580,9 @@ class Exercise
             $result = Database::query($sql);
             $questions = array();
             if (Database::num_rows($result)) {
+                if (!empty($extraFields)) {
+                    $extraFieldValue = new ExtraFieldValue('question');
+                }
                 while ($question = Database::fetch_array($result, 'ASSOC')) {
                     $objQuestionTmp = Question::read($question['iid']);
                     $category_labels = Testcategory::return_category_labels($objQuestionTmp->category_list, $category_list);
@@ -607,6 +610,18 @@ class Exercise
                         'score' => $objQuestionTmp->selectWeighting(),
                         'level' => $objQuestionTmp->level
                     );
+
+                    if (!empty($extraFields)) {
+                        foreach ($extraFields as $extraField) {
+                            $value = $extraFieldValue->get_values_by_handler_and_field_id($question['id'], $extraField['id']);
+                            $stringValue = null;
+                            if ($value) {
+                                $stringValue = $value['field_value'];
+                            }
+                            $question[$extraField['field_variable']] = $stringValue;
+                        }
+                    }
+
                     $questions[] = $question;
                 }
             }

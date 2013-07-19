@@ -316,8 +316,18 @@ switch ($action) {
         break;
     case 'get_question_list':
         if (isset($exercise) && !empty($exercise)) {
-            $columns = array('question', 'type', 'category', 'level', 'score', 'actions');
-            $result = $exercise->getQuestionListPagination($start, $limit, $sidx, $sord, $where_condition);
+            $extraField = new ExtraField('question');
+            $extraFields = $extraField->get_all(array('field_filter = ?' => 1));
+
+            $columns = array('question', 'type', 'category', 'level', 'score');
+            if (!empty($extraFields)) {
+                foreach ($extraFields as $extraField) {
+                    $columns[] = $extraField['field_variable'];
+                }
+            }
+            $columns[] = 'actions';
+
+            $result = $exercise->getQuestionListPagination($start, $limit, $sidx, $sord, $where_condition, $extraFields);
         }
         break;
     case 'get_group_reporting':

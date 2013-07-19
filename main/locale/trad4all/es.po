@@ -4068,3 +4068,6 @@ msgstr "Gestor de campos de preguntas"
 msgid "QuestionFields"
 msgstr "Campos de preguntas"
 
+msgid "FieldLoggeable"
+msgstr "Registrar cambios del valor de este campo"
+

@@ -49,8 +49,11 @@ class FreeAnswer extends Question
             }
         }
 
-        // Setting the save button here and not in the question class.php.
-        $form->addElement('style_submit_button', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
+        if ($form->isFrozen() == false) {
+
+            // Setting the save button here and not in the question class.php.
+            $form->addElement('style_submit_button', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
+        }
     }
 
     /**

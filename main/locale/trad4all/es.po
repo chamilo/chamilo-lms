@@ -4080,3 +4080,6 @@ msgstr "Elegir rol"
 msgid "SelectAnOption"
 msgstr "Elegir una opción"
 
+msgid "CurrentStatus"
+msgstr "Estado actual"
+

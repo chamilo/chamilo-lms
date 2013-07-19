@@ -86,7 +86,7 @@ class Promotion extends Model {
                         $new_session_list = array();
                         
 						foreach($session_list as $item) {
-							$sid = SessionManager::copy_session($item['id'], true, false, true, true);						
+							$sid = SessionManager::copy_session($item['id'], true, false, false, true);						
                             $new_session_list[] = $sid;
 						}
                         

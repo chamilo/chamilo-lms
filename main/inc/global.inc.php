@@ -279,6 +279,16 @@ $app->error(
         $app['twig']->addGlobal('error_code', $code);
         $app['twig']->addGlobal('error_message', $message);
 
+        // It seems that error() is executed first than the before() middleware
+        // @ŧodo check this one
+        $templateStyle = api_get_setting('template');
+        $templateStyle = isset($templateStyle) && !empty($templateStyle) ? $templateStyle : 'default';
+        $app['template_style'] = $templateStyle;
+
+        // Default layout.
+        $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
+
+
         $response = $app['template']->render_layout('error.tpl');
 
         return new Response($response);
@@ -308,8 +318,6 @@ if ($alreadyInstalled) {
     //api_set_internationalization_default_encoding($charset);
 
     // require $includePath.'/local.inc.php';
-
-
 
     /**	Loading languages and sublanguages **/
     // @todo improve the language loading
@@ -502,7 +510,6 @@ $app->before(
 
         // Starting the session for more info see: http://silex.sensiolabs.org/doc/providers/session.html
         $request->getSession()->start();
-
 
         /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem $filesystem */
         $filesystem = $app['chamilo.filesystem'];

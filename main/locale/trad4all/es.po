@@ -4101,3 +4101,9 @@ msgstr "Ordenar mis cursos"
 msgid "Compose"
 msgstr "Redactar"
 
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Committee"
+msgstr "Comité"
+

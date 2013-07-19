@@ -4095,3 +4095,13 @@ msgstr "Sort my courses"
 
 msgid "Compose"
 msgstr "Compose"
+
+msgid "ModelType"
+msgstr "Exercise model type"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Committee"
+msgstr "Committee"
+

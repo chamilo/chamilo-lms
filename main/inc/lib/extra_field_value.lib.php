@@ -232,22 +232,22 @@ class ExtraFieldValue extends Model
                     global $app;
                     switch($this->type) {
                         case 'question':
-                            $extraFieldValue = $app['orm.em']->getRepository('Entity\QuestionFieldValues')->find($field_values['id']);
+                            $extraFieldValue = $app['orm.ems']['db_write']->getRepository('Entity\QuestionFieldValues')->find($field_values['id']);
                             $extraFieldValue->setUserId(api_get_user_id());
                             $extraFieldValue->setQuestionId($params[$this->handler_id]);
                             break;
                         case 'course':
-                            $extraFieldValue = $app['orm.em']->getRepository('Entity\CourseFieldValues')->find($field_values['id']);
+                            $extraFieldValue = $app['orm.ems']['db_write']->getRepository('Entity\CourseFieldValues')->find($field_values['id']);
                             $extraFieldValue->setUserId(api_get_user_id());
                             $extraFieldValue->setCourseCode($params[$this->handler_id]);
                             break;
                         case 'user':
-                            $extraFieldValue = $app['orm.em']->getRepository('Entity\UserFieldValues')->find($field_values['id']);
+                            $extraFieldValue = $app['orm.ems']['db_write']->getRepository('Entity\UserFieldValues')->find($field_values['id']);
                             $extraFieldValue->setUserId(api_get_user_id());
                             $extraFieldValue->setAuthorId(api_get_user_id());
                             break;
                         case 'session':
-                            $extraFieldValue = $app['orm.em']->getRepository('Entity\SessionFieldValues')->find($field_values['id']);
+                            $extraFieldValue = $app['orm.ems']['db_write']->getRepository('Entity\SessionFieldValues')->find($field_values['id']);
                             $extraFieldValue->setUserId(api_get_user_id());
                             $extraFieldValue->setSessionId($params[$this->handler_id]);
                             break;
@@ -270,7 +270,7 @@ class ExtraFieldValue extends Model
                             $extraFieldValue->setFieldValue($params['field_value']);
                             $extraFieldValue->setFieldId($params['field_id']);
                             $extraFieldValue->setTms(api_get_utc_datetime(null, false, true));
-                            $app['orm.ems']['db_write']->merge($extraFieldValue);
+                            $app['orm.ems']['db_write']->persist($extraFieldValue);
                             $app['orm.ems']['db_write']->flush();
                         }
                     }

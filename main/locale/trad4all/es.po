@@ -4083,3 +4083,18 @@ msgstr "Elegir una opción"
 msgid "CurrentStatus"
 msgstr "Estado actual"
 
+msgid "SpecialCourses"
+msgstr "Cursos especiales"
+
+msgid "MyCoursesCategories"
+msgstr "Mis categorías de cursos"
+
+msgid "SessionsCategories"
+msgstr "Categorías de sesiones"
+
+msgid "PendingInvitations"
+msgstr "Invitaciones pendientes"
+
+msgid "SortMyCourses"
+msgstr "Ordenar mis cursos"
+

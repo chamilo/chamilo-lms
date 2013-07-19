@@ -4078,3 +4078,18 @@ msgstr "Please select an option"
 msgid "CurrentStatus"
 msgstr "Current status"
 
+msgid "SpecialCourses"
+msgstr "Special courses"
+
+msgid "MyCoursesCategories"
+msgstr "My courses categories"
+
+msgid "SessionsCategories"
+msgstr "Sessions categories"
+
+msgid "PendingInvitations"
+msgstr "Pending invitations"
+
+msgid "SortMyCourses"
+msgstr "Sort my courses"
+

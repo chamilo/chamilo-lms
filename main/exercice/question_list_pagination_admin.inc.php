@@ -35,7 +35,17 @@ $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_question_list&exerciseI
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
 //$columns = array(get_lang('Questions'), get_lang('Type'), get_lang('Category'), get_lang('Difficulty'), get_lang('Score'), get_lang('Actions'));
-$columns = array(get_lang('Questions'), get_lang('Type'), get_lang('Category'), get_lang('Score'), get_lang('Actions'));
+$columns = array(get_lang('Questions'), get_lang('Type'), get_lang('Category'), get_lang('Score'));
+
+// Adding filtered question extra fields
+$extraField = new ExtraField('question');
+$extraFields = $extraField->get_all(array('field_filter = ?' => 1));
+if (!empty($extraFields)) {
+    foreach ($extraFields as $field) {
+        $columns[] = $field['field_display_text'];
+    }
+}
+$columns[] = get_lang('Actions');
 
 //Column config
 $column_model = array(
@@ -67,17 +77,30 @@ $column_model = array(
         'width'    => '50',
         'align'    => 'left',
         'sortable' => 'false'
-    ),
-    array(
-        'name'      => 'actions',
-        'index'     => 'actions',
-        'width'     => '50',
-        'align'     => 'left',
-        'formatter' => 'action_formatter',
-        'sortable'  => 'false'
     )
 );
 
+if (!empty($extraFields)) {
+    foreach ($extraFields as $field) {
+        $column_model[] =
+        array(
+            'name'     => $field['field_variable'],
+            'index'    => $field['field_variable'],
+            'width'    => '100',
+            'align'    => 'left',
+            'sortable' => 'false'
+        );
+    }
+}
+
+$column_model[] = array(
+    'name'      => 'actions',
+    'index'     => 'actions',
+    'width'     => '50',
+    'align'     => 'left',
+    'formatter' => 'action_formatter',
+    'sortable'  => 'false'
+);
 
 //Autowidth
 $extra_params['autowidth'] = 'true';

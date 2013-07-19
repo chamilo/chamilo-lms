@@ -9,7 +9,6 @@
                         <a href="{{ url('admin_questions') }}">
                         {{ 'Questions' | get_lang }}</a>
                     </li>
-                    <li><a href="{{ _p.web }}main/admin/extra_fields.php?type=question">{{ 'ExtraFields' | get_lang }}</a></li>
                     <li><a href="{{ url('admin_category_new')}}">{{ 'AddACategory' | get_lang }}</a></li>
                 </ul>
 

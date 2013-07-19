@@ -15,13 +15,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 
-if ($type == 'question') {
-    if (!(api_is_platform_admin() || api_is_question_manager())) {
-        api_not_allowed(true);
-    }
-} else {
-    api_protect_admin_script();
-}
+api_protect_admin_script();
 
 // setting breadcrumbs
 $interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));

@@ -652,8 +652,11 @@ class ExtraField extends Model
                             $options[''] = get_lang('SelectAnOption');
                         }
 
+                        $optionList = array();
+
                         if (!empty($field_details['options'])) {
                             foreach ($field_details['options'] as $option_details) {
+                                $optionList[$option_details['id']] = $option_details;
                                 if ($get_lang_variables) {
                                     $options[$option_details['option_value']] = get_lang($option_details['option_display_text']);
                                 } else {
@@ -674,6 +677,16 @@ class ExtraField extends Model
                                         $options[$option_details['option_value']] = $option_details['option_display_text'];
                                     }
                                 }
+                            }
+                        }
+
+                        // Setting priority message
+                        if (isset($optionList[$defaultValueId]) && isset($optionList[$defaultValueId]['priority'])) {
+                            if (!empty($optionList[$defaultValueId]['priority'])) {
+                                $priorityId = $optionList[$defaultValueId]['priority'];
+                                $option = new ExtraFieldOption($this->type);
+                                $messageType = $option->getPriorityMessageType($priorityId);
+                                $form->addElement('label', null, Display::return_message($optionList[$defaultValueId]['priority_message'], $messageType));
                             }
                         }
 

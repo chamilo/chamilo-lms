@@ -581,13 +581,17 @@ class Exercise
                     $extraFieldValue = new ExtraFieldValue('question');
                 }
 
+
+
                 while ($question = Database::fetch_array($result, 'ASSOC')) {
+                    /** @var Question $objQuestionTmp */
                     $objQuestionTmp = Question::read($question['iid']);
                     $category_labels = Testcategory::return_category_labels($objQuestionTmp->category_list, $category_list);
 
                     if (empty($category_labels)) {
                         $category_labels = "-";
                     }
+
 
                     // Question type
                     list($typeImg, $typeExpl) = $objQuestionTmp->get_type_icon_html();
@@ -597,7 +601,6 @@ class Exercise
                         $objQuestionMedia = Question::read($objQuestionTmp->parent_id);
                         $question_media  = Question::getMediaLabel($objQuestionMedia->question);
                     }
-
                     $questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, array(), ICON_SIZE_MEDIUM).$question_media);
 
                     $question = array(

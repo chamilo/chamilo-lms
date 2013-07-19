@@ -2266,6 +2266,11 @@ abstract class Question
             //var_dump($exerciseId);
             // Including actions
             foreach ($questions as &$question) {
+
+                $type = self::get_question_type($question['type']);
+                $question['type'] = get_lang($type[1]);
+                $question['question_question_type'] = get_lang($type[1]);
+
                 if (empty($exerciseId)) {
                     // View.
                     $actions = Display::url(

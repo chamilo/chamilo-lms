@@ -190,7 +190,13 @@ class ModelAjaxController
             case 'get_questions':
                 $categoryId = $request->get('categoryId');
                 $exerciseId = $request->get('exerciseId');
-                $courseId = null; //$request->get('courseId');
+                //$courseId = null; //$request->get('courseId');
+                $courseId = $request->get('courseId');
+
+                // Question manager can view all questions
+                if (api_is_question_manager()) {
+                    $courseId  = null;
+                }
 
                 $count = \Question::getQuestions(
                     $app,

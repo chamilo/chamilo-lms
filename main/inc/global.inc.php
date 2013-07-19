@@ -668,7 +668,8 @@ $app->before(
         $languageFiles = array(
             'trad4all',
             'notification',
-            'accessibility'
+            'accessibility',
+            'exercice'
         );
 
 

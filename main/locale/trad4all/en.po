@@ -4105,3 +4105,6 @@ msgstr "Normal"
 msgid "Committee"
 msgstr "Committee"
 
+msgid "CourseSessionBlock"
+msgstr "Courses and sessions"
+

@@ -560,7 +560,7 @@ function modify_filter($user_id, $url_params, $row) {
         if ($delete_user_available) {
             if ($user_id != api_get_user_id() && !$user_is_anonymous && api_global_admin_can_edit_admin($user_id)) {
                 // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-                $result .= ' <a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.Security::getCurrentToken().'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
+                $result .= ' <a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.Security::getCurrentToken().'"  onclick="javascript:if(!confirm('."'".addslashes(get_lang("ConfirmYourChoice"))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
             } else {
                 $result .= Display::return_icon('delete_na.png', get_lang('Delete'), array(), ICON_SIZE_SMALL);
             }

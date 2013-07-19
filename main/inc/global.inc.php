@@ -632,6 +632,8 @@ $app->before(
         $iso = api_get_language_isocode($language);
         $app['translator']->setLocale($iso);
 
+
+
         // From the login page
         $language = $request->get('language');
 
@@ -642,7 +644,8 @@ $app->before(
 
         // From the user
         if ($user) {
-            $language = $user->getLanguage();
+            //$language = $user->getLanguage();
+            $language = $userInfo['language'];
             $iso = api_get_language_isocode($language);
             $app['translator']->setLocale($iso);
         }

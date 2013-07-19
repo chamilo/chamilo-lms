@@ -17,9 +17,6 @@
 
             {% include app.template_style ~ "/index/profile_social_block.tpl" %}
 
-            {#  Course block - admin #}
-            {% include app.template_style ~ "/index/course_block.tpl" %}
-
             {#  Notice  #}
             {% include app.template_style ~ "/index/notice_block.tpl" %}
 

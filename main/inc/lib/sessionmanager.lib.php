@@ -573,6 +573,17 @@ class SessionManager {
 		event_system(LOG_SESSION_DELETE, LOG_SESSION_ID, $id_checked, api_get_utc_datetime(), $user_id);
 	}
 
+    public static function clear_session_ref_promotion($id_promotion) {
+        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $id_promotion = intval($id_promotion);
+        $update_sql = "UPDATE $tbl_session SET promotion_id=0 WHERE promotion_id='$id_promotion'";
+        if (Database::query($update_sql)) {
+            return true;
+        } else {
+            return false;
+        }
+        
+    }
 	 /**
 	  * Subscribes users (students)  to the given session and optionally (default) unsubscribes previous users
 	  * @author Carlos Vargas from existing code
@@ -1709,6 +1720,7 @@ class SessionManager {
             	foreach ($courses as $course) {
             		$short_courses[] = $course;
             	}
+            
             }
             $courses = null;
 
@@ -1751,6 +1763,7 @@ class SessionManager {
                          $new_short_courses[] = $course_data['code'];
                     }
                 }
+
                 $short_courses = $new_short_courses;
                 $res = self::add_courses_to_session($sid, $short_courses, true);
                 $short_courses = null;

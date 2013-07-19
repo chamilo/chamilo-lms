@@ -4081,7 +4081,7 @@ msgstr "Current status"
 msgid "SpecialCourses"
 msgstr "Special courses"
 
-msgid "MyCoursesCategories"
+msgid "MyCourseCategories"
 msgstr "My courses categories"
 
 msgid "SessionsCategories"
@@ -4093,3 +4093,5 @@ msgstr "Pending invitations"
 msgid "SortMyCourses"
 msgstr "Sort my courses"
 
+msgid "Compose"
+msgstr "Compose"

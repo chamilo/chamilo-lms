@@ -4071,3 +4071,12 @@ msgstr "Campos de preguntas"
 msgid "FieldLoggeable"
 msgstr "Registrar cambios del valor de este campo"
 
+msgid "EditExtraFieldWorkFlow"
+msgstr "Editar el flujo de trabajo de este campo"
+
+msgid "SelectRole"
+msgstr "Elegir rol"
+
+msgid "SelectAnOption"
+msgstr "Elegir una opción"
+

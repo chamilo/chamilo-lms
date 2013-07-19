@@ -543,7 +543,7 @@ $app->get('/admin/dashboard', 'index.controller:dashboardAction')
 
 /** Question manager - admin */
 
-$app->get('/admin/questionmanager/', 'question_manager.controller:questionManagerIndexAction')
+$app->get('/admin/questionmanager', 'question_manager.controller:questionManagerIndexAction')
     ->assert('type', '.+')
     ->bind('admin_questionmanager');
 

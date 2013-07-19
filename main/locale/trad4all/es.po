@@ -4059,3 +4059,12 @@ msgstr "Condiciones legales aceptadas"
 msgid "PaginationXofY"
 msgstr "%s de %s"
 
+msgid "ManageCourseFields"
+msgstr "Gestor de campos de cursos"
+
+msgid "ManageQuestionFields"
+msgstr "Gestor de campos de preguntas"
+
+msgid "QuestionFields"
+msgstr "Campos de preguntas"
+

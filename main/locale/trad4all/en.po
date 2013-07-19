@@ -4054,3 +4054,12 @@ msgstr "Legal agreement accepted"
 msgid "PaginationXofY"
 msgstr "%s of %s"
 
+msgid "ManageCourseFields"
+msgstr "Manage extra fields for courses"
+
+msgid "ManageQuestionFields"
+msgstr "Manage extra fields for questions"
+
+msgid "QuestionFields"
+msgstr "Questions fields"
+

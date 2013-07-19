@@ -104,9 +104,9 @@ $app['security.role_hierarchy'] = array(
 $app['security.access_rules'] = array(
     //array('^/admin', 'ROLE_ADMIN', 'https'),
     array('^/admin/administrator', 'ROLE_ADMIN'),
-    array('^/main/admin/extra_fields.php', 'ROLE_QUESTION_MANAGER'),
-    array('^/main/admin/extra_field_options.php', 'ROLE_QUESTION_MANAGER'),
-    array('^/main/admin/extra_field_workflow.php', 'ROLE_QUESTION_MANAGER'),
+    //array('^/main/admin/extra_fields.php', 'ROLE_QUESTION_MANAGER'),
+    //array('^/main/admin/extra_field_options.php', 'ROLE_QUESTION_MANAGER'),
+    //array('^/main/admin/extra_field_workflow.php', 'ROLE_QUESTION_MANAGER'),
     array('^/main/admin/.*', 'ROLE_ADMIN'),
     array('^/admin/questionmanager', 'ROLE_QUESTION_MANAGER'),
     array('^/main/.*', array('ROLE_STUDENT'))

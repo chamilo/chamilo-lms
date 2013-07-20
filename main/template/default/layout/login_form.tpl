@@ -10,8 +10,6 @@
 
 	{{ login_form }}
 
-	{{ login_failed }}
-
 	{{ login_options }}
 
     {% if plugin_login_bottom is not null %}

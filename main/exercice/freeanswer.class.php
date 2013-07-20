@@ -37,15 +37,22 @@ class FreeAnswer extends Question
      */
     public function createAnswersForm($form)
     {
-        $form->addElement('text', 'weighting', get_lang('Weighting'), array('class' => 'span1'));
-        // setting the save button here and not in the question class.php
-        $form->addElement('style_submit_button', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
-        if (!empty($this->id)) {
-            $form->setDefaults(array('weighting' => Text::float_format($this->weighting, 1)));
-        } else {
-            if ($this->isContent == 1) {
-                $form->setDefaults(array('weighting' => '10'));
+
+        if ($this->exercise->getModelType() == EXERCISE_MODEL_TYPE_NORMAL) {
+            $form->addElement('text', 'weighting', get_lang('Weighting'), array('class' => 'span1'));
+            if (!empty($this->id)) {
+                $form->setDefaults(array('weighting' => Text::float_format($this->weighting, 1)));
+            } else {
+                if ($this->isContent == 1) {
+                    $form->setDefaults(array('weighting' => '10'));
+                }
             }
+        }
+
+        if ($form->isFrozen() == false) {
+
+            // Setting the save button here and not in the question class.php.
+            $form->addElement('style_submit_button', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
         }
     }
 
@@ -59,14 +66,17 @@ class FreeAnswer extends Question
         $this->save();
     }
 
-    function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false)
+    /**
+     * {@inheritdoc}
+     */
+    function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false, $hideTitle = 0)
     {
         if (!empty($score['comments']) || $score['score'] > 0) {
             $score['revised'] = true;
         } else {
             $score['revised'] = false;
         }
-        $header = parent::return_header($feedback_type, $counter, $score, $show_media);
+        $header = parent::return_header($feedback_type, $counter, $score, $show_media, $hideTitle);
         $header .= '<table class="'.$this->question_table_class.'" >
         <tr>
 		<th>'.get_lang("Answer").'</th>

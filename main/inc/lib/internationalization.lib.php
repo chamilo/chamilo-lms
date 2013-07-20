@@ -125,22 +125,20 @@ $_api_is_translated_call = false;
 function get_lang($variable, $reserved = null, $language = null)
 {
     // In order to use $app['translator']
-    /*global $app;
+    global $app;
     if ($app['debug']) {
         //return $variable;
     }
-    //var_dump($variable);
+
     $translated = $app['translator']->trans($variable);
-    //var_dump($translated);
     if ($translated == $variable) {
         $translated = $app['translator']->trans("lang$variable");
         if ($translated == "lang$variable") {
             return $variable;
         }
     }
-
     return $translated;
-    */
+
 
     global $app;
     $language_interface = isset($app['language_interface']) ? $app['language_interface'] : api_get_language_interface();
@@ -207,8 +205,9 @@ function get_lang($variable, $reserved = null, $language = null)
 
     // Translation mode for production servers.
 
-    if (!$test_server_mode) {
-        //$read_global_variables = true;
+    if ($test_server_mode == true) {
+
+        $read_global_variables = true;
         if ($read_global_variables) {
             if (isset($GLOBALS[$variable])) {
                 $langvar = $GLOBALS[$variable];
@@ -242,14 +241,14 @@ function get_lang($variable, $reserved = null, $language = null)
         return $ret;
     }
 
-
+    /*
     // Translation mode for test/development servers.
     if (!is_string($variable)) {
         //return $cache[$language][$variable] = SPECIAL_OPENING_TAG.'get_lang(?)'.SPECIAL_CLOSING_TAG;
         $ret = $cache[$language][$variable] = SPECIAL_OPENING_TAG.'get_lang(?)'.SPECIAL_CLOSING_TAG;
         $used_lang_vars[$variable.$lang_postfix] = $ret;
         return $ret;
-    }
+    }*/
 
 
     if (isset($$variable)) {
@@ -1013,6 +1012,7 @@ function api_convert_and_format_date($time = null, $format = null, $from_timezon
  */
 function api_get_week_days_short($language = null)
 {
+
     $days = & _api_get_day_month_names($language);
     return $days['days_short'];
 }
@@ -1406,6 +1406,35 @@ function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = null)
     }
 
     return $string;
+}
+
+
+/**
+ * Checks whether the specified encoding is supported by the html-entitiy related functions.
+ * @param string $encoding	The specified encoding.
+ * @return bool				Returns TRUE when the specified encoding is supported, FALSE othewise.
+ */
+function _api_html_entity_supports($encoding) {
+    static $supports = array();
+    if (!isset($supports[$encoding])) {
+        // See http://php.net/manual/en/function.htmlentities.php
+        $html_entity_encodings = array(
+            'ISO-8859-1',
+            'ISO-8859-15',
+            'UTF-8',
+            'CP866',
+            'CP1251',
+            'CP1252',
+            'KOI8-R',
+            'BIG5', '950',
+            'GB2312', '936',
+            'BIG5-HKSCS',
+            'Shift_JIS', 'SJIS', '932',
+            'EUC-JP', 'EUCJP'
+        );
+        $supports[$encoding] = api_equal_encodings($encoding, $html_entity_encodings);
+    }
+    return $supports[$encoding];
 }
 
 /**

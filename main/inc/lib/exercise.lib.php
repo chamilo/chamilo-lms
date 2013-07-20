@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  * Exercise library
- * @todo convert this lib into a static class
+ * @todo move this in exercise.class or question.class depending of the functions.
  *
  * shows a question and its answers
  * @package chamilo.exercise
@@ -15,11 +15,12 @@
  */
 
 use ChamiloSession as Session;
+
 class ExerciseLib
 {
     /**
      * Shows a question
-     *
+     * @todo move to the Exercise class
      * @param int   question id
      * @param bool  if true only show the questions, no exercise title
      * @param bool  origin i.e = learnpath
@@ -36,7 +37,8 @@ class ExerciseLib
         $user_choice = array(),
         $show_comment = false,
         $exercise_feedback = null,
-        $show_answers = false
+        $show_answers = false,
+        $modelType = null
     ) {
         // Text direction for the current language
         //$is_ltr_text_direction = api_get_text_direction() != 'rtl';
@@ -60,7 +62,6 @@ class ExerciseLib
         $pictureName = $objQuestionTmp->selectPicture();
 
         $s = null;
-        // @todo use a formvalidator
         $form = new FormValidator('question');
         $renderer = $form->defaultRenderer();
         $form_template = '{content}';
@@ -73,9 +74,22 @@ class ExerciseLib
                 if ($show_title) {
                     $html .= Testcategory::getCategoryNamesForQuestion($objQuestionTmp->id);
                     $html .= Display::div($current_item.'. '.$objQuestionTmp->selectTitle(), array('class' => 'question_title'));
-                }
+                    if (!empty($questionDescription)) {
+                        $html .= Display::div($questionDescription, array('class' => 'question_description'));
+                    }
+                } else {
+                    $html .= '<div class="media">';
+                    $html .= '<div class="pull-left">';
+                    $html .= '<div class="media-object">';
+                    $html .= Display::div($current_item.'. ', array('class' => 'question_no_title'));
+                    $html .= '</div>';
+                    $html .= '</div>';
+                    $html .= '<div class="media-body">';
                 if (!empty($questionDescription)) {
                     $html .= Display::div($questionDescription, array('class' => 'question_description'));
+                }
+                    $html .= '</div>';
+                    $html .= '</div>';
                 }
             }
 
@@ -144,7 +158,11 @@ class ExerciseLib
                 $num_suggestions = ($nbrAnswers - $j) + 1;
             } elseif ($answerType == FREE_ANSWER) {
                 $content = isset($user_choice[0]) && !empty($user_choice[0]['answer']) ? $user_choice[0]['answer'] : null;
-                $form->addElement('html_editor', "choice[".$questionId."]", null, array('id' => "choice[".$questionId."]"), array('ToolbarSet' => 'TestFreeAnswer'));
+                $toolBar = 'TestFreeAnswer';
+                if ($modelType == EXERCISE_MODEL_TYPE_COMMITTEE) {
+                    $toolBar = 'TestFreeAnswerStrict';
+                }
+                $form->addElement('html_editor', "choice[".$questionId."]", null, array('id' => "choice[".$questionId."]"), array('ToolbarSet' => $toolBar));
                 $form->setDefaults(array("choice[".$questionId."]" => $content));
                 $s .= $form->return_form();
             } elseif ($answerType == ORAL_EXPRESSION) {
@@ -270,7 +288,7 @@ class ExerciseLib
 
                 } elseif (in_array($answerType, array(MULTIPLE_ANSWER, MULTIPLE_ANSWER_TRUE_FALSE, GLOBAL_MULTIPLE_ANSWER))) {
                     $input_id = 'choice-'.$questionId.'-'.$answerId;
-                    $answer = Security::remove_XSS($answer, STUDENT);
+                    $answer = Security::remove_XSS($answer);
 
                     if (in_array($numAnswer, $user_choice_array)) {
                         $attributes = array('id' => $input_id, 'checked' => 1, 'selected' => 1);
@@ -362,7 +380,7 @@ class ExerciseLib
                         }
                     }
 
-                    $answer = Security::remove_XSS($answer, STUDENT);
+                    $answer = Security::remove_XSS($answer);
                     $answer_input = '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
                     $answer_input .= '<label class="checkbox">';
                     $answer_input .= Display::input('checkbox', 'choice['.$questionId.']['.$numAnswer.']', 1, $attributes);
@@ -391,7 +409,7 @@ class ExerciseLib
                             $my_choice[$item[0]] = $item[1];
                         }
                     }
-                    $answer = Security::remove_XSS($answer, STUDENT);
+                    $answer = Security::remove_XSS($answer);
                     $s .='<tr>';
                     $s .= Display::tag('td', $answer);
 
@@ -722,13 +740,26 @@ class ExerciseLib
                 if ($show_title) {
                     $html .=  Testcategory::getCategoryNamesForQuestion($objQuestionTmp->id);
                     $html .=  '<div class="question_title">'.$current_item.'. '.$questionName.'</div>';
+                    $html .=  $questionDescription;
+                } else {
+                    $html .= '<div class="media">';
+                    $html .= '<div class="pull-left">';
+                    $html .= '<div class="media-object">';
+                    $html .= Display::div($current_item.'. ', array('class' => 'question_no_title'));
+                    $html .= '</div>';
+                    $html .= '</div>';
+                    $html .= '<div class="media-body">';
+                    if (!empty($questionDescription)) {
+                        $html .= Display::div($questionDescription, array('class' => 'question_description'));
+                }
+                    $html .= '</div>';
+                    $html .= '</div>';
                 }
                 //@todo I need to the get the feedback type
                 $html .=  '<input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'" />';
                 $html .=  '<table class="exercise_questions">
                            <tr>
                             <td valign="top" colspan="2">';
-                $html .=  $questionDescription;
                 $html .=  '</td></tr>';
             }
 
@@ -2225,6 +2256,7 @@ class ExerciseLib
         return $return;
     }
 
+
     /**
        return the HTML code for a menu with students group
        @input : $in_name : is the name and the id of the <select>
@@ -2298,6 +2330,58 @@ class ExerciseLib
         $sql = "UPDATE $exercice_attemp_table SET tms = '".api_get_utc_datetime()."'
                 WHERE exe_id = $exeId AND tms = '".$last_attempt_date."' ";
         Database::query($sql);
-
     }
+
+    public static function getExerciseResult($trackExerciseInfo)
+    {
+        $TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_QUESTIONS         	= Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $TBL_TRACK_EXERCICES    = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $TBL_TRACK_ATTEMPT		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+        $query = "SELECT attempts.question_id, answer
+              FROM ".$TBL_TRACK_ATTEMPT." as attempts
+                INNER JOIN ".$TBL_TRACK_EXERCICES." AS stats_exercices
+                    ON stats_exercices.exe_id=attempts.exe_id
+                INNER JOIN ".$TBL_EXERCICE_QUESTION." AS quizz_rel_questions
+                    ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id AND
+                    quizz_rel_questions.question_id = attempts.question_id AND
+                    quizz_rel_questions.c_id=".$trackExerciseInfo['c_id']."
+                INNER JOIN ".$TBL_QUESTIONS." AS questions
+                    ON questions.iid=quizz_rel_questions.question_id AND
+                    questions.c_id = ".$trackExerciseInfo['c_id']."
+              WHERE attempts.exe_id='".$trackExerciseInfo['exe_id']."' AND user_id=".intval($trackExerciseInfo['exe_user_id'])."
+              GROUP BY quizz_rel_questions.question_order, attempts.question_id";
+
+        $result = Database::query($query);
+
+        $exerciseResult = array();
+        while ($row = Database::fetch_array($result)) {
+            $exerciseResult[$row['question_id']] = $row['answer'];
+        }
+        return $exerciseResult;
+    }
+
+
+    public static function getExerciseResults($exerciseId, $courseId, $sessionId)
+    {
+        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+        $exerciseId = intval($exerciseId);
+        $courseId = intval($courseId);
+        $sessionId = intval($sessionId);
+
+        $sql = "SELECT DISTINCT e.exe_id, e.data_tracking
+                FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
+                WHERE 	exe_exo_id 		= $exerciseId AND
+                        a.c_id = $courseId AND
+                        e.c_id = $courseId AND
+                        e.session_id 	= $sessionId AND
+                        status = ''";
+        $result = Database::query($sql);
+        return $result->fetchAll();
+    }
+
+
 }

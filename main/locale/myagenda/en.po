@@ -1,0 +1,10 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8 \n"
+
+msgid "langMyAgenda"
+msgstr "Personal agenda"
+
+msgid "langToday"
+msgstr "Today"
+

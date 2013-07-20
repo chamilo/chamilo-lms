@@ -89,11 +89,6 @@ $app->register(new ConsoleServiceProvider(), array(
     'console.project_directory' => __DIR__.'/..'
 ));
 
-function get_lang($variable) {
-    global $app;
-    return $app['translator']->trans($variable);
-}
-
 // Adding commands.
 /** @var Knp\Console\Application $console */
 $console = $app['console'];
@@ -430,7 +425,7 @@ $app->match('/installing', function() use($app) {
 $app->get('/finish', function() use($app) {
     $output = $app['session']->get('output');
     $message = $app['translator']->trans(
-        'To protect your site, make the whole %s directory read-only (chmod 0555 on Linux)',
+        'To protect your site, make the whole %s directory read-only (chmod 0555 on Unix/Linux)',
         array('%s' => $app['root_sys'].'config')
     );
     $app['session']->getFlashBag()->add('warning', $message);

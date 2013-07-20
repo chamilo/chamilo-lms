@@ -64,10 +64,7 @@ class Template
         // Setting course variables.
         $this->setCourseParameters();
 
-        global $interbreadcrumb;
-        $this->setBreadcrumb($interbreadcrumb);
-
-        //header and footer are showed by default
+        // header and footer are showed by default
         $this->setFooter($app['template.show_footer']);
         $this->setHeader($app['template.show_header']);
 
@@ -101,7 +98,7 @@ class Template
     /**
      * @param array $interbreadcrumb
      */
-    function setBreadcrumb($interbreadcrumb)
+    public function setBreadcrumb($interbreadcrumb)
     {
 
         if (isset($this->app['breadcrumb']) && !empty($this->app['breadcrumb'])) {
@@ -441,7 +438,7 @@ class Template
         }
     }
 
-    public function addJsFiles($htmlHeadXtra)
+    public function addJsFiles($htmlHeadXtra = array())
     {
         $extra_headers = null;
         if (isset($htmlHeadXtra) && $htmlHeadXtra) {
@@ -636,10 +633,11 @@ class Template
         $notification = $this->returnNotificationMenu();
         $this->assign('notification_menu', $notification);
 
-        //Preparing values for the menu
+        // Preparing values for the menu
 
-        //Logout link
-        $this->assign('logout_link', api_get_path(WEB_PUBLIC_PATH).'logout');
+        // Logout link
+        // See the SecurityServiceProvider definition
+        $this->assign('logout_link', $this->app['url_generator']->generate('admin_logout'));
 
         //Profile link
         if (api_get_setting('allow_social_tool') == 'true') {
@@ -897,6 +895,8 @@ class Template
         return $this->menu_navigation;
     }
 
+    // Render Chamilo layouts:
+
     /**
      * @param string $layout
      * @return mixed
@@ -906,6 +906,7 @@ class Template
         if (empty($layout)) {
             $layout = $this->app['default_layout'];
         }
+        $this->addJsFiles();
         return $this->app['twig']->render($this->app['template_style'].'/layout/'.$layout);
     }
 
@@ -916,6 +917,7 @@ class Template
      */
     public function render_template($template, $elements = array())
     {
+        $this->addJsFiles();
         return $this->app['twig']->render($this->app['template_style'].'/'.$template, $elements);
     }
 
@@ -934,20 +936,23 @@ class Template
         $navigation = array();
 
         // Campus Homepage
-        $navigation[SECTION_CAMPUS]['url'] = api_get_path(WEB_PATH).'index.php';
+        $navigation[SECTION_CAMPUS]['url'] = api_get_path(WEB_PUBLIC_PATH).'index';
         $navigation[SECTION_CAMPUS]['title'] = get_lang('CampusHomepage');
 
         // My Courses
-
+        /*
         if (api_is_allowed_to_create_course()) {
             // Link to my courses for teachers
-            $navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php?nosession=true';
+            $navigation['mycourses']['url'] = api_get_path(WEB_PUBLIC_PATH).'user_portal.php?nosession=true';
             $navigation['mycourses']['title'] = get_lang('MyCourses');
         } else {
             // Link to my courses for students
-            $navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php';
+            $navigation['mycourses']['url'] = api_get_path(WEB_PUBLIC_PATH).'user_portal.php';
             $navigation['mycourses']['title'] = get_lang('MyCourses');
-        }
+        }*/
+
+        $navigation['mycourses']['url'] = api_get_path(WEB_PUBLIC_PATH).'userportal';
+        $navigation['mycourses']['title'] = get_lang('MyCourses');
 
         // My Profile
         $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '');
@@ -968,7 +973,7 @@ class Template
         // Reporting
         if (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) {
             // Link to my space
-            $navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH).'mySpace/';
+            $navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH).'mySpace/index.php';
             $navigation['session_my_space']['title'] = get_lang('MySpace');
         } else {
             // Link to my progress
@@ -1008,11 +1013,12 @@ class Template
         if (api_is_platform_admin(true)) {
             $navigation['platform_admin']['url'] = api_get_path(WEB_CODE_PATH).'admin/index.php';
             $navigation['platform_admin']['title'] = get_lang('PlatformAdmin');
-        }
+        } else {
 
-        if (api_is_question_manager()) {
-            $navigation['question_manager']['url'] = api_get_path(WEB_PUBLIC_PATH).'admin/questionmanager';
-            $navigation['question_manager']['title'] = get_lang('PlatformAdmin');
+            if (api_is_question_manager()) {
+                $navigation['question_manager']['url'] = api_get_path(WEB_PUBLIC_PATH).'admin/questionmanager';
+                $navigation['question_manager']['title'] = get_lang('PlatformAdmin');
+            }
         }
 
         return $navigation;
@@ -1242,10 +1248,10 @@ class Template
                 } else {
                     $menu_navigation['platform_admin'] = $possible_tabs['platform_admin'];
                 }
-            }
-
-            if (api_is_question_manager()) {
-                $navigation['question_manager'] = $possible_tabs['question_manager'];
+            } else {
+                if (api_is_question_manager()) {
+                    $navigation['question_manager'] = $possible_tabs['question_manager'];
+                }
             }
 
 

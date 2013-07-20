@@ -15,13 +15,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 
-if ($type == 'question') {
-    if (!(api_is_platform_admin() || api_is_question_manager())) {
-        api_not_allowed(true);
-    }
-} else {
-    api_protect_admin_script();
-}
+api_protect_admin_script();
 
 // setting breadcrumbs
 $interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
@@ -126,7 +120,7 @@ $form = new FormValidator('workflow', 'post', api_get_self().'?'.$params);
 $options = api_get_user_roles();
 $options[0] = get_lang('SelectAnOption');
 ksort($options);
-$form->addElement('select', 'status', get_lang('SelectStatus'), $options, array('onclick' => 'changeStatus(this)'));
+$form->addElement('select', 'status', get_lang('SelectRole'), $options, array('onclick' => 'changeStatus(this)'));
 
 $checks = $app['orm.em']->getRepository('Entity\ExtraFieldOptionRelFieldOption')->findBy(array('fieldId' => $field_id, 'roleId' => $roleId));
 $includedFields = array();

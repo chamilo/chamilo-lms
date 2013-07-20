@@ -5,7 +5,6 @@ $(function() {
     //$("#settings").tabs();
 });
 </script>
-
 <div id="settings">
     <!--
     <ul>
@@ -62,7 +61,5 @@ $(function() {
             </div>
         {% endif %}
     {% endfor %}
-
-
 </div>
 {% endblock %}

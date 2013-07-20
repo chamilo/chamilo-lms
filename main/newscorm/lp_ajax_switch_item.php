@@ -260,3 +260,4 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
     return $return;
 }
 echo switch_item_details($_REQUEST['lid'], $_REQUEST['uid'], $_REQUEST['vid'], $_REQUEST['iid'], $_REQUEST['next']);
+exit;

@@ -114,13 +114,21 @@ class SortableTable extends HTML_Table {
      * @param string $default_order_direction The default order direction;
      * either the constant 'ASC' or 'DESC'
      */
-    public function __construct($table_name = 'table', $get_total_number_function = null, $get_data_function = null, $default_column = 1, $default_items_per_page = 20, $default_order_direction = 'ASC', $table_id = null) {
+    public function __construct(
+        $table_name = 'table',
+        $get_total_number_function = null,
+        $get_data_function = null,
+        $default_column = 1,
+        $default_items_per_page = 20,
+        $default_order_direction = 'ASC',
+        $table_id = null
+    ) {
         if (empty($table_id)) {
             $table_id = $table_name.uniqid();
         }
         $this->table_id = $table_id;
 
-        parent :: __construct (array ('class' => 'data_table', 'id' => $table_id));
+        parent :: __construct(array ('class' => 'data_table', 'id' => $table_id));
         $this->table_name = $table_name;
         $this->additional_parameters = array ();
         $this->param_prefix = $table_name.'_';
@@ -189,7 +197,8 @@ class SortableTable extends HTML_Table {
     /**
      * Get the Pager object to split the showed data in several pages
      */
-    public function get_pager() {
+    public function get_pager()
+    {
         if (is_null($this->pager)) {
             $total_number_of_items   = $this->get_total_number_of_items();
             $params['mode']          = 'Sliding';
@@ -859,7 +868,8 @@ class SortableTable extends HTML_Table {
      * 2nd argument in the constructor of a SortableTable. Make sure your
      * function has the same parameters as defined here.
      */
-    public function get_total_number_of_items () {
+    public function get_total_number_of_items ()
+    {
         if ($this->total_number_of_items == -1 && !is_null($this->get_total_number_function)) {
             $this->total_number_of_items = call_user_func($this->get_total_number_function);
         }

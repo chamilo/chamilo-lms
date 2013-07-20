@@ -1,0 +1,292 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8 \n"
+
+msgid "Tools"
+msgstr "Werkzeuge"
+
+msgid "SendWork"
+msgstr "Dokument hochladen"
+
+msgid "langTooBig"
+msgstr "Sie haben keine Datei ausgewählt oder die Datei ist zu groß"
+
+msgid "langListDeleted"
+msgstr "Die Liste wurde gelöscht"
+
+msgid "langDocModif"
+msgstr "Titel des Dokuments wurde verändert"
+
+msgid "langDocAdd"
+msgstr "Dokument hinzugefügt"
+
+msgid "langDocDel"
+msgstr "Dokument entfernt"
+
+msgid "langTitleWork"
+msgstr "Titel des Dokuments"
+
+msgid "langAuthors"
+msgstr "Autoren"
+
+msgid "langDelList"
+msgstr "Die gesamte Liste löschen"
+
+msgid "langWorkDelete"
+msgstr "Löschen"
+
+msgid "langWorkModify"
+msgstr "Bearbeiten"
+
+msgid "langWorkConfirmDelete"
+msgstr "Wollen Sie dieses Dokument wirklich löschen"
+
+msgid "langAllFiles"
+msgstr "Alle Dateien"
+
+msgid "DefaultUpload"
+msgstr "Standardeinstellung für die Sichbarkeit neu-veröffentlichter Dateien"
+
+msgid "NewVisible"
+msgstr "Neue Dokumente sind für alle Benutzer sichtbar"
+
+msgid "NewUnvisible"
+msgstr "Neue Dokumente sind nur für den/die Kursleiter sichtbar"
+
+msgid "lang_doc_unvisible"
+msgstr "Ihre Datei ist nur für den/die Kursleiter sichtbar und wird daher auch für Sie unsichtbar sein."
+
+msgid "langDelLk"
+msgstr "Wollen Sie diesen Link wirklich löschen?"
+
+msgid "langMustBeRegisteredUser"
+msgstr "Nur registrierte Benutzer können Dokumente veröffentlichen."
+
+msgid "langListDel"
+msgstr "Liste löschen"
+
+msgid "langNameDir"
+msgstr "Name des neuen Verzeichnisses"
+
+msgid "langFileExists"
+msgstr "Aktion fehlgeschlagen.<br>Eine Datei mit dem gleichen Namen exisitiert bereits"
+
+msgid "CreateDirectory"
+msgstr "Verzeichnis erstellen"
+
+msgid "langCurrentDir"
+msgstr "aktuelles Verzeichnis"
+
+msgid "UploadADocument"
+msgstr "Upload eines Dokuments"
+
+msgid "EditToolOptions"
+msgstr "Optionen zum Bearbeiten von Werkzeugen"
+
+msgid "DocumentDeleted"
+msgstr "Dokument wurde gelöscht"
+
+msgid "SendMailBody"
+msgstr "Ein Benutzer hat ein Dokument im Ausarbeitung-Werkzeuges Ihres  Kurses veröffentlicht"
+
+msgid "DirDelete"
+msgstr "Verzeichnis wurde gelöscht"
+
+msgid "ValidateChanges"
+msgstr "Gültige Änderungen"
+
+msgid "FolderUpdated"
+msgstr "Verzeichnis aktualisiert"
+
+msgid "EndsAt"
+msgstr "endet am (danach geschlossen)"
+
+msgid "QualificationOfAssignment"
+msgstr "Bewertung der Ausarbeitung"
+
+msgid "MakeQualifiable"
+msgstr "Beurteilung ermöglichen"
+
+msgid "QualificationNumberOver"
+msgstr "Punkte"
+
+msgid "WeightInTheGradebook"
+msgstr "Gewichtung in der Bewertungsmappe"
+
+msgid "DatesAvailables"
+msgstr "Datum verfügbar"
+
+msgid "ExpiresAt"
+msgstr "läuft ab am"
+
+msgid "AddToCalendar"
+msgstr "Zum Kalender hinzufügen"
+
+msgid "DirectoryCreated"
+msgstr "Verzeichnis erstellt"
+
+msgid "Assignment"
+msgstr "Ausarbeitungen"
+
+msgid "AdvancedParameters"
+msgstr "Weitere Einstellungen"
+
+msgid "ExpiryDateToSendWorkIs"
+msgstr "Abgabeschluss für Ausarbeitungen"
+
+msgid "EnableExpiryDate"
+msgstr "Verspätete Abgabe ermöglichen (Sichtbar für Teilnehmer)"
+
+msgid "EnableEndDate"
+msgstr "Letztse Abgabedatum aktivieren (Nicht sichtbar für Teilnehmer)"
+
+msgid "IsNotPosibleSaveTheDocument"
+msgstr "Dokument speichern nicht möglich"
+
+msgid "EndDateCannotBeBeforeTheExpireDate"
+msgstr "Das End-Datum kann nicht vor dem Ablaufdatum sein"
+
+msgid "SelectAFilter"
+msgstr "Filter wählen"
+
+msgid "FilterByNotExpired"
+msgstr "Sortiere nach nicht abgelaufen"
+
+msgid "FilterAssignments"
+msgstr "Filter Ausarbeitungen"
+
+msgid "WeightNecessary"
+msgstr "Erwartete Mindest-Punktzahl"
+
+msgid "QualificationOver"
+msgstr "Punkte"
+
+msgid "ExpiryDateAlreadyPassed"
+msgstr "Ablaufdatum überschritten"
+
+msgid "EndDateAlreadyPassed"
+msgstr "End-Datum bereits erreicht"
+
+msgid "MoveXTo"
+msgstr "Verschiebe %s nach"
+
+msgid "QualificationMustNotBeMoreThanQualificationOver"
+msgstr "Die Bewertung kann die Maximal-Wertung nicht überschreiten"
+
+msgid "ModifyDirectory"
+msgstr "Okay"
+
+msgid "DeleteAllFiles"
+msgstr "Alle Dokumente löschen"
+
+msgid "BackToWorksList"
+msgstr "Zurück zur Übersicht"
+
+msgid "EditMedia"
+msgstr "Dokument ändern und bewerten"
+
+msgid "AllFilesInvisible"
+msgstr "Alle Dokumente sind jetzt unsichtbar"
+
+msgid "FileInvisible"
+msgstr "Die Datei ist jetzt unsichtbar"
+
+msgid "AllFilesVisible"
+msgstr "Alle Dokumente sind jetzt sichtbar"
+
+msgid "FileVisible"
+msgstr "Die Datei ist jetzt sichtbar"
+
+msgid "ButtonCreateAssignment"
+msgstr "Ausarbeitung erstellen"
+
+msgid "AssignmentName"
+msgstr "Name der Ausarbeitung"
+
+msgid "CreateAssignment"
+msgstr "Ausarbeitung erstellen"
+
+msgid "FolderEdited"
+msgstr "Ordner geändert"
+
+msgid "UpdateWork"
+msgstr "Diese Ausarbeitung aktualisieren"
+
+msgid "MakeAllPapersInvisible"
+msgstr "Alle Dokumente unsichtbar machen"
+
+msgid "MakeAllPapersVisible"
+msgstr "Alle Dokumente sichtbar machen"
+
+msgid "TheDocumentHasBeenDeleted"
+msgstr "Das Dokument wurde gelöscht"
+
+msgid "YouAreNotAllowedToDeleteThisDocument"
+msgstr "Sie haben nicht die Berechtigung dieses Dokument zu löschen"
+
+msgid "StudentAllowedToDeleteOwnPublication"
+msgstr "Erlaube den Teilnehmern ihre eigenen Inhalte zu löschen"
+
+msgid "ConfirmYourChoiceDeleteAllfiles"
+msgstr "Bitte bestätigen Sie das endgültige Löschen sämtlicher Dateien."
+
+msgid "WorkName"
+msgstr "Bezeichnung der Ausarbeitung"
+
+msgid "ReminderToSubmitPendingTask"
+msgstr "Bitte denken Sie an die Übersendung der ausstehenden  Ausarbeitung"
+
+msgid "MessageConfirmSendingOfTask"
+msgstr "Diese Nachricht enthält die Empfangsbestätigung der Ausarbeitung"
+
+msgid "DataSent"
+msgstr "Die Daten wurden übertragen"
+
+msgid "DownloadLink"
+msgstr "Download Link"
+
+msgid "ViewUsersWithTask"
+msgstr "Erhaltene Ausarbeitungen"
+
+msgid "ReminderMessage"
+msgstr "Erinnerung senden"
+
+msgid "DateSent"
+msgstr "Absendedatum"
+
+msgid "ViewUsersWithoutTask"
+msgstr "Fehlende Ausarbeitungen anzeigen"
+
+msgid "HomeworkCreated"
+msgstr "Ausarbeitung wurde erzeugt"
+
+msgid "HomeworkHasBeenCreatedForTheCourse"
+msgstr "Eine Ausarbeitung für den Kurs wurde erzeugt"
+
+msgid "PleaseCheckHomeworkPage"
+msgstr "Bitte überprüfen Sie die Ausarbeitungs-Seite"
+
+msgid "IncludedInEvaluation"
+msgstr "In der Auswertung enthalten"
+
+msgid "DateExpiredNotBeLessDeadLine"
+msgstr "Das Enddatum kann nicht vor dem Abgabeschluss liegen!"
+
+msgid "NotRevised"
+msgstr "Nicht überprüft"
+
+msgid "MaxWeightNeedToBeProvided"
+msgstr "Die Maximalgewichtung muss angegeben werden"
+
+msgid "ContainsAfile"
+msgstr "Enthält eine Datei"
+
+msgid "AllowTextAssignments"
+msgstr "Erstellung der Ausarbeitung mit WYSIWYG-Editor erlauben"
+
+msgid "YouAlreadySentAPaperYouCantUpload"
+msgstr "Sie haben die Ausarbeitung bereits eingereicht. Ein nochmaliger Upload ist nicht möglich."
+
+msgid "CantUploadDeleteYourPaperFirst"
+msgstr "Upload der Ausarbeitung nicht möglich, bitte löschen Sie zunächst die Vorversion."
+

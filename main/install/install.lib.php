@@ -228,12 +228,12 @@ function detect_browser_language()
 function check_writable($folder, $suggestion = false)
 {
     if (is_writable(api_get_path(SYS_CODE_PATH).$folder)) {
-        return Display::label(get_lang('Writable'), 'success');
+        return Display::label(translate('Writable'), 'success');
     } else {
         if ($suggestion) {
-            return Display::label(get_lang('NotWritable'), 'info');
+            return Display::label(translate('NotWritable'), 'info');
         } else {
-            return Display::label(get_lang('NotWritable'), 'important');
+            return Display::label(translate('NotWritable'), 'important');
         }
     }
 }
@@ -244,12 +244,12 @@ function check_writable($folder, $suggestion = false)
 function check_writable_root_path($folder, $suggestion = false)
 {
     if (is_writable(api_get_path(SYS_PATH).$folder)) {
-        return Display::label(get_lang('Writable'), 'success');
+        return Display::label(translate('Writable'), 'success');
     } else {
         if ($suggestion) {
-            return Display::label(get_lang('NotWritable'), 'info');
+            return Display::label(translate('NotWritable'), 'info');
         } else {
-            return Display::label(get_lang('NotWritable'), 'important');
+            return Display::label(translate('NotWritable'), 'important');
         }
     }
 }
@@ -491,15 +491,15 @@ function database_server_connect()
         $no = Database::errno();
         $msg = Database::error();
         echo '<hr />#'.$no.': '.$msg.'<hr />';
-        echo get_lang('DBServerDoesntWorkOrLoginPassIsWrong').'.<br /><br />'.
-            get_lang('PleaseCheckTheseValues').' :<br /><br />'.
-            '<strong>'.get_lang('DBHost').'</strong> : '.$dbHostForm.'<br />'.
-            '<strong>'.get_lang('DBLogin').'</strong> : '.$dbUsernameForm.'<br />'.
-            '<strong>'.get_lang('DBPassword').'</strong> : '.$dbPassForm.'<br /><br />'.
-            get_lang('PleaseGoBackToStep').' '.(defined('SYSTEM_INSTALLATION') ? '3' : '1').'.'.
+        echo translate('DBServerDoesntWorkOrLoginPassIsWrong').'.<br /><br />'.
+            translate('PleaseCheckTheseValues').' :<br /><br />'.
+            '<strong>'.translate('DBHost').'</strong> : '.$dbHostForm.'<br />'.
+            '<strong>'.translate('DBLogin').'</strong> : '.$dbUsernameForm.'<br />'.
+            '<strong>'.translate('DBPassword').'</strong> : '.$dbPassForm.'<br /><br />'.
+            translate('PleaseGoBackToStep').' '.(defined('SYSTEM_INSTALLATION') ? '3' : '1').'.'.
             '<p><button type="submit" class="back" name="step'.(defined(
             'SYSTEM_INSTALLATION'
-        ) ? '3' : '1').'" value="&lt; '.get_lang('Back').'">'.get_lang('Back').'</button></p>'.
+        ) ? '3' : '1').'" value="&lt; '.translate('Back').'">'.translate('Back').'</button></p>'.
             '</td></tr></table></form></body></html>';
         exit ();
     }
@@ -554,7 +554,7 @@ function testDatabaseConnect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleD
         $databases = $sm->listDatabases();
 
         if (in_array($dbNameForm, $databases)) {
-            echo '<div class="warning-message">'.get_lang('ADatabaseWithTheSameNameAlreadyExists').'</div>';
+            echo '<div class="warning-message">'.translate('ADatabaseWithTheSameNameAlreadyExists').'</div>';
         }
         $database = new Database($conn);
         return $connect;
@@ -900,7 +900,7 @@ function display_step_sequence()
 {
     global $current_step;
 
-    return get_lang('Step'.$current_step).' &ndash; ';
+    return translate('Step'.$current_step).' &ndash; ';
 }
 
 /**
@@ -951,22 +951,26 @@ function display_language_selection_box($name = 'language_list', $default_langua
 function display_language_selection()
 {
     ?>
-<h2><?php get_lang('WelcomeToTheDokeosInstaller'); ?></h2>
+<h2><?php translate('WelcomeToTheDokeosInstaller'); ?></h2>
 <div class="RequirementHeading">
-    <h2><?php echo display_step_sequence(); ?><?php echo get_lang('InstallationLanguage'); ?></h2>
+    <h2><?php echo display_step_sequence(); ?><?php echo translate('InstallationLanguage'); ?></h2>
 
-    <p><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?>:</p>
+    <p><?php echo translate('PleaseSelectInstallationProcessLanguage'); ?>:</p>
 
     <form id="lang_form" method="post" action="<?php echo api_get_self(); ?>">
         <?php display_language_selection_box('language_list', api_get_interface_language()); ?>
         <button type="submit" name="step1" class="btn next" autofocus="autofocus"
-                value="<?php echo get_lang('Next'); ?>"><?php echo get_lang('Next'); ?></button>
+                value="<?php echo translate('Next'); ?>"><?php echo translate('Next'); ?></button>
         <input type="hidden" name="is_executable" id="is_executable" value="-"/>
     </form>
 </div>
 <?php
 }
 
+function translate($variable) {
+    global $app;
+    return $app['translator']->trans($variable);
+}
 /**
  * This function displays the requirements for installing Chamilo.
  *
@@ -983,129 +987,129 @@ function display_requirements($app, $installType)
 {
     $html = null;
     $html .= '<div class="RequirementText">';
-    $html .= '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
-    $html .= get_lang('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">'.get_lang('ReadTheInstallGuide').'</a>.<br />';
+    $html .= '<strong>'.translate('ReadThoroughly').'</strong><br />';
+    $html .= translate('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">'.translate('ReadTheInstallGuide').'</a>.<br />';
 
     if ($installType == 'update') {
-        $html .= get_lang('IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog').'<br />';
+        $html .= translate('IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog').'<br />';
     }
     $html .= '</div>';
 
     //  SERVER REQUIREMENTS
-    $html .= '<div class="RequirementHeading"><h3>'.get_lang('ServerRequirements').'</h3>';
-    $html .= '<div class="RequirementText">'.get_lang('ServerRequirementsInfo').'</div>';
+    $html .= '<div class="RequirementHeading"><h3>'.translate('ServerRequirements').'</h3>';
+    $html .= '<div class="RequirementText">'.translate('ServerRequirementsInfo').'</div>';
     $html .= '<div class="RequirementContent">';
     $html .= '<table class="table">
             <tr>
-                <td class="requirements-item">'.get_lang('PHPVersion').' >= '.REQUIRED_PHP_VERSION.'</td>
+                <td class="requirements-item">'.translate('PHPVersion').' >= '.REQUIRED_PHP_VERSION.'</td>
                 <td class="requirements-value">';
     if (phpversion() < REQUIRED_PHP_VERSION) {
-        $html .= '<strong><font color="red">'.get_lang('PHPVersionError').'</font></strong>';
+        $html .= '<strong><font color="red">'.translate('PHPVersionError').'</font></strong>';
     } else {
-        $html .= '<strong><font color="green">'.get_lang('PHPVersionOK').' '.phpversion().'</font></strong>';
+        $html .= '<strong><font color="green">'.translate('PHPVersionOK').' '.phpversion().'</font></strong>';
     }
     $html .= '</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.session.php" target="_blank">Session</a> '.get_lang('support').'</td>
-            <td class="requirements-value">'.check_extension('session',get_lang('Yes'), get_lang('ExtensionSessionsNotAvailable')).'</td>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.session.php" target="_blank">Session</a> '.translate('support').'</td>
+            <td class="requirements-value">'.check_extension('session',translate('Yes'), translate('ExtensionSessionsNotAvailable')).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.mysql.php" target="_blank">MySQL</a> '.get_lang('support').'</td>
-                <td class="requirements-value">'.check_extension('mysql', get_lang('Yes'), get_lang('ExtensionMySQLNotAvailable') ).'</td>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.mysql.php" target="_blank">MySQL</a> '.translate('support').'</td>
+                <td class="requirements-value">'.check_extension('mysql', translate('Yes'), translate('ExtensionMySQLNotAvailable') ).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.zlib.php" target="_blank">Zlib</a> '.get_lang('support').'</td>
-                <td class="requirements-value">'.check_extension('zlib', get_lang('Yes'), get_lang('ExtensionZlibNotAvailable')    ).'</td>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.zlib.php" target="_blank">Zlib</a> '.translate('support').'</td>
+                <td class="requirements-value">'.check_extension('zlib', translate('Yes'), translate('ExtensionZlibNotAvailable')    ).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.pcre.php" target="_blank">Perl-compatible regular expressions</a> '.get_lang(
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.pcre.php" target="_blank">Perl-compatible regular expressions</a> '.translate(
         'support'
     ).'</td>
                 <td class="requirements-value">'.check_extension(
         'pcre',
-        get_lang('Yes'),
-        get_lang('ExtensionPCRENotAvailable')
+        translate('Yes'),
+        translate('ExtensionPCRENotAvailable')
     ).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.xml.php" target="_blank">XML</a> '.get_lang(
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.xml.php" target="_blank">XML</a> '.translate(
         'support'
     ).'</td>
-                <td class="requirements-value">'.check_extension('xml', get_lang('Yes'), get_lang('No')).'</td>
+                <td class="requirements-value">'.check_extension('xml', translate('Yes'), translate('No')).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.mbstring.php" target="_blank">Multibyte string</a> '.get_lang(
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.mbstring.php" target="_blank">Multibyte string</a> '.translate(
         'support'
-    ).' ('.get_lang('Optional').')</td>
+    ).' ('.translate('Optional').')</td>
                 <td class="requirements-value">'.check_extension(
         'mbstring',
-        get_lang('Yes'),
-        get_lang('ExtensionMBStringNotAvailable'),
+        translate('Yes'),
+        translate('ExtensionMBStringNotAvailable'),
         true
     ).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.iconv.php" target="_blank">Iconv</a> '.get_lang(
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.iconv.php" target="_blank">Iconv</a> '.translate(
         'support'
-    ).' ('.get_lang('Optional').')</td>
-                <td class="requirements-value">'.check_extension('iconv', get_lang('Yes'), get_lang('No'), true).'</td>
+    ).' ('.translate('Optional').')</td>
+                <td class="requirements-value">'.check_extension('iconv', translate('Yes'), translate('No'), true).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.intl.php" target="_blank">Internationalization</a> '.get_lang(
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.intl.php" target="_blank">Internationalization</a> '.translate(
         'support'
-    ).' ('.get_lang('Optional').')</td>
-                <td class="requirements-value">'.check_extension('intl', get_lang('Yes'), get_lang('No'), true).'</td>
+    ).' ('.translate('Optional').')</td>
+                <td class="requirements-value">'.check_extension('intl', translate('Yes'), translate('No'), true).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.image.php" target="_blank">GD</a> '.get_lang(
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.image.php" target="_blank">GD</a> '.translate(
         'support'
     ).'</td>
                 <td class="requirements-value">'.check_extension(
         'gd',
-        get_lang('Yes'),
-        get_lang('ExtensionGDNotAvailable')
+        translate('Yes'),
+        translate('ExtensionGDNotAvailable')
     ).'</td>
             </tr>
 
 
              <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/fr/book.imagick.php" target="_blank">ImageMagick</a> '.get_lang(
+                <td class="requirements-item"><a href="http://php.net/manual/fr/book.imagick.php" target="_blank">ImageMagick</a> '.translate(
         'support'
-    ).' ('.get_lang('Optional').')</td>
-                <td class="requirements-value">'.check_extension('imagick', get_lang('Yes'), get_lang('No'), true).'</td>
+    ).' ('.translate('Optional').')</td>
+                <td class="requirements-value">'.check_extension('imagick', translate('Yes'), translate('No'), true).'</td>
             </tr>
 
 
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.json.php" target="_blank">JSON</a> '.get_lang(
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.json.php" target="_blank">JSON</a> '.translate(
         'support'
     ).'</td>
-                <td class="requirements-value">'.check_extension('json', get_lang('Yes'), get_lang('No')).'</td>
+                <td class="requirements-value">'.check_extension('json', translate('Yes'), translate('No')).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.ldap.php" target="_blank">LDAP</a> '.get_lang(
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.ldap.php" target="_blank">LDAP</a> '.translate(
         'support'
-    ).' ('.get_lang('Optional').')</td>
+    ).' ('.translate('Optional').')</td>
                 <td class="requirements-value">'.check_extension(
         'ldap',
-        get_lang('Yes'),
-        get_lang('ExtensionLDAPNotAvailable'),
+        translate('Yes'),
+        translate('ExtensionLDAPNotAvailable'),
         true
     ).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://xapian.org/" target="_blank">Xapian</a> '.get_lang(
+                <td class="requirements-item"><a href="http://xapian.org/" target="_blank">Xapian</a> '.translate(
         'support'
-    ).' ('.get_lang('Optional').')</td>
-                <td class="requirements-value">'.check_extension('xapian', get_lang('Yes'), get_lang('No'), true).'</td>
+    ).' ('.translate('Optional').')</td>
+                <td class="requirements-value">'.check_extension('xapian', translate('Yes'), translate('No'), true).'</td>
             </tr>
 
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.curl.php" target="_blank">cURL</a> '.get_lang(
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.curl.php" target="_blank">cURL</a> '.translate(
         'support'
-    ).' ('.get_lang('Optional').')</td>
-                <td class="requirements-value">'.check_extension('curl', get_lang('Yes'), get_lang('No'), true).'</td>
+    ).' ('.translate('Optional').')</td>
+                <td class="requirements-value">'.check_extension('curl', translate('Yes'), translate('No'), true).'</td>
             </tr>
 
 
@@ -1120,14 +1124,14 @@ function display_requirements($app, $installType)
     // RECOMMENDED SETTINGS
     // Note: these are the settings for Joomla, does this also apply for Chamilo?
     // Note: also add upload_max_filesize here so that large uploads are possible
-    $html .= '<div class="RequirementHeading"><h3>'.get_lang('RecommendedSettings').'</h3>';
-    $html .= '<div class="RequirementText">'.get_lang('RecommendedSettingsInfo').'</div>';
+    $html .= '<div class="RequirementHeading"><h3>'.translate('RecommendedSettings').'</h3>';
+    $html .= '<div class="RequirementText">'.translate('RecommendedSettingsInfo').'</div>';
     $html .= '<div class="RequirementContent">';
     $html .= '<table class="table">
             <tr>
-                <th>'.get_lang('Setting').'</th>
-                <th>'.get_lang('Recommended').'</th>
-                <th>'.get_lang('Actual').'</th>
+                <th>'.translate('Setting').'</th>
+                <th>'.translate('Recommended').'</th>
+                <th>'.translate('Actual').'</th>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/features.safe-mode.php">Safe Mode</a></td>
@@ -1203,8 +1207,8 @@ function display_requirements($app, $installType)
     $html .= '</div>';
 
     // DIRECTORY AND FILE PERMISSIONS
-    $html .= '<div class="RequirementHeading"><h3>'.get_lang('DirectoryAndFilePermissions').'</h3>';
-    $html .= '<div class="RequirementText">'.get_lang('DirectoryAndFilePermissionsInfo').'</div>';
+    $html .= '<div class="RequirementHeading"><h3>'.translate('DirectoryAndFilePermissions').'</h3>';
+    $html .= '<div class="RequirementText">'.translate('DirectoryAndFilePermissionsInfo').'</div>';
     $html .= '<div class="RequirementContent">';
 
     $course_attempt_name = '__XxTestxX__';
@@ -1261,7 +1265,7 @@ function display_requirements($app, $installType)
     $dir_perm = Display::label('0'.decoct($dir_perm_verified), 'info');
     $file_perm = Display::label('0'.decoct($fil_perm_verified), 'info');
 
-    $course_test_was_created  = ($course_test_was_created == true && $file_course_test_was_created == true) ? Display::label(get_lang('Yes'), 'success') : Display::label(get_lang('No'), 'important');
+    $course_test_was_created  = ($course_test_was_created == true && $file_course_test_was_created == true) ? Display::label(translate('Yes'), 'success') : Display::label(translate('No'), 'important');
 
     $html .= '<table class="table">
             <tr>
@@ -1289,15 +1293,15 @@ function display_requirements($app, $installType)
                 <td class="requirements-value">'.check_writable('default_course_document/images/').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">'.get_lang('CourseTestWasCreated').'</td>
+                <td class="requirements-item">'.translate('CourseTestWasCreated').'</td>
                 <td class="requirements-value">'.$course_test_was_created.' </td>
             </tr>
             <tr>
-                <td class="requirements-item">'.get_lang('PermissionsForNewDirs').'</td>
+                <td class="requirements-item">'.translate('PermissionsForNewDirs').'</td>
                 <td class="requirements-value">'.$dir_perm.' </td>
             </tr>
             <tr>
-                <td class="requirements-item">'.get_lang('PermissionsForNewFiles').'</td>
+                <td class="requirements-item">'.translate('PermissionsForNewFiles').'</td>
                 <td class="requirements-value">'.$file_perm.' </td>
             </tr>';
 
@@ -1369,11 +1373,10 @@ function display_requirements($app, $installType)
     // The user would have to adjust the permissions manually
 
     if (count($notwritable) > 0) {
-        $error = true;
         $html .= '<div class="error-message">';
-        $html .= '<center><h3>'.get_lang('Warning').'</h3></center>';
-        printf(
-            get_lang('NoWritePermissionPleaseReadInstallGuide'),
+        $html .= '<center><h3>'.translate('Warning').'</h3></center>';
+        $html .=  sprintf(
+            translate('NoWritePermissionPleaseReadInstallGuide'),
             '</font>
             <a href="../../documentation/installation_guide.html" target="blank">',
             '</a> <font color="red">'
@@ -1388,7 +1391,7 @@ function display_requirements($app, $installType)
     }  elseif (file_exists(api_get_path(CONFIGURATION_PATH).'configuration.php')) {
         // Check wether a Chamilo configuration file already exists.
         $html .= '<div class="warning-message"><h4><center>';
-        $html .= get_lang('WarningExistingDokeosInstallationDetected');
+        $html .= translate('WarningExistingDokeosInstallationDetected');
         $html .= '</center></h4></div>';
     }
 
@@ -1397,10 +1400,10 @@ function display_requirements($app, $installType)
     ?>
     <p align="center" style="padding-top:15px">
     <button type="submit" name="step1" class="back" onclick="javascript: window.location='index.php'; return false;"
-            value="&lt; <?php echo get_lang('Previous'); ?>"><?php echo get_lang('Previous'); ?></button>
-    <button type="submit" name="step2_install" class="add"value="<?php echo get_lang("NewInstallation"); ?>" <?php if ($error) {
+            value="&lt; <?php echo translate('Previous'); ?>"><?php echo translate('Previous'); ?></button>
+    <button type="submit" name="step2_install" class="add"value="<?php echo translate("NewInstallation"); ?>" <?php if ($error) {
         echo 'disabled="disabled"';
-    } ?> ><?php echo get_lang('NewInstallation'); ?></button>
+    } ?> ><?php echo translate('NewInstallation'); ?></button>
     <input type="hidden" name="is_executable" id="is_executable" value="-"/>
     <?php
     // Real code
@@ -1412,12 +1415,12 @@ function display_requirements($app, $installType)
     //echo '<input type="submit" name="step2_update" value="Upgrading is not possible in this beta version"';
     //echo ' disabled="disabled"';
     //end temp code
-    echo ' >'.get_lang('UpgradeFromDokeos18x').'</button>';
+    echo ' >'.translate('UpgradeFromDokeos18x').'</button>';
     echo ' <button type="submit" class="save" name="step2_update_6" value="Upgrade from Dokeos 1.6.x"';
     if ($error) {
         echo ' disabled="disabled"';
     }
-    echo ' >'.get_lang('UpgradeFromDokeos16x').'</button>';
+    echo ' >'.translate('UpgradeFromDokeos16x').'</button>';
     echo '</p>';*/
 
     return $html;
@@ -1432,9 +1435,9 @@ function display_requirements($app, $installType)
 
 function display_license_agreement()
 {
-    echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Licence').'</h2>';
-    echo '<p>'.get_lang('DokeosLicenseInfo').'</p>';
-    echo '<p><a href="../../documentation/license.html" target="_blank">'.get_lang('PrintVers').'</a></p>';
+    echo '<div class="RequirementHeading"><h2>'.display_step_sequence().translate('Licence').'</h2>';
+    echo '<p>'.translate('DokeosLicenseInfo').'</p>';
+    echo '<p><a href="../../documentation/license.html" target="_blank">'.translate('PrintVers').'</a></p>';
     echo '</div>';
     ?>
 <table>
@@ -1452,12 +1455,12 @@ function display_license_agreement()
         <td>
             <label class="checkbox">
                 <input type="checkbox" name="accept" id="accept_licence" value="1" autofocus="autofocus"/>
-                <?php echo get_lang('IAccept'); ?>
+                <?php echo translate('IAccept'); ?>
             </label>
         </td>
     </tr>
     <tr>
-        <td><p style="color:#666"><br/><?php echo get_lang('DokeosArtLicense'); ?></p></td>
+        <td><p style="color:#666"><br/><?php echo translate('DokeosArtLicense'); ?></p></td>
     </tr>
     <tr>
         <td>
@@ -1466,14 +1469,14 @@ function display_license_agreement()
                     <td></td>
                     <td align="center">
                         <button type="submit" class="btn back" name="step1"
-                                value="&lt; <?php echo get_lang('Previous'); ?>"><?php echo get_lang(
+                                value="&lt; <?php echo translate('Previous'); ?>"><?php echo translate(
                             'Previous'
                         ); ?></button>
                         <input type="hidden" name="is_executable" id="is_executable" value="-"/>
                         <button type="submit" class="btn next" name="step3"
-                                onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo get_lang(
+                                onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo translate(
                                     'YouMustAcceptLicence'
-                                )?>');return false;}" value="<?php echo get_lang('Next'); ?> &gt;"><?php echo get_lang(
+                                )?>');return false;}" value="<?php echo translate('Next'); ?> &gt;"><?php echo translate(
                             'Next'
                         ); ?></button>
                     </td>
@@ -1488,8 +1491,8 @@ function display_license_agreement()
 
     <a href="javascript://" class="advanced_parameters">
         <span id="img_plus_and_minus">&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_hide.gif"
-                                                 alt="<?php echo get_lang('Hide') ?>"
-                                                 title="<?php echo get_lang('Hide')?>" style="vertical-align:middle"/>&nbsp;<?php echo get_lang(
+                                                 alt="<?php echo translate('Hide') ?>"
+                                                 title="<?php echo translate('Hide')?>" style="vertical-align:middle"/>&nbsp;<?php echo translate(
             'ContactInformation'
         ) ?></span>
     </a>
@@ -1497,7 +1500,7 @@ function display_license_agreement()
 </div>
 
 <div id="id_contact_form" style="display:block">
-    <div class="normal-message"><?php echo get_lang('ContactInformationDescription') ?></div>
+    <div class="normal-message"><?php echo translate('ContactInformationDescription') ?></div>
     <div id="contact_registration">
         <p><?php echo get_contact_registration_form() ?></p><br/>
     </div>
@@ -1517,22 +1520,22 @@ function get_contact_registration_form()
    <fieldset style="width:95%;padding:15px;border:1pt solid #eee">
     <div id="div_sent_information"></div>
     <div class="control-group">
-            <label class="control-label"><span class="form_required">*</span>'.get_lang('Name').'</label>
+            <label class="control-label"><span class="form_required">*</span>'.translate('Name').'</label>
             <div class="controls"><input id="person_name" type="text" name="person_name" size="30" /></div>
     </div>
     <div class="control-group">
-            <label class="control-label"><span class="form_required">*</span>'.get_lang('Email').'</label>
+            <label class="control-label"><span class="form_required">*</span>'.translate('Email').'</label>
             <div class="controls"><input id="person_email" type="text" name="person_email" size="30" /></div>
     </div>
     <div class="control-group">
-            <label class="control-label"><span class="form_required">*</span>'.get_lang('CompanyName').'</label>
+            <label class="control-label"><span class="form_required">*</span>'.translate('CompanyName').'</label>
             <div class="controls"><input id="company_name" type="text" name="company_name" size="30" /></div>
     </div>
     <div class="control-group">
-            <div class="control-label"><span class="form_required">*</span>'.get_lang('CompanyActivity').'</div>
+            <div class="control-label"><span class="form_required">*</span>'.translate('CompanyActivity').'</div>
             <div class="controls">
                     <select name="company_activity" id="company_activity" >
-                            <option value="">--- '.get_lang('SelectOne').' ---</option>
+                            <option value="">--- '.translate('SelectOne').' ---</option>
                             <Option value="Advertising/Marketing/PR">Advertising/Marketing/PR</Option><Option value="Agriculture/Forestry">Agriculture/Forestry</Option>
                             <Option value="Architecture">Architecture</Option><Option value="Banking/Finance">Banking/Finance</Option>
                             <Option value="Biotech/Pharmaceuticals">Biotech/Pharmaceuticals</Option><Option value="Business Equipment">Business Equipment</Option>
@@ -1553,10 +1556,10 @@ function get_contact_registration_form()
     </div>
 
     <div class="control-group">
-            <div class="control-label"><span class="form_required">*</span>'.get_lang('PersonRole').'</div>
+            <div class="control-label"><span class="form_required">*</span>'.translate('PersonRole').'</div>
             <div class="controls">
                     <select name="person_role" id="person_role" >
-                            <option value="">--- '.get_lang('SelectOne').' ---</option>
+                            <option value="">--- '.translate('SelectOne').' ---</option>
                             <Option value="Administration">Administration</Option><Option value="CEO/President/ Owner">CEO/President/ Owner</Option>
                             <Option value="CFO">CFO</Option><Option value="CIO/CTO">CIO/CTO</Option>
                             <Option value="Consultant">Consultant</Option><Option value="Customer Service">Customer Service</Option>
@@ -1573,17 +1576,17 @@ function get_contact_registration_form()
     </div>
 
     <div class="control-group">
-            <div class="control-label"><span class="form_required">*</span>'.get_lang('CompanyCountry').'</div>
+            <div class="control-label"><span class="form_required">*</span>'.translate('CompanyCountry').'</div>
             <div class="controls">'.get_countries_list_from_array(true).'</div>
     </div>
     <div class="control-group">
-            <div class="control-label">'.get_lang('CompanyCity').'</div>
+            <div class="control-label">'.translate('CompanyCity').'</div>
             <div class="controls">
                     <input type="text" id="company_city" name="company_city" size="30" />
             </div>
     </div>
     <div class="control-group">
-            <div class="control-label">'.get_lang('WhichLanguageWouldYouLikeToUseWhenContactingYou').'</div>
+            <div class="control-label">'.translate('WhichLanguageWouldYouLikeToUseWhenContactingYou').'</div>
             <div class="controls">
                     <select id="language" name="language">
                             <option value="bulgarian">Bulgarian</option>
@@ -1604,24 +1607,24 @@ function get_contact_registration_form()
     </div>
 
     <div class="control-group">
-            <div class="control-label">'.get_lang('HaveYouThePowerToTakeFinancialDecisions').'</div>
+            <div class="control-label">'.translate('HaveYouThePowerToTakeFinancialDecisions').'</div>
             <div class="controls">
-                    <input type="radio" name="financial_decision" id="financial_decision1" value="1" checked />'.get_lang(
+                    <input type="radio" name="financial_decision" id="financial_decision1" value="1" checked />'.translate(
         'Yes'
     ).'
-                    <input type="radio" name="financial_decision" id="financial_decision2" value="0" />'.get_lang('No').'
+                    <input type="radio" name="financial_decision" id="financial_decision2" value="0" />'.translate('No').'
             </div>
     </div>
     <div class="clear"></div>
     <div class="control-group">
             <div class="control-label">&nbsp;</div>
-            <div class="controls"><button type="button" class="save" onclick="javascript:send_contact_information();" value="'.get_lang(
+            <div class="controls"><button type="button" class="save" onclick="javascript:send_contact_information();" value="'.translate(
         'SendInformation'
-    ).'" >'.get_lang('SendInformation').'</button></div>
+    ).'" >'.translate('SendInformation').'</button></div>
     </div>
     <div class="control-group">
             <div class="control-label">&nbsp;</div>
-            <div class="controls"><span class="form_required">*</span><small>'.get_lang('FieldRequired').'</small></div>
+            <div class="controls"><span class="form_required">*</span><small>'.translate('FieldRequired').'</small></div>
     </div>
 </fieldset></form>';
 
@@ -1737,17 +1740,17 @@ function display_database_settings_form(
             $dbUserForm = $singleDbForm ? $dbNameForm : $dbPrefixForm.'chamilo_user';
         }
 
-        echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('DBSetting').'</h2></div>';
+        echo '<div class="RequirementHeading"><h2>'.display_step_sequence().translate('DBSetting').'</h2></div>';
         echo '<div class="RequirementContent">';
-        echo get_lang('DBSettingUpgradeIntro');
+        echo translate('DBSettingUpgradeIntro');
         echo '</div>';
     } else {
         if (empty($dbPrefixForm)) { //make sure there is a default value for db prefix
             $dbPrefixForm = '';
         }
-        echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('DBSetting').'</h2></div>';
+        echo '<div class="RequirementHeading"><h2>'.display_step_sequence().translate('DBSetting').'</h2></div>';
         echo '<div class="RequirementContent">';
-        echo get_lang('DBSettingIntro');
+        echo translate('DBSettingIntro');
         echo '</div>';
     }
 
@@ -1758,7 +1761,7 @@ function display_database_settings_form(
     <td>
     <table class="data_table_no_border">
         <tr>
-            <td width="40%"><?php echo get_lang('DBHost'); ?> </td>
+            <td width="40%"><?php echo translate('DBHost'); ?> </td>
             <?php if ($installType == 'update'): ?>
             <td width="30%"><input type="hidden" name="dbHostForm"
                                    value="<?php echo htmlentities($dbHostForm); ?>"/><?php echo $dbHostForm; ?></td>
@@ -1766,26 +1769,26 @@ function display_database_settings_form(
             <?php else: ?>
             <td width="30%">
                 <input type="text" size="25" maxlength="50" name="dbHostForm" value="<?php echo htmlentities($dbHostForm); ?>" /></td>
-            <td width="30%"><?php echo get_lang('EG').' localhost'; ?></td>
+            <td width="30%"><?php echo translate('EG').' localhost'; ?></td>
             <?php endif; ?>
         </tr>
         <tr>
             <?php
             //database user username
-            $example_login = get_lang('EG').' root';
+            $example_login = translate('EG').' root';
             display_database_parameter(
                 $installType,
-                get_lang('DBLogin'),
+                translate('DBLogin'),
                 'dbUsernameForm',
                 $dbUsernameForm,
                 $example_login
             );
 
             //database user password
-            $example_password = get_lang('EG').' '.api_generate_password();
+            $example_password = translate('EG').' '.api_generate_password();
             display_database_parameter(
                 $installType,
-                get_lang('DBPassword'),
+                translate('DBPassword'),
                 'dbPassForm',
                 $dbPassForm,
                 $example_password
@@ -1806,7 +1809,7 @@ function display_database_settings_form(
 
             display_database_parameter(
                 $installType,
-                get_lang('MainDB'),
+                translate('MainDB'),
                 'dbNameForm',
                 $dbNameForm,
                 '&nbsp;',
@@ -1817,8 +1820,8 @@ function display_database_settings_form(
         <tr>
             <td></td>
             <td>
-                <button type="submit" class="btn" name="step3"value="<?php echo get_lang('CheckDatabaseConnection'); ?>">
-                    <?php echo get_lang('CheckDatabaseConnection'); ?></button>
+                <button type="submit" class="btn" name="step3"value="<?php echo translate('CheckDatabaseConnection'); ?>">
+                    <?php echo translate('CheckDatabaseConnection'); ?></button>
             </td>
         </tr>
         <tr>
@@ -1838,14 +1841,14 @@ function display_database_settings_form(
                 }
                 if ($user_can_create_databases) {
                     $database_exists_text = '<div class="normal-message">'.sprintf(
-                        get_lang('DatabaseXWillBeCreated'),
+                        translate('DatabaseXWillBeCreated'),
                         $dbNameForm,
                         $dbUsernameForm
                     ).'</div>';
                 } else {
                     $dbConnect = 0;
                     $database_exists_text = '<div class="warning-message">'.sprintf(
-                        get_lang('DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions'),
+                        translate('DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions'),
                         $dbNameForm,
                         $dbUsernameForm
                     ).'</div>';
@@ -1853,7 +1856,7 @@ function display_database_settings_form(
 
             } else {
                 echo '<div class="warning-message">'.sprintf(
-                        get_lang('UserXCantHaveAccessInTheDatabaseX'),
+                        translate('UserXCantHaveAccessInTheDatabaseX'),
                         $dbUsernameForm,
                         $dbNameForm
                     ).'</div>';
@@ -1873,7 +1876,7 @@ function display_database_settings_form(
                     <?php echo $database_exists_text ?>
                     <div id="db_status" style="float:left;" class="error-message">
                         <div style="float:left;">
-                            <strong><?php echo get_lang('FailedConectionDatabase'); ?></strong><br/>
+                            <strong><?php echo translate('FailedConectionDatabase'); ?></strong><br/>
 
                         </div>
                     </div>
@@ -1883,19 +1886,19 @@ function display_database_settings_form(
         <tr>
             <td>
                 <button type="submit" name="step2" class="back"
-                        value="&lt; <?php echo get_lang('Previous'); ?>"><?php echo get_lang('Previous'); ?></button>
+                        value="&lt; <?php echo translate('Previous'); ?>"><?php echo translate('Previous'); ?></button>
             </td>
             <td>&nbsp;</td>
             <td align="right">
                 <input type="hidden" name="is_executable" id="is_executable" value="-"/>
                 <?php if ($dbConnect == 1) { ?>
                 <button type="submit" class="btn next" name="step4"
-                        value="<?php echo get_lang('Next'); ?> &gt;" <?php if ($dbConnect == 1) {
+                        value="<?php echo translate('Next'); ?> &gt;" <?php if ($dbConnect == 1) {
                     echo 'autofocus="autofocus"';
-                } ?> /><?php echo get_lang('Next'); ?></button>
+                } ?> /><?php echo translate('Next'); ?></button>
                 <?php } else { ?>
                 <button disabled="disabled" type="submit" class="btn next disabled" name="step4"
-                        value="<?php echo get_lang('Next'); ?> &gt;"/><?php echo get_lang('Next'); ?></button>
+                        value="<?php echo translate('Next'); ?> &gt;"/><?php echo translate('Next'); ?></button>
                 <?php } ?>
             </td>
         </tr>
@@ -1954,21 +1957,21 @@ function display_configuration_settings_form(
         $languageForm = $_SESSION['install_language'];
     }
     echo '<div class="RequirementHeading">';
-    echo "<h2>".display_step_sequence().get_lang("CfgSetting")."</h2>";
+    echo "<h2>".display_step_sequence().translate("CfgSetting")."</h2>";
     echo '</div>';
     echo '<div class="RequirementContent">';
-    echo '<p>'.get_lang('ConfigSettingsInfo').' '.Display::label('config/configuration.php', 'info').'</p>';
+    echo '<p>'.translate('ConfigSettingsInfo').' '.Display::label('config/configuration.php', 'info').'</p>';
     echo '</div>';
 
     echo '<fieldset>';
-    echo '<legend>'.get_lang('Administrator').'</legend>';
+    echo '<legend>'.translate('Administrator').'</legend>';
     echo '<table class="data_table_no_border">';
 
     //Parameter 1: administrator's login
 
     display_configuration_parameter(
         $installType,
-        get_lang('AdminLogin'),
+        translate('AdminLogin'),
         'loginForm',
         $loginForm,
         $installType == 'update'
@@ -1976,35 +1979,35 @@ function display_configuration_settings_form(
 
     //Parameter 2: administrator's password
     if ($installType != 'update') {
-        display_configuration_parameter($installType, get_lang('AdminPass'), 'passForm', $passForm, false);
+        display_configuration_parameter($installType, translate('AdminPass'), 'passForm', $passForm, false);
     }
 
     //Parameters 3 and 4: administrator's names
     if (api_is_western_name_order()) {
-        display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
-        display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
+        display_configuration_parameter($installType, translate('AdminFirstName'), 'adminFirstName', $adminFirstName);
+        display_configuration_parameter($installType, translate('AdminLastName'), 'adminLastName', $adminLastName);
     } else {
-        display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
-        display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
+        display_configuration_parameter($installType, translate('AdminLastName'), 'adminLastName', $adminLastName);
+        display_configuration_parameter($installType, translate('AdminFirstName'), 'adminFirstName', $adminFirstName);
     }
 
     //Parameter 3: administrator's email
-    display_configuration_parameter($installType, get_lang('AdminEmail'), 'emailForm', $emailForm);
+    display_configuration_parameter($installType, translate('AdminEmail'), 'emailForm', $emailForm);
 
     //Parameter 6: administrator's telephone
-    display_configuration_parameter($installType, get_lang('AdminPhone'), 'adminPhoneForm', $adminPhoneForm);
+    display_configuration_parameter($installType, translate('AdminPhone'), 'adminPhoneForm', $adminPhoneForm);
 
     echo '</table>';
     echo '</fieldset>';
 
     echo '<fieldset>';
-    echo '<legend>'.get_lang('Platform').'</legend>';
+    echo '<legend>'.translate('Platform').'</legend>';
 
     echo '<table class="data_table_no_border">';
 
     //First parameter: language
     echo "<tr>";
-    echo '<td>'.get_lang('MainLang')."&nbsp;&nbsp;</td>";
+    echo '<td>'.translate('MainLang')."&nbsp;&nbsp;</td>";
     if ($installType == 'update') {
         echo '<td><input type="hidden" name="languageForm" value="'.api_htmlentities(
             $languageForm,
@@ -2021,7 +2024,7 @@ function display_configuration_settings_form(
 
     //Second parameter: Chamilo URL
     echo "<tr>";
-    echo '<td>'.get_lang('ChamiloURL').' (<font color="red">'.get_lang(
+    echo '<td>'.translate('ChamiloURL').' (<font color="red">'.translate(
         'ThisFieldIsRequired'
     )."</font>)&nbsp;&nbsp;</td>";
 
@@ -2037,17 +2040,17 @@ function display_configuration_settings_form(
 
 
     //Parameter 9: campus name
-    display_configuration_parameter($installType, get_lang('CampusName'), 'campusForm', $campusForm);
+    display_configuration_parameter($installType, translate('CampusName'), 'campusForm', $campusForm);
 
     //Parameter 10: institute (short) name
-    display_configuration_parameter($installType, get_lang('InstituteShortName'), 'institutionForm', $institutionForm);
+    display_configuration_parameter($installType, translate('InstituteShortName'), 'institutionForm', $institutionForm);
 
     //Parameter 11: institute (short) name
-    display_configuration_parameter($installType, get_lang('InstituteURL'), 'institutionUrlForm', $institutionUrlForm);
+    display_configuration_parameter($installType, translate('InstituteURL'), 'institutionUrlForm', $institutionUrlForm);
 
     ?>
 <tr>
-    <td><?php echo get_lang("EncryptMethodUserPass"); ?> :</td>
+    <td><?php echo translate("EncryptMethodUserPass"); ?> :</td>
     <?php if ($installType == 'update') { ?>
     <td><input type="hidden" name="encryptPassForm"
                value="<?php echo $encryptPassForm; ?>"/><?php echo $encryptPassForm; ?></td>
@@ -2066,7 +2069,7 @@ function display_configuration_settings_form(
 
             <label class="checkbox inline">
                 <input class="checkbox" type="radio" name="encryptPassForm" value="none"
-                       id="encryptPass2" <?php echo $encryptPassForm === '0' or $encryptPassForm === 0 ? 'checked="checked" ' : ''; ?>/><?php echo get_lang(
+                       id="encryptPass2" <?php echo $encryptPassForm === '0' or $encryptPassForm === 0 ? 'checked="checked" ' : ''; ?>/><?php echo translate(
                 'None'
             ); ?>
             </label>
@@ -2076,24 +2079,24 @@ function display_configuration_settings_form(
     <?php } ?>
 </tr>
 <tr>
-    <td><?php echo get_lang('AllowSelfReg'); ?> :</td>
+    <td><?php echo translate('AllowSelfReg'); ?> :</td>
 
     <?php if ($installType == 'update'): ?>
     <td><input type="hidden" name="allowSelfReg"
-               value="<?php echo $allowSelfReg; ?>"/><?php echo $allowSelfReg ? get_lang('Yes') : get_lang('No'); ?>
+               value="<?php echo $allowSelfReg; ?>"/><?php echo $allowSelfReg ? translate('Yes') : translate('No'); ?>
     </td>
     <?php else: ?>
     <td>
         <div class="control-group">
             <label class="checkbox inline">
                 <input class="checkbox" type="radio" name="allowSelfReg" value="1"
-                       id="allowSelfReg1" <?php echo $allowSelfReg ? 'checked="checked" ' : ''; ?>/> <?php echo get_lang(
+                       id="allowSelfReg1" <?php echo $allowSelfReg ? 'checked="checked" ' : ''; ?>/> <?php echo translate(
                 'Yes'
             ); ?>
             </label>
             <label class="checkbox inline">
                 <input class="checkbox" type="radio" name="allowSelfReg" value="0"
-                       id="allowSelfReg0" <?php echo $allowSelfReg ? '' : 'checked="checked" '; ?>/><?php echo get_lang(
+                       id="allowSelfReg0" <?php echo $allowSelfReg ? '' : 'checked="checked" '; ?>/><?php echo translate(
                 'No'
             ); ?>
             </label>
@@ -2103,11 +2106,11 @@ function display_configuration_settings_form(
 
 </tr>
 <tr>
-    <td><?php echo get_lang('AllowSelfRegProf'); ?> :</td>
+    <td><?php echo translate('AllowSelfRegProf'); ?> :</td>
 
     <?php if ($installType == 'update'): ?>
     <td><input type="hidden" name="allowSelfRegProf"
-               value="<?php echo $allowSelfRegProf; ?>"/><?php echo $allowSelfRegProf ? get_lang('Yes') : get_lang(
+               value="<?php echo $allowSelfRegProf; ?>"/><?php echo $allowSelfRegProf ? translate('Yes') : translate(
         'No'
     ); ?></td>
     <?php else: ?>
@@ -2116,12 +2119,12 @@ function display_configuration_settings_form(
             <label class="checkbox inline">
                 <input class="checkbox" type="radio" name="allowSelfRegProf" value="1"
                        id="allowSelfRegProf1" <?php echo $allowSelfRegProf ? 'checked="checked" ' : ''; ?>/>
-                <?php echo get_lang('Yes'); ?>
+                <?php echo translate('Yes'); ?>
             </label>
             <label class="checkbox inline">
                 <input class="checkbox" type="radio" name="allowSelfRegProf" value="0"
                        id="allowSelfRegProf0" <?php echo $allowSelfRegProf ? '' : 'checked="checked" '; ?>/>
-                <?php echo get_lang('No'); ?>
+                <?php echo translate('No'); ?>
             </label>
         </div>
     </td>
@@ -2130,13 +2133,13 @@ function display_configuration_settings_form(
 </tr>
 <tr>
     <td>
-        <button type="submit" class="btn back" name="step3" value="&lt; <?php echo get_lang('Previous'); ?>"/>
-            <?php echo get_lang('Previous'); ?></button>
+        <button type="submit" class="btn back" name="step3" value="&lt; <?php echo translate('Previous'); ?>"/>
+            <?php echo translate('Previous'); ?></button>
     </td>
     <td align="right">
         <input type="hidden" name="is_executable" id="is_executable" value="-"/>
-        <button class="btn next" type="submit" name="step5" value="<?php echo get_lang('Next'); ?> &gt;"/>
-            <?php echo get_lang('Next'); ?></button></td>
+        <button class="btn next" type="submit" name="step5" value="<?php echo translate('Next'); ?> &gt;"/>
+            <?php echo translate('Next'); ?></button></td>
 </tr>
 </fieldset>
 </table>
@@ -2148,15 +2151,15 @@ function display_configuration_settings_form(
  */
 function display_after_install_message($installType)
 {
-    echo '<div class="RequirementContent">'.get_lang('FirstUseTip').'</div>';
+    echo '<div class="RequirementContent">'.translate('FirstUseTip').'</div>';
     echo '<div class="warning-message">';
-    echo '<strong>'.get_lang('SecurityAdvice').'</strong>';
+    echo '<strong>'.translate('SecurityAdvice').'</strong>';
     echo ': ';
-    printf(get_lang('ToProtectYourSiteMakeXReadOnlyAndDeleteY'), 'main/inc/conf/', 'main/install/');
+    printf(translate('ToProtectYourSiteMakeXReadOnlyAndDeleteY'), 'main/inc/conf/', 'main/install/');
     echo '</div>';
     ?></form>
 <br/>
-<a class="btn btn-success btn-large btn-install" href="../../index.php" autofocus="autofocus"><?php echo get_lang(
+<a class="btn btn-success btn-large btn-install" href="../../index.php" autofocus="autofocus"><?php echo translate(
     'GoToYourNewlyCreatedPortal'
 ); ?></a>
 <?php
@@ -2368,7 +2371,7 @@ function get_countries_list_from_array($combo = false)
     $country_select = '';
     if ($combo) {
         $country_select = '<select id="country" name="country">';
-        $country_select .= '<option value="">--- '.get_lang('SelectOne').' ---</option>';
+        $country_select .= '<option value="">--- '.translate('SelectOne').' ---</option>';
         foreach ($a_countries as $country) {
             $country_select .= '<option value="'.$country.'">'.$country.'</option>';
         }

@@ -76,7 +76,8 @@ class ExerciseShowFunctions {
         }
 	}
 
-	static function display_oral_expression_answer($answer, $id, $questionId, $nano = null) {
+    static function display_oral_expression_answer($answer, $id, $questionId, $nano = null)
+    {
 		global $feedback_type;
 
 		if (isset($nano)) {

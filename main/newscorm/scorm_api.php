@@ -39,12 +39,14 @@ $oLP    = unserialize($_SESSION['lpobject']);
 $oItem 	= $oLP->items[$oLP->current];
 
 if (!is_object($oItem)) {
-    error_log('New LP - scorm_api - Could not load oItem item',0);
+    error_log('New LP - scorm_api - Could not load oItem item', 0);
     exit;
 }
+
 $autocomplete_when_80pct = 0;
 $user = api_get_user_info();
 header('Content-type: text/javascript');
+
 ?>var scorm_logs = <?php echo ((empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin()) )?'0':'3');?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
 var lms_logs = 0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
 
@@ -171,7 +173,7 @@ olms.lms_initialized = 0;
 
 olms.lms_view_id = '<?php echo $oLP->get_view();?>';
 if(olms.lms_view_id == ''){ olms.lms_view_id = 1;}
-olms.lms_user_id = '<?php echo $_user['user_id'];?>';
+olms.lms_user_id = '<?php echo api_get_user_id();?>';
 olms.lms_next_item = '<?php echo $oLP->get_next_item_id();?>';
 olms.lms_previous_item = '<?php echo $oLP->get_previous_item_id();?>';
 olms.lms_lp_type = '<?php echo $oLP->get_type();?>';
@@ -183,8 +185,8 @@ olms.lms_item_core_exit = '<?php echo $oItem->get_core_exit();?>';
 <?php echo $oLP->get_items_details_as_js('olms.lms_item_types');?>
 
 olms.asset_timer = 0;
-olms.userfname = '<?php echo str_replace("'","\\'",$user['firstname']); ?>';
-olms.userlname = '<?php echo str_replace("'","\\'",$user['lastname']); ?>';
+olms.userfname = '<?php echo str_replace("'","\\'", $user['firstname']); ?>';
+olms.userlname = '<?php echo str_replace("'","\\'", $user['lastname']); ?>';
 
 olms.execute_stats = false;
 
@@ -405,11 +407,11 @@ function LMSGetValue(param) {
         }
     } else if(param == 'cmi.core.student_id'){
         // ---- cmi.core.student_id
-        result='<?php echo $_user['user_id']; ?>';
+        result='<?php echo api_get_user_id(); ?>';
     } else if(param == 'cmi.core.student_name'){
         // ---- cmi.core.student_name
         <?php
-          $who = addslashes(api_get_person_name($_user['firstName'], $_user['lastName']));
+          $who = addslashes($user['complete_name']);
           echo "result='$who';";
         ?>
     } else if(param == 'cmi.core.lesson_location'){

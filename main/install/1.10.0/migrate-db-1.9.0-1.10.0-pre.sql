@@ -96,6 +96,7 @@ ALTER TABLE session ADD INDEX idx_id_session_admin_id (session_admin_id);
 
 ALTER TABLE c_quiz_question ADD COLUMN parent_id INT unsigned NOT NULL DEFAULT 0;
 ALTER TABLE c_quiz ADD COLUMN email_notification_template TEXT DEFAULT '';
+ALTER TABLE c_quiz ADD COLUMN model_type INT DEFAULT 1;
 
 CREATE TABLE IF NOT EXISTS gradebook_evaluation_type(id INT unsigned PRIMARY KEY NOT NULL AUTO_INCREMENT, name varchar(255), external_id INT unsigned NOT NULL DEFAULT 0);
 
@@ -212,6 +213,7 @@ ALTER TABLE track_e_lastaccess ADD INDEX (c_id, access_user_id);
 
 ALTER TABLE access_url_rel_course DROP PRIMARY KEY;
 ALTER TABLE access_url_rel_course ADD COLUMN id int unsigned NOT NULL auto_increment PRIMARY KEY;
+
 ALTER TABLE c_quiz ADD COLUMN autolaunch int DEFAULT 0;
 RENAME TABLE c_quiz_question_category TO c_quiz_category;
 ALTER TABLE c_quiz_category ADD COLUMN parent_id int unsigned default NULL;
@@ -273,17 +275,7 @@ ALTER TABLE c_quiz_category ADD COLUMN rgt int;
 ALTER TABLE c_quiz_category ADD COLUMN root int;
 ALTER TABLE c_quiz_category MODIFY COLUMN parent_id int default null;
 
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('use_virtual_keyboard', NULL, 'radio', 'Platform', 'false', 'ShowVirtualKeyboardTitle', 'ShowVirtualKeyboardComment', NULL, NULL, 1);
-INSERT INTO settings_options (variable, value, display_text) VALUES ('use_virtual_keyboard', 'true', 'Yes');
-INSERT INTO settings_options (variable, value, display_text) VALUES ('use_virtual_keyboard', 'false', 'No');
-
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('disable_copy_paste', NULL,'radio','Platform','false','DisableCopyPasteTitle','DisableCopyPasteComment', NULL, NULL, 1);
-INSERT INTO settings_options (variable, value, display_text) VALUES ('disable_copy_paste', 'true', 'Yes');
-INSERT INTO settings_options (variable, value, display_text) VALUES ('disable_copy_paste', 'false', 'No');
-
 ALTER TABLE track_e_course_access MODIFY COLUMN course_access_id bigint unsigned auto_increment;
--- Add new configuration setting to activate transaction logging.
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('log_transactions','exercise_attempt','checkbox','LogTransactions','false','LogTransactionsForExerciseAttempts','LogTransactionsForExerciseAttemptsComment',NULL,'LogTransactionsForExerciseAttemptsText', 1);
 
 CREATE TABLE extra_field_option_rel_field_option(id INT auto_increment, role_id INT, field_id INT, field_option_id INT, related_field_option_id INT, PRIMARY KEY(id));
 
@@ -316,6 +308,11 @@ INSERT INTO roles (name, role) VALUES('Question Manager', 'ROLE_QUESTION_MANAGER
 -- Admin
 INSERT INTO users_roles VALUES (1, 1);
 
+CREATE TABLE question_score_name (id int NOT NULL AUTO_INCREMENT,  score varchar(255) DEFAULT NULL,  name varchar(255) DEFAULT NULL,  description TEXT DEFAULT NULL,  question_score_id INT NOT NULL,  PRIMARY KEY (id)) DEFAULT CHARSET=utf8;
+CREATE TABLE question_score (  id int NOT NULL AUTO_INCREMENT,  name varchar(255) DEFAULT NULL,  PRIMARY KEY (id)) DEFAULT CHARSET=utf8;
+
+
+
 -- Add new configuration setting for action related transaction settings.
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('transaction_action_map','exercise_attempt','text','TransactionMapping','a:0:{}','TransactionMapForExerciseAttempts','TransactionMapForExerciseAttemptsComment',NULL,'TransactionMapForExerciseAttemptsText', 1);
 
@@ -329,4 +326,14 @@ ALTER TABLE branch_transaction_log ADD message MEDIUMTEXT NOT NULL;
 -- Remove orig_id in favor of item_id and delete info field.
 ALTER TABLE branch_transaction DROP orig_id, DROP info;
 
-UPDATE settings_current SET selected_value = '1.10.0.026' WHERE variable = 'chamilo_database_version';
+-- Add missing fields to brach_sync table.
+ALTER TABLE branch_sync ADD ssl_pub_key varchar(250) default '';
+ALTER TABLE branch_sync ADD lft int unsigned;
+ALTER TABLE branch_sync ADD rgt int unsigned;
+ALTER TABLE branch_sync ADD lvl int unsigned;
+ALTER TABLE branch_sync ADD root int unsigned;
+ALTER TABLE branch_sync ADD parent_id int unsigned;
+ALTER TABLE branch_sync ADD branch_type varchar(250) default null;
+
+-- Do not move this
+UPDATE settings_current SET selected_value = '1.10.0.029' WHERE variable = 'chamilo_database_version';

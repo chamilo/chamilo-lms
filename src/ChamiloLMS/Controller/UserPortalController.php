@@ -25,19 +25,12 @@ class UserPortalController extends CommonController
      */
     public function indexAction(Application $app, $type = 'courses', $filter = 'current', $page = 1)
     {
-        $this->cidReset();
-
-        //@todo Use filters like "after/before|finish" to manage user access
+        // @todo Use filters like "after/before|finish" to manage user access
         api_block_anonymous_users();
 
         //Abort request because the user is not allowed here - @todo use filters
         if ($app['allowed'] == false) {
             return $app->abort(403, 'Not allowed');
-        }
-
-        // Check if a user is enrolled only in one course for going directly to the course after the login.
-        if (api_get_setting('go_to_course_after_login') == 'true') {
-            $this->redirectAfterLogin();
         }
 
         // Main courses and session list
@@ -121,7 +114,6 @@ class UserPortalController extends CommonController
         $count_of_sessions = count($my_session_list);
 
         if ($count_of_sessions == 1 && $count_of_courses_no_sessions == 0) {
-
             $key = array_keys($personal_course_list);
             $course_info = $personal_course_list[$key[0]];
             $id_session = isset($course_info['id_session']) ? $course_info['id_session'] : 0;

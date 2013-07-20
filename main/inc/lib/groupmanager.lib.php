@@ -168,13 +168,11 @@ class GroupManager
         $groups = array();
 
         while ($thisGroup = Database::fetch_array($groupList)) {
-            $thisGroup = array();
             $thisGroup['number_of_members'] = count(self::get_subscribed_users($thisGroup['id']));
 
             if ($thisGroup['session_id'] != 0) {
-                $sql_session = 'SELECT name FROM '.Database::get_main_table(
-                    TABLE_MAIN_SESSION
-                ).' WHERE id='.$thisGroup['session_id'];
+                $sql_session = 'SELECT name FROM '.Database::get_main_table(TABLE_MAIN_SESSION).'
+                                WHERE id='.$thisGroup['session_id'];
                 $rs_session = Database::query($sql_session);
                 if (Database::num_rows($rs_session) > 0) {
                     $thisGroup['session_name'] = Database::result($rs_session, 0, 0);
@@ -399,15 +397,15 @@ class GroupManager
         while ($group = Database::fetch_object($db_result)) {
             // move group-documents to garbage
             //$source_directory = api_get_path(SYS_COURSE_PATH).$course['path']."/group/".$group->secret_directory;
-            $source_directory = api_get_path(SYS_COURSE_PATH).$course['path']."/document".$group->secret_directory;
+            $source_directory = api_get_path(SYS_COURSE_PATH).$course_info['path']."/document".$group->secret_directory;
             //File to renamed
             $destination_dir = api_get_path(
                 SYS_COURSE_PATH
-            ).$course['path']."/document".$group->secret_directory.'_DELETED_'.$group->id;
+            ).$course_info['path']."/document".$group->secret_directory.'_DELETED_'.$group->id;
 
             if (!empty($group->secret_directory)) {
                 //Deleting from document tool
-                DocumentManager::delete_document($course, $group->secret_directory, $source_directory);
+                DocumentManager::delete_document($course_info, $group->secret_directory, $source_directory);
 
                 if (file_exists($source_directory)) {
                     if (api_get_setting('permanently_remove_deleted_files') == 'true') {

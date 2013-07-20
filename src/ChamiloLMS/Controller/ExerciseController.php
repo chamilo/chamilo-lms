@@ -158,6 +158,7 @@ class ExerciseController extends CommonController
 
         // jqgrid will use this URL to do the selects
         $extraConditions = null;
+
         if (!empty($cidReq)) {
             $extraConditions = "courseId=".api_get_course_int_id();
         }

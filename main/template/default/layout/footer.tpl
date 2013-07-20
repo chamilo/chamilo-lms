@@ -86,7 +86,7 @@ jQuery.fn.filterByText = function(textbox) {
     });
 };
 
-//Functions used in main/admin
+// Functions used in main/admin.
 
 var textarea = "";
 var max_char = 255;
@@ -123,7 +123,7 @@ function sortOptions(options) {
         options[i] = newOptions[i];
 }
 
-function mysort(a, b){
+function mysort(a, b) {
     if(a.text.toLowerCase() > b.text.toLowerCase()){
         return 1;
     }
@@ -141,13 +141,12 @@ $("form").on("click", '.advanced_parameters', function() {
     });
 });
 
-
 /** Makes row highlighting possible */
 $(document).ready( function() {
     //Chosen select
     $(".chzn-select").chosen();
 
-    //Advmultiselect text inputs
+    // Adv multiselect text inputs.
     $('.select_class_filter').each(function(){
         var inputId = $(this).attr('id');
 

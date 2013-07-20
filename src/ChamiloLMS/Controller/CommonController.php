@@ -2,63 +2,84 @@
 /* For licensing terms, see /license.txt */
 namespace ChamiloLMS\Controller;
 
-use \ChamiloSession as Session;
 use Silex\Application;
 use Knp\Menu\Matcher\Matcher;
+use ChamiloLMS\Controller\BaseController;
 
 /**
  * @package ChamiloLMS.CommonController
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class CommonController
+class CommonController extends BaseController
 {
-
     public $languageFiles = array();
 
-    /**
-     *
-    */
-    public function __construct()
+    public function __construct(Application $app)
     {
-
+        parent::__construct($app);
     }
 
     /**
-     * Reset course session
+     * {@inheritdoc}
      */
-    public function cidReset()
+    protected function getRepository()
     {
-        Session::erase('_cid');
-        Session::erase('_real_cid');
-        Session::erase('_course');
-
-        if (!empty($_SESSION)) {
-            foreach ($_SESSION as $key => $item) {
-                if (strpos($key, 'lp_autolunch_') === false) {
-                    continue;
-                } else {
-                    if (isset($_SESSION[$key])) {
-                        Session::erase($key);
-                    }
-                }
-            }
-        }
-        // Deleting session info.
-        if (api_get_session_id()) {
-            Session::erase('id_session');
-            Session::erase('session_name');
-        }
-        // Deleting group info.
-        if (api_get_group_id()) {
-            Session::erase('_gid');
-        }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getNewEntity()
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getFormType()
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getControllerAlias() {
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function generateLinks()
+    {
+        return $this->generateDefaultCrudRoutes();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getTemplatePath()
+    {
+    }
+
+    protected function generateDefaultCrudRoutes()
+    {
+        $className = $this->getControllerAlias();
+        return array(
+            'create_link' => $className.':addAction',
+            'read_link' => $className.':readAction',
+            'update_link' => $className.':editAction',
+            'delete_link' => $className.':deleteAction',
+            'list_link' => $className.':indexAction'
+        );
+    }
+
 
     /**
      * @param Application $app
      * @param array $breadcrumbs
      */
-    public function setBreadcrumb(Application $app, $breadcrumbs)
+    protected function setBreadcrumb(Application $app, $breadcrumbs)
     {
         $courseInfo = api_get_course_info();
 

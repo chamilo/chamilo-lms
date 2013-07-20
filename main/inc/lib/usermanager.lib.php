@@ -54,7 +54,8 @@ class UserManager
      * @param array $params
      * @return array
      */
-    static function clean_params($params) {
+    static function clean_params($params)
+    {
         $clean_params = array();
         foreach ($params as $key => $value) {
             if (in_array($key, self::$columns)) {
@@ -2630,7 +2631,7 @@ class UserManager
                                      FROM $tbl_course_user course_rel_user
                                         INNER JOIN $tbl_course course
                                         ON course.id = course_rel_user.c_id
-                                        INNER JOIN $tbl_user_course_category user_course_category
+                                        LEFT JOIN $tbl_user_course_category user_course_category
                                         ON course_rel_user.user_course_cat = user_course_category.id
                                      $join_access_url
                                      WHERE  course_rel_user.user_id = '".$user_id."' AND

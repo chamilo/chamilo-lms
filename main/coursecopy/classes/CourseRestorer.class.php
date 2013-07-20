@@ -1485,6 +1485,7 @@ class CourseRestorer
                         'propagate_neg' => $quiz->propagate_neg,
                         'text_when_finished' => $quiz->text_when_finished,
                         'expired_time' => (int)$quiz->expired_time,
+                        'end_button' => (int)$quiz->end_button
                     );
 
                     if ($respect_base_content) {
@@ -1579,7 +1580,7 @@ class CourseRestorer
             $table_ans = Database::get_course_table(TABLE_QUIZ_ANSWER);
             $table_options = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
 
-            // check resources inside html from fckeditor tool and copy correct urls into recipient course
+            // check resources inside html from ckeditor tool and copy correct urls into recipient course
 			$question->description = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                 $question->description,
                 $this->course->code,
@@ -1592,13 +1593,13 @@ class CourseRestorer
                 $question_obj = Question::readByTitle($question->parent_info['question'], $this->destination_course_id);
 
                 if ($question_obj) {
-                    //Reuse media
+                    // Reuse media.
                     $parent_id = $question_obj->selectId();
                 } else {
-                    //Create media
+                    // Create media.
                     $question_obj = new MediaQuestion();
                     $question_obj->updateCourse($this->destination_course_id);
-                    $parent_id = $question_obj->save_media(array(
+                    $parent_id = $question_obj->saveMedia(array(
                         'questionName'  => $question->parent_info['question'],
                         'questionDescription' => $question->parent_info['description']
                     ));
@@ -1614,7 +1615,7 @@ class CourseRestorer
                     type='".self::DBUTF8escapestring($question->quiz_type)."',
                     picture='".self::DBUTF8escapestring($question->picture)."',
                     level='".self::DBUTF8escapestring($question->level)."',
-                    parent_id ='".$parent_id."',
+                    parent_id = '".$parent_id."',
                     extra='".self::DBUTF8escapestring($question->extra)."'";
 
             Database::query($sql);

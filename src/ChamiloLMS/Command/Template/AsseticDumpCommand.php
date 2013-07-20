@@ -15,7 +15,7 @@ use Symfony\Component\Console\Command\Command;
 class AsseticDumpCommand extends Command
 {
     /**
-     *
+     * {@inheritdoc}
      */
     protected function configure()
     {

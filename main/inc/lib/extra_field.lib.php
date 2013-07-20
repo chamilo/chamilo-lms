@@ -106,10 +106,10 @@ class ExtraField extends Model
                 break;
         }
         $this->pageUrl  = 'extra_fields.php?type='.$this->type;
+
         // Example QuestionFields
-        // @todo error while installing
-        // $this->pageName = get_lang(ucwords($this->type).'Fields');
-        $this->pageName = ucwords($this->type).'Fields';
+        $this->pageName = get_lang(ucwords($this->type).'Fields');
+
     }
 
     static function getValidExtraFieldTypes()
@@ -221,6 +221,7 @@ class ExtraField extends Model
         if (empty($form)) {
             return false;
         }
+
         $extra_data = false;
         if (!empty($item_id)) {
             $extra_data = self::get_handler_extra_data($item_id);
@@ -652,8 +653,12 @@ class ExtraField extends Model
                             $options[''] = get_lang('SelectAnOption');
                         }
 
+                        $optionList = array();
+
                         if (!empty($field_details['options'])) {
+
                             foreach ($field_details['options'] as $option_details) {
+                                $optionList[$option_details['id']] = $option_details;
                                 if ($get_lang_variables) {
                                     $options[$option_details['option_value']] = get_lang($option_details['option_display_text']);
                                 } else {
@@ -673,6 +678,26 @@ class ExtraField extends Model
                                         // Normal behaviour
                                         $options[$option_details['option_value']] = $option_details['option_display_text'];
                                     }
+                                }
+                            }
+
+                            if (isset($optionList[$defaultValueId])) {
+
+                                if (isset($optionList[$defaultValueId]['option_value']) && $optionList[$defaultValueId]['option_value'] == 'aprobada') {
+                                    if (api_is_question_manager() == false) {
+                                        $form->freeze();
+                                    }
+                                }
+                            }
+
+                            // Setting priority message
+                            if (isset($optionList[$defaultValueId]) && isset($optionList[$defaultValueId]['priority'])) {
+
+                                if (!empty($optionList[$defaultValueId]['priority'])) {
+                                    $priorityId = $optionList[$defaultValueId]['priority'];
+                                    $option = new ExtraFieldOption($this->type);
+                                    $messageType = $option->getPriorityMessageType($priorityId);
+                                    $form->addElement('label', null, Display::return_message($optionList[$defaultValueId]['priority_message'], $messageType));
                                 }
                             }
                         }
@@ -1256,16 +1281,6 @@ EOF;
         $rules = array();
         if (!empty($fields)) {
             foreach ($fields as $field) {
-
-                /*if ($checkExtraFieldExistence) {
-                    if (empty($extraFields)) {
-                        continue;
-                    } else {
-                        if (!in_array('extra_'.$field['field_variable'], $extraFields)) {
-                            continue;
-                        }
-                    }
-                }*/
 
                 $search_options = array();
                 $type           = 'text';

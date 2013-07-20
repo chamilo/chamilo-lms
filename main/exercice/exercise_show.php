@@ -134,10 +134,15 @@ function showfck(sid,marksid) {
 	document.getElementById(comment).style.display='none';
 }
 
-function getFCK(vals,marksid) {
-	var f=document.getElementById('myform');
+$(function() {
+    $("#myform").submit(function() {
+        $("#result_from_ajax").html('<?php echo Display::return_icon('loading1.gif'); ?>');
 
-	var m_id = marksid.split(',');
+        var vals = $("#vals").val();
+        var marksid = $("#marksid").val();
+	var f=document.getElementById('myform');
+        var m_id = marksid.split(',');
+
 	for(var i=0;i<m_id.length;i++){
 		var oHidn = document.createElement("input");
 		oHidn.type = "hidden";
@@ -152,11 +157,33 @@ function getFCK(vals,marksid) {
 		var oHidden = document.createElement("input");
 		oHidden.type = "hidden";
 		oHidden.name = "comments_"+ids[k];
-		oEditor = FCKeditorAPI.GetInstance(oHidden.name) ;
-		oHidden.value = oEditor.GetXHTML(true);
+            //oEditor = FCKeditorAPI.GetInstance(oHidden.name) ;
+            var valueEditor = CKEDITOR.instances[oHidden.name].getData();
+            //console.log(oHidden.name);
+            oHidden.value = valueEditor;
 		f.appendChild(oHidden);
 	}
+        var params = $("#myform").serialize();
+
+        $.ajax({
+            type : "post",
+            url: "<?php echo api_get_path(WEB_AJAX_PATH); ?>exercise.ajax.php?a=correct_exercise_result",
+            data: "<?php ?>"+params,
+            success: function(data) {
+                if (data == 0) {
+                    $('#result_from_ajax').html('<?php echo addslashes(Display::return_message(get_lang('Error'), 'warning'))?>');
+                } else {
+                    $('#result_from_ajax').html('<?php echo addslashes(Display::return_message(get_lang('Saved'), 'success'))?>');
+                    $('.question_row').hide();
+                    $('#myform').hide();
+                    $('#correct_again').hide();
 }
+            }
+        });
+        return false;
+
+    });
+});
 </script>
 <?php
 $show_results           = true;
@@ -169,9 +196,7 @@ if (!empty($track_exercise_info)) {
 
 	if (!(api_is_platform_admin() || api_is_course_admin()) ) {
 		if ($result_disabled == 1) {
-			//api_not_allowed();
 			$show_results = false;
-			//Display::display_warning_message(get_lang('CantViewResults'));
 			if ($origin != 'learnpath') {
 			    echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
                       <tr>
@@ -208,12 +233,17 @@ if ($origin == 'learnpath' && !isset($_GET['fb_type']) ) {
 if ($show_results || $show_only_total_score) {
     $user_info   = api_get_user_info($student_id);
     //Shows exercise header
-    echo $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']), api_convert_and_format_date($exercise_date));
+    echo $objExercise->show_exercise_result_header(
+        api_get_person_name($user_info['firstName'], $user_info['lastName']),
+        api_convert_and_format_date($exercise_date)
+    );
 }
 
 $i = $totalScore = $totalWeighting = 0;
 
-if($debug>0){error_log("ExerciseResult: ".print_r($exerciseResult,1)); error_log("QuestionList: ".print_r($questionList,1));}
+if ($debug>0) {
+    error_log("ExerciseResult: ".print_r($exerciseResult,1)); error_log("QuestionList: ".print_r($questionList,1));
+}
 
 $arrques = array();
 $arrans  = array();
@@ -279,12 +309,14 @@ $media_list = array();
 $category_list = array();
 $tempParentId = null;
 $mediaCounter = 0;
+$arrid = array();
 
 foreach ($questionList as $questionId) {
 
 	$choice = $exerciseResult[$questionId];
 
 	// creates a temporary Question object
+    /** @var Question $objQuestionTmp */
 	$objQuestionTmp = Question::read($questionId);
 
 	$questionWeighting	= $objQuestionTmp->selectWeighting();
@@ -519,8 +551,8 @@ foreach ($questionList as $questionId) {
 			}
 			echo '</div>';
 
+            $arrid[] = $questionId;
             echo '<div id="'.$name.'" style="display:none">';
-			$arrid[] = $questionId;
 			$feedback_form = new FormValidator('frmcomments'.$questionId,'post','');
 			$feedback_form->addElement('html','<br>');
 			$renderer =& $feedback_form->defaultRenderer();
@@ -531,6 +563,11 @@ foreach ($questionList as $questionId) {
 			$feedback_form->addElement('html_editor', 'comments_'.$questionId, null, null, array('ToolbarSet' => 'TestAnswerFeedback', 'Width' => '100%', 'Height' => '120'));
 			$feedback_form->addElement('html','<br>');
 			$feedback_form->setDefaults($default);
+            $modelType = $objExercise->getModelType();
+
+            if ($modelType == EXERCISE_MODEL_TYPE_COMMITTEE) {
+                //$app['orm']->getRepository()
+            }
 			$feedback_form->display();
 			echo '</div>';
 
@@ -579,12 +616,6 @@ foreach ($questionList as $questionId) {
 
     $category_was_added_for_this_test = false;
 
-    // We use now category_list instead of a unique category
-    /*if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
-        $category_list[$objQuestionTmp->category]['score'] += $my_total_score;
-        $category_list[$objQuestionTmp->category]['total'] += $my_total_weight;
-        $category_was_added_for_this_test = true;
-    }*/
 
     if (isset($objQuestionTmp->category_list) && !empty($objQuestionTmp->category_list)) {
         foreach ($objQuestionTmp->category_list as $category_id) {
@@ -654,8 +685,9 @@ foreach ($questionList as $questionId) {
 
  	if ($show_results) {
         //Shows question title an description
+	    //$question_content .= $objQuestionTmp->return_header(null, $counterToShow, $score, $show_media, $mediaCounter, );
 
-	    $question_content .= $objQuestionTmp->return_header(null, $counterToShow, $score, $show_media, $mediaCounter);
+        $question_content .= $objQuestionTmp->return_header(null, $counterToShow, $score, $show_media, $objExercise->getHideQuestionTitle());
 
         // display question category, if any
  	    $question_content .= Testcategory::getCategoryNamesForQuestion($questionId);
@@ -704,26 +736,34 @@ if (is_array($arrid) && is_array($arrmarks)) {
 }
 
 if ($is_allowedToEdit && $locked == false && !api_is_drh()) {
+    echo '<form name="myform" id="myform">';
 	if (in_array($origin, array('tracking_course','user_course','correct_exercise_in_lp'))) {
-		echo '<form name="myform" id="myform" action="'.$urlMainExercise.'exercise_report.php?exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
+        //'.$urlMainExercise.'exercise_report.php?exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'
 		echo '<input type = "hidden" name="lp_item_id"       value="'.$learnpath_id.'">';
 		echo '<input type = "hidden" name="lp_item_view_id"  value="'.$lp_item_view_id.'">';
 		echo '<input type = "hidden" name="student_id"       value="'.$student_id.'">';
 		echo '<input type = "hidden" name="total_score"      value="'.$totalScore.'"> ';
 		echo '<input type = "hidden" name="my_exe_exo_id"    value="'.$exercise_id.'"> ';
 	} else {
-		echo ' <form name="myform" id="myform" action="'.$urlMainExercise.'exercise_report.php?exerciseId='.$exercise_id.'&filter=1&comments=update&exeid='.$id.'" method="post">';
+        //action="'.$urlMainExercise.'exercise_report.php?exerciseId='.$exercise_id.'&filter=1&comments=update&exeid='.$id.'" method="post"
 	}
+    echo '<input type = "hidden" name="origin"       value="'.$origin.'">';
+    echo '<input type = "hidden" name="exeid"       value="'.$id.'">';
+    echo '<input type = "hidden" name="comments"       value="update">';
+
+    echo '<input id="vals" type = "hidden" name="vals"       value="'.$strids.'">';
+    echo '<input id="marksid" type = "hidden" name="marksid"       value="'.$marksid.'">';
 	if ($origin !='learnpath' && $origin!='student_progress') {
 
         echo '<label><input type= "checkbox" name="send_notification"> '.get_lang('SendEmail').'</label>';
 		?>
-		<button type="submit" class="btn btn-primary" value="<?php echo get_lang('Ok'); ?>" onclick="getFCK('<?php echo $strids; ?>','<?php echo $marksid; ?>');">
-            <?php echo get_lang('CorrectTest'); ?>
-        </button>
-		</form>
+        <input type="submit" class="btn btn-primary" value=" <?php echo get_lang('CorrectTest'); ?>">
 		<?php
 	}
+    echo '</form>
+        <div id="result_from_ajax">
+        </div>';
+    //echo '<div id="correct_again" style="display:none"><a href="'..'">'.get_lang('CorrectTest').'</div>';
 }
 
 //Came from lpstats in a lp

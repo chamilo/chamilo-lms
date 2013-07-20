@@ -1,0 +1,270 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+namespace ChamiloLMS\Controller\Tool\Curriculum;
+
+use ChamiloLMS\Controller\CommonController;
+use Silex\Application;
+use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
+use Symfony\Component\HttpFoundation\Response;
+use Entity;
+use ChamiloLMS\Form\CurriculumItemRelUserCollectionType;
+use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+
+/**
+ * Class CurriculumUserController
+ * @todo @route and @method function don't work yet
+ * @package ChamiloLMS\Controller
+ * @author Julio Montoya <gugli100@gmail.com>
+ */
+class CurriculumUserController extends CommonController
+{
+    /**
+     *
+     * @Route("/")
+     * @Method({"GET"})
+     */
+    public function indexAction()
+    {
+        // $repo = $this->getCurriculumCategoryRepository();
+
+        $query = $this->getManager()
+            ->createQueryBuilder()
+            ->select('node, i')
+            ->from('Entity\CurriculumCategory', 'node')
+            ->innerJoin('node.items', 'i')
+            ->leftJoin('i.userItems', 'u')
+            ->orderBy('node.root, node.lft', 'ASC')
+            ->getQuery();
+
+        $categories = $query->getResult();
+
+        $formList = array();
+        /** @var \Entity\CurriculumCategory $category */
+
+        foreach ($categories as $category) {
+            /** @var \Entity\CurriculumItem $item */
+            foreach ($category->getItems() as $item) {
+                $formType = new CurriculumItemRelUserCollectionType($item->getId());
+                $form = $this->get('form.factory')->create($formType, $item);
+                $formList[$item->getId()] = $form->createView();
+            }
+        }
+
+        //$htmlTree = $repo->buildTree($query->getArrayResult(), $options);
+        //$this->get('template')->assign('tree', $htmlTree);
+
+        $this->get('template')->assign('categories', $query->getResult());
+        $this->get('template')->assign('links', $this->generateLinks());
+        $this->get('template')->assign('form_list', $formList);
+
+        $response = $this->get('template')->render_template($this->getTemplatePath().'list.tpl');
+        return new Response($response, 200, array());
+    }
+
+    /**
+    *
+    * @Route("/save-user-item")
+    * @Method({"POST"})
+    */
+    public function saveUserItemAction()
+    {
+        $request = $this->getRequest();
+        $form = $this->get('form.factory')->create($this->getFormType());
+        $token = $this->get('security')->getToken();
+        $user = $token->getUser();
+
+
+
+
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
+
+            if ($form->isValid()) {
+                /** @var Entity\CurriculumItem $item */
+                $postedItem = $form->getData();
+
+                /** @var Entity\CurriculumItemRelUser $curriculumItemRelUser  */
+                $postedItemId = null;
+                foreach ($postedItem->getUserItems() as $curriculumItemRelUser) {
+                    $postedItemId = $curriculumItemRelUser->getItemId();
+                    break;
+                }
+
+                 // Get user items
+
+                $query = $this->getManager()
+                    ->createQueryBuilder()
+                    ->select('node, i, u')
+                    ->from('Entity\CurriculumCategory', 'node')
+                    ->innerJoin('node.items', 'i')
+                    ->innerJoin('i.userItems', 'u')
+                    ->orderBy('node.root, node.lft', 'ASC')
+                    ->where('u.userId = :user_id AND i.id = :item_id')
+                    ->setParameter('user_id', $user->getUserId())
+                    ->setParameter('item_id', $postedItemId)
+                    ->getQuery();
+
+                $categories = $query->getResult();
+
+                /** @var \Entity\CurriculumCategory $category */
+                $alreadyAdded = array();
+                //$alreadyAddedObjects = array();
+                foreach ($categories as $category) {
+                    foreach ($category->getItems() as $item) {
+                        if ($item->getId() == $postedItemId) {
+                            // Now we can do stuff
+                            /** @var Entity\CurriculumItemRelUser $userItem */
+                            foreach ($item->getUserItems() as $userItem) {
+                                $alreadyAdded[md5($userItem->getDescription())] = $userItem;
+                            }
+                        }
+                    }
+                }
+
+                // @todo check this
+                $user = $this->get('orm.em')->getRepository('Entity\User')->find($user->getUserId());
+
+                $counter = 1;
+                $parsed = array();
+
+                /** @var Entity\CurriculumItemRelUser $curriculumItemRelUser  */
+                foreach ($postedItem->getUserItems() as $curriculumItemRelUser) {
+                    $curriculumItemRelUser->setUser($user);
+                    $newItem = $this->getCurriculumItemRepository()->find($curriculumItemRelUser->getItemId());
+                    $curriculumItemRelUser->setItem($newItem);
+                    $curriculumItemRelUser->setOrderId(strval($counter));
+                    $description = $curriculumItemRelUser->getDescription();
+
+                    if (empty($description)) {
+                        //error_log('skipeed');
+                        continue;
+                    }
+
+                    // @todo improve this
+                    if (!empty($alreadyAdded)) {
+                        $hash = md5($curriculumItemRelUser->getDescription());
+                        if (isset($alreadyAdded[$hash])) {
+                            $parsed[] = $hash;
+                            //$this->get('monolog')->addInfo($curriculumItemRelUser->getDescription());
+                            //error_log("aaa ->".$curriculumItemRelUser->getDescription());
+                            continue;
+                        } else {
+                            $this->createAction($curriculumItemRelUser);
+                        }
+                    } else {
+                        $this->createAction($curriculumItemRelUser);
+                    }
+                    $counter++;
+                }
+
+                if (!empty($alreadyAdded)) {
+                    foreach ($alreadyAdded as $hash => $item) {
+                        if (!in_array($hash, $parsed)) {
+                            $this->removeEntity($item->getId());
+                        }
+                    }
+                }
+            }
+        }
+        $response = null;
+        return new Response($response, 200, array());
+    }
+
+    /**
+    *
+    * @Route("/{id}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Method({"GET"})
+    */
+    public function readAction($id)
+    {
+        return parent::readAction($id);
+    }
+
+    /**
+    * @Route("/add")
+    * @Method({"GET"})
+    */
+    public function addAction()
+    {
+        return parent::addAction();
+    }
+
+    /**
+    *
+    * @Route("/{id}/edit", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Method({"GET"})
+    */
+    public function editAction($id)
+    {
+        return parent::editAction($id);
+    }
+
+    /**
+    *
+    * @Route("/{id}/delete", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Method({"GET"})
+    */
+    public function deleteAction($id)
+    {
+        return parent::deleteAction($id);
+    }
+
+    protected function getControllerAlias()
+    {
+        return 'curriculum_user.controller';
+    }
+
+    protected function generateDefaultCrudRoutes()
+    {
+        $routes = parent::generateDefaultCrudRoutes();
+        $routes['add_from_category'] = 'curriculum_item.controller:addFromCategoryAction';
+        //$routes['add_items'] = 'curriculum_item.controller:addItemsAction';
+
+        return $routes ;
+    }
+
+    /**
+    * {@inheritdoc}
+    */
+    protected function getTemplatePath()
+    {
+        return 'tool/curriculum/user/';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getRepository()
+    {
+        return $this->get('orm.em')->getRepository('Entity\CurriculumItemRelUser');
+    }
+
+    private function getCurriculumCategoryRepository()
+    {
+        return $this->get('orm.em')->getRepository('Entity\CurriculumCategory');
+    }
+
+    private function getCurriculumItemRepository()
+    {
+        return $this->get('orm.em')->getRepository('Entity\CurriculumItem');
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getNewEntity()
+    {
+        return new Entity\CurriculumItemRelUser();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getFormType()
+    {
+        return new CurriculumItemRelUserCollectionType();
+    }
+}

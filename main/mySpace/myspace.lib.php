@@ -1216,8 +1216,9 @@ class MySpace {
 	 * Get data for courses list in sortable with pagination
 	 * @return array
 	 */
-	static function get_course_data($from, $number_of_items, $column, $direction) {
-		global $courses, $csv_content, $charset, $session_id;
+	static function get_course_data($from, $number_of_items, $column, $direction, $courses, $csv_content, $charset)
+    {
+        $session_id = api_get_session_id();
 
 		// definition database tables
 		$tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -1225,7 +1226,7 @@ class MySpace {
 		$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 		$course_data = array();
-		$courseList = array_keys($courses);
+		$courseList = isset($courses) ? array_keys($courses) : array();
 
 		foreach($courseList as &$code) {
 			$code = "'$code'";
@@ -1236,13 +1237,19 @@ class MySpace {
 				FROM $tbl_course course
 				WHERE course.id IN (".implode(',',$courseList).")";
 
-		if (!in_array($direction, array('ASC','DESC'))) $direction = 'ASC';
+		if (!in_array($direction, array('ASC','DESC')))
+            $direction = 'ASC';
 
 	    $column = intval($column);
 	    $from = intval($from);
 	    $number_of_items = intval($number_of_items);
-		$sql .= " ORDER BY $column $direction ";
-		$sql .= " LIMIT $from,$number_of_items";
+        if (!empty($column)) {
+		    $sql .= " ORDER BY $column $direction ";
+        }
+
+        if (!empty($from)) {
+		    $sql .= " LIMIT $from,$number_of_items";
+        }
 
 		$res = Database::query($sql);
 		while ($row_course = Database::fetch_array($res, 'ASSOC')) {
@@ -1259,7 +1266,9 @@ class MySpace {
 			}
 			$rs = Database::query($sql);
 			$users = array();
-			while ($row = Database::fetch_array($rs)) { $users[] = $row['user_id']; }
+			while ($row = Database::fetch_array($rs)) {
+                $users[] = $row['user_id'];
+            }
 
 			if (count($users) > 0) {
 				$nb_students_in_course = count($users);

@@ -6,11 +6,15 @@ namespace ChamiloLMS\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\NoResultException;
 use Silex\Application;
+
+use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
  * Each entity controller must extends this class.
@@ -46,21 +50,43 @@ abstract class BaseController
     abstract protected function getNewEntity();
 
     /**
+     * Returns a new Form Type
+     * @return AbstractType
+     */
+    abstract protected function getFormType();
+
+    /**
+     * Returns the template path
+     * */
+    abstract protected function getTemplatePath();
+
+    /**
+    * Returns the controller alias
+     * @example for QuestionScoreController: question_score_controller
+    */
+    abstract protected function getControllerAlias();
+
+    /**
+     * Array with links
+     * @return array
+     */
+    abstract protected function generateLinks();
+
+    /**
      *
      * @return Request
      */
-    public function getRequest()
+    protected function getRequest()
     {
         return $this->get('request');
     }
 
-    public function redirect($redirect)
+    protected function redirect($redirect)
     {
         return $this->app->redirect($redirect);
     }
 
-
-    public function createNotFoundException($message = 'Not Found', \Exception $previous = null)
+    protected function createNotFoundException($message = 'Not Found', \Exception $previous = null)
     {
         return $this->app->abort(404, $message);
     }
@@ -69,20 +95,179 @@ abstract class BaseController
      * @param string $item
      * @return mixed
      */
-    public function get($item)
+    protected function get($item)
     {
         return $this->app[$item];
     }
 
-    public function getManager()
+    protected function getManager()
     {
         return $this->app['orm.em'];
     }
 
+    /**
+     * Converts an array of URL to absolute URLs using the url_generator service
+     * @param string $label
+     * @param array
+     * @return mixed
+     */
+    protected function createUrl($label, $params = array())
+    {
+        $links = $this->generateLinks();
+        if (isset($links) && is_array($links) && isset($links[$label])) {
+            $url = $this->get('url_generator')->generate($links[$label], $params);
+            return $url;
+        }
+        return $url = $this->get('url_generator')->generate($links['list_link']);
+    }
+
+
+    // CRUD default actions
+
+    /**
+     * @Route("/")
+     * @Method({"GET"})
+     */
+    public function listingAction()
+    {
+        $items = $this->listAction('array');
+        $template = $this->get('template');
+        $template->assign('items', $items);
+        $template->assign('links', $this->generateLinks());
+        $response = $template->render_template($this->getTemplatePath().'list.tpl');
+        return new Response($response, 200, array());
+    }
+
+    /**
+     *
+     * @Route("/add")
+     * @Method({"GET"})
+     */
+    public function addAction()
+    {
+        $request = $this->getRequest();
+        $form = $this->get('form.factory')->create($this->getFormType());
+
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $item = $form->getData();
+                $this->createAction($item);
+                $this->get('session')->getFlashBag()->add('success', "Added");
+                $url = $this->createUrl('list_link');
+                return $this->redirect($url);
+            }
+        }
+
+        $template = $this->get('template');
+        $template->assign('links', $this->generateLinks());
+        $template->assign('form', $form->createView());
+        $response = $template->render_template($this->getTemplatePath().'add.tpl');
+        return new Response($response, 200, array());
+    }
+
+    /**
+     *
+     * @Route("/{id}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+     * @Method({"GET"})
+     */
+    public function readAction($id)
+    {
+        $template = $this->get('template');
+        $template->assign('links', $this->generateLinks());
+        return $this->readEntity($id);
+    }
+
+    /**
+     *
+     * @Route("/{id}/edit", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+     * @Method({"GET"})
+     */
+    public function editAction($id)
+    {
+        $repo = $this->getRepository();
+        $request = $this->getRequest();
+        $item = $repo->findOneById($id);
+
+        if ($item) {
+            $form = $this->get('form.factory')->create($this->getFormType(), $item);
+
+            if ($request->getMethod() == 'POST') {
+                $form->bind($this->getRequest());
+
+                if ($form->isValid()) {
+                    $data = $form->getData();
+                    $this->updateAction($data);
+                    $this->get('session')->getFlashBag()->add('success', "Updated");
+                    $url = $this->createUrl('list_link');
+                    return $this->redirect($url);
+                }
+            }
+
+            $template = $this->get('template');
+            $template->assign('item', $item);
+            $template->assign('form', $form->createView());
+            $template->assign('links', $this->generateLinks());
+            $response = $template->render_template($this->getTemplatePath().'edit.tpl');
+            return new Response($response, 200, array());
+        } else {
+            return $this->createNotFoundException();
+        }
+    }
+
+    /**
+     *
+     * @Route("/{id/delete}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+     * @Method({"GET"})
+     */
+    public function deleteAction($id)
+    {
+        $result = $this->removeEntity($id);
+        if ($result) {
+            $url = $this->createUrl('list_link');
+            $this->get('session')->getFlashBag()->add('success', "Deleted");
+
+            return $this->redirect($url);
+        }
+    }
+
+
+    /**
+     * Base "read" action.
+     *
+     * @param int $id
+     * @return JsonResponse|NotFoundHttpException
+     */
+    protected function readEntity($id)
+    {
+        $entityInstance = $this->getEntityForJson($id);
+        if (false === $entityInstance) {
+            return $this->createNotFoundException();
+        }
+
+        return new JsonResponse($entityInstance);
+    }
+
+    /**
+     * Base "delete" action.
+     * @param int id
+     * @return JsonResponse|NotFoundHttpException
+     */
+    protected function removeEntity($id)
+    {
+        $object = $this->getEntity($id);
+        if (false === $object) {
+            return $this->createNotFoundException();
+        }
+        $em = $this->getManager();
+        $em->remove($object);
+        $em->flush();
+        return new JsonResponse(array());
+    }
 
     /**
      * Base "list" action.
-     * @param format
+     * @param string format
      * @return JsonResponse
      */
     protected function listAction($format = 'json')
@@ -90,6 +275,10 @@ abstract class BaseController
         return $this->getList($format);
     }
 
+    /**
+     * @param string $format
+     * @return JsonResponse
+     */
     protected function getList($format = 'json')
     {
         $list = $this->getRepository()
@@ -104,23 +293,30 @@ abstract class BaseController
                 return $list;
                 break;
         }
-
     }
 
     /**
      * Base "read" action.
      *
      * @param int $id
+     * @param string format
+     *
      * @return JsonResponse|NotFoundHttpException
      */
-    protected function readAction($id)
+    protected function readActionByFormat($id, $format = 'array')
     {
         $entityInstance = $this->getEntityForJson($id);
         if (false === $entityInstance) {
             return $this->createNotFoundException();
         }
+        switch($format) {
+            case 'json':
+                return new JsonResponse($entityInstance);
+            case 'array':
+                return $entityInstance;
+        }
 
-        return new JsonResponse($entityInstance);
+        return $entityInstance;
     }
 
     /**
@@ -166,7 +362,6 @@ abstract class BaseController
         return new JsonResponse($this->getEntityForJson($object->getId()));
     }
 
-
     /**
      * Base "upload" action.
      * @param int id
@@ -207,23 +402,6 @@ abstract class BaseController
         return new JsonResponse($this->getEntityForJson($object->getId()));
     }
 
-    /**
-     * Base "delete" action.
-     *
-     * @return JsonResponse|NotFoundHttpException
-     */
-    protected function deleteAction($id)
-    {
-        $object = $this->getEntity($id);
-        if (false === $object) {
-            return $this->createNotFoundException();
-        }
-        $em = $this->getManager();
-        $em->remove($object);
-        $em->flush();
-
-        return new JsonResponse(array());
-    }
 
     /**
      * Returns an entity from its ID, or FALSE in case of error.
@@ -304,5 +482,4 @@ abstract class BaseController
 
         return $entity;
     }
-
 }

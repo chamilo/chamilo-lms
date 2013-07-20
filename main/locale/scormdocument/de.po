@@ -1,0 +1,139 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8 \n"
+
+msgid "langChapter"
+msgstr "Kapitel"
+
+msgid "langDocumentList"
+msgstr "Liste aller Dokumente"
+
+msgid "langOrganisationList"
+msgstr "Inhaltsverzeichnis"
+
+msgid "langEditTOC"
+msgstr "Inhaltsverzeichnis bearbeiten"
+
+msgid "langEditDocument"
+msgstr "Bearbeiten"
+
+msgid "langCreateDocument"
+msgstr "Dokument erstellen"
+
+msgid "langMissingImagesDetected"
+msgstr "Fehlende Bilder entdeckt"
+
+msgid "langPublish"
+msgstr "Veröffentlicht"
+
+msgid "langScormcontentstudent"
+msgstr "Dies ist ein Kurs im SCORM Format. Zum Abspielen, bitte hier klicken: <input type=button name=scormbutton value='Abspielen !' onclick='openscorm()'>"
+
+msgid "langScormcontent"
+msgstr "Dies sind SCORM-Inhalte<br><input type=button name=scormbutton value='Inhalte aufrufen!' onclick='openscorm()'>"
+
+msgid "langDownloadAndZipEnd"
+msgstr " Zip-Dateien hochgeladen und entpackt"
+
+msgid "langZipNoPhp"
+msgstr "Die Zip-Datei darf keine PHP-Dateien enthalten"
+
+msgid "langGroupForumLink"
+msgstr "Gruppenforum"
+
+msgid "langGroupSpace"
+msgstr "Gruppenbereich"
+
+msgid "langNotScormContent"
+msgstr "Dies ist keine SCORM-ZIP-Datei!"
+
+msgid "langNoText"
+msgstr "Bitte geben Sie die Text/HTML-Inhalte ein"
+
+msgid "langNoFileName"
+msgstr "Bitte geben Sie den Dateinamen an"
+
+msgid "langMaxFileSize"
+msgstr "Max. Dateigröße ist"
+
+msgid "langFileName"
+msgstr "Dateiname"
+
+msgid "langFileError"
+msgstr "Der Datei-Upload ist nicht möglich."
+
+msgid "langDown"
+msgstr "Nach unten"
+
+msgid "langViMod"
+msgstr "Sichtbarkeit geändert"
+
+msgid "langAddComment"
+msgstr "Kommentar hinzufügen/ändern"
+
+msgid "langImpossible"
+msgstr "Vorgang nicht möglich"
+
+msgid "langNewDir"
+msgstr "Name des neuen Verzeichnisses"
+
+msgid "langTo"
+msgstr "nach"
+
+msgid "langNoSpace"
+msgstr "Der Upload ist fehlgeschlagen. Sie haben nicht genug Platz im Verzeichnis"
+
+msgid "langDownloadEnd"
+msgstr "Der Upload ist abgeschlossen"
+
+msgid "langFileExists"
+msgstr "Aktion fehlgeschlagen.<br>Eine Datei mit dem gleichen Namen exisitiert bereits"
+
+msgid "langDocCopied"
+msgstr "Dokument kopiert"
+
+msgid "langDocDeleted"
+msgstr "Dokument gelöscht"
+
+msgid "langElRen"
+msgstr "Element umbenannt"
+
+msgid "langDirMv"
+msgstr "Verzeichnis verschoben"
+
+msgid "langComMod"
+msgstr "Kommentar verändert"
+
+msgid "langRename"
+msgstr "Umbenennen"
+
+msgid "langCopy"
+msgstr "Kurs kopieren"
+
+msgid "langNameDir"
+msgstr "Name des neuen Verzeichnisses"
+
+msgid "langDownloadFile"
+msgstr "Dateien zum Server hochladen"
+
+msgid "langRoot"
+msgstr "Wurzelverzeichnis"
+
+msgid "langBuilder"
+msgstr "Lernpfad Werkzeug"
+
+msgid "langScormBuilder"
+msgstr "Lernpfad-Werkzeug für SCORM-unterstützte Kurse"
+
+msgid "langCreateDoc"
+msgstr "Dokument erstellen"
+
+msgid "langOrganiseDocuments"
+msgstr "Inhaltsverzeichnis erstellen"
+
+msgid "langUncompress"
+msgstr "gepackte Dateien (im Portal) entpacken"
+
+msgid "ExportShort"
+msgstr "SCORM-Export"
+

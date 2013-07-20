@@ -190,7 +190,14 @@ class ModelAjaxController
             case 'get_questions':
                 $categoryId = $request->get('categoryId');
                 $exerciseId = $request->get('exerciseId');
+                //$courseId = null; //$request->get('courseId');
                 $courseId = $request->get('courseId');
+
+                // Question manager can view all questions
+                if (api_is_question_manager()) {
+                    $courseId  = null;
+                }
+
                 $count = \Question::getQuestions(
                     $app,
                     $categoryId,
@@ -315,7 +322,8 @@ class ModelAjaxController
 
         //3. Calculating first, end, etc
         $total_pages = 0;
-        if ($count > 0) {
+
+        if ((int)$count > 0) {
             if (!empty($limit)) {
                 $total_pages = ceil($count/$limit);
             }

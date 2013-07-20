@@ -9,12 +9,38 @@ use Doctrine\ORM\NoResultException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
+
 /**
  * Class UserRepository
  * @package Entity\Repository
  */
 class UserRepository extends EntityRepository implements UserProviderInterface
 {
+
+    /**
+     * @param string $keyword
+     * @return mixed
+     */
+    public function searchUserByKeyword($keyword)
+    {
+        $qb = $this->createQueryBuilder('a');
+
+        //Selecting user info
+        $qb->select('DISTINCT b');
+
+        $qb->from('Entity\User', 'b');
+
+        //Selecting courses for users
+        //$qb->innerJoin('u.courses', 'c');
+
+        //@todo check app settings
+        $qb->add('orderBy', 'b.firstname ASC');
+        $qb->where('b.firstname LIKE :keyword OR b.lastname LIKE :keyword ');
+        $qb->setParameter('keyword', "%$keyword%");
+        $q = $qb->getQuery();
+
+        return $q->execute();
+    }
 
     /**
      * @param string $username
@@ -32,7 +58,6 @@ class UserRepository extends EntityRepository implements UserProviderInterface
 
         try {
             $user = $q->getSingleResult();
-            // api_format_user_from_obj($user);
         } catch (NoResultException $e) {
             throw new UsernameNotFoundException(
                 sprintf('Unable to find an active admin User identified by "%s".', $username),

@@ -71,12 +71,22 @@ CREATE TABLE users_roles (
   PRIMARY KEY(user_id, role_id)
 );
 
+-- Admin
+INSERT INTO users_roles VALUES (1, 1);
+
 INSERT INTO roles (name, role) VALUES('Admin', 'ROLE_ADMIN');
 INSERT INTO roles (name, role) VALUES('Teacher', 'ROLE_TEACHER');
 INSERT INTO roles (name, role) VALUES('Student', 'ROLE_STUDENT');
 INSERT INTO roles (name, role) VALUES('Anonymous', 'ROLE_ANONYMOUS');
 INSERT INTO roles (name, role) VALUES('RRHH', 'ROLE_RRHH');
 INSERT INTO roles (name, role) VALUES('Question Manager', 'ROLE_QUESTION_MANAGER');
+
+INSERT INTO roles (name, role) VALUES('Jury president', 'ROLE_JURY_PRESIDENT');
+INSERT INTO roles (name, role) VALUES('Jury member', 'ROLE_JURY_MEMBER');
+INSERT INTO roles (name, role) VALUES('Jury substitute', 'ROLE_JURY_SUBSTITUTE');
+INSERT INTO roles (name, role) VALUES('Director', 'ROLE_DIRECTOR');
+INSERT INTO roles (name, role) VALUES('Session Manager', 'ROLE_SESSION_MANAGER');
+
 
 --
 -- Table structure for table admin
@@ -254,6 +264,8 @@ CREATE TABLE IF NOT EXISTS course_field_options (
     option_value text,
     option_display_text varchar(255),
     option_order int,
+    priority int default NULL,
+    priority_message varchar(255) default NULL,
     tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY (id)
 );
@@ -588,6 +600,8 @@ CREATE TABLE IF NOT EXISTS session_field_options(
     option_value text,
     option_display_text varchar(255),
     option_order int,
+    priority int default NULL,
+    priority_message varchar(255) default NULL,
     tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY (id)
 );
@@ -1515,6 +1529,8 @@ CREATE TABLE IF NOT EXISTS user_field_options (
     option_value	text,
     option_display_text varchar(64),
     option_order int,
+    priority int default NULL,
+    priority_message varchar(255) default NULL,
     tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY (id)
 );
@@ -3075,7 +3091,14 @@ CREATE TABLE branch_sync(
   admin_phone varchar(250) default '',
   last_sync_trans_id bigint unsigned default 0,
   last_sync_trans_date datetime,
-  last_sync_type char(20) default 'full'
+  last_sync_type char(20) default 'full',
+  ssl_pub_key varchar(250) default '',
+  branch_type varchar(250) default null,
+  lft int unsigned,
+  rgt int unsigned,
+  lvl int unsigned,
+  root int unsigned,
+  parent_id int unsigned
 );
 INSERT INTO branch_sync (id, access_url_id, branch_name, branch_ip) VALUES (1, 1, 'Local', '127.0.0.1');
 
@@ -3110,11 +3133,32 @@ CREATE TABLE branch_transaction (
     PRIMARY KEY (id, transaction_id, branch_id)
 );
 
-
 CREATE TABLE IF NOT EXISTS branch_transaction_data (
     id bigint unsigned NOT NULL PRIMARY KEY,
     data text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
 );
+
+
+CREATE TABLE jury (
+  id int NOT NULL AUTO_INCREMENT,
+  name varchar(255) DEFAULT NULL,
+  branch_id int NULL,
+  opening_date datetime DEFAULT NULL,
+  closure_date datetime DEFAULT NULL,
+  opening_user_id int DEFAULT NULL,
+  closure_user_id int DEFAULT NULL,
+  exercise_id int NOT NULL,
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE jury_members (
+    id int NOT NULL AUTO_INCREMENT,
+    user_id int,
+    role_id int,
+    jury_id int,
+    PRIMARY KEY(id)
+);
+
 
 -- Stats database
 
@@ -3238,6 +3282,8 @@ ALTER TABLE track_e_exercices ADD exe_duration int UNSIGNED NOT NULL default 0;
 ALTER TABLE track_e_exercices ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT  NOT NULL DEFAULT '';
+ALTER TABLE track_e_exercices ADD COLUMN jury_score float(6,2);
+ALTER TABLE track_e_exercices ADD COLUMN jury_id INT DEFAULT NULL;
 
 DROP TABLE IF EXISTS track_e_attempt;
 CREATE TABLE track_e_attempt (
@@ -3508,6 +3554,8 @@ CREATE TABLE IF NOT EXISTS question_field_options(
     option_value text,
     option_display_text varchar(255),
     option_order int,
+    priority int default NULL,
+    priority_message varchar(255) default NULL,
     tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY (id)
 );
@@ -3544,5 +3592,76 @@ CREATE TABLE ext_log_entries (
   PRIMARY KEY (id)
 ) DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS question_score_name;
+CREATE TABLE question_score_name (
+  id int NOT NULL AUTO_INCREMENT,
+  score varchar(255) DEFAULT NULL,
+  name varchar(255) DEFAULT NULL,
+  description TEXT DEFAULT NULL,
+  question_score_id INT NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS question_score;
+CREATE TABLE question_score (
+  id int NOT NULL AUTO_INCREMENT,
+  name varchar(255) DEFAULT NULL,
+  PRIMARY KEY (id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS track_attempt_jury;
+CREATE TABLE track_attempt_jury(
+    id int NOT NULL AUTO_INCREMENT,
+    exe_id INT,
+    question_id INT,
+    score float(6,2),
+    jury_member_id INT,
+    question_score_name_id INT,
+    PRIMARY KEY (id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS curriculum_category;
+CREATE TABLE curriculum_category (
+    id int unsigned not null primary key AUTO_INCREMENT,
+    c_id int unsigned, -- the course ID (not setting as "not null" because at some point in the future it might be considered course-agnostic). This is only necessary for the item with parent_id = 0
+    session_id int unsigned, -- the session ID (not setting as "not null" because at some point in the future it might be considered session-agnostic). This is only necessary for the item with parent_id = 0
+    title varchar(255),
+    max_score int unsigned not null default 1,
+    min_chars tinyint unsigned not null default 0, -- the minimum number of characters an item field in this category requires to be considered a valid submission (and generate score),
+    parent_id int unsigned DEFAULT NULL,
+    lvl int default NULL,
+    lft int default NULL,
+    rgt int default NULL,
+    root int default NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS curriculum_item;
+CREATE TABLE curriculum_item (
+    id int unsigned not null primary key AUTO_INCREMENT,
+    category_id int unsigned not null, -- references the curriculum category's id
+    title varchar(255),
+    score int unsigned not null default 1, -- how much points are assigned for filling this item
+    max_repeat tinyint unsigned not null default 1 -- how many items of this type are allowed
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS curriculum_item_rel_user;
+CREATE TABLE curriculum_item_rel_user (
+    id int unsigned not null primary key AUTO_INCREMENT,
+    item_id int unsigned not null, -- the id of the item
+    user_id int unsigned not null,
+    order_id tinyint unsigned not null default 0, -- given there is a item_max_repeat field, this allows us to store more than one answer per item.id per user
+    description varchar(255) not null default '' -- the text given as "answer" by the student
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS curriculum_rel_user;
+CREATE TABLE curriculum_rel_user (
+    id int unsigned not null primary key AUTO_INCREMENT,
+    category_id int unsigned not null, -- references c_curriculum_category.id where parent_id = 0 (one root curriculum)
+    user_id int unsigned not null,
+    score int unsigned not null default 0 -- the temporary total score given to the user for the information he completed
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.026' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.029' WHERE variable = 'chamilo_database_version';

@@ -73,12 +73,14 @@ class PageController
         $show_create_link = false;
         $show_course_link = false;
 
-        if ((api_get_setting('allow_users_to_create_courses') == 'false' && !api_is_platform_admin()) || api_is_student(
-        )
-        ) {
+        $display_add_course_link = false;
+
+        if (api_get_setting('allow_users_to_create_courses') == 'false') {
             $display_add_course_link = false;
         } else {
+            if (api_is_teacher()) {
             $display_add_course_link = true;
+            }
         }
 
         if ($display_add_course_link) {
@@ -132,7 +134,7 @@ class PageController
                     );
                 }
             } else {
-                $my_account_content .= array(
+                $my_account_content[] = array(
                     'href'  => api_get_path(WEB_CODE_PATH).'dashboard/index.php',
                     'title' => get_lang('Dashboard')
                 );

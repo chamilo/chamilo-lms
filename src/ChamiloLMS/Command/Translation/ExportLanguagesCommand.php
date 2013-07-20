@@ -17,7 +17,7 @@ use Symfony\Component\Finder\Finder;
 class ExportLanguagesCommand extends Command
 {
     /**
-     *
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -50,7 +50,9 @@ class ExportLanguagesCommand extends Command
     {
         /** @var \Silex\Application $app */
         $app = $this->getApplication()->getSilexApplication();
-        $tempPath = $app['paths']['sys_temp_path'].'langs';
+        //$tempPath = $app['paths']['sys_temp_path'].'langs';
+
+        $tempPath = $app['paths']['sys_root'].'main/locale';
 
         if (!is_dir($tempPath)) {
             mkdir($tempPath);

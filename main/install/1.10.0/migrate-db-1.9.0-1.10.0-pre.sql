@@ -326,6 +326,14 @@ ALTER TABLE branch_transaction_log ADD message MEDIUMTEXT NOT NULL;
 -- Remove orig_id in favor of item_id and delete info field.
 ALTER TABLE branch_transaction DROP orig_id, DROP info;
 
+-- Add missing fields to brach_sync table.
+ALTER TABLE branch_sync ADD ssl_pub_key varchar(250) default '';
+ALTER TABLE branch_sync ADD lft int unsigned;
+ALTER TABLE branch_sync ADD rgt int unsigned;
+ALTER TABLE branch_sync ADD lvl int unsigned;
+ALTER TABLE branch_sync ADD root int unsigned;
+ALTER TABLE branch_sync ADD parent_id int unsigned;
+ALTER TABLE branch_sync ADD branch_type varchar(250) default null;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.028' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.029' WHERE variable = 'chamilo_database_version';

@@ -279,6 +279,7 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
 
         // Checking the course access
         $is_allowed_in_course = false;
+        $_course =& $courseInfo; //fix issue in code rewriting: TODO: do it properly, renaming $_course where appropriate
 
         if (isset($_course)) {
             switch ($_course['visibility']) {

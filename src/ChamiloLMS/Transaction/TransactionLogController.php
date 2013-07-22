@@ -285,6 +285,14 @@ class TransactionLogController
             'fail' => array(),
         );
 
+        if (!is_writable($filepath)) {
+            error_log(sprintf('%s::%s(): Unable to write the requested file "%s".', __CLASS__, __METHOD__, $filepath));
+            foreach ($transactions as $transaction) {
+                $exported_ids['fail'][] = $transaction->id;
+            }
+            return $exported_ids;
+        }
+
         foreach ($transactions as $transaction) {
             try {
                 $transaction->export();
@@ -296,7 +304,6 @@ class TransactionLogController
             }
         }
 
-        // @todo: Verify access before writing.
         file_put_contents($filepath, json_encode($transactions_to_persist));
 
         return $exported_ids;

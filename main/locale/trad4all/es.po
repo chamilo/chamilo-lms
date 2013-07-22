@@ -141,7 +141,7 @@ msgid "langTodo"
 msgstr "Sugerencias"
 
 msgid "UserName"
-msgstr "Nombre de usuario"
+msgstr "DNI"
 
 msgid "lang_show_hide"
 msgstr "Mostrar / ocultar"

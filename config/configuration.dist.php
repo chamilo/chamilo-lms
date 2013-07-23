@@ -40,7 +40,7 @@ $_configuration['main_database'] = '{DATABASE_MAIN}';
 // URL to the root of your Chamilo installation, e.g.: http://www.mychamilo.com/
 $_configuration['root_web']    = '{ROOT_WEB}';
 
-/** Chamilo will automatically manage all this paths */
+/** Chamilo will automatically manage the following paths */
 
 // Path to the webroot of system, example: /var/www/chamilo
 //$_configuration['root_sys'] = '{ROOT_SYS}';

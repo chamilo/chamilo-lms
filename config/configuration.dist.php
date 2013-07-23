@@ -38,6 +38,7 @@ $_configuration['main_database'] = '{DATABASE_MAIN}';
 
 /** Directory settings */
 // URL to the root of your Chamilo installation, e.g.: http://www.mychamilo.com/
+// Comment this line if you want to enable multiple URLs
 $_configuration['root_web']    = '{ROOT_WEB}';
 
 /** Chamilo will automatically manage the following paths */

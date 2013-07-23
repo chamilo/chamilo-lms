@@ -530,8 +530,10 @@ $app->before(
         // Setting access_url id (multiple url feature)
 
         if (api_get_multiple_access_url()) {
-            Session::write('url_id', $app['configuration']['access_url']);
-            Session::write('url_info', api_get_current_access_url_info($app['configuration']['access_url']));
+            //for some reason $app['configuration'] doesn't work. Use $_config
+            global $_configuration;
+            Session::write('url_id', $_configuration['access_url']);
+            Session::write('url_info', api_get_current_access_url_info($_configuration['access_url']));
         } else {
             Session::write('url_id', 1);
         }

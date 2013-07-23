@@ -5937,8 +5937,8 @@ function api_get_course_url($course_code = null, $session_id = null) {
  *
  * */
 function api_get_multiple_access_url() {
-    global $_configuration;
-    if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
+    global $app;
+    if (isset($app['configuration']['multiple_access_urls']) && $app['configuration']['multiple_access_urls']) {
         return true;
     }
     return false;

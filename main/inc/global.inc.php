@@ -4,7 +4,7 @@
 /**
  * This is a bootstrap file that loads all Chamilo dependencies including:
  *
- * - Chamilo settings in main/inc/configuration.php or main/inc/configuration.yml
+ * - Chamilo settings in main/inc/conf/configuration.php or config/configuration.yml or config/configuration.php (in this order, using what if finds first)
  * - Database (Using Doctrine DBAL/ORM)
  * - Templates (Using Twig)
  * - Loading language files (Using Symfony component)

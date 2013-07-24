@@ -212,7 +212,7 @@ class Testcategory
         //Only admins can delete global categories
         $courseId = $category->getCId();
         //Only admins can delete global categories
-        if (empty($courseId) && !api_is_platform_admin() || api_is_question_manager()) {
+        if (empty($courseId) && !(api_is_platform_admin() || api_is_question_manager())) {
             return false;
         }
 

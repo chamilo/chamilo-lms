@@ -292,6 +292,7 @@ define('LINK_FORUM_THREAD',			5);
 //define('LINK_WORK',6);
 define('LINK_ATTENDANCE',			7);
 define('LINK_SURVEY',				8);
+define('LINK_HOTPOTATOES',			9);
 
 //From display.lib.php
 

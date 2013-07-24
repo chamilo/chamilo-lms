@@ -4110,3 +4110,6 @@ msgstr "Comité"
 msgid "CourseSessionBlock"
 msgstr "Cursos y sesiones"
 
+msgid "ManageQuestionCategories"
+msgstr "Gestionar categorías globales de preguntas"
+

@@ -12,6 +12,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console;
 use Symfony\Component\Yaml\Dumper;
 
+// Include language management lib
+require_once __DIR__.'/../../../../main/inc/lib/internationalization.lib.php';
+
 /**
  * Class InstallCommand
  */

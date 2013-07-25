@@ -378,4 +378,71 @@ class TransactionLogController
             throw new TransactionFileSigningException(sprintf('Unable sign the transaction file "%s" with data in the PKCS#12 certificate store "%s".', $transactions_file, $p12_certificate_store_file));
         }
     }
+
+    /**
+     * Verify signature and extracts contained data into a file.
+     *
+     * @param string $signed_transactions_file
+     *   The path to the file that will contain the exported transactions
+     *   signed.
+     * @param string $ca_certificate_file
+     *   The path to the file that contains the CA certificate trusted for the
+     *   verification process.
+     * @param string $signer_certificates_file
+     *   The path to the file that will contain the certificates of the entities
+     *   that signed the file.
+     * @param string $unsigned_transactions_file
+     *   The path to the file that will contain the extracted information from
+     *   the signed file.
+     *
+     * @throws TransactionFileUnsigningException
+     *   When there was a problem during the unsigning process.
+     */
+    public function unsignTransactionFile($signed_transactions_file, $ca_certificate_file, $signer_certificates_file, $unsigned_transactions_file) {
+        $signed_transactions_file = realpath($signed_transactions_file);
+        $ca_certificate_file = realpath($ca_certificate_file);
+
+        // Filesystem verifications.
+        if (!is_readable($signed_transactions_file)) {
+            throw new TransactionFileUnsigningException(sprintf('Unable to read signed transaction file "%s".', $signed_transactions_file));
+        }
+        if (!is_readable($ca_certificate_file)) {
+            throw new TransactionFileUnsigningException(sprintf('Unable to read CA certificate file "%s".', $ca_certificate_file));
+        }
+        if (!is_writable($signer_certificates_file)) {
+            throw new TransactionFileSigningException(sprintf('Unable to write signer certificates to file "%s".', $signer_certificates_file));
+        }
+        if (!is_writable($unsigned_transactions_file)) {
+            throw new TransactionFileSigningException(sprintf('Unable to write original information to file "%s".', $unsigned_transactions_file));
+        }
+
+        // Unfortunately we cannot NULL out unwanted parameters. That's why we
+        // specify $ca_certificate_file as the extracerts parameter. Although
+        // it's not clean, this doesn't compromise security: The CA certificate
+        // can never be a valid intermediate certificate as it is self-signed
+        // already.
+        $sign_flags = self::getSignFlags();
+        $sign_verification = openssl_pkcs7_verify($signed_transactions_file, $sign_flags, $signer_certificates_file, array($ca_certificate_file), $ca_certificate_file, $unsigned_transactions_file);
+        if ($sign_verification === TRUE) {
+            // @todo Process signature owner certificates to identify origin.
+        } elseif ($sign_verification === FALSE) {
+            throw new TransactionFileSigningException(sprintf('Signed file "%s" failed verification.', $signed_transactions_file));
+        } else { // -1
+            throw new TransactionFileSigningException(sprintf('There was an error during the signature verification for signed file "%s".', $signed_transactions_file));
+        }
+    }
+
+    /**
+     * Identify the branch associated with the certificate passed.
+     *
+     * @param string $signer_certificates_file
+     *   The path to the file that contains the certificates of the entities
+     *   that signed the file.
+     *
+     * @return int
+     *   The branch ID corresponding to the signer or FALSE if not found.
+     */
+    public function identifyBranchSigner($signer_certificates_file) {
+        // @fixme Implement.
+    }
 }

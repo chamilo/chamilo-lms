@@ -310,7 +310,9 @@ class TransactionLogController
     }
 
     /**
-     * Signs a transaction file with a PKCS#12 certificate including data.
+     * Signs and writes a transaction file with a PKCS#12 certificate.
+     *
+     * It includes the data inside the transaction file.
      *
      * @param string $transactions_file
      *   The path to the file containing the exported transactions.
@@ -319,25 +321,22 @@ class TransactionLogController
      * @param string $p12_passphrase
      *   Passphrase to open the PKCS#12 certificate store.
      * @param string $signed_transactions_file
-     *   The path to the file containing the exported transactions.
+     *   The path to the file that will contain the exported transactions signed.
      *
-     * @return boolean
-     *   Success(TRUE) or failure(FALSE) status.
+     * @throws TransactionFileSigningException
+     *   When there was a problem during the signing process.
      */
     private function signTransactionFile($transactions_file, $p12_certificate_store_file, $p12_passphrase, $signed_transactions_file)
     {
         // Filesystem verifications.
         if (!is_readable($transactions_file)) {
-            error_log(sprintf('%s::%s(): Unable to read transaction file "%s".', __CLASS__, __METHOD__, $transactions_file));
-            return FALSE;
+            throw new TransactionFileSigningException(sprintf('Unable to read transaction file "%s".', $transactions_file));
         }
         if (!is_readable($p12_certificate_store_file)) {
-            error_log(sprintf('%s::%s(): Unable to read certificate store file "%s".', __CLASS__, __METHOD__, $p12_certificate_store_file));
-            return FALSE;
+            throw new TransactionFileSigningException(sprintf('Unable to read certificate store file "%s".', $p12_certificate_store_file));
         }
         if (!is_writable($signed_transactions_file)) {
-            error_log(sprintf('%s::%s(): Unable to write file "%s".', __CLASS__, __METHOD__, $signed_transactions_file));
-            return FALSE;
+            throw new TransactionFileSigningException(sprintf('Unable to write file "%s".', $signed_transactions_file));
         }
 
         // Read and parse the PKCS#12 file.
@@ -346,16 +345,13 @@ class TransactionLogController
         fclose($p12_handle);
         $p12_store = array();
         if (!openssl_pkcs12_read($p12_buffer, $p12_store, $p12_passphrase)) {
-            error_log(sprintf('%s::%s(): Unable to decrypt PKCS#12 certificate store "%s".', __CLASS__, __METHOD__, $p12_certificate_store_file));
-            return FALSE;
+            throw new TransactionFileSigningException(sprintf('Unable to decrypt PKCS#12 certificate store "%s".', $p12_certificate_store_file));
         }
         if (!$certificate_handle = openssl_x509_read($p12_store['cert'])) {
-            error_log(sprintf('%s::%s(): Unable read the certificate inside the PKCS#12 certificate store "%s".', __CLASS__, __METHOD__, $p12_certificate_store_file));
-            return FALSE;
+            throw new TransactionFileSigningException(sprintf('Unable read the certificate inside the PKCS#12 certificate store "%s".', $p12_certificate_store_file));
         }
         if (!$private_key = openssl_get_privatekey($p12_store['pkey'])) {
-            error_log(sprintf('%s::%s(): Unable read the private key inside the PKCS#12 certificate store "%s".', __CLASS__, __METHOD__, $p12_certificate_store_file));
-            return FALSE;
+            throw new TransactionFileSigningException(sprintf('Unable read the private key inside the PKCS#12 certificate store "%s".', $p12_certificate_store_file));
         }
 
         // Do signing.
@@ -363,10 +359,7 @@ class TransactionLogController
         $data_to_sign = realpath($transactions_file);
         $sign_flags = PKCS7_BINARY & PKCS7_DETACHED;
         if (!openssl_pkcs7_sign($data_to_sign, $signed_transactions_file, $certificate_handle, $private_key, $headers , $sign_flags)) {
-            error_log(sprintf('%s::%s(): Unable sign the transaction file "%s" with data in the PKCS#12 certificate store "%s".', __CLASS__, __METHOD__, $transactions_file, $p12_certificate_store_file));
-            return FALSE;
+            throw new TransactionFileSigningException(sprintf('Unable sign the transaction file "%s" with data in the PKCS#12 certificate store "%s".', $transactions_file, $p12_certificate_store_file));
         }
-
-        return TRUE;
     }
 }

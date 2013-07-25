@@ -24,6 +24,10 @@ class TransactionLogController
      * A local place to store the branch transaction data table name.
      */
     protected $log_table;
+    /**
+     * Static cache for sign flags.
+     */
+    protected static $signFlags;
 
     public function __construct()
     {
@@ -310,6 +314,18 @@ class TransactionLogController
     }
 
     /**
+     * Retrieves the sign flags for PKCS7 functions.
+     *
+     * Cannot initialize with a logical AND, so use this as workaround.
+     */
+    protected static function getSignFlags() {
+        if (isset(self::$signFlags)) {
+            self::$signFlags = PKCS7_BINARY & PKCS7_DETACHED;
+        }
+        return self::$signFlags;
+    }
+
+    /**
      * Signs and writes a transaction file with a PKCS#12 certificate.
      *
      * It includes the data inside the transaction file.
@@ -357,7 +373,7 @@ class TransactionLogController
         // Do signing.
         $headers = array();
         $data_to_sign = realpath($transactions_file);
-        $sign_flags = PKCS7_BINARY & PKCS7_DETACHED;
+        $sign_flags = self::getSignFlags();
         if (!openssl_pkcs7_sign($data_to_sign, $signed_transactions_file, $certificate_handle, $private_key, $headers , $sign_flags)) {
             throw new TransactionFileSigningException(sprintf('Unable sign the transaction file "%s" with data in the PKCS#12 certificate store "%s".', $transactions_file, $p12_certificate_store_file));
         }

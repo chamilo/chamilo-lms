@@ -4111,3 +4111,11 @@ msgstr "Courses and sessions"
 msgid "ManageQuestionCategories"
 msgstr "Manage global questions categories"
 
+msgid "YouAreReg"
+msgstr "Your are registered to"
+
+msgid "WithTheFollowingSettings"
+msgstr "with the following settings"
+
+msgid "Formula"
+msgstr "Best regards"

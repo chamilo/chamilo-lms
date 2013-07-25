@@ -4113,3 +4113,11 @@ msgstr "Cursos y sesiones"
 msgid "ManageQuestionCategories"
 msgstr "Gestionar categorías globales de preguntas"
 
+msgid "YouAreReg"
+msgstr "Está registrado a"
+
+msgid "WithTheFollowingSettings"
+msgstr "con los siguientes parámetros"
+
+msgid "Formula"
+msgstr "Saludos cordiales"

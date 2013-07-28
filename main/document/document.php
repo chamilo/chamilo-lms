@@ -47,11 +47,11 @@ require_once $lib_path.'fileManage.lib.php';
 api_protect_course_script(true);
 
 //erase temp nanogons' audio, image edit
-if (isset($_SESSION['temp_audio_nanogong']) && !empty($_SESSION['temp_audio_nanogong'])) {
+if (isset($_SESSION['temp_audio_nanogong']) && !empty($_SESSION['temp_audio_nanogong']) && is_file($_SESSION['temp_audio_nanogong'])) {
     unlink($_SESSION['temp_audio_nanogong']);
 }
 
-if (isset($_SESSION['temp_realpath_image']) && !empty($_SESSION['temp_realpath_image'])) {
+if (isset($_SESSION['temp_realpath_image']) && !empty($_SESSION['temp_realpath_image']) && is_file($_SESSION['temp_realpath_image'])) {
     unlink($_SESSION['temp_realpath_image']);
 }
 

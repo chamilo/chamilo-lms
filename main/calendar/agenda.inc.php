@@ -24,8 +24,8 @@ function setFocus(){
 }
 $(function() {
     setFocus();
-    $("#selected_form_id_search").change(function() {
-        var temp ="&user_id="+$("#selected_form_id_search").val();
+    $("#select_form_id_search").change(function() {
+        var temp ="&user_id="+$("#select_form_id_search").val();
         var position =String(window.location).indexOf("&user");
         var url_length = String(window.location).length;
         var url = String(window.location).substring(0,position)+temp;
@@ -1018,7 +1018,7 @@ function show_to($filter = 0, $id = null)
 
 function construct_to_select_form($group_list = null, $user_list = null, $filter = 0, $id = null) {
     $result = '<form class="form-search" style="margin-top:3px;">';
-    $result .= '<select data-placeholder= "'.get_lang('FilterAll').'" name="sel_to" class="chzn-select" id="selected_form_id_search">';
+    $result .= '<select data-placeholder= "'.get_lang('FilterAll').'" name="sel_to" class="chzn-select" id="select_form_id_search">';
 
     // adding the groups to the select form
     $result .= '<option value=""></option>';
@@ -1578,7 +1578,7 @@ function display_courseadmin_links($filter = 0)
     }
     $form = null;
     if (!isset($_GET['action'])) {
-        $form = show_to($filter, 'selected_form_id_search');
+        $form = show_to($filter, 'select_form_id_search');
         $actions = "<a href='agenda_js.php?type=course&".api_get_cidreq()."'>".Display::return_icon('calendar_na.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";
     } else {
         $actions = "<a href='agenda_js.php?type=course&".api_get_cidreq()."'>".Display::return_icon('calendar.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";

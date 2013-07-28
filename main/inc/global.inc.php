@@ -137,12 +137,17 @@ if (!$_configuration['db_host']) {
 if (!empty($_configuration['multiple_access_urls'])) {
     $_configuration['access_url'] = 1;
     $access_urls = api_get_access_urls();
-
+    
+    $root_rel = api_get_self();
+    $root_rel = substr($root_rel,1);
+    $pos = strpos($root_rel,'/');
+    $root_rel = substr($root_rel,0,$pos);
     $protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
-    $request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
-    $request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
-
-    foreach ($access_urls as & $details) {
+    $request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/'.$root_rel.'/';
+    $request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/'.$root_rel.'/';
+    
+    
+    foreach ($access_urls as $details) {
         if ($request_url1 == $details['url'] or $request_url2 == $details['url']) {
             $_configuration['access_url'] = $details['id'];
         }

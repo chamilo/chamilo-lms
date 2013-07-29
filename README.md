@@ -1,7 +1,7 @@
 Chamilo LMS
 =============
 
-It's a next generation learning content management system focusing on ease of use, re-usibality, collaboration and sharing.
+A next generation Learning Content Management system focused on ease of use, collaboration and sharing.
 See documentation/index.html for a complete overview of Chamilo.
 
 Installation

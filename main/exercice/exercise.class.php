@@ -136,6 +136,12 @@ class Exercise
         } else {
             $course_info = api_get_course_info();
         }
+
+        /* Make sure that we have a valid $course_info. */
+        if (!isset($course_info['real_id'])) {
+            throw new Exception('Could not get a valid $course_info with the provided $course_id: ' . $course_id . '.');
+        }
+
         $this->course_id = $course_info['real_id'];
         $this->course = $course_info;
         $this->fastEdition = api_get_course_setting('allow_fast_exercise_edition') == 1 ? true : false;

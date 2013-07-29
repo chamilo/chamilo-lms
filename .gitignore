@@ -7,6 +7,7 @@ config/events.conf.php
 config/mail.conf.php
 config/portfolio.conf.php
 config/profile.conf.php
+tests/unittests/db.conf.php
 
 temp/*
 !temp/twig/PLACEHOLDER
@@ -29,6 +30,8 @@ logs/*
 *.orig
 nbproject/*
 vendor/.git
+
+.*.swp
 
 #Doctrine entities generation tests
 

@@ -266,7 +266,7 @@ class SessionManager {
 
 		$query = "$select FROM $tbl_session s
 				LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
-				INNER JOIN $tbl_user u ON s.id_coach = u.user_id
+				LEFT JOIN $tbl_user u ON s.id_coach = u.user_id
                 $where $limit";
 
 		global $_configuration;

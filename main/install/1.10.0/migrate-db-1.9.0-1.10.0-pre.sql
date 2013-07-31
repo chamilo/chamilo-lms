@@ -335,5 +335,8 @@ ALTER TABLE branch_sync ADD root int unsigned;
 ALTER TABLE branch_sync ADD parent_id int unsigned;
 ALTER TABLE branch_sync ADD branch_type varchar(250) default null;
 
+ALTER TABLE c_quiz_question ADD INDEX idx_c_q_qst_cpt (c_id, parent_id, type);
+ALTER TABLE c_quiz_question_rel_category ADD INDEX idx_c_q_qst_r_cat_qc(question_id, c_id);
+
 -- Do not move this
 UPDATE settings_current SET selected_value = '1.10.0.029' WHERE variable = 'chamilo_database_version';

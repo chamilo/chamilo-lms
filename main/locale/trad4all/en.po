@@ -4128,3 +4128,9 @@ msgstr "Sign in"
 
 msgid "Username"
 msgstr "Username"
+
+msgid "AllowFastExerciseEdition"
+msgstr "Enable exercises' fast edition mode"
+
+msgid "ExerciseAutoLaunch"
+msgstr "Auto-launch for exercises"

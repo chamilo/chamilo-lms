@@ -4130,3 +4130,9 @@ msgstr "Ingresar"
 
 msgid "Username"
 msgstr "DNI"
+
+msgid "AllowFastExerciseEdition"
+msgstr "Activar modo de edición rápida de exámenes"
+
+msgid "ExerciseAutoLaunch"
+msgstr "Modo de lanzamiento automático de exámenes"

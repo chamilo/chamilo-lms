@@ -382,7 +382,7 @@ class AnnouncementManager
         $aid = self::get_last_announcement_id($course_id)+1;
 
         // store in the table announcement
-        $sql = "tINSERT INTO $tbl_announcement SET
+        $sql = "INSERT INTO $tbl_announcement SET
                 c_id 			= '$course_id',
                 id                      = $aid,
                 content 		= '$newContent',
@@ -1193,8 +1193,7 @@ class AnnouncementManager
      */
     public static function sent_to($tool, $id)
     {
-        global $tbl_item_property;
-
+        $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tool = Database::escape_string($tool);
         $id = intval($id);
 

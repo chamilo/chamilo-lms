@@ -4122,3 +4122,9 @@ msgstr "Best regards"
 
 msgid "TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise"
 msgstr "The exercise's auto-launch setting is 'on'. Students will be redirected to a specific exercise when entering this course. You are a teacher, so this feature is disabled for you."
+
+msgid "SignIn"
+msgstr "Sign in"
+
+msgid "Username"
+msgstr "Username"

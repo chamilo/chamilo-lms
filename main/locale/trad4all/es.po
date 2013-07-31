@@ -4124,3 +4124,9 @@ msgstr "Saludos cordiales"
 
 msgid "TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise"
 msgstr "La funcionalidad de lanzamiento automático de los ejercicios está activada. Los estudiantes estarán enviados directamente a la evaluación correspondiente al entrar en este espacio"
+
+msgid "SignIn"
+msgstr "Ingresar"
+
+msgid "Username"
+msgstr "DNI"

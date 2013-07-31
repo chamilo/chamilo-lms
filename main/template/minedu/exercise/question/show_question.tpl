@@ -1,1 +1,1 @@
-{% extends app.template_style ~ "/../default/question/show_question.tpl" %}
+{% extends app.template_style ~ "/../default/exercise/question/show_question.tpl" %}

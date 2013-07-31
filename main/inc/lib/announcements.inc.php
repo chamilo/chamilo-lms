@@ -7,8 +7,8 @@
  */
 
 /**
+ * Announcements handler class
  * @author jmontoya
- *
  */
 class AnnouncementManager
 {
@@ -332,12 +332,12 @@ class AnnouncementManager
 
         // store in the table announcement
         $sql = "INSERT INTO $tbl_announcement SET
-				c_id 			= '$course_id',
-				content 		= '$newContent',
-				title 			= '$emailTitle',
+                c_id 			= '$course_id',
+                content 		= '$newContent',
+                title 			= '$emailTitle',
                 end_date        = '$end_date',
-				display_order 	= '$order',
-				session_id		= ".api_get_session_id();
+                display_order 	= '$order',
+                session_id		= ".api_get_session_id();
         $result = Database::query($sql);
         if ($result === false) {
             return false;

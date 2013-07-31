@@ -410,10 +410,10 @@ class TransactionLogController
             throw new TransactionFileUnsigningException(sprintf('Unable to read CA certificate file "%s".', $ca_certificate_file));
         }
         if (!is_writable($signer_certificates_file)) {
-            throw new TransactionFileSigningException(sprintf('Unable to write signer certificates to file "%s".', $signer_certificates_file));
+            throw new TransactionFileUnsigningException(sprintf('Unable to write signer certificates to file "%s".', $signer_certificates_file));
         }
         if (!is_writable($unsigned_transactions_file)) {
-            throw new TransactionFileSigningException(sprintf('Unable to write original information to file "%s".', $unsigned_transactions_file));
+            throw new TransactionFileUnsigningException(sprintf('Unable to write original information to file "%s".', $unsigned_transactions_file));
         }
 
         // Unfortunately we cannot NULL out unwanted parameters. That's why we
@@ -426,9 +426,9 @@ class TransactionLogController
         if ($sign_verification === TRUE) {
             // @todo Process signature owner certificates to identify origin.
         } elseif ($sign_verification === FALSE) {
-            throw new TransactionFileSigningException(sprintf('Signed file "%s" failed verification.', $signed_transactions_file));
+            throw new TransactionFileUnsigningException(sprintf('Signed file "%s" failed verification.', $signed_transactions_file));
         } else { // -1
-            throw new TransactionFileSigningException(sprintf('There was an error during the signature verification for signed file "%s".', $signed_transactions_file));
+            throw new TransactionFileUnsigningException(sprintf('There was an error during the signature verification for signed file "%s".', $signed_transactions_file));
         }
     }
 

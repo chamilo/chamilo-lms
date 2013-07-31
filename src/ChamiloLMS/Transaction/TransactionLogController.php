@@ -395,6 +395,9 @@ class TransactionLogController
      *   The path to the file that will contain the extracted information from
      *   the signed file.
      *
+     * @return int
+     *   The branch id on valid identification.
+     *
      * @throws TransactionFileUnsigningException
      *   When there was a problem during the unsigning process.
      */
@@ -424,7 +427,7 @@ class TransactionLogController
         $sign_flags = self::getSignFlags();
         $sign_verification = openssl_pkcs7_verify($signed_transactions_file, $sign_flags, $signer_certificates_file, array($ca_certificate_file), $ca_certificate_file, $unsigned_transactions_file);
         if ($sign_verification === TRUE) {
-            // @todo Process signature owner certificates to identify origin.
+            return $this->identifyBranchSigner($signer_certificates_file);
         } elseif ($sign_verification === FALSE) {
             throw new TransactionFileUnsigningException(sprintf('Signed file "%s" failed verification.', $signed_transactions_file));
         } else { // -1
@@ -441,8 +444,80 @@ class TransactionLogController
      *
      * @return int
      *   The branch ID corresponding to the signer or FALSE if not found.
+     *
+     * @throws TransactionFileUnsigningException
+     *   When there was a problem during the unsigning process.
      */
     public function identifyBranchSigner($signer_certificates_file) {
         // @fixme Implement.
+    }
+
+    /**
+     * Verify the a signer certificate with an expected branch certificate.
+     *
+     * @param string $signer_certificates_file
+     *   The path to the file that contains the certificates of the entities
+     *   that signed the file.
+     * @param int $branch_id
+     *   The expected branch id to compare the certificate.
+     * @param string $p12_passphrase
+     *   Passphrase to open the PKCS#12 certificate store associated with the
+     *   branch with id $branch_id.
+     *
+     * @return boolean
+     *   true on success, false on failure.
+     *
+     * @throws TransactionFileUnsigningException
+     *   When there was a problem during the identification process.
+     */
+    public function verifyBranchSigner($signer_certificates_file, $branch_id, $p12_passphrase) {
+        // Filesystem verifications.
+        if (!is_readable($signer_certificates_file)) {
+            throw new TransactionFileUnsigningException(sprintf('Unable to read signer certificate file "%s".', $signer_certificates_file));
+        }
+
+        // Read and parse the signer X.509 file.
+        $x509_handle = fopen($signer_certificates_file, 'r');
+        $x509_buffer = fread($x509_handle, filesize($signer_certificates_file));
+        fclose($x509_handle);
+        if (!$signer_x509_certificate = openssl_x509_read($x509_buffer)) {
+            throw new TransactionFileUnsigningException(sprintf('Unable read correctly the contents of the signer certificate file "%s".', $signer_certificates_file));
+        }
+        // Generate X.509 format for the signer certificate.
+        $signer_x509_string = null;
+        if (!openssl_x509_export($signer_x509_certificate, $signer_x509_string)) {
+            throw new TransactionFileUnsigningException(sprintf('Unable to export X.509 format for signer certificate file "%s".', $signer_certificates_file));
+        }
+
+        // Retrieve branch certificate file path.
+        $branch_sync_table = Database::get_main_table(TABLE_BRANCH_SYNC);
+        $results = Database::select('ssl_pub_key', $branch_sync_table, array('where' => array('id = ?' => array($branch_id))));
+        if (empty($results)) {
+            throw new TransactionFileUnsigningException(sprintf('Cannot retrieve p12 file associated with branch id "%d".', $branch_id));
+        }
+        $branch_row = array_shift($results);
+        $p12_certificate_store_file = $branch_row['ssl_pub_key'];
+        // Read and parse the branch PKCS#12 file.
+        if (!is_readable($p12_certificate_store_file)) {
+            throw new TransactionFileUnsigningException(sprintf('Unable to read expected branch (id = "%d") PKCS#12 certificate store "%s".', $branch_id, $signer_certificates_file));
+        }
+        $p12_handle = fopen($p12_certificate_store_file, 'r');
+        $p12_buffer = fread($p12_handle, filesize($p12_certificate_store_file));
+        fclose($p12_handle);
+        $p12_store = array();
+        if (!openssl_pkcs12_read($p12_buffer, $p12_store, $p12_passphrase)) {
+            throw new TransactionFileUnsigningException(sprintf('Unable to decrypt expected branch (id = "%d") PKCS#12 certificate store "%s".', $branch_id, $p12_certificate_store_file));
+        }
+        if (!$certificate_handle = openssl_x509_read($p12_store['cert'])) {
+            throw new TransactionFileUnsigningException(sprintf('Unable read the expected branch (id = "%d") certificate inside the PKCS#12 certificate store "%s".', $branch_id, $p12_certificate_store_file));
+        }
+        // Generate X.509 format for expected certificate.
+        $expected_x509_string = null;
+        if (!openssl_x509_export($certificate_handle, $expected_x509_string)) {
+            throw new TransactionFileUnsigningException(sprintf('Unable to export X.509 format for expected branch (id = "%d") certificate inside the PKCS#12 certificate store "%s".', $branch_id, $p12_certificate_store_file));
+        }
+
+        // Finally, compare exported strings.
+        return $signer_x509_string == $expected_x509_string;
     }
 }

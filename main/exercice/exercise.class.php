@@ -5750,9 +5750,9 @@ class Exercise
         $html .= Display::label(sprintf(get_lang('AnsweredZ'),'a'), 'success').'<br />'.Display::label(sprintf(get_lang('UnansweredZ'),'b')).'<br />'.
                  $reviewAnswerLabel.$currentAnswerLabel.
                  '<br /><br />'.
-                 sprintf(get_lang('AnsweredXYZ'),$numa,'a','c').'<br />'.
-                 sprintf(get_lang('UnansweredXYZ'),$numu,'b').'<br />'.
-                 sprintf(get_lang('ToReviewXYZ'),$numr,'c').'<br />'.
+                 sprintf(get_lang('AnsweredXYZ'),str_pad($numa,2,'0',STR_PAD_LEFT),'a','c').'<br />'.
+                 sprintf(get_lang('UnansweredXYZ'),str_pad($numu,2,'0',STR_PAD_LEFT),'b').'<br />'.
+                 sprintf(get_lang('ToReviewXYZ'),str_pad($numr,2,'0',STR_PAD_LEFT),'c').'<br />'.
                  '</div>';
 
         $conditions = array();

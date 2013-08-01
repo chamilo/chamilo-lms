@@ -4136,3 +4136,6 @@ msgstr "Activar modo de edición rápida de exámenes"
 
 msgid "ExerciseAutoLaunch"
 msgstr "Modo de lanzamiento automático de exámenes"
+
+msgid "ReturnToExerciseList"
+msgstr "Regresar a la lista de exámenes"

@@ -4134,3 +4134,6 @@ msgstr "Enable exercises' fast edition mode"
 
 msgid "ExerciseAutoLaunch"
 msgstr "Auto-launch for exercises"
+
+msgid "ReturnToExerciseList"
+msgstr "Return to exercises list"

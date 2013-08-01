@@ -53,7 +53,7 @@ class ExerciseController extends CommonController
                 'id' => $newId,
                 'exerciseId' => $exerciseId
             );
-            $url = $app['url_generator']->generate('exercise_question_show', $params);
+            $url = $app['url_generator']->generate('exercise_question_pool', $params);
             return $app->redirect($url);
         }
     }
@@ -84,7 +84,7 @@ class ExerciseController extends CommonController
                 'id' => $questionId,
                 'exerciseId' => $exerciseId
             );
-            $url = $app['url_generator']->generate('exercise_question_show', $params);
+            $url = $app['url_generator']->generate('exercise_question_pool', $params);
             return $app->redirect($url);
         }
     }

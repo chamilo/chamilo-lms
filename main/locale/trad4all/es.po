@@ -4139,3 +4139,24 @@ msgstr "Modo de lanzamiento automático de exámenes"
 
 msgid "ReturnToExerciseList"
 msgstr "Regresar a la lista de exámenes"
+
+msgid "ToReviewZ"
+msgstr "(%s) Por revisar"
+
+msgid "CurrentQuestionZ"
+msgstr "(%s) Pregunta actual"
+
+msgid "AnsweredZ"
+msgstr "(%s) Respondida"
+
+msgid "UnansweredZ"
+msgstr "(%s) Sin responder"
+
+msgid "AnsweredXYZ"
+msgstr "%s respondidas (%s)+(%s)"
+
+msgid "UnansweredXYZ"
+msgstr "%s sin responder (%s)"
+
+msgid "ToReviewXYZ"
+msgstr "%s por revisar (%s)"

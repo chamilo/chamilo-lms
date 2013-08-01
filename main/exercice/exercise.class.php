@@ -4639,7 +4639,6 @@ class Exercise
                 return false;
             }
 
-            //if (0) {
             if (!empty($this->emailNotificationTemplate)) {
                 $twig = new \Twig_Environment(new \Twig_Loader_String());
                 $twig->addFilter('var_dump', new Twig_Filter_Function('var_dump'));
@@ -5738,15 +5737,23 @@ class Exercise
 
         $reviewAnswerLabel = null;
         if ($this->review_answers) {
-            $reviewAnswerLabel = Display::label(get_lang('ToReview'), 'warning').'<br />';
+            $reviewAnswerLabel = Display::label(sprintf(get_lang('ToReviewZ'),'c'), 'warning').'<br />';
         }
         $currentAnswerLabel = null;
         if (!empty($current_question)) {
-            $currentAnswerLabel = Display::label(get_lang('CurrentQuestion'), 'info');
+            $currentAnswerLabel = Display::label(sprintf(get_lang('CurrentQuestionZ'),'d'), 'info');
         }
-        $html .= Display::label(get_lang('Answered'), 'success').'<br />'.Display::label(get_lang('Unanswered')).'<br />'.
-                 $reviewAnswerLabel.$currentAnswerLabel;
-        $html .= '</div>';
+        // Count the number of answered, unanswered and 'for review' questions - see BT#6523
+        $numa = count(array_flip(array_merge($exercise_result,$remindList)));
+        $numu = count($questionListFlatten)-$numa;
+        $numr = count($remindList);
+        $html .= Display::label(sprintf(get_lang('AnsweredZ'),'a'), 'success').'<br />'.Display::label(sprintf(get_lang('UnansweredZ'),'b')).'<br />'.
+                 $reviewAnswerLabel.$currentAnswerLabel.
+                 '<br /><br />'.
+                 sprintf(get_lang('AnsweredXYZ'),$numa,'a','c').'<br />'.
+                 sprintf(get_lang('UnansweredXYZ'),$numu,'b').'<br />'.
+                 sprintf(get_lang('ToReviewXYZ'),$numr,'c').'<br />'.
+                 '</div>';
 
         $conditions = array();
         $conditions[] = array("class" => 'answered', 'items' => $exercise_result);
@@ -6600,5 +6607,4 @@ class Exercise
         return $categoriesInExercise;
 
     }
-
 }

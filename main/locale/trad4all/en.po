@@ -4137,3 +4137,24 @@ msgstr "Auto-launch for exercises"
 
 msgid "ReturnToExerciseList"
 msgstr "Return to exercises list"
+
+msgid "ToReviewZ"
+msgstr "(%s) To review"
+
+msgid "CurrentQuestionZ"
+msgstr "(%s) Current question"
+
+msgid "AnsweredZ"
+msgstr "(%s) Answered"
+
+msgid "UnansweredZ"
+msgstr "(%s) Unanswered"
+
+msgid "AnsweredXYZ"
+msgstr "%s answered (%s)+(%s)"
+
+msgid "UnansweredXYZ"
+msgstr "%s unanswered (%s)"
+
+msgid "ToReviewXYZ"
+msgstr "%s to review (%s)"

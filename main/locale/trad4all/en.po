@@ -4158,3 +4158,9 @@ msgstr "%s unanswered (%s)"
 
 msgid "ToReviewXYZ"
 msgstr "%s to review (%s)"
+
+msgid "BreadcrumbNavigationDisplayTitle"
+msgstr "Breadcrumb navigation"
+
+msgid "BreadcrumbNavigationDisplayComment"
+msgstr "Show or hide the breadcrumb navigation, the one appearing just below the main navigation tabs. It is highly recommended to have this navigation shown to users, as this allows them to locate their current position and navigate to previous pages easily. Sometimes, however, it might be necessary to hide it (for example in the case of exam platforms) to avoid users navigating to pages they should not see."

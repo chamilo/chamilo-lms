@@ -329,7 +329,7 @@ switch ($action) {
                 error_log("type = $type ");
                 error_log("choice = ".print_r($choice, 1)." ");
                 error_log("hot_spot_coordinates = ".print_r($hot_spot_coordinates, 1));
-                error_log("remind_list = ".print_r($remind_list));
+                error_log("remind_list = ".print_r($remind_list, 1));
             }
 
             // Exercise information.

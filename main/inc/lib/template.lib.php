@@ -635,7 +635,7 @@ class Template
         }
         $this->assign('profile_link', $profile_link);
 
-        //Message link
+        // Message link.
         $message_link = null;
         if (api_get_setting('allow_message_tool') == 'true') {
             $message_link = '<a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">'.get_lang('Inbox').'</a>';
@@ -670,6 +670,10 @@ class Template
      */
     public function loadBreadcrumbToTemplate()
     {
+        if (api_get_setting('breadcrumb_navigation_display') == 'false') {
+            return;
+        }
+
         $breadcrumb = $this->returnBreadcrumb();
         $this->assign('breadcrumb', $breadcrumb);
     }

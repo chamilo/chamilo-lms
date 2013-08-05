@@ -6434,3 +6434,20 @@ function api_get_bytes_memory_limit($mem){
     }
     return $mem;
 }
+
+/**
+ * Finds all the information about a user from username instead of user id
+ * @param $username (string): the username
+ * @return $user_info (array): user_id, lastname, firstname, username, email, ...
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ */
+function api_get_user_info_from_official_code($official_code = '') {
+    if (empty($official_code)) { return false; }
+    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE official_code ='".Database::escape_string($official_code)."'";
+    $result = Database::query($sql);
+    if (Database::num_rows($result) > 0) {
+        $result_array = Database::fetch_array($result);
+        return _api_format_user($result_array);
+    }
+    return false;
+}

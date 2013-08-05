@@ -444,6 +444,13 @@ switch ($action) {
                 // creates a temporary Question object
                 $objQuestionTmp = Question::read($my_question_id, $course_id);
 
+                if ($objExercise->type == ONE_PER_PAGE && $objQuestionTmp->type == UNIQUE_ANSWER) {
+                    if (empty($my_choice)) {
+                        echo 'answer_required';
+                        exit;
+                    }
+                }
+
                 //Getting free choice data
                 if ($objQuestionTmp->type  == FREE_ANSWER && $type == 'all') {
                     $my_choice = isset($_REQUEST['free_choice'][$my_question_id]) && !empty($_REQUEST['free_choice'][$my_question_id])? $_REQUEST['free_choice'][$my_question_id]: null;

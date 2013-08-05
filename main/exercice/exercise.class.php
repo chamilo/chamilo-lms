@@ -6190,8 +6190,8 @@ class Exercise
 
             $attributes = array('id' =>'remind_list['.$questionId.']');
             if (is_array($remindList) && in_array($questionId, $remindList)) {
-                $attributes['checked'] = 1;
-                $remind_highlight = ' remind_highlight ';
+                //$attributes['checked'] = 1;
+                //$remind_highlight = ' remind_highlight ';
             }
 
             // Showing the question

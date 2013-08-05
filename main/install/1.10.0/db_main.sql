@@ -968,6 +968,7 @@ VALUES
 ('template', NULL, 'text', 'stylesheets', 'default', 'DefaultTemplateTitle', 'DefaultTemplateComment', NULL, NULL, 1),
 ('log_transactions','exercise_attempt','checkbox','LogTransactions','false','LogTransactionsForExerciseAttempts','LogTransactionsForExerciseAttemptsComment',NULL,'LogTransactionsForExerciseAttemptsText', 1),
 ('transaction_action_map','exercise_attempt','text','TransactionMapping','a:0:{}','TransactionMapForExerciseAttempts','TransactionMapForExerciseAttemptsComment',NULL,'TransactionMapForExerciseAttemptsText', 1),
+('breadcrumb_navigation_display', NULL, 'radio', 'Platform','true','BreadcrumbNavigationDisplayTitle', 'BreadcrumbNavigationDisplayComment', NULL, NULL, 1),
 ('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.001','DatabaseVersion','', NULL, NULL, 0); -- base value, updated at end of file. Don't change here
 
 UNLOCK TABLES;
@@ -1325,7 +1326,9 @@ VALUES
 ('login_as_allowed','true','Yes'),
 ('login_as_allowed','false','No'),
 ('admins_can_set_users_pass','true','Yes'),
-('admins_can_set_users_pass','false','No');
+('admins_can_set_users_pass','false','No'),
+('breadcrumb_navigation_display', 'true', 'Show'),
+('breadcrumb_navigation_display', 'false', 'Hide');
 
 UNLOCK TABLES;
 

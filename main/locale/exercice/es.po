@@ -1618,3 +1618,16 @@ msgstr "Por revisar"
 
 msgid "Unanswered"
 msgstr "Sin responder"
+
+msgid "NoIWantToTurnBack"
+msgstr "No, quiero regresar"
+
+msgid "YesImSure"
+msgstr "¡Sí, estoy seguro!"
+
+msgid "IfYouContinueYourAnswerWillBeSavedAnyChangeWillBeNotAllowed"
+msgstr "Si continua, sus respuestas serán guardadas y no se permitirá ninguna modificación adicional. ¿Está seguro de querer terminar?"
+
+msgid "SelectAnAnswerToContinue"
+msgstr "Seleccione una repuesta para continuar."
+

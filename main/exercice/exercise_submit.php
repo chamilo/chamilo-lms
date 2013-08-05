@@ -1144,6 +1144,10 @@ if (!empty($error)) {
                 $.ajax({
                     type:"post",
                     async: false,
+                    beforeSend: function ( xhr ) {
+                         $("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('loading1.gif')).'");
+
+                    },
                     url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=save_exercise_by_now",
                     data: "'.$params.'&type=simple&question_id="+question_id+"&"+my_choice+"&"+hotspot+"&"+remind_list,
                     success: function(return_value) {
@@ -1151,8 +1155,10 @@ if (!empty($error)) {
                             $("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('save.png', get_lang('Saved'), array(), ICON_SIZE_SMALL)).'");
                         } else if (return_value == "error") {
                             $("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('error.png', get_lang('Error'), array(), ICON_SIZE_SMALL)).'");
+                        } else if (return_value == "answer_required") {
+                            $("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('warning.png', get_lang('warning'), array(), ICON_SIZE_SMALL).
+                            " ".get_lang('SelectAnAnswerToContinue')).'");
                         } else if (return_value == "one_per_page") {
-
                             var url = "";
                             if ('.$reminder.' == 1 ) {
                                 url = "'.$urlMainExercise.'exercise_reminder.php?'.$params.'&num='.$current_question.'";

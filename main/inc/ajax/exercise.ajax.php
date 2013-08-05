@@ -445,8 +445,15 @@ switch ($action) {
                     error_log("my_choice = ".print_r($my_choice, 1)."");
                 }
 
-               // creates a temporary Question object
+                // Creates a temporary Question object
             	$objQuestionTmp = Question::read($my_question_id, $course_id);
+
+                if ($objExercise->type == ONE_PER_PAGE && $objQuestionTmp->type == UNIQUE_ANSWER) {
+                    if (empty($my_choice)) {
+                        echo 'answer_required';
+                        exit;
+                    }
+                }
 
                 // Getting free choice data.
             	if ($objQuestionTmp->type  == FREE_ANSWER && $type == 'all') {

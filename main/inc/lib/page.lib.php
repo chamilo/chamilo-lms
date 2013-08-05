@@ -399,7 +399,7 @@ class PageController
     {
         // Including the page for the news
         $html          = null;
-        $home          = api_get_path(SYS_PATH).api_get_home_path();
+        $home          = api_get_path(SYS_DATA_PATH).api_get_home_path();
         $home_top_temp = null;
 
         if (!empty($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/', $_GET['include'])) {
@@ -424,7 +424,6 @@ class PageController
                     $home_top_temp = file_get_contents($home.'home_top.html');
                 }
             }
-
             if (empty($home_top_temp) && api_is_platform_admin()) {
                 $home_top_temp = get_lang('PortalHomepageDefaultIntroduction');
             }

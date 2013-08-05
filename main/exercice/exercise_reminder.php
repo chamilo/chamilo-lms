@@ -108,11 +108,39 @@ echo Display::div('', array('id' => 'message'));
 $urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
 
 echo '<script>
+
+        $(function() {
+            $( "#dialog-confirm" ).dialog({
+                autoOpen: false,
+                resizable: false,
+                height:200,
+                width:550,
+                modal: true,
+                buttons: {
+                    "cancel": {
+                        click: function() {
+                            $( this ).dialog( "close" );
+                        },
+                        text : "'.get_lang("NoIWantToTurnBack").'",
+                        class : "btn btn-danger"
+                    },
+                    "ok": {
+                        click : function() {
+                            // Normal inputs
+                            //$( this ).dialog( "close" );
+                            window.location = "'.$urlMainExercise.'exercise_result.php?origin='.$origin.'&exe_id='.$exe_id.'&" + lp_data;
+                        },
+                        text: "'.get_lang("YesImSure").'",
+                        class : "btn btn-success"
+                    }
+                }
+            });
+        });
+
 		lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});
 
         function final_submit() {
-        	// Normal inputs
-        	window.location = "'.$urlMainExercise.'exercise_result.php?origin='.$origin.'&exe_id='.$exe_id.'&" + lp_data;
+            $("#dialog-confirm").dialog("open");
 		}
 
 		function review_questions() {
@@ -275,6 +303,12 @@ echo $objExercise->getProgressPagination(
 
 echo Display::div('', array('class' => 'clear'));
 echo Display::div($exercise_actions, array('class' => 'form-actions'));
+
+echo '<div id="dialog-confirm" title="'.get_lang('Exercise').'" style="display:none">
+  <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+  '.get_lang('IfYouContinueYourAnswerWillBeSavedAnyChangeWillBeNotAllowed').'
+    </p>
+</div>';
 
 if ($origin != 'learnpath') {
     //we are not in learnpath tool

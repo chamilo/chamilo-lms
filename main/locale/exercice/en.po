@@ -1612,3 +1612,11 @@ msgstr "Using categories"
 msgid "OrderedByUser"
 msgstr "Ordered by user"
 
+msgid "NoIWantToTurnBack"
+msgstr "No, quiero regresar"
+
+msgid "YesImSure"
+msgstr "¡Sí, estoy seguro!"
+
+msgid "IfYouContinueYourAnswerWillBeSavedAnyChangeWillBeNotAllowed"
+msgstr "Si continua, sus respuestas serán guardadas y no permitirán ninguna modificación adicional. ¿Está seguro de querer terminar?"

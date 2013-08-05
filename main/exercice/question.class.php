@@ -2316,13 +2316,17 @@ abstract class Question
                         // Copy.
                         $actions .= Display::url(
                             $copyIcon,
-                            $app['url_generator']->generate(
-                                'exercise_copy_question',
-                                array(
-                                    'cidReq' => api_get_course_id(),
-                                    'id_session' => api_get_session_id(),
-                                    'questionId' => $question['iid'],
-                                    'exerciseId' => $exerciseId
+                            'javascript:void(0);',
+                            array(
+                                'onclick' => 'ajaxAction(this);',
+                                'data-url' => $app['url_generator']->generate(
+                                    'exercise_copy_question',
+                                    array(
+                                        'cidReq' => api_get_course_id(),
+                                        'id_session' => api_get_session_id(),
+                                        'questionId' => $question['iid'],
+                                        'exerciseId' => $exerciseId
+                                    )
                                 )
                             )
                         );
@@ -2330,14 +2334,18 @@ abstract class Question
                          // Reuse.
                         $actions .= Display::url(
                             $reuseIcon,
-                            $app['url_generator']->generate(
-                                'exercise_reuse_question',
-                                array(
-                                    'cidReq' => api_get_course_id(),
-                                    'id_session' => api_get_session_id(),
-                                    'questionId' => $question['iid'],
-                                    'exerciseId' => $exerciseId
-                                )
+                            'javascript:void(0);',
+                            array(
+                                'onclick' => 'ajaxAction(this);',
+                                'data-url' => $app['url_generator']->generate(
+                                    'exercise_reuse_question',
+                                    array(
+                                        'cidReq' => api_get_course_id(),
+                                        'id_session' => api_get_session_id(),
+                                        'questionId' => $question['iid'],
+                                        'exerciseId' => $exerciseId
+                                    )
+                                ),
                             )
                         );
                     }

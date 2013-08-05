@@ -3513,7 +3513,7 @@ msgid "SupportedScormContentMakers"
 msgstr "Paquetes Scorm soportados"
 
 msgid "Copy"
-msgstr "Copiar"
+msgstr "Copia"
 
 msgid "EnableStartTime"
 msgstr "Usar tiempo de publicación"
@@ -4160,3 +4160,9 @@ msgstr "%s sin responder (%s)"
 
 msgid "ToReviewXYZ"
 msgstr "%s por revisar (%s)"
+
+msgid "QuestionReused"
+msgstr "Pregunta agregada a la lista de preguntas"
+
+msgid "QuestionCopied"
+msgstr "Pregunta agregada a la lista de preguntas"

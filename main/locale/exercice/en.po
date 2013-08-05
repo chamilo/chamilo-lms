@@ -1619,4 +1619,4 @@ msgid "YesImSure"
 msgstr "¡Sí, estoy seguro!"
 
 msgid "IfYouContinueYourAnswerWillBeSavedAnyChangeWillBeNotAllowed"
-msgstr "Si continua, sus respuestas serán guardadas y no permitirán ninguna modificación adicional. ¿Está seguro de querer terminar?"
+msgstr "Si continua, sus respuestas serán guardadas y no se permitirá ninguna modificación adicional. ¿Está seguro de querer terminar?"

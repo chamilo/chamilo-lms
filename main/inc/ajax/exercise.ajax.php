@@ -302,6 +302,7 @@ switch ($action) {
     	break;
     case 'save_exercise_by_now':
         $course_info = api_get_course_info($course_code);
+
         $course_id = $course_info['real_id'];
         //Use have permissions?
         if (api_is_allowed_to_session_edit()) {
@@ -330,7 +331,7 @@ switch ($action) {
                 error_log("type = $type ");
                 error_log("choice = ".print_r($choice, 1)." ");
                 error_log("hot_spot_coordinates = ".print_r($hot_spot_coordinates, 1));
-                error_log("remind_list = ".print_r($remind_list));
+                error_log("remind_list = ".print_r($remind_list, 1));
             }
 
             // Exercise information.
@@ -340,6 +341,7 @@ switch ($action) {
             // Question info.
             $question_id             = isset($_REQUEST['question_id']) ? intval($_REQUEST['question_id']) : null;
             $question_list           = Session::read('question_list_uncompressed');
+
 
             // If exercise or question is not set then exit.
             if (empty($question_list) || empty($objExercise)) {

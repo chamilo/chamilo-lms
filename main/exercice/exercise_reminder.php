@@ -40,10 +40,10 @@ if ( empty ($exerciseId)) {  $exerciseId = intval($_REQUEST['exerciseId']);}
 if ( empty ($objExercise)) { $objExercise = $_SESSION['objExercise'];}
 
 if (!$objExercise) {
-	//Redirect to the exercise overview
-	//Check if the exe_id exists
-	header("Location: overview.php?exerciseId=".$exerciseId);
-	exit;
+    // Redirect to the exercise overview
+    // Check if the exe_id exists
+    header("Location: ".$urlMainExercise."overview.php?exerciseId=".$exerciseId."&".api_get_cidreq());
+    exit;
 }
 
 $time_control = false;
@@ -54,7 +54,7 @@ if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
 }
 
 if ($time_control) {
-    // Get time left for exipiring time
+    // Get time left for expiring time
     $time_left = api_strtotime($clock_expired_time,'UTC') - time();
     $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
     $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
@@ -107,37 +107,10 @@ echo Display::div('', array('id' => 'message'));
 
 $urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
 
+echo $objExercise->returnWarningJs($urlMainExercise.'exercise_result.php?origin='.$origin.'&exe_id='.$exe_id);
+
 echo '<script>
-
-        $(function() {
-            $( "#dialog-confirm" ).dialog({
-                autoOpen: false,
-                resizable: false,
-                height:200,
-                width:550,
-                modal: true,
-                buttons: {
-                    "cancel": {
-                        click: function() {
-                            $( this ).dialog( "close" );
-                        },
-                        text : "'.get_lang("NoIWantToTurnBack").'",
-                        class : "btn btn-danger"
-                    },
-                    "ok": {
-                        click : function() {
-                            // Normal inputs
-                            //$( this ).dialog( "close" );
-                            window.location = "'.$urlMainExercise.'exercise_result.php?origin='.$origin.'&exe_id='.$exe_id.'&" + lp_data;
-                        },
-                        text: "'.get_lang("YesImSure").'",
-                        class : "btn btn-success"
-                    }
-                }
-            });
-        });
-
-		lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});
+        lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});
 
         function final_submit() {
             $("#dialog-confirm").dialog("open");
@@ -273,11 +246,6 @@ foreach ($question_list as $questionId) {
 $table .= "</div>";
 $table .= "</div>";
 
-/*echo Display::label(get_lang('QuestionWithNoAnswer'), 'warning');
-echo '<hr>';
-echo '<div class="clear"></div><br />';
-echo Display::div($table, array('class' => 'span12'));
-*/
 $exercise_actions = Display::url(get_lang('EndTest'), 'javascript://', array('onclick' => 'final_submit();', 'class' => 'btn btn-warning'));
 
 //$exercise_actions .= '&nbsp;'.Display::url(get_lang('ReviewQuestions'), 'javascript://', array('onclick' => 'review_questions();', 'class' => 'btn btn-success'));
@@ -304,11 +272,7 @@ echo $objExercise->getProgressPagination(
 echo Display::div('', array('class' => 'clear'));
 echo Display::div($exercise_actions, array('class' => 'form-actions'));
 
-echo '<div id="dialog-confirm" title="'.get_lang('Exercise').'" style="display:none">
-  <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
-  '.get_lang('IfYouContinueYourAnswerWillBeSavedAnyChangeWillBeNotAllowed').'
-    </p>
-</div>';
+echo $objExercise->returnWarningHtml();
 
 if ($origin != 'learnpath') {
     //we are not in learnpath tool

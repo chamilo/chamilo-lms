@@ -470,6 +470,10 @@ class UniqueAnswer extends Question
         $question_id = filter_var($question_id, FILTER_SANITIZE_NUMBER_INT);
         $score       = filter_var($score, FILTER_SANITIZE_NUMBER_FLOAT);
         $correct     = filter_var($correct, FILTER_SANITIZE_NUMBER_INT);
+
+        if (empty($question_id) or empty($score) or empty($correct)) {
+            return false;
+        }
         // Get the max position
         $sql      = "SELECT max(position) as max_position FROM $tbl_quiz_answer WHERE question_id = $question_id";
         $rs_max   = Database::query($sql);

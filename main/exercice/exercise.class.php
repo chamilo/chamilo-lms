@@ -2540,7 +2540,8 @@ class Exercise
 
             $original_exercise->copy_exercise_categories($exercise_obj);
 
-            $question_list = $exercise_obj->selectQuestionList(true);
+            //$question_list = $exercise_obj->selectQuestionList(true);
+            $question_list = $exercise_obj->getQuestionListWithMediasUncompressed();
 
             if (!empty($question_list)) {
                 //Question creation

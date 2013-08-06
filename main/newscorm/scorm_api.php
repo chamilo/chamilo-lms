@@ -219,7 +219,7 @@ $(document).ready(function() {
 //oxajax = new XAJAXobject();
 
 // This code was moved inside LMSInitialize()
-if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset') {
+if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
     xajax_start_timer();
 }
 
@@ -294,7 +294,7 @@ function LMSInitialize() {
 
         logit_scorm('LMSInitialize() with params: '+log);
 
-        if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset') {
+	if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
             xajax_start_timer();
         }
 
@@ -1026,7 +1026,7 @@ function addListeners(){
         return;
     }
     //assign event handlers to objects
-    if (olms.lms_lp_type==1 || olms.lms_item_type=='asset'){
+    if (olms.lms_lp_type==1 || olms.lms_item_type=='asset' || olms.lms_item_type == 'document') {
         logit_lms('Chamilo LP or asset',2);
         //if this path is a Chamilo learnpath, then start manual save
         //when something is loaded in there
@@ -1049,7 +1049,7 @@ function lms_save_asset() {
     }
 
     //For scorms do not show stats
-    if (olms.lms_lp_type == 2) {
+    if (olms.lms_lp_type == 2 && olms.lms_lp_item_type != 'document') {
        olms.execute_stats = false;
     }
 
@@ -1057,10 +1057,10 @@ function lms_save_asset() {
         olms.execute_stats = true;
     }
 
-    if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset') {
+    if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
         logit_lms('lms_save_asset');
         logit_lms('execute_stats :'+ olms.execute_stats);
-        xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.session_time, olms.suspend_data, olms.lesson_location, olms.interactions, olms.lms_item_core_exit);
+        xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.session_time, olms.suspend_data, olms.lesson_location, olms.interactions, olms.lms_item_core_exit, olms.lms_item_type);
         if (olms.item_objectives.length>0) {
             xajax_save_objectives(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,olms.lms_item_id,olms.item_objectives);
         }
@@ -1345,12 +1345,12 @@ function switch_item(current_item, next_item){
         if (next_item_type != 'sco' ) {
             //case 1
             logit_lms('Case 1');
-            xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.asset_timer, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit);
+            xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.asset_timer, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit, orig_item_type);
             xajax_switch_item_details(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, next_item);
         } else {
             logit_lms('Case 2');
             //case 2
-            xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.asset_timer, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit);
+            xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.asset_timer, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit, orig_item_type);
             xajax_switch_item_details(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,olms.lms_item_id,next_item);
         }
     } else {
@@ -1397,7 +1397,7 @@ function switch_item(current_item, next_item){
         // new status
         savedata('finish');
     }
-    xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.session_time, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit);
+    xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.session_time, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit, olms.lms_item_type);
     */
 
     olms.execute_stats = false;
@@ -1455,10 +1455,11 @@ function switch_item(current_item, next_item){
     }
 
     <?php } else { ?>
+            console.log('loading '+mysrc+' in frame');
             cont_f.attr("src",mysrc);
     <?php } ?>
 
-    if (olms.lms_lp_type==1 || olms.lms_item_type == 'asset'){
+    if (olms.lms_lp_type==1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
         xajax_start_timer();
     }
 
@@ -1499,7 +1500,7 @@ function switch_item(current_item, next_item){
  * @return  void
  * @uses lp_ajax_save_item.php through an AJAX call
  */
-function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit) {
+function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit, item_type) {
     var params = '';
     params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id;
     params += '&iid='+lms_item_id+'&s='+score+'&max='+max+'&min='+min;
@@ -1507,7 +1508,7 @@ function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score
     params += '&suspend='+suspend_data+'&loc='+lesson_location;
     params += '&core_exit='+lms_item_core_exit;
     //console.info(session_time);
-    if (olms.lms_lp_type == 1) {
+    if (olms.lms_lp_type == 1 || item_type == 'document') {
         logit_lms('xajax_save_item with params:' + params);
         $.ajax({
             type:"POST",
@@ -1675,6 +1676,7 @@ function xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,ite
  * @uses    lp_ajax_switch_item.php
  */
 function xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item) {
+
     var params = {
         'lid': lms_lp_id,
         'uid': lms_user_id,

@@ -5470,7 +5470,7 @@ class Exercise
         $condition = "
             var dialog = $('#dialog-confirm');
 
-            if (dialog.data('question_list') != '') {
+            if (dialog.data('question_list') != '' && dialog.data('question_list') != undefined) {
                 saveQuestionList(dialog.data('question_list'));
             } else {
                 saveNow(dialog.data('question_id'), dialog.data('url_extra'), dialog.data('redirect'));

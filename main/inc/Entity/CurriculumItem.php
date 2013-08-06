@@ -58,6 +58,7 @@ class CurriculumItem
 
     /**
      * @ORM\OneToMany(targetEntity="CurriculumItemRelUser", mappedBy="item")
+     * @ORM\OrderBy({"orderId" = "ASC"})
      */
     private $userItems;
 

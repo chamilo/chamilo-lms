@@ -122,9 +122,13 @@ $app['security.access_rules'] = array(
     // Ministerio routes
 
     array('^/admin/director', 'ROLE_DIRECTOR'),
+    array('^/tool/curriculum/category', 'ROLE_ADMIN'),
+    array('^/tool/curriculum/item', 'ROLE_ADMIN'),
     array('^/tool/.*', array('ROLE_ADMIN','ROLE_TEACHER')),
     array('^/admin/jury_president', 'ROLE_JURY_PRESIDENT'),
-    array('^/admin/jury_member', 'ROLE_JURY_MEMBER') //? jury subsitute??
+    array('^/admin/jury_member', 'ROLE_JURY_MEMBER'), //? jury subsitute??
+
+
     //array('^.*$', 'ROLE_USER'),
 );
 

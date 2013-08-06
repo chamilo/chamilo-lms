@@ -27,8 +27,6 @@ class CurriculumCategoryController extends CommonController
      */
     public function indexAction()
     {
-        //return parent::listingAction();
-
         $options = array(
             'decorate' => true,
             'rootOpen' => '<ul>',

@@ -14,7 +14,7 @@ class CurriculumItemRelUserType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('description', 'text');
+        $builder->add('description', 'text', array('label' => ' ', 'attr' => array('class' => 'span8')));
         $builder->add('item_id', 'hidden', array('attr' => array('value' => $this->itemId)));
         //$builder->add('id', 'hidden');
         //$builder->add('user_id', 'hidden');

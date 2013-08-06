@@ -27,15 +27,15 @@ class CurriculumUserController extends CommonController
      */
     public function indexAction()
     {
-        // $repo = $this->getCurriculumCategoryRepository();
+        $repo = $this->getCurriculumCategoryRepository();
 
         $query = $this->getManager()
             ->createQueryBuilder()
             ->select('node, i')
             ->from('Entity\CurriculumCategory', 'node')
-            ->innerJoin('node.items', 'i')
+            ->leftJoin('node.items', 'i')
             ->leftJoin('i.userItems', 'u')
-            ->orderBy('node.root, node.lft', 'ASC')
+            ->orderBy('node.root, node.lft, node.title', 'ASC')
             ->getQuery();
 
         $categories = $query->getResult();
@@ -52,10 +52,7 @@ class CurriculumUserController extends CommonController
             }
         }
 
-        //$htmlTree = $repo->buildTree($query->getArrayResult(), $options);
-        //$this->get('template')->assign('tree', $htmlTree);
-
-        $this->get('template')->assign('categories', $query->getResult());
+        $this->get('template')->assign('categories', $categories);
         $this->get('template')->assign('links', $this->generateLinks());
         $this->get('template')->assign('form_list', $formList);
 

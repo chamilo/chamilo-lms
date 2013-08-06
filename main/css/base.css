@@ -5319,3 +5319,26 @@ i.size-32.icon-new-work {
 .table td.hover {
     background-color: rgba(255, 153, 0, 0.5);
 }
+
+.trajectory .control-group .btn-danger {
+    margin-top: -10px;
+    margin-left: 5px;
+}
+
+.trajectory ul {
+    margin-left: 0px;
+    list-style-type: none;
+}
+.trajectory .control-group {
+    margin-left: 25px;
+}
+
+.trajectory .control-group label {
+}
+
+
+#saveQuestionBar {
+    width:150px;
+    bottom:140px;
+    position:fixed;
+}

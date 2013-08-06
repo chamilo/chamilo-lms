@@ -46,7 +46,7 @@ class CurriculumItem
     /**
      * @var boolean
      *
-     * @ORM\Column(name="max_repeat", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="max_repeat", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $maxRepeat;
 

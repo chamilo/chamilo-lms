@@ -13,7 +13,6 @@
         {# <a class="btn-remove" data-related="{{ name }}">{{ remove_text }}</a> #}
         {{ form_widget(form) }}
     </div>
-
 {% endmacro %}
 
 {% block content %}
@@ -21,18 +20,27 @@
 <script>
 
 $(function() {
-
+    // When loading the page create delete buttons for inputs:
     $("#list form :input").each(function(index, value) {
         var input = $(this);
         if (input.attr('type') == 'text') {
-            var removeForm = $('<a class="btn btn-danger" href="#">{{ 'Delete' | get_lang }}</a>');
-            input.parent().parent().append(removeForm);
+            var removeForm = $('<a class="btn btn-danger" href="#"><i class="icon-minus-sign icon-large"></i></a>');
+            input.parent().append(removeForm);
             addTagFormDeleteLink(removeForm);
         }
     });
 
+    // When clicking in the add button:
     $('.btn-add[data-target]').live('click', function(event) {
+        var maxRepeat = $(this).attr('data-max');
         var collectionHolder = $('#' + $(this).attr('data-target'));
+
+        var countInput = collectionHolder.find('input:text').length;
+
+        if (countInput > maxRepeat - 1) {
+            return false;
+        }
+
         if (!collectionHolder.attr('data-counter')) {
             collectionHolder.attr('data-counter', collectionHolder.children().length);
         }
@@ -40,15 +48,19 @@ $(function() {
         var form = prototype.replace(/__name__/g, collectionHolder.attr('data-counter'));
 
         collectionHolder.attr('data-counter', Number(collectionHolder.attr('data-counter')) + 1);
-        //collectionHolder.append(form);
-        var removeForm = $('<a class="btn btn-danger" href="#">{{ 'Delete' | get_lang }}</a>');
-        var liItem = $('<li id="'+collectionHolder.attr('data-counter')+'">'+form+'</li>').append(removeForm);
+
+        var removeForm = $('<a class="btn btn-danger" href="#"><i class="icon-minus-sign icon-large"></i></a>');
+
+        var liItem = $('<li id="'+collectionHolder.attr('data-counter')+'">'+form+'</li>');
+        liItem.find('.controls').append(removeForm);
+
         var item = collectionHolder.find('ul').append(liItem);
         addTagFormDeleteLink(removeForm);
         event && event.preventDefault();
     });
-});
 
+    $('#saveQuestionBar').affix();
+});
 
 function addTagFormDeleteLink($tagFormLi) {
     $tagFormLi.on('click', function(e) {
@@ -64,41 +76,61 @@ function save(itemId) {
     return false;
 }
 
+function saveAll() {
+    var items = $("form").find(".items");
+    $(items).each(function(index, value) {
+        var itemId = $(this).attr('id')
+        save(itemId);
+    });
+}
+
 </script>
-    <h2>Trayectoria</h2>
+<div class="row">
+    <div class="span10">
 
-    <p>Explicaciones</p>
-    <p>Las respuestas a este formulario son de carácter jurado.</p>
-    <div id="list">
+        <h2>Trayectoria</h2>
+        <p>Explicaciones</p>
+        <p>Las respuestas a este formulario son de carácter jurado.</p>
+        <div id="list" class="trajectory">
+            {% for subcategory in categories %}
+                {% if subcategory.lvl == 0 %}
+                    <h3> {{ subcategory.title }}</h3>
+                    <hr />
+                {% else %}
+                    <h4> {{ subcategory.title }}</h4>
+                {% endif %}
 
-    {% for subcategory in categories %}
-        <h3> {{ subcategory.title }}</h3>
-        {% for item in subcategory.items %}
-            <h4> {{ item.title }} (item)</h4>
+                {% for item in subcategory.items %}
+                    <h5> {{ item.title }} (item) - Max {{ item.maxRepeat }}</h5>
 
-            {{ form_start(form_list[item.id]) }}
-                <div id="items_{{ item.id }}" class="items" data-prototype="{{ form_widget(form_list[item.id].userItems.vars.prototype)|e }}" >
-                    <ul>
-                    </ul>
-                    {% for widget in form_list[item.id].userItems.children %}
-                        {{ _self.widget_prototype(widget, 'Remove item') }}
-                    {% endfor %}
+                    {{ form_start(form_list[item.id]) }}
+                        <div class="btn-group">
+                            {# form_widget(form_list[item.id].submit) #}
+                            <!-- <a class="btn btn-success" onclick="save('items_{{ item.id }}');" data-target="items_{{ item.id }}">{{ 'Save items' | get_lang }}</a> -->
+                            <a class="btn-add btn btn-primary" data-max="{{ item.maxRepeat }}" data-target="items_{{ item.id }}"><i class="icon-plus-sign icon-large"></i></a>
+                        </div>
 
-                    <div class="btn-group">
-                        {# form_widget(form_list[item.id].submit) #}
-                        <a class="btn btn-success" onclick="save('items_{{ item.id }}');" data-target="items_{{ item.id }}">{{ 'Save item' | get_lang }}</a>
-                        <a class="btn-add btn btn-primary" data-target="items_{{ item.id }}">{{ 'Add' | get_lang }}</a>
-                    </div>
-                </div>
+                        <div id="items_{{ item.id }}" class="items" data-prototype="{{ form_widget(form_list[item.id].userItems.vars.prototype)|e }}" >
+                            {% for widget in form_list[item.id].userItems.children %}
+                                {{ _self.widget_prototype(widget, 'Remove item') }}
+                            {% endfor %}
 
-            {{ form_end(form_list[item.id]) }}
+                            <ul>
+                            </ul>
 
-        {% endfor %}
-    {% endfor %}
 
+                        </div>
+
+                    {{ form_end(form_list[item.id]) }}
+                {% endfor %}
+            {% endfor %}
+        </div>
     </div>
 
-
-
-
+    <div class="span2">
+        <div id="saveQuestionBar" data-spy="affix" data-offset-top="500">
+            <a class="btn btn-success btn-large  btn-block" onclick="saveAll();">{{ 'Save all' | get_lang }}</a>
+        </div>
+    </div>
+</div>
 {% endblock %}

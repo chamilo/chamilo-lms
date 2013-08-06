@@ -27,7 +27,7 @@ class CurriculumUserController extends CommonController
      */
     public function indexAction()
     {
-        $repo = $this->getCurriculumCategoryRepository();
+        // $repo = $this->getCurriculumCategoryRepository();
 
         $query = $this->getManager()
             ->createQueryBuilder()
@@ -72,12 +72,9 @@ class CurriculumUserController extends CommonController
         $token = $this->get('security')->getToken();
         $user = $token->getUser();
 
-
-
-
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
-
+            // @todo move this in a repo!
             if ($form->isValid()) {
                 /** @var Entity\CurriculumItem $item */
                 $postedItem = $form->getData();
@@ -87,6 +84,10 @@ class CurriculumUserController extends CommonController
                 foreach ($postedItem->getUserItems() as $curriculumItemRelUser) {
                     $postedItemId = $curriculumItemRelUser->getItemId();
                     break;
+                }
+
+                if (empty($postedItemId)) {
+                    return 0;
                 }
 
                  // Get user items
@@ -107,7 +108,7 @@ class CurriculumUserController extends CommonController
 
                 /** @var \Entity\CurriculumCategory $category */
                 $alreadyAdded = array();
-                //$alreadyAddedObjects = array();
+
                 foreach ($categories as $category) {
                     foreach ($category->getItems() as $item) {
                         if ($item->getId() == $postedItemId) {
@@ -126,16 +127,20 @@ class CurriculumUserController extends CommonController
                 $counter = 1;
                 $parsed = array();
 
-                /** @var Entity\CurriculumItemRelUser $curriculumItemRelUser  */
+                /** @var Entity\CurriculumItem $newItem */
+                $newItem = $this->getCurriculumItemRepository()->find($postedItemId);
+
+                /** @var Entity\CurriculumItemRelUser $curriculumItemRelUser */
                 foreach ($postedItem->getUserItems() as $curriculumItemRelUser) {
                     $curriculumItemRelUser->setUser($user);
-                    $newItem = $this->getCurriculumItemRepository()->find($curriculumItemRelUser->getItemId());
+
+                    // $newItem = $this->getCurriculumItemRepository()->find($curriculumItemRelUser->getItemId());
                     $curriculumItemRelUser->setItem($newItem);
                     $curriculumItemRelUser->setOrderId(strval($counter));
                     $description = $curriculumItemRelUser->getDescription();
 
                     if (empty($description)) {
-                        //error_log('skipeed');
+                        // error_log('skip');
                         continue;
                     }
 
@@ -144,15 +149,16 @@ class CurriculumUserController extends CommonController
                         $hash = md5($curriculumItemRelUser->getDescription());
                         if (isset($alreadyAdded[$hash])) {
                             $parsed[] = $hash;
-                            //$this->get('monolog')->addInfo($curriculumItemRelUser->getDescription());
-                            //error_log("aaa ->".$curriculumItemRelUser->getDescription());
+                            // $this->get('monolog')->addInfo($curriculumItemRelUser->getDescription());
+                            // error_log("aaa ->".$curriculumItemRelUser->getDescription());
                             continue;
                         } else {
-                            $this->createAction($curriculumItemRelUser);
+                            $this->checkAndCreateAction($curriculumItemRelUser);
                         }
                     } else {
-                        $this->createAction($curriculumItemRelUser);
+                        $this->checkAndCreateAction($curriculumItemRelUser);
                     }
+
                     $counter++;
                 }
 
@@ -167,6 +173,24 @@ class CurriculumUserController extends CommonController
         }
         $response = null;
         return new Response($response, 200, array());
+    }
+
+    /**
+     * @param Entity\CurriculumItemRelUser $object
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    private function checkAndCreateAction($object)
+    {
+        if (false === $object) {
+            throw new \Exception('Unable to create the entity');
+        }
+
+        $repo = $this->getRepository();
+        if ($repo->isAllowToInsert($object->getItem(), $object->getUser())) {
+            $this->createAction($object);
+        }
+        return false;
     }
 
     /**
@@ -217,9 +241,7 @@ class CurriculumUserController extends CommonController
     {
         $routes = parent::generateDefaultCrudRoutes();
         $routes['add_from_category'] = 'curriculum_item.controller:addFromCategoryAction';
-        //$routes['add_items'] = 'curriculum_item.controller:addItemsAction';
-
-        return $routes ;
+        return $routes;
     }
 
     /**
@@ -247,7 +269,6 @@ class CurriculumUserController extends CommonController
     {
         return $this->get('orm.em')->getRepository('Entity\CurriculumItem');
     }
-
 
     /**
      * {@inheritdoc}

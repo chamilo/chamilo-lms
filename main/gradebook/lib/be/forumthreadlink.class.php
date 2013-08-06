@@ -113,58 +113,56 @@ class ForumThreadLink extends AbstractLink
     }
 
     public function calc_score($stud_id = null) {    			
-		if (!empty($database_name)) {
-			$thread_qualify = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY);
+        $thread_qualify = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY);
 
-	  		$sql = 'SELECT thread_qualify_max FROM '.Database :: get_course_table(TABLE_FORUM_THREAD)." 
-	  				WHERE c_id = ".$this->course_id." AND thread_id = '".$this->get_ref_id()."'";
-			$query = Database::query($sql);
-			$assignment = Database::fetch_array($query);
+  		$sql = 'SELECT thread_qualify_max FROM '.Database :: get_course_table(TABLE_FORUM_THREAD)." 
+  				WHERE c_id = ".$this->course_id." AND thread_id = '".$this->get_ref_id()."'";
+		$query = Database::query($sql);
+		$assignment = Database::fetch_array($query);
 
-	  	    $sql = "SELECT * FROM $thread_qualify WHERE c_id = ".$this->course_id." AND thread_id = ".$this->get_ref_id();
-	    	if (isset($stud_id)) {
-	    		$sql .= ' AND user_id = '."'".intval($stud_id)."'";
-	    	}
+  	    $sql = "SELECT * FROM $thread_qualify WHERE c_id = ".$this->course_id." AND thread_id = ".$this->get_ref_id();
+    	if (isset($stud_id)) {
+    		$sql .= ' AND user_id = '."'".intval($stud_id)."'";
+    	}
 
-	    	// order by id, that way the student's first attempt is accessed first
-			$sql .= ' ORDER BY qualify_time DESC';
+    	// order by id, that way the student's first attempt is accessed first
+		$sql .= ' ORDER BY qualify_time DESC';
 
-	    	$scores = Database::query($sql);
+    	$scores = Database::query($sql);
 
-			// for 1 student
-	    	if (isset($stud_id)) {
-	    	    
-	    		if ($data = Database::fetch_array($scores)) {	    		    
-	    			return array ($data['qualify'], $assignment['thread_qualify_max']);
-	    		} else {
-	    			//We sent the 0/thread_qualify_max instead of null for correct calculations
-	      			//return null;
-	      			return array (0, $assignment['thread_qualify_max']);
-	    		}
-	    	} else {
-	    	    // all students -> get average
-	    		$students=array();  // user list, needed to make sure we only
-	    							// take first attempts into account
-				$rescount = 0;
-				$sum = 0;
+		// for 1 student
+    	if (isset($stud_id)) {
+    	    
+    		if ($data = Database::fetch_array($scores)) {	    		    
+    			return array ($data['qualify'], $assignment['thread_qualify_max']);
+			} else {
+    			//We sent the 0/thread_qualify_max instead of null for correct calculations
+      			//return null;
+      			return array (0, $assignment['thread_qualify_max']);
+    		}
+    	} else {
+    	    // all students -> get average
+    		$students=array();  // user list, needed to make sure we only
+    							// take first attempts into account
+			$rescount = 0;
+			$sum = 0;
 
-				while ($data=Database::fetch_array($scores)) {
-					if (!(array_key_exists($data['user_id'],$students))) {
-						if ($assignment['thread_qualify_max'] != 0) {
-							$students[$data['user_id']] = $data['qualify'];
-							$rescount++;
-							$sum += ($data['qualify'] / $assignment['thread_qualify_max']);
-						}
-					 }
-				}
+			while ($data=Database::fetch_array($scores)) {
+				if (!(array_key_exists($data['user_id'],$students))) {
+					if ($assignment['thread_qualify_max'] != 0) {
+						$students[$data['user_id']] = $data['qualify'];
+						$rescount++;
+						$sum += ($data['qualify'] / $assignment['thread_qualify_max']);
+					}
+				 }
+			}
 
-				if ($rescount == 0) {
-					return null;
-				  } else {
-					return array ($sum , $rescount);
-				 }    
-	    	}
-        }
+			if ($rescount == 0) {
+			    return null;
+		    } else {
+                return array ($sum , $rescount);
+   		    }    
+    	}
     }
 
 // INTERNAL FUNCTIONS

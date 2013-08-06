@@ -95,7 +95,7 @@ $app['security.authentication.logout_handler.admin'] = $app->share(function($app
 
 // Role hierarchy
 $app['security.role_hierarchy'] = array(
-    'ROLE_ADMIN' => array('ROLE_QUESTION_MANAGER', 'ROLE_SESSION_MANAGER', 'ROLE_TEACHER', 'ROLE_ALLOWED_TO_SWITCH'),
+    'ROLE_ADMIN' => array('ROLE_QUESTION_MANAGER', 'ROLE_SESSION_MANAGER', 'ROLE_TEACHER', 'ROLE_ALLOWED_TO_SWITCH', 'ROLE_DIRECTOR'),
     'ROLE_RRHH' => array('ROLE_TEACHER'),
     'ROLE_TEACHER' => array('ROLE_STUDENT'),
     'ROLE_QUESTION_MANAGER' => array('ROLE_STUDENT', 'ROLE_QUESTION_MANAGER'),
@@ -105,7 +105,8 @@ $app['security.role_hierarchy'] = array(
     // Ministerio
     'ROLE_JURY_PRESIDENT' => array('ROLE_JURY_PRESIDENT', 'ROLE_JURY_MEMBER', 'ROLE_JURY_SUBSTITUTE'),
     'ROLE_JURY_SUBSTITUTE' => array('ROLE_JURY_SUBSTITUTE', 'ROLE_JURY_MEMBER'),
-    'ROLE_JURY_MEMBER' => array('ROLE_JURY_MEMBER')
+    'ROLE_JURY_MEMBER' => array('ROLE_JURY_MEMBER'),
+    'ROLE_DIRECTOR' => array('ROLE_DIRECTOR')
 );
 
 // Role rules
@@ -127,7 +128,6 @@ $app['security.access_rules'] = array(
     array('^/tool/.*', array('ROLE_ADMIN','ROLE_TEACHER')),
     array('^/admin/jury_president', 'ROLE_JURY_PRESIDENT'),
     array('^/admin/jury_member', 'ROLE_JURY_MEMBER'), //? jury subsitute??
-
 
     //array('^.*$', 'ROLE_USER'),
 );

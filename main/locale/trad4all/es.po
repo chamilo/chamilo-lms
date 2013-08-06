@@ -4166,3 +4166,6 @@ msgstr "Pregunta agregada a la lista de preguntas"
 
 msgid "QuestionCopied"
 msgstr "Pregunta agregada a la lista de preguntas"
+
+msgid "Bad credentials"
+msgstr "Los datos suministrados son incorrectos"

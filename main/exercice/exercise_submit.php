@@ -1112,13 +1112,27 @@ if (!empty($error)) {
 
             function previous_question_and_save(previous_question_id, question_id_to_save) {
                 url = "'.$urlMainExercise.'exercise_submit.php?'.$params.'&num="+previous_question_id;
-                //Save the current question
+                // Save the current question.
                 save_now(question_id_to_save, url);
             }
 
-            function save_question_list(question_list) {
+            function save_question_list(question_list, showWarning) {
+
+                if (showWarning == 1) {
+                    $("#dialog-confirm").data("question_list", question_list);
+                    $("#dialog-confirm").dialog("open");
+                } else {
+                    saveQuestionList(question_list);
+                }
+            }
+
+            function saveQuestionList(question_list) {
+                var redirect = true;
                 $.each(question_list, function(key, question_id) {
-                    save_now(question_id, null, false);
+                    result = save_now(question_id, null, false, 0);
+                    if (result == "answer_required") {
+                        redirect = false;
+                    }
                 });
                 var url = "";
                 if ('.$reminder.' == 1) {
@@ -1129,7 +1143,9 @@ if (!empty($error)) {
                     url = "'.$urlMainExercise.'exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'";
                 }
                 //$("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('save.png', get_lang('Saved'), array(), ICON_SIZE_SMALL)).'");
-                window.location = url;
+                if (redirect) {
+                    window.location = url;
+                }
             }
 
             function save_now(question_id, url_extra, redirect, showWarning) {
@@ -1137,14 +1153,16 @@ if (!empty($error)) {
                     redirect = true;
                 }
 
+                var result = false;
                 if (showWarning == 1) {
                     $("#dialog-confirm").data("question_id", question_id);
                     $("#dialog-confirm").data("url_extra", url_extra);
                     $("#dialog-confirm").data("redirect", redirect);
                     $("#dialog-confirm").dialog("open");
                 } else {
-                    saveNow(question_id, url_extra, redirect);
+                    result = saveNow(question_id, url_extra, redirect);
                 }
+                return result;
             }
 
             function saveNow(question_id, url_extra, redirect)
@@ -1176,6 +1194,7 @@ if (!empty($error)) {
            		// Only for the first time
 
           		$("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('loading1.gif')).'");
+          		var mainResult = false;
 
                 $.ajax({
                     type : "post",
@@ -1183,6 +1202,7 @@ if (!empty($error)) {
                     url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=save_exercise_by_now",
                     data: "'.$params.'&type=simple&question_id="+question_id+"&"+my_choice+"&"+hotspot+"&"+remind_list,
                     success: function(return_value) {
+                        mainResult =  return_value;
                         if (return_value == "ok") {
                             $("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('save.png', get_lang('Saved'), array(), ICON_SIZE_SMALL)).'");
                         } else if (return_value == "error") {
@@ -1216,7 +1236,7 @@ if (!empty($error)) {
                         $("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('error.png', get_lang('Error'), array(), ICON_SIZE_SMALL)).'");
                     }
                 });
-                return false;
+                return mainResult;
             }
 
             function save_now_all(validate) {

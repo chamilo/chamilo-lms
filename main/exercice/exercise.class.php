@@ -2551,7 +2551,8 @@ class Exercise
 
             $original_exercise->copy_exercise_categories($exercise_obj);
 
-            $question_list = $exercise_obj->selectQuestionList();
+            //$question_list = $exercise_obj->selectQuestionList();
+            $question_list = $exercise_obj->getQuestionListWithMediasUncompressed();
 
             if (!empty($question_list)) {
                 //Question creation
@@ -2772,7 +2773,7 @@ class Exercise
                     //Next question
                     if (isset($questions_in_media) && !empty($questions_in_media) && is_array($questions_in_media)) {
                         $questions_in_media = "['".implode("','", $questions_in_media)."']";
-                        $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_question_list('.$questions_in_media.'); ">'.$label.'</a>';
+                        $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_question_list('.$questions_in_media.', '.$showEndWarning.'); ">'.$label.'</a>';
                     } else {
                         $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_now('.$question_id.', null, true, '.$showEndWarning.'); ">'.$label.'</a>';
                     }
@@ -5479,10 +5480,14 @@ class Exercise
     public function returnWarningJs($url)
     {
         $condition = "
+            var dialog = $('#dialog-confirm');
 
-        var dialog = $('#dialog-confirm');
-        saveNow(dialog.data('question_id'), dialog.data('url_extra'), dialog.data('redirect'));
-        $(this).dialog('close');
+            if (dialog.data('question_list') != '') {
+                saveQuestionList(dialog.data('question_list'));
+            } else {
+                saveNow(dialog.data('question_id'), dialog.data('url_extra'), dialog.data('redirect'));
+            }
+            $(this).dialog('close');
 
         ";
 

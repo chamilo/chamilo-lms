@@ -753,8 +753,8 @@ if ($is_allowedToEdit && $locked == false && !api_is_drh()) {
 
     echo '<input id="vals" type = "hidden" name="vals"       value="'.$strids.'">';
     echo '<input id="marksid" type = "hidden" name="marksid"       value="'.$marksid.'">';
-	if ($origin !='learnpath' && $origin!='student_progress') {
 
+	if ($origin !='learnpath' && $origin!='student_progress') {
         echo '<label><input type= "checkbox" name="send_notification"> '.get_lang('SendEmail').'</label>';
 		?>
         <input type="submit" class="btn btn-primary" value=" <?php echo get_lang('CorrectTest'); ?>">

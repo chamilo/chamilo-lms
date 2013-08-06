@@ -779,7 +779,7 @@ class Exercise
                 if (!empty($numberOfQuestions)) {
                     $elements = Testcategory::getNElementsFromArray($categoryQuestionList, $numberOfQuestions, $randomizeQuestions);
                 if (!empty($elements)) {
-                    $temp_question_list[$category_id] = $elements;
+                        $temp_question_list[$category_id] = $elements;
                         $categoryQuestionList = $elements;
                     }
                 }
@@ -945,10 +945,6 @@ class Exercise
                     $this->categoryWithQuestionList = $result['category_with_questions_list'];
                     $questionList = $result['question_list'];
                     break;
-            }
-
-
-            if ($this->categories_grouping) {
             }
 
             return $questionList;
@@ -2544,7 +2540,7 @@ class Exercise
 
             $original_exercise->copy_exercise_categories($exercise_obj);
 
-            $question_list = $exercise_obj->selectQuestionList();
+            $question_list = $exercise_obj->selectQuestionList(true);
 
             if (!empty($question_list)) {
                 //Question creation
@@ -2738,15 +2734,19 @@ class Exercise
             $html .= '<br />';
         } else {
             // User
+            $showEndWarning = 0;
             if (api_is_allowed_to_session_edit()) {
                 if ($this->type == ALL_ON_ONE_PAGE || $nbrQuestions == $questionNum) {
                     if ($this->review_answers) {
-                        $label = get_lang('ReviewQuestions');
-                        $class = 'btn btn-success';
+                        //$label = get_lang('ReviewQuestions');
+                        //$class = 'btn btn-success';
+                        $label = get_lang('EndTest');
+                        $class = 'btn btn-warning';
                     } else {
                         $label = get_lang('EndTest');
                         $class = 'btn btn-warning';
                     }
+                    $showEndWarning = 1;
                 } else {
                     $label = get_lang('NextQuestion');
                     $class = 'btn btn-primary';
@@ -2758,13 +2758,14 @@ class Exercise
                         $all_button .= '<a href="javascript://" class="btn" onclick="previous_question_and_save('.$prev_question.', '.$question_id.' ); ">'.get_lang('PreviousQuestion').'</a>';
                     }
 
-                    //Next question
+                    // Next question
                     if (isset($questions_in_media) && !empty($questions_in_media) && is_array($questions_in_media)) {
                         $questions_in_media = "['".implode("','", $questions_in_media)."']";
-                        $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_question_list('.$questions_in_media.'); ">'.$label.'</a>';
+                        $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_question_list('.$questions_in_media.', '.$showEndWarning.'); ">'.$label.'</a>';
                     } else {
-                        $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_now('.$question_id.'); ">'.$label.'</a>';
+                        $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_now('.$question_id.', null, true, '.$showEndWarning.'); ">'.$label.'</a>';
                     }
+
                     $all_button .= '<span id="save_for_now_'.$question_id.'" class="exercise_save_mini_message"></span>&nbsp;';
                     $html .= $all_button;
                 } else {
@@ -2837,14 +2838,13 @@ class Exercise
                 }).bind('timer', function () {
                     send_form();
                 });
-
             }
 
             function send_form() {
                 if ($('#exercise_form').length) {
                     $('#exercise_form').submit();
                 } else {
-                    // In reminder
+                    // In reminder.
                     final_submit();
                 }
             }
@@ -2886,119 +2886,118 @@ class Exercise
      */
     public function show_lp_javascript()
     {
-
         return "<script type=\"text/javascript\" src=\"../plugin/hotspot/JavaScriptFlashGateway.js\"></script>
-                    <script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>
-                    <script language=\"JavaScript\" type=\"text/javascript\">
-                    <!--
-                    // -----------------------------------------------------------------------------
-                    // Globals
-                    // Major version of Flash required
-                    var requiredMajorVersion = 7;
-                    // Minor version of Flash required
-                    var requiredMinorVersion = 0;
-                    // Minor version of Flash required
-                    var requiredRevision = 0;
-                    // the version of javascript supported
-                    var jsVersion = 1.0;
-                    // -----------------------------------------------------------------------------
-                    // -->
-                    </script>
-                    <script language=\"VBScript\" type=\"text/vbscript\">
-                    <!-- // Visual basic helper required to detect Flash Player ActiveX control version information
-                    Function VBGetSwfVer(i)
-                      on error resume next
-                      Dim swControl, swVersion
-                      swVersion = 0
+                <script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>
+                <script language=\"JavaScript\" type=\"text/javascript\">
+                <!--
+                // -----------------------------------------------------------------------------
+                // Globals
+                // Major version of Flash required
+                var requiredMajorVersion = 7;
+                // Minor version of Flash required
+                var requiredMinorVersion = 0;
+                // Minor version of Flash required
+                var requiredRevision = 0;
+                // the version of javascript supported
+                var jsVersion = 1.0;
+                // -----------------------------------------------------------------------------
+                // -->
+                </script>
+                <script language=\"VBScript\" type=\"text/vbscript\">
+                <!-- // Visual basic helper required to detect Flash Player ActiveX control version information
+                Function VBGetSwfVer(i)
+                  on error resume next
+                  Dim swControl, swVersion
+                  swVersion = 0
 
-                      set swControl = CreateObject(\"ShockwaveFlash.ShockwaveFlash.\" + CStr(i))
-                      if (IsObject(swControl)) then
-                        swVersion = swControl.GetVariable(\"\$version\")
-                      end if
-                      VBGetSwfVer = swVersion
-                    End Function
-                    // -->
-                    </script>
+                  set swControl = CreateObject(\"ShockwaveFlash.ShockwaveFlash.\" + CStr(i))
+                  if (IsObject(swControl)) then
+                    swVersion = swControl.GetVariable(\"\$version\")
+                  end if
+                  VBGetSwfVer = swVersion
+                End Function
+                // -->
+                </script>
 
-                    <script language=\"JavaScript1.1\" type=\"text/javascript\">
-                    <!-- // Detect Client Browser type
-                    var isIE  = (navigator.appVersion.indexOf(\"MSIE\") != -1) ? true : false;
-                    var isWin = (navigator.appVersion.toLowerCase().indexOf(\"win\") != -1) ? true : false;
-                    var isOpera = (navigator.userAgent.indexOf(\"Opera\") != -1) ? true : false;
-                    jsVersion = 1.1;
-                    // JavaScript helper required to detect Flash Player PlugIn version information
-                    function JSGetSwfVer(i){
-                        // NS/Opera version >= 3 check for Flash plugin in plugin array
-                        if (navigator.plugins != null && navigator.plugins.length > 0) {
-                            if (navigator.plugins[\"Shockwave Flash 2.0\"] || navigator.plugins[\"Shockwave Flash\"]) {
-                                var swVer2 = navigator.plugins[\"Shockwave Flash 2.0\"] ? \" 2.0\" : \"\";
-                                var flashDescription = navigator.plugins[\"Shockwave Flash\" + swVer2].description;
-                                descArray = flashDescription.split(\" \");
-                                tempArrayMajor = descArray[2].split(\".\");
-                                versionMajor = tempArrayMajor[0];
-                                versionMinor = tempArrayMajor[1];
-                                if ( descArray[3] != \"\" ) {
-                                    tempArrayMinor = descArray[3].split(\"r\");
-                                } else {
-                                    tempArrayMinor = descArray[4].split(\"r\");
-                                }
-                                versionRevision = tempArrayMinor[1] > 0 ? tempArrayMinor[1] : 0;
-                                flashVer = versionMajor + \".\" + versionMinor + \".\" + versionRevision;
+                <script language=\"JavaScript1.1\" type=\"text/javascript\">
+                <!-- // Detect Client Browser type
+                var isIE  = (navigator.appVersion.indexOf(\"MSIE\") != -1) ? true : false;
+                var isWin = (navigator.appVersion.toLowerCase().indexOf(\"win\") != -1) ? true : false;
+                var isOpera = (navigator.userAgent.indexOf(\"Opera\") != -1) ? true : false;
+                jsVersion = 1.1;
+                // JavaScript helper required to detect Flash Player PlugIn version information
+                function JSGetSwfVer(i){
+                    // NS/Opera version >= 3 check for Flash plugin in plugin array
+                    if (navigator.plugins != null && navigator.plugins.length > 0) {
+                        if (navigator.plugins[\"Shockwave Flash 2.0\"] || navigator.plugins[\"Shockwave Flash\"]) {
+                            var swVer2 = navigator.plugins[\"Shockwave Flash 2.0\"] ? \" 2.0\" : \"\";
+                            var flashDescription = navigator.plugins[\"Shockwave Flash\" + swVer2].description;
+                            descArray = flashDescription.split(\" \");
+                            tempArrayMajor = descArray[2].split(\".\");
+                            versionMajor = tempArrayMajor[0];
+                            versionMinor = tempArrayMajor[1];
+                            if ( descArray[3] != \"\" ) {
+                                tempArrayMinor = descArray[3].split(\"r\");
                             } else {
-                                flashVer = -1;
+                                tempArrayMinor = descArray[4].split(\"r\");
                             }
-                        }
-                        // MSN/WebTV 2.6 supports Flash 4
-                        else if (navigator.userAgent.toLowerCase().indexOf(\"webtv/2.6\") != -1) flashVer = 4;
-                        // WebTV 2.5 supports Flash 3
-                        else if (navigator.userAgent.toLowerCase().indexOf(\"webtv/2.5\") != -1) flashVer = 3;
-                        // older WebTV supports Flash 2
-                        else if (navigator.userAgent.toLowerCase().indexOf(\"webtv\") != -1) flashVer = 2;
-                        // Can't detect in all other cases
-                        else {
-
+                            versionRevision = tempArrayMinor[1] > 0 ? tempArrayMinor[1] : 0;
+                            flashVer = versionMajor + \".\" + versionMinor + \".\" + versionRevision;
+                        } else {
                             flashVer = -1;
                         }
-                        return flashVer;
                     }
-                    // When called with reqMajorVer, reqMinorVer, reqRevision returns true if that version or greater is available
-                    function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
-                    {
-                        reqVer = parseFloat(reqMajorVer + \".\" + reqRevision);
-                        // loop backwards through the versions until we find the newest version
-                        for (i=25;i>0;i--) {
-                            if (isIE && isWin && !isOpera) {
-                                versionStr = VBGetSwfVer(i);
-                            } else {
-                                versionStr = JSGetSwfVer(i);
-                            }
-                            if (versionStr == -1 ) {
-                                return false;
-                            } else if (versionStr != 0) {
-                                if(isIE && isWin && !isOpera) {
-                                    tempArray         = versionStr.split(\" \");
-                                    tempString        = tempArray[1];
-                                    versionArray      = tempString .split(\",\");
-                                } else {
-                                    versionArray      = versionStr.split(\".\");
-                                }
-                                versionMajor      = versionArray[0];
-                                versionMinor      = versionArray[1];
-                                versionRevision   = versionArray[2];
+                    // MSN/WebTV 2.6 supports Flash 4
+                    else if (navigator.userAgent.toLowerCase().indexOf(\"webtv/2.6\") != -1) flashVer = 4;
+                    // WebTV 2.5 supports Flash 3
+                    else if (navigator.userAgent.toLowerCase().indexOf(\"webtv/2.5\") != -1) flashVer = 3;
+                    // older WebTV supports Flash 2
+                    else if (navigator.userAgent.toLowerCase().indexOf(\"webtv\") != -1) flashVer = 2;
+                    // Can't detect in all other cases
+                    else {
 
-                                versionString     = versionMajor + \".\" + versionRevision;   // 7.0r24 == 7.24
-                                versionNum        = parseFloat(versionString);
-                                // is the major.revision >= requested major.revision AND the minor version >= requested minor
-                                if ( (versionMajor > reqMajorVer) && (versionNum >= reqVer) ) {
-                                    return true;
-                                } else {
-                                    return ((versionNum >= reqVer && versionMinor >= reqMinorVer) ? true : false );
-                                }
+                        flashVer = -1;
+                    }
+                    return flashVer;
+                }
+                // When called with reqMajorVer, reqMinorVer, reqRevision returns true if that version or greater is available
+                function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
+                {
+                    reqVer = parseFloat(reqMajorVer + \".\" + reqRevision);
+                    // loop backwards through the versions until we find the newest version
+                    for (i=25;i>0;i--) {
+                        if (isIE && isWin && !isOpera) {
+                            versionStr = VBGetSwfVer(i);
+                        } else {
+                            versionStr = JSGetSwfVer(i);
+                        }
+                        if (versionStr == -1 ) {
+                            return false;
+                        } else if (versionStr != 0) {
+                            if(isIE && isWin && !isOpera) {
+                                tempArray         = versionStr.split(\" \");
+                                tempString        = tempArray[1];
+                                versionArray      = tempString .split(\",\");
+                            } else {
+                                versionArray      = versionStr.split(\".\");
+                            }
+                            versionMajor      = versionArray[0];
+                            versionMinor      = versionArray[1];
+                            versionRevision   = versionArray[2];
+
+                            versionString     = versionMajor + \".\" + versionRevision;   // 7.0r24 == 7.24
+                            versionNum        = parseFloat(versionString);
+                            // is the major.revision >= requested major.revision AND the minor version >= requested minor
+                            if ( (versionMajor > reqMajorVer) && (versionNum >= reqVer) ) {
+                                return true;
+                            } else {
+                                return ((versionNum >= reqVer && versionMinor >= reqMinorVer) ? true : false );
                             }
                         }
                     }
-                    // -->
-                    </script>";
+                }
+                // -->
+                </script>";
     }
 
     /**
@@ -5465,6 +5464,62 @@ class Exercise
         return $html;
     }
 
+    public function returnWarningJs($url)
+    {
+        $condition = "
+            var dialog = $('#dialog-confirm');
+
+            if (dialog.data('question_list') != '') {
+                saveQuestionList(dialog.data('question_list'));
+            } else {
+                saveNow(dialog.data('question_id'), dialog.data('url_extra'), dialog.data('redirect'));
+            }
+
+            $(this).dialog('close');
+        ";
+
+        if (!empty($url)) {
+           $condition = 'window.location = "'.$url.'&" + lp_data;';
+        }
+
+        return '<script>
+            $(function() {
+                $("#dialog-confirm").dialog({
+                    autoOpen: false,
+                    resizable: false,
+                    height:200,
+                    width:550,
+                    modal: true,
+                    buttons: {
+                        "cancel": {
+                            click: function() {
+                                $(this).dialog("close");
+                            },
+                            text : "'.get_lang("NoIWantToTurnBack").'",
+                            class : "btn btn-danger"
+                        },
+                        "ok": {
+                            click : function() {
+                                '.$condition.'
+                            },
+                            text: "'.get_lang("YesImSure").'",
+                            class : "btn btn-success"
+                        }
+                    }
+                });
+            });
+        </script>';
+    }
+
+    function returnWarningHtml()
+    {
+        return  '<div id="dialog-confirm" title="'.get_lang('Exercise').'" style="display:none">
+          <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+          '.get_lang('IfYouContinueYourAnswerWillBeSavedAnyChangeWillBeNotAllowed').'
+            </p>
+        </div>';
+    }
+
     /**
      * Get question list (including question ids of the media)
      * @return int
@@ -6216,7 +6271,7 @@ class Exercise
                     $exercise_actions .= $this->show_button($questionId, $current_question, null, $remindList);
                     break;
                 case ALL_ON_ONE_PAGE:
-                    $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
+                    $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\', null, true, 1); ">'.get_lang('SaveForNow').'</a>';
                     $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
                     $exercise_actions .= Display::div($button, array('class'=>'exercise_save_now_button'));
                     break;
@@ -6225,7 +6280,7 @@ class Exercise
             if (!empty($questions_in_media)) {
                 $count_of_questions_inside_media = count($questions_in_media);
                 if ($count_of_questions_inside_media > 1) {
-                    $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\', false, false); ">'.get_lang('SaveForNow').'</a>';
+                    $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\', false, false, 0); ">'.get_lang('SaveForNow').'</a>';
                     $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
                     $exercise_actions = Display::div($button, array('class'=>'exercise_save_now_button'));
                 }
@@ -6521,22 +6576,24 @@ class Exercise
                     $exercise_stat_info['exe_duration'],
                     '',
                     array()
-                  );
+                );
+
                 $log_transactions_settings = TransactionLog::getTransactionSettings();
                 if (isset($log_transactions_settings['exercise_attempt'])) {
-                  $transaction_controller = new TransactionLogController();
-                  $transaction = $transaction_controller->loadOne(array(
-                    'action' => 'exercise_attempt',
-                    'branch_id' => TransactionLog::BRANCH_LOCAL,
-                    'item_id' => $exercise_stat_info['exe_id'],
-                  ));
-                  if (!$transaction) {
-                    $transaction_data = array(
-                      'item_id' => $exercise_stat_info['exe_id'],
+                    $transaction_controller = new TransactionLogController();
+                    $transaction = $transaction_controller->loadOne(array(
+                        'action' => 'exercise_attempt',
+                        'branch_id' => TransactionLog::BRANCH_LOCAL,
+                        'item_id' => $exercise_stat_info['exe_id'],
+                        )
                     );
-                    $transaction = $transaction_controller->createTransaction('exercise_attempt', $transaction_data);
-                  }
-                  $transaction->save();
+                    if (!$transaction) {
+                        $transaction_data = array(
+                            'item_id' => $exercise_stat_info['exe_id'],
+                        );
+                        $transaction = $transaction_controller->createTransaction('exercise_attempt', $transaction_data);
+                    }
+                    $transaction->save();
                 }
             }
 

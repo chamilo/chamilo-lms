@@ -294,21 +294,23 @@ class UniqueAnswer extends Question
 
         // ie6 fix.
 
-        if ($obj_ex->edit_exercise_in_lp == true) {
-            if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
-                $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="btn minus"');
-                $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn plus"');
-                $form->addElement('submit', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
-            } else {
-                //setting the save button here and not in the question class.php
-                $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'), 'class="btn minus"');
-                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn plus"');
-                $form->addElement('style_submit_button', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
+        if ($form->isFrozen() == false) {
+            if ($obj_ex->edit_exercise_in_lp == true) {
+                if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
+                    $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="btn minus"');
+                    $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn plus"');
+                    $form->addElement('submit', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
+                } else {
+                    //setting the save button here and not in the question class.php
+                    $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'), 'class="btn minus"');
+                    $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn plus"');
+                    $form->addElement('style_submit_button', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
+                }
             }
+            $renderer->setElementTemplate('{element}&nbsp;', 'submitQuestion');
+            $renderer->setElementTemplate('{element}&nbsp;', 'lessAnswers');
+            $renderer->setElementTemplate('{element}&nbsp;', 'moreAnswers');
         }
-        $renderer->setElementTemplate('{element}&nbsp;', 'submitQuestion');
-        $renderer->setElementTemplate('{element}&nbsp;', 'lessAnswers');
-        $renderer->setElementTemplate('{element}&nbsp;', 'moreAnswers');
 
         $form->addElement('html', '</div></div>');
 
@@ -469,8 +471,9 @@ class UniqueAnswer extends Question
         $score       = filter_var($score, FILTER_SANITIZE_NUMBER_FLOAT);
         $correct     = filter_var($correct, FILTER_SANITIZE_NUMBER_INT);
 
-        if (empty($question_id) or empty($score) or empty($correct))
+        if (empty($question_id) or empty($score) or empty($correct)) {
             return false;
+        }
 
         // Get the max position
         $sql      = "SELECT max(position) as max_position FROM $tbl_quiz_answer WHERE question_id = $question_id";

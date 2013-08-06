@@ -2264,6 +2264,10 @@ abstract class Question
             //var_dump($exerciseId);
             // Including actions
             foreach ($questions as &$question) {
+                $type = self::get_question_type($question['type']);
+                $question['type'] = get_lang($type[1]);
+                $question['question_question_type'] = get_lang($type[1]);
+
                 if (empty($exerciseId)) {
                     // View.
                     $actions = Display::url(
@@ -2309,13 +2313,17 @@ abstract class Question
                         // Copy.
                         $actions .= Display::url(
                             $copyIcon,
-                            $app['url_generator']->generate(
+                            'javascript:void(0);',
+                            array(
+                                'onclick' => 'ajaxAction(this);',
+                                'data-url' => $app['url_generator']->generate(
                                 'exercise_copy_question',
                                 array(
                                     'cidReq' => api_get_course_id(),
                                     'id_session' => api_get_session_id(),
                                     'questionId' => $question['iid'],
                                     'exerciseId' => $exerciseId
+                                    )
                                 )
                             )
                         );
@@ -2323,7 +2331,10 @@ abstract class Question
                          // Reuse.
                         $actions .= Display::url(
                             $reuseIcon,
-                            $app['url_generator']->generate(
+                            'javascript:void(0);',
+                            array(
+                                'onclick' => 'ajaxAction(this);',
+                                'data-url' => $app['url_generator']->generate(
                                 'exercise_reuse_question',
                                 array(
                                     'cidReq' => api_get_course_id(),
@@ -2331,6 +2342,7 @@ abstract class Question
                                     'questionId' => $question['iid'],
                                     'exerciseId' => $exerciseId
                                 )
+                                ),
                             )
                         );
                     }

@@ -539,6 +539,7 @@ class Exercise
      * @param int $sidx
      * @param string $sord
      * @param array $where_condition
+     * @param array $extraFields
      */
     public function getQuestionListPagination($start, $limit, $sidx, $sord, $where_condition = array(), $extraFields = array())
     {
@@ -584,6 +585,7 @@ class Exercise
                     $extraFieldValue = new ExtraFieldValue('question');
                 }
                 while ($question = Database::fetch_array($result, 'ASSOC')) {
+                    /** @var Question $objQuestionTmp */
                     $objQuestionTmp = Question::read($question['iid']);
                     $category_labels = Testcategory::return_category_labels($objQuestionTmp->category_list, $category_list);
 
@@ -2743,15 +2745,19 @@ class Exercise
             $html .= '<br />';
         } else {
             // User
+            $showEndWarning = 0;
             if (api_is_allowed_to_session_edit()) {
                 if ($this->type == ALL_ON_ONE_PAGE || $nbrQuestions == $questionNum) {
                     if ($this->review_answers) {
-                        $label = get_lang('ReviewQuestions');
-                        $class = 'btn btn-success';
+                        //$label = get_lang('ReviewQuestions');
+                        //$class = 'btn btn-success';
+                        $label = get_lang('EndTest');
+                        $class = 'btn btn-warning';
                     } else {
                         $label = get_lang('EndTest');
                         $class = 'btn btn-warning';
                     }
+                    $showEndWarning = 1;
                 } else {
                     $label = get_lang('NextQuestion');
                     $class = 'btn btn-primary';
@@ -2768,7 +2774,7 @@ class Exercise
                         $questions_in_media = "['".implode("','", $questions_in_media)."']";
                         $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_question_list('.$questions_in_media.'); ">'.$label.'</a>';
                     } else {
-                        $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_now('.$question_id.'); ">'.$label.'</a>';
+                        $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_now('.$question_id.', null, true, '.$showEndWarning.'); ">'.$label.'</a>';
                     }
                     $all_button .= '<span id="save_for_now_'.$question_id.'" class="exercise_save_mini_message"></span>&nbsp;';
                     $html .= $all_button;
@@ -2849,7 +2855,7 @@ class Exercise
                 if ($('#exercise_form').length) {
                     $('#exercise_form').submit();
                 } else {
-                    // In reminder
+                    // In reminder.
                     final_submit();
                 }
             }
@@ -4643,7 +4649,6 @@ class Exercise
                 return false;
             }
 
-            //if (0) {
             if (!empty($this->emailNotificationTemplate)) {
                 $twig = new \Twig_Environment(new \Twig_Loader_String());
                 $twig->addFilter('var_dump', new Twig_Filter_Function('var_dump'));
@@ -5471,6 +5476,57 @@ class Exercise
         return $html;
     }
 
+    public function returnWarningJs($url)
+    {
+        $condition = "
+
+        var dialog = $('#dialog-confirm');
+        saveNow(dialog.data('question_id'), dialog.data('url_extra'), dialog.data('redirect'));
+        $(this).dialog('close');
+
+        ";
+
+
+        if (!empty($url)) {
+           $condition = 'window.location = "'.$url.'&" + lp_data;';
+        }
+        return '<script>
+            $(function() {
+                $("#dialog-confirm").dialog({
+                    autoOpen: false,
+                    resizable: false,
+                    height:200,
+                    width:550,
+                    modal: true,
+                    buttons: {
+                        "cancel": {
+                            click: function() {
+                                $(this).dialog("close");
+                            },
+                            text : "'.get_lang("NoIWantToTurnBack").'",
+                            class : "btn btn-danger"
+                        },
+                        "ok": {
+                            click : function() {
+                                '.$condition.'
+                            },
+                            text: "'.get_lang("YesImSure").'",
+                            class : "btn btn-success"
+                        }
+                    }
+                });
+            });
+        </script>';
+    }
+
+    function returnWarningHtml()
+    {
+        return  '<div id="dialog-confirm" title="'.get_lang('Exercise').'" style="display:none">
+          <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+          '.get_lang('IfYouContinueYourAnswerWillBeSavedAnyChangeWillBeNotAllowed').'
+            </p>
+        </div>';
+    }
     /**
      * Get question list (including question ids of the media)
      * @return int
@@ -6211,7 +6267,7 @@ class Exercise
                     $exercise_actions .= $this->show_button($questionId, $current_question, null, $remindList);
                     break;
                 case ALL_ON_ONE_PAGE:
-                    $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
+                    $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\', null, true, 1); ">'.get_lang('SaveForNow').'</a>';
                     $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
                     $exercise_actions .= Display::div($button, array('class'=>'exercise_save_now_button'));
                     break;
@@ -6220,7 +6276,7 @@ class Exercise
             if (!empty($questions_in_media)) {
                 $count_of_questions_inside_media = count($questions_in_media);
                 if ($count_of_questions_inside_media > 1) {
-                    $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\', false, false); ">'.get_lang('SaveForNow').'</a>';
+                    $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\', false, false, 0); ">'.get_lang('SaveForNow').'</a>';
                     $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
                     $exercise_actions = Display::div($button, array('class'=>'exercise_save_now_button'));
                 }

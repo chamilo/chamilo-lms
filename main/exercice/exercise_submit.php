@@ -256,14 +256,22 @@ var connectorType = "Straight";
                 sourceDestinationArray[count+1] = sourceEndPoint;
 
                 count++;
-                jsPlumb.addEndpoint(windowId, { anchor:[ "RightMiddle","RightMiddle","RightMiddle","RightMiddle" ] }, sourceEndPoint);
+                jsPlumb.addEndpoint(
+                    windowId,
+                    { anchor:[ "RightMiddle","RightMiddle","RightMiddle","RightMiddle" ] },
+                    sourceEndPoint
+                );
                 var destinationCount = 0;
                 $(windowQuestion).each(function( index ) {
                     var windowDestinationId = $(this).attr("id");
                     destinationEndPoint.scope = scope;
                     destinationEndPoint.paintStyle.fillStyle = colorArrayDestination[destinationCount].getHex();
                     destinationCount++;
-                    jsPlumb.addEndpoint(windowDestinationId+"_answer", { anchor:[ "LeftMiddle","LeftMiddle","LeftMiddle","LeftMiddle" ]  }, destinationEndPoint);
+                    jsPlumb.addEndpoint(
+                        windowDestinationId+"_answer",
+                        { anchor:[ "LeftMiddle","LeftMiddle","LeftMiddle","LeftMiddle" ] },
+                        destinationEndPoint
+                    );
                 });
             });
             //var divsWithWindowClass = jsPlumb.CurrentLibrary.getSelector("#"+questionId+" .window");
@@ -392,6 +400,17 @@ if ($objExercise->review_answers) {
         $paramsReminder = "exerciseId=$exerciseId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();
         header('Location: '.$urlMainExercise.'exercise_reminder.php?'.$paramsReminder);
         exit;
+    }
+}
+
+$exeId = isset($_GET['exe_id']) ? $_GET['exe_id'] : null;
+// Blocking access if exe_id was already treated
+if (!empty($exeId)) {
+    $attemptInfo = $objExercise->getStatTrackExerciseInfoByExeId($exeId);
+
+    if (!empty($attemptInfo) && $attemptInfo['status'] == '') {
+        header("Location: ".$urlMainExercise."overview.php?exerciseId=".$exerciseId."&".api_get_cidreq());
+	    exit;
     }
 }
 
@@ -818,9 +837,9 @@ if ($question_count != 0) {
 	                }
 	            }
 	        } else {
-	            //Time control is only enabled for ONE PER PAGE
+	            // Time control is only enabled for ONE PER PAGE
 	            if (!empty($exe_id) && is_numeric($exe_id)) {
-	                //Verify if the current test is fraudulent
+	                // Verify if the current test is fraudulent
 	            	$check = ExerciseLib::exercise_time_control_is_valid($exerciseId, $learnpath_id, $learnpath_item_id);
 
 	                if ($check) {
@@ -832,7 +851,8 @@ if ($question_count != 0) {
 	                }
 	            }
 	            if ($objExercise->review_answers) {
-	            	header('Location: '.$urlMainExercise.'exercise_reminder.php?'.$params);
+	            	//header('Location: '.$urlMainExercise.'exercise_reminder.php?'.$params);
+                    header("Location: ".$urlMainExercise."exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
 	            	exit;
 	            } else {
 	            	header("Location: ".$urlMainExercise."exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
@@ -1015,7 +1035,7 @@ if ($reminder == 2)  {
         }
     } else {
     	if ($objExercise->review_answers) {
-            if ($debug) { error_log('. redirecting to exercise_reminder.php '); }
+            if ($debug) { error_log('Redirecting to exercise_reminder.php '); }
 	    	header("Location: ".$urlMainExercise."exercise_reminder.php?$params");
 	    	exit;
     	}
@@ -1069,6 +1089,7 @@ if (!empty($error)) {
         $onsubmit = " onsubmit=\"return validateFlashVar('".$number_of_hotspot_questions."', '" .get_lang('HotspotValidateError1')."', '".get_lang('HotspotValidateError2')."');\"";
     }
 
+    echo $objExercise->returnWarningJs(null);
     echo '<script>
             $(function() {
     		    $(".main_question").mouseover(function() {
@@ -1111,11 +1132,23 @@ if (!empty($error)) {
                 window.location = url;
             }
 
-            function save_now(question_id, url_extra, redirect) {
+            function save_now(question_id, url_extra, redirect, showWarning) {
                 if (redirect == undefined) {
                     redirect = true;
                 }
 
+                if (showWarning == 1) {
+                    $("#dialog-confirm").data("question_id", question_id);
+                    $("#dialog-confirm").data("url_extra", url_extra);
+                    $("#dialog-confirm").data("redirect", redirect);
+                    $("#dialog-confirm").dialog("open");
+                } else {
+                    saveNow(question_id, url_extra, redirect);
+                }
+            }
+
+            function saveNow(question_id, url_extra, redirect)
+            {
            		//1. Normal choice inputs
            		var my_choice = $(\'*[name*="choice[\'+question_id+\']"]\').serialize();
 
@@ -1159,6 +1192,7 @@ if (!empty($error)) {
                             " ".get_lang('SelectAnAnswerToContinue')).'");
                         } else if (return_value == "one_per_page") {
                             var url = "";
+                            // Redirect to reminder
                             if ('.$reminder.' == 1) {
                                 url = "'.$urlMainExercise.'exercise_reminder.php?'.$params.'&num='.$current_question.'";
                             } else if ('.$reminder.' == 2 ) {
@@ -1265,6 +1299,7 @@ if (!empty($error)) {
      <input type="hidden" name="learnpath_item_view_id" value="'.$learnpath_item_view_id . '" />';
     $objExercise->renderQuestionList($questionList, $current_question, $exerciseResult, $attempt_list, $remind_list);
     echo '</form>';
+    echo $objExercise->returnWarningHtml();
 }
 
 if ($origin != 'learnpath') {

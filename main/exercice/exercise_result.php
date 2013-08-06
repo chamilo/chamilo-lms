@@ -62,13 +62,20 @@ $exe_id = isset($_REQUEST['exe_id']) ? intval($_REQUEST['exe_id']) : 0;
 if (empty($objExercise)) {
     // Redirect to the exercise overview
     // Check if the exe_id exists
+
     $objExercise = new Exercise();
     $exercise_stat_info = $objExercise->getStatTrackExerciseInfoByExeId($exe_id);
+
     if (!empty($exercise_stat_info) && isset($exercise_stat_info['exe_exo_id'])) {
-        header("Location: overview.php?exerciseId=".$exercise_stat_info['exe_exo_id']);
-        exit;
+        if ($exercise_stat_info['status'] == 'incomplete') {
+            $objExercise->read($exercise_stat_info['exe_exo_id']);
+        } else {
+            header("Location: overview.php?exerciseId=".$exercise_stat_info['exe_exo_id']);
+            exit;
+        }
+    } else {
+        api_not_allowed(true);
     }
-    api_not_allowed(true);
 }
 
 $gradebook = '';
@@ -129,7 +136,7 @@ if ($objExercise->selectAttempts() > 0) {
     if ($attempt_count >= $objExercise->selectAttempts()) {
         Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $objExercise->selectTitle(), $objExercise->selectAttempts()), false);
         if ($origin != 'learnpath') {
-            //we are not in learnpath tool
+            // We are not in learnpath tool
             Display::display_footer();
         }
         exit;
@@ -149,7 +156,7 @@ if (isset($session_control_key) && !ExerciseLib::exercise_time_control_is_valid(
     Database::query($sql_fraud);
 }
 
-//Unset session for clock time
+// Unset session for clock time.
 ExerciseLib::exercise_time_control_delete($objExercise->id, $learnpath_id, $learnpath_item_id);
 
 ExerciseLib::delete_chat_exercise_session($exe_id);
@@ -177,7 +184,7 @@ if ($origin != 'learnpath') {
         Session::erase('exe_id');
         Session::erase('categoryList');
     }
-    //record the results in the learning path, using the SCORM interface (API)
+    // Record the results in the learning path, using the SCORM interface (API)
     echo "<script>window.parent.API.void_save_asset('$total_score', '$total_weight', 0, 'completed');</script>";
     echo '<script type="text/javascript">'.$href.'</script>';
     echo '</body></html>';

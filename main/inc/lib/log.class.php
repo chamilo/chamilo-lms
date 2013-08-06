@@ -3,11 +3,11 @@
 use Monolog\Logger;
 
 /**
- * Since static constructors do not exist in php the line below serves as a 
+ * Since static constructors do not exist in php the line below serves as a
  * substitute.
- * 
+ *
  * Log is used by install which do not use autoload at the moment. If it becomes
- * the case then the line below may/should be moved to the main autoloading 
+ * the case then the line below may/should be moved to the main autoloading
  * function.
  */
 Log::register_autoload();
@@ -15,19 +15,19 @@ Log::register_autoload();
 /**
  * Provides access to the main log - i.e. stderr - and allows to register events.
  * It is a facade to the monolog library:
- * 
+ *
  * Log::error('message');
  * Log::warning('message');
  * ...
- * 
- * 
+ *
+ *
  * Note:
  * This class uses a static approach which has the benefit of being simpler but do
  * no allow as much freedom as using an object approche. Another approach could be
- * 
+ *
  * Chamilo::log()->error('message');
  * Chamilo::log()->warning('message');
- * 
+ *
  * To somewhat alleviate this issue the user can register a different logger if hew
  * wants.
  *
@@ -57,7 +57,7 @@ class Log
 
     /**
      *
-     * @return \Monolog\Logger 
+     * @return \Monolog\Logger
      */
     public static function default_logger()
     {
@@ -73,7 +73,7 @@ class Log
 
     /**
      *
-     * @return \Monolog\Logger 
+     * @return \Monolog\Logger
      */
     public static function logger()
     {
@@ -89,9 +89,9 @@ class Log
     }
 
     /**
-     * Returns the 
+     * Returns the
      * @param type $index
-     * @return type 
+     * @return type
      */
     public static function frame($index)
     {
@@ -146,7 +146,8 @@ class Log
      */
     public static function info($message, array $context = array())
     {
-        return self::write(Logger::INFO, self::message($message), $context);
+//        return self::write(Logger::INFO, self::message($message), $context);
+        return self::write(Logger::INFO, $message, $context);
     }
 
     /**

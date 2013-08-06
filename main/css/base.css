@@ -403,6 +403,12 @@ footer .container .row {
     padding-top: 50px;
 }
 
+footer #footer_left {
+    overflow-y : auto;
+    max-height:50px;
+    padding: 5px;
+}
+
 #footer_right #admin_name, #footer_right #software_name{
     text-align:right;
 }
@@ -572,6 +578,14 @@ a.tag {
     background-color:#F9F9F9;
     /*padding:5px 10px 5px 10px;
     margin:0px 0px 10px 0px;    */
+}
+#course_category li,
+#hot_courses h5,
+.course-box h5 {
+    font-size: 12px;
+    overflow-y : auto;
+    max-height:70px;
+    padding: 5px;
 }
 
 .session_box_title {
@@ -2795,8 +2809,6 @@ div.admin_section h4 {
     border-color: #ccc transparent transparent transparent;
 }
 
-
-
 .ribbon .rib::before {left: 0;}
 .ribbon .rib::after {right: 0;}
 
@@ -4861,3 +4873,4 @@ i.size-32.icon-new-work{
   line-height: 14px;
   background-color: #e6e6e6;
 }
+

@@ -24,17 +24,19 @@ function validate_data($courses) {
     $coursecodes = array ();
     foreach ($courses as $index => $course) {
         $course['line'] = $index +1;
+
         // 1. Check whether mandatory fields are set.
-        $mandatory_fields = array ('Code', 'Title', 'CourseCategory', 'Teacher');
+        $mandatory_fields = array ('Code', 'Title', 'CourseCategory');
         foreach ($mandatory_fields as $key => $field) {
             if (!isset($course[$field]) || strlen($course[$field]) == 0) {
                 $course['error'] = get_lang($field.'Mandatory');
                 $errors[] = $course;
             }
         }
+
         // 2. Check current course code.
         if (isset ($course['Code']) && strlen($course['Code']) != 0) {
-            // 2.1 Check whether code has been allready used by this CVS-file.
+            // 2.1 Check whether code has been already used by this CVS-file.
             if (isset($coursecodes[$course['Code']])) {
                 $course['error'] = get_lang('CodeTwiceInFile');
                 $errors[] = $course;
@@ -46,7 +48,7 @@ function validate_data($courses) {
             }
             // 2.3 Check whether course code has been occupied.
             else {
-                $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
+                $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
                 $sql = "SELECT * FROM $course_table WHERE code = '".Database::escape_string($course['Code'])."'";
                 $res = Database::query($sql);
                 if (Database::num_rows($res) > 0) {
@@ -56,16 +58,27 @@ function validate_data($courses) {
             }
             $coursecodes[$course['Code']] = 1;
         }
-        /*
+
         // 3. Check whether teacher exists.
-        if (!UserManager::is_username_empty($course['Teacher'])) {
-            $teacher = UserManager::purify_username($course['Teacher'], $purification_option_for_usernames);
-            if (UserManager::is_username_available($teacher)) {
-                $course['error'] = get_lang('UnknownTeacher').' ('.$teacher.')';
-                $errors[] = $course;
+        $teacherList = getTeacherListInArray($course['Teacher']);
+
+
+        if (!empty($teacherList)) {
+            foreach ($teacherList as $teacher) {
+                $teacherInfo = api_get_user_info_from_username($teacher);
+                if (empty($teacherInfo)) {
+                    $course['error'] = get_lang('UnknownTeacher').' ('.$teacher.')';
+                    $errors[] = $course;
+                } else {
+                    if ($teacherInfo['status'] != COURSEMANAGER) {
+                        $course['error'] = get_lang('UserIsNotATeacher').' ('.$teacher.')';
+                        $errors[] = $course;
+                    }
+                }
             }
         }
-        */
+
+
         // 4. Check whether course category exists.
         if (isset($course['CourseCategory']) && strlen($course['CourseCategory']) != 0) {
             $category_table = Database :: get_main_table(TABLE_MAIN_CATEGORY);
@@ -81,59 +94,64 @@ function validate_data($courses) {
     return $errors;
 }
 
+function getTeacherListInArray($teachers)
+{
+    if (!empty($teachers)) {
+        return explode('|', $teachers);
+    }
+    return array();
+}
+
 /**
  * Saves imported data.
  * @param array   List of courses
  */
-function save_data($courses) {    
+function save_data($courses) {
     global $purification_option_for_usernames;
 
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
     $msg = '';
-    
+
     foreach ($courses as $index => $course) {
         $course_language = api_get_valid_language($course['Language']);
-        $titular = $uidCreator = $username = '';
+        $username = '';
 
-        // Get username from name (firstname lastname).
-        if (!UserManager::is_username_empty($course['Teacher'])) {
-            $teacher = UserManager::purify_username($course['Teacher'], $purification_option_for_usernames);
-            if (UserManager::is_username_available($teacher)) {
-                $sql    = "SELECT username FROM $user_table WHERE ".(api_is_western_name_order(null, $course_language) ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)")." = '{$course['Teacher']}' LIMIT 1";
-                $rs     = Database::query($sql);
-                $user   = Database::fetch_object($rs);
-                $username = $user->username;
-            } else {
-                $username = $teacher;
+        $teachers = getTeacherListInArray($course['Teacher']);
+        $teacherList = array();
+        $creatorId = api_get_user_id();
+
+        if (!empty($teachers)) {
+            foreach ($teachers as $teacher) {
+                $teacherInfo = api_get_user_info_from_username($teacher);
+                if (!empty($teacherInfo)) {
+                    $teacherList[] = $teacherInfo;
+                }
             }
         }
 
-        // Get name and uid creator from username.
-        if (!empty($username)) {
-            $sql = "SELECT user_id, ".(api_is_western_name_order(null, $course_language) ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)")." AS name FROM $user_table WHERE username = '".Database::escape_string(UserManager::purify_username($username, $purification_option_for_usernames))."'";
-            $res = Database::query($sql);
-            $teacher    = Database::fetch_object($res);
-            $titular    = $teacher->name;
-            $uidCreator = $teacher->user_id;
-        } else {
-            $titular    = $course['Teacher'];
-            $uidCreator = 1;
-        }
-        
         $params = array();
         $params['title']            = $course['Title'];
-        $params['wanted_code']      = $course['Code'];         
-        $params['tutor_name']       = $titular;
-        $params['course_category']  = $course['CourseCategory'];        
+        $params['wanted_code']      = $course['Code'];
+        $params['tutor_name']       = null;
+        $params['course_category']  = $course['CourseCategory'];
         $params['course_language']  = $course_language;
-        $params['user_id']          = $uidCreator;         
-         
+        $params['user_id']          = $creatorId;
+
         $course_info = CourseManager::create_course($params);
+
         if (!empty($course_info)) {
-            $msg .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/">'.$course_info['title'].'</a> '.get_lang('Created').'<br />';
+
+            if (!empty($teacherList)) {
+                foreach ($teacherList as $teacher) {
+                    CourseManager::add_user_to_course($teacher['user_id'], $course_info['code'], COURSEMANAGER);
+                }
+            }
+
+            $msg .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/">
+                    '.$course_info['title'].'</a> '.get_lang('Created').'<br />';
         }
     }
-    
+
     if (!empty($msg)) {
         Display::display_normal_message($msg, false);
     }
@@ -145,7 +163,7 @@ function save_data($courses) {
  * @return array All course-information read from the file
  */
 function parse_csv_data($file) {
-    $courses = Import :: csv_to_array($file);
+    $courses = Import::csv_to_array($file);
     return $courses;
 }
 
@@ -185,7 +203,7 @@ if ($_POST['formSent']) {
         if (!in_array($ext_import_file, $allowed_file_mimetype)) {
             Display :: display_error_message(get_lang('YouMustImportAFileAccordingToSelectedOption'));
         } else {
-            $courses = parse_csv_data($_FILES['import_file']['tmp_name']);            
+            $courses = parse_csv_data($_FILES['import_file']['tmp_name']);
             $errors = validate_data($courses);
             if (count($errors) == 0) {
                 save_data($courses);
@@ -198,7 +216,7 @@ if (count($errors) != 0) {
     $error_message = '<ul>';
     foreach ($errors as $index => $error_course) {
         $error_message .= '<li>'.get_lang('Line').' '.$error_course['line'].': <strong>'.$error_course['error'].'</strong>: ';
-        $error_message .= $error_course['Code'].' '.$error_course['Title'];
+        $error_message .= get_lang('Course').': '.$error_course['Title'].' ('.$error_course['Code'].')';
         $error_message .= '</li>';
     }
     $error_message .= '</ul>';
@@ -213,7 +231,7 @@ if (count($errors) != 0) {
         <input type="file" name="import_file"/>
     </div>
 </div>
-<div class="control-group ">    
+<div class="control-group">
     <div class="control">
         <button type="submit" class="save" value="<?php echo get_lang('Import'); ?>"><?php echo get_lang('Import'); ?></button>
     </div>
@@ -225,8 +243,10 @@ if (count($errors) != 0) {
 
 <blockquote>
 <pre>
-<strong>Code</strong>;<strong>Title</strong>;<strong>CourseCategory</strong>;<strong>Teacher</strong>;Language
-BIO0015;Biology;BIO;username;english
+<strong>Code</strong>;<strong>Title</strong>;<strong>CourseCategory</strong>;Teacher;Language
+BIO0015;Biology;BIO;teacher1;english
+BIO0016;Maths;MATH;teacher2|teacher3;english
+BIO0017;Language;LANG;;english
 </pre>
 </blockquote>
 

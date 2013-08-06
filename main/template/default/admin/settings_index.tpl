@@ -1,7 +1,12 @@
 <script>
-$(function() {
-    //$("#settings").tabs();
-});
+$(document).ready(function() {
+    $.ajax({    
+        url:'{{web_admin_ajax_url}}?a=version',
+        success:function(version){
+            $(".admin-block-version").html(version);
+        } 
+    });
+});    
 </script>
 
 <div id="settings">
@@ -20,6 +25,9 @@ $(function() {
     <div class="row">
     {% for block_item in blocks %}
         <div id="tabs-{{loop.index}}" class="span6">
+        {% if block_item.label == 'VersionCheck'|get_lang %}
+               <div id="tabs-{{loop.index}}" class="admin-block-version">  
+        {% endif %}  
             <div class="well_border">
                 <h4>{{block_item.icon}} {{block_item.label}}</h4>                
                 <div style="list-style-type:none">
@@ -33,12 +41,23 @@ $(function() {
                     </ul>    	
                 {% endif %}
                 
+                {% if block_item.label == 'VersionCheck'|get_lang %}
+                    <div class="admin-block-version"> 
+                {% endif %}
+                
+                {% if block_item.label == 'VersionCheck'|get_lang %}
+                    </div> 
+                {% endif %}
                 {% if block_item.extra is not null %}
                     <div>
                     {{ block_item.extra }}
                     </div>
-                {% endif %}                
+                {% endif %}
+                                
             </div>
+        {% if block_item.label == 'VersionCheck'|get_lang %}
+               </div>  
+        {% endif %}
         </div>        
     {% endfor %}
     </div>

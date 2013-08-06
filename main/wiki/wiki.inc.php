@@ -807,8 +807,8 @@ function display_wiki_entry($newtitle) {
             return Display::display_normal_message(get_lang('WikiStandBy'));
         }
     } else {
-          $content=Security::remove_XSS($row['content'],COURSEMANAGERLOWSECURITY);
-        $title= $row['title'];
+        $content=Security::remove_XSS(api_html_entity_decode($row['content']),COURSEMANAGERLOWSECURITY);
+        $title= api_html_entity_decode($row['title']);
     }
 
     //assignment mode: identify page type

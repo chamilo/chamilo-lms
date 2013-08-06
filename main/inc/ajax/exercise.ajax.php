@@ -216,7 +216,7 @@ switch ($action) {
             if ($debug) error_log("type = $type ");
             if ($debug) error_log("choice = ".print_r($choice, 1)." ");
             if ($debug) error_log("hot_spot_coordinates = ".print_r($hot_spot_coordinates,1));
-            if ($debug) error_log("remind_list = ".print_r($remind_list));
+            if ($debug) error_log("remind_list = ".print_r($remind_list, 1));
 
             //Exercise information
             $objExercise             = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;

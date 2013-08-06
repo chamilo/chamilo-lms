@@ -130,11 +130,9 @@ switch ($action) {
             if ($check) {
                 $values = $form->exportValues();                    
                 $res    = $promotion->update($values);
-                $promotion->update_all_sessions_status_by_promotion_id($values['id'], $values['status']);    
-                if ($values['status']) {
-                    Display::display_confirmation_message(sprintf(get_lang('PromotionXUnarchived'), $values['name']), false);
-                } else {
-                    Display::display_confirmation_message(sprintf(get_lang('PromotionXArchived'), $values['name']), false);
+                $promotion->update_all_sessions_status_by_promotion_id($values['id'], $values['status']);  
+                if ($res) {
+                    Display::display_confirmation_message(get_lang('PromotionUpdated'), $values['name']);
                 }
             }            
             $promotion->display();

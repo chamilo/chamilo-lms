@@ -47,11 +47,11 @@ require_once $lib_path.'fileManage.lib.php';
 api_protect_course_script(true);
 
 //erase temp nanogons' audio, image edit
-if (isset($_SESSION['temp_audio_nanogong']) && !empty($_SESSION['temp_audio_nanogong'])) {
+if (isset($_SESSION['temp_audio_nanogong']) && !empty($_SESSION['temp_audio_nanogong']) && is_file($_SESSION['temp_audio_nanogong'])) {
     unlink($_SESSION['temp_audio_nanogong']);
 }
 
-if (isset($_SESSION['temp_realpath_image']) && !empty($_SESSION['temp_realpath_image'])) {
+if (isset($_SESSION['temp_realpath_image']) && !empty($_SESSION['temp_realpath_image']) && is_file($_SESSION['temp_realpath_image'])) {
     unlink($_SESSION['temp_realpath_image']);
 }
 
@@ -479,7 +479,7 @@ $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skins/chamilo/jplayer.blue.monday.css" type="text/css">';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jquery.jplayer.min.js"></script>';
 //$htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jquery.jplayer.inspector.js"></script>';
-
+$to_group_id = api_get_group_id();
 $mediaplayer_path = api_get_path(WEB_LIBRARY_PATH).'mediaplayer/player.swf';
 $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, false);
 

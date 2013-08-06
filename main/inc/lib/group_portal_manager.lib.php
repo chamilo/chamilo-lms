@@ -376,7 +376,10 @@ class GroupPortalManager
         $sql = "SELECT DISTINCT count(user_id) as count, g.picture_uri, g.name, g.description, g.id
 				FROM $tbl_group g
 				INNER JOIN $table_group_rel_user gu
-				ON gu.group_id = g.id $where_relation_condition GROUP BY g.id ORDER BY count DESC LIMIT $num";
+				ON gu.group_id = g.id $where_relation_condition
+				GROUP BY g.id
+				ORDER BY count DESC
+				LIMIT $num";
 
         $result = Database::query($sql);
         $array = array();
@@ -413,7 +416,9 @@ class GroupPortalManager
         $sql = "SELECT DISTINCT count(user_id) as count, g.picture_uri, g.name, g.description, g.id
 					 FROM $tbl_group g INNER JOIN $table_group_rel_user gu ON gu.group_id = g.id
 					 $where_relation_condition
-					 ORDER BY created_on desc LIMIT $num ";
+					 GROUP BY g.id
+					 ORDER BY created_on DESC
+					 LIMIT $num ";
 
         $result = Database::query($sql);
         $array = array();

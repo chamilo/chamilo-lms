@@ -153,6 +153,8 @@ define('LOG_COURSE_DELETE',                     'course_deleted');
 define('LOG_COURSE_CREATE',                     'course_created');
 define('LOG_USER_DELETE',                       'user_deleted');
 define('LOG_USER_CREATE',                       'user_created');
+define('LOG_USER_ENABLE',                       'user_enable');
+define('LOG_USER_DISABLE',                      'user_disable');
 define('LOG_SESSION_CREATE',                    'session_created');
 define('LOG_SESSION_DELETE',                    'session_deleted');
 define('LOG_SESSION_CATEGORY_CREATE',           'session_category_created');
@@ -1070,6 +1072,7 @@ function _api_format_user($user, $add_password = false) {
     $result['user_id']          = $user_id;
     $result['official_code']    = $user['official_code'];
     $result['status']           = $user['status'];
+    $result['active']           = $user['active'];
     $result['auth_source']      = $user['auth_source'];
 
     if (isset($user['username'])) {
@@ -6430,4 +6433,21 @@ function api_get_bytes_memory_limit($mem){
             break;
     }
     return $mem;
+}
+
+/**
+ * Finds all the information about a user from username instead of user id
+ * @param $username (string): the username
+ * @return $user_info (array): user_id, lastname, firstname, username, email, ...
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ */
+function api_get_user_info_from_official_code($official_code = '') {
+    if (empty($official_code)) { return false; }
+    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE official_code ='".Database::escape_string($official_code)."'";
+    $result = Database::query($sql);
+    if (Database::num_rows($result) > 0) {
+        $result_array = Database::fetch_array($result);
+        return _api_format_user($result_array);
+    }
+    return false;
 }

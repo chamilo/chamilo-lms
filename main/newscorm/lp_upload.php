@@ -100,7 +100,7 @@ if( Request::is_post() && $is_error){
             break;
         case 'woogie':
             require_once 'openoffice_text.class.php';
-            $split_steps = $_POST['split_steps'];
+            $split_steps = (empty($_POST['split_steps']) || $_POST['split_steps'] == 'per_page') ? 'per_page' : 'per_chapter';
             $o_doc = new OpenofficeText($split_steps);
             $first_item_id = $o_doc->convert_document($_FILES['user_file']);
             break;

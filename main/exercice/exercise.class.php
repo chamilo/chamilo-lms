@@ -97,6 +97,7 @@ class Exercise
     public $modelType = 1;
     public $questionSelectionType = EX_Q_SELECTION_ORDERED;
     public $hideQuestionTitle = 0;
+    public $scoreTypeModel = 0;
 
     /**
      * Constructor of the class
@@ -129,6 +130,7 @@ class Exercise
         $this->modelType = 1;
         $this->questionSelectionType = EX_Q_SELECTION_ORDERED;
         $this->endButton = 0;
+        $this->scoreTypeModel = 0;
 
         if (!empty($course_id)) {
             $course_info = api_get_course_info_by_id($course_id);
@@ -192,6 +194,7 @@ class Exercise
             $this->modelType = $object->model_type;
             $this->questionSelectionType = $object->question_selection_type;
             $this->hideQuestionTitle = $object->hide_question_title;
+            $this->scoreTypeModel = $object->score_type_model;
 
             $this->review_answers = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;
             $sql = "SELECT max_score FROM $table_lp_item
@@ -530,6 +533,17 @@ class Exercise
     {
         $this->hideQuestionTitle = intval($value);
     }
+
+    public function getScoreTypeModel()
+    {
+        return $this->scoreTypeModel;
+    }
+
+    public function setScoreTypeModel($value)
+    {
+        $this->scoreTypeModel = intval($value);
+    }
+
     /**
      *
      * @param int $start
@@ -1330,6 +1344,7 @@ class Exercise
                     model_type = '".$this->getModelType()."',
                     question_selection_type = '".$this->getQuestionSelectionType()."',
                     hide_question_title = '".$this->getHideQuestionTitle()."',
+                    score_type_model = '".$this->getScoreTypeModel()."',
 					results_disabled='".Database::escape_string($results_disabled)."'";
             }
             $sql .= " WHERE iid = ".Database::escape_string($id)." AND c_id = {$this->course_id}";
@@ -1347,7 +1362,7 @@ class Exercise
                         c_id, start_time, end_time, title, description, sound, type, random, random_answers, active,
                         max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category,
                         text_when_finished, display_category_name, pass_percentage, end_button, email_notification_template,
-                        results_disabled, model_type, question_selection_type, hide_question_title)
+                        results_disabled, model_type, question_selection_type, score_type_model, hide_question_title)
 					VALUES(
 						".$this->course_id.",
 						'$start_time',
@@ -1373,6 +1388,7 @@ class Exercise
                         '".Database::escape_string($results_disabled)."',
                         '".Database::escape_string($this->getModelType())."',
                         '".Database::escape_string($this->getQuestionSelectionType())."',
+                        '".Database::escape_string($this->getScoreTypeModel())."',
                         '".Database::escape_string($this->getHideQuestionTitle())."'
 						)";
             Database::query($sql);
@@ -1533,16 +1549,46 @@ class Exercise
             </a>'
         );
 
-        // Random questions
-        // style="" and not "display:none" to avoid #4029 Random and number of attempt menu empty
         $form->addElement('html', '<div id="options" style="">');
 
+        // Model type
         $radio = array(
             $form->createElement('radio', 'model_type', null, get_lang('Normal'), EXERCISE_MODEL_TYPE_NORMAL),
             $form->createElement('radio', 'model_type', null, get_lang('Committee'), EXERCISE_MODEL_TYPE_COMMITTEE)
         );
-
         $form->addGroup($radio, null, get_lang('ModelType'), '');
+        $modelType = $this->getModelType();
+
+        $scoreTypeDisplay = 'display:none';
+        if ($modelType == EXERCISE_MODEL_TYPE_COMMITTEE) {
+            $scoreTypeDisplay = null;
+        }
+
+        $form->addElement('html', '<div id="score_type" style="'.$scoreTypeDisplay.'">');
+
+        // QuestionScoreType
+
+        global $app;
+        $em = $app['orm.em'];
+        $types = $em->getRepository('Entity\QuestionScore')->findAll();
+        $options = array(
+            '0' => get_lang('SelectAnOption')
+        );
+
+        foreach ($types as $questionType) {
+            $options[$questionType->getId()] = $questionType->getName();
+        }
+
+        $form->addElement(
+            'select',
+            'score_type_model',
+            array(get_lang('QuestionScoreType')),
+            $options,
+            array('id' => 'score_type_model')
+        );
+
+        $form->addElement('html', '</div>');
+
 
         if ($type == 'full') {
             //Can't modify a DirectFeedback question
@@ -1783,7 +1829,6 @@ class Exercise
                 $option,
                 array('id' => 'questionSelection', 'onclick' => 'checkQuestionSelection()')
             );
-
 
             $displayMatrix = 'none';
             $displayRandom = 'none';
@@ -2042,6 +2087,7 @@ class Exercise
                 $defaults['email_notification_template'] = $this->selectEmailNotificationTemplate();
                 $defaults['model_type'] = $this->getModelType();
                 $defaults['question_selection_type'] = $this->getQuestionSelectionType();
+                $defaults['score_type_model'] = $this->getScoreTypeModel();
 
                 $defaults['hide_question_title'] = $this->getHideQuestionTitle();
 
@@ -2122,6 +2168,7 @@ class Exercise
         $this->setModelType($form->getSubmitValue('model_type'));
         $this->setQuestionSelectionType($form->getSubmitValue('question_selection_type'));
         $this->setHideQuestionTitle($form->getSubmitValue('hide_question_title'));
+        $this->setScoreTypeModel($form->getSubmitValue('score_type_model'));
 
         if ($form->getSubmitValue('activate_start_date_check') == 1) {
             $start_time = $form->getSubmitValue('start_time');

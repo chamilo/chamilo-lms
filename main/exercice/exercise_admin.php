@@ -13,7 +13,6 @@
 
 use \ChamiloSession as Session;
 
-
 require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
@@ -21,7 +20,7 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 if (!api_is_allowed_to_edit(null,true)) {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?1=1';
@@ -74,6 +73,21 @@ $htmlHeadXtra[] = '<script>
             filter_selected: true,
             newel: true
         });
+
+
+        $("input[name=\'model_type\']").each(function(index, value) {
+            $(this).click(function() {
+                var value = $(this).attr("value");
+                // Committee‎
+                if (value == 2) {
+                    $("#score_type").show();
+                } else {
+                    $("#score_type").hide();
+                }
+
+            });
+        });
+
     });
 
 	function advanced_parameters() {

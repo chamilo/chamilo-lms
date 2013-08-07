@@ -20,19 +20,26 @@
 <script>
 
 $(function() {
-    // When loading the page create delete buttons for inputs:
-    $("#list form :input").each(function(index, value) {
+    // Create delete buttons:
+    $("#list form input:text").each(function(index, value) {
         var input = $(this);
-        if (input.attr('type') == 'text') {
-            var removeForm = $('<a class="btn btn-danger" href="#"><i class="icon-minus-sign icon-large"></i></a>');
-            //var id = input.parent().parent().parent().parent().attr('id');
-            var maxRepeat = input.parent().parent().parent().parent().attr('data-max');
 
-            if (maxRepeat != 1) {
-                input.parent().append(removeForm);
-                addTagFormDeleteLink(removeForm);
-            }
+        var removeForm = $('<a class="btn btn-danger" href="#"><i class="icon-minus-sign icon-large"></i></a>');
+        //var id = input.parent().parent().parent().parent().attr('id');
+        var maxRepeat = input.parent().parent().parent().parent().attr('data-max');
+
+        if (maxRepeat != 1) {
+            input.parent().append(removeForm);
+            addTagFormDeleteLink(removeForm);
         }
+    });
+    // Create add buttons:
+    $(".items").each(function(index, value) {
+        var itemId = $(this).attr('id');
+        var lastInput = $(this).find("input:text").last();
+        console.log(lastInput.attr('id'));
+        var addButton = $('<a class="btn-add btn btn-primary" data-target="'+itemId+'"><i class="icon-plus-sign icon-large"></i></a>');
+        //lastInput.parent().append(addButton );
     });
 
     // When clicking in the add button:
@@ -108,14 +115,6 @@ function saveAll() {
                     <h5> {{ item.title }} (item) - Max {{ item.maxRepeat }}</h5>
 
                     {{ form_start(form_list[item.id]) }}
-                        <div class="btn-group">
-                            {# form_widget(form_list[item.id].submit) #}
-                            <!-- <a class="btn btn-success" onclick="save('items_{{ item.id }}');" data-target="items_{{ item.id }}">{{ 'Save items' | get_lang }}</a> -->
-                            {% if item.maxRepeat > 1 %}
-                                <a class="btn-add btn btn-primary" data-target="items_{{ item.id }}"><i class="icon-plus-sign icon-large"></i></a>
-                            {% endif %}
-                        </div>
-
                         <div id="items_{{ item.id }}" class="items" data-max="{{ item.maxRepeat }}" data-prototype="{{ form_widget(form_list[item.id].userItems.vars.prototype)|e }}" >
                             {% for widget in form_list[item.id].userItems.children %}
                                 {{ _self.widget_prototype(widget, 'Remove item') }}
@@ -123,6 +122,14 @@ function saveAll() {
 
                             <ul>
                             </ul>
+                        </div>
+
+                        <div class="btn-group">
+                            {# form_widget(form_list[item.id].submit) #}
+                            <!-- <a class="btn btn-success" onclick="save('items_{{ item.id }}');" data-target="items_{{ item.id }}">{{ 'Save items' | get_lang }}</a> -->
+                            {% if item.maxRepeat > 1 %}
+                                <a class="btn-add btn btn-primary" data-target="items_{{ item.id }}"><i class="icon-plus-sign icon-large"></i></a>
+                            {% endif %}
                         </div>
 
                     {{ form_end(form_list[item.id]) }}

@@ -1129,7 +1129,6 @@ if (!empty($error)) {
 
             function saveQuestionList(question_list) {
                 var redirect = true;
-
                 $.each(question_list, function(key, question_id) {
                     result = save_now(question_id, null, false, 0);
                     if (result == "answer_required") {

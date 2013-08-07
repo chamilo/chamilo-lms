@@ -71,22 +71,21 @@ CREATE TABLE users_roles (
   PRIMARY KEY(user_id, role_id)
 );
 
--- Admin
-INSERT INTO users_roles VALUES (1, 1);
-
-INSERT INTO roles (name, role) VALUES('Admin', 'ROLE_ADMIN');
-INSERT INTO roles (name, role) VALUES('Teacher', 'ROLE_TEACHER');
-INSERT INTO roles (name, role) VALUES('Student', 'ROLE_STUDENT');
-INSERT INTO roles (name, role) VALUES('Anonymous', 'ROLE_ANONYMOUS');
-INSERT INTO roles (name, role) VALUES('RRHH', 'ROLE_RRHH');
-INSERT INTO roles (name, role) VALUES('Question Manager', 'ROLE_QUESTION_MANAGER');
+INSERT INTO roles (id, name, role) VALUES('1', 'Teacher', 'ROLE_TEACHER');
+INSERT INTO roles (id, name, role) VALUES('4', 'RRHH', 'ROLE_RRHH');
+INSERT INTO roles (id, name, role) VALUES('3', 'Session Manager', 'ROLE_SESSION_MANAGER');
+INSERT INTO roles (id ,name, role) VALUES('5', 'Student', 'ROLE_STUDENT');
+INSERT INTO roles (id, name, role) VALUES('6', 'Anonymous', 'ROLE_ANONYMOUS');
+INSERT INTO roles (id, name, role) VALUES('11', 'Admin', 'ROLE_ADMIN');
+INSERT INTO roles (id, name, role) VALUES('17', 'Question Manager', 'ROLE_QUESTION_MANAGER');
 
 INSERT INTO roles (name, role) VALUES('Jury president', 'ROLE_JURY_PRESIDENT');
 INSERT INTO roles (name, role) VALUES('Jury member', 'ROLE_JURY_MEMBER');
 INSERT INTO roles (name, role) VALUES('Jury substitute', 'ROLE_JURY_SUBSTITUTE');
 INSERT INTO roles (name, role) VALUES('Director', 'ROLE_DIRECTOR');
-INSERT INTO roles (name, role) VALUES('Session Manager', 'ROLE_SESSION_MANAGER');
 
+-- Admin
+INSERT INTO users_roles VALUES (1, 11);
 
 --
 -- Table structure for table admin

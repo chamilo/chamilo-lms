@@ -1851,7 +1851,7 @@ class SessionManager {
      * @param int $user_id
      * @return array
      */
-    static function importCSV($file, $updatesession, $user_id = null, $debug = false)
+    static function importCSV($file, $updatesession, $user_id = null, $logger = null)
     {
         $content = file($file);
         $error_message = null;
@@ -1859,6 +1859,11 @@ class SessionManager {
 
         if (empty($user_id)) {
             $user_id = api_get_user_id();
+        }
+
+        $debug = false;
+        if (isset($logger)) {
+            $debug = true;
         }
 
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -1944,9 +1949,9 @@ class SessionManager {
 
                     if ($debug) {
                         if ($session_id) {
-                            Log::info("Sessions - Session created: #$session_id - $session_name");
+                            $logger->addInfo("Sessions - Session created: #$session_id - $session_name");
                         } else {
-                            Log::error("Sessions - Session NOT created $session_name");
+                            $logger->addError("Sessions - Session NOT created $session_name");
                         }
                     }
                     $session_counter++;
@@ -1970,9 +1975,9 @@ class SessionManager {
 
                         if ($debug) {
                             if ($session_id) {
-                                Log::info("Sessions - #$session_id created: $session_name");
+                                $logger->addInfo("Sessions - #$session_id created: $session_name");
                             } else {
-                                Log::error("Sessions - Session NOT created $session_name");
+                                $logger->addError("Sessions - Session NOT created $session_name");
                             }
                         }
                     } else {
@@ -2007,7 +2012,7 @@ class SessionManager {
                                     id_session = '$session_id'";
                             Database::query($sql);
                             if ($debug) {
-                                Log::info("Sessions - Adding User #$user_id to session #$session_id");
+                                $logger->addInfo("Sessions - Adding User #$user_id to session #$session_id");
                             }
                             $user_counter++;
                         }
@@ -2043,7 +2048,7 @@ class SessionManager {
                         Database::query($sql_course);
 
                         if ($debug) {
-                            Log::info("Sessions - Adding course '$course_code' to session #$session_id");
+                            $logger->addInfo("Sessions - Adding course '$course_code' to session #$session_id");
                         }
                         $course_counter++;
 
@@ -2070,7 +2075,7 @@ class SessionManager {
                                             status = 2 ";
                                     Database::query($sql);
                                     if ($debug) {
-                                        Log::info("Sessions - Adding course coach: user #$coach_id to course: '$course_code' and session #$session_id");
+                                        $logger->addInfo("Sessions - Adding course coach: user #$coach_id to course: '$course_code' and session #$session_id");
                                     }
                                 } else {
                                     $error_message .= get_lang('UserDoesNotExist').' : '.$user.'<br />';
@@ -2090,7 +2095,7 @@ class SessionManager {
                                         id_session = '$session_id'";
                                 Database::query($sql);
                                 if ($debug) {
-                                    Log::info("Sessions - Adding student: user #$user_id to course: '$course_code' and session #$session_id");
+                                    $logger->addInfo("Sessions - Adding student: user #$user_id to course: '$course_code' and session #$session_id");
                                 }
                                 $users_in_course_counter++;
                             } else {
@@ -2126,7 +2131,7 @@ class SessionManager {
                                 Database::query($sql_course);
 
                                 if ($debug) {
-                                    Log::info("Sessions - Adding course to session: course: '".$vcourse['code']."' and session #$session_id");
+                                    $logger->addInfo("Sessions - Adding course to session: course: '".$vcourse['code']."' and session #$session_id");
                                 }
 
                                 // adding coachs to session course user
@@ -2141,7 +2146,7 @@ class SessionManager {
                                         Database::query($sql);
 
                                         if ($debug) {
-                                            Log::info("Sessions - Adding coach to session: user #$coach_id course: '".$vcourse['code']."' and session #$session_id");
+                                            $logger->addInfo("Sessions - Adding coach to session: user #$coach_id course: '".$vcourse['code']."' and session #$session_id");
                                         }
 
                                     } else {
@@ -2161,7 +2166,7 @@ class SessionManager {
                                         Database::query($sql);
 
                                         if ($debug) {
-                                            Log::info("Sessions - Adding user to session: user #$user_id course: '".$vcourse['code']."' and session #$session_id");
+                                            $logger->addInfo("Sessions - Adding user to session: user #$user_id course: '".$vcourse['code']."' and session #$session_id");
                                         }
 
                                         $users_in_course_counter++;

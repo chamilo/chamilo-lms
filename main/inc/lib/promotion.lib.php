@@ -86,7 +86,7 @@ class Promotion extends Model {
                         $new_session_list = array();
                         
 						foreach($session_list as $item) {
-							$sid = SessionManager::copy_session($item['id'], true, false, true, true);						
+							$sid = SessionManager::copy_session($item['id'], true, false, false, true);						
                             $new_session_list[] = $sid;
 						}
                         
@@ -218,8 +218,12 @@ class Promotion extends Model {
     }
     
     public function delete($id) {
-    	parent::delete($id);
-    	event_system(LOG_PROMOTION_DELETE, LOG_PROMOTION_ID, $id, api_get_utc_datetime(), api_get_user_id());    	
+    	if (parent::delete($id)) {
+           SessionManager::clear_session_ref_promotion($id);
+    	   event_system(LOG_PROMOTION_DELETE, LOG_PROMOTION_ID, $id, api_get_utc_datetime(), api_get_user_id());
+        } else {
+            return false;
+        }   	
     }
    
     

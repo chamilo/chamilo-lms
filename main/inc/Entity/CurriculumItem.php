@@ -85,10 +85,8 @@ class CurriculumItem
         return $this->userItems;
     }
 
-
     /**
-     *
-     * @return CurriculumCategory
+     * @param $userItem
      */
     public function setUserItems($userItem)
     {

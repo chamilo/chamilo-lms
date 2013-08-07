@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
 use Entity;
 use ChamiloLMS\Form\CurriculumItemRelUserCollectionType;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
@@ -47,6 +48,18 @@ class CurriculumUserController extends CommonController
             /** @var \Entity\CurriculumItem $item */
             foreach ($category->getItems() as $item) {
                 $formType = new CurriculumItemRelUserCollectionType($item->getId());
+
+                $count = count($item->getUserItems());
+                // If there are no items for the user, then create a new one!
+                if ($count == 0) {
+                    $userItem = new Entity\CurriculumItemRelUser();
+                    $userItem->setItemId($item->getId());
+                    $userItemList = array(
+                        $userItem
+                    );
+                    $item->setUserItems($userItemList);
+                }
+
                 $form = $this->get('form.factory')->create($formType, $item);
                 $formList[$item->getId()] = $form->createView();
             }
@@ -139,6 +152,7 @@ class CurriculumUserController extends CommonController
                     $curriculumItemRelUser->setOrderId(strval($counter));
                     $description = $curriculumItemRelUser->getDescription();
 
+                    // Need description
                     if (empty($description)) {
                         // error_log('skip');
                         continue;
@@ -153,9 +167,12 @@ class CurriculumUserController extends CommonController
                             // error_log("aaa ->".$curriculumItemRelUser->getDescription());
                             continue;
                         } else {
-                            $this->checkAndCreateAction($curriculumItemRelUser);
+                            // No need to check because it's an update.
+                            // Update
+                            $this->createAction($curriculumItemRelUser);
                         }
                     } else {
+                        // Insert
                         $this->checkAndCreateAction($curriculumItemRelUser);
                     }
 
@@ -169,6 +186,7 @@ class CurriculumUserController extends CommonController
                         }
                     }
                 }
+
             }
         }
         $response = null;
@@ -185,7 +203,7 @@ class CurriculumUserController extends CommonController
         if (false === $object) {
             throw new \Exception('Unable to create the entity');
         }
-
+        /** @var Entity\Repository\CurriculumItemRelUserRepository $repo */
         $repo = $this->getRepository();
         if ($repo->isAllowToInsert($object->getItem(), $object->getUser())) {
             $this->createAction($object);

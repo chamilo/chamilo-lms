@@ -25,16 +25,20 @@ $(function() {
         var input = $(this);
         if (input.attr('type') == 'text') {
             var removeForm = $('<a class="btn btn-danger" href="#"><i class="icon-minus-sign icon-large"></i></a>');
-            input.parent().append(removeForm);
-            addTagFormDeleteLink(removeForm);
+            //var id = input.parent().parent().parent().parent().attr('id');
+            var maxRepeat = input.parent().parent().parent().parent().attr('data-max');
+
+            if (maxRepeat != 1) {
+                input.parent().append(removeForm);
+                addTagFormDeleteLink(removeForm);
+            }
         }
     });
 
     // When clicking in the add button:
     $('.btn-add[data-target]').live('click', function(event) {
-        var maxRepeat = $(this).attr('data-max');
         var collectionHolder = $('#' + $(this).attr('data-target'));
-
+        var maxRepeat = collectionHolder.attr('data-max');
         var countInput = collectionHolder.find('input:text').length;
 
         if (countInput > maxRepeat - 1) {
@@ -107,18 +111,18 @@ function saveAll() {
                         <div class="btn-group">
                             {# form_widget(form_list[item.id].submit) #}
                             <!-- <a class="btn btn-success" onclick="save('items_{{ item.id }}');" data-target="items_{{ item.id }}">{{ 'Save items' | get_lang }}</a> -->
-                            <a class="btn-add btn btn-primary" data-max="{{ item.maxRepeat }}" data-target="items_{{ item.id }}"><i class="icon-plus-sign icon-large"></i></a>
+                            {% if item.maxRepeat > 1 %}
+                                <a class="btn-add btn btn-primary" data-target="items_{{ item.id }}"><i class="icon-plus-sign icon-large"></i></a>
+                            {% endif %}
                         </div>
 
-                        <div id="items_{{ item.id }}" class="items" data-prototype="{{ form_widget(form_list[item.id].userItems.vars.prototype)|e }}" >
+                        <div id="items_{{ item.id }}" class="items" data-max="{{ item.maxRepeat }}" data-prototype="{{ form_widget(form_list[item.id].userItems.vars.prototype)|e }}" >
                             {% for widget in form_list[item.id].userItems.children %}
                                 {{ _self.widget_prototype(widget, 'Remove item') }}
                             {% endfor %}
 
                             <ul>
                             </ul>
-
-
                         </div>
 
                     {{ form_end(form_list[item.id]) }}

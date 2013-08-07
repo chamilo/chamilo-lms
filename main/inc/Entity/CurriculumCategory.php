@@ -106,6 +106,7 @@ class CurriculumCategory
 
     /**
      * @ORM\OneToMany(targetEntity="CurriculumItem", mappedBy="category")
+     * @ORM\OrderBy({"title" = "ASC"})
      */
     private $items;
 

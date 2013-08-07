@@ -19,7 +19,6 @@ class CurriculumItemRelUserRepository extends EntityRepository
      */
     public function isAllowToInsert(\Entity\CurriculumItem $item, \Entity\User $user)
     {
-
         $max = $item->getMaxRepeat();
         $count = $this->createQueryBuilder('a')
             ->select('COUNT(a)')
@@ -33,7 +32,7 @@ class CurriculumItemRelUserRepository extends EntityRepository
             )
             ->getQuery()
             ->getSingleScalarResult();
-        return $count >= $max ? false : true;
+        return $count <= $max ? true : false;
 
     }
 }

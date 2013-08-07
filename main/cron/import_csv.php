@@ -19,6 +19,11 @@ class ImportCsv
     public function run()
     {
         $path = api_get_path(SYS_CODE_PATH).'cron/incoming/';
+        if (!is_dir($path)) {
+            echo "The folder! $path does not exits";
+            exit;
+        }
+
         $files = scandir($path);
         if (!empty($files)) {
             foreach ($files as $file) {
@@ -331,10 +336,13 @@ use Monolog\Handler\RotatingFileHandler;
 
 $logger = new Logger('cron');
 
-$to = "";
+$to = isset($_configuration['cron_notification_mail']) ? $_configuration['cron_notification_mail'] : null;
 $subject = "Cron main/cron/import_csv.php ".date('Y-m-d h:i:s');
 $from = api_get_setting('emailAdministrator');
-$logger->pushHandler(new NativeMailerHandler($to, $subject, $from, Logger::ERROR));
+
+if (!empty($to)) {
+    $logger->pushHandler(new NativeMailerHandler($to, $subject, $from, Logger::ERROR));
+}
 
 $logger->pushHandler(new StreamHandler(api_get_path(SYS_ARCHIVE_PATH).'import_csv.log'), Logger::ERROR);
 $logger->pushHandler(new RotatingFileHandler('import_csv', 5, Logger::ERROR));

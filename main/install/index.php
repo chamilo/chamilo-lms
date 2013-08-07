@@ -23,6 +23,7 @@ class BufferedOutput extends Output
 {
     public $messages = array();
     public $lastMessage = null;
+    public $buffer = null;
 
     public function doWrite($message, $newline)
     {

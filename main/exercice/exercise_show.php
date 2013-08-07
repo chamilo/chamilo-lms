@@ -273,15 +273,15 @@ while ($row = Database::fetch_array($result)) {
     $exerciseResult[$row['question_id']] = $row['answer'];
 }
 
-//Fixing #2073 Fixing order of questions
+// Fixing #2073 Fixing order of questions.
 if (!empty($track_exercise_info['data_tracking'])) {
-	$temp_question_list = explode(',', $track_exercise_info['data_tracking']);
+    $temp_question_list = explode(',', $track_exercise_info['data_tracking']);
 
-    //Getting question list from data_tracking
+    // Getting question list from data_tracking.
     if (!empty($temp_question_list)) {
         $questionList = $temp_question_list;
     }
-    //If for some reason data_tracking is empty we select the question list from db
+    // If for some reason data_tracking is empty we select the question list from db.
     if (empty($questionList)) {
         $questionList = $question_list_from_database;
     }
@@ -314,78 +314,79 @@ $arrid = array();
 
 foreach ($questionList as $questionId) {
 
-    $choice = $exerciseResult[$questionId];
+    $choice = isset($exerciseResult[$questionId]) ? $exerciseResult[$questionId] : null;
 
-	// creates a temporary Question object
+    // Creates a temporary Question object
+
     /** @var Question $objQuestionTmp */
-	$objQuestionTmp = Question::read($questionId);
+    $objQuestionTmp = Question::read($questionId);
 
-	$questionWeighting	= $objQuestionTmp->selectWeighting();
-	$answerType			= $objQuestionTmp->selectType();
+    $questionWeighting	= $objQuestionTmp->selectWeighting();
+    $answerType			= $objQuestionTmp->selectType();
 
-	// Start buffer
+    // Start buffer
     ob_start();
 
     /* Use switch
     switch ($answerType) {
     }*/
-	if ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
+    if ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
         $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore   = $question_result['score'];
         $totalScore      += $question_result['score'];
-	} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
-		$choice = array();
+    } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
+        $choice = array();
         $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];
-	} elseif ($answerType == UNIQUE_ANSWER || $answerType ==  UNIQUE_ANSWER_NO_OPTION) {
+    } elseif ($answerType == UNIQUE_ANSWER || $answerType ==  UNIQUE_ANSWER_NO_OPTION) {
         $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];
-		echo '</table>';
-	} elseif ($answerType == FILL_IN_BLANKS) {
+        echo '</table>';
+    } elseif ($answerType == FILL_IN_BLANKS) {
         $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];
-	} elseif ($answerType == GLOBAL_MULTIPLE_ANSWER) {
+    } elseif ($answerType == GLOBAL_MULTIPLE_ANSWER) {
         $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];
-	} elseif ($answerType == FREE_ANSWER) {
+    } elseif ($answerType == FREE_ANSWER) {
         $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];
-	} elseif ($answerType == ORAL_EXPRESSION) {
-		$question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
-		$questionScore   = $question_result['score'];
-		$totalScore     += $question_result['score'];
-	} elseif ($answerType == MATCHING || $answerType == DRAGGABLE) {
+    } elseif ($answerType == ORAL_EXPRESSION) {
         $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];
-	} elseif ($answerType == HOT_SPOT) {
+    } elseif ($answerType == MATCHING || $answerType == DRAGGABLE) {
+        $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
+        $questionScore   = $question_result['score'];
+        $totalScore     += $question_result['score'];
+    } elseif ($answerType == HOT_SPOT) {
         //@todo remove this HTML and move in the function
-	    if ($show_results) {
-		    echo '<table width="500" border="0"><tr>
+        if ($show_results) {
+            echo '<table width="500" border="0"><tr>
                     <td valign="top" align="center" style="padding-left:0px;" >
                         <table border="1" bordercolor="#A4A4A4" style="border-collapse: collapse;" width="552">';
-		}
+        }
         $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore  = $question_result['score'];
         $totalScore    += $question_result['score'];
 
         if ($show_results) {
-			echo '</table></td></tr>';
-		 	echo '<tr>
-				<td colspan="2">'.
-					'<object type="application/x-shockwave-flash" data="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_solution.swf?modifyAnswers='.intval($questionId).'&exe_id='.$id.'&from_db=1" width="552" height="352">
-						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.intval($questionId).'&exe_id='.$id.'&from_db=1" />
-					</object>
-				</td>
-			</tr>
-			</table><br/>';
+            echo '</table></td></tr>';
+            echo '<tr>
+                <td colspan="2">'.
+                    '<object type="application/x-shockwave-flash" data="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_solution.swf?modifyAnswers='.intval($questionId).'&exe_id='.$id.'&from_db=1" width="552" height="352">
+                        <param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.intval($questionId).'&exe_id='.$id.'&from_db=1" />
+                    </object>
+                </td>
+            </tr>
+            </table><br/>';
         }
-	} else if($answerType == HOT_SPOT_DELINEATION) {
+    } else if($answerType == HOT_SPOT_DELINEATION) {
 
         $question_result  = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
 
@@ -516,7 +517,7 @@ foreach ($questionList as $questionId) {
                 </tr>
                 </table>';
         }
-	}
+    }
 
 	if ($show_results) {
 	    if ($answerType != HOT_SPOT) {

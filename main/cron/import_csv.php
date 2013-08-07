@@ -330,9 +330,8 @@ use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\NativeMailerHandler;
 use Monolog\Handler\RotatingFileHandler;
+use Monolog\Handler\BufferHandler;
 
-//use Monolog\Handler\SwiftMailerHandler;
-//require_once api_get_path(LIBRARY_PATH).'swiftmailer/lib/swift_required.php';
 $logger = new Logger('cron');
 $emails = isset($_configuration['cron_notification_mails']) ? $_configuration['cron_notification_mails'] : null;
 
@@ -346,11 +345,13 @@ $from = api_get_setting('emailAdministrator');
 
 if (!empty($emails)) {
     foreach ($emails as $email) {
-        $logger->pushHandler(new NativeMailerHandler($email, $subject, $from, $minLevel));
+        $stream = new NativeMailerHandler($email, $subject, $from, $minLevel);
+        $logger->pushHandler(new BufferHandler($stream, 0, $minLevel));
     }
 }
 
-$logger->pushHandler(new StreamHandler(api_get_path(SYS_ARCHIVE_PATH).'import_csv.log', $minLevel));
+$stream = new StreamHandler(api_get_path(SYS_ARCHIVE_PATH).'import_csv.log', $minLevel);
+$logger->pushHandler(new BufferHandler($stream, 0, $minLevel));
 $logger->pushHandler(new RotatingFileHandler('import_csv', 5, $minLevel));
 
 $import = new ImportCsv($logger);

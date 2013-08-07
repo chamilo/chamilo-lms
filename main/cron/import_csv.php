@@ -333,19 +333,25 @@ use Monolog\Handler\RotatingFileHandler;
 
 //use Monolog\Handler\SwiftMailerHandler;
 //require_once api_get_path(LIBRARY_PATH).'swiftmailer/lib/swift_required.php';
-
 $logger = new Logger('cron');
+$emails = isset($_configuration['cron_notification_mails']) ? $_configuration['cron_notification_mails'] : null;
 
-$to = isset($_configuration['cron_notification_mail']) ? $_configuration['cron_notification_mail'] : null;
+$minLevel = Logger::DEBUG;
+
+if (!is_array($emails)) {
+    $emails = array($emails);
+}
 $subject = "Cron main/cron/import_csv.php ".date('Y-m-d h:i:s');
 $from = api_get_setting('emailAdministrator');
 
-if (!empty($to)) {
-    $logger->pushHandler(new NativeMailerHandler($to, $subject, $from, Logger::ERROR));
+if (!empty($emails)) {
+    foreach ($emails as $email) {
+        $logger->pushHandler(new NativeMailerHandler($email, $subject, $from, $minLevel));
+    }
 }
 
-$logger->pushHandler(new StreamHandler(api_get_path(SYS_ARCHIVE_PATH).'import_csv.log'), Logger::ERROR);
-$logger->pushHandler(new RotatingFileHandler('import_csv', 5, Logger::ERROR));
+$logger->pushHandler(new StreamHandler(api_get_path(SYS_ARCHIVE_PATH).'import_csv.log', $minLevel));
+$logger->pushHandler(new RotatingFileHandler('import_csv', 5, $minLevel));
 
 $import = new ImportCsv($logger);
 $import->run();

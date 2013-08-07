@@ -98,6 +98,7 @@ class Exercise
     public $questionSelectionType = EX_Q_SELECTION_ORDERED;
     public $hideQuestionTitle = 0;
     public $scoreTypeModel = 0;
+    public $categoryMinusOne = true; // Shows the category -1: See BT#6540
 
     /**
      * Constructor of the class
@@ -828,7 +829,6 @@ class Exercise
         // Order/random categories
         $cat = new Testcategory();
 
-
         // Setting category order.
         switch ($questionSelectionType) {
             case EX_Q_SELECTION_ORDERED: // 1
@@ -850,27 +850,27 @@ class Exercise
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'title DESC', false, true);
                 $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise);
                 $question_list = $this->pickQuestionsPerCategory($categoriesAddedInExercise, $question_list, $questions_by_category, true, true);
-                    break;
+                break;
             case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM: // 6
             case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED:
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], null, true, true);
                 $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise);
                 $question_list = $this->pickQuestionsPerCategory($categoriesAddedInExercise, $question_list, $questions_by_category, true, true);
-                    break;
-            /*case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED: // 7
-                    break;
+                break;
+            case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED: // 7
+                break;
             case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED: // 8
-                break;*/
+                break;
             case EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED: // 9
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'root ASC', false, true);
                 $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise);
                 $question_list = $this->pickQuestionsPerCategory($categoriesAddedInExercise, $question_list, $questions_by_category, true, false);
-                    break;
+                break;
             case EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM: // 10
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'root ASC', false, true);
                 $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise);
                 $question_list = $this->pickQuestionsPerCategory($categoriesAddedInExercise, $question_list, $questions_by_category, true, true);
-                    break;
+                break;
         }
 
         $result['question_list'] = isset($question_list) ? $question_list : array();
@@ -892,7 +892,6 @@ class Exercise
                 $cat['iid'] = $cat['id'];
                 $cat['name'] = $cat['title'];
 
-
                 $categoryParentInfo = null;
 
                 if (!empty($cat['parent_id'])) {
@@ -903,14 +902,18 @@ class Exercise
                         $categoryEntity = $parentsLoaded[$cat['parent_id']];
                     }
                     $path = $repo->getPath($categoryEntity);
-                    if (isset($path) && isset($path[0])) {
-                        $categoryParentId = $path[0]->getIid();
+                    $index = 0;
+                    if ($this->categoryMinusOne) {
+                        $index = 1;
+                    }
+                    if (isset($path) && isset($path[$index])) {
+                        $categoryParentId = $path[$index]->getIid();
 
                         $categoryParentInfo['id'] = $categoryParentId;
                         $categoryParentInfo['iid'] = $categoryParentId;
                         $categoryParentInfo['parent_path'] = null;
-                        $categoryParentInfo['title'] = $path[0]->getTitle();
-                        $categoryParentInfo['name'] = $path[0]->getTitle();
+                        $categoryParentInfo['title'] = $path[$index]->getTitle();
+                        $categoryParentInfo['name'] = $path[$index]->getTitle();
                         $categoryParentInfo['parent_id'] = null;
                     }
                 }
@@ -5842,10 +5845,12 @@ class Exercise
         if ($this->review_answers) {
             $reviewAnswerLabel = Display::label(sprintf(get_lang('ToReviewZ'),'c'), 'warning').'<br />';
         }
+
         $currentAnswerLabel = null;
         if (!empty($current_question)) {
             $currentAnswerLabel = Display::label(sprintf(get_lang('CurrentQuestionZ'),'d'), 'info');
         }
+
         // Count the number of answered, unanswered and 'for review' questions - see BT#6523
         $numa = count(array_flip(array_merge($exercise_result,$remindList)));
         $numu = count($questionListFlatten)-$numa;
@@ -5884,29 +5889,31 @@ class Exercise
     {
         $newMediaList = array();
         $mediaQuestions = $this->getMediaList();
+
         foreach ($mediaQuestions as $mediaId => $questionMediaList) {
             foreach ($questionMediaList as $questionId) {
                 $newMediaList[$questionId] = $mediaId;
             }
         }
+
         $categoryList = $this->categoryWithQuestionList;
         $categoriesWithQuestion = array();
 
         if (!empty($categoryList)) {
-        foreach ($categoryList as $categoryId => $category) {
-            $categoriesWithQuestion[$categoryId] = $category['category'];
-            $categoriesWithQuestion[$categoryId]['question_list'] = $category['question_list'];
+            foreach ($categoryList as $categoryId => $category) {
+                $categoriesWithQuestion[$categoryId] = $category['category'];
+                $categoriesWithQuestion[$categoryId]['question_list'] = $category['question_list'];
 
-            if (!empty($newMediaList)) {
-                foreach ($category['question_list'] as $questionId) {
-                    if (isset($newMediaList[$questionId])) {
-                       $categoriesWithQuestion[$categoryId]['media_question'] = $newMediaList[$questionId];
-                    }  else {
-                       $categoriesWithQuestion[$categoryId]['media_question'] = 999;
+                if (!empty($newMediaList)) {
+                    foreach ($category['question_list'] as $questionId) {
+                        if (isset($newMediaList[$questionId])) {
+                           $categoriesWithQuestion[$categoryId]['media_question'] = $newMediaList[$questionId];
+                        }  else {
+                           $categoriesWithQuestion[$categoryId]['media_question'] = 999;
+                        }
                     }
                 }
             }
-        }
         }
         return $categoriesWithQuestion;
     }
@@ -6311,7 +6318,7 @@ class Exercise
 
             // Shows the question + possible answers
             $showTitle = $this->getHideQuestionTitle() == 1 ? false : true;
-            echo ExerciseLib::showQuestion($question_obj, false, $origin, $i, $showTitle, false, $user_choice, false, null, false, $this->getModelType());
+            echo ExerciseLib::showQuestion($question_obj, false, $origin, $i, $showTitle, false, $user_choice, false, null, false, $this->getModelType(), $this->categoryMinusOne);
 
             // Button save and continue
             switch ($this->type) {
@@ -6425,6 +6432,7 @@ class Exercise
 
         // Display text when test is finished #4074 and for LP #4227
         $end_of_message = $this->selectTextWhenFinished();
+
         if (!empty($end_of_message)) {
             Display::display_normal_message($end_of_message, false);
             echo "<div class='clear'>&nbsp;</div>";
@@ -6566,7 +6574,7 @@ class Exercise
                     $question_content .= $objQuestionTmp->return_header(null, $counterToShow, $score, $show_media, $this->getHideQuestionTitle());
 
                     // display question category, if any
-                    $question_content .= Testcategory::getCategoryNamesForQuestion($questionId);
+                    $question_content .= Testcategory::getCategoryNamesForQuestion($questionId, null, true, $this->categoryMinusOne);
                 }
                 $counter++;
 
@@ -6594,7 +6602,7 @@ class Exercise
         if (!empty($category_list) && ($show_results || $show_only_score)) {
             //Adding total
             $category_list['total'] = array('score' => $total_score, 'total' => $total_weight);
-            echo Testcategory::get_stats_table_by_attempt($this->id, $category_list);
+            echo Testcategory::get_stats_table_by_attempt($this->id, $category_list, $this->categoryMinusOne);
         }
 
         echo $total_score_text;

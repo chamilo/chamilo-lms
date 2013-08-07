@@ -398,10 +398,11 @@ class Testcategory
      * @param int $question_id
      * @param int $course_id
      * @param bool $display_into_labels
+     * @param bool $categoryMinusOne shows category - 1 see BT#6540
      * @return string
      */
-    public static function getCategoryNamesForQuestion($question_id, $course_id = null, $display_into_labels = true) {
-        $result = array(); // result
+    public static function getCategoryNamesForQuestion($question_id, $course_id = null, $display_into_labels = true, $categoryMinusOne = false)
+    {
         if (empty($course_id) || $course_id == "") {
             $course_id = api_get_course_int_id();
         }
@@ -414,10 +415,19 @@ class Testcategory
                 ON (qc.category_id = c.iid AND qc.c_id = $course_id)
                 WHERE question_id = '$question_id' ";
 		$res = Database::query($sql);
+        $result = array();
 		if (Database::num_rows($res) > 0) {
             while ($row = Database::fetch_array($res)) {
                 $cat = new Testcategory($row['iid']);
+                if ($categoryMinusOne) {
+                    $catParts = explode('>', $cat->parent_path);
+                    if (isset($catParts[0])) {
+                        unset($catParts[0]);
+                        $cat->parent_path = implode('>', $catParts);
+                    }
+                }
                 $result[] = array('title' => $cat->parent_path);
+
             }
 		}
 
@@ -699,11 +709,13 @@ class Testcategory
         }
 
         $newCategoryList = array();
-
         foreach ($categoriesAddedInExercise as $category) {
             $categoryId = $category['category_id'];
-            $newCategoryList[$categoryId] = $categories[$categoryId];
-            }
+            //if (isset($categories[$categoryId])) {
+                $newCategoryList[$categoryId] = $categories[$categoryId];
+            //}
+        }
+
         return $newCategoryList;
     }
 
@@ -908,10 +920,14 @@ class Testcategory
 
     /**
      * Returns a category summary report
-     * @params int exercise id
-     * @params array prefilled array with the category_id, score, and weight example: array(1 => array('score' => '10', 'total' => 20));
+     *
+     * @param int exercise id
+     * @param array prefilled array with the category_id, score, and weight example: array(1 => array('score' => '10', 'total' => 20));
+     * @param bool $categoryMinusOne shows category - 1 see BT#6540
+     * @return string
      */
-    public static function get_stats_table_by_attempt($exercise_id, $category_list = array())
+
+    public static function get_stats_table_by_attempt($exercise_id, $category_list = array(), $categoryMinusOne = false)
     {
         global $app;
         if (empty($category_list)) {
@@ -951,10 +967,16 @@ class Testcategory
 
                 $categoryName = $category_name_list[$category_id];
 
-                if (isset($path[0])) {
-                    $category_id = $path[0]->getIid();
-                    $categoryName = $path[0]->getTitle();
+                $index = 0;
+                if ($categoryMinusOne) {
+                    $index = 1;
                 }
+
+                if (isset($path[$index])) {
+                    $category_id = $path[$index]->getIid();
+                    $categoryName = $path[$index]->getTitle();
+                }
+
                 if (!isset($globalCategoryScore[$category_id])) {
                     $globalCategoryScore[$category_id] = array();
                     $globalCategoryScore[$category_id]['score'] = 0;
@@ -1034,11 +1056,10 @@ class Testcategory
         if (!empty($order)) {
             $sql .= "ORDER BY $order";
         }
-        $categories = array();
 
+        $categories = array();
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
-            //$list = array();
              while ($row = Database::fetch_array($result, 'ASSOC')) {
                 if ($excludeCategoryWithNoQuestions) {
                     //if ($row['count_questions'] == 0 || $row['count_questions'] == -1) {
@@ -1046,8 +1067,7 @@ class Testcategory
                     Exercise::pickQuestionsPerCategory() */
                     if ($row['count_questions'] == 0) {
                        continue;
-            }
-
+                    }
                 }
                 $categories[$row['category_id']] = $row;
             }
@@ -1055,7 +1075,6 @@ class Testcategory
                 //$categories = $this->sort_tree_array($list);
             }
         }
-
         if ($shuffle) {
             ArrayClass::shuffle_assoc($categories);
         }

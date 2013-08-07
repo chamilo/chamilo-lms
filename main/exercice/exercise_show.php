@@ -691,7 +691,7 @@ foreach ($questionList as $questionId) {
         $question_content .= $objQuestionTmp->return_header(null, $counterToShow, $score, $show_media, $objExercise->getHideQuestionTitle());
 
         // display question category, if any
- 	    $question_content .= Testcategory::getCategoryNamesForQuestion($questionId);
+ 	    $question_content .= Testcategory::getCategoryNamesForQuestion($questionId, null, true, $objExercise->categoryMinusOne);
 	}
 
 	$counter++;

@@ -29,7 +29,7 @@ class LegacyController extends CommonController
     */
     public function classicAction(Application $app, $file)
     {
-        $headers = array();
+        $responseHeaders = array();
 
         /** @var Request $request */
         $request = $app['request'];
@@ -62,7 +62,7 @@ class LegacyController extends CommonController
 
             // No browser cache when executing an exercise.
             if ($file == 'exercice/exercise_submit.php') {
-                $headers = array(
+                $responseHeaders = array(
                     'cache-control' => 'no-store, no-cache, must-revalidate'
                 );
             }
@@ -91,7 +91,6 @@ class LegacyController extends CommonController
         } else {
             return $app->abort(404, 'File not found');
         }
-
-        return new Response($response, 200, $headers);
+        return new Response($response, 200, $responseHeaders);
     }
 }

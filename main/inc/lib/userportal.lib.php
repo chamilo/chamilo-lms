@@ -649,7 +649,7 @@ class IndexManager {
 
         // Captcha
 
-        $useCaptcha = isset($_GET['loginFailed']) ? $_GET['loginFailed'] : null;
+        $useCaptcha = isset($_SESSION['loginFailed']) ? $_SESSION['loginFailed'] : null;
 
         if ($useCaptcha) {
 
@@ -682,13 +682,11 @@ class IndexManager {
 		$form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));
 
 		$html = $form->return_form();
-
+        // The validation is located in the local.inc
         /*if ($form->validate()) {
             // Prevent re-use of the same CAPTCHA phrase
             $captcha_question->destroy();
         }*/
-
-        $_SESSION['login_form'] = $form;
 
 		if (api_get_setting('openid_authentication') == 'true') {
 			include_once 'main/auth/openid/login.php';

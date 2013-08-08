@@ -6451,3 +6451,44 @@ function api_get_user_info_from_official_code($official_code = '') {
     }
     return false;
 }
+
+function api_get_password_checker_js($inputId)
+{
+    global $_configuration;
+    $useStrengthPassChecker = isset($_configuration['allow_strength_pass_checker']) ? $_configuration['allow_strength_pass_checker'] : false;
+
+    if ($useStrengthPassChecker == false) {
+        return null;
+    }
+
+    $verdicts = array(get_lang('Weak'), get_lang('Normal'), get_lang('Medium'), get_lang('Strong'), get_lang('VeryStrong'));
+    $js = api_get_js('strength/strength.js');
+    $js .=  "<script>
+
+    var verdicts = ['".implode("','", $verdicts)."'];
+    var errorMessages = {
+        password_to_short : '".get_lang('PasswordIsTooShort')."'
+    };
+
+    $(document).ready(function() {
+        var options = {
+            verdicts: verdicts,
+            onLoad : function () {
+                //$('#messages').text('Start typing password');
+            },
+            onKeyUp: function (evt) {
+                $(evt.target).pwstrength('outputErrorList');
+            },
+            errorMessages : errorMessages,
+            viewports: {
+              progress: '#password_progress',
+              //verdict: undefined,
+              //errors: undefined
+          }
+        };
+        $('".$inputId."').pwstrength(options);
+    });
+    </script>";
+    return $js;
+
+}

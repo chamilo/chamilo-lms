@@ -19,6 +19,8 @@ if (api_get_setting('allow_registration') === 'false') {
     api_not_allowed(true);
 }
 
+$htmlHeadXtra[] = api_get_password_checker_js('#pass1');
+
 if (!empty($_SESSION['user_language_choice'])) {
     $user_selected_language = $_SESSION['user_language_choice'];
 } elseif (!empty($_SESSION['_user']['language'])) {
@@ -99,8 +101,13 @@ if ($user_already_registered_show_terms == false) {
     }
 
     //	PASSWORD
-    $form->addElement('password', 'pass1', get_lang('Password'), array('size' => 20, 'autocomplete' => 'off'));
-    $form->addElement('password', 'pass2', get_lang('Confirmation'), array('size' => 20, 'autocomplete' => 'off'));
+    $form->addElement('password', 'pass1', get_lang('Password'), array('id' => 'pass1', 'size' => 20, 'autocomplete' => 'off'));
+    global $_configuration;
+    if (isset($_configuration['allow_strength_pass_checker']) && $_configuration['allow_strength_pass_checker']) {
+        $form->addElement('label', null, '<div id="password_progress"></div>');
+    }
+
+    $form->addElement('password', 'pass2', get_lang('Confirmation'), array('id' => 'pass2', 'size' => 20, 'autocomplete' => 'off'));
     $form->addRule('pass1', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule(array('pass1', 'pass2'), get_lang('PassTwo'), 'compare');

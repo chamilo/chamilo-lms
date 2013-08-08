@@ -20,6 +20,7 @@ if (isset($_configuration['deny_delete_users']) &&  $_configuration['deny_delete
     $delete_user_available = false;
 }
 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=get_user_courses';
+$urlSession = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=get_user_sessions';
 
 $htmlHeadXtra[] = '<script>
 function load_course_list (div_course,my_user_id) {
@@ -34,6 +35,21 @@ function load_course_list (div_course,my_user_id) {
 			$("div#"+div_course).html(datos);
 			$("div#div_"+my_user_id).attr("class","blackboard_show");
 			$("div#div_"+my_user_id).attr("style","");
+		}
+	});
+}
+function load_session_list (div_session,my_user_id) {
+	 $.ajax({
+		contentType: "application/x-www-form-urlencoded",
+		beforeSend: function(objeto) {
+            $("div#"+div_session).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
+		type: "POST",
+		url: "'.$urlSession.'",
+		data: "user_id="+my_user_id,
+		success: function(datos) {
+			$("div#"+div_session).html(datos);
+			$("div#div_s_"+my_user_id).attr("class","blackboard_show");
+			$("div#div_s_"+my_user_id).attr("style","");
 		}
 	});
 }
@@ -78,6 +94,10 @@ function active_user(element_div) {
 function clear_course_list (div_course) {
 	$("div#"+div_course).html("&nbsp;");
 	$("div#"+div_course).hide("");
+}
+function clear_session_list (div_session) {
+	$("div#"+div_session).html("&nbsp;");
+	$("div#"+div_session).hide("");
 }
 
 function display_advanced_search_form () {
@@ -128,8 +148,7 @@ $(document).ready(function() {
 //Load user calendar
 function load_calendar(user_id, month, year) {
  	var url = "'.api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?a=get_user_agenda&user_id=" +user_id + "&month="+month+"&year="+year;
-	$("#dialog").load( url
-	);
+	$("#dialog").load(url);
 }
 </script>';
 
@@ -288,8 +307,10 @@ function get_user_data($from, $number_of_items, $column, $direction, $get_count 
                  u.status				AS col7,
                  u.active				AS col8,
                  u.user_id				AS col9,
-                 u.registration_date    AS col10 ".
-                 ", u.expiration_date   AS exp            ";
+                 u.registration_date    AS col10,
+                 u.expiration_date      AS exp,
+                 u.password
+    ";
 
     if ($get_count) {
         $select = "SELECT count(u.user_id) as total_rows";
@@ -377,6 +398,17 @@ function get_user_data($from, $number_of_items, $column, $direction, $get_count 
     // adding the filter to see the user's only of the current access_url
 	if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
 		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
+    }
+
+    $checkPassStrength = isset($_GET['check_easy_passwords']) && $_GET['check_easy_passwords'] == 1 ? true : false;
+
+    if ($checkPassStrength) {
+        $easyPasswordList = api_get_easy_password_list();
+        $easyPasswordList = array_map('api_get_encrypted_password', $easyPasswordList);
+        $easyPasswordList = array_map(array('Database', 'escape_string'), $easyPasswordList);
+        $easyPassword = implode("' OR password LIKE '", $easyPasswordList);
+
+        $sql .= "AND password LIKE '$easyPassword' ";
     }
 
     if (!in_array($direction, array('ASC','DESC'))) {
@@ -766,6 +798,7 @@ $active_group[] = $form->createElement('checkbox','keyword_inactive','', get_lan
 $form->addGroup($active_group,'',get_lang('ActiveAccount'),'<br/>',false);
 $form->addElement('html', '</td><td>');
 
+$form->addElement('checkbox', 'check_easy_passwords', null, get_lang('CheckEasyPasswords'));
 
 /*
  * @todo fix this code

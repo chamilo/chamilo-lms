@@ -23,6 +23,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $this_section = SECTION_MYPROFILE;
 }
 
+$htmlHeadXtra[] = api_get_password_checker_js('#password1');
 $_SESSION['this_section'] = $this_section;
 
 if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
@@ -303,8 +304,12 @@ if (is_platform_authentication() && is_profile_editable() && api_get_setting('pr
         'password',
         'password0',
         array(get_lang('Pass'), get_lang('Enter2passToChange')),
-        array('size' => 40)
+        array('id'=> 'password1', 'size' => 40)
     );
+
+    if (isset($_configuration['allow_strength_pass_checker']) && $_configuration['allow_strength_pass_checker']) {
+        $form->addElement('label', null, '<div id="password_progress"></div>');
+    }
     $form->addElement('password', 'password1', get_lang('NewPass'), array('size' => 40));
     $form->addElement('password', 'password2', get_lang('Confirmation'), array('size' => 40));
     //	user must enter identical password twice so we can prevent some user errors

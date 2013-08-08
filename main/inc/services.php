@@ -109,7 +109,9 @@ $app['security.access_rules'] = array(
     //array('^/main/admin/extra_field_workflow.php', 'ROLE_QUESTION_MANAGER'),
     array('^/main/admin/.*', 'ROLE_ADMIN'),
     array('^/admin/questionmanager', 'ROLE_QUESTION_MANAGER'),
-    array('^/main/.*', array('ROLE_STUDENT'))
+    array('^/main/auth/inscription.php', 'IS_AUTHENTICATED_ANONYMOUSLY'),
+    array('^/main/auth/lostPassword.php', 'IS_AUTHENTICATED_ANONYMOUSLY'),
+    array('^/main/.*', array('ROLE_STUDENT')),
     //array('^.*$', 'ROLE_USER'),
 );
 

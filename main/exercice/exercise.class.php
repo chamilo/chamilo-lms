@@ -1492,6 +1492,9 @@ class Exercise
     public function delete()
     {
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
+        /* When an exercise is marked for deletion we instead only set
+         * active=-1 because learning paths might still be referencing
+         * it. */
         $sql = "UPDATE $TBL_EXERCICES
                 SET active='-1' WHERE c_id = ".$this->course_id." AND iid='".Database::escape_string($this->id)."'";
         Database::query($sql);

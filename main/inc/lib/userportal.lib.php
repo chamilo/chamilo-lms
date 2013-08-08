@@ -332,6 +332,9 @@ class IndexManager {
 				case 'access_url_inactive':
 					$message = get_lang('AccountURLInactive');
 					break;
+                case 'wrong_captcha':
+                    $message = get_lang('TheTextYouEnteredDoesNotMatchThePicture');
+                    break;
                 case 'unrecognize_sso_origin':
                     //$message = get_lang('SSOError');
                     break;
@@ -638,15 +641,55 @@ class IndexManager {
 	 * Adds a form to let users login
 	 * @version 1.1
 	 */
-	function display_login_form() {
+	function display_login_form()
+    {
 		$form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-vertical'));
-        // 'placeholder'=>get_lang('UserName')
-        //'autocomplete'=>"off",
-
 		$form->addElement('text', 'login', get_lang('UserName'), array('class' => 'span2 autocapitalize_off', 'autofocus' => 'autofocus'));
 		$form->addElement('password', 'password', get_lang('Pass'), array('class' => 'span2'));
+
+        // Captcha
+
+        $useCaptcha = isset($_GET['loginFailed']) ? $_GET['loginFailed'] : null;
+
+        if ($useCaptcha) {
+
+            $form->addElement('text', 'captcha', 'Enter the letters you see');
+            $form->addRule('captcha', 'Enter the characters you read in the image', 'required', null, 'client');
+
+            $ajax = api_get_path(WEB_AJAX_PATH).'form.ajax.php?a=get_captcha';
+
+            $options = array(
+                'width'        => 250,
+                'height'       => 90,
+                'callback'     => $ajax.'&var='.basename(__FILE__, '.php'),
+                'sessionVar'   => basename(__FILE__, '.php'),
+                'imageOptions' => array(
+                    'font_size' => 20,
+                    'font_path' => api_get_path(LIBRARY_PATH).'pchart/fonts/',
+                    'font_file' => 'tahoma.ttf',
+                    //'output' => 'gif'
+                )
+            );
+
+            // Minimum options using all defaults (including defaults for Image_Text):
+            //$options = array('callback' => 'qfcaptcha_image.php');
+
+            $captcha_question =  $form->addElement('CAPTCHA_Image', 'captcha_question', 'Verification', $options);
+            $form->addElement('static', null, null, 'Click on the image for a new one');
+            $form->addRule('captcha', 'What you entered didn\'t match the picture', 'CAPTCHA', $captcha_question);
+        }
+
 		$form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));
+
 		$html = $form->return_form();
+
+        /*if ($form->validate()) {
+            // Prevent re-use of the same CAPTCHA phrase
+            $captcha_question->destroy();
+        }*/
+
+        $_SESSION['login_form'] = $form;
+
 		if (api_get_setting('openid_authentication') == 'true') {
 			include_once 'main/auth/openid/login.php';
 			$html .= '<div>'.openid_form().'</div>';

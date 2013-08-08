@@ -237,8 +237,36 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 WHERE username = '".Database::escape_string($login)."'";
         $result = Database::query($sql);
 
+        $catpchaValidated = true;
+
         if (Database::num_rows($result) > 0) {
             $uData = Database::fetch_array($result);
+
+            if (isset($_POST['captcha'])) {
+                // Check captcha
+                $captchaText = $_POST['captcha'];
+                /** @var Text_CAPTCHA $obj */
+                $obj = isset($_SESSION['userportal.lib']) ? $_SESSION['userportal.lib'] : null;
+                if ($obj) {
+                    $obj->getPhrase();
+                    if ($obj->getPhrase() != $captchaText) {
+                        $catpchaValidated = false;
+                    } else {
+                        $catpchaValidated = true;
+                    }
+                }
+                if (isset($_SESSION['captcha_question'])) {
+                    $captcha_question = $_SESSION['captcha_question'];
+                    $captcha_question->destroy();
+                }
+            }
+
+            if ($catpchaValidated == false) {
+                $loginFailed = true;
+                Session::erase('_uid');
+                header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=wrong_captcha');
+                exit;
+            }
 
             if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE || $uData['auth_source'] == CAS_AUTH_SOURCE) {
                 //The authentification of this user is managed by Chamilo itself
@@ -251,6 +279,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     if (!empty($extAuthSource[$update_type]['updateUser']) && file_exists($extAuthSource[$update_type]['updateUser'])) {
                         include_once $extAuthSource[$update_type]['updateUser'];
                     }
+
 
                     // Check if the account is active (not locked)
                     if ($uData['active'] == '1') {

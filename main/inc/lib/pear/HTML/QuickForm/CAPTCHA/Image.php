@@ -61,6 +61,10 @@ require_once 'Text/CAPTCHA/Driver/Image.php';
 class HTML_QuickForm_CAPTCHA_Image extends HTML_QuickForm_CAPTCHA
 {
 
+    function HTML_QuickForm_CAPTCHA_Image($elementName = null, $elementLabel = null, $options = null, $attributes = null) {
+        return parent::HTML_QuickForm_CAPTCHA($elementName, $elementLabel, $options, $attributes);
+    }
+
     /**
      * Default options
      *
@@ -75,7 +79,7 @@ class HTML_QuickForm_CAPTCHA_Image extends HTML_QuickForm_CAPTCHA
             'callback'     => '',
             'imageOptions' => null,
             'phrase'       => null,
-            );
+    );
 
     /**
      * CAPTCHA driver
@@ -98,6 +102,7 @@ class HTML_QuickForm_CAPTCHA_Image extends HTML_QuickForm_CAPTCHA
         }
 
         $result = parent::_initCAPTCHA();
+
         if (PEAR::isError($result)) {
             return $result;
         }
@@ -153,13 +158,3 @@ class HTML_QuickForm_CAPTCHA_Image extends HTML_QuickForm_CAPTCHA
         return $onclickJs;
     }
 }
-
-/**
- * Registers the class with QuickForm
- */
-if (class_exists('HTML_QuickForm')) {
-    HTML_QuickForm::registerElementType('CAPTCHA_Image',
-            'HTML/QuickForm/CAPTCHA/Image.php', 'HTML_QuickForm_CAPTCHA_Image');
-}
-
-?>

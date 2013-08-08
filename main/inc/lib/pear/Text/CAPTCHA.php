@@ -149,4 +149,15 @@ class Text_CAPTCHA
     {
         return $this->_driver->getPhrase();
     }
+
+    /**
+     * Place holder for the real getCAPTCHA() method used by extended classes to
+     * return the generated CAPTCHA (as an image resource, as an ASCII text, ...).
+     *
+     * @return string|object
+     */
+    public function getCAPTCHAAsJPEG()
+    {
+        return $this->_driver->_getCAPTCHAAsJPEG();
+    }
 }

@@ -121,8 +121,7 @@ class HTML_QuickForm_CAPTCHA extends HTML_QuickForm_input
     function HTML_QuickForm_CAPTCHA($elementName = null, $elementLabel = null,
                                     $options = null, $attributes = null)
     {
-        HTML_QuickForm_input::HTML_QuickForm_input($elementName, $elementLabel,
-                                                   $attributes);
+        HTML_QuickForm_input::HTML_QuickForm_input($elementName, $elementLabel, $attributes);
         $this->setType('CAPTCHA_'.$this->_CAPTCHA_driver);
 
         if (is_array($options)) {
@@ -141,7 +140,9 @@ class HTML_QuickForm_CAPTCHA extends HTML_QuickForm_input
         $sessionVar = $this->_options['sessionVar'];
 
         if (empty($_SESSION[$sessionVar])) {
-            $_SESSION[$sessionVar] =& Text_CAPTCHA::factory($this->_CAPTCHA_driver);
+
+            $_SESSION[$sessionVar] = Text_CAPTCHA::factory($this->_CAPTCHA_driver);
+
             if (PEAR::isError($_SESSION[$sessionVar])) {
                 return $_SESSION[$sessionVar];
             }

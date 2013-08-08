@@ -6452,6 +6452,11 @@ function api_get_user_info_from_official_code($official_code = '') {
     return false;
 }
 
+/**
+ *
+ * @param string $inputId the jquery id example: #password
+ * @return string
+ */
 function api_get_password_checker_js($inputId)
 {
     global $_configuration;
@@ -6492,6 +6497,10 @@ function api_get_password_checker_js($inputId)
     return $js;
 }
 
+/**
+ * Gets an array with "easy" passwords
+ * @return array
+ */
 function api_get_easy_password_list()
 {
     $passwordList = array('123', '1234', '123456', 'admin', 'user', 'student', 'teacher');

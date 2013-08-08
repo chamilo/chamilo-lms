@@ -102,7 +102,7 @@ class Text_CAPTCHA_Driver_Image extends Text_CAPTCHA_Driver_Base
                 $this->setPhrase($options['phrase']);
             }
             if (!isset($options['output']) || empty($options['output'])) {
-                $this->_output = 'resource';
+                $this->_output = 'jpeg';
             } else {
                 $this->_output = $options['output'];
             }
@@ -144,6 +144,7 @@ class Text_CAPTCHA_Driver_Image extends Text_CAPTCHA_Driver_Base
         $options['background_color'] = $this->_imageOptions['background_color'];
         $options['max_lines'] = 1;
         $options['mode'] = 'auto';
+
         do {
             $imageText = new Image_Text($this->getPhrase(), $options);
             $imageText->init();
@@ -184,6 +185,9 @@ class Text_CAPTCHA_Driver_Image extends Text_CAPTCHA_Driver_Base
             $w = rand(1, 24);
             imagearc($image, $cx, $cy, $w, $w, 0, 360, $linesColor);
         }
+
+        // @todo remove hardcoded value
+        $this->_output = 'jpg';
 
         if ($this->_output == 'gif' && imagetypes() & IMG_GIF) {
             $this->setCaptcha($this->_getCAPTCHAAsGIF($image));

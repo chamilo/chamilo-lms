@@ -21,6 +21,7 @@ if (isset($_configuration['deny_delete_users']) &&  $_configuration['deny_delete
 	$delete_user_available = false;
 }
 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=get_user_courses';
+$urlSession = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=get_user_sessions';
         
 $htmlHeadXtra[] = '<script type="text/javascript">
 function load_course_list (div_course,my_user_id) {
@@ -35,6 +36,21 @@ function load_course_list (div_course,my_user_id) {
 			$("div#"+div_course).html(datos);
 			$("div#div_"+my_user_id).attr("class","blackboard_show");
 			$("div#div_"+my_user_id).attr("style","");
+		}
+	});
+}
+function load_session_list (div_session,my_user_id) {
+	 $.ajax({
+		contentType: "application/x-www-form-urlencoded",
+		beforeSend: function(objeto) {
+            $("div#"+div_session).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
+		type: "POST",
+		url: "'.$urlSession.'",
+		data: "user_id="+my_user_id,
+		success: function(datos) {
+			$("div#"+div_session).html(datos);
+			$("div#div_s_"+my_user_id).attr("class","blackboard_show");
+			$("div#div_s_"+my_user_id).attr("style","");
 		}
 	});
 }
@@ -79,6 +95,10 @@ function active_user(element_div) {
 function clear_course_list (div_course) {
 	$("div#"+div_course).html("&nbsp;");
 	$("div#"+div_course).hide("");
+}
+function clear_session_list (div_session) {
+	$("div#"+div_session).html("&nbsp;");
+	$("div#"+div_session).hide("");
 }
 
 function display_advanced_search_form () {
@@ -503,11 +523,16 @@ function modify_filter($user_id, $url_params, $row) {
 	$result = '';
 	if (!$user_is_anonymous) {
 		$result .= '<a href="javascript:void(0)" onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')" >
-					<img onmouseout="clear_course_list (\'div_'.$user_id.'\')" src="../img/course.gif" title="'.get_lang('Courses').'" alt="'.get_lang('Courses').'"/>
+					<img onmouseout="clear_course_list (\'div_'.$user_id.'\')" src="../img/icons/22/course.png" title="'.get_lang('Courses').'" alt="'.get_lang('Courses').'"/>
 					<div class="blackboard_hide" id="div_'.$user_id.'">&nbsp;&nbsp;</div>
 					</a>&nbsp;&nbsp;';
+		$result .= '<a href="javascript:void(0)" onclick="load_session_list(\'div_s_'.$user_id.'\','.$user_id.')" >
+					<img onmouseout="clear_session_list (\'div_s_'.$user_id.'\')" src="../img/icons/22/session.png" title="'.get_lang('Sessions').'" alt="'.get_lang('Sessions').'"/>
+					<div class="blackboard_hide" id="div_s_'.$user_id.'">&nbsp;&nbsp;</div>
+					</a>&nbsp;&nbsp;';
 	} else {
-		$result .= Display::return_icon('course_na.gif',get_lang('Courses')).'&nbsp;&nbsp;';
+		$result .= Display::return_icon('course_na.png',get_lang('Courses')).'&nbsp;&nbsp;';
+		$result .= Display::return_icon('course_na.png',get_lang('Sessions')).'&nbsp;&nbsp;';
 	}
 
 	if (api_is_platform_admin()) {

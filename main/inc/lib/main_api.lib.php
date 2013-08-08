@@ -6490,5 +6490,14 @@ function api_get_password_checker_js($inputId)
     });
     </script>";
     return $js;
+}
 
+function api_get_easy_password_list()
+{
+    $passwordList = array('123', '1234', '123456', 'admin', 'user', 'student', 'teacher');
+    $file = api_get_path(CONFIGURATION_PATH).'easy_password_list.php';
+    if (file_exists($file)) {
+        $passwordList = require_once $file;
+    }
+    return $passwordList;
 }

@@ -1,6 +1,6 @@
 <?php
 
-if (PHP_SAPI!='cli') {
+if (PHP_SAPI !='cli') {
     die('Run this script through the command line or comment this line in the code');
 }
 
@@ -16,6 +16,11 @@ class ImportCsv
     private $dumpValues;
     public $test;
     public $defaultLanguage = 'dutch';
+    public $extraFieldIdNameList = array(
+        'session' => 'external_session_id',
+        'course' => 'external_course_id',
+        'user' => 'external_user_id',
+    );
 
     /**
      * @param Logger $logger
@@ -50,49 +55,7 @@ class ImportCsv
         }
 
         if ($this->getDumpValues()) {
-
-            $table = Database::get_main_table(TABLE_MAIN_USER);
-            $sql = "DELETE FROM $table WHERE username NOT IN ('admin') AND lastname <> 'Anonymous' ";
-            Database::query($sql);
-
-            echo 'Dumping tables'.PHP_EOL;
-            echo $sql.PHP_EOL;
-
-            $table = Database::get_main_table(TABLE_MAIN_COURSE);
-            $sql = "DELETE FROM $table";
-            Database::query($sql);
-            echo $sql.PHP_EOL;
-
-            $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-            $sql = "DELETE FROM $table";
-            Database::query($sql);
-            echo $sql.PHP_EOL;
-
-            $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-            $sql = "DELETE FROM $table";
-            Database::query($sql);
-            echo $sql.PHP_EOL;
-
-            $table = Database::get_main_table(TABLE_MAIN_SESSION);
-            $sql = "DELETE FROM $table";
-            Database::query($sql);
-            echo $sql.PHP_EOL;
-
-            $table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-            $sql = "DELETE FROM $table";
-            Database::query($sql);
-            echo $sql.PHP_EOL;
-
-            $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-            $sql = "DELETE FROM $table";
-            Database::query($sql);
-            echo $sql.PHP_EOL;
-
-            $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-            $sql = "DELETE FROM $table";
-            Database::query($sql);
-            echo $sql.PHP_EOL;
-
+            $this->dumpDatabaseTables();
         }
 
         echo "Starting with reading the files: ".PHP_EOL.PHP_EOL;
@@ -129,6 +92,7 @@ class ImportCsv
             }
 
             $sections = array('students', 'teachers', 'courses', 'sessions');
+            $sections = array('sessions');
 
             $this->prepareImport();
 
@@ -155,12 +119,12 @@ class ImportCsv
     private function prepareImport()
     {
         // Create user extra field: extra_external_user_id
-        UserManager::create_extra_field('external_user_id', 1, 'External user id', null);
+        UserManager::create_extra_field($this->extraFieldIdNameList['user'], 1, 'External user id', null);
 
         // Create course extra field: extra_external_course_id
-        CourseManager::create_course_extra_field('external_course_id', 1, 'External course id');
+        CourseManager::create_course_extra_field($this->extraFieldIdNameList['course'], 1, 'External course id');
         // Create session extra field extra_external_session_id
-        SessionManager::create_session_extra_field('external_session_id', 1, 'External session id');
+        SessionManager::create_session_extra_field($this->extraFieldIdNameList['session'], 1, 'External session id');
     }
 
     /**
@@ -200,11 +164,11 @@ class ImportCsv
         $row['phone'] = $row['PhoneNumber'];
 
         if (isset($row['StudentID'])) {
-            $row['extra_external_user_id'] = $row['StudentID'];
+            $row['extra_'.$this->extraFieldIdNameList['user']] = $row['StudentID'];
         }
 
         if (isset($row['TeacherID'])) {
-            $row['extra_external_user_id'] = $row['TeacherID'];
+            $row['extra_'.$this->extraFieldIdNameList['user']] = $row['TeacherID'];
         }
 
         //$row['lastname'] =  Status
@@ -222,15 +186,12 @@ class ImportCsv
         $row['course_category'] = $row['CourseCategory'];
         $row['email'] = $row['Teacher'];
         $row['language'] = $row['Language'];
-        $row['external_id'] = $row['CourseID'];
 
         if (isset($row['CourseID'])) {
-            $row['extra_external_course_id'] = $row['CourseID'];
+            $row['extra_'.$this->extraFieldIdNameList['course']] = $row['CourseID'];
         }
-
         return $row;
     }
-
 
     /**
      * File to import
@@ -254,7 +215,10 @@ class ImportCsv
             $this->logger->addInfo(count($data)." records found.");
             foreach ($data as $row) {
                 $row = $this->cleanUserRow($row);
-                $userInfo = api_get_user_info_from_username($row['username']);
+
+                $user_id = UserManager::get_user_id_from_original_id($row['extra_'.$this->extraFieldIdNameList['user']], $this->extraFieldIdNameList['user']);
+                $userInfo = api_get_user_info($user_id);
+                //$userInfo = api_get_user_info_from_username($row['username']);
                 $userInfoByOfficialCode = api_get_user_info_from_official_code($row['official_code']);
 
                 if (empty($userInfo) && empty($userInfoByOfficialCode)) {
@@ -356,7 +320,14 @@ class ImportCsv
             $this->logger->addInfo(count($data)." records found.");
             foreach ($data as $row) {
                 $row = $this->cleanUserRow($row);
-                $userInfo = api_get_user_info_from_username($row['username']);
+                //$userInfo = api_get_user_info_from_username($row['username']);
+                $user_id = UserManager::get_user_id_from_original_id($row['extra_'.$this->extraFieldIdNameList['user']], $this->extraFieldIdNameList['user']);
+
+                $userInfo = array();
+                if (!empty($user_id)) {
+                    $userInfo = api_get_user_info($user_id);
+                }
+
                 $userInfoByOfficialCode = api_get_user_info_from_official_code($row['official_code']);
 
                 if (empty($userInfo) && empty($userInfoByOfficialCode)) {
@@ -451,13 +422,17 @@ class ImportCsv
     {
         $data = Import::csv_to_array($file);
 
-        $language = $this->defaultLanguage;
+        //$language = $this->defaultLanguage;
 
         if (!empty($data)) {
             $this->logger->addInfo(count($data)." records found.");
+
             foreach ($data as $row) {
                 $row = $this->cleanCourseRow($row);
-                $courseInfo = api_get_course_info($row['course_code']);
+                $courseCode = CourseManager::get_course_id_from_original_id($row['extra_'.$this->extraFieldIdNameList['course']], $this->extraFieldIdNameList['course']);
+
+                //$courseInfo = api_get_course_info($row['course_code']);
+                $courseInfo = api_get_course_info($courseCode);
                 if (empty($courseInfo)) {
                     // Create
                     $params = array();
@@ -466,12 +441,11 @@ class ImportCsv
                     $params['wanted_code']          = $row['course_code'];
                     $params['course_category']      = $row['course_category'];
                     $params['course_language']      = $row['language'];
-                    //$params['gradebook_model_id']   = isset($course_values['gradebook_model_id']) ? $course_values['gradebook_model_id'] : null;
 
                     $courseInfo = CourseManager::create_course($params);
 
                     if (!empty($courseInfo)) {
-                        CourseManager::update_course_extra_field_value($courseInfo['code'], 'external_course_id', $row['extra_external_course_id']);
+                        CourseManager::update_course_extra_field_value($courseInfo['code'], 'external_course_id', $row['extra_'.$this->extraFieldIdNameList['course']]);
                         $this->logger->addInfo("Courses - Course created ".$courseInfo['code']);
                     } else {
                         $this->logger->addError("Courses - Can't create course:".$row['title']);
@@ -482,8 +456,7 @@ class ImportCsv
                     $params = array(
                         'title' => $row['title'],
                     );
-
-                    $result = CourseManager::update_attributes($courseInfo['id'], $params);
+                    $result = CourseManager::update_attributes($courseInfo['real_id'], $params);
 
                     if ($result) {
                         $this->logger->addInfo("Courses - Course updated ".$courseInfo['code']);
@@ -501,13 +474,88 @@ class ImportCsv
      */
     private function importSessions($file)
     {
-        $result = SessionManager::importCSV($file, true, 1, $this->logger, array('SessionId' => 'extra_external_session_id'));
+        $result = SessionManager::importCSV(
+            $file,
+            true,
+            1,
+            $this->logger,
+            array('SessionID' => 'extra_'.$this->extraFieldIdNameList['session']),
+            $this->extraFieldIdNameList['session']
+        );
 
         if (!empty($result['error_message'])) {
             $this->logger->addError($result['error_message']);
         }
         $this->logger->addInfo("Sessions - Sessions parsed: ".$result['session_counter']);
         $this->moveFile($file);
+    }
+
+    private function dumpDatabaseTables()
+    {
+        echo 'Dumping tables'.PHP_EOL;
+
+        // User
+
+        $table = Database::get_main_table(TABLE_MAIN_USER);
+        $sql = "DELETE FROM $table WHERE username NOT IN ('admin') AND lastname <> 'Anonymous' ";
+        Database::query($sql);
+        echo $sql.PHP_EOL;
+
+        // Course
+
+        $table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "DELETE FROM $table";
+        Database::query($sql);
+        echo $sql.PHP_EOL;
+
+        $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $sql = "DELETE FROM $table";
+        Database::query($sql);
+        echo $sql.PHP_EOL;
+
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $sql = "DELETE FROM $table";
+        Database::query($sql);
+        echo $sql.PHP_EOL;
+
+        // Sessions
+
+        $table = Database::get_main_table(TABLE_MAIN_SESSION);
+        $sql = "DELETE FROM $table";
+        Database::query($sql);
+        echo $sql.PHP_EOL;
+
+        $table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+        $sql = "DELETE FROM $table";
+        Database::query($sql);
+        echo $sql.PHP_EOL;
+
+        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $sql = "DELETE FROM $table";
+        Database::query($sql);
+        echo $sql.PHP_EOL;
+
+        $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $sql = "DELETE FROM $table";
+        Database::query($sql);
+        echo $sql.PHP_EOL;
+
+        // Extra fields
+
+        $table = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+        $sql = "DELETE FROM $table";
+        Database::query($sql);
+        echo $sql.PHP_EOL;
+
+        $table = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+        $sql = "DELETE FROM $table";
+        Database::query($sql);
+        echo $sql.PHP_EOL;
+
+        $table = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+        $sql = "DELETE FROM $table";
+        Database::query($sql);
+        echo $sql.PHP_EOL;
     }
 }
 

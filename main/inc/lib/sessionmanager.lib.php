@@ -11,8 +11,13 @@
  * Code
  */
 
-class SessionManager {
-	private function __construct() {
+/**
+ * Class SessionManager
+ */
+class SessionManager
+{
+	private function __construct()
+    {
 	}
 
     /**
@@ -20,7 +25,8 @@ class SessionManager {
      * @param   int     Session ID
      * @return  array   Session details (id, id_coach, name, nbr_courses, nbr_users, nbr_classes, date_start, date_end, nb_days_access_before_beginning,nb_days_access_after_end, session_admin_id)
      */
-    public static function fetch($id) {
+    public static function fetch($id)
+    {
     	$t = Database::get_main_table(TABLE_MAIN_SESSION);
         if ($id != strval(intval($id))) { return array(); }
         $s = "SELECT * FROM $t WHERE id = $id";
@@ -1863,11 +1869,14 @@ class SessionManager {
      * false: if session exists a new session will be created adding a counter session1, session2, etc
      * @param int $user_id
      * @param $logger
+     * @param array convert a file row to an extra field. Example in CSV file there's a SessionID then it will
+     * converted to extra_external_session_id if you set this: array('SessionId' => 'extra_external_session_id')
      * @return array
      */
-    static function importCSV($file, $updatesession, $user_id = null, $logger = null)
+    static function importCSV($file, $updatesession, $user_id = null, $logger = null, $extraFields = array())
     {
         $content = file($file);
+
         $error_message = null;
         $session_counter = 0;
 
@@ -1885,12 +1894,15 @@ class SessionManager {
         $tbl_session_course         = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $tbl_session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
+        $sessions = array();
+
         if (!api_strstr($content[0], ';')) {
             $error_message = get_lang('NotCSV');
         } else {
             $tag_names = array();
 
             foreach ($content as $key => $enreg) {
+
                 $enreg = explode(';', trim($enreg));
                 if ($key) {
                     foreach ($tag_names as $tag_key => $tag_name) {
@@ -1912,7 +1924,13 @@ class SessionManager {
                 $user_counter = 0;
                 $course_counter = 0;
 
-                $session_name           = $enreg['SessionName'];
+                if (isset($extraFields) && !empty($extraFields)) {
+                    foreach ($extraFields as $original => $to) {
+                        $enreg[$to] = $enreg[$original];
+                    }
+                }
+
+                $session_name           = Database::escape_string($enreg['SessionName']);
                 $date_start             = $enreg['DateStart'];
                 $date_end               = $enreg['DateEnd'];
                 $visibility             = $enreg['Visibility'];
@@ -1938,7 +1956,7 @@ class SessionManager {
                         if ($i > 1) {
                             $suffix = ' - '.$i;
                         }
-                        $sql = 'SELECT 1 FROM '.$tbl_session.' WHERE name="'.Database::escape_string($session_name.$suffix).'"';
+                        $sql = 'SELECT 1 FROM '.$tbl_session.' WHERE name="'.$session_name.$suffix.'"';
                         $rs = Database::query($sql);
 
                         if (Database::result($rs, 0, 0)) {
@@ -1951,7 +1969,7 @@ class SessionManager {
 
                     // Creating the session.
                     $sql_session = "INSERT IGNORE INTO $tbl_session SET
-                            name = '".Database::escape_string($session_name)."',
+                            name = '".$session_name."',
                             id_coach = '$coach_id',
                             date_start = '$date_start',
                             date_end = '$date_end',
@@ -1963,6 +1981,13 @@ class SessionManager {
 
                     if ($debug) {
                         if ($session_id) {
+
+                            foreach ($enreg as $key => $value) {
+                                if (substr($key, 0, 6) == 'extra_') { //an extra field
+                                    self::update_session_extra_field_value($session_id, substr($key, 6), $value);
+                                }
+                            }
+
                             $logger->addInfo("Sessions - Session created: #$session_id - $session_name");
                         } else {
                             $logger->addError("Sessions - Session NOT created: $session_name");
@@ -1989,6 +2014,11 @@ class SessionManager {
 
                         if ($debug) {
                             if ($session_id) {
+                                foreach ($enreg as $key => $value) {
+                                    if (substr($key, 0, 6) == 'extra_') { //an extra field
+                                        self::update_session_extra_field_value($session_id, substr($key, 6), $value);
+                                    }
+                                }
                                 $logger->addInfo("Sessions - #$session_id created: $session_name");
                             } else {
                                 $logger->addError("Sessions - Session NOT created: $session_name");
@@ -2004,7 +2034,14 @@ class SessionManager {
                                 session_category_id = '$session_category_id'
                             WHERE name = '$session_name'";
                         Database::query($sql_session);
+
                         $session_id = Database::query("SELECT id FROM $tbl_session WHERE name='$session_name'");
+
+                        foreach ($enreg as $key => $value) {
+                            if (substr($key, 0, 6) == 'extra_') { //an extra field
+                                self::update_session_extra_field_value($session_id, substr($key, 6), $value);
+                            }
+                        }
                         list($session_id) = Database::fetch_array($session_id);
                         Database::query("DELETE FROM $tbl_session_user WHERE id_session='$session_id'");
                         Database::query("DELETE FROM $tbl_session_course WHERE id_session='$session_id'");

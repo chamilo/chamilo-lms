@@ -7,15 +7,40 @@ if (PHP_SAPI!='cli') {
 require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'log.class.php';
 
+/**
+ * Class ImportCsv
+ */
 class ImportCsv
 {
     private $logger;
+    private $dumpValues;
+    public $test;
+    public $defaultLanguage = 'english';
 
+    /**
+     * @param Logger $logger
+     */
     public function __construct($logger)
     {
         $this->logger = $logger;
     }
 
+    /**
+     * @param bool $dump
+     */
+    function setDumpValues($dump)
+    {
+        $this->dumpValues = $dump;
+    }
+
+    function getDumpValues()
+    {
+        return $this->dumpValues;
+    }
+
+    /**
+     * Runs the import process
+     */
     public function run()
     {
         $path = api_get_path(SYS_CODE_PATH).'cron/incoming/';
@@ -24,24 +49,119 @@ class ImportCsv
             exit;
         }
 
+        if ($this->getDumpValues()) {
+
+            $table = Database::get_main_table(TABLE_MAIN_USER);
+            $sql = "DELETE FROM $table WHERE username NOT IN ('admin') AND lastname <> 'Anonymous' ";
+            Database::query($sql);
+
+            echo 'Dumping tables'.PHP_EOL;
+            echo $sql.PHP_EOL;
+
+            $table = Database::get_main_table(TABLE_MAIN_COURSE);
+            $sql = "DELETE FROM $table";
+            Database::query($sql);
+            echo $sql.PHP_EOL;
+
+            $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+            $sql = "DELETE FROM $table";
+            Database::query($sql);
+            echo $sql.PHP_EOL;
+
+            $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+            $sql = "DELETE FROM $table";
+            Database::query($sql);
+            echo $sql.PHP_EOL;
+
+            $table = Database::get_main_table(TABLE_MAIN_SESSION);
+            $sql = "DELETE FROM $table";
+            Database::query($sql);
+            echo $sql.PHP_EOL;
+
+            $table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+            $sql = "DELETE FROM $table";
+            Database::query($sql);
+            echo $sql.PHP_EOL;
+
+            $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+            $sql = "DELETE FROM $table";
+            Database::query($sql);
+            echo $sql.PHP_EOL;
+
+            $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+            $sql = "DELETE FROM $table";
+            Database::query($sql);
+            echo $sql.PHP_EOL;
+
+        }
+
+        echo "Starting with reading the files: ".PHP_EOL.PHP_EOL;
+
         $files = scandir($path);
+        $fileToProcess = array();
+
         if (!empty($files)) {
             foreach ($files as $file) {
                 $fileInfo = pathinfo($file);
                 if ($fileInfo['extension'] == 'csv') {
                     // teachers_yyyymmdd.csv, courses_yyyymmdd.csv, students_yyyymmdd.csv and sessions_yyyymmdd.csv
                     $parts = explode('_', $fileInfo['filename']);
-                    $method = 'import'.ucwords($parts[0]);
+                    $method = 'import'.ucwords($parts[1]);
 
                     if (method_exists($this, $method)) {
-                        $this->$method($path.$fileInfo['basename']);
+                         $fileToProcess[$parts[1]][] = array(
+                            'method' => $method,
+                            'file' => $path.$fileInfo['basename']
+                        );
+                        //$this->$method($path.$fileInfo['basename']);
                     } else {
-                        echo "Error - This file can't be processed.";
+                        echo "Error - This file '$file' can't be processed.".PHP_EOL;
+                        echo "The file have to has this format:".PHP_EOL;
+                        echo "prefix_students_ddmmyyyy.csv, prefix_teachers_ddmmyyyy.csv, prefix_courses_ddmmyyyy.csv, prefix_sessions_ddmmyyyy.csv ".PHP_EOL;
                         exit;
                     }
                 }
             }
+
+            if (empty($fileToProcess)) {
+                echo 'Error - no files to process.';
+                exit;
+            }
+
+            $sections = array('students', 'teachers', 'courses', 'sessions');
+
+
+            $this->prepareImport();
+
+            foreach ($sections as $section) {
+                $this->logger->addInfo("-- Import $section --");
+
+                if (isset($fileToProcess[$section]) && !empty($fileToProcess[$section])) {
+                    $files = $fileToProcess[$section];
+                    foreach ($files as $fileInfo) {
+                        $method = $fileInfo['method'];
+                        $file = $fileInfo['file'];
+
+                        echo 'Reading file: '.$file.PHP_EOL;
+                        $this->logger->addInfo("Reading file: $file");
+
+                        $this->$method($file);
+                    }
+
+                }
+            }
         }
+    }
+
+    private function prepareImport()
+    {
+        // Create user extra field: extra_external_user_id
+        UserManager::create_extra_field('external_user_id', 1, 'External user id', null);
+
+        // Create course extra field: extra_external_course_id
+        CourseManager::create_course_extra_field('external_course_id', 1, 'External course id');
+        // Create session extra field extra_external_session_id
+        SessionManager::create_session_extra_field('external_session_id', 1, 'External session id');
     }
 
     /**
@@ -50,8 +170,13 @@ class ImportCsv
     function moveFile($file)
     {
         $moved = str_replace('incoming', 'treated', $file);
-        // $result = rename($file, $moved);
-        $result = 1;
+
+        if ($this->test) {
+            $result = 1;
+        } else {
+            $result = rename($file, $moved);
+        }
+
         if ($result) {
             $this->logger->addInfo("Moving file to the treated folder: $file");
         } else {
@@ -60,14 +185,62 @@ class ImportCsv
     }
 
     /**
+     * @param array $row
+     *
+     * @return array
+     */
+    private function cleanUserRow($row)
+    {
+        $row['lastname'] = $row['LastName'];
+        $row['firstname'] = $row['FirstName'];
+        $row['email'] = $row['Email'];
+        $row['username'] = $row['UserName'];
+        $row['password'] = $row['Password'];
+        $row['auth_srouce'] = $row['AuthSource'];
+        $row['official_code'] = $row['OfficialCode'];
+        $row['phone'] = $row['PhoneNumber'];
+
+        if (isset($row['StudentID'])) {
+            $row['extra_external_user_id'] = $row['StudentID'];
+        }
+
+        if (isset($row['TeacherID'])) {
+            $row['extra_external_user_id'] = $row['TeacherID'];
+        }
+
+        //$row['lastname'] =  Status
+        return $row;
+    }
+
+
+    /**
+     * @param array $row
+     * @return array
+     */
+    private function cleanCourseRow($row)
+    {
+        $row['title'] = $row['Title'];
+        $row['course_code'] = $row['Code'];
+        $row['category_code'] = $row['CourseCategory'];
+        $row['email'] = $row['Teacher'];
+        $row['language'] = $row['Language'];
+        $row['external_id'] = $row['CourseID'];
+
+        if (isset($row['CourseID'])) {
+            $row['extra_external_course_id'] = $row['CourseID'];
+        }
+
+        return $row;
+    }
+
+
+    /**
      * File to import
      * @param string $file
      */
-    function importTeachers($file)
+    private function importTeachers($file)
     {
         $data = Import::csv_to_array($file);
-        $this->logger->addInfo("-- Import Teachers --");
-        $this->logger->addInfo("Reading file: $file");
 
         /* Unique identifier: official-code username.
         Email address and password should never get updated. *ok
@@ -77,15 +250,18 @@ class ImportCsv
         We’ll handle that manually if applicable.
         No delete!
         */
+        $language = $this->defaultLanguage;
 
         if (!empty($data)) {
+            $this->logger->addInfo(count($data)." records found.");
             foreach ($data as $row) {
+                $row = $this->cleanUserRow($row);
                 $userInfo = api_get_user_info_from_username($row['username']);
                 $userInfoByOfficialCode = api_get_user_info_from_official_code($row['official_code']);
 
                 if (empty($userInfo) && empty($userInfoByOfficialCode)) {
                     // Create user
-                    $result = UserManager::create_user(
+                    $userId = UserManager::create_user(
                         $row['firstname'],
                         $row['lastname'],
                         COURSEMANAGER,
@@ -93,11 +269,11 @@ class ImportCsv
                         $row['username'],
                         $row['password'],
                         $row['official_code'],
-                        $row['language'],
+                        $language, //$row['language'],
                         $row['phone'],
-                        $row['picture'], //picture
+                        null, //$row['picture'], //picture
                         PLATFORM_AUTH_SOURCE, // ?
-                        $row['expiration_date'], //$expiration_date = '0000-00-00 00:00:00',
+                        '0000-00-00 00:00:00', //$row['expiration_date'], //$expiration_date = '0000-00-00 00:00:00',
                         1, //active
                         0,
                         null, // extra
@@ -105,14 +281,19 @@ class ImportCsv
                         false //$send_mail = false
                     );
 
-                    if ($result) {
-                        $this->logger->addInfo("Info - Teachers - User created: ".$row['username']);
+                    if ($userId) {
+                        foreach ($row as $key => $value) {
+                            if (substr($key, 0, 6) == 'extra_') { //an extra field
+                                UserManager::update_extra_field_value($userId, substr($key, 6), $value);
+                            }
+                        }
+                        $this->logger->addInfo("Teachers - User created: ".$row['username']);
                     } else {
-                        $this->logger->addError("Error - Teachers - User NOT created: ".$row['username']." ".$row['firstname']." ".$row['lastname']);
+                        $this->logger->addError("Teachers - User NOT created: ".$row['username']." ".$row['firstname']." ".$row['lastname']);
                     }
                 } else {
                     if (empty($userInfo)) {
-                        $this->logger->addError("Error - Teachers - Can't update user :".$row['username']);
+                        $this->logger->addError("Teachers - Can't update user :".$row['username']);
                         continue;
                     }
 
@@ -141,26 +322,27 @@ class ImportCsv
                     );
 
                     if ($result) {
+                        foreach ($row as $key => $value) {
+                            if (substr($key, 0, 6) == 'extra_') { //an extra field
+                                UserManager::update_extra_field_value($userInfo['user_id'], substr($key, 6), $value);
+                            }
+                        }
                         $this->logger->addInfo("Teachers - User updated: ".$row['username']);
                     } else {
                         $this->logger->addError("Teachers - User not updated: ".$row['username']);
                     }
                 }
-
-                // UserManager::delete_user();
-                $this->moveFile($file);
             }
         }
+        $this->moveFile($file);
     }
 
     /**
      * @param string $file
      */
-    function importStudents($file)
+    private function importStudents($file)
     {
         $data = Import::csv_to_array($file);
-        $this->logger->addInfo("-- Import Students --");
-        $this->logger->addInfo("Reading file: $file");
 
         /*
          * Another users import.
@@ -172,7 +354,10 @@ class ImportCsv
         He should be set inactive one year after the current date. So I presume you’ll just update the expiration date. We want to grant access to courses up to a year after deletion.
          */
         if (!empty($data)) {
+            $language = $this->defaultLanguage;
+            $this->logger->addInfo(count($data)." records found.");
             foreach ($data as $row) {
+                $row = $this->cleanUserRow($row);
                 $userInfo = api_get_user_info_from_username($row['username']);
                 $userInfoByOfficialCode = api_get_user_info_from_official_code($row['official_code']);
 
@@ -181,16 +366,16 @@ class ImportCsv
                     $result = UserManager::create_user(
                         $row['firstname'],
                         $row['lastname'],
-                        STUDENT,
+                        COURSEMANAGER,
                         $row['email'],
                         $row['username'],
                         $row['password'],
                         $row['official_code'],
-                        $row['language'],
+                        $language, //$row['language'],
                         $row['phone'],
-                        $row['picture'], //picture
+                        null, //$row['picture'], //picture
                         PLATFORM_AUTH_SOURCE, // ?
-                        $row['expiration_date'], //$expiration_date = '0000-00-00 00:00:00',
+                        '0000-00-00 00:00:00', //$row['expiration_date'], //$expiration_date = '0000-00-00 00:00:00',
                         1, //active
                         0,
                         null, // extra
@@ -199,6 +384,11 @@ class ImportCsv
                     );
 
                     if ($result) {
+                        foreach ($row as $key => $value) {
+                            if (substr($key, 0, 6) == 'extra_') { //an extra field
+                                UserManager::update_extra_field_value($result, substr($key, 6), $value);
+                            }
+                        }
                         $this->logger->addInfo("Students - User created: ".$row['username']);
                     } else {
                         $this->logger->addError("Students - User NOT created: ".$row['username']." ".$row['firstname']." ".$row['lastname']);
@@ -239,14 +429,17 @@ class ImportCsv
                     );
 
                     if ($result) {
+                        foreach ($row as $key => $value) {
+                            if (substr($key, 0, 6) == 'extra_') { //an extra field
+                                UserManager::update_extra_field_value($userInfo['user_id'], substr($key, 6), $value);
+                            }
+                        }
+
                         $this->logger->addInfo("Students - User updated: ".$row['username']);
                     } else {
                         $this->logger->addError("Students - User NOT updated: ".$row['username']." ".$row['firstname']." ".$row['lastname']);
                     }
                 }
-
-                // UserManager::delete_user();
-                $this->moveFile($file);
             }
         }
 
@@ -256,13 +449,16 @@ class ImportCsv
     /**
      * @param string $file
      */
-    function importCourses($file)
+    private function importCourses($file)
     {
         $data = Import::csv_to_array($file);
-        $this->logger->addInfo("Reading file: $file");
+
+        $language = $this->defaultLanguage;
 
         if (!empty($data)) {
+            $this->logger->addInfo(count($data)." records found.");
             foreach ($data as $row) {
+                $row = $this->cleanCourseRow($row);
                 $courseInfo = api_get_course_info($row['course_code']);
                 if (empty($courseInfo)) {
                     // Create
@@ -276,6 +472,7 @@ class ImportCsv
                     $courseInfo = CourseManager::create_course($params);
 
                     if (!empty($courseInfo)) {
+                        CourseManager::update_course_extra_field_value($courseInfo['code'], 'external_course_id', $row['extra_external_course_id']);
                         $this->logger->addInfo("Courses - Course created ".$courseInfo['code']);
                     } else {
                         $this->logger->addError("Courses - Can't create course:".$row['title']);
@@ -294,18 +491,6 @@ class ImportCsv
                     } else {
                         $this->logger->addError("Courses - Course NOT updated ".$courseInfo['code']);
                     }
-
-                    /*course_language='".Database::escape_string($course_language)."',
-                    title='".Database::escape_string($title)."',
-                    category_code='".Database::escape_string($category_code)."',
-                    tutor_name='".Database::escape_string($tutor_name)."',
-                    visual_code='".Database::escape_string($visual_code)."',
-                    department_name='".Database::escape_string($department_name)."',
-                    department_url='".Database::escape_string($department_url)."',
-                    disk_quota='".Database::escape_string($disk_quota)."',
-                    visibility = '".Database::escape_string($visibility)."',
-                    subscribe = '".Database::escape_string($subscribe)."',
-                    unsubscribe='*/
                 }
             }
         }
@@ -315,9 +500,9 @@ class ImportCsv
     /**
      * @param string $file
      */
-    function importSessions($file)
+    private function importSessions($file)
     {
-        $result = SessionManager::importCSV($file, true, 1, $this->logger);
+        $result = SessionManager::importCSV($file, true, 1, $this->logger, array('SessionId' => 'extra_external_session_id'));
 
         if (!empty($result['error_message'])) {
             $this->logger->addError($result['error_message']);
@@ -326,6 +511,7 @@ class ImportCsv
         $this->moveFile($file);
     }
 }
+
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\NativeMailerHandler;
@@ -345,8 +531,8 @@ $from = api_get_setting('emailAdministrator');
 
 if (!empty($emails)) {
     foreach ($emails as $email) {
-        $stream = new NativeMailerHandler($email, $subject, $from, $minLevel);
-        $logger->pushHandler(new BufferHandler($stream, 0, $minLevel));
+        //$stream = new NativeMailerHandler($email, $subject, $from, $minLevel);
+        //$logger->pushHandler(new BufferHandler($stream, 0, $minLevel));
     }
 }
 
@@ -355,4 +541,14 @@ $logger->pushHandler(new BufferHandler($stream, 0, $minLevel));
 $logger->pushHandler(new RotatingFileHandler('import_csv', 5, $minLevel));
 
 $import = new ImportCsv($logger);
+$dump = false;
+
+if (isset($argv[1]) && $argv[1] = '--dump') {
+    $dump = true;
+}
+
+$import->setDumpValues($dump);
+// Do not moves the files to treated
+$import->test = true;
+
 $import->run();

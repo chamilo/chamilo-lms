@@ -5838,8 +5838,8 @@ class Exercise
         }
 
 
-        $html = '<div class="row" id="questions_progress_block">';
-        $html .= '<div class="span2" id="questions_progress_legend">';
+        $html = '<div class="row" id="exercise_progress_block">';
+        $html .= '<div class="span2" id="exercise_progress_legend">';
 
         $reviewAnswerLabel = null;
         if ($this->review_answers) {
@@ -5869,7 +5869,7 @@ class Exercise
 
         $link = $url.'&num=';
 
-        $html .= '<div class="span10" id="questions_progress_bars">';
+        $html .= '<div class="span10" id="exercise_progress_bars">';
         if (!empty($categoryList)) {
             $html .= $this->progressExercisePaginationBarWithCategories($categoryList, $current_question, $conditions, $link);
         } else {

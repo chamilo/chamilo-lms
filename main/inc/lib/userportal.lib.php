@@ -335,6 +335,9 @@ class IndexManager {
                 case 'wrong_captcha':
                     $message = get_lang('TheTextYouEnteredDoesNotMatchThePicture');
                     break;
+                case 'blocked_by_captcha':
+                    $message = get_lang('AccountBlockedByCaptcha');
+                    break;
                 case 'unrecognize_sso_origin':
                     //$message = get_lang('SSOError');
                     break;
@@ -646,37 +649,43 @@ class IndexManager {
 		$form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-vertical'));
 		$form->addElement('text', 'login', get_lang('UserName'), array('class' => 'span2 autocapitalize_off', 'autofocus' => 'autofocus'));
 		$form->addElement('password', 'password', get_lang('Pass'), array('class' => 'span2'));
+        global $_configuration;
 
         // Captcha
+        $allowCaptcha = isset($_configuration['allow_captcha']) ? $_configuration['allow_captcha'] : false;
 
-        $useCaptcha = isset($_SESSION['loginFailed']) ? $_SESSION['loginFailed'] : null;
+        if ($allowCaptcha) {
 
-        if ($useCaptcha) {
+            $useCaptcha = isset($_SESSION['loginFailed']) ? $_SESSION['loginFailed'] : null;
 
-            $form->addElement('text', 'captcha', 'Enter the letters you see');
-            $form->addRule('captcha', 'Enter the characters you read in the image', 'required', null, 'client');
+            if ($useCaptcha) {
 
-            $ajax = api_get_path(WEB_AJAX_PATH).'form.ajax.php?a=get_captcha';
+                $ajax = api_get_path(WEB_AJAX_PATH).'form.ajax.php?a=get_captcha';
 
-            $options = array(
-                'width'        => 250,
-                'height'       => 90,
-                'callback'     => $ajax.'&var='.basename(__FILE__, '.php'),
-                'sessionVar'   => basename(__FILE__, '.php'),
-                'imageOptions' => array(
-                    'font_size' => 20,
-                    'font_path' => api_get_path(LIBRARY_PATH).'pchart/fonts/',
-                    'font_file' => 'tahoma.ttf',
-                    //'output' => 'gif'
-                )
-            );
+                $options = array(
+                    'width'        => 250,
+                    'height'       => 90,
+                    'callback'     => $ajax.'&var='.basename(__FILE__, '.php'),
+                    'sessionVar'   => basename(__FILE__, '.php'),
+                    'imageOptions' => array(
+                        'font_size' => 20,
+                        'font_path' => api_get_path(LIBRARY_PATH).'pchart/fonts/',
+                        'font_file' => 'tahoma.ttf',
+                        //'output' => 'gif'
+                    )
+                );
 
-            // Minimum options using all defaults (including defaults for Image_Text):
-            //$options = array('callback' => 'qfcaptcha_image.php');
+                // Minimum options using all defaults (including defaults for Image_Text):
+                //$options = array('callback' => 'qfcaptcha_image.php');
 
-            $captcha_question =  $form->addElement('CAPTCHA_Image', 'captcha_question', 'Verification', $options);
-            $form->addElement('static', null, null, 'Click on the image for a new one');
-            $form->addRule('captcha', 'What you entered didn\'t match the picture', 'CAPTCHA', $captcha_question);
+                $captcha_question =  $form->addElement('CAPTCHA_Image', 'captcha_question', '', $options);
+                $form->addElement('static', null, null, get_lang('ClickOnTheImageForANewOne'));
+
+                $form->addElement('text', 'captcha', get_lang('EnterTheLettersYouSee'));
+                $form->addRule('captcha', get_lang('EnterTheCharactersYouReadInTheImage'), 'required', null, 'client');
+
+                $form->addRule('captcha', 'What you entered didn\'t match the picture', 'CAPTCHA', $captcha_question);
+            }
         }
 
 		$form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));

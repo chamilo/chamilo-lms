@@ -237,44 +237,69 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 WHERE username = '".Database::escape_string($login)."'";
         $result = Database::query($sql);
 
-        $catpchaValidated = true;
+        $captchaValidated = true;
+        $allowCaptcha = isset($_configuration['allow_captcha']) ? $_configuration['allow_captcha'] : false;
 
         if (Database::num_rows($result) > 0) {
             $uData = Database::fetch_array($result);
 
-            if (isset($_POST['captcha'])) {
-                // Check captcha
-                $captchaText = $_POST['captcha'];
-                /** @var Text_CAPTCHA $obj */
-                $obj = isset($_SESSION['userportal.lib']) ? $_SESSION['userportal.lib'] : null;
-                if ($obj) {
-                    $obj->getPhrase();
-                    if ($obj->getPhrase() != $captchaText) {
-                        $catpchaValidated = false;
-                    } else {
-                        $catpchaValidated = true;
+            if ($allowCaptcha) {
+
+                // Checking captcha
+                if (isset($_POST['captcha'])) {
+                    // Check captcha
+                    $captchaText = $_POST['captcha'];
+                    /** @var Text_CAPTCHA $obj */
+                    $obj = isset($_SESSION['userportal.lib']) ? $_SESSION['userportal.lib'] : null;
+                    if ($obj) {
+                        $obj->getPhrase();
+                        if ($obj->getPhrase() != $captchaText) {
+                            $captchaValidated = false;
+                        } else {
+                            $captchaValidated = true;
+                        }
+                    }
+                    if (isset($_SESSION['captcha_question'])) {
+                        $captcha_question = $_SESSION['captcha_question'];
+                        $captcha_question->destroy();
                     }
                 }
-                if (isset($_SESSION['captcha_question'])) {
-                    $captcha_question = $_SESSION['captcha_question'];
-                    $captcha_question->destroy();
+
+                // Redirect to login page
+                if ($captchaValidated == false) {
+                    $loginFailed = true;
+                    Session::erase('_uid');
+                    Session::write('loginFailed', '1');
+
+                    header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=wrong_captcha');
+                    exit;
+                }
+
+                // Check if account is blocked by captcha user extra field see function api_block_account_captcha()
+                $blockedUntilDate = api_get_user_blocked_by_captcha($login);
+
+                if (isset($blockedUntilDate) && !empty($blockedUntilDate)) {
+                    if (time() > api_strtotime($blockedUntilDate, 'UTC')) {
+                        api_clean_account_captcha($login);
+
+                    } else {
+                        $loginFailed = true;
+                        Session::erase('_uid');
+                        Session::write('loginFailed', '1');
+
+                        header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=blocked_by_captcha');
+                        exit;
+                    }
                 }
             }
 
-            if ($catpchaValidated == false) {
-                $loginFailed = true;
-                Session::erase('_uid');
-                Session::write('loginFailed', '1');
-                header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=wrong_captcha');
-                exit;
-            }
 
             if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE || $uData['auth_source'] == CAS_AUTH_SOURCE) {
                 //The authentification of this user is managed by Chamilo itself
                 $password = api_get_encrypted_password(trim(stripslashes($password)));
 
                 // Check the user's password
-                if (($password == $uData['password']  OR $cas_login) AND (trim($login) == $uData['username'])) {
+                if (($password == $uData['password'] OR $cas_login) AND (trim($login) == $uData['username'])) {
                     $update_type = UserManager::get_extra_user_data_by_field($uData['user_id'], 'update_type');
                     $update_type= $update_type['update_type'];
                     if (!empty($extAuthSource[$update_type]['updateUser']) && file_exists($extAuthSource[$update_type]['updateUser'])) {
@@ -377,6 +402,24 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     $loginFailed = true;
                     Session::erase('_uid');
                     Session::write('loginFailed', '1');
+
+                    if ($allowCaptcha) {
+
+                        if (isset($_SESSION['loginFailedCount'])) {
+                            $_SESSION['loginFailedCount']++;
+                        } else {
+                            $_SESSION['loginFailedCount'] = 1;
+                        }
+
+                        $numberMistakesToBlockAccount = isset($_configuration['captcha_number_mistakes_to_block_account']) ? $_configuration['captcha_number_mistakes_to_block_account'] : 10;
+
+                        if (isset($_SESSION['loginFailedCount'])) {
+                            if ($_SESSION['loginFailedCount'] >= $numberMistakesToBlockAccount) {
+                                api_block_account_captcha($login);
+                            }
+                        }
+                    }
+
                     header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');
                     exit;
                 }
@@ -618,8 +661,12 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
     $is_allowedCreateCourse = false;
 
     if (isset($_user['user_id']) && $_user['user_id'] && ! api_is_anonymous()) {
-    // a uid is given (log in succeeded)
+        // a uid is given (log in succeeded)
+
         $_SESSION['loginFailed'] = false;
+        unset($_SESSION['loginFailedCount']);
+        unset($_SESSION['loginToBlock']);
+
         $user_table     = Database::get_main_table(TABLE_MAIN_USER);
         $admin_table    = Database::get_main_table(TABLE_MAIN_ADMIN);
         $track_e_login  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);

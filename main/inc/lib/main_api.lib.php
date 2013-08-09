@@ -6510,3 +6510,42 @@ function api_get_easy_password_list()
     }
     return $passwordList;
 }
+
+/**
+ *
+* create an user extra field called 'captcha_blocked_until_date'
+ */
+function api_block_account_captcha($username)
+{
+    $userInfo = api_get_user_info_from_username($username);
+    if (empty($userInfo)) {
+        return false;
+    }
+    global $_configuration;
+    $minutesToBlock = isset($_configuration['captcha_time_to_block']) ? $_configuration['captcha_time_to_block'] : 10;
+    $time = time() + $minutesToBlock*60;
+    Usermanager::update_extra_field_value($userInfo['user_id'], 'captcha_blocked_until_date', api_get_utc_datetime($time));
+}
+
+function api_clean_account_captcha($username)
+{
+    $userInfo = api_get_user_info_from_username($username);
+    if (empty($userInfo)) {
+        return false;
+    }
+    Session::erase('loginFailedCount');
+    Usermanager::update_extra_field_value($userInfo['user_id'], 'captcha_blocked_until_date', null);
+}
+
+function api_get_user_blocked_by_captcha($username)
+{
+    $userInfo = api_get_user_info_from_username($username);
+    if (empty($userInfo)) {
+        return false;
+    }
+    $data = Usermanager::get_extra_user_data_by_field($userInfo['user_id'], 'captcha_blocked_until_date');
+    if (isset($data)) {
+        return $data['captcha_blocked_until_date'];
+    }
+    return false;
+}

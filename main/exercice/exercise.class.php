@@ -6663,6 +6663,8 @@ class Exercise
     }
 
     /**
+     * Returns an HTML ribbon to show on top of the exercise result, with
+     * colouring depending on the success or failure of the student
      * @param $score
      * @param $weight
      * @param bool $check_pass_percentage
@@ -6697,6 +6699,11 @@ class Exercise
         return $ribbon;
     }
 
+    /**
+     * Returns an array of categories' details for the questions of the current
+     * exercise.
+     * @return array
+     */
     public function getQuestionWithCategories()
     {
         $categoryTable = Database::get_course_table(TABLE_QUIZ_CATEGORY);

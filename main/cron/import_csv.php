@@ -15,7 +15,7 @@ class ImportCsv
     private $logger;
     private $dumpValues;
     public $test;
-    public $defaultLanguage = 'english';
+    public $defaultLanguage = 'dutch';
 
     /**
      * @param Logger $logger
@@ -130,7 +130,6 @@ class ImportCsv
 
             $sections = array('students', 'teachers', 'courses', 'sessions');
 
-
             $this->prepareImport();
 
             foreach ($sections as $section) {
@@ -212,7 +211,6 @@ class ImportCsv
         return $row;
     }
 
-
     /**
      * @param array $row
      * @return array
@@ -221,7 +219,7 @@ class ImportCsv
     {
         $row['title'] = $row['Title'];
         $row['course_code'] = $row['Code'];
-        $row['category_code'] = $row['CourseCategory'];
+        $row['course_category'] = $row['CourseCategory'];
         $row['email'] = $row['Teacher'];
         $row['language'] = $row['Language'];
         $row['external_id'] = $row['CourseID'];
@@ -366,7 +364,7 @@ class ImportCsv
                     $result = UserManager::create_user(
                         $row['firstname'],
                         $row['lastname'],
-                        COURSEMANAGER,
+                        STUDENT,
                         $row['email'],
                         $row['username'],
                         $row['password'],
@@ -466,9 +464,10 @@ class ImportCsv
                     $params['title']                = $row['title'];
                     $params['exemplary_content']    = false;
                     $params['wanted_code']          = $row['course_code'];
-                    $params['category_code']        = $row['category_code'];
+                    $params['course_category']      = $row['course_category'];
                     $params['course_language']      = $row['language'];
                     //$params['gradebook_model_id']   = isset($course_values['gradebook_model_id']) ? $course_values['gradebook_model_id'] : null;
+
                     $courseInfo = CourseManager::create_course($params);
 
                     if (!empty($courseInfo)) {
@@ -531,8 +530,8 @@ $from = api_get_setting('emailAdministrator');
 
 if (!empty($emails)) {
     foreach ($emails as $email) {
-        //$stream = new NativeMailerHandler($email, $subject, $from, $minLevel);
-        //$logger->pushHandler(new BufferHandler($stream, 0, $minLevel));
+        $stream = new NativeMailerHandler($email, $subject, $from, $minLevel);
+        $logger->pushHandler(new BufferHandler($stream, 0, $minLevel));
     }
 }
 

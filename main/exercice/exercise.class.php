@@ -5870,6 +5870,7 @@ class Exercise
         $link = $url.'&num=';
 
         $html .= '<div class="span10" id="exercise_progress_bars">';
+
         if (!empty($categoryList)) {
             $html .= $this->progressExercisePaginationBarWithCategories($categoryList, $current_question, $conditions, $link);
         } else {
@@ -6000,18 +6001,28 @@ class Exercise
                 $useRootAsCategoryTitle = true;
             }
 
+            // If the exercise is set to only show the titles of the categories
+            // at the root of the tree, then pre-order the categories tree by
+            // removing children and summing their questions into the parent
+            // categories
             if ($useRootAsCategoryTitle) {
-            $newCategoryList = array();
-            foreach ($categories as $category) {
-
-                if (!isset($newCategoryList[$category['root']])) {
-                    $newCategoryList[$category['root']] = $category;
-                } else {
-                    $oldQuestionList = $newCategoryList[$category['root']]['question_list'];
-                    $category['question_list'] = array_merge($oldQuestionList , $category['question_list']);
-                    $newCategoryList[$category['root']] = $category;
+                // The new categories list starts empty
+                $newCategoryList = array();
+                foreach ($categories as $category) {
+                    if (!isset($newCategoryList[$category['root']])) {
+                        // If the current category's ancestor was never seen
+                        // before, then declare it and assign the current
+                        // category to it.
+                        $newCategoryList[$category['root']] = $category;
+                    } else {
+                        // If it was already seen, then merge the previous with
+                        // the current category
+                        $oldQuestionList = $newCategoryList[$category['root']]['question_list'];
+                        $category['question_list'] = array_merge($oldQuestionList , $category['question_list']);
+                        $newCategoryList[$category['root']] = $category;
+                    }
                 }
-                }
+                // Now use the newly built categories list, with only parents
                 $categories = $newCategoryList;
             }
             /*

@@ -149,6 +149,7 @@ class Exercise
      * Reads exercise information from the database
      *
      * @author Olivier Brouckaert
+     * @todo use Doctrine to manage read/writes
      * @param int $id - exercise ID
      * @param bool parse exercise question list
      * @return boolean - true if exercise exists, otherwise false
@@ -596,8 +597,6 @@ class Exercise
                     $extraFieldValue = new ExtraFieldValue('question');
                 }
 
-
-
                 while ($question = Database::fetch_array($result, 'ASSOC')) {
                     /** @var Question $objQuestionTmp */
                     $objQuestionTmp = Question::read($question['iid']);
@@ -606,7 +605,6 @@ class Exercise
                     if (empty($category_labels)) {
                         $category_labels = "-";
                     }
-
 
                     // Question type
                     list($typeImg, $typeExpl) = $objQuestionTmp->get_type_icon_html();
@@ -757,6 +755,7 @@ class Exercise
         $addAll = true;
         $categoryCountArray = array();
 
+        // Getting how many questions will be selected per category.
         if (!empty($categoriesAddedInExercise)) {
             $addAll = false;
              // Parsing question according the category rel exercise settings
@@ -773,7 +772,7 @@ class Exercise
                     }
                 }
             }
-            }
+        }
 
         if (!empty($questions_by_category)) {
             $temp_question_list = array();
@@ -793,7 +792,7 @@ class Exercise
 
                 if (!empty($numberOfQuestions)) {
                     $elements = Testcategory::getNElementsFromArray($categoryQuestionList, $numberOfQuestions, $randomizeQuestions);
-                if (!empty($elements)) {
+                    if (!empty($elements)) {
                         $temp_question_list[$category_id] = $elements;
                         $categoryQuestionList = $elements;
                     }
@@ -807,7 +806,6 @@ class Exercise
                 $question_list = $temp_question_list;
             }
         }
-
         return $question_list;
     }
 
@@ -903,9 +901,11 @@ class Exercise
                     }
                     $path = $repo->getPath($categoryEntity);
                     $index = 0;
+
                     if ($this->categoryMinusOne) {
                         $index = 1;
                     }
+
                     if (isset($path) && isset($path[$index])) {
                         $categoryParentId = $path[$index]->getIid();
 
@@ -5685,10 +5685,6 @@ class Exercise
             $list = array();
             if (Database::num_rows($result)) {
                  while ($row = Database::fetch_array($result, 'ASSOC')) {
-                    /*$cat = new Testcategory($row['category_id']);
-                    $cat = (array)$cat;
-                    $cat['iid'] = $row['category_id'];
-                    $cat['title'] = $cat['name'];*/
                     $list[$row['category_id']] = $row;
                 }
                 return $list;
@@ -5836,7 +5832,6 @@ class Exercise
             $categoryList = $this->getListOfCategoriesWithQuestionForTest();
             Session::write('categoryList', $categoryList);
         }
-
 
         $html = '<div class="row">';
         $html .= '<div class="span2">';
@@ -6000,20 +5995,29 @@ class Exercise
                 $useRootAsCategoryTitle = true;
             }
 
-            if ($useRootAsCategoryTitle) {
-            $newCategoryList = array();
-            foreach ($categories as $category) {
+            $categoryList = $this->categoryWithQuestionList;
+            var_dump($categoryList );
 
-                if (!isset($newCategoryList[$category['root']])) {
-                    $newCategoryList[$category['root']] = $category;
-                } else {
-                    $oldQuestionList = $newCategoryList[$category['root']]['question_list'];
-                    $category['question_list'] = array_merge($oldQuestionList , $category['question_list']);
-                    $newCategoryList[$category['root']] = $category;
-                }
+            if ($useRootAsCategoryTitle) {
+                $newCategoryList = array();
+
+                foreach ($categories as $category) {
+                    if ($this->categoryMinusOne) {
+                        $rootElement = $category['id'];
+                    } else {
+                        $rootElement = $category['root'];
+                    }
+                    if (!isset($newCategoryList[$rootElement])) {
+                        $newCategoryList[$rootElement] = $category;
+                    } else {
+                        $oldQuestionList = $newCategoryList[$rootElement]['question_list'];
+                        $category['question_list'] = array_merge($oldQuestionList , $category['question_list']);
+                        $newCategoryList[$rootElement] = $category;
+                    }
                 }
                 $categories = $newCategoryList;
             }
+
             /*
             $showCategoriesGrouped = true;
             if (in_array(

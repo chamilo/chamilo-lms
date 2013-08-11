@@ -134,7 +134,7 @@ $form->addElement('html', $image_html);
 
 
 $form->add_textfield('title', get_lang('Title'), true, array('class' => 'span6'));
-//$form->applyFilter('title', 'html_filter');
+$form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
 //$form->add_textfield('tutor_name', get_lang('Professors'), true, array ('size' => '60'));
@@ -154,9 +154,11 @@ $form->addElement('select', 'category_code', get_lang('Fac'), $categories, array
 $form->addElement('select_language', 'course_language', array(get_lang('Ln'), get_lang('TipLang')));
 
 $form->add_textfield('department_name', get_lang('Department'), false, array('class' => 'span5'));
+$form->applyFilter('department_name', 'html_filter');
 $form->applyFilter('department_name', 'trim');
 
 $form->add_textfield('department_url', get_lang('DepartmentUrl'), false, array('class' => 'span5'));
+$form->applyFilter('department_url', 'html_filter');
 //$form->addRule('tutor_name', get_lang('ThisFieldIsRequired'), 'required');
 
 

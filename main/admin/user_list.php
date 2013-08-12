@@ -419,7 +419,7 @@ function get_user_data($from, $number_of_items, $column, $direction, $get_count 
     $from 	= intval($from);
     $number_of_items = intval($number_of_items);
 
-    //Returns counts and exits function
+    // Returns counts and exits function.
     if ($get_count) {
         $res = Database::query($sql);
         $user = Database::fetch_array($res);

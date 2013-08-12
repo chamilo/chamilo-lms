@@ -19,7 +19,7 @@ if (api_get_setting('allow_registration') === 'false') {
     api_not_allowed(true);
 }
 
-$htmlHeadXtra[] = api_get_password_checker_js('#pass1');
+$htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
 
 if (!empty($_SESSION['user_language_choice'])) {
     $user_selected_language = $_SESSION['user_language_choice'];
@@ -92,7 +92,7 @@ if ($user_already_registered_show_terms == false) {
 
     //	USERNAME
     if (api_get_setting('login_is_email') != 'true') {
-        $form->addElement('text', 'username', get_lang('UserName'), array('size' => USERNAME_MAX_LENGTH));
+        $form->addElement('text', 'username', get_lang('UserName'), array('id' => 'username', 'size' => USERNAME_MAX_LENGTH));
         $form->applyFilter('username','trim');
         $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
         $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);

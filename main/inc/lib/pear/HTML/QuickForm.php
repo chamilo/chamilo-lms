@@ -65,7 +65,8 @@ $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] = array(
     'advanced_settings' => array('HTML/QuickForm/advanced_settings.php','HTML_QuickForm_advanced_settings'),
     'label'             => array('HTML/QuickForm/label.php','HTML_QuickForm_label'),
     'email'             => array('HTML/QuickForm/email.php','HTML_QuickForm_email'),
-    'advmultiselect'    => array('HTML/QuickForm/advmultiselect.php','HTML_QuickForm_advmultiselect')
+    'advmultiselect'    => array('HTML/QuickForm/advmultiselect.php','HTML_QuickForm_advmultiselect'),
+    'captcha'           => array('HTML/QuickForm/CAPTCHA.php','HTML_QuickForm_advmultiselect')
 );
 
 /**
@@ -91,7 +92,8 @@ $GLOBALS['_HTML_QuickForm_registered_rules'] = array(
     //'compare'       => array('html_quickform_rule_compare',  'HTML/QuickForm/Rule/Compare.php')
     'compare'       => array('html_quickform_rule_compare',  'HTML/QuickForm/Rule/Compare.php'),
     'comparedate'   => array('html_quickform_rule_comparedate',  'HTML/QuickForm/Rule/CompareDate.php'),
-    'errordate'  	=> array('html_quickform_rule_date',  'HTML/QuickForm/Rule/Date.php')
+    'errordate'  	=> array('html_quickform_rule_date',  'HTML/QuickForm/Rule/Date.php'),
+    'captcha'  	    => array('HTML_QuickForm_Rule_CAPTCHA',  'HTML/QuickForm/Rule/CAPTCHA.php')
     //
 );
 

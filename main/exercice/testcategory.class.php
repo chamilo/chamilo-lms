@@ -16,6 +16,7 @@ class Testcategory
     public $course_id;
     public $c_id; // from db
     public $root;
+    public $visibility;
 
     /**
      * Constructor of the class Category
@@ -31,7 +32,7 @@ class Testcategory
      * @param string $type
      * @param int $course_id
      */
-    public function Testcategory($in_id = 0, $in_name = '', $in_description = "", $parent_id = 0, $type = 'simple', $course_id = null)
+    public function Testcategory($in_id = 0, $in_name = '', $in_description = "", $parent_id = 0, $type = 'simple', $course_id = null, $visibility = 1)
     {
 		if ($in_id != 0 && $in_name == "") {
 			$tmpobj = new Testcategory();
@@ -44,6 +45,7 @@ class Testcategory
             $this->parent_path = $this->name;
             $this->c_id = $tmpobj->c_id;
             $this->root = $tmpobj->root;
+            $this->visibility = $tmpobj->visibility;
 
             if (!empty($tmpobj->parent_id)) {
                 $category = new Testcategory($tmpobj->parent_id);
@@ -54,6 +56,7 @@ class Testcategory
 			$this->name = $in_name;
 			$this->description = $in_description;
             $this->parent_id = $parent_id;
+            $this->visibility = $visibility;
         }
         $this->type = $type;
 
@@ -89,6 +92,7 @@ class Testcategory
             $this->parent_id = $row['parent_id'];
             $this->c_id = $row['c_id'];
             $this->root = $row['root'];
+            $this->visibility = $row['visibility'];
         } else {
             return false;
         }
@@ -168,6 +172,7 @@ class Testcategory
 
         $category->setTitle($this->name);
         $category->setDescription($this->description);
+        $category->setVisibility($this->visibility);
 
         if (!empty($this->parent_id)) {
             foreach ($this->parent_id as $parentId) {
@@ -397,10 +402,11 @@ class Testcategory
      * @param int $question_id
      * @param int $course_id
      * @param bool $display_into_labels
+     * @param bool $categoryMinusOne shows category - 1 see BT#6540
      * @return string
      */
-    public static function getCategoryNamesForQuestion($question_id, $course_id = null, $display_into_labels = true) {
-        $result = array(); // result
+    public static function getCategoryNamesForQuestion($question_id, $course_id = null, $display_into_labels = true, $categoryMinusOne = false)
+    {
         if (empty($course_id) || $course_id == "") {
             $course_id = api_get_course_int_id();
         }
@@ -413,9 +419,17 @@ class Testcategory
                 ON (qc.category_id = c.iid AND qc.c_id = $course_id)
                 WHERE question_id = '$question_id' ";
 		$res = Database::query($sql);
+        $result = array();
 		if (Database::num_rows($res) > 0) {
             while ($row = Database::fetch_array($res)) {
                 $cat = new Testcategory($row['iid']);
+                if ($categoryMinusOne) {
+                    $catParts = explode('>', $cat->parent_path);
+                    if (isset($catParts[0])) {
+                        unset($catParts[0]);
+                        $cat->parent_path = implode('>', $catParts);
+                    }
+                }
                 $result[] = array('title' => $cat->parent_path);
             }
 		}
@@ -906,10 +920,13 @@ class Testcategory
 
     /**
      * Returns a category summary report
-     * @params int exercise id
-     * @params array prefilled array with the category_id, score, and weight example: array(1 => array('score' => '10', 'total' => 20));
+     *
+     * @param int exercise id
+     * @param array prefilled array with the category_id, score, and weight example: array(1 => array('score' => '10', 'total' => 20));
+     * @param bool $categoryMinusOne shows category - 1 see BT#6540
+     * @return string
      */
-    public static function get_stats_table_by_attempt($exercise_id, $category_list = array())
+    public static function get_stats_table_by_attempt($exercise_id, $category_list = array(), $categoryMinusOne = false)
     {
         global $app;
         if (empty($category_list)) {
@@ -949,9 +966,13 @@ class Testcategory
 
                 $categoryName = $category_name_list[$category_id];
 
-                if (isset($path[0])) {
-                    $category_id = $path[0]->getIid();
-                    $categoryName = $path[0]->getTitle();
+                $index = 0;
+                if ($categoryMinusOne) {
+                    $index = 1;
+                }
+                if (isset($path[$index])) {
+                    $category_id = $path[$index]->getIid();
+                    $categoryName = $path[$index]->getTitle();
                 }
                 if (!isset($globalCategoryScore[$category_id])) {
                     $globalCategoryScore[$category_id] = array();
@@ -1036,20 +1057,13 @@ class Testcategory
 
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
-            //$list = array();
              while ($row = Database::fetch_array($result, 'ASSOC')) {
                 if ($excludeCategoryWithNoQuestions) {
-                    //if ($row['count_questions'] == 0 || $row['count_questions'] == -1) {
-                    /*0 means no questions selected this options is also filtered in the function:
-                    Exercise::pickQuestionsPerCategory() */
                     if ($row['count_questions'] == 0) {
                         continue;
                     }
                 }
                 $categories[$row['category_id']] = $row;
-            }
-            if (!empty($list)) {
-                //$categories = $this->sort_tree_array($list);
             }
         }
 
@@ -1142,6 +1156,12 @@ class Testcategory
         $form->add_html_editor('category_description', get_lang('CategoryDescription'), false, false, array('ToolbarSet' => 'test_category', 'Width' => '90%', 'Height' => '200'));
         $category_parent_list = array();
 
+        $options = array(
+            '1' => get_lang('Visible'),
+            '0' => get_lang('Hidden')
+        );
+        $form->addElement('select', 'visibility', get_lang('Visibility'), $options);
+
         $script = null;
         if (!empty($this->parent_id)) {
             $parent_cat = new Testcategory($this->parent_id);
@@ -1159,6 +1179,7 @@ class Testcategory
         $defaults["category_name"] = $this->name;
         $defaults["category_description"] = $this->description;
         $defaults["parent_id"] = $this->parent_id;
+        $defaults["visibility"] = $this->visibility;
         $form->setDefaults($defaults);
 
         // setting the rules

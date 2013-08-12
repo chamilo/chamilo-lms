@@ -23,7 +23,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $this_section = SECTION_MYPROFILE;
 }
 
-$htmlHeadXtra[] = api_get_password_checker_js('#password1');
+$htmlHeadXtra[] = api_get_password_checker_js('#username', '#password1');
 $_SESSION['this_section'] = $this_section;
 
 if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
@@ -31,9 +31,7 @@ if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user[
 }
 
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<link href="'.api_get_path(
-    WEB_LIBRARY_PATH
-).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+$htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
 $htmlHeadXtra[] = '<script>
 function confirmation(name) {
@@ -147,7 +145,7 @@ $form->addElement(
     'text',
     'username',
     get_lang('UserName'),
-    array('maxlength' => USERNAME_MAX_LENGTH, 'size' => USERNAME_MAX_LENGTH)
+    array('id' => 'username', 'maxlength' => USERNAME_MAX_LENGTH, 'size' => USERNAME_MAX_LENGTH)
 );
 if (api_get_setting('profile', 'login') !== 'true') {
     $form->freeze('username');

@@ -6954,11 +6954,28 @@ function api_get_user_roles()
 
 
 /**
+ * Finds all the information about a user from username instead of user id
+ * @param $username (string): the username
+ * @return $user_info (array): user_id, lastname, firstname, username, email, ...
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ */
+function api_get_user_info_from_official_code($official_code = '') {
+    if (empty($official_code)) { return false; }
+    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE official_code ='".Database::escape_string($official_code)."'";
+    $result = Database::query($sql);
+    if (Database::num_rows($result) > 0) {
+        $result_array = Database::fetch_array($result);
+        return _api_format_user($result_array);
+    }
+    return false;
+}
+
+/**
  *
  * @param string $inputId the jquery id example: #password
  * @return string
  */
-function api_get_password_checker_js($inputId)
+function api_get_password_checker_js($usernameInputId, $passwordInputid)
 {
     global $_configuration;
     $useStrengthPassChecker = isset($_configuration['allow_strength_pass_checker']) ? $_configuration['allow_strength_pass_checker'] : false;
@@ -6967,13 +6984,14 @@ function api_get_password_checker_js($inputId)
         return null;
     }
 
-    $verdicts = array(get_lang('Weak'), get_lang('Normal'), get_lang('Medium'), get_lang('Strong'), get_lang('VeryStrong'));
+    $verdicts = array(get_lang('PasswordWeak'), get_lang('PasswordNormal'), get_lang('PasswordMedium'), get_lang('PasswordStrong'), get_lang('PasswordVeryStrong'));
     $js = api_get_js('strength/strength.js');
     $js .=  "<script>
 
     var verdicts = ['".implode("','", $verdicts)."'];
     var errorMessages = {
-        password_to_short : '".get_lang('PasswordIsTooShort')."'
+        password_to_short : '".get_lang('PasswordIsTooShort')."',
+        same_as_username : '".get_lang('YourPasswordCannotBeTheSameAsYourUsername')."',
     };
 
     $(document).ready(function() {
@@ -6987,12 +7005,13 @@ function api_get_password_checker_js($inputId)
             },
             errorMessages : errorMessages,
             viewports: {
-              progress: '#password_progress',
-              //verdict: undefined,
-              //errors: undefined
-          }
+                progress: '#password_progress',
+                //verdict: undefined,
+                //errors: undefined
+            },
+            usernameField: '$usernameInputId'
         };
-        $('".$inputId."').pwstrength(options);
+        $('".$passwordInputid."').pwstrength(options);
     });
     </script>";
     return $js;
@@ -7012,3 +7031,41 @@ function api_get_easy_password_list()
     return $passwordList;
 }
 
+/**
+ *
+* create an user extra field called 'captcha_blocked_until_date'
+ */
+function api_block_account_captcha($username)
+{
+    $userInfo = api_get_user_info_from_username($username);
+    if (empty($userInfo)) {
+        return false;
+    }
+    global $_configuration;
+    $minutesToBlock = isset($_configuration['captcha_time_to_block']) ? $_configuration['captcha_time_to_block'] : 10;
+    $time = time() + $minutesToBlock*60;
+    Usermanager::update_extra_field_value($userInfo['user_id'], 'captcha_blocked_until_date', api_get_utc_datetime($time));
+}
+
+function api_clean_account_captcha($username)
+{
+    $userInfo = api_get_user_info_from_username($username);
+    if (empty($userInfo)) {
+        return false;
+    }
+    Session::erase('loginFailedCount');
+    Usermanager::update_extra_field_value($userInfo['user_id'], 'captcha_blocked_until_date', null);
+}
+
+function api_get_user_blocked_by_captcha($username)
+{
+    $userInfo = api_get_user_info_from_username($username);
+    if (empty($userInfo)) {
+        return false;
+    }
+    $data = Usermanager::get_extra_user_data_by_field($userInfo['user_id'], 'captcha_blocked_until_date');
+    if (isset($data)) {
+        return $data['captcha_blocked_until_date'];
+    }
+    return false;
+}

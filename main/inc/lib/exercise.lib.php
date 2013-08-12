@@ -38,7 +38,8 @@ class ExerciseLib
         $show_comment = false,
         $exercise_feedback = null,
         $show_answers = false,
-        $modelType = null
+        $modelType = null,
+        $categoryMinusOne = true
     ) {
         // Text direction for the current language
         //$is_ltr_text_direction = api_get_text_direction() != 'rtl';
@@ -73,7 +74,8 @@ class ExerciseLib
                 $questionDescription = $objQuestionTmp->selectDescription();
 
                 if ($show_title) {
-                    $html .= Testcategory::getCategoryNamesForQuestion($objQuestionTmp->id);
+                    $categoryName = Testcategory::getCategoryNamesForQuestion($objQuestionTmp->id, null, true, $categoryMinusOne);
+                    $html .= $categoryName;
                     $html .= Display::div($current_item.'. '.$objQuestionTmp->selectTitle(), array('class' => 'question_title'));
                     if (!empty($questionDescription)) {
                         $html .= Display::div($questionDescription, array('class' => 'question_description'));

@@ -725,7 +725,7 @@ if (!empty($category_list) && ($show_results || $show_only_total_score)) {
         'score' => $my_total_score_temp,
         'total' => $totalWeighting
     );
-    echo Testcategory::get_stats_table_by_attempt($objExercise->id, $category_list);
+    echo Testcategory::get_stats_table_by_attempt($objExercise->id, $category_list, $objExercise->categoryMinusOne);
 }
 
 echo $total_score_text;

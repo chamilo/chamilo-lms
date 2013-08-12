@@ -775,7 +775,7 @@ class Exercise
                     }
                 }
             }
-            }
+        }
 
         if (!empty($questions_by_category)) {
             $temp_question_list = array();
@@ -795,7 +795,7 @@ class Exercise
 
                 if (!empty($numberOfQuestions)) {
                     $elements = Testcategory::getNElementsFromArray($categoryQuestionList, $numberOfQuestions, $randomizeQuestions);
-                if (!empty($elements)) {
+                    if (!empty($elements)) {
                         $temp_question_list[$category_id] = $elements;
                         $categoryQuestionList = $elements;
                     }
@@ -832,6 +832,7 @@ class Exercise
         $cat = new Testcategory();
 
         // Setting category order.
+
         switch ($questionSelectionType) {
             case EX_Q_SELECTION_ORDERED: // 1
             case EX_Q_SELECTION_RANDOM:  // 2
@@ -864,12 +865,12 @@ class Exercise
             case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED: // 8
                 break;
             case EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED: // 9
-                $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'root ASC', false, true);
+                $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'root ASC, lft ASC', false, true);
                 $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise);
                 $question_list = $this->pickQuestionsPerCategory($categoriesAddedInExercise, $question_list, $questions_by_category, true, false);
                 break;
             case EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM: // 10
-                $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'root ASC', false, true);
+                $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'root, lft ASC', false, true);
                 $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise);
                 $question_list = $this->pickQuestionsPerCategory($categoriesAddedInExercise, $question_list, $questions_by_category, true, true);
                 break;
@@ -886,6 +887,7 @@ class Exercise
             $repo = $em->getRepository('Entity\CQuizCategory');
 
             $newCategoryList = array();
+//            var_dump($questions_by_category);
 
             foreach ($questions_by_category as $categoryId => $questionList) {
 
@@ -903,11 +905,39 @@ class Exercise
                     } else {
                         $categoryEntity = $parentsLoaded[$cat['parent_id']];
                     }
+
                     $path = $repo->getPath($categoryEntity);
+
                     $index = 0;
                     if ($this->categoryMinusOne) {
-                        $index = 1;
+                        //$index = 1;
                     }
+                    /** @var Entity\CQuizCategory $categoryParent*/
+
+                    foreach ($path as $categoryParent) {
+                        $visibility = $categoryParent->getVisibility();
+
+                        if ($visibility == 0) {
+                            $categoryParentId = $categoryId;
+                            $categoryTitle = $cat['title'];
+                            if (count($path) > 1) {
+                                continue;
+                            }
+                        } else {
+                            $categoryParentId = $categoryParent->getIid();
+                            $categoryTitle = $categoryParent->getTitle();
+                        }
+
+                        $categoryParentInfo['id'] = $categoryParentId;
+                        $categoryParentInfo['iid'] = $categoryParentId;
+                        $categoryParentInfo['parent_path'] = null;
+                        $categoryParentInfo['title'] = $categoryTitle;
+                        $categoryParentInfo['name'] = $categoryTitle;
+                        $categoryParentInfo['parent_id'] = null;
+                        break;
+                    }
+
+                    /*
                     if (isset($path) && isset($path[$index])) {
                         $categoryParentId = $path[$index]->getIid();
 
@@ -917,7 +947,7 @@ class Exercise
                         $categoryParentInfo['title'] = $path[$index]->getTitle();
                         $categoryParentInfo['name'] = $path[$index]->getTitle();
                         $categoryParentInfo['parent_id'] = null;
-                    }
+                    }*/
                 }
                 $cat['parent_info'] = $categoryParentInfo;
                 $newCategoryList[$categoryId] = array(
@@ -927,6 +957,7 @@ class Exercise
             }
             $result['category_with_questions_list'] = $newCategoryList;
         }
+        //echo '<pre>'; print_r($result);
         return $result;
     }
 
@@ -5988,6 +6019,8 @@ class Exercise
             $selectionType = $this->getQuestionSelectionType();
             $useRootAsCategoryTitle = false;
 
+            // Grouping questions per parent category see BT#6540
+
             if (in_array(
                 $selectionType,
                 array(
@@ -6007,11 +6040,19 @@ class Exercise
                 // The new categories list starts empty
                 $newCategoryList = array();
                 foreach ($categories as $category) {
-                    if ($this->categoryMinusOne) {
+                    /*if ($this->categoryMinusOne) {
                         $rootElement = $category['id'];
                     } else {
-                        $rootElement = $category['root'];
+
+                    }*/
+
+                    $rootElement = $category['root'];
+
+                    if (isset($category['parent_info'])) {
+                        $rootElement = $category['parent_info']['id'];
                     }
+
+                    //$rootElement = $category['id'];
                     // If the current category's ancestor was never seen
                     // before, then declare it and assign the current
                     // category to it.

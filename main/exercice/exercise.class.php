@@ -98,6 +98,8 @@ class Exercise
     public $modelType = 1;
     public $questionSelectionType = EX_Q_SELECTION_ORDERED;
     public $hideQuestionTitle = 0;
+    public $scoreTypeModel = 0;
+    public $categoryMinusOne = true; // Shows the category -1: See BT#6540
 
     /**
      * Constructor of the class
@@ -130,6 +132,7 @@ class Exercise
         $this->modelType = 1;
         $this->questionSelectionType = EX_Q_SELECTION_ORDERED;
         $this->endButton = 0;
+        $this->scoreTypeModel = 0;
 
         if (!empty($course_id)) {
             $course_info = api_get_course_info_by_id($course_id);
@@ -147,6 +150,7 @@ class Exercise
      * Reads exercise information from the database
      *
      * @author Olivier Brouckaert
+     * @todo use Doctrine to manage read/writes
      * @param int $id - exercise ID
      * @param bool parse exercise question list
      * @return boolean - true if exercise exists, otherwise false
@@ -193,6 +197,7 @@ class Exercise
             $this->modelType = $object->model_type;
             $this->questionSelectionType = $object->question_selection_type;
             $this->hideQuestionTitle = $object->hide_question_title;
+            $this->scoreTypeModel = $object->score_type_model;
 
             $this->review_answers = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;
             $sql = "SELECT max_score FROM $table_lp_item
@@ -532,6 +537,15 @@ class Exercise
         $this->hideQuestionTitle = intval($value);
     }
 
+    public function getScoreTypeModel()
+    {
+        return $this->scoreTypeModel;
+    }
+
+    public function setScoreTypeModel($value)
+    {
+        $this->scoreTypeModel = intval($value);
+    }
     /**
      *
      * @param int $start
@@ -743,6 +757,7 @@ class Exercise
         $addAll = true;
         $categoryCountArray = array();
 
+        // Getting how many questions will be selected per category.
         if (!empty($categoriesAddedInExercise)) {
             $addAll = false;
              // Parsing question according the category rel exercise settings
@@ -845,17 +860,17 @@ class Exercise
                 $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise);
                 $question_list = $this->pickQuestionsPerCategory($categoriesAddedInExercise, $question_list, $questions_by_category, true, true);
                 break;
-            /*case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED: // 7
+            case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED: // 7
                 break;
             case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED: // 8
-                break;*/
+                break;
             case EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED: // 9
-                $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'root ASC', false, true);
+                $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'root ASC, lft ASC', false, true);
                 $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise);
                 $question_list = $this->pickQuestionsPerCategory($categoriesAddedInExercise, $question_list, $questions_by_category, true, false);
                 break;
             case EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM: // 10
-                $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'root ASC', false, true);
+                $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'root, lft ASC', false, true);
                 $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise);
                 $question_list = $this->pickQuestionsPerCategory($categoriesAddedInExercise, $question_list, $questions_by_category, true, true);
                 break;
@@ -889,16 +904,45 @@ class Exercise
                         $categoryEntity = $parentsLoaded[$cat['parent_id']];
                     }
                     $path = $repo->getPath($categoryEntity);
-                    if (isset($path) && isset($path[0])) {
-                        $categoryParentId = $path[0]->getIid();
+                    $index = 0;
+                    if ($this->categoryMinusOne) {
+                        //$index = 1;
+                    }
+                    /** @var Entity\CQuizCategory $categoryParent*/
+
+                    foreach ($path as $categoryParent) {
+                        $visibility = $categoryParent->getVisibility();
+
+                        if ($visibility == 0) {
+                            $categoryParentId = $categoryId;
+                            $categoryTitle = $cat['title'];
+                            if (count($path) > 1) {
+                                continue;
+                            }
+                        } else {
+                            $categoryParentId = $categoryParent->getIid();
+                            $categoryTitle = $categoryParent->getTitle();
+                        }
 
                         $categoryParentInfo['id'] = $categoryParentId;
                         $categoryParentInfo['iid'] = $categoryParentId;
                         $categoryParentInfo['parent_path'] = null;
-                        $categoryParentInfo['title'] = $path[0]->getTitle();
-                        $categoryParentInfo['name'] = $path[0]->getTitle();
+                        $categoryParentInfo['title'] = $categoryTitle;
+                        $categoryParentInfo['name'] = $categoryTitle;
                         $categoryParentInfo['parent_id'] = null;
+                        break;
                     }
+                    /*
+                    if (isset($path) && isset($path[$index])) {
+                        $categoryParentId = $path[$index]->getIid();
+
+                        $categoryParentInfo['id'] = $categoryParentId;
+                        $categoryParentInfo['iid'] = $categoryParentId;
+                        $categoryParentInfo['parent_path'] = null;
+                        $categoryParentInfo['title'] = $path[$index]->getTitle();
+                        $categoryParentInfo['name'] = $path[$index]->getTitle();
+                        $categoryParentInfo['parent_id'] = null;
+                    }*/
                 }
                 $cat['parent_info'] = $categoryParentInfo;
                 $newCategoryList[$categoryId] = array(
@@ -948,8 +992,6 @@ class Exercise
             }
 
 
-            if ($this->categories_grouping) {
-            }
 
             return $questionList;
         }
@@ -1338,6 +1380,7 @@ class Exercise
                     model_type = '".$this->getModelType()."',
                     question_selection_type = '".$this->getQuestionSelectionType()."',
                     hide_question_title = '".$this->getHideQuestionTitle()."',
+                    score_type_model = '".$this->getScoreTypeModel()."',
 					results_disabled='".Database::escape_string($results_disabled)."'";
             }
             $sql .= " WHERE iid = ".Database::escape_string($id)." AND c_id = {$this->course_id}";
@@ -1355,7 +1398,7 @@ class Exercise
                         c_id, start_time, end_time, title, description, sound, type, random, random_answers, active,
                         max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category,
                         text_when_finished, display_category_name, pass_percentage, end_button, email_notification_template,
-                        results_disabled, model_type, question_selection_type, hide_question_title)
+                        results_disabled, model_type, question_selection_type, score_type_model, hide_question_title)
 					VALUES(
 						".$this->course_id.",
 						'$start_time',
@@ -1381,6 +1424,7 @@ class Exercise
                         '".Database::escape_string($results_disabled)."',
                         '".Database::escape_string($this->getModelType())."',
                         '".Database::escape_string($this->getQuestionSelectionType())."',
+                        '".Database::escape_string($this->getScoreTypeModel())."',
                         '".Database::escape_string($this->getHideQuestionTitle())."'
 						)";
             Database::query($sql);
@@ -1541,16 +1585,46 @@ class Exercise
             </a>'
         );
 
-        // Random questions
-        // style="" and not "display:none" to avoid #4029 Random and number of attempt menu empty
         $form->addElement('html', '<div id="options" style="">');
 
+        // Model type
         $radio = array(
             $form->createElement('radio', 'model_type', null, get_lang('Normal'), EXERCISE_MODEL_TYPE_NORMAL),
             $form->createElement('radio', 'model_type', null, get_lang('Committee'), EXERCISE_MODEL_TYPE_COMMITTEE)
         );
 
         $form->addGroup($radio, null, get_lang('ModelType'), '');
+        $modelType = $this->getModelType();
+
+        $scoreTypeDisplay = 'display:none';
+        if ($modelType == EXERCISE_MODEL_TYPE_COMMITTEE) {
+            $scoreTypeDisplay = null;
+        }
+
+        $form->addElement('html', '<div id="score_type" style="'.$scoreTypeDisplay.'">');
+
+        // QuestionScoreType
+
+        global $app;
+        $em = $app['orm.em'];
+        $types = $em->getRepository('Entity\QuestionScore')->findAll();
+        $options = array(
+            '0' => get_lang('SelectAnOption')
+        );
+
+        foreach ($types as $questionType) {
+            $options[$questionType->getId()] = $questionType->getName();
+        }
+
+        $form->addElement(
+            'select',
+            'score_type_model',
+            array(get_lang('QuestionScoreType')),
+            $options,
+            array('id' => 'score_type_model')
+        );
+
+        $form->addElement('html', '</div>');
 
         if ($type == 'full') {
             //Can't modify a DirectFeedback question
@@ -2054,6 +2128,7 @@ class Exercise
                 $defaults['email_notification_template'] = $this->selectEmailNotificationTemplate();
                 $defaults['model_type'] = $this->getModelType();
                 $defaults['question_selection_type'] = $this->getQuestionSelectionType();
+                $defaults['score_type_model'] = $this->getScoreTypeModel();
                 $defaults['hide_question_title'] = $this->getHideQuestionTitle();
 
                 if (($this->start_time != '0000-00-00 00:00:00')) {
@@ -2133,6 +2208,7 @@ class Exercise
         $this->setModelType($form->getSubmitValue('model_type'));
         $this->setQuestionSelectionType($form->getSubmitValue('question_selection_type'));
         $this->setHideQuestionTitle($form->getSubmitValue('hide_question_title'));
+        $this->setScoreTypeModel($form->getSubmitValue('score_type_model'));
 
         if ($form->getSubmitValue('activate_start_date_check') == 1) {
             $start_time = $form->getSubmitValue('start_time');
@@ -2551,7 +2627,6 @@ class Exercise
 
             $original_exercise->copy_exercise_categories($exercise_obj);
 
-            //$question_list = $exercise_obj->selectQuestionList();
             $question_list = $exercise_obj->getQuestionListWithMediasUncompressed();
 
             if (!empty($question_list)) {
@@ -5482,13 +5557,13 @@ class Exercise
         $condition = "
             var dialog = $('#dialog-confirm');
 
-            if (dialog.data('question_list') != '') {
+            if (dialog.data('question_list') != '' && dialog.data('question_list') != undefined) {
                 saveQuestionList(dialog.data('question_list'));
             } else {
                 saveNow(dialog.data('question_id'), dialog.data('url_extra'), dialog.data('redirect'));
             }
-            $(this).dialog('close');
 
+            $(this).dialog('close');
         ";
 
 
@@ -5646,10 +5721,6 @@ class Exercise
             $list = array();
             if (Database::num_rows($result)) {
                 while ($row = Database::fetch_array($result, 'ASSOC')) {
-                    /*$cat = new Testcategory($row['category_id']);
-                    $cat = (array)$cat;
-                    $cat['iid'] = $row['category_id'];
-                    $cat['title'] = $cat['name'];*/
                     $list[$row['category_id']] = $row;
                 }
                 return $list;
@@ -5936,6 +6007,7 @@ class Exercise
             $selectionType = $this->getQuestionSelectionType();
             $useRootAsCategoryTitle = false;
 
+            // Grouping questions per parent category see BT#6540
             if (in_array(
                 $selectionType,
                 array(
@@ -5945,18 +6017,41 @@ class Exercise
             )) {
                 $useRootAsCategoryTitle = true;
             }
+            // If the exercise is set to only show the titles of the categories
+            // at the root of the tree, then pre-order the categories tree by
+            // removing children and summing their questions into the parent
+            // categories
 
             if ($useRootAsCategoryTitle) {
+                // The new categories list starts empty
                 $newCategoryList = array();
                 foreach ($categories as $category) {
-                    if (!isset($newCategoryList[$category['root']])) {
-                        $newCategoryList[$category['root']] = $category;
+                    /*if ($this->categoryMinusOne) {
+                        $rootElement = $category['id'];
                     } else {
-                        $oldQuestionList = $newCategoryList[$category['root']]['question_list'];
+                    }*/
+
+                    $rootElement = $category['root'];
+
+                    if (isset($category['parent_info'])) {
+                        $rootElement = $category['parent_info']['id'];
+                    }
+
+                    //$rootElement = $category['id'];
+                    // If the current category's ancestor was never seen
+                    // before, then declare it and assign the current
+                    // category to it.
+                    if (!isset($newCategoryList[$rootElement])) {
+                        $newCategoryList[$rootElement] = $category;
+                    } else {
+                        // If it was already seen, then merge the previous with
+                        // the current category
+                        $oldQuestionList = $newCategoryList[$rootElement]['question_list'];
                         $category['question_list'] = array_merge($oldQuestionList , $category['question_list']);
-                        $newCategoryList[$category['root']] = $category;
+                        $newCategoryList[$rootElement] = $category;
                     }
                 }
+                // Now use the newly built categories list, with only parents
                 $categories = $newCategoryList;
             }
             /*
@@ -6264,7 +6359,7 @@ class Exercise
 
             // Shows the question + possible answers
             $showTitle = $this->getHideQuestionTitle() == 1 ? false : true;
-            echo ExerciseLib::showQuestion($question_obj, false, $origin, $i, $showTitle, false, $user_choice, false, null, false, $this->getModelType());
+            echo ExerciseLib::showQuestion($question_obj, false, $origin, $i, $showTitle, false, $user_choice, false, null, false, $this->getModelType(), $this->categoryMinusOne);
 
             // Button save and continue
             switch ($this->type) {
@@ -6519,7 +6614,7 @@ class Exercise
                     $question_content .= $objQuestionTmp->return_header(null, $counterToShow, $score, $show_media, $this->getHideQuestionTitle());
 
                     // display question category, if any
-                    $question_content .= Testcategory::getCategoryNamesForQuestion($questionId);
+                    $question_content .= Testcategory::getCategoryNamesForQuestion($questionId, null, true, $this->categoryMinusOne);
                 }
                 $counter++;
 
@@ -6547,7 +6642,7 @@ class Exercise
         if (!empty($category_list) && ($show_results || $show_only_score)) {
             //Adding total
             $category_list['total'] = array('score' => $total_score, 'total' => $total_weight);
-            echo Testcategory::get_stats_table_by_attempt($this->id, $category_list);
+            echo Testcategory::get_stats_table_by_attempt($this->id, $category_list, $this->categoryMinusOne);
         }
 
         echo $total_score_text;
@@ -6590,6 +6685,8 @@ class Exercise
     }
 
     /**
+     * Returns an HTML ribbon to show on top of the exercise result, with
+     * colouring depending on the success or failure of the student
      * @param $score
      * @param $weight
      * @param bool $check_pass_percentage
@@ -6624,6 +6721,11 @@ class Exercise
         return $ribbon;
     }
 
+    /**
+     * Returns an array of categories' details for the questions of the current
+     * exercise.
+     * @return array
+     */
     public function getQuestionWithCategories()
     {
         $categoryTable = Database::get_course_table(TABLE_QUIZ_CATEGORY);

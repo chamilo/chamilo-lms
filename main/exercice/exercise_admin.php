@@ -73,6 +73,19 @@ $htmlHeadXtra[] = '<script>
             filter_selected: true,
             newel: true
         });
+
+        $("input[name=\'model_type\']").each(function(index, value) {
+            $(this).click(function() {
+                var value = $(this).attr("value");
+                // Committee‎
+                if (value == 2) {
+                    $("#score_type").show();
+                } else {
+                    $("#score_type").hide();
+                }
+
+            });
+        });
     });
 
 	function advanced_parameters() {

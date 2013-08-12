@@ -1872,7 +1872,16 @@ class SessionManager
      * converted to extra_external_session_id if you set this: array('SessionId' => 'extra_external_session_id')
      * @return array
      */
-    static function importCSV($file, $updatesession, $user_id = null, $logger = null, $extraFields = array(), $extraFieldId = null)
+    static function importCSV(
+        $file,
+        $updatesession,
+        $user_id = null,
+        $logger = null,
+        $extraFields = array(),
+        $extraFieldId = null,
+        $daysCoachAccessBeforeBeginning = null,
+        $daysCoachAccessAfterBeginning = null
+    )
     {
         $content = file($file);
 
@@ -1891,6 +1900,14 @@ class SessionManager
         $debug = false;
         if (isset($logger)) {
             $debug = true;
+        }
+
+
+        $extraParameters = null;
+
+        if (!empty($daysCoachAccessBeforeBeginning) && !empty($daysCoachAccessAfterBeginning)) {
+            $extraParameters .= ' , nb_days_access_before_beginning = '.intval($daysCoachAccessBeforeBeginning);
+            $extraParameters .= ' , nb_days_access_after_end = '.intval($daysCoachAccessAfterBeginning);
         }
 
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -1979,7 +1996,7 @@ class SessionManager
                             date_end = '$date_end',
                             visibility = '$visibility',
                             session_category_id = '$session_category_id',
-                            session_admin_id=".intval($user_id);
+                            session_admin_id=".intval($user_id).$extraParameters;
                     Database::query($sql_session);
                     $session_id = Database::insert_id();
 
@@ -2021,7 +2038,7 @@ class SessionManager
                                 date_start = '$date_start',
                                 date_end = '$date_end',
                                 visibility = '$visibility',
-                                session_category_id = '$session_category_id'";
+                                session_category_id = '$session_category_id'".$extraParameters;
 
                         Database::query($sql_session);
                         // We get the last insert id.

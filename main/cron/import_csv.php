@@ -34,6 +34,9 @@ class ImportCsv
      */
     public $expirationDateInUserUpdate = 1;
 
+    public $daysCoachAccessBeforeBeginning = 30;
+    public $daysCoachAccessAfterBeginning = 60;
+
     /**
      * @param Logger $logger
      */
@@ -104,7 +107,7 @@ class ImportCsv
             }
 
             $sections = array('students', 'teachers', 'courses', 'sessions');
-            //$sections = array('students');
+            //$sections = array('students', 'teachers', 'sessions');
 
             $this->prepareImport();
 
@@ -500,7 +503,9 @@ class ImportCsv
             1,
             $this->logger,
             array('SessionID' => 'extra_'.$this->extraFieldIdNameList['session']),
-            $this->extraFieldIdNameList['session']
+            $this->extraFieldIdNameList['session'],
+            $this->daysCoachAccessBeforeBeginning,
+            $this->daysCoachAccessAfterBeginning
         );
 
         if (!empty($result['error_message'])) {
@@ -523,7 +528,6 @@ class ImportCsv
         echo $sql.PHP_EOL;
 
         // Course
-
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
         $sql = "DELETE FROM $table";
         Database::query($sql);

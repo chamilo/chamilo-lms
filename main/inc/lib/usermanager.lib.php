@@ -177,7 +177,6 @@ class UserManager
                     $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstName, $lastName)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ".$loginName."\n".get_lang('Pass')." : ".stripslashes($original_password)."\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".$_configuration['root_web']."\n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator');
                 }
 
-
                 /* MANAGE EVENT WITH MAIL */
                 if (EventsMail::check_if_using_class('user_registration')) {
                     $values["about_user"] = $return;
@@ -536,7 +535,7 @@ class UserManager
         $change_active = 0;
         if ($user_info['active'] != $active) {
             $change_active = 1;
-        }        
+        }
         $sql = "UPDATE $table_user SET
                 lastname='".Database::escape_string($lastname)."',
                 firstname='".Database::escape_string($firstname)."',
@@ -583,7 +582,7 @@ class UserManager
            } else {
                 $event_title = LOG_USER_DISABLE;
            }
-           event_system($event_title, LOG_USER_ID, $user_id, api_get_utc_datetime(), null, null); 
+           event_system($event_title, LOG_USER_ID, $user_id, api_get_utc_datetime(), null, null);
         }
         if (is_array($extra) && count($extra) > 0) {
             $res = true;
@@ -1340,12 +1339,13 @@ class UserManager
         } else {
             $fvalues = Database::escape_string($fvalue);
         }
-        $sqluf = "SELECT * FROM $t_uf WHERE field_variable='$fname'";
+         $sqluf = "SELECT * FROM $t_uf WHERE field_variable='$fname'";
         $resuf = Database::query($sqluf);
         if (Database::num_rows($resuf) == 1) {
             //ok, the field exists
             // Check if enumerated field, if the option is available
             $rowuf = Database::fetch_array($resuf);
+
             switch ($rowuf['field_type']) {
                 case self::USER_FIELD_TYPE_TAG :
                     //4. Tags are process here comes from main/auth/profile.php

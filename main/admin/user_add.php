@@ -23,7 +23,7 @@ api_protect_admin_script(true);
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 
 $message = null;
-$htmlHeadXtra[] = api_get_password_checker_js('#password');
+$htmlHeadXtra[] = api_get_password_checker_js('#username', '#password');
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
@@ -34,13 +34,14 @@ if (isset($_configuration['allow_strength_pass_checker']) && $_configuration['al
         $("input[name=\'password[password_auto]\']").each(function(index, value) {
             $(this).click(function() {
                 var value = $(this).attr("value");
-                // Committee‎
                 if (value == 0) {
                     $("#password_progress").show();
                     $(".password-verdict").show();
+                    $(".error-list").show();
                 } else {
                     $("#password_progress").hide();
                     $(".password-verdict").hide();
+                    $(".error-list").hide();
                 }
             });
         });
@@ -63,8 +64,6 @@ function password_switch_radio_button() {
 		}
 	}
 }
-
-
 
 var is_platform_id = "'.$is_platform_admin.'";
 
@@ -89,7 +88,7 @@ function display_drh_list(){
 </script>';
 
 if (!empty($_GET['message'])) {
-	$message = urldecode($_GET['message']);
+    $message = urldecode($_GET['message']);
 }
 
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
@@ -148,7 +147,7 @@ $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allow
 
 // Username
 if (api_get_setting('login_is_email') != 'true') {
-    $form->addElement('text', 'username', get_lang('LoginName'), array('maxlength' => USERNAME_MAX_LENGTH));
+    $form->addElement('text', 'username', get_lang('LoginName'), array('id'=> 'username', 'maxlength' => USERNAME_MAX_LENGTH));
     $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
     $form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username');

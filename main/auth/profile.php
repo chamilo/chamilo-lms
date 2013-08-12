@@ -24,7 +24,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
 }
 
 
-$htmlHeadXtra[] = api_get_password_checker_js('#password1');
+$htmlHeadXtra[] = api_get_password_checker_js('#username', '#password1');
 
 $_SESSION['this_section'] = $this_section;
 
@@ -145,7 +145,7 @@ $form->addRule('lastname' , get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 
 //    USERNAME
-$form->addElement('text', 'username', get_lang('UserName'), array('maxlength' => USERNAME_MAX_LENGTH, 'size' => USERNAME_MAX_LENGTH));
+$form->addElement('text', 'username', get_lang('UserName'), array('id' => 'username', 'maxlength' => USERNAME_MAX_LENGTH, 'size' => USERNAME_MAX_LENGTH));
 if (api_get_setting('profile', 'login') !== 'true') {
     $form->freeze('username');
 }

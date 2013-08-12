@@ -6457,7 +6457,7 @@ function api_get_user_info_from_official_code($official_code = '') {
  * @param string $inputId the jquery id example: #password
  * @return string
  */
-function api_get_password_checker_js($inputId)
+function api_get_password_checker_js($usernameInputId, $passwordInputid)
 {
     global $_configuration;
     $useStrengthPassChecker = isset($_configuration['allow_strength_pass_checker']) ? $_configuration['allow_strength_pass_checker'] : false;
@@ -6466,13 +6466,14 @@ function api_get_password_checker_js($inputId)
         return null;
     }
 
-    $verdicts = array(get_lang('Weak'), get_lang('Normal'), get_lang('Medium'), get_lang('Strong'), get_lang('VeryStrong'));
+    $verdicts = array(get_lang('PasswordWeak'), get_lang('PasswordNormal'), get_lang('PasswordMedium'), get_lang('PasswordStrong'), get_lang('PasswordVeryStrong'));
     $js = api_get_js('strength/strength.js');
     $js .=  "<script>
 
     var verdicts = ['".implode("','", $verdicts)."'];
     var errorMessages = {
-        password_to_short : '".get_lang('PasswordIsTooShort')."'
+        password_to_short : '".get_lang('PasswordIsTooShort')."',
+        same_as_username : '".get_lang('YourPasswordCannotBeTheSameAsYourUsername')."',
     };
 
     $(document).ready(function() {
@@ -6486,12 +6487,13 @@ function api_get_password_checker_js($inputId)
             },
             errorMessages : errorMessages,
             viewports: {
-              progress: '#password_progress',
-              //verdict: undefined,
-              //errors: undefined
-          }
+                progress: '#password_progress',
+                //verdict: undefined,
+                //errors: undefined
+            },
+            usernameField: '$usernameInputId'
         };
-        $('".$inputId."').pwstrength(options);
+        $('".$passwordInputid."').pwstrength(options);
     });
     </script>";
     return $js;

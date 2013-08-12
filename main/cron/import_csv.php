@@ -23,6 +23,18 @@ class ImportCsv
     );
 
     /**
+     * When creating a user the expiration date is set to registration date + this value
+     * @var int number of years
+     */
+    public $expirationDateInUserCreation = 1;
+
+    /**
+     * When updating a user the expiration date is set to update date + this value
+     * @var int number of years
+     */
+    public $expirationDateInUserUpdate = 1;
+
+    /**
      * @param Logger $logger
      */
     public function __construct($logger)
@@ -92,7 +104,7 @@ class ImportCsv
             }
 
             $sections = array('students', 'teachers', 'courses', 'sessions');
-            //$sections = array('sessions');
+            //$sections = array('students');
 
             $this->prepareImport();
 
@@ -221,6 +233,8 @@ class ImportCsv
                 //$userInfo = api_get_user_info_from_username($row['username']);
                 $userInfoByOfficialCode = api_get_user_info_from_official_code($row['official_code']);
 
+                $expirationDate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserCreation)."years"));
+
                 if (empty($userInfo) && empty($userInfoByOfficialCode)) {
                     // Create user
                     $userId = UserManager::create_user(
@@ -235,7 +249,7 @@ class ImportCsv
                         $row['phone'],
                         null, //$row['picture'], //picture
                         PLATFORM_AUTH_SOURCE, // ?
-                        '0000-00-00 00:00:00', //$row['expiration_date'], //$expiration_date = '0000-00-00 00:00:00',
+                        $expirationDate, //'0000-00-00 00:00:00', //$row['expiration_date'], //$expiration_date = '0000-00-00 00:00:00',
                         1, //active
                         0,
                         null, // extra
@@ -259,6 +273,8 @@ class ImportCsv
                         continue;
                     }
 
+                    $expirationDate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserUpdate)."years"));
+
                     // Update user
                     $result = UserManager::update_user(
                         $userInfo['user_id'],
@@ -272,7 +288,7 @@ class ImportCsv
                         $userInfo['official_code'],
                         $userInfo['phone'],
                         $userInfo['picture_uri'],
-                        $userInfo['expiration_date'],
+                        $expirationDate,
                         $userInfo['active'],
                         null, //$creator_id = null,
                         0, //$hr_dept_id = 0,
@@ -330,6 +346,8 @@ class ImportCsv
 
                 $userInfoByOfficialCode = api_get_user_info_from_official_code($row['official_code']);
 
+                $expirationDate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserCreation)."years"));
+
                 if (empty($userInfo) && empty($userInfoByOfficialCode)) {
                     // Create user
                     $result = UserManager::create_user(
@@ -344,7 +362,7 @@ class ImportCsv
                         $row['phone'],
                         null, //$row['picture'], //picture
                         PLATFORM_AUTH_SOURCE, // ?
-                        '0000-00-00 00:00:00', //$row['expiration_date'], //$expiration_date = '0000-00-00 00:00:00',
+                        $expirationDate, //'0000-00-00 00:00:00', //$row['expiration_date'], //$expiration_date = '0000-00-00 00:00:00',
                         1, //active
                         0,
                         null, // extra
@@ -373,6 +391,8 @@ class ImportCsv
                         $userInfo['expiration_date'] = api_get_utc_datetime(api_strtotime(time() + 365*24*60*60));
                     }
 
+                    $expirationDate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserUpdate)."years"));
+
                     // Update user
                     $result = UserManager::update_user(
                         $userInfo['user_id'],
@@ -386,7 +406,7 @@ class ImportCsv
                         $userInfo['official_code'],
                         $userInfo['phone'],
                         $userInfo['picture_uri'],
-                        $userInfo['expiration_date'],
+                        $expirationDate,
                         $userInfo['active'],
                         null, //$creator_id = null,
                         0, //$hr_dept_id = 0,
@@ -498,7 +518,7 @@ class ImportCsv
         $table = Database::get_main_table(TABLE_MAIN_USER);
         $tableAdmin = Database::get_main_table(TABLE_MAIN_ADMIN);
         //$sql = "DELETE FROM $table WHERE username NOT IN ('admin') AND lastname <> 'Anonymous' ";
-        $sql = "DELETE FROM $table where user_id not in (select user_id from $tableAdmin) and status <> ".ANONYMOUS;
+        $sql = "DELETE FROM $table WHERE user_id not in (select user_id from $tableAdmin) and status <> ".ANONYMOUS;
         Database::query($sql);
         echo $sql.PHP_EOL;
 
@@ -598,5 +618,4 @@ if (isset($argv[1]) && $argv[1] = '--dump') {
 $import->setDumpValues($dump);
 // Do not moves the files to treated
 $import->test = true;
-
 $import->run();

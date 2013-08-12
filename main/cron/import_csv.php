@@ -159,7 +159,7 @@ class ImportCsv
         $row['email'] = $row['Email'];
         $row['username'] = $row['UserName'];
         $row['password'] = $row['Password'];
-        $row['auth_srouce'] = $row['AuthSource'];
+        $row['auth_source'] = $row['AuthSource'];
         $row['official_code'] = $row['OfficialCode'];
         $row['phone'] = $row['PhoneNumber'];
 

@@ -376,7 +376,7 @@ if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSessi
     }
 }
 
-$objExercise = new Exercise(); $objExercise->read($exerciseId);
+//$objExercise = new Exercise(); $objExercise->read($exerciseId);
 
 //2. Checking if $objExercise is set
 if (!isset($objExercise) && isset($exerciseInSession)) {
@@ -518,9 +518,9 @@ if ($objExercise->selectAttempts() > 0) {
 // 5. Getting user exercise info (if the user took the exam before) - generating exe_id
 $exercise_stat_info = $objExercise->getStatTrackExerciseInfo($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
 
-if (1) {
-//$questionListInSession = Session::read('questionList');
-//if (!isset($questionListInSession)) {
+//if (1) {
+$questionListInSession = Session::read('questionList');
+if (!isset($questionListInSession)) {
     // Selects the list of question ID
     $questionList = $objExercise->getQuestionList();
 

@@ -501,7 +501,7 @@ foreach ($questionList as $questionId) {
                 echo '<p>'.$comment.'</p>';
             }
 
-            // Showing the score
+            // Showing the score.
             $queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
             $resfree = Database::query($queryfree);
             $questionScore= Database::result($resfree,0,"marks");

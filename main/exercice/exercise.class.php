@@ -887,7 +887,6 @@ class Exercise
             $repo = $em->getRepository('Entity\CQuizCategory');
 
             $newCategoryList = array();
-//            var_dump($questions_by_category);
 
             foreach ($questions_by_category as $categoryId => $questionList) {
 
@@ -957,7 +956,6 @@ class Exercise
             }
             $result['category_with_questions_list'] = $newCategoryList;
         }
-        //echo '<pre>'; print_r($result);
         return $result;
     }
 
@@ -2623,7 +2621,6 @@ class Exercise
 
             $original_exercise->copy_exercise_categories($exercise_obj);
 
-            //$question_list = $exercise_obj->selectQuestionList(true);
             $question_list = $exercise_obj->getQuestionListWithMediasUncompressed();
 
             if (!empty($question_list)) {

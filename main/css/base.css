@@ -5310,6 +5310,66 @@ i.size-32.icon-new-work {
     padding: 7px 9px;
 }
 
+.question_no_title {
+    text-align: center;
+}
+
+.main_question .media .media-object {
+    font-weight: bold;
+    background-color: #ccc;
+    width:32px;
+    height:32px;
+    padding:8px 2px 0px 2px;
+    border-radius: 5px;
+}
+
+.main_question .media .question_description {
+    padding-top: 5px;
+
+}
+
+
+.btn-invitations {
+    margin-left: 110px;
+}
+.btn-msg {
+  background: url("send_msg.png") no-repeat left center;
+  background-position: 3px;
+  padding: 2px 4px;
+  padding-left: 22px;
+  margin-bottom: 10px;
+  font-size: 11px;
+  line-height: 14px;
+  background-color: #e6e6e6;
+}
+.btn-inv {
+  background: url("send_inv.png") no-repeat left center;
+  background-position: 3px;
+  padding: 2px 4px;
+  padding-left: 22px;
+  margin-bottom: 10px;
+  font-size: 11px;
+  line-height: 14px;
+  background-color: #e6e6e6;
+}
+.btn-inv-off {
+  background: url("send_inv_off.png") no-repeat left center;
+  background-position: 3px;
+  padding: 2px 4px;
+  padding-left: 22px;
+  margin-bottom: 10px;
+  font-size: 11px;
+  line-height: 14px;
+  background-color: #e6e6e6;
+}
+
+.password-verdict {
+    padding-left:5px;
+}
+#password_progress {
+    width: 220px;
+}
+
 
 .table td div.success {
     background-color: #98E57F;

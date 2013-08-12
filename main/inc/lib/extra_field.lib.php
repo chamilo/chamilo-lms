@@ -676,6 +676,13 @@ class ExtraField extends Model
                                     }
                                 }
                             }
+                            if (isset($optionList[$defaultValueId])) {
+
+                                if (isset($optionList[$defaultValueId]['option_value']) && $optionList[$defaultValueId]['option_value'] == 'aprobada') {
+                                    if (api_is_question_manager() == false) {
+                                        $form->freeze();
+                                    }
+                                }
                         }
 
                         // Setting priority message
@@ -685,6 +692,7 @@ class ExtraField extends Model
                                 $option = new ExtraFieldOption($this->type);
                                 $messageType = $option->getPriorityMessageType($priorityId);
                                 $form->addElement('label', null, Display::return_message($optionList[$defaultValueId]['priority_message'], $messageType));
+                                }
                             }
                         }
 

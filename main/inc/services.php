@@ -91,7 +91,7 @@ $app['security.authentication.logout_handler.admin'] = $app->share(function($app
 
 // Role hierarchy
 $app['security.role_hierarchy'] = array(
-    'ROLE_ADMIN' => array('ROLE_QUESTION_MANAGER', 'ROLE_SESSION_MANAGER', 'ROLE_TEACHER', 'ROLE_ALLOWED_TO_SWITCH'),
+    'ROLE_ADMIN' => array('ROLE_QUESTION_MANAGER', 'ROLE_SESSION_MANAGER', 'ROLE_TEACHER', 'ROLE_ALLOWED_TO_SWITCH', 'ROLE_DIRECTOR'),
     'ROLE_RRHH' => array('ROLE_TEACHER'),
     'ROLE_TEACHER' => array('ROLE_STUDENT'),
     'ROLE_QUESTION_MANAGER' => array('ROLE_STUDENT', 'ROLE_QUESTION_MANAGER'),

@@ -2267,14 +2267,17 @@ function api_get_self() {
 function api_is_platform_admin($allow_sessions_admins = false)
 {
     global $app;
+    $token = $app['security']->getToken();
 
-    if ($app['security']->isGranted('ROLE_ADMIN')) {
-        return true;
-    }
-
-    if ($allow_sessions_admins) {
-        if ($app['security']->isGranted('ROLE_SESSION_MANAGER')) {
+    if (!empty($token)) {
+        if ($app['security']->isGranted('ROLE_ADMIN')) {
             return true;
+        }
+
+        if ($allow_sessions_admins) {
+            if ($app['security']->isGranted('ROLE_SESSION_MANAGER')) {
+                return true;
+            }
         }
     }
     return false;
@@ -2283,8 +2286,12 @@ function api_is_platform_admin($allow_sessions_admins = false)
 function api_is_question_manager()
 {
     global $app;
-    if ($app['security']->isGranted('ROLE_QUESTION_MANAGER')) {
-        return true;
+    $token = $app['security']->getToken();
+
+    if (!empty($token)) {
+        if ($app['security']->isGranted('ROLE_QUESTION_MANAGER')) {
+            return true;
+        }
     }
     return false;
 }
@@ -2297,8 +2304,12 @@ function api_is_question_manager()
 function api_is_session_admin()
 {
     global $app;
-    if ($app['security']->isGranted('ROLE_SESSION_MANAGER')) {
-        return true;
+    $token = $app['security']->getToken();
+
+    if (!empty($token)) {
+        if ($app['security']->isGranted('ROLE_SESSION_MANAGER')) {
+            return true;
+        }
     }
     return false;
 }
@@ -2309,8 +2320,12 @@ function api_is_session_admin()
  */
 function api_is_drh() {
     global $app;
-    if ($app['security']->isGranted('ROLE_RRHH')) {
-        return true;
+    $token = $app['security']->getToken();
+
+    if (!empty($token)) {
+        if ($app['security']->isGranted('ROLE_RRHH')) {
+            return true;
+        }
     }
     return false;
 }
@@ -2321,8 +2336,12 @@ function api_is_drh() {
  */
 function api_is_student() {
     global $app;
-    if ($app['security']->isGranted('ROLE_STUDENT')) {
-        return true;
+    $token = $app['security']->getToken();
+
+    if (!empty($token)) {
+        if ($app['security']->isGranted('ROLE_STUDENT')) {
+            return true;
+        }
     }
     return false;
 }

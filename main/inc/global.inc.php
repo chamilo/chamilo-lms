@@ -259,6 +259,7 @@ $app->error(
         if ($app['debug']) {
             //return;
         }
+        $message = null;
         if (isset($code)) {
             switch ($code) {
                 case 401:
@@ -273,12 +274,9 @@ $app->error(
             }
         } else {
             $code = null;
-            $message = null;
         }
         //$code = ($e instanceof HttpException) ? $e->getStatusCode() : 500;
-        $app['twig']->addGlobal('error_code', $code);
-        $app['twig']->addGlobal('error_message', $message);
-
+    
         // It seems that error() is executed first than the before() middleware
         // @ŧodo check this one
         $templateStyle = api_get_setting('template');
@@ -288,6 +286,7 @@ $app->error(
         // Default layout.
         $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
 
+        $app['template']->assign('error', array('code' => $code, 'message' => $message));
 
         $response = $app['template']->render_layout('error.tpl');
 

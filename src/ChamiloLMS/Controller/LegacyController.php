@@ -64,6 +64,9 @@ class LegacyController extends CommonController
             $app['template']->setFooter($app['template.show_footer']);
             $app['template']->setHeader($app['template.show_header']);
 
+            $token = $app['security']->getToken();
+
+
             //var_dump($app['template.show_header']);
 
             if (isset($htmlHeadXtra)) {

@@ -107,7 +107,6 @@ class ImportCsv
             }
 
             $sections = array('students', 'teachers', 'courses', 'sessions');
-            $sections = array('sessions');
 
             $this->prepareImport();
 

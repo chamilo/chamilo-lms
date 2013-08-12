@@ -4621,11 +4621,11 @@ function api_get_access_url($id)
  */
 function api_get_current_access_url_info()
 {
-    $userInfo = Session::read('url_info');
-    if (count($urlInfo)==0) {
+    $urlInfo = Session::read('url_info');
+    if (count($urlInfo) == 0) {
         $urlInfo = api_get_access_url(api_get_current_access_url_id());
     }
-    return $userInfo;
+    return $urlInfo;
 }
 
 

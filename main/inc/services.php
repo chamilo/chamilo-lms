@@ -74,6 +74,8 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     )
 ));
 
+
+
 // Registering Password encoder.
 
 $app['security.encoder.digest'] = $app->share(function($app) {
@@ -102,6 +104,7 @@ $app['security.role_hierarchy'] = array(
     'ROLE_SESSION_MANAGER' => array('ROLE_STUDENT', 'ROLE_SESSION_MANAGER'),
     'ROLE_STUDENT' => array('ROLE_STUDENT'),
     'ROLE_ANONYMOUS' => array('ROLE_ANONYMOUS'),
+
     // Ministerio
     'ROLE_JURY_PRESIDENT' => array('ROLE_JURY_PRESIDENT', 'ROLE_JURY_MEMBER', 'ROLE_JURY_SUBSTITUTE'),
     'ROLE_JURY_SUBSTITUTE' => array('ROLE_JURY_SUBSTITUTE', 'ROLE_JURY_MEMBER'),
@@ -118,6 +121,8 @@ $app['security.access_rules'] = array(
     //array('^/main/admin/extra_field_workflow.php', 'ROLE_QUESTION_MANAGER'),
     array('^/main/admin/.*', 'ROLE_ADMIN'),
     array('^/admin/questionmanager', 'ROLE_QUESTION_MANAGER'),
+    array('^/main/auth/inscription.php', 'IS_AUTHENTICATED_ANONYMOUSLY'),
+    array('^/main/auth/lostPassword.php', 'IS_AUTHENTICATED_ANONYMOUSLY'),
     array('^/main/.*', array('ROLE_STUDENT')),
 
     // Ministerio routes

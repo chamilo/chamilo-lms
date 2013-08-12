@@ -71,7 +71,8 @@ class UserManager
      * @param array Array of user details (array('status'=>...,'username'=>..., ...))
      * @return mixed Array of user information
      */
-    public static function add($params) {
+    public static function add($params)
+    {
         global $_configuration;
 
         $access_url_id = 1;

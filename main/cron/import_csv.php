@@ -495,9 +495,10 @@ class ImportCsv
         echo 'Dumping tables'.PHP_EOL;
 
         // User
-
         $table = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "DELETE FROM $table WHERE username NOT IN ('admin') AND lastname <> 'Anonymous' ";
+        $tableAdmin = Database::get_main_table(TABLE_MAIN_ADMIN);
+        //$sql = "DELETE FROM $table WHERE username NOT IN ('admin') AND lastname <> 'Anonymous' ";
+        $sql = "DELETE FROM $table where user_id not in (select user_id from $tableAdmin) and status <> ".ANONYMOUS;
         Database::query($sql);
         echo $sql.PHP_EOL;
 

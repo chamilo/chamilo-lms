@@ -107,7 +107,7 @@ class ImportCsv
             }
 
             $sections = array('students', 'teachers', 'courses', 'sessions');
-            //$sections = array('students', 'teachers', 'sessions');
+            $sections = array('sessions');
 
             $this->prepareImport();
 
@@ -232,9 +232,14 @@ class ImportCsv
                 $row = $this->cleanUserRow($row);
 
                 $user_id = UserManager::get_user_id_from_original_id($row['extra_'.$this->extraFieldIdNameList['user']], $this->extraFieldIdNameList['user']);
-                $userInfo = api_get_user_info($user_id);
-                //$userInfo = api_get_user_info_from_username($row['username']);
-                $userInfoByOfficialCode = api_get_user_info_from_official_code($row['official_code']);
+                $userInfo  = array();
+                $userInfoByOfficialCode  = null;
+
+                if (!empty($user_id)) {
+                    $userInfo = api_get_user_info($user_id);
+                    //$userInfo = api_get_user_info_from_username($row['username']);
+                    $userInfoByOfficialCode = api_get_user_info_from_official_code($row['official_code']);
+                }
 
                 $expirationDate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserCreation)."years"));
 
@@ -324,7 +329,6 @@ class ImportCsv
     private function importStudents($file)
     {
         $data = Import::csv_to_array($file);
-
         /*
          * Another users import.
         Unique identifier: official code and username . ok
@@ -343,11 +347,11 @@ class ImportCsv
                 $user_id = UserManager::get_user_id_from_original_id($row['extra_'.$this->extraFieldIdNameList['user']], $this->extraFieldIdNameList['user']);
 
                 $userInfo = array();
+                $userInfoByOfficialCode = null;
                 if (!empty($user_id)) {
                     $userInfo = api_get_user_info($user_id);
+                    $userInfoByOfficialCode = api_get_user_info_from_official_code($row['official_code']);
                 }
-
-                $userInfoByOfficialCode = api_get_user_info_from_official_code($row['official_code']);
 
                 $expirationDate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserCreation)."years"));
 

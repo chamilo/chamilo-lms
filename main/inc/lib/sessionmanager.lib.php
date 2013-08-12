@@ -2019,7 +2019,8 @@ class SessionManager
                     $sessionId = null;
 
                     if (isset($extraFields) && !empty($extraFields)) {
-                        $sessionId = self::get_session_id_from_original_id($enreg['extra_'.$extraFieldId], 'extra_'.$extraFieldId);
+                        $sessionId = self::get_session_id_from_original_id($enreg['extra_'.$extraFieldId], $extraFieldId);
+
                         if (empty($sessionId)) {
                             $my_session_result = false;
                         } else {
@@ -2108,7 +2109,7 @@ class SessionManager
                         if ($user_id !== false) {
                             // Insert new users.
                             $sql = "INSERT IGNORE INTO $tbl_session_user SET
-                                    id_user='$user_id',
+                                    id_user = '$user_id',
                                     id_session = '$session_id'";
                             Database::query($sql);
                             if ($debug) {
@@ -2125,9 +2126,6 @@ class SessionManager
                     $course_code = api_strtoupper(api_substr($course, 0, api_strpos($course, '[')));
 
                     if (CourseManager::course_exists($course_code)) {
-
-                        // If the course exists we continue.
-                        $course_info = CourseManager::get_course_information($course_code);
 
                         $coach = api_strstr($course, '[');
                         $coach = api_substr($coach, 1, api_strpos($coach,']') - 1);

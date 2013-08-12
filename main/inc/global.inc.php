@@ -259,6 +259,8 @@ $app->error(
         if ($app['debug']) {
             //return;
         }
+        $message = null;
+
         if (isset($code)) {
             switch ($code) {
                 case 401:
@@ -273,7 +275,6 @@ $app->error(
             }
         } else {
             $code = null;
-            $message = null;
         }
 
         // It seems that error() is executed first than the before() middleware
@@ -285,6 +286,7 @@ $app->error(
         // Default layout.
         $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
 
+        $app['template']->assign('error', array('code' => $code, 'message' => $message));
 
         $response = $app['template']->render_layout('error.tpl');
 

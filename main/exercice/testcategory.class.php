@@ -711,9 +711,9 @@ class Testcategory
         $newCategoryList = array();
         foreach ($categoriesAddedInExercise as $category) {
             $categoryId = $category['category_id'];
-            //if (isset($categories[$categoryId])) {
+            if (isset($categories[$categoryId])) {
                 $newCategoryList[$categoryId] = $categories[$categoryId];
-            //}
+            }
         }
 
         return $newCategoryList;

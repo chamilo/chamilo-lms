@@ -21,6 +21,8 @@ class ImportCsv
         'course' => 'external_course_id',
         'user' => 'external_user_id',
     );
+    public $defaultAdminId = 5;
+    public $defaultSessionVisibility = 1;
 
     /**
      * When creating a user the expiration date is set to registration date + this value
@@ -503,12 +505,13 @@ class ImportCsv
         $result = SessionManager::importCSV(
             $file,
             true,
-            1,
+            $this->defaultAdminId,
             $this->logger,
             array('SessionID' => 'extra_'.$this->extraFieldIdNameList['session']),
             $this->extraFieldIdNameList['session'],
             $this->daysCoachAccessBeforeBeginning,
-            $this->daysCoachAccessAfterBeginning
+            $this->daysCoachAccessAfterBeginning,
+            $this->defaultSessionVisibility
         );
 
         if (!empty($result['error_message'])) {
@@ -616,6 +619,7 @@ $logger->pushHandler(new BufferHandler($stream, 0, $minLevel));
 $logger->pushHandler(new RotatingFileHandler('import_csv', 5, $minLevel));
 
 $import = new ImportCsv($logger);
+// @todo in production disable the dump option
 $dump = false;
 
 if (isset($argv[1]) && $argv[1] = '--dump') {

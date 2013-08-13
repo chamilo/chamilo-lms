@@ -1880,7 +1880,8 @@ class SessionManager
         $extraFields = array(),
         $extraFieldId = null,
         $daysCoachAccessBeforeBeginning = null,
-        $daysCoachAccessAfterBeginning = null
+        $daysCoachAccessAfterBeginning = null,
+        $sessionVisibility = 1
     )
     {
         $content = file($file);
@@ -1902,12 +1903,15 @@ class SessionManager
             $debug = true;
         }
 
-
         $extraParameters = null;
 
         if (!empty($daysCoachAccessBeforeBeginning) && !empty($daysCoachAccessAfterBeginning)) {
             $extraParameters .= ' , nb_days_access_before_beginning = '.intval($daysCoachAccessBeforeBeginning);
             $extraParameters .= ' , nb_days_access_after_end = '.intval($daysCoachAccessAfterBeginning);
+        }
+
+        if (!empty($sessionVisibility)) {
+            $extraParameters .= ' , visibility = '.intval($sessionVisibility);
         }
 
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);

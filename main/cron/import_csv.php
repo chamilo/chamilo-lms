@@ -21,7 +21,7 @@ class ImportCsv
         'course' => 'external_course_id',
         'user' => 'external_user_id',
     );
-    public $defaultAdminId = 5;
+    public $defaultAdminId = 1;
     public $defaultSessionVisibility = 1;
 
     /**
@@ -626,6 +626,10 @@ $logger->pushHandler(new BufferHandler($stream, 0, $minLevel));
 $logger->pushHandler(new RotatingFileHandler('import_csv', 5, $minLevel));
 
 $import = new ImportCsv($logger);
+
+if (isset($_configuration['default_admin_user_id_for_cron'])) {
+    $import->defaultAdminId = $_configuration['default_admin_user_id_for_cron'];
+}
 // @todo in production disable the dump option
 $dump = false;
 

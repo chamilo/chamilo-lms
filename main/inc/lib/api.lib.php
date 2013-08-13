@@ -7005,3 +7005,15 @@ function api_get_easy_password_list()
     }
     return $passwordList;
 }
+
+function api_is_profile_editable()
+{
+    global $profileIsEditable;
+    return isset($profileIsEditable) ? $profileIsEditable : false;
+}
+
+function api_is_profile_readable()
+{
+    global $profileIsReadable;
+    return isset($profileIsReadable) ? $profileIsReadable : true;
+}

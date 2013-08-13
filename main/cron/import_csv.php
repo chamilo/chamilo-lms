@@ -486,10 +486,6 @@ class ImportCsv
                     } else {
                         $this->logger->addError("Courses - Can't create course:".$row['title']);
                     }
-
-
-
-
                 } else {
                     // Update
                     $params = array(

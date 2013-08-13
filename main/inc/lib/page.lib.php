@@ -58,7 +58,10 @@ class PageController
                                     <img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'"></a>';
             }
         }
-        $this->show_right_block(null, null, 'user_image_block', array('content' => $profile_content));
+
+        if (!empty($profile_content)) {
+            $this->show_right_block(null, null, 'user_image_block', array('content' => $profile_content));
+        }
     }
 
     /**

@@ -557,7 +557,6 @@ class ImportCsv
         echo $sql.PHP_EOL;
 
         // Sessions
-
         $table = Database::get_main_table(TABLE_MAIN_SESSION);
         $sql = "DELETE FROM $table";
         Database::query($sql);

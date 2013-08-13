@@ -121,12 +121,23 @@ class BranchSync
      */
     private $lastSyncType;
 
-     /**
+    /**
+     * Path to the associated certificate file in PEM format.
+     *
      * @var string
      *
-     * @ORM\Column(name="ssl_pub_key", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="ssl_certificate", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
      */
-    private $sslPubKey;
+    private $sslCertificate;
+
+    /**
+     * Path to the associated PCKS#12 store file.
+     *
+     * @var string
+     *
+     * @ORM\Column(name="ssl_p12_store", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $sslP12Store;
 
     /**
      * @var string
@@ -493,32 +504,55 @@ class BranchSync
     }
 
     /**
-     * Set sslPubKey
+     * Set sslCertificate.
      *
-     * @param string $sslPubKey
+     * @param string $sslCertificate
      * @return BranchSync
      */
-    public function setSslPubKey($sslPubKey)
+    public function setSslCertificate($sslCertificate)
     {
-        $this->sslPubKey = $sslPubKey;
+        $this->sslCertificate = $sslCertificate;
 
         return $this;
     }
 
     /**
-     * Get sslPubKey
+     * Get sslCertificate.
      *
      * @return string
      */
-    public function getSslPubKey()
+    public function getSslCertificate()
     {
-        return $this->sslPubKey;
+        return $this->sslCertificate;
+    }
+
+    /**
+     * Set sslP12Store.
+     *
+     * @param string $sslP12Store
+     * @return BranchSync
+     */
+    public function setSslP12Store($sslP12Store)
+    {
+        $this->sslP12Store = $sslP12Store;
+
+        return $this;
+    }
+
+    /**
+     * Get sslP12Store.
+     *
+     * @return string
+     */
+    public function getSslP12Store()
+    {
+        return $this->sslP12Store;
     }
 
      /**
-     * Set sslPubKey
+     * Set branchType.
      *
-     * @param string $sslPubKey
+     * @param string $branchType
      * @return BranchSync
      */
     public function setBranchType($branchType)
@@ -529,7 +563,7 @@ class BranchSync
     }
 
     /**
-     * Get sslPubKey
+     * Get branchType.
      *
      * @return string
      */

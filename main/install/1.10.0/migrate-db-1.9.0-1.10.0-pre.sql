@@ -335,5 +335,10 @@ ALTER TABLE branch_sync ADD root int unsigned;
 ALTER TABLE branch_sync ADD parent_id int unsigned;
 ALTER TABLE branch_sync ADD branch_type varchar(250) default null;
 
+-- Rename the ssl_pub_key field to be more specific.
+ALTER TABLE branch_sync CHANGE ssl_pub_key ssl_certificate varchar(250) default '';
+-- Adds a new field to store the PCKS#12 file for the branch.
+ALTER TABLE branch_sync ADD ssl_p12_store varchar(250) default '' AFTER ssl_certificate;
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.029' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.030' WHERE variable = 'chamilo_database_version';

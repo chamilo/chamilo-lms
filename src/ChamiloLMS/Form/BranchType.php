@@ -48,7 +48,8 @@ class BranchType extends AbstractType
             )
             ->add('last_sync_type', 'text')
             ->add('last_sync_trans_id', 'text')
-            ->add('ssl_pub_key', 'text')
+            ->add('ssl_certificate', 'text')
+            ->add('ssl_p12_store', 'text')
             ->add('last_sync_trans_id', 'text')
             ->add('access_url_id', 'text')
             ->add('submit', 'submit');

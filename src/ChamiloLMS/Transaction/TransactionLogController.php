@@ -451,9 +451,9 @@ class TransactionLogController
     public function identifySignerBranch($signer_certificates_file) {
         // Retrieve all branch certificate file paths.
         $branch_sync_table = Database::get_main_table(TABLE_BRANCH_SYNC);
-        $results = Database::select(array('id', 'ssl_pub_key'), $branch_sync_table);
+        $results = Database::select(array('id', 'ssl_p12_store'), $branch_sync_table);
         foreach ($results as $row) {
-            $p12_certificate_store_file = $row['ssl_pub_key'];
+            $p12_certificate_store_file = $row['ssl_p12_store'];
             // @fixme how to retrieve p12 passphrases, where they should be stored?
             if (verifySignerBranch($signer_certificates_file, $p12_certificate_store_file, $p12_passphrase)) {
                 return $row['id'];

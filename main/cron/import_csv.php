@@ -35,7 +35,6 @@ class ImportCsv
      * @var int number of years
      */
     public $expirationDateInUserUpdate = 1;
-
     public $daysCoachAccessBeforeBeginning = 30;
     public $daysCoachAccessAfterBeginning = 60;
 
@@ -202,6 +201,14 @@ class ImportCsv
         $row['course_category'] = $row['CourseCategory'];
         $row['email'] = $row['Teacher'];
         $row['language'] = $row['Language'];
+
+        $row['teachers'] = array();
+        if (isset($row['Teacher']) && !empty($row['Teacher'])) {
+            $userInfo = api_get_user_info_from_username($row['Teacher']);
+            if (!empty($userInfo)) {
+                $row['teachers'] = $userInfo['user_id'];
+            }
+        }
 
         if (isset($row['CourseID'])) {
             $row['extra_'.$this->extraFieldIdNameList['course']] = $row['CourseID'];
@@ -469,6 +476,7 @@ class ImportCsv
                     $params['wanted_code']          = $row['course_code'];
                     $params['course_category']      = $row['course_category'];
                     $params['course_language']      = $row['language'];
+                    $params['teachers']             = $row['teachers'];
 
                     $courseInfo = CourseManager::create_course($params);
 
@@ -478,6 +486,9 @@ class ImportCsv
                     } else {
                         $this->logger->addError("Courses - Can't create course:".$row['title']);
                     }
+
+
+
 
                 } else {
                     // Update

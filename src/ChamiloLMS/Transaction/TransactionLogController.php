@@ -451,11 +451,10 @@ class TransactionLogController
     public function identifySignerBranch($signer_certificates_file) {
         // Retrieve all branch certificate file paths.
         $branch_sync_table = Database::get_main_table(TABLE_BRANCH_SYNC);
-        $results = Database::select(array('id', 'ssl_p12_store'), $branch_sync_table);
+        $results = Database::select(array('id', 'ssl_certificate'), $branch_sync_table);
         foreach ($results as $row) {
-            $p12_certificate_store_file = $row['ssl_p12_store'];
-            // @fixme how to retrieve p12 passphrases, where they should be stored?
-            if (verifySignerBranch($signer_certificates_file, $p12_certificate_store_file, $p12_passphrase)) {
+            $certificate_file = $row['ssl_certificate'];
+            if (verifySignerBranch($signer_certificates_file, $certificate_file)) {
                 return $row['id'];
             }
         }
@@ -468,10 +467,8 @@ class TransactionLogController
      * @param string $signer_certificates_file
      *   The path to the file that contains the certificates of the entities
      *   that signed the file.
-     * @param int $expected_certificate_store_file
-     *   The expected branch PKCS#12 certificate store to compare.
-     * @param string $p12_passphrase
-     *   Passphrase to open the PKCS#12 expected certificate store.
+     * @param int $expected_certificate_file
+     *   The expected branch PEM certificate file path to compare.
      *
      * @return boolean
      *   true on success, false on failure.
@@ -479,13 +476,13 @@ class TransactionLogController
      * @throws TransactionFileUnsigningException
      *   When there was a problem during the identification process.
      */
-    public function verifySignerBranch($signer_certificates_file, $expected_certificate_store_file, $p12_passphrase) {
+    public function verifySignerBranch($signer_certificates_file, $expected_certificate_file) {
         // Filesystem verifications.
         if (!is_readable($signer_certificates_file)) {
             throw new TransactionFileUnsigningException(sprintf('Unable to read signer certificate file "%s".', $signer_certificates_file));
         }
-        if (!is_readable($expected_certificate_store_file)) {
-            throw new TransactionFileUnsigningException(sprintf('Unable to read expected PKCS#12 certificate store "%s".', $expected_certificate_store_file));
+        if (!is_readable($expected_certificate_file)) {
+            throw new TransactionFileUnsigningException(sprintf('Unable to read expected PKCS#12 certificate store "%s".', $expected_certificate_file));
         }
 
         // Read and parse the signer X.509 file.
@@ -501,21 +498,17 @@ class TransactionLogController
             throw new TransactionFileUnsigningException(sprintf('Unable to export X.509 format for signer certificate file "%s".', $signer_certificates_file));
         }
 
-        // Read and parse the branch PKCS#12 file.
-        $p12_handle = fopen($expected_certificate_store_file, 'r');
-        $p12_buffer = fread($p12_handle, filesize($expected_certificate_store_file));
-        fclose($p12_handle);
-        $p12_store = array();
-        if (!openssl_pkcs12_read($p12_buffer, $p12_store, $p12_passphrase)) {
-            throw new TransactionFileUnsigningException(sprintf('Unable to decrypt expected PKCS#12 certificate store "%s".', $expected_certificate_store_file));
-        }
-        if (!$certificate_handle = openssl_x509_read($p12_store['cert'])) {
-            throw new TransactionFileUnsigningException(sprintf('Unable read the expected certificate inside the PKCS#12 certificate store "%s".', $expected_certificate_store_file));
+        // Read and re-export to X.509 format.
+        $expected_x509_handle = fopen($expected_certificate_file, 'r');
+        $expected_x509_buffer = fread($expected_x509_handle, filesize($expected_certificate_file));
+        fclose($expected_x509_handle);
+        if (!$expected_x509_certificate = openssl_x509_read($expected_x509_buffer)) {
+            throw new TransactionFileUnsigningException(sprintf('Unable read the expected certificate in PEM format at "%s".', $expected_certificate_file));
         }
         // Generate X.509 format for expected certificate.
         $expected_x509_string = null;
-        if (!openssl_x509_export($certificate_handle, $expected_x509_string)) {
-            throw new TransactionFileUnsigningException(sprintf('Unable to export X.509 format for expected certificate inside the PKCS#12 certificate store "%s".', $expected_certificate_store_file));
+        if (!openssl_x509_export($expected_x509_handle, $expected_x509_string)) {
+            throw new TransactionFileUnsigningException(sprintf('Unable to export X.509 format for expected certificate "%s" referred branch_sync entry.', $expected_certificate_file));
         }
 
         // Finally, compare exported strings.

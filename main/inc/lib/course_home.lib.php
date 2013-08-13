@@ -601,15 +601,13 @@ class CourseHome
         }
         $web_code_path = api_get_path(WEB_CODE_PATH);
         $session_id = api_get_session_id();
+        $is_platform_admin = api_is_platform_admin();
 
         if ($session_id == 0 ) {
-            $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+            $is_allowed_to_edit = api_is_allowed_to_edit(null, true) && api_is_course_admin();
         } else {
             $is_allowed_to_edit = api_is_allowed_to_edit(null, true) && !api_is_coach();
         }
-
-        $is_platform_admin = api_is_platform_admin();
-
 
         $i = 0;
         $items = array();

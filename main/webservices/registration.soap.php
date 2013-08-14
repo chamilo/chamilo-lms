@@ -5216,7 +5216,7 @@ function WSListSessions($params) {
     foreach ($sessions_list as $session) {
         $return_list[] = array(
             'id' => $session['id'],
-            'title' => $session['title'],
+            'title' => $session['name'],
             'url' => api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session['id'], // something like http://my.chamilo.net/main/session/index.php?session_id=5
             'date_start' => $session['date_start'],
             'date_end' => $session['date_end'],

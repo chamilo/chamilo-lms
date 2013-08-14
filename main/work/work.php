@@ -72,10 +72,8 @@ $my_folder_data = get_work_data_by_id($work_id);
 
 $curdirpath = '';
 $htmlHeadXtra[] = api_get_jqgrid_js();
-
 $htmlHeadXtra[] = to_javascript_work();
-
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function setFocus(){
     $("#work_title").focus();
 }
@@ -142,7 +140,7 @@ if ($action == 'downloadfolder') {
 /*	More init stuff */
 
 if (isset ($_POST['cancelForm']) && !empty ($_POST['cancelForm'])) {
-    header('Location: ' . api_get_self() . '?origin='.$origin.'&amp;gradebook='.$gradebook);
+    header('Location: '.api_get_self().'?origin='.$origin.'&amp;gradebook='.$gradebook);
     exit;
 }
 
@@ -249,7 +247,7 @@ $is_allowed_to_edit = api_is_allowed_to_edit(); //has to come after display_tool
 
 $student_can_edit_in_session = api_is_allowed_to_session_edit(false, true);
 
-Display :: display_introduction_section(TOOL_STUDENTPUBLICATION);
+Display::display_introduction_section(TOOL_STUDENTPUBLICATION);
 
 // introduction section
 
@@ -1119,8 +1117,7 @@ if (isset($work_id) && !empty($work_id) && !$display_list_users_without_publicat
 
     if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) {
         $type = 'simple';
-        $columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), get_lang('Title'),
-            get_lang('Qualification'), get_lang('Date'),  get_lang('Status'), get_lang('Actions'));
+        $columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), get_lang('Title'), get_lang('Qualification'), get_lang('Date'),  get_lang('Status'), get_lang('Actions'));
         $column_model   = array (
             array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false'),
             array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
@@ -1136,8 +1133,7 @@ if (isset($work_id) && !empty($work_id) && !$display_list_users_without_publicat
         );
     } else {
         $type = 'complex';
-        $columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), get_lang('Title'),
-            get_lang('Date'),  get_lang('Actions'));
+        $columns  = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), get_lang('Title'), get_lang('Date'),  get_lang('Actions'));
         $column_model   = array (
             array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false'),
             array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
@@ -1179,8 +1175,57 @@ if (isset($work_id) && !empty($work_id) && !$display_list_users_without_publicat
     //User with no works
     display_list_users_without_publication($work_id);
 } else {
-    //Work list
-    display_student_publications_list($work_id, $link_target_parameter, $dateFormatLong, $origin, $add_query);
+
+    $my_folder_data = get_work_data_by_id($work_id);
+
+    $work_parents = array();
+    if (empty($my_folder_data)) {
+        $work_parents = getWorkList($work_id, $my_folder_data, $add_query);
+    }
+
+    if (api_is_allowed_to_edit()) {
+
+        // Work list
+        echo '<div class="row">';
+        echo '<div class="span9">';
+
+        $userList = CourseManager::get_user_list_from_course_code($course_code, $session_id);
+        display_student_publications_list($work_id, $my_folder_data, $work_parents, $origin, $add_query, count($userList));
+
+        echo '</div>';
+        echo '<div class="span3">';
+
+
+        $table = new HTML_Table(array('class' => 'data_table'));
+        $column = 0;
+        $row = 0;
+        $headers = array(get_lang('Students'), get_lang('Works'));
+        foreach ($headers as $header) {
+            $table->setHeaderContents($row, $column, $header);
+            $column++;
+        }
+        $row++;
+        $column = 0;
+
+            foreach ($userList as $user) {
+                $url = Display::url(api_get_person_name($user['firstname'], $user['lastname']), api_get_path(WEB_CODE_PATH).'work/student_work.php?studentId='.$user['user_id']);
+                $table->setCellContents($row, $column, $url);
+                $column++;
+                $userWorks = 0;
+                foreach ($work_parents as $work) {
+                    $userWorks += getUniqueStudentAttempts($work->id, $course_id, $user['user_id']);
+                }
+                $cell = $userWorks." / ".count($work_parents);
+                $table->setCellContents($row, $column, $cell);
+                $row++;
+                $column = 0;
+            }
+
+            echo $table->toHtml();
+        echo '</div>';
+    } else {
+        display_student_publications_list($work_id, $my_folder_data, $work_parents, $origin, $add_query, null);
+    }
 }
     break;
 }

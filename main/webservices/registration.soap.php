@@ -5177,13 +5177,13 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSSessionsList',         // method name
+$server->register('WSListSessions',         // method name
     array('secret_key' => 'xsd:string',
         'date_start' => 'xsd:string',
         'date_end' => 'xsd:string'),      // input parameters
     array('return' => 'tns:sessions'),             // output parameters
-    'urn:WSSessionsList',                         // namespace
-    'urn:WSSessionsList#WSSessionList',      // soapaction
+    'urn:WSListSessions',                         // namespace
+    'urn:WSListSessions#WSListSessions',      // soapaction
     'rpc',                                      // style
     'encoded',                                  // use
     'This service returns a list of sessions'    // documentation
@@ -5199,7 +5199,7 @@ $server->register('WSSessionsList',         // method name
  * @param array List of parameters (security key, date_start and date_end)
  * @return array Sessions list (id=>[title=>'title',url='http://...',date_start=>'...',date_end=>''])
  */
-function WSSessionsList($params) {
+function WSListSessions($params) {
     if(!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }

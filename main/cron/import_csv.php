@@ -37,13 +37,15 @@ class ImportCsv
     public $expirationDateInUserUpdate = 1;
     public $daysCoachAccessBeforeBeginning = 30;
     public $daysCoachAccessAfterBeginning = 60;
+    public $conditions;
 
     /**
      * @param Logger $logger
      */
-    public function __construct($logger)
+    public function __construct($logger, $conditions)
     {
         $this->logger = $logger;
+        $this->conditions = $conditions;
     }
 
     /**
@@ -54,6 +56,9 @@ class ImportCsv
         $this->dumpValues = $dump;
     }
 
+    /**
+     * @return mixed
+     */
     function getDumpValues()
     {
         return $this->dumpValues;
@@ -337,6 +342,7 @@ class ImportCsv
     private function importStudents($file)
     {
         $data = Import::csv_to_array($file);
+
         /*
          * Another users import.
         Unique identifier: official code and username . ok
@@ -346,6 +352,7 @@ class ImportCsv
         If a user gets deleted (not there anymore),
         He should be set inactive one year after the current date. So I presume you’ll just update the expiration date. We want to grant access to courses up to a year after deletion.
          */
+
         if (!empty($data)) {
             $language = $this->defaultLanguage;
             $this->logger->addInfo(count($data)." records found.");
@@ -404,6 +411,23 @@ class ImportCsv
                     if ($row['action'] == 'delete') {
                         // INactive one year later
                         $userInfo['expiration_date'] = api_get_utc_datetime(api_strtotime(time() + 365*24*60*60));
+                    }
+
+                    if (isset($this->conditions['importStudents'])) {
+                        if (isset($this->conditions['importStudents']['update']) && isset($this->conditions['importStudents']['update']['avoid'])) {
+                            $avoidUsersWithEmail = $this->conditions['importStudents']['update']['avoid']['email'];
+                            if ($userInfo['email'] != $row['email'] && in_array($row['email'], $avoidUsersWithEmail)) {
+                                $this->logger->addInfo("Students - User skipped: ".$row['username']." because the avoid conditions (email).");
+                                continue;
+                            }
+
+                            $avoidUsersWithPassword = $this->conditions['importStudents']['update']['avoid']['password'];
+
+                            if ($userInfo['password'] != api_get_encrypted_password($row['password']) && in_array($row['password'], $avoidUsersWithPassword)) {
+                                $this->logger->addInfo("Students - User skipped: ".$row['username']." because the avoid conditions (password).");
+                                continue;
+                            }
+                        }
                     }
 
                     $expirationDate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserUpdate)."years"));
@@ -624,7 +648,7 @@ $stream = new StreamHandler(api_get_path(SYS_ARCHIVE_PATH).'import_csv.log', $mi
 $logger->pushHandler(new BufferHandler($stream, 0, $minLevel));
 $logger->pushHandler(new RotatingFileHandler('import_csv', 5, $minLevel));
 
-$import = new ImportCsv($logger);
+$import = new ImportCsv($logger, $_configuration['cron_import_csv_avoid_users']);
 
 if (isset($_configuration['default_admin_user_id_for_cron'])) {
     $import->defaultAdminId = $_configuration['default_admin_user_id_for_cron'];

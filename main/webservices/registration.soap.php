@@ -5145,8 +5145,7 @@ function WSUpdateUserApiKey($params) {
     return $apikey;
 }
 
-/* Register WSCourseList function */
-// Register the data structures used by the service
+/** WSListSessions **/
 
 $server->wsdl->addComplexType(
     'sessionDetails',
@@ -5164,7 +5163,7 @@ $server->wsdl->addComplexType(
 );
 
 $server->wsdl->addComplexType(
-    'sessionsList',
+    'sessions',
     'complexType',
     'array',
     '',
@@ -5179,11 +5178,10 @@ $server->wsdl->addComplexType(
 
 // Register the method to expose
 $server->register('WSSessionsList',         // method name
-    array('username' => 'xsd:string',
-        'signature' => 'xsd:string',
+    array('secret_key' => 'xsd:string',
         'date_start' => 'xsd:string',
         'date_end' => 'xsd:string'),      // input parameters
-    array('return' => 'xsd:Array'),             // output parameters
+    array('return' => 'tns:sessions'),             // output parameters
     'urn:WSSessionsList',                         // namespace
     'urn:WSSessionsList#WSSessionList',      // soapaction
     'rpc',                                      // style
@@ -5194,44 +5192,26 @@ $server->register('WSSessionsList',         // method name
 
 /**
  * Get a list of sessions (id, title, url, date_start, date_end) and
- * return to caller
+ * return to caller. Date start can be set to ask only for the sessions
+ * starting at or after this date. Date end can be set to ask only for the
+ * sessions ending before or at this date.
  * Function registered as service. Returns strings in UTF-8.
- * @param string User name in Chamilo
- * @param string Signature (composed of the sha1(username+apikey)
- * @param string Date which sessions have to *start after* to be returned
- * @param string Date which sessions have to *end before* to be returned
+ * @param array List of parameters (security key, date_start and date_end)
  * @return array Sessions list (id=>[title=>'title',url='http://...',date_start=>'...',date_end=>''])
  */
-function WSSessionsList($username, $signature, $date_start = null, $date_end = null) {
-    if (empty($username) or empty($signature)) { return -1; }
-
-    global $_configuration;
-
-    $info = api_get_user_info_from_username($username);
-    $user_id = $info['user_id'];
-    if (!UserManager::is_admin($user_id)) { return -1; }
-
-    $list = UserManager::get_api_keys($user_id, 'dokeos');
-    $key = '';
-    //get the last API key
-    foreach ($list as $key) {
-        break;
+function WSSessionsList($params) {
+    if(!WSHelperVerifyKey($params)) {
+        return return_error(WS_ERROR_SECRET_KEY);
     }
-
-    $local_key = $username.$key;
-
-    if (!api_is_valid_secret_key($signature, $local_key)) {
-        return -1; // The secret key is incorrect.
-    }
-    $params = array();
+    $sql_params = array();
     // Dates should be provided in YYYY-MM-DD format, UTC
-    if (!empty($date_start)) {
-        $params['date_start >='] = $date_start;
+    if (!empty($params['date_start'])) {
+        $sql_params['date_start >='] = $params['date_start'];
     }
-    if (!empty($date_end)) {
-        $params['date_end <='] = $date_end;
+    if (!empty($params['date_end'])) {
+        $sql_params['date_end <='] = $params['date_end'];
     }
-    $sessions_list = SessionManager::get_sessions_list($params);
+    $sessions_list = SessionManager::get_sessions_list($sql_params);
     $return_list = array();
     foreach ($sessions_list as $session) {
         $return_list[] = array(

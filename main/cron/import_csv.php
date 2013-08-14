@@ -648,7 +648,7 @@ $stream = new StreamHandler(api_get_path(SYS_ARCHIVE_PATH).'import_csv.log', $mi
 $logger->pushHandler(new BufferHandler($stream, 0, $minLevel));
 $logger->pushHandler(new RotatingFileHandler('import_csv', 5, $minLevel));
 
-$import = new ImportCsv($logger, $_configuration['cron_import_csv_avoid_users']);
+$import = new ImportCsv($logger, $_configuration['cron_import_csv_conditions']);
 
 if (isset($_configuration['default_admin_user_id_for_cron'])) {
     $import->defaultAdminId = $_configuration['default_admin_user_id_for_cron'];

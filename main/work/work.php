@@ -655,7 +655,7 @@ switch ($action) {
 
                     if (!empty($_POST['title']))
                         $title 		 = isset($_POST['title']) ? $_POST['title'] : $work_data['title'];
-                    $description = isset($_POST['description']) ? $_POST['description'] : $work_data['description'];
+                        $description = isset($_POST['description']) ? $_POST['description'] : $work_data['description'];
 
                     if ($is_allowed_to_edit && ($_POST['qualification'] !='' )) {
                         $add_to_update = ', qualificator_id ='."'".api_get_user_id()."',";
@@ -921,247 +921,245 @@ switch ($action) {
     case 'move':
     case 'move_to':
     case 'list':
-    /*	Move file command */
-    if ($is_allowed_to_edit && $action == 'move_to') {
-        $move_to_path = get_work_path($_REQUEST['move_to_id']);
+        /* Move file command */
+        if ($is_allowed_to_edit && $action == 'move_to') {
+            $move_to_path = get_work_path($_REQUEST['move_to_id']);
 
-        if ($move_to_path==-1) {
-            $move_to_path = '/';
-        } elseif (substr($move_to_path, -1, 1) != '/') {
-            $move_to_path = $move_to_path .'/';
-        }
+            if ($move_to_path==-1) {
+                $move_to_path = '/';
+            } elseif (substr($move_to_path, -1, 1) != '/') {
+                $move_to_path = $move_to_path .'/';
+            }
 
-        //security fix: make sure they can't move files that are not in the document table
-        if ($path = get_work_path($item_id)) {
+            //security fix: make sure they can't move files that are not in the document table
+            if ($path = get_work_path($item_id)) {
 
-            if (move($course_dir.'/'.$path, $base_work_dir . $move_to_path)) {
-                //update db
-                update_work_url($item_id, 'work' . $move_to_path, $_REQUEST['move_to_id']);
+                if (move($course_dir.'/'.$path, $base_work_dir . $move_to_path)) {
+                    //update db
+                    update_work_url($item_id, 'work' . $move_to_path, $_REQUEST['move_to_id']);
 
-                api_item_property_update($_course, 'work', $_REQUEST['move_to_id'], 'FolderUpdated', $user_id);
+                    api_item_property_update($_course, 'work', $_REQUEST['move_to_id'], 'FolderUpdated', $user_id);
 
-                /*
-                // update all the parents in the table item propery
-                $list_id = get_parent_directories($move_to_path);
-                for ($i = 0; $i < count($list_id); $i++) {
-                    api_item_property_update($_course, 'work', $list_id[$i], 'FolderUpdated', $user_id);
-                }*/
-                Display :: display_confirmation_message(get_lang('DirMv'));
+                    /*
+                    // update all the parents in the table item propery
+                    $list_id = get_parent_directories($move_to_path);
+                    for ($i = 0; $i < count($list_id); $i++) {
+                        api_item_property_update($_course, 'work', $list_id[$i], 'FolderUpdated', $user_id);
+                    }*/
+                    Display :: display_confirmation_message(get_lang('DirMv'));
+                } else {
+                    Display :: display_error_message(get_lang('Impossible'));
+                }
             } else {
                 Display :: display_error_message(get_lang('Impossible'));
             }
-        } else {
-            Display :: display_error_message(get_lang('Impossible'));
         }
-    }
 
-    /*	Move file form request */
-    if ($is_allowed_to_edit && $action == 'move') {
-        if (!empty($item_id)) {
-            $folders = array();
-            $session_id = api_get_session_id();
-            $session_id == 0 ? $withsession = " AND session_id = 0 " : $withsession = " AND session_id='".$session_id."'";
-            $sql = "SELECT id, url, title FROM $work_table
-                    WHERE c_id = $course_id AND active IN (0, 1) AND url LIKE '/%' AND post_group_id = '".$group_id."'".$withsession;
-            $res = Database::query($sql);
-            while($folder = Database::fetch_array($res)) {
-                $folders[$folder['id']] = $folder['title'];
-            }
-            echo build_work_move_to_selector($folders, $curdirpath, $item_id);
-        }
-    }
-
-    /*	MAKE VISIBLE WORK COMMAND */
-    if ($is_allowed_to_edit && $action == 'make_visible') {
-        if (!empty($item_id)) {
-            if (isset($item_id) && $item_id == 'all') {
-                //never happens
-                /*
-                $sql = "ALTER TABLE  " . $work_table . " CHANGE accepted accepted TINYINT(1) DEFAULT '1'";
-                Database::query($sql);
-                $sql = "UPDATE  " . $work_table . " SET accepted = 1";
-                Database::query($sql);
-                Display::display_confirmation_message(get_lang('AllFilesVisible'));*/
-            } else {
-                $sql = "UPDATE " . $work_table . "	SET accepted = 1 WHERE c_id = $course_id AND id = '" . $item_id . "'";
-                Database::query($sql);
-                api_item_property_update($course_info, 'work', $item_id, 'visible', api_get_user_id());
-                Display::display_confirmation_message(get_lang('FileVisible'));
+        /*	Move file form request */
+        if ($is_allowed_to_edit && $action == 'move') {
+            if (!empty($item_id)) {
+                $folders = array();
+                $session_id = api_get_session_id();
+                $session_id == 0 ? $withsession = " AND session_id = 0 " : $withsession = " AND session_id='".$session_id."'";
+                $sql = "SELECT id, url, title FROM $work_table
+                        WHERE c_id = $course_id AND active IN (0, 1) AND url LIKE '/%' AND post_group_id = '".$group_id."'".$withsession;
+                $res = Database::query($sql);
+                while ($folder = Database::fetch_array($res)) {
+                    $folders[$folder['id']] = $folder['title'];
+                }
+                echo build_work_move_to_selector($folders, $curdirpath, $item_id);
             }
         }
-    }
 
-    if ($is_allowed_to_edit && $action == 'make_invisible') {
-
-        /*	MAKE INVISIBLE WORK COMMAND */
-        if (!empty($item_id)) {
-            if (isset($item_id) && $item_id == 'all') {
-                /*
-                $sql = "ALTER TABLE " . $work_table . "
-                    CHANGE accepted accepted TINYINT(1) DEFAULT '0'";
-                Database::query($sql);
-                $sql = "UPDATE  " . $work_table . " SET accepted = 0";
-                Database::query($sql);
-                Display::display_confirmation_message(get_lang('AllFilesInvisible'));*/
-            } else {
-                $sql = "UPDATE  " . $work_table . " SET accepted = 0
-                        WHERE c_id = $course_id AND id = '" . $item_id . "'";
-                Database::query($sql);
-                api_item_property_update($course_info, 'work', $item_id, 'invisible', api_get_user_id());
-                Display::display_confirmation_message(get_lang('FileInvisible'));
-            }
-        }
-    }
-
-    /*	Delete dir command */
-
-    if ($is_allowed_to_edit && !empty($_REQUEST['delete_dir'])) {
-        $delete_dir_id = intval($_REQUEST['delete_dir']);
-        $locked = api_resource_is_locked_by_gradebook($delete_dir_id, LINK_STUDENTPUBLICATION);
-
-        if ($locked == false) {
-
-            $work_to_delete = get_work_data_by_id($delete_dir_id);
-            del_dir($delete_dir_id);
-
-            // gets calendar_id from student_publication_assigment
-            $sql = "SELECT add_to_calendar FROM $TSTDPUBASG WHERE c_id = $course_id AND publication_id ='$delete_dir_id'";
-            $res = Database::query($sql);
-            $calendar_id = Database::fetch_row($res);
-
-            // delete from agenda if it exists
-            if (!empty($calendar_id[0])) {
-                $t_agenda   = Database::get_course_table(TABLE_AGENDA);
-                $sql = "DELETE FROM $t_agenda WHERE c_id = $course_id AND id ='".$calendar_id[0]."'";
-                Database::query($sql);
-            }
-            $sql = "DELETE FROM $TSTDPUBASG WHERE c_id = $course_id AND publication_id ='$delete_dir_id'";
-            Database::query($sql);
-
-            $link_info = is_resource_in_course_gradebook(api_get_course_id(), 3 , $delete_dir_id, api_get_session_id());
-            $link_id = $link_info['id'];
-            if ($link_info !== false) {
-                remove_resource_from_course_gradebook($link_id);
-            }
-            Display :: display_confirmation_message(get_lang('DirDeleted') . ': '.$work_to_delete['title']);
-        } else {
-            Display::display_warning_message(get_lang('ResourceLockedByGradebook'));
-        }
-    }
-
-    /*	DELETE WORK COMMAND */
-
-    if ($action == 'delete' && $item_id) {
-
-        $file_deleted = false;
-        $is_author = user_is_author($item_id);
-        $work_data = get_work_data_by_id($item_id);
-        $locked = api_resource_is_locked_by_gradebook($work_data['parent_id'], LINK_STUDENTPUBLICATION);
-
-        if ( ($is_allowed_to_edit && $locked == false) || ($locked == false AND $is_author && api_get_course_setting('student_delete_own_publication') == 1 && $work_data['qualificator_id'] == 0)) {
-            //we found the current user is the author
-            $queryString1 	= "SELECT url, contains_file FROM  " . $work_table . "  WHERE c_id = $course_id AND id = $item_id";
-            $result1 		= Database::query($queryString1);
-            $row 			= Database::fetch_array($result1);
-
-            if (Database::num_rows($result1) > 0) {
-                $queryString2 	= "UPDATE " . $work_table . "  SET active  = 2 WHERE c_id = $course_id AND id = $item_id";
-                $queryString3 	= "DELETE FROM  " . $TSTDPUBASG . "  WHERE c_id = $course_id AND publication_id = $item_id";
-                Database::query($queryString2);
-                Database::query($queryString3);
-                api_item_property_update($_course, 'work', $item_id, 'DocumentDeleted', $user_id);
-                $work = $row['url'];
-
-                if ($row['contains_file'] == 1) {
-                    if (!empty($work)) {
-                        if (api_get_setting('permanently_remove_deleted_files') == 'true') {
-                            my_delete($currentCourseRepositorySys.'/'.$work);
-                            Display::display_confirmation_message(get_lang('TheDocumentHasBeenDeleted'));
-                            $file_deleted = true;
-                        } else {
-                            $extension = pathinfo($work, PATHINFO_EXTENSION);
-                            $new_dir = $work.'_DELETED_'.$item_id.'.'.$extension;
-
-                            if (file_exists($currentCourseRepositorySys.'/'.$work)) {
-                                rename($currentCourseRepositorySys.'/'.$work, $currentCourseRepositorySys.'/'.$new_dir);
-                                Display::display_confirmation_message(get_lang('TheDocumentHasBeenDeleted'));
-                                $file_deleted = true;
-                            }
-                        }
-                    }
+        /*	MAKE VISIBLE WORK COMMAND */
+        if ($is_allowed_to_edit && $action == 'make_visible') {
+            if (!empty($item_id)) {
+                if (isset($item_id) && $item_id == 'all') {
+                    //never happens
+                    /*
+                    $sql = "ALTER TABLE  " . $work_table . " CHANGE accepted accepted TINYINT(1) DEFAULT '1'";
+                    Database::query($sql);
+                    $sql = "UPDATE  " . $work_table . " SET accepted = 1";
+                    Database::query($sql);
+                    Display::display_confirmation_message(get_lang('AllFilesVisible'));*/
                 } else {
-                    $file_deleted = true;
+                    $sql = "UPDATE " . $work_table . "	SET accepted = 1 WHERE c_id = $course_id AND id = '" . $item_id . "'";
+                    Database::query($sql);
+                    api_item_property_update($course_info, 'work', $item_id, 'visible', api_get_user_id());
+                    Display::display_confirmation_message(get_lang('FileVisible'));
                 }
             }
         }
-        if (!$file_deleted) {
-            Display::display_error_message(get_lang('YouAreNotAllowedToDeleteThisDocument'));
+
+        if ($is_allowed_to_edit && $action == 'make_invisible') {
+
+            /*	MAKE INVISIBLE WORK COMMAND */
+            if (!empty($item_id)) {
+                if (isset($item_id) && $item_id == 'all') {
+                    /*
+                    $sql = "ALTER TABLE " . $work_table . "
+                        CHANGE accepted accepted TINYINT(1) DEFAULT '0'";
+                    Database::query($sql);
+                    $sql = "UPDATE  " . $work_table . " SET accepted = 0";
+                    Database::query($sql);
+                    Display::display_confirmation_message(get_lang('AllFilesInvisible'));*/
+                } else {
+                    $sql = "UPDATE  " . $work_table . " SET accepted = 0
+                            WHERE c_id = $course_id AND id = '" . $item_id . "'";
+                    Database::query($sql);
+                    api_item_property_update($course_info, 'work', $item_id, 'invisible', api_get_user_id());
+                    Display::display_confirmation_message(get_lang('FileInvisible'));
+                }
+            }
         }
-    }
 
-    /*	Display list of student publications */
-    if ($curdirpath == '/') {
-        $my_cur_dir_path = '';
-    } else {
-        $my_cur_dir_path = $curdirpath;
-    }
+        /*	Delete dir command */
 
-    if (!empty($my_folder_data['description'])) {
-        echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description'], STUDENT).'</p></div></p>';
-    }
+        if ($is_allowed_to_edit && !empty($_REQUEST['delete_dir'])) {
+            $delete_dir_id = intval($_REQUEST['delete_dir']);
+            $locked = api_resource_is_locked_by_gradebook($delete_dir_id, LINK_STUDENTPUBLICATION);
 
-    //User works
-if (isset($work_id) && !empty($work_id) && !$display_list_users_without_publication) {
-    $work_data = get_work_assignment_by_id($work_id);
-    $check_qualification = intval($my_folder_data['qualification']);
+            if ($locked == false) {
 
-    if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) {
-        $type = 'simple';
-        $columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), get_lang('Title'), get_lang('Qualification'), get_lang('Date'),  get_lang('Status'), get_lang('Actions'));
-        $column_model   = array (
-            array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false'),
-            array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'username',       'index'=>'username',        'width'=>'30',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => 'true'),
-            //                array('name'=>'file',           'index'=>'file',            'width'=>'20',   'align'=>'left', 'search' => 'false'),
-            array('name'=>'qualification',	'index'=>'qualification',	'width'=>'20',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'sent_date',           'index'=>'sent_date',            'width'=>'50',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'qualificator_id','index'=>'qualificator_id', 'width'=>'30',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'actions',        'index'=>'actions',         'width'=>'40',   'align'=>'left', 'search' => 'false', 'sortable'=>'false')
+                $work_to_delete = get_work_data_by_id($delete_dir_id);
+                del_dir($delete_dir_id);
 
-        );
-    } else {
-        $type = 'complex';
-        $columns  = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), get_lang('Title'), get_lang('Date'),  get_lang('Actions'));
-        $column_model   = array (
-            array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false'),
-            array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'username',       'index'=>'username',        'width'=>'30',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),
-            //                array('name'=>'file',           'index'=>'file',            'width'=>'20',   'align'=>'left', 'search' => 'false'),
-            //array('name'=>'qualification',	'index'=>'qualification',	'width'=>'20',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'sent_date',       'index'=>'sent_date',            'width'=>'50',   'align'=>'left', 'search' => 'true'),
-            //array('name'=>'qualificator_id','index'=>'qualificator_id', 'width'=>'30',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'actions',        'index'=>'actions',         'width'=>'40',   'align'=>'left', 'search' => 'false', 'sortable'=>'false')
-        );
-    }
+                // gets calendar_id from student_publication_assigment
+                $sql = "SELECT add_to_calendar FROM $TSTDPUBASG WHERE c_id = $course_id AND publication_id ='$delete_dir_id'";
+                $res = Database::query($sql);
+                $calendar_id = Database::fetch_row($res);
 
-    $extra_params = array();
+                // delete from agenda if it exists
+                if (!empty($calendar_id[0])) {
+                    $t_agenda   = Database::get_course_table(TABLE_AGENDA);
+                    $sql = "DELETE FROM $t_agenda WHERE c_id = $course_id AND id ='".$calendar_id[0]."'";
+                    Database::query($sql);
+                }
+                $sql = "DELETE FROM $TSTDPUBASG WHERE c_id = $course_id AND publication_id ='$delete_dir_id'";
+                Database::query($sql);
 
-    //Autowidth
-    $extra_params['autowidth'] = 'true';
+                $link_info = is_resource_in_course_gradebook(api_get_course_id(), 3 , $delete_dir_id, api_get_session_id());
+                $link_id = $link_info['id'];
+                if ($link_info !== false) {
+                    remove_resource_from_course_gradebook($link_id);
+                }
+                Display :: display_confirmation_message(get_lang('DirDeleted') . ': '.$work_to_delete['title']);
+            } else {
+                Display::display_warning_message(get_lang('ResourceLockedByGradebook'));
+            }
+        }
 
-    //height auto
-    $extra_params['height'] = 'auto';
-    //$extra_params['excel'] = 'excel';
+        /*	DELETE WORK COMMAND */
 
-    //$extra_params['rowList'] = array(10, 20 ,30);
+        if ($action == 'delete' && $item_id) {
 
-    $extra_params['sortname'] = 'firstname';
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list&work_id='.$work_id.'&type='.$type;
-    ?>
+            $file_deleted = false;
+            $is_author = user_is_author($item_id);
+            $work_data = get_work_data_by_id($item_id);
+            $locked = api_resource_is_locked_by_gradebook($work_data['parent_id'], LINK_STUDENTPUBLICATION);
+
+            if (($is_allowed_to_edit && $locked == false) || ($locked == false AND $is_author && api_get_course_setting('student_delete_own_publication') == 1 && $work_data['qualificator_id'] == 0)) {
+                //we found the current user is the author
+                $queryString1 	= "SELECT url, contains_file FROM  " . $work_table . "  WHERE c_id = $course_id AND id = $item_id";
+                $result1 		= Database::query($queryString1);
+                $row 			= Database::fetch_array($result1);
+
+                if (Database::num_rows($result1) > 0) {
+                    $queryString2 	= "UPDATE " . $work_table . "  SET active  = 2 WHERE c_id = $course_id AND id = $item_id";
+                    $queryString3 	= "DELETE FROM  " . $TSTDPUBASG . "  WHERE c_id = $course_id AND publication_id = $item_id";
+                    Database::query($queryString2);
+                    Database::query($queryString3);
+                    api_item_property_update($_course, 'work', $item_id, 'DocumentDeleted', $user_id);
+                    $work = $row['url'];
+
+                    if ($row['contains_file'] == 1) {
+                        if (!empty($work)) {
+                            if (api_get_setting('permanently_remove_deleted_files') == 'true') {
+                                my_delete($currentCourseRepositorySys.'/'.$work);
+                                Display::display_confirmation_message(get_lang('TheDocumentHasBeenDeleted'));
+                                $file_deleted = true;
+                            } else {
+                                $extension = pathinfo($work, PATHINFO_EXTENSION);
+                                $new_dir = $work.'_DELETED_'.$item_id.'.'.$extension;
+
+                                if (file_exists($currentCourseRepositorySys.'/'.$work)) {
+                                    rename($currentCourseRepositorySys.'/'.$work, $currentCourseRepositorySys.'/'.$new_dir);
+                                    Display::display_confirmation_message(get_lang('TheDocumentHasBeenDeleted'));
+                                    $file_deleted = true;
+                                }
+                            }
+                        }
+                    } else {
+                        $file_deleted = true;
+                    }
+                }
+            }
+            if (!$file_deleted) {
+                Display::display_error_message(get_lang('YouAreNotAllowedToDeleteThisDocument'));
+            }
+        }
+
+        /*	Display list of student publications */
+        if ($curdirpath == '/') {
+            $my_cur_dir_path = '';
+        } else {
+            $my_cur_dir_path = $curdirpath;
+        }
+
+        if (!empty($my_folder_data['description'])) {
+            echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description'], STUDENT).'</p></div></p>';
+        }
+
+        //User works
+        if (isset($work_id) && !empty($work_id) && !$display_list_users_without_publication) {
+            $work_data = get_work_assignment_by_id($work_id);
+            $check_qualification = intval($my_folder_data['qualification']);
+
+            if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) {
+                $type = 'simple';
+                $columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), get_lang('Title'), get_lang('Qualification'), get_lang('Date'),  get_lang('Status'), get_lang('Actions'));
+                $column_model   = array (
+                array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false'),
+                array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
+                array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
+                array('name'=>'username',       'index'=>'username',        'width'=>'30',   'align'=>'left', 'search' => 'true'),
+                array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => 'true'),
+                //                array('name'=>'file',           'index'=>'file',            'width'=>'20',   'align'=>'left', 'search' => 'false'),
+                array('name'=>'qualification',	'index'=>'qualification',	'width'=>'20',   'align'=>'left', 'search' => 'true'),
+                array('name'=>'sent_date',           'index'=>'sent_date',            'width'=>'50',   'align'=>'left', 'search' => 'true'),
+                array('name'=>'qualificator_id','index'=>'qualificator_id', 'width'=>'30',   'align'=>'left', 'search' => 'true'),
+                array('name'=>'actions',        'index'=>'actions',         'width'=>'40',   'align'=>'left', 'search' => 'false', 'sortable'=>'false')
+                );
+            } else {
+                $type = 'complex';
+                $columns  = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), get_lang('Title'), get_lang('Date'),  get_lang('Actions'));
+                $column_model   = array (
+                array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false'),
+                array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
+                array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
+                array('name'=>'username',       'index'=>'username',        'width'=>'30',   'align'=>'left', 'search' => 'true'),
+                array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),
+                //                array('name'=>'file',           'index'=>'file',            'width'=>'20',   'align'=>'left', 'search' => 'false'),
+                //array('name'=>'qualification',	'index'=>'qualification',	'width'=>'20',   'align'=>'left', 'search' => 'true'),
+                array('name'=>'sent_date',       'index'=>'sent_date',            'width'=>'50',   'align'=>'left', 'search' => 'true'),
+                //array('name'=>'qualificator_id','index'=>'qualificator_id', 'width'=>'30',   'align'=>'left', 'search' => 'true'),
+                array('name'=>'actions',        'index'=>'actions',         'width'=>'40',   'align'=>'left', 'search' => 'false', 'sortable'=>'false')
+                );
+            }
+            $extra_params = array();
+
+            //Autowidth
+            $extra_params['autowidth'] = 'true';
+
+            //height auto
+            $extra_params['height'] = 'auto';
+            //$extra_params['excel'] = 'excel';
+
+            //$extra_params['rowList'] = array(10, 20 ,30);
+
+            $extra_params['sortname'] = 'firstname';
+            $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list&work_id='.$work_id.'&type='.$type;
+            ?>
     <script>
         $(function() {
             <?php
@@ -1169,64 +1167,63 @@ if (isset($work_id) && !empty($work_id) && !$display_list_users_without_publicat
         ?>
         });
     </script>
-    <?php
-    echo Display::grid_html('results');
-} elseif (isset($_GET['list']) && $_GET['list'] == 'without') {
-    //User with no works
-    display_list_users_without_publication($work_id);
-} else {
+            <?php
+            echo Display::grid_html('results');
+        } elseif (isset($_GET['list']) && $_GET['list'] == 'without') {
+            //User with no works
+            display_list_users_without_publication($work_id);
+        } else {
 
-    $my_folder_data = get_work_data_by_id($work_id);
+            $my_folder_data = get_work_data_by_id($work_id);
 
-    $work_parents = array();
-    if (empty($my_folder_data)) {
-        $work_parents = getWorkList($work_id, $my_folder_data, $add_query);
-    }
-
-    if (api_is_allowed_to_edit()) {
-
-        // Work list
-        echo '<div class="row">';
-        echo '<div class="span9">';
-
-        $userList = CourseManager::get_user_list_from_course_code($course_code, $session_id);
-        display_student_publications_list($work_id, $my_folder_data, $work_parents, $origin, $add_query, count($userList));
-
-        echo '</div>';
-        echo '<div class="span3">';
-
-
-        $table = new HTML_Table(array('class' => 'data_table'));
-        $column = 0;
-        $row = 0;
-        $headers = array(get_lang('Students'), get_lang('Works'));
-        foreach ($headers as $header) {
-            $table->setHeaderContents($row, $column, $header);
-            $column++;
-        }
-        $row++;
-        $column = 0;
-
-            foreach ($userList as $user) {
-                $url = Display::url(api_get_person_name($user['firstname'], $user['lastname']), api_get_path(WEB_CODE_PATH).'work/student_work.php?studentId='.$user['user_id']);
-                $table->setCellContents($row, $column, $url);
-                $column++;
-                $userWorks = 0;
-                foreach ($work_parents as $work) {
-                    $userWorks += getUniqueStudentAttempts($work->id, $course_id, $user['user_id']);
-                }
-                $cell = $userWorks." / ".count($work_parents);
-                $table->setCellContents($row, $column, $cell);
-                $row++;
-                $column = 0;
+            $work_parents = array();
+            if (empty($my_folder_data)) {
+                $work_parents = getWorkList($work_id, $my_folder_data, $add_query);
             }
 
-            echo $table->toHtml();
-        echo '</div>';
-    } else {
-        display_student_publications_list($work_id, $my_folder_data, $work_parents, $origin, $add_query, null);
+            if (api_is_allowed_to_edit()) {
+
+                // Work list
+                echo '<div class="row">';
+                echo '<div class="span9">';
+
+                $userList = CourseManager::get_user_list_from_course_code($course_code, $session_id);
+                display_student_publications_list($work_id, $my_folder_data, $work_parents, $origin, $add_query, count($userList));
+
+                echo '</div>';
+                echo '<div class="span3">';
+
+
+                $table = new HTML_Table(array('class' => 'data_table'));
+                $column = 0;
+                $row = 0;
+                $headers = array(get_lang('Students'), get_lang('Works'));
+                foreach ($headers as $header) {
+                    $table->setHeaderContents($row, $column, $header);
+                    $column++;
+                }
+                $row++;
+                $column = 0;
+
+                foreach ($userList as $user) {
+                    $url = Display::url(api_get_person_name($user['firstname'], $user['lastname']), api_get_path(WEB_CODE_PATH).'work/student_work.php?studentId='.$user['user_id']);
+                    $table->setCellContents($row, $column, $url);
+                    $column++;
+                    $userWorks = 0;
+                    foreach ($work_parents as $work) {
+                        $userWorks += getUniqueStudentAttempts($work->id, $course_id, $user['user_id']);
+                    }
+                    $cell = $userWorks." / ".count($work_parents);
+                    $table->setCellContents($row, $column, $cell);
+                    $row++;
+                    $column = 0;
+                }
+                echo $table->toHtml();
+            echo '</div>';
+        } else {
+            display_student_publications_list($work_id, $my_folder_data, $work_parents, $origin, $add_query, null);
+        }
     }
-}
     break;
 }
 if ($origin != 'learnpath') {

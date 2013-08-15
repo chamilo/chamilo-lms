@@ -1135,15 +1135,17 @@ class Template
             }
 
             // Display the who's online for the session
-            if (isset($user_id) && api_get_session_id() != 0) {
-                if (api_is_allowed_to_edit()) {
-                    $html .= '<li><a href="'.SocialManager::getUserOnlineLink(null, api_get_session_id()).'&id_coach='.$user_id.'" >'.
-                        Display::return_icon(
-                            'session.png',
-                            get_lang('UsersConnectedToMySessions'),
-                            array(),
-                            ICON_SIZE_TINY
-                        ).' </a></li>';
+            if (api_get_setting('showonline', 'session') == 'true') {
+                if (isset($user_id) && api_get_session_id() != 0) {
+                    if (api_is_allowed_to_edit()) {
+                        $html .= '<li><a href="'.SocialManager::getUserOnlineLink(null, api_get_session_id()).'&id_coach='.$user_id.'" >'.
+                            Display::return_icon(
+                                'session.png',
+                                get_lang('UsersConnectedToMySessions'),
+                                array(),
+                                ICON_SIZE_TINY
+                            ).' </a></li>';
+                    }
                 }
             }
         }

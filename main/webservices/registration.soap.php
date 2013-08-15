@@ -5148,17 +5148,17 @@ function WSUpdateUserApiKey($params) {
 /** WSListSessions **/
 
 $server->wsdl->addComplexType(
-    'sessionDetails',
+    'session',
     'complexType',
     'struct',
     'all',
     '',
     array(
-        'name'=>'id'  , 'type'=>'xsd:string',
-        'name'=>'title'  , 'type'=>'xsd:string',
-        'name'=>'url'    , 'type'=>'xsd:string',
-        'name'=>'date_start', 'type'=>'xsd:string',
-        'name'=>'date_end','type'=>'xsd:string',
+        'id' => array ('name' => 'id'  , 'type' => 'xsd:int'),
+        'title' => array ('name' => 'title', 'type' => 'xsd:string'),
+        'url' => array ('name' => 'url', 'type' => 'xsd:string'),
+        'date_start' => array ('name' => 'date_start', 'type' => 'xsd:string'),
+        'date_end' => array ('name' => 'date_end', 'type' => 'xsd:string'),
     )
 );
 
@@ -5171,9 +5171,9 @@ $server->wsdl->addComplexType(
     array(),
     array(
         array('ref'=>'SOAP:ENC:arrayType',
-            'wsdl:arrayType'=>'tns:sessionDetails[]')
+            'wsdl:arrayType'=>'tns:session[]')
     ),
-    'tns:sessionDetails'
+    'tns:session'
 );
 
 // Register the method to expose
@@ -5182,8 +5182,8 @@ $server->register('WSListSessions',         // method name
         'date_start' => 'xsd:string',
         'date_end' => 'xsd:string'),      // input parameters
     array('return' => 'tns:sessions'),             // output parameters
-    'urn:WSListSessions',                         // namespace
-    'urn:WSListSessions#WSListSessions',      // soapaction
+    'urn:WSRegistration',                         // namespace
+    'urn:WSRegistration#WSListSessions',      // soapaction
     'rpc',                                      // style
     'encoded',                                  // use
     'This service returns a list of sessions'    // documentation

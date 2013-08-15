@@ -17,50 +17,6 @@
  * @package chamilo.library
  */
 
-/**
-    DOCUMENTATION
-    (list not up to date, you can auto generate documentation with phpDocumentor)
-
-    CourseManager::get_real_course_code_select_html($element_name, $has_size=true, $only_current_user_courses=true)
-    CourseManager::check_parameter($parameter, $error_message)
-    CourseManager::check_parameter_or_fail($parameter, $error_message)
-    CourseManager::course_code_exists($wanted_course_code)
-    CourseManager::get_real_course_list()
-    CourseManager::get_virtual_course_list()
-
-    GENERAL COURSE FUNCTIONS
-    CourseManager::get_access_settings($course_code)
-    CourseManager::set_course_tool_visibility($tool_table_id, $visibility)
-    CourseManager::get_user_in_course_status($user_id, $course_code)
-    CourseManager::add_user_to_course($user_id, $course_code)
-    CourseManager::get_virtual_course_info($real_course_code)
-    CourseManager::is_virtual_course_from_visual_code($visual_code)
-    CourseManager::is_virtual_course_from_system_code($system_code)
-    CourseManager::get_virtual_courses_linked_to_real_course($real_course_code)
-    CourseManager::get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $real_course_code)
-    CourseManager::has_virtual_courses_from_code($real_course_code, $user_id)
-    CourseManager::get_target_of_linked_course($virtual_course_code)
-
-    TITLE AND CODE FUNCTIONS
-    CourseManager::create_combined_name($user_is_registered_in_real_course, $real_course_name, $virtual_course_list)
-    CourseManager::create_combined_code($user_is_registered_in_real_course, $real_course_code, $virtual_course_list)
-
-    USER FUNCTIONS
-    CourseManager::get_real_course_list_of_user_as_course_admin($user_id)
-    CourseManager::get_course_list_of_user_as_course_admin($user_id)
-
-    CourseManager::is_user_subscribed_in_course($user_id, $course_code)
-    CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_code)
-    CourseManager::get_user_list_from_course_code($course_code)
-    CourseManager::get_real_and_linked_user_list($course_code);
-
-    GROUP FUNCTIONS
-    CourseManager::get_group_list_of_course($course_code)
-
-    CREATION FUNCTIONS
-    CourseManager::attempt_create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category)
-*/
-
 /*    INIT SECTION */
 
 require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
@@ -1069,7 +1025,7 @@ class CourseManager {
      *
      *    @return true if the user is registered in the real course or linked courses, false otherwise
      */
-    public static function is_user_subscribed_in_real_or_linked_course ($user_id, $course_code, $session_id = '') {
+    public static function is_user_subscribed_in_real_or_linked_course($user_id, $course_code, $session_id = '') {
 
         if ($user_id != strval(intval($user_id))) {
             return false;
@@ -1223,7 +1179,7 @@ class CourseManager {
         }
 
         if ($return_count && $resumed_report) {
-            $sql .= ' AND field_id IS NOT NULL  GROUP BY field_value ';
+            $sql .= ' AND field_id IS NOT NULL GROUP BY field_value ';
         }
 
         $sql .= ' '.$order_by.' '.$limit;
@@ -1362,7 +1318,7 @@ class CourseManager {
         $session_id     = intval($session_id);
         $course_code    = Database::escape_string($course_code);
 
-        $sql .= 'SELECT DISTINCT count(*) as count  FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
+        $sql = 'SELECT DISTINCT count(*) as count  FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
         $where = array();
         if (!empty($session_id)) {
             $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' as session_course_user
@@ -1682,8 +1638,7 @@ class CourseManager {
                     ON (g.id = gu.group_id AND g.c_id = $course_id AND gu.c_id = $course_id)
                     $session_condition
                     ORDER BY g.name";
-                }
-        else {
+        } else {
             // get all groups even if they are empty
             $sql = "SELECT g.id, g.name
                     FROM ".Database::get_course_table(TABLE_GROUP)." AS g

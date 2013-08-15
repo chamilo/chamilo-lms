@@ -17,6 +17,7 @@ api_protect_course_script(true);
 require_once 'work.lib.php';
 
 $work_data = get_work_data_by_id($work_id);
+$groupId = api_get_group_id();
 if (empty($work_data)) {
     exit;
 }
@@ -53,15 +54,19 @@ $course_id = api_get_course_int_id();
 
 if (api_is_allowed_to_edit()) {
     //Search for all files that are not deleted => visibility != 2
-    $sql = "SELECT url, title, description, insert_user_id, insert_date, contains_file
+    $sql = "SELECT DISTINCT url, title, description, insert_user_id, insert_date, contains_file
             FROM $tbl_student_publication AS work INNER JOIN $prop_table AS props
-                ON (props.c_id = $course_id AND
+                ON (
+                    props.c_id = $course_id AND
                     work.c_id = $course_id AND
-                    work.id = props.ref)
+                    work.id = props.ref
+                  )
  			WHERE   props.tool='work' AND
  			        work.parent_id = $work_id AND
  			        work.filetype = 'file' AND
- 			        props.visibility<>'2' ";
+ 			        props.visibility<>'2' AND
+ 			        work.post_group_id = $groupId
+            ";
 
 } else {
     $courseInfo = api_get_course_info();
@@ -76,7 +81,7 @@ if (api_is_allowed_to_edit()) {
     }
 
     //for other users, we need to create a zipfile with only visible files and folders
-    $sql = "SELECT url, title, description, insert_user_id, insert_date, contains_file
+    $sql = "SELECT DISTINCT url, title, description, insert_user_id, insert_date, contains_file
             FROM $tbl_student_publication AS work INNER JOIN $prop_table AS props
                 ON (props.c_id = $course_id AND
                     work.c_id = $course_id AND
@@ -84,13 +89,14 @@ if (api_is_allowed_to_edit()) {
            WHERE
                     props.tool='work' AND
                     work.accepted = 1 AND
+                    work.active = 1 AND
                     work.parent_id = $work_id AND
                     work.filetype='file' AND
-                    props.visibility = '1'
+                    props.visibility = '1' AND
+                    work.post_group_id = $groupId
                     $userCondition
             ";
 }
-
 $query = Database::query($sql);
 
 //add tem to the zip file

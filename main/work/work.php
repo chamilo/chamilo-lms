@@ -91,14 +91,13 @@ $table_user			= Database :: get_main_table(TABLE_MAIN_USER);
 $table_session		= Database :: get_main_table(TABLE_MAIN_SESSION);
 $table_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
+$_course = api_get_course_info();
+
 /*	Constants and variables */
 
 $tool_name 		= get_lang('StudentPublications');
 $course_code 	= api_get_course_id();
 $session_id 	= api_get_session_id();
-
-$is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_code,$session_id);
-$is_course_member = $is_course_member || api_is_platform_admin();
 
 $currentCourseRepositorySys = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/';
 $currentCourseRepositoryWeb = api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/';
@@ -110,11 +109,9 @@ $currentUserEmail 		= $_user['mail'];
 $item_id 		        = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
 $parent_id 		        = isset($_REQUEST['parent_id']) ? Database::escape_string($_REQUEST['parent_id']) : '';
 $origin 		        = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
-
 $submitGroupWorkUrl     = isset($_REQUEST['submitGroupWorkUrl']) ? Security::remove_XSS($_REQUEST['submitGroupWorkUrl']) : '';
 $title 			        = isset($_REQUEST['title']) ? $_REQUEST['title'] : '';
 $description 	        = isset($_REQUEST['description']) ? $_REQUEST['description'] : '';
-
 $uploadvisibledisabled  = isset($_REQUEST['uploadvisibledisabled']) ? Database::escape_string($_REQUEST['uploadvisibledisabled']) : $course_info['show_score'];
 
 // get data for publication assignment
@@ -242,7 +239,7 @@ if (!empty($group_id)) {
 //stats
 event_access_tool(TOOL_STUDENTPUBLICATION);
 
-$is_allowed_to_edit = api_is_allowed_to_edit(); //has to come after display_tool_view_option();
+$is_allowed_to_edit = api_is_allowed_to_edit();
 
 $student_can_edit_in_session = api_is_allowed_to_session_edit(false, true);
 
@@ -294,9 +291,7 @@ if (!empty($my_folder_data)) {
         $expires_on = api_convert_and_format_date($homework['expires_on']);
 
         if ($has_ended) {
-            //if (!api_is_allowed_to_edit()) {
             $display_upload_link = false;
-            //}
             $message = Display::return_message(get_lang('EndDateAlreadyPassed').' '.$ends_on, 'error');
         } elseif ($has_expired) {
             $display_upload_link = true;
@@ -371,362 +366,6 @@ switch ($action) {
             Display::display_footer();
         }
         break;
-    case 'edit':
-    case 'upload_form': //can be add or edit work
-        $is_author = false;
-        if (empty($item_id)) {
-            $parent_data = get_work_data_by_id($work_id);
-            $parent_data['qualification'] = intval($parent_data['qualification']);
-
-            if (!empty($parent_data) && !empty($parent_data['qualification']))  {
-                $count =  get_work_count_by_student($user_id, $work_id);
-                if ($count >= 1 ) {
-                    if (api_get_course_setting('student_delete_own_publication') == '1') {
-                        Display::display_warning_message(get_lang('CantUploadDeleteYourPaperFirst'));
-                    } else {
-                        Display::display_warning_message(get_lang('YouAlreadySentAPaperYouCantUpload'));
-                    }
-                    Display::display_footer();
-                    exit;
-                }
-            }
-        } else {
-            //we found the current user is the author
-            $sql = "SELECT * FROM  $work_table WHERE c_id = $course_id AND id = $item_id";
-            $result = Database::query($sql);
-            $work_item = array();
-            if ($result) {
-                $work_item = Database::fetch_array($result);
-            }
-
-            //Get the author ID for that document from the item_property table
-            $is_author 			= user_is_author($item_id);
-            if (!$is_author) {
-                Display::display_warning_message(get_lang('NotAllowed'));
-                Display::display_footer();
-            }
-        }
-
-        $form = new FormValidator('form', 'POST', api_get_self()."?".api_get_cidreq()."&action=upload&id=".$work_id."&gradebook=".Security::remove_XSS($_GET['gradebook'])."&origin=$origin", '', array('enctype' => "multipart/form-data"));
-
-        // form title
-        if ($item_id) {
-            $form_title = get_lang('Edit');
-        } else {
-            $form_title = get_lang('UploadADocument');
-        }
-        $form->addElement('header', $form_title);
-
-        if (!empty ($error_message)) {
-            Display :: display_error_message($error_message);
-        }
-        $show_progress_bar = false;
-
-        if ($submitGroupWorkUrl) {
-            // For user comming from group space to publish his work
-            $realUrl = str_replace($_configuration['root_sys'], api_get_path(WEB_PATH), str_replace("\\", '/', realpath($submitGroupWorkUrl)));
-            $form->addElement('hidden', 'newWorkUrl', $submitGroupWorkUrl);
-            $text_document = $form->addElement('text', 'document', get_lang('Document'));
-            $defaults['document'] = '<a href="' . format_url($submitGroupWorkUrl) . '">' . $realUrl . '</a>';
-            $text_document->freeze();
-        } elseif ($item_id && ($is_allowed_to_edit or $is_author)) {
-            $workUrl = $currentCourseRepositoryWeb . $workUrl;
-        } else {
-            // else standard upload option
-            $form->addElement('file', 'file', get_lang('UploadADocument'), 'size="40" onchange="updateDocumentTitle(this.value)"');
-            $show_progress_bar = true;
-        }
-
-        $form->addElement('hidden', 'id', $work_id);
-        if (empty($item_id)) {
-            $form->addElement('hidden', 'contains_file', 0, array('id'=>'contains_file_id'));
-        } else {
-            $form->addElement('hidden', 'item_id', $item_id);
-        }
-        $form->addElement('text', 'title', get_lang('Title'), array('id' => 'file_upload', 'class' => 'span4'));
-        //$form->addElement('html_editor', 'description', get_lang("Description"));
-        $form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'Work', 'Width' => '100%', 'Height' => '200'));
-
-        if ($item_id && !empty($work_item)) {
-            $defaults['title'] 			= $work_item['title'];
-            $defaults["description"] 	= $work_item['description'];
-            $defaults['qualification']  = $work_item['qualification'];
-        }
-
-        if ($is_allowed_to_edit && !empty($item_id)) {
-            // Get qualification from parent_id that'll allow the validation qualification over
-            $sql = "SELECT qualification FROM $work_table WHERE c_id = $course_id AND id ='$parent_id' ";
-            $result = Database::query($sql);
-            $row = Database::fetch_array($result);
-            $qualification_over = $row['qualification'];
-            if (!empty($qualification_over) && intval($qualification_over) > 0) {
-                $form->addElement('text', 'qualification', array(get_lang('Qualification'),  null, " / ".$qualification_over), 'size="10"');
-                $form->addElement('hidden', 'qualification_over', $qualification_over);
-            }
-        }
-
-        $form->addElement('hidden', 'active',   1);
-        $form->addElement('hidden', 'accepted', 1);
-        $form->addElement('hidden', 'item_to_edit', $item_id);
-        $token = Security::get_token();
-        $form->addElement('hidden', 'sec_token', $token);
-
-        if ($item_id) {
-            $text = get_lang('UpdateWork');
-            $class = 'save';
-        } else {
-            $text = get_lang('Send');
-            $class = 'upload';
-        }
-
-        // fix the Ok button when we see the tool in the learn path
-        if ($origin == 'learnpath') {
-            $form->addElement('html', '<div style="margin-left:137px">');
-            $form->addElement('style_submit_button', 'submitWork', $text, array('class'=> $class, 'value' => "submitWork"));
-            $form->addElement('html', '</div>');
-        } else {
-            if ($item_id) {
-                $form->addElement('style_submit_button', 'editWork', $text, array('class'=> $class, 'value' => "editWork"));
-            } else {
-                $form->addElement('style_submit_button', 'submitWork', $text, array('class'=> $class, 'value' => "submitWork"));
-            }
-        }
-
-        if (!empty($_POST['submitWork']) || $item_id) {
-            $form->addElement('style_submit_button', 'cancelForm', get_lang('Cancel'), 'class="cancel"');
-        }
-
-        if ($show_progress_bar) {
-            $form->add_real_progress_bar('uploadWork', 'file');
-        }
-        $form->setDefaults($defaults);
-
-        //fixes bug when showing modification form
-        if (!empty($work_id)) {
-            if ($is_allowed_to_edit) {
-                if (api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION)) {
-                    echo Display::display_warning_message(get_lang('ResourceLockedByGradebook'));
-                } else {
-                    $form->display();
-                }
-            } elseif ($is_author) {
-                if (empty($work_item['qualificator_id']) || $work_item['qualificator_id'] == 0) {
-                    $form->display();
-                } else {
-                    Display::display_error_message(get_lang('ActionNotAllowed'));
-                }
-            } elseif ($student_can_edit_in_session && $has_ended == false) {
-                $form->display();
-            } else {
-                Display::display_error_message(get_lang('ActionNotAllowed'));
-            }
-        } else {
-            Display::display_error_message(get_lang('ActionNotAllowed'));
-        }
-        break;
-    case 'upload':
-        $check = Security::check_token('post');
-
-        if ($student_can_edit_in_session && $check) {
-
-            //check the token inserted into the form
-            if (isset($_POST['submitWork']) && !empty($is_course_member)) {
-                $authors = api_get_person_name($currentUserFirstName, $currentUserLastName);
-                $url = null;
-                $contains_file = 0;
-
-                if ($_POST['contains_file'] && !empty($_FILES['file']['size'])) {
-                    $updir = $currentCourseRepositorySys . 'work/'; //directory path to upload
-
-                    // Try to add an extension to the file if it has'nt one
-                    $new_file_name = add_ext_on_mime(stripslashes($_FILES['file']['name']), $_FILES['file']['type']);
-
-                    // Replace dangerous characters
-                    $new_file_name = replace_dangerous_char($new_file_name, 'strict');
-
-                    // Transform any .php file in .phps fo security
-                    $new_file_name = php2phps($new_file_name);
-
-                    $filesize = filesize($_FILES['file']['tmp_name']);
-
-                    if (empty($filesize)) {
-                        Display :: display_error_message(get_lang('UplUploadFailedSizeIsZero'));
-                        $succeed = false;
-                    } elseif (!filter_extension($new_file_name)) {
-                        //filter extension
-                        Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
-                        $succeed = false;
-                    }
-                    if (!$title) {
-                        $title = $_FILES['file']['name'];
-                    }
-
-                    // Compose a unique file name to avoid any conflict
-                    $new_file_name = api_get_unique_id();
-                    $curdirpath = basename($my_folder_data['url']);
-
-                    //if we come from the group tools the groupid will be saved in $work_table
-                    $result = @move_uploaded_file($_FILES['file']['tmp_name'], $updir.$curdirpath.'/'.$new_file_name);
-                    if ($result) {
-                        $url = 'work/'.$curdirpath.'/'.$new_file_name;
-                        $contains_file = 1;
-                    }
-                }
-
-                if (empty($title)) {
-                    $title = get_lang('Untitled');
-                }
-
-                $documents_total_space = DocumentManager::documents_total_space();
-                $course_max_space = DocumentManager::get_course_quota();
-                $total_size = $filesize + $documents_total_space;
-                if ($total_size > $course_max_space) {
-                    $error_message = get_lang('NoSpace');
-                } else {
-
-                    $active = '1';
-                    $sql_add_publication = "INSERT INTO " . $work_table . " SET
-                                       c_id 		= $course_id ,
-                                       url         	= '" . $url . "',
-                                       title       	= '" . Database::escape_string($title) . "',
-                                       description	= '" . Database::escape_string($description) . "',
-                                       author      	= '" . Database::escape_string($authors) . "',
-                                       contains_file = '".$contains_file."',
-                                       active		= '" . $active . "',
-                                       accepted		= '1',
-                                       post_group_id = '".$group_id."',
-                                       sent_date	=  '".api_get_utc_datetime()."',
-                                       parent_id 	=  '".$work_id."' ,
-                                       session_id	= '".intval($id_session)."' ,
-                                       user_id 		= '".$user_id."'";
-                    //var_dump($sql_add_publication);exit;
-                    Database::query($sql_add_publication);
-                    $id = Database::insert_id();
-                }
-
-                if ($id) {
-                    api_item_property_update($course_info, 'work', $id, 'DocumentAdded', $user_id, api_get_group_id());
-                    /*
-                     * See task #5145
-                    if($uploadvisibledisabled){
-                        $sql = "UPDATE $work_table SET accepted = 0 WHERE c_id = $course_id AND id = $id";
-                        Database::query($sql);
-                        api_item_property_update($course_info, 'work', $id, 'invisible', api_get_user_id());
-                    }else{
-                        //api_item_property_update($course_info, 'work', $id, 'visible', api_get_user_id());
-                    }*/
-                    $succeed = true;
-                }
-            } elseif ($newWorkUrl) {
-
-                // SPECIAL CASE ! For a work coming from another area (i.e. groups)
-                /*
-                            $url = str_replace('../../' . $_course['path'] . '/', '', $newWorkUrl);
-
-                            if (!$title) {
-                                $title = basename($workUrl);
-                            }
-                            $sql = "INSERT INTO  " . $work_table . " SET
-                                                c_id = $course_id,
-                                                url        	= '" . $url . "',
-                                                title       	= '" . Database::escape_string($title) . "',
-                                                description 	= '" . Database::escape_string($description) . "',
-                                                author      	= '" . Database::escape_string($authors) . "',
-                                                post_group_id   = '".$group_id."',
-                                                sent_date    	= '".api_get_utc_datetime()."',
-                                                session_id 		= '".intval($id_session)."',
-                                                user_id 		= '".$user_id."'";
-
-                            Database::query($sql);
-
-                            $insertId = Database::insert_id();
-                            api_item_property_update($_course, 'work', $insertId, 'DocumentAdded', $user_id, $group_id);
-                            $succeed = true;*/
-            } elseif (isset($_POST['editWork'])) {
-                /*
-                 * SPECIAL CASE ! For a work edited
-                */
-                //Get the author ID for that document from the item_property table
-                $item_to_edit_id 	= intval($_POST['item_to_edit']);
-                $is_author 			= user_is_author($item_to_edit_id);
-
-                if ($is_author) {
-                    $work_data = get_work_data_by_id($item_to_edit_id);
-
-                    if (!empty($_POST['title']))
-                        $title 		 = isset($_POST['title']) ? $_POST['title'] : $work_data['title'];
-                        $description = isset($_POST['description']) ? $_POST['description'] : $work_data['description'];
-
-                    if ($is_allowed_to_edit && ($_POST['qualification'] !='' )) {
-                        $add_to_update = ', qualificator_id ='."'".api_get_user_id()."',";
-                        $add_to_update .= ' qualification = '."'".Database::escape_string($_POST['qualification'])."',";
-                        $add_to_update .= ' date_of_qualification ='."'".api_get_utc_datetime()."'";
-                    }
-
-                    if ((int)$_POST['qualification'] > (int)$_POST['qualification_over']) {
-                        Display::display_error_message(get_lang('QualificationMustNotBeMoreThanQualificationOver'));
-                    } else {
-                        $sql = "UPDATE  " . $work_table . "
-                                SET	title       = '" . Database::escape_string($title) . "',
-                                    description = '" . Database::escape_string($description) . "'
-                                    ".$add_to_update."
-                                WHERE c_id = $course_id AND id = $item_to_edit_id";
-                        Database::query($sql);
-                    }
-                    api_item_property_update($_course, 'work', $item_to_edit_id, 'DocumentUpdated', $user_id);
-                    $succeed = true;
-                    Display :: display_confirmation_message(get_lang('ItemUpdated'), false);
-                } else {
-                    $error_message = get_lang('IsNotPosibleSaveTheDocument');
-                }
-            } else {
-                $error_message = get_lang('IsNotPosibleSaveTheDocument');
-            }
-            Security::clear_token();
-        } else {
-            //Bad token or can't add works
-            $error_message = get_lang('IsNotPosibleSaveTheDocument');
-        }
-
-        if (!empty($succeed) && !empty($id)) {
-            //last value is to check this is not "just" an edit
-            //YW Tis part serve to send a e-mail to the tutors when a new file is sent
-            $send = api_get_course_setting('email_alert_manager_on_new_doc');
-
-            if ($send > 0) {
-                // Lets predefine some variables. Be sure to change the from address!
-                if (empty($id_session)) {
-                    //Teachers
-                    $user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), null, null, null, COURSEMANAGER);
-                } else {
-                    //Coaches
-                    $user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), $session_id, null, null, 2);
-                }
-
-                $emailsubject = "[" . api_get_setting('siteName') . "] ".get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$_course['name']."  ";
-
-                foreach ($user_list as $user_data) {
-                    $to_user_id = $user_data['user_id'];
-                    $emailbody = get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$_course['name']."\n";
-                    $user_id = api_get_user_id();
-                    $user_info = api_get_user_info($user_id);
-                    $emailbody .= get_lang('UserName')." : ".api_get_person_name($user_info['firstname'], $user_info['lastname'])."\n";
-                    $emailbody .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";
-                    $emailbody .= get_lang('WorkName')." : ".$title."\n\n".get_lang('DownloadLink')."\n";
-                    $url = api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()."&amp;id=".$work_id;
-                    $emailbody .= $url;
-
-                    MessageManager::send_message_simple($to_user_id, $emailsubject, $emailbody);
-                }
-            }
-            $message = get_lang('DocAdd');
-            event_upload($id);
-            Display :: display_confirmation_message(get_lang('DocAdd'), false);
-        } else {
-            if (!empty($error_message)) {
-                Display :: display_warning_message($error_message, false);
-            }
-        }
     case 'create_dir':
     case 'add':
         //$check = Security::check_token('post');
@@ -776,7 +415,6 @@ switch ($action) {
             $form->addElement('advanced_settings',draw_date_picker('expires'));
             $form->addElement('html', '</div>');
 
-
             $form->addElement('checkbox', 'type2', null, get_lang('EnableEndDate'), array('id' =>'make_calification_id', 'onclick' => "javascript: if(this.checked){document.getElementById('option3').style.display='block';}else{document.getElementById('option3').style.display='none';}"));
 
             $form->addElement('html', '<div id="option3" style="display: none;">');
@@ -825,8 +463,8 @@ switch ($action) {
                                             date_of_qualification	= '0000-00-00 00:00:00',
                                             weight              = '".Database::escape_string($_POST['weight'])."',
                                             session_id          = '".intval($id_session)."',
-                                            allow_text_assignment   = '".Database::escape_string($_POST['allow_text_assignment'])."',
-                                            contains_file    = 0,
+                                            allow_text_assignment = '".Database::escape_string($_POST['allow_text_assignment'])."',
+                                            contains_file       = 0,
                                             user_id 			= '".$user_id."'";
 
                     Database::query($sql_add_publication);
@@ -1060,15 +698,17 @@ switch ($action) {
 
             if (($is_allowed_to_edit && $locked == false) || ($locked == false AND $is_author && api_get_course_setting('student_delete_own_publication') == 1 && $work_data['qualificator_id'] == 0)) {
                 //we found the current user is the author
-                $queryString1 	= "SELECT url, contains_file FROM  " . $work_table . "  WHERE c_id = $course_id AND id = $item_id";
+                $queryString1 	= "SELECT url, contains_file FROM ".$work_table." WHERE c_id = $course_id AND id = $item_id";
                 $result1 		= Database::query($queryString1);
                 $row 			= Database::fetch_array($result1);
 
+
                 if (Database::num_rows($result1) > 0) {
-                    $queryString2 	= "UPDATE " . $work_table . "  SET active  = 2 WHERE c_id = $course_id AND id = $item_id";
-                    $queryString3 	= "DELETE FROM  " . $TSTDPUBASG . "  WHERE c_id = $course_id AND publication_id = $item_id";
+                    $queryString2 	= "UPDATE " . $work_table . "  SET active = 2 WHERE c_id = $course_id AND id = $item_id";
+                    $queryString3 	= "DELETE FROM  ".$TSTDPUBASG ." WHERE c_id = $course_id AND publication_id = $item_id";
                     Database::query($queryString2);
                     Database::query($queryString3);
+
                     api_item_property_update($_course, 'work', $item_id, 'DocumentDeleted', $user_id);
                     $work = $row['url'];
 
@@ -1094,6 +734,7 @@ switch ($action) {
                     }
                 }
             }
+
             if (!$file_deleted) {
                 Display::display_error_message(get_lang('YouAreNotAllowedToDeleteThisDocument'));
             }
@@ -1110,7 +751,6 @@ switch ($action) {
             echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description'], STUDENT).'</p></div></p>';
         }
 
-        //User works
         if (isset($work_id) && !empty($work_id) && !$display_list_users_without_publication) {
 
         } elseif (isset($_GET['list']) && $_GET['list'] == 'without') {
@@ -1130,9 +770,18 @@ switch ($action) {
                 // Work list
                 echo '<div class="row">';
                 echo '<div class="span9">';
+                if (!empty($group_id)) {
+                    $userList = GroupManager::get_users($group_id);
+                } else {
+                    if (empty($session_id)) {
+                        $userList = CourseManager::get_user_list_from_course_code($course_code, $session_id, null, null, STUDENT);
+                    } else {
+                        $userList = CourseManager::get_user_list_from_course_code($course_code, $session_id, null, null, 0);
+                    }
+                    $userList = array_keys($userList);
+                }
 
-                $userList = CourseManager::get_user_list_from_course_code($course_code, $session_id, null, null, STUDENT);
-                display_student_publications_list($work_id, $my_folder_data, $work_parents, $origin, $add_query, count($userList));
+                display_student_publications_list($work_id, $my_folder_data, $work_parents, $origin, $add_query, $userList);
 
                 echo '</div>';
                 echo '<div class="span3">';
@@ -1148,13 +797,15 @@ switch ($action) {
                 $row++;
                 $column = 0;
 
-                foreach ($userList as $user) {
-                    $url = Display::url(api_get_person_name($user['firstname'], $user['lastname']), api_get_path(WEB_CODE_PATH).'work/student_work.php?studentId='.$user['user_id']);
+                foreach ($userList as $userId) {
+                    $user = api_get_user_info($userId);
+                    $link = api_get_path(WEB_CODE_PATH).'work/student_work.php?'.api_get_cidreq().'&studentId='.$user['user_id'];
+                    $url = Display::url(api_get_person_name($user['firstname'], $user['lastname']), $link);
                     $table->setCellContents($row, $column, $url);
                     $column++;
                     $userWorks = 0;
                     foreach ($work_parents as $work) {
-                        $userWorks += getUniqueStudentAttempts($work->id, $course_id, $user['user_id']);
+                        $userWorks += getUniqueStudentAttempts($work->id, $group_id, $course_id, $session_id, $user['user_id']);
                     }
                     $cell = $userWorks." / ".count($work_parents);
                     $table->setCellContents($row, $column, $cell);

@@ -22,9 +22,15 @@ $studentId = isset($_GET['studentId']) ? intval($_GET['studentId']) : null;
 if (empty($studentId)) {
     api_not_allowed(true);
 }
-$tool_name 		= get_lang('StudentPublications');
 
+$tool_name = get_lang('StudentPublications');
 $group_id = api_get_group_id();
+
+$userInfo = api_get_user_info($studentId);
+
+if (empty($userInfo)) {
+    api_not_allowed(true);
+}
 
 if (!empty($group_id)) {
     $group_properties  = GroupManager :: get_group_properties($group_id);
@@ -38,13 +44,19 @@ if (!empty($group_id)) {
     }
 
     if (!$show_work) {
-        api_not_allowed(true);
+        api_not_allowed();
     }
+
+    $interbreadcrumb[] = array ('url' => '../group/group.php', 'name' => get_lang('Groups'));
+    $interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
 } else {
     if (!api_is_course_admin()) {
         api_not_allowed(true);
     }
 }
+
+$interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
+$interbreadcrumb[] = array ('url' => '#', 'name' => $userInfo['complete_name']);
 
 Display :: display_header(null);
 
@@ -72,9 +84,8 @@ foreach ($workPerUser as $work) {
     $workExtraData = get_work_assignment_by_id($workId);
 
     foreach ($work->user_results as $userResult) {
-        //var_dump($userResult);
         $table->setCellContents($row, $column, $work->title.' ['.strip_tags($userResult['title']).']');
-        $table->setCellAttributes($row, $column, array('width' => '200px'));
+        $table->setCellAttributes($row, $column, array('width' => '300px'));
         $column++;
         $table->setCellContents($row, $column, $userResult['sent_date']);
         $column++;
@@ -103,7 +114,7 @@ foreach ($workPerUser as $work) {
             $links .= Display::url(Display::return_icon('save.png'), $url);
         }
 
-        $url = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&action=edit&item_id='.$userResult['id'].'&id='.$workId.'&parent_id='.$workId;
+        $url = api_get_path(WEB_CODE_PATH).'work/edit.php?'.api_get_cidreq().'&item_id='.$userResult['id'].'&id='.$workId.'&parent_id='.$workId;
         $links .= Display::url(Display::return_icon('edit.png'), $url);
 
         $table->setCellContents($row, $column, $links);

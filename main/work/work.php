@@ -239,7 +239,6 @@ if (!empty($group_id)) {
     }
 }
 
-
 //stats
 event_access_tool(TOOL_STUDENTPUBLICATION);
 
@@ -1113,63 +1112,7 @@ switch ($action) {
 
         //User works
         if (isset($work_id) && !empty($work_id) && !$display_list_users_without_publication) {
-            $work_data = get_work_assignment_by_id($work_id);
-            $check_qualification = intval($my_folder_data['qualification']);
 
-            if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) {
-                $type = 'simple';
-                $columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), get_lang('Title'), get_lang('Qualification'), get_lang('Date'),  get_lang('Status'), get_lang('Actions'));
-                $column_model   = array (
-                array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false'),
-                array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
-                array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
-                array('name'=>'username',       'index'=>'username',        'width'=>'30',   'align'=>'left', 'search' => 'true'),
-                array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => 'true'),
-                //                array('name'=>'file',           'index'=>'file',            'width'=>'20',   'align'=>'left', 'search' => 'false'),
-                array('name'=>'qualification',	'index'=>'qualification',	'width'=>'20',   'align'=>'left', 'search' => 'true'),
-                array('name'=>'sent_date',           'index'=>'sent_date',            'width'=>'50',   'align'=>'left', 'search' => 'true'),
-                array('name'=>'qualificator_id','index'=>'qualificator_id', 'width'=>'30',   'align'=>'left', 'search' => 'true'),
-                array('name'=>'actions',        'index'=>'actions',         'width'=>'40',   'align'=>'left', 'search' => 'false', 'sortable'=>'false')
-                );
-            } else {
-                $type = 'complex';
-                $columns  = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), get_lang('Title'), get_lang('Date'),  get_lang('Actions'));
-                $column_model   = array (
-                array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false'),
-                array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
-                array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
-                array('name'=>'username',       'index'=>'username',        'width'=>'30',   'align'=>'left', 'search' => 'true'),
-                array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),
-                //                array('name'=>'file',           'index'=>'file',            'width'=>'20',   'align'=>'left', 'search' => 'false'),
-                //array('name'=>'qualification',	'index'=>'qualification',	'width'=>'20',   'align'=>'left', 'search' => 'true'),
-                array('name'=>'sent_date',       'index'=>'sent_date',            'width'=>'50',   'align'=>'left', 'search' => 'true'),
-                //array('name'=>'qualificator_id','index'=>'qualificator_id', 'width'=>'30',   'align'=>'left', 'search' => 'true'),
-                array('name'=>'actions',        'index'=>'actions',         'width'=>'40',   'align'=>'left', 'search' => 'false', 'sortable'=>'false')
-                );
-            }
-            $extra_params = array();
-
-            //Autowidth
-            $extra_params['autowidth'] = 'true';
-
-            //height auto
-            $extra_params['height'] = 'auto';
-            //$extra_params['excel'] = 'excel';
-
-            //$extra_params['rowList'] = array(10, 20 ,30);
-
-            $extra_params['sortname'] = 'firstname';
-            $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list&work_id='.$work_id.'&type='.$type;
-            ?>
-    <script>
-        $(function() {
-            <?php
-            echo Display::grid_js('results', $url, $columns, $column_model, $extra_params);
-        ?>
-        });
-    </script>
-            <?php
-            echo Display::grid_html('results');
         } elseif (isset($_GET['list']) && $_GET['list'] == 'without') {
             //User with no works
             display_list_users_without_publication($work_id);

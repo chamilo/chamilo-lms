@@ -454,7 +454,6 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
         $qualification_exists = true;
     }
 
-
 	$edit_dir = isset($_GET['edit_dir']) ? $_GET['edit_dir'] : '';
 
 	$table_header = array();
@@ -467,22 +466,23 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 		$table_header[] = array(get_lang('LastName'), true);
 	}
 
-	//$table_header[] = array(get_lang('Date'), true, 'style="width:200px"');
     $table_header[] = array(get_lang('HandOutDateLimit'), true, 'style="width:200px"');
 
 	if ($is_allowed_to_edit) {
         $table_header[] = array(get_lang('HandedOut'), false);
 		$table_header[] = array(get_lang('Actions'), false, 'style="width:90px"', array('class'=>'td_actions'));
 		$table_has_actions_column = true;
+
+        if ($qualification_exists) {
+            $table_header[] = array(get_lang('Qualification'), true);
+        }
+
 	} else {
-        //$table_header[] = array(get_lang('HandedOutDate'), false);
+        // All users
+        if ($course_info['show_score'] == 0) {
+            $table_header[] = array(get_lang('Others'), false);
+        }
     }
-
-    if ($qualification_exists) {
-        $table_header[] = array(get_lang('Qualification'), true);
-    }
-
-
 
 	$table_data = array();
 
@@ -802,14 +802,18 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 			$session_id = api_get_session_id();
 
 			if (api_is_allowed_to_edit()) {
-                $sql_document = "SELECT count(*)
+                $cant_files = get_count_work($work_data['id']);
+                /*$sql_document = "SELECT count(*)
                                  FROM $work_table w INNER JOIN $user_table u ON w.user_id = u.user_id
-                                 WHERE w.c_id = $course_id AND w.parent_id = ".$work_data['id']." AND w.active IN (0, 1)";
+                                 WHERE w.c_id = $course_id AND w.parent_id = ".$work_data['id']." AND w.active IN (0, 1)";*/
 			} else {
+                $cant_files = get_count_work($work_data['id'], api_get_user_id());
+                /*
                 $user_filter = "user_id = ".api_get_user_id()." AND ";
                 if ($course_info['show_score'] == 0) {
                     $user_filter  = null;
                 }
+
                 $sql_document = "SELECT count(*) FROM $work_table s, $iprop_table p
                                   WHERE s.c_id = $course_id  AND
                                         p.c_id = $course_id AND
@@ -819,15 +823,14 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
                                         $user_filter
                                         parent_id = ".$work_data['id']." AND
                                         active = 1 AND
-                                        parent_id = ".$work_parent->id."";
+                                        parent_id = ".$work_parent->id."";*/
 			}
 
 			//count documents
-			$res_document   = Database::query($sql_document);
+			/*$res_document   = Database::query($sql_document);
 			$count_document = Database::fetch_row($res_document);
-			$cant_files     = $count_document[0];
+			$cant_files     = $count_document[0];*/
 
-			$cant_files_per_user = getUniqueStudentAttempts($work_data['id'], $course_id);
 
 			$text_file = get_lang('FilesUpload');
 
@@ -866,7 +869,13 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
                         $zip = '<a href="downloadfolder.inc.php?id='.$work_data['id'].'">'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), ICON_SIZE_SMALL).'</a>';
                     }
 				//}
-				$url = $zip.'<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&id='.$work_data['id'].'"'.$class.'>'.
+
+                $link = 'work_list.php';
+                if (api_is_allowed_to_edit()) {
+                    $link = 'work_list_all.php';
+                }
+
+				$url = $zip.'<a href="'.api_get_path(WEB_CODE_PATH).'work/'.$link.'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&id='.$work_data['id'].'"'.$class.'>'.
 						$work_title.'</a> '.$add_to_name.'<br />'.$cant_files.' '.$text_file.$dirtext;
 				$row[] = $url;
 			}
@@ -895,9 +904,18 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
                 $row[] = '-';
             }
 
+            if (!$is_allowed_to_edit) {
+                if ($course_info['show_score'] == 0) {
+                    $url = api_get_path(WEB_CODE_PATH).'work/work_list_others.php?'.api_get_cidreq().'&id='.$work_parent->id;
+                    $row[] = Display::url(Display::return_icon('group.png', get_lang('Others')), $url);
+                }
+            }
 
 			if ($origin != 'learnpath') {
 				if ($is_allowed_to_edit) {
+
+			        $cant_files_per_user = getUniqueStudentAttempts($work_data['id'], $course_id);
+
                     $row[] = $cant_files_per_user.'/'.$countUsers;
                     if (api_resource_is_locked_by_gradebook($id2, LINK_STUDENTPUBLICATION)) {
                         $action .= Display::return_icon('edit_na.png', get_lang('Edit'), array(), ICON_SIZE_SMALL);
@@ -1575,7 +1593,14 @@ function get_work_id($path) {
 	}
 }
 
-function get_count_work($work_id) {
+/**
+ * @param int $work_id
+ * @param int $onlyMeUserId show only my works
+ * @param int $notMeUserId show works from everyone except me
+ * @return int
+ */
+function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
+{
     $work_table 	 = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $iprop_table     = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $user_table      = Database::get_main_table(TABLE_MAIN_USER);
@@ -1608,6 +1633,17 @@ function get_count_work($work_id) {
     }
 
     $extra_conditions .= " AND parent_id  = ".$work_id."  ";
+
+    $where_condition = null;
+
+    if (!empty($notMeUserId)) {
+        $where_condition .= " AND u.user_id <> ".intval($notMeUserId);
+    }
+
+    if (!empty($onlyMeUserId)) {
+        $where_condition .= " AND u.user_id =  ".intval($onlyMeUserId);
+    }
+
 
     $sql = "SELECT  count(*) as count ".
            " FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ".
@@ -1689,7 +1725,6 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
         $sql = "SELECT $select
                 FROM $work_condition  $user_condition $course_conditions
                 WHERE  $extra_conditions $where_condition $condition_session ";
-
 
         $sql .= " ORDER BY $column $direction ";
         $sql .= " LIMIT $start, $limit";

@@ -116,4 +116,3 @@ foreach ($workPerUser as $work) {
 echo $table->toHtml();
 
 Display :: display_footer();
-

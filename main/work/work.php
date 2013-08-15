@@ -353,11 +353,11 @@ switch ($action) {
 
             if ($number_of_setting == 1) {
                 $query = "UPDATE " . $table_course_setting . " SET value='" . Database::escape_string($_POST['student_delete_own_publication']) . "'
-						WHERE variable='student_delete_own_publication' AND c_id = $course_id";
+                        WHERE variable='student_delete_own_publication' AND c_id = $course_id";
                 Database::query($query);
             } else {
                 $query = "INSERT INTO " . $table_course_setting . " (c_id, variable, value, category) VALUES
-				($course_id, 'student_delete_own_publication','" . Database::escape_string($_POST['student_delete_own_publication']) . "','work')";
+                ($course_id, 'student_delete_own_publication','" . Database::escape_string($_POST['student_delete_own_publication']) . "','work')";
                 Database::query($query);
             }
             Display::display_confirmation_message(get_lang('Saved'));
@@ -586,17 +586,17 @@ switch ($action) {
 
                     $active = '1';
                     $sql_add_publication = "INSERT INTO " . $work_table . " SET
-									   c_id 		= $course_id ,
-								       url         	= '" . $url . "',
-								       title       	= '" . Database::escape_string($title) . "',
-					                   description	= '" . Database::escape_string($description) . "',
-					                   author      	= '" . Database::escape_string($authors) . "',
-					                   contains_file = '".$contains_file."',
-									   active		= '" . $active . "',
-									   accepted		= '1',
-									   post_group_id = '".$group_id."',
-									   sent_date	=  '".api_get_utc_datetime()."',
-									   parent_id 	=  '".$work_id."' ,
+                                       c_id 		= $course_id ,
+                                       url         	= '" . $url . "',
+                                       title       	= '" . Database::escape_string($title) . "',
+                                       description	= '" . Database::escape_string($description) . "',
+                                       author      	= '" . Database::escape_string($authors) . "',
+                                       contains_file = '".$contains_file."',
+                                       active		= '" . $active . "',
+                                       accepted		= '1',
+                                       post_group_id = '".$group_id."',
+                                       sent_date	=  '".api_get_utc_datetime()."',
+                                       parent_id 	=  '".$work_id."' ,
                                        session_id	= '".intval($id_session)."' ,
                                        user_id 		= '".$user_id."'";
                     //var_dump($sql_add_publication);exit;
@@ -667,10 +667,10 @@ switch ($action) {
                         Display::display_error_message(get_lang('QualificationMustNotBeMoreThanQualificationOver'));
                     } else {
                         $sql = "UPDATE  " . $work_table . "
-						        SET	title       = '" . Database::escape_string($title) . "',
-						            description = '" . Database::escape_string($description) . "'
-						            ".$add_to_update."
-						        WHERE c_id = $course_id AND id = $item_to_edit_id";
+                                SET	title       = '" . Database::escape_string($title) . "',
+                                    description = '" . Database::escape_string($description) . "'
+                                    ".$add_to_update."
+                                WHERE c_id = $course_id AND id = $item_to_edit_id";
                         Database::query($sql);
                     }
                     api_item_property_update($_course, 'work', $item_to_edit_id, 'DocumentUpdated', $user_id);
@@ -920,7 +920,7 @@ switch ($action) {
     case 'make_invisible':
     case 'move':
     case 'move_to':
-case 'list':
+    case 'list':
     /*	Move file command */
     if ($is_allowed_to_edit && $action == 'move_to') {
         $move_to_path = get_work_path($_REQUEST['move_to_id']);
@@ -1005,7 +1005,7 @@ case 'list':
                 Display::display_confirmation_message(get_lang('AllFilesInvisible'));*/
             } else {
                 $sql = "UPDATE  " . $work_table . " SET accepted = 0
-							WHERE c_id = $course_id AND id = '" . $item_id . "'";
+                        WHERE c_id = $course_id AND id = '" . $item_id . "'";
                 Database::query($sql);
                 api_item_property_update($course_info, 'work', $item_id, 'invisible', api_get_user_id());
                 Display::display_confirmation_message(get_lang('FileInvisible'));

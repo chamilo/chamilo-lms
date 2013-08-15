@@ -1742,8 +1742,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
             }
 
             $add_string = '';
-            $time_expires = api_strtotime($work['expires_on'], 'UTC');
-
+            $time_expires = api_strtotime($work_assignment['expires_on'], 'UTC');
             if (!empty($work_assignment['expires_on']) && $work_assignment['expires_on'] != '0000-00-00 00:00:00' && $time_expires && ($time_expires < api_strtotime($work['sent_date'], 'UTC'))) {
                 $add_string = Display::label(get_lang('Expired'),'important');
             }

@@ -770,6 +770,7 @@ switch ($action) {
                 // Work list
                 echo '<div class="row">';
                 echo '<div class="span9">';
+
                 if (!empty($group_id)) {
                     $userList = GroupManager::get_users($group_id);
                 } else {

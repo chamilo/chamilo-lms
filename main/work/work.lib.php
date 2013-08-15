@@ -400,6 +400,10 @@ function getUniqueStudentAttempts($workId, $groupId, $course_id, $sessionId, $us
 
     if (!empty($onlyUserList)) {
         $studentCondition = "AND u.user_id IN ('".implode("', '", $onlyUserList)."') ";
+    } else {
+        if (empty($userId)) {
+            return 0;
+        }
     }
 
     $sql_document = "SELECT count(*) FROM (
@@ -920,7 +924,6 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 
 			if ($origin != 'learnpath') {
 				if ($is_allowed_to_edit) {
-
 			        $cant_files_per_user = getUniqueStudentAttempts($work_data['id'], $group_id, $course_id, api_get_session_id(), null, $userList);
 
                     $row[] = $cant_files_per_user.'/'.count($userList);

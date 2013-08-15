@@ -56,7 +56,7 @@ api_protect_course_script(true);
 require_once 'work.lib.php';
 
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-include_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 
@@ -331,16 +331,17 @@ switch ($action) {
     case 'settings':
         //if posts
         if ($is_allowed_to_edit && !empty($_POST['changeProperties'])) {
-            // changing the tool setting: default visibility of an uploaded document
-            $query = "UPDATE " . $main_course_table . " SET show_score='" . $uploadvisibledisabled . "' WHERE code='" . api_get_course_id() . "'";
+            // Changing the tool setting: default visibility of an uploaded document
+            // @todo i
+            $query = "UPDATE ".$main_course_table." SET show_score='" . $uploadvisibledisabled . "' WHERE code='" . api_get_course_id() . "'";
             $res = Database::query($query);
+
             /**
              * Course data are cached in session so we need to update both the database
              * and the session data
              */
             $_course['show_score'] = $uploadvisibledisabled;
             Session::write('_course', $course);
-
 
             // changing the tool setting: is a student allowed to delete his/her own document
             // database table definition
@@ -1187,12 +1188,11 @@ switch ($action) {
                 echo '<div class="row">';
                 echo '<div class="span9">';
 
-                $userList = CourseManager::get_user_list_from_course_code($course_code, $session_id);
+                $userList = CourseManager::get_user_list_from_course_code($course_code, $session_id, null, null, STUDENT);
                 display_student_publications_list($work_id, $my_folder_data, $work_parents, $origin, $add_query, count($userList));
 
                 echo '</div>';
                 echo '<div class="span3">';
-
 
                 $table = new HTML_Table(array('class' => 'data_table'));
                 $column = 0;
@@ -1218,6 +1218,7 @@ switch ($action) {
                     $row++;
                     $column = 0;
                 }
+
                 echo $table->toHtml();
             echo '</div>';
         } else {

@@ -23,12 +23,13 @@ if (empty($work_data)) {
 
 //prevent some stuff
 if (empty($path)) {
-	$path = '/';
+    $path = '/';
 }
 
 if (empty($_course) || empty($_course['path'])) {
     api_not_allowed();
 }
+
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 
 //zip library for creation of the zipfile
@@ -63,6 +64,17 @@ if (api_is_allowed_to_edit()) {
  			        props.visibility<>'2' ";
 
 } else {
+    $courseInfo = api_get_course_info();
+    $userCondition = null;
+
+    // All users
+    if ($courseInfo['show_score'] == 0) {
+        // Do another filter
+    } else {
+        // Only teachers
+        $userCondition = " AND props.insert_user_id='".api_get_user_id();
+    }
+
     //for other users, we need to create a zipfile with only visible files and folders
     $sql = "SELECT url, title, description, insert_user_id, insert_date, contains_file
             FROM $tbl_student_publication AS work INNER JOIN $prop_table AS props
@@ -74,8 +86,8 @@ if (api_is_allowed_to_edit()) {
                     work.accepted = 1 AND
                     work.parent_id = $work_id AND
                     work.filetype='file' AND
-                    props.visibility = '1' AND
-                    props.insert_user_id='".api_get_user_id()."'
+                    props.visibility = '1'
+                    $userCondition
             ";
 }
 
@@ -104,7 +116,6 @@ while ($not_deleted_file = Database::fetch_assoc($query)) {
         @unlink($work_temp);
     }
 }
-
 
 if (!empty($files)) {
     //logging

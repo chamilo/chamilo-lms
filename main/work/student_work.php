@@ -89,11 +89,24 @@ foreach ($workPerUser as $work) {
         }
         $table->setCellContents($row, $column, $score);
         $column++;
-        $url = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&action=edit&item_id='.$userResult['id'].'&id='.$workId.'&parent_id='.$workId;
-        $link = Display::url(Display::return_icon('edit.png'), $url);
 
-        $table->setCellContents($row, $column, $link);
-        //$table->setCellContents($row, $column, $link);
+        // Actions
+        $links = null;
+
+        if (empty($userResult['url'])) {
+            // is a text
+            $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$userResult['id'];
+            $links .= Display::url(Display::return_icon('default.png'), $url);
+        } else {
+
+            $url = api_get_path(WEB_CODE_PATH).'work/download.php?'.api_get_cidreq().'&id='.$userResult['id'];
+            $links .= Display::url(Display::return_icon('save.png'), $url);
+        }
+
+        $url = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&action=edit&item_id='.$userResult['id'].'&id='.$workId.'&parent_id='.$workId;
+        $links .= Display::url(Display::return_icon('edit.png'), $url);
+
+        $table->setCellContents($row, $column, $links);
 
         $row++;
         $column = 0;

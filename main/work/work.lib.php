@@ -890,7 +890,7 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
             }*/
 
             if (!empty($homework)) {
-                $row[] = !empty($homework['ends_on']) && $homework['ends_on'] != '0000-00-00 00:00:00' ? api_get_utc_datetime($homework['ends_on']): '-';
+                $row[] = !empty($homework['ends_on']) && $homework['ends_on'] != '0000-00-00 00:00:00' ? api_get_local_time($homework['ends_on']): '-';
             } else {
                 $row[] = '-';
             }

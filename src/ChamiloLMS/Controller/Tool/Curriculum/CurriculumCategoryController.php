@@ -14,7 +14,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
  * Class CurriculumController
- * @todo @route and @method function don't work yet
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
@@ -25,7 +24,7 @@ class CurriculumCategoryController extends CommonController
      * @Route("/")
      * @Method({"GET"})
      */
-    public function indexAction()
+    public function indexAction($courseCode)
     {
         $options = array(
             'decorate' => true,
@@ -33,24 +32,25 @@ class CurriculumCategoryController extends CommonController
             'rootClose' => '</ul>',
             'childOpen' => '<li>',
             'childClose' => '</li>',
-            'nodeDecorator' => function($row) {
+            'nodeDecorator' => function ($row) use ($courseCode) {
                 $addChildren = null;
                 $items = null;
                 if ($row['lvl'] <= 0) {
-                    $addChildren = '<a class="btn" href="'.$this->createUrl('add_from_parent_link', array('id' => $row['id'])).'">Add children</a>';
+
+                    $addChildren = '<a class="btn" href="'.$this->createUrl('add_from_parent_link', array('courseCode' => $courseCode, 'id' => $row['id'])).'">Add children</a>';
                 } else {
-                    $addChildren = '<a class="btn" href="'.$this->createUrl('add_from_category', array('id' => $row['id'])).'">Add items</a>';
+                    $addChildren = '<a class="btn" href="'.$this->createUrl('add_from_category', array('courseCode' => $courseCode, 'id' => $row['id'])).'">Add items</a>';
                     //$items = $row['items'];
                     $items = '<ul>';
                     foreach ($row['items'] as $item) {
-                        $url = ' <a class="btn" href="'.$this->createUrl('edit_item', array('id' => $item['id'])).'">Edit</a>';
+                        $url = ' <a class="btn" href="'.$this->createUrl('edit_item', array('courseCode' => $courseCode, 'id' => $item['id'])).'">Edit</a>';
                         $items.= '<li>'.$item['title']." (item) ".$url.'</li>';
                     }
                     $items .= '</ul>';
                 }
-                $readLink = '<a href="'.$this->createUrl('read_link', array('id' => $row['id'])).'">'.$row['title'].'</a>';
-                $editLink = '<a class="btn" href="'.$this->createUrl('update_link', array('id' => $row['id'])).'">Edit</a>';
-                $deleteLink = '<a class="btn" href="'.$this->createUrl('delete_link', array('id' => $row['id'])).'"/>Delete</a>';
+                $readLink = '<a href="'.$this->createUrl('read_link', array('courseCode' => $courseCode, 'id' => $row['id'])).'">'.$row['title'].'</a>';
+                $editLink = '<a class="btn" href="'.$this->createUrl('update_link', array('courseCode' => $courseCode, 'id' => $row['id'])).'">Edit</a>';
+                $deleteLink = '<a class="btn" href="'.$this->createUrl('delete_link', array('courseCode' => $courseCode, 'id' => $row['id'])).'"/>Delete</a>';
 
                 return $readLink.' '.$addChildren.' '.$editLink.' '.$deleteLink.$items;
             }
@@ -71,19 +71,20 @@ class CurriculumCategoryController extends CommonController
             ->getQuery();
 
         $htmlTree = $repo->buildTree($query->getArrayResult(), $options);
+
         $this->get('template')->assign('tree', $htmlTree);
         $this->get('template')->assign('links', $this->generateLinks());
         $response = $this->get('template')->render_template($this->getTemplatePath().'list.tpl');
-        return new Response($response, 200, array());
 
+        return new Response($response, 200, array());
     }
 
     /**
     *
-    * @Route("/{id}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Route("/{id}/show", requirements={"id" = "\d+"})
     * @Method({"GET"})
     */
-    public function readAction($id)
+    public function readCategoryAction($courseCode, $id)
     {
         return parent::readAction($id);
     }
@@ -92,7 +93,7 @@ class CurriculumCategoryController extends CommonController
     * @Route("/add")
     * @Method({"GET"})
     */
-    public function addAction()
+    public function addCategoryAction($courseCode)
     {
         return parent::addAction();
     }
@@ -137,20 +138,20 @@ class CurriculumCategoryController extends CommonController
 
     /**
     *
-    * @Route("/{id}/edit", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Route("/{id}/edit", requirements={"id" = "\d+"})
     * @Method({"GET"})
     */
-    public function editAction($id)
+    public function editCategoryAction($courseCode, $id)
     {
         return parent::editAction($id);
     }
 
     /**
     *
-    * @Route("/{id}/delete", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Route("/{id}/delete", requirements={"id" = "\d+"})
     * @Method({"GET"})
     */
-    public function deleteAction($id)
+    public function deleteCategoryAction($courseCode, $id)
     {
         return parent::deleteAction($id);
     }
@@ -166,7 +167,6 @@ class CurriculumCategoryController extends CommonController
         $routes['add_from_parent_link'] = 'curriculum_category.controller:addFromParentAction';
         $routes['add_from_category'] = 'curriculum_item.controller:addFromCategoryAction';
         $routes['edit_item'] = 'curriculum_item.controller:editAction';
-
 
         return $routes ;
     }

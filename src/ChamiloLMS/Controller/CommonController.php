@@ -12,12 +12,6 @@ use ChamiloLMS\Controller\BaseController;
  */
 class CommonController extends BaseController
 {
-    public $languageFiles = array();
-
-    public function __construct(Application $app)
-    {
-        parent::__construct($app);
-    }
 
     /**
      * {@inheritdoc}
@@ -43,8 +37,8 @@ class CommonController extends BaseController
     /**
      * {@inheritdoc}
      */
-    protected function getControllerAlias() {
-
+    protected function getControllerAlias()
+    {
     }
 
     /**
@@ -73,7 +67,6 @@ class CommonController extends BaseController
             'list_link' => $className.':indexAction'
         );
     }
-
 
     /**
      * @param Application $app
@@ -129,5 +122,4 @@ class CommonController extends BaseController
         );
         $app['breadcrumbs'] = $bread;
     }
-
 }

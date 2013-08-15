@@ -63,6 +63,7 @@ return array(
     'Gedmo' => array($vendorDir . '/gedmo/doctrine-extensions/lib'),
     'Gaufrette' => array($vendorDir . '/knplabs/gaufrette/src'),
     'FranMoreno' => array($vendorDir . '/franmomu/silex-pagerfanta-provider/src'),
+    'Flint' => array($vendorDir . '/flint/flint/src'),
     'Entity' => array($baseDir . '/main/inc'),
     'Doctrine\\ORM' => array($vendorDir . '/doctrine/orm/lib'),
     'Doctrine\\DBAL\\Migrations' => array($vendorDir . '/doctrine/migrations/lib'),

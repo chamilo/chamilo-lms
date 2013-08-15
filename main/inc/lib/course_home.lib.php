@@ -1,7 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-class CourseHome {
+class CourseHome
+{
 
     /**
      * Gets the html content to show in the 3 column view
@@ -18,7 +19,7 @@ class CourseHome {
         $course_id = api_get_course_int_id();
 
         switch ($cat) {
-            case 'Basic' :
+            case 'Basic':
                 $condition_display_tools = ' WHERE a.c_id = '.$course_id.' AND  a.link=t.link AND t.position="basic" ';
                 if ((api_is_coach() || api_is_course_tutor()) && $_SESSION['studentview'] != 'studentview') {
                     $condition_display_tools = ' WHERE a.c_id = '.$course_id.' AND a.link=t.link AND (t.position="basic" OR a.name = "'.TOOL_TRACKING.'") ';
@@ -27,7 +28,7 @@ class CourseHome {
                 $sql = "SELECT a.*, t.image img, t.row_module, t.column_module  FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
                         $condition_display_tools ORDER BY t.row_module, t.column_module";
                 break;
-            case 'External' :
+            case 'External':
                 if (api_is_allowed_to_edit()) {
                     $sql = "SELECT a.*, t.image img FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
                             WHERE a.c_id = $course_id AND ((a.link=t.link AND t.position='external')
@@ -40,12 +41,12 @@ class CourseHome {
                             ORDER BY a.id";
                 }
                 break;
-            case 'courseAdmin' :
+            case 'courseAdmin':
                 $sql = "SELECT a.*, t.image img, t.row_module, t.column_module  FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
                         WHERE a.c_id = $course_id AND admin=1 AND a.link=t.link ORDER BY t.row_module, t.column_module";
                 break;
 
-            case 'platformAdmin' :
+            case 'platformAdmin':
                $sql = "SELECT *, image img FROM $TBL_ACCUEIL WHERE c_id = $course_id AND visibility = 2 ORDER BY id";
         }
         $result = Database::query($sql);
@@ -205,7 +206,8 @@ class CourseHome {
      * @param string $course_tool_category	contains the category of tools to display:
      * "Public", "PublicButHide", "courseAdmin", "claroAdmin"
      */
-    public static function show_tool_2column($course_tool_category) {
+    public static function show_tool_2column($course_tool_category)
+    {
         $html = '';
         $web_code_path = api_get_path(WEB_CODE_PATH);
         $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
@@ -249,13 +251,13 @@ class CourseHome {
 
         switch ($course_tool_category)  {
             case TOOL_PUBLIC:
-                $sql_links="SELECT tl.*, tip.visibility
+                $sql_links = "SELECT tl.*, tip.visibility
                         FROM $course_link_table tl
                         LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tl.c_id = tip.c_id AND tl.c_id = $course_id AND tip.ref=tl.id
                         WHERE tl.on_homepage='1' AND tip.visibility = 1";
                 break;
             case TOOL_PUBLIC_BUT_HIDDEN:
-                $sql_links="SELECT tl.*, tip.visibility
+                $sql_links = "SELECT tl.*, tip.visibility
                     FROM $course_link_table tl
                     LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tl.c_id = tip.c_id AND tl.c_id = $course_id AND tip.ref=tl.id
                     WHERE tl.on_homepage='1' AND tip.visibility = 0";
@@ -403,7 +405,8 @@ class CourseHome {
      * @return array
      */
 
-    public static function get_tools_category($course_tool_category) {
+    public static function get_tools_category($course_tool_category)
+    {
         $course_tool_table  = Database::get_course_table(TABLE_TOOL_LIST);
         $is_platform_admin  = api_is_platform_admin();
         $all_tools_list = array();
@@ -415,46 +418,46 @@ class CourseHome {
 
         switch ($course_tool_category) {
             case TOOL_STUDENT_VIEW:
-                    $condition_display_tools = ' WHERE visibility = 1 AND (category = "authoring" OR category = "interaction" OR category = "plugin") ';
-                    if ((api_is_coach() || api_is_course_tutor()) && $_SESSION['studentview'] != 'studentview') {
-                        $condition_display_tools = ' WHERE (visibility = 1 AND (category = "authoring" OR category = "interaction" OR category = "plugin") OR (name = "'.TOOL_TRACKING.'") )   ';
-                    }
-                    $sql = "SELECT * FROM $course_tool_table  $condition_display_tools AND c_id = $course_id $condition_session ORDER BY id";
-                    $result = Database::query($sql);
-                    $col_link ="##003399";
-                    break;
+                $condition_display_tools = ' WHERE visibility = 1 AND (category = "authoring" OR category = "interaction" OR category = "plugin") ';
+                if ((api_is_coach() || api_is_course_tutor()) && $_SESSION['studentview'] != 'studentview') {
+                    $condition_display_tools = ' WHERE (visibility = 1 AND (category = "authoring" OR category = "interaction" OR category = "plugin") OR (name = "'.TOOL_TRACKING.'") )   ';
+                }
+                $sql = "SELECT * FROM $course_tool_table  $condition_display_tools AND c_id = $course_id $condition_session ORDER BY id";
+                $result = Database::query($sql);
+                $col_link ="##003399";
+                break;
             case TOOL_AUTHORING:
-                    $sql = "SELECT * FROM $course_tool_table WHERE category = 'authoring' AND c_id = $course_id $condition_session ORDER BY id";
-                    $result = Database::query($sql);
-                    $col_link ="##003399";
-                    break;
+                $sql = "SELECT * FROM $course_tool_table WHERE category = 'authoring' AND c_id = $course_id $condition_session ORDER BY id";
+                $result = Database::query($sql);
+                $col_link ="##003399";
+                break;
             case TOOL_INTERACTION:
-                    $sql = "SELECT * FROM $course_tool_table WHERE category = 'interaction' AND c_id = $course_id $condition_session ORDER BY id";
-                    $result = Database::query($sql);
-                    $col_link ="##003399";
-                    break;
+                $sql = "SELECT * FROM $course_tool_table WHERE category = 'interaction' AND c_id = $course_id $condition_session ORDER BY id";
+                $result = Database::query($sql);
+                $col_link ="##003399";
+                break;
             case TOOL_ADMIN_VISIBLE:
-                    $sql = "SELECT * FROM $course_tool_table WHERE category = 'admin' AND visibility ='1' AND c_id = $course_id $condition_session ORDER BY id";
-                    $result = Database::query($sql);
-                    $col_link ="##003399";
-                    break;
+                $sql = "SELECT * FROM $course_tool_table WHERE category = 'admin' AND visibility ='1' AND c_id = $course_id $condition_session ORDER BY id";
+                $result = Database::query($sql);
+                $col_link ="##003399";
+                break;
             case TOOL_ADMIN_PLATFORM:
-                    $sql = "SELECT * FROM $course_tool_table WHERE category = 'admin' AND c_id = $course_id $condition_session ORDER BY id";
-                    $result = Database::query($sql);
-                    $col_link ="##003399";
-                    break;
+                $sql = "SELECT * FROM $course_tool_table WHERE category = 'admin' AND c_id = $course_id $condition_session ORDER BY id";
+                $result = Database::query($sql);
+                $col_link ="##003399";
+                break;
             case TOOL_COURSE_PLUGIN:
-                    //Other queries recover id, name, link, image, visibility, admin, address, added_tool, target, category and session_id
-                    // but plugins are not present in the tool table, only globally and inside the course_settings table once configured
-                    $sql = "SELECT * FROM $course_tool_table WHERE category = 'plugin' AND c_id = $course_id $condition_session ORDER BY id";
-                    $result = Database::query($sql);
-                    break;
+                //Other queries recover id, name, link, image, visibility, admin, address, added_tool, target, category and session_id
+                // but plugins are not present in the tool table, only globally and inside the course_settings table once configured
+                $sql = "SELECT * FROM $course_tool_table WHERE category = 'plugin' AND c_id = $course_id $condition_session ORDER BY id";
+                $result = Database::query($sql);
+                break;
         }
 
         //Get the list of hidden tools - this might imply performance slowdowns
         // if the course homepage is loaded many times, so the list of hidden
         // tools might benefit from a shared memory storage later on
-        $list = api_get_settings('Tools','list', api_get_current_access_url_id());
+        $list = api_get_settings('Tools', 'list', api_get_current_access_url_id());
         $hide_list = array();
         $check = false;
 
@@ -575,20 +578,21 @@ class CourseHome {
      * @param   int rows
      * @return void
      */
-    public static function show_tools_category($all_tools_list, $rows = false) {
+    public static function show_tools_category($all_tools_list, $rows = false)
+    {
         $rowDiv =  '<div class="row-fluid">';
         $theme = api_get_setting('homepage_view');
         if ($theme == 'vertical_activity') {
             //ordering by get_lang name
             $order_tool_list = array();
             if (is_array($all_tools_list) && count($all_tools_list)>0) {
-                foreach($all_tools_list as $key=>$new_tool) {
+                foreach ($all_tools_list as $key => $new_tool) {
                     $tool_name = self::translate_tool_name($new_tool);
                     $order_tool_list [$key]= $tool_name;
                 }
                 natsort($order_tool_list);
                 $my_temp_tool_array = array();
-                foreach($order_tool_list as $key=>$new_tool) {
+                foreach ($order_tool_list as $key => $new_tool) {
                     $my_temp_tool_array[] = $all_tools_list[$key];
                 }
                 $all_tools_list = $my_temp_tool_array;
@@ -596,6 +600,7 @@ class CourseHome {
                 $all_tools_list = array();
             }
         }
+        $courseInfo = api_get_course_info();
         $web_code_path      = api_get_path(WEB_CODE_PATH);
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
         $is_platform_admin  = api_is_platform_admin();
@@ -613,6 +618,14 @@ class CourseHome {
 
                 $tool['original_link'] = $tool['link'];
 
+                // Re-writing URL for new tools
+                $newTools = array(TOOL_CURRICULUM);
+
+                $toolName = isset($tool['name']) ? $tool['name'] : null;
+                if (in_array($toolName, $newTools)) {
+                    $tool['link'] = $courseInfo['course_web_public_url'].$tool['name'].'/';
+                }
+
                 if ($tool['image'] == 'scormbuilder.gif') {
                     // display links to lp only for current session
                     /*if ($session_id != $tool['session_id']) {
@@ -620,7 +633,7 @@ class CourseHome {
                     }*/
                     // check if the published learnpath is visible for student
                     $published_lp_id = self::get_published_lp_id_from_link($tool['link']);
-                    if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($published_lp_id,api_get_user_id())) {
+                    if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($published_lp_id, api_get_user_id())) {
                         continue;
                     }
                 }
@@ -678,9 +691,9 @@ class CourseHome {
                     $tool['link'] = $web_code_path.$tool['link'];
                 }
                 if ($tool['visibility'] == '0' && $tool['admin'] != '1') {
-                      $class = 'invisible';
-                      $info = pathinfo($tool['image']);
-                      $basename = basename($tool['image'], '.'.$info['extension']); // $file is set to "index"
+                    $class = 'invisible';
+                    $info = pathinfo($tool['image']);
+                    $basename = basename($tool['image'], '.'.$info['extension']); // $file is set to "index"
                     $tool['image'] = $basename.'_na.'.$info['extension'];
                 } else {
                     $class = '';
@@ -698,7 +711,7 @@ class CourseHome {
 
                 //$tool['link'] = htmlspecialchars($tool['link']) ;
                 //@todo this visio stuff should be removed
-                if (strpos($tool['name'],'visio_') !== false) {
+                if (strpos($tool['name'], 'visio_') !== false) {
                     $tool_link_params = array(
                         'id'      => 'tooldesc_'.$tool["id"],
                         'href'    => '"javascript: void(0);"',
@@ -720,6 +733,8 @@ class CourseHome {
                             'class'   => $class,
                             'target'  =>  '_blank');
                     } else {
+
+
                         $tool_link_params = array(
                             'id'      => 'tooldesc_'.$tool["id"],
                             'href'    => $tool['link'],
@@ -800,7 +815,7 @@ class CourseHome {
                                 $image = $original_image;
                         }
 
-                        $data .= Display::url($image , $item['url_params']['href'], $item['url_params']);
+                        $data .= Display::url($image, $item['url_params']['href'], $item['url_params']);
                         $html .= Display::div($data, array('class'=>'big_icon')); //box-image reflection
                         $html .= Display::div('<h4>'.$item['visibility'].$item['extra'].$item['link'].'</h4>', array('class'=>'content'));
                         $html .=  '</div>';
@@ -813,7 +828,6 @@ class CourseHome {
 
                         break;
                     case 'activity':
-
                         if ($counter == 0) {
                             $html .=  $rowDiv;
                         }
@@ -860,7 +874,8 @@ class CourseHome {
      * @param id	session id
      * @return string	session data
      */
-    public static function show_session_data($id_session) {
+    public static function show_session_data($id_session)
+    {
 
         if ($id_session != strval(intval($id_session))) {
             return '';
@@ -884,7 +899,7 @@ class CourseHome {
 
         $output  = '';
         if (!empty($session_category)) {
-            $output .= '<tr><td>'. get_lang('SessionCategory') . ': ' . '<b>' . $session_category_name .'</b></td></tr>';
+            $output .= '<tr><td>'. get_lang('SessionCategory').': '.'<b>'.$session_category_name.'</b></td></tr>';
         }
         $output .= '<tr>
                         <td style="width:50%">'. get_lang('SessionName') . ': ' . '<b>' . $session_info['name'] .'</b></td>
@@ -900,7 +915,8 @@ class CourseHome {
      * @param array $tool		The input record.
      * @return string			Returns the name of the corresponding tool.
      */
-    public static function translate_tool_name(& $tool) {
+    public static function translate_tool_name(& $tool)
+    {
         static $already_translated_icons = array(
             'file_html.gif',
             'file_html_na.gif',

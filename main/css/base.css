@@ -5390,15 +5390,21 @@ i.size-32.icon-new-work {
     list-style-type: none;
 }
 .trajectory .control-group {
-    margin-left: 25px;
+    /* margin-left: 25px; */
 }
 
 .trajectory .control-group label {
 }
 
+.trajectory .btn-group {
+    margin-top: -50px;
+    margin-right: -10px;
+    float: right;
+}
 
 #saveQuestionBar {
     width:150px;
     bottom:140px;
     position:fixed;
 }
+

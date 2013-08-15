@@ -635,10 +635,6 @@ class Template
 
         // Preparing values for the menu
 
-        // Logout link.
-        // See the SecurityServiceProvider definition
-        $this->assign('logout_link', $this->app['url_generator']->generate('admin_logout'));
-
         // Profile link.
 
         $this->assign('is_profile_editable', api_is_profile_readable());

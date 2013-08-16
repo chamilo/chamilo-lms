@@ -186,7 +186,7 @@ class FillBlanks extends Question
 
 		$this->save();
         $objAnswer = new answer($this->id);
-        $objAnswer->createAnswer($answer, 0, '', 0, '');
+        $objAnswer->createAnswer($answer, 0, '', 0, '1');
         $objAnswer->save();
 	}
 

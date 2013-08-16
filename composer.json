@@ -50,7 +50,7 @@
         "symfony/translation": "~2.3",
         "symfony/dependency-injection": "~2.3",
         "symfony/filesystem": "~2.3",
-        "symfony/finder": "~2.3",
+        "symfony/finder": "2.3.*@dev",
         "monolog/monolog" : ">=1.0.0",
         "symfony/config": "~2.3",
         "symfony/yaml": "~2.3",
@@ -62,7 +62,7 @@
         "gedmo/doctrine-extensions": "2.3.*@dev",
         "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
         "pagerfanta/pagerfanta": "dev-master",
-        "franmomu/silex-pagerfanta-provider": "2.3.*@dev",
+        "franmomu/silex-pagerfanta-provider": "1.0.*@dev",
         "igorw/config-service-provider": "1.2.*@dev",
         "mpdf/mpdf": "v5.6.1",
         "ezyang/htmlpurifier": "v4.5.0",
@@ -84,7 +84,7 @@
         "flint/flint" : "~1.4"
     },
     "require-dev": {
-        "symfony/browser-kit": "2.3.*@dev",
+        "symfony/browser-kit": "~2.3",
         "symfony/web-profiler-bundle": "~2.3",
         "silex/web-profiler": "1.0.x-dev",
         "natxet/CssMin": "dev-master",

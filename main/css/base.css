@@ -2601,7 +2601,7 @@ div.admin_section h4 {
 }
 
 .question_options input[type="text"] {
-    width:100%;
+    width: 80px;
     padding:0px;
     margin:2px 2px 2px 0px;
 }

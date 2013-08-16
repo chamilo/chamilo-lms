@@ -1,16 +1,17 @@
 ;(function($){
 /**
- * jqGrid Chinese Translation for v3.6
- * waiting 2010.01.18
- * http://waiting.javaeye.com/
+ * jqGrid Chinese Translation for v4.2
+ * henryyan 2011.11.30
+ * http://www.wsria.com
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
  * 
- * update 2010.05.04
+ * update 2011.11.30
  *		add double u3000 SPACE for search:odata to fix SEARCH box display err when narrow width from only use of eq/ne/cn/in/lt/gt operator under IE6/7
 **/
-$.jgrid = {
+$.jgrid = $.jgrid || {};
+$.extend($.jgrid,{
 	defaults : {
 		recordtext: "{0} - {1}\u3000共 {2} 条",	// 共字前是全角空格
 		emptyrecords: "无数据显示",
@@ -21,11 +22,9 @@ $.jgrid = {
 		caption: "搜索...",
 		Find: "查找",
 		Reset: "重置",
-		odata : ['等于\u3000\u3000', '不等\u3000\u3000', '小于\u3000\u3000', '小于等于','大于\u3000\u3000','大于等于', 
-			'开始于','不开始于','属于\u3000\u3000','不属于','结束于','不结束于','包含\u3000\u3000','不包含'],
-		groupOps: [	{ op: "AND", text: "所有" },	{ op: "OR",  text: "任一" }	],
-		matchText: " 匹配",
-		rulesText: " 规则"
+		odata : [{oper:'eq', text:'等于\u3000\u3000'},{oper:'ne', text: '不等\u3000\u3000'}, { oper:'lt', text:'小于\u3000\u3000'},{ oper:'le', text: '小于等于'},{ oper:'gt', text:'大于\u3000\u3000'},{ oper:'ge', text:'大于等于'},
+			{oper:'bw', text:'开始于'},{ oper:'bn', text:'不开始于'},{ oper:'in', text:'属于\u3000\u3000'},{ oper:'ni', text:'不属于'},{ oper:'ew', text:'结束于'},{ oper:'en', text:'不结束于'},{ oper:'cn', text:'包含\u3000\u3000'},{ oper:'nc', text:'不包含'},{ oper:'nu', text:'空值于\u3000\u3000'},{ oper:'nn', text:'非空值'}],
+		groupOps: [	{ op: "AND", text: "所有" },	{ op: "OR",  text: "任一" }	]
 	},
 	edit : {
 		addCaption: "添加记录",
@@ -107,6 +106,7 @@ $.jgrid = {
 			S: function (j) {return j < 11 || j > 13 ? ['st', 'nd', 'rd', 'th'][Math.min((j - 1) % 10, 3)] : 'th'},
 			srcformat: 'Y-m-d',
 			newformat: 'm-d-Y',
+			parseRe : /[Tt\\\/:_;.,\t\s-]/,
 			masks : {
 				ISO8601Long:"Y-m-d H:i:s",
 				ISO8601Short:"Y-m-d",
@@ -128,5 +128,5 @@ $.jgrid = {
 		checkbox : {disabled:true},
 		idName : 'id'
 	}
-};
+});
 })(jQuery);

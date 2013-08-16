@@ -86,7 +86,7 @@ $(function () {
         buildUploadRow: function (files, index) {
 			$('.files').show();
             return $('<tr><td>' + files[index].name + '<\/td>' +
-					'<td class=\"file_upload_progress\"><div><\/div><\/td>' +                    
+					'<td class=\"file_upload_progress\"><div><\/div><\/td>' +
                     '<td class=\"file_upload_cancel\">' +
                     '<button class=\"ui-state-default ui-corner-all\" title=\"".get_lang('Cancel')."\">' + '<span class=\"ui-icon ui-icon-cancel\">".get_lang('Cancel')."<\/span>' +'<\/button>'+
 					'<\/td><\/tr>');
@@ -94,7 +94,7 @@ $(function () {
         buildDownloadRow: function (file) {
             return $('<tr><td>' + file.name + '<\/td> <td> ' + file.size + ' <\/td>  <td>&nbsp;' + file.result + ' <\/td> <\/tr>');
         }
-    });    
+    });
     $('#tabs').tabs();
 });
 </script>";
@@ -112,7 +112,7 @@ $selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']
 $document_data  = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true);
 if (empty($document_data)) {
     $document_id  = $parent_id =  0;
-    $path = '/';    
+    $path = '/';
 } else {
     $document_id    = $document_data['id'];
     $path           = $document_data['path'];
@@ -120,13 +120,13 @@ if (empty($document_data)) {
 }
 $group_properties = array();
 // This needs cleaning!
-if (api_get_group_id()) { 
+if (api_get_group_id()) {
     // If the group id is set, check if the user has the right to be here
 	// Needed for group related stuff
 	require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 	// Get group info
 	$group_properties = GroupManager::get_group_properties(api_get_group_id());
-	
+
 	if ($is_allowed_to_edit || GroupManager::is_user_in_group($_user['user_id'], api_get_group_id())) { // Only courseadmin or group members allowed
 		$to_group_id = api_get_group_id();
 		$req_gid = '&amp;gidReq='.api_get_group_id();
@@ -135,7 +135,7 @@ if (api_get_group_id()) {
 		api_not_allowed(true);
 	}
 } elseif ($is_allowed_to_edit || is_my_shared_folder(api_get_user_id(), $path, api_get_session_id())) {
-     
+
     // Admin for "regular" upload, no group documents. And check if is my shared folder
 	$to_group_id = 0;
 	$req_gid = '';
@@ -190,7 +190,7 @@ Display::display_header($nameTools, 'Doc');
 /*	Here we do all the work */
 
 // User has submitted a file
-if (!empty($_FILES)) {    
+if (!empty($_FILES)) {
     DocumentManager::upload_document($_FILES, $_POST['curdirpath'], $_POST['title'], $_POST['comment'], $_POST['unzip'], $_POST['if_exists'], $_POST['index_document'], true);
 }
 
@@ -230,7 +230,7 @@ $course_quota = format_file_size(DocumentManager::get_course_quota() - DocumentM
 
 $label = get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.get_lang('DocumentQuota').': '.$course_quota;
 
-$form->addElement('file', 'file', array(get_lang('File'), $label), 'id="user_upload" size="45"');
+$form->addElement('file', 'file', array(get_lang('File'), $label), 'style="width: 250px" id="user_upload"');
 
 $form->addElement('text', 'title', get_lang('Title'), array('size' => '20', 'style' => 'width:300px', 'id' => 'title_file'));
 $form->addElement('textarea', 'comment', get_lang('Comment'), 'wrap="virtual" style="width:300px;"');
@@ -281,11 +281,11 @@ $multiple_form =  get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadFi
 //<div style="width:50%;margin:0 auto;"> '.Display::div(Display::return_icon('folder_document.png', '', array(), 64), array('style'=>'float:left')).' '.get_lang('UploadFiles').'</div>
 $multiple_form .=  '
 	<center>
-	<form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">    
-    	<input type="hidden" name="curdirpath" value="'.$path.'" />    
+	<form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">
+    	<input type="hidden" name="curdirpath" value="'.$path.'" />
     	<input type="file" name="file" multiple>
     	<button type="submit">Upload</button>
-    	'.get_lang('UploadFiles').' 
+    	'.get_lang('UploadFiles').'
 	</form>
 	</center>
 	<table style="display:none; width:50%" class="files data_table">
@@ -301,6 +301,6 @@ if ($nav_info ['name'] == 'Internet Explorer') {
 	echo $simple_form;
 } else {
 	$headers = array(get_lang('Send') , get_lang('Send').' ('.get_lang('Simple').')');
-	echo Display::tabs($headers, array($multiple_form, $simple_form),'tabs');	
+	echo Display::tabs($headers, array($multiple_form, $simple_form),'tabs');
 }
 Display::display_footer();

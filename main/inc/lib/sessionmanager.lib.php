@@ -11,8 +11,13 @@
  * Code
  */
 
-class SessionManager {
-	private function __construct() {
+/**
+ * Class SessionManager
+ */
+class SessionManager
+{
+	private function __construct()
+    {
 	}
 
     /**
@@ -20,7 +25,8 @@ class SessionManager {
      * @param   int     Session ID
      * @return  array   Session details (id, id_coach, name, nbr_courses, nbr_users, nbr_classes, date_start, date_end, nb_days_access_before_beginning,nb_days_access_after_end, session_admin_id)
      */
-    public static function fetch($id) {
+    public static function fetch($id)
+    {
     	$t = Database::get_main_table(TABLE_MAIN_SESSION);
         if ($id != strval(intval($id))) { return array(); }
         $s = "SELECT * FROM $t WHERE id = $id";
@@ -296,7 +302,6 @@ class SessionManager {
         if (!empty($options['order'])) {
             $query .= " ORDER BY ".$options['order'];
         }
-        //var_dump($query);
 
 		$result = Database::query($query);
 		$formatted_sessions = array();
@@ -576,6 +581,17 @@ class SessionManager {
 		event_system(LOG_SESSION_DELETE, LOG_SESSION_ID, $id_checked, api_get_utc_datetime(), $user_id);
 	}
 
+    public static function clear_session_ref_promotion($id_promotion) {
+        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $id_promotion = intval($id_promotion);
+        $update_sql = "UPDATE $tbl_session SET promotion_id=0 WHERE promotion_id='$id_promotion'";
+        if (Database::query($update_sql)) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 	 /**
 	  * Subscribes users (students)  to the given session and optionally (default) unsubscribes previous users
 	  * @author Carlos Vargas from existing code
@@ -1712,6 +1728,7 @@ class SessionManager {
             	foreach ($courses as $course) {
             		$short_courses[] = $course;
             	}
+
             }
             $courses = null;
 
@@ -1754,6 +1771,7 @@ class SessionManager {
                          $new_short_courses[] = $course_data['code'];
                     }
                 }
+
                 $short_courses = $new_short_courses;
                 $res = self::add_courses_to_session($sid, $short_courses, true);
                 $short_courses = null;
@@ -1849,16 +1867,52 @@ class SessionManager {
      * true: if the session exists it will be updated
      * false: if session exists a new session will be created adding a counter session1, session2, etc
      * @param int $user_id
+     * @param $logger
+     * @param array convert a file row to an extra field. Example in CSV file there's a SessionID then it will
+     * converted to extra_external_session_id if you set this: array('SessionId' => 'extra_external_session_id')
+     * @param array extra fields
+     * @param string extra field id
+     * @param int $daysCoachAccessBeforeBeginning
+     * @param int $daysCoachAccessAfterBeginning
+     * @param int $sessionVisibility
      * @return array
      */
-    static function importCSV($file, $updatesession, $user_id = null, $debug = false)
+    static function importCSV(
+        $file,
+        $updatesession,
+        $defaultUserId = null,
+        $logger = null,
+        $extraFields = array(),
+        $extraFieldId = null,
+        $daysCoachAccessBeforeBeginning = null,
+        $daysCoachAccessAfterBeginning = null,
+        $sessionVisibility = 1
+    )
     {
         $content = file($file);
+
         $error_message = null;
         $session_counter = 0;
 
-        if (empty($user_id)) {
-            $user_id = api_get_user_id();
+        if (empty($defaultUserId)) {
+            $defaultUserId = api_get_user_id();
+        }
+
+        $eol = PHP_EOL;
+        if (PHP_SAPI !='cli') {
+            $eol = '<br />';
+        }
+
+        $debug = false;
+        if (isset($logger)) {
+            $debug = true;
+        }
+
+        $extraParameters = null;
+
+        if (!empty($daysCoachAccessBeforeBeginning) && !empty($daysCoachAccessAfterBeginning)) {
+            $extraParameters .= ' , nb_days_access_before_beginning = '.intval($daysCoachAccessBeforeBeginning);
+            $extraParameters .= ' , nb_days_access_after_end = '.intval($daysCoachAccessAfterBeginning);
         }
 
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -1866,12 +1920,15 @@ class SessionManager {
         $tbl_session_course         = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $tbl_session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
+        $sessions = array();
+
         if (!api_strstr($content[0], ';')) {
             $error_message = get_lang('NotCSV');
         } else {
             $tag_names = array();
 
             foreach ($content as $key => $enreg) {
+
                 $enreg = explode(';', trim($enreg));
                 if ($key) {
                     foreach ($tag_names as $tag_key => $tag_name) {
@@ -1893,10 +1950,16 @@ class SessionManager {
                 $user_counter = 0;
                 $course_counter = 0;
 
-                $session_name           = $enreg['SessionName'];
+                if (isset($extraFields) && !empty($extraFields)) {
+                    foreach ($extraFields as $original => $to) {
+                        $enreg[$to] = $enreg[$original];
+                    }
+                }
+
+                $session_name           = Database::escape_string($enreg['SessionName']);
                 $date_start             = $enreg['DateStart'];
                 $date_end               = $enreg['DateEnd'];
-                $visibility             = $enreg['Visibility'];
+                $visibility             = isset($enreg['Visibility']) ? $enreg['Visibility'] : $sessionVisibility;
                 $session_category_id    = $enreg['SessionCategory'];
 
                 // Searching a coach.
@@ -1904,10 +1967,10 @@ class SessionManager {
                     $coach_id = UserManager::get_user_id_from_username($enreg['Coach']);
                     if ($coach_id === false) {
                         // If the coach-user does not exist - I'm the coach.
-                        $coach_id = api_get_user_id();
+                        $coach_id = $defaultUserId;
                     }
                 } else {
-                    $coach_id = api_get_user_id();
+                    $coach_id = $defaultUserId;
                 }
 
                 if (!$updatesession) {
@@ -1919,7 +1982,7 @@ class SessionManager {
                         if ($i > 1) {
                             $suffix = ' - '.$i;
                         }
-                        $sql = 'SELECT 1 FROM '.$tbl_session.' WHERE name="'.Database::escape_string($session_name.$suffix).'"';
+                        $sql = 'SELECT 1 FROM '.$tbl_session.' WHERE name="'.$session_name.$suffix.'"';
                         $rs = Database::query($sql);
 
                         if (Database::result($rs, 0, 0)) {
@@ -1932,26 +1995,46 @@ class SessionManager {
 
                     // Creating the session.
                     $sql_session = "INSERT IGNORE INTO $tbl_session SET
-                            name = '".Database::escape_string($session_name)."',
+                            name = '".$session_name."',
                             id_coach = '$coach_id',
                             date_start = '$date_start',
                             date_end = '$date_end',
                             visibility = '$visibility',
                             session_category_id = '$session_category_id',
-                            session_admin_id=".intval($user_id);
+                            session_admin_id=".intval($defaultUserId).$extraParameters;
                     Database::query($sql_session);
                     $session_id = Database::insert_id();
 
                     if ($debug) {
                         if ($session_id) {
-                            Log::info("Sessions - Session created: #$session_id - $session_name");
+
+                            foreach ($enreg as $key => $value) {
+                                if (substr($key, 0, 6) == 'extra_') { //an extra field
+                                    self::update_session_extra_field_value($session_id, substr($key, 6), $value);
+                                }
+                            }
+
+                            $logger->addInfo("Sessions - Session created: #$session_id - $session_name");
                         } else {
-                            Log::error("Sessions - Session NOT created $session_name");
+                            $logger->addError("Sessions - Session NOT created: $session_name");
                         }
                     }
                     $session_counter++;
                 } else {
-                    $my_session_result = SessionManager::get_session_by_name($session_name);
+                    $sessionId = null;
+
+                    if (isset($extraFields) && !empty($extraFields)) {
+                        $sessionId = self::get_session_id_from_original_id($enreg['extra_'.$extraFieldId], $extraFieldId);
+
+                        if (empty($sessionId)) {
+                            $my_session_result = false;
+                        } else {
+                            $my_session_result = true;
+                        }
+                    } else {
+                        $my_session_result = self::get_session_by_name($session_name);
+                    }
+
                     if ($my_session_result === false) {
 
                         // Creating a session.
@@ -1961,7 +2044,7 @@ class SessionManager {
                                 date_start = '$date_start',
                                 date_end = '$date_end',
                                 visibility = '$visibility',
-                                session_category_id = '$session_category_id'";
+                                session_category_id = '$session_category_id'".$extraParameters;
 
                         Database::query($sql_session);
                         // We get the last insert id.
@@ -1970,23 +2053,51 @@ class SessionManager {
 
                         if ($debug) {
                             if ($session_id) {
-                                Log::info("Sessions - #$session_id created: $session_name");
+                                foreach ($enreg as $key => $value) {
+                                    if (substr($key, 0, 6) == 'extra_') { //an extra field
+                                        self::update_session_extra_field_value($session_id, substr($key, 6), $value);
+                                    }
+                                }
+                                $logger->addInfo("Sessions - #$session_id created: $session_name");
                             } else {
-                                Log::error("Sessions - Session NOT created $session_name");
+                                $logger->addError("Sessions - Session NOT created: $session_name");
                             }
                         }
                     } else {
-                        // The session already exists, update it then.
-                        $sql_session = "UPDATE $tbl_session SET
-                                id_coach = '$coach_id',
-                                date_start = '$date_start',
-                                date_end = '$date_end',
-                                visibility = '$visibility',
-                                session_category_id = '$session_category_id'
-                            WHERE name = '$session_name'";
-                        Database::query($sql_session);
-                        $session_id = Database::query("SELECT id FROM $tbl_session WHERE name='$session_name'");
-                        list($session_id) = Database::fetch_array($session_id);
+
+                        if (isset($sessionId) && !empty($sessionId)) {
+                            // The session already exists, update it then.
+                            $sql_session = "UPDATE $tbl_session SET
+                                    id_coach = '$coach_id',
+                                    date_start = '$date_start',
+                                    date_end = '$date_end',
+                                    visibility = '$visibility',
+                                    session_category_id = '$session_category_id'
+                                WHERE id = '$sessionId'";
+                            //name = '$session_name'
+                            Database::query($sql_session);
+                            $session_id = $sessionId;
+                        } else {
+
+                            // The session already exists, update it then.
+                            $sql_session = "UPDATE $tbl_session SET
+                                    id_coach = '$coach_id',
+                                    date_start = '$date_start',
+                                    date_end = '$date_end',
+                                    visibility = '$visibility',
+                                    session_category_id = '$session_category_id'
+                                WHERE name = '$session_name'";
+                            Database::query($sql_session);
+                            $row = Database::query("SELECT id FROM $tbl_session WHERE name='$session_name'");
+                            list($session_id) = Database::fetch_array($row);
+                        }
+
+                        foreach ($enreg as $key => $value) {
+                            if (substr($key, 0, 6) == 'extra_') { //an extra field
+                                self::update_session_extra_field_value($session_id, substr($key, 6), $value);
+                            }
+                        }
+
                         Database::query("DELETE FROM $tbl_session_user WHERE id_session='$session_id'");
                         Database::query("DELETE FROM $tbl_session_course WHERE id_session='$session_id'");
                         Database::query("DELETE FROM $tbl_session_course_user WHERE id_session='$session_id'");
@@ -2003,11 +2114,11 @@ class SessionManager {
                         if ($user_id !== false) {
                             // Insert new users.
                             $sql = "INSERT IGNORE INTO $tbl_session_user SET
-                                    id_user='$user_id',
+                                    id_user = '$user_id',
                                     id_session = '$session_id'";
                             Database::query($sql);
                             if ($debug) {
-                                Log::info("Sessions - Adding User #$user_id to session #$session_id");
+                                $logger->addInfo("Sessions - Adding User #$user_id ($user) to session #$session_id");
                             }
                             $user_counter++;
                         }
@@ -2020,9 +2131,6 @@ class SessionManager {
                     $course_code = api_strtoupper(api_substr($course, 0, api_strpos($course, '[')));
 
                     if (CourseManager::course_exists($course_code)) {
-
-                        // If the course exists we continue.
-                        $course_info = CourseManager::get_course_information($course_code);
 
                         $coach = api_strstr($course, '[');
                         $coach = api_substr($coach, 1, api_strpos($coach,']') - 1);
@@ -2043,7 +2151,7 @@ class SessionManager {
                         Database::query($sql_course);
 
                         if ($debug) {
-                            Log::info("Sessions - Adding course '$course_code' to session #$session_id");
+                            $logger->addInfo("Sessions - Adding course '$course_code' to session #$session_id");
                         }
                         $course_counter++;
 
@@ -2070,10 +2178,10 @@ class SessionManager {
                                             status = 2 ";
                                     Database::query($sql);
                                     if ($debug) {
-                                        Log::info("Sessions - Adding course coach: user #$coach_id to course: '$course_code' and session #$session_id");
+                                        $logger->addInfo("Sessions - Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
                                     }
                                 } else {
-                                    $error_message .= get_lang('UserDoesNotExist').' : '.$user.'<br />';
+                                    $error_message .= get_lang('UserDoesNotExist').' : '.$course_coach.$eol;
                                 }
                             }
                         }
@@ -2081,8 +2189,10 @@ class SessionManager {
                         $users_in_course_counter = 0;
 
                         // Adding the relationship "Session - Course - User".
+
                         foreach ($course_users as $user) {
                             $user_id = UserManager::get_user_id_from_username($user);
+
                             if ($user_id !== false) {
                                 $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
                                         id_user='$user_id',
@@ -2090,13 +2200,14 @@ class SessionManager {
                                         id_session = '$session_id'";
                                 Database::query($sql);
                                 if ($debug) {
-                                    Log::info("Sessions - Adding student: user #$user_id to course: '$course_code' and session #$session_id");
+                                    $logger->addInfo("Sessions - Adding student: user #$user_id ($user) to course: '$course_code' and session #$session_id");
                                 }
                                 $users_in_course_counter++;
                             } else {
-                                $error_message .= get_lang('UserDoesNotExist').' : '.$user.'<br />';
+                                $error_message .= get_lang('UserDoesNotExist').': '.$user.$eol;
                             }
                         }
+
                         $sql = "UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE course_code='$course_code'";
                         Database::query($sql);
 
@@ -2106,11 +2217,13 @@ class SessionManager {
                         // TODO: We should create the course as in the XML import.
                     }
 
+
                     if (CourseManager::course_exists($course_code, true)) {
 
                         $list = CourseManager :: get_courses_info_from_visual_code($course_code);
 
                         foreach ($list as $vcourse) {
+
                             if ($vcourse['code'] == $course_code) {
                                 // Ignore, this has already been inserted.
                             } else {
@@ -2126,10 +2239,10 @@ class SessionManager {
                                 Database::query($sql_course);
 
                                 if ($debug) {
-                                    Log::info("Sessions - Adding course to session: course: '".$vcourse['code']."' and session #$session_id");
+                                    $logger->addInfo("Sessions - Adding course to session: course: '".$vcourse['code']."' and session #$session_id");
                                 }
 
-                                // adding coachs to session course user
+                                // Adding coachs to session course user
                                 foreach ($course_coaches as $course_coach) {
                                     $coach_id = UserManager::get_user_id_from_username($course_coach);
                                     if ($coach_id !== false) {
@@ -2141,13 +2254,14 @@ class SessionManager {
                                         Database::query($sql);
 
                                         if ($debug) {
-                                            Log::info("Sessions - Adding coach to session: user #$coach_id course: '".$vcourse['code']."' and session #$session_id");
+                                            $logger->addInfo("Sessions - Adding coach to session: user #$coach_id ($course_coach) course: '".$vcourse['code']."' and session #$session_id");
                                         }
 
                                     } else {
-                                        $error_message .= get_lang('UserDoesNotExist').' : '.$user.'<br />';
+                                        $error_message .= get_lang('UserDoesNotExist').' : '.$course_coach.$eol;
                                     }
                                 }
+
 
                                 $users_in_course_counter = 0;
                                 // Adding the relationship "Session - Course - User".
@@ -2161,12 +2275,12 @@ class SessionManager {
                                         Database::query($sql);
 
                                         if ($debug) {
-                                            Log::info("Sessions - Adding user to session: user #$user_id course: '".$vcourse['code']."' and session #$session_id");
+                                            $logger->addInfo("Sessions - Adding user to session: user #$user_id ($user) course: '".$vcourse['code']."' and session #$session_id");
                                         }
 
                                         $users_in_course_counter++;
                                     } else {
-                                        $error_message .= get_lang('UserDoesNotExist').' : '.$user.'<br />';
+                                        $error_message .= get_lang('UserDoesNotExist').' : '.$user.$eol;
                                     }
                                 }
                                 Database::query("UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE course_code='".$vcourse['code']."'");

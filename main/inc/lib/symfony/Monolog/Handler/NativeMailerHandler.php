@@ -44,6 +44,6 @@ class NativeMailerHandler extends MailHandler
      */
     protected function send($content)
     {
-        mail($this->to, $this->subject, wordwrap($content, 70), $this->headers);
+        mail($this->to, $this->subject, wordwrap($content, 120), $this->headers);
     }
 }

@@ -27,7 +27,7 @@ legend {
 #header_right {
     text-align: right;
     float: right;
-    
+
 
 }
 
@@ -175,9 +175,9 @@ header #logo {
 #main .nav .dropdown {
   width:150px;
   text-align: right;
-   
-} 
- 
+
+}
+
 #main .nav .dropdown:nth-child(n) {
   width:auto;
 }
@@ -198,7 +198,7 @@ header {
 .breadcrumb li img {
   width: 0%;
  }
- 
+
  .breadcrumb li img:nth-child(n) {
   width: auto;
  }
@@ -434,7 +434,7 @@ footer #footer_left {
     vertical-align:middle;
 }
 .actions .actions-pagination {
-  float:right; 
+  float:right;
   margin-top:2px;
 }
 .actions .actions-pagination * {
@@ -581,6 +581,7 @@ a.tag {
 }
 #course_category li,
 #hot_courses h5,
+.course_item h5,
 .course-box h5 {
     font-size: 12px;
     overflow-y : auto;
@@ -4874,3 +4875,9 @@ i.size-32.icon-new-work{
   background-color: #e6e6e6;
 }
 
+.password-verdict {
+    padding-left:5px;
+}
+#password_progress {
+    width: 220px;
+}

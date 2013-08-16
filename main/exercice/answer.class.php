@@ -442,13 +442,14 @@ class Answer {
 	 * @param	integer	Answer weighting
 	 * @param	integer	Answer position
 	 */
-	function updateAnswers($answer,$comment,$weighting,$position,$destination) {
+	function updateAnswers($answer,$comment, $correct, $weighting,$position,$destination) {
 		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
 
 		$questionId=$this->questionId;
 		$sql = "UPDATE $TBL_REPONSES SET 
                 answer = '".Database::escape_string($answer)."',
-				comment = '".Database::escape_string($comment)."', 
+				comment = '".Database::escape_string($comment)."',
+                correct = '".Database::escape_string($correct)."', 
 				ponderation = '".Database::escape_string($weighting)."', 
 				position = '".Database::escape_string($position)."', 
 				destination = '".Database::escape_string($destination)."'
@@ -466,7 +467,6 @@ class Answer {
 		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
         $table_track_e_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 		$questionId   = intval($this->questionId);
-       
 		       
 		$c_id = $this->course['real_id'];
 		// inserts new answers into data base
@@ -486,12 +486,14 @@ class Answer {
                 $flag = 1;
 			    $sql.="($c_id, '$i','$questionId','$answer','$correct','$comment','$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
             } else {
-                $this->updateAnswers($answer, $comment, $weighting, $position, $destination);
+                // https://support.chamilo.org/issues/6558
+                // function updateAnswers already escape_string, error if we do it twice. Feed function updateAnswers with none escaped strings
+                $this->updateAnswers($this->new_answer[$i], $this->new_comment[$i], $this->new_correct[$i], $this->new_weighting[$i], $this->new_position[$i], $this->new_destination[$i]);
             }
         }
 		if ($flag == 1) {
-        $sql = api_substr($sql,0,-1);        
-		Database::query($sql);
+            $sql = api_substr($sql,0,-1);        
+            Database::query($sql);
         }
         if (count($this->position) > $this->new_nbrAnswers) {
             $i = $this->new_nbrAnswers+1;

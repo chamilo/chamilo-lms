@@ -201,11 +201,14 @@ function return_notification_menu() {
             }
         }
 
-        // Display the who's online for the session
-        if (isset($user_id) && api_get_session_id() != 0) {
-            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.
-                    Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), array(), ICON_SIZE_TINY).' </a></li>';
-        }
+        //if (api_get_setting('showonline', 'session') == 'true') {
+
+            // Display the who's online for the session
+            if (isset($user_id) && api_get_session_id() != 0) {
+                $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.
+                        Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), array(), ICON_SIZE_TINY).' </a></li>';
+            }
+        //}
     }
 
 

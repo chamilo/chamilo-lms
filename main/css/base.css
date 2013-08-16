@@ -2598,7 +2598,12 @@ div.admin_section h4 {
 
 .question_options input {
     /* margin-right:10px; */
+}
 
+.question_options input[type="text"] {
+    width:100%;
+    padding:0px;
+    margin:2px 2px 2px 0px;
 }
 
 .question_description {
@@ -4881,3 +4886,5 @@ i.size-32.icon-new-work{
 #password_progress {
     width: 220px;
 }
+
+

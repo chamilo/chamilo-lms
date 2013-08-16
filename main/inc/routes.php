@@ -444,18 +444,11 @@ $app->match('/main/{file}', 'legacy.controller:classicAction', 'GET|POST')
     ->assert('file', '.+')
     ->assert('type', '.+');
 
-/** Logout already implemented by the the security service provider */
-
-/* $app->get('/logout', 'index.controller:logoutAction')
-    ->bind('logout')
-    ->after($cleanCourseSession);*/
 
 /** Login form */
 $app->match('/login', 'index.controller:loginAction', 'GET|POST')
     ->bind('login');
 
-/*$app->match('/admin/login-check', 'index.controller:checkLoginAction', 'GET|POST')
-->bind('login_check');*/
 
 /** Course home instead of courses/MATHS the new URL is web/courses/MATHS  */
 $app->match('/courses/{cidReq}/{id_session}/', 'course_home.controller:indexAction', 'GET|POST')

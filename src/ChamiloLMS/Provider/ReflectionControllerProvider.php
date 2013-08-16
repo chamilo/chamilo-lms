@@ -35,10 +35,14 @@ class ReflectionControllerProvider implements ControllerProviderInterface
         /** @var \Silex\ControllerCollection $controllers */
         $controllers = $app['controllers_factory'];
 
+        // Routes are already cached using Flint
+        if ($app['debug'] == false) {
+            return $controllers;
+        }
+
         $reflection = new \ReflectionClass($app[$this->controllerName]);
 
         $annotationReader = new AnnotationReader();
-        //$classAnnotations = $annotationReader->getClassAnnotations($reflection);
         $routeAnnotation = new Route(array());
         $methodAnnotation = new Method(array());
 
@@ -46,37 +50,52 @@ class ReflectionControllerProvider implements ControllerProviderInterface
 
         foreach ($methods as $method) {
             $methodName = $method->getName();
+
             $controllerName = $this->controllerName.':'.$methodName;
 
-            if (in_array($methodName, array('__construct', 'get', 'getManager'))) {
+            // Parse only function with the "Action" suffix
+
+            if (strpos($methodName, 'Action') === false) {
                 continue;
             }
 
-            /** @var Route $routeObject */
-            $routeObject = $annotationReader->getMethodAnnotation($method, $routeAnnotation);
-            $req = $routeObject->getRequirements();
-            //$routeObject->setMethods();
+            // Getting all annotations
+            $routeObjects = $annotationReader->getMethodAnnotations($method);
 
             /** @var Method $routeObject */
             $methodObject = $annotationReader->getMethodAnnotation($method, $methodAnnotation);
 
             $methodsToString = 'GET';
+
             if ($methodObject) {
                 $methodsToString = implode('|', $methodObject->getMethods());
             }
 
-            if ($routeObject) {
-                $match = $controllers->match($routeObject->getPath(), $controllerName, $methodsToString);
-                //var_dump($controllerName);
-                $match->bind($controllerName);
-                // setRequirements
-                if (!empty($req)) {
-                    foreach ($req as $key => $value) {
-                        $match->assert($key, $value);
+            /** @var Route $routeObject */
+            foreach ($routeObjects as $routeObject) {
+
+                if ($routeObject && is_a($routeObject, 'Symfony\Component\Routing\Annotation\Route')) {
+
+                    $match = $controllers->match($routeObject->getPath(), $controllerName, $methodsToString);
+
+                    // Setting requirements
+                    if (!empty($req)) {
+                        foreach ($req as $key => $value) {
+                            $match->assert($key, $value);
+                        }
                     }
+                    $defaults = $routeObject->getDefaults();
+                    // Setting defaults
+
+                    if (!empty($defaults)) {
+                        foreach ($defaults as $key => $value) {
+                            $match->value($key, $value);
+                        }
+                    }
+
+                    $match->bind($controllerName);
                 }
             }
-
         }
         return $controllers;
     }

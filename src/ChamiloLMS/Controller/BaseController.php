@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\NoResultException;
 use Silex\Application;
+use Flint\Controller\Controller as FlintController;
 
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -21,9 +22,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  *
  * @abstract
  */
-abstract class BaseController
+abstract class BaseController extends FlintController
 {
     protected $app;
+    protected $pimple;
 
     /**
      * @param Application $app
@@ -31,6 +33,8 @@ abstract class BaseController
     public function __construct(Application $app)
     {
         $this->app = $app;
+        // In order to use the Flint Controller
+        $this->pimple = $app;
     }
 
     /**
@@ -81,28 +85,16 @@ abstract class BaseController
         return $this->get('request');
     }
 
-    protected function redirect($redirect)
-    {
-        return $this->app->redirect($redirect);
-    }
 
     protected function createNotFoundException($message = 'Not Found', \Exception $previous = null)
     {
         return $this->app->abort(404, $message);
     }
 
-    /**
-     * @param string $item
-     * @return mixed
-     */
-    protected function get($item)
-    {
-        return $this->app[$item];
-    }
 
     protected function getManager()
     {
-        return $this->app['orm.em'];
+        return $this->get('orm.em');
     }
 
     /**
@@ -114,11 +106,13 @@ abstract class BaseController
     protected function createUrl($label, $params = array())
     {
         $links = $this->generateLinks();
+        $courseCode = $this->getRequest()->get('courseCode');
+        $params['courseCode'] = $courseCode;
         if (isset($links) && is_array($links) && isset($links[$label])) {
-            $url = $this->get('url_generator')->generate($links[$label], $params);
+            $url = $this->generateUrl($links[$label], $params);
             return $url;
         }
-        return $url = $this->get('url_generator')->generate($links['list_link']);
+        return $url = $this->generateUrl($links['list_link']);
     }
 
 
@@ -168,7 +162,7 @@ abstract class BaseController
 
     /**
      *
-     * @Route("/{id}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+     * @Route("/{id}", requirements={"id" = "\d+"})
      * @Method({"GET"})
      */
     public function readAction($id)
@@ -180,7 +174,7 @@ abstract class BaseController
 
     /**
      *
-     * @Route("/{id}/edit", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+     * @Route("/{id}/edit", requirements={"id" = "\d+"})
      * @Method({"GET"})
      */
     public function editAction($id)
@@ -217,7 +211,7 @@ abstract class BaseController
 
     /**
      *
-     * @Route("/{id/delete}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+     * @Route("/{id}/delete", requirements={"id" = "\d+"})
      * @Method({"GET"})
      */
     public function deleteAction($id)

@@ -54,9 +54,6 @@ switch ($action) {
 
 $token = Security::get_token();
 
-
-
-
 if (!empty($group_id)) {
     $group_properties  = GroupManager :: get_group_properties($group_id);
     $show_work = false;

@@ -66,9 +66,9 @@ class ExerciseLink extends AbstractLink
         $TBL_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
         $TBL_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
         $documentPath = api_get_path(SYS_COURSE_PATH).$this->course_code."/document";
-    	if (empty($this->course_code)) {
-    		die('Error in get_not_created_links() : course code not set');
-    	}    	    	
+        if (empty($this->course_code)) {
+            die('Error in get_not_created_links() : course code not set');
+        }    	    	
         $session_id = api_get_session_id();
         if (empty($session_id)) {
             $session_condition = api_get_session_condition(0, true);
@@ -79,15 +79,17 @@ class ExerciseLink extends AbstractLink
 		$sql = 'SELECT id,title from '.$this->get_exercise_table().' 
 				WHERE c_id = '.$this->course_id.' AND active=1  '.$session_condition;        
         $sql2 = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility, d.id
-            FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
-            WHERE d.c_id = $this->course_id AND
-                    ip.c_id = $this->course_id AND
-            d.id = ip.ref AND ip.tool = '".TOOL_DOCUMENT."' AND (d.path LIKE '%htm%')AND (d.path LIKE '%HotPotatoes_files%')
-            AND   d.path  LIKE '".Database :: escape_string($uploadPath)."/%/%' AND ip.visibility='1'";
+                FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
+                WHERE d.c_id = $this->course_id AND
+                      ip.c_id = $this->course_id AND
+                d.id = ip.ref AND ip.tool = '".TOOL_DOCUMENT."' AND (d.path LIKE '%htm%')AND (d.path LIKE '%HotPotatoes_files%')
+                AND   d.path  LIKE '".Database :: escape_string($uploadPath)."/%/%' AND ip.visibility='1'";
         
-  /*      $sql = 'SELECT id,title from '.$this->get_exercise_table().' 
+        /*
+        $sql = 'SELECT id,title from '.$this->get_exercise_table().' 
 				WHERE c_id = '.$this->course_id.' AND active=1 AND session_id='.api_get_session_id().'';
-	*/	require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
+        */
+        require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
 		if (!$this->is_hp) {
             $result = Database::query($sql);
         } else {
@@ -95,10 +97,10 @@ class ExerciseLink extends AbstractLink
         }
 		$cats = array();
         if (isset($result)) {
-            if (mysql_numrows($result) > 0) {
+            if (Database::num_rows($result) > 0) {
                 while ($data=Database::fetch_array($result)) {
                     $cats[] = array ($data['id'], $data['title']);
-        		}
+                }
             }
         }
         if (isset($result2)) {
@@ -228,7 +230,7 @@ class ExerciseLink extends AbstractLink
     public function get_name() {
         $documentPath = api_get_path(SYS_COURSE_PATH).$this->course_code."/document";
         require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
-    	$data = $this->get_exercise_data(); 
+        $data = $this->get_exercise_data(); 
         if ($this->is_hp == 1) {
             if (isset($data['path'])) {
                 $hotpotatoes_exist = true;
@@ -311,14 +313,14 @@ class ExerciseLink extends AbstractLink
         if ($tbl_exercise=='') {
     		return false;
     	} elseif (!isset($this->exercise_data)) {
-    	    if ($this->is_hp == 1) {
-    	       $ref_id = intval($this->get_ref_id());
-    	       $sql = "SELECT * FROM $tbl_exercise ex, $TBL_ITEM_PROPERTY ip 
-    					WHERE ip.ref = ex.id AND ip.c_id = $this->course_id AND ex.c_id = $this->course_id AND ip.tool = '".TOOL_DOCUMENT."' AND (ex.path LIKE '%htm%')AND (ex.path LIKE '%HotPotatoes_files%') AND ip.visibility = 1";    	       
- 	        } else {    	       
+            if ($this->is_hp == 1) {
+                $ref_id = intval($this->get_ref_id());
+                $sql = "SELECT * FROM $tbl_exercise ex, $TBL_ITEM_PROPERTY ip 
+                        WHERE ip.ref = ex.id AND ip.c_id = $this->course_id AND ex.c_id = $this->course_id AND ip.tool = '".TOOL_DOCUMENT."' AND (ex.path LIKE '%htm%')AND (ex.path LIKE '%HotPotatoes_files%') AND ip.visibility = 1";    	       
+            } else {    	       
                 $sql = 'SELECT * FROM '.$tbl_exercise.' 
-    					WHERE c_id = '.$this->course_id.' AND id = '.(int)$this->get_ref_id().' ';
-			}
+                        WHERE c_id = '.$this->course_id.' AND id = '.(int)$this->get_ref_id().' ';
+            }
 			$result = Database::query($sql);
 			$this->exercise_data=Database::fetch_array($result);
     	}

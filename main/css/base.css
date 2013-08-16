@@ -4888,3 +4888,7 @@ i.size-32.icon-new-work{
 }
 
 
+
+.jqgrid_whitespace {
+    white-space: normal !important;
+}

@@ -927,7 +927,7 @@ class Display {
         //Fixing true/false js values that doesn't need the ""
         $json_encode = str_replace(':"true"',':true',$json_encode);
         //wrap_cell is not a valid jqgrid attributes is a hack to wrap a text
-        $json_encode = str_replace('"wrap_cell":true','cellattr:function(rowId, tv, rawObject, cm, rdata) { return \'style ="white-space: normal;"\'}',$json_encode);
+        $json_encode = str_replace('"wrap_cell":true','cellattr : function(rowId, value, rowObject, colModel, arrData) { return \'class = "jqgrid_whitespace"\'; }', $json_encode);
         $json_encode = str_replace(':"false"',':false',$json_encode);
         $json_encode = str_replace('"formatter":"action_formatter"','formatter:action_formatter',$json_encode);
 

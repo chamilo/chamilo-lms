@@ -50,7 +50,7 @@ if (!empty($group_id)) {
     $interbreadcrumb[] = array ('url' => '../group/group.php', 'name' => get_lang('Groups'));
     $interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
 } else {
-    if (!api_is_course_admin()) {
+    if (!api_is_allowed_to_edit(false, true)) {
         api_not_allowed(true);
     }
 }

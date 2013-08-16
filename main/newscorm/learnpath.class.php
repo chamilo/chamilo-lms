@@ -3017,6 +3017,10 @@ class learnpath {
                                 $src  = get_youtube_video_id($file);
                                 $file = 'embed.php?type=youtube&src='.$src;
                             }
+                            if (isVimeoLink($file)) {
+                                $src  = getVimeoLinkId($file);
+                                $file = 'embed.php?type=vimeo&src='.$src;
+                            }
                         } else {
                             // check how much attempts of a exercise exits in lp
                             $lp_item_id = $this->get_current_item_id();

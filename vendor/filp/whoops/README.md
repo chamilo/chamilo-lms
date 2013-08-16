@@ -109,9 +109,9 @@ If you're using Laravel 4, as of [this commit to laravel/framework](https://gith
 
 ### Integrating with Laravel 3
 
-User [@hdias](https://github.com/hdias) contributed a simple guide/example to help you integrate **whoops** with Laravel 3's IoC container, available at:
+User [@hugomrdias](https://github.com/hugomrdias) contributed a simple guide/example to help you integrate **whoops** with Laravel 3's IoC container, available at:
 
-https://gist.github.com/hdias/5169713#file-start-php
+https://gist.github.com/hugomrdias/5169713#file-start-php
 
 ### Integrating with Zend Framework 2
 
@@ -180,6 +180,24 @@ Adding your own editor is simple:
 $handler->setEditor(function($file, $line) {
     return "whatever://open?file=$file&line=$line";
 });
+
+```
+
+You can add PhpStorm support with [PhpStormOpener](https://github.com/pinepain/PhpStormOpener#phpstormopener) (Mac OS X only):
+```php
+
+$handler->setEditor(
+    function ($file, $line) {
+        // if your development server is not local it's good to map remote files to local
+        $translations = array('^' . __DIR__ => '~/Development/PhpStormOpener'); // change to your path
+        
+        foreach ($translations as $from => $to) {
+            $file = preg_replace('#' . $from . '#', $to, $file, 1);
+        }
+
+        return "pstorm://$file:$line";
+    }
+);
 
 ```
 

@@ -40,7 +40,7 @@ class RunSQLCommand extends CommonChamiloDatabaseCommand
         parent::execute($input, $output);
         $output->writeln('Starting Chamilo SQL cli');
 
-        $_configuration = $this->getHelper('configuration')->getConfiguration();
+        $_configuration = $this->getConfigurationArray();
 
         $cmd         = 'mysql -h '.$_configuration['db_host'].' -u '.$_configuration['db_user'].' -p'.$_configuration['db_password'].' '.$_configuration['main_database'];
         $process     = proc_open($cmd, array(0 => STDIN, 1 => STDOUT, 2 => STDERR), $pipes);

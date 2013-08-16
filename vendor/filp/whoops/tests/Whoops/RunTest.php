@@ -8,9 +8,11 @@ namespace Whoops;
 use Whoops\TestCase;
 use Whoops\Run;
 use Whoops\Handler\Handler;
-use RuntimeException;
 use ArrayObject;
 use Mockery as m;
+use InvalidArgumentException;
+use RuntimeException;
+use Exception;
 
 class RunTest extends TestCase
 {
@@ -25,7 +27,7 @@ class RunTest extends TestCase
     }
 
     /**
-     * @return Whoops\Handler\Handler
+     * @return Handler
      */
     protected function getHandler()
     {
@@ -247,6 +249,9 @@ class RunTest extends TestCase
         ;
 
         $run->handleException($this->getException());
+
+        // Reached the end without errors
+        $this->assertTrue(true);
     }
 
     /**
@@ -269,6 +274,9 @@ class RunTest extends TestCase
         ;
 
         @trigger_error("Test error suppression");
+
+        // Reached the end without errors
+        $this->assertTrue(true);
     }
 
     /**
@@ -293,6 +301,33 @@ class RunTest extends TestCase
         $oldLevel = error_reporting(E_ALL ^ E_USER_NOTICE);
         trigger_error("Test error reporting", E_USER_NOTICE);
         error_reporting($oldLevel);
+
+        // Reached the end without errors
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @covers Whoops\Run::silenceErrorsInPaths
+     */
+    public function testSilenceErrorsInPaths()
+    {
+        $run = $this->getRunInstance();
+        $run->register();
+
+        $handler = $this->getHandler();
+        $run->pushHandler($handler);
+
+        $test = $this;
+        $handler
+            ->shouldReceive('handle')
+            ->andReturnUsing(function () use($test) {
+                $test->fail('$handler should not be called, silenceErrorsInPaths not respected');
+            })
+        ;
+
+        $run->silenceErrorsInPaths('@^'.preg_quote(__FILE__).'$@', E_USER_NOTICE);
+        trigger_error('Test', E_USER_NOTICE);
+        $this->assertTrue(true);
     }
 
     /**
@@ -326,5 +361,24 @@ class RunTest extends TestCase
         ob_start();
         $this->assertEquals("hello there", $run->handleException(new RuntimeException));
         $this->assertEquals("", ob_get_clean());
+    }
+
+    /**
+     * @covers Whoops\Run::sendHttpCode
+     */
+    public function testSendHttpCode()
+    {
+        $run = $this->getRunInstance();
+        $run->sendHttpCode(true);
+        $this->assertEquals(500, $run->sendHttpCode());
+    }
+
+    /**
+     * @covers Whoops\Run::sendHttpCode
+     * @expectedException InvalidArgumentException
+     */
+    public function testSendHttpCodeWrongCode()
+    {
+        $this->getRunInstance()->sendHttpCode(1337);
     }
 }

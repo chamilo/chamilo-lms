@@ -31,6 +31,7 @@ class SQLCountCommand extends CommonChamiloDatabaseCommand
     }
 
     /**
+     * @todo use doctrine
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int|null|void
@@ -39,8 +40,9 @@ class SQLCountCommand extends CommonChamiloDatabaseCommand
     {
         parent::execute($input, $output);
         $table = $input->getArgument('table');
-        $_configuration = $this->getHelper('configuration')->getConfiguration();
-        $connection = $this->getHelper('configuration')->getConnection();
+
+        $_configuration = $this->getConfigurationArray();
+        $connection = $this->getConfigurationHelper()->getConnection();
 
         $t = mysql_real_escape_string($table);
         $q = mysql_query('SELECT COUNT(*) FROM '.$t);

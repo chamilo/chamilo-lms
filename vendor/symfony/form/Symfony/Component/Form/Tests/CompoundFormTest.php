@@ -13,6 +13,7 @@ namespace Symfony\Component\Form\Tests;
 
 use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationRequestHandler;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\Forms;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Form\Tests\Fixtures\FixedDataTransformer;
@@ -21,8 +22,8 @@ class CompoundFormTest extends AbstractFormTest
 {
     public function testValidIfAllChildrenAreValid()
     {
-        $this->form->add($this->getValidForm('firstName'));
-        $this->form->add($this->getValidForm('lastName'));
+        $this->form->add($this->getBuilder('firstName')->getForm());
+        $this->form->add($this->getBuilder('lastName')->getForm());
 
         $this->form->submit(array(
             'firstName' => 'Bernhard',
@@ -34,15 +35,49 @@ class CompoundFormTest extends AbstractFormTest
 
     public function testInvalidIfChildIsInvalid()
     {
-        $this->form->add($this->getValidForm('firstName'));
-        $this->form->add($this->getInvalidForm('lastName'));
+        $this->form->add($this->getBuilder('firstName')->getForm());
+        $this->form->add($this->getBuilder('lastName')->getForm());
 
         $this->form->submit(array(
             'firstName' => 'Bernhard',
             'lastName' => 'Schussek',
         ));
 
+        $this->form->get('lastName')->addError(new FormError('Invalid'));
+
         $this->assertFalse($this->form->isValid());
+    }
+
+    public function testValidIfChildIsNotSubmitted()
+    {
+        $this->form->add($this->getBuilder('firstName')->getForm());
+        $this->form->add($this->getBuilder('lastName')->getForm());
+
+        $this->form->submit(array(
+            'firstName' => 'Bernhard',
+        ));
+
+        // "lastName" is not "valid" because it was not submitted. This happens
+        // for example in PATCH requests. The parent form should still be
+        // considered valid.
+
+        $this->assertTrue($this->form->isValid());
+    }
+
+    public function testDisabledFormsValidEvenIfChildrenInvalid()
+    {
+        $form = $this->getBuilder('person')
+            ->setDisabled(true)
+            ->setCompound(true)
+            ->setDataMapper($this->getDataMapper())
+            ->add($this->getBuilder('name'))
+            ->getForm();
+
+        $form->submit(array('name' => 'Jacques Doe'));
+
+        $form->get('name')->addError(new FormError('Invalid'));
+
+        $this->assertTrue($form->isValid());
     }
 
     public function testSubmitForwardsNullIfValueIsMissing()
@@ -68,6 +103,19 @@ class CompoundFormTest extends AbstractFormTest
             ->method('submit');
 
         $this->form->submit(array(), false);
+    }
+
+    public function testSubmitDoesNotAddExtraFieldForNullValues()
+    {
+        $factory = Forms::createFormFactoryBuilder()
+            ->getFormFactory();
+
+        $child = $factory->create('file', null, array('auto_initialize' => false));
+
+        $this->form->add($child);
+        $this->form->submit(array('file' => null));
+
+        $this->assertCount(0, $this->form->getExtraData());
     }
 
     public function testClearMissingFlagIsForwarded()
@@ -105,37 +153,6 @@ class CompoundFormTest extends AbstractFormTest
         $this->form->add($child);
 
         $this->assertFalse($this->form->isEmpty());
-    }
-
-    public function testValidIfSubmittedAndDisabledWithChildren()
-    {
-        $this->factory->expects($this->once())
-            ->method('createNamedBuilder')
-            ->with('name', 'text', null, array())
-            ->will($this->returnValue($this->getBuilder('name')));
-
-        $form = $this->getBuilder('person')
-            ->setDisabled(true)
-            ->setCompound(true)
-            ->setDataMapper($this->getDataMapper())
-            ->add('name', 'text')
-            ->getForm();
-        $form->submit(array('name' => 'Jacques Doe'));
-
-        $this->assertTrue($form->isValid());
-    }
-
-    public function testNotValidIfChildNotValid()
-    {
-        $child = $this->getMockForm();
-        $child->expects($this->once())
-            ->method('isValid')
-            ->will($this->returnValue(false));
-
-        $this->form->add($child);
-        $this->form->submit(array());
-
-        $this->assertFalse($this->form->isValid());
     }
 
     public function testAdd()

@@ -10,42 +10,28 @@ The main idea of Imagine is to avoid driver specific methods spill outside of th
 Installation
 ------------
 
-Phar file (recommended)
-+++++++++++++++++++++++
+The recommended way to install Imagine is through `Composer`_.
+Composer is a dependency management library for PHP.
 
-`Download Imagine PHAR file here <https://github.com/downloads/avalanche123/Imagine/imagine-v0.3.0.phar>`_
+Here is an example of composer project configuration that requires imagine
+version 0.4.
+
+.. code-block:: json
+
+    {
+        "require": {
+            "imagine/imagine": "~0.5.0"
+        }
+    }
+
+Update the dependencies using composer.phar and use Imagine :
 
 .. code-block:: php
 
-   <?php
+    <?php
+    require 'vendor/autoload.php';
 
-   require_once 'phar://imagine.phar';
-
-   var_dump(interface_exists('Imagine\Image\ImageInterface'));
-
-PEAR package
-++++++++++++
-
-Install using pear package:
-
-.. code-block:: console
-
-   pear channel-discover pear.avalanche123.com
-   pear install avalanche123/Imagine-beta
-
-Clone from GitHub
-+++++++++++++++++
-
-Clone Imagine git repository:
-
-.. code-block:: console
-
-   git clone git://github.com/avalanche123/Imagine.git
-
-then require files as usual
-
-.. NOTE::
-   when using git clone or pear install methods, classes don't get registered with autoload and you have to do it yourself, this will change in future.
+    $imagine = new Imagine\Gd\Imagine();
 
 Basic usage
 -----------
@@ -94,6 +80,38 @@ Now that you've opened an image, you can perform manipulations on it:
    Read more about ImageInterface_
    Read more about coordinates_
 
+Resize Images
++++++++++++++
+
+Resize an image is very easy, just pass the box size you want as argument :
+
+.. code-block:: php
+
+   <?php
+
+   use Imagine\Image\Box;
+   use Imagine\Image\Point;
+
+   $image->resize(new Box(15, 25))
+
+You can also specify the filter you want as second argument :
+
+.. code-block:: php
+
+   <?php
+
+   use Imagine\Image\Box;
+   use Imagine\Image\Point;
+   use Imagine\Image\ImageInterface;
+
+   // resize with lanczos filter
+   $image->resize(new Box(15, 25), ImageInterface::FILTER_LANCZOS);
+
+Available filters are ImageInterface::FILTER_* constants.
+
+.. NOTE::
+   GD only supports ImageInterface::RESIZE_UNDEFINED filter.
+
 Create New Images
 +++++++++++++++++
 
@@ -112,8 +130,9 @@ You can optionally specify the fill color for the new image, which defaults to o
 
    <?php
 
+   $palette = new Imagine\Image\Palette\RGB();
    $size  = new Imagine\Image\Box(400, 300);
-   $color = new Imagine\Image\Color('000', 100);
+   $color = $palette->color('#000', 100);
    $image = $imagine->create($size, $color);
 
 Save Images
@@ -171,7 +190,7 @@ The following example opens a Jpg image and saves it with it with 150 dpi horizo
 .. TIP::
    You **MUST** provide a unit system when setting resolution values.
    There are two available unit systems for resolution : ``ImageInterface::RESOLUTION_PIXELSPERINCH`` and ``ImageInterface::RESOLUTION_PIXELSPERCENTIMETER``.
-`
+
 The flatten option is used when dealing with multi-layers images (see the
 `layers <layers>`_ section for information). Image are saved flatten by default,
 you can avoid this by explicitly set this option to ``false`` when saving :
@@ -212,37 +231,24 @@ Of course, you can combine options :
 
    $imagine->open('/path/to/image.jpg')->save('/path/to/image.jpg', $options);
 
-Color Class
-+++++++++++
-
-Color is a class in Imagine, which takes two arguments in its constructor: the RGB color code and a transparency percentage. The following examples are equivalent ways of defining a fully-transparent white color.
-
-.. code-block:: php
-
-   <?php
-
-   $white = new Imagine\Image\Color('fff', 100);
-   $white = new Imagine\Image\Color('ffffff', 100);
-   $white = new Imagine\Image\Color('#fff', 100);
-   $white = new Imagine\Image\Color('#ffffff', 100);
-   $white = new Imagine\Image\Color(0xFFFFFF, 100);
-   $white = new Imagine\Image\Color(array(255, 255, 255), 100);
-
-After you have instantiated a color, you can easily get its Red, Green, Blue and Alpha (transparency) values:
-
-.. code-block:: php
-
-   <?php
-
-   var_dump(array(
-      'R' => $white->getRed(),
-      'G' => $white->getGreen(),
-      'B' => $white->getBlue(),
-      'A' => $white->getAlpha()
-   ));
-
 Advanced Examples
 -----------------
+
+Image Watermarking
+++++++++++++++++++
+
+Here is a simple way to add a watermark to an image :
+
+.. code-block:: php
+
+    $watermark = $imagine->open('/my/watermark.png');
+    $image     = $imagine->open('/path/to/image.jpg');
+    $size      = $image->getSize();
+    $wSize     = $watermark->getSize();
+
+    $bottomRight = new Imagine\Image\Point($size->getX() - $wSize->getX(), $size->getY() - $wSize->getY());
+
+    $image->paste($watermark, $bottomRight);
 
 An Image Collage
 ++++++++++++++++
@@ -310,17 +316,17 @@ Image Reflection Filter
            $canvas     = new Imagine\Image\Box($size->getWidth(), $size->getHeight() * 2);
            $reflection = $image->copy()
                ->flipVertically()
-               ->applyMask($this->getTransparencyMask($size))
+               ->applyMask($this->getTransparencyMask($image->palette(), $size))
            ;
 
-           return $this->imagine->create($canvas, new Imagine\Image\Color('fff', 100))
+           return $this->imagine->create($canvas, $image->palette()->color('fff', 100))
                ->paste($image, new Imagine\Image\Point(0, 0))
                ->paste($reflection, new Imagine\Image\Point(0, $size->getHeight()));
        }
 
-       private function getTransparencyMask(Imagine\Image\BoxInterface $size)
+       private function getTransparencyMask(Imagine\Image\Palette\PaletteInterface $palette, Imagine\Image\BoxInterface $size)
        {
-           $white = new Imagine\Image\Color('fff');
+           $white = $palette->color('fff');
            $fill  = new Imagine\Image\Fill\Gradient\Vertical(
                $size->getHeight(),
                $white->darken(127),
@@ -357,3 +363,4 @@ The ``Transformation`` object is an example of a composite filter, representing 
 .. _ImageInterface: ../_static/API/Imagine/Image/ImageInterface.html
 .. _coordinates: coordinates.html
 .. _exceptions: exceptions.html
+.. _Composer: https://getcomposer.org/

@@ -4,6 +4,7 @@ class URLifyTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals ('  J\'etudie le francais  ', URLify::downcode ('  J\'étudie le français  '));
 		$this->assertEquals ('Lo siento, no hablo espanol.', URLify::downcode ('Lo siento, no hablo español.'));
 		$this->assertEquals ('F3PWS', URLify::downcode ('ΦΞΠΏΣ'));
+		$this->assertEquals ('foo-bar', URLify::filter ('_foo_bar_'));
 	}
 
 	function test_filter () {

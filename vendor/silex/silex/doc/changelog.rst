@@ -1,6 +1,15 @@
 Changelog
 =========
 
+1.1.0 (2013-07-04)
+------------------
+
+* Support for any ``Psr\Log\LoggerInterface`` as opposed to the monolog-bridge
+  one.
+* Made dispatcher proxy methods ``on``, ``before``, ``after`` and ``error``
+  lazy, so that they will not instantiate the dispatcher early.
+* Dropped support for 2.1 and 2.2 versions of Symfony.
+
 1.0.1 (2013-07-04)
 ------------------
 

@@ -14,7 +14,7 @@ namespace Imagine\Image;
 use Imagine\Exception\OutOfBoundsException;
 use Imagine\Exception\RuntimeException;
 use Imagine\Image\BoxInterface;
-use Imagine\Image\Color;
+use Imagine\Image\Palette\Color\ColorInterface;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\PointInterface;
 use Imagine\Image\Fill\FillInterface;
@@ -54,26 +54,27 @@ interface ManipulatorInterface
      * Resizes current image and returns self
      *
      * @param BoxInterface $size
+     * @param string       $filter
      *
      * @throws RuntimeException
      *
      * @return ManipulatorInterface
      */
-    public function resize(BoxInterface $size);
+    public function resize(BoxInterface $size, $filter = ImageInterface::FILTER_UNDEFINED);
 
     /**
      * Rotates an image at the given angle.
      * Optional $background can be used to specify the fill color of the empty
      * area of rotated image.
      *
-     * @param integer $angle
-     * @param Color   $background
+     * @param integer        $angle
+     * @param ColorInterface $background
      *
      * @throws RuntimeException
      *
      * @return ManipulatorInterface
      */
-    public function rotate($angle, Color $background = null);
+    public function rotate($angle, ColorInterface $background = null);
 
     /**
      * Pastes an image into a parent image
@@ -105,7 +106,7 @@ interface ManipulatorInterface
      *
      * @return ManipulatorInterface
      */
-    public function save($path, array $options = array());
+    public function save($path = null, array $options = array());
 
     /**
      * Outputs the image content

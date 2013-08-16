@@ -3,7 +3,9 @@
 * Template file for Whoops's pretty error output.
 * Check the $v global variable (stdClass) for what's available
 * to work with.
-* @var $v
+* @var stdClass $v
+* @var callable $e
+* @var callable $slug
 */
 ?>
 <!DOCTYPE html>
@@ -25,6 +27,7 @@
                    clicking these links/buttons will display the code view
                    for that particular frame */ ?>
           <?php foreach($v->frames as $i => $frame): ?>
+            <?php /** @var \Whoops\Exception\Frame $frame */ ?>
             <div class="frame <?php echo ($i == 0 ? 'active' : '') ?>" id="frame-line-<?php echo $i ?>">
                 <div class="frame-method-info">
                   <span class="frame-index"><?php echo (count($v->frames) - $i - 1) ?>.</span>
@@ -65,6 +68,7 @@
                  * we get 200 frames to process. */ ?>
           <div class="frame-code-container <?php echo (!$v->hasFrames ? 'empty' : '') ?>">
             <?php foreach($v->frames as $i => $frame): ?>
+              <?php /** @var \Whoops\Exception\Frame $frame */ ?>
               <?php $line = $frame->getLine(); ?>
                 <div class="frame-code <?php echo ($i == 0 ) ? 'active' : '' ?>" id="frame-code-<?php echo $i ?>">
                   <div class="frame-file">
@@ -97,7 +101,14 @@
                   ?>
                   <div class="frame-comments <?php echo empty($comments) ? 'empty' : '' ?>">
                     <?php foreach($comments as $commentNo => $comment): ?>
-                      <?php extract($comment) ?>
+                      <?php
+                        extract($comment)
+
+                        /**
+                         * @var string $context
+                         * @var string $comment
+                         */
+                      ?>
                       <div class="frame-comment" id="comment-<?php echo $i . '-' . $commentNo ?>">
                         <span class="frame-comment-context"><?php echo $e($context) ?></span>
                         <?php echo $e($comment, true) ?>
@@ -174,7 +185,7 @@
           $($lines[activeLineNumber - firstLine - 1]).addClass('current');
           $($lines[activeLineNumber - firstLine]).addClass('current active');
           $($lines[activeLineNumber - firstLine + 1]).addClass('current');
-        }
+        };
 
         // Highlight the active for the first frame:
         highlightCurrentLine();

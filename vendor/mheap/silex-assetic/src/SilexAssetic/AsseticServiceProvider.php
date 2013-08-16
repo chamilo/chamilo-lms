@@ -50,7 +50,8 @@ class AsseticServiceProvider implements ServiceProviderInterface
          * @return Assetic\Factory\AssetFactory
          */
         $app['assetic.factory'] = $app->share(function () use ($app) {
-            $factory = new AssetFactory($app['assetic.path_to_web'], $app['assetic.options']['debug']);
+            $root = isset($app['assetic.path_to_source']) ? $app['assetic.path_to_source'] : $app['assetic.path_to_web'];
+            $factory = new AssetFactory($root, $app['assetic.options']['debug']);
             $factory->setAssetManager($app['assetic.asset_manager']);
             $factory->setFilterManager($app['assetic.filter_manager']);
 

@@ -6,6 +6,8 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Zend\\Stdlib\\' => array($vendorDir . '/zendframework/zend-stdlib'),
+    'Zend\\Config\\' => array($vendorDir . '/zendframework/zend-config'),
     'Whoops' => array($vendorDir . '/filp/whoops/src'),
     'URLify' => array($vendorDir . '/jbroadway/urlify'),
     'Twig_' => array($vendorDir . '/twig/twig/lib'),
@@ -54,6 +56,8 @@ return array(
     'Imagine' => array($vendorDir . '/imagine/imagine/lib'),
     'Igorw\\Silex' => array($vendorDir . '/igorw/config-service-provider/src'),
     'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
+    'Guzzle\\Tests' => array($vendorDir . '/guzzle/guzzle/tests'),
+    'Guzzle' => array($vendorDir . '/guzzle/guzzle/src'),
     'Grom\\Silex' => array($vendorDir . '/grom/silex-service-provider/src'),
     'Gedmo\\' => array($vendorDir . '/gedmo/doctrine-extensions/lib'),
     'Gedmo' => array($vendorDir . '/gedmo/doctrine-extensions/lib'),
@@ -64,13 +68,14 @@ return array(
     'Doctrine\\ORM' => array($vendorDir . '/doctrine/orm/lib'),
     'Doctrine\\DBAL\\Migrations' => array($vendorDir . '/doctrine/migrations/lib'),
     'Doctrine\\DBAL' => array($vendorDir . '/doctrine/dbal/lib'),
+    'Doctrine\\Common\\Collections\\' => array($vendorDir . '/doctrine/collections/lib'),
     'Doctrine\\Common' => array($vendorDir . '/doctrine/common/lib'),
     'Dflydev\\Silex\\Provider\\DoctrineOrm' => array($vendorDir . '/dflydev/doctrine-orm-service-provider/src'),
     'Dflydev\\Pimple\\Provider\\DoctrineOrm' => array($vendorDir . '/dflydev/doctrine-orm-service-provider/src'),
     'Dflydev\\Cilex\\Provider\\DoctrineOrm' => array($vendorDir . '/dflydev/doctrine-orm-service-provider/src'),
-    'CssMin' => array($vendorDir . '/natxet/CssMin/src'),
     'Chash' => array($vendorDir . '/chamilo/chash/src'),
     'ChamiloLMS' => array($baseDir . '/src'),
     'Bt51\\Silex\\Provider\\GaufretteServiceProvider' => array($vendorDir . '/bt51/gaufrette-serviceprovider/src'),
     'Assetic' => array($vendorDir . '/kriswallsmith/assetic/src'),
+    'Alchemy' => array($vendorDir . '/alchemy/zippy/src'),
 );

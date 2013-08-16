@@ -23,17 +23,19 @@ DROP TABLE IF EXISTS c_announcement;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE c_announcement (
+  iid int unsigned NOT NULL AUTO_INCREMENT,
   c_id int(11) NOT NULL,
-  id int(10) unsigned NOT NULL AUTO_INCREMENT,
+  id int(10) unsigned NOT NULL,
   title text,
   content mediumtext,
   end_date date DEFAULT NULL,
   display_order mediumint(9) NOT NULL DEFAULT '0',
   email_sent tinyint(4) DEFAULT '0',
   session_id int(11) DEFAULT '0',
-  PRIMARY KEY (c_id,id),
+  PRIMARY KEY (iid),
+  UNIQUE KEY (c_id,id),
   KEY session_id (session_id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,15 +46,17 @@ DROP TABLE IF EXISTS c_announcement_attachment;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE c_announcement_attachment (
+  iid int unsigned NOT NULL AUTO_INCREMENT,
   c_id int(11) NOT NULL,
-  id int(11) NOT NULL AUTO_INCREMENT,
+  id int(11) unsigned NOT NULL,
   path varchar(255) NOT NULL,
   comment text,
   size int(11) NOT NULL DEFAULT '0',
   announcement_id int(11) NOT NULL,
   filename varchar(255) NOT NULL,
-  PRIMARY KEY (c_id,id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  PRIMARY KEY (iid),
+  UNIQUE KEY (c_id,id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -63,20 +67,22 @@ DROP TABLE IF EXISTS c_attendance;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE c_attendance (
-  c_id int(11) NOT NULL,
-  id int(11) NOT NULL AUTO_INCREMENT,
+  iid int unsigned not null AUTO_INCREMENT,
+  c_id int NOT NULL,
+  id int unsigned NOT NULL,
   name text NOT NULL,
   description text,
-  active tinyint(4) NOT NULL DEFAULT '1',
+  active tinyint NOT NULL DEFAULT '1',
   attendance_qualify_title varchar(255) DEFAULT NULL,
-  attendance_qualify_max int(11) NOT NULL DEFAULT '0',
+  attendance_qualify_max int NOT NULL DEFAULT '0',
   attendance_weight float(6,2) NOT NULL DEFAULT '0.00',
-  session_id int(11) NOT NULL DEFAULT '0',
-  locked int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (c_id,id),
+  session_id int NOT NULL DEFAULT '0',
+  locked int NOT NULL DEFAULT '0',
+  PRIMARY KEY (iid),
+  UNIQUE KEY (c_id,id),
   KEY session_id (session_id),
   KEY active (active)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -87,15 +93,17 @@ DROP TABLE IF EXISTS c_attendance_calendar;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE c_attendance_calendar (
-  c_id int(11) NOT NULL,
-  id int(11) NOT NULL AUTO_INCREMENT,
-  attendance_id int(11) NOT NULL,
+  iid int unsigned NOT NULL AUTO_INCREMENT,
+  c_id int NOT NULL,
+  id int unsigned NOT NULL,
+  attendance_id int NOT NULL,
   date_time datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  done_attendance tinyint(4) NOT NULL DEFAULT '0',
-  PRIMARY KEY (c_id,id),
+  done_attendance tinyint NOT NULL DEFAULT '0',
+  PRIMARY KEY (iid),
+  UNIQUE KEY (c_id,id),
   KEY attendance_id (attendance_id),
   KEY done_attendance (done_attendance)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -106,15 +114,17 @@ DROP TABLE IF EXISTS c_attendance_result;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE c_attendance_result (
-  c_id int(11) NOT NULL,
-  id int(11) NOT NULL AUTO_INCREMENT,
-  user_id int(11) NOT NULL,
-  attendance_id int(11) NOT NULL,
-  score int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (c_id,id),
+  iid int unsigned NOT NULL AUTO_INCREMENT,
+  c_id int NOT NULL,
+  id int unsigned NOT NULL,
+  user_id int NOT NULL,
+  attendance_id int NOT NULL,
+  score int NOT NULL DEFAULT '0',
+  PRIMARY KEY (iid),
+  UNIQUE KEY (c_id,id),
   KEY attendance_id (attendance_id),
   KEY user_id (user_id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -125,13 +135,15 @@ DROP TABLE IF EXISTS c_attendance_sheet;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE c_attendance_sheet (
-  c_id int(11) NOT NULL,
-  user_id int(11) NOT NULL,
-  attendance_calendar_id int(11) NOT NULL,
-  presence tinyint(4) NOT NULL DEFAULT '0',
-  PRIMARY KEY (c_id,user_id,attendance_calendar_id),
+  iid int unsigned NOT NULL AUTO_INCREMENT,
+  c_id int NOT NULL,
+  user_id int NOT NULL,
+  attendance_calendar_id int NOT NULL,
+  presence tinyint NOT NULL DEFAULT '0',
+  PRIMARY KEY (iid),
+  UNIQUE KEY (c_id,user_id,attendance_calendar_id),
   KEY presence (presence)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -142,15 +154,17 @@ DROP TABLE IF EXISTS c_attendance_sheet_log;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE c_attendance_sheet_log (
-  c_id int(11) NOT NULL,
-  id int(11) NOT NULL AUTO_INCREMENT,
-  attendance_id int(11) NOT NULL DEFAULT '0',
+  iid int unsigned NOT NULL AUTO_INCREMENT,
+  c_id int NOT NULL,
+  id int unsigned NOT NULL,
+  attendance_id int NOT NULL DEFAULT '0',
   lastedit_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   lastedit_type varchar(200) NOT NULL,
-  lastedit_user_id int(11) NOT NULL DEFAULT '0',
+  lastedit_user_id int NOT NULL DEFAULT '0',
   calendar_date_value datetime DEFAULT NULL,
-  PRIMARY KEY (c_id,id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  PRIMARY KEY (iid),
+  UNIQUE KEY (c_id,id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1396,6 +1410,7 @@ CREATE TABLE c_quiz_category (
   lft int default NULL,
   rgt int default NULL,
   root int default NULL,
+  visibility INT default 1,
   PRIMARY KEY (iid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

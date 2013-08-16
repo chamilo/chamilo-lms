@@ -15,23 +15,67 @@ use Exception;
 
 class Run
 {
-    const EXCEPTION_HANDLER = 'handleException';
-    const ERROR_HANDLER     = 'handleError';
-    const SHUTDOWN_HANDLER  = 'handleShutdown';
+    const EXCEPTION_HANDLER = "handleException";
+    const ERROR_HANDLER     = "handleError";
+    const SHUTDOWN_HANDLER  = "handleShutdown";
 
     protected $isRegistered;
-    protected $allowQuit  = true;
-    protected $sendOutput = true;
+    protected $allowQuit       = true;
+    protected $sendOutput      = true;
+    protected $sendHttpCode    = 500;
+    protected $httpStatusCodes = array(
+        100 => "Continue",
+        101 => "Switching Protocols",
+        200 => "OK",
+        201 => "Created",
+        202 => "Accepted",
+        203 => "Non-Authoritative Information",
+        204 => "No Content",
+        205 => "Reset Content",
+        206 => "Partial Content",
+        300 => "Multiple Choices",
+        301 => "Moved Permanently",
+        302 => "Moved Temporarily",
+        303 => "See Other",
+        304 => "Not Modified",
+        305 => "Use Proxy",
+        400 => "Bad Request",
+        401 => "Unauthorized",
+        402 => "Payment Required",
+        403 => "Forbidden",
+        404 => "Not Found",
+        405 => "Method Not Allowed",
+        406 => "Not Acceptable",
+        407 => "Proxy Authentication Required",
+        408 => "Request Time-out",
+        409 => "Conflict",
+        410 => "Gone",
+        411 => "Length Required",
+        412 => "Precondition Failed",
+        413 => "Request Entity Too Large",
+        414 => "Request-URI Too Large",
+        415 => "Unsupported Media Type",
+        500 => "Internal Server Error",
+        501 => "Not Implemented",
+        502 => "Bad Gateway",
+        503 => "Service Unavailable",
+        504 => "Gateway Time-out",
+        505 => "HTTP Version not supported"
+    );
 
     /**
-     * @var Whoops\Handler\HandlerInterface[]
+     * @var HandlerInterface[]
      */
     protected $handlerStack = array();
 
+    protected $silencedPatterns = array();
+
     /**
-     * Pushes a handler to the end of the stack.
-     * @param  Whoops\HandlerInterface $handler
-     * @return Whoops\Run
+     * Pushes a handler to the end of the stack
+     *
+     * @throws InvalidArgumentException If argument is not callable or instance of HandlerInterface
+     * @param  HandlerInterface $handler
+     * @return Run
      */
     public function pushHandler($handler)
     {
@@ -41,8 +85,8 @@ class Run
 
         if(!$handler instanceof HandlerInterface) {
             throw new InvalidArgumentException(
-                  'Argument to ' . __METHOD__ . ' must be a callable, or instance of'
-                . 'Whoops\\Handler\\HandlerInterface'
+                  "Argument to " . __METHOD__ . " must be a callable, or instance of"
+                . "Whoops\\Handler\\HandlerInterface"
             );
         }
 
@@ -52,8 +96,8 @@ class Run
 
     /**
      * Removes the last handler in the stack and returns it.
-     * Returns null if there's nothing else to pop.
-     * @return null|Whoops\Handler\HandlerInterface
+     * Returns null if there"s nothing else to pop.
+     * @return null|HandlerInterface
      */
     public function popHandler()
     {
@@ -73,7 +117,7 @@ class Run
     /**
      * Clears all handlers in the handlerStack, including
      * the default PrettyPage handler.
-     * @return Whoops\Run
+     * @return Run
      */
     public function clearHandlers()
     {
@@ -83,7 +127,7 @@ class Run
 
     /**
      * @param  Exception $exception
-     * @return Whoops\Exception\Inspector
+     * @return Inspector
      */
     protected function getInspector(Exception $exception)
     {
@@ -92,11 +136,18 @@ class Run
 
     /**
      * Registers this instance as an error handler.
-     * @return Whoops\Run
+     * @return Run
      */
     public function register()
     {
         if(!$this->isRegistered) {
+            // Workaround PHP bug 42098
+            // https://bugs.php.net/bug.php?id=42098
+            class_exists("\\Whoops\\Exception\\ErrorException");
+            class_exists("\\Whoops\\Exception\\FrameCollection");
+            class_exists("\\Whoops\\Exception\\Frame");
+            class_exists("\\Whoops\\Exception\\Inspector");
+
             set_error_handler(array($this, self::ERROR_HANDLER));
             set_exception_handler(array($this, self::EXCEPTION_HANDLER));
             register_shutdown_function(array($this, self::SHUTDOWN_HANDLER));
@@ -109,7 +160,7 @@ class Run
 
     /**
      * Unregisters all handlers registered by this Whoops\Run instance
-     * @return Whoops\Run
+     * @return Run
      */
     public function unregister()
     {
@@ -125,7 +176,7 @@ class Run
 
     /**
      * Should Whoops allow Handlers to force the script to quit?
-     * @param bool|num $exit
+     * @param bool|int $exit
      * @return bool
      */
     public function allowQuit($exit = null)
@@ -138,9 +189,63 @@ class Run
     }
 
     /**
+     * Silence particular errors in particular files
+     * @param array|string $patterns List or a single regex pattern to match
+     * @param integer $levels Defaults to E_STRICT | E_DEPRECATED
+     * @return \Whoops\Run
+     */
+    public function silenceErrorsInPaths($patterns, $levels = 10240)
+    {
+        $this->silencedPatterns = array_merge(
+            $this->silencedPatterns,
+            array_map(
+                function ($pattern) use ($levels) {
+                    return array(
+                        "pattern" => $pattern,
+                        "levels" => $levels,
+                    );
+                },
+                (array) $patterns
+            )
+        );
+        return $this;
+    }
+
+    /*
+     * Should Whoops send HTTP error code to the browser if possible?
+     * Whoops will by default send HTTP code 500, but you may wish to
+     * use 502, 503, or another 5xx family code.
+     *
+     * @param bool|int $code
+     * @return bool
+     */
+    public function sendHttpCode($code = null)
+    {
+        if(func_num_args() == 0) {
+            return $this->sendHttpCode;
+        }
+
+        if(!$code) {
+            return $this->sendHttpCode = false;
+        }
+
+        if($code === true) {
+            $code = 500;
+        }
+
+        if(!isset($this->httpStatusCodes[$code])) {
+            throw new InvalidArgumentException(
+                "Unknown status code '$code'"
+            );
+        }
+
+        return $this->sendHttpCode = $code;
+    }
+
+    /**
      * Should Whoops push output directly to the client?
      * If this is false, output will be returned by handleException
-     * @param bool|num $send
+     * @param bool|int $send
      * @return bool
      */
     public function writeToOutput($send = null)
@@ -170,6 +275,9 @@ class Run
         // or return it silently.
         ob_start();
 
+        // Just in case there are no handlers:
+        $handlerResponse = null;
+
         for($i = count($this->handlerStack) - 1; $i >= 0; $i--) {
             $handler = $this->handlerStack[$i];
 
@@ -190,15 +298,22 @@ class Run
 
         $output = ob_get_clean();
 
-        // If we're allowed to, send output generated by handlers directly
-        // to the output, otherwise, and if the script doesn't quit, return
+        // If we"re allowed to, send output generated by handlers directly
+        // to the output, otherwise, and if the script doesn"t quit, return
         // it so that it may be used by the caller
         if($this->writeToOutput()) {
             // @todo Might be able to clean this up a bit better
-            // If we're going to quit execution, cleanup all other output 
+            // If we"re going to quit execution, cleanup all other output
             // buffers before sending our own output:
             if($handlerResponse == Handler::QUIT && $this->allowQuit()) {
                 while (ob_get_level() > 0) ob_end_clean();
+            }
+
+            if($this->sendHttpCode() && isset($_SERVER["REQUEST_URI"]) && !headers_sent()) {
+                $httpCode   = $this->sendHttpCode();
+                $httpStatus = $this->httpStatusCodes[$httpCode];
+
+                header("HTTP/1.0 $httpCode $httpStatus", true, $httpCode);
             }
 
             echo $output;
@@ -224,10 +339,20 @@ class Run
      * @param string $message
      * @param string $file
      * @param int    $line
+     *
+     * @return bool
      */
     public function handleError($level, $message, $file = null, $line = null)
     {
         if ($level & error_reporting()) {
+            foreach ($this->silencedPatterns as $entry) {
+                $pathMatches = (bool) preg_match($entry["pattern"], $file);
+                $levelMatches = $level & $entry["levels"];
+                if ($pathMatches && $levelMatches)  {
+                    // Ignore the error, abort handling
+                    return true;
+                }
+            }
             $this->handleException(
                 new ErrorException(
                     $message, $level, 0, $file, $line
@@ -243,10 +368,10 @@ class Run
     {
         if($error = error_get_last()) {
             $this->handleError(
-                $error['type'],
-                $error['message'],
-                $error['file'],
-                $error['line']
+                $error["type"],
+                $error["message"],
+                $error["file"],
+                $error["line"]
             );
         }
     }

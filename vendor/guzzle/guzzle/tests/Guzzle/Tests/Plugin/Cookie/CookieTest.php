@@ -145,11 +145,8 @@ class CookieTest extends \Guzzle\Tests\GuzzleTestCase
         $this->assertFalse($cookie->matchesDomain('baz.bar.com'));
         $this->assertTrue($cookie->matchesDomain('baz.com'));
 
-        $cookie->setDomain('.com');
-        $this->assertFalse($cookie->matchesDomain('baz.com'));
-
         $cookie->setDomain('.127.0.0.1');
-        $this->assertFalse($cookie->matchesDomain('127.0.0.1'));
+        $this->assertTrue($cookie->matchesDomain('127.0.0.1'));
 
         $cookie->setDomain('127.0.0.1');
         $this->assertTrue($cookie->matchesDomain('127.0.0.1'));

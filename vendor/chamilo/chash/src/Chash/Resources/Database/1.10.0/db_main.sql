@@ -260,6 +260,8 @@ CREATE TABLE IF NOT EXISTS course_field_options (
     option_value text,
     option_display_text varchar(255),
     option_order int,
+    priority int default NULL,
+    priority_message varchar(255) default NULL,
     tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY (id)
 );
@@ -594,6 +596,8 @@ CREATE TABLE IF NOT EXISTS session_field_options(
     option_value text,
     option_display_text varchar(255),
     option_order int,
+    priority int default NULL,
+    priority_message varchar(255) default NULL,
     tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY (id)
 );
@@ -665,6 +669,7 @@ VALUES
 ('showonline','world','checkbox','Platform','true','ShowOnlineTitle','ShowOnlineComment',NULL,'ShowOnlineWorld', 0),
 ('showonline','users','checkbox','Platform','true','ShowOnlineTitle','ShowOnlineComment',NULL,'ShowOnlineUsers', 0),
 ('showonline','course','checkbox','Platform','true','ShowOnlineTitle','ShowOnlineComment',NULL,'ShowOnlineCourse', 0),
+('showonline','session','checkbox','Platform','true','ShowOnlineTitle','ShowOnlineComment',NULL,'ShowOnlineSession', 0),
 ('profile','name','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'name', 0),
 ('profile','officialcode','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'officialcode', 0),
 ('profile','email','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'Email', 0),
@@ -955,6 +960,7 @@ VALUES
 ('login_as_allowed', NULL, 'radio', 'Security', 'true', 'AdminLoginAsAllowedTitle', 'AdminLoginAsAllowedComment', 1, 0, 1),
 ('admins_can_set_users_pass', NULL, 'radio', 'security', 'true', 'AdminsCanChangeUsersPassTitle', 'AdminsCanChangeUsersPassComment', 1, 0, 1),
 ('template', NULL, 'text', 'stylesheets', 'default', 'DefaultTemplateTitle', 'DefaultTemplateComment', NULL, NULL, 1),
+('breadcrumb_navigation_display', NULL, 'radio', 'Platform','true','BreadcrumbNavigationDisplayTitle', 'BreadcrumbNavigationDisplayComment', NULL, NULL, 1),
 ('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.001', 'DatabaseVersion', '', NULL, NULL, 0); -- base value, updated at end of file. Don't change here
 
 UNLOCK TABLES;
@@ -1308,7 +1314,9 @@ VALUES
 ('login_as_allowed','true','Yes'),
 ('login_as_allowed','false','No'),
 ('admins_can_set_users_pass','true','Yes'),
-('admins_can_set_users_pass','false','No');
+('admins_can_set_users_pass','false','No'),
+('breadcrumb_navigation_display', 'true', 'Show'),
+('breadcrumb_navigation_display', 'false', 'Hide');
 
 UNLOCK TABLES;
 
@@ -1512,6 +1520,8 @@ CREATE TABLE IF NOT EXISTS user_field_options (
     option_value	text,
     option_display_text varchar(64),
     option_order int,
+    priority int default NULL,
+    priority_message varchar(255) default NULL,
     tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY (id)
 );
@@ -3501,6 +3511,8 @@ CREATE TABLE IF NOT EXISTS question_field_options(
     option_value text,
     option_display_text varchar(255),
     option_order int,
+    priority int default NULL,
+    priority_message varchar(255) default NULL,
     tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY (id)
 );
@@ -3555,5 +3567,47 @@ CREATE TABLE question_score (
 ) DEFAULT CHARSET=utf8;
 
 
+DROP TABLE IF EXISTS curriculum_category;
+CREATE TABLE curriculum_category (
+    id int unsigned not null primary key AUTO_INCREMENT,
+    c_id int unsigned, -- the course ID (not setting as "not null" because at some point in the future it might be considered course-agnostic). This is only necessary for the item with parent_id = 0
+    session_id int unsigned, -- the session ID (not setting as "not null" because at some point in the future it might be considered session-agnostic). This is only necessary for the item with parent_id = 0
+    title varchar(255),
+    max_score int unsigned not null default 1,
+    min_chars tinyint unsigned not null default 0, -- the minimum number of characters an item field in this category requires to be considered a valid submission (and generate score),
+    parent_id int unsigned DEFAULT NULL,
+    lvl int default NULL,
+    lft int default NULL,
+    rgt int default NULL,
+    root int default NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS curriculum_item;
+CREATE TABLE curriculum_item (
+    id int unsigned not null primary key AUTO_INCREMENT,
+    category_id int unsigned not null, -- references the curriculum category's id
+    title varchar(255),
+    score int unsigned not null default 1, -- how much points are assigned for filling this item
+    max_repeat tinyint unsigned not null default 1 -- how many items of this type are allowed
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS curriculum_item_rel_user;
+CREATE TABLE curriculum_item_rel_user (
+    id int unsigned not null primary key AUTO_INCREMENT,
+    item_id int unsigned not null, -- the id of the item
+    user_id int unsigned not null,
+    order_id tinyint unsigned not null default 0, -- given there is a item_max_repeat field, this allows us to store more than one answer per item.id per user
+    description varchar(255) not null default '' -- the text given as "answer" by the student
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS curriculum_rel_user;
+CREATE TABLE curriculum_rel_user (
+    id int unsigned not null primary key AUTO_INCREMENT,
+    category_id int unsigned not null, -- references c_curriculum_category.id where parent_id = 0 (one root curriculum)
+    user_id int unsigned not null,
+    score int unsigned not null default 0 -- the temporary total score given to the user for the information he completed
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.030' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.033' WHERE variable = 'chamilo_database_version';

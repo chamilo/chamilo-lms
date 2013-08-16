@@ -1,8 +1,9 @@
 Chamilo Shell script
 ====================
 
-The Chamilo Shell (or "Chash") is a command-line PHP tool meant to speed up the
-management of (multiple) Chamilo portals under Linux.
+The Chamilo Shell (or "Chash", as inspired by Drupal's "Drush") is a 
+command-line PHP tool meant to speed up the management of (multiple) 
+Chamilo portals under Linux.
 
 To get the most out of Chash, you should move the chash.phar file to your
 /usr/local/bin directory. You can do this getting inside the directory where
@@ -31,6 +32,11 @@ In order to generate the executable chash.phar file. You have to set first this 
 You need to download the third parties libraries via composer:
 
     composer update --no-dev --prefer-dist
+
+If you don't have composer installed on your computer, you can just do the following to download and install it and run the command above (make sure you have PHP5 enabled on the command line):
+
+    curl -sS https://getcomposer.org/installer | php
+    php5 composer.phar update --no-dev --prefer-dist
 
 Then you can call the php createPhar.php file. A new chash.phar file will be created.
 

@@ -36,13 +36,13 @@ class UriTemplate implements UriTemplateInterface
 
     public function expand($template, array $variables)
     {
+        // Check to ensure that the preg_* function is needed
+        if (false === strpos($template, '{')) {
+            return $template;
+        }
+
         $this->template = $template;
         $this->variables = $variables;
-
-        // Check to ensure that the preg_* function is needed
-        if (false === strpos($this->template, '{')) {
-            return $this->template;
-        }
 
         return preg_replace_callback(self::$regex, array($this, 'expandMatch'), $this->template);
     }

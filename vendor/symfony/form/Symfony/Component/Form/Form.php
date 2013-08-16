@@ -537,7 +537,7 @@ class Form implements \IteratorAggregate, FormInterface
             }
 
             foreach ($this->children as $name => $child) {
-                if (isset($submittedData[$name]) || $clearMissing) {
+                if (array_key_exists($name, $submittedData) || $clearMissing) {
                     $child->submit(isset($submittedData[$name]) ? $submittedData[$name] : null, $clearMissing);
                     unset($submittedData[$name]);
                 }
@@ -710,11 +710,13 @@ class Form implements \IteratorAggregate, FormInterface
             return false;
         }
 
-        if (!$this->isDisabled()) {
-            foreach ($this->children as $child) {
-                if (!$child->isValid()) {
-                    return false;
-                }
+        if ($this->isDisabled()) {
+            return true;
+        }
+
+        foreach ($this->children as $child) {
+            if ($child->isSubmitted() && !$child->isValid()) {
+                return false;
             }
         }
 

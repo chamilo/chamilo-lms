@@ -18,7 +18,7 @@
     },
     "require-dev": {
         "mlehner/gelf-php": "1.0.*",
-        "raven/raven": "0.3.*",
+        "raven/raven": "0.5.*",
         "doctrine/couchdb": "dev-master"
     },
     "suggest": {
@@ -33,7 +33,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.4.x-dev"
+            "dev-master": "1.6.x-dev"
         }
     }
 }

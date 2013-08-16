@@ -14,8 +14,6 @@ namespace Symfony\Component\Intl\Tests\DateFormatter;
 use Symfony\Component\Intl\DateFormatter\IntlDateFormatter;
 use Symfony\Component\Intl\Globals\IntlGlobals;
 use Symfony\Component\Intl\Intl;
-use Symfony\Component\Intl\Util\IcuVersion;
-use Symfony\Component\Intl\Util\Version;
 
 /**
  * Test case for IntlDateFormatter implementations.
@@ -850,27 +848,16 @@ abstract class AbstractIntlDateFormatterTest extends \PHPUnit_Framework_TestCase
 
     public function setTimeZoneIdProvider()
     {
-        $data = array(
+        return array(
             array('UTC', 'UTC'),
             array('GMT', 'GMT'),
             array('GMT-03:00', 'GMT-03:00'),
             array('Europe/Zurich', 'Europe/Zurich'),
+            array('GMT-0300', 'GMT-0300'),
+            array('Foo/Bar', 'Foo/Bar'),
+            array('GMT+00:AA', 'GMT+00:AA'),
+            array('GMT+00AA', 'GMT+00AA'),
         );
-
-        // When time zone not exists, uses UTC by default
-        if (version_compare(PHP_VERSION, '5.5.0-dev', '>=')) {
-            $data[] = array('GMT-0300', 'UTC');
-            $data[] = array('Foo/Bar', 'UTC');
-            $data[] = array('GMT+00:AA', 'UTC');
-            $data[] = array('GMT+00AA', 'UTC');
-        } else {
-            $data[] = array('GMT-0300', 'GMT-0300');
-            $data[] = array('Foo/Bar', 'Foo/Bar');
-            $data[] = array('GMT+00:AA', 'GMT+00:AA');
-            $data[] = array('GMT+00AA', 'GMT+00AA');
-        }
-
-        return $data;
     }
 
     protected function getDefaultDateFormatter($pattern = null)

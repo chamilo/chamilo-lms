@@ -151,7 +151,7 @@ class Xml extends BaseXml
             throw new InvalidMappingException("You need to map a date field as the tree lock time field to activate locking support.");
         }
 
-        if ($xmlDoctrine->getName() == 'entity') {        
+        if ($xmlDoctrine->getName() == 'entity' || $xmlDoctrine->getName() == 'mapped-superclass') {        
             if (isset($xmlDoctrine->{'many-to-one'})) {
                 foreach ($xmlDoctrine->{'many-to-one'} as $manyToOneMapping)  {
                     /**
@@ -161,9 +161,11 @@ class Xml extends BaseXml
                     $manyToOneMapping = $manyToOneMapping->children(self::GEDMO_NAMESPACE_URI);;
                     if (isset($manyToOneMapping->{'tree-parent'})) {
                         $field = $this->_getAttribute($manyToOneMappingDoctrine, 'field');
-                        if ($meta->associationMappings[$field]['targetEntity'] != $meta->name) {
+                        $targetEntity = $meta->associationMappings[$field]['targetEntity'];
+                        $reflectionClass = new \ReflectionClass($targetEntity);
+                        if ($targetEntity != $meta->name && !$reflectionClass->isSubclassOf($meta->name)) {
                             throw new InvalidMappingException("Unable to find ancestor/parent child relation through ancestor field - [{$field}] in class - {$meta->name}");
-                        }
+                        }			
                         $config['parent'] = $field;
                     }
                 }

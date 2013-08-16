@@ -39,13 +39,28 @@ class Frame implements Serializable
      */
     public function getFile($shortened = false)
     {
-        $file = !empty($this->frame['file']) ? $this->frame['file'] : null;
-        if ($shortened && is_string($file)) {
+        if(empty($this->frame['file'])) {
+            return null;
+        }
+
+        $file = $this->frame['file'];
+
+        // Check if this frame occurred within an eval().
+        // @todo: This can be made more reliable by checking if we've entered
+        // eval() in a previous trace, but will need some more work on the upper
+        // trace collector(s).
+        if(preg_match('/^(.*)\((\d+)\) : eval\(\)\'d code$/', $file, $matches)) {
+            $file = $this->frame['file'] = $matches[1];
+            $this->frame['line'] = (int) $matches[2];
+        }
+
+        if($shortened && is_string($file)) {
             // Replace the part of the path that all frames have in common, and add 'soft hyphens' for smoother line-breaks.
             $dirname = dirname(dirname(dirname(dirname(dirname(dirname(__DIR__))))));
             $file = str_replace($dirname, "…", $file);
             $file = str_replace("/", "/&shy;", $file);
         }
+
         return $file;
     }
 
@@ -89,6 +104,14 @@ class Frame implements Serializable
     public function getFileContents()
     {
         if($this->fileContentsCache === null && $filePath = $this->getFile()) {
+
+            // Return null if the file doesn't actually exist - this may
+            // happen in cases where the filename is provided as, for
+            // example, 'Unknown'
+            if(!is_file($filePath)) {
+                return null;
+            }
+
             $this->fileContentsCache = file_get_contents($filePath);
         }
 
@@ -159,6 +182,7 @@ class Frame implements Serializable
      *     Get one line for this file, starting at line 10 (zero-indexed, remember!)
      *     $frame->getFileLines(9, 1); // array( 10 => '...', 11 => '...')
      *
+     * @throws InvalidArgumentException if $length is less than or equal to 0
      * @param  int $start
      * @param  int $length
      * @return string[]|null

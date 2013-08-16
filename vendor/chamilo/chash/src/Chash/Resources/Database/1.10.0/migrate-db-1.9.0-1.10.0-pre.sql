@@ -315,5 +315,60 @@ INSERT INTO users_roles VALUES (1, 11);
 CREATE TABLE question_score_name (id int NOT NULL AUTO_INCREMENT,  score varchar(255) DEFAULT NULL,  name varchar(255) DEFAULT NULL,  description TEXT DEFAULT NULL,  question_score_id INT NOT NULL,  PRIMARY KEY (id)) DEFAULT CHARSET=utf8;
 CREATE TABLE question_score (  id int NOT NULL AUTO_INCREMENT,  name varchar(255) DEFAULT NULL,  PRIMARY KEY (id)) DEFAULT CHARSET=utf8;
 
+ALTER TABLE question_field_options ADD COLUMN priority INT default NULL;
+ALTER TABLE course_field_options ADD COLUMN priority INT default NULL;
+ALTER TABLE user_field_options ADD COLUMN priority INT default NULL;
+ALTER TABLE session_field_options ADD COLUMN priority INT default NULL;
+
+
+ALTER TABLE question_field_options ADD COLUMN priority_message varchar(255) default NULL;
+ALTER TABLE course_field_options ADD COLUMN priority_message varchar(255) default NULL;
+ALTER TABLE user_field_options ADD COLUMN priority_message varchar(255) default NULL;
+ALTER TABLE session_field_options ADD COLUMN priority_message varchar(255) default NULL;
+
+-- update tables to add iid field
+ALTER TABLE c_announcement CHANGE id id int unsigned not null;
+ALTER TABLE c_announcement DROP PRIMARY KEY;
+ALTER TABLE c_announcement add COLUMN iid int unsigned not null AUTO_INCREMENT PRIMARY KEY FIRST;
+ALTER TABLE c_announcement add UNIQUE KEY(c_id,id);
+ALTER TABLE c_announcement ENGINE = InnoDB;
+ALTER TABLE c_announcement_attachment CHANGE id id int unsigned not null;
+ALTER TABLE c_announcement_attachment DROP PRIMARY KEY;
+ALTER TABLE c_announcement_attachment add COLUMN iid int unsigned not null AUTO_INCREMENT PRIMARY KEY FIRST;
+ALTER TABLE c_announcement_attachment add UNIQUE KEY(c_id,id);
+ALTER TABLE c_announcement_attachment ENGINE = InnoDB;
+ALTER TABLE c_attendance CHANGE id id int unsigned not null;
+ALTER TABLE c_attendance DROP PRIMARY KEY;
+ALTER TABLE c_attendance add COLUMN iid int unsigned not null AUTO_INCREMENT PRIMARY KEY FIRST;
+ALTER TABLE c_attendance add UNIQUE KEY(c_id,id);
+ALTER TABLE c_attendance ENGINE = InnoDB;
+ALTER TABLE c_attendance_calendar CHANGE id id int unsigned not null;
+ALTER TABLE c_attendance_calendar DROP PRIMARY KEY;
+ALTER TABLE c_attendance_calendar add COLUMN iid int unsigned not null AUTO_INCREMENT PRIMARY KEY FIRST;
+ALTER TABLE c_attendance_calendar add UNIQUE KEY(c_id,id);
+ALTER TABLE c_attendance_calendar ENGINE = InnoDB;
+ALTER TABLE c_attendance_result CHANGE id id int unsigned not null;
+ALTER TABLE c_attendance_result DROP PRIMARY KEY;
+ALTER TABLE c_attendance_result add COLUMN iid int unsigned not null AUTO_INCREMENT PRIMARY KEY FIRST;
+ALTER TABLE c_attendance_result add UNIQUE KEY(c_id,id);
+ALTER TABLE c_attendance_result ENGINE = InnoDB;
+ALTER TABLE c_attendance_sheet DROP PRIMARY KEY;
+ALTER TABLE c_attendance_sheet add COLUMN iid int unsigned not null AUTO_INCREMENT PRIMARY KEY FIRST;
+ALTER TABLE c_attendance_sheet add UNIQUE KEY(c_id,user_id,attendance_calendar_id);
+ALTER TABLE c_attendance_sheet ENGINE = InnoDB;
+ALTER TABLE c_attendance_sheet_log CHANGE id id int unsigned not null;
+ALTER TABLE c_attendance_sheet_log DROP PRIMARY KEY;
+ALTER TABLE c_attendance_sheet_log add COLUMN iid int unsigned not null AUTO_INCREMENT PRIMARY KEY FIRST;
+ALTER TABLE c_attendance_sheet_log add UNIQUE KEY(c_id,id);
+ALTER TABLE c_attendance_sheet_log ENGINE = InnoDB;
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('breadcrumb_navigation_display', NULL, 'radio', 'Platform','true','BreadcrumbNavigationDisplayTitle', 'BreadcrumbNavigationDisplayComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('breadcrumb_navigation_display', 'true', 'Show');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('breadcrumb_navigation_display', 'false', 'Hide');
+
+INSERT INTO settings_current(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)  VALUES ('showonline','session','checkbox','Platform','true','ShowOnlineTitle','ShowOnlineComment',NULL,'ShowOnlineSession', 0);
+
+ALTER TABLE c_quiz_category ADD COLUMN visibility INT default 1;
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.030' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.033' WHERE variable = 'chamilo_database_version';

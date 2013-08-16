@@ -28,6 +28,7 @@ class IndexController extends CommonController
         /** @var \Template $template */
         $template = $app['template'];
 
+
         /*
         $token = $app['security']->getToken();
         if (null !== $token) {
@@ -198,7 +199,6 @@ class IndexController extends CommonController
         $app['template']->assign('error', $app['security.last_error']($request));
         $response = $app['template']->render_template('auth/login.tpl');
         return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
-        //return new Response($response, 200, array());
     }
 
     /**

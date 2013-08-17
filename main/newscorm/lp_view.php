@@ -55,7 +55,9 @@ if (empty($_SESSION['oLP'])) {
 
 $debug = 0;
 
-if ($debug) { error_log('------ Entering lp_view.php -------'); }
+if ($debug) {
+    error_log('------ Entering lp_view.php -------');
+}
 
 $_SESSION['oLP']->error = '';
 $lp_item_id = $_SESSION['oLP']->get_current_item_id();
@@ -175,7 +177,7 @@ if (!isset($src)) {
             $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
             $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
             if ($prereq_check === true) {
-                $src = $_SESSION['oLP']->get_link('http',$lp_item_id, $get_toc_list);
+                $src = $_SESSION['oLP']->get_link('http', $lp_item_id, $get_toc_list);
                 $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php?error=prerequisites';
@@ -187,7 +189,7 @@ if (!isset($src)) {
             $htmlHeadXtra[] = '<script src="'.$_SESSION['oLP']->get_js_lib().'" type="text/javascript" language="javascript"></script>';
             $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
             if ($prereq_check === true) {
-                $src = $_SESSION['oLP']->get_link('http',$lp_item_id, $get_toc_list);
+                $src = $_SESSION['oLP']->get_link('http', $lp_item_id, $get_toc_list);
                 $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php';

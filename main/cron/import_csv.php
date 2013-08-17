@@ -4,6 +4,9 @@ if (PHP_SAPI !='cli') {
     die('Run this script through the command line or comment this line in the code');
 }
 
+$_SERVER['SERVER_NAME'] = 'elo.encora.be';
+$_SERVER['HTTP_HOST'] = 'elo.encora.be';
+
 require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'log.class.php';
 
@@ -570,6 +573,11 @@ class ImportCsv
         Database::query($sql);
         echo $sql.PHP_EOL;
 
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $sql = "DELETE FROM $table";
+        Database::query($sql);
+        echo $sql.PHP_EOL;
+
         $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $sql = "DELETE FROM $table";
         Database::query($sql);
@@ -601,8 +609,12 @@ class ImportCsv
         Database::query($sql);
         echo $sql.PHP_EOL;
 
-        // Extra fields
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $sql = "DELETE FROM $table";
+        Database::query($sql);
+        echo $sql.PHP_EOL;
 
+        // Extra fields
         $table = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
         $sql = "DELETE FROM $table";
         Database::query($sql);

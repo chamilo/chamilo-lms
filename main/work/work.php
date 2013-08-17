@@ -311,17 +311,6 @@ echo $message;
 //for teachers
 
 switch ($action) {
-    case 'send_mail':
-        if (Security::check_token('get')) {
-            $mails_sent_to = send_reminder_users_without_publication($my_folder_data);
-            if (empty($mails_sent_to)) {
-                Display::display_warning_message(get_lang('NoResults'));
-            } else {
-                Display::display_confirmation_message(get_lang('MessageHasBeenSent').' '.implode(', ', $mails_sent_to));
-            }
-            Security::clear_token();
-        }
-        break;
     case 'settings':
         //if posts
         if ($is_allowed_to_edit && !empty($_POST['changeProperties'])) {
@@ -754,8 +743,7 @@ switch ($action) {
         if (isset($work_id) && !empty($work_id) && !$display_list_users_without_publication) {
 
         } elseif (isset($_GET['list']) && $_GET['list'] == 'without') {
-            //User with no works
-            display_list_users_without_publication($work_id);
+
         } else {
 
             $my_folder_data = get_work_data_by_id($work_id);

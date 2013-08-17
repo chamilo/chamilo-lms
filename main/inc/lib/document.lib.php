@@ -53,7 +53,8 @@ class DocumentManager {
      * 	@author Bert Vanderkimpen
      *
      */
-    public static function file_get_mime_type($filename) {
+    public static function file_get_mime_type($filename)
+    {
         // All MIME types in an array (from 1.6, this is the authorative source)
         // Please, keep this alphabetical if you add something to this list!
         $mime_types = array(
@@ -87,6 +88,7 @@ class DocumentManager {
             'dotx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
             'dvi' => 'application/x-dvi',
             'dwg' => 'application/vnd.dwg',
+            'dwf' => 'application/vnd.dwf',
             'dxf' => 'application/vnd.dxf',
             'dxr' => 'application/x-director',
             'eps' => 'application/postscript',
@@ -302,10 +304,12 @@ class DocumentManager {
      * @param string $name
      * @return false if file doesn't exist, true if stream succeeded
      */
-    public static function file_send_for_download($full_file_name, $forced = false, $name = '') {
+    public static function file_send_for_download($full_file_name, $forced = false, $name = '')
+    {
         if (!is_file($full_file_name)) {
             return false;
         }
+
         $filename = ($name == '') ? basename($full_file_name) : replace_dangerous_char($name);
         $len = filesize($full_file_name);
 
@@ -335,6 +339,7 @@ class DocumentManager {
             //no forced download, just let the browser decide what to do according to the mimetype
 
             $content_type = self::file_get_mime_type($filename);
+
             header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
             header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
             // Commented to avoid double caching declaration when playing with IE and HTTPS
@@ -352,6 +357,10 @@ class DocumentManager {
                     if (!empty($encoding)) {
                         $content_type .= '; charset=' . $encoding;
                     }
+                    break;
+                case 'application/vnd.dwg':
+                case 'application/vnd.dwf':
+                    header('Content-type: application/octet-stream');
                     break;
             }
             header('Content-type: ' . $content_type);

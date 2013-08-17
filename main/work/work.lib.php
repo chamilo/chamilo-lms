@@ -64,30 +64,6 @@ function display_action_links($id, $cur_dir_path, $show_tool_options, $display_u
         }
     }
 
-	if (api_is_allowed_to_edit(null, true)) {
-		global $token;
-
-		if (!empty($id)) {
-			if (empty($_GET['list']) or Security::remove_XSS($_GET['list']) == 'with') {
-				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without">'.
-				Display::return_icon('exercice_uncheck.png', get_lang('ViewUsersWithoutTask'),'',ICON_SIZE_MEDIUM)."</a>\n";
-                                $count = get_count_work($id);
-                                if ($count > 0) {
-                                    $display_output .= '<a href="downloadfolder.inc.php?id='.$id.'">'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), ICON_SIZE_MEDIUM).'</a>';
-                                }
-			} else {
-				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=with">'.
-				Display::return_icon('exercice_check.png', get_lang('ViewUsersWithTask'),'',ICON_SIZE_MEDIUM)."</a>\n";
-                                $display_output .= '<a href="downloadfolder.inc.php?id='.$id.'">'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), ICON_SIZE_MEDIUM).'</a>';
-                if (!isset($_GET['action']) || (isset($_GET['action']) && $_GET['action'] != 'send_mail')) {
-                    $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without&amp;action=send_mail&amp;sec_token='.$token.'">'.
-                    Display::return_icon('mail_send.png', get_lang('ReminderMessage'),'',ICON_SIZE_MEDIUM)."</a>";
-                } else {
-                    $display_output .= Display::return_icon('mail_send_na.png', get_lang('ReminderMessage'),'',ICON_SIZE_MEDIUM);
-                }
-			}
-		}
-	}
 
 	if ($display_output != '') {
 		echo '<div class="actions">';
@@ -1897,9 +1873,11 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
  * @return array
  * @author cvargas carlos.vargas@beeznest.com cfasanando, christian.fasanado@beeznest.com
  */
-function send_reminder_users_without_publication($task_data) {
+function send_reminder_users_without_publication($task_data)
+{
 	global $_course;
     $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+
 
 	$task_id = $task_data['id'];
 	$task_title = !empty($task_data['title']) ? $task_data['title'] : basename($task_data['url']);

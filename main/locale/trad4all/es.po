@@ -4172,3 +4172,6 @@ msgstr "Los datos suministrados son incorrectos"
 
 msgid "EnterEmailUserAndWellSendYouPassword"
 msgstr "Indique su DNI o correo electrónico y le enviarémos una nueva contraseña"
+
+msgid "LostPass"
+msgstr "Olvido de contraseña"

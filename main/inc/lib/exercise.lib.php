@@ -83,7 +83,7 @@ class ExerciseLib
                     $html .= '<div class="media">';
                     $html .= '<div class="pull-left">';
                     $html .= '<div class="media-object">';
-                    $html .= Display::div($current_item.'. ', array('class' => 'question_no_title'));
+                    $html .= Display::div($current_item, array('class' => 'question_no_title'));
                     $html .= '</div>';
                     $html .= '</div>';
                     $html .= '<div class="media-body">';

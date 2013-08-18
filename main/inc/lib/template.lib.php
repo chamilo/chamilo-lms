@@ -502,11 +502,11 @@ class Template
         }
 
         if (api_get_setting('use_virtual_keyboard') == 'true') {
-            $js_files[] = 'keyboard/jquery.keyboard.js';
+            $js_files[] = $jsFolder.'keyboard/jquery.keyboard.js';
         }
 
         if (api_get_setting('disable_copy_paste') == 'true') {
-            $js_files[] = 'jquery.nocutcopypaste.js';
+            $js_files[] = $jsFolder.'jquery.nocutcopypaste.js';
         }
 
         $js_file_to_string = null;

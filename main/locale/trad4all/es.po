@@ -4169,3 +4169,6 @@ msgstr "Pregunta agregada a la lista de preguntas"
 
 msgid "Bad credentials"
 msgstr "Los datos suministrados son incorrectos"
+
+msgid "EnterEmailUserAndWellSendYouPassword"
+msgstr "Indique su DNI o correo electrónico y le enviarémos una nueva contraseña"

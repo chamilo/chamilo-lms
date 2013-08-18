@@ -6138,8 +6138,8 @@ class Exercise
                 }
                 }
                 $html .= '<div class="row">';
-                $html .= '<div class="span2">'.$categoryName.'</div>';
-                $html .= '<div class="span8">';
+                $html .= '<div class="span2 exercise_progress_bars_cat">'.$categoryName.'</div>';
+                $html .= '<div class="span8 exercise_progress_bars_cat_items">';
 
                 if (!empty($nextValue)) {
                     if ($wasMedia) {

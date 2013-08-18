@@ -198,7 +198,6 @@ class IndexController extends CommonController
         $app['template']->assign('error', $app['security.last_error']($request));
         $response = $app['template']->render_template('auth/login.tpl');
         return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
-        //return new Response($response, 200, array());
     }
 
     /**
@@ -287,8 +286,9 @@ class IndexController extends CommonController
           ->getForm();
           return $app['template']->assign('form', $form->createView());
          */
-
-        $form = new \FormValidator('formLogin', 'POST', $app['url_generator']->generate('admin_login_check'), null, array('class' => 'form-vertical'));
+        $url = $app['url_generator']->generate('admin_login_check');
+        //var_dump($app['router']->generate('admin_login_check'));
+        $form = new \FormValidator('formLogin', 'POST', $url , null, array('class' => 'form-vertical'));
         $form->addElement(
             'text',
             'username',

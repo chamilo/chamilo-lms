@@ -82,7 +82,7 @@ define('UNSUBSCRIBE_NOT_ALLOWED', 0);
 
 // CONSTANTS defining all tools, using the english version
 /* When you add a new tool you must add it into function api_get_tools_lists() too */
-define('TOOL_DOCUMENT','document');
+define('TOOL_DOCUMENT', 'document');
 define('TOOL_THUMBNAIL', 'thumbnail');
 define('TOOL_HOTPOTATOES', 'hotpotatoes');
 define('TOOL_CALENDAR_EVENT', 'calendar_event');
@@ -92,11 +92,11 @@ define('TOOL_SEARCH', 'search');
 define('TOOL_LEARNPATH', 'learnpath');
 define('TOOL_ANNOUNCEMENT', 'announcement');
 define('TOOL_FORUM', 'forum');
-define('TOOL_FORUM_CATEGORY','forum_category');
-define('TOOL_FORUM_THREAD','forum_thread');
-define('TOOL_FORUM_POST','forum_post');
-define('TOOL_FORUM_ATTACH','forum_attachment');
-define('TOOL_FORUM_THREAD_QUALIFY','forum_thread_qualify');
+define('TOOL_FORUM_CATEGORY', 'forum_category');
+define('TOOL_FORUM_THREAD', 'forum_thread');
+define('TOOL_FORUM_POST', 'forum_post');
+define('TOOL_FORUM_ATTACH', 'forum_attachment');
+define('TOOL_FORUM_THREAD_QUALIFY', 'forum_thread_qualify');
 define('TOOL_THREAD', 'thread');
 define('TOOL_POST', 'post');
 define('TOOL_DROPBOX', 'dropbox');
@@ -115,18 +115,19 @@ define('TOOL_COPY_COURSE_CONTENT', 'copy_course_content');
 define('TOOL_RECYCLE_COURSE', 'recycle_course');
 define('TOOL_COURSE_HOMEPAGE', 'course_homepage');
 define('TOOL_COURSE_RIGHTS_OVERVIEW', 'course_rights');
-define('TOOL_UPLOAD','file_upload');
-define('TOOL_COURSE_MAINTENANCE','course_maintenance');
-define('TOOL_VISIO','visio');
-define('TOOL_VISIO_CONFERENCE','visio_conference');
-define('TOOL_VISIO_CLASSROOM','visio_classroom');
-define('TOOL_SURVEY','survey');
-define('TOOL_WIKI','wiki');
-define('TOOL_GLOSSARY','glossary');
-define('TOOL_GRADEBOOK','gradebook');
-define('TOOL_NOTEBOOK','notebook');
-define('TOOL_ATTENDANCE','attendance');
-define('TOOL_COURSE_PROGRESS','course_progress');
+define('TOOL_UPLOAD', 'file_upload');
+define('TOOL_COURSE_MAINTENANCE', 'course_maintenance');
+define('TOOL_VISIO', 'visio');
+define('TOOL_VISIO_CONFERENCE', 'visio_conference');
+define('TOOL_VISIO_CLASSROOM', 'visio_classroom');
+define('TOOL_SURVEY', 'survey');
+define('TOOL_WIKI', 'wiki');
+define('TOOL_GLOSSARY', 'glossary');
+define('TOOL_GRADEBOOK', 'gradebook');
+define('TOOL_NOTEBOOK', 'notebook');
+define('TOOL_ATTENDANCE', 'attendance');
+define('TOOL_COURSE_PROGRESS', 'course_progress');
+define('TOOL_CURRICULUM', 'curriculum');
 
 // CONSTANTS defining Chamilo interface sections
 define('SECTION_CAMPUS', 'mycampus');
@@ -136,7 +137,7 @@ define('SECTION_MYAGENDA', 'myagenda');
 define('SECTION_COURSE_ADMIN', 'course_admin');
 define('SECTION_PLATFORM_ADMIN', 'platform_admin');
 define('SECTION_MYGRADEBOOK', 'mygradebook');
-define('SECTION_TRACKING','session_my_space');
+define('SECTION_TRACKING', 'session_my_space');
 define('SECTION_SOCIAL', 'social');
 define('SECTION_DASHBOARD', 'dashboard');
 define('SECTION_REPORTS', 'reports');
@@ -148,7 +149,7 @@ define('CAS_AUTH_SOURCE', 'cas');
 define('LDAP_AUTH_SOURCE', 'extldap');
 
 // CONSTANT defining the default HotPotatoes files directory
-define('DIR_HOTPOTATOES','/HotPotatoes_files');
+define('DIR_HOTPOTATOES', '/HotPotatoes_files');
 
 // Event logs types
 define('LOG_COURSE_DELETE',                     'course_deleted');
@@ -847,7 +848,7 @@ function api_get_path($path_type, $path = null) {
 function api_get_cdn_path($web_path) {
     global $_configuration;
     $web_root = api_get_path(WEB_PATH);
-    $ext = substr($web_path,strrpos($web_path,'.'));
+    $ext = substr($web_path,strrpos($web_path, '.'));
     if (isset($ext[2])) { // faster version of strlen to check if len>2
         // Check for CDN definitions
         if (!empty($_configuration['cdn_enable']) && !empty($ext)) {
@@ -1174,7 +1175,7 @@ function api_get_user_id() {
  * Gets the list of courses a specific user is subscribed to
  * @param int       User ID
  * @param boolean   Whether to get session courses or not - NOT YET IMPLEMENTED
- * @return array    Array of courses in the form [0]=>('code'=>xxx,'db'=>xxx,'dir'=>xxx,'status'=>d)
+ * @return array    Array of courses in the form [0]=>('code'=>xxx, 'db'=>xxx, 'dir'=>xxx, 'status'=>d)
  * @deprecated use the UserManager or CourseManager class
  */
 function api_get_user_courses($userid, $fetch_session = true) {
@@ -2267,13 +2268,17 @@ function api_get_self() {
 function api_is_platform_admin($allow_sessions_admins = false)
 {
     global $app;
-    if ($app['security']->isGranted('ROLE_ADMIN')) {
-        return true;
-    }
+    $token = $app['security']->getToken();
 
-    if ($allow_sessions_admins) {
-        if ($app['security']->isGranted('ROLE_SESSION_MANAGER')) {
+    if (!empty($token)) {
+        if ($app['security']->isGranted('ROLE_ADMIN')) {
             return true;
+        }
+
+        if ($allow_sessions_admins) {
+            if ($app['security']->isGranted('ROLE_SESSION_MANAGER')) {
+                return true;
+            }
         }
     }
     return false;
@@ -2282,8 +2287,12 @@ function api_is_platform_admin($allow_sessions_admins = false)
 function api_is_question_manager()
 {
     global $app;
-    if ($app['security']->isGranted('ROLE_QUESTION_MANAGER')) {
-        return true;
+    $token = $app['security']->getToken();
+
+    if (!empty($token)) {
+        if ($app['security']->isGranted('ROLE_QUESTION_MANAGER')) {
+            return true;
+        }
     }
     return false;
 }
@@ -2296,8 +2305,12 @@ function api_is_question_manager()
 function api_is_session_admin()
 {
     global $app;
-    if ($app['security']->isGranted('ROLE_SESSION_MANAGER')) {
-        return true;
+    $token = $app['security']->getToken();
+
+    if (!empty($token)) {
+        if ($app['security']->isGranted('ROLE_SESSION_MANAGER')) {
+            return true;
+        }
     }
     return false;
 }
@@ -2308,8 +2321,12 @@ function api_is_session_admin()
  */
 function api_is_drh() {
     global $app;
-    if ($app['security']->isGranted('ROLE_RRHH')) {
-        return true;
+    $token = $app['security']->getToken();
+
+    if (!empty($token)) {
+        if ($app['security']->isGranted('ROLE_RRHH')) {
+            return true;
+        }
     }
     return false;
 }
@@ -2320,8 +2337,12 @@ function api_is_drh() {
  */
 function api_is_student() {
     global $app;
-    if ($app['security']->isGranted('ROLE_STUDENT')) {
-        return true;
+    $token = $app['security']->getToken();
+
+    if (!empty($token)) {
+        if ($app['security']->isGranted('ROLE_STUDENT')) {
+            return true;
+        }
     }
     return false;
 }
@@ -3317,7 +3338,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
                             WHERE $filter";
                 } else {
                     $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id, to_user_id, to_group_id, visibility, start_visible, end_visible, id_session)
-                            VALUES ($course_id, '$tool','$item_id','$time', '$user_id', '$time', '$lastedit_type','$user_id', '$to_user_id', '$to_group_id', '$visibility', '$start_visible','$end_visible', '$session_id')";
+                            VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_user_id', '$to_group_id', '$visibility', '$start_visible', '$end_visible', '$session_id')";
                 }
 
             } else {
@@ -3479,7 +3500,7 @@ function api_get_track_item_property_history($tool, $ref) {
     $item_property_id = api_get_item_property_id($course_code, $tool, $ref);
     $sql = "SELECT * FROM $tbl_stats_item_property WHERE item_property_id = $item_property_id AND course_id = $course_id ORDER BY lastedit_date DESC";
     $result = Database::query($sql);
-    $result = Database::store_result($result,'ASSOC');
+    $result = Database::store_result($result, 'ASSOC');
     return $result;
 }
 
@@ -3513,7 +3534,7 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0) {
     $rs  = Database::query($sql);
     $row = array();
     if (Database::num_rows($rs) > 0) {
-        $row = Database::fetch_array($rs,'ASSOC');
+        $row = Database::fetch_array($rs, 'ASSOC');
     }
     return $row;
 }
@@ -3685,7 +3706,7 @@ function api_get_language_info($language_id) {
     $rs = Database::query($sql);
     $language_info = array();
     if (Database::num_rows($rs)) {
-        $language_info = Database::fetch_array($rs,'ASSOC');
+        $language_info = Database::fetch_array($rs, 'ASSOC');
     }
     return $language_info;
 }
@@ -4108,7 +4129,7 @@ function api_copy_folder_course_session($pathname, $base_path_document, $session
 
     $course_id	 = $course_info['real_id'];
 
-    $folders = explode(DIRECTORY_SEPARATOR,str_replace($base_path_document.DIRECTORY_SEPARATOR,'',$pathname));
+    $folders = explode(DIRECTORY_SEPARATOR,str_replace($base_path_document.DIRECTORY_SEPARATOR, '',$pathname));
 
     $new_pathname = $base_path_document;
     $path = '';
@@ -4138,7 +4159,7 @@ function api_copy_folder_course_session($pathname, $base_path_document, $session
                 		session_id = '$session_id'";
                 Database::query($sql);
                 $document_id = Database::insert_id();
-                api_item_property_update($course_info,TOOL_DOCUMENT,$document_id,'FolderCreated',api_get_user_id(),0,0,null,null,$session_id);
+                api_item_property_update($course_info,TOOL_DOCUMENT,$document_id, 'FolderCreated',api_get_user_id(),0,0,null,null,$session_id);
             }
         }
 
@@ -4469,8 +4490,8 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
                         "subkeytext,access_url)" .
                         " VALUES " .
                         "('".$row['variable']."',".(!empty($row['subkey']) ? "'".$row['subkey']."'" : "NULL")."," .
-                        "'".$row['type']."','".$row['category']."'," .
-                        "'$value','".$row['title']."'," .
+                        "'".$row['type']."', '".$row['category']."'," .
+                        "'$value', '".$row['title']."'," .
                         "".(!empty($row['comment']) ? "'".$row['comment']."'" : "NULL").",".(!empty($row['scope']) ? "'".$row['scope']."'" : "NULL")."," .
                         "".(!empty($row['subkeytext'])?"'".$row['subkeytext']."'":"NULL").",$access_url)";
                 $res = Database::query($insert);
@@ -4499,8 +4520,8 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
                             " VALUES " .
                             "('".$row['variable']."',".
                             (!empty($row['subkey']) ? "'".$row['subkey']."'" : "NULL")."," .
-                            "'".$row['type']."','".$row['category']."'," .
-                            "'$value','".$row['title']."'," .
+                            "'".$row['type']."', '".$row['category']."'," .
+                            "'$value', '".$row['title']."'," .
                             "".(!empty($row['comment']) ? "'".$row['comment']."'" : "NULL").",".
                             (!empty($row['scope']) ? "'".$row['scope']."'" : "NULL")."," .
                             "".(!empty($row['subkeytext']) ? "'".$row['subkeytext']."'" : "NULL").",$access_url,".$row['access_url_changeable'].")";
@@ -4590,7 +4611,7 @@ function api_get_access_url($id)
 {
     $id = intval($id);
     $table_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-    $sql = "SELECT url, description, active, created_by, tms FROM $table_access_url WHERE id = '$id' ";
+    $sql = "SELECT id, url, description, active, created_by, tms FROM $table_access_url WHERE id = '$id' ";
     $res = Database::query($sql);
     $result = Database::fetch_array($res);
     return $result;
@@ -4629,7 +4650,7 @@ function api_add_access_url($u, $d = '', $a = 1) {
     }
     $ui = api_get_user_id();
 
-    $sql = "INSERT INTO $t_au (url,description,active,created_by,tms) VALUES ('$u','$d',$a,$ui,'')";
+    $sql = "INSERT INTO $t_au (url,description,active,created_by,tms) VALUES ('$u', '$d',$a,$ui, '')";
     $res = Database::query($sql);
     return ($res === false) ? false : Database::insert_id();
 }
@@ -4676,7 +4697,7 @@ function & api_get_settings_categories($exceptions = array(), $access_url = 1) {
     $t_cs = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $list = "'".implode("','",$exceptions)."'";
     $sql = "SELECT DISTINCT category FROM $t_cs WHERE category is NOT NULL ";
-    if ($list != "'',''" and $list != "''" and !empty($list)) {
+    if ($list != "'', ''" and $list != "''" and !empty($list)) {
         $sql .= " AND category NOT IN ($list) ";
     }
     $result = Database::store_result(Database::query($sql));
@@ -4771,7 +4792,7 @@ function api_add_setting($val, $var, $sk = null, $type = 'textfield', $c = null,
                 "subkey,title," .
                 "comment,scope," .
                 "subkeytext,access_url,access_url_changeable)" .
-                " VALUES ('$var','$val',";
+                " VALUES ('$var', '$val',";
     if (isset($type)) {
         $type = Database::escape_string($type);
         $insert .= "'$type',";
@@ -5879,7 +5900,7 @@ function api_get_jquery_libraries_js($libraries) {
         $platform_isocode = strtolower(api_get_language_isocode());
 
         //languages supported by jqgrid see files in main/inc/lib/javascript/jqgrid/js/i18n
-        $jqgrid_langs = array('bg', 'bg1251', 'cat','cn','cs','da','de','el','en','es','fa','fi','fr','gl','he','hu','is','it','ja','nl','no','pl','pt-br','pt','ro','ru','sk','sr','sv','tr','ua');
+        $jqgrid_langs = array('bg', 'bg1251', 'cat', 'cn', 'cs', 'da', 'de', 'el', 'en', 'es', 'fa', 'fi', 'fr', 'gl', 'he', 'hu', 'is', 'it', 'ja', 'nl', 'no', 'pl', 'pt-br', 'pt', 'ro', 'ru', 'sk', 'sr', 'sv', 'tr', 'ua');
 
         if (in_array($platform_isocode, $jqgrid_langs)) {
             $languaje = $platform_isocode;
@@ -6049,7 +6070,7 @@ function api_check_php_version() {
  */
 function api_check_archive_dir() {
     if (is_dir(api_get_path(SYS_ARCHIVE_PATH)) && !is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
-        $message = Display::return_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'),'warning');
+        $message = Display::return_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'), 'warning');
         api_not_allowed(true, $message);
     }
 }
@@ -6145,7 +6166,7 @@ function api_check_ip_in_range($ip,$range) {
     $ip_ip = ip2long ($ip);
     $ranges = array();
     // divide range param into array of elements
-    if (strpos($range,',')!==false) {
+    if (strpos($range, ',')!==false) {
         $ranges = explode(',',$range);
     } else {
         $ranges = array($range);
@@ -6153,7 +6174,7 @@ function api_check_ip_in_range($ip,$range) {
     foreach ($ranges as $range) {
         $range = trim($range);
         if (empty($range)) { continue; }
-        if (strpos($range,'/')===false) {
+        if (strpos($range, '/')===false) {
             if (strcmp($ip,$range)===0) {
                 return true; // there is a direct IP match, return OK
             }
@@ -6926,4 +6947,74 @@ function api_get_user_roles()
     $status[SESSIONADMIN] = get_lang('SessionsAdmin');
     $status[QUESTION_MANAGER] = get_lang('QuestionManager');
     return $status;
+}
+/**
+ *
+ * @param string $inputId the jquery id example: #password
+ * @return string
+ */
+function api_get_password_checker_js($inputId)
+{
+    global $_configuration;
+    $useStrengthPassChecker = isset($_configuration['allow_strength_pass_checker']) ? $_configuration['allow_strength_pass_checker'] : false;
+
+    if ($useStrengthPassChecker == false) {
+        return null;
+    }
+
+    $verdicts = array(get_lang('Weak'), get_lang('Normal'), get_lang('Medium'), get_lang('Strong'), get_lang('VeryStrong'));
+    $js = api_get_js('strength/strength.js');
+    $js .=  "<script>
+
+    var verdicts = ['".implode("','", $verdicts)."'];
+    var errorMessages = {
+        password_to_short : '".get_lang('PasswordIsTooShort')."'
+    };
+
+    $(document).ready(function() {
+        var options = {
+            verdicts: verdicts,
+            onLoad : function () {
+                //$('#messages').text('Start typing password');
+            },
+            onKeyUp: function (evt) {
+                $(evt.target).pwstrength('outputErrorList');
+            },
+            errorMessages : errorMessages,
+            viewports: {
+              progress: '#password_progress',
+              //verdict: undefined,
+              //errors: undefined
+          }
+        };
+        $('".$inputId."').pwstrength(options);
+    });
+    </script>";
+    return $js;
+}
+
+/**
+ * Gets an array with "easy" passwords
+ * @return array
+ */
+function api_get_easy_password_list()
+{
+    $passwordList = array('123', '1234', '123456', 'admin', 'user', 'student', 'teacher');
+    $file = api_get_path(CONFIGURATION_PATH).'easy_password_list.php';
+    if (file_exists($file)) {
+        $passwordList = require_once $file;
+    }
+    return $passwordList;
+}
+
+function api_is_profile_editable()
+{
+    global $profileIsEditable;
+    return isset($profileIsEditable) ? $profileIsEditable : false;
+}
+
+function api_is_profile_readable()
+{
+    global $profileIsReadable;
+    return isset($profileIsReadable) ? $profileIsReadable : true;
 }

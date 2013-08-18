@@ -279,6 +279,11 @@ class AnnouncementManager
         }
     }
 
+    /**
+     * Get last announcement order in the list (by max display_order)
+     * @return int 0 or the integer display_order of the last announcement
+     * @assert () === 0 
+     */
     public static function get_last_announcement_order()
     {
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
@@ -397,7 +402,7 @@ class AnnouncementManager
     }
 
     /*
-      STORE ANNOUNCEMENT  GROUP ITEM
+     * STORE ANNOUNCEMENT  GROUP ITEM
      */
 
     public static function add_group_announcement(

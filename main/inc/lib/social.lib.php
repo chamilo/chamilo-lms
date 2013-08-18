@@ -928,13 +928,13 @@ class SocialManager extends UserManager {
         }
 
         if (!empty($courseCode)) {
-            //return api_get_path(WEB_PUBLIC_PATH).'users/online-in-course/'.$courseCode;
             return api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$courseCode;
+            //return api_get_path(WEB_PUBLIC_PATH).'users/online/course/'.$courseCode;
         }
 
         if (!empty($sessionId)) {
-            //return api_get_path(WEB_PUBLIC_PATH).'users/online-in-session/'.$courseCode;
             return api_get_path(WEB_PATH).'whoisonlinesession.php?session_id='.$sessionId;
+            //return api_get_path(WEB_PUBLIC_PATH).'users/online/session/'.$sessionId;
         }
     }
 }

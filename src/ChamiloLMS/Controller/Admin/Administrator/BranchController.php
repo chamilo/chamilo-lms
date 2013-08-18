@@ -65,7 +65,7 @@ class BranchController extends CommonController
 
     /**
     *
-    * @Route("/{id}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Route("/{id}", requirements={"id" = "\d+"})
     * @Method({"GET"})
     */
     public function readAction($id)
@@ -132,7 +132,7 @@ class BranchController extends CommonController
 
     /**
     *
-    * @Route("/{id}/edit", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Route("/{id}/edit", requirements={"id" = "\d+"})
     * @Method({"GET"})
     */
     public function editAction($id)
@@ -142,7 +142,7 @@ class BranchController extends CommonController
 
     /**
     *
-    * @Route("/{id}/delete", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Route("/{id}/delete", requirements={"id" = "\d+"})
     * @Method({"GET"})
     */
     public function deleteAction($id)

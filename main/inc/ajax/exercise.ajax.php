@@ -446,12 +446,14 @@ switch ($action) {
                 }
 
                 // Creates a temporary Question object
-            	$objQuestionTmp = Question::read($my_question_id, $course_id);
+                $objQuestionTmp = Question::read($my_question_id, $course_id);
 
                 if ($objExercise->type == ONE_PER_PAGE && $objQuestionTmp->type == UNIQUE_ANSWER) {
-                    if (empty($my_choice)) {
-                        echo 'answer_required';
-                        exit;
+                    if (in_array($my_question_id, $remind_list)) {
+                        if (empty($my_choice)) {
+                            echo 'answer_required';
+                            exit;
+                        }
                     }
                 }
 

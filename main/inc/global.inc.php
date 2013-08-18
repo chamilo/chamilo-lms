@@ -4,7 +4,7 @@
 /**
  * This is a bootstrap file that loads all Chamilo dependencies including:
  *
- * - Chamilo settings in main/inc/configuration.php or main/inc/configuration.yml
+ * - Chamilo settings in main/inc/conf/configuration.php or config/configuration.yml or config/configuration.php (in this order, using what if finds first)
  * - Database (Using Doctrine DBAL/ORM)
  * - Templates (Using Twig)
  * - Loading language files (Using Symfony component)
@@ -259,6 +259,8 @@ $app->error(
         if ($app['debug']) {
             //return;
         }
+        $message = null;
+
         if (isset($code)) {
             switch ($code) {
                 case 401:
@@ -273,8 +275,8 @@ $app->error(
             }
         } else {
             $code = null;
-            $message = null;
         }
+        //$code = ($e instanceof HttpException) ? $e->getStatusCode() : 500;
 
         // It seems that error() is executed first than the before() middleware
         // @ŧodo check this one
@@ -285,6 +287,7 @@ $app->error(
         // Default layout.
         $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
 
+        $app['template']->assign('error', array('code' => $code, 'message' => $message));
 
         $response = $app['template']->render_layout('error.tpl');
 

@@ -1,5 +1,4 @@
 {% if menu is not null %}
-
 <div class="navbar subnav">
     <div class="navbar-inner">
         {% if app.full_width == 1 %}
@@ -27,20 +26,30 @@
                     </li>
                     {% endif %}
 
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    {% if is_profile_editable == true %}
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                {{ _u.messages_count }}  <img src="{{ _u.avatar_small }}"/>
+                                {{ _u.complete_name }}
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    {{ profile_link }}
+                                    {{ message_link }}
+                                </li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a>
                             {{ _u.messages_count }}  <img src="{{ _u.avatar_small }}"/>
                             {{ _u.complete_name }}
-                            <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                {{ profile_link }}
-                                {{ message_link }}
-                            </li>
-                        </ul>
+                            </a>
+                        </li>
+                    {% endif %}
                     <li>
-                        <a id="logout_button" class="logout" title="{{ "Logout"|get_lang }}" href="{{ logout_link }}" >
+                        <a id="logout_button" class="logout" title="{{ "Logout"|get_lang }}" href="{{ url('admin_logout') }}" >
                             <img src="{{ "exit.png"|icon(22) }}">
                         </a>
                     </li>

@@ -501,7 +501,7 @@ foreach ($questionList as $questionId) {
                 echo '<p>'.$comment.'</p>';
             }
 
-            // Showing the score
+            // Showing the score.
             $queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
             $resfree = Database::query($queryfree);
             $questionScore= Database::result($resfree,0,"marks");
@@ -725,7 +725,7 @@ if (!empty($category_list) && ($show_results || $show_only_total_score)) {
         'score' => $my_total_score_temp,
         'total' => $totalWeighting
     );
-    echo Testcategory::get_stats_table_by_attempt($objExercise->id, $category_list);
+    echo Testcategory::get_stats_table_by_attempt($objExercise->id, $category_list, $objExercise->categoryMinusOne);
 }
 
 echo $total_score_text;

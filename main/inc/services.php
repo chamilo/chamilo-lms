@@ -7,6 +7,19 @@
  * @package chamilo.services
  */
 
+
+// Flint
+$app->register(new Flint\Provider\ConfigServiceProvider());
+$app['root_dir'] = $app['root_sys'];
+
+$app->register(new Flint\Provider\RoutingServiceProvider(), array(
+    'routing.resource' => $app['sys_config_path'].'routing.yml',
+    'routing.options' => array(
+        'cache_dir' => $app['debug'] == true ? null : $app['sys_temp_path']
+        //'cache_dir' => $app['sys_temp_path']
+    ),
+));
+
 // Monolog.
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
 use FranMoreno\Silex\Provider\PagerfantaServiceProvider;
@@ -35,6 +48,7 @@ if (is_writable($app['sys_temp_path'])) {
     }
 }
 
+
 //Setting HttpCacheService provider in order to use do: $app['http_cache']->run();
 /*
 $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
@@ -43,7 +57,15 @@ $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
 
 // http://symfony.com/doc/master/reference/configuration/security.html
 
-$app->register(new Silex\Provider\SecurityServiceProvider(), array(
+class SecurityServiceProvider extends \Silex\Provider\SecurityServiceProvider
+{
+    public function addFakeRoute($method, $pattern, $name)
+    {
+        // Don't do anything otherwise the closures will be dumped and that leads to fatal errors.
+    }
+}
+
+$app->register(new SecurityServiceProvider, array(
     'security.firewalls' => array(
         'login' => array(
             'pattern' => '^/login$',
@@ -67,21 +89,19 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
                 return $app['orm.em']->getRepository('Entity\User');
             }),
             'anonymous' => true
-        ),/*
-        'classic' => array(
-            'pattern' => '^/.*$'
-        )*/
+        )
     )
 ));
 
-// Registering Password encoder.
 
+// Registering Password encoder.
 $app['security.encoder.digest'] = $app->share(function($app) {
     // use the sha1 algorithm
     // don't base64 encode the password
     // use only 1 iteration
     return new MessageDigestPasswordEncoder($app['configuration']['password_encryption'], false, 1);
 });
+
 
 // What to do when login success?
 $app['security.authentication.success_handler.admin'] = $app->share(function($app) {
@@ -95,13 +115,21 @@ $app['security.authentication.logout_handler.admin'] = $app->share(function($app
 
 // Role hierarchy
 $app['security.role_hierarchy'] = array(
-    'ROLE_ADMIN' => array('ROLE_QUESTION_MANAGER', 'ROLE_SESSION_MANAGER', 'ROLE_TEACHER', 'ROLE_ALLOWED_TO_SWITCH', 'ROLE_DIRECTOR'),
+    'ROLE_ADMIN' => array(
+        'ROLE_QUESTION_MANAGER',
+        'ROLE_SESSION_MANAGER',
+        'ROLE_TEACHER',
+        'ROLE_ALLOWED_TO_SWITCH',
+        'ROLE_DIRECTOR',
+        'ROLE_JURY_PRESIDENT'
+    ),
     'ROLE_RRHH' => array('ROLE_TEACHER'),
     'ROLE_TEACHER' => array('ROLE_STUDENT'),
     'ROLE_QUESTION_MANAGER' => array('ROLE_STUDENT', 'ROLE_QUESTION_MANAGER'),
     'ROLE_SESSION_MANAGER' => array('ROLE_STUDENT', 'ROLE_SESSION_MANAGER'),
     'ROLE_STUDENT' => array('ROLE_STUDENT'),
     'ROLE_ANONYMOUS' => array('ROLE_ANONYMOUS'),
+
     // Ministerio
     'ROLE_JURY_PRESIDENT' => array('ROLE_JURY_PRESIDENT', 'ROLE_JURY_MEMBER', 'ROLE_JURY_SUBSTITUTE'),
     'ROLE_JURY_SUBSTITUTE' => array('ROLE_JURY_SUBSTITUTE', 'ROLE_JURY_MEMBER'),
@@ -118,6 +146,8 @@ $app['security.access_rules'] = array(
     //array('^/main/admin/extra_field_workflow.php', 'ROLE_QUESTION_MANAGER'),
     array('^/main/admin/.*', 'ROLE_ADMIN'),
     array('^/admin/questionmanager', 'ROLE_QUESTION_MANAGER'),
+    array('^/main/auth/inscription.php', 'IS_AUTHENTICATED_ANONYMOUSLY'),
+    array('^/main/auth/lostPassword.php', 'IS_AUTHENTICATED_ANONYMOUSLY'),
     array('^/main/.*', array('ROLE_STUDENT')),
 
     // Ministerio routes
@@ -153,7 +183,7 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
 $app->register(new Silex\Provider\FormServiceProvider());
 
 // URL generator provider
-$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+//$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
 // Needed to use the "entity" option in symfony forms
 
@@ -445,7 +475,6 @@ if ($app['assetic.enabled']) {
     );
 }
 
-
 // Gaufrette service provider (to manage files/dirs) (not used yet)
 /*
 use Bt51\Silex\Provider\GaufretteServiceProvider\GaufretteServiceProvider;
@@ -680,7 +709,3 @@ $app['curriculum_user.controller'] = $app->share(
         return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumUserController($app);
     }
 );
-
-
-
-

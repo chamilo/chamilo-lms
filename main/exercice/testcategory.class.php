@@ -16,6 +16,7 @@ class Testcategory
     public $course_id;
     public $c_id; // from db
     public $root;
+    public $visibility;
 
     /**
      * Constructor of the class Category
@@ -31,7 +32,7 @@ class Testcategory
      * @param string $type
      * @param int $course_id
      */
-    public function Testcategory($in_id = 0, $in_name = '', $in_description = "", $parent_id = 0, $type = 'simple', $course_id = null)
+    public function Testcategory($in_id = 0, $in_name = '', $in_description = "", $parent_id = 0, $type = 'simple', $course_id = null, $visibility = 1)
     {
 		if ($in_id != 0 && $in_name == "") {
 			$tmpobj = new Testcategory();
@@ -44,6 +45,7 @@ class Testcategory
             $this->parent_path = $this->name;
             $this->c_id = $tmpobj->c_id;
             $this->root = $tmpobj->root;
+            $this->visibility = $tmpobj->visibility;
 
             if (!empty($tmpobj->parent_id)) {
                 $category = new Testcategory($tmpobj->parent_id);
@@ -54,10 +56,11 @@ class Testcategory
 			$this->name = $in_name;
 			$this->description = $in_description;
             $this->parent_id = $parent_id;
+            $this->visibility = $visibility;
         }
         $this->type = $type;
 
-        if (!empty($course_id))  {
+        if (!empty($course_id)) {
             $this->course_id = $course_id;
 		} else {
             $this->course_id = api_get_course_int_id();
@@ -89,6 +92,7 @@ class Testcategory
             $this->parent_id = $row['parent_id'];
             $this->c_id = $row['c_id'];
             $this->root = $row['root'];
+            $this->visibility = $row['visibility'];
 
         } else {
             return false;
@@ -169,6 +173,7 @@ class Testcategory
 
         $category->setTitle($this->name);
         $category->setDescription($this->description);
+        $category->setVisibility($this->visibility);
 
         if (!empty($this->parent_id)) {
             foreach ($this->parent_id as $parentId) {
@@ -690,8 +695,7 @@ class Testcategory
                 WHERE   exercice_id = $exerciseId AND
                         qrc.c_id = ".api_get_course_int_id()."
                 ";
-
-		$res = Database::query($sql);
+        $res = Database::query($sql);
         $categories = array();
 
 		while ($data = Database::fetch_array($res)) {
@@ -715,7 +719,6 @@ class Testcategory
                 $newCategoryList[$categoryId] = $categories[$categoryId];
             }
         }
-
         return $newCategoryList;
     }
 
@@ -956,8 +959,6 @@ class Testcategory
         $em = $app['orm.em'];
         $repo = $em->getRepository('Entity\CQuizCategory');
 
-        $redefineCategoryList = array();
-
         if (!empty($category_list) && count($category_list) > 1) {
             $globalCategoryScore = array();
 
@@ -1054,27 +1055,21 @@ class Testcategory
                 WHERE exercise_id = {$exercise_id} ";
 
         if (!empty($order)) {
-            $sql .= "ORDER BY $order";
+            $sql .= " ORDER BY $order";
         }
-
         $categories = array();
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
              while ($row = Database::fetch_array($result, 'ASSOC')) {
                 if ($excludeCategoryWithNoQuestions) {
-                    //if ($row['count_questions'] == 0 || $row['count_questions'] == -1) {
-                    /*0 means no questions selected this options is also filtered in the function:
-                    Exercise::pickQuestionsPerCategory() */
                     if ($row['count_questions'] == 0) {
                        continue;
                     }
                 }
                 $categories[$row['category_id']] = $row;
             }
-            if (!empty($list)) {
-                //$categories = $this->sort_tree_array($list);
-            }
         }
+
         if ($shuffle) {
             ArrayClass::shuffle_assoc($categories);
         }
@@ -1163,6 +1158,12 @@ class Testcategory
         $form->add_html_editor('category_description', get_lang('CategoryDescription'), false, false, array('ToolbarSet' => 'test_category', 'Width' => '90%', 'Height' => '200'));
         $category_parent_list = array();
 
+        $options = array(
+            '1' => get_lang('Visible'),
+            '0' => get_lang('Hidden')
+        );
+        $form->addElement('select', 'visibility', get_lang('Visibility'), $options);
+
         $script = null;
         if (!empty($this->parent_id)) {
             $parent_cat = new Testcategory($this->parent_id);
@@ -1180,6 +1181,7 @@ class Testcategory
         $defaults["category_name"] = $this->name;
         $defaults["category_description"] = $this->description;
         $defaults["parent_id"] = $this->parent_id;
+        $defaults["visibility"] = $this->visibility;
         $form->setDefaults($defaults);
 
         // setting the rules

@@ -14,7 +14,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
  * Class CurriculumItemController
- * @todo @route and @method function don't work yet
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
@@ -32,7 +31,7 @@ class CurriculumItemController extends CommonController
 
     /**
     *
-    * @Route("/{id}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Route("/{id}", requirements={"id" = "\d+"})
     * @Method({"GET"})
     */
     public function readAction($id)
@@ -91,7 +90,7 @@ class CurriculumItemController extends CommonController
 
     /**
     *
-    * @Route("/{id}/edit", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Route("/{id}/edit", requirements={"id" = "\d+"})
     * @Method({"GET"})
     */
     public function editAction($id)
@@ -101,7 +100,7 @@ class CurriculumItemController extends CommonController
 
     /**
     *
-    * @Route("/{id}/delete", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Route("/{id}/delete", requirements={"id" = "\d+"})
     * @Method({"GET"})
     */
     public function deleteAction($id)
@@ -118,8 +117,6 @@ class CurriculumItemController extends CommonController
     {
         $routes = parent::generateDefaultCrudRoutes();
         $routes['add_from_category'] = 'curriculum_item.controller:addFromCategoryAction';
-        //$routes['add_items'] = 'curriculum_item.controller:addItemsAction';
-
         return $routes ;
     }
 

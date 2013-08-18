@@ -1398,6 +1398,7 @@ CREATE TABLE c_quiz_category (
   lft int default NULL,
   rgt int default NULL,
   root int default NULL,
+  visibility INT default 1,
   PRIMARY KEY (iid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

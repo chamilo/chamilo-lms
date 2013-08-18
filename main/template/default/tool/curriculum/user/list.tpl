@@ -83,7 +83,7 @@ function addTagFormDeleteLink($tagFormLi) {
 function save(itemId) {
     var form = $("#"+itemId).parent();
     var serializedForm = form.serialize();
-    $.post('{{ url('curriculum_user.controller:saveUserItemAction') }}', serializedForm);
+    $.post('{{ url('curriculum_user.controller:saveUserItemAction', {'courseCode' : app.request.get('courseCode')) }}', serializedForm);
     return false;
 }
 
@@ -113,9 +113,10 @@ function saveAll() {
 
                 {% for item in subcategory.items %}
                     <h5> {{ item.title }} (item) - Max {{ item.maxRepeat }}</h5>
-
+                    <div class="row">
                     {{ form_start(form_list[item.id]) }}
-                        <div id="items_{{ item.id }}" class="items" data-max="{{ item.maxRepeat }}" data-prototype="{{ form_widget(form_list[item.id].userItems.vars.prototype)|e }}" >
+
+                        <div id="items_{{ item.id }}" class="items span8" data-max="{{ item.maxRepeat }}" data-prototype="{{ form_widget(form_list[item.id].userItems.vars.prototype)|e }}" >
                             {% for widget in form_list[item.id].userItems.children %}
                                 {{ _self.widget_prototype(widget, 'Remove item') }}
                             {% endfor %}
@@ -124,16 +125,19 @@ function saveAll() {
                             </ul>
                         </div>
 
-                        <div class="btn-group">
-                            {# form_widget(form_list[item.id].submit) #}
-                            <!-- <a class="btn btn-success" onclick="save('items_{{ item.id }}');" data-target="items_{{ item.id }}">{{ 'Save items' | get_lang }}</a> -->
-                            {% if item.maxRepeat > 1 %}
-                                <a class="btn-add btn btn-primary" data-target="items_{{ item.id }}"><i class="icon-plus-sign icon-large"></i></a>
-                            {% endif %}
+                        <div class="span8">
+                            <div class="btn-group">
+                                {# form_widget(form_list[item.id].submit) #}
+                                <!-- <a class="btn btn-success" onclick="save('items_{{ item.id }}');" data-target="items_{{ item.id }}">{{ 'Save items' | get_lang }}</a> -->
+                                {% if item.maxRepeat > 1 %}
+                                    <a class="btn-add btn btn-primary" data-target="items_{{ item.id }}"><i class="icon-plus-sign icon-large"></i></a>
+                                {% endif %}
+                            </div>
                         </div>
-
                     {{ form_end(form_list[item.id]) }}
+                    </div>
                 {% endfor %}
+
             {% endfor %}
         </div>
     </div>

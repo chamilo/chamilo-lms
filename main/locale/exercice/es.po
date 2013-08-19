@@ -1515,7 +1515,7 @@ msgid "YouDidNotReachTheMinimumScore"
 msgstr "No ha alcanzado el puntaje mínimo."
 
 msgid "EndTest"
-msgstr "Terminar ejercicio"
+msgstr "Terminar prueba"
 
 msgid "PassPercentage"
 msgstr "Porcentaje de éxito"

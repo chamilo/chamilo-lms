@@ -77,7 +77,7 @@ $tbl_user                   = Database :: get_main_table(TABLE_MAIN_USER);
 
 $user_id = $user['user_id'];
 
-$sessions = SessionManager::get_sessions_by_user($user_id);
+$sessions = SessionManager::get_sessions_by_user($user_id, true);
 
 $personal_course_list = array();
 if (count($sessions) > 0) {

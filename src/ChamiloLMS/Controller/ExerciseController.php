@@ -231,7 +231,7 @@ class ExerciseController extends CommonController
 
         $question = \Question::read($id, null, $exercise);
 
-        $questionHTML = \ExerciseLib::showQuestion($question, false, null, null, false, true, false, true, $exercise->feedback_type, true);
+        $questionHTML = $exercise->showQuestion($question, false, null, null, false, true, false, true, $exercise->feedback_type, true);
         $app['template']->assign('question_preview', $questionHTML);
         $app['template']->assign('question', $question);
         $response = $app['template']->render_template('exercise/question/show_question.tpl');

@@ -378,7 +378,7 @@ if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSessi
 
 //$objExercise = new Exercise(); $objExercise->read($exerciseId);
 
-//2. Checking if $objExercise is set
+// 2. Checking if $objExercise is set
 if (!isset($objExercise) && isset($exerciseInSession)) {
     if ($debug) {
         error_log('2. Loading $objExercise from session');
@@ -386,7 +386,7 @@ if (!isset($objExercise) && isset($exerciseInSession)) {
     $objExercise = $exerciseInSession;
 }
 
-//3. $objExercise is not set, then return to the exercise list
+// 3. $objExercise is not set, then return to the exercise list
 if (!is_object($objExercise)) {
     if ($debug) {
         error_log('3. $objExercise was not set, kill the script');
@@ -433,8 +433,6 @@ $durationTime = array(
     $current_expired_time_key => $current_timestamp
 );
 Session::write('duration_time', $durationTime);
-
-//$_SESSION['duration_time'][$current_expired_time_key] = $current_timestamp;
 
 if ($time_control) {
     // Get the expired time of the current exercise in track_e_exercices.
@@ -529,7 +527,7 @@ if (!isset($questionListInSession)) {
 
     //Getting order from random
     if ($media_is_activated == false && $objExercise->isRandom() && isset($exercise_stat_info) && !empty($exercise_stat_info['data_tracking'])) {
-    	$questionList = explode(',', $exercise_stat_info['data_tracking']);
+        $questionList = explode(',', $exercise_stat_info['data_tracking']);
     }
     Session::write('questionList', $questionList);
     if ($debug > 0) {
@@ -538,7 +536,7 @@ if (!isset($questionListInSession)) {
 } else {
     if (isset($objExercise) && isset($exerciseInSession)) {
         $questionList = Session::read('questionList');
-	}
+    }
 }
 
 // Fix in order to get the correct question list.
@@ -552,9 +550,9 @@ if (empty($exercise_stat_info)) {
     if ($debug) {
         error_log('5  $exercise_stat_info is empty ');
     }
-	$total_weight = 0;
+    $total_weight = 0;
 
-	foreach ($questionListUncompressed as $question_id) {
+    foreach ($questionListUncompressed as $question_id) {
         $objQuestionTmp = Question::read($question_id);
         $total_weight += floatval($objQuestionTmp->weighting);
 	}
@@ -564,8 +562,8 @@ if (empty($exercise_stat_info)) {
 
 		$clock_expired_time 	= api_get_utc_datetime($expected_time);
 
-		//Sessions  that contain the expired time
-		$expiredTime = array(
+        //Sessions  that contain the expired time
+        $expiredTime = array(
             $current_expired_time_key => $clock_expired_time
         );
         Session::write('expired_time', $expiredTime);
@@ -617,7 +615,7 @@ if ($reminder == 2 && empty($my_remind_list)) {
 if ($time_control) {
     $expiredTimeInSession = Session::read('expired_time');
 
-	if ($debug) {
+    if ($debug) {
         error_log('7.1. Time control is enabled.');
         error_log('7.2. $current_expired_time_key:'.$current_expired_time_key);
     }
@@ -625,26 +623,26 @@ if ($time_control) {
         if ($debug) error_log('7.3. $expiredTimeInSession[$current_expired_time_key] not set.');
         //Timer - Get expired_time for a student
         if (!empty($exercise_stat_info)) {
-        	if ($debug) {error_log('7.4 Seems that the session ends and the user want to retake the exam'); };
-	        $expired_time_of_this_attempt = $exercise_stat_info['expired_time_control'];
-			if ($debug) {error_log('7.5 $expired_time_of_this_attempt: '.$expired_time_of_this_attempt); }
-	        // Get the last attempt of an exercise.
-	    	$last_attempt_date = getLastAttemptDateOfExercise($exercise_stat_info['exe_id']);
+            if ($debug) {error_log('7.4 Seems that the session ends and the user want to retake the exam'); };
+            $expired_time_of_this_attempt = $exercise_stat_info['expired_time_control'];
+            if ($debug) {error_log('7.5 $expired_time_of_this_attempt: '.$expired_time_of_this_attempt); }
+            // Get the last attempt of an exercise.
+            $last_attempt_date = getLastAttemptDateOfExercise($exercise_stat_info['exe_id']);
 
-	    	/* This means that the user enters the exam but do not answer the first question we get the date
+            /* This means that the user enters the exam but do not answer the first question we get the date
             from the track_e_exercises not from the track_et_attempt see #2069 */
-	    	if (empty($last_attempt_date)) {
-	    		$diff = $current_timestamp - api_strtotime($exercise_stat_info['start_date'], 'UTC');
-	    		$last_attempt_date = api_get_utc_datetime(api_strtotime($exercise_stat_info['start_date'],'UTC') + $diff);
-	    	} else {
-	    		//Recalculate the time control due #2069
-	    		$diff = $current_timestamp - api_strtotime($last_attempt_date,'UTC');
-	    		$last_attempt_date = api_get_utc_datetime(api_strtotime($last_attempt_date,'UTC') + $diff);
-	    	}
-	        if ($debug) {error_log('7.6. $last_attempt_date: '.$last_attempt_date); }
+            if (empty($last_attempt_date)) {
+                $diff = $current_timestamp - api_strtotime($exercise_stat_info['start_date'], 'UTC');
+                $last_attempt_date = api_get_utc_datetime(api_strtotime($exercise_stat_info['start_date'],'UTC') + $diff);
+            } else {
+                //Recalculate the time control due #2069
+                $diff = $current_timestamp - api_strtotime($last_attempt_date,'UTC');
+                $last_attempt_date = api_get_utc_datetime(api_strtotime($last_attempt_date,'UTC') + $diff);
+            }
+            if ($debug) {error_log('7.6. $last_attempt_date: '.$last_attempt_date); }
 
-	        //New expired time - it is due to the possible closure of session
-	        $new_expired_time_in_seconds = api_strtotime($expired_time_of_this_attempt, 'UTC') - api_strtotime($last_attempt_date,'UTC');
+            //New expired time - it is due to the possible closure of session
+            $new_expired_time_in_seconds = api_strtotime($expired_time_of_this_attempt, 'UTC') - api_strtotime($last_attempt_date,'UTC');
 	        if ($debug) {error_log('7.7. $new_expired_time_in_seconds: '.$new_expired_time_in_seconds); }
 
 	        $expected_time	= $current_timestamp + $new_expired_time_in_seconds;

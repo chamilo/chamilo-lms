@@ -19,7 +19,7 @@ require_once 'answer.class.php';
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-if (!api_is_allowed_to_edit(null,true)) {
+if (!api_is_allowed_to_edit(null, true)) {
     api_not_allowed(true);
 }
 
@@ -248,10 +248,10 @@ $course_id = api_get_course_int_id();
 if (isset($_GET['exerciseId'])) {
 	$form = new FormValidator('exercise_admin', 'post', api_get_self().'?'.api_get_cidreq().'&exerciseId='.intval($_GET['exerciseId']));
 	$objExercise->read($_GET['exerciseId']);
-	$form->addElement('hidden','edit','true');
+	$form->addElement('hidden', 'edit', 'true');
 } else {
-	$form = new FormValidator('exercise_admin','post',api_get_self().'?'.api_get_cidreq());
-	$form->addElement('hidden','edit','false');
+	$form = new FormValidator('exercise_admin', 'post',api_get_self().'?'.api_get_cidreq());
+	$form->addElement('hidden', 'edit', 'false');
 }
 
 $objExercise->createForm($form);

@@ -63,7 +63,7 @@
 /* Makes row highlighting possible */
 $(document).ready( function() {
     //Chosen select
-    $(".chzn-select").chosen();     
+    $(".chzn-select").chosen({disable_search_threshold: 10});
     
     //Table highlight
     $("form .data_table input:checkbox").click(function() {

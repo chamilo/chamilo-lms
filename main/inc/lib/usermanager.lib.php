@@ -2031,7 +2031,7 @@ class UserManager
      * @return array  list of statuses [session_category][session_id]
      * @todo ensure multiple access urls are managed correctly
      */
-    public static function get_sessions_by_category($user_id, $is_time_over = false)
+    public static function get_sessions_by_category($user_id, $is_time_over = false, $ignore_visibility_for_admins = false)
     {
         // Database Table Definitions
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
@@ -2059,25 +2059,27 @@ class UserManager
         }
 
         //ORDER BY session_category_id, date_start, date_end
-        $sql = "SELECT DISTINCT session.id,
-                                session.name,
-                                session.date_start,
-                                session.date_end,
-                                session_category_id,
-                                session_category.name as session_category_name,
-                                session_category.date_start session_category_date_start,
-                                session_category.date_end session_category_date_end,
-                                nb_days_access_before_beginning,
-                                nb_days_access_after_end
+        $sql = "SELECT DISTINCT
+                    session.id,
+                    session.name,
+                    session.date_start,
+                    session.date_end,
+                    session_category_id,
+                    session_category.name as session_category_name,
+                    session_category.date_start session_category_date_start,
+                    session_category.date_end session_category_date_end,
+                    nb_days_access_before_beginning,
+                    nb_days_access_after_end
 
-                              FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id)
-                                    INNER JOIN $tbl_session_course_user as session_rel_course_user ON (session_rel_course_user.id_session = session.id)
-                              WHERE (
-                                        session_rel_course_user.id_user = $user_id OR session.id_coach = $user_id
-                                    )  $condition_date_end
-                              ORDER BY session_category_name, name";
+              FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id)
+                    INNER JOIN $tbl_session_course_user as session_rel_course_user ON (session_rel_course_user.id_session = session.id)
+              WHERE (
+                        session_rel_course_user.id_user = $user_id OR session.id_coach = $user_id
+                    )  $condition_date_end
+              ORDER BY session_category_name, name";
 
         $result = Database::query($sql);
+
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
                 $categories[$row['session_category_id']]['session_category']['id'] = $row['session_category_id'];
@@ -2087,8 +2089,8 @@ class UserManager
 
                 $session_id = $row['id'];
 
-                //Checking session visibility
-                $visibility = api_get_session_visibility($session_id, null, false);
+                // Checking session visibility
+                $visibility = api_get_session_visibility($session_id, null, $ignore_visibility_for_admins);
 
                 switch ($visibility) {
                     case SESSION_VISIBLE_READ_ONLY:
@@ -2108,6 +2110,7 @@ class UserManager
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['courses'] = UserManager::get_courses_list_by_session($user_id, $row['id']);
             }
         }
+
         return $categories;
     }
 
@@ -3926,4 +3929,5 @@ EOF;
             Database::query($sql);
         }
     }
+
 }

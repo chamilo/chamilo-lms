@@ -1515,7 +1515,7 @@ msgid "YouDidNotReachTheMinimumScore"
 msgstr "No ha alcanzado el puntaje mínimo."
 
 msgid "EndTest"
-msgstr "Terminar ejercicio"
+msgstr "Terminar prueba"
 
 msgid "PassPercentage"
 msgstr "Porcentaje de éxito"
@@ -1631,3 +1631,6 @@ msgstr "Si continua, sus respuestas serán guardadas y no se permitirá ninguna 
 msgid "SelectAnAnswerToContinue"
 msgstr "Seleccione una repuesta para continuar."
 
+msgid "ZeroMeansNoQuestionWillBeSelectedMinusOneMeansThatAllQuestionsWillBeSelected"
+msgstr "0 significa que ninguna pregunta se seleccionará, -1 significa que todaa
+s las preguntas de esta categoría se seleccionarán"

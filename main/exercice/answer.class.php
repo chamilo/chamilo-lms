@@ -106,7 +106,7 @@ class Answer
     }
 
     /**
-     * Reads answer informations from the data base
+     * Reads answer from the data base
      *
      * @author - Olivier Brouckaert
      */

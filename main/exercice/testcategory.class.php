@@ -713,9 +713,10 @@ class Testcategory
 
         foreach ($categoriesAddedInExercise as $category) {
             $categoryId = $category['category_id'];
-            $newCategoryList[$categoryId] = $categories[$categoryId];
+            if (isset($categories[$categoryId])) {
+                $newCategoryList[$categoryId] = $categories[$categoryId];
+            }
         }
-
         return $newCategoryList;
     }
 

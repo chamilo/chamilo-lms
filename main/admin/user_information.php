@@ -108,7 +108,9 @@ if (count($sessions) > 0) {
             $row[] = $tools;
             $data[] = $row;
         }
-        echo Display::page_subheader($session_item['session_name']);
+        $dates = array_filter(array($session_item['date_start'], $session_item['date_end']));
+        echo Display::page_subheader($session_item['session_name'], ' '.implode(' - ', $dates));
+
         Display :: display_sortable_table($header, $data, array (), array(), array ('user_id' => intval($_GET['user_id'])));
     }
 } else {

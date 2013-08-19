@@ -520,6 +520,8 @@ class ImportCsv
                     );
                     $result = CourseManager::update_attributes($courseInfo['real_id'], $params);
 
+                    //CourseManager::updateTeachers($courseInfo['id'], $row['teachers']);
+
                     if ($result) {
                         $this->logger->addInfo("Courses - Course updated ".$courseInfo['code']);
                     } else {

@@ -78,15 +78,15 @@ class ReflectionControllerProvider implements ControllerProviderInterface
 
                     $match = $controllers->match($routeObject->getPath(), $controllerName, $methodsToString);
 
-                    // setRequirements
+                    // Setting requirements
                     if (!empty($req)) {
                         foreach ($req as $key => $value) {
                             $match->assert($key, $value);
                         }
                     }
                     $defaults = $routeObject->getDefaults();
-                    //var_dump($routeObject);
-                    //var_dump($defaults);
+                    // Setting defaults
+
                     if (!empty($defaults)) {
                         foreach ($defaults as $key => $value) {
                             $match->value($key, $value);

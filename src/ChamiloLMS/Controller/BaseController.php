@@ -172,7 +172,7 @@ abstract class BaseController extends FlintController
 
     /**
      *
-     * @Route("/{id}/edit", requirements={"id" = "\d+"}})
+     * @Route("/{id}/edit", requirements={"id" = "\d+"})
      * @Method({"GET"})
      */
     public function editAction($id)

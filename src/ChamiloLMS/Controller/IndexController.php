@@ -286,9 +286,7 @@ class IndexController extends CommonController
           ->getForm();
           return $app['template']->assign('form', $form->createView());
          */
-        $url = $app['url_generator']->generate('admin_login_check');
-        //var_dump($app['router']->generate('admin_login_check'));
-        $form = new \FormValidator('formLogin', 'POST', $url , null, array('class' => 'form-vertical'));
+        $form = new \FormValidator('formLogin', 'POST', $app['url_generator']->generate('admin_login_check'), null, array('class' => 'form-vertical'));
         $form->addElement(
             'text',
             'username',

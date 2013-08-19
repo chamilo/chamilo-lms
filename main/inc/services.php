@@ -7,6 +7,12 @@
  * @package chamilo.services
  */
 
+// Needed to use the "entity" option in symfony forms
+use Doctrine\Common\Persistence\AbstractManagerRegistry;
+use FranMoreno\Silex\Provider\PagerfantaServiceProvider;
+use Silex\Application;
+use Silex\ServiceProviderInterface;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 // Flint
 $app->register(new Flint\Provider\ConfigServiceProvider());
@@ -19,13 +25,6 @@ $app->register(new Flint\Provider\RoutingServiceProvider(), array(
         //'cache_dir' => $app['sys_temp_path']
     ),
 ));
-
-// Monolog.
-use Doctrine\Common\Persistence\AbstractManagerRegistry;
-use FranMoreno\Silex\Provider\PagerfantaServiceProvider;
-use Silex\Application;
-use Silex\ServiceProviderInterface;
-use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 // Monolog.
 if (is_writable($app['sys_temp_path'])) {

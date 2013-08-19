@@ -3,11 +3,10 @@ admin_login_check:
 admin_logout:
     pattern:   /admin/logout
 
-homepage:
-    path:      /homepage
+home:
+    path:      /home
     defaults:  { _controller: index.controller:indexAction, culture: en }
 
 example:
     resource: "src/ChamiloLMS/Resources/config/route_example.yml"
     prefix:   /example-route
-

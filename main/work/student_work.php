@@ -115,7 +115,7 @@ foreach ($workPerUser as $work) {
         }
 
         $url = api_get_path(WEB_CODE_PATH).'work/edit.php?'.api_get_cidreq().'&item_id='.$userResult['id'].'&id='.$workId.'&parent_id='.$workId;
-        $links .= Display::url(Display::return_icon('edit.png'), $url);
+        $links .= Display::url(Display::return_icon('edit.png', get_lang('Comment')), $url);
 
         $table->setCellContents($row, $column, $links);
 

@@ -55,7 +55,7 @@ switch ($action) {
 $token = Security::get_token();
 
 if (!empty($group_id)) {
-    $group_properties  = GroupManager :: get_group_properties($group_id);
+    $group_properties  = GroupManager::get_group_properties($group_id);
     $show_work = false;
 
     if (api_is_allowed_to_edit(false, true)) {
@@ -81,7 +81,6 @@ if (isset($_GET['list']) && $_GET['list'] == 'with') {
 } else {
     $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('UsersWithoutTask'));
 }
-
 
 Display :: display_header(null);
 

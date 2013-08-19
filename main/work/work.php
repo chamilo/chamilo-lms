@@ -253,13 +253,9 @@ if ($origin == 'learnpath') {
 
 /*	Display links to upload form and tool options */
 
-if (!in_array($action, array('send_mail','add','create_dir','upload'))) {
+if (!in_array($action, array('add','create_dir'))) {
     $token = Security::get_token();
 }
-
-$show_tool_options = (in_array($action, array('list', 'add'))) ? true : false;
-
-$display_upload_link = $action == 'upload_form' ? false : true;
 
 if (!empty($my_folder_data)) {
     $homework = get_work_assignment_by_id($my_folder_data['id']);
@@ -291,10 +287,8 @@ if (!empty($my_folder_data)) {
         $expires_on = api_convert_and_format_date($homework['expires_on']);
 
         if ($has_ended) {
-            $display_upload_link = false;
             $message = Display::return_message(get_lang('EndDateAlreadyPassed').' '.$ends_on, 'error');
         } elseif ($has_expired) {
-            $display_upload_link = true;
             $message = Display::return_message(get_lang('ExpiryDateAlreadyPassed').' '.$expires_on, 'warning');
         } else {
             if ($has_expired) {
@@ -304,7 +298,7 @@ if (!empty($my_folder_data)) {
     }
 }
 
-display_action_links($work_id, $curdirpath, $show_tool_options, $display_upload_link, $action);
+display_action_links($work_id, $curdirpath, $action);
 
 echo $message;
 
@@ -730,84 +724,73 @@ switch ($action) {
         }
 
         /*	Display list of student publications */
-        if ($curdirpath == '/') {
-            $my_cur_dir_path = '';
-        } else {
-            $my_cur_dir_path = $curdirpath;
-        }
 
         if (!empty($my_folder_data['description'])) {
             echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description'], STUDENT).'</p></div></p>';
         }
 
-        if (isset($work_id) && !empty($work_id) && !$display_list_users_without_publication) {
+        $my_folder_data = get_work_data_by_id($work_id);
 
-        } elseif (isset($_GET['list']) && $_GET['list'] == 'without') {
+        $work_parents = array();
+        if (empty($my_folder_data)) {
+            $work_parents = getWorkList($work_id, $my_folder_data, $add_query);
+        }
 
-        } else {
+        if (api_is_allowed_to_edit()) {
 
-            $my_folder_data = get_work_data_by_id($work_id);
+            // Work list
+            echo '<div class="row">';
+            echo '<div class="span9">';
 
-            $work_parents = array();
-            if (empty($my_folder_data)) {
-                $work_parents = getWorkList($work_id, $my_folder_data, $add_query);
+            if (!empty($group_id)) {
+                $userList = GroupManager::get_users($group_id);
+            } else {
+                if (empty($session_id)) {
+                    $userList = CourseManager::get_user_list_from_course_code($course_code, $session_id, null, null, STUDENT);
+                } else {
+                    $userList = CourseManager::get_user_list_from_course_code($course_code, $session_id, null, null, 0);
+                }
+                $userList = array_keys($userList);
             }
 
-            if (api_is_allowed_to_edit()) {
+            display_student_publications_list($work_id, $my_folder_data, $work_parents, $origin, $add_query, $userList);
 
-                // Work list
-                echo '<div class="row">';
-                echo '<div class="span9">';
+            echo '</div>';
+            echo '<div class="span3">';
 
-                if (!empty($group_id)) {
-                    $userList = GroupManager::get_users($group_id);
-                } else {
-                    if (empty($session_id)) {
-                        $userList = CourseManager::get_user_list_from_course_code($course_code, $session_id, null, null, STUDENT);
-                    } else {
-                        $userList = CourseManager::get_user_list_from_course_code($course_code, $session_id, null, null, 0);
-                    }
-                    $userList = array_keys($userList);
+            $table = new HTML_Table(array('class' => 'data_table'));
+            $column = 0;
+            $row = 0;
+            $headers = array(get_lang('Students'), get_lang('Works'));
+            foreach ($headers as $header) {
+                $table->setHeaderContents($row, $column, $header);
+                $column++;
+            }
+            $row++;
+            $column = 0;
+
+            foreach ($userList as $userId) {
+                $user = api_get_user_info($userId);
+                $link = api_get_path(WEB_CODE_PATH).'work/student_work.php?'.api_get_cidreq().'&studentId='.$user['user_id'];
+                $url = Display::url(api_get_person_name($user['firstname'], $user['lastname']), $link);
+                $table->setCellContents($row, $column, $url);
+                $column++;
+                $userWorks = 0;
+                foreach ($work_parents as $work) {
+                    $userWorks += getUniqueStudentAttempts($work->id, $group_id, $course_id, $session_id, $user['user_id']);
                 }
-
-                display_student_publications_list($work_id, $my_folder_data, $work_parents, $origin, $add_query, $userList);
-
-                echo '</div>';
-                echo '<div class="span3">';
-
-                $table = new HTML_Table(array('class' => 'data_table'));
-                $column = 0;
-                $row = 0;
-                $headers = array(get_lang('Students'), get_lang('Works'));
-                foreach ($headers as $header) {
-                    $table->setHeaderContents($row, $column, $header);
-                    $column++;
-                }
+                $cell = $userWorks." / ".count($work_parents);
+                $table->setCellContents($row, $column, $cell);
                 $row++;
                 $column = 0;
+            }
 
-                foreach ($userList as $userId) {
-                    $user = api_get_user_info($userId);
-                    $link = api_get_path(WEB_CODE_PATH).'work/student_work.php?'.api_get_cidreq().'&studentId='.$user['user_id'];
-                    $url = Display::url(api_get_person_name($user['firstname'], $user['lastname']), $link);
-                    $table->setCellContents($row, $column, $url);
-                    $column++;
-                    $userWorks = 0;
-                    foreach ($work_parents as $work) {
-                        $userWorks += getUniqueStudentAttempts($work->id, $group_id, $course_id, $session_id, $user['user_id']);
-                    }
-                    $cell = $userWorks." / ".count($work_parents);
-                    $table->setCellContents($row, $column, $cell);
-                    $row++;
-                    $column = 0;
-                }
-
-                echo $table->toHtml();
+            echo $table->toHtml();
             echo '</div>';
         } else {
             display_student_publications_list($work_id, $my_folder_data, $work_parents, $origin, $add_query, null);
         }
-    }
+
     break;
 }
 if ($origin != 'learnpath') {

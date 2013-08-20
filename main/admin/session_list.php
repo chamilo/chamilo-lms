@@ -163,3 +163,5 @@ echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_list.php">'
 echo '</div>';
 echo Display::grid_html('sessions');
 Display::display_footer();
+
+

@@ -137,13 +137,12 @@ $form->addElement('text', 'title', get_lang('Title'), array('id' => 'file_upload
 //$form->addElement('html_editor', 'description', get_lang("Description"));
 $form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'Work', 'Width' => '100%', 'Height' => '200'));
 
-$form->addElement('hidden', 'active',   1);
+$form->addElement('hidden', 'active', 1);
 $form->addElement('hidden', 'accepted', 1);
 $form->addElement('hidden', 'sec_token', $token);
 
 $text = get_lang('Send');
 $class = 'upload';
-
 
 // fix the Ok button when we see the tool in the learn path
 if ($origin == 'learnpath') {
@@ -171,14 +170,15 @@ $succeed = false;
 if ($form->validate()) {
     if ($student_can_edit_in_session && $check) {
 
-        //check the token inserted into the form
+        // Check the token inserted into the form
 
         if (isset($_POST['submitWork'])) {
             $url = null;
             $contains_file = 0;
 
+
             if ($_POST['contains_file'] && !empty($_FILES['file']['size'])) {
-                $updir = $currentCourseRepositorySys . 'work/'; //directory path to upload
+                $updir = $currentCourseRepositorySys.'work/'; //directory path to upload
 
                 // Try to add an extension to the file if it has'nt one
                 $new_file_name = add_ext_on_mime(stripslashes($_FILES['file']['name']), $_FILES['file']['type']);
@@ -208,7 +208,7 @@ if ($form->validate()) {
                 $new_file_name = api_get_unique_id();
                 $curdirpath = basename($my_folder_data['url']);
 
-                //if we come from the group tools the groupid will be saved in $work_table
+                // If we come from the group tools the groupid will be saved in $work_table
                 $result = move_uploaded_file($_FILES['file']['tmp_name'], $updir.$curdirpath.'/'.$new_file_name);
 
                 if ($result) {
@@ -229,21 +229,20 @@ if ($form->validate()) {
                 $error_message .= Display::return_message(get_lang('NoSpace'), 'warning');
             } else {
                 $active = '1';
-                //author      	= '" . Database::escape_string($authors) . "',
-                $sql_add_publication = "INSERT INTO " . $work_table . " SET
+                $sql_add_publication = "INSERT INTO ".$work_table." SET
                                    c_id 		= $course_id ,
-                                   url         	= '" . $url . "',
-                                   title       	= '" . Database::escape_string($title) . "',
-                                   description	= '" . Database::escape_string($description) . "',
+                                   url         	= '".$url . "',
+                                   title       	= '".Database::escape_string($title)."',
+                                   description	= '".Database::escape_string($description)."',
                                    contains_file = '".$contains_file."',
-                                   active		= '" . $active . "',
+                                   active		= '" . $active."',
                                    accepted		= '1',
                                    post_group_id = '".$group_id."',
                                    sent_date	=  '".api_get_utc_datetime()."',
                                    parent_id 	=  '".$work_id."' ,
                                    session_id	= '".intval($id_session)."' ,
                                    user_id 		= '".$user_id."'";
-                //var_dump($sql_add_publication);exit;
+
                 Database::query($sql_add_publication);
                 $id = Database::insert_id();
             }
@@ -276,7 +275,7 @@ if ($form->validate()) {
                 $user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), $session_id, null, null, 2);
             }
 
-            $emailsubject = "[" . api_get_setting('siteName') . "] ".get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$_course['name']."  ";
+            $subject = "[" . api_get_setting('siteName') . "] ".get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$_course['name']."  ";
 
             foreach ($user_list as $user_data) {
                 $to_user_id = $user_data['user_id'];
@@ -288,18 +287,17 @@ if ($form->validate()) {
                 $url = api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()."&amp;id=".$work_id;
                 $emailbody .= $url;
 
-                MessageManager::send_message_simple($to_user_id, $emailsubject, $emailbody);
+                MessageManager::send_message_simple($to_user_id, $subject, $emailbody);
             }
         }
         $message = get_lang('DocAdd');
         event_upload($id);
-        $error_message .= Display :: return_message(get_lang('DocAdd'));
+        $error_message .= Display::return_message(get_lang('DocAdd'));
 
         $script = 'work_list.php';
         if ($is_allowed_to_edit) {
             $script = 'work_list_all.php';
         }
-
         header('Location: '.api_get_path(WEB_CODE_PATH).'work/'.$script.'?'.api_get_cidreq().'&id='.$work_id.'&error_message='.$error_message);
         exit;
     }

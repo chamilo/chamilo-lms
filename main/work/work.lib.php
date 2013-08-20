@@ -24,7 +24,7 @@ require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.
  * @param	integer	Whether to show upload form option
  * @return	void
  */
-function display_action_links($id, $cur_dir_path, $show_tool_options, $display_upload_link, $action)
+function display_action_links($id, $cur_dir_path, $action)
 {
 	global $gradebook;
 
@@ -40,7 +40,7 @@ function display_action_links($id, $cur_dir_path, $show_tool_options, $display_u
         $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&id='.$my_back_id.'">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';
     }
 
-    if ($show_tool_options && api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
+    if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
         // Create dir
         if (empty($id)) {
             $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=create_dir&origin='.$origin.'&gradebook='.$gradebook.'">';
@@ -415,6 +415,7 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 	global $gradebook;
 
     $_course = api_get_course_info();
+
 	// Database table names
 	$work_table      = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$iprop_table     = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -1878,7 +1879,6 @@ function send_reminder_users_without_publication($task_data)
 	global $_course;
     $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 
-
 	$task_id = $task_data['id'];
 	$task_title = !empty($task_data['title']) ? $task_data['title'] : basename($task_data['url']);
 
@@ -1897,7 +1897,7 @@ function send_reminder_users_without_publication($task_data)
         $dear_line = get_lang('Dear')." ".api_get_person_name($user[1], $user[0]) .", \n\n";
         $body      = $dear_line.$content;
 
-		api_mail($name_user, $user[3], $subject, $body, $sender_name, $email_admin);
+        MessageManager::send_message($user[3], $subject, $body);
         $mails_sent_to[] = $name_user;
 	}
     return $mails_sent_to;
@@ -2040,9 +2040,9 @@ function get_list_users_without_publication($task_id, $studentId = null)
 	$task_id = intval($task_id);
 
 	if ($session_id == 0) {
-		$sql = "SELECT user_id as id FROM $work_table WHERE c_id = $course_id AND parent_id='$task_id'";
+		$sql = "SELECT user_id as id FROM $work_table WHERE c_id = $course_id AND parent_id='$task_id' AND active = 1";
 	} else {
-		$sql = "SELECT user_id as id FROM $work_table WHERE c_id = $course_id AND parent_id='$task_id' and session_id='".$session_id."'";
+		$sql = "SELECT user_id as id FROM $work_table WHERE c_id = $course_id AND parent_id='$task_id' and session_id='".$session_id."' AND active = 1";
 	}
 
 	$result = Database::query($sql);
@@ -2051,16 +2051,16 @@ function get_list_users_without_publication($task_id, $studentId = null)
 		$users_with_tasks[] = $row['id'];
 	}
 
-	if ($session_id == 0){
+	if ($session_id == 0) {
 		$sql_users = "SELECT cu.user_id, u.lastname, u.firstname, u.email FROM $table_course_user AS cu, $table_user AS u
-		              WHERE u.status!=1 and cu.course_code='".api_get_course_id()."' AND u.user_id=cu.user_id";
+		              WHERE u.status != 1 and cu.course_code='".api_get_course_id()."' AND u.user_id = cu.user_id";
 	} else {
 		$sql_users = "SELECT cu.id_user, u.lastname, u.firstname, u.email FROM $session_course_rel_user AS cu, $table_user AS u
-		              WHERE u.status!=1 and cu.course_code='".api_get_course_id()."' AND u.user_id=cu.id_user and cu.id_session='".$session_id."'";
+		              WHERE u.status != 1 and cu.course_code='".api_get_course_id()."' AND u.user_id = cu.id_user and cu.id_session = '".$session_id."'";
 	}
 
     if (!empty($studentId)) {
-        $sql_users.= "AND u.user_id = ".intval($studentId);
+        $sql_users.= " AND u.user_id = ".intval($studentId);
     }
 
     $group_id = api_get_group_id();
@@ -2080,15 +2080,18 @@ function get_list_users_without_publication($task_id, $studentId = null)
 	$users_without_tasks = array();
 	while ($row_users = Database::fetch_row($result_users)) {
 
-		if (in_array($row_users[0], $users_with_tasks)) continue;
+		if (in_array($row_users[0], $users_with_tasks)) {
+            continue;
+        }
+
 		if ($group_id && !in_array($row_users[0], $new_group_user_list)) {
             continue;
         }
-		//$user_id = array_shift($row_users);
+        $userId = $row_users[0];
         $row_users[0] = $row_users[1];
         $row_users[1] = $row_users[2];
 		$row_users[2] = Display::encrypted_mailto_link($row_users[3]);
-
+        $row_users[3] = $userId;
 		$users_without_tasks[] = $row_users;
 	}
 	return $users_without_tasks;
@@ -2102,13 +2105,14 @@ function get_list_users_without_publication($task_id, $studentId = null)
  * @author cvargas carlos.vargas@beeznest.com cfasanando, christian.fasanado@beeznest.com
  * @author Julio Montoya <gugli100@gmail.com> Fixes
  */
-function display_list_users_without_publication($task_id, $studentId = null) {
+function display_list_users_without_publication($task_id, $studentId = null)
+{
 	global $origin;
 	$table_header[] = array(get_lang('LastName'), true);
 	$table_header[] = array(get_lang('FirstName'), true);
 	$table_header[] = array(get_lang('Email'), true);
-	// table_data
-	$table_data = get_list_users_without_publication($task_id);
+
+	$data = get_list_users_without_publication($task_id);
 
 	$sorting_options = array();
 	$sorting_options['column'] = 1;
@@ -2131,5 +2135,5 @@ function display_list_users_without_publication($task_id, $studentId = null) {
 	$column_show[] = 1;
 	$column_show[] = 1;
 	$column_show[] = 1;
-	Display::display_sortable_config_table('work', $table_header, $table_data, $sorting_options, $paging_options, $my_params, $column_show);
+	Display::display_sortable_config_table('work', $table_header, $data, $sorting_options, $paging_options, $my_params, $column_show);
 }

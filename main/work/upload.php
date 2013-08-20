@@ -58,6 +58,8 @@ $is_author = false;
 
 $parent_data['qualification'] = intval($parent_data['qualification']);
 
+//  @todo add an option to allow/block multiple attempts.
+
 if (!empty($parent_data) && !empty($parent_data['qualification'])) {
     $count =  get_work_count_by_student($user_id, $work_id);
     if ($count >= 1) {

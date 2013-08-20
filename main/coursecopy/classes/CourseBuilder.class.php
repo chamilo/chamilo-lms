@@ -558,7 +558,7 @@ class CourseBuilder
                     SELECT q.* FROM $table_que q
                     INNER JOIN $table_rel r
                     ON (q.c_id = r.c_id AND q.iid = r.question_id)
-                    WHERE r.c_id = $course_id AND r.exercice_id = '-1' OR r.exercice_id = '0'
+                    WHERE r.c_id = $course_id AND (r.exercice_id = '-1' OR r.exercice_id = '0')
                  )
         ";
 

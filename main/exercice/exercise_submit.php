@@ -215,7 +215,6 @@ if ($objExercise->selectAttempts() > 0) {
 if ($debug) { error_log("4. Setting the exe_id: $exe_id");} ;
 
 //5. Getting user exercise info (if the user took the exam before) - generating exe_id
-//var_dump($learnpath_id.' - '.$learnpath_item_id.' - '.$learnpath_item_view_id);
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
 
 $clock_expired_time = null;
@@ -875,16 +874,16 @@ if (!empty($error)) {
             }
 
             function save_now_all(validate) {
-            	//1. Input choice
+            	// 1. Input choice.
            		var my_choice = $(\'*[name*="choice"]\').serialize();
 
-           		//2. Reminder
+           		// 2. Reminder.
            		var remind_list = $(\'*[name*="remind_list"]\').serialize();
 
-           		//3. Hotspots
+           		// 3. Hotspots.
            		var hotspot = $(\'*[name*="hotspot"]\').serialize();
 
-           		//Question list
+           		// Question list.
            		var question_list = ['.implode(',', $questionList).'];
 
            		var free_answers = {};
@@ -901,7 +900,8 @@ if (!empty($error)) {
                    		}
                		}
            		});
-           		//lok+(fgt)= data base
+
+           		// lok+(fgt)= data base
            		free_answers = $.param(free_answers);
 
           		$("#save_all_reponse").html("'.addslashes(Display::return_icon('loading1.gif')).'");

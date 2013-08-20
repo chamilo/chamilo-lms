@@ -87,35 +87,46 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
     	if ($answerType == MATCHING) {
             $s .= '<table class="data_table">';
+            // Iterate through answers
+    		$x = 1;
+            //mark letters for each answer
+    		$letter = 'A';
+    		$answer_matching = array();
+            $cpt1 = array();
+            for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+                $answerCorrect = $objAnswerTmp->isCorrect($answerId);
+                $numAnswer = $objAnswerTmp->selectAutoId($answerId);
 
-    		$x = 1; //iterate through answers
-    		$letter = 'A'; //mark letters for each answer
-    		$answer_matching = $cpt1 = array();
+                $answer = $objAnswerTmp->selectAnswer($answerId);
+                if ($answerCorrect == 0) {
+                    // options (A, B, C, ...) that will be put into the list-box
+                    // have the "correct" field set to 0 because they are answer
+                    $cpt1[$x] = $letter;
+    				$answer_matching[$x] = $objAnswerTmp->selectAnswerByAutoId($numAnswer);
+                    $x++;
+                    $letter++;
+                }
+            }
 
-    		for ($answerId=1; $answerId <= $nbrAnswers; $answerId++) {
-    			$answerCorrect = $objAnswerTmp->isCorrect($answerId);
-    			$numAnswer = $objAnswerTmp->selectAutoId($answerId);
-    			$answer=$objAnswerTmp->selectAnswer($answerId);
-    			if ($answerCorrect==0) {
-    				// options (A, B, C, ...) that will be put into the list-box
-    				// have the "correct" field set to 0 because they are answer
-    				$cpt1[$x] = $letter;
-    				$answer_matching[$x]=$objAnswerTmp->selectAnswerByAutoId($numAnswer);
-    				$x++; $letter++;
-    			}
-    		}
-    		$i = 1;
+            $i = 1;
 
-    		$select_items[0]['id'] = 0;
-    		$select_items[0]['letter'] = '--';
-    		$select_items[0]['answer'] = '';
+            $select_items[0]['id'] = 0;
+            $select_items[0]['letter'] = '--';
+            $select_items[0]['answer'] = '';
+            foreach ($answer_matching as $id => $value) {
+                $select_items[$i]['id'] 	= $value['id'];
+                $select_items[$i]['letter'] = $cpt1[$id];
+                $select_items[$i]['answer'] = $value['answer'];
+                $i++;
+            }
 
-    		foreach ($answer_matching as $id => $value) {
-    			$select_items[$i]['id'] 	= $value['id'];
-    			$select_items[$i]['letter'] = $cpt1[$id];
-    			$select_items[$i]['answer'] = $value['answer'];
-    			$i ++;
-    		}
+            $user_choice_array_position = array();
+            if (!empty($user_choice)) {
+                foreach ($user_choice as $item) {
+                    $user_choice_array_position[$item['position']] = $item['answer'];
+                }
+            }
+
     		$num_suggestions = ($nbrAnswers - $x) + 1;
 
     	} elseif ($answerType == FREE_ANSWER) {
@@ -195,6 +206,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
         		$user_choice_array[] = $item['answer'];
         	}
         }
+
 
     	for ($answerId=1; $answerId <= $nbrAnswers; $answerId++) {
     		$answer          = $objAnswerTmp->selectAnswer($answerId);
@@ -407,6 +419,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     				$student_answer_list = $correct_answer_list[0];
                 }
 
+
     			if (!empty($correct_answer_list) && !empty($student_answer_list)) {
     			    $correct_answer_list = $correct_answer_list[0];
     			    $i = 0;
@@ -424,13 +437,26 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     			            	$value = str_replace('&nbsp;', '',  trim($value[0]));
     			            }
                             $correct_item = preg_quote($correct_item);
-                            $correct_item = api_preg_replace('|/|', '\/', $correct_item);   // to prevent error if there is a / in the text to find
-    			            $answer = api_preg_replace('/'.$correct_item.'/', Display::input('text', "choice[$questionId][]", $value), $answer, 1);
+                            // to prevent error if there is a / in the text to find
+                            $correct_item = api_preg_replace('|/|', '\/', $correct_item);
+
+                            $size = strlen($correct_item) * 10 + 10;
+                            $attributes['style'] = 'width: '.$size.'px';
+
+    			            $answer = api_preg_replace('/'.$correct_item.'/', Display::input('text', "choice[$questionId][]", $value, $attributes), $answer, 1);
     			        }
     			        $i++;
     			    }
     			} else {
-    				$answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
+
+                    foreach ($correct_answer_list[0] as $item) {
+                        $size = strlen($item) * 10 + 10;
+                        $attributes['style'] = 'width: '.$size.'px';
+                        $pattern = '/\['.$item.'+\]/';
+                        $answer = api_preg_replace($pattern, Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
+                    }
+                    //$answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
+
     			}
     			$s .= $answer;
             } elseif ($answerType == MATCHING) {
@@ -451,7 +477,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     			            <select name="choice['.$questionId.']['.$numAnswer.']">';
 
     				// fills the list-box
-    				foreach ($select_items as $key=>$val) {
+    				foreach ($select_items as $key => $val) {
     					// set $debug_mark_answer to true at function start to
     					// show the correct answer with a suffix '-x'
     					$selected = '';
@@ -460,16 +486,18 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     							$selected = 'selected="selected"';
     						}
     					}
-    					if (isset($user_choice[$matching_correct_answer]) && $val['id'] == $user_choice[$matching_correct_answer]['answer']) {
+                        //$user_choice_array_position
+                        if (isset($user_choice_array_position[$numAnswer]) && $val['id'] == $user_choice_array_position[$numAnswer]) {
     					    $selected = 'selected="selected"';
     					}
-    					$s .= '<option value="'.$val['id'].'" '.$selected.'>'.$val['letter'].$help.'</option>';
+    					/*if (isset($user_choice_array[$matching_correct_answer]) && $val['id'] == $user_choice_array[$matching_correct_answer]['answer']) {
+    					    $selected = 'selected="selected"';
+    					}*/
+    					$s .= '<option value="'.$val['id'].'" '.$selected.'>'.$val['letter'].'</option>';
 
     				}  // end foreach()
 
     				$s .= '</select></td>';
-    				//print_r($select_items);
-    				//right part (answers)
     				$s.='<td width="45%" valign="top" >';
     				if (isset($select_items[$lines_count])) {
     					$s.='<span style="float:left; width:5%;"><b>'.$select_items[$lines_count]['letter'].'.</b></span>'.
@@ -2133,13 +2161,14 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         foreach ($question_list as $questionId) {
 
             // creates a temporary Question object
-            $objQuestionTmp = Question :: read($questionId);
+            $objQuestionTmp = Question::read($questionId);
 
             //this variable commes from exercise_submit_modal.php
             ob_start();
 
             // We're inside *one* question. Go through each possible answer for this question
             $result = $objExercise->manage_answer($exercise_stat_info['exe_id'], $questionId, null, 'exercise_result', array(), $save_user_result, true, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result);
+
             if (empty($result)) {
                 continue;
             }

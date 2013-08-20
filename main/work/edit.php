@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
@@ -58,13 +59,17 @@ $is_author = false;
 
 $work_item = get_work_data_by_id($item_id);
 
-//Get the author ID for that document from the item_property table
+// Get the author ID for that document from the item_property table
 $is_author = user_is_author($item_id);
+
 if (!$is_author) {
-    Display::display_warning_message(get_lang('NotAllowed'));
-    Display::display_footer();
+    api_not_allowed(true);
 }
 
+// Student's can't edit work
+if (!api_is_allowed_to_edit()) {
+    api_not_allowed(true);
+}
 
 if (!empty($my_folder_data)) {
     $homework = get_work_assignment_by_id($my_folder_data['id']);

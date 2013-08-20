@@ -67,24 +67,25 @@ $interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'work/work_list
 Display :: display_header(null);
 
 echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'">'.
+        Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
-
 if (!empty($my_folder_data['description'])) {
-    echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description'], STUDENT).'</p></div></p>';
+    echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description']).'</p></div></p>';
 }
 
 $check_qualification = intval($my_folder_data['qualification']);
 
 if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) {
     $type = 'simple';
-    $columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), get_lang('Title'), get_lang('Qualification'), get_lang('Date'),  get_lang('Status'), get_lang('Actions'));
+    //$columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), get_lang('Title'), get_lang('Qualification'), get_lang('Date'),  get_lang('Status'), get_lang('Actions'));
+    $columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('Title'), get_lang('Qualification'), get_lang('Date'),  get_lang('Status'), get_lang('Actions'));
     $column_model   = array (
         array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false'),
         array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'username',       'index'=>'username',        'width'=>'30',   'align'=>'left', 'search' => 'true'),
+        //array('name'=>'username',       'index'=>'username',        'width'=>'30',   'align'=>'left', 'search' => 'true'),
         array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => 'true'),
         //                array('name'=>'file',           'index'=>'file',            'width'=>'20',   'align'=>'left', 'search' => 'false'),
         array('name'=>'qualification',	'index'=>'qualification',	'width'=>'20',   'align'=>'left', 'search' => 'true'),
@@ -94,12 +95,13 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
     );
 } else {
     $type = 'complex';
-    $columns  = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), get_lang('Title'), get_lang('Date'),  get_lang('Actions'));
+    //$columns  = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), get_lang('Title'), get_lang('Date'),  get_lang('Actions'));
+    $columns  = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('Title'), get_lang('Date'),  get_lang('Actions'));
     $column_model   = array (
         array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false'),
         array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'username',       'index'=>'username',        'width'=>'30',   'align'=>'left', 'search' => 'true'),
+        //array('name'=>'username',       'index'=>'username',        'width'=>'30',   'align'=>'left', 'search' => 'true'),
         array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),
         //                array('name'=>'file',           'index'=>'file',            'width'=>'20',   'align'=>'left', 'search' => 'false'),
         //array('name'=>'qualification',	'index'=>'qualification',	'width'=>'20',   'align'=>'left', 'search' => 'true'),

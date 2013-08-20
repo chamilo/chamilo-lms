@@ -247,7 +247,7 @@ function get_work_data_by_id($id) {
 	$result = Database::query($sql);
 	$return = array();
 	if (Database::num_rows($result)) {
-		$return = Database::fetch_array($result,'ASSOC');
+		$return = Database::fetch_array($result, 'ASSOC');
 	}
 	return $return;
 }
@@ -1773,7 +1773,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 //Firstname, lastname, username
                 $work['firstname'] = Display::div($work['firstname'], array('class' => $class));
                 $work['lastname'] = Display::div($work['lastname'], array('class' => $class));
-                $work['username'] = Display::div($work['username'], array('class' => $class));
+                //$work['username'] = Display::div($work['username'], array('class' => $class));
 
                 if (strlen($work['title']) > 30) {
                     $short_title = substr($work['title'],0,27).'...';
@@ -1782,11 +1782,10 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                     $work['title'] = Display::div($work['title'], array('class' => $class));
                 }
 
-
-                //Type
+                // Type.
                 $work['type'] = build_document_icon_tag('file', $work['file']);
 
-                //File name
+                // File name.
                 $link_to_download = null;
 
                 if ($work['contains_file']) {
@@ -1799,11 +1798,11 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
 
                 $work['qualification'] = $qualification_string;
 
-                //Date
+                // Date.
                 $work_date = api_convert_and_format_date($work['sent_date']);
                 $work['sent_date'] = date_to_str_ago(api_get_local_time($work['sent_date'])).' '.$add_string.'<br />'.$work_date;
 
-                //Actions
+                // Actions.
                 $url = api_get_path(WEB_CODE_PATH).'work/';
                 $action = '';
                 if ($is_allowed_to_edit) {
@@ -1841,7 +1840,9 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                     }
                 } elseif ($is_author && (empty($work['qualificator_id']) || $work['qualificator_id'] == 0)) {
                     if (api_is_allowed_to_session_edit(false, true)) {
-                        $action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Modify').'"  >'.Display::return_icon('edit.png', get_lang('Modify'),array(), ICON_SIZE_SMALL).'</a>';
+                        //$action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Modify').'"  >'.Display::return_icon('edit.png', get_lang('Modify'),array(), ICON_SIZE_SMALL).'</a>';
+                        $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('Modify').'">'.
+                            Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a>';
                     } else {
                         $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);
                     }
@@ -1852,7 +1853,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                     $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);
                 }
 
-                //Status
+                // Status.
                 if (empty($work['qualificator_id'])) {
                     $qualificator_id = Display::label(get_lang('NotRevised'), 'warning');
                 } else {

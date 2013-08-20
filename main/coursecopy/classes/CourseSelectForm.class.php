@@ -16,7 +16,8 @@ class CourseSelectForm
 	 * @param array $hidden_fiels Hidden fields to add to the form.
 	 * @param boolean the document array will be serialize. This is used in the course_copy.php file
 	 */
-	static function display_form($course, $hidden_fields = null, $avoid_serialize=false) {
+	static function display_form($course, $hidden_fields = null, $avoid_serialize=false)
+    {
         global $charset;
 		$resource_titles[RESOURCE_EVENT]                = get_lang('Events');
 		$resource_titles[RESOURCE_ANNOUNCEMENT] 		= get_lang('Announcements');
@@ -360,7 +361,7 @@ class CourseSelectForm
 
 		//Create the resource DOCUMENT objects
 		//Loading the results from the checkboxes of ethe javascript
-		$resource       = $_POST['resource'][RESOURCE_DOCUMENT];
+		$resource       = isset($_POST['resource'][RESOURCE_DOCUMENT]) ? $_POST['resource'][RESOURCE_DOCUMENT] : null;
 
 		$course_info 	= api_get_course_info($course_code);
 		$table_doc 		= Database::get_course_table(TABLE_DOCUMENT);
@@ -470,8 +471,8 @@ class CourseSelectForm
 					case RESOURCE_DOCUMENT:
 						// Mark folders to import which are not selected by the user to import,
 						// but in which a document was selected.
-						$documents = $_POST['resource'][RESOURCE_DOCUMENT];
-						if (is_array($resources))
+						$documents = isset($_POST['resource'][RESOURCE_DOCUMENT]) ? $_POST['resource'][RESOURCE_DOCUMENT] : null;
+						if (!empty($resources) && is_array($resources))
 							foreach($resources as $id => $obj) {
 								if ($obj->file_type == 'folder' && ! isset($_POST['resource'][RESOURCE_DOCUMENT][$id]) && is_array($documents)) {
 									foreach($documents as $id_to_check => $post_value) {
@@ -485,7 +486,7 @@ class CourseSelectForm
 								}
 							}
 					default :
-						if (is_array($resources)) {
+						if (!empty($resources) && is_array($resources)) {
 							foreach ($resources as $id => $obj) {
 								$resource_is_used_elsewhere = $course->is_linked_resource($obj);
                                 //var_dump($obj, $resource_is_used_elsewhere);

@@ -59,7 +59,7 @@ $is_author = false;
 $parent_data['qualification'] = intval($parent_data['qualification']);
 
 //  @todo add an option to allow/block multiple attempts.
-
+/*
 if (!empty($parent_data) && !empty($parent_data['qualification'])) {
     $count =  get_work_count_by_student($user_id, $work_id);
     if ($count >= 1) {
@@ -72,7 +72,7 @@ if (!empty($parent_data) && !empty($parent_data['qualification'])) {
         Display::display_footer();
         exit;
     }
-}
+}*/
 
 if (!empty($my_folder_data)) {
     $homework = get_work_assignment_by_id($my_folder_data['id']);
@@ -134,7 +134,6 @@ if ($submitGroupWorkUrl) {
 $form->addElement('hidden', 'id', $work_id);
 $form->addElement('hidden', 'contains_file', 0, array('id'=>'contains_file_id'));
 $form->addElement('text', 'title', get_lang('Title'), array('id' => 'file_upload', 'class' => 'span4'));
-//$form->addElement('html_editor', 'description', get_lang("Description"));
 $form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'Work', 'Width' => '100%', 'Height' => '200'));
 
 $form->addElement('hidden', 'active', 1);
@@ -176,6 +175,8 @@ if ($form->validate()) {
             $url = null;
             $contains_file = 0;
 
+            $title  = isset($_POST['title']) ? $_POST['title'] : null;
+            $description = isset($_POST['description']) ? $_POST['description'] : null;
 
             if ($_POST['contains_file'] && !empty($_FILES['file']['size'])) {
                 $updir = $currentCourseRepositorySys.'work/'; //directory path to upload

@@ -303,7 +303,8 @@ class CourseRecycler
     /**
      * Recycle quizzes - doesn't remove the questions and their answers, as they might still be used later
      */
-    function recycle_quizzes() {
+    function recycle_quizzes()
+    {
         if ($this->course->has_resources(RESOURCE_QUIZ)) {
             $table_qui_que = Database :: get_course_table(TABLE_QUIZ_QUESTION);
             $table_qui_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
@@ -319,7 +320,7 @@ class CourseRecycler
             // This value is set in CourseBuilder::quiz_build_questions()
             $delete_orphan_questions = in_array(-1, $ids);
             $ids = implode(',', $ids);
-            
+
             if (!empty($ids)) {
                 // Deletion of the tests first. Questions in these tests are
                 //   not deleted and become orphan at this point
@@ -331,19 +332,29 @@ class CourseRecycler
 
             // Identifying again and deletion of the orphan questions, if it was desired.
             if ($delete_orphan_questions) {
-                $sql = 'SELECT questions.id '.
-                       ' FROM '.$table_qui_que.' as questions '.
-                       ' LEFT JOIN '.$table_rel.' as quizz_questions '.
-                       '   ON questions.id=quizz_questions.question_id '.
-                       ' LEFT JOIN '.$table_qui.' as exercices '.
-                       '   ON exercice_id=exercices.id '.
-                       ' WHERE '.
-                       '   questions.c_id = '.$this->course_id.' AND '.
-                       '   quizz_questions.c_id = '.$this->course_id.' AND '.
-                       '   exercices.c_id = '.$this->course_id.' AND '.
-                       '   quizz_questions.exercice_id IS NULL OR '.
-                       '   exercices.active = -1';
-                       // active = -1 means "deleted" test.
+
+                $sql = " (
+                        SELECT q.id, ex.c_id FROM $table_qui_que q
+                        INNER JOIN $table_rel r
+                        ON (q.c_id = r.c_id AND q.id = r.question_id)
+                        INNER JOIN $table_qui ex
+                        ON (ex.id = r.exercice_id AND ex.c_id = r.c_id)
+                        WHERE ex.c_id = ".$this->course_id." AND (ex.active = '-1' OR ex.id = '-1')
+                    )
+                    UNION
+                    (
+                        SELECT q.id, r.c_id FROM $table_qui_que q
+                        LEFT OUTER JOIN $table_rel r
+                        ON (q.c_id = r.c_id AND q.id = r.question_id)
+                        WHERE q.c_id = ".$this->course_id." AND r.question_id is null
+                    )
+                    UNION
+                    (
+                        SELECT q.id, r.c_id FROM $table_qui_que q
+                        INNER JOIN $table_rel r
+                        ON (q.c_id = r.c_id AND q.id = r.question_id)
+                        WHERE r.c_id = ".$this->course_id." AND (r.exercice_id = '-1' OR r.exercice_id = '0')
+                    )";
                 $db_result = Database::query($sql);
                 if (Database::num_rows($db_result) > 0) {
                     $orphan_ids = array();

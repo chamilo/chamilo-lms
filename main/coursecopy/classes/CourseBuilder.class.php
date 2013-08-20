@@ -583,8 +583,8 @@ class CourseBuilder
                     if (Database::num_rows($db_result2)) {
                         while ($obj2 = Database::fetch_object($db_result2)) {
                             $question->add_answer($obj2->iid, $obj2->answer, $obj2->correct, $obj2->comment, $obj2->ponderation, $obj2->position, $obj2->hotspot_coordinates, $obj2->hotspot_type);
-                            $orphanQuestionIds[] = $obj2->iid;
                         }
+                        $orphanQuestionIds[] = $obj->iid;
                     }
 				    $this->course->add_resource($question);
 			    }
@@ -600,7 +600,7 @@ class CourseBuilder
             $newQuiz = new Quiz((object)$obj);
             if (!empty($orphanQuestionIds)) {
                 foreach($orphanQuestionIds as $index => $orphanId) {
-                    $order = $index +1;
+                    $order = $index + 1;
                     $newQuiz->add_question($orphanId, $order);
                 }
             }

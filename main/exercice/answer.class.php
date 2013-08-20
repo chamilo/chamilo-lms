@@ -48,19 +48,19 @@ class Answer {
 	 * @author 	Olivier Brouckaert
 	 * @param 	integer	Question ID that answers belong to
 	 */
-	function Answer($questionId, $course_id = null) {
-
-		$this->questionId			= intval($questionId);
-		$this->answer				= array();
-		$this->correct				= array();
-		$this->comment				= array();
-		$this->weighting			= array();
-		$this->position				= array();
-		$this->hotspot_coordinates	= array();
-		$this->hotspot_type 		= array();
-		$this->destination  		= array();
-		// clears $new_* arrays
-		$this->cancel();
+	function Answer($questionId, $course_id = null)
+    {
+        $this->questionId			= intval($questionId);
+        $this->answer				= array();
+        $this->correct				= array();
+        $this->comment				= array();
+        $this->weighting			= array();
+        $this->position				= array();
+        $this->hotspot_coordinates	= array();
+        $this->hotspot_type 		= array();
+        $this->destination  		= array();
+        // clears $new_* arrays
+        $this->cancel();
 
         if (!empty($course_id)) {
             $course_info = api_get_course_info_by_id($course_id);
@@ -71,15 +71,15 @@ class Answer {
         $this->course    = $course_info;
         $this->course_id = $course_info['real_id'];
 
-		// fills arrays
-		$objExercise = new Exercise($this->course_id);
-		$objExercise->read($_REQUEST['exerciseId']);
-		if ($objExercise->random_answers=='1') {
-			$this->readOrderedBy('rand()', '');// randomize answers
-		} else {
-			$this->read(); // natural order
-		}
-	}
+        // fills arrays
+        $objExercise = new Exercise($this->course_id);
+        $objExercise->read($_REQUEST['exerciseId']);
+        if ($objExercise->random_answers == '1') {
+            $this->readOrderedBy('rand()', '');// randomize answers
+        } else {
+            $this->read(); // natural order
+        }
+    }
 
 	/**
 	 * Clears $new_* arrays
@@ -114,7 +114,7 @@ class Answer {
 		$i=1;
 
 		// while a record is found
-		while($object=Database::fetch_object($result)) {
+		while ($object=Database::fetch_object($result)) {
 			$this->id[$i]					= $object->id;
 			$this->answer[$i]				= $object->answer;
 			$this->correct[$i]				= $object->correct;
@@ -145,18 +145,17 @@ class Answer {
 			$order = 'ASC';
 		}
 
-
 		$TBL_ANSWER   = Database::get_course_table(TABLE_QUIZ_ANSWER);
 		$TBL_QUIZ     = Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$questionId=intval($this->questionId);
 
 		$sql = "SELECT type FROM $TBL_QUIZ WHERE c_id = {$this->course_id} AND id = $questionId";
-		$result_question=Database::query($sql);
-		$question_type=Database::fetch_array($result_question);
+		$result_question = Database::query($sql);
+		$question_type = Database::fetch_array($result_question);
 
-		$sql="SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type, destination, id_auto " .
-				"FROM $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id='".$questionId."'   " .
-				"ORDER BY $field $order";
+		$sql = "SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type, destination, id_auto " .
+               "FROM $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id='".$questionId."'   " .
+               "ORDER BY $field $order";
 		$result=Database::query($sql);
 
 		$i=1;
@@ -187,7 +186,7 @@ class Answer {
 			$this->autoId[$i]		= $doubt_data->id_auto;
 			$i++;
 	    }
-        $this->nbrAnswers=$i-1;
+        $this->nbrAnswers = $i-1;
 	}
 
 
@@ -249,10 +248,10 @@ class Answer {
 		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
 		$auto_id = intval($auto_id);
-		$sql="SELECT id, answer FROM $TBL_ANSWER WHERE c_id = {$this->course_id} AND id_auto='$auto_id'";
+		$sql="SELECT id, answer, id_auto FROM $TBL_ANSWER WHERE c_id = {$this->course_id} AND id_auto='$auto_id'";
 		$rs = Database::query($sql);
 
-		if (Database::num_rows($rs)>0) {
+		if (Database::num_rows($rs) > 0) {
 			$row = Database::fetch_array($rs);
 			return $row;
 		}
@@ -279,7 +278,8 @@ class Answer {
 	 * @author Yannick Warnier <ywarnier@beeznest.org>
 	 * @return array	List of answers where each answer is an array of (id, answer, comment, grade) and grade=weighting
 	 */
-	 function getAnswersList($decode = false) {
+	 function getAnswersList($decode = false)
+     {
 	 	$list = array();
 	 	for($i = 1; $i<=$this->nbrAnswers;$i++){
 	 		if(!empty($this->answer[$i])){
@@ -291,14 +291,14 @@ class Answer {
 	 			}
 
 	 			$list[] = array(
-						'id'            => $i,
-						'answer'        => $this->answer[$i],
-						'comment'       => $this->comment[$i],
-						'grade'         => $this->weighting[$i],
-						'hotspot_coord' => $this->hotspot_coordinates[$i],
-						'hotspot_type'	=> $this->hotspot_type[$i],
-						'correct'		=> $this->correct[$i],
-						'destination'	=> $this->destination[$i]
+                    'id'            => $i,
+                    'answer'        => $this->answer[$i],
+                    'comment'       => $this->comment[$i],
+                    'grade'         => $this->weighting[$i],
+                    'hotspot_coord' => $this->hotspot_coordinates[$i],
+                    'hotspot_type'	=> $this->hotspot_type[$i],
+                    'correct'		=> $this->correct[$i],
+                    'destination'	=> $this->destination[$i]
 				);
 	 		}
 	 	}

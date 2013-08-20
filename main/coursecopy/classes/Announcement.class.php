@@ -13,31 +13,31 @@ class Announcement extends Resource
 	/**
 	 * The title of the announcement
 	 */
-	var $title;
+    public $title;
 	/**
 	 * The content of the announcement
 	 */
-	var $content;
+    public $content;
 	/**
 	 * The date on which this announcement was made
 	 */
-	var $date;
+    public $date;
 	/**
 	 * The display order of this announcement
 	 */
-	var $display_order;
+    public $display_order;
 	/**
 	 * Has the e-mail been sent?
 	 */
-	var $email_sent;
+    public $email_sent;
 	
-	var $attachment_path;
+    public $attachment_path;
 	
-	var $attachment_filename;
+    public $attachment_filename;
 	
-	var $attachment_size;
+    public $attachment_size;
 	
-	var $attachment_comment;
+    public $attachment_comment;
 	
 	/**
 	 * Create a new announcement
@@ -47,7 +47,8 @@ class Announcement extends Resource
 	 * @param string $date
 	 * @param int display_order
 	 */
-	function Announcement($id, $title, $content, $date, $display_order, $email_sent, $path, $filename, $size, $comment) {
+	function Announcement($id, $title, $content, $date, $display_order, $email_sent, $path, $filename, $size, $comment) 
+{
 		parent::Resource($id,RESOURCE_ANNOUNCEMENT);
 		
 		$this->content	= $content;
@@ -71,4 +72,3 @@ class Announcement extends Resource
 		echo $this->date.': '.$this->title;
 	}
 }
-?>

@@ -179,7 +179,7 @@ class WSReport extends WS {
      * @param string User id value
      * @param string Course id field name (use chamilo_course_id if none)
      * @param string Course id value
-     * @param string Learnpath ID
+     * @param int Learnpath ID
      * @param int Learnpath *ITEM* ID
      * @return string "not attempted", "passed", "completed", "failed", "incomplete"
      */

@@ -68,23 +68,26 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId)) {
 }
 echo '</div>';
 
-
 $error_message = isset($_GET['error_message']) ? Security::remove_XSS($_GET['error_message']) : null;
 if (!empty($error_message)) {
     echo $error_message;
 }
 
+if (!empty($my_folder_data['description'])) {
+    echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description']).'</p></div></p>';
+}
 
 $check_qualification = intval($my_folder_data['qualification']);
 
 if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) {
     $type = 'simple';
-    $columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), get_lang('Title'), get_lang('Qualification'), get_lang('Date'),  get_lang('Status'), get_lang('Actions'));
+    //$columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), get_lang('Title'), get_lang('Qualification'), get_lang('Date'),  get_lang('Status'), get_lang('Actions'));
+    $columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('Title'), get_lang('Qualification'), get_lang('Date'), get_lang('Status'), get_lang('Actions'));
     $column_model   = array (
         array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false'),
         array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'username',       'index'=>'username',        'width'=>'30',   'align'=>'left', 'search' => 'true'),
+        //array('name'=>'username',       'index'=>'username',        'width'=>'30',   'align'=>'left', 'search' => 'true'),
         array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => 'true'),
         //                array('name'=>'file',           'index'=>'file',            'width'=>'20',   'align'=>'left', 'search' => 'false'),
         array('name'=>'qualification',	'index'=>'qualification',	'width'=>'20',   'align'=>'left', 'search' => 'true'),
@@ -94,12 +97,13 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
     );
 } else {
     $type = 'complex';
-    $columns  = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), get_lang('Title'), get_lang('Date'),  get_lang('Actions'));
+    //$columns  = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), get_lang('Title'), get_lang('Date'),  get_lang('Actions'));
+    $columns  = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('Title'), get_lang('Date'),  get_lang('Actions'));
     $column_model   = array (
         array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false'),
         array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'username',       'index'=>'username',        'width'=>'30',   'align'=>'left', 'search' => 'true'),
+        //array('name'=>'username',       'index'=>'username',        'width'=>'30',   'align'=>'left', 'search' => 'true'),
         array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),
         //                array('name'=>'file',           'index'=>'file',            'width'=>'20',   'align'=>'left', 'search' => 'false'),
         //array('name'=>'qualification',	'index'=>'qualification',	'width'=>'20',   'align'=>'left', 'search' => 'true'),
@@ -116,9 +120,6 @@ $extra_params['autowidth'] = 'true';
 
 //height auto
 $extra_params['height'] = 'auto';
-//$extra_params['excel'] = 'excel';
-
-//$extra_params['rowList'] = array(10, 20 ,30);
 
 $extra_params['sortname'] = 'firstname';
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list&work_id='.$workId.'&type='.$type;

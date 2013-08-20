@@ -419,6 +419,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     				$student_answer_list = $correct_answer_list[0];
                 }
 
+
     			if (!empty($correct_answer_list) && !empty($student_answer_list)) {
     			    $correct_answer_list = $correct_answer_list[0];
     			    $i = 0;
@@ -436,13 +437,26 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     			            	$value = str_replace('&nbsp;', '',  trim($value[0]));
     			            }
                             $correct_item = preg_quote($correct_item);
-                            $correct_item = api_preg_replace('|/|', '\/', $correct_item);   // to prevent error if there is a / in the text to find
-    			            $answer = api_preg_replace('/'.$correct_item.'/', Display::input('text', "choice[$questionId][]", $value), $answer, 1);
+                            // to prevent error if there is a / in the text to find
+                            $correct_item = api_preg_replace('|/|', '\/', $correct_item);
+
+                            $size = strlen($correct_item) * 10 + 10;
+                            $attributes['style'] = 'width: '.$size.'px';
+
+    			            $answer = api_preg_replace('/'.$correct_item.'/', Display::input('text', "choice[$questionId][]", $value, $attributes), $answer, 1);
     			        }
     			        $i++;
     			    }
     			} else {
-    				$answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
+
+                    foreach ($correct_answer_list[0] as $item) {
+                        $size = strlen($item) * 10 + 10;
+                        $attributes['style'] = 'width: '.$size.'px';
+                        $pattern = '/\['.$item.'+\]/';
+                        $answer = api_preg_replace($pattern, Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
+                    }
+                    //$answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
+
     			}
     			$s .= $answer;
             } elseif ($answerType == MATCHING) {

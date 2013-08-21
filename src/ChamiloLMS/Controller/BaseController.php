@@ -35,6 +35,24 @@ abstract class BaseController extends FlintController
         $this->app = $app;
         // In order to use the Flint Controller
         $this->pimple = $app;
+
+        // Inserting course
+        /** @var \Entity\Course $app['course'] */
+        if (isset($app['course'])) {
+            $template = $this->get('template');
+            $template->assign('course', $app['course']);
+        }
+    }
+
+    /**
+     * @return \Entity\Course
+     */
+    protected function getCourse()
+    {
+        if (isset($this->app['course'])) {
+            return $this->app['course'];
+        }
+        return false;
     }
 
     /**
@@ -104,8 +122,8 @@ abstract class BaseController extends FlintController
     protected function createUrl($label, $params = array())
     {
         $links = $this->generateLinks();
-        $courseCode = $this->getRequest()->get('courseCode');
-        $params['courseCode'] = $courseCode;
+        $courseCode = $this->getRequest()->get('course');
+        $params['course'] = $courseCode;
         if (isset($links) && is_array($links) && isset($links[$label])) {
             $url = $this->generateUrl($links[$label], $params);
             return $url;

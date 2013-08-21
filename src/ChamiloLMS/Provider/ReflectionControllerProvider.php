@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Routing\AnnotatedRouteControllerLoader;
 use Doctrine\Common\Annotations\AnnotationReader;
-use ChamiloLMS\Middleware;
+use ChamiloLMS\Middleware\CourseMiddleware;
 
 class ReflectionControllerProvider implements ControllerProviderInterface
 {
@@ -35,15 +35,13 @@ class ReflectionControllerProvider implements ControllerProviderInterface
         $controllers = $app['controllers_factory'];
 
         // Routes are already cached using Flint
-        if ($app['debug'] == false) {
-            return $controllers;
+
+        if (file_exists($app['sys_temp_path'].'ProjectUrlMatcher.php')) {
+           return $controllers;
         }
 
         $reflection = new \ReflectionClass($app[$this->controllerName]);
         $className = $reflection->getName();
-
-        // is a Chamilo course tool in order to convert course/{courseCode} into an entity
-        $isCourseTool = (strpos($className, 'ChamiloLMS\Controller\Tool') === false) ? false : true;
 
         // Needed in order to get annotations
         $annotationReader = new AnnotationReader();
@@ -98,27 +96,11 @@ class ReflectionControllerProvider implements ControllerProviderInterface
                         }
                     }
 
-                    // Setting converts
-                    if ($isCourseTool) {
-
-                        // Converting /courses/XXX/ to a Entity/Course object
-
-                        $match->convert('course', function ($courseCode) use ($app, $match) {
-                            $course = $app['orm.em']->getRepository('Entity\Course')->findOneByCode($courseCode);
-
-                            // Set course stuff thanks to a before
-                            $match->before(new CourseMiddleware($app, $courseCode));
-                            return $course;
-                        });
-
-
-
-                    }
-
                     $match->bind($controllerName);
                 }
             }
         }
+
         return $controllers;
     }
 }

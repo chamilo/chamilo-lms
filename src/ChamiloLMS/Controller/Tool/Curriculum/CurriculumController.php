@@ -24,20 +24,9 @@ class CurriculumController extends CommonController
      * @Route("/")
      * @Method({"GET"})
      */
-    public function indexAction($courseCode)
+    public function indexAction($course)
     {
         // Redirecting to curriculum user
-        return $this->redirect($this->generateUrl('curriculum_user.controller:indexAction', array('courseCode' => $courseCode)));
-
-        /*
-        $template = $this->get('template');
-        $response = $template->render_template($this->getTemplatePath().'index.tpl');
-        return new Response($response, 200, array());
-        */
-    }
-
-    protected function getTemplatePath()
-    {
-        return 'tool/curriculum/';
+        return $this->redirect($this->generateUrl('curriculum_user.controller:indexAction', array('course' => $course)));
     }
 }

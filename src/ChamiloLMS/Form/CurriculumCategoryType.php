@@ -27,13 +27,15 @@ class CurriculumCategoryType extends AbstractType
         $builder->add('c_id', 'hidden');
         $builder->add('session_id', 'hidden');
 
+        $course = $entity->getCourse();
+
         $builder->add('parent', 'entity', array(
             'class' => 'Entity\CurriculumCategory',
-            'query_builder' => function($repository) use ($entity) {
+            'query_builder' => function($repository) use ($entity, $course) {
                 return $repository->createQueryBuilder('c')
                     ->where('c.cId = :id')
                     ->andWhere('c.sessionId = :session_id')
-                    ->setParameters(array('id' => $entity->getId(), 'session_id' => $entity->getSessionId()))
+                    ->setParameters(array('id' => $course->getId(), 'session_id' => $entity->getSessionId()))
                     ->orderBy('c.title', 'ASC');
             },
             'property' => 'title',

@@ -635,8 +635,6 @@ $app->before(
         $iso = api_get_language_isocode($language);
         $app['translator']->setLocale($iso);
 
-
-
         // From the login page
         $language = $request->get('language');
 
@@ -678,7 +676,7 @@ $app->before(
 
         $languageFilesToAdd = array();
         /* Loading translations depending of the "section" folder after main
-          for example the section is exercice here: web/main/exercice/result.php
+           for example the section is exercice here: web/main/exercice/result.php
         */
         if (!empty($section)) {
             switch($section) {
@@ -775,6 +773,23 @@ $app->before(
                 return $translator;
             }
         }));
+
+        // Setting course entity for controllers.
+
+        // The course parameter is loaded
+        $course = $request->get('course');
+
+        // Check if we are inside a Chamilo course tool
+        $isCourseTool = (strpos($request->getPathInfo(), 'courses/') === false) ? false : true;
+
+        //$controllerName = $request->get('_controller');
+
+        // Setting converts
+        if ($isCourseTool) {
+            // Converting /courses/XXX/ to a Entity/Course object
+            $course = $app['orm.em']->getRepository('Entity\Course')->findOneByCode($course);
+            $app['course'] = $course;
+        }
     }
 );
 

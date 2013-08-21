@@ -19,18 +19,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  */
 class CurriculumCategoryController extends CommonController
 {
-    private $course;
-
     /**
      *
      * @Route("/")
      * @Method({"GET"})
      */
-    public function indexAction($course)
+    public function indexAction()
     {
-        $this->course = $course;
-        $template = $this->get('template');
-        $template->assign('course', $course);
+        $course = $this->getCourse();
 
         $options = array(
             'decorate' => true,
@@ -39,7 +35,7 @@ class CurriculumCategoryController extends CommonController
             'childOpen' => '<li>',
             'childClose' => '</li>',
             'nodeDecorator' => function ($row) use ($course) {
-                $courseCode = $course->getId();
+                $courseCode = $course->getCode();
                 $addChildren = null;
                 $items = null;
                 if ($row['lvl'] <= 0) {
@@ -91,7 +87,7 @@ class CurriculumCategoryController extends CommonController
     * @Route("/{id}/show", requirements={"id" = "\d+"})
     * @Method({"GET"})
     */
-    public function readCategoryAction($courseCode, $id)
+    public function readCategoryAction($id)
     {
         return parent::readAction($id);
     }
@@ -102,9 +98,6 @@ class CurriculumCategoryController extends CommonController
     */
     public function addCategoryAction($course)
     {
-        $this->course = $course;
-        $template = $this->get('template');
-        $template->assign('course', $course);
         return parent::addAction();
     }
 
@@ -151,7 +144,7 @@ class CurriculumCategoryController extends CommonController
     * @Route("/{id}/edit", requirements={"id" = "\d+"})
     * @Method({"GET"})
     */
-    public function editCategoryAction($courseCode, $id)
+    public function editCategoryAction($id)
     {
         return parent::editAction($id);
     }
@@ -161,7 +154,7 @@ class CurriculumCategoryController extends CommonController
     * @Route("/{id}/delete", requirements={"id" = "\d+"})
     * @Method({"GET"})
     */
-    public function deleteCategoryAction($courseCode, $id)
+    public function deleteCategoryAction($id)
     {
         return parent::deleteAction($id);
     }
@@ -216,7 +209,7 @@ class CurriculumCategoryController extends CommonController
     protected function getDefaultEntity()
     {
         $entity = $this->getNewEntity();
-        $entity->setCourse($this->course);
+        $entity->setCourse($this->getCourse());
         $entity->setSessionId(api_get_session_id());
         return $entity;
     }

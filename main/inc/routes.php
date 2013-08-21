@@ -669,6 +669,7 @@ if ($alreadyInstalled) {
     $app->mount('/courses/{courseCode}/curriculum/category', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_category.controller'));
     $app->mount('/courses/{courseCode}/curriculum/item', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_item.controller'));
     $app->mount('/courses/{courseCode}/curriculum/user', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_user.controller'));
+    $app->mount('/courses/{courseCode}/curriculum', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum.controller'));
 
 }
 

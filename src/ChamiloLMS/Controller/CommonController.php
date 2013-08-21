@@ -54,6 +54,7 @@ class CommonController extends BaseController
      */
     protected function getTemplatePath()
     {
+
     }
 
     protected function generateDefaultCrudRoutes()

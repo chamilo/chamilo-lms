@@ -78,7 +78,7 @@ class CurriculumItem
 
     /**
      *
-     * @return CurriculumCategory
+     * @return ArrayCollection
      */
     public function getUserItems()
     {

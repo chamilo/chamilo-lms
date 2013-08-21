@@ -26,9 +26,15 @@ class CurriculumUserController extends CommonController
      * @Route("/")
      * @Method({"GET"})
      */
-    public function indexAction()
+    public function indexAction(Application $app)
     {
-        // $repo = $this->getCurriculumCategoryRepository();
+        // @todo Use filters like "after/before|finish" to manage user access
+        api_block_anonymous_users();
+
+        // Abort request because the user is not allowed here - @todo use filters
+        if ($app['allowed'] == false) {
+            return $app->abort(403, 'Not allowed');
+        }
 
         $query = $this->getManager()
             ->createQueryBuilder()
@@ -63,6 +69,10 @@ class CurriculumUserController extends CommonController
                 $form = $this->get('form.factory')->create($formType, $item);
                 $formList[$item->getId()] = $form->createView();
             }
+        }
+
+        if (api_is_allowed_to_edit()) {
+            $this->get('template')->assign('teacher_links', $categories);
         }
 
         $this->get('template')->assign('categories', $categories);

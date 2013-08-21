@@ -152,8 +152,10 @@ $app['security.access_rules'] = array(
     // Ministerio routes
 
     array('^/admin/director', 'ROLE_DIRECTOR'),
-    array('^/tool/curriculum/category', 'ROLE_ADMIN'),
-    array('^/tool/curriculum/item', 'ROLE_ADMIN'),
+    array('^/courses/.*/curriculum/category', 'ROLE_TEACHER'),
+    array('^/courses/.*/curriculum/item', 'ROLE_TEACHER'),
+    array('^/courses/.*/curriculum/user', 'ROLE_STUDENT'),
+    array('^/courses/.*/curriculum', 'ROLE_STUDENT'),
     array('^/tool/.*', array('ROLE_ADMIN','ROLE_TEACHER')),
     array('^/admin/jury_president', 'ROLE_JURY_PRESIDENT'),
     array('^/admin/jury_member', 'ROLE_JURY_MEMBER'), //? jury subsitute??
@@ -708,3 +710,10 @@ $app['curriculum_user.controller'] = $app->share(
         return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumUserController($app);
     }
 );
+
+$app['curriculum.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumController($app);
+    }
+);
+

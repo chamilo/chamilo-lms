@@ -11,7 +11,9 @@ class CurriculumCategoryType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builderData = $builder->getData();
+        /** @var Entity\CurriculumCategory $entity */
+        $entity = $builder->getData();
+
         /*$parentIdDisabled = false;
         if (!empty($builderData)) {
             $parentIdDisabled = true;
@@ -21,11 +23,18 @@ class CurriculumCategoryType extends AbstractType
         $builder->add('max_score', 'text');
         $builder->add('min_chars', 'text');
         $builder->add('min_chars', 'text');
+
+        $builder->add('c_id', 'hidden');
+        $builder->add('session_id', 'hidden');
+
         $builder->add('parent', 'entity', array(
             'class' => 'Entity\CurriculumCategory',
-            'query_builder' => function($repository) {
-                return $repository->createQueryBuilder('p')
-                    ->orderBy('p.title', 'ASC');
+            'query_builder' => function($repository) use ($entity) {
+                return $repository->createQueryBuilder('c')
+                    ->where('c.cId = :id')
+                    ->andWhere('c.sessionId = :session_id')
+                    ->setParameters(array('id' => $entity->getId(), 'session_id' => $entity->getSessionId()))
+                    ->orderBy('c.title', 'ASC');
             },
             'property' => 'title',
             'required' => false

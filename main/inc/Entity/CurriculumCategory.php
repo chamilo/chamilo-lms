@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
 
-
 /**
  * CurriculumCategory
  *
@@ -110,10 +109,34 @@ class CurriculumCategory
      */
     private $items;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Course")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     */
+    private $course;
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCourse()
+    {
+        return $this->course;
+    }
+
+    /**
+     * @param Course $course
+     * @return mixed
+     */
+    public function setCourse(Course $course)
+    {
+        $this->course = $course;
+    }
+
 
     public function getItems()
     {

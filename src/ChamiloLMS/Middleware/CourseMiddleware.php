@@ -1,15 +1,16 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: jmontoya
- * Date: 8/21/13
- * Time: 4:50 PM
- * To change this template use File | Settings | File Templates.
- */
 
 namespace ChamiloLMS\Middleware;
 
+/**
+ * Class CourseMiddleware
+ * @package ChamiloLMS\Middleware
+ */
+class CourseMiddleware
+{
 
-class CourseMiddleware {
-
+    public function __construct(Application $app, $course)
+    {
+        $app['template']->assign('course', $course);
+    }
 }

@@ -91,7 +91,7 @@ class CurriculumUserController extends CommonController
     public function saveUserItemAction()
     {
         $request = $this->getRequest();
-        $form = $this->get('form.factory')->create($this->getFormType());
+        $form = $this->get('form.factory')->create($this->getFormType(), $this->getDefaultEntity());
         $token = $this->get('security')->getToken();
         $user = $token->getUser();
 

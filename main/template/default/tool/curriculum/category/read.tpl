@@ -5,7 +5,7 @@
     <ul>
     {% for subitem in subitems %}
         <li>
-            <a href="{{ url(links.question_score_name_read_link, {'courseCode' : app.request.get('courseCode'), id: subitem.id} ) }}">
+            <a href="{{ url(links.question_score_name_read_link, {'course' : course.code, id: subitem.id }) }}">
                 {{ subitem.name }}
             </a>
         </li>

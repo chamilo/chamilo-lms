@@ -137,7 +137,7 @@ abstract class BaseController extends FlintController
     public function addAction()
     {
         $request = $this->getRequest();
-        $form = $this->get('form.factory')->create($this->getFormType());
+        $form = $this->get('form.factory')->create($this->getFormType(), $this->getDefaultEntity());
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -472,5 +472,10 @@ abstract class BaseController extends FlintController
         }
 
         return $entity;
+    }
+
+    protected function getDefaultEntity()
+    {
+        return null;
     }
 }

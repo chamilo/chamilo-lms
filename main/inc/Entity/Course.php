@@ -207,10 +207,16 @@ class Course
      **/
     private $items;
 
+    /**
+     * @ORM\OneToMany(targetEntity="CurriculumCategory", mappedBy="course")
+     **/
+    //private $curriculumCategories;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->items = new ArrayCollection();
+        //$this->curriculumCategories = new ArrayCollection();
     }
 
     public function getItems()

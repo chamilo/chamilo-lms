@@ -9,10 +9,9 @@ use Symfony\Component\Routing\Loader\AnnotationClassLoader;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-
 use Sensio\Bundle\FrameworkExtraBundle\Routing\AnnotatedRouteControllerLoader;
-
 use Doctrine\Common\Annotations\AnnotationReader;
+use ChamiloLMS\Middleware;
 
 class ReflectionControllerProvider implements ControllerProviderInterface
 {
@@ -41,7 +40,12 @@ class ReflectionControllerProvider implements ControllerProviderInterface
         }
 
         $reflection = new \ReflectionClass($app[$this->controllerName]);
+        $className = $reflection->getName();
 
+        // is a Chamilo course tool in order to convert course/{courseCode} into an entity
+        $isCourseTool = (strpos($className, 'ChamiloLMS\Controller\Tool') === false) ? false : true;
+
+        // Needed in order to get annotations
         $annotationReader = new AnnotationReader();
         $routeAnnotation = new Route(array());
         $methodAnnotation = new Method(array());
@@ -75,22 +79,40 @@ class ReflectionControllerProvider implements ControllerProviderInterface
             foreach ($routeObjects as $routeObject) {
 
                 if ($routeObject && is_a($routeObject, 'Symfony\Component\Routing\Annotation\Route')) {
-
                     $match = $controllers->match($routeObject->getPath(), $controllerName, $methodsToString);
 
                     // Setting requirements
+                    $req = $routeObject->getRequirements();
+
                     if (!empty($req)) {
                         foreach ($req as $key => $value) {
                             $match->assert($key, $value);
                         }
                     }
-                    $defaults = $routeObject->getDefaults();
-                    // Setting defaults
 
+                    // Setting defaults
+                    $defaults = $routeObject->getDefaults();
                     if (!empty($defaults)) {
                         foreach ($defaults as $key => $value) {
                             $match->value($key, $value);
                         }
+                    }
+
+                    // Setting converts
+                    if ($isCourseTool) {
+
+                        // Converting /courses/XXX/ to a Entity/Course object
+
+                        $match->convert('course', function ($courseCode) use ($app, $match) {
+                            $course = $app['orm.em']->getRepository('Entity\Course')->findOneByCode($courseCode);
+
+                            // Set course stuff thanks to a before
+                            $match->before(new CourseMiddleware($app, $courseCode));
+                            return $course;
+                        });
+
+
+
                     }
 
                     $match->bind($controllerName);

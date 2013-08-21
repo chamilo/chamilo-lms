@@ -716,4 +716,3 @@ $app['curriculum.controller'] = $app->share(
         return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumController($app);
     }
 );
-

@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use ChamiloLMS\Component\Auth;
 
 /**
  * User
@@ -314,7 +315,9 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function getRoles()
     {
-        return $this->roles->toArray();
+        $roles = $this->roles->toArray();
+        //$roles[] = new Auth\Role($this);
+        return $roles;
     }
 
     /**

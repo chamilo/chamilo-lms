@@ -19,38 +19,43 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  */
 class CurriculumCategoryController extends CommonController
 {
+    private $course;
+
     /**
      *
      * @Route("/")
      * @Method({"GET"})
      */
-    public function indexAction($courseCode)
+    public function indexAction($course)
     {
+        $this->course = $course;
+        $template = $this->get('template');
+        $template->assign('course', $course);
+
         $options = array(
             'decorate' => true,
             'rootOpen' => '<ul>',
             'rootClose' => '</ul>',
             'childOpen' => '<li>',
             'childClose' => '</li>',
-            'nodeDecorator' => function ($row) use ($courseCode) {
+            'nodeDecorator' => function ($row) use ($course) {
+                $courseCode = $course->getId();
                 $addChildren = null;
                 $items = null;
                 if ($row['lvl'] <= 0) {
-
-                    $addChildren = '<a class="btn" href="'.$this->createUrl('add_from_parent_link', array('courseCode' => $courseCode, 'id' => $row['id'])).'">Add children</a>';
+                    $addChildren = '<a class="btn" href="'.$this->createUrl('add_from_parent_link', array('course' => $courseCode, 'id' => $row['id'])).'">Add children</a>';
                 } else {
-                    $addChildren = '<a class="btn" href="'.$this->createUrl('add_from_category', array('courseCode' => $courseCode, 'id' => $row['id'])).'">Add items</a>';
-                    //$items = $row['items'];
+                    $addChildren = '<a class="btn" href="'.$this->createUrl('add_from_category', array('course' => $courseCode, 'id' => $row['id'])).'">Add items</a>';
                     $items = '<ul>';
                     foreach ($row['items'] as $item) {
-                        $url = ' <a class="btn" href="'.$this->createUrl('edit_item', array('courseCode' => $courseCode, 'id' => $item['id'])).'">Edit</a>';
+                        $url = ' <a class="btn" href="'.$this->createUrl('edit_item', array('course' => $courseCode, 'id' => $item['id'])).'">Edit</a>';
                         $items.= '<li>'.$item['title']." (item) ".$url.'</li>';
                     }
                     $items .= '</ul>';
                 }
-                $readLink = '<a href="'.$this->createUrl('read_link', array('courseCode' => $courseCode, 'id' => $row['id'])).'">'.$row['title'].'</a>';
-                $editLink = '<a class="btn" href="'.$this->createUrl('update_link', array('courseCode' => $courseCode, 'id' => $row['id'])).'">Edit</a>';
-                $deleteLink = '<a class="btn" href="'.$this->createUrl('delete_link', array('courseCode' => $courseCode, 'id' => $row['id'])).'"/>Delete</a>';
+                $readLink = '<a href="'.$this->createUrl('read_link', array('course' => $courseCode, 'id' => $row['id'])).'">'.$row['title'].'</a>';
+                $editLink = '<a class="btn" href="'.$this->createUrl('update_link', array('course' => $courseCode, 'id' => $row['id'])).'">Edit</a>';
+                $deleteLink = '<a class="btn" href="'.$this->createUrl('delete_link', array('course' => $courseCode, 'id' => $row['id'])).'"/>Delete</a>';
 
                 return $readLink.' '.$addChildren.' '.$editLink.' '.$deleteLink.$items;
             }
@@ -66,8 +71,10 @@ class CurriculumCategoryController extends CommonController
             ->select('node, i')
             ->from('Entity\CurriculumCategory', 'node')
             ->leftJoin('node.items', 'i')
-            //->where('node.cId = 0')
+            ->innerJoin('node.course', 'c')
+            ->where('node.cId = :id')
             ->orderBy('node.root, node.lft', 'ASC')
+            ->setParameters(array('id' => $course->getId()))
             ->getQuery();
 
         $htmlTree = $repo->buildTree($query->getArrayResult(), $options);
@@ -93,8 +100,11 @@ class CurriculumCategoryController extends CommonController
     * @Route("/add")
     * @Method({"GET"})
     */
-    public function addCategoryAction($courseCode)
+    public function addCategoryAction($course)
     {
+        $this->course = $course;
+        $template = $this->get('template');
+        $template->assign('course', $course);
         return parent::addAction();
     }
 
@@ -201,5 +211,13 @@ class CurriculumCategoryController extends CommonController
     protected function getFormType()
     {
         return new CurriculumCategoryType();
+    }
+
+    protected function getDefaultEntity()
+    {
+        $entity = $this->getNewEntity();
+        $entity->setCourse($this->course);
+        $entity->setSessionId(api_get_session_id());
+        return $entity;
     }
 }

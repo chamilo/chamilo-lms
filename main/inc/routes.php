@@ -666,10 +666,11 @@ if ($alreadyInstalled) {
     $app->mount('/admin/jury_president', new ChamiloLMS\Provider\ReflectionControllerProvider('jury_president.controller'));
     $app->mount('/admin/jury_member', new ChamiloLMS\Provider\ReflectionControllerProvider('jury_member.controller'));
 
-    $app->mount('/courses/{courseCode}/curriculum/category', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_category.controller'));
-    $app->mount('/courses/{courseCode}/curriculum/item', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_item.controller'));
-    $app->mount('/courses/{courseCode}/curriculum/user', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_user.controller'));
-    $app->mount('/courses/{courseCode}/curriculum', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum.controller'));
+
+    $app->mount('/courses/{course}/curriculum/category', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_category.controller'));
+    $app->mount('/courses/{course}/curriculum/item', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_item.controller'));
+    $app->mount('/courses/{course}/curriculum/user', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_user.controller'));
+    $app->mount('/courses/{course}/curriculum', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum.controller'));
 
 }
 

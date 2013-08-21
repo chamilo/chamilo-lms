@@ -120,6 +120,14 @@ class CourseArchiver
             copyDirTo($course->path . 'upload/announcements/', $doc_dir, false);
         }
 
+        // Copy work folders (only folders)
+        if (isset($course->resources[RESOURCE_WORK]) && is_array($course->resources[RESOURCE_WORK])) {
+            $doc_dir = dirname($backup_dir . '/upload/work/');
+            @mkdir($doc_dir, $perm_dirs, true);
+            // @todo: adjust to only create subdirs, but not copy files
+            copyDirTo($course->path . 'upload/work/', $doc_dir, false);
+        }
+
         // Zip the course-contents
         $zip = new PclZip($zip_dir . $zip_file);
         $zip->create($zip_dir . $tmp_dir_name, PCLZIP_OPT_REMOVE_PATH, $zip_dir . $tmp_dir_name . '/');

@@ -56,6 +56,7 @@ class CourseRecycler
         $this->recycle_glossary();
         $this->recycle_thematic();
         $this->recycle_attendance();
+        $this->recycle_work();
 
         foreach ($this->course->resources as $type => $resources) {
             foreach ($resources as $id => $resource) {
@@ -524,6 +525,30 @@ class CourseRecycler
                     $cond = array('id = ? AND c_id = ?'=>array($last_id, $this->course_id));
                     Database::delete($table_attendance, $cond);
                     api_item_property_update($this->course_info, TOOL_ATTENDANCE, $last_id,'AttendanceDeleted', api_get_user_id());
+                }
+            }
+        }
+    }
+    /**
+     * Recycle Works
+     */
+    function recycle_work($session_id = 0) {
+        if ($this->course->has_resources(RESOURCE_WORK)) {
+            $table_work          = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+            $table_work_assignment = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+
+            $resources = $this->course->resources;
+            foreach ($resources[RESOURCE_WORK] as $last_id => $obj) {
+                if (is_numeric($last_id)) {
+                    $cond = array('publication_id = ? AND c_id = ? '=>array($last_id, $this->course_id));
+                    Database::delete($table_work_assignment, $cond);
+                    // The following also deletes student tasks
+                    $cond = array('parent_id = ? AND c_id = ?'=>array($last_id, $this->course_id));
+                    Database::delete($table_work, $cond);
+                    // Finally, delete the main task registry
+                    $cond = array('id = ? AND c_id = ?'=>array($last_id, $this->course_id));
+                    Database::delete($table_work, $cond);
+                    api_item_property_update($this->course_info, TOOL_STUDENTPUBLICATION, $last_id,'StudentPublicationDeleted', api_get_user_id());
                 }
             }
         }

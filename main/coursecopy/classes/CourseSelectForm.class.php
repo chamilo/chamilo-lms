@@ -35,6 +35,7 @@ class CourseSelectForm
 		$resource_titles[RESOURCE_WIKI]                 = get_lang('Wiki');
 		$resource_titles[RESOURCE_THEMATIC]             = get_lang('Thematic');
 		$resource_titles[RESOURCE_ATTENDANCE]           = get_lang('Attendance');
+        $resource_titles[RESOURCE_WORK]                 = get_lang('ToolStudentPublication');
 ?>
 		<script>
 			function exp(item) {

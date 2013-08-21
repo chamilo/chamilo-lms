@@ -150,4 +150,12 @@ echo '<blockquote><pre>
 </pre>
 </blockquote>';
 
+echo get_lang('Or');
+echo '<blockquote><pre>
+    id;
+    23;
+    1337;
+</pre>
+</blockquote>';
+
 Display::display_footer();

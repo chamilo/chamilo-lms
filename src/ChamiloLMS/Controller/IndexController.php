@@ -75,7 +75,7 @@ class IndexController extends CommonController
         echo $formatter->format(time());*/
 
         //@todo improve this JS includes should be added using twig
-        $app['extraJS'] = array(
+        $extra = array(
             api_get_jquery_libraries_js(array('bxslider')),
             '<script>
             $(document).ready(function(){
@@ -89,6 +89,13 @@ class IndexController extends CommonController
             });
             </script>'
         );
+
+        if (api_get_setting('use_virtual_keyboard') == 'true') {
+            $extra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/keyboard/keyboard.css');
+            $extra[] = api_get_js('keyboard/jquery.keyboard.js');
+        }
+
+        $app['extraJS'] = $extra;
 
         $app['this_section'] = SECTION_CAMPUS;
         $request = $app['request'];
@@ -297,9 +304,9 @@ class IndexController extends CommonController
             )
         );
         $form->addElement(
-            'password', 
-            'password', 
-            get_lang('Pass'), 
+            'password',
+            'password',
+            get_lang('Pass'),
             array(
                 'class' => 'input-medium virtualkey'
             )
@@ -310,23 +317,26 @@ class IndexController extends CommonController
             include_once 'main/auth/openid/login.php';
             $html .= '<div>'.openid_form().'</div>';
         }*/
+
         /** Verify if settings is active to set keyboard. Included extra class in form input elements */
 
         if (api_get_setting('use_virtual_keyboard') == 'true') {
-            $html .= "<script> $(function(){ $('.virtualkey').keyboard(
-                     {
-                       layout:'custom',
-                       customLayout: {
-                         'default': [
-                           '1 2 3 4 5 6 7 8 9 0 {bksp}',
-                           'q w e r t y u i o p',
-                           'a s d f g h j k l',
-                           'z x c v b n m',
-                           '{cancel} {accept}'
-                         ]
-                       }
-                     }
-                     );}); </script>";
+            $html .= "<script>
+                $(function(){
+                    $('.virtualkey').keyboard({
+                        layout:'custom',
+                        customLayout: {
+                        'default': [
+                            '1 2 3 4 5 6 7 8 9 0 {bksp}',
+                            'q w e r t y u i o p',
+                            'a s d f g h j k l',
+                            'z x c v b n m',
+                            '{cancel} {accept}'
+                        ]
+                        }
+                    });
+                });
+            </script>";
         }
         return $html;
     }

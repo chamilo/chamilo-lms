@@ -30,7 +30,13 @@ logs/*
 nbproject/*
 vendor/.git
 
-#Doctrine entities generation tests
+vendor/ezyang/htmlpurifier/docs/*
+vendor/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema/Filter/ExtractStyleBlocks.txt
+vendor/ezyang/htmlpurifier/smoketests/*
+vendor/realityking/pchart/Sample/*
+vendor/realityking/pchart/Example*
+
+# Doctrine entities generation tests
 
 tests/doctrine_console/generated
 tests/doctrine_console/mapping

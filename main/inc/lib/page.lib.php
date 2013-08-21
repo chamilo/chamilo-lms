@@ -1180,6 +1180,7 @@ class PageController
         if (empty($user_id)) {
             return false;
         }
+
         $app = $this->app;
 
         $loadHistory = (isset($filter) && $filter == 'history') ? true : false;
@@ -1257,8 +1258,8 @@ class PageController
                 'no_category'
             );
         } else {
-            //Load sessions in category
-            $nbResults          = (int)UserManager::get_sessions_by_category(
+            // Load sessions in category
+            $nbResults = (int)UserManager::get_sessions_by_category(
                 $user_id,
                 false,
                 true,
@@ -1267,6 +1268,7 @@ class PageController
                 null,
                 'no_category'
             );
+
             $session_categories = UserManager::get_sessions_by_category(
                 $user_id,
                 false,
@@ -1276,6 +1278,7 @@ class PageController
                 $this->maxPerPage,
                 'no_category'
             );
+
         }
 
         $html = null;

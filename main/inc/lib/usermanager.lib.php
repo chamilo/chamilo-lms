@@ -2337,7 +2337,16 @@ class UserManager
      * @return array  list of statuses [session_category][session_id]
      * @todo ensure multiple access urls are managed correctly
      */
-    public static function get_sessions_by_category($user_id, $is_time_over = false, $get_count = false, $reverse_order = false, $start = 0, $maxPerPage = null, $categoryFilter = null) {
+    public static function get_sessions_by_category(
+        $user_id,
+        $is_time_over = false,
+        $get_count = false,
+        $reverse_order = false,
+        $start = 0,
+        $maxPerPage = null,
+        $categoryFilter = null
+    )
+    {
         // Database Table Definitions
         $tbl_session                = Database :: get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -2360,7 +2369,6 @@ class UserManager
         if ($reverse_order) {
             $order = ' ORDER BY name DESC ';
         }
-
 
         if ($is_time_over) {
             $condition_date_end1 = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00') OR moved_to <> 0) ";
@@ -2415,7 +2423,6 @@ class UserManager
                 ON su.id_session = session.id AND su.id_user = scu.id_user
                 WHERE scu.id_user = $user_id $condition_date_end1";
 
-
         // select specific to session coaches
         $select2 = " $select FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id) ";
         $sql2 = $select2 . " WHERE session.id_coach = $user_id $condition_date_end2 ";
@@ -2469,7 +2476,6 @@ class UserManager
             $row = Database::fetch_array($result3);
             return $row['total_rows'];
         } else {
-
             $result1 = Database::query($sql1);
             $result2 = Database::query($sql2);
         }
@@ -2483,19 +2489,20 @@ class UserManager
             }
         }
 
+
         if (Database::num_rows($result1) > 0) {
             // Now add the diff with $row1, ordering elements as planned by query
 
             $i = 0;
             while ($row1 = Database::fetch_array($result1)) {
-                if (!in_array($row1['id'],$ids)) {
+                if (!in_array($row1['id'], $ids)) {
                     if ($reverse_order) {
-                        while (isset($join[$i]) && strcmp($row1['session_category_name'],$join[$i]['session_category_name'])<=0) {
+                        while (isset($join[$i]) && strcmp($row1['session_category_name'], $join[$i]['session_category_name']) <= 0) {
                             $ordered_join[] = $join[$i];
                             $i++;
                         }
                     } else {
-                        while (isset($join[$i]) && strcmp($row1['session_category_name'],$join[$i]['session_category_name'])>0) {
+                        while (isset($join[$i]) && strcmp($row1['session_category_name'], $join[$i]['session_category_name']) > 0) {
                             $ordered_join[] = $join[$i];
                             $i++;
                         }
@@ -2535,7 +2542,7 @@ class UserManager
                 // the session table again
                 $session_info = $row;
 
-                //Checking session visibility
+                // Checking session visibility
                 $visibility = api_get_session_visibility($session_id, null, false);
 
                 switch ($visibility) {

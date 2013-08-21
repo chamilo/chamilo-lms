@@ -6551,3 +6551,36 @@ function api_get_user_blocked_by_captcha($username)
     }
     return false;
 }
+
+
+/**
+ * Remove tags from HTML anf return the $in_number_char first non-HTML char
+ * Postfix the text with "..." if it has been truncated.
+ * @return string
+ * @author hubert borderiou
+ */
+function api_get_short_text_from_html($in_html, $in_number_char) {
+    $out_res = api_remove_tags_with_space($in_html, false);
+    $postfix = "...";
+    if (strlen($out_res) > $in_number_char) {
+        $out_res = substr($out_res, 0, $in_number_char).$postfix;
+    }
+    return $out_res;
+}
+
+/**
+ * Replace tags with a space in a text.
+ * If $in_double_quote_replace, replace " with '' (for HTML attribute purpose, for exemple)
+ * @return string
+ * @author hubert borderiou
+ */
+function api_remove_tags_with_space($in_html, $in_double_quote_replace = true) {
+    $out_res = $in_html;
+    if ($in_double_quote_replace) {
+        $out_res = str_replace('"', "''", $out_res);
+    }
+    // avoid text stuck together when tags are removed, adding a space after >
+    $out_res = str_replace (">", "> ", $out_res);
+    $out_res = strip_tags($out_res);
+    return $out_res;
+}

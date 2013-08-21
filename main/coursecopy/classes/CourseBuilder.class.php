@@ -23,6 +23,7 @@ require_once 'CourseSession.class.php';
 require_once 'wiki.class.php';
 require_once 'Thematic.class.php';
 require_once 'Attendance.class.php';
+require_once 'Work.class.php';
 
 /**
  * Class which can build a course-object from a Chamilo-course.
@@ -51,7 +52,8 @@ class CourseBuilder
         'surveys',
         'tool_intro',
         'thematic',
-        'wiki'
+        'wiki',
+        'works'
     );
 
     /* With this array you can filter wich elements of the tools are going to be added in the course obj (only works with LPs) */
@@ -986,7 +988,7 @@ class CourseBuilder
     }
 
     /**
-    * Build the Surveys
+    * Build the attendances
     */
     function build_attendance($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
         $table_attendance            = Database :: get_course_table(TABLE_ATTENDANCE);
@@ -1004,6 +1006,22 @@ class CourseBuilder
             while ($sub_row = Database::fetch_array($result,'ASSOC')) {
                 $obj->add_attendance_calendar($sub_row);
             }
+            $this->course->add_resource($obj);
+        }
+    }
+    /**
+     * Build the works (or "student publications", or "assignments")
+     */
+    function build_works($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
+        $table_work            = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+        //$table_work_assignment  = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+
+        $course_id = api_get_course_int_id();
+
+        $sql = 'SELECT * FROM '.$table_work.' WHERE c_id = '.$course_id.' AND session_id = 0 AND filetype = \'folder\' AND parent_id = 0 AND active = 1';
+        $db_result = Database::query($sql);
+        while ($row = Database::fetch_array($db_result,'ASSOC')) {
+            $obj = new Work($row);
             $this->course->add_resource($obj);
         }
     }

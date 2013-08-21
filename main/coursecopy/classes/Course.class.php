@@ -181,6 +181,10 @@ class Course
 							$title 			= $resource->params['name'];
 							$description 	= $resource->params['description'];
 							break;
+                        case RESOURCE_WORK:
+                            $title = $resource->title;
+                            $description = $resource->description;
+                            break;
 						default:
 							break;
 					}
@@ -320,7 +324,11 @@ class Course
 							$resource->content = api_to_system_encoding($resource->content, $this->encoding);
 							$resource->reflink = api_to_system_encoding($resource->reflink, $this->encoding);
 							break;
-
+                        case RESOURCE_WORK:
+                            $resource->url = api_to_system_encoding($resource->url, $this->encoding);
+                            $resource->title = api_to_system_encoding($resource->title, $this->encoding);
+                            $resource->description = api_to_system_encoding($resource->description, $this->encoding);
+                            break;
 						default:
 							break;
 					}

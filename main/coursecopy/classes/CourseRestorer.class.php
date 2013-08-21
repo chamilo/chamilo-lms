@@ -24,6 +24,7 @@ require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
 require_once 'Glossary.class.php';
 require_once 'wiki.class.php';
 require_once 'Thematic.class.php';
+require_once 'Work.class.php';
 
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
@@ -72,7 +73,8 @@ class CourseRestorer
         //'scorm_documents', ??
         'tool_intro',
         'thematic',
-        'wiki'
+        'wiki',
+        'works',
     );
 
     /** Setting per tool */
@@ -2007,6 +2009,42 @@ class CourseRestorer
 			}
 		}
 	}
+
+    /**
+     * Restore Work
+     */
+    function restore_works($session_id = 0)
+    {
+        $perm = api_get_permissions_for_new_directories();
+        if ($this->course->has_resources(RESOURCE_WORK)) {
+            $table_work 		   = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+            $table_work_assignment = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+
+            $resources = $this->course->resources;
+            foreach ($resources[RESOURCE_WORK] as $id => $obj) {
+
+                // check resources inside html from fckeditor tool and copy correct urls into recipient course
+                $obj->params['description'] = DocumentManager::replace_urls_inside_content_html_from_copy_course($obj->params['description'], $this->course->code, $this->course->destination_path, $this->course->backup_path, $this->course->info['path']);
+                $obj->params['id'] = null;
+                $obj->params['c_id'] = $this->destination_course_id;
+
+                $last_id = Database::insert($table_work, $obj->params);
+                // re-create dir
+                // @todo check security against injection of dir in crafted course backup here!
+                $path = $obj->params['url'];
+                $path = '/'.str_replace('/','',substr($path,1));
+                $destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/work'.$path;
+                $r = @mkdir($destination_path, $perm);
+                if ($r === false) {
+                    error_log('Failed creating directory '.$destination_path.' in course restore for work tool');
+                }
+
+                if (is_numeric($last_id)) {
+                    api_item_property_update($this->destination_course_info, 'work', $last_id,"DirectoryCreated", api_get_user_id());
+                }
+            }
+        }
+    }
 
     function DBUTF8($str)
     {

@@ -443,7 +443,7 @@ class Answer {
 	 * @param	integer	Answer weighting
 	 * @param	integer	Answer position
 	 */
-	function updateAnswers($answer,$comment, $correct, $weighting, $position, $destination)
+	function updateAnswers($answer,$comment, $correct, $weighting, $position, $destination, $hotspot_coordinates, $hotspot_type)
     {
 		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
 
@@ -454,10 +454,12 @@ class Answer {
                 correct = '".Database::escape_string($correct)."',
 				ponderation = '".Database::escape_string($weighting)."',
 				position = '".Database::escape_string($position)."',
-				destination = '".Database::escape_string($destination)."'
+				destination = '".Database::escape_string($destination)."',
+				hotspot_coordinates = '".Database::escape_string($hotspot_coordinates)."',
+                hotspot_type = '".Database::escape_string($hotspot_type)."'
 				WHERE c_id = {$this->course_id} AND id = '".Database::escape_string($position)."'
 				AND question_id = '".Database::escape_string($questionId)."'";
-		Database::query($sql);
+        Database::query($sql);
 	}
 
 	/**
@@ -497,7 +499,9 @@ class Answer {
                     $this->new_correct[$i],
                     $this->new_weighting[$i],
                     $this->new_position[$i],
-                    $this->new_destination[$i]
+                    $this->new_destination[$i],
+                    $this->new_hotspot_coordinates[$i],
+                    $this->new_hotspot_type[$i]
                 );
             }
         }

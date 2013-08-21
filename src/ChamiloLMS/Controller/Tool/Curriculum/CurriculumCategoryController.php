@@ -96,7 +96,7 @@ class CurriculumCategoryController extends CommonController
     * @Route("/add")
     * @Method({"GET"})
     */
-    public function addCategoryAction($course)
+    public function addCategoryAction()
     {
         return parent::addAction();
     }
@@ -113,6 +113,9 @@ class CurriculumCategoryController extends CommonController
         $entity = new Entity\CurriculumCategory();
         $parentEntity = $this->getEntity($id);
         $entity->setParent($parentEntity);
+        $entity->setCourse($this->getCourse());
+        $entity->setSessionId(api_get_session_id());
+
         $form = $this->get('form.factory')->create($formType, $entity);
 
         if ($request->getMethod() == 'POST') {

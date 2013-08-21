@@ -83,7 +83,7 @@ function addTagFormDeleteLink($tagFormLi) {
 function save(itemId) {
     var form = $("#"+itemId).parent();
     var serializedForm = form.serialize();
-    $.post('{{ url('curriculum_user.controller:saveUserItemAction', {'courseCode' : app.request.get('courseCode')) }}', serializedForm);
+    $.post('{{ url('curriculum_user.controller:saveUserItemAction', {'courseCode' : app.request.get('courseCode') }) }}', serializedForm);
     return false;
 }
 

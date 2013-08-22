@@ -333,7 +333,7 @@ if (!empty($action)) {
                             if (empty($link_html)) {
                                 fputs($fp, get_lang('MyTextHere'));
                             } else {
-                            	fputs($fp, $link_html);
+                            	fputs($fp, '$link_html');
                             }
                             fclose($fp);
                         }

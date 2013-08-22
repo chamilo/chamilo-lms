@@ -367,17 +367,18 @@ abstract class BaseController extends FlintController
 
     /**
      * @param \Doctrine\ORM\QueryBuilder $qb
+     * @param string
      */
-    protected function setCourseParameters(\Doctrine\ORM\QueryBuilder & $qb)
+    protected function setCourseParameters(\Doctrine\ORM\QueryBuilder & $qb, $prefix)
     {
         $course = $this->getCourse();
         if ($course) {
-            $qb->andWhere('e.cId = :id');
-            $qb->setParameter('session_id', $course->getId());
+            $qb->andWhere($prefix.'.cId = :id');
+            $qb->setParameter('id', $course->getId());
 
             $session = $this->getSession();
             if (!empty($session)) {
-                $qb->andWhere('e.cId = :session_id');
+                $qb->andWhere($prefix.'.sessionId = :session_id');
                 $qb->setParameter('session_id', $session->getId());
             }
         }

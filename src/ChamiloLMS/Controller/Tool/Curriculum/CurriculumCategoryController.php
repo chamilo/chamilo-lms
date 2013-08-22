@@ -70,22 +70,20 @@ class CurriculumCategoryController extends CommonController
         // @todo put this in a function
         $repo = $this->getRepository();
 
-        $parameters = array('id' => $course->getId());
         $qb = $this->getManager()
             ->createQueryBuilder()
             ->select('node, i')
             ->from('Entity\CurriculumCategory', 'node')
             ->leftJoin('node.items', 'i')
             ->innerJoin('node.course', 'c')
-            ->where('node.cId = :id')
             ->orderBy('node.root, node.lft', 'ASC');
 
-        if (!empty($session)) {
+        $this->setCourseParameters($qb, 'node');
+
+        /*if (!empty($session)) {
             $qb->andWhere('node.sessionId = :session_id');
             $parameters['session_id'] = $session->getId();
-        }
-
-        $qb->setParameters($parameters);
+        }*/
 
         $query = $qb->getQuery();
 

@@ -419,7 +419,6 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     				$student_answer_list = $correct_answer_list[0];
                 }
 
-
     			if (!empty($correct_answer_list) && !empty($student_answer_list)) {
     			    $correct_answer_list = $correct_answer_list[0];
     			    $i = 0;
@@ -443,7 +442,8 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                             $size = strlen($correct_item) * 10 + 10;
                             $attributes['style'] = 'width: '.$size.'px';
 
-    			            $answer = api_preg_replace('/'.$correct_item.'/', Display::input('text', "choice[$questionId][]", $value, $attributes), $answer, 1);
+    			            //$answer = api_preg_replace('/'.$correct_item.'/', Display::input('text', "choice[$questionId][]", $value, $attributes), $answer, 1);
+                            $answer = str_replace('/'.$correct_item.'/', Display::input('text', "choice[$questionId][]", $value, $attributes), $answer);
     			        }
     			        $i++;
     			    }
@@ -452,8 +452,10 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     foreach ($correct_answer_list[0] as $item) {
                         $size = strlen($item) * 10 + 10;
                         $attributes['style'] = 'width: '.$size.'px';
-                        $pattern = '/\['.$item.'+\]/';
-                        $answer = api_preg_replace($pattern, Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
+
+                        //$pattern = '/\['.$item.'+\]/';
+                        //$answer = api_preg_replace($pattern, Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
+                        $answer = str_replace($item, Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
                     }
                     //$answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
 

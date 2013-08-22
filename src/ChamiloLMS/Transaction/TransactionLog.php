@@ -102,8 +102,8 @@ abstract class TransactionLog
      *
      * @param array $data
      *   An array with some values to initialize the object. One of the
-     *   following: id, branch_id, transaction_id, item_id, orig_id, dest_id,
-     *   info, status_id, data.
+     *   following: id, branch_id, transaction_id, item_id, dest_id, status_id,
+     *   data.
      */
     public function __construct($data)
     {
@@ -118,14 +118,9 @@ abstract class TransactionLog
             'branch_id' => TransactionLog::BRANCH_LOCAL,
             'transaction_id' => TransactionLog::TRANSACTION_LOCAL,
             'item_id' => false,
+            'dest_id' => null,
             'status_id' => TransactionLog::STATUS_LOCAL,
             'data' => array(),
-            // @todo The following fields are legacy fields from initial
-            // migration implementation and probably need to be removed from
-            // the object and the table soon.
-            'orig_id' => null,
-            'dest_id' => null,
-            'info' => null,
         );
         foreach ($fields as $field => $default_value) {
             if (isset($data[$field])) {
@@ -153,7 +148,7 @@ abstract class TransactionLog
         $transaction_row = array();
         if (isset($this->id)) {
             $this->time_update = api_get_utc_datetime();
-            $fields = array('transaction_id', 'branch_id', 'action', 'item_id', 'orig_id', 'dest_id', 'info', 'status_id', 'time_update');
+            $fields = array('transaction_id', 'branch_id', 'action', 'item_id', 'dest_id', 'status_id', 'time_update');
             $transaction_row = array();
             foreach ($fields as $field) {
                 if (isset($this->$field)) {
@@ -163,7 +158,7 @@ abstract class TransactionLog
             Database::update(self::$table, $transaction_row, array('id = ?' => $this->id));
         } else {
             $this->time_insert = $this->time_update = api_get_utc_datetime();
-            $fields = array('transaction_id', 'branch_id', 'action', 'item_id', 'orig_id', 'dest_id', 'info', 'status_id', 'time_insert', 'time_update');
+            $fields = array('transaction_id', 'branch_id', 'action', 'item_id', 'dest_id', 'status_id', 'time_insert', 'time_update');
             foreach ($fields as $field) {
                 if (isset($this->$field)) {
                     $transaction_row[$field] = $this->$field;

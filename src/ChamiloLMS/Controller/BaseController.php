@@ -166,7 +166,10 @@ abstract class BaseController extends FlintController
     {
         $links = $this->generateLinks();
         $course = $this->getCourse();
-        $parameters['course'] = $course->getCode();
+
+        if (!empty($course)) {
+            $parameters['course'] = $course->getCode();
+        }
         $session = $this->getSession();
         if (!empty($session)) {
             $parameters['id_session'] = $session->getId();
@@ -185,7 +188,9 @@ abstract class BaseController extends FlintController
     public function generateUrl($name, array $parameters = array(), $reference = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         $course = $this->getCourse();
-        $parameters['course'] = $course->getCode();
+        if (!empty($course)) {
+            $parameters['course'] = $course->getCode();
+        }
         $session = $this->getSession();
         if (!empty($session)) {
             $parameters['id_session'] = $session->getId();

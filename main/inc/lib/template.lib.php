@@ -1190,7 +1190,9 @@ class Template
                     $navigation['myprofile'] = $possible_tabs['myprofile'];
                 }
             } else {
-                $menu_navigation['myprofile'] = $possible_tabs['myprofile'];
+                if (isset($possible_tabs['myprofile'])) {
+                    $menu_navigation['myprofile'] = $possible_tabs['myprofile'];
+                }
             }
 
             // My Agenda

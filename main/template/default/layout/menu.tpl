@@ -19,17 +19,13 @@
 
                 {% if _u.logged == 1 %}
                 <ul class="nav pull-right">
-
-                    {% if user_notifications is not null %}
-                    <li>
-                        <a href="{{ profile_url }}">{{ user_notifications }}</a>
-                    </li>
-                    {% endif %}
-
                     {% if is_profile_editable == true %}
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                {{ _u.messages_count }}  <img src="{{ _u.avatar_small }}"/>
+                                {% if ('allow_message_tool' | get_setting) == 'true' %}
+                                    {{ _u.messages_count }}
+                                {% endif %}
+                                <img src="{{ _u.avatar_small }}"/>
                                 {{ _u.complete_name }}
                                 <b class="caret"></b>
                             </a>
@@ -43,8 +39,11 @@
                     {% else %}
                         <li>
                             <a>
-                            {{ _u.messages_count }}  <img src="{{ _u.avatar_small }}"/>
-                            {{ _u.complete_name }}
+                                {% if ('allow_message_tool' | get_setting) == 'true' %}
+                                    {{ _u.messages_count }}
+                                {% endif %}
+                                <img src="{{ _u.avatar_small }}"/>
+                                {{ _u.complete_name }}
                             </a>
                         </li>
                     {% endif %}

@@ -7,15 +7,20 @@
 /**
  * Initialization
  */
-$language_file = array('messages','userInfo');
-$cidReset=true;
-require_once '../inc/global.inc.php';
-
+$cidReset = true;
 api_block_anonymous_users();
 
-if (api_get_setting('allow_social_tool') !='true') {
+if (api_get_setting('allow_social_tool') != 'true') {
     api_not_allowed();
+    return;
 }
+
+if (api_get_setting('allow_message_tool') != 'true') {
+    api_not_allowed(true);
+    return;
+}
+
+
 $usergroup = new UserGroup();
 $this_section = SECTION_SOCIAL;
 
@@ -113,7 +118,7 @@ if ($number_loop != 0) {
         $sender_user_id = $invitation['user_sender_id'];
         $social_right_content .= '<div id="id_'.$sender_user_id.'" class="invitation_confirm span8">';
 
-        $picture = UserManager::get_user_picture_path_by_id($sender_user_id,'web',false,true);
+        $picture = UserManager::get_user_picture_path_by_id($sender_user_id, 'web', false, true);
         $friends_profile = SocialManager::get_picture_user($sender_user_id, $picture['file'], 92);
         $user_info	= api_get_user_info($sender_user_id);
         $title 		= Security::remove_XSS($invitation['title'], STUDENT, true);
@@ -141,14 +146,14 @@ if ($number_loop != 0) {
     }
 }
 
-if (count($list_get_invitation_sent) > 0 ) {
+if (count($list_get_invitation_sent) > 0) {
     $social_right_content .= '<div class="span8">'.Display::page_subheader(get_lang('InvitationSent')).'</div>';
     foreach ($list_get_invitation_sent as $invitation) {
         $sender_user_id = $invitation['user_receiver_id'];
 
         $social_right_content .= '<div id="id_'.$sender_user_id.'" class="invitation_confirm span8">';
 
-        $picture = UserManager::get_user_picture_path_by_id($sender_user_id,'web',false,true);
+        $picture = UserManager::get_user_picture_path_by_id($sender_user_id,'web', false, true);
         $friends_profile = SocialManager::get_picture_user($sender_user_id, $picture['file'], 92);
         $user_info	= api_get_user_info($sender_user_id);
 

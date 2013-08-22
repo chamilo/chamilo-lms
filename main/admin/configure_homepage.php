@@ -173,12 +173,12 @@ if (!empty($action)) {
 						fclose($fp);
                         if ($_POST['all_langs']) {
                             foreach ($_languages['name'] as $key => $value) {
-        						$lang_name = $_languages['folder'][$key];
-        						if (file_exists($homep.$topf.'_'.$lang_name.$ext)) {
-        							if (is_writable($homep.$topf.'_'.$lang_name.$ext)) {
-        								$fp = fopen($homep.$topf.'_'.$lang_name.$ext, 'w');
-        								fputs($fp, $home_top);
-        								fclose($fp);
+                                $lang_name = $_languages['folder'][$key];
+                                if (file_exists($homep.$topf.'_'.$lang_name.$ext)) {
+                                    if (is_writable($homep.$topf.'_'.$lang_name.$ext)) {
+                                        $fp = fopen($homep.$topf.'_'.$lang_name.$ext, 'w');
+                                        fputs($fp, $home_top);
+                                        fclose($fp);
                                     }
                                 }
                             }

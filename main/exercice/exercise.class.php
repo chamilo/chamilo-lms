@@ -2223,6 +2223,7 @@ class Exercise {
                     break;
                 // for fill in the blanks
                 case FILL_IN_BLANKS:
+
                     // the question is encoded like this
                     // [A] B [C] D [E] F::10,10,10@1
                     // number 1 before the "@" means that is a switchable fill in blank question
@@ -2245,7 +2246,6 @@ class Exercise {
                     $answerWeighting = explode(',', $is_set_switchable[0]);
 
                     // we save the answer because it will be modified
-                    //$temp = $answer;
                     $temp = $answer;
 
                     $answer = '';
@@ -2258,11 +2258,6 @@ class Exercise {
                         if (($pos = api_strpos($temp, '[')) === false) {
                             // adds the end of the text
                             $answer = $temp;
-                            /* // Deprecated code
-                             // TeX parsing - replacement of texcode tags
-                            $texstring = api_parse_tex($texstring);
-                            $answer = str_replace("{texcode}", $texstring, $answer);
-                            */
                             $real_text[] = $answer;
                             break; //no more "blanks", quit the loop
                         }
@@ -2279,7 +2274,8 @@ class Exercise {
                             break;
                         }
                         if ($from_database) {
-                            $queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".Database::escape_string($questionId)."'";
+                            $queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
+                                          WHERE exe_id = '".$exeId."' AND question_id= '".Database::escape_string($questionId)."'";
                             $resfill = Database::query($queryfill);
                             $str = Database::result($resfill,0,'answer');
 
@@ -2324,9 +2320,8 @@ class Exercise {
                                 $totalScore += $answerWeighting[$i];
                                 // adds the word in green at the end of the string
                                 $answer .= $correct_tags[$i];
-                            }
-                            // else if the word entered by the student IS NOT the same as the one defined by the professor
-                            elseif (!empty ($user_tags[$i])) {
+                            }  elseif (!empty ($user_tags[$i])) {
+                                // else if the word entered by the student IS NOT the same as the one defined by the professor
                                 // adds the word in red at the end of the string, and strikes it
                                 $answer .= '<font color="red"><s>' . $user_tags[$i] . '</s></font>';
                             } else {
@@ -2360,6 +2355,7 @@ class Exercise {
                         if (isset ($real_text[$i +1])) {
                             $answer .= $real_text[$i +1];
                         }
+
                     }
                     break;
                 // for free answer
@@ -2564,6 +2560,7 @@ class Exercise {
             } // end switch Answertype
 
             global $origin;
+
 
             if ($show_result) {
 

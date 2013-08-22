@@ -57,27 +57,28 @@ abstract class Question
     public $category_list;
     public $parent_id;
 	public $category;
-	private $isContent;
+	public $isContent;
     public $course;
-	static $typePicture = 'new_question.png';
-	static $explanationLangVar = '';
+	public static $typePicture = 'new_question.png';
+	public static $explanationLangVar = '';
     public $question_table_class = 'table table-striped';
-	static $questionTypes = array(
-                                UNIQUE_ANSWER => 				array('unique_answer.class.php' , 	'UniqueAnswer'),
-                                MULTIPLE_ANSWER => 				array('multiple_answer.class.php' , 'MultipleAnswer'),
-								FILL_IN_BLANKS => 				array('fill_blanks.class.php' , 	'FillBlanks'),
-                                MATCHING => 					array('matching.class.php' , 		'Matching'),
-                                FREE_ANSWER => 					array('freeanswer.class.php' , 		'FreeAnswer'),
-                                ORAL_EXPRESSION => 				array('oral_expression.class.php' , 'OralExpression'),
-                                HOT_SPOT => 					array('hotspot.class.php' , 		'HotSpot'),
-                                HOT_SPOT_DELINEATION =>         array('hotspot.class.php' , 'HotspotDelineation'),
-                                MULTIPLE_ANSWER_COMBINATION =>	array('multiple_answer_combination.class.php', 'MultipleAnswerCombination'),
-                                UNIQUE_ANSWER_NO_OPTION =>      array('unique_answer_no_option.class.php',   'UniqueAnswerNoOption'),
-                                MULTIPLE_ANSWER_TRUE_FALSE =>   array('multiple_answer_true_false.class.php', 'MultipleAnswerTrueFalse'),
-                                MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE =>   array('multiple_answer_combination_true_false.class.php', 'MultipleAnswerCombinationTrueFalse'),
-                                GLOBAL_MULTIPLE_ANSWER =>		array('global_multiple_answer.class.php' , 'GlobalMultipleAnswer'),
-                                //MEDIA_QUESTION =>               array('media_question.class.php' , 'MediaQuestion')
-							);
+	public static $questionTypes =
+        array(
+            UNIQUE_ANSWER => 				array('unique_answer.class.php' , 	'UniqueAnswer'),
+            MULTIPLE_ANSWER => 				array('multiple_answer.class.php' , 'MultipleAnswer'),
+            FILL_IN_BLANKS => 				array('fill_blanks.class.php' , 	'FillBlanks'),
+            MATCHING => 					array('matching.class.php' , 		'Matching'),
+            FREE_ANSWER => 					array('freeanswer.class.php' , 		'FreeAnswer'),
+            ORAL_EXPRESSION => 				array('oral_expression.class.php' , 'OralExpression'),
+            HOT_SPOT => 					array('hotspot.class.php' , 		'HotSpot'),
+            HOT_SPOT_DELINEATION =>         array('hotspot.class.php' , 'HotspotDelineation'),
+            MULTIPLE_ANSWER_COMBINATION =>	array('multiple_answer_combination.class.php', 'MultipleAnswerCombination'),
+            UNIQUE_ANSWER_NO_OPTION =>      array('unique_answer_no_option.class.php',   'UniqueAnswerNoOption'),
+            MULTIPLE_ANSWER_TRUE_FALSE =>   array('multiple_answer_true_false.class.php', 'MultipleAnswerTrueFalse'),
+            MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE =>   array('multiple_answer_combination_true_false.class.php', 'MultipleAnswerCombinationTrueFalse'),
+            GLOBAL_MULTIPLE_ANSWER =>		array('global_multiple_answer.class.php' , 'GlobalMultipleAnswer'),
+            //MEDIA_QUESTION =>               array('media_question.class.php' , 'MediaQuestion')
+        );
 
 	/**
 	 * constructor of the class
@@ -1435,7 +1436,8 @@ abstract class Question
      * @param type $counter
      * @param type $score
      */
-	function return_header($feedback_type = null, $counter = null, $score = null) {
+	function return_header($feedback_type = null, $counter = null, $score = null)
+    {
 	    $counter_label = '';
 	    if (!empty($counter)) {
 	        $counter_label = intval($counter);
@@ -1466,7 +1468,6 @@ abstract class Question
         }
 
         $header .= Display::page_subheader2($counter_label.". ".$question_title);
-        //$header .=  Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.($score['result']).' </h4><h5 class="'.$class.'">'.$score['result'].' </h5>', array('class'=>'ribbon'));
 	    $header .= Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.$score['result'].' </h4>', array('class'=>'ribbon'));
 	    $header .= Display::div($this->description, array('id'=>'question_description'));
         return $header;

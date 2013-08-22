@@ -21,8 +21,8 @@ $app['root_dir'] = $app['root_sys'];
 $app->register(new Flint\Provider\RoutingServiceProvider(), array(
     'routing.resource' => $app['sys_config_path'].'routing.yml',
     'routing.options' => array(
-        'cache_dir' => $app['debug'] == true ? null : $app['sys_temp_path']
-        //'cache_dir' => $app['sys_temp_path']
+        //'cache_dir' => $app['debug'] == true ? null : $app['sys_temp_path']
+        'cache_dir' => $app['sys_temp_path']
     ),
 ));
 

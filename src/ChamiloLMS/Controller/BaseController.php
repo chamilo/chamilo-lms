@@ -9,9 +9,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\NoResultException;
 use Silex\Application;
+
 use Flint\Controller\Controller as FlintController;
 
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,14 +35,18 @@ abstract class BaseController extends FlintController
     public function __construct(Application $app)
     {
         $this->app = $app;
-        // In order to use the Flint Controller
+        // In order to use the Flint Controller.
         $this->pimple = $app;
 
         // Inserting course
         /** @var \Entity\Course $app['course'] */
-        if (isset($app['course'])) {
+        $course = $this->getCourse();
+        if ($course) {
             $template = $this->get('template');
-            $template->assign('course', $app['course']);
+            $template->assign('course', $course);
+
+            $session = $this->getSession();
+            $template->assign('course_session', $session);
         }
     }
 
@@ -49,17 +55,28 @@ abstract class BaseController extends FlintController
      */
     protected function getCourse()
     {
-        if (isset($this->app['course'])) {
+        if (isset($this->app['course']) && !empty($this->app['course'])) {
             return $this->app['course'];
         }
         return false;
     }
 
     /**
+     * @return \Entity\Session
+     */
+    protected function getSession()
+    {
+        if (isset($this->app['course_session']) && !empty($this->app['course_session'])) {
+            return $this->app['course_session'];
+        }
+        return null;
+    }
+
+    /**
      * This method should return the entity's repository.
      *
      * @abstract
-     * @return EntityRepository
+     * @return \Doctrine\ORM\EntityRepository
      */
     abstract protected function getRepository();
 
@@ -103,6 +120,32 @@ abstract class BaseController extends FlintController
         return $this->get('request');
     }
 
+    /**
+     * Get a user from the Security Context
+     *
+     * @return mixed
+     *
+     * @throws \LogicException If SecurityBundle is not available
+     *
+     * @see Symfony\Component\Security\Core\Authentication\Token\TokenInterface::getUser()
+     */
+    public function getUser()
+    {
+        if (!$this->has('security.context')) {
+            throw new \LogicException('The SecurityServiceProvider is not registered in your application.');
+        }
+
+        if (null === $token = $this->get('security.context')->getToken()) {
+            return null;
+        }
+
+        if (!is_object($user = $token->getUser())) {
+            return null;
+        }
+
+        return $user;
+    }
+
     protected function createNotFoundException($message = 'Not Found', \Exception $previous = null)
     {
         return $this->app->abort(404, $message);
@@ -119,16 +162,36 @@ abstract class BaseController extends FlintController
      * @param array
      * @return mixed
      */
-    protected function createUrl($label, $params = array())
+    protected function createUrl($label, $parameters = array())
     {
         $links = $this->generateLinks();
-        $courseCode = $this->getRequest()->get('course');
-        $params['course'] = $courseCode;
+        $course = $this->getCourse();
+        $parameters['course'] = $course->getCode();
+        $session = $this->getSession();
+        if (!empty($session)) {
+            $parameters['id_session'] = $session->getId();
+        }
+
         if (isset($links) && is_array($links) && isset($links[$label])) {
-            $url = $this->generateUrl($links[$label], $params);
+            $url = $this->generateUrl($links[$label], $parameters);
             return $url;
         }
         return $url = $this->generateUrl($links['list_link']);
+    }
+
+     /**
+     * @see Symfony\Component\Routing\RouterInterface::generate()
+     */
+    public function generateUrl($name, array $parameters = array(), $reference = UrlGeneratorInterface::ABSOLUTE_PATH)
+    {
+        $course = $this->getCourse();
+        $parameters['course'] = $course->getCode();
+        $session = $this->getSession();
+        if (!empty($session)) {
+            $parameters['id_session'] = $session->getId();
+        }
+
+        return parent::generateUrl($name, $parameters, $reference);
     }
 
     // CRUD default actions
@@ -290,10 +353,8 @@ abstract class BaseController extends FlintController
      */
     protected function getList($format = 'json')
     {
-        $list = $this->getRepository()
-            ->createQueryBuilder('e')
-            ->getQuery()->getResult(Query::HYDRATE_ARRAY);
-
+        $qb = $this->getRepository()->createQueryBuilder('e');
+        $list = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
         switch ($format) {
             case 'json':
                 return new JsonResponse($list);
@@ -301,6 +362,24 @@ abstract class BaseController extends FlintController
             default:
                 return $list;
                 break;
+        }
+    }
+
+    /**
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     */
+    protected function setCourseParameters(\Doctrine\ORM\QueryBuilder & $qb)
+    {
+        $course = $this->getCourse();
+        if ($course) {
+            $qb->andWhere('e.cId = :id');
+            $qb->setParameter('session_id', $course->getId());
+
+            $session = $this->getSession();
+            if (!empty($session)) {
+                $qb->andWhere('e.cId = :session_id');
+                $qb->setParameter('session_id', $session->getId());
+            }
         }
     }
 
@@ -441,7 +520,8 @@ abstract class BaseController extends FlintController
             return $this->getRepository()->createQueryBuilder('e')
                 ->where('e.id = :id')
                 ->setParameter('id', $id)
-                ->getQuery()->getSingleResult(Query::HYDRATE_ARRAY);
+                ->getQuery()
+                ->getSingleResult(Query::HYDRATE_ARRAY);
         } catch (NoResultException $ex) {
             return false;
         }

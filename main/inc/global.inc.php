@@ -492,7 +492,7 @@ use Symfony\Component\Finder\Finder;
 $app->before(
 
     function () use ($app) {
-        // Checking configuration file
+        // Checking configuration file.
         if (!file_exists($app['configuration_file']) && !file_exists($app['configuration_yml_file'])) {
             return new RedirectResponse(api_get_path(WEB_CODE_PATH).'install');
             $app->abort(500, "Configuration file was not found");
@@ -513,6 +513,7 @@ $app->before(
 
         // Starting the session for more info see: http://silex.sensiolabs.org/doc/providers/session.html
         $request->getSession()->start();
+
         /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem $filesystem */
         $filesystem = $app['chamilo.filesystem'];
 
@@ -521,12 +522,12 @@ $app->before(
             $filesystem->createFolders($app['temp.paths']->folders);
         }
 
-        // If assetic is enabled copy folders from theme inside web/
+        // If Assetic is enabled copy folders from theme inside "web/"
         if ($app['assetic.auto_dump_assets']) {
             $filesystem->copyFolders($app['temp.paths']->copyFolders);
         }
 
-        // Check and modify the date of user in the track.e.online table
+        // Check and modify the date of user in the track.e.online table.
         Online::loginCheck(api_get_user_id());
 
         // Setting access_url id (multiple url feature)
@@ -538,11 +539,12 @@ $app->before(
             Session::write('url_id', 1);
         }
 
-        // Loading portal settings from DB
+        // Loading portal settings from DB.
         $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
         $settings_latest_update = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
 
         $_setting = Session::read('_setting');
+
         if (empty($_setting)) {
             api_set_settings_and_plugins();
         } else {
@@ -630,7 +632,6 @@ $app->before(
 
         /** Translator component. */
         // Platform lang
-
         $language = api_get_setting('platformLanguage');
         $iso = api_get_language_isocode($language);
         $app['translator']->setLocale($iso);
@@ -672,7 +673,6 @@ $app->before(
             'accessibility',
             'exercice'
         );
-
 
         $languageFilesToAdd = array();
         /* Loading translations depending of the "section" folder after main
@@ -789,6 +789,10 @@ $app->before(
             // Converting /courses/XXX/ to a Entity/Course object
             $course = $app['orm.em']->getRepository('Entity\Course')->findOneByCode($course);
             $app['course'] = $course;
+
+            $sessionId = $request->get('id_session');
+            $session = $app['orm.em']->getRepository('Entity\Session')->findOneById($sessionId);
+            $app['course_session'] = $session;
         }
     }
 );

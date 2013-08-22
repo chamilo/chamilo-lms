@@ -115,10 +115,34 @@ class CurriculumCategory
      */
     private $course;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Session")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     */
+    private $session;
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSession()
+    {
+        return $this->session;
+    }
+
+    /**
+     * @param Session $session
+     * @return mixed
+     */
+    public function setSession(Session $session)
+    {
+        $this->session = $session;
+    }
+
 
     /**
      * @return mixed

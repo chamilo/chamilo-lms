@@ -25,6 +25,7 @@ global $_configuration;
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
 $tool_name = get_lang('ConfigureHomePage');
+$_languages = api_get_languages();
 
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
@@ -170,6 +171,18 @@ if (!empty($action)) {
 						$fp = fopen($homep.$topf.'_'.$lang.$ext, 'w');
 						fputs($fp, $home_top);
 						fclose($fp);
+                        if ($_POST['all_langs']) {
+                            foreach ($_languages['name'] as $key => $value) {
+        						$lang_name = $_languages['folder'][$key];
+        						if (file_exists($homep.$topf.'_'.$lang_name.$ext)) {
+        							if (is_writable($homep.$topf.'_'.$lang_name.$ext)) {
+        								$fp = fopen($homep.$topf.'_'.$lang_name.$ext, 'w');
+        								fputs($fp, $home_top);
+        								fclose($fp);
+                                    }
+                                }
+                            }
+                        }
 					} else {
 						$errorMsg = get_lang('HomePageFilesNotWritable');
 					}
@@ -178,6 +191,17 @@ if (!empty($action)) {
 					$fp = fopen($homep.$topf.'_'.$lang.$ext, 'w');
 					fputs($fp, $home_top);
 					fclose($fp);
+                    if ($_POST['all_langs']) {
+                        foreach ($_languages['name'] as $key => $value) {
+        					$lang_name = $_languages['folder'][$key];
+        					if (file_exists($homep.$topf.'_'.$lang_name.$ext)) {
+                                $fp = fopen($homep.$topf.'_'.$lang_name.$ext, 'w');
+                                fputs($fp, $home_top);
+                                fclose($fp);
+                                
+                            }
+                        }
+                    }
 				}
 
                 if (EventsMail::check_if_using_class('portal_homepage_edited')) {
@@ -198,8 +222,32 @@ if (!empty($action)) {
 						$fp = fopen($homep.$noticef.'_'.$lang.$ext, 'w');
 						if ($errorMsg == '') {
 							fputs($fp, "<b>$notice_title</b><br />\n$notice_text");
+                            if ($_POST['all_langs']) {
+                                foreach ($_languages['name'] as $key => $value) {
+            						$lang_name = $_languages['folder'][$key];
+            						if (file_exists($homep.$noticef.'_'.$lang_name.$ext)) {
+            							if (is_writable($homep.$noticef.'_'.$lang_name.$ext)) {
+            								$fp = fopen($homep.$noticef.'_'.$lang_name.$ext, 'w');
+            								fputs($fp, "<b>$notice_title</b><br />\n$notice_text");
+            								fclose($fp);
+                                        }
+                                    }
+                                }
+                            }
+                            
 						} else {
 							fputs($fp, '');
+                            if ($_POST['all_langs']) {
+                                foreach ($_languages['name'] as $key => $value) {
+            						$lang_name = $_languages['folder'][$key];
+            						if (file_exists($homep.$noticef.'_'.$lang_name.$ext)) {
+                                        $fp1 = fopen($homep.$noticef.'_'.$lang_name.$ext, 'w');
+        								fputs($fp1, '');
+        								fclose($fp1);
+                                        
+                                    }
+                                }
+                            }
 						}
 						fclose($fp);
 					} else {
@@ -239,7 +287,6 @@ if (!empty($action)) {
 					}
 				} else {
 					// We update all the news file
-					$_languages = api_get_languages();
 					foreach ($_languages['name'] as $key => $value) {
 						$english_name = $_languages['folder'][$key];
 						if (file_exists($homep.$newsf.'_'.$english_name.$ext)) {
@@ -379,6 +426,18 @@ if (!empty($action)) {
 							$fp = fopen($homep.$menuf.'_'.$lang.$ext, 'w');
 							fputs($fp, $home_menu);
 							fclose($fp);
+                            if ($_POST['all_langs']) {
+                                foreach ($_languages['name'] as $key => $value) {
+            						$lang_name = $_languages['folder'][$key];
+            						if (file_exists($homep.$menuf.'_'.$lang_name.$ext)) {
+            							if (is_writable($homep.$menuf.'_'.$lang_name.$ext)) {
+            								$fp = fopen($homep.$menuf.'_'.$lang_name.$ext, 'w');
+            								fputs($fp, $home_menu);
+            								fclose($fp);
+                                        }
+                                    }
+                                }
+                            }
 							if (file_exists($homep.$menuf.$ext)) {
 								if (is_writable($homep.$menuf.$ext)) {
 									$fpo = fopen($homep.$menuf.$ext, 'w');
@@ -394,6 +453,17 @@ if (!empty($action)) {
 						$fp = fopen($homep.$menuf.'_'.$lang.$ext, 'w');
 						fputs($fp, $home_menu);
 						fclose($fp);
+                        if ($_POST['all_langs']) {
+                            foreach ($_languages['name'] as $key => $value) {
+        						$lang_name = $_languages['folder'][$key];
+        						if (file_exists($homep.$menuf.'_'.$lang_name.$ext)) {
+        							$fp = fopen($homep.$menuf.'_'.$lang_name.$ext, 'w');
+    								fputs($fp, $home_menu);
+    								fclose($fp);
+                                   
+                                }
+                            }
+                        }
 					}
 				}
                 event_system(LOG_HOMEPAGE_CHANGED, $action, cut($link_name.':'.$link_url, 254), api_get_utc_datetime(), api_get_user_id());
@@ -654,6 +724,9 @@ switch ($action) {
 		  <td nowrap="nowrap" valign="top"><?php echo get_lang('NoticeText'); ?> :</td>
 		  <td><textarea name="notice_text" cols="30" rows="5" wrap="virtual" style="width: 350px;"><?php echo $notice_text; ?></textarea></td>
 		</tr>
+        <tr>
+          <td><input type="checkbox" value="<?php echo get_lang('AllLanguages'); ?>"/></td>
+        </tr>
 		<tr>
 		  <td>&nbsp;</td>
 		  <td><button class="save" type="submit" value="<?php echo get_lang('Ok'); ?>"><?php echo get_lang('Ok'); ?></button></td>
@@ -730,6 +803,7 @@ switch ($action) {
                     $form->add_html_editor('link_html', get_lang('Content'), false, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
                 }
             }
+            $form->addElement('checkbox', 'all_langs', null, get_lang('AllLanguages'), 1);
 			$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 		}
 
@@ -788,6 +862,7 @@ switch ($action) {
 			$default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);
 			$form->add_html_editor($name, '', true, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
 		}
+        $form->addElement('checkbox', 'all_langs', null, get_lang('AllLanguages'), 1);
 		$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 		$form->setDefaults($default);
 		$form->display();

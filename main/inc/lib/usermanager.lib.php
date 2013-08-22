@@ -193,8 +193,7 @@ class UserManager
 
             // Add event to system log
             $user_id_manager = api_get_user_id();
-            $user_info = api_get_user_info($return);
-            event_system(LOG_USER_CREATE, LOG_USER_ID, $return, api_get_utc_datetime(), $user_id_manager, null, $user_info);
+            event_system(LOG_USER_CREATE, LOG_USER_ID, $return);
         } else {
             $return = false;
             return api_set_failure('error inserting in Database');
@@ -429,7 +428,11 @@ class UserManager
         $ids = implode(',', $ids);
 
         $sql = "UPDATE $table_user SET active = 0 WHERE user_id IN ($ids)";
-        return Database::query($sql);
+        $r = Database::query($sql);
+        if ($r !== false) {
+            event_system(LOG_USER_DISABLE,LOG_USER_ID,$ids);
+        }
+        return $r;
     }
 
     /**
@@ -455,7 +458,11 @@ class UserManager
         $ids = implode(',', $ids);
 
         $sql = "UPDATE $table_user SET active = 1 WHERE user_id IN ($ids)";
-        return Database::query($sql);
+        $r = Database::query($sql);
+        if ($r !== false) {
+            event_system(LOG_USER_ENABLE,LOG_USER_ID,$ids);
+        }
+        return $r;
     }
 
     /**
@@ -582,7 +589,7 @@ class UserManager
            } else {
                 $event_title = LOG_USER_DISABLE;
            }
-           event_system($event_title, LOG_USER_ID, $user_id, api_get_utc_datetime(), null, null);
+           event_system($event_title, LOG_USER_ID, $user_id);
         }
         if (is_array($extra) && count($extra) > 0) {
             $res = true;
@@ -631,7 +638,15 @@ class UserManager
         $user_id = intval($user_id);
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
         $sql = "UPDATE $table_user SET active = '$active' WHERE user_id = '$user_id';";
-        return Database::query($sql);
+        $r = Database::query($sql);
+        $ev = LOG_USER_DISABLE;
+        if ($active == 1) {
+            $ev = LOG_USER_ENABLE;
+        }
+        if ($r !== false) {
+            event_system($ev,LOG_USER_ID,$user_id);
+        }
+        return $r;
     }
 
     /**
@@ -1417,7 +1432,6 @@ class UserManager
             } else {
                 $sqli = "INSERT INTO $t_ufv (user_id,field_id,field_value,tms) ".
                     "VALUES ($user_id,".$rowuf['id'].",'$fvalues',FROM_UNIXTIME($tms))";
-                //error_log('UM::update_extra_field_value: '.$sqli);
                 $resi = Database::query($sqli);
                 return($resi ? true : false);
             }
@@ -1572,6 +1586,7 @@ class UserManager
         if ($result) {
             //echo "id returned";
             $return = Database::insert_id();
+            event_system(LOG_USER_FIELD_CREATE, LOG_USER_FIELD_VARIABLE, Database::escape_string($fieldvarname));
         } else {
             //echo "false - failed" ;
             return false;

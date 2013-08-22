@@ -9,7 +9,7 @@ namespace ChamiloLMS\Middleware;
 class CourseMiddleware
 {
 
-    public function __construct(Application $app, $course)
+    public function __construct($app, $course)
     {
         $app['template']->assign('course', $course);
     }

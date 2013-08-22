@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CareerUpdated = "Carrière mise à jour";
 $CasMainActivateComment = "Activer l'authentification CAS permettra aux utilisateurs de s'identifier à l'aide de leur compte CAS<br/>Vous trouverez dans les <a href='settings.php?category=CAS'>Plugin</a> un bouton 'Login CAS', paramétrable, qui s'ajoutera sur la page d'accueil de votre campus Chamilo.";
 $UsersRegisteredInAnyGroup = "Utilisateurs enregistrés dans n'importe quel groupe";
 $ShowHotCoursesComment = "Affiche la liste des cours les plus utilisés (hot courses) sur la page d'accueil";
@@ -259,7 +260,7 @@ $Properties = "Propriétés";
 $PlatformConfigSettings = "Paramètres de configuration de Chamilo";
 $SettingsStored = "Les paramètres ont été enregistrés";
 $InstitutionTitle = "Titre de l'institution";
-$InstitutionComment = "Le nom de l'instituion (apparaît dans l'en-tête du côté droit)";
+$InstitutionComment = "Le nom de l'institution (apparaît dans l'en-tête du côté droit)";
 $InstitutionUrlTitle = "URL de l'institution";
 $InstitutionUrlComment = "L'URL de l'institution (le lien apparaît dans l'en-tête du côté droit)";
 $SiteNameTitle = "Nom du portal Chamilo";
@@ -342,7 +343,7 @@ $CourseUsage = "Utilisation du cours";
 $NoCoursesForThisUser = "Cet utilisateur n'est pas inscrit dans un cours";
 $NoClassesForThisUser = "Cet utilisateur n'est pas inscrit dans une classe";
 $NoCoursesForThisClass = "Cette classe n'est inscrite à aucun cours";
-$langOpenToTheWorld = "Ouvert - accès autorisé pour tout le monde";
+$langOpenToTheWorld = "Public - accès autorisé pour tout le monde";
 $OpenToThePlatform = "Ouvert - accès autorisé aux utilisateurs enregistrés sur la plateforme";
 $langPrivate = "Accès privé (site accessible uniquement aux personnes de la liste des utilisateurs)";
 $langCourseVisibilityClosed = "Complètement fermé - le cours est uniquement accessible pour son administrateur";
@@ -1075,6 +1076,7 @@ $EditTabs = "Éditer les onglets";
 $YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill = "Votre carnet de notes doit d'abord être lié à un certificat pour pouvoir être attaché à une compétence";
 $PlatformUnsubscribeTitle = "Autoriser les utilisateurs à se désinscrire de la plateforme";
 $PlatformUnsubscribeComment = "Quand les utilisateurs se désinscrivent toutes leurs données sont effacées de façon permanente.";
+$PromotionUpdated = "Promotion mise à jour";
 $BabyOrange = "Petite Orange";
 $BlueLagoon = "Lagon bleu";
 $CoolBlue = "Bleu Frais";

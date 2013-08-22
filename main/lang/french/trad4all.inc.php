@@ -2,6 +2,25 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$YourPasswordCannotBeTheSameAsYourUsername = "Votre mot de passe ne peut être identique à votre nom d'utilisateur";
+$CheckEasyPasswords = "Vérifier mots de passe trop simples";
+$PasswordVeryStrong = "Très fort";
+$PasswordStrong = "Fort";
+$PasswordMedium = "Moyen";
+$PasswordNormal = "Normal";
+$PasswordWeak = "Faible";
+$PasswordIsTooShort = "Mot de passe trop court.";
+$Bad credentials = "Identification non reconnue";
+$BreadcrumbNavigationDisplayComment = "Montrer ou cacher la barre de navigation \"mies de pain\", apparaissant juste sous la barre d'onglets. Il est très fortement recommandé de montrer cette barre de navigation aux utilisateurs, car elle leur permet de localiser leur position actuelle et naviguer vers les pages antérieures plus facilement. Il peut cependant être nécessaire, dans certains cas, de les cacher (par exemple dans le cas de plateformes d'examens) pour éviter que les utilisateurs naviguent par erreur vers des pages qui pourraient les confondre.";
+$BreadcrumbNavigationDisplayTitle = "Montrer la navigation en mies de pain";
+$AllowurlfopenIsSetToOff = "Le paramètre PHP \"allow_url_fopen\" est configuré à \"off\", ce qui empêche le système d'enregistrement de fonctionner correctement. Ce paramètre peut être modifié dans votre configurtion PHP (php.ini) ou dans votre configuration de Virtual Host si vous utilisez Apache, en utilisant la directive php_admin_value.";
+$ImpossibleToContactVersionServerPleaseTryAgain = "Impossible de se connecter au serveur de versions. Ce problème devrait être résolu dans quelques minutes.";
+$VersionUpToDate = "Votre version est à jour";
+$LatestVersionIs = "La dernière version est la";
+$YourVersionNotUpToDate = "Votre version n'est pas à jour";
+$Hotpotatoes = "Hotpotatoes";
+$CourseCategoriesAreGlobal = "Les catégories de cours sont globales par rapport aux configurations multi-portails. Les modifications ne sont autorisées qu'à l'administrateur global du portail administratif.";
+$UserIsNotATeacher = "L'utilisateur n'est pas un enseignant";
 $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Cet élément est invisible pour les étudiants mais vous avez un accès enseignant.";
 $DeleteAllAttendances = "Supprimer toutes les présences créées";
 $Unsubscribe = "Désinscription";
@@ -841,6 +860,7 @@ $AssignUsers = "Assigner des utilisateurs";
 $AssignCourses = "Assigner des cours";
 $AssignSessions = "Assigner des sessions";
 $Timezone = "Zones horaires";
+$EmptyHeaderLine = "Le fichier sélectionné contient des lignes blanches parmi les premières lignes";
 $FilterByUser = "Filtrer par utilisateur";
 $FilterByGroup = "Filtrer par groupe";
 $FilterAll = "Filtre: Tout le monde";
@@ -1233,7 +1253,7 @@ $NoItem = "Pas encore d'élément";
 $LoadExtraData = "Charger les données des champs utilisateurs (seulement les champs notés comme 'Filtre' apparaîtront).";
 $CourseAssistant = "Assistant";
 $SupportedScormContentMakers = "Paquets SCORM supportés";
-$Copy = "Copier";
+$Copy = "Copie";
 $EnableStartTime = "Activer date de début";
 $EnableEndTime = "Utiliser date de fin";
 $Wrong = "Faux";

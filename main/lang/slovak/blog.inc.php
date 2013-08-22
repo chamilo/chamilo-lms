@@ -77,7 +77,6 @@ $langUserHasPermissionNot = "Používateľ nemá práva";
 $langUserHasPermission = "Používateľ má práva";
 $langLegend = "Legenda";
 $langUserHasPermissionByRoleGroup = "Používateľ má práva svojej skupiny";
-$EditPost = "Upraviť článok";
 $AddBlog = "Vytvoriť nový blog";
 $EditBlog = "Upraviť názov a podtitul";
 $DeleteBlog = "Zmazať tento blog";

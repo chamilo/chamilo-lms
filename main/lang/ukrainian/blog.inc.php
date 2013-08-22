@@ -77,7 +77,6 @@ $langUserHasPermissionNot = "Користувач не має прав";
 $langUserHasPermission = "Користувач має права";
 $langLegend = "Легенда";
 $langUserHasPermissionByRoleGroup = "Користувач має права групи";
-$EditPost = "Редагувати статтю";
 $AddBlog = "Створити новий блог";
 $EditBlog = "Редагувати назву та підназву";
 $DeleteBlog = "Видалити цей блог";

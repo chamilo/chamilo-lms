@@ -2,6 +2,47 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ExerciseWasActivatedFromXToY = "El ejercicio estuvo disponible desde %s hasta %s";
+$SelectAnAnswerToContinue = "Tiene que seleccionar una respuesta para poder continuar";
+$IfYouContinueYourAnswerWillBeSavedAnyChangeWillBeNotAllowed = "Si continua, sus respuestas serán guardadas, y no podrá más modificarlas. Está seguro que desea terminar?";
+$YesImSure = "Sí, he terminado!";
+$NoIWantToTurnBack = "No, deseo revisar la prueba primero";
+$QuestionReused = "Pregunta añadida al ejercicio";
+$QuestionCopied = "Pregunta copiada a la prueba";
+$ZeroMeansNoQuestionWillBeSelectedMinusOneMeansThatAllQuestionsWillBeSelected = "-1 = Todas las preguntas serán seleccionadas. 0 = Ninguna pregunta será seleccionada.";
+$EmailNotificationTemplateDescription = "Puede modificar el correo enviado a los usuarios al terminar el ejercicio. Puede usar los siguientes términos: 
+
+{{ student.username }}
+{{ student.firstname }} 
+{{ student.lastname }}
+{{ student.official_code }} 
+{{ exercise.title }} 
+{{ exercise.start_time }}
+{{ exercise.end_time }}
+{{ course.title }}
+{{ course.code }}";
+$EmailNotificationTemplate = "Plantilla del correo electrónico enviado al usuario al terminar el ejercicio.";
+$ExerciseEndButtonDisconnect = "Desconexión de la plataforma";
+$ExerciseEndButtonExerciseHome = "Lista de ejercicios";
+$ExerciseEndButtonCourseHome = "Página principal del curso";
+$ExerciseEndButton = "Botón al terminar el ejercicio";
+$HideQuestionTitle = "Ocultar el título de la pregunta";
+$QuestionSelection = "Selección de preguntas";
+$OrderedCategoriesByParentWithQuestionsRandom = "Categorías ordenadas según la categoría padre, con preguntas desordenadas";
+$OrderedCategoriesByParentWithQuestionsOrdered = "Categorías ordenadas según la categoría padre, con preguntas ordenadas";
+$RandomCategoriesWithRandomQuestionsNoQuestionGrouped = "Categorías tomadas al azar, con preguntas desordenadas, sin agrupar preguntas";
+$RandomCategoriesWithQuestionsOrderedNoQuestionGrouped = "Categorías tomadas al azar, con preguntas ordenadas, sin agrupar preguntas";
+$RandomCategoriesWithRandomQuestions = "Categorías tomadas al azar, con preguntas desordenadas";
+$OrderedCategoriesAlphabeticallyWithRandomQuestions = "Categorías ordenadas (alfabéticamente), con preguntas desordenadas";
+$RandomCategoriesWithQuestionsOrdered = "Categorías tomadas al azar, con preguntas ordenadas";
+$OrderedCategoriesAlphabeticallyWithQuestionsOrdered = "Categorías ordenadas alfabéticamente, con preguntas ordenadas";
+$UsingCategories = "Usando categorías";
+$OrderedByUser = "Ordenado según la lista de preguntas";
+$ToReview = "Por revisar";
+$Unanswered = "Sin responder";
+$Answered = "Respondida";
+$CurrentQuestion = "Pregunta actual";
+$MediaQuestions = "Enunciados compartidos";
 $AddedToLPCannotBeAccessed = "Este ejercicio ha sido incluido en una secuencia de aprendizaje, por lo cual no podrá ser accesible directamente por los estudiantes desde aquí. Si quiere colocar el mismo ejercicio disponible a través de la herramienta ejercicios, haga una copia del ejercicio en cuestión pulsando sobre el icono de copia.";
 $langExercice = "Ejercicio";
 $langActivate = "Activar";

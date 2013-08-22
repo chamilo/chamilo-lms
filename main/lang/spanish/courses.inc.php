@@ -84,6 +84,7 @@ $Collapse = "Contraer";
 $CourseDetails = "Descripción del curso";
 $GroupPendingInvitations = "Invitaciones pendientes de grupo";
 $Compose = "Redactar";
+$EmptyHeaderLine = "Exiten líneas en blanco al inicio del fichero seleccionado";
 $EnrollToCourseXSuccessful = "Su inscripción en el curso %s se ha completado.";
 $ThereAreNoCoursesInThisCategory = "No existen cursos en la categoría actual";
 ?>

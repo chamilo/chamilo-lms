@@ -78,7 +78,6 @@ $langUserHasPermissionNot = "Χρήστης χωρίς δικαιώματα";
 $langUserHasPermission = "Χρήστης με δικαιώματα";
 $langLegend = "Legend";
 $langUserHasPermissionByRoleGroup = "Ο χρήστης έχει τα δικαιώματα της ομάδας του";
-$EditPost = "Επεξεργασία ανάρτησης";
 $AddBlog = "Δημιουργία ενός νέου έργου (project)";
 $EditBlog = "Επεξεργασία ενός έργου (project)";
 $DeleteBlog = "Διαγραφή έργου (project)";

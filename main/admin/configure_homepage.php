@@ -725,7 +725,7 @@ switch ($action) {
 		  <td><textarea name="notice_text" cols="30" rows="5" wrap="virtual" style="width: 350px;"><?php echo $notice_text; ?></textarea></td>
 		</tr>
         <tr>
-          <td><input type="checkbox" value="<?php echo get_lang('AllLanguages'); ?>"/></td>
+          <td><input type="checkbox" value="<?php echo get_lang('ApplyAllLanguages'); ?>"/></td>
         </tr>
 		<tr>
 		  <td>&nbsp;</td>
@@ -803,7 +803,7 @@ switch ($action) {
                     $form->add_html_editor('link_html', get_lang('Content'), false, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
                 }
             }
-            $form->addElement('checkbox', 'all_langs', null, get_lang('AllLanguages'), 1);
+            $form->addElement('checkbox', 'all_langs', null, get_lang('ApplyAllLanguages'), 1);
 			$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 		}
 
@@ -839,7 +839,7 @@ switch ($action) {
 			$_languages = api_get_languages();
 			$html = '<tr><td>'.get_lang('ChooseNewsLanguage').' : ';
 			$html .= '<select name="news_languages">';
-			$html .= '<option value="all">'.get_lang('AllLanguages').'</option>';
+			$html .= '<option value="all">'.get_lang('ApplyAllLanguages').'</option>';
 			foreach ($_languages['name'] as $key => $value) {
 				$english_name = $_languages['folder'][$key];
 				if ($language == $english_name) {
@@ -862,7 +862,7 @@ switch ($action) {
 			$default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);
 			$form->add_html_editor($name, '', true, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
 		}
-        $form->addElement('checkbox', 'all_langs', null, get_lang('AllLanguages'), 1);
+        $form->addElement('checkbox', 'all_langs', null, get_lang('ApplyAllLanguages'), 1);
 		$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 		$form->setDefaults($default);
 		$form->display();

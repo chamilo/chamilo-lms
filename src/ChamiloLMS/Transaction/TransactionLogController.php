@@ -163,9 +163,10 @@ class TransactionLogController
                 continue;
             }
             try {
-                $transaction->import();
+                $imported_item_id = $transaction->import();
                 $log_entry['message'] = 'Successfully imported.';
                 $transaction->status_id = TransactionLog::STATUS_SUCCESSFUL;
+                $transaction->dest_id = $imported_item_id;
                 $imported_ids['success'][] = $transaction->id;
             } catch (Exception $import_exception) {
                 $log_entry['message'] = $import_exception->getMessage();

@@ -274,6 +274,10 @@ abstract class TransactionLog
      * @trows TransactionImportException
      *   If any step for re-creating the element fails, an exception should be
      *   raised.
+     *
+     * @return string
+     *   The item id corresponding to the imported information in the
+     *   destination system.
      */
     abstract public function import();
 

@@ -126,5 +126,8 @@ class ExerciseAttemptTransactionLog extends TransactionLog
             $nano = null;
             $attempt_answer_id = saveExerciseAttempt($attempt_answer_info['marks'], $attempt_answer_info['answer'], $question_id, $imported_exe_id, $attempt_answer_info['position'], $exercise_id, $nano, $user_id, $course_id, $stat_info['session_id'], $stat_info['orig_lp_id'], $stat_info['orig_lp_item_id']);
         }
+
+        // Finally return the associated id.
+        return $imported_exe_id;
     }
 }

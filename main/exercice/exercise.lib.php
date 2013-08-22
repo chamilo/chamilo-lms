@@ -435,31 +435,32 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     			            if (!empty($value[0])) {
     			            	$value = str_replace('&nbsp;', '',  trim($value[0]));
     			            }
-                            $correct_item = preg_quote($correct_item);
+                            //var_dump($correct_item);
+                            //$correct_item = preg_quote($correct_item);
                             // to prevent error if there is a / in the text to find
-                            $correct_item = api_preg_replace('|/|', '\/', $correct_item);
+                            //$correct_item = api_preg_replace('|/|', '\/', $correct_item);
 
-                            $size = strlen($correct_item) * 10 + 10;
-                            $attributes['style'] = 'width: '.$size.'px';
+                            $size = strlen($correct_item);
+                            $attributes['class'] = detectInputAppropriateClass($size);
 
     			            //$answer = api_preg_replace('/'.$correct_item.'/', Display::input('text', "choice[$questionId][]", $value, $attributes), $answer, 1);
-                            $answer = str_replace('/'.$correct_item.'/', Display::input('text', "choice[$questionId][]", $value, $attributes), $answer);
+                            $answer = str_replace($correct_item, Display::input('text', "choice[$questionId][]", $value, $attributes), $answer);
     			        }
     			        $i++;
     			    }
     			} else {
 
                     foreach ($correct_answer_list[0] as $item) {
-                        $size = strlen($item) * 10 + 10;
-                        $attributes['style'] = 'width: '.$size.'px';
+                        $size = strlen($item);
+                        $attributes['class'] = detectInputAppropriateClass($size);
 
                         //$pattern = '/\['.$item.'+\]/';
                         //$answer = api_preg_replace($pattern, Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
                         $answer = str_replace($item, Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
                     }
                     //$answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
-
     			}
+
     			$s .= $answer;
             } elseif ($answerType == MATCHING) {
     			// matching type, showing suggestions and answers
@@ -2326,4 +2327,24 @@ function get_question_ribbon($objExercise, $score, $weight, $check_pass_percenta
 
     $ribbon .= '</div>';
     return $ribbon;
+}
+
+function detectInputAppropriateClass($countLetter)
+{
+    $limits = array(
+        0 => 'input-mini',
+        10 => 'input-mini',
+        15 => 'input-medium',
+        20 => 'input-xlarge',
+        40 => 'input-xlarge',
+        60 => 'input-xxlarge',
+        100  => 'input-xxlarge',
+        200 => 'input-xxlarge',
+    );
+    foreach ($limits as $size => $item) {
+        if ($countLetter <= $size) {
+            return $item;
+        }
+    }
+    return $limits[0];
 }

@@ -27,6 +27,14 @@ class CurriculumController extends CommonController
     public function indexAction($course)
     {
         // Redirecting to curriculum user
-        return $this->redirect($this->generateUrl('curriculum_user.controller:indexAction', array('course' => $course)));
+        // @todo Fix redirection
+        return $this->redirect(
+                $this->generateUrl(
+                    'curriculum_user.controller:indexAction',
+                    array('course' => $course)
+                )
+                .'?'.$this->getRequest()->getQueryString()
+        );
+
     }
 }

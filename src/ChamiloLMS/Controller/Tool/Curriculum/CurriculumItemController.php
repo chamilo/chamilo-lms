@@ -58,7 +58,7 @@ class CurriculumItemController extends CommonController
         $formType = $this->getFormType();
 
         $entity = new Entity\CurriculumItem();
-        //$category = new Entity\CurriculumCategory();
+
         $category = $this->get('orm.em')->getRepository('Entity\CurriculumCategory')->find($id);
         $entity->setCategory($category);
 

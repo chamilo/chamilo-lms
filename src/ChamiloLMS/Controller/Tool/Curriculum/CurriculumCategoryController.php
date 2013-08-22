@@ -27,6 +27,7 @@ class CurriculumCategoryController extends CommonController
     public function indexAction()
     {
         $course = $this->getCourse();
+        $session = $this->getSession();
 
         $options = array(
             'decorate' => true,
@@ -34,24 +35,31 @@ class CurriculumCategoryController extends CommonController
             'rootClose' => '</ul>',
             'childOpen' => '<li>',
             'childClose' => '</li>',
-            'nodeDecorator' => function ($row) use ($course) {
-                $courseCode = $course->getCode();
+            'nodeDecorator' => function ($row) {
                 $addChildren = null;
                 $items = null;
+
+                $editLabel = $this->get('translator')->trans('Edit');
+                $deleteLabel = $this->get('translator')->trans('Delete');
+
                 if ($row['lvl'] <= 0) {
-                    $addChildren = '<a class="btn" href="'.$this->createUrl('add_from_parent_link', array('course' => $courseCode, 'id' => $row['id'])).'">Add children</a>';
+                    $label = $this->get('translator')->trans('Add children');
+                    $addChildren = '<a class="btn" href="'.$this->createUrl('add_from_parent_link', array('id' => $row['id'])).'">'.$label.'</a>';
                 } else {
-                    $addChildren = '<a class="btn" href="'.$this->createUrl('add_from_category', array('course' => $courseCode, 'id' => $row['id'])).'">Add items</a>';
+                    $label = $this->get('translator')->trans('Add items');
+
+                    $addChildren = '<a class="btn" href="'.$this->createUrl('add_from_category', array('id' => $row['id'])).'">'.$label.'</a>';
                     $items = '<ul>';
+
                     foreach ($row['items'] as $item) {
-                        $url = ' <a class="btn" href="'.$this->createUrl('edit_item', array('course' => $courseCode, 'id' => $item['id'])).'">Edit</a>';
+                        $url = ' <a class="btn" href="'.$this->createUrl('edit_item', array('id' => $item['id'])).'">'.$editLabel.'</a>';
                         $items.= '<li>'.$item['title']." (item) ".$url.'</li>';
                     }
                     $items .= '</ul>';
                 }
-                $readLink = '<a href="'.$this->createUrl('read_link', array('course' => $courseCode, 'id' => $row['id'])).'">'.$row['title'].'</a>';
-                $editLink = '<a class="btn" href="'.$this->createUrl('update_link', array('course' => $courseCode, 'id' => $row['id'])).'">Edit</a>';
-                $deleteLink = '<a class="btn" href="'.$this->createUrl('delete_link', array('course' => $courseCode, 'id' => $row['id'])).'"/>Delete</a>';
+                $readLink = '<a href="'.$this->createUrl('read_link', array('id' => $row['id'])).'">'.$row['title'].'</a>';
+                $editLink = '<a class="btn" href="'.$this->createUrl('update_link', array('id' => $row['id'])).'">'.$editLabel.'</a>';
+                $deleteLink = '<a class="btn" href="'.$this->createUrl('delete_link', array('id' => $row['id'])).'"/>'.$deleteLabel.'</a>';
 
                 return $readLink.' '.$addChildren.' '.$editLink.' '.$deleteLink.$items;
             }
@@ -62,16 +70,24 @@ class CurriculumCategoryController extends CommonController
         // @todo put this in a function
         $repo = $this->getRepository();
 
-        $query = $this->getManager()
+        $parameters = array('id' => $course->getId());
+        $qb = $this->getManager()
             ->createQueryBuilder()
             ->select('node, i')
             ->from('Entity\CurriculumCategory', 'node')
             ->leftJoin('node.items', 'i')
             ->innerJoin('node.course', 'c')
             ->where('node.cId = :id')
-            ->orderBy('node.root, node.lft', 'ASC')
-            ->setParameters(array('id' => $course->getId()))
-            ->getQuery();
+            ->orderBy('node.root, node.lft', 'ASC');
+
+        if (!empty($session)) {
+            $qb->andWhere('node.sessionId = :session_id');
+            $parameters['session_id'] = $session->getId();
+        }
+
+        $qb->setParameters($parameters);
+
+        $query = $qb->getQuery();
 
         $htmlTree = $repo->buildTree($query->getArrayResult(), $options);
 
@@ -114,7 +130,7 @@ class CurriculumCategoryController extends CommonController
         $parentEntity = $this->getEntity($id);
         $entity->setParent($parentEntity);
         $entity->setCourse($this->getCourse());
-        $entity->setSessionId(api_get_session_id());
+        $entity->setSession($this->getSession());
 
         $form = $this->get('form.factory')->create($formType, $entity);
 
@@ -211,9 +227,13 @@ class CurriculumCategoryController extends CommonController
 
     protected function getDefaultEntity()
     {
+
         $entity = $this->getNewEntity();
         $entity->setCourse($this->getCourse());
-        $entity->setSessionId(api_get_session_id());
+        $session = $this->getSession();
+        if (!empty($session)) {
+            $entity->setSession($session);
+        }
         return $entity;
     }
 }

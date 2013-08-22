@@ -36,12 +36,19 @@ class CurriculumUserController extends CommonController
             return $app->abort(403, 'Not allowed');
         }
 
+        $course = $this->getCourse();
+        $session = $this->getSession();
+
         $query = $this->getManager()
             ->createQueryBuilder()
             ->select('node, i')
             ->from('Entity\CurriculumCategory', 'node')
             ->leftJoin('node.items', 'i')
             ->leftJoin('i.userItems', 'u')
+            ->innerJoin('node.course', 'c')
+            ->where('node.cId = :id')
+            ->andWhere('node.sessionId = :session_id')
+            ->setParameters(array('id' => $course->getId(), 'session_id' => $session->getId()))
             ->orderBy('node.root, node.lft, node.title', 'ASC')
             ->getQuery();
 

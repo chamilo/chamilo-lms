@@ -98,6 +98,13 @@ function saveAll() {
 </script>
 <div class="row">
     <div class="span10">
+        {%  if is_granted('ROLE_ADMIN')  %}
+               <div class="actions">
+                   <a href="{{ url('curriculum_category.controller:indexAction', {'course' : course.code , 'id_session' : course_session.id}) }}">
+                       {{ "Categories" | trans }}
+                   </a>
+               </div>
+        {%  endif  %}
 
         <h2>Trayectoria</h2>
         <p>Explicaciones</p>

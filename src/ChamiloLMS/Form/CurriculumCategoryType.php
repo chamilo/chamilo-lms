@@ -14,11 +14,6 @@ class CurriculumCategoryType extends AbstractType
         /** @var Entity\CurriculumCategory $entity */
         $entity = $builder->getData();
 
-        /*$parentIdDisabled = false;
-        if (!empty($builderData)) {
-            $parentIdDisabled = true;
-        }*/
-
         $builder->add('title', 'text');
         $builder->add('max_score', 'text');
         $builder->add('min_chars', 'text');
@@ -28,15 +23,23 @@ class CurriculumCategoryType extends AbstractType
         $builder->add('session_id', 'hidden');
 
         $course = $entity->getCourse();
+        $session = $entity->getSession();
 
         $builder->add('parent', 'entity', array(
             'class' => 'Entity\CurriculumCategory',
-            'query_builder' => function($repository) use ($entity, $course) {
-                return $repository->createQueryBuilder('c')
+            'query_builder' => function($repository) use ($entity, $course, $session) {
+
+                $qb = $repository->createQueryBuilder('c')
                     ->where('c.cId = :id')
-                    ->andWhere('c.sessionId = :session_id')
-                    ->setParameters(array('id' => $course->getId(), 'session_id' => $entity->getSessionId()))
                     ->orderBy('c.title', 'ASC');
+                $parameters = array('id' => $course->getId());
+
+                if (!empty($session)) {
+                    $qb ->andWhere('c.sessionId = :session_id');
+                    $parameters['session_id'] = $session->getId();
+                }
+                $qb->setParameters($parameters);
+                return $qb;
             },
             'property' => 'title',
             'required' => false

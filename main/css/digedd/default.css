@@ -181,7 +181,7 @@ button.arrowl, input.arrowl {
     background-image:url(images/portal.png);
 }
 #logo img {
-    max-width: none;
+    max-width: 180%;
 }
 .exercise_progress_bars_cat {
     width: 220px !important;

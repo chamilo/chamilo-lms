@@ -155,8 +155,6 @@ $app['security.access_rules'] = array(
     array('^/admin/director', 'ROLE_DIRECTOR'),
     array('^/admin/jury_president', 'ROLE_JURY_PRESIDENT'),
     array('^/admin/jury_member', 'ROLE_JURY_MEMBER') //? jury subsitute??
-
-
     //array('^.*$', 'ROLE_USER'),
 );
 
@@ -473,6 +471,7 @@ if ($app['assetic.enabled']) {
     );
 }
 
+
 // Gaufrette service provider (to manage files/dirs) (not used yet)
 /*
 use Bt51\Silex\Provider\GaufretteServiceProvider\GaufretteServiceProvider;
@@ -715,4 +714,3 @@ $app['jury_member.controller'] = $app->share(
         return new ChamiloLMS\Controller\Admin\JuryMember\JuryMemberController($app);
     }
 );
-

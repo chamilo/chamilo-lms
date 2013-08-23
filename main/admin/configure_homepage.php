@@ -426,18 +426,18 @@ if (!empty($action)) {
 							$fp = fopen($homep.$menuf.'_'.$lang.$ext, 'w');
 							fputs($fp, $home_menu);
 							fclose($fp);
-                            if ($_POST['all_langs']) {
-                                foreach ($_languages['name'] as $key => $value) {
-            						$lang_name = $_languages['folder'][$key];
-            						if (file_exists($homep.$menuf.'_'.$lang_name.$ext)) {
-            							if (is_writable($homep.$menuf.'_'.$lang_name.$ext)) {
-            								$fp = fopen($homep.$menuf.'_'.$lang_name.$ext, 'w');
-            								fputs($fp, $home_menu);
-            								fclose($fp);
-                                        }
-                                    }
-                                }
+                if ($_POST['all_langs']) {
+                    foreach ($_languages['name'] as $key => $value) {
+                        $lang_name = $_languages['folder'][$key];
+                        if (file_exists($homep.$menuf.'_'.$lang_name.$ext)) {
+                            if (is_writable($homep.$menuf.'_'.$lang_name.$ext)) {
+                                $fp = fopen($homep.$menuf.'_'.$lang_name.$ext, 'w');
+                                fputs($fp, $home_menu);
+                                fclose($fp);
                             }
+                        }
+                     }
+                }
 							if (file_exists($homep.$menuf.$ext)) {
 								if (is_writable($homep.$menuf.$ext)) {
 									$fpo = fopen($homep.$menuf.$ext, 'w');
@@ -453,18 +453,18 @@ if (!empty($action)) {
 						$fp = fopen($homep.$menuf.'_'.$lang.$ext, 'w');
 						fputs($fp, $home_menu);
 						fclose($fp);
-                        if ($_POST['all_langs']) {
-                            foreach ($_languages['name'] as $key => $value) {
-                                $lang_name = $_languages['folder'][$key];
-                                if (file_exists($homep.$menuf.'_'.$lang_name.$ext)) {
-                                    $fp = fopen($homep.$menuf.'_'.$lang_name.$ext, 'w');
-                                    fputs($fp, $home_menu);
-                                    fclose($fp);
-
-                                }
-                             }  
-                         }
-					 }
+            if ($_POST['all_langs']) {
+                foreach ($_languages['name'] as $key => $value) {
+                    $lang_name = $_languages['folder'][$key];
+                    if (file_exists($homep.$menuf.'_'.$lang_name.$ext)) {
+                        $fp = fopen($homep.$menuf.'_'.$lang_name.$ext, 'w');
+                        fputs($fp, $home_menu);
+                        fclose($fp);
+    
+                    }
+                }  
+             }
+          }
 				}
                 event_system(LOG_HOMEPAGE_CHANGED, $action, cut($link_name.':'.$link_url, 254), api_get_utc_datetime(), api_get_user_id());
 				break;
@@ -803,7 +803,7 @@ switch ($action) {
                     $form->add_html_editor('link_html', get_lang('Content'), false, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
                 }
             }
-            $form->addElement('checkbox', 'all_langs', null, get_lang('ApplyAllLanguages'), 1);
+        $form->addElement('checkbox', 'all_langs', null, get_lang('ApplyAllLanguages'), 1);
 			$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 		}
 
@@ -862,7 +862,7 @@ switch ($action) {
 			$default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);
 			$form->add_html_editor($name, '', true, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
 		}
-        $form->addElement('checkbox', 'all_langs', null, get_lang('ApplyAllLanguages'), 1);
+    $form->addElement('checkbox', 'all_langs', null, get_lang('ApplyAllLanguages'), 1);
 		$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 		$form->setDefaults($default);
 		$form->display();

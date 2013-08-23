@@ -545,7 +545,6 @@ class CourseBuilder
                 'type' => 2
             );
             $newQuiz = new Quiz((object)$obj);
-            var_dump($orphanQuestionIds);
             if (!empty($orphanQuestionIds)) {
                 foreach ($orphanQuestionIds as $index => $orphanId) {
                     $order = $index + 1;

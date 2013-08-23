@@ -38,6 +38,45 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Generated from @assert ('Sam','Gamegie',5,'sam@example.com','jo','jo') > 1.
+     *
+     * @covers UserManager::create_user
+     */
+    public function testCreate_user()
+    {
+        $this->assertGreaterThan(
+          1,
+          UserManager::create_user('Sam','Gamgee',5,'sam@example.com','jo','jo')
+        );
+    }
+
+   /**
+     * Generated from @assert ('Pippin','Took',null,null,'jo','jo') === false.
+     *
+     * @covers UserManager::create_user
+     */
+    public function testCreate_user2()
+    {
+        $this->assertSame(
+          false,
+          UserManager::create_user('Pippin','Brandybuck',null,null,'jo','jo')
+        );
+    }
+    /**
+     * Test multiple URL case with users hosting limit
+     */
+    public function testCreate_user3()
+    {
+        global $_configuration;
+        $_configuration[1]['hosting_limit_users'] = 50;
+        $this->assertSame(
+          false,
+          UserManager::create_user('Merry','Brandybuck',null,null,'jo','jo')
+        );
+    }
+
+
+    /**
      *
      * @covers UserManager::is_username_available
      */
@@ -50,6 +89,31 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
         $unique_id = uniqid();
         $this->assertSame(
             true, UserManager::is_username_available($unique_id)
+        );
+    }
+
+  /**
+     * Test teachers hosting limit
+     */
+    public function testCreate_user4()
+    {
+        global $_configuration;
+        $_configuration[1]['hosting_limit_teachers'] = 50;
+        $this->assertSame(
+          false,
+          UserManager::create_user('Pippin','Took',1,null,'jo','jo')
+        );
+    }
+
+    /**
+     * Test language non-existence
+     */
+    public function testCreate_user5()
+    {
+        global $_configuration;
+        $this->assertSame(
+          false,
+          UserManager::create_user('Pippin','Tooky',null,null,'jo','jo',null,'spaniard')
         );
     }
 
@@ -153,26 +217,41 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Generated from @assert (-1) === false.
+     * Generated from @assert (null) === false.
      *
-     * @covers UserManager::can_delete_user
+     * @covers UserManager::delete_users
      */
-    public function testCan_delete_user2()
+    public function testDelete_users()
     {
         $this->assertSame(
-            false, UserManager::can_delete_user(-1)
+          false,
+          UserManager::delete_users(null)
         );
     }
 
     /**
-     * Generated from @assert ('abc') === false.
+     * Generated from @assert (-1) === false.
      *
-     * @covers UserManager::can_delete_user
+     * @covers UserManager::delete_users
      */
-    public function testCan_delete_user3()
+    public function testDelete_users2()
     {
         $this->assertSame(
-            false, UserManager::can_delete_user('abc')
+          false,
+          UserManager::delete_users(-1)
+        );
+    }
+
+    /**
+     * Generated from @assert (array(-1)) === false.
+     *
+     * @covers UserManager::delete_users
+     */
+    public function testDelete_users3()
+    {
+        $this->assertSame(
+          false,
+          UserManager::delete_users(array(-1))
         );
     }
 
@@ -185,7 +264,8 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     public function testDeactivate_users()
     {
         $this->assertSame(
-            false, UserManager::deactivate_users(null)
+          false,
+          UserManager::deactivate_users(null)
         );
     }
 
@@ -197,7 +277,8 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     public function testDeactivate_users2()
     {
         $this->assertSame(
-            false, UserManager::deactivate_users(array(-1))
+          false,
+          UserManager::deactivate_users(array(-1))
         );
     }
 
@@ -209,7 +290,8 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     public function testActivate_users()
     {
         $this->assertSame(
-            false, UserManager::activate_users(null)
+          false,
+          UserManager::activate_users(null)
         );
     }
 
@@ -221,7 +303,8 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     public function testActivate_users2()
     {
         $this->assertSame(
-            false, UserManager::activate_users(array(-1))
+          false,
+          UserManager::activate_users(array(-1))
         );
     }
 
@@ -233,7 +316,8 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     public function testUpdate_openid()
     {
         $this->assertSame(
-            false, UserManager::update_openid(false, '')
+          false,
+          UserManager::update_openid(false,'')
         );
     }
 
@@ -245,18 +329,21 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     public function testUpdate_openid2()
     {
         $this->assertSame(
-            false, UserManager::update_openid(-1, '')
+          false,
+          UserManager::update_openid(-1,'')
         );
     }
 
     /**
+     * Generated from @assert (false, false, false, false, false, false, false, false, false, false, false, false, false) === false.
      *
      * @covers UserManager::update_user
      */
     public function testUpdate_user()
     {
         $this->assertSame(
-            false, UserManager::update_user(false, false, false, false)
+          false,
+          UserManager::update_user(false,false,false,false,false,false,false,false,false,false,false,false,false)
         );
     }
 
@@ -268,7 +355,8 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     public function testDisable()
     {
         $this->assertSame(
-            false, UserManager::disable(0)
+          false,
+          UserManager::disable(0)
         );
     }
 
@@ -280,7 +368,8 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     public function testEnable()
     {
         $this->assertSame(
-            false, UserManager::enable(0)
+          false,
+          UserManager::enable(0)
         );
     }
 
@@ -292,11 +381,36 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     public function testGet_user_id_from_original_id()
     {
         $this->assertSame(
-            0, UserManager::get_user_id_from_original_id('0', '---')
+          0,
+          UserManager::get_user_id_from_original_id('0', '---')
         );
     }
 
+    /**
+     * Generated from @assert ('') === false.
+     *
+     * @covers UserManager::is_username_available
+     */
+    public function testIs_username_available()
+    {
+        $this->assertSame(
+          false,
+          UserManager::is_username_available('')
+        );
+    }
 
+    /**
+     * Generated from @assert ('xyzxyzxyz') === true.
+     *
+     * @covers UserManager::is_username_available
+     */
+    public function testIs_username_available2()
+    {
+        $this->assertSame(
+          true,
+          UserManager::is_username_available('xyzxyzxyz')
+        );
+    }
 
     /**
      * Generated from @assert ('','') === false.
@@ -306,7 +420,8 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     public function testCreate_username()
     {
         $this->assertSame(
-            'user', UserManager::create_username('', '')
+          false,
+          UserManager::create_username('','')
         );
     }
 
@@ -318,7 +433,8 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     public function testCreate_username2()
     {
         $this->assertSame(
-            'ab', UserManager::create_username('a', 'b')
+          'ab',
+          UserManager::create_username('a','b')
         );
     }
 
@@ -423,6 +539,42 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
      * @todo   Implement testGet_user_list_like().
      */
     public function testGet_user_list_like()
+    {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @covers UserManager::get_user_info
+     * @todo   Implement testGet_user_info().
+     */
+    public function testGet_user_info()
+    {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @covers UserManager::get_user_info_by_id
+     * @todo   Implement testGet_user_info_by_id().
+     */
+    public function testGet_user_info_by_id()
+    {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @covers UserManager::get_teacher_list
+     * @todo   Implement testGet_teacher_list().
+     */
+    public function testGet_teacher_list()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(

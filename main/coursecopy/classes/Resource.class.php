@@ -30,6 +30,7 @@ define('RESOURCE_SURVEYINVITATION', 'survey_invitation');
 define('RESOURCE_WIKI', 'wiki');
 define('RESOURCE_THEMATIC', 'thematic');
 define('RESOURCE_ATTENDANCE', 'attendance');
+define('RESOURCE_WORK', 'work');
 
 /**
  * Representation of a resource in a Chamilo-course.
@@ -192,6 +193,8 @@ class Resource
                 return TOOL_COURSE_PROGRESS;
             case RESOURCE_ATTENDANCE:
                 return TOOL_ATTENDANCE;
+            case RESOURCE_WORK:
+                return TOOL_STUDENTPUBLICATION;
             default:
                 return null;
         }

@@ -293,4 +293,6 @@ $EnrichQuestion = "سؤال إثرائي";
 $langDefaultUniqueAnswer1 = "أ ثم ب ثم ت";
 $langDefaultUniqueComment1 = "الحليب هو الأساس للعديد من منتجات الألبان مثل الزبدة، الجبنة، واللبن من بين المصادر الأخرى";
 $langDefaultUniqueAnswer2 = "أ ثم ت ثم ب";
+$ResultIs = "النتائج";
+$Random = "عشوائي";
 ?>

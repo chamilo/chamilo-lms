@@ -222,6 +222,7 @@ $Duration = "Czas trwania";
 $WrongDatasForTimeSpentOnThePlatform = "Dane tego użytkownika, zostały zarejestrowane podczas, gdy obliczenie czasu spędzonego na platformie nie było możliwe.";
 $DisplayCoaches = "Przegląd trenerów";
 $DisplayUserOverview = "Przegląd użytkownika";
+$ExportUserOverviewOptions = "Przegląd opcji eksportu użytkownika";
 $FollowingFieldsWillAlsoBeExported = "Następujące pola również będą eksportowane";
 $TotalExercisesScoreObtained = "Łączny wynik uzyskany w testach";
 $TotalExercisesScorePossible = "Całkowity możliwy wynik do uzyskania w testach";

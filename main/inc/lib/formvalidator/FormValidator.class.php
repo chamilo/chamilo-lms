@@ -140,6 +140,8 @@ class FormValidator extends HTML_QuickForm
         $this->registerRule('CAPTCHA', 'rule', 'HTML_QuickForm_Rule_CAPTCHA', 'HTML/QuickForm/Rule/CAPTCHA.php');
 
 
+        $this->registerRule('CAPTCHA', 'rule', 'HTML_QuickForm_Rule_CAPTCHA', 'HTML/QuickForm/Rule/CAPTCHA.php');
+
         // Modify the default templates
         $renderer = & $this->defaultRenderer();
 

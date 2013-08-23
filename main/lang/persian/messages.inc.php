@@ -36,5 +36,9 @@ $WriteAMessage = "نوشتن یک پیام";
 $AlreadyReadMessage = "پیام قبلا خوانده شده";
 $UnReadMessage = "پیام خوانده نشده";
 $MessageSent = "پیام ارسال شد";
+$MailMarkSelectedAsUnread = "علامتگذاری بعنوان خوانده نشده";
+$MailMarkSelectedAsRead = "علامتگذاری بعنوان خوانده شده";
 $YouShouldWriteAMessage = "شما باید یک پیام بنویسید";
+$SelectedMessagesUnRead = "پیام های انتخاب شده بعنوان خوانده نشده علامتگذاری شدند";
+$SelectedMessagesRead = "پیام های انتخاب شده بعنوان خوانده شده علامتگذاری شدند";
 ?>

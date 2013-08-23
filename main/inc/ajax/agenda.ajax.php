@@ -70,14 +70,12 @@ switch ($action) {
         $agenda->move_event($id, $day_delta, $minute_delta);
         break;
     case 'get_events':
-        // The following code needs a security check for permissions
-        /*
-        $uid = $user_id;
-        if (!empty($_REQUEST['user_id'])) {
-            $uid = intval($user_id);
+        $user_id = $_REQUEST['user_id'];
+        if (substr($user_id,0,1) == 'G') {
+            $length = strlen($user_id);
+            $group_id = substr($user_id,2,$length-1);
         }
-        */
-        $events = $agenda->get_events($_GET['start'], $_GET['end'], api_get_course_int_id(), $group_id, $user_id);
+        $events = $agenda->get_events($_REQUEST['start'], $_REQUEST['end'], api_get_course_int_id(), $group_id , $user_id);
         echo $events;
         break;
     case 'get_user_agenda':

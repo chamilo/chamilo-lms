@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$Upload = "رفع الملف";
 $BackList = "عودة إلى صندوق التجميع الخاص بك";
 $ShowFeedback = "عرض الاقتراحات";
 $GiveFeedback = "إدراج / تحرير إقتراحات";
@@ -94,4 +95,5 @@ $MailingSelectNoOther = "لا يمكن دمج الإرسال مع مستلمات
 $MailingJustUploadSelectNoOther = "هكذا، لا يمكن دمج التحميل مع مستلمات أخرى";
 $NewDropboxFileUploaded = "ملف جديد تم إرساله في أداة صندوق التجميع";
 $NewDropboxFileUploadedContent = "ملف جديد تم إرساله في أداة صندوق التجميع من مقررك";
+$langAddEdit = "اضافة / تعديل";
 ?>

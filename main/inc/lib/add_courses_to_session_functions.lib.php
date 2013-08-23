@@ -8,6 +8,8 @@
  * Init
  */
 require_once dirname(__FILE__).'/xajax/xajax.inc.php';
+//require_once (api_get_path(SYS_CODE_PATH).'admin/add_courses_to_session.php');
+
 /**
  * AddCourseToSession class
  */
@@ -65,7 +67,7 @@ class AddCourseToSession {
 			}
 
 			if (api_is_multiple_url_enabled()) {
-				$tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+				$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 				$access_url_id = api_get_current_access_url_id();
 				if ($access_url_id != -1){
 

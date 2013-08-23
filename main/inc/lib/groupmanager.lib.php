@@ -851,6 +851,10 @@ class GroupManager
         return $users;
     }
 
+    /**
+     * @param int $group_id
+     * @return array
+     */
     public static function get_members_and_tutors($group_id)
     {
         $group_user_table = Database :: get_course_table(TABLE_GROUP_USER);

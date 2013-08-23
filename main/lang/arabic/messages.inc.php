@@ -22,4 +22,7 @@ $InvalidMessageId = "هوية الرسالة للرد عليها غير صالح
 $ErrorSendingMessage = "لقد حدثت مشكلة أثناء محاولة الإرسال";
 $SureYouWantToDeleteSelectedMessages = "هل أنت متأكد من أنك تريد حذف الرسائل المحددة؟";
 $SelectedMessagesDeleted = "لقد تم حذف الرسائل المحددة";
+$MessageSent = "الرسائل المرسلة";
+$SelectedMessagesUnRead = "الرسائل المحددة هي الغير مقروءة";
+$SelectedMessagesRead = "الرسائل المحددة هي الرسائل المقروءة";
 ?>

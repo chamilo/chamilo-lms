@@ -182,4 +182,5 @@ $LatencyTimeSpent = "الوقت المستغرق";
 $Result = "نتيجة";
 $SplitStepsPerPage = "صفحة لكل خطوة";
 $SplitStepsPerChapter = "فصل لكل خطوة";
+$ReturnToLearningPaths = "الرجوع الي مسارات التعلم";
 ?>

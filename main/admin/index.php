@@ -7,9 +7,9 @@
 /**
  * Code
  */
-
 // Language files that need to be included.
 $language_file = array('admin', 'tracking','coursebackup');
+
 
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -116,11 +116,9 @@ if (api_is_platform_admin()) {
 	$items[] = array('url'=>'course_category.php', 			'label' => get_lang('AdminCategories'));
 	$items[] = array('url'=>'subscribe_user2course.php', 	'label' => get_lang('AddUsersToACourse'));
 	$items[] = array('url'=>'course_user_import.php', 		'label' => get_lang('ImportUsersToACourse'));
-
     $items[] = array('url'=>'extra_fields.php?type=course', 	'label' => get_lang('ManageCourseFields'));
 
     $items[] = array('url'=>'extra_fields.php?type=question', 	'label' => get_lang('ManageQuestionFields'));
-
 
     if (api_get_setting('gradebook_enable_grade_model') == 'true') {
         $items[] = array('url'=>'grade_models.php',             'label' => get_lang('GradeModel'));
@@ -149,7 +147,7 @@ if (api_is_platform_admin()) {
     $items[] = array('url'=>'settings.php?category=Plugins','label' => get_lang('Plugins'));
     $items[] = array('url'=>'settings.php?category=Regions','label' => get_lang('Regions'));
     $items[] = array('url'=>'system_announcements.php', 	'label' => get_lang('SystemAnnouncements'));
-    $items[] = array('url'=>api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=admin', 'label' => get_lang('GlobalAgenda'));
+    $items[] = array('url'=> api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=admin', 'label' => get_lang('GlobalAgenda'));
     $items[] = array('url'=>'configure_homepage.php', 		'label' => get_lang('ConfigureHomePage'));
     $items[] = array('url'=>'configure_inscription.php', 	'label' => get_lang('ConfigureInscription'));
     $items[] = array('url'=>'statistics/index.php', 		'label' => get_lang('Statistics'));
@@ -162,9 +160,9 @@ if (api_is_platform_admin()) {
     }
 
     if (api_get_multiple_access_url()) {
-	if (api_is_global_platform_admin()) {
+		if (api_is_global_platform_admin()) {
             	$items[] = array('url'=>'access_urls.php', 	'label' => get_lang('ConfigureMultipleAccessURLs'));
-        }
+            }
     }
 
     if (api_get_setting('allow_reservation') == 'true') {
@@ -189,7 +187,7 @@ $blocks['sessions']['search_form'] = $search_form;
 $items = array();
 $items[] = array('url'=> api_get_path(WEB_CODE_PATH).'session/session_list.php', 'label' => get_lang('ListSession'));
 $items[] = array('url'=> api_get_path(WEB_CODE_PATH).'session/session_add.php', 	'label' => get_lang('AddSession'));
-$items[] = array('url'=> 'session_category_list.php', 	'label' => get_lang('ListSessionCategory'));
+$items[] = array('url'=>'session_category_list.php', 	'label' => get_lang('ListSessionCategory'));
 $items[] = array('url'=> api_get_path(WEB_CODE_PATH).'session/session_import.php', 	'label' => get_lang('ImportSessionListXMLCSV'));
 if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
     $items[] = array('url'=>'ldap_import_students_to_session.php', 	'label' => get_lang('ImportLDAPUsersIntoSession'));
@@ -226,8 +224,8 @@ if (api_is_platform_admin()) {
 	if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
 		$items[] = array('url'=>'filler.php', 	'label' => get_lang('DataFiller'));
 	}
-    $items[] = array('url'=>'archive_cleanup.php', 	'label' => get_lang('ArchiveDirCleanup'));
-	$items[] = array('url'=>'system_management.php', 'label' => get_lang('SystemManagement'));
+	$items[] = array('url'=>'archive_cleanup.php', 	'label' => get_lang('ArchiveDirCleanup'));
+    $items[] = array('url'=>'system_management.php', 'label' => get_lang('SystemManagement'));
 
 	$blocks['settings']['items'] = $items;
     $blocks['settings']['extra'] = null;
@@ -251,7 +249,7 @@ if (api_is_platform_admin()) {
 
     //Skills
     if (api_get_setting('allow_skills_tool') == 'true') {
-        $blocks['skills']['icon']  = Display::return_icon('logo.gif', get_lang('Skills'), array(), ICON_SIZE_SMALL, false);
+        $blocks['skills']['icon']  = Display::return_icon('logo.png', get_lang('Skills'), array(), ICON_SIZE_SMALL, false);
         $blocks['skills']['label'] = get_lang('Skills');
 
         $items = array();
@@ -293,12 +291,13 @@ if (api_is_platform_admin()) {
 	//ob_flush();
 
     //Version check
-    $blocks['version_check']['icon']  = Display::return_icon('logo.gif', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
+    $blocks['version_check']['icon']  = Display::return_icon('logo.png', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
 	$blocks['version_check']['label'] = get_lang('VersionCheck');
-	$blocks['version_check']['extra'] = version_check();
+	//$blocks['version_check']['extra'] = version_check();
     $blocks['version_check']['search_form'] = null;
     $blocks['version_check']['items'] = null;
 }
+$admin_ajax_url = api_get_path(WEB_AJAX_PATH).'admin.ajax.php';
 
 $app['template']->assign('blocks', $blocks);
 $app['template']->display('default/admin/settings_index.tpl');
@@ -333,26 +332,6 @@ function version_check() {
     return $return;
 }
 
-/**
- * This setting changes the registration status for the campus
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version August 2006
- *
- * @todo the $_settings should be reloaded here. => write api function for this and use this in global.inc.php also.
- */
-function register_site() {
-    $tbl_settings = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-
-    $sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='registered'";
-    Database::query($sql);
-
-    if ($_POST['donotlistcampus']) {
-        $sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='donotlistcampus'";
-        Database::query($sql);
-    }
-    // Reload the settings.
-}
 
 
 /**
@@ -394,7 +373,7 @@ function check_system_version() {
 
         $res = _http_request('version.chamilo.org', 80, '/version.php', $data);
 
-        if ($res !== false) {
+        if ($res != 0) {
             $version_info = $res;
 
             if ($system_version != $version_info) {

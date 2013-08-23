@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ViewModeImpress = "Modo de visualização atual: Impressione";
 $NewForumCreated = "O novo fórum acaba de ser criado";
 $NewThreadCreated = "O novo assunto do fórum acaba de ser criado.";
 $AddHotpotatoes = "Adicionar HotPotatoes";
@@ -251,6 +252,10 @@ $ModifyHotPotatoes = "Modificar hotpotatoes";
 $SaveHotpotatoes = "Salvar hotpotatoes";
 $ReturnToLPList = "Retornar para a lista";
 $LpPrerequisiteDescription = "Selecionando uma outra Rota de Aprendizagem como pré-requisito será escondida a condição atual de progresso, até o pré-requisito está totalmente concluído (100%)";
+$PrerequisitesOptions = "Opções de  pré-requisitos";
+$ClearAllPrerequisites = "Limpar todos os pré-requisitos";
+$SetPrerequisiteForEachItem = "Definir etapa anterior, como pré-requisito para cada etapa";
+$ClickOnTheLearnerViewToSeeYourLearningPath = "Clique no [Visão de Estudante] para ver o seu caminho de aprendizagem";
 $ExerciseCantBeEditedAfterAddingToTheLP = "O exercício não pode ser editado depois de ser adicionado a uma Rota de Aprendizagem";
 $EnableTimeLimits = "Ativar limites de disponibilidade";
 $PublicationDate = "Data de publicação";

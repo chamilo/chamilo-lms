@@ -51,4 +51,5 @@ $DeleteAll = "حذف الكل";
 $ScoringUpdated = "تم تعديل التسجيل";
 $CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "%s تشهد بأن\n\n %s \nأنهى بنجاح المقرر \n\n '%s' \n\nبدرجة  of\n\n '%s'";
 $FileType = "نوع الملف";
+$Average = "المتوسط";
 ?>

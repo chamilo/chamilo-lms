@@ -20,7 +20,6 @@ if (api_get_setting('allow_registration') === 'false') {
 }
 
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
-
 if (!empty($_SESSION['user_language_choice'])) {
     $user_selected_language = $_SESSION['user_language_choice'];
 } elseif (!empty($_SESSION['_user']['language'])) {
@@ -42,7 +41,7 @@ $course_code_redirect = isset($_REQUEST['c']) && !empty($_REQUEST['c']) ? $_REQU
 $exercise_redirect = isset($_REQUEST['e']) && !empty($_REQUEST['e']) ? $_REQUEST['e'] : null;
 
 if (!empty($course_code_redirect)) {
-    Session::write('course_redirect', $course_code_redirect);
+    Session::write('course_redirect',   $course_code_redirect);
     Session::write('exercise_redirect', $exercise_redirect);
 }
 
@@ -63,7 +62,6 @@ if ($user_already_registered_show_terms == false) {
 
     //	EMAIL
     $form->addElement('text', 'email', get_lang('Email'), array('size' => 40));
-
     if (api_get_setting('registration', 'email') == 'true') {
         $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
     }
@@ -92,7 +90,7 @@ if ($user_already_registered_show_terms == false) {
 
     //	USERNAME
     if (api_get_setting('login_is_email') != 'true') {
-        $form->addElement('text', 'username', get_lang('UserName'), array('id' => 'username', 'size' => USERNAME_MAX_LENGTH));
+        $form->addElement('text', 'username', get_lang('UserName'), array('size' => USERNAME_MAX_LENGTH));
         $form->applyFilter('username','trim');
         $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
         $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
@@ -103,6 +101,7 @@ if ($user_already_registered_show_terms == false) {
     //	PASSWORD
     $form->addElement('password', 'pass1', get_lang('Password'), array('id' => 'pass1', 'size' => 20, 'autocomplete' => 'off'));
     global $_configuration;
+
     if (isset($_configuration['allow_strength_pass_checker']) && $_configuration['allow_strength_pass_checker']) {
         $form->addElement('label', null, '<div id="password_progress"></div>');
     }
@@ -112,13 +111,11 @@ if ($user_already_registered_show_terms == false) {
     $form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule(array('pass1', 'pass2'), get_lang('PassTwo'), 'compare');
 
-    //if (CHECK_PASS_EASY_TO_FIND) {
-        //$form->addRule('pass1', get_lang('PassTooEasy').': '.api_generate_password(), 'callback', 'api_check_password');
-    //}
+    if (CHECK_PASS_EASY_TO_FIND)
+        $form->addRule('password1', get_lang('PassTooEasy').': '.api_generate_password(), 'callback', 'api_check_password');
 
     //	PHONE
     $form->addElement('text', 'phone', get_lang('Phone'), array('size' => 20));
-
     if (api_get_setting('registration', 'phone') == 'true') {
         $form->addRule('phone', get_lang('ThisFieldIsRequired'), 'required');
     }

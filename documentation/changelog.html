@@ -44,7 +44,6 @@
 <p><i>Note: most #wxyz references are issue numbers you can find in <a href="http://support.chamilo.org/projects/chamilo-18/issues" target="_blank">our public bug tracking system</a>. Some references marked BT#xyz are developments made externally for BeezNest customers and integrated into Chamilo. The details of these tasks cannot be seen for confidentiality reasons, but the code change is public and can be reviewed by anyone.</i></p>
 <p>&nbsp;</p>
 
-
 <h1>Chamilo 1.10.0 - ???, 31st of ???, 2012</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.10.0 is a major stable version with loads of added features.</p>
@@ -68,39 +67,170 @@
   <li></li>
 </ul>
 
-<h1>Chamilo 1.9.6 - Mystery, 18th of April, 2013</h1>
+<h1>Chamilo 1.9.8 - Mystery name, Mystery date, 2013</h1>
 <h3>Release notes - summary</h3>
-<p>Chamilo 1.9.6 is a minor stable version with a series of improvements on top of 1.9.4.</p>
+<p>Chamilo 1.9.8 is a minor stable version with a series of improvements on top of 1.9.6.</p>
 <h3>Release name</h3>
-<p><a href="http://en.wikipedia.org/wiki/Mystery">Mystery</a> is a name we give new versions before we know their name. </p>
+<p><a href="http://fr.wikipedia.org/wiki/">City name</a> is a city ... </p>
+<h3>Security</h3>
+<ul>
+  <li></li>
+</ul>
 <h3>New Features</h3>
 <ul>
-  <li>Documents gallery now creates thumbnails to speed rendering up (#4536)</li>
-  <li>New "Impress" visualization for learning paths (#4595)</li>
-  <li>Show weight of current teacher's documents in session (#5298)</li>
-  <li>Show user data in admin tracking (#5723)</li>
-  <li>User import through CSV now accepts language (#5746)</li>
-  <li>Written assignments can be downloaded by teacher (#5805)</li>
+  <li></li>
 </ul>
 <h3>Improvements</h3>
 <ul>
+  <li>Increased maximum lifetime of videoconference sessions - now 5h (#6261)</li>
   <li></li>
 </ul>
 <h3>Debugging</h3>
 <ul>
   <li></li>
 </ul>
-<h3>Third-Party Libraries additions/updates</h3>
-<ul>
-  <li></li>
-</ul>
-<h3>Removals</h3>
-<ul>
-  <li></li>
-</ul>
 <h3>Stylesheets and theming</h3>
 <ul>
   <li></li>
+</ul>
+<h3>Web services</h3>
+<ul>
+  <li></li>
+</ul>
+
+
+<h1>Chamilo 1.9.6 - Rochefort, 4th of June, 2013</h1>
+<h3>Release notes - summary</h3>
+<p>Chamilo 1.9.6 is a minor stable version with security patches and a series of improvements on top of 1.9.4.</p>
+<h3>Release name</h3>
+<p><a href="http://fr.wikipedia.org/wiki/Rochefort_%28Belgique%29">Rochefort</a> is a small city in the South of Belgium, that has existed at least since year 1041 and has shown impressive resilience and stability, which we think 1.9.6 has reached as well. Rochefort's Brewery produces a very nice trappist beer exported even to Peru! As we are getting ready for a larger battle, getting Chamilo LMS every day to a larger community, we thought we'd make a last quiet stop and salute the little town where several contributors of Chamilo have set foot in the past.</p>
+<h3>Security</h3>
+<ul>
+  <li>Fixed XSS vulnerabilities in announcement, blog and chat tools - see <a href="https://support.chamilo.org/projects/chamilo-18/wiki/Security_issues">our security page for details</a></li>
+  <li>Fixed unreported design flaw in e-mail password resetter</li>
+</ul>
+<h3>New Features</h3>
+<ul>
+  <li>Documents gallery now creates thumbnails to speed rendering up (#4536)</li>
+  <li>New "Impress" visualization for learning paths (#4595)</li>
+  <li>Show weight of current teacher's documents in session (#5298)</li>
+  <li>Added system tracking for homepage edition (#5597)</li>
+  <li>Show user data in admin tracking (#5723)</li>
+  <li>User import through CSV now accepts language (#5746)</li>
+  <li>Online-text assignments can be downloaded by teacher (#5805)</li>
+  <li>Added improved permissions checker to installer to avoid HTTP 500 Server error page when entering the course on a Security Enhanced server (#5863)</li>
+  <li>Added feature to "Mark all as read" in social messaging (#6019)</li>
+</ul>
+<h3>Improvements</h3>
+<ul>
+  <li>Fixed wrong uploader user reference in e-mail sent to teacher when assignment is uploaded (#5970)</li>
+  <li>Added return link on top of courses tree on homepage (#5986)</li>
+  <li>Set minimum certification score to 75 by default in gradebook (#6001)</li>
+  <li>Changed "Edit settings" label in groups edition (#6003)</li>
+  <li>Improved (visually) the procedure to add new friends in the social network (#6015)</li>
+  <li>Added "Re:[subject]" as title to answers in social messaging (#6018)</li>
+  <li>Authorize .psd files uploads in custom stylesheet uploads to avoid frustration (#6038)</li>
+  <li>Updated logo of all Chamilo styles with the new logo</li>
+  <li>Improved visualization of very long assignments titles (cut at 27 chars)(#6163)</li>
+  <li>Reverted the order of columns in gradebook flat view graphics (linked to #5883 but not exactly the topic)</li>
+</ul>
+<h3>Debugging</h3>
+<ul>
+  <li>Fixed filter function in agenda tool (#2238)</li>
+  <li>Fixed bug preventing HotPotatoes exercises from opening for students (#3993)</li>
+  <li>Fixed missing conclusion text for exercises when seen from LP (#4227)</li>
+  <li>Fixed bug changing forum post as main thread when edited by admin (#4271)</li>
+  <li>Fixed bug preventing the creation of links in assignments description (#4374)</li>
+  <li>Fixed confusing message for expired session (#4797)</li>
+  <li>Fixed bug preventing import of large course backup files (#5334)</li>
+  <li>Fixed confusing Nanogong text in admin settings (#5400)</li>
+  <li>Fixed fonts size in Windows 7 (#5410)</li>
+  <li>Fixed messaging isolation bug in multi-URL installations (#5441)</li>
+  <li>Fixed bug importing backup copy (#5460)</li>
+  <li>Fixed bug in survey not showing questions when invitation sent by mail (#5529)</li>
+  <li>Fixed header in backup progress page (#5540)</li>
+  <li>Fixed teacher viewing more folders in drop-down list (#5555)</li>
+  <li>Fixed side panel not hiding in learning path when using through mobile device (#5563)</li>
+  <li>Fixed 1.9.4 installation bug (#5565)</li>
+  <li>Fixed wrong number of questions in survey list (#5567)</li>
+  <li>Fixed reverse numbering of courses and users in sessions reporting block (#5594)</li>
+  <li>Fixed users import from CSV in groups (#5603)</li>
+  <li>Fixed groups too visible (#5608)</li>
+  <li>Fixed score bug in exercise showing different scores to student and teacher (#5623)</li>
+  <li>Fixed bug preventing edition of groups (#5625)</li>
+  <li>Fixed visual bug in admin section, caused by mobile tweaks (#5660)</li>
+  <li>Fixed bug in course code handling when importing users through CSV in course (#5670)</li>
+  <li>Fixed crypto bug when upgrading from 1.8.8.4 to 1.9.2 (#5685)</li>
+  <li>Fixed users edition bug after upgrading from 1.8.8.4 to 1.9.2 (#5687)</li>
+  <li>Fixed wrong link in mail sent to user when a test has been reviewed by the teacher (#5697)</li>
+  <li>Fixed bug in teacher report chart in admin dashboard (#5713)</li>
+  <li>Fixed bug in end of HotPotatoes tests (#5719)</li>
+  <li>Fixed quick toolbar icons not showing nicely in IE (#5733)</li>
+  <li>Fixed e-mail sender for teacher announcements (#5738)</li>
+  <li>Fixed missing images after backup restoration (#5765)</li>
+  <li>Fixed bug preventing user from changing his stylesheet (#5767)</li>
+  <li>Fixed notice message in local.inc.php (#5769)</li>
+  <li>Fixed display bugs in IE (#5775)</li>
+  <li>Fixed "FillGroup" confusing translation (#5778)</li>
+  <li>Fixed students limit in a class (#5804)</li>
+  <li>Removed mail sending to students when exercise is "exam" type (#5807)</li>
+  <li>Fixed group chat history not being logged in documents (#5837)</li>
+  <li>Fixed missing removal of survey invitations and answers on delete_user() call (#5847)</li>
+  <li>Fixed course subcategories not showing after adding new course on same category (#5850)</li>
+  <li>Fixed learning path view in student mode (#5855)</li>
+  <li>Removed double course code info in admin courses list (#5865)</li>
+  <li>Fixed bug preventing the printing of the gradebook flat view page (#5883)</li>
+  <li>Fixed bug in BigBlueButton videoconference plugin to enable audio (#5884)</li>
+  <li>Fixed several issues in recording of videoconference sessions (#5885)</li>
+  <li>Fixed bug preventing the update of users picture (#5903)</li>
+  <li>Fixed minor notice message about is_courseCoach (#5909)</li>
+  <li>Fixed message when max_upload_filesize reached (#5938)</li>
+  <li>Fixed downloadability of assignment when "invisible" (#5947)</li>
+  <li>Fixed PDF export to include images (#5948)</li>
+  <li>Fixed translation quirks for Spanish (#5949)</li>
+  <li>Fixed bug removing students answers when modifying question (#5950)</li>
+  <li>Fixed issue giving wrong time info in backup filename (#5951)</li>
+  <li>Fixed horizontal/vertical view in survey questions (#5956)</li>
+  <li>Fixed big issue in IE7&amp;8 preventing to move to the next question in exercises (#5957)</li>
+  <li>Fixed bug not showing phone number in student details (#5958)</li>
+  <li>Fixed list of sessions not showing sessions (#5960)</li>
+  <li>Fixed issue blocking the switch between tabs in session view (#5961)</li>
+  <li>Fixed list of assignments not showing course assignments in session (#5963)</li>
+  <li>Fixed issue uploading custom stylesheets (#5967)</li>
+  <li>Fixed display issue in scoring system (gradebook) (#5969)</li>
+  <li>Re-applied chart appearing in session view (#5971)</li>
+  <li>Fixed missing title attribute in links on course homepage (#5976)</li>
+  <li>Fixed missing images in glossary export (#5979)</li>
+  <li>Fixed locking of user subscription to session when name contains special character (#5981)</li>
+  <li>Aligned pager icons in images gallery (#5982)</li>
+  <li>Minor orthographic fixes (#5985,#5987,#6002,#6063 and many others not referenced)</li>
+  <li>Fixed CSS for categories list on homepage (#5989)</li>
+  <li>Fixed missing results after exercise taken in learning path (#5990)</li>
+  <li>Fixed style between course title and teacher name in courses tree on homepage (#5991)</li>
+  <li>Fixed alignment in questions list for small screen resolutions (#5995)</li>
+  <li>Fixed SQL error in update-db-1.8.7-1.8.8.inc.php (#5998)</li>
+  <li>Fixed bug preventing change of password in profile (#5999, #6127)</li>
+  <li>Fixed bug preventing display of documents templates when adding an element to the learning path (#6000)</li>
+  <li>Fixed security issue allowing a student to take hiddn tests through the progress page (#6014)</li>
+  <li>Fixed SQL error when uploading file to dropbox without destination (#6034)</li>
+  <li>Fixed regression for score in forum threads (#6035)</li>
+  <li>Fixed issue deleting one document at a time through course recycling feature (#6045)</li>
+  <li>Fixed visibility of files in group documents for sender when just uploaded (#6046)</li>
+  <li>Fixed bug preventing the re-enabling of the table of contents in learning paths (#6047)</li>
+  <li>Fixed minor issue loading glyphicons from bootstrap.css (#6049)</li>
+  <li>Fixed issue in Portuguese date format (#6054)</li>
+  <li>Fixed security issue with reset password e-mail (#6113)</li>
+  <li>Fixed warning in gradebook (#6122)</li>
+  <li>Fixed bug preventing session coach to import users in his session even when authorized by admin (#6141)</li>
+  <li>Fixed display issue in long HotPotatoes tests (#6150)</li>
+  <li>Fixed learning path student view issue created from improvements to user experience (#6154)</li>
+  <li>Fixed bug with jqgrid column titles character set not showing properly (#6159)</li>
+  <li>Fixed missing variable definition in check_abs_path() function (#5705)</li>
+  <li>Fixed bug whereby non-admin coaches can't see the details of an exam in a session (#6160)</li>
+</ul>
+<h3>Stylesheets and theming</h3>
+<ul>
+  <li>Updated Chamilo logo in default styles</li>
 </ul>
 <h3>Web services</h3>
 <ul>
@@ -379,6 +509,7 @@
   <li>Added session-box-text and session-item elements to improve styling</li>
   <li>Modified #main_content to #top_main_content to avoid double #main_content id on the same page</li>
 </ul>
+  
 
 
 <h1>Chamilo 1.9.2 - Hanga Roa, 27th of September, 2012</h1>
@@ -476,6 +607,7 @@
   <li>Social network: An user could not modify its own official code, even if configured to be possible (#5538)</li>
 </ul>
 
+
 <h1>Chamilo 1.9.0 - Vogüé, 31st of July, 2012</h1>
 
 <h3>Release notes - summary</h3>
@@ -536,7 +668,7 @@ This version of Chamilo includes a few new features.
   <li>Assignments: The teacher can now download all files from a specific assignment in one Zip (#4687)</li>
   <li>Documents: Added Flash(TM) webcam photoboot, whereby teachers (or students through groups) can take pictures from their webcam, wich get uploaded to the documents tool directly (#4856) (enable through admin settings)</li>
   <li>Plugins: Added plugin for School Server of OLPC Perú project (Squid proxy filtering from course) (#4925)</li>
-  <li>Exerciss: Added new type of questions that automate the repartition of score between available answers (#5012)</li>
+  <li>Exercises: Added new type of questions that automate the repartition of score between available answers (#5012)</li>
   <li>Exercises: Time counter now changes color at 3, then 1 minute to increase awareness of student, and appears nicely in all-questions-on-one-page exercises (#5043, #5267)</li>
   <li>System: The stats collection of Chamilo.org is now automatic. If you want to disable this feature, edit admin/index.php and look for fsockopen() (#5104)</li>
   <li>Global: Improvements for iPad(TM) and iPhone(TM) by disabling auto-capitalization (#5116)</li>

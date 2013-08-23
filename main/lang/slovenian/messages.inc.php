@@ -36,5 +36,9 @@ $WriteAMessage = "Sestavi sporočilo";
 $AlreadyReadMessage = "Sporočilo je že bilo prebrano";
 $UnReadMessage = "Neprebrana sporočila";
 $MessageSent = "Sporočilo je bilo poslano";
+$MailMarkSelectedAsUnread = "Označi kot neprebrano";
+$MailMarkSelectedAsRead = "Označi kot prebrano";
 $YouShouldWriteAMessage = "Napisati morate sporočilo ...";
+$SelectedMessagesUnRead = "Izbrana sporočila so bila označena kot neprebrana";
+$SelectedMessagesRead = "Izbrana sporočila so bila označena kot prebrana";
 ?>

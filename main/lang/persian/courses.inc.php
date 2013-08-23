@@ -84,5 +84,6 @@ $Collapse = "بستن";
 $CourseDetails = "توضیحات درس";
 $GroupPendingInvitations = "دعوتنامه های معلق گروه";
 $Compose = "ارسال پیام";
+$EnrollToCourseXSuccessful = "شما در این درس ثبت نام شده اید: %s";
 $ThereAreNoCoursesInThisCategory = "هیچ درسی در این مرحله از دسته بندی وجود ندارد";
 ?>

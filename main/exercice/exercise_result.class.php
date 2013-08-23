@@ -90,6 +90,7 @@ class ExerciseResult
 		$TBL_TRACK_EXERCISES    	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 		$TBL_TRACK_HOTPOTATOES	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
         $TBL_TRACK_ATTEMPT_RECORDING = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+        $TBL_TABLE_LP_MAIN = Database::get_course_table(TABLE_LP_MAIN);
 
     	$cid             = api_get_course_id();
         $course_id       = api_get_course_int_id();
@@ -115,8 +116,10 @@ class ExerciseResult
                         steps_counter as exstep,
                         exe_user_id as excruid,
                         te.exe_duration as duration
-                FROM $TBL_EXERCISES  AS ce INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.iid) INNER JOIN
-                     $TBL_USER  AS user ON (user.user_id = exe_user_id)
+                FROM $TBL_EXERCISES  AS ce 
+                INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.iid) 
+                INNER JOIN $TBL_USER  AS user ON (user.user_id = exe_user_id)
+                LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm ON tlm.id = te.orig_lp_id AND tlm.c_id = ce.c_id
                 WHERE   ce.c_id = $course_id AND
                         te.status != 'incomplete' AND
                         te.c_id = '" . $course_id . "' $user_id_and $session_id_and AND
@@ -149,9 +152,13 @@ class ExerciseResult
                     steps_counter as exstep,
                     exe_user_id as excruid,
                     te.exe_duration as duration,
-                    ce.results_disabled as exdisabled
-                        FROM $TBL_EXERCISES  AS ce INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.iid)
-                        INNER JOIN $TBL_USER  AS user ON (user.user_id = exe_user_id)
+                    ce.results_disabled as exdisabled,
+                    te.orig_lp_id as orig_lp_id,
+                    tlm.name as lp_name
+                    FROM $TBL_EXERCISES  AS ce 
+                    INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.id) 
+                    INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
+                    LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm ON tlm.id = te.orig_lp_id AND tlm.c_id = ce.c_id
                         WHERE   ce.c_id = $course_id AND
                                 te.status != 'incomplete' AND
                                 te.c_id ='" . $course_id . "'  $user_id_and $session_id_and AND
@@ -161,10 +168,10 @@ class ExerciseResult
                         ORDER BY userpart2, te.c_id ASC, ce.title ASC, te.exe_date DESC";
 
             $hpsql = "SELECT '', exe_name, exe_result , exe_weighting, exe_date
-                        FROM $TBL_TRACK_HOTPOTATOES
-                        WHERE   exe_user_id = '" . $user_id . "' AND
+                            FROM $TBL_TRACK_HOTPOTATOES
+                            WHERE   exe_user_id = '" . $user_id . "' AND
                                 c_id = '" . $course_id . "' AND
-                                tth.exe_name = '$hotpotato_name'
+                                    tth.exe_name = '$hotpotato_name'
                         ORDER BY c_id ASC, exe_date DESC";
 		}
 
@@ -180,7 +187,6 @@ class ExerciseResult
 	    while ($rowx = Database::fetch_array($resx,'ASSOC')) {
             $hpresults[] = $rowx;
 		}
-
         $filter_by_not_revised = false;
         $filter_by_revised = false;
 
@@ -233,6 +239,8 @@ class ExerciseResult
 				$return[$i]['result']  = $results[$i]['exresult'];
 				$return[$i]['max']     = $results[$i]['exweight'];
                 $return[$i]['status']  = $revised ? get_lang('Validated') : get_lang('NotValidated');
+                $return[$i]['lp_id'] = $results[$i]['orig_lp_id'];
+                $return[$i]['lp_name'] = $results[$i]['lp_name'];
 			}
 		}
 
@@ -312,6 +320,7 @@ class ExerciseResult
 		$data .= get_lang('Score').';';
 		$data .= get_lang('Total').';';
         $data .= get_lang('Status').';';
+        $data .= get_lang('ToolLearnpath').';';
 		$data .= "\n";
 
 		//results
@@ -343,6 +352,7 @@ class ExerciseResult
 			$data .= str_replace("\r\n",'  ',$row['result']).';';
 			$data .= str_replace("\r\n",'  ',$row['max']).';';
             $data .= str_replace("\r\n",'  ',$row['status']).';';
+            $data .= str_replace("\r\n",'  ',$row['lp_name']).';';
 			$data .= "\n";
 		}
 
@@ -416,7 +426,7 @@ class ExerciseResult
 		}
 	    $worksheet->write($line,$column,get_lang('Groups'));
 	    $column++;
-
+        
 		if ($export_user_fields) {
 			//show user fields section with a big th colspan that spans over all fields
 			$extra_user_fields = UserManager::get_extra_fields(0,1000,5,'ASC',false, 1);
@@ -441,13 +451,14 @@ class ExerciseResult
 		$worksheet->write($line,$column, get_lang('Total'));
 		$column++;
         $worksheet->write($line,$column, get_lang('Status'));
+		$column++;
+        $worksheet->write($line,$column, get_lang('ToolLearnpath'));
 		$line++;
 
 		foreach ($this->results as $row) {
 			$column = 0;
 
             if ($with_column_user) {
-
                 if (api_is_western_name_order()) {
                     $worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset));
                     $column++;
@@ -465,7 +476,7 @@ class ExerciseResult
 
             $worksheet->write($line,$column,api_html_entity_decode(strip_tags(implode(", ", GroupManager :: get_user_group_name($row['user_id']))), ENT_QUOTES, $charset));
             $column++;
-
+            
 			if ($export_user_fields) {
 				//show user fields data, if any, for this user
 				$user_fields_values = UserManager::get_extra_user_data($row['user_id'],false,false, false, true);
@@ -488,6 +499,8 @@ class ExerciseResult
 			$worksheet->write($line,$column,$row['max']);
 			$column++;
             $worksheet->write($line,$column,$row['status']);
+			$column++;
+            $worksheet->write($line,$column,$row['lp_name']);
 			$line++;
 		}
 		//output the results

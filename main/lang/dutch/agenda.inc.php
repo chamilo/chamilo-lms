@@ -75,6 +75,7 @@ $AgendaSortChronologicallyDown = "Aflopend";
 $ItemForUserSelection = "Selecteer gebruikers";
 $IsNotiCalFormatFile = "Dit bestand is geen iCal bestand.";
 $RepeatEvent = "Herhaal gebeurtenis";
+$AllDay = "Hele dag";
 $SessionCalendar = "Sessie agenda";
 $RepeatDate = "Herhaal datum";
 $EndDateMustBeMoreThanStartDate = "De einddatum moet na de begindatum liggen";

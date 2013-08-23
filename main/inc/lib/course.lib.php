@@ -4916,4 +4916,50 @@ class CourseManager
         return $settings;
     }
 
+
+    function updateTeachers($course_code, $teachers)
+    {
+        if (empty($teachers)) {
+            return false;
+        }
+        if (!is_array($teachers)) {
+            $teachers = array($teachers);
+        }
+
+        $course_user_table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
+        // Delete only teacher relations that doesn't match the selected teachers
+        $cond = null;
+        if (count($teachers)>0) {
+            foreach($teachers as $key) {
+                $cond.= " AND user_id <> '".$key."'";
+            }
+        }
+        $sql = 'DELETE FROM '.$course_user_table.' WHERE course_code="'.Database::escape_string($course_code).'" AND status="1"'.$cond;
+        Database::query($sql);
+
+        if (count($teachers) > 0) {
+            foreach ($teachers as $key) {
+
+                //We check if the teacher is already subscribed in this course
+                $sql_select_teacher = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$key.'" AND course_code = "'.$course_code.'" ';
+                $result = Database::query($sql_select_teacher);
+
+                if (Database::num_rows($result) == 1) {
+                    $sql = 'UPDATE '.$course_user_table.' SET status = "1" WHERE course_code = "'.$course_code.'" AND user_id = "'.$key.'"  ';
+                } else {
+                    $sql = "INSERT INTO ".$course_user_table . " SET
+                        course_code = '".Database::escape_string($course_code). "',
+                        user_id = '".$key . "',
+                        status = '1',
+                        role = '',
+                        tutor_id='0',
+                        sort='0',
+                        user_course_cat='0'";
+                }
+                Database::query($sql);
+            }
+        }
+    }
+
 } //end class CourseManager

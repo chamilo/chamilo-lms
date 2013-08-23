@@ -585,7 +585,7 @@ class SocialManager extends UserManager {
                        // Do something?
                     if ($user_id != api_get_user_id()) {
                         if ($current_user_info['user_is_online_in_chat'] == 1) {
-                            $message = Security::remove_XSS(sprintf(get_lang("YouHaveToAddXAsAFriendFirst", $user_name)));
+                            $message = Security::remove_XSS(sprintf(get_lang("YouHaveToAddXAsAFriendFirst"), $user_name));
                             $options = array('onclick' => "javascript:chatNotYetWith('".$message."')");
                             $chat_icon = $user_info['user_is_online_in_chat'] ? Display::return_icon('online.png', get_lang('Online')) : Display::return_icon('offline.png', get_lang('Offline'));
                             $html .= Display::tag('li', Display::url($chat_icon.'&nbsp;&nbsp;'.get_lang('Chat'), 'javascript:void(0);', $options));

@@ -12,6 +12,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
+
 $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
 $course_code = isset($_GET['course_code']) ? $_GET['course_code'] : $_POST['code'];
 
@@ -48,15 +49,17 @@ if (api_is_multiple_url_enabled()) {
 			INNER JOIN $access_url_rel_user_table url_rel_user
 			ON (u.user_id=url_rel_user.user_id) WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status=1".$order_clause;
 } else {
+	
 	$sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status='1'".$order_clause;
 }
 
 $res = Database::query($sql);
 $teachers = array();
 
+
 $platform_teachers[0] = '-- '.get_lang('NoManager').' --';
 while ($obj = Database::fetch_object($res)) {
-
+    
 	if (!array_key_exists($obj->user_id,$course_teachers)) {
 		$teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
 	}
@@ -176,7 +179,6 @@ $(function() {
     '.$extra['jquery_ready_content'].'
 });
 </script>';
-
 $form->addElement('style_submit_button', 'button', get_lang('ModifyCourseInfo'),'onclick="valide()"; class="save"');
 
 // Set some default values
@@ -216,12 +218,12 @@ if ($form->validate()) {
 	} else {
         header('Location: course_list.php');
         exit;
-	}
+    }
 }
-
 Display::display_header($tool_name);
 
 echo "<script>
+
 function valide() {
 	var options = document.getElementById('course_teachers').options;
 	for (i = 0 ; i<options.length ; i++) {

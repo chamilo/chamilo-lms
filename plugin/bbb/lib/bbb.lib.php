@@ -118,7 +118,9 @@ class bbb {
             $welcome_msg        = isset($params['welcome_msg']) ? $params['welcome_msg'] : null;
             $record             = isset($params['record']) && $params['record'] ? 'true' : 'false';
             $duration           = isset($params['duration']) ? intval($params['duration']) : 0;
-            $duration           = 30;
+            // This setting currently limits the maximum conference duration,
+            // to avoid llingering sessions on the videoconference server #6261
+            $duration           = 300;
 
             $bbb_params = array(
                 'meetingId' => $id, 					// REQUIRED

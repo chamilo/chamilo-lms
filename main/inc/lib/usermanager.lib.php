@@ -4252,7 +4252,4 @@ class UserManager
         }
         return $users;
     }
-
-
-
 }

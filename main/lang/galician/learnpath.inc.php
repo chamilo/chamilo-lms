@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ViewModeImpress = "Visualización actual: Impress";
 $NewForumCreated = "Creouse o novo foro";
 $NewThreadCreated = "Creouse o novo tema no foro";
 $AddHotpotatoes = "Importar Hotpotatoes";

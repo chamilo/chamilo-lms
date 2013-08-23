@@ -3,6 +3,12 @@
 <script>
 $(function() {
     //$("#settings").tabs();
+    $.ajax({    
+        url:'{{web_admin_ajax_url}}?a=version',
+        success:function(version){
+            $(".admin-block-version").html(version);
+        } 
+    });
 });
 </script>
 <div id="settings">

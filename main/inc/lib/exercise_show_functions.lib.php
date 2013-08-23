@@ -24,15 +24,17 @@ class ExerciseShowFunctions {
 	 * @param int       Question ID
 	 * @return void
 	 */
-	static function display_fill_in_blanks_answer($answer,$id,$questionId) {
-        global $feedback_type;
+	static function display_fill_in_blanks_answer($feedback_type, $answer, $id, $questionId)
+    {
         if (empty($id)) {
-            echo '<tr><td>'. nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)).'</td></tr>';
+            echo '<tr><td>'. (Security::remove_XSS($answer)).'</td></tr>';
         } else {
 		?>
 			<tr>
                 <td>
-                    <?php echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)); ?>
+                    <?php
+                    echo (Security::remove_XSS($answer));
+                    ?>
                 </td>
 
 			<?php
@@ -55,9 +57,7 @@ class ExerciseShowFunctions {
 	 * @param int       Question ID
 	 * @return void
 	 */
-	static function display_free_answer($answer, $exe_id, $questionId, $questionScore = null) {
-        global $feedback_type;
-
+	static function display_free_answer($feedback_type, $answer, $exe_id, $questionId, $questionScore = null) {
         $comments = get_comments($exe_id, $questionId);
 
         if (!empty($answer)) {
@@ -76,41 +76,38 @@ class ExerciseShowFunctions {
         }
 	}
 
-    static function display_oral_expression_answer($answer, $id, $questionId, $nano = null)
-    {
-        global $feedback_type;
+	static function display_oral_expression_answer($feedback_type, $answer, $id, $questionId, $nano = null) {
+		if (isset($nano)) {
+			echo $nano->show_audio_file();
+		}
 
-        if (isset($nano)) {
-            echo $nano->show_audio_file();
-        }
+		if (empty($id)) {
+			echo '<tr>';
+			echo Display::tag('td',nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)), array('width'=>'55%'));
+			echo '</tr>';
+			if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+				echo '<tr>';
+				echo Display::tag('td',get_lang('notCorrectedYet'), array('width'=>'45%'));
+				echo '</tr>';
+			} else {
+				echo '<tr><td>&nbsp;</td></tr>';
+			}
+		} else {
+			echo '<tr>';
+			echo '<td>';
+			if (!empty($answer)) {
+				echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY));
+			}
+			echo '</td>';
 
-        if (empty($id)) {
-            echo '<tr>';
-            echo Display::tag('td',nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)), array('width'=>'55%'));
-            echo '</tr>';
-            if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
-                echo '<tr>';
-                echo Display::tag('td',get_lang('notCorrectedYet'), array('width'=>'45%'));
-                echo '</tr>';
-            } else {
-                echo '<tr><td>&nbsp;</td></tr>';
-            }
-        } else {
-            echo '<tr>';
-            echo '<td>';
-            if (!empty($answer)) {
-                echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY));
-            }
-            echo '</td>';
-
-            if (!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
-                echo '<td>';
-                $comm = get_comments($id,$questionId);
-                echo '</td>';
-            }
-            echo '</tr>';
-        }
-    }
+			if (!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+				echo '<td>';
+				$comm = get_comments($id,$questionId);
+				echo '</td>';
+			}
+			echo '</tr>';
+		}
+	}
 
 	/**
 	 * Displays the answer to a hotspot question
@@ -120,9 +117,10 @@ class ExerciseShowFunctions {
 	 * @param string $studentChoice
 	 * @param string $answerComment
 	 */
-	static function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment) {
-		global $feedback_type;
-		$hotspot_colors = array("", // $i starts from 1 on next loop (ugly fix)
+	static function display_hotspot_answer($feedback_type, $answerId, $answer, $studentChoice, $answerComment) {
+
+		$hotspot_colors = array(
+            "", // $i starts from 1 on next loop (ugly fix)
             "#4271B5",
             "#FE8E16",
             "#45C7F0",
@@ -158,9 +156,9 @@ class ExerciseShowFunctions {
 			<td valign="top" align="left" >
 				<?php
                 if ($studentChoice) {
-                    echo '<span style="font-weight: bold; color: #008000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
+                    echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
                 } else {
-                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
+                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
                 }
 
 				?>
@@ -186,24 +184,16 @@ class ExerciseShowFunctions {
 	 * @param boolean Whether to show the answer comment or not
 	 * @return void
 	 */
-	static function display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
-		global $feedback_type;
-        // radio_on.gif/radio_off.gif
-
-        $imageType = (in_array($answerType, array(UNIQUE_ANSWER,UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION))) ? 'radio' : 'checkbox';
-        $image = $imageType.($studentChoice ? '_on' : '_off');
-        $image .= '.gif';
-
-        $imageAnswer = $imageType.($answerCorrect ? '_on' : '_off');
-        $imageAnswer .= '.gif';
-
+	static function display_unique_or_multiple_answer($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
 		?>
 		<tr>
 		<td width="5%">
-            <?php Display::display_icon($image); ?>
+			<img src="../img/<?php echo (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION))) ? 'radio':'checkbox'; echo $studentChoice?'_on':'_off'; ?>.gif"
+			border="0" alt="" />
 		</td>
 		<td width="5%">
-            <?php Display::display_icon($imageAnswer); ?>
+			<img src="../img/<?php echo (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION))) ? 'radio':'checkbox'; echo $answerCorrect?'_on':'_off'; ?>.gif"
+			border="0" alt=" " />
 		</td>
 		<td width="40%">
 			<?php
@@ -217,18 +207,18 @@ class ExerciseShowFunctions {
             if ($studentChoice) {
 				if ($answerCorrect) {
                     $color = 'green';
-					//echo '<span style="font-weight: bold; color: #008000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
+					//echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
 				} else {
                     $color = 'black';
-                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
+                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
 				}
-                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br(Text::make_clickable($answerComment)).'</span>';
+                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br(make_clickable($answerComment)).'</span>';
 
 			} else {
 				if ($answerCorrect) {
-					//echo '<span style="font-weight: bold; color: #000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
+					//echo '<span style="font-weight: bold; color: #000;">'.nl2br(make_clickable($answerComment)).'</span>';
 				} else {
-                    //echo '<span style="font-weight: normal; color: #000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
+                    //echo '<span style="font-weight: normal; color: #000;">'.nl2br(make_clickable($answerComment)).'</span>';
 				}
 			}
 			?>
@@ -245,65 +235,6 @@ class ExerciseShowFunctions {
 		<?php
 	}
 
-    static function display_unique_image_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
-        global $feedback_type;
-
-        $imageType = (in_array($answerType, array(UNIQUE_ANSWER,UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION))) ? 'radio' : 'checkbox';
-        $image = $imageType.($studentChoice ? '_on' : '_off');
-        $image .= '.gif';
-
-        $imageAnswer = $imageType.($answerCorrect ? '_on' : '_off');
-        $imageAnswer .= '.gif';
-
-        ?>
-    <tr>
-        <tr>
-		<td width="5%">
-            <?php Display::display_icon($image); ?>
-		</td>
-		<td width="5%">
-            <?php Display::display_icon($imageAnswer); ?>
-		</td>
-        <td width="40%">
-            <?php
-            echo $answer;
-            ?>
-        </td>
-
-        <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
-        <td width="20%">
-            <?php
-            if ($studentChoice) {
-                if ($answerCorrect) {
-                    $color = 'green';
-                    //echo '<span style="font-weight: bold; color: #008000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
-                } else {
-                    $color = 'black';
-                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
-                }
-                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br(Text::make_clickable($answerComment)).'</span>';
-
-            } else {
-                if ($answerCorrect) {
-                    //echo '<span style="font-weight: bold; color: #000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
-                } else {
-                    //echo '<span style="font-weight: normal; color: #000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
-                }
-            }
-            ?>
-        </td>
-        <?php
-        if ($ans==1) {
-            $comm = get_comments($id,$questionId);
-        }
-        ?>
-        <?php } else { ?>
-        <td>&nbsp;</td>
-        <?php } ?>
-    </tr>
-        <?php
-    }
-
     /**
      * Display the answers to a multiple choice question
      *
@@ -317,8 +248,7 @@ class ExerciseShowFunctions {
      * @param boolean Whether to show the answer comment or not
      * @return void
      */
-    static function display_multiple_answer_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
-        global $feedback_type;
+    static function display_multiple_answer_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
         ?>
         <tr>
         <td width="5%">
@@ -344,6 +274,7 @@ class ExerciseShowFunctions {
         } else {
             echo '-';
         }
+
         ?>
         </td>
         <td width="40%">
@@ -358,7 +289,7 @@ class ExerciseShowFunctions {
                 if ($studentChoice == $answerCorrect) {
                     $color = "green";
                 }
-                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br(Text::make_clickable($answerComment)).'</span>';
+                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br(make_clickable($answerComment)).'</span>';
             }
             ?>
         </td>
@@ -387,8 +318,7 @@ class ExerciseShowFunctions {
      * @param boolean Whether to show the answer comment or not
      * @return void
      */
-    static function display_multiple_answer_combination_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
-        global $feedback_type;
+    static function display_multiple_answer_combination_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
         ?>
         <tr>
         <td width="5%">
@@ -428,15 +358,15 @@ class ExerciseShowFunctions {
                 if ($studentChoice == $answerCorrect) {
                     $color = "green";
                 }
-                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br(Text::make_clickable($answerComment)).'</span>';
+                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br(make_clickable($answerComment)).'</span>';
             }
             if ($studentChoice == 2 || $studentChoice == '') {
-            	//echo '<span style="font-weight: bold; color: #000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
+            	//echo '<span style="font-weight: bold; color: #000;">'.nl2br(make_clickable($answerComment)).'</span>';
             } else {
 				if ($studentChoice == $answerCorrect) {
-	            	//echo '<span style="font-weight: bold; color: #008000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
+	            	//echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
 				} else {
-                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
+                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
 				}
             }
             ?>

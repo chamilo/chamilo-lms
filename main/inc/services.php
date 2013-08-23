@@ -124,7 +124,13 @@ $app['security.role_hierarchy'] = array(
     'ROLE_QUESTION_MANAGER' => array('ROLE_STUDENT', 'ROLE_QUESTION_MANAGER'),
     'ROLE_SESSION_MANAGER' => array('ROLE_STUDENT', 'ROLE_SESSION_MANAGER'),
     'ROLE_STUDENT' => array('ROLE_STUDENT'),
-    'ROLE_ANONYMOUS' => array('ROLE_ANONYMOUS')
+    'ROLE_ANONYMOUS' => array('ROLE_ANONYMOUS'),
+
+    // Ministerio
+    'ROLE_JURY_PRESIDENT' => array('ROLE_JURY_PRESIDENT', 'ROLE_JURY_MEMBER', 'ROLE_JURY_SUBSTITUTE'),
+    'ROLE_JURY_SUBSTITUTE' => array('ROLE_JURY_SUBSTITUTE', 'ROLE_JURY_MEMBER'),
+    'ROLE_JURY_MEMBER' => array('ROLE_JURY_MEMBER'),
+    'ROLE_DIRECTOR' => array('ROLE_DIRECTOR')
 );
 
 // Role rules
@@ -138,7 +144,17 @@ $app['security.access_rules'] = array(
     array('^/admin/questionmanager', 'ROLE_QUESTION_MANAGER'),
     array('^/main/auth/inscription.php', 'IS_AUTHENTICATED_ANONYMOUSLY'),
     array('^/main/auth/lostPassword.php', 'IS_AUTHENTICATED_ANONYMOUSLY'),
-    array('^/main/.*', array('ROLE_STUDENT'))
+    array('^/main/.*', array('ROLE_STUDENT')),
+
+    // Ministerio routes
+
+    array('^/admin/director', 'ROLE_DIRECTOR'),
+    array('^/tool/curriculum/category', 'ROLE_ADMIN'),
+    array('^/tool/curriculum/item', 'ROLE_ADMIN'),
+    array('^/tool/.*', array('ROLE_ADMIN','ROLE_TEACHER')),
+    array('^/admin/jury_president', 'ROLE_JURY_PRESIDENT'),
+    array('^/admin/jury_member', 'ROLE_JURY_MEMBER'), //? jury subsitute??
+
     //array('^.*$', 'ROLE_USER'),
 );
 
@@ -455,7 +471,6 @@ if ($app['assetic.enabled']) {
     );
 }
 
-
 // Gaufrette service provider (to manage files/dirs) (not used yet)
 /*
 use Bt51\Silex\Provider\GaufretteServiceProvider\GaufretteServiceProvider;
@@ -640,3 +655,54 @@ $app['model_ajax.controller'] = $app->share(
         return new ChamiloLMS\Controller\ModelAjaxController();
     }
 );
+
+$app['curriculum_category.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumCategoryController($app);
+    }
+);
+
+$app['curriculum_item.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumItemController($app);
+    }
+);
+
+$app['curriculum_user.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumUserController($app);
+    }
+);
+
+// Ministerio
+
+$app['branch.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\Administrator\BranchController($app);
+    }
+);
+
+$app['branch_director.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\Director\BranchDirectorController($app);
+    }
+);
+
+$app['jury.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\Administrator\JuryController($app);
+    }
+);
+
+$app['jury_president.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\JuryPresident\JuryPresidentController($app);
+    }
+);
+
+$app['jury_member.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\JuryMember\JuryMemberController($app);
+    }
+);
+

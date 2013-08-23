@@ -78,7 +78,6 @@ $langUserHasPermissionNot = "L'usuariu nun tien permisos";
 $langUserHasPermission = "L'usuariu tien permisos";
 $langLegend = "Lleenda";
 $langUserHasPermissionByRoleGroup = "L'usuariu tien los permisos del so grupu";
-$EditPost = "Editar artículu";
 $AddBlog = "Crear un blog";
 $EditBlog = "Editar títulu y sotítulu";
 $DeleteBlog = "Esborrar esti blog";

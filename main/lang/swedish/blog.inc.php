@@ -77,7 +77,6 @@ $langUserHasPermissionNot = "Användaren har inga rättigheter";
 $langUserHasPermission = "Användaren har rättigheter";
 $langLegend = "Förklaring";
 $langUserHasPermissionByRoleGroup = "Användare har sin grupps rättigheter";
-$EditPost = "Ändra i inlägg";
 $AddBlog = "Skapa ny blogg";
 $EditBlog = "Ändra rubrik eller underrubrik";
 $DeleteBlog = "Ta bort den här bloggen";

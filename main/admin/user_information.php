@@ -77,7 +77,7 @@ $tbl_user                   = Database :: get_main_table(TABLE_MAIN_USER);
 
 $user_id = $user['user_id'];
 
-$sessions = SessionManager::get_sessions_by_user($user_id);
+$sessions = SessionManager::get_sessions_by_user($user_id, true);
 
 $personal_course_list = array();
 if (count($sessions) > 0) {
@@ -108,7 +108,9 @@ if (count($sessions) > 0) {
             $row[] = $tools;
             $data[] = $row;
         }
-        echo Display::page_subheader($session_item['session_name']);
+        $dates = array_filter(array($session_item['date_start'], $session_item['date_end']));
+        echo Display::page_subheader($session_item['session_name'], ' '.implode(' - ', $dates));
+
         Display :: display_sortable_table($header, $data, array (), array(), array ('user_id' => intval($_GET['user_id'])));
     }
 } else {

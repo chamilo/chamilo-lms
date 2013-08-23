@@ -54,7 +54,7 @@ if ($_configuration['multiple_access_urls']) {
 			INNER JOIN $access_url_rel_user_table url_rel_user
 			ON (u.user_id=url_rel_user.user_id) WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status=1".$order_clause;
 } else {
-	
+
 	$sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status='1'".$order_clause;
 }
 
@@ -64,13 +64,13 @@ $teachers = array();
 
 $platform_teachers[0] = '-- '.get_lang('NoManager').' --';
 while ($obj = Database::fetch_object($res)) {
-    
+
 	if (!array_key_exists($obj->user_id,$course_teachers)) {
 		$teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
 	}
 
-	if ($course['tutor_name']==$course_teachers[$obj->user_id]) {
-		$course['tutor_name']=$obj->user_id;
+	if ($course['tutor_name'] == $course_teachers[$obj->user_id]) {
+		$course['tutor_name'] = $obj->user_id;
 	}
 	//We add in the array platform teachers
 	$platform_teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
@@ -170,22 +170,22 @@ $group[]= $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowe
 $form->addGroup($group,'', get_lang('Unsubscription'), '<br />');
 
 
-$form->addElement('text','disk_quota',array(get_lang('CourseQuota'), null, get_lang('MB')));
-$form->addRule('disk_quota', get_lang('ThisFieldIsRequired'),'required');
-$form->addRule('disk_quota',get_lang('ThisFieldShouldBeNumeric'),'numeric');
+$form->addElement('text', 'disk_quota', array(get_lang('CourseQuota'), null, get_lang('MB')));
+$form->addRule('disk_quota', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');
 
 $list_course_extra_field = CourseManager::get_course_extra_field_list($course_code);
 //@todo this is wrong
 foreach ($list_course_extra_field as $extra_field) {
-	switch ($extra_field['field_type']) {		
-		case CourseManager::COURSE_FIELD_TYPE_CHECKBOX:
-			$checked = (array_key_exists('extra_field_value', $extra_field) && $extra_field['extra_field_value'] == 1)? array('checked'=>'checked'): '';
-			$form->addElement('hidden', '_extra_'.$extra_field['field_variable'], 0);
-			$field_display_text=$extra_field['field_display_text'];
-			//$form->addElement('checkbox', 'extra_'.$extra_field['field_variable'], array(get_lang('SpecialCourse'), get_lang('AllUsersAreAutomaticallyRegistered')) , get_lang($extra_field['field_default_value']), $checked);
-			$form->addElement('checkbox', 'extra_'.$extra_field['field_variable'], array(null, get_lang('AllUsersAreAutomaticallyRegistered')) , get_lang('SpecialCourse'), $checked);
-			break;		
-	}
+    switch ($extra_field['field_type']) {
+        case CourseManager::COURSE_FIELD_TYPE_CHECKBOX:
+            $checked = (array_key_exists('extra_field_value', $extra_field) && $extra_field['extra_field_value'] == 1)? array('checked'=>'checked'): '';
+            $form->addElement('hidden', '_extra_'.$extra_field['field_variable'], 0);
+            $field_display_text=$extra_field['field_display_text'];
+            //$form->addElement('checkbox', 'extra_'.$extra_field['field_variable'], array(get_lang('SpecialCourse'), get_lang('AllUsersAreAutomaticallyRegistered')) , get_lang($extra_field['field_default_value']), $checked);
+            $form->addElement('checkbox', 'extra_'.$extra_field['field_variable'], array(null, get_lang('AllUsersAreAutomaticallyRegistered')) , get_lang('SpecialCourse'), $checked);
+            break;
+    }
 }
 $form->addElement('style_submit_button', 'button', get_lang('ModifyCourseInfo'),'onclick="valide()"; class="save"');
 
@@ -203,8 +203,8 @@ if ($form->validate()) {
 	$course = $form->getSubmitValues();
 	$dbName = $_POST['dbName'];
 	$course_code = $course['code'];
-	$visual_code = $course['visual_code'];	
-	$visual_code = generate_course_code($visual_code);   
+	$visual_code = $course['visual_code'];
+	$visual_code = generate_course_code($visual_code);
 
     // Check if the visual code is already used by *another* course
     $visual_code_is_used = false;
@@ -241,9 +241,9 @@ if ($form->validate()) {
 	$department_name = $course['department_name'];
 	$department_url = $course['department_url'];
 	$course_language = $course['course_language'];
-    
+
     $course['disk_quota'] = $course['disk_quota']*1024*1024;
-     
+
 	$disk_quota = $course['disk_quota'];
 	$visibility = $course['visibility'];
 	$subscribe = $course['subscribe'];
@@ -252,17 +252,17 @@ if ($form->validate()) {
 		$department_url = 'http://'.$department_url;
 	}
 	$sql = "UPDATE $course_table SET course_language='".Database::escape_string($course_language)."',
-								title='".Database::escape_string($title)."',
-								category_code='".Database::escape_string($category_code)."',
-								tutor_name='".Database::escape_string($tutor_name)."',
-								visual_code='".Database::escape_string($visual_code)."',
-								department_name='".Database::escape_string($department_name)."',
-								department_url='".Database::escape_string($department_url)."',
-								disk_quota='".Database::escape_string($disk_quota)."',
-								visibility = '".Database::escape_string($visibility)."',
-								subscribe = '".Database::escape_string($subscribe)."',
-								unsubscribe='".Database::escape_string($unsubscribe)."'
-							WHERE code='".Database::escape_string($course_code)."'";
+                title='".Database::escape_string($title)."',
+                category_code='".Database::escape_string($category_code)."',
+                tutor_name='".Database::escape_string($tutor_name)."',
+                visual_code='".Database::escape_string($visual_code)."',
+                department_name='".Database::escape_string($department_name)."',
+                department_url='".Database::escape_string($department_url)."',
+                disk_quota='".Database::escape_string($disk_quota)."',
+                visibility = '".Database::escape_string($visibility)."',
+                subscribe = '".Database::escape_string($subscribe)."',
+                unsubscribe='".Database::escape_string($unsubscribe)."'
+            WHERE code='".Database::escape_string($course_code)."'";
 	Database::query($sql);
 
 	//update the extra fields
@@ -272,36 +272,7 @@ if ($form->validate()) {
 		}
 	}
 
-	//Delete only teacher relations that doesn't match the selected teachers
-	$cond='';
-	if (count($teachers)>0) {
-		foreach($teachers as $key) $cond.=" AND user_id<>'".$key."'";
-	}
-	$sql='DELETE FROM '.$course_user_table.' WHERE course_code="'.Database::escape_string($course_code).'" AND status="1"'.$cond;
-	Database::query($sql);
-
-	if (count($teachers)>0) {
-		foreach ($teachers as $key) {
-
-			//We check if the teacher is already subscribed in this course
-			$sql_select_teacher = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$key.'" AND course_code = "'.$course_code.'" ';
-			$result = Database::query($sql_select_teacher);
-
-			if (Database::num_rows($result) == 1) {
-				$sql = 'UPDATE '.$course_user_table.' SET status = "1" WHERE course_code = "'.$course_code.'" AND user_id = "'.$key.'"  ';
-			} else {
-				$sql = "INSERT INTO ".$course_user_table . " SET
-					course_code = '".Database::escape_string($course_code). "',
-					user_id = '".$key . "',
-					status = '1',
-					role = '',
-					tutor_id='0',
-					sort='0',
-					user_course_cat='0'";
-			}
-			Database::query($sql);
-		}
-	}
+    CourseManager::updateTeachers($course_code, $teachers);
 
 	$sql = "INSERT IGNORE INTO ".$course_user_table . " SET
 				course_code = '".Database::escape_string($course_code). "',
@@ -312,18 +283,20 @@ if ($form->validate()) {
 				sort='0',
 				user_course_cat='0'";
 	Database::query($sql);
-	
+
 	$course_info = api_get_course_info($course_code);
 	$course_id = $course_info['real_id'];
 	$forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE);
+
 	$sql = "UPDATE ".$forum_config_table." SET default_lang='".Database::escape_string($course_language)."' WHERE c_id = $course_id ";
 	if ($visual_code_is_used) {
 	    header('Location: course_list.php?action=show_msg&warn='.urlencode($warn));
 	} else {
         header('Location: course_list.php');
 	}
-	exit ();
+	exit;
 }
+
 Display::display_header($tool_name);
 
 echo "<script>

@@ -78,7 +78,6 @@ $langUserHasPermissionNot = "用户没有权限";
 $langUserHasPermission = "用户有权限";
 $langLegend = "图例";
 $langUserHasPermissionByRoleGroup = "用户有群组的权限";
-$EditPost = "编辑一篇文章";
 $AddBlog = "创建新博客";
 $EditBlog = "编辑标题和子标题";
 $DeleteBlog = "删除博客";

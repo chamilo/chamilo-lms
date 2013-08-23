@@ -155,6 +155,8 @@ define('LOG_USER_DELETE',                       'user_deleted');
 define('LOG_USER_CREATE',                       'user_created');
 define('LOG_USER_ENABLE',                       'user_enable');
 define('LOG_USER_DISABLE',                      'user_disable');
+define('LOG_USER_FIELD_CREATE',			'user_field_created');
+define('LOG_USER_FIELD_DELETE',			'user_field_deleted');
 define('LOG_SESSION_CREATE',                    'session_created');
 define('LOG_SESSION_DELETE',                    'session_deleted');
 define('LOG_SESSION_CATEGORY_CREATE',           'session_category_created');
@@ -176,6 +178,7 @@ define('LOG_CAREER_DELETE',                     'career_deleted');
 define('LOG_COURSE_CODE',                       'course_code');
 define('LOG_USER_ID',                           'user_id');
 define('LOG_USER_OBJECT',                       'user_object');
+define('LOG_USER_FIELD_VARIABLE',		'user_field_variable');
 define('LOG_SESSION_ID',                        'session_id');
 define('LOG_SESSION_CATEGORY_ID',               'session_category_id');
 define('LOG_CONFIGURATION_SETTINGS_CATEGORY',   'settings_category');
@@ -294,6 +297,7 @@ define('LINK_FORUM_THREAD',			5);
 //define('LINK_WORK',6);
 define('LINK_ATTENDANCE',			7);
 define('LINK_SURVEY',				8);
+define('LINK_HOTPOTATOES',			9);
 
 //From display.lib.php
 
@@ -6550,4 +6554,37 @@ function api_get_user_blocked_by_captcha($username)
         return $data['captcha_blocked_until_date'];
     }
     return false;
+}
+
+
+/**
+ * Remove tags from HTML anf return the $in_number_char first non-HTML char
+ * Postfix the text with "..." if it has been truncated.
+ * @return string
+ * @author hubert borderiou
+ */
+function api_get_short_text_from_html($in_html, $in_number_char) {
+    $out_res = api_remove_tags_with_space($in_html, false);
+    $postfix = "...";
+    if (strlen($out_res) > $in_number_char) {
+        $out_res = substr($out_res, 0, $in_number_char).$postfix;
+    }
+    return $out_res;
+}
+
+/**
+ * Replace tags with a space in a text.
+ * If $in_double_quote_replace, replace " with '' (for HTML attribute purpose, for exemple)
+ * @return string
+ * @author hubert borderiou
+ */
+function api_remove_tags_with_space($in_html, $in_double_quote_replace = true) {
+    $out_res = $in_html;
+    if ($in_double_quote_replace) {
+        $out_res = str_replace('"', "''", $out_res);
+    }
+    // avoid text stuck together when tags are removed, adding a space after >
+    $out_res = str_replace (">", "> ", $out_res);
+    $out_res = strip_tags($out_res);
+    return $out_res;
 }

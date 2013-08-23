@@ -77,7 +77,6 @@ $langUserHasPermissionNot = "La uzanto ne havas la rajtojn.";
 $langUserHasPermission = "La uzanto havas la rajtojn";
 $langLegend = "Legendo";
 $langUserHasPermissionByRoleGroup = "La uzanto havas la rajtojn de sia grupo.";
-$EditPost = "Ŝanĝi artikolon";
 $AddBlog = "Fari novan blogon";
 $EditBlog = "Redakti titolon kaj subtitolon";
 $DeleteBlog = "Viŝi ĉi tiun blogon";

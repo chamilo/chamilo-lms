@@ -193,8 +193,7 @@ class UserManager
 
             // Add event to system log
             $user_id_manager = api_get_user_id();
-            $user_info = api_get_user_info($return);
-            event_system(LOG_USER_CREATE, LOG_USER_ID, $return, api_get_utc_datetime(), $user_id_manager, null, $user_info);
+            event_system(LOG_USER_CREATE, LOG_USER_ID, $return);
         } else {
             $return = false;
             return api_set_failure('error inserting in Database');
@@ -429,7 +428,11 @@ class UserManager
         $ids = implode(',', $ids);
 
         $sql = "UPDATE $table_user SET active = 0 WHERE user_id IN ($ids)";
-        return Database::query($sql);
+        $r = Database::query($sql);
+        if ($r !== false) {
+            event_system(LOG_USER_DISABLE,LOG_USER_ID,$ids);
+        }
+        return $r;
     }
 
     /**
@@ -455,7 +458,11 @@ class UserManager
         $ids = implode(',', $ids);
 
         $sql = "UPDATE $table_user SET active = 1 WHERE user_id IN ($ids)";
-        return Database::query($sql);
+        $r = Database::query($sql);
+        if ($r !== false) {
+            event_system(LOG_USER_ENABLE,LOG_USER_ID,$ids);
+        }
+        return $r;
     }
 
     /**
@@ -582,7 +589,7 @@ class UserManager
            } else {
                 $event_title = LOG_USER_DISABLE;
            }
-           event_system($event_title, LOG_USER_ID, $user_id, api_get_utc_datetime(), null, null);
+           event_system($event_title, LOG_USER_ID, $user_id);
         }
         if (is_array($extra) && count($extra) > 0) {
             $res = true;
@@ -631,7 +638,15 @@ class UserManager
         $user_id = intval($user_id);
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
         $sql = "UPDATE $table_user SET active = '$active' WHERE user_id = '$user_id';";
-        return Database::query($sql);
+        $r = Database::query($sql);
+        $ev = LOG_USER_DISABLE;
+        if ($active == 1) {
+            $ev = LOG_USER_ENABLE;
+        }
+        if ($r !== false) {
+            event_system($ev,LOG_USER_ID,$user_id);
+        }
+        return $r;
     }
 
     /**
@@ -1417,7 +1432,6 @@ class UserManager
             } else {
                 $sqli = "INSERT INTO $t_ufv (user_id,field_id,field_value,tms) ".
                     "VALUES ($user_id,".$rowuf['id'].",'$fvalues',FROM_UNIXTIME($tms))";
-                //error_log('UM::update_extra_field_value: '.$sqli);
                 $resi = Database::query($sqli);
                 return($resi ? true : false);
             }
@@ -1572,6 +1586,7 @@ class UserManager
         if ($result) {
             //echo "id returned";
             $return = Database::insert_id();
+            event_system(LOG_USER_FIELD_CREATE, LOG_USER_FIELD_VARIABLE, Database::escape_string($fieldvarname));
         } else {
             //echo "false - failed" ;
             return false;
@@ -2031,7 +2046,7 @@ class UserManager
      * @return array  list of statuses [session_category][session_id]
      * @todo ensure multiple access urls are managed correctly
      */
-    public static function get_sessions_by_category($user_id, $is_time_over = false)
+    public static function get_sessions_by_category($user_id, $is_time_over = false, $ignore_visibility_for_admins = false)
     {
         // Database Table Definitions
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
@@ -2059,25 +2074,27 @@ class UserManager
         }
 
         //ORDER BY session_category_id, date_start, date_end
-        $sql = "SELECT DISTINCT session.id,
-                                session.name,
-                                session.date_start,
-                                session.date_end,
-                                session_category_id,
-                                session_category.name as session_category_name,
-                                session_category.date_start session_category_date_start,
-                                session_category.date_end session_category_date_end,
-                                nb_days_access_before_beginning,
-                                nb_days_access_after_end
+        $sql = "SELECT DISTINCT
+                    session.id,
+                    session.name,
+                    session.date_start,
+                    session.date_end,
+                    session_category_id,
+                    session_category.name as session_category_name,
+                    session_category.date_start session_category_date_start,
+                    session_category.date_end session_category_date_end,
+                    nb_days_access_before_beginning,
+                    nb_days_access_after_end
 
-                              FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id)
-                                    INNER JOIN $tbl_session_course_user as session_rel_course_user ON (session_rel_course_user.id_session = session.id)
-                              WHERE (
-                                        session_rel_course_user.id_user = $user_id OR session.id_coach = $user_id
-                                    )  $condition_date_end
-                              ORDER BY session_category_name, name";
+              FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id)
+                    INNER JOIN $tbl_session_course_user as session_rel_course_user ON (session_rel_course_user.id_session = session.id)
+              WHERE (
+                        session_rel_course_user.id_user = $user_id OR session.id_coach = $user_id
+                    )  $condition_date_end
+              ORDER BY session_category_name, name";
 
         $result = Database::query($sql);
+
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
                 $categories[$row['session_category_id']]['session_category']['id'] = $row['session_category_id'];
@@ -2087,8 +2104,8 @@ class UserManager
 
                 $session_id = $row['id'];
 
-                //Checking session visibility
-                $visibility = api_get_session_visibility($session_id, null, false);
+                // Checking session visibility
+                $visibility = api_get_session_visibility($session_id, null, $ignore_visibility_for_admins);
 
                 switch ($visibility) {
                     case SESSION_VISIBLE_READ_ONLY:
@@ -2108,6 +2125,7 @@ class UserManager
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['courses'] = UserManager::get_courses_list_by_session($user_id, $row['id']);
             }
         }
+
         return $categories;
     }
 
@@ -3926,4 +3944,5 @@ EOF;
             Database::query($sql);
         }
     }
+
 }

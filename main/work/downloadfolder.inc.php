@@ -65,6 +65,7 @@ if (api_is_allowed_to_edit()) {
  			        work.parent_id = $work_id AND
  			        work.filetype = 'file' AND
  			        props.visibility<>'2' AND
+ 			        work.active = 1 AND
  			        work.post_group_id = $groupId
             ";
 

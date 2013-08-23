@@ -1836,7 +1836,7 @@ class SessionManager
         }
     }
 
-    static function get_session_by_course($course_code) {
+    public static function get_session_by_course($course_code) {
         $table_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $table_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $course_code = Database::escape_string($course_code);
@@ -1846,8 +1846,9 @@ class SessionManager
         return Database::store_result($result);
     }
 
-    static function get_sessions_by_user($user_id) {
-       $session_categories = UserManager::get_sessions_by_category($user_id);
+    public static function get_sessions_by_user($user_id, $ignore_visibility_for_admins = false)
+    {
+       $session_categories = UserManager::get_sessions_by_category($user_id, false, $ignore_visibility_for_admins);
        $session_array = array();
        if (!empty($session_categories)) {
            foreach ($session_categories as $category) {

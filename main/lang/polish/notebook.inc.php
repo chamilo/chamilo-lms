@@ -26,4 +26,10 @@ $ModifyNote = "Edytuj moją notatkę";
 $BackToNoteList = "Powrót do listy notatek";
 $NotebookManagement = "Zarządzanie notatnikiem";
 $BackToNotesList = "Powrót do listy notatek";
+$NotesSortedByTitleAsc = "Notatki posortowane rosnąco wg tytułu";
+$NotesSortedByTitleDESC = "Notatki posortowane malejąco wg tytułu";
+$NotesSortedByUpdateDateAsc = "Notatki posortowane rosnąco wg daty aktualizacji";
+$NotesSortedByUpdateDateDESC = "Notatki posortowane malejąco wg daty aktualizacji";
+$NotesSortedByCreationDateAsc = "Notatki posortowane rosnąco wg daty utworzenia";
+$NotesSortedByCreationDateDESC = "Notatki posortowane malejąco wg daty utworzenia";
 ?>

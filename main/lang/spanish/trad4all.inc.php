@@ -2,6 +2,25 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$YourPasswordCannotBeTheSameAsYourUsername = "Su contraseña no puede ser igual a su nombre de usuario";
+$CheckEasyPasswords = "Identificar contraseñas demasiado simples";
+$PasswordVeryStrong = "Muy fuerte";
+$PasswordStrong = "Fuerte";
+$PasswordMedium = "Moderada";
+$PasswordNormal = "Normal";
+$PasswordWeak = "Débil";
+$PasswordIsTooShort = "Contraseña demasiado corta";
+$BadCredentials = "Identificación no reconocida";
+$BreadcrumbNavigationDisplayComment = "Mostrar o esconder la navegación en migajas de pan, que aparece normalmente bajo la barra horizontal de pestañas del menú principal. Es áltamente recomendado dejar esta barra de navegación visible, ya que ayuda los alumnos a navegar en el sistema, identificar su ubicación actual y regresar a etapas anteriores de su navegación. En pocos casos, puede generarse la necesidad de esconder esta barra (por ejemplo en el caso de un sistema de exámenes) para evitar que los usuarios naveguen erróneamente a páginas que los podría confundir.";
+$BreadcrumbNavigationDisplayTitle = "Mostrar la navegación en migajas de pan";
+$AllowurlfopenIsSetToOff = "El parámetro de PHP \"allow_url_fopen\" está desactivado. Esto impide que el mecanismo de registro funcione correctamente. Este parámetro puede cambiarse en el archivo de configuración de PHP (php.ini) o en la configuración del Virtual Host de Apache, mediante la directiva php_admin_value";
+$ImpossibleToContactVersionServerPleaseTryAgain = "Imposible de conectarse al servidor de versiones. Por favor inténtelo de nuevo más tarde 	Imposible de conectarse al servidor de versiones. Por favor inténtelo de nuevo más tarde";
+$VersionUpToDate = "Su versión está actualizada";
+$LatestVersionIs = "La última versión es";
+$YourVersionNotUpToDate = "Su versión está actualizada";
+$Hotpotatoes = "Hotpotatoes";
+$CourseCategoriesAreGlobal = "Las categorías de cursos son globales en la configuración de múltiples portales, pero los cambios son permitidos solamente en la sesión administrativa del portal principal.";
+$UserIsNotATeacher = "El usuario no es un profesor.";
 $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Este item no es visible para un estudiante pero podrá acceder a él como profesor";
 $DeleteAllAttendances = "Eliminar todas las asistencias creadas";
 $Unsubscribe = "Dar de baja";
@@ -841,6 +860,7 @@ $AssignUsers = "Asignar usuarios";
 $AssignCourses = "Asignar cursos";
 $AssignSessions = "Asignar sesiones de formación";
 $Timezone = "Zona horaria";
+$EmptyHeaderLine = "Existen líneas en blanco al inicio del fichero seleccionado";
 $FilterByUser = "Filtrar por usuario";
 $FilterByGroup = "Filtrar por grupo";
 $FilterAll = "Filtro: Todos";

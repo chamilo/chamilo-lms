@@ -24,7 +24,7 @@ require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.
  * @param	integer	Whether to show upload form option
  * @return	void
  */
-function display_action_links($id, $cur_dir_path, $show_tool_options, $display_upload_link, $action)
+function display_action_links($id, $cur_dir_path, $action)
 {
 	global $gradebook;
 
@@ -40,7 +40,7 @@ function display_action_links($id, $cur_dir_path, $show_tool_options, $display_u
         $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&id='.$my_back_id.'">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';
     }
 
-    if ($show_tool_options && api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
+    if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
         // Create dir
         if (empty($id)) {
             $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=create_dir&origin='.$origin.'&gradebook='.$gradebook.'">';
@@ -247,7 +247,7 @@ function get_work_data_by_id($id) {
 	$result = Database::query($sql);
 	$return = array();
 	if (Database::num_rows($result)) {
-		$return = Database::fetch_array($result,'ASSOC');
+		$return = Database::fetch_array($result, 'ASSOC');
 	}
 	return $return;
 }
@@ -415,6 +415,7 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 	global $gradebook;
 
     $_course = api_get_course_info();
+
 	// Database table names
 	$work_table      = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$iprop_table     = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -454,7 +455,7 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
         $qualification_exists = true;
     }
 
-	$edit_dir = isset($_GET['edit_dir']) ? $_GET['edit_dir'] : '';
+	$edit_dir = isset($_GET['edit_dir']) ? intval($_GET['edit_dir']) : '';
 
 	$table_header = array();
 	$table_has_actions_column = false;
@@ -538,7 +539,8 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
                 $sql = Database::query('SELECT * FROM '.$work_assigment.' WHERE c_id = '.$course_id.' AND id = "'.$row['has_properties'].'" LIMIT 1');
                 $homework = Database::fetch_array($sql);
             }
-
+            // save original value for later
+            $utc_expiry_time = $homework['expires_on'];
 			if ($is_allowed_to_edit && $locked == false) {
 
 				if (!empty($edit_dir) && $edit_dir == $id2) {
@@ -886,7 +888,8 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 			}
 
             if (!empty($homework)) {
-                $row[] = !empty($homework['ends_on']) && $homework['ends_on'] != '0000-00-00 00:00:00' ? api_get_local_time($homework['ends_on']): '-';
+                // use original utc value saved previously to avoid doubling the utc-to-local conversion ($homework['expires_on'] might have been tainted)
+                $row[] = !empty($utc_expiry_time) && $utc_expiry_time != '0000-00-00 00:00:00' ? api_get_local_time($utc_expiry_time): '-';
             } else {
                 $row[] = '-';
             }
@@ -1772,7 +1775,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 //Firstname, lastname, username
                 $work['firstname'] = Display::div($work['firstname'], array('class' => $class));
                 $work['lastname'] = Display::div($work['lastname'], array('class' => $class));
-                $work['username'] = Display::div($work['username'], array('class' => $class));
+                //$work['username'] = Display::div($work['username'], array('class' => $class));
 
                 if (strlen($work['title']) > 30) {
                     $short_title = substr($work['title'],0,27).'...';
@@ -1781,11 +1784,10 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                     $work['title'] = Display::div($work['title'], array('class' => $class));
                 }
 
-
-                //Type
+                // Type.
                 $work['type'] = build_document_icon_tag('file', $work['file']);
 
-                //File name
+                // File name.
                 $link_to_download = null;
 
                 if ($work['contains_file']) {
@@ -1798,11 +1800,11 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
 
                 $work['qualification'] = $qualification_string;
 
-                //Date
+                // Date.
                 $work_date = api_convert_and_format_date($work['sent_date']);
                 $work['sent_date'] = date_to_str_ago(api_get_local_time($work['sent_date'])).' '.$add_string.'<br />'.$work_date;
 
-                //Actions
+                // Actions.
                 $url = api_get_path(WEB_CODE_PATH).'work/';
                 $action = '';
                 if ($is_allowed_to_edit) {
@@ -1840,7 +1842,9 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                     }
                 } elseif ($is_author && (empty($work['qualificator_id']) || $work['qualificator_id'] == 0)) {
                     if (api_is_allowed_to_session_edit(false, true)) {
-                        $action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Modify').'"  >'.Display::return_icon('edit.png', get_lang('Modify'),array(), ICON_SIZE_SMALL).'</a>';
+                        //$action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Modify').'"  >'.Display::return_icon('edit.png', get_lang('Modify'),array(), ICON_SIZE_SMALL).'</a>';
+                        $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('Modify').'">'.
+                            Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a>';
                     } else {
                         $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);
                     }
@@ -1851,7 +1855,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                     $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);
                 }
 
-                //Status
+                // Status.
                 if (empty($work['qualificator_id'])) {
                     $qualificator_id = Display::label(get_lang('NotRevised'), 'warning');
                 } else {
@@ -1878,7 +1882,6 @@ function send_reminder_users_without_publication($task_data)
 	global $_course;
     $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 
-
 	$task_id = $task_data['id'];
 	$task_title = !empty($task_data['title']) ? $task_data['title'] : basename($task_data['url']);
 
@@ -1897,7 +1900,7 @@ function send_reminder_users_without_publication($task_data)
         $dear_line = get_lang('Dear')." ".api_get_person_name($user[1], $user[0]) .", \n\n";
         $body      = $dear_line.$content;
 
-		api_mail($name_user, $user[3], $subject, $body, $sender_name, $email_admin);
+        MessageManager::send_message($user[3], $subject, $body);
         $mails_sent_to[] = $name_user;
 	}
     return $mails_sent_to;
@@ -2040,9 +2043,9 @@ function get_list_users_without_publication($task_id, $studentId = null)
 	$task_id = intval($task_id);
 
 	if ($session_id == 0) {
-		$sql = "SELECT user_id as id FROM $work_table WHERE c_id = $course_id AND parent_id='$task_id'";
+		$sql = "SELECT user_id as id FROM $work_table WHERE c_id = $course_id AND parent_id='$task_id' AND active = 1";
 	} else {
-		$sql = "SELECT user_id as id FROM $work_table WHERE c_id = $course_id AND parent_id='$task_id' and session_id='".$session_id."'";
+		$sql = "SELECT user_id as id FROM $work_table WHERE c_id = $course_id AND parent_id='$task_id' and session_id='".$session_id."' AND active = 1";
 	}
 
 	$result = Database::query($sql);
@@ -2051,16 +2054,16 @@ function get_list_users_without_publication($task_id, $studentId = null)
 		$users_with_tasks[] = $row['id'];
 	}
 
-	if ($session_id == 0){
+	if ($session_id == 0) {
 		$sql_users = "SELECT cu.user_id, u.lastname, u.firstname, u.email FROM $table_course_user AS cu, $table_user AS u
-		              WHERE u.status!=1 and cu.course_code='".api_get_course_id()."' AND u.user_id=cu.user_id";
+		              WHERE u.status != 1 and cu.course_code='".api_get_course_id()."' AND u.user_id = cu.user_id";
 	} else {
 		$sql_users = "SELECT cu.id_user, u.lastname, u.firstname, u.email FROM $session_course_rel_user AS cu, $table_user AS u
-		              WHERE u.status!=1 and cu.course_code='".api_get_course_id()."' AND u.user_id=cu.id_user and cu.id_session='".$session_id."'";
+		              WHERE u.status != 1 and cu.course_code='".api_get_course_id()."' AND u.user_id = cu.id_user and cu.id_session = '".$session_id."'";
 	}
 
     if (!empty($studentId)) {
-        $sql_users.= "AND u.user_id = ".intval($studentId);
+        $sql_users.= " AND u.user_id = ".intval($studentId);
     }
 
     $group_id = api_get_group_id();
@@ -2080,15 +2083,18 @@ function get_list_users_without_publication($task_id, $studentId = null)
 	$users_without_tasks = array();
 	while ($row_users = Database::fetch_row($result_users)) {
 
-		if (in_array($row_users[0], $users_with_tasks)) continue;
+		if (in_array($row_users[0], $users_with_tasks)) {
+            continue;
+        }
+
 		if ($group_id && !in_array($row_users[0], $new_group_user_list)) {
             continue;
         }
-		//$user_id = array_shift($row_users);
+        $userId = $row_users[0];
         $row_users[0] = $row_users[1];
         $row_users[1] = $row_users[2];
 		$row_users[2] = Display::encrypted_mailto_link($row_users[3]);
-
+        $row_users[3] = $userId;
 		$users_without_tasks[] = $row_users;
 	}
 	return $users_without_tasks;
@@ -2102,13 +2108,14 @@ function get_list_users_without_publication($task_id, $studentId = null)
  * @author cvargas carlos.vargas@beeznest.com cfasanando, christian.fasanado@beeznest.com
  * @author Julio Montoya <gugli100@gmail.com> Fixes
  */
-function display_list_users_without_publication($task_id, $studentId = null) {
+function display_list_users_without_publication($task_id, $studentId = null)
+{
 	global $origin;
 	$table_header[] = array(get_lang('LastName'), true);
 	$table_header[] = array(get_lang('FirstName'), true);
 	$table_header[] = array(get_lang('Email'), true);
-	// table_data
-	$table_data = get_list_users_without_publication($task_id);
+
+	$data = get_list_users_without_publication($task_id);
 
 	$sorting_options = array();
 	$sorting_options['column'] = 1;
@@ -2131,5 +2138,5 @@ function display_list_users_without_publication($task_id, $studentId = null) {
 	$column_show[] = 1;
 	$column_show[] = 1;
 	$column_show[] = 1;
-	Display::display_sortable_config_table('work', $table_header, $table_data, $sorting_options, $paging_options, $my_params, $column_show);
+	Display::display_sortable_config_table('work', $table_header, $data, $sorting_options, $paging_options, $my_params, $column_show);
 }

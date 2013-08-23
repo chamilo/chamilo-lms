@@ -24,14 +24,17 @@ class ExerciseShowFunctions {
 	 * @param int       Question ID
 	 * @return void
 	 */
-	static function display_fill_in_blanks_answer($feedback_type, $answer,$id,$questionId) {
+	static function display_fill_in_blanks_answer($feedback_type, $answer, $id, $questionId)
+    {
         if (empty($id)) {
-            echo '<tr><td>'. nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)).'</td></tr>';
+            echo '<tr><td>'. (Security::remove_XSS($answer)).'</td></tr>';
         } else {
 		?>
 			<tr>
                 <td>
-                    <?php echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)); ?>
+                    <?php
+                    echo (Security::remove_XSS($answer));
+                    ?>
                 </td>
 
 			<?php

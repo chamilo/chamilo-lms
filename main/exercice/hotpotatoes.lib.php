@@ -74,7 +74,7 @@ function GetQuizName($fname, $fpath) {
  */
 function GetComment($path, $course_code = '') {
     $dbTable = Database::get_course_table(TABLE_DOCUMENT);
-    $course_info = api_get_course_info($course_code);            
+    $course_info = api_get_course_info($course_code);
     $path = Database::escape_string($path);
     if (!empty($course_info) && !empty($path)) {
         $query = "SELECT comment FROM $dbTable WHERE c_id = {$course_info['real_id']}";
@@ -417,7 +417,7 @@ function HotPotGCt($folder, $flag, $user_id) {
     while (list($key, $val) = each($filelist)) {
         if (stristr($val, $user_id.'.t.html')) {
             if ($flag == 1) {
-                my_delete($folder.'/'.$val);
+                FileManager::my_delete($folder.'/'.$val);
             } else {
                 echo $folder.'/'.$val.'<br />';
             }

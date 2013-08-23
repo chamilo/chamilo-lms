@@ -1,0 +1,38 @@
+{
+    "name": "mheap/silex-assetic",
+    "description": "Assetic extension for Silex",
+    "keywords": ["silex", "assetic"],
+    "homepage": "https://github.com/mheap/Silex-Assetic",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Eisenschmidt",
+            "email": "sven.eisenschmidt@gmail.com",
+            "homepage": "http://unsicherheitsagent.de/"
+        },
+        {
+            "name": "Michael Heap",
+            "email": "m@michaelheap.com",
+            "homepage": "http://michaelheap.com/"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "kriswallsmith/assetic": "~1.0",
+        "symfony/finder": "~2.1"
+    },
+    "require-dev": {
+        "silex/silex": "~1.0@dev",
+        "twig/twig": "~1.2",
+        "phpunit/phpunit": "~3.7.10"
+    },
+    "suggest": {
+        "twig/twig": "~1.2"
+    },
+    "autoload": {
+        "psr-0": {
+            "SilexAssetic": "src"
+        }
+    }
+}

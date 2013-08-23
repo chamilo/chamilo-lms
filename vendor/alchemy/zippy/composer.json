@@ -1,0 +1,39 @@
+{
+    "name": "alchemy/zippy",
+    "type": "library",
+    "description": "Zippy, the archive manager companion",
+    "keywords": ["zip", "tar", "bzip", "compression"],
+    "license": "MIT",
+    "authors": [
+    {
+        "name": "Phraseanet Team",
+        "email": "info@alchemy.fr",
+        "homepage": "http://www.phraseanet.com/"
+    }
+    ],
+    "require": {
+        "php"                  : ">=5.3.3",
+        "doctrine/collections" : "~1.0",
+        "guzzle/guzzle"        : "~3.0",
+        "pimple/pimple"        : "~1.0",
+        "symfony/process"      : "~2.0",
+        "symfony/filesystem"   : "~2.0"
+    },
+    "require-dev": {
+        "ext-zip"              : "*",
+        "symfony/finder"       : "~2.0"
+    },
+    "suggest": {
+        "ext-zip"              : "To use the ZipExtensionAdapter"
+    },
+    "autoload": {
+        "psr-0": {
+            "Alchemy": "src"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
+    }
+}

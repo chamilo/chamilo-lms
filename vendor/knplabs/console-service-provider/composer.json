@@ -1,0 +1,23 @@
+{
+    "name": "knplabs/console-service-provider",
+    "type": "library",
+    "description": "console service provider for Silex",
+    "keywords": [ "console", "silex" ],
+    "homepage": "http://knplabs.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name":     "KnpLabs",
+            "homepage": "http://knplabs.com"
+        }
+    ],
+    "require": {
+        "php":              ">=5.3.2",
+        "symfony/console":   "~2.1"
+    },
+    "autoload": {
+        "psr-0": {
+            "Knp\\": ""
+        }
+    }
+}

@@ -1,0 +1,20 @@
+
+body {
+	@hello: "world";
+	e1: e("this is simple");
+	e2: e(this is simple); // only returns first
+	e3: e("this is simple", "cool lad");
+	e4: e(1232);
+	e5: e(@hello);
+	e6: e("one" + 'more');
+	e7: e();
+
+	t1: ~"eating rice";
+	t2: ~"string cheese";
+	t3: a b c ~"string me" d e f;
+	t4: ~"string @{hello}";
+}
+
+.class {
+	filter: ~"progid:DXImageTransform.Microsoft.AlphaImageLoader(src='image.png')";
+}

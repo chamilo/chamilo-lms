@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="tests/bootstrap.php" colors="true">
+    <testsuites>
+        <testsuite name="Pagerfanta Test Suite">
+            <directory>tests/Pagerfanta/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src/Pagerfanta/</directory>
+        </whitelist>
+    </filter>
+</phpunit>

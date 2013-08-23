@@ -1,0 +1,96 @@
+// builtin
+
+@something: "hello world";
+@color: #112233;
+@color2: rgba(44,55,66, .6);
+
+body {
+	color: @something;
+
+	@num: 7 / 6;
+	num-basic: @num + 4;
+	num-floor: floor(@num) + 4px;
+	num-ceil: ceil(@num) + 4px;
+
+	@num2: 2 / 3;
+	num2: @num2;
+	num2-round: round(@num2);
+	num2-floor: floor(@num2);
+	num2-ceil: ceil(@num2);
+
+	round-lit: round(10px / 3);
+
+	rgba1: rgbahex(@color);
+	rgba2: rgbahex(@color2);
+	argb: argb(@color2);
+}
+
+
+format {
+  @r: 32;
+  format: %("rgb(%d, %d, %d)", @r, 128, 64);
+  format-string: %("hello %s", "world");
+  format-multiple: %("hello %s %d", "earth", 2);
+  format-url-encode: %('red is %A', #ff0000);
+  eformat: e(%("rgb(%d, %d, %d)", @r, 128, 64));
+}
+
+
+#functions {
+	str1: isstring("hello");
+	str2: isstring(one, two);
+
+	num1: isnumber(2323px);
+	num2: isnumber(2323);
+	num3: isnumber(4/5);
+	num4: isnumber("hello");
+
+	col1: iscolor(red);
+	col2: iscolor(hello);
+	col3: iscolor(rgba(0,0,0,0.3));
+	col4: iscolor(#fff);
+
+	key1: iskeyword(hello);
+	key2: iskeyword(3D);
+
+	px1: ispixel(10px);
+	px2: ispixel(10);
+
+	per1: ispercentage(10%);
+	per2: ispercentage(10);
+
+	em1: isem(10em);
+	em2: isem(10);
+
+	ex1: extract(1 2 3 4, 2);
+	ex2: extract(1 2, 1);
+	ex3: extract(1, 1);
+
+	@list: 1,2,3,4;
+
+	ex4: extract(@list, 2);
+
+	pow: pow(2,4);
+	pi: pi();
+	mod: mod(14,10);
+
+	tan: tan(1);
+	cos: cos(1);
+	sin: sin(1);
+
+	atan: atan(1);
+	acos: acos(1);
+	asin: asin(1);
+
+	sqrt: sqrt(8);
+}
+
+
+#unit {
+	@unit: "em";
+	unit-lit: unit(10px);
+	unit-arg: unit(10px, "s");
+	unit-arg2: unit(10px, @unit);
+	unit-math: unit(0.07407s) * 100%;
+}
+

@@ -24,14 +24,14 @@ class CurriculumController extends CommonController
      * @Route("/")
      * @Method({"GET"})
      */
-    public function indexAction($course)
+    public function indexAction()
     {
         // Redirecting to curriculum user
         // @todo Fix redirection
         return $this->redirect(
                 $this->generateUrl(
                     'curriculum_user.controller:indexAction',
-                    array('course' => $course)
+                    array('course' => $this->getCourse())
                 )
                 .'?'.$this->getRequest()->getQueryString()
         );

@@ -145,15 +145,17 @@ $app['security.access_rules'] = array(
     array('^/main/auth/inscription.php', 'IS_AUTHENTICATED_ANONYMOUSLY'),
     array('^/main/auth/lostPassword.php', 'IS_AUTHENTICATED_ANONYMOUSLY'),
     array('^/main/.*', array('ROLE_STUDENT')),
+    array('^/courses/.*/curriculum/category', 'ROLE_TEACHER'),
+    array('^/courses/.*/curriculum/item', 'ROLE_TEACHER'),
+    array('^/courses/.*/curriculum/user', 'ROLE_STUDENT'),
+    array('^/courses/.*/curriculum', 'ROLE_STUDENT'),
 
     // Ministerio routes
 
     array('^/admin/director', 'ROLE_DIRECTOR'),
-    array('^/tool/curriculum/category', 'ROLE_ADMIN'),
-    array('^/tool/curriculum/item', 'ROLE_ADMIN'),
-    array('^/tool/.*', array('ROLE_ADMIN','ROLE_TEACHER')),
     array('^/admin/jury_president', 'ROLE_JURY_PRESIDENT'),
-    array('^/admin/jury_member', 'ROLE_JURY_MEMBER'), //? jury subsitute??
+    array('^/admin/jury_member', 'ROLE_JURY_MEMBER') //? jury subsitute??
+
 
     //array('^.*$', 'ROLE_USER'),
 );
@@ -653,6 +655,14 @@ $app['question_score_name.controller'] = $app->share(
 $app['model_ajax.controller'] = $app->share(
     function () use ($app) {
         return new ChamiloLMS\Controller\ModelAjaxController();
+    }
+);
+
+// Curriculum tool
+
+$app['curriculum.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumController($app);
     }
 );
 

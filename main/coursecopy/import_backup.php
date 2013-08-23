@@ -57,6 +57,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
     if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
         // Partial backup here we recover the documents posted
         $course = CourseSelectForm::get_posted_course();
+
     } else {
         $backupServer = isset($_POST['backup_server']) ? $_POST['backup_server'] : null;
         if ($backupServer == 'server') {
@@ -80,6 +81,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
             $course = CourseArchiver::read_course($filename, $delete_file);
         }
     }
+
 
     if (!$error && $course->has_resources()) {
 
@@ -198,6 +200,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
     );
 
     $form->addElement('html', '<br /><br />');
+
     $form->addElement('html', get_lang('SameFilename'));
     $form->addElement('html', '<br /><br />');
     $form->addElement(

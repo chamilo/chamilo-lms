@@ -276,7 +276,6 @@ $app->error(
             $code = null;
         }
         //$code = ($e instanceof HttpException) ? $e->getStatusCode() : 500;
-    
         // It seems that error() is executed first than the before() middleware
         // @ŧodo check this one
         $templateStyle = api_get_setting('template');
@@ -317,6 +316,7 @@ if ($alreadyInstalled) {
     //api_set_internationalization_default_encoding($charset);
 
     // require $includePath.'/local.inc.php';
+
 
     /**	Loading languages and sublanguages **/
     // @todo improve the language loading
@@ -477,6 +477,7 @@ if (is_array($language_files)) {
 
 // End loading languages
 
+
 /** Silex Middlewares. */
 
 /** A "before" middleware allows you to tweak the Request before the controller is executed. */
@@ -488,7 +489,6 @@ use Symfony\Component\Finder\Finder;
 $app->before(
 
     function () use ($app) {
-
         // Checking configuration file
         if (!file_exists($app['configuration_file']) && !file_exists($app['configuration_yml_file'])) {
             return new RedirectResponse(api_get_path(WEB_CODE_PATH).'install');
@@ -499,6 +499,7 @@ $app->before(
         if (api_check_php_version() == false) {
             $app->abort(500, "Incorrect PHP version");
         }
+
         // Checks temp folder permissions.
         if (!is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
             $app->abort(500, "temp folder must be writable");
@@ -509,7 +510,6 @@ $app->before(
 
         // Starting the session for more info see: http://silex.sensiolabs.org/doc/providers/session.html
         $request->getSession()->start();
-
         /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem $filesystem */
         $filesystem = $app['chamilo.filesystem'];
 
@@ -518,7 +518,7 @@ $app->before(
             $filesystem->createFolders($app['temp.paths']->folders);
         }
 
-        // If assetic is enabled copy folders from theme inside web/
+        // If Assetic is enabled copy folders from theme inside "web/"
         if ($app['assetic.auto_dump_assets']) {
             $filesystem->copyFolders($app['temp.paths']->copyFolders);
         }
@@ -537,11 +537,12 @@ $app->before(
             Session::write('url_id', 1);
         }
 
-        // Loading portal settings from DB
+        // Loading portal settings from DB.
         $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
         $settings_latest_update = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
 
         $_setting = Session::read('_setting');
+
         if (empty($_setting)) {
             api_set_settings_and_plugins();
         } else {
@@ -620,6 +621,7 @@ $app->before(
             if ($app['security']->isGranted('ROLE_TEACHER')) {
                 Session::write('is_allowedCreateCourse', true);
             }
+
         } else {
             Session::erase('_user');
             Session::erase('is_platformAdmin');
@@ -628,10 +630,10 @@ $app->before(
 
         /** Translator component. */
         // Platform lang
+
         $language = api_get_setting('platformLanguage');
         $iso = api_get_language_isocode($language);
         $app['translator']->setLocale($iso);
-
 
         // From the login page
         $language = $request->get('language');
@@ -664,14 +666,17 @@ $app->before(
             $section = $info['dirname'];
         }
 
+
         $app['translator.cache.enabled'] = false;
 
         $app['translator'] = $app->share($app->extend('translator', function($translator, $app) {
 
             $locale = $translator->getLocale();
 
+
             /** @var Symfony\Component\Translation\Translator $translator  */
             if ($app['translator.cache.enabled']) {
+
                 //$phpFileDumper = new Symfony\Component\Translation\Dumper\PhpFileDumper();
                 $dumper = new Symfony\Component\Translation\Dumper\MoFileDumper();
                 $catalogue = new Symfony\Component\Translation\MessageCatalogue($locale);
@@ -695,6 +700,27 @@ $app->before(
                 return $translator;
             }
         }));
+
+        // Setting course entity for controllers.
+
+        // The course parameter is loaded
+        $course = $request->get('course');
+
+        // Check if we are inside a Chamilo course tool
+        $isCourseTool = (strpos($request->getPathInfo(), 'courses/') === false) ? false : true;
+
+        //$controllerName = $request->get('_controller');
+
+        // Setting converts
+        if ($isCourseTool) {
+            // Converting /courses/XXX/ to a Entity/Course object
+            $course = $app['orm.em']->getRepository('Entity\Course')->findOneByCode($course);
+            $app['course'] = $course;
+
+            $sessionId = $request->get('id_session');
+            $session = $app['orm.em']->getRepository('Entity\Session')->findOneById($sessionId);
+            $app['course_session'] = $session;
+        }
     }
 );
 
@@ -770,6 +796,7 @@ if (isset($app['configuration']['language_measure_frequency']) && $app['configur
     $langstats = new langstats();
 }
 
+
 /** Setting the is_admin key */
 $app['is_admin'] = false;
 
@@ -817,7 +844,6 @@ if (isset($app['configuration']['main_database']) && isset($app['db.event_manage
     $app['dbs.event_manager']['db_write']->addEventSubscriber($treeListener);
 
     $loggableListener = new \Gedmo\Loggable\LoggableListener();
-
     if (PHP_SAPI != 'cli') {
         $userInfo = api_get_user_info();
 
@@ -825,10 +851,13 @@ if (isset($app['configuration']['main_database']) && isset($app['db.event_manage
             $loggableListener->setUsername($userInfo['username']);
         }
     }
-
     //$app['db.event_manager']->addEventSubscriber($loggableListener);
     $app['dbs.event_manager']['db_read']->addEventSubscriber($loggableListener);
     $app['dbs.event_manager']['db_write']->addEventSubscriber($loggableListener);
 }
 
+// Fixes uses of $_course in the scripts.
+$_course = api_get_course_info();
+$_cid = api_get_course_id();
 return $app;
+

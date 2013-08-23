@@ -10,6 +10,7 @@
                         {{ 'Questions' | get_lang }}</a>
                     </li>
                     <li><a href="{{ url('admin_category_new')}}">{{ 'AddACategory' | get_lang }}</a></li>
+                    <li><a href="../../main/exercice/tests_category.php?type=global">{{ 'ManageQuestionCategories' | get_lang }}</a></li>
                 </ul>
 
             </div>

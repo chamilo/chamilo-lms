@@ -28,7 +28,7 @@ class UserPortalController extends CommonController
         // @todo Use filters like "after/before|finish" to manage user access
         api_block_anonymous_users();
 
-        //Abort request because the user is not allowed here - @todo use filters
+        // Abort request because the user is not allowed here - @todo use filters
         if ($app['allowed'] == false) {
             return $app->abort(403, 'Not allowed');
         }
@@ -114,7 +114,6 @@ class UserPortalController extends CommonController
         $count_of_sessions = count($my_session_list);
 
         if ($count_of_sessions == 1 && $count_of_courses_no_sessions == 0) {
-
             $key = array_keys($personal_course_list);
             $course_info = $personal_course_list[$key[0]];
             $id_session = isset($course_info['id_session']) ? $course_info['id_session'] : 0;

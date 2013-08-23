@@ -291,14 +291,14 @@ switch ($action) {
         }
         break;
     case 'add_question_to_reminder':
-        $objExercise  = $_SESSION['objExercise'];
-        if (empty($objExercise)) {
-            echo 0;
-            exit;
-        } else {
-            $objExercise->edit_question_to_remind($_REQUEST['exe_id'], $_REQUEST['question_id'], $_REQUEST['action']);
-        }
-        break;
+    	$objExercise  = $_SESSION['objExercise'];
+    	if (empty($objExercise)) {
+    		echo 0;
+    		exit;
+    	} else {
+    		$objExercise->edit_question_to_remind($_REQUEST['exe_id'], $_REQUEST['question_id'], $_REQUEST['action']);
+    	}
+    	break;
     case 'save_exercise_by_now':
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
@@ -306,20 +306,20 @@ switch ($action) {
         if (api_is_allowed_to_session_edit()) {
 
             // "all" or "simple" strings means that there's one or all questions exercise type
-            $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
+            $type                   = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 
             // Questions choices
-            $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
+            $choice                 = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
 
             // Hotspot coordinates from all questions
-            $hot_spot_coordinates = isset($_REQUEST['hotspot']) ? $_REQUEST['hotspot'] : null;
+            $hot_spot_coordinates   = isset($_REQUEST['hotspot']) ? $_REQUEST['hotspot'] : null;
 
             // There is a reminder?
-            $remind_list = isset($_REQUEST['remind_list']) && !empty($_REQUEST['remind_list'])? array_keys($_REQUEST['remind_list']) : null;
+            $remind_list            = isset($_REQUEST['remind_list']) && !empty($_REQUEST['remind_list'])? array_keys($_REQUEST['remind_list']) : null;
 
             // Needed in manage_answer
-            $learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : 0;
-            $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
+            $learnpath_id           = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : 0;
+            $learnpath_item_id      = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
 
             // Attempt id
             $exe_id = $_REQUEST['exe_id'];
@@ -434,6 +434,7 @@ switch ($action) {
                     continue;
                 }
 
+
                 $my_choice = isset($choice[$my_question_id]) ? $choice[$my_question_id] : null;
 
                 if ($debug) {
@@ -441,20 +442,22 @@ switch ($action) {
                     error_log("my_choice = ".print_r($my_choice, 1)."");
                 }
 
-                // creates a temporary Question object
-                $objQuestionTmp = Question::read($my_question_id, $course_id);
+                // Creates a temporary Question object
+            	$objQuestionTmp = Question::read($my_question_id, $course_id);
 
                 if ($objExercise->type == ONE_PER_PAGE && $objQuestionTmp->type == UNIQUE_ANSWER) {
-                    if (empty($my_choice)) {
-                        echo 'answer_required';
-                        exit;
+                    if (in_array($my_question_id, $remind_list)) {
+                        if (empty($my_choice)) {
+                            echo 'answer_required';
+                            exit;
+                        }
                     }
                 }
 
-                //Getting free choice data
-                if ($objQuestionTmp->type  == FREE_ANSWER && $type == 'all') {
-                    $my_choice = isset($_REQUEST['free_choice'][$my_question_id]) && !empty($_REQUEST['free_choice'][$my_question_id])? $_REQUEST['free_choice'][$my_question_id]: null;
-                }
+                // Getting free choice data.
+            	if ($objQuestionTmp->type  == FREE_ANSWER && $type == 'all') {
+            	    $my_choice = isset($_REQUEST['free_choice'][$my_question_id]) && !empty($_REQUEST['free_choice'][$my_question_id])? $_REQUEST['free_choice'][$my_question_id]: null;
+            	}
 
                 if ($type == 'all') {
                     $total_weight += $objQuestionTmp->selectWeighting();
@@ -494,16 +497,16 @@ switch ($action) {
                     }
                     delete_attempt($exe_id, api_get_user_id(), $course_id, $session_id, $my_question_id);
                     if ($objQuestionTmp->type  == HOT_SPOT) {
-                        delete_attempt_hotspot($exe_id, api_get_user_id(), $course_id, $my_question_id);
+            	        delete_attempt_hotspot($exe_id, api_get_user_id(), $course_id, $my_question_id);
                     }
                     if (isset($attempt_list[$my_question_id]) && isset($attempt_list[$my_question_id]['marks'])) {
-                        $total_score -= $attempt_list[$my_question_id]['marks'];
-                    }
-                }
+            	        $total_score  -= $attempt_list[$my_question_id]['marks'];
+            	    }
+            	}
 
-                // We're inside *one* question. Go through each possible answer for this question
+            	// We're inside *one* question. Go through each possible answer for this question
 
-                $result = $objExercise->manageAnswers(
+            	$result = $objExercise->manageAnswers(
                     $exe_id,
                     $my_question_id,
                     $my_choice,
@@ -522,7 +525,6 @@ switch ($action) {
                     error_log("total_score: $total_score ");
                     error_log("total_weight: $total_weight ");
                 }
-
 
                 $duration = 0;
                 $now = time();

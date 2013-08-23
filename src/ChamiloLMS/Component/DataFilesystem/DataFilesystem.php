@@ -78,7 +78,7 @@ class DataFilesystem
     /**
      * Create folders
      * @param array $folderList
-     * @param Console\Output\OutputInterface $output
+     * @param Console\Output\OutputInterface  $output
      * @param string permissions
      */
     public function createFolders(array $folderList, Console\Output\OutputInterface $output = null, $folderPermissions = null)
@@ -86,7 +86,6 @@ class DataFilesystem
         if (empty($folderPermissions)) {
             $folderPermissions = api_get_permissions_for_new_directories();
         }
-
         if (!empty($folderList)) {
             foreach ($folderList as $folder) {
                 if (!is_dir($folder)) {

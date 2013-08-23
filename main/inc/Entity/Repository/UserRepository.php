@@ -41,6 +41,31 @@ class UserRepository extends EntityRepository implements UserProviderInterface
     }
 
     /**
+     * @param string $keyword
+     * @return mixed
+     */
+    public function searchUserByKeyword($keyword)
+    {
+        $qb = $this->createQueryBuilder('a');
+
+        //Selecting user info
+        $qb->select('DISTINCT b');
+
+        $qb->from('Entity\User', 'b');
+
+        //Selecting courses for users
+        //$qb->innerJoin('u.courses', 'c');
+
+        //@todo check app settings
+        $qb->add('orderBy', 'b.firstname ASC');
+        $qb->where('b.firstname LIKE :keyword OR b.lastname LIKE :keyword ');
+        $qb->setParameter('keyword', "%$keyword%");
+        $q = $qb->getQuery();
+
+        return $q->execute();
+    }
+
+    /**
      * @param string $username
      * @return mixed
      * @throws UsernameNotFoundException
@@ -74,12 +99,11 @@ class UserRepository extends EntityRepository implements UserProviderInterface
     public function refreshUser(UserInterface $user)
     {
         return $user;
-
-        $class = get_class($user);
+        /*$class = get_class($user);
         if (!$this->supportsClass($class)) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $class));
         }
-        return $this->loadUserByUsername($user->getUsername());
+        return $this->loadUserByUsername($user->getUsername());*/
     }
 
     /**

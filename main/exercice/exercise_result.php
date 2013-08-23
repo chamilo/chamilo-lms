@@ -62,20 +62,18 @@ $exe_id = isset($_REQUEST['exe_id']) ? intval($_REQUEST['exe_id']) : 0;
 if (empty($objExercise)) {
     // Redirect to the exercise overview
     // Check if the exe_id exists
-
     $objExercise = new Exercise();
     $exercise_stat_info = $objExercise->getStatTrackExerciseInfoByExeId($exe_id);
-
     if (!empty($exercise_stat_info) && isset($exercise_stat_info['exe_exo_id'])) {
         if ($exercise_stat_info['status'] == 'incomplete') {
             $objExercise->read($exercise_stat_info['exe_exo_id']);
         } else {
-            header("Location: overview.php?exerciseId=".$exercise_stat_info['exe_exo_id']);
-            exit;
-        }
-    } else {
-        api_not_allowed(true);
+        header("Location: overview.php?exerciseId=".$exercise_stat_info['exe_exo_id']);
+        exit;
     }
+    } else {
+    api_not_allowed(true);
+}
 }
 
 $gradebook = '';

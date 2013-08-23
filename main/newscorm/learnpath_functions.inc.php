@@ -1418,7 +1418,7 @@ function export_exercise($item_id)
         echo $s = "<tr bgcolor='#e6e6e6'><td valign='top' colspan='2'>".get_lang('Question')." ";
         // Call the showQuestion(). This basically displays the question in a table.
         $question_obj = Question::read($questionId);
-        $test .= ExerciseLib::showQuestion($question_obj, false, 'export', $i);
+        $test .= $objExercise->showQuestion($question_obj, false, 'export', $i);
 
     } // end foreach()
 
@@ -2098,7 +2098,7 @@ function createimsmanifest($circle1_files, $learnpath_id)
     $header = '<?xml version="1.0" encoding="'.api_get_system_encoding(
     ).'"?>'."\n<manifest identifier='".$LPnamesafe."' version='1.1'\n xmlns='http://www.imsproject.org/xsd/imscp_rootv1p1p2'\n xmlns:adlcp='http://www.adlnet.org/xsd/adlcp_rootv1p2'\n xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'\n xsi:schemaLocation='http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd\n http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 imsmd_rootv1p2p1.xsd\n http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd'>\n";
 
-    $org .= xmltagwrite('metadata', 'open');
+    $org = xmltagwrite('metadata', 'open');
     $org .= '  '.xmltagwrite('schema', 'full', 'ADL SCORM');
     $org .= '  '.xmltagwrite('schemaversion', 'full', '1.2');
     $org .= xmltagwrite('metadata', 'close');

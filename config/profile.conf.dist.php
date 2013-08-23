@@ -11,6 +11,7 @@
 define('CHECK_PASS_EASY_TO_FIND', false);
 
 $profileIsEditable = true;
+$profileIsReadable = true;
 
 // User photos
 define('PREFIX_IMAGE_FILENAME_WITH_UID', true); // If true, filename of images on server begin with uid of the user.

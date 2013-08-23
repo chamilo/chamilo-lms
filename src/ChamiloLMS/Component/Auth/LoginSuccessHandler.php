@@ -37,7 +37,6 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
     {
         $response = null;
         //$session = $request->getSession();
-
         /* Possible values: index.php, user_portal.php, main/auth/courses.php */
         $pageAfterLogin = api_get_setting('page_after_login');
 
@@ -58,7 +57,6 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                     break;
             }
         }
-
         // Redirecting to a course or a session
 
         if (api_get_setting('go_to_course_after_login') == 'true') {

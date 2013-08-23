@@ -67,8 +67,8 @@ $extra_params['height'] = 'auto'; //use the width of the parent
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
                     return \'<a href="add_sessions_to_promotion.php?id=\'+options.rowId+\'">'.Display::return_icon('session_to_promotion.png',get_lang('SubscribeSessionsToPromotions'),'',ICON_SIZE_SMALL).'</a>'.
                     '&nbsp;<a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
-					'&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=copy&id=\'+options.rowId+\'">'.Display::return_icon('copy.png',get_lang('Copy'),'',ICON_SIZE_SMALL).'</a>'.
-                    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a> \'; 
+					'&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(get_lang("ConfirmYourChoice"))."\'".')) return false;"  href="?sec_token='.$token.'&action=copy&id=\'+options.rowId+\'">'.Display::return_icon('copy.png',get_lang('Copy'),'',ICON_SIZE_SMALL).'</a>'.
+                    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(get_lang("ConfirmYourChoice"))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a> \';
                  }';
 
 ?>
@@ -130,9 +130,11 @@ switch ($action) {
             if ($check) {
                 $values = $form->exportValues();                    
                 $res    = $promotion->update($values);
-                $promotion->update_all_sessions_status_by_promotion_id($values['id'], $values['status']);  
-                if ($res) {
-                    Display::display_confirmation_message(get_lang('PromotionUpdated'), $values['name']);
+                $promotion->update_all_sessions_status_by_promotion_id($values['id'], $values['status']);    
+                if ($values['status']) {
+                    Display::display_confirmation_message(sprintf(get_lang('PromotionXUnarchived'), $values['name']), false);
+                } else {
+                    Display::display_confirmation_message(sprintf(get_lang('PromotionXArchived'), $values['name']), false);
                 }
             }            
             $promotion->display();

@@ -13,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Routing\AnnotatedRouteControllerLoader;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use ChamiloLMS\Middleware\CourseMiddleware;
 
 class ReflectionControllerProvider implements ControllerProviderInterface
 {
@@ -36,13 +37,16 @@ class ReflectionControllerProvider implements ControllerProviderInterface
         $controllers = $app['controllers_factory'];
 
         // Routes are already cached using Flint
-        if ($app['debug'] == false) {
-            return $controllers;
+
+        if (file_exists($app['sys_temp_path'].'ProjectUrlMatcher.php')) {
+           return $controllers;
         }
-
         $reflection = new \ReflectionClass($app[$this->controllerName]);
+        $className = $reflection->getName();
 
+        // Needed in order to get annotations
         $annotationReader = new AnnotationReader();
+        //$classAnnotations = $annotationReader->getClassAnnotations($reflection);
         $routeAnnotation = new Route(array());
         $methodAnnotation = new Method(array());
 
@@ -50,7 +54,6 @@ class ReflectionControllerProvider implements ControllerProviderInterface
 
         foreach ($methods as $method) {
             $methodName = $method->getName();
-
             $controllerName = $this->controllerName.':'.$methodName;
 
             // Parse only function with the "Action" suffix
@@ -66,7 +69,6 @@ class ReflectionControllerProvider implements ControllerProviderInterface
             $methodObject = $annotationReader->getMethodAnnotation($method, $methodAnnotation);
 
             $methodsToString = 'GET';
-
             if ($methodObject) {
                 $methodsToString = implode('|', $methodObject->getMethods());
             }
@@ -75,18 +77,17 @@ class ReflectionControllerProvider implements ControllerProviderInterface
             foreach ($routeObjects as $routeObject) {
 
                 if ($routeObject && is_a($routeObject, 'Symfony\Component\Routing\Annotation\Route')) {
-
                     $match = $controllers->match($routeObject->getPath(), $controllerName, $methodsToString);
-
                     // Setting requirements
+                    $req = $routeObject->getRequirements();
                     if (!empty($req)) {
                         foreach ($req as $key => $value) {
                             $match->assert($key, $value);
                         }
                     }
-                    $defaults = $routeObject->getDefaults();
-                    // Setting defaults
 
+                    // Setting defaults
+                    $defaults = $routeObject->getDefaults();
                     if (!empty($defaults)) {
                         foreach ($defaults as $key => $value) {
                             $match->value($key, $value);

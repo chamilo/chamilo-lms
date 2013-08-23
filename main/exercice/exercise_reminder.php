@@ -109,7 +109,6 @@ $urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
 echo $objExercise->returnWarningJs($urlMainExercise.'exercise_result.php?origin='.$origin.'&exe_id='.$exe_id);
 
 echo '<script>
-
 		lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});
 
         function final_submit() {
@@ -271,7 +270,6 @@ echo $objExercise->getProgressPagination(
 
 echo Display::div('', array('class' => 'clear'));
 echo Display::div($exercise_actions, array('class' => 'form-actions'));
-
 echo $objExercise->returnWarningHtml();
 
 if ($origin != 'learnpath') {

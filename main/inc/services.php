@@ -21,8 +21,8 @@ $app['root_dir'] = $app['root_sys'];
 $app->register(new Flint\Provider\RoutingServiceProvider(), array(
     'routing.resource' => $app['sys_config_path'].'routing.yml',
     'routing.options' => array(
-        'cache_dir' => $app['debug'] == true ? null : $app['sys_temp_path']
-        //'cache_dir' => $app['sys_temp_path']
+        //'cache_dir' => $app['debug'] == true ? null : $app['sys_temp_path']
+        'cache_dir' => $app['sys_temp_path']
     ),
 ));
 
@@ -138,7 +138,7 @@ $app['security.access_rules'] = array(
     array('^/admin/questionmanager', 'ROLE_QUESTION_MANAGER'),
     array('^/main/auth/inscription.php', 'IS_AUTHENTICATED_ANONYMOUSLY'),
     array('^/main/auth/lostPassword.php', 'IS_AUTHENTICATED_ANONYMOUSLY'),
-    array('^/main/.*', array('ROLE_STUDENT')),
+    array('^/main/.*', array('ROLE_STUDENT'))
     //array('^.*$', 'ROLE_USER'),
 );
 
@@ -163,7 +163,9 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
 $app->register(new Silex\Provider\FormServiceProvider());
 
 // URL generator provider
-$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+//$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+
+// Needed to use the "entity" option in symfony forms
 
 class ManagerRegistry extends AbstractManagerRegistry
 {
@@ -336,11 +338,12 @@ if (is_writable($app['sys_temp_path'])) {
         $app->mount('/_profiler', $p);
 
         // PHP errors for cool kids
-        // $app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
+        //$app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
     }
 }
 
 // Pagerfanta settings (Pagination using Doctrine2, arrays, etc)
+
 $app->register(new PagerfantaServiceProvider());
 
 // Custom route params see https://github.com/franmomu/silex-pagerfanta-provider/pull/2
@@ -524,8 +527,6 @@ class ChamiloServiceProvider implements ServiceProviderInterface
 $app->register(new ChamiloServiceProvider(), array());
 
 // Controller as services definitions.
-
-
 $app['pages.controller'] = $app->share(
     function () use ($app) {
         return new PagesController($app['pages.repository']);

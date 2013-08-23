@@ -651,7 +651,6 @@ class ExtraField extends Model
                         }
 
                         $optionList = array();
-
                         if (!empty($field_details['options'])) {
                             foreach ($field_details['options'] as $option_details) {
                                 $optionList[$option_details['id']] = $option_details;
@@ -676,6 +675,7 @@ class ExtraField extends Model
                                     }
                                 }
                             }
+
                             if (isset($optionList[$defaultValueId])) {
 
                                 if (isset($optionList[$defaultValueId]['option_value']) && $optionList[$defaultValueId]['option_value'] == 'aprobada') {
@@ -683,15 +683,16 @@ class ExtraField extends Model
                                         $form->freeze();
                                     }
                                 }
-                        }
+                            }
 
-                        // Setting priority message
-                        if (isset($optionList[$defaultValueId]) && isset($optionList[$defaultValueId]['priority'])) {
-                            if (!empty($optionList[$defaultValueId]['priority'])) {
-                                $priorityId = $optionList[$defaultValueId]['priority'];
-                                $option = new ExtraFieldOption($this->type);
-                                $messageType = $option->getPriorityMessageType($priorityId);
-                                $form->addElement('label', null, Display::return_message($optionList[$defaultValueId]['priority_message'], $messageType));
+                            // Setting priority message
+                            if (isset($optionList[$defaultValueId]) && isset($optionList[$defaultValueId]['priority'])) {
+
+                                if (!empty($optionList[$defaultValueId]['priority'])) {
+                                    $priorityId = $optionList[$defaultValueId]['priority'];
+                                    $option = new ExtraFieldOption($this->type);
+                                    $messageType = $option->getPriorityMessageType($priorityId);
+                                    $form->addElement('label', null, Display::return_message($optionList[$defaultValueId]['priority_message'], $messageType));
                                 }
                             }
                         }

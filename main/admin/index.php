@@ -7,6 +7,7 @@
 /**
  * Code
  */
+
 // Language files that need to be included.
 $language_file = array('admin', 'tracking','coursebackup');
 
@@ -116,9 +117,11 @@ if (api_is_platform_admin()) {
 	$items[] = array('url'=>'course_category.php', 			'label' => get_lang('AdminCategories'));
 	$items[] = array('url'=>'subscribe_user2course.php', 	'label' => get_lang('AddUsersToACourse'));
 	$items[] = array('url'=>'course_user_import.php', 		'label' => get_lang('ImportUsersToACourse'));
+
     $items[] = array('url'=>'extra_fields.php?type=course', 	'label' => get_lang('ManageCourseFields'));
 
     $items[] = array('url'=>'extra_fields.php?type=question', 	'label' => get_lang('ManageQuestionFields'));
+
 
     if (api_get_setting('gradebook_enable_grade_model') == 'true') {
         $items[] = array('url'=>'grade_models.php',             'label' => get_lang('GradeModel'));
@@ -147,7 +150,7 @@ if (api_is_platform_admin()) {
     $items[] = array('url'=>'settings.php?category=Plugins','label' => get_lang('Plugins'));
     $items[] = array('url'=>'settings.php?category=Regions','label' => get_lang('Regions'));
     $items[] = array('url'=>'system_announcements.php', 	'label' => get_lang('SystemAnnouncements'));
-    $items[] = array('url'=> api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=admin', 'label' => get_lang('GlobalAgenda'));
+    $items[] = array('url'=>api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=admin', 'label' => get_lang('GlobalAgenda'));
     $items[] = array('url'=>'configure_homepage.php', 		'label' => get_lang('ConfigureHomePage'));
     $items[] = array('url'=>'configure_inscription.php', 	'label' => get_lang('ConfigureInscription'));
     $items[] = array('url'=>'statistics/index.php', 		'label' => get_lang('Statistics'));
@@ -160,9 +163,9 @@ if (api_is_platform_admin()) {
     }
 
     if (api_get_multiple_access_url()) {
-		if (api_is_global_platform_admin()) {
+	    if (api_is_global_platform_admin()) {
             	$items[] = array('url'=>'access_urls.php', 	'label' => get_lang('ConfigureMultipleAccessURLs'));
-            }
+        }
     }
 
     if (api_get_setting('allow_reservation') == 'true') {
@@ -187,7 +190,7 @@ $blocks['sessions']['search_form'] = $search_form;
 $items = array();
 $items[] = array('url'=> api_get_path(WEB_CODE_PATH).'session/session_list.php', 'label' => get_lang('ListSession'));
 $items[] = array('url'=> api_get_path(WEB_CODE_PATH).'session/session_add.php', 	'label' => get_lang('AddSession'));
-$items[] = array('url'=>'session_category_list.php', 	'label' => get_lang('ListSessionCategory'));
+$items[] = array('url'=> 'session_category_list.php', 	'label' => get_lang('ListSessionCategory'));
 $items[] = array('url'=> api_get_path(WEB_CODE_PATH).'session/session_import.php', 	'label' => get_lang('ImportSessionListXMLCSV'));
 if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
     $items[] = array('url'=>'ldap_import_students_to_session.php', 	'label' => get_lang('ImportLDAPUsersIntoSession'));
@@ -224,8 +227,8 @@ if (api_is_platform_admin()) {
 	if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
 		$items[] = array('url'=>'filler.php', 	'label' => get_lang('DataFiller'));
 	}
-	$items[] = array('url'=>'archive_cleanup.php', 	'label' => get_lang('ArchiveDirCleanup'));
-    $items[] = array('url'=>'system_management.php', 'label' => get_lang('SystemManagement'));
+    $items[] = array('url'=>'archive_cleanup.php', 	'label' => get_lang('ArchiveDirCleanup'));
+	$items[] = array('url'=>'system_management.php', 'label' => get_lang('SystemManagement'));
 
 	$blocks['settings']['items'] = $items;
     $blocks['settings']['extra'] = null;
@@ -303,7 +306,6 @@ $admin_ajax_url = api_get_path(WEB_AJAX_PATH).'admin.ajax.php';
 $app['template']->assign('web_admin_ajax_url', $admin_ajax_url);
 $app['template']->assign('blocks', $blocks);
 $app['template']->display('default/admin/settings_index.tpl');
-
 
 /**
  * Displays either the text for the registration or the message that the installation is (not) up to date

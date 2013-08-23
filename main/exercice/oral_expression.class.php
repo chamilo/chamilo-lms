@@ -47,15 +47,15 @@ class OralExpression extends Question
 		}
 	}
 
-    /**
-     * abstract function which creates the form to create / edit the answers of the question
+	/**
+	 * abstract function which creates the form to create / edit the answers of the question
      * @param FormValidator instance
-     */
+	 */
     function processAnswersCreation($form)
     {
-        $this->weighting = $form -> getSubmitValue('weighting');
-        $this->save();
-    }
+		$this->weighting = $form -> getSubmitValue('weighting');
+		$this->save();
+	}
 
     /**
      * {@inheritdoc}
@@ -63,16 +63,16 @@ class OralExpression extends Question
     function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false, $hideTitle = 0)
     {
         $header = parent::return_header($feedback_type, $counter, $score, $show_media, $hideTitle);
-        $header .= '<table class="'.$this->question_table_class.'">
-            <tr>
+	    $header .= '<table class="'.$this->question_table_class.'">
+			<tr>
                 <th>&nbsp;</th>
-            </tr>
-            <tr>
+			</tr>
+			<tr>
                 <th>'.get_lang("Answer").'</th>
-            </tr>
-            <tr>
+			</tr>
+			<tr>
                 <th>&nbsp;</th>
-            </tr>';
+			</tr>';
         return $header;
-    }
+	}
 }

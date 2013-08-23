@@ -11,6 +11,12 @@
     <li>
         <a href="{{ url('role.controller:indexAction') }}">{{ 'Roles' |trans }}</a>
     </li>
+    <li>
+        <a href="{{ url('branch.controller:indexAction') }}">{{ 'Branches' |trans }}</a>
+    </li>
+    <li>
+        <a href="{{ url('jury.controller:indexAction') }}">{{ 'Juries' |trans }}</a>
+    </li>
 </ul>
 
 {% endblock %}

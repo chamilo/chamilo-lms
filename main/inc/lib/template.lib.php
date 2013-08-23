@@ -399,10 +399,6 @@ class Template
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
 
-        if (api_get_setting('use_virtual_keyboard') == 'true') {
-            $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/keyboard/keyboard.css';
-        }
-
         $css_file_to_string = null;
         foreach ($css as $file) {
             $css_file_to_string .= api_get_css($file);
@@ -501,12 +497,8 @@ class Template
             $js_files[] = $jsFolder.'asciimath/ASCIIMathML.js';
         }
 
-        if (api_get_setting('use_virtual_keyboard') == 'true') {
-            $js_files[] = 'keyboard/jquery.keyboard.js';
-        }
-
         if (api_get_setting('disable_copy_paste') == 'true') {
-            $js_files[] = 'jquery.nocutcopypaste.js';
+            $js_files[] = $jsFolder.'jquery.nocutcopypaste.js';
         }
 
         $js_file_to_string = null;
@@ -635,15 +627,17 @@ class Template
 
         // Preparing values for the menu
 
-        // Logout link
-        // See the SecurityServiceProvider definition
-        $this->assign('logout_link', $this->app['url_generator']->generate('admin_logout'));
+        // Profile link.
 
-        //Profile link
+        $this->assign('is_profile_editable', api_is_profile_readable());
+
+        $profile_link = null;
         if (api_get_setting('allow_social_tool') == 'true') {
             $profile_link = '<a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">'.get_lang('Profile').'</a>';
         } else {
-            $profile_link = '<a href="'.api_get_path(WEB_CODE_PATH).'auth/profile.php">'.get_lang('Profile').'</a>';
+            if (api_is_profile_readable()) {
+                $profile_link = '<a href="'.api_get_path(WEB_CODE_PATH).'auth/profile.php">'.get_lang('Profile').'</a>';
+            }
         }
         $this->assign('profile_link', $profile_link);
 
@@ -685,7 +679,6 @@ class Template
         if (api_get_setting('breadcrumb_navigation_display') == 'false') {
             return;
         }
-
         $breadcrumb = $this->returnBreadcrumb();
         $this->assign('breadcrumb', $breadcrumb);
     }
@@ -959,8 +952,10 @@ class Template
         $navigation['mycourses']['title'] = get_lang('MyCourses');
 
         // My Profile
-        $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '');
-        $navigation['myprofile']['title'] = get_lang('ModifyProfile');
+        if (api_is_profile_readable()) {
+            $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '');
+            $navigation['myprofile']['title'] = get_lang('ModifyProfile');
+        }
 
         // Link to my agenda
         $navigation['myagenda']['url'] = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=personal';
@@ -1189,13 +1184,14 @@ class Template
             }
 
             // My Profile
-            if (api_get_setting('show_tabs', 'my_profile') == 'true' && api_get_setting(
-                'allow_social_tool'
-            ) != 'true'
-            ) {
-                $navigation['myprofile'] = $possible_tabs['myprofile'];
+            if (api_get_setting('show_tabs', 'my_profile') == 'true' && api_get_setting('allow_social_tool') != 'true') {
+                if (isset($possible_tabs['myprofile'])) {
+                    $navigation['myprofile'] = $possible_tabs['myprofile'];
+                }
             } else {
-                $menu_navigation['myprofile'] = $possible_tabs['myprofile'];
+                if (isset($possible_tabs['myprofile'])) {
+                    $menu_navigation['myprofile'] = $possible_tabs['myprofile'];
+                }
             }
 
             // My Agenda

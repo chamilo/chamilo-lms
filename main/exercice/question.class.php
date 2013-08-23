@@ -1785,39 +1785,37 @@ abstract class Question
         }
 
         $score_label = get_lang('Wrong');
-        $class = 'error';
+        $class       = 'error';
         if ($score['pass'] == true) {
             $score_label = get_lang('Correct');
-            $class = 'success';
+            $class       = 'success';
         }
 
         if ($this->type == FREE_ANSWER || $this->type == ORAL_EXPRESSION) {
             if ($score['revised'] == true) {
                 $score_label = get_lang('Revised');
-                $class = '';
+                $class       = '';
             } else {
                 $score_label = get_lang('NotRevised');
-                $class = 'error';
+                $class       = 'error';
             }
         }
+
 
         $header = null;
         // Display question category, if any
         if ($show_media) {
             $header .= $this->show_media_content();
         }
-
         if ($hideTitle == 1) {
             $header .= Display::page_subheader2($counterLabel);
         } else {
             $header .= Display::page_subheader2($counterLabel.". ".$this->question);
         }
-
         $header .= Display::div(
             '<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div><h4>'.$score['result'].' </h4>',
             array('class' => 'ribbon')
         );
-
         $header .= Display::div($this->description, array('id' => 'question_description'));
 
         return $header;
@@ -2267,7 +2265,6 @@ abstract class Question
                 $type = self::get_question_type($question['type']);
                 $question['type'] = get_lang($type[1]);
                 $question['question_question_type'] = get_lang($type[1]);
-
                 if (empty($exerciseId)) {
                     // View.
                     $actions = Display::url(

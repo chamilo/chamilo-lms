@@ -1005,7 +1005,6 @@ function delete_template($id) {
     // Display a feedback message.
     Display::display_confirmation_message(get_lang('TemplateDeleted'));
 }
-
 /**
  * Returns the list of timezone identifiers used to populate the select
  * This function is called through a call_user_func() in the generate_settings_form function.
@@ -1028,8 +1027,6 @@ function select_timezone_value() {
 function select_gradebook_number_decimals() {
     return array('0', '1', '2');
 }
-
-
 function select_gradebook_default_grade_model_id() {
     $grade_model = new GradeModel();
     $models = $grade_model->get_all();
@@ -1140,10 +1137,10 @@ function generate_settings_form($settings, $settings_by_access_list, $settings_t
                 if (empty($row['category']))
                     $row['category'] = 0;
 
-                if (is_array($settings_by_access_list[$row['variable']][ $row['subkey']][ $row['category']])) {
+                if (is_array($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ])) {
                     // We are sure that the other site have a selected value.
                     if ($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ]['selected_value'] != '') {
-                        $row['selected_value'] = $settings_by_access_list[$row['variable']][$row['subkey']][ $row['category']]['selected_value'];
+                        $row['selected_value'] =$settings_by_access_list[$row['variable']] [$row['subkey']] [ $row['category'] ]['selected_value'];
                     }
                 }
                 // There is no else{} statement because we load the default $row['selected_value'] of the main Chamilo site.
@@ -1161,6 +1158,7 @@ function generate_settings_form($settings, $settings_by_access_list, $settings_t
                     $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), array('maxlength' => '5'));
                     $form->applyFilter($row['variable'], 'html_filter');
                     $default_values[$row['variable']] = $row['selected_value'];
+
                 } else {
                     $hideme['class'] = 'span4';
                     $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), $hideme);

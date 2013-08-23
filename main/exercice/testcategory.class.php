@@ -693,6 +693,7 @@ class Testcategory
                 WHERE   exercice_id = $exerciseId AND
                         qrc.c_id = ".api_get_course_int_id()."
                 ";
+
 		$res = Database::query($sql);
         $categories = array();
 
@@ -706,11 +707,11 @@ class Testcategory
             if (!isset($categories[$data['category_id']]) OR !is_array($categories[$data['category_id']])) {
                 $categories[$data['category_id']] = array();
             }
+
             $categories[$data['category_id']][] = $data['question_id'];
         }
 
         $newCategoryList = array();
-
         foreach ($categoriesAddedInExercise as $category) {
             $categoryId = $category['category_id'];
             if (isset($categories[$categoryId])) {
@@ -1061,12 +1062,12 @@ class Testcategory
              while ($row = Database::fetch_array($result, 'ASSOC')) {
                 if ($excludeCategoryWithNoQuestions) {
                     if ($row['count_questions'] == 0) {
-                        continue;
+                       continue;
                     }
                 }
                 $categories[$row['category_id']] = $row;
             }
-        }
+            }
 
         if ($shuffle) {
             ArrayClass::shuffle_assoc($categories);
@@ -1082,6 +1083,7 @@ class Testcategory
     public function returnCategoryForm(Exercise $exercise_obj)
     {
         $categories = $this->getListOfCategoriesForTest($exercise_obj);
+
         $saved_categories = $exercise_obj->get_categories_in_exercise();
         $return = null;
 
@@ -1091,7 +1093,6 @@ class Testcategory
             $real_question_count = count($exercise_obj->getQuestionList());
 
             $warning = null;
-
             if ($nbQuestionsTotal != $real_question_count) {
                 $warning = Display::return_message(get_lang('CheckThatYouHaveEnoughQuestionsInYourCategories'), 'warning');
             }
@@ -1102,7 +1103,7 @@ class Testcategory
             $return .= '<th height="24">' . get_lang('Categories') . '</th>';
             $return .= '<th width="70" height="24">' . get_lang('Number') . '</th></tr>';
 
-            foreach ($categories as $category) {
+            foreach($categories as $category) {
                 $cat_id = $category['iid'];
                 $return .= '<tr>';
                 $return .= '<td>';
@@ -1115,7 +1116,6 @@ class Testcategory
                 $return .= '</tr>';
             }
             $return .= '</table>';
-
             $return .= get_lang('ZeroMeansNoQuestionWillBeSelectedMinusOneMeansThatAllQuestionsWillBeSelected');
             return $return;
         }
@@ -1162,7 +1162,6 @@ class Testcategory
             '0' => get_lang('Hidden')
         );
         $form->addElement('select', 'visibility', get_lang('Visibility'), $options);
-
         $script = null;
         if (!empty($this->parent_id)) {
             $parent_cat = new Testcategory($this->parent_id);

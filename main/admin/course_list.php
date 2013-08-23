@@ -136,7 +136,7 @@ function modify_filter($code) {
         '<a href="../tracking/courseLog.php?cidReq='.$code.'">'.Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;'.
         '<a href="course_edit.php?course_code='.$code.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;'.
         '<a href="../coursecopy/backup.php?cidReq='.$code.'">'.Display::return_icon('backup.gif', get_lang('CreateBackup')).'</a>&nbsp;'.
-        '<a href="course_list.php?delete_course='.$code.'"  onclick="javascript: if (!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
+        '<a href="course_list.php?delete_course='.$code.'"  onclick="javascript: if (!confirm('."'".addslashes(get_lang('ConfirmYourChoice'))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
 }
 
 /**

@@ -101,7 +101,7 @@ class Online
         // (using *authent_name*_logout as the function name) and the following code
         // will find and execute it
         $uinfo = api_get_user_info($user_id);
-        if (($uinfo['auth_source'] != PLATFORM_AUTH_SOURCE) && is_array($extAuthSource)) {
+        if ((isset($uinfo['auth_source']) && $uinfo['auth_source'] != PLATFORM_AUTH_SOURCE) && is_array($extAuthSource)) {
             if (is_array($extAuthSource[$uinfo['auth_source']])) {
                 $subarray = $extAuthSource[$uinfo['auth_source']];
                 if (!empty($subarray['logout']) && file_exists($subarray['logout'])) {

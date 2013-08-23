@@ -282,6 +282,7 @@ class ExtraFieldValue extends Model
         }
     }
 
+
     /**
      * Returns the value of the given extra field on the given resource
      * @param int Item ID (It could be a session_id, course_id or user_id)

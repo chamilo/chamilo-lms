@@ -432,7 +432,7 @@ switch ($action) {
         }
         $where_condition .= " AND u.user_id <> ".api_get_user_id();
         $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);
-        break;
+    	break;
     case 'get_work_user_list':
         if (isset($_GET['type'])  && $_GET['type'] == 'simple') {
             //$columns = array('type', 'firstname', 'lastname',  'username', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions');

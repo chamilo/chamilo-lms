@@ -216,7 +216,7 @@ if ($action == 'add' || $action == 'edit') {
                 <li>
                     <a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($enreg['code']); ?>"><?php Display::display_icon('folder_document.gif', get_lang('OpenNode')); ?></a>
                     <a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>&amp;action=edit&amp;id=<?php echo Security::remove_XSS($enreg['code']); ?>"><?php Display::display_icon('edit.gif', get_lang('EditNode')); ?></a>
-                    <a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>&amp;action=delete&amp;id=<?php echo Security::remove_XSS($enreg['code']); ?>" onclick="javascript:if (!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)); ?>'))
+                    <a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>&amp;action=delete&amp;id=<?php echo Security::remove_XSS($enreg['code']); ?>" onclick="javascript:if (!confirm('<?php echo addslashes(get_lang('ConfirmYourChoice')); ?>'))
                                 return false;"><?php Display::display_icon('delete.gif', get_lang('DeleteNode')); ?></a>
                     <a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>&amp;action=moveUp&amp;id=<?php echo Security::remove_XSS($enreg['code']); ?>&amp;tree_pos=<?php echo $enreg['tree_pos']; ?>"><?php Display::display_icon('up.gif', get_lang('UpInSameLevel')); ?></a>
                 <?php echo $enreg['name']; ?>

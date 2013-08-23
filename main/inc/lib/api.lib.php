@@ -127,6 +127,7 @@ define('TOOL_GRADEBOOK','gradebook');
 define('TOOL_NOTEBOOK','notebook');
 define('TOOL_ATTENDANCE','attendance');
 define('TOOL_COURSE_PROGRESS','course_progress');
+define('TOOL_CURRICULUM', 'curriculum');
 
 // CONSTANTS defining Chamilo interface sections
 define('SECTION_CAMPUS', 'mycampus');
@@ -2025,7 +2026,6 @@ function api_get_session_date_validation($session_info, $course_code, $ignore_vi
         if ($session_info['access_start_date'] == '0000-00-00 00:00:00' && $session_info['access_end_date'] == '0000-00-00 00:00:00') {
             return true;
         } else {
-
             $accessStart = true;
 
             //If access_start_date is set
@@ -2271,9 +2271,8 @@ function api_is_platform_admin($allow_sessions_admins = false)
 
     if (!empty($token)) {
         if ($app['security']->isGranted('ROLE_ADMIN')) {
-            return true;
-        }
-
+        return true;
+    }
         if ($allow_sessions_admins) {
             if ($app['security']->isGranted('ROLE_SESSION_MANAGER')) {
                 return true;
@@ -2384,7 +2383,6 @@ function api_is_platform_admin_by_id($user_id = null, $url = null) {
     $is_on_url = Database::num_rows($res) === 1;
     return $is_on_url;
 }
-
 /**
  * Returns the user's numeric status ID from the users table
  * @param int User ID. If none provided, will use current user
@@ -4439,12 +4437,10 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
     $var = Database::escape_string($var);
     $value = Database::escape_string($value);
     $access_url = (int)$access_url;
-
     if (empty($access_url)) {
         $access_url = 1;
     }
     $select = "SELECT id FROM $t_settings WHERE variable = '$var' ";
-
     if (!empty($subvar)) {
         $subvar = Database::escape_string($subvar);
         $select .= " AND subkey = '$subvar'";
@@ -4460,7 +4456,6 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
     }
 
     $res = Database::query($select);
-
     if (Database::num_rows($res) > 0) {
         // Found item for this access_url.
         $row = Database::fetch_array($res);
@@ -4621,11 +4616,8 @@ function api_get_access_url($id)
  */
 function api_get_current_access_url_info()
 {
-    $urlInfo = Session::read('url_info');
-    if (count($urlInfo) == 0) {
-        $urlInfo = api_get_access_url(api_get_current_access_url_id());
-    }
-    return $urlInfo;
+    $userInfo = Session::read('url_info');
+    return $userInfo;
 }
 
 
@@ -5959,8 +5951,8 @@ function api_get_course_url($course_code = null, $session_id = null) {
  *
  * */
 function api_get_multiple_access_url() {
-    global $app;
-    if (isset($app['configuration']['multiple_access_urls']) && $app['configuration']['multiple_access_urls']) {
+    global $_configuration;
+    if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
         return true;
     }
     return false;
@@ -6394,6 +6386,7 @@ function api_get_js_simple($file)
     return '<script type="text/javascript" src="'.$file.'"></script>'."\n";
 }
 
+
 function api_set_settings_and_plugins()
 {
     global $_configuration;
@@ -6636,7 +6629,7 @@ function api_mail_html(
         $type->setValue('text/html');
         $type->setParameter('charset', 'utf-8');
 
-        //$app['monolog']->addDebug($message);
+        $app['monolog']->addDebug($message);
         $result = $app['mailer']->send($message);
 
         return $result;
@@ -6950,9 +6943,6 @@ function api_get_user_roles()
     $status[QUESTION_MANAGER] = get_lang('QuestionManager');
     return $status;
 }
-
-
-
 /**
  * Finds all the information about a user from username instead of user id
  * @param $username (string): the username
@@ -6969,13 +6959,12 @@ function api_get_user_info_from_official_code($official_code = '') {
     }
     return false;
 }
-
 /**
  *
  * @param string $inputId the jquery id example: #password
  * @return string
  */
-function api_get_password_checker_js($usernameInputId, $passwordInputid)
+function api_get_password_checker_js($inputId)
 {
     global $_configuration;
     $useStrengthPassChecker = isset($_configuration['allow_strength_pass_checker']) ? $_configuration['allow_strength_pass_checker'] : false;
@@ -6984,14 +6973,13 @@ function api_get_password_checker_js($usernameInputId, $passwordInputid)
         return null;
     }
 
-    $verdicts = array(get_lang('PasswordWeak'), get_lang('PasswordNormal'), get_lang('PasswordMedium'), get_lang('PasswordStrong'), get_lang('PasswordVeryStrong'));
+    $verdicts = array(get_lang('Weak'), get_lang('Normal'), get_lang('Medium'), get_lang('Strong'), get_lang('VeryStrong'));
     $js = api_get_js('strength/strength.js');
     $js .=  "<script>
 
     var verdicts = ['".implode("','", $verdicts)."'];
     var errorMessages = {
-        password_to_short : '".get_lang('PasswordIsTooShort')."',
-        same_as_username : '".get_lang('YourPasswordCannotBeTheSameAsYourUsername')."',
+        password_to_short : '".get_lang('PasswordIsTooShort')."'
     };
 
     $(document).ready(function() {
@@ -7005,13 +6993,12 @@ function api_get_password_checker_js($usernameInputId, $passwordInputid)
             },
             errorMessages : errorMessages,
             viewports: {
-                progress: '#password_progress',
-                //verdict: undefined,
-                //errors: undefined
-            },
-            usernameField: '$usernameInputId'
+              progress: '#password_progress',
+              //verdict: undefined,
+              //errors: undefined
+          }
         };
-        $('".$passwordInputid."').pwstrength(options);
+        $('".$inputId."').pwstrength(options);
     });
     </script>";
     return $js;
@@ -7031,41 +7018,14 @@ function api_get_easy_password_list()
     return $passwordList;
 }
 
-/**
- *
-* create an user extra field called 'captcha_blocked_until_date'
- */
-function api_block_account_captcha($username)
+function api_is_profile_editable()
 {
-    $userInfo = api_get_user_info_from_username($username);
-    if (empty($userInfo)) {
-        return false;
-    }
-    global $_configuration;
-    $minutesToBlock = isset($_configuration['captcha_time_to_block']) ? $_configuration['captcha_time_to_block'] : 10;
-    $time = time() + $minutesToBlock*60;
-    Usermanager::update_extra_field_value($userInfo['user_id'], 'captcha_blocked_until_date', api_get_utc_datetime($time));
+    global $profileIsEditable;
+    return isset($profileIsEditable) ? $profileIsEditable : false;
 }
 
-function api_clean_account_captcha($username)
+function api_is_profile_readable()
 {
-    $userInfo = api_get_user_info_from_username($username);
-    if (empty($userInfo)) {
-        return false;
-    }
-    Session::erase('loginFailedCount');
-    Usermanager::update_extra_field_value($userInfo['user_id'], 'captcha_blocked_until_date', null);
-}
-
-function api_get_user_blocked_by_captcha($username)
-{
-    $userInfo = api_get_user_info_from_username($username);
-    if (empty($userInfo)) {
-        return false;
-    }
-    $data = Usermanager::get_extra_user_data_by_field($userInfo['user_id'], 'captcha_blocked_until_date');
-    if (isset($data)) {
-        return $data['captcha_blocked_until_date'];
-    }
-    return false;
+    global $profileIsReadable;
+    return isset($profileIsReadable) ? $profileIsReadable : true;
 }

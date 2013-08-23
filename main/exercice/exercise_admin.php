@@ -13,14 +13,15 @@
 
 use \ChamiloSession as Session;
 
+
 require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-if (!api_is_allowed_to_edit(null, true)) {
-    api_not_allowed(true);
+if (!api_is_allowed_to_edit(null,true)) {
+	api_not_allowed(true);
 }
 
 $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?1=1';
@@ -69,11 +70,10 @@ $htmlHeadXtra[] = '<script>
             complete_text: "'.get_lang('StartToType').'",
             firstselected: false,
             onselect: check,
-            //oncreate: add_item,
+            // oncreate: add_item,
             filter_selected: true,
             newel: true
         });
-
         $("input[name=\'model_type\']").each(function(index, value) {
             $(this).click(function() {
                 var value = $(this).attr("value");
@@ -190,7 +190,6 @@ $htmlHeadXtra[] = '<script>
     function check_results_disabled() {
         document.getElementById(\'exerciseType_2\').checked = true;
     }
-
     function disabledHideRandom() {
         $("#hidden_random option:eq(0)").prop("selected", true);
         $("#hidden_random").hide();
@@ -223,7 +222,6 @@ $htmlHeadXtra[] = '<script>
 
         }
     }
-
 </script>';
 
 // to correct #4029 Random and number of attempt menu empty added window.onload=advanced_parameters;
@@ -245,12 +243,12 @@ $course_id = api_get_course_int_id();
 
 //INIT FORM
 if (isset($_GET['exerciseId'])) {
-    $form = new FormValidator('exercise_admin', 'post', api_get_self().'?'.api_get_cidreq().'&exerciseId='.intval($_GET['exerciseId']));
-    $objExercise->read($_GET['exerciseId']);
-    $form->addElement('hidden', 'edit', 'true');
+	$form = new FormValidator('exercise_admin', 'post', api_get_self().'?'.api_get_cidreq().'&exerciseId='.intval($_GET['exerciseId']));
+	$objExercise->read($_GET['exerciseId']);
+	$form->addElement('hidden','edit','true');
 } else {
-    $form = new FormValidator('exercise_admin','post',api_get_self().'?'.api_get_cidreq());
-    $form->addElement('hidden', 'edit', 'false');
+	$form = new FormValidator('exercise_admin','post',api_get_self().'?'.api_get_cidreq());
+	$form->addElement('hidden','edit','false');
 }
 
 $objExercise->createForm($form);
@@ -269,48 +267,48 @@ if ($form->validate()) {
     exit;
 } else {
     // DISPLAY FORM
-    if (isset($_SESSION['gradebook'])) {
-        $gradebook=	$_SESSION['gradebook'];
-    }
+	if (isset($_SESSION['gradebook'])) {
+		$gradebook=	$_SESSION['gradebook'];
+	}
 
-    if (!empty($gradebook) && $gradebook=='view') {
-        $interbreadcrumb[]= array ('url' => '../gradebook/'.$_SESSION['gradebook_dest'],'name' => get_lang('ToolGradebook'));
-    }
-    $nameTools = get_lang('ExerciseManagement');
-    $interbreadcrumb[] = array("url"=>'exercice.php', 'name'=> get_lang('Exercices'));
+	if (!empty($gradebook) && $gradebook=='view') {
+		$interbreadcrumb[]= array ('url' => '../gradebook/'.$_SESSION['gradebook_dest'],'name' => get_lang('ToolGradebook'));
+	}
+	$nameTools = get_lang('ExerciseManagement');
+	$interbreadcrumb[] = array("url"=>'exercice.php', 'name'=> get_lang('Exercices'));
     $interbreadcrumb[] = array("url"=>"admin.php?exerciseId=".$objExercise->id, "name" => $objExercise->name);
 
-    Display::display_header($nameTools,get_lang('Exercise'));
+	Display::display_header($nameTools,get_lang('Exercise'));
 
 	echo '<div class="actions">';
 
-    if ($objExercise->id != 0) {
-        echo '<a href="admin.php?'.api_get_cidReq().'&exerciseId='.$objExercise->id.'">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
-    } else {
-        if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])){
-            if (!empty($_POST['lp_id'])){
-                $lp_id = Security::remove_XSS($_POST['lp_id']);//TODO:this remains to be implemented after press the first post
-            } else {
-                $lp_id = Security::remove_XSS($_GET['lp_id']);
-            }
-            echo "<a href=\"../newscorm/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-2\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"),'',ICON_SIZE_MEDIUM)."</a>";
+	if ($objExercise->id != 0) {
+	    echo '<a href="admin.php?'.api_get_cidReq().'&exerciseId='.$objExercise->id.'">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
+	} else {
+		if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])){
+			if (!empty($_POST['lp_id'])){
+				$lp_id = Security::remove_XSS($_POST['lp_id']);//TODO:this remains to be implemented after press the first post
+			} else {
+				$lp_id = Security::remove_XSS($_GET['lp_id']);
+			}
+			echo "<a href=\"../newscorm/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-2\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"),'',ICON_SIZE_MEDIUM)."</a>";
         } else {
-            echo '<a href="exercice.php">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
-        }
-    }
+	    	echo '<a href="exercice.php">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
+		}
+	}
 	echo '</div>';
 
     if ($objExercise->feedback_type == 1) {
-        Display::display_normal_message(get_lang('DirectFeedbackCantModifyTypeQuestion'));
+		Display::display_normal_message(get_lang('DirectFeedbackCantModifyTypeQuestion'));
     }
 
-    if (api_get_setting('search_enabled')=='true' && !extension_loaded('xapian')) {
-        Display::display_error_message(get_lang('SearchXapianModuleNotInstalled'));
-    }
+	if (api_get_setting('search_enabled')=='true' && !extension_loaded('xapian')) {
+		Display::display_error_message(get_lang('SearchXapianModuleNotInstalled'));
+	}
 
     if ($objExercise->id != 0 && $objExercise->edit_exercise_in_lp == false) {
         $form->freeze();
     }
-    $form->display();
+	$form->display();
 }
 Display::display_footer();

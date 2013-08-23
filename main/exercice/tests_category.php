@@ -15,13 +15,13 @@ require_once 'question.class.php';
 
 $this_section = SECTION_COURSES;
 
-if (!api_is_allowed_to_edit()) {
+if (!(api_is_allowed_to_edit() || api_is_question_manager())) {
     api_not_allowed(true);
 }
 
 $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : 'simple';
 
-if ($type == 'global' && !api_is_platform_admin()) {
+if ($type == 'global' && !(api_is_platform_admin() || api_is_question_manager())) {
     api_not_allowed(true);
 }
 

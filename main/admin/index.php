@@ -295,9 +295,11 @@ if (api_is_platform_admin()) {
     //Version check
     $blocks['version_check']['icon']  = Display::return_icon('logo.png', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
 	$blocks['version_check']['label'] = get_lang('VersionCheck');
-	//$blocks['version_check']['extra'] = version_check();
+	$blocks['version_check']['extra'] = '<div class="admin-block-version"></div>';
     $blocks['version_check']['search_form'] = null;
     $blocks['version_check']['items'] = null;
+    //$blocks['version_check']['class'] = '';
+
 }
 $admin_ajax_url = api_get_path(WEB_AJAX_PATH).'admin.ajax.php';
 
@@ -309,8 +311,6 @@ $content = $tpl->fetch($admin_template);
 $tpl->assign('content', $content);
 $tpl->assign('message', $message);
 $tpl->display_one_col_template();
-
-
 
 /**
  * This setting changes the registration status for the campus
@@ -324,11 +324,11 @@ function register_site() {
     $tbl_settings = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
     $sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='registered'";
-    $result = Database::query($sql);
+    Database::query($sql);
 
     if ($_POST['donotlistcampus']) {
         $sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='donotlistcampus'";
-        $result = Database::query($sql);
+        Database::query($sql);
     }
     // Reload the settings.
 }

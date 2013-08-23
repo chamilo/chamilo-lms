@@ -42,12 +42,12 @@ switch ($action) {
  * @return string html code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version august 2006
- * @todo have a 6monthly re-registration
+ * @todo have a 6 monthly re-registration
  */
 function version_check()
 {
     $tbl_settings = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-    $sql = 'SELECT selected_value FROM  '.$tbl_settings.' WHERE variable="registered" ';
+    $sql = 'SELECT selected_value FROM '.$tbl_settings.' WHERE variable = "registered" ';
     $result = Database::query($sql);
     $row = Database::fetch_array($result, 'ASSOC');
 
@@ -55,7 +55,7 @@ function version_check()
     $return = '';
     if ($row['selected_value'] == 'false') {
         $return .= get_lang('VersionCheckExplanation');
-        $return .= '<form class="well" action="'.api_get_self().'" id="VersionCheck" name="VersionCheck" method="post">';
+        $return .= '<form class="well" action="'.api_get_path(WEB_CODE_PATH).'admin/index.php" id="VersionCheck" name="VersionCheck" method="post">';
         $return .= '<label class="checkbox"><input type="checkbox" name="donotlistcampus" value="1" id="checkbox" />'.get_lang('HideCampusFromPublicPlatformsList');
         $return .= '</label><button type="submit" class="btn btn-primary" name="Register" value="'.get_lang('EnableVersionCheck').'" id="register" >'.get_lang('EnableVersionCheck').'</button>';
         $return .= '</form>';

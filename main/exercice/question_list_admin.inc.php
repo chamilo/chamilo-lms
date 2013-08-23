@@ -190,7 +190,7 @@ if (!$inATest) {
                 $move = Display::return_icon('all_directions.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));
 
                 // Question name
-                $questionName = Display::tag('div', '<a href="#" title = "'.str_replace('"','',$title).'">'.$move.' '.cut($title, 42).'</a>', array('style'=>$styleQuestion));
+                $questionName = Display::tag('div', '<a href="#" title = "'.htmlentities($title).'">'.$move.' '.cut($title, 42).'</a>', array('style'=>$styleQuestion));
 
 				// Question type
 				list($typeImg, $typeExpl) = $objQuestionTmp->get_type_icon_html();

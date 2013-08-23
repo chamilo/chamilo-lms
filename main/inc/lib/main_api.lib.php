@@ -155,6 +155,8 @@ define('LOG_USER_DELETE',                       'user_deleted');
 define('LOG_USER_CREATE',                       'user_created');
 define('LOG_USER_ENABLE',                       'user_enable');
 define('LOG_USER_DISABLE',                      'user_disable');
+define('LOG_USER_FIELD_CREATE',			'user_field_created');
+define('LOG_USER_FIELD_DELETE',			'user_field_deleted');
 define('LOG_SESSION_CREATE',                    'session_created');
 define('LOG_SESSION_DELETE',                    'session_deleted');
 define('LOG_SESSION_CATEGORY_CREATE',           'session_category_created');
@@ -176,6 +178,7 @@ define('LOG_CAREER_DELETE',                     'career_deleted');
 define('LOG_COURSE_CODE',                       'course_code');
 define('LOG_USER_ID',                           'user_id');
 define('LOG_USER_OBJECT',                       'user_object');
+define('LOG_USER_FIELD_VARIABLE',		'user_field_variable');
 define('LOG_SESSION_ID',                        'session_id');
 define('LOG_SESSION_CATEGORY_ID',               'session_category_id');
 define('LOG_CONFIGURATION_SETTINGS_CATEGORY',   'settings_category');
@@ -294,6 +297,7 @@ define('LINK_FORUM_THREAD',			5);
 //define('LINK_WORK',6);
 define('LINK_ATTENDANCE',			7);
 define('LINK_SURVEY',				8);
+define('LINK_HOTPOTATOES',			9);
 
 //From display.lib.php
 

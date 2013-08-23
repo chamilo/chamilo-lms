@@ -77,7 +77,6 @@ $langUserHasPermissionNot = "Vartotojas neturi teisių";
 $langUserHasPermission = "Vartotojas turi teises";
 $langLegend = "Legenda";
 $langUserHasPermissionByRoleGroup = "Vartotojas turi šios grupės teises";
-$EditPost = "Redaguoti straipsnį";
 $AddBlog = "Sukurti naują dienoraštį";
 $EditBlog = "Redaguoti antraštę ir poantraštę";
 $DeleteBlog = "Ištrinti šį dienoraštį";

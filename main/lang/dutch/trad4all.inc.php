@@ -844,5 +844,10 @@ $ToolCourseMaintenance = "Cursusback-up";
 $ToolCourseProgress = "Voortgang";
 $ToolVideoconference = "Videoconferentie";
 $AddedToALP = "Toegevoegd aan leerpad";
+$YouHaveANewInvitationFromX = "Je hebt een nieuwe uitnodiging van %s";
+$YouHaveANewMessageFromX = "Je hebt een nieuw bericht van %s";
+$SeeMessage = "Bekijk het bericht";
+$SeeInvitation = "Bekijk de uitnodiging";
+$YouHaveReceivedThisNotificationBecauseYouAreSubscribedOrInvolvedInItToChangeYourNotificationPreferencesPleaseClickHereX = "Je kreeg deze melding omdat je in je profiel aangaf dat je meldingen via e-mail wenst te ontvangen. Deze instelling kan je op volgende link aanpassen: %s";
 $UserList = "Gebruikerslijst";
 ?>

@@ -2,6 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ApplyAllLanguages = "Appliquer ces modifications à toutes les langues disponibles";
+$CareerUpdated = "Carrière mise à jour";
 $CasMainActivateComment = "Activer l'authentification CAS permettra aux utilisateurs de s'identifier à l'aide de leur compte CAS<br/>Vous trouverez dans les <a href='settings.php?category=CAS'>Plugin</a> un bouton 'Login CAS', paramétrable, qui s'ajoutera sur la page d'accueil de votre campus Chamilo.";
 $UsersRegisteredInAnyGroup = "Utilisateurs enregistrés dans n'importe quel groupe";
 $ShowHotCoursesComment = "Affiche la liste des cours les plus utilisés (hot courses) sur la page d'accueil";
@@ -1075,6 +1077,7 @@ $EditTabs = "Éditer les onglets";
 $YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill = "Votre carnet de notes doit d'abord être lié à un certificat pour pouvoir être attaché à une compétence";
 $PlatformUnsubscribeTitle = "Autoriser les utilisateurs à se désinscrire de la plateforme";
 $PlatformUnsubscribeComment = "Quand les utilisateurs se désinscrivent toutes leurs données sont effacées de façon permanente.";
+$PromotionUpdated = "Promotion mise à jour";
 $BabyOrange = "Petite Orange";
 $BlueLagoon = "Lagon bleu";
 $CoolBlue = "Bleu Frais";

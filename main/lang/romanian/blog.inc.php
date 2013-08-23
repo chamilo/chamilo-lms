@@ -78,7 +78,6 @@ $langUserHasPermissionNot = "Utilizatorul nu are drepturi";
 $langUserHasPermission = "Utilizatorul are drepturi";
 $langLegend = "Legenda";
 $langUserHasPermissionByRoleGroup = "Utilizatorul are drepturi asupra grupului sau";
-$EditPost = "Editeaza un articol";
 $AddBlog = "Creaza un blog nou";
 $EditBlog = "Editeaza titlul si subtitlul";
 $DeleteBlog = "Sterge acest blog";

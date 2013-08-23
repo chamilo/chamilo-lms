@@ -266,7 +266,7 @@ if (api_is_platform_admin()) {
 
 	/* Chamilo.org */
 
-	$blocks['chamilo']['icon']  = Display::return_icon('logo.gif', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
+	$blocks['chamilo']['icon']  = Display::return_icon('logo.png', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
 	$blocks['chamilo']['label'] = 'Chamilo.org';
 
 	$items = array();
@@ -293,14 +293,16 @@ if (api_is_platform_admin()) {
     //Version check
     $blocks['version_check']['icon']  = Display::return_icon('logo.png', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
 	$blocks['version_check']['label'] = get_lang('VersionCheck');
-	//$blocks['version_check']['extra'] = version_check();
+	$blocks['version_check']['extra'] = '<div class="admin-block-version"></div>';
     $blocks['version_check']['search_form'] = null;
     $blocks['version_check']['items'] = null;
+    //$blocks['version_check']['class'] = '';
 }
 $admin_ajax_url = api_get_path(WEB_AJAX_PATH).'admin.ajax.php';
 
 $app['template']->assign('blocks', $blocks);
 $app['template']->display('default/admin/settings_index.tpl');
+
 
 /**
  * Displays either the text for the registration or the message that the installation is (not) up to date
@@ -331,8 +333,6 @@ function version_check() {
     }
     return $return;
 }
-
-
 
 /**
  * Check if the current installation is up to date

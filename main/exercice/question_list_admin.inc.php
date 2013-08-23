@@ -3,17 +3,12 @@
 /**
 *	Code library for HotPotatoes integration.
 *	@package chamilo.exercise
-* 	@author
-*/
+*	@author Olivier Brouckaert & Julio Montoya & Hubert Borderiou 21-10-2011 (Question by category)
 
-/**
 *	QUESTION LIST ADMINISTRATION
 *
 *	This script allows to manage the question list
 *	It is included from the script admin.php
-*
-*	@author Olivier Brouckaert
-* Modified by Hubert Borderiou 21-10-2011 (Question by category)
 */
 
 // deletes a question from the exercise (not from the data base)
@@ -108,7 +103,7 @@ $(function() {
         autoHeight: false,
         active: false, // all items closed by default
         collapsible: true,
-        header: ".header_operations",
+        header: ".header_operations"
     })
 
     .sortable({

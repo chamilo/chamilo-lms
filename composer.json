@@ -67,7 +67,7 @@
         "mpdf/mpdf": "v5.6.1",
         "ezyang/htmlpurifier": "v4.5.0",
         "realityking/pchart": "dev-master",
-        "imagine/imagine": "dev-develop",
+        "imagine/imagine": "0.6.*@dev",
         "grom/silex-service-provider": "dev-master",
         "knplabs/knp-menu": "2.0.*@dev",
         "knplabs/knp-snappy": "dev-master",
@@ -79,8 +79,6 @@
         "jbroadway/urlify": "dev-master",
         "sensio/framework-extra-bundle": "2.3.*@dev",
         "chamilo/chash": "dev-master",
-        "zendframework/zend-config": "2.3.*@dev",
-        "zendframework/zend-stdlib" : "2.3.*@dev",
         "flint/flint" : "~1.4"
     },
     "require-dev": {

@@ -122,24 +122,6 @@ class BranchSync
     private $lastSyncType;
 
     /**
-     * Path to the associated certificate file in PEM format.
-     *
-     * @var string
-     *
-     * @ORM\Column(name="ssl_certificate", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
-     */
-    private $sslCertificate;
-
-    /**
-     * Path to the associated PCKS#12 store file.
-     *
-     * @var string
-     *
-     * @ORM\Column(name="ssl_p12_store", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
-     */
-    private $sslP12Store;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="branch_type", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
@@ -193,6 +175,53 @@ class BranchSync
      * @ORM\OrderBy({"lft" = "ASC"})
      */
     private $children;
+
+    /**
+     * Machine name for the envelope plugin to use.
+     *
+     * @var string
+     *
+     * @ORM\Column(name="plugin_envelope", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $pluginEnvelope;
+
+    /**
+     * Machine name for the send plugin to use.
+     *
+     * @var string
+     *
+     * @ORM\Column(name="plugin_send", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $pluginSend;
+
+    /**
+     * Machine name for the receive plugin to use.
+     *
+     * @var string
+     *
+     * @ORM\Column(name="plugin_receive", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $pluginReceive;
+
+    /**
+     * Extra information about the branch.
+     *
+     * For now, mainly used by plugins.
+     * An example status:
+     * <code>
+     * array(
+     *     'plugins' => array(
+     *         'envelope' => 'json',
+     *         'receive' => 'chamilows',
+     *     ),
+     * );
+     * </code>
+     *
+     * @var array
+     *
+     * @ORM\Column(type="array", nullable=true, unique=false)
+     */
+    private $data;
 
 
     /**
@@ -503,52 +532,6 @@ class BranchSync
         return $this;
     }
 
-    /**
-     * Set sslCertificate.
-     *
-     * @param string $sslCertificate
-     * @return BranchSync
-     */
-    public function setSslCertificate($sslCertificate)
-    {
-        $this->sslCertificate = $sslCertificate;
-
-        return $this;
-    }
-
-    /**
-     * Get sslCertificate.
-     *
-     * @return string
-     */
-    public function getSslCertificate()
-    {
-        return $this->sslCertificate;
-    }
-
-    /**
-     * Set sslP12Store.
-     *
-     * @param string $sslP12Store
-     * @return BranchSync
-     */
-    public function setSslP12Store($sslP12Store)
-    {
-        $this->sslP12Store = $sslP12Store;
-
-        return $this;
-    }
-
-    /**
-     * Get sslP12Store.
-     *
-     * @return string
-     */
-    public function getSslP12Store()
-    {
-        return $this->sslP12Store;
-    }
-
      /**
      * Set branchType.
      *
@@ -734,5 +717,101 @@ class BranchSync
     public function getParent()
     {
         return $this->parent;
+    }
+
+    /**
+     * Set pluginEnvelope.
+     *
+     * @param string $pluginEnvelope
+     *
+     * @return BranchSync
+     */
+    public function setPluginEnvelope($pluginEnvelope)
+    {
+        $this->pluginEnvelope = $pluginEnvelope;
+
+        return $this;
+    }
+
+    /**
+     * Get pluginEnvelope.
+     *
+     * @return string
+     */
+    public function getPluginEnvelope()
+    {
+        return $this->pluginEnvelope;
+    }
+
+    /**
+     * Set pluginSend.
+     *
+     * @param string $pluginSend
+     *
+     * @return BranchSync
+     */
+    public function setPluginSend($pluginSend)
+    {
+        $this->pluginSend = $pluginSend;
+
+        return $this;
+    }
+
+    /**
+     * Get pluginSend.
+     *
+     * @return string
+     */
+    public function getPluginSend()
+    {
+        return $this->pluginSend;
+    }
+
+    /**
+     * Set pluginReceive.
+     *
+     * @param string $pluginReceive
+     *
+     * @return BranchSync
+     */
+    public function setPluginReceive($pluginReceive)
+    {
+        $this->pluginReceive = $pluginReceive;
+
+        return $this;
+    }
+
+    /**
+     * Get pluginReceive.
+     *
+     * @return string
+     */
+    public function getPluginReceive()
+    {
+        return $this->pluginReceive;
+    }
+
+    /**
+     * Set data.
+     *
+     * @param array $data
+     *
+     * @return BranchSync
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
+    /**
+     * Get data.
+     *
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
     }
 }

@@ -2721,7 +2721,7 @@ class learnpath
                     return $prereq;
                 }
             }
-        }    
+        }
 
     /**
      * Returns the XML DOM document's node
@@ -10506,6 +10506,7 @@ EOD;
                 $previous_item_id = $item->get_id();
                 $previous_item_max = $item->get_max();
                 $previous_item_type = $item->get_type();
+            }
         }
     }
 

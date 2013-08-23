@@ -340,5 +340,10 @@ ALTER TABLE branch_sync CHANGE ssl_pub_key ssl_certificate varchar(250) default 
 -- Adds a new field to store the PCKS#12 file for the branch.
 ALTER TABLE branch_sync ADD ssl_p12_store varchar(250) default '' AFTER ssl_certificate;
 
+-- Fields re-structuring corresponding to plugin generalization.
+ALTER TABLE branch_sync DROP ssl_certificate , DROP ssl_p12_store;
+ALTER TABLE branch_sync ADD plugin_envelope varchar(250) default null, ADD plugin_send varchar(250) default null, ADD plugin_receive varchar(250) default null;
+ALTER TABLE branch_sync ADD data TEXT DEFAULT null COMMENT 'Serialized php array with extra information for the branch. Mainly used by its plugins.';
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.030' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.031' WHERE variable = 'chamilo_database_version';

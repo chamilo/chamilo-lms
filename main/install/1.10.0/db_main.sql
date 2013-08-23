@@ -3092,14 +3092,16 @@ CREATE TABLE branch_sync(
   last_sync_trans_id bigint unsigned default 0,
   last_sync_trans_date datetime,
   last_sync_type char(20) default 'full',
-  ssl_certificate varchar(250) default '',
-  ssl_p12_store varchar(250) default '',
   branch_type varchar(250) default null,
   lft int unsigned,
   rgt int unsigned,
   lvl int unsigned,
   root int unsigned,
   parent_id int unsigned
+  plugin_envelope varchar(250) default null,
+  plugin_send varchar(250) default null,
+  plugin_receive varchar(250) default null,
+  data TEXT DEFAULT null COMMENT 'Serialized php array with extra information for the branch. Mainly used by its plugins.';
 );
 INSERT INTO branch_sync (id, access_url_id, branch_name, branch_ip) VALUES (1, 1, 'Local', '127.0.0.1');
 
@@ -3665,4 +3667,4 @@ CREATE TABLE curriculum_rel_user (
 
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.030' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.031' WHERE variable = 'chamilo_database_version';

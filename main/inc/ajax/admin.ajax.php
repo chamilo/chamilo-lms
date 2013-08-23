@@ -74,7 +74,7 @@ function version_check()
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University (the modifications)
  * @author Yannick Warnier <ywarnier@beeznest.org> for the move to HTTP request
  * @copyright (C) 2001 The phpBB Group
- * @return language string with some layout (color)
+ * @return string language string with some layout (color)
  */
 function check_system_version()
 {
@@ -83,11 +83,11 @@ function check_system_version()
 
     if (ini_get('allow_url_fopen') == 1) {
         // The number of courses
-        $number_of_courses = statistics::count_courses();
+        $number_of_courses = Statistics::count_courses();
 
         // The number of users
-        $number_of_users = statistics::count_users();
-        $number_of_active_users = statistics::count_users(null, null, null, true);
+        $number_of_users = Statistics::count_users();
+        $number_of_active_users = Statistics::count_users(null, null, null, true);
 
         $data = array(
             'url' => api_get_path(WEB_PATH),

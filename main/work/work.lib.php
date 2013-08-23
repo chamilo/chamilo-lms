@@ -455,7 +455,7 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
         $qualification_exists = true;
     }
 
-	$edit_dir = isset($_GET['edit_dir']) ? $_GET['edit_dir'] : '';
+	$edit_dir = isset($_GET['edit_dir']) ? intval($_GET['edit_dir']) : '';
 
 	$table_header = array();
 	$table_has_actions_column = false;
@@ -539,7 +539,8 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
                 $sql = Database::query('SELECT * FROM '.$work_assigment.' WHERE c_id = '.$course_id.' AND id = "'.$row['has_properties'].'" LIMIT 1');
                 $homework = Database::fetch_array($sql);
             }
-
+            // save original value for later
+            $utc_expiry_time = $homework['expires_on'];
 			if ($is_allowed_to_edit && $locked == false) {
 
 				if (!empty($edit_dir) && $edit_dir == $id2) {
@@ -887,7 +888,8 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 			}
 
             if (!empty($homework)) {
-                $row[] = !empty($homework['ends_on']) && $homework['ends_on'] != '0000-00-00 00:00:00' ? api_get_local_time($homework['ends_on']): '-';
+                // use original utc value saved previously to avoid doubling the utc-to-local conversion ($homework['expires_on'] might have been tainted)
+                $row[] = !empty($utc_expiry_time) && $utc_expiry_time != '0000-00-00 00:00:00' ? api_get_local_time($utc_expiry_time): '-';
             } else {
                 $row[] = '-';
             }

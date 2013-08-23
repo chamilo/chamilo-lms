@@ -69,7 +69,7 @@ $workPerUser = getWorkPerUser($studentId);
 $table = new HTML_Table(array('class' => 'data_table'));
 $column = 0;
 $row = 0;
-$headers = array(get_lang('Title'), get_lang('HandedOutDate'), get_lang('HandedOutDateLimit'), get_lang('Score'), get_lang('Actions'));
+$headers = array(get_lang('Title'), get_lang('HandedOutDate'), get_lang('HandOutDateLimit'), get_lang('Score'), get_lang('Actions'));
 foreach ($headers as $header) {
     $table->setHeaderContents($row, $column, $header);
     $column++;
@@ -90,7 +90,7 @@ foreach ($workPerUser as $work) {
         $table->setCellContents($row, $column, $userResult['sent_date']);
         $column++;
         //$dateQualification = !empty($workExtraData['expires_on']) && $workExtraData['expires_on'] != '0000-00-00 00:00:00' ? api_get_utc_datetime($workExtraData['expires_on']) : '-';
-        $dateQualification = !empty($workExtraData['ends_on']) && $workExtraData['ends_on'] != '0000-00-00 00:00:00' ? api_get_utc_datetime($workExtraData['ends_on']) : '-';
+        $dateQualification = !empty($workExtraData['expires_on']) && $workExtraData['expires_on'] != '0000-00-00 00:00:00' ? api_get_local_time($workExtraData['expires_on']) : '-';
         $table->setCellContents($row, $column, $dateQualification);
         $column++;
         //var_dump($userResult);

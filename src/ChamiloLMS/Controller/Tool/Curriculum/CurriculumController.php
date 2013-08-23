@@ -31,7 +31,7 @@ class CurriculumController extends CommonController
         return $this->redirect(
                 $this->generateUrl(
                     'curriculum_user.controller:indexAction',
-                    array('course' => $course)
+                    array('course' => $this->getCourse())
                 )
                 .'?'.$this->getRequest()->getQueryString()
         );

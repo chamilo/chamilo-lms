@@ -138,7 +138,11 @@ $app['security.access_rules'] = array(
     array('^/admin/questionmanager', 'ROLE_QUESTION_MANAGER'),
     array('^/main/auth/inscription.php', 'IS_AUTHENTICATED_ANONYMOUSLY'),
     array('^/main/auth/lostPassword.php', 'IS_AUTHENTICATED_ANONYMOUSLY'),
-    array('^/main/.*', array('ROLE_STUDENT'))
+    array('^/main/.*', array('ROLE_STUDENT')),
+    array('^/courses/.*/curriculum/category', 'ROLE_TEACHER'),
+    array('^/courses/.*/curriculum/item', 'ROLE_TEACHER'),
+    array('^/courses/.*/curriculum/user', 'ROLE_STUDENT'),
+    array('^/courses/.*/curriculum', 'ROLE_STUDENT'),
     //array('^.*$', 'ROLE_USER'),
 );
 
@@ -638,5 +642,31 @@ $app['question_score_name.controller'] = $app->share(
 $app['model_ajax.controller'] = $app->share(
     function () use ($app) {
         return new ChamiloLMS\Controller\ModelAjaxController();
+    }
+);
+
+// Curriculum tool
+
+$app['curriculum.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumController($app);
+    }
+);
+
+$app['curriculum_category.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumCategoryController($app);
+    }
+);
+
+$app['curriculum_item.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumItemController($app);
+    }
+);
+
+$app['curriculum_user.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumUserController($app);
     }
 );

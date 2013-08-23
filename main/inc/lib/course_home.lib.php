@@ -629,6 +629,10 @@ class CourseHome {
                     continue;
                 }
 
+                if ($tool['name'] == 'course_description') {
+                    $tool['link'] = 'course_description/index.php';
+                }
+
                 // This part displays the links to hide or remove a tool.
                 // These links are only visible by the course manager.
                 unset($lnk);
@@ -656,7 +660,7 @@ class CourseHome {
 
                 // Both checks are necessary as is_platform_admin doesn't take student view into account
                 if ($is_platform_admin && $is_allowed_to_edit) {
-                     if ($tool['admin'] != '1') {
+                    if ($tool['admin'] != '1') {
                         $link['cmd'] = 'hide=yes';
                     }
                 }
@@ -696,7 +700,6 @@ class CourseHome {
 
                 $tool_link_params = array();
 
-                //$tool['link'] = htmlspecialchars($tool['link']) ;
                 //@todo this visio stuff should be removed
                 if (strpos($tool['name'],'visio_') !== false) {
                     $tool_link_params = array(

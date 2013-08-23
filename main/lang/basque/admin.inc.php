@@ -1623,7 +1623,7 @@ $LdapDescriptionComment = "
 
 I. LDAP konfigurazioa
 Editatu main/inc/conf/auth.conf.php konfigurazioa
--> Editatu bektoreen balioak $extldap_config
+-> Editatu bektoreen balioak \$extldap_config
 
 Parametroak honako hauek dira
 
@@ -1638,7 +1638,7 @@ Parametroak honako hauek dira
     *kodeketa (e b : 'encoding' => 'UTF-8')
     *eguneratu_erabiltzaileinfo (e b : 'update_userinfo' => true) 
 
--> Erabiltzailearen eta LDAP atributuen arteko korrespondentziak eguneratzeko, editatu bektoreak $extldap_user_correspondance
+-> Erabiltzailearen eta LDAP atributuen arteko korrespondentziak eguneratzeko, editatu bektoreak \$extldap_user_correspondance
 Bektoreen balioak honakoak dira <chamilo_field> => >ldap_field>
 Bektoreen egitura  main/auth/external_login/ldap.conf.php  fitxategian azalduta dago
 
@@ -1646,8 +1646,8 @@ Bektoreen egitura  main/auth/external_login/ldap.conf.php  fitxategian azalduta 
 II. Aktibatu LDAP autentifikazioa
 Editatu  main/inc/conf/configuration.php
 -> Iruzkinik gabeko lerroak
-$extAuthSource[\"extldap\"][\"login\"] =$_configuration['root_sys'].$_configuration['code_append'].\"auth/external_login/login.ldap.php\";
-$extAuthSource[\"extldap\"][\"newUser\"] =$_configuration['root_sys'].$_configuration['code_append'].\"auth/external_login/newUser.ldap.php\";
+\$extAuthSource[\"extldap\"][\"login\"] =\$_configuration['root_sys'].\$_configuration['code_append'].\"auth/external_login/login.ldap.php\";
+\$extAuthSource[\"extldap\"][\"newUser\"] =\$_configuration['root_sys'].\$_configuration['code_append'].\"auth/external_login/newUser.ldap.php\";
 
 N.B. : LDAP erabiltzaileek eta plataformako erabiltzaileek konektatzean eremu berberak erabiltzen dituzte.
 N.B. : LDAP aktibatzeak [LDAP] Kanpo autentifikazioa menua gehitzen du, erabiltzaileen \"gehitu edo aldatu\" orrietan.";

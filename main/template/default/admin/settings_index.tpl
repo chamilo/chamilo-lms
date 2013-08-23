@@ -3,11 +3,11 @@
 <script>
 $(function() {
     //$("#settings").tabs();
-    $.ajax({    
-        url:'{{web_admin_ajax_url}}?a=version',
+    $.ajax({
+        url:'{{ web_admin_ajax_url }}?a=version',
         success:function(version){
             $(".admin-block-version").html(version);
-        } 
+        }
     });
 });
 </script>
@@ -15,7 +15,8 @@ $(function() {
     <div class="row">
 
     {% for block_item in blocks %}
-        {% if loop.index % 2 == 1%}
+
+        {% if loop.index % 2 == 1 %}
             {% if app.full_width == 1 %}
                 <div class="row-fluid">
             {% else %}
@@ -23,9 +24,9 @@ $(function() {
             {% endif %}
         {% endif %}
 
-        <div id="tabs-{{loop.index}}" class="span6">
+        <div id="tabs-{{ loop.index }}" class="span6">
             <div class="well_border {{ block_item.class }}">
-                <h4>{{block_item.icon}} {{block_item.label}}</h4>
+                <h4>{{ block_item.icon }} {{ block_item.label }}</h4>
                 <div style="list-style-type:none">
                     {{ block_item.search_form }}
                 </div>
@@ -48,9 +49,11 @@ $(function() {
                 {% endif %}
             </div>
         </div>
+
         {% if loop.index % 2 == 0 %}
             </div>
         {% endif %}
     {% endfor %}
+    </div>
 </div>
 {% endblock %}

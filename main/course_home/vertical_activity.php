@@ -55,7 +55,7 @@ if (api_is_platform_admin()) {
 //	COURSE ADMIN ONLY VIEW
 
 // Start of tools for CourseAdmins (teachers/tutors)
-if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {   
+if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
     $content .=  '<div class="courseadminview" style="border:0px; margin-top: 0px;padding:5px;">
     <div class="normal-message" id="id_normal_message" style="display:none">';
         $content .=  '<img src="'.api_get_path(WEB_PATH).'main/inc/lib/javascript/indicator.gif"/>&nbsp;&nbsp;';
@@ -109,8 +109,8 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 		foreach($my_list as $key=>$new_tool) {
 			$tool_name = CourseHome::translate_tool_name($new_tool);
 			$order_tool_list [$key]= $tool_name;
-		}		
-		natsort($order_tool_list);		
+		}
+		natsort($order_tool_list);
 		$my_temp_tool_array = array();
 		foreach($order_tool_list as $key=>$new_tool) {
 			$my_temp_tool_array[] = $my_list[$key];

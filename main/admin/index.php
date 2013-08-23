@@ -300,6 +300,7 @@ if (api_is_platform_admin()) {
 }
 $admin_ajax_url = api_get_path(WEB_AJAX_PATH).'admin.ajax.php';
 
+$app['template']->assign('web_admin_ajax_url', $admin_ajax_url);
 $app['template']->assign('blocks', $blocks);
 $app['template']->display('default/admin/settings_index.tpl');
 

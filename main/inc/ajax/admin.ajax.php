@@ -5,7 +5,6 @@
  */
 
 require_once '../global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'admin/statistics/statistics.lib.php';
 
 api_protect_admin_script();
 
@@ -33,29 +32,30 @@ switch ($action) {
         }
         echo json_encode($json_coaches);
         break;
-	case 'update_changeable_setting':        
+	case 'update_changeable_setting':
         $url_id = api_get_current_access_url_id();
-        
-        if (api_is_global_platform_admin() && $url_id == 1) {            
-            if (isset($_GET['id']) && !empty($_GET['id'])) {                
+
+        if (api_is_global_platform_admin() && $url_id == 1) {
+            if (isset($_GET['id']) && !empty($_GET['id'])) {
                 $params = array('variable = ? ' =>  array($_GET['id']));
-                $data = api_get_settings_params($params);                
+                $data = api_get_settings_params($params);
                 if (!empty($data)) {
-                    foreach ($data as $item) {                
+                    foreach ($data as $item) {
                         $params = array('id' =>$item['id'], 'access_url_changeable' => $_GET['changeable']);
-                        api_set_setting_simple($params);        
+                        api_set_setting_simple($params);
                     }
-                }                
+                }
                 echo '1';
-            }        
+            }
         }
         break;
-        
+
     case 'version':
         echo version_check();
+        exit;
         break;
 }
-    
+
 
 /**
  * Displays either the text for the registration or the message that the installation is (not) up to date
@@ -95,7 +95,7 @@ function version_check()
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University (the modifications)
  * @author Yannick Warnier <ywarnier@beeznest.org> for the move to HTTP request
  * @copyright (C) 2001 The phpBB Group
- * @return language string with some layout (color)
+ * @return string language string with some layout (color)
  */
 function check_system_version()
 {
@@ -104,11 +104,11 @@ function check_system_version()
 
     if (ini_get('allow_url_fopen') == 1) {
         // The number of courses
-        $number_of_courses = statistics::count_courses();
+        $number_of_courses = Statistics::count_courses();
 
         // The number of users
-        $number_of_users = statistics::count_users();
-        $number_of_active_users = statistics::count_users(null,null,null,true);
+        $number_of_users = Statistics::count_users();
+        $number_of_active_users = Statistics::count_users(null, null, null, true);
 
         $data = array(
             'url' => api_get_path(WEB_PATH),
@@ -186,7 +186,7 @@ function _http_request($ip, $port = 80, $uri = '/', $getdata = array(), $timeout
 
     stream_set_timeout($fp, $timeout);
     $r = @fwrite($fp, $req);
-    $line = @fread($fp,512);
+    $line = @fread($fp, 512);
     $ret .= $line;
     fclose($fp);
 

@@ -1499,8 +1499,8 @@ abstract class Question
             }
 
             // Level (difficulty).
-            $select_level = Question::get_default_levels();
-            $form->addElement('select', 'questionLevel', get_lang('Difficulty'), $select_level);
+            /*$select_level = Question::get_default_levels();
+            $form->addElement('select', 'questionLevel', get_lang('Difficulty'), $select_level);*/
 
             // Media question.
 
@@ -1664,8 +1664,12 @@ abstract class Question
                 if ($a_type[1] != 'FreeAnswer') {
                     continue;
                 }
+            } else {
+                //Skip other question types, just for minedu
+                if (!in_array($a_type[1],array('MediaQuestion','UniqueAnswer'))) {
+                    continue;
+                }
             }
-
             // include the class of the type
             require_once $a_type[0];
             // get the picture of the type and the langvar which describes it

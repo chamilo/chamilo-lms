@@ -232,7 +232,8 @@ function setFocus(){
 $(document).ready(function () {
     setFocus();
 });
-window.onload = advanced_parameters;
+//Commented only for Minedu (to show all options upfront)
+//window.onload=advanced_parameters;
 </script>';
 
 // INIT EXERCISE

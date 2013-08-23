@@ -417,7 +417,7 @@ function HotPotGCt($folder, $flag, $user_id) {
     while (list($key, $val) = each($filelist)) {
         if (stristr($val, $user_id.'.t.html')) {
             if ($flag == 1) {
-                my_delete($folder.'/'.$val);
+                FileManager::my_delete($folder.'/'.$val);
             } else {
                 echo $folder.'/'.$val.'<br />';
             }

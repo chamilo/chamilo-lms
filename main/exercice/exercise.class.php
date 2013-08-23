@@ -11,6 +11,8 @@
  * Code
  */
 use \ChamiloSession as Session;
+use \ChamiloLMS\Transaction\TransactionLog;
+use \ChamiloLMS\Transaction\TransactionLogController;
 
 // Page options
 define('ALL_ON_ONE_PAGE', 1);
@@ -5867,20 +5869,28 @@ class Exercise
 
         //var_dump($categoryList);
 
-        $html = '<div class="row">';
-        $html .= '<div class="span2">';
+        $html = '<div class="row" id="exercise_progress_block">';
+        $html .= '<div class="span2" id="exercise_progress_legend">';
 
         $reviewAnswerLabel = null;
         if ($this->review_answers) {
-            $reviewAnswerLabel = Display::label(get_lang('ToReview'), 'warning').'<br />';
+            $reviewAnswerLabel = Display::label(sprintf(get_lang('ToReviewZ'),'c'), 'warning').'<br />';
         }
         $currentAnswerLabel = null;
         if (!empty($current_question)) {
-            $currentAnswerLabel = Display::label(get_lang('CurrentQuestion'), 'info');
+            $currentAnswerLabel = Display::label(sprintf(get_lang('CurrentQuestionZ'),'d'), 'info');
         }
-        $html .= Display::label(get_lang('Answered'), 'success').'<br />'.Display::label(get_lang('Unanswered')).'<br />'.
-                 $reviewAnswerLabel.$currentAnswerLabel;
-        $html .= '</div>';
+        // Count the number of answered, unanswered and 'for review' questions - see BT#6523
+        $numa = count(array_flip(array_merge($exercise_result,$remindList)));
+        $numu = count($questionListFlatten)-$numa;
+        $numr = count($remindList);
+        $html .= Display::label(sprintf(get_lang('AnsweredZ'),'a'), 'success').'<br />'.Display::label(sprintf(get_lang('UnansweredZ'),'b')).'<br />'.
+                 $reviewAnswerLabel.$currentAnswerLabel.
+                 '<br /><br />'.
+                 sprintf(get_lang('AnsweredXYZ'),str_pad($numa,2,'0',STR_PAD_LEFT),'a','c').'<br />'.
+                 sprintf(get_lang('UnansweredXYZ'),str_pad($numu,2,'0',STR_PAD_LEFT),'b').'<br />'.
+                 sprintf(get_lang('ToReviewXYZ'),str_pad($numr,2,'0',STR_PAD_LEFT),'c').'<br />'.
+                 '</div>';
 
         $conditions = array();
         $conditions[] = array("class" => 'answered', 'items' => $exercise_result);
@@ -5888,7 +5898,7 @@ class Exercise
 
         $link = $url.'&num=';
 
-        $html .= '<div class="span10">';
+        $html .= '<div class="span10" id="exercise_progress_bars">';
         if (!empty($categoryList)) {
             $html .= $this->progressExercisePaginationBarWithCategories($categoryList, $current_question, $conditions, $link);
         } else {
@@ -6127,8 +6137,8 @@ class Exercise
                     }
                 }
                 $html .= '<div class="row">';
-                $html .= '<div class="span2">'.$categoryName.'</div>';
-                $html .= '<div class="span8">';
+                $html .= '<div class="span2 exercise_progress_bars_cat">'.$categoryName.'</div>';
+                $html .= '<div class="span8 exercise_progress_bars_cat_items">';
 
                 if (!empty($nextValue)) {
                     if ($wasMedia) {
@@ -6673,6 +6683,24 @@ class Exercise
                     '',
                     array()
                 );
+
+                $log_transactions_settings = TransactionLog::getTransactionSettings();
+                if (isset($log_transactions_settings['exercise_attempt'])) {
+                    $transaction_controller = new TransactionLogController();
+                    $transaction = $transaction_controller->loadOne(array(
+                        'action' => 'exercise_attempt',
+                        'branch_id' => TransactionLog::BRANCH_LOCAL,
+                        'item_id' => $exercise_stat_info['exe_id'],
+                        )
+                    );
+                    if (!$transaction) {
+                        $transaction_data = array(
+                            'item_id' => $exercise_stat_info['exe_id'],
+                        );
+                        $transaction = $transaction_controller->createTransaction('exercise_attempt', $transaction_data);
+                    }
+                    $transaction->save();
+                }
             }
 
             // Send notification.

@@ -353,8 +353,8 @@ function check_system_version() {
         $number_of_courses = Statistics::count_courses();
 
         // The number of users
-        $number_of_users = statistics::count_users();
-        $number_of_active_users = statistics::count_users(null,null,null,true);
+        $number_of_users = Statistics::count_users();
+        $number_of_active_users = Statistics::count_users(null,null,null,true);
 
         $data = array(
             'url' => api_get_path(WEB_PATH),

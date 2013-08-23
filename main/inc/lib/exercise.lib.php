@@ -15,9 +15,9 @@
  */
 
 use ChamiloSession as Session;
-
 class ExerciseLib
 {
+
     /**
      * @param int $exe_id
      * @return array
@@ -30,7 +30,7 @@ class ExerciseLib
         $exe_id = intval($exe_id);
         $result_array = array();
         if (!empty($exe_id)) {
-            $sql = "SELECT q.*, tee.*
+             $sql = "SELECT q.*, tee.*
                     FROM $TBL_EXERCICES as q
                     INNER JOIN $TBL_TRACK_EXERCICES as tee
                       ON q.iid = tee.exe_exo_id
@@ -1370,7 +1370,6 @@ class ExerciseLib
         return $return;
     }
 
-
     /**
        return the HTML code for a menu with students group
        @input : $in_name : is the name and the id of the <select>
@@ -1428,8 +1427,6 @@ class ExerciseLib
             $_SESSION['current_exercises'][$exe_id] = false;
         }
     }
-
-
 
     /**
      * Update attempt date

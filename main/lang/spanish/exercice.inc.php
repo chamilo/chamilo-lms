@@ -2,6 +2,39 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$EmailNotificationTemplateDescription = "Puede modificar el correo enviado a los usuarios al terminar el ejercicio. Puede usar los siguientes términos: 
+
+{{ student.username }}
+{{ student.firstname }} 
+{{ student.lastname }}
+{{ student.official_code }} 
+{{ exercise.title }} 
+{{ exercise.start_time }}
+{{ exercise.end_time }}
+{{ course.title }}
+{{ course.code }}";
+$EmailNotificationTemplate = "Plantilla del correo electrónico enviado al usuario al terminar el ejercicio.";
+$ExerciseEndButtonDisconnect = "Desconexión de la plataforma";
+$ExerciseEndButtonExerciseHome = "Lista de ejercicios";
+$ExerciseEndButtonCourseHome = "Página principal del curso";
+$ExerciseEndButton = "Botón al terminar el ejercicio";
+$HideQuestionTitle = "Ocultar el título de la pregunta";
+$QuestionSelection = "Selección de preguntas";
+$OrderedCategoriesByParentWithQuestionsRandom = "Categorías ordenadas según la categoría padre, con preguntas desordenadas";
+$OrderedCategoriesByParentWithQuestionsOrdered = "Categorías ordenadas según la categoría padre, con preguntas ordenadas";
+$RandomCategoriesWithRandomQuestionsNoQuestionGrouped = "Categorías tomadas al azar, con preguntas desordenadas, sin agrupar preguntas";
+$RandomCategoriesWithQuestionsOrderedNoQuestionGrouped = "Categorías tomadas al azar, con preguntas ordenadas, sin agrupar preguntas";
+$RandomCategoriesWithRandomQuestions = "Categorías tomadas al azar, con preguntas desordenadas";
+$OrderedCategoriesAlphabeticallyWithRandomQuestions = "Categorías ordenadas (alfabéticamente), con preguntas desordenadas";
+$RandomCategoriesWithQuestionsOrdered = "Categorías tomadas al azar, con preguntas ordenadas";
+$OrderedCategoriesAlphabeticallyWithQuestionsOrdered = "Categorías ordenadas alfabéticamente, con preguntas ordenadas";
+$UsingCategories = "Usando categorías";
+$OrderedByUser = "Ordenado según la lista de preguntas";
+$ToReview = "Por revisar";
+$Unanswered = "Sin responder";
+$Answered = "Respondida";
+$CurrentQuestion = "Pregunta actual";
+$MediaQuestions = "Enunciados compartidos";
 $AddedToLPCannotBeAccessed = "Este ejercicio ha sido incluido en una secuencia de aprendizaje, por lo cual no podrá ser accesible directamente por los estudiantes desde aquí. Si quiere colocar el mismo ejercicio disponible a través de la herramienta ejercicios, haga una copia del ejercicio en cuestión pulsando sobre el icono de copia.";
 $langExercice = "Ejercicio";
 $langActivate = "Activar";
@@ -362,6 +395,7 @@ $ExerciseAttempted = "Un estudiante ha contestado una pregunta";
 $MultipleSelectCombination = "Combinación exacta";
 $MultipleAnswerCombination = "Combinación exacta";
 $ExerciceExpiredTimeMessage = "El tiempo de la evaluación ha terminado. Sin embargo las preguntas que ya respondió, serán consideradas en la evaluación del ejercicio.";
+$AllQuestionsMustHaveACategory = "Todas las preguntas deben de tener por lo menos una categoría asociada.";
 $NoMedia = "Sin vínculo a medio";
 $AttachToMedia = "Vincular a medio";
 $ExamModeWithFinalScoreShowOnlyFinalScoreWithCategoriesIfAvailable = "Mostrar solo el resultado final, con categorías si disponibles";
@@ -514,5 +548,4 @@ $NoNegativeScore = "Sin puntos negativos";
 $GlobalMultipleAnswer = "Respuesta múltiple global";
 $AllQuestionsShort = "Todas";
 $ProblemsRecordingUploadYourOwnAudioFile = "Tiene problemas para grabar? Mande su propio fichero audio.";
-$AllQuestionsMustHaveACategory = "Todas las preguntas deben de tener por lo menos una categoría asociada";
 ?>

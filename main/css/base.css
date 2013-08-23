@@ -53,8 +53,6 @@ header #logo {
 }
 
 .subnav {
-    /*font-size: 11px;
-    font-weight: bold;*/
 }
 
 .subnav .btn-navbar {
@@ -541,6 +539,15 @@ a.tag {
     margin:0px 0px 10px 0px;    */
 }
 
+#course_category li,
+#hot_courses h5,
+.course_item h5,
+.course-box h5 {
+    font-size: 12px;
+    overflow-y : auto;
+    max-height:70px;
+    padding: 5px;
+}
 .session_box_title {
     margin-bottom: 7px;
 }
@@ -2127,28 +2134,6 @@ div.image-social-content center.friend {
     margin-right: 4px;
 }
 
-/*
-textarea {
-    border:1px solid #CCCCCC;
-    padding:5px;
-    -moz-border-radius:5px;
-    -webkit-border-radius:5px;
-    border-radius:5px;
-    color:#666666;
-}
-*/
-/*
-select {
-    color:#555;
-    border: 1px solid #CCC;
-    padding: 4px;
-    background-color: #F3F3F3;
-    font-size: 12px;
-
-    -moz-border-radius:5px;
-    -webkit-border-radius:5px;
-    border-radius:5px;
-}*/
 
 /* Fixes the FB input*/
 input.maininput:focus {
@@ -2887,7 +2872,11 @@ div.admin_section h4 {
 
 .question_options input {
     /* margin-right:10px; */
+}
 
+.question_options input[type="text"] {
+    padding:0px;
+    margin:2px 2px 2px 0px;
 }
 
 .question_description {
@@ -3805,6 +3794,20 @@ a:active {
     margin-right: 4px;
 }
 
+.send_msg_in_text {
+    background: url("send_msg.png") no-repeat scroll right center transparent;
+    height: 16px;
+    width: 17px;
+    display: inline-block;
+    margin-right: 4px;
+}
+.send_inv_in_text {
+    background: url("send_inv.png") no-repeat scroll right center transparent;
+    height: 16px;
+    width: 17px;
+    display: inline-block;
+    margin-right: 4px;
+}
 .teacher_online {
     background: url("teacher.png") no-repeat scroll right center transparent;
     height: 16px;
@@ -5326,7 +5329,6 @@ i.size-32.icon-new-work {
 
 .main_question .media .question_description {
     padding-top: 5px;
-
 }
 
 
@@ -5371,12 +5373,9 @@ i.size-32.icon-new-work {
     width: 220px;
 }
 
-
 .table td div.success {
     background-color: #98E57F;
 }
-
-
 .table td.hover {
     background-color: rgba(255, 153, 0, 0.5);
 }
@@ -5409,3 +5408,6 @@ i.size-32.icon-new-work {
     position:fixed;
 }
 
+.jqgrid_whitespace {
+    white-space: normal !important;
+}

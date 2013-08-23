@@ -2,6 +2,39 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$EmailNotificationTemplateDescription = "You can customize the email sent to users when they finished the exercise. You can use tags like these:
+
+1. {{ student.username }}
+2. {{ student.firstname }}
+3. {{ student.lastname }}
+4. {{ student.official_code }}
+5. {{ exercise.title }}
+6. {{ exercise.start_time }}
+7. {{ exercise.end_time }}
+8. {{ course.title }}
+9. {{ course.code }}";
+$EmailNotificationTemplate = "Email notification template";
+$ExerciseEndButtonDisconnect = "Logout";
+$ExerciseEndButtonExerciseHome = "Exercise list.";
+$ExerciseEndButtonCourseHome = "Course home";
+$ExerciseEndButton = "Exercise end button";
+$HideQuestionTitle = "Hide question title";
+$QuestionSelection = "Question selection type";
+$OrderedCategoriesByParentWithQuestionsRandom = "Ordered categories by parent with random questions";
+$OrderedCategoriesByParentWithQuestionsOrdered = "Ordered categories by parent with questions ordered";
+$RandomCategoriesWithRandomQuestionsNoQuestionGrouped = "Random categories with random questions (questions not grouped)";
+$RandomCategoriesWithQuestionsOrderedNoQuestionGrouped = "Random categories with questions ordered (questions not grouped)";
+$RandomCategoriesWithRandomQuestions = "Random categories with random questions";
+$OrderedCategoriesAlphabeticallyWithRandomQuestions = "Ordered categories alphabetically with random questions";
+$RandomCategoriesWithQuestionsOrdered = "Random categories with questions ordered";
+$OrderedCategoriesAlphabeticallyWithQuestionsOrdered = "Ordered categories alphabetically with questions ordered";
+$UsingCategories = "Using categories";
+$OrderedByUser = "Ordered by user";
+$ToReview = "To be reviewed";
+$Unanswered = "Unanswered";
+$Answered = "Answered";
+$CurrentQuestion = "Current question";
+$MediaQuestions = "Shareable enunciates";
 $AddedToLPCannotBeAccessed = "This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.";
 $langExercice = "Test";
 $langActivate = "Show";
@@ -362,6 +395,7 @@ $ExerciseAttempted = "A learner attempted an exercise";
 $MultipleSelectCombination = "Exact Selection";
 $MultipleAnswerCombination = "Exact answers combination";
 $ExerciceExpiredTimeMessage = "The exercise time limit has expired";
+$AllQuestionsMustHaveACategory = "All questions must have a category to use the random-by-category mode.";
 $NoMedia = "Not linked to media";
 $AttachToMedia = "Attach to media";
 $ExamModeWithFinalScoreShowOnlyFinalScoreWithCategoriesIfAvailable = "Show only final score, with categories if available";
@@ -514,5 +548,4 @@ $NoNegativeScore = "No negative score";
 $GlobalMultipleAnswer = "Global multiple answer";
 $AllQuestionsShort = "All";
 $ProblemsRecordingUploadYourOwnAudioFile = "Problem recording? Upload your own audio file.";
-$AllQuestionsMustHaveACategory = "All questions must have a category";
 ?>

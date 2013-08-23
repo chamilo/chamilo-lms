@@ -98,12 +98,9 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             }
         }
 
-
         if (!empty($url)) {
             $response = new RedirectResponse($url);
         }
-
-
 
         // Redirect the user to where they were before the login process begun.
         if (empty($response)) {

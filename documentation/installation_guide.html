@@ -109,6 +109,7 @@ previously required to choose between multiple databases and a deprecated single
 
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="2._Installation_of_Chamilo_LMS"></a><span style="font-weight: bold;">2. Installation of Chamilo LMS</span></h2>
+
 <h3>Configuring your web server to allow .htaccess overrides</h3>
 Starting from 1.10, Chamilo LMS allows friendly URLs if using Apache. As it is based on .htaccess and rewrites, you will be required to <b>AllowOverride All</b> (and possibly enable the ModRewrite extension for Apache). This means that, inside your Apache configuration (or your VirtualHost configuration), you will need to have a block similar to this (the directory given is the same as in the <i>DocumentRoot</i> directive):
 <pre>
@@ -264,7 +265,9 @@ And optionally (for more features) the following PHP modules:
 </ul>
 
 To get the best out of Chamilo, you need to finetune your PHP settings. Consider : <br />
+
 <ul>
+
   <li>Editing php.ini file (on Windows can be located at 
   <span style="font-weight: bold;">C:\xampp\php\php.ini</span>, 
   on Ubuntu : 

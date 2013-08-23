@@ -106,10 +106,8 @@ class ExtraField extends Model
                 break;
         }
         $this->pageUrl  = 'extra_fields.php?type='.$this->type;
-
         // Example QuestionFields
         $this->pageName = get_lang(ucwords($this->type).'Fields');
-
     }
 
     static function getValidExtraFieldTypes()
@@ -221,7 +219,6 @@ class ExtraField extends Model
         if (empty($form)) {
             return false;
         }
-
         $extra_data = false;
         if (!empty($item_id)) {
             $extra_data = self::get_handler_extra_data($item_id);
@@ -654,9 +651,7 @@ class ExtraField extends Model
                         }
 
                         $optionList = array();
-
                         if (!empty($field_details['options'])) {
-
                             foreach ($field_details['options'] as $option_details) {
                                 $optionList[$option_details['id']] = $option_details;
                                 if ($get_lang_variables) {

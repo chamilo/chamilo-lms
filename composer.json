@@ -95,6 +95,5 @@
     "scripts": {
         "post-install-cmd": "ChamiloLMS\\Composer\\Tasks::postInstall",
         "post-update-cmd": "ChamiloLMS\\Composer\\Tasks::postUpdate"
-    },
-    "minimum-stability": "stable"
+    }
 }

@@ -9,7 +9,9 @@ use Symfony\Component\Routing\Loader\AnnotationClassLoader;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+
 use Sensio\Bundle\FrameworkExtraBundle\Routing\AnnotatedRouteControllerLoader;
+
 use Doctrine\Common\Annotations\AnnotationReader;
 use ChamiloLMS\Middleware\CourseMiddleware;
 
@@ -39,12 +41,12 @@ class ReflectionControllerProvider implements ControllerProviderInterface
         if (file_exists($app['sys_temp_path'].'ProjectUrlMatcher.php')) {
            return $controllers;
         }
-
         $reflection = new \ReflectionClass($app[$this->controllerName]);
         $className = $reflection->getName();
 
         // Needed in order to get annotations
         $annotationReader = new AnnotationReader();
+        //$classAnnotations = $annotationReader->getClassAnnotations($reflection);
         $routeAnnotation = new Route(array());
         $methodAnnotation = new Method(array());
 
@@ -52,7 +54,6 @@ class ReflectionControllerProvider implements ControllerProviderInterface
 
         foreach ($methods as $method) {
             $methodName = $method->getName();
-
             $controllerName = $this->controllerName.':'.$methodName;
 
             // Parse only function with the "Action" suffix
@@ -68,7 +69,6 @@ class ReflectionControllerProvider implements ControllerProviderInterface
             $methodObject = $annotationReader->getMethodAnnotation($method, $methodAnnotation);
 
             $methodsToString = 'GET';
-
             if ($methodObject) {
                 $methodsToString = implode('|', $methodObject->getMethods());
             }
@@ -78,10 +78,8 @@ class ReflectionControllerProvider implements ControllerProviderInterface
 
                 if ($routeObject && is_a($routeObject, 'Symfony\Component\Routing\Annotation\Route')) {
                     $match = $controllers->match($routeObject->getPath(), $controllerName, $methodsToString);
-
                     // Setting requirements
                     $req = $routeObject->getRequirements();
-
                     if (!empty($req)) {
                         foreach ($req as $key => $value) {
                             $match->assert($key, $value);
@@ -100,7 +98,6 @@ class ReflectionControllerProvider implements ControllerProviderInterface
                 }
             }
         }
-
         return $controllers;
     }
 }

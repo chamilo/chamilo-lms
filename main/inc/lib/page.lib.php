@@ -58,7 +58,6 @@ class PageController
                                     <img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'"></a>';
             }
         }
-
         if (!empty($profile_content)) {
             $this->show_right_block(null, null, 'user_image_block', array('content' => $profile_content));
         }
@@ -76,14 +75,12 @@ class PageController
         $show_create_link = false;
         $show_course_link = false;
 
-        $display_add_course_link = false;
-
-        if (api_get_setting('allow_users_to_create_courses') == 'false') {
+        if ((api_get_setting('allow_users_to_create_courses') == 'false' && !api_is_platform_admin()) || api_is_student(
+        )
+        ) {
             $display_add_course_link = false;
         } else {
-            if (api_is_teacher()) {
             $display_add_course_link = true;
-            }
         }
 
         if ($display_add_course_link) {
@@ -427,6 +424,7 @@ class PageController
                     $home_top_temp = file_get_contents($home.'home_top.html');
                 }
             }
+
             if (empty($home_top_temp) && api_is_platform_admin()) {
                 $home_top_temp = get_lang('PortalHomepageDefaultIntroduction');
             }
@@ -1180,7 +1178,6 @@ class PageController
         if (empty($user_id)) {
             return false;
         }
-
         $app = $this->app;
 
         $loadHistory = (isset($filter) && $filter == 'history') ? true : false;
@@ -1258,8 +1255,8 @@ class PageController
                 'no_category'
             );
         } else {
-            // Load sessions in category
-            $nbResults = (int)UserManager::get_sessions_by_category(
+            //Load sessions in category
+            $nbResults          = (int)UserManager::get_sessions_by_category(
                 $user_id,
                 false,
                 true,
@@ -1268,7 +1265,6 @@ class PageController
                 null,
                 'no_category'
             );
-
             $session_categories = UserManager::get_sessions_by_category(
                 $user_id,
                 false,
@@ -1278,7 +1274,6 @@ class PageController
                 $this->maxPerPage,
                 'no_category'
             );
-
         }
 
         $html = null;

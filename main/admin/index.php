@@ -11,6 +11,7 @@
 // Language files that need to be included.
 $language_file = array('admin', 'tracking','coursebackup');
 
+
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -161,8 +162,8 @@ if (api_is_platform_admin()) {
         $items[] = array('url'=>'event_controller.php?action=listing', 		'label' => get_lang('EventMessageManagement'));
     }
 
-    if (!empty($_configuration['multiple_access_urls'])) {
-	if (api_is_global_platform_admin()) {
+    if (api_get_multiple_access_url()) {
+	    if (api_is_global_platform_admin()) {
             	$items[] = array('url'=>'access_urls.php', 	'label' => get_lang('ConfigureMultipleAccessURLs'));
         }
     }
@@ -251,7 +252,7 @@ if (api_is_platform_admin()) {
 
     //Skills
     if (api_get_setting('allow_skills_tool') == 'true') {
-        $blocks['skills']['icon']  = Display::return_icon('logo.gif', get_lang('Skills'), array(), ICON_SIZE_SMALL, false);
+        $blocks['skills']['icon']  = Display::return_icon('logo.png', get_lang('Skills'), array(), ICON_SIZE_SMALL, false);
         $blocks['skills']['label'] = get_lang('Skills');
 
         $items = array();
@@ -268,7 +269,7 @@ if (api_is_platform_admin()) {
 
 	/* Chamilo.org */
 
-	$blocks['chamilo']['icon']  = Display::return_icon('logo.gif', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
+	$blocks['chamilo']['icon']  = Display::return_icon('logo.png', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
 	$blocks['chamilo']['label'] = 'Chamilo.org';
 
 	$items = array();
@@ -293,13 +294,16 @@ if (api_is_platform_admin()) {
 	//ob_flush();
 
     //Version check
-    $blocks['version_check']['icon']  = Display::return_icon('logo.gif', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
+    $blocks['version_check']['icon']  = Display::return_icon('logo.png', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
 	$blocks['version_check']['label'] = get_lang('VersionCheck');
-	$blocks['version_check']['extra'] = version_check();
+	$blocks['version_check']['extra'] = '<div class="admin-block-version"></div>';
     $blocks['version_check']['search_form'] = null;
     $blocks['version_check']['items'] = null;
+    //$blocks['version_check']['class'] = '';
 }
+$admin_ajax_url = api_get_path(WEB_AJAX_PATH).'admin.ajax.php';
 
+$app['template']->assign('web_admin_ajax_url', $admin_ajax_url);
 $app['template']->assign('blocks', $blocks);
 $app['template']->display('default/admin/settings_index.tpl');
 
@@ -334,28 +338,6 @@ function version_check() {
 }
 
 /**
- * This setting changes the registration status for the campus
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version August 2006
- *
- * @todo the $_settings should be reloaded here. => write api function for this and use this in global.inc.php also.
- */
-function register_site() {
-    $tbl_settings = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-
-    $sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='registered'";
-    Database::query($sql);
-
-    if ($_POST['donotlistcampus']) {
-        $sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='donotlistcampus'";
-        Database::query($sql);
-    }
-    // Reload the settings.
-}
-
-
-/**
  * Check if the current installation is up to date
  * The code is borrowed from phpBB and slighlty modified
  * @author The phpBB Group <support@phpbb.com> (the code)
@@ -373,8 +355,8 @@ function check_system_version() {
         $number_of_courses = Statistics::count_courses();
 
         // The number of users
-        $number_of_users = statistics::count_users();
-        $number_of_active_users = statistics::count_users(null,null,null,true);
+        $number_of_users = Statistics::count_users();
+        $number_of_active_users = Statistics::count_users(null,null,null,true);
 
         $data = array(
             'url' => api_get_path(WEB_PATH),
@@ -394,7 +376,7 @@ function check_system_version() {
 
         $res = _http_request('version.chamilo.org', 80, '/version.php', $data);
 
-        if ($res !== false) {
+        if ($res != 0) {
             $version_info = $res;
 
             if ($system_version != $version_info) {

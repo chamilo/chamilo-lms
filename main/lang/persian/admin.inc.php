@@ -5,6 +5,7 @@ for more information: see languages.txt in the lang folder.
 $UsersRegisteredInAnyGroup = "کاربران در هر گروهی ثبت نام کردند";
 $ShowHotCoursesComment = "دروس فوق العاده در صفحه اصلی اضافه می گردد";
 $ShowHotCoursesTitle = "نمایش دروس فوق العاده";
+$MailSubjectReplyShort = "پاسخ:";
 $AdminBy = "مدیریت توسط";
 $AdministrationTools = "مدیریت";
 $State = "وضعیت سیستم";
@@ -29,66 +30,70 @@ $CreateUser = "ساخت کاربر";
 $ModifyInformation = "ویرایش اطلاعات";
 $ModifyUser = "ویرایش کاربر";
 $buttonEditUserField = "ویرایش رشته کاربر";
-$langCourseBackup = "این\nدرس را بر روی\nرایانه خود\nذخیره کنید";
+$ModifyCoach = "ویرایش مربی";
+$ModifyThisSession = "ویرایش این جلسه";
+$ExportSession = "برون بری جلسات";
+$ImportSession = "درون ریزی جلسات";
+$langCourseBackup = "این درس را بر روی رایانه خود ذخیره کنید";
 $langCourseTitular = "استاد";
 $langCourseTitle = "دروس";
-$langCourseFaculty = "طبقه\nبندی درس";
-$langCourseDepartment = "گروه\nآموزشی درس";
-$langCourseDepartmentURL = "آدرس\nاینترنتی گروه\nآموزشی";
-$langCourseLanguage = "زبان\nدرس";
-$langCourseAccess = "دسترسی\nبه درس";
-$langCourseSubscription = "ثبت\nنام در درس";
-$langPublicAccess = "دسترسی\nعمومی";
-$langPrivateAccess = "دسترسی\nخصوصی";
+$langCourseFaculty = "طبقه بندی درس";
+$langCourseDepartment = "گروه آموزشی درس";
+$langCourseDepartmentURL = "آدرس اینترنتی گروه آموزشی";
+$langCourseLanguage = "زبان درس";
+$langCourseAccess = "دسترسی به درس";
+$langCourseSubscription = "ثبت نام در درس";
+$langPublicAccess = "دسترسی عمومی";
+$langPrivateAccess = "دسترسی خصوصی";
 $langDBManagementOnlyForServerAdmin = "مدریت پایگاه داده ها تنها در اختیار مسئول سرور است";
-$langShowUsersOfCourse = "نمایش\nافراد ثبت نام\nشده در این درس";
-$langShowClassesOfCourse = "نمایش\nکلاسهای ثبت\nنام شده در این\nدرس";
-$langShowGroupsOfCourse = "نمایش\nگروه های این\nدرس";
+$langShowUsersOfCourse = "نمایش افراد ثبت نام شده در این درس";
+$langShowClassesOfCourse = "نمایش کلاسهای ثبت نام شده در این درس";
+$langShowGroupsOfCourse = "نمایش گروه های این درس";
 $langPhone = "تلفن";
-$langPhoneNumber = "شماره\nتلفن";
+$langPhoneNumber = "شماره تلفن";
 $langActions = "فعّالیتها";
-$langAddToCourse = "به\nیک درس اضافه\nکنید";
-$langDeleteFromPlatform = "از\nمحیط آموزشی\nحذف کنید";
-$langDeleteCourse = "این\nدرس(ها)\nرا حذف\nکنید";
-$langDeleteFromCourse = "از\nاین درس حذف\nکنید";
-$langDeleteSelectedClasses = "کلاسهای\nانتخاب شده را\nحذف کنید";
-$langDeleteSelectedGroups = "گروه\nهای انتخاب شده\nرا حذف کنید";
+$langAddToCourse = "به یک درس اضافه کنید";
+$langDeleteFromPlatform = "از محیط آموزشی حذف کنید";
+$langDeleteCourse = "این درس(ها) را حذف کنید";
+$langDeleteFromCourse = "از این درس حذف کنید";
+$langDeleteSelectedClasses = "کلاسهای انتخاب شده را حذف کنید";
+$langDeleteSelectedGroups = "گروه های انتخاب شده را حذف کنید";
 $langAdministrator = "مدیر";
-$langAddPicture = "عکستان\nرا اضافه کنید";
-$langChangePicture = "عکستان\nرا تغییر دهید";
-$langDeletePicture = "عکستان\nرا حذف کنید";
-$langAddUsers = "اضافه\nکردن کاربر";
-$langAddGroups = "اضافه\nکردن گروه";
-$langAddClasses = "اضافه\nکردن کلاس";
-$langExportUsers = "ضبط\nاسامی";
-$langKeyword = "کلمه\nکلیدی";
-$langGroupName = "نام\nگروه";
-$langGroupTutor = "مشاور\nآموزشی گروه";
-$langGroupDescription = "توضیحات\nدر مورد گروه";
-$langNumberOfParticipants = "تعداد\nشرکت کنندگان";
-$langNumberOfUsers = "تعداد\nکاربران";
+$langAddPicture = "عکستان را اضافه کنید";
+$langChangePicture = "عکستان را تغییر دهید";
+$langDeletePicture = "عکستان را حذف کنید";
+$langAddUsers = "اضافه کردن کاربر";
+$langAddGroups = "اضافه کردن گروه";
+$langAddClasses = "اضافه کردن کلاس";
+$langExportUsers = "برون بری فهرست کاربران";
+$langKeyword = "کلمه کلیدی";
+$langGroupName = "نام گروه";
+$langGroupTutor = "مشاور آموزشی گروه";
+$langGroupDescription = "توضیحات در مورد گروه";
+$langNumberOfParticipants = "تعداد شرکت کنندگان";
+$langNumberOfUsers = "تعداد کاربران";
 $langMaximum = "حداکثر";
-$langMaximumOfParticipants = "حداکثر\nشرکت کنندگان";
+$langMaximumOfParticipants = "حداکثر شرکت کنندگان";
 $langParticipants = "اعضا";
-$langFirstLetterClass = "حرفاوّل نامکلاس";
-$langFirstLetterUser = "حرفاوّل نامخانوادگی";
-$langFirstLetterCourse = "حرفاوّل کد";
-$langModifyUserInfo = "تغییر\nاطلاعات کاربر";
-$langModifyClassInfo = "تغییر\nاطلاعات کلاس";
-$langModifyGroupInfo = "تغییر\nاطلاعات گروه";
-$langModifyCourseInfo = "تغییر\nاطلاعات درس";
-$langPleaseEnterClassName = "!لطفاً\nنام کلاس را\nوارد کنید";
-$langPleaseEnterLastName = "!لطفاً\nنام خانوادگی\nکاربران را وارد\nکنید";
-$langPleaseEnterFirstName = "!لطفاً\nنام کاربران\nرا وارد کنید";
-$langPleaseEnterValidEmail = "!لطفاً\nآدرس ایمیل\nمعتبری را وارد\nکنید";
-$langPleaseEnterValidLogin = "!لطفاً\nنام کاربری\nمعتبری را وارد\nکنید";
-$langPleaseEnterCourseCode = "!لطفاً\nکد درس را وارد\nکنید";
-$langPleaseEnterTitularName = "!لطفاً\nنام و نام خانوادگی\nاستاد را وارد\nکنید";
-$langPleaseEnterCourseTitle = "!لطفاً\nنام درس را وارد\nکنید";
+$langFirstLetterClass = "حرف اوّل نام کلاس";
+$langFirstLetterUser = "حرف اوّل نام خانوادگی";
+$langFirstLetterCourse = "حرف اوّل کد";
+$langModifyUserInfo = "تغییر اطلاعات کاربر";
+$langModifyClassInfo = "تغییر اطلاعات کلاس";
+$langModifyGroupInfo = "تغییر اطلاعات گروه";
+$langModifyCourseInfo = "تغییر اطلاعات درس";
+$langPleaseEnterClassName = "!لطفاً نام کلاس را وارد کنید";
+$langPleaseEnterLastName = "!لطفاً نام خانوادگی کاربران را وارد کنید";
+$langPleaseEnterFirstName = "!لطفاً نام کاربران را وارد کنید";
+$langPleaseEnterValidEmail = "!لطفاً آدرس ایمیل معتبری را وارد کنید";
+$langPleaseEnterValidLogin = "!لطفاً نام کاربری معتبری را وارد کنید";
+$langPleaseEnterCourseCode = "!لطفاً کد درس را وارد کنید";
+$langPleaseEnterTitularName = "!لطفاً نام و نام خانوادگی استاد را وارد کنید";
+$langPleaseEnterCourseTitle = "!لطفاً نام درس را وارد کنید";
 $langAcceptedPictureFormats = " گونه های قابل قبول برای عکس تنها <br>!هستند GIF و PNG ،JPG<br>";
-$langLoginAlreadyTaken = "ایننام کاربریقبلاً توسط شخصدیگری استفادهشده است";
-$langImportUserListXMLCSV = "لیستی از کاربران را از یک فایل سی اس وی یا ایکس ام ال وارد کنید";
-$langExportUserListXMLCSV = " لیستی از کاربران را به یک فایل سی اس وی یا ایکس ام ال صادر کنید";
+$langLoginAlreadyTaken = "این نام کاربری قبلاً توسط شخص دیگری استفاده شده است";
+$langImportUserListXMLCSV = "درون ریزی فهرست کاربران";
+$langExportUserListXMLCSV = "برون بری فهرست کاربران";
 $langOnlyUsersFromCourse = "تنها\nکاربران ثبت\nنام شده در درس";
 $langAddClassesToACourse = "اضافه\nکردن کلاس به\nیک درس";
 $langAddUsersToACourse = "اضافه\nکردن یک کاربر\nبه یک درس";
@@ -97,21 +102,21 @@ $langAddUsersToAGroup = "اضافه\nکردن کاربران\nبه یک گروه
 $langAtLeastOneClassAndOneCourse = "بایدحدأقل یک کلاسو یک درس را انتخابکنید";
 $AtLeastOneUser = "!بایدحدأقل یک کاربررا انتخاب کنید";
 $langAtLeastOneUserAndOneCourse = "بایدحدأقل یک کاربرو یک درس را انتخابکنید";
-$langClassList = "لیست\nکلاسها";
-$langUserList = "لیست\nکاربران";
-$langCourseList = "لیست\nدروس";
-$langAddToThatCourse = "اضافه\nکردن درس یا\nدروس";
-$langAddToClass = "اضافه\nکردن به کلاس";
-$langRemoveFromClass = "حذف\nاز کلاس";
-$langAddToGroup = "اضافه\nکردن به گروه";
-$langRemoveFromGroup = "حذف\nاز گروه";
-$langUsersOutsideClass = "کاربران\nخارج از کلاس";
-$langUsersInsideClass = "کاربران\nداخل کلاس";
-$langUsersOutsideGroup = "کاربران\nخارج از گروه";
-$langUsersInsideGroup = "کاربران\nداخل گروه";
+$langClassList = "لیست کلاسها";
+$langUserList = "لیست کاربران";
+$langCourseList = "لیست دروس";
+$langAddToThatCourse = "اضافه کردن درس یا دروس";
+$langAddToClass = "اضافه کردن به کلاس";
+$langRemoveFromClass = "حذف از کلاس";
+$langAddToGroup = "اضافه کردن به گروه";
+$langRemoveFromGroup = "حذف از گروه";
+$langUsersOutsideClass = "کاربران خارج از کلاس";
+$langUsersInsideClass = "کاربران داخل کلاس";
+$langUsersOutsideGroup = "کاربران خارج از گروه";
+$langUsersInsideGroup = "کاربران داخل گروه";
 $langImportFileLocation = "محل فایل سی اس وی یا ایکس ام ال";
 $langFileType = "نوع\nفایل";
-$langOutputFileType = "نوع\nفایل خروجی";
+$langOutputFileType = "نوع فایل خروجی";
 $langMustUseSeparator = "بایداز علامت �؛�برایجداسازی واحدهااستفاده کنید";
 $langCSVMustLookLike = "فایل سی اس وی باید به این صورت باشد";
 $langXMLMustLookLike = "فایل ایکس ام ال  باید به این صورت باشد";
@@ -120,50 +125,54 @@ $langNotXML = " فایل مورد نظر از نوع ایکس ام ال نیست
 $langNotCSV = "فایل مورد نظر از نوع سی اس وی  نیست";
 $langNoNeededData = "فایلمورد نظر تمامیاطلاعات موردنیاز را در برندارد";
 $langMaxImportUsers = "نمیتوان بیش از ٥٠٠کاربر رابهیکباره واردکرد";
-$langAdminDatabases = " پایگاهداده ها<br>(phpMyAdmin)<br>";
+$langAdminDatabases = " پایگاه داده ها<br>(phpMyAdmin)<br>";
 $langAdminUsers = "کاربران";
-$langAdminClasses = "کلاسهای\nکاربران";
-$langAdminGroups = "گروههای\nکاربران";
+$langAdminClasses = "کلاسهای کاربران";
+$langAdminGroups = "گروه های کاربران";
 $langAdminCourses = "دروس";
-$langAdminCategories = "طبقه\nبندی دروس";
+$langAdminCategories = "طبقه بندی دروس";
 $langSubscribeUserGroupToCourse = "ثبت\nنام یک کاربر\nیا یک گروه در\nدرس";
 $AddACategory = "اضافه\nکردن یک طبقه\nجدید";
 $langInto = "در";
 $langNoCategories = "هیچ\nطبقه ای وجود\nندارد";
 $langAllowCoursesInCategory = "اجازه\nاضافه نمودن\nدروس در این\nطبقه را می دهید؟";
 $langGoToForum = "رفتنبه پیامگاه";
-$langCategoryCode = "کد\nطبقه";
-$langCategoryName = "نام\nطبقه";
-$langCategories = "طبقه\nها";
-$langEditNode = "تغییر\nاین طبقه";
-$langOpenNode = "باز\nکردن این طبقه";
-$langDeleteNode = "حذف\nاین طبقه";
+$langCategoryCode = "کد طبقه";
+$langCategoryName = "نام طبقه";
+$langCategories = "طبقه ها";
+$langEditNode = "تغییر این طبقه";
+$langOpenNode = "باز کردن این طبقه";
+$langDeleteNode = "حذف این طبقه";
 $langAddChildNode = "اضافه\nکردن یک زیر\nطبقه";
-$langViewChildren = "نمایشبچه ها<br>(children)<br>";
+$langViewChildren = "نمایش بچه ها<br>(children)<br>";
 $langTreeRebuildedIn = "طبقه بندی درختی بازسازی شد <br>: در مدت<br>";
 $langTreeRecountedIn = "طبقه بندی درختی باز شماری شد <br>: در مدت<br>";
 $langRebuildTree = "بازسازیطبقه بندی درختی";
-$langRefreshNbChildren = "تجدیدتعداد بچهها<br>(children) <br>";
+$langRefreshNbChildren = "تجدید تعداد بچه ها<br>(children) <br>";
 $langShowTree = "نمایشطبقه بندی درختی";
-$langBack = "بازگشت\nبه صفحه قبلی";
-$langLogDeleteCat = "طبقه\nمورد نظر حذف\nشد";
+$langBack = "بازگشت به صفحه قبلی";
+$langLogDeleteCat = "طبقه مورد نظر حذف شد";
 $langRecountChildren = "بازشماریبچه ها<br>(children)<br>";
-$langUpInSameLevel = "بالاتر\nدر همین طبقه";
+$langUpInSameLevel = "بالاتر در همین طبقه";
 $langSeconds = "دقیقه";
 $langMailTo = "تماس";
-$lang_no_access_here = "دسترسی\nغیرممکن است";
-$lang_php_info = "اطلاعات\nمربوط یه سیستم";
-$langAddAdminInApache = "اضافه\nکردن مسئول محیط\nآموزش مجازی";
-$langAddFaculties = "اضافهکردن طبقه";
-$langSearchACourse = "جستجوی\nیک درس";
-$langSearchAUser = "جستجوی\nیک کاربر";
+$lang_no_access_here = "دسترسی غیرممکن است";
+$lang_php_info = "اطلاعات مربوط یه سیستم";
+$langAddAdminInApache = "اضافه کردن مسئول محیط آموزش مجازی";
+$langAddFaculties = "اضافه کردن طبقه";
+$langSearchACourse = "جستجوی یک درس";
+$langSearchAUser = "جستجوی یک کاربر";
 $langTechnicalTools = "تکنیکی";
-$langConfig = "برنامه\nریزی سیستم";
+$langConfig = "برنامه ریزی سیستم";
 $langLogIdentLogoutComplete = "لیست\n(کامل)\nنام های\nکاربری";
+$langLimitUsersListDefaultMax = "حداکثر نمایش کاربران در فهرست اسکرول";
 $NoTimeLimits = "بدون محدودیت زمانی";
 $GeneralCoach = "مشاور آموزشی عمومی";
+$GeneralProperties = "خواص عمومی";
 $CourseCoach = "مشاور آموزشی درس";
 $UsersNumber = "تعداد کاربران";
+$DokeosClassic = "سیستم کلاسیک";
+$PublicAdmin = "مدیریت عمومی";
 $PageAfterLoginTitle = "صفحه بعد از ورود";
 $DokeosAdminWebLinks = "وب سایت دکئوس";
 $TabsMyProfile = "برگه ی مشخصات من";
@@ -171,26 +180,26 @@ $GlobalRole = "هدف اصلی";
 $langNomOutilTodo = "مدیریت پیشنهادات";
 $langNomPageAdmin = "اداره";
 $langSysInfo = "اطلاعات\nمربوط به سیستم";
-$langDiffTranslation = "مقایسه\nترجمه ها";
+$langDiffTranslation = "مقایسه ترجمه ها";
 $langStatOf = "آمار";
 $langSpeeSubscribe = "ثبتنام سریع یهعنوان بررسیکننده درس";
-$langLogIdentLogout = "لیست\nنام های کاربری";
+$langLogIdentLogout = "لیست نام های کاربری";
 $langServerStatus = "MySQL وضعیت\nسرور";
-$langDataBase = "پایگاه\nداده ها";
+$langDataBase = "پایگاه داده ها";
 $langRun = "کار می کند";
 $langClient = "MySql Client";
 $langServer = "MySql Server";
 $langtitulary = "دارنده";
 $langUpgradeBase = "بهروز گردانیپایگاه";
-$langManage = "مدیریت\nمحیط آموزشی";
-$langErrorsFound = "اشتباهاتیرخ داد";
+$langManage = "مدیریت محیط آموزشی";
+$langErrorsFound = "اشتباهاتی رخ داد";
 $langMaintenance = "نگهداری";
 $langUpgrade = "به\nروز گردانی\nدوکئوس";
-$langWebsite = "سایت\nدوکئوس";
-$langDocumentation = "مدارک\nتوضیحی";
-$langContribute = "یاری\nرسانی";
-$langInfoServer = "اطلاعاتسرور";
-$langOtherCategory = "طبقه\nهای دیگر";
+$langWebsite = "سایت دوکئوس";
+$langDocumentation = "مدارک توضیحی";
+$langContribute = "یاری رسانی";
+$langInfoServer = "اطلاعات سرور";
+$langOtherCategory = "طبقه های دیگر";
 $langSendMailToUsers = "ارسال ایمیل به کاربران";
 $langExampleXMLFile = "مثالی برای یک فایل ایکس ام ال";
 $langExampleCSVFile = "مثالی برای یک فایل سی وی اس";
@@ -198,9 +207,9 @@ $langCourseSystemCode = " کد سیستم";
 $langCourseVisualCode = "کدی که نمایش داده می شود";
 $langSystemCode = " کد سیستم";
 $langVisualCode = "کدی که نمایش داده می شود";
-$langAddCourse = "آفرینش\nکلاس";
+$langAddCourse = "ساخت یک درس";
 $langAdminManageVirtualCourses = "اداره دروس مجازی";
-$langAdminCreateVirtualCourse = "آفرینش دروس مجازی";
+$langAdminCreateVirtualCourse = "ساخت یک درس مجازی";
 $langAdminCreateVirtualCourseExplanation = "درس مجازی فضای ذخیره مورد نیاز خود را با یک درس واقعی تقسیم خواهد کرد";
 $langRealCourseCode = "کد واقعی درس";
 $langCourseCreationSucceeded = "دزس مورد نظر با موفقیت ایجاد شد";
@@ -213,6 +222,7 @@ $langAnnouncementAdded = "اطلاعیه مورد نظر افزوده شد";
 $langAnnouncementUpdated = "اطلاعیه مورد نظر به روز گردید";
 $langAnnouncementDeleted = "اطلاعیه مورد نظر حذف گردید";
 $langContent = "محتوا";
+$PermissionsForNewFiles = "سطح دسترسی برای فایل های جدید";
 $langStudent = "دانشجو";
 $Guest = "مهمان";
 $langLoginAsThisUserColumnName = "معرفی شما به سیستم به عنوان";
@@ -228,9 +238,9 @@ $PlatformLanguages = "زبانهای محیط آموزشی دوکئوس";
 $PlatformLanguagesExplanation = "این کارایی به لیست انتخاب زبانهای موجود بر روی اولین صفحۀ محیط مربوط می شود.به عنوان اداره کنندۀ محیط آموزشی می توانید تعیین کنید که کاربر حق انتخاب از بین چه زبانهایی دارد";
 $OriginalName = "نامبه زبان اصلی";
 $EnglishName = "نامبه زبان انگلیسی";
-$DokeosFolder = "پرونده یا فایل دوکئوس";
+$DokeosFolder = "پرونده سیستم";
 $Properties = "مشخصات";
-$PlatformConfigSettings = "تنظیماتدوکئوس";
+$PlatformConfigSettings = "تنظیمات سیستم";
 $SettingsStored = "تنظیماتمورد نظر انجامگردید";
 $InstitutionTitle = "ناممؤسسه یا نهاد";
 $InstitutionComment = "ناممؤسسه یا نهاد در گوشه سمت راست بالای صفحه نمایان میشود";
@@ -281,6 +291,8 @@ $AllowRegistrationComment = "آیا اجازه ثبت نام را به کارب�
 $AllowRegistrationAsTeacherTitle = "ثبت نام به عنوان استاد";
 $AllowRegistrationAsTeacherComment = "آیا اجازه ثبت نام به عنوان استاد را می دهید ؟ اساتید توانایی آفرینش دروس را دارند";
 $PlatformLanguage = "زبان محیط آموزشی";
+$Tuning = "بهینه سازی";
+$SplitUsersUploadDirectory = "جداسازی کاربران پوشه آپلود";
 $CourseQuota = "حجم فضای اختصاص داده شده به درس";
 $EditNotice = "تغییر یادداشت";
 $General = "عمومی";
@@ -346,7 +358,7 @@ $AddDummyContentToCourse = "اضافه نمودن محتوای آزمایشی ب
 $DummyCourseCreator = "آفرینش محتوای درس آزمایشی";
 $DummyCourseDescription = "شما در شُرف اضافه نمودن محتوای آزمایشی به این درس هستید. این کاربرد تنها برای مقاصد آزمایشی در نظر گرفته شده است";
 $AvailablePlugins = "در زیرمیتوانید فهرست پلاگین های نصب شده بر روی رایانه خود را مشاهده نمایید";
-$CreateVirtualCourse = "آفرینش یک درس مجازی";
+$CreateVirtualCourse = "ساخت یک درس مجازی";
 $DisplayListVirtualCourses = "نمایش فهرستی از دروس مجازی";
 $LinkedToRealCourseCode = "مربوط به کد واقعی درس";
 $AttemptedCreationVirtualCourse = "تلاش برای آفرینش درس مجازی";
@@ -370,6 +382,7 @@ $DropboxAllowStudentToStudentTitle = "قسمت تبادل مدارک : کارب�
 $DropboxAllowStudentToStudentComment = "آیا به دانشجویان امکان فرستادن فایل به دیگر دانشجویان را می دهید؟ با انتخاب �خیر� دانشجویان فقط خواهند توانست فایلهای خود را به استاد خود بفرستند";
 $DropboxAllowMailingTitle = "قسمت تیادل مدارک : اجازۀ ارسال از طریق ایمیل";
 $DropboxAllowMailingComment = "با استفاده از کارایی ارسال به وسیلۀ ایمیل شما خواهید توانست به تک تک کاربران فایلهای متفاوفی ارسال کنید";
+$PermissionsForNewDirs = "سطح دسترسی برای دایرکتوری های جدید";
 $UserListHasBeenExported = "لیست کاربران با موفقیت صادر شد";
 $ClickHereToDownloadTheFile = "برای بارگیری فایل اینجا را فشار دهید";
 $administratorTelephoneTitle = "تلفن تماس با اداره کنندۀ محیط آموزشی";
@@ -427,27 +440,435 @@ $ShowIconsInNavigationsMenuComment = "آیا فهرست پیمایش آیکون�
 $Plugin = "پلاگین";
 $MainMenu = "فهرست اصلی";
 $MainMenuLogged = "فهرست اصلی بعد از وارد شدن به سیستم";
-$Banner = "بانر";
+$Banner = "بنر";
 $ImageResizeTitle = "تغییر اندازه ی عکسهای ارسالی کاربران";
+$MaxImageWidthTitle = "حداکثر عرض تصویر کاربر";
+$MaxImageHeightTitle = "حداکثر ارتفاع تصویر کاربر";
 $YourVersionNotUpToDate = "نسخه برنامه شما به روز نیست";
 $YourVersionIs = "نسخه برنامه شما";
 $PleaseVisitDokeos = "لطفا از دکئوس دیدن کنید";
 $VersionUpToDate = "نسخه برنامه شما بروز است";
-$langVisioconf = "همایش ویدیویی";
+$ConnectSocketError = "خطا در اتصال سوکت";
+$SocketFunctionsDisabled = "اتصالات سوکت غیر فعال شده اند";
+$ShowEmailAddresses = "نمایش آدرس ایمیل ها";
+$ShowEmailAddressesComment = "نمایش آدرس ایمیل ها به کاربران";
+$LatestVersionIs = "آخرین نسخه :";
+$langConfigureExtensions = "چامیلو حرفه ای";
+$langActiveExtensions = "فعال کردن این سرویس";
+$langVisioconf = "چامیلو زنده";
 $langPpt2lp = "اوجی";
+$langBandWidthStatistics = "آمار پهنای باند";
+$ServerStatistics = "آمار سرور";
+$langListSession = "فهرست جلسات آموزشی";
+$AddSession = "افزودن یک جلسه آموزشی";
+$langImportSessionListXMLCSV = "درون ریزی فهرست جلسات";
+$ExportSessionListXMLCSV = "برون بری فهرست جلسات";
+$SessionName = "نام جلسه";
+$langNbCourses = "دروس";
 $DateStart = "تاریخ شروع";
 $DateEnd = "تاریخ پایانی";
 $CoachName = "نام استاد";
+$SessionList = "فهرست جلسات آموزشی";
+$SessionNameIsRequired = "یک نام برای جلسه باید وارد کنید";
 $NextStep = "مرحله بعد";
 $keyword = "کلیدواژه";
 $Confirm = "تایید";
+$UnsubscribeUsersFromCourse = "ابطال ثبت نام کاربران از درس";
+$MissingClassName = "فاقد نام کلاس";
+$ClassNameExists = "نام کلاس وجود دارد";
+$ImportCSVFileLocation = "مکان درون ریزی فایل CSV";
+$ClassesCreated = "کلاس ساخته شد";
+$ErrorsWhenImportingFile = "خطا در هنگام درون ریزی فایل";
+$ServiceActivated = "سرویس فعال شد";
+$ActivateExtension = "فعال سازی سرویس";
+$InvalidExtension = "فرمت نامعتبر";
+$AfterApproval = "بعد از تایید";
+$StudentViewEnabledTitle = "فعال سازی نمای دانشجو";
+$TimeLimitWhosonlineTitle = "محدودیت زمان در چه کسی آنلاین هست";
+$AccountValidDurationTitle = "معتبرسازی اکانت";
+$UseSessionModeTitle = "استفاده از جلسات آموزشی";
+$HomepageViewActivity = "نمای فعالیت (پیشفرض)";
+$HomepageView2column = "نمای دو ستونه";
+$HomepageView3column = "نمای سه ستونه";
+$AllowUserHeadings = "اجازه دادن به پروفایل کاربران درون درس";
+$IconsOnly = "فقط آیکون";
+$TextOnly = "فقط متن";
+$IconsText = "آیکون و متن";
+$EnableToolIntroductionTitle = "فعال سازی ابزار معرفی";
+$BreadCrumbsCourseHomepageTitle = "نمودار صفحه اصلی درس";
+$Comment = "دیدگاه";
+$Version = "نسخه";
+$LoginPageMainArea = "ناحیه اصلی صفحه ورود";
+$LoginPageMenu = "منوی صفحه ورود";
+$CampusHomepageMainArea = "ناحیه صفحه اصلی پرتال";
+$CampusHomepageMenu = "منوی صفحه اصلی پرتال";
+$MyCoursesMainArea = "ناحیه اصلی دروس";
+$MyCoursesMenu = "منوی دروس";
+$VersionCheck = "بروز رسانی نسخه";
 $Active = "فعال";
 $Inactive = "غیر فعال";
+$SessionOverview = "پیش نمایش جلسه";
+$DeleteSelectedSessions = "حذف کردن جلسات انتخاب شده";
+$CourseListInSession = "دروس در این جلسه";
+$UnsubscribeCoursesFromSession = "ابطال ثبت نام دروس انتخاب شده از این جلسه";
+$NbUsers = "کاربران";
+$SubscribeUsersToSession = "ثبت نام کاربران برای این جلسه";
+$UserListInPlatform = "فهرست کاربران پرتال";
+$UserListInSession = "فهرست کاربران ثبت نام شده در این جلسه";
+$CourseListInPlatform = "فهرست دروس";
+$Host = "میزبان";
+$UserOnHost = "ورود";
+$FtpPassword = "کلمه عبور اف تی پی";
 $WCAGContent = "نوشته";
+$SubscribeCoursesToSession = "افزودن درس به این جلسه";
+$DateStartSession = "تاریخ شروع";
+$DateEndSession = "تاریخ پایان";
+$EditSession = "ویرایش این جلسه";
+$VideoConferenceUrl = "مسیر کنفرانس زنده";
+$VideoClassroomUrl = "مسیر کنفرانس زنده اتاق درس";
+$ReconfigureExtension = "پیکربندی مجدد فرمت";
+$ServiceReconfigured = "سرویس مجدد پیکربندی شد";
+$ChooseNewsLanguage = "انتخاب زبان جدید";
+$Ajax_course_tracking_refresh = "تمام زمان گذرانده شده در یک درس";
+$EditLink = "ویرایش پیوند";
+$FinishSessionCreation = "اتمام ساخت جلسه";
+$SessionNameAlreadyExists = "نام جلسه از قبل وجود دارد";
+$NoClassesHaveBeenCreated = "هیچ کلاسی ساخت نشده است";
+$ThisFieldShouldBeNumeric = "این گزینه باید شامل ارقام باشد";
+$UserLocked = "کاربر قفل شد";
+$UserUnlocked = "کاربر باز شد";
+$CannotDeleteUser = "شما قادر به حذف این کاربر نیستید";
+$SelectedUsersDeleted = "کاربران انتخاب شده حذف شدند";
+$SomeUsersNotDeleted = "بعضی از کاربران حذف نشده اند";
+$ExternalAuthentication = "ورودی های خارجی";
+$RegistrationDate = "تاریخ ثبت نام";
+$UserUpdated = "کاربر آپدیت شد";
 $Choose = "انتخاب کنید";
+$ModifySessionCourse = "ویرایش جلسه درس";
+$CourseSessionList = "دروس در این جلسه";
+$SelectACoach = "انتخاب یک مربی";
+$UserNameUsedTwice = "ورود دوبار استفاده شده است";
+$WrongStatus = "این وضعیت وجود ندارد";
+$ClassNameNotAvailable = "این کلاس وجود ندارد";
+$FileImported = "فایل درون ریزی شد";
+$WhichSessionToExport = "جلسه را برای برون بری انتخاب کنید";
+$AllSessions = "تمامی جلسات";
+$CodeDoesNotExists = "این کد وجود ندارد";
+$UnknownUser = "کاربر ناشناخته";
+$UnknownStatus = "وضعیت ناشناخته";
+$SessionDeleted = "این جلسه حذف شده است";
+$CourseDoesNotExist = "این درس وجود ندارد";
+$UserDoesNotExist = "این کاربر وجود ندارد";
+$ButProblemsOccured = "دچار مشکل شدیم";
+$UsernameTooLongWasCut = "اطلاعات ورودی کم شد";
+$NoInputFile = "هیچ فایلی ارسال نشد";
+$StudentStatusWasGivenTo = "وضعیت دانشجو داده شد به";
+$ThisIsAutomaticEmailNoReply = "این یک پیام اتوماتیک هست. لطفا به آن پاسخ ندهید.";
+$YouWillSoonReceiveMailFromCoach = "شما بزودی از مربی خود یک ایمیل دریافت خواهید کرد.";
+$SlideSize = "اندازه اسلاید ها";
+$CourseTeachers = "اساتید";
+$UnknownTeacher = "استاد ناشناخته";
+$ListOfCoursesOfSession = "فهرست دروس این جلسه";
+$UnsubscribeSelectedUsersFromSession = "ابطال ثبت نام کاربران انتخاب شده از جلسه";
+$ShowEmptyCourseCategories = "نمایش دسته بندی دروس خالی";
+$ForTheSession = "برای جلسه";
+$AllowEmailEditorTitle = "ویرایشگر آنلاین ایمیل فعال شد";
+$ListOfUsersSubscribedToCourse = "فهرست کاربران ثبت نام شده در درس";
+$NumberOfCourses = "دروس";
+$ShowDifferentCourseLanguage = "نمایش زبان های درس";
+$name = "نام";
+$Security = "امنیت";
+$Blacklist = "فهرست سیاه";
+$Whitelist = "فهرست سفید";
+$UploadExtensionsBlacklist = "فهرست سیاه - تنظیمات";
+$UploadExtensionsWhitelist = "فهرست سفید - تنظیمات";
+$Remove = "حذف کردن";
+$Rename = "تغییر نام";
+$NameOfTheSession = "نام جلسه";
+$DefaultForumViewTitle = "نمای پیشفرض انجمن";
+$NoCoursesForThisSession = "هیچ درسی برای این جلسه موجود نیست";
+$NoUsersForThisSession = "هیچ کاربری برای این جلسه وجود ندارد";
+$LastNameMandatory = "نام خانوادگی نباید خالی باشد";
+$FirstNameMandatory = "نام نباید خالی باشد";
+$EmailMandatory = "ایمیل نباید خالی باشد";
+$ExtendedProfileRegistrationTitle = "گزینه پروفایل اضافه در ثبت نام";
+$NoReplyEmailAddress = "آدرس ایمیل بی پاسخ";
+$CourseCoachEmailSender = "آدرس ایمیل مربی";
+$NoReplyEmailSender = "آدرس ایمیل بی پاسخ";
+$VersionCheckEnabled = "چک کننده نسخه فعال شد";
+$Port = "پورت";
+$ManageUserFields = "پروفایل";
+$UserFields = "خصوصیات پروفایل";
+$AddUserField = "افزودن گزینه پروفایل";
+$FieldLabel = "برچسب گزینه";
+$FieldType = "نوع گزینه";
+$FieldTitle = "عنوان گزینه";
+$FieldDefaultValue = "مقدار پیشفرض";
+$FieldOrder = "ترتیب";
+$FieldVisibility = "آشکار؟";
+$FieldChangeability = "قابل تغییر";
+$FieldTypeText = "متن";
+$FieldTypeTextarea = "ناحیه متنی";
+$FieldPossibleValues = "مقدارهای ممکن";
+$FieldTypeDate = "تاریخ";
+$FieldTypeDatetime = "تاریخ و زمان";
+$AllowCourseThemeTitle = "اجازه دادن قالب های درس";
+$LDAPSearchTermTitle = "واژه جستجو";
+$LDAPFilledTutorFieldTitle = "گزینه شناسایی مربی";
+$LDAPAuthenticationLoginTitle = "ورود به احراز هویت";
+$LDAPAuthenticationPasswordTitle = "کلمه عبور احراز هویت";
+$EmailNotifySubscription = "اطلاع رسانی کاربران ثبت نام شده توسط ایمیل";
+$AllSlashNone = "همه/هیچ";
+$StepDeletedSuccessfully = "گام با موفقیت حذف شد";
+$StepUsersDeletedSuccessfully = "کاربران گام با موفقیت حذف شدند";
+$DeleteStepUsers = "حذف کاربران از گام";
+$ImportStudentsOfAllSteps = "درون ریزی دانشجوها از تمامی گام ها";
+$NoUserInThisSession = "هیچ کاربری در این جلسه نیست";
+$SelectStudents = "انتخاب دانشجوها";
+$NoUserAdded = "هیچ کاربری اضافه نشد";
+$CannotMakeFieldChangeable = "این گزینه را نمی توان قابل تغییر کرد";
+$CannotMakeFieldUnchangeable = "این گزینه را نمی توان غیر قابل تغییر کرد";
+$FieldDeleted = "این گزینه حذف شده است";
+$CannotDeleteField = "قادر به حذف گزینه نبودیم";
+$AddUsersByCoachTitle = "ثبت نام کاربران توسط مربی";
+$FieldOptionMovedUp = "این گزینه به مرحله بالا انتقال یافت";
+$CannotMoveFieldOption = "قادر به انتقال گزینه نبودیم";
+$FieldOptionMovedDown = "این گزینه به مرحله پایین انتقال یافت";
+$DaysBefore = "روزهای قبل از شروع جلسه";
+$DaysAfter = "روزهای بعد";
+$SessionAddTypeUnique = "ثبت نام تکی";
+$SessionAddTypeMultiple = "ثبت نام گروهی";
+$SearchASession = "پیدا کردن یک جلسه آموزشی";
+$ActiveSession = "جلسه فعال";
+$ShowSessionCoachTitle = "نمایش مربی جلسه";
+$SelectAResponsible = "انتخاب یک مدیر";
+$SharedSettingIconComment = "این یک تنظیمات مشترک هست";
+$GlobalAgenda = "دستور کار جهانی";
+$ScormAndLPProgressTotalAverage = "معدل روند در دروس";
+$SearchHideUnlinkedResults = "آنها را نمایش ندهید";
+$SearchShowUnlinkedResults = "نمایش بده ولی بدون پیوند به منبع";
+$Templates = "قالب ها";
+$EnableVersionCheck = "فعال سازی چک کننده نسخه";
+$AllowMessageToolTitle = "ابزار پیام دهی داخلی";
+$ConfigureResourceType = "پیکربندی";
+$CurrentLanguagesPortal = "زبان کنونی سیستم";
+$LPTestScore = "امتیاز درس";
+$ImportUsersToACourse = "درون ریزی فهرست کاربران";
+$ImportCourses = "درون ریزی فهرست دروس";
+$ManageUsers = "مدیریت کاربران";
+$ManageCourses = "مدیریت دروس";
+$UserListIn = "کاربران";
+$EditUsers = "ویرایش کاربران";
+$EditCourses = "ویرایش دروس";
+$CourseListIn = "دروس";
+$CoursesWereEdited = "دروس با موفقیت بروز رسانی شدند";
+$EditSessionToURL = "ویرایش جلسه";
+$SessionBelongURL = "جلسات ویرایش شدند";
+$ManageSessions = "مدیریت جلسات";
+$SetLanguageAsDefault = "انتخاب بعنوان زبان پیشفرض";
+$FieldFilter = "فیلتر";
+$FilterOn = "فیلتر روشن";
+$FilterOff = "فیلتر خاموش";
+$buttonAddUserField = "افزودن گزینه کاربر";
+$FilterUsers = "فیلتر کردن کاربران";
+$CoachIsRequired = "شما باید یک مربی انتخاب کنید";
+$AddTemplate = "افزودن یک قالب";
+$TemplateAdded = "قالب اضافه شد";
+$TemplateDeleted = "قالب حذف شد";
+$EditTemplate = "ویرایش قالب";
+$Created = "ساخته شد";
+$EditSystemAnnouncement = "ویرایش سیستم اطلاع رسانی";
+$TotalTimeByCourse = "زمان کلی این درس";
+$Searching = "جستجو";
+$AddNews = "افزودن خبر";
+$FieldRemoved = "گزینه حذف شد";
+$LoadLanguageFile = "بارگذاری فایل زبان";
+$TemplateEdited = "قالب ویرایش شد";
+$ShowTeacherDataTitle = "نمایش اطلاعات استاد در سربرگ پایین";
+$TermsAndConditions = "شرایط و ضوابط";
+$PageLink = "پیوند صفحه";
+$AllowTermsAndConditionsTitle = "فعال سازی شرایط و مقررات";
+$Load = "بارگذاری";
+$AllVersions = "تمامی نسخه ها";
+$EditTermsAndConditions = "ویرایش شرایط و ضوابط";
+$Changes = "تغییرات";
+$ExplainChanges = "تشریح تغییرات";
+$TermAndConditionNotSaved = "شرایط و ضوابط ذخیره نشد";
+$AddTermsAndConditions = "افزودن شرایط و ضوابط";
+$TermAndConditionSaved = "شرایط و ضوابط ذخیره شد";
+$Visibility = "وضعیت نمایش";
+$SessionCategory = "دسته بندی جلسات";
+$ListSessionCategory = "فهرست دسته بندی جلسات";
+$AddSessionCategory = "افزودن دسته بندی";
+$SessionCategoryName = "نام دسته بندی";
+$EditSessionCategory = "ویرایش دسته بندی جلسه";
+$SessionCategoryAdded = "دسته بندی اضافه شد";
+$SessionCategoryUpdate = "بروز رسانی دسته بندی";
+$SessionCategoryDelete = "دسته های انتخاب شده حذف شدند";
+$SessionCategoryNameIsRequired = "لطفا یک نام برای دسته بندی جلسات وارد کنید";
+$ThereIsNotStillASession = "هیچ جلسه ای در دسترس نیست";
+$SelectASession = "انتخاب یک جلسه";
+$OriginCoursesFromSession = "دروس از جلسه اصلی";
+$DestinationCoursesFromSession = "دروس از جلسه مقصد";
+$CopyCourseFromSessionToSessionExplanation = "راهنمایی درباره کپی برداری دروس از یک جلسه به جلسه دیگر";
+$TypeOfCopy = "نوع کپی";
+$CopyFromCourseInSessionToAnotherSession = "کپی برداری از درس این جلسه به جلسه دیگر";
+$YouMustSelectACourseFromOriginalSession = "شما باید یک درس از جلسه اصلی انتخاب کنید";
+$EditSessionCoursesByUser = "ویرایش جلسه دروس توسط کاربر";
+$CoursesUpdated = "بروز رسانی دروس";
+$CurrentCourses = "دروس فعلی";
+$CoursesToAvoid = "دروس غیر قابل دسترس";
+$EditSessionCourses = "ویرایش دروس جلسه";
+$SessionVisibility = "وضعیت نمایش بعد از تاریخ پایان";
+$BlockCoursesForThisUser = "مسدود کردن کاربر از دروس این جلسه";
+$LanguageFile = "فایل زبان";
+$ShowCoursesDescriptionsInCatalogTitle = "نمایش توضیحات دروس در کاتالوگ";
+$AddSessionsInCategories = "افزودن جلسات به دسته بندی ها";
+$EditSpecificSearchField = "ویرایش گزبنه خاص جستجو";
+$FieldName = "نام گزینه";
+$SpecialExports = "برون بری های خاص";
+$SpecialCreateFullBackup = "ساخت نسخه پشتیبان خاص";
+$CreateBackup = "ساخت نسخه پشتیبان";
+$AllowCoachsToEditInsideTrainingSessions = "اجازه دادن به مربی ها برای ویرایش داخل جلسات درس";
+$ShowSessionDataTitle = "نمایش عنوان اطلاعات جلسه";
+$ShowSessionDataComment = "نمایش دیدگاه اطلاعات جلسه";
+$SessionListInPlatform = "فهرت جلسات در این پلاتفرم";
+$SessionListInCategory = "فهرست جلسات در این دسته";
+$ConfigureInscription = "تنظیمات صفحه ثبت نام";
+$NumberOfSession = "تعداد جلسات";
+$EditTopRegister = "ویرایش یادداشت";
+$ExportCourses = "برون بری دروس";
+$IsAdministrator = "مدیر هست";
+$IsNotAdministrator = "مدیر نیست";
+$AddTimeLimit = "افزودن محدودیت زمانی";
+$EditTimeLimit = "ویرایش محدودیت زمانی";
+$FieldTypeTag = "برچسب کاربر";
+$UserTag = "برچسب کاربر";
+$SelectSession = "انتخاب جلسه";
+$GroupPermissions = "سطح دسترسی گروه";
+$SpecialCourse = "درس خاص";
+$GoToCourseAfterLoginTitle = "هدایت مستقیم به درس بعد از ورود";
+$GroupList = "فهرست گروه ها";
+$AllowStudentsDownloadFoldersTitle = "اجازه به کاربران برای دانلود پوشه ها";
+$AllowStudentsToCreateGroupsInSocialTitle = "اجازه به دانشجویان برای ساخت گروه ها در شبکه اجتماعی";
+$AllowStudentsToCreateGroupsInSocialComment = "اجازه به دانشجویان برای ساخت گروه ها در شبکه اجتماعی";
+$AllowSendMessageToAllPlatformUsersTitle = "اجازه ارسال پیام ها به هر نوع کاربر پلتفرم";
+$MessageMaxUploadFilesizeTitle = "حداکثر حجم آپلود فایل در پیام";
+$AddAdditionalProfileField = "افزودن گزینه پروفایل کاربر";
+$Username = "نام کاربری";
+$ChamiloHomepage = "صفحه اصلی چامیلو";
+$ChamiloForum = "انجمن چامیلو";
+$MessagesSent = "تعداد پیام های ارسال شده";
+$MessagesReceived = "تعداد پیام های دریافت شده";
+$CoursesListInPlatform = "فهرست دروس پلاتفرم";
+$AssignedCoursesTo = "دروس منتصب شد به";
+$TimezoneValueTitle = "وقدار منطقه زمانی";
+$UseUsersTimezoneTitle = "فعال سازی زمان محلی کاربران";
+$FieldTypeTimezone = "منقطه زمانی";
+$AssignedSessionsHaveBeenUpdatedSuccessfully = "جلسه های منتصب شده بروز رسانی شد";
+$AssignedCoursesHaveBeenUpdatedSuccessfully = "دروس منتصب شده بروز رسانی شد";
+$AssignedUsersHaveBeenUpdatedSuccessfully = "کاربران منتصب شده بروز رسانی شد";
+$Lock = "قفل";
+$AssignUsersToX = "انتصاب کاربران به %s";
+$AssignCoursesToX = "انتصاب دروس به %s";
+$SessionsInformation = "گزارش جلسات";
+$YourSessionsList = "جلسات شما";
+$TeachersInformationsList = "گزارش اساتید";
+$YourTeachers = "اساتید شما";
+$StudentsInformationsList = "گزارش دانشجویان";
+$YourStudents = "دانشجویان شما";
+$TeachersInformationsGraph = "چارت گزارش اساتید";
+$StudentsInformationsGraph = "چارت گزارش دانشجویان";
+$Timezones = "منطقه زمانی";
+$AttendancesFaults = "شرکت نکرده است";
+$Minutes = "دقایق";
+$SystemStatus = "وضعیت سیستم";
+$IsWritable = "قابل نوشتن";
+$DirectoryExists = "پوشه وجود دارد";
+$Section = "بخش";
+$Setting = "تنظیمات";
+$Current = "کنونی";
+$PHPVersionInfo = "نسخه پی اچ پی";
+$ServerProtocolInfo = "پروتکل های مورد استفاده این سرور";
+$ServerAddessInfo = "آدرس سرور";
+$ServerNameInfo = "نام سرور (همانطور که در درخواست تان استفاده کردید)";
+$ServerPortInfo = "پورت سرور";
+$ServerSoftwareInfo = "نرم افزار در حال اجرا بعنوان یک وب سرور";
+$AssignSessionsToX = "انتصاب جلسات به %s";
+$AssignCoursesToSessionsAdministrator = "انتصاب دروس به مدیر جلسه";
+$AssignCoursesToPlatformAdministrator = "انتصاب دروس به مدیر پلاتفرم";
+$AssignedCoursesListToPlatformAdministrator = "انتصاب فهرست دروس به مدیر پلاتفرم";
+$AssignedCoursesListToSessionsAdministrator = "انتصاب فهرست دروس به مدیر جلسه";
+$AssignSessionsToPlatformAdministrator = "انتصاب جلسات به مدیر پلاتفرم";
+$AssignSessionsToSessionsAdministrator = "انتصاب جلسات به مدیر جلسه";
+$AssignedSessionsListToPlatformAdministrator = "انتصاب فهرست جلسات به مدیر پلاتفرم";
+$AssignedSessionsListToSessionsAdministrator = "انتصاب فهرست جلسات به مدیر جلسه";
+$Action = "عملیات";
+$ISOCode = "کد ISO";
+$ReturnToLanguagesList = "بازگشت به فهرست زبان ها";
+$CategoriesNumber = "دسته بندی";
+$CourseProgress = "روند درس";
+$ExportAllCoursesList = "برون بری تمامی دروس";
+$CoursesListHasBeenExported = "فهرست دروس برون ریزی شد";
+$WhichCoursesToExport = "دروس جهت برون ریزی";
+$AssignUsersToPlatformAdministrator = "انتصاب کاربران به مدیر پلاتفرم";
+$AssignedUsersListToPlatformAdministrator = "کاربران به مدیر پلاتفرم منتصب شدند";
+$ThereAreNotCreatedCourses = "هیچ درسی برای انتخاب وجود ندارد";
+$HomepageViewVerticalActivity = "مشاهده فعالیت های عمودی";
+$CoursesInformation = "اطلاعات دروس";
+$EditBlocks = "ویرایش بلوک";
+$DataFiller = "فیلتر اطلاعات";
+$SessionListIn = "فهرست جلسات در";
+$FillUsers = "پر کردن کاربران";
+$UsersFillingReport = "کاربران در حال پر کردن گزارش";
+$AssignCoach = "انتصاب مربی";
+$chamilo = "چامیلو";
 $Off = "خاموش";
 $minimum = "حداقل";
 $webserver = "وب سرور";
 $Social = "اجتماعی";
+$BackupCreated = "ساخت بک آپ";
 $phone = "تلفن";
+$AnnouncementVisible = "اعلامیه آشکار";
+$AnnouncementInvisible = "اعلامیه پنهان";
+$GlossaryDeleted = "واژه نامه حذف شد";
+$CourseDescriptionUpdated = "توضیحات درس بروز رسانی شد";
+$SessionReadOnly = "فقط خواندنی";
+$SessionAccessible = "قابل دسترس";
+$SessionNotAccessible = "غیر قابل دسترس";
+$GroupAdded = "گروه اضافه شد";
+$AddUsersToGroup = "افزودن کاربران به گروه";
+$MyTextHere = "متن خود را اینجا وارد کنید...";
+$FieldTypeSocialProfile = "پیوند شبکه اجتماعی";
+$AcceptedCourseRequests = "درخواست درس قبول شد";
+$RejectedCourseRequests = "درخواست درس رد شد";
+$EnableCourseValidation = "معتبرسازی دروس";
+$CourseTool = "ابزار درس";
+$ExerciseMinScoreTitle = "حداقل امتیاز تمرین ها";
+$ExerciseMaxScoreTitle = "حداکثر امتیاز تمرین ها";
+$CareersAndPromotions = "فرصت های شغلی و جوایز";
+$Careers = "شغل ها";
+$Promotions = "جوایز";
+$Updated = "بروزرسانی با موفقیت انجام شد";
+$Career = "شغل";
+$SubscribeSessionsToPromotions = "ثبت نام جلسات در جوایز";
+$SessionsInPlatform = "جلسات ثبت نام نشده اند";
+$NoEndTime = "بدون زمان پایان";
+$SubscribeUsersToClass = "ثبت نام کاربران در کلاس";
+$SubscribeClassToSessions = "ثبت نام کلاس در جلسات";
+$SessionsInGroup = "جلسات در گروه";
+$CoursesInGroup = "دروس در گروه";
+$UsersInGroup = "کاربران در گروه";
+$UsersInPlatform = "کاربران در پلاتفرم";
+$SubscribeGroupToSessions = "ثبت نام گروه در جلسات";
+$SubscribeGroupToCourses = "ثبت نام گروه در دروس";
+$CompareStats = "مقایسه آمار";
+$FillCourses = "پر کردن دروس";
+$FillSessions = "پر کردن جلسات";
+$Archived = "بایگانی شد";
+$Unarchived = "از بایگانی خارج شد";
+$StatsUsersDidNotLoginInLastPeriods = "برای مدتی متصل نشده اند";
+$NeverConnected = "هرگز متصل نشده اند";
+$ArchiveDirCleanup = "پاکسازی دایرکتوری بایگانی";
+$Regions = "منطقه";
 ?>

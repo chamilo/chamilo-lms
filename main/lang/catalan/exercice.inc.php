@@ -362,6 +362,7 @@ $ExerciseAttempted = "Un estudiant ha contestat una pregunta";
 $MultipleSelectCombination = "Combinació exacta";
 $MultipleAnswerCombination = "Combinació exacta";
 $ExerciceExpiredTimeMessage = "El temps d'avaluació ha acabat. De totes maneres les preguntes que ja heu respost, seran considerades a l'avaluació de l'exercici.";
+$AllQuestionsMustHaveACategory = "Totes les preguntes han de tenir com a mínim una categoria associada.";
 $NoMedia = "Sense vincle a medi";
 $AttachToMedia = "Vincula a medi";
 $ExamModeWithFinalScoreShowOnlyFinalScoreWithCategoriesIfAvailable = "Mostra només el resultat final, amb categories si estan disponibles";

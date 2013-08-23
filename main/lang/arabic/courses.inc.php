@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AlreadyRegisteredToCourse = "لقد تم التسجيل من قيل";
 $lang_already_enrolled = " مسجل مسبقا";
 $lang_my_personnal_course_list = " قائمة مقرراتي الخاصة";
 $lang_course_enrollment = " مقررات المستخدمين";
@@ -70,4 +71,5 @@ $SubmitRegistrationCode = " ارسل رمز التسجيل";
 $CourseCategoryDeleted = " تم حذف تصنيف المقرر";
 $CategorySortingDone = " تم ترتيب التصنيف";
 $CourseCategoryEditStored = " تم تحديث التصنيف";
+$Compose = "انشاء رسالة";
 ?>

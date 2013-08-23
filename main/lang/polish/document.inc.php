@@ -66,6 +66,7 @@ $ChangeVisibility = "Zmień widoczność";
 $VisibilityCannotBeChanged = "Widoczność nie może być zmieniona";
 $DocumentCannotBeMoved = "Dokument nie może zostać przeniesiony";
 $langOogieConversionPowerPoint = "Chamilo RAPID: konwersja PowerPoint";
+$langWelcomeOogieSubtitle = "Konwertor kursu z PowerPoint do SCORM";
 $langAddMetadata = "Podgląd/Edycja Metadanych";
 $langGoMetadata = "Idź";
 $langQuotaForThisCourseIs = "Rozmiar dla tego kursu to:";

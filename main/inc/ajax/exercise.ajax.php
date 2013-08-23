@@ -9,8 +9,6 @@ require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/answer.class.php';
 
 use \ChamiloSession as Session;
-use \ChamiloLMS\Transaction\TransactionLog;
-use \ChamiloLMS\Transaction\TransactionLogController;
 
 api_protect_course_script(true);
 
@@ -105,6 +103,7 @@ switch ($action) {
 
         $cat = new Testcategory(null, null, null, null, $type);
         $items = $cat->get_categories_by_keyword($_REQUEST['tag']);
+
         $courseId = api_get_course_int_id();
 
         $json_items = array();
@@ -302,7 +301,6 @@ switch ($action) {
     	break;
     case 'save_exercise_by_now':
         $course_info = api_get_course_info($course_code);
-
         $course_id = $course_info['real_id'];
         //Use have permissions?
         if (api_is_allowed_to_session_edit()) {
@@ -341,7 +339,6 @@ switch ($action) {
             // Question info.
             $question_id             = isset($_REQUEST['question_id']) ? intval($_REQUEST['question_id']) : null;
             $question_list           = Session::read('question_list_uncompressed');
-
 
             // If exercise or question is not set then exit.
             if (empty($question_list) || empty($objExercise)) {
@@ -446,7 +443,7 @@ switch ($action) {
                 }
 
                 // Creates a temporary Question object
-                $objQuestionTmp = Question::read($my_question_id, $course_id);
+            	$objQuestionTmp = Question::read($my_question_id, $course_id);
 
                 if ($objExercise->type == ONE_PER_PAGE && $objQuestionTmp->type == UNIQUE_ANSWER) {
                     if (in_array($my_question_id, $remind_list)) {
@@ -579,23 +576,6 @@ switch ($action) {
                     'incomplete',
                     $remind_list
                 );
-
-                $log_transactions_settings = TransactionLog::getTransactionSettings();
-                if (isset($log_transactions_settings['exercise_attempt'])) {
-                  $transaction_controller = new TransactionLogController();
-                  $transaction = $transaction_controller->loadOne(array(
-                    'action' => 'exercise_attempt',
-                    'branch_id' => TransactionLog::BRANCH_LOCAL,
-                    'item_id' => $exe_id,
-                  ));
-                  if (!$transaction) {
-                    $transaction_data = array(
-                      'item_id' => $exe_id,
-                    );
-                    $transaction = $transaction_controller->createTransaction('exercise_attempt', $transaction_data);
-                  }
-                  $transaction->save();
-                }
 
                  // Destruction of the Question object
             	unset($objQuestionTmp);

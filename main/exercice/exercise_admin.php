@@ -13,14 +13,15 @@
 
 use \ChamiloSession as Session;
 
+
 require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-if (!api_is_allowed_to_edit(null, true)) {
-    api_not_allowed(true);
+if (!api_is_allowed_to_edit(null,true)) {
+	api_not_allowed(true);
 }
 
 $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?1=1';
@@ -73,8 +74,6 @@ $htmlHeadXtra[] = '<script>
             filter_selected: true,
             newel: true
         });
-
-
         $("input[name=\'model_type\']").each(function(index, value) {
             $(this).click(function() {
                 var value = $(this).attr("value");
@@ -87,7 +86,6 @@ $htmlHeadXtra[] = '<script>
 
             });
         });
-
     });
 
 	function advanced_parameters() {
@@ -234,8 +232,7 @@ function setFocus(){
 $(document).ready(function () {
     setFocus();
 });
-//Commented only for Minedu (to show all options upfront)
-//window.onload=advanced_parameters;
+window.onload = advanced_parameters;
 </script>';
 
 // INIT EXERCISE
@@ -248,10 +245,10 @@ $course_id = api_get_course_int_id();
 if (isset($_GET['exerciseId'])) {
 	$form = new FormValidator('exercise_admin', 'post', api_get_self().'?'.api_get_cidreq().'&exerciseId='.intval($_GET['exerciseId']));
 	$objExercise->read($_GET['exerciseId']);
-	$form->addElement('hidden', 'edit', 'true');
+	$form->addElement('hidden','edit','true');
 } else {
-	$form = new FormValidator('exercise_admin', 'post',api_get_self().'?'.api_get_cidreq());
-	$form->addElement('hidden', 'edit', 'false');
+	$form = new FormValidator('exercise_admin','post',api_get_self().'?'.api_get_cidreq());
+	$form->addElement('hidden','edit','false');
 }
 
 $objExercise->createForm($form);

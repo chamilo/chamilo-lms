@@ -65,6 +65,14 @@ if (api_get_setting('allow_group_categories') == 'true') {
 	$nameTools = get_lang('PropModify');
 }
 
+$htmlHeadXtra[] = '<script>
+$(document).ready( function() {
+    $("#max_member").on("focus", function() {
+        $("#max_member_selected").attr("checked", true);
+    });
+});
+ </script>';
+  
 $interbreadcrumb[] = array ('url' => 'group.php', 'name' => get_lang('Groups'));
 
 $course_id = api_get_course_int_id();
@@ -123,8 +131,8 @@ $form->addElement('html', '</div>');
 // Members per group
 $form->addElement('radio', 'max_member_no_limit', get_lang('GroupLimit'), get_lang('NoLimit'), GroupManager::MEMBER_PER_GROUP_NO_LIMIT);
 $group = array ();
-$group[] = $form->createElement('radio', 'max_member_no_limit', null, get_lang('MaximumOfParticipants'), 1);
-$group[] = $form->createElement('text', 'max_member', null, array ('size' => 2));
+$group[] = $form->createElement('radio', 'max_member_no_limit', null, get_lang('MaximumOfParticipants'), 1, array('id' => 'max_member_selected'));
+$group[] = $form->createElement('text', 'max_member', null, array ('size' => 2, 'id' => 'max_member'));
 $group[] = $form->createElement('static', null, null, get_lang('GroupPlacesThis'));
 $form->addGroup($group, 'max_member_group', null, '', false);
 $form->addRule('max_member_group', get_lang('InvalidMaxNumberOfMembers'), 'callback', 'check_max_number_of_members');

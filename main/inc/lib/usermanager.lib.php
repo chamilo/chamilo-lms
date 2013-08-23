@@ -150,6 +150,7 @@ class UserManager
                 return api_set_failure('encrypt_method invalid');
             }
         }
+
         $params['registration_date'] = api_get_utc_datetime();
 
         // Database table definition
@@ -2631,7 +2632,7 @@ class UserManager
 
         //Courses in which we are subscribed out of any session
         $tbl_user_course_category = Database :: get_main_table(TABLE_USER_COURSE_CATEGORY);
-
+        //INNER JOIN $tbl_user_course_category user_course_category
         $personal_course_list_sql = "SELECT course.code,
                                             course_rel_user.status course_rel_status,
                                             course_rel_user.sort sort,
@@ -4258,7 +4259,4 @@ class UserManager
         }
         return $users;
     }
-
-
-
 }

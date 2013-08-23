@@ -81,7 +81,6 @@ class ExerciseController extends CommonController
             // adds the question ID represented by $recup into the list of questions for the current exercise
             $objExercise->addToList($exerciseId);
             Session::write('objExercise', $objExercise);
-
             /*$params = array(
                 'cidReq' => api_get_course_id(),
                 'id_session' => api_get_session_id(),
@@ -92,7 +91,6 @@ class ExerciseController extends CommonController
             return $app->redirect($url);*/
             $response = \Display::return_message(get_lang('QuestionReused').": ".$question->question);
             return new Response($response, 200, array());
-
         }
     }
 

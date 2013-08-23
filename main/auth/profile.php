@@ -27,6 +27,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $this_section = SECTION_MYPROFILE;
 }
 
+$htmlHeadXtra[] = api_get_password_checker_js('#username', '#password1');
 $_SESSION['this_section'] = $this_section;
 
 if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
@@ -34,9 +35,7 @@ if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user[
 }
 
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<link href="'.api_get_path(
-    WEB_LIBRARY_PATH
-).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+$htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
 $htmlHeadXtra[] = '<script>
 function confirmation(name) {
@@ -90,10 +89,10 @@ if (!empty($_GET['fe'])) {
 $jquery_ready_content = '';
 if (api_get_setting('allow_message_tool') == 'true') {
     $jquery_ready_content = <<<EOF
-    $(".message-content .message-delete").click(function(){
-        $(this).parents(".message-content").animate({ opacity: "hide" }, "slow");
-        $(".message-view").animate({ opacity: "show" }, "slow");
-    });
+			$(".message-content .message-delete").click(function(){
+				$(this).parents(".message-content").animate({ opacity: "hide" }, "slow");
+				$(".message-view").animate({ opacity: "show" }, "slow");
+			});
 EOF;
 }
 

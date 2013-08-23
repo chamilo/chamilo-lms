@@ -53,15 +53,25 @@ if ($form->validate()) {
         $clean_users    = array();
 
         if (!empty($users)) {
-
+            $empty_line = 0;
             foreach ($users as $user_data) {
-                $username = $user_data['username'];
-                $user_id = UserManager::get_user_id_from_username($username);
-                $user_info = api_get_user_info($user_id);
-                if ($user_id && !empty($user_info)) {
-                    $clean_users[$user_id] = $user_info;
+                $user_id = null;
+                $user_data = array_change_key_case($user_data, CASE_LOWER);
+
+                // Checking "username" field
+                if (isset($user_data['username']) && !empty($user_data['username'])) {
+                    $user_id = UserManager::get_user_id_from_username($user_data['username']);
+                }
+
+                // Checking "id" field
+                if (isset($user_data['id']) && !empty($user_data['id'])) {
+                    $user_id = $user_data['id'];
+                }
+
+                if (UserManager::is_user_id_valid($user_id)) {
+                    $clean_users[] = $user_id;
                 } else {
-                    $invalid_users[] = $user_id;
+                    $invalid_users[] = $user_data;
                 }
             }
 
@@ -79,18 +89,18 @@ if ($form->validate()) {
                         CourseManager::unsubscribe_user($user_ids, $course_code, $session_id);
                     }
                 }
-                foreach ($clean_users as $user_info) {
-                    $user_id = $user_info['user_id'];
-                    CourseManager :: subscribe_user($user_id, $course_code, STUDENT, $session_id);
+                foreach ($clean_users as $userId) {
+                    $userInfo = api_get_user_info($userId);
+                    CourseManager::subscribe_user($userId, $course_code, STUDENT, $session_id);
                     if (empty($session_id)) {
                         //just to make sure
-                        if (CourseManager :: is_user_subscribed_in_course($user_id, $course_code)) {
-                            $user_to_show[]= $user_info['complete_name'];
+                        if (CourseManager :: is_user_subscribed_in_course($userId, $course_code)) {
+                            $user_to_show[]= $userInfo['complete_name'];
                         }
                     } else {
                         //just to make sure
-                        if (CourseManager :: is_user_subscribed_in_course($user_id, $course_code, true, $session_id)) {
-                            $user_to_show[]= $user_info['complete_name'];
+                        if (CourseManager::is_user_subscribed_in_course($userId, $course_code, true, $session_id)) {
+                            $user_to_show[]= $userInfo['complete_name'];
                         }
                     }
                 }
@@ -109,13 +119,22 @@ Display::display_header();
 
 if (!empty($message)) {
     if (!empty($user_to_show)) {
+        $userMessage = null;
+        foreach ($user_to_show as $user) {
+            if (!is_array($user)) {
+                $user = array($user);
+            }
+            $user = array_filter($user);
+            $userMessage .= implode(', ', $user)."<br />";
+        }
         if ($type == 'confirmation') {
-            Display::display_confirmation_message($message.': <br />'.implode(', ', $user_to_show), false);
+            Display::display_confirmation_message($message.': <br />'.$userMessage, false);
         } else {
-            Display::display_warning_message($message.': '.implode(', ', $user_to_show));
+            Display::display_warning_message($message.':  <br />'.$userMessage, false);
         }
     } else {
-        Display::display_error_message(get_lang('ErrorsWhenImportingFile'));
+        $empty_line_msg = ($empty_line == 0) ? get_lang('ErrorsWhenImportingFile'): get_lang('ErrorsWhenImportingFile').': '.get_lang('EmptyHeaderLine');
+        Display::display_error_message($empty_line_msg);
     }
 }
 
@@ -126,6 +145,14 @@ echo '<blockquote><pre>
     username;
     jdoe;
     jmontoya;
+</pre>
+</blockquote>';
+
+echo get_lang('Or');
+echo '<blockquote><pre>
+    id;
+    23;
+    1337;
 </pre>
 </blockquote>';
 

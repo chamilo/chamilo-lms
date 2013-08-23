@@ -35,9 +35,10 @@ class CourseSelectForm
 		$resource_titles[RESOURCE_WIKI]                 = get_lang('Wiki');
 		$resource_titles[RESOURCE_THEMATIC]             = get_lang('Thematic');
 		$resource_titles[RESOURCE_ATTENDANCE]           = get_lang('Attendance');
+        $resource_titles[RESOURCE_WORK]                 = get_lang('ToolStudentPublication');
 
         $iconPath = api_get_path(WEB_IMG_PATH);
-        ?>
+?>
 		<script>
 			function exp(item) {
 				el = document.getElementById('div_'+item);
@@ -489,7 +490,7 @@ class CourseSelectForm
 							}
 					default :
 						if (!empty($resources) && is_array($resources)) {
-							foreach($resources as $id => $obj) {
+							foreach ($resources as $id => $obj) {
 								$resource_is_used_elsewhere = $course->is_linked_resource($obj);
                                 //var_dump($obj, $resource_is_used_elsewhere);
 								// check if document is in a quiz (audio/video)
@@ -563,7 +564,7 @@ class CourseSelectForm
 		<?php
 
 		//get destination course title
-		if (!empty($hidden_fields['destination_course'])) {
+		if(!empty($hidden_fields['destination_course'])) {
 			$course_infos = CourseManager::get_course_information($hidden_fields['destination_course']);
 			echo '<h3>';
 				echo get_lang('DestinationCourse').' : '.$course_infos['title'];

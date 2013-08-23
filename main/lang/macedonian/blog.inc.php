@@ -77,7 +77,6 @@ $langUserHasPermissionNot = "Корисникот нема права";
 $langUserHasPermission = "Корисникот има права";
 $langLegend = "Легенда";
 $langUserHasPermissionByRoleGroup = "Корисникот има права во неговата група";
-$EditPost = "Уреди ја објавата";
 $AddBlog = "Креирај нов блог";
 $EditBlog = "Уреди го блогот";
 $DeleteBlog = "Избриши го блогот";

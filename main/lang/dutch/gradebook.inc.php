@@ -235,4 +235,8 @@ $SelectGradeModel = "Selecteer een kwalificatie model";
 $AllMustWeight100 = "De som van alle waarden moet 100 zijn";
 $Components = "Componenten";
 $OnlyActiveWhenThereAreAnyComponents = "Deze optie is ingeschakeld als u evaluaties of categorieën hebt";
+$GradebookLockedAlert = "Deze evaluatie werd vergrendeld. Je kan ze niet ontgrendelen. Als je ze echt wil ontgrendelen, contacteer dan de platform beheerder, leg hem/haar uit waarom je de evaluatie moet kunnen ontgrendelen (anders kan je evaluatie als frauduleus worden aanzien)";
+$NoStudentCertificatesAvailableYet = "Er is nog geen student certificaat beschikbaar. Onthoud dat, om zijn certificaat te genereren, een student naar de evaluaties tool moet gaan en er moet klikken op het certificaat icoon, wat alleen zichtbaar zal zijn wanneer hij de cursus doelen heeft bereikt.";
+$CertificateExistsButNotPublic = "Het gevraagde certificaat is beschikbaar via dit platform, maar werd niet publiek gemaakt. Meld je aan om het te kunnen zien.";
+$ConfirmToUnlockElement = "Bevestig om dit element te ontgrendelen";
 ?>

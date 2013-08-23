@@ -49,23 +49,22 @@ $time_control = false;
 $clock_expired_time = ExerciseLib::get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
 
 if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
-    $time_control = true;
+	$time_control = true;
 }
 
 $urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
 
 $exercise_stat_info = $objExercise->getStatTrackExerciseInfo($learnpath_id, $learnpath_item_id, 0);
-
 if ($time_control) {
     // Get time left for expiring time
-    $time_left = api_strtotime($clock_expired_time, 'UTC') - time();
+    $time_left = api_strtotime($clock_expired_time,'UTC') - time();
 
-    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
+	$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
     $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
     $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
-    $htmlHeadXtra[] = $objExercise->show_time_control_js($time_left);
+	$htmlHeadXtra[] = $objExercise->show_time_control_js($time_left);
     $htmlHeadXtra[] = '<script>
 
     function final_submit() {
@@ -85,11 +84,11 @@ if ($origin != 'learnpath') {
 $html = '';
 $message = '';
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 $edit_link = '';
 if ($is_allowed_to_edit) {
     $url = api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&exerciseId='.$objExercise->id;
-    $edit_link = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), $url);
+	$edit_link = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), $url);
 }
 
 //Exercise name
@@ -114,11 +113,11 @@ if (isset($exercise_stat_info['exe_id'])) {
 $label = get_lang('StartTest');
 
 if ($time_control && !empty($clock_expired_time) || !empty($attempt_list)) {
-    $label = get_lang('ContinueTest');
+	$label = get_lang('ContinueTest');
 }
 
 if (!empty($attempt_list)) {
-    $message = Display::return_message(get_lang('YouTriedToResolveThisExerciseEarlier'));
+	$message = Display::return_message(get_lang('YouTriedToResolveThisExerciseEarlier'));
 }
 
 //2. Exercise button
@@ -171,9 +170,9 @@ if (!empty($attempts)) {
 			$teacher_revised = Display::label(get_lang('NotValidated'), 'info');
 		}
 		$row = array(
-            'count'	 	=> $i,
-             'date'	 		=> api_convert_and_format_date($attempt_result['start_date'], DATE_TIME_FORMAT_LONG)
-        );
+            'count' => $i,
+			'date' => api_convert_and_format_date($attempt_result['start_date'], DATE_TIME_FORMAT_LONG)
+		);
 		$attempt_link .= "&nbsp;&nbsp;&nbsp;".$teacher_revised;
 
 		if (in_array($objExercise->results_disabled, array(RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS, RESULT_DISABLE_SHOW_SCORE_ONLY, RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES))) {
@@ -203,13 +202,13 @@ if (!empty($attempts)) {
 			break;
 	}
 	$column = 0;
-    foreach ($header_names as $item) {
-        $table->setHeaderContents(0, $column, $item);
-        $column++;
-    }
+	foreach ($header_names as $item) {
+		$table->setHeaderContents(0, $column, $item);
+		$column++;
+	}
 	$row = 1;
-    if (!empty($my_attempt_array)) {
-        foreach ($my_attempt_array as $data) {
+	if (!empty($my_attempt_array)) {
+		foreach ($my_attempt_array as $data) {
 			$column = 0;
 			$table->setCellContents($row, $column, $data);
 			$class = 'class="row_odd"';
@@ -244,7 +243,7 @@ if ($time_control) {
     $html.= $objExercise->returnTimeLeftDiv();
 }
 
-$html .= $message;
+$html .=  $message;
 
 if (!empty($exercise_url_button)) {
     $html .=  Display::div(Display::div($exercise_url_button, array('class'=>'exercise_overview_options span12')), array('class'=>' row'));

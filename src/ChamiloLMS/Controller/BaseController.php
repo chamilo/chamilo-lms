@@ -13,7 +13,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\NoResultException;
 use Silex\Application;
-
 use Flint\Controller\Controller as FlintController;
 
 use Symfony\Component\Routing\Annotation\Route;
@@ -174,7 +173,6 @@ abstract class BaseController extends FlintController
         if (!empty($session)) {
             $parameters['id_session'] = $session->getId();
         }
-
         if (isset($links) && is_array($links) && isset($links[$label])) {
             $url = $this->generateUrl($links[$label], $parameters);
             return $url;
@@ -231,7 +229,6 @@ abstract class BaseController extends FlintController
                 $item = $form->getData();
                 $this->createAction($item);
                 $this->get('session')->getFlashBag()->add('success', "Added");
-
                 $url = $this->createUrl('list_link');
                 return $this->redirect($url);
             }
@@ -309,6 +306,7 @@ abstract class BaseController extends FlintController
         }
     }
 
+
     /**
      * Base "read" action.
      *
@@ -360,6 +358,7 @@ abstract class BaseController extends FlintController
     {
         $qb = $this->getRepository()->createQueryBuilder('e');
         $list = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
         switch ($format) {
             case 'json':
                 return new JsonResponse($list);

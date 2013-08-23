@@ -293,6 +293,7 @@ class UniqueAnswer extends Question
         $navigator_info = api_get_navigator();
 
         // ie6 fix.
+
         if ($form->isFrozen() == false) {
             if ($obj_ex->edit_exercise_in_lp == true) {
                 if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
@@ -306,7 +307,6 @@ class UniqueAnswer extends Question
                     $form->addElement('style_submit_button', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
                 }
             }
-
             $renderer->setElementTemplate('{element}&nbsp;', 'submitQuestion');
             $renderer->setElementTemplate('{element}&nbsp;', 'lessAnswers');
             $renderer->setElementTemplate('{element}&nbsp;', 'moreAnswers');
@@ -470,7 +470,6 @@ class UniqueAnswer extends Question
         $question_id = filter_var($question_id, FILTER_SANITIZE_NUMBER_INT);
         $score       = filter_var($score, FILTER_SANITIZE_NUMBER_FLOAT);
         $correct     = filter_var($correct, FILTER_SANITIZE_NUMBER_INT);
-
         if (empty($question_id) or empty($score) or empty($correct)) {
             return false;
         }

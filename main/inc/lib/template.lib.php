@@ -639,7 +639,6 @@ class Template
                 $profile_link = '<a href="'.api_get_path(WEB_CODE_PATH).'auth/profile.php">'.get_lang('Profile').'</a>';
             }
         }
-
         $this->assign('profile_link', $profile_link);
 
         // Message link.
@@ -677,11 +676,9 @@ class Template
      */
     public function loadBreadcrumbToTemplate()
     {
-
         if (api_get_setting('breadcrumb_navigation_display') == 'false') {
             return;
         }
-
         $breadcrumb = $this->returnBreadcrumb();
         $this->assign('breadcrumb', $breadcrumb);
     }
@@ -1133,15 +1130,17 @@ class Template
             }
 
             // Display the who's online for the session
-            if (isset($user_id) && api_get_session_id() != 0) {
-                if (api_is_allowed_to_edit()) {
-                    $html .= '<li><a href="'.SocialManager::getUserOnlineLink(null, api_get_session_id()).'&id_coach='.$user_id.'" >'.
-                        Display::return_icon(
-                            'session.png',
-                            get_lang('UsersConnectedToMySessions'),
-                            array(),
-                            ICON_SIZE_TINY
-                        ).' </a></li>';
+            if (api_get_setting('showonline', 'session') == 'true') {
+                if (isset($user_id) && api_get_session_id() != 0) {
+                    if (api_is_allowed_to_edit()) {
+                        $html .= '<li><a href="'.SocialManager::getUserOnlineLink(null, api_get_session_id()).'&id_coach='.$user_id.'" >'.
+                            Display::return_icon(
+                                'session.png',
+                                get_lang('UsersConnectedToMySessions'),
+                                array(),
+                                ICON_SIZE_TINY
+                            ).' </a></li>';
+                    }
                 }
             }
         }
@@ -1252,6 +1251,7 @@ class Template
                     $menu_navigation['platform_admin'] = $possible_tabs['platform_admin'];
                 }
             } else {
+
                 if (api_is_question_manager()) {
                     $navigation['question_manager'] = $possible_tabs['question_manager'];
                 }

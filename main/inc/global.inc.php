@@ -260,7 +260,6 @@ $app->error(
             //return;
         }
         $message = null;
-
         if (isset($code)) {
             switch ($code) {
                 case 401:
@@ -277,7 +276,6 @@ $app->error(
             $code = null;
         }
         //$code = ($e instanceof HttpException) ? $e->getStatusCode() : 500;
-
         // It seems that error() is executed first than the before() middleware
         // @ŧodo check this one
         $templateStyle = api_get_setting('template');
@@ -421,7 +419,6 @@ $language_files = array();
 $language_files[] = 'trad4all';
 $language_files[] = 'notification';
 $language_files[] = 'accessibility';
-$language_files[] = 'minedu';
 
 // @todo Added because userportal and index are loaded by a controller should be fixed when a $app['translator'] is configured
 $language_files[] = 'index';
@@ -492,7 +489,7 @@ use Symfony\Component\Finder\Finder;
 $app->before(
 
     function () use ($app) {
-        // Checking configuration file.
+        // Checking configuration file
         if (!file_exists($app['configuration_file']) && !file_exists($app['configuration_yml_file'])) {
             return new RedirectResponse(api_get_path(WEB_CODE_PATH).'install');
             $app->abort(500, "Configuration file was not found");
@@ -513,7 +510,6 @@ $app->before(
 
         // Starting the session for more info see: http://silex.sensiolabs.org/doc/providers/session.html
         $request->getSession()->start();
-
         /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem $filesystem */
         $filesystem = $app['chamilo.filesystem'];
 
@@ -527,14 +523,16 @@ $app->before(
             $filesystem->copyFolders($app['temp.paths']->copyFolders);
         }
 
-        // Check and modify the date of user in the track.e.online table.
+        // Check and modify the date of user in the track.e.online table
         Online::loginCheck(api_get_user_id());
 
         // Setting access_url id (multiple url feature)
 
         if (api_get_multiple_access_url()) {
-            Session::write('url_id', $app['configuration']['access_url']);
-            Session::write('url_info', api_get_current_access_url_info($app['configuration']['access_url']));
+            //for some reason $app['configuration'] doesn't work. Use $_config
+            global $_configuration;
+            Session::write('url_id', $_configuration['access_url']);
+            Session::write('url_info', api_get_current_access_url_info($_configuration['access_url']));
         } else {
             Session::write('url_id', 1);
         }
@@ -632,6 +630,7 @@ $app->before(
 
         /** Translator component. */
         // Platform lang
+
         $language = api_get_setting('platformLanguage');
         $iso = api_get_language_isocode($language);
         $app['translator']->setLocale($iso);
@@ -646,6 +645,7 @@ $app->before(
 
         // From the user
         if ($user) {
+            // @todo check why this does not works
             //$language = $user->getLanguage();
             $language = $userInfo['language'];
             $iso = api_get_language_isocode($language);
@@ -666,86 +666,13 @@ $app->before(
             $section = $info['dirname'];
         }
 
-        // Default langs
-        $languageFiles = array(
-            'trad4all',
-            'notification',
-            'accessibility',
-            'exercice'
-        );
-
-        $languageFilesToAdd = array();
-        /* Loading translations depending of the "section" folder after main
-           for example the section is exercice here: web/main/exercice/result.php
-        */
-        if (!empty($section)) {
-            switch($section) {
-                case 'admin':
-                    $languageFilesToAdd = array('admin');
-                    break;
-                case 'document':
-                    $languageFilesToAdd = array('document');
-                    break;
-                case 'dashboard':
-                    $languageFilesToAdd = array ('index', 'tracking', 'userInfo', 'admin', 'gradebook');
-                    break;
-                case 'mySpace':
-                    $languageFilesToAdd = array('registration', 'index', 'tracking', 'admin');
-                    break;
-                case 'course_info':
-                case 'course_home':
-                case 'course_description':
-                case 'create_course':
-                    $languageFilesToAdd = array('create_course', 'registration', 'admin', 'exercice', 'course_description', 'course_info');
-                    break;
-                case 'coursecopy':
-                    $languageFilesToAdd = array('exercice', 'coursebackup', 'admin');
-                    break;
-                case 'group':
-                    $languageFilesToAdd = array('group');
-                    break;
-                case 'newscorm':
-                    $languageFilesToAdd = array('course_home', 'scormdocument','document','scorm','learnpath','resourcelinker','registration','exercice');
-                    break;
-                case 'link':
-                    $languageFilesToAdd = array('link', 'admin');
-                    break;
-                case 'session':
-                    $languageFilesToAdd = array('admin', 'registration');
-                    break;
-                case 'user':
-                    $languageFilesToAdd = array('registration', 'admin', 'userInfo', 'registration');
-                    break;
-                case 'social':
-                    $languageFilesToAdd = array('userInfo');
-                    break;
-                case 'exercice':
-                    $languageFilesToAdd = array('exercice');
-                    break;
-            }
-        } else {
-
-            $controllerName = $request->get('_controller');
-
-            // Work around to load languages:
-            switch($controllerName) {
-                case 'index.controller:indexAction':
-                case 'userPortal.controller::indexAction':
-                    $languageFilesToAdd = array('courses', 'index', 'admin');
-                    break;
-            }
-        }
-
-        $languageFiles = array_merge($languageFiles, $languageFilesToAdd);
 
         $app['translator.cache.enabled'] = false;
 
-        $app['translator'] = $app->share($app->extend('translator', function($translator, $app) use ($languageFiles) {
+        $app['translator'] = $app->share($app->extend('translator', function($translator, $app) {
 
             $locale = $translator->getLocale();
 
-            // Creating regex to parse sections (admin, exercice, etc)
-            $languageFilesToString = '/'.implode('|', $languageFiles).'/';
 
             /** @var Symfony\Component\Translation\Translator $translator  */
             if ($app['translator.cache.enabled']) {
@@ -758,18 +685,18 @@ $app->before(
 
             } else {
                 $translator->addLoader('pofile', new PoFileLoader());
-
-                $finder = new Finder();
-                $files = $finder->files()
-                    ->path($languageFilesToString)
-                    ->name('en.po')
-                    ->name($locale.'.po')
-                    ->in(api_get_path(SYS_PATH).'main/locale');
-
-                foreach ($files as $entry) {
-                    $code = $entry->getBasename('.po');
-                    $translator->addResource('pofile', $entry->getPathname(), $code);
+                $filePath = api_get_path(SYS_PATH).'main/locale/'.$locale.'.po';
+                if (!file_exists($filePath)) {
+                    $filePath = api_get_path(SYS_PATH).'main/locale/en.po';
                 }
+                $translator->addResource('pofile', $filePath, $locale);
+
+                /*$translator->addLoader('mofile', new MoFileLoader());
+                $filePath = api_get_path(SYS_PATH).'main/locale/'.$locale.'.mo';
+                if (!file_exists($filePath)) {
+                    $filePath = api_get_path(SYS_PATH).'main/locale/en.mo';
+                }
+                $translator->addResource('mofile', $filePath, $locale);*/
                 return $translator;
             }
         }));
@@ -929,5 +856,8 @@ if (isset($app['configuration']['main_database']) && isset($app['db.event_manage
     $app['dbs.event_manager']['db_write']->addEventSubscriber($loggableListener);
 }
 
+// Fixes uses of $_course in the scripts.
+$_course = api_get_course_info();
+$_cid = api_get_course_id();
 return $app;
 

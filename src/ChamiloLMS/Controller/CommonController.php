@@ -39,6 +39,7 @@ class CommonController extends BaseController
      */
     protected function getControllerAlias()
     {
+
     }
 
     /**
@@ -67,6 +68,7 @@ class CommonController extends BaseController
             'list_link' => $className.':indexAction'
         );
     }
+
 
     /**
      * @param Application $app
@@ -122,4 +124,5 @@ class CommonController extends BaseController
         );
         $app['breadcrumbs'] = $bread;
     }
+
 }

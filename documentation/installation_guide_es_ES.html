@@ -261,7 +261,7 @@ date.timezone = 'America/Lima'
 </p>
 
 <hr />
-<h2><a name="3._Upgrade_from_a_previous_version_of"></a>3. Actualizar desde una versión previa de Chamilo LMS (1.*) o Dok€os (<2.0)</h2>
+<h2><a name="3._Upgrade_from_a_previous_version_of"></a>3. Actualizar desde una versión previa de Chamilo LMS (1.*) o Dok€os (&lt;2.0)</h2>
 
 <p>
 Antes de actualizar, le recomendamos <b>seriamente</b> que haga una copia de seguridad de los directorios
@@ -282,7 +282,7 @@ Dado que se trata sólo de un cambio de versión menor  previa de Chamilo 1.9.*,
 <li>Revisar que no ha dejado alguna hoja de estilo personalizada o imagen (si es que tiene, asegúrese de guardar una copia de respaldo)</li>
 <li>Descargar el paquete de instalación de Chamilo 1.9 desde la página de descarga de Chamilo</li>
 <li>Descomprimir los nuevos archivos de Chamilo 1.9 sobre los archivos de la versión anterior (o descomprimirlos en una nueva carpeta y después copiarlos sobre los archivos de la versión anterior)</li>
-<li>Editar el archivo main/inc/conf/configuration.php: hacia el final del archivo, localizar el número de la versión (p.e. ‘1.9.2’) y cambiarlo por la nueva versión (p.e.‘1.9.4’)</li>
+<li>Editar el archivo main/inc/conf/configuration.php: hacia el final del archivo, localizar el número de la versión (p.e. ‘1.9.4’) y cambiarlo por la nueva versión (p.e.‘1.9.8’)</li>
 <li>Ya está! Ningún otro procedimiento de actualización es requerido.</li>
 </ul>
 </p>
@@ -420,11 +420,11 @@ Escribir en la línea de comandos:
   <li>mkdir /var/www/chamilo/version_antigua</li>
   <li>mv /var/www/chamilo/* /var/www/chamilo/version_antigua/</li>
   <li>chmod -R 0777 /var/www/chamilo/version_antigua/</li>
-  <li>wget http://www.chamilo.org/files/chamilo-1.9.tar.gz</li>
-  <li>tar zxvf chamilo-1.9.tar.gz</li>
-  <li>sudo cp -ra chamilo-1.9/* /var/www/chamilo/</li>
-  <li>rm chamilo-1.9.tar.gz</li>
-  <li>sudo rm -r chamilo-1.9/</li>
+  <li>wget http://www.chamilo.org/files/chamilo-1.9.8.tar.gz</li>
+  <li>tar zxvf chamilo-1.9.8.tar.gz</li>
+  <li>sudo cp -ra chamilo-1.9.8/* /var/www/chamilo/</li>
+  <li>rm chamilo-1.9.8.tar.gz</li>
+  <li>sudo rm -r chamilo-1.9.8/</li>
 </ul>
 
 <br />
@@ -706,7 +706,7 @@ sudo /etc/init.d/apache2 restart
 </pre>
 </p>
 <p>
-A continuación, vaya a la página de administración -> Ajustes de configuración -> Buscar y habilitar la herramienta de búsqueda. Siga las recomendaciones de la página para obtener la suite completa de indexación instalada. Una vez que haya terminado, todos los documentos importados en su portal Chamilo en un formato reconocido serán indexados y buscados. En formación de administradores de Chamilo ( el cual puede preguntar a cualquier <a href="http://www.chamilo.org/en/providers">Proveedor Oficial de Chamilo</a>) incluyen una revisión completa de la función de búsqueda de texto completo.
+A continuación, vaya a la página de administración -&gt; Ajustes de configuración -&gt; Buscar y habilitar la herramienta de búsqueda. Siga las recomendaciones de la página para obtener la suite completa de indexación instalada. Una vez que haya terminado, todos los documentos importados en su portal Chamilo en un formato reconocido serán indexados y buscados. En formación de administradores de Chamilo ( el cual puede preguntar a cualquier <a href="http://www.chamilo.org/en/providers">Proveedor Oficial de Chamilo</a>) incluyen una revisión completa de la función de búsqueda de texto completo.
 </p>
 
 <hr style="width: 100%; height: 2px;" />
@@ -718,11 +718,11 @@ Nota: Este paso requiere un servidor dedicado o un servidor dedicado virtual ya 
 En Debian o Ubuntu 11.10 y superior, instale LibreOffice.org v3 e iniciarlo como un servidor en segundo plano:
 <pre>
 sudo apt-get install libreoffice
-sudo soffice "--accept=socket,host=127.0.0.1,port=2002,tcpNoDelay=1;urp;" --headless --nodefault --nofirststartwizard --nolockcheck --nologo --norestore
+sudo soffice -accept="socket,host=127.0.0.1,port=2002,tcpNoDelay=1;urp;" -headless -nodefault -nofirststartwizard -nolockcheck -nologo -norestore &amp;
 </pre>
 </p>
 <p>
-A continuación, vaya a la página de administración -> Chamilo Rapid y establecer el host a "localhost" y el puerto a "2002". Guarde los cambios. Vaya a su curso, en la pantalla de herramientas de aprendizaje y verá que apareció un nuevo icono. Importar tu PPT. Esto debería funcionar.
+A continuación, vaya a la página de administración -&gt; Chamilo Rapid y establecer el host a "localhost" y el puerto a "2002". Guarde los cambios. Vaya a su curso, en la pantalla de herramientas de aprendizaje y verá que apareció un nuevo icono. Importar tu PPT. Esto debería funcionar.
 </p>
 <p>
 Nota: A veces, esto no se resuelve tan fácilmente. Usted probablemente tenga que solicitar la asistencia de algún administrador de sistemas con un poco de experiencia en  Java y PHP, o siempre podrá preguntar a uno de los proveedores oficiales de Chamilo para asistirle (pregunte por un contrato comercial garantizado).
@@ -751,11 +751,11 @@ Como Chamilo se hace más popular y atraviesa muchas fronteras ahora, es frecuen
 <p>
 Esto fácilmente se puede modificar editando el archivo main/inc/lib/internationalization_database/name_order_conventions.php, buscando nuestro idioma y cambiando los campos. Es tan simple que se explica por sí mismo y se ve así:
 <pre>
-'simpl_chinese' => array( 'format' => 'title last_name first_name', 'sort_by' => 'last_name' ), // Eastern order
+'simpl_chinese' =&gt; array( 'format' =&gt; 'title last_name first_name', 'sort_by' =&gt; 'last_name' ), // Eastern order
 </pre>
 Siéntase libre de cambiar esto a
 <pre>
-'simpl_chinese' => array( 'format' => 'title first_name lastname', 'sort_by' => 'last_name' ), // Eastern order
+'simpl_chinese' =&gt; array( 'format' =&gt; 'title first_name lastname', 'sort_by' =&gt; 'last_name' ), // Eastern order
 </pre>
 por ejemplo. El efecto debería ser inmediato.
 </p>

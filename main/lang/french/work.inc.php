@@ -2,6 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$HandedOutDate = "Date de réception";
+$HandedOut = "Remis";
+$HandOutDateLimit = "Date limite de remise";
 $Tools = "Outils";
 $SendWork = "Envoyer le document";
 $langTooBig = "Vous n'avez choisi aucun fichier à envoyer, ou celui-ci est trop gros";

@@ -78,7 +78,6 @@ $langUserHasPermissionNot = "O usuario non ten permisos";
 $langUserHasPermission = "O usuario ten permisos";
 $langLegend = "Lexenda";
 $langUserHasPermissionByRoleGroup = "O usuario ten os permisos do seu grupo";
-$EditPost = "Modificar o artigo";
 $AddBlog = "Crear un novo blog";
 $EditBlog = "Modificar título e subtítulo";
 $DeleteBlog = "Eliminar este blog";

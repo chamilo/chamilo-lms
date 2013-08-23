@@ -28,6 +28,7 @@ class IndexController extends CommonController
         /** @var \Template $template */
         $template = $app['template'];
 
+
         /*
         $token = $app['security']->getToken();
         if (null !== $token) {

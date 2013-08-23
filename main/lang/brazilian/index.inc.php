@@ -74,5 +74,10 @@ $PendingInvitations = "Convites pendentes";
 $YouDoNotHaveAnySessionInItsHistory = "Você não tem nenhuma sessão de treinamento em seu histórico";
 $PortalHomepageDefaultIntroduction = "<h2>Parabéns! Você instalou com sucesso seu portal de e-learning!</h2>  <p>Você agora pode terminar a instalação seguindo três etapas fáceis:<br /> <ol>     <li>Configurar seu portal indo à seção de administração, e selecionando -> <a href=\"main/admin/settings.php\">Configurações gerais do Chamilo</a>.</li>     <li>Adicione alguma vida a seu portal criando usuários e/ou cursos. Você pode convidar novas pessoas para criar seus cursos ou criar você mesmo através da seção de <a href=\"main/admin/\">adminitração</a> usuários e cursos.</li>     <li>Edite a página inicial do portal através da opção de <a href=\"main/admin/configure_homepage.php\">Edição da Página Inicial</a>.</li> </ol> <p>Você pode sempre encontrar mais informação sobre este software em nosso Web site: <a href=\"http://www.chamilo.org\">http://www.chamilo.org</a>.</p> <p>Divirta-se, e não hesite em juntar-se à comunidade e dar-nos o feedback através de <a href=\"http://www.chamilo.org/forum\">nosso fórum</a>.</p>";
 $Username = "Nome de usuário";
+$GoAheadAndBrowseOurCourseCatalogXOnceRegisteredYouWillSeeTheCourseHereX = "Vá em frente e veja nosso catálogo de cursos % s você pode se registrar para qualquer curso que desejar. Uma vez cadastrado, você verá o curso aparecer s%, em vez desta mensagem.";
+$HelloXAsYouCanSeeYourCourseListIsEmpty = "Olá %s, seja bem-vindo,
+
+Como você pode ver, sua lista de cursos ainda está vazia. Isso é porque você não está registrado em nenhum curso!";
+$PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses = "Por favor, permita-nos um pouco de tempo para inscrevê-lo em um de nossos cursos. Se você acha que esqueci de você, entre em contato com os administradores do portal. Normalmente você pode encontrar os detalhes de contato no rodapé desta página.";
 $Profile = "Perfil";
 ?>

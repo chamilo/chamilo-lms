@@ -77,7 +77,6 @@ $langUserHasPermissionNot = "Haykuqmasiqa mana huñichayuqmi";
 $langUserHasPermission = "Haykuqmasiqa huñichayuqmi";
 $langLegend = "Qelqa pusaq";
 $langUserHasPermissionByRoleGroup = "Haykuqmasiqa huñusqanmantan huñichayuqmi";
-$EditPost = "Ruwapay qelqachata";
 $AddBlog = "Kamariy hoq blog nisqata";
 $EditBlog = "Ruwapay sutinchayninta sullk'a stinchaynintawan";
 $DeleteBlog = "Pichay kay blog nisqata";

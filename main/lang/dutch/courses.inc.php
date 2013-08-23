@@ -84,5 +84,6 @@ $Collapse = "Verbergen";
 $CourseDetails = "Cursusomschrijving";
 $GroupPendingInvitations = "Zwevende uitnodigingen voor groep";
 $Compose = "Opstellen";
+$EnrollToCourseXSuccessful = "Je bent ingeschreven voor deze cursus: %s";
 $ThereAreNoCoursesInThisCategory = "Er zijn geen cursussen in deze categorie";
 ?>

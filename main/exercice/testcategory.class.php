@@ -60,7 +60,7 @@ class Testcategory
         }
         $this->type = $type;
 
-        if (!empty($course_id)) {
+        if (!empty($course_id))  {
             $this->course_id = $course_id;
 		} else {
             $this->course_id = api_get_course_int_id();
@@ -93,7 +93,6 @@ class Testcategory
             $this->c_id = $row['c_id'];
             $this->root = $row['root'];
             $this->visibility = $row['visibility'];
-
         } else {
             return false;
         }
@@ -167,7 +166,7 @@ class Testcategory
         $courseId = $category->getCId();
 
         //Only admins can delete global categories
-        if (empty($courseId) && !(api_is_platform_admin() || api_is_question_manager())) {
+        if (empty($courseId) && !api_is_platform_admin()) {
             return false;
         }
 
@@ -217,7 +216,7 @@ class Testcategory
         //Only admins can delete global categories
         $courseId = $category->getCId();
         //Only admins can delete global categories
-        if (empty($courseId) && !(api_is_platform_admin() || api_is_question_manager())) {
+        if (empty($courseId) && !api_is_platform_admin() || api_is_question_manager()) {
             return false;
         }
 
@@ -432,7 +431,6 @@ class Testcategory
                     }
                 }
                 $result[] = array('title' => $cat->parent_path);
-
             }
 		}
 
@@ -695,7 +693,8 @@ class Testcategory
                 WHERE   exercice_id = $exerciseId AND
                         qrc.c_id = ".api_get_course_int_id()."
                 ";
-        $res = Database::query($sql);
+
+		$res = Database::query($sql);
         $categories = array();
 
 		while ($data = Database::fetch_array($res)) {
@@ -929,7 +928,6 @@ class Testcategory
      * @param bool $categoryMinusOne shows category - 1 see BT#6540
      * @return string
      */
-
     public static function get_stats_table_by_attempt($exercise_id, $category_list = array(), $categoryMinusOne = false)
     {
         global $app;
@@ -959,6 +957,8 @@ class Testcategory
         $em = $app['orm.em'];
         $repo = $em->getRepository('Entity\CQuizCategory');
 
+        $redefineCategoryList = array();
+
         if (!empty($category_list) && count($category_list) > 1) {
             $globalCategoryScore = array();
 
@@ -972,12 +972,10 @@ class Testcategory
                 if ($categoryMinusOne) {
                     $index = 1;
                 }
-
                 if (isset($path[$index])) {
                     $category_id = $path[$index]->getIid();
                     $categoryName = $path[$index]->getTitle();
                 }
-
                 if (!isset($globalCategoryScore[$category_id])) {
                     $globalCategoryScore[$category_id] = array();
                     $globalCategoryScore[$category_id]['score'] = 0;
@@ -1055,9 +1053,10 @@ class Testcategory
                 WHERE exercise_id = {$exercise_id} ";
 
         if (!empty($order)) {
-            $sql .= " ORDER BY $order";
+            $sql .= "ORDER BY $order";
         }
         $categories = array();
+
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
              while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -1068,7 +1067,7 @@ class Testcategory
                 }
                 $categories[$row['category_id']] = $row;
             }
-        }
+            }
 
         if ($shuffle) {
             ArrayClass::shuffle_assoc($categories);
@@ -1163,7 +1162,6 @@ class Testcategory
             '0' => get_lang('Hidden')
         );
         $form->addElement('select', 'visibility', get_lang('Visibility'), $options);
-
         $script = null;
         if (!empty($this->parent_id)) {
             $parent_cat = new Testcategory($this->parent_id);

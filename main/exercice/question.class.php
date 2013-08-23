@@ -1499,8 +1499,8 @@ abstract class Question
             }
 
             // Level (difficulty).
-            /*$select_level = Question::get_default_levels();
-            $form->addElement('select', 'questionLevel', get_lang('Difficulty'), $select_level);*/
+            $select_level = Question::get_default_levels();
+            $form->addElement('select', 'questionLevel', get_lang('Difficulty'), $select_level);
 
             // Media question.
 
@@ -1629,7 +1629,6 @@ abstract class Question
      */
     abstract public function processAnswersCreation($form);
 
-
     /**
      * Displays the menu of question types
      * @param Exercise $objExercise
@@ -1645,6 +1644,7 @@ abstract class Question
         if (!isset($feedback_type)) {
             $feedback_type = 0;
         }
+
         if ($feedback_type == 1) {
             //2. but if it is a feedback DIRECT we only show the UNIQUE_ANSWER type that is currently available
             $question_type_custom_list = array(
@@ -1664,12 +1664,8 @@ abstract class Question
                 if ($a_type[1] != 'FreeAnswer') {
                     continue;
                 }
-            } else {
-                //Skip other question types, just for minedu
-                if (!in_array($a_type[1],array('MediaQuestion','UniqueAnswer'))) {
-                    continue;
-                }
             }
+
             // include the class of the type
             require_once $a_type[0];
             // get the picture of the type and the langvar which describes it
@@ -2266,11 +2262,9 @@ abstract class Question
             //var_dump($exerciseId);
             // Including actions
             foreach ($questions as &$question) {
-
                 $type = self::get_question_type($question['type']);
                 $question['type'] = get_lang($type[1]);
                 $question['question_question_type'] = get_lang($type[1]);
-
                 if (empty($exerciseId)) {
                     // View.
                     $actions = Display::url(
@@ -2320,12 +2314,12 @@ abstract class Question
                             array(
                                 'onclick' => 'ajaxAction(this);',
                                 'data-url' => $app['url_generator']->generate(
-                                    'exercise_copy_question',
-                                    array(
-                                        'cidReq' => api_get_course_id(),
-                                        'id_session' => api_get_session_id(),
-                                        'questionId' => $question['iid'],
-                                        'exerciseId' => $exerciseId
+                                'exercise_copy_question',
+                                array(
+                                    'cidReq' => api_get_course_id(),
+                                    'id_session' => api_get_session_id(),
+                                    'questionId' => $question['iid'],
+                                    'exerciseId' => $exerciseId
                                     )
                                 )
                             )
@@ -2338,13 +2332,13 @@ abstract class Question
                             array(
                                 'onclick' => 'ajaxAction(this);',
                                 'data-url' => $app['url_generator']->generate(
-                                    'exercise_reuse_question',
-                                    array(
-                                        'cidReq' => api_get_course_id(),
-                                        'id_session' => api_get_session_id(),
-                                        'questionId' => $question['iid'],
-                                        'exerciseId' => $exerciseId
-                                    )
+                                'exercise_reuse_question',
+                                array(
+                                    'cidReq' => api_get_course_id(),
+                                    'id_session' => api_get_session_id(),
+                                    'questionId' => $question['iid'],
+                                    'exerciseId' => $exerciseId
+                                )
                                 ),
                             )
                         );

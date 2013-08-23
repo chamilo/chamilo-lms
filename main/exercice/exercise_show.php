@@ -24,10 +24,9 @@ require_once 'exercise.class.php';
 require_once 'question.class.php'; //also defines answer type constants
 require_once 'answer.class.php';
 require_once '../inc/global.inc.php';
-
 $urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
 
-if (empty($origin)) {
+if (empty($origin) ) {
     $origin = isset($_REQUEST['origin']) ? $_REQUEST['origin'] : null;
 }
 
@@ -35,6 +34,7 @@ if ($origin == 'learnpath') {
     api_protect_course_script(false, false, true);
 } else {
     api_protect_course_script(true, false, true);
+
 }
 
 // Database table definitions
@@ -60,7 +60,7 @@ if ( empty ( $action ) ) {              $action         = isset($_REQUEST['actio
 $id = intval($_REQUEST['id']); //exe id
 
 if (empty($id)) {
-    api_not_allowed(true);
+	api_not_allowed(true);
 }
 
 if (api_is_course_session_coach(api_get_user_id(), api_get_course_int_id(), api_get_session_id())) {
@@ -68,8 +68,7 @@ if (api_is_course_session_coach(api_get_user_id(), api_get_course_int_id(), api_
         api_not_allowed(true);
     }
 }
-
-$is_allowedToEdit = api_is_allowed_to_edit(null, true) || $is_courseTutor || api_is_session_admin() || api_is_drh();
+$is_allowedToEdit    = api_is_allowed_to_edit(null,true) || $is_courseTutor || api_is_session_admin() || api_is_drh();
 
 //Getting results from the exe_id. This variable also contain all the information about the exercise
 $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
@@ -90,16 +89,16 @@ $current_user_id    = api_get_user_id();
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 
 if (empty($objExercise)) {
-    $objExercise = new Exercise();
+	$objExercise = new Exercise();
     $objExercise->read($exercise_id);
 }
 $feedback_type = $objExercise->feedback_type;
 
 
-// Only users can see their own results
+//Only users can see their own results
 if (!$is_allowedToEdit) {
     if ($student_id != $current_user_id) {
-        api_not_allowed(true);
+    	api_not_allowed(true);
     }
 }
 
@@ -122,9 +121,9 @@ $interbreadcrumb[]= array("url" => "#","name" => get_lang('Result'));
 $this_section = SECTION_COURSES;
 
 if ($origin != 'learnpath') {
-    Display::display_header('');
+	Display::display_header('');
 } else {
-    Display::display_reduced_header();
+	Display::display_reduced_header();
 }
 ?>
 <script>
@@ -144,40 +143,40 @@ $(function() {
 	    var f=document.getElementById('myform');
         var m_id = marksid.split(',');
 
-        for(var i=0;i<m_id.length;i++){
-            var oHidn = document.createElement("input");
-            oHidn.type = "hidden";
-            var selname = oHidn.name = "marks_"+m_id[i];
-            var selid = document.forms['marksform_'+m_id[i]].marks.selectedIndex;
-            oHidn.value = document.forms['marksform_'+m_id[i]].marks.options[selid].text;
-            f.appendChild(oHidn);
-        }
+	for(var i=0;i<m_id.length;i++){
+		var oHidn = document.createElement("input");
+		oHidn.type = "hidden";
+		var selname = oHidn.name = "marks_"+m_id[i];
+		var selid = document.forms['marksform_'+m_id[i]].marks.selectedIndex;
+		oHidn.value = document.forms['marksform_'+m_id[i]].marks.options[selid].text;
+		f.appendChild(oHidn);
+	}
 
-        var ids = vals.split(',');
-        for(var k=0;k<ids.length;k++){
-            var oHidden = document.createElement("input");
-            oHidden.type = "hidden";
-            oHidden.name = "comments_"+ids[k];
-            //oEditor = FCKeditorAPI.GetInstance(oHidden.name) ;
-            var valueEditor = CKEDITOR.instances[oHidden.name].getData();
-            //console.log(oHidden.name);
-            oHidden.value = valueEditor;
-            f.appendChild(oHidden);
-        }
-        var params = $("#myform").serialize();
+	var ids = vals.split(',');
+	for(var k=0;k<ids.length;k++){
+		var oHidden = document.createElement("input");
+		oHidden.type = "hidden";
+		oHidden.name = "comments_"+ids[k];
+        //oEditor = FCKeditorAPI.GetInstance(oHidden.name) ;
+        var valueEditor = CKEDITOR.instances[oHidden.name].getData();
+        //console.log(oHidden.name);
+        oHidden.value = valueEditor;
+		f.appendChild(oHidden);
+	}
+    var params = $("#myform").serialize();
 
-        $.ajax({
-            type : "post",
-            url: "<?php echo api_get_path(WEB_AJAX_PATH); ?>exercise.ajax.php?a=correct_exercise_result",
-            data: "<?php ?>"+params,
-            success: function(data) {
-                if (data == 0) {
-                    $('#result_from_ajax').html('<?php echo addslashes(Display::return_message(get_lang('Error'), 'warning'))?>');
-                } else {
-                    $('#result_from_ajax').html('<?php echo addslashes(Display::return_message(get_lang('Saved'), 'success'))?>');
-                    $('.question_row').hide();
-                    $('#myform').hide();
-                    $('#correct_again').hide();
+    $.ajax({
+        type : "post",
+        url: "<?php echo api_get_path(WEB_AJAX_PATH); ?>exercise.ajax.php?a=correct_exercise_result",
+        data: "<?php ?>"+params,
+        success: function(data) {
+            if (data == 0) {
+                $('#result_from_ajax').html('<?php echo addslashes(Display::return_message(get_lang('Error'), 'warning'))?>');
+            } else {
+                $('#result_from_ajax').html('<?php echo addslashes(Display::return_message(get_lang('Saved'), 'success'))?>');
+                $('.question_row').hide();
+                $('#myform').hide();
+                $('#correct_again').hide();            
                 }
             }
         });
@@ -222,12 +221,12 @@ if (!empty($track_exercise_info)) {
 		}
 	}
 } else {
-    Display::display_warning_message(get_lang('CantViewResults'));
-    $show_results = false;
+	Display::display_warning_message(get_lang('CantViewResults'));
+	$show_results = false;
 }
 
 if ($origin == 'learnpath' && !isset($_GET['fb_type']) ) {
-    $show_results = false;
+	$show_results = false;
 }
 
 if ($show_results || $show_only_total_score) {
@@ -269,13 +268,13 @@ $question_list_from_database = array();
 $exerciseResult = array();
 
 while ($row = Database::fetch_array($result)) {
-    $question_list_from_database[] = $row['question_id'];
-    $exerciseResult[$row['question_id']] = $row['answer'];
+	$question_list_from_database[] = $row['question_id'];
+	$exerciseResult[$row['question_id']] = $row['answer'];
 }
 
 // Fixing #2073 Fixing order of questions.
 if (!empty($track_exercise_info['data_tracking'])) {
-    $temp_question_list = explode(',', $track_exercise_info['data_tracking']);
+	$temp_question_list = explode(',', $track_exercise_info['data_tracking']);
 
     // Getting question list from data_tracking.
     if (!empty($temp_question_list)) {
@@ -319,74 +318,74 @@ foreach ($questionList as $questionId) {
     // Creates a temporary Question object
 
     /** @var Question $objQuestionTmp */
-    $objQuestionTmp = Question::read($questionId);
+	$objQuestionTmp = Question::read($questionId);
 
-    $questionWeighting	= $objQuestionTmp->selectWeighting();
-    $answerType			= $objQuestionTmp->selectType();
+	$questionWeighting	= $objQuestionTmp->selectWeighting();
+	$answerType			= $objQuestionTmp->selectType();
 
-    // Start buffer
+	// Start buffer
     ob_start();
 
     /* Use switch
     switch ($answerType) {
     }*/
-    if ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
+	if ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
         $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore   = $question_result['score'];
         $totalScore      += $question_result['score'];
-    } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
-        $choice = array();
+	} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
+		$choice = array();
         $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];
-    } elseif ($answerType == UNIQUE_ANSWER || $answerType ==  UNIQUE_ANSWER_NO_OPTION) {
+	} elseif ($answerType == UNIQUE_ANSWER || $answerType ==  UNIQUE_ANSWER_NO_OPTION) {
         $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];
-        echo '</table>';
-    } elseif ($answerType == FILL_IN_BLANKS) {
+		echo '</table>';
+	} elseif ($answerType == FILL_IN_BLANKS) {
         $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];
-    } elseif ($answerType == GLOBAL_MULTIPLE_ANSWER) {
+	} elseif ($answerType == GLOBAL_MULTIPLE_ANSWER) {
         $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];
-    } elseif ($answerType == FREE_ANSWER) {
+	} elseif ($answerType == FREE_ANSWER) {
         $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];
-    } elseif ($answerType == ORAL_EXPRESSION) {
+	} elseif ($answerType == ORAL_EXPRESSION) {
+		$question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
+		$questionScore   = $question_result['score'];
+		$totalScore     += $question_result['score'];
+	} elseif ($answerType == MATCHING || $answerType == DRAGGABLE) {
         $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];
-    } elseif ($answerType == MATCHING || $answerType == DRAGGABLE) {
-        $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
-        $questionScore   = $question_result['score'];
-        $totalScore     += $question_result['score'];
-    } elseif ($answerType == HOT_SPOT) {
+	} elseif ($answerType == HOT_SPOT) {
         //@todo remove this HTML and move in the function
-        if ($show_results) {
-            echo '<table width="500" border="0"><tr>
+	    if ($show_results) {
+		    echo '<table width="500" border="0"><tr>
                     <td valign="top" align="center" style="padding-left:0px;" >
                         <table border="1" bordercolor="#A4A4A4" style="border-collapse: collapse;" width="552">';
-        }
+		}
         $question_result = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
         $questionScore  = $question_result['score'];
         $totalScore    += $question_result['score'];
 
         if ($show_results) {
-            echo '</table></td></tr>';
-            echo '<tr>
-                <td colspan="2">'.
-                    '<object type="application/x-shockwave-flash" data="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_solution.swf?modifyAnswers='.intval($questionId).'&exe_id='.$id.'&from_db=1" width="552" height="352">
-                        <param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.intval($questionId).'&exe_id='.$id.'&from_db=1" />
-                    </object>
-                </td>
-            </tr>
-            </table><br/>';
+			echo '</table></td></tr>';
+		 	echo '<tr>
+				<td colspan="2">'.
+					'<object type="application/x-shockwave-flash" data="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_solution.swf?modifyAnswers='.intval($questionId).'&exe_id='.$id.'&from_db=1" width="552" height="352">
+						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.intval($questionId).'&exe_id='.$id.'&from_db=1" />
+					</object>
+				</td>
+			</tr>
+			</table><br/>';
         }
-    } else if($answerType == HOT_SPOT_DELINEATION) {
+	} else if($answerType == HOT_SPOT_DELINEATION) {
 
         $question_result  = $objExercise->manageAnswers($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
 
@@ -517,7 +516,7 @@ foreach ($questionList as $questionId) {
                 </tr>
                 </table>';
         }
-    }
+	}
 
 	if ($show_results) {
 	    if ($answerType != HOT_SPOT) {
@@ -755,8 +754,8 @@ if ($is_allowedToEdit && $locked == false && !api_is_drh()) {
 
     echo '<input id="vals" type = "hidden" name="vals"       value="'.$strids.'">';
     echo '<input id="marksid" type = "hidden" name="marksid"       value="'.$marksid.'">';
-
 	if ($origin !='learnpath' && $origin!='student_progress') {
+
         echo '<label><input type= "checkbox" name="send_notification"> '.get_lang('SendEmail').'</label>';
 		?>
         <input type="submit" class="btn btn-primary" value=" <?php echo get_lang('CorrectTest'); ?>">

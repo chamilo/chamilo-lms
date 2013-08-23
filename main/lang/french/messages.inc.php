@@ -39,4 +39,6 @@ $MessageSent = "Message envoyé";
 $MailMarkSelectedAsUnread = "Marquer comme non lu";
 $MailMarkSelectedAsRead = "Marquer comme lu";
 $YouShouldWriteAMessage = "Vous devriez écrire un message";
+$SelectedMessagesUnRead = "Les messages sélectionnés ont été marqués comme non lus";
+$SelectedMessagesRead = "Les messages sélectionnés ont été marqués comme lus";
 ?>

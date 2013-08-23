@@ -53,7 +53,6 @@ if (empty($origin)) {
 if (empty($objExercise)) {
     $objExercise = $_SESSION['objExercise'];
 }
-
 if (empty($remind_list)) {
     $remind_list = isset($_REQUEST['remind_list']) ? $_REQUEST['remind_list'] : null;
 }
@@ -65,17 +64,16 @@ if (empty($objExercise)) {
     // Check if the exe_id exists
     $objExercise = new Exercise();
     $exercise_stat_info = $objExercise->getStatTrackExerciseInfoByExeId($exe_id);
-
     if (!empty($exercise_stat_info) && isset($exercise_stat_info['exe_exo_id'])) {
         if ($exercise_stat_info['status'] == 'incomplete') {
             $objExercise->read($exercise_stat_info['exe_exo_id']);
         } else {
-            header("Location: overview.php?exerciseId=".$exercise_stat_info['exe_exo_id']);
-            exit;
-        }
-    } else {
-        api_not_allowed(true);
+        header("Location: overview.php?exerciseId=".$exercise_stat_info['exe_exo_id']);
+        exit;
     }
+    } else {
+    api_not_allowed(true);
+}
 }
 
 $gradebook = '';
@@ -185,7 +183,6 @@ if ($origin != 'learnpath') {
         Session::erase('exe_id');
         Session::erase('categoryList');
     }
-
     // Record the results in the learning path, using the SCORM interface (API)
     echo "<script>window.parent.API.void_save_asset('$total_score', '$total_weight', 0, 'completed');</script>";
     echo '<script type="text/javascript">'.$href.'</script>';

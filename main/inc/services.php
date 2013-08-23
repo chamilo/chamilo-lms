@@ -47,7 +47,6 @@ if (is_writable($app['sys_temp_path'])) {
     }
 }
 
-
 //Setting HttpCacheService provider in order to use do: $app['http_cache']->run();
 /*
 $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
@@ -92,7 +91,6 @@ $app->register(new SecurityServiceProvider, array(
     )
 ));
 
-
 // Registering Password encoder.
 $app['security.encoder.digest'] = $app->share(function($app) {
     // use the sha1 algorithm
@@ -100,7 +98,6 @@ $app['security.encoder.digest'] = $app->share(function($app) {
     // use only 1 iteration
     return new MessageDigestPasswordEncoder($app['configuration']['password_encryption'], false, 1);
 });
-
 
 // What to do when login success?
 $app['security.authentication.success_handler.admin'] = $app->share(function($app) {
@@ -127,13 +124,7 @@ $app['security.role_hierarchy'] = array(
     'ROLE_QUESTION_MANAGER' => array('ROLE_STUDENT', 'ROLE_QUESTION_MANAGER'),
     'ROLE_SESSION_MANAGER' => array('ROLE_STUDENT', 'ROLE_SESSION_MANAGER'),
     'ROLE_STUDENT' => array('ROLE_STUDENT'),
-    'ROLE_ANONYMOUS' => array('ROLE_ANONYMOUS'),
-
-    // Ministerio
-    'ROLE_JURY_PRESIDENT' => array('ROLE_JURY_PRESIDENT', 'ROLE_JURY_MEMBER', 'ROLE_JURY_SUBSTITUTE'),
-    'ROLE_JURY_SUBSTITUTE' => array('ROLE_JURY_SUBSTITUTE', 'ROLE_JURY_MEMBER'),
-    'ROLE_JURY_MEMBER' => array('ROLE_JURY_MEMBER'),
-    'ROLE_DIRECTOR' => array('ROLE_DIRECTOR')
+    'ROLE_ANONYMOUS' => array('ROLE_ANONYMOUS')
 );
 
 // Role rules
@@ -147,19 +138,7 @@ $app['security.access_rules'] = array(
     array('^/admin/questionmanager', 'ROLE_QUESTION_MANAGER'),
     array('^/main/auth/inscription.php', 'IS_AUTHENTICATED_ANONYMOUSLY'),
     array('^/main/auth/lostPassword.php', 'IS_AUTHENTICATED_ANONYMOUSLY'),
-    array('^/main/.*', array('ROLE_STUDENT')),
-
-    // Ministerio routes
-
-    array('^/admin/director', 'ROLE_DIRECTOR'),
-    array('^/courses/.*/curriculum/category', 'ROLE_TEACHER'),
-    array('^/courses/.*/curriculum/item', 'ROLE_TEACHER'),
-    array('^/courses/.*/curriculum/user', 'ROLE_STUDENT'),
-    array('^/courses/.*/curriculum', 'ROLE_STUDENT'),
-    array('^/tool/.*', array('ROLE_ADMIN','ROLE_TEACHER')),
-    array('^/admin/jury_president', 'ROLE_JURY_PRESIDENT'),
-    array('^/admin/jury_member', 'ROLE_JURY_MEMBER'), //? jury subsitute??
-
+    array('^/main/.*', array('ROLE_STUDENT'))
     //array('^.*$', 'ROLE_USER'),
 );
 
@@ -476,6 +455,7 @@ if ($app['assetic.enabled']) {
     );
 }
 
+
 // Gaufrette service provider (to manage files/dirs) (not used yet)
 /*
 use Bt51\Silex\Provider\GaufretteServiceProvider\GaufretteServiceProvider;
@@ -658,61 +638,5 @@ $app['question_score_name.controller'] = $app->share(
 $app['model_ajax.controller'] = $app->share(
     function () use ($app) {
         return new ChamiloLMS\Controller\ModelAjaxController();
-    }
-);
-
-// Ministerio
-
-$app['branch.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Admin\Administrator\BranchController($app);
-    }
-);
-
-$app['branch_director.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Admin\Director\BranchDirectorController($app);
-    }
-);
-
-$app['jury.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Admin\Administrator\JuryController($app);
-    }
-);
-
-$app['jury_president.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Admin\JuryPresident\JuryPresidentController($app);
-    }
-);
-
-$app['jury_member.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Admin\JuryMember\JuryMemberController($app);
-    }
-);
-
-$app['curriculum_category.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumCategoryController($app);
-    }
-);
-
-$app['curriculum_item.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumItemController($app);
-    }
-);
-
-$app['curriculum_user.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumUserController($app);
-    }
-);
-
-$app['curriculum.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumController($app);
     }
 );

@@ -105,7 +105,7 @@ class Login
         $email_admin = api_get_setting('emailAdministrator');
 
         if (api_mail_html('', $email_to, $email_subject, $email_body, $sender_name, $email_admin) == 1) {
-            return get_lang('your_password_has_been_reset');
+            return get_lang('YourPasswordHasBeenReset');
         } else {
             $admin_email = Display :: encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')));
             return sprintf(get_lang('ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation'), $admin_email);
@@ -167,8 +167,7 @@ class Login
      */
     public static function get_secret_word($add)
     {
-        global $_configuration;
-        return $secret_word = md5($_configuration['security_key'] . $add);
+        return $secret_word = sha1($add);
     }
 
     /**
@@ -189,12 +188,12 @@ class Login
             return get_lang('CouldNotResetPassword');
         }
 
-        if (self::get_secret_word($user['email']) == $secret) { // OK, secret word is good. Now change password and mail it.
+        if (self::get_secret_word($user['email']) == $secret) {
+            // OK, secret word is good. Now change password and mail it.
             $user['password'] = api_generate_password();
-            $crypted = $user['password'];
-            $crypted = api_get_encrypted_password($crypted);
+            $crypted = api_get_encrypted_password($user['password']);
             $sql = "UPDATE " . $tbl_user . " SET password='$crypted' WHERE user_id = $id";
-            $result = Database::query($sql);
+            Database::query($sql);
             return self::send_password_to_user($user, $by_username);
         } else {
             return get_lang('NotAllowed');

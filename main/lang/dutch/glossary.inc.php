@@ -25,4 +25,13 @@ $GlossaryManagement = "Beheer van begrippen";
 $TermMoved = "Het begrip werd verplaatst";
 $ShowGlossaryInExtraToolsTitle = "Tool begrippen uit het glossarium in andere modules";
 $ShowGlossaryInExtraToolsComment = "Mogen begrippen uit het cursusglossarium weergegeven worden in andere modules zoals bv. leerpaden en oefeningen ?";
+$ImportGlossary = "Importeer woordenlijst";
+$ReplaceGlossary = "Vervang woordenlijst";
+$CannotDeleteGlossary = "Kan de woordenlijst niet verwijderen";
+$TermsImported = "Termen geïmporteerd";
+$TermsNotImported = "Termen niet geïmporteerd";
+$ExportGlossaryAsCSV = "Exporteer woordenlijst als een CSV-bestand";
+$List = "Lijst";
+$GlossaryTermUpdated = "Termen aangepast";
+$DeleteAllGlossaryTerms = "Verwijder alle termen";
 ?>

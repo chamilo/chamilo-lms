@@ -56,4 +56,7 @@ $AnnounceSentToUserSelection = "الإعلانات أرسلت للمستخدمي
 $SendAnnouncement = "إرسال إعلان";
 $ModifyAnnouncement = "تعديل إعلان";
 $ButtonPublishAnnouncement = "إرسال إعلان";
+$YourAccountIsActiveYouCanLoginAndCheckYourCourses = "عزيزي الطالب تم تفعيل الحساب الخاص بك فضلا ادخل علي حسابك واسنمتع يالمقررات المتاحة";
+$AddAsAnnouncement = "اضف كاعلان";
+$AnnouncementForGroup = "اعلان للمجموعة";
 ?>

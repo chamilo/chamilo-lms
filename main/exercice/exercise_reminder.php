@@ -40,10 +40,10 @@ if ( empty ($exerciseId)) {  $exerciseId = intval($_REQUEST['exerciseId']);}
 if ( empty ($objExercise)) { $objExercise = $_SESSION['objExercise'];}
 
 if (!$objExercise) {
-    // Redirect to the exercise overview
-    // Check if the exe_id exists
+	//Redirect to the exercise overview
+	//Check if the exe_id exists
     header("Location: ".$urlMainExercise."overview.php?exerciseId=".$exerciseId."&".api_get_cidreq());
-    exit;
+	exit;
 }
 
 $time_control = false;
@@ -106,11 +106,10 @@ if ($time_control) {
 echo Display::div('', array('id' => 'message'));
 
 $urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
-
 echo $objExercise->returnWarningJs($urlMainExercise.'exercise_result.php?origin='.$origin.'&exe_id='.$exe_id);
 
 echo '<script>
-        lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});
+		lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});
 
         function final_submit() {
             $("#dialog-confirm").dialog("open");
@@ -271,7 +270,6 @@ echo $objExercise->getProgressPagination(
 
 echo Display::div('', array('class' => 'clear'));
 echo Display::div($exercise_actions, array('class' => 'form-actions'));
-
 echo $objExercise->returnWarningHtml();
 
 if ($origin != 'learnpath') {

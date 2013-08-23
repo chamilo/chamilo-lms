@@ -2065,7 +2065,7 @@ class Exercise
 
         // Category selection.
         $cat = new Testcategory();
-        $cat_form = $cat->return_category_form($this);
+        $cat_form = $cat->returnCategoryForm($this);
         $form->addElement('html', $cat_form);
 
         // submit
@@ -3094,9 +3094,11 @@ class Exercise
         $hotspot_delineation_result = array(),
         $updateResults = false
     ) {
-        global $feedback_type, $debug;
+        global $debug;
         global $learnpath_id, $learnpath_item_id; //needed in order to use in the exercise_attempt() for the time
         require_once api_get_path(LIBRARY_PATH).'geometry.lib.php';
+
+        $feedback_type = $this->feedback_type;
 
         $propagate_neg = $this->selectPropagateNeg();
 
@@ -3862,6 +3864,7 @@ class Exercise
                         ) {
 
                             ExerciseShowFunctions::display_unique_or_multiple_answer(
+                                $feedback_type,
                                 $answerType,
                                 $studentChoice,
                                 $answer,
@@ -3874,6 +3877,7 @@ class Exercise
 
                         } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
                             ExerciseShowFunctions::display_multiple_answer_true_false(
+                                $feedback_type,
                                 $answerType,
                                 $studentChoice,
                                 $answer,
@@ -3886,6 +3890,7 @@ class Exercise
 
                         } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
                             ExerciseShowFunctions::display_multiple_answer_combination_true_false(
+                                $feedback_type,
                                 $answerType,
                                 $studentChoice,
                                 $answer,
@@ -3896,9 +3901,10 @@ class Exercise
                                 0
                             );
                         } elseif ($answerType == FILL_IN_BLANKS) {
-                            ExerciseShowFunctions::display_fill_in_blanks_answer($answer, 0, 0);
+                            ExerciseShowFunctions::display_fill_in_blanks_answer($feedback_type, $answer, 0, 0);
                         } elseif ($answerType == FREE_ANSWER) {
                             ExerciseShowFunctions::display_free_answer(
+                                $feedback_type,
                                 $choice,
                                 $exeId,
                                 $questionId,
@@ -3909,9 +3915,10 @@ class Exercise
                             ExerciseShowFunctions::display_oral_expression_answer($choice, 0, 0, $nano);
 
                         } elseif ($answerType == HOT_SPOT) {
-                            ExerciseShowFunctions::display_hotspot_answer($counter, $answer, $studentChoice, $answerComment);
+                            ExerciseShowFunctions::display_hotspot_answer($feedback_type, $counter, $answer, $studentChoice, $answerComment);
                         } elseif ($answerType == HOT_SPOT_ORDER) {
                             ExerciseShowFunctions::display_hotspot_order_answer(
+                                $feedback_type,
                                 $answerId,
                                 $answer,
                                 $studentChoice,
@@ -4091,6 +4098,7 @@ class Exercise
                         case MULTIPLE_ANSWER_COMBINATION :
                             if ($answerId == 1) {
                                 ExerciseShowFunctions::display_unique_or_multiple_answer(
+                                    $feedback_type,
                                     $answerType,
                                     $studentChoice,
                                     $answer,
@@ -4102,6 +4110,7 @@ class Exercise
                                 );
                             } else {
                                 ExerciseShowFunctions::display_unique_or_multiple_answer(
+                                    $feedback_type,
                                     $answerType,
                                     $studentChoice,
                                     $answer,
@@ -4116,6 +4125,7 @@ class Exercise
                         case MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:
                             if ($answerId == 1) {
                                 ExerciseShowFunctions::display_multiple_answer_combination_true_false(
+                                    $feedback_type,
                                     $answerType,
                                     $studentChoice,
                                     $answer,
@@ -4127,6 +4137,7 @@ class Exercise
                                 );
                             } else {
                                 ExerciseShowFunctions::display_multiple_answer_combination_true_false(
+                                    $feedback_type,
                                     $answerType,
                                     $studentChoice,
                                     $answer,
@@ -4141,6 +4152,7 @@ class Exercise
                         case MULTIPLE_ANSWER_TRUE_FALSE :
                             if ($answerId == 1) {
                                 ExerciseShowFunctions::display_multiple_answer_true_false(
+                                    $feedback_type,
                                     $answerType,
                                     $studentChoice,
                                     $answer,
@@ -4152,6 +4164,7 @@ class Exercise
                                 );
                             } else {
                                 ExerciseShowFunctions::display_multiple_answer_true_false(
+                                    $feedback_type,
                                     $answerType,
                                     $studentChoice,
                                     $answer,
@@ -4164,10 +4177,11 @@ class Exercise
                             }
                             break;
                         case FILL_IN_BLANKS:
-                            ExerciseShowFunctions::display_fill_in_blanks_answer($answer, $exeId, $questionId);
+                            ExerciseShowFunctions::display_fill_in_blanks_answer($feedback_type, $answer, $exeId, $questionId);
                             break;
                         case FREE_ANSWER:
                             echo ExerciseShowFunctions::display_free_answer(
+                                $feedback_type,
                                 $choice,
                                 $exeId,
                                 $questionId,
@@ -4177,16 +4191,16 @@ class Exercise
                         case ORAL_EXPRESSION:
                             echo '<tr>
 		                            <td valign="top">'.ExerciseShowFunctions::display_oral_expression_answer(
-                                $choice,
-                                $exeId,
-                                $questionId,
-                                $nano
-                            ).'</td>
+                                    $feedback_type,
+                                    $choice,
+                                    $exeId,
+                                    $questionId,
+                                    $nano).'</td>
 		                            </tr>
 		                            </table>';
                             break;
                         case HOT_SPOT:
-                            ExerciseShowFunctions::display_hotspot_answer($counter, $answer, $studentChoice, $answerComment);
+                            ExerciseShowFunctions::display_hotspot_answer($feedback_type, $counter, $answer, $studentChoice, $answerComment);
                             break;
                         case HOT_SPOT_DELINEATION:
                             $user_answer = $user_array;
@@ -4331,6 +4345,7 @@ class Exercise
                             break;
                         case HOT_SPOT_ORDER:
                             ExerciseShowFunctions::display_hotspot_order_answer(
+                                $feedback_type,
                                 $answerId,
                                 $answer,
                                 $studentChoice,

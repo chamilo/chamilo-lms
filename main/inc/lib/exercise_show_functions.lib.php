@@ -15,7 +15,8 @@
  * Class
  * @package chamilo.library
  */
-class ExerciseShowFunctions {
+class ExerciseShowFunctions
+{
 
 	/**
 	 * Shows the answer to a fill-in-the-blanks question, as HTML
@@ -57,7 +58,8 @@ class ExerciseShowFunctions {
 	 * @param int       Question ID
 	 * @return void
 	 */
-	static function display_free_answer($feedback_type, $answer, $exe_id, $questionId, $questionScore = null) {
+	static function display_free_answer($feedback_type, $answer, $exe_id, $questionId, $questionScore = null)
+    {
 
         $comments = get_comments($exe_id, $questionId);
 
@@ -77,7 +79,8 @@ class ExerciseShowFunctions {
         }
 	}
 
-	static function display_oral_expression_answer($feedback_type, $answer, $id, $questionId, $nano = null) {
+	static function display_oral_expression_answer($feedback_type, $answer, $id, $questionId, $nano = null)
+    {
 
 		if (isset($nano)) {
 			echo $nano->show_audio_file();
@@ -119,7 +122,8 @@ class ExerciseShowFunctions {
 	 * @param string $studentChoice
 	 * @param string $answerComment
 	 */
-	static function display_hotspot_answer($feedback_type, $answerId, $answer, $studentChoice, $answerComment) {
+	static function display_hotspot_answer($feedback_type, $answerId, $answer, $studentChoice, $answerComment)
+    {
 
 		$hotspot_colors = array(
             "", // $i starts from 1 on next loop (ugly fix)
@@ -186,10 +190,8 @@ class ExerciseShowFunctions {
 	 * @param boolean Whether to show the answer comment or not
 	 * @return void
 	 */
-	static function display_unique_or_multiple_answer($feedback_type; $answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
-
-        // radio_on.gif/radio_off.gif
-
+	static function display_unique_or_multiple_answer($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans)
+    {
         $imageType = (in_array($answerType, array(UNIQUE_ANSWER,UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION))) ? 'radio' : 'checkbox';
         $image = $imageType.($studentChoice ? '_on' : '_off');
         $image .= '.gif';
@@ -245,7 +247,9 @@ class ExerciseShowFunctions {
 		<?php
 	}
 
-    static function display_unique_image_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
+    /** @todo check if this function is used */
+    static function display_unique_image_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans)
+    {
         global $feedback_type;
 
         $imageType = (in_array($answerType, array(UNIQUE_ANSWER,UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION))) ? 'radio' : 'checkbox';

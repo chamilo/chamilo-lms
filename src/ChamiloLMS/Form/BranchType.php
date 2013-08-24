@@ -25,6 +25,8 @@ class BranchType extends AbstractType
         if (!empty($builderData)) {
             $parentIdDisabled = true;
         }
+        // Some shared options for plugins related form fields.
+        $plugin_fields_shared_options = array('required' => false);
 
         $builder
             ->add('branch_name', 'text')
@@ -48,13 +50,17 @@ class BranchType extends AbstractType
             )
             ->add('last_sync_type', 'text')
             ->add('last_sync_trans_id', 'text')
-            ->add('ssl_certificate', 'text')
-            ->add('ssl_p12_store', 'text')
             ->add('last_sync_trans_id', 'text')
             ->add('access_url_id', 'text')
+            // @fixme Convert to html select's when we have a way to retrive
+            //        each plugin type available plugins.
+            // @fixme Implement custom form options when plugins needs to store
+            //        extra information on branch_sync.data.
+            ->add('plugin_envelope', 'text', $plugin_fields_shared_options)
+            ->add('plugin_send', 'text', $plugin_fields_shared_options)
+            ->add('plugin_receive', 'text', $plugin_fields_shared_options)
+            ->add('data', 'textarea', array('label' => 'Data (Unusable for now, use direct edit until UI is ready)') + $plugin_fields_shared_options)
             ->add('submit', 'submit');
-
-
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

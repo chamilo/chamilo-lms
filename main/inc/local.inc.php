@@ -1108,6 +1108,10 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset))
                     $is_allowed_in_course = true;
                 }
                 break;
+            case COURSE_VISIBILITY_HIDDEN: //4
+                if ($is_platformAdmin) {
+                    $is_allowed_in_course = true;
+                }
         }
     }
 

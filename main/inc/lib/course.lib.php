@@ -2961,7 +2961,7 @@ class CourseManager {
             if ($number_of_courses > 0) {
                 while ($course = Database::fetch_array($rs_special_course)) {
                     $course_info = api_get_course_info($course['code']);
-                    if ($course_info['visibility'] != COURSE_VISIBILITY_HIDDEN) {
+                    if ($course_info['visibility'] == COURSE_VISIBILITY_HIDDEN) {
                         continue;
                     }
                     $params = array();
@@ -3276,7 +3276,9 @@ class CourseManager {
 
         $course_access_settings     = CourseManager :: get_access_settings($course_info['code']);
         $course_visibility          = $course_access_settings['visibility'];
-
+        if ($course_visibility == COURSE_VISIBILITY_HIDDEN) {
+            return '';
+        }
         $user_in_course_status      = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_info['code']);
 
         $is_coach = api_is_coach($course_info['id_session'], $course['code']);
@@ -3287,7 +3289,7 @@ class CourseManager {
         $session_title = '';
 
         if ($session_accessible) {
-            if ($course_visibility != COURSE_VISIBILITY_HIDDEN && ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER)) {
+            if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER) {
                 if (!$nosession) {
                     if (empty($course_info['id_session'])) {
                         $course_info['id_session'] = 0;

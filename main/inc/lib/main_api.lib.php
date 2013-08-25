@@ -64,7 +64,8 @@ define('COURSE_VISIBILITY_REGISTERED', 1);
 define('COURSE_VISIBILITY_OPEN_PLATFORM', 2);
 /** Open for the whole world */
 define('COURSE_VISIBILITY_OPEN_WORLD', 3);
-
+/** Invisible to all except admin */
+define('COURSE_VISIBILITY_HIDDEN', 4);
 
 // SESSION VISIBILITY CONSTANTS
 define('SESSION_VISIBLE_READ_ONLY', 1);
@@ -887,6 +888,11 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     		case COURSE_VISIBILITY_OPEN_WORLD: //Open - access allowed for the whole world - 3
     			$is_visible = true;
     			break;
+            case COURSE_VISIBILITY_HIDDEN: //Completely closed: the course is only accessible to the teachers. - 0
+                if (api_is_platform_admin()) {
+                    $is_visible = true;
+                }
+                break;
     	}
         //If pasword is set and user is not registered to the course then the course is not visible
         if ($is_allowed_in_course == false & isset($course_info['registration_code']) && !empty($course_info['registration_code'])) {
@@ -4824,6 +4830,8 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
         case COURSE_VISIBILITY_REGISTERED:
         case COURSE_VISIBILITY_CLOSED:
             return $is_platformAdmin || $is_courseMember || $is_courseAdmin;
+        case COURSE_VISIBILITY_HIDDEN:
+            return $is_platformAdmin;
     }
     return false;
 }

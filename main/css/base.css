@@ -409,6 +409,10 @@ footer #footer_left {
     padding: 5px;
 }
 
+footer #footer_right {
+    float: right;
+}
+
 #footer_right #admin_name, #footer_right #software_name{
     text-align:right;
 }

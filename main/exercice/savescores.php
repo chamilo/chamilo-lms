@@ -42,7 +42,7 @@ $score = $_REQUEST['score'];
 $origin = $_REQUEST['origin'];
 $learnpath_item_id = filter_var($_REQUEST['learnpath_item_id']);
 $course_info = api_get_course_info();
-$course_id = filter_var($course_info['real_id']);
+$course_id = $course_info['real_id'];
 $jscript2run = '';
 
 /**

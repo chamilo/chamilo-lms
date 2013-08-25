@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CourseVisibilityHidden = "Verborgen - Volledig verborgen voor alles behalve de beheerders";
 $CasMainActivateComment = "Door CAS authentication te activeren, kunnen gebruikers inloggen met hun CAS gegevens. Ga naar Plugin om een 'CAS Login' knop toe te voegen voor uw Chamilo campus.";
 $UsersRegisteredInAnyGroup = "Gebruikers geregistreerd in om het even welke groep";
 $ShowHotCoursesComment = "De lijst van meest bezochte cursussen zal toegevoegd worden op de home-page";

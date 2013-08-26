@@ -294,6 +294,9 @@ class ExerciseShowFunctions {
                 echo '-';
             }
         }
+        else {
+            echo '-';
+        }
         ?>
         </td>
         <td width="40%">
@@ -364,6 +367,9 @@ class ExerciseShowFunctions {
             } else {
                 echo $question->options[2];
             }
+        }
+        else {
+            echo '-';
         }
         ?>
         </td>

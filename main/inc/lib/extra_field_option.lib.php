@@ -154,7 +154,8 @@ class ExtraFieldOption extends Model
                             'option_order'        => 0,
                             'tms'                 => $time,
                         );
-                        //Looking if option already exists:
+
+                        // Looking if option already exists:
                         $option_info = self::get_field_option_by_field_id_and_option_display_text(
                             $field_id,
                             $option['label']
@@ -167,6 +168,7 @@ class ExtraFieldOption extends Model
                             $new_params['id'] = $sub_id;
                             parent::update($new_params, $show_query);
                         }
+
                         foreach ($sub_options as $sub_option) {
                             if (!empty($sub_option)) {
                                 $new_params  = array(
@@ -206,10 +208,11 @@ class ExtraFieldOption extends Model
 
                     if ($option_info == false) {
                         $order      = self::get_max_order($field_id);
+
                         $new_params = array(
                             'field_id'            => $field_id,
-                            'option_value'        => $optionValue,
-                            'option_display_text' => $option,
+                            'option_value'        => trim($optionValue),
+                            'option_display_text' => trim($option),
                             'option_order'        => $order,
                             'tms'                 => $time,
                         );
@@ -237,6 +240,15 @@ class ExtraFieldOption extends Model
         if (empty($field_id)) {
             return false;
         }
+
+        if (isset($params['option_value'])) {
+            $params['option_value'] = trim($params['option_value']);
+        }
+
+        if (isset($params['option_display_text'])) {
+            $params['option_display_text'] = trim($params['option_display_text']);
+        }
+
         $params['tms'] = api_get_utc_datetime();
         if (empty($params['option_order'])) {
             $order                  = self::get_max_order($field_id);

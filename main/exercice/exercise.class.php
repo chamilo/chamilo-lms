@@ -960,7 +960,7 @@ class Exercise {
                 $radios_results_disabled = array();
                 $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('ShowScoreAndRightAnswer'), '0', array('id'=>'result_disabled_0'));
                 $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('DoNotShowScoreNorRightAnswer'),  '1',array('id'=>'result_disabled_1','onclick' => 'check_results_disabled()'));
-                $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('OnlyShowScore'),  '2', array('id'=>'result_disabled_2','onclick' => 'check_results_disabled()'));
+                $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('OnlyShowScore'),  '2', array('id'=>'result_disabled_2'));
                 //$radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('ExamModeWithFinalScoreShowOnlyFinalScoreWithCategoriesIfAvailable'),  '3', array('id'=>'result_disabled_3','onclick' => 'check_results_disabled()'));
 
                 $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'), '');
@@ -1900,6 +1900,7 @@ class Exercise {
         global $learnpath_id, $learnpath_item_id; //needed in order to use in the exercise_attempt() for the time
 
         $feedback_type = $this->selectFeedbackType();
+        $results_disabled = $this->selectResultsDisabled();
 
         require_once api_get_path(LIBRARY_PATH).'geometry.lib.php';
 
@@ -2561,7 +2562,6 @@ class Exercise {
 
             global $origin;
 
-
             if ($show_result) {
 
                 if ($debug) error_log('show result '.$show_result);
@@ -2572,15 +2572,15 @@ class Exercise {
                     if ($answerType != MATCHING || $answerCorrect) {
                         if (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION, MULTIPLE_ANSWER, MULTIPLE_ANSWER_COMBINATION, GLOBAL_MULTIPLE_ANSWER))) {
                             //if ($origin != 'learnpath') {
-                            ExerciseShowFunctions::display_unique_or_multiple_answer($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect, 0, 0, 0);
+                            ExerciseShowFunctions::display_unique_or_multiple_answer($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect, 0, 0, 0, $results_disabled);
                             //}
                         } elseif($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
                             //if ($origin!='learnpath') {
-                            ExerciseShowFunctions::display_multiple_answer_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect,0,$questionId,0);
+                            ExerciseShowFunctions::display_multiple_answer_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect,0,$questionId,0, $results_disabled);
                             //}
                         } elseif($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE ) {
                             //	if ($origin!='learnpath') {
-                            ExerciseShowFunctions::display_multiple_answer_combination_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect,0,0,0);
+                            ExerciseShowFunctions::display_multiple_answer_combination_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect,0,0,0, $results_disabled);
                             //}
                         } elseif($answerType == FILL_IN_BLANKS) {
                             //if ($origin!='learnpath') {
@@ -2597,7 +2597,7 @@ class Exercise {
                             //}
                         } elseif($answerType == HOT_SPOT) {
                             //if ($origin != 'learnpath') {
-                            ExerciseShowFunctions::display_hotspot_answer($feedback_type, $answerId, $answer, $studentChoice, $answerComment);
+                            ExerciseShowFunctions::display_hotspot_answer($feedback_type, $answerId, $answer, $studentChoice, $answerComment, $results_disabled);
                             //	}
                         } elseif($answerType == HOT_SPOT_ORDER) {
                             //if ($origin != 'learnpath') {
@@ -2771,23 +2771,23 @@ class Exercise {
                         case GLOBAL_MULTIPLE_ANSWER :
                         case MULTIPLE_ANSWER_COMBINATION :
                             if ($answerId==1) {
-                                ExerciseShowFunctions::display_unique_or_multiple_answer($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,$answerId);
+                                ExerciseShowFunctions::display_unique_or_multiple_answer($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,$answerId, $results_disabled);
                             } else {
-                                ExerciseShowFunctions::display_unique_or_multiple_answer($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,"");
+                                ExerciseShowFunctions::display_unique_or_multiple_answer($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,"", $results_disabled);
                             }
                             break;
                         case MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:
                             if ($answerId==1) {
-                                ExerciseShowFunctions::display_multiple_answer_combination_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,$answerId);
+                                ExerciseShowFunctions::display_multiple_answer_combination_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,$answerId, $results_disabled);
                             } else {
-                                ExerciseShowFunctions::display_multiple_answer_combination_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,"");
+                                ExerciseShowFunctions::display_multiple_answer_combination_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,"", $results_disabled);
                             }
                             break;
                         case MULTIPLE_ANSWER_TRUE_FALSE :
                             if ($answerId==1) {
-                                ExerciseShowFunctions::display_multiple_answer_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,$answerId);
+                                ExerciseShowFunctions::display_multiple_answer_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,$answerId, $results_disabled);
                             } else {
-                                ExerciseShowFunctions::display_multiple_answer_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId, "");
+                                ExerciseShowFunctions::display_multiple_answer_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId, "", $results_disabled);
                             }
                             break;
                         case FILL_IN_BLANKS:
@@ -2803,7 +2803,7 @@ class Exercise {
 		                            </table>';
                             break;
                         case HOT_SPOT:
-                            ExerciseShowFunctions::display_hotspot_answer($feedback_type, $answerId, $answer, $studentChoice, $answerComment);
+                            ExerciseShowFunctions::display_hotspot_answer($feedback_type, $answerId, $answer, $studentChoice, $answerComment, $results_disabled);
                             break;
                         case HOT_SPOT_DELINEATION:
                             $user_answer = $user_array;

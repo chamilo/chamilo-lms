@@ -2141,6 +2141,14 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         $show_only_score = true;
     }
 
+    // Not display expected answer, but score, and feedback
+    $show_all_but_expected_answer = false;
+    if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY && $objExercise->feedback_type == EXERCISE_FEEDBACK_TYPE_END) {
+        $show_all_but_expected_answer = true;
+        $show_results = true;
+        $show_only_score = false;
+    }
+
     if ($show_results || $show_only_score) {
         $user_info   = api_get_user_info($exercise_stat_info['exe_user_id']);
         //Shows exercise header
@@ -2277,6 +2285,10 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     echo $exercise_content;
     if (!$show_only_score) {
         echo $total_score_text;
+    }
+
+    if ($show_all_but_expected_answer) {
+        echo "<p>Note : cet exercice est configuré pour ne pas montrer les corrections.</p>";
     }
 
     if ($save_user_result) {

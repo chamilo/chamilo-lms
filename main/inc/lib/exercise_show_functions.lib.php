@@ -117,7 +117,11 @@ class ExerciseShowFunctions {
 	 * @param string $studentChoice
 	 * @param string $answerComment
 	 */
-	static function display_hotspot_answer($feedback_type, $answerId, $answer, $studentChoice, $answerComment) {
+	static function display_hotspot_answer($feedback_type, $answerId, $answer, $studentChoice, $answerComment, $in_results_disabled) {
+        $hide_expected_answer = false;
+        if ($feedback_type == 0 && $in_results_disabled == 2) {
+            $hide_expected_answer = true;
+        }
 
 		$hotspot_colors = array(
             "", // $i starts from 1 on next loop (ugly fix)
@@ -148,8 +152,10 @@ class ExerciseShowFunctions {
 			</td>
 			<td width="50px" style="padding-right:15px" valign="top" align="left">
 				<?php
-				$my_choice = ($studentChoice)?get_lang('Correct'):get_lang('Fault');
-				echo $my_choice;
+                if (!$hide_expected_answer) {
+    				$my_choice = ($studentChoice)?get_lang('Correct'):get_lang('Fault');
+    				echo $my_choice;
+                }
 				?>
 			</td>
 			<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
@@ -184,7 +190,11 @@ class ExerciseShowFunctions {
 	 * @param boolean Whether to show the answer comment or not
 	 * @return void
 	 */
-	static function display_unique_or_multiple_answer($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
+	static function display_unique_or_multiple_answer($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans, $in_results_disabled) {
+        $hide_expected_answer = false;
+        if ($feedback_type == 0 && $in_results_disabled == 2) {
+            $hide_expected_answer = true;
+        }
 		?>
 		<tr>
 		<td width="5%">
@@ -192,8 +202,12 @@ class ExerciseShowFunctions {
 			border="0" alt="" />
 		</td>
 		<td width="5%">
-			<img src="../img/<?php echo (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION))) ? 'radio':'checkbox'; echo $answerCorrect?'_on':'_off'; ?>.gif"
-			border="0" alt=" " />
+            <?php if (!$hide_expected_answer) { ?>
+			    <img src="../img/<?php echo (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION))) ? 'radio':'checkbox'; echo $answerCorrect?'_on':'_off'; ?>.gif" border="0" alt=" " />
+            <?php }
+            else {
+                echo "-";
+            }?>
 		</td>
 		<td width="40%">
 			<?php
@@ -248,7 +262,11 @@ class ExerciseShowFunctions {
      * @param boolean Whether to show the answer comment or not
      * @return void
      */
-    static function display_multiple_answer_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
+    static function display_multiple_answer_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans, $in_results_disabled) {
+        $hide_expected_answer = false;
+        if ($feedback_type == 0 && $in_results_disabled == 2) {
+            $hide_expected_answer = true;
+        }
         ?>
         <tr>
         <td width="5%">
@@ -269,12 +287,16 @@ class ExerciseShowFunctions {
         <td width="5%">
         <?php
 		//Expected choice
-        if (isset($new_options[$answerCorrect])) {
-            echo get_lang($new_options[$answerCorrect]['name']);
-        } else {
+        if (!$hide_expected_answer) {
+            if (isset($new_options[$answerCorrect])) {
+                echo get_lang($new_options[$answerCorrect]['name']);
+            } else {
+                echo '-';
+            }
+        }
+        else {
             echo '-';
         }
-
         ?>
         </td>
         <td width="40%">
@@ -318,7 +340,11 @@ class ExerciseShowFunctions {
      * @param boolean Whether to show the answer comment or not
      * @return void
      */
-    static function display_multiple_answer_combination_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
+    static function display_multiple_answer_combination_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans, $in_results_disabled) {
+        $hide_expected_answer = false;
+        if ($feedback_type == 0 && $in_results_disabled == 2) {
+            $hide_expected_answer = true;
+        }
         ?>
         <tr>
         <td width="5%">
@@ -335,10 +361,15 @@ class ExerciseShowFunctions {
         <td width="5%">
         <?php
 		//Expected choice
-        if (isset($question->options[$answerCorrect])) {
-            echo $question->options[$answerCorrect];
-        } else {
-            echo $question->options[2];
+        if (!$hide_expected_answer) {
+            if (isset($question->options[$answerCorrect])) {
+                echo $question->options[$answerCorrect];
+            } else {
+                echo $question->options[2];
+            }
+        }
+        else {
+            echo '-';
         }
         ?>
         </td>

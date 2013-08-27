@@ -412,6 +412,22 @@ class IndexController extends CommonController
         }
     }
 
+     /**
+     * Gets a document from the data/default_platform_document/* folder
+     * @param Application $app
+     * @param string $file
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
+     */
+    public function getDefaultCourseDocumentAction(Application $app, $file)
+    {
+        try {
+            $file = $app['chamilo.filesystem']->get('default_course_document/'.$file);
+            return $app->sendFile($file->getPathname());
+        } catch (\InvalidArgumentException $e) {
+            return $app->abort(404, 'File not found');
+        }
+    }
+
     /**
      * @param Application $app
      * @param $groupId

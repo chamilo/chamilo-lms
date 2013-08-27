@@ -15,14 +15,8 @@
  * Code
  */
 
-// Name of the language file that needs to be included.
-$language_file = array('create_course', 'registration', 'admin', 'exercice', 'course_description', 'course_info');
-
 // Flag forcing the "current course" reset.
 $cidReset = true;
-
-// Including the global initialization file.
-require_once '../inc/global.inc.php';
 
 // Section for the tabs.
 $this_section = SECTION_COURSES;
@@ -36,23 +30,12 @@ $htmlHeadXtra[] = '<script>
     function setFocus(){
         $("#title").focus();
     }
+
     $(window).load(function () {
         setFocus();
+        $("#advanced_params_options").hide();
     });
 
-    function advanced_parameters() {
-        if(document.getElementById(\'options\').style.display == \'none\') {
-            document.getElementById(\'options\').style.display = \'block\';
-            document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif').'&nbsp;'.get_lang(
-    'AdvancedParameters'
-).'\';
-        } else {
-            document.getElementById(\'options\').style.display = \'none\';
-            document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif').'&nbsp;'.get_lang(
-    'AdvancedParameters'
-).'\';
-        }
-    }
 </script>';
 
 $interbreadcrumb[] = array('url' => api_get_path(WEB_PATH).'user_portal.php', 'name' => get_lang('MyCourses'));
@@ -87,11 +70,9 @@ $form->addElement(
 $form->applyFilter('title', 'html_filter');
 $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
-$advanced = '<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" >'.Display::return_icon('div_show.gif').'&nbsp;'.get_lang(
-    'AdvancedParameters'
-).'</div></span></a>';
-$form->addElement('advanced_settings', $advanced);
-$form->addElement('html', '<div id="options" style="display:none">');
+$form->addElement('advanced_settings', '<a class="btn btn-show advanced_parameters" id="advanced_params" href="javascript://">'.get_lang('AdvancedParameters').'</a>');
+
+$form->addElement('html', '<div id="advanced_params_options">');
 
 // Course category.
 $categories_select = $form->addElement(
@@ -114,10 +95,6 @@ $form->add_textfield(
 );
 $form->applyFilter('wanted_code', 'html_filter');
 $form->addRule('wanted_code', get_lang('Max'), 'maxlength', CourseManager::MAX_COURSE_LENGTH_CODE);
-
-/*if ($course_validation_feature) {
-    $form->addRule('wanted_code', get_lang('ThisFieldIsRequired'), 'required');
-}*/
 
 // The teacher
 //get_lang('ExplicationTrainers')

@@ -18,10 +18,10 @@
  */
 class CourseManager
 {
-    CONST MAX_COURSE_LENGTH_CODE = 40;
+    const MAX_COURSE_LENGTH_CODE = 40;
 
     //This constant is used to show separate user names in the course list (userportal), footer, etc
-    CONST USER_SEPARATOR = ' |';
+    const USER_SEPARATOR = ' |';
 
     public $columns = array();
 
@@ -3978,7 +3978,6 @@ class CourseManager
      */
     static function prepare_course_repository($course_repository, $course_code)
     {
-
         $perm = api_get_permissions_for_new_directories();
         $perm_file = api_get_permissions_for_new_files();
         $htmlpage = "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\">\n    <title>Not authorized</title>\n  </head>\n  <body>\n  </body>\n</html>";
@@ -4162,22 +4161,25 @@ class CourseManager
         return $tables;
     }
 
-    static function browse_folders($path, $files, $media) {
+    static function browse_folders($path, $files, $media)
+    {
+        $defaultCourseDocumentPath = api_get_path(SYS_DEFAULT_COURSE_DOCUMENT_PATH);
         if ($media == 'images') {
-            $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/';
+            $code_path = $defaultCourseDocumentPath.'images/';
         }
         if ($media == 'audio') {
-            $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/audio/';
+            $code_path = $defaultCourseDocumentPath.'audio/';
         }
         if ($media == 'flash') {
-            $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/flash/';
+            $code_path = $defaultCourseDocumentPath.'flash/';
         }
         if ($media == 'video') {
-            $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/video/';
+            $code_path = $defaultCourseDocumentPath.'video/';
         }
         if ($media == 'certificates') {
-            $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/certificates/';
+            $code_path = $defaultCourseDocumentPath.'certificates/';
         }
+
         if (is_dir($path)) {
             $handle = opendir($path);
             while (false !== ($file = readdir($handle))) {
@@ -4189,6 +4191,7 @@ class CourseManager
                 }
             }
         }
+
         return $files;
     }
 
@@ -4396,7 +4399,7 @@ class CourseManager
                 'certificates',
             );
 
-            $default_course_path = api_get_path(SYS_CODE_PATH).'default_course_document/';
+            $default_course_path = api_get_path(SYS_DEFAULT_COURSE_DOCUMENT_PATH);
 
             $default_document_array = array();
             foreach ($folders_to_copy_from_default_course as $folder) {
@@ -4430,7 +4433,7 @@ class CourseManager
                     }
 
                     $course_documents_folder = $sys_course_path.$course_repository."/document/$media_type/";
-                    $default_course_path = api_get_path(SYS_CODE_PATH).'default_course_document'.$path_documents;
+                    $default_course_path = api_get_path(SYS_DEFAULT_COURSE_DOCUMENT_PATH).$path_documents;
 
                     //echo 'try '.$course_documents_folder; echo '<br />';
 
@@ -4561,7 +4564,7 @@ class CourseManager
 
             $html = Database::escape_string('<table width="100%" border="0" cellpadding="0" cellspacing="0">
                                                 <tr><td width="110" valign="top" align="left">
-                                                <img src="'.api_get_path(WEB_CODE_PATH).'default_course_document/images/mr_dokeos/thinking.jpg"></td><td valign="top" align="left">'.get_lang('Antique').'
+                                                <img src="'.api_get_path(WEB_DEFAULT_COURSE_DOCUMENT_PATH).'images/mr_dokeos/thinking.jpg"></td><td valign="top" align="left">'.get_lang('Antique').'
                                             </td></tr></table>');
 
             // Insert exercise
@@ -4668,6 +4671,7 @@ class CourseManager
         } else {
             $visibility         = $params['visibility'];
         }
+
         $subscribe          = isset($params['subscribe']) ? intval($params['subscribe']) : ($visibility == COURSE_VISIBILITY_OPEN_PLATFORM ? 1 : 0);
         $unsubscribe        = isset($params['unsubscribe']) ? intval($params['unsubscribe']) : 0;
         $expiration_date    = isset($params['expiration_date']) ? $params['expiration_date'] : null;
@@ -4767,6 +4771,7 @@ class CourseManager
                             user_course_cat = '0'";
                     Database::query($sql);
                 }
+
                 if (!empty($teachers)) {
                     if (!is_array($teachers)) {
                         $teachers = array($teachers);

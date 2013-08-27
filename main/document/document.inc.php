@@ -336,8 +336,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                 //yox view
                 //$url = 'showinframesmin.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;
                 //Simpler version of showinframesmin.php with no headers
-                $url = 'show_content.php?'.api_get_cidreq(
-                ).'&id='.$document_data['id'].$req_gid.'&width=700&height=500';
+                $url = 'show_content.php?id='.$document_data['id'].$req_gid.'&'.api_get_cidreq().'&width=700&height=500';
                 $class = 'ajax';
                 if ($visibility == false) {
                     $class = "ajax invisible";

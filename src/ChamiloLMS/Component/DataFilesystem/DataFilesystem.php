@@ -21,7 +21,7 @@ class DataFilesystem
     private $fs;
 
     /**
-     * @param string $path
+     * @param array $paths
      * @param Filesystem $filesystem
      */
     public function __construct($paths, Filesystem $filesystem)
@@ -32,7 +32,7 @@ class DataFilesystem
 
     /**
      * Gets a file from the "data" folder
-     * @param $file
+     * @param string $file
      * @return SplFileInfo
      * @throws \InvalidArgumentException
      */

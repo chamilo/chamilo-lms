@@ -128,7 +128,10 @@ class CurriculumCategoryController extends CommonController
         $parentEntity = $this->getEntity($id);
         $entity->setParent($parentEntity);
         $entity->setCourse($this->getCourse());
-        $entity->setSession($this->getSession());
+        $session = $this->getSession();
+        if (!empty($session)) {
+            $entity->setSession($this->getSession());
+        }
 
         $form = $this->get('form.factory')->create($formType, $entity);
 

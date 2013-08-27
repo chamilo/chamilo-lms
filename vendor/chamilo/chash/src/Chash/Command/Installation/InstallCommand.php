@@ -359,6 +359,22 @@ class InstallCommand extends CommonCommand
                     $configuration = $this->getConfigurationHelper()->readConfigurationFile($configurationFile);
                     $this->setConfigurationArray($configuration);
 
+
+                    $configPath = $this->getConfigurationPath();
+                    // Only works with 1.10.0 >=
+                    $installChamiloPath = str_replace('config', 'main/install', $configPath);
+                    $customVersion = $installChamiloPath.$version;
+
+                    $output->writeln("Checking custom update.sql file in dir: ".$customVersion);
+                    if (is_dir($customVersion)) {
+                        $file = $customVersion.'/update.sql';
+                        if (is_file($file) && file_exists($file)) {
+                            $this->importSQLFile($file, $output);
+                        }
+                    } else {
+                        $output->writeln("Nothing to update");
+                    }
+
                     $this->setPortalSettingsInChamilo($output, $this->getHelper('db')->getConnection());
                     $this->setAdminSettingsInChamilo($output, $this->getHelper('db')->getConnection());
 
@@ -473,6 +489,22 @@ class InstallCommand extends CommonCommand
         }
 
         return false;
+    }
+
+    private function importSQLFile($file, $output)
+    {
+        $command = $this->getApplication()->find('dbal:import');
+
+        // Importing sql files.
+        $arguments = array(
+            'command' => 'dbal:import',
+            'file' =>  $file
+        );
+        $input = new ArrayInput($arguments);
+        $command->run($input, $output);
+
+        // Getting extra information about the installation.
+        $output->writeln("<comment>File loaded </comment><info>$file</info>");
     }
 
      /**

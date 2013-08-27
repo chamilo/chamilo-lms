@@ -1394,6 +1394,8 @@ CREATE TABLE c_quiz_question (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+ALTER TABLE c_quiz_question ADD INDEX idx_c_q_qst_cpt (c_id, parent_id, type);
+
 --
 -- Table structure for table c_quiz_category
 --
@@ -1446,6 +1448,7 @@ CREATE TABLE c_quiz_question_rel_category (
   PRIMARY KEY (iid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+ALTER TABLE c_quiz_question_rel_category ADD INDEX idx_c_q_qst_r_cat_qc(question_id, c_id);
 
 DROP TABLE IF EXISTS c_quiz_rel_category;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

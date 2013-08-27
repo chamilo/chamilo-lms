@@ -371,5 +371,9 @@ INSERT INTO settings_current(variable, subkey, type, category, selected_value, t
 
 ALTER TABLE c_quiz_category ADD COLUMN visibility INT default 1;
 
+ALTER TABLE c_quiz_question ADD INDEX idx_c_q_qst_cpt (c_id, parent_id, type);
+ALTER TABLE c_quiz_question_rel_category ADD INDEX idx_c_q_qst_r_cat_qc(question_id, c_id);
+
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.034' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.035' WHERE variable = 'chamilo_database_version';

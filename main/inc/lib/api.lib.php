@@ -571,6 +571,7 @@ function api_get_path($path_type, $path = null) {
     global $_configuration;
 
     // Default $_configuration['root_web'] configuration
+    //$root_web = isset($_configuration['root_web']) ? $_configuration['root_web'] : $app['url_generator'];
     $root_web = $_configuration['root_web'];
 
     // Configuration data for already installed system.

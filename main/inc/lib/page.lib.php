@@ -72,19 +72,13 @@ class PageController
      */
     public function return_course_block($filter = null)
     {
-        $show_create_link = false;
         $show_course_link = false;
+        $display_add_course_link = false;
 
-        if ((api_get_setting('allow_users_to_create_courses') == 'false' && !api_is_platform_admin()) || api_is_student(
-        )
+        if ((api_get_setting('allow_users_to_create_courses') == 'true' && api_is_allowed_to_create_course() ||
+            api_is_platform_admin())
         ) {
-            $display_add_course_link = false;
-        } else {
             $display_add_course_link = true;
-        }
-
-        if ($display_add_course_link) {
-            $show_create_link = true;
         }
 
         if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create_course()) {
@@ -95,10 +89,10 @@ class PageController
             }
         }
 
-        // My account section
+        // My account section.
         $my_account_content = array();
 
-        if ($show_create_link) {
+        if ($display_add_course_link) {
             $my_account_content[] = array(
                 'href'  => api_get_path(WEB_CODE_PATH).'create_course/add_course.php',
                 'title' => api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang(
@@ -107,14 +101,14 @@ class PageController
             );
         }
 
-        //Sort courses
-        $url                  = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
+        // Sort courses.
+        $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
         $my_account_content[] = array(
             'href'  => $url,
             'title' => get_lang('SortMyCourses')
         );
 
-        //Course management
+        // Course management.
         if ($show_course_link) {
             if (!api_is_drh()) {
                 $my_account_content[] = array(
@@ -140,6 +134,7 @@ class PageController
                 );
             }
         }
+
         $this->show_right_block(get_lang('Courses'), $my_account_content, 'course_block');
     }
 
@@ -1235,7 +1230,7 @@ class PageController
         $start = ($page - 1) * $this->maxPerPage;
 
         if ($loadHistory) {
-            //Load sessions in category in *history*
+            // Load sessions in category in *history*.
             $nbResults          = (int)UserManager::get_sessions_by_category(
                 $user_id,
                 true,
@@ -1255,8 +1250,8 @@ class PageController
                 'no_category'
             );
         } else {
-            //Load sessions in category
-            $nbResults          = (int)UserManager::get_sessions_by_category(
+            // Load sessions in category.
+            $nbResults = (int)UserManager::get_sessions_by_category(
                 $user_id,
                 false,
                 true,
@@ -1265,6 +1260,7 @@ class PageController
                 null,
                 'no_category'
             );
+
             $session_categories = UserManager::get_sessions_by_category(
                 $user_id,
                 false,

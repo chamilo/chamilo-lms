@@ -139,9 +139,11 @@ class IndexController extends CommonController
                 \CustomPages::display(\CustomPages::INDEX_UNLOGGED);
             }
         }
+        /** @var \PageController $pageController */
+        $pageController = $app['page_controller'];
 
         if (api_get_setting('display_categories_on_homepage') == 'true') {
-            $template->assign('course_category_block', $app['page_controller']->return_courses_in_categories());
+            $template->assign('course_category_block', $pageController->return_courses_in_categories());
         }
 
         // @todo Custom Facebook connection lib could be replaced with opauth
@@ -153,13 +155,13 @@ class IndexController extends CommonController
         $this->setLoginForm($app);
 
         if (!api_is_anonymous()) {
-            $app['page_controller']->return_profile_block();
-            $app['page_controller']->return_user_image_block();
+            $pageController->return_profile_block();
+            $pageController->return_user_image_block();
 
             if (api_is_platform_admin()) {
-                $app['page_controller']->return_course_block();
+                $pageController->return_course_block();
             } else {
-                $app['page_controller']->return_teacher_link();
+                $pageController->return_teacher_link();
             }
         }
 
@@ -170,24 +172,24 @@ class IndexController extends CommonController
         // When loading a chamilo page do not include the hot courses and news
         if (!isset($_REQUEST['include'])) {
             if (api_get_setting('show_hot_courses') == 'true') {
-                $hotCourses = $app['page_controller']->return_hot_courses();
+                $hotCourses = $pageController->return_hot_courses();
             }
-            $announcementsBlock = $app['page_controller']->return_announcements();
+            $announcementsBlock = $pageController->return_announcements();
         }
 
         $template->assign('hot_courses', $hotCourses);
         $template->assign('announcements_block', $announcementsBlock);
 
         // Homepage
-        $template->assign('home_page_block', $app['page_controller']->returnHomePage());
+        $template->assign('home_page_block', $pageController->returnHomePage());
 
         // Navigation links
-        $app['page_controller']->returnNavigationLinks($template->getNavigationLinks());
-        $app['page_controller']->return_notice();
-        $app['page_controller']->return_help();
+        $pageController->returnNavigationLinks($template->getNavigationLinks());
+        $pageController->return_notice();
+        $pageController->return_help();
 
         if (api_is_platform_admin() || api_is_drh()) {
-            $app['page_controller']->return_skills_links();
+            $pageController->return_skills_links();
         }
 
         $response = $template->render_layout('layout_2_col.tpl');
@@ -404,6 +406,22 @@ class IndexController extends CommonController
     {
         try {
             $file = $app['chamilo.filesystem']->get('default_platform_document/'.$file);
+            return $app->sendFile($file->getPathname());
+        } catch (\InvalidArgumentException $e) {
+            return $app->abort(404, 'File not found');
+        }
+    }
+
+     /**
+     * Gets a document from the data/default_platform_document/* folder
+     * @param Application $app
+     * @param string $file
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
+     */
+    public function getDefaultCourseDocumentAction(Application $app, $file)
+    {
+        try {
+            $file = $app['chamilo.filesystem']->get('default_course_document/'.$file);
             return $app->sendFile($file->getPathname());
         } catch (\InvalidArgumentException $e) {
             return $app->abort(404, 'File not found');

@@ -43,3 +43,6 @@ vendor/realityking/pchart/Example*
 tests/doctrine_console/generated
 tests/doctrine_console/mapping
 tests/doctrine_console/Proxies
+
+# OS stuff
+.DS_Store

@@ -480,12 +480,13 @@ class ConfigurationHelper extends Helper
 
     /**
      * Gets an array with all the databases (particularly useful for Chamilo <1.9)
+     * @todo use connection instead of mysql_*
      * @return mixed Array of databases
      */
     public function getAllDatabases()
     {
         $_configuration = $this->getConfiguration();
-        $dbs            = array();
+        $dbs = array();
 
         $dbs[] = $_configuration['main_database'];
 
@@ -520,7 +521,7 @@ class ConfigurationHelper extends Helper
         if ($singleDatabase == false) {
             $sql = 'SELECT db_name from '.$courseTable;
             $res = mysql_query($sql);
-            if (mysql_num_rows($res) > 0) {
+            if ($res && mysql_num_rows($res) > 0) {
                 while ($row = mysql_fetch_array($res)) {
                     if (!empty($row['db_name'])) {
                         $dbs[] = $row['db_name'];

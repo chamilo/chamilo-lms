@@ -41,7 +41,15 @@ class BufferedOutput extends Output
 
 $app = new Silex\Application();
 
+// Setting Chamilo paths
 $app['root_sys'] = dirname(dirname(__DIR__)).'/';
+$app['sys_root'] = $app['root_sys'];
+$app['sys_data_path'] = isset($_configuration['sys_data_path']) ? $_configuration['sys_data_path'] : $app['root_sys'].'data/';
+$app['sys_config_path'] = isset($_configuration['sys_config_path']) ? $_configuration['sys_config_path'] : $app['root_sys'].'config/';
+$app['sys_course_path'] = isset($_configuration['sys_course_path']) ? $_configuration['sys_course_path'] : $app['sys_data_path'].'/course';
+$app['sys_log_path'] = isset($_configuration['sys_log_path']) ? $_configuration['sys_log_path'] : $app['root_sys'].'logs/';
+$app['sys_temp_path'] = isset($_configuration['sys_temp_path']) ? $_configuration['sys_temp_path'] : $app['sys_data_path'].'temp/';
+
 
 // Registering services
 
@@ -56,7 +64,6 @@ $app['translator'] = $app->share($app->extend('translator', function($translator
     $translator->addResource('yaml', __DIR__.'/lang/fr.yml', 'fr');
     $translator->addResource('yaml', __DIR__.'/lang/en.yml', 'en');
     $translator->addResource('yaml', __DIR__.'/lang/es.yml', 'es');*/
-
     return $translator;
 }));
 
@@ -138,7 +145,9 @@ foreach ($helpers as $name => $helper) {
 }
 
 $blockInstallation = function() use($app) {
-    if (file_exists($app['root_sys'].'config/configuration.php') || file_exists($app['root_sys'].'config/configuration.yml')) {
+    if (file_exists($app['root_sys'].'config/configuration.php') ||
+        file_exists($app['root_sys'].'config/configuration.yml')
+    ) {
         return $app->abort(500, "A Chamilo installation was found. You can't reinstall.");
     }
 };
@@ -257,11 +266,6 @@ $app->match('/check-database', function() use($app) {
             } catch (Exception $e) {
                 $app['session']->getFlashBag()->add('success', 'Connection error !'.$e->getMessage());
             }
-
-            // do something with the data
-
-            // redirect somewhere
-            //return $app->redirect('...');
         }
     }
 

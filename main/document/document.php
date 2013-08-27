@@ -29,9 +29,7 @@
 /**
  * Code
  */
-// Language files that need to be included
-$language_file = array('document', 'slideshow', 'gradebook', 'create_course');
-require_once '../inc/global.inc.php';
+
 $parent_id = null;
 $current_course_tool = TOOL_DOCUMENT;
 $this_section = SECTION_COURSES;
@@ -349,7 +347,7 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isse
         $path_image = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/images/gallery';
         $new_content_html = str_replace('../images/gallery', $path_image, $new_content_html);
 
-        $path_image_in_default_course = api_get_path(WEB_CODE_PATH).'default_course_document';
+        $path_image_in_default_course = api_get_path(WEB_DEFAULT_COURSE_DOCUMENT_PATH);
         $new_content_html = str_replace('/main/default_course_document', $path_image_in_default_course, $new_content_html);
         $new_content_html = str_replace('/main/img/', api_get_path(WEB_IMG_PATH), $new_content_html);
 

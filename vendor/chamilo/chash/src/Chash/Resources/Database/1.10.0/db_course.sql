@@ -1323,6 +1323,7 @@ CREATE TABLE c_quiz (
   model_type INT default 1,
   question_selection_type INT default 1,
   hide_question_title INT default 0,
+  score_type_model INT default 0,
   PRIMARY KEY (iid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

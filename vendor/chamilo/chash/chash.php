@@ -50,6 +50,9 @@ $application->addCommands(
         new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand(),
 
         // Chash commands
+
+        new Chash\Command\Chash\SetupCommand(),
+
         new Chash\Command\Database\RunSQLCommand(),
         new Chash\Command\Database\DumpCommand(),
         new Chash\Command\Database\RestoreCommand(),

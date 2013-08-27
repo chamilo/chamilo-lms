@@ -2395,10 +2395,8 @@ class UserManager
                    " access_end_date, ".
                    " coach_access_start_date, ".
                    " coach_access_end_date, ".
-
                    " display_start_date, ".
                    " display_end_date, ".
-
                    " session_category_id, ".
                    " session_category.name as session_category_name, ".
                    " session_category.date_start session_category_date_start, ".
@@ -2468,6 +2466,7 @@ class UserManager
             $sql2 .= $limitCondition;
         }
 
+
         $join = array();
         $ordered_join = array();
         $ids = array();
@@ -2489,7 +2488,6 @@ class UserManager
                 $ids[] = $row2['id'];
             }
         }
-
 
         if (Database::num_rows($result1) > 0) {
             // Now add the diff with $row1, ordering elements as planned by query
@@ -2545,6 +2543,7 @@ class UserManager
 
                 // Checking session visibility
                 $visibility = api_get_session_visibility($session_id, null, false);
+
 
                 switch ($visibility) {
                     case SESSION_VISIBLE_READ_ONLY:

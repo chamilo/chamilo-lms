@@ -420,6 +420,8 @@ class Template
             $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
         }
 
+        $css[] = api_get_path(WEB_CSS_PATH).'font_awesome/css/font-awesome.css';
+
         $css_file_to_string = null;
         foreach ($css as $file) {
             $css_file_to_string .= api_get_css($file);
@@ -442,9 +444,7 @@ class Template
 
         $navigator_info = api_get_navigator();
         if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
-            $css_file_to_string .= 'img, div { behavior: url('.api_get_path(
-                    WEB_LIBRARY_PATH
-                ).'javascript/iepngfix/iepngfix.htc) } '."\n";
+            $css_file_to_string .= 'img, div { behavior: url('.api_get_path(WEB_LIBRARY_PATH).'javascript/iepngfix/iepngfix.htc) } '."\n";
         }
 
         if (!$disable_js_and_css_files) {

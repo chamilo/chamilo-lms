@@ -18,6 +18,7 @@ require_once '../inc/lib/api.lib.php';
 error_reporting(-1);
 
 use Symfony\Component\Console\Output\Output;
+use Symfony\Component\HttpFoundation\Request;
 
 class BufferedOutput extends Output
 {
@@ -196,6 +197,7 @@ $app->match('/requirements', function() use($app) {
 
 
 $app->match('/check-database', function() use($app) {
+    /** @var Request $request */
     $request = $app['request'];
 
     $command = $app['console']->get('chamilo:install');
@@ -384,7 +386,7 @@ $app->match('/installing', function() use($app) {
     $adminSettings = $app['session']->get('admin_settings');
     $databaseSettings = $app['session']->get('database_settings');
 
-    /** @var \ChamiloLMS\Command\Database\InstallCommand $command */
+    /** @var Chash\Command\Installation\InstallCommand $command */
     $command = $app['console']->get('chamilo:install');
 
     $def = $command->getDefinition();

@@ -18,8 +18,11 @@ require_once '../inc/global.inc.php';
 // Set this option to true to enforce strict purification for usenames.
 $purification_option_for_usernames = false;
 
+$time = time();
+
 function validate_data($users) {
 	global $defined_auth_sources;
+    global $time;
 	$errors = array();
 	$usernames = array();
 
@@ -83,6 +86,7 @@ function validate_data($users) {
  */
 function complete_missing_data($user) {
 	global $purification_option_for_usernames;
+    global $time;
 	// 1. Create a username if necessary.
 	if (UserManager::is_username_empty($user['UserName'])) {
 		$user['UserName'] = UserManager::create_unique_username($user['FirstName'], $user['LastName']);
@@ -112,6 +116,7 @@ function complete_missing_data($user) {
  */
 function save_data($users) {
 	global $inserted_in_course;
+    global $time;
 	// Not all scripts declare the $inserted_in_course array (although they should).
 	if (!isset($inserted_in_course)) {
 		$inserted_in_course = array();
@@ -121,11 +126,11 @@ function save_data($users) {
 		foreach ($users as $index => $user)	{
 			$user = complete_missing_data($user);
 			$user['Status'] = api_status_key($user['Status']);
-            $user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], $user['language'], $user['PhoneNumber'], '', $user['AuthSource'], null, 1, 0, null, null, $send_mail);
-			if (!is_array($user['Courses']) && !empty($user['Courses'])) {
+            $user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], (isset($user['OfficialCode'])?$user['OfficialCode']:null), (isset($user['language'])?$user['language']:null), (isset($user['PhoneNumber'])?$user['PhoneNumber']:null), '', $user['AuthSource'], null, 1, 0, null, null, $send_mail);
+			if (!empty($user['Courses']) && !is_array($user['Courses'])) {
 				$user['Courses'] = array($user['Courses']);
 			}
-			if (is_array($user['Courses'])) {
+			if (isset($user['Courses']) && is_array($user['Courses'])) {
 				foreach ($user['Courses'] as $index => $course) {
 					if (CourseManager :: course_exists($course)) {
 						CourseManager :: subscribe_user($user_id, $course,$user['Status']);
@@ -155,13 +160,15 @@ function save_data($users) {
 			global $extra_fields;
 
 			// We are sure that the extra field exists.
-			foreach($extra_fields as $extras) {
-				if (isset($user[$extras[1]])) {
-					$key 	= $extras[1];
-					$value 	= $user[$extras[1]];
-					UserManager::update_extra_field_value($user_id, $key,$value);
-				}
-			}
+            if (isset($extra_fields) && is_array($extra_fields)) {
+                foreach($extra_fields as $extras) {
+                    if (isset($user[$extras[1]])) {
+                        $key 	= $extras[1];
+                        $value 	= $user[$extras[1]];
+                        UserManager::update_extra_field_value($user_id, $key,$value);
+                    }
+                }
+            }
 		}
 	}
 }
@@ -172,6 +179,8 @@ function save_data($users) {
  * @return array All userinformation read from the file
  */
 function parse_csv_data($file) {
+    global $time;
+    $time = time();
 	$users = Import :: csv_to_array($file);
 	foreach ($users as $index => $user) {
 		if (isset ($user['Courses'])) {
@@ -346,14 +355,14 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 
 	// if the warning message is too long then we display the warning message trough a session
 	if (api_strlen($warning_message) > 150) {
-		$_SESSION['session_message_import_users'] = $warning_message;
+		$_SESSION['session_message_import_users'] = (isset($warning_message)?$warning_message:'');
 		$warning_message = 'session_message';
 	}
 
     if ($error_kind_file) {
 		$error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
 	} else {
-		header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=show_message&warn='.urlencode($warning_message).'&message='.urlencode($see_message_import).'&sec_token='.$tok);
+		header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=show_message&warn='.(isset($warning_message)?urlencode($warning_message):'').'&message='.urlencode($see_message_import).'&sec_token='.$tok);
 		exit;
 	}
 

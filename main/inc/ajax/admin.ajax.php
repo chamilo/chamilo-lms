@@ -196,3 +196,4 @@ function _http_request($ip, $port = 80, $uri = '/', $getdata = array(), $timeout
 
     return trim($ret);
 }
+exit;

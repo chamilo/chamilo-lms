@@ -2093,7 +2093,7 @@ class SessionManager
      * @param $courseId
      * @return array
      */
-    static function get_session_by_course($courseId) 
+    static function get_session_by_course($courseId)
     {
         $table_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $table_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -2819,22 +2819,6 @@ class SessionManager
             Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND c_id = '$courseId'");
             Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'");
         }
-    }
-
-    static function get_sessions_by_user($user_id)
-    {
-       $session_categories = UserManager::get_sessions_by_category($user_id);
-       $session_array = array();
-       if (!empty($session_categories)) {
-           foreach ($session_categories as $category) {
-               if (isset($category['sessions'])) {
-                   foreach ($category['sessions'] as $session) {
-                       $session_array[] = $session;
-                   }
-               }
-           }
-       }
-       return $session_array;
     }
 
     static function get_session_rel_user_by_moved_to($session_id, $user_id) {

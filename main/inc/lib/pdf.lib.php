@@ -99,26 +99,32 @@ class PDF {
      * @param bool Whether to print the header, footer and watermark (true) or just the content (false)
      * @return void
      */
-    public function html_to_pdf($html_file_array, $pdf_name = '', $course_code = null, $print_title = false, $complete_style = true) {
-        if ($complete_style === false) { error_log(__FUNCTION__.' with no style'); }
+    public function html_to_pdf($html_file_array, $pdf_name = '', $course_code = null, $print_title = false, $complete_style = true)
+    {
+        if ($complete_style === false) {
+            error_log(__FUNCTION__.' with no style');
+        }
+
         if (empty($html_file_array)) {
         	return false;
         }
 
         if (is_array($html_file_array)) {
-            if (count($html_file_array) == 0)
+            if (count($html_file_array) == 0) {
         	   return false;
+            }
         } else {
             if (!file_exists($html_file_array)) {
                 return false;
             }
-            //Converting the string into an array
+
+            // Converting the string into an array
             $html_file_array = array($html_file_array);
         }
 
         $course_data = array();
         if (!empty($course_code)) {
-        	$course_data = api_get_course_info($course_code);
+            $course_data = api_get_course_info($course_code);
         } else {
             $course_data = api_get_course_info();
         }
@@ -148,15 +154,15 @@ class PDF {
             //if the array provided contained subarrays with 'title' entry,
             // then print the title in the PDF
             if (is_array($file) && isset($file['title'])) {
-            	$html_title = $file['title'];
+                $html_title = $file['title'];
                 $file  = $file['path'];
             } else {
-                //we suppose we've only been sent a file path
-            	$html_title = basename($file);
+                // We suppose we've only been sent a file path.
+                $html_title = basename($file);
             }
 
             if (empty($file) && !empty($html_title)) {
-            	//this is a chapter, print title & skip the rest
+                //this is a chapter, print title & skip the rest
                 if ($print_title) {
                     $this->pdf->WriteHTML('<html><body><h3>'.$html_title.'</h3></body></html>'.$page_break, 2);
                 }
@@ -165,7 +171,7 @@ class PDF {
 
             if (!file_exists($file)) {
                 //the file doesn't exist, skip
-            	continue;
+                continue;
             }
 
             //it's not a chapter but the file exists, print its title
@@ -178,12 +184,12 @@ class PDF {
 
             if (in_array($extension, array('html', 'htm'))) {
                 $filename = $file_info['basename'];
-                $filename = str_replace('_',' ',$filename);
+                $filename = str_replace('_', ' ', $filename);
 
                 if ($extension == 'html') {
-                    $filename = basename($filename,'.html');
-                } elseif($extension == 'htm'){
-                    $filename = basename($filename,'.htm');
+                    $filename = basename($filename, '.html');
+                } elseif ($extension == 'htm') {
+                    $filename = basename($filename, '.htm');
                 }
 
                 $document_html = @file_get_contents($file);
@@ -193,9 +199,8 @@ class PDF {
                 $absolute_css_path = api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css';
                 $document_html = str_replace('href="./css/frames.css"', $absolute_css_path, $document_html);
 
-
                 if (!empty($course_data['path'])) {
-                    $document_html= str_replace('../','',$document_html);
+                    $document_html= str_replace('../', '', $document_html);
                     $document_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document/';
 
                     $doc = new DOMDocument();

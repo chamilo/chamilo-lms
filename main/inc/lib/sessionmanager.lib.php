@@ -2821,22 +2821,6 @@ class SessionManager
         }
     }
 
-    static function get_sessions_by_user($user_id)
-    {
-       $session_categories = UserManager::get_sessions_by_category($user_id);
-       $session_array = array();
-       if (!empty($session_categories)) {
-           foreach ($session_categories as $category) {
-               if (isset($category['sessions'])) {
-                   foreach ($category['sessions'] as $session) {
-                       $session_array[] = $session;
-                   }
-               }
-           }
-       }
-       return $session_array;
-    }
-
     static function get_session_rel_user_by_moved_to($session_id, $user_id) {
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $sql = "SELECT id_session, moved_status, moved_at FROM $tbl_session_rel_user WHERE id_user = $user_id AND moved_to = $session_id LIMIT 1";

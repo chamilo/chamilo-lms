@@ -490,10 +490,14 @@ use Symfony\Component\Finder\Finder;
 $app->before(
 
     function () use ($app) {
-        // Checking configuration file
+         /** @var Request $request */
+        $request = $app['request'];
+
+        // Checking configuration file. If does not exists redirect to the install folder.
         if (!file_exists($app['configuration_file']) && !file_exists($app['configuration_yml_file'])) {
-            return new RedirectResponse(api_get_path(WEB_CODE_PATH).'install');
-            $app->abort(500, "Configuration file was not found.");
+            $url = str_replace('web', 'main/install', $request->getBasePath());
+            return new RedirectResponse($url);
+            //$app->abort(500, "Configuration file was not found.");
         }
 
         // Check the PHP version.
@@ -514,11 +518,9 @@ $app->before(
             $app->abort(500, '$configuration[root_web] must be set in the configuration.php file.');
         }
 
-        /** @var Request $request */
-        $request = $app['request'];
-
         // Starting the session for more info see: http://silex.sensiolabs.org/doc/providers/session.html
         $request->getSession()->start();
+
         /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem $filesystem */
         $filesystem = $app['chamilo.filesystem'];
 

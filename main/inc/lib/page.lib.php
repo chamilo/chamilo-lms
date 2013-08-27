@@ -1230,7 +1230,7 @@ class PageController
         $start = ($page - 1) * $this->maxPerPage;
 
         if ($loadHistory) {
-            //Load sessions in category in *history*
+            // Load sessions in category in *history*.
             $nbResults          = (int)UserManager::get_sessions_by_category(
                 $user_id,
                 true,
@@ -1250,8 +1250,8 @@ class PageController
                 'no_category'
             );
         } else {
-            //Load sessions in category
-            $nbResults          = (int)UserManager::get_sessions_by_category(
+            // Load sessions in category.
+            $nbResults = (int)UserManager::get_sessions_by_category(
                 $user_id,
                 false,
                 true,
@@ -1260,6 +1260,7 @@ class PageController
                 null,
                 'no_category'
             );
+
             $session_categories = UserManager::get_sessions_by_category(
                 $user_id,
                 false,

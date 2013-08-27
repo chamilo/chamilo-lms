@@ -6,7 +6,7 @@ $langProfessors = "Lesgevers";
 $langExplanation = "Wanneer u op OK klikt, wordt een cursuspagina aangemaakt met o.a. de onderdelen: forum, links, oefeningen, agenda en cursusmateriaal. Met uw log-in kan u de inhoud later wijzigen.";
 $langEmpty = "U hebt niet alle velden ingevuld.<br />Gebruik de terugknop en herbegin.<br />Als u uw cursuscode niet kent, kunt u de cursuslijst raadplegen.";
 $langCodeTaken = "Deze cursuscode is al in gebruik. Gebruik de terugknop en herbegin.";
-$langFormula = "Vriendelijke groeten, uw lesgever";
+$langFormula = "Vriendelijke groeten,";
 $langMessage = "Wanneer u het testforum verwijdert, zal ook elk onderwerp hierin verwijderd worden.";
 $langExerciceEx = "Voorbeeldoefening";
 $langAntique = "Oude filosofie geschiedenis";
@@ -106,4 +106,6 @@ $Create = "Aanmaken";
 $MessageOfNewCourseToAdmin = "Er werd een nieuwe cursus aangemaakt op het platform:";
 $NewCourseCreatedIn = "Er werd een nieuwe cursus aangemaakt in";
 $ExplicationTrainers = "Je staat op dit moment ingesteld als cursusbeheerder. Je kan dit later aanpassen via de cursuseigenschappen.";
+$Objectives = "Doelstellingen";
+$TargetAudience = "Doelpubliek";
 ?>

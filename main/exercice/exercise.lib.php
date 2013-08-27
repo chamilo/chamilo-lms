@@ -2281,15 +2281,16 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         echo Testcategory::get_stats_table_by_attempt($objExercise->id, $category_list);
     }
 
+    if ($show_all_but_expected_answer) {
+        $exercise_content .= "<div class='normal-message'>".get_lang("ExerciseWithFeedbackWithoutCorrectionComment")."</div>";
+    }
+
     echo $total_score_text;
     echo $exercise_content;
     if (!$show_only_score) {
         echo $total_score_text;
     }
 
-    if ($show_all_but_expected_answer) {
-        echo "<p>Note : cet exercice est configuré pour ne pas montrer les corrections.</p>";
-    }
 
     if ($save_user_result) {
 

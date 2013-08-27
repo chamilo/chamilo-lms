@@ -83,7 +83,10 @@ class StatusCommand extends CommonCommand
         $output->writeln('<comment>Chamilo $_configuration[db_password]:</comment> <info>'.$_configuration['db_password'].'</info>');
 
         $output->writeln('<comment>Chamilo $_configuration[single_database]:</comment> <info>'.$_configuration['single_database'].'</info>');
-        $output->writeln('<comment>Chamilo $_configuration[db_prefix]:</comment> <info>'.$_configuration['db_prefix'].'</info>');
+
+        if (isset($_configuration['db_prefix'])) {
+            $output->writeln('<comment>Chamilo $_configuration[db_prefix]:</comment> <info>'.$_configuration['db_prefix'].'</info>');
+        }
 
         $output->writeln('<comment>Chamilo $_configuration[db_glue]:</comment> <info>'.$_configuration['db_glue'].'</info>');
         $output->writeln('<comment>Chamilo $_configuration[table_prefix]:</comment> <info>'.$_configuration['table_prefix'].'</info>');
@@ -96,14 +99,15 @@ class StatusCommand extends CommonCommand
             $output->writeln("<comment>Chamilo setting_current['".$databaseSetting."']:</comment> <info>".$chamiloVersion."</info>");
         }
 
-        if (!version_compare(substr($chamiloVersion, 0, 5), substr($_configuration['system_version'],0, 5), '==' )) {
-            $output->writeln("<error>Please check carefully your Chamilo installation. </error>");
-            $output->writeln("<comment>The configuration.php file and the 'chamilo_database_version' setting are not synced.</comment>");
-        } else {
-            //$output->writeln("<comment>You're ready for an upgrade.</comment>");
+        if (isset($_configuration['system_version'])) {
+            $output->writeln('<comment>Chamilo $_configuration[system_version]:</comment> <info>'.$_configuration['system_version'].'</info>');
         }
 
-        //$this->getConfigurationHelper()->
+        if (!version_compare(substr($chamiloVersion, 0, 5), substr($_configuration['system_version'], 0, 5), '==' )) {
+            /*$output->writeln("<error>Please check carefully your Chamilo installation. </error>");
+            $output->writeln("<comment>The configuration.php file and the 'chamilo_database_version' setting are not synced.</comment>");*/
+        }
+
     }
 
 }

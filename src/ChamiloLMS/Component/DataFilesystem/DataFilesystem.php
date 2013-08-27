@@ -86,6 +86,7 @@ class DataFilesystem
         if (empty($folderPermissions)) {
             $folderPermissions = api_get_permissions_for_new_directories();
         }
+
         if (!empty($folderList)) {
             foreach ($folderList as $folder) {
                 if (!is_dir($folder)) {

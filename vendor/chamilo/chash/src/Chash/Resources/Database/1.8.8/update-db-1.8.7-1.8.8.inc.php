@@ -22,7 +22,6 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
 
                 $prefix = $this->getTablePrefix($_configuration, $row_course['db_name']);
 
-
                 $output->writeln('Updating course db: '.$row_course['db_name']);
 
                 $table_lp_item_view = $prefix."lp_item_view";

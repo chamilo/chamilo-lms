@@ -2540,7 +2540,7 @@ INSERT INTO user_field(field_type, field_variable, field_display_text, field_vis
 --
 
 DROP TABLE IF EXISTS course_request;
-CREATE TABLE course_request (
+CREATE TABLE IF NOT EXISTS course_request (
   id int NOT NULL AUTO_INCREMENT,
   code varchar(40) NOT NULL,
   user_id int unsigned NOT NULL default '0',

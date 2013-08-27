@@ -54,6 +54,14 @@ class UpgradeCommand extends CommonCommand
      */
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
+        // Setting up Chash:
+        $command = $this->getApplication()->find('chash:setup');
+        $arguments = array(
+            'command' => 'chash:setup'
+        );
+        $inputSetup = new ArrayInput($arguments);
+        $command->run($inputSetup, $output);
+
         // Arguments and options
         $version = $input->getArgument('version');
         $path = $input->getOption('path');
@@ -64,15 +72,16 @@ class UpgradeCommand extends CommonCommand
 
         // Setting the configuration path and configuration array
         $_configuration = $this->getConfigurationHelper()->getConfiguration($path);
-        $this->setConfigurationArray($_configuration);
-        $this->getConfigurationHelper()->setConfiguration($_configuration);
-        $this->setRootSysDependingConfigurationPath($path);
 
         if (empty($_configuration)) {
             $output->writeln("<comment>Chamilo is not installed here! You may add a path as an option:</comment>");
             $output->writeln("<comment>For example: </comment><info>chamilo:upgrade 1.9.0 --path=/var/www/chamilo</info>");
             return 0;
         }
+
+        $this->setConfigurationArray($_configuration);
+        $this->getConfigurationHelper()->setConfiguration($_configuration);
+        $this->setRootSysDependingConfigurationPath($path);
 
         $configurationPath = $this->getHelper('configuration')->getConfigurationPath($path);
 
@@ -159,7 +168,9 @@ class UpgradeCommand extends CommonCommand
         $this->writeCommandHeader($output, 'Welcome to the Chamilo upgrade process!');
 
         if ($dryRun == false) {
-            $output->writeln("<comment>When the installation process finished the files located here:</comment> <info>$chamiloLocationPath</info> <comment>will be copied in your portal here: </comment> <info>".$this->getRootSys()."</info>");
+            $output->writeln("<comment>When the installation process finished the files located here:<comment>");
+            $output->writeln("<info>$chamiloLocationPath</info>");
+            $output->writeln("<comment>will be copied in your portal here: </comment><info>".$this->getRootSys()."</info>");
         } else {
             $output->writeln("<comment>When the installation process finished PHP files are not going to be updated (--dry-run is on).</comment>");
         }
@@ -250,9 +261,7 @@ class UpgradeCommand extends CommonCommand
 
         $this->updateConfiguration($output, $dryRun, array('system_version' => $version));
 
-        //
-
-        $output->writeln("<comment>Wow! You just finish to migrate. Too check the current status of your platform. Run </comment><info>chamilo:status</info>");
+        $output->writeln("<comment>Hurrah!!! You just finish to migrate. Too check the current status of your platform. Run </comment><info>chamilo:status</info>");
     }
 
     /**
@@ -327,7 +336,7 @@ class UpgradeCommand extends CommonCommand
         if (1) {
 
             $output->writeln('');
-            $output->writeln("<comment>You have to select yes for the 'Chamilo Migrations'<comment>");
+            $output->writeln("<comment>You have to select 'yes' for the 'Chamilo Migrations'<comment>");
 
             $command = $this->getApplication()->find('migrations:migrate');
             $arguments = array(
@@ -340,6 +349,7 @@ class UpgradeCommand extends CommonCommand
             $output->writeln("<comment>Executing migrations:migrate ".$versionInfo['hook_to_doctrine_version']." --configuration=".$this->getMigrationConfigurationFile()."<comment>");
             $input = new ArrayInput($arguments);
             $command->run($input, $output);
+
             $output->writeln("<comment>Migration ended successfully</comment>");
 
             // Generating temp folders.
@@ -395,6 +405,7 @@ class UpgradeCommand extends CommonCommand
         $databases = $this->getDatabaseList($output, $courseList, $path, $version, $type);
         $this->setConnections($version, $path, $databases);
 
+
         foreach ($databases as $section => &$dbList) {
             foreach ($dbList as &$dbInfo) {
 
@@ -419,17 +430,17 @@ class UpgradeCommand extends CommonCommand
                         /** @var \Doctrine\DBAL\Connection $conn */
                         $conn = $this->getHelper($dbInfo['database'])->getConnection();
                         $output->writeln("<comment>Executing queries in DB:</comment> <info>".$conn->getDatabase()."</info>");
+
                         $conn->beginTransaction();
 
                         foreach ($queryList as $query) {
                             // Add a prefix.
 
                             if ($section == 'course') {
-                                var_dump($dbInfo);
-
+                                //var_dump($dbInfo);
                                 $query = str_replace('{prefix}', $dbInfo['prefix'], $query);
-                                var_dump($query);
-                                var_dump($conn->getParams());
+                                //var_dump($query);
+                                //var_dump($conn->getParams());
                             }
 
                             if ($dryRun) {
@@ -437,6 +448,7 @@ class UpgradeCommand extends CommonCommand
                             } else {
                                 $output->writeln('     <comment>-></comment> ' . $query);
                                 $conn->executeQuery($query);
+                                //$conn->exec($query);
                             }
                             $lines++;
                         }
@@ -448,9 +460,7 @@ class UpgradeCommand extends CommonCommand
                             $this->saveDatabaseList($path, $databases, $version, $type);
                         }
                     } catch (\Exception $e) {
-                        if (!$dryRun) {
-                           $conn->rollback();
-                        }
+                        $conn->rollback();
                         $output->write(sprintf('<error>Migration failed. Error %s</error>', $e->getMessage()));
                         throw $e;
                     }

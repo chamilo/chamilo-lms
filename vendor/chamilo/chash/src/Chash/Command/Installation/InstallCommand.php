@@ -85,12 +85,15 @@ class InstallCommand extends CommonCommand
 
         $sqlFolder = $this->getInstallationPath($version);
 
+        // @todo fix process in order to install minor versions: 1.9.6
+        //$versionList = $this->getVersionNumberList();
+        //if (!in_array($version, $versionList)) {
         if (!is_dir($sqlFolder)) {
             $output->writeln("<comment>Sorry you can't install version '$version' of Chamilo :(</comment>");
+            //$output->writeln("<comment>Supported versions:</comment> <info>".implode(', ', $this->getVersionNumberList()));
             $output->writeln("<comment>Supported versions:</comment> <info>".implode(', ', $this->getAvailableVersions()));
             return 0;
         }
-
 
         if ($download) {
             $chamiloLocationPath = $this->getPackage($output, $version, null, $tempFolder);
@@ -104,10 +107,10 @@ class InstallCommand extends CommonCommand
             }
         }
 
-        // Setting configuration helper
+        // Setting configuration helper.
         $this->getApplication()->getHelperSet()->set(new \Chash\Helpers\ConfigurationHelper(), 'configuration');
 
-        // Getting the new config folder
+        // Getting the new config folder.
         $configurationPath = $this->getConfigurationHelper()->getNewConfigurationPath($path);
 
         // @todo move this in the helper
@@ -137,9 +140,9 @@ class InstallCommand extends CommonCommand
 
         if (empty($configurationPath)) {
             $output->writeln("<error>There's an error while loading the configuration path. Are you sure this is a Chamilo path?</error>");
-            $output->writeln("<comment>Try setting up a Chamilo path for example: </comment><info>chamilo:install 1.9.0 /var/www/chamilo</info>");
-
-            $output->writeln("<comment>You can also *download* a Chamilo package adding the --download-package option</comment><info>chamilo:install 1.9.0 /var/www/chamilo</info>");
+            $output->writeln("<comment>Try setting up a Chamilo path for example: </comment> <info>chamilo:install 1.9.0 /var/www/chamilo</info>");
+            $output->writeln("<comment>You can also *download* a Chamilo package adding the --download-package option:</comment>");
+            $output->writeln("<info>chamilo:install 1.9.0 /var/www/chamilo --download-package</info>");
             return 0;
         }
 
@@ -165,7 +168,6 @@ class InstallCommand extends CommonCommand
             $output->writeln("<error>configuration.dist.php file nof found</error> <comment>The file must exists in install/configuration.dist.php or config/configuration.dist.php");
             return 0;
         }
-
 
         if (file_exists($configurationPath.'configuration.php') || file_exists($configurationPath.'configuration.yml')) {
             if ($this->commandLine) {
@@ -350,26 +352,6 @@ class InstallCommand extends CommonCommand
                 $result = $this->install($version, $output);
 
                 if ($result) {
-                    // Injecting the chamilo application (because the configuration.php is now set)
-                    /*if (version_compare($version, '1.10.0', '>=')) {
-                        // This code is already manager by commands
-                        $app = require_once $this->getRootSys().'main/inc/global.inc.php';
-
-                        $app['session.test'] = true;
-
-                        if (isset($app['chamilo.filesystem'])) {
-                            $filesystem = $app['chamilo.filesystem'];
-
-                            // Creating temp folders
-                            //$filesystem->createFolders($app['temp.paths']->folders, null, octdec(trim($portalSettings['permissions_for_new_directories'])));
-                            //$output->writeln("<comment>Temp folders were created.</comment>");
-
-                            $app['installer']->setSettingsAfterInstallation($this->getAdminSettings(), $this->getPortalSettings());
-                        } else {
-                            // This is an old chamilo
-                            require_once $this->getRootSys().'main/inc/global.inc.php';
-                        }
-                    }*/
 
                     // Read configuration file
 
@@ -486,6 +468,8 @@ class InstallCommand extends CommonCommand
             }
 
             return true;
+        } else {
+            $output->writeln("<comment>Unknown version: </comment> <info>$version</info>");
         }
 
         return false;

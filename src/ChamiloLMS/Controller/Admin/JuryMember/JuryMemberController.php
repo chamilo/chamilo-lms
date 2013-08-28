@@ -14,8 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
- * Class RoleController
- * @todo @route and @method function don't work yet
+ * Class JuryMemberController
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
@@ -47,6 +46,7 @@ class JuryMemberController extends CommonController
     public function scoreUserAction($exeId)
     {
         $trackExercise = \ExerciseLib::get_exercise_track_exercise_info($exeId);
+
         if (empty($trackExercise)) {
             $this->createNotFoundException();
         }
@@ -55,7 +55,7 @@ class JuryMemberController extends CommonController
         $exerciseResult = \ExerciseLib::getExerciseResult($trackExercise);
         $counter = 1;
 
-        $objExercise = new \Exercise();
+        $objExercise = new \Exercise($trackExercise['c_id']);
         $objExercise->read($trackExercise['exe_exo_id']);
         $show_results = true;
 
@@ -71,7 +71,7 @@ class JuryMemberController extends CommonController
 
         foreach ($questionList as $questionId) {
             ob_start();
-            $choice = $exerciseResult[$questionId];
+            $choice = isset($exerciseResult[$questionId]) ? $exerciseResult[$questionId] : null;
 
             // Creates a temporary Question object
             $objQuestionTmp = \Question::read($questionId);
@@ -113,6 +113,7 @@ class JuryMemberController extends CommonController
             }
 
             $contents = ob_get_clean();
+
             $question_content = '<div class="question_row">';
             $question_content .= $objQuestionTmp->return_header(null, $counter, $score, $show_media, $mediaCounter);
 
@@ -121,6 +122,7 @@ class JuryMemberController extends CommonController
 
             $question_content .= $contents;
             $question_content .= '</div>';
+
             $exerciseContent .= $question_content;
 
             $counter++;

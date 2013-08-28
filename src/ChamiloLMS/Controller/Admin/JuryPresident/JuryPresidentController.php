@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Whoops\Example\Exception;
 
 /**
  * Class RoleController
@@ -37,23 +38,22 @@ class JuryPresidentController extends CommonController
     * @Route("/open-jury")
     * @Method({"GET, POST"})
     */
-    public function openJuryAction(Application $app)
+    public function openJuryAction()
     {
-        $token = $app['security']->getToken();
-        if (null !== $token) {
-            $user = $token->getUser();
-        }
+        $user = $this->getUser();
 
         // @todo where is get this value?
         $juryId = null;
 
         /** @var Entity\Jury $jury */
+
         $jury = $this->getEntity($juryId);
         $jury->setOpeningDate(new \DateTime());
         $jury->setOpeningUserId($user->getUserId());
         $this->updateAction($jury);
 
         $this->get('session')->getFlashBag()->add('success', "Comité abierto");
+        //$this->get('session')->getFlashBag()->add('success', "Comité no encontrado");
         $url = $this->get('url_generator')->generate('jury_president.controller:indexAction');
         return $this->redirect($url);
     }
@@ -64,10 +64,7 @@ class JuryPresidentController extends CommonController
     */
     public function closeJuryAction(Application $app)
     {
-        $token = $app['security']->getToken();
-        if (null !== $token) {
-            $user = $token->getUser();
-        }
+        $user = $this->getUser();
 
         // @todo where is get this value?
         $juryId = null;
@@ -87,12 +84,9 @@ class JuryPresidentController extends CommonController
     * @Route("/close-score")
     * @Method({"GET, POST"})
     */
-    public function closeScoreAction(Application $app)
+    public function closeScoreAction()
     {
-        $token = $app['security']->getToken();
-        if (null !== $token) {
-            $user = $token->getUser();
-        }
+        $user = $this->getUser();
 
         // @todo where is get this value?
         $juryId = null;
@@ -114,14 +108,11 @@ class JuryPresidentController extends CommonController
     */
     public function assignMembersAction()
     {
-        $token = $this->get('security')->getToken();
-
-        if (null !== $token) {
-            $user = $token->getUser();
-            $userId = $user->getUserId();
-        }
+        $user = $this->getUser();
+        $userId = $user->getUserId();
 
         /** @var Entity\Jury $jury */
+
         $jury = $this->getRepository()->getJuryByPresidentId($userId);
 
         if (!$jury) {

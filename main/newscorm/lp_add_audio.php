@@ -28,7 +28,9 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 // Using the resource linker as a tool for adding resources to the learning path.
 if ($action == 'add' && $type == 'learnpathitem') {
-     $htmlHeadXtra[] = "<script language='JavaScript' type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
+     $htmlHeadXtra[] = "<script>
+     window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\";
+     </script>";
 }
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
     error_log('New LP - User not authorized in lp_add_item.php');
@@ -92,17 +94,24 @@ echo '</div>';
 echo '<div id="doc_form" class="span8">';
 
 $lp_item = new learnpathItem($lp_item_id);
+
 $form = new FormValidator('add_audio', 'post', api_get_self().'?action=add_audio&id='.$lp_item_id, null, array('enctype' => 'multipart/form-data'));
+
+$form->addElement('header', get_lang('RecordYourVoice'));
+
+
 $form->addElement('header', get_lang('UplUpload'));
+
 $form->addElement('html', $lp_item->get_title());
 $form->addElement('file', 'file', get_lang('AudioFile'), 'style="width: 250px"');
 $form->addElement('hidden', 'id', $lp_item_id);
 
-if (isset($lp_item->audio) && !empty($lp_item->audio))  {
+if (isset($lp_item->audio) && !empty($lp_item->audio)) {
     $form->addElement('checkbox', 'delete_file', null, get_lang('RemoveAudio'));
 
     $player = '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
-    $player .= '<div id="preview"></div><script type="text/javascript">
+    $player .= '<div id="preview"></div>
+                <script>
                     var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
                     s1.addParam("allowscriptaccess","always");
                     s1.addParam("flashvars","file=../../courses/' . $_course['path'] . '/document/audio/' . $lp_item->audio . '");
@@ -123,5 +132,4 @@ echo '</div>';
 
 echo '</div>';
 
-/* FOOTER */
 Display::display_footer();

@@ -4,6 +4,7 @@ namespace Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\NoResultException;
 
 /**
  * JuryRepository
@@ -44,8 +45,12 @@ class JuryRepository extends EntityRepository
 
         $qb->where($wherePart);
         $q = $qb->getQuery();
-        return $q->getSingleResult();
-        //return $qb;
+
+        try {
+            return $q->getSingleResult();
+        } catch (NoResultException $e) {
+            return false;
+        }
     }
 
     public function getExerciseAttemptsByJury($juryId)

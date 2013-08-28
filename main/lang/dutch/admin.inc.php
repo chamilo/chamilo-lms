@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CourseVisibilityHidden = "Verborgen - Volledig verborgen voor alle gebruikers behalve de platformbeheerders";
 $CasMainActivateComment = "Door CAS authentication te activeren, kunnen gebruikers inloggen met hun CAS gegevens. Ga naar Plugin om een 'CAS Login' knop toe te voegen voor uw Chamilo campus.";
 $UsersRegisteredInAnyGroup = "Gebruikers geregistreerd in om het even welke groep";
 $ShowHotCoursesComment = "De lijst van meest bezochte cursussen zal toegevoegd worden op de home-page";
@@ -691,7 +692,7 @@ $Nested = "Geneste weergave";
 $OpenIdAuthenticationComment = "Activeer de OpenID URL-gebaseerde authenticatie (er verschijnt een extra login-formulier op de homepage)";
 $VersionCheckEnabled = "Versieverificatie ingeschakeld";
 $InstallDirAccessibleSecurityThreat = "De map main/install van uw Chamilo-systeem is nog steeds toegankelijk voor webgebruikers. Dit houdt een beveiligingsrisico in voor uw installatie. Wij adviseren u deze map te verwijderen, of de permissies ervan te wijzigen zodat webgebruikers geen toegang krijgen tot de scripts in die map.";
-$GradebookActivation = "Gradebook activeren";
+$GradebookActivation = "Puntenboekje activeren";
 $GradebookActivationComment = "Het Gradebook activeren biedt de mogelijkheid leerdoelstellingen met scores te definiëren, maar indien u dit niet gebruikt, maakt het de interface onnodig complex. Wenst u het Gradebook te activeren?";
 $UserTheme = "Thema (stylesheet)";
 $UserThemeSelection = "Keuze van thema door de gebruiker";

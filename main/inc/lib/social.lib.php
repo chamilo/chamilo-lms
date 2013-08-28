@@ -408,7 +408,7 @@ class SocialManager extends UserManager {
         $result .= $s_htlm_status_icon;
 
         //show a hyperlink to the course, unless the course is closed and user is not course admin
-        if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER) {
+        if ($course_visibility != COURSE_VISIBILITY_HIDDEN && ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER)) {
             $result .= '<a href="javascript:void(0)" id="ln_'.$count.'"  onclick=toogle_course(this,\''.$course_id.'\');>&nbsp;'.$course_title.'</a>';
         } else {
             $result .= $course_title." "." ".get_lang('CourseClosed')."";

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AudioFile = "Audio file";
 $ViewModeImpress = "Current view mode: Impress";
 $NewForumCreated = "A new forum has now been created";
 $NewThreadCreated = "A new forum thread has now been created";

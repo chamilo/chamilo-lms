@@ -393,6 +393,7 @@ $AreYouSureToDeleteResults = "Are you sure to delete results";
 $ExerciseCopied = "Exercise copied";
 $AreYouSureToCopy = "Are you sure to copy";
 $EditingExerciseCauseProblemsInLP = "Editing exercise cause problems in Learning Path";
+$ExerciseWithFeedbackWithoutCorrectionComment = "Note: This test has been setup to hide the expected answers.";
 $SessionIsReadOnly = "The session is read only";
 $EnableTimerControl = "Enable time control";
 $ExerciseTotalDurationInMinutes = "Total duration in minutes of the test";

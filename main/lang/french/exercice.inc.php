@@ -382,6 +382,7 @@ $AreYouSureToDeleteResults = "Êtes-vous certain de vouloir supprimer les résul
 $ExerciseCopied = "Exercice copié";
 $AreYouSureToCopy = "Êtes-vous certain de vouloir procéder à la copie";
 $EditingExerciseCauseProblemsInLP = "Éditer l'exercice peut causer des problèmes dans les parcours d'apprentissage";
+$ExerciseWithFeedbackWithoutCorrectionComment = "Note : cet exercice est configuré pour ne pas montrer les corrections.";
 $SessionIsReadOnly = "La session est en mode de lecture seule";
 $EnableTimerControl = "Activer le contrôle du temps";
 $ExerciseTotalDurationInMinutes = "Durée totale du test en minutes";

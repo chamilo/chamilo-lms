@@ -1084,7 +1084,11 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
             $session_img = api_get_session_image($document_data['session_id'], $_user['status']);
 
             // Document title with link
-            $row[] = create_document_link($document_data, false, null, $is_visible).$session_img.'<br />'.$invisibility_span_open.'<i>'.nl2br(htmlspecialchars($document_data['comment'], ENT_QUOTES, $charset)).'</i>'.$invisibility_span_close.$user_link;
+            $row[] = create_document_link($document_data, false, null, $is_visible).
+                $session_img.'<br />'.$invisibility_span_open.
+                '<i>'.nl2br(htmlspecialchars($document_data['comment'], ENT_QUOTES, $charset)).'</i>'.
+                $invisibility_span_close.
+                $user_link;
 
             // Comments => display comment under the document name
             $display_size = format_file_size($size);

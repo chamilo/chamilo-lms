@@ -47,6 +47,14 @@ class JuryMemberController extends CommonController
     {
         $trackExercise = \ExerciseLib::get_exercise_track_exercise_info($exeId);
 
+        $user = $this->getUser();
+        $userId = $user->getUserId();
+
+
+
+        //$jury = $this->getRepository()->getJuryByPresidentId($userId);
+
+
         if (empty($trackExercise)) {
             $this->createNotFoundException();
         }
@@ -57,15 +65,29 @@ class JuryMemberController extends CommonController
 
         $objExercise = new \Exercise($trackExercise['c_id']);
         $objExercise->read($trackExercise['exe_exo_id']);
-        $show_results = true;
 
         $totalScore = $totalWeighting = 0;
-
         $show_media = true;
-
         $tempParentId = null;
         $mediaCounter = 0;
         $media_list = array();
+
+        $modelType = $objExercise->getScoreTypeModel();
+
+        $options = array();
+
+        if ($modelType) {
+            /** @var \Entity\QuestionScore $questionScoreName */
+            $questionScore = $this->get('orm.em')->getRepository('Entity\QuestionScore')->find($modelType);
+            if ($questionScore) {
+                $items = $questionScore->getItems();
+                /** @var \Entity\QuestionScoreName  $score */
+
+                foreach ($items as $score) {
+                    $options[$score->getId()] = $score->getName();
+                }
+            }
+        }
 
         $exerciseContent = null;
 
@@ -74,6 +96,7 @@ class JuryMemberController extends CommonController
             $choice = isset($exerciseResult[$questionId]) ? $exerciseResult[$questionId] : null;
 
             // Creates a temporary Question object
+            /** @var \Question $objQuestionTmp */
             $objQuestionTmp = \Question::read($questionId);
 
             if ($objQuestionTmp->parent_id != 0) {
@@ -94,7 +117,17 @@ class JuryMemberController extends CommonController
             $questionWeighting	= $objQuestionTmp->selectWeighting();
             $answerType			= $objQuestionTmp->selectType();
 
-            $question_result = $objExercise->manageAnswers($exeId, $questionId, $choice,'exercise_show', array(), false, true, $show_results);
+            $question_result = $objExercise->manageAnswers(
+                $exeId,
+                $questionId,
+                $choice,
+                'exercise_show',
+                array(),
+                false,
+                true,
+                true
+            );
+
             $questionScore   = $question_result['score'];
             $totalScore     += $question_result['score'];
 
@@ -103,24 +136,29 @@ class JuryMemberController extends CommonController
             $totalWeighting += $questionWeighting;
 
             $score = array();
-            if ($show_results) {
-                $score['result'] = get_lang('Score')." : ".\ExerciseLib::show_score($my_total_score, $my_total_weight, false, false);
-                $score['pass']   = $my_total_score >= $my_total_weight ? true : false;
-                $score['type']   = $answerType;
-                $score['score']  = $my_total_score;
-                $score['weight'] = $my_total_weight;
-                $score['comments'] = isset($comnt) ? $comnt : null;
-            }
+
+            $score['result'] = get_lang('Score')." : ".\ExerciseLib::show_score($my_total_score, $my_total_weight, false, false);
+            $score['pass']   = $my_total_score >= $my_total_weight ? true : false;
+            $score['type']   = $answerType;
+            $score['score']  = $my_total_score;
+            $score['weight'] = $my_total_weight;
+            $score['comments'] = isset($comnt) ? $comnt : null;
 
             $contents = ob_get_clean();
 
             $question_content = '<div class="question_row">';
-            $question_content .= $objQuestionTmp->return_header(null, $counter, $score, $show_media, $mediaCounter);
+
+            $question_content .= $objQuestionTmp->return_header($objExercise->feedback_type, $counter, $score, $show_media, $mediaCounter);
+            $question_content .= '</table>';
+
 
             // display question category, if any
             $question_content .= \Testcategory::getCategoryNamesForQuestion($questionId);
 
             $question_content .= $contents;
+            $question_content .= \Display::select('aa', $options);
+
+
             $question_content .= '</div>';
 
             $exerciseContent .= $question_content;

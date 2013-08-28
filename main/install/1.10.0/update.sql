@@ -27,6 +27,17 @@ CREATE TABLE jury_members (
     PRIMARY KEY(id)
 );
 
+DROP TABLE IF EXISTS track_attempt_jury;
+CREATE TABLE track_attempt_jury(
+    id int NOT NULL AUTO_INCREMENT,
+    exe_id INT,
+    question_id INT,
+    score float(6,2),
+    jury_member_id INT,
+    question_score_name_id INT,
+    PRIMARY KEY (id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 
 ALTER TABLE track_e_exercices ADD COLUMN jury_score float(6,2);
 ALTER TABLE track_e_exercices ADD COLUMN jury_id INT DEFAULT NULL;

@@ -384,6 +384,7 @@ $AreYouSureToDeleteResults = "Está seguro de querer eliminar los resultados";
 $ExerciseCopied = "Ejercicio copiado";
 $AreYouSureToCopy = "Está seguro de querer copiar";
 $EditingExerciseCauseProblemsInLP = "Editar un ejercicio causará problemas en Lecciones";
+$ExerciseWithFeedbackWithoutCorrectionComment = "Nota: Este ejercicio ha sido configurado para ocultar las respuestas esperadas.";
 $SessionIsReadOnly = "La sesión es de sólo lectura";
 $EnableTimerControl = "Habilitar control de tiempo";
 $ExerciseTotalDurationInMinutes = "Duración del ejercicio (en minutos)";

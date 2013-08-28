@@ -1261,13 +1261,13 @@ function generate_settings_form($settings, $settings_by_access_list, $settings_t
         switch ($row['variable']) {
             case 'pdf_export_watermark_enable':
                 $url =  PDF::get_watermark(null);
-                $form->addElement('file', 'pdf_export_watermark_path', get_lang('AddWaterMark'));
 
                 if ($url != false) {
-                    $delete_url = '<a href="?delete_watermark">'.Display::return_icon('delete.png',get_lang('DelImage')).'</a>';
-                    $form->addElement('html', '<a href="'.$url.'">'.$url.' '.$delete_url.'</a>');
+                    $delete_url = '<a href="?delete_watermark">'.get_lang('DelImage').' '.Display::return_icon('delete.png',get_lang('DelImage')).'</a>';
+                    $form->addElement('html', '<div style="max-height:100px; max-width:100px; margin-left:162px; margin-bottom:10px; clear:both;"><img src="'.$url.'" style="margin-bottom:10px;" />'.$delete_url.'</div>');
                 }
 
+                $form->addElement('file', 'pdf_export_watermark_path', get_lang('AddWaterMark'));
                 $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
                 $form->addRule('pdf_export_watermark_path', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 

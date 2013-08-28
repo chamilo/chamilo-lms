@@ -91,12 +91,12 @@ echo '</div>';
 
 echo '<div id="doc_form" class="span8">';
 
+$lp_item = new learnpathItem($lp_item_id);
 $form = new FormValidator('add_audio', 'post', api_get_self().'?action=add_audio&id='.$lp_item_id, null, array('enctype' => 'multipart/form-data'));
 $form->addElement('header', get_lang('UplUpload'));
+$form->addElement('html', $lp_item->get_title());
 $form->addElement('file', 'file', get_lang('AudioFile'), 'style="width: 250px"');
 $form->addElement('hidden', 'id', $lp_item_id);
-
-$lp_item = new learnpathItem($lp_item_id);
 
 if (isset($lp_item->audio) && !empty($lp_item->audio))  {
     $form->addElement('checkbox', 'delete_file', null, get_lang('RemoveAudio'));

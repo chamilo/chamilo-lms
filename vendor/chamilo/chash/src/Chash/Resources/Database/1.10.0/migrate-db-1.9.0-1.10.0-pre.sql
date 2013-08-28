@@ -97,6 +97,7 @@ ALTER TABLE session ADD INDEX idx_id_session_admin_id (session_admin_id);
 ALTER TABLE c_quiz_question ADD COLUMN parent_id INT unsigned NOT NULL DEFAULT 0;
 ALTER TABLE c_quiz ADD COLUMN email_notification_template TEXT DEFAULT '';
 ALTER TABLE c_quiz ADD COLUMN model_type INT DEFAULT 1;
+ALTER TABLE c_quiz ADD COLUMN score_type_model INT DEFAULT 0;
 
 CREATE TABLE IF NOT EXISTS gradebook_evaluation_type(id INT unsigned PRIMARY KEY NOT NULL AUTO_INCREMENT, name varchar(255), external_id INT unsigned NOT NULL DEFAULT 0);
 
@@ -366,9 +367,20 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('breadcrumb_navigation_display', 'true', 'Show');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('breadcrumb_navigation_display', 'false', 'Hide');
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('use_virtual_keyboard', NULL, 'radio', 'Platform', 'false','ShowVirtualKeyboardTitle','ShowVirtualKeyboardComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('use_virtual_keyboard', 'true', 'Show');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('use_virtual_keyboard', 'false', 'Hide');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('disable_copy_paste', NULL, 'radio', 'Platform', 'false','DisableCopyPasteTitle','DisableCopyPasteComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('disable_copy_paste', 'true', 'Show');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('disable_copy_paste', 'false', 'Hide');
+
 INSERT INTO settings_current(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)  VALUES ('showonline','session','checkbox','Platform','true','ShowOnlineTitle','ShowOnlineComment',NULL,'ShowOnlineSession', 0);
 
 ALTER TABLE c_quiz_category ADD COLUMN visibility INT default 1;
 
+ALTER TABLE c_quiz_question ADD INDEX idx_c_q_qst_cpt (c_id, parent_id, type);
+ALTER TABLE c_quiz_question_rel_category ADD INDEX idx_c_q_qst_r_cat_qc(question_id, c_id);
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.033' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.036' WHERE variable = 'chamilo_database_version';

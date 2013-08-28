@@ -957,6 +957,8 @@ VALUES
 ('settings_latest_update', NULL, NULL, NULL, '', '','', NULL, NULL, 0),
 ('user_name_order', NULL, 'textfield', 'Platform', '', 'UserNameOrderTitle', 'UserNameOrderComment', NULL, NULL, 1),
 ('allow_teachers_to_create_sessions', NULL,'radio','Session','false','AllowTeachersToCreateSessionsTitle','AllowTeachersToCreateSessionsComment', NULL, NULL, 0),
+('use_virtual_keyboard', NULL, 'radio', 'Platform', 'false','ShowVirtualKeyboardTitle','ShowVirtualKeyboardComment', NULL, NULL, 1),
+('disable_copy_paste', NULL, 'radio', 'Platform', 'false','DisableCopyPasteTitle','DisableCopyPasteComment', NULL, NULL, 1),
 ('login_as_allowed', NULL, 'radio', 'Security', 'true', 'AdminLoginAsAllowedTitle', 'AdminLoginAsAllowedComment', 1, 0, 1),
 ('admins_can_set_users_pass', NULL, 'radio', 'security', 'true', 'AdminsCanChangeUsersPassTitle', 'AdminsCanChangeUsersPassComment', 1, 0, 1),
 ('template', NULL, 'text', 'stylesheets', 'default', 'DefaultTemplateTitle', 'DefaultTemplateComment', NULL, NULL, 1),
@@ -1311,6 +1313,10 @@ VALUES
 ('session_page_enabled', 'false', 'No'),
 ('allow_teachers_to_create_sessions', 'true', 'Yes'),
 ('allow_teachers_to_create_sessions', 'false', 'No'),
+('use_virtual_keyboard', 'true', 'Yes'),
+('use_virtual_keyboard', 'false', 'No'),
+('disable_copy_paste', 'true', 'Yes'),
+('disable_copy_paste', 'false', 'No'),
 ('login_as_allowed','true','Yes'),
 ('login_as_allowed','false','No'),
 ('admins_can_set_users_pass','true','Yes'),
@@ -3082,18 +3088,25 @@ CREATE TABLE branch_sync(
   admin_phone varchar(250) default '',
   last_sync_trans_id bigint unsigned default 0,
   last_sync_trans_date datetime,
-  last_sync_type char(20) default 'full'
+  last_sync_type char(20) default 'full',
+  ssl_pub_key varchar(250) default '',
+  branch_type varchar(250) default null,
+  lft int unsigned,
+  rgt int unsigned,
+  lvl int unsigned,
+  root int unsigned,
+  parent_id int unsigned
 );
 
-DROP TABLE IF EXISTS branch_sync_log;
-CREATE TABLE branch_sync_log(
+INSERT INTO branch_sync (id, access_url_id, branch_name, branch_ip) VALUES (1, 1, 'Local', '127.0.0.1');
+
+DROP TABLE IF EXISTS branch_transaction_log;
+CREATE TABLE branch_transaction_log(
   id bigint unsigned not null AUTO_INCREMENT PRIMARY KEY,
-  branch_sync_id int unsigned not null,
-  sync_trans_id bigint unsigned default 0,
-  sync_trans_date datetime,
-  sync_type char(20)
+  transaction_id bigint unsigned not null default 0,
+  import_time datetime,
+  message mediumtext not null
 );
-
 
 DROP TABLE IF EXISTS branch_transaction_status;
 CREATE TABLE branch_transaction_status (
@@ -3110,14 +3123,18 @@ CREATE TABLE branch_transaction (
     branch_id int not null default 0,
     action char(20),
     item_id char(36),
-    orig_id char(36),
     dest_id char(36),
-    info char(20),
     status_id tinyint not null default 0,
     time_insert datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
     time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
     PRIMARY KEY (id, transaction_id, branch_id)
 );
+
+CREATE TABLE IF NOT EXISTS branch_transaction_data (
+    id bigint unsigned NOT NULL PRIMARY KEY,
+    data text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+);
+
 
 -- Stats database
 
@@ -3610,4 +3627,4 @@ CREATE TABLE curriculum_rel_user (
 
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.033' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.036' WHERE variable = 'chamilo_database_version';

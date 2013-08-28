@@ -520,6 +520,11 @@ $app->get('/data/default_platform_document/{file}', 'index.controller:getDefault
     ->assert('file', '.+')
     ->assert('type', '.+');
 
+/** Data default_platform_document files */
+$app->get('/data/default_course_document/{file}', 'index.controller:getDefaultCourseDocumentAction')
+    ->assert('file', '.+')
+    ->assert('type', '.+');
+
 /** User files */
 $app->match('/data/upload/users/{file}', 'index.controller:getUserFile', 'GET|POST')
     ->assert('file', '.+');

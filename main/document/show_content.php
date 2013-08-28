@@ -11,7 +11,6 @@
 /*   INITIALIZATION */
 
 $language_file[] = 'document';
-require_once '../inc/global.inc.php';
 
 // Protection
 api_protect_course_script();
@@ -58,18 +57,17 @@ if (is_dir($file_url_sys)) {
     api_not_allowed(true);
 }
 
-
-//Check user visibility
+// Check user visibility.
 //$is_visible = DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id(), api_get_user_id());
 $is_visible = DocumentManager::check_visibility_tree($document_id, api_get_course_id(), api_get_session_id(), api_get_user_id());
 if (!api_is_allowed_to_edit() && !$is_visible) {
     api_not_allowed(true);
 }
 
-
 //TODO:clean all code
 
 /*	Main section */
+
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 //header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 header('Last-Modified: Wed, 01 Jan 2100 00:00:00 GMT');
@@ -81,7 +79,7 @@ $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$head
 
 $pathinfo = pathinfo($header_file);
 
-if ($pathinfo['extension']=='wav' && preg_match('/_chnano_.wav/i', $file_url_web) && api_get_setting('enable_nanogong') == 'true'){
+if ($pathinfo['extension']=='wav' && preg_match('/_chnano_.wav/i', $file_url_web) && api_get_setting('enable_nanogong') == 'true') {
 	echo '<div align="center">';
 		echo '<br/>';
 		echo '<applet id="applet" archive="../inc/lib/nanogong/nanogong.jar" code="gong.NanoGong" width="160" height="40" >';
@@ -92,6 +90,22 @@ if ($pathinfo['extension']=='wav' && preg_match('/_chnano_.wav/i', $file_url_web
 		echo '</applet>';
 	echo '</div>';
 } else {
-	if ($pathinfo['extension']=='swf') { $width='83%'; $height='83%';} else {$width='100%'; $height='100%';}
-	echo '<iframe border="0" frameborder="0" scrolling="no" style="width:'.$width.'; height:'.$height.';background-color:#ffffff;" id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 1000).'"></iframe>';
+	if ($pathinfo['extension']=='swf') {
+        $width='83%';
+        $height='83%';
+    } else {
+        $width='100%'; $height='100%';
+    }
+	echo '<iframe border="0" frameborder="0" scrolling="no"
+	            style="width:'.$width.';
+	            height:'.$height.';
+	            background-color:#ffffff;"
+	            id="mainFrame"
+	            name="mainFrame"
+	            src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 1000).'">
+          </iframe>';
 }
+
+$app['template.show_footer'] = false;
+$app['template.show_header'] = false;
+

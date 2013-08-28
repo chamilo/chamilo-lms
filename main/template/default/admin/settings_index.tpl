@@ -12,10 +12,8 @@ $(function() {
 });
 </script>
 <div id="settings">
-    <div class="row">
 
     {% for block_item in blocks %}
-
         {% if loop.index % 2 == 1 %}
             {% if app.full_width == 1 %}
                 <div class="row-fluid">
@@ -55,5 +53,4 @@ $(function() {
         {% endif %}
     {% endfor %}
     </div>
-</div>
 {% endblock %}

@@ -189,8 +189,10 @@ class SessionManager
         $where = 'WHERE 1 = 1 ';
         $user_id = api_get_user_id();
 
-        if (api_is_session_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false') {
-            $where .=" AND s.session_admin_id = $user_id ";
+        if (!api_is_platform_admin()) {
+            if (api_is_session_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false') {
+                $where .=" AND s.session_admin_id = $user_id ";
+            }
         }
 
         if (!api_is_platform_admin() && api_is_teacher() && api_get_setting('allow_teachers_to_create_sessions') == 'true') {
@@ -234,16 +236,16 @@ class SessionManager
 
         $query .= $order;
         $query .= $limit;
-
         $result = Database::query($query);
 
         $formatted_sessions = array();
 
         if (Database::num_rows($result)) {
-            $sessions   = Database::store_result($result, 'ASSOC');
+            $sessions = Database::store_result($result, 'ASSOC');
             if ($get_count) {
                 return $sessions[0]['total_rows'];
             }
+
             foreach ($sessions as $session) {
 
                 $session_id = $session['id'];
@@ -2093,7 +2095,7 @@ class SessionManager
      * @param $courseId
      * @return array
      */
-    static function get_session_by_course($courseId) 
+    static function get_session_by_course($courseId)
     {
         $table_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $table_session = Database::get_main_table(TABLE_MAIN_SESSION);

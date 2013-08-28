@@ -266,6 +266,9 @@ define('WEB_DATA_COURSE_PATH', 'WEB_DATA_COURSE_PATH');
 define('WEB_DATA_PATH', 'WEB_DATA_PATH');
 define('REL_DATA_PATH', 'REL_DATA_PATH');
 
+define('SYS_DEFAULT_COURSE_DOCUMENT_PATH', 'SYS_DEFAULT_COURSE_DOCUMENT_PATH');
+define('WEB_DEFAULT_COURSE_DOCUMENT_PATH', 'WEB_DEFAULT_COURSE_DOCUMENT_PATH');
+
 // Constants for requesting path conversion.
 define('TO_WEB', 'TO_WEB');
 define('TO_SYS', 'TO_SYS');
@@ -523,31 +526,19 @@ function api_get_path($path_type, $path = null) {
     global $app;
 
     static $paths = array(
-        WEB_PATH                => '',
-        SYS_PATH                => '',
         SYS_DATA_PATH           => 'data/',
         SYS_WEB_PATH            => 'web/',
         SYS_CONFIG_PATH         => 'config/',
         SYS_LOG_PATH            => 'logs/',
-        REL_PATH                => '',
-        WEB_SERVER_ROOT_PATH    => '',
-        SYS_SERVER_ROOT_PATH    => '',
-        WEB_COURSE_PATH         => '',
         WEB_DATA_COURSE_PATH    => 'courses/',
         WEB_DATA_PATH           => '/',
         SYS_COURSE_PATH         => 'data/',
-        REL_COURSE_PATH         => '',
-        REL_CODE_PATH           => '',
-        REL_DATA_PATH           => '',
-        WEB_CODE_PATH           => '',
-        SYS_CODE_PATH           => '',
         SYS_CSS_PATH            => 'css/',
         SYS_LANG_PATH           => 'lang/',
         WEB_IMG_PATH            => 'img/',
         WEB_CSS_PATH            => 'css/',
         SYS_PLUGIN_PATH         => 'plugin/',
         WEB_PLUGIN_PATH         => 'plugin/',
-        SYS_ARCHIVE_PATH        => 'temp/',
         WEB_ARCHIVE_PATH        => 'temp/',
         INCLUDE_PATH            => 'inc/',
         LIBRARY_PATH            => 'inc/lib/',
@@ -576,11 +567,12 @@ function api_get_path($path_type, $path = null) {
     static $code_folder;
     static $course_folder;
 
-    // Always load root_web modifications for multiple url features
+    // Always load root_web modifications for multiple url features.
     global $_configuration;
 
-    //default $_configuration['root_web'] configuration
-    $root_web = isset($_configuration['root_web']) ? $_configuration['root_web'] : null;
+    // Default $_configuration['root_web'] configuration
+    //$root_web = isset($_configuration['root_web']) ? $_configuration['root_web'] : $app['url_generator'];
+    $root_web = $_configuration['root_web'];
 
     // Configuration data for already installed system.
     $root_sys = isset($_configuration['root_sys']) ? $_configuration['root_sys'] : $app['root_sys'];
@@ -597,71 +589,39 @@ function api_get_path($path_type, $path = null) {
         }
     }
 
+
     if (!$is_this_function_initialized) {
-        $root_rel       = $_configuration['url_append'];
+        $root_rel = $_configuration['url_append'];
 
         $code_folder    = 'main/';
         //$course_folder  = isset($_configuration['course_folder']) ? $_configuration['course_folder'] : null;
         $course_folder  = "courses/";
-
-        // Support for the installation process.
-        // Developers might use the function api_get_path() directly or indirectly (this is difficult to be traced), at the moment when
-        // configuration has not been created yet. This is why this function should be upgraded to return correct results in this case.
-
-        //if (defined('SYSTEM_INSTALLATION') && SYSTEM_INSTALLATION)
-
-        if (empty($root_web)) {
-
-            //$pos = strpos(($requested_page_rel = api_get_self()), 'index.php');
-            $pos = strpos(($requested_page_rel = api_get_self()), 'web/index');
-            $pos_install = strpos(($requested_page_rel = api_get_self()), 'main/install');
-
-            if ($pos_install) {
-                $pos = $pos_install;
-            }
-            //if (() !== false) {
-                $root_rel = substr($requested_page_rel, 0, $pos);
-                // See http://www.mediawiki.org/wiki/Manual:$wgServer
-                $server_protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
-                $server_name =
-                    isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME']
-                    : (isset($_SERVER['HOSTNAME']) ? $_SERVER['HOSTNAME']
-                    : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST']
-                    : (isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR']
-                    : 'localhost')));
-                if (isset($_SERVER['SERVER_PORT']) && !strpos($server_name, ':')
-                    && (($server_protocol == 'http'
-                    && $_SERVER['SERVER_PORT'] != 80 ) || ($server_protocol == 'https' && $_SERVER['SERVER_PORT'] != 443 ))) {
-                    $server_name .= ":" . $_SERVER['SERVER_PORT'];
-                }
-                $root_web = $server_protocol.'://'.$server_name.$root_rel;
-                $root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../../')).'/';
-            //}
-            // Here we give up, so we don't touch anything.
-        }
 
         // Dealing with trailing slashes.
         $root_web       = api_add_trailing_slash($root_web);
         $root_sys       = api_add_trailing_slash($root_sys);
         $root_rel       = api_add_trailing_slash($root_rel);
         $code_folder    = api_add_trailing_slash($code_folder);
-
         $course_folder  = api_add_trailing_slash($course_folder);
 
         // Web server base and system server base.
         $server_base_web = preg_replace('@'.$root_rel.'$@', '', $root_web); // No trailing slash.
         $server_base_sys = preg_replace('@'.$root_rel.'$@', '', $root_sys); // No trailing slash.
 
-        // Initialization of a table taht contains common-purpose paths.
+        // Initialization of a table that contains common-purpose paths.
         $paths[WEB_PATH]                = $root_web;
         $paths[WEB_PUBLIC_PATH]         = $root_web.'web/';
         $paths[SYS_PATH]                = $root_sys;
 
-        //update data path to get it from config file if defined
-        $paths[SYS_DATA_PATH]           = $root_sys.'data/';
+        // Update data path to get it from config file if defined
+        $paths[SYS_DATA_PATH]           = $app['sys_data_path'];
+        $paths[SYS_LOG_PATH]            = $app['sys_log_path'];
+        $paths[SYS_CONFIG_PATH]         = $app['sys_config_path'];
+        $paths[SYS_COURSE_PATH]         = $app['sys_course_path'];
+
+        $paths[SYS_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[SYS_DATA_PATH].'default_course_document/';
+
         $paths[SYS_WEB_PATH]            = $root_sys.'web/';
-        $paths[SYS_LOG_PATH]            = $root_sys.'logs/';
-        $paths[SYS_CONFIG_PATH]         = $root_sys.'config/';
 
         $paths[REL_PATH]                = $root_rel;
         $paths[WEB_SERVER_ROOT_PATH]    = $server_base_web.'/';
@@ -671,7 +631,8 @@ function api_get_path($path_type, $path = null) {
         $paths[WEB_COURSE_PATH]         = $root_web.$course_folder;
         $paths[WEB_DATA_COURSE_PATH]    = $paths[WEB_DATA_PATH].$course_folder;
 
-        $paths[SYS_COURSE_PATH]         = $paths[SYS_DATA_PATH].$course_folder;
+        $paths[WEB_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[WEB_DATA_PATH].'default_course_document/';
+
         $paths[REL_COURSE_PATH]         = $root_rel.$course_folder;
         $paths[REL_CODE_PATH]           = $root_rel.$code_folder;
         $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
@@ -682,7 +643,7 @@ function api_get_path($path_type, $path = null) {
         // Now we can switch into api_get_path() "terminology".
         $paths[SYS_LANG_PATH]           = $paths[SYS_CODE_PATH].$paths[SYS_LANG_PATH];
         $paths[SYS_PLUGIN_PATH]         = $paths[SYS_PATH].$paths[SYS_PLUGIN_PATH];
-        $paths[SYS_ARCHIVE_PATH]        = $paths[SYS_PATH].$paths[SYS_ARCHIVE_PATH];
+        $paths[SYS_ARCHIVE_PATH]        = $app['sys_temp_path'];
         $paths[SYS_TEST_PATH]           = $paths[SYS_PATH].$paths[SYS_TEST_PATH];
         $paths[SYS_TEMPLATE_PATH]       = $paths[SYS_CODE_PATH].$paths[SYS_TEMPLATE_PATH];
         $paths[SYS_CSS_PATH]            = $paths[SYS_CODE_PATH].$paths[SYS_CSS_PATH];
@@ -690,7 +651,7 @@ function api_get_path($path_type, $path = null) {
         $paths[WEB_CSS_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_CSS_PATH];
         $paths[WEB_IMG_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_IMG_PATH];
         $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
-        //$paths[WEB_AJAX_PATH]           = $paths[WEB_CODE_PATH].$paths[WEB_AJAX_PATH];
+
         $paths[WEB_AJAX_PATH]           = $paths[WEB_PUBLIC_PATH].'main/'.$paths[WEB_AJAX_PATH];
 
         $paths[WEB_PLUGIN_PATH]         = $paths[WEB_PATH].$paths[WEB_PLUGIN_PATH];
@@ -809,6 +770,7 @@ function api_get_path($path_type, $path = null) {
                 $path = $matches[1].'courses/'.$sys_course_code.'/document/'.str_replace('//', '/', $matches[3].'/'.$matches[2]);
             }
         }
+
         // Replacement of the present web server base with a slash '/'.
         $path = preg_replace(VALID_WEB_SERVER_BASE, '/', $path);
 
@@ -816,7 +778,7 @@ function api_get_path($path_type, $path = null) {
         $path = preg_replace('@^'.$server_base_sys.'@', '', $path);
     } elseif (strpos($path, '/') === 0) {
         // Leading slash - we assume that this path is semi-absolute (REL),
-        // then path is left without furthes modifications.
+        // then path is left without further modifications.
     } else {
         return null; // Probably implementation of this case won't be needed.
     }
@@ -2007,7 +1969,8 @@ function api_get_session_info($session_id, $add_extra_values = false) {
     return $data;
 }
 
-function api_get_session_date_validation($session_info, $course_code, $ignore_visibility_for_admins = true, $check_coach_dates = true) {
+function api_get_session_date_validation($session_info, $course_code, $ignore_visibility_for_admins = true, $check_coach_dates = true)
+{
     if (api_is_platform_admin()) {
         if ($ignore_visibility_for_admins) {
             return true;
@@ -2015,20 +1978,20 @@ function api_get_session_date_validation($session_info, $course_code, $ignore_vi
     }
 
     $session_id = $session_info['id'];
-
     $now = time();
-
     $access = false;
 
     if ($session_info) {
 
         // I don't care the field visibility because there are not limit dates.
-        if ($session_info['access_start_date'] == '0000-00-00 00:00:00' && $session_info['access_end_date'] == '0000-00-00 00:00:00') {
+        if (
+            (empty($session_info['access_start_date']) && empty($session_info['access_end_date'])) ||
+            ($session_info['access_start_date'] == '0000-00-00 00:00:00' && $session_info['access_end_date'] == '0000-00-00 00:00:00')) {
             return true;
         } else {
             $accessStart = true;
 
-            //If access_start_date is set
+            // If access_start_date is set
             if (!empty($session_info['access_start_date']) && $session_info['access_start_date'] != '0000-00-00 00:00:00') {
                 if ($now > api_strtotime($session_info['access_start_date'], 'UTC')) {
                     $access = true;
@@ -6904,20 +6867,8 @@ function api_get_language_interface()
             $language_interface = api_get_setting('platformLanguage');
         }
     }
-
     return $language_interface;
 }
-
-function api_get_default_course_document()
-{
-    return api_get_path(SYS_PATH).'app/data/default_course_document/';
-}
-
-function api_get_web_default_course_document()
-{
-    return api_get_path(WEB_PATH).'app/data/default_course_document/';
-}
-
 
 /**
  * Get user roles

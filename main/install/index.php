@@ -18,6 +18,7 @@ require_once '../inc/lib/api.lib.php';
 error_reporting(-1);
 
 use Symfony\Component\Console\Output\Output;
+use Symfony\Component\HttpFoundation\Request;
 
 class BufferedOutput extends Output
 {
@@ -41,7 +42,15 @@ class BufferedOutput extends Output
 
 $app = new Silex\Application();
 
+// Setting Chamilo paths
 $app['root_sys'] = dirname(dirname(__DIR__)).'/';
+$app['sys_root'] = $app['root_sys'];
+$app['sys_data_path'] = isset($_configuration['sys_data_path']) ? $_configuration['sys_data_path'] : $app['root_sys'].'data/';
+$app['sys_config_path'] = isset($_configuration['sys_config_path']) ? $_configuration['sys_config_path'] : $app['root_sys'].'config/';
+$app['sys_course_path'] = isset($_configuration['sys_course_path']) ? $_configuration['sys_course_path'] : $app['sys_data_path'].'/course';
+$app['sys_log_path'] = isset($_configuration['sys_log_path']) ? $_configuration['sys_log_path'] : $app['root_sys'].'logs/';
+$app['sys_temp_path'] = isset($_configuration['sys_temp_path']) ? $_configuration['sys_temp_path'] : $app['sys_data_path'].'temp/';
+
 
 // Registering services
 
@@ -56,7 +65,6 @@ $app['translator'] = $app->share($app->extend('translator', function($translator
     $translator->addResource('yaml', __DIR__.'/lang/fr.yml', 'fr');
     $translator->addResource('yaml', __DIR__.'/lang/en.yml', 'en');
     $translator->addResource('yaml', __DIR__.'/lang/es.yml', 'es');*/
-
     return $translator;
 }));
 
@@ -108,23 +116,16 @@ $console->addCommands(
         new \Doctrine\DBAL\Migrations\Tools\Console\Command\StatusCommand(),
         new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand(),
 
-        // Chamilo commands.
-        new ChamiloLMS\Command\Database\UpgradeCommand(),
-        new ChamiloLMS\Command\Database\InstallCommand(),
-        new ChamiloLMS\Command\Database\StatusCommand(),
-        new ChamiloLMS\Command\Database\SetupCommand(),
-
         // Chash commands.
-        /*new Chash\Command\Database\RunSQLCommand(),
-        new Chash\Command\Database\DumpCommand(),
-        new Chash\Command\Database\RestoreCommand(),
-        new Chash\Command\Database\SQLCountCommand(),
-        new Chash\Command\Database\FullBackupCommand(),
-        new Chash\Command\Database\DropDatabaseCommand(),
+        new Chash\Command\Installation\UpgradeCommand(),
+        new Chash\Command\Installation\InstallCommand(),
+
+        new Chash\Command\Files\CleanDataFilesCommand(),
         new Chash\Command\Files\CleanTempFolderCommand(),
-        new Chash\Command\Files\CleanConfigFiles(),
-        new Chash\Command\Translation\ExportLanguageCommand(),
-        new Chash\Command\Translation\ImportLanguageCommand()*/
+        new Chash\Command\Files\CleanConfigFilesCommand(),
+        new Chash\Command\Files\MailConfCommand(),
+        new Chash\Command\Files\SetPermissionsAfterInstallCommand(),
+        new Chash\Command\Files\GenerateTempFileStructureCommand(),
     )
 );
 
@@ -138,7 +139,9 @@ foreach ($helpers as $name => $helper) {
 }
 
 $blockInstallation = function() use($app) {
-    if (file_exists($app['root_sys'].'config/configuration.php') || file_exists($app['root_sys'].'config/configuration.yml')) {
+    if (file_exists($app['root_sys'].'config/configuration.php') ||
+        file_exists($app['root_sys'].'config/configuration.yml')
+    ) {
         return $app->abort(500, "A Chamilo installation was found. You can't reinstall.");
     }
 };
@@ -194,6 +197,7 @@ $app->match('/requirements', function() use($app) {
 
 
 $app->match('/check-database', function() use($app) {
+    /** @var Request $request */
     $request = $app['request'];
 
     $command = $app['console']->get('chamilo:install');
@@ -257,11 +261,6 @@ $app->match('/check-database', function() use($app) {
             } catch (Exception $e) {
                 $app['session']->getFlashBag()->add('success', 'Connection error !'.$e->getMessage());
             }
-
-            // do something with the data
-
-            // redirect somewhere
-            //return $app->redirect('...');
         }
     }
 
@@ -355,7 +354,7 @@ $app->match('/resume', function() use($app) {
     if (!empty($portalSettings) && !empty($databaseSettings) && !empty($adminSettings)) {
 
         $form = $app['form.factory']->createBuilder('form', $data)
-            ->add('install', 'submit', array('label' => 'Continue'))
+            ->add('install', 'submit', array('label' => 'Install'))
             ->getForm();
 
         if ('POST' == $request->getMethod()) {
@@ -387,7 +386,7 @@ $app->match('/installing', function() use($app) {
     $adminSettings = $app['session']->get('admin_settings');
     $databaseSettings = $app['session']->get('database_settings');
 
-    /** @var \ChamiloLMS\Command\Database\InstallCommand $command */
+    /** @var Chash\Command\Installation\InstallCommand $command */
     $command = $app['console']->get('chamilo:install');
 
     $def = $command->getDefinition();

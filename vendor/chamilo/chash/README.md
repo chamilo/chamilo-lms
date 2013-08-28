@@ -1,26 +1,43 @@
 Chamilo Shell script
 ====================
 
-The Chamilo Shell (or "Chash", as inspired by Drupal's "Drush") is a 
-command-line PHP tool meant to speed up the management of (multiple) 
+The Chamilo Shell ("Chash") is a command-line PHP tool meant to speed up the management of (multiple)
 Chamilo portals under Linux.
 
-To get the most out of Chash, you should move the chash.phar file to your
-/usr/local/bin directory. You can do this getting inside the directory where
-you put chash.phar and doing:
+Installation
+====================
 
-    chmod +x chash.phar
-    sudo ln -s /path/to/chash.phar /usr/local/bin/chash
+    git clone https://github.com/chamilo/chash.git
+    cd chash
+    composer install
 
-Then you can launch chash by moving into any Chamilo installation directory and
-typing
+Usage
+====================
 
-    chash
+In a Chamilo installation folder located in "/var/www/chamilo"
 
-It will give you the details of what command you can use to run it properly.
+    cd /var/www/chamilo
+    php /path/chash/chash.php chamilo:status
 
-The most useful command to us until now has been the "chash database:sql" command,
-which puts you directly into a MySQL client session.
+    Chamilo $_configuration info:
+    Chamilo $_configuration[root_web]: http://localhost/chamilo-1.8.7.1-stable/
+    Chamilo $_configuration[root_sys]: /var/www/chamilo-1.8.7.1-stable/
+    Chamilo $_configuration[main_database]: chamilo18777_chamilo_main
+    Chamilo $_configuration[db_host]: localhost
+    Chamilo $_configuration[db_user]: root
+    Chamilo $_configuration[db_password]: root
+    Chamilo $_configuration[single_database]:
+    Chamilo $_configuration[db_glue]: `.`
+    Chamilo $_configuration[table_prefix]:
+
+    Chamilo database settings:
+    Chamilo setting_current['chamilo_database_version']: 1.9.0.18715
+    Chamilo $_configuration[system_version]: 1.9.6
+
+
+Inside a chamilo folder execute db:sql_cli in order to enter to the SQL client of the Chamilo database:
+
+    php /path/chash.php db:sql_cli --conf=main/inc/conf/configuration.php
 
 Building the chash.phar file
 ====================
@@ -64,8 +81,34 @@ If you're using php 5.3 with suhosin the phar will not be executed you can try t
 
 or you can change this setting in your /etc/php5/cli/conf.d/suhosin.ini file (look for "executor"), although this might increase the vulnerability of your system.
 
+Make it global
+====================
+
+To get the most out of Chash, you should move the chash.phar file to your
+/usr/local/bin directory. You can do this getting inside the directory where
+you put chash.phar and doing:
+
+    chmod +x chash.phar
+    sudo ln -s /path/to/chash.phar /usr/local/bin/chash
+
+Then you can launch chash by moving into any Chamilo installation directory and
+typing
+
+    chash
+
+It will give you the details of what command you can use to run it properly.
+
+The most useful command to us until now has been the "chash database:sql" command,
+which puts you directly into a MySQL client session.
+
 Available commands:
 ====================
+
+    chamilo
+      chamilo:install          Execute a Chamilo installation to a specified version
+      chamilo:status           Show the information of the current Chamilo installation
+      chamilo:upgrade          Execute a chamilo migration to a specified version or the latest available version.
+      chamilo:wipe             Prepares a portal for a new installation
 
     db
         db:drop_databases       Drops all databases from the current Chamilo install
@@ -92,14 +135,6 @@ Available commands:
         user:make_admin               Makes the given user admin on the main portal
         user:reset_login              Outputs login link for given username
         user:set_language             Sets the users language to the one given
-
-Usage
-====================
-
-Inside a chamilo folder execute db:sql_cli in order to enter to the SQL client of the Chamilo database:
-
-    chash.phar db:sql_cli
-
 
 Licensing
 =========

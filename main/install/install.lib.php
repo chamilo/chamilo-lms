@@ -1008,6 +1008,7 @@ function display_requirements($app, $installType)
     } else {
         $html .= '<strong><font color="green">'.translate('PHPVersionOK').' '.phpversion().'</font></strong>';
     }
+
     $html .= '</td>
             </tr>
             <tr>
@@ -1071,20 +1072,14 @@ function display_requirements($app, $installType)
         translate('ExtensionGDNotAvailable')
     ).'</td>
             </tr>
-
-
              <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/fr/book.imagick.php" target="_blank">ImageMagick</a> '.translate(
         'support'
     ).' ('.translate('Optional').')</td>
                 <td class="requirements-value">'.check_extension('imagick', translate('Yes'), translate('No'), true).'</td>
             </tr>
-
-
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.json.php" target="_blank">JSON</a> '.translate(
-        'support'
-    ).'</td>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.json.php" target="_blank">JSON</a> '.translate('support').'</td>
                 <td class="requirements-value">'.check_extension('json', translate('Yes'), translate('No')).'</td>
             </tr>
             <tr>
@@ -1111,12 +1106,6 @@ function display_requirements($app, $installType)
     ).' ('.translate('Optional').')</td>
                 <td class="requirements-value">'.check_extension('curl', translate('Yes'), translate('No'), true).'</td>
             </tr>
-
-
-
-
-
-
           </table>';
     $html .= '  </div>';
     $html .= '</div>';
@@ -1281,18 +1270,6 @@ function display_requirements($app, $installType)
                 <td class="requirements-value">'.check_writable_root_path('logs').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">[chamilo]/temp</td>
-                <td class="requirements-value">'.check_writable_root_path('temp').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item">[chamilo]/temp/twig</td>
-                <td class="requirements-value">'.check_writable_root_path('temp').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item">[chamilo]/main/default_course_document/images/</td>
-                <td class="requirements-value">'.check_writable('default_course_document/images/').'</td>
-            </tr>
-            <tr>
                 <td class="requirements-item">'.translate('CourseTestWasCreated').'</td>
                 <td class="requirements-value">'.$course_test_was_created.' </td>
             </tr>
@@ -1328,7 +1305,7 @@ function display_requirements($app, $installType)
         @chmod($checked_writable, $perm);
     }
 
-    $checked_writable = api_get_path(SYS_CODE_PATH).'default_course_document/images/';
+    $checked_writable = api_get_path(SYS_DEFAULT_COURSE_DOCUMENT_PATH).'images/';
     if (!is_writable($checked_writable)) {
         $notwritable[] = $checked_writable;
         @chmod($checked_writable, $perm);

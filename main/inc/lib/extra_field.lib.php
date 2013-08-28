@@ -393,7 +393,11 @@ class ExtraField extends Model
         return $string;
     }
 
-    function clean_parameters($params)
+    /**
+     * @param array $params
+     * @return array
+     */
+    public function clean_parameters($params)
     {
         if (!isset($params['field_variable']) || empty($params['field_variable'])) {
             $params['field_variable'] = trim(strtolower(str_replace(" ", "_", $params['field_display_text'])));
@@ -407,10 +411,15 @@ class ExtraField extends Model
         return $params;
     }
 
+    /**
+     * @param array $params
+     * @param bool $show_query
+     * @return bool
+     */
     public function save($params, $show_query = false)
     {
         $session_field_info = self::get_handler_field_info_by_field_variable($params['field_variable']);
-        $params             = self::clean_parameters($params);
+        $params = self::clean_parameters($params);
         if ($session_field_info) {
             return $session_field_info['id'];
         } else {
@@ -1113,6 +1122,11 @@ EOF;
 
     }
 
+    /**
+     * @param string $url
+     * @param string $action
+     * @return FormValidator
+     */
     public function return_form($url, $action)
     {
         $form = new FormValidator($this->type.'_field', 'post', $url);
@@ -1152,6 +1166,7 @@ EOF;
             get_lang('FieldPossibleValues'),
             array('id' => 'field_options', 'class' => 'span6')
         );
+
         if ($action == 'edit') {
             if (in_array(
                 $defaults['field_type'],

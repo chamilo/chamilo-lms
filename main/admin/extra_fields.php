@@ -9,11 +9,11 @@
 $language_file = array('admin');
 
 $cidReset = true;
-require_once '../inc/global.inc.php';
 
 $extraFieldType =  isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 
 $this_section = SECTION_PLATFORM_ADMIN;
+
 api_protect_admin_script();
 
 //Add the JS needed to use the jqgrid

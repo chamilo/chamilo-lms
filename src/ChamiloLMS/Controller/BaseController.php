@@ -130,11 +130,11 @@ abstract class BaseController extends FlintController
      */
     public function getUser()
     {
-        if (!$this->has('security.context')) {
+        if (!$this->has('security')) {
             throw new \LogicException('The SecurityServiceProvider is not registered in your application.');
         }
 
-        if (null === $token = $this->get('security.context')->getToken()) {
+        if (null === $token = $this->get('security')->getToken()) {
             return null;
         }
 

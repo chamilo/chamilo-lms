@@ -28,16 +28,33 @@ class MediaQuestion extends Question
     public function saveMedia($params)
     {
         $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $course_id = '';
+        $questionName = '';
+
+        if (!empty($this->course['real_id'])) {
+            $course_id = $this->course['real_id'];
+        } else {
+            throw new Exception('Missing $this->course info in MediaQuestion::saveMedia()');
+        }
+
+        if (isset($params['questionName'])) {
+            $questionName = $params['questionName'];
+        } else {
+            throw new Exception('Missing questionName in $params in MediaQuestion::saveMedia()');
+        }
+
+        $questionDescription = isset($params['questionDescription']) ? $params['questionDescription'] : '';
+
         $new_params = array(
-            'c_id'          => $this->course['real_id'],
-            'question'      => $params['questionName'],
-            'description'   => $params['questionDescription'],
+            'c_id'          => $course_id,
+            'question'      => $questionName,
+            'description'   => $questionDescription,
             'parent_id'     => 0,
             'type'          => MEDIA_QUESTION
         );
 
         if (isset($this->id) && !empty($this->id)) {
-            Database::update($table_question, $new_params, array('iid = ? and c_id = ?' => array($this->id, $this->course['real_id'])));
+            Database::update($table_question, $new_params, array('iid = ? and c_id = ?' => array($this->id, $course_id)));
         } else {
             return Database::insert($table_question, $new_params);
         }

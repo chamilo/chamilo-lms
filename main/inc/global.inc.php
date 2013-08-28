@@ -87,7 +87,8 @@ $app['root_sys'] = isset($_configuration['root_sys']) ? $_configuration['root_sy
 $app['sys_root'] = $app['root_sys'];
 $app['sys_data_path'] = isset($_configuration['sys_data_path']) ? $_configuration['sys_data_path'] : $app['root_sys'].'data/';
 $app['sys_config_path'] = isset($_configuration['sys_config_path']) ? $_configuration['sys_config_path'] : $app['root_sys'].'config/';
-$app['sys_temp_path'] = isset($_configuration['sys_temp_path']) ? $_configuration['sys_temp_path'] : $app['root_sys'].'temp/';
+$app['sys_course_path'] = isset($_configuration['sys_course_path']) ? $_configuration['sys_course_path'] : $app['sys_data_path'].'/courses/';
+$app['sys_temp_path'] = isset($_configuration['sys_temp_path']) ? $_configuration['sys_temp_path'] : $app['sys_data_path'].'temp/';
 $app['sys_log_path'] = isset($_configuration['sys_log_path']) ? $_configuration['sys_log_path'] : $app['root_sys'].'logs/';
 
 /** Loading config files (mail, auth, profile) */
@@ -489,27 +490,37 @@ use Symfony\Component\Finder\Finder;
 $app->before(
 
     function () use ($app) {
-        // Checking configuration file
+         /** @var Request $request */
+        $request = $app['request'];
+
+        // Checking configuration file. If does not exists redirect to the install folder.
         if (!file_exists($app['configuration_file']) && !file_exists($app['configuration_yml_file'])) {
-            return new RedirectResponse(api_get_path(WEB_CODE_PATH).'install');
-            $app->abort(500, "Configuration file was not found");
+            $url = str_replace('web', 'main/install', $request->getBasePath());
+            return new RedirectResponse($url);
+            //$app->abort(500, "Configuration file was not found.");
         }
 
         // Check the PHP version.
         if (api_check_php_version() == false) {
-            $app->abort(500, "Incorrect PHP version");
+            $app->abort(500, "Incorrect PHP version.");
         }
 
         // Checks temp folder permissions.
         if (!is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
-            $app->abort(500, "temp folder must be writable");
+            $app->abort(500, "temp folder must be writable.");
         }
 
-        /** @var Request $request */
-        $request = $app['request'];
+        if (!isset($app['configuration'])) {
+            $app->abort(500, '$configuration array must be set in the configuration.php file.');
+        }
+
+        if (!isset($app['configuration']['root_web'])) {
+            $app->abort(500, '$configuration[root_web] must be set in the configuration.php file.');
+        }
 
         // Starting the session for more info see: http://silex.sensiolabs.org/doc/providers/session.html
         $request->getSession()->start();
+
         /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem $filesystem */
         $filesystem = $app['chamilo.filesystem'];
 

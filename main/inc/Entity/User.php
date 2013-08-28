@@ -363,8 +363,6 @@ class User implements AdvancedUserInterface, \Serializable
         return $this->roles;
     }
 
-
-
     /**
      * Set salt
      *

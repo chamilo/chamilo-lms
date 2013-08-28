@@ -20,9 +20,9 @@ class Diagnoser
     /**
      * The status's
      */
-    const STATUS_OK          = 1;
-    const STATUS_WARNING     = 2;
-    const STATUS_ERROR       = 3;
+    const STATUS_OK = 1;
+    const STATUS_WARNING = 2;
+    const STATUS_ERROR = 3;
     const STATUS_INFORMATION = 4;
 
     function __construct()
@@ -50,12 +50,12 @@ class Diagnoser
                 $html .= '<li>';
             }
             $params['section'] = $section;
-            $html .= '<a href="system_status.php?section='.$section.'">'.get_lang($section).'</a></li>';
+            $html .= '<a href="system_status.php?section=' . $section . '">' . get_lang($section) . '</a></li>';
         }
 
         $html .= '</ul><div class="tab-pane">';
 
-        $data = call_user_func(array($this, 'get_'.$current_section.'_data'));
+        $data = call_user_func(array($this, 'get_' . $current_section . '_data'));
         echo $html;
         $table = new SortableTableFromArray($data, 1, 100);
 
@@ -76,21 +76,19 @@ class Diagnoser
      */
     function get_chamilo_data()
     {
-        $array            = array();
+        $array = array();
         $writable_folders = array(
-            'archive',
-            'courses',
-            'home',
-            'main/upload/users/',
-            'main/default_course_document/images/'
+            'data/',
+            'main/upload/users/'
+
         );
         foreach ($writable_folders as $index => $folder) {
-            $writable = is_writable(api_get_path(SYS_PATH).$folder);
-            $status   = $writable ? self :: STATUS_OK : self :: STATUS_ERROR;
-            $array[]  = $this->build_setting(
+            $writable = is_writable(api_get_path(SYS_PATH) . $folder);
+            $status = $writable ? self :: STATUS_OK : self :: STATUS_ERROR;
+            $array[] = $this->build_setting(
                 $status,
                 '[FILES]',
-                get_lang('IsWritable').': '.$folder,
+                get_lang('IsWritable') . ': ' . $folder,
                 'http://be2.php.net/manual/en/function.is-writable.php',
                 $writable,
                 1,
@@ -99,12 +97,12 @@ class Diagnoser
             );
         }
 
-        $exists  = file_exists(api_get_path(SYS_CODE_PATH).'install');
-        $status  = $exists ? self :: STATUS_WARNING : self :: STATUS_OK;
+        $exists = file_exists(api_get_path(SYS_CODE_PATH) . 'install');
+        $status = $exists ? self :: STATUS_WARNING : self :: STATUS_OK;
         $array[] = $this->build_setting(
             $status,
             '[FILES]',
-            get_lang('DirectoryExists').': /install',
+            get_lang('DirectoryExists') . ': /install',
             'http://be2.php.net/file_exists',
             $exists,
             0,
@@ -113,7 +111,7 @@ class Diagnoser
         );
 
         $app_version = api_get_setting('chamilo_database_version');
-        $array[]     = $this->build_setting(
+        $array[] = $this->build_setting(
             self :: STATUS_INFORMATION,
             '[DB]',
             'chamilo_database_version',
@@ -138,22 +136,22 @@ class Diagnoser
         // General Functions
 
         $version = phpversion();
-        $status  = $version > REQUIRED_PHP_VERSION ? self :: STATUS_OK : self :: STATUS_ERROR;
+        $status = $version > REQUIRED_PHP_VERSION ? self :: STATUS_OK : self :: STATUS_ERROR;
         $array[] = $this->build_setting(
             $status,
             '[PHP]',
             'phpversion()',
             'http://www.php.net/manual/en/function.phpversion.php',
             phpversion(),
-            '>= '.REQUIRED_PHP_VERSION,
+            '>= ' . REQUIRED_PHP_VERSION,
             null,
             get_lang('PHPVersionInfo')
         );
 
-        $setting     = ini_get('output_buffering');
+        $setting = ini_get('output_buffering');
         $req_setting = 1;
-        $status      = $setting >= $req_setting ? self :: STATUS_OK : self :: STATUS_ERROR;
-        $array[]     = $this->build_setting(
+        $status = $setting >= $req_setting ? self :: STATUS_OK : self :: STATUS_ERROR;
+        $array[] = $this->build_setting(
             $status,
             '[INI]',
             'output_buffering',
@@ -164,10 +162,10 @@ class Diagnoser
             get_lang('OutputBufferingInfo')
         );
 
-        $setting     = ini_get('file_uploads');
+        $setting = ini_get('file_uploads');
         $req_setting = 1;
-        $status      = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_ERROR;
-        $array[]     = $this->build_setting(
+        $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_ERROR;
+        $array[] = $this->build_setting(
             $status,
             '[INI]',
             'file_uploads',
@@ -178,10 +176,10 @@ class Diagnoser
             get_lang('FileUploadsInfo')
         );
 
-        $setting     = ini_get('magic_quotes_runtime');
+        $setting = ini_get('magic_quotes_runtime');
         $req_setting = 0;
-        $status      = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_ERROR;
-        $array[]     = $this->build_setting(
+        $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_ERROR;
+        $array[] = $this->build_setting(
             $status,
             '[INI]',
             'magic_quotes_runtime',
@@ -192,10 +190,10 @@ class Diagnoser
             get_lang('MagicQuotesRuntimeInfo')
         );
 
-        $setting     = ini_get('safe_mode');
+        $setting = ini_get('safe_mode');
         $req_setting = 0;
-        $status      = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_WARNING;
-        $array[]     = $this->build_setting(
+        $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_WARNING;
+        $array[] = $this->build_setting(
             $status,
             '[INI]',
             'safe_mode',
@@ -206,10 +204,10 @@ class Diagnoser
             get_lang('SafeModeInfo')
         );
 
-        $setting     = ini_get('register_globals');
+        $setting = ini_get('register_globals');
         $req_setting = 0;
-        $status      = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_ERROR;
-        $array[]     = $this->build_setting(
+        $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_ERROR;
+        $array[] = $this->build_setting(
             $status,
             '[INI]',
             'register_globals',
@@ -220,10 +218,10 @@ class Diagnoser
             get_lang('RegisterGlobalsInfo')
         );
 
-        $setting     = ini_get('short_open_tag');
+        $setting = ini_get('short_open_tag');
         $req_setting = 0;
-        $status      = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_WARNING;
-        $array[]     = $this->build_setting(
+        $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_WARNING;
+        $array[] = $this->build_setting(
             $status,
             '[INI]',
             'short_open_tag',
@@ -234,10 +232,10 @@ class Diagnoser
             get_lang('ShortOpenTagInfo')
         );
 
-        $setting     = ini_get('magic_quotes_gpc');
+        $setting = ini_get('magic_quotes_gpc');
         $req_setting = 0;
-        $status      = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_ERROR;
-        $array[]     = $this->build_setting(
+        $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_ERROR;
+        $array[] = $this->build_setting(
             $status,
             '[INI]',
             'magic_quotes_gpc',
@@ -248,10 +246,10 @@ class Diagnoser
             get_lang('MagicQuotesGpcInfo')
         );
 
-        $setting     = ini_get('display_errors');
+        $setting = ini_get('display_errors');
         $req_setting = 0;
-        $status      = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_WARNING;
-        $array[]     = $this->build_setting(
+        $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_WARNING;
+        $array[] = $this->build_setting(
             $status,
             '[INI]',
             'display_errors',
@@ -267,8 +265,8 @@ class Diagnoser
             $setting = null;
         }
         $req_setting = null;
-        $status      = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_ERROR;
-        $array[]     = $this->build_setting(
+        $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_ERROR;
+        $array[] = $this->build_setting(
             $status,
             '[INI]',
             'default_charset',
@@ -279,10 +277,10 @@ class Diagnoser
             get_lang('DefaultCharsetInfo')
         );
 
-        $setting     = ini_get('max_execution_time');
-        $req_setting = '300 ('.get_lang('minimum').')';
-        $status      = $setting >= 300 ? self :: STATUS_OK : self :: STATUS_WARNING;
-        $array[]     = $this->build_setting(
+        $setting = ini_get('max_execution_time');
+        $req_setting = '300 (' . get_lang('minimum') . ')';
+        $status = $setting >= 300 ? self :: STATUS_OK : self :: STATUS_WARNING;
+        $array[] = $this->build_setting(
             $status,
             '[INI]',
             'max_execution_time',
@@ -293,10 +291,10 @@ class Diagnoser
             get_lang('MaxExecutionTimeInfo')
         );
 
-        $setting     = ini_get('max_input_time');
-        $req_setting = '300 ('.get_lang('minimum').')';
-        $status      = $setting >= 300 ? self :: STATUS_OK : self :: STATUS_WARNING;
-        $array[]     = $this->build_setting(
+        $setting = ini_get('max_input_time');
+        $req_setting = '300 (' . get_lang('minimum') . ')';
+        $status = $setting >= 300 ? self :: STATUS_OK : self :: STATUS_WARNING;
+        $array[] = $this->build_setting(
             $status,
             '[INI]',
             'max_input_time',
@@ -307,9 +305,9 @@ class Diagnoser
             get_lang('MaxInputTimeInfo')
         );
 
-        $setting     = ini_get('memory_limit');
-        $req_setting = '>= '.REQUIRED_MIN_MEMORY_LIMIT.'M';
-        $status      = self :: STATUS_ERROR;
+        $setting = ini_get('memory_limit');
+        $req_setting = '>= ' . REQUIRED_MIN_MEMORY_LIMIT . 'M';
+        $status = self :: STATUS_ERROR;
         if ((float)$setting >= REQUIRED_MIN_MEMORY_LIMIT) {
             $status = self :: STATUS_OK;
         }
@@ -324,9 +322,9 @@ class Diagnoser
             get_lang('MemoryLimitInfo')
         );
 
-        $setting     = ini_get('post_max_size');
-        $req_setting = '>= '.REQUIRED_MIN_POST_MAX_SIZE.'M';
-        $status      = self :: STATUS_ERROR;
+        $setting = ini_get('post_max_size');
+        $req_setting = '>= ' . REQUIRED_MIN_POST_MAX_SIZE . 'M';
+        $status = self :: STATUS_ERROR;
         if ((float)$setting >= REQUIRED_MIN_POST_MAX_SIZE) {
             $status = self :: STATUS_OK;
         }
@@ -341,9 +339,9 @@ class Diagnoser
             get_lang('PostMaxSizeInfo')
         );
 
-        $setting     = ini_get('upload_max_filesize');
-        $req_setting = '>= '.REQUIRED_MIN_UPLOAD_MAX_FILESIZE.'M';
-        $status      = self :: STATUS_ERROR;
+        $setting = ini_get('upload_max_filesize');
+        $req_setting = '>= ' . REQUIRED_MIN_UPLOAD_MAX_FILESIZE . 'M';
+        $status = self :: STATUS_ERROR;
         if ((float)$setting >= REQUIRED_UPLOAD_MAX_FILESIZE) {
             $status = self :: STATUS_OK;
         }
@@ -358,10 +356,10 @@ class Diagnoser
             get_lang('UploadMaxFilesizeInfo')
         );
 
-        $setting     = ini_get('variables_order');
+        $setting = ini_get('variables_order');
         $req_setting = 'GPCS';
-        $status      = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_ERROR;
-        $array[]     = $this->build_setting(
+        $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_ERROR;
+        $array[] = $this->build_setting(
             $status,
             '[INI]',
             'variables_order',
@@ -372,10 +370,10 @@ class Diagnoser
             get_lang('VariablesOrderInfo')
         );
 
-        $setting     = ini_get('session.gc_maxlifetime');
+        $setting = ini_get('session.gc_maxlifetime');
         $req_setting = '4320';
-        $status      = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_WARNING;
-        $array[]     = $this->build_setting(
+        $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_WARNING;
+        $array[] = $this->build_setting(
             $status,
             '[SESSION]',
             'session.gc_maxlifetime',
@@ -392,8 +390,8 @@ class Diagnoser
             $setting = false;
         }
         $req_setting = true;
-        $status      = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_WARNING;
-        $array[]     = $this->build_setting(
+        $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_WARNING;
+        $array[] = $this->build_setting(
             $status,
             '[INI]',
             'browscap',
@@ -406,59 +404,59 @@ class Diagnoser
 
         //Extensions
         $extensions = array(
-            'gd'       => array(
-                'link'     => 'http://www.php.net/gd',
+            'gd' => array(
+                'link' => 'http://www.php.net/gd',
                 'expected' => 1,
-                'comment'  => get_lang('ExtensionMustBeLoaded')
+                'comment' => get_lang('ExtensionMustBeLoaded')
             ),
-            'mysql'    => array(
-                'link'     => 'http://www.php.net/mysql',
+            'mysql' => array(
+                'link' => 'http://www.php.net/mysql',
                 'expected' => 1,
-                'comment'  => get_lang('ExtensionMustBeLoaded')
+                'comment' => get_lang('ExtensionMustBeLoaded')
             ),
-            'pcre'     => array(
-                'link'     => 'http://www.php.net/pcre',
+            'pcre' => array(
+                'link' => 'http://www.php.net/pcre',
                 'expected' => 1,
-                'comment'  => get_lang('ExtensionMustBeLoaded')
+                'comment' => get_lang('ExtensionMustBeLoaded')
             ),
-            'session'  => array(
-                'link'     => 'http://www.php.net/session',
+            'session' => array(
+                'link' => 'http://www.php.net/session',
                 'expected' => 1,
-                'comment'  => get_lang('ExtensionMustBeLoaded')
+                'comment' => get_lang('ExtensionMustBeLoaded')
             ),
             'standard' => array(
-                'link'     => 'http://www.php.net/spl',
+                'link' => 'http://www.php.net/spl',
                 'expected' => 1,
-                'comment'  => get_lang('ExtensionMustBeLoaded')
+                'comment' => get_lang('ExtensionMustBeLoaded')
             ),
-            'zlib'     => array(
-                'link'     => 'http://www.php.net/zlib',
+            'zlib' => array(
+                'link' => 'http://www.php.net/zlib',
                 'expected' => 1,
-                'comment'  => get_lang('ExtensionMustBeLoaded')
+                'comment' => get_lang('ExtensionMustBeLoaded')
             ),
-            'xsl'      => array(
-                'link'     => 'http://be2.php.net/xsl',
+            'xsl' => array(
+                'link' => 'http://be2.php.net/xsl',
                 'expected' => 2,
-                'comment'  => get_lang('ExtensionShouldBeLoaded')
+                'comment' => get_lang('ExtensionShouldBeLoaded')
             ),
-            'curl'     => array(
-                'link'     => 'http://www.php.net/curl',
+            'curl' => array(
+                'link' => 'http://www.php.net/curl',
                 'expected' => 2,
-                'comment'  => get_lang('ExtensionShouldBeLoaded')
+                'comment' => get_lang('ExtensionShouldBeLoaded')
             ),
         );
 
         foreach ($extensions as $extension => $data) {
-            $url            = $data['link'];
+            $url = $data['link'];
             $expected_value = $data['expected'];
-            $comment        = $data['comment'];
+            $comment = $data['comment'];
 
-            $loaded  = extension_loaded($extension);
-            $status  = $loaded ? self :: STATUS_OK : self :: STATUS_ERROR;
+            $loaded = extension_loaded($extension);
+            $status = $loaded ? self :: STATUS_OK : self :: STATUS_ERROR;
             $array[] = $this->build_setting(
                 $status,
                 '[EXTENSION]',
-                get_lang('LoadedExtension').': '.$extension,
+                get_lang('LoadedExtension') . ': ' . $extension,
                 $url,
                 $loaded,
                 $expected_value,
@@ -609,7 +607,8 @@ class Diagnoser
         $formatter,
         $comment,
         $img_path = null
-    ) {
+    )
+    {
         switch ($status) {
             case self :: STATUS_OK :
                 $img = 'bullet_green.gif';
@@ -629,16 +628,16 @@ class Diagnoser
             $img_path = api_get_path(WEB_IMG_PATH);
         }
 
-        $image = '<img src="'.$img_path.$img.'" alt="'.$status.'" />';
-        $url   = $this->get_link($title, $url);
+        $image = '<img src="' . $img_path . $img . '" alt="' . $status . '" />';
+        $url = $this->get_link($title, $url);
 
-        $formatted_current_value  = $current_value;
+        $formatted_current_value = $current_value;
         $formatted_expected_value = $expected_value;
 
         if ($formatter) {
-            if (method_exists($this, 'format_'.$formatter)) {
-                $formatted_current_value  = call_user_func(array($this, 'format_'.$formatter), $current_value);
-                $formatted_expected_value = call_user_func(array($this, 'format_'.$formatter), $expected_value);
+            if (method_exists($this, 'format_' . $formatter)) {
+                $formatted_current_value = call_user_func(array($this, 'format_' . $formatter), $current_value);
+                $formatted_expected_value = call_user_func(array($this, 'format_' . $formatter), $expected_value);
             }
         }
 
@@ -653,7 +652,7 @@ class Diagnoser
      */
     function get_link($title, $url)
     {
-        return '<a href="'.$url.'" target="about:bank">'.$title.'</a>';
+        return '<a href="' . $url . '" target="about:bank">' . $title . '</a>';
     }
 
     function format_yes_no_optional($value)

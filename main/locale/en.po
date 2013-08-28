@@ -21042,3 +21042,5 @@ msgstr "Description updated"
 msgid "CourseDescriptions"
 msgstr "Course descriptions"
 
+msgid "ToolCurriculum"
+msgstr "Curriculum"

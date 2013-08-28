@@ -20890,3 +20890,5 @@ msgstr "Descripción actualizada"
 msgid "CourseDescriptions"
 msgstr "Descripción del curso"
 
+msgid "ToolCurriculum"
+msgstr "Trayectoria"

@@ -2,11 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-<<<<<<< HEAD
-=======
 $CourseVisibilityHidden = "Hidden - Completely hidden to all users except the administrators";
 $ApplyAllLanguages = "Apply this change to all available languages";
->>>>>>> chamilo19
 $CareerUpdated = "Career updated successfully";
 $CasMainActivateComment = "Enabling CAS authentication will allow users to authenticate with their CAS credentials.<br/>Go to <a href='settings.php?category=CAS'>Plugin</a> to add a configurable 'CAS Login' button for your Chamilo campus.";
 $UsersRegisteredInAnyGroup = "Users registered in any group";
@@ -746,4 +743,14 @@ $FieldTypeDate = "Date";
 $FieldTypeDatetime = "Date and time";
 $UserFieldsAddHelp = "Adding a user field is very easy:<br />- pick a one-word, lowercase identifier,<br />- select a type,<br />- pick a text that should appear to the user (if you use an existing translated name like BirthDate or UserSex, it will automatically get translated to any language),<br />- if you picked a multiple type (radio, select, multiple select), provide the possible choices (again, it can make use of the language variables defined in Chamilo), split by semi-column characters,<br />- for text types, you can choose a default value.<br /><br />Once you're done, add the field and choose whether you want to make it visible and modifiable. Making it modifiable but not visible is useless.";
 $AllowCourseThemeTitle = "Allow course themes";
-$AllowCourseThemeComment = "Allows course graphical themes and makes it possible to change the style sheet used by a course to any of the possible style sheets available to Chamilo. When a user enters the course, the style sheet of the course will have priority over the user's own style sheet and the platf
+$AllowCourseThemeComment = "Allows course graphical themes and makes it possible to change the style sheet used by a course to any of the possible style sheets available to Chamilo. When a user enters the course, the style sheet of the course will have priority over the user's own style sheet and the platform's default style sheet.";
+$DisplayMiniMonthCalendarTitle = "Display the small month calendar in the agenda tool";
+$DisplayMiniMonthCalendarComment = "This setting enables or disables the small month calendar that appears in the left column of the agenda tool";
+$DisplayUpcomingEventsTitle = "Display the upcoming events in the agenda tool";
+$DisplayUpcomingEventsComment = "This setting enables or disables the upcoming events that appears in the left column of the agenda tool of the course";
+$NumberOfUpcomingEventsTitle = "Number of upcoming events that have to be displayed.";
+$NumberOfUpcomingEventsComment = "The number of upcoming events that have to be displayed in the agenda. This requires that the upcoming event functionlity is activated (see setting above).";
+$ShowClosedCoursesTitle = "Display closed courses on login page and portal start page?";
+$ShowClosedCoursesComment = "Display closed courses on the login page and courses start page? On the portal start page an icon will appear next to the courses to quickly subscribe to each courses. This will only appear on the portal's start page when the user is logged in and when the user is not subscribed to the portal yet.";
+$LDAPConnectionError = "LDAP Connection Error";
+$LDAP = "LDAP";

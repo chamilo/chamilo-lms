@@ -2513,6 +2513,11 @@ function api_is_coach($session_id = 0, $courseId = null) {
         $session_id = api_get_session_id();
     }
 
+    // The student preview was on
+    if (isset($_SESSION['studentview']) && $_SESSION['studentview'] == "studentview") {
+        return false;
+    }
+
     if (!empty($courseId)) {
         $courseId = Database::escape_string($courseId);
     } else {

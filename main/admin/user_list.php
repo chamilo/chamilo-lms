@@ -494,12 +494,15 @@ function modify_filter($user_id, $url_params, $row) {
 	}
 	$result = '';
 	if (!$user_is_anonymous) {
+        $icon = Display::return_icon('course.png', get_lang('Courses'), array('onmouseout' => 'clear_course_list (\'div_'.$user_id.'\')'));
 		$result .= '<a href="javascript:void(0)" onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')" >
-					<img onmouseout="clear_course_list (\'div_'.$user_id.'\')" src="../img/icons/22/course.png" title="'.get_lang('Courses').'" alt="'.get_lang('Courses').'"/>
+			        '.$icon.'
 					<div class="blackboard_hide" id="div_'.$user_id.'">&nbsp;&nbsp;</div>
 					</a>';
+
+        $icon = Display::return_icon('session.png', get_lang('Sessions'), array('onmouseout' => 'clear_session_list (\'div_s_'.$user_id.'\')'));
 		$result .= '<a href="javascript:void(0)" onclick="load_session_list(\'div_s_'.$user_id.'\','.$user_id.')" >
-					<img onmouseout="clear_session_list (\'div_s_'.$user_id.'\')" src="../img/icons/22/session.png" title="'.get_lang('Sessions').'" alt="'.get_lang('Sessions').'"/>
+					'.$icon.'
 					<div class="blackboard_hide" id="div_s_'.$user_id.'">&nbsp;&nbsp;</div>
 					</a>';
 	} else {

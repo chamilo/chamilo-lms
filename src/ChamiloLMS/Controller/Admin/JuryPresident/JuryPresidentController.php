@@ -108,12 +108,14 @@ class JuryPresidentController extends CommonController
     */
     public function assignMembersAction()
     {
+        return null;
+
         $user = $this->getUser();
         $userId = $user->getUserId();
 
         /** @var Entity\Jury $jury */
 
-        $jury = $this->getRepository()->getJuryByPresidentId($userId);
+        $jury = $this->getRepository()->getJuryByUserId($userId);
 
         if (!$jury) {
             $this->get('session')->getFlashBag()->add('warning', "No tiene un comité asignado.");
@@ -166,7 +168,6 @@ class JuryPresidentController extends CommonController
         $template->assign('relations', $relations);
         $template->assign('attempts', $attempts);
         $template->assign('members', $members);
-        //$template->assign('students', $students);
         $template->assign('jury', $jury);
         $response = $template->render_template($this->getTemplatePath().'assign_members.tpl');
 

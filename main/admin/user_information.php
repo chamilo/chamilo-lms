@@ -118,7 +118,7 @@ if (count($sessions) > 0) {
             $data[] = $row;
         }
         $dates = SessionManager::parse_session_dates($session_item);
-        echo Display::page_subheader($session_item['session_name'], ' '.implode(' - ', $dates));
+        echo Display::page_subheader($session_item['session_name'], ' '.$dates);
 
         Display :: display_sortable_table($header, $data, array (), array(), array ('user_id' => intval($_GET['user_id'])));
     }

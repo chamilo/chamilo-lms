@@ -521,6 +521,7 @@ class DocumentManager {
 
         if ($result !== false && Database::num_rows($result) != 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
+
                 if (api_is_coach()) {
                     //Looking for course items that are invisible to hide it in the session
                     if (in_array($row['id'], array_keys($doc_list))) {
@@ -553,7 +554,8 @@ class DocumentManager {
                 $document_data[$row['id']] = $row;
             }
 
-            //Only for the student we filter the results see BT#1652
+            // Only for the student we filter the results see BT#1652
+
             if (!api_is_coach() && !$is_allowed_to_edit) {
                 $ids_to_remove = array();
                 $my_repeat_ids = $temp = array();
@@ -579,7 +581,6 @@ class DocumentManager {
                         }
                     }
                 }
-
                 foreach ($doc_list as $key => $row) {
                     if (in_array($row['visibility'], array('0', '2')) && !in_array($row['id'], $my_repeat_ids)) {
                         $ids_to_remove[] = $row['id'];
@@ -2249,6 +2250,7 @@ class DocumentManager {
 
         if (isset($files['file'])) {
             $upload_ok = process_uploaded_file($files['file'], $show_output);
+
             if ($upload_ok) {
                 // File got on the server without problems, now process it
                 $new_path = handle_uploaded_document($course_info, $files['file'], $base_work_dir, $path, api_get_user_id(), api_get_group_id(), null, $unzip, $if_exists, $show_output);

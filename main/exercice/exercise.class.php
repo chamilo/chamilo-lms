@@ -3685,7 +3685,7 @@ class Exercise {
                 // on tri les categories en fonction du terme entre [] en tete de la description de la categorie
                 /*
                  * ex de catégories :
-                 * [biologie] Maitriser les m袡nismes de base de la g诩tique
+                 * [biologie] Maitriser les mecanismes de base de la genetique
                  * [biologie] Relier les moyens de depenses et les agents infectieux
                  * [biologie] Savoir ou est produite l'enrgie dans les cellules et sous quelle forme
                  * [chimie] Classer les molles suivant leur pouvoir oxydant ou reacteur

@@ -279,15 +279,14 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
 
         // Checking the course access
         $is_allowed_in_course = false;
-        $_course =& $courseInfo; //fix issue in code rewriting: TODO: do it properly, renaming $_course where appropriate
 
-        if (isset($_course)) {
-            switch ($_course['visibility']) {
+        if (isset($courseInfo)) {
+            switch ($courseInfo['visibility']) {
                 case COURSE_VISIBILITY_OPEN_WORLD: //3
                     $is_allowed_in_course = true;
                     break;
                 case COURSE_VISIBILITY_OPEN_PLATFORM: //2
-                    if (isset($user_id) && !api_is_anonymous($user_id)) {
+                    if (isset($userId) && !api_is_anonymous($userId)) {
                         $is_allowed_in_course = true;
                     }
                     break;
@@ -340,22 +339,12 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
         Session::write('is_courseCoach', $is_courseCoach);
         Session::write('is_allowed_in_course', $is_allowed_in_course);
         Session::write('is_sessionAdmin', $is_sessionAdmin);
-
-    } else {
-        // continue with the previous values
-        /*
-        $_courseUser          = Session::read('_courseUser');
-        $is_courseAdmin       = Session::read('is_courseAdmin');
-        $is_courseTutor       = Session::read('is_courseTutor');
-        $is_courseCoach       = Session::read('is_courseCoach');
-        $is_courseMember      = Session::read('is_courseMember');
-        $is_allowed_in_course = Session::read('is_allowed_in_course');*/
     }
 };
 
 /**
  * Deletes the exam_password user extra field *only* to students
- * @todo improve the login hook system
+ * @todo move to the login hook system
  * @param Request $request
  */
 $afterLogin = function (Request $request) use ($app) {

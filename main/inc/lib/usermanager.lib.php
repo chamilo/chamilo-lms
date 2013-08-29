@@ -257,7 +257,8 @@ class UserManager
         $hr_dept_id = 0,
         $extra = null,
         $encrypt_method = '',
-        $send_mail = false
+        $send_mail = false,
+        $reliable_data = false
     ) {
         global $_configuration;
         $original_password = $password;
@@ -266,7 +267,6 @@ class UserManager
         if (api_get_multiple_access_url()) {
             $access_url_id = api_get_current_access_url_id();
         }
-
         if (is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_users']) && $_configuration[$access_url_id]['hosting_limit_users'] > 0) {
             $num = self::get_number_of_users();
             if ($num >= $_configuration[$access_url_id]['hosting_limit_users']) {
@@ -280,11 +280,6 @@ class UserManager
                 return api_set_failure('portal teachers limit reached');
             }
         }
-
-        $firstName     = Security::remove_XSS($firstName);
-        $lastName      = Security::remove_XSS($lastName);
-        $loginName     = Security::remove_XSS($loginName);
-        $phone         = Security::remove_XSS($phone);
 
         // database table definition
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -315,27 +310,46 @@ class UserManager
             }
         }
 
+        if (!$reliable_data) {
+            // Filtering here takes about 0.04s
+            $firstName     = Database::escape_string(trim(Security::remove_XSS($firstName)));
+            $lastName      = Database::escape_string(trim(Security::remove_XSS($lastName)));
+            $loginName     = Database::escape_string(trim(Security::remove_XSS($loginName)));
+            $phone         = Database::escape_string(trim(Security::remove_XSS($phone)));
+            $password      = Database::escape_string($password);
+            $email         = Database::escape_string($email);
+            $official_code = Database::escape_string($official_code);
+            $picture_uri   = Database::escape_string($picture_uri);
+            $creator_id    = intval($creator_id);
+            $auth_source   = Database::escape_string($auth_source);
+            $language      = Database::escape_string($language);
+            $expiration_date = Database::escape_string($expiration_date);
+            $hr_dept_id    = intval($hr_dept_id);
+            $active = intval($active);
+            $status = intval($status);
+        }
 
         //@todo replace this date with the api_get_utc_date function big problem with users that are already registered
         $current_date = api_get_utc_datetime();
         $sql = "INSERT INTO $table_user ".
-               "SET lastname =         '".Database::escape_string(trim($lastName))."',".
-               "firstname =         '".Database::escape_string(trim($firstName))."',".
-               "username =            '".Database::escape_string(trim($loginName))."',".
-               "status =             '".Database::escape_string($status)."',".
-               "password =             '".Database::escape_string($password)."',".
-               "email =             '".Database::escape_string($email)."',".
-               "official_code    =     '".Database::escape_string($official_code)."',".
-               "picture_uri     =     '".Database::escape_string($picture_uri)."',".
-               "creator_id      =     '".Database::escape_string($creator_id)."',".
-               "auth_source =         '".Database::escape_string($auth_source)."',".
-               "phone =             '".Database::escape_string($phone)."',".
-               "language =             '".Database::escape_string($language)."',".
-               "registration_date = '".$current_date."',".
-               "expiration_date =     '".Database::escape_string($expiration_date)."',".
-               "hr_dept_id =         '".Database::escape_string($hr_dept_id)."',".
-               "active =             '".Database::escape_string($active)."'";
+               "SET lastname =         '$lastName',".
+               "firstname =         '$firstName',".
+               "username =            '$loginName',".
+               "status =             $status,".
+               "password =             '$password',".
+               "email =             '$email',".
+               "official_code    =     '$official_code',".
+               "picture_uri     =     '$picture_uri',".
+               "creator_id      =     $creator_id,".
+               "auth_source =         '$auth_source',".
+               "phone =             '$phone',".
+               "language =             '$language',".
+               "registration_date = '$current_date',".
+               "expiration_date =     '$expiration_date',".
+               "hr_dept_id =         $hr_dept_id,".
+               "active =             $active";
         $result = Database::query($sql);
+        // Query execution takes about 0.04s
 
         if ($result) {
             //echo "id returned";
@@ -346,10 +360,11 @@ class UserManager
                 //we are adding by default the access_url_user table with access_url_id = 1
                 UrlManager::add_user_to_url($return, 1);
             }
-
+            // multi url check takes about 0.01s
+/*
             global $app;
             // Adding user
-            /** @var Entity\User $user */
+            /** @var Entity\User $user
             $em = $app['orm.ems']['db_write'];
             $user = $em->getRepository('Entity\User')->find($return);
             $role = $em->getRepository('Entity\Role')->find($status);
@@ -357,10 +372,21 @@ class UserManager
             if ($role->getRole() == 'ROLE_ADMIN') {
                 UserManager::add_user_as_admin($return);
             }
-
+            //->add() takes about no time (0.0003s)
             $user->getRolesObj()->add($role);
+            //->persist() takes about no time either
             $em->persist($user);
+            $t2 = microtime() - $t0;
+            error_log(__LINE__.': '.$t2);
+            // this flush takes about 0.05s (20% of whole insert) all by itself
             $em->flush();
+/*/
+            // optimized version of the above (takes about 56% of the time - see CT#6640)
+            if ($status == 11) {
+                UserManager::add_user_as_admin($return);
+            }
+            $sql = "insert into users_roles values($return,$status)";
+            $res = Database::query($sql);
 
             if (!empty($email) && $send_mail) {
                 $recipient_name = api_get_person_name($firstName, $lastName, null, PERSON_NAME_EMAIL_ADDRESS);
@@ -393,9 +419,12 @@ class UserManager
             }
             // Add event to system log
             $user_id_manager = api_get_user_id();
-            $user_info = api_get_user_info($return);
+            // api_get_user_info() takes about 0.01s
+            //$user_info = api_get_user_info($return);
             event_system(LOG_USER_CREATE, LOG_USER_ID, $return, api_get_utc_datetime(), $user_id_manager);
-            event_system(LOG_USER_CREATE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager);
+            // event_system of object takes about 0.03s
+            //event_system(LOG_USER_CREATE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager);
+
         } else {
             return api_set_failure('error inserting in Database');
         }

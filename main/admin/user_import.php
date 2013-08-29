@@ -18,8 +18,6 @@ require_once '../inc/global.inc.php';
 // Set this option to true to enforce strict purification for usenames.
 $purification_option_for_usernames = false;
 
-$time = time();
-
 function validate_data($users) {
 	global $defined_auth_sources;
     global $time;
@@ -116,17 +114,17 @@ function complete_missing_data($user) {
  */
 function save_data($users) {
 	global $inserted_in_course;
-    global $time;
 	// Not all scripts declare the $inserted_in_course array (although they should).
 	if (!isset($inserted_in_course)) {
 		$inserted_in_course = array();
 	}
 	$send_mail = $_POST['sendMail'] ? 1 : 0;
+    $t0 = time();
 	if (is_array($users)) {
-		foreach ($users as $index => $user)	{
+        foreach ($users as $index => $user)	{
 			$user = complete_missing_data($user);
 			$user['Status'] = api_status_key($user['Status']);
-            $user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], (isset($user['OfficialCode'])?$user['OfficialCode']:null), (isset($user['language'])?$user['language']:null), (isset($user['PhoneNumber'])?$user['PhoneNumber']:null), '', $user['AuthSource'], null, 1, 0, null, null, $send_mail);
+            $user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], (isset($user['OfficialCode'])?$user['OfficialCode']:null), (isset($user['language'])?$user['language']:null), (isset($user['PhoneNumber'])?$user['PhoneNumber']:null), '', $user['AuthSource'], null, 1, 0, null, null, $send_mail, true);
 			if (!empty($user['Courses']) && !is_array($user['Courses'])) {
 				$user['Courses'] = array($user['Courses']);
 			}
@@ -171,6 +169,8 @@ function save_data($users) {
             }
 		}
 	}
+    $t1 = time()-$t0;
+    error_log('Total import took '.$t1.'s');
 }
 
 /**
@@ -354,7 +354,7 @@ if (!empty($_POST['formSent']) AND $_FILES['import_file']['size'] !== 0) {
 	}
 
 	// if the warning message is too long then we display the warning message trough a session
-	if (api_strlen($warning_message) > 150) {
+	if (isset($warning_message) && api_strlen($warning_message) > 150) {
 		$_SESSION['session_message_import_users'] = (isset($warning_message)?$warning_message:'');
 		$warning_message = 'session_message';
 	}

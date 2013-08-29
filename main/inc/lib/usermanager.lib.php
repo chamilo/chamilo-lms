@@ -2345,7 +2345,8 @@ class UserManager
         $reverse_order = false,
         $start = 0,
         $maxPerPage = null,
-        $categoryFilter = null
+        $categoryFilter = null,
+        $ignore_visibility_for_admins = false
     )
     {
         // Database Table Definitions
@@ -2542,7 +2543,7 @@ class UserManager
                 $session_info = $row;
 
                 // Checking session visibility
-                $visibility = api_get_session_visibility($session_id, null, false);
+                $visibility = api_get_session_visibility($session_id, null, $ignore_visibility_for_admins);
 
 
                 switch ($visibility) {

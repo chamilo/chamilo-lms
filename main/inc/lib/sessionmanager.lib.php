@@ -2108,7 +2108,7 @@ class SessionManager
 
     public static function get_sessions_by_user($user_id, $ignore_visibility_for_admins = false)
     {
-       $session_categories = UserManager::get_sessions_by_category($user_id, false, $ignore_visibility_for_admins);
+       $session_categories = UserManager::get_sessions_by_category($user_id, false, false, false, 0, null, null, $ignore_visibility_for_admins);
        $session_array = array();
        if (!empty($session_categories)) {
            foreach ($session_categories as $category) {

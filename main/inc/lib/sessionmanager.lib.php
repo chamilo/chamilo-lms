@@ -2873,10 +2873,17 @@ class SessionManager
      * @params array An array with all the session dates
      * @return string
      */
-    static function parse_session_dates($session_info) {
+    static function parse_session_dates($session_info)
+    {
         //This will clean the variables if 0000-00-00 00:00:00 the variable will be empty
-        $start_date = api_get_local_time($session_info['display_start_date'], null, null, true);
-        $end_date = api_get_local_time($session_info['display_end_date'], null, null, true);
+        $start_date = null;
+        $end_date = null;
+        if (isset($session_info['display_start_date'])) {
+            $start_date = api_get_local_time($session_info['display_start_date'], null, null, true);
+        }
+        if (isset($session_info['display_end_date'])) {
+            $end_date = api_get_local_time($session_info['display_end_date'], null, null, true);
+        }
         $msg_date = null;
         if (!empty($start_date) && !empty($end_date)) {
             //$msg_date = get_lang('From').' '.$start_date.' '.get_lang('To').' '.$end_date;

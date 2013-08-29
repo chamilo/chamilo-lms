@@ -68,6 +68,8 @@ define('COURSE_VISIBILITY_REGISTERED', 1);
 define('COURSE_VISIBILITY_OPEN_PLATFORM', 2);
 /** Open for the whole world */
 define('COURSE_VISIBILITY_OPEN_WORLD', 3);
+/** Invisible to all except admin */
+define('COURSE_VISIBILITY_HIDDEN', 4);
 
 // SESSION VISIBILITY CONSTANTS
 define('SESSION_VISIBLE_READ_ONLY', 1);
@@ -2511,6 +2513,11 @@ function api_is_coach($session_id = 0, $courseId = null) {
         $session_id = intval($session_id);
     } else {
         $session_id = api_get_session_id();
+    }
+
+    // The student preview was on
+    if (isset($_SESSION['studentview']) && $_SESSION['studentview'] == "studentview") {
+        return false;
     }
 
     if (!empty($courseId)) {

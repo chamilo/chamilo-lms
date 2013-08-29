@@ -2402,8 +2402,8 @@ class UserManager
         }
 
         if ($is_time_over) {
-            $condition_date_end1 = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00') OR moved_to <> 0) ";
-            $condition_date_end2 = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00')) ";
+            $condition_date_end1 = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00' AND session.access_end_date != '' ) OR moved_to <> 0) ";
+            $condition_date_end2 = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00' AND session.access_end_date != '') ) ";
         } else {
             if (api_is_allowed_to_create_course()) {
                 //Teachers can access the session depending in the access_coach date
@@ -2413,8 +2413,8 @@ class UserManager
                 //Student can't access before the start date or after the end date
                 //$condition_date_start1 = " AND (session.access_start_date <= '$now' OR session.access_start_date = '0000-00-00 00:00:00') ";
                 //$condition_date_start2 = " AND (session.access_start_date <= '$now' OR session.access_start_date = '0000-00-00 00:00:00') ";
-                $condition_date_end1 = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00') ";
-                $condition_date_end2 = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00') ";
+                $condition_date_end1 = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00' OR session.access_end_date IS NULL ) ";
+                $condition_date_end2 = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00' OR session.access_end_date IS NULL ) ";
             }
         }
 
@@ -2536,7 +2536,7 @@ class UserManager
                             $i++;
                         }
                         if (isset($join[$i]) && strcmp($row1['session_category_name'],$join[$i]['session_category_name']) === 0) {
-                            while (isset($join[$i]) && strcmp($row1['short_name'],$join[$i]['short_name'])>0) {
+                            while (isset($join[$i]) && isset($row1['short_name']) && strcmp($row1['short_name'], $join[$i]['short_name']) > 0) {
                                 $ordered_join[] = $join[$i];
                                 $i++;
                             }
@@ -2551,7 +2551,6 @@ class UserManager
         if (count($ordered_join) == 0) {
             $ordered_join = $join;
         }
-
         if (count($ordered_join) > 0) {
             //while ($row = Database::fetch_array($result1)) {
             foreach ($ordered_join as $row) {
@@ -2572,8 +2571,8 @@ class UserManager
                 $session_info = $row;
 
                 // Checking session visibility
-                $visibility = api_get_session_visibility($session_id, null, $ignore_visibility_for_admins);
 
+                $visibility = api_get_session_visibility($session_id, null, $ignore_visibility_for_admins);
 
                 switch ($visibility) {
                     case SESSION_VISIBLE_READ_ONLY:

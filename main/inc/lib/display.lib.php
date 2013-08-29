@@ -1550,4 +1550,25 @@ class Display {
             </div> </div>';
         return $html;
     }
+
+    public static function getMediaPlayer($file, $params = array())
+    {
+        $fileInfo = pathinfo($file);
+
+        switch ($fileInfo['extension']) {
+            case 'mp3':
+            case 'webm':
+                $autoplay = null;
+                if (isset($params['autoplay']) && $params['autoplay'] == 'true') {
+                    $autoplay = 'autoplay';
+                }
+                $width = isset($params['width']) ? 'width="'.$params['width'].'"' : null;
+                $html = '<audio id="'.$fileInfo['basename'].'" controls '.$autoplay.' '.$width.' src="'.$file.'" />';
+                return $html;
+                break;
+
+        }
+
+        return null;
+    }
 } //end class Display

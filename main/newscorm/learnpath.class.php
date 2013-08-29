@@ -1995,15 +1995,16 @@ class learnpath {
      * Returns the HTML necessary to print a mediaplayer block inside a page
      * @return string	The mediaplayer HTML
      */
-    public function get_mediaplayer($autostart='true') {
+    public function get_mediaplayer($autostart = 'true')
+    {
         $course_id = api_get_course_int_id();
         global $_course;
         $tbl_lp_item 		= Database :: get_course_table(TABLE_LP_ITEM);
         $tbl_lp_item_view 	= Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 
         // Getting all the information about the item.
-        $sql = "SELECT * FROM " . $tbl_lp_item . " as lp INNER  JOIN " . $tbl_lp_item_view . " as lp_view on lp.id = lp_view.lp_item_id " .
-                "WHERE  lp.id = '" . $_SESSION['oLP']->current . "' AND
+        $sql = "SELECT * FROM ".$tbl_lp_item." as lp INNER  JOIN ".$tbl_lp_item_view." as lp_view on lp.id = lp_view.lp_item_id ".
+                "WHERE  lp.id = '".$_SESSION['oLP']->current."' AND
                         lp.c_id = $course_id AND
                         lp_view.c_id = $course_id";
         $result = Database::query($sql);
@@ -2031,19 +2032,26 @@ class learnpath {
                 $autostart_audio = 'true';
             }
 
+            $courseInfo = api_get_course_info();
+
+            $audio = $row['audio'];
+
+            $file = '../../courses/'.$courseInfo['path'].'/document/audio/'.$audio;
+            if (!file_exists($file)) {
+                $lpPathInfo = $_SESSION['oLP']->generate_lp_folder(api_get_course_info());
+                $file = '../../courses/'.$_course['path'].'/document'.$lpPathInfo['dir'].$audio;
+            }
+
+            $player = Display::getMediaPlayer($file, array('autoplay' => $autostart_audio, 'width' => '90%'));
+
             // The mp3 player.
             $output  = '<div id="container">';
-            $output .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
-            $output .= '<script type="text/javascript">
-                            var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
-                            s1.addParam("allowscriptaccess","always");
-                                s1.addParam("flashvars","file=' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document/audio/' . $row['audio'] . '&autostart=' . $autostart_audio.'");
-                            s1.write("container");
-						</script>
-                        </div>';
+            $output .= $player;
+            $output .= '</div>';
         }
         return $output;
     }
+
 
     /**
      * This function checks if the learnpath is visible for student after the progress of its prerequisite is completed, and considering time availability
@@ -5304,7 +5312,8 @@ class learnpath {
      * This function builds the action menu
      * @return void
      */
-    public function build_action_menu() {
+    public function build_action_menu($returnContent = false)
+    {
         $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 
         $gradebook = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
@@ -5334,6 +5343,10 @@ class learnpath {
         );
         $return .= Display::group_button(get_lang('PrerequisitesOptions'), $buttons);
         $return .= '</div>';
+
+        if ($returnContent) {
+            return $return;
+        }
         echo $return;
     }
 

@@ -13,8 +13,9 @@ $this_section = SECTION_COURSES;
 
 api_protect_course_script();
 
-include 'learnpath_functions.inc.php';
-include 'resourcelinker.inc.php';
+require_once 'learnpath_functions.inc.php';
+require_once 'resourcelinker.inc.php';
+
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
@@ -45,9 +46,9 @@ if (isset($_SESSION['gradebook'])) {
 
 if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array (
-            'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-            'name' => get_lang('ToolGradebook')
-        );
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'name' => get_lang('ToolGradebook')
+    );
 }
 
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
@@ -66,7 +67,7 @@ switch ($type) {
         break;
 }
 
-if ($action == 'add_item' && $type == 'document' ) {
+if ($action == 'add_item' && $type == 'document') {
     $interbreadcrumb[]= array ('url' => '#', 'name' => get_lang('NewDocumentCreated'));
 }
 
@@ -77,21 +78,21 @@ if (empty($lp_item_id)) {
     api_not_allowed();
 }
 
-Display::display_header(null, 'Path');
-
 $suredel = trim(get_lang('AreYouSureToDelete'));
 
 /* DISPLAY SECTION */
 
-echo $_SESSION['oLP']->build_action_menu();
+$tpl = new Template($tool_name);
 
-echo '<div class="row-fluid" style="overflow:hidden">';
-echo '<div id="lp_sidebar" class="span4">';
-echo $_SESSION['oLP']->return_new_tree(null, true);
+$page = $_SESSION['oLP']->build_action_menu(true);
+
+$page .= '<div class="row-fluid" style="overflow:hidden">';
+$page .= '<div id="lp_sidebar" class="span4">';
+$page .= $_SESSION['oLP']->return_new_tree(null, true);
 // Show the template list.
-echo '</div>';
+$page .= '</div>';
 
-echo '<div id="doc_form" class="span8">';
+$page .= '<div id="doc_form" class="span8">';
 
 $lp_item = new learnpathItem($lp_item_id);
 
@@ -99,7 +100,10 @@ $form = new FormValidator('add_audio', 'post', api_get_self().'?action=add_audio
 
 $form->addElement('header', get_lang('RecordYourVoice'));
 
+$tpl->assign('lp_item_id', $lp_item_id);
+$voiceContent = $tpl->fetch('default/learnpath/record_voice.tpl');
 
+$form->addElement('html', $voiceContent);
 $form->addElement('header', get_lang('UplUpload'));
 
 $form->addElement('html', $lp_item->get_title());
@@ -108,28 +112,29 @@ $form->addElement('hidden', 'id', $lp_item_id);
 
 if (isset($lp_item->audio) && !empty($lp_item->audio)) {
     $form->addElement('checkbox', 'delete_file', null, get_lang('RemoveAudio'));
-
-    $player = '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
-    $player .= '<div id="preview"></div>
-                <script>
-                    var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
-                    s1.addParam("allowscriptaccess","always");
-                    s1.addParam("flashvars","file=../../courses/' . $_course['path'] . '/document/audio/' . $lp_item->audio . '");
-                    s1.write("preview");
-                </script>';
-    $form->addElement('label', get_lang('Preview'), $player);
+    $file = '../../courses/'.$_course['path'].'/document/audio/'.$lp_item->audio;
+    if (!file_exists($file)) {
+        $lpPathInfo = $_SESSION['oLP']->generate_lp_folder(api_get_course_info());
+        $file = '../../courses/'.$_course['path'].'/document'.$lpPathInfo['dir'].$lp_item->audio;
+    }
+    $audioPlayer = '<div id="preview">'.Display::getMediaPlayer($file)."</div>";
+    $form->addElement('label', get_lang('Preview'), $audioPlayer);
 }
 $form->addElement('button', 'submit', get_lang('Edit'));
 
 $course_info = api_get_course_info();
 $document_tree = DocumentManager::get_document_preview($course_info, null, null, 0, false, '/audio', 'lp_controller.php?action=add_audio&id='.$lp_item_id);
 
-$form->display();
+$page .= $form->return_form();
 
-echo '<legend>'.get_lang('SelectAnAudioFileFromDocuments').'</legend>';
-echo $document_tree;
-echo '</div>';
+$page .= '<legend>'.get_lang('SelectAnAudioFileFromDocuments').'</legend>';
+$page .= $document_tree;
 
-echo '</div>';
+$page .= '</div>';
 
-Display::display_footer();
+$page .= '</div>';
+
+
+$tpl->assign('content', $page);
+$content = $tpl->fetch('default/learnpath/lp_upload_audio.tpl');
+$tpl->display_one_col_template();

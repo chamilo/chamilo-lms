@@ -67,21 +67,23 @@ $(document).ready(function() {
 
     var original = $('#content_id').height();
 
-    // Adding funcionality
-    $( "#hide_bar" ).click(function() {
-        $('#hide_bar table').toggle(function() {
+    // Adding funcionality 
+	
+
+        $('#hide_bar table').toggle(function(){
             if ($('#hide_bar').position().left >= left_width) {
                 toogle_minipanel();
             }
         },
-        function(){
-            // Show navigation left zone
-            $('#learning_path_left_zone').show(50);
-            $('#learning_path_right_zone').css('marginLeft', left_width + 10 + 'px');
-            $('#hide_bar table').css('backgroundImage','url(../img/hide0.png)').css('backgroundColor','#EEEEEE');
-            $('#learning_path_main  #control').remove();
-            $('#content_id').css({ height: original});
-        }
-    );
-    });
+            function(){
+                // Show navigation left zone
+                $('#learning_path_left_zone').show(50);
+                $('#learning_path_right_zone').css('marginLeft', left_width + 10 + 'px');
+                $('#hide_bar table').css('backgroundImage','url(../img/hide0.png)').css('backgroundColor','#EEEEEE');
+                $('#learning_path_main  #control').remove();
+                $('#content_id').css({ height: original});
+            }
+        );
+
+
 });

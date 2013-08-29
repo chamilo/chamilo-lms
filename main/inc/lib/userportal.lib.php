@@ -497,7 +497,7 @@ class IndexManager {
 
 			foreach ($course_list as $course) {
 				// $setting_show_also_closed_courses
-
+                if ($course['visibility'] == COURSE_VISIBILITY_HIDDEN) { continue; }
 				if (!$setting_show_also_closed_courses) {
 					// If we do not show the closed courses
 					// we only show the courses that are open to the world (to everybody)
@@ -532,15 +532,17 @@ class IndexManager {
 					$courses_list_string .= "<li>";
 					if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
                         || ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
-                        || ($user_identified && key_exists($course['code'], $courses_of_user) && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
+                        || ($user_identified && key_exists($course['code'], $courses_of_user)
+                            && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
                         || $courses_of_user[$course['code']]['status'] == '1'
                         || api_is_platform_admin()) {
                             $courses_list_string .= '<a href="'.$web_course_path.$course['directory'].'/">';
                         }
-                        $courses_list_string .= $course['title'];
+                    $courses_list_string .= $course['title'];
                     if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
 						|| ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
-						|| ($user_identified && key_exists($course['code'], $courses_of_user) && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
+						|| ($user_identified && key_exists($course['code'], $courses_of_user)
+                            && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
 	                        || $courses_of_user[$course['code']]['status'] == '1'
 						|| api_is_platform_admin()) {
                         $courses_list_string .= '</a><br />';

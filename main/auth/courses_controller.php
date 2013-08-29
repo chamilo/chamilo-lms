@@ -173,7 +173,7 @@ class CoursesController { // extends Controller {
         $data = array();
         $courseInfo = api_get_course_info($course_code);
         // The course must be open in order to access the auto subscription
-        if (in_array($courseInfo['visibility'], array(COURSE_VISIBILITY_CLOSED, COURSE_VISIBILITY_REGISTERED))) {
+        if (in_array($courseInfo['visibility'], array(COURSE_VISIBILITY_CLOSED, COURSE_VISIBILITY_REGISTERED, COURSE_VISIBILITY_HIDDEN))) {
             $error = get_lang('SubscribingNotAllowed');
             //$message = get_lang('SubscribingNotAllowed');
         } else {

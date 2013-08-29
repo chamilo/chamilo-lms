@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CourseVisibilityHidden = "Hidden - Completely hidden to all users except the administrators";
 $ApplyAllLanguages = "Apply this change to all available languages";
 $CareerUpdated = "Career updated successfully";
 $CasMainActivateComment = "Enabling CAS authentication will allow users to authenticate with their CAS credentials.<br/>Go to <a href='settings.php?category=CAS'>Plugin</a> to add a configurable 'CAS Login' button for your Chamilo campus.";

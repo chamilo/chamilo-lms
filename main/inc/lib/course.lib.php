@@ -2961,6 +2961,9 @@ class CourseManager {
             if ($number_of_courses > 0) {
                 while ($course = Database::fetch_array($rs_special_course)) {
                     $course_info = api_get_course_info($course['code']);
+                    if ($course_info['visibility'] == COURSE_VISIBILITY_HIDDEN) {
+                        continue;
+                    }
                     $params = array();
                     // Get notifications.
                     //$course['id_session']   = null;
@@ -3108,6 +3111,9 @@ class CourseManager {
         // Browse through all courses.
         while ($course = Database::fetch_array($result)) {
             $course_info = api_get_course_info($course['code']);
+            if ($course_info['visibility'] == COURSE_VISIBILITY_HIDDEN) {
+                continue;
+            }
             //$course['id_session'] = null;
             $course_info['id_session'] = null;
             $course_info['status'] = $course['status'];
@@ -3270,7 +3276,9 @@ class CourseManager {
 
         $course_access_settings     = CourseManager :: get_access_settings($course_info['code']);
         $course_visibility          = $course_access_settings['visibility'];
-
+        if ($course_visibility == COURSE_VISIBILITY_HIDDEN) {
+            return '';
+        }
         $user_in_course_status      = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_info['code']);
 
         $is_coach = api_is_coach($course_info['id_session'], $course['code']);
@@ -3308,7 +3316,7 @@ class CourseManager {
 
         $params['right_actions'] = '';
 
-        if ($course_visibility != COURSE_VISIBILITY_CLOSED) {
+        if ($course_visibility != COURSE_VISIBILITY_CLOSED && $course_visibility != COURSE_VISIBILITY_HIDDEN) {
             if ($load_dirs) {
                 $params['right_actions'] .= '<a id="document_preview_'.$course_info['real_id'].'_'.$course_info['id_session'].'" class="document_preview" href="javascript:void(0);">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),ICON_SIZE_SMALL).'</a>';
                 $params['right_actions'] .= Display::div('', array('id' => 'document_result_'.$course_info['real_id'].'_'.$course_info['id_session'], 'class'=>'document_preview_container'));
@@ -3338,7 +3346,7 @@ class CourseManager {
         $session_title .= isset($course['special_course']) ? ' '.Display::return_icon('klipper.png', get_lang('CourseAutoRegister')) : '';
 
         // Display the "what's new" icons
-        if ($course_visibility != COURSE_VISIBILITY_CLOSED) {
+        if ($course_visibility != COURSE_VISIBILITY_CLOSED && $course_visibility != COURSE_VISIBILITY_HIDDEN) {
             $session_title .= Display :: show_notification($course_info);
         }
 
@@ -3802,7 +3810,7 @@ class CourseManager {
               "  WHERE   u.access_url_id = ".$_configuration['access_url']." AND".
               "          login_course_date <= now() AND ".
               "          login_course_date > DATE_SUB(now(), INTERVAL $days DAY) AND".
-              "          visibility <> '".COURSE_VISIBILITY_CLOSED."'".
+              "          visibility <> '".COURSE_VISIBILITY_CLOSED."' AND visibility <> '".COURSE_VISIBILITY_HIDDEN."'".
               "  GROUP BY course_code".
               "  ORDER BY course_count DESC".
               "  LIMIT $limit";
@@ -3924,6 +3932,9 @@ class CourseManager {
 
         if (!isset($course['real_id']) && empty($course['real_id'])) {
             $course = api_get_course_info($course['code']);
+        }
+        if ($course['visibility'] != COURSE_VISIBILITY_HIDDEN) {
+            return array();
         }
 
         $is_admin = api_is_platform_admin_by_id($uid);

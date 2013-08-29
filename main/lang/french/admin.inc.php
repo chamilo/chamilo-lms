@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CourseVisibilityHidden = "Invisible - Complètement invisible et inaccessible pour tous les utilisateurs excepté les administrateurs";
 $ApplyAllLanguages = "Appliquer ces modifications à toutes les langues disponibles";
 $CareerUpdated = "Carrière mise à jour";
 $CasMainActivateComment = "Activer l'authentification CAS permettra aux utilisateurs de s'identifier à l'aide de leur compte CAS<br/>Vous trouverez dans les <a href='settings.php?category=CAS'>Plugin</a> un bouton 'Login CAS', paramétrable, qui s'ajoutera sur la page d'accueil de votre campus Chamilo.";

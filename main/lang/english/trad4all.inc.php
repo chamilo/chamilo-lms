@@ -2,6 +2,33 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ToReviewXYZ = "%s to review (%s)";
+$UnansweredXYZ = "%s unanswered (%s)";
+$AnsweredXYZ = "%s answered (%s)+(%s)";
+$UnansweredZ = "(%s) Unanswered";
+$AnsweredZ = "(%s) Answered";
+$CurrentQuestionZ = "(%s) Current question";
+$ToReviewZ = "(%s) To review";
+$ReturnToExerciseList = "Return to exercises list";
+$ExerciseAutoLaunch = "Auto-launch for exercises";
+$AllowFastExerciseEdition = "Enable exercise fast edition mode";
+$Username = "Username";
+$SignIn = "Sign in";
+$YouAreReg = "Your are registered to";
+$ManageQuestionCategories = "Manage global questions categories";
+$ManageCourseFields = "Manage extra fields for courses";
+$ManageQuestionFields = "Manage extra fields for questions";
+$QuestionFields = "Questions fields";
+$FieldLoggeable = "Field changes should be logged";
+$EditExtraFieldWorkFlow = "Edit this field's workflow";
+$SelectRole = "Select role";
+$SelectAnOption = "Please select an option";
+$CurrentStatus = "Current status";
+$MyCourseCategories = "My courses categories";
+$SessionsCategories = "Sessions categories";
+$CourseSessionBlock = "Courses and sessions";
+$Committee = "Committee";
+$ModelType = "Exercise model type";
 $YourPasswordCannotBeTheSameAsYourUsername = "Your password cannot be the same as your username";
 $CheckEasyPasswords = "Check passwords too easy to guess";
 $PasswordVeryStrong = "Very strong";

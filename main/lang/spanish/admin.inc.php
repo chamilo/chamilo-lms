@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CourseVisibilityHidden = "Invisible - Totalmente invisible para todos los usuarios a parte de los administradores";
 $ApplyAllLanguages = "Aplicar cambio a todos los lenguajes habilitados";
 $CareerUpdated = "Carrera actualizada satisfactoriamente";
 $CasMainActivateComment = "Activar la autentificación CAS permitirá a usuarios autentificarse con sus credenciales CAS";

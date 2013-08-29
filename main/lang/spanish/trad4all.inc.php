@@ -2,6 +2,33 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ToReviewXYZ = "%s por revisar (%s)";
+$UnansweredXYZ = "%s sin responder (%s)";
+$AnsweredXYZ = "%s respondidas (%s)+(%s)";
+$UnansweredZ = "(%s) Sin responder";
+$AnsweredZ = "(%s) Respondida";
+$CurrentQuestionZ = "(%s) Pregunta actual";
+$ToReviewZ = "(%s) Por revisar";
+$ReturnToExerciseList = "Regresar a la lista de exámenes";
+$ExerciseAutoLaunch = "Modo de lanzamiento automático de exámenes";
+$AllowFastExerciseEdition = "Activar modo de edición rápida de exámenes";
+$Username = "Usuario";
+$SignIn = "Ingresar";
+$YouAreReg = "Está registrado a";
+$ManageQuestionCategories = "Gestionar categorías globales de preguntas";
+$ManageCourseFields = "Gestor de campos de cursos";
+$ManageQuestionFields = "Gestor de campos de preguntas";
+$QuestionFields = "Campos de preguntas";
+$FieldLoggeable = "Registrar cambios del valor de este campo";
+$EditExtraFieldWorkFlow = "Editar el flujo de trabajo de este campo";
+$SelectRole = "Elegir rol";
+$SelectAnOption = "Elegir una opción";
+$CurrentStatus = "Estado actual";
+$MyCourseCategories = "Mis categorías de cursos";
+$SessionsCategories = "Categorías de sesiones";
+$CourseSessionBlock = "Cursos y sesiones.";
+$Committee = "Comité";
+$ModelType = "Modelo de ejercicio";
 $YourPasswordCannotBeTheSameAsYourUsername = "Su contraseña no puede ser igual a su nombre de usuario";
 $CheckEasyPasswords = "Identificar contraseñas demasiado simples";
 $PasswordVeryStrong = "Muy fuerte";

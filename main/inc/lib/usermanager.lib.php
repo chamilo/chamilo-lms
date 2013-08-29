@@ -2373,8 +2373,8 @@ class UserManager
         }
 
         if ($is_time_over) {
-            $condition_date_end1 = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00') OR moved_to <> 0) ";
-            $condition_date_end2 = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00')) ";
+            $condition_date_end1 = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00' AND session.access_end_date != '' ) OR moved_to <> 0) ";
+            $condition_date_end2 = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00' AND session.access_end_date != '') ) ";
         } else {
             if (api_is_allowed_to_create_course()) {
                 //Teachers can access the session depending in the access_coach date
@@ -2384,8 +2384,8 @@ class UserManager
                 //Student can't access before the start date or after the end date
                 //$condition_date_start1 = " AND (session.access_start_date <= '$now' OR session.access_start_date = '0000-00-00 00:00:00') ";
                 //$condition_date_start2 = " AND (session.access_start_date <= '$now' OR session.access_start_date = '0000-00-00 00:00:00') ";
-                $condition_date_end1 = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00') ";
-                $condition_date_end2 = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00') ";
+                $condition_date_end1 = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00' OR session.access_end_date IS NULL ) ";
+                $condition_date_end2 = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00' OR session.access_end_date IS NULL ) ";
             }
         }
 

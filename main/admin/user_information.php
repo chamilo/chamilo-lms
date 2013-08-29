@@ -103,22 +103,22 @@ if (count($sessions) > 0) {
         $id_session = $session_item['session_id'];
 
         foreach ($session_item['courses'] as $my_course) {
-            $course_info = api_get_course_info($my_course['code']);
+            $courseInfo = api_get_course_info_by_id($my_course['id']);
             $row = array();
-            $row[] = $my_course['code'];
-            $row[] = $course_info['title'];
+            $row[] = $courseInfo['code'];
+            $row[] = $courseInfo['title'];
             //$row[] = $my_course['status'] == STUDENT ? get_lang('Student') : get_lang('Teacher');
 
-            $roles = api_detect_user_roles($user['user_id'], $my_course['real_id'], $id_session);
+            $roles = api_detect_user_roles($user['user_id'], $courseInfo['real_id'], $id_session);
             $row[] = api_get_roles_to_string($roles);
-            $tools = '<a href="course_information.php?code='.$course_info['code'].'&id_session='.$id_session.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
-                    '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>';
+            $tools = '<a href="course_information.php?code='.$courseInfo['code'].'&id_session='.$id_session.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
+                    '<a href="'.api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>';
 
             $row[] = $tools;
             $data[] = $row;
         }
-        $dates = array_filter(array($session_item['date_start'], $session_item['date_end']));
-        echo Display::page_subheader($session_item['session_name'], ' '.implode(' - ', $dates));
+        $dates = SessionManager::parse_session_dates($session_item);
+        echo Display::page_subheader($session_item['session_name'], ' '.$dates);
 
         Display :: display_sortable_table($header, $data, array (), array(), array ('user_id' => intval($_GET['user_id'])));
     }

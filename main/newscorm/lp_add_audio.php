@@ -78,14 +78,26 @@ if (empty($lp_item_id)) {
     api_not_allowed();
 }
 
+$lp_item = new learnpathItem($lp_item_id);
+$tpl = new Template($tool_name);
+$form = new FormValidator('add_audio', 'post', api_get_self().'?action=add_audio&id='.$lp_item_id, null, array('enctype' => 'multipart/form-data'));
+
+
+
 $suredel = trim(get_lang('AreYouSureToDelete'));
 
-/* DISPLAY SECTION */
 
-$tpl = new Template($tool_name);
+$file = null;
+$lpPathInfo = $_SESSION['oLP']->generate_lp_folder(api_get_course_info());
+
+if (isset($lp_item->audio) && !empty($lp_item->audio)) {
+    $file = '../../courses/'.$_course['path'].'/document/audio/'.$lp_item->audio;
+    if (!file_exists($file)) {
+        $file = '../../courses/'.$_course['path'].'/document'.$lpPathInfo['dir'].$lp_item->audio;
+    }
+}
 
 $page = $_SESSION['oLP']->build_action_menu(true);
-
 $page .= '<div class="row-fluid" style="overflow:hidden">';
 $page .= '<div id="lp_sidebar" class="span4">';
 $page .= $_SESSION['oLP']->return_new_tree(null, true);
@@ -94,13 +106,11 @@ $page .= '</div>';
 
 $page .= '<div id="doc_form" class="span8">';
 
-$lp_item = new learnpathItem($lp_item_id);
-
-$form = new FormValidator('add_audio', 'post', api_get_self().'?action=add_audio&id='.$lp_item_id, null, array('enctype' => 'multipart/form-data'));
 
 $form->addElement('header', get_lang('RecordYourVoice'));
 
 $tpl->assign('lp_item_id', $lp_item_id);
+$tpl->assign('lp_dir', api_remove_trailing_slash($lpPathInfo['dir']));
 $voiceContent = $tpl->fetch('default/learnpath/record_voice.tpl');
 
 $form->addElement('html', $voiceContent);
@@ -108,15 +118,13 @@ $form->addElement('header', get_lang('UplUpload'));
 
 $form->addElement('html', $lp_item->get_title());
 $form->addElement('file', 'file', get_lang('AudioFile'), 'style="width: 250px"');
+if (!empty($file)) {
+    $form->addElement('checkbox', 'delete_file', null, get_lang('RemoveAudio'));
+}
+
 $form->addElement('hidden', 'id', $lp_item_id);
 
-if (isset($lp_item->audio) && !empty($lp_item->audio)) {
-    $form->addElement('checkbox', 'delete_file', null, get_lang('RemoveAudio'));
-    $file = '../../courses/'.$_course['path'].'/document/audio/'.$lp_item->audio;
-    if (!file_exists($file)) {
-        $lpPathInfo = $_SESSION['oLP']->generate_lp_folder(api_get_course_info());
-        $file = '../../courses/'.$_course['path'].'/document'.$lpPathInfo['dir'].$lp_item->audio;
-    }
+if (!empty($file)) {
     $audioPlayer = '<div id="preview">'.Display::getMediaPlayer($file)."</div>";
     $form->addElement('label', get_lang('Preview'), $audioPlayer);
 }

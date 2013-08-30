@@ -26,7 +26,6 @@ if ($wamiuserid != api_get_user_id() || api_get_user_id() == 0 || $wamiuserid ==
     die();
 }
 
-
 //clean
 $waminame = Security::remove_XSS($waminame);
 $waminame = Database::escape_string($waminame);
@@ -34,8 +33,11 @@ $waminame = addslashes(trim($waminame));
 $waminame = replace_dangerous_char($waminame, 'strict');
 $waminame = disable_dangerous_file($waminame);
 $wamidir  = Security::remove_XSS($wamidir);
-
 $content = file_get_contents('php://input');
+
+if (empty($content)) {
+    exit;
+}
 
 //security extension
 $ext = explode('.', $waminame);
@@ -50,7 +52,7 @@ if ($ext != 'wav') {
 $dirBaseDocuments   = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $saveDir            = $dirBaseDocuments.$wamidir;
 $current_session_id = api_get_session_id();
-$groupId            = $_SESSION['_gid'];
+$groupId            = api_get_group_id();
 
 //avoid duplicates
 $waminame_to_save = $waminame;
@@ -68,22 +70,58 @@ if (file_exists($saveDir.'/'.$waminame_noex.'.'.$ext)) {
 
 $documentPath = $saveDir.'/'.$waminame_to_save;
 
-//add to disk
+// Add to disk
 $fh = fopen($documentPath, 'w') or die("can't open file");
 fwrite($fh, $content);
 fclose($fh);
 
-//add document to database
-$doc_id = add_document($_course, $wamidir.'/'.$waminame_to_save, 'file', filesize($documentPath), $title_to_save);
-api_item_property_update(
-    $_course,
-    TOOL_DOCUMENT,
-    $doc_id,
-    'DocumentAdded',
-    $_user['user_id'],
-    $groupId,
-    null,
-    null,
-    null,
-    $current_session_id
-);
+$addToLP = false;
+
+if (isset($_REQUEST['lp_item_id']) && !empty($_REQUEST['lp_item_id'])) {
+    $lpItemId = $_REQUEST['lp_item_id'];
+    $lp = isset($_SESSION['oLP']) ? $_SESSION['oLP'] : null;
+
+    if (!empty($lp)) {
+        $addToLP = true;
+        // Converts wav into mp3
+        require_once '../../../../vendor/autoload.php';
+        $ffmpeg = \FFMpeg\FFMpeg::create();
+        $oldWavFile = $documentPath;
+        if (file_exists($oldWavFile)) {
+            $video = $ffmpeg->open($documentPath);
+            $waminame_to_save = str_replace('wav', 'mp3', $waminame_to_save);
+            $documentPath = $saveDir.'/'.$waminame_to_save;
+            $title_to_save = $waminame_to_save;
+
+            $result = $video->save(new FFMpeg\Format\Audio\Mp3(), $documentPath);
+            if ($result) {
+                unlink($oldWavFile);
+            }
+        }
+    }
+}
+
+if (file_exists($documentPath)) {
+    // Add document to database
+    $newDocId = add_document($_course, $wamidir.'/'.$waminame_to_save, 'file', filesize($documentPath), $title_to_save);
+
+    api_item_property_update(
+        $_course,
+        TOOL_DOCUMENT,
+        $newDocId,
+        'DocumentAdded',
+        api_get_user_id(),
+        $groupId,
+        null,
+        null,
+        null,
+        $current_session_id
+    );
+
+    if ($addToLP) {
+        $lp->set_modified_on();
+        $lpItem = new learnpathItem($lpItemId);
+        $lpItem->add_audio_from_documents($newDocId);
+    }
+}
+

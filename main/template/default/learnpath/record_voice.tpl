@@ -1,36 +1,90 @@
 <script type="text/javascript" src="{{ _p.web_lib }}javascript/rtc/RecordRTC.js"></script>
 
-<audio id="audio" autoplay="" loop="" controls=""></audio>
-<span id="progress-info"></span>
-<br />
-<button id="record" class="btn btn-danger" >Record Audio</button>
-<button id="stop" class="btn" disabled="">Stop Recording Audio</button>
+<script type="text/javascript" src="{{ _p.web_lib }}swfobject/swfobject.js"></script>
+<script type="text/javascript" src="{{ _p.web_lib }}wami-recorder/recorder.js"></script>
+<script type="text/javascript" src="{{ _p.web_lib }}wami-recorder/gui.js"></script>
+
+<div id="rtc">
+    <audio id="audio" autoplay="" loop="" controls=""></audio>
+    <span id="progress-info"></span>
+    <br />
+    <a id="record" class="btn btn-danger" >{{ 'RecordAudio' | get_lang }}</a>
+    <button id="stop" class="btn" disabled="">{{ 'StopRecordingAudio' | get_lang }}</button>
+</div>
+
+<div id="wami" style="float:left">
+    <a id="record-wami" class="btn btn-info">{{ 'ActivateAudioRecorder' | get_lang }}</a>
+    <br />
+    <div id="wami-recorder">
+    </div>
+    <div id="start-recording" class="alert" style="display:none">
+        {{ "StartSpeaking" | get_lang }}
+    </div>
+</div>
 
 <script>
 
-    $(document).ready(function() {
+function setupRecorder() {
+    Wami.setup({
+        id : "wami",
+        onReady : setupGUI,
+        swfUrl : "{{ _p.web_lib }}wami-recorder/Wami.swf"
+    });
+    $('#wami-recorder').css('margin-bottom', '150px');
+}
 
+function setupGUI() {
+    var uniq = 'rec_' + (new Date()).getTime() + ".wav";
+    var gui = new Wami.GUI({
+        id : "wami-recorder",
+        recordUrl : "{{ _p.web_lib }}wami-recorder/record_document.php?lp_item_id={{ lp_item_id }}&waminame="+uniq+"&wamidir={{ lp_dir }}&wamiuserid={{ _u.user_id }}",
+        //playUrl : "https://wami-recorder.appspot.com/audio",
+        buttonUrl : "{{ _p.web_lib }}wami-recorder/buttons.png",
+        buttonNoUrl: "{{ _p.web_img }}blank.gif",
+        onRecordStart : function() {
+            console.log('Record starts');
+            $('#start-recording').show();
+        },
+        onRecordFinish: function() {
+            $('#start-recording').hide();
+            window.location.reload();
+        },
+        onError : function() {
+        },
+        singleButton : true
+    });
+
+    gui.setPlayEnabled(false);
+}
+</script>
+<script>
+
+    $(document).ready(function() {
+        var isChrome =  navigator.webkitGetUserMedia;
+        //isChrome = false;
+        if (isChrome) {
+            $('#rtc').show();
+            $('#wami').hide();
+        } else {
+            $('#rtc').hide();
+            $('#wami').show();
+
+            var recordWami = $('#record-wami');
+            recordWami.on('click', function() {
+                setupRecorder();
+                return false;
+            });
+        }
 
         var format = 'webm'; // or wav
-        var record = document.getElementById('record');
+        var record = $('#record');
         var stop = document.getElementById('stop');
         var preview = document.getElementById('audio');
         var progressInfo = document.getElementById('progress-info');
         var previewBlock = document.getElementById('preview');
 
 
-        function xhr(url, data, callback) {
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                if (request.readyState == 4 && request.status == 200) {
-                    callback(location.href + request.responseText);
-                }
-            };
-            request.open('POST', url);
-            request.send(data);
-        }
-
-         function postBlob(blob, fileType, fileName) {
+        function postBlob(blob, fileType, fileName) {
             // FormData
             var formData = new FormData();
             formData.append(fileType + '-filename', fileName);
@@ -69,33 +123,46 @@
             });
         }
 
-
-
         var recordAudio, recordVideo;
-        record.onclick = function() {
+
+        record.on('click', function() {
+
             record.disabled = true;
-            var video_constraints = {
-                mandatory: { },
-                optional: []
-            };
 
-            navigator.webkitGetUserMedia({
-                    audio: true,
-                    video: video_constraints
-                }, function(stream) {
-                    preview.src = (window.webkitURL || window.URL).createObjectURL(stream);
-                    preview.play();
+            var myURL = (window.URL || window.webkitURL || {});
 
-                    recordAudio = RecordRTC(stream);
-                    recordAudio.startRecording();
 
-                    /*recordVideo = RecordRTC(stream, {
-                        type: 'video'
-                    });*/
-                    //recordVideo.startRecording();
-                    stop.disabled = false;
+            if (navigator.getUserMedia) {
+
+                navigator.getUserMedia({
+                        audio: true,
+                        video: false
+                    },
+                    function(stream) {
+                        if (window.IsChrome) stream = new window.MediaStream(stream.getAudioTracks());
+
+                        preview.src = myURL.createObjectURL(stream);
+                            console.log(preview.src);
+                        preview.play();
+
+                        recordAudio = RecordRTC(stream, {
+                            type: 'audio'
+                        });
+                        recordAudio.startRecording();
+
+                        /*recordVideo = RecordRTC(stream, {
+                            type: 'video'
+                        });*/
+                        //recordVideo.startRecording();
+                        stop.disabled = false;
+                    },
+                    function(err) {
+                        console.log("The following error occured: " + err);
+                        return false;
                 });
-        };
+            }
+
+        });
 
         stop.onclick = function() {
             record.disabled = false;
@@ -115,6 +182,3 @@
     });
 
 </script>
-
-
-

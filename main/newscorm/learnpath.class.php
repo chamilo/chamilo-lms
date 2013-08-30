@@ -4922,7 +4922,8 @@ class learnpath {
 
     public function return_new_tree($update_audio = 'false', $drop_element_here = false) {
         $ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php';
-        echo '<script>
+
+        $return = '<script>
         var newOrderData= "";
         function processChildren(parentId) {
             //Loop through the children of the UL element defined by the parentId
@@ -5255,7 +5256,7 @@ class learnpath {
             }
         }
 
-        $return = '<div class="lp_tree well">';
+        $return .= '<div class="lp_tree well">';
 
         $return .= '<ul id="lp_item_list">';
         $return .='<h4>'.$this->name.'</h4><br>';

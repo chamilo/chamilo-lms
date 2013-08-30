@@ -2055,11 +2055,11 @@ class CourseRestorer
                     $add_to_calendar = $row['add_to_calendar'];
                     $enable_calification = $row['enable_calification'];
                     $sql_add_homework = "INSERT INTO $table_work_assignment SET
-                                                c_id                    = $this->destination_course_id ,
+                                                c_id                 = $this->destination_course_id ,
                                                 expires_on       		= '$expires_date',
-                                                ends_on        	 		= '$end_date',
+                                                ends_on        	 	   = '$end_date',
                                                 add_to_calendar  		= '$add_to_calendar',
-                                                enable_qualification 	= '$enable_calification',
+                                                enable_qualification  = '$enable_calification',
                                                 publication_id 			= '$last_id'";
                     Database::query($sql_add_homework);
                     api_item_property_update($this->destination_course_info, 'work', $last_id,"DirectoryCreated", api_get_user_id());

@@ -2695,6 +2695,7 @@ class UserManager
                         continue;
                     }
                     $course['course_info'] = $course;
+                    $course['session_id'] = $session_id;
                     $key = $session_id.' - '.$course['id'];
                     $personal_course_list[$key] = $course;
                 }

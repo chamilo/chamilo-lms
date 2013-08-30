@@ -84,7 +84,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                 $course_info = $personal_course_list[$key[0]];
                 $id_session = isset($course_info['session_id']) ? $course_info['session_id'] : 0;
 
-                $url = api_get_path(WEB_CODE_PATH).$course_info['directory'].'/index.php?id_session='.$id_session;
+                $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?id_session='.$id_session;
             }
 
             if ($count_of_sessions == 0 && $count_of_courses_no_sessions == 1) {

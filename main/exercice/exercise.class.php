@@ -376,7 +376,7 @@ class Exercise {
     /**
      * returns random answers status.
      *
-     * @author - Juan Carlos Raï¿½a
+     * @author - Juan Carlos Rana
      */
     function selectRandomAnswers() {
         return $this->random_answers;
@@ -634,7 +634,7 @@ class Exercise {
     /**
      * sets to 0 if answers are not selected randomly
      * if answers are selected randomly
-     * @author - Juan Carlos Raï¿½a
+     * @author - Juan Carlos Rana
      * @param - integer $random_answers - random answers
      */
     function updateRandomAnswers($random_answers) {
@@ -1264,6 +1264,7 @@ class Exercise {
             $this->random_answers=0;
         }
         $this->save($type);
+
     }
 
     function search_engine_save() {
@@ -1540,7 +1541,7 @@ class Exercise {
             $lp_id = 0;
         }
         if (empty($lp_item_id)) {
-            $lp_item_id = 0;
+            $lp_item_id   = 0;
         }
         if (empty($lp_item_view_id)) {
             $lp_item_view_id = 0;
@@ -3681,16 +3682,16 @@ class Exercise {
                 $questionList = array();
                 $tabCategoryQuestions = Testcategory::getQuestionsByCat($this->id);
                 $isRandomByCategory = $this->selectRandomByCat();
-                // on tri les categories en fonction du terme entre [] en tÃªte de la description de la catégorie
+                // on tri les categories en fonction du terme entre [] en tete de la description de la categorie
                 /*
                  * ex de catégories :
-                 * [biologie] MaÃ®triser les mécanismes de base de la génétique
-                 * [biologie] Relier les moyens de défenses et les agents infectieux
-                 * [biologie] Savoir oÃ¹ est produite l'énergie dans les cellules et sous quelle forme
-                 * [chimie] Classer les molécules suivant leur pouvoir oxydant ou réducteur
-                 * [chimie] ConnaÃ®tre la définition de la théorie acide/base selon BrÃ¶nsted
-                 * [chimie] ConnaÃ®tre les charges des particules
-                 * On veut dans l'ordre des groupes définis par le terme entre crochet au début du titre de la catégorie
+                 * [biologie] Maitriser les mecanismes de base de la genetique
+                 * [biologie] Relier les moyens de depenses et les agents infectieux
+                 * [biologie] Savoir ou est produite l'enrgie dans les cellules et sous quelle forme
+                 * [chimie] Classer les molles suivant leur pouvoir oxydant ou reacteur
+                 * [chimie] Connaître la denition de la theoie acide/base selon Brönsted
+                 * [chimie] Connaître les charges des particules
+                 * On veut dans l'ordre des groupes definis par le terme entre crochet au debut du titre de la categorie
                 */
                 // If test option is Grouped By Categories
                 if ($isRandomByCategory == 2) {
@@ -3896,5 +3897,57 @@ class Exercise {
             }
         }
         return $list;
+    }
+
+
+    /**
+     * Calculate the max_score of the quiz, depending of question inside, and quiz advanced option
+     */
+    public function get_max_score() {
+        $out_max_score = 0;
+        $tab_question_list = $this->selectQuestionList(true);   // list of question's id !!! the array key start at 1 !!!
+        // test is randomQuestions - see field random of test
+        if ($this->random > 0 && $this->randomByCat == 0) {
+            $nb_random_questions = $this->random;
+            $tab_questions_score = array();
+            for ($i=1; $i <= count($tab_question_list); $i++) {
+                $tmpobj_question = Question::read($tab_question_list[$i]);
+                $tab_questions_score[] = $tmpobj_question->weighting;
+            }
+            rsort($tab_questions_score);
+            // add the first $nb_random_questions value of score array to get max_score
+            for ($i=0; $i < min($nb_random_questions, count($tab_questions_score)); $i++) {
+                $out_max_score += $tab_questions_score[$i];
+            }
+        }
+        // test is random by category
+        // get the $nb_random_questions best score question of each category
+        else if ($this->random > 0 && $this->randomByCat > 0) {
+            $nb_random_questions = $this->random;
+            $tab_categories_scores = array();
+            for ($i=1; $i <= count($tab_question_list); $i++) {
+                $question_category_id = Testcategory::getCategoryForQuestion($tab_question_list[$i]);
+                if (!is_array($tab_categories_scores[$question_category_id])) {
+                    $tab_categories_scores[$question_category_id] = array();
+                }
+                $tmpobj_question = Question::read($tab_question_list[$i]);
+                $tab_categories_scores[$question_category_id][] = $tmpobj_question->weighting;
+            }
+            // here we've got an array with first key, the category_id, second key, score of question for this cat
+            while (list($key, $tab_scores) = each($tab_categories_scores)) {
+                rsort($tab_scores);
+                for ($i=0; $i < min($nb_random_questions, count($tab_scores)); $i++) {
+                    $out_max_score += $tab_scores[$i];
+                }
+            }
+        }
+        // standart test, just add each question score
+        else {
+            for ($i=1; $i <= count($tab_question_list); $i++) {
+                $tmpobj_question = Question::read($tab_question_list[$i]);
+                $out_max_score += $tmpobj_question->weighting;
+            }
+        }
+        return $out_max_score;
     }
 }

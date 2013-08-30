@@ -7894,6 +7894,15 @@ class learnpath {
             //$return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . ' />';
 
             if ($arrLP[$i]['item_type'] == TOOL_QUIZ) {
+                // lets update max_score Quiz information depending of the Quiz Advanced properties
+                require_once api_get_path(LIBRARY_PATH)."lp_item.lib.php";
+                $tmp_obj_lp_item = new LpItem($course_id, $arrLP[$i]['id']);
+                $tmp_obj_exercice = new Exercise();
+                $tmp_obj_exercice->read($tmp_obj_lp_item->path);
+                $tmp_obj_lp_item->max_score = $tmp_obj_exercice->get_max_score();
+                $tmp_obj_lp_item->update_in_bdd();
+                $arrLP[$i]['max_score'] = $tmp_obj_lp_item->max_score;
+
                 $return .= '<td class="exercise" style="border:1px solid #ccc;">';
                 $return .= '<center><input size="4" maxlength="3" name="min_' . $arrLP[$i]['id'] . '" type="text" value="' . (($arrLP[$i]['id'] == $preq_id) ? $preq_mastery : 0) . '" /></center>';
                 $return .= '</td>';

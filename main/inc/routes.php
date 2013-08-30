@@ -134,6 +134,7 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
     $is_courseCoach  = false;
     $is_sessionAdmin = false;
 
+
     if ($courseReset) {
 
         if (isset($courseId) && $courseId && $courseId != -1) {
@@ -181,7 +182,7 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
             }
 
             //We are in a session course? Check session permissions
-            if (!empty($session_id)) {
+            if (!empty($sessionId)) {
                 //I'm not the teacher of the course
                 if ($is_courseAdmin == false) {
                     // this user has no status related to this course

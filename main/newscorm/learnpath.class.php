@@ -2042,7 +2042,7 @@ class learnpath {
                 $file = '../../courses/'.$_course['path'].'/document'.$lpPathInfo['dir'].$audio;
             }
 
-            $player = Display::getMediaPlayer($file, array('autoplay' => $autostart_audio, 'width' => '90%'));
+            $player = Display::getMediaPlayer($file, array('autoplay' => $autostart_audio, 'width' => '100%'));
 
             // The mp3 player.
             $output  = '<div id="container">';

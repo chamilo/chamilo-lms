@@ -81,7 +81,7 @@ switch ($action) {
 
                 $fileInfo = pathinfo($fileName);
 
-                $file['name'] = 'rec_'.date('Y-m-d H:i:s').'_'.uniqid().'.'.$fileInfo['extension'];
+                $file['name'] = 'rec_'.date('Y-m-d_His').'_'.uniqid().'.'.$fileInfo['extension'];
                 $file['file'] = $file;
 
                 $lpPathInfo['dir'] = api_remove_trailing_slash($lpPathInfo['dir']);

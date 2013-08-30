@@ -5,7 +5,7 @@
 <script type="text/javascript" src="{{ _p.web_lib }}wami-recorder/gui.js"></script>
 
 <div id="rtc">
-    <audio id="audio" autoplay="" loop="" controls=""></audio>
+    <audio class="skip" id="audio" autoplay="" loop="" controls=""></audio>
     <span id="progress-info"></span>
     <br />
     <a id="record" class="btn btn-danger" >{{ 'RecordAudio' | get_lang }}</a>
@@ -42,7 +42,7 @@ function setupGUI() {
         buttonUrl : "{{ _p.web_lib }}wami-recorder/buttons.png",
         buttonNoUrl: "{{ _p.web_img }}blank.gif",
         onRecordStart : function() {
-            console.log('Record starts');
+            //console.log('Record starts');
             $('#start-recording').show();
         },
         onRecordFinish: function() {
@@ -83,7 +83,6 @@ function setupGUI() {
         var progressInfo = document.getElementById('progress-info');
         var previewBlock = document.getElementById('preview');
 
-
         function postBlob(blob, fileType, fileName) {
             // FormData
             var formData = new FormData();
@@ -108,6 +107,9 @@ function setupGUI() {
                 contentType: false,
                 type: 'POST',
                 success:function(fileURL) {
+
+                    window.location.reload();
+
                     progressInfo.appendChild(document.createElement('hr'));
 
                     var mediaElement = document.createElement(fileType);
@@ -116,9 +118,11 @@ function setupGUI() {
                     var uniq = 'id' + (new Date()).getTime();
                     mediaElement.id = uniq;
                     $(previewBlock).html('');
+
                     previewBlock.appendChild(mediaElement);
                     mediaElement.play();
                     $(progressInfo).html('');
+                    window.location.reload();
                 }
             });
         }

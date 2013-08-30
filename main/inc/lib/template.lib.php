@@ -422,6 +422,8 @@ class Template
 
         $css[] = api_get_path(WEB_CSS_PATH).'font_awesome/css/font-awesome.css';
 
+        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/mediaelementplayer.css';
+
         $css_file_to_string = null;
         foreach ($css as $file) {
             $css_file_to_string .= api_get_css($file);
@@ -474,6 +476,7 @@ class Template
             'chosen/chosen.jquery.min.js',
             'thickbox.js',
             'bootstrap/bootstrap.js',
+            'mediaelement/mediaelement-and-player.min.js'
         );
 
         if (api_is_global_chat_enabled()) {

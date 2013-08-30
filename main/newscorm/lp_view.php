@@ -86,7 +86,7 @@ $htmlHeadXtra[] = '<script>
 $(document).ready(function(){
 	$("div#log_content_cleaner").bind("click", function() {
     	$("div#log_content").empty();
-	});
+	});$("video:not(.skip), audio:not(.skip)").mediaelementplayer(/* Options */);
 });
 var chamilo_xajax_handler = window.oxajax;
 </script>';
@@ -321,7 +321,10 @@ $res_media= Database::query($sql);
 
 if (Database::num_rows($res_media) > 0) {
     while ($row_media= Database::fetch_array($res_media)) {
-        if (!empty($row_media['audio'])) {$show_audioplayer = true; break;}
+        if (!empty($row_media['audio'])) {
+            $show_audioplayer = true;
+            break;
+        }
     }
 }
 echo '<div id="learning_path_main" style="width:100%;height:100%;">';
@@ -475,19 +478,20 @@ echo '<div id="learning_path_main" style="width:100%;height:100%;">';
       ?>
     $.frameReady(function(){
         //  $("<div>I am a div courses</div>").prependTo("body");
-      }, "top.content_name",
-      { load: [
-              {type:"script", id:"_fr1", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.min.js"},
-              {type:"script", id:"_fr4", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
-              {type:"stylesheet", id:"_fr5", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
-              {type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"}
-
-          ] }
-          );
-      <?php
-           }
-      }
-      ?>
+      },
+        "top.content_name",
+      {
+      load: [
+          {type:"script", id:"_fr1", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.min.js"},
+          {type:"script", id:"_fr4", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
+          {type:"stylesheet", id:"_fr5", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
+          {type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"}
+      ]}
+      );
+  <?php
+       }
+  }
+  ?>
 }
     window.onload = updateContentHeight;
     window.onresize = updateContentHeight;

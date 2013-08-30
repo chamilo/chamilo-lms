@@ -74,7 +74,8 @@ switch ($action) {
         }
         break;
     case 'exercise_category_exists':
-        $category = new Testcategory();
+        $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'simple';
+        $category = new Testcategory(null, null, null, null, $type);
         $category->getCategory($_REQUEST['id']);
         if (empty($category->id)) {
             echo 0;
@@ -100,16 +101,39 @@ switch ($action) {
         break;
     case 'search_category_parent':
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'simple';
+        $filterByGlobal = isset($_REQUEST['filter_by_global']) ? $_REQUEST['filter_by_global'] : null;
 
         $cat = new Testcategory(null, null, null, null, $type);
         $items = $cat->get_categories_by_keyword($_REQUEST['tag']);
 
         $courseId = api_get_course_int_id();
 
+        $em = $this->get('orm.em');
+        $repo = $em->getRepository('Entity\CQuizCategory');
+
         $json_items = array();
         if (!empty($items)) {
             foreach ($items as $item) {
                 if ($item['c_id'] == 0) {
+                    if ($filterByGlobal) {
+                        $cat = $em->find('Entity\CQuizCategory', $item['iid']);
+                        $idList = array();
+                        if ($cat) {
+                            $path = $repo->getPath($cat);
+                            if (!empty($path)) {
+                                /** @var Entity\CQuizCategory $cat */
+                                foreach ($path as $cat) {
+                                    $idList[] = $cat->getIid();
+                                }
+                            }
+                        }
+
+                        if (isset($idList) && !empty($idList)) {
+                            if (!in_array($filterByGlobal, $idList)) {
+                                continue;
+                            }
+                        }
+                    }
                     $item['title'] .= " [".get_lang('Global')."]";
                 } else {
                     if (isset($courseId)) {

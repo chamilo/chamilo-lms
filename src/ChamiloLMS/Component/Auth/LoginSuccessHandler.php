@@ -69,8 +69,8 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             $count_of_courses_with_sessions = 0;
 
             foreach ($personal_course_list as $course) {
-                if (!empty($course['id_session'])) {
-                    $my_session_list[$course['id_session']] = true;
+                if (!empty($course['session_id'])) {
+                    $my_session_list[$course['session_id']] = true;
                     $count_of_courses_with_sessions++;
                 } else {
                     $count_of_courses_no_sessions++;
@@ -82,19 +82,15 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             if ($count_of_sessions == 1 && $count_of_courses_no_sessions == 0) {
                 $key = array_keys($personal_course_list);
                 $course_info = $personal_course_list[$key[0]];
-                $id_session = isset($course_info['id_session']) ? $course_info['id_session'] : 0;
+                $id_session = isset($course_info['session_id']) ? $course_info['session_id'] : 0;
 
-                $url = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$id_session;
+                $url = api_get_path(WEB_CODE_PATH).$course_info['directory'].'/index.php?id_session='.$id_session;
             }
 
             if ($count_of_sessions == 0 && $count_of_courses_no_sessions == 1) {
                 $key = array_keys($personal_course_list);
-
                 $course_info = $personal_course_list[$key[0]];
-                $course_directory = $course_info['course_info']['directory'];
-                $id_session = isset($course_info['id_session']) ? $course_info['id_session'] : 0;
-
-                $url = api_get_path(WEB_COURSE_PATH).$course_directory.'/index.php?id_session='.$id_session;
+                $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?id_session=0';
             }
         }
 

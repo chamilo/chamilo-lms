@@ -5962,36 +5962,44 @@ class Exercise
             Session::write('categoryList', $categoryList);
         }
 
-        //var_dump($categoryList);
-
-        $html = '<div class="row">';
-        $html .= '<div class="span2">';
-
-        $reviewAnswerLabel = null;
-        if ($this->review_answers) {
-            $reviewAnswerLabel = Display::label(get_lang('ToReview'), 'warning').'<br />';
-        }
-        $currentAnswerLabel = null;
-        if (!empty($current_question)) {
-            $currentAnswerLabel = Display::label(get_lang('CurrentQuestion'), 'info');
-        }
-        $html .= Display::label(get_lang('Answered'), 'success').'<br />'.Display::label(get_lang('Unanswered')).'<br />'.
-                 $reviewAnswerLabel.$currentAnswerLabel;
-        $html .= '</div>';
-
         $conditions = array();
         $conditions[] = array("class" => 'answered', 'items' => $exercise_result);
         $conditions[] = array("class" => 'remind', 'mode' => 'overwrite', 'items' => $remindList);
 
         $link = $url.'&num=';
 
-        $html .= '<div class="span10">';
+        $html = '<div class="row" id="exercise_progress_block">';
+        $html .= '<div class="span10" id="exercise_progress_bars">';
         if (!empty($categoryList)) {
             $html .= $this->progressExercisePaginationBarWithCategories($categoryList, $current_question, $conditions, $link);
         } else {
             $html .= $this->progressExercisePaginationBar($questionList, $current_question, $conditions, $link);
         }
         $html .= '</div>';
+
+        $html .= '<div class="span2" id="exercise_progress_legend"><div class="legend_static">';
+
+        $reviewAnswerLabel = null;
+        if ($this->review_answers) {
+            $reviewAnswerLabel = Display::label(sprintf(get_lang('ToReviewZ'),'c'), 'warning').'<br />';
+        }
+        $currentAnswerLabel = null;
+        if (!empty($current_question)) {
+            $currentAnswerLabel = Display::label(sprintf(get_lang('CurrentQuestionZ'),'d'), 'info');
+        }
+
+        // Count the number of answered, unanswered and 'for review' questions - see BT#6523
+        $numa = count(array_flip(array_merge($exercise_result,$remindList)));
+        $numu = count($questionListFlatten)-$numa;
+        $numr = count($remindList);
+        $html .= Display::label(sprintf(get_lang('AnsweredZ'),'a'), 'success').'<br />'.Display::label(sprintf(get_lang('UnansweredZ'),'b')).'<br />'.
+                 $reviewAnswerLabel.$currentAnswerLabel.
+                 '</div><div class="legend_dynamic">'.
+                 sprintf(get_lang('AnsweredXYZ'),str_pad($numa,2,'0',STR_PAD_LEFT),'a','c').'<br />'.
+                 sprintf(get_lang('UnansweredXYZ'),str_pad($numu,2,'0',STR_PAD_LEFT),'b').'<br />'.
+                 sprintf(get_lang('ToReviewXYZ'),str_pad($numr,2,'0',STR_PAD_LEFT),'c').'</div>'.
+                 '</div>';
+
         $html .= '</div>';
         return $html;
     }

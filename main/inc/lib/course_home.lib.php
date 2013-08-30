@@ -416,10 +416,12 @@ class CourseHome
         $course_id              = api_get_course_int_id();
         $condition_session 		= api_get_session_condition($session_id, true, true);
 
+        $studentView = isset($_SESSION['studentview']) ? $_SESSION['studentview'] : null;
+
         switch ($course_tool_category) {
             case TOOL_STUDENT_VIEW:
                 $condition_display_tools = ' WHERE visibility = 1 AND (category = "authoring" OR category = "interaction" OR category = "plugin") ';
-                if ((api_is_coach() || api_is_course_tutor()) && $_SESSION['studentview'] != 'studentview') {
+                if ((api_is_coach() || api_is_course_tutor()) && $studentView != 'studentview') {
                     $condition_display_tools = ' WHERE (visibility = 1 AND (category = "authoring" OR category = "interaction" OR category = "plugin") OR (name = "'.TOOL_TRACKING.'") )   ';
                 }
                 $sql = "SELECT * FROM $course_tool_table  $condition_display_tools AND c_id = $course_id $condition_session ORDER BY id";

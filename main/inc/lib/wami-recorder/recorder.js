@@ -75,7 +75,9 @@ Wami.setup = function(options) {
 		// Detecting the OS is a big no-no in Javascript programming, but
 		// I can't think of a better way to know if wmode is supported or
 		// not... since NOT supporting it (like Flash on Ubuntu) is a bug.
-		return (navigator.platform.indexOf("Linux") == -1);
+		//return (navigator.platform.indexOf("Linux") == -1);
+        // Chamilo change
+        return true;
 	}
 
 	function setOptions(options) {
@@ -125,7 +127,7 @@ Wami.setup = function(options) {
 
 		var container = document.createElement('div');
 		container.style.position = 'absolute';
-		_options.cid = Wami.createID();
+        _options.cid = Wami.createID();
 		container.setAttribute('id', _options.cid);
 
 		var swfdiv = document.createElement('div');

@@ -493,6 +493,7 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 
     $group_id = api_get_group_id();
 
+
 	if (is_array($work_parents)) {
 		foreach ($work_parents as $work_parent) {
 			$sql_select_directory = "SELECT
@@ -812,6 +813,16 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
                                  FROM $work_table w INNER JOIN $user_table u ON w.user_id = u.user_id
                                  WHERE w.c_id = $course_id AND w.parent_id = ".$work_data['id']." AND w.active IN (0, 1)";*/
 			} else {
+
+                if (ADD_DOCUMENT_TO_WORK) {
+                    $subscribedUsers = getAllUserToWork($work_data['id'], $course_id);
+                    if (!empty($subscribedUsers)) {
+                        if (!in_array(api_get_user_id(), $subscribedUsers)) {
+                            continue;
+                        }
+                    }
+                }
+
                 $cant_files = get_count_work($work_data['id'], api_get_user_id());
                 /*
                 $user_filter = "user_id = ".api_get_user_id()." AND ";
@@ -2216,6 +2227,15 @@ function getAllUserToWork($workId, $courseId)
     return Database::select('*', $table, array('where' => $params));
 }
 
+function userAddedToWork($userId, $workId, $courseId)
+{
+    /*$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_USER);
+    $params = array(
+        'user_id = ? and work_id = ? and c_id = ?' => array($userId, $workId, $courseId)
+    );
+    $result = Database::select('count(*)', $table, array('where' => $params));*/
+}
+
 
 function deleteUserToWork($userId, $workId, $courseId)
 {
@@ -2225,4 +2245,6 @@ function deleteUserToWork($userId, $workId, $courseId)
     );
     Database::delete($table, $params);
 }
+
+
 

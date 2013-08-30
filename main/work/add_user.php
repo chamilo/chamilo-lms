@@ -45,7 +45,10 @@ $error_message = null;
 switch ($action) {
     case 'add':
 
-        addUserToWork($userId, $workId, api_get_course_int_id());
+        $data = getUserToWork($userId, $workId, api_get_course_int_id());
+        if (empty($data)) {
+            addUserToWork($userId, $workId, api_get_course_int_id());
+        }
         $url = api_get_path(WEB_CODE_PATH).'work/add_user.php?id='.$workId;
         header('Location: '.$url);
         exit;
@@ -66,10 +69,12 @@ Display :: display_header(null);
 echo Display::page_subheader(get_lang('UsersAdded'));
 
 $items = getAllUserToWork($workId, api_get_course_int_id());
+$usersAdded = array();
 if (!empty($items)) {
     echo '<div class="well">';
     foreach ($items as $data) {
         $myUserId = $data['user_id'];
+        $usersAdded[] = $myUserId;
         $userInfo = api_get_user_info($myUserId);
         $url = api_get_path(WEB_CODE_PATH).'work/add_user.php?action=delete&id='.$workId.'&user_id='.$myUserId;
         $link = Display::url(get_lang('Delete'), $url);
@@ -84,6 +89,9 @@ echo Display::page_subheader(get_lang('UserToAdd'));
 if (!empty($userList)) {
     echo '<div class="well">';
     foreach ($userList as $user) {
+        if (in_array($user['user_id'], $usersAdded)) {
+            continue;
+        }
         $userName = api_get_person_name($user['firstname'], $user['lastname']);
         $url = api_get_path(WEB_CODE_PATH).'work/add_user.php?action=add&id='.$workId.'&user_id='.$user['user_id'];
         $link = Display::url(get_lang('Add'), $url);

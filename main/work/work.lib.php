@@ -17,6 +17,8 @@ require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
+define('ADD_DOCUMENT_TO_WORK', true);
+
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
  * @param	string	Current dir
@@ -2140,3 +2142,87 @@ function display_list_users_without_publication($task_id, $studentId = null)
 	$column_show[] = 1;
 	Display::display_sortable_config_table('work', $table_header, $data, $sorting_options, $paging_options, $my_params, $column_show);
 }
+
+// Document to work
+
+function addDocumentToWork($documentId, $workId, $courseId)
+{
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
+    $params = array(
+        'document_id' => $documentId,
+        'work_id' => $workId,
+        'c_id' => $courseId
+    );
+    Database::insert($table, $params);
+}
+
+function getDocumentToWork($documentId, $workId, $courseId)
+{
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
+    $params = array(
+        'document_id = ? and work_id = ? and c_id = ?' => array($documentId, $workId, $courseId)
+    );
+    return Database::select('*', $table, array('where' => $params));
+}
+
+function getAllDocumentToWork($workId, $courseId)
+{
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
+    $params = array(
+        'work_id = ? and c_id = ?' => array($workId, $courseId)
+    );
+    return Database::select('*', $table, array('where' => $params));
+}
+
+
+function deleteDocumentToWork($documentId, $workId, $courseId)
+{
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
+    $params = array(
+        'document_id = ? and work_id = ? and c_id = ?' => array($documentId, $workId, $courseId)
+    );
+    Database::delete($table, $params);
+}
+
+// User to work
+
+
+function addUserToWork($userId, $workId, $courseId)
+{
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_USER);
+    $params = array(
+        'user_id' => $userId,
+        'work_id' => $workId,
+        'c_id' => $courseId
+    );
+    Database::insert($table, $params);
+}
+
+function getUserToWork($userId, $workId, $courseId)
+{
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_USER);
+    $params = array(
+        'user_id = ? and work_id = ? and c_id = ?' => array($userId, $workId, $courseId)
+    );
+    return Database::select('*', $table, array('where' => $params));
+}
+
+function getAllUserToWork($workId, $courseId)
+{
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_USER);
+    $params = array(
+        'work_id = ? and c_id = ?' => array($workId, $courseId)
+    );
+    return Database::select('*', $table, array('where' => $params));
+}
+
+
+function deleteUserToWork($userId, $workId, $courseId)
+{
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_USER);
+    $params = array(
+        'user_id = ? and work_id = ? and c_id = ?' => array($userId, $workId, $courseId)
+    );
+    Database::delete($table, $params);
+}
+

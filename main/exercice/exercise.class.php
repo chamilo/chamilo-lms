@@ -5964,7 +5964,11 @@ class Exercise
             Session::write('categoryList', $categoryList);
         }
 
-        //var_dump($categoryList);
+        $conditions = array();
+        $conditions[] = array("class" => 'answered', 'items' => $exercise_result);
+        $conditions[] = array("class" => 'remind', 'mode' => 'overwrite', 'items' => $remindList);
+
+        $link = $url.'&num=';
 
         $html = '<div class="row" id="exercise_progress_block">';
         $html .= '<div class="span10" id="exercise_progress_bars">';
@@ -5974,6 +5978,7 @@ class Exercise
             $html .= $this->progressExercisePaginationBar($questionList, $current_question, $conditions, $link);
         }
         $html .= '</div>';
+
         $html .= '<div class="span2" id="exercise_progress_legend"><div class="legend_static">';
 
         $reviewAnswerLabel = null;
@@ -5984,6 +5989,7 @@ class Exercise
         if (!empty($current_question)) {
             $currentAnswerLabel = Display::label(sprintf(get_lang('CurrentQuestionZ'),'d'), 'info');
         }
+
         // Count the number of answered, unanswered and 'for review' questions - see BT#6523
         $numa = count(array_flip(array_merge($exercise_result,$remindList)));
         $numu = count($questionListFlatten)-$numa;
@@ -5995,12 +6001,6 @@ class Exercise
                  sprintf(get_lang('UnansweredXYZ'),str_pad($numu,2,'0',STR_PAD_LEFT),'b').'<br />'.
                  sprintf(get_lang('ToReviewXYZ'),str_pad($numr,2,'0',STR_PAD_LEFT),'c').'</div>'.
                  '</div>';
-
-        $conditions = array();
-        $conditions[] = array("class" => 'answered', 'items' => $exercise_result);
-        $conditions[] = array("class" => 'remind', 'mode' => 'overwrite', 'items' => $remindList);
-
-        $link = $url.'&num=';
 
         $html .= '</div>';
         return $html;

@@ -680,10 +680,9 @@ $app->before(
 
         $app['translator.cache.enabled'] = false;
 
-        $app['translator'] = $app->share($app->extend('translator', function($translator, $app) {
+        $app['translator'] = $app->share($app->extend('translator', function ($translator, $app) {
 
             $locale = $translator->getLocale();
-
 
             /** @var Symfony\Component\Translation\Translator $translator  */
             if ($app['translator.cache.enabled']) {
@@ -712,17 +711,15 @@ $app->before(
             }
         }));
 
-        // Setting course entity for controllers.
-
-        // The course parameter is loaded
-        $course = $request->get('course');
-
         // Check if we are inside a Chamilo course tool
         $isCourseTool = (strpos($request->getPathInfo(), 'courses/') === false) ? false : true;
 
         //$controllerName = $request->get('_controller');
 
-        // Setting converts
+        // The course parameter is loaded
+        $course = $request->get('course');
+
+        // Setting course entity for controllers and templates
         if ($isCourseTool) {
             // Converting /courses/XXX/ to a Entity/Course object
             $course = $app['orm.em']->getRepository('Entity\Course')->findOneByCode($course);
@@ -841,7 +838,6 @@ if (isset($app['configuration']['main_database']) && isset($app['db.event_manage
     // $app['db.event_manager']->addEventSubscriber($sluggableListener);
     $app['dbs.event_manager']['db_read']->addEventSubscriber($sluggableListener);
     $app['dbs.event_manager']['db_write']->addEventSubscriber($sluggableListener);
-
 
     $sortableListener = new Gedmo\Sortable\SortableListener();
     // $app['db.event_manager']->addEventSubscriber($sortableListener);

@@ -99,6 +99,7 @@ class Exercise
     public $hideQuestionTitle = 0;
     public $scoreTypeModel = 0;
     public $categoryMinusOne = true; // Shows the category -1: See BT#6540
+    public $globalCategoryId = null;
 
     /**
      * Constructor of the class
@@ -132,6 +133,7 @@ class Exercise
         $this->questionSelectionType = EX_Q_SELECTION_ORDERED;
         $this->endButton = 0;
         $this->scoreTypeModel = 0;
+        $this->globalCategoryId = null;
 
         if (!empty($course_id)) {
             $course_info = api_get_course_info_by_id($course_id);
@@ -201,6 +203,7 @@ class Exercise
             $this->questionSelectionType = $object->question_selection_type;
             $this->hideQuestionTitle = $object->hide_question_title;
             $this->scoreTypeModel = $object->score_type_model;
+            $this->globalCategoryId = $object->global_category_id;
 
             $this->review_answers = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;
             $sql = "SELECT max_score FROM $table_lp_item
@@ -549,6 +552,20 @@ class Exercise
     {
         $this->scoreTypeModel = intval($value);
     }
+
+    public function getGlobalCategoryId()
+    {
+        return $this->globalCategoryId;
+    }
+
+    public function setGlobalCategoryId($value)
+    {
+        if (is_array($value) && isset($value[0])) {
+            $value = $value[0];
+        }
+        $this->globalCategoryId = intval($value);
+    }
+
     /**
      *
      * @param int $start
@@ -1310,7 +1327,6 @@ class Exercise
 
         $id = $this->id;
         $exercise = $this->exercise;
-        $description = $this->description;
         $sound = $this->sound;
         $type = $this->type;
         $attempts = $this->attempts;
@@ -1350,7 +1366,7 @@ class Exercise
         if ($id) {
             $sql = "UPDATE $TBL_EXERCICES SET
 				    title='".Database::escape_string($exercise)."',
-					description='".Database::escape_string($description)."'";
+					description='".Database::escape_string($this->description)."'";
 
             if ($type_e != 'simple') {
                 $sql .= ",sound='".Database::escape_string($sound)."',
@@ -1375,12 +1391,13 @@ class Exercise
                     question_selection_type = '".$this->getQuestionSelectionType()."',
                     hide_question_title = '".$this->getHideQuestionTitle()."',
                     score_type_model = '".$this->getScoreTypeModel()."',
+                    global_category_id = '".$this->getGlobalCategoryId()."',
 					results_disabled='".Database::escape_string($results_disabled)."'";
             }
             $sql .= " WHERE iid = ".Database::escape_string($id)." AND c_id = {$this->course_id}";
             Database::query($sql);
 
-            // update into the item_property table
+            // Update into the item_property table
             api_item_property_update($_course, TOOL_QUIZ, $id, 'QuizUpdated', api_get_user_id());
 
             if (api_get_setting('search_enabled') == 'true') {
@@ -1392,13 +1409,13 @@ class Exercise
                         c_id, start_time, end_time, title, description, sound, type, random, random_answers, active,
                         max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category,
                         text_when_finished, display_category_name, pass_percentage, end_button, email_notification_template,
-                        results_disabled, model_type, question_selection_type, score_type_model, hide_question_title)
+                        results_disabled, model_type, question_selection_type, score_type_model, global_category_id, hide_question_title)
 					VALUES(
 						".$this->course_id.",
 						'$start_time',
                         '$end_time',
 						'".Database::escape_string($exercise)."',
-						'".Database::escape_string($description)."',
+						'".Database::escape_string($this->description)."',
 						'".Database::escape_string($sound)."',
 						'".Database::escape_string($type)."',
 						'".Database::escape_string($random)."',
@@ -1419,6 +1436,7 @@ class Exercise
                         '".Database::escape_string($this->getModelType())."',
                         '".Database::escape_string($this->getQuestionSelectionType())."',
                         '".Database::escape_string($this->getScoreTypeModel())."',
+                        '".Database::escape_string($this->getGlobalCategoryId())."',
                         '".Database::escape_string($this->getHideQuestionTitle())."'
 						)";
             Database::query($sql);
@@ -1998,14 +2016,89 @@ class Exercise
             );
             $form->addElement('html', '</div>');
 
-            // Pass percentage.
+
+              // Pass percentage.
             $form->addElement(
                 'text',
                 'pass_percentage',
                 array(get_lang('PassPercentage'), null, '%'),
                 array('id' => 'pass_percentage')
             );
+
             $form->addRule('pass_percentage', get_lang('Numeric'), 'numeric');
+
+
+
+            $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?1=1';
+
+
+            $js = '<script>
+
+            function check() {
+                var counter = 0;
+                $("#global_category_id option:selected").each(function() {
+                    var id = $(this).val();
+                    var name = $(this).text();
+                    if (id != "" ) {
+
+                        $.ajax({
+                            async: false,
+                            url: "'.$url.'&a=exercise_category_exists&type=global",
+                            data: "id="+id,
+                            success: function(return_value) {
+                                if (return_value == 0 ) {
+                                    alert("'.addslashes(get_lang('CategoryDoesNotExists')).'");
+                                    // Deleting select option tag
+                                    $("#global_category_id").find("option").remove();
+
+                                    $(".holder li").each(function () {
+                                        if ($(this).attr("rel") == id) {
+                                            $(this).remove();
+                                        }
+                                    });
+                                }
+                            },
+                        });
+                    }
+                    counter++;
+                });
+            }
+
+            $(function() {
+                $("#global_category_id").fcbkcomplete({
+                    json_url: "'.$url.'&a=search_category_parent&type=global&",
+                    maxitems: 1 ,
+                    addontab: false,
+                    input_min_size: 1,
+                    cache: false,
+                    complete_text:"'.get_lang('StartToType').'",
+                    firstselected: false,
+                    onselect: check,
+                    filter_selected: true,
+                    newel: true
+                });
+            });
+
+            </script>';
+            $form->addElement('html', $js);
+
+            $categoryJS = null;
+            $globalCategoryId = $this->getGlobalCategoryId();
+            if (!empty($globalCategoryId)) {
+                $cat = new Testcategory($globalCategoryId);
+                $trigger = '$("#global_category_id").trigger("addItem",[{ "title": "'.$cat->title.'", "value": "'.$globalCategoryId.'"}]);';
+                $categoryJS .= '<script>$(function() { '.$trigger.' });</script>';
+            }
+            $form->addElement('html', $categoryJS);
+
+             // Global category id.
+            $form->addElement(
+                'select',
+                'global_category_id',
+                array(get_lang('GlobalCategory')),
+                array(),
+                array('id' => 'global_category_id')
+            );
 
             // Text when ending an exam
             $form->add_html_editor('text_when_finished', get_lang('TextWhenFinished'), false, false, $editor_config);
@@ -2111,6 +2204,7 @@ class Exercise
                 $defaults['model_type'] = $this->getModelType();
                 $defaults['question_selection_type'] = $this->getQuestionSelectionType();
                 $defaults['score_type_model'] = $this->getScoreTypeModel();
+                //$defaults['global_category_id'] = $this->getScoreTypeModel();
 
                 $defaults['hide_question_title'] = $this->getHideQuestionTitle();
 
@@ -2170,6 +2264,7 @@ class Exercise
      */
     function processCreation($form, $type = '')
     {
+        $values = $form->exportValues();
         $this->updateTitle($form->getSubmitValue('exerciseTitle'));
         $this->updateDescription($form->getSubmitValue('exerciseDescription'));
         $this->updateAttempts($form->getSubmitValue('exerciseAttempts'));
@@ -2191,7 +2286,9 @@ class Exercise
         $this->setModelType($form->getSubmitValue('model_type'));
         $this->setQuestionSelectionType($form->getSubmitValue('question_selection_type'));
         $this->setHideQuestionTitle($form->getSubmitValue('hide_question_title'));
+        var_dump($values);
         $this->setScoreTypeModel($form->getSubmitValue('score_type_model'));
+        $this->setGlobalCategoryId($form->getSubmitValue('global_category_id'));
 
         if ($form->getSubmitValue('activate_start_date_check') == 1) {
             $start_time = $form->getSubmitValue('start_time');

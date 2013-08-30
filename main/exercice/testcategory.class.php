@@ -29,18 +29,19 @@ class Testcategory
      * @param string $in_name
      * @param string $in_description
      * @param int $parent_id
-     * @param string $type
+     * @param string $type Posible values: all, simple, global
      * @param int $course_id
+     * @param int visibility
      */
     public function Testcategory($in_id = 0, $in_name = '', $in_description = "", $parent_id = 0, $type = 'simple', $course_id = null, $visibility = 1)
     {
-		if ($in_id != 0 && $in_name == "") {
-			$tmpobj = new Testcategory();
-			$tmpobj->getCategory($in_id);
-			$this->id = $tmpobj->id;
-			$this->name = $tmpobj->name;
+        if ($in_id != 0 && $in_name == "") {
+            $tmpobj = new Testcategory();
+            $tmpobj->getCategory($in_id);
+            $this->id = $tmpobj->id;
+            $this->name = $tmpobj->name;
             $this->title = $tmpobj->name;
-			$this->description = $tmpobj->description;
+            $this->description = $tmpobj->description;
             $this->parent_id = $tmpobj->parent_id;
             $this->parent_path = $this->name;
             $this->c_id = $tmpobj->c_id;
@@ -50,22 +51,22 @@ class Testcategory
             if (!empty($tmpobj->parent_id)) {
                 $category = new Testcategory($tmpobj->parent_id);
                 $this->parent_path = $category->parent_path.' > '.$this->name;
-		    }
+            }
         } else {
-			$this->id = $in_id;
-			$this->name = $in_name;
-			$this->description = $in_description;
+            $this->id = $in_id;
+            $this->name = $in_name;
+            $this->description = $in_description;
             $this->parent_id = $parent_id;
             $this->visibility = $visibility;
         }
         $this->type = $type;
 
-        if (!empty($course_id))  {
+        if (!empty($course_id)) {
             $this->course_id = $course_id;
-		} else {
+        } else {
             $this->course_id = api_get_course_int_id();
         }
-	}
+    }
 
     /**
     * Return the Testcategory object with id=in_id
@@ -80,7 +81,7 @@ class Testcategory
         }
 
         $t_cattable = Database::get_course_table(TABLE_QUIZ_CATEGORY);
-        $id = Database::escape_string($id);
+        $id = intval($id);
         $sql = "SELECT * FROM $t_cattable WHERE iid = $id ";
         $res = Database::query($sql);
         $numRows = Database::num_rows($res);
@@ -119,14 +120,14 @@ class Testcategory
             return false;
         }
 
-		// Check if name already exists.
+        // Check if name already exists.
         $sql = "SELECT count(*) AS nb FROM $t_cattable WHERE title = '$v_name' $courseCondition";
-		$result = Database::query($sql);
-		$data = Database::fetch_array($result);
+        $result = Database::query($sql);
+        $data = Database::fetch_array($result);
 
         // lets add in BD if not the same name
         if ($data['nb'] <= 0) {
-            // @todo inject the app in the claas
+            // @todo inject the app in the class
             global $app;
             $category = new \Entity\CQuizCategory();
             $category->setTitle($this->name);
@@ -271,7 +272,7 @@ class Testcategory
             $where_condition = array(
                 "title $condition",
             );
-            $where_condition = ' AND  ('.implode(' OR ',  $where_condition).') ';
+            $where_condition = ' AND  ('.implode(' OR ', $where_condition).') ';
         }
 
         switch ($this->type) {
@@ -910,11 +911,12 @@ class Testcategory
         $html = null;
         if (!empty($new_category_list)) {
             switch ($type) {
-            case 'label':
-                $html = implode(' ', $new_category_list);
-                break;
-            case 'header':
-                $html = Display::page_subheader3(get_lang('Category').': '.implode(', ', $new_category_list));
+                case 'label':
+                    $html = implode(' ', $new_category_list);
+                    break;
+                case 'header':
+                    $html = Display::page_subheader3(get_lang('Category').': '.implode(', ', $new_category_list));
+                    break;
             }
         }
         return $html;

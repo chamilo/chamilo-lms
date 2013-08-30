@@ -309,6 +309,7 @@ INSERT INTO roles (id, name, role) VALUES('17', 'Question Manager', 'ROLE_QUESTI
 
 ALTER TABLE c_quiz ADD COLUMN question_selection_type INT DEFAULT 1;
 ALTER TABLE c_quiz ADD COLUMN hide_question_title INT DEFAULT 0;
+ALTER TABLE c_quiz ADD COLUMN global_category_id INT DEFAULT NULL;
 
 -- Admin
 INSERT INTO users_roles VALUES (1, 11);

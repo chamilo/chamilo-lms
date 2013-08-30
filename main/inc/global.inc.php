@@ -695,11 +695,17 @@ $app->before(
 
             } else {
                 $translator->addLoader('pofile', new PoFileLoader());
-                $filePath = api_get_path(SYS_PATH).'main/locale/'.$locale.'.po';
-                if (!file_exists($filePath)) {
-                    $filePath = api_get_path(SYS_PATH).'main/locale/en.po';
+
+                $filesToLoad = array(
+                    api_get_path(SYS_PATH).'main/locale/'.$locale.'.po',
+                    api_get_path(SYS_PATH).'main/locale/'.$locale.'.custom.po'
+                );
+
+                foreach ($filesToLoad as $file) {
+                    if (file_exists($file)) {
+                        $translator->addResource('pofile', $file, $locale);
+                    }
                 }
-                $translator->addResource('pofile', $filePath, $locale);
 
                 /*$translator->addLoader('mofile', new MoFileLoader());
                 $filePath = api_get_path(SYS_PATH).'main/locale/'.$locale.'.mo';

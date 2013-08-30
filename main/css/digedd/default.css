@@ -189,3 +189,13 @@ button.arrowl, input.arrowl {
 .exercise_progress_bars_cat_items {
     width: 710px !important;
 }
+#exercise_progress_legend {
+  width:97%;
+  margin-top:20px;
+}
+#exercise_progress_legend .legend_static {
+  float:right;
+} 
+#exercise_progress_legend .legend_dynamic {
+  float:left;
+}

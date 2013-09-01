@@ -11,7 +11,7 @@
 die('Please remove line '.__LINE__.' of this scripts if you are sure you know'."\n".'what you\'re doing'."\n");
 require_once '../../main/inc/global.inc.php';
 $t0 = time();
-$user_offset = 10; //30 students per room
+$user_offset = 30; //30 students per room
 $user = 0;
 $course_id = 1;
 $session = 0;

@@ -64,9 +64,12 @@ if (empty($docId)) {
         foreach ($documents as $doc) {
             $documentId = $doc['document_id'];
             $docData = DocumentManager::get_document_data_by_id($documentId, $courseInfo['code']);
-            $url = api_get_path(WEB_CODE_PATH).'work/add_document.php?action=delete&id='.$workId.'&document_id='.$documentId;
-            $link = Display::url(get_lang('Delete'), $url);
-            echo $docData['title'].' '.$link.'<br />';
+            if ($docData) {
+                $url = api_get_path(WEB_CODE_PATH).'work/add_document.php?action=delete&id='.$workId.'&document_id='.$documentId;
+                $link = Display::url(get_lang('Delete'), $url);
+                echo $docData['title'].' '.$link.'<br />';
+            }
+
         }
         echo '</div>';
     }

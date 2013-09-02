@@ -26,6 +26,7 @@ $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 $is_allowed_to_edit = api_is_allowed_to_edit();
 $course_id = api_get_course_int_id();
 $user_id = api_get_user_id();
+$userInfo = api_get_user_info();
 $session_id = api_get_session_id();
 $course_code = api_get_course_id();
 $course_info = api_get_course_info();
@@ -121,7 +122,7 @@ $form->addElement('header', $form_title);
 $show_progress_bar = false;
 
 if ($submitGroupWorkUrl) {
-    // For user comming from group space to publish his work
+    // For user coming from group space to publish his work
     $realUrl = str_replace($_configuration['root_sys'], api_get_path(WEB_PATH), str_replace("\\", '/', realpath($submitGroupWorkUrl)));
     $form->addElement('hidden', 'newWorkUrl', $submitGroupWorkUrl);
     $text_document = $form->addElement('text', 'document', get_lang('Document'));
@@ -160,6 +161,12 @@ if (!empty($_POST['submitWork']) || $item_id) {
 
 if ($show_progress_bar) {
     $form->add_real_progress_bar('uploadWork', 'file');
+}
+
+$documentTemplateData = getDocumentTemplateFromWork($work_id, $course_info);
+if (!empty($documentTemplateData)) {
+    $defaults['title'] = $userInfo['complete_name'].'_'.$documentTemplateData['title'].'_'.substr(api_get_utc_datetime(), 0, 10);
+    $defaults['description'] = $documentTemplateData['file_content'];
 }
 
 $form->setDefaults($defaults);

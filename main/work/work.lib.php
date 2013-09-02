@@ -1774,7 +1774,8 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 if ($work['contains_file']) {
                     $link_to_download = '<a href="download.php?id='.$item_id.'">'.Display::return_icon('save.png', get_lang('Save'),array(), ICON_SIZE_SMALL).'</a> ';
                 } else {
-                    $link_to_download = '<a href="view.php?id='.$item_id.'">'.Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a> ';
+                    //api_get_cidreq()
+                   //$link_to_download = '<a href="view.php?id='.$item_id.'">'.Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a> ';
                 }
 
                 $send_to = Portfolio::share('work', $work['id'],  array('style' => 'white-space:nowrap;'));
@@ -1830,7 +1831,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                         $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);
                     }
                     if (api_get_course_setting('student_delete_own_publication') == 1) {
-                        $action .= '<a href="'.$url.'work.php?'.api_get_cidreq().'&action=delete&amp;item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'"  >'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
+                        $action .= ' <a href="'.$url.'work.php?'.api_get_cidreq().'&action=delete&amp;item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'"  >'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
                     }
                 } else {
                     $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);
@@ -2146,6 +2147,9 @@ function getDocumentToWork($documentId, $workId, $courseId)
 
 function getAllDocumentToWork($workId, $courseId)
 {
+    if (ADD_DOCUMENT_TO_WORK == false) {
+        return array();
+    }
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
     $params = array(
         'work_id = ? and c_id = ?' => array($workId, $courseId)
@@ -2220,10 +2224,15 @@ function userIsSubscribedToWork($userId, $workId, $courseId)
         return true;
     }
     $subscribedUsers = getAllUserToWork($workId, $courseId);
+
     if (empty($subscribedUsers)) {
         return true;
     } else {
-        if (in_array($userId, $subscribedUsers)) {
+        $subscribedUsersIdList = array();
+        foreach ($subscribedUsers as $item) {
+            $subscribedUsersIdList[] = $item['user_id'];
+        }
+        if (in_array($userId, $subscribedUsersIdList)) {
             return true;
         }
     }
@@ -2244,3 +2253,20 @@ function allowOnlySubscribedUser($userId, $workId, $courseId)
 
 }
 
+function getDocumentTemplateFromWork($workId, $courseInfo)
+{
+    $documents = getAllDocumentToWork($workId, $courseInfo['real_id']);
+    if (!empty($documents)) {
+        foreach ($documents as $doc) {
+            $docData = DocumentManager::get_document_data_by_id($doc['document_id'], $courseInfo['code']);
+            $fileInfo = pathinfo($docData['path']);
+            if ($fileInfo['extension'] == 'html') {
+                if (file_exists($docData['absolute_path']) && is_file($docData['absolute_path'])) {
+                    $docData['file_content'] = file_get_contents($docData['absolute_path']);
+                    return $docData;
+                }
+            }
+        }
+    }
+    return array();
+}

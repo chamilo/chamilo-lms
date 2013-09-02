@@ -473,7 +473,7 @@ class Template
         //JS files
         $js_files = array(
             'modernizr.js',
-            'jquery.min.js',
+            'jquery.js',
             'chosen/chosen.jquery.min.js',
             'thickbox.js',
             'bootstrap/bootstrap.js',

@@ -2293,7 +2293,7 @@ class SessionManager
                             $my_session_result = true;
                         }
                     } else {
-                        $my_session_result = self::get_session_by_name($session_name);
+                        $my_session_result = self::get_session_by_name($enreg['SessionName']);
                     }
 
                     if ($my_session_result === false) {
@@ -2326,30 +2326,28 @@ class SessionManager
                         }
                     } else {
 
+                        $params = array(
+                            'id_coach' =>  $coach_id,
+                            'date_start' => $date_start,
+                            'date_end' => $date_end,
+                            'visibility' => $visibility,
+                            'session_category_id' => $session_category_id
+                        );
+
+                        if (!empty($fieldsToAvoidUpdate)) {
+                            foreach ($fieldsToAvoidUpdate as $field) {
+                                unset($params[$field]);
+                            }
+                        }
+
                         if (isset($sessionId) && !empty($sessionId)) {
                             // The session already exists, update it then.
-                            $sql_session = "UPDATE $tbl_session SET
-                                    id_coach = '$coach_id',
-                                    date_start = '$date_start',
-                                    date_end = '$date_end',
-                                    visibility = '$visibility',
-                                    session_category_id = '$session_category_id'
-                                WHERE id = '$sessionId'";
-                            //name = '$session_name'
-                            Database::query($sql_session);
+                            Database::update($tbl_session, $params, array('id = ?' => $sessionId));
                             $session_id = $sessionId;
                         } else {
+                            Database::update($tbl_session, $params, array("name = '?' " => $enreg['SessionName']));
 
-                            // The session already exists, update it then.
-                            $sql_session = "UPDATE $tbl_session SET
-                                    id_coach = '$coach_id',
-                                    date_start = '$date_start',
-                                    date_end = '$date_end',
-                                    visibility = '$visibility',
-                                    session_category_id = '$session_category_id'
-                                WHERE name = '$session_name'";
-                            Database::query($sql_session);
-                            $row = Database::query("SELECT id FROM $tbl_session WHERE name='$session_name'");
+                            $row = Database::query("SELECT id FROM $tbl_session WHERE name = '$session_name'");
                             list($session_id) = Database::fetch_array($row);
                         }
 

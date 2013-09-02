@@ -35,6 +35,8 @@ $courseInfo = api_get_course_info();
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $url_dir = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq();
 
+allowOnlySubscribedUser(api_get_user_id(), $workId, $courseInfo['real_id']);
+
 
 if (!empty($group_id)) {
     $group_properties  = GroupManager :: get_group_properties($group_id);

@@ -808,45 +808,13 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 
 			if (api_is_allowed_to_edit()) {
                 $cant_files = get_count_work($work_data['id']);
-
-                /*$sql_document = "SELECT count(*)
-                                 FROM $work_table w INNER JOIN $user_table u ON w.user_id = u.user_id
-                                 WHERE w.c_id = $course_id AND w.parent_id = ".$work_data['id']." AND w.active IN (0, 1)";*/
 			} else {
-
-                if (ADD_DOCUMENT_TO_WORK) {
-                    $subscribedUsers = getAllUserToWork($work_data['id'], $course_id);
-                    if (!empty($subscribedUsers)) {
-                        if (!in_array(api_get_user_id(), $subscribedUsers)) {
-                            continue;
-                        }
-                    }
+                $isSubscribed = userIsSubscribedToWork(api_get_user_id(), $work_data['id'], $course_id);
+                if ($isSubscribed == false) {
+                    continue;
                 }
-
                 $cant_files = get_count_work($work_data['id'], api_get_user_id());
-                /*
-                $user_filter = "user_id = ".api_get_user_id()." AND ";
-                if ($course_info['show_score'] == 0) {
-                    $user_filter  = null;
-                }
-
-                $sql_document = "SELECT count(*) FROM $work_table s, $iprop_table p
-                                  WHERE s.c_id = $course_id  AND
-                                        p.c_id = $course_id AND
-                                        s.id = p.ref AND
-                                        p.tool='work' AND
-                                        s.accepted='1' AND
-                                        $user_filter
-                                        parent_id = ".$work_data['id']." AND
-                                        active = 1 AND
-                                        parent_id = ".$work_parent->id."";*/
 			}
-
-
-			//count documents
-			/*$res_document   = Database::query($sql_document);
-			$count_document = Database::fetch_row($res_document);
-			$cant_files     = $count_document[0];*/
 
 			$text_file = get_lang('FilesUpload');
 
@@ -2246,5 +2214,33 @@ function deleteUserToWork($userId, $workId, $courseId)
     Database::delete($table, $params);
 }
 
+function userIsSubscribedToWork($userId, $workId, $courseId)
+{
+    if (ADD_DOCUMENT_TO_WORK == false) {
+        return true;
+    }
+    $subscribedUsers = getAllUserToWork($workId, $courseId);
+    if (empty($subscribedUsers)) {
+        return true;
+    } else {
+        if (in_array($userId, $subscribedUsers)) {
+            return true;
+        }
+    }
+    return false;
+}
 
+function allowOnlySubscribedUser($userId, $workId, $courseId)
+{
+    if (ADD_DOCUMENT_TO_WORK == false) {
+        return true;
+    }
+    if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+        return true;
+    }
+    if (userIsSubscribedToWork($userId, $workId, $courseId) == false) {
+        api_not_allowed(true);
+    }
+
+}
 

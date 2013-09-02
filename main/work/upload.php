@@ -35,6 +35,8 @@ if (empty($work_id)) {
     api_not_allowed(true);
 }
 
+allowOnlySubscribedUser($user_id, $work_id, $course_id);
+
 $parent_data = $my_folder_data = get_work_data_by_id($work_id);
 
 if (empty($parent_data)) {

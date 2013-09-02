@@ -50,7 +50,7 @@ if (isset($_SESSION['lpobject'])) {
 
     $mycourselptheme = null;
     if (api_get_setting('allow_course_theme') == 'true') {
-    	$mycourselptheme = api_get_course_setting('allow_learning_path_theme');
+        $mycourselptheme = api_get_course_setting('allow_learning_path_theme');
     }
 
     if (!empty($lp_theme_css) && !empty($mycourselptheme) && $mycourselptheme != -1 && $mycourselptheme == 1) {
@@ -65,4 +65,11 @@ if (isset($_SESSION['lpobject'])) {
 }
 session_write_close();
 ?>
-<span><?php echo (!empty($mediaplayer)) ? $mediaplayer : '&nbsp;' ?></span>
+<script>
+$(document).ready(function() {
+$('video:not(.skip), audio:not(.skip)').mediaelementplayer();
+});
+</script>
+<span>
+    <?php echo (!empty($mediaplayer)) ? $mediaplayer : '&nbsp;' ?>
+</span>

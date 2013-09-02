@@ -68,6 +68,9 @@ $(document).ready( function() {
         disable_search_threshold: 10
     });
 
+    // Mediaelement
+    $('video:not(.skip), audio:not(.skip)').mediaelementplayer(/* Options */);
+
     // Table highlight.
     $("form .data_table input:checkbox").click(function() {
         if ($(this).is(":checked")) {
@@ -92,11 +95,8 @@ $(document).ready( function() {
     }
     $('.boot-tooltip').tooltip(tip_options);
 });
-
-$(document).load(function() {
-    // Mediaelement
-    $('video:not(.skip), audio:not(.skip)').mediaelementplayer(/* Options */);
-});
-</script>
 {% endraw %}
+
+</script>
+
 {{ execution_stats }}

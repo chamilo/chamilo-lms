@@ -83,17 +83,18 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setti
 }*/
 
 $htmlHeadXtra[] = '<script>
-$(document).ready(function(){
+$(document).ready(function() {
 	$("div#log_content_cleaner").bind("click", function() {
     	$("div#log_content").empty();
-	});$("video:not(.skip), audio:not(.skip)").mediaelementplayer(/* Options */);
+	});
+	$("video:not(.skip), audio:not(.skip)").mediaelementplayer();
 });
 var chamilo_xajax_handler = window.oxajax;
 </script>';
 
 if ($_SESSION['oLP']->mode == 'embedframe' || $_SESSION['oLP']->get_hide_toc_frame()==1 ) {
     $htmlHeadXtra[] = '<script>
-        $(document).ready(function(){
+        $(document).ready(function() {
             toogle_minipanel();
         });
         </script>';

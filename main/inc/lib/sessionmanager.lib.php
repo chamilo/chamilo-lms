@@ -2034,7 +2034,7 @@ class SessionManager
                             $my_session_result = true;
                         }
                     } else {
-                        $my_session_result = self::get_session_by_name($session_name);
+                        $my_session_result = self::get_session_by_name($enreg['SessionName']);
                     }
 
                     if ($my_session_result === false) {
@@ -2049,8 +2049,10 @@ class SessionManager
                                 session_category_id = '$session_category_id' ".$extraParameters;
 
                         Database::query($sql_session);
+
                         // We get the last insert id.
-                        $my_session_result = SessionManager::get_session_by_name($session_name);
+                        $my_session_result = SessionManager::get_session_by_name($enreg['SessionName']);
+
                         $session_id = $my_session_result['id'];
 
                         if ($debug) {
@@ -2086,7 +2088,7 @@ class SessionManager
                             Database::update($tbl_session, $params, array('id = ?' => $sessionId));
                             $session_id = $sessionId;
                         } else {
-                            Database::update($tbl_session, $params, array("name = '?' " => $session_name));
+                            Database::update($tbl_session, $params, array("name = '?' " => $enreg['SessionName']));
 
                             $row = Database::query("SELECT id FROM $tbl_session WHERE name = '$session_name'");
                             list($session_id) = Database::fetch_array($row);

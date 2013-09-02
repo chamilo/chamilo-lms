@@ -1564,7 +1564,7 @@ class Display {
                 }
                 $width = isset($params['width']) ? 'width="'.$params['width'].'"' : null;
                 $html = '<audio id="'.$fileInfo['basename'].'" controls '.$autoplay.' '.$width.' src="'.$file.'" >';
-                $html .=  '<object width="320" height="240" type="application/x-shockwave-flash" data="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf">
+                $html .=  '<object width="120" height="50" type="application/x-shockwave-flash" data="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf">
                                 <param name="movie" value="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf" />
                                 <param name="flashvars" value="controls=true&file='.$fileInfo['basename'].'" />
                             </object>';

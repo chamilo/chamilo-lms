@@ -1,6 +1,7 @@
 # Chamilo
 
 main/inc/conf
+main/lang/*
 config/auth.conf.php
 config/configuration.php
 config/events.conf.php

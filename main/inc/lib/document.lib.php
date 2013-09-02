@@ -1028,12 +1028,13 @@ class DocumentManager {
     /**
      * Gets the document data with a given id
      *
-     * @param array $_course
-     * @param string $path
-     * @todo load parent_id
-     * @return int id of document / false if no doc found
+     * @param int id
+     * @param string course code
+     * @param bool load parents?
+     * @return array document content
      */
-    public static function get_document_data_by_id($id, $course_code, $load_parents = false) {
+    public static function get_document_data_by_id($id, $course_code, $load_parents = false)
+    {
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
 

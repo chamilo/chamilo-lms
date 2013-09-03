@@ -1708,7 +1708,7 @@ class SessionManager
             $consider_end = false;
         }
 
-        $sid = self::create_session($s['name'].' '.get_lang('Copy'),
+        $sid = self::create_session($s['name'].' '.get_lang('CopyLabelSuffix'),
              $s['year_start'], $s['month_start'], $s['day_start'],
              $s['year_end'],$s['month_end'],$s['day_end'],
              $s['nb_days_acess_before_beginning'],$s['nb_days_acess_after_end'],
@@ -1744,7 +1744,7 @@ class SessionManager
                     $params['skip_lp_dates'] = true;
 
                     foreach ($short_courses as $course_data) {
-                        $course_info = CourseManager::copy_course_simple($course_data['title'].' '.get_lang('Copy'), $course_data['course_code'], $id, $sid, $params);
+                        $course_info = CourseManager::copy_course_simple($course_data['title'].' '.get_lang('CopyLabelSuffix'), $course_data['course_code'], $id, $sid, $params);
                         if ($course_info) {
                             //By default new elements are invisible
                             if ($set_exercises_lp_invisible) {

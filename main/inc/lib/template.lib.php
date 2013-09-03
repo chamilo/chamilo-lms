@@ -421,6 +421,7 @@ class Template
         }
 
         $css[] = api_get_path(WEB_CSS_PATH).'font_awesome/css/font-awesome.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/mediaelementplayer.css';
 
         $css_file_to_string = null;
         foreach ($css as $file) {
@@ -470,10 +471,11 @@ class Template
         //JS files
         $js_files = array(
             'modernizr.js',
-            'jquery.min.js',
+            'jquery.js',
             'chosen/chosen.jquery.min.js',
             'thickbox.js',
             'bootstrap/bootstrap.js',
+            'mediaelement/mediaelement-and-player.min.js'
         );
 
         if (api_is_global_chat_enabled()) {
@@ -645,9 +647,7 @@ class Template
         if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
             $bug_notification_link = '<li class="report">
 		        						<a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank">
-		        						<img src="'.api_get_path(
-                    WEB_IMG_PATH
-                ).'bug.large.png" style="vertical-align: middle;" alt="'.get_lang('ReportABug').'" title="'.get_lang(
+		        						<img src="'.api_get_path(WEB_IMG_PATH).'bug.large.png" style="vertical-align: middle;" alt="'.get_lang('ReportABug').'" title="'.get_lang(
                     'ReportABug'
                 ).'"/></a>
 		    						  </li>';

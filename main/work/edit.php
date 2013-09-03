@@ -147,7 +147,7 @@ if ($is_allowed_to_edit && !empty($item_id)) {
     }
 }
 
-$form->addElement('hidden', 'active',   1);
+$form->addElement('hidden', 'active', 1);
 $form->addElement('hidden', 'accepted', 1);
 $form->addElement('hidden', 'item_to_edit', $item_id);
 $form->addElement('hidden', 'sec_token', $token);
@@ -178,9 +178,10 @@ if ($form->validate()) {
             if ($is_author) {
                 $work_data = get_work_data_by_id($item_to_edit_id);
 
-                if (!empty($_POST['title']))
+                if (!empty($_POST['title'])) {
                     $title 		 = isset($_POST['title']) ? $_POST['title'] : $work_data['title'];
-                    $description = isset($_POST['description']) ? $_POST['description'] : $work_data['description'];
+                }
+                $description = isset($_POST['description']) ? $_POST['description'] : $work_data['description'];
 
                 if ($is_allowed_to_edit && ($_POST['qualification'] !='' )) {
                     $add_to_update = ', qualificator_id ='."'".api_get_user_id()."',";

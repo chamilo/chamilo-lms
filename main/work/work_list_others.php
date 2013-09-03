@@ -38,8 +38,9 @@ if ($courseInfo['show_score'] == 1) {
     api_not_allowed(true);
 }
 
-$htmlHeadXtra[] = api_get_jqgrid_js();
+allowOnlySubscribedUser(api_get_user_id(), $workId, $courseInfo['real_id']);
 
+$htmlHeadXtra[] = api_get_jqgrid_js();
 
 if (!empty($group_id)) {
     $group_properties  = GroupManager :: get_group_properties($group_id);

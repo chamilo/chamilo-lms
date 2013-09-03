@@ -17,6 +17,8 @@ require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
+define('ADD_DOCUMENT_TO_WORK', false);
+
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
  * @param	string	Current dir
@@ -491,6 +493,7 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 
     $group_id = api_get_group_id();
 
+
 	if (is_array($work_parents)) {
 		foreach ($work_parents as $work_parent) {
 			$sql_select_directory = "SELECT
@@ -805,35 +808,13 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 
 			if (api_is_allowed_to_edit()) {
                 $cant_files = get_count_work($work_data['id']);
-
-                /*$sql_document = "SELECT count(*)
-                                 FROM $work_table w INNER JOIN $user_table u ON w.user_id = u.user_id
-                                 WHERE w.c_id = $course_id AND w.parent_id = ".$work_data['id']." AND w.active IN (0, 1)";*/
 			} else {
-                $cant_files = get_count_work($work_data['id'], api_get_user_id());
-                /*
-                $user_filter = "user_id = ".api_get_user_id()." AND ";
-                if ($course_info['show_score'] == 0) {
-                    $user_filter  = null;
+                $isSubscribed = userIsSubscribedToWork(api_get_user_id(), $work_data['id'], $course_id);
+                if ($isSubscribed == false) {
+                    continue;
                 }
-
-                $sql_document = "SELECT count(*) FROM $work_table s, $iprop_table p
-                                  WHERE s.c_id = $course_id  AND
-                                        p.c_id = $course_id AND
-                                        s.id = p.ref AND
-                                        p.tool='work' AND
-                                        s.accepted='1' AND
-                                        $user_filter
-                                        parent_id = ".$work_data['id']." AND
-                                        active = 1 AND
-                                        parent_id = ".$work_parent->id."";*/
+                $cant_files = get_count_work($work_data['id'], api_get_user_id());
 			}
-
-
-			//count documents
-			/*$res_document   = Database::query($sql_document);
-			$count_document = Database::fetch_row($res_document);
-			$cant_files     = $count_document[0];*/
 
 			$text_file = get_lang('FilesUpload');
 
@@ -1793,7 +1774,8 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 if ($work['contains_file']) {
                     $link_to_download = '<a href="download.php?id='.$item_id.'">'.Display::return_icon('save.png', get_lang('Save'),array(), ICON_SIZE_SMALL).'</a> ';
                 } else {
-                    $link_to_download = '<a href="view.php?id='.$item_id.'">'.Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a> ';
+                    //api_get_cidreq()
+                   //$link_to_download = '<a href="view.php?id='.$item_id.'">'.Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a> ';
                 }
 
                 $send_to = Portfolio::share('work', $work['id'],  array('style' => 'white-space:nowrap;'));
@@ -1849,7 +1831,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                         $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);
                     }
                     if (api_get_course_setting('student_delete_own_publication') == 1) {
-                        $action .= '<a href="'.$url.'work.php?'.api_get_cidreq().'&action=delete&amp;item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'"  >'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
+                        $action .= ' <a href="'.$url.'work.php?'.api_get_cidreq().'&action=delete&amp;item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'"  >'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
                     }
                 } else {
                     $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);
@@ -2139,4 +2121,152 @@ function display_list_users_without_publication($task_id, $studentId = null)
 	$column_show[] = 1;
 	$column_show[] = 1;
 	Display::display_sortable_config_table('work', $table_header, $data, $sorting_options, $paging_options, $my_params, $column_show);
+}
+
+// Document to work
+
+function addDocumentToWork($documentId, $workId, $courseId)
+{
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
+    $params = array(
+        'document_id' => $documentId,
+        'work_id' => $workId,
+        'c_id' => $courseId
+    );
+    Database::insert($table, $params);
+}
+
+function getDocumentToWork($documentId, $workId, $courseId)
+{
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
+    $params = array(
+        'document_id = ? and work_id = ? and c_id = ?' => array($documentId, $workId, $courseId)
+    );
+    return Database::select('*', $table, array('where' => $params));
+}
+
+function getAllDocumentToWork($workId, $courseId)
+{
+    if (ADD_DOCUMENT_TO_WORK == false) {
+        return array();
+    }
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
+    $params = array(
+        'work_id = ? and c_id = ?' => array($workId, $courseId)
+    );
+    return Database::select('*', $table, array('where' => $params));
+}
+
+
+function deleteDocumentToWork($documentId, $workId, $courseId)
+{
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
+    $params = array(
+        'document_id = ? and work_id = ? and c_id = ?' => array($documentId, $workId, $courseId)
+    );
+    Database::delete($table, $params);
+}
+
+// User to work
+
+
+function addUserToWork($userId, $workId, $courseId)
+{
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_USER);
+    $params = array(
+        'user_id' => $userId,
+        'work_id' => $workId,
+        'c_id' => $courseId
+    );
+    Database::insert($table, $params);
+}
+
+function getUserToWork($userId, $workId, $courseId)
+{
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_USER);
+    $params = array(
+        'user_id = ? and work_id = ? and c_id = ?' => array($userId, $workId, $courseId)
+    );
+    return Database::select('*', $table, array('where' => $params));
+}
+
+function getAllUserToWork($workId, $courseId)
+{
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_USER);
+    $params = array(
+        'work_id = ? and c_id = ?' => array($workId, $courseId)
+    );
+    return Database::select('*', $table, array('where' => $params));
+}
+
+function userAddedToWork($userId, $workId, $courseId)
+{
+    /*$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_USER);
+    $params = array(
+        'user_id = ? and work_id = ? and c_id = ?' => array($userId, $workId, $courseId)
+    );
+    $result = Database::select('count(*)', $table, array('where' => $params));*/
+}
+
+
+function deleteUserToWork($userId, $workId, $courseId)
+{
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_USER);
+    $params = array(
+        'user_id = ? and work_id = ? and c_id = ?' => array($userId, $workId, $courseId)
+    );
+    Database::delete($table, $params);
+}
+
+function userIsSubscribedToWork($userId, $workId, $courseId)
+{
+    if (ADD_DOCUMENT_TO_WORK == false) {
+        return true;
+    }
+    $subscribedUsers = getAllUserToWork($workId, $courseId);
+
+    if (empty($subscribedUsers)) {
+        return true;
+    } else {
+        $subscribedUsersIdList = array();
+        foreach ($subscribedUsers as $item) {
+            $subscribedUsersIdList[] = $item['user_id'];
+        }
+        if (in_array($userId, $subscribedUsersIdList)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function allowOnlySubscribedUser($userId, $workId, $courseId)
+{
+    if (ADD_DOCUMENT_TO_WORK == false) {
+        return true;
+    }
+    if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+        return true;
+    }
+    if (userIsSubscribedToWork($userId, $workId, $courseId) == false) {
+        api_not_allowed(true);
+    }
+
+}
+
+function getDocumentTemplateFromWork($workId, $courseInfo)
+{
+    $documents = getAllDocumentToWork($workId, $courseInfo['real_id']);
+    if (!empty($documents)) {
+        foreach ($documents as $doc) {
+            $docData = DocumentManager::get_document_data_by_id($doc['document_id'], $courseInfo['code']);
+            $fileInfo = pathinfo($docData['path']);
+            if ($fileInfo['extension'] == 'html') {
+                if (file_exists($docData['absolute_path']) && is_file($docData['absolute_path'])) {
+                    $docData['file_content'] = file_get_contents($docData['absolute_path']);
+                    return $docData;
+                }
+            }
+        }
+    }
+    return array();
 }

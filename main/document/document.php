@@ -162,7 +162,7 @@ switch ($action) {
         }
         exit;
         break;
-    case 'downloadfolder' :
+    case 'downloadfolder':
         if (api_get_setting('students_download_folders') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin()) {
             $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
 
@@ -177,7 +177,7 @@ switch ($action) {
             exit;
         }
         break;
-    case 'export_to_pdf' :
+    case 'export_to_pdf':
         if (api_get_setting('students_export2pdf') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin()) {
             DocumentManager::export_to_pdf($document_id, $course_code);
         }
@@ -205,7 +205,10 @@ switch ($action) {
             if (empty($parent_id)) {
                 $parent_id = 0;
             }
-            $file_link = Display::url(get_lang('SeeFile'), api_get_path(WEB_CODE_PATH).'social/myfiles.php?cidReq='.$cidReq.'&amp;id_session='.$id_session.'&amp;gidReq='.$gidReq.'&amp;parent_id='.$parent_id);
+            $file_link = Display::url(
+                get_lang('SeeFile'),
+                api_get_path(WEB_CODE_PATH).'social/myfiles.php?cidReq='.$cidReq.'&amp;id_session='.$id_session.'&amp;gidReq='.$gidReq.'&amp;parent_id='.$parent_id
+            );
 
             if (file_exists($copyfile)) {
                 $message = get_lang('CopyAlreadyDone').'</p><p>';
@@ -323,8 +326,9 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isse
         $qr_code_filename = api_get_path(SYS_ARCHIVE_PATH).$filename;
 
         $temp_folder = api_get_path(SYS_ARCHIVE_PATH).'certificate_preview';
-        if (!is_dir($temp_folder))
+        if (!is_dir($temp_folder)) {
             mkdir($temp_folder, api_get_permissions_for_new_directories());
+        }
 
         $qr_code_web_filename = api_get_path(WEB_ARCHIVE_PATH).$filename;
 
@@ -342,8 +346,10 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isse
 
         Display::display_reduced_header();
 
-        echo '<style>body {background:none;}</style><style media="print" type="text/css"> #print_div { visibility:hidden; } </style>';
-        echo '<a href="javascript:window.print();" style="float:right; padding:4px;" id="print_div"><img src="../img/printmgr.gif" alt="'.get_lang('Print').'"/>'.get_lang('Print').'</a>';
+        echo '<style>body {background:none;}</style>
+              <style media="print" type="text/css"> #print_div { visibility:hidden; } </style>';
+        echo '<a href="javascript:window.print();" style="float:right; padding:4px;" id="print_div">
+              <img src="../img/printmgr.gif" alt="'.get_lang('Print').'"/>'.get_lang('Print').'</a>';
         if (is_file($qr_code_filename) && is_readable($qr_code_filename)) {
             $new_content_html = str_replace('((certificate_barcode))', Display::img($qr_code_web_filename), $new_content_html);
         }
@@ -486,7 +492,7 @@ $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath
 $count = 1;
 $jquery = null;
 
-if (!empty($docs_and_folders))
+if (!empty($docs_and_folders)) {
     foreach ($docs_and_folders as $file) {
         if ($file['filetype'] == 'file') {
             $path_info = pathinfo($file['path']);
@@ -508,6 +514,7 @@ if (!empty($docs_and_folders))
             }
         }
     }
+}
 
 $htmlHeadXtra[] = '<script>
 $(document).ready( function() {
@@ -538,7 +545,12 @@ if (!empty($_SESSION['_gid'])) {
 
 /* 	MOVE FILE OR DIRECTORY */
 //Only teacher and all users into their group and each user into his/her shared folder
-if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id) || is_my_shared_folder(api_get_user_id(), Security::remove_XSS($_POST['move_to']), $session_id)) {
+if (
+    $is_allowed_to_edit ||
+    $group_member_with_upload_rights ||
+    is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id) ||
+    is_my_shared_folder(api_get_user_id(), Security::remove_XSS($_POST['move_to']), $session_id)
+) {
 
     if (isset($_GET['move']) && $_GET['move'] != '') {
         $my_get_move = intval($_REQUEST['move']);
@@ -682,7 +694,8 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
                 }
 
                 foreach ($_POST['path'] as $index => & $path) {
-                    if (in_array($path, array('/audio', '/flash', '/images', '/shared_folder', '/video', '/chat_files', '/certificates'))) {
+                    $items = array('/audio', '/flash', '/images', '/shared_folder', '/video', '/chat_files', '/certificates');
+                    if (in_array($path, $items)) {
                         continue;
                     } else {
                         $delete_document = DocumentManager::delete_document($_course, $path, $base_work_dir);
@@ -910,7 +923,6 @@ if ($is_certificate_mode && $curdirpath != '/certificates') {
     <?php
 }
 
-
 $column_show = array();
 
 if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)) {
@@ -1008,7 +1020,11 @@ $table_footer = '';
 $total_size = 0;
 
 if (isset($docs_and_folders) && is_array($docs_and_folders)) {
-    if (api_get_group_id() == 0 || ( api_is_allowed_to_edit() || GroupManager::is_subscribed(api_get_user_id(), api_get_group_id()) || GroupManager :: is_tutor_of_group(api_get_user_id(), api_get_group_id()))) {
+    if (
+        api_get_group_id() == 0 ||
+        ( api_is_allowed_to_edit() || GroupManager::is_subscribed(api_get_user_id(), api_get_group_id()) ||
+        GroupManager :: is_tutor_of_group(api_get_user_id(), api_get_group_id()))
+    ) {
         // Create a sortable table with our data
         $sortable_data = array();
 
@@ -1068,7 +1084,11 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
             $session_img = api_get_session_image($document_data['session_id'], $_user['status']);
 
             // Document title with link
-            $row[] = create_document_link($document_data, false, null, $is_visible).$session_img.'<br />'.$invisibility_span_open.'<i>'.nl2br(htmlspecialchars($document_data['comment'], ENT_QUOTES, $charset)).'</i>'.$invisibility_span_close.$user_link;
+            $row[] = create_document_link($document_data, false, null, $is_visible).
+                $session_img.'<br />'.$invisibility_span_open.
+                '<i>'.nl2br(htmlspecialchars($document_data['comment'], ENT_QUOTES, $charset)).'</i>'.
+                $invisibility_span_close.
+                $user_link;
 
             // Comments => display comment under the document name
             $display_size = format_file_size($size);

@@ -1995,15 +1995,16 @@ class learnpath {
      * Returns the HTML necessary to print a mediaplayer block inside a page
      * @return string	The mediaplayer HTML
      */
-    public function get_mediaplayer($autostart='true') {
+    public function get_mediaplayer($autostart = 'true')
+    {
         $course_id = api_get_course_int_id();
         global $_course;
         $tbl_lp_item 		= Database :: get_course_table(TABLE_LP_ITEM);
         $tbl_lp_item_view 	= Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 
         // Getting all the information about the item.
-        $sql = "SELECT * FROM " . $tbl_lp_item . " as lp INNER  JOIN " . $tbl_lp_item_view . " as lp_view on lp.id = lp_view.lp_item_id " .
-                "WHERE  lp.id = '" . $_SESSION['oLP']->current . "' AND
+        $sql = "SELECT * FROM ".$tbl_lp_item." as lp INNER  JOIN ".$tbl_lp_item_view." as lp_view on lp.id = lp_view.lp_item_id ".
+                "WHERE  lp.id = '".$_SESSION['oLP']->current."' AND
                         lp.c_id = $course_id AND
                         lp_view.c_id = $course_id";
         $result = Database::query($sql);
@@ -2031,19 +2032,26 @@ class learnpath {
                 $autostart_audio = 'true';
             }
 
+            $courseInfo = api_get_course_info();
+
+            $audio = $row['audio'];
+
+            $file = '../../courses/'.$courseInfo['path'].'/document/audio/'.$audio;
+            if (!file_exists($file)) {
+                $lpPathInfo = $_SESSION['oLP']->generate_lp_folder(api_get_course_info());
+                $file = '../../courses/'.$_course['path'].'/document'.$lpPathInfo['dir'].$audio;
+            }
+
+            $player = Display::getMediaPlayer($file, array('id' => 'lp_audio_media_player', 'autoplay' => $autostart_audio, 'width' => '100%'));
+
             // The mp3 player.
             $output  = '<div id="container">';
-            $output .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
-            $output .= '<script type="text/javascript">
-                            var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
-                            s1.addParam("allowscriptaccess","always");
-                                s1.addParam("flashvars","file=' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document/audio/' . $row['audio'] . '&autostart=' . $autostart_audio.'");
-                            s1.write("container");
-						</script>
-                        </div>';
+            $output .= $player;
+            $output .= '</div>';
         }
         return $output;
     }
+
 
     /**
      * This function checks if the learnpath is visible for student after the progress of its prerequisite is completed, and considering time availability
@@ -2822,7 +2830,7 @@ class learnpath {
             // The anchor will let us center the TOC on the currently viewed item &^D
             if ($item['type'] != 'dokeos_module' && $item['type'] != 'dokeos_chapter') {
                 $html .= '<div class="' . $style_item . '" style="padding-left: ' . ($item['level'] * 1.5) . 'em; padding-right:' . ($item['level'] / 2) . 'em"             title="' . $item['description'] . '" >';
-                $html .= '<a name="atoc_' . $item['id'] . '" />';
+                $html .= '<a name="atoc_' . $item['id'] . '" ></a>';
             } else {
                 $html .= '<div class="' . $style_item . '" style="padding-left: ' . ($item['level'] * 2) . 'em; padding-right:' . ($item['level'] * 1.5) . 'em"             title="' . $item['description'] . '" >';
             }
@@ -4914,7 +4922,8 @@ class learnpath {
 
     public function return_new_tree($update_audio = 'false', $drop_element_here = false) {
         $ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php';
-        echo '<script>
+
+        $return = '<script>
         var newOrderData= "";
         function processChildren(parentId) {
             //Loop through the children of the UL element defined by the parentId
@@ -5247,7 +5256,7 @@ class learnpath {
             }
         }
 
-        $return = '<div class="lp_tree well">';
+        $return .= '<div class="lp_tree well">';
 
         $return .= '<ul id="lp_item_list">';
         $return .='<h4>'.$this->name.'</h4><br>';
@@ -5304,7 +5313,8 @@ class learnpath {
      * This function builds the action menu
      * @return void
      */
-    public function build_action_menu() {
+    public function build_action_menu($returnContent = false)
+    {
         $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 
         $gradebook = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
@@ -5334,6 +5344,10 @@ class learnpath {
         );
         $return .= Display::group_button(get_lang('PrerequisitesOptions'), $buttons);
         $return .= '</div>';
+
+        if ($returnContent) {
+            return $return;
+        }
         echo $return;
     }
 
@@ -7880,6 +7894,15 @@ class learnpath {
             //$return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . ' />';
 
             if ($arrLP[$i]['item_type'] == TOOL_QUIZ) {
+                // lets update max_score Quiz information depending of the Quiz Advanced properties
+                require_once api_get_path(LIBRARY_PATH)."lp_item.lib.php";
+                $tmp_obj_lp_item = new LpItem($course_id, $arrLP[$i]['id']);
+                $tmp_obj_exercice = new Exercise();
+                $tmp_obj_exercice->read($tmp_obj_lp_item->path);
+                $tmp_obj_lp_item->max_score = $tmp_obj_exercice->get_max_score();
+                $tmp_obj_lp_item->update_in_bdd();
+                $arrLP[$i]['max_score'] = $tmp_obj_lp_item->max_score;
+
                 $return .= '<td class="exercise" style="border:1px solid #ccc;">';
                 $return .= '<center><input size="4" maxlength="3" name="min_' . $arrLP[$i]['id'] . '" type="text" value="' . (($arrLP[$i]['id'] == $preq_id) ? $preq_mastery : 0) . '" /></center>';
                 $return .= '</td>';

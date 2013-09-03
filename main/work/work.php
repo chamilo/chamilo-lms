@@ -788,6 +788,8 @@ switch ($action) {
             echo $table->toHtml();
             echo '</div>';
         } else {
+
+
             display_student_publications_list($work_id, $my_folder_data, $work_parents, $origin, $add_query, null);
         }
 

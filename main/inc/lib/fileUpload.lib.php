@@ -89,34 +89,36 @@ function get_document_title($name) {
  */
 function process_uploaded_file($uploaded_file, $show_output = true) {
 	// Checking the error code sent with the file upload.
-
-	switch ($uploaded_file['error']) {
-		case 1:
-			// The uploaded file exceeds the upload_max_filesize directive in php.ini.
-			if ($show_output)
-                Display::display_error_message(get_lang('UplExceedMaxServerUpload').ini_get('upload_max_filesize'));
-			return false;
-		case 2:
-			// The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.
-			// Not used at the moment, but could be handy if we want to limit the size of an upload (e.g. image upload in html editor).
-			$max_file_size = intval($_POST['MAX_FILE_SIZE']);
-			if ($show_output) {
-                Display::display_error_message(get_lang('UplExceedMaxPostSize'). format_file_size($max_file_size));
-			}
-			return false;
-		case 3:
-			// The uploaded file was only partially uploaded.
-		    if ($show_output) {
-			     Display::display_error_message(get_lang('UplPartialUpload').' '.get_lang('PleaseTryAgain'));
-		    }
-			return false;
-		case 4:
-			// No file was uploaded.
-		    if ($show_output) {
-			     Display::display_error_message(get_lang('UplNoFileUploaded').' '. get_lang('UplSelectFileFirst'));
-		    }
-			return false;
-	}
+    if (isset($uploaded_file['error'])) {
+        switch ($uploaded_file['error']) {
+            case 1:
+                // The uploaded file exceeds the upload_max_filesize directive in php.ini.
+                if ($show_output) {
+                    Display::display_error_message(get_lang('UplExceedMaxServerUpload').ini_get('upload_max_filesize'));
+                }
+                return false;
+            case 2:
+                // The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.
+                // Not used at the moment, but could be handy if we want to limit the size of an upload (e.g. image upload in html editor).
+                $max_file_size = intval($_POST['MAX_FILE_SIZE']);
+                if ($show_output) {
+                    Display::display_error_message(get_lang('UplExceedMaxPostSize'). format_file_size($max_file_size));
+                }
+                return false;
+            case 3:
+                // The uploaded file was only partially uploaded.
+                if ($show_output) {
+                     Display::display_error_message(get_lang('UplPartialUpload').' '.get_lang('PleaseTryAgain'));
+                }
+                return false;
+            case 4:
+                // No file was uploaded.
+                if ($show_output) {
+                     Display::display_error_message(get_lang('UplNoFileUploaded').' '. get_lang('UplSelectFileFirst'));
+                }
+                return false;
+        }
+    }
 
 	if (!file_exists($uploaded_file['tmp_name'])) {
 	    // No file was uploaded.

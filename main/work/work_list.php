@@ -35,6 +35,7 @@ $courseInfo = api_get_course_info();
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $url_dir = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq();
 
+allowOnlySubscribedUser(api_get_user_id(), $workId, $courseInfo['real_id']);
 
 if (!empty($group_id)) {
     $group_properties  = GroupManager :: get_group_properties($group_id);
@@ -75,6 +76,21 @@ if (!empty($error_message)) {
 
 if (!empty($my_folder_data['description'])) {
     echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description']).'</p></div></p>';
+}
+
+$documents = getAllDocumentToWork($workId, $courseInfo['real_id']);
+if (!empty($documents)) {
+    $docContent = '<ul class="nav nav-list well">';
+    $docContent .= '<li class="nav-header">'.get_lang('Documents').'</li>';
+    foreach ($documents as $doc) {
+        $docData = DocumentManager::get_document_data_by_id($doc['document_id'], $courseInfo['code']);
+        if ($docData) {
+            $docContent .= '<li><a target="_blank" href="'.$docData['url'].'">'.$docData['title'].'</a></li>';
+        }
+
+    }
+    $docContent .= '</ul><br />';
+    echo $docContent;
 }
 
 $check_qualification = intval($my_folder_data['qualification']);

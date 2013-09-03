@@ -538,6 +538,10 @@ class ImportCsv
      */
     private function importSessions($file)
     {
+        $avoid =  null;
+        if (isset($this->conditions['importSessions']) && isset($this->conditions['importSessions']['update'])) {
+            $avoid = $this->conditions['importSessions']['update'];
+        }
         $result = SessionManager::importCSV(
             $file,
             true,
@@ -547,7 +551,8 @@ class ImportCsv
             $this->extraFieldIdNameList['session'],
             $this->daysCoachAccessBeforeBeginning,
             $this->daysCoachAccessAfterBeginning,
-            $this->defaultSessionVisibility
+            $this->defaultSessionVisibility,
+            $avoid
         );
 
         if (!empty($result['error_message'])) {

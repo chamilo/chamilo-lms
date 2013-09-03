@@ -1563,11 +1563,15 @@ class Display {
                     $autoplay = 'autoplay';
                 }
                 $width = isset($params['width']) ? 'width="'.$params['width'].'"' : null;
-                $html = '<audio id="'.$fileInfo['basename'].'" controls '.$autoplay.' '.$width.' src="'.$file.'" >';
+                $id = isset($params['id']) ? $params['id'] : $fileInfo['basename'];
+                $class = isset($params['class']) ? ' class="'.$params['class'].'"' : null;
+
+                $html = '<audio id="'.$id.'" '.$class.' controls '.$autoplay.' '.$width.' src="'.$file.'" >';
                 $html .=  '<object width="'.$params['width'].'" height="50" type="application/x-shockwave-flash" data="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf">
                                 <param name="movie" value="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf" />
                                 <param name="flashvars" value="controls=true&file='.$fileInfo['basename'].'" />
                             </object>';
+                 $html .= '</audio>';
                 return $html;
                 break;
 

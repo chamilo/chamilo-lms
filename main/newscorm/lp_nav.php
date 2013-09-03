@@ -65,9 +65,13 @@ if (isset($_SESSION['lpobject'])) {
 }
 session_write_close();
 ?>
-<script>
+<script type="text/javascript">
 $(document).ready(function() {
-$('video:not(.skip), audio:not(.skip)').mediaelementplayer();
+    jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer({
+        success: function(player, node) {
+        }
+    });
+
 });
 </script>
 <span>

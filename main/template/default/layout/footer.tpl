@@ -69,7 +69,7 @@ $(document).ready( function() {
     });
 
     // Mediaelement
-    $('video:not(.skip), audio:not(.skip)').mediaelementplayer(/* Options */);
+    jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer(/* Options */);
 
     // Table highlight.
     $("form .data_table input:checkbox").click(function() {

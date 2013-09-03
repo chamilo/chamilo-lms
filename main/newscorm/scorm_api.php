@@ -1463,17 +1463,29 @@ function switch_item(current_item, next_item){
         xajax_start_timer();
     }
 
+
     //(4) refresh the audio player if needed
     $.ajax({
         type: "POST",
         url: "lp_nav.php",
         data: "",
+        beforeSend: function() {
+            $.each($('audio'), function () {
+                var player = new MediaElementPlayer($(this));
+                player.pause();
+            });
+        },
         success: function(tmp_data) {
             if ($("#lp_media_file").length != 0) {
                 $("#lp_media_file").html(tmp_data);
             }
         }
     });
+
+
+
+
+
     return true;
 }
 

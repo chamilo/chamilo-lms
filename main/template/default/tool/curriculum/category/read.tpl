@@ -11,5 +11,4 @@
         </li>
     {% endfor %}
     </ul>
-
 {% endblock %}

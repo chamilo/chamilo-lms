@@ -39,8 +39,9 @@ class ReflectionControllerProvider implements ControllerProviderInterface
         // Routes are already cached using Flint
 
         if (file_exists($app['sys_temp_path'].'ProjectUrlMatcher.php')) {
-           return $controllers;
+            return $controllers;
         }
+
         $reflection = new \ReflectionClass($app[$this->controllerName]);
         $className = $reflection->getName();
 

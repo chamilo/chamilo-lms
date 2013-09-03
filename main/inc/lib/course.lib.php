@@ -1103,12 +1103,17 @@ class CourseManager
                 if (isset($user['role'])) {
                     $user_info['role'] = $user['role'];
                 }
+
                 if (isset($user['tutor_id'])) {
                     $user_info['tutor_id'] = $user['tutor_id'];
                 }
+
                 if (!empty($session_id)) {
                     $user_info['status_session'] = $user['status_session'];
                 }
+
+                $user_info['complete_name'] = api_get_person_name($user_info['firstname'], $user_info['lastname']);
+
                 if ($add_reports) {
                     $course_code = $user['code'];
                     if ($resumed_report) {
@@ -1146,7 +1151,7 @@ class CourseManager
                         $users[$row_key]['count_users_registered'] = $registered_users_with_extra_field;
                         $users[$row_key]['average_hours_per_user'] = $users[$row_key]['training_hours'] / $users[$row_key]['count_users'];
 
-                        $category = Category :: load (null, null, $course_code);
+                        $category = Category::load (null, null, $course_code);
                         if (!isset($users[$row_key]['count_certificates'])) {
                             $users[$row_key]['count_certificates'] = 0;
                         }

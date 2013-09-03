@@ -497,7 +497,6 @@ $app->before(
         if (!file_exists($app['configuration_file']) && !file_exists($app['configuration_yml_file'])) {
             $url = str_replace('web', 'main/install', $request->getBasePath());
             return new RedirectResponse($url);
-            //$app->abort(500, "Configuration file was not found.");
         }
 
         // Check the PHP version.
@@ -505,11 +504,18 @@ $app->before(
             $app->abort(500, "Incorrect PHP version.");
         }
 
-        // Checks temp folder permissions.
-        if (!is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
-            $app->abort(500, "temp folder must be writable.");
+        // Check data folder
+
+        if (!is_writable(api_get_path(SYS_DATA_PATH))) {
+            $app->abort(500, "data folder must be writable.");
         }
 
+        // Checks temp folder permissions.
+        if (!is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
+            $app->abort(500, "data/temp folder must be writable.");
+        }
+
+        // Checking that configuration is loaded
         if (!isset($app['configuration'])) {
             $app->abort(500, '$configuration array must be set in the configuration.php file.');
         }
@@ -525,7 +531,7 @@ $app->before(
         $filesystem = $app['chamilo.filesystem'];
 
         if ($app['debug']) {
-            // Creates temp folders for every request if debug is on.
+            // Creates data/temp folders for every request if debug is on.
             $filesystem->createFolders($app['temp.paths']->folders);
         }
 
@@ -562,8 +568,7 @@ $app->before(
             }
         }
 
-        $_setting = Session::read('_setting');
-        $_plugins = Session::read('_plugins');
+        $app['plugins'] = Session::read('_plugins');
 
         // Default template style.
         $templateStyle = api_get_setting('template');
@@ -572,8 +577,6 @@ $app->before(
 
         // Default layout.
         $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
-
-        $app['plugins'] = $_plugins;
 
         // Setting languages.
         $app['api_get_languages'] = api_get_languages();
@@ -720,20 +723,21 @@ $app->before(
         // Check if we are inside a Chamilo course tool
         $isCourseTool = (strpos($request->getPathInfo(), 'courses/') === false) ? false : true;
 
-        //$controllerName = $request->get('_controller');
-
-        // The course parameter is loaded
-        $course = $request->get('course');
-
         // Setting course entity for controllers and templates
         if ($isCourseTool) {
+            // The course parameter is loaded
+            $course = $request->get('course');
+
             // Converting /courses/XXX/ to a Entity/Course object
             $course = $app['orm.em']->getRepository('Entity\Course')->findOneByCode($course);
             $app['course'] = $course;
+            $app['template']->assign('course', $course);
 
             $sessionId = $request->get('id_session');
             $session = $app['orm.em']->getRepository('Entity\Session')->findOneById($sessionId);
             $app['course_session'] = $session;
+
+            $app['template']->assign('course_session', $session);
         }
     }
 );

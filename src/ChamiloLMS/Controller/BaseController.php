@@ -36,17 +36,6 @@ abstract class BaseController extends FlintController
         $this->app = $app;
         // In order to use the Flint Controller.
         $this->pimple = $app;
-
-        // Inserting course
-        /** @var \Entity\Course $app['course'] */
-        $course = $this->getCourse();
-        if ($course) {
-            $template = $this->get('template');
-            $template->assign('course', $course);
-
-            $session = $this->getSession();
-            $template->assign('course_session', $session);
-        }
     }
 
     /**
@@ -68,7 +57,23 @@ abstract class BaseController extends FlintController
         if (isset($this->app['course_session']) && !empty($this->app['course_session'])) {
             return $this->app['course_session'];
         }
-        return null;
+        return false;
+    }
+
+    /**
+     * @return \Template
+     */
+    protected function getTemplate()
+    {
+        return $this->app['template'];
+    }
+
+    /**
+     * @return \Entity\User
+     */
+    public function getUser()
+    {
+        return parent::getUser();
     }
 
     /**
@@ -111,45 +116,8 @@ abstract class BaseController extends FlintController
     abstract protected function generateLinks();
 
     /**
-     *
-     * @return Request
+     * @return \Doctrine\ORM\EntityManager
      */
-    protected function getRequest()
-    {
-        return $this->get('request');
-    }
-
-    /**
-     * Get a user from the Security Context
-     *
-     * @return mixed
-     *
-     * @throws \LogicException If SecurityBundle is not available
-     *
-     * @see Symfony\Component\Security\Core\Authentication\Token\TokenInterface::getUser()
-     */
-    public function getUser()
-    {
-        if (!$this->has('security')) {
-            throw new \LogicException('The SecurityServiceProvider is not registered in your application.');
-        }
-
-        if (null === $token = $this->get('security')->getToken()) {
-            return null;
-        }
-
-        if (!is_object($user = $token->getUser())) {
-            return null;
-        }
-
-        return $user;
-    }
-
-    protected function createNotFoundException($message = 'Not Found', \Exception $previous = null)
-    {
-        return $this->app->abort(404, $message);
-    }
-
     protected function getManager()
     {
         return $this->get('orm.em');
@@ -265,7 +233,8 @@ abstract class BaseController extends FlintController
         $item = $repo->findOneById($id);
 
         if ($item) {
-            $form = $this->get('form.factory')->create($this->getFormType(), $item);
+
+            $form = $this->createForm($this->getFormType(), $item);
 
             if ($request->getMethod() == 'POST') {
                 $form->bind($this->getRequest());
@@ -494,7 +463,6 @@ abstract class BaseController extends FlintController
 
         return new JsonResponse($this->getEntityForJson($object->getId()));
     }
-
 
     /**
      * Returns an entity from its ID, or FALSE in case of error.

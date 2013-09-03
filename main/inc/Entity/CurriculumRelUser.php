@@ -42,7 +42,6 @@ class CurriculumRelUser
      */
     private $score;
 
-
     /**
      * Get id
      *

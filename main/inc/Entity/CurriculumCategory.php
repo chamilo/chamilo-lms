@@ -143,7 +143,6 @@ class CurriculumCategory
         $this->session = $session;
     }
 
-
     /**
      * @return mixed
      */
@@ -161,18 +160,25 @@ class CurriculumCategory
         $this->course = $course;
     }
 
-
+    /**
+     * @return ArrayCollection
+     */
     public function getItems()
     {
         return $this->items;
     }
 
-
+    /**
+     * @param CurriculumCategory $parent
+     */
     public function setParent(CurriculumCategory $parent = null)
     {
         $this->parent = $parent;
     }
 
+    /**
+     * @return CurriculumCategory
+     */
     public function getParent()
     {
         return $this->parent;

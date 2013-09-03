@@ -56,6 +56,74 @@ abstract class Controller extends \Flint\PimpleAware
     }
 
     /**
+     * This will result in a 404 response code.
+     * 
+     * @param string $message
+     * @return Exception
+     */
+    protected function createNotFoundException($message = 'Not Found')
+    {
+        return $this->abort(404, $message);
+    }
+
+    /**
+     * @return Request
+     */
+    protected function getRequest()
+    {
+        return $this->get('request');
+    }
+
+    /**
+     * Get a user from the Security Context
+     *
+     * @throws \LogicException
+     * @return mixed
+     */
+    public function getUser()
+    {
+        if (!$this->has('security')) {
+            throw new \LogicException('The SecurityServiceProvider is not registered in your application.');
+        }
+
+        if (null === $token = $this->get('security')->getToken()) {
+            return null;
+        }
+
+        if (!is_object($user = $token->getUser())) {
+            return null;
+        }
+
+        return $user;
+    }
+
+    /**
+     * Creates and returns a Form instance from the type of the form.
+     *
+     * @param string|FormTypeInterface $type    The built type of the form
+     * @param mixed                    $data    The initial data for the form
+     * @param array                    $options Options for the form
+     *
+     * @return \Symfony\Component\Form\Form
+     */
+    public function createForm($type, $data = null, array $options = array())
+    {
+        return $this->get('form.factory')->create($type, $data, $options);
+    }
+
+    /**
+     * Creates and returns a form builder instance
+     *
+     * @param mixed $data    The initial data for the form
+     * @param array $options Options for the form
+     * @return \Symfony\Component\Form\FormBuilder
+     */
+    public function createFormBuilder($data = null, array $options = array())
+    {
+        return $this->get('form.factory')->createBuilder('form', $data, $options);
+    }
+
+    /**
      * @param  string  $id
      * @return boolean
      */

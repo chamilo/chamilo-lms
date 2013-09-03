@@ -417,6 +417,8 @@ class CourseHome
         $condition_session 		= api_get_session_condition($session_id, true, true);
         $studentView = isset($_SESSION['studentview']) ? $_SESSION['studentview'] : null;
 
+        $studentView = isset($_SESSION['studentview']) ? $_SESSION['studentview'] : null;
+
         switch ($course_tool_category) {
             case TOOL_STUDENT_VIEW:
                 $condition_display_tools = ' WHERE visibility = 1 AND (category = "authoring" OR category = "interaction" OR category = "plugin") ';

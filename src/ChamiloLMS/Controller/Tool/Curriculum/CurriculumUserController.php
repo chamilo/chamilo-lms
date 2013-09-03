@@ -36,23 +36,36 @@ class CurriculumUserController extends CommonController
             return $app->abort(403, 'Not allowed');
         }
 
-        $course = $this->getCourse();
-        $session = $this->getSession();
+        $breadcrumbs = array(
+            array(
+                'name' => get_lang('Curriculum'),
+                'url' => array(
+                    /*'route' => 'exercise_question_pool_global',
+                    'routeParameters' => array(
+                        'cidReq' => api_get_course_id(),
+                        'id_session' => api_get_session_id(),
+                    )*/
+                )
+            )
+        );
+
+        $this->setBreadcrumb($breadcrumbs);
+
+        $userId = $this->getUser()->getUserId();
 
         $qb = $this->getManager()
             ->createQueryBuilder()
-            ->select('node, i')
+            ->select('node, i, u')
             ->from('Entity\CurriculumCategory', 'node')
-            ->leftJoin('node.items', 'i')
-            ->leftJoin('i.userItems', 'u')
             ->innerJoin('node.course', 'c')
-            //->where('node.cId = :id')
-            //->andWhere('node.sessionId = :session_id')
-            //->setParameters(array('id' => $course->getId(), 'session_id' => $session->getId()))
+            ->leftJoin('node.items', 'i')
+            ->leftJoin('i.userItems', 'u', 'WITH', 'u.userId = :userId OR u.userId IS NULL')
+            //->where('u.userId = :userId or u.userId IS NULL')
+            //->orWhere('u.userId IS NULL')
+            ->setParameter('userId', $userId)
             ->orderBy('node.root, node.lft, node.title', 'ASC');
         $this->setCourseParameters($qb, 'node');
         $query = $qb->getQuery();
-
 
         $categories = $query->getResult();
 
@@ -60,11 +73,15 @@ class CurriculumUserController extends CommonController
         /** @var \Entity\CurriculumCategory $category */
 
         foreach ($categories as $category) {
+
             /** @var \Entity\CurriculumItem $item */
+
             foreach ($category->getItems() as $item) {
+
                 $formType = new CurriculumItemRelUserCollectionType($item->getId());
 
                 $count = count($item->getUserItems());
+
                 // If there are no items for the user, then create a new one!
                 if ($count == 0) {
                     $userItem = new Entity\CurriculumItemRelUser();
@@ -74,7 +91,6 @@ class CurriculumUserController extends CommonController
                     );
                     $item->setUserItems($userItemList);
                 }
-
                 $form = $this->get('form.factory')->create($formType, $item);
                 $formList[$item->getId()] = $form->createView();
             }
@@ -87,6 +103,7 @@ class CurriculumUserController extends CommonController
         $this->get('template')->assign('categories', $categories);
         $this->get('template')->assign('links', $this->generateLinks());
         $this->get('template')->assign('form_list', $formList);
+        $this->get('template')->assign('isAllowed', api_is_allowed_to_edit(true, true, true));
 
         $response = $this->get('template')->render_template($this->getTemplatePath().'list.tpl');
         return new Response($response, 200, array());
@@ -209,6 +226,91 @@ class CurriculumUserController extends CommonController
             }
         }
         $response = null;
+        return new Response($response, 200, array());
+    }
+
+    /**
+    *
+    * @Route("{userId}/get-user-items")
+    * @Method({"GET"})
+    */
+    public function getUserItemsAction($userId)
+    {
+        $breadcrumbs = array(
+            array(
+                'name' => get_lang('Curriculum'),
+                'url' => array(
+                    'route' => 'curriculum_user.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+            ),
+            array(
+                'name' => get_lang('Categories'),
+                'url' => array(
+                    'route' => 'curriculum_category.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+
+            ),
+            array(
+                'name' => get_lang('Results'),
+                'url' => array(
+                    'route' => 'curriculum_category.controller:resultsAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+            ),
+            array(
+                'name' => get_lang('UserResults'),
+            )
+        );
+        $this->setBreadcrumb($breadcrumbs);
+
+        if (!api_is_allowed_to_edit()) {
+            return $this->abort(403);
+        }
+
+        $qb = $this->getManager()
+            ->createQueryBuilder()
+            ->select('node, i, u')
+            ->from('Entity\CurriculumCategory', 'node')
+            ->innerJoin('node.course', 'c')
+            ->leftJoin('node.items', 'i')
+            ->leftJoin('i.userItems', 'u', 'WITH', 'u.userId = :userId OR u.userId IS NULL')
+            ->setParameter('userId', $userId)
+            ->orderBy('node.root, node.lft, node.title', 'ASC');
+        $this->setCourseParameters($qb, 'node');
+        $query = $qb->getQuery();
+
+        $categories = $query->getResult();
+
+        foreach ($categories as $category) {
+            /** @var \Entity\CurriculumItem $item */
+            $score = 0;
+            foreach ($category->getItems() as $item) {
+
+                $formType = new CurriculumItemRelUserCollectionType($item->getId());
+                $form = $this->get('form.factory')->create($formType, $item, array('disabled' => true));
+                $formList[$item->getId()] = $form->createView();
+
+                foreach ($item->getUserItems() as $userItem) {
+                    $score += $item->getScore();
+                }
+                $categoryScore[$item->getCategoryId()] = $score;
+            }
+        }
+
+        $this->get('template')->assign('categories', $categories);
+        $this->get('template')->assign('category_score', $categoryScore);
+        $this->get('template')->assign('form_list', $formList);
+        $this->get('template')->assign('isAllowed', api_is_allowed_to_edit(true, true, true));
+
+        $response = $this->get('template')->render_template($this->getTemplatePath().'get_user_items.tpl');
         return new Response($response, 200, array());
     }
 

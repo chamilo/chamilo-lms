@@ -26,8 +26,21 @@ class CurriculumCategoryController extends CommonController
      */
     public function indexAction()
     {
-        $course = $this->getCourse();
-        $session = $this->getSession();
+        $breadcrumbs = array(
+            array(
+                'name' => get_lang('Curriculum'),
+                'url' => array(
+                    'route' => 'curriculum_user.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+            ),
+            array(
+                'name' => get_lang('Categories')
+            )
+        );
+        $this->setBreadcrumb($breadcrumbs);
 
         $options = array(
             'decorate' => true,
@@ -80,17 +93,14 @@ class CurriculumCategoryController extends CommonController
 
         $this->setCourseParameters($qb, 'node');
 
-        /*if (!empty($session)) {
-            $qb->andWhere('node.sessionId = :session_id');
-            $parameters['session_id'] = $session->getId();
-        }*/
-
         $query = $qb->getQuery();
 
         $htmlTree = $repo->buildTree($query->getArrayResult(), $options);
 
         $this->get('template')->assign('tree', $htmlTree);
         $this->get('template')->assign('links', $this->generateLinks());
+        $this->get('template')->assign('isAllowed', api_is_allowed_to_edit(true, true, true));
+
         $response = $this->get('template')->render_template($this->getTemplatePath().'list.tpl');
 
         return new Response($response, 200, array());
@@ -112,6 +122,37 @@ class CurriculumCategoryController extends CommonController
     */
     public function addCategoryAction()
     {
+        $breadcrumbs = array(
+            array(
+                'name' => get_lang('Curriculum'),
+                'url' => array(
+                    'route' => 'curriculum_user.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+            ),
+            array(
+                'name' => get_lang('Categories'),
+                'url' => array(
+                    'route' => 'curriculum_category.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+
+            ),
+            array(
+                'name' => get_lang('Add'),
+                'url' => array(
+                    'route' => 'curriculum_category.controller:addCategoryAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+            )
+        );
+        $this->setBreadcrumb($breadcrumbs);
         return parent::addAction();
     }
 
@@ -121,6 +162,31 @@ class CurriculumCategoryController extends CommonController
     */
     public function addFromParentAction($id)
     {
+        $breadcrumbs = array(
+            array(
+                'name' => get_lang('Curriculum'),
+                'url' => array(
+                    'route' => 'curriculum_user.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+            ),
+            array(
+                'name' => get_lang('Categories'),
+                'url' => array(
+                    'route' => 'curriculum_category.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+            ),
+            array(
+                'name' => get_lang('AddItems')
+            )
+        );
+        $this->setBreadcrumb($breadcrumbs);
+
         $request = $this->getRequest();
         $formType = $this->getFormType();
 
@@ -166,6 +232,32 @@ class CurriculumCategoryController extends CommonController
     */
     public function editCategoryAction($id)
     {
+         $breadcrumbs = array(
+            array(
+                'name' => get_lang('Curriculum'),
+                'url' => array(
+                    'route' => 'curriculum_user.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+            ),
+            array(
+                'name' => get_lang('Categories'),
+                'url' => array(
+                    'route' => 'curriculum_category.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+
+            ),
+            array(
+                'name' => get_lang('Edit')
+            )
+        );
+
+        $this->setBreadcrumb($breadcrumbs);
         return parent::editAction($id);
     }
 
@@ -177,6 +269,95 @@ class CurriculumCategoryController extends CommonController
     public function deleteCategoryAction($id)
     {
         return parent::deleteAction($id);
+    }
+
+    /**
+    *
+    * @Route("/results")
+    * @Method({"GET"})
+    */
+    public function resultsAction()
+    {
+        $breadcrumbs = array(
+            array(
+                'name' => get_lang('Curriculum'),
+                'url' => array(
+                    'route' => 'curriculum_user.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+            ),
+            array(
+                'name' => get_lang('Categories'),
+                'url' => array(
+                    'route' => 'curriculum_category.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+
+            ),
+            array(
+                'name' => get_lang('Results'),
+            )
+        );
+        $this->setBreadcrumb($breadcrumbs);
+        if (!api_is_allowed_to_edit(true, true, true)) {
+            $this->abort('405');
+        }
+
+        $session = $this->getSession();
+        $sessionId = 0;
+        if ($session) {
+            $sessionId =  $this->getSession()->getId();
+        }
+
+        // @todo move in a function
+        $users = \CourseManager::get_user_list_from_course_code(
+            $this->getCourse()->getCode(),
+            $sessionId,
+            null,
+            null,
+            STUDENT
+        );
+
+        $qb = $this->getManager()
+            ->createQueryBuilder()
+            ->select('node.id, u.userId, SUM(i.score) as score')
+            ->from('Entity\CurriculumCategory', 'node')
+            ->innerJoin('node.course', 'c')
+            ->innerJoin('node.items', 'i')
+            ->innerJoin('i.userItems', 'u')
+            ->groupby('u.userId') ;
+        $this->setCourseParameters($qb, 'node');
+        $query = $qb->getQuery();
+        $userResults = $query->getResult();
+
+        $userResultsByUserId = array();
+        if (!empty($userResults)) {
+            foreach ($userResults as $item) {
+                $userResultsByUserId[$item['userId']] = $item['score'];
+            }
+        }
+
+        if (!empty($users)) {
+            foreach ($users as &$user) {
+                if (!empty($userResultsByUserId)) {
+                    if (isset($userResultsByUserId[$user['user_id']])) {
+                        $user['score'] = $userResultsByUserId[$user['user_id']];
+                    } else {
+                        $user['score'] = 0;
+                    }
+                }
+            }
+        }
+
+        $template = $this->getTemplate();
+        $template->assign('users', $users);
+
+        $response = $template->render_template($this->getTemplatePath().'results.tpl');
+        return new Response($response, 200, array());
     }
 
     protected function getControllerAlias()

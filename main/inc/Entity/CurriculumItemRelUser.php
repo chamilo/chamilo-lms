@@ -66,12 +66,17 @@ class CurriculumItemRelUser
      */
     private $item;
 
-
+    /**
+     * @return mixed
+     */
     public function getUser()
     {
         return $this->user;
     }
 
+    /**
+     * @return mixed
+     */
     public function getItem()
     {
         return $this->item;
@@ -85,6 +90,9 @@ class CurriculumItemRelUser
         $this->item = $item;
     }
 
+    /**
+     * @param User $user
+     */
     public function setUser(User $user)
     {
         $this->user = $user;

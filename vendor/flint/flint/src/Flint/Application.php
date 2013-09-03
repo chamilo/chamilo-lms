@@ -41,15 +41,4 @@ class Application extends \Silex\Application
     {
         $this['configurator']->configure($this, $resource);
     }
-
-    /**
-     * @deprecated
-     * @param array $parameters
-     */
-    public function inject(array $parameters)
-    {
-        foreach ($parameters as $k => $v) {
-            $this[$k] = $v;
-        }
-    }
 }

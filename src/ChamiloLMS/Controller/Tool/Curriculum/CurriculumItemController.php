@@ -26,6 +26,31 @@ class CurriculumItemController extends CommonController
      */
     public function indexAction()
     {
+        $breadcrumbs = array(
+            array(
+                'name' => get_lang('Curriculum'),
+                'url' => array(
+                    'route' => 'curriculum_user.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+            ),
+            array(
+                'name' => get_lang('Categories'),
+                'url' => array(
+                    'route' => 'curriculum_category.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+
+            ),
+            array(
+                'name' => get_lang('List')
+            )
+        );
+        $this->setBreadcrumb($breadcrumbs);
         return parent::listingAction();
     }
 
@@ -54,6 +79,31 @@ class CurriculumItemController extends CommonController
     */
     public function addFromCategoryAction($id)
     {
+         $breadcrumbs = array(
+            array(
+                'name' => get_lang('Curriculum'),
+                'url' => array(
+                    'route' => 'curriculum_user.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+            ),
+            array(
+                'name' => get_lang('Categories'),
+                'url' => array(
+                    'route' => 'curriculum_category.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+
+            ),
+            array(
+                'name' => get_lang('AddItems')
+            )
+        );
+        $this->setBreadcrumb($breadcrumbs);
         $request = $this->getRequest();
         $formType = $this->getFormType();
 
@@ -95,6 +145,31 @@ class CurriculumItemController extends CommonController
     */
     public function editAction($id)
     {
+         $breadcrumbs = array(
+            array(
+                'name' => get_lang('Curriculum'),
+                'url' => array(
+                    'route' => 'curriculum_user.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+            ),
+            array(
+                'name' => get_lang('Categories'),
+                'url' => array(
+                    'route' => 'curriculum_category.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+
+            ),
+            array(
+                'name' => get_lang('Edit')
+            )
+        );
+        $this->setBreadcrumb($breadcrumbs);
         return parent::editAction($id);
     }
 

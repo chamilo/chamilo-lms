@@ -72,16 +72,16 @@
         "knplabs/knp-menu": "2.0.*@dev",
         "knplabs/knp-snappy": "dev-master",
         "knplabs/console-service-provider": "dev-master",
-        "knplabs/gaufrette": "0.2.*@dev",
         "jmontoyaa/phpqrcode": "dev-master",
-        "bt51/gaufrette-serviceprovider": "dev-master",
         "neutron/silex-filesystem-provider": "dev-master",
         "jbroadway/urlify": "dev-master",
         "sensio/framework-extra-bundle": "2.3.*@dev",
         "chamilo/chash": "dev-master",
-        "flint/flint" : "~1.4"
+        "flint/flint" : "dev-master"
     },
     "require-dev": {
+        "knplabs/gaufrette": "0.2.*@dev",
+        "bt51/gaufrette-serviceprovider": "dev-master",
         "symfony/browser-kit": "~2.3",
         "symfony/web-profiler-bundle": "~2.3",
         "silex/web-profiler": "1.0.x-dev",
@@ -89,6 +89,7 @@
         "leafo/lessphp": "dev-master",
         "mheap/silex-assetic": "1.0.*@dev",
         "filp/whoops": "dev-master"
+
     },
     "scripts": {
         "post-install-cmd": "ChamiloLMS\\Composer\\Tasks::postInstall",

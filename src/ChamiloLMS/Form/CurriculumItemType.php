@@ -17,7 +17,7 @@ class CurriculumItemType extends AbstractType
             $parentIdDisabled = true;
         }*/
 
-        $builder->add('title', 'text');
+        $builder->add('title', 'textarea');
         $builder->add('score', 'text');
         $builder->add('max_repeat', 'text');
 

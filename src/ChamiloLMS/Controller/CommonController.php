@@ -9,6 +9,7 @@ use ChamiloLMS\Controller\BaseController;
 /**
  * @package ChamiloLMS.CommonController
  * @author Julio Montoya <gugli100@gmail.com>
+ * @todo improve breadcrumb management
  */
 class CommonController extends BaseController
 {
@@ -39,7 +40,6 @@ class CommonController extends BaseController
      */
     protected function getControllerAlias()
     {
-
     }
 
     /**
@@ -69,23 +69,23 @@ class CommonController extends BaseController
         );
     }
 
-
     /**
-     * @param Application $app
+     *
      * @param array $breadcrumbs
      */
-    protected function setBreadcrumb(Application $app, $breadcrumbs)
+    protected function setBreadcrumb($breadcrumbs)
     {
-        $courseInfo = api_get_course_info();
+        $course = $this->getCourse();
+        //$session =  $this->getSession();
 
         // Adding course breadcrumb.
-        if (!empty($courseInfo)) {
+        if (!empty($course)) {
             $courseBreadcrumb = array(
-                'name' => \Display::return_icon('home.png').' '.$courseInfo['title'],
+                'name' => \Display::return_icon('home.png').' '.$course->getTitle(),
                 'url' => array(
                     'route' => 'course',
                     'routeParameters' => array(
-                        'cidReq' => api_get_course_id(),
+                        'cidReq' => $course->getCode(),
                         'id_session' => api_get_session_id()
                     )
                 )
@@ -93,8 +93,10 @@ class CommonController extends BaseController
             array_unshift($breadcrumbs, $courseBreadcrumb);
         }
 
+        $app = $this->app;
+
         $app['main_breadcrumb'] = function ($app) use ($breadcrumbs) {
-            /** @var  \Knp\Menu\Silex\RouterAwareFactory $menu */
+            /** @var  \Knp\Menu\MenuItem $menu */
             $menu = $app['knp_menu.factory']->createItem(
                 'root',
                 array(
@@ -105,24 +107,29 @@ class CommonController extends BaseController
                 )
             );
 
-            foreach ($breadcrumbs as $item) {
-                $menu->addChild($item['name'], $item['url']);
+            if (!empty($breadcrumbs)) {
+                foreach ($breadcrumbs as $item) {
+                    if (empty($item['url'])) {
+                        $item['url'] = array();
+                    }
+                    $menu->addChild($item['name'], $item['url']);
+                }
             }
+
             return $menu;
         };
 
         $matcher = new Matcher();
         $voter = new \Knp\Menu\Silex\Voter\RouteVoter();
-        $voter->setRequest($app['request']);
+        $voter->setRequest($this->getRequest());
         $matcher->addVoter($voter);
-        $renderer = new \Knp\Menu\Renderer\TwigRenderer($app['twig'], 'bread.tpl', $matcher);
+        $renderer = new \Knp\Menu\Renderer\TwigRenderer($this->get('twig'), 'bread.tpl', $matcher);
         $bread = $renderer->render(
-            $app['main_breadcrumb'],
+            $this->get('main_breadcrumb'),
             array(
                 'template' => 'default/layout/bread.tpl'
             )
         );
         $app['breadcrumbs'] = $bread;
     }
-
 }

@@ -109,11 +109,9 @@ parameter will be used as to determaine if cache should be used or not.
     <?php
 
     // .. create a $app before this line
-    $app->inject(array(
-        'routing.options' => array(
-            'cache_dir' => '/my/cache/directory/routing',
-        ),
-    ));
+    $app['routing.options'] = array(
+        'cache_dir' => '/my/cache/directory/routing',
+    );
 
 Before it is possible to use the full power of caching it is needed to
 use configuration files because Silex will always call add routes via
@@ -125,9 +123,7 @@ baked right in.
     <?php
 
     // .. create $app
-    $app->inject(array(
-        'routing.resource' => 'config/routing.xml',
-    ));
+    $app['routing.resource'] = 'config/routing.xml';
 
 .. code-block:: xml
 
@@ -187,10 +183,9 @@ services to add paths for caching, logs or other directories.
 
     <?php
 
-    // .. create $app
-    $app->inject(array(
-        'twig.path' => $app['root_dir'] . '/views',
-    ));
+    $app = new Flint\Application(__DIR__, true);
+    $app['debug'] === true;
+    $app['root_dir'] === __DIR__;
 
 Custom Error Pages
 ------------------
@@ -229,25 +224,44 @@ To see what parameter the controller action takes look at the one
 provided by default. Normally it should not be overwritten as it already
 gives a lot of flexibilty with the template lookup.
 
-Injecting Configuration Parameters
-----------------------------------
 
-Some times it is more useful to inject an array of parameters instead of
-setting them on the application one-by-one. Flint have a method that
-does this. It does the same thing as the second parameter of Silex
-``register`` method.
+Pimple Console
+--------------
+
+Helper
+~~~~~~
+
+Flint have a helper that provides access to a pimple instance or in the case of Flint access to you application
+object.
 
 .. code-block:: php
 
     <?php
 
-    // .. $app
-    $app->inject(array(
-        'twig.paths' => '/my/path/to/views',
-    ));
+    class SomeCommand extends Command
+    {
+        public function execute(InputInterface $input, OutputInterface $output)
+        {
+            $pimple = $this->getHelperSet()->get('pimple');
+        }
+    }
 
-Pimple Console
---------------
+To register the helper do this.
+
+.. code-block:: php
+
+    <?php
+
+    $app = new Symfony\Component\Console\Application;
+    $app->getHelperSet()->set(new Flint\Console\PimpleHelper($pimple));
+
+
+Application
+~~~~~~~~~~~
+
+.. warning::
+    
+    This is deprecated and it is adviced to use ``Flint\Console\PimpleHelper`` instead.
 
 ``Flint\Console\Application`` is an extension of the base console
 application shipped with Symfony. It gives access to Pimple in commands.

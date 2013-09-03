@@ -2,14 +2,13 @@
 
 namespace Flint\Controller;
 
-use Flint\Application;
 use Flint\PimpleAwareInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
 
 /**
- * Injects the Application into the Controller if it implements the right interface
- * otherwise it delegates to the composed resolver.
+ * Injects a Pimple instance into the Controller if it implements
+ * the right interface otherwise it delegates to the wrapped resolver.
  *
  * @package Flint
  */

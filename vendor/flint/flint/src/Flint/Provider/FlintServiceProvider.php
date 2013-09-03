@@ -26,7 +26,7 @@ class FlintServiceProvider implements \Silex\ServiceProviderInterface
             return new ControllerResolver($resolver, $app);
         }));
 
-        $app['twig.loader.filesystem'] = $app->share($app->extend('twig.loader.filesystem', function ($loader, $app) {
+        $app['twig.loader.filesystem'] = $app->share($app->extend('twig.loader.filesystem', function ($loader) {
             $loader->addPath(__DIR__ . '/../Resources/views', 'Flint');
 
             return $loader;

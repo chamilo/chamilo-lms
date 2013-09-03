@@ -3906,59 +3906,6 @@
         ]
     },
     {
-        "name": "flint/flint",
-        "version": "1.4.1",
-        "version_normalized": "1.4.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/henrikbjorn/Flint.git",
-            "reference": "1.4.1"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/henrikbjorn/Flint/zipball/1.4.1",
-            "reference": "1.4.1",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3",
-            "silex/silex": "~1.0",
-            "symfony/config": "~2.2",
-            "twig/twig": "~1.10"
-        },
-        "replace": {
-            "henrikbjorn/flint": "self.version"
-        },
-        "require-dev": {
-            "symfony/console": "~2.2"
-        },
-        "time": "2013-07-04 09:26:29",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.4.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Flint": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Henrik Bjørnskov",
-                "email": "henrik@bjrnskov.dk",
-                "homepage": "http://henrik.bjrnskov.dk"
-            }
-        ],
-        "description": "Enhanced Silex"
-    },
-    {
         "name": "symfony/dom-crawler",
         "version": "v2.3.3",
         "version_normalized": "2.3.3.0",
@@ -4111,5 +4058,58 @@
         },
         "notification-url": "https://packagist.org/downloads/",
         "homepage": "http://www.chamilo.org"
+    },
+    {
+        "name": "flint/flint",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/henrikbjorn/Flint.git",
+            "reference": "0cbc0db3b06425e2e97acbfeb7d19d9483367c02"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/henrikbjorn/Flint/zipball/0cbc0db3b06425e2e97acbfeb7d19d9483367c02",
+            "reference": "0cbc0db3b06425e2e97acbfeb7d19d9483367c02",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "silex/silex": "~1.0",
+            "symfony/config": "~2.2",
+            "twig/twig": "~1.10"
+        },
+        "replace": {
+            "henrikbjorn/flint": "self.version"
+        },
+        "require-dev": {
+            "symfony/console": "~2.2"
+        },
+        "time": "2013-09-03 10:23:18",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.4.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Flint": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Henrik Bjornskov",
+                "email": "henrik@bjrnskov.dk",
+                "homepage": "http://henrik.bjrnskov.dk"
+            }
+        ],
+        "description": "Enhanced Silex"
     }
 ]

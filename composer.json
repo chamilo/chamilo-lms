@@ -77,7 +77,7 @@
         "jbroadway/urlify": "dev-master",
         "sensio/framework-extra-bundle": "2.3.*@dev",
         "chamilo/chash": "dev-master",
-        "flint/flint" : "~1.4"
+        "flint/flint" : "dev-master"
     },
     "require-dev": {
         "knplabs/gaufrette": "0.2.*@dev",

@@ -268,7 +268,10 @@ function LMSInitialize() {
             url: "lp_ajax_initialize.php",
             data: params,
             dataType: 'script',
-            async: false
+            async: false,
+            success:function(data) {
+                jQuery("video:not(.skip), audio:not(.skip)").mediaelementplayer();
+            }
         });
 
         olms.lms_initialized = 1;
@@ -294,7 +297,7 @@ function LMSInitialize() {
 
         logit_scorm('LMSInitialize() with params: '+log);
 
-	if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
+	    if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
             xajax_start_timer();
         }
 
@@ -1481,10 +1484,6 @@ function switch_item(current_item, next_item){
             }
         }
     });
-
-
-
-
 
     return true;
 }

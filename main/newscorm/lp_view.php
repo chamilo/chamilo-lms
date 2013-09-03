@@ -75,17 +75,17 @@ $(document).ready(function() {
 	$("div#log_content_cleaner").bind("click", function() {
     	$("div#log_content").empty();
 	});
-	jQuery("video:not(.skip), audio:not(.skip)").mediaelementplayer();
+	//jQuery("video:not(.skip), audio:not(.skip)").mediaelementplayer();
 });
 var chamilo_xajax_handler = window.oxajax;
 </script>';
 
 if ($_SESSION['oLP']->mode == 'embedframe' || $_SESSION['oLP']->get_hide_toc_frame()==1 ) {
     $htmlHeadXtra[] = '<script>
-        $(document).ready(function() {
-            toogle_minipanel();
-        });
-        </script>';
+    $(document).ready(function() {
+        toogle_minipanel();
+    });
+    </script>';
 }
 
 //Impress js
@@ -477,10 +477,15 @@ if ($is_allowed_to_edit) {
   <?php
        }
   }
-  ?>
-}
-    window.onload = updateContentHeight;
-    window.onresize = updateContentHeight;
+  ?>}
+    $(document).ready(function() {
+        updateContentHeight();
+        $(window).resize(function() {
+            updateContentHeight();
+        });
+    });
+    //window.onload = updateContentHeight;
+    //window.onresize = updateContentHeight;
 </script>
 <?php
 // Restore a global setting.

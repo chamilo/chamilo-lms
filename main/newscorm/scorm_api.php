@@ -1455,7 +1455,7 @@ function switch_item(current_item, next_item){
     }
 
     <?php } else { ?>
-            console.log('loading '+mysrc+' in frame');
+            log_in_log('loading '+mysrc+' in frame');
             cont_f.attr("src",mysrc);
     <?php } ?>
 

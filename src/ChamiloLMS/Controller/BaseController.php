@@ -36,17 +36,6 @@ abstract class BaseController extends FlintController
         $this->app = $app;
         // In order to use the Flint Controller.
         $this->pimple = $app;
-
-        // Inserting course
-        /** @var \Entity\Course $app['course'] */
-        $course = $this->getCourse();
-        if ($course) {
-            $template = $this->get('template');
-            $template->assign('course', $course);
-
-            $session = $this->getSession();
-            $template->assign('course_session', $session);
-        }
     }
 
     /**
@@ -68,7 +57,23 @@ abstract class BaseController extends FlintController
         if (isset($this->app['course_session']) && !empty($this->app['course_session'])) {
             return $this->app['course_session'];
         }
-        return null;
+        return false;
+    }
+
+    /**
+     * @return \Template
+     */
+    protected function getTemplate()
+    {
+        return $this->app['template'];
+    }
+
+    /**
+     * @return \Entity\User
+     */
+    public function getUser()
+    {
+        return parent::getUser();
     }
 
     /**
@@ -110,6 +115,9 @@ abstract class BaseController extends FlintController
      */
     abstract protected function generateLinks();
 
+    /**
+     * @return \Doctrine\ORM\EntityManager
+     */
     protected function getManager()
     {
         return $this->get('orm.em');
@@ -455,7 +463,6 @@ abstract class BaseController extends FlintController
 
         return new JsonResponse($this->getEntityForJson($object->getId()));
     }
-
 
     /**
      * Returns an entity from its ID, or FALSE in case of error.

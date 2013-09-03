@@ -36,8 +36,20 @@ class CurriculumUserController extends CommonController
             return $app->abort(403, 'Not allowed');
         }
 
-        $course = $this->getCourse();
-        $session = $this->getSession();
+        $breadcrumbs = array(
+            array(
+                'name' => get_lang('Curriculum'),
+                'url' => array(
+                    /*'route' => 'exercise_question_pool_global',
+                    'routeParameters' => array(
+                        'cidReq' => api_get_course_id(),
+                        'id_session' => api_get_session_id(),
+                    )*/
+                )
+            )
+        );
+
+        $this->setBreadcrumb($breadcrumbs);
 
         $qb = $this->getManager()
             ->createQueryBuilder()
@@ -52,7 +64,6 @@ class CurriculumUserController extends CommonController
             ->orderBy('node.root, node.lft, node.title', 'ASC');
         $this->setCourseParameters($qb, 'node');
         $query = $qb->getQuery();
-
 
         $categories = $query->getResult();
 

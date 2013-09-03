@@ -26,8 +26,21 @@ class CurriculumCategoryController extends CommonController
      */
     public function indexAction()
     {
-        $course = $this->getCourse();
-        $session = $this->getSession();
+        $breadcrumbs = array(
+            array(
+                'name' => get_lang('Curriculum'),
+                'url' => array(
+                    'route' => 'curriculum_user.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+            ),
+            array(
+                'name' => get_lang('Categories')
+            )
+        );
+        $this->setBreadcrumb($breadcrumbs);
 
         $options = array(
             'decorate' => true,
@@ -80,11 +93,6 @@ class CurriculumCategoryController extends CommonController
 
         $this->setCourseParameters($qb, 'node');
 
-        /*if (!empty($session)) {
-            $qb->andWhere('node.sessionId = :session_id');
-            $parameters['session_id'] = $session->getId();
-        }*/
-
         $query = $qb->getQuery();
 
         $htmlTree = $repo->buildTree($query->getArrayResult(), $options);
@@ -112,6 +120,37 @@ class CurriculumCategoryController extends CommonController
     */
     public function addCategoryAction()
     {
+        $breadcrumbs = array(
+            array(
+                'name' => get_lang('Curriculum'),
+                'url' => array(
+                    'route' => 'curriculum_user.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+            ),
+            array(
+                'name' => get_lang('Categories'),
+                'url' => array(
+                    'route' => 'curriculum_category.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+
+            ),
+            array(
+                'name' => get_lang('Add'),
+                'url' => array(
+                    'route' => 'curriculum_category.controller:addCategoryAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+            )
+        );
+        $this->setBreadcrumb($breadcrumbs);
         return parent::addAction();
     }
 
@@ -166,6 +205,32 @@ class CurriculumCategoryController extends CommonController
     */
     public function editCategoryAction($id)
     {
+         $breadcrumbs = array(
+            array(
+                'name' => get_lang('Curriculum'),
+                'url' => array(
+                    'route' => 'curriculum_user.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+            ),
+            array(
+                'name' => get_lang('Categories'),
+                'url' => array(
+                    'route' => 'curriculum_category.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+
+            ),
+            array(
+                'name' => get_lang('Edit')
+            )
+        );
+
+        $this->setBreadcrumb($breadcrumbs);
         return parent::editAction($id);
     }
 

@@ -160,6 +160,31 @@ class CurriculumCategoryController extends CommonController
     */
     public function addFromParentAction($id)
     {
+        $breadcrumbs = array(
+            array(
+                'name' => get_lang('Curriculum'),
+                'url' => array(
+                    'route' => 'curriculum_user.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+            ),
+            array(
+                'name' => get_lang('Categories'),
+                'url' => array(
+                    'route' => 'curriculum_category.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+            ),
+            array(
+                'name' => get_lang('AddItems')
+            )
+        );
+        $this->setBreadcrumb($breadcrumbs);
+
         $request = $this->getRequest();
         $formType = $this->getFormType();
 

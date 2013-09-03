@@ -9,6 +9,7 @@ use ChamiloLMS\Controller\BaseController;
 /**
  * @package ChamiloLMS.CommonController
  * @author Julio Montoya <gugli100@gmail.com>
+ * @todo improve breadcrumb management
  */
 class CommonController extends BaseController
 {

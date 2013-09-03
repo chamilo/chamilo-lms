@@ -89,6 +89,10 @@ $form->applyFilter('title','trim');
 $element = $form->addElement('text', 'real_code', array(get_lang('CourseCode'), get_lang('ThisValueCantBeChanged')));
 $element->freeze();
 
+// Id
+$element = $form->addElement('text', 'real_id', 'id');
+$element->freeze();
+
 // visual code
 $form->add_textfield('visual_code', array(get_lang('VisualCode'), get_lang('OnlyLettersAndNumbers'), get_lang('ThisValueIsUsedInTheCourseURL')), true, array('class' => 'span4'));
 

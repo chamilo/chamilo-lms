@@ -25,7 +25,6 @@ $(function() {
         var input = $(this);
 
         var removeForm = $('<a class="btn btn-danger" href="#"><i class="icon-minus-sign icon-large"></i></a>');
-        //var id = input.parent().parent().parent().parent().attr('id');
         var maxRepeat = input.parent().parent().parent().parent().attr('data-max');
 
         if (maxRepeat != 1) {
@@ -33,13 +32,12 @@ $(function() {
             addTagFormDeleteLink(removeForm);
         }
     });
+
     // Create add buttons:
     $(".items").each(function(index, value) {
         var itemId = $(this).attr('id');
         var lastInput = $(this).find("input:text").last();
-        console.log(lastInput.attr('id'));
         var addButton = $('<a class="btn-add btn btn-primary" data-target="'+itemId+'"><i class="icon-plus-sign icon-large"></i></a>');
-        //lastInput.parent().append(addButton );
     });
 
     // When clicking in the add button:
@@ -48,7 +46,15 @@ $(function() {
         var maxRepeat = collectionHolder.attr('data-max');
         var countInput = collectionHolder.find('input:text').length;
 
+        // Disables the add button when reached the max count
+        var showButtonWhenIsHidden = false;
+        if (countInput > maxRepeat - 2) {
+            showButtonWhenIsHidden = true;
+        }
+
+        // Disables the clicking when it's disabled
         if (countInput > maxRepeat - 1) {
+            $(this).addClass('disabled');
             return false;
         }
 
@@ -66,44 +72,62 @@ $(function() {
         liItem.find('.controls').append(removeForm);
 
         var item = collectionHolder.find('ul').append(liItem);
-        addTagFormDeleteLink(removeForm);
+        if (showButtonWhenIsHidden) {
+            addTagFormDeleteLink(removeForm, $(this));
+        } else {
+
+            addTagFormDeleteLink(removeForm);
+        }
         event && event.preventDefault();
     });
 
     $('#saveQuestionBar').affix();
 });
 
-function addTagFormDeleteLink($tagFormLi) {
+function addTagFormDeleteLink($tagFormLi, showButton) {
     $tagFormLi.on('click', function(e) {
         e.preventDefault();
         $(this).parent().remove();
+        // Restore the add button.
+        if (showButton) {
+            showButton.removeClass('disabled');
+        }
     });
 }
 
 function save(itemId) {
     var form = $("#"+itemId).parent();
     var serializedForm = form.serialize();
-    $.post('{{ url('curriculum_user.controller:saveUserItemAction', {'course' : course.code }) }}', serializedForm);
-    return false;
+    $.ajax({
+        'url' : '{{ url('curriculum_user.controller:saveUserItemAction', {'course' : course.code, 'id_session' : course_session.id }) }}',
+        'data' : serializedForm,
+        'async': false,
+        'type' : 'post'
+        }
+    );
 }
 
 function saveAll() {
     var items = $("form").find(".items");
     $(items).each(function(index, value) {
-        var itemId = $(this).attr('id')
+        var itemId = $(this).attr('id');
         save(itemId);
     });
+    window.location = '{{ url('index') }}';
 }
 
 </script>
 <div class="row">
     <div class="span10">
-        {%  if is_granted('ROLE_ADMIN')  %}
-               <div class="actions">
-                   <a href="{{ url('curriculum_category.controller:indexAction', {'course' : course.code , 'id_session' : course_session.id}) }}">
-                       {{ "Categories" | trans }}
-                   </a>
-               </div>
+        {%  if is_granted('ROLE_ADMIN') and isAllowed %}
+            <div class="actions">
+                <a href="{{ url('curriculum_category.controller:indexAction', { 'course' : course.code, 'id_session' : course_session.id }) }}">
+                   {{ "Categories" | trans }}
+                </a>
+                <a href="{{ url('curriculum_category.controller:resultsAction', { 'course' : course.code, 'id_session' : course_session.id }) }}">
+                   {{ "Results" | trans }}
+                </a>
+            </div>
         {%  endif  %}
 
         <h2>Trayectoria</h2>
@@ -112,14 +136,15 @@ function saveAll() {
         <div id="list" class="trajectory">
             {% for subcategory in categories %}
                 {% if subcategory.lvl == 0 %}
-                    <h3> {{ subcategory.title }}</h3>
-                    <hr />
+                   {#  <h3> {{ subcategory.title }} </h3>
+                    <hr /> #}
                 {% else %}
                     <h4> {{ subcategory.title }}</h4>
                 {% endif %}
 
                 {% for item in subcategory.items %}
-                    <h5> {{ item.title }} (item) - Max {{ item.maxRepeat }}</h5>
+                    {# Items #}
+                    {{ item.title }} (item) - {{ 'CurriculumMaximumItem' | trans }} {{ item.maxRepeat }}
                     <div class="row">
                     {{ form_start(form_list[item.id]) }}
 
@@ -127,15 +152,12 @@ function saveAll() {
                             {% for widget in form_list[item.id].userItems.children %}
                                 {{ _self.widget_prototype(widget, 'Remove item') }}
                             {% endfor %}
-
                             <ul>
                             </ul>
                         </div>
 
                         <div class="span8">
                             <div class="btn-group">
-                                {# form_widget(form_list[item.id].submit) #}
-                                <!-- <a class="btn btn-success" onclick="save('items_{{ item.id }}');" data-target="items_{{ item.id }}">{{ 'Save items' | get_lang }}</a> -->
                                 {% if item.maxRepeat > 1 %}
                                     <a class="btn-add btn btn-primary" data-target="items_{{ item.id }}"><i class="icon-plus-sign icon-large"></i></a>
                                 {% endif %}
@@ -144,7 +166,6 @@ function saveAll() {
                     {{ form_end(form_list[item.id]) }}
                     </div>
                 {% endfor %}
-
             {% endfor %}
         </div>
     </div>

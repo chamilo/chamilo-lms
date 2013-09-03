@@ -70,24 +70,12 @@ $platform_theme = api_get_setting('stylesheets'); // Plataform's css.
 $my_style       = $platform_theme;
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.lp_minipanel.js" type="text/javascript" language="javascript"></script>';
-/*
- * already added in lp_controller.php
-if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) {
-    $htmlHeadXtra[] = '<script type="text/javascript">
-<!--
-    var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js\';
--->
-</script>';
-    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>';
-    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
-}*/
-
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
 	$("div#log_content_cleaner").bind("click", function() {
     	$("div#log_content").empty();
 	});
-	$("video:not(.skip), audio:not(.skip)").mediaelementplayer();
+	jQuery("video:not(.skip), audio:not(.skip)").mediaelementplayer();
 });
 var chamilo_xajax_handler = window.oxajax;
 </script>';
@@ -226,7 +214,6 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
     if ($safe_id == strval(intval($safe_id)) && $safe_item_id == strval(intval($safe_item_id))) {
 
         $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting FROM ' . $TBL_TRACK_EXERCICES . ' WHERE exe_id = '.$safe_exe_id;
-        if ($debug) error_log($sql);
         $res = Database::query($sql);
         $row_dates = Database::fetch_array($res);
 
@@ -238,12 +225,10 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
         $max_score 	= (float)$row_dates['exe_weighting'];
 
         $sql_upd_max_score = "UPDATE $TBL_LP_ITEM SET max_score = '$max_score' WHERE c_id = $course_id AND id = '".$safe_item_id."'";
-        if ($debug) error_log($sql_upd_max_score);
         Database::query($sql_upd_max_score);
 
         $sql_last_attempt = "SELECT id FROM $TBL_LP_ITEM_VIEW  WHERE c_id = $course_id AND lp_item_id = '$safe_item_id' AND lp_view_id = '".$_SESSION['oLP']->lp_view_id."' order by id desc limit 1";
         $res_last_attempt = Database::query($sql_last_attempt);
-        if ($debug) error_log($sql_last_attempt);
 
         if (Database::num_rows($res_last_attempt)) {
         	$row_last_attempt = Database::fetch_row($res_last_attempt);
@@ -329,18 +314,18 @@ if (Database::num_rows($res_media) > 0) {
     }
 }
 echo '<div id="learning_path_main" style="width:100%;height:100%;">';
-    $is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
-    if ($is_allowed_to_edit) {
-        echo '<div id="learning_path_breadcrumb_zone">';
-        global $interbreadcrumb;
-        $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list&isStudentView=false', 'name' => get_lang('LearningPaths'));
-        $interbreadcrumb[] = array('url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false", 'name' => $_SESSION['oLP']->get_name());
-        $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Preview'));
-        //$interbreadcrumb[] = array('type' => 'right', 'url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false", 'name' => get_lang('Edit'), 'class' => 'btn btn-mini btn-warning');
+$is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
+if ($is_allowed_to_edit) {
+    echo '<div id="learning_path_breadcrumb_zone">';
+    global $interbreadcrumb;
+    $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list&isStudentView=false', 'name' => get_lang('LearningPaths'));
+    $interbreadcrumb[] = array('url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false", 'name' => $_SESSION['oLP']->get_name());
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Preview'));
+    //$interbreadcrumb[] = array('type' => 'right', 'url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false", 'name' => get_lang('Edit'), 'class' => 'btn btn-mini btn-warning');
 
-        echo return_breadcrumb($interbreadcrumb, null, null);
-        echo '</div>';
-    }
+    echo return_breadcrumb($interbreadcrumb, null, null);
+    echo '</div>';
+}
     echo '<div id="learning_path_left_zone" style="'.$display_none.'"> ';
     echo '<div id="header">
             <table>
@@ -496,7 +481,6 @@ echo '<div id="learning_path_main" style="width:100%;height:100%;">';
 }
     window.onload = updateContentHeight;
     window.onresize = updateContentHeight;
--->
 </script>
 <?php
 // Restore a global setting.

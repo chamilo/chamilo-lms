@@ -198,9 +198,7 @@ if (api_is_platform_admin()) {
 }
 
 $items[] = array('url'=>'usergroups.php', 	'label' => get_lang('Classes'));
-
-
-
+$items[] = array('url'=> 'exercise_report.php', 	'label' => get_lang('ExerciseReport'));
 $items[] = array('url'=>'extra_fields.php?type=session', 	'label' => get_lang('ManageSessionFields'));
 
 $blocks['sessions']['items'] = $items;

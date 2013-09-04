@@ -119,6 +119,134 @@ class ExerciseLib
         return $count;
     }
 
+    /**
+     * Gets count of exam results
+     * @todo this public static function should be moved in a library  + no global calls
+     */
+    public static function get_admin_count_exam_results($extra_where_conditions)
+    {
+        $count = self::get_admin_exam_results_data(null, null, null, null, $extra_where_conditions, true);
+        return $count;
+    }
+
+    /**
+     * Gets the exam'data results
+     * @todo this function should be moved in a library  + no global calls
+     */
+    public static function get_admin_exam_results_data($from, $number_of_items, $column, $direction, $extra_where_conditions = null, $get_count = false)
+    {
+
+        if (empty($extra_where_conditions)) {
+            $extra_where_conditions = "1 = 1 ";
+        }
+
+        $TBL_USER = Database :: get_main_table(TABLE_MAIN_USER);
+        $tableCourse = Database :: get_main_table(TABLE_MAIN_COURSE);
+        $tableSession = Database :: get_main_table(TABLE_MAIN_SESSION);
+        $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
+
+        $TBL_TRACK_EXERCICES = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $TBL_TRACK_ATTEMPT_RECORDING = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+
+        // sql for chamilo-type tests for teacher / tutor view
+        $sql_inner_join_tbl_track_exercices = " (
+            SELECT DISTINCT ttte.*
+            FROM $TBL_TRACK_EXERCICES ttte LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr
+            ON (ttte.exe_id = tr.exe_id)
+        )";
+
+        $first_and_last_name = api_is_western_name_order() ? "firstname, lastname" : "lastname, firstname";
+
+        if ($get_count) {
+            $sql_select = "SELECT count(te.exe_id) ";
+        } else {
+            $sql_select = "SELECT DISTINCT
+                    user_id,
+                    $first_and_last_name,
+                    ce.title,
+                    username,
+                    session.name as session,
+                    te.exe_result,
+                    te.exe_weighting,
+                    te.exe_date,
+                    te.exe_id,
+                    email as exemail,
+                    te.start_date,
+                    steps_counter,
+                    exe_user_id,
+                    te.exe_duration,
+                    propagate_neg,
+                    te.c_id,
+                    te.session_id,
+                    course.code,
+                    orig_lp_id";
+        }
+
+        $sql = " $sql_select
+                FROM $TBL_EXERCICES AS ce
+                INNER JOIN $sql_inner_join_tbl_track_exercices AS te ON (te.exe_exo_id = ce.iid)
+                INNER JOIN $TBL_USER  AS user ON (user.user_id = exe_user_id)
+                INNER JOIN $tableCourse AS course ON (course.id = te.c_id)
+                INNER JOIN $tableSession AS session ON (session.id = te.session_id)
+
+                WHERE $extra_where_conditions AND
+                    te.status != 'incomplete' AND
+                    ce.active <>-1
+                ";
+
+        $column = !empty($column) ? Database::escape_string($column) : null;
+        $from = intval($from);
+        $number_of_items = intval($number_of_items);
+
+        // just count how many answers
+        if ($get_count) {
+            $res = Database::query($sql);
+            return Database::num_rows($res);
+        }
+
+        if (!empty($column)) {
+            $sql .= " ORDER BY $column $direction ";
+        }
+        if ($get_count == false) {
+            $sql .= " LIMIT $from, $number_of_items";
+        }
+
+        $results = array();
+        $resx = Database::query($sql);
+        while ($rowx = Database::fetch_array($resx, 'ASSOC')) {
+            $results[] = $rowx;
+        }
+
+        $list_info = array();
+
+        if (is_array($results)) {
+            // Looping results.
+            foreach ($results as $result) {
+
+                $id = $result['exe_id'];
+                $my_res = $result['exe_result'];
+                $my_total = $result['exe_weighting'];
+
+                if (!$result['propagate_neg'] && $my_res < 0) {
+                    $my_res = 0;
+                }
+
+                $score = self::show_score($my_res, $my_total);
+
+                $courseLink = 'cidReq='.$result['code'].'&id_session='.$result['session_id'];
+
+                $url = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?'.$courseLink.'&action=edit&id='.$id;
+                $link = Display::url('exercise', $url);
+                $result['link'] = $link;
+                $result['score'] = $score;
+
+                $list_info[] = $result;
+            }
+        }
+
+        return $list_info;
+    }
+
     public static function get_count_exam_hotpotatoes_results($in_hotpot_path)
     {
         return self::get_exam_results_hotpotatoes_data(0, 0, '', '', $in_hotpot_path, true, '');
@@ -191,7 +319,6 @@ class ExerciseLib
         $TBL_TRACK_EXERCICES = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $TBL_TRACK_HOTPOTATOES = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
         $TBL_TRACK_ATTEMPT_RECORDING = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
-
         $session_id_and = ' AND te.session_id = '.api_get_session_id().' ';
 
         $exercise_id = intval($exercise_id);
@@ -223,7 +350,7 @@ class ExerciseLib
             }
 
             $sqlFromOption = "";
-            $sqlWhereOption = "";           // for hpsql
+            $sqlWhereOption = "";
             //@todo fix to work with COURSE_RELATION_TYPE_RRHH in both queries
             //Hack in order to filter groups
             $sql_inner_join_tbl_user = '';
@@ -359,7 +486,7 @@ class ExerciseLib
             $teacher_id_list[] = $teacher['user_id'];
         }
 
-        //Simple exercises
+        // Simple exercises.
         if (empty($hotpotatoe_where)) {
             $column = !empty($column) ? Database::escape_string($column) : null;
             $from = intval($from);
@@ -371,6 +498,7 @@ class ExerciseLib
             $sql .= " LIMIT $from, $number_of_items";
 
             $results = array();
+
             $resx = Database::query($sql);
             while ($rowx = Database::fetch_array($resx, 'ASSOC')) {
                 $results[] = $rowx;

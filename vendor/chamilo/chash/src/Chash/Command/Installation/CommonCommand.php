@@ -19,6 +19,7 @@ class CommonCommand extends AbstractCommand
     public $configurationPath = null;
     public $configuration = array();
     public $extraDatabaseSettings;
+    private $migrationConfigurationFile;
 
     /**
      * @param array $configuration
@@ -477,6 +478,14 @@ class CommonCommand extends AbstractCommand
                 'update_files' => null,
                 'hook_to_doctrine_version' => '10'
             ),
+            '1.11.0'  => array(
+                'require_update' => true,
+                'pre' => 'pre.sql',
+                'post' => 'post.sql',
+                'update_db' => 'update.php',
+                'update_files' => null,
+                'hook_to_doctrine_version' => '11'
+            ),
             'master'  => array(
                 'require_update' => true,
                 'pre' => 'migrate-db-1.9.0-1.10.0-pre.sql',
@@ -496,7 +505,12 @@ class CommonCommand extends AbstractCommand
      */
     public function getMigrationConfigurationFile()
     {
-        return realpath(__DIR__.'/../../Migrations/migrations.yml');
+        return $this->migrationConfigurationFile;
+    }
+
+    public function setMigrationConfigurationFile($file)
+    {
+        $this->migrationConfigurationFile = $file;
     }
 
     /**
@@ -1056,6 +1070,10 @@ class CommonCommand extends AbstractCommand
 
         if (empty($destinationPath)) {
             $destinationPath = $this->getRootSys();
+        }
+
+        if (empty($chamiloLocationPath)) {
+            $output->writeln("<error>The chamiloLocationPath variable is empty<error>");
         }
 
         $output->writeln("<comment>Copying files from </comment><info>$chamiloLocationPath</info><comment> to </comment><info>".$destinationPath."</info>");

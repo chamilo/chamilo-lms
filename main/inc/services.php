@@ -25,6 +25,14 @@ $app->register(new Flint\Provider\RoutingServiceProvider(), array(
     ),
 ));
 
+use Knp\Provider\ConsoleServiceProvider;
+
+$app->register(new ConsoleServiceProvider(), array(
+    'console.name'              => 'Chamilo',
+    'console.version'           => '1.0.0',
+    'console.project_directory' => __DIR__.'/..'
+));
+
 // Monolog.
 if (is_writable($app['sys_temp_path'])) {
 
@@ -672,3 +680,10 @@ $app['curriculum_user.controller'] = $app->share(
         return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumUserController($app);
     }
 );
+
+$app['upgrade.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\Administrator\UpgradeController($app);
+    }
+);
+

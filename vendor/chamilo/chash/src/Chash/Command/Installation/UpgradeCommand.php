@@ -20,6 +20,7 @@ class UpgradeCommand extends CommonCommand
 {
     public $queryList;
     public $databaseList;
+    public $commandLine = true;
 
     /**
      * Get connection
@@ -40,6 +41,9 @@ class UpgradeCommand extends CommonCommand
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Execute the migration as a dry run.')
             ->addOption('update-installation', null, InputOption::VALUE_OPTIONAL, 'Updates the portal with the current zip file. http:// or /var/www/file.zip')
             ->addOption('temp-folder', null, InputOption::VALUE_OPTIONAL, 'The temp folder.', '/tmp')
+            ->addOption('migration-yml-path', null, InputOption::VALUE_OPTIONAL, 'The temp folder.', '/tmp')
+            ->addOption('migration-class-path', null, InputOption::VALUE_OPTIONAL, 'The temp folder.', '/tmp')
+            ->addOption('download-package', null, InputOption::VALUE_OPTIONAL, 'Downloads the chamilo package', 'true')
             ->addOption('silent', null, InputOption::VALUE_NONE, 'Execute the migration with out asking questions.');
             //->addOption('force', null, InputOption::VALUE_NONE, 'Force the update. Only for tests');
     }
@@ -54,13 +58,31 @@ class UpgradeCommand extends CommonCommand
      */
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
+        if (PHP_SAPI != 'cli') {
+            $this->commandLine = false;
+        }
+
         // Setting up Chash:
         $command = $this->getApplication()->find('chash:setup');
+        $migrationPath = $input->getOption('migration-yml-path');
+        $migrationDir = $input->getOption('migration-class-path');
+
         $arguments = array(
             'command' => 'chash:setup'
         );
+
+        if (!empty($migrationPath)) {
+            $arguments['--migration-yml-path'] = $migrationPath;
+        }
+
+        if (!empty($migrationDir)) {
+            $arguments['--migration-class-path'] = $migrationDir;
+        }
+
         $inputSetup = new ArrayInput($arguments);
         $command->run($inputSetup, $output);
+
+        $this->setMigrationConfigurationFile($command->getMigrationFile());
 
         // Arguments and options
         $version = $originalVersion = $input->getArgument('version');
@@ -68,6 +90,7 @@ class UpgradeCommand extends CommonCommand
         $dryRun = $input->getOption('dry-run');
         $silent = $input->getOption('silent') == true;
         $tempFolder = $input->getOption('temp-folder');
+        $downloadPackage = $input->getOption('download-package') == 'true' ? true : false;
         $updateInstallation = $input->getOption('update-installation');
 
         // Setting the configuration path and configuration array
@@ -173,18 +196,23 @@ class UpgradeCommand extends CommonCommand
         }
 
         if ($dryRun == false) {
-            $chamiloLocationPath = $this->getPackage($output, $originalVersion, $updateInstallation, $tempFolder);
-            if (empty($chamiloLocationPath)) {
-                return;
+            if ($downloadPackage) {
+                $output->writeln("<comment>Downloading package ...</comment>");
+                $chamiloLocationPath = $this->getPackage($output, $originalVersion, $updateInstallation, $tempFolder);
+                if (empty($chamiloLocationPath)) {
+                    return;
+                }
             }
         }
 
         $this->writeCommandHeader($output, 'Welcome to the Chamilo upgrade process!');
 
         if ($dryRun == false) {
-            $output->writeln("<comment>When the installation process finished the files located here:<comment>");
-            $output->writeln("<info>$chamiloLocationPath</info>");
-            $output->writeln("<comment>will be copied in your portal here: </comment><info>".$this->getRootSys()."</info>");
+            if ($downloadPackage) {
+                $output->writeln("<comment>When the installation process finished the files located here:<comment>");
+                $output->writeln("<info>$chamiloLocationPath</info>");
+                $output->writeln("<comment>will be copied in your portal here: </comment><info>".$this->getRootSys()."</info>");
+            }
         } else {
             $output->writeln("<comment>When the installation process finished PHP files are not going to be updated (--dry-run is on).</comment>");
         }
@@ -346,7 +374,9 @@ class UpgradeCommand extends CommonCommand
                     $output->writeln("<comment>Executing update db: <info>'$sqlToInstall'</info>");
                 }
                 require $sqlToInstall;
-                $update($_configuration, $conn, $courseList, $dryRun, $output);
+                if (!empty($update)) {
+                    $update($_configuration, $conn, $courseList, $dryRun, $output);
+                }
             }
         }
 
@@ -359,7 +389,9 @@ class UpgradeCommand extends CommonCommand
                 } else {
                     $output->writeln("<comment>Executing update files: <info>'$sqlToInstall'</info>");
                     require $sqlToInstall;
-                    $updateFiles($_configuration, $conn, $courseList, $dryRun, $output);
+                    if (!empty($updateFiles)) {
+                        $updateFiles($_configuration, $conn, $courseList, $dryRun, $output);
+                    }
                 }
             }
         }
@@ -388,6 +420,9 @@ class UpgradeCommand extends CommonCommand
 
             $output->writeln("<comment>Executing migrations:migrate ".$versionInfo['hook_to_doctrine_version']." --configuration=".$this->getMigrationConfigurationFile()."<comment>");
             $input = new ArrayInput($arguments);
+            if ($this->commandLine == false) {
+                $input->setInteractive(false);
+            }
             $command->run($input, $output);
 
             $output->writeln("<comment>Migration ended successfully</comment>");

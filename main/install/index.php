@@ -19,26 +19,7 @@ error_reporting(-1);
 
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\HttpFoundation\Request;
-
-class BufferedOutput extends Output
-{
-    public $messages = array();
-    public $lastMessage = null;
-    public $buffer = null;
-
-    public function doWrite($message, $newline)
-    {
-        //$this->buffer .= $message. ($newline ? PHP_EOL: '');
-        $this->buffer .= $message. '<br />';
-        $this->messages[] = $message;
-        $this->lastMessage = $message;
-    }
-
-    public function getBuffer()
-    {
-        return $this->buffer;
-    }
-}
+use ChamiloLMS\Component\Console\Output\BufferedOutput;
 
 $app = new Silex\Application();
 

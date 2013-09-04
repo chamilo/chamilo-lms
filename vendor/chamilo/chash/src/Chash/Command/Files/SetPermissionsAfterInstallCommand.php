@@ -93,9 +93,9 @@ class SetPermissionsAfterInstallCommand extends CommonChamiloDatabaseCommand
         try {
             if ($dryRun) {
 
-                $output->writeln("<comment>Files to be changed to permission ".decoct($permission).":</comment>");
-                $output->writeln("<comment>user: ".$user.":</comment>");
-                $output->writeln("<comment>group ".$group.":</comment>");
+                $output->writeln("<comment>Files to be changed to permission ".decoct($permission)."</comment>");
+                $output->writeln("<comment>user: ".$user."</comment>");
+                $output->writeln("<comment>group: ".$group."</comment>");
                 if ($listFiles) {
                     foreach ($files as $file) {
                         $output->writeln($file->getPathName());
@@ -104,13 +104,13 @@ class SetPermissionsAfterInstallCommand extends CommonChamiloDatabaseCommand
             } else {
 
                 if (!empty($permission)) {
-                    $output->writeln("<comment>Modifying files permission: ".decoct($permission).":</comment>");
+                    $output->writeln("<comment>Modifying files permission: ".decoct($permission)."</comment>");
                 }
                 if (!empty($user)) {
-                    $output->writeln("<comment>user: ".$user.":</comment>");
+                    $output->writeln("<comment>user: ".$user."</comment>");
                 }
                 if (!empty($group)) {
-                    $output->writeln("<comment>group: ".$group.":</comment>");
+                    $output->writeln("<comment>group: ".$group."</comment>");
                 }
 
                 if ($listFiles) {
@@ -118,6 +118,7 @@ class SetPermissionsAfterInstallCommand extends CommonChamiloDatabaseCommand
                         $output->writeln($file->getPathName());
                     }
                 }
+
                 if (!empty($permission)) {
                     $fs->chmod($files, $permission, 0000, true);
                 }

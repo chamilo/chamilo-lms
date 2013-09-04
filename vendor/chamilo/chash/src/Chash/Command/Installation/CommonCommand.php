@@ -74,8 +74,10 @@ class CommonCommand extends AbstractCommand
     public function setDatabaseSettings(array $databaseSettings)
     {
         $this->databaseSettings = $databaseSettings;
-        $this->databaseSettings['user'] = $databaseSettings['dbuser'];
-        $this->databaseSettings['password'] = $databaseSettings['dbpassword'];
+        $user = isset($databaseSettings['dbuser']) ? $databaseSettings['dbuser'] : $databaseSettings['user'];
+        $password = isset($databaseSettings['dbpassword']) ? $databaseSettings['dbpassword'] : $databaseSettings['password'];
+        $this->databaseSettings['user'] = $user;
+        $this->databaseSettings['password'] = $password;
     }
 
     /**
@@ -355,7 +357,18 @@ class CommonCommand extends AbstractCommand
      */
     public function getInstallationPath($version)
     {
+        if ($version == 'master') {
+            $version = $this->getLatestVersion();
+        }
         return __DIR__.'/../../Resources/Database/'.$version.'/';
+    }
+
+    /**
+     * @return string
+     */
+    public function getLatestVersion()
+    {
+        return '1.10.0';
     }
 
     /**
@@ -463,6 +476,14 @@ class CommonCommand extends AbstractCommand
                 'update_db' => 'update-db-1.9.0-1.10.0.inc.php',
                 'update_files' => null,
                 'hook_to_doctrine_version' => '10'
+            ),
+            'master'  => array(
+                'require_update' => true,
+                'pre' => 'migrate-db-1.9.0-1.10.0-pre.sql',
+                'post' => 'migrate-db-1.9.0-1.10.0-post.sql',
+                'update_db' => 'update-db-1.9.0-1.10.0.inc.php',
+                'update_files' => null,
+                'hook_to_doctrine_version' => '10'
             )
         );
 
@@ -546,6 +567,7 @@ class CommonCommand extends AbstractCommand
         //Prevent all admins from using the "login_as" feature
         $configuration['login_as_forbidden_globally'] = false;
 
+
         // Version settings
         $configuration['system_version']           = $version;
 
@@ -565,9 +587,9 @@ class CommonCommand extends AbstractCommand
         $config['{DATABASE_MAIN}'] = $configuration['main_database'];
         $config['{DATABASE_DRIVER}'] = $configuration['driver'];
 
-        $config['{COURSE_TABLE_PREFIX}'] = "";
-        $config['{DATABASE_GLUE}'] = "";
-        $config['{DATABASE_PREFIX}'] = "";
+        $config['{COURSE_TABLE_PREFIX}'] = '';
+        $config['{DATABASE_GLUE}'] = "`.`"; // keeping for backward compatibility
+        $config['{DATABASE_PREFIX}'] = '';
         $config['{DATABASE_STATS}'] = $configuration['main_database'];
         $config['{DATABASE_SCORM}'] = $configuration['main_database'];
         $config['{DATABASE_PERSONAL}'] = $configuration['main_database'];
@@ -730,6 +752,19 @@ class CommonCommand extends AbstractCommand
                         ),
                     ),
                 )
+            ),
+            'master' => array(
+                'section' => array(
+                    'main' => array(
+                        array(
+                            'name' => 'chamilo',
+                            'sql' => array(
+                                'db_course.sql',
+                                'db_main.sql'
+                            ),
+                        ),
+                    ),
+                )
             )
         );
     }
@@ -880,6 +915,10 @@ class CommonCommand extends AbstractCommand
         if (empty($updateInstallation)) {
             $versionTag = str_replace('.', '_', $version);
             $updateInstallation = "https://github.com/chamilo/chamilo-lms/archive/CHAMILO_".$versionTag."_STABLE.zip";
+
+            if ($version == 'master') {
+                $updateInstallation = "https://github.com/chamilo/chamilo-lms/archive/master.zip";
+            }
         }
 
         $updateInstallationOriginal = $updateInstallation;
@@ -913,7 +952,6 @@ class CommonCommand extends AbstractCommand
 
                     $systemOutput = str_replace("\n", "\n\t", $systemOutput);
                     $output->writeln($systemOutput);
-                    //$result = file_put_contents($updateInstallationLocalName, file_get_contents($updateInstallation));
                 } else {
                     $output->writeln("<comment>Seems that the chamilo v".$version." has been already downloaded. File location:</comment> <info>$updateInstallationLocalName</info>");
                 }
@@ -945,6 +983,7 @@ class CommonCommand extends AbstractCommand
                 }
 
                 $location = null;
+
                 if (is_dir($folderPath)) {
                     $output->writeln("<comment>Extracting files here:</comment> <info>$folderPath</info>");
 
@@ -954,10 +993,9 @@ class CommonCommand extends AbstractCommand
                         foreach ($archive as $member) {
                             if ($member->isDir()) {
                                 $location = $member->getLocation();
-
-                                //$output->writeln($folderPath.'/'.$location.'main/inc/lib/global.inc.php');
-                                if (file_exists($folderPath.'/'.$location.'global.inc.php')) {
-                                    $location = realpath($folderPath.'/'.$location.'../../').'/';
+                                $globalFile = $folderPath.'/'.$location.'main/inc/global.inc.php';
+                                if (file_exists($globalFile) && is_file($globalFile)) {
+                                    $location = realpath($folderPath.'/'.$location).'/';
                                     $output->writeln('<comment>Chamilo file detected:</comment> <info>'.$location.'main/inc/lib/global.inc.php</info>');
                                     break;
                                 }
@@ -1043,12 +1081,9 @@ class CommonCommand extends AbstractCommand
         $output->writeln('<comment>-----------------------------------------------</comment>');
     }
 
-    /**
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     */
-    public function generateConfFiles(\Symfony\Component\Console\Output\OutputInterface $output)
+    public function getConfigFiles()
     {
-        $configList = array(
+        return array(
             'portfolio.conf.dist.php',
             'events.conf.dist.php',
             'add_course.conf.dist.php',
@@ -1056,11 +1091,17 @@ class CommonCommand extends AbstractCommand
             'auth.conf.dist.php',
             'profile.conf.dist.php',
         );
+    }
 
+    /**
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
+    public function generateConfFiles(\Symfony\Component\Console\Output\OutputInterface $output)
+    {
         $confDir = $this->getConfigurationPath();
-
         $fs = new Filesystem();
 
+        $configList = $this->getConfigFiles();
         foreach ($configList as $file) {
             if (file_exists($confDir.$file)) {
                 $newConfFile = $confDir.str_replace('dist.', '', $file);
@@ -1070,6 +1111,32 @@ class CommonCommand extends AbstractCommand
                 }
             }
         }
+    }
+
+    public function copyConfigFilesToNewLocation(\Symfony\Component\Console\Output\OutputInterface $output)
+    {
+        $output->writeln('<comment>Copy files to new location</comment>');
+        $confDir = $this->getConfigurationPath();
+        $newChamiloPath = realpath($confDir.'../../../');
+        $configurationPath = $this->getConfigurationHelper()->getNewConfigurationPath($newChamiloPath);
+        $fs = new Filesystem();
+        $configList = $this->getConfigFiles();
+        $configList[] = 'configuration.dist.php';
+        foreach ($configList as $file) {
+            // This file contains a get_lang that cause a fatal error.
+            if (in_array($file, array('events.conf.dist.php', 'mail.conf.dist.php'))) {
+                continue;
+            }
+            $configFile = str_replace('dist.', '', $file);
+            $output->writeln($configurationPath.$configFile);
+            $output->writeln($confDir.$configFile);
+            if (!file_exists($configurationPath.$configFile)) {
+                $fs->copy($confDir.$configFile, $configurationPath.$configFile);
+                $output->writeln('Removing: '.$confDir.$configFile);
+                $fs->remove($confDir.$configFile);
+            }
+        }
+        $this->setConfigurationPath($configurationPath);
     }
 
     /**

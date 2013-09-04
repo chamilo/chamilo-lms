@@ -63,7 +63,7 @@ class UpgradeCommand extends CommonCommand
         $command->run($inputSetup, $output);
 
         // Arguments and options
-        $version = $input->getArgument('version');
+        $version = $originalVersion = $input->getArgument('version');
         $path = $input->getOption('path');
         $dryRun = $input->getOption('dry-run');
         $silent = $input->getOption('silent') == true;
@@ -102,6 +102,9 @@ class UpgradeCommand extends CommonCommand
         // Doctrine migrations version
         //$doctrineVersion = $configuration->getCurrentVersion();
 
+
+         // Moves files from main/inc/conf to config/
+
         $doctrineVersion = null;
 
         // Getting supported version number list
@@ -110,10 +113,12 @@ class UpgradeCommand extends CommonCommand
         $versionList = $this->availableVersions();
 
         // Checking version.
-        if (!in_array($version, $versionNameList)) {
-            $output->writeln("<comment>Version '$version' is not available.</comment>");
-            $output->writeln("<comment>Available versions: </comment><info>".implode(', ', $versionNameList)."</info>");
-            return 0;
+        if ($version != 'master') {
+            if (!in_array($version, $versionNameList)) {
+                $output->writeln("<comment>Version '$version' is not available.</comment>");
+                $output->writeln("<comment>Available versions: </comment><info>".implode(', ', $versionNameList)."</info>");
+                return 0;
+            }
         }
 
         $currentVersion = null;
@@ -126,19 +131,31 @@ class UpgradeCommand extends CommonCommand
         }
 
         if (version_compare($_configuration['system_version'], $minVersion, '<')) {
-            $output->writeln("<comment>Your Chamilo version is not supported! The minimun version is: </comment><info>$minVersion</info> <comment>You want to upgrade from <info>".$_configuration['system_version']."</info> <comment>to</comment> <info>$minVersion</info>");
+            $output->writeln("<comment>Your Chamilo version is not supported! The minimun version is: </comment><info>$minVersion</info>");
+            $output->writeln("<comment>You want to upgrade from <info>".$_configuration['system_version']."</info> <comment>to</comment> <info>$minVersion</info>");
             return 0;
         }
 
-        if (version_compare($version, $_configuration['system_version'], '>')) {
-            $currentVersion = $_configuration['system_version'];
+        if ($version != 'master') {
+            if (version_compare($version, $_configuration['system_version'], '>')) {
+                $currentVersion = $_configuration['system_version'];
+            } else {
+                $output->writeln("<comment>Please provide a version greater than </comment><info>".$_configuration['system_version']."</info>");
+                $output->writeln("<comment>You selected version: </comment><info>$version</info>");
+                $output->writeln("<comment>You can also check your installation status with </comment><info>chamilo:status");
+                return 0;
+            }
         } else {
-            $output->writeln("<comment>Please provide a version greater than </comment><info>".$_configuration['system_version']."</info> <comment>you selected version: </comment><info>$version</info>");
-            $output->writeln("<comment>You can also check your installation health with </comment><info>chamilo:status");
-            return 0;
+            $currentVersion = $_configuration['system_version'];
+            $version = $this->getLatestVersion();
         }
 
         $versionInfo = $this->getAvailableVersionInfo($version);
+
+        if (empty($versionInfo)) {
+            $output->writeln("<comment>The version is not supported: $version</comment>");
+            return false;
+        }
 
         if (isset($versionInfo['hook_to_doctrine_version']) && isset($doctrineVersion)) {
             if ($doctrineVersion == $versionInfo['hook_to_doctrine_version']) {
@@ -155,11 +172,8 @@ class UpgradeCommand extends CommonCommand
             }
         }
 
-        //$updateInstallation = '/home/jmontoya/Downloads/chamilo-lms-CHAMILO_1_9_6_STABLE.zip';
-        //$updateInstallation = 'https://github.com/chamilo/chamilo-lms/archive/CHAMILO_1_9_6_STABLE.zip';
-
         if ($dryRun == false) {
-            $chamiloLocationPath = $this->getPackage($output, $version, $updateInstallation, $tempFolder);
+            $chamiloLocationPath = $this->getPackage($output, $originalVersion, $updateInstallation, $tempFolder);
             if (empty($chamiloLocationPath)) {
                 return;
             }
@@ -250,14 +264,39 @@ class UpgradeCommand extends CommonCommand
                     $oldVersion = $versionItem;
                     $output->writeln("----------------------------------------------------------------");
                 } else {
-                    $output->writeln("<comment>Version <info>'$versionItem'</info> does not need a DB migration</comment>");
+                    $output->writeln("<comment>Skip migration for version: </comment><info>'$versionItem'</info>");
                 }
             }
         }
 
         if ($dryRun == false) {
             $this->copyPackageIntoSystem($output, $chamiloLocationPath, null);
+            if ($version == '1.10.0') {
+                $this->copyConfigFilesToNewLocation($output);
+            }
         }
+
+        // Generating temp folders.
+        $command = $this->getApplication()->find('files:generate_temp_folders');
+        $arguments = array(
+            'command' => 'files:generate_temp_folders',
+            '--conf' => $this->getConfigurationHelper()->getConfigurationFilePath($path),
+            '--dry-run' => $dryRun
+        );
+
+        $input = new ArrayInput($arguments);
+        $command->run($input, $output);
+
+        // Fixing permissions.
+        $command = $this->getApplication()->find('files:set_permissions_after_install');
+        $arguments = array(
+            'command' => 'files:set_permissions_after_install',
+            '--conf' => $this->getConfigurationHelper()->getConfigurationFilePath($path),
+            '--dry-run' => $dryRun
+        );
+
+        $input = new ArrayInput($arguments);
+        $command->run($input, $output);
 
         $this->updateConfiguration($output, $dryRun, array('system_version' => $version));
 
@@ -297,14 +336,6 @@ class UpgradeCommand extends CommonCommand
             $this->processQueryList($courseList, $output, $path, $toVersion, $dryRun, 'pre');
         }
 
-        // Filling sqlList array with "post" db changes.
-        if (isset($versionInfo['post']) && !empty($versionInfo['post'])) {
-            $sqlToInstall = $installPath.$versionInfo['post'];
-            $this->fillQueryList($sqlToInstall, $output, 'post');
-            // Processing sql query list depending of the section.
-            $this->processQueryList($courseList, $output, $path, $toVersion, $dryRun, 'post');
-        }
-
         // Processing "db" changes.
         if (isset($versionInfo['update_db']) && !empty($versionInfo['update_db'])) {
             $sqlToInstall = $installPath.$versionInfo['update_db'];
@@ -333,7 +364,16 @@ class UpgradeCommand extends CommonCommand
             }
         }
 
+        // Filling sqlList array with "post" db changes.
+        if (isset($versionInfo['post']) && !empty($versionInfo['post'])) {
+            $sqlToInstall = $installPath.$versionInfo['post'];
+            $this->fillQueryList($sqlToInstall, $output, 'post');
+            // Processing sql query list depending of the section.
+            $this->processQueryList($courseList, $output, $path, $toVersion, $dryRun, 'post');
+        }
+
         if (1) {
+            // Doctrine migrations:
 
             $output->writeln('');
             $output->writeln("<comment>You have to select 'yes' for the 'Chamilo Migrations'<comment>");
@@ -351,29 +391,6 @@ class UpgradeCommand extends CommonCommand
             $command->run($input, $output);
 
             $output->writeln("<comment>Migration ended successfully</comment>");
-
-            // Generating temp folders.
-            $command = $this->getApplication()->find('files:generate_temp_folders');
-            $arguments = array(
-                'command' => 'files:generate_temp_folders',
-                '--conf' => $this->getConfigurationHelper()->getConfigurationFilePath($path),
-                '--dry-run' => $dryRun
-            );
-
-            $input = new ArrayInput($arguments);
-            $command->run($input, $output);
-
-            // Fixing permissions.
-            $command = $this->getApplication()->find('files:set_permissions_after_install');
-            $arguments = array(
-                'command' => 'files:set_permissions_after_install',
-                '--conf' => $this->getConfigurationHelper()->getConfigurationFilePath($path),
-                '--dry-run' => $dryRun
-            );
-
-            $input = new ArrayInput($arguments);
-            $command->run($input, $output);
-
         }
 
         return false;
@@ -404,7 +421,6 @@ class UpgradeCommand extends CommonCommand
     {
         $databases = $this->getDatabaseList($output, $courseList, $path, $version, $type);
         $this->setConnections($version, $path, $databases);
-
 
         foreach ($databases as $section => &$dbList) {
             foreach ($dbList as &$dbInfo) {
@@ -744,7 +760,6 @@ class UpgradeCommand extends CommonCommand
         return $section_contents;
     }
 
-
     /**
      * Executed only before createCourseTables()
      */
@@ -883,4 +898,3 @@ class UpgradeCommand extends CommonCommand
         return $tables;
     }
 }
-

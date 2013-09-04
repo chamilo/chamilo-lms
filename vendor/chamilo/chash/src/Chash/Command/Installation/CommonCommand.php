@@ -74,6 +74,8 @@ class CommonCommand extends AbstractCommand
     public function setDatabaseSettings(array $databaseSettings)
     {
         $this->databaseSettings = $databaseSettings;
+        $this->databaseSettings['user'] = $databaseSettings['dbuser'];
+        $this->databaseSettings['password'] = $databaseSettings['dbpassword'];
     }
 
     /**
@@ -99,7 +101,6 @@ class CommonCommand extends AbstractCommand
     {
         return $this->extraDatabaseSettings;
     }
-
 
     /**
      * @param array $adminSettings
@@ -281,7 +282,6 @@ class CommonCommand extends AbstractCommand
                 ),
                 'type' => 'text'
             ),
-
         );
     }
 
@@ -315,6 +315,13 @@ class CommonCommand extends AbstractCommand
                 ),
                 'type' => 'text'
             ),
+            'port' => array(
+                'attributes' => array(
+                    'label' => 'Port',
+                    'data' => '3306',
+                ),
+                'type' => 'text'
+            ),
             'dbname' => array(
                 'attributes' => array(
                     'label' => 'Database name',
@@ -322,14 +329,14 @@ class CommonCommand extends AbstractCommand
                 ),
                 'type' => 'text'
             ),
-            'user' => array(
+            'dbuser' => array(
                 'attributes' => array(
                     'label' => 'User',
                     'data' => 'root',
                 ),
                 'type' => 'text'
             ),
-            'password' => array(
+            'dbpassword' => array(
                 'attributes' => array(
                     'label' => 'Password',
                     'data' => 'root',
@@ -338,6 +345,7 @@ class CommonCommand extends AbstractCommand
             )
         );
     }
+
     /**
      * Gets the installation version path
      *
@@ -461,7 +469,6 @@ class CommonCommand extends AbstractCommand
         return $versionList;
     }
 
-
     /**
      * Gets the Doctrine configuration file path
      * @return string
@@ -516,14 +523,14 @@ class CommonCommand extends AbstractCommand
         $configuration = array();
 
         $configuration['db_host'] = $databaseSettings['host'];
-        $configuration['db_user'] = $databaseSettings['user'];
-        $configuration['db_password'] = $databaseSettings['password'];
+        $configuration['db_port'] = $databaseSettings['port'];
+        $configuration['db_user'] = $databaseSettings['dbuser'];
+        $configuration['db_password'] = $databaseSettings['dbpassword'];
         $configuration['main_database'] = $databaseSettings['dbname'];
         $configuration['driver'] = $databaseSettings['driver'];
 
         $configuration['root_web'] = $portalSettings['institution_url'];
         $configuration['root_sys'] = $this->getRootSys();
-
         $configuration['security_key'] = md5(uniqid(rand().time()));
 
         // Hash function method
@@ -552,6 +559,7 @@ class CommonCommand extends AbstractCommand
 
         $config['{DATE_GENERATED}'] = date('r');
         $config['{DATABASE_HOST}'] = $configuration['db_host'];
+        $config['{DATABASE_PORT}'] = $configuration['db_port'];
         $config['{DATABASE_USER}'] = $configuration['db_user'];
         $config['{DATABASE_PASSWORD}'] = $configuration['db_password'];
         $config['{DATABASE_MAIN}'] = $configuration['main_database'];
@@ -585,8 +593,6 @@ class CommonCommand extends AbstractCommand
         $result = file_put_contents($newConfigurationFile, $contents);
 
         return $result;
-
-
     }
 
     /**
@@ -1107,7 +1113,6 @@ class CommonCommand extends AbstractCommand
         $connection->update('user', array('firstname' => $settings['firstname']), array('user_id' => '1'));
         $connection->update('user', array('lastname' => $settings['lastname']), array('user_id' => '1'));
         $connection->update('user', array('phone' => $settings['phone']), array('user_id' => '1'));
-
         $connection->update('user', array('password' => $settings['password']), array('user_id' => '1'));
         $connection->update('user', array('email' => $settings['email']), array('user_id' => '1'));
         $connection->update('user', array('language' => $settings['language']), array('user_id' => '1'));

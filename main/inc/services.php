@@ -207,10 +207,12 @@ if (isset($app['configuration']['main_database'])) {
 
     /* The database connection can be overwritten if you set $_configuration['db.options']
        in configuration.php like this : */
+    $dbPort = isset($app['configuration']['db_port']) ? $app['configuration']['db_port'] : 3306;
     $defaultDatabaseOptions = array(
         'db_read' => array(
             'driver' => 'pdo_mysql',
             'host' => $app['configuration']['db_host'],
+            'port' => $dbPort,
             'dbname' => $app['configuration']['main_database'],
             'user' => $app['configuration']['db_user'],
             'password' => $app['configuration']['db_password'],
@@ -220,6 +222,7 @@ if (isset($app['configuration']['main_database'])) {
         'db_write' => array(
             'driver' => 'pdo_mysql',
             'host' => $app['configuration']['db_host'],
+            'port' => $dbPort,
             'dbname' => $app['configuration']['main_database'],
             'user' => $app['configuration']['db_user'],
             'password' => $app['configuration']['db_password'],

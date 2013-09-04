@@ -27,6 +27,8 @@
  */
 // Host.
 $_configuration['db_host']     = '{DATABASE_HOST}';
+// Port.
+$_configuration['db_port']     = '{DATABASE_PORT}';
 // Username.
 $_configuration['db_user']     = '{DATABASE_USER}';
 // Password.

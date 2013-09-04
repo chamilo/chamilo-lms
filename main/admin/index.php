@@ -25,29 +25,30 @@ $message = '';
 
 if (api_is_platform_admin()) {
     if (is_dir(api_get_path(SYS_CODE_PATH).'install/') && is_readable(api_get_path(SYS_CODE_PATH).'install/index.php')) {
-        $message = Display::return_message(get_lang('InstallDirAccessibleSecurityThreat'),'warning');
+        $message = Display::return_message(get_lang('InstallDirAccessibleSecurityThreat'), 'warning');
     }
     if (is_dir(api_get_path(SYS_ARCHIVE_PATH)) && !is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
-        $message = Display::return_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'),'warning');
+        $message = Display::return_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'), 'warning');
     }
 
     /* ACTION HANDLING */
     if (!empty($_POST['Register'])) {
         register_site();
-        $message = Display :: return_message(get_lang('VersionCheckEnabled'),'confirmation');
+        $message = Display::return_message(get_lang('VersionCheckEnabled'), 'confirmation');
     }
     $keyword_url = Security::remove_XSS((empty($_GET['keyword']) ? '' : $_GET['keyword']));
 }
 
 if (isset($_GET['msg']) && isset($_GET['type'])) {
-	if (in_array($_GET['msg'], array('ArchiveDirCleanupSucceeded', 'ArchiveDirCleanupFailed')))
-	switch($_GET['type']) {
-		case 'error':
-			$message = Display::return_message(get_lang($_GET['msg']), 'error');
-			break;
-		case 'confirmation':
-			$message = Display::return_message(get_lang($_GET['msg']), 'confirm');
-	}
+    if (in_array($_GET['msg'], array('ArchiveDirCleanupSucceeded', 'ArchiveDirCleanupFailed'))) {
+        switch($_GET['type']) {
+            case 'error':
+                $message = Display::return_message(get_lang($_GET['msg']), 'error');
+                break;
+            case 'confirmation':
+                $message = Display::return_message(get_lang($_GET['msg']), 'confirm');
+        }
+    }
 }
 
 $blocks = array();
@@ -69,23 +70,17 @@ if (api_is_platform_admin()) {
 		array('url'=>'user_export.php', 'label' => get_lang('ExportUserListXMLCSV')),
 		array('url'=>'user_import.php', 'label' => get_lang('ImportUserListXMLCSV')),
 	);
-
-	/*if (api_get_setting('allow_social_tool') == 'true') {
-		$items[] = array('url'=>'group_add.php', 	'label' => get_lang('AddGroups'));
-		$items[] = array('url'=>'group_list.php', 	'label' => get_lang('GroupList'));
-	}*/
 	if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
 		$items[] = array('url'=>'ldap_users_list.php', 	'label' => get_lang('ImportLDAPUsersIntoPlatform'));
 	}
-	// $items[] = array('url'=>'user_fields.php', 	'label' => get_lang('ManageUserFields'));
     $items[] = array('url'=>'extra_fields.php?type=user', 	'label' => get_lang('ManageUserFields'));
     $items[] = array('url'=> api_get_path(WEB_PUBLIC_PATH).'admin/administrator/roles', 	'label' => get_lang('Roles'));
 } else {
- 	$items = array(
- 		array('url'=>'user_list.php', 	'label' => get_lang('UserList')),
- 		array('url'=>'user_add.php', 	'label' => get_lang('AddUsers')),
- 		array('url'=>'user_import.php', 'label' => get_lang('ImportUserListXMLCSV')),
- 	);
+    $items = array(
+        array('url'=>'user_list.php', 	'label' => get_lang('UserList')),
+        array('url'=>'user_add.php', 	'label' => get_lang('AddUsers')),
+        array('url'=>'user_import.php', 'label' => get_lang('ImportUserListXMLCSV')),
+    );
 }
 $blocks['users']['items'] = $items;
 $blocks['users']['extra'] = null;
@@ -101,25 +96,23 @@ if (api_is_platform_admin()) {
 	            		</form>';
 	$blocks['courses']['search_form'] = $search_form;
 
-	$items = array();
-	$items[] = array('url'=>'course_list.php', 	'label' => get_lang('CourseList'));
+    $items = array();
+    $items[] = array('url'=>'course_list.php', 	'label' => get_lang('CourseList'));
 
-	if (api_get_setting('course_validation') != 'true') {
-		$items[] = array('url'=>'course_add.php', 	'label' => get_lang('AddCourse'));
-	} else {
-		$items[] = array('url'=>'course_request_review.php', 	'label' => get_lang('ReviewCourseRequests'));
-		$items[] = array('url'=>'course_request_accepted.php', 	'label' => get_lang('AcceptedCourseRequests'));
-		$items[] = array('url'=>'course_request_rejected.php', 	'label' => get_lang('RejectedCourseRequests'));
+    if (api_get_setting('course_validation') != 'true') {
+        $items[] = array('url'=>'course_add.php', 	'label' => get_lang('AddCourse'));
+    } else {
+        $items[] = array('url'=>'course_request_review.php', 	'label' => get_lang('ReviewCourseRequests'));
+        $items[] = array('url'=>'course_request_accepted.php', 	'label' => get_lang('AcceptedCourseRequests'));
+        $items[] = array('url'=>'course_request_rejected.php', 	'label' => get_lang('RejectedCourseRequests'));
 	}
 
-	$items[] = array('url'=>'course_export.php', 			'label' => get_lang('ExportCourses'));
-	$items[] = array('url'=>'course_import.php', 			'label' => get_lang('ImportCourses'));
-	$items[] = array('url'=>'course_category.php', 			'label' => get_lang('AdminCategories'));
-	$items[] = array('url'=>'subscribe_user2course.php', 	'label' => get_lang('AddUsersToACourse'));
-	$items[] = array('url'=>'course_user_import.php', 		'label' => get_lang('ImportUsersToACourse'));
-
+    $items[] = array('url'=>'course_export.php', 			'label' => get_lang('ExportCourses'));
+    $items[] = array('url'=>'course_import.php', 			'label' => get_lang('ImportCourses'));
+    $items[] = array('url'=>'course_category.php', 			'label' => get_lang('AdminCategories'));
+    $items[] = array('url'=>'subscribe_user2course.php', 	'label' => get_lang('AddUsersToACourse'));
+    $items[] = array('url'=>'course_user_import.php', 		'label' => get_lang('ImportUsersToACourse'));
     $items[] = array('url'=>'extra_fields.php?type=course', 	'label' => get_lang('ManageCourseFields'));
-
     $items[] = array('url'=>'extra_fields.php?type=question', 	'label' => get_lang('ManageQuestionFields'));
 
 
@@ -128,7 +121,7 @@ if (api_is_platform_admin()) {
     }
 
     if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
-    	$items[] = array('url'=>'ldap_import_students.php', 	'label' => get_lang('ImportLDAPUsersIntoCourse'));
+        $items[] = array('url'=>'ldap_import_students.php', 	'label' => get_lang('ImportLDAPUsersIntoCourse'));
     }
     $blocks['courses']['items'] = $items;
     $blocks['courses']['extra'] = null;
@@ -142,15 +135,14 @@ if (api_is_platform_admin()) {
                             <input type="hidden" value="search_setting" name="category">
 							<button class="btn" type="submit">'.get_lang('Search').'</button>
 	            		</form>';
-	$blocks['platform']['search_form'] = $search_form;
-
+    $blocks['platform']['search_form'] = $search_form;
 
     $items = array();
     $items[] = array('url'=>'settings.php', 				'label' => get_lang('PlatformConfigSettings'));
     $items[] = array('url'=>'settings.php?category=Plugins','label' => get_lang('Plugins'));
     $items[] = array('url'=>'settings.php?category=Regions','label' => get_lang('Regions'));
     $items[] = array('url'=>'system_announcements.php', 	'label' => get_lang('SystemAnnouncements'));
-    $items[] = array('url'=>api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=admin', 'label' => get_lang('GlobalAgenda'));
+    $items[] = array('url'=> api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=admin', 'label' => get_lang('GlobalAgenda'));
     $items[] = array('url'=>'configure_homepage.php', 		'label' => get_lang('ConfigureHomePage'));
     $items[] = array('url'=>'configure_inscription.php', 	'label' => get_lang('ConfigureInscription'));
     $items[] = array('url'=>'statistics/index.php', 		'label' => get_lang('Statistics'));
@@ -163,18 +155,18 @@ if (api_is_platform_admin()) {
     }
 
     if (api_get_multiple_access_url()) {
-	    if (api_is_global_platform_admin()) {
-            	$items[] = array('url'=>'access_urls.php', 	'label' => get_lang('ConfigureMultipleAccessURLs'));
+        if (api_is_global_platform_admin()) {
+                $items[] = array('url'=>'access_urls.php', 	'label' => get_lang('ConfigureMultipleAccessURLs'));
         }
     }
 
     if (api_get_setting('allow_reservation') == 'true') {
-    	$items[] = array('url'=>'../reservation/m_category.php', 	'label' => get_lang('BookingSystem'));
-	}
-	if (api_get_setting('allow_terms_conditions') == 'true') {
-    	$items[] = array('url'=>'legal_add.php', 	'label' => get_lang('TermsAndConditions'));
-	}
-	$blocks['platform']['items'] = $items;
+        $items[] = array('url'=>'../reservation/m_category.php', 	'label' => get_lang('BookingSystem'));
+    }
+    if (api_get_setting('allow_terms_conditions') == 'true') {
+        $items[] = array('url'=>'legal_add.php', 	'label' => get_lang('TermsAndConditions'));
+    }
+    $blocks['platform']['items'] = $items;
     $blocks['platform']['extra'] = null;
 }
 
@@ -206,6 +198,7 @@ if (api_is_platform_admin()) {
 }
 
 $items[] = array('url'=>'usergroups.php', 	'label' => get_lang('Classes'));
+$items[] = array('url'=> 'exercise_report.php', 	'label' => get_lang('ExerciseReport'));
 $items[] = array('url'=>'extra_fields.php?type=session', 	'label' => get_lang('ManageSessionFields'));
 
 $blocks['sessions']['items'] = $items;
@@ -215,8 +208,8 @@ $blocks['sessions']['extra'] = null;
 /* Settings */
 if (api_is_platform_admin()) {
 
-	$blocks['settings']['icon']  = Display::return_icon('settings.png', get_lang('System'), array(), ICON_SIZE_SMALL, false);
-	$blocks['settings']['label'] = api_ucfirst(get_lang('System'));
+    $blocks['settings']['icon']  = Display::return_icon('settings.png', get_lang('System'), array(), ICON_SIZE_SMALL, false);
+    $blocks['settings']['label'] = api_ucfirst(get_lang('System'));
 
 	$items = array();
 	$items[] = array('url'=>'special_exports.php', 	'label' => get_lang('SpecialExports'));
@@ -235,21 +228,6 @@ if (api_is_platform_admin()) {
 
     $blocks['settings']['search_form'] = null;
 
-	/* Extensions */
-	/*
-	$blocks['extensions']['icon']  = Display::return_icon('visio_meeting.gif', get_lang('ConfigureExtensions'), array(), ICON_SIZE_SMALL, false);
-	$blocks['extensions']['label'] = api_ucfirst(get_lang('ConfigureExtensions'));
-
-	$items = array();
-	$items[] = array('url'=>'configure_extensions.php?display=visio', 	'label' => get_lang('Visioconf'));
-	$items[] = array('url'=>'configure_extensions.php?display=ppt2lp', 	'label' => get_lang('Ppt2lp'));
-	//$items[] = array('url'=>'configure_extensions.php?display=ephorus', 	'label' => get_lang('EphorusPlagiarismPrevention'));
-	$items[] = array('url'=>'configure_extensions.php?display=search', 	'label' => get_lang('SearchEngine'));
-	$items[] = array('url'=>'configure_extensions.php?display=serverstats', 	'label' => get_lang('ServerStatistics'));
-	$items[] = array('url'=>'configure_extensions.php?display=bandwidthstats', 	'label' => get_lang('BandWidthStatistics'));
-	$blocks['extensions']['items'] = $items;
-    */
-
     //Skills
     if (api_get_setting('allow_skills_tool') == 'true') {
         $blocks['skills']['icon']  = Display::return_icon('logo.png', get_lang('Skills'), array(), ICON_SIZE_SMALL, false);
@@ -267,24 +245,24 @@ if (api_is_platform_admin()) {
         $blocks['skills']['search_form'] = null;
     }
 
-	/* Chamilo.org */
+    /** Chamilo.org */
 
-	$blocks['chamilo']['icon']  = Display::return_icon('logo.png', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
-	$blocks['chamilo']['label'] = 'Chamilo.org';
+    $blocks['chamilo']['icon']  = Display::return_icon('logo.png', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
+    $blocks['chamilo']['label'] = 'Chamilo.org';
 
-	$items = array();
-	$items[] = array('url'=>'http://www.chamilo.org/', 	'label' => get_lang('ChamiloHomepage'));
-	$items[] = array('url'=>'http://www.chamilo.org/forum', 	'label' => get_lang('ChamiloForum'));
+    $items = array();
+    $items[] = array('url'=>'http://www.chamilo.org/', 	'label' => get_lang('ChamiloHomepage'));
+    $items[] = array('url'=>'http://www.chamilo.org/forum', 	'label' => get_lang('ChamiloForum'));
 
-	$items[] = array('url'=>'../../documentation/installation_guide.html', 	'label' => get_lang('InstallationGuide'));
-	$items[] = array('url'=>'../../documentation/changelog.html', 	'label' => get_lang('ChangesInLastVersion'));
-	$items[] = array('url'=>'../../documentation/credits.html', 	'label' => get_lang('ContributorsList'));
-	$items[] = array('url'=>'../../documentation/security.html', 	'label' => get_lang('SecurityGuide'));
-	$items[] = array('url'=>'../../documentation/optimization.html', 	'label' => get_lang('OptimizationGuide'));
-	$items[] = array('url'=>'http://www.chamilo.org/extensions', 	'label' => get_lang('ChamiloExtensions'));
-	$items[] = array('url'=>'http://www.chamilo.org/en/providers', 	'label' => get_lang('ChamiloOfficialServicesProviders'));
+    $items[] = array('url'=>'../../documentation/installation_guide.html', 	'label' => get_lang('InstallationGuide'));
+    $items[] = array('url'=>'../../documentation/changelog.html', 	'label' => get_lang('ChangesInLastVersion'));
+    $items[] = array('url'=>'../../documentation/credits.html', 	'label' => get_lang('ContributorsList'));
+    $items[] = array('url'=>'../../documentation/security.html', 	'label' => get_lang('SecurityGuide'));
+    $items[] = array('url'=>'../../documentation/optimization.html', 	'label' => get_lang('OptimizationGuide'));
+    $items[] = array('url'=>'http://www.chamilo.org/extensions', 	'label' => get_lang('ChamiloExtensions'));
+    $items[] = array('url'=>'http://www.chamilo.org/en/providers', 	'label' => get_lang('ChamiloOfficialServicesProviders'));
 
-	$blocks['chamilo']['items'] = $items;
+    $blocks['chamilo']['items'] = $items;
     $blocks['chamilo']['extra'] = null;
     $blocks['chamilo']['search_form'] = null;
 
@@ -295,8 +273,8 @@ if (api_is_platform_admin()) {
 
     //Version check
     $blocks['version_check']['icon']  = Display::return_icon('logo.png', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
-	$blocks['version_check']['label'] = get_lang('VersionCheck');
-	$blocks['version_check']['extra'] = '<div class="admin-block-version"></div>';
+    $blocks['version_check']['label'] = get_lang('VersionCheck');
+    $blocks['version_check']['extra'] = '<div class="admin-block-version"></div>';
     $blocks['version_check']['search_form'] = null;
     $blocks['version_check']['items'] = null;
     //$blocks['version_check']['class'] = '';
@@ -315,7 +293,8 @@ $app['template']->display('default/admin/settings_index.tpl');
  * @version august 2006
  * @todo have a 6monthly re-registration
  */
-function version_check() {
+function version_check()
+{
     $tbl_settings = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $sql = 'SELECT selected_value FROM  '.$tbl_settings.' WHERE variable="registered" ';
     $result = Database::query($sql);
@@ -346,7 +325,8 @@ function version_check() {
  * @copyright (C) 2001 The phpBB Group
  * @return language string with some layout (color)
  */
-function check_system_version() {
+function check_system_version()
+{
     global $_configuration;
     $system_version = trim($_configuration['system_version']); // the chamilo version of your installation
 
@@ -356,7 +336,7 @@ function check_system_version() {
 
         // The number of users
         $number_of_users = Statistics::count_users();
-        $number_of_active_users = Statistics::count_users(null,null,null,true);
+        $number_of_active_users = Statistics::count_users(null, null, null,true);
 
         $data = array(
             'url' => api_get_path(WEB_PATH),
@@ -424,20 +404,21 @@ function _http_request($ip, $port = 80, $uri = '/', $getdata = array(), $timeout
 
     $req .= $crlf;
 
-    if ($req_hdr) { $ret .= $req; }
+    if ($req_hdr) {
+        $ret .= $req;
+    }
     if (($fp = @fsockopen($ip, $port, $errno, $errstr, $timeout)) == false) {
         return "Error $errno: $errstr\n";
     }
 
     stream_set_timeout($fp, $timeout);
     $r = @fwrite($fp, $req);
-    $line = @fread($fp,512);
+    $line = @fread($fp, 512);
     $ret .= $line;
     fclose($fp);
 
     if (!$res_hdr) {
         $ret = substr($ret, strpos($ret, "\r\n\r\n") + 4);
     }
-
     return trim($ret);
 }

@@ -62,15 +62,16 @@ $tool_name = $course_info['title'].' ('.$course_info['visual_code'].')';
 Display::display_header($tool_name);
 
 echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['directory'].'">'.Display::display_icon('home.png', get_lang('CourseHomepage'), array(), ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['directory'].'">'.
+        Display::display_icon('home.png', get_lang('CourseHomepage'), array(), ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 echo Display::page_header($tool_name);
 
 echo Display::page_subheader(get_lang('CourseUsage'));
 
-$id_session = intval($_GET['id_session']);
-$table = new SortableTableFromArray(get_course_usage($course_info['code'],$id_session),0,20,'usage_table');
+$id_session = isset($_GET['id_session']) ? $_GET['id_session'] : 0;
+$table = new SortableTableFromArray(get_course_usage($course_info['code'], $id_session), 0, 20,'usage_table');
 $table->set_additional_parameters(array ('code' => Security::remove_XSS($_GET['code'])));
 $table->set_other_tables(array('user_table','class_table'));
 $table->set_header(0,get_lang('Tool'), true);
@@ -152,7 +153,6 @@ if (!empty($extra_fields)) {
         $value = null;
         if ($result) {
             $value = $result['field_value'];
-
             if (is_bool($value)) {
                 $value = $value ? get_lang('Yes') : get_lang('No');
             }

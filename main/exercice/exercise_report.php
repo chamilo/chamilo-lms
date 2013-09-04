@@ -243,7 +243,7 @@ if ($is_allowedToEdit) {
 
 echo $actions;
 
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_results&exerciseId='.$exercise_id.'&filter_by_user='.$filter_user;
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_results&exerciseId='.$exercise_id.'&filter_by_user='.$filter_user.'&'.api_get_cidreq();
 
 $action_links = '';
 
@@ -404,35 +404,16 @@ $extra_params['height'] = 'auto';
 
     if ($is_allowedToEdit || $is_tutor) {
         ?>
-        //setSearchSelect("status");
-        //
-        //view:true, del:false, add:false, edit:false, excel:true}
-        $("#results").jqGrid('navGrid', '#results_pager', {view:true, edit:false, add:false, del:false, excel:false},
-                {height:280, reloadAfterSubmit:false}, // view options
-                {height:280, reloadAfterSubmit:false}, // edit options
-                {height:280, reloadAfterSubmit:false}, // add options
-                {reloadAfterSubmit:false}, // del options
-                {width:500} // search options
+        $("#results").jqGrid(
+            'navGrid',
+            '#results_pager',
+            { view:true, edit:false, add:false, del:false, excel:false },
+            { height:280, reloadAfterSubmit:false }, // view options
+            { height:280, reloadAfterSubmit:false }, // edit options
+            { height:280, reloadAfterSubmit:false }, // add options
+            { reloadAfterSubmit:false }, // del options
+            { width:500 } // search options
         );
-        /*
-// add custom button to export the data to excel
-jQuery("#results").jqGrid('navButtonAdd','#results_pager',{
-  caption:"",
-  onClickButton : function () {
-       //exportExcel();
-  }
-});*/
-
-        /*
-        jQuery('#sessions').jqGrid('navButtonAdd','#sessions_pager',{id:'pager_csv',caption:'',title:'Export To CSV',onClickButton : function(e)
-        {
-            try {
-                jQuery("#sessions").jqGrid('excelExport',{tag:'csv', url:'grid.php'});
-            } catch (e) {
-                window.location= 'grid.php?oper=csv';
-            }
-        },buttonicon:'ui-icon-document'})
-        */
 
         //Adding search options
         var options = {

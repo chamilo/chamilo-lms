@@ -68,11 +68,11 @@ Display::display_header($tool_name);
 <div class="actions">
 <a href="<?php echo api_get_path(WEB_COURSE_PATH).$course->directory; ?>"><?php Display::display_icon('home.png', get_lang('CourseHomepage'), array(), ICON_SIZE_MEDIUM); ?></a>
 </div>
-<?php 
+<?php
 
 echo Display::page_header(get_lang('CourseUsage'));
 
-$id_session = intval($_GET['id_session']);
+$id_session = isset($_GET['id_session']) ? $_GET['id_session'] : 0;
 $table = new SortableTableFromArray(get_course_usage($course->code,$id_session),0,20,'usage_table');
 $table->set_additional_parameters(array ('code' => Security::remove_XSS($_GET['code'])));
 $table->set_other_tables(array('user_table','class_table'));
@@ -129,11 +129,11 @@ $session_list = SessionManager::get_session_by_course($course->code);
 
 $url = api_get_path(WEB_CODE_PATH);
 if (!empty($session_list)) {
-    foreach($session_list as &$session)  {    
+    foreach($session_list as &$session)  {
         $session[0] = Display::url($session[0], $url.'admin/resume_session.php?id_session='.$session['id'] );
         unset($session[1]);
     }
-    echo Display::page_header(get_lang('Sessions')); 
+    echo Display::page_header(get_lang('Sessions'));
     $table = new SortableTableFromArray($session_list, 0, 20,'user_table');
     $table->display();
 }
@@ -141,10 +141,10 @@ if (!empty($session_list)) {
 /*$group = new UserGroup();
 $usegroups = $group->get_usergroup_by_course($course->id);*/
 
-/*@todo This should be dissapear classes are a deprecated feature*/ 
+/*@todo This should be dissapear classes are a deprecated feature*/
 /*
 //Show all classes subscribed in this course
- 
+
 $table_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 $table_class 		= Database :: get_main_table(TABLE_MAIN_CLASS);
 $sql = "SELECT * FROM $table_course_class cc, $table_class c WHERE cc.class_id = c.id AND cc.course_code = '".$code."'";

@@ -1708,7 +1708,7 @@ class SessionManager
             $consider_end = false;
         }
 
-        $sid = self::create_session($s['name'].' '.get_lang('Copy'),
+        $sid = self::create_session($s['name'].' '.get_lang('CopyLabelSuffix'),
              $s['year_start'], $s['month_start'], $s['day_start'],
              $s['year_end'],$s['month_end'],$s['day_end'],
              $s['nb_days_acess_before_beginning'],$s['nb_days_acess_after_end'],

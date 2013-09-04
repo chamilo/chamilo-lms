@@ -1705,8 +1705,8 @@ function get_thread_users_qualify($thread_id)
                   AND user.user_id = session_rel_user_rel_course.id_user
                   AND session_rel_user_rel_course.status<>'2'
                   AND session_rel_user_rel_course.id_user NOT IN ($user_to_avoid)
-                  AND qualify.thread_id = '".Database::escape_string($thread_id)."
-                  AND thread_id = '".Database::escape_string($thread_id)."'
+                  AND qualify.thread_id = '".Database::escape_string($thread_id)."'
+                  AND post.thread_id = '".Database::escape_string($thread_id)."'
                   AND id_session = '".api_get_session_id()."'
                   AND course_code = '".$course_code."' AND
                   qualify.c_id = $course_id AND

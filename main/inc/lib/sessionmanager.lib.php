@@ -302,7 +302,7 @@ class SessionManager
         if (!empty($options['order'])) {
             $query .= " ORDER BY ".$options['order'];
         }
-        
+
 		$result = Database::query($query);
 		$formatted_sessions = array();
 		if (Database::num_rows($result)) {
@@ -488,15 +488,21 @@ class SessionManager
      * @return	void	Nothing, or false on error
 	 * The parameters is a array to delete sessions
 	 **/
-	public static function delete_session($id_checked,$from_ws = false) {
+	public static function delete_session($id_checked,$from_ws = false)
+    {
 		$tbl_session=						Database::get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_rel_course=			Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$tbl_session_rel_course_rel_user=	Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 		$tbl_session_rel_user=				Database::get_main_table(TABLE_MAIN_SESSION_USER);
 		$tbl_url_session                  = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
-		global $_user;
-		if(is_array($id_checked)) {
+        // Extra session fields
+		$t_sf 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
+		$t_sfv 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+
+		$userId = api_get_user_id();
+
+		if (is_array($id_checked)) {
 			$id_checked = Database::escape_string(implode(',',$id_checked));
 		} else {
 			$id_checked = intval($id_checked);
@@ -505,77 +511,20 @@ class SessionManager
 		if (!api_is_platform_admin() && !$from_ws) {
 			$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_checked;
 			$rs  = Database::query($sql);
-			if (Database::result($rs,0,0)!=$_user['user_id']) {
+			if (Database::result($rs, 0, 0) != $userId) {
 				api_not_allowed(true);
 			}
 		}
+
 		Database::query("DELETE FROM $tbl_session WHERE id IN($id_checked)");
 		Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session IN($id_checked)");
 		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session IN($id_checked)");
 		Database::query("DELETE FROM $tbl_session_rel_user WHERE id_session IN($id_checked)");
 		Database::query("DELETE FROM $tbl_url_session WHERE session_id IN($id_checked)");
 
-		// delete extra session fields
-		$t_sf 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-		$t_sfv 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+		$sql_delete_sfv = "DELETE FROM $t_sfv WHERE session_id = '$id_checked'";
+		Database::query($sql_delete_sfv);
 
-		// Delete extra fields from session where field variable is "SECCION"
-		$sql = "SELECT t_sfv.field_id FROM $t_sfv t_sfv, $t_sf t_sf  WHERE t_sfv.session_id = '$id_checked' AND t_sf.field_variable = 'SECCION' ";
-		$rs_field = Database::query($sql);
-
-		$field_id = 0;
-		if (Database::num_rows($rs_field) == 1) {
-			$row_field = Database::fetch_row($rs_field);
-			$field_id = $row_field[0];
-
-			$sql_delete_sfv = "DELETE FROM $t_sfv WHERE session_id = '$id_checked' AND field_id = '$field_id'";
-			$rs_delete_sfv = Database::query($sql_delete_sfv);
-		}
-
-		$sql = "SELECT * FROM $t_sfv WHERE field_id = '$field_id' ";
-		$rs_field_id = Database::query($sql);
-
-		if (Database::num_rows($rs_field_id) == 0) {
-			$sql_delete_sf = "DELETE FROM $t_sf WHERE id = '$field_id'";
-			$rs_delete_sf = Database::query($sql_delete_sf);
-		}
-
-		/*
-		$sql = "SELECT distinct field_id FROM $t_sfv  WHERE session_id = '$id_checked'";
-		$res_field_ids = @Database::query($sql);
-
-		if (Database::num_rows($res_field_ids) > 0) {
-			while($row_field_id = Database::fetch_row($res_field_ids)){
-				$field_ids[] = $row_field_id[0];
-			}
-		}
-
-		//delete from table_session_field_value from a given session id
-
-		$sql_session_field_value = "DELETE FROM $t_sfv WHERE session_id = '$id_checked'";
-		@Database::query($sql_session_field_value);
-
-		$sql = "SELECT distinct field_id FROM $t_sfv";
-		$res_field_all_ids = @Database::query($sql);
-
-		if (Database::num_rows($res_field_all_ids) > 0) {
-			while($row_field_all_id = Database::fetch_row($res_field_all_ids)){
-				$field_all_ids[] = $row_field_all_id[0];
-			}
-		}
-
-		if (count($field_ids) > 0 && count($field_all_ids) > 0) {
-			foreach($field_ids as $field_id) {
-				// check if field id is used into table field value
-				if (in_array($field_id,$field_all_ids)) {
-					continue;
-				} else {
-					$sql_session_field = "DELETE FROM $t_sf WHERE id = '$field_id'";
-					Database::query($sql_session_field);
-				}
-			}
-		}
-		*/
 		// Add event to system log
 		$user_id = api_get_user_id();
 		event_system(LOG_SESSION_DELETE, LOG_SESSION_ID, $id_checked, api_get_utc_datetime(), $user_id);

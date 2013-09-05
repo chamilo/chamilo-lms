@@ -124,7 +124,7 @@ $default_course_visibility = api_get_setting('courses_default_creation_visibilit
 if (isset($default_course_visibility)) {
     $values['visibility']       = api_get_setting('courses_default_creation_visibility');
 } else {
-    $values['visibility']       = COURSE_VISIBILITY_OPEN_PLATFORM;    
+    $values['visibility']       = COURSE_VISIBILITY_OPEN_PLATFORM;
 }
 $values['subscribe']        = 1;
 $values['unsubscribe']      = 0;
@@ -135,21 +135,19 @@ $form->setDefaults($values);
 
 // Validate the form
 if ($form->validate()) {
-    $course          = $form->exportValues();    
-    //$tutor_name      = $teachers[$course['tutor_id']];
+    $course          = $form->exportValues();
     $teacher_id      = $course['tutor_id'];
-    $course_teachers = $course['course_teachers'];    
-    
+    $course_teachers = $course['course_teachers'];
+
     $course['disk_quota'] = $course['disk_quota']*1024*1024;
-    
+
     $course['exemplary_content']    = empty($course['exemplary_content']) ? false : true;
     $course['teachers']             = $course_teachers;
-    //$course['tutor_name']           = $tutor_name;
-    $course['user_id']              = $teacher_id;  
+    $course['user_id']              = $teacher_id;
     $course['wanted_code']          = $course['visual_code'];
-    
-    $course['gradebook_model_id']   = isset($course['gradebook_model_id']) ? $course['gradebook_model_id'] : null;            
-    
+    $course['gradebook_model_id']   = isset($course['gradebook_model_id']) ? $course['gradebook_model_id'] : null;
+    // Fixing category code
+    $course['course_category'] = $course['category_code'];
     $course_info = CourseManager::create_course($course);
 
     header('Location: course_list.php'.($course_info===false?'?action=show_msg&warn='.api_get_last_failure():''));

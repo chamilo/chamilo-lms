@@ -33,20 +33,18 @@ class UpgradeController extends CommonController
 
         $request = $this->getRequest();
         $builder = $this->createFormBuilder();
-        $builder
-            ->add('submit', 'submit');
+        $builder->add('upgrade_chamilo', 'submit');
         $form = $builder->getForm();
 
         if ($request->getMethod() == 'POST') {
             if ($form->isValid()) {
-
-                $this->get('session')->getFlashBag()->add('success', "Added");
+                $this->get('session')->getFlashBag()->add('success', "Upgrade");
                 $url = $this->generateUrl('upgrade.controller:upgradeAction');
                 return $this->redirect($url);
             }
         }
-
         $template = $this->get('template');
+
         $template->assign('form', $form->createView());
         $template->assign('version', $version);
         $response = $template->render_template($this->getTemplatePath().'index.tpl');
@@ -55,12 +53,49 @@ class UpgradeController extends CommonController
     }
 
     /**
+     * @Route("/update-chash")
+     * @Method({"GET"})
+     */
+    public function updateChashAction()
+    {
+         /** @var \Knp\Console\Application $console */
+        $console = $this->get('console');
+
+        $console->addCommands(
+            array(
+                new \Chash\Command\Chash\SelfUpdateCommand(),
+            )
+        );
+
+        /** @var \Chash\Command\Chash\SelfUpdateCommand $command */
+        $command = $console->get('chash:self-update');
+        $def = $command->getDefinition();
+
+        $input = new \Symfony\Component\Console\Input\ArrayInput(
+            array(
+                'name',
+                '--temp-folder' => $this->get('sys_temp_path'),
+                '--src-destination' => $this->get('sys_root').'vendor/chamilo/chash'
+            )
+        );
+
+        $output = new BufferedOutput();
+        $command->run($input, $output);
+        $outputTostring = $output->getBuffer();
+
+        $this->get('session')->getFlashBag()->add('success', "Updated");
+        $this->get('session')->getFlashBag()->add('info', $outputTostring);
+        $url = $this->generateUrl('upgrade.controller:indexAction');
+        return $this->redirect($url);
+    }
+
+    /**
     * @Route("{version}/update")
     * @Method({"GET"})
     */
     public function upgradeAction($version)
     {
-         /** @var \Knp\Console\Application $console */
+        /** @var \Knp\Console\Application $console */
         $console = $this->get('console');
 
         $console->addCommands(
@@ -122,9 +157,10 @@ class UpgradeController extends CommonController
                 'name',
                 '--path' => $this->get('sys_root'),
                 'version' => $version,
+                '--temp-folder' => $this->get('sys_temp_path'),
                 '--migration-yml-path' => api_remove_trailing_slash($this->get('sys_temp_path')),
                 '--migration-class-path' => $this->get('sys_root').'vendor/chamilo/chash/src/Chash/Migrations',
-                '--download-package' => 'false',
+                '--download-package' => 'true',
                 '--silent' => 'true'
             ),
             $def

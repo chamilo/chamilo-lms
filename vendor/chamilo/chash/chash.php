@@ -52,6 +52,7 @@ $application->addCommands(
         // Chash commands
 
         new Chash\Command\Chash\SetupCommand(),
+        new Chash\Command\Chash\SelfUpdateCommand(),
 
         new Chash\Command\Database\RunSQLCommand(),
         new Chash\Command\Database\DumpCommand(),
@@ -67,7 +68,6 @@ $application->addCommands(
         new Chash\Command\Files\MailConfCommand(),
         new Chash\Command\Files\SetPermissionsAfterInstallCommand(),
         new Chash\Command\Files\GenerateTempFileStructureCommand(),
-
 
         new Chash\Command\Installation\InstallCommand(),
         new Chash\Command\Installation\WipeCommand(),

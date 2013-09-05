@@ -216,10 +216,21 @@ if (isset($app['configuration']['main_database'])) {
     /* The database connection can be overwritten if you set $_configuration['db.options']
        in configuration.php like this : */
     $dbPort = isset($app['configuration']['db_port']) ? $app['configuration']['db_port'] : 3306;
+    $dbDriver = isset($app['configuration']['db_driver']) ? $app['configuration']['db_driver'] : 'pdo_mysql';
+    $host = $app['configuration']['db_host'];
+
+    // Accepts that db_host can have a port part like: localhost:6666;
+
+    $hostParts = explode(':', $app['configuration']['db_host']);
+    if (isset($hostParts[1]) && !empty($hostParts[1])) {
+        $dbPort = $hostParts[1];
+        $host = str_replace(':'.$dbPort, '', $app['configuration']['db_host']);
+    }
+
     $defaultDatabaseOptions = array(
         'db_read' => array(
-            'driver' => 'pdo_mysql',
-            'host' => $app['configuration']['db_host'],
+            'driver' => $dbDriver,
+            'host' => $host,
             'port' => $dbPort,
             'dbname' => $app['configuration']['main_database'],
             'user' => $app['configuration']['db_user'],
@@ -228,8 +239,8 @@ if (isset($app['configuration']['main_database'])) {
             //'priority' => '1'
         ),
         'db_write' => array(
-            'driver' => 'pdo_mysql',
-            'host' => $app['configuration']['db_host'],
+            'driver' => $dbDriver,
+            'host' => $host,
             'port' => $dbPort,
             'dbname' => $app['configuration']['main_database'],
             'user' => $app['configuration']['db_user'],

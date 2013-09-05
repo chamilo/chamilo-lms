@@ -7,11 +7,6 @@
 // name of the language file that needs to be included
 $language_file = array('admin', 'registration');
 
-// resetting the course id
-$cidReset = true;
-
-// including some necessary files
-require_once '../inc/global.inc.php';
 $xajax = new xajax();
 
 $xajax->registerFunction('search_users');
@@ -31,6 +26,7 @@ $interbreadcrumb[] = array(
     "name" => get_lang('SessionOverview')
 );
 
+
 // Database Table Definitions
 $tbl_session          = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_course           = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -45,6 +41,8 @@ $add_type = 'unique';
 if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
+
+$add = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 
 $page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
 
@@ -274,8 +272,7 @@ $nosessionUsersList = $sessionUsersList = array();
 
 $ajax_search = $add_type == 'unique' ? true : false;
 
-$order_clause = api_sort_by_first_name(
-) ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
+$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 if ($ajax_search) {
     $sql = "SELECT user_id, lastname, firstname, username, id_session
             FROM $tbl_user u
@@ -467,15 +464,11 @@ if ($ajax_search) {
 
 
 if ($add_type == 'multiple') {
-    $link_add_type_unique   = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS(
-        $_GET['add']
-    ).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
+    $link_add_type_unique   = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.$add.'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
     $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
 } else {
     $link_add_type_unique   = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
-    $link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&amp;add='.Security::remove_XSS(
-        $_GET['add']
-    ).'&amp;add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
+    $link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&amp;add='.$add.'&amp;add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
 $link_add_group = '<a href="usergroups.php">'.Display::return_icon(
     'multiple.gif',
@@ -487,7 +480,7 @@ $link_add_group = '<a href="usergroups.php">'.Display::return_icon(
     &nbsp;|&nbsp;<?php echo $link_add_group; ?>
 </div>
 <form name="formulaire" method="post" action="<?php echo api_get_self(
-); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($_GET['add'])) {
+); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($add)) {
     echo '&add=true';
 } ?>"
       style="margin:0px;" <?php if ($ajax_search) {
@@ -615,7 +608,7 @@ $link_add_group = '<a href="usergroups.php">'.Display::return_icon(
             <br/>
             <br/>
             <?php
-            if (isset($_GET['add'])) {
+            if (isset($add)) {
                 echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang(
                     'FinishSessionCreation'
                 ).'</button>';
@@ -697,5 +690,3 @@ $link_add_group = '<a href="usergroups.php">'.Display::return_icon(
     }
 </script>
 <?php
-/*		FOOTER */
-Display::display_footer();

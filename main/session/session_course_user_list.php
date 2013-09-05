@@ -26,12 +26,12 @@ if (empty($course_info)) {
 }
 
 $course_code    = $course_info['code'];
-$courseId    = $course_info['real_id'];
-$page           = intval($_GET['page']);
-$action         = $_REQUEST['action'];
+$courseId       = $course_info['real_id'];
+$page           = isset($_GET['page']) ? intval($_GET['page']) : null;
+$action         = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $default_sort   = api_sort_by_first_name() ? 'firstname':'lastname';
-$sort           = in_array($_GET['sort'], array('lastname','firstname','username')) ? $_GET['sort'] : $default_sort;
-$idChecked      = (is_array($_GET['idChecked']) ? $_GET['idChecked'] : (is_array($_POST['idChecked']) ? $_POST['idChecked'] : null));
+$sort           = isset($_GET['sort']) && in_array($_GET['sort'], array('lastname','firstname','username')) ? $_GET['sort'] : $default_sort;
+$idChecked      = isset($_GET['idChecked']) && (is_array($_GET['idChecked']) ? $_GET['idChecked'] : (is_array($_POST['idChecked']) ? $_POST['idChecked'] : null));
 
 $direction      = isset($_GET['direction']) && in_array($_GET['direction'], array('desc','asc')) ? $_GET['direction'] : 'desc';
 

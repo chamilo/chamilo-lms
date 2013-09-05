@@ -2507,7 +2507,7 @@ class UserManager
                             $i++;
                         }
                         if (isset($join[$i]) && strcmp($row1['session_category_name'],$join[$i]['session_category_name']) === 0) {
-                            while (isset($join[$i]) && strcmp($row1['short_name'],$join[$i]['short_name'])>0) {
+                            while (isset($join[$i]) && isset($row1['short_name']) && strcmp($row1['short_name'], $join[$i]['short_name'])>0) {
                                 $ordered_join[] = $join[$i];
                                 $i++;
                             }

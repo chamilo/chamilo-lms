@@ -1168,6 +1168,12 @@ class PageController
         return $sessions_with_category;
     }
 
+    /**
+     * @param int $user_id
+     * @param string $filter current|history
+     * @param int $page
+     * @return bool|null|string
+     */
     public function returnSessions($user_id, $filter, $page)
     {
         if (empty($user_id)) {
@@ -1187,12 +1193,6 @@ class PageController
                     )
                 )
             );
-
-            //$menu->setUri($app['request']->getRequestUri());
-            /*
-            $menu->setChildrenAttributes(array(
-                'currentClass' => 'active'
-            ));*/
 
             $current = $menu->addChild(
                 get_lang('Current'),
@@ -1273,8 +1273,8 @@ class PageController
         }
 
         $html = null;
-        //Showing history title
 
+        // Showing history title
         if ($loadHistory) {
             // $html .= Display::page_subheader(get_lang('HistoryTrainingSession'));
             if (empty($session_categories)) {

@@ -483,22 +483,18 @@ class SessionManager
 	/**
 	 * Delete session
 	 * @author Carlos Vargas  from existing code
-	 * @param	array	id_checked
+	 * @param	array	id_checked an array to delete sessions
 	 * @param   boolean  optional, true if the function is called by a webservice, false otherwise.
      * @return	void	Nothing, or false on error
-	 * The parameters is a array to delete sessions
 	 **/
-	public static function delete_session($id_checked,$from_ws = false)
+	public static function delete_session($id_checked, $from_ws = false)
     {
 		$tbl_session=						Database::get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_rel_course=			Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$tbl_session_rel_course_rel_user=	Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 		$tbl_session_rel_user=				Database::get_main_table(TABLE_MAIN_SESSION_USER);
 		$tbl_url_session                  = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-
-        // Extra session fields
-		$t_sf 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-		$t_sfv 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+		$t_sfv = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
 
 		$userId = api_get_user_id();
 
@@ -526,8 +522,7 @@ class SessionManager
 		Database::query($sql_delete_sfv);
 
 		// Add event to system log
-		$user_id = api_get_user_id();
-		event_system(LOG_SESSION_DELETE, LOG_SESSION_ID, $id_checked, api_get_utc_datetime(), $user_id);
+		event_system(LOG_SESSION_DELETE, LOG_SESSION_ID, $id_checked, api_get_utc_datetime(), $userId);
 	}
 
     public static function clear_session_ref_promotion($id_promotion) {

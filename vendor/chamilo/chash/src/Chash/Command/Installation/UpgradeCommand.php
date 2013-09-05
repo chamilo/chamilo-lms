@@ -206,7 +206,8 @@ class UpgradeCommand extends CommonCommand
                 $output->writeln("<comment>Downloading package ...</comment>");
                 $chamiloLocationPath = $this->getPackage($output, $originalVersion, $updateInstallation, $tempFolder);
                 if (empty($chamiloLocationPath)) {
-                    return;
+                    $output->writeln("<comment>Can't zip download package for version: $originalVersion</comment>");
+                    return 0;
                 }
             }
         }
@@ -311,7 +312,6 @@ class UpgradeCommand extends CommonCommand
 
             }
         }
-
 
         // Generating temp folders.
         $command = $this->getApplication()->find('files:generate_temp_folders');
@@ -502,7 +502,6 @@ class UpgradeCommand extends CommonCommand
 
                                 if ($section == 'course') {
                                     $query = str_replace('{prefix}', $dbInfo['prefix'], $query);
-                                    var_dump($query);
                                 }
 
                                 if ($dryRun) {

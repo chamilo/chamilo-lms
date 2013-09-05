@@ -938,6 +938,7 @@ class CommonCommand extends AbstractCommand
     public function getPackage(\Symfony\Component\Console\Output\OutputInterface $output, $version, $updateInstallation, $defaultTempFolder)
     {
         $fs = new Filesystem();
+
         // Download the chamilo package from from github:
         if (empty($updateInstallation)) {
             $versionTag = str_replace('.', '_', $version);
@@ -1030,8 +1031,8 @@ class CommonCommand extends AbstractCommand
                         }
                     } catch (\Alchemy\Zippy\Exception\RunTimeException $e) {
                         $output->writeln("<comment>It seems that this file doesn't contain a Chamilo package:</comment> <info>$updateInstallationOriginal</info>");
-                        $output->writeln("Error:");
-                        $output->writeln($e->getMessage());
+                        //$output->writeln("Error:");
+                        //$output->writeln($e->getMessage());
                         return 0;
                     }
                 }
@@ -1087,6 +1088,7 @@ class CommonCommand extends AbstractCommand
 
         if (empty($chamiloLocationPath)) {
             $output->writeln("<error>The chamiloLocationPath variable is empty<error>");
+            return 0;
         }
 
         $output->writeln("<comment>Copying files from </comment><info>$chamiloLocationPath</info><comment> to </comment><info>".$destinationPath."</info>");

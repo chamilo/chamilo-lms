@@ -6,9 +6,8 @@ use Doctrine\DBAL\Migrations\Tools\Console\Command\AbstractCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console;
-use Symfony\Component\Yaml\Dumper;
 use Composer\Util\RemoteFilesystem;
-use Composer\Downloader\FilesystemException;
+use Symfony\Component\Yaml\Dumper;
 use Composer\IO\NullIO;
 use Alchemy\Zippy\Zippy;
 
@@ -17,8 +16,6 @@ use Alchemy\Zippy\Zippy;
  */
 class SelfUpdateCommand extends AbstractCommand
 {
-    public $migrationFile = null;
-
     protected function configure()
     {
         $this
@@ -47,11 +44,13 @@ class SelfUpdateCommand extends AbstractCommand
         }
 
         if (!is_writable($destinationFolder)) {
-            throw new FilesystemException('Chash update failed: the "'.$destinationFolder.'" directory used to update the Chas file could not be written');
+            $output->writeln('Chash update failed: the "'.$destinationFolder.'" directory used to update the Chash file could not be written');
+            return 0;
         }
 
         if (!is_writable($tempFolder)) {
-            throw new FilesystemException('Chash update failed: the "'.$tempFolder.'" directory used to download the temp file could not be written');
+            $output->writeln('Chash update failed: the "'.$tempFolder.'" directory used to download the temp file could not be written');
+            return 0;
         }
 
         //$protocol = extension_loaded('openssl') ? 'https' : 'http';
@@ -65,7 +64,8 @@ class SelfUpdateCommand extends AbstractCommand
         $rfs->copy('github.com', 'https://github.com/chamilo/chash/archive/master.zip', $tempFile);
 
         if (!file_exists($tempFile)) {
-            throw new FilesystemException('Chash update failed: the "'.$tempFile. '" file could not be written');
+            $output->writeln('Chash update failed: the "'.$tempFile. '" file could not be written');
+            return 0;
         }
 
         $folderPath = $tempFolder.'/chash';
@@ -85,10 +85,5 @@ class SelfUpdateCommand extends AbstractCommand
         $fs = new \Symfony\Component\Filesystem\Filesystem();
         $fs->mirror($folderPath.'/chash-master', $destinationFolder, null, array('override' => true));
         $output->writeln('Copying '.$folderPath.'/chash-master to '.$destinationFolder);
-    }
-
-    public function getMigrationFile()
-    {
-        return $this->migrationFile;
     }
 }

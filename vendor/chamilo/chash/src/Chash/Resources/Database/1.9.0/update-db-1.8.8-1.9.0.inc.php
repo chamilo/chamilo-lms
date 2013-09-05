@@ -192,9 +192,6 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
             $output->writeln($sql);
         }
 
-        //$output->writeln("Dropping c_* tables ...");
-        //$this->dropCourseTables();
-
         $this->createCourseTables($output, $dryRun);
 
         if (!empty($courseList)) {
@@ -331,7 +328,6 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
                         if ($result) {
                             $row = $result->fetch();
                             $old_count = $row['count'];
-                            // $output->writeln("Count(*) in table $old_table: $old_count");
                         } else {
                             $output->writeln("Count(*) in table $old_table failed");
                         }
@@ -367,7 +363,6 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
                         if ($old_count != $count) {
                             $output->writeln("<error>Count of new and old table doesn't match: $old_count - $new_table</error>");
                             $output->writeln("<comment>Check the results:</comment>");
-                            //$output->writeln(print_r($errors, 1));
                         }
                     } else {
                         $output->writeln("<comment>Seems that the table $old_table doesn't exists</comment>");

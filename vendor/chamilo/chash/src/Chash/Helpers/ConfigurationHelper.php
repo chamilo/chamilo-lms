@@ -74,6 +74,7 @@ class ConfigurationHelper extends Helper
         } else {
             $chamiloPath = $path;
         }
+
         if (is_dir($chamiloPath.'/main/inc/conf')) {
             return realpath($chamiloPath.'/main/inc/conf/').'/';
         }
@@ -107,6 +108,16 @@ class ConfigurationHelper extends Helper
         }
 
         return false;
+    }
+
+    /**
+     * Converts /var/www/chamilo/main/inc/conf to /var/www/chamilo/config
+     * @param string $path
+     * @return string new path
+     */
+    public function convertOldConfigurationPathToNewPath($path)
+    {
+        return realpath($path.'../../../').'/config/';
     }
 
     /**

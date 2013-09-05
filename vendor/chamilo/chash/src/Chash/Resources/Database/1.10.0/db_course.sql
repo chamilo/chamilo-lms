@@ -2014,3 +2014,20 @@ CREATE TABLE c_wiki_mailcue (
   KEY c_id (c_id,id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+
+DROP TABLE IF EXISTS c_student_publication_rel_document;
+CREATE TABLE c_student_publication_rel_document (
+    id  INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    work_id INT NOT NULL,
+    document_id INT NOT NULL,
+    c_id INT NOT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS c_student_publication_rel_user;
+CREATE TABLE c_student_publication_rel_user (
+    id  INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    work_id INT NOT NULL,
+    user_id INT NOT NULL,
+    c_id INT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -192,7 +192,7 @@ class DoctrineOrmServiceProvider
                 return $app[$cacheInstanceKey];
             }
 
-            return $app[$cacheInstanceKey] = $app['orm.cache.factory']($driver, $options);
+            return $app[$cacheInstanceKey] = $app['orm.cache.factory']($driver, $options[$cacheNameKey]);
         });
 
         $app['orm.cache.factory.backing_memcache'] = $app->protect(function() {

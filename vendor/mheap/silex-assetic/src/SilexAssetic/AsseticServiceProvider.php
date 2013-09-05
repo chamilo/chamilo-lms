@@ -156,6 +156,12 @@ class AsseticServiceProvider implements ServiceProviderInterface
      */
     public function boot(Application $app)
     {
+
+        // Register our filters to use
+        if (isset($app['assetic.filters']) && is_callable($app['assetic.filters'])) {
+            $app['assetic.filters']($app['assetic.filter_manager']);
+        }
+
         /**
          * Writes down all lazy asset manager and asset managers assets
          */

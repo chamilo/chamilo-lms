@@ -15,6 +15,7 @@
 
 -- Optimize tracking query very often queried on busy campuses
 ALTER TABLE track_e_online ADD INDEX idx_trackonline_uat (login_user_id, access_url_id, login_date);
+
 ALTER TABLE track_e_default ADD COLUMN session_id INT NOT NULL DEFAULT 0;
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('session_tutor_reports_visibility', NULL, 'radio', 'Session', 'true', 'SessionTutorsCanSeeExpiredSessionsResultsTitle', 'SessionTutorsCanSeeExpiredSessionsResultsComment', NULL, NULL, 1);
@@ -52,14 +53,15 @@ ALTER TABLE session_field_values ADD INDEX idx_session_field_values_field_id(fie
 ALTER TABLE session MODIFY COLUMN name CHAR(150) NOT NULL DEFAULT '';
 ALTER TABLE session MODIFY COLUMN id INT unsigned NOT NULL;
 
+ALTER TABLE session_rel_course MODIFY COLUMN course_code char(40) NOT NULL;
 ALTER TABLE session_rel_course MODIFY COLUMN id_session INT unsigned NOT NULL;
-ALTER TABLE session_rel_course ADD COLUMN c_id INT NOT NULL DEFAULT '0';
 ALTER TABLE session_rel_course DROP PRIMARY KEY;
+ALTER TABLE session_rel_course ADD COLUMN c_id INT NOT NULL DEFAULT '0';
+
 -- remove course_code
 ALTER TABLE session_rel_course ADD COLUMN id INT NOT NULL;
-ALTER TABLE session_rel_course MODIFY COLUMN id int unsigned AUTO_INCREMENT;
+ALTER TABLE session_rel_course MODIFY COLUMN id int unsigned PRIMARY KEY AUTO_INCREMENT;
 ALTER TABLE session_rel_course ADD INDEX idx_session_rel_course_course_id (c_id);
-ALTER TABLE session_rel_course ADD PRIMARY KEY (id);
 
 ALTER TABLE session_rel_course_rel_user MODIFY COLUMN id_session INT unsigned NOT NULL;
 ALTER TABLE session_rel_course_rel_user ADD COLUMN c_id INT NOT NULL DEFAULT '0';
@@ -89,7 +91,10 @@ ALTER TABLE c_tool_intro MODIFY COLUMN intro_text MEDIUMTEXT NOT NULL;
 ALTER TABLE c_quiz_answer ADD INDEX idx_quiz_answer_c_q (c_id, question_id);
 CREATE TABLE c_quiz_order( iid bigint unsigned NOT NULL auto_increment, c_id int unsigned NOT NULL, session_id int unsigned NOT NULL, exercise_id int NOT NULL, exercise_order INT NOT NULL, PRIMARY KEY (iid));
 
-CREATE TABLE c_quiz_question_rel_category ( iid int unsigned NOT NULL AUTO_INCREMENT, c_id int NOT NULL, question_id int NOT NULL, category_id int NOT NULL,  PRIMARY KEY (iid));
+ALTER TABLE c_quiz_question_rel_category MODIFY COLUMN c_id INT unsigned NOT NULL;
+ALTER TABLE c_quiz_question_rel_category MODIFY COLUMN question_id INT unsigned NOT NULL;
+ALTER TABLE c_quiz_question_rel_category DROP PRIMARY KEY;
+ALTER TABLE c_quiz_question_rel_category ADD COLUMN iid INT unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT;
 
 ALTER TABLE session ADD INDEX idx_id_coach (id_coach);
 ALTER TABLE session ADD INDEX idx_id_session_admin_id (session_admin_id);
@@ -244,7 +249,6 @@ ALTER TABLE c_quiz_question_option MODIFY c_id INT NOT NULL;
 ALTER TABLE c_quiz_question_option DROP PRIMARY KEY;
 ALTER TABLE c_quiz_question_option ADD COLUMN iid INT unsigned NOT NULL auto_increment PRIMARY KEY;
 
-ALTER TABLE c_quiz_rel_question MODIFY id INT NOT NULL;
 ALTER TABLE c_quiz_rel_question MODIFY question_id INT NOT NULL;
 ALTER TABLE c_quiz_rel_question MODIFY exercice_id INT NOT NULL;
 ALTER TABLE c_quiz_rel_question DROP PRIMARY KEY;
@@ -383,5 +387,8 @@ ALTER TABLE c_quiz_category ADD COLUMN visibility INT default 1;
 ALTER TABLE c_quiz_question ADD INDEX idx_c_q_qst_cpt (c_id, parent_id, type);
 ALTER TABLE c_quiz_question_rel_category ADD INDEX idx_c_q_qst_r_cat_qc(question_id, c_id);
 
+CREATE TABLE IF NOT EXISTS c_student_publication_rel_document (id  INT PRIMARY KEY NOT NULL AUTO_INCREMENT,    work_id INT NOT NULL,    document_id INT NOT NULL,    c_id INT NOT NULL);
+CREATE TABLE IF NOT EXISTS c_student_publication_rel_user (id  INT PRIMARY KEY NOT NULL AUTO_INCREMENT,    work_id INT NOT NULL,    user_id INT NOT NULL,    c_id INT NOT NULL);
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.036' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.037' WHERE variable = 'chamilo_database_version';

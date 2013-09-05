@@ -19,19 +19,11 @@ class InstallCommand extends CommonCommand
     public $commandLine = true;
     public $oldConfigLocation = false;
 
-    /**
-     * @return string
-     */
-    public function getLatestVersion()
-    {
-        return '1.10.0';
-    }
-
     protected function configure()
     {
         $this
             ->setName('chamilo:install')
-            ->setDescription('Execute a Chamilo installation to a specified version')
+            ->setDescription('Execute a Chamilo installation to a specified version.')
             ->addArgument('version', InputArgument::REQUIRED, 'The version to migrate to.', null)
             ->addArgument('path', InputArgument::OPTIONAL, 'The path to the chamilo folder')
             ->addOption('download-package', null, InputOption::VALUE_NONE, 'Downloads the chamilo package')
@@ -55,7 +47,6 @@ class InstallCommand extends CommonCommand
         foreach ($params as $key => $value) {
             $this->addOption($key, null, InputOption::VALUE_OPTIONAL);
         }
-
     }
 
     /**
@@ -68,6 +59,8 @@ class InstallCommand extends CommonCommand
      */
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
+        // Test string
+        // sudo php /var/www/chash/chash.php  chamilo:install --download-package --sitename=Chamilo --institution=Chami --institution_url=http://localhost/chamilo-test --encrypt_method=sha1 --permissions_for_new_directories=0777 --permissions_for_new_files=0777 --firstname=John --lastname=Doe --username=admin --password=admin --email=admin@example.com --language=english --phone=666 --driver=pdo_mysql --host=localhost --port=3306 --dbname=chamilo_test --dbuser=root --dbpassword=root master /var/www/chamilo-test
         if (PHP_SAPI != 'cli') {
             $this->commandLine = false;
         }
@@ -86,12 +79,11 @@ class InstallCommand extends CommonCommand
         $sqlFolder = $this->getInstallationPath($version);
 
         // @todo fix process in order to install minor versions: 1.9.6
-        //$versionList = $this->getVersionNumberList();
-        //if (!in_array($version, $versionList)) {
-        if (!is_dir($sqlFolder)) {
-            $output->writeln("<comment>Sorry you can't install version '$version' of Chamilo :(</comment>");
-            //$output->writeln("<comment>Supported versions:</comment> <info>".implode(', ', $this->getVersionNumberList()));
-            $output->writeln("<comment>Supported versions:</comment> <info>".implode(', ', $this->getAvailableVersions()));
+        $versionList = $this->getVersionNumberList();
+        if (!in_array($version, $versionList)) {
+            $output->writeln("<comment>Sorry you can't install version: '$version' of Chamilo :(</comment>");
+            $output->writeln("<comment>Supported versions:</comment> <info>".implode(', ', $this->getVersionNumberList()));
+            //$output->writeln("<comment>Supported versions:</comment> <info>".implode(', ', $this->getAvailableVersions()));
             return 0;
         }
 
@@ -179,40 +171,7 @@ class InstallCommand extends CommonCommand
                 $output->writeln("<comment>There's a Chamilo portal here:</comment> <info>".$configurationPath." </info>");
             }
             return 0;
-            /*
-            if (!$dialog->askConfirmation(
-                $output,
-                '<question>There is a Chamilo installation located here:</question> '.$configurationPath.' <question>Are you sure you want to continue?</question>(y/N)',
-                false
-            )
-            ) {
-                return 0;
-            }
-
-            if (!$dialog->askConfirmation(
-                $output,
-                '<comment>This will be a fresh installation. Old databases and config files will be deleted. </comment></info> <question>Are you sure?</question>(y/N)',
-                false
-            )
-            ) {
-                return 0;
-            }
-            $this->cleanInstallation($output);*/
         }
-
-        $avoidVariables = array(
-            //'main_database', //default is chamilo
-            'db_glue',
-            'table_prefix',
-            'course_folder',
-            'db_admin_path',
-            'cdn_enable',
-            'verbose_backup',
-            'session_stored_in_db',
-            'session_lifetime',
-            'deny_delete_users',
-            'system_version',
-        );
 
         if ($this->commandLine) {
 
@@ -359,13 +318,12 @@ class InstallCommand extends CommonCommand
                     $configuration = $this->getConfigurationHelper()->readConfigurationFile($configurationFile);
                     $this->setConfigurationArray($configuration);
 
-
                     $configPath = $this->getConfigurationPath();
                     // Only works with 1.10.0 >=
                     $installChamiloPath = str_replace('config', 'main/install', $configPath);
                     $customVersion = $installChamiloPath.$version;
 
-                    $output->writeln("Checking custom update.sql file in dir: ".$customVersion);
+                    $output->writeln("Checking custom *update.sql* file in dir: ".$customVersion);
                     if (is_dir($customVersion)) {
                         $file = $customVersion.'/update.sql';
                         if (is_file($file) && file_exists($file)) {
@@ -424,6 +382,38 @@ class InstallCommand extends CommonCommand
         }
     }
 
+    /**
+     * Get database version to install for a requested version
+     * @param string $version
+     * @return string
+     */
+    public function getVersionToInstall($version)
+    {
+        $newVersion = $this->getLatestVersion();
+        switch ($version) {
+            case '1.8.7':
+                $newVersion = '1.8.7';
+                break;
+            case '1.8.8.0':
+            case '1.8.8.6':
+            case '1.8.8.8':
+                $newVersion = '1.8.0';
+                break;
+            case '1.9.0':
+            case '1.9.1':
+            case '1.9.2':
+            case '1.9.4':
+            case '1.9.6':
+            case '1.9.8':
+                $newVersion = '1.9.0';
+                break;
+            case '1.10.1':
+                $newVersion = '1.10.0';
+                break;
+        }
+        return $newVersion;
+
+    }
 
     /**
      * Installation command
@@ -435,9 +425,14 @@ class InstallCommand extends CommonCommand
     public function install($version, $output)
     {
         $this->setDoctrineSettings();
+        // Fixing the version
+        if (!isset($databaseMap[$version])) {
+            $version = $this->getVersionToInstall($version);
+        }
         $sqlFolder = $this->getInstallationPath($version);
-
         $databaseMap = $this->getDatabaseMap();
+
+
 
         if (isset($databaseMap[$version])) {
             $dbInfo = $databaseMap[$version];
@@ -455,8 +450,12 @@ class InstallCommand extends CommonCommand
                         $db = $sqlFolder.$db;
                     }
 
-                    $command = $this->getApplication()->find('dbal:import');
+                    if (empty($dbList)) {
+                        $output->writeln("<error>No files to load</error>");
+                        return false;
+                    }
 
+                    $command = $this->getApplication()->find('dbal:import');
                     // Importing sql files.
                     $arguments = array(
                         'command' => 'dbal:import',

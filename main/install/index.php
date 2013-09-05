@@ -19,26 +19,7 @@ error_reporting(-1);
 
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\HttpFoundation\Request;
-
-class BufferedOutput extends Output
-{
-    public $messages = array();
-    public $lastMessage = null;
-    public $buffer = null;
-
-    public function doWrite($message, $newline)
-    {
-        //$this->buffer .= $message. ($newline ? PHP_EOL: '');
-        $this->buffer .= $message. '<br />';
-        $this->messages[] = $message;
-        $this->lastMessage = $message;
-    }
-
-    public function getBuffer()
-    {
-        return $this->buffer;
-    }
-}
+use ChamiloLMS\Component\Console\Output\BufferedOutput;
 
 $app = new Silex\Application();
 
@@ -61,6 +42,12 @@ $app->register(new Silex\Provider\SessionServiceProvider());
 $app->register(new Silex\Provider\DoctrineServiceProvider());
 $app->register(new Silex\Provider\TranslationServiceProvider());
 $app['translator'] = $app->share($app->extend('translator', function($translator, $app) {
+
+    /*$translator->addLoader('pofile', new PoFileLoader());
+    $file = 'main/locale/'.$locale.'.po';
+    $translator->addResource('pofile', $file, $locale);*/
+
+
     /*$translator->addLoader('yaml', new Symfony\Component\Translation\Loader\YamlFileLoader());
     $translator->addResource('yaml', __DIR__.'/lang/fr.yml', 'fr');
     $translator->addResource('yaml', __DIR__.'/lang/en.yml', 'en');
@@ -195,7 +182,6 @@ $app->match('/requirements', function() use($app) {
     );
 })->bind('requirements');
 
-
 $app->match('/check-database', function() use($app) {
     /** @var Request $request */
     $request = $app['request'];
@@ -218,7 +204,7 @@ $app->match('/check-database', function() use($app) {
         if ($form->isValid()) {
             $parameters = $form->getData();
 
-            /** @var \ChamiloLMS\Command\Database\InstallCommand $command */
+            /** @var \Chash\Command\Installation\InstallCommand $command */
             $command = $app['console']->get('chamilo:install');
             $command->setDatabaseSettings($parameters);
 
@@ -228,17 +214,6 @@ $app->match('/check-database', function() use($app) {
                 $connect = $connection->connect();
                 $sm = $connection->getSchemaManager();
                 $databases = $sm->listDatabases();
-
-                /*if ($result == false) {
-                    $message = $app['translator']->trans(
-                        'The database name is not correct: %s',
-                        array('%s' => $parameters['dbname'])
-                    );
-                    $app['session']->getFlashBag()->add('error', $message);
-
-                    $url = $app['url_generator']->generate('check-database');
-                    return $app->redirect($url);
-                }*/
 
                 if (in_array($parameters['dbname'], $databases)) {
                     $message = $app['translator']->trans(
@@ -272,9 +247,8 @@ $app->match('/portal-settings', function() use($app) {
     /** @var Request $request */
     $request = $app['request'];
 
-    /** @var \ChamiloLMS\Command\Database\InstallCommand $command */
+    /** @var \Chash\Command\Installation\InstallCommand $command */
     $command = $app['console']->get('chamilo:install');
-
     $builder  = $app['form.factory']->createBuilder('form');
 
     $data = $command->getPortalSettingsParams();
@@ -316,7 +290,7 @@ $app->match('/portal-settings', function() use($app) {
 $app->match('/admin-settings', function() use($app) {
     $request = $app['request'];
 
-    /** @var \ChamiloLMS\Command\Database\InstallCommand $command */
+    /** @var Chash\Command\Installation\InstallCommand $command */
     $command = $app['console']->get('chamilo:install');
 
     $data = $command->getAdminSettingsParams();

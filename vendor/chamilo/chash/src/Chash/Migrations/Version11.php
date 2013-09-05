@@ -13,7 +13,7 @@ class Version11 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
-        $this->addSql('UPDATE settings_current SET selected_value = "1.11" WHERE variable = "chamilo_database_version"');
+        $this->addSql('UPDATE settings_current SET selected_value = "1.11.final" WHERE variable = "chamilo_database_version"');
     }
 
     public function down(Schema $schema)

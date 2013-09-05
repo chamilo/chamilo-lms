@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-$update = function($_configuration, \Doctrine\DBAL\Connection $mainConnection, $dryRun, $output, $app) {
+$update = function($_configuration, \Doctrine\DBAL\Connection $mainConnection, $courseList, $dryRun, $output) {
 
     $mainConnection->beginTransaction();
 
@@ -107,11 +107,11 @@ $update = function($_configuration, \Doctrine\DBAL\Connection $mainConnection, $
     $id = $fieldData['id'];
 
     $sql = "INSERT INTO $dbNameForm.course_field_options (field_id, option_value, option_display_text, option_order)
-            VALUES ('$id', '1', '".get_lang('Yes')."', '1')";
+            VALUES ('$id', '1', '".'Yes'."', '1')";
     $mainConnection->executeQuery($sql);
 
     $sql = "INSERT INTO $dbNameForm.course_field_options (field_id, option_value, option_display_text, option_order)
-            VALUES ('$id', '0', '".get_lang('No')."', '2')";
+            VALUES ('$id', '0', '".'No'."', '2')";
     $mainConnection->executeQuery($sql);
 
     //Moving social group to class

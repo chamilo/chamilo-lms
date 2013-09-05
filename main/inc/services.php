@@ -25,6 +25,13 @@ $app->register(new Flint\Provider\RoutingServiceProvider(), array(
     ),
 ));
 
+use Knp\Provider\ConsoleServiceProvider;
+
+$app->register(new ConsoleServiceProvider(), array(
+    'console.name'              => 'Chamilo',
+    'console.version'           => '1.0.0',
+    'console.project_directory' => __DIR__.'/..'
+));
 // Monolog.
 if (is_writable($app['sys_temp_path'])) {
 
@@ -219,10 +226,22 @@ if (isset($app['configuration']['main_database'])) {
 
     /* The database connection can be overwritten if you set $_configuration['db.options']
        in configuration.php like this : */
+    $dbPort = isset($app['configuration']['db_port']) ? $app['configuration']['db_port'] : 3306;
+    $dbDriver = isset($app['configuration']['db_driver']) ? $app['configuration']['db_driver'] : 'pdo_mysql';
+    $host = $app['configuration']['db_host'];
+
+    // Accepts that db_host can have a port part like: localhost:6666;
+
+    $hostParts = explode(':', $app['configuration']['db_host']);
+    if (isset($hostParts[1]) && !empty($hostParts[1])) {
+        $dbPort = $hostParts[1];
+        $host = str_replace(':'.$dbPort, '', $app['configuration']['db_host']);
+    }
     $defaultDatabaseOptions = array(
         'db_read' => array(
-            'driver' => 'pdo_mysql',
-            'host' => $app['configuration']['db_host'],
+            'driver' => $dbDriver,
+            'host' => $host,
+            'port' => $dbPort,
             'dbname' => $app['configuration']['main_database'],
             'user' => $app['configuration']['db_user'],
             'password' => $app['configuration']['db_password'],
@@ -230,8 +249,9 @@ if (isset($app['configuration']['main_database'])) {
             //'priority' => '1'
         ),
         'db_write' => array(
-            'driver' => 'pdo_mysql',
-            'host' => $app['configuration']['db_host'],
+            'driver' => $dbDriver,
+            'host' => $host,
+            'port' => $dbPort,
             'dbname' => $app['configuration']['main_database'],
             'user' => $app['configuration']['db_user'],
             'password' => $app['configuration']['db_password'],
@@ -681,6 +701,13 @@ $app['curriculum_user.controller'] = $app->share(
         return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumUserController($app);
     }
 );
+
+$app['upgrade.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\Administrator\UpgradeController($app);
+    }
+);
+
 
 // Ministerio
 

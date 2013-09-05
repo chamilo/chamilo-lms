@@ -41,8 +41,8 @@ class UpgradeCommand extends CommonCommand
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Execute the migration as a dry run.')
             ->addOption('update-installation', null, InputOption::VALUE_OPTIONAL, 'Updates the portal with the current zip file. http:// or /var/www/file.zip')
             ->addOption('temp-folder', null, InputOption::VALUE_OPTIONAL, 'The temp folder.', '/tmp')
-            ->addOption('migration-yml-path', null, InputOption::VALUE_OPTIONAL, 'The temp folder.', '/tmp')
-            ->addOption('migration-class-path', null, InputOption::VALUE_OPTIONAL, 'The temp folder.', '/tmp')
+            ->addOption('migration-yml-path', null, InputOption::VALUE_OPTIONAL, 'The temp folder.')
+            ->addOption('migration-class-path', null, InputOption::VALUE_OPTIONAL, 'The temp folder.')
             ->addOption('download-package', null, InputOption::VALUE_OPTIONAL, 'Downloads the chamilo package', 'true')
             ->addOption('silent', null, InputOption::VALUE_NONE, 'Execute the migration with out asking questions.');
             //->addOption('force', null, InputOption::VALUE_NONE, 'Force the update. Only for tests');
@@ -82,6 +82,13 @@ class UpgradeCommand extends CommonCommand
         $inputSetup = new ArrayInput($arguments);
         $command->run($inputSetup, $output);
 
+        $migrationFile = $command->getMigrationFile();
+
+        if (empty($migrationFile) || !file_exists($migrationFile)) {
+            $output->writeln("<error>Set the --migration-yml-path and --migration-class-path manually.</error>");
+            return 0;
+        }
+
         $this->setMigrationConfigurationFile($command->getMigrationFile());
 
         // Arguments and options
@@ -113,7 +120,6 @@ class UpgradeCommand extends CommonCommand
             $output->writeln("<comment>Folder ".$configurationPath." must have writable permissions</comment>");
             return 0;
         }
-
         $this->setConfigurationPath($configurationPath);
 
         // In order to use Doctrine migrations
@@ -300,9 +306,12 @@ class UpgradeCommand extends CommonCommand
         if ($dryRun == false) {
             $this->copyPackageIntoSystem($output, $chamiloLocationPath, null);
             if ($version == '1.10.0') {
+                $this->removeUnUsedFiles($output, $path);
                 $this->copyConfigFilesToNewLocation($output);
+
             }
         }
+
 
         // Generating temp folders.
         $command = $this->getApplication()->find('files:generate_temp_folders');
@@ -446,6 +455,7 @@ class UpgradeCommand extends CommonCommand
      *
      * Process the queryList array and executes queries to the correct section (main, user, course, etc)
      *
+     * @param array course list
      * @param $output
      * @param $version
      * @param $dryRun
@@ -474,46 +484,53 @@ class UpgradeCommand extends CommonCommand
                     !empty($this->queryList[$type][$section])
                 ) {
                     $queryList = $this->queryList[$type][$section];
+                    //$output->writeln("<comment>Loading query list: $type - $section </comment>");
 
-                    try {
-                        $lines = 0;
+                    if (!empty($queryList)) {
 
-                        /** @var \Doctrine\DBAL\Connection $conn */
-                        $conn = $this->getHelper($dbInfo['database'])->getConnection();
-                        $output->writeln("<comment>Executing queries in DB:</comment> <info>".$conn->getDatabase()."</info>");
+                        try {
+                            $lines = 0;
 
-                        $conn->beginTransaction();
+                            /** @var \Doctrine\DBAL\Connection $conn */
+                            $conn = $this->getHelper($dbInfo['database'])->getConnection();
+                            $output->writeln("<comment>Executing queries in DB:</comment> <info>".$conn->getDatabase()."</info>");
 
-                        foreach ($queryList as $query) {
-                            // Add a prefix.
+                            $conn->beginTransaction();
 
-                            if ($section == 'course') {
-                                //var_dump($dbInfo);
-                                $query = str_replace('{prefix}', $dbInfo['prefix'], $query);
-                                //var_dump($query);
-                                //var_dump($conn->getParams());
+                            foreach ($queryList as $query) {
+                                // Add a prefix.
+
+                                if ($section == 'course') {
+                                    $query = str_replace('{prefix}', $dbInfo['prefix'], $query);
+                                    var_dump($query);
+                                }
+
+                                if ($dryRun) {
+                                    $output->writeln($query);
+                                } else {
+                                    $output->writeln('     <comment>-></comment> ' . $query);
+                                    $conn->executeQuery($query);
+                                    //$conn->exec($query);
+                                }
+                                $lines++;
                             }
 
-                            if ($dryRun) {
-                                $output->writeln($query);
-                            } else {
-                                $output->writeln('     <comment>-></comment> ' . $query);
-                                $conn->executeQuery($query);
-                                //$conn->exec($query);
+                            if (!$dryRun) {
+                                if ($conn->isTransactionActive()) {
+                                    $conn->commit();
+                                }
+                                $output->writeln(sprintf('%d statements executed!', $lines) . PHP_EOL);
+                                $dbInfo['status'] = 'complete';
+                                $this->saveDatabaseList($path, $databases, $version, $type);
                             }
-                            $lines++;
-                        }
 
-                        if (!$dryRun) {
-                            $conn->commit();
-                            $output->writeln(sprintf('%d statements executed!', $lines) . PHP_EOL);
-                            $dbInfo['status'] = 'complete';
-                            $this->saveDatabaseList($path, $databases, $version, $type);
+                        } catch (\Exception $e) {
+                            $conn->rollback();
+                            $output->write(sprintf('<error>Migration failed. Error %s</error>', $e->getMessage()));
+                            throw $e;
                         }
-                    } catch (\Exception $e) {
-                        $conn->rollback();
-                        $output->write(sprintf('<error>Migration failed. Error %s</error>', $e->getMessage()));
-                        throw $e;
+                    } else {
+                        $output->writeln(sprintf("<comment>queryList array is empty.</comment>"));
                     }
                 } else {
                     $output->writeln(sprintf("<comment>Nothing to execute for section $section!</comment>"));
@@ -796,18 +813,6 @@ class UpgradeCommand extends CommonCommand
     }
 
     /**
-     * Executed only before createCourseTables()
-     */
-    public function dropCourseTables()
-    {
-        $list = $this->getCourseTables();
-        foreach ($list as $table) {
-            $sql = "DROP TABLE IF EXISTS ".DB_COURSE_PREFIX.$table;
-            //\Database::query($sql);
-        }
-    }
-
-    /**
      * Creates the course tables with the prefix c_
      * @param $output
      * @param string $dryRun
@@ -825,7 +830,7 @@ class UpgradeCommand extends CommonCommand
         $command = $this->getApplication()->find('dbal:import');
         $sqlFolder = $this->getInstallationPath('1.9.0');
 
-        //Importing sql files
+        // Importing sql files.
         $arguments = array(
             'command' => 'dbal:import',
             'file' =>  $sqlFolder.'db_course.sql'
@@ -835,101 +840,102 @@ class UpgradeCommand extends CommonCommand
     }
 
     /**
+     * Gets course tables
      * @return array
      */
     private function getCourseTables()
     {
-        $tables = array();
-
-        $tables[]= 'tool';
-        $tables[]= 'tool_intro';
-        $tables[]= 'group_info';
-        $tables[]= 'group_category';
-        $tables[]= 'group_rel_user';
-        $tables[]= 'group_rel_tutor';
-        $tables[]= 'item_property';
-        $tables[]= 'userinfo_content';
-        $tables[]= 'userinfo_def';
-        $tables[]= 'course_description';
-        $tables[]= 'calendar_event';
-        $tables[]= 'calendar_event_repeat';
-        $tables[]= 'calendar_event_repeat_not';
-        $tables[]= 'calendar_event_attachment';
-        $tables[]= 'announcement';
-        $tables[]= 'announcement_attachment';
-        $tables[]= 'resource';
-        $tables[]= 'student_publication';
-        $tables[]= 'student_publication_assignment';
-        $tables[]= 'document';
-        $tables[]= 'forum_category';
-        $tables[]= 'forum_forum';
-        $tables[]= 'forum_thread';
-        $tables[]= 'forum_post';
-        $tables[]= 'forum_mailcue';
-        $tables[]= 'forum_attachment';
-        $tables[]= 'forum_notification';
-        $tables[]= 'forum_thread_qualify';
-        $tables[]= 'forum_thread_qualify_log';
-        $tables[]= 'link';
-        $tables[]= 'link_category';
-        $tables[]= 'online_connected';
-        $tables[]= 'online_link';
-        $tables[]= 'chat_connected';
-        $tables[]= 'quiz';
-        $tables[]= 'quiz_rel_question';
-        $tables[]= 'quiz_question';
-        $tables[]= 'quiz_answer';
-        $tables[]= 'quiz_question_option';
-        $tables[]= 'quiz_category';
-        $tables[]= 'quiz_question_rel_category';
-        $tables[]= 'dropbox_post';
-        $tables[]= 'dropbox_file';
-        $tables[]= 'dropbox_person';
-        $tables[]= 'dropbox_category';
-        $tables[]= 'dropbox_feedback';
-        $tables[]= 'lp';
-        $tables[]= 'lp_item';
-        $tables[]= 'lp_view';
-        $tables[]= 'lp_item_view';
-        $tables[]= 'lp_iv_interaction';
-        $tables[]= 'lp_iv_objective';
-        $tables[]= 'blog';
-        $tables[]= 'blog_comment';
-        $tables[]= 'blog_post';
-        $tables[]= 'blog_rating';
-        $tables[]= 'blog_rel_user';
-        $tables[]= 'blog_task';
-        $tables[]= 'blog_task_rel_user';
-        $tables[]= 'blog_attachment';
-        $tables[]= 'permission_group';
-        $tables[]= 'permission_user';
-        $tables[]= 'permission_task';
-        $tables[]= 'role';
-        $tables[]= 'role_group';
-        $tables[]= 'role_permissions';
-        $tables[]= 'role_user';
-        $tables[]= 'survey';
-        $tables[]= 'survey_question';
-        $tables[]= 'survey_question_option';
-        $tables[]= 'survey_invitation';
-        $tables[]= 'survey_answer';
-        $tables[]= 'survey_group';
-        $tables[]= 'wiki';
-        $tables[]= 'wiki_conf';
-        $tables[]= 'wiki_discuss';
-        $tables[]= 'wiki_mailcue';
-        $tables[]= 'course_setting';
-        $tables[]= 'glossary';
-        $tables[]= 'notebook';
-        $tables[]= 'attendance';
-        $tables[]= 'attendance_sheet';
-        $tables[]= 'attendance_calendar';
-        $tables[]= 'attendance_result';
-        $tables[]= 'attendance_sheet_log';
-        $tables[]= 'thematic';
-        $tables[]= 'thematic_plan';
-        $tables[]= 'thematic_advance';
-        $tables[]= 'metadata';
+        $tables = array(
+            'tool',
+            'tool_intro',
+            'group_info',
+            'group_category',
+            'group_rel_user',
+            'group_rel_tutor',
+            'item_property',
+            'userinfo_content',
+            'userinfo_def',
+            'course_description',
+            'calendar_event',
+            'calendar_event_repeat',
+            'calendar_event_repeat_not',
+            'calendar_event_attachment',
+            'announcement',
+            'announcement_attachment',
+            'resource',
+            'student_publication',
+            'student_publication_assignment',
+            'document',
+            'forum_category',
+            'forum_forum',
+            'forum_thread',
+            'forum_post',
+            'forum_mailcue',
+            'forum_attachment',
+            'forum_notification',
+            'forum_thread_qualify',
+            'forum_thread_qualify_log',
+            'link',
+            'link_category',
+            'online_connected',
+            'online_link',
+            'chat_connected',
+            'quiz',
+            'quiz_rel_question',
+            'quiz_question',
+            'quiz_answer',
+            'quiz_question_option',
+            'quiz_category',
+            'quiz_question_rel_category',
+            'dropbox_post',
+            'dropbox_file',
+            'dropbox_person',
+            'dropbox_category',
+            'dropbox_feedback',
+            'lp',
+            'lp_item',
+            'lp_view',
+            'lp_item_view',
+            'lp_iv_interaction',
+            'lp_iv_objective',
+            'blog',
+            'blog_comment',
+            'blog_post',
+            'blog_rating',
+            'blog_rel_user',
+            'blog_task',
+            'blog_task_rel_user',
+            'blog_attachment',
+            'permission_group',
+            'permission_user',
+            'permission_task',
+            'role',
+            'role_group',
+            'role_permissions',
+            'role_user',
+            'survey',
+            'survey_question',
+            'survey_question_option',
+            'survey_invitation',
+            'survey_answer',
+            'survey_group',
+            'wiki',
+            'wiki_conf',
+            'wiki_discuss',
+            'wiki_mailcue',
+            'course_setting',
+            'glossary',
+            'notebook',
+            'attendance',
+            'attendance_sheet',
+            'attendance_calendar',
+            'attendance_result',
+            'attendance_sheet_log',
+            'thematic',
+            'thematic_plan',
+            'thematic_advance',
+            'metadata'
+        );
         return $tables;
     }
 }

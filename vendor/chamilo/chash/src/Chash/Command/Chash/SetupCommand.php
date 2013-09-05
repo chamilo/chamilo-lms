@@ -21,8 +21,7 @@ class SetupCommand extends AbstractCommand
             ->setName('chash:setup')
             ->setDescription('Setups the migration.yml')
             ->addOption('migration-yml-path', null, InputOption::VALUE_OPTIONAL, 'The path to the migration.yml file')
-            ->addOption('migration-class-path', null, InputOption::VALUE_OPTIONAL, 'The path to the migration classes');
-
+            ->addOption('migration-class-path', null, InputOption::VALUE_OPTIONAL, 'The path to the migration class');
     }
 
     /**
@@ -36,6 +35,7 @@ class SetupCommand extends AbstractCommand
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
         $path = $input->getOption('migration-yml-path');
+
         if (empty($path)) {
             $srcPath = realpath(__DIR__.'/../../../').'/Chash/Migrations/';
         } else {
@@ -47,8 +47,6 @@ class SetupCommand extends AbstractCommand
         if (empty($migrationClassPath)) {
             $migrationClassPath =  $srcPath;
         }
-
-        //$migrationDist = $srcPath."/Chash/Migrations/migrations_dist.yml";
 
         $migrations = array(
             'name' => 'Chamilo Migrations',
@@ -65,15 +63,14 @@ class SetupCommand extends AbstractCommand
         $yaml = $dumper->dump($migrations, 1);
         $file = $srcPath.'/migrations.yml';
         file_put_contents($file, $yaml);
+
         // migrations_directory
         $output->writeln("<comment>Chash migrations.yml saved: $file</comment>");
         $this->migrationFile = $file;
-
     }
 
     public function getMigrationFile()
     {
         return $this->migrationFile;
     }
-
 }

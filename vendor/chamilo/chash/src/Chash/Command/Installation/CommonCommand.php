@@ -74,9 +74,27 @@ class CommonCommand extends AbstractCommand
      */
     public function setDatabaseSettings(array $databaseSettings)
     {
-        $this->databaseSettings = $databaseSettings;
         $user = isset($databaseSettings['dbuser']) ? $databaseSettings['dbuser'] : $databaseSettings['user'];
         $password = isset($databaseSettings['dbpassword']) ? $databaseSettings['dbpassword'] : $databaseSettings['password'];
+
+        // Try db_port
+        $dbPort = isset($databaseSettings['db_port']) ? $databaseSettings['db_port'] : null;
+
+        // Try port
+        if (empty($dbPort)) {
+            $dbPort = isset($databaseSettings['port']) ? $databaseSettings['port'] : null;
+        }
+
+        $hostParts = explode(':', $databaseSettings['host']);
+        if (isset($hostParts[1]) && !empty($hostParts[1])) {
+            $dbPort = $hostParts[1];
+            $databaseSettings['host'] = str_replace(':'.$dbPort, '', $databaseSettings['host']);
+        }
+        $this->databaseSettings = $databaseSettings;
+
+        if (!empty($dbPort)) {
+            $this->databaseSettings['port'] = $dbPort;
+        }
         $this->databaseSettings['user'] = $user;
         $this->databaseSettings['password'] = $password;
     }
@@ -840,12 +858,7 @@ class CommonCommand extends AbstractCommand
                 if (isset($_configuration['single_database']) && $_configuration['single_database'] == true) {
                     $em = \Doctrine\ORM\EntityManager::create($params, $config);
                 } else {
-
                     if ($section == 'course') {
-                        /*$evm = new \Doctrine\Common\EventManager;
-                        $tablePrefix = new \Chash\DoctrineExtensions\TablePrefix($_configuration['table_prefix']);
-                        $evm->addEventListener(\Doctrine\ORM\Events::loadClassMetadata, $tablePrefix);*/
-
                         if (version_compare($version, '1.10.0', '<=')) {
                             if (strpos($dbInfo['database'], '_chamilo_course_') === false) {
                                 //$params['dbname'] = $params['dbname'];
@@ -1099,6 +1112,10 @@ class CommonCommand extends AbstractCommand
         $output->writeln('<comment>-----------------------------------------------</comment>');
     }
 
+    /**
+     * Returns the config file list
+     * @return array
+     */
     public function getConfigFiles()
     {
         return array(
@@ -1108,6 +1125,7 @@ class CommonCommand extends AbstractCommand
             'mail.conf.dist.php',
             'auth.conf.dist.php',
             'profile.conf.dist.php',
+            'course_info.conf.php'
         );
     }
 
@@ -1131,12 +1149,17 @@ class CommonCommand extends AbstractCommand
         }
     }
 
+    /**
+     * Copy files from main/inc/conf to the new location config
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
     public function copyConfigFilesToNewLocation(\Symfony\Component\Console\Output\OutputInterface $output)
     {
         $output->writeln('<comment>Copy files to new location</comment>');
+        // old config main/inc/conf
         $confDir = $this->getConfigurationPath();
-        $newChamiloPath = realpath($confDir.'../../../');
-        $configurationPath = $this->getConfigurationHelper()->getNewConfigurationPath($newChamiloPath);
+
+        $configurationPath = $this->getConfigurationHelper()->convertOldConfigurationPathToNewPath($confDir);
         $fs = new Filesystem();
         $configList = $this->getConfigFiles();
         $configList[] = 'configuration.dist.php';
@@ -1146,15 +1169,41 @@ class CommonCommand extends AbstractCommand
                 continue;
             }
             $configFile = str_replace('dist.', '', $file);
-            $output->writeln($configurationPath.$configFile);
-            $output->writeln($confDir.$configFile);
+            $output->writeln("<comment> Moving file from: </comment>".$confDir.$configFile);
+            $output->writeln("<comment> to: </comment>".$configurationPath.$configFile);
             if (!file_exists($configurationPath.$configFile)) {
                 $fs->copy($confDir.$configFile, $configurationPath.$configFile);
-                $output->writeln('Removing: '.$confDir.$configFile);
-                $fs->remove($confDir.$configFile);
             }
         }
+
+        $backupConfPath = str_replace('inc/conf', 'inc/conf_old', $confDir);
+        $output->writeln('<comment>Renaming conf folder: </comment>'.$confDir.' to '.$backupConfPath.'');
+
+        $fs->rename($confDir, $backupConfPath);
         $this->setConfigurationPath($configurationPath);
+    }
+
+    /**
+     *
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
+    public function removeUnUsedFiles(\Symfony\Component\Console\Output\OutputInterface $output, $path)
+    {
+        $output->writeln('<comment>Removing unused files</comment>');
+        $fs = new Filesystem();
+
+        $list = array(
+            'archive',
+            'config/course_info.conf.php'
+        );
+
+        foreach ($list as $file) {
+            $filePath = $path.'/'.$file;
+            if ($fs->exists($filePath)) {
+                $output->writeln('<comment>Removing: </comment>'.$filePath);
+                $fs->remove($filePath);
+            }
+        }
     }
 
     /**

@@ -111,6 +111,16 @@ class ConfigurationHelper extends Helper
     }
 
     /**
+     * Converts /var/www/chamilo/main/inc/conf to /var/www/chamilo/config
+     * @param string $path
+     * @return string new path
+     */
+    public function convertOldConfigurationPathToNewPath($path)
+    {
+        return realpath($path.'../../../').'/config/';
+    }
+
+    /**
      * Gets the configuration file path
      * <code>
      * $configurationPath = $this->getConfigurationFilePath('/var/www/chamilo')

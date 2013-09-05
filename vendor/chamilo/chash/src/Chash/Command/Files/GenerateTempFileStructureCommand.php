@@ -34,19 +34,6 @@ class GenerateTempFileStructureCommand extends CommonChamiloDatabaseCommand
         parent::execute($input, $output);
         $this->writeCommandHeader($output, 'Generating temp folders.');
 
-        /*$dialog = $this->getHelperSet()->get('dialog');
-
-        if (!$dialog->askConfirmation(
-            $output,
-            '<question>Are you sure you want to clean your config files? (y/N)</question>',
-            false
-        )
-        ) {
-            return;
-        }*/
-
-        // $configuration = $this->getConfigurationArray();
-
         // Data folders
         $files = $this->getConfigurationHelper()->getTempFolderList();
         $this->createFolders($output, $files, 0777);

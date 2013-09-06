@@ -280,7 +280,12 @@ $app->error(
         // It seems that error() is executed first than the before() middleware
         // @ŧodo check this one
         $templateStyle = api_get_setting('template');
+
         $templateStyle = isset($templateStyle) && !empty($templateStyle) ? $templateStyle : 'default';
+
+        if (!is_dir($app['sys_root'].'main/template/'.$templateStyle)) {
+            $templateStyle = 'default';
+        }
         $app['template_style'] = $templateStyle;
 
         // Default layout.
@@ -573,6 +578,9 @@ $app->before(
         // Default template style.
         $templateStyle = api_get_setting('template');
         $templateStyle = isset($templateStyle) && !empty($templateStyle) ? $templateStyle : 'default';
+        if (!is_dir($app['sys_root'].'main/template/'.$templateStyle)) {
+            $templateStyle = 'default';
+        }
         $app['template_style'] = $templateStyle;
 
         // Default layout.

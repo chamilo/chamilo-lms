@@ -18,7 +18,7 @@ use ChamiloLMS\Form\QuestionScoreType;
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class AdministratorController extends CommonController
+class AdminController extends CommonController
 {
     /**
      *
@@ -28,6 +28,27 @@ class AdministratorController extends CommonController
      */
     public function indexAction()
     {
+        $template = $this->getTemplate();
+        /** @var  \Symfony\Component\Security\Core\SecurityContext  $security */
+        $security = $this->get('security');
+
+        if (!$security->isGranted($this->app['allow_admin_toolbar'])) {
+            return $this->abort(403, 'Access denied');
+        }
+
+        if ($security->isGranted('ROLE_ADMIN')) {
+            $this->loadAdminMenu();
+        }
+        $response = $template->render_template('admin/index.tpl');
+        return new Response($response, 200, array());
+    }
+
+    /**
+     * Move in template.lib
+     */
+    private function loadAdminMenu()
+    {
+
         $template = $this->get('template');
 
         // Access restrictions.
@@ -268,8 +289,6 @@ class AdministratorController extends CommonController
 
         $template->assign('web_admin_ajax_url', $admin_ajax_url);
         $template->assign('blocks', $blocks);
-        $response = $template->render_template('admin/administrator/index.tpl');
-        return new Response($response, 200, array());
     }
 
 }

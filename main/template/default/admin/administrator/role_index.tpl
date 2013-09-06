@@ -1,5 +1,3 @@
-{% extends app.template_style ~ "/layout/layout_1_col.tpl" %}
-{% block content %}
 <script>
 $(function() {
     //$("#settings").tabs();
@@ -61,6 +59,3 @@ $(function() {
         </div>
     </div>
 </div>
-
-
-{% endblock %}

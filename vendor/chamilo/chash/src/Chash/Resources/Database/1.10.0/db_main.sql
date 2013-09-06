@@ -509,7 +509,7 @@ CREATE TABLE IF NOT EXISTS session (
   nbr_classes int unsigned NOT NULL default '0',
   session_admin_id INT UNSIGNED NOT NULL,
   visibility int NOT NULL default 1,
-  session_category_id int NOT NULL,
+  session_category_id int default NULL,
   promotion_id INT NOT NULL,
   display_start_date datetime default '0000-00-00 00:00:00',
   display_end_date datetime default '0000-00-00 00:00:00',
@@ -3625,4 +3625,4 @@ CREATE TABLE curriculum_rel_user (
 
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.037' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.039' WHERE variable = 'chamilo_database_version';

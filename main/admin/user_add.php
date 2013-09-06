@@ -258,7 +258,7 @@ $(document).ready(function(){
 
 // Set default values
 $defaults['admin']['platform_admin'] = 0;
-$defaults['mail']['send_mail'] = 1;
+$defaults['mail']['send_mail'] = 0;
 $defaults['password']['password_auto'] = 1;
 $defaults['active'] = 1;
 $defaults['expiration_date'] = array();

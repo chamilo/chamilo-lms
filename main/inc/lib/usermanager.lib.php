@@ -267,6 +267,7 @@ class UserManager
         if (api_get_multiple_access_url()) {
             $access_url_id = api_get_current_access_url_id();
         }
+
         if (is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_users']) && $_configuration[$access_url_id]['hosting_limit_users'] > 0) {
             $num = self::get_number_of_users();
             if ($num >= $_configuration[$access_url_id]['hosting_limit_users']) {
@@ -280,6 +281,7 @@ class UserManager
                 return api_set_failure('portal teachers limit reached');
             }
         }
+
 
         // database table definition
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -349,7 +351,6 @@ class UserManager
                "hr_dept_id =         $hr_dept_id,".
                "active =             $active";
         $result = Database::query($sql);
-        // Query execution takes about 0.04s
 
         if ($result) {
             //echo "id returned";
@@ -360,10 +361,11 @@ class UserManager
                 //we are adding by default the access_url_user table with access_url_id = 1
                 UrlManager::add_user_to_url($return, 1);
             }
-            // multi url check takes about 0.01s
+
 /*
             global $app;
             // Adding user
+            /** @var Entity\User $user */
             /** @var Entity\User $user
             $em = $app['orm.ems']['db_write'];
             $user = $em->getRepository('Entity\User')->find($return);
@@ -372,13 +374,11 @@ class UserManager
             if ($role->getRole() == 'ROLE_ADMIN') {
                 UserManager::add_user_as_admin($return);
             }
-            //->add() takes about no time (0.0003s)
+
             $user->getRolesObj()->add($role);
-            //->persist() takes about no time either
             $em->persist($user);
             $t2 = microtime() - $t0;
             error_log(__LINE__.': '.$t2);
-            // this flush takes about 0.05s (20% of whole insert) all by itself
             $em->flush();
 /*/
             // optimized version of the above (takes about 56% of the time - see CT#6640)
@@ -419,7 +419,7 @@ class UserManager
             }
             // Add event to system log
             $user_id_manager = api_get_user_id();
-            // api_get_user_info() takes about 0.01s
+             // api_get_user_info() takes about 0.01s
             //$user_info = api_get_user_info($return);
             event_system(LOG_USER_CREATE, LOG_USER_ID, $return, api_get_utc_datetime(), $user_id_manager);
             // event_system of object takes about 0.03s
@@ -2402,8 +2402,8 @@ class UserManager
         }
 
         if ($is_time_over) {
-            $condition_date_end1 = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00' AND session.access_end_date != '' ) OR moved_to <> 0) ";
-            $condition_date_end2 = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00' AND session.access_end_date != '') ) ";
+            $condition_date_end1 = " AND ((session.access_end_date < '$now' AND access_end_date IS NOT NULL AND session.access_end_date != '0000-00-00 00:00:00' AND session.access_end_date != '' ) OR moved_to <> 0) ";
+            $condition_date_end2 = " AND ((session.access_end_date < '$now' AND access_end_date IS NOT NULL AND session.access_end_date != '0000-00-00 00:00:00' AND session.access_end_date != '') ) ";
         } else {
             if (api_is_allowed_to_create_course()) {
                 //Teachers can access the session depending in the access_coach date
@@ -2459,12 +2459,12 @@ class UserManager
         if (isset($categoryFilter) && $categoryFilter != '') {
             switch ($categoryFilter) {
                 case 'no_category':
-                    $sql1 .= "AND session_category_id = 0";
-                    $sql2 .= "AND session_category_id = 0";
+                    $sql1 .= "AND (session_category_id = 0 OR session_category_id IS NULL)";
+                    $sql2 .= "AND (session_category_id = 0 OR session_category_id IS NULL)";
                     break;
                 case 'with_category':
-                    $sql1 .= "AND session_category_id <> 0";
-                    $sql2 .= "AND session_category_id <> 0";
+                    $sql1 .= "AND (session_category_id <> 0 AND session_category_id IS NOT NULL ) ";
+                    $sql2 .= "AND (session_category_id <> 0 AND session_category_id IS NOT NULL )";
                     break;
                 default:
                     if (!empty($categoryFilter) && is_numeric($categoryFilter)) {
@@ -2479,7 +2479,7 @@ class UserManager
         $sql3 = null;
 
         if ($get_count) {
-            $sql3 = $sql2;
+            $sql3 = $sql1;
         } else {
             $sql1 .= $order;
             $sql2 .= $order;
@@ -2536,7 +2536,7 @@ class UserManager
                             $i++;
                         }
                         if (isset($join[$i]) && strcmp($row1['session_category_name'],$join[$i]['session_category_name']) === 0) {
-                            while (isset($join[$i]) && isset($row1['short_name']) && strcmp($row1['short_name'], $join[$i]['short_name']) > 0) {
+                            while (isset($join[$i]) && isset($row1['short_name']) && strcmp($row1['short_name'], $join[$i]['short_name'])>0) {
                                 $ordered_join[] = $join[$i];
                                 $i++;
                             }
@@ -2551,6 +2551,7 @@ class UserManager
         if (count($ordered_join) == 0) {
             $ordered_join = $join;
         }
+
         if (count($ordered_join) > 0) {
             //while ($row = Database::fetch_array($result1)) {
             foreach ($ordered_join as $row) {
@@ -2571,8 +2572,8 @@ class UserManager
                 $session_info = $row;
 
                 // Checking session visibility
-
                 $visibility = api_get_session_visibility($session_id, null, $ignore_visibility_for_admins);
+
 
                 switch ($visibility) {
                     case SESSION_VISIBLE_READ_ONLY:

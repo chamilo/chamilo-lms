@@ -1010,14 +1010,15 @@ class Template
 
         // Platform administration
         if (api_is_platform_admin(true)) {
-            $navigation['platform_admin']['url'] = api_get_path(WEB_CODE_PATH).'admin/index.php';
+            $navigation['platform_admin']['url'] = api_get_path(WEB_PUBLIC_PATH).'admin/administrator';
             $navigation['platform_admin']['title'] = get_lang('PlatformAdmin');
         } else {
-
             if (api_is_question_manager()) {
                 $navigation['question_manager']['url'] = api_get_path(WEB_PUBLIC_PATH).'admin/questionmanager';
                 $navigation['question_manager']['title'] = get_lang('PlatformAdmin');
             }
+            /*$token = $this->app['security']->getToken();
+            $user = $token->getUser();*/
         }
 
         return $navigation;

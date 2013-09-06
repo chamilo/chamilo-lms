@@ -2059,7 +2059,8 @@ function api_get_session_date_validation($session_info, $course_code, $ignore_vi
  * @param int       session id
  * @return int      0 = session still available, SESSION_VISIBLE_READ_ONLY = 1, SESSION_VISIBLE = 2, SESSION_INVISIBLE = 3
  */
-function api_get_session_visibility($session_id, $course_code = null, $ignore_visibility_for_admins = true) {
+function api_get_session_visibility($session_id, $course_code = null, $ignore_visibility_for_admins = true)
+{
 
     if (api_is_platform_admin()) {
         if ($ignore_visibility_for_admins) {
@@ -2074,7 +2075,7 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
     if (!empty($session_info)) {
         $visibility = $session_info['visibility'];
 
-        //1. Checking session date validation
+        // 1. Checking session date validation
         $date_validation = api_get_session_date_validation($session_info, $course_code, $ignore_visibility_for_admins);
 
         if ($date_validation) {
@@ -6987,8 +6988,6 @@ function api_is_profile_readable()
     global $profileIsReadable;
     return isset($profileIsReadable) ? $profileIsReadable : true;
 }
-
-
 
 /**
  * Function to make an HTTP request through fsockopen (specialised for GET)

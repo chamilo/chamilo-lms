@@ -167,7 +167,11 @@ $app['security.access_rules'] = array(
 // Roles that have an admin toolbar
 $app['allow_admin_toolbar'] = array(
     'ROLE_ADMIN',
-    'ROLE_QUESTION_MANAGER'
+    'ROLE_QUESTION_MANAGER',
+    'ROLE_DIRECTOR',
+    'ROLE_JURY_PRESIDENT',
+    'ROLE_JURY_SUBSTITUTE',
+    'ROLE_JURY_MEMBER'
 );
 
 /**

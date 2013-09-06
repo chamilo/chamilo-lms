@@ -50,7 +50,7 @@ class AdministratorController extends CommonController
         $blocks['users']['label'] = api_ucfirst(get_lang('Users'));
 
         if (api_is_platform_admin()) {
-            $search_form = ' <form method="get" class="form-search" action="user_list.php">
+            $search_form = ' <form method="get" class="form-search" action="'.$adminUrl.'user_list.php">
                                 <input class="span3" type="text" name="keyword" value="">
                                 <button class="btn" type="submit">'.get_lang('Search').'</button>
                             </form>';
@@ -81,7 +81,7 @@ class AdministratorController extends CommonController
             $blocks['courses']['icon']  = \Display::return_icon('course.gif', get_lang('Courses'), array(), ICON_SIZE_MEDIUM, false);
             $blocks['courses']['label'] = api_ucfirst(get_lang('Courses'));
 
-            $search_form = ' <form method="get" class="form-search" action="course_list.php">
+            $search_form = ' <form method="get" class="form-search" action="'.$adminUrl.'course_list.php">
                                     <input class="span3" type="text" name="keyword" value="">
                                     <button class="btn" type="submit">'.get_lang('Search').'</button>
                                 </form>';
@@ -121,7 +121,7 @@ class AdministratorController extends CommonController
             $blocks['platform']['icon']  = \Display::return_icon('platform.png', get_lang('Platform'), array(), ICON_SIZE_MEDIUM, false);
             $blocks['platform']['label'] = api_ucfirst(get_lang('Platform'));
 
-            $search_form = ' <form method="get" action="settings.php" class="form-search">
+            $search_form = ' <form method="get" action="'.$adminUrl.'settings.php" class="form-search">
                                     <input class="span3" type="text" name="search_field" value="" >
                                     <input type="hidden" value="search_setting" name="category">
                                     <button class="btn" type="submit">'.get_lang('Search').'</button>

@@ -14,25 +14,34 @@
 
 -- xxMAINxx
 
-DROP PROCEDURE IF EXISTS drop_index;
-CREATE PROCEDURE drop_index(in t_name varchar(128), in i_name varchar(128) ) BEGIN IF ( (SELECT count(*) AS index_exists FROM  information_schema.statistics WHERE table_schema = DATABASE( )  AND table_name = t_name  AND  index_name =   i_name ) > 0) THEN    SET @s = CONCAT('DROP INDEX ' , i_name , ' ON ' , t_name );    PREPARE stmt FROM @s;    EXECUTE stmt;  END IF; END;
-
 CREATE TABLE IF NOT EXISTS course_request (id int NOT NULL AUTO_INCREMENT, code varchar(40) NOT NULL, user_id int unsigned NOT NULL default '0', directory varchar(40) DEFAULT NULL, db_name varchar(40) DEFAULT NULL, course_language varchar(20) DEFAULT NULL, title varchar(250) DEFAULT NULL, description text, category_code varchar(40) DEFAULT NULL, tutor_name varchar(200) DEFAULT NULL, visual_code varchar(40) DEFAULT NULL, request_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00', objetives text, target_audience text, status int unsigned NOT NULL default '0', info int unsigned NOT NULL default '0', exemplary_content int unsigned NOT NULL default '0', PRIMARY KEY (id), UNIQUE KEY code (code));
+CREATE TABLE IF NOT EXISTS career (id INT NOT NULL AUTO_INCREMENT,	name VARCHAR(255) NOT NULL, description TEXT NOT NULL, status INT NOT NULL default '0', created_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00', updated_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00', PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS promotion (id INT NOT NULL AUTO_INCREMENT,	name VARCHAR(255) NOT NULL, description TEXT NOT NULL, status INT NOT NULL default '0', career_id INT NOT NULL, created_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00', updated_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00', PRIMARY KEY(id));
+CREATE TABLE IF NOT EXISTS usergroup ( id INT NOT NULL AUTO_INCREMENT,	name VARCHAR(255) NOT NULL, description TEXT NOT NULL,PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS usergroup_rel_user    ( usergroup_id INT NOT NULL, user_id 	INT NOT NULL );
+CREATE TABLE IF NOT EXISTS usergroup_rel_course  ( usergroup_id INT NOT NULL, course_id 	INT NOT NULL );
+CREATE TABLE IF NOT EXISTS usergroup_rel_session ( usergroup_id INT NOT NULL, session_id  INT NOT NULL );
+CREATE TABLE IF NOT EXISTS notification (id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,dest_user_id INT NOT NULL, dest_mail CHAR(255),title CHAR(255), content CHAR(255), send_freq SMALLINT DEFAULT 1, created_at DATETIME NOT NULL, sent_at DATETIME NULL);
 
-CALL drop_index('settings_current', 'unique_setting');
-CALL drop_index('settings_options', 'unique_setting_option');
+DROP INDEX unique_setting ON settings_current;
+DROP INDEX unique_setting_option ON settings_options;
 
+ALTER TABLE course ADD INDEX idx_course_category_code (category_code);
+ALTER TABLE course ADD INDEX idx_course_directory (directory(10));
+ALTER TABLE user MODIFY COLUMN username VARCHAR(40) NOT NULL;
+ALTER TABLE sys_announcement ADD COLUMN access_url_id INT  NOT NULL default 1;
+ALTER TABLE sys_calendar ADD COLUMN access_url_id INT  NOT NULL default 1;
+ALTER TABLE session ADD COLUMN promotion_id INT NOT NULL;
+ALTER TABLE notification ADD index mail_notify_sent_index (sent_at);
+ALTER TABLE notification ADD index mail_notify_freq_index (sent_at, send_freq, created_at);
+ALTER TABLE session_category ADD COLUMN access_url_id INT NOT NULL default 1;
+ALTER TABLE gradebook_evaluation ADD COLUMN locked int NOT NULL DEFAULT 0;
 ALTER TABLE settings_current ADD UNIQUE unique_setting (variable(110), subkey(110), category(110), access_url);
 ALTER TABLE settings_options ADD UNIQUE unique_setting_option (variable(165), value(165));
 ALTER TABLE settings_current CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE settings_options CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-ALTER TABLE user MODIFY COLUMN username VARCHAR(40) NOT NULL;
-
-UPDATE settings_current SET variable='chamilo_database_version' WHERE variable='dokeos_database_version';
-
-ALTER TABLE sys_announcement ADD COLUMN access_url_id INT  NOT NULL default 1;
-ALTER TABLE sys_calendar ADD COLUMN access_url_id INT  NOT NULL default 1;
+LOCK TABLES settings_current WRITE, settings_options WRITE;
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('users_copy_files', NULL, 'radio', 'Tools', 'true', 'AllowUsersCopyFilesTitle','AllowUsersCopyFilesComment', NULL,NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('users_copy_files', 'true', 'Yes');
@@ -63,8 +72,6 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_wi
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_spellcheck',NULL,'radio','Editor','false','AllowSpellCheckTitle','AllowSpellCheckComment',NULL,NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_spellcheck', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_spellcheck', 'false', 'No');
-ALTER TABLE course ADD INDEX idx_course_category_code (category_code);
-ALTER TABLE course ADD INDEX idx_course_directory (directory(10));
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('force_wiki_paste_as_plain_text',NULL,'radio','Editor','false','ForceWikiPasteAsPlainText','ForceWikiPasteAsPlainTextComment',NULL,NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('force_wiki_paste_as_plain_text', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('force_wiki_paste_as_plain_text', 'false', 'No');
@@ -152,43 +159,23 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_groups_to_users', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_groups_to_users', 'false', 'No');
 
-INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES ('&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;', 'hindi', 'hi', 'hindi', 0);
-
-ALTER TABLE session ADD COLUMN promotion_id INT NOT NULL;
-
-CREATE TABLE career (id INT NOT NULL AUTO_INCREMENT,	name VARCHAR(255) NOT NULL, description TEXT NOT NULL, status INT NOT NULL default '0', created_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00', updated_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00', PRIMARY KEY (id));
-CREATE TABLE promotion (id INT NOT NULL AUTO_INCREMENT,	name VARCHAR(255) NOT NULL, description TEXT NOT NULL, status INT NOT NULL default '0', career_id INT NOT NULL, created_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00', updated_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00', PRIMARY KEY(id));
-
-CREATE TABLE usergroup ( id INT NOT NULL AUTO_INCREMENT,	name VARCHAR(255) NOT NULL, description TEXT NOT NULL,PRIMARY KEY (id));
-CREATE TABLE usergroup_rel_user    ( usergroup_id INT NOT NULL, user_id 	INT NOT NULL );
-CREATE TABLE usergroup_rel_course  ( usergroup_id INT NOT NULL, course_id 	INT NOT NULL );
-CREATE TABLE usergroup_rel_session ( usergroup_id INT NOT NULL, session_id  INT NOT NULL );
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('accessibility_font_resize',NULL,'radio','Platform','false','EnableAccessibilityFontResizeTitle','EnableAccessibilityFontResizeComment',NULL,NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('accessibility_font_resize', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('accessibility_font_resize', 'false', 'No');
 
-CREATE TABLE notification (id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,dest_user_id INT NOT NULL, dest_mail CHAR(255),title CHAR(255), content CHAR(255), send_freq SMALLINT DEFAULT 1, created_at DATETIME NOT NULL, sent_at DATETIME NULL);
-
-ALTER TABLE notification ADD index mail_notify_sent_index (sent_at);
-ALTER TABLE notification ADD index mail_notify_freq_index (sent_at, send_freq, created_at);
-
-ALTER TABLE session_category ADD COLUMN access_url_id INT NOT NULL default 1;
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enable_quiz_scenario', NULL,'radio','Course','false','EnableQuizScenarioTitle','EnableQuizScenarioComment',NULL,NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_quiz_scenario', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_quiz_scenario', 'false', 'No');
-
-UPDATE settings_current SET category='Search' WHERE variable='search_enable';
-
 INSERT INTO settings_options (variable, value, display_text) VALUES ('homepage_view', 'activity_big', 'HomepageViewActivityBig');
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enable_nanogong',NULL,'radio','Tools','false','EnableNanogongTitle','EnableNanogongComment',NULL,NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_nanogong', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_nanogong', 'false', 'No');
+UNLOCK TABLES;
 
-ALTER TABLE gradebook_evaluation ADD COLUMN locked int NOT NULL DEFAULT 0;
+INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES ('&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;', 'hindi', 'hi', 'hindi', 0);
 
+UPDATE settings_current SET category='Search' WHERE variable='search_enable';
+UPDATE settings_current SET variable='chamilo_database_version' WHERE variable='dokeos_database_version';
 UPDATE settings_current SET selected_value = '1.8.8.14911' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
@@ -201,31 +188,30 @@ ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_parent (parent_event_i
 ALTER TABLE user_course_category ADD INDEX idx_user_c_cat_uid (user_id);
 
 -- xxCOURSExx
+
+CREATE TABLE {prefix}quiz_question_option (id int NOT NULL, name varchar(255), position int unsigned NOT NULL, PRIMARY KEY (id));
+CREATE TABLE {prefix}attendance_sheet_log (id INT  NOT NULL AUTO_INCREMENT, attendance_id INT  NOT NULL DEFAULT 0, lastedit_date DATETIME  NOT NULL DEFAULT '0000-00-00 00:00:00', lastedit_type VARCHAR(200)  NOT NULL, lastedit_user_id INT  NOT NULL DEFAULT 0, calendar_date_value DATETIME NULL, PRIMARY KEY (id));
+
 ALTER TABLE {prefix}course_setting CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE {prefix}forum_forum ADD start_time DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
 ALTER TABLE {prefix}forum_forum ADD end_time DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
 ALTER TABLE {prefix}wiki_mailcue ADD session_id smallint DEFAULT 0;
-
 ALTER TABLE {prefix}lp ADD COLUMN use_max_score INT DEFAULT 1;
 ALTER TABLE {prefix}lp_item MODIFY COLUMN max_score FLOAT UNSIGNED DEFAULT 100;
 ALTER TABLE {prefix}tool MODIFY COLUMN category varchar(20) not null default 'authoring';
-
 ALTER TABLE {prefix}lp ADD COLUMN autolunch INT DEFAULT 0;
 ALTER TABLE {prefix}lp ADD COLUMN created_on 	DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
 ALTER TABLE {prefix}lp ADD COLUMN modified_on 	DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
 ALTER TABLE {prefix}lp ADD COLUMN expired_on 	DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
 ALTER TABLE {prefix}lp ADD COLUMN publicated_on DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
-
-CREATE TABLE {prefix}quiz_question_option (id int NOT NULL, name varchar(255), position int unsigned NOT NULL, PRIMARY KEY (id));
 ALTER TABLE {prefix}quiz_question ADD COLUMN extra varchar(255) DEFAULT NULL;
 ALTER TABLE {prefix}quiz_question CHANGE question question TEXT NOT NULL;
+ALTER TABLE {prefix}quiz ADD COLUMN propagate_neg INT NOT NULL DEFAULT 0;
+ALTER TABLE {prefix}quiz_answer MODIFY COLUMN hotspot_type ENUM('square','circle','poly','delineation','oar');
+ALTER TABLE {prefix}attendance ADD COLUMN locked int NOT NULL default 0;
 
 INSERT INTO {prefix}course_setting(variable,value,category) VALUES ('enable_lp_auto_launch',0,'learning_path');
 INSERT INTO {prefix}course_setting(variable,value,category) VALUES ('pdf_export_watermark_text','','course');
 
-ALTER TABLE {prefix}quiz ADD COLUMN propagate_neg INT NOT NULL DEFAULT 0;
-ALTER TABLE {prefix}quiz_answer MODIFY COLUMN hotspot_type ENUM('square','circle','poly','delineation','oar');
 
-ALTER TABLE {prefix}attendance ADD COLUMN locked int NOT NULL default 0;
-CREATE TABLE {prefix}attendance_sheet_log (id INT  NOT NULL AUTO_INCREMENT, attendance_id INT  NOT NULL DEFAULT 0, lastedit_date DATETIME  NOT NULL DEFAULT '0000-00-00 00:00:00', lastedit_type VARCHAR(200)  NOT NULL, lastedit_user_id INT  NOT NULL DEFAULT 0, calendar_date_value DATETIME NULL, PRIMARY KEY (id));
 

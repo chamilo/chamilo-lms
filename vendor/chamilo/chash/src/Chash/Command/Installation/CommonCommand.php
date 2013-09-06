@@ -1031,6 +1031,10 @@ class CommonCommand extends AbstractCommand
                         }
                     } catch (\Alchemy\Zippy\Exception\RunTimeException $e) {
                         $output->writeln("<comment>It seems that this file doesn't contain a Chamilo package:</comment> <info>$updateInstallationOriginal</info>");
+
+                        unlink($updateInstallation);
+                        $output->writeln("<comment>Removing file</comment>:<info>$updateInstallation</info>");
+
                         //$output->writeln("Error:");
                         //$output->writeln($e->getMessage());
                         return 0;

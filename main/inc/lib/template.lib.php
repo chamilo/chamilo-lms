@@ -175,7 +175,6 @@ class Template
     {
         $tpl = $this->get_template('layout/layout_1_col.tpl');
         $this->display($tpl);
-
     }
 
     /**
@@ -892,8 +891,6 @@ class Template
         return $this->menu_navigation;
     }
 
-    // Render Chamilo layouts:
-
     /**
      * @param string $layout
      * @return mixed
@@ -937,17 +934,6 @@ class Template
         $navigation[SECTION_CAMPUS]['title'] = get_lang('CampusHomepage');
 
         // My Courses
-        /*
-        if (api_is_allowed_to_create_course()) {
-            // Link to my courses for teachers
-            $navigation['mycourses']['url'] = api_get_path(WEB_PUBLIC_PATH).'user_portal.php?nosession=true';
-            $navigation['mycourses']['title'] = get_lang('MyCourses');
-        } else {
-            // Link to my courses for students
-            $navigation['mycourses']['url'] = api_get_path(WEB_PUBLIC_PATH).'user_portal.php';
-            $navigation['mycourses']['title'] = get_lang('MyCourses');
-        }*/
-
         $navigation['mycourses']['url'] = api_get_path(WEB_PUBLIC_PATH).'userportal';
         $navigation['mycourses']['title'] = get_lang('MyCourses');
 
@@ -1257,7 +1243,6 @@ class Template
                     $navigation['question_manager'] = $possible_tabs['question_manager'];
                 }
             }
-
 
             // Reports
             if (!empty($possible_tabs['reports'])) {

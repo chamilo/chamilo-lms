@@ -966,7 +966,6 @@ class Template
             $navigation['session_my_progress']['title'] = get_lang('MyProgress');
         }
 
-
         // Social
         if (api_get_setting('allow_social_tool') == 'true') {
             $navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/home.php';
@@ -979,13 +978,6 @@ class Template
             $navigation['dashboard']['title'] = get_lang('Dashboard');
         }
 
-        // Reports
-        /*
-        if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
-            $navigation['reports']['url'] = api_get_path(WEB_CODE_PATH).'reports/index.php';
-            $navigation['reports']['title'] = get_lang('Reports');
-        }*/
-
         // Custom tabs
         for ($i = 1; $i <= 3; $i++) {
             if (api_get_setting('custom_tab_'.$i.'_name') && api_get_setting('custom_tab_'.$i.'_url')) {
@@ -994,19 +986,34 @@ class Template
             }
         }
 
-        // Platform administration
-        if (api_is_platform_admin(true)) {
-            $navigation['platform_admin']['url'] = api_get_path(WEB_PUBLIC_PATH).'admin/administrator';
-            $navigation['platform_admin']['title'] = get_lang('PlatformAdmin');
-        } else {
-            if (api_is_question_manager()) {
-                $navigation['question_manager']['url'] = api_get_path(WEB_PUBLIC_PATH).'admin/questionmanager';
-                $navigation['question_manager']['title'] = get_lang('PlatformAdmin');
-            }
-            /*$token = $this->app['security']->getToken();
-            $user = $token->getUser();*/
-        }
+        // Adding block settings for each role
+        if (isset($this->app['allow_admin_toolbar'])) {
+            /** @var  \Symfony\Component\Security\Core\SecurityContext  $security */
+            $security = $this->app['security'];
 
+            $roleTemplate = array();
+            foreach ($this->app['allow_admin_toolbar'] as $role) {
+                if ($security->isGranted($role)) {
+                    // Fixes in order to match the templates
+                    if ($role == 'ROLE_ADMIN') {
+                        $role = 'administrator';
+                    }
+                    if ($role == 'ROLE_QUESTION_MANAGER') {
+                        $role = 'QUESTIONMANAGER';
+                    }
+                    $stripRole = strtolower(str_replace('ROLE_', '', $role));
+                    $roleTemplate[] = $stripRole;
+                }
+            }
+
+            if (!empty($roleTemplate)) {
+                if (api_get_setting('show_tabs', 'platform_administration') == 'true') {
+                    $navigation['admin']['url'] = api_get_path(WEB_PUBLIC_PATH).'admin';
+                    $navigation['admin']['title'] = get_lang('PlatformAdmin');
+                }
+            }
+            $this->app['admin_toolbar_roles'] = $roleTemplate;
+        }
         return $navigation;
     }
 
@@ -1230,18 +1237,9 @@ class Template
                 $menu_navigation['dashboard'] = isset($possible_tabs['dashboard']) ? $possible_tabs['dashboard'] : null;
             }
 
-            // Administration
-            if (api_is_platform_admin(true)) {
-                if (api_get_setting('show_tabs', 'platform_administration') == 'true') {
-                    $navigation['platform_admin'] = $possible_tabs['platform_admin'];
-                } else {
-                    $menu_navigation['platform_admin'] = $possible_tabs['platform_admin'];
-                }
-            } else {
-
-                if (api_is_question_manager()) {
-                    $navigation['question_manager'] = $possible_tabs['question_manager'];
-                }
+            if (isset($possible_tabs['admin'])) {
+                $navigation['platform_admin'] = $possible_tabs['admin'];
+                $navigation['platform_admin'] = $possible_tabs['admin'];
             }
 
             // Reports

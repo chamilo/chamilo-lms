@@ -153,6 +153,12 @@ $app['security.access_rules'] = array(
     //array('^.*$', 'ROLE_USER'),
 );
 
+// Roles that have an admin toolbar
+$app['allow_admin_toolbar'] = array(
+    'ROLE_ADMIN',
+    'ROLE_QUESTION_MANAGER'
+);
+
 /**
 $app['security.access_manager'] = $app->share(function($app) {
     return new AccessDecisionManager($app['security.voters'], 'unanimous');
@@ -639,7 +645,7 @@ $app['exercise_manager.controller'] = $app->share(
 
 $app['admin.controller'] = $app->share(
     function () use ($app) {
-        return new ChamiloLMS\Controller\Admin\AdministratorController($app);
+        return new ChamiloLMS\Controller\Admin\AdminController($app);
     }
 );
 $app['role.controller'] = $app->share(

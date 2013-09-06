@@ -51,3 +51,6 @@ ALTER TABLE branch_transaction_log CHANGE sync_trans_id transaction_id bigint un
 ALTER TABLE branch_transaction_log DROP branch_sync_id, DROP sync_type;
 ALTER TABLE branch_transaction_log CHANGE sync_trans_date import_time DATETIME NULL DEFAULT NULL;
 ALTER TABLE branch_transaction_log ADD message MEDIUMTEXT NOT NULL;
+
+UPDATE settings_current SET selected_value = 'minedu' WHERE variable = 'template';
+UPDATE settings_current SET selected_value = 'digedd' WHERE variable = 'stylesheets';

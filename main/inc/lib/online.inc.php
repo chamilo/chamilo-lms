@@ -57,8 +57,10 @@ class Online
     }
 
     /**
-     * This function handles the logout and is called whenever there is a $_GET['logout']
+
      * @return void  Directly redirects the user or leaves him where he is, but doesn't return anything
+     * @param int $userId
+     * @param bool $logout_redirect
      * @author Fernando P. García <fernando@develcuy.com>
      */
     public static function logout($user_id = null, $logout_redirect = false)
@@ -71,8 +73,9 @@ class Online
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
+        $user_id = intval($user_id);
 
-        //Changing global chat status to offline
+        // Changing global chat status to offline
         if (api_is_global_chat_enabled()) {
             $chat = new Chat();
             $chat->set_user_status(0);
@@ -84,12 +87,12 @@ class Online
         $q_last_connection=Database::query($sql_last_connection);
         $i_id_last_connection = null;
         if (Database::num_rows($q_last_connection)>0) {
-            $i_id_last_connection = Database::result($q_last_connection,0,"login_id");
+            $i_id_last_connection = Database::result($q_last_connection, 0, "login_id");
         }
 
         if (!isset($_SESSION['login_as']) && !empty($i_id_last_connection)) {
             $current_date = api_get_utc_datetime();
-            $s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date='".$current_date."' WHERE login_id = '$i_id_last_connection'";
+            $s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date='".$current_date."' WHERE login_id = '$i_id_last_connection'";
             Database::query($s_sql_update_logout_date);
         }
 
@@ -101,11 +104,12 @@ class Online
         // (using *authent_name*_logout as the function name) and the following code
         // will find and execute it
         $uinfo = api_get_user_info($user_id);
+
         if ((isset($uinfo['auth_source']) && $uinfo['auth_source'] != PLATFORM_AUTH_SOURCE) && is_array($extAuthSource)) {
             if (is_array($extAuthSource[$uinfo['auth_source']])) {
                 $subarray = $extAuthSource[$uinfo['auth_source']];
                 if (!empty($subarray['logout']) && file_exists($subarray['logout'])) {
-                    require_once($subarray['logout']);
+                    require_once $subarray['logout'];
                     $logout_function = $uinfo['auth_source'].'_logout';
                     if (function_exists($logout_function)) {
                         $logout_function($uinfo);
@@ -117,7 +121,6 @@ class Online
         require_once api_get_path(SYS_PATH) . 'main/chat/chat_functions.lib.php';
         exit_of_chat($user_id);
 
-        Session::destroy();
         if ($logout_redirect) {
             header("Location: index.php");
             exit;

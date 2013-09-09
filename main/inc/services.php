@@ -135,7 +135,7 @@ $app['security.role_hierarchy'] = array(
     // Ministerio
     'ROLE_JURY_PRESIDENT' => array('ROLE_JURY_PRESIDENT', 'ROLE_JURY_MEMBER', 'ROLE_JURY_SUBSTITUTE'),
     'ROLE_JURY_SUBSTITUTE' => array('ROLE_JURY_SUBSTITUTE', 'ROLE_JURY_MEMBER'),
-    'ROLE_JURY_MEMBER' => array('ROLE_JURY_MEMBER'),
+    'ROLE_JURY_MEMBER' => array('ROLE_JURY_MEMBER', 'ROLE_STUDENT'),
     'ROLE_DIRECTOR' => array('ROLE_DIRECTOR')
 );
 

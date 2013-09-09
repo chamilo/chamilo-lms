@@ -13,7 +13,7 @@
 
     <h3>{{ 'Asignación de responsabilidades' |trans }}</h3>
 
-    <a class="btn" href="">
+    <a class="btn" href="{{ url('jury_president.controller:assignMembersAction') }}">
         Asignar usuarios.
     </a>
 

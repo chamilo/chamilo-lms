@@ -103,20 +103,67 @@ class JuryPresidentController extends CommonController
     }
 
     /**
+    * @Route("/assign-user/{userId}/{juryMemberId}")
+    * @Method({"GET"})
+    */
+    public function assignUserToJuryMemberAction($userId, $juryMemberId)
+    {
+        /** @var Entity\Jury $jury */
+        $em = $this->getManager();
+
+        $member = $em->getRepository('Entity\JuryMembers')->find($juryMemberId);
+        if ($member) {
+            $criteria = array('userId' => $userId, 'juryMemberId'=> $juryMemberId);
+            $result = $em->getRepository('Entity\JuryMemberRelUser')->findOneBy($criteria);
+            if (empty($result)) {
+
+                $object = new Entity\JuryMemberRelUser();
+                $object->setMember($member);
+                $object->setUserId($userId);
+
+                $em = $this->getManager();
+                $em->persist($object);
+                $em->flush();
+                return '1';
+            }
+        }
+        return '0';
+    }
+
+    /**
+    * @Route("/remove-user/{userId}/{juryMemberId}")
+    * @Method({"GET"})
+    */
+    public function removeUserToJuryMemberAction($userId, $juryMemberId)
+    {
+        $em = $this->getManager();
+        $member = $em->getRepository('Entity\JuryMembers')->find($juryMemberId);
+        if ($member) {
+
+            $criteria = array('userId' => $userId, 'juryMemberId'=> $juryMemberId);
+            $result = $em->getRepository('Entity\JuryMemberRelUser')->findOneBy($criteria);
+            if (!empty($result)) {
+                $em = $this->getManager();
+                $em->remove($result);
+                $em->flush();
+                return '1';
+            }
+        }
+        return '0';
+    }
+
+    /**
     * @Route("/assign-members")
     * @Method({"GET"})
     */
     public function assignMembersAction()
     {
-        return null;
-
         $user = $this->getUser();
         $userId = $user->getUserId();
 
         /** @var Entity\Jury $jury */
 
         $jury = $this->getRepository()->getJuryByUserId($userId);
-
         if (!$jury) {
             $this->get('session')->getFlashBag()->add('warning', "No tiene un comité asignado.");
             $url = $this->get('url_generator')->generate('jury_president.controller:indexAction');
@@ -162,6 +209,15 @@ class JuryPresidentController extends CommonController
         }
 
         $members = $jury->getMembers();
+        /** @var Entity\JuryMembers $member */
+        $studentsByMember = array();
+        foreach ($members as $member) {
+            $students = $member->getStudents();
+            foreach ($students as $student) {
+                $studentsByMember[$member->getId()][] = $student->getUserId();
+            }
+        }
+
         $template = $this->get('template');
 
         $template->assign('my_status_for_student', $myStatusForStudent);
@@ -169,6 +225,8 @@ class JuryPresidentController extends CommonController
         $template->assign('attempts', $attempts);
         $template->assign('members', $members);
         $template->assign('jury', $jury);
+        $template->assign('students_by_member', $studentsByMember);
+
         $response = $template->render_template($this->getTemplatePath().'assign_members.tpl');
 
         return new Response($response, 200, array());

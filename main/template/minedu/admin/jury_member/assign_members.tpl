@@ -42,17 +42,23 @@
                         {% set memberHover = '' %}
                     {% endif %}
 
+
                     {% if relations[attempt.user.getUserId][member.user.userId] == 3 %}
-                        {% set checked = 'checked="checked"' %}
-                        <td class="{{ memberHover }}">
-                            <div class="success">
+                        {% set checkedSuccess = 'class="success"' %}
                     {% else %}
-                        {% set checked = '' %}
-                        <td class="{{ memberHover }}">
-                            <div>
+                        {% set checkedSuccess = '' %}
                     {% endif %}
 
-                        <input {{ checked }} id="check_{{ attempt.user.getUserId }}_{{ member.user.userId }}" type="checkbox">
+                    {% set studentList = students_by_member[member.id]  %}
+                    {% if attempt.user.getUserId in studentList %}
+                        {% set checked = 'checked="checked"' %}
+                    {% else %}
+                        {% set checked = '' %}
+                    {% endif %}
+
+                    <td class="{{ memberHover }}">
+                        <div {{ checkedSuccess }}>
+                        <input disabled {{ checked }} id="check_{{ attempt.user.getUserId }}_{{ member.user.userId }}" type="checkbox">
                         </div>
                     </td>
                 {% endfor %}

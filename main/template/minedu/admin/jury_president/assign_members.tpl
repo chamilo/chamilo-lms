@@ -1,9 +1,27 @@
 {% extends app.template_style ~ "/layout/layout_1_col.tpl" %}
 {% block content %}
+    <script>
+        $(document).ready(function() {
+            $('.inputAction').on('click', function() {
+                $isChecked = $(this).is(":checked");
+                var idParts = $(this).attr('id').split('_');
+
+                var userId =  idParts[1];
+                var juryMemberId = idParts[2];
+
+                if ($isChecked) {
+                    url = '{{ _p.public_web }}admin/jury_president/assign-user/'+ userId +'/'+juryMemberId;
+                } else {
+                    url = '{{ _p.public_web }}admin/jury_president/remove-user/'+ userId +'/'+juryMemberId;
+                }
+                $.ajax(url);
+            });
+        });
+
+    </script>
     <a class="btn" href="">Asignar al azar</a>
     <hr>
     <form>
-
     <table class="table table-bordered">
         <tbody>
         <tr>
@@ -15,14 +33,14 @@
                     <td>
                 {% endif %}
 
-                    {# member.user.userId #}
-                    {%  if member.role.role == 'ROLE_JURY_PRESIDENT' %}
-                        P{{ loop.index }}
-                    {% elseif member.role.role == 'ROLE_JURY_MEMBER' %}
-                        M{{ loop.index -1}}
-                    {% else %}
-                        S{{ loop.index -1}}
-                    {% endif %}
+                {# member.user.userId #}
+                {%  if member.role.role == 'ROLE_JURY_PRESIDENT' %}
+                    P{{ loop.index }}
+                {% elseif member.role.role == 'ROLE_JURY_MEMBER' %}
+                    M{{ loop.index -1}}
+                {% else %}
+                    S{{ loop.index -1}}
+                {% endif %}
                 </td>
             {% endfor %}
             <td>Estado</td>
@@ -30,7 +48,7 @@
         {% for attempt in attempts %}
             <tr>
                 <td>
-                    Estudiante #{{ attempt.user.getUserId }}
+                    Estudiante #{{ attempt.user.getUserId }} ({{ attempt.exeId }})
                 </td>
                 {% for member in members %}
 
@@ -41,16 +59,19 @@
                     {% endif %}
 
                     {% if relations[attempt.user.getUserId][member.user.userId] == 3 %}
-                        {% set checked = 'checked="checked"' %}
-                        <td class="{{ memberHover }}">
-                            <div class="success">
+                        {% set checkedSuccess = 'class="success"' %}
                     {% else %}
-                        {% set checked = '' %}
-                        <td class="{{ memberHover }}">
-                            <div>
+                        {% set checkedSuccess = '' %}
                     {% endif %}
-
-                        <input {{ checked }} id="check_{{ attempt.user.getUserId }}_{{ member.user.userId }}" type="checkbox">
+                    <td class="{{ memberHover }}">
+                        {% set studentList = students_by_member[member.id]  %}
+                        {% if attempt.user.getUserId in studentList %}
+                            {% set checked = 'checked="checked"' %}
+                        {% else %}
+                            {% set checked = '' %}
+                        {% endif %}
+                        <div {{ checkedSuccess }}>
+                            <input class="inputAction" {{ checked }} id="check_{{ attempt.user.getUserId }}_{{ member.id }}" type="checkbox">
                         </div>
                     </td>
                 {% endfor %}

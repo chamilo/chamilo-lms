@@ -1,3 +1,3 @@
 <div class="well">
-    director
+    Director
 </div>

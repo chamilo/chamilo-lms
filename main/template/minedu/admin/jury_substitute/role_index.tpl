@@ -1,3 +1,4 @@
 <div class="well">
-    jury sub
+    Jury substitute
+
 </div>

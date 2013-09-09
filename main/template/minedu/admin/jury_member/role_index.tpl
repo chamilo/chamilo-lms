@@ -1,3 +1,3 @@
 <div class="well">
-    jury_member
+    Jury Member
 </div>

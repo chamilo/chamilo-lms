@@ -1,0 +1,68 @@
+{
+    "name": "gedmo/doctrine-extensions",
+    "type": "library",
+    "description": "Doctrine2 behavioral extensions",
+    "keywords": [
+        "behaviors",
+        "doctrine2",
+        "extensions",
+        "gedmo",
+        "sluggable",
+        "loggable",
+        "translatable",
+        "tree",
+        "nestedset",
+        "sortable",
+        "timestampable",
+        "blameable",
+        "uploadable"
+    ],
+    "homepage": "http://gediminasm.org/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gediminas Morkevicius",
+            "email": "gediminas.morkevicius@gmail.com"
+        },
+        {
+            "name": "Gustavo Falco",
+            "email": "comfortablynumb84@gmail.com"
+        },
+        {
+            "name": "David Buchmann",
+            "email": "david@liip.ch"
+        }
+    ],
+    "support": {
+        "email": "gediminas.morkevicius@gmail.com",
+        "wiki": "https://github.com/l3pp4rd/DoctrineExtensions/tree/master/doc",
+        "issues": "https://github.com/l3pp4rd/DoctrineExtensions/issues",
+        "source": "https://github.com/l3pp4rd/DoctrineExtensions"
+    },
+    "require": {
+        "php": ">=5.3.2",
+        "doctrine/common": ">=2.2,<2.5-dev"
+    },
+    "require-dev": {
+        "doctrine/mongodb": ">=1.0.3",
+        "doctrine/mongodb-odm": ">=1.0.0-BETA9",
+        "doctrine/orm": ">=2.4.0-RC1",
+        "doctrine/common": ">=2.4.0-RC3",
+        "doctrine/dbal": ">=2.4.0-RC1",
+        "symfony/yaml": "2.3.1"
+    },
+    "suggest": {
+        "doctrine/mongodb": ">=1.0.1",
+        "doctrine/mongodb-odm": ">=1.0.0-BETA7",
+        "doctrine/orm": ">=2.3.2",
+        "doctrine/dbal": ">=2.3.2"
+    },
+    "autoload": {
+        "psr-0": { "Gedmo\\": "lib/" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.3.x-dev"
+        }
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "name": "silex/web-profiler",
+    "description": "A WebProfiler for Silex",
+    "homepage": "http://silex.sensiolabs.org/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fabien Potencier",
+            "email": "fabien@symfony.com"
+        }
+    ],
+    "require": {
+        "silex/silex": "~1.0",
+        "symfony/web-profiler-bundle": "~2.2",
+        "symfony/stopwatch": "~2.2"
+    },
+    "autoload": {
+        "psr-0": { "Silex\\Provider\\": "" }
+    },
+    "target-dir": "Silex/Provider",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}

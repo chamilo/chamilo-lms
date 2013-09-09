@@ -108,26 +108,7 @@ class JuryPresidentController extends CommonController
     */
     public function assignUserToJuryMemberAction($userId, $juryMemberId)
     {
-        /** @var Entity\Jury $jury */
-        $em = $this->getManager();
-
-        $member = $em->getRepository('Entity\JuryMembers')->find($juryMemberId);
-        if ($member) {
-            $criteria = array('userId' => $userId, 'juryMemberId'=> $juryMemberId);
-            $result = $em->getRepository('Entity\JuryMemberRelUser')->findOneBy($criteria);
-            if (empty($result)) {
-
-                $object = new Entity\JuryMemberRelUser();
-                $object->setMember($member);
-                $object->setUserId($userId);
-
-                $em = $this->getManager();
-                $em->persist($object);
-                $em->flush();
-                return '1';
-            }
-        }
-        return '0';
+        return $this->getManager()->getRepository('Entity\JuryMembers')->assignUserToJuryMember($userId, $juryMemberId);
     }
 
     /**
@@ -136,20 +117,7 @@ class JuryPresidentController extends CommonController
     */
     public function removeUserToJuryMemberAction($userId, $juryMemberId)
     {
-        $em = $this->getManager();
-        $member = $em->getRepository('Entity\JuryMembers')->find($juryMemberId);
-        if ($member) {
-
-            $criteria = array('userId' => $userId, 'juryMemberId'=> $juryMemberId);
-            $result = $em->getRepository('Entity\JuryMemberRelUser')->findOneBy($criteria);
-            if (!empty($result)) {
-                $em = $this->getManager();
-                $em->remove($result);
-                $em->flush();
-                return '1';
-            }
-        }
-        return '0';
+        return $this->getManager()->getRepository('Entity\JuryMembers')->removeUserToJuryMember($userId, $juryMemberId);
     }
 
     /**
@@ -170,9 +138,6 @@ class JuryPresidentController extends CommonController
             return $this->redirect($url);
         }
 
-        // @todo add to a repository
-        // $students = $this->getRepository()->getStudentsByJury($jury->getId());
-
         $attempts = $jury->getExerciseAttempts();
 
         // @todo move logic in a repository
@@ -180,6 +145,8 @@ class JuryPresidentController extends CommonController
         $students = array();
         $relations = array();
         $myStatusForStudent = array();
+        $maxCountOfMemberToVoteToConsiderEvaluated = 3;
+
         foreach ($attempts as $attempt) {
 
             $user = $attempt->getUser();
@@ -199,7 +166,7 @@ class JuryPresidentController extends CommonController
             foreach ($tempAttempt as $memberId => $answerCount) {
                 $relations[$user->getUserId()][$memberId] = $answerCount;
                 if ($userId == $memberId) {
-                    if ($answerCount == 3) {
+                    if ($answerCount == $maxCountOfMemberToVoteToConsiderEvaluated) {
                         $myStatusForStudent[$user->getUserId()] = true;
                     } else {
                         $myStatusForStudent[$user->getUserId()] = false;

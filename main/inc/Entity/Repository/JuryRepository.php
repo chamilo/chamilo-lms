@@ -91,10 +91,4 @@ class JuryRepository extends EntityRepository
             return false;
         }
     }
-
-    public function getExerciseAttemptsByJury($juryId)
-    {
-
-    }
-
 }

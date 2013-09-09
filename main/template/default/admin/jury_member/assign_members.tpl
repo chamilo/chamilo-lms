@@ -60,7 +60,7 @@
                     {% if my_status_for_student[attempt.user.getUserId] %}
                         <a href="#" class="btn btn-success disabled">Evaluado</a>
                     {% else %}
-                        <a href="{{ url('jury_member.controller:scoreUserAction', { 'exeId': attempt.getExeId }) }}" class="btn btn-warning">Evaluar</a>
+                        <a href="{{ url('jury_member.controller:scoreAttemptAction', { 'exeId': attempt.getExeId, 'juryId': jury.id }) }}" class="btn btn-warning">Evaluar</a>
                     {% endif %}
                 </td>
             </tr>

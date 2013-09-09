@@ -17,8 +17,8 @@
                 $.ajax(url);
             });
         });
-
     </script>
+
     <a class="btn" href="">Asignar al azar</a>
     <hr>
     <form>
@@ -58,11 +58,14 @@
                         {% set memberHover = '' %}
                     {% endif %}
 
-                    {% if relations[attempt.user.getUserId][member.user.userId] == 3 %}
+                    {% if relations[attempt.user.getUserId][member.user.userId] %}
                         {% set checkedSuccess = 'class="success"' %}
+                        {% set disabled = 'disabled' %}
                     {% else %}
                         {% set checkedSuccess = '' %}
+                        {% set disabled = '' %}
                     {% endif %}
+
                     <td class="{{ memberHover }}">
                         {% set studentList = students_by_member[member.id]  %}
                         {% if attempt.user.getUserId in studentList %}
@@ -71,7 +74,7 @@
                             {% set checked = '' %}
                         {% endif %}
                         <div {{ checkedSuccess }}>
-                            <input class="inputAction" {{ checked }} id="check_{{ attempt.user.getUserId }}_{{ member.id }}" type="checkbox">
+                            <input {{ disabled }} class="inputAction" {{ checked }} id="check_{{ attempt.user.getUserId }}_{{ member.id }}" type="checkbox">
                         </div>
                     </td>
                 {% endfor %}
@@ -79,7 +82,7 @@
                     {% if my_status_for_student[attempt.user.getUserId] %}
                         <a href="#" class="btn btn-success disabled">Evaluado</a>
                     {% else %}
-                        <a href="{{ url('jury_member.controller:scoreUserAction', { 'exeId': attempt.getExeId }) }}" class="btn btn-warning">Evaluar</a>
+                        <a href="{{ url('jury_member.controller:scoreAttemptAction', { 'exeId': attempt.getExeId, 'juryId': jury.id }) }}" class="btn btn-warning">Evaluar</a>
                     {% endif %}
                 </td>
             </tr>

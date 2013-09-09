@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * JuryMembers
  *
  * @ORM\Table(name="jury_members")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Entity\Repository\JuryMembersRepository")
  */
 class JuryMembers
 {

@@ -276,19 +276,10 @@ class AdminController extends CommonController
             $blocks['chamilo']['items'] = $items;
             $blocks['chamilo']['extra'] = null;
             $blocks['chamilo']['search_form'] = null;
-
-            // Version check
-            $blocks['version_check']['icon']  = \Display::return_icon('logo.png', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
-            $blocks['version_check']['label'] = get_lang('VersionCheck');
-            $blocks['version_check']['extra'] = '<div class="admin-block-version"></div>';
-            $blocks['version_check']['search_form'] = null;
-            $blocks['version_check']['items'] = null;
-            //$blocks['version_check']['class'] = '';
         }
-        $admin_ajax_url = api_get_path(WEB_AJAX_PATH).'admin.ajax.php';
 
+        $admin_ajax_url = api_get_path(WEB_AJAX_PATH).'admin.ajax.php';
         $template->assign('web_admin_ajax_url', $admin_ajax_url);
         $template->assign('blocks', $blocks);
     }
-
 }

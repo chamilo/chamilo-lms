@@ -1905,7 +1905,7 @@ class SessionManager
                 $date_start             = $enreg['DateStart'];
                 $date_end               = $enreg['DateEnd'];
                 $visibility             = isset($enreg['Visibility']) ? $enreg['Visibility'] : $sessionVisibility;
-                $session_category_id    = $enreg['SessionCategory'];
+                $session_category_id    = isset($enreg['SessionCategory']) ? $enreg['SessionCategory'] : null;
 
                 // Searching a general coach.
                 if (!empty($enreg['Coach'])) {
@@ -1923,6 +1923,7 @@ class SessionManager
                     $unique_name = false; // This MUST be initializead.
                     $i = 0;
                     // Change session name, verify that session doesn't exist.
+                    $suffix = null;
                     while (!$unique_name) {
                         if ($i > 1) {
                             $suffix = ' - '.$i;

@@ -666,7 +666,7 @@ $app->before(
         }
 
         // From the user
-        if ($user) {
+        if ($user && $userInfo) {
             // @todo check why this does not works
             //$language = $user->getLanguage();
             $language = $userInfo['language'];
@@ -687,7 +687,6 @@ $app->before(
             $info = pathinfo($file);
             $section = $info['dirname'];
         }
-
 
         $app['translator.cache.enabled'] = false;
 
@@ -870,13 +869,12 @@ if (isset($app['configuration']['main_database']) && isset($app['db.event_manage
 
     $loggableListener = new \Gedmo\Loggable\LoggableListener();
     if (PHP_SAPI != 'cli') {
-        $userInfo = api_get_user_info();
+        //$userInfo = api_get_user_info();
 
         if (isset($userInfo) && !empty($userInfo['username'])) {
-            $loggableListener->setUsername($userInfo['username']);
+            //$loggableListener->setUsername($userInfo['username']);
         }
     }
-    //$app['db.event_manager']->addEventSubscriber($loggableListener);
     $app['dbs.event_manager']['db_read']->addEventSubscriber($loggableListener);
     $app['dbs.event_manager']['db_write']->addEventSubscriber($loggableListener);
 }
@@ -884,5 +882,5 @@ if (isset($app['configuration']['main_database']) && isset($app['db.event_manage
 // Fixes uses of $_course in the scripts.
 $_course = api_get_course_info();
 $_cid = api_get_course_id();
-return $app;
 
+return $app;

@@ -206,6 +206,12 @@ class IndexController extends CommonController
     {
         $request = $app['request'];
         $app['template']->assign('error', $app['security.last_error']($request));
+        $extra = array();
+        if (api_get_setting('use_virtual_keyboard') == 'true') {
+            $extra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/keyboard/keyboard.css');
+            $extra[] = api_get_js('keyboard/jquery.keyboard.js');
+        }
+        $app['extraJS'] = $extra;
         $response = $app['template']->render_template('auth/login.tpl');
         return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
     }

@@ -62,9 +62,20 @@ class TrackExerciseAttemptJury
      */
     private $attempt;
 
+    /**
+     * @return TrackExercise
+     */
     public function getAttempt()
     {
         return $this->attempt;
+    }
+
+    /**
+     * @param TrackExercise $attempt
+     */
+    public function setAttempt(TrackExercise $attempt)
+    {
+        $this->attempt = $attempt;
     }
 
     /**

@@ -13,7 +13,7 @@ namespace Imagine\Gmagick;
 
 use Imagine\Image\AbstractFont;
 use Imagine\Image\Box;
-use Imagine\Image\Palette\Color\ColorInterface;
+use Imagine\Image\Color;
 
 /**
  * Font implementation using the Gmagick PHP extension
@@ -26,12 +26,12 @@ final class Font extends AbstractFont
     private $gmagick;
 
     /**
-     * @param \Gmagick       $gmagick
-     * @param string         $file
-     * @param integer        $size
-     * @param ColorInterface $color
+     * @param \Gmagick $gmagick
+     * @param string   $file
+     * @param integer  $size
+     * @param Color    $color
      */
-    public function __construct(\Gmagick $gmagick, $file, $size, ColorInterface $color)
+    public function __construct(\Gmagick $gmagick, $file, $size, Color $color)
     {
         $this->gmagick = $gmagick;
 

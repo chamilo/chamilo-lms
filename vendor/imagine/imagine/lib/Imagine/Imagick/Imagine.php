@@ -12,13 +12,10 @@
 namespace Imagine\Imagick;
 
 use Imagine\Image\BoxInterface;
-use Imagine\Image\Palette\Color\ColorInterface;
+use Imagine\Image\Color;
 use Imagine\Exception\InvalidArgumentException;
 use Imagine\Exception\RuntimeException;
 use Imagine\Image\ImagineInterface;
-use Imagine\Image\Palette\CMYK;
-use Imagine\Image\Palette\RGB;
-use Imagine\Image\Palette\Grayscale;
 
 /**
  * Imagine implementation using the Imagick PHP extension
@@ -59,7 +56,6 @@ final class Imagine implements ImagineInterface
 
         try {
             $image = $this->read($handle);
-            $image->getImagick()->setImageFilename($path);
         } catch (\Exception $e) {
             fclose($handle);
             throw new RuntimeException(sprintf('Unable to open image %s', $path), $e->getCode(), $e);
@@ -71,13 +67,12 @@ final class Imagine implements ImagineInterface
     /**
      * {@inheritdoc}
      */
-    public function create(BoxInterface $size, ColorInterface $color = null)
+    public function create(BoxInterface $size, Color $color = null)
     {
         $width  = $size->getWidth();
         $height = $size->getHeight();
 
-        $palette = null !== $color ? $color->getPalette() : new RGB();
-        $color = null !== $color ? $color : $palette->color('fff');
+        $color = null !== $color ? $color : new Color('fff');
 
         try {
             $pixel = new \ImagickPixel((string) $color);
@@ -94,7 +89,7 @@ final class Imagine implements ImagineInterface
             $pixel->clear();
             $pixel->destroy();
 
-            return new Image($imagick, $palette);
+            return new Image($imagick);
         } catch (\ImagickException $e) {
             throw new RuntimeException(
                 'Could not create empty image', $e->getCode(), $e
@@ -113,7 +108,7 @@ final class Imagine implements ImagineInterface
             $imagick->readImageBlob($string);
             $imagick->setImageMatte(true);
 
-            return new Image($imagick, $this->createPalette($imagick));
+            return new Image($imagick);
         } catch (\ImagickException $e) {
             throw new RuntimeException(
                 'Could not load image from string', $e->getCode(), $e
@@ -139,35 +134,14 @@ final class Imagine implements ImagineInterface
             );
         }
 
-        return new Image($imagick, $this->createPalette($imagick));
+        return new Image($imagick);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function font($file, $size, ColorInterface $color)
+    public function font($file, $size, Color $color)
     {
         return new Font(new \Imagick(), $file, $size, $color);
-    }
-
-    private function createPalette(\Imagick $imagick)
-    {
-        switch ($imagick->getImageColorspace()) {
-            case \Imagick::COLORSPACE_RGB:
-            case \Imagick::COLORSPACE_SRGB:
-                return new RGB();
-                break;
-            case \Imagick::COLORSPACE_CMYK:
-                return new CMYK();
-                break;
-            case \Imagick::COLORSPACE_GRAY:
-                return new Grayscale();
-                break;
-            default:
-                throw new RuntimeException(
-                    'Only RGB and CMYK colorspace are curently supported'
-                );
-                break;
-        }
     }
 }

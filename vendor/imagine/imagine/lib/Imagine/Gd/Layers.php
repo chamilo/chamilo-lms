@@ -13,16 +13,14 @@ namespace Imagine\Gd;
 
 use Imagine\Image\AbstractLayers;
 use Imagine\Exception\RuntimeException;
-use Imagine\Image\Palette\PaletteInterface;
 
 class Layers extends AbstractLayers
 {
     private $image;
     private $offset;
     private $resource;
-    private $palette;
 
-    public function __construct(Image $image, PaletteInterface $palette, $resource)
+    public function __construct(Image $image, $resource)
     {
         if (!is_resource($resource)) {
             throw new RuntimeException('Invalid Gd resource provided');
@@ -31,7 +29,6 @@ class Layers extends AbstractLayers
         $this->image = $image;
         $this->resource = $resource;
         $this->offset = 0;
-        $this->palette = $palette;
     }
 
     /**
@@ -61,7 +58,7 @@ class Layers extends AbstractLayers
      */
     public function current()
     {
-        return new Image($this->resource, $this->palette);
+        return new Image($this->resource);
     }
 
     /**
@@ -118,7 +115,7 @@ class Layers extends AbstractLayers
     public function offsetGet($offset)
     {
         if (0 === $offset) {
-            return new Image($this->resource, $this->palette);
+            return new Image($this->resource);
         }
 
         throw new RuntimeException('GD only supports one layer at offset 0');

@@ -13,7 +13,6 @@ namespace Imagine\Test\Imagick;
 
 use Imagine\Imagick\Imagine;
 use Imagine\Test\Image\AbstractImageTest;
-use Imagine\Image\Box;
 
 class ImageTest extends AbstractImageTest
 {
@@ -38,12 +37,12 @@ class ImageTest extends AbstractImageTest
         $image = $imagine->open('tests/Imagine/Fixtures/resize/210-design-19933.jpg');
 
         $image
-            ->resize(new Box(1500, 750))
+            ->resize(new \Imagine\Image\Box(1500, 750))
             ->save('tests/Imagine/Fixtures/resize/large.png')
         ;
 
         $image
-            ->resize(new Box(100, 50))
+            ->resize(new \Imagine\Image\Box(100, 50))
             ->save('tests/Imagine/Fixtures/resize/small.png')
         ;
 

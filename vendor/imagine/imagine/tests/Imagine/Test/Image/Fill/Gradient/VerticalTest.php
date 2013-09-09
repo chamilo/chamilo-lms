@@ -10,7 +10,7 @@
 namespace Imagine\Test\Image\Fill\Gradient;
 
 use Imagine\Image\Fill\Gradient\Vertical;
-use Imagine\Image\Palette\Color\ColorInterface;
+use Imagine\Image\Color;
 use Imagine\Image\Point;
 
 class VerticalTest extends LinearTest
@@ -21,7 +21,7 @@ class VerticalTest extends LinearTest
      */
     protected function getEnd()
     {
-        return $this->getColor('fff');
+        return new Color('fff');
     }
 
     /**
@@ -30,14 +30,14 @@ class VerticalTest extends LinearTest
      */
     protected function getStart()
     {
-        return $this->getColor('000');
+        return new Color('000');
     }
 
     /**
      * (non-PHPdoc)
      * @see Imagine\Image\Fill\Gradient\LinearTest::getMask()
      */
-    protected function getFill(ColorInterface $start, ColorInterface $end)
+    protected function getFill(Color $start, Color $end)
     {
         return new Vertical(100, $start, $end);
     }
@@ -49,9 +49,9 @@ class VerticalTest extends LinearTest
     public function getPointsAndColors()
     {
         return array(
-            array($this->getColor('fff'), new Point(5, 100)),
-            array($this->getColor('000'), new Point(15, 0)),
-            array($this->getColor(array(128, 128, 128)), new Point(25, 50))
+            array(new Color('fff'), new Point(5, 100)),
+            array(new Color('000'), new Point(15, 0)),
+            array(new Color(array(128, 128, 128)), new Point(25, 50))
         );
     }
 }

@@ -16,7 +16,7 @@ use Imagine\Exception\InvalidArgumentException;
 use Imagine\Exception\RuntimeException;
 use Imagine\Image\AbstractFont;
 use Imagine\Image\BoxInterface;
-use Imagine\Image\Palette\Color\ColorInterface;
+use Imagine\Image\Color;
 use Imagine\Image\Point;
 use Imagine\Image\PointInterface;
 
@@ -41,7 +41,7 @@ final class Drawer implements DrawerInterface
     /**
      * {@inheritdoc}
      */
-    public function arc(PointInterface $center, BoxInterface $size, $start, $end, ColorInterface $color, $thickness = 1)
+    public function arc(PointInterface $center, BoxInterface $size, $start, $end, Color $color, $thickness = 1)
     {
         $x      = $center->getX();
         $y      = $center->getY();
@@ -81,7 +81,7 @@ final class Drawer implements DrawerInterface
     /**
      * {@inheritdoc}
      */
-    public function chord(PointInterface $center, BoxInterface $size, $start, $end, ColorInterface $color, $fill = false, $thickness = 1)
+    public function chord(PointInterface $center, BoxInterface $size, $start, $end, Color $color, $fill = false, $thickness = 1)
     {
         $x      = $center->getX();
         $y      = $center->getY();
@@ -127,7 +127,7 @@ final class Drawer implements DrawerInterface
     /**
      * {@inheritdoc}
      */
-    public function ellipse(PointInterface $center, BoxInterface $size, ColorInterface $color, $fill = false, $thickness = 1)
+    public function ellipse(PointInterface $center, BoxInterface $size, Color $color, $fill = false, $thickness = 1)
     {
         $width  = $size->getWidth();
         $height = $size->getHeight();
@@ -170,7 +170,7 @@ final class Drawer implements DrawerInterface
     /**
      * {@inheritdoc}
      */
-    public function line(PointInterface $start, PointInterface $end, ColorInterface $color, $thickness = 1)
+    public function line(PointInterface $start, PointInterface $end, Color $color, $thickness = 1)
     {
         try {
             $pixel = $this->getColor($color);
@@ -203,7 +203,7 @@ final class Drawer implements DrawerInterface
     /**
      * {@inheritdoc}
      */
-    public function pieSlice(PointInterface $center, BoxInterface $size, $start, $end, ColorInterface $color, $fill = false, $thickness = 1)
+    public function pieSlice(PointInterface $center, BoxInterface $size, $start, $end, Color $color, $fill = false, $thickness = 1)
     {
         $width  = $size->getWidth();
         $height = $size->getHeight();
@@ -237,7 +237,7 @@ final class Drawer implements DrawerInterface
     /**
      * {@inheritdoc}
      */
-    public function dot(PointInterface $position, ColorInterface $color)
+    public function dot(PointInterface $position, Color $color)
     {
         $x = $position->getX();
         $y = $position->getY();
@@ -266,7 +266,7 @@ final class Drawer implements DrawerInterface
     /**
      * {@inheritdoc}
      */
-    public function polygon(array $coordinates, ColorInterface $color, $fill = false, $thickness = 1)
+    public function polygon(array $coordinates, Color $color, $fill = false, $thickness = 1)
     {
         if (count($coordinates) < 3) {
             throw new InvalidArgumentException(sprintf(
@@ -296,7 +296,9 @@ final class Drawer implements DrawerInterface
 
             $this->gmagick->drawImage($polygon);
 
-            unset($pixel, $polygon);
+            $pixel = null;
+
+            $polygon = null;
         } catch (\GmagickException $e) {
             throw new RuntimeException(
                 'Draw polygon operation failed', $e->getCode(), $e
@@ -342,7 +344,9 @@ final class Drawer implements DrawerInterface
                 $position->getY() + $y2 + $ydiff, $angle, $string
             );
 
-            unset($pixel, $text);
+            $pixel = null;
+
+            $text = null;
         } catch (\GmagickException $e) {
             throw new RuntimeException(
                 'Draw text operation failed', $e->getCode(), $e
@@ -355,11 +359,11 @@ final class Drawer implements DrawerInterface
     /**
      * Gets specifically formatted color string from Color instance
      *
-     * @param ColorInterface $color
+     * @param Color $color
      *
      * @return string
      */
-    private function getColor(ColorInterface $color)
+    private function getColor(Color $color)
     {
         if (!$color->isOpaque()) {
             throw new InvalidArgumentException('Gmagick doesn\'t support transparency');

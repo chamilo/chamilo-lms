@@ -11,8 +11,8 @@
 
 namespace Imagine\Test\Image\Fill\Gradient;
 
-use Imagine\Image\Palette\RGB;
-use Imagine\Image\Palette\Color\ColorInterface;
+use Imagine\Image\Fill\Gradient\Linear;
+use Imagine\Image\Color;
 use Imagine\Image\PointInterface;
 
 abstract class LinearTest extends \PHPUnit_Framework_TestCase
@@ -23,15 +23,14 @@ abstract class LinearTest extends \PHPUnit_Framework_TestCase
     private $fill;
 
     /**
-     * @var ColorInterface
+     * @var Imagine\Image\Color
      */
     private $start;
 
     /**
-     * @var ColorInterface
+     * @var Imagine\Image\Color
      */
     private $end;
-    protected $palette;
 
     protected function setUp()
     {
@@ -46,7 +45,7 @@ abstract class LinearTest extends \PHPUnit_Framework_TestCase
      * @param integer                      $shade
      * @param Imagine\Image\PointInterface $position
      */
-    public function testShouldProvideCorrectColorsValues(ColorInterface $color, PointInterface $position)
+    public function testShouldProvideCorrectColorsValues(Color $color, PointInterface $position)
     {
         $this->assertEquals($color, $this->fill->getColor($position));
     }
@@ -61,32 +60,21 @@ abstract class LinearTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->end, $this->fill->getEnd());
     }
 
-    protected function getColor($color)
-    {
-        static $palette;
-
-        if (!$palette) {
-            $palette = new RGB();
-        }
-
-        return $palette->color($color);
-    }
-
     /**
-     * @param ColorInterface $start
-     * @param ColorInterface $end
+     * @param Imagine\Image\Color $start
+     * @param Imagine\Image\Color $end
      *
      * @return Imagine\Image\Fill\FillInterface
      */
-    abstract protected function getFill(ColorInterface $start, ColorInterface $end);
+    abstract protected function getFill(Color $start, Color $end);
 
     /**
-     * @return ColorInterface
+     * @return Imagine\Image\Color
      */
     abstract protected function getStart();
 
     /**
-     * @return ColorInterface
+     * @return Imagine\Image\Color
      */
     abstract protected function getEnd();
 

@@ -16,15 +16,13 @@ use Imagine\Exception\InvalidArgumentException;
 use Imagine\Exception\RuntimeException;
 use Imagine\Image\Box;
 use Imagine\Image\BoxInterface;
-use Imagine\Image\Palette\Color\ColorInterface;
+use Imagine\Image\Color;
 use Imagine\Image\Fill\FillInterface;
 use Imagine\Image\Fill\Gradient\Horizontal;
 use Imagine\Image\Fill\Gradient\Linear;
 use Imagine\Image\Point;
 use Imagine\Image\PointInterface;
-use Imagine\Image\ProfileInterface;
 use Imagine\Image\ImageInterface;
-use Imagine\Image\Palette\PaletteInterface;
 
 /**
  * Image implementation using the Imagick PHP extension
@@ -39,29 +37,16 @@ final class Image implements ImageInterface
      * @var Layers
      */
     private $layers;
-    /**
-     *
-     * @var PaletteInterface
-     */
-    private $palette;
-
-    private static $colorspaceMapping = array(
-        PaletteInterface::PALETTE_CMYK      => \Imagick::COLORSPACE_CMYK,
-        PaletteInterface::PALETTE_RGB       => \Imagick::COLORSPACE_RGB,
-        PaletteInterface::PALETTE_GRAYSCALE => \Imagick::COLORSPACE_GRAY,
-    );
 
     /**
      * Constructs Image with Imagick and Imagine instances
      *
-     * @param \Imagick         $imagick
-     * @param PaletteInterface $palette
+     * @param \Imagick $imagick
      */
-    public function __construct(\Imagick $imagick, PaletteInterface $palette)
+    public function __construct(\Imagick $imagick)
     {
         $this->imagick = $imagick;
-        $this->setColorspace($palette);
-        $this->layers = new Layers($this, $this->palette, $this->imagick);
+        $this->layers = new Layers($this, $this->imagick);
     }
 
     /**
@@ -102,7 +87,7 @@ final class Image implements ImageInterface
             );
         }
 
-        return new self($clone, $this->palette);
+        return new self($clone);
     }
 
     /**
@@ -173,7 +158,6 @@ final class Image implements ImageInterface
     public function strip()
     {
         try {
-            $this->profile($this->palette->profile());
             $this->imagick->stripImage();
         } catch (\ImagickException $e) {
             throw new RuntimeException(
@@ -266,9 +250,9 @@ final class Image implements ImageInterface
     /**
      * {@inheritdoc}
      */
-    public function rotate($angle, ColorInterface $background = null)
+    public function rotate($angle, Color $background = null)
     {
-        $color = $background ? $background : $this->palette->color('fff');
+        $color = $background ? $background : new Color('fff');
 
         try {
             $pixel = $this->getColor($color);
@@ -289,15 +273,8 @@ final class Image implements ImageInterface
     /**
      * {@inheritdoc}
      */
-    public function save($path = null, array $options = array())
+    public function save($path, array $options = array())
     {
-        $path = null === $path ? $this->imagick->getImageFilename() : $path;
-        if (null === $path) {
-            throw new RuntimeException(
-                'You can omit save path only if image has been open from a file'
-            );
-        }
-
         try {
             $this->prepareOutput($options);
             $this->imagick->writeImages($path, true);
@@ -340,7 +317,7 @@ final class Image implements ImageInterface
 
     /**
      * {@inheritdoc}
-     */
+     **/
     public function interlace($scheme)
     {
         static $supportedInterlaceSchemes = array(
@@ -409,16 +386,10 @@ final class Image implements ImageInterface
 
         $imageSize = $this->getSize();
         $thumbnail = $this->copy();
-        // forces profile usage, it will merge current profile in the picture
-        // required as the next methods will strip the thumbnail and remove
-        // profiles.
-        $thumbnail->usePalette($this->palette);
 
         // if target width is larger than image width
         // AND target height is longer than image height
         if ($size->contains($imageSize)) {
-            $thumbnail->strip();
-
             return $thumbnail;
         }
 
@@ -595,19 +566,21 @@ final class Image implements ImageInterface
      */
     public function histogram()
     {
-        try {
-            $pixels = $this->imagick->getImageHistogram();
-        } catch (\ImagickException $e) {
-            throw new RuntimeException(
-                'Error while fetching histogram', $e->getCode(), $e
-            );
-        }
-
-        $image = $this;
+        $pixels = $this->imagick->getImageHistogram();
 
         return array_map(
-            function(\ImagickPixel $pixel) use ($image) {
-                return $image->pixelToColor($pixel);
+            function(\ImagickPixel $pixel) {
+                $info = $pixel->getColor();
+                $opacity = isset($infos['a']) ? $info['a'] : 0;
+
+                return new Color(
+                    array(
+                        $info['r'],
+                        $info['g'],
+                        $info['b'],
+                    ),
+                    (int) round($opacity * 100)
+                );
             },
             $pixels
         );
@@ -624,54 +597,14 @@ final class Image implements ImageInterface
                 $point->getX(), $point->getY(), $this->getSize()->getWidth(), $this->getSize()->getHeight()
             ));
         }
+        $pixel = $this->imagick->getImagePixelColor($point->getX(), $point->getY());
 
-        try {
-            $pixel = $this->imagick->getImagePixelColor($point->getX(), $point->getY());
-        } catch (\ImagickException $e) {
-            throw new RuntimeException(
-                'Error while getting image pixel color', $e->getCode(), $e
-            );
-        }
-
-        return $this->pixelToColor($pixel);
-    }
-
-    /**
-     * Returns a color given a pixel, depending the Palette context
-     *
-     * Note : this method is public for PHP 5.3 compatibility
-     *
-     * @param \ImagickPixel $pixel
-     *
-     * @return ColorInterface
-     *
-     * @throws InvalidArgumentException In case a unknown color is requested
-     */
-    public function pixelToColor(\ImagickPixel $pixel)
-    {
-        static $colorMapping = array(
-            ColorInterface::COLOR_RED     => \Imagick::COLOR_RED,
-            ColorInterface::COLOR_GREEN   => \Imagick::COLOR_GREEN,
-            ColorInterface::COLOR_BLUE    => \Imagick::COLOR_BLUE,
-            ColorInterface::COLOR_CYAN    => \Imagick::COLOR_CYAN,
-            ColorInterface::COLOR_MAGENTA => \Imagick::COLOR_MAGENTA,
-            ColorInterface::COLOR_YELLOW  => \Imagick::COLOR_YELLOW,
-            ColorInterface::COLOR_KEYLINE => \Imagick::COLOR_BLACK,
-        );
-
-        $alpha = $this->palette->supportsAlpha() ? (int) round($pixel->getColorValue(\Imagick::COLOR_ALPHA) * 100) : null;
-
-        return $this->palette->color(
-            array_map(function ($color) use ($pixel, $colorMapping) {
-                if (!isset($colorMapping[$color])) {
-                    throw new InvalidArgumentException(
-                        'Color %s is not mapped in Imagick'
-                    );
-                }
-
-                return $pixel->getColorValue($colorMapping[$color]) * 255;
-            }, $this->palette->pixelDefinition()),
-            $alpha
+        return new Color(array(
+                $pixel->getColorValue(\Imagick::COLOR_RED) * 255,
+                $pixel->getColorValue(\Imagick::COLOR_GREEN) * 255,
+                $pixel->getColorValue(\Imagick::COLOR_BLUE) * 255,
+            ),
+            (int) round($pixel->getColorValue(\Imagick::COLOR_ALPHA) * 100)
         );
     }
 
@@ -681,66 +614,6 @@ final class Image implements ImageInterface
     public function layers()
     {
         return $this->layers;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function usePalette(PaletteInterface $palette)
-    {
-        if (!isset(static::$colorspaceMapping[$palette->name()])) {
-            throw new InvalidArgumentException(sprintf(
-                'The palette %s is not supported by Imagick driver',
-                $palette->name()
-            ));
-        }
-
-        if ($this->palette->name() === $palette->name()) {
-            return $this;
-        }
-
-        try {
-            try {
-                $hasICCProfile = (Boolean) $this->imagick->getImageProfile('icc');
-            } catch (\ImagickException $e) {
-                $hasICCProfile = false;
-            }
-
-            if (!$hasICCProfile) {
-                $this->profile($this->palette->profile());
-            }
-
-            $this->profile($palette->profile());
-            $this->setColorspace($palette);
-        } catch (\ImagickException $e) {
-            throw new RuntimeException('Failed to set colorspace', $e->getCode(), $e);
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function palette()
-    {
-        return $this->palette;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function profile(ProfileInterface $profile)
-    {
-        try {
-            $this->imagick->profileImage('icc', $profile->data());
-        } catch (\ImagickException $e) {
-            throw new RuntimeException(sprintf(
-                'Unable to add profile %s to image', $profile->name()
-            ), $e->getCode(), $e);
-        }
-
-        return $this;
     }
 
     /**
@@ -792,11 +665,11 @@ final class Image implements ImageInterface
     /**
      * Gets specifically formatted color string from Color instance
      *
-     * @param ColorInterface $color
+     * @param Color $color
      *
      * @return string
      */
-    private function getColor(ColorInterface $color)
+    private function getColor(Color $color)
     {
         $pixel = new \ImagickPixel((string) $color);
 
@@ -893,32 +766,5 @@ final class Image implements ImageInterface
         }
 
         return $mimeTypes[$format];
-    }
-
-    /**
-     * Sets colorspace and image type, assigns the palette.
-     *
-     * @param PaletteInterface $palette
-     *
-     * @throws InvalidArgumentException
-     */
-    private function setColorspace(PaletteInterface $palette)
-    {
-        static $typeMapping = array(
-            PaletteInterface::PALETTE_CMYK      => \Imagick::IMGTYPE_TRUECOLOR,
-            PaletteInterface::PALETTE_RGB       => \Imagick::IMGTYPE_TRUECOLOR,
-            PaletteInterface::PALETTE_GRAYSCALE => \Imagick::IMGTYPE_GRAYSCALE,
-        );
-
-        if (!isset(static::$colorspaceMapping[$palette->name()])) {
-            throw new InvalidArgumentException(sprintf(
-                'The palette %s is not supported by Imagick driver',
-                $palette->name()
-            ));
-        }
-
-        $this->imagick->setType($typeMapping[$palette->name()]);
-        $this->imagick->setColorspace(static::$colorspaceMapping[$palette->name()]);
-        $this->palette = $palette;
     }
 }

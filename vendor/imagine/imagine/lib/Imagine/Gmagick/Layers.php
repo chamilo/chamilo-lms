@@ -16,7 +16,6 @@ use Imagine\Gmagick\Image;
 use Imagine\Exception\RuntimeException;
 use Imagine\Exception\OutOfBoundsException;
 use Imagine\Exception\InvalidArgumentException;
-use Imagine\Image\Palette\PaletteInterface;
 
 class Layers extends AbstractLayers
 {
@@ -37,13 +36,10 @@ class Layers extends AbstractLayers
      */
     private $layers = array();
 
-    private $palette;
-
-    public function __construct(Image $image, PaletteInterface $palette, \Gmagick $resource)
+    public function __construct(Image $image, \Gmagick $resource)
     {
         $this->image = $image;
         $this->resource = $resource;
-        $this->palette = $palette;
     }
 
     /**
@@ -120,7 +116,7 @@ class Layers extends AbstractLayers
         if (!isset($this->layers[$offset])) {
             try {
                 $this->resource->setimageindex($offset);
-                $this->layers[$offset] = new Image($this->resource->getimage(), $this->palette);
+                $this->layers[$offset] = new Image($this->resource->getimage());
             } catch (\GmagickException $e) {
                 throw new RuntimeException(
                     sprintf('Failed to extract layer %d', $offset),

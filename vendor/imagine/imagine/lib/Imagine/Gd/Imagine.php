@@ -11,12 +11,9 @@
 
 namespace Imagine\Gd;
 
-use Imagine\Image\Palette\Color\ColorInterface;
-use Imagine\Image\Palette\RGB;
-use Imagine\Image\Palette\PaletteInterface;
+use Imagine\Image\Color;
 use Imagine\Image\BoxInterface;
 use Imagine\Image\ImagineInterface;
-use Imagine\Image\Palette\Color\RGB as RGBColor;
 use Imagine\Exception\InvalidArgumentException;
 use Imagine\Exception\RuntimeException;
 
@@ -58,7 +55,7 @@ final class Imagine implements ImagineInterface
     /**
      * {@inheritdoc}
      */
-    public function create(BoxInterface $size, ColorInterface $color = null)
+    public function create(BoxInterface $size, Color $color = null)
     {
         $width  = $size->getWidth();
         $height = $size->getHeight();
@@ -69,15 +66,7 @@ final class Imagine implements ImagineInterface
             throw new RuntimeException('Create operation failed');
         }
 
-        $palette = null !== $color ? $color->getPalette() : new RGB();
-        $color = $color ? $color : $palette->color('fff');
-
-        if (!$color instanceof RGBColor) {
-            throw new InvalidArgumentException(
-                'GD driver only supports RGB colors'
-            );
-        }
-
+        $color = $color ? $color : new Color('fff');
         $index = imagecolorallocatealpha(
             $resource, $color->getRed(), $color->getGreen(), $color->getBlue(),
             round(127 * $color->getAlpha() / 100)
@@ -95,7 +84,7 @@ final class Imagine implements ImagineInterface
             imagecolortransparent($resource, $index);
         }
 
-        return $this->wrap($resource, $palette);
+        return $this->wrap($resource);
     }
 
     /**
@@ -103,21 +92,22 @@ final class Imagine implements ImagineInterface
      */
     public function open($path)
     {
-        $data = @file_get_contents($path);
+        $handle = @fopen($path, 'r');
 
-        if (false === $data) {
+        if (false === $handle) {
             throw new InvalidArgumentException(sprintf(
                 'File %s doesn\'t exist', $path
             ));
         }
 
-        $resource = @imagecreatefromstring($data);
-
-        if (!is_resource($resource)) {
-            throw new InvalidArgumentException(sprintf('Unable to open image %s', $path));
+        try {
+            $image = $this->read($handle);
+        } catch (\Exception $e) {
+            fclose($handle);
+            throw new RuntimeException(sprintf('Unable to open image %s', $path), $e->getCode(), $e);
         }
 
-        return $this->wrap($resource, new RGB(), $path);
+        return $image;
     }
 
     /**
@@ -131,7 +121,7 @@ final class Imagine implements ImagineInterface
             throw new InvalidArgumentException('An image could not be created from the given input');
         }
 
-        return $this->wrap($resource, new RGB());
+        return $this->wrap($resource);
     }
 
     /**
@@ -155,7 +145,7 @@ final class Imagine implements ImagineInterface
     /**
      * {@inheritdoc}
      */
-    public function font($file, $size, ColorInterface $color)
+    public function font($file, $size, Color $color)
     {
         if (!$this->info['FreeType Support']) {
             throw new RuntimeException('GD is not compiled with FreeType support');
@@ -164,7 +154,7 @@ final class Imagine implements ImagineInterface
         return new Font($file, $size, $color);
     }
 
-    private function wrap($resource, PaletteInterface $palette, $path = null)
+    private function wrap($resource)
     {
         if (!imageistruecolor($resource)) {
             list($width, $height) = array(imagesx($resource), imagesy($resource));
@@ -193,6 +183,6 @@ final class Imagine implements ImagineInterface
             imageantialias($resource, true);
         }
 
-        return new Image($resource, $palette, $path);
+        return new Image($resource);
     }
 }

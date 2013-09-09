@@ -390,20 +390,6 @@ class AbstractGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $r->invokeArgs($media, array($binary, $url, $path, $options)));
     }
 
-<<<<<<< HEAD
-    public function dataForBuildCommand()
-    {
-        return array(
-            array(
-                'thebinary',
-                'http://the.url/',
-                '/the/path',
-                array(),
-                "thebinary 'http://the.url/' '/the/path'"
-            ),
-            array(
-                'thebinary',
-=======
     private function getPHPExecutableFromPath() {
         if (isset($_SERVER["_"])) {
             return $_SERVER["_"];
@@ -443,7 +429,6 @@ class AbstractGeneratorTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 $theBinary,
->>>>>>> chamilo10
                 'http://the.url/',
                 '/the/path',
                 array(
@@ -451,17 +436,10 @@ class AbstractGeneratorTest extends \PHPUnit_Framework_TestCase
                     'bar'   => false,
                     'baz'   => array()
                 ),
-<<<<<<< HEAD
-                "thebinary 'http://the.url/' '/the/path'"
-            ),
-            array(
-                'thebinary',
-=======
                 "{$theBinary} 'http://the.url/' '/the/path'"
             ),
             array(
                 $theBinary,
->>>>>>> chamilo10
                 'http://the.url/',
                 '/the/path',
                 array(
@@ -469,45 +447,27 @@ class AbstractGeneratorTest extends \PHPUnit_Framework_TestCase
                     'bar'   => array('barvalue1', 'barvalue2'),
                     'baz'   => true
                 ),
-<<<<<<< HEAD
-                "thebinary --foo 'foovalue' --bar 'barvalue1' --bar 'barvalue2' --baz 'http://the.url/' '/the/path'"
-            ),
-            array(
-                'thebinary',
-=======
                 "{$theBinary} --foo 'foovalue' --bar 'barvalue1' --bar 'barvalue2' --baz 'http://the.url/' '/the/path'"
             ),
             array(
                 $theBinary,
->>>>>>> chamilo10
                 'http://the.url/',
                 '/the/path',
                 array(
                     'cookie'   => array('session' => 'bla', 'phpsess' => 12),
                     'no-background'   => '1',
                 ),
-<<<<<<< HEAD
-                "thebinary --cookie 'session' 'bla' --cookie 'phpsess' '12' --no-background '1' 'http://the.url/' '/the/path'"
-            ),
-            array(
-                'thebinary',
-=======
                 "{$theBinary} --cookie 'session' 'bla' --cookie 'phpsess' '12' --no-background '1' 'http://the.url/' '/the/path'"
             ),
             array(
                 $theBinary,
->>>>>>> chamilo10
                 'http://the.url/',
                 '/the/path',
                 array(
                     'allow'   => array('/path1', '/path2'),
                     'no-background'   => '1',
                 ),
-<<<<<<< HEAD
-                "thebinary --allow '/path1' --allow '/path2' --no-background '1' 'http://the.url/' '/the/path'"
-=======
                 "{$theBinary} --allow '/path1' --allow '/path2' --no-background '1' 'http://the.url/' '/the/path'"
->>>>>>> chamilo10
             ),
         );
     }

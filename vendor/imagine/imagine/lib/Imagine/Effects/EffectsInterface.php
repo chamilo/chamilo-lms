@@ -12,7 +12,7 @@
 namespace Imagine\Effects;
 
 use Imagine\Exception\RuntimeException;
-use Imagine\Image\Palette\Color\ColorInterface;
+use Imagine\Image\Color;
 
 /**
  * Interface for the effects
@@ -50,13 +50,13 @@ interface EffectsInterface
     /**
      * Colorize the image
      *
-     * @param ColorInterface $color
+     * @param Color $color
      *
      * @return EffectsInterface
      *
      * @throws RuntimeException
      */
-    public function colorize(ColorInterface $color);
+    public function colorize(Color $color);
 
     /**
      * Sharpens the image

@@ -11,7 +11,7 @@
 
 namespace Imagine\Image\Fill\Gradient;
 
-use Imagine\Image\Palette\Color\ColorInterface;
+use Imagine\Image\Color;
 use Imagine\Image\Fill\FillInterface;
 use Imagine\Image\PointInterface;
 
@@ -26,12 +26,12 @@ abstract class Linear implements FillInterface
     private $length;
 
     /**
-     * @var ColorInterface
+     * @var Color
      */
     private $start;
 
     /**
-     * @var ColorInterface
+     * @var Color
      */
     private $end;
 
@@ -39,11 +39,11 @@ abstract class Linear implements FillInterface
      * Constructs a linear gradient with overall gradient length, and start and
      * end shades, which default to 0 and 255 accordingly
      *
-     * @param integer        $length
-     * @param ColorInterface $start
-     * @param ColorInterface $end
+     * @param integer $length
+     * @param Color   $start
+     * @param Color   $end
      */
-    final public function __construct($length, ColorInterface $start, ColorInterface $end)
+    final public function __construct($length, Color $start, Color $end)
     {
         $this->length = $length;
         $this->start  = $start;
@@ -65,11 +65,19 @@ abstract class Linear implements FillInterface
             return $this->start;
         }
 
-        return $this->start->getPalette()->blend($this->start, $this->end, $l / $this->length);
+        $color = new Color(array(
+                (int) min(255, min($this->start->getRed(), $this->end->getRed()) + round(abs($this->end->getRed() - $this->start->getRed()) * $l / $this->length)),
+                (int) min(255, min($this->start->getGreen(), $this->end->getGreen()) + round(abs($this->end->getGreen() - $this->start->getGreen()) * $l / $this->length)),
+                (int) min(255, min($this->start->getBlue(), $this->end->getBlue()) + round(abs($this->end->getBlue() - $this->start->getBlue()) * $l / $this->length)),
+            ),
+            (int) min(100, min($this->start->getAlpha(), $this->end->getAlpha()) + round(abs($this->end->getAlpha() - $this->start->getAlpha()) * $l / $this->length))
+        );
+
+        return $color;
     }
 
     /**
-     * @return ColorInterface
+     * @return Color
      */
     final public function getStart()
     {
@@ -77,7 +85,7 @@ abstract class Linear implements FillInterface
     }
 
     /**
-     * @return ColorInterface
+     * @return Color
      */
     final public function getEnd()
     {

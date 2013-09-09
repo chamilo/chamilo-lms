@@ -11,7 +11,7 @@
 
 namespace Imagine\Image;
 
-use Imagine\Image\Palette\Color\ColorInterface;
+use Imagine\Image\Color;
 
 /**
  * Abstract font base class
@@ -29,7 +29,7 @@ abstract class AbstractFont implements FontInterface
     protected $size;
 
     /**
-     * @var ColorInterface
+     * @var Color
      */
     protected $color;
 
@@ -38,11 +38,11 @@ abstract class AbstractFont implements FontInterface
      *
      * The font size is to be specified in points (e.g. 10pt means 10)
      *
-     * @param string         $file
-     * @param integer        $size
-     * @param ColorInterface $color
+     * @param string  $file
+     * @param integer $size
+     * @param Color   $color
      */
-    public function __construct($file, $size, ColorInterface $color)
+    public function __construct($file, $size, Color $color)
     {
         $this->file  = $file;
         $this->size  = $size;

@@ -15,22 +15,14 @@ abstract class AbstractGenerator implements GeneratorInterface
     private $binary;
     private $options = array();
     private $env;
-<<<<<<< HEAD
-=======
     private $timeout = false;
->>>>>>> chamilo10
     private $defaultExtension;
 
     /**
      * Constructor
      *
-<<<<<<< HEAD
-     * @param  string $binary
-     * @param  array  $options
-=======
      * @param string $binary
      * @param array  $options
->>>>>>> chamilo10
      */
     public function __construct($binary, array $options = array(), array $env = null)
     {
@@ -73,13 +65,8 @@ abstract class AbstractGenerator implements GeneratorInterface
      * Sets an option. Be aware that option values are NOT validated and that
      * it is your responsibility to validate user inputs
      *
-<<<<<<< HEAD
-     * @param  string $name  The option to set
-     * @param  mixed  $value The value (NULL to unset)
-=======
      * @param string $name  The option to set
      * @param mixed  $value The value (NULL to unset)
->>>>>>> chamilo10
      */
     public function setOption($name, $value)
     {
@@ -91,11 +78,6 @@ abstract class AbstractGenerator implements GeneratorInterface
     }
 
     /**
-<<<<<<< HEAD
-     * Sets an array of options
-     *
-     * @param  array $options An associative array of options as name/value
-=======
      * Sets the timeout. Be aware that option only works with symfony
      *
      * @param integer $timeout The timeout to set
@@ -109,7 +91,6 @@ abstract class AbstractGenerator implements GeneratorInterface
      * Sets an array of options
      *
      * @param array $options An associative array of options as name/value
->>>>>>> chamilo10
      */
     public function setOptions(array $options)
     {
@@ -194,11 +175,7 @@ abstract class AbstractGenerator implements GeneratorInterface
     /**
      * Defines the binary
      *
-<<<<<<< HEAD
-     * @param  string $binary The path/name of the binary
-=======
      * @param string $binary The path/name of the binary
->>>>>>> chamilo10
      */
     public function setBinary($binary)
     {
@@ -218,15 +195,9 @@ abstract class AbstractGenerator implements GeneratorInterface
     /**
      * Returns the command for the given input and output files
      *
-<<<<<<< HEAD
-     * @param  string $input   The input file
-     * @param  string $output  The ouput file
-     * @param  array  $options An optional array of options that will be used
-=======
      * @param string $input   The input file
      * @param string $output  The ouput file
      * @param array  $options An optional array of options that will be used
->>>>>>> chamilo10
      *                         only for this command
      *
      * @return string
@@ -241,13 +212,8 @@ abstract class AbstractGenerator implements GeneratorInterface
     /**
      * Adds an option
      *
-<<<<<<< HEAD
-     * @param  string $name    The name
-     * @param  mixed  $default An optional default value
-=======
      * @param string $name    The name
      * @param mixed  $default An optional default value
->>>>>>> chamilo10
      */
     protected function addOption($name, $default = null)
     {
@@ -261,11 +227,7 @@ abstract class AbstractGenerator implements GeneratorInterface
     /**
      * Adds an array of options
      *
-<<<<<<< HEAD
-     * @param  array $options
-=======
      * @param array $options
->>>>>>> chamilo10
      */
     protected function addOptions(array $options)
     {
@@ -278,11 +240,7 @@ abstract class AbstractGenerator implements GeneratorInterface
      * Merges the given array of options to the instance options and returns
      * the result options array. It does NOT change the instance options.
      *
-<<<<<<< HEAD
-     * @param  array $options
-=======
      * @param array $options
->>>>>>> chamilo10
      *
      * @return array
      */
@@ -304,13 +262,8 @@ abstract class AbstractGenerator implements GeneratorInterface
     /**
      * Checks the specified output
      *
-<<<<<<< HEAD
-     * @param  string $output  The output filename
-     * @param  string $command The generation command
-=======
      * @param string $output  The output filename
      * @param string $command The generation command
->>>>>>> chamilo10
      *
      * @throws RuntimeException if the output file generation failed
      */
@@ -336,17 +289,10 @@ abstract class AbstractGenerator implements GeneratorInterface
     /**
      * Checks the process return status
      *
-<<<<<<< HEAD
-     * @param  int   $status    The exit status code
-     * @param  string $stdout   The stdout content
-     * @param  string $stderr   The stderr content
-     * @param  string $command  The run command
-=======
      * @param int    $status  The exit status code
      * @param string $stdout  The stdout content
      * @param string $stderr  The stderr content
      * @param string $command The run command
->>>>>>> chamilo10
      *
      * @throws RuntimeException if the output file generation failed
      */
@@ -367,13 +313,8 @@ abstract class AbstractGenerator implements GeneratorInterface
      * Creates a temporary file.
      * The file is not created if the $content argument is null
      *
-<<<<<<< HEAD
-     * @param  string $content  Optional content for the temporary file
-     * @param  string $extension An optional extension for the filename
-=======
      * @param string $content   Optional content for the temporary file
      * @param string $extension An optional extension for the filename
->>>>>>> chamilo10
      *
      * @return string The filename
      */
@@ -395,30 +336,20 @@ abstract class AbstractGenerator implements GeneratorInterface
     /**
      * Builds the command string
      *
-<<<<<<< HEAD
-     * @param  string $binary   The binary path/name
-     * @param  string $input    Url or file location of the page to process
-     * @param  string $output   File location to the image-to-be
-     * @param  array  $options  An array of options
-=======
      * @param string $binary  The binary path/name
      * @param string $input   Url or file location of the page to process
      * @param string $output  File location to the image-to-be
      * @param array  $options An array of options
->>>>>>> chamilo10
      *
      * @return string
      */
     protected function buildCommand($binary, $input, $output, array $options = array())
     {
         $command = $binary;
-<<<<<<< HEAD
-=======
         $escapedBinary = escapeshellarg($binary);
         if (is_executable($escapedBinary)) {
             $command = $escapedBinary;
         }
->>>>>>> chamilo10
 
         foreach ($options as $key => $option) {
             if (null !== $option && false !== $option) {
@@ -453,30 +384,19 @@ abstract class AbstractGenerator implements GeneratorInterface
      * and not an indexed array
      *
      * @param array $array
-<<<<<<< HEAD
-=======
      *
->>>>>>> chamilo10
      * @return boolean
      */
     protected function isAssociativeArray(array $array)
     {
-<<<<<<< HEAD
-        return (bool)count(array_filter(array_keys($array), 'is_string'));
-=======
         return (bool) count(array_filter(array_keys($array), 'is_string'));
->>>>>>> chamilo10
     }
 
     /**
      * Executes the given command via shell and returns the complete output as
      * a string
      *
-<<<<<<< HEAD
-     * @param  string $command
-=======
      * @param string $command
->>>>>>> chamilo10
      *
      * @return array(status, stdout, stderr)
      */
@@ -484,12 +404,9 @@ abstract class AbstractGenerator implements GeneratorInterface
     {
         if (class_exists('Symfony\Component\Process\Process')) {
             $process = new \Symfony\Component\Process\Process($command, $this->env);
-<<<<<<< HEAD
-=======
             if ($this->timeout !== false) {
                 $process->setTimeout($this->timeout);
             }
->>>>>>> chamilo10
         } else {
             $process = new Process($command, $this->env);
         }
@@ -506,13 +423,8 @@ abstract class AbstractGenerator implements GeneratorInterface
     /**
      * Prepares the specified output
      *
-<<<<<<< HEAD
-     * @param  string  $filename  The output filename
-     * @param  boolean $overwrite Whether to overwrite the file if it already
-=======
      * @param string  $filename  The output filename
      * @param boolean $overwrite Whether to overwrite the file if it already
->>>>>>> chamilo10
      *                            exist
      */
     protected function prepareOutput($filename, $overwrite)
@@ -547,11 +459,7 @@ abstract class AbstractGenerator implements GeneratorInterface
     /**
      * Wrapper for the "file_get_contents" function
      *
-<<<<<<< HEAD
-     * @param  string $filename
-=======
      * @param string $filename
->>>>>>> chamilo10
      *
      * @return string
      */
@@ -563,11 +471,7 @@ abstract class AbstractGenerator implements GeneratorInterface
     /**
      * Wrapper for the "file_exists" function
      *
-<<<<<<< HEAD
-     * @param  string $filename
-=======
      * @param string $filename
->>>>>>> chamilo10
      *
      * @return boolean
      */
@@ -579,11 +483,7 @@ abstract class AbstractGenerator implements GeneratorInterface
     /**
      * Wrapper for the "is_file" method
      *
-<<<<<<< HEAD
-     * @param  string $filename
-=======
      * @param string $filename
->>>>>>> chamilo10
      *
      * @return boolean
      */
@@ -595,11 +495,7 @@ abstract class AbstractGenerator implements GeneratorInterface
     /**
      * Wrapper for the "filesize" function
      *
-<<<<<<< HEAD
-     * @param  string $filename
-=======
      * @param string $filename
->>>>>>> chamilo10
      *
      * @return integer or FALSE on failure
      */
@@ -611,11 +507,7 @@ abstract class AbstractGenerator implements GeneratorInterface
     /**
      * Wrapper for the "unlink" function
      *
-<<<<<<< HEAD
-     * @param  string $filename
-=======
      * @param string $filename
->>>>>>> chamilo10
      *
      * @return boolean
      */
@@ -627,11 +519,7 @@ abstract class AbstractGenerator implements GeneratorInterface
     /**
      * Wrapper for the "is_dir" function
      *
-<<<<<<< HEAD
-     * @param  string $filename
-=======
      * @param string $filename
->>>>>>> chamilo10
      *
      * @return boolean
      */
@@ -643,11 +531,7 @@ abstract class AbstractGenerator implements GeneratorInterface
     /**
      * Wrapper for the mkdir function
      *
-<<<<<<< HEAD
-     * @param  string $pathname
-=======
      * @param string $pathname
->>>>>>> chamilo10
      *
      * @return boolean
      */

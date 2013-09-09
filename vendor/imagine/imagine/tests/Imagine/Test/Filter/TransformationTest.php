@@ -1,5 +1,7 @@
 <?php
 
+namespace Imagine\Test\Filter;
+
 /*
  * This file is part of the Imagine package.
  *
@@ -9,10 +11,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Imagine\Test\Filter;
-
 use Imagine\Filter\Transformation;
 use Imagine\Image\Box;
+use Imagine\Image\Color;
 use Imagine\Image\Point;
 use Imagine\Image\ManipulatorInterface;
 
@@ -50,7 +51,7 @@ class TransformationTest extends FilterTestCase
         $size       = new Box(50, 50);
         $resize     = new Box(200, 200);
         $angle      = 90;
-        $background = $this->getPalette()->color('fff');
+        $background = new Color('fff');
 
         $image->expects($this->once())
             ->method('resize')

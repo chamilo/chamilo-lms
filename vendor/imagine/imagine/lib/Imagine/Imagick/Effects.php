@@ -13,7 +13,7 @@ namespace Imagine\Imagick;
 
 use Imagine\Effects\EffectsInterface;
 use Imagine\Exception\RuntimeException;
-use Imagine\Image\Palette\Color\ColorInterface;
+use Imagine\Image\Color;
 
 /**
  * Effects implementation using the Imagick PHP extension
@@ -72,7 +72,7 @@ class Effects implements EffectsInterface
     /**
      * {@inheritdoc}
      */
-    public function colorize(ColorInterface $color)
+    public function colorize(Color $color)
     {
         try {
             $this->imagick->colorizeImage((string) $color, 1);

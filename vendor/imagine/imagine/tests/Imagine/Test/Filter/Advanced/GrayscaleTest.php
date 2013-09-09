@@ -14,8 +14,9 @@ namespace Imagine\Test\Filter\Advanced;
 use Imagine\Filter\Advanced\Grayscale;
 use Imagine\Image\Box;
 use Imagine\Image\BoxInterface;
+use Imagine\Image\Color;
+use Imagine\Image\Point;
 use Imagine\Test\Filter\FilterTestCase;
-use Imagine\Image\Palette\Color\ColorInterface;
 
 class GrayscaleTest extends FilterTestCase
 {
@@ -24,11 +25,11 @@ class GrayscaleTest extends FilterTestCase
      *
      * @dataProvider getDataSet
      *
-     * @param BoxInterface   $size
-     * @param ColorInterface $color
-     * @param ColorInterface $filteredColor
+     * @param \Imagine\Image\BoxInterface $size
+     * @param \Imagine\Image\Color        $color
+     * @param \Imagine\Image\Color        $filteredColor
      */
-    public function testGrayscaling(BoxInterface $size, ColorInterface $color, ColorInterface $filteredColor)
+    public function testGrayscaling(BoxInterface $size, Color $color, Color $filteredColor)
     {
         $image       = $this->getImage();
         $imageWidth  = $size->getWidth();
@@ -51,10 +52,6 @@ class GrayscaleTest extends FilterTestCase
             ->method('getColorAt')
             ->will($this->returnValue($color));
 
-        $color->expects($this->exactly($imageWidth*$imageHeight))
-            ->method('grayscale')
-            ->will($this->returnValue($filteredColor));
-
         $draw = $this->getDrawer();
         $draw->expects($this->exactly($imageWidth*$imageHeight))
             ->method('dot')
@@ -76,9 +73,9 @@ class GrayscaleTest extends FilterTestCase
     public function getDataSet()
     {
         return array(
-            array(new Box(20, 10), $this->getColor(), $this->getColor()),
-            array(new Box(10, 15), $this->getColor(), $this->getColor()),
-            array(new Box(12, 23), $this->getColor(), $this->getColor()),
+            array(new Box(20, 10), new Color('#D02090'), new Color('#808080')),
+            array(new Box(10, 15), new Color('#778899'), new Color('#888888')),
+            array(new Box(12, 23), new Color('#00FA9A'), new Color('#878787')),
         );
     }
 }

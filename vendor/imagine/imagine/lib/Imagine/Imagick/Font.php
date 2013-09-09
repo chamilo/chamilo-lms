@@ -13,7 +13,7 @@ namespace Imagine\Imagick;
 
 use Imagine\Image\AbstractFont;
 use Imagine\Image\Box;
-use Imagine\Image\Palette\Color\ColorInterface;
+use Imagine\Image\Color;
 
 /**
  * Font implementation using the Imagick PHP extension
@@ -26,12 +26,12 @@ final class Font extends AbstractFont
     private $imagick;
 
     /**
-     * @param \Imagick       $imagick
-     * @param string         $file
-     * @param integer        $size
-     * @param ColorInterface $color
+     * @param \Imagick $imagick
+     * @param string   $file
+     * @param integer  $size
+     * @param Color    $color
      */
-    public function __construct(\Imagick $imagick, $file, $size, ColorInterface $color)
+    public function __construct(\Imagick $imagick, $file, $size, Color $color)
     {
         $this->imagick = $imagick;
 

@@ -74,11 +74,11 @@ class JuryMemberController extends CommonController
 
             $juryCorrections = 1;
             foreach ($tempAttempt as $memberId => $answerCount) {
-                $relations[$user->getUserId()][$memberId] = $answerCount;
+                $relations[$attempt->getExeId()][$user->getUserId()][$memberId] = $answerCount;
 
                 // the jury_member correct the attempt
                 if (!empty($answerCount) && $userId == $memberId) {
-                    $myStudentStatus[$user->getUserId()] = true;
+                    $myStudentStatus[$attempt->getExeId()][$user->getUserId()] = true;
                 }
                 $juryCorrections++;
             }
@@ -342,7 +342,6 @@ class JuryMemberController extends CommonController
                         $obj->setQuestionId($questionId);
                     }
                     $em->persist($obj);
-                    $em->flush();
                 }
             }
 
@@ -350,6 +349,7 @@ class JuryMemberController extends CommonController
             $attempt->setJuryId($juryId);
             //$attempt->setJuryScore($totalScore);
             $em->persist($attempt);
+            $em->flush();
 
             $this->get('session')->getFlashBag()->add('success', "Saved");
             //$url = $this->generateUrl('jury_member.controller:scoreAttemptAction', array('exeId' => $exeId, 'juryId' => $juryId));

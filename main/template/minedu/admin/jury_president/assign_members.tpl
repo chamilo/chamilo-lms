@@ -62,7 +62,7 @@
                         {% set memberHover = '' %}
                     {% endif %}
 
-                    {% if relations[attempt.user.getUserId][member.user.userId] %}
+                    {% if relations[attempt.exeId][attempt.user.getUserId][member.user.userId] %}
                         {% set checkedSuccess = 'class="success"' %}
                         {% set disabled = 'disabled' %}
                     {% else %}
@@ -83,7 +83,7 @@
                     </td>
                 {% endfor %}
                 <td>
-                    {% if my_student_status[attempt.user.getUserId] %}
+                    {% if my_student_status[attempt.exeId][attempt.user.getUserId] %}
                         <a href="#" class="btn btn-success disabled">Evaluado</a>
                     {% else %}
                         {% if attempt.user.getUserId in students_by_member[_u.user_id] %}

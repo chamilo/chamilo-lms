@@ -14,7 +14,7 @@ use \ChamiloSession as Session;
  * Constants declaration
  */
 // PHP version requirement.
-define('REQUIRED_PHP_VERSION', '5.3');
+define('REQUIRED_PHP_VERSION', '5.3.3');
 define('REQUIRED_MIN_MEMORY_LIMIT',         '32');
 define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE',  '10');
 define('REQUIRED_MIN_POST_MAX_SIZE',        '10');
@@ -6023,7 +6023,7 @@ function api_block_course_item_locked_by_gradebook($item_id, $link_type, $course
  * @return void
  */
 function api_check_php_version() {
-    if (!function_exists('version_compare') || version_compare( phpversion(), REQUIRED_PHP_VERSION, '<')) {
+    if (version_compare(phpversion(), REQUIRED_PHP_VERSION, '<')) {
         return false;
     }
     return true;

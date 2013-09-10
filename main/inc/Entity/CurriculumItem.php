@@ -62,6 +62,9 @@ class CurriculumItem
      */
     private $userItems;
 
+    /**
+     *
+     */
     public function __construct()
     {
         $this->userItems = new ArrayCollection();

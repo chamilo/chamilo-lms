@@ -117,6 +117,9 @@ class CQuizQuestion
         $this->extraFields = new ArrayCollection();
     }
 
+    /**
+     * @return ArrayCollection
+     */
     public function getCategories()
     {
         return $this->quizQuestionRelCategoryList;

@@ -216,14 +216,19 @@ class Course
     {
         $this->users = new ArrayCollection();
         $this->items = new ArrayCollection();
-        //$this->curriculumCategories = new ArrayCollection();
     }
 
+    /**
+     * @return ArrayCollection
+     */
     public function getItems()
     {
         return $this->items;
     }
 
+    /**
+     * @return ArrayCollection
+     */
     public function getUsers()
     {
         return $this->users;

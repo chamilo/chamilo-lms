@@ -140,7 +140,6 @@ class Session
         $this->items = new ArrayCollection();
     }
 
-
     /**
      * Get id
      *

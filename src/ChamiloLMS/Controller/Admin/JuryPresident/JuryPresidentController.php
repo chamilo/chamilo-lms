@@ -23,6 +23,7 @@ use Whoops\Example\Exception;
  */
 class JuryPresidentController extends CommonController
 {
+    public $maxCountOfMemberToVoteToConsiderEvaluated = 3;
     /**
     * @Route("/")
     * @Method({"GET"})
@@ -142,36 +143,40 @@ class JuryPresidentController extends CommonController
 
         // @todo move logic in a repository
         /** @var Entity\TrackExercise $attempt */
-        $students = array();
         $relations = array();
-        $myStatusForStudent = array();
-        $maxCountOfMemberToVoteToConsiderEvaluated = 3;
-
+        $globalStudentStatus = array();
+        $myStudentStatus = array();
         foreach ($attempts as $attempt) {
 
             $user = $attempt->getUser();
-            $students[] = $user;
             $juryAttempts = $attempt->getJuryAttempts();
 
             /** @var Entity\TrackExerciseAttemptJury $juryAttempt */
             $tempAttempt = array();
             foreach ($juryAttempts as $juryAttempt) {
-                if (!isset($tempAttempt[$juryAttempt->getJuryMemberId()])) {
-                    $tempAttempt[$juryAttempt->getJuryMemberId()] = 1;
+                if (!isset($tempAttempt[$juryAttempt->getJuryUserId()])) {
+                    $tempAttempt[$juryAttempt->getJuryUserId()] = 1;
                 } else {
-                    $tempAttempt[$juryAttempt->getJuryMemberId()]++;
+                    $tempAttempt[$juryAttempt->getJuryUserId()]++;
                 }
             }
 
+            $juryCorrections = 1;
             foreach ($tempAttempt as $memberId => $answerCount) {
                 $relations[$user->getUserId()][$memberId] = $answerCount;
+
+                // the jury_member correct the attempt
+                $myStudentStatus[$user->getUserId()] = false;
                 if ($userId == $memberId) {
-                    if ($answerCount == $maxCountOfMemberToVoteToConsiderEvaluated) {
-                        $myStatusForStudent[$user->getUserId()] = true;
-                    } else {
-                        $myStatusForStudent[$user->getUserId()] = false;
-                    }
+                    $myStudentStatus[$user->getUserId()] = true;
                 }
+
+                if ($juryCorrections == $this->maxCountOfMemberToVoteToConsiderEvaluated) {
+                    $globalStudentStatus[$user->getUserId()] = true;
+                } else {
+                    $globalStudentStatus[$user->getUserId()] = false;
+                }
+                $juryCorrections++;
             }
         }
 
@@ -184,16 +189,16 @@ class JuryPresidentController extends CommonController
                 $studentsByMember[$member->getId()][] = $student->getUserId();
             }
         }
-
         $template = $this->get('template');
 
-        $template->assign('my_status_for_student', $myStatusForStudent);
+        $template->assign('global_student_status', $globalStudentStatus);
+        $template->assign('my_student_status', $myStudentStatus);
         $template->assign('relations', $relations);
         $template->assign('attempts', $attempts);
         $template->assign('members', $members);
-        $template->assign('jury', $jury);
         $template->assign('students_by_member', $studentsByMember);
-
+        $template->assign('considered_evaluated', $this->maxCountOfMemberToVoteToConsiderEvaluated);
+        $template->assign('jury', $jury);
         $response = $template->render_template($this->getTemplatePath().'assign_members.tpl');
 
         return new Response($response, 200, array());

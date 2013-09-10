@@ -1,11 +1,5 @@
 {% extends app.template_style ~ "/layout/layout_1_col.tpl" %}
 {% block content %}
-    {%  if member.role.role == 'ROLE_JURY_PRESIDENT' %}
-    <a class="btn" href="">Asignar al azar</a>
-    <hr>
-    {% endif %}
-    <form>
-
     <table class="table table-bordered">
         <tbody>
         <tr>
@@ -27,7 +21,7 @@
                     {% endif %}
                 </td>
             {% endfor %}
-            <td>Estado</td>
+            <td>Mi estado</td>
         </tr>
         {% for attempt in attempts %}
             <tr>
@@ -42,8 +36,7 @@
                         {% set memberHover = '' %}
                     {% endif %}
 
-
-                    {% if relations[attempt.user.getUserId][member.user.userId] == 3 %}
+                    {% if relations[attempt.user.getUserId][member.user.userId] %}
                         {% set checkedSuccess = 'class="success"' %}
                     {% else %}
                         {% set checkedSuccess = '' %}
@@ -58,15 +51,17 @@
 
                     <td class="{{ memberHover }}">
                         <div {{ checkedSuccess }}>
-                        <input disabled {{ checked }} id="check_{{ attempt.user.getUserId }}_{{ member.user.userId }}" type="checkbox">
+                        <input disabled {{ checked }} type="checkbox">
                         </div>
                     </td>
                 {% endfor %}
                 <td>
-                    {% if my_status_for_student[attempt.user.getUserId] %}
+                    {% if my_student_status[attempt.user.getUserId] %}
                         <a href="#" class="btn btn-success disabled">Evaluado</a>
                     {% else %}
-                        <a href="{{ url('jury_member.controller:scoreAttemptAction', { 'exeId': attempt.getExeId, 'juryId' : jury.id }) }}" class="btn btn-warning">Evaluar</a>
+                        <a href="{{ url('jury_member.controller:scoreAttemptAction', { 'exeId': attempt.getExeId, 'juryId' : jury.id }) }}" class="btn btn-warning">
+                            Evaluar
+                        </a>
                     {% endif %}
                 </td>
             </tr>
@@ -74,8 +69,4 @@
         </tbody>
     </table>
     </form>
-    <hr>
-    {%  if member.role.role == 'ROLE_JURY_PRESIDENT' %}
-        <a class="btn" href="">Cierre de proceso</a>
-    {% endif %}
 {% endblock %}

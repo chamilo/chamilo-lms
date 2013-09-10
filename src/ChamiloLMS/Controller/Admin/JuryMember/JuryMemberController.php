@@ -20,6 +20,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  */
 class JuryMemberController extends CommonController
 {
+    public $maxCountOfMemberToVoteToConsiderEvaluated = 3;
+
     /**
     * @Route("/")
     * @Method({"GET"})
@@ -53,7 +55,8 @@ class JuryMemberController extends CommonController
         // @todo move logic in a repository
         /** @var Entity\TrackExercise $attempt */
         $relations = array();
-        $myStatusForStudent = array();
+        $globalStudentStatus = array();
+        $myStudentStatus = array();
         foreach ($attempts as $attempt) {
 
             $user = $attempt->getUser();
@@ -62,22 +65,29 @@ class JuryMemberController extends CommonController
             /** @var Entity\TrackExerciseAttemptJury $juryAttempt */
             $tempAttempt = array();
             foreach ($juryAttempts as $juryAttempt) {
-                if (!isset($tempAttempt[$juryAttempt->getJuryMemberId()])) {
-                    $tempAttempt[$juryAttempt->getJuryMemberId()] = 1;
+                if (!isset($tempAttempt[$juryAttempt->getJuryUserId()])) {
+                    $tempAttempt[$juryAttempt->getJuryUserId()] = 1;
                 } else {
-                    $tempAttempt[$juryAttempt->getJuryMemberId()]++;
+                    $tempAttempt[$juryAttempt->getJuryUserId()]++;
                 }
             }
 
+            $juryCorrections = 1;
             foreach ($tempAttempt as $memberId => $answerCount) {
                 $relations[$user->getUserId()][$memberId] = $answerCount;
+
+                // the jury_member correct the attempt
+                $myStudentStatus[$user->getUserId()] = false;
                 if ($userId == $memberId) {
-                    if ($answerCount == 3) {
-                        $myStatusForStudent[$user->getUserId()] = true;
-                    } else {
-                        $myStatusForStudent[$user->getUserId()] = false;
-                    }
+                    $myStudentStatus[$user->getUserId()] = true;
                 }
+
+                if ($juryCorrections == $this->maxCountOfMemberToVoteToConsiderEvaluated) {
+                    $globalStudentStatus[$user->getUserId()] = true;
+                } else {
+                    $globalStudentStatus[$user->getUserId()] = false;
+                }
+                $juryCorrections++;
             }
         }
 
@@ -92,12 +102,13 @@ class JuryMemberController extends CommonController
         }
         $template = $this->get('template');
 
-        $template->assign('my_status_for_student', $myStatusForStudent);
+        $template->assign('global_student_status', $globalStudentStatus);
+        $template->assign('my_student_status', $myStudentStatus);
         $template->assign('relations', $relations);
         $template->assign('attempts', $attempts);
         $template->assign('members', $members);
         $template->assign('students_by_member', $studentsByMember);
-
+        $template->assign('considered_evaluated', $this->maxCountOfMemberToVoteToConsiderEvaluated);
         $template->assign('jury', $jury);
         $response = $template->render_template($this->getTemplatePath().'assign_members.tpl');
 
@@ -105,10 +116,10 @@ class JuryMemberController extends CommonController
     }
 
     /**
-    * @Route("/score-user/{exeId}")
+    * @Route("/score-attempt/{exeId}/jury/{juryId}")
     * @Method({"GET"})
     */
-    public function scoreUserAction($exeId)
+    public function scoreAttemptAction($exeId, $juryId)
     {
         $trackExercise = \ExerciseLib::get_exercise_track_exercise_info($exeId);
 
@@ -116,16 +127,34 @@ class JuryMemberController extends CommonController
             $this->createNotFoundException();
         }
 
+        $security = $this->get('security');
         $userId = $this->getUser()->getUserId();
+
+        // Getting member
+        $criteria = array('juryId' => $juryId, 'userId' => $userId);
+        $member = $this->getManager()->getRepository('Entity\JuryMembers')->findOneBy($criteria);
+
+        if ($security->isGranted('ROLE_JURY_PRESIDENT')) {
+            // Relating user with president
+            if ($member) {
+                $this->getManager()->getRepository('Entity\JuryMembers')->assignUserToJuryMember(
+                    $trackExercise['exe_user_id'],
+                    $member->getId()
+                );
+            }
+        }
+
+        $questionScoreTypeModel = array();
 
         $criteria = array(
             'exeId' => $exeId,
-            'juryMemberId' => $userId
+            'juryUserId' => $userId
         );
-
         $trackJury = $this->getManager()->getRepository('Entity\TrackExerciseAttemptJury')->findAll($criteria);
-        $questionScoreTypeModel = array();
         if ($trackJury) {
+
+            $this->get('session')->getFlashBag()->add('info', "You already correct this exercise.");
+
             /** @var Entity\TrackExerciseAttemptJury $track */
             foreach ($trackJury as $track) {
                 $questionScoreTypeModel[$track->getQuestionId()] = $track->getQuestionScoreNameId();
@@ -155,7 +184,6 @@ class JuryMemberController extends CommonController
             if ($questionScore) {
                 $items = $questionScore->getItems();
                 /** @var \Entity\QuestionScoreName  $score */
-
                 foreach ($items as $score) {
                     $options[$score->getId().':'.$score->getScore()] = $score->getName();
                 }
@@ -238,18 +266,18 @@ class JuryMemberController extends CommonController
         $template = $this->get('template');
         $template->assign('exercise', $exerciseContent);
         $template->assign('exe_id', $exeId);
+        $template->assign('jury_id', $juryId);
         $response = $this->get('template')->render_template($this->getTemplatePath().'score_user.tpl');
         return new Response($response, 200, array());
     }
 
     /**
-    * @Route("/save-score")
+    * @Route("/save-score/{exeId}/jury/{juryId}")
     * @Method({"POST"})
     */
-    public function saveScoreAction()
+    public function saveScoreAction($exeId, $juryId)
     {
         $questionsAndScore = $this->getRequest()->get('options');
-        $exeId = $this->getRequest()->get('exe_id');
         $attempt = $this->getManager()->getRepository('Entity\TrackExercise')->find($exeId);
 
         if ($attempt) {
@@ -265,7 +293,7 @@ class JuryMemberController extends CommonController
                     $criteria = array(
                         'exeId' => $exeId,
                         'questionId' => $questionId,
-                        'juryMemberId' => $userId
+                        'juryUserId' => $userId
                     );
 
                     $obj = $this->getManager()->getRepository('Entity\TrackExerciseAttemptJury')->findOneBy($criteria);
@@ -274,7 +302,7 @@ class JuryMemberController extends CommonController
                         $obj->setScore($score);
                     } else {
                         $obj = new Entity\TrackExerciseAttemptJury();
-                        $obj->setJuryMemberId($userId);
+                        $obj->setJuryUserId($userId);
                         $obj->setAttempt($attempt);
                         $obj->setQuestionScoreNameId($questionScoreNameId);
                         $obj->setScore($score);
@@ -285,7 +313,7 @@ class JuryMemberController extends CommonController
                 }
             }
             $this->get('session')->getFlashBag()->add('success', "Saved");
-            $url = $this->generateUrl('jury_member.controller:scoreUserAction', array('exeId' => $exeId));
+            $url = $this->generateUrl('jury_member.controller:scoreAttemptAction', array('exeId' => $exeId, 'juryId' => $juryId));
             return $this->redirect($url);
         } else {
             return $this->createNotFoundException('Attempt not found');

@@ -14,7 +14,7 @@ class JuryMembersRepository extends EntityRepository
 {
     /**
      * @param int $userId
-     * @param int $juryMemberId
+     * @param int $juryMemberId "id" field of the jury_members table
      * @return string
      */
     public function assignUserToJuryMember($userId, $juryMemberId)
@@ -40,7 +40,7 @@ class JuryMembersRepository extends EntityRepository
 
     /**
      * @param int $userId
-     * @param int $juryMemberId
+     * @param int $juryMemberId "id" field of the jury_members table
      * @return string
      */
     public function removeUserToJuryMember($userId, $juryMemberId)

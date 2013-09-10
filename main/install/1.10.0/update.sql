@@ -33,7 +33,7 @@ CREATE TABLE track_attempt_jury(
     exe_id INT,
     question_id INT,
     score float(6,2),
-    jury_member_id INT,
+    jury_user_id INT,
     question_score_name_id INT,
     PRIMARY KEY (id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

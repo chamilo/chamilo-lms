@@ -77,8 +77,7 @@ class JuryMemberController extends CommonController
                 $relations[$user->getUserId()][$memberId] = $answerCount;
 
                 // the jury_member correct the attempt
-                $myStudentStatus[$user->getUserId()] = false;
-                if ($userId == $memberId) {
+                if (!empty($answerCount) && $userId == $memberId) {
                     $myStudentStatus[$user->getUserId()] = true;
                 }
                 $juryCorrections++;
@@ -146,6 +145,7 @@ class JuryMemberController extends CommonController
         if (empty($member)) {
             $this->createNotFoundException('You are not part of the jury.');
         }
+
         $students = $member->getStudents();
 
         $criteria = Criteria::create()
@@ -157,10 +157,6 @@ class JuryMemberController extends CommonController
 
         if (empty($student)) {
             $this->createNotFoundException('You are not assigned to this user.');
-        }
-
-        if ($member == false) {
-            $this->createNotFoundException('You are not part of the jury.');
         }
 
         $security = $this->get('security');
@@ -310,7 +306,10 @@ class JuryMemberController extends CommonController
     public function saveScoreAction($exeId, $juryId)
     {
         $questionsAndScore = $this->getRequest()->get('options');
+        /** @var \Entity\TrackExercise $attempt */
         $attempt = $this->getManager()->getRepository('Entity\TrackExercise')->find($exeId);
+
+        $totalScore = 0;
 
         if ($attempt) {
             $userId = $this->getUser()->getUserId();
@@ -328,6 +327,8 @@ class JuryMemberController extends CommonController
                         'juryUserId' => $userId
                     );
 
+                    $totalScore += $score;
+
                     $obj = $this->getManager()->getRepository('Entity\TrackExerciseAttemptJury')->findOneBy($criteria);
                     if ($obj) {
                         $obj->setQuestionScoreNameId($questionScoreNameId);
@@ -344,6 +345,12 @@ class JuryMemberController extends CommonController
                     $em->flush();
                 }
             }
+
+            // Updating TrackExercise do not
+            $attempt->setJuryId($juryId);
+            //$attempt->setJuryScore($totalScore);
+            $em->persist($attempt);
+
             $this->get('session')->getFlashBag()->add('success', "Saved");
             //$url = $this->generateUrl('jury_member.controller:scoreAttemptAction', array('exeId' => $exeId, 'juryId' => $juryId));
             $url = $this->generateUrl('jury_member.controller:listUsersAction');

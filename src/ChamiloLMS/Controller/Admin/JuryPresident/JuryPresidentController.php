@@ -10,6 +10,7 @@ use Entity;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
+use Doctrine\Common\Collections\Criteria;
 
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -122,6 +123,71 @@ class JuryPresidentController extends CommonController
     }
 
     /**
+    * @Route("/auto-assign-users/{juryId}")
+    * @Method({"GET"})
+    */
+    public function autoAssignUsersAction($juryId)
+    {
+        $userId = $this->getUser()->getUserId();
+
+        /** @var \Entity\Jury $jury */
+        $jury = $this->getRepository()->find($juryId);
+
+        if (empty($jury)) {
+            $this->createNotFoundException('Jury does not exists');
+        }
+
+        $members = $jury->getMembers();
+
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq("userId", $userId))
+            ->setFirstResult(0)
+            ->setMaxResults(1);
+
+        /** @var Entity\JuryMembers $member */
+        $member = $members->matching($criteria)->first();
+
+        if (empty($member)) {
+            $this->createNotFoundException('You are not part of the jury.');
+        }
+
+        $exerciseAttempt = $jury->getExerciseAttempts();
+
+        $hasStudents = $this->getRepository()->getStudentsByJury($juryId);
+
+        // Nothing was saved and no assignation exists
+        if (empty($trackJuryAttempts) && $hasStudents == false) {
+            $userList = array();
+            /** @var Entity\TrackExercise $attempt  */
+            foreach ($exerciseAttempt as $attempt) {
+                $studentId = $attempt->getExeUserId();
+                if (!in_array($studentId, $userList)) {
+                    $userList[] = $attempt->getExeUserId();
+                }
+            }
+
+            $members = $jury->getMembers()->getValues();
+            $count = count($members);
+
+            $maxCount = $this->maxCountOfMemberToVoteToConsiderEvaluated;
+            if ($count < $this->maxCountOfMemberToVoteToConsiderEvaluated) {
+                $maxCount = $count;
+            }
+            foreach ($userList as $userId) {
+                $randomMembers = array_rand($members, $maxCount);
+                foreach ($randomMembers as $randomMember) {
+                    $member = $members[$randomMember];
+                    $this->getManager()->getRepository('Entity\JuryMembers')->assignUserToJuryMember($userId, $member->getId());
+                }
+            }
+            $this->get('session')->getFlashBag()->add('success', "Los usuarios fueron asignados al azar");
+            $url = $this->get('url_generator')->generate('jury_president.controller:assignMembersAction');
+            return $this->redirect($url);
+        }
+    }
+
+
+    /**
     * @Route("/assign-members")
     * @Method({"GET"})
     */
@@ -133,6 +199,7 @@ class JuryPresidentController extends CommonController
         /** @var Entity\Jury $jury */
 
         $jury = $this->getRepository()->getJuryByUserId($userId);
+
         if (!$jury) {
             $this->get('session')->getFlashBag()->add('warning', "No tiene un comité asignado.");
             $url = $this->get('url_generator')->generate('jury_president.controller:indexAction');
@@ -147,7 +214,6 @@ class JuryPresidentController extends CommonController
         $globalStudentStatus = array();
         $myStudentStatus = array();
         foreach ($attempts as $attempt) {
-
             $user = $attempt->getUser();
             $juryAttempts = $attempt->getJuryAttempts();
 
@@ -166,8 +232,7 @@ class JuryPresidentController extends CommonController
                 $relations[$user->getUserId()][$memberId] = $answerCount;
 
                 // the jury_member correct the attempt
-                $myStudentStatus[$user->getUserId()] = false;
-                if ($userId == $memberId) {
+                if (!empty($answerCount) && $userId == $memberId) {
                     $myStudentStatus[$user->getUserId()] = true;
                 }
 
@@ -186,11 +251,15 @@ class JuryPresidentController extends CommonController
         foreach ($members as $member) {
             $students = $member->getStudents();
             foreach ($students as $student) {
-                $studentsByMember[$member->getId()][] = $student->getUserId();
+                $studentsByMember[$member->getUserId()][] = $student->getUserId();
             }
         }
+
+        $hasStudents = $this->getRepository()->getStudentsByJury($jury->getId());
+
         $template = $this->get('template');
 
+        $template->assign('has_students', $hasStudents);
         $template->assign('global_student_status', $globalStudentStatus);
         $template->assign('my_student_status', $myStudentStatus);
         $template->assign('relations', $relations);

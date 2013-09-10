@@ -14,13 +14,16 @@
                 } else {
                     url = '{{ _p.public_web }}admin/jury_president/remove-user/'+ userId +'/'+juryMemberId;
                 }
+
                 $.ajax(url);
             });
         });
     </script>
+    {% if has_students == false %}
+        <a class="btn" href="{{ url('jury_president.controller:autoAssignUsersAction', {'juryId' : jury.id }) }}">Asignar al azar</a>
+        <hr>
+    {% endif %}
 
-    <a class="btn" href="">Asignar al azar</a>
-    <hr>
     <form>
     <table class="table table-bordered">
         <tbody>
@@ -68,7 +71,7 @@
                     {% endif %}
 
                     <td class="{{ memberHover }}">
-                        {% set studentList = students_by_member[member.id]  %}
+                        {% set studentList = students_by_member[member.userId]  %}
                         {% if attempt.user.getUserId in studentList %}
                             {% set checked = 'checked="checked"' %}
                         {% else %}

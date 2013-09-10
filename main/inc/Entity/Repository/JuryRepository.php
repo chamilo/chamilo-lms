@@ -91,4 +91,53 @@ class JuryRepository extends EntityRepository
             return false;
         }
     }
+
+    /**
+     * @param int $juryId
+     * @param array skip this roles
+     *
+     * @return bool|mixed
+     */
+    public function getStudentsByJury($juryId, $skipRoles = array())
+    {
+        $qb = $this->createQueryBuilder('a');
+
+        //Selecting user info
+        $qb->select('DISTINCT u');
+
+        // Loading EntityUser
+        $qb->from('Entity\Jury', 'u');
+
+        // Selecting members
+        $qb->innerJoin('u.members', 'c');
+
+        // Inner join with the table c_quiz_question_rel_category.
+        $qb->innerJoin('c.role', 'r');
+
+        $qb->innerJoin('c.students', 's');
+
+        //@todo check app settings
+        //$qb->add('orderBy', 'u.lastname ASC');
+
+        $wherePart = $qb->expr()->andx();
+
+        // Get jury
+        $wherePart->add($qb->expr()->eq('u.id', $juryId));
+
+        if (!empty($skipRoles)) {
+            foreach ($skipRoles as $role) {
+                $wherePart->add($qb->expr()->neq('r.role', $qb->expr()->literal($role)));
+            }
+        }
+
+        $qb->where($wherePart);
+
+        $q = $qb->getQuery();
+
+        try {
+            return $q->getSingleResult();
+        } catch (NoResultException $e) {
+            return false;
+        }
+    }
 }

@@ -57,7 +57,7 @@ abstract class Controller extends \Flint\PimpleAware
 
     /**
      * This will result in a 404 response code.
-     * 
+     *
      * @param string $message
      * @return Exception
      */
@@ -67,7 +67,7 @@ abstract class Controller extends \Flint\PimpleAware
     }
 
     /**
-     * @return Request
+     * @return \Symfony\Component\HttpFoundation\Request
      */
     protected function getRequest()
     {

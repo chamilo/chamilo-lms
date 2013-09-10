@@ -9,6 +9,7 @@ use Entity;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
+use Doctrine\Common\Collections\Criteria;
 
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -55,7 +56,6 @@ class JuryMemberController extends CommonController
         // @todo move logic in a repository
         /** @var Entity\TrackExercise $attempt */
         $relations = array();
-        $globalStudentStatus = array();
         $myStudentStatus = array();
         foreach ($attempts as $attempt) {
 
@@ -81,28 +81,23 @@ class JuryMemberController extends CommonController
                 if ($userId == $memberId) {
                     $myStudentStatus[$user->getUserId()] = true;
                 }
-
-                if ($juryCorrections == $this->maxCountOfMemberToVoteToConsiderEvaluated) {
-                    $globalStudentStatus[$user->getUserId()] = true;
-                } else {
-                    $globalStudentStatus[$user->getUserId()] = false;
-                }
                 $juryCorrections++;
             }
         }
 
         $members = $jury->getMembers();
+
         /** @var Entity\JuryMembers $member */
         $studentsByMember = array();
         foreach ($members as $member) {
             $students = $member->getStudents();
             foreach ($students as $student) {
-                $studentsByMember[$member->getId()][] = $student->getUserId();
+                $studentsByMember[$member->getUserId()][] = $student->getUserId();
             }
         }
+
         $template = $this->get('template');
 
-        $template->assign('global_student_status', $globalStudentStatus);
         $template->assign('my_student_status', $myStudentStatus);
         $template->assign('relations', $relations);
         $template->assign('attempts', $attempts);
@@ -121,19 +116,56 @@ class JuryMemberController extends CommonController
     */
     public function scoreAttemptAction($exeId, $juryId)
     {
+        $userId = $this->getUser()->getUserId();
         $trackExercise = \ExerciseLib::get_exercise_track_exercise_info($exeId);
 
         if (empty($trackExercise)) {
             $this->createNotFoundException();
         }
 
+        /** @var \Entity\Jury $jury */
+        $jury = $this->getRepository()->find($juryId);
+
+        if (empty($jury)) {
+            $this->createNotFoundException('Jury does not exists');
+        }
+
+        if ($jury->getExerciseId() != $trackExercise['exe_exo_id']) {
+            $this->createNotFoundException('Exercise attempt is not related with this jury.');
+        }
+
+        $members = $jury->getMembers();
+
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq("userId", $userId))
+            ->setFirstResult(0)
+            ->setMaxResults(1);
+        /** @var Entity\JuryMembers $member */
+        $member = $members->matching($criteria)->first();
+
+        if (empty($member)) {
+            $this->createNotFoundException('You are not part of the jury.');
+        }
+        $students = $member->getStudents();
+
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq("userId", $trackExercise['exe_user_id']))
+            ->setFirstResult(0)
+            ->setMaxResults(1);
+        /** @var Entity\JuryMembers $member */
+        $student = $students->matching($criteria)->first();
+
+        if (empty($student)) {
+            $this->createNotFoundException('You are not assigned to this user.');
+        }
+
+        if ($member == false) {
+            $this->createNotFoundException('You are not part of the jury.');
+        }
+
         $security = $this->get('security');
-        $userId = $this->getUser()->getUserId();
 
-        // Getting member
-        $criteria = array('juryId' => $juryId, 'userId' => $userId);
-        $member = $this->getManager()->getRepository('Entity\JuryMembers')->findOneBy($criteria);
-
+        // Setting member only for president.
         if ($security->isGranted('ROLE_JURY_PRESIDENT')) {
             // Relating user with president
             if ($member) {
@@ -150,11 +182,11 @@ class JuryMemberController extends CommonController
             'exeId' => $exeId,
             'juryUserId' => $userId
         );
-        $trackJury = $this->getManager()->getRepository('Entity\TrackExerciseAttemptJury')->findAll($criteria);
+
+        $trackJury = $this->getManager()->getRepository('Entity\TrackExerciseAttemptJury')->findBy($criteria);
+
         if ($trackJury) {
-
-            $this->get('session')->getFlashBag()->add('info', "You already correct this exercise.");
-
+            $this->get('session')->getFlashBag()->add('info', "You already review this exercise attempt.");
             /** @var Entity\TrackExerciseAttemptJury $track */
             foreach ($trackJury as $track) {
                 $questionScoreTypeModel[$track->getQuestionId()] = $track->getQuestionScoreNameId();
@@ -267,7 +299,7 @@ class JuryMemberController extends CommonController
         $template->assign('exercise', $exerciseContent);
         $template->assign('exe_id', $exeId);
         $template->assign('jury_id', $juryId);
-        $response = $this->get('template')->render_template($this->getTemplatePath().'score_user.tpl');
+        $response = $this->get('template')->render_template($this->getTemplatePath().'score_attempt.tpl');
         return new Response($response, 200, array());
     }
 
@@ -313,7 +345,8 @@ class JuryMemberController extends CommonController
                 }
             }
             $this->get('session')->getFlashBag()->add('success', "Saved");
-            $url = $this->generateUrl('jury_member.controller:scoreAttemptAction', array('exeId' => $exeId, 'juryId' => $juryId));
+            //$url = $this->generateUrl('jury_member.controller:scoreAttemptAction', array('exeId' => $exeId, 'juryId' => $juryId));
+            $url = $this->generateUrl('jury_member.controller:listUsersAction');
             return $this->redirect($url);
         } else {
             return $this->createNotFoundException('Attempt not found');

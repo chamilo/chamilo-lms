@@ -4,5 +4,4 @@
     <a class="btn" href="{{ url('jury_member.controller:listUsersAction') }}">
         Revisar notas.
     </a>
-
 {% endblock %}

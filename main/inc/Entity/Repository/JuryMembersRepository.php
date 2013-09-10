@@ -52,7 +52,6 @@ class JuryMembersRepository extends EntityRepository
             $criteria = array('userId' => $userId, 'juryMemberId'=> $juryMemberId);
             $result = $em->getRepository('Entity\JuryMemberRelUser')->findOneBy($criteria);
             if (!empty($result)) {
-                $em = $this->getManager();
                 $em->remove($result);
                 $em->flush();
                 return '1';
@@ -60,6 +59,4 @@ class JuryMembersRepository extends EntityRepository
         }
         return '0';
     }
-
-
 }

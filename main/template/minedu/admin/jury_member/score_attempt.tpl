@@ -3,18 +3,22 @@
     <script>
 
         function showSaveButton() {
-            var value = 0;
             var submitStatus = true;
 
-            $("select").each(function() {
-                $(this).find('option:checked').each(function() {
-                    value = $(this).attr('value');
-                    console.log(value);
-                    if (value == -1) {
-                        submitStatus = false;
+            $(".question_row").each(function() {
+                var questionOptionIsChecked = false;
+                result = $(this).find("input[type=radio]").each(function() {
+                    var isChecked = $(this).is(':checked');
+                    if (isChecked == true) {
+                        questionOptionIsChecked = true;
                         return;
                     }
                 });
+
+                if (questionOptionIsChecked == false) {
+                    submitStatus = false;
+                    return;
+                }
             });
 
             if (submitStatus) {
@@ -27,7 +31,7 @@
         $(document).ready(function() {
             $('.question_row .normal-message').hide();
             showSaveButton();
-            $("select").on('change', showSaveButton);
+            $("input[type=radio]").on('click', showSaveButton);
         });
 
     </script>

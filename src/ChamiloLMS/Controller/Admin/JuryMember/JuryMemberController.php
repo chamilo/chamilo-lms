@@ -213,9 +213,11 @@ class JuryMemberController extends CommonController
                 $items = $questionScore->getItems();
                 /** @var \Entity\QuestionScoreName  $score */
                 foreach ($items as $score) {
-                    $options[$score->getId().':'.$score->getScore()] = $score->getName();
+                    $options[$score->getId().':'.$score->getScore()] = $score;
                 }
             }
+        } else {
+            return $this->createNotFoundException('The exercise does not contain a model type.');
         }
 
         $exerciseContent = null;
@@ -284,7 +286,23 @@ class JuryMemberController extends CommonController
 
             $defaultValue = isset($questionScoreTypeModel[$questionId]) ? $questionScoreTypeModel[$questionId] : null;
 
-            $question_content .= \Display::select('options['.$questionId.']', $options, $defaultValue);
+            //$question_content .= \Display::select('options['.$questionId.']', $options, $defaultValue);
+            foreach ($options as $value => $score) {
+                $attributes = array();
+                if ($score->getId() == $defaultValue) {
+                    $attributes = array('checked' => 'checked');
+                }
+                $question_content .= '<label>';
+                $question_content .= \Display::input(
+                    'radio',
+                    'options['.$questionId.']',
+                    $value,
+                    $attributes
+                )
+                .' <span title="'.$score->getDescription().'" data-toggle="tooltip" > '.$score->getName().' </span>';
+
+                $question_content .= '</label>';
+            }
             $question_content .= '</div>';
             $exerciseContent .= $question_content;
 

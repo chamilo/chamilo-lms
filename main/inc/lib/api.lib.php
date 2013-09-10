@@ -14,7 +14,7 @@ use \ChamiloSession as Session;
  * Constants declaration
  */
 // PHP version requirement.
-define('REQUIRED_PHP_VERSION', '5.3');
+define('REQUIRED_PHP_VERSION', '5.3.3');
 define('REQUIRED_MIN_MEMORY_LIMIT',         '32');
 define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE',  '10');
 define('REQUIRED_MIN_POST_MAX_SIZE',        '10');
@@ -84,7 +84,7 @@ define('UNSUBSCRIBE_NOT_ALLOWED', 0);
 
 // CONSTANTS defining all tools, using the english version
 /* When you add a new tool you must add it into function api_get_tools_lists() too */
-define('TOOL_DOCUMENT','document');
+define('TOOL_DOCUMENT', 'document');
 define('TOOL_THUMBNAIL', 'thumbnail');
 define('TOOL_HOTPOTATOES', 'hotpotatoes');
 define('TOOL_CALENDAR_EVENT', 'calendar_event');
@@ -952,7 +952,6 @@ function api_valid_email($address) {
     }
 }
 
-
 /* PROTECTION FUNCTIONS
    Use these functions to protect your scripts. */
 
@@ -1064,7 +1063,6 @@ function api_block_anonymous_users($print_headers = true)
     }
     return true;
 }
-
 
 /* ACCESSOR FUNCTIONS
    Don't access kernel variables directly, use these functions instead. */
@@ -1468,6 +1466,7 @@ function api_get_cidreq($add_session_id = true, $add_group_id = true) {
     }
     return $url;
 }
+
 /**
  * Returns the current course info array.
  * Note: this array is only defined if the user is inside a course.
@@ -1792,7 +1791,6 @@ function api_get_status_from_code($status_code) {
     }
 }
 
-
 /* FAILURE MANAGEMENT */
 
 /**
@@ -1863,6 +1861,8 @@ function api_get_last_failure() {
  * from functions or objects. This strengthens encupsalation principle
  *
  * @author Hugues Peeters <hugues.peeters@claroline.net>
+ * @todo move this code
+ * @deprecated discourage the use of this class
  * @package chamilo.library
  */
 class api_failure {
@@ -2052,7 +2052,6 @@ function api_get_session_date_validation($session_info, $course_code, $ignore_vi
         return $access;
     }
 }
-
 
 /**
  * Gets the session visibility by session id
@@ -2248,6 +2247,9 @@ function api_is_platform_admin($allow_sessions_admins = false)
     return false;
 }
 
+/**
+ * @return bool
+ */
 function api_is_question_manager()
 {
     global $app;
@@ -2349,6 +2351,7 @@ function api_is_platform_admin_by_id($user_id = null, $url = null) {
     $is_on_url = Database::num_rows($res) === 1;
     return $is_on_url;
 }
+
 /**
  * Returns the user's numeric status ID from the users table
  * @param int User ID. If none provided, will use current user
@@ -2403,6 +2406,10 @@ function api_is_course_tutor() {
     return isset($_SESSION['is_courseTutor']) ? $_SESSION['is_courseTutor'] : null;
 }
 
+/**
+ * @param bool $user_id
+ * @return array|bool
+ */
 function api_get_user_platform_status($user_id = false) {
 	$status     = array();
     $user_id    = intval($user_id);
@@ -2482,6 +2489,12 @@ function api_get_user_platform_status($user_id = false) {
     return $status;
 }
 
+/**
+ * @param int $user_id
+ * @param int $courseId
+ * @param int $session_id
+ * @return bool
+ */
 function api_is_course_session_coach($user_id, $courseId, $session_id)
 {
     $session_table 						= Database::get_main_table(TABLE_MAIN_SESSION);
@@ -2573,7 +2586,6 @@ function api_is_coach($session_id = 0, $courseId = null) {
     return $result;
 }
 
-
 /**
  * This function checks whether a session is assigned into a category
  * @param int       - session id
@@ -2601,8 +2613,7 @@ function api_is_session_in_category($session_id, $category_name) {
     }
 }
 
-/* DISPLAY OPTIONS
-   student view, title, message boxes,... */
+/* DISPLAY OPTIONS */
 
 /**
  * Displays the title of a tool.
@@ -6023,7 +6034,7 @@ function api_block_course_item_locked_by_gradebook($item_id, $link_type, $course
  * @return void
  */
 function api_check_php_version() {
-    if (!function_exists('version_compare') || version_compare( phpversion(), REQUIRED_PHP_VERSION, '<')) {
+    if (version_compare(phpversion(), REQUIRED_PHP_VERSION, '<')) {
         return false;
     }
     return true;
@@ -6447,8 +6458,6 @@ function api_set_settings_and_plugins()
 function api_set_setting_last_update() {
     api_set_setting('settings_latest_update', api_get_utc_datetime());
 }
-
-
 
 /**
  * Tries to set memory limit, if authorized and new limit is higher than current

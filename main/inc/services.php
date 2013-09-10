@@ -177,7 +177,9 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
 ));
 
 // Form provider
-$app->register(new Silex\Provider\FormServiceProvider());
+$app->register(new Silex\Provider\FormServiceProvider(), array(
+    'form.secret' => sha1(__DIR__)
+));
 
 // URL generator provider
 //$app->register(new Silex\Provider\UrlGeneratorServiceProvider());

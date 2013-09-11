@@ -411,12 +411,13 @@ $app['dbal_logger'] = $app->share(function() {
 });
 
 if ($app['debug']) {
-    /*$logger = $app['dbal_logger'];
+    /*$logger = new Doctrine\DBAL\Logging\DebugStack();
     $app['db.config']->setSQLLogger($logger);
     $app->after(function() use ($app, $logger) {
         // Log all queries as DEBUG.
+        $app['monolog']->addDebug('---- Doctrine SQL queries ----');
         foreach ($logger->queries as $query) {
-            $app['monolog']->debug(
+            $app['monolog']->addDebug(
                 $query['sql'],
                 array(
                     'params' => $query['params'],
@@ -425,6 +426,7 @@ if ($app['debug']) {
                 )
             );
         }
+        $app['monolog']->addDebug('---- End Doctrine SQL queries ----');
     });*/
 }
 

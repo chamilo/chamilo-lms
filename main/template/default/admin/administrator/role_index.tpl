@@ -35,9 +35,6 @@
             <li>
                 <a href="{{ url('question_score_name.controller:indexAction') }}">{{ 'Question names' |trans }}</a>
             </li>
-            <li>
-                <a href="{{ url('role.controller:indexAction') }}">{{ 'Roles' |trans }}</a>
-            </li>
         </ul>
     </div>
 </div>

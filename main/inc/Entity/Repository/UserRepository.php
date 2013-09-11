@@ -23,22 +23,57 @@ class UserRepository extends EntityRepository implements UserProviderInterface
     {
         $qb = $this->createQueryBuilder('a');
 
-        //Selecting user info
-        $qb->select('DISTINCT b');
+        // Selecting user info
+        $qb->select('DISTINCT u');
 
-        $qb->from('Entity\User', 'b');
+        $qb->from('Entity\User', 'u');
 
-        //Selecting courses for users
-        //$qb->innerJoin('u.courses', 'c');
+        // Selecting courses for users
+        // $qb->innerJoin('u.courses', 'c');
 
         //@todo check app settings
-        $qb->add('orderBy', 'b.firstname ASC');
-        $qb->where('b.firstname LIKE :keyword OR b.lastname LIKE :keyword ');
-        $qb->setParameter('keyword', "%$keyword%");
+        $qb->add('orderBy', 'u.firstname ASC');
+        $qb->where('u.firstname LIKE :keyword OR u.lastname LIKE :keyword OR u.username LIKE :keyword ');
+        $qb->setParameter('keyword', $qb->expr()->literal("%$keyword%"));
         $q = $qb->getQuery();
 
         return $q->execute();
     }
+
+    /**
+     * @param string $keyword
+     * @param string $role
+     * @return mixed
+     */
+    public function searchUserByKeywordAndRole($keyword, $role)
+    {
+        $qb = $this->createQueryBuilder('a');
+
+        // Selecting user info
+        $qb->select('DISTINCT u');
+
+        $qb->from('Entity\User', 'u');
+
+        // Selecting courses for users
+        $qb->innerJoin('u.roles', 'r');
+
+        //@todo check app settings
+        $qb->add('orderBy', 'u.firstname ASC');
+        $qb->where('u.firstname LIKE :keyword OR u.lastname LIKE :keyword OR u.username LIKE :keyword ');
+        $qb->andWhere('r.role = :role');
+
+        $qb->setParameters(
+            array(
+                'keyword' => "%$keyword%",
+                'role' => $role
+            )
+        );
+
+        $q = $qb->getQuery();
+        return $q->execute();
+
+    }
+
 
     /**
      * @param string $username

@@ -105,9 +105,16 @@ class JuryController extends CommonController
     {
         $request = $this->getRequest();
         $keyword = $request->get('tag');
-        $repo = $this->get('orm.em')->getRepository('Entity\User');
 
-        $entities = $repo->searchUserByKeyword($keyword);
+        $role = $request->get('role');
+        $repo = $this->getManager()->getRepository('Entity\User');
+
+        if (empty($role)) {
+            $entities = $repo->searchUserByKeyword($keyword);
+        } else {
+            $entities = $repo->searchUserByKeywordAndRole($keyword, $role);
+        }
+
         $data = array();
         if ($entities) {
             /** @var \Entity\User $entity */
@@ -134,9 +141,7 @@ class JuryController extends CommonController
         $juryUserType = new JuryMembersType();
         $juryMember =  new Entity\JuryMembers();
         $juryMember->setJuryId($id);
-
-        $form = $this->get('form.factory')->create($juryUserType, $juryMember);
-
+        $form = $this->createForm($juryUserType, $juryMember);
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             $form->bind($request);

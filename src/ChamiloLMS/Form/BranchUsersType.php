@@ -9,7 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Entity;
 use Doctrine\ORM\EntityRepository;
 
-class JuryMembersType extends AbstractType
+class BranchUsersType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -17,13 +17,13 @@ class JuryMembersType extends AbstractType
             function(EntityRepository $er) {
                 return $er->createQueryBuilder('u')
                     ->where('u.role LIKE :role')
-                    ->setParameter(':role', 'ROLE_JURY%')
+                    ->setParameter(':role', 'ROLE_DIRECTOR')
                     ->orderBy('u.name', 'DESC');
             },)
         );
 
         $builder->add('user_id', 'choice', array('label' => 'User'));
-        $builder->add('jury_id', 'hidden');
+        $builder->add('branch_id', 'hidden');
         $builder->add('submit', 'submit');
 
         $factory = $builder->getFormFactory();
@@ -45,13 +45,13 @@ class JuryMembersType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'Entity\JuryMembers'
+                'data_class' => 'Entity\BranchUsers'
             )
         );
     }
 
     public function getName()
     {
-        return 'jury_user';
+        return 'branch_user';
     }
 }

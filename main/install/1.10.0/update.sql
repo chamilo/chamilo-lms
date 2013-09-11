@@ -27,7 +27,14 @@ CREATE TABLE jury_members (
     PRIMARY KEY(id)
 );
 
-DROP TABLE IF EXISTS track_attempt_jury;
+CREATE TABLE branch_users (
+    id int NOT NULL AUTO_INCREMENT,
+    user_id int,
+    branch_id int,
+    role_id int,
+    PRIMARY KEY(id)
+);
+
 CREATE TABLE track_attempt_jury(
     id int NOT NULL AUTO_INCREMENT,
     exe_id INT,

@@ -3,6 +3,7 @@ namespace Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * BranchSync
@@ -183,6 +184,10 @@ class BranchSync
      */
     private $children;
 
+    /**
+     * @ORM\OneToMany(targetEntity="BranchUsers", mappedBy="branch")
+     */
+    private $users;
 
     /**
      *
@@ -192,6 +197,13 @@ class BranchSync
         // $this->lastSyncTransDate = new \DateTime();
     }
 
+    /**
+     * @return ArrayCollection
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
 
     /**
      * Get id

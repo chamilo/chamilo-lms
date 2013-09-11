@@ -3,7 +3,23 @@
     <a href="{{ url(links.list_link) }}">
         List
     </a>
-     {{ item.id }} {{ item.branchName }}
+
+    <h3>#{{ item.id }} {{ item.branchName }} </h3>
+
+    {% if item.getUsers %}
+        <hr />
+        <h4> {{ 'Users' | trans }} </h4>
+
+        <a class="btn" href="{{ url('branch.controller:addDirectorAction', { "id" : item.id }) }}"> Add users </a>
+        {% for branchUsers in item.getUsers %}
+            <li>
+                {{ branchUsers.user.getCompleteName }} - {{ branchUsers.role.name }}
+                <a class="btn btn-danger" href="{{ url('branch.controller:removeDirectorAction', { 'id': item.id, 'userId':branchUsers.user.userId }) }}">
+                    Remove
+                </a>
+            </li>
+        {% endfor %}
+    {% endif %}
     <hr />
     <ul>
     {% for subitem in subitems %}

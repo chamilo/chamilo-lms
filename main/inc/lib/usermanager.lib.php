@@ -3492,7 +3492,7 @@ class UserManager
         } elseif ($session > 0) {
             $sql = 'SELECT u.user_id FROM '.$table_user.' u
                 INNER JOIN '.$table_session_course_user.' sru
-                ON sru.id_user=u.user_id WHERE sru.course_code="'.Database::escape_string($course_id).'" ';
+                ON sru.id_user=u.user_id WHERE sru.course_code="'.Database::escape_string($course_id).'" AND sru.status=2';
             $rs = Database::query($sql);
             $row = Database::fetch_array($rs);
 

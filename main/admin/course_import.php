@@ -14,11 +14,10 @@
  * Validates imported data.
  */
 function validate_data($courses) {
-    global $_configuration;
     global $purification_option_for_usernames;
-    $dbnamelength = strlen($_configuration['db_prefix']);
+
     // Ensure the prefix + database name do not get over 40 characters.
-    $maxlength = 40 - $dbnamelength;
+    $maxlength = 40;
 
     $errors = array ();
     $coursecodes = array ();
@@ -101,12 +100,12 @@ function getTeacherListInArray($teachers)
  * Saves imported data.
  * @param array   List of courses
  */
-function save_data($courses) {    
+function save_data($courses) {
     global $purification_option_for_usernames;
 
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
     $msg = '';
-    
+
     foreach ($courses as $index => $course) {
         $course_language = api_get_valid_language($course['Language']);
         $username = '';
@@ -124,15 +123,15 @@ function save_data($courses) {
         }
 
         }
-        
+
         $params = array();
         $params['title']            = $course['Title'];
-        $params['wanted_code']      = $course['Code'];         
+        $params['wanted_code']      = $course['Code'];
         $params['tutor_name']       = null;
-        $params['course_category']  = $course['CourseCategory'];        
+        $params['course_category']  = $course['CourseCategory'];
         $params['course_language']  = $course_language;
         $params['user_id']          = $creatorId;
-         
+
         $course_info = CourseManager::create_course($params);
         if (!empty($course_info)) {
             if (!empty($teacherList)) {
@@ -145,7 +144,7 @@ function save_data($courses) {
                     '.$course_info['title'].'</a> '.get_lang('Created').'<br />';
         }
     }
-    
+
     if (!empty($msg)) {
         Display::display_normal_message($msg, false);
     }
@@ -165,14 +164,12 @@ $language_file = array('admin', 'registration','create_course', 'document');
 
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
-
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
 
-if (is_array($extAuthSource)) {
+if (isset($extAuthSource) && is_array($extAuthSource)) {
     $defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
 }
 
@@ -183,7 +180,7 @@ $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdm
 set_time_limit(0);
 Display :: display_header($tool_name);
 
-if ($_POST['formSent']) {
+if (isset($_POST['formSent']) && $_POST['formSent']) {
     if (empty($_FILES['import_file']['tmp_name'])) {
         $error_message = get_lang('UplUploadFailed');
         Display :: display_error_message($error_message, false);
@@ -195,7 +192,7 @@ if ($_POST['formSent']) {
         if (!in_array($ext_import_file, $allowed_file_mimetype)) {
             Display :: display_error_message(get_lang('YouMustImportAFileAccordingToSelectedOption'));
         } else {
-            $courses = parse_csv_data($_FILES['import_file']['tmp_name']);            
+            $courses = parse_csv_data($_FILES['import_file']['tmp_name']);
             $errors = validate_data($courses);
             if (count($errors) == 0) {
                 save_data($courses);
@@ -204,7 +201,7 @@ if ($_POST['formSent']) {
     }
 }
 
-if (count($errors) != 0) {
+if (isset($errors) && count($errors) != 0) {
     $error_message = '<ul>';
     foreach ($errors as $index => $error_course) {
         $error_message .= '<li>'.get_lang('Line').' '.$error_course['line'].': <strong>'.$error_course['error'].'</strong>: ';
@@ -223,7 +220,7 @@ if (count($errors) != 0) {
         <input type="file" name="import_file"/>
     </div>
 </div>
-<div class="control-group ">    
+<div class="control-group ">
     <div class="control">
         <button type="submit" class="save" value="<?php echo get_lang('Import'); ?>"><?php echo get_lang('Import'); ?></button>
     </div>

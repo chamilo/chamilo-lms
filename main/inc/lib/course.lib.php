@@ -3964,8 +3964,15 @@ class CourseManager {
         return $options;
     }
 
-    function updateTeachers($course_code, $teachers)
+    /**
+     * @param string $course_code
+     * @param array $teachers
+     * @param bool $editTeacherInSessions
+     * @return bool
+     */
+    public static function updateTeachers($course_code, $teachers, $editTeacherInSessions = false)
     {
+
         if (empty($teachers)) {
             return false;
         }
@@ -3982,6 +3989,7 @@ class CourseManager {
                 $cond.= " AND user_id <> '".$key."'";
             }
         }
+
         $sql = 'DELETE FROM '.$course_user_table.' WHERE course_code="'.Database::escape_string($course_code).'" AND status="1"'.$cond;
         Database::query($sql);
 
@@ -4005,6 +4013,26 @@ class CourseManager {
                         user_course_cat='0'";
                 }
                 Database::query($sql);
+            }
+        }
+
+
+        if ($editTeacherInSessions) {
+            $sessions = SessionManager::get_session_by_course($course_code);
+            if (!empty($sessions)) {
+                foreach ($sessions as $session) {
+                    $alreadyAddedTeachers = SessionManager::getCoachByCourseSession($session['id'], $course_code);
+                    foreach ($teachers as $userId) {
+                        SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code);
+                    }
+
+                    $teachersToDelete = array_diff($alreadyAddedTeachers, $teachers);
+                    if (!empty($teachersToDelete)) {
+                        foreach ($teachersToDelete as $userId) {
+                            SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code, true);
+                        }
+                    }
+                }
             }
         }
     }

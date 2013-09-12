@@ -1278,7 +1278,7 @@ class SessionManager
 	 * @param bool  	- optional, if is true the user don't be a coach now, otherwise it'll assign a coach
 	 * @return bool true if there are affected rows, otherwise false
 	 */
-	public static function set_coach_to_course_session($user_id, $session_id = 0, $course_code = '',$nocoach = false) {
+	public static function set_coach_to_course_session($user_id, $session_id = 0, $course_code = '', $nocoach = false) {
 
 		// Definition of variables
 		$user_id = intval($user_id);
@@ -2159,5 +2159,23 @@ class SessionManager
             'error_message' => $error_message,
             'session_counter' =>  $session_counter
         );
+    }
+
+    public static function getCoachByCourseSession($sessionId, $courseCode)
+    {
+        $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $sessionId = intval($sessionId);
+        $courseCode = Database::escape_string($courseCode);
+
+        $sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user WHERE id_session = '$sessionId' AND course_code = '$courseCode' AND status = 2";
+        $rs_coachs = Database::query($sql);
+
+        $coachs_course_session = array();
+        if (Database::num_rows($rs_coachs) > 0){
+            while ($row_coachs = Database::fetch_row($rs_coachs)) {
+                $coachs_course_session[] = $row_coachs[0];
+            }
+        }
+        return $coachs_course_session;
     }
 }

@@ -121,13 +121,15 @@ $element_template = <<<EOT
 EOT;
 
 $renderer = $form->defaultRenderer();
-$renderer -> setElementTemplate($element_template, 'group');
-$form -> addGroup($group,'group',get_lang('CourseTeachers'),'</td><td width="80" align="center">'.
+$renderer->setElementTemplate($element_template, 'group');
+$form->addGroup($group,'group',get_lang('CourseTeachers'),'</td><td width="80" align="center">'.
 		'<input class="arrowr" style="width:30px;height:30px;padding-right:12px" type="button" onclick="moveItem(document.getElementById(\'platform_teachers\'), document.getElementById(\'course_teachers\'))" ><br><br>' .
 		'<input class="arrowl" style="width:30px;height:30px;padding-left:13px" type="button" onclick="moveItem(document.getElementById(\'course_teachers\'), document.getElementById(\'platform_teachers\'))" ></td><td>');
 
+$form->addElement('checkbox', 'add_teachers_to_sessions', array(null, null, get_lang('TeachersWillBeAddedAsCoachInAllCourseSessions')));
+
 $categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories , array('style'=>'width:350px','id'=>'category_code_id', 'class'=>'chzn-select'));
-$categories_select->addOption('-','');
+$categories_select->addOption('-', '');
 CourseManager::select_and_sort_categories($categories_select);
 
 $form->add_textfield('department_name', get_lang('CourseDepartment'), false,array ('size' => '60'));
@@ -215,7 +217,9 @@ if ($form->validate()) {
 			$extras[substr($key,6)] = $value;
 		}
 		if (substr($key,0,7)=='_extra_') {
-			if(!array_key_exists(substr($key,7), $extras)) $extras[substr($key,7)] = $value;
+			if (!array_key_exists(substr($key,7), $extras)) {
+                $extras[substr($key,7)] = $value;
+            }
 		}
     }
 
@@ -260,7 +264,8 @@ if ($form->validate()) {
 		}
 	}
 
-    CourseManager::updateTeachers($course_code, $teachers);
+
+    CourseManager::updateTeachers($course_code, $teachers, $course['add_teachers_to_sessions']);
 
 	$sql = "INSERT IGNORE INTO ".$course_user_table . " SET
 				course_code = '".Database::escape_string($course_code). "',

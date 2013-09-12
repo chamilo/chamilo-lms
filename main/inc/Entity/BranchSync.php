@@ -189,12 +189,26 @@ class BranchSync
      */
     private $users;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="Jury", mappedBy="branch")
+     **/
+    private $juries;
+
     /**
      *
      */
     public function __construct()
     {
         // $this->lastSyncTransDate = new \DateTime();
+    }
+
+    /**
+    * @return ArrayCollection
+    */
+    public function getJuries()
+    {
+        return $this->juries;
     }
 
     /**

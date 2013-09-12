@@ -107,6 +107,7 @@ class JuryController extends CommonController
         $keyword = $request->get('tag');
 
         $role = $request->get('role');
+        /** @var Entity\Repository\UserRepository $repo */
         $repo = $this->getManager()->getRepository('Entity\User');
 
         if (empty($role)) {
@@ -134,8 +135,10 @@ class JuryController extends CommonController
     */
     public function addMembersAction(Application $app, $id)
     {
-        $extraJS[]      = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
-        $extraJS[]      = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
+        $extraJS = array(
+            '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />',
+            '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript"></script>'
+        );
         $app['extraJS'] = $extraJS;
 
         $juryUserType = new JuryMembersType();

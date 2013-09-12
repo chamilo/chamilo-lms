@@ -34,7 +34,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         //@todo check app settings
         $qb->add('orderBy', 'u.firstname ASC');
         $qb->where('u.firstname LIKE :keyword OR u.lastname LIKE :keyword OR u.username LIKE :keyword ');
-        $qb->setParameter('keyword', $qb->expr()->literal("%$keyword%"));
+        $qb->setParameter('keyword', "%$keyword%");
         $q = $qb->getQuery();
 
         return $q->execute();

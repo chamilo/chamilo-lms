@@ -14,7 +14,7 @@ class BranchUsersType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('role', 'entity', array('class'=>'Entity\Role', 'property' => 'name', 'query_builder'=>
-            function(EntityRepository $er) {
+            function (EntityRepository $er) {
                 return $er->createQueryBuilder('u')
                     ->where('u.role LIKE :role')
                     ->setParameter(':role', 'ROLE_DIRECTOR')

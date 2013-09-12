@@ -19,7 +19,7 @@
     });
     </script>
 
-    <form action="{{ url('jury.controller:addDirectorAction', { "id" : jury_id }) }}" method="post" {{ form_enctype(form) }}>
+    <form action="{{ url('jury.controller:addMembersAction', { "id" : jury_id }) }}" method="post" {{ form_enctype(form) }}>
       {{ form_widget(form) }}
     </form>
 {% endblock %}

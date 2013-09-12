@@ -349,7 +349,7 @@ class ImportCsv
         /*
          * Another users import.
         Unique identifier: official code and username . ok
-        Username and password should never get updated. ok
+        Password should never get updated. ok
         If an update should need to occur (because it changed in the .csv), we’ll want that logged. We will handle this manually in that case.
         All other fields should be updateable, though passwords should of course not get updated. ok
         If a user gets deleted (not there anymore),
@@ -440,7 +440,7 @@ class ImportCsv
                         $userInfo['user_id'],
                         $row['firstname'], // <<-- changed
                         $row['lastname'],  // <<-- changed
-                        $userInfo['username'],
+                        $row['username'],  // <<-- changed
                         null, //$password = null,
                         $auth_source = null,
                         $userInfo['email'],
@@ -460,6 +460,9 @@ class ImportCsv
                     );
 
                     if ($result) {
+                        if ($row['username'] != $userInfo['user_id']) {
+                            $this->logger->addInfo("Students - Username was changes from '".$userInfo['username']."' to '".$row['username']."' ");
+                        }
                         foreach ($row as $key => $value) {
                             if (substr($key, 0, 6) == 'extra_') { //an extra field
                                 UserManager::update_extra_field_value($userInfo['user_id'], substr($key, 6), $value);

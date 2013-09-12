@@ -1906,6 +1906,12 @@ class SessionManager
                 $date_end               = $enreg['DateEnd'];
                 $visibility             = isset($enreg['Visibility']) ? $enreg['Visibility'] : $sessionVisibility;
                 $session_category_id    = isset($enreg['SessionCategory']) ? $enreg['SessionCategory'] : null;
+                $sessionDescription    = isset($enreg['SessionDescription']) ? $enreg['SessionDescription'] : null;
+
+                $extraSessionParameters = null;
+                if (!empty($sessionDescription)) {
+                    $extraSessionParameters = ' , description = '.Database::escape_string($sessionDescription);
+                }
 
                 // Searching a general coach.
                 if (!empty($enreg['Coach'])) {
@@ -1947,13 +1953,12 @@ class SessionManager
                             date_end = '$date_end',
                             visibility = '$visibility',
                             session_category_id = '$session_category_id',
-                            session_admin_id=".intval($defaultUserId).$extraParameters;
+                            session_admin_id=".intval($defaultUserId).$extraParameters.$extraSessionParameters;
                     Database::query($sql_session);
                     $session_id = Database::insert_id();
 
                     if ($debug) {
                         if ($session_id) {
-
                             foreach ($enreg as $key => $value) {
                                 if (substr($key, 0, 6) == 'extra_') { //an extra field
                                     self::update_session_extra_field_value($session_id, substr($key, 6), $value);
@@ -1990,7 +1995,7 @@ class SessionManager
                                 date_start = '$date_start',
                                 date_end = '$date_end',
                                 visibility = '$visibility',
-                                session_category_id = '$session_category_id' ".$extraParameters;
+                                session_category_id = '$session_category_id' ".$extraParameters.$extraSessionParameters;
 
                         Database::query($sql_session);
 
@@ -2021,11 +2026,16 @@ class SessionManager
                             'session_category_id' => $session_category_id
                         );
 
+                        if (!empty($sessionDescription)) {
+                            $params['description'] = $sessionDescription;
+                        }
+
                         if (!empty($fieldsToAvoidUpdate)) {
                             foreach ($fieldsToAvoidUpdate as $field) {
                                 unset($params[$field]);
                             }
                         }
+
 
                         if (isset($sessionId) && !empty($sessionId)) {
                             // The session already exists, update it then.

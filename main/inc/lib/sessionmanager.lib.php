@@ -204,12 +204,12 @@ class SessionManager
             $where_condition = str_replace('category_name', 'sc.name', $where_condition);
             $where_condition = str_replace(
                 array("AND session_active = '1'  )", " AND (  session_active = '1'  )"),
-                array(') GROUP BY name HAVING session_active = 1 ', " GROUP BY name HAVING session_active = 1 " )
+                array(') GROUP BY s.name HAVING session_active = 1 ', " GROUP BY s.name HAVING session_active = 1 " )
                 , $where_condition
             );
             $where_condition = str_replace(
                 array("AND session_active = '0'  )", " AND (  session_active = '0'  )"),
-                array(') GROUP BY name HAVING session_active = 0 ', " GROUP BY name HAVING session_active = '0' "),
+                array(') GROUP BY s.name HAVING session_active = 0 ', " GROUP BY s.name HAVING session_active = '0' "),
                 $where_condition
             );
         } else {
@@ -259,7 +259,7 @@ class SessionManager
                  $where AND $where_condition ";
             }
         }
-        echo ($query_rows);
+
         $result_rows = Database::query($query_rows);
         $recorset = Database::fetch_array($result_rows);
 

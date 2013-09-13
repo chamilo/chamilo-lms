@@ -460,7 +460,7 @@ class ImportCsv
                     );
 
                     if ($result) {
-                        if ($row['username'] != $userInfo['user_id']) {
+                        if ($row['username'] != $userInfo['username']) {
                             $this->logger->addInfo("Students - Username was changes from '".$userInfo['username']."' to '".$row['username']."' ");
                         }
                         foreach ($row as $key => $value) {

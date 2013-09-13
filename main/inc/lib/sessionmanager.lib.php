@@ -2036,7 +2036,6 @@ class SessionManager
                             }
                         }
 
-
                         if (isset($sessionId) && !empty($sessionId)) {
                             // The session already exists, update it then.
                             Database::update($tbl_session, $params, array('id = ?' => $sessionId));
@@ -2112,6 +2111,7 @@ class SessionManager
                         // Adding coaches to session course user
                         if (!empty($course_coaches)) {
                             foreach ($course_coaches as $course_coach) {
+                                $course_coach = trim($course_coach);
                                 $coach_id = UserManager::get_user_id_from_username($course_coach);
                                 if ($coach_id !== false) {
                                     $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
@@ -2134,6 +2134,7 @@ class SessionManager
                         // Adding the relationship "Session - Course - User".
 
                         foreach ($course_users as $user) {
+                            $user = trim($user);
                             $user_id = UserManager::get_user_id_from_username($user);
 
                             if ($user_id !== false) {

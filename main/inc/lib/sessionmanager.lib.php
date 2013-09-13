@@ -181,7 +181,8 @@ class SessionManager
         return $result['count'] > 0;
 	}
 
-    static function get_count_admin() {
+    static function get_count_admin($where_condition = null) {
+
         $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_category   = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
         $tbl_user               = Database::get_main_table(TABLE_MAIN_USER);
@@ -193,11 +194,44 @@ class SessionManager
             $where.=" WHERE s.session_admin_id = $user_id ";
         }
 
-        $query_rows = "SELECT count(*) as total_rows
-         FROM $tbl_session s
-            LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
-            INNER JOIN $tbl_user u ON s.id_coach = u.user_id
-         $where ";
+        $today = api_get_utc_datetime();
+        $today = api_strtotime($today, 'UTC');
+        $today = date('Y-m-d', $today);
+
+        if (!empty($where_condition)) {
+
+            $where_condition = str_replace('category_name', 'sc.name', $where_condition);
+            $where_condition = str_replace(
+                array("AND session_active = '1'  )", " AND (  session_active = '1'  )"),
+                array(') HAVING session_active = 1 ', "HAVING session_active = 1 " )
+                , $where_condition
+            );
+            $where_condition = str_replace(
+                array("AND session_active = '0'  )", " AND (  session_active = '0'  )"),
+                array(') HAVING session_active = 0 ', " HAVING session_active = '0' "),
+                $where_condition
+            );
+        } else {
+            $where_condition = "1 = 1";
+        }
+
+        $query_rows = "SELECT
+                 IF (
+					(s.date_start <= '$today' AND '$today' < s.date_end) OR
+                    (s.nb_days_access_before_beginning > 0 AND DATEDIFF(s.date_start,'".$today."' ".") <= s.nb_days_access_before_beginning) OR
+                    (s.nb_days_access_after_end > 0 AND DATEDIFF('".$today."',s.date_end) <= s.nb_days_access_after_end) OR
+                    (s.date_start  = '0000-00-00' AND s.date_end  = '0000-00-00' ) OR
+					(s.date_start <= '$today' AND '0000-00-00' = s.date_end) OR
+					('$today' < s.date_end AND '0000-00-00' = s.date_start)
+				, 1, 0)
+				as session_active,
+				s.name,
+				sc.name,
+                count(*) as total_rows
+                FROM $tbl_session s
+                    LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
+                    INNER JOIN $tbl_user u ON s.id_coach = u.user_id
+                $where AND $where_condition ";
 
         if (api_is_multiple_url_enabled()) {
             $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
@@ -205,16 +239,29 @@ class SessionManager
             if ($access_url_id != -1) {
 				$where.= " AND ar.access_url_id = $access_url_id ";
 
-                $query_rows = "SELECT count(*) as total_rows
+                $query_rows = "SELECT
+                  IF (
+					(s.date_start <= '$today' AND '$today' < s.date_end) OR
+                    (s.nb_days_access_before_beginning > 0 AND DATEDIFF(s.date_start,'".$today."' ".") <= s.nb_days_access_before_beginning) OR
+                    (s.nb_days_access_after_end > 0 AND DATEDIFF('".$today."',s.date_end) <= s.nb_days_access_after_end) OR
+                    (s.date_start  = '0000-00-00' AND s.date_end  = '0000-00-00' ) OR
+					(s.date_start <= '$today' AND '0000-00-00' = s.date_end) OR
+					('$today' < s.date_end AND '0000-00-00' = s.date_start)
+				, 1, 0)
+				as session_active,
+				s.name,
+                 count(*) as total_rows
                  FROM $tbl_session s
                     LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
                     INNER JOIN $tbl_user u ON s.id_coach = u.user_id
                     INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
-                 $where ";
+                 $where AND $where_condition ";
             }
         }
+
         $result_rows = Database::query($query_rows);
         $recorset = Database::fetch_array($result_rows);
+
         $num = $recorset['total_rows'];
         return $num;
     }
@@ -254,7 +301,6 @@ class SessionManager
                     (s.date_start  = '0000-00-00' AND s.date_end  = '0000-00-00' ) OR
 					(s.date_start <= '$today' AND '0000-00-00' = s.date_end) OR
 					('$today' < s.date_end AND '0000-00-00' = s.date_start)
-
 				, 1, 0)
 				as session_active,
 				s.name,

@@ -47,32 +47,44 @@ if (!empty($error_message)) {
 
 //jqgrid will use this URL to do the selects
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions';
+
 if (isset($_REQUEST['keyword'])) {
     //Begin with see the searchOper param
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&rows=20&page=1&sidx=&sord=asc&filters=&searchField=name&searchString='.Security::remove_XSS($_REQUEST['keyword']).'&searchOper=bw';
 }
 
-//The order is important you need to check the the $column variable in the model.ajax.php file
-$columns        = array(get_lang('Name'), get_lang('NumberOfCourses'), get_lang('NumberOfUsers'), get_lang('SessionCategoryName'),
-                        get_lang('StartDate'), get_lang('EndDate'), get_lang('Coach'),  get_lang('Status'), get_lang('Visibility'), get_lang('Actions'));
+if (isset($_REQUEST['id_category'])) {
+    $sessionCategory = SessionManager::get_session_category($_REQUEST['id_category']);
+    if (!empty($sessionCategory)) {
+        //Begin with see the searchOper param
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&rows=20&page=1&sidx=&sord=asc&filters=&searchField=category_name&searchString='.Security::remove_XSS($sessionCategory['name']).'&searchOper=bw';
+    }
+}
 
-//$activeurl = '?sidx=session_active';
+//The order is important you need to check the the $column variable in the model.ajax.php file
+$columns = array(get_lang('Name'), get_lang('NumberOfCourses'), get_lang('NumberOfUsers'), get_lang('SessionCategoryName'),
+                 get_lang('StartDate'), get_lang('EndDate'), get_lang('Coach'),  get_lang('Status'), get_lang('Visibility'), get_lang('Actions'));
+
 //Column config
 $column_model   = array(
     array('name'=>'name',           'index'=>'s.name',        'width'=>'160',  'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
     array('name'=>'nbr_courses',    'index'=>'nbr_courses',   'width'=>'30',   'align'=>'left', 'search' => 'true'),
     array('name'=>'nbr_users',      'index'=>'nbr_users',     'width'=>'30',   'align'=>'left', 'search' => 'true'),
     array('name'=>'category_name',  'index'=>'category_name', 'width'=>'70',   'align'=>'left', 'search' => 'true'),
-    array('name'=>'date_start',     'index'=>'date_start',    'width'=>'40',   'align'=>'left', 'search' => 'true'),
-    array('name'=>'date_end',       'index'=>'date_end',      'width'=>'40',   'align'=>'left', 'search' => 'true'),
+    array('name'=>'date_start',     'index'=>'s.date_start',    'width'=>'40',   'align'=>'left', 'search' => 'true'),
+    array('name'=>'date_end',       'index'=>'s.date_end',      'width'=>'40',   'align'=>'left', 'search' => 'true'),
     array('name'=>'coach_name',     'index'=>'coach_name',    'width'=>'80',   'align'=>'left', 'search' => 'false'),
     array('name'=>'status',         'index'=>'session_active','width'=>'40',   'align'=>'left', 'search' => 'true', 'stype'=>'select',
-      //for the bottom bar
-      'searchoptions' => array(
-                        'defaultValue'  => '1',
-                        'value'         => '1:'.get_lang('Active').';0:'.get_lang('Inactive')),
-      //for the top bar
-      'editoptions' => array('value' => ':'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive'))),
+        //for the bottom bar
+        'searchoptions' => array(
+            'defaultValue'  => '1',
+            'value'         => '1:'.get_lang('Active').';0:'.get_lang('Inactive')
+        ),
+        //for the top bar
+        'editoptions' => array(
+            'value' => ':'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive')
+        )
+    ),
     array('name'=>'visibility',     'index'=>'visibility',      'width'=>'40',   'align'=>'left', 'search' => 'false'),
     array('name'=>'actions',        'index'=>'actions',         'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false')
 );
@@ -81,8 +93,6 @@ $extra_params['autowidth'] = 'true';
 
 //height auto
 $extra_params['height'] = 'auto';
-//$extra_params['excel'] = 'excel';
-//$extra_params['rowList'] = array(10, 20 ,30);
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
@@ -96,34 +106,40 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
 ?>
 <script>
 
-    function setSearchSelect(columnName) {
-    $("#sessions").jqGrid('setColProp', columnName,
-    {
-       searchoptions:{
-            dataInit:function(el){
-                $("option[value='2']",el).attr("selected", "selected");
-                setTimeout(function(){
-                    $(el).trigger('change');
-                },1000);
+function setSearchSelect(columnName) {
+    $("#sessions").jqGrid(
+        'setColProp',
+        columnName,
+        {
+            searchoptions: {
+                dataInit:function(el) {
+                    $("option[value='2']",el).attr("selected", "selected");
+                    setTimeout(function() {
+                        $(el).trigger('change');
+                    }, 1000);
+                }
             }
         }
-    });
+    );
 }
-
 
 $(function() {
     <?php
-        echo Display::grid_js('sessions', $url,$columns,$column_model,$extra_params, array(), $action_links,true);
+        echo Display::grid_js('sessions', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
     ?>
 
     setSearchSelect("status");
 
-    $("#sessions").jqGrid('navGrid','#sessions_pager', {edit:false,add:false,del:false},
-        {height:280,reloadAfterSubmit:false}, // edit options
-        {height:280,reloadAfterSubmit:false}, // add options
-        {reloadAfterSubmit:false}, // del options
-        {width:500} // search options
+    $("#sessions").jqGrid(
+        'navGrid',
+        '#sessions_pager',
+        { edit: false, add: false, del: false},
+        { height:280, reloadAfterSubmit:false }, // edit options
+        { height:280, reloadAfterSubmit:false }, // add options
+        { reloadAfterSubmit:false }, // del options
+        { width:500 } // search options
     );
+
     /*
     // add custom button to export the data to excel
     jQuery("#sessions").jqGrid('navButtonAdd','#sessions_pager',{
@@ -150,9 +166,11 @@ $(function() {
         'autosearch' : true,
         'searchOnEnter':false
     }
-    jQuery("#sessions").jqGrid('filterToolbar',options);
+
+    jQuery("#sessions").jqGrid('filterToolbar', options);
     var sgrid = $("#sessions")[0];
     sgrid.triggerToolbar();
+
 });
 </script>
 <div class="actions">

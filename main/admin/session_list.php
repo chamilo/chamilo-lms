@@ -59,7 +59,7 @@ $columns        = array(get_lang('Name'), get_lang('NumberOfCourses'), get_lang(
 //$activeurl = '?sidx=session_active';
 //Column config
 $column_model   = array(
-    array('name'=>'name',           'index'=>'name',          'width'=>'160',  'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
+    array('name'=>'name',           'index'=>'s.name',        'width'=>'160',  'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
     array('name'=>'nbr_courses',    'index'=>'nbr_courses',   'width'=>'30',   'align'=>'left', 'search' => 'true'),
     array('name'=>'nbr_users',      'index'=>'nbr_users',     'width'=>'30',   'align'=>'left', 'search' => 'true'),
     array('name'=>'category_name',  'index'=>'category_name', 'width'=>'70',   'align'=>'left', 'search' => 'true'),

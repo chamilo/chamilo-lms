@@ -229,7 +229,7 @@ class SessionManager
 		$tbl_session_category   = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 		$tbl_user               = Database::get_main_table(TABLE_MAIN_USER);
 
-		$where = 'WHERE 1=1 ';
+		$where = 'HAVING 1=1 ';
 		$user_id = api_get_user_id();
 
 		if (api_is_session_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false') {
@@ -273,10 +273,19 @@ class SessionManager
             $limit = " LIMIT ".$options['limit'];
         }
 
+        if (!empty($options['where'])) {
+		   $where .= ' AND '.$options['where'];
+		}
+
+        $order = null;
+        if (!empty($options['order'])) {
+            $order = " ORDER BY ".$options['order'];
+        }
+
 		$query = "$select FROM $tbl_session s
 				LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
 				LEFT JOIN $tbl_user u ON s.id_coach = u.user_id
-                $where $limit";
+                $where $order $limit";
 
 		global $_configuration;
 		if ($_configuration['multiple_access_urls']) {
@@ -289,27 +298,18 @@ class SessionManager
                                LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
                                INNER JOIN $tbl_user u ON s.id_coach = u.user_id
                                INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
-				 $where $limit";
+				 $where $order $limit";
 			}
 		}
 
 		$query .= ") AS session_table";
 
-		if (!empty($options['where'])) {
-		   $query .= ' WHERE '.$options['where'];
-		}
-
-        if (!empty($options['order'])) {
-            $query .= " ORDER BY ".$options['order'];
-        }
-
 		$result = Database::query($query);
 		$formatted_sessions = array();
 		if (Database::num_rows($result)) {
-			$sessions   = Database::store_result($result);
+			$sessions = Database::store_result($result);
 			foreach ($sessions as $session) {
 				$session['name'] = Display::url($session['name'], "resume_session.php?id_session=".$session['id']);
-
 				$session['coach_name'] = Display::url($session['coach_name'], "user_information.php?user_id=".$session['user_id']);
 
 				if ($session['date_start'] == '0000-00-00' && $session['date_end'] == '0000-00-00') {

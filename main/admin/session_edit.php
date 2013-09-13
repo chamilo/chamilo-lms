@@ -16,8 +16,6 @@ require_once '../inc/global.inc.php';
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-
-
 $formSent = 0;
 
 // Database Table Definitions
@@ -37,9 +35,7 @@ if (!$infos = Database::fetch_array($result)) {
     exit();
 }
 
-$id_coach   = $infos['id_coach'];
-
-
+$id_coach = $infos['id_coach'];
 
 $tool_name = get_lang('EditSession');
 
@@ -52,7 +48,7 @@ list($year_end,$month_end,$day_end)         = explode('-',$infos['date_end']);
 
 $end_year_disabled = $end_month_disabled = $end_day_disabled = '';
 
-if ($_POST['formSent']) {
+if (isset($_POST['formSent']) && $_POST['formSent']) {
 	$formSent = 1;
 
 	$name                  = $_POST['name'];
@@ -104,11 +100,8 @@ $thisYear   = date('Y');
 // display the header
 Display::display_header($tool_name);
 
-// display the tool title
-// api_display_tool_title($tool_name);
-
 if (!empty($return)) {
-	Display::display_error_message($return,false);
+    Display::display_error_message($return,false);
 }
 ?>
 
@@ -183,8 +176,8 @@ if (!empty($return)) {
                 ;" id="options">
 
             <input type="text" name="nb_days_access_before" value="<?php if($formSent) echo api_htmlentities($nb_days_access_before,ENT_QUOTES,$charset); else echo api_htmlentities($infos['nb_days_access_before_beginning'],ENT_QUOTES,$charset); ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysBefore') ?>
-                <br />
-                <br />
+            <br />
+            <br />
             <input type="text" name="nb_days_access_after" value="<?php if($formSent) echo api_htmlentities($nb_days_access_after,ENT_QUOTES,$charset); else echo api_htmlentities($infos['nb_days_access_after_end'],ENT_QUOTES,$charset); ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysAfter') ?>
 
             </div>
@@ -379,8 +372,6 @@ function setDisable(select){
 
     var start_div = document.getElementById('start_date');
     start_div.style.display = 'none';
-
-
 }
 
 function disable_endtime(select) {

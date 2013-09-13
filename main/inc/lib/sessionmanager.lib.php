@@ -396,9 +396,28 @@ class SessionManager
 	 * @return $id;
 	 * The parameter id is a primary key
 	**/
-	public static function edit_session ($id,$name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$id_coach, $id_session_category, $id_visibility, $start_limit = true, $end_limit = true) {
-		global $_user;
-		$name=trim(stripslashes($name));
+	public static function edit_session (
+        $id,
+        $name,
+        $year_start,
+        $month_start,
+        $day_start,
+        $year_end,
+        $month_end,
+        $day_end,
+        $nb_days_acess_before,
+        $nb_days_acess_after,
+        $nolimit,
+        $id_coach,
+        $id_session_category,
+        $id_visibility,
+        $start_limit = true,
+        $end_limit = true,
+        $description = null,
+        $showDescription = null
+    )
+    {
+		$name = trim(stripslashes($name));
 		$year_start=intval($year_start);
 		$month_start=intval($month_start);
 		$day_start=intval($day_start);
@@ -411,9 +430,7 @@ class SessionManager
 		$id_session_category = intval($id_session_category);
 		$id_visibility = intval($id_visibility);
 
-		$tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
-		$tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
 		if (empty($nolimit)) {
 			$date_start  = "$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
@@ -453,17 +470,32 @@ class SessionManager
 			$msg=get_lang('StartDateShouldBeBeforeEndDate');
 			return $msg;
 		} else {
+
 			$rs = Database::query("SELECT id FROM $tbl_session WHERE name='".Database::escape_string($name)."'");
 			$exists = false;
 			while ($row = Database::fetch_array($rs)) {
-				if($row['id']!=$id)
+				if ($row['id'] != $id)
 					$exists = true;
 			}
+
 			if ($exists) {
-				$msg=get_lang('SessionNameAlreadyExists');
+				$msg = get_lang('SessionNameAlreadyExists');
 				return $msg;
 			} else {
-				$sql="UPDATE $tbl_session " .
+
+                $sessionInfo = SessionManager::fetch($id);
+
+                $descriptionCondition = null;
+                if (array_key_exists('description', $sessionInfo)) {
+                    $descriptionCondition = ' description = "'.Database::escape_string($description).'" ,';
+                }
+
+                $showDescriptionCondition = null;
+                if (array_key_exists('show_description', $sessionInfo)) {
+                    $showDescriptionCondition = ' show_description = "'.Database::escape_string($showDescription).'" ,';
+                }
+
+				$sql = "UPDATE $tbl_session " .
 					"SET name='".Database::escape_string($name)."',
 						date_start='".$date_start."',
 						date_end='".$date_end."',
@@ -471,6 +503,8 @@ class SessionManager
 						nb_days_access_before_beginning = ".$nb_days_acess_before.",
 						nb_days_access_after_end = ".$nb_days_acess_after.",
 						session_category_id = ".$id_session_category." ,
+                        $descriptionCondition
+                        $showDescriptionCondition
 						visibility= ".$id_visibility."
 					  WHERE id='$id'";
 				Database::query($sql);
@@ -1905,7 +1939,7 @@ class SessionManager
                 $date_end               = $enreg['DateEnd'];
                 $visibility             = isset($enreg['Visibility']) ? $enreg['Visibility'] : $sessionVisibility;
                 $session_category_id    = isset($enreg['SessionCategory']) ? $enreg['SessionCategory'] : null;
-                $sessionDescription    = isset($enreg['SessionDescription']) ? $enreg['SessionDescription'] : null;
+                $sessionDescription     = isset($enreg['SessionDescription']) ? $enreg['SessionDescription'] : null;
 
                 $extraSessionParameters = null;
                 if (!empty($sessionDescription)) {

@@ -26,25 +26,22 @@ $id = intval($_GET['id']);
 
 SessionManager::protect_session_edit($id);
 
-$sql = "SELECT name,date_start,date_end,id_coach, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility
-        FROM $tbl_session WHERE id = $id";
-$result = Database::query($sql);
-
-if (!$infos = Database::fetch_array($result)) {
-    header('Location: session_list.php');
-    exit();
-}
+$infos = SessionManager::fetch($id);
 
 $id_coach = $infos['id_coach'];
-
 $tool_name = get_lang('EditSession');
 
 $interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => "session_list.php","name" => get_lang('SessionList'));
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id,"name" => get_lang('SessionOverview'));
 
-list($year_start,$month_start,$day_start)   = explode('-',$infos['date_start']);
-list($year_end,$month_end,$day_end)         = explode('-',$infos['date_end']);
+list($year_start,$month_start,$day_start)   = explode('-', $infos['date_start']);
+list($year_end,$month_end,$day_end)         = explode('-', $infos['date_end']);
+
+$showDescriptionChecked = null;
+if (isset($infos['show_description']) && !empty($infos['show_description'])) {
+    $showDescriptionChecked = 'checked';
+}
 
 $end_year_disabled = $end_month_disabled = $end_day_disabled = '';
 
@@ -65,6 +62,9 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 	$id_session_category   = $_POST['session_category'];
 	$id_visibility         = $_POST['session_visibility'];
 
+    $description = isset($_POST['description']) ? $_POST['description'] : null;
+    $showDescription = isset($_POST['show_description']) ? 1 : 0;
+
     $end_limit              = $_POST['end_limit'];
     $start_limit            = $_POST['start_limit'];
 
@@ -74,7 +74,27 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $nolimit = null;
     }
 
-	$return = SessionManager::edit_session($id,$name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit, $id_coach, $id_session_category,$id_visibility,$start_limit,$end_limit);
+	$return = SessionManager::edit_session(
+        $id,
+        $name,
+        $year_start,
+        $month_start,
+        $day_start,
+        $year_end,
+        $month_end,
+        $day_end,
+        $nb_days_acess_before,
+        $nb_days_acess_after,
+        $nolimit,
+        $id_coach,
+        $id_session_category,
+        $id_visibility,
+        $start_limit,
+        $end_limit,
+        $description,
+        $showDescription
+    );
+
 	if ($return == strval(intval($return))) {
 		header('Location: resume_session.php?id_session='.$return);
 		exit();
@@ -336,6 +356,26 @@ if (!empty($return)) {
     </div>
     </div>
   </div>
+
+    <?php if (array_key_exists('show_description', $infos)) { ?>
+
+        <div class="control-group">
+            <div class="controls">
+                <?php echo get_lang('Description') ?> <br />
+                <textarea name="description"><?php  echo $infos['description']; ?></textarea>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="controls">
+                <label>
+                <input id="show_description" type="checkbox" name="show_description" <?php echo $showDescriptionChecked ?> />
+                <?php echo get_lang('ShowDescription') ?>
+                </label>
+            </div>
+        </div>
+
+    <?php } ?>
 
     <div class="control-group">
         <div class="controls">

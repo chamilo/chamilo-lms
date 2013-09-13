@@ -17,18 +17,19 @@ api_protect_admin_script(true);
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
-$htmlHeadXtra[] = '<script>
-				function selectAll(idCheck,numRows,action) {
-					for(i=0;i<numRows;i++) {
-						idcheck = document.getElementById(idCheck+"_"+i);
-						if (action == "true"){
-							idcheck.checked = true;
-						} else {
-							idcheck.checked = false;
-						}
-					}
-				}
-				</script>';
+$htmlHeadXtra[] =
+'<script>
+    function selectAll(idCheck,numRows,action) {
+        for(i=0;i<numRows;i++) {
+            idcheck = document.getElementById(idCheck+"_"+i);
+            if (action == "true"){
+                idcheck.checked = true;
+            } else {
+                idcheck.checked = false;
+            }
+        }
+    }
+</script>';
 
 $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -238,4 +239,5 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     <?php } ?>
     </table>
 
-<?php } Display::display_footer(); ?>
+<?php }
+Display::display_footer();

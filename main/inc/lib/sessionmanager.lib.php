@@ -292,12 +292,11 @@ class SessionManager
 			$table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1) {
-				$where.= " AND ar.access_url_id = $access_url_id ";
 				$query = " $select
                            FROM $tbl_session s
                                LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
                                INNER JOIN $tbl_user u ON s.id_coach = u.user_id
-                               INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
+                               INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id AND ar.access_url_id = $access_url_id
 				 $where $order $limit";
 			}
 		}

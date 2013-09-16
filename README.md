@@ -57,6 +57,14 @@ Contributing
 
 When contributing patches (which we always welcome, as long as you agree to do that under the GNU/GPLv3 license), please ensure you respect our coding conventions: https://support.chamilo.org/projects/1/wiki/Coding_conventions (mostly PSR-2 with a few additional rules and hints).
 
+Manual testing
+--------------
+
+You can always check the impact of your changes and confirm with other users on the following portals, which are automatically updated every 15 minutes:
+* https://stable.chamilo.org for versions 1.9.x
+* https://unstable.chamilo.org for development version (currently 1.10) - this one doesn't automatically apply database changes, so it is more likely to break often
+These are *NOT* production portals. Your content *WILL* be deleted once every now and then. It is completely public and anyone can enter and delete your content if they want to. DO NOT put important content there.
+
 Learn more
 ----------
 

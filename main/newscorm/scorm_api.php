@@ -1104,10 +1104,16 @@ function logit_scorm(message, priority) {
     return false;
 }
 
-function log_in_log(message) {
+function log_in_log(message, priority) {
     var ua = $.browser;
-    if (ua.mozilla) {
-        console.log(message);
+    if (ua.mozilla || ua.webkit) {
+        // Colorize a little
+        var color = "color: green";
+        if (priority == 2) { color = "color:blue"; }
+        elseif (priority == 1) { color = "color:orange"; }
+        elseif (priority == 0) { color = "color:red;font-weight:bold"; }
+        // Log in console with syntax colouring
+        console.log("%c"+message, color);
     } else {
         if (window.console) {
             window.console.log(message);

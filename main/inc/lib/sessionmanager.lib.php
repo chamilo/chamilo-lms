@@ -181,18 +181,34 @@ class SessionManager
         return $result['count'] > 0;
 	}
 
+    /**
+     * @param string $where_condition
+     * @return mixed
+     */
     static function get_count_admin($where_condition = null)
     {
 
         $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_category   = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
         $tbl_user               = Database::get_main_table(TABLE_MAIN_USER);
+        $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $tbl_session_rel_user 	= Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
         $where = 'WHERE 1=1 ';
         $user_id = api_get_user_id();
 
-        if (api_is_session_admin() && api_get_setting('allow_session_admins_to_see_all_sessions') == 'false') {
-            $where.=" WHERE s.session_admin_id = $user_id ";
+        $extraJoin = null;
+
+        if (api_is_session_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false') {
+            $where .= " AND (
+                            s.session_admin_id = $user_id  OR
+                            sru.id_user = '$user_id' AND
+                            sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."'
+                            )
+                      ";
+
+            $extraJoin = " INNER JOIN $tbl_session_rel_user sru
+                            ON sru.id_session = s.id ";
         }
 
         $today = api_get_utc_datetime();
@@ -216,7 +232,8 @@ class SessionManager
             $where_condition = "1 = 1";
         }
 
-        $query_rows = "SELECT
+        $sql = "SELECT count(id) as total_rows FROM (
+                SELECT
                  IF (
 					(s.date_start <= '$today' AND '$today' < s.date_end) OR
                     (s.nb_days_access_before_beginning > 0 AND DATEDIFF(s.date_start,'".$today."' ".") <= s.nb_days_access_before_beginning) OR
@@ -226,21 +243,22 @@ class SessionManager
 					('$today' < s.date_end AND '0000-00-00' = s.date_start)
 				, 1, 0)
 				as session_active,
-				s.name,
-				sc.name,
+				s.id,
                 count(*) as total_rows
                 FROM $tbl_session s
                     LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
                     INNER JOIN $tbl_user u ON s.id_coach = u.user_id
-                $where AND $where_condition ";
+                    $extraJoin
+                $where AND $where_condition  ) as session_table";
 
         if (api_is_multiple_url_enabled()) {
-            $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
 				$where.= " AND ar.access_url_id = $access_url_id ";
 
-                $query_rows = "SELECT
+                $sql = "SELECT count(id) as total_rows FROM (
+                SELECT
                   IF (
 					(s.date_start <= '$today' AND '$today' < s.date_end) OR
                     (s.nb_days_access_before_beginning > 0 AND DATEDIFF(s.date_start,'".$today."' ".") <= s.nb_days_access_before_beginning) OR
@@ -250,20 +268,19 @@ class SessionManager
 					('$today' < s.date_end AND '0000-00-00' = s.date_start)
 				, 1, 0)
 				as session_active,
-				s.name,
-                 count(*) as total_rows
+				s.id
                  FROM $tbl_session s
                     LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
                     INNER JOIN $tbl_user u ON s.id_coach = u.user_id
                     INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
-                 $where AND $where_condition ";
+                    $extraJoin
+                 $where AND $where_condition) as session_table";
             }
         }
 
-        $result_rows = Database::query($query_rows);
-        $recorset = Database::fetch_array($result_rows);
-
-        $num = $recorset['total_rows'];
+        $result_rows = Database::query($sql);
+        $row = Database::fetch_array($result_rows);
+        $num = $row['total_rows'];
         return $num;
     }
 
@@ -272,16 +289,29 @@ class SessionManager
      * @param array $options order and limit keys
      * @return array
      */
-	public static function get_sessions_admin($options) {
+	public static function get_sessions_admin($options)
+    {
 		$tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_category   = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 		$tbl_user               = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_session_rel_user 	= Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
-		$where = 'HAVING 1=1 ';
+		$where = ' WHERE 1=1 ';
 		$user_id = api_get_user_id();
 
+        $extraJoin = null;
+
 		if (api_is_session_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false') {
-			$where.=" AND s.session_admin_id = $user_id ";
+            $where .= " AND (
+                            s.session_admin_id = $user_id  OR
+                            sru.id_user = '$user_id' AND
+                            sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."'
+                            )
+                      ";
+
+            $extraJoin = " INNER JOIN $tbl_session_rel_user sru
+                            ON sru.id_session = s.id ";
 		}
 
 		$coach_name = " CONCAT(u.lastname , ' ', u.firstname) as coach_name ";
@@ -289,6 +319,18 @@ class SessionManager
 		if (api_is_western_name_order()) {
 			$coach_name = " CONCAT(u.firstname, ' ', u.lastname) as coach_name ";
 		}
+
+        $options['where'] = str_replace(
+            array("AND session_active = '1'  )", " AND (  session_active = '1'  )"),
+            array(') GROUP BY s.name HAVING session_active = 1 ', " GROUP BY s.name HAVING session_active = 1 " )
+            , $options['where']
+        );
+
+        $options['where'] = str_replace(
+            array("AND session_active = '0'  )", " AND (  session_active = '0'  )"),
+            array(') GROUP BY s.name HAVING session_active = 0 ', " GROUP BY s.name HAVING session_active = '0' "),
+            $options['where']
+        );
 
 		$today = api_get_utc_datetime();
         $today = api_strtotime($today, 'UTC');
@@ -330,13 +372,12 @@ class SessionManager
         }
 
 		$query = "$select FROM $tbl_session s
-				LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
+				LEFT JOIN $tbl_session_category sc ON s.session_category_id = sc.id
 				LEFT JOIN $tbl_user u ON s.id_coach = u.user_id
+				$extraJoin
                 $where $order $limit";
 
-		global $_configuration;
-		if ($_configuration['multiple_access_urls']) {
-			$table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+		if (api_is_multiple_url_enabled()) {
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1) {
 				$query = " $select
@@ -344,6 +385,7 @@ class SessionManager
                                LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
                                INNER JOIN $tbl_user u ON s.id_coach = u.user_id
                                INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id AND ar.access_url_id = $access_url_id
+                               $extraJoin
 				 $where $order $limit";
 			}
 		}
@@ -1488,8 +1530,8 @@ class SessionManager
 	 * @param int		Human resources manager or Session admin id
 	 * @return array 	sessions
 	 */
-	public static function get_sessions_followed_by_drh($hr_manager_id) {
-        global $_configuration;
+	public static function get_sessions_followed_by_drh($hr_manager_id)
+    {
 		// Database Table Definitions
 		$tbl_session 			= 	Database::get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_rel_user 	= 	Database::get_main_table(TABLE_MAIN_SESSION_USER);

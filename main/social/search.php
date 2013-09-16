@@ -195,12 +195,9 @@ if ($query != '') {
                 $status_icon = Display::span('', array('class' => 'offline_user_in_text'));
             }
 
-            $user['tag'] = isset($user['tag']) ? $user['tag'] : null;
+            $tag = isset($user['tag']) ? ' <br /><br />'.$user['tag'] : null;
 
-            $user_info['complete_name'] = Display::url(
-                    $status_icon.$user_info['complete_name'],
-                    $url
-                ).'<br /><br />'.$user['tag'];
+            $user_info['complete_name'] = Display::url($status_icon.$user_info['complete_name'], $url);
 
             $invitations = $user['tag'].$send_inv.$send_msg;
 
@@ -265,7 +262,7 @@ if ($query != '') {
                 $item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2"></span></div>';
                 $item_3 = '<div class="box_description_group_content" ></div>';
             }
-            $item_4        = '<div class="box_description_group_tags" >'.$tags.'</div>';
+            $item_4        = '<div class="box_description_group_tags">'.$tags.'</div>';
             $item_5        = '<div class="box_description_group_actions" >'.$url_open.get_lang('SeeMore').$url_close.'</div>';
             $grid_item_2   = $item_0.$item_1.$item_2.$item_3.$item_4.$item_5;
             $grid_groups[] = array('', $grid_item_2);

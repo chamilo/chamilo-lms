@@ -1,5 +1,5 @@
 <?php
-/** This script is only use when using the console.php chamilo:install command */
+/** This script is only used when using the console.php chamilo:install command */
 /**
  * Database settings
  */

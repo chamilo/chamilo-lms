@@ -28,7 +28,7 @@ class AsseticDumpCommand extends Command
     /**
      * @param Console\Input\InputInterface $input
      * @param Console\Output\OutputInterface $output
-     * @return int|null|void
+     * @return integer|null|boolean|void
      */
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
@@ -49,10 +49,10 @@ class AsseticDumpCommand extends Command
         if (empty($theme)) {
             $dialog = $this->getHelperSet()->get('dialog');
             if (!$dialog->askConfirmation(
-                $output,
-                '<question>Are you sure you want to dump css/js of all themes?</question>(y/N)',
-                false
-            )
+                    $output,
+                    '<question>Are you sure you want to dump css/js of all themes?</question>(y/N)',
+                    false
+                )
             ) {
                 return;
             }
@@ -89,5 +89,7 @@ class AsseticDumpCommand extends Command
             }
         }
         $output->writeln('<info>Dump finished</info>');
+
+        return true;
     }
 }

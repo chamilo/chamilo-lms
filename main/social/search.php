@@ -146,7 +146,7 @@ $social_right_content = '<div class="span9">'.UserManager::get_search_form($quer
 // I'm searching something
 if ($query != '') {
 
-    $itemPerPage = 5;
+    $itemPerPage = 9;
     $page = isset($_GET['groups_page_nr']) ? intval($_GET['groups_page_nr']) : 1;
     $total = UserManager::get_all_user_tags($_GET['q'], 0, 0, $itemPerPage, true);
 

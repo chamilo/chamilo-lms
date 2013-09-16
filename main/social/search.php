@@ -125,10 +125,7 @@ $(document).ready(function (){
         width    : 550,
         height    : 300
        });
-
 });
-
-
 </script>';
 
 if (api_get_setting('allow_social_tool') != 'true') {
@@ -231,7 +228,7 @@ if ($query != '') {
         $social_right_content .= Display::page_subheader(get_lang('Groups'));
         foreach ($groups as $group) {
             $group['name']         = Security::remove_XSS($group['name'], STUDENT, true);
-            $$group['description'] = Security::remove_XSS($group['description'], STUDENT, true);
+            $group['description'] = Security::remove_XSS($group['description'], STUDENT, true);
             $id                    = $group['id'];
             $url_open              = '<a href="groups.php?id='.$id.'" >';
             $url_close             = '</a>';
@@ -284,9 +281,7 @@ $social_right_content .= MessageManager::generate_invitation_form('send_invitati
 
 $tpl = new Template($tool_name);
 $tpl->assign('social_left_content', $social_left_content);
-
 $tpl->assign('social_right_content', $social_right_content);
-
 
 $social_layout = $tpl->get_template('layout/social_layout.tpl');
 $tpl->display($social_layout);

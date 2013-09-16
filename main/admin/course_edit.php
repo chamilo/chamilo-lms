@@ -186,6 +186,8 @@ $course['disk_quota'] = round(DocumentManager::get_course_quota($course_code) /1
 $course['title'] = api_html_entity_decode($course['title'], ENT_QUOTES, $charset);
 $course['real_code'] = $course['code'];
 
+$course['add_teachers_to_sessions'] = empty($course_teachers) ||  count($course_teachers) == 1 ? null : '1';
+
 $form->setDefaults($course);
 
 // Validate form
@@ -224,8 +226,7 @@ if ($form->validate()) {
     }
 
 	$tutor_id = $course['tutor_name'];
-	$tutor_name=$platform_teachers[$tutor_id];
-
+	$tutor_name = $platform_teachers[$tutor_id];
 	$teachers = $course['group']['course_teachers'];
 
 	$title = $course['title'];
@@ -263,7 +264,6 @@ if ($form->validate()) {
 			CourseManager::update_course_extra_field_value($course_code, $key, $value);
 		}
 	}
-
 
     CourseManager::updateTeachers($course_code, $teachers, $course['add_teachers_to_sessions']);
 

@@ -38,7 +38,6 @@ if (api_is_platform_admin() && $type == 'admin') {
     $type = 'admin';
 }
 
-//if (api_get_course_id() != -1 && $type == 'course') {
 if (isset($_REQUEST['cidReq']) && !empty($_REQUEST['cidReq'])) {
     $type = 'course';
 }
@@ -152,6 +151,16 @@ if ($type == 'course' && !empty($group_id)) {
     $type_event_class = 'group_event';
     $type_label = get_lang('GroupCalendar');
 }
+
+$defaultView = api_get_setting('default_calendar_view');
+
+if (empty($defaultView)) {
+    $defaultView = 'month';
+}
+
+/* month, basicWeek,agendaWeek,agendaDay */
+
+$tpl->assign('default_view', $defaultView);
 
 if ($type == 'course' && !empty($session_id)) {
     $type_event_class = 'session_event';

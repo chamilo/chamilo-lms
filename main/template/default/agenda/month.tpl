@@ -103,6 +103,7 @@ $(document).ready(function() {
             ],
         {% endif %}
 
+        defaultView:    '{{ default_view }}',
 		buttonText: 	{{ button_text }},
 		monthNames: 	{{ month_names }},
 		monthNamesShort:{{ month_names_short }},

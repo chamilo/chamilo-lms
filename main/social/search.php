@@ -273,7 +273,7 @@ if ($query != '') {
         'groups',
         null,
         $grid_groups,
-        array('hide_navigation' => false, 'per_page' => 5),
+        array('hide_navigation' => false, 'per_page' => $itemPerPage),
         $query_vars,
         false,
         $visibility,

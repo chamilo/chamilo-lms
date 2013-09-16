@@ -14,6 +14,27 @@ use ChamiloLMS\Transaction\ExerciseAttemptTransactionLog;
 class TransactionLogController
 {
     /**
+     * A log entry with no type.
+     */
+    const LOG_NULL = 0;
+    /**
+     * A log entry created during envelope wrapping/unwrapping.
+     */
+    const LOG_ENVELOPE = 1;
+    /**
+     * A log entry created during envelope sending.
+     */
+    const LOG_SEND = 2;
+    /**
+     * A log entry created during envelope receive.
+     */
+    const LOG_RECEIVE = 3;
+    /**
+     * A log entry created during transaction import to the system.
+     */
+    const LOG_IMPORT = 4;
+
+    /**
      * A local place to store the branch transaction table name.
      */
     protected $table;
@@ -142,7 +163,7 @@ class TransactionLogController
         $transaction_actions_map = TransactionLog::getTransactionMappingSettings();
         $max_possible_attempts = 3;
         foreach ($transactions as $transaction) {
-            $log_entry = array('transaction_id' => $transaction->id);
+            $log_entry = array('transaction_id' => $transaction->id, 'log_type' => self::LOG_IMPORT);
             if ($transaction->status_id == TransactionLog::STATUS_ABANDONNED) {
                 $log_entry['message'] = 'Skipped import of abandoned transaction.';
                 self::addImportLog($log_entry);
@@ -153,7 +174,8 @@ class TransactionLogController
                 $max_possible_attempts = $transaction_actions_map[$transaction->action]['max_attempts'];
             }
             // @todo Move to group query outside of the loop if performance is not enough.
-            $row = Database::select('count(id) as import_attempts', $this->log_table, array('where' => array('transaction_id = ?' => array($transaction->id))));
+            $log_condition = array('log_type = ? and transaction_id = ?' => array(self::LOG_IMPORT, $transaction->id));
+            $row = Database::select('count(id) as import_attempts', $this->log_table, array('where' => $log_condition));
             $row = array_shift($row);
             if ($row['import_attempts'] >= $max_possible_attempts) {
                 $log_entry['message'] = sprintf('Reached maximum number of import attempts: "%d" attempts of "%d".', $row['import_attempts'], $max_possible_attempts);
@@ -210,9 +232,10 @@ class TransactionLogController
      *
      * @param array $log_entry
      *   An array with the following keys:
-     *   - 'transaction_id': The related transaction id.
-     *   - 'import_time': (optional) The time of the import or current time if
-     *     not provided.
+     *   - 'log_type': See self::LOG_* constants.
+     *   - 'transaction_id': (optional) The related transaction id.
+     *   - 'log_time': (optional) The related datetime or current time if not
+     *     provided.
      *   - 'message': (optional) The related message. Usually from exception
      *     messages or manual strings on success.
      *
@@ -222,7 +245,8 @@ class TransactionLogController
     public function addImportLog($log_entry)
     {
         $log_entry += array(
-            'import_time' => api_get_utc_datetime(),
+            'log_type' => self::LOG_NULL,
+            'log_time' => api_get_utc_datetime(),
             'message' => '',
         );
 

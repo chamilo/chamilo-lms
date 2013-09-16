@@ -63,3 +63,10 @@ ALTER TABLE branch_sync
   ADD plugin_send varchar(250) null default null,
   ADD plugin_receive varchar(250) null default null,
   ADD data TEXT null DEFAULT null COMMENT 'Serialized php array with extra information for the branch. Mainly used by its plugins.';
+
+-- Generalize a little more the transaction log table.
+ALTER TABLE branch_transaction_log
+  ADD log_type int not null after id,
+  CHANGE transaction_id transaction_id bigint unsigned null default null,
+  CHANGE import_time log_time datetime not null,
+  ADD INDEX (log_type);

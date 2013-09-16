@@ -209,7 +209,7 @@ $(document).ready(function() {
         if (olms.lms_item_types['i'+olms.info_lms_item[1]] != 'sco') {
             LMSInitialize();
         } else {
-            logit_lms('Cant execute LMSInitialize() ');
+            logit_lms('Cant execute LMSInitialize() (type is sco)',2);
         }
     });
 });
@@ -804,7 +804,7 @@ function SetValue(param, val) {
  */
 function savedata(origin) {
     //origin can be 'commit', 'finish' or 'terminate' (depending on the calling function)
-    logit_lms('function savedata() with origin: ' + origin);
+    logit_lms('function savedata() with origin: ' + origin, 3);
 
     //Status is NOT modified here see the lp_ajax_save_item.php file
 
@@ -815,15 +815,15 @@ function savedata(origin) {
     old_item_id = olms.info_lms_item[0];
 
     var item_to_save = olms.lms_item_id;
-    logit_lms('item_to_save original: ' + item_to_save);
+    logit_lms('item_to_save original: ' + item_to_save, 3);
 
     //If saving session_time value we asume that is from the old item not the current one
     if (olms.session_time != '' && olms.session_time != '0') {
-        logit_lms('item_to_save changed to: ' + old_item_id);
+        logit_lms('item_to_save changed to: ' + old_item_id, 3);
         item_to_save = old_item_id;
     }
 
-    logit_lms('item_to_save final: ' + item_to_save);
+    logit_lms('item_to_save final: ' + item_to_save, 3);
 
     //Original behaviour
     //xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);
@@ -1019,24 +1019,24 @@ function addEvent(elm, evType, fn, useCapture){
  */
 function addListeners(){
     //exit if the browser doesn't support ID or tag retrieval
-    logit_lms('Entering addListeners()',2);
+    logit_lms('Entering addListeners()', 3);
     if (!document.getElementsByTagName){
-        logit_lms("getElementsByTagName not available",2);
+        logit_lms("getElementsByTagName not available", 2);
         return;
     }
     if (!document.getElementById){
-        logit_lms("getElementById not available",2);
+        logit_lms("getElementById not available", 2);
         return;
     }
     //assign event handlers to objects
     if (olms.lms_lp_type==1 || olms.lms_item_type=='asset' || olms.lms_item_type == 'document') {
-        logit_lms('Chamilo LP or asset',2);
+        logit_lms('Chamilo LP or asset');
         //if this path is a Chamilo learnpath, then start manual save
         //when something is loaded in there
         addEvent(window, 'unload', lms_save_asset,false);
-        logit_lms('Added event listener lms_save_asset() on window unload',2);
+        logit_lms('Added event listener lms_save_asset() on window unload', 3);
     }
-    logit_lms('Quitting addListeners()',2);
+    logit_lms('Quitting addListeners()');
 }
 
 /**
@@ -1078,7 +1078,7 @@ function lms_save_asset() {
  * Saving the status will be dealt with by the XAJAX function.
  */
 function chamilo_void_save_asset(score, max, min, status) {
-    logit_lms('chamilo_void_save_asset',2);
+    logit_lms('chamilo_void_save_asset', 3);
     olms.score = score;
     if ((max == null) || (max == '')){
         max = 100;
@@ -1099,7 +1099,7 @@ function chamilo_void_save_asset(score, max, min, status) {
  */
 function logit_scorm(message, priority) {
     if (scorm_logs) {
-        log_in_log("SCORM: " + message);
+        log_in_log("SCORM: " + message, priority);
     }
     return false;
 }
@@ -1108,8 +1108,9 @@ function log_in_log(message, priority) {
     var ua = $.browser;
     if (ua.mozilla || ua.webkit) {
         // Colorize a little
-        var color = "color: green";
-        if (priority == 2) { color = "color:blue"; }
+        var color = "color: black";
+        if (priority == 3) { color = "color:blue"; }
+        elseif (priority == 2) { color = "color:green"; }
         elseif (priority == 1) { color = "color:orange"; }
         elseif (priority == 0) { color = "color:red;font-weight:bold"; }
         // Log in console with syntax colouring
@@ -1128,7 +1129,7 @@ function log_in_log(message, priority) {
  */
 function logit_lms(message, priority){
     if (scorm_logs) {
-        log_in_log("LMS: " + message);
+        log_in_log("LMS: " + message, priority);
     }
     return false;
 }
@@ -1199,7 +1200,7 @@ function update_toc(update_action, update_id, change_ids) {
                 }
                 break;
             default:
-                logit_lms('Update action unknown',2);
+                logit_lms('Update action unknown',1);
                 break;
         }
     }
@@ -1227,7 +1228,7 @@ function update_stats() {
  * Update the stats frame using a reload of the frame to avoid unsynched data
  */
 function update_stats_page() {
-    logit_lms('update_stats_page');
+    logit_lms('update_stats_page',3);
     var myframe = document.getElementById('content_id');
     var mysrc = myframe.location.href;
     if(mysrc == 'lp_controller.php?action=stats'){
@@ -1247,8 +1248,8 @@ function update_stats_page() {
  * @param	string  Display mode (absolute 'abs' or percentage '%').Defaults to %
  */
 function update_progress_bar(nbr_complete, nbr_total, mode) {
-    logit_lms('update_progress_bar('+nbr_complete+', '+nbr_total+', '+mode+')',2);
-    logit_lms('update_progress_bar with params: lms_lp_id= '+olms.lms_lp_id+', lms_view_id= '+olms.lms_view_id+' lms_user_id= '+olms.lms_user_id,2);
+    logit_lms('update_progress_bar('+nbr_complete+', '+nbr_total+', '+mode+')',3);
+    logit_lms('update_progress_bar with params: lms_lp_id= '+olms.lms_lp_id+', lms_view_id= '+olms.lms_view_id+' lms_user_id= '+olms.lms_user_id,3);
 
     if (mode == '') {
         mode='%';
@@ -1330,7 +1331,7 @@ function switch_item(current_item, next_item){
     var orig_item_type      = olms.lms_item_types['i'+current_item];
     var next_item_type      = olms.lms_item_types['i'+next_item];
 
-    logit_lms('switch_item() called with params '+olms.lms_item_id+' and '+next_item+'',0);
+    logit_lms('switch_item() called with params '+olms.lms_item_id+' and '+next_item+'',2);
 
     /*
      There are four "cases" for switching items:
@@ -1526,7 +1527,7 @@ function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score
     params += '&core_exit='+lms_item_core_exit;
     //console.info(session_time);
     if (olms.lms_lp_type == 1 || item_type == 'document') {
-        logit_lms('xajax_save_item with params:' + params);
+        logit_lms('xajax_save_item with params:' + params,3);
         $.ajax({
             type:"POST",
             data: params,
@@ -1610,7 +1611,7 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id)
         is_interactions='false';
     }
 
-    logit_lms('xajax_save_item_scorm with params:' + params);
+    logit_lms('xajax_save_item_scorm with params:' + params,3);
 
     $.ajax({
         type:"POST",
@@ -1630,7 +1631,7 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id)
  * @uses    lp_ajax_start_timer.php
  */
 function xajax_start_timer() {
-    logit_lms('xajax_start_timer() called');
+    logit_lms('xajax_start_timer() called',3);
     $.ajax({
         type: "GET",
         url: "lp_ajax_start_timer.php",
@@ -1639,10 +1640,10 @@ function xajax_start_timer() {
         success: function(time) {
             olms.asset_timer = time;
             olms.asset_timer_total = 0;
-            logit_lms('xajax_start_timer result: ' + time);
+            logit_lms('xajax_start_timer result: ' + time,3);
 
             var date = new Date(time * 1000);
-            logit_lms('xajax_start_timer result: ' + date.toString());
+            logit_lms('xajax_start_timer result: ' + date.toString(),3);
         }
     });
 }
@@ -1662,7 +1663,7 @@ function xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,ite
     params += '&iid='+lms_item_id;
     obj_string = '';
 
-    logit_lms('xajax_save_objectives with params:' + params);
+    logit_lms('xajax_save_objectives with params:' + params, 3);
 
     for (i in item_objectives){
         obj_string += '&objectives['+i+']=';
@@ -1702,7 +1703,7 @@ function xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id
         'next': next_item
     };
 
-    logit_lms('xajax_switch_item_details with params:' + params);
+    logit_lms('xajax_switch_item_details with params:' + params, 3);
 
     $.ajax({
         type: "POST",
@@ -1755,7 +1756,6 @@ function attach_glossary_into_scorm(type) {
         logit_lms('attach_glossary_into_scorm failed', 0);
         return false;
     }
-    //logit_lms('attach_glossary_into_scorm', 0);
 
     try {
         var doc = f.contentWindow ? f.contentWindow.document : f.contentDocument ? f.contentDocument : f.document;
@@ -1811,7 +1811,6 @@ function attach_glossary_into_scorm(type) {
                         }
                         //alert(n + ' ' + my_index);
                         $("iframe").contents().find('body').removeHighlight().highlight(n,my_index)
-                        //logit_lms(n+ ' - '+my_index, 0);
                     }
                 }
 

@@ -22,11 +22,7 @@ logs/*
 *.log
 
 # IDE settings
-
 .idea
-.idea/*
-.idea/dictionaries/*
-.idea/cssxfire.xml
 
 *.orig
 nbproject/*

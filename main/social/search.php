@@ -136,17 +136,23 @@ $this_section      = SECTION_SOCIAL;
 $tool_name         = get_lang('Search');
 $interbreadcrumb[] = array('url' => 'profile.php', 'name' => get_lang('SocialNetwork'));
 
-$query_vars = array();
 $query      = isset($_GET['q']) ? $_GET['q'] : null;
+$query_vars = array('q' => $query);
 
 $social_left_content = SocialManager::show_social_menu('search');
 
 $social_right_content = '<div class="span9">'.UserManager::get_search_form($query).'</div>';
 
-//I'm searching something
+// I'm searching something
 if ($query != '') {
-    //get users from tags
-    $users  = UserManager::get_all_user_tags($_GET['q'], 0, 0, 5);
+
+    $itemPerPage = 5;
+    $page = isset($_GET['groups_page_nr']) ? intval($_GET['groups_page_nr']) : 1;
+    $total = UserManager::get_all_user_tags($_GET['q'], 0, 0, $itemPerPage, true);
+
+    $from = intval(($page - 1) * $itemPerPage);
+    // Get users from tags
+    $users  = UserManager::get_all_user_tags($_GET['q'], 0, $from, $itemPerPage);
     $groups = GroupPortalManager::get_all_group_tags($_GET['q']);
 
     if (empty($users) && empty($groups)) {
@@ -228,7 +234,7 @@ if ($query != '') {
         $social_right_content .= Display::page_subheader(get_lang('Groups'));
         foreach ($groups as $group) {
             $group['name']         = Security::remove_XSS($group['name'], STUDENT, true);
-            $group['description'] = Security::remove_XSS($group['description'], STUDENT, true);
+            $group['description']  = Security::remove_XSS($group['description'], STUDENT, true);
             $id                    = $group['id'];
             $url_open              = '<a href="groups.php?id='.$id.'" >';
             $url_close             = '</a>';
@@ -267,13 +273,16 @@ if ($query != '') {
     }
     $visibility = array(true, true, true, true, true);
     $social_right_content .= Display::return_sortable_grid(
-        'mygroups',
-        array(),
+        'groups',
+        null,
         $grid_groups,
-        array('hide_navigation' => true, 'per_page' => 5),
+        array('hide_navigation' => false, 'per_page' => 5),
         $query_vars,
         false,
-        $visibility
+        $visibility,
+        true,
+        array(),
+        $total
     );
 }
 $social_right_content .= MessageManager::generate_message_form('send_message');

@@ -7,13 +7,31 @@
  * @package chamilo.services
  */
 
-// Monolog.
+// Needed to use the "entity" option in symfony forms
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
 use FranMoreno\Silex\Provider\PagerfantaServiceProvider;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
+// Flint
+$app->register(new Flint\Provider\ConfigServiceProvider());
+$app['root_dir'] = $app['root_sys'];
+
+$app->register(new Flint\Provider\RoutingServiceProvider(), array(
+    'routing.resource' => $app['sys_config_path'].'routing.yml',
+    'routing.options' => array(
+        //'cache_dir' => $app['debug'] == true ? null : $app['sys_temp_path']
+    ),
+));
+
+use Knp\Provider\ConsoleServiceProvider;
+
+$app->register(new ConsoleServiceProvider(), array(
+    'console.name'              => 'Chamilo',
+    'console.version'           => '1.0.0',
+    'console.project_directory' => __DIR__.'/..'
+));
 // Monolog.
 if (is_writable($app['sys_temp_path'])) {
 
@@ -43,7 +61,15 @@ $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
 
 // http://symfony.com/doc/master/reference/configuration/security.html
 
-$app->register(new Silex\Provider\SecurityServiceProvider(), array(
+class SecurityServiceProvider extends \Silex\Provider\SecurityServiceProvider
+{
+    public function addFakeRoute($method, $pattern, $name)
+    {
+        // Don't do anything otherwise the closures will be dumped and that leads to fatal errors.
+    }
+}
+
+$app->register(new SecurityServiceProvider, array(
     'security.firewalls' => array(
         'login' => array(
             'pattern' => '^/login$',
@@ -67,15 +93,11 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
                 return $app['orm.em']->getRepository('Entity\User');
             }),
             'anonymous' => true
-        ),/*
-        'classic' => array(
-            'pattern' => '^/.*$'
-        )*/
+        )
     )
 ));
 
 // Registering Password encoder.
-
 $app['security.encoder.digest'] = $app->share(function($app) {
     // use the sha1 algorithm
     // don't base64 encode the password
@@ -95,17 +117,26 @@ $app['security.authentication.logout_handler.admin'] = $app->share(function($app
 
 // Role hierarchy
 $app['security.role_hierarchy'] = array(
-    'ROLE_ADMIN' => array('ROLE_QUESTION_MANAGER', 'ROLE_SESSION_MANAGER', 'ROLE_TEACHER', 'ROLE_ALLOWED_TO_SWITCH'),
+    'ROLE_ADMIN' => array(
+        'ROLE_QUESTION_MANAGER',
+        'ROLE_SESSION_MANAGER',
+        'ROLE_TEACHER',
+        'ROLE_ALLOWED_TO_SWITCH',
+        'ROLE_DIRECTOR',
+        'ROLE_JURY_PRESIDENT'
+    ),
     'ROLE_RRHH' => array('ROLE_TEACHER'),
     'ROLE_TEACHER' => array('ROLE_STUDENT'),
     'ROLE_QUESTION_MANAGER' => array('ROLE_STUDENT', 'ROLE_QUESTION_MANAGER'),
     'ROLE_SESSION_MANAGER' => array('ROLE_STUDENT', 'ROLE_SESSION_MANAGER'),
     'ROLE_STUDENT' => array('ROLE_STUDENT'),
     'ROLE_ANONYMOUS' => array('ROLE_ANONYMOUS'),
+
     // Ministerio
     'ROLE_JURY_PRESIDENT' => array('ROLE_JURY_PRESIDENT', 'ROLE_JURY_MEMBER', 'ROLE_JURY_SUBSTITUTE'),
     'ROLE_JURY_SUBSTITUTE' => array('ROLE_JURY_SUBSTITUTE', 'ROLE_JURY_MEMBER'),
-    'ROLE_JURY_MEMBER' => array('ROLE_JURY_MEMBER')
+    'ROLE_JURY_MEMBER' => array('ROLE_JURY_MEMBER', 'ROLE_STUDENT'),
+    'ROLE_DIRECTOR' => array('ROLE_DIRECTOR')
 );
 
 // Role rules
@@ -117,15 +148,30 @@ $app['security.access_rules'] = array(
     //array('^/main/admin/extra_field_workflow.php', 'ROLE_QUESTION_MANAGER'),
     array('^/main/admin/.*', 'ROLE_ADMIN'),
     array('^/admin/questionmanager', 'ROLE_QUESTION_MANAGER'),
+    array('^/main/auth/inscription.php', 'IS_AUTHENTICATED_ANONYMOUSLY'),
+    array('^/main/auth/lostPassword.php', 'IS_AUTHENTICATED_ANONYMOUSLY'),
     array('^/main/.*', array('ROLE_STUDENT')),
+    array('^/courses/.*/curriculum/category', 'ROLE_TEACHER'),
+    array('^/courses/.*/curriculum/item', 'ROLE_TEACHER'),
+    array('^/courses/.*/curriculum/user', 'ROLE_STUDENT'),
+    array('^/courses/.*/curriculum', 'ROLE_STUDENT'),
 
     // Ministerio routes
 
     array('^/admin/director', 'ROLE_DIRECTOR'),
-    array('^/tool/.*', array('ROLE_ADMIN','ROLE_TEACHER')),
     array('^/admin/jury_president', 'ROLE_JURY_PRESIDENT'),
     array('^/admin/jury_member', 'ROLE_JURY_MEMBER') //? jury subsitute??
     //array('^.*$', 'ROLE_USER'),
+);
+
+// Roles that have an admin toolbar
+$app['allow_admin_toolbar'] = array(
+    'ROLE_ADMIN',
+    'ROLE_QUESTION_MANAGER',
+    'ROLE_DIRECTOR',
+    'ROLE_JURY_PRESIDENT',
+    'ROLE_JURY_SUBSTITUTE',
+    'ROLE_JURY_MEMBER'
 );
 
 /**
@@ -146,10 +192,12 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
 ));
 
 // Form provider
-$app->register(new Silex\Provider\FormServiceProvider());
+$app->register(new Silex\Provider\FormServiceProvider(), array(
+    'form.secret' => sha1(__DIR__)
+));
 
 // URL generator provider
-$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+//$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
 // Needed to use the "entity" option in symfony forms
 
@@ -190,10 +238,22 @@ if (isset($app['configuration']['main_database'])) {
 
     /* The database connection can be overwritten if you set $_configuration['db.options']
        in configuration.php like this : */
+    $dbPort = isset($app['configuration']['db_port']) ? $app['configuration']['db_port'] : 3306;
+    $dbDriver = isset($app['configuration']['db_driver']) ? $app['configuration']['db_driver'] : 'pdo_mysql';
+    $host = $app['configuration']['db_host'];
+
+    // Accepts that db_host can have a port part like: localhost:6666;
+
+    $hostParts = explode(':', $app['configuration']['db_host']);
+    if (isset($hostParts[1]) && !empty($hostParts[1])) {
+        $dbPort = $hostParts[1];
+        $host = str_replace(':'.$dbPort, '', $app['configuration']['db_host']);
+    }
     $defaultDatabaseOptions = array(
         'db_read' => array(
-            'driver' => 'pdo_mysql',
-            'host' => $app['configuration']['db_host'],
+            'driver' => $dbDriver,
+            'host' => $host,
+            'port' => $dbPort,
             'dbname' => $app['configuration']['main_database'],
             'user' => $app['configuration']['db_user'],
             'password' => $app['configuration']['db_password'],
@@ -201,8 +261,9 @@ if (isset($app['configuration']['main_database'])) {
             //'priority' => '1'
         ),
         'db_write' => array(
-            'driver' => 'pdo_mysql',
-            'host' => $app['configuration']['db_host'],
+            'driver' => $dbDriver,
+            'host' => $host,
+            'port' => $dbPort,
             'dbname' => $app['configuration']['main_database'],
             'user' => $app['configuration']['db_user'],
             'password' => $app['configuration']['db_password'],
@@ -364,12 +425,13 @@ $app['dbal_logger'] = $app->share(function() {
 });
 
 if ($app['debug']) {
-    /*$logger = $app['dbal_logger'];
+    /*$logger = new Doctrine\DBAL\Logging\DebugStack();
     $app['db.config']->setSQLLogger($logger);
     $app->after(function() use ($app, $logger) {
         // Log all queries as DEBUG.
+        $app['monolog']->addDebug('---- Doctrine SQL queries ----');
         foreach ($logger->queries as $query) {
-            $app['monolog']->debug(
+            $app['monolog']->addDebug(
                 $query['sql'],
                 array(
                     'params' => $query['params'],
@@ -378,6 +440,7 @@ if ($app['debug']) {
                 )
             );
         }
+        $app['monolog']->addDebug('---- End Doctrine SQL queries ----');
     });*/
 }
 
@@ -600,7 +663,7 @@ $app['exercise_manager.controller'] = $app->share(
 
 $app['admin.controller'] = $app->share(
     function () use ($app) {
-        return new ChamiloLMS\Controller\Admin\AdministratorController($app);
+        return new ChamiloLMS\Controller\Admin\AdminController($app);
     }
 );
 $app['role.controller'] = $app->share(
@@ -626,6 +689,39 @@ $app['model_ajax.controller'] = $app->share(
         return new ChamiloLMS\Controller\ModelAjaxController();
     }
 );
+
+// Curriculum tool
+
+$app['curriculum.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumController($app);
+    }
+);
+
+$app['curriculum_category.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumCategoryController($app);
+    }
+);
+
+$app['curriculum_item.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumItemController($app);
+    }
+);
+
+$app['curriculum_user.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumUserController($app);
+    }
+);
+
+$app['upgrade.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\Administrator\UpgradeController($app);
+    }
+);
+
 
 // Ministerio
 
@@ -658,25 +754,3 @@ $app['jury_member.controller'] = $app->share(
         return new ChamiloLMS\Controller\Admin\JuryMember\JuryMemberController($app);
     }
 );
-
-$app['curriculum_category.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumCategoryController($app);
-    }
-);
-
-$app['curriculum_item.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumItemController($app);
-    }
-);
-
-$app['curriculum_user.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumUserController($app);
-    }
-);
-
-
-
-

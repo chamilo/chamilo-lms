@@ -52,7 +52,6 @@ $column_model   = array(
 $extra_params['autowidth'] = 'true';
 //height auto
 $extra_params['height'] = 'auto';
-
 ?>
 <script>
 

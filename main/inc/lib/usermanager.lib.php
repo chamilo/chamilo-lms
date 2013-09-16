@@ -71,7 +71,8 @@ class UserManager
      * @param array Array of user details (array('status'=>...,'username'=>..., ...))
      * @return mixed Array of user information
      */
-    public static function add($params) {
+    public static function add($params)
+    {
         global $_configuration;
 
         $access_url_id = 1;
@@ -149,6 +150,7 @@ class UserManager
                 return api_set_failure('encrypt_method invalid');
             }
         }
+
         $params['registration_date'] = api_get_utc_datetime();
 
         // Database table definition
@@ -255,7 +257,8 @@ class UserManager
         $hr_dept_id = 0,
         $extra = null,
         $encrypt_method = '',
-        $send_mail = false
+        $send_mail = false,
+        $reliable_data = false
     ) {
         global $_configuration;
         $original_password = $password;
@@ -279,10 +282,6 @@ class UserManager
             }
         }
 
-        $firstName     = Security::remove_XSS($firstName);
-        $lastName      = Security::remove_XSS($lastName);
-        $loginName     = Security::remove_XSS($loginName);
-        $phone         = Security::remove_XSS($phone);
 
         // database table definition
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -313,26 +312,44 @@ class UserManager
             }
         }
 
+        if (!$reliable_data) {
+            // Filtering here takes about 0.04s
+            $firstName     = Database::escape_string(trim(Security::remove_XSS($firstName)));
+            $lastName      = Database::escape_string(trim(Security::remove_XSS($lastName)));
+            $loginName     = Database::escape_string(trim(Security::remove_XSS($loginName)));
+            $phone         = Database::escape_string(trim(Security::remove_XSS($phone)));
+            $password      = Database::escape_string($password);
+            $email         = Database::escape_string($email);
+            $official_code = Database::escape_string($official_code);
+            $picture_uri   = Database::escape_string($picture_uri);
+            $creator_id    = intval($creator_id);
+            $auth_source   = Database::escape_string($auth_source);
+            $language      = Database::escape_string($language);
+            $expiration_date = Database::escape_string($expiration_date);
+            $hr_dept_id    = intval($hr_dept_id);
+            $active = intval($active);
+            $status = intval($status);
+        }
 
         //@todo replace this date with the api_get_utc_date function big problem with users that are already registered
         $current_date = api_get_utc_datetime();
         $sql = "INSERT INTO $table_user ".
-               "SET lastname =         '".Database::escape_string(trim($lastName))."',".
-               "firstname =         '".Database::escape_string(trim($firstName))."',".
-               "username =            '".Database::escape_string(trim($loginName))."',".
-               "status =             '".Database::escape_string($status)."',".
-               "password =             '".Database::escape_string($password)."',".
-               "email =             '".Database::escape_string($email)."',".
-               "official_code    =     '".Database::escape_string($official_code)."',".
-               "picture_uri     =     '".Database::escape_string($picture_uri)."',".
-               "creator_id      =     '".Database::escape_string($creator_id)."',".
-               "auth_source =         '".Database::escape_string($auth_source)."',".
-               "phone =             '".Database::escape_string($phone)."',".
-               "language =             '".Database::escape_string($language)."',".
-               "registration_date = '".$current_date."',".
-               "expiration_date =     '".Database::escape_string($expiration_date)."',".
-               "hr_dept_id =         '".Database::escape_string($hr_dept_id)."',".
-               "active =             '".Database::escape_string($active)."'";
+               "SET lastname =         '$lastName',".
+               "firstname =         '$firstName',".
+               "username =            '$loginName',".
+               "status =             $status,".
+               "password =             '$password',".
+               "email =             '$email',".
+               "official_code    =     '$official_code',".
+               "picture_uri     =     '$picture_uri',".
+               "creator_id      =     $creator_id,".
+               "auth_source =         '$auth_source',".
+               "phone =             '$phone',".
+               "language =             '$language',".
+               "registration_date = '$current_date',".
+               "expiration_date =     '$expiration_date',".
+               "hr_dept_id =         $hr_dept_id,".
+               "active =             $active";
         $result = Database::query($sql);
 
         if ($result) {
@@ -345,9 +362,11 @@ class UserManager
                 UrlManager::add_user_to_url($return, 1);
             }
 
+/*
             global $app;
             // Adding user
             /** @var Entity\User $user */
+            /** @var Entity\User $user
             $em = $app['orm.ems']['db_write'];
             $user = $em->getRepository('Entity\User')->find($return);
             $role = $em->getRepository('Entity\Role')->find($status);
@@ -358,7 +377,16 @@ class UserManager
 
             $user->getRolesObj()->add($role);
             $em->persist($user);
+            $t2 = microtime() - $t0;
+            error_log(__LINE__.': '.$t2);
             $em->flush();
+/*/
+            // optimized version of the above (takes about 56% of the time - see CT#6640)
+            if ($status == 11) {
+                UserManager::add_user_as_admin($return);
+            }
+            $sql = "insert into users_roles values($return,$status)";
+            $res = Database::query($sql);
 
             if (!empty($email) && $send_mail) {
                 $recipient_name = api_get_person_name($firstName, $lastName, null, PERSON_NAME_EMAIL_ADDRESS);
@@ -391,9 +419,12 @@ class UserManager
             }
             // Add event to system log
             $user_id_manager = api_get_user_id();
-            $user_info = api_get_user_info($return);
+             // api_get_user_info() takes about 0.01s
+            //$user_info = api_get_user_info($return);
             event_system(LOG_USER_CREATE, LOG_USER_ID, $return, api_get_utc_datetime(), $user_id_manager);
-            event_system(LOG_USER_CREATE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager);
+            // event_system of object takes about 0.03s
+            //event_system(LOG_USER_CREATE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager);
+
         } else {
             return api_set_failure('error inserting in Database');
         }
@@ -2336,7 +2367,17 @@ class UserManager
      * @return array  list of statuses [session_category][session_id]
      * @todo ensure multiple access urls are managed correctly
      */
-    public static function get_sessions_by_category($user_id, $is_time_over = false, $get_count = false, $reverse_order = false, $start = 0, $maxPerPage = null, $categoryFilter = null) {
+    public static function get_sessions_by_category(
+        $user_id,
+        $is_time_over = false,
+        $get_count = false,
+        $reverse_order = false,
+        $start = 0,
+        $maxPerPage = null,
+        $categoryFilter = null,
+        $ignore_visibility_for_admins = false
+    )
+    {
         // Database Table Definitions
         $tbl_session                = Database :: get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -2360,10 +2401,9 @@ class UserManager
             $order = ' ORDER BY name DESC ';
         }
 
-
         if ($is_time_over) {
-            $condition_date_end1 = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00') OR moved_to <> 0) ";
-            $condition_date_end2 = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00')) ";
+            $condition_date_end1 = " AND ((session.access_end_date < '$now' AND access_end_date IS NOT NULL AND session.access_end_date != '0000-00-00 00:00:00' AND session.access_end_date != '' ) OR moved_to <> 0) ";
+            $condition_date_end2 = " AND ((session.access_end_date < '$now' AND access_end_date IS NOT NULL AND session.access_end_date != '0000-00-00 00:00:00' AND session.access_end_date != '') ) ";
         } else {
             if (api_is_allowed_to_create_course()) {
                 //Teachers can access the session depending in the access_coach date
@@ -2373,8 +2413,8 @@ class UserManager
                 //Student can't access before the start date or after the end date
                 //$condition_date_start1 = " AND (session.access_start_date <= '$now' OR session.access_start_date = '0000-00-00 00:00:00') ";
                 //$condition_date_start2 = " AND (session.access_start_date <= '$now' OR session.access_start_date = '0000-00-00 00:00:00') ";
-                $condition_date_end1 = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00') ";
-                $condition_date_end2 = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00') ";
+                $condition_date_end1 = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00' OR session.access_end_date IS NULL ) ";
+                $condition_date_end2 = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00' OR session.access_end_date IS NULL ) ";
             }
         }
 
@@ -2385,10 +2425,8 @@ class UserManager
                    " access_end_date, ".
                    " coach_access_start_date, ".
                    " coach_access_end_date, ".
-
                    " display_start_date, ".
                    " display_end_date, ".
-
                    " session_category_id, ".
                    " session_category.name as session_category_name, ".
                    " session_category.date_start session_category_date_start, ".
@@ -2414,7 +2452,6 @@ class UserManager
                 ON su.id_session = session.id AND su.id_user = scu.id_user
                 WHERE scu.id_user = $user_id $condition_date_end1";
 
-
         // select specific to session coaches
         $select2 = " $select FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id) ";
         $sql2 = $select2 . " WHERE session.id_coach = $user_id $condition_date_end2 ";
@@ -2422,12 +2459,12 @@ class UserManager
         if (isset($categoryFilter) && $categoryFilter != '') {
             switch ($categoryFilter) {
                 case 'no_category':
-                    $sql1 .= "AND session_category_id = 0";
-                    $sql2 .= "AND session_category_id = 0";
+                    $sql1 .= "AND (session_category_id = 0 OR session_category_id IS NULL)";
+                    $sql2 .= "AND (session_category_id = 0 OR session_category_id IS NULL)";
                     break;
                 case 'with_category':
-                    $sql1 .= "AND session_category_id <> 0";
-                    $sql2 .= "AND session_category_id <> 0";
+                    $sql1 .= "AND (session_category_id <> 0 AND session_category_id IS NOT NULL ) ";
+                    $sql2 .= "AND (session_category_id <> 0 AND session_category_id IS NOT NULL )";
                     break;
                 default:
                     if (!empty($categoryFilter) && is_numeric($categoryFilter)) {
@@ -2442,7 +2479,7 @@ class UserManager
         $sql3 = null;
 
         if ($get_count) {
-            $sql3 = $sql2;
+            $sql3 = $sql1;
         } else {
             $sql1 .= $order;
             $sql2 .= $order;
@@ -2459,6 +2496,7 @@ class UserManager
             $sql2 .= $limitCondition;
         }
 
+
         $join = array();
         $ordered_join = array();
         $ids = array();
@@ -2468,7 +2506,6 @@ class UserManager
             $row = Database::fetch_array($result3);
             return $row['total_rows'];
         } else {
-
             $result1 = Database::query($sql1);
             $result2 = Database::query($sql2);
         }
@@ -2487,19 +2524,19 @@ class UserManager
 
             $i = 0;
             while ($row1 = Database::fetch_array($result1)) {
-                if (!in_array($row1['id'],$ids)) {
+                if (!in_array($row1['id'], $ids)) {
                     if ($reverse_order) {
-                        while (isset($join[$i]) && strcmp($row1['session_category_name'],$join[$i]['session_category_name'])<=0) {
+                        while (isset($join[$i]) && strcmp($row1['session_category_name'], $join[$i]['session_category_name']) <= 0) {
                             $ordered_join[] = $join[$i];
                             $i++;
                         }
                     } else {
-                        while (isset($join[$i]) && strcmp($row1['session_category_name'],$join[$i]['session_category_name'])>0) {
+                        while (isset($join[$i]) && strcmp($row1['session_category_name'], $join[$i]['session_category_name']) > 0) {
                             $ordered_join[] = $join[$i];
                             $i++;
                         }
                         if (isset($join[$i]) && strcmp($row1['session_category_name'],$join[$i]['session_category_name']) === 0) {
-                            while (isset($join[$i]) && strcmp($row1['short_name'],$join[$i]['short_name'])>0) {
+                            while (isset($join[$i]) && isset($row1['short_name']) && strcmp($row1['short_name'], $join[$i]['short_name'])>0) {
                                 $ordered_join[] = $join[$i];
                                 $i++;
                             }
@@ -2534,8 +2571,9 @@ class UserManager
                 // the session table again
                 $session_info = $row;
 
-                //Checking session visibility
-                $visibility = api_get_session_visibility($session_id, null, false);
+                // Checking session visibility
+                $visibility = api_get_session_visibility($session_id, null, $ignore_visibility_for_admins);
+
 
                 switch ($visibility) {
                     case SESSION_VISIBLE_READ_ONLY:
@@ -2623,7 +2661,7 @@ class UserManager
 
         //Courses in which we are subscribed out of any session
         $tbl_user_course_category = Database :: get_main_table(TABLE_USER_COURSE_CATEGORY);
-
+        //INNER JOIN $tbl_user_course_category user_course_category
         $personal_course_list_sql = "SELECT course.code,
                                             course_rel_user.status course_rel_status,
                                             course_rel_user.sort sort,
@@ -2686,6 +2724,7 @@ class UserManager
                         continue;
                     }
                     $course['course_info'] = $course;
+                    $course['session_id'] = $session_id;
                     $key = $session_id.' - '.$course['id'];
                     $personal_course_list[$key] = $course;
                 }
@@ -4250,7 +4289,4 @@ class UserManager
         }
         return $users;
     }
-
-
-
 }

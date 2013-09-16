@@ -4,7 +4,7 @@
 /**
  * This is a bootstrap file that loads all Chamilo dependencies including:
  *
- * - Chamilo settings in main/inc/configuration.php or main/inc/configuration.yml
+ * - Chamilo settings in main/inc/conf/configuration.php or config/configuration.yml or config/configuration.php (in this order, using what if finds first)
  * - Database (Using Doctrine DBAL/ORM)
  * - Templates (Using Twig)
  * - Loading language files (Using Symfony component)
@@ -87,7 +87,8 @@ $app['root_sys'] = isset($_configuration['root_sys']) ? $_configuration['root_sy
 $app['sys_root'] = $app['root_sys'];
 $app['sys_data_path'] = isset($_configuration['sys_data_path']) ? $_configuration['sys_data_path'] : $app['root_sys'].'data/';
 $app['sys_config_path'] = isset($_configuration['sys_config_path']) ? $_configuration['sys_config_path'] : $app['root_sys'].'config/';
-$app['sys_temp_path'] = isset($_configuration['sys_temp_path']) ? $_configuration['sys_temp_path'] : $app['root_sys'].'temp/';
+$app['sys_course_path'] = isset($_configuration['sys_course_path']) ? $_configuration['sys_course_path'] : $app['sys_data_path'].'/courses/';
+$app['sys_temp_path'] = isset($_configuration['sys_temp_path']) ? $_configuration['sys_temp_path'] : $app['sys_data_path'].'temp/';
 $app['sys_log_path'] = isset($_configuration['sys_log_path']) ? $_configuration['sys_log_path'] : $app['root_sys'].'logs/';
 
 /** Loading config files (mail, auth, profile) */
@@ -259,6 +260,7 @@ $app->error(
         if ($app['debug']) {
             //return;
         }
+        $message = null;
         if (isset($code)) {
             switch ($code) {
                 case 401:
@@ -273,18 +275,23 @@ $app->error(
             }
         } else {
             $code = null;
-            $message = null;
         }
-
+        //$code = ($e instanceof HttpException) ? $e->getStatusCode() : 500;
         // It seems that error() is executed first than the before() middleware
         // @ŧodo check this one
         $templateStyle = api_get_setting('template');
+
         $templateStyle = isset($templateStyle) && !empty($templateStyle) ? $templateStyle : 'default';
+
+        if (!is_dir($app['sys_root'].'main/template/'.$templateStyle)) {
+            $templateStyle = 'default';
+        }
         $app['template_style'] = $templateStyle;
 
         // Default layout.
         $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
 
+        $app['template']->assign('error', array('code' => $code, 'message' => $message));
 
         $response = $app['template']->render_layout('error.tpl');
 
@@ -418,7 +425,6 @@ $language_files = array();
 $language_files[] = 'trad4all';
 $language_files[] = 'notification';
 $language_files[] = 'accessibility';
-$language_files[] = 'minedu';
 
 // @todo Added because userportal and index are loaded by a controller should be fixed when a $app['translator'] is configured
 $language_files[] = 'index';
@@ -489,36 +495,52 @@ use Symfony\Component\Finder\Finder;
 $app->before(
 
     function () use ($app) {
-        // Checking configuration file
+         /** @var Request $request */
+        $request = $app['request'];
+
+        // Checking configuration file. If does not exists redirect to the install folder.
         if (!file_exists($app['configuration_file']) && !file_exists($app['configuration_yml_file'])) {
-            return new RedirectResponse(api_get_path(WEB_CODE_PATH).'install');
-            $app->abort(500, "Configuration file was not found");
+            $url = str_replace('web', 'main/install', $request->getBasePath());
+            return new RedirectResponse($url);
         }
 
         // Check the PHP version.
         if (api_check_php_version() == false) {
-            $app->abort(500, "Incorrect PHP version");
+            $app->abort(500, "Incorrect PHP version.");
+        }
+
+        // Check data folder
+
+        if (!is_writable(api_get_path(SYS_DATA_PATH))) {
+            $app->abort(500, "data folder must be writable.");
         }
 
         // Checks temp folder permissions.
         if (!is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
-            $app->abort(500, "temp folder must be writable");
+            $app->abort(500, "data/temp folder must be writable.");
         }
 
-        /** @var Request $request */
-        $request = $app['request'];
+        // Checking that configuration is loaded
+        if (!isset($app['configuration'])) {
+            $app->abort(500, '$configuration array must be set in the configuration.php file.');
+        }
+
+        if (!isset($app['configuration']['root_web'])) {
+            $app->abort(500, '$configuration[root_web] must be set in the configuration.php file.');
+        }
 
         // Starting the session for more info see: http://silex.sensiolabs.org/doc/providers/session.html
         $request->getSession()->start();
+
         /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem $filesystem */
         $filesystem = $app['chamilo.filesystem'];
 
         if ($app['debug']) {
-            // Creates temp folders for every request if debug is on.
+            // Creates data/temp folders for every request if debug is on.
             $filesystem->createFolders($app['temp.paths']->folders);
         }
 
-        // If assetic is enabled copy folders from theme inside web/
+        // If Assetic is enabled copy folders from theme inside "web/"
         if ($app['assetic.auto_dump_assets']) {
             $filesystem->copyFolders($app['temp.paths']->copyFolders);
         }
@@ -529,17 +551,20 @@ $app->before(
         // Setting access_url id (multiple url feature)
 
         if (api_get_multiple_access_url()) {
-            Session::write('url_id', $app['configuration']['access_url']);
-            Session::write('url_info', api_get_current_access_url_info($app['configuration']['access_url']));
+            //for some reason $app['configuration'] doesn't work. Use $_config
+            global $_configuration;
+            Session::write('url_id', $_configuration['access_url']);
+            Session::write('url_info', api_get_current_access_url_info($_configuration['access_url']));
         } else {
             Session::write('url_id', 1);
         }
 
-        // Loading portal settings from DB
+        // Loading portal settings from DB.
         $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
         $settings_latest_update = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
 
         $_setting = Session::read('_setting');
+
         if (empty($_setting)) {
             api_set_settings_and_plugins();
         } else {
@@ -548,18 +573,18 @@ $app->before(
             }
         }
 
-        $_setting = Session::read('_setting');
-        $_plugins = Session::read('_plugins');
+        $app['plugins'] = Session::read('_plugins');
 
         // Default template style.
         $templateStyle = api_get_setting('template');
         $templateStyle = isset($templateStyle) && !empty($templateStyle) ? $templateStyle : 'default';
+        if (!is_dir($app['sys_root'].'main/template/'.$templateStyle)) {
+            $templateStyle = 'default';
+        }
         $app['template_style'] = $templateStyle;
 
         // Default layout.
         $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
-
-        $app['plugins'] = $_plugins;
 
         // Setting languages.
         $app['api_get_languages'] = api_get_languages();
@@ -632,8 +657,6 @@ $app->before(
         $iso = api_get_language_isocode($language);
         $app['translator']->setLocale($iso);
 
-
-
         // From the login page
         $language = $request->get('language');
 
@@ -643,7 +666,8 @@ $app->before(
         }
 
         // From the user
-        if ($user) {
+        if ($user && $userInfo) {
+            // @todo check why this does not works
             //$language = $user->getLanguage();
             $language = $userInfo['language'];
             $iso = api_get_language_isocode($language);
@@ -664,87 +688,11 @@ $app->before(
             $section = $info['dirname'];
         }
 
-        // Default langs
-        $languageFiles = array(
-            'trad4all',
-            'notification',
-            'accessibility',
-            'exercice'
-        );
-
-
-        $languageFilesToAdd = array();
-        /* Loading translations depending of the "section" folder after main
-          for example the section is exercice here: web/main/exercice/result.php
-        */
-        if (!empty($section)) {
-            switch($section) {
-                case 'admin':
-                    $languageFilesToAdd = array('admin');
-                    break;
-                case 'document':
-                    $languageFilesToAdd = array('document');
-                    break;
-                case 'dashboard':
-                    $languageFilesToAdd = array ('index', 'tracking', 'userInfo', 'admin', 'gradebook');
-                    break;
-                case 'mySpace':
-                    $languageFilesToAdd = array('registration', 'index', 'tracking', 'admin');
-                    break;
-                case 'course_info':
-                case 'course_home':
-                case 'course_description':
-                case 'create_course':
-                    $languageFilesToAdd = array('create_course', 'registration', 'admin', 'exercice', 'course_description', 'course_info');
-                    break;
-                case 'coursecopy':
-                    $languageFilesToAdd = array('exercice', 'coursebackup', 'admin');
-                    break;
-                case 'group':
-                    $languageFilesToAdd = array('group');
-                    break;
-                case 'newscorm':
-                    $languageFilesToAdd = array('course_home', 'scormdocument','document','scorm','learnpath','resourcelinker','registration','exercice');
-                    break;
-                case 'link':
-                    $languageFilesToAdd = array('link', 'admin');
-                    break;
-                case 'session':
-                    $languageFilesToAdd = array('admin', 'registration');
-                    break;
-                case 'user':
-                    $languageFilesToAdd = array('registration', 'admin', 'userInfo', 'registration');
-                    break;
-                case 'social':
-                    $languageFilesToAdd = array('userInfo');
-                    break;
-                case 'exercice':
-                    $languageFilesToAdd = array('exercice');
-                    break;
-            }
-        } else {
-
-            $controllerName = $request->get('_controller');
-
-            // Work around to load languages:
-            switch($controllerName) {
-                case 'index.controller:indexAction':
-                case 'userPortal.controller::indexAction':
-                    $languageFilesToAdd = array('courses', 'index', 'admin');
-                    break;
-            }
-        }
-
-        $languageFiles = array_merge($languageFiles, $languageFilesToAdd);
-
         $app['translator.cache.enabled'] = false;
 
-        $app['translator'] = $app->share($app->extend('translator', function($translator, $app) use ($languageFiles) {
+        $app['translator'] = $app->share($app->extend('translator', function ($translator, $app) {
 
             $locale = $translator->getLocale();
-
-            // Creating regex to parse sections (admin, exercice, etc)
-            $languageFilesToString = '/'.implode('|', $languageFiles).'/';
 
             /** @var Symfony\Component\Translation\Translator $translator  */
             if ($app['translator.cache.enabled']) {
@@ -758,20 +706,46 @@ $app->before(
             } else {
                 $translator->addLoader('pofile', new PoFileLoader());
 
-                $finder = new Finder();
-                $files = $finder->files()
-                    ->path($languageFilesToString)
-                    ->name('en.po')
-                    ->name($locale.'.po')
-                    ->in(api_get_path(SYS_PATH).'main/locale');
+                $filesToLoad = array(
+                    api_get_path(SYS_PATH).'main/locale/'.$locale.'.po',
+                    api_get_path(SYS_PATH).'main/locale/'.$locale.'.custom.po'
+                );
 
-                foreach ($files as $entry) {
-                    $code = $entry->getBasename('.po');
-                    $translator->addResource('pofile', $entry->getPathname(), $code);
+                foreach ($filesToLoad as $file) {
+                    if (file_exists($file)) {
+                        $translator->addResource('pofile', $file, $locale);
+                    }
                 }
+
+                /*$translator->addLoader('mofile', new MoFileLoader());
+                $filePath = api_get_path(SYS_PATH).'main/locale/'.$locale.'.mo';
+                if (!file_exists($filePath)) {
+                    $filePath = api_get_path(SYS_PATH).'main/locale/en.mo';
+                }
+                $translator->addResource('mofile', $filePath, $locale);*/
                 return $translator;
             }
         }));
+
+        // Check if we are inside a Chamilo course tool
+        $isCourseTool = (strpos($request->getPathInfo(), 'courses/') === false) ? false : true;
+
+        // Setting course entity for controllers and templates
+        if ($isCourseTool) {
+            // The course parameter is loaded
+            $course = $request->get('course');
+
+            // Converting /courses/XXX/ to a Entity/Course object
+            $course = $app['orm.em']->getRepository('Entity\Course')->findOneByCode($course);
+            $app['course'] = $course;
+            $app['template']->assign('course', $course);
+
+            $sessionId = $request->get('id_session');
+            $session = $app['orm.em']->getRepository('Entity\Session')->findOneById($sessionId);
+            $app['course_session'] = $session;
+
+            $app['template']->assign('course_session', $session);
+        }
     }
 );
 
@@ -882,7 +856,6 @@ if (isset($app['configuration']['main_database']) && isset($app['db.event_manage
     $app['dbs.event_manager']['db_read']->addEventSubscriber($sluggableListener);
     $app['dbs.event_manager']['db_write']->addEventSubscriber($sluggableListener);
 
-
     $sortableListener = new Gedmo\Sortable\SortableListener();
     // $app['db.event_manager']->addEventSubscriber($sortableListener);
     $app['dbs.event_manager']['db_read']->addEventSubscriber($sortableListener);
@@ -896,16 +869,18 @@ if (isset($app['configuration']['main_database']) && isset($app['db.event_manage
 
     $loggableListener = new \Gedmo\Loggable\LoggableListener();
     if (PHP_SAPI != 'cli') {
-        $userInfo = api_get_user_info();
+        //$userInfo = api_get_user_info();
 
         if (isset($userInfo) && !empty($userInfo['username'])) {
-            $loggableListener->setUsername($userInfo['username']);
+            //$loggableListener->setUsername($userInfo['username']);
         }
     }
-    //$app['db.event_manager']->addEventSubscriber($loggableListener);
     $app['dbs.event_manager']['db_read']->addEventSubscriber($loggableListener);
     $app['dbs.event_manager']['db_write']->addEventSubscriber($loggableListener);
 }
 
-return $app;
+// Fixes uses of $_course in the scripts.
+$_course = api_get_course_info();
+$_cid = api_get_course_id();
 
+return $app;

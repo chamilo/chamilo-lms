@@ -17,12 +17,17 @@ $language_file = array('registration', 'messages', 'userInfo');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
+if (api_is_profile_readable() == false) {
+    api_not_allowed(true);
+}
+
 if (api_get_setting('allow_social_tool') == 'true') {
     $this_section = SECTION_SOCIAL;
 } else {
     $this_section = SECTION_MYPROFILE;
 }
 
+$htmlHeadXtra[] = api_get_password_checker_js('#username', '#password1');
 $_SESSION['this_section'] = $this_section;
 
 if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
@@ -30,9 +35,7 @@ if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user[
 }
 
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<link href="'.api_get_path(
-    WEB_LIBRARY_PATH
-).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+$htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
 $htmlHeadXtra[] = '<script>
 function confirmation(name) {
@@ -72,7 +75,6 @@ function show_icon_edit(element_html) {
 }
 </script>';
 
-//$interbreadcrumb[] = array('url' => '../auth/profile.php', 'name' => get_lang('ModifyProfile'));
 if (!empty ($_GET['coursePath'])) {
     $course_url = api_get_path(WEB_COURSE_PATH).htmlentities(strip_tags($_GET['coursePath'])).'/index.php';
     $interbreadcrumb[] = array('url' => $course_url, 'name' => Security::remove_XSS($_GET['courseCode']));
@@ -95,7 +97,7 @@ EOF;
 }
 
 // Libraries
-$tool_name = is_profile_editable() ? get_lang('ModifProfile') : get_lang('ViewProfile');
+$tool_name = api_is_profile_editable() ? get_lang('ModifProfile') : get_lang('ViewProfile');
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
 /*	Form	*/
@@ -188,7 +190,7 @@ if (api_get_setting('registration', 'email') == 'true' && api_get_setting('profi
 }
 
 // OPENID URL
-if (is_profile_editable() && api_get_setting('openid_authentication') == 'true') {
+if (api_is_profile_editable() && api_get_setting('openid_authentication') == 'true') {
     $form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => 40));
     if (api_get_setting('profile', 'openid') !== 'true') {
         $form->freeze('openid');
@@ -212,7 +214,7 @@ $form->applyFilter('phone', 'trim');
 $form->addRule('phone', get_lang('EmailWrong'), 'email');*/
 
 //	PICTURE
-if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
+if (api_is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
     $form->addElement(
         'file',
         'picture',
@@ -238,7 +240,7 @@ if (api_get_setting('profile', 'language') !== 'true') {
 }
 
 //THEME
-if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true') {
+if (api_is_profile_editable() && api_get_setting('user_selected_theme') == 'true') {
     $form->addElement('select_theme', 'theme', get_lang('Theme'));
     if (api_get_setting('profile', 'theme') !== 'true') {
         $form->freeze('theme');
@@ -298,7 +300,7 @@ if (api_get_setting('extended_profile') == 'true') {
 }
 
 //	PASSWORD, if auth_source is platform
-if (is_platform_authentication() && is_profile_editable() && api_get_setting('profile', 'password') == 'true') {
+if (is_platform_authentication() && api_is_profile_editable() && api_get_setting('profile', 'password') == 'true') {
     $form->addElement(
         'password',
         'password0',
@@ -344,7 +346,7 @@ if (api_get_setting('profile', 'apikeys') == 'true') {
     ); //generate_open_id_form()
 }
 //	SUBMIT
-if (is_profile_editable()) {
+if (api_is_profile_editable()) {
     $form->addElement('style_submit_button', 'apply_change', get_lang('SaveSettings'), 'class="save"');
 } else {
     $form->freeze();
@@ -366,17 +368,6 @@ function is_platform_authentication()
     $tab_user_info = api_get_user_info();
 
     return $tab_user_info['auth_source'] == PLATFORM_AUTH_SOURCE;
-}
-
-/**
- * Returns whether a user can edit his/her profile. Defaults to false if
- * profileIsEditable is not set in $GLOBALS.
- *
- * @return    boolean    Editability of the profile
- */
-function is_profile_editable()
-{
-    return isset($GLOBALS['profileIsEditable']) ? $GLOBALS['profileIsEditable'] : false;
 }
 
 /*

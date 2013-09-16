@@ -122,7 +122,7 @@ foreach ($connectionOptions as $name => $connection) {
 /*
 To generate doctrine2 entities you must:
 
-cd /var/www/chamilo11/tests/doctrine_console
+cd /var/www/chamilo/tests/doctrine_console
 
 Delete old mappings/entities
 
@@ -135,11 +135,14 @@ sudo mkdir mapping generated repository
 You can add a Namespace if you want to with: --namespace "Entity"
 sudo php5 doctrine.php orm:convert-mapping --force --from-database --namespace "Entity" annotation mapping
 
-with no namepsace
+with no namespace
 sudo php5 doctrine.php orm:convert-mapping --force --from-database annotation mapping
 
 
 1. Generate entities
+
+sudo rm -R /var/www/chamilogits/tests/doctrine_console/mapping/Class.php
+
 
 sudo php5 doctrine.php orm:generate-entities   --generate-annotations="true"   generated
 

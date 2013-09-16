@@ -21,7 +21,11 @@
         {% if matcher.isCurrent(item) %}
             <li class="active">{{ block('label') }}</li>
         {% else %}
-            <li><a href="{{ item.uri }}">{{ block('label') }}</a> <span class="divider">/</span></li>
+            {% if item.uri %}
+                <li><a href="{{ item.uri }}">{{ block('label') }}</a> <span class="divider">/</span></li>
+            {% else %}
+                <li>{{ block('label') }}</li>
+            {% endif %}
         {% endif %}
     {% endfor %}
 {% endblock %}

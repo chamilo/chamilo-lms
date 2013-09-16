@@ -74,6 +74,10 @@ class Basic
 
         //$config['extraPlugins'] = 'oembed,video,wordcount';
         $config['extraPlugins'] = 'oembed,video';
+        //$config['oembed_maxWidth'] = '560';
+        //$config['oembed_maxHeight'] = '315';
+
+        $config['allowedContent'] = true;
 
         /*$config['wordcount'] = array(
             // Whether or not you want to show the Word Count
@@ -86,11 +90,14 @@ class Basic
             'wordLimit' => 'unlimited'
         );*/
 
+        //$config['skins'] = 'moono';
+
         if (isset($this->config)) {
             $this->config = array_merge($config, $this->config);
         } else {
             $this->config = $config;
         }
+
 
         //$config['width'] = '100';
         //$config['height'] = '200';

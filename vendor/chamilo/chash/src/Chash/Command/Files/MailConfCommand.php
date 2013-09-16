@@ -33,12 +33,11 @@ class MailConfCommand extends CommonChamiloDatabaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);
-
-        $output->writeln('<comment>Current mail configuration:</comment>');
+        $this->writeCommandHeader($output, 'Current mail configuration.');
 
         $path = $this->getHelper('configuration')->getConfigurationPath();
         $path .= 'mail.conf.php';
-        define('IS_WINDOWS_OS',strtolower(substr(php_uname(), 0, 3 )) == 'win'?true:false);
+        define('IS_WINDOWS_OS', strtolower(substr(php_uname(), 0, 3 )) == 'win'?true:false);
         if (isset($path) && is_file($path)) {
             $output->writeln('File: '.$path);
             $lines = file($path);

@@ -474,7 +474,7 @@ abstract class Question
                         WHERE question_id=$question_id AND c_id=".api_get_course_int_id();
                 Database::query($sql);
             } else {
-                $sql = "INSERT INTO $TBL_QUESTION_REL_CATEGORY VALUES (".api_get_course_int_id().", $question_id, $category_id)";
+                $sql = "INSERT INTO $TBL_QUESTION_REL_CATEGORY (c_id, question_id, category_id) VALUES (".api_get_course_int_id().", $question_id, $category_id)";
                 Database::query($sql);
             }
         }
@@ -1387,8 +1387,8 @@ abstract class Question
 
             $(function() {
                 $("#category_id").fcbkcomplete({
-                    json_url: "'.$url.'&a=search_category_parent&type=all&",
-                    maxitems: "'.$maxCategories.'" ,
+                    json_url: "'.$url.'&a=search_category_parent&type=all&filter_by_global='.$this->exercise->getGlobalCategoryId().',
+                    maxitems: "'.$maxCategories.'",
                     addontab: false,
                     input_min_size: 1,
                     cache: false,
@@ -1629,7 +1629,6 @@ abstract class Question
      */
     abstract public function processAnswersCreation($form);
 
-
     /**
      * Displays the menu of question types
      * @param Exercise $objExercise
@@ -1645,6 +1644,7 @@ abstract class Question
         if (!isset($feedback_type)) {
             $feedback_type = 0;
         }
+
         if ($feedback_type == 1) {
             //2. but if it is a feedback DIRECT we only show the UNIQUE_ANSWER type that is currently available
             $question_type_custom_list = array(
@@ -2266,11 +2266,9 @@ abstract class Question
             //var_dump($exerciseId);
             // Including actions
             foreach ($questions as &$question) {
-
                 $type = self::get_question_type($question['type']);
                 $question['type'] = get_lang($type[1]);
                 $question['question_question_type'] = get_lang($type[1]);
-
                 if (empty($exerciseId)) {
                     // View.
                     $actions = Display::url(
@@ -2316,13 +2314,17 @@ abstract class Question
                         // Copy.
                         $actions .= Display::url(
                             $copyIcon,
-                            $app['url_generator']->generate(
+                            'javascript:void(0);',
+                            array(
+                                'onclick' => 'ajaxAction(this);',
+                                'data-url' => $app['url_generator']->generate(
                                 'exercise_copy_question',
                                 array(
                                     'cidReq' => api_get_course_id(),
                                     'id_session' => api_get_session_id(),
                                     'questionId' => $question['iid'],
                                     'exerciseId' => $exerciseId
+                                    )
                                 )
                             )
                         );
@@ -2330,7 +2332,10 @@ abstract class Question
                          // Reuse.
                         $actions .= Display::url(
                             $reuseIcon,
-                            $app['url_generator']->generate(
+                            'javascript:void(0);',
+                            array(
+                                'onclick' => 'ajaxAction(this);',
+                                'data-url' => $app['url_generator']->generate(
                                 'exercise_reuse_question',
                                 array(
                                     'cidReq' => api_get_course_id(),
@@ -2338,6 +2343,7 @@ abstract class Question
                                     'questionId' => $question['iid'],
                                     'exerciseId' => $exerciseId
                                 )
+                                ),
                             )
                         );
                     }

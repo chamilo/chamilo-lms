@@ -29,6 +29,7 @@ class LegacyController extends CommonController
     */
     public function classicAction(Application $app, $file)
     {
+        $responseHeaders = array();
         /** @var Request $request */
         $request = $app['request'];
 
@@ -58,10 +59,18 @@ class LegacyController extends CommonController
             $out = ob_get_contents();
             ob_end_clean();
 
+            // No browser cache when executing an exercise.
+            if ($file == 'exercice/exercise_submit.php') {
+                $responseHeaders = array(
+                    'cache-control' => 'no-store, no-cache, must-revalidate'
+                );
+            }
+
             // Setting page header/footer conditions (important for LPs)
             $app['template']->setFooter($app['template.show_footer']);
             $app['template']->setHeader($app['template.show_header']);
 
+            $token = $app['security']->getToken();
             //var_dump($app['template.show_header']);
 
             if (isset($htmlHeadXtra)) {
@@ -83,6 +92,6 @@ class LegacyController extends CommonController
             return $app->abort(404, 'File not found');
         }
 
-        return new Response($response, 200, array());
+        return new Response($response, 200, $responseHeaders);
     }
 }

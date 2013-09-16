@@ -526,8 +526,8 @@ function saveQuestionAttempt(
             'filename' => $file,
         );
 
-        // Check if attempt exists.
 
+        // Check if attempt exists.
 
         $sql = "SELECT exe_id FROM $TBL_TRACK_ATTEMPT
                 WHERE c_id = $course_id AND
@@ -542,13 +542,12 @@ function saveQuestionAttempt(
                 error_log("Attempt already exist: exe_id: $exe_id - user_id:$user_id - question_id:$question_id");
             }
             if ($updateResults == false) {
-                // The attempt already exist do not update use  update_event_exercise() instead
+                //The attempt already exist do not update use  update_event_exercise() instead
                 return false;
             }
         } else {
             $attempt['exe_id'] = $exe_id;
         }
-
 
         if ($debug) {
             error_log("updateResults : $updateResults");
@@ -559,22 +558,21 @@ function saveQuestionAttempt(
         $recording_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 
         if ($updateResults == false) {
-            $attempt_id = Database::insert($TBL_TRACK_ATTEMPT, $attempt);
+        $attempt_id = Database::insert($TBL_TRACK_ATTEMPT, $attempt);
 
-            if (defined('ENABLED_LIVE_EXERCISE_TRACKING')) {
-
-                if ($debug) {
-                    error_log("Saving e attempt recording ");
-                }
-                $attempt_recording = array(
-                    'exe_id' => $attempt_id,
-                    'question_id' => $question_id,
-                    'marks' => $score,
-                    'insert_date' => $now,
-                    'author' => '',
-                    'session_id' => $session_id,
-                );
-                Database::insert($recording_table, $attempt_recording);
+        if (defined('ENABLED_LIVE_EXERCISE_TRACKING')) {
+            if ($debug) {
+                error_log("Saving e attempt recording ");
+            }
+            $attempt_recording = array(
+                'exe_id' => $attempt_id,
+                'question_id' => $question_id,
+                'marks' => $score,
+                'insert_date' => $now,
+                'author' => '',
+                'session_id' => $session_id,
+            );
+            Database::insert($recording_table, $attempt_recording);
             }
         } else {
             Database::update($TBL_TRACK_ATTEMPT, $attempt,
@@ -597,8 +595,6 @@ function saveQuestionAttempt(
             }
             $attempt_id = $exe_id;
         }
-
-
         return $attempt_id;
     } else {
         return false;
@@ -643,7 +639,6 @@ function saveExerciseAttemptHotspot($exe_id, $question_id, $answer_id, $correct,
             )));
 
     } else {
-
         $sql = "INSERT INTO $tbl_track_e_hotspot (hotspot_user_id, c_id, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate)".
             " VALUES ('".api_get_user_id()."',".
             " '".api_get_course_int_id()."', ".

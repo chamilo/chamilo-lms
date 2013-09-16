@@ -83,7 +83,7 @@ $column_model = array(
 if (!empty($extraFields)) {
     foreach ($extraFields as $field) {
         $column_model[] =
-        array(
+    array(
             'name'     => $field['field_variable'],
             'index'    => $field['field_variable'],
             'width'    => '100',
@@ -101,6 +101,7 @@ $column_model[] = array(
     'formatter' => 'action_formatter',
     'sortable'  => 'false'
 );
+
 
 //Autowidth
 $extra_params['autowidth'] = 'true';

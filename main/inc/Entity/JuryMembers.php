@@ -3,12 +3,13 @@
 namespace Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * JuryMembers
  *
  * @ORM\Table(name="jury_members")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Entity\Repository\JuryMembersRepository")
  */
 class JuryMembers
 {
@@ -59,6 +60,26 @@ class JuryMembers
      * @ORM\JoinColumn(name="role_id", referencedColumnName="id")
      */
     private $role;
+
+    /**
+     * @ORM\OneToMany(targetEntity="JuryMemberRelUser", mappedBy="member")
+     */
+    private $students;
+
+    public function __construct()
+    {
+        $this->students = new ArrayCollection();
+    }
+
+    public function getStudents()
+    {
+        return $this->students;
+    }
+
+    public function setStudents($students)
+    {
+        $this->students = $students;
+    }
 
     public function getRole()
     {

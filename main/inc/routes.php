@@ -134,6 +134,7 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
     $is_courseCoach  = false;
     $is_sessionAdmin = false;
 
+
     if ($courseReset) {
 
         if (isset($courseId) && $courseId && $courseId != -1) {
@@ -181,7 +182,7 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
             }
 
             //We are in a session course? Check session permissions
-            if (!empty($session_id)) {
+            if (!empty($sessionId)) {
                 //I'm not the teacher of the course
                 if ($is_courseAdmin == false) {
                     // this user has no status related to this course
@@ -280,13 +281,13 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
         // Checking the course access
         $is_allowed_in_course = false;
 
-        if (isset($_course)) {
-            switch ($_course['visibility']) {
+        if (isset($courseInfo)) {
+            switch ($courseInfo['visibility']) {
                 case COURSE_VISIBILITY_OPEN_WORLD: //3
                     $is_allowed_in_course = true;
                     break;
                 case COURSE_VISIBILITY_OPEN_PLATFORM: //2
-                    if (isset($user_id) && !api_is_anonymous($user_id)) {
+                    if (isset($userId) && !api_is_anonymous($userId)) {
                         $is_allowed_in_course = true;
                     }
                     break;
@@ -339,22 +340,12 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
         Session::write('is_courseCoach', $is_courseCoach);
         Session::write('is_allowed_in_course', $is_allowed_in_course);
         Session::write('is_sessionAdmin', $is_sessionAdmin);
-
-    } else {
-        // continue with the previous values
-        /*
-        $_courseUser          = Session::read('_courseUser');
-        $is_courseAdmin       = Session::read('is_courseAdmin');
-        $is_courseTutor       = Session::read('is_courseTutor');
-        $is_courseCoach       = Session::read('is_courseCoach');
-        $is_courseMember      = Session::read('is_courseMember');
-        $is_allowed_in_course = Session::read('is_allowed_in_course');*/
     }
 };
 
 /**
  * Deletes the exam_password user extra field *only* to students
- * @todo improve the login hook system
+ * @todo move to the login hook system
  * @param Request $request
  */
 $afterLogin = function (Request $request) use ($app) {
@@ -443,18 +434,11 @@ $app->match('/main/{file}', 'legacy.controller:classicAction', 'GET|POST')
     ->assert('file', '.+')
     ->assert('type', '.+');
 
-/** Logout already implemented by the the security service provider */
-
-/* $app->get('/logout', 'index.controller:logoutAction')
-    ->bind('logout')
-    ->after($cleanCourseSession);*/
 
 /** Login form */
 $app->match('/login', 'index.controller:loginAction', 'GET|POST')
     ->bind('login');
 
-/*$app->match('/admin/login-check', 'index.controller:checkLoginAction', 'GET|POST')
-->bind('login_check');*/
 
 /** Course home instead of courses/MATHS the new URL is web/courses/MATHS  */
 $app->match('/courses/{cidReq}/{id_session}/', 'course_home.controller:indexAction', 'GET|POST')
@@ -523,6 +507,11 @@ $app->get('/data/document_templates/{file}', 'index.controller:getDocumentTempla
 
 /** Data default_platform_document files */
 $app->get('/data/default_platform_document/{file}', 'index.controller:getDefaultPlatformDocumentAction')
+    ->assert('file', '.+')
+    ->assert('type', '.+');
+
+/** Data default_platform_document files */
+$app->get('/data/default_course_document/{file}', 'index.controller:getDefaultCourseDocumentAction')
     ->assert('file', '.+')
     ->assert('type', '.+');
 
@@ -658,35 +647,27 @@ $app->match('/admin/administrator/', 'admin.controller:indexAction', 'GET')
     ->assert('type', '.+')
     ->bind('admin_administrator');
 
-
-
 $app->match('/ajax', 'model_ajax.controller:indexAction', 'GET')
     ->assert('type', '.+')
     ->bind('model_ajax');
 
-
-// Roles
-// @todo improve route creation. Use mount() to write less
-
 if ($alreadyInstalled) {
-    // Takes a some time to load @todo improve this calls
+    $app->mount('/admin/', new ChamiloLMS\Provider\ReflectionControllerProvider('admin.controller'));
+    $app->mount('/admin/administrator/upgrade', new ChamiloLMS\Provider\ReflectionControllerProvider('upgrade.controller'));
     $app->mount('/admin/administrator/roles', new ChamiloLMS\Provider\ReflectionControllerProvider('role.controller'));
     $app->mount('/admin/administrator/question_scores', new ChamiloLMS\Provider\ReflectionControllerProvider('question_score.controller'));
     $app->mount('/admin/administrator/question_score_names', new ChamiloLMS\Provider\ReflectionControllerProvider('question_score_name.controller'));
+    $app->mount('/courses/{course}/curriculum/category', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_category.controller'));
+    $app->mount('/courses/{course}/curriculum/item', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_item.controller'));
+    $app->mount('/courses/{course}/curriculum/user', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_user.controller'));
+    $app->mount('/courses/{course}/curriculum', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum.controller'));
 
     // Ministerio routes:
-
     $app->mount('/admin/administrator/branches', new ChamiloLMS\Provider\ReflectionControllerProvider('branch.controller'));
     $app->mount('/admin/administrator/juries', new ChamiloLMS\Provider\ReflectionControllerProvider('jury.controller'));
 
     $app->mount('/admin/director', new ChamiloLMS\Provider\ReflectionControllerProvider('branch_director.controller'));
     $app->mount('/admin/jury_president', new ChamiloLMS\Provider\ReflectionControllerProvider('jury_president.controller'));
     $app->mount('/admin/jury_member', new ChamiloLMS\Provider\ReflectionControllerProvider('jury_member.controller'));
-
-    $app->mount('/tool/curriculum/category', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_category.controller'));
-    $app->mount('/tool/curriculum/item', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_item.controller'));
-    $app->mount('/tool/curriculum/user', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_user.controller'));
-
 }
-
 

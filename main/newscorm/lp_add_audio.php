@@ -85,29 +85,29 @@ echo $_SESSION['oLP']->build_action_menu();
 
 echo '<div class="row-fluid" style="overflow:hidden">';
 echo '<div id="lp_sidebar" class="span4">';
-echo $_SESSION['oLP']->return_new_tree(null, true); 
+echo $_SESSION['oLP']->return_new_tree(null, true);
 // Show the template list.
 echo '</div>';
 
 echo '<div id="doc_form" class="span8">';
 
+$lp_item = new learnpathItem($lp_item_id);
 $form = new FormValidator('add_audio', 'post', api_get_self().'?action=add_audio&id='.$lp_item_id, null, array('enctype' => 'multipart/form-data'));
 $form->addElement('header', get_lang('UplUpload'));
-$form->addElement('file', 'file', get_lang('File'));
+$form->addElement('html', $lp_item->get_title());
+$form->addElement('file', 'file', get_lang('AudioFile'), 'style="width: 250px"');
 $form->addElement('hidden', 'id', $lp_item_id);
-
-$lp_item = new learnpathItem($lp_item_id);
 
 if (isset($lp_item->audio) && !empty($lp_item->audio))  {
     $form->addElement('checkbox', 'delete_file', null, get_lang('RemoveAudio'));
-    
+
     $player = '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
     $player .= '<div id="preview"></div><script type="text/javascript">
                     var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
                     s1.addParam("allowscriptaccess","always");
                     s1.addParam("flashvars","file=../../courses/' . $_course['path'] . '/document/audio/' . $lp_item->audio . '");
                     s1.write("preview");
-                </script>';    
+                </script>';
     $form->addElement('label', get_lang('Preview'), $player);
 }
 $form->addElement('button', 'submit', get_lang('Edit'));

@@ -175,7 +175,6 @@ class Template
     {
         $tpl = $this->get_template('layout/layout_1_col.tpl');
         $this->display($tpl);
-
     }
 
     /**
@@ -399,10 +398,6 @@ class Template
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
 
-        if (api_get_setting('use_virtual_keyboard') == 'true') {
-            $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/keyboard/keyboard.css';
-        }
-
         $css_file_to_string = null;
         foreach ($css as $file) {
             $css_file_to_string .= api_get_css($file);
@@ -501,12 +496,8 @@ class Template
             $js_files[] = $jsFolder.'asciimath/ASCIIMathML.js';
         }
 
-        if (api_get_setting('use_virtual_keyboard') == 'true') {
-            $js_files[] = 'keyboard/jquery.keyboard.js';
-        }
-
         if (api_get_setting('disable_copy_paste') == 'true') {
-            $js_files[] = 'jquery.nocutcopypaste.js';
+            $js_files[] = $jsFolder.'jquery.nocutcopypaste.js';
         }
 
         $js_file_to_string = null;
@@ -635,19 +626,21 @@ class Template
 
         // Preparing values for the menu
 
-        // Logout link
-        // See the SecurityServiceProvider definition
-        $this->assign('logout_link', $this->app['url_generator']->generate('admin_logout'));
+        // Profile link.
 
-        //Profile link
+        $this->assign('is_profile_editable', api_is_profile_readable());
+
+        $profile_link = null;
         if (api_get_setting('allow_social_tool') == 'true') {
             $profile_link = '<a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">'.get_lang('Profile').'</a>';
         } else {
-            $profile_link = '<a href="'.api_get_path(WEB_CODE_PATH).'auth/profile.php">'.get_lang('Profile').'</a>';
+            if (api_is_profile_readable()) {
+                $profile_link = '<a href="'.api_get_path(WEB_CODE_PATH).'auth/profile.php">'.get_lang('Profile').'</a>';
+            }
         }
         $this->assign('profile_link', $profile_link);
 
-        //Message link
+        // Message link.
         $message_link = null;
         if (api_get_setting('allow_message_tool') == 'true') {
             $message_link = '<a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">'.get_lang('Inbox').'</a>';
@@ -682,6 +675,9 @@ class Template
      */
     public function loadBreadcrumbToTemplate()
     {
+        if (api_get_setting('breadcrumb_navigation_display') == 'false') {
+            return;
+        }
         $breadcrumb = $this->returnBreadcrumb();
         $this->assign('breadcrumb', $breadcrumb);
     }
@@ -895,8 +891,6 @@ class Template
         return $this->menu_navigation;
     }
 
-    // Render Chamilo layouts:
-
     /**
      * @param string $layout
      * @return mixed
@@ -940,23 +934,14 @@ class Template
         $navigation[SECTION_CAMPUS]['title'] = get_lang('CampusHomepage');
 
         // My Courses
-        /*
-        if (api_is_allowed_to_create_course()) {
-            // Link to my courses for teachers
-            $navigation['mycourses']['url'] = api_get_path(WEB_PUBLIC_PATH).'user_portal.php?nosession=true';
-            $navigation['mycourses']['title'] = get_lang('MyCourses');
-        } else {
-            // Link to my courses for students
-            $navigation['mycourses']['url'] = api_get_path(WEB_PUBLIC_PATH).'user_portal.php';
-            $navigation['mycourses']['title'] = get_lang('MyCourses');
-        }*/
-
         $navigation['mycourses']['url'] = api_get_path(WEB_PUBLIC_PATH).'userportal';
         $navigation['mycourses']['title'] = get_lang('MyCourses');
 
         // My Profile
-        $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '');
-        $navigation['myprofile']['title'] = get_lang('ModifyProfile');
+        if (api_is_profile_readable()) {
+            $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '');
+            $navigation['myprofile']['title'] = get_lang('ModifyProfile');
+        }
 
         // Link to my agenda
         $navigation['myagenda']['url'] = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=personal';
@@ -981,7 +966,6 @@ class Template
             $navigation['session_my_progress']['title'] = get_lang('MyProgress');
         }
 
-
         // Social
         if (api_get_setting('allow_social_tool') == 'true') {
             $navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/home.php';
@@ -994,13 +978,6 @@ class Template
             $navigation['dashboard']['title'] = get_lang('Dashboard');
         }
 
-        // Reports
-        /*
-        if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
-            $navigation['reports']['url'] = api_get_path(WEB_CODE_PATH).'reports/index.php';
-            $navigation['reports']['title'] = get_lang('Reports');
-        }*/
-
         // Custom tabs
         for ($i = 1; $i <= 3; $i++) {
             if (api_get_setting('custom_tab_'.$i.'_name') && api_get_setting('custom_tab_'.$i.'_url')) {
@@ -1009,18 +986,34 @@ class Template
             }
         }
 
-        // Platform administration
-        if (api_is_platform_admin(true)) {
-            $navigation['platform_admin']['url'] = api_get_path(WEB_CODE_PATH).'admin/index.php';
-            $navigation['platform_admin']['title'] = get_lang('PlatformAdmin');
-        } else {
+        // Adding block settings for each role
+        if (isset($this->app['allow_admin_toolbar'])) {
+            /** @var  \Symfony\Component\Security\Core\SecurityContext  $security */
+            $security = $this->app['security'];
 
-            if (api_is_question_manager()) {
-                $navigation['question_manager']['url'] = api_get_path(WEB_PUBLIC_PATH).'admin/questionmanager';
-                $navigation['question_manager']['title'] = get_lang('PlatformAdmin');
+            $roleTemplate = array();
+            foreach ($this->app['allow_admin_toolbar'] as $role) {
+                if ($security->isGranted($role)) {
+                    // Fixes in order to match the templates
+                    if ($role == 'ROLE_ADMIN') {
+                        $role = 'administrator';
+                    }
+                    if ($role == 'ROLE_QUESTION_MANAGER') {
+                        $role = 'QUESTIONMANAGER';
+                    }
+                    $stripRole = strtolower(str_replace('ROLE_', '', $role));
+                    $roleTemplate[] = $stripRole;
+                }
             }
-        }
 
+            if (!empty($roleTemplate)) {
+                if (api_get_setting('show_tabs', 'platform_administration') == 'true') {
+                    $navigation['admin']['url'] = api_get_path(WEB_PUBLIC_PATH).'admin';
+                    $navigation['admin']['title'] = get_lang('PlatformAdmin');
+                }
+            }
+            $this->app['admin_toolbar_roles'] = $roleTemplate;
+        }
         return $navigation;
     }
 
@@ -1131,15 +1124,17 @@ class Template
             }
 
             // Display the who's online for the session
-            if (isset($user_id) && api_get_session_id() != 0) {
-                if (api_is_allowed_to_edit()) {
-                    $html .= '<li><a href="'.SocialManager::getUserOnlineLink(null, api_get_session_id()).'&id_coach='.$user_id.'" >'.
-                        Display::return_icon(
-                            'session.png',
-                            get_lang('UsersConnectedToMySessions'),
-                            array(),
-                            ICON_SIZE_TINY
-                        ).' </a></li>';
+            if (api_get_setting('showonline', 'session') == 'true') {
+                if (isset($user_id) && api_get_session_id() != 0) {
+                    if (api_is_allowed_to_edit()) {
+                        $html .= '<li><a href="'.SocialManager::getUserOnlineLink(null, api_get_session_id()).'&id_coach='.$user_id.'" >'.
+                            Display::return_icon(
+                                'session.png',
+                                get_lang('UsersConnectedToMySessions'),
+                                array(),
+                                ICON_SIZE_TINY
+                            ).' </a></li>';
+                    }
                 }
             }
         }
@@ -1183,13 +1178,14 @@ class Template
             }
 
             // My Profile
-            if (api_get_setting('show_tabs', 'my_profile') == 'true' && api_get_setting(
-                'allow_social_tool'
-            ) != 'true'
-            ) {
-                $navigation['myprofile'] = $possible_tabs['myprofile'];
+            if (api_get_setting('show_tabs', 'my_profile') == 'true' && api_get_setting('allow_social_tool') != 'true') {
+                if (isset($possible_tabs['myprofile'])) {
+                    $navigation['myprofile'] = $possible_tabs['myprofile'];
+                }
             } else {
-                $menu_navigation['myprofile'] = $possible_tabs['myprofile'];
+                if (isset($possible_tabs['myprofile'])) {
+                    $menu_navigation['myprofile'] = $possible_tabs['myprofile'];
+                }
             }
 
             // My Agenda
@@ -1241,19 +1237,10 @@ class Template
                 $menu_navigation['dashboard'] = isset($possible_tabs['dashboard']) ? $possible_tabs['dashboard'] : null;
             }
 
-            // Administration
-            if (api_is_platform_admin(true)) {
-                if (api_get_setting('show_tabs', 'platform_administration') == 'true') {
-                    $navigation['platform_admin'] = $possible_tabs['platform_admin'];
-                } else {
-                    $menu_navigation['platform_admin'] = $possible_tabs['platform_admin'];
-                }
-            } else {
-                if (api_is_question_manager()) {
-                    $navigation['question_manager'] = $possible_tabs['question_manager'];
-                }
+            if (isset($possible_tabs['admin'])) {
+                $navigation['platform_admin'] = $possible_tabs['admin'];
+                $navigation['platform_admin'] = $possible_tabs['admin'];
             }
-
 
             // Reports
             if (!empty($possible_tabs['reports'])) {

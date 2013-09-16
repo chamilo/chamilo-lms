@@ -28,7 +28,7 @@ class UserPortalController extends CommonController
         // @todo Use filters like "after/before|finish" to manage user access
         api_block_anonymous_users();
 
-        //Abort request because the user is not allowed here - @todo use filters
+        // Abort request because the user is not allowed here - @todo use filters
         if ($app['allowed'] == false) {
             return $app->abort(403, 'Not allowed');
         }

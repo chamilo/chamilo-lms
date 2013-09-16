@@ -143,8 +143,11 @@ $("form").on("click", '.advanced_parameters', function() {
 
 /** Makes row highlighting possible */
 $(document).ready( function() {
-    //Chosen select
-    $(".chzn-select").chosen();
+
+    // Chosen select.
+    $(".chzn-select").chosen({
+        disable_search_threshold: 10
+    });
 
     // Adv multiselect text inputs.
     $('.select_class_filter').each(function(){
@@ -157,7 +160,7 @@ $(document).ready( function() {
         $("#"+ inputId+"-t").filterByText($("#t-"+inputId+"-filter"));
     });
 
-    //Table highlight
+    // Table highlight.
     $("form .data_table input:checkbox").click(function() {
         if ($(this).is(":checked")) {
             $(this).parentsUntil("tr").parent().addClass("row_selected");
@@ -180,6 +183,7 @@ $(document).ready( function() {
         placement : 'right'
     }
     $('.boot-tooltip').tooltip(tip_options);
+
 });
 </script>
 {% endraw %}

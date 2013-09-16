@@ -46,7 +46,7 @@ class ShowConnInfoCommand extends CommonChamiloDatabaseCommand
             return;
         }
 
-        $_configuration = $this->getHelper('configuration')->getConfiguration();
+        $_configuration = $this->getConfigurationArray();
 
         $output->writeln("Database connection details:");
         $output->writeln("Host:\t".$_configuration['db_host']);

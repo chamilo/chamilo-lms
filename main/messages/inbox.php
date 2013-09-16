@@ -11,9 +11,8 @@
 $language_file = array('registration', 'messages', 'userInfo');
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
-
 api_block_anonymous_users();
+
 if (isset($_GET['messages_page_nr'])) {
     $social_link = '';
     if ($_REQUEST['f'] == 'social') {
@@ -24,11 +23,11 @@ if (isset($_GET['messages_page_nr'])) {
     }
 }
 if (api_get_setting('allow_message_tool') != 'true') {
-    api_not_allowed();
+    api_not_allowed(true);
+    return;
 }
 
 $htmlHeadXtra[] = '<script>
-
 function show_icon_edit(element_html) {
 	ident="#edit_image";
 	$(ident).show();

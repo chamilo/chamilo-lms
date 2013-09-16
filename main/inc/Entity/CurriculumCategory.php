@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
 
-
 /**
  * CurriculumCategory
  *
@@ -106,25 +105,80 @@ class CurriculumCategory
 
     /**
      * @ORM\OneToMany(targetEntity="CurriculumItem", mappedBy="category")
+     * @ORM\OrderBy({"title" = "ASC"})
      */
     private $items;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Course")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     */
+    private $course;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Session")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     */
+    private $session;
 
     public function __construct()
     {
         $this->items = new ArrayCollection();
     }
 
+    /**
+     * @return mixed
+     */
+    public function getSession()
+    {
+        return $this->session;
+    }
+
+    /**
+     * @param Session $session
+     * @return mixed
+     */
+    public function setSession(Session $session)
+    {
+        $this->session = $session;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCourse()
+    {
+        return $this->course;
+    }
+
+    /**
+     * @param Course $course
+     * @return mixed
+     */
+    public function setCourse(Course $course)
+    {
+        $this->course = $course;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
     public function getItems()
     {
         return $this->items;
     }
 
-
+    /**
+     * @param CurriculumCategory $parent
+     */
     public function setParent(CurriculumCategory $parent = null)
     {
         $this->parent = $parent;
     }
 
+    /**
+     * @return CurriculumCategory
+     */
     public function getParent()
     {
         return $this->parent;

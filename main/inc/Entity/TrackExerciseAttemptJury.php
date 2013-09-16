@@ -45,9 +45,9 @@ class TrackExerciseAttemptJury
     /**
      * @var integer
      *
-     * @ORM\Column(name="jury_member_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="jury_user_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $juryMemberId;
+    private $juryUserId;
 
     /**
      * @var integer
@@ -62,9 +62,20 @@ class TrackExerciseAttemptJury
      */
     private $attempt;
 
+    /**
+     * @return TrackExercise
+     */
     public function getAttempt()
     {
         return $this->attempt;
+    }
+
+    /**
+     * @param TrackExercise $attempt
+     */
+    public function setAttempt(TrackExercise $attempt)
+    {
+        $this->attempt = $attempt;
     }
 
     /**
@@ -149,12 +160,12 @@ class TrackExerciseAttemptJury
     /**
      * Set juryMemberId
      *
-     * @param integer $juryMemberId
+     * @param integer $juryUserId
      * @return TrackExerciseAttemptJury
      */
-    public function setJuryMemberId($juryMemberId)
+    public function setJuryUserId($juryUserId)
     {
-        $this->juryMemberId = $juryMemberId;
+        $this->juryUserId = $juryUserId;
 
         return $this;
     }
@@ -164,9 +175,9 @@ class TrackExerciseAttemptJury
      *
      * @return integer
      */
-    public function getJuryMemberId()
+    public function getJuryUserId()
     {
-        return $this->juryMemberId;
+        return $this->juryUserId;
     }
 
     /**

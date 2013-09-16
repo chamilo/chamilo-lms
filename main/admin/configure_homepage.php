@@ -22,6 +22,7 @@ require_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
 $tool_name = get_lang('ConfigureHomePage');
+$_languages = api_get_languages();
 
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 

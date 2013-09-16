@@ -58,14 +58,14 @@ class TranslationWalker extends SqlWalker
     /**
      * DBAL database platform
      *
-     * @var Doctrine\DBAL\Platforms\AbstractPlatform
+     * @var \Doctrine\DBAL\Platforms\AbstractPlatform
      */
     private $platform;
 
     /**
      * DBAL database connection
      *
-     * @var Doctrine\DBAL\Connection
+     * @var \Doctrine\DBAL\Connection
      */
     private $conn;
 
@@ -225,7 +225,7 @@ class TranslationWalker extends SqlWalker
      * Walks from clause, and creates translation joins
      * for the translated components
      *
-     * @param Doctrine\ORM\Query\AST\FromClause $from
+     * @param \Doctrine\ORM\Query\AST\FromClause $from
      * @return string
      */
     private function joinTranslations($from)
@@ -291,8 +291,7 @@ class TranslationWalker extends SqlWalker
             $transMeta = $em->getClassMetadata($transClass);
             $transTable = $transMeta->getQuotedTableName($this->platform);
             foreach ($config['fields'] as $field) {
-                $compTableName = $meta->getQuotedTableName($this->platform);
-                $compTblAlias = $this->getSQLTableAlias($compTableName, $dqlAlias);
+                $compTblAlias = $this->walkIdentificationVariable($dqlAlias, $field);
                 $tblAlias = $this->getSQLTableAlias('trans'.$compTblAlias.$field);
                 $sql = " {$joinStrategy} JOIN ".$transTable.' '.$tblAlias;
                 $sql .= ' ON '.$tblAlias.'.'.$transMeta->getQuotedColumnName('locale', $this->platform)

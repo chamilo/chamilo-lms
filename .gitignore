@@ -1,12 +1,14 @@
 # Chamilo
 
 main/inc/conf
+main/lang/*
 config/auth.conf.php
 config/configuration.php
 config/events.conf.php
 config/mail.conf.php
 config/portfolio.conf.php
 config/profile.conf.php
+tests/unittests/db.conf.php
 
 temp/*
 !temp/twig/PLACEHOLDER
@@ -29,9 +31,19 @@ logs/*
 *.orig
 nbproject/*
 vendor/.git
+.*.swp
 
-#Doctrine entities generation tests
+vendor/ezyang/htmlpurifier/docs/*
+vendor/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema/Filter/ExtractStyleBlocks.txt
+vendor/ezyang/htmlpurifier/smoketests/*
+vendor/realityking/pchart/Sample/*
+vendor/realityking/pchart/Example*
+
+# Doctrine entities generation tests
 
 tests/doctrine_console/generated
 tests/doctrine_console/mapping
 tests/doctrine_console/Proxies
+
+# OS stuff
+.DS_Store

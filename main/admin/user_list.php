@@ -17,10 +17,10 @@ $current_access_url_id = api_get_current_access_url_id();
 // Blocks the possibility to delete a user
 $delete_user_available = true;
 if (isset($_configuration['deny_delete_users']) &&  $_configuration['deny_delete_users']) {
-    $delete_user_available = false;
+	$delete_user_available = false;
 }
-
 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=get_user_courses';
+$urlSession = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=get_user_sessions';
 
 $htmlHeadXtra[] = '<script>
 function load_course_list (div_course,my_user_id) {
@@ -35,6 +35,21 @@ function load_course_list (div_course,my_user_id) {
 			$("div#"+div_course).html(datos);
 			$("div#div_"+my_user_id).attr("class","blackboard_show");
 			$("div#div_"+my_user_id).attr("style","");
+		}
+	});
+}
+function load_session_list (div_session,my_user_id) {
+	 $.ajax({
+		contentType: "application/x-www-form-urlencoded",
+		beforeSend: function(objeto) {
+            $("div#"+div_session).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
+		type: "POST",
+		url: "'.$urlSession.'",
+		data: "user_id="+my_user_id,
+		success: function(datos) {
+			$("div#"+div_session).html(datos);
+			$("div#div_s_"+my_user_id).attr("class","blackboard_show");
+			$("div#div_s_"+my_user_id).attr("style","");
 		}
 	});
 }
@@ -79,6 +94,10 @@ function active_user(element_div) {
 function clear_course_list (div_course) {
 	$("div#"+div_course).html("&nbsp;");
 	$("div#"+div_course).hide("");
+}
+function clear_session_list (div_session) {
+	$("div#"+div_session).html("&nbsp;");
+	$("div#"+div_session).hide("");
 }
 
 function display_advanced_search_form () {
@@ -129,8 +148,7 @@ $(document).ready(function() {
 //Load user calendar
 function load_calendar(user_id, month, year) {
  	var url = "'.api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?a=get_user_agenda&user_id=" +user_id + "&month="+month+"&year="+year;
-	$("#dialog").load( url
-	);
+	$("#dialog").load(url);
 }
 </script>';
 
@@ -289,8 +307,10 @@ function get_user_data($from, $number_of_items, $column, $direction, $get_count 
                  u.status				AS col7,
                  u.active				AS col8,
                  u.user_id				AS col9,
-                 u.registration_date    AS col10 ".
-                 ", u.expiration_date   AS exp            ";
+                 u.registration_date    AS col10,
+                 u.expiration_date      AS exp,
+                 u.password
+    ";
 
     if ($get_count) {
         $select = "SELECT count(u.user_id) as total_rows";
@@ -380,6 +400,16 @@ function get_user_data($from, $number_of_items, $column, $direction, $get_count 
 		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
     }
 
+    $checkPassStrength = isset($_GET['check_easy_passwords']) && $_GET['check_easy_passwords'] == 1 ? true : false;
+
+    if ($checkPassStrength) {
+        $easyPasswordList = api_get_easy_password_list();
+        $easyPasswordList = array_map('api_get_encrypted_password', $easyPasswordList);
+        $easyPasswordList = array_map(array('Database', 'escape_string'), $easyPasswordList);
+        $easyPassword = implode("' OR password LIKE '", $easyPasswordList);
+
+        $sql .= "AND password LIKE '$easyPassword' ";
+    }
     if (!in_array($direction, array('ASC','DESC'))) {
     	$direction = 'ASC';
     }
@@ -388,7 +418,7 @@ function get_user_data($from, $number_of_items, $column, $direction, $get_count 
     $from 	= intval($from);
     $number_of_items = intval($number_of_items);
 
-    //Returns counts and exits function
+    // Returns counts and exits function.
     if ($get_count) {
         $res = Database::query($sql);
         $user = Database::fetch_array($res);
@@ -418,9 +448,8 @@ function get_user_data($from, $number_of_items, $column, $direction, $get_count 
         	   $user[7] = '-1';
             }
         }
-
         // forget about the expiration date field
-        $users[] = array($user[0], $photo, $user[1],$user[2], $user[3], $user[4], $user[5], $roles[$user[6]], $user[7], api_get_local_time($user[9]), $user[0]);
+        $users[] = array($user[0], $photo, $user[1],$user[2], $user[3], $user[4], $user[5], $user[6], $user[7], api_get_local_time($user[9]), $user[0]);
 	}
 	return $users;
 }
@@ -463,16 +492,22 @@ function modify_filter($user_id, $url_params, $row) {
 	if ($current_user_status_label == $statusname[ANONYMOUS]) {
 		$user_is_anonymous =true;
 	}
-
 	$result = '';
 	if (!$user_is_anonymous) {
-        $icon = Display::return_icon('course.gif', get_lang('Courses'), array('onmouseout' =>'"clear_course_list (\'div_'.$user_id.'\')" '));
+        $icon = Display::return_icon('course.png', get_lang('Courses'), array('onmouseout' => 'clear_course_list (\'div_'.$user_id.'\')'));
 		$result .= '<a href="javascript:void(0)" onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')" >
-					'.$icon.'
+			        '.$icon.'
 					<div class="blackboard_hide" id="div_'.$user_id.'">&nbsp;&nbsp;</div>
-					</a>&nbsp;&nbsp;';
+					</a>';
+
+        $icon = Display::return_icon('session.png', get_lang('Sessions'), array('onmouseout' => 'clear_session_list (\'div_s_'.$user_id.'\')'));
+		$result .= '<a href="javascript:void(0)" onclick="load_session_list(\'div_s_'.$user_id.'\','.$user_id.')" >
+					'.$icon.'
+					<div class="blackboard_hide" id="div_s_'.$user_id.'">&nbsp;&nbsp;</div>
+					</a>';
 	} else {
-		$result .= Display::return_icon('course_na.gif',get_lang('Courses')).'&nbsp;&nbsp;';
+		$result .= Display::return_icon('course_na.png',get_lang('Courses')).'&nbsp;&nbsp;';
+		$result .= Display::return_icon('course_na.png',get_lang('Sessions')).'&nbsp;&nbsp;';
 	}
 
 	if (api_is_platform_admin()) {
@@ -601,6 +636,20 @@ function active_filter($active, $url_params, $row) {
 		$result = Display::return_icon($image.'.png', get_lang(ucfirst($action)), array('onclick'=>'active_user(this);', 'id'=>'img_'.$row['0']), 16).'</a>';
 	}
 	return $result;
+}
+
+/**
+ * Instead of displaying the integer of the status, we give a translation for the status
+ *
+ * @param integer $status
+ * @return string translation
+ *
+ * @version march 2008
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ */
+function status_filter($status) {
+	$statusname = api_get_status_langvars();
+	return $statusname[$status];
 }
 
 $action = isset($_REQUEST["action"]) ? $_REQUEST["action"] : null;
@@ -769,10 +818,12 @@ $active_group[] = $form->createElement('checkbox','keyword_inactive','', get_lan
 $form->addGroup($active_group,'',get_lang('ActiveAccount'),'<br/>',false);
 $form->addElement('html', '</td><td>');
 
+$form->addElement('checkbox', 'check_easy_passwords', null, get_lang('CheckEasyPasswords'));
 
 /*
  * @todo fix this code
 $extra_data = UserManager::get_extra_fields( 0,10,5, 'ASC', true, 1);
+var_dump($extra_data);
 $extra_options = array();
 if (!empty($extra_data)) {
     $extra_options[0] = get_lang('All');
@@ -829,7 +880,7 @@ $table->set_header(10, get_lang('Action'), false, 'width="220px"');
 $table->set_column_filter(3, 'user_filter');
 $table->set_column_filter(4, 'user_filter');
 $table->set_column_filter(6, 'email_filter');
-//$table->set_column_filter(7, 'status_filter');
+$table->set_column_filter(7, 'status_filter');
 $table->set_column_filter(8, 'active_filter');
 $table->set_column_filter(10, 'modify_filter');
 

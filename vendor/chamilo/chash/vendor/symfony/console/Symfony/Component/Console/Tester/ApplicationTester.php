@@ -32,7 +32,6 @@ class ApplicationTester
     private $application;
     private $input;
     private $output;
-    private $statusCode;
 
     /**
      * Constructor.
@@ -73,7 +72,7 @@ class ApplicationTester
             $this->output->setVerbosity($options['verbosity']);
         }
 
-        return $this->statusCode = $this->application->run($this->input, $this->output);
+        return $this->application->run($this->input, $this->output);
     }
 
     /**
@@ -114,15 +113,5 @@ class ApplicationTester
     public function getOutput()
     {
         return $this->output;
-    }
-
-    /**
-     * Gets the status code returned by the last execution of the application.
-     *
-     * @return integer The status code
-     */
-    public function getStatusCode()
-    {
-        return $this->statusCode;
     }
 }

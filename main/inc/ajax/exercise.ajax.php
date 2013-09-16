@@ -9,8 +9,6 @@ require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/answer.class.php';
 
 use \ChamiloSession as Session;
-use \ChamiloLMS\Transaction\TransactionLog;
-use \ChamiloLMS\Transaction\TransactionLogController;
 
 api_protect_course_script(true);
 
@@ -76,7 +74,8 @@ switch ($action) {
         }
         break;
     case 'exercise_category_exists':
-        $category = new Testcategory();
+        $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'simple';
+        $category = new Testcategory(null, null, null, null, $type);
         $category->getCategory($_REQUEST['id']);
         if (empty($category->id)) {
             echo 0;
@@ -102,15 +101,39 @@ switch ($action) {
         break;
     case 'search_category_parent':
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'simple';
+        $filterByGlobal = isset($_REQUEST['filter_by_global']) ? $_REQUEST['filter_by_global'] : null;
 
         $cat = new Testcategory(null, null, null, null, $type);
         $items = $cat->get_categories_by_keyword($_REQUEST['tag']);
+
         $courseId = api_get_course_int_id();
+
+        $em = $this->get('orm.em');
+        $repo = $em->getRepository('Entity\CQuizCategory');
 
         $json_items = array();
         if (!empty($items)) {
             foreach ($items as $item) {
                 if ($item['c_id'] == 0) {
+                    if ($filterByGlobal) {
+                        $cat = $em->find('Entity\CQuizCategory', $item['iid']);
+                        $idList = array();
+                        if ($cat) {
+                            $path = $repo->getPath($cat);
+                            if (!empty($path)) {
+                                /** @var Entity\CQuizCategory $cat */
+                                foreach ($path as $cat) {
+                                    $idList[] = $cat->getIid();
+                                }
+                            }
+                        }
+
+                        if (isset($idList) && !empty($idList)) {
+                            if (!in_array($filterByGlobal, $idList)) {
+                                continue;
+                            }
+                        }
+                    }
                     $item['title'] .= " [".get_lang('Global')."]";
                 } else {
                     if (isset($courseId)) {
@@ -330,7 +353,7 @@ switch ($action) {
                 error_log("type = $type ");
                 error_log("choice = ".print_r($choice, 1)." ");
                 error_log("hot_spot_coordinates = ".print_r($hot_spot_coordinates, 1));
-                error_log("remind_list = ".print_r($remind_list));
+                error_log("remind_list = ".print_r($remind_list, 1));
             }
 
             // Exercise information.
@@ -443,8 +466,17 @@ switch ($action) {
                     error_log("my_choice = ".print_r($my_choice, 1)."");
                 }
 
-               // creates a temporary Question object
+                // Creates a temporary Question object
             	$objQuestionTmp = Question::read($my_question_id, $course_id);
+
+                if ($objExercise->type == ONE_PER_PAGE && $objQuestionTmp->type == UNIQUE_ANSWER) {
+                    if (in_array($my_question_id, $remind_list)) {
+                        if (empty($my_choice)) {
+                            echo 'answer_required';
+                            exit;
+                        }
+                    }
+                }
 
                 // Getting free choice data.
             	if ($objQuestionTmp->type  == FREE_ANSWER && $type == 'all') {
@@ -568,23 +600,6 @@ switch ($action) {
                     'incomplete',
                     $remind_list
                 );
-
-                $log_transactions_settings = TransactionLog::getTransactionSettings();
-                if (isset($log_transactions_settings['exercise_attempt'])) {
-                  $transaction_controller = new TransactionLogController();
-                  $transaction = $transaction_controller->loadOne(array(
-                    'action' => 'exercise_attempt',
-                    'branch_id' => TransactionLog::BRANCH_LOCAL,
-                    'item_id' => $exe_id,
-                  ));
-                  if (!$transaction) {
-                    $transaction_data = array(
-                      'item_id' => $exe_id,
-                    );
-                    $transaction = $transaction_controller->createTransaction('exercise_attempt', $transaction_data);
-                  }
-                  $transaction->save();
-                }
 
                  // Destruction of the Question object
             	unset($objQuestionTmp);

@@ -8,29 +8,30 @@ require_once 'Resource.class.php';
 
 class CourseCopyAttendance extends Resource
 {
-
+		
     public $params = array();
     public $attendance_calendar = array();
-
-    /**
-     * Create a new Thematic
-     *
-     * @param array parameters
-     */
+	
+	
+	/**
+	 * Create a new Thematic
+	 * 
+	 * @param array parameters	
+	 */
     public function __construct($params)
     {
-        parent::Resource($params['id'], RESOURCE_ATTENDANCE);
-        $this->params = $params;
-    }
+		parent::Resource($params['id'], RESOURCE_ATTENDANCE);
+		$this->params = $params;
+	}
 
     public function show()
     {
-        parent::show();
-        echo $this->params['name'];
-    }
-
+		parent::show();
+		echo $this->params['name'];
+	}
+	
     public function add_attendance_calendar($data)
     {
-        $this->attendance_calendar[] = $data;
-    }
+		$this->attendance_calendar[] = $data;
+	}	
 }

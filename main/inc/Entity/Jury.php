@@ -98,7 +98,7 @@ class Jury
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getMembers()
     {
@@ -106,7 +106,7 @@ class Jury
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getExerciseAttempts()
     {

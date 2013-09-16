@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Entity;
 use ChamiloLMS\Form\BranchType;
+use ChamiloLMS\Form\BranchUsersType;
 
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -38,8 +39,9 @@ class BranchController extends CommonController
                 $addChildren = '<a class="btn" href="'.$this->createUrl('add_from_parent_link', array('id' => $row['id'])).'">Add children</a>';
                 $readLink = '<a href="'.$this->createUrl('read_link', array('id' => $row['id'])).'">'.$row['branchName'].'</a>';
                 $editLink = '<a class="btn" href="'.$this->createUrl('update_link', array('id' => $row['id'])).'">Edit</a>';
+                $addDirector = '<a class="btn" href="'.$this->generateUrl('branch.controller:addDirectorAction', array('id' => $row['id'])).'">Add director</a>';
                 $deleteLink = '<a class="btn" href="'.$this->createUrl('delete_link', array('id' => $row['id'])).'"/>Delete</a>';
-                return $readLink.' '.$addChildren.' '.$editLink.' '.$deleteLink;
+                return $readLink.' '.$addChildren.' '.$addDirector.' '.$editLink.' '.$deleteLink;
             }
             //'representationField' => 'slug',
             //'html' => true
@@ -65,7 +67,84 @@ class BranchController extends CommonController
 
     /**
     *
-    * @Route("/{id}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Route("/{id}/add-director", requirements={"id" = "\d+"})
+    * @Method({"GET"})
+    */
+    public function addDirectorAction($id)
+    {
+        $extraJS[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+
+        $type = new BranchUsersType();
+        $branchUsers =  new Entity\BranchUsers();
+
+        $form = $this->createForm($type, $branchUsers);
+        $request = $this->getRequest();
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $item = $form->getData();
+
+                $userIdList = $item->getUserId();
+                $userId = ($userIdList[0]);
+                $user = $this->getManager()->getRepository('Entity\User')->find($userId);
+                if (!$user) {
+                    throw new \Exception('Unable to found User');
+                }
+
+                $branch = $this->getRepository()->find($id);
+
+                if (!$branch) {
+                    throw new \Exception('Unable to found branch');
+                }
+
+                $branchUsers->setUser($user);
+                $branchUsers->setBranch($branch);
+
+                $em = $this->getManager();
+                $em->persist($branchUsers);
+                $em->flush();
+
+                $this->get('session')->getFlashBag()->add('success', "Saved");
+                $url = $this->get('url_generator')->generate('branch.controller:readAction', array('id' => $id));
+                return $this->redirect($url);
+            }
+        }
+
+
+        $template = $this->get('template');
+        $template->assign('form', $form->createView());
+        $template->assign('id', $id);
+        $response = $template->render_template($this->getTemplatePath().'add_director.tpl');
+        return new Response($response, 200, array());
+    }
+
+    /**
+    *
+    * @Route("/{id}/remove-director/{userId}", requirements={"id" = "\d+"})
+    * @Method({"GET"})
+    */
+    public function removeDirectorAction($id, $userId)
+    {
+        $criteria = array(
+            'branchId' => $id,
+            'userId' => $userId
+        );
+        $branchUser = $this->getManager()->getRepository('Entity\BranchUsers')->findOneBy($criteria);
+
+        if (!$branchUser) {
+            $this->createNotFoundException();
+        }
+        $this->getManager()->remove($branchUser);
+        $this->getManager()->flush();
+
+        $url = $this->createUrl('read_link', array('id' => $id));
+        $this->get('session')->getFlashBag()->add('success', "User removed");
+        return $this->redirect($url);
+    }
+
+    /**
+    *
+    * @Route("/{id}", requirements={"id" = "\d+"})
     * @Method({"GET"})
     */
     public function readAction($id)
@@ -132,7 +211,7 @@ class BranchController extends CommonController
 
     /**
     *
-    * @Route("/{id}/edit", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Route("/{id}/edit", requirements={"id" = "\d+"})
     * @Method({"GET"})
     */
     public function editAction($id)
@@ -142,7 +221,7 @@ class BranchController extends CommonController
 
     /**
     *
-    * @Route("/{id}/delete", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Route("/{id}/delete", requirements={"id" = "\d+"})
     * @Method({"GET"})
     */
     public function deleteAction($id)

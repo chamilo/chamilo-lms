@@ -71,11 +71,7 @@ $cli->addCommands(
         new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand(),
 
         // Chamilo commands.
-        new ChamiloLMS\Command\Database\UpgradeCommand(),
-        new ChamiloLMS\Command\Database\InstallCommand(),
-        //new ChamiloLMS\Command\Database\InstallExtendCommand(),
-        new ChamiloLMS\Command\Database\StatusCommand(),
-        new ChamiloLMS\Command\Database\SetupCommand(),
+
         new ChamiloLMS\Command\Template\AsseticDumpCommand(),
         new ChamiloLMS\Command\Translation\ExportLanguagesCommand(),
 
@@ -86,8 +82,10 @@ $cli->addCommands(
         new Chash\Command\Database\SQLCountCommand(),
         new Chash\Command\Database\FullBackupCommand(),
         new Chash\Command\Database\DropDatabaseCommand(),
+
         new Chash\Command\Files\CleanTempFolderCommand(),
-        new Chash\Command\Files\CleanConfigFiles(),
+        new Chash\Command\Files\CleanConfigFilesCommand(),
+
         new Chash\Command\Translation\ExportLanguageCommand(),
         new Chash\Command\Translation\ImportLanguageCommand()
     )

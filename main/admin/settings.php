@@ -212,9 +212,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
             if ($pdf_export_watermark_path_result) {
                 $message['confirmation'][] = get_lang('UplUploadSucceeded');
             } else {
-                $message['warning'][] = get_lang('UplUnableToSaveFile').' '.get_lang('Folder').': '.api_get_path(
-                    SYS_CODE_PATH
-                ).'default_course_document/images';
+                $message['warning'][] = get_lang('UplUnableToSaveFile').' '.get_lang('Folder').': '.api_get_path(SYS_DEFAULT_COURSE_DOCUMENT_PATH).'/images';
             }
             unset($update_values['pdf_export_watermark_path']);
         }
@@ -557,6 +555,9 @@ if (!empty($_GET['category'])) {
         case 'Stylesheets':
             // Displaying the extensions: Stylesheets.
             handle_stylesheets();
+            if (isset($_POST)) {
+                api_set_setting_last_update();
+            }
             $form->display();
             break;
         case 'Search':

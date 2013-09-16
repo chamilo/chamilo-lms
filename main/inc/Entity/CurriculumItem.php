@@ -46,7 +46,7 @@ class CurriculumItem
     /**
      * @var boolean
      *
-     * @ORM\Column(name="max_repeat", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="max_repeat", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $maxRepeat;
 
@@ -58,9 +58,13 @@ class CurriculumItem
 
     /**
      * @ORM\OneToMany(targetEntity="CurriculumItemRelUser", mappedBy="item")
+     * @ORM\OrderBy({"orderId" = "ASC"})
      */
     private $userItems;
 
+    /**
+     *
+     */
     public function __construct()
     {
         $this->userItems = new ArrayCollection();
@@ -77,17 +81,15 @@ class CurriculumItem
 
     /**
      *
-     * @return CurriculumCategory
+     * @return ArrayCollection
      */
     public function getUserItems()
     {
         return $this->userItems;
     }
 
-
     /**
-     *
-     * @return CurriculumCategory
+     * @param $userItem
      */
     public function setUserItems($userItem)
     {

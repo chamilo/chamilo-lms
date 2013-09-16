@@ -140,7 +140,7 @@ $(function() {
 
         var vals = $("#vals").val();
         var marksid = $("#marksid").val();
-	var f=document.getElementById('myform');
+	    var f=document.getElementById('myform');
         var m_id = marksid.split(',');
 
 	for(var i=0;i<m_id.length;i++){
@@ -157,31 +157,30 @@ $(function() {
 		var oHidden = document.createElement("input");
 		oHidden.type = "hidden";
 		oHidden.name = "comments_"+ids[k];
-            //oEditor = FCKeditorAPI.GetInstance(oHidden.name) ;
-            var valueEditor = CKEDITOR.instances[oHidden.name].getData();
-            //console.log(oHidden.name);
-            oHidden.value = valueEditor;
+        //oEditor = FCKeditorAPI.GetInstance(oHidden.name) ;
+        var valueEditor = CKEDITOR.instances[oHidden.name].getData();
+        //console.log(oHidden.name);
+        oHidden.value = valueEditor;
 		f.appendChild(oHidden);
 	}
-        var params = $("#myform").serialize();
+    var params = $("#myform").serialize();
 
-        $.ajax({
-            type : "post",
-            url: "<?php echo api_get_path(WEB_AJAX_PATH); ?>exercise.ajax.php?a=correct_exercise_result",
-            data: "<?php ?>"+params,
-            success: function(data) {
-                if (data == 0) {
-                    $('#result_from_ajax').html('<?php echo addslashes(Display::return_message(get_lang('Error'), 'warning'))?>');
-                } else {
-                    $('#result_from_ajax').html('<?php echo addslashes(Display::return_message(get_lang('Saved'), 'success'))?>');
-                    $('.question_row').hide();
-                    $('#myform').hide();
-                    $('#correct_again').hide();
-}
+    $.ajax({
+        type : "post",
+        url: "<?php echo api_get_path(WEB_AJAX_PATH); ?>exercise.ajax.php?a=correct_exercise_result",
+        data: "<?php ?>"+params,
+        success: function(data) {
+            if (data == 0) {
+                $('#result_from_ajax').html('<?php echo addslashes(Display::return_message(get_lang('Error'), 'warning'))?>');
+            } else {
+                $('#result_from_ajax').html('<?php echo addslashes(Display::return_message(get_lang('Saved'), 'success'))?>');
+                $('.question_row').hide();
+                $('#myform').hide();
+                $('#correct_again').hide();            
+                }
             }
         });
         return false;
-
     });
 });
 </script>
@@ -232,7 +231,7 @@ if ($origin == 'learnpath' && !isset($_GET['fb_type']) ) {
 
 if ($show_results || $show_only_total_score) {
     $user_info   = api_get_user_info($student_id);
-    //Shows exercise header
+    // Shows exercise header.
     echo $objExercise->show_exercise_result_header(
         api_get_person_name($user_info['firstName'], $user_info['lastName']),
         api_convert_and_format_date($exercise_date)
@@ -241,8 +240,9 @@ if ($show_results || $show_only_total_score) {
 
 $i = $totalScore = $totalWeighting = 0;
 
-if ($debug>0) {
-    error_log("ExerciseResult: ".print_r($exerciseResult,1)); error_log("QuestionList: ".print_r($questionList,1));
+if ($debug > 0) {
+    error_log("ExerciseResult: ".print_r($exerciseResult, 1));
+    error_log("QuestionList: ".print_r($questionList, 1));
 }
 
 $arrques = array();
@@ -272,15 +272,15 @@ while ($row = Database::fetch_array($result)) {
 	$exerciseResult[$row['question_id']] = $row['answer'];
 }
 
-//Fixing #2073 Fixing order of questions
+// Fixing #2073 Fixing order of questions.
 if (!empty($track_exercise_info['data_tracking'])) {
 	$temp_question_list = explode(',', $track_exercise_info['data_tracking']);
 
-    //Getting question list from data_tracking
+    // Getting question list from data_tracking.
     if (!empty($temp_question_list)) {
         $questionList = $temp_question_list;
     }
-    //If for some reason data_tracking is empty we select the question list from db
+    // If for some reason data_tracking is empty we select the question list from db.
     if (empty($questionList)) {
         $questionList = $question_list_from_database;
     }
@@ -313,9 +313,10 @@ $arrid = array();
 
 foreach ($questionList as $questionId) {
 
-	$choice = $exerciseResult[$questionId];
+    $choice = isset($exerciseResult[$questionId]) ? $exerciseResult[$questionId] : null;
 
-	// creates a temporary Question object
+    // Creates a temporary Question object
+
     /** @var Question $objQuestionTmp */
 	$objQuestionTmp = Question::read($questionId);
 
@@ -499,7 +500,7 @@ foreach ($questionList as $questionId) {
                 echo '<p>'.$comment.'</p>';
             }
 
-            //showing the score
+            // Showing the score.
             $queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
             $resfree = Database::query($queryfree);
             $questionScore= Database::result($resfree,0,"marks");
@@ -690,7 +691,7 @@ foreach ($questionList as $questionId) {
         $question_content .= $objQuestionTmp->return_header(null, $counterToShow, $score, $show_media, $objExercise->getHideQuestionTitle());
 
         // display question category, if any
- 	    $question_content .= Testcategory::getCategoryNamesForQuestion($questionId);
+ 	    $question_content .= Testcategory::getCategoryNamesForQuestion($questionId, null, true, $objExercise->categoryMinusOne);
 	}
 
 	$counter++;
@@ -723,7 +724,7 @@ if (!empty($category_list) && ($show_results || $show_only_total_score)) {
         'score' => $my_total_score_temp,
         'total' => $totalWeighting
     );
-    echo Testcategory::get_stats_table_by_attempt($objExercise->id, $category_list);
+    echo Testcategory::get_stats_table_by_attempt($objExercise->id, $category_list, $objExercise->categoryMinusOne);
 }
 
 echo $total_score_text;

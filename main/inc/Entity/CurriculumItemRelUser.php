@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * CurriculumItemRelUser
  *
  * @ORM\Table(name="curriculum_item_rel_user")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Entity\Repository\CurriculumItemRelUserRepository")
  */
 class CurriculumItemRelUser
 {
@@ -50,11 +50,6 @@ class CurriculumItemRelUser
     private $description;
 
     /**
-     * @ORM\OneToMany(targetEntity="User", mappedBy="curriculumItems")
-     */
-    //private $user;
-
-    /**
      * @ORM\ManyToOne(targetEntity="User"))
      * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id", nullable=true)
      */
@@ -66,12 +61,25 @@ class CurriculumItemRelUser
      */
     private $item;
 
-
+    /**
+     * @return mixed
+     */
     public function getUser()
     {
         return $this->user;
     }
 
+    /**
+     * @param User $user
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getItem()
     {
         return $this->item;
@@ -83,11 +91,6 @@ class CurriculumItemRelUser
     public function setItem(CurriculumItem $item)
     {
         $this->item = $item;
-    }
-
-    public function setUser(User $user)
-    {
-        $this->user = $user;
     }
 
     /**

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="robots" content="index, follow, all" />
+        <title>Alchemy\Zippy\Archive\ArchiveInterface | Zippy API</title>
+                    <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
+                            </head>
+        <body id="class">
+            <div class="header">
+        <ul>
+            <li><a href="../../../classes.html">Classes</a></li>
+                            <li><a href="../../../namespaces.html">Namespaces</a></li>
+                        <li><a href="../../../interfaces.html">Interfaces</a></li>
+            <li><a href="../../../doc-index.html">Index</a></li>
+            
+        </ul>
+
+        <div id="title">Zippy API</div>
+
+            <div class="type">Interface</div>
+    <h1><a href="../../../Alchemy/Zippy/Archive.html">Alchemy\Zippy\Archive</a>\ArchiveInterface</h1>
+    </div>
+        <div class="content">
+                <p>interface    <strong>ArchiveInterface</strong>        implements
+        <a href="http://php.net/IteratorAggregate"><abbr title="IteratorAggregate">IteratorAggregate</abbr></a>, <a href="http://php.net/Countable"><abbr title="Countable">Countable</abbr></a></p>
+
+    
+    
+    
+            <h2>Methods</h2>
+
+            <table>
+                    <tr>
+                <td class="type">
+                    <a href="../../../Alchemy/Zippy/Archive/Options.html"><abbr title="Alchemy\Zippy\Archive\Options">Options</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_getOptions">getOptions</a>()
+                    <p>Returns the archive options</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <abbr title="Alchemy\Zippy\Archive\AdapterInterface">AdapterInterface</abbr>
+                </td>
+                <td class="last">
+                    <a href="#method_setOptions">setOptions</a>(<a href="../../../Alchemy/Zippy/Archive/Options.html"><abbr title="Alchemy\Zippy\Archive\Options">Options</abbr></a> $option)
+                    <p>Sets the archive options</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    String
+                </td>
+                <td class="last">
+                    <a href="#method_getLocation">getLocation</a>()
+                    <p>Gets the location of the archive</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <a href="../../../Alchemy/Zippy/Archive/ArchiveInterface.html"><abbr title="Alchemy\Zippy\Archive\ArchiveInterface">ArchiveInterface</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_addMembers">addMembers</a>(String|Array|<a href="http://php.net/SplFileInfo"><abbr title="SplFileInfo">SplFileInfo</abbr></a> $sources, Boolean $recursive = true)
+                    <p>Adds a file or a folder into the archive</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <a href="../../../Alchemy/Zippy/Archive/ArchiveInterface.html"><abbr title="Alchemy\Zippy\Archive\ArchiveInterface">ArchiveInterface</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_removeMembers">removeMembers</a>(String|Array $sources)
+                    <p>Removes a file from the archive</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    Array
+                </td>
+                <td class="last">
+                    <a href="#method_getMembers">getMembers</a>()
+                    <p>Lists files and directories archive members</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <a href="../../../Alchemy/Zippy/Archive/ArchiveInterface.html"><abbr title="Alchemy\Zippy\Archive\ArchiveInterface">ArchiveInterface</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_extract">extract</a>(String $to)
+                    <p>Extracts current archive to the given directory</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <a href="../../../Alchemy/Zippy/Archive/ArchiveInterface.html"><abbr title="Alchemy\Zippy\Archive\ArchiveInterface">ArchiveInterface</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_extractMembers">extractMembers</a>(String|Array $members)
+                    <p>Extracts specific members from the archive</p>
+                </td>
+                <td></td>
+            </tr>
+            </table>
+
+
+        <h2>Details</h2>
+
+                        <h3 id="method_getOptions">
+        <div class="location">at line 25</div>
+        <code>            public            <a href="../../../Alchemy/Zippy/Archive/Options.html"><abbr title="Alchemy\Zippy\Archive\Options">Options</abbr></a>
+    <strong>getOptions</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Returns the archive options</p>
+        <p></p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="../../../Alchemy/Zippy/Archive/Options.html"><abbr title="Alchemy\Zippy\Archive\Options">Options</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_setOptions">
+        <div class="location">at line 34</div>
+        <code>            public            <abbr title="Alchemy\Zippy\Archive\AdapterInterface">AdapterInterface</abbr>
+    <strong>setOptions</strong>(<a href="../../../Alchemy/Zippy/Archive/Options.html"><abbr title="Alchemy\Zippy\Archive\Options">Options</abbr></a> $option)</code>
+    </h3>
+    <div class="details">
+        <p>Sets the archive options</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="../../../Alchemy/Zippy/Archive/Options.html"><abbr title="Alchemy\Zippy\Archive\Options">Options</abbr></a></td>
+                <td>$option</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><abbr title="Alchemy\Zippy\Archive\AdapterInterface">AdapterInterface</abbr></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_getLocation">
+        <div class="location">at line 41</div>
+        <code>            public            String
+    <strong>getLocation</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Gets the location of the archive</p>
+        <p></p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>String</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_addMembers">
+        <div class="location">at line 54</div>
+        <code>            public            <a href="../../../Alchemy/Zippy/Archive/ArchiveInterface.html"><abbr title="Alchemy\Zippy\Archive\ArchiveInterface">ArchiveInterface</abbr></a>
+    <strong>addMembers</strong>(String|Array|<a href="http://php.net/SplFileInfo"><abbr title="SplFileInfo">SplFileInfo</abbr></a> $sources, Boolean $recursive = true)</code>
+    </h3>
+    <div class="details">
+        <p>Adds a file or a folder into the archive</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>String|Array|<a href="http://php.net/SplFileInfo"><abbr title="SplFileInfo">SplFileInfo</abbr></a></td>
+                <td>$sources</td>
+                <td>The path to the file or a folder</td>
+            </tr>
+                    <tr>
+                <td>Boolean</td>
+                <td>$recursive</td>
+                <td>Recurse into sub-directories</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="../../../Alchemy/Zippy/Archive/ArchiveInterface.html"><abbr title="Alchemy\Zippy\Archive\ArchiveInterface">ArchiveInterface</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/InvalidArgumentException"><abbr title="InvalidArgumentException">InvalidArgumentException</abbr></a></td>
+                <td>In case the provided source path is not valid</td>
+            </tr>
+                    <tr>
+                <td><a href="http://php.net/RuntimeException"><abbr title="RuntimeException">RuntimeException</abbr></a></td>
+                <td>In case of failure</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+                <h3 id="method_removeMembers">
+        <div class="location">at line 65</div>
+        <code>            public            <a href="../../../Alchemy/Zippy/Archive/ArchiveInterface.html"><abbr title="Alchemy\Zippy\Archive\ArchiveInterface">ArchiveInterface</abbr></a>
+    <strong>removeMembers</strong>(String|Array $sources)</code>
+    </h3>
+    <div class="details">
+        <p>Removes a file from the archive</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>String|Array</td>
+                <td>$sources</td>
+                <td>The path to an archive or a folder member</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="../../../Alchemy/Zippy/Archive/ArchiveInterface.html"><abbr title="Alchemy\Zippy\Archive\ArchiveInterface">ArchiveInterface</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/RuntimeException"><abbr title="RuntimeException">RuntimeException</abbr></a></td>
+                <td>In case of failure</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+                <h3 id="method_getMembers">
+        <div class="location">at line 74</div>
+        <code>            public            Array
+    <strong>getMembers</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Lists files and directories archive members</p>
+        <p></p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>Array</td>
+            <td>An array of File</td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/RuntimeException"><abbr title="RuntimeException">RuntimeException</abbr></a></td>
+                <td>In case archive could not be read</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+                <h3 id="method_extract">
+        <div class="location">at line 85</div>
+        <code>            public            <a href="../../../Alchemy/Zippy/Archive/ArchiveInterface.html"><abbr title="Alchemy\Zippy\Archive\ArchiveInterface">ArchiveInterface</abbr></a>
+    <strong>extract</strong>(String $to)</code>
+    </h3>
+    <div class="details">
+        <p>Extracts current archive to the given directory</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>String</td>
+                <td>$to</td>
+                <td>The path the extracted archive</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="../../../Alchemy/Zippy/Archive/ArchiveInterface.html"><abbr title="Alchemy\Zippy\Archive\ArchiveInterface">ArchiveInterface</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/RuntimeException"><abbr title="RuntimeException">RuntimeException</abbr></a></td>
+                <td>In case archive could not be extracted</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+                <h3 id="method_extractMembers">
+        <div class="location">at line 96</div>
+        <code>            public            <a href="../../../Alchemy/Zippy/Archive/ArchiveInterface.html"><abbr title="Alchemy\Zippy\Archive\ArchiveInterface">ArchiveInterface</abbr></a>
+    <strong>extractMembers</strong>(String|Array $members)</code>
+    </h3>
+    <div class="details">
+        <p>Extracts specific members from the archive</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>String|Array</td>
+                <td>$members</td>
+                <td>An array of members path</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="../../../Alchemy/Zippy/Archive/ArchiveInterface.html"><abbr title="Alchemy\Zippy\Archive\ArchiveInterface">ArchiveInterface</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/RuntimeException"><abbr title="RuntimeException">RuntimeException</abbr></a></td>
+                <td>In case member could not be extracted</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+    
+            </div>
+            <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/" target="_top">Sami, the API Documentation Generator</a>.
+    </div>
+    </body>
+</html>

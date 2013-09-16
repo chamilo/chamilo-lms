@@ -90,6 +90,12 @@ class CQuizCategory
     private $children;
 
     /**
+     *
+     * @ORM\Column(name="visibility", type="integer")
+     */
+    private $visibility;
+
+    /**
      * @ORM\OneToMany(targetEntity="CQuizQuestionRelCategory", mappedBy="category")
      **/
     private $quizQuestionRelCategoryList;
@@ -217,20 +223,39 @@ class CQuizCategory
     * @param integer $cId
     * @return CQuizQuestionCategory
     */
-   public function setParentId($id)
-   {
+    public function setParentId($id)
+    {
        $this->parentId = $id;
 
        return $this;
-   }
+    }
 
-   /**
+    /**
     * Get cId
     *
     * @return integer
     */
-   public function getParentId()
-   {
+    public function getParentId()
+    {
        return $this->parentId;
-   }
+    }
+
+    /**
+     * @return integer
+     */
+    public function getVisibility()
+    {
+        return $this->visibility;
+    }
+
+    /**
+     * @param $visibility
+     * @return $this
+     */
+    public function setVisibility($visibility)
+    {
+        $this->visibility = $visibility;
+
+        return $this;
+    }
 }

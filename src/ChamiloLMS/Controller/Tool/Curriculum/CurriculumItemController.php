@@ -14,7 +14,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
  * Class CurriculumItemController
- * @todo @route and @method function don't work yet
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
@@ -27,12 +26,37 @@ class CurriculumItemController extends CommonController
      */
     public function indexAction()
     {
+        $breadcrumbs = array(
+            array(
+                'name' => get_lang('Curriculum'),
+                'url' => array(
+                    'route' => 'curriculum_user.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+            ),
+            array(
+                'name' => get_lang('Categories'),
+                'url' => array(
+                    'route' => 'curriculum_category.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+
+            ),
+            array(
+                'name' => get_lang('List')
+            )
+        );
+        $this->setBreadcrumb($breadcrumbs);
         return parent::listingAction();
     }
 
     /**
     *
-    * @Route("/{id}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Route("/{id}", requirements={"id" = "\d+"})
     * @Method({"GET"})
     */
     public function readAction($id)
@@ -55,11 +79,36 @@ class CurriculumItemController extends CommonController
     */
     public function addFromCategoryAction($id)
     {
+         $breadcrumbs = array(
+            array(
+                'name' => get_lang('Curriculum'),
+                'url' => array(
+                    'route' => 'curriculum_user.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+            ),
+            array(
+                'name' => get_lang('Categories'),
+                'url' => array(
+                    'route' => 'curriculum_category.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+
+            ),
+            array(
+                'name' => get_lang('AddItems')
+            )
+        );
+        $this->setBreadcrumb($breadcrumbs);
         $request = $this->getRequest();
         $formType = $this->getFormType();
 
         $entity = new Entity\CurriculumItem();
-        //$category = new Entity\CurriculumCategory();
+
         $category = $this->get('orm.em')->getRepository('Entity\CurriculumCategory')->find($id);
         $entity->setCategory($category);
 
@@ -91,17 +140,42 @@ class CurriculumItemController extends CommonController
 
     /**
     *
-    * @Route("/{id}/edit", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Route("/{id}/edit", requirements={"id" = "\d+"})
     * @Method({"GET"})
     */
     public function editAction($id)
     {
+         $breadcrumbs = array(
+            array(
+                'name' => get_lang('Curriculum'),
+                'url' => array(
+                    'route' => 'curriculum_user.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+            ),
+            array(
+                'name' => get_lang('Categories'),
+                'url' => array(
+                    'route' => 'curriculum_category.controller:indexAction',
+                    'routeParameters' => array(
+                        'course' => $this->getCourse()->getCode()
+                    )
+                )
+
+            ),
+            array(
+                'name' => get_lang('Edit')
+            )
+        );
+        $this->setBreadcrumb($breadcrumbs);
         return parent::editAction($id);
     }
 
     /**
     *
-    * @Route("/{id}/delete", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Route("/{id}/delete", requirements={"id" = "\d+"})
     * @Method({"GET"})
     */
     public function deleteAction($id)
@@ -118,8 +192,6 @@ class CurriculumItemController extends CommonController
     {
         $routes = parent::generateDefaultCrudRoutes();
         $routes['add_from_category'] = 'curriculum_item.controller:addFromCategoryAction';
-        //$routes['add_items'] = 'curriculum_item.controller:addItemsAction';
-
         return $routes ;
     }
 

@@ -14,11 +14,10 @@
  * Validates imported data.
  */
 function validate_data($courses) {
-    global $_configuration;
     global $purification_option_for_usernames;
-    $dbnamelength = strlen($_configuration['db_prefix']);
+
     // Ensure the prefix + database name do not get over 40 characters.
-    $maxlength = 40 - $dbnamelength;
+    $maxlength = 40;
 
     $errors = array ();
     $coursecodes = array ();
@@ -56,16 +55,24 @@ function validate_data($courses) {
             }
             $coursecodes[$course['Code']] = 1;
         }
-        /*
         // 3. Check whether teacher exists.
-        if (!UserManager::is_username_empty($course['Teacher'])) {
-            $teacher = UserManager::purify_username($course['Teacher'], $purification_option_for_usernames);
-            if (UserManager::is_username_available($teacher)) {
-                $course['error'] = get_lang('UnknownTeacher').' ('.$teacher.')';
-                $errors[] = $course;
+        $teacherList = getTeacherListInArray($course['Teacher']);
+
+        if (!empty($teacherList)) {
+            foreach ($teacherList as $teacher) {
+                $teacherInfo = api_get_user_info_from_username($teacher);
+                if (empty($teacherInfo)) {
+                    $course['error'] = get_lang('UnknownTeacher').' ('.$teacher.')';
+                    $errors[] = $course;
+                } else {
+                    if ($teacherInfo['status'] != COURSEMANAGER) {
+                        $course['error'] = get_lang('UserIsNotATeacher').' ('.$teacher.')';
+                        $errors[] = $course;
+                    }
+                }
             }
         }
-        */
+
         // 4. Check whether course category exists.
         if (isset($course['CourseCategory']) && strlen($course['CourseCategory']) != 0) {
             $category_table = Database :: get_main_table(TABLE_MAIN_CATEGORY);
@@ -81,6 +88,14 @@ function validate_data($courses) {
     return $errors;
 }
 
+function getTeacherListInArray($teachers)
+{
+    if (!empty($teachers)) {
+        return explode('|', $teachers);
+    }
+    return array();
+}
+
 /**
  * Saves imported data.
  * @param array   List of courses
@@ -93,44 +108,40 @@ function save_data($courses) {
 
     foreach ($courses as $index => $course) {
         $course_language = api_get_valid_language($course['Language']);
-        $titular = $uidCreator = $username = '';
+        $username = '';
 
-        // Get username from name (firstname lastname).
-        if (!UserManager::is_username_empty($course['Teacher'])) {
-            $teacher = UserManager::purify_username($course['Teacher'], $purification_option_for_usernames);
-            if (UserManager::is_username_available($teacher)) {
-                $sql    = "SELECT username FROM $user_table WHERE ".(api_is_western_name_order(null, $course_language) ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)")." = '{$course['Teacher']}' LIMIT 1";
-                $rs     = Database::query($sql);
-                $user   = Database::fetch_object($rs);
-                $username = $user->username;
-            } else {
-                $username = $teacher;
+        $teachers = getTeacherListInArray($course['Teacher']);
+        $teacherList = array();
+        $creatorId = api_get_user_id();
+
+        if (!empty($teachers)) {
+            foreach ($teachers as $teacher) {
+                $teacherInfo = api_get_user_info_from_username($teacher);
+                if (!empty($teacherInfo)) {
+                    $teacherList[] = $teacherInfo;
             }
         }
 
-        // Get name and uid creator from username.
-        if (!empty($username)) {
-            $sql = "SELECT user_id, ".(api_is_western_name_order(null, $course_language) ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)")." AS name FROM $user_table WHERE username = '".Database::escape_string(UserManager::purify_username($username, $purification_option_for_usernames))."'";
-            $res = Database::query($sql);
-            $teacher    = Database::fetch_object($res);
-            $titular    = $teacher->name;
-            $uidCreator = $teacher->user_id;
-        } else {
-            $titular    = $course['Teacher'];
-            $uidCreator = 1;
         }
 
         $params = array();
         $params['title']            = $course['Title'];
         $params['wanted_code']      = $course['Code'];
-        $params['tutor_name']       = $titular;
+        $params['tutor_name']       = null;
         $params['course_category']  = $course['CourseCategory'];
         $params['course_language']  = $course_language;
-        $params['user_id']          = $uidCreator;
+        $params['user_id']          = $creatorId;
 
         $course_info = CourseManager::create_course($params);
         if (!empty($course_info)) {
-            $msg .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/">'.$course_info['title'].'</a> '.get_lang('Created').'<br />';
+            if (!empty($teacherList)) {
+                foreach ($teacherList as $teacher) {
+                    CourseManager::add_user_to_course($teacher['user_id'], $course_info['code'], COURSEMANAGER);
+                }
+            }
+
+            $msg .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/">
+                    '.$course_info['title'].'</a> '.get_lang('Created').'<br />';
         }
     }
 
@@ -153,14 +164,12 @@ $language_file = array('admin', 'registration','create_course', 'document');
 
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
-
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
 
-if (is_array($extAuthSource)) {
+if (isset($extAuthSource) && is_array($extAuthSource)) {
     $defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
 }
 
@@ -171,7 +180,7 @@ $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdm
 set_time_limit(0);
 Display :: display_header($tool_name);
 
-if ($_POST['formSent']) {
+if (isset($_POST['formSent']) && $_POST['formSent']) {
     if (empty($_FILES['import_file']['tmp_name'])) {
         $error_message = get_lang('UplUploadFailed');
         Display :: display_error_message($error_message, false);
@@ -192,11 +201,11 @@ if ($_POST['formSent']) {
     }
 }
 
-if (count($errors) != 0) {
+if (isset($errors) && count($errors) != 0) {
     $error_message = '<ul>';
     foreach ($errors as $index => $error_course) {
         $error_message .= '<li>'.get_lang('Line').' '.$error_course['line'].': <strong>'.$error_course['error'].'</strong>: ';
-        $error_message .= $error_course['Code'].' '.$error_course['Title'];
+        $error_message .= get_lang('Course').': '.$error_course['Title'].' ('.$error_course['Code'].')';
         $error_message .= '</li>';
     }
     $error_message .= '</ul>';
@@ -223,8 +232,10 @@ if (count($errors) != 0) {
 
 <blockquote>
 <pre>
-<strong>Code</strong>;<strong>Title</strong>;<strong>CourseCategory</strong>;<strong>Teacher</strong>;Language
-BIO0015;Biology;BIO;username;english
+<strong>Code</strong>;<strong>Title</strong>;<strong>CourseCategory</strong>;Teacher;Language
+BIO0015;Biology;BIO;teacher1;english
+BIO0016;Maths;MATH;teacher2|teacher3;english
+BIO0017;Language;LANG;;english
 </pre>
 </blockquote>
 

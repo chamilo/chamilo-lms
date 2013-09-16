@@ -21,7 +21,7 @@ class DataFilesystem
     private $fs;
 
     /**
-     * @param string $path
+     * @param array $paths
      * @param Filesystem $filesystem
      */
     public function __construct($paths, Filesystem $filesystem)
@@ -32,7 +32,7 @@ class DataFilesystem
 
     /**
      * Gets a file from the "data" folder
-     * @param $file
+     * @param string $file
      * @return SplFileInfo
      * @throws \InvalidArgumentException
      */
@@ -86,6 +86,7 @@ class DataFilesystem
         if (empty($folderPermissions)) {
             $folderPermissions = api_get_permissions_for_new_directories();
         }
+
         if (!empty($folderList)) {
             foreach ($folderList as $folder) {
                 if (!is_dir($folder)) {

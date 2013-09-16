@@ -15,13 +15,13 @@ require_once 'question.class.php';
 
 $this_section = SECTION_COURSES;
 
-if (!api_is_allowed_to_edit()) {
+if (!(api_is_allowed_to_edit() || api_is_question_manager())) {
     api_not_allowed(true);
 }
 
 $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : 'simple';
 
-if ($type == 'global' && !api_is_platform_admin()) {
+if ($type == 'global' && !(api_is_platform_admin() || api_is_question_manager())) {
     api_not_allowed(true);
 }
 
@@ -129,7 +129,8 @@ function edit_category_form($in_action, $type = 'simple') {
                 $v_name = $values['category_name'];
                 $v_description = $values['category_description'];
                 $parent_id = isset($values['parent_id']) ? $values['parent_id'] : null;
-                $objcat = new Testcategory($v_id, $v_name, $v_description, $parent_id, $type);
+                $visibility = isset($values['visibility']) ? $values['visibility'] : 1;
+                $objcat = new Testcategory($v_id, $v_name, $v_description, $parent_id, $type, null, $visibility);
                 if ($objcat->modifyCategory()) {
                     Display::display_confirmation_message(get_lang('MofidfyCategoryDone'));
                 } else {
@@ -153,7 +154,8 @@ function edit_category_form($in_action, $type = 'simple') {
 }
 
 // process to delete a category
-function delete_category_form($in_action, $type = 'simple') {
+function delete_category_form($in_action, $type = 'simple')
+{
     $in_action = Security::remove_XSS($in_action);
     if (isset($_GET['category_id']) && is_numeric($_GET['category_id'])) {
         $category_id = Security::remove_XSS($_GET['category_id']);

@@ -228,7 +228,7 @@ $course_quota = Text::format_file_size(DocumentManager::get_course_quota() - Doc
 
 $label = get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.get_lang('DocumentQuota').': '.$course_quota;
 
-$form->addElement('file', 'file', array(get_lang('File'), $label), 'id="user_upload" size="45"');
+$form->addElement('file', 'file', array(get_lang('File'), $label), 'style="width: 250px" id="user_upload"');
 
 $form->addElement('text', 'title', get_lang('Title'), array('size' => '20', 'style' => 'width:300px', 'id' => 'title_file'));
 $form->addElement('textarea', 'comment', get_lang('Comment'), 'wrap="virtual" style="width:300px;"');

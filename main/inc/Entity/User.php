@@ -5,7 +5,15 @@ namespace Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
+use ChamiloLMS\Component\Auth;
 
 /**
  * User
@@ -13,7 +21,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="Entity\Repository\UserRepository")
  */
-class User implements AdvancedUserInterface, \Serializable
+class User implements AdvancedUserInterface, \Serializable , EquatableInterface
 {
     /**
      * @var integer
@@ -245,12 +253,7 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $curriculumItems;
 
-    public function getCurriculumItems()
-    {
-        return $this->curriculumItems;
-    }
-
-    /**
+     /**
      *
      */
     public function __construct()
@@ -262,17 +265,78 @@ class User implements AdvancedUserInterface, \Serializable
         $this->curriculumItems = new ArrayCollection();
         $this->salt = sha1(uniqid(null, true));
         $this->isActive = true;
+        $this->registrationDate = new \DateTime();
+        $this->curriculumItems = new ArrayCollection();
     }
 
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        /*$metadata->addConstraint(new UniqueEntity(array(
+            'fields'  => 'email',
+            'message' => 'This email already exists.',
+        )));
+        $metadata->addPropertyConstraint('email', new Assert\Email());*/
+        /*
+        $metadata->addConstraint(new UniqueEntity(array(
+            'fields'  => 'username',
+            'message' => 'This username already exists.',
+        )));
+
+        $metadata->addPropertyConstraint('username', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('email', new Assert\Email());*/
+    }
+
+    /**
+    * @inheritDoc
+    */
+    public function isEqualTo(UserInterface $user)
+    {
+        if (!$user instanceof User) {
+            return false;
+        }
+
+        if ($this->password !== $user->getPassword()) {
+            return false;
+        }
+
+        if ($this->getSalt() !== $user->getSalt()) {
+            return false;
+        }
+
+        if ($this->username !== $user->getUsername()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCurriculumItems()
+    {
+        return $this->curriculumItems;
+    }
+
+    /**
+     * @param $items
+     */
+    public function setCurriculumItems($items)
+    {
+        $this->curriculumItems = $items;
+    }
+
+    /**
+     * @return bool
+     */
     public function getIsActive()
     {
         return $this->active == 1;
     }
 
-
     /**
-     * @inheritDoc
-     */
+    * @inheritDoc
+    */
     public function isAccountNonExpired()
     {
         return true;
@@ -307,6 +371,7 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function eraseCredentials()
     {
+        $this->password = null;
     }
 
     /**
@@ -314,7 +379,16 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function getRoles()
     {
-        return $this->roles->toArray();
+        $roles = $this->roles->toArray();
+        //$roles[] = new Auth\Role($this);
+        return $roles;
+    }
+
+    public function setRoles($role)
+    {
+        $this->roles->add($role);
+
+        return $this;
     }
 
     /**
@@ -359,8 +433,6 @@ class User implements AdvancedUserInterface, \Serializable
     {
         return $this->roles;
     }
-
-
 
     /**
      * Set salt

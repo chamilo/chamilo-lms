@@ -14,7 +14,6 @@ namespace Imagine\Gmagick;
 use Imagine\Exception\OutOfBoundsException;
 use Imagine\Exception\InvalidArgumentException;
 use Imagine\Exception\RuntimeException;
-use Imagine\Gmagick\Imagine;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Box;
 use Imagine\Image\BoxInterface;
@@ -192,13 +191,36 @@ final class Image implements ImageInterface
     /**
      * {@inheritdoc}
      */
-    public function resize(BoxInterface $size)
+    public function resize(BoxInterface $size, $filter = ImageInterface::FILTER_UNDEFINED)
     {
+        static $supportedFilters = array(
+            ImageInterface::FILTER_UNDEFINED => \Gmagick::FILTER_UNDEFINED,
+            ImageInterface::FILTER_BESSEL    => \Gmagick::FILTER_BESSEL,
+            ImageInterface::FILTER_BLACKMAN  => \Gmagick::FILTER_BLACKMAN,
+            ImageInterface::FILTER_BOX       => \Gmagick::FILTER_BOX,
+            ImageInterface::FILTER_CATROM    => \Gmagick::FILTER_CATROM,
+            ImageInterface::FILTER_CUBIC     => \Gmagick::FILTER_CUBIC,
+            ImageInterface::FILTER_GAUSSIAN  => \Gmagick::FILTER_GAUSSIAN,
+            ImageInterface::FILTER_HANNING   => \Gmagick::FILTER_HANNING,
+            ImageInterface::FILTER_HAMMING   => \Gmagick::FILTER_HAMMING,
+            ImageInterface::FILTER_HERMITE   => \Gmagick::FILTER_HERMITE,
+            ImageInterface::FILTER_LANCZOS   => \Gmagick::FILTER_LANCZOS,
+            ImageInterface::FILTER_MITCHELL  => \Gmagick::FILTER_MITCHELL,
+            ImageInterface::FILTER_POINT     => \Gmagick::FILTER_POINT,
+            ImageInterface::FILTER_QUADRATIC => \Gmagick::FILTER_QUADRATIC,
+            ImageInterface::FILTER_SINC      => \Gmagick::FILTER_SINC,
+            ImageInterface::FILTER_TRIANGLE  => \Gmagick::FILTER_TRIANGLE
+        );
+
+        if (!array_key_exists($filter, $supportedFilters)) {
+            throw new InvalidArgumentException('Unsupported filter type');
+        }
+
         try {
             $this->gmagick->resizeimage(
                 $size->getWidth(),
                 $size->getHeight(),
-                \Gmagick::FILTER_UNDEFINED,
+                $supportedFilters[$filter],
                 1
             );
         } catch (\GmagickException $e) {
@@ -354,41 +376,41 @@ final class Image implements ImageInterface
             throw new InvalidArgumentException('Invalid mode specified');
         }
 
-        $width  = $size->getWidth();
-        $height = $size->getHeight();
+        $imageSize = $this->getSize();
+        $thumbnail = $this->copy();
 
-        $ratios = array(
-            $width / $this->getSize()->getWidth(),
-            $height / $this->getSize()->getHeight()
-        );
-
-        if ($mode === ImageInterface::THUMBNAIL_INSET) {
-            $ratio = min($ratios);
-        } else {
-            $ratio = max($ratios);
+        // if target width is larger than image width
+        // AND target height is longer than image height
+        if ($size->contains($imageSize)) {
+            return $thumbnail;
         }
 
-        $thumbnail = $this->copy();
-        
-        if ($ratio < 1) {
-            try {
-                if ($mode === ImageInterface::THUMBNAIL_INSET) {
-                    $thumbnail->gmagick->thumbnailimage(
-                        $size->getWidth(),
-                        $size->getHeight(),
-                        true
-                    );
-                } elseif ($mode === ImageInterface::THUMBNAIL_OUTBOUND) {
-                    $thumbnail->gmagick->cropthumbnailimage(
-                        $size->getWidth(),
-                        $size->getHeight()
-                    );
-                }
-            } catch (\GmagickException $e) {
-                throw new RuntimeException(
-                    'Thumbnail operation failed', $e->getCode(), $e
+        // if target width is larger than image width
+        // OR target height is longer than image height
+        if (!$imageSize->contains($size)) {
+            $size = new Box(
+                min($imageSize->getWidth(), $size->getWidth()),
+                min($imageSize->getHeight(), $size->getHeight())
+            );
+        }
+
+        try {
+            if ($mode === ImageInterface::THUMBNAIL_INSET) {
+                $thumbnail->gmagick->thumbnailimage(
+                    $size->getWidth(),
+                    $size->getHeight(),
+                    true
+                );
+            } elseif ($mode === ImageInterface::THUMBNAIL_OUTBOUND) {
+                $thumbnail->gmagick->cropthumbnailimage(
+                    $size->getWidth(),
+                    $size->getHeight()
                 );
             }
+        } catch (\GmagickException $e) {
+            throw new RuntimeException(
+                'Thumbnail operation failed', $e->getCode(), $e
+            );
         }
 
         return $thumbnail;

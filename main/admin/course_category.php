@@ -24,7 +24,6 @@ $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
 $errorMsg = '';
-
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 
 $categoryCode = isset($_POST['categoryCode']) ? $_POST['categoryCode'] : null;
@@ -36,10 +35,20 @@ $canHaveCourses = 0;
 
 if (!empty($action)) {
     if ($action == 'delete') {
-        deleteNode($id);
-        header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
-        exit();
-    } elseif (($action == 'add' || $action == 'edit') && $formSent) {
+        if (api_get_multiple_access_url()) {
+            if (api_get_current_access_url_id() == 1) {
+                deleteNode($id);
+                header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
+                exit();
+            } else {
+                $delError = 1;
+            }
+        } else {
+            deleteNode($_GET['id']);
+            header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
+            exit();
+        }
+    } elseif (($action == 'add' || $action == 'edit') && $_POST['formSent']) {
         $_POST['categoryCode'] = trim($_POST['categoryCode']);
         $_POST['categoryName'] = trim($_POST['categoryName']);
 
@@ -65,11 +74,11 @@ if (!empty($action)) {
             $sql = "SELECT name, auth_course_child FROM $tbl_category WHERE code='$id'";
             $result = Database::query($sql);
             list($categoryName, $canHaveCourses) = Database::fetch_row($result);
-
             $canHaveCourses = ($canHaveCourses == 'FALSE') ? 0 : 1;
         }
     } elseif ($action == 'moveUp') {
         moveNodeUp($id, $_GET['tree_pos'], $category);
+
         header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
         exit();
     }
@@ -91,16 +100,16 @@ if (!empty($category)) {
 }
 
 if (empty($action)) {
-    $myquery = "SELECT t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count,COUNT(DISTINCT t3.code) AS nbr_courses
-			 	FROM $tbl_category t1 LEFT JOIN $tbl_category t2 ON t1.code=t2.parent_id LEFT JOIN $tbl_course t3 ON t3.category_code=t1.code
-				WHERE t1.parent_id " . (empty($category) ? "IS NULL" : "='$category'") . "
+    $myquery = "SELECT t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count,COUNT(DISTINCT t3.code) AS nbr_courses 
+			 	FROM $tbl_category t1 LEFT JOIN $tbl_category t2 ON t1.code=t2.parent_id LEFT JOIN $tbl_course t3 ON t3.category_code=t1.code 
+				WHERE t1.parent_id " . (empty($category) ? "IS NULL" : "='$category'") . " 
 				GROUP BY t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count ORDER BY t1.tree_pos";
     $result = Database::query($myquery);
     $Categories = Database::store_result($result);
 }
 
 if ($action == 'add' || $action == 'edit') {
-    ?>
+    if ((api_get_multiple_access_url() && api_get_current_access_url_id() == 1) || !api_get_multiple_access_url() ) { ?>
     <div class="actions">
         <a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>"><?php echo Display::return_icon('folder_up.png', get_lang("Back"), '', ICON_SIZE_MEDIUM);
     if (!empty($category)) echo ' (' . Security::remove_XSS($category) . ')'; ?></a>
@@ -126,16 +135,17 @@ if ($action == 'add' || $action == 'edit') {
         <?php
         Display::display_normal_message($errorMsg); //main API
         ?>
+
                     </td>
                 </tr>
 
         <?php
     }
     ?>
+
             <tr>
                 <td nowrap="nowrap"><?php echo get_lang("CategoryCode"); ?> :</td>
-                <td>
-                    <input type="text" name="categoryCode" size="20" maxlength="20" value="<?php echo api_htmlentities(stripslashes($categoryCode), ENT_QUOTES, $charset); ?>" /></td>
+                <td><input type="text" name="categoryCode" size="20" maxlength="20" value="<?php echo api_htmlentities(stripslashes($categoryCode), ENT_QUOTES, $charset); ?>" /></td>
             </tr>
             <tr>
                 <td nowrap="nowrap"><?php echo get_lang("CategoryName"); ?> :</td>
@@ -164,21 +174,23 @@ if ($action == 'add' || $action == 'edit') {
         </table>
     </form>
 
-                <?php
+<?php  } elseif (api_get_multiple_access_url() && api_get_current_access_url_id() != 1) {
+           Display :: display_error_message(get_lang('CourseCategoriesAreGlobal'));
+       }
             } else {
-                ?>
+    if ($delError == 0) {           ?>
     <div class="actions">
-    <?php
-    if (!empty($category) && empty($action)) {
-        $myquery = "SELECT parent_id FROM $tbl_category WHERE code='$category'";
-        $result = Database::query($myquery);
-        $parent_id = 0;
-        if (Database::num_rows($result) > 0) {
-            $parent_id = Database::fetch_array($result);
-        }
+                <?php
+                if (!empty($category) && empty($action)) {
+                    $myquery = "SELECT parent_id FROM $tbl_category WHERE code='$category'";
+                    $result = Database::query($myquery);
+                    $parent_id = 0;
+                    if (Database::num_rows($result) > 0) {
+                        $parent_id = Database::fetch_array($result);
+                    }
 
-        $parent_id['parent_id'] ? $link = ' (' . $parent_id['parent_id'] . ')' : $link = '';
-        ?>
+                    $parent_id['parent_id'] ? $link = ' (' . $parent_id['parent_id'] . ')' : $link = '';
+                    ?>
 
             <a href="<?php echo api_get_self(); ?>?category=<?php echo $parent_id['parent_id']; ?>"><?php echo Display::return_icon('folder_up.png', get_lang("Back"), '', ICON_SIZE_MEDIUM);
         if (!empty($parent_id)) echo $link ?></a>
@@ -216,12 +228,19 @@ if ($action == 'add' || $action == 'edit') {
     } else {
         echo get_lang("NoCategories");
     }
-    ?>
+    } else {
+        Display :: display_error_message(get_lang('CourseCategoriesAreGlobal'));
+        
+    }?>
     </ul>
+
+
+
     <?php
 }
 
 Display::display_footer();
+
 
 function deleteNode($node) {
     global $tbl_category, $tbl_course;
@@ -341,4 +360,3 @@ function compterFils($pere, $cpt) {
 
     return ($cpt + 1);
 }
-

@@ -13,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Routing\AnnotatedRouteControllerLoader;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use ChamiloLMS\Middleware\CourseMiddleware;
 
 class ReflectionControllerProvider implements ControllerProviderInterface
 {
@@ -35,8 +36,16 @@ class ReflectionControllerProvider implements ControllerProviderInterface
         /** @var \Silex\ControllerCollection $controllers */
         $controllers = $app['controllers_factory'];
 
-        $reflection = new \ReflectionClass($app[$this->controllerName]);
+        // Routes are already cached using Flint
 
+        if (file_exists($app['sys_temp_path'].'ProjectUrlMatcher.php')) {
+            return $controllers;
+        }
+
+        $reflection = new \ReflectionClass($app[$this->controllerName]);
+        $className = $reflection->getName();
+
+        // Needed in order to get annotations
         $annotationReader = new AnnotationReader();
         //$classAnnotations = $annotationReader->getClassAnnotations($reflection);
         $routeAnnotation = new Route(array());
@@ -48,14 +57,14 @@ class ReflectionControllerProvider implements ControllerProviderInterface
             $methodName = $method->getName();
             $controllerName = $this->controllerName.':'.$methodName;
 
-            if (in_array($methodName, array('__construct', 'get', 'getManager'))) {
+            // Parse only function with the "Action" suffix
+
+            if (strpos($methodName, 'Action') === false) {
                 continue;
             }
 
-            /** @var Route $routeObject */
-            $routeObject = $annotationReader->getMethodAnnotation($method, $routeAnnotation);
-            $req = $routeObject->getRequirements();
-            //$routeObject->setMethods();
+            // Getting all annotations
+            $routeObjects = $annotationReader->getMethodAnnotations($method);
 
             /** @var Method $routeObject */
             $methodObject = $annotationReader->getMethodAnnotation($method, $methodAnnotation);
@@ -65,18 +74,30 @@ class ReflectionControllerProvider implements ControllerProviderInterface
                 $methodsToString = implode('|', $methodObject->getMethods());
             }
 
-            if ($routeObject) {
-                $match = $controllers->match($routeObject->getPath(), $controllerName, $methodsToString);
-                //var_dump($controllerName);
-                $match->bind($controllerName);
-                // setRequirements
-                if (!empty($req)) {
-                    foreach ($req as $key => $value) {
-                        $match->assert($key, $value);
+            /** @var Route $routeObject */
+            foreach ($routeObjects as $routeObject) {
+
+                if ($routeObject && is_a($routeObject, 'Symfony\Component\Routing\Annotation\Route')) {
+                    $match = $controllers->match($routeObject->getPath(), $controllerName, $methodsToString);
+                    // Setting requirements
+                    $req = $routeObject->getRequirements();
+                    if (!empty($req)) {
+                        foreach ($req as $key => $value) {
+                            $match->assert($key, $value);
+                        }
                     }
+
+                    // Setting defaults
+                    $defaults = $routeObject->getDefaults();
+                    if (!empty($defaults)) {
+                        foreach ($defaults as $key => $value) {
+                            $match->value($key, $value);
+                        }
+                    }
+
+                    $match->bind($controllerName);
                 }
             }
-
         }
         return $controllers;
     }

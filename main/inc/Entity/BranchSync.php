@@ -3,6 +3,7 @@ namespace Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * BranchSync
@@ -177,6 +178,16 @@ class BranchSync
     private $children;
 
     /**
+     * @ORM\OneToMany(targetEntity="BranchUsers", mappedBy="branch")
+     */
+    private $users;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Jury", mappedBy="branch")
+     **/
+    private $juries;
+
+    /**
      * Machine name for the envelope plugin to use.
      *
      * @var string
@@ -232,6 +243,21 @@ class BranchSync
         // $this->lastSyncTransDate = new \DateTime();
     }
 
+    /**
+    * @return ArrayCollection
+    */
+    public function getJuries()
+    {
+        return $this->juries;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
 
     /**
      * Get id

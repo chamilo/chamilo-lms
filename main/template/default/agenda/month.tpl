@@ -123,7 +123,7 @@ $(document).ready(function() {
                 //api.render();
             }
         },
-		//add event
+		//Add event
 		select: function(start, end, allDay, jsEvent, view) {
 			//Removing UTC stuff
             var start_date = $.datepicker.formatDate("yy-mm-dd", start) + " " + start.toTimeString().substr(0, 8);
@@ -181,8 +181,36 @@ $(document).ready(function() {
 							$.ajax({
 								url: url+'&'+params,
 								success:function(data) {
-									calendar.fullCalendar("refetchEvents");
-									calendar.fullCalendar("rerenderEvents");
+									var user = $('#users_to_send_id').val();
+                                    if (user) {
+
+                                        if (user.length > 1) {
+                                            user = 0;
+                                        } else {
+                                            user = user[0];
+                                        }
+                                        var user_length = String(user).length;
+                                        if (String(user).substring(0,1) == 'G') {
+                                            var user_id = String(user).substring(6,user_length);
+                                            var  user_id = "G:"+user_id;
+                                        } else {
+                                            var user_id = String(user).substring(5,user_length);
+                                        }
+                                        var temp = "&user_id="+user_id;
+                                        var position =String(window.location).indexOf("&user");
+                                        var url_length = String(window.location).length;
+                                        var url = String(window.location).substring(0, position)+temp;
+
+                                        if (position > 0) {
+                                            window.location.replace(url);
+                                        } else {
+                                            url = String(window.location)+temp;
+                                            window.location.replace(url);
+                                        }
+                                    } else {
+									    calendar.fullCalendar("refetchEvents");
+									    calendar.fullCalendar("rerenderEvents");
+                                    }
 									$("#dialog-form").dialog("close");
 								}
 							});
@@ -210,9 +238,7 @@ $(document).ready(function() {
 		            content: event.attachment,
 		            position: { at:'top right' , my:'bottom right'},
 		        }).removeData('qtip'); // this is an special hack to add multiple qtip in the same target
-
             }
-
 			if (event.description) {
 				element.qtip({
                     hide: {
@@ -222,7 +248,6 @@ $(document).ready(function() {
 		            position: { at:'top left' , my:'bottom left'}
 		        });
 			}
-
 	    },
 		eventClick: function(calEvent, jsEvent, view) {
             //var start_date 	= Math.round(calEvent.start.getTime() / 1000);
@@ -238,7 +263,7 @@ $(document).ready(function() {
                 }
             }
 
-			//edit event
+			//Edit event
 			if (calEvent.editable) {
 
 				$('#visible_to_input').hide();
@@ -273,8 +298,9 @@ $(document).ready(function() {
 
                 $("#title_edit").show();
                 $("#content_edit").show();
-                $("#title").attr('value', calEvent.title);
-                $("#content").attr('value', calEvent.description);
+
+                $("#title").hide();
+                $("#content").hide();
 
 				allFields.removeClass( "ui-state-error" );
 
@@ -297,6 +323,7 @@ $(document).ready(function() {
                             url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";
                             window.location.href = url;
 						},
+
                         {% if type == 'not_available' %}
 						'{{ "Edit"|get_lang }}' : function() {
 
@@ -314,10 +341,9 @@ $(document).ready(function() {
 									calEvent.description 	= $("#content").val();
 
 									calendar.fullCalendar('updateEvent',
-											calEvent,
-											true // make the event "stick"
+                                        calEvent,
+                                        true // make the event "stick"
 									);
-
 									$("#dialog-form").dialog("close");
 								}
 							});
@@ -329,6 +355,7 @@ $(document).ready(function() {
                             window.location.href = url;
                             $("#dialog-form").dialog( "close" );
                         },
+
 						'{{ "Delete"|get_lang }}': function() {
 							$.ajax({
 								url: delete_url,
@@ -344,8 +371,9 @@ $(document).ready(function() {
 						}
 					},
 					close: function() {
-						$("#title").attr('value', '');
-						$("#content").attr('value', '');
+                        $("#title_edit").hide();
+                        $("#content_edit").hide();
+
                         $("#title").show();
                         $("#content").show();
 
@@ -356,7 +384,8 @@ $(document).ready(function() {
                         $("#content").attr('value', '');
 					}
 				});
-			} else { //simple form
+			} else {
+			    //Simple form
                 my_start_month = calEvent.start.getMonth() +1;
                 $('#simple_start_date').html(calEvent.start.getDate() +"/"+ my_start_month +"/"+calEvent.start.getFullYear());
 
@@ -452,7 +481,7 @@ $(document).ready(function() {
     	    <div id="visible_to_input" class="control-group">
                 <label class="control-label">{{ "To"|get_lang }}</label>
                 <div class="controls">
-                    {{visible_to}}
+                    {{ visible_to }}
                 </div>
             </div>
         {% endif %}
@@ -506,7 +535,6 @@ $(document).ready(function() {
 	</form>
 	</div>
 </div>
-<div id="loading" style="margin-left:150px;position:absolute;display:none">{{"Loading"|get_lang}}...</div>
+<div id="loading" style="margin-left:150px;position:absolute;display:none">{{ "Loading"|get_lang }}...</div>
 <div id="calendar"></div>
-
 {% endblock %}

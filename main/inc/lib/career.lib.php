@@ -8,6 +8,11 @@
 /**
  * Code
  */
+require_once 'promotion.lib.php';
+require_once 'fckeditor/fckeditor.php';
+
+define ('CAREER_STATUS_ACTIVE',  1);
+define ('CAREER_STATUS_INACTIVE',0);
 
 /**
  * @package chamilo.library
@@ -140,7 +145,7 @@ class Career extends Model {
                 case 'updated_at':
                     break;
                 case 'name':
-                    $val .= ' '.get_lang('Copy');
+                    $val .= ' '.get_lang('CopyLabelSuffix');
                     $new[$key] = $val;
                     break;
                 case 'created_at':
@@ -165,6 +170,21 @@ class Career extends Model {
         }
         return $cid;
     }    
+    
+     public function get_status($career_id) {
+        $TBL_CAREER             = Database::get_main_table(TABLE_CAREER);
+        $career_id = intval($career_id);
+        $sql 	= "SELECT status FROM $TBL_CAREER WHERE id = '$career_id'";
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
+            $data = Database::fetch_array($result);
+            return $data['status'];
+        } else {
+            return false;
+        }
+        
+    }
+        
     
     public function save($params, $show_query = false) {
 	    $id = parent::save($params, $show_query);

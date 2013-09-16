@@ -19,6 +19,7 @@ use Symfony\Component\Form\Exception\LogicException;
 use Symfony\Component\Form\Exception\OutOfBoundsException;
 use Symfony\Component\Form\Util\FormUtil;
 use Symfony\Component\Form\Util\InheritDataAwareIterator;
+use Symfony\Component\Form\Util\OrderedHashMap;
 use Symfony\Component\PropertyAccess\PropertyPath;
 
 /**
@@ -73,9 +74,9 @@ class Form implements \IteratorAggregate, FormInterface
 
     /**
      * The children of this form
-     * @var FormInterface[] An array of FormInterface instances
+     * @var FormInterface[] A map of FormInterface instances
      */
-    private $children = array();
+    private $children;
 
     /**
      * The errors of this form
@@ -164,6 +165,7 @@ class Form implements \IteratorAggregate, FormInterface
         }
 
         $this->config = $config;
+        $this->children = new OrderedHashMap();
     }
 
     public function __clone()
@@ -370,9 +372,9 @@ class Form implements \IteratorAggregate, FormInterface
         // even if the form is compound.
         if (count($this->children) > 0) {
             // Update child forms from the data
-            $childrenIterator = new InheritDataAwareIterator($this->children);
-            $childrenIterator = new \RecursiveIteratorIterator($childrenIterator);
-            $this->config->getDataMapper()->mapDataToForms($viewData, $childrenIterator);
+            $iterator = new InheritDataAwareIterator($this->children);
+            $iterator = new \RecursiveIteratorIterator($iterator);
+            $this->config->getDataMapper()->mapDataToForms($viewData, $iterator);
         }
 
         if ($dispatcher->hasListeners(FormEvents::POST_SET_DATA)) {
@@ -537,7 +539,7 @@ class Form implements \IteratorAggregate, FormInterface
             }
 
             foreach ($this->children as $name => $child) {
-                if (isset($submittedData[$name]) || $clearMissing) {
+                if (array_key_exists($name, $submittedData) || $clearMissing) {
                     $child->submit(isset($submittedData[$name]) ? $submittedData[$name] : null, $clearMissing);
                     unset($submittedData[$name]);
                 }
@@ -584,9 +586,9 @@ class Form implements \IteratorAggregate, FormInterface
                 // descendants that inherit this form's data.
                 // These descendants will not be submitted normally (see the check
                 // for $this->config->getInheritData() above)
-                $childrenIterator = new InheritDataAwareIterator($this->children);
-                $childrenIterator = new \RecursiveIteratorIterator($childrenIterator);
-                $this->config->getDataMapper()->mapFormsToData($childrenIterator, $viewData);
+                $iterator = new InheritDataAwareIterator($this->children);
+                $iterator = new \RecursiveIteratorIterator($iterator);
+                $this->config->getDataMapper()->mapFormsToData($iterator, $viewData);
             }
 
             $modelData = null;
@@ -710,11 +712,13 @@ class Form implements \IteratorAggregate, FormInterface
             return false;
         }
 
-        if (!$this->isDisabled()) {
-            foreach ($this->children as $child) {
-                if (!$child->isValid()) {
-                    return false;
-                }
+        if ($this->isDisabled()) {
+            return true;
+        }
+
+        foreach ($this->children as $child) {
+            if ($child->isSubmitted() && !$child->isValid()) {
+                return false;
             }
         }
 
@@ -762,7 +766,7 @@ class Form implements \IteratorAggregate, FormInterface
      */
     public function all()
     {
-        return $this->children;
+        return iterator_to_array($this->children);
     }
 
     /**
@@ -831,9 +835,9 @@ class Form implements \IteratorAggregate, FormInterface
         $child->setParent($this);
 
         if (!$this->lockSetData && $this->defaultDataSet && !$this->config->getInheritData()) {
-            $childrenIterator = new InheritDataAwareIterator(array($child));
-            $childrenIterator = new \RecursiveIteratorIterator($childrenIterator);
-            $this->config->getDataMapper()->mapDataToForms($viewData, $childrenIterator);
+            $iterator = new InheritDataAwareIterator(new \ArrayIterator(array($child)));
+            $iterator = new \RecursiveIteratorIterator($iterator);
+            $this->config->getDataMapper()->mapDataToForms($viewData, $iterator);
         }
 
         return $this;
@@ -934,11 +938,11 @@ class Form implements \IteratorAggregate, FormInterface
     /**
      * Returns the iterator for this group.
      *
-     * @return \ArrayIterator
+     * @return \Iterator
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->children);
+        return $this->children;
     }
 
     /**

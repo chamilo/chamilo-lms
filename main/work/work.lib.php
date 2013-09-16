@@ -577,7 +577,7 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 					list($d_year, $d_month, $d_day) = explode('-', $parts[0]);
 					list($d_hour, $d_minute) = explode(':', $parts[1]);
 
-                    $qualification_input[] = FormValidator :: createElement('text', 'qualification');
+                    $qualification_input[] = $form_folder->createElement('text', 'qualification');
                     $form_folder -> addGroup($qualification_input, 'qualification', get_lang('QualificationNumeric'));
 
                     if (Gradebook::is_active()) {
@@ -593,7 +593,7 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
                         //Loading gradebook select
                         load_gradebook_select_in_tool($form_folder);
 
-                        $weight_input2[] = FormValidator :: createElement('text', 'weight');
+                        $weight_input2[] = $form_folder->createElement('text', 'weight');
                         $form_folder -> addGroup($weight_input2, 'weight', get_lang('WeightInTheGradebook'), 'size="10"');
 
                         $form_folder -> addElement('html', '</div>');

@@ -9,7 +9,7 @@
 // name of the language file that needs to be included
 $language_file='admin';
 // resetting the course id
-$cidReset=true;
+$cidReset = true;
 
 // including some necessary dokeos files
 require_once '../inc/global.inc.php';
@@ -36,10 +36,10 @@ $tbl_session_rel_user 	= 	Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_rel_access_url = 	Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
 // initializing variables
-$id_session=intval($_GET['id_session']);
+$id_session = intval($_GET['id_session']);
 $user_id = intval($_GET['user']);
 $user_info = api_get_user_info($user_id);
-$user_anonymous  = api_get_anonymous_id();
+$user_anonymous = api_get_anonymous_id();
 $current_user_id = api_get_user_id();
 
 // setting the name of the tool
@@ -101,7 +101,6 @@ $xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
 <script type="text/javascript">
-<!--
 function moveItem(origin , destination) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
@@ -149,7 +148,6 @@ function remove_item(origin) {
 		}
 	}
 }
--->
 </script>';
 
 $formSent=0;

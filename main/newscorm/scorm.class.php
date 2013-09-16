@@ -19,7 +19,8 @@ require_once 'scormResource.class.php';
  * Defines the "scorm" child of class "learnpath"
  * @package chamilo.learnpath
  */
-class scorm extends learnpath {
+class scorm extends learnpath
+{
     public $manifest = array();
     public $resources = array();
     public $resources_att = array();
@@ -41,7 +42,8 @@ class scorm extends learnpath {
      * @param	integer	Learnpath ID in DB
      * @param	integer	User ID
      */
-    function __construct($course_code = null, $resource_id = null, $user_id = null) {
+    function __construct($course_code = null, $resource_id = null, $user_id = null)
+    {
         if ($this->debug > 0) { error_log('New LP - scorm::scorm('.$course_code.','.$resource_id.','.$user_id.') - In scorm constructor', 0); }
         if (!empty($course_code) && !empty($resource_id) && !empty($user_id)) {
             parent::__construct($course_code, $resource_id, $user_id);
@@ -54,7 +56,8 @@ class scorm extends learnpath {
      * Opens a resource
      * @param	integer	Database ID of the resource
      */
-    function open($id) {
+    function open($id)
+    {
         if ($this->debug > 0) { error_log('New LP - scorm::open() - In scorm::open method', 0); }
         // redefine parent method
     }
@@ -72,11 +75,13 @@ class scorm extends learnpath {
      * @param	string	Path to the imsmanifest.xml file on the system. If not defined, uses the base path of the course's scorm dir
      * @return	array	Structured array representing the imsmanifest's contents
      */
-    function parse_manifest($file = '') {
+    function parse_manifest($file = '')
+    {
         if ($this->debug > 0) { error_log('In scorm::parse_manifest('.$file.')', 0); }
         if (empty($file)) {
             // Get the path of the imsmanifest file.
         }
+
         if (is_file($file) && is_readable($file) && ($xml = @file_get_contents($file))) {
 
             // Parsing using PHP5 DOMXML methods.
@@ -118,7 +123,7 @@ class scorm extends learnpath {
                             switch ($child->tagName) {
                                 case 'metadata':
                                     // Parse items from inside the <metadata> element.
-                                    $this->metadata = new scormMetadata('manifest',$child);
+                                    $this->metadata = new scormMetadata('manifest', $child);
                                     break;
                                 case 'organizations':
                                     // Contains the course structure - this element appears 1 and only 1 time in a package imsmanifest. It contains at least one 'organization' sub-element.
@@ -262,7 +267,8 @@ class scorm extends learnpath {
      * @param	string	Unique course code
      * @return	bool	Returns -1 on error
      */
-    function import_manifest($course_code, $use_max_score = 1) {
+    function import_manifest($course_code, $use_max_score = 1)
+    {
         if ($this->debug > 0) { error_log('New LP - Entered import_manifest('.$course_code.')', 0); }
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
@@ -323,7 +329,7 @@ class scorm extends learnpath {
                         $outdated_parent = array_pop($parents_stack);
                     }
                     $parent = array_pop($parents_stack); // Just save that value, then add it back.
-                    array_push($parents_stack,$parent);
+                    array_push($parents_stack, $parent);
                 }
                 $path = '';
                 $type = 'dir';
@@ -340,10 +346,12 @@ class scorm extends learnpath {
                 $level = $item['level'];
                 $field_add = '';
                 $value_add = '';
+
                 if (!empty($item['masteryscore'])) {
                     $field_add .= 'mastery_score, ';
                     $value_add .= $item['masteryscore'].',';
                 }
+
                 if (!empty($item['maxtimeallowed'])) {
                     $field_add .= 'max_time_allowed, ';
                     $value_add .= "'".$item['maxtimeallowed']."',";
@@ -354,14 +362,14 @@ class scorm extends learnpath {
                 $max_score = Database::escape_string($item['max_score']);
 
                 if ($max_score == 0 || is_null($max_score) || $max_score == '') {
-                    //If max score is not set The use_max_score parameter is check in order to use 100 (chamilo style) or '' (strict scorm)
+                    // If max score is not set The use_max_score parameter is check in order to use 100 (chamilo style) or '' (strict scorm)
                     if ($use_max_score) {
                         $max_score = "'100'";
                     } else {
                         $max_score = "NULL";
                     }
                 } else {
-                    //Otherwise save the max score
+                    // Otherwise save the max score.
                     $max_score = "'$max_score'";
                 }
 
@@ -373,9 +381,8 @@ class scorm extends learnpath {
 
                 $prereq = Database::escape_string($item['prerequisites']);
 
-                $sql_item = "INSERT INTO $new_lp_item (c_id, lp_id,item_type,ref,title, path,min_score,max_score, $field_add parent_item_id,previous_item_id,next_item_id, prerequisite,display_order,launch_data, parameters) VALUES " .
-                        "($course_id, $lp_id, '$type','$identifier', '$title', '$path' , 0, $max_score, $value_add" .
-                        "$parent, $previous, 0, " .
+                $sql_item = "INSERT INTO $new_lp_item (c_id, lp_id,item_type,ref,title, path,min_score,max_score, $field_add parent_item_id,previous_item_id,next_item_id, prerequisite,display_order,launch_data, parameters)
+                        VALUES ($course_id, $lp_id, '$type','$identifier', '$title', '$path' , 0, $max_score, $value_add $parent, $previous, 0, " .
                         "'$prereq', ".$item['rel_order'] .", '".$item['datafromlms']."'," .
                         "'".$item['parameters']."'" .
                         ")";
@@ -397,7 +404,7 @@ class scorm extends learnpath {
 
                     $di = new ChamiloIndexer();
                     isset($_POST['language']) ? $lang = Database::escape_string($_POST['language']) : $lang = 'english';
-                    $di->connectDb(NULL, NULL, $lang);
+                    $di->connectDb(null, null, $lang);
                     $ic_slide = new IndexableChunk();
                     $ic_slide->addValue('title', $title);
                     $specific_fields = get_specific_field_list();
@@ -449,7 +456,8 @@ class scorm extends learnpath {
      * @param	string	Current path (optional)
      * @return string	Absolute path to the imsmanifest.xml file or empty string on error
      */
-    function import_local_package($file_path, $current_dir = '') {
+    function import_local_package($file_path, $current_dir = '')
+    {
         // TODO: Prepare info as given by the $_FILES[''] vector.
         $file_info = array();
         $file_info['tmp_name'] = $file_path;
@@ -463,7 +471,8 @@ class scorm extends learnpath {
      * @param	string	Zip file info as given by $_FILES['userFile']
      * @return	string	Absolute path to the imsmanifest.xml file or empty string on error
      */
-    function import_package($zip_file_info, $current_dir = '') {
+    function import_package($zip_file_info, $current_dir = '')
+    {
         if ($this->debug > 0) { error_log('In scorm::import_package('.print_r($zip_file_info,true).',"'.$current_dir.'") method', 0); }
 
         $maxFilledSpace = DocumentManager :: get_course_quota();
@@ -595,7 +604,7 @@ class scorm extends learnpath {
 
             if ($dir = @opendir($course_sys_dir.$new_dir)) {
                 if ($this->debug >= 1) { error_log('New LP - Opened dir '.$course_sys_dir.$new_dir, 0); }
-                while ($file=readdir($dir)) {
+                while ($file = readdir($dir)) {
                     if ($file != '.' && $file != '..') {
                         $filetype = 'file';
 

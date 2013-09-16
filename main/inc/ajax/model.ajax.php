@@ -177,7 +177,7 @@ switch ($action) {
         $count = get_count_exam_hotpotatoes_results($hotpot_path);
         break;
     case 'get_sessions':
-        $count = SessionManager::get_count_admin();
+        $count = SessionManager::get_count_admin($where_condition);
         break;
     /*case 'get_extra_fields':
         $type = $_REQUEST['type'];

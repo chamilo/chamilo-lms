@@ -33,7 +33,7 @@ $sql = "SELECT * FROM $course_table WHERE code='".Database::escape_string($cours
 $result = Database::query($sql);
 if (Database::num_rows($result) != 1) {
 	header('Location: course_list.php');
-	exit ();
+	exit();
 }
 $course = Database::fetch_array($result,'ASSOC');
 
@@ -44,7 +44,7 @@ $sql = "SELECT user.user_id,lastname,firstname FROM $table_user as user,$table_c
 $res = Database::query($sql);
 $course_teachers = array();
 while ($obj = Database::fetch_object($res)) {
-	$course_teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
+    $course_teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
 }
 
 // Get all possible teachers without the course teachers
@@ -54,34 +54,32 @@ if ($_configuration['multiple_access_urls']) {
 			INNER JOIN $access_url_rel_user_table url_rel_user
 			ON (u.user_id=url_rel_user.user_id) WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status=1".$order_clause;
 } else {
-
 	$sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status='1'".$order_clause;
 }
 
 $res = Database::query($sql);
 $teachers = array();
 
-
 $platform_teachers[0] = '-- '.get_lang('NoManager').' --';
 while ($obj = Database::fetch_object($res)) {
 
-	if (!array_key_exists($obj->user_id,$course_teachers)) {
-		$teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
-	}
+    if (!array_key_exists($obj->user_id,$course_teachers)) {
+        $teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
+    }
 
-	if ($course['tutor_name'] == $course_teachers[$obj->user_id]) {
-		$course['tutor_name'] = $obj->user_id;
-	}
-	//We add in the array platform teachers
-	$platform_teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
+    if ($course['tutor_name'] == $course_teachers[$obj->user_id]) {
+        $course['tutor_name'] = $obj->user_id;
+    }
+    //We add in the array platform teachers
+    $platform_teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
 }
 
 //Case where there is no teacher in the course
-if (count($course_teachers)==0) {
-	$sql='SELECT tutor_name FROM '.$course_table.' WHERE code="'.$course_code.'"';
-	$res = Database::query($sql);
-	$tutor_name=Database::result($res,0,0);
-	$course['tutor_name']=array_search($tutor_name,$platform_teachers);
+if (count($course_teachers) == 0) {
+    $sql='SELECT tutor_name FROM '.$course_table.' WHERE code="'.$course_code.'"';
+    $res = Database::query($sql);
+    $tutor_name=Database::result($res,0,0);
+    $course['tutor_name']=array_search($tutor_name,$platform_teachers);
 }
 
 // Build the form
@@ -103,13 +101,6 @@ $form->add_textfield('visual_code', array(get_lang('VisualCode'), get_lang('Only
 $form->applyFilter('visual_code','strtoupper');
 $form->applyFilter('visual_code','html_filter');
 
-//$form->addElement('text', tutor_name', get_lang('CourseTitular'));
-
-//$form->addElement('select', 'tutor_name', get_lang('CourseTitular'), $platform_teachers, array('style'=>'width:350px','id'=>'tutor_name_id', 'class'=>'chzn-select'));
-//$form->applyFilter('tutor_name','html_filter');
-
-//$form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, 'multiple=multiple size="4" style="width: 150px;"');
-
 $group=array();
 $group[] = $form->createElement('select', 'platform_teachers', '', $teachers,        ' id="platform_teachers" multiple=multiple size="4" style="width:300px;"');
 $group[] = $form->createElement('select', 'course_teachers', '',   $course_teachers, ' id="course_teachers" multiple=multiple size="4" style="width:300px;"');
@@ -130,24 +121,24 @@ $element_template = <<<EOT
 EOT;
 
 $renderer = $form->defaultRenderer();
-$renderer -> setElementTemplate($element_template, 'group');
-$form -> addGroup($group,'group',get_lang('CourseTeachers'),'</td><td width="80" align="center">'.
+$renderer->setElementTemplate($element_template, 'group');
+$form->addGroup($group,'group',get_lang('CourseTeachers'),'</td><td width="80" align="center">'.
 		'<input class="arrowr" style="width:30px;height:30px;padding-right:12px" type="button" onclick="moveItem(document.getElementById(\'platform_teachers\'), document.getElementById(\'course_teachers\'))" ><br><br>' .
 		'<input class="arrowl" style="width:30px;height:30px;padding-left:13px" type="button" onclick="moveItem(document.getElementById(\'course_teachers\'), document.getElementById(\'platform_teachers\'))" ></td><td>');
 
+$form->addElement('checkbox', 'add_teachers_to_sessions', array(null, null, get_lang('TeachersWillBeAddedAsCoachInAllCourseSessions')));
 
 $categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories , array('style'=>'width:350px','id'=>'category_code_id', 'class'=>'chzn-select'));
-$categories_select->addOption('-','');
+$categories_select->addOption('-', '');
 CourseManager::select_and_sort_categories($categories_select);
 
-$form->add_textfield( 'department_name', get_lang('CourseDepartment'), false,array ('size' => '60'));
+$form->add_textfield('department_name', get_lang('CourseDepartment'), false,array ('size' => '60'));
 $form->applyFilter('department_name','html_filter');
 $form->applyFilter('department_name','trim');
 
-$form->add_textfield( 'department_url', get_lang('CourseDepartmentURL'),false, array ('size' => '60'));
+$form->add_textfield('department_url', get_lang('CourseDepartmentURL'),false, array ('size' => '60'));
 $form->applyFilter('department_url','html_filter');
 $form->applyFilter('department_url','trim');
-
 
 $form->addElement('select_language', 'course_language', get_lang('CourseLanguage'));
 $form->applyFilter('select_language','html_filter');
@@ -163,13 +154,12 @@ $form->addGroup($group,'', get_lang('CourseAccess'), '<br />');
 $group = array();
 $group[]= $form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
 $group[]= $form->createElement('radio', 'subscribe', null, get_lang('Denied'), 0);
-$form->addGroup($group,'', get_lang('Subscription'), '<br />');
+$form->addGroup($group, '', get_lang('Subscription'), '<br />');
 
 $group = array();
 $group[]= $form->createElement('radio', 'unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
 $group[]= $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
-$form->addGroup($group,'', get_lang('Unsubscription'), '<br />');
-
+$form->addGroup($group, '', get_lang('Unsubscription'), '<br />');
 
 $form->addElement('text', 'disk_quota', array(get_lang('CourseQuota'), null, get_lang('MB')));
 $form->addRule('disk_quota', get_lang('ThisFieldIsRequired'), 'required');
@@ -194,18 +184,19 @@ $form->addElement('style_submit_button', 'button', get_lang('ModifyCourseInfo'),
 //$course['disk_quota'] = round($course['disk_quota']/1024/1024, 1);
 $course['disk_quota'] = round(DocumentManager::get_course_quota($course_code) /1024/1024, 1);
 $course['title'] = api_html_entity_decode($course['title'], ENT_QUOTES, $charset);
-
 $course['real_code'] = $course['code'];
+
+$course['add_teachers_to_sessions'] = empty($course_teachers) ||  count($course_teachers) == 1 ? null : '1';
 
 $form->setDefaults($course);
 
 // Validate form
 if ($form->validate()) {
-	$course = $form->getSubmitValues();
-	$dbName = $_POST['dbName'];
-	$course_code = $course['code'];
-	$visual_code = $course['visual_code'];
-	$visual_code = generate_course_code($visual_code);
+    $course = $form->getSubmitValues();
+    $dbName = $_POST['dbName'];
+    $course_code = $course['code'];
+    $visual_code = $course['visual_code'];
+    $visual_code = generate_course_code($visual_code);
 
     // Check if the visual code is already used by *another* course
     $visual_code_is_used = false;
@@ -228,13 +219,14 @@ if ($form->validate()) {
 			$extras[substr($key,6)] = $value;
 		}
 		if (substr($key,0,7)=='_extra_') {
-			if(!array_key_exists(substr($key,7), $extras)) $extras[substr($key,7)] = $value;
+			if (!array_key_exists(substr($key,7), $extras)) {
+                $extras[substr($key,7)] = $value;
+            }
 		}
     }
 
 	$tutor_id = $course['tutor_name'];
-	$tutor_name=$platform_teachers[$tutor_id];
-
+	$tutor_name = $platform_teachers[$tutor_id];
 	$teachers = $course['group']['course_teachers'];
 
 	$title = $course['title'];
@@ -273,7 +265,7 @@ if ($form->validate()) {
 		}
 	}
 
-    CourseManager::updateTeachers($course_code, $teachers);
+    CourseManager::updateTeachers($course_code, $teachers, $course['add_teachers_to_sessions']);
 
 	$sql = "INSERT IGNORE INTO ".$course_user_table . " SET
 				course_code = '".Database::escape_string($course_code). "',
@@ -346,8 +338,7 @@ function valide() {
 	document.update_course.submit();
 }
 </script>";
-//api_display_tool_title($tool_name);
 // Display the form
 $form->display();
-/* FOOTER */
+
 Display :: display_footer();

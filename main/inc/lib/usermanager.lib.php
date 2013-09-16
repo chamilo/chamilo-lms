@@ -3073,19 +3073,20 @@ class UserManager
     }
 
     /**
-     * Searchs an user (tags, firstname, lastname and email )
+     * Search an user (tags, first name, last name and email )
      * @param string the tag
      * @param int field id of the tag
      * @param int where to start in the query
      * @param int number of items
+     * @param bool get count or not
      * @return array
      */
-    public static function get_all_user_tags($tag, $field_id = 0, $from = 0, $number_of_items = 10)
+    public static function get_all_user_tags($tag, $field_id = 0, $from = 0, $number_of_items = 10, $getCount = false)
     {
-
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $table_user_tag = Database::get_main_table(TABLE_MAIN_TAG);
         $table_user_tag_values = Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
+        $access_url_rel_user_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
         $tag = Database::escape_string($tag);
         $field_id = intval($field_id);
@@ -3096,69 +3097,56 @@ class UserManager
         if ($field_id != 0) {
             $where_field = " field_id = $field_id AND ";
         }
+
         // all the information of the field
-        $sql = "SELECT u.user_id,u.username,firstname, lastname, email, tag, picture_uri FROM $table_user_tag ut INNER JOIN $table_user_tag_values uv ON (uv.tag_id=ut.id)
-                INNER JOIN $user_table u ON(uv.user_id =u.user_id)
-                WHERE $where_field tag LIKE '$tag%' ORDER BY tag";
-        $sql .= " LIMIT $from,$number_of_items";
 
-        $result = Database::query($sql);
-        $return = array();
-        if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
-                if (isset($return[$row['user_id']]) && !empty($return[$row['user_id']]['tag'])) {
-                    $row['tag'] = $return[$row['user_id']]['tag'].' '.Display::url($row['tag'], api_get_path(WEB_PATH).'main/social/search.php?q='.$row['tag'], array('class' => 'tag'));
-                } else {
-                    $row['tag'] = Display::url($row['tag'], api_get_path(WEB_PATH).'main/social/search.php?q='.$row['tag'], array('class' => 'tag'));
-                }
-                $return[$row['user_id']] = $row;
-            }
+        if ($getCount) {
+            $select = "SELECT count(DISTINCT u.user_id) count";
+        } else {
+            $select = "SELECT DISTINCT u.user_id, u.username, firstname, lastname, email, tag, picture_uri";
         }
 
-        $keyword = $tag;
-        $sql = "SELECT u.user_id, u.username, firstname, lastname, email, picture_uri FROM $user_table u";
+        $sql = " $select
+                FROM $user_table u
+                INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id = url_rel_user.user_id)
+                LEFT JOIN $table_user_tag_values uv ON (u.user_id AND uv.user_id AND  uv.user_id = url_rel_user.user_id)
+                LEFT JOIN $table_user_tag ut ON (uv.tag_id = ut.id)
+                WHERE
+                    ($where_field tag LIKE '$tag%') OR
+                    (
+                        u.firstname LIKE '%".$tag."%' OR
+                        u.lastname LIKE '%".$tag."%' OR
+                        u.username LIKE '%".$tag."%' OR
+                        concat(u.firstname,' ',u.lastname) LIKE '%".$tag."%' OR
+                        concat(u.lastname,' ',u.firstname) LIKE '%".$tag."%'
+                     )
+                     AND
+                     url_rel_user.access_url_id=".api_get_current_access_url_id();
 
-        if (api_get_multiple_access_url()) {
-            $access_url_rel_user_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-            $sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
-        }
-
-        if (isset($keyword)) {
-            $keyword = Database::escape_string($keyword);
-            //OR u.official_code LIKE '%".$keyword."%'
-            // OR u.email LIKE '%".$keyword."%'
-            $sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.username LIKE '%".$keyword."%' OR concat(u.firstname,' ',u.lastname) LIKE '%".$keyword."%' OR concat(u.lastname,' ',u.firstname) LIKE '%".$keyword."%' )";
-        }
         $keyword_active = true;
-        //only active users
+        // only active users
         if ($keyword_active) {
             $sql .= " AND u.active='1'";
         }
-        //avoid anonymous
+        // avoid anonymous
         $sql .= " AND u.status <> 6 ";
+        $sql .= " ORDER BY username";
+        $sql .= " LIMIT $from , $number_of_items";
 
-        // adding the filter to see the user's only of the current access_url
-        if (api_get_multiple_access_url() && api_get_current_access_url_id() != -1) {
-            $sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
-        }
-        $direction = 'ASC';
-        if (!in_array($direction, array('ASC', 'DESC'))) {
-            $direction = 'ASC';
-        }
+        $result = Database::query($sql);
+        $return = array();
 
-        //$column = intval($column);
-        $from = intval($from);
-        $number_of_items = intval($number_of_items);
-
-        //$sql .= " ORDER BY col$column $direction ";
-        $sql .= " LIMIT $from,$number_of_items";
-
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            while ($row = Database::fetch_array($res, 'ASSOC')) {
-                if (!in_array($row['user_id'], array_keys($return))) {
-                    $return[$row['user_id']] = $row;
+        if (Database::num_rows($result) > 0) {
+            if ($getCount) {
+                $row = Database::fetch_array($result, 'ASSOC');
+                return $row['count'];
+            }
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
+                if (isset($return[$row['user_id']]) && !empty($return[$row['user_id']]['tag'])) {
+                    $url = Display::url($row['tag'], api_get_path(WEB_PATH).'main/social/search.php?q='.$row['tag'], array('class' => 'tag'));
+                    $row['tag'] = $url;
                 }
+                $return[$row['user_id']] = $row;
             }
         }
         return $return;

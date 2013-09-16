@@ -214,11 +214,23 @@ class Display {
      * @param array grid classes
      * @return 	string   html grid
      */
-    public static function return_sortable_grid($name, $header, $content, $paging_options = array(), $query_vars = null, $form_actions = array(), $visibility_options = true, $sort_data = true, $grid_class = array()) {
-        global $origin;
+    public static function return_sortable_grid(
+        $name,
+        $header,
+        $content,
+        $paging_options = array(),
+        $query_vars = null,
+        $form_actions = array(),
+        $visibility_options = true,
+        $sort_data = true,
+        $grid_class = array(),
+        $elementCount = 0
+    ) {
         $column =  0;
         $default_items_per_page = isset($paging_options['per_page']) ? $paging_options['per_page'] : 20;
+
         $table = new SortableTableFromArray($content, $column, $default_items_per_page, $name);
+        $table->total_number_of_items = intval($elementCount);
         if (is_array($query_vars)) {
             $table->set_additional_parameters($query_vars);
         }
@@ -1226,7 +1238,8 @@ class Display {
      * @param int       Session ID
      * @return array    Empty array or session array ['title'=>'...','category'=>'','dates'=>'...','coach'=>'...','active'=>true/false,'session_category_id'=>int]
      */
-    public static function get_session_title_box($session_id) {
+    public static function get_session_title_box($session_id)
+    {
         global $nosession;
 
         if (!$nosession) {
@@ -1239,20 +1252,21 @@ class Display {
             $tbl_session            = Database :: get_main_table(TABLE_MAIN_SESSION);
             $active = false;
             // Request for the name of the general coach
-            $sql ='SELECT tu.lastname, tu.firstname, ts.name, ts.date_start, ts.date_end, ts.session_category_id
+            $sql ='SELECT tu.lastname, tu.firstname, ts.*
                     FROM '.$tbl_session.' ts  LEFT JOIN '.$main_user_table .' tu ON ts.id_coach = tu.user_id
-                    WHERE ts.id='.intval($session_id);
+                    WHERE ts.id = '.intval($session_id);
             $rs = Database::query($sql);
-            $session_info = Database::store_result($rs);
+            $session_info = Database::store_result($rs, 'ASSOC');
             $session_info = $session_info[0];
+
             $session = array();
-            $session['title'] = $session_info[2];
+            $session['title'] = $session_info['name'];
             $session['coach'] = '';
             $session['dates'] =  '';
 
             if ($session_info['date_end'] == '0000-00-00' && $session_info['date_start'] == '0000-00-00') {
                 if (api_get_setting('show_session_coach') === 'true') {
-                    $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info[1], $session_info[0]);
+                    $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info['firstname'], $session_info['lastname']);
                 }
                 $active = true;
             } else {
@@ -1279,12 +1293,19 @@ class Display {
                 }
 
                 if ( api_get_setting('show_session_coach') === 'true' ) {
-                    $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info[1], $session_info[0]);
+                    $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info['firstname'], $session_info['lastname']);
                 }
                 $active = ($date_start <= $now && $date_end >= $now);
             }
             $session['active'] = $active;
-            $session['session_category_id'] = $session_info[5];
+            $session['session_category_id'] = $session_info['session_category_id'];
+
+            if (array_key_exists('show_description', $session_info)) {
+                if (!empty($session_info['show_description'])) {
+                    $session['description'] = $session_info['description'];
+                }
+            }
+
             $output = $session;
         }
         return $output;

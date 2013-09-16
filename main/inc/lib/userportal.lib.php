@@ -1016,8 +1016,10 @@ class IndexManager {
                             }
 
                             if (api_get_setting('hide_courses_in_sessions') == 'false') {
-                            //	$params['extra'] .=  $html_courses_session;
+                                // $params['extra'] .=  $html_courses_session;
                             }
+
+                            $params['description'] =  isset($session_box['description']) ? $session_box['description'] : null;
                             $sessions_with_no_category .= CourseManager::course_item_parent(CourseManager::course_item_html($params, true), $html_courses_session);
                         }
                     }
@@ -1085,12 +1087,12 @@ class IndexManager {
                             }
 
                             $params['title'] .=  $session_link;
-
                             $params['subtitle'] =  (!empty($session_box['coach']) ? $session_box['coach'].' | ' : '').$session_box['dates'];
 
                             if (api_is_platform_admin()) {
                                 $params['right_actions'] .=  '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session_id.'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'), ICON_SIZE_SMALL).'</a>';
                             }
+
                             $html_sessions .= CourseManager::course_item_html($params, true).$html_courses_session;
                         }
                     }
@@ -1122,6 +1124,7 @@ class IndexManager {
                                 $params['subtitle'] = get_lang('Until').' '.$session_category_end_date;
                             }
                         }
+
                         $sessions_with_category .= CourseManager::course_item_parent(CourseManager::course_item_html($params, true), $html_sessions);
                     }
 

@@ -212,9 +212,15 @@ class ImportCsv
 
         $row['teachers'] = array();
         if (isset($row['Teacher']) && !empty($row['Teacher'])) {
-            $userInfo = api_get_user_info_from_username($row['Teacher']);
-            if (!empty($userInfo)) {
-                $row['teachers'] = $userInfo['user_id'];
+            $teachers = explode(',', $row['Teacher']);
+            if (!empty($teachers)) {
+                foreach ($teachers as $teacherUserName) {
+                    $teacherUserName = trim($teacherUserName);
+                    $userInfo = api_get_user_info_from_username($teacherUserName);
+                    if (!empty($userInfo)) {
+                        $row['teachers'][] = $userInfo['user_id'];
+                    }
+                }
             }
         }
 
@@ -349,7 +355,7 @@ class ImportCsv
         /*
          * Another users import.
         Unique identifier: official code and username . ok
-        Username and password should never get updated. ok
+        Password should never get updated. ok
         If an update should need to occur (because it changed in the .csv), we’ll want that logged. We will handle this manually in that case.
         All other fields should be updateable, though passwords should of course not get updated. ok
         If a user gets deleted (not there anymore),
@@ -440,7 +446,7 @@ class ImportCsv
                         $userInfo['user_id'],
                         $row['firstname'], // <<-- changed
                         $row['lastname'],  // <<-- changed
-                        $userInfo['username'],
+                        $row['username'],  // <<-- changed
                         null, //$password = null,
                         $auth_source = null,
                         $userInfo['email'],
@@ -460,6 +466,9 @@ class ImportCsv
                     );
 
                     if ($result) {
+                        if ($row['username'] != $userInfo['username']) {
+                            $this->logger->addInfo("Students - Username was changes from '".$userInfo['username']."' to '".$row['username']."' ");
+                        }
                         foreach ($row as $key => $value) {
                             if (substr($key, 0, 6) == 'extra_') { //an extra field
                                 UserManager::update_extra_field_value($userInfo['user_id'], substr($key, 6), $value);
@@ -503,7 +512,7 @@ class ImportCsv
                     $params['wanted_code']          = $row['course_code'];
                     $params['course_category']      = $row['course_category'];
                     $params['course_language']      = $row['language'];
-                    $params['teachers']             = $row['teachers'];
+                    $params['teachers'] = $row['teachers'];
 
                     $courseInfo = CourseManager::create_course($params);
 
@@ -655,13 +664,13 @@ if (!is_array($emails)) {
 }
 $subject = "Cron main/cron/import_csv.php ".date('Y-m-d h:i:s');
 $from = api_get_setting('emailAdministrator');
-
+/*
 if (!empty($emails)) {
     foreach ($emails as $email) {
         $stream = new NativeMailerHandler($email, $subject, $from, $minLevel);
         $logger->pushHandler(new BufferHandler($stream, 0, $minLevel));
     }
-}
+}*/
 
 $stream = new StreamHandler(api_get_path(SYS_ARCHIVE_PATH).'import_csv.log', $minLevel);
 $logger->pushHandler(new BufferHandler($stream, 0, $minLevel));

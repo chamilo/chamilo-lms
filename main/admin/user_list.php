@@ -706,16 +706,18 @@ if (!empty($action)) {
                 }
                 break;
 			case 'show_message' :
-                if (!empty($_GET['warn'])) {
-                	// to prevent too long messages
-                	if ($_GET['warn'] == 'session_message'){
-                		$_GET['warn'] = $_SESSION['session_message_import_users'];
-                	}
-                	$message = Display::return_message(urldecode($_GET['warn']),'warning', false);
-                }
                 if (!empty($_GET['message'])) {
                     $message = Display :: return_message(stripslashes($_GET['message']), 'confirmation');
                 }
+
+                if (!empty($_GET['warn'])) {
+                	// to prevent too long messages
+                	if ($_GET['warn'] == 'session_message'){
+                        $_GET['warn'] = $_SESSION['session_message_import_users'];
+                	}
+                	$message = Display::return_message(urldecode($_GET['warn']),'warning', false);
+                }
+
 				break;
 			case 'delete_user' :
 				if (api_is_platform_admin()) {
@@ -969,7 +971,6 @@ if ($table->get_total_number_of_items() == 0) {
 }
 
 $tpl = new Template($tool_name);
-
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $form.$table_result.$extra_search_options);

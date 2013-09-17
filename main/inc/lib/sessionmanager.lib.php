@@ -1602,10 +1602,11 @@ class SessionManager
     /**
      * Get users by session
      * @param  int session id
-     * @param	int	filter by status
+     * @param	int	filter by status coach = 2
      * @return  array a list with an user list
      */
-    public static function get_users_by_session($id, $with_status = null) {
+    public static function get_users_by_session($id, $with_status = null)
+    {
         if (empty($id)) {
             return array();
         }
@@ -2232,23 +2233,40 @@ class SessionManager
 
                         // Adding coaches to session course user
                         if (!empty($course_coaches)) {
+
+                            $savedCoaches = array();
+                            // Adding course teachers as course session teachers
+                            $alreadyAddedTeachers = CourseManager::get_teacher_list_from_course_code($course_code);
+
+                            if (!empty($alreadyAddedTeachers)) {
+                                $teachersToAdd = array();
+                                foreach ($alreadyAddedTeachers as $user) {
+                                    $teachersToAdd[] = $user['username'];
+                                }
+                                $course_coaches = array_merge($course_coaches, $teachersToAdd);
+                            }
+
                             foreach ($course_coaches as $course_coach) {
                                 $course_coach = trim($course_coach);
                                 $coach_id = UserManager::get_user_id_from_username($course_coach);
                                 if ($coach_id !== false) {
                                     $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
-                                            id_user='$coach_id',
-                                            course_code='$course_code',
+                                            id_user = '$coach_id',
+                                            course_code = '$course_code',
                                             id_session = '$session_id',
                                             status = 2 ";
                                     Database::query($sql);
                                     if ($debug) {
                                         $logger->addInfo("Sessions - Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
                                     }
+                                    $savedCoaches[] = $coach_id;
                                 } else {
                                     $error_message .= get_lang('UserDoesNotExist').' : '.$course_coach.$eol;
                                 }
                             }
+
+
+
                         }
 
                         $users_in_course_counter = 0;
@@ -2294,21 +2312,26 @@ class SessionManager
         );
     }
 
-    public static function getCoachByCourseSession($sessionId, $courseCode)
+    /**
+     * @param int $sessionId
+     * @param string $courseCode
+     * @return array
+     */
+    public static function getCoachesByCourseSession($sessionId, $courseCode)
     {
         $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $sessionId = intval($sessionId);
         $courseCode = Database::escape_string($courseCode);
 
         $sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user WHERE id_session = '$sessionId' AND course_code = '$courseCode' AND status = 2";
-        $rs_coachs = Database::query($sql);
+        $result = Database::query($sql);
 
-        $coachs_course_session = array();
-        if (Database::num_rows($rs_coachs) > 0){
-            while ($row_coachs = Database::fetch_row($rs_coachs)) {
-                $coachs_course_session[] = $row_coachs[0];
+        $coaches = array();
+        if (Database::num_rows($result) > 0){
+            while ($row = Database::fetch_row($result)) {
+                $coaches[] = $row[0];
             }
         }
-        return $coachs_course_session;
+        return $coaches;
     }
 }

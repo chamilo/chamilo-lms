@@ -3988,6 +3988,8 @@ class CourseManager {
             $teachers = array($teachers);
         }
 
+        $alreadyAddedTeachers = CourseManager::get_teacher_list_from_course_code($course_code);
+
         $course_user_table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
         // Delete only teacher relations that doesn't match the selected teachers
@@ -4003,8 +4005,7 @@ class CourseManager {
 
         if (count($teachers) > 0) {
             foreach ($teachers as $key) {
-
-                //We check if the teacher is already subscribed in this course
+                // We check if the teacher is already subscribed in this course
                 $sql_select_teacher = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$key.'" AND course_code = "'.$course_code.'" ';
                 $result = Database::query($sql_select_teacher);
 
@@ -4024,17 +4025,18 @@ class CourseManager {
             }
         }
 
-
         if ($editTeacherInSessions) {
             $sessions = SessionManager::get_session_by_course($course_code);
             if (!empty($sessions)) {
                 foreach ($sessions as $session) {
-                    $alreadyAddedTeachers = SessionManager::getCoachByCourseSession($session['id'], $course_code);
                     foreach ($teachers as $userId) {
                         SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code);
                     }
+                    $teachersToDelete = array();
+                    if (!empty($alreadyAddedTeachers)) {
+                        $teachersToDelete = array_diff(array_keys($alreadyAddedTeachers), $teachers);
+                    }
 
-                    $teachersToDelete = array_diff($alreadyAddedTeachers, $teachers);
                     if (!empty($teachersToDelete)) {
                         foreach ($teachersToDelete as $userId) {
                             SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code, true);

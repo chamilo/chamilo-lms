@@ -126,7 +126,7 @@ $form->addGroup($group,'group',get_lang('CourseTeachers'),'</td><td width="80" a
 		'<input class="arrowr" style="width:30px;height:30px;padding-right:12px" type="button" onclick="moveItem(document.getElementById(\'platform_teachers\'), document.getElementById(\'course_teachers\'))" ><br><br>' .
 		'<input class="arrowl" style="width:30px;height:30px;padding-left:13px" type="button" onclick="moveItem(document.getElementById(\'course_teachers\'), document.getElementById(\'platform_teachers\'))" ></td><td>');
 
-$form->addElement('checkbox', 'add_teachers_to_sessions', array(null, null, get_lang('TeachersWillBeAddedAsCoachInAllCourseSessions')));
+$form->addElement('checkbox', 'add_teachers_to_sessions', null, get_lang('TeachersWillBeAddedAsCoachInAllCourseSessions'));
 
 $categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories , array('style'=>'width:350px','id'=>'category_code_id', 'class'=>'chzn-select'));
 $categories_select->addOption('-', '');

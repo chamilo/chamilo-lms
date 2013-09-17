@@ -3923,8 +3923,12 @@ class CourseManager {
      * @param array  List of courses to which the user is subscribed (if not provided, will be generated)
      * @return mixed 'enter' for a link to go to the course or 'register' for a link to subscribe, or false if no access
      */
-    static function get_access_link_by_user($uid, $course, $user_courses = array()) {
-        if (empty($uid) or empty($course)) { return false; }
+    static function get_access_link_by_user($uid, $course, $user_courses = array())
+    {
+        if (empty($uid) or empty($course)) {
+            return false;
+        }
+
         if (empty($user_courses)) {
             // get the array of courses to which the user is subscribed
             $user_courses = CourseManager::get_courses_list_by_user_id($uid);
@@ -3936,13 +3940,13 @@ class CourseManager {
         if (!isset($course['real_id']) && empty($course['real_id'])) {
             $course = api_get_course_info($course['code']);
         }
-        if ($course['visibility'] != COURSE_VISIBILITY_HIDDEN) {
+
+        if ($course['visibility'] == COURSE_VISIBILITY_HIDDEN) {
             return array();
         }
 
         $is_admin = api_is_platform_admin_by_id($uid);
         $options = array();
-
         // Register button
         if (!api_is_anonymous($uid) &&
             !$is_admin &&
@@ -3964,6 +3968,7 @@ class CourseManager {
         ) {
             $options[]=  'enter';
         }
+
         return $options;
     }
 

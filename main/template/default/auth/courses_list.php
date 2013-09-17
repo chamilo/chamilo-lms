@@ -7,7 +7,7 @@
 * @package chamilo.auth
 */
 
-// Acces rights: anonymous users can't do anything usefull here.
+// Access rights: anonymous users can't do anything usefull here.
 api_block_anonymous_users();
 $stok = Security::get_token();
 $courses_without_category = $courses_in_category[0];

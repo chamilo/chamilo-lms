@@ -625,7 +625,8 @@ class Auth {
      * @param string Course code
      * @return string  Message about results
      */
-    public function subscribe_user($course_code) {
+    public function subscribe_user($course_code)
+    {
         $user_id = api_get_user_id();
         $all_course_information = CourseManager::get_course_information($course_code);
 

@@ -412,29 +412,39 @@ class ImportCsv
                         $this->logger->addError("Students - User NOT created: ".$row['username']." ".$row['firstname']." ".$row['lastname']);
                     }
                 } else {
+
                     if (empty($userInfo)) {
                         $this->logger->addError("Students - Can't update user :".$row['username']);
                         continue;
                     }
 
                     if ($row['action'] == 'delete') {
-                        // INactive one year later
+                        // Inactive one year later
                         $userInfo['expiration_date'] = api_get_utc_datetime(api_strtotime(time() + 365*24*60*60));
                     }
 
+                    $password = $row['password']; // change password
+                    $email = $row['email']; // change email
+                    $resetPassword = 2; // allow password change
+
+                    // Conditions that disables the update of password and email:
+
                     if (isset($this->conditions['importStudents'])) {
                         if (isset($this->conditions['importStudents']['update']) && isset($this->conditions['importStudents']['update']['avoid'])) {
+                            // Blocking email update
                             $avoidUsersWithEmail = $this->conditions['importStudents']['update']['avoid']['email'];
                             if ($userInfo['email'] != $row['email'] && in_array($row['email'], $avoidUsersWithEmail)) {
-                                $this->logger->addInfo("Students - User skipped: ".$row['username']." because the avoid conditions (email).");
-                                continue;
+                                $this->logger->addInfo("Students - User email is not updated : ".$row['username']." because the avoid conditions (email).");
+                                // Do not change email keep the old email.
+                                $email = $userInfo['email'];
                             }
 
+                            // Blocking password update
                             $avoidUsersWithPassword = $this->conditions['importStudents']['update']['avoid']['password'];
-
                             if ($userInfo['password'] != api_get_encrypted_password($row['password']) && in_array($row['password'], $avoidUsersWithPassword)) {
-                                $this->logger->addInfo("Students - User skipped: ".$row['username']." because the avoid conditions (password).");
-                                continue;
+                                $this->logger->addInfo("Students - User password is not updated: ".$row['username']." because the avoid conditions (password).");
+                                $password = null;
+                                $resetPassword = 0; // disallow password change
                             }
                         }
                     }
@@ -447,9 +457,9 @@ class ImportCsv
                         $row['firstname'], // <<-- changed
                         $row['lastname'],  // <<-- changed
                         $row['username'],  // <<-- changed
-                        null, //$password = null,
+                        $password, //$password = null,
                         $auth_source = null,
-                        $userInfo['email'],
+                        $email,
                         STUDENT,
                         $userInfo['official_code'],
                         $userInfo['phone'],
@@ -462,7 +472,7 @@ class ImportCsv
                         null, //$language = 'english',
                         null, //$encrypt_method = '',
                         false, //$send_email = false,
-                        0 //$reset_password = 0
+                        $resetPassword //$reset_password = 0
                     );
 
                     if ($result) {

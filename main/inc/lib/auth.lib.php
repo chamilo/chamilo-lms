@@ -555,7 +555,8 @@ class Auth {
      * @param string $search_term: the string that the user submitted, what we are looking for
      * @return array an array containing a list of all the courses (the code, directory, dabase, visual_code, title, ... ) matching the the search term.
      */
-    public function search_courses($search_term) {
+    public function search_courses($search_term)
+    {
         $TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLE_COURSE_FIELD = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
         $TABLE_COURSE_FIELD_VALUE = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
@@ -595,7 +596,12 @@ class Auth {
             $row['registration_code'] = !empty($row['registration_code']);
             $count_users = count(CourseManager::get_user_list_from_course_code($row['code']));
             $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time() - (30 * 86400)));
+
+            $point_info = CourseManager::get_course_ranking($row['id'], 0);
+
             $courses[] = array(
+                'real_id' => $row['id'],
+                'point_info' => $point_info,
                 'code' => $row['code'],
                 'directory' => $row['directory'],
                 'db' => $row['db_name'],

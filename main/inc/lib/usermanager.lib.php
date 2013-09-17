@@ -256,20 +256,23 @@ class UserManager
      */
     public static function delete_user($user_id)
     {
+        if ($user_id != strval(intval($user_id))) {
+            return false;
+        }
 
-        if ($user_id != strval(intval($user_id)))
+        if ($user_id === false) {
             return false;
-        if ($user_id === false)
-            return false;
+        }
 
         if (!self::can_delete_user($user_id)) {
             return false;
         }
+
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
         $usergroup_rel_user = Database :: get_main_table(TABLE_USERGROUP_REL_USER);
         $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-        //$table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
         $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
+        $table_session = Database :: get_main_table(TABLE_MAIN_SESSION);
         $table_admin = Database :: get_main_table(TABLE_MAIN_ADMIN);
         $table_session_user = Database :: get_main_table(TABLE_MAIN_SESSION_USER);
         $table_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -300,6 +303,14 @@ class UserManager
 
         // Unsubscribe user from all courses in sessions
         $sql = "DELETE FROM $table_session_course_user WHERE id_user = '".$user_id."'";
+        Database::query($sql);
+
+        // If the user was added as a id_coach then set the current admin as coach see BT#
+        $currentUserId = api_get_user_id();
+        $sql = "UPDATE $table_session SET id_coach = $currentUserId  WHERE id_coach = '".$user_id."'";
+        Database::query($sql);
+
+        $sql = "UPDATE $table_session SET id_coach = $currentUserId  WHERE session_admin_id = '".$user_id."'";
         Database::query($sql);
 
         // Unsubscribe user from all sessions
@@ -361,17 +372,17 @@ class UserManager
                 }
             }
 
-            //Delete user from friend lists
+            // Delete user from friend lists
             SocialManager::remove_user_rel_user($user_id, true);
         }
 
-        //Removing survey invitation
+        // Removing survey invitation
         survey_manager::delete_all_survey_invitations_by_user($user_id);
 
         // Delete students works
-        $sqlw = "DELETE FROM $table_work WHERE user_id = $user_id AND c_id <> 0";
-        Database::query($sqlw);
-        unset($sqlw);
+        $sql = "DELETE FROM $table_work WHERE user_id = $user_id AND c_id <> 0";
+        Database::query($sql);
+
         // Add event to system log
         $user_id_manager = api_get_user_id();
         event_system(LOG_USER_DELETE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager, null, $user_info);

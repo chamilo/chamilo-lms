@@ -2033,7 +2033,7 @@ class SessionManager
 
                 $extraSessionParameters = null;
                 if (!empty($sessionDescription)) {
-                    $extraSessionParameters = ' , description = '.Database::escape_string($sessionDescription);
+                    $extraSessionParameters = " , description = '".Database::escape_string($sessionDescription)."'";
                 }
 
                 // Searching a general coach.

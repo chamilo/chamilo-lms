@@ -444,9 +444,9 @@ if ($show_audioplayer) {
     // hub 26-05-2010 Fullscreen or not fullscreen
     $height = '100%';
     if ($_SESSION['oLP']->mode == 'fullscreen') {
-        echo '<iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width:100%;height:'.$height.'" ></iframe>';
+        echo '<iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width:100%;height:'.$height.'" allowFullScreen></iframe>';
     } else {
-        echo '<iframe id="content_id" name="content_name" src="'.$src.'" border="0" frameborder="0" style="display: block; width:100%;height:'.$height.'"></iframe>';
+        echo '<iframe id="content_id" name="content_name" src="'.$src.'" border="0" frameborder="0" style="display: block; width:100%;height:'.$height.'" allowFullScreen></iframe>';
     }
     ?>
 </div>

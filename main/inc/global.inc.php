@@ -176,7 +176,7 @@ $app['debug'] = isset($_configuration['debug']) ? $_configuration['debug'] : fal
 $app['show_profiler'] = isset($_configuration['show_profiler']) ? $_configuration['show_profiler'] : false;
 
 // Enables assetic in order to load 1 compressed stylesheet or split files
-$app['assetic.enabled'] = false;
+$app['assetic.enabled'] = $app['debug'];
 // Dumps assets
 $app['assetic.auto_dump_assets'] = false;
 

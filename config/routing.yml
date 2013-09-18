@@ -1,10 +1,15 @@
 admin_login_check:
     pattern:   /admin/login_check
+
 admin_logout:
     pattern:   /admin/logout
 
 home:
     path:      /home
+    defaults:  { _controller: index.controller:indexAction, culture: en }
+
+homepage:
+    path:      /homepage
     defaults:  { _controller: index.controller:indexAction, culture: en }
 
 example:

@@ -13,6 +13,7 @@ use FranMoreno\Silex\Provider\PagerfantaServiceProvider;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManager;
 
 // Flint
 $app->register(new Flint\Provider\ConfigServiceProvider());
@@ -76,8 +77,7 @@ $app->register(new SecurityServiceProvider, array(
             'pattern' => '^/login$',
             'anonymous' => true
         ),
-        'admin' => array(
-            //'http' => true,
+        'secured' => array(
             'pattern' => '^/.*$',
             'form'    => array(
                 'login_path' => '/login',
@@ -93,6 +93,7 @@ $app->register(new SecurityServiceProvider, array(
             'users' => $app->share(function() use ($app) {
                 return $app['orm.em']->getRepository('Entity\User');
             }),
+            'switch_user' => true,
             'anonymous' => true
         )
     )
@@ -116,20 +117,27 @@ $app['security.authentication.logout_handler.admin'] = $app->share(function($app
     return new ChamiloLMS\Component\Auth\LogoutSuccessHandler($app['url_generator'], $app['security']);
 });
 
+// What to do when switch user?
+$app['security.authentication_listener.switch_user.secured'] = $app->share(function($app) {
+    return new ChamiloLMS\Component\Auth\LoginListener();
+});
+
 // Role hierarchy
 $app['security.role_hierarchy'] = array(
+    // the admin that belongs to the portal #1 can affect all portals
+    'ROLE_GLOBAL_ADMIN' => array('ROLE_ADMIN', 'ROLE_ALLOWED_TO_SWITCH'),
+    // the default admin
     'ROLE_ADMIN' => array(
         'ROLE_QUESTION_MANAGER',
         'ROLE_SESSION_MANAGER',
         'ROLE_TEACHER',
-        'ROLE_ALLOWED_TO_SWITCH',
         'ROLE_DIRECTOR',
         'ROLE_JURY_PRESIDENT'
     ),
     'ROLE_RRHH' => array('ROLE_TEACHER'),
     'ROLE_TEACHER' => array('ROLE_STUDENT'),
     'ROLE_QUESTION_MANAGER' => array('ROLE_STUDENT', 'ROLE_QUESTION_MANAGER'),
-    'ROLE_SESSION_MANAGER' => array('ROLE_STUDENT', 'ROLE_SESSION_MANAGER'),
+    'ROLE_SESSION_MANAGER' => array('ROLE_STUDENT', 'ROLE_SESSION_MANAGER', 'ROLE_ALLOWED_TO_SWITCH'),
     'ROLE_STUDENT' => array('ROLE_STUDENT'),
     'ROLE_ANONYMOUS' => array('ROLE_ANONYMOUS')
 );
@@ -156,10 +164,11 @@ $app['security.access_rules'] = array(
 // Roles that have an admin toolbar
 $app['allow_admin_toolbar'] = array(
     'ROLE_ADMIN',
-    'ROLE_QUESTION_MANAGER'
+    'ROLE_QUESTION_MANAGER',
+    'ROLE_SESSION_MANAGER'
 );
 
-/**
+/*
 $app['security.access_manager'] = $app->share(function($app) {
     return new AccessDecisionManager($app['security.voters'], 'unanimous');
 });*/

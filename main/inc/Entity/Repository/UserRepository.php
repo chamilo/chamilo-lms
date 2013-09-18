@@ -16,9 +16,9 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 class UserRepository extends EntityRepository implements UserProviderInterface
 {
     /**
-     * @param string $keyword
-     * @return mixed
-     */
+    * @param string $keyword
+    * @return mixed
+    */
     public function searchUserByKeyword($keyword)
     {
         $qb = $this->createQueryBuilder('a');
@@ -42,7 +42,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
 
     /**
      * @param string $username
-     * @return mixed
+     * @return \Entity\User
      * @throws UsernameNotFoundException
      */
     public function loadUserByUsername($username)
@@ -67,14 +67,22 @@ class UserRepository extends EntityRepository implements UserProviderInterface
     }
 
     /**
+     * Refreshes the user for the account interface.
+     *
+     * It is up to the implementation if it decides to reload the user data
+     * from the database, or if it simply merges the passed User into the
+     * identity map of an entity manager.
+     *
+     * @throws UnsupportedUserException if the account is not supported
      * @param UserInterface $user
-     * @return \Entity\User
-     * @throws UnsupportedUserException
+     *
+     * @return UserInterface
      */
     public function refreshUser(UserInterface $user)
     {
         return $user;
-        /*$class = get_class($user);
+        /*
+        $class = get_class($user);
         if (!$this->supportsClass($class)) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $class));
         }
@@ -88,22 +96,5 @@ class UserRepository extends EntityRepository implements UserProviderInterface
     public function supportsClass($class)
     {
         return $this->getEntityName() === $class || is_subclass_of($class, $this->getEntityName());
-    }
-
-    public function getUsers($limit = null)
-    {
-        $qb = $this->createQueryBuilder('u')
-                   ->select('u')
-                   ->addOrderBy('u.username', 'DESC');
-
-        return $qb;
-    }
-
-    public function getSubscribedUsers($limit = null)
-    {
-        $qb = $this->createQueryBuilder('u')
-            ->select('u')
-            ->addOrderBy('u.username', 'DESC');
-        return $qb;
     }
 }

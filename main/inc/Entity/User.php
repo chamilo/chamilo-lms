@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use ChamiloLMS\Component\Auth;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * User
@@ -246,11 +247,6 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $curriculumItems;
 
-    public function getCurriculumItems()
-    {
-        return $this->curriculumItems;
-    }
-
     /**
      *
      */
@@ -265,11 +261,21 @@ class User implements AdvancedUserInterface, \Serializable
         $this->isActive = true;
     }
 
+    /**
+     * @return ArrayCollection
+     */
+    public function getCurriculumItems()
+    {
+        return $this->curriculumItems;
+    }
+
+    /**
+     * @return bool
+     */
     public function getIsActive()
     {
         return $this->active == 1;
     }
-
 
     /**
      * @inheritDoc
@@ -277,6 +283,8 @@ class User implements AdvancedUserInterface, \Serializable
     public function isAccountNonExpired()
     {
         return true;
+        /*$now = new \DateTime();
+        return $this->getExpirationDate() < $now;*/
     }
 
     /**
@@ -311,6 +319,7 @@ class User implements AdvancedUserInterface, \Serializable
     }
 
     /**
+     * This function is needed in order to pass roles to the security component
      * @inheritDoc
      */
     public function getRoles()
@@ -329,14 +338,16 @@ class User implements AdvancedUserInterface, \Serializable
         /*
          * ! Don't serialize $roles field !
          */
-        return \serialize(array(
-            $this->userId,
-            $this->username,
-            $this->email,
-            $this->salt,
-            $this->password,
-            $this->isActive
-        ));
+        return \serialize(
+            array(
+                $this->userId,
+                $this->username,
+                $this->email,
+                $this->salt,
+                $this->password,
+                $this->isActive
+            )
+        );
     }
 
     /**
@@ -419,7 +430,6 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function getCompleteName()
     {
-        //return $this->lastname .', '. $this->firstname .' ('. $this->email .')';
         return $this->lastname .', '. $this->firstname;
     }
 
@@ -449,7 +459,6 @@ class User implements AdvancedUserInterface, \Serializable
     {
         return $this->userId;
     }
-
 
     /**
      * Set lastname

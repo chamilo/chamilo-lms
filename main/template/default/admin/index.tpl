@@ -3,12 +3,21 @@
     <div id="settings">
         <div class="row">
             {% for role in app.admin_toolbar_roles %}
-                {% include app.template_style ~ "/admin/" ~ role ~ "/role_index.tpl" %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    {# Skip session admin #}
+                    {% if (role != 'session_manager') %}
+                        {% include app.template_style ~ "/admin/" ~ role ~ "/role_index.tpl" %}
+                    {% endif %}
+                {% else %}
+                    {% include app.template_style ~ "/admin/" ~ role ~ "/role_index.tpl" %}
+                {% endif %}
+
+
             {% endfor %}
         </div>
     </div>
 
-    {% if is_granted('ROLE_ADMIN')%}
+    {% if is_granted('ROLE_ADMIN') %}
         <script>
         $(function() {
             //$("#settings").tabs();

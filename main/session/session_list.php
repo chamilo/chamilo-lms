@@ -7,15 +7,8 @@
 /**
  * Code
  */
-$language_file = 'admin';
-$cidReset = true;
-
-require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
-//api_protect_admin_script(true);
-//@todo use filters
-//$app['controllers_factory']->before($app['index.controller']->security());
 SessionManager::protect_session_edit();
 
 //Add the JS needed to use the jqgrid
@@ -101,7 +94,6 @@ $url_select = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
 
 function setSearchSelect(columnName) {
     $("#sessions").jqGrid('setColProp', columnName, {
-
        /*searchoptions:{
             dataInit:function(el){
                 $("option[value='1']",el).attr("selected", "selected");
@@ -185,42 +177,42 @@ $(function() {
     setSearchSelect("status");
 
     var grid = $("#sessions"),
-    prmSearch = {
-        multipleSearch : true,
-        overlay : false,
-        width: 'auto',
-        caption: '<?php echo addslashes(get_lang('Search')); ?>',
-        formclass:'data_table',
-        onSearch : function() {
-            var postdata = grid.jqGrid('getGridParam', 'postData');
+        prmSearch = {
+            multipleSearch : true,
+            overlay : false,
+            width: 'auto',
+            caption: '<?php echo addslashes(get_lang('Search')); ?>',
+            formclass:'data_table',
+            onSearch : function() {
+                var postdata = grid.jqGrid('getGridParam', 'postData');
 
-            if (postdata && postdata.filters) {
-                filters = jQuery.parseJSON(postdata.filters);
+                if (postdata && postdata.filters) {
+                    filters = jQuery.parseJSON(postdata.filters);
+                    clean_cols(grid, added_cols);
+                    added_cols = [];
+                    $.each(filters, function(key, value){
+                        //console.log('key: ' + key );
+
+                        if (key == 'rules') {
+                            $.each(value, function(subkey, subvalue) {
+
+                                if (subvalue.data == undefined) {
+                                }
+
+                                //if (added_cols[value.field] == undefined) {
+                                    added_cols[subvalue.field] = subvalue.field;
+                                //}
+                                //grid.showCol(value.field);
+                            });
+                        }
+                    });
+                    show_cols(grid, added_cols);
+                }
+           },
+           onReset: function() {
                 clean_cols(grid, added_cols);
-                added_cols = [];
-                $.each(filters, function(key, value){
-                    //console.log('key: ' + key );
-
-                    if (key == 'rules') {
-                        $.each(value, function(subkey, subvalue) {
-
-                            if (subvalue.data == undefined) {
-                            }
-
-                            //if (added_cols[value.field] == undefined) {
-                                added_cols[subvalue.field] = subvalue.field;
-                            //}
-                            //grid.showCol(value.field);
-                        });
-                    }
-                });
-                show_cols(grid, added_cols);
-            }
-       },
-       onReset: function() {
-            clean_cols(grid, added_cols);
-       }
-    };
+           }
+        };
 
     original_cols = grid.jqGrid('getGridParam', 'colModel');
 
@@ -268,6 +260,7 @@ $(function() {
 });
 </script>
 <?php
+
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.Display::return_icon('new_session.png',get_lang('AddSession'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_many_session_to_category.php">'.Display::return_icon('session_to_category.png',get_lang('AddSessionsInCategories'),'',ICON_SIZE_MEDIUM).'</a>';
@@ -278,6 +271,4 @@ if ($list_type == 'complete') {
     echo '<a href="'.api_get_self().'?list_type=complete">'.Display::return_icon('view_text.png',get_lang('Complete'),'',ICON_SIZE_MEDIUM).'</a>';
 }
 echo '</div>';
-
 echo Display::grid_html('sessions');
-Display::display_footer();

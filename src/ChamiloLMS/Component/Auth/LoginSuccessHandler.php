@@ -35,17 +35,24 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
-        $response = null;
-        //$session = $request->getSession();
-        /* Possible values: index.php, user_portal.php, main/auth/courses.php */
-        $pageAfterLogin = api_get_setting('page_after_login');
-
+        /** @var \Entity\User $user */
         $user = $token->getUser();
         $userId = $user->getUserId();
 
+        event_login($user);
+
+        $session = $request->getSession();
+
+        // Setting last login datetime
+        $session->set('user_last_login_datetime', api_get_utc_datetime());
+
+        $response = null;
+        /* Possible values: index.php, user_portal.php, main/auth/courses.php */
+        $pageAfterLogin = api_get_setting('page_after_login');
+
         $url = null;
         if ($this->security->isGranted('ROLE_STUDENT') && !empty($pageAfterLogin)) {
-            switch($pageAfterLogin) {
+            switch ($pageAfterLogin) {
                 case 'index.php':
                     $url = $this->router->generate('index');
                     break;
@@ -57,6 +64,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                     break;
             }
         }
+
         // Redirecting to a course or a session
 
         if (api_get_setting('go_to_course_after_login') == 'true') {

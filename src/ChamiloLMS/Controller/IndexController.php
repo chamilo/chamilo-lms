@@ -28,7 +28,6 @@ class IndexController extends CommonController
         /** @var \Template $template */
         $template = $app['template'];
 
-
         /*
         $token = $app['security']->getToken();
         if (null !== $token) {
@@ -214,46 +213,6 @@ class IndexController extends CommonController
         $app['extraJS'] = $extra;
         $response = $app['template']->render_template('auth/login.tpl');
         return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
-    }
-
-    /**
-     *
-     * @todo This piece of code should probably move to local.inc.php where the actual login procedure is handled.
-     * @todo Check if this code is used. I think this code is never executed because after clicking the submit button
-     *       the code does the stuff in local.inc.php and then redirects to index.php or user_portal.php depending
-     *       on api_get_setting('page_after_login').
-     * @deprecated seems not to be used
-     */
-    function check_last_login()
-    {
-        if (!empty($_POST['submitAuth'])) {
-            // The user has been already authenticated, we are now to find the last login of the user.
-            if (!empty($this->user_id)) {
-                $track_login_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-                $sql_last_login = "SELECT login_date
-                                    FROM $track_login_table
-                                    WHERE login_user_id = '".$this->user_id."'
-                                    ORDER BY login_date DESC LIMIT 1";
-                $result_last_login = Database::query($sql_last_login);
-                if (!$result_last_login) {
-                    if (Database::num_rows($result_last_login) > 0) {
-                        $user_last_login_datetime = Database::fetch_array($result_last_login);
-                        $user_last_login_datetime = $user_last_login_datetime[0];
-                        Session::write('user_last_login_datetime', $user_last_login_datetime);
-                    }
-                }
-                Database::free_result($result_last_login);
-
-                if (api_is_platform_admin()) {
-                    // Decode all open event informations and fill the track_c_* tables
-                    include api_get_path(LIBRARY_PATH).'stats.lib.inc.php';
-                    decodeOpenInfos();
-                }
-            }
-        } else {
-            // Only if login form was not sent because if the form is sent the user was already on the page.
-            event_open();
-        }
     }
 
     /**
@@ -464,7 +423,6 @@ class IndexController extends CommonController
             return $app->abort(404, 'File not found');
         }
     }
-
 
     /**
      * Reacts on a failed login.

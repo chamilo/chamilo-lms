@@ -16,6 +16,13 @@
     </div>
 {% endif %}
 
+
+{% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+    <div class="alert">
+        <a href="{{ path('index', {'_switch_user': '_exit'}) }}">{{ 'Exit impersonation' | trans }}</a>
+    </div>
+{% endif %}
+
 {#  Show messages #}
 {% if message != '' %}
     <section id="messages">

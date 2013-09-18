@@ -32,16 +32,16 @@ CREATE TABLE IF NOT EXISTS user (
   openarea text,
   teach text,
   productions varchar(250) default NULL,
-  chatcall_user_id int unsigned NOT NULL default '0',
-  chatcall_date datetime NOT NULL default '0000-00-00 00:00:00',
-  chatcall_text varchar(50) NOT NULL default '',
+  chatcall_user_id int unsigned default 0,
+  chatcall_date datetime default NULL,
+  chatcall_text varchar(50) default NULL,
   language varchar(40) default NULL,
   registration_date datetime NOT NULL default '0000-00-00 00:00:00',
-  expiration_date datetime NOT NULL default '0000-00-00 00:00:00',
+  expiration_date datetime default NULL,
   active tinyint unsigned NOT NULL default 1,
   openid varchar(255) DEFAULT NULL,
   theme varchar(255) DEFAULT NULL,
-  hr_dept_id int unsigned NOT NULL default 0,
+  hr_dept_id int unsigned default 0,
   salt VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY (user_id),
   UNIQUE KEY username (username)
@@ -79,10 +79,10 @@ INSERT INTO roles (id ,name, role) VALUES('5', 'Student', 'ROLE_STUDENT');
 INSERT INTO roles (id, name, role) VALUES('6', 'Anonymous', 'ROLE_ANONYMOUS');
 INSERT INTO roles (id, name, role) VALUES('11', 'Admin', 'ROLE_ADMIN');
 INSERT INTO roles (id, name, role) VALUES('17', 'Question Manager', 'ROLE_QUESTION_MANAGER');
+INSERT INTO roles (id, name, role) VALUES('18', 'Global admin', 'ROLE_GLOBAL_ADMIN');
 
 -- Admin
-INSERT INTO users_roles VALUES (1, 11);
-
+INSERT INTO users_roles VALUES (1, 18);
 
 --
 -- Table structure for table admin
@@ -504,6 +504,8 @@ CREATE TABLE IF NOT EXISTS session (
   id INT unsigned NOT NULL auto_increment,
   id_coach int unsigned NOT NULL default '0',
   name char(150) NOT NULL default '',
+  description text,
+  show_description int default NULL,
   nbr_courses int unsigned NOT NULL default '0',
   nbr_users int unsigned NOT NULL default '0',
   nbr_classes int unsigned NOT NULL default '0',
@@ -963,6 +965,7 @@ VALUES
 ('admins_can_set_users_pass', NULL, 'radio', 'security', 'true', 'AdminsCanChangeUsersPassTitle', 'AdminsCanChangeUsersPassComment', 1, 0, 1),
 ('template', NULL, 'text', 'stylesheets', 'default', 'DefaultTemplateTitle', 'DefaultTemplateComment', NULL, NULL, 1),
 ('breadcrumb_navigation_display', NULL, 'radio', 'Platform','true','BreadcrumbNavigationDisplayTitle', 'BreadcrumbNavigationDisplayComment', NULL, NULL, 1),
+('default_calendar_view', NULL, 'radio', 'Platform','month','DefaultCalendarViewTitle', 'DefaultCalendarViewComment', NULL, NULL, 1)
 ('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.001', 'DatabaseVersion', '', NULL, NULL, 0); -- base value, updated at end of file. Don't change here
 
 UNLOCK TABLES;
@@ -1322,7 +1325,11 @@ VALUES
 ('admins_can_set_users_pass','true','Yes'),
 ('admins_can_set_users_pass','false','No'),
 ('breadcrumb_navigation_display', 'true', 'Show'),
-('breadcrumb_navigation_display', 'false', 'Hide');
+('breadcrumb_navigation_display', 'false', 'Hide'),
+('default_calendar_view', 'month', 'Month'),
+('default_calendar_view', 'basicWeek', 'BasicWeek'),
+('default_calendar_view', 'agendaWeek', 'Week'),
+('default_calendar_view', 'agendaDay', 'Day');
 
 UNLOCK TABLES;
 
@@ -3625,4 +3632,4 @@ CREATE TABLE curriculum_rel_user (
 
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.039' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.043' WHERE variable = 'chamilo_database_version';

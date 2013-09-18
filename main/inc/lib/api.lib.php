@@ -6895,7 +6895,7 @@ function api_get_user_roles()
 {
     global $app;
     $em = $app['orm.ems']['db_read'];
-    $roles = $em->getRepository('Entity\Role')->findAll();
+    $roles = $em->getRepository('Entity\Role')->findBy(array(), array('name'=>'asc'));
     $userRoles = array();
     foreach ($roles as $role) {
         $userRoles[$role->getId()] = $role->getName();
@@ -6911,6 +6911,7 @@ function api_get_user_roles()
     $status[QUESTION_MANAGER] = get_lang('QuestionManager');
     return $status;
 }
+
 /**
  * Finds all the information about a user from username instead of user id
  * @param $username (string): the username

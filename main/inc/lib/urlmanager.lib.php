@@ -650,12 +650,12 @@ class UrlManager
         $result             = Database::query($sql);
         $existing_users     = array();
 
-        //Getting all users
+        // Getting all users
         while ($row = Database::fetch_array($result)) {
             $existing_users[] = $row['user_id'];
         }
 
-        //Adding users
+        // Adding users
         $users_added = array();
         foreach ($user_list as $user_id_to_add) {
             if (!in_array($user_id_to_add, $existing_users)) {

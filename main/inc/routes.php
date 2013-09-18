@@ -433,7 +433,6 @@ $app->match('/main/{file}', 'legacy.controller:classicAction', 'GET|POST')
     ->assert('file', '.+')
     ->assert('type', '.+');
 
-
 /** Login form */
 $app->match('/login', 'index.controller:loginAction', 'GET|POST')
     ->bind('login');

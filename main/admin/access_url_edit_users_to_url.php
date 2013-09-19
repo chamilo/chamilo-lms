@@ -168,13 +168,15 @@ if ($ajax_search) {
         $sessionUsersList[$user['user_id']] = $user;
     }
 } else {
-    $Users = UrlManager::get_url_rel_user_data();
+    $order_clause = api_sort_by_first_name() ? ' ORDER BY username, firstname, lastname' : ' ORDER BY username, lastname, firstname';
+
+    $Users = UrlManager::get_url_rel_user_data(null, $order_clause);
     foreach ($Users as $user) {
         if ($user['access_url_id'] == $access_url_id) {
             $sessionUsersList[$user['user_id']] = $user;
         }
     }
-    $order_clause = api_sort_by_first_name() ? ' ORDER BY username, firstname, lastname' : ' ORDER BY username, lastname, firstname';
+
     $sql = "SELECT u.user_id, lastname, firstname, username
 	  	  	FROM $tbl_user u WHERE status <> " . ANONYMOUS . " " .
             $order_clause;

@@ -2076,6 +2076,10 @@ class SessionManager
             return false;
         }
 
+        if (api_is_session_admin()) {
+            return false;
+        }
+
         $blockTeachers = !api_is_teacher() || (api_is_teacher() && api_get_setting('allow_teachers_to_create_sessions') == 'false');
 
         if ($blockTeachers) {
@@ -2084,6 +2088,7 @@ class SessionManager
 
         if (!empty($id)) {
             $session_info = self::fetch($id);
+
 
             if (empty($session_info)) {
                 api_not_allowed(true);

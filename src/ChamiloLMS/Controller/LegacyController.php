@@ -70,9 +70,6 @@ class LegacyController extends CommonController
             $app['template']->setFooter($app['template.show_footer']);
             $app['template']->setHeader($app['template.show_header']);
 
-            $token = $app['security']->getToken();
-            //var_dump($app['template.show_header']);
-
             if (isset($htmlHeadXtra)) {
                 $app['template']->addJsFiles($htmlHeadXtra);
             }
@@ -91,7 +88,6 @@ class LegacyController extends CommonController
         } else {
             return $app->abort(404, 'File not found');
         }
-
         return new Response($response, 200, $responseHeaders);
     }
 }

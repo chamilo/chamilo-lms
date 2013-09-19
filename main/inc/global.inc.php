@@ -4,7 +4,7 @@
 /**
  * This is a bootstrap file that loads all Chamilo dependencies including:
  *
- * - Chamilo settings in main/inc/conf/configuration.php or config/configuration.yml or config/configuration.php (in this order, using what if finds first)
+ * - Chamilo settings config/configuration.yml or config/configuration.php (in this order, using what if finds first)
  * - Database (Using Doctrine DBAL/ORM)
  * - Templates (Using Twig)
  * - Loading language files (Using Symfony component)
@@ -176,7 +176,10 @@ $app['debug'] = isset($_configuration['debug']) ? $_configuration['debug'] : fal
 $app['show_profiler'] = isset($_configuration['show_profiler']) ? $_configuration['show_profiler'] : false;
 
 // Enables assetic in order to load 1 compressed stylesheet or split files
+//$app['assetic.enabled'] = $app['debug'];
+// Harcoded to false by default. Implementation is not finished yet.
 $app['assetic.enabled'] = false;
+
 // Dumps assets
 $app['assetic.auto_dump_assets'] = false;
 
@@ -217,12 +220,11 @@ $app['template.show_footer'] = true;
 $app['template.show_learnpath'] = false;
 $app['template.hide_global_chat'] = true;
 $app['template.load_plugins'] = true;
-
 $app['configuration'] = $_configuration;
-
 
 $_plugins = array();
 if ($alreadyInstalled) {
+
 
     /** Including service providers */
     require_once 'services.php';
@@ -244,12 +246,7 @@ if ($alreadyInstalled) {
                 $_configuration['access_url'] = $details['id'];
             }
         }
-        //Session::write('url_id', $_configuration['access_url']);
-        //Session::write('url_info', api_get_current_access_url_info($_configuration['access_url']));
-    } else {
-        //Session::write('url_id', 1);
     }
-
 }
 
 $charset = 'UTF-8';
@@ -290,9 +287,7 @@ $app->error(
 
         // Default layout.
         $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
-
         $app['template']->assign('error', array('code' => $code, 'message' => $message));
-
         $response = $app['template']->render_layout('error.tpl');
 
         return new Response($response);
@@ -302,7 +297,7 @@ $app->error(
 // Preserving the value of the global variable $charset.
 $charset_initial_value = $charset;
 
-// Section (tabs in the main chamilo menu)
+// Section (tabs in the main Chamilo menu)
 $app['this_section'] = SECTION_GLOBAL;
 
 // Inclusion of internationalization libraries
@@ -773,8 +768,6 @@ $charset = $charset_initial_value;
 // For determing text direction correspondent to the current language we use now information from the internationalization library.
 $text_dir = api_get_text_direction();
 
-// Update of the logout_date field in the table track_e_login (needed for the calculation of the total connection time)
-
 /** "Login as user" custom script */
 // @todo move this code in a controller
 if (!isset($_SESSION['login_as']) && isset($_user)) {
@@ -803,9 +796,6 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
         $now = api_get_utc_datetime();
         $s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date = '$now' WHERE login_id = $i_id_last_connection";
         Database::query($s_sql_update_logout_date);
-    } else {
-        // it isn't, we should create a fresh entry
-        event_login();
     }
 }
 

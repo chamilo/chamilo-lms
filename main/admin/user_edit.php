@@ -4,17 +4,6 @@
  * @package chamilo.admin
  */
 
-// Language files that should be included
-$language_file = array('admin', 'registration');
-
-$cidReset = true;
-
-require_once '../inc/global.inc.php';
-
-$this_section = SECTION_PLATFORM_ADMIN;
-
-api_protect_admin_script(true);
-
 $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : intval($_POST['user_id']);
 
 api_protect_super_admin($user_id, null, true);
@@ -79,7 +68,6 @@ if (Database::num_rows($res) != 1) {
 }
 
 $user_data = Database::fetch_array($res, 'ASSOC');
-$user_data['platform_admin'] = is_null($user_data['is_admin']) ? 0 : 1;
 $user_data['send_mail'] = 0;
 $user_data['old_password'] = $user_data['password'];
 //Convert the registration date of the user
@@ -216,13 +204,18 @@ if (api_is_global_platform_admin() or api_get_setting('admins_can_set_users_pass
 
 // Status.
 $status = api_get_user_roles();
+unset($status[ANONYMOUS]);
 
 $form->addElement(
     'select',
     'status',
     get_lang('Profile'),
     $status,
-    array('id' => 'status_select', 'onchange' => 'javascript: display_drh_list();', 'class' => 'chzn-select')
+    array(
+        'id' => 'status_select',
+        'onchange' => 'javascript: display_drh_list();',
+        'class' => 'chzn-select'
+    )
 );
 
 $display = isset($user_data['status']) && ($user_data['status'] == STUDENT || (isset($_POST['status']) && $_POST['status'] == STUDENT)) ? 'block' : 'none';
@@ -244,19 +237,6 @@ foreach($drh_list as $drh) {
 $form->addElement('html', '</div>');
 */
 
-// Platform admin
-if (api_is_platform_admin()) {
-    $group = array();
-    $group[] = $form->createElement('radio', 'platform_admin', null, get_lang('Yes'), 1);
-    $group[] = $form->createElement('radio', 'platform_admin', null, get_lang('No'), 0);
-
-    $user_data['status'] == 1 ? $display = 'block' : $display = 'none';
-
-    $form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.'">');
-    $form->addGroup($group, 'admin', get_lang('PlatformAdmin'), null, false);
-    $form->addElement('html', '</div>');
-}
-
 //Language
 $form->addElement('select_language', 'language', get_lang('Language'));
 
@@ -269,24 +249,21 @@ $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), '&nbsp;', false);
 // Registration Date
 $form->addElement('static', 'registration_date', get_lang('RegistrationDate'), $user_data['registration_date']);
 
-if (!$user_data['platform_admin']) {
-    // Expiration Date
-    $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
-    $group = array();
-    $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
-    $group[] = $form->createElement(
-        'datepicker',
-        'expiration_date',
-        null,
-        array('form_name' => $form->getAttribute('name'), 'onchange' => 'javascript: enable_expiration_date();')
-    );
-    $form->addGroup($group, 'max_member_group', null, '', false);
+// Expiration Date
+$form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
+$group = array();
+$group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
+$group[] = $form->createElement(
+    'datepicker',
+    'expiration_date',
+    null,
+    array('form_name' => $form->getAttribute('name'), 'onchange' => 'javascript: enable_expiration_date();')
+);
+$form->addGroup($group, 'max_member_group', null, '', false);
 
-    // Active account or inactive account
-    $form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
-    $form->addElement('radio', 'active', '', get_lang('Inactive'), 0);
-}
-
+// Active account or inactive account
+$form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
+$form->addElement('radio', 'active', '', get_lang('Inactive'), 0);
 
 // EXTRA FIELDS
 $extraField = new ExtraField('user');
@@ -325,6 +302,18 @@ if ($expiration_date == '0000-00-00 00:00:00') {
     $user_data['expiration_date']['H'] = substr($expiration_date, 11, 2);
     $user_data['expiration_date']['i'] = substr($expiration_date, 14, 2);
 }
+
+$user = $app['orm.em']->getRepository('Entity\User')->find($user_data['user_id']);
+
+$roles = $user->getRoles();
+
+$role  = array();
+if (!empty($roles)) {
+    $role = current($roles);
+    $role = $role->getId();
+}
+
+$user_data['status'] = $role;
 $form->setDefaults($user_data);
 
 $error_drh = false;
@@ -355,33 +344,28 @@ if ($form->validate()) {
         $firstname = $user['firstname'];
         $password = $user['password'];
         $auth_source = $user['auth_source'];
-
         $official_code = $user['official_code'];
         $email = $user['email'];
         $phone = $user['phone'];
         $username = $user['username'];
         $status = intval($user['status']);
-        $platform_admin = intval($user['platform_admin']);
         $send_mail = intval($user['send_mail']);
         $reset_password = intval($user['reset_password']);
         $hr_dept_id = intval($user['hr_dept_id']);
         $language = $user['language'];
-        if ($user['radio_expiration_date'] == '1' && !$user_data['platform_admin']) {
+
+        if ($user['radio_expiration_date'] == '1') {
             $expiration_date = Text::return_datetime_from_array($user['expiration_date']);
         } else {
-            $expiration_date = '0000-00-00 00:00:00';
+            $expiration_date = null;
         }
 
-        $active = $user_data['platform_admin'] ? 1 : intval($user['active']);
-
-        //If the user is set to admin the status will be overwrite by COURSEMANAGER = 1
-        if ($platform_admin == 1) {
-            $status = COURSEMANAGER;
-        }
+        $active = intval($user['active']);
 
         if (api_get_setting('login_is_email') == 'true') {
             $username = $email;
         }
+
         UserManager::update_user(
             $user_id,
             $firstname,
@@ -408,38 +392,13 @@ if ($form->validate()) {
         if (api_get_setting('openid_authentication') == 'true' && !empty($user['openid'])) {
             $up = UserManager::update_openid($user_id, $user['openid']);
         }
-        if ($user_id != $_SESSION['_uid']) {
-            if ($platform_admin == 1) {
-                UserManager::add_user_as_admin($user_id);
-            } else {
-                UserManager::remove_user_admin($user_id);
-            }
-        }
 
-        // Using the extrafieldvalue obj
+        // Using the extra field value obj
         $extraFieldValues = new ExtraFieldValue('user');
         $extraFieldValues->save_field_values($user);
 
-        /*
-        foreach ($user as $key => $value) {
-            if (substr($key, 0, 6) == 'extra_') {
-                //an extra field
-                if (is_array($value) && isset($value['Y']) && isset($value['F']) && isset($value['d'])) {
-                    if (isset($value['H']) && isset($value['i'])) {
-                        // extra field date time
-                        $time = mktime($value['H'], $value['i'], 0, $value['F'], $value['d'], $value['Y']);
-                        $value = date('Y-m-d H:i:s', $time);
-                    } else {
-                        // extra field date
-                        $time = mktime(0, 0, 0, $value['F'], $value['d'], $value['Y']);
-                        $value = date('Y-m-d', $time);
-                    }
-                }
-                UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
-            }
-        }*/
-
         $tok = Security::get_token();
+
         header(
             'Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserUpdated')).'&sec_token='.$tok
         );

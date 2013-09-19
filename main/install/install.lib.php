@@ -11,45 +11,8 @@
  */
 
 /* CONSTANTS */
-
-//define('SYSTEM_MAIN_DATABASE_FILE', $new_version.'/db_main.sql');
-define('COUNTRY_DATA_FILENAME', 'country_data.csv');
 define('COURSES_HTACCESS_FILENAME', 'htaccess.dist');
 define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
-
-/*      COMMON PURPOSE FUNCTIONS    */
-
-/**
- * This function detects whether the system has been already installed.
- * It should be used for prevention from second running the installation
- * script and as a result - destroying a production system.
- * @return bool     The detected result;
- * @author Ivan Tcholakov, 2010;
- */
-function is_already_installed_system()
-{
-    global $new_version, $_configuration;
-
-    if (empty($new_version)) {
-        return true; // Must be initialized.
-    }
-
-    if (empty($_configuration)) {
-        return false;
-    }
-
-    $current_version = null;
-
-    if (isset($_configuration['dokeos_version'])) {
-        $current_version = trim($_configuration['dokeos_version']);
-    }
-    if (empty($current_version)) {
-        $current_version = trim($_configuration['system_version']);
-    }
-
-    // If the current version is old, upgrading is assumed, the installer goes ahead.
-    return empty($current_version) ? false : version_compare($current_version, $new_version, '>=');
-}
 
 /**
  * This function checks if a php extension exists or not and returns an HTML status string.
@@ -270,16 +233,6 @@ function file_to_array($filename)
     fclose($fp);
 
     return explode('<br />', nl2br($buffer));
-}
-
-/**
- * We assume this function is called from install scripts that reside inside the install folder.
- */
-function set_file_folder_permissions()
-{
-    @chmod('.', 0755); //set permissions on install dir
-    @chmod('..', 0755); //set permissions on parent dir of install dir
-    @chmod('country_data.csv.csv', 0755);
 }
 
 /**
@@ -565,25 +518,6 @@ function testDatabaseConnect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleD
         return -1;
     }
 
-}
-
-/**
- * Fills the countries table with a list of countries.
- */
-function fill_track_countries_table($track_countries_table)
-{
-    $file_path = dirname(__FILE__).'/'.COUNTRY_DATA_FILENAME;
-    $countries = file($file_path);
-    $add_country_sql = "INSERT INTO $track_countries_table (id, code, country, counter) VALUES ";
-    foreach ($countries as $line) {
-        $elems = explode(',', $line);
-        $add_country_sql .= '('.intval($elems[0]).',\''.Database::escape_string(
-            $elems[1]
-        ).'\',\''.Database::escape_string($elems[2]).'\','.intval($elems[3]).'),';
-    }
-    $add_country_sql = substr($add_country_sql, 0, -1);
-    //$add_country_sql = "LOAD DATA INFILE '".Database::escape_string($file_path)."' INTO TABLE $track_countries_table FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\'';";
-    @ Database::query($add_country_sql);
 }
 
 /**

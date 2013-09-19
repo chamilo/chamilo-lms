@@ -4074,15 +4074,19 @@ class learnpath
      * @param    integer    Learnpath ID
      * @param    string    New visibility
      */
-    public function toggle_visibility($lp_id, $set_visibility = 1)
+    public function toggle_visibility($lp_id, $set_visibility = 1, $course_id = null)
     {
         //if ($this->debug > 0) { error_log('New LP - In learnpath::toggle_visibility()', 0); }
         $action = 'visible';
         if ($set_visibility != 1) {
             $action = 'invisible';
         }
-
-        return api_item_property_update(api_get_course_info(), TOOL_LEARNPATH, $lp_id, $action, api_get_user_id());
+        if (!empty($course_id)) {
+            $course = api_get_course_info_by_id($course_id);
+        } else {
+            $course = api_get_course_info();
+        }
+        return api_item_property_update($course, TOOL_LEARNPATH, $lp_id, $action, api_get_user_id());
     }
 
     /**

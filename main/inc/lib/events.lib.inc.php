@@ -13,74 +13,54 @@
  */
 
 /**
- * @author Sebastien Piraux <piraux_seb@hotmail.com>
- * @desc Record information for open event (when homepage is opened)
+ * @author Sebastien Piraux <piraux_seb@hotmail.com> old code
+ * @author Julio Montoya 2013
+ * @desc Record information for login event when an user identifies himself with username & password
  */
-function event_open()
+function event_login(\Entity\User $user)
 {
-    global $_configuration;
-    $TABLETRACK_OPEN = Database::get_main_table(TABLE_STATISTIC_TRACK_E_OPEN);
+    $userId =  $user->getUserId();
 
-    // @getHostByAddr($_SERVER['REMOTE_ADDR']) : will provide host and country information
-    // $_SERVER['HTTP_USER_AGENT'] :  will provide browser and os information
-    // $_SERVER['HTTP_REFERER'] : provide information about refering url
-    if (isset($_SERVER['HTTP_REFERER'])) {
-        $referer = Database::escape_string($_SERVER['HTTP_REFERER']);
-    } else {
-        $referer = '';
-    }
-    // record informations only if user comes from another site
-    //if(!eregi($_configuration['root_web'],$referer))
-    $pos = strpos($referer, $_configuration['root_web']);
-    if ($pos === false && $referer != '') {
-        $ip = api_get_real_ip();
-        $remhost = @ getHostByAddr($ip);
-        if ($remhost == $ip) {
-            $remhost = "Unknown"; // don't change this
-        }
-        $reallyNow = api_get_utc_datetime();
-        $sql = "INSERT INTO ".$TABLETRACK_OPEN."
-        		(open_remote_host,
-        		 open_agent,
-        		 open_referer,
-        		 open_date)
-        		VALUES
-        		('".$remhost."',
-        		 '".Database::escape_string($_SERVER['HTTP_USER_AGENT'])."', '".Database::escape_string($referer)."', '$reallyNow')";
-        Database::query($sql);
-    }
-    return 1;
-}
-
-/**
- * @author Sebastien Piraux <piraux_seb@hotmail.com>
- * @desc Record information for login event
- * (when an user identifies himself with username & password)
- */
-function event_login()
-{
     $TABLETRACK_LOGIN = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-    $_user = api_get_user_info();
 
     $reallyNow = api_get_utc_datetime();
+
     $sql = "INSERT INTO ".$TABLETRACK_LOGIN." (login_user_id, login_ip, login_date, logout_date) VALUES
-                ('".api_get_user_id()."',
+                ('".$userId."',
         		'".Database::escape_string(api_get_real_ip())."',
         		'".$reallyNow."',
         		'".$reallyNow."'
         		)";
     Database::query($sql);
 
+    $roles = $user->getRolesObj();
+
     // auto subscribe
-    $user_status = $_user['status'] == SESSIONADMIN ? 'sessionadmin' :
-    $_user['status'] == COURSEMANAGER ? 'teacher' :
-    $_user['status'] == DRH ? 'DRH' : 'student';
-    $autoSubscribe = api_get_setting($user_status.'_autosubscribe');
-    if ($autoSubscribe) {
-        $autoSubscribe = explode('|', $autoSubscribe);
-        foreach ($autoSubscribe as $code) {
-            if (CourseManager::course_exists($code)) {
-                CourseManager::subscribe_user($_user['user_id'], $code);
+
+    /** @var \Entity\Role $role  */
+    foreach ($roles as $role) {
+        $role = $role->getRole();
+        $userStatusParsed = 'student';
+
+        switch ($role) {
+            case 'ROLE_SESSION_MANAGER':
+                $userStatusParsed = 'sessionadmin';
+                break;
+            case 'ROLE_TEACHER':
+                $userStatusParsed = 'teacher';
+                break;
+            case 'ROLE_RRHH':
+                $userStatusParsed = 'DRH';
+                break;
+        }
+
+        $autoSubscribe = api_get_setting($userStatusParsed.'_autosubscribe');
+        if ($autoSubscribe) {
+            $autoSubscribe = explode('|', $autoSubscribe);
+            foreach ($autoSubscribe as $code) {
+                if (CourseManager::course_exists($code)) {
+                    CourseManager::subscribe_user($userId, $code);
+                }
             }
         }
     }

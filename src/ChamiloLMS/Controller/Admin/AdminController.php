@@ -216,7 +216,6 @@ class AdminController extends CommonController
         $blocks['sessions']['items'] = $items;
         $blocks['sessions']['extra'] = null;
 
-
         /* Settings */
         if (api_is_platform_admin()) {
 

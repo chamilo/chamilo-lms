@@ -4,19 +4,8 @@
 *	@package chamilo.admin
 */
 
-// Language files that should be included
-$language_file = array('admin', 'registration');
-$cidReset = true;
-// Including necessary libraries.
-require_once '../inc/global.inc.php';
-
-// Section for the tabs
-$this_section = SECTION_PLATFORM_ADMIN;
-
 // User permissions
 api_protect_admin_script(true);
-
-$is_platform_admin = api_is_platform_admin() ? 1 : 0;
 
 $message = null;
 
@@ -161,7 +150,7 @@ $auth_sources = 0; //make available wider as we need it in case of form reset (s
 $nb_ext_auth_source_added = 0;
 if (isset($extAuthSource) && count($extAuthSource) > 0) {
 	$auth_sources = array();
-	foreach($extAuthSource as $key => $info) {
+	foreach ($extAuthSource as $key => $info) {
 	    // @todo : make uniform external authentification configuration (ex : cas and external_login ldap)
 	    // Special case for CAS. CAS is activated from Chamilo > Administration > Configuration > CAS
 	    // extAuthSource always on for CAS even if not activated
@@ -185,8 +174,10 @@ $form->addGroup($group, 'password', get_lang('Password'), '');
 if (isset($_configuration['allow_strength_pass_checker']) && $_configuration['allow_strength_pass_checker']) {
     $form->addElement('label', null, '<div id="password_progress" style="display:none"></div>');
 }
+
 // Status
 $status = api_get_user_roles();
+unset($status[ANONYMOUS]);
 
 $form->addElement(
     'select',
@@ -208,18 +199,6 @@ if (isset($drh_list) && is_array($drh_list)) {
 	}
 }
 $form->addElement('html', '</div>');
-
-/*
-if (api_is_platform_admin()) {
-    // Platform admin
-    $group = array();
-    $group[] = $form->createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('Yes'), 1);
-    $group[] = $form->createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('No'), 0);
-    //$display = ($_POST['status'] == STUDENT || !isset($_POST['status'])) ? 'none' : 'block';
-    $form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.';">');
-    $form->addGroup($group, 'admin', get_lang('PlatformAdmin'), '&nbsp;');
-    $form->addElement('html', '</div>');
-}*/
 
 $form->addElement('select_language', 'language', get_lang('Language'), null);
 
@@ -257,7 +236,6 @@ $(document).ready(function(){
 </script>';
 
 // Set default values
-$defaults['admin']['platform_admin'] = 0;
 $defaults['mail']['send_mail'] = 0;
 $defaults['password']['password_auto'] = 1;
 $defaults['active'] = 1;
@@ -291,7 +269,6 @@ if( $form->validate()) {
 		$status         = intval($user['status']);
 		$language       = $user['language'];
 		$picture        = $_FILES['picture'];
-		$platform_admin = intval($user['admin']['platform_admin']);
 		$send_mail      = intval($user['mail']['send_mail']);
 		$hr_dept_id     = intval($user['hr_dept_id']);
 

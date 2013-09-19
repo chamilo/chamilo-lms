@@ -32,9 +32,7 @@ $app['sys_course_path'] = isset($_configuration['sys_course_path']) ? $_configur
 $app['sys_log_path'] = isset($_configuration['sys_log_path']) ? $_configuration['sys_log_path'] : $app['root_sys'].'logs/';
 $app['sys_temp_path'] = isset($_configuration['sys_temp_path']) ? $_configuration['sys_temp_path'] : $app['sys_data_path'].'temp/';
 
-
 // Registering services
-
 $app['debug'] = false;
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new Silex\Provider\FormServiceProvider());
@@ -47,15 +45,12 @@ $app['translator'] = $app->share($app->extend('translator', function($translator
     $file = 'main/locale/'.$locale.'.po';
     $translator->addResource('pofile', $file, $locale);*/
 
-
     /*$translator->addLoader('yaml', new Symfony\Component\Translation\Loader\YamlFileLoader());
     $translator->addResource('yaml', __DIR__.'/lang/fr.yml', 'fr');
     $translator->addResource('yaml', __DIR__.'/lang/en.yml', 'en');
     $translator->addResource('yaml', __DIR__.'/lang/es.yml', 'es');*/
     return $translator;
 }));
-
-//$app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
 
 $app->register(
     new Silex\Provider\TwigServiceProvider(),
@@ -136,6 +131,8 @@ $blockInstallation = function() use($app) {
 // Controllers
 
 $app->match('/', function() use($app) {
+    // in order to get a list of countries
+    //var_dump(Symfony\Component\Intl\Intl::getRegionBundle()->getCountryNames());
     $languages = array(
         'english' => 'english',
         'spanish' =>  'spanish',

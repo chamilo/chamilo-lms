@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-
+use Symfony\Component\Validator\Constraints\DateTime;
 use ChamiloLMS\Component\Auth;
 
 /**
@@ -77,7 +77,7 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
     /**
      * @var boolean
      *
-     * @ORM\Column(name="status", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="status", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $status;
 
@@ -253,7 +253,7 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
      */
     private $curriculumItems;
 
-     /**
+    /**
      *
      */
     public function __construct()
@@ -335,11 +335,13 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
     }
 
     /**
-    * @inheritDoc
-    */
+     * @inheritDoc
+     */
     public function isAccountNonExpired()
     {
         return true;
+        /*$now = new \DateTime();
+        return $this->getExpirationDate() < $now;*/
     }
 
     /**
@@ -371,10 +373,10 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
      */
     public function eraseCredentials()
     {
-        $this->password = null;
     }
 
     /**
+     * This function is needed in order to pass roles to the security component
      * @inheritDoc
      */
     public function getRoles()
@@ -400,14 +402,16 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
         /*
          * ! Don't serialize $roles field !
          */
-        return \serialize(array(
-            $this->userId,
-            $this->username,
-            $this->email,
-            $this->salt,
-            $this->password,
-            $this->isActive
-        ));
+        return \serialize(
+            array(
+                $this->userId,
+                $this->username,
+                $this->email,
+                $this->salt,
+                $this->password,
+                $this->isActive
+            )
+        );
     }
 
     /**
@@ -490,7 +494,6 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
      */
     public function getCompleteName()
     {
-        //return $this->lastname .', '. $this->firstname .' ('. $this->email .')';
         return $this->lastname .', '. $this->firstname;
     }
 
@@ -520,7 +523,6 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
     {
         return $this->userId;
     }
-
 
     /**
      * Set lastname

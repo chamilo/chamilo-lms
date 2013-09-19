@@ -41,7 +41,7 @@ use ChamiloSession as Session;
  *
  */
 
-/*		INIT SECTION */
+/* INIT SECTION */
 
 $language_file = array('exercice', 'work', 'document', 'admin', 'gradebook');
 
@@ -54,6 +54,11 @@ api_protect_course_script(true);
 
 // Including necessary files
 require_once 'work.lib.php';
+
+require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 
 $course_id      = api_get_course_int_id();
 $course_info    = api_get_course_info();
@@ -109,10 +114,6 @@ $title 			        = isset($_REQUEST['title']) ? $_REQUEST['title'] : '';
 $description 	        = isset($_REQUEST['description']) ? $_REQUEST['description'] : '';
 $uploadvisibledisabled  = isset($_REQUEST['uploadvisibledisabled']) ? Database::escape_string($_REQUEST['uploadvisibledisabled']) : $course_info['show_score'];
 
-// get data for publication assignment
-$has_expired = false;
-$has_ended   = false;
-
 //directories management
 $sys_course_path 	= api_get_path(SYS_COURSE_PATH);
 $course_dir 		= $sys_course_path . $_course['path'];
@@ -142,10 +143,10 @@ if (isset ($_POST['cancelForm']) && !empty ($_POST['cancelForm'])) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && !sizeof($_POST)) {
     if (strstr($_SERVER['REQUEST_URI'], '?')) {
         header('Location: ' . $_SERVER['REQUEST_URI'] . '&submitWork=1');
-        exit ();
+        exit();
     } else {
         header('Location: ' . $_SERVER['REQUEST_URI'] . '?submitWork=1');
-        exit ();
+        exit();
     }
 }
 
@@ -252,59 +253,16 @@ if (!in_array($action, array('add','create_dir'))) {
     $token = Security::get_token();
 }
 
-if (!empty($my_folder_data)) {
-    $homework = get_work_assignment_by_id($my_folder_data['id']);
-
-    if ($homework['expires_on'] != '0000-00-00 00:00:00' || $homework['ends_on'] != '0000-00-00 00:00:00') {
-        $time_now		= time();
-
-        if (!empty($homework['expires_on']) && $homework['expires_on'] != '0000-00-00 00:00:00') {
-            $time_expires 	= api_strtotime($homework['expires_on'], 'UTC');
-            $difference 	= $time_expires - $time_now;
-            if ($difference < 0) {
-                $has_expired = true;
-            }
-        }
-
-        if (empty($homework['expires_on']) || $homework['expires_on'] == '0000-00-00 00:00:00') {
-            $has_expired = false;
-        }
-
-        if (!empty($homework['ends_on']) && $homework['ends_on'] != '0000-00-00 00:00:00') {
-            $time_ends 		= api_strtotime($homework['ends_on'], 'UTC');
-            $difference2 	= $time_ends - $time_now;
-            if ($difference2 < 0) {
-                $has_ended = true;
-            }
-        }
-
-        $ends_on 	= api_convert_and_format_date($homework['ends_on']);
-        $expires_on = api_convert_and_format_date($homework['expires_on']);
-
-        if ($has_ended) {
-            $message = Display::return_message(get_lang('EndDateAlreadyPassed').' '.$ends_on, 'error');
-        } elseif ($has_expired) {
-            $message = Display::return_message(get_lang('ExpiryDateAlreadyPassed').' '.$expires_on, 'warning');
-        } else {
-            if ($has_expired) {
-                $message = Display::return_message(get_lang('ExpiryDateToSendWorkIs').' '.$expires_on);
-            }
-        }
-    }
-}
-
 display_action_links($work_id, $curdirpath, $action);
 
-echo $message;
-
-//for teachers
+// for teachers
 
 switch ($action) {
     case 'settings':
         //if posts
         if ($is_allowed_to_edit && !empty($_POST['changeProperties'])) {
             // Changing the tool setting: default visibility of an uploaded document
-            // @todo i
+            // @todo
             $query = "UPDATE ".$main_course_table." SET show_score='" . $uploadvisibledisabled . "' WHERE code='" . api_get_course_id() . "'";
             $res = Database::query($query);
 
@@ -783,6 +741,8 @@ switch ($action) {
             echo $table->toHtml();
             echo '</div>';
         } else {
+
+
             display_student_publications_list($work_id, $my_folder_data, $work_parents, $origin, $add_query, null);
         }
 

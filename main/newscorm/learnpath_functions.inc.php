@@ -1454,18 +1454,6 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
     include_once $libp.'answer.class.php';
 
     $langLasting = ''; //avoid code parser warning
-    include_once $libp.'lang/english/announcements.inc.php'; //this line is here only for $langPubl in announcements
-    include_once $libp.'lang/'.$language_interface.'/announcements.inc.php'; //this line is here only for $langPubl in announcements
-    include_once $libp.'lang/english/agenda.inc.php'; //this line is here only for $langLasting
-    include_once $libp.'lang/'.$language_interface.'/agenda.inc.php'; //this line is here only for $langLasting
-    include_once $libp.'lang/english/course_description.inc.php'; //this line is here only for $langThisCourseDescriptionIsEmpty
-    include_once $libp.'lang/'.$language_interface.'/course_description.inc.php'; //				 -||-
-    include_once $libp.'lang/english/resourcelinker.inc.php';
-    include_once $libp.'lang/'.$language_interface.'/resourcelinker.inc.php';
-    include_once $libp.'lang/english/learnpath.inc.php';
-    include_once $libp.'lang/'.$language_interface.'/learnpath.inc.php';
-    include_once $libp.'lang/english/exercice.inc.php';
-    include_once $libp.'lang/'.$language_interface.'/exercice.inc.php';
 
     include_once '../resourcelinker/resourcelinker.inc.php';
 

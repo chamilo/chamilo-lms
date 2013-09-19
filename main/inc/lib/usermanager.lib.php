@@ -167,7 +167,8 @@ class UserManager
                 UrlManager::add_user_to_url($user_id, 1);
             }
 
-            /* global $app;
+            global $app;
+            /*
             $em = $app['orm.ems']['db_write'];
             // @var Entity\User $user
             $user = $em->getRepository('Entity\User')->findOneById($user_id);
@@ -370,10 +371,6 @@ class UserManager
             $em = $app['orm.ems']['db_write'];
             $user = $em->getRepository('Entity\User')->find($return);
             $role = $em->getRepository('Entity\Role')->find($status);
-
-            if ($role->getRole() == 'ROLE_ADMIN') {
-                UserManager::add_user_as_admin($return);
-            }
 
             $user->getRolesObj()->add($role);
             $em->persist($user);
@@ -724,7 +721,28 @@ class UserManager
      * @return boolean true if the user information was updated
      * @assert (false) === false
      */
-    public static function update_user($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email = null, $status = STUDENT, $official_code = null, $phone = null , $picture_uri = null, $expiration_date = null, $active = 1, $creator_id = null, $hr_dept_id = 0, $extra = null, $language = 'english', $encrypt_method = '', $send_email = false, $reset_password = 0) {
+    public static function update_user(
+        $user_id,
+        $firstname,
+        $lastname,
+        $username,
+        $password = null,
+        $auth_source = null,
+        $email = null,
+        $status = STUDENT,
+        $official_code = null,
+        $phone = null,
+        $picture_uri = null,
+        $expiration_date = null,
+        $active = 1,
+        $creator_id = null,
+        $hr_dept_id = 0,
+        $extra = null,
+        $language = 'english',
+        $encrypt_method = '',
+        $send_email = false,
+        $reset_password = 0
+    ) {
         global $_configuration;
         $original_password = $password;
 
@@ -804,7 +822,18 @@ class UserManager
         if ($user_info['active'] != $active) {
             self::change_active_state($user_id, $active);
         }
-        //active='".Database::escape_string($active)."',
+
+        global $app;
+        // Adding user
+        /** @var Entity\User $user */
+        $em = $app['orm.ems']['db_write'];
+        $user = $em->getRepository('Entity\User')->find($user_id);
+        $role = $em->getRepository('Entity\Role')->find($status);
+
+        $user->getRolesObj()->remove(0);
+        $user->getRolesObj()->add($role);
+        $em->persist($user);
+        $em->flush();
 
         if (!empty($email) && $send_email) {
             $recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);

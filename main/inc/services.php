@@ -734,3 +734,38 @@ $app['upgrade.controller'] = $app->share(
     }
 );
 
+
+
+// Ministerio
+
+$app['branch.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\Administrator\BranchController($app);
+    }
+);
+
+$app['branch_director.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\Director\BranchDirectorController($app);
+    }
+);
+
+$app['jury.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\Administrator\JuryController($app);
+    }
+);
+
+$app['jury_president.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\JuryPresident\JuryPresidentController($app);
+    }
+);
+
+$app['jury_member.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\JuryMember\JuryMemberController($app);
+    }
+);
+
+

@@ -120,7 +120,7 @@ ALTER TABLE c_survey_invitation ADD COLUMN group_id INT NOT NULL DEFAULT 0;
 ALTER TABLE c_lp ADD COLUMN category_id INT unsigned NOT NULL default 0;
 ALTER TABLE c_lp ADD COLUMN max_attempts INT NOT NULL default 0;
 ALTER TABLE c_lp ADD COLUMN subscribe_users INT NOT NULL default 0;
-ALTER TABLE user MODIFY COLUMN hr_dept_id int unsigned NOT NULL default 0;
+ALTER TABLE user MODIFY COLUMN hr_dept_id int unsigned default 0;
 ALTER TABLE session MODIFY COLUMN id INT unsigned NOT NULL auto_increment;
 ALTER TABLE session MODIFY COLUMN nbr_courses int unsigned NOT NULL default 0;
 ALTER TABLE session MODIFY COLUMN nbr_users int unsigned NOT NULL default 0;
@@ -295,10 +295,21 @@ ALTER TABLE c_attendance_sheet_log DROP PRIMARY KEY;
 ALTER TABLE c_attendance_sheet_log add COLUMN iid int unsigned not null AUTO_INCREMENT PRIMARY KEY FIRST;
 ALTER TABLE c_attendance_sheet_log add UNIQUE KEY(c_id,id);
 ALTER TABLE c_attendance_sheet_log ENGINE = InnoDB;
+ALTER TABLE session ADD COLUMN description TEXT;
+ALTER TABLE session ADD COLUMN show_description int default NULL;
 
 ALTER TABLE c_quiz_category ADD COLUMN visibility INT default 1;
 ALTER TABLE c_quiz_question ADD INDEX idx_c_q_qst_cpt (c_id, parent_id, type);
 ALTER TABLE c_quiz_question_rel_category ADD INDEX idx_c_q_qst_r_cat_qc(question_id, c_id);
+ALTER TABLE c_quiz ADD COLUMN question_selection_type INT DEFAULT 1;
+ALTER TABLE c_quiz ADD COLUMN hide_question_title INT DEFAULT 0;
+ALTER TABLE c_quiz ADD COLUMN global_category_id INT DEFAULT NULL;
+
+ALTER TABLE user MODIFY COLUMN chatcall_user_id int unsigned default 0;
+ALTER TABLE user MODIFY COLUMN chatcall_date datetime default NULL;
+ALTER TABLE user MODIFY COLUMN chatcall_text varchar(50) default NULL;
+ALTER TABLE user MODIFY COLUMN expiration_date datetime default NULL;
+
 
 INSERT INTO roles (id, name, role) VALUES('1', 'Teacher', 'ROLE_TEACHER');
 INSERT INTO roles (id, name, role) VALUES('4', 'RRHH', 'ROLE_RRHH');
@@ -307,10 +318,7 @@ INSERT INTO roles (id ,name, role) VALUES('5', 'Student', 'ROLE_STUDENT');
 INSERT INTO roles (id, name, role) VALUES('6', 'Anonymous', 'ROLE_ANONYMOUS');
 INSERT INTO roles (id, name, role) VALUES('11', 'Admin', 'ROLE_ADMIN');
 INSERT INTO roles (id, name, role) VALUES('17', 'Question Manager', 'ROLE_QUESTION_MANAGER');
-
-ALTER TABLE c_quiz ADD COLUMN question_selection_type INT DEFAULT 1;
-ALTER TABLE c_quiz ADD COLUMN hide_question_title INT DEFAULT 0;
-ALTER TABLE c_quiz ADD COLUMN global_category_id INT DEFAULT NULL;
+INSERT INTO roles (id, name, role) VALUES('18', 'Global admin', 'ROLE_GLOBAL_ADMIN');
 
 -- Admin
 INSERT INTO users_roles VALUES (1, 11);
@@ -347,11 +355,18 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('use_virtua
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('disable_copy_paste', NULL, 'radio', 'Platform', 'false','DisableCopyPasteTitle','DisableCopyPasteComment', NULL, NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('disable_copy_paste', 'true', 'Show');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('disable_copy_paste', 'false', 'Hide');
-INSERT INTO settings_current(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)  VALUES ('showonline','session','checkbox','Platform','true','ShowOnlineTitle','ShowOnlineComment',NULL,'ShowOnlineSession', 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('showonline','session','checkbox','Platform','true','ShowOnlineTitle','ShowOnlineComment',NULL,'ShowOnlineSession', 0);
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('default_calendar_view', NULL, 'radio', 'Platform','month','DefaultCalendarViewTitle', 'DefaultCalendarViewComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('default_calendar_view', 'month', 'Month');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('default_calendar_view', 'basicWeek', 'BasicWeek');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('default_calendar_view', 'agendaWeek', 'Week');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('default_calendar_view', 'agendaDay', 'Day');
+
 
 INSERT INTO branch_transaction_status VALUES (1, 'To be executed'), (2, 'Executed successfully'), (3, 'Execution deprecated'), (4, 'Execution failed');
 
 UPDATE course_field SET field_type = 3 WHERE field_variable = 'special_course';
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.039' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.043' WHERE variable = 'chamilo_database_version';

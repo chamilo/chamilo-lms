@@ -5,9 +5,15 @@ namespace Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
-use ChamiloLMS\Component\Auth;
+use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints\DateTime;
+use ChamiloLMS\Component\Auth;
 
 /**
  * User
@@ -327,6 +333,17 @@ class User implements AdvancedUserInterface, \Serializable
         $roles = $this->roles->toArray();
         //$roles[] = new Auth\Role($this);
         return $roles;
+    }
+
+    /**
+     * @param $role
+     * @return $this
+     */
+    public function setRoles($role)
+    {
+        $this->roles->add($role);
+
+        return $this;
     }
 
     /**

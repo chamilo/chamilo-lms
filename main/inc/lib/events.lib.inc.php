@@ -13,46 +13,6 @@
  */
 
 /**
- * @author Sebastien Piraux <piraux_seb@hotmail.com>
- * @desc Record information for open event (when homepage is opened)
- */
-function event_open()
-{
-    global $_configuration;
-    $TABLETRACK_OPEN = Database::get_main_table(TABLE_STATISTIC_TRACK_E_OPEN);
-
-    // @getHostByAddr($_SERVER['REMOTE_ADDR']) : will provide host and country information
-    // $_SERVER['HTTP_USER_AGENT'] :  will provide browser and os information
-    // $_SERVER['HTTP_REFERER'] : provide information about refering url
-    if (isset($_SERVER['HTTP_REFERER'])) {
-        $referer = Database::escape_string($_SERVER['HTTP_REFERER']);
-    } else {
-        $referer = '';
-    }
-    // record informations only if user comes from another site
-    //if(!eregi($_configuration['root_web'],$referer))
-    $pos = strpos($referer, $_configuration['root_web']);
-    if ($pos === false && $referer != '') {
-        $ip = api_get_real_ip();
-        $remhost = @ getHostByAddr($ip);
-        if ($remhost == $ip) {
-            $remhost = "Unknown"; // don't change this
-        }
-        $reallyNow = api_get_utc_datetime();
-        $sql = "INSERT INTO ".$TABLETRACK_OPEN."
-        		(open_remote_host,
-        		 open_agent,
-        		 open_referer,
-        		 open_date)
-        		VALUES
-        		('".$remhost."',
-        		 '".Database::escape_string($_SERVER['HTTP_USER_AGENT'])."', '".Database::escape_string($referer)."', '$reallyNow')";
-        Database::query($sql);
-    }
-    return 1;
-}
-
-/**
  * @author Sebastien Piraux <piraux_seb@hotmail.com> old code
  * @author Julio Montoya 2013
  * @desc Record information for login event when an user identifies himself with username & password

@@ -24,7 +24,7 @@ class CurriculumController extends CommonController
      * @Route("/")
      * @Method({"GET"})
      */
-    public function indexAction($course)
+    public function indexAction()
     {
         // Redirecting to curriculum user
         // @todo Fix redirection

@@ -29,14 +29,13 @@ class JuryMembersType extends AbstractType
         $factory = $builder->getFormFactory();
 
         // Fixes issue with the ajax select, waiting this workaround until symfony add ajax search into the core
-        $builder->addEventListener(FormEvents::PRE_BIND, function($event) use ($factory, $builder) {
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function($event) use ($factory, $builder) {
             $form = $event->getForm();
             $case = $event->getData();
             $id = $case['user_id'][0];
 
             if ($case) {
                 $form->remove('user_id');
-
                 $form->add($factory->createNamed('user_id', 'hidden', $id, array('auto_initialize' => false)));
             }
         });

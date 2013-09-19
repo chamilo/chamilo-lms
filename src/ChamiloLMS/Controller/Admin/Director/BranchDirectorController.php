@@ -5,6 +5,8 @@ namespace ChamiloLMS\Controller\Admin\Director;
 
 use ChamiloLMS\Controller\CommonController;
 use ChamiloLMS\Form\BranchType;
+use ChamiloLMS\Form\DirectorJuryUserType;
+
 use ChamiloLMS\Form\JuryType;
 use Entity;
 use Silex\Application;
@@ -28,12 +30,7 @@ class BranchDirectorController extends CommonController
      */
     public function indexAction()
     {
-        $token = $this->get('security')->getToken();
-
-        if (null !== $token) {
-            $user = $token->getUser();
-            $userId = $user->getUserId();
-        }
+        $userId = $this->getUser()->getUserId();
 
         $options = array(
             'decorate' => true,
@@ -41,10 +38,31 @@ class BranchDirectorController extends CommonController
             'rootClose' => '</ul>',
             'childOpen' => '<li>',
             'childClose' => '</li>',
-            'nodeDecorator' => function($row) {
-                //$addChildren = '<a class="btn" href="'.$this->createUrl('add_from_parent_link', array('id' => $row['id'])).'">Add children</a>';
-                $readLink = $row['branchName'].' <a class="btn" href="'.$this->createUrl('read_link', array('id' => $row['id'])).'">Assign users</a>';
-                return $readLink;
+            'nodeDecorator' => function ($row) {
+                /**  @var Entity\BranchSync $branch */
+                $branch = $this->getManager()->getRepository('Entity\BranchSync')->find($row['id']);
+                $juries = $branch->getJuries();
+                /** @var Entity\Jury $jury */
+                $juryList = null;
+                foreach ($juries as $jury) {
+                    $juryId = $jury->getId();
+
+                    $url = $this->generateUrl(
+                        'branch_director.controller:listUsersAction',
+                        array('juryId' => $juryId, 'branchId' => $row['id'])
+                    );
+                    $viewUsers = ' <a class="btn" href="'.$url.'">User list</a>';
+                    $url = $this->generateUrl(
+                        'branch_director.controller:addUsersAction',
+                        array('juryId' => $juryId, 'branchId' => $row['id'])
+                    );
+                    $addUserLink = ' <a class="btn" href="'.$url.'">Add users</a>';
+
+                    $juryList  .= $jury->getName() . ' '.$addUserLink.$viewUsers.'<br />';
+                }
+
+
+                return $row['branchName'].' <br />'.$juryList;
             }
             //'representationField' => 'slug',
             //'html' => true
@@ -57,6 +75,9 @@ class BranchDirectorController extends CommonController
             ->createQueryBuilder()
             ->select('node')
             ->from('Entity\BranchSync', 'node')
+            ->innerJoin('node.users', 'u')
+            ->where('u.userId = :userId')
+            ->setParameter('userId', $userId)
             ->orderBy('node.root, node.lft', 'ASC')
             ->getQuery();
 
@@ -83,12 +104,13 @@ class BranchDirectorController extends CommonController
         $item = $this->getEntity($id);
         $template->assign('item', $item);
 
-        $form = $this->get('form.factory')->create(new JuryType());
+        $form = $this->createForm(new JuryType());
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->isMethod('POST')) {
             $form->bind($this->getRequest());
 
             if ($form->isValid()) {
+
 
             }
         }
@@ -98,17 +120,71 @@ class BranchDirectorController extends CommonController
         return new Response($response, 200, array());
     }
 
-    private function saveUsers()
+    /**
+    *
+    * @Route("branches/{branchId}/jury/{juryId}/add-user")
+    * @Method({"GET"})
+    */
+    public function addUsersAction($juryId, $branchId)
+    {
+        $template = $this->get('template');
+        $request = $this->getRequest();
+
+        $type = new DirectorJuryUserType();
+
+        $user = new Entity\User();
+        $form = $this->createForm($type, $user);
+
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+
+            $jury = $this->getManager()->getRepository('Entity\Jury')->find($juryId);
+
+            $factory = $this->get('security.encoder_factory');
+            $encoder = $factory->getEncoder($user);
+            $pass = $encoder->encodePassword($user->getPassword(), $user->getSalt());
+            $user->setPassword($pass);
+            $user->setStatus(STUDENT);
+            $user->setChatcallUserId(0);
+            $user->setChatcallDate(null);
+            $user->setCurriculumItems(null);
+            $user->setChatcallText(' ');
+            $user->setActive(true);
+
+            $em = $this->getManager();
+            $em->persist($user);
+
+            $user->getUserId();
+            $role = current($user->getRoles());
+
+            $juryMember = new Entity\JuryMembers();
+            $juryMember->setJury($jury);
+            $juryMember->setRole($role);
+            $juryMember->setUser($user);
+
+            $em->persist($juryMember);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('success', "User saved");
+            //return $this->redirect($url);
+
+        }
+
+        $template->assign('form', $form->createView());
+        $template->assign('juryId', $juryId);
+        $template->assign('branchId', $branchId);
+        $response = $template->render_template($this->getTemplatePath().'add_user.tpl');
+        return new Response($response, 200, array());
+    }
+
+    /**
+    *
+    * @Route("branches/{branchId}/jury/{juryId}/list-user")
+    * @Method({"GET"})
+    */
+    public function listUsersAction()
     {
 
     }
-
-    private function getUserFormType($users)
-    {
-
-    }
-
-
 
     protected function getControllerAlias()
     {

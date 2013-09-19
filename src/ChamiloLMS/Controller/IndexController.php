@@ -100,31 +100,6 @@ class IndexController extends CommonController
         $app['this_section'] = SECTION_CAMPUS;
         $request = $app['request'];
 
-        /*
-        $sql = 'SELECT * from user WHERE user_id = 1';
-        var_dump($sql);
-        $result = \Database::query($sql);
-        var_dump(\Database::fetch_object($result));*/
-
-        // Testing translation using translator
-        //echo $app['translator']->trans('Wiki Search Results');
-        //echo $app['translator']->trans('Profile');
-
-        //$token = $app['security']->getToken();
-
-        //$article = $app['orm.em']->getRepository('Entity\Course');
-        //$courses_query = $app['orm.em']->createQuery('SELECT a FROM Entity\Course a');
-        //$a = new Course();
-        //$article = $app['orm.em']->getRepository('Course');
-        //var_dump($article);
-        //$courses_query = $app['orm.em']->createQuery('SELECT a FROM Entity\Course a');
-        /*
-          $paginator = new Doctrine\ORM\Tools\Pagination\Paginator($courses_query, $fetchJoinCollection = true);
-          $c = count($paginator);
-          foreach ($paginator as $course) {
-          echo $course->getCode() . "\n";
-          }
-          exit; */
         if (api_get_setting('allow_terms_conditions') == 'true') {
             unset($_SESSION['term_and_condition']);
         }

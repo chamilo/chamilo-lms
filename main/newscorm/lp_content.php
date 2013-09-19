@@ -22,6 +22,7 @@ if (empty($lp_controller_touched)) {
         error_log('New lp - In lp_content.php - Redirecting to lp_controller', 0);
     }
     header('location: lp_controller.php?action=content&lp_id='.Security::remove_XSS($_REQUEST['lp_id']).'&item_id='.Security::remove_XSS($_REQUEST['item_id']));
+    exit;
 }
 $_SESSION['oLP']->error = '';
 $lp_type = $_SESSION['oLP']->get_type();

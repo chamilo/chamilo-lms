@@ -326,14 +326,14 @@ if ($time_control) {
     if ($debug) { error_log("7 No time control"); };
 }
 
-// Get time left for exipiring time
+// Get time left for expiring time
 $time_left = api_strtotime($clock_expired_time,'UTC') - time();
 
 /*
  * The time control feature is enable here - this feature is enable for a jquery plugin called epiclock
  * for more details of how it works see this link : http://eric.garside.name/docs.html?p=epiclock
  */
-if ($time_control) { //Sends the exercice form when the expired time is finished
+if ($time_control) { //Sends the exercise form when the expired time is finished
 	$htmlHeadXtra[] = $objExercise->show_time_control_js($time_left);
 }
 

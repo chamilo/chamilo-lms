@@ -25,9 +25,9 @@ Display::display_header($tool_name);
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 if ( isset($_GET['action']) ) {
-    switch($_GET['action']) {
+    switch ($_GET['action']) {
         case 'unsubscribe':
-            if ( CourseManager::get_user_in_course_status($_GET['user_id'],$_GET['course_code']) == STUDENT) {
+            if (CourseManager::get_user_in_course_status($_GET['user_id'],$_GET['course_code']) == STUDENT) {
                 CourseManager::unsubscribe_user($_GET['user_id'],$_GET['course_code']);
                 Display::display_normal_message(get_lang('UserUnsubscribed'));
             } else {
@@ -36,22 +36,29 @@ if ( isset($_GET['action']) ) {
             break;
     }
 }
-//only allow platform admins to login_as, or session admins only for students (not teachers nor other admins)
+// only allow platform admins to login_as, or session admins only for students (not teachers nor other admins)
 $statusname = api_get_status_langvars();
-$login_as_icon = '';
+$login_as_icon = null;
+$editUser = null;
 if (api_is_platform_admin() || (api_is_session_admin() && $row['6'] == $statusname[STUDENT])) {
-        $login_as_icon = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$user['user_id'].'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>';
+    $login_as_icon = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$user['user_id'].'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>';
+    $editUser = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array()), api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user['user_id']);
 }
-echo '<div class="actions"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.intval($_GET['user_id']).'" title="'.get_lang('Reporting').'">'.Display::return_icon('statistics.png',get_lang('Reporting'),'',  ICON_SIZE_MEDIUM).'</a>'.$login_as_icon.'</div>';
+echo '<div class="actions">
+        <a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.intval($_GET['user_id']).'" title="'.get_lang('Reporting').'">'.Display::return_icon('statistics.png',get_lang('Reporting'),'',  ICON_SIZE_MEDIUM).'
+        </a>
+        '.$login_as_icon.'
+        '.$editUser.'
+    </div>';
 
 echo Display::page_header($tool_name);
 
-//getting the user image
+// Getting the user image
 $sysdir_array = UserManager::get_user_picture_path_by_id($user['user_id'],'system',false,true);
 $sysdir = $sysdir_array['dir'];
 $webdir_array = UserManager::get_user_picture_path_by_id($user['user_id'],'web',false,true);
 $webdir = $webdir_array['dir'];
-$fullurl=$webdir.$webdir_array['file'];
+$fullurl = $webdir.$webdir_array['file'];
 $system_image_path=$sysdir.$webdir_array['file'];
 list($width, $height, $type, $attr) = @getimagesize($system_image_path);
 $resizing = (($height > 200) ? 'height="200"' : '');
@@ -64,7 +71,7 @@ echo '<p>'. ($user['status'] == 1 ? get_lang('Teacher') : get_lang('Student')).'
 echo '<p>'.Display :: encrypted_mailto_link($user['mail'], $user['mail']).'</p>';
 
 /**
- * Show the sessions and the courses in wich this user is subscribed
+ * Show the sessions and the courses in which this user is subscribed
  */
 
 echo Display::page_subheader(get_lang('SessionList'));
@@ -152,35 +159,6 @@ if (Database::num_rows($res) > 0) {
 } else {
     echo '<p>'.get_lang('NoCoursesForThisUser').'</p>';
 }
-
-/**
- * Show the classes in which this user is subscribed
- */
-/*
-$table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
-$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
-$sql = 'SELECT * FROM '.$table_class_user.' cu, '.$table_class.' c '.
-    ' WHERE cu.user_id = '.$user['user_id'].' AND cu.class_id = c.id';
-$res = Database::query($sql);
-if (Database::num_rows($res) > 0) {
-    $header = array();
-    $header[] = array (get_lang('ClassName'), true);
-    $header[] = array ('', false);
-    $data = array ();
-    while ($class = Database::fetch_object($res)) {
-        $row = array();
-        $row[] = $class->name;
-        $row[] = '<a href="class_information.php?id='.$class->id.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>';
-        $data[] = $row;
-    }
-    echo '<p><b>'.get_lang('Classes').'</b></p>';
-    echo '<blockquote>';
-    Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => intval($_GET['user_id'])));
-    echo '</blockquote>';
-} else {
-    echo '<p>'.get_lang('NoClassesForThisUser').'</p>';
-}*/
-
 /**
  * Show the URL in which this user is subscribed
  */
@@ -203,5 +181,4 @@ if ($_configuration['multiple_access_urls']) {
     }
 }
 
-/* FOOTER */
 Display::display_footer();

@@ -138,12 +138,13 @@ display_question_list_by_attempt($objExercise, $exe_id, true);
 
 //If is not valid
 
+/*
 $session_control_key = get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
 if (isset($session_control_key) && !exercise_time_control_is_valid($objExercise->id, $learnpath_id, $learnpath_item_id)) {
 	$TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 	$sql_fraud = "UPDATE $TBL_TRACK_ATTEMPT SET answer = 0, marks = 0, position = 0 WHERE exe_id = $exe_id ";
 	Database::query($sql_fraud);
-}
+}*/
 
 //Unset session for clock time
 exercise_time_control_delete($objExercise->id, $learnpath_id, $learnpath_item_id);

@@ -17,18 +17,19 @@ api_protect_admin_script(true);
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
-$htmlHeadXtra[] = '<script>
-				function selectAll(idCheck,numRows,action) {
-					for(i=0;i<numRows;i++) {
-						idcheck = document.getElementById(idCheck+"_"+i);
-						if (action == "true"){
-							idcheck.checked = true;
-						} else {
-							idcheck.checked = false;
-						}
-					}
-				}
-				</script>';
+$htmlHeadXtra[] =
+'<script>
+    function selectAll(idCheck,numRows,action) {
+        for(i=0;i<numRows;i++) {
+            idcheck = document.getElementById(idCheck+"_"+i);
+            if (action == "true"){
+                idcheck.checked = true;
+            } else {
+                idcheck.checked = false;
+            }
+        }
+    }
+</script>';
 
 $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -74,13 +75,20 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     } else {
         $where .= (empty($_REQUEST['keyword']) ? "" : " WHERE name LIKE '%".Database::escape_string(trim($_REQUEST['keyword']))."%'");
     }
+
+
+
     if (empty($where)) {
         $where = " WHERE access_url_id = ".api_get_current_access_url_id()." ";
     } else {
         $where .= " AND access_url_id = ".api_get_current_access_url_id()." ";
     }
 
-    $query = "SELECT sc.*, (select count(id) FROM $tbl_session WHERE session_category_id = sc.id) as nbr_session
+    $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+    $query = "SELECT sc.*, (
+                SELECT count(id) FROM $tbl_session s INNER JOIN $table_access_url_rel_session us ON (s.id = us.session_id)
+                WHERE s.session_category_id = sc.id and access_url_id = ".api_get_current_access_url_id()."
+                ) as nbr_session
 	 			FROM $tbl_session_category sc
 	 			$where
 	 			ORDER BY $sort $order
@@ -98,7 +106,6 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     $nbr_results = sizeof($Sessions);
     $tool_name = get_lang('ListSessionCategory');
     Display::display_header($tool_name);
-    //api_display_tool_title($tool_name);
 
     if (!empty($_GET['warn'])) {
         Display::display_warning_message(urldecode($_GET['warn']), false);
@@ -169,7 +176,10 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
                 if ($key == $limit) {
                     break;
                 }
-                $sql = 'SELECT COUNT(session_category_id) FROM '.$tbl_session.' WHERE session_category_id = '.intval($enreg['id']);
+                $sql = 'SELECT COUNT(session_category_id)
+                FROM '.$tbl_session.' s INNER JOIN '.$table_access_url_rel_session.'  us ON (s.id = us.session_id)
+                WHERE s.session_category_id = '.intval($enreg['id']).' AND us.access_url_id = '.api_get_current_access_url_id();
+
                 $rs = Database::query($sql);
                 list($nb_courses) = Database::fetch_array($rs);
                 ?>
@@ -238,4 +248,5 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     <?php } ?>
     </table>
 
-<?php } Display::display_footer(); ?>
+<?php }
+Display::display_footer();

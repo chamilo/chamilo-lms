@@ -77,11 +77,15 @@ if (!empty($parent_data) && !empty($parent_data['qualification'])) {
     }
 }*/
 
+$has_expired = false;
+$has_ended   = false;
+$message = null;
+
 if (!empty($my_folder_data)) {
     $homework = get_work_assignment_by_id($my_folder_data['id']);
 
     if ($homework['expires_on'] != '0000-00-00 00:00:00' || $homework['ends_on'] != '0000-00-00 00:00:00') {
-        $time_now		= time();
+        $time_now = time();
 
         if (!empty($homework['expires_on']) && $homework['expires_on'] != '0000-00-00 00:00:00') {
             $time_expires 	= api_strtotime($homework['expires_on'], 'UTC');
@@ -105,6 +109,16 @@ if (!empty($my_folder_data)) {
 
         $ends_on 	= api_convert_and_format_date($homework['ends_on']);
         $expires_on = api_convert_and_format_date($homework['expires_on']);
+    }
+
+    if ($has_ended) {
+        $message = Display::return_message(get_lang('EndDateAlreadyPassed').' '.$ends_on, 'error');
+    } elseif ($has_expired) {
+        $message = Display::return_message(get_lang('ExpiryDateAlreadyPassed').' '.$expires_on, 'warning');
+    } else {
+        if ($has_expired) {
+            $message = Display::return_message(get_lang('ExpiryDateToSendWorkIs').' '.$expires_on);
+        }
     }
 }
 
@@ -318,6 +332,9 @@ $htmlHeadXtra[] = to_javascript_work();
 Display :: display_header(null);
 
 if (!empty($work_id)) {
+
+    echo $message;
+
     if ($is_allowed_to_edit) {
         if (api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION)) {
             echo Display::display_warning_message(get_lang('ResourceLockedByGradebook'));
@@ -331,6 +348,7 @@ if (!empty($work_id)) {
             Display::display_error_message(get_lang('ActionNotAllowed'));
         }
     } elseif ($student_can_edit_in_session && $has_ended == false) {
+
         $form->display();
     } else {
         Display::display_error_message(get_lang('ActionNotAllowed'));

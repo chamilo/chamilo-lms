@@ -2899,6 +2899,9 @@ class CourseManager {
                     $html .= '<div class="span6 '.$param_class.'">';
                         $html .='<h3>'.$params['title'].$notifications.'</h3> ';
 
+                        if (isset($params['description'])) {
+                            $html .= '<p>'.$params['description'].'</p>';
+                        }
                         if (!empty($params['subtitle'])) {
                             $html .= '<small>'.$params['subtitle'].'</small>';
                         }
@@ -3920,8 +3923,12 @@ class CourseManager {
      * @param array  List of courses to which the user is subscribed (if not provided, will be generated)
      * @return mixed 'enter' for a link to go to the course or 'register' for a link to subscribe, or false if no access
      */
-    static function get_access_link_by_user($uid, $course, $user_courses = array()) {
-        if (empty($uid) or empty($course)) { return false; }
+    static function get_access_link_by_user($uid, $course, $user_courses = array())
+    {
+        if (empty($uid) or empty($course)) {
+            return false;
+        }
+
         if (empty($user_courses)) {
             // get the array of courses to which the user is subscribed
             $user_courses = CourseManager::get_courses_list_by_user_id($uid);
@@ -3933,13 +3940,13 @@ class CourseManager {
         if (!isset($course['real_id']) && empty($course['real_id'])) {
             $course = api_get_course_info($course['code']);
         }
-        if ($course['visibility'] != COURSE_VISIBILITY_HIDDEN) {
+
+        if ($course['visibility'] == COURSE_VISIBILITY_HIDDEN) {
             return array();
         }
 
         $is_admin = api_is_platform_admin_by_id($uid);
         $options = array();
-
         // Register button
         if (!api_is_anonymous($uid) &&
             !$is_admin &&
@@ -3961,17 +3968,27 @@ class CourseManager {
         ) {
             $options[]=  'enter';
         }
+
         return $options;
     }
 
-    function updateTeachers($course_code, $teachers)
+    /**
+     * @param string $course_code
+     * @param array $teachers
+     * @param bool $editTeacherInSessions
+     * @return bool
+     */
+    public static function updateTeachers($course_code, $teachers, $editTeacherInSessions = false)
     {
+
         if (empty($teachers)) {
             return false;
         }
         if (!is_array($teachers)) {
             $teachers = array($teachers);
         }
+
+        $alreadyAddedTeachers = CourseManager::get_teacher_list_from_course_code($course_code);
 
         $course_user_table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
@@ -3982,13 +3999,13 @@ class CourseManager {
                 $cond.= " AND user_id <> '".$key."'";
             }
         }
+
         $sql = 'DELETE FROM '.$course_user_table.' WHERE course_code="'.Database::escape_string($course_code).'" AND status="1"'.$cond;
         Database::query($sql);
 
         if (count($teachers) > 0) {
             foreach ($teachers as $key) {
-
-                //We check if the teacher is already subscribed in this course
+                // We check if the teacher is already subscribed in this course
                 $sql_select_teacher = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$key.'" AND course_code = "'.$course_code.'" ';
                 $result = Database::query($sql_select_teacher);
 
@@ -4005,6 +4022,27 @@ class CourseManager {
                         user_course_cat='0'";
                 }
                 Database::query($sql);
+            }
+        }
+
+        if ($editTeacherInSessions) {
+            $sessions = SessionManager::get_session_by_course($course_code);
+            if (!empty($sessions)) {
+                foreach ($sessions as $session) {
+                    foreach ($teachers as $userId) {
+                        SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code);
+                    }
+                    $teachersToDelete = array();
+                    if (!empty($alreadyAddedTeachers)) {
+                        $teachersToDelete = array_diff(array_keys($alreadyAddedTeachers), $teachers);
+                    }
+
+                    if (!empty($teachersToDelete)) {
+                        foreach ($teachersToDelete as $userId) {
+                            SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code, true);
+                        }
+                    }
+                }
             }
         }
     }

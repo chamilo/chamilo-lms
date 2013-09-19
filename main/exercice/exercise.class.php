@@ -709,19 +709,21 @@ class Exercise {
 
         $expired_time = intval($this->expired_time);
 
-        if (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') {
-            $start_time = Database::escape_string(api_get_utc_datetime($this->start_time));
-        } else {
-            $start_time = '0000-00-00 00:00:00';
-        }
-        if (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00') {
-            $end_time 	= Database::escape_string(api_get_utc_datetime($this->end_time));
-        } else {
-            $end_time = '0000-00-00 00:00:00';
-        }
-
         // Exercise already exists
         if ($id) {
+            // we prepare date in the database using the api_get_utc_datetime() function
+            if (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') {
+                $start_time = Database::escape_string(api_get_utc_datetime($this->start_time));
+            } else {
+                $start_time = '0000-00-00 00:00:00';
+            }
+
+            if (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00') {
+                $end_time 	= Database::escape_string(api_get_utc_datetime($this->end_time));
+            } else {
+                $end_time = '0000-00-00 00:00:00';
+            }
+
             $sql="UPDATE $TBL_EXERCICES SET
 				    title='".Database::escape_string($exercise)."',
 					description='".Database::escape_string($description)."'";
@@ -756,6 +758,22 @@ class Exercise {
             }
         } else {
             // creates a new exercise
+
+            // In this case of new exercise, we don't do the api_get_utc_datetime() for date because, bellow, we call function api_set_default_visibility()
+            // In this function, api_set_default_visibility, the Quiz is saved too, with an $id and api_get_utc_datetime() is done.
+            // If we do it now, it will be done twice (cf. https://support.chamilo.org/issues/6586)
+            if (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') {
+                $start_time = Database::escape_string($this->start_time);
+            } else {
+                $start_time = '0000-00-00 00:00:00';
+            }
+
+            if (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00') {
+                $end_time 	= Database::escape_string(($this->end_time));
+            } else {
+                $end_time = '0000-00-00 00:00:00';
+            }
+
             $sql = "INSERT INTO $TBL_EXERCICES (c_id, start_time, end_time, title, description, sound, type, random, random_answers, active,
                                                 results_disabled, max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category,
                                                 text_when_finished, display_category_name, pass_percentage)
@@ -785,7 +803,7 @@ class Exercise {
 
             // insert into the item_property table
             api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'QuizAdded', api_get_user_id());
-            api_set_default_visibility($this->id, TOOL_QUIZ);
+            api_set_default_visibility($this->id, TOOL_QUIZ, null, true); // This function save the quiz again, carefull about start_time and end_time if you remove this line (see above)
 
             if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {
                 $this->search_engine_save();
@@ -1234,6 +1252,7 @@ class Exercise {
             $start_time['d'] = sprintf('%02d', $start_time['d']);
 
             $this->start_time = $start_time['Y'].'-'.$start_time['F'].'-'.$start_time['d'].' '.$start_time['H'].':'.$start_time['i'].':00';
+
         } else {
             $this->start_time = '0000-00-00 00:00:00';
         }

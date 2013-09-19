@@ -129,11 +129,42 @@ class WSReport extends WS {
         }
         require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
         $lp = new learnpath($course_code, $learnpath_id, $user_id);
-        $items = $lp->items[$learnpath_id];
         $return = array(
           'progress_bar_mode' => $lp->progress_bar_mode,
           'progress_db' => $lp->progress_db,
         );
+        return $return;
+    }
+
+    /**
+     * Gets the highest element seen (lesson_location) in the given learning
+     * path by the given user. If the user saw the learning path several times,
+     * the last time (lp_view) is assumed. If there are several items in the lp,
+     * the last item seen (lp_view.last_item) is considered as the relevant one
+     * to get the lesson_location from.
+     *
+     * @param string User id field name
+     * @param string User id value
+     * @param string Course id field name
+     * @param string Course id value
+     * @param string Learnpath ID
+     * @return string The last item's lesson_location value
+     */
+    public function GetLearnpathHighestLessonLocation($secret_key, $user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id) {
+        $user_id = $this->getUserId($user_id_field_name, $user_id_value);
+        if($user_id instanceof WSError) {
+            return $user_id;
+        }
+        $course_id = $this->getCourseId($course_id_field_name, $course_id_value);
+        if($course_id instanceof WSError) {
+            return $course_id;
+        } else {
+            $course_code = CourseManager::get_course_code_from_course_id($course_id);
+        }
+        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
+        $lp = new learnpath($course_code, $learnpath_id, $user_id);
+        $item = $lp->last_item_seen;
+        $return = $lp->items[$item]->get_lesson_location();
         return $return;
     }
     

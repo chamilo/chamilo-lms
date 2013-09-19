@@ -146,6 +146,7 @@ $stok = Security::get_token();
         if (!empty($browse_courses_in_category)) {
 
             foreach ($browse_courses_in_category as $course) {
+
                 // if course is closed, don't show it.
                 if ($course['visibility'] == COURSE_VISIBILITY_CLOSED || $course['visibility'] == COURSE_VISIBILITY_HIDDEN) {
                     continue;

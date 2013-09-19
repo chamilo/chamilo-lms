@@ -123,7 +123,7 @@ function save_data($users) {
     require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
     $send_mail = $_POST['sendMail'] ? 1 : 0;
     if (is_array($users)) {
-        foreach ($users as $index => $user)	{
+        foreach ($users as $user) {
             $user = complete_missing_data($user);
             $user['Status'] = api_status_key($user['Status']);
             $user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], $user['language'], $user['PhoneNumber'], '', $user['AuthSource'], null, 1, 0, null, null, $send_mail);
@@ -276,12 +276,13 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
     $file_type = $_POST['file_type'];
     Security::clear_token();
     $tok = Security::get_token();
-    $allowed_file_mimetype = array('csv','xml');
+    $allowed_file_mimetype = array('csv', 'xml');
     $error_kind_file = false;
 
-    $ext_import_file = substr($_FILES['import_file']['name'],(strrpos($_FILES['import_file']['name'],'.')+1));
+    $uploadInfo = pathinfo($_FILES['import_file']['name']);
+    $ext_import_file = $uploadInfo['extension'];
 
-    if (in_array($ext_import_file,$allowed_file_mimetype)) {
+    if (in_array($ext_import_file, $allowed_file_mimetype)) {
         if (strcmp($file_type, 'csv') === 0 && $ext_import_file == $allowed_file_mimetype[0]) {
             $users	= parse_csv_data($_FILES['import_file']['tmp_name']);
             $errors = validate_data($users);
@@ -297,8 +298,9 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
         $error_kind_file = true;
     }
 
-    // List user id whith error.
+    // List user id with error.
     $users_to_insert = $user_id_error = array();
+
     if (is_array($errors)) {
         foreach ($errors as $my_errors) {
             $user_id_error[] = $my_errors['UserName'];
@@ -327,17 +329,6 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
     } else {
         $see_message_import = get_lang('FileImported');
     }
-    /*
-    $msg2 = '';
-    if (count($inserted_in_course) > 1) {
-        $msg2 .= '<br>'.get_lang('UsersSubscribedToSeveralCoursesBecauseOfVirtualCourses').':';
-        foreach ($inserted_in_course as $course) {
-            $msg2 .= ' '.$course.',';
-        }
-        $msg2 = substr($msg2, 0, -1);
-        $msg2 .= '</br>';
-    }
-    */
 
     if (count($errors) != 0) {
         $warning_message = '<ul>';
@@ -350,10 +341,9 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
     }
 
     // if the warning message is too long then we display the warning message trough a session
-    if (api_strlen($warning_message) > 150) {
-        $_SESSION['session_message_import_users'] = $warning_message;
-        $warning_message = 'session_message';
-    }
+
+    $_SESSION['session_message_import_users'] = $warning_message;
+    $warning_message = 'session_message';
 
     if ($error_kind_file) {
         $error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');

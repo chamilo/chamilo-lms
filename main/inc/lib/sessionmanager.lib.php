@@ -236,9 +236,9 @@ class SessionManager
 			$where.=" AND s.session_admin_id = $user_id ";
 		}
         
-        if (api_is_allowed_to_edit() && !api_is_platform_admin()) {
-            $where.=" AND s.id_coach = $user_id ";
-        }
+    if (api_is_allowed_to_edit() && !api_is_platform_admin()) {
+        $where.=" AND s.id_coach = $user_id ";
+    }
 		$coach_name = " CONCAT(u.lastname , ' ', u.firstname) as coach_name ";
 
 		if (api_is_western_name_order()) {

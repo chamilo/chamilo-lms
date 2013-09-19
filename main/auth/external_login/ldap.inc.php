@@ -295,27 +295,29 @@ function extldap_import_all_users()
  */
 function extldap_add_user_by_array($data, $update_if_exists = true)
 {
-    $lastname  = api_convert_encoding($data['sn'][0], api_get_system_encoding(), 'UTF-8');
-    $firstname = api_convert_encoding($data['cn'][0], api_get_system_encoding(), 'UTF-8');
-    $email     = $data['mail'][0];
-    // Get uid from dn
-    $dn_array = ldap_explode_dn($data['dn'], 1);
-    $username = $dn_array[0]; // uid is first key
-    $outab[]  = $data['edupersonprimaryaffiliation'][0]; // Here, "student"
-    //$val = ldap_get_values_len($ds, $entry, "userPassword");
-    //$val = ldap_get_values_len($ds, $data, "userPassword");
-    //$password = $val[0];
+    global $extldap_user_correspondance;
+
+    $lastname  = api_convert_encoding($data[$extldap_user_correspondance['lastname']][0], api_get_system_encoding(), 'UTF-8');
+    $firstname = api_convert_encoding($data[$extldap_user_correspondance['firstname']][0], api_get_system_encoding(), 'UTF-8');
+    $email     = $data[$extldap_user_correspondance['email']][0];
+    $username  = $data[$extldap_user_correspondance['username']][0];
+
     // TODO the password, if encrypted at the source, will be encrypted twice, which makes it useless. Try to fix that.
-    $password        = $data['userPassword'][0];
+    $passwordKey = isset($extldap_user_correspondance['password']) ? $extldap_user_correspondance['password'] : 'userPassword';
+    $password        = $data[$passwordKey][0];
+
+    // Structure
     $structure       = $data['edupersonprimaryorgunitdn'][0];
     $array_structure = explode(",", $structure);
     $array_val       = explode("=", $array_structure[0]);
     $etape           = $array_val[1];
     $array_val       = explode("=", $array_structure[1]);
     $annee           = $array_val[1];
+
     // To ease management, we add the step-year (etape-annee) code
     $official_code = $etape."-".$annee;
     $auth_source   = 'ldap';
+
     // No expiration date for students (recover from LDAP's shadow expiry)
     $expiration_date = '0000-00-00 00:00:00';
     $active          = 1;

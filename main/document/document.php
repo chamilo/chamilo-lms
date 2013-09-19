@@ -374,10 +374,11 @@ if ($tool_visibility == '0' && $to_group_id == '0' && !($is_allowed_to_edit || $
 
 $htmlHeadXtra[] = "<script>
 function confirmation (name) {
-    if (confirm(\" ".get_lang("AreYouSureToDelete")." \"+ name + \" ?\"))
-        {return true;}
-    else
-        {return false;}
+    if (confirm(\" ".get_lang("AreYouSureToDelete")." \"+ name + \" ?\")) {
+        return true;
+    } else {
+        return false;
+    }
 }
 </script>";
 
@@ -681,30 +682,76 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         }
     }
 
-    if (isset($_POST['action'])) {
-        switch ($_POST['action']) {
-            case 'delete':
-                foreach ($_POST['path'] as $index => & $path) {
-                    if (!$is_allowed_to_edit) {
-                        if (DocumentManager::check_readonly($_course, api_get_user_id(), $path)) {
-                            Display::display_error_message(get_lang('CantDeleteReadonlyFiles'));
-                            break 2;
-                        }
-                    }
-                }
+    if (isset($_POST['action']) && isset($_POST['path'])) {
+        $files = $_POST['path'];
 
-                foreach ($_POST['path'] as $index => & $path) {
-                    $items = array('/audio', '/flash', '/images', '/shared_folder', '/video', '/chat_files', '/certificates');
-                    if (in_array($path, $items)) {
-                        continue;
-                    } else {
+        foreach ($files as $path) {
+            $items = array('/audio', '/flash', '/images', '/shared_folder', '/video', '/chat_files', '/certificates');
+            if (in_array($path, $items)) {
+                continue;
+            } else {
+
+                $documentId = DocumentManager::get_document_id($_course, $path);
+                $data = DocumentManager::get_document_data_by_id($documentId, $_course['code']);
+
+                switch ($_POST['action']) {
+                    case 'set_invisible':
+                        $visibilityCommand = 'invisible';
+
+                        if (api_item_property_update(
+                            $_course,
+                            TOOL_DOCUMENT,
+                            $documentId,
+                            $visibilityCommand,
+                            api_get_user_id(),
+                            null,
+                            null,
+                            null,
+                            null,
+                            $session_id
+                        )) {
+                            Display::display_confirmation_message(get_lang('VisibilityChanged').': '.$data['path']);
+                        } else {
+                            Display::display_error_message(get_lang('ViModProb'));
+                        }
+                        break;
+                    case 'set_visible':
+                        $visibilityCommand = 'visible';
+                        if (api_item_property_update(
+                            $_course,
+                            TOOL_DOCUMENT,
+                            $documentId,
+                            $visibilityCommand,
+                            api_get_user_id(),
+                            null,
+                            null,
+                            null,
+                            null,
+                            $session_id
+                        )) {
+                            Display::display_confirmation_message(get_lang('VisibilityChanged').': '.$data['path']);
+                        } else {
+                            Display::display_error_message(get_lang('ViModProb'));
+                        }
+                        break;
+                    case 'delete':
+
+                        foreach ($files as $path) {
+                            if (!$is_allowed_to_edit) {
+                                if (DocumentManager::check_readonly($_course, api_get_user_id(), $path)) {
+                                    Display::display_error_message(get_lang('CantDeleteReadonlyFiles'));
+                                    break 2;
+                                }
+                            }
+                        }
+
                         $delete_document = DocumentManager::delete_document($_course, $path, $base_work_dir);
-                    }
+                        if (!empty($delete_document)) {
+                            Display::display_confirmation_message(get_lang('DocDeleted').': '.$data['path']);
+                        }
+                        break;
                 }
-                if (!empty($delete_document)) {
-                    Display::display_confirmation_message(get_lang('DocDeleted'));
-                }
-                break;
+            }
         }
     }
 }
@@ -1149,7 +1196,6 @@ if ($image_present && !isset($_GET['keyword'])) {
 if (api_is_allowed_to_edit(null, true)) {
     echo '<a href="document_quota.php?'.api_get_cidreq().'">'.Display::return_icon('percentage.png', get_lang('DocumentQuota'), '', ICON_SIZE_MEDIUM).'</a>';
 }
-
 echo '</div>'; //end actions
 
 
@@ -1234,7 +1280,10 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 if (count($docs_and_folders) > 1) {
     if ($is_allowed_to_edit || $group_member_with_upload_rights) {
         $form_actions = array();
+        $form_action['set_invisible'] = get_lang('SetInvisible');
+        $form_action['set_visible'] = get_lang('SetVisible');
         $form_action['delete'] = get_lang('Delete');
+
         $portfolio_actions = Portfolio::actions();
         foreach ($portfolio_actions as $action) {
             $form_action[$action->get_name()] = $action->get_title();

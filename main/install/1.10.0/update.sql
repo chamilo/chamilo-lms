@@ -3,6 +3,7 @@ INSERT INTO roles (name, role) VALUES('Jury member', 'ROLE_JURY_MEMBER');
 INSERT INTO roles (name, role) VALUES('Jury substitute', 'ROLE_JURY_SUBSTITUTE');
 INSERT INTO roles (name, role) VALUES('Director', 'ROLE_DIRECTOR');
 
+-- Add new configuration setting for action related transaction settings.
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES
 ('log_transactions','exercise_attempt','checkbox','LogTransactions','false','LogTransactionsForExerciseAttempts','LogTransactionsForExerciseAttemptsComment',NULL,'LogTransactionsForExerciseAttemptsText', 1),
 ('transaction_action_map','exercise_attempt','text','TransactionMapping','a:0:{}','TransactionMapForExerciseAttempts','TransactionMapForExerciseAttemptsComment',NULL,'TransactionMapForExerciseAttemptsText', 1);
@@ -49,15 +50,8 @@ CREATE TABLE track_attempt_jury(
 ALTER TABLE track_e_exercices ADD COLUMN jury_score float(6,2);
 ALTER TABLE track_e_exercices ADD COLUMN jury_id INT DEFAULT NULL;
 
--- Add new configuration setting for action related transaction settings.
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('transaction_action_map','exercise_attempt','text','TransactionMapping','a:0:{}','TransactionMapForExerciseAttempts','TransactionMapForExerciseAttemptsComment',NULL,'TransactionMapForExerciseAttemptsText', 1);
-
 -- Rename the transaction import log table and change its structure.
 RENAME TABLE branch_sync_log TO branch_transaction_log;
-ALTER TABLE branch_transaction_log CHANGE sync_trans_id transaction_id bigint unsigned not null default 0;
-ALTER TABLE branch_transaction_log DROP branch_sync_id, DROP sync_type;
-ALTER TABLE branch_transaction_log CHANGE sync_trans_date import_time DATETIME NULL DEFAULT NULL;
-ALTER TABLE branch_transaction_log ADD message MEDIUMTEXT NOT NULL;
 
 UPDATE settings_current SET selected_value = 'minedu' WHERE variable = 'template';
 UPDATE settings_current SET selected_value = 'digedd' WHERE variable = 'stylesheets';

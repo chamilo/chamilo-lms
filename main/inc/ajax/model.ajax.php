@@ -43,8 +43,10 @@ if (!in_array(
         'get_user_skill_ranking',
         'get_usergroups_teacher'
     )
-)) {
+) && !$_REQUEST['from_course_session']) {
     api_protect_admin_script(true);
+} elseif ($_REQUEST['from_course_session'] == 1) {
+    api_protect_teacher_script(true);
 }
 
 //Search features

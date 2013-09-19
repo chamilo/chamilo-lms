@@ -235,7 +235,10 @@ class SessionManager
 		if (api_is_session_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false') {
 			$where.=" AND s.session_admin_id = $user_id ";
 		}
-
+        
+        if (api_is_allowed_to_edit() && !api_is_platform_admin()) {
+            $where.=" AND s.id_coach = $user_id ";
+        }
 		$coach_name = " CONCAT(u.lastname , ' ', u.firstname) as coach_name ";
 
 		if (api_is_western_name_order()) {
@@ -1833,6 +1836,14 @@ class SessionManager
             if ($session_info['session_admin_id'] != api_get_user_id()) {
                 api_not_allowed(true);
             }
+        }
+    }
+    
+    static function protect_teacher_session_edit($id) {
+        if (!api_is_coach($id) && !api_is_platform_admin()) {
+           api_not_allowed(true);
+        } else {
+            return true;
         }
     }
 

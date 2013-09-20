@@ -4,7 +4,7 @@
 namespace ChamiloLMS\Transaction;
 
 use Exception as Exception;
-use ChamiloLMS\Transaction\Plugin\WrapPluginInterface;
+use ChamiloLMS\Transaction\Plugin\WrapperPluginInterface;
 use ChamiloLMS\Transaction\Plugin\WrapException;
 use ChamiloLMS\Transaction\Plugin\UnwrapException;
 
@@ -57,18 +57,18 @@ class Envelope
      *   - 'blob': A string containing the envelope in raw form.
      *   - 'wrapper_plugin': A ChamiloLMS\WrapperPluginInterface object.
      */
-    public function __construct(WrapPluginInterface $wrapper_plugin, $data)
+    public function __construct(WrapperPluginInterface $wrapper_plugin, $data)
     {
         $this->wrapperPlugin = $wrapper_plugin;
         if (empty($data['transactions']) && empty($data['blob'])) {
             throw new Exception('Cannot create a envelope without transactions neither a blob.');
         }
         if (!empty($data['transactions'])) {
-            $this->transactions = $transactions;
+            $this->transactions = $data['transactions'];
             $this->state |= self::STATE_OPEN;
         }
         if (!empty($data['blob'])) {
-            $this->blob = $blob;
+            $this->blob = $data['blob'];
             $this->state |= self::STATE_CLOSED;
         }
     }

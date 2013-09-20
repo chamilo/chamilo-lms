@@ -112,6 +112,7 @@ class Envelope
         try {
             $this->prepare();
             $this->blob = $this->wrapperPlugin->wrap($this->transactions);
+            $this->state |= self::STATE_CLOSED;
         }
         catch (Exception $exception) {
             throw new WrapException('Unable to wrap correctly the transactions. ' . $exception->getMessage());
@@ -130,6 +131,7 @@ class Envelope
         }
         try {
             $this->transactions = $this->wrapperPlugin->unwrap($this);
+            $this->state |= self::STATE_OPEN;
         }
         catch (Exception $exception) {
             throw new UnwrapException('Unable to unwrap correctly the envelope. ' . $exception->getMessage());

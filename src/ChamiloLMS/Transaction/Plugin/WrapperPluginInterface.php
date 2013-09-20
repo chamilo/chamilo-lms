@@ -25,7 +25,7 @@ interface WrapperPluginInterface
     public function wrap($transactions);
 
     /**
-     * Wraps a list of transactions.
+     * Unwraps a list of transactions.
      *
      * @param string $envelope_blob
      *   The transactions wrapped with the corresponding wrap() method.

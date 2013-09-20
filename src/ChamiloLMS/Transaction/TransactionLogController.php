@@ -5,6 +5,7 @@ namespace ChamiloLMS\Transaction;
 
 use Database;
 use Exception as Exception;
+use ChamiloLMS\Transaction\Plugin\WrapperPluginInterface;
 // See comment at getTransactionClass().
 use ChamiloLMS\Transaction\ExerciseAttemptTransactionLog;
 
@@ -292,6 +293,54 @@ class TransactionLogController
         );
 
         return '\ChamiloLMS\Transaction\\' . $map[$action];
+    }
+
+    /**
+     * Generates an envelope from transactions.
+     *
+     * @param array $transactions
+     *   The list of TransactionLog objects to be included.
+     * @param WrapperPluginInterface $wrapper
+     *   The wrapper to use to create the envelope.
+     *
+     * @return mixed
+     *   The generated Envelope object or FALSE on error.
+     */
+    public function makeEnvelopeFromTransactions($transactions, WrapperPluginInterface $wrapper)
+    {
+        try {
+            $data = array('transactions' => $transactions);
+            return new Envelope($wrapper, $data);
+        }
+        catch (Exception $exception) {
+            // @fixme Log to table!
+            $message = sprintf('Error creating the envelope: %s', $exception->getMessage());
+            return FALSE;
+        }
+    }
+
+    /**
+     * Generates an envelope from an envelope blob.
+     *
+     * @param string $blob
+     *   The envelop blob.
+     * @param WrapperPluginInterface $wrapper
+     *   The wrapper to use to create the envelope.
+     *
+     * @return mixed
+     *   The generated Envelope object or FALSE on error.
+     */
+    public function makeEnvelopeFromBlob($transactions, WrapperPluginInterface $wrapper)
+    {
+        try {
+            $data = array('transactions' => $transactions);
+            return new Envelope($wrapper, $data);
+        }
+        catch (Exception $exception) {
+            // @fixme Log to table!
+            $message = sprintf('Error creating the envelope: %s', $exception->getMessage());
+            return FALSE;
+        }
     }
 
     /**

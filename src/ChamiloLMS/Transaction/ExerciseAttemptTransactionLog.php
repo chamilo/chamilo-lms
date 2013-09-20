@@ -3,7 +3,8 @@
 
 namespace ChamiloLMS\Transaction;
 
-use Exercise as Exercise;
+use Exercise;
+use Database;
 
 /**
  * Exercise tool attempt transaction.
@@ -34,19 +35,32 @@ class ExerciseAttemptTransactionLog extends TransactionLog
             throw new TransactionExportException('Undefined item_id');
         }
         $attempt_id = $this->item_id;
-        $attempt = get_exercise_results_by_attempt($attempt_id);
-        if (empty($attempt)) {
-            throw new TransactionExportException(sprintf('There is no exercise attempt information associated with exe_id "%d" in the database.', $attempt_id));
+
+        // Get course id.
+        // @todo Maybe suggest to convert getStatTrackExerciseInfoByExeId into
+        // static to avoid this query. aka Exercise constructor needs a course
+        // id.
+        $attempts_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $rows = Database::select('c_id', $attempts_table, array('where' => array('exe_id = ?' => array($attempt_id))));
+        if (empty($rows[0]['c_id'])) {
+            throw new TransactionExportException(sprintf('Coud not find a valid course id associated with the exe_id "%d" in the database.', $attempt_id));
         }
-        $exercise = new Exercise();
+        $course_id = $rows[0]['c_id'];
+        // Get stat info.
+        $exercise = new Exercise($course_id);
         $exercise_stat_info = $exercise->getStatTrackExerciseInfoByExeId($attempt_id);
         if (empty($exercise_stat_info)) {
             throw new TransactionExportException(sprintf('There is no exercise stat information associated with exe_id "%d" in the database.', $attempt_id));
         }
-        // Exercise read expects course id set.
-        $exercise->course_id = $exercise_stat_info['c_id'];
+        // Exercise read() expects course id set.
+        $exercise->course_id = $course_id;
         if (!$exercise->read($exercise_stat_info['exe_exo_id'])) {
             throw new TransactionExportException(sprintf('The associated exercise id "%d" does not currently exist in the database.', $exercise_stat_info['exe_exo_id']));
+        }
+        // Get attempt info.
+        $attempt = get_exercise_results_by_attempt($attempt_id);
+        if (empty($attempt)) {
+            throw new TransactionExportException(sprintf('There is no exercise attempt information associated with exe_id "%d" in the database.', $attempt_id));
         }
 
         // Prepare the export.

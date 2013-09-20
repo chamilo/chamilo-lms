@@ -344,10 +344,11 @@ class TransactionLogController
     }
 
     /**
-     * Exports a set of transactions to a file.
+     * Exports a set of transactions.
      *
-     * @param string $filepath
-     *   The path to the file where the exported transactions will be stored.
+     * Adds extra information to the transaction objects to be used out of the
+     * system.
+     *
      * @param array $transactions
      *   The list of TransactionLog objects to be exported.
      *
@@ -356,26 +357,18 @@ class TransactionLogController
      *   - 'success': A set of transaction ids correctly added.
      *   - 'fail': A set of transaction ids that failed to be added.
      */
-    public function exportToFile($filepath, $transactions)
+    public function exportTransactions(&$transactions)
     {
-        $transactions_to_persist = array();
+        $exported_transactions = array();
         $exported_ids = array(
             'success' => array(),
             'fail' => array(),
         );
 
-        if (!is_writable($filepath)) {
-            error_log(sprintf('%s::%s(): Unable to write the requested file "%s".', __CLASS__, __METHOD__, $filepath));
-            foreach ($transactions as $transaction) {
-                $exported_ids['fail'][] = $transaction->id;
-            }
-            return $exported_ids;
-        }
-
         foreach ($transactions as $transaction) {
             try {
                 $transaction->export();
-                $transactions_to_persist[] = $transaction;
+                $exported_transactions[] = $transaction;
                 $exported_ids['success'][] = $transaction->id;
             } catch (Exception $export_exception) {
                 error_log($export_exception->getMessage());
@@ -383,9 +376,35 @@ class TransactionLogController
             }
         }
 
-        file_put_contents($filepath, json_encode($transactions_to_persist));
-
         return $exported_ids;
+    }
+
+    /**
+     * Exports a set of transactions to a file.
+     *
+     * @fixme Use log table.
+     *
+     * @param string $filepath
+     *   The path to the file where the exported transactions will be stored.
+     * @param array $transactions
+     *   The list of TransactionLog objects to be exported.
+     *
+     * @return boolean
+     *   Either true on success or false on failure.
+     */
+    public function writeEnvelope($filepath, Envelope $envelope)
+    {
+        try {
+            $envelope->wrap();
+            if (file_put_contents($filepath, $envelope->getBlob())) {
+                return TRUE;
+            }
+            error_log(sprintf('%s::%s(): Evelope wrapped, but unable to write the requested file "%s".', __CLASS__, __METHOD__, $filepath));
+            return FALSE;
+        }
+        catch (Exception $e) {
+            error_log(sprintf('%s::%s(): Problem wrapping the Evelope: %s.', __CLASS__, __METHOD__, $e->getMessage()));
+        }
     }
 
     /**

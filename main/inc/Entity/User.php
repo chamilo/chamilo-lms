@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 use Symfony\Component\Validator\Constraints\DateTime;
 use ChamiloLMS\Component\Auth;
 
@@ -21,7 +22,7 @@ use ChamiloLMS\Component\Auth;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="Entity\Repository\UserRepository")
  */
-class User implements AdvancedUserInterface, \Serializable
+class User implements AdvancedUserInterface, \Serializable , EquatableInterface
 {
     /**
      * @var integer
@@ -240,7 +241,7 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $roles;
 
-     /**
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $salt;
@@ -265,6 +266,51 @@ class User implements AdvancedUserInterface, \Serializable
         $this->curriculumItems = new ArrayCollection();
         $this->salt = sha1(uniqid(null, true));
         $this->isActive = true;
+        $this->registrationDate = new \DateTime();
+        $this->curriculumItems = new ArrayCollection();
+    }
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        /*$metadata->addPropertyConstraint('firstname', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('lastname', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('email', new Assert\Email());
+
+        $metadata->addConstraint(new UniqueEntity(array(
+            'fields'  => 'username',
+            'message' => 'This username already exists.',
+        )));
+
+        $metadata->addPropertyConstraint('username', new Assert\Length(array(
+            'min'        => 2,
+            'max'        => 50,
+            'minMessage' => 'Your username must be at least {{ limit }} characters length',
+            'maxMessage' => 'Your username cannot be longer than {{ limit }} characters length',
+        )));*/
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isEqualTo(UserInterface $user)
+    {
+        if (!$user instanceof User) {
+            return false;
+        }
+
+        if ($this->password !== $user->getPassword()) {
+            return false;
+        }
+
+        if ($this->getSalt() !== $user->getSalt()) {
+            return false;
+        }
+
+        if ($this->username !== $user->getUsername()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -273,6 +319,14 @@ class User implements AdvancedUserInterface, \Serializable
     public function getCurriculumItems()
     {
         return $this->curriculumItems;
+    }
+
+    /**
+     * @param $items
+     */
+    public function setCurriculumItems($items)
+    {
+        $this->curriculumItems = $items;
     }
 
     /**
@@ -379,7 +433,7 @@ class User implements AdvancedUserInterface, \Serializable
             $this->salt,
             $this->password,
             $this->isActive
-        ) = \unserialize($serialized);
+            ) = \unserialize($serialized);
     }
 
     /**

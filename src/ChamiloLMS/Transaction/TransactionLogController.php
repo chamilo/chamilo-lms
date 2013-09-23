@@ -5,7 +5,10 @@ namespace ChamiloLMS\Transaction;
 
 use Database;
 use Exception as Exception;
+use Entity\BranchSync;
 use ChamiloLMS\Transaction\Plugin\WrapperPluginInterface;
+use ChamiloLMS\Transaction\Plugin\SendPluginInterface;
+use ChamiloLMS\Transaction\Plugin\ReceivePluginInterface;
 // See comment at getTransactionClass().
 use ChamiloLMS\Transaction\ExerciseAttemptTransactionLog;
 
@@ -461,6 +464,66 @@ class TransactionLogController
         catch (Exception $e) {
             error_log(sprintf('%s::%s(): Problem wrapping the Evelope: %s.', __CLASS__, __METHOD__, $e->getMessage()));
         }
+    }
+
+    /**
+     * Sends an envelope to a branch.
+     *
+     * It uses local configuration to figure out how to send it.
+     *
+     * @fixme Use log table.
+     *
+     * @param Envelope $envelope
+     *   The transactions envelope.
+     * @param BranchSync $branch
+     *   The destination branch where to send the envelope.
+     *
+     * @return boolean
+     *   Either true on success or false on failure.
+     */
+    public function sendEnvelope(Envelope $envelope, BranchSync $branch)
+    {
+        try {
+            $send_plugin = $this->createPlugin('send', $branch->getPluginSend());
+            $send_plugin->send($envelope, $branch);
+            return TRUE;
+        }
+        catch (Exception $exception) {
+            error_log(sprintf('%s::%s(): Problem sending an Evelope: %s.', __CLASS__, __METHOD__, $exception->getMessage()));
+        }
+        return FALSE;
+    }
+
+    /**
+     * Receives envelopes for local install.
+     *
+     * It uses local configuration to figure out how to send it.
+     *
+     * @fixme Use log table.
+     *
+     * @param integer $limit
+     *   The maximum allowed envelopes to receive. 0 means unlimited.
+     *
+     * @return array|boolean
+     *   A list of envelope objects received or false on failure.
+     */
+    public function receiveEnvelopeData($limit = 0)
+    {
+        try {
+            // @fixme: Use the right API to retrieve the branch object.
+            //$receive_plugin = $this->createPlugin('receive', $branch->getPluginReceive());
+            $is_local_branch = array('id = ?' => array(TransactionLog::BRANCH_LOCAL));
+            $branch_sync_table = Database::get_main_table(TABLE_BRANCH_SYNC);
+            $row = Database::select('plugin_receive', $branch_sync_table, array('where' => $is_local_branch));
+            $row = array_shift($row);
+            $receive_plugin = $this->createPlugin('receive', $row['plugin_receive']);
+            $envelopes = $receive_plugin->receive($limit);
+            return $envelopes;
+        }
+        catch (Exception $exception) {
+            error_log(sprintf('%s::%s(): Problem receiving envelopes: %s.', __CLASS__, __METHOD__, $exception->getMessage()));
+        }
+        return FALSE;
     }
 
     /**

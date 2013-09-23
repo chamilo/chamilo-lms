@@ -911,6 +911,12 @@ if (api_is_course_admin() && $origin != 'learnpath') {
     echo '</div>';
 }
 
+// Timer control.
+if ($time_control) {
+    echo $objExercise->returnTimeLeftDiv();
+	echo '<div style="display:none" class="warning-message" id="expired-message-id">'.get_lang('ExerciceExpiredTimeMessage').'</div>';
+}
+
 if ($objExercise->type == ONE_PER_PAGE) {
     echo $objExercise->getProgressPagination(
         $exe_id,
@@ -979,11 +985,6 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) && $_custom['exercise
 	}
 }
 
-// Timer control.
-if ($time_control) {
-    echo $objExercise->returnTimeLeftDiv();
-	echo '<div style="display:none" class="warning-message" id="expired-message-id">'.get_lang('ExerciceExpiredTimeMessage').'</div>';
-}
 
 if (!empty($objExercise->description)) {
     echo '<br />';

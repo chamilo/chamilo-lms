@@ -108,12 +108,12 @@ $app['security.encoder.digest'] = $app->share(function($app) {
 });
 
 // What to do when login success?
-$app['security.authentication.success_handler.admin'] = $app->share(function($app) {
+$app['security.authentication.success_handler.secured'] = $app->share(function($app) {
     return new ChamiloLMS\Component\Auth\LoginSuccessHandler($app['url_generator'], $app['security']);
 });
 
 // What to do when logout?
-$app['security.authentication.logout_handler.admin'] = $app->share(function($app) {
+$app['security.authentication.logout_handler.secured'] = $app->share(function($app) {
     return new ChamiloLMS\Component\Auth\LogoutSuccessHandler($app['url_generator'], $app['security']);
 });
 
@@ -176,14 +176,14 @@ $app['security.access_manager'] = $app->share(function($app) {
 // Setting Controllers as services provider.
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
-// Validator provider.
-$app->register(new Silex\Provider\ValidatorServiceProvider());
-
 // Implements Symfony2 translator.
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'locale' => 'en',
     'locale_fallback' => 'en'
 ));
+
+// Validator provider.
+$app->register(new Silex\Provider\ValidatorServiceProvider());
 
 // Form provider
 $app->register(new Silex\Provider\FormServiceProvider(), array(

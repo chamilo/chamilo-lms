@@ -323,7 +323,14 @@ class UniqueAnswer extends Question
         if (!empty($this->id)) {
             $form->setDefaults($defaults);
         } else {
+            // Auto fill question
             if ($this->isContent == 1) {
+                $form->setDefaults($defaults);
+            } else {
+                // Default values
+                $defaults = array();
+                $defaults['weighting[1]'] = 1;
+                $defaults['correct'] = 1;
                 $form->setDefaults($defaults);
             }
         }

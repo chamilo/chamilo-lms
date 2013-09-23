@@ -18,8 +18,10 @@ msgstr "No, deseo regresar al examen."
 msgid "YesImSure"
 msgstr "Si, estoy seguro."
 
-
 msgid "BadCredentials"
+msgstr "Los datos suministrados son incorrectos"
+
+msgid "Bad credentials"
 msgstr "Los datos suministrados son incorrectos"
 
 

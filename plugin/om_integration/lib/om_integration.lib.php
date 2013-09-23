@@ -3,6 +3,7 @@ include_once 'services/getSession/getSession.class.php';
 include_once 'services/loginUser/loginUser.class.php';
 include_once 'services/addRoomWithModerationAndExternalType/addRoomWithModerationAndExternalType.class.php';
 include_once 'services/getRoomWithCurrentUsersById/getRoomWithCurrentUsersById.class.php';
+include_once 'services/setUserObjectAndGenerateRoomHashByURLAndRecFlag/setUserObjectAndGenerateRoomHashByURLAndRecFlag.class.php';
 /**
  * Open Meetings-Chamilo connector class
  */
@@ -110,7 +111,7 @@ class om_integration {
         $objAddRoom->isDemoRoom = false;
         $objAddRoom->demoTime = false;
         $objAddRoom->isModeratedRoom = $isModerated;
-        $objAddRoom->externalRoomType = 'Chamilo';
+        $objAddRoom->externalRoomType = 'chamilo';
         
         $omServices = new SoapClient( $urlWsdl );
         $adFun = $omServices->addRoomWithModerationAndExternalType( $objAddRoom );
@@ -146,6 +147,7 @@ class om_integration {
      * @assert ('abcdefghijklmnopqrstuvwxyzabcdefghijklmno') === false
      */
     function join_meeting($meetingid) {
+        
         if (empty($meetingid)) { return false; }
         $pass = $this->get_user_meeting_password();
         $meeting_data = Database::select('*', $this->table, array('where' => array('id = ? AND status = 1 ' => $meetingid)), 'first');
@@ -153,35 +155,23 @@ class om_integration {
             if ($this->debug) error_log("meeting does not exist: $meetingid ");
             return false;
         }
+        
+       $params = array( 'room_id' => $meetingid );
+       $returnVal = $this->setUserObjectAndGenerateRoomHashByURLAndRecFlag( $params );
+       $urlWithoutProtocol = str_replace("http://",  CONFIG_OMSERVER_BASE_URL);
+       $imgWithoutProtocol = str_replace("http://", $_SESSION['_user']['avatar'] );
 
-        $meeting_is_running_info = $this->api->isMeetingRunningWithXmlResponseArray($meeting_data['id']);
-        $meeting_is_running = $meeting_is_running_info['running'] == 'true' ? true : false;
+       $iframe = CONFIG_OMSERVER_BASE_URL . "/?" .
+                "secureHash=" . $returnVal . 
+                "&scopeRoomId=" . $meeting_data['id'] .
+                "&language=" . "" . 
+                "&picture=" . $imgWithoutProtocol . 
+                "&user_id=". $_SESSION['_user']['user_id'] . 
+                "&chamiloRoom=1" .   
+                "&wwwroot=" . $urlWithoutProtocol;
+       
+       printf("<iframe src='%s' width='%s' height = '%s' />", $iframe, "100%", 640);
 
-        if ($this->debug) error_log("meeting is running: ".$meeting_is_running);
-
-        $params = array(
-			'meetingId' => $meeting_data['id'],	//	-- REQUIRED - The unique id for the meeting
-			'password' => $this->get_mod_meeting_password()		//	-- REQUIRED - The moderator password for the meeting
-		);
-
-        $meeting_info_exists = $this->get_meeting_info($params);
-
-        if (isset($meeting_is_running) && $meeting_info_exists) {
-            $joinParams = array(
-                'meetingId' => $meeting_data['id'],	//	-- REQUIRED - A unique id for the meeting
-                'username' => $this->user_complete_name,	//-- REQUIRED - The name that will display for the user in the meeting
-                'password' => $pass,			//-- REQUIRED - The attendee or moderator password, depending on what's passed here
-                //'createTime' => api_get_utc_datetime(),			//-- OPTIONAL - string. Leave blank ('') unless you set this correctly.
-                'userID' => api_get_user_id(),				//-- OPTIONAL - string
-                'webVoiceConf' => ''	//	-- OPTIONAL - string
-            );
-            $url = $this->api->getJoinMeetingURL($joinParams);
-            $url = $this->protocol.$url;
-        } else {
-            $url = $this->logout_url;
-        }
-        if ($this->debug) error_log("return url :".$url);
-        return $url;
     }
     /**
      * Checks if the videoconference server is running.
@@ -229,6 +219,46 @@ class om_integration {
         }
         return false;
     }
+    
+    /**
+     * Gets all the course meetings saved in the plugin_bbb_meeting table
+     * @return array Array of current open meeting rooms
+     */
+    function setUserObjectAndGenerateRoomHashByURLAndRecFlag( $params ) {
+            
+        $username = $_SESSION['_user']['username'];
+        $firstname = $_SESSION['_user']['firstname'];
+        $lastname = $_SESSION['_user']['lastname'];
+	$profilePictureUrl = $_SESSION['_user']['avatar'];
+        $email = $_SESSION['_user']['mail'];
+        $userId = $_SESSION['_user']['user_id'];
+        $systemType = 'chamilo';
+        $room_id = $params['room_id'];
+        $becomeModerator = ( $this->is_teacher() ? 1 : 0 );
+        $allowRecording = 1; //Provisional
+        
+        $urlWsdl = CONFIG_OMSERVER_BASE_URL . "/services/UserService?wsdl";
+	$omServices = new SoapClient( $urlWsdl );
+        $objRec = new setUserObjectAndGenerateRoomHashByURLAndRecFlag();
+       
+        $objRec->SID = $this->sessionId;
+        $objRec->username = $username;
+        $objRec->firstname = $firstname;
+        $objRec->lastname = $lastname;
+        $objRec->profilePictureUrl = $profilePictureUrl;
+        $objRec->email = $email;
+        $objRec->externalUserId = $userId;
+        $objRec->externalUserType = $systemType;
+        $objRec->room_id = $room_id;
+        $objRec->becomeModeratorAsInt = $becomeModerator;
+        $objRec->showAudioVideoTestAsInt = 1;
+        $objRec->allowRecording = $allowRecording;
+        
+        $rcFn = $omServices->setUserObjectAndGenerateRoomHashByURLAndRecFlag($objRec);
+
+        return $rcFn->return;
+    }
+    
     /**
      * Gets all the course meetings saved in the plugin_bbb_meeting table
      * @return array Array of current open meeting rooms
@@ -285,61 +315,61 @@ class om_integration {
 
             $record_array = array();
 
-            if ($meeting_db['record'] == 1) {
-                $recordingParams = array(
-                    'meetingId' => $meeting_db['id'],		//-- OPTIONAL - comma separate if multiple ids
-                );
-
-                //To see the recording list in your BBB server do: bbb-record --list
-                $records = $this->api->getRecordingsWithXmlResponseArray($recordingParams);
-                if (!empty($records)) {
-                    $count = 1;
-                    if (isset($records['message']) && !empty($records['message'])) {
-                        if ($records['messageKey'] == 'noRecordings') {
-                            $record_array[] = get_lang('NoRecording');
-                        } else {
-                            //$record_array[] = $records['message'];
-                        }
-                    } else {
-                        foreach ($records as $record) {
-                            if (is_array($record) && isset($record['recordId'])) {
-                                $url = Display::url(get_lang('ViewRecord'), $record['playbackFormatUrl'], array('target' => '_blank'));
-                                if ($this->is_teacher()) {
-                                    $url .= Display::url(Display::return_icon('link.gif',get_lang('CopyToLinkTool')), api_get_self().'?action=copy_record_to_link_tool&id='.$meeting_db['id'].'&record_id='.$record['recordId']);
-                                    $url .= Display::url(Display::return_icon('agenda.png',get_lang('AddToCalendar')), api_get_self().'?action=add_to_calendar&id='.$meeting_db['id'].'&start='.api_strtotime($meeting_db['created_at']).'&url='.$record['playbackFormatUrl']);
-                                    $url .= Display::url(Display::return_icon('delete.png',get_lang('Delete')), api_get_self().'?action=delete_record&id='.$record['recordId']);
-                                }
-                                //$url .= api_get_self().'?action=publish&id='.$record['recordID'];
-                                $count++;
-                                $record_array[] = $url;
-                            } else {
-                               
-                            }
-                        }
-                    }
-                }
-                //var_dump($record_array);
-                $item['show_links']  = implode('<br />', $record_array);
-               
-            }
-
-            $item['created_at'] = api_convert_and_format_date($meeting_db['created_at']);
-            //created_at
-
-            $item['publish_url'] = api_get_self().'?action=publish&id='.$meeting_db['id'];
-            $item['unpublish_url'] = api_get_self().'?action=unpublish&id='.$meeting_db['id'];
-
-            if ($meeting_db['status'] == 1) {
-                $joinParams = array(
-                    'meetingId' => $meeting_db['id'],		//-- REQUIRED - A unique id for the meeting
-                    'username' => $this->user_complete_name,	//-- REQUIRED - The name that will display for the user in the meeting
-                    'password' => $pass,			//-- REQUIRED - The attendee or moderator password, depending on what's passed here
-                    'createTime' => '',			//-- OPTIONAL - string. Leave blank ('') unless you set this correctly.
-                    'userID' => '',			//	-- OPTIONAL - string
-                    'webVoiceConf' => ''	//	-- OPTIONAL - string
-                );
-                $item['go_url'] = $this->protocol.$this->api->getJoinMeetingURL($joinParams);
-            }
+//            if ($meeting_db['record'] == 1) {
+//                $recordingParams = array(
+//                    'meetingId' => $meeting_db['id'],		//-- OPTIONAL - comma separate if multiple ids
+//                );
+//
+//                //To see the recording list in your BBB server do: bbb-record --list
+//                $records = $this->api->getRecordingsWithXmlResponseArray($recordingParams);
+//                if (!empty($records)) {
+//                    $count = 1;
+//                    if (isset($records['message']) && !empty($records['message'])) {
+//                        if ($records['messageKey'] == 'noRecordings') {
+//                            $record_array[] = get_lang('NoRecording');
+//                        } else {
+//                            //$record_array[] = $records['message'];
+//                        }
+//                    } else {
+//                        foreach ($records as $record) {
+//                            if (is_array($record) && isset($record['recordId'])) {
+//                                $url = Display::url(get_lang('ViewRecord'), $record['playbackFormatUrl'], array('target' => '_blank'));
+//                                if ($this->is_teacher()) {
+//                                    $url .= Display::url(Display::return_icon('link.gif',get_lang('CopyToLinkTool')), api_get_self().'?action=copy_record_to_link_tool&id='.$meeting_db['id'].'&record_id='.$record['recordId']);
+//                                    $url .= Display::url(Display::return_icon('agenda.png',get_lang('AddToCalendar')), api_get_self().'?action=add_to_calendar&id='.$meeting_db['id'].'&start='.api_strtotime($meeting_db['created_at']).'&url='.$record['playbackFormatUrl']);
+//                                    $url .= Display::url(Display::return_icon('delete.png',get_lang('Delete')), api_get_self().'?action=delete_record&id='.$record['recordId']);
+//                                }
+//                                //$url .= api_get_self().'?action=publish&id='.$record['recordID'];
+//                                $count++;
+//                                $record_array[] = $url;
+//                            } else {
+//                               
+//                            }
+//                        }
+//                    }
+//                }
+//                //var_dump($record_array);
+//                $item['show_links']  = implode('<br />', $record_array);
+//               
+//            }
+//
+//            $item['created_at'] = api_convert_and_format_date($meeting_db['created_at']);
+//            //created_at
+//
+//            $item['publish_url'] = api_get_self().'?action=publish&id='.$meeting_db['id'];
+//            $item['unpublish_url'] = api_get_self().'?action=unpublish&id='.$meeting_db['id'];
+//
+//            if ($meeting_db['status'] == 1) {
+//                $joinParams = array(
+//                    'meetingId' => $meeting_db['id'],		//-- REQUIRED - A unique id for the meeting
+//                    'username' => $this->user_complete_name,	//-- REQUIRED - The name that will display for the user in the meeting
+//                    'password' => $pass,			//-- REQUIRED - The attendee or moderator password, depending on what's passed here
+//                    'createTime' => '',			//-- OPTIONAL - string. Leave blank ('') unless you set this correctly.
+//                    'userID' => '',			//	-- OPTIONAL - string
+//                    'webVoiceConf' => ''	//	-- OPTIONAL - string
+//                );
+//                $item['go_url'] = $this->protocol.$this->api->getJoinMeetingURL($joinParams);
+//            }
             $item = array_merge($item, $meeting_db, $meeting_om);
             $new_meeting_list[] = $item;
         }

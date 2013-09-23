@@ -33,8 +33,9 @@ if ($om->plugin_enabled) {
                 }
             } else {
                 if ( $om->is_teacher() && $om->loginUser()) {
-                    $url = $om->create_meeting($meeting_params);
-                    header('location: '.$url);
+                    //$url = 
+                    $om->create_meeting($meeting_params);
+                    //header('location: '.$url);
                     exit;
                 } else {
                     $url = 'listing.php';

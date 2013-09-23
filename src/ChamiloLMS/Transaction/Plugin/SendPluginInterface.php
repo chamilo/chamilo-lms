@@ -19,9 +19,6 @@ interface SendPluginInterface
      * @param BranchSync $branch
      *   The destination branch where to send the envelope.
      *
-     * @return boolean
-     *   Either true on success of FALSE on failure.
-     *
      * @throws SendException
      *   When there is an error on the sending process.
      */

@@ -390,6 +390,10 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
         return $roles;
     }
 
+    /**
+     * @param $role
+     * @return $this
+     */
     public function setRoles($role)
     {
         $this->roles->add($role);

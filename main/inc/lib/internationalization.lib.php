@@ -1096,16 +1096,9 @@ function api_get_person_name($first_name, $last_name, $title = null, $format = n
             switch ($format) {
                 case PERSON_NAME_COMMON_CONVENTION:
                     $valid[$format][$language] = _api_get_person_name_convention($language, 'format');
-
-                    $username_order_from_database = api_get_setting('user_name_order');
-                    if (isset($username_order_from_database) && !empty($username_order_from_database)) {
-                        if (strpos($username_order_from_database, '%t') == false || strpos(
-                            $username_order_from_database,
-                            '%l'
-                        ) == false || strpos($username_order_from_database, '%f') == false
-                        ) {
-                            $valid[$format][$language] = $username_order_from_database;
-                        }
+                    $usernameOrderFromDatabase = api_get_setting('user_name_order');
+                    if (isset($usernameOrderFromDatabase) && !empty($usernameOrderFromDatabase)) {
+                        $valid[$format][$language] = $usernameOrderFromDatabase;
                     }
                     break;
                 case PERSON_NAME_WESTERN_ORDER:
@@ -1182,6 +1175,11 @@ function api_is_western_name_order($format = null, $language = null)
  */
 function api_sort_by_first_name($language = null)
 {
+    $userNameSortBy = api_get_setting('user_name_sort_by');
+    if (!empty($userNameSortBy) && in_array($userNameSortBy, array('firstname', 'lastname'))) {
+        return $userNameSortBy == 'firstname' ? true : false;
+    }
+
     static $sort_by_first_name = array();
 
     $language_is_supported = api_is_language_supported($language);

@@ -185,8 +185,9 @@ function _api_get_person_name_convention($language, $type) {
     $language = api_purify_language_id($language);
     if (!isset($conventions)) {
         $file = dirname(__FILE__).'/internationalization_database/name_order_conventions.php';
+
         if (file_exists($file)) {
-            $conventions = include ($file);
+            $conventions = include $file;
         } else {
             $conventions = array('english' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'));
         }

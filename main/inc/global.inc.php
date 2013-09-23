@@ -712,6 +712,10 @@ $app->before(
                     }
                 }
 
+                $translator->addLoader('xlf', new Symfony\Component\Translation\Loader\XliffFileLoader());
+                $translator->addResource('xlf', api_get_path(SYS_PATH).'vendor/symfony/src/Symfony/Bundle/FrameworkBundle/Resources/translations/validators.sr_Latn.xlf', 'sr_Latn', 'validators');
+
+
                 /*$translator->addLoader('mofile', new MoFileLoader());
                 $filePath = api_get_path(SYS_PATH).'main/locale/'.$locale.'.mo';
                 if (!file_exists($filePath)) {
@@ -720,6 +724,10 @@ $app->before(
                 $translator->addResource('mofile', $filePath, $locale);*/
                 return $translator;
             }
+
+
+
+
         }));
 
         // Check if we are inside a Chamilo course tool

@@ -724,6 +724,10 @@ $app->before(
                 $translator->addResource('mofile', $filePath, $locale);*/
                 return $translator;
             }
+
+
+
+
         }));
 
         // Check if we are inside a Chamilo course tool

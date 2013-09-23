@@ -15,7 +15,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use Symfony\Component\Validator\Constraints\DateTime;
 use ChamiloLMS\Component\Auth;
-//* @Assert\UniqueEntity(fields={"username"})
 
 /**
  * User

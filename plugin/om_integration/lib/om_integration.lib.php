@@ -4,6 +4,7 @@ include_once 'services/loginUser/loginUser.class.php';
 include_once 'services/addRoomWithModerationAndExternalType/addRoomWithModerationAndExternalType.class.php';
 include_once 'services/getRoomWithCurrentUsersById/getRoomWithCurrentUsersById.class.php';
 include_once 'services/setUserObjectAndGenerateRoomHashByURLAndRecFlag/setUserObjectAndGenerateRoomHashByURLAndRecFlag.class.php';
+include_once 'services/closeRoom/closeRoom.class.php';
 /**
  * Open Meetings-Chamilo connector class
  */
@@ -374,5 +375,16 @@ class om_integration {
             $new_meeting_list[] = $item;
         }
         return $new_meeting_list;
+    }
+    function end_meeting( $meetingId ){
+        $urlWsdl = CONFIG_OMSERVER_BASE_URL . "/services/RoomService?wsdl";
+	$omServices = new SoapClient( $urlWsdl );
+        $objClose = new closeRoom();
+        
+        $objClose->SID = $this->sessionId;
+        $objClose->room_id = $meetingId;
+        $objClose->status = false;
+        
+        $omServices->closeRoom( $objClose );
     }
 }

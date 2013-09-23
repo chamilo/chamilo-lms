@@ -877,8 +877,4 @@ if (isset($app['configuration']['main_database']) && isset($app['db.event_manage
     $app['dbs.event_manager']['db_write']->addEventSubscriber($loggableListener);
 }
 
-// Fixes uses of $_course in the scripts.
-$_course = api_get_course_info();
-$_cid = api_get_course_id();
-
 return $app;

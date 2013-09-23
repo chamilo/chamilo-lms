@@ -273,6 +273,27 @@ class TransactionLogController
     }
 
     /**
+     * Creates a new plugin object based on passed information.
+     *
+     * @param string $plugin_type
+     *   Either 'wrapper', 'send' or 'receive'.
+     * @param string $plugin_name
+     *   The machine name of the plugin.
+     * @param array $data
+     *   See the plugin type constructor.
+     *
+     * @return mixed
+     *   Either a WrapperPluginInterface, SendPluginInterface or
+     *   ReceivePluginInterface object.
+     */
+    public static function createPlugin($plugin_type, $plugin_name, $data = array())
+    {
+        $class_name = self::getPluginClass($plugin_type, $plugin_name);
+
+        return new $class_name($data);
+    }
+
+    /**
      * Returns the class name related with the action passed.
      *
      * @param string $action
@@ -293,6 +314,41 @@ class TransactionLogController
         );
 
         return '\ChamiloLMS\Transaction\\' . $map[$action];
+    }
+
+    /**
+     * Returns the class name related with the machine name passed.
+     *
+     * @param string $plugin_type
+     *   Either 'wrapper', 'send' or 'receive'.
+     * @param string $plugin_name
+     *   The machine name of the plugin.
+     *
+     * @throws Exception
+     *   Class not yet mapped.
+     *
+     * @return string
+     *   The related plugin class name.
+     */
+    public static function getPluginClass($plugin_type, $plugin_name)
+    {
+        // Do the mapping manually for now.
+        $map = array(
+            'envelope' => array(
+                'json' => 'JsonWrapper',
+            ),
+            'send' => array(
+                'none' => 'NoneSendPlugin',
+            ),
+            'receive' => array(
+                'none' => 'NoneReceivePlugin',
+            ),
+        );
+
+        if (empty($map[$plugin_type][$plugin_name])) {
+            throw new Exception(sprintf('Could not find the plugin mapping for type "%s" and name "%s"', $plugin_type, $plugin_name));
+        }
+        return '\ChamiloLMS\Transaction\Plugin\\' . $map[$plugin_type][$plugin_name];
     }
 
     /**

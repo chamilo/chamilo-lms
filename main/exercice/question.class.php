@@ -1387,7 +1387,7 @@ abstract class Question
 
             $(function() {
                 $("#category_id").fcbkcomplete({
-                    json_url: "'.$url.'&a=search_category_parent&type=all&filter_by_global='.$this->exercise->getGlobalCategoryId().',
+                    json_url: "'.$url.'&a=search_category_parent&type=all&filter_by_global='.$this->exercise->getGlobalCategoryId().'",
                     maxitems: "'.$maxCategories.'",
                     addontab: false,
                     input_min_size: 1,

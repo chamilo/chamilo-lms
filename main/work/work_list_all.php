@@ -73,7 +73,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId)) {
         echo Display::return_icon('new_document.png', get_lang('AddDocument'), '', ICON_SIZE_MEDIUM).'</a>';
 
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_user.php?'.api_get_cidreq().'&id='.$workId.'">';
-        echo Display::return_icon('user.png', get_lang('AddUser'), '', ICON_SIZE_MEDIUM).'</a>';
+        echo Display::return_icon('user.png', get_lang('AddUsers'), '', ICON_SIZE_MEDIUM).'</a>';
     }
 
     $display_output .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_missing.php?'.api_get_cidreq().'&amp;id='.$workId.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without">'.

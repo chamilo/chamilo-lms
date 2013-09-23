@@ -56,10 +56,10 @@ switch ($action) {
 Display :: display_header(null);
 
 if (empty($docId)) {
-    echo Display::page_subheader(get_lang('DocumentsAdded'));
-
     $documents = getAllDocumentToWork($workId, api_get_course_int_id());
     if (!empty($documents)) {
+
+        echo Display::page_subheader(get_lang('DocumentsAdded'));
         echo '<div class="well">';
         foreach ($documents as $doc) {
             $documentId = $doc['document_id'];
@@ -75,7 +75,7 @@ if (empty($docId)) {
     }
 
     $document_tree = DocumentManager::get_document_preview($courseInfo, null, null, 0, false, '/', api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId);
-    echo Display::page_subheader(get_lang('DocumentToAdd'));
+    echo Display::page_subheader(get_lang('Documents'));
     echo $document_tree;
     echo '<hr /><div class="clear"></div>';
 
@@ -99,7 +99,9 @@ if (empty($docId)) {
 
         if (empty($data)) {
             addDocumentToWork($docId, $workId, api_get_course_int_id());
-            Display::display_confirmation_message(get_lang('Added'));
+            $url = api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId;
+            header('Location: '.$url);
+            exit;
         } else {
             Display::display_warning_message(get_lang('DocumentAlreadyAdded'));
         }

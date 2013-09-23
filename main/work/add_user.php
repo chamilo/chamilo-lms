@@ -44,7 +44,6 @@ $error_message = null;
 
 switch ($action) {
     case 'add':
-
         $data = getUserToWork($userId, $workId, api_get_course_int_id());
         if (empty($data)) {
             addUserToWork($userId, $workId, api_get_course_int_id());
@@ -52,7 +51,6 @@ switch ($action) {
         $url = api_get_path(WEB_CODE_PATH).'work/add_user.php?id='.$workId;
         header('Location: '.$url);
         exit;
-
         break;
     case 'delete':
         if (!empty($workId) && !empty($userId)) {
@@ -66,11 +64,10 @@ switch ($action) {
 
 Display :: display_header(null);
 
-echo Display::page_subheader(get_lang('UsersAdded'));
-
 $items = getAllUserToWork($workId, api_get_course_int_id());
 $usersAdded = array();
 if (!empty($items)) {
+    echo Display::page_subheader(get_lang('UsersAdded'));
     echo '<div class="well">';
     foreach ($items as $data) {
         $myUserId = $data['user_id'];

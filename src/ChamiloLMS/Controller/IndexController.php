@@ -256,10 +256,6 @@ class IndexController extends CommonController
         );
         $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));
         $html = $form->return_form();
-        /*if (api_get_setting('openid_authentication') == 'true') {
-            include_once 'main/auth/openid/login.php';
-            $html .= '<div>'.openid_form().'</div>';
-        }*/
 
         /** Verify if settings is active to set keyboard. Included extra class in form input elements */
 

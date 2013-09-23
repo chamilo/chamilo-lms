@@ -19,7 +19,7 @@ msgid "YesImSure"
 msgstr "Si, estoy seguro."
 
 
-msgid "Bad credentials"
+msgid "BadCredentials"
 msgstr "Los datos suministrados son incorrectos"
 
 

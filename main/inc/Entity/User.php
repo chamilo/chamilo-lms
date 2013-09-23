@@ -241,7 +241,7 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
      */
     private $roles;
 
-     /**
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $salt;

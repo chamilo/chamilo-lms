@@ -17,7 +17,11 @@ require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
-define('ADD_DOCUMENT_TO_WORK', false);
+if (isset($_configuration['add_document_to_work'])) {
+    define('ADD_DOCUMENT_TO_WORK', $_configuration['add_document_to_work']);
+} else {
+    define('ADD_DOCUMENT_TO_WORK', false);
+}
 
 /**
  * Displays action links (for admins, authorized groups members and authorized students)

@@ -73,8 +73,8 @@ if ($teacher) {
 $meetings = $om->get_course_meetings();
 if (!empty($meetings))  $meetings = array_reverse($meetings);
 
-$users_online = $om->participantCount;
-$status = !$om->isClosed;
+$users_online = $meetings->participantCount;
+$status = !$meetings->isClosed;
 $meeting_exists = 1;//$om->meeting_exists(api_get_course_id());
 $show_join_button = false;
 if ($meeting_exists || $teacher) {

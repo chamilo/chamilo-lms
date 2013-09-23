@@ -12,8 +12,10 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 use Symfony\Component\Validator\Constraints\DateTime;
 use ChamiloLMS\Component\Auth;
+//* @Assert\UniqueEntity(fields={"username"})
 
 /**
  * User
@@ -271,19 +273,21 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
 
     public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
-        /*$metadata->addConstraint(new UniqueEntity(array(
-            'fields'  => 'email',
-            'message' => 'This email already exists.',
-        )));
-        $metadata->addPropertyConstraint('email', new Assert\Email());*/
-        /*
+        /*$metadata->addPropertyConstraint('firstname', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('lastname', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('email', new Assert\Email());
+
         $metadata->addConstraint(new UniqueEntity(array(
             'fields'  => 'username',
             'message' => 'This username already exists.',
         )));
 
-        $metadata->addPropertyConstraint('username', new Assert\NotBlank());
-        $metadata->addPropertyConstraint('email', new Assert\Email());*/
+        $metadata->addPropertyConstraint('username', new Assert\Length(array(
+            'min'        => 2,
+            'max'        => 50,
+            'minMessage' => 'Your username must be at least {{ limit }} characters length',
+            'maxMessage' => 'Your username cannot be longer than {{ limit }} characters length',
+        )));*/
     }
 
     /**

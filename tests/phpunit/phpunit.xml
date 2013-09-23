@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="autoload.php"
+<phpunit bootstrap="bootstrap.php"
          backupGlobals="false"
          backupStaticAttributes="false"
-         colors="false"
+         colors="true"
          strict="true"
          verbose="true"
          convertErrorsToExceptions="true"
@@ -18,11 +18,6 @@
             <directory suffix="Test.lib.php">../phpunit/classes</directory>
         </testsuite>
     </testsuites>
-    <logging>
-        <log type="coverage-clover" target="../logs/clover.xml"/>
-        <log type="coverage-html" target="../coverage" title="ChamiloTests"/>
-        <log type="junit" target="../logs/junit.xml" logIncompleteSkipped="false"/>
-    </logging>
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">../../main/inc</directory>

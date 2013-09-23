@@ -193,14 +193,15 @@ $app['security.access_manager'] = $app->share(function($app) {
 // Setting Controllers as services provider.
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
-// Validator provider.
-$app->register(new Silex\Provider\ValidatorServiceProvider());
-
 // Implements Symfony2 translator.
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
-    'locale' => 'en',
-    'locale_fallback' => 'en'
+    'locale' => 'en, sr_Latn',
+    'locale_fallback' => 'en',
+    'translator.domains' => array()
 ));
+
+// Validator provider.
+$app->register(new Silex\Provider\ValidatorServiceProvider());
 
 // Form provider
 $app->register(new Silex\Provider\FormServiceProvider(), array(

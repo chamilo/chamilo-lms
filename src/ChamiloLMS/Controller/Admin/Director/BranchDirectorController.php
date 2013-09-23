@@ -82,6 +82,14 @@ class BranchDirectorController extends CommonController
             ->getQuery();
 
         $htmlTree = $repo->buildTree($query->getArrayResult(), $options);
+
+        if (empty($htmlTree)) {
+            $this->get('session')->getFlashBag()->add(
+                'warning',
+                $this->get('translator')->trans("You don't have any branches.")
+            );
+        }
+
         $this->get('template')->assign('tree', $htmlTree);
         $this->get('template')->assign('links', $this->generateLinks());
         $response = $this->get('template')->render_template($this->getTemplatePath().'list.tpl');
@@ -136,6 +144,7 @@ class BranchDirectorController extends CommonController
         $form = $this->createForm($type, $user);
 
         $form->handleRequest($request);
+
         if ($form->isValid()) {
 
             $jury = $this->getManager()->getRepository('Entity\Jury')->find($juryId);

@@ -10,4 +10,4 @@
  * Queries
  */
 require_once dirname(__FILE__).'/config.php';
-BBBPlugin::create()->uninstall();
+om_integrationPlugin::create()->uninstall();

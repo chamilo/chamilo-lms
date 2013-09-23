@@ -2,6 +2,7 @@
 include_once 'services/getSession/getSession.class.php';
 include_once 'services/loginUser/loginUser.class.php';
 include_once 'services/addRoomWithModerationAndExternalType/addRoomWithModerationAndExternalType.class.php';
+include_once 'services/getRoomWithCurrentUsersById/getRoomWithCurrentUsersById.class.php';
 /**
  * Open Meetings-Chamilo connector class
  */
@@ -94,11 +95,12 @@ class om_integration {
       try{    
         $objAddRoom = new addRoomWithModerationAndExternalType();
         $roomtypes_id = $isModerated = ( $this->is_teacher() ) ? 1 : 2 ;
-        $params['c_id'] = api_get_course_int_id();
+        
+        
         $course_name = 'COURSE_ID_' . $params['c_id'] .'_NAME_' . $params['meeting_name'];
         $urlWsdl = CONFIG_OMSERVER_BASE_URL . "/services/RoomService?wsdl";
-
-        $params['id'] = $objAddRoom->SID = $this->sessionId;
+        
+        $objAddRoom->SID = $this->sessionId;
         $objAddRoom->name = $course_name;
         $objAddRoom->roomtypes_id = $roomtypes_id;
         $objAddRoom->comment = 'Curso: ' . $params['meeting_name'] . ' </br>Plugin for Chamilo';
@@ -113,12 +115,20 @@ class om_integration {
         $omServices = new SoapClient( $urlWsdl );
         $adFun = $omServices->addRoomWithModerationAndExternalType( $objAddRoom );
         
-        //Database::insert($this->table, $params);
-        
-        //if( $adFun->return > -1 )
-         //   $this->join_meeting($meeting_name);
-        
-        return $adFun->return;
+        if( $adFun->return > -1 ){
+            $params['id'] = $adFun->return;
+            $params['status'] = '1';
+            $params['meeting_name'] = $course_name;
+            $params['c_id'] = api_get_course_int_id();
+            $params['created_at'] = date('l jS \of F Y h:i:s A');
+            
+            $meetingId = Database::insert($this->table, $params);
+            
+            $this->join_meeting($meetingId);
+        }else{
+            return -1;
+        }
+            
       }catch( SoapFault $e){
           echo "<h1>Warning</h1>
                 <p>We have detected some problems </br>
@@ -136,11 +146,11 @@ class om_integration {
      * @assert ('abcdefghijklmnopqrstuvwxyzabcdefghijklmno') === false
      */
     function join_meeting($meetingid) {
-        if (empty($meeting_name)) { return false; }
+        if (empty($meetingid)) { return false; }
         $pass = $this->get_user_meeting_password();
-        $meeting_data = Database::select('*', $this->table, array('where' => array('meeting_name = ? AND status = 1 ' => $meeting_name)), 'first');
+        $meeting_data = Database::select('*', $this->table, array('where' => array('id = ? AND status = 1 ' => $meetingid)), 'first');
         if (empty($meeting_data)) {
-            if ($this->debug) error_log("meeting does not exist: $meeting_name ");
+            if ($this->debug) error_log("meeting does not exist: $meetingid ");
             return false;
         }
 
@@ -181,5 +191,158 @@ class om_integration {
      */
     function is_server_running() {
         return true;
+    }
+     /**
+     * Gets the password for a specific meeting for the current user
+     * @return string A moderator password if user is teacher, or the course code otherwise
+     */
+    function get_user_meeting_password() {
+        if ($this->is_teacher()) {
+            return $this->get_mod_meeting_password();
+        } else {
+            return api_get_course_id();
+        }
+    } 
+    /**
+     * Generated a moderator password for the meeting
+     * @return string A password for the moderation of the videoconference
+     */
+    function get_mod_meeting_password() {
+        return api_get_course_id().'mod';
+    }
+    /**
+     * Get information about the given meeting
+     * @param array ...?
+     * @return mixed Array of information on success, false on error
+     * @assert (array()) === false
+     */
+    function get_meeting_info($params) {
+        try {
+            $result = $this->api->getMeetingInfoArray($params);
+            if ($result == null) {
+                if ($this->debug) error_log("Failed to get any response. Maybe we can't contact the BBB server.");
+            } else {
+                return $result;
+            }
+        } catch (Exception $e) {
+            if ($this->debug) error_log('Caught exception: ', $e->getMessage(), "\n");
+        }
+        return false;
+    }
+    /**
+     * Gets all the course meetings saved in the plugin_bbb_meeting table
+     * @return array Array of current open meeting rooms
+     */
+    function get_course_meetings() {
+        $new_meeting_list = array();
+        $item = array();
+        $pass = $this->get_user_meeting_password();
+        $this->loginUser();
+        $meeting_list = Database::select('*', $this->table, array('where' => array('c_id = ? ' => api_get_course_int_id())));
+        $urlWsdl = CONFIG_OMSERVER_BASE_URL . "/services/RoomService?wsdl";
+        
+        $omServices = new SoapClient( $urlWsdl );
+        $objCurrentUsers = new getRoomWithCurrentUsersById();
+
+        foreach ($meeting_list as $meeting_db) {
+            $objCurrentUsers->SID = $this->sessionId;
+            $objCurrentUsers->rooms_id = $meeting_db['id']; 
+            $objCurUs = $omServices->getRoomWithCurrentUsersById( $objCurrentUsers );
+            $current_room = array(
+                                'roomtype' => $objCurUs->return->roomtype->roomtypes_id,
+                                'meetingName' => $objCurUs->return->name,
+                                'meetingId' => $objCurUs->return->meetingID,
+                                'createTime' => $objCurUs->return->rooms_id,
+                                'showMicrophoneStatus' => $objCurUs->return->showMicrophoneStatus,
+                                'attendeePw' => $objCurUs->return->attendeePW,
+                                'moderatorPw' => $objCurUs->return->moderators,
+                                'isClosed' => $objCurUs->return->isClosed,
+                                'allowRecording' => $objCurUs->return->allowRecording,
+                                'startTime' => $objCurUs->return->startTime,
+                                'endTime' => $objCurUs->return->updatetime,
+                                'participantCount' => count($objCurUs->return->currentusers),
+                                'maxUsers' => $objCurUs->return->numberOfPartizipants,
+                                'moderatorCount' => count($objCurUs->return->moderators)
+                            );
+				// Then interate through attendee results and return them as part of the array:
+                    foreach ($objCurUs->return->currentusers as $a)
+                      $current_room[] = array(
+                                'userId' => $a->username,
+                                'fullName' => $a->firstname . " " . $a->lastname,
+                                'isMod' => $a->isMod
+                      );
+            
+            $meeting_om = $current_room;
+
+
+            if (empty( $meeting_om ))
+                if ($meeting_db['status'] == 1 && $this->is_teacher())
+                    $this->end_meeting($meeting_db['id']);
+            else 
+                $meeting_om['add_to_calendar_url'] = api_get_self().'?action=add_to_calendar&id='.$meeting_db['id'].'&start='.api_strtotime($meeting_db['startTime']);
+            
+            $meeting_om['end_url'] = api_get_self().'?action=end&id='.$meeting_db['id'];
+
+            $record_array = array();
+
+            if ($meeting_db['record'] == 1) {
+                $recordingParams = array(
+                    'meetingId' => $meeting_db['id'],		//-- OPTIONAL - comma separate if multiple ids
+                );
+
+                //To see the recording list in your BBB server do: bbb-record --list
+                $records = $this->api->getRecordingsWithXmlResponseArray($recordingParams);
+                if (!empty($records)) {
+                    $count = 1;
+                    if (isset($records['message']) && !empty($records['message'])) {
+                        if ($records['messageKey'] == 'noRecordings') {
+                            $record_array[] = get_lang('NoRecording');
+                        } else {
+                            //$record_array[] = $records['message'];
+                        }
+                    } else {
+                        foreach ($records as $record) {
+                            if (is_array($record) && isset($record['recordId'])) {
+                                $url = Display::url(get_lang('ViewRecord'), $record['playbackFormatUrl'], array('target' => '_blank'));
+                                if ($this->is_teacher()) {
+                                    $url .= Display::url(Display::return_icon('link.gif',get_lang('CopyToLinkTool')), api_get_self().'?action=copy_record_to_link_tool&id='.$meeting_db['id'].'&record_id='.$record['recordId']);
+                                    $url .= Display::url(Display::return_icon('agenda.png',get_lang('AddToCalendar')), api_get_self().'?action=add_to_calendar&id='.$meeting_db['id'].'&start='.api_strtotime($meeting_db['created_at']).'&url='.$record['playbackFormatUrl']);
+                                    $url .= Display::url(Display::return_icon('delete.png',get_lang('Delete')), api_get_self().'?action=delete_record&id='.$record['recordId']);
+                                }
+                                //$url .= api_get_self().'?action=publish&id='.$record['recordID'];
+                                $count++;
+                                $record_array[] = $url;
+                            } else {
+                               
+                            }
+                        }
+                    }
+                }
+                //var_dump($record_array);
+                $item['show_links']  = implode('<br />', $record_array);
+               
+            }
+
+            $item['created_at'] = api_convert_and_format_date($meeting_db['created_at']);
+            //created_at
+
+            $item['publish_url'] = api_get_self().'?action=publish&id='.$meeting_db['id'];
+            $item['unpublish_url'] = api_get_self().'?action=unpublish&id='.$meeting_db['id'];
+
+            if ($meeting_db['status'] == 1) {
+                $joinParams = array(
+                    'meetingId' => $meeting_db['id'],		//-- REQUIRED - A unique id for the meeting
+                    'username' => $this->user_complete_name,	//-- REQUIRED - The name that will display for the user in the meeting
+                    'password' => $pass,			//-- REQUIRED - The attendee or moderator password, depending on what's passed here
+                    'createTime' => '',			//-- OPTIONAL - string. Leave blank ('') unless you set this correctly.
+                    'userID' => '',			//	-- OPTIONAL - string
+                    'webVoiceConf' => ''	//	-- OPTIONAL - string
+                );
+                $item['go_url'] = $this->protocol.$this->api->getJoinMeetingURL($joinParams);
+            }
+            $item = array_merge($item, $meeting_db, $meeting_om);
+            $new_meeting_list[] = $item;
+        }
+        return $new_meeting_list;
     }
 }

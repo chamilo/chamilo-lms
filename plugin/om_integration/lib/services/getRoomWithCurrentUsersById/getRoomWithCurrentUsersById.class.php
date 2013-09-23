@@ -1,4 +1,5 @@
 <?php
-class getSession{
-
+class getRoomWithCurrentUsersById{
+    var $SID;
+    var $rooms_id;
 }

@@ -13,10 +13,10 @@ $plugin = om_integrationPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
 $tpl = new Template($tool_name);
 
-$bbb = new om_integration();
+$om = new om_integration();
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
-$teacher = $bbb->is_teacher();
+$teacher = $om->is_teacher();
 
 api_protect_course_script(true);
 $message = null;
@@ -40,7 +40,7 @@ if ($teacher) {
             }
             break;
         case 'copy_record_to_link_tool':
-            $result = $bbb->copy_record_to_link_tool($_GET['id'], $_GET['record_id']);
+            $result = $om->copy_record_to_link_tool($_GET['id'], $_GET['record_id']);
             if ($result) {
                 $message = Display::return_message(get_lang('VideoConferenceAddedToTheLinkTool'), 'success');
             } else {
@@ -48,7 +48,7 @@ if ($teacher) {
             }
             break;
         case 'delete_record':
-            $bbb->delete_record($_GET['id']);
+            $om->delete_record($_GET['id']);
             if ($result) {
                 $message = Display::return_message(get_lang('Deleted'), 'success');
             } else {
@@ -56,27 +56,26 @@ if ($teacher) {
             }
             break;
         case 'end':
-            $bbb->end_meeting($_GET['id']);
+            $om->end_meeting($_GET['id']);
             $message = Display::return_message(get_lang('MeetingClosed').'<br />'.get_lang('MeetingClosedComment'), 'success', false);
             break;
         case 'publish':
-            //$result = $bbb->publish_meeting($_GET['id']);
+            //$result = $om->publish_meeting($_GET['id']);
             break;
         case 'unpublish':
-            //$result = $bbb->unpublish_meeting($_GET['id']);
+            //$result = $om->unpublish_meeting($_GET['id']);
             break;
         default:
             break;
     }
 }
 
-$meetings = $bbb->get_course_meetings();
-if (!empty($meetings)) {
-    $meetings = array_reverse($meetings);
-}
-$users_online   = $bbb->get_users_online_in_current_room();
-$status         = $bbb->is_server_running();
-$meeting_exists = $bbb->meeting_exists(api_get_course_id());
+$meetings = $om->get_course_meetings();
+if (!empty($meetings))  $meetings = array_reverse($meetings);
+
+$users_online = $om->participantCount;
+$status = !$om->isClosed;
+$meeting_exists = 1;//$om->meeting_exists(api_get_course_id());
 $show_join_button = false;
 if ($meeting_exists || $teacher) {
     $show_join_button = true;

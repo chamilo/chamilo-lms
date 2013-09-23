@@ -36,15 +36,7 @@
                             </ul>
                         </li>
                     {% else %}
-                        <li>
-                            <a>
-                                {% if ('allow_message_tool' | get_setting) == 'true' %}
-                                    {{ _u.messages_count }}
-                                {% endif %}
-                                <img src="{{ _u.avatar_small }}"/>
-                                {{ _u.complete_name }}
-                            </a>
-                        </li>
+
                     {% endif %}
                     <li>
                         <a id="logout_button" class="logout" title="{{ "Logout"|get_lang }}" href="{{ url('admin_logout') }}" >

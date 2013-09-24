@@ -503,7 +503,12 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             }
         } elseif(!$logout) {
             // Handle cookie comming from Master Server
-            if (!isset($_GET['sso_referer']) && !isset($_GET['loginFailed']) && isset($_GET['sso_cookie'])) {
+            //  Use this first line if you want users to still see the
+            //  homepage without connecting
+            //if (!isset($_GET['sso_referer']) && !isset($_GET['loginFailed']) && isset($_GET['sso_cookie'])) {
+            //  Use this second line if you want all users to be redirected
+            //  unless they are connected (removed req on sso_cookie)
+            if (!isset($_GET['sso_referer']) && !isset($_GET['loginFailed'])) {
                 // Redirect to master server
                 $osso->ask_master();
             } elseif (isset($_GET['sso_cookie'])) {

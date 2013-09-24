@@ -39,9 +39,10 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $user = $token->getUser();
         $userId = $user->getUserId();
 
-        event_login($user);
-
         $session = $request->getSession();
+        \ChamiloSession::setSession($session);
+
+        event_login($user);
 
         // Setting last login datetime
         $session->set('user_last_login_datetime', api_get_utc_datetime());

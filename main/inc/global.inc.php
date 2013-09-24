@@ -511,7 +511,10 @@ $app->before(
         // Starting the session for more info see: http://silex.sensiolabs.org/doc/providers/session.html
         $request->getSession()->start();
 
+        // Setting session obj
 
+        Session::setSession($app['session']);
+        UserManager::setEntityManager($app['orm.em']);
 
         /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem $filesystem */
         $filesystem = $app['chamilo.filesystem'];

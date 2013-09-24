@@ -42,12 +42,11 @@ class UserManager
         'hr_dept_id'
     );
 
-    /**
-     * Empty constructor. This class is mostly static.
-     */
-    public function __construct ()
-    {
+    public static $em;
 
+    public static function setEntityManager($em)
+    {
+        self::$em = $em;
     }
 
     /**
@@ -166,17 +165,6 @@ class UserManager
                 //we are adding by default the access_url_user table with access_url_id = 1
                 UrlManager::add_user_to_url($user_id, 1);
             }
-
-            global $app;
-            /*
-            $em = $app['orm.ems']['db_write'];
-            // @var Entity\User $user
-            $user = $em->getRepository('Entity\User')->findOneById($user_id);
-            $status = $em->getRepository('Entity\Role')->findOneById($status);
-            $user->roles->add($status);
-            $em->persist($user);
-            $em->flush();*/
-
 
             //saving extra fields
             $field_value = new ExtraFieldValue('user');
@@ -348,10 +336,11 @@ class UserManager
                 UrlManager::add_user_to_url($return, 1);
             }
 
-            global $app;
+
             // Adding user
             /** @var Entity\User $user */
-            $em = $app['orm.ems']['db_write'];
+            $em = self::$em;
+
             $user = $em->getRepository('Entity\User')->find($return);
             $role = $em->getRepository('Entity\Role')->find($status);
 

@@ -131,8 +131,8 @@ class TransactionLogController
      * Adds the information to the transaction tables.
      *
      * @param array $exported_transactions
-     *   A set of transactions to import. Each of them as provided by the
-     *   corresponding transaction object export().
+     *   A set of TransactionLog data to be passed to its constructor and then
+     *   imported into the transactions table.
      *
      * @return array
      *   A set of transaction ids correctly added.
@@ -141,12 +141,11 @@ class TransactionLogController
     {
         $added_transactions = array();
         foreach ($exported_transactions as $exported_transaction) {
-            $transaction_data = json_decode($exported_transaction, true);
             // Set the right id in the new system.
-            $transaction_data['transaction_id'] = $transaction_data['id'];
-            unset($transaction_data['id']);
-            $transaction_data['status_id'] = TransactionLog::STATUS_TO_BE_EXECUTED;
-            $transaction = self::createTransaction($transaction_data['action'], $transaction_data);
+            $exported_transaction['transaction_id'] = $exported_transaction['id'];
+            unset($exported_transaction['id']);
+            $exported_transaction['status_id'] = TransactionLog::STATUS_TO_BE_EXECUTED;
+            $transaction = self::createTransaction($exported_transaction['action'], $exported_transaction);
             $transaction->save();
             $added_transactions[] = $transaction->id;
         }

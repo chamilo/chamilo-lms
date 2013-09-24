@@ -379,7 +379,7 @@ class TransactionLogController
      * @return mixed
      *   The generated Envelope object or FALSE on error.
      */
-    public function makeEnvelopeFromTransactions($transactions, WrapperPluginInterface $wrapper)
+    public static function makeEnvelopeFromTransactions($transactions, WrapperPluginInterface $wrapper)
     {
         try {
             $data = array('transactions' => $transactions);
@@ -404,10 +404,10 @@ class TransactionLogController
      * @return mixed
      *   The generated Envelope object or FALSE on error.
      */
-    public function makeEnvelopeFromBlob($transactions, WrapperPluginInterface $wrapper)
+    public static function makeEnvelopeFromBlob($blob, WrapperPluginInterface $wrapper)
     {
         try {
-            $data = array('transactions' => $transactions);
+            $data = array('blob' => $blob);
             return new Envelope($wrapper, $data);
         }
         catch (Exception $exception) {

@@ -34,9 +34,14 @@ class TransactionLogController
      */
     const LOG_RECEIVE = 3;
     /**
+     * A log entry created during transaction addition to the transaction log
+     * table queue.
+     */
+    const LOG_IMPORT_TO_QUEUE = 4;
+    /**
      * A log entry created during transaction import to the system.
      */
-    const LOG_IMPORT = 4;
+    const LOG_IMPORT_TO_SYSTEM = 5;
 
     /**
      * A local place to store the branch transaction table name.
@@ -149,6 +154,9 @@ class TransactionLogController
             $transaction->save();
             $added_transactions[] = $transaction->id;
         }
+        $log_entry = array('log_type' => self::LOG_IMPORT_TO_QUEUE);
+        $log_entry['message'] = sprintf('Imported transactions with ids: (%s).', implode(', ', $added_transactions));
+        self::addImportLog($log_entry);
 
         return $added_transactions;
     }
@@ -173,7 +181,7 @@ class TransactionLogController
         $transaction_actions_map = TransactionLog::getTransactionMappingSettings();
         $max_possible_attempts = 3;
         foreach ($transactions as $transaction) {
-            $log_entry = array('transaction_id' => $transaction->id, 'log_type' => self::LOG_IMPORT);
+            $log_entry = array('transaction_id' => $transaction->id, 'log_type' => self::LOG_IMPORT_TO_SYSTEM);
             if ($transaction->status_id == TransactionLog::STATUS_ABANDONNED) {
                 $log_entry['message'] = 'Skipped import of abandoned transaction.';
                 self::addImportLog($log_entry);
@@ -184,7 +192,7 @@ class TransactionLogController
                 $max_possible_attempts = $transaction_actions_map[$transaction->action]['max_attempts'];
             }
             // @todo Move to group query outside of the loop if performance is not enough.
-            $log_condition = array('log_type = ? and transaction_id = ?' => array(self::LOG_IMPORT, $transaction->id));
+            $log_condition = array('log_type = ? and transaction_id = ?' => array(self::LOG_IMPORT_TO_SYSTEM, $transaction->id));
             $row = Database::select('count(id) as import_attempts', $this->log_table, array('where' => $log_condition));
             $row = array_shift($row);
             if ($row['import_attempts'] >= $max_possible_attempts) {
@@ -378,8 +386,9 @@ class TransactionLogController
             return new Envelope($wrapper, $data);
         }
         catch (Exception $exception) {
-            // @fixme Log to table!
-            $message = sprintf('Error creating the envelope: %s', $exception->getMessage());
+            $log_entry = array('log_type' => self::LOG_ENVELOPE);
+            $log_entry['message'] = sprintf('Error creating an envelope from transactions: %s', $exception->getMessage());
+            self::addImportLog($log_entry);
             return FALSE;
         }
     }
@@ -402,8 +411,9 @@ class TransactionLogController
             return new Envelope($wrapper, $data);
         }
         catch (Exception $exception) {
-            // @fixme Log to table!
-            $message = sprintf('Error creating the envelope: %s', $exception->getMessage());
+            $log_entry = array('log_type' => self::LOG_ENVELOPE);
+            $log_entry['message'] = sprintf('Error creating an envelope from blob: %s', $exception->getMessage());
+            self::addImportLog($log_entry);
             return FALSE;
         }
     }
@@ -436,7 +446,6 @@ class TransactionLogController
                 $exported_transactions[] = $transaction;
                 $exported_ids['success'][] = $transaction->id;
             } catch (Exception $export_exception) {
-                error_log($export_exception->getMessage());
                 $exported_ids['fail'][] = $transaction->id;
             }
         }
@@ -446,8 +455,6 @@ class TransactionLogController
 
     /**
      * Exports a set of transactions to a file.
-     *
-     * @fixme Use log table.
      *
      * @param string $filepath
      *   The path to the file where the exported transactions will be stored.
@@ -459,16 +466,19 @@ class TransactionLogController
      */
     public function writeEnvelope($filepath, Envelope $envelope)
     {
+        $log_entry = array('log_type' => self::LOG_ENVELOPE);
         try {
             $envelope->wrap();
             if (file_put_contents($filepath, $envelope->getBlob())) {
                 return TRUE;
             }
-            error_log(sprintf('%s::%s(): Evelope wrapped, but unable to write the requested file "%s".', __CLASS__, __METHOD__, $filepath));
+            $log_entry['message'] = sprintf('Envelope wrapped, but unable to write the requested file "%s": %s', $filepath, $exception->getMessage());
+            self::addImportLog($log_entry);
             return FALSE;
         }
-        catch (Exception $e) {
-            error_log(sprintf('%s::%s(): Problem wrapping the Evelope: %s.', __CLASS__, __METHOD__, $e->getMessage()));
+        catch (Exception $exception) {
+            $log_entry['message'] = sprintf('Problem wrapping an envelope: %s', $exception->getMessage());
+            self::addImportLog($log_entry);
         }
     }
 
@@ -476,8 +486,6 @@ class TransactionLogController
      * Sends an envelope to a branch.
      *
      * It uses local configuration to figure out how to send it.
-     *
-     * @fixme Use log table.
      *
      * @param Envelope $envelope
      *   The transactions envelope.
@@ -495,7 +503,9 @@ class TransactionLogController
             return TRUE;
         }
         catch (Exception $exception) {
-            error_log(sprintf('%s::%s(): Problem sending an Evelope: %s.', __CLASS__, __METHOD__, $exception->getMessage()));
+            $log_entry = array('log_type' => self::LOG_SEND);
+            $log_entry['message'] = sprintf('Problem sending an envelope: %s', $exception->getMessage());
+            self::addImportLog($log_entry);
         }
         return FALSE;
     }
@@ -504,8 +514,6 @@ class TransactionLogController
      * Receives envelopes for local install.
      *
      * It uses local configuration to figure out how to send it.
-     *
-     * @fixme Use log table.
      *
      * @param integer $limit
      *   The maximum allowed envelopes to receive. 0 means unlimited.
@@ -522,7 +530,9 @@ class TransactionLogController
             return $envelopes;
         }
         catch (Exception $exception) {
-            error_log(sprintf('%s::%s(): Problem receiving envelopes: %s.', __CLASS__, __METHOD__, $exception->getMessage()));
+            $log_entry = array('log_type' => self::LOG_RECEIVE);
+            $log_entry['message'] = sprintf('Problem receiving envelopes: %s', $exception->getMessage());
+            self::addImportLog($log_entry);
         }
         return FALSE;
     }

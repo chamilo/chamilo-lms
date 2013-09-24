@@ -1635,6 +1635,16 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
     return $users_with_work;
 }
 
+/**
+ * @param int $start
+ * @param int $limit
+ * @param int $column
+ * @param string $direction
+ * @param int $work_id
+ * @param array $where_condition
+ * @param int $studentId
+ * @return array
+ */
 function get_work_user_list($start, $limit, $column, $direction, $work_id, $where_condition, $studentId = null)
 {
     $work_table         = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -1757,13 +1767,12 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
 
             if (($can_read && $work['accepted'] == '1') || ($is_author && $work['accepted'] == '1') || $is_allowed_to_edit) {
 
-                //Firstname, lastname, username
+                // Firstname, lastname, username
                 $work['firstname'] = Display::div($work['firstname'], array('class' => $class));
                 $work['lastname'] = Display::div($work['lastname'], array('class' => $class));
-                //$work['username'] = Display::div($work['username'], array('class' => $class));
 
                 if (strlen($work['title']) > 30) {
-                    $short_title = substr($work['title'],0,27).'...';
+                    $short_title = substr($work['title'], 0, 27).'...';
                     $work['title'] = Display::span($short_title, array('class' => $class, 'title' => $work['title']));
                 } else {
                     $work['title'] = Display::div($work['title'], array('class' => $class));
@@ -1778,8 +1787,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 if ($work['contains_file']) {
                     $link_to_download = '<a href="download.php?id='.$item_id.'">'.Display::return_icon('save.png', get_lang('Save'),array(), ICON_SIZE_SMALL).'</a> ';
                 } else {
-                    //api_get_cidreq()
-                   //$link_to_download = '<a href="view.php?id='.$item_id.'">'.Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a> ';
+                   //$link_to_download = '<a href="view.php?id='.$item_id.'">'.Display::return_icon('save_na.png', get_lang('Save'),array(), ICON_SIZE_SMALL).'</a> ';
                 }
 
                 $send_to = Portfolio::share('work', $work['id'],  array('style' => 'white-space:nowrap;'));
@@ -1794,6 +1802,11 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 $url = api_get_path(WEB_CODE_PATH).'work/';
                 $action = '';
                 if ($is_allowed_to_edit) {
+
+                    $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
+                        Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a> ';
+
+
                     if ($locked) {
                         if ($qualification_exists) {
                             $action .= Display::return_icon('rate_work_na.png', get_lang('CorrectAndRate'),array(), ICON_SIZE_SMALL);
@@ -1809,6 +1822,8 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                             Display::return_icon('edit.png', get_lang('Comment'),array(), ICON_SIZE_SMALL).'</a>';
                         }
                     }
+
+
                     if ($work['contains_file']) {
                         if ($locked) {
                             $action .= Display::return_icon('move_na.png', get_lang('Move'),array(), ICON_SIZE_SMALL);
@@ -1821,6 +1836,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                     } else {
                         $action .= '<a href="'.$url.'work.php?'.api_get_cidreq().'&action=make_visible&item_id='.$item_id.'&amp;'.$sort_params.'" title="'.get_lang('Visible').'" >'.Display::return_icon('invisible.png', get_lang('Visible'),array(), ICON_SIZE_SMALL).'</a> ';
                     }
+
                     if ($locked) {
                         $action .= Display::return_icon('delete_na.png', get_lang('Delete'),'',ICON_SIZE_SMALL);
                     } else {
@@ -1828,8 +1844,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                     }
                 } elseif ($is_author && (empty($work['qualificator_id']) || $work['qualificator_id'] == 0)) {
                     if (api_is_allowed_to_session_edit(false, true)) {
-                        //$action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Modify').'"  >'.Display::return_icon('edit.png', get_lang('Modify'),array(), ICON_SIZE_SMALL).'</a>';
-                        $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('Modify').'">'.
+                        $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
                             Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a>';
                     } else {
                         $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);

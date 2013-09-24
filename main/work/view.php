@@ -23,8 +23,12 @@ $course_info = api_get_course_info();
 allowOnlySubscribedUser(api_get_user_id(), $work['parent_id'], $course_info['real_id']);
 
 if (user_is_author($id) || $course_info['show_score'] == 0 && $work['active'] == 1 && $work['accepted'] == 1) {
-    $url_dir = 'work.php?&id=' . $my_folder_data['id'];
-    $interbreadcrumb[] = array ('url' => $url_dir,'name' =>  $my_folder_data['title']);
+    if (api_is_allowed_to_edit(null, true)) {
+        $url_dir = 'work_list_all.php?id='.$my_folder_data['id'];
+    } else {
+        $url_dir = 'work_list.php?id='.$my_folder_data['id'];
+    }
+    $interbreadcrumb[] = array ('url' => $url_dir, 'name' =>  $my_folder_data['title']);
     $interbreadcrumb[] = array ('url' => '#','name' =>  $work['title']);
 
     if (($course_info['show_score'] == 0 && $work['active'] == 1 && $work['accepted'] == 1) || api_is_allowed_to_edit() || ($work['user_id'] == api_get_user_id() && $work['active'] == 1 && $work['accepted'] == 1)) {

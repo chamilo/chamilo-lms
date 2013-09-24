@@ -97,7 +97,6 @@ $check_qualification = intval($my_folder_data['qualification']);
 
 if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) {
     $type = 'simple';
-    //$columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), get_lang('Title'), get_lang('Qualification'), get_lang('Date'),  get_lang('Status'), get_lang('Actions'));
     $columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('Title'), get_lang('Qualification'), get_lang('Date'), get_lang('Status'), get_lang('Actions'));
     $column_model   = array (
         array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false'),
@@ -113,7 +112,6 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
     );
 } else {
     $type = 'complex';
-    //$columns  = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), get_lang('Title'), get_lang('Date'),  get_lang('Actions'));
     $columns  = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('Title'), get_lang('Date'),  get_lang('Actions'));
     $column_model   = array (
         array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false'),
@@ -131,10 +129,10 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
 
 $extra_params = array();
 
-//Autowidth
+// Auto width
 $extra_params['autowidth'] = 'true';
 
-//height auto
+// Height
 $extra_params['height'] = 'auto';
 
 $extra_params['sortname'] = 'firstname';

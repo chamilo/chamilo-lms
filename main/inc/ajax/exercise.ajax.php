@@ -559,12 +559,6 @@ switch ($action) {
 
                 $key = ExerciseLib::get_time_control_key($exercise_id, $exercise_stat_info['orig_lp_id'], $exercise_stat_info['orig_lp_item_id']);
 
-                /*$durationTime = array(
-                    'duration_time' => array(
-                        $key => time()
-                    )
-                );*/
-
                 $durationTime = Session::read('duration_time');
 
                 if (isset($durationTime[$key]) && !empty($durationTime[$key])) {
@@ -585,7 +579,6 @@ switch ($action) {
                 );
 
                 Session::write('duration_time', $durationTime);
-                // $_SESSION['duration_time'][$key] = time();
 
                 update_event_exercise(
                     $exe_id,

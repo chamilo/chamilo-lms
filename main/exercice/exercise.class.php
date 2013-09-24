@@ -7744,4 +7744,84 @@ class Exercise
         return $nbrAnswers;
     }
 
+    /**
+     * @param int $exeId
+     * @param array $exercise_stat_info
+     */
+    public static function getNextQuestionId($exeId, $exercise_stat_info, $remindList, $currentQuestion)
+    {
+        $result = get_exercise_results_by_attempt($exeId, 'incomplete');
+
+        if (isset($result[$exeId])) {
+            $result = $result[$exeId];
+        } else {
+            return null;
+        }
+
+        $data_tracking  = $exercise_stat_info['data_tracking'];
+        $data_tracking  = explode(',', $data_tracking);
+
+        // if this is the final question do nothing.
+        if ($currentQuestion == count($data_tracking)) {
+            return null;
+        }
+
+        $currentQuestion = $currentQuestion - 1;
+
+        if (!empty($result['question_list'])) {
+            $answeredQuestions = array();
+
+            foreach ($result['question_list'] as $question) {
+                if (!empty($question['answer'])) {
+                    $answeredQuestions[] = $question['question_id'];
+                }
+            }
+
+            // Checking answered questions
+
+            $counterAnsweredQuestions = 0;
+            foreach ($data_tracking as $questionId) {
+                if (!in_array($questionId, $answeredQuestions)) {
+                    if ($currentQuestion != $counterAnsweredQuestions) {
+                        break;
+                    }
+                }
+                $counterAnsweredQuestions++;
+            }
+
+            $counterRemindListQuestions = 0;
+            // Checking questions saved in the reminder list
+
+            if (!empty($remindList)) {
+                foreach ($data_tracking as $questionId) {
+                    if (in_array($questionId, $remindList)) {
+                        // Skip the current question
+                        if ($currentQuestion != $counterRemindListQuestions) {
+                            break;
+                        }
+                    }
+                    $counterRemindListQuestions++;
+                }
+
+                if ($counterRemindListQuestions < $currentQuestion) {
+                    return null;
+                }
+
+                if (!empty($counterRemindListQuestions)) {
+                    if ($counterRemindListQuestions > $counterAnsweredQuestions) {
+                        return $counterAnsweredQuestions;
+                    } else {
+                        return $counterRemindListQuestions;
+                    }
+                }
+            }
+
+            return $counterAnsweredQuestions;
+        }
+
+
+
+
+    }
+
 }

@@ -1091,12 +1091,6 @@ if (!empty($error)) {
     if ($number_of_hotspot_questions > 0) {
         $onsubmit = " onsubmit=\"return validateFlashVar('".$number_of_hotspot_questions."', '" .get_lang('HotspotValidateError1')."', '".get_lang('HotspotValidateError2')."');\"";
     }
-    //skip already answered question 
-    $next_remind = current(array_intersect(array_slice($questionList, array_search($current_question, $questionList) + 1), $my_remind_list)); 
-    $next_remind = (!empty($next_remind)) ? $next_remind : 0;
-    if ($next_remind != 0) {
-      $next_remind = array_search($next_remind, $questionList);
-    }
     echo $objExercise->returnWarningJs(null);
     echo '<script>
             $(function() {
@@ -1228,10 +1222,6 @@ if (!empty($error)) {
                                 url = "'.$urlMainExercise.'exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'&reminder=2";
                             } else {
                                 url = "'.$urlMainExercise.'exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'";
-                            }
-                            var next_remind = '.$next_remind.';
-                            if (next_remind) {
-                              url_extra = "'.$urlMainExercise.'exercise_submit.php?'.$params.'&num='.$next_remind.'";
                             }
                             if (url_extra) {
                                 url = url_extra;

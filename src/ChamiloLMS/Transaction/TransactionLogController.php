@@ -517,13 +517,8 @@ class TransactionLogController
     public function receiveEnvelopeData($limit = 0)
     {
         try {
-            // @fixme: Use the right API to retrieve the branch object.
-            //$receive_plugin = $this->createPlugin('receive', $branch->getPluginReceive());
-            $is_local_branch = array('id = ?' => array(TransactionLog::BRANCH_LOCAL));
-            $branch_sync_table = Database::get_main_table(TABLE_BRANCH_SYNC);
-            $row = Database::select('plugin_receive', $branch_sync_table, array('where' => $is_local_branch));
-            $row = array_shift($row);
-            $receive_plugin = $this->createPlugin('receive', $row['plugin_receive']);
+            $local_branch = $this->branchRepository->find(TransactionLog::BRANCH_LOCAL);
+            $receive_plugin = $this->createPlugin('receive', $local_branch->getPluginReceive());
             $envelopes = $receive_plugin->receive($limit);
             return $envelopes;
         }

@@ -209,3 +209,9 @@ button.arrowl, input.arrowl {
 #exercise_clock_warning {
   margin-top: 0 !important;
 }
+#exercise-description-content {
+  clear: both;
+  display: block;
+  padding-top: 2px;
+}
+

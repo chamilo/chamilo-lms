@@ -988,7 +988,7 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) && $_custom['exercise
 
 if (!empty($objExercise->description)) {
     echo '<br />';
-    echo Display::generate_accordion(array(array('title' => get_lang('ExerciseDescriptionLabel'), 'content' => $objExercise->description)), 'jquery', 'description_content');
+    echo Display::generate_accordion(array(array('title' => get_lang('ExerciseDescriptionLabel'), 'content' => $objExercise->description)), 'jquery', 'exercise-description-content');
 }
 
 if ($origin != 'learnpath') {

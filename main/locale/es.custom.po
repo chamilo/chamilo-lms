@@ -24,6 +24,20 @@ msgstr "Los datos suministrados son incorrectos"
 msgid "Bad credentials"
 msgstr "Los datos suministrados son incorrectos"
 
+msgid "NextQuestion"
+msgstr "Siguiente pregunta"
+
+msgid "ToReviewXYZ"
+msgstr "%s por revisar (%s)"
+
+msgid "ToReviewZ"
+msgstr "(%s) Por revisar"
+
+msgid "ReviewQuestionLater"
+msgstr "Marcar para revisar después"
+
+msgid "SelectAnAnswerToContinue"
+msgstr "Seleccione una respuesta antes de seguir"
 
 
 

@@ -518,23 +518,53 @@ class TransactionLogController
      * @param integer $limit
      *   The maximum allowed envelopes to receive. 0 means unlimited.
      *
-     * @return array|boolean
-     *   A list of envelope objects received or false on failure.
+     * @return array
+     *   A list of envelope objects from correctly received and processed blobs.
+     *
+     * @fixme Use a non volatile storage for pending-to-process blobs.
      */
     public function receiveEnvelopeData($limit = 0)
     {
+        $envelopes = array();
+        $log_entry = array('log_type' => self::LOG_RECEIVE);
+
         try {
+            // @fixme identify correctly local branch.
             $local_branch = $this->branchRepository->find(TransactionLog::BRANCH_LOCAL);
             $receive_plugin = $this->createPlugin('receive', $local_branch->getPluginReceive());
-            $envelopes = $receive_plugin->receive($limit);
-            return $envelopes;
+            $blobs = $receive_plugin->receive($limit);
         }
         catch (Exception $exception) {
-            $log_entry = array('log_type' => self::LOG_RECEIVE);
-            $log_entry['message'] = sprintf('Problem receiving envelopes: %s', $exception->getMessage());
+            $log_entry['message'] = sprintf('Problem receiving blobs: %s', $exception->getMessage());
+            self::addImportLog($log_entry);
+            return $envelopes;
+        }
+
+        $errors = array();
+        foreach ($blobs as $blob) {
+            if (!$wrapper_plugin_name = Envelope::identifyBlobType($blob)) {
+                $errors[] = 'Unable to identify the blob type for raw envelope blob.';
+                continue;
+            }
+            try {
+                $wrapper_plugin = self::createPlugin('wrapper', $wrapper_plugin_name);
+            }
+            catch (Exception $exception) {
+                $errors[] = sprintf('Unable to create wrapper plugin with machine name "%s": %s', $wrapper_plugin_name, $exception->getMessage());
+                continue;
+            }
+            if (!$envelope = self::makeEnvelopeFromBlob($blob, $wrapper_plugin)) {
+                $errors[] = sprintf('Unable to create an envelop from blob with wrapper plugin "%s".', $wrapper_plugin_name);
+                continue;
+            }
+            $envelopes[] = $envelope;
+        }
+        if (!empty($errors)) {
+            $log_entry['message'] = sprintf('Problems processing received blobs: %s', implode(', ', $errors));
             self::addImportLog($log_entry);
         }
-        return FALSE;
+
+        return $envelopes;
     }
 
     /**

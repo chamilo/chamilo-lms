@@ -15,7 +15,7 @@ interface ReceivePluginInterface extends PluginInterface
      *   The maximum allowed envelopes to receive. 0 means unlimited.
      *
      * @return array
-     *   A list of envelope objects received.
+     *   A list of envelope blob strings received.
      *
      * @throws ReceiveException
      *   When there is an error on the receiving process.

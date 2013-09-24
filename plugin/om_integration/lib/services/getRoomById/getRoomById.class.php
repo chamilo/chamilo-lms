@@ -1,5 +1,5 @@
 <?php
-class getRoomWithCurrentUsersById{
+class getRoomById{
     public $SID;
     public $rooms_id;
 }

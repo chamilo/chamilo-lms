@@ -1,6 +1,6 @@
 <?php
 class closeRoom{
-    var $SID;
-    var $room_id;
-    var $status;
+    public $SID;
+    public $room_id;
+    public $status;
 }

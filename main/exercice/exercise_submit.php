@@ -46,13 +46,13 @@ $this_section = SECTION_COURSES;
 $debug = false;
 if ($debug) {
     error_log('--- Enter to the exercise_submit.php ---- ');
-    error_log('0. POST variables : '.print_r($_POST,1));
+    error_log('0. POST variables : '.print_r($_POST, 1));
 }
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
 
-$is_allowedToEdit = api_is_allowed_to_edit(null,true);
+$is_allowedToEdit = api_is_allowed_to_edit(null, true);
 
 if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
     $htmlHeadXtra[] = api_get_js('glossary.js'); //Glossary
@@ -224,8 +224,6 @@ var connectorType = "Straight";
                     });
                     var selectId = params.sourceId + "_select";
                     var value = params.targetId.split("_")[2];
-                    console.log(selectId);
-                    console.log(value);
 
                     $("#" +selectId +" option").filter(function() {
                         return $(this).val() == value;
@@ -305,7 +303,7 @@ jsPlumb.ready(function() {
 	}
 });
 
-$(function(){
+$(function() {
     $(".highlight_image").on("click", function() {
         $(this).parent().find(".highlight_image").each(function(index){
             $(this).removeClass("highlight_image_selected");
@@ -343,7 +341,7 @@ $error = '';
 
 /*  Teacher takes an exam and want to see a preview,
 we delete the objExercise from the session in order to get the latest changes in the exercise */
-if (api_is_allowed_to_edit(null,true) && isset($_GET['preview']) && $_GET['preview'] == 1) {
+if (api_is_allowed_to_edit(null, true) && isset($_GET['preview']) && $_GET['preview'] == 1) {
     Session::erase('objExercise');
 }
 /** @var \Exercise $exerciseInSession */
@@ -1156,6 +1154,7 @@ if (!empty($error)) {
                 }
 
                 var result = false;
+
                 if (showWarning == 1) {
                     $("#dialog-confirm").data("question_id", question_id);
                     $("#dialog-confirm").data("url_extra", url_extra);

@@ -18,15 +18,6 @@
  *
  */
 
-// Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
-// @todo not sure if we need this
-// api_request_uri();
-// This is for compatibility with MAC computers.
-//ini_set('auto_detect_line_endings', '1');
-
-// Composer auto loader.
-require_once __DIR__.'../../../vendor/autoload.php';
-
 use Silex\Application;
 use \ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -54,6 +45,9 @@ $configurationYMLFile = $includePath.'/../../config/configuration.yml';
 $configurationFileAppPath = $includePath.'/../../config/configuration.php';
 
 $alreadyInstalled = false;
+
+$_configuration = array();
+
 if (file_exists($configurationFilePath) || file_exists($configurationYMLFile)  || file_exists($configurationFileAppPath)) {
     if (file_exists($configurationFilePath)) {
         require_once $configurationFilePath;
@@ -64,8 +58,6 @@ if (file_exists($configurationFilePath) || file_exists($configurationYMLFile)  |
         require_once $configurationFileAppPath;
     }
     $alreadyInstalled = true;
-} else {
-    $_configuration = array();
 }
 
 // Overwriting $_configuration
@@ -154,13 +146,6 @@ require_once $libPath.'events.lib.inc.php';
 // Load allowed tag definitions for kses and/or HTMLPurifier.
 require_once $libPath.'formvalidator/Rule/allowed_tags.inc.php';
 
-// Ensure that _configuration is in the global scope before loading
-// api.lib.php. This is particularly helpful for unit tests
-// @todo do not use $GLOBALS
-/*if (!isset($GLOBALS['_configuration'])) {
-    $GLOBALS['_configuration'] = $_configuration;
-}*/
-
 // Add the path to the pear packages to the include path
 ini_set('include_path', api_create_include_path_setting());
 
@@ -177,7 +162,7 @@ $app['show_profiler'] = isset($_configuration['show_profiler']) ? $_configuratio
 
 // Enables assetic in order to load 1 compressed stylesheet or split files
 //$app['assetic.enabled'] = $app['debug'];
-// Harcoded to false by default. Implementation is not finished yet.
+// Hardcoded to false by default. Implementation is not finished yet.
 $app['assetic.enabled'] = false;
 
 // Dumps assets
@@ -225,12 +210,11 @@ $app['configuration'] = $_configuration;
 $_plugins = array();
 if ($alreadyInstalled) {
 
-
     /** Including service providers */
     require_once 'services.php';
 
     // Setting the static database class
-    $database = $app['database'];
+    $database = isset($app['database']) ? $app['database'] : null;
 
     // Retrieving all the chamilo config settings for multiple URLs feature
     $_configuration['access_url'] = 1;
@@ -527,6 +511,8 @@ $app->before(
         // Starting the session for more info see: http://silex.sensiolabs.org/doc/providers/session.html
         $request->getSession()->start();
 
+
+
         /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem $filesystem */
         $filesystem = $app['chamilo.filesystem'];
 
@@ -713,8 +699,8 @@ $app->before(
                 }
 
                 $translator->addLoader('xlf', new Symfony\Component\Translation\Loader\XliffFileLoader());
-                $translator->addResource('xlf', api_get_path(SYS_PATH).'vendor/symfony/src/Symfony/Bundle/FrameworkBundle/Resources/translations/validators.sr_Latn.xlf', 'sr_Latn', 'validators');
-
+                $url = api_get_path(SYS_PATH).'vendor/symfony/src/Symfony/Bundle/FrameworkBundle/Resources/translations/validators.sr_Latn.xlf';
+                $translator->addResource('xlf', $url, 'sr_Latn', 'validators');
 
                 /*$translator->addLoader('mofile', new MoFileLoader());
                 $filePath = api_get_path(SYS_PATH).'main/locale/'.$locale.'.mo';
@@ -724,10 +710,6 @@ $app->before(
                 $translator->addResource('mofile', $filePath, $locale);*/
                 return $translator;
             }
-
-
-
-
         }));
 
         // Check if we are inside a Chamilo course tool
@@ -778,6 +760,7 @@ $text_dir = api_get_text_direction();
 
 /** "Login as user" custom script */
 // @todo move this code in a controller
+/*
 if (!isset($_SESSION['login_as']) && isset($_user)) {
     // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
 
@@ -805,7 +788,7 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
         $s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date = '$now' WHERE login_id = $i_id_last_connection";
         Database::query($s_sql_update_logout_date);
     }
-}
+}*/
 
 // Add language_measure_frequency to your main/inc/conf/configuration.php in
 // order to generate language variables frequency measurements (you can then

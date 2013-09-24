@@ -9,6 +9,8 @@
 /**
  * Inclusion of main setup script
  */
+require_once __DIR__.'/../vendor/autoload.php';
+
 $app = require_once '../main/inc/global.inc.php';
 
 /**

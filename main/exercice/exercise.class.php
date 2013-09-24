@@ -2932,6 +2932,25 @@ class Exercise
                         $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_now('.$question_id.', null, true, '.$showEndWarning.'); ">'.$label.'</a>';
                     }
                     $all_button .= '<span id="save_for_now_'.$question_id.'" class="exercise_save_mini_message"></span>&nbsp;';
+                    $all_button .= "<script>
+                        $(function() {
+                            // get main question
+                            var mainButton = $('.main_question .form-actions .btn-primary');
+
+                            $('#exercise_progress_bars div').each(function() {
+                                var items = $(this).find('.exercise_progress_bars_cat_items .exercise_pagination ul li');
+                                items.each(function() {
+                                    var link = $(this).find('a');
+                                    if (link.hasClass('current') == false) {
+                                        link.on('click', function() {
+                                            mainButton.click();
+                                            //console.log('Saving question');
+                                        });
+                                    }
+                                });
+                            });
+                        });
+                    </script>";
                     $html .= $all_button;
                 } else {
                     if ($this->review_answers) {

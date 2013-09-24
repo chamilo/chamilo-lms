@@ -54,12 +54,19 @@ class TransactionLogController
      * Static cache for sign flags.
      */
     protected static $signFlags;
+    /**
+     * Branch repository.
+     */
+    protected $branchRepository;
 
     public function __construct()
     {
+        global $app;
+
         $this->table = Database::get_main_table(TABLE_BRANCH_TRANSACTION);
         $this->data_table = Database::get_main_table(TABLE_BRANCH_TRANSACTION_DATA);
         $this->log_table = Database::get_main_table(TABLE_BRANCH_TRANSACTION_LOG);
+        $this->branchRepository = $app['orm.em']->getRepository('Entity\BranchSync');
     }
 
     /**

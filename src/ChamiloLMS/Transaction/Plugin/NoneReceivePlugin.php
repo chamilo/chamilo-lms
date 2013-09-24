@@ -16,5 +16,6 @@ class NoneReceivePlugin implements ReceivePluginInterface
     public function receive($limit = 0)
     {
         // Do nothing.
+        return array();
     }
 }

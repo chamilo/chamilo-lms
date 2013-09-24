@@ -41,8 +41,6 @@
                 {% endif %}
 
                 <div id="software_name">
-                    {{ "Platform"|get_lang }} <a href="https://evaluaciondocente.perueduca.pe/index.php" target="_blank">Evaluación docente {{_s.system_version}}</a>
-                    &copy; {{ "now"|date("Y") }}
                 </div>
                 {#   Plugins for footer section  #}
                 {% if plugin_footer_right is not null %}

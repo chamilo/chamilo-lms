@@ -1682,12 +1682,11 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
         if ($is_allowed_to_edit) {
             $extra_conditions .= ' AND work.active IN (0, 1) ';
         } else {
-            $extra_conditions .= ' AND work.active IN (1) ';
 
             if (isset($course_info['show_score']) &&  $course_info['show_score'] == 1) {
-                $extra_conditions .= " AND u.user_id = ".api_get_user_id()." ";
+                $extra_conditions .= " AND (u.user_id = ".api_get_user_id()." AND work.active IN (0, 1) OR work.active = 1) ";
             } else {
-                $extra_conditions .= '';
+                $extra_conditions .= ' AND work.active = 1 ';
             }
         }
 
@@ -1716,10 +1715,9 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
         $works = array();
 
         while ($work = Database::fetch_array($result, 'ASSOC')) {
-           //var_dump($work);
             $item_id = $work['id'];
 
-            //Get the author ID for that document from the item_property table
+            // Get the author ID for that document from the item_property table
 			$is_author  = false;
             $can_read   = false;
 
@@ -1734,7 +1732,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
 				$is_author = true;
 			}
 
-            if ($course_info['show_score'] == 0 ) {
+            if ($course_info['show_score'] == 0) {
                 $can_read = true;
             }
 
@@ -1761,11 +1759,16 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
 
             $add_string = '';
             $time_expires = api_strtotime($work_assignment['expires_on'], 'UTC');
+
             if (!empty($work_assignment['expires_on']) && $work_assignment['expires_on'] != '0000-00-00 00:00:00' && $time_expires && ($time_expires < api_strtotime($work['sent_date'], 'UTC'))) {
-                $add_string = Display::label(get_lang('Expired'),'important');
+                $add_string = Display::label(get_lang('Expired'), 'important');
             }
 
-            if (($can_read && $work['accepted'] == '1') || ($is_author && $work['accepted'] == '1') || $is_allowed_to_edit) {
+            if (
+                ($can_read && $work['accepted'] == '1') ||
+                ($is_author && in_array($work['accepted'], array('1','0'))) ||
+                $is_allowed_to_edit
+            ) {
 
                 // Firstname, lastname, username
                 $work['firstname'] = Display::div($work['firstname'], array('class' => $class));
@@ -1991,12 +1994,19 @@ function draw_date_picker($prefix, $default = '') {
 	return $date_form;
 }
 
-function get_date_from_select($prefix) {
+function get_date_from_select($prefix)
+{
 	return $_POST[$prefix.'_year'].'-'.two_digits($_POST[$prefix.'_month']).'-'.two_digits($_POST[$prefix.'_day']).' '.two_digits($_POST[$prefix.'_hour']).':'.two_digits($_POST[$prefix.'_minute']).':00';
 }
 
-/* Check if a user is the author of the item */
-function user_is_author($item_id, $user_id = null) {
+/**
+ * Check if a user is the author of the item
+ * @param int $item_id
+ * @param int  $user_id
+ * @return bool
+ */
+function user_is_author($item_id, $user_id = null)
+{
     if (empty($item_id)) {
         return false;
     }
@@ -2021,7 +2031,6 @@ function user_is_author($item_id, $user_id = null) {
     }
     return $is_author;
 }
-
 
 /**
  * Get list of users who have not given the task
@@ -2143,7 +2152,11 @@ function display_list_users_without_publication($task_id, $studentId = null)
 }
 
 // Document to work
-
+/**
+ * @param int $documentId
+ * @param int $workId
+ * @param int $courseId
+ */
 function addDocumentToWork($documentId, $workId, $courseId)
 {
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
@@ -2155,6 +2168,12 @@ function addDocumentToWork($documentId, $workId, $courseId)
     Database::insert($table, $params);
 }
 
+/**
+ * @param int $documentId
+ * @param int $workId
+ * @param int $courseId
+ * @return array
+ */
 function getDocumentToWork($documentId, $workId, $courseId)
 {
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
@@ -2164,6 +2183,11 @@ function getDocumentToWork($documentId, $workId, $courseId)
     return Database::select('*', $table, array('where' => $params));
 }
 
+/**
+ * @param int $workId
+ * @param int $courseId
+ * @return array
+ */
 function getAllDocumentToWork($workId, $courseId)
 {
     if (ADD_DOCUMENT_TO_WORK == false) {
@@ -2176,7 +2200,11 @@ function getAllDocumentToWork($workId, $courseId)
     return Database::select('*', $table, array('where' => $params));
 }
 
-
+/**
+ * @param int $documentId
+ * @param int $workId
+ * @param int $courseId
+ */
 function deleteDocumentToWork($documentId, $workId, $courseId)
 {
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
@@ -2186,9 +2214,11 @@ function deleteDocumentToWork($documentId, $workId, $courseId)
     Database::delete($table, $params);
 }
 
-// User to work
-
-
+/**
+ * @param int $userId
+ * @param int $workId
+ * @param int $courseId
+ */
 function addUserToWork($userId, $workId, $courseId)
 {
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_USER);
@@ -2200,6 +2230,12 @@ function addUserToWork($userId, $workId, $courseId)
     Database::insert($table, $params);
 }
 
+/**
+ * @param int $userId
+ * @param int $workId
+ * @param int $courseId
+ * @return array
+ */
 function getUserToWork($userId, $workId, $courseId)
 {
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_USER);
@@ -2258,6 +2294,12 @@ function userIsSubscribedToWork($userId, $workId, $courseId)
     return false;
 }
 
+/**
+ * @param int $userId
+ * @param int $workId
+ * @param int $courseId
+ * @return bool
+ */
 function allowOnlySubscribedUser($userId, $workId, $courseId)
 {
     if (ADD_DOCUMENT_TO_WORK == false) {
@@ -2272,6 +2314,11 @@ function allowOnlySubscribedUser($userId, $workId, $courseId)
 
 }
 
+/**
+ * @param int $workId
+ * @param array $courseInfo
+ * @return array
+ */
 function getDocumentTemplateFromWork($workId, $courseInfo)
 {
     $documents = getAllDocumentToWork($workId, $courseInfo['real_id']);

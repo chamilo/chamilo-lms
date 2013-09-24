@@ -3173,7 +3173,7 @@ msgstr "Seleccionar un archivo de audio desde los documentos"
 
 
 msgid "ToReviewXYZ"
-msgstr "%s en duda (%s)"
+msgstr "%s por revisar (%s)"
 
 msgid "UnansweredXYZ"
 msgstr "%s sin responder (%s)"
@@ -3191,7 +3191,7 @@ msgid "CurrentQuestionZ"
 msgstr "(%s) Pregunta actual"
 
 msgid "ToReviewZ"
-msgstr "(%s) En duda"
+msgstr "(%s) Por revisar"
 
 msgid "ReturnToExerciseList"
 msgstr "Regresar a la lista de exámenes"
@@ -12596,7 +12596,7 @@ msgid "AbsoluteTotal"
 msgstr "Total global"
 
 msgid "NextQuestion"
-msgstr "Guardar y pasar a la siguiente pregunta"
+msgstr "Siguiente pregunta"
 
 msgid "PreviousQuestion"
 msgstr "Pregunta anterior"
@@ -15192,7 +15192,7 @@ msgid "SelectAQuestionToReview"
 msgstr "Seleccione una pregunta por revisar"
 
 msgid "ReviewQuestionLater"
-msgstr "Pregunta en duda"
+msgstr "Marcar para revisar después"
 
 msgid "NumberStudentWhoSelectedIt"
 msgstr "Número de estudiantes quienes la seleccionaron"
@@ -20892,3 +20892,7 @@ msgstr "Descripción del curso"
 
 msgid "ToolCurriculum"
 msgstr "Trayectoria"
+
+msgid "SelectAnAnswerToContinue"
+msgstr "Seleccione una respuesta antes de seguir"
+

@@ -9,7 +9,7 @@ use Entity\BranchSync;
 /**
  * Defines how an envelope is sent.
  */
-interface SendPluginInterface
+interface SendPluginInterface extends PluginInterface
 {
     /**
      * Sends the transactions envelope to the destination system.

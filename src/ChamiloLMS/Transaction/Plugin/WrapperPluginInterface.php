@@ -6,7 +6,7 @@ namespace ChamiloLMS\Transaction\Plugin;
 /**
  * Defines how a transaction is handled before going out of the system.
  */
-interface WrapperPluginInterface
+interface WrapperPluginInterface extends PluginInterface
 {
     /**
      * Wraps a list of transactions.

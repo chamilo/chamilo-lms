@@ -13,6 +13,14 @@ class NoneReceivePlugin implements ReceivePluginInterface
     /**
      * {@inheritdoc}
      */
+    public function getMachineName()
+    {
+        return 'none';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function receive($limit = 0)
     {
         // Do nothing.

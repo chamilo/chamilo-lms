@@ -16,6 +16,14 @@ class NoneSendPlugin implements SendPluginInterface
     /**
      * {@inheritdoc}
      */
+    public function getMachineName()
+    {
+        return 'none';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function send(Envelope $envelope, BranchSync $branch)
     {
         // Do nothing.

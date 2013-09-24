@@ -6,7 +6,7 @@ namespace ChamiloLMS\Transaction\Plugin;
 /**
  * Defines how envelopes are received.
  */
-interface ReceivePluginInterface
+interface ReceivePluginInterface extends PluginInterface
 {
     /**
      * Receives envelopes for the current system.

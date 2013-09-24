@@ -13,6 +13,14 @@ class JsonWrapper implements WrapperPluginInterface
     /**
      * {@inheritdoc}
      */
+    public function getMachineName()
+    {
+        return 'json';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function wrap($transactions)
     {
         $blob = json_encode($transactions);

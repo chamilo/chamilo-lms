@@ -332,8 +332,9 @@ $choice                 = isset($_GET['choice']) ? $_GET['choice'] : null;
 $choice                 = empty($choice) ? isset($_GET['choice2']) ? $_GET['choice2'] : null : null;
 $exerciseResultCoordinates = isset($_GET['exerciseResultCoordinates']) ? $_GET['exerciseResultCoordinates'] : null;
 $current_question       = isset($_REQUEST['num']) ? intval($_REQUEST['num']) : null;
+$endExercise = isset($_REQUEST['end_exercise']) && $_REQUEST['end_exercise'] == 1 ? true : false;
 
-//Error message
+// Error message
 $error = '';
 
 /*  Teacher takes an exam and want to see a preview,
@@ -440,6 +441,7 @@ $exercise_sound = $objExercise->selectSound();
 
 $show_clock = true;
 $user_id = api_get_user_id();
+
 if ($objExercise->selectAttempts() > 0) {
     $attempt_html = null;
     $attempt_count = get_attempt_count($user_id, $exerciseId, $learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
@@ -575,7 +577,9 @@ if (empty($exercise_stat_info)) {
     }
     $exe_id = $objExercise->save_stat_track_exercise_info($clock_expired_time, $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $questionListUncompressed, $total_weight);
     $exercise_stat_info = $objExercise->getStatTrackExerciseInfo($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
-    if ($debug)  error_log("5.5  Creating a new attempt exercise_stat_info[] exe_id : $exe_id");
+    if ($debug)  {
+        error_log("5.5  Creating a new attempt exercise_stat_info[] exe_id : $exe_id");
+    }
 } else {
     $exe_id = $exercise_stat_info['exe_id'];
     if ($debug) {
@@ -601,7 +605,10 @@ if ($debug) {
 
 $params = "exe_id=$exe_id&exerciseId=$exerciseId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();
 
-if ($debug) { error_log("6.1 params: $params"); };
+if ($debug) {
+    error_log("6.1 params: $params");
+}
+
 
 if ($reminder == 2 && empty($my_remind_list)) {
     if ($debug) {
@@ -758,6 +765,7 @@ if ($formSent && isset($_POST)) {
     Session::write('exerciseResultCoordinates', $exerciseResultCoordinates);
 
     // if all questions on one page OR if it is the last question (only for an exercise with one question per page)
+
     if (($objExercise->type == ALL_ON_ONE_PAGE || $current_question >= $question_count)) {
 
         if (api_is_allowed_to_session_edit()) {
@@ -811,14 +819,19 @@ if ($formSent && isset($_POST)) {
 
 // Getting the latest questionId
 $latestQuestionId = getLatestQuestionIdFromAttempt($exe_id);
+
 if (is_null($current_question)) {
     $current_question = 1;
     if ($latestQuestionId) {
         $current_question = $objExercise->getPositionInCompressedQuestionList($latestQuestionId);
     }
 } else {
-    $current_question++;
+    //var_dump($current_question, count($questionList));exit;
+    if ($current_question != count($questionList) || $endExercise) {
+        $current_question++;
+    }
 }
+
 
 if ($question_count != 0) {
 	if (($objExercise->type == ALL_ON_ONE_PAGE || $current_question > $question_count)) {
@@ -856,6 +869,7 @@ if ($question_count != 0) {
 	                    if ($debug) { error_log('12. exercise_time_control_is_valid is NOT valid then exe_result = 0 '); }
 	                }
 	            }
+
 	            if ($objExercise->review_answers) {
 	            	//header('Location: '.$urlMainExercise.'exercise_reminder.php?'.$params);
                     header("Location: ".$urlMainExercise."exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
@@ -1137,7 +1151,6 @@ if (!empty($error)) {
             }
 
             function save_question_list(question_list, showWarning) {
-
                 if (showWarning == 1) {
                     $("#dialog-confirm").data("question_list", question_list);
                     $("#dialog-confirm").dialog("open");
@@ -1179,14 +1192,15 @@ if (!empty($error)) {
                     $("#dialog-confirm").data("question_id", question_id);
                     $("#dialog-confirm").data("url_extra", url_extra);
                     $("#dialog-confirm").data("redirect", redirect);
+                    $("#dialog-confirm").data("end_exercise", 1);
                     $("#dialog-confirm").dialog("open");
                 } else {
-                    result = saveNow(question_id, url_extra, redirect);
+                    result = saveNow(question_id, url_extra, redirect, 0);
                 }
                 return result;
             }
 
-            function saveNow(question_id, url_extra, redirect)
+            function saveNow(question_id, url_extra, redirect, end_exercise)
             {
            		//1. Normal choice inputs
            		var my_choice = $(\'*[name*="choice[\'+question_id+\']"]\').serialize();
@@ -1243,12 +1257,13 @@ if (!empty($error)) {
                                 url = "'.$urlMainExercise.'exercise_submit.php?'.$params.'&num='.$currentQuestionJsVariable.'&remind_question_id='.$remind_question_id.'";
                             }
 
+                            url = url + "&end_exercise="+end_exercise;
+
                             if (url_extra) {
                                 url = url_extra;
                             }
 
                             $("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('save.png', get_lang('Saved'), array(), ICON_SIZE_SMALL)).'");
-
                             if (redirect) {
                                 window.location = url;
                             }
@@ -1339,6 +1354,7 @@ if (!empty($error)) {
      <input type="hidden" name="learnpath_id" 			value="'.$learnpath_id . '" />
      <input type="hidden" name="learnpath_item_id" 		value="'.$learnpath_item_id . '" />
      <input type="hidden" name="learnpath_item_view_id" value="'.$learnpath_item_view_id . '" />';
+
     $objExercise->renderQuestionList($questionList, $current_question, $exerciseResult, $attempt_list, $remind_list);
     echo '</form>';
     echo $objExercise->returnWarningHtml();

@@ -2902,6 +2902,7 @@ class Exercise
             // User
             $showEndWarning = 0;
             if (api_is_allowed_to_session_edit()) {
+                $addInvisibleNextButton = false;
                 if ($this->type == ALL_ON_ONE_PAGE || $nbrQuestions == $questionNum) {
                     if ($this->review_answers) {
                         //$label = get_lang('ReviewQuestions');
@@ -2912,6 +2913,7 @@ class Exercise
                         $label = get_lang('EndTest');
                         $class = 'btn btn-warning';
                     }
+                    $addInvisibleNextButton = true;
                     $showEndWarning = 1;
                 } else {
                     $label = get_lang('NextQuestion');
@@ -2931,12 +2933,22 @@ class Exercise
                     } else {
                         $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_now('.$question_id.', null, true, '.$showEndWarning.'); ">'.$label.'</a>';
                     }
+
+                    if ($addInvisibleNextButton) {
+                        $all_button .= '<span style="display:none">
+                            <a href="javascript://" class="invisible_button '.$class.'" onclick="save_now('.$question_id.', null, true, '.$showEndWarning.'); ">
+                            ..
+                            </a>';
+                    }
+
                     $all_button .= '<span id="save_for_now_'.$question_id.'" class="exercise_save_mini_message"></span>&nbsp;';
                     $all_button .= "<script>
                         $(function() {
                             // get main question
-                            var mainButton = $('.main_question .form-actions .btn-primary');
-
+                            var mainButton = $('.main_question .form-actions .invisible_button');
+                            if (mainButton.length == 0 ) {
+                                //mainButton = $('.main_question .form-actions .btn-warning');
+                            }
                             $('#exercise_progress_bars div').each(function() {
                                 var items = $(this).find('.exercise_progress_bars_cat_items .exercise_pagination ul li');
                                 items.each(function() {
@@ -2944,7 +2956,7 @@ class Exercise
                                     if (link.hasClass('current') == false) {
                                         link.on('click', function() {
                                             mainButton.click();
-                                            //console.log('Saving question');
+                                            //return false;
                                         });
                                     }
                                 });

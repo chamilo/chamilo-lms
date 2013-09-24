@@ -186,12 +186,19 @@ button.arrowl, input.arrowl {
 .exercise_progress_bars_cat {
     width: 220px !important;
 }
-.exercise_progress_bars_cat_items {
-    width: 710px !important;
-}
 #exercise_progress_legend {
-  width:97%;
   margin-top:20px;
+  float:right;
+  width:300px;
+  clear:both
+}
+#exercise_progress_bars {
+  float:left;
+  width:60%;
+}
+#exercise_progress_bars .exercise_progress_bars_cat,
+#exercise_progress_bars .exercise_progress_bars_cat_items {
+  display:inline-block;
 }
 #exercise_progress_legend .legend_static {
   float:right;
@@ -199,3 +206,12 @@ button.arrowl, input.arrowl {
 #exercise_progress_legend .legend_dynamic {
   float:left;
 }
+#exercise_clock_warning {
+  margin-top: 0 !important;
+}
+#exercise-description-content {
+  clear: both;
+  display: block;
+  padding-top: 2px;
+}
+

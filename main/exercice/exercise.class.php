@@ -5641,7 +5641,7 @@ class Exercise
             '<span id="counter_to_redirect" class="red_alert"></span>'
         );
         $html = '<div id="clock_warning" style="display:none">'.$message.'</div>';
-        $html .= '<div class="row"><div class="pull-right"><div id="exercise_clock_warning" class="well count_down"></div></div></div>';
+        $html .= '<div class=""><div class="pull-right"><div id="exercise_clock_warning" class="well count_down"></div></div></div>';
 
         return $html;
     }
@@ -5970,8 +5970,7 @@ class Exercise
 
         $link = $url.'&num=';
 
-        $html = '<div class="row" id="exercise_progress_block">';
-        $html .= '<div class="span10" id="exercise_progress_bars">';
+        $html = '<div class="" id="exercise_progress_bars">';
         if (!empty($categoryList)) {
             $html .= $this->progressExercisePaginationBarWithCategories($categoryList, $current_question, $conditions, $link);
         } else {
@@ -5979,6 +5978,7 @@ class Exercise
         }
         $html .= '</div>';
 
+        $html .= '<div class="" id="exercise_progress_block">';
         $html .= '<div class="span2" id="exercise_progress_legend"><div class="legend_static">';
 
         $reviewAnswerLabel = null;
@@ -6233,9 +6233,9 @@ class Exercise
                         $categoryName  = $category['parent_info']['title'];
                     }
                 }
-                $html .= '<div class="row">';
-                $html .= '<div class="span2 exercise_progress_bars_cat">'.$categoryName.'</div>';
-                $html .= '<div class="span8 exercise_progress_bars_cat_items">';
+                $html .= '<div class="">';
+                $html .= '<div class="exercise_progress_bars_cat">'.$categoryName.'</div>';
+                $html .= '<div class="exercise_progress_bars_cat_items">';
 
                 if (!empty($nextValue)) {
                     if ($wasMedia) {

@@ -55,7 +55,7 @@
                         {# logo #}
 
                         <div id="logo">
-                            <a href="{{ _p.web }}">
+                            <a href="https://evaluaciondocente.perueduca.pe/index.php">
                                 <img title="{{ "siteName" | get_setting }}" src="{{ _p.web_css }}/{{ app.theme }}/images/header-logo.svg" />
                             </a>
                         </div>

@@ -2025,6 +2025,7 @@ function user_is_author($item_id, $user_id = null)
             $is_author = true;
         }
     }
+
     if (!$is_author) {
         //api_not_allowed();
         return false;
@@ -2245,6 +2246,11 @@ function getUserToWork($userId, $workId, $courseId)
     return Database::select('*', $table, array('where' => $params));
 }
 
+/**
+ * @param int $workId
+ * @param int $courseId
+ * @return array
+ */
 function getAllUserToWork($workId, $courseId)
 {
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_USER);
@@ -2263,7 +2269,11 @@ function userAddedToWork($userId, $workId, $courseId)
     $result = Database::select('count(*)', $table, array('where' => $params));*/
 }
 
-
+/**
+ * @param int $userId
+ * @param int $workId
+ * @param int $courseId
+ */
 function deleteUserToWork($userId, $workId, $courseId)
 {
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_USER);
@@ -2273,6 +2283,12 @@ function deleteUserToWork($userId, $workId, $courseId)
     Database::delete($table, $params);
 }
 
+/**
+ * @param int $userId
+ * @param int $workId
+ * @param int $courseId
+ * @return bool
+ */
 function userIsSubscribedToWork($userId, $workId, $courseId)
 {
     if (ADD_DOCUMENT_TO_WORK == false) {
@@ -2311,7 +2327,6 @@ function allowOnlySubscribedUser($userId, $workId, $courseId)
     if (userIsSubscribedToWork($userId, $workId, $courseId) == false) {
         api_not_allowed(true);
     }
-
 }
 
 /**

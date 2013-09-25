@@ -467,6 +467,7 @@ class SortableTable extends HTML_Table {
 
         $empty_table = false;
         $total = $this->get_total_number_of_items();
+
         if ($this->get_total_number_of_items() == 0) {
             $cols = $this->getColCount();
             //$this->setCellAttributes(1, 0, 'style="font-style: italic;text-align:center;" colspan='.$cols);

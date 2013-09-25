@@ -655,14 +655,20 @@ class GroupPortalManager
         $result = Database::query($sql);
     }
 
-    public static function get_all_group_tags($tag, $from = 0, $number_of_items = 10) {
+    /**
+     * @param $tag
+     * @param int $from
+     * @param int $number_of_items
+     * @param bool $getCount
+     * @return array
+     */
+    public static function get_all_group_tags($tag, $from = 0, $number_of_items = 10, $getCount = false)
+    {
         // database table definition
 
         $group_table = Database::get_main_table(TABLE_MAIN_GROUP);
         $table_tag = Database::get_main_table(TABLE_MAIN_TAG);
         $table_group_tag_values = Database::get_main_table(TABLE_MAIN_GROUP_REL_TAG);
-
-        //default field_id == 1
 
         $field_id = 5;
 
@@ -671,56 +677,33 @@ class GroupPortalManager
         $number_of_items = intval($number_of_items);
 
         // all the information of the field
-        $sql = "SELECT g.id, g.name, g.description, g.picture_uri FROM $table_tag t INNER JOIN $table_group_tag_values tv ON (tv.tag_id=t.id)
-					 INNER JOIN $group_table g ON(tv.group_id =g.id)
-				WHERE tag LIKE '$tag%' AND field_id= $field_id ORDER BY tag";
+        if ($getCount) {
+            $select = "SELECT count(DISTINCT g.id) count";
+        } else {
+            $select = " SELECT DISTINCT g.id, g.name, g.description, g.picture_uri ";
+        }
+        $sql = " $select
+                FROM $group_table g
+                LEFT JOIN $table_group_tag_values tv ON (g.id AND tv.group_id)
+                LEFT JOIN $table_tag t ON (tv.tag_id = t.id)
+                WHERE
+                    tag LIKE '$tag%' AND field_id= $field_id OR
+                    (
+                       g.name LIKE '%".$tag."%' OR g.description LIKE '%".$tag."%'  OR  g.url LIKE '%".$tag."%'
 
-        $sql .= " LIMIT $from,$number_of_items";
+                     )";
+
+        $sql .= " LIMIT $from, $number_of_items";
 
         $result = Database::query($sql);
         $return = array();
         if (Database::num_rows($result) > 0) {
+            if ($getCount) {
+                $row = Database::fetch_array($result, 'ASSOC');
+                return $row['count'];
+            }
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $return[$row['id']] = $row;
-            }
-        }
-
-        $keyword = $tag;
-        $sql = "SELECT  g.id, g.name, g.description, g.url, g.picture_uri FROM $group_table g";
-
-        //@todo implement groups + multiple urls
-
-        /*
-          global $_configuration;
-          if ($_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
-          $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-          $sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
-          } */
-
-        //@todo implement visibility
-
-        if (isset($keyword)) {
-            $sql .= " WHERE (g.name LIKE '%".$keyword."%' OR g.description LIKE '%".$keyword."%'  OR  g.url LIKE '%".$keyword."%' )";
-        }
-
-        $direction = 'ASC';
-        if (!in_array($direction, array('ASC', 'DESC'))) {
-            $direction = 'ASC';
-        }
-
-        //$column = intval($column);
-        $from = intval($from);
-        $number_of_items = intval($number_of_items);
-
-        //$sql .= " ORDER BY col$column $direction ";
-        $sql .= " LIMIT $from,$number_of_items";
-
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            while ($row = Database::fetch_array($res, 'ASSOC')) {
-                if (!in_array($row['id'], $return)) {
-                    $return[$row['id']] = $row;
-                }
             }
         }
         return $return;

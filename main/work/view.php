@@ -41,6 +41,8 @@ if (user_is_author($id) || $course_info['show_score'] == 0 && $work['active'] ==
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();
     } else {
-        api_not_allowed();
+        api_not_allowed(true);
     }
+} else {
+    api_not_allowed(true);
 }

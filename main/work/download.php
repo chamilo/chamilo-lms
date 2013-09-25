@@ -93,5 +93,7 @@ if (!empty($course_info['real_id'])) {
             api_not_allowed();
         }
     }
+} else {
+    api_not_allowed();
 }
 exit;

@@ -117,7 +117,7 @@ if ($alreadyInstalled) {
     }*/
 
     // For backward compatibility.
-    $_configuration['dokeos_version'] = $_configuration['system_version'];
+    $_configuration['dokeos_version'] = isset($_configuration['system_version']) ? $_configuration['system_version'] : null;
     //$_configuration['dokeos_stable'] = $_configuration['system_stable'];
     $userPasswordCrypted = (!empty($_configuration['password_encryption']) ? $_configuration['password_encryption'] : 'sha1');
 }

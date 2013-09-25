@@ -209,6 +209,11 @@ class ManagerRegistry extends AbstractManagerRegistry
         unset($this->container[$name]);
     }
 
+    /**
+     * @param string $alias
+     * @return string|void
+     * @throws BadMethodCallException
+     */
     public function getAliasNamespace($alias)
     {
         throw new \BadMethodCallException('Namespace aliases not supported.');

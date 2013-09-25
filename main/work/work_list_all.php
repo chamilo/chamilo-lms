@@ -153,6 +153,8 @@ $(function() {
 </script>
 <?php
 
+echo getAllDocumentsFromWorkToString($workId, $courseInfo);
+
 echo Display::grid_html('results');
 
 Display :: display_footer();

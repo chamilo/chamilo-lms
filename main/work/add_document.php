@@ -53,12 +53,11 @@ switch ($action) {
         break;
 }
 
-Display :: display_header(null);
-
 if (empty($docId)) {
+
+    Display :: display_header(null);
     $documents = getAllDocumentToWork($workId, api_get_course_int_id());
     if (!empty($documents)) {
-
         echo Display::page_subheader(get_lang('DocumentsAdded'));
         echo '<div class="well">';
         foreach ($documents as $doc) {
@@ -78,8 +77,8 @@ if (empty($docId)) {
     echo Display::page_subheader(get_lang('Documents'));
     echo $document_tree;
     echo '<hr /><div class="clear"></div>';
-
 } else {
+    $message = null;
 
     $documentInfo = DocumentManager::get_document_data_by_id($docId, $courseInfo['code']);
     $form = new FormValidator('add_doc', 'post', api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId.'&document_id='.$docId);
@@ -89,8 +88,6 @@ if (empty($docId)) {
     $form->addElement('hidden', 'document_id', $docId);
     $form->addElement('label', get_lang('File'), $documentInfo['title']);
     $form->addElement('style_submit_button', 'submit', get_lang('Add'));
-    $form->display();
-
     if ($form->validate()) {
         $values = $form->exportValues();
         $workId = $values['id'];
@@ -103,12 +100,17 @@ if (empty($docId)) {
             header('Location: '.$url);
             exit;
         } else {
-            Display::display_warning_message(get_lang('DocumentAlreadyAdded'));
+            $message = Display::return_message(get_lang('DocumentAlreadyAdded'), 'warning');
         }
     }
+
+    Display :: display_header(null);
+    echo $message;
+    $form->display();
 }
 
 /*
+ * DB changes needed
  *
 CREATE TABLE IF NOT EXISTS c_student_publication_rel_document (
     id  INT PRIMARY KEY NOT NULL AUTO_INCREMENT,

@@ -498,7 +498,7 @@ class TransactionLogController
     public function sendEnvelope(Envelope $envelope, BranchSync $branch)
     {
         try {
-            $send_plugin = $this->createPlugin('send', $branch->getPluginSend());
+            $send_plugin = $this->createPlugin('send', $branch->getPluginSend(), $branch->getPluginData('send'));
             $send_plugin->send($envelope, $branch);
             return TRUE;
         }
@@ -531,7 +531,7 @@ class TransactionLogController
         try {
             // @fixme identify correctly local branch.
             $local_branch = $this->branchRepository->find(TransactionLog::BRANCH_LOCAL);
-            $receive_plugin = $this->createPlugin('receive', $local_branch->getPluginReceive());
+            $receive_plugin = $this->createPlugin('receive', $local_branch->getPluginReceive(), $local_branch->getPluginData('receive'));
             $blobs = $receive_plugin->receive($limit);
         }
         catch (Exception $exception) {
@@ -547,14 +547,14 @@ class TransactionLogController
                 continue;
             }
             try {
-                $wrapper_plugin = self::createPlugin('wrapper', $wrapper_plugin_name);
+                $wrapper_plugin = self::createPlugin('wrapper', $wrapper_plugin_name, $local_branch->getPluginData('wrapper'));
             }
             catch (Exception $exception) {
                 $errors[] = sprintf('Unable to create wrapper plugin with machine name "%s": %s', $wrapper_plugin_name, $exception->getMessage());
                 continue;
             }
             if (!$envelope = self::makeEnvelopeFromBlob($blob, $wrapper_plugin)) {
-                $errors[] = sprintf('Unable to create an envelop from blob with wrapper plugin "%s".', $wrapper_plugin_name);
+                $errors[] = sprintf('Unable to create an envelope from blob with wrapper plugin "%s".', $wrapper_plugin_name);
                 continue;
             }
             $envelopes[] = $envelope;

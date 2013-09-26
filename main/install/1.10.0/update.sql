@@ -70,3 +70,10 @@ ALTER TABLE branch_transaction_log
   CHANGE transaction_id transaction_id bigint unsigned null default null,
   CHANGE import_time log_time datetime not null,
   ADD INDEX (log_type);
+
+-- Adds a table to use as queue for received envelopes.
+CREATE TABLE received_envelopes (
+  id int not null AUTO_INCREMENT,
+  data TEXT not null COMMENT 'The envelope blob.',
+  PRIMARY KEY(id)
+);

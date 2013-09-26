@@ -360,3 +360,4 @@ define('TABLE_BRANCH_TRANSACTION',           'branch_transaction');
 define('TABLE_BRANCH_TRANSACTION_STATUS',    'branch_transaction_status');
 define('TABLE_BRANCH_TRANSACTION_DATA',      'branch_transaction_data');
 define('TABLE_BRANCH_TRANSACTION_LOG',       'branch_transaction_log');
+define('TABLE_RECEIVED_ENVELOPES',           'received_envelopes');

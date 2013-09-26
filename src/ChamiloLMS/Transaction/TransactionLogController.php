@@ -260,15 +260,16 @@ class TransactionLogController
      * @return int
      *   The id of the inserted log, as provided by Database::insert().
      */
-    public function addImportLog($log_entry)
+    public static function addImportLog($log_entry)
     {
+        $log_table = Database::get_main_table(TABLE_BRANCH_TRANSACTION_LOG);
         $log_entry += array(
             'log_type' => self::LOG_NULL,
             'log_time' => api_get_utc_datetime(),
             'message' => '',
         );
 
-        return Database::insert($this->log_table, $log_entry);
+        return Database::insert($log_table, $log_entry);
     }
 
     /**

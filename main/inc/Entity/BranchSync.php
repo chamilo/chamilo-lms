@@ -217,13 +217,16 @@ class BranchSync
     /**
      * Extra information about the branch.
      *
-     * For now, mainly used by plugins.
+     * For now, mainly used by plugins to store extra information for them to be
+     * instanciated.
      * An example status:
      * <code>
      * array(
      *     'plugins' => array(
-     *         'envelope' => 'json',
-     *         'receive' => 'chamilows',
+     *         'receive' => array(
+     *             'origin' => '/path/to/dir1',
+     *             'processed' => '/path/to/dir2',
+     *         ),
      *     ),
      * );
      * </code>
@@ -839,5 +842,24 @@ class BranchSync
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * Get plugin data.
+     *
+     * Helper to retrieve plugin information.
+     *
+     * @param string $plugin_type
+     *   The plugin type to search information for.
+     *
+     * @return array
+     *   The information or empty array.
+     */
+    public function getPluginData($plugin_type)
+    {
+        if (isset($this->data['plugins'][$plugin_type])) {
+            return $this->data['plugins'][$plugin_type];
+        }
+        return array();
     }
 }

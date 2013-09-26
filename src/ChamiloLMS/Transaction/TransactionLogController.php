@@ -273,6 +273,25 @@ class TransactionLogController
     }
 
     /**
+     * Adds an entry on received_envelopes table.
+     *
+     * @param Envelope $envelope
+     *   The received envelope to be added to the queue.
+     *
+     * @return int
+     *   The id of the inserted row, as provided by Database::insert().
+     */
+    public static function queueReceivedEnvelope(Envelope $envelope)
+    {
+        $table = Database::get_main_table(TABLE_RECEIVED_ENVELOPES);
+        $entry = array(
+            'data' => $envelope->getBlob(),
+        );
+
+        return Database::insert($table, $entry);
+    }
+
+    /**
      * Creates a new transaction object based on passed information.
      *
      * @param string $action
@@ -522,8 +541,6 @@ class TransactionLogController
      *
      * @return array
      *   A list of envelope objects from correctly received and processed blobs.
-     *
-     * @fixme Use a non volatile storage for pending-to-process blobs.
      */
     public function receiveEnvelopeData($limit = 0)
     {
@@ -560,6 +577,7 @@ class TransactionLogController
                 continue;
             }
             $envelopes[] = $envelope;
+            self::queueReceivedEnvelope($envelope);
         }
         if (!empty($errors)) {
             $log_entry['message'] = sprintf('Problems processing received blobs: %s', implode(', ', $errors));

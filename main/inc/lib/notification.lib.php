@@ -69,13 +69,13 @@ class Notification extends Model
 
         if (!empty($notifications)) {
             foreach ($notifications as $item_to_send) {
-                //Sending email
+                // Sending email
                 api_mail_html($item_to_send['dest_mail'], $item_to_send['dest_mail'], Security::filter_terms($item_to_send['title']), Security::filter_terms($item_to_send['content']), $this->admin_name, $this->admin_email);
                 if ($this->debug) {
                     error_log('Sending message to: '.$item_to_send['dest_mail']);
                 }
 
-                //Updating
+                // Updating
                 $item_to_send['sent_at'] = api_get_utc_datetime();
                 $this->update($item_to_send);
                 if ($this->debug) {
@@ -156,7 +156,7 @@ class Notification extends Model
                                 $extra_headers['reply_to']['name'] = $sender_info['complete_name'];
                                 api_mail_html($name, $user_info['mail'], Security::filter_terms($title), Security::filter_terms($content), $sender_info['complete_name'], $sender_info['email'], $extra_headers);
                             } else {
-                                api_mail_html($name, $user_info['mail'], Security::filter_terms($title), Security::filter_terms($content), $sender_info['complete_name'], $sender_info['email']);
+                                api_mail_html($name, $user_info['mail'], Security::filter_terms($title), Security::filter_terms($content), $this->admin_name, $this->admin_email);
                             }
                         }
                         $params['sent_at'] = api_get_utc_datetime();

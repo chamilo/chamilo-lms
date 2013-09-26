@@ -167,7 +167,7 @@ if ($action == 'add' || $action == 'edit') {
         </form>
 
 <?php  } elseif (api_get_multiple_access_url() && api_get_current_access_url_id() != 1) {
-           Display :: display_error_message(get_lang('CourseCategoriesAreGlobal'));
+           Display :: display_warning_message(get_lang('CourseCategoriesAreGlobal'));
        }
     
 } else {
@@ -223,7 +223,7 @@ if ($action == 'add' || $action == 'edit') {
         }
     
     } else {
-        Display :: display_error_message(get_lang('CourseCategoriesAreGlobal'));
+        Display :: display_warning_message(get_lang('CourseCategoriesAreGlobal'));
         
     }?>
     </ul>

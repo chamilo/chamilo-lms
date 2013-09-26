@@ -351,7 +351,7 @@ class TransactionLogController
     {
         // Do the mapping manually for now.
         $map = array(
-            'envelope' => array(
+            'wrapper' => array(
                 'json' => 'JsonWrapper',
             ),
             'send' => array(

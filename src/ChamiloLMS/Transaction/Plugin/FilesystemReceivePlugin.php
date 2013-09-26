@@ -4,6 +4,7 @@
 namespace ChamiloLMS\Transaction\Plugin;
 
 use ChamiloLMS\Transaction\Envelope;
+use ChamiloLMS\Transaction\TransactionLogController;
 
 /**
  * Receive from a directory, then move the file to other one.
@@ -29,12 +30,30 @@ class FilesystemReceivePlugin implements ReceivePluginInterface
     }
 
     /**
+     * Constructor.
+     *
+     * @param array $data
+     *   An array containing the values of the two required data members using
+     *   the data member name as key.
+     *
+     * @throws ReceiveException
+     *   When there is an error while instanciating the plugin.
+     */
+    public function __construct($data) {
+        if (empty($data['origin']) || empty($data['processed'])) {
+            throw new ReceiveException(sprintf('filesystem: Cannot instanciate the plugin with data array: "%s".', print_r($data, 1)));
+        }
+        $this->origin = $data['origin'];
+        $this->processed = $data['processed'];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function receive($limit = 0)
     {
         $this->prepare();
-        if (!$envelope_files = scandir($directorio)) {
+        if (!$envelope_files = scandir($this->origin)) {
             throw new ReceiveException(sprintf('filesystem: Cannot read receive directory "%s".', $this->origin));
         }
         $blobs = array();
@@ -50,6 +69,10 @@ class FilesystemReceivePlugin implements ReceivePluginInterface
                 break;
             }
             $filepath = $this->origin . '/' . $envelope_file;
+            if (is_dir($filepath)) {
+                // Ignore directories.
+                continue;
+            }
             if (!$blob = file_get_contents($filepath)) {
                 throw new ReceiveException(sprintf('filesystem: Cannot read envelope file "%s".', $filepath));
             }
@@ -58,11 +81,16 @@ class FilesystemReceivePlugin implements ReceivePluginInterface
             $new_filepath = $new_filepath_base;
             $extra_suffix = 0;
             while (file_exists($new_filepath)) {
+                ++$extra_suffix;
                 $new_filepath = $new_filepath_base . '.' .  $extra_suffix;
             }
-            // @fixme Log a message metioning the rename.
             if (!rename($filepath, $new_filepath)) {
                 throw new ReceiveException(sprintf('filesystem: Cannot move the processed envelope file "%s" to "%s".', $filepath, $new_filepath));
+            }
+            else {
+                $log_entry = array('log_type' => TransactionLogController::LOG_RECEIVE);
+                $log_entry['message'] = sprintf('filesystem: Moved envelope file "%s" to "%s".', $filepath, $new_filepath);
+                TransactionLogController::addImportLog($log_entry);
             }
             ++$count;
         }

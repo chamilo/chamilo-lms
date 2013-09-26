@@ -360,6 +360,7 @@ class TransactionLogController
             ),
             'receive' => array(
                 'none' => 'NoneReceivePlugin',
+                'filesystem' => 'FilesystemReceivePlugin',
             ),
         );
 

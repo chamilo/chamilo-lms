@@ -47,7 +47,7 @@
                         </li>
                     {% endif %}
                     <li>
-                        <a id="logout_button" class="logout" title="{{ "Logout"|get_lang }}" href="{{ url('admin_logout') }}" >
+                        <a id="logout_button" class="logout" title="{{ "Logout"|get_lang }}" href="{{ url('logout') }}" >
                             <img src="{{ "exit.png"|icon(22) }}">
                         </a>
                     </li>

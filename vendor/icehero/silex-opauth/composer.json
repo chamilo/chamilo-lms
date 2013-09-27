@@ -1,0 +1,28 @@
+{
+    "name": "icehero/silex-opauth",
+    "description": "Opauth silex framework service provider.",
+    "keywords": ["opauth", "silex", "oauth"],
+    "homepage": "https://github.com/icehero/silex-opauth",
+    "version": "dev",
+    "licence": "MIT",
+    "require": {
+        "opauth/opauth": "*"
+    },
+    "require-dev": {
+        "silex/silex": "dev-master",
+        "opauth/facebook": "*"
+    },
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Florin Popa",
+            "email": "pp.flrn@gmail.com",
+            "homepage": "http://florinpopa.net"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "SilexOpauth": "src"
+        }
+    }
+}

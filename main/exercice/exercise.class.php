@@ -5904,7 +5904,7 @@ class Exercise
                 break;
             case '2':
                 global $app;
-                $url = $app['url_generator']->generate('admin_logout');
+                $url = $app['url_generator']->generate('logout');
                 $html = Display::url(get_lang('Logout'), $url, array('class' => 'btn btn-large'));
                 break;
         }

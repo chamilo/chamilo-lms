@@ -236,7 +236,7 @@ class IndexController extends CommonController
           ->getForm();
           return $app['template']->assign('form', $form->createView());
          */
-        $form = new \FormValidator('formLogin', 'POST', $app['url_generator']->generate('admin_login_check'), null, array('class' => 'form-vertical'));
+        $form = new \FormValidator('formLogin', 'POST', $app['url_generator']->generate('secured_login_check'), null, array('class' => 'form-vertical'));
         $form->addElement(
             'text',
             'username',

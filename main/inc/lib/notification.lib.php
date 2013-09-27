@@ -17,7 +17,9 @@ class Notification extends Model
 {
     public $table;
     public $columns = array('id', 'dest_user_id', 'dest_mail', 'title', 'content', 'send_freq', 'created_at', 'sent_at');
-    public $max_content_length = 254; //Max lenght of the notification.content field
+
+    //Max length of the notification.content field
+    public $max_content_length = 254;
     public $debug = false;
 
     /* message, invitation, group messages */

@@ -24,6 +24,14 @@ class CQuizDistribution
     private $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $title;
+
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="exercise_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
@@ -58,6 +66,32 @@ class CQuizDistribution
      */
     private $lastGenerationDate;
 
+    /**
+     * @ORM\OneToMany(targetEntity="CQuizDistributionQuestions", mappedBy="distribution", cascade={"persist", "remove"} )
+     */
+    private $questions;
+
+    public function __construct()
+    {
+        $this->lastGenerationDate = new \DateTime();
+        $this->questions = new ArrayCollection();
+    }
+
+    public function getQuestions()
+    {
+        return $this->questions;
+    }
+
+    public function setQuestions($questions)
+    {
+        $this->questions = $questions;
+        return $this;
+    }
+
+    public function setQuestion(CQuizDistributionQuestions $questions)
+    {
+        $this->questions->add($questions);
+    }
 
     /**
      * Get id
@@ -80,6 +114,29 @@ class CQuizDistribution
         $this->exerciseId = $exerciseId;
 
         return $this;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return CQuizDistribution
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
 
     /**

@@ -55,10 +55,11 @@ RENAME TABLE branch_sync_log TO branch_transaction_log;
 UPDATE settings_current SET selected_value = 'minedu' WHERE variable = 'template';
 UPDATE settings_current SET selected_value = 'digedd' WHERE variable = 'stylesheets';
 
-
+DROP TABLE c_quiz_distribution;
 CREATE TABLE c_quiz_distribution (
   id int unsigned not null primary key AUTO_INCREMENT,
   exercise_id int unsigned not null,
+  title varchar(255) not null,
   -- the list of questions id that the student will have to go through for this form, split by ","
   -- (as in track_e_exercices - this will avoid 60 more queries to the next table once the exam is taking place)
   data_tracking text not null default '',

@@ -137,7 +137,7 @@ abstract class Question
      * @param int $course_id
      * @param Exercise
      *
-     * @return boolean - true if question exists, otherwise false
+     * @return Question
      */
     public static function read($id, $course_id = null, Exercise $exercise = null)
     {

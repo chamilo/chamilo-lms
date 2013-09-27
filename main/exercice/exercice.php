@@ -698,6 +698,13 @@ if (!empty($exercise_list)) {
                         }*/
                     }
 
+                    if ($app['security']->isGranted('ROLE_SESSION_MANAGER')) {
+                        $actions .= Display::url(
+                            Display::return_icon('admin_star.png', get_lang('Distribution'), '', ICON_SIZE_SMALL),
+                            $app['url_generator']->generate('exercise_distribution.controller:indexAction', array('exerciseId' => $exercise_id))
+                        );
+                    }
+
                     // Number of questions
                     /*
                     $random_label = null;

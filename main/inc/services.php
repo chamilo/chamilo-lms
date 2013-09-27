@@ -762,4 +762,8 @@ $app['jury_member.controller'] = $app->share(
     }
 );
 
-
+$app['exercise_distribution.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\QuestionManager\ExerciseDistributionController($app);
+    }
+);

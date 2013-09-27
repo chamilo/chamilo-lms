@@ -45,6 +45,17 @@ class CQuizDistributionQuestions
      */
     private $questionId;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="CQuizDistribution")
+     * @ORM\JoinColumn(name="quiz_distribution_id", referencedColumnName="id", nullable=true)
+     */
+    private $distribution;
+
+
+    public function setDistribution($distribution)
+    {
+        $this->distribution = $distribution;
+    }
 
     /**
      * Get id

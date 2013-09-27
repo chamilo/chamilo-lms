@@ -668,5 +668,7 @@ if ($alreadyInstalled) {
     $app->mount('/admin/director', new ChamiloLMS\Provider\ReflectionControllerProvider('branch_director.controller'));
     $app->mount('/admin/jury_president', new ChamiloLMS\Provider\ReflectionControllerProvider('jury_president.controller'));
     $app->mount('/admin/jury_member', new ChamiloLMS\Provider\ReflectionControllerProvider('jury_member.controller'));
+
+    $app->mount('/admin/question_manager/exercise_distribution', new ChamiloLMS\Provider\ReflectionControllerProvider('exercise_distribution.controller'));
 }
 

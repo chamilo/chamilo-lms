@@ -723,6 +723,39 @@ class Testcategory
     }
 
     /**
+     * Returns an array of question ids for each category
+     * $categories[1][30] = 10, array with category id = 1 and question_id = 10
+     * A question has "n" categories
+     * @param int exercise
+     * @param array check question list
+     * @param string order by
+     * @return array
+     */
+    static function getQuestionsByCategory($categoryId) {
+        $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
+        $categoryTable = Database::get_course_table(TABLE_QUIZ_CATEGORY);
+        $categoryId = intval($categoryId);
+
+        $sql = "SELECT DISTINCT qrc.question_id, qrc.category_id
+                FROM $TBL_QUESTION_REL_CATEGORY qrc INNER JOIN $TBL_EXERCICE_QUESTION eq
+                ON (eq.question_id = qrc.question_id)
+                INNER JOIN $categoryTable c
+                ON (c.iid = qrc.category_id)
+                INNER JOIN $tableQuestion q
+                ON (q.iid = qrc.question_id )
+                WHERE   qrc.category_id = $categoryId ";
+
+        $res = Database::query($sql);
+        $newCategoryList = array();
+        while ($data = Database::fetch_array($res)) {
+            $newCategoryList[] = $data['question_id'];
+        }
+        return $newCategoryList;
+    }
+
+    /**
      * Return an array of X elements of an array
      * @param array $array
      * @param int $numberOfElements

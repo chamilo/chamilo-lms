@@ -2,15 +2,27 @@
 
 /**
  * ChamiloSession class definition
- * @todo don't use global
- */
+  */
 class ChamiloSession
 {
+    public static $session;
 
+    /**
+     * @param $session
+     */
+    public static function setSession($session)
+    {
+        self::$session = $session;
+    }
+
+    /**
+     * @param $variable
+     * @param null $default
+     * @return null
+     */
     public static function read($variable, $default = null)
     {
-        global $app;
-        $result = $app['session']->get($variable);
+        $result = self::$session->get($variable);
         // check if the value exists in the $_SESSION array
         if (empty($result)) {
             return isset($_SESSION[$variable]) ? $_SESSION[$variable] : $default;
@@ -19,19 +31,24 @@ class ChamiloSession
         }
     }
 
+    /**
+     * @param $variable
+     * @param $value
+     */
     public static function write($variable, $value)
     {
-        global $app;
         // Writing the session in 2 instances because
         $_SESSION[$variable] = $value;
-        $app['session']->set($variable, $value);
+        self::$session->set($variable, $value);
     }
 
+    /**
+     * @param $variable
+     */
     public static function erase($variable)
     {
-        global $app;
         $variable = (string) $variable;
-        $app['session']->remove($variable);
+        self::$session->remove($variable);
 
         if (isset($GLOBALS[$variable])) {
             unset($GLOBALS[$variable]);
@@ -46,9 +63,7 @@ class ChamiloSession
      */
     public static function clear()
     {
-        global $app;
-        $app['session']->clear();
-        //$_SESSION = array();
+        self::$session->clear();
     }
 
     /**
@@ -56,11 +71,6 @@ class ChamiloSession
      */
     public static function destroy()
     {
-        global $app;
-        $app['session']->invalidate();
-        /*
-        session_unset();
-        $_SESSION = array();
-        session_destroy();*/
+        self::$session->invalidate();
     }
 }

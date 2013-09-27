@@ -1,9 +1,11 @@
-admin_login_check:
-    pattern:   /admin/login_check
+secured_login_check:
+    pattern:   /secured/login_check
 
-admin_logout:
-    pattern:   /admin/logout
+secured_logout:
+    pattern:   /secured/logout
 
+logout:
+    pattern:   /secured/logout
 home:
     path:      /home
     defaults:  { _controller: index.controller:indexAction, culture: en }

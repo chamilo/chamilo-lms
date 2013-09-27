@@ -948,16 +948,15 @@ class PageController
     }
 
     /**
-     * The most important function here, prints the session and course list (user_portal.php)
-     *
-     * @param int User id
-     * @param string filter
-     * @param int page
-     * @return string HTML list of sessions and courses
-     * @assert () === false
-     *
-     */
-
+    * The most important function here, prints the session and course list (user_portal.php)
+    *
+    * @param int User id
+    * @param string filter
+    * @param int page
+    * @return string HTML list of sessions and courses
+    * @assert () === false
+    *
+    */
     public function returnCourses($user_id, $filter, $page)
     {
         if (empty($user_id)) {

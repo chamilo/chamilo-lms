@@ -25,7 +25,7 @@
 {% endif %}
 
 
-<form class="form-signin" action="{{ url('admin_login_check') }}" method="post">
+<form class="form-signin" action="{{ url('secured_login_check') }}" method="post">
     <h2 class="form-signin-heading">{{ 'SignIn' | get_lang }}</h2>
     {% if error %}
         <div class="alert">

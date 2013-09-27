@@ -18,6 +18,10 @@ class LoginListener
         var_dump($event->getRequest()->getUser());
         */
 
+        $request = $event->getRequest();
+        $session = $request->getSession();
+        \ChamiloSession::setSession($session);
+
         $session = $event->getRequest()->getSession();
         //$session->remove('partThatShouldNotCarryOver');
     }

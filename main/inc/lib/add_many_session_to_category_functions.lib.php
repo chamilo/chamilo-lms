@@ -17,12 +17,11 @@ class AddManySessionToCategoryFunctions {
      * @param string A search string
      * @param string A search box type (single or anything else)
      * @return string XajaxResponse
-     * @assert () !== ''
      * @assert ('abc','single') !== ''
      */
-    function search_courses($needle,$type) {
+    function search_courses($needle, $type) {
 
-		global $tbl_course, $tbl_session, $id_session;
+		global $tbl_session;
 		$xajax_response = new XajaxResponse();
 		$return = '';
 		if(!empty($needle) && !empty($type)) {

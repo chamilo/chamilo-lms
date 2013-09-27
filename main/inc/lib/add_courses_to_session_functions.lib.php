@@ -8,7 +8,6 @@
  * Init
  */
 require_once dirname(__FILE__).'/xajax/xajax.inc.php';
-//require_once (api_get_path(SYS_CODE_PATH).'admin/add_courses_to_session.php');
 
 /**
  * AddCourseToSession class

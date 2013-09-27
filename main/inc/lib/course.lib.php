@@ -2892,6 +2892,15 @@ class CourseManager
         return $html;
     }
 
+    /**
+     * @param int $user_id
+     * @param $filter
+     * @param bool $load_dirs
+     * @param int $getCount
+     * @param int $start
+     * @param null $maxPerPage
+     * @return null|string
+     */
     static function displayCourses($user_id, $filter, $load_dirs, $getCount, $start = null, $maxPerPage = null)
     {
 

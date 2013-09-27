@@ -42,12 +42,11 @@ class UserManager
         'hr_dept_id'
     );
 
-    /**
-     * Empty constructor. This class is mostly static.
-     */
-    public function __construct ()
-    {
+    public static $em;
 
+    public static function setEntityManager($em)
+    {
+        self::$em = $em;
     }
 
     /**
@@ -166,17 +165,6 @@ class UserManager
                 //we are adding by default the access_url_user table with access_url_id = 1
                 UrlManager::add_user_to_url($user_id, 1);
             }
-
-            global $app;
-            /*
-            $em = $app['orm.ems']['db_write'];
-            // @var Entity\User $user
-            $user = $em->getRepository('Entity\User')->findOneById($user_id);
-            $status = $em->getRepository('Entity\Role')->findOneById($status);
-            $user->roles->add($status);
-            $em->persist($user);
-            $em->flush();*/
-
 
             //saving extra fields
             $field_value = new ExtraFieldValue('user');
@@ -2461,8 +2449,7 @@ class UserManager
                    " session_category.date_start session_category_date_start, ".
                    " session_category.date_end session_category_date_end, ".
                    " id_coach ";
-
-         $select_1 = ", moved_to, ".
+        $select_1 = ", moved_to, ".
                      " moved_status, ".
                      " scu.id_user";
 
@@ -2481,7 +2468,8 @@ class UserManager
                 ON su.id_session = session.id AND su.id_user = scu.id_user
                 WHERE scu.id_user = $user_id $condition_date_end1";
 
-        // select specific to session coaches
+        // This is bad because we asumme the user is a coach which is not the case
+        // Select specific to session coaches
         $select2 = " $select FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id) ";
         $sql2 = $select2 . " WHERE session.id_coach = $user_id $condition_date_end2 ";
 
@@ -2508,13 +2496,12 @@ class UserManager
         $sql3 = null;
 
         if ($get_count) {
+            //$sql3 = $sql2;
             $sql3 = $sql1;
         } else {
             $sql1 .= $order;
             $sql2 .= $order;
         }
-
-        //$sql3 = $sql2 . " AND session.id_coach = $user_id $condition_date_end2 ";
 
         if (isset($start) && isset($maxPerPage)) {
             $start = intval($start);
@@ -2524,7 +2511,6 @@ class UserManager
             $sql1 .= $limitCondition;
             $sql2 .= $limitCondition;
         }
-
 
         $join = array();
         $ordered_join = array();
@@ -2582,18 +2568,16 @@ class UserManager
         }
 
         if (count($ordered_join) > 0) {
-            //while ($row = Database::fetch_array($result1)) {
             foreach ($ordered_join as $row) {
                 if ($get_count) {
                     return $row['total_rows'];
                 }
-                $categories[$row['session_category_id']]['session_category']['id']                          = $row['session_category_id'];
-                $categories[$row['session_category_id']]['session_category']['name']                        = $row['session_category_name'];
-                $categories[$row['session_category_id']]['session_category']['date_start']                  = $row['session_category_date_start'];
-                $categories[$row['session_category_id']]['session_category']['date_end']                    = $row['session_category_date_end'];
+                $categories[$row['session_category_id']]['session_category']['id'] = $row['session_category_id'];
+                $categories[$row['session_category_id']]['session_category']['name'] = $row['session_category_name'];
+                $categories[$row['session_category_id']]['session_category']['date_start'] = $row['session_category_date_start'];
+                $categories[$row['session_category_id']]['session_category']['date_end'] = $row['session_category_date_end'];
 
                 $session_id = $row['id'];
-                //$session_info = api_get_session_info($session_id);
                 // The only usage of $session_info is to call
                 // api_get_session_date_validation, which only needs id and
                 // dates from the session itself, so really no need to query
@@ -2602,7 +2586,6 @@ class UserManager
 
                 // Checking session visibility
                 $visibility = api_get_session_visibility($session_id, null, $ignore_visibility_for_admins);
-
 
                 switch ($visibility) {
                     case SESSION_VISIBLE_READ_ONLY:
@@ -2619,16 +2602,16 @@ class UserManager
                         continue;
                     }
                 }
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['session_name']            = $row['name'];
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['session_id']              = $row['id'];
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['id_coach']                = $row['id_coach'];
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['session_name'] = $row['name'];
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['session_id'] = $row['id'];
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['id_coach'] = $row['id_coach'];
 
                 if (isset($row['id_coach']) && !empty($row['id_coach'])) {
                     $user_info = api_get_user_info($row['id_coach']);
-                    $categories[$row['session_category_id']]['sessions'][$row['id']]['coach_info']          = $user_info;
+                    $categories[$row['session_category_id']]['sessions'][$row['id']]['coach_info'] = $user_info;
                 }
 
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['access_start_date']       = $row['access_start_date'];
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['access_start_date'] = $row['access_start_date'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['access_end_date']         = $row['access_end_date'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['coach_access_start_date'] = $row['coach_access_start_date'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['coach_access_end_date']   = $row['coach_access_end_date'];

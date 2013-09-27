@@ -28,19 +28,17 @@ class Template
     public $force_plugin_load = true;
     public $navigation_array;
     public $loadBreadcrumb = true;
+    /** @var  Symfony\Component\Security\Core\SecurityContext */
+    private $security;
 
     /**
      * @param Application $app
      */
-    public function __construct(Application $app = null)
+    public function __construct(Application $app, $database, $security)
     {
-        if (empty($app)) {
-            global $app;
-            $this->app = &$app;
-        } else {
-            //ugly fix just for now
-            $this->app = &$app;
-        }
+        $this->app = &$app;
+        $this->security = $security;
+
         $this->app['classic_layout'] = true;
         $this->navigation_array = $this->returnNavigationArray();
 
@@ -433,6 +431,9 @@ class Template
         }
     }
 
+    /**
+     * @param array $htmlHeadXtra
+     */
     public function addJsFiles($htmlHeadXtra = array())
     {
         $extra_headers = null;
@@ -988,12 +989,9 @@ class Template
 
         // Adding block settings for each role
         if (isset($this->app['allow_admin_toolbar'])) {
-            /** @var  \Symfony\Component\Security\Core\SecurityContext  $security */
-            $security = $this->app['security'];
-
             $roleTemplate = array();
             foreach ($this->app['allow_admin_toolbar'] as $role) {
-                if ($security->isGranted($role)) {
+                if ($this->security->getToken() && $this->security->isGranted($role)) {
                     // Fixes in order to match the templates
                     if ($role == 'ROLE_ADMIN') {
                         $role = 'administrator';

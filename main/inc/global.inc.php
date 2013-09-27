@@ -18,15 +18,6 @@
  *
  */
 
-// Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
-// @todo not sure if we need this
-// api_request_uri();
-// This is for compatibility with MAC computers.
-//ini_set('auto_detect_line_endings', '1');
-
-// Composer auto loader.
-require_once __DIR__.'../../../vendor/autoload.php';
-
 use Silex\Application;
 use \ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -54,6 +45,8 @@ $configurationYMLFile = $includePath.'/../../config/configuration.yml';
 $configurationFileAppPath = $includePath.'/../../config/configuration.php';
 
 $alreadyInstalled = false;
+$_configuration = array();
+
 if (file_exists($configurationFilePath) || file_exists($configurationYMLFile)  || file_exists($configurationFileAppPath)) {
     if (file_exists($configurationFilePath)) {
         require_once $configurationFilePath;
@@ -64,8 +57,6 @@ if (file_exists($configurationFilePath) || file_exists($configurationYMLFile)  |
         require_once $configurationFileAppPath;
     }
     $alreadyInstalled = true;
-} else {
-    $_configuration = array();
 }
 
 // Overwriting $_configuration
@@ -125,7 +116,7 @@ if ($alreadyInstalled) {
     }*/
 
     // For backward compatibility.
-    $_configuration['dokeos_version'] = $_configuration['system_version'];
+    $_configuration['dokeos_version'] = isset($_configuration['system_version']) ? $_configuration['system_version'] : null;
     //$_configuration['dokeos_stable'] = $_configuration['system_stable'];
     $userPasswordCrypted = (!empty($_configuration['password_encryption']) ? $_configuration['password_encryption'] : 'sha1');
 }
@@ -143,7 +134,6 @@ if (isset($urlInfo['path'])) {
 }
 
 $libPath = $includePath.'/lib/';
-$langPath = api_get_path(SYS_LANG_PATH);
 
 // Database constants
 require_once $libPath.'database.constants.inc.php';
@@ -154,15 +144,8 @@ require_once $libPath.'events.lib.inc.php';
 // Load allowed tag definitions for kses and/or HTMLPurifier.
 require_once $libPath.'formvalidator/Rule/allowed_tags.inc.php';
 
-// Ensure that _configuration is in the global scope before loading
-// api.lib.php. This is particularly helpful for unit tests
-// @todo do not use $GLOBALS
-/*if (!isset($GLOBALS['_configuration'])) {
-    $GLOBALS['_configuration'] = $_configuration;
-}*/
-
 // Add the path to the pear packages to the include path
-ini_set('include_path', api_create_include_path_setting());
+ini_set('include_path', api_create_include_path_setting($includePath));
 
 $app['configuration_file'] = $configurationFilePath;
 $app['configuration_yml_file'] = $configurationYMLFile;
@@ -177,7 +160,7 @@ $app['show_profiler'] = isset($_configuration['show_profiler']) ? $_configuratio
 
 // Enables assetic in order to load 1 compressed stylesheet or split files
 //$app['assetic.enabled'] = $app['debug'];
-// Harcoded to false by default. Implementation is not finished yet.
+// Hardcoded to false by default. Implementation is not finished yet.
 $app['assetic.enabled'] = false;
 
 // Dumps assets
@@ -225,28 +208,8 @@ $app['configuration'] = $_configuration;
 $_plugins = array();
 if ($alreadyInstalled) {
 
-
     /** Including service providers */
     require_once 'services.php';
-
-    // Setting the static database class
-    $database = $app['database'];
-
-    // Retrieving all the chamilo config settings for multiple URLs feature
-    $_configuration['access_url'] = 1;
-
-    if (api_get_multiple_access_url()) {
-        $access_urls = api_get_access_urls();
-        $protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
-        $request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
-        $request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
-
-        foreach ($access_urls as & $details) {
-            if ($request_url1 == $details['url'] or $request_url2 == $details['url']) {
-                $_configuration['access_url'] = $details['id'];
-            }
-        }
-    }
 }
 
 $charset = 'UTF-8';
@@ -273,6 +236,9 @@ $app->error(
         } else {
             $code = null;
         }
+
+        Session::setSession($app['session']);
+
         //$code = ($e instanceof HttpException) ? $e->getStatusCode() : 500;
         // It seems that error() is executed first than the before() middleware
         // @ŧodo check this one
@@ -283,13 +249,15 @@ $app->error(
         if (!is_dir($app['sys_root'].'main/template/'.$templateStyle)) {
             $templateStyle = 'default';
         }
+
         $app['template_style'] = $templateStyle;
 
         // Default layout.
         $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
-        $app['template']->assign('error', array('code' => $code, 'message' => $message));
-        $response = $app['template']->render_layout('error.tpl');
-
+        /** @var Template $template */
+        $template = $app['template'];
+        $template->assign('error', array('code' => $code, 'message' => $message));
+        $response = $template->render_layout('error.tpl');
         return new Response($response);
     }
 );
@@ -527,6 +495,10 @@ $app->before(
         // Starting the session for more info see: http://silex.sensiolabs.org/doc/providers/session.html
         $request->getSession()->start();
 
+        // Setting session obj
+        Session::setSession($app['session']);
+        UserManager::setEntityManager($app['orm.em']);
+
         /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem $filesystem */
         $filesystem = $app['chamilo.filesystem'];
 
@@ -540,14 +512,27 @@ $app->before(
             $filesystem->copyFolders($app['temp.paths']->copyFolders);
         }
 
+
         // Check and modify the date of user in the track.e.online table
         Online::loginCheck(api_get_user_id());
+
 
         // Setting access_url id (multiple url feature)
 
         if (api_get_multiple_access_url()) {
-            //for some reason $app['configuration'] doesn't work. Use $_config
-            global $_configuration;
+            $_configuration = $app['configuration'];
+            $_configuration['access_url'] = 1;
+
+            $access_urls = api_get_access_urls();
+            $protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
+            $request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
+            $request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
+
+            foreach ($access_urls as & $details) {
+                if ($request_url1 == $details['url'] or $request_url2 == $details['url']) {
+                    $_configuration['access_url'] = $details['id'];
+                }
+            }
             Session::write('url_id', $_configuration['access_url']);
             Session::write('url_info', api_get_current_access_url_info($_configuration['access_url']));
         } else {
@@ -613,10 +598,12 @@ $app->before(
         $user = null;
 
         /** Security component. */
-        if ($app['security']->isGranted('IS_AUTHENTICATED_FULLY')) {
+        /** @var Symfony\Component\Security\Core\SecurityContext $security */
+        $security = $app['security'];
+        if ($security->isGranted('IS_AUTHENTICATED_FULLY')) {
 
             // Checking token in order to get the current user.
-            $token = $app['security']->getToken();
+            $token = $security->getToken();
             if (null !== $token) {
                 /** @var Entity\User $user */
                 $user = $token->getUser();
@@ -630,12 +617,12 @@ $app->before(
             $app['current_user'] = $userInfo;
 
             // Setting admin permissions.
-            if ($app['security']->isGranted('ROLE_ADMIN')) {
+            if ($security->isGranted('ROLE_ADMIN')) {
                 Session::write('is_platformAdmin', true);
             }
 
             // Setting teachers permissions.
-            if ($app['security']->isGranted('ROLE_TEACHER')) {
+            if ($security->isGranted('ROLE_TEACHER')) {
                 Session::write('is_allowedCreateCourse', true);
             }
 
@@ -650,14 +637,17 @@ $app->before(
 
         $language = api_get_setting('platformLanguage');
         $iso = api_get_language_isocode($language);
-        $app['translator']->setLocale($iso);
+
+        /** @var  Symfony\Component\Translation\Translator $translator */
+        $translator = $app['translator'];
+        $translator->setLocale($iso);
 
         // From the login page
         $language = $request->get('language');
 
         if (!empty($language)) {
             $iso = api_get_language_isocode($language);
-            $app['translator']->setLocale($iso);
+            $translator->setLocale($iso);
         }
 
         // From the user
@@ -666,14 +656,14 @@ $app->before(
             //$language = $user->getLanguage();
             $language = $userInfo['language'];
             $iso = api_get_language_isocode($language);
-            $app['translator']->setLocale($iso);
+            $translator->setLocale($iso);
         }
 
         // From the course
         $courseInfo = api_get_course_info();
         if ($courseInfo && !empty($courseInfo)) {
             $iso = api_get_language_isocode($courseInfo['language']);
-            $app['translator']->setLocale($iso);
+            $translator->setLocale($iso);
         }
 
         $file = $request->get('file');
@@ -713,8 +703,8 @@ $app->before(
                 }
 
                 $translator->addLoader('xlf', new Symfony\Component\Translation\Loader\XliffFileLoader());
-                $translator->addResource('xlf', api_get_path(SYS_PATH).'vendor/symfony/src/Symfony/Bundle/FrameworkBundle/Resources/translations/validators.sr_Latn.xlf', 'sr_Latn', 'validators');
-
+                $url = api_get_path(SYS_PATH).'vendor/symfony/src/Symfony/Bundle/FrameworkBundle/Resources/translations/validators.sr_Latn.xlf';
+                $translator->addResource('xlf', $url, 'sr_Latn', 'validators');
 
                 /*$translator->addLoader('mofile', new MoFileLoader());
                 $filePath = api_get_path(SYS_PATH).'main/locale/'.$locale.'.mo';
@@ -724,10 +714,6 @@ $app->before(
                 $translator->addResource('mofile', $filePath, $locale);*/
                 return $translator;
             }
-
-
-
-
         }));
 
         // Check if we are inside a Chamilo course tool
@@ -749,6 +735,7 @@ $app->before(
 
             $app['template']->assign('course_session', $session);
         }
+
     }
 );
 
@@ -778,6 +765,7 @@ $text_dir = api_get_text_direction();
 
 /** "Login as user" custom script */
 // @todo move this code in a controller
+/*
 if (!isset($_SESSION['login_as']) && isset($_user)) {
     // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
 
@@ -805,7 +793,7 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
         $s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date = '$now' WHERE login_id = $i_id_last_connection";
         Database::query($s_sql_update_logout_date);
     }
-}
+}*/
 
 // Add language_measure_frequency to your main/inc/conf/configuration.php in
 // order to generate language variables frequency measurements (you can then
@@ -876,9 +864,5 @@ if (isset($app['configuration']['main_database']) && isset($app['db.event_manage
     $app['dbs.event_manager']['db_read']->addEventSubscriber($loggableListener);
     $app['dbs.event_manager']['db_write']->addEventSubscriber($loggableListener);
 }
-
-// Fixes uses of $_course in the scripts.
-$_course = api_get_course_info();
-$_cid = api_get_course_id();
 
 return $app;

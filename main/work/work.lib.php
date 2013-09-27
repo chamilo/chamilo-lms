@@ -1716,7 +1716,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
         }
 
         $sql = "SELECT $select
-                FROM $work_condition  $user_condition $course_conditions
+                FROM $work_condition  $user_condition
                 WHERE  $extra_conditions $where_condition $condition_session ";
 
         $sql .= " ORDER BY $column $direction ";
@@ -1816,10 +1816,8 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 $url = api_get_path(WEB_CODE_PATH).'work/';
                 $action = '';
                 if ($is_allowed_to_edit) {
-
                     $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
                         Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a> ';
-
 
                     if ($locked) {
                         if ($qualification_exists) {
@@ -1836,7 +1834,6 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                             Display::return_icon('edit.png', get_lang('Comment'),array(), ICON_SIZE_SMALL).'</a>';
                         }
                     }
-
 
                     if ($work['contains_file']) {
                         if ($locked) {
@@ -1857,16 +1854,19 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                         $action .= '<a href="'.$url.'work.php?'.api_get_cidreq().'&action=delete&amp;item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'" >'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
                     }
                 } elseif ($is_author && (empty($work['qualificator_id']) || $work['qualificator_id'] == 0)) {
-                    if (api_is_allowed_to_session_edit(false, true)) {
-                        $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                            Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a>';
+                    $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a>';
+
+                    if (api_get_course_setting('student_delete_own_publication') == 1) {
+                        if (api_is_allowed_to_session_edit(false, true)) {
+                            $action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'&gradebook='.Security::remove_XSS($_GET['gradebook']).'" title="'.get_lang('Modify').'">'.
+                                Display::return_icon('edit.png', get_lang('Comment'),array(), ICON_SIZE_SMALL).'</a>';
+                        }
+                        $action .= ' <a href="'.$url.'work.php?'.api_get_cidreq().'&action=delete&amp;item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'"  >'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
                     } else {
                         $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);
                     }
-                    if (api_get_course_setting('student_delete_own_publication') == 1) {
-                        $action .= ' <a href="'.$url.'work.php?'.api_get_cidreq().'&action=delete&amp;item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'"  >'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
-                    }
                 } else {
+                    $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a>';
                     $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);
                 }
 

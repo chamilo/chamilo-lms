@@ -583,7 +583,8 @@ function api_get_path($path_type, $path = null) {
 
     // To avoid that the api_get_access_url() function fails since global.inc.php also calls the api.lib.php
     if ($path_type == WEB_PATH) {
-        if (isset($_configuration['access_url']) &&  $_configuration['access_url'] != 1) {
+        $urlId = api_get_current_access_url_id();
+        if (isset($urlId) &&  $urlId != 1) {
             //we look into the DB the function api_get_access_url
             $url_info = api_get_current_access_url_info();
             $root_web = $url_info['active'] == 1 ? $url_info['url'] : $_configuration['root_web'];
@@ -5103,7 +5104,7 @@ function api_request_uri() {
  * To be used in global.inc.php only.
  * @author Ivan Tcholakov, 06-NOV-2008.
  */
-function api_create_include_path_setting() {
+function api_create_include_path_setting($includePath) {
     $include_path = ini_get('include_path');
     if (!empty($include_path)) {
         $include_path_array = explode(PATH_SEPARATOR, $include_path);
@@ -5120,10 +5121,10 @@ function api_create_include_path_setting() {
             return implode(PATH_SEPARATOR, $result);
         }
         // Current directory is not listed in the include_path setting, low probability is here.
-        return api_get_path(LIBRARY_PATH).'pear'.PATH_SEPARATOR.$include_path;
+        return $includePath.'/lib/pear'.PATH_SEPARATOR.$include_path;
     }
     // The include_path setting is empty, low probability is here.
-    return api_get_path(LIBRARY_PATH).'pear';
+    return $includePath.'/lib/pear';
 }
 
 /**

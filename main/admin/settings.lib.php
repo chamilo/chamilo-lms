@@ -195,10 +195,10 @@ function handle_stylesheets()
     $currentStyle = api_get_setting('stylesheets');
 
     $is_style_changeable = false;
-
-    if ($_configuration['access_url'] != 1) {
+    $urlId = api_get_current_access_url_id();
+    if ($urlId != 1) {
         $style_info = api_get_settings('stylesheets', '', 1, 0);
-        $url_info = api_get_access_url($_configuration['access_url']);
+        $url_info = api_get_access_url($urlId);
         if ($style_info[0]['access_url_changeable'] == 1 && $url_info['active'] == 1) {
             $is_style_changeable = true;
         }
@@ -223,7 +223,7 @@ function handle_stylesheets()
         Display::display_error_message(api_get_path(SYS_CODE_PATH).'css/'.get_lang('IsNotWritable'));
     } else {
         // Uploading a new stylesheet.
-        if ($_configuration['access_url'] == 1) {
+        if ($urlId == 1) {
             $show_upload_form = true;
         } else {
             if ($is_style_changeable) {
@@ -573,7 +573,7 @@ function handle_search()
 
     if ($form->validate()) {
         $formvalues = $form->exportValues();
-        $r = api_set_settings_category('Search', 'false', $_configuration['access_url']);
+        $r = api_set_settings_category('Search', 'false', api_get_current_access_url_id());
         // Save the settings.
         foreach ($formvalues as $key => $value) {
             $result = api_set_setting($key, $value, null, null);
@@ -1072,6 +1072,7 @@ function update_gradebook_score_display_custom_values($values) {
 function generate_settings_form($settings, $settings_by_access_list, $settings_to_avoid, $convert_byte_to_mega_list)
 {
     global $_configuration;
+    $urlId = api_get_current_access_url_id();
     $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
     $form = new FormValidator('settings', 'post', 'settings.php?category='.Security::remove_XSS($_GET['category']));
@@ -1123,7 +1124,7 @@ function generate_settings_form($settings, $settings_by_access_list, $settings_t
         $hideme = array();
         $hide_element = false;
 
-        if ($_configuration['access_url'] != 1) {
+        if ($urlId != 1) {
             if ($row['access_url_changeable'] == 0) {
                 // We hide the element in other cases (checkbox, radiobutton) we 'freeze' the element.
                 $hide_element = true;
@@ -1223,7 +1224,7 @@ function generate_settings_form($settings, $settings_by_access_list, $settings_t
                     $element = & $form->createElement('checkbox', $rowkeys['subkey'], '', get_lang($rowkeys['subkeytext']));
                     if ($row['access_url_changeable'] == 1) {
                         // 2. We look into the DB if there is a setting for a specific access_url.
-                        $access_url = $_configuration['access_url'];
+                        $access_url = $urlId;
                         if (empty($access_url )) $access_url = 1;
                         $sql = "SELECT selected_value FROM $table_settings_current WHERE variable='".$rowkeys['variable']."' AND subkey='".$rowkeys['subkey']."'  AND  subkeytext='".$rowkeys['subkeytext']."' AND access_url =  $access_url";
                         $result_access = Database::query($sql);

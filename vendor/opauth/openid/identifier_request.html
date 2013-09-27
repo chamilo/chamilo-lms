@@ -1,0 +1,22 @@
+<html>
+	<head>
+		<title>OpenID Authentication</title>
+	</head>
+	<body>
+		<h1>OpenID Authentication</h1>
+		
+		<form method="post">
+			<label for="openid_url">OpenID Identifier (URL):</label>
+			<input type="url" id="openid_url" name="openid_url">
+			<input type="submit" value="Authenticate">
+		</form>
+		
+		<script>
+		window.onload = function(){
+			var openid_url = document.getElementById('openid_url');
+			openid_url.focus();
+			openid_url.select();
+		}
+		</script>
+	</body>
+</html>

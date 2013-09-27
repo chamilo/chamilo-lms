@@ -481,6 +481,8 @@ return array(
     'OLE_PPS_File' => $baseDir . '/main/inc/lib/pear/OLE/PPS/File.php',
     'OLE_PPS_Root' => $baseDir . '/main/inc/lib/pear/OLE/PPS/Root.php',
     'Online' => $baseDir . '/main/inc/lib/online.inc.php',
+    'Opauth' => $vendorDir . '/opauth/opauth/lib/Opauth/Opauth.php',
+    'OpauthStrategy' => $vendorDir . '/opauth/opauth/lib/Opauth/OpauthStrategy.php',
     'OpenOfficeTextDocument' => $baseDir . '/main/newscorm/openoffice_text_document.class.php',
     'OpenofficeDocument' => $baseDir . '/main/newscorm/openoffice_document.class.php',
     'OpenofficePresentation' => $baseDir . '/main/newscorm/openoffice_presentation.class.php',

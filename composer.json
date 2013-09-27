@@ -78,7 +78,11 @@
         "sensio/framework-extra-bundle": "2.3.*@dev",
         "chamilo/chash": "dev-master",
         "composer/composer": "1.0.0-alpha7",
-        "flint/flint" : "dev-master"
+        "flint/flint" : "dev-master",
+        "icehero/silex-opauth": "dev-master",
+        "opauth/openid": "0.1.0",
+        "opauth/facebook": "0.2.1",
+        "opauth/google": "0.2.2"
     },
     "require-dev": {
         "knplabs/gaufrette": "0.2.*@dev",
@@ -90,7 +94,6 @@
         "leafo/lessphp": "dev-master",
         "mheap/silex-assetic": "1.0.*@dev",
         "filp/whoops": "dev-master"
-
     },
     "scripts": {
         "post-install-cmd": "ChamiloLMS\\Composer\\Tasks::postInstall",

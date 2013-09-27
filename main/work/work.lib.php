@@ -8,7 +8,7 @@
  * 	@author Roan Embrechts, code refactoring and virtual course support
  * 	@author Frederic Vauthier, directories management
  *  @author Julio Montoya <gugli100@gmail.com> BeezNest 2011 LOTS of bug fixes
- * 	@todo 	this lib should be convert in a static class and moved to main/inc/lib
+ * 	@todo 	this lib should be convert in a static class and moved to magein/inc/lib
  */
 /**
  * Initialization
@@ -59,8 +59,6 @@ function display_action_links($id, $cur_dir_path, $action)
         }
     }
 
-
-
     if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath' && api_is_allowed_to_session_edit(false, true)) {
         // Delete all files
         if (api_get_setting('permanently_remove_deleted_files') == 'true'){
@@ -69,7 +67,6 @@ function display_action_links($id, $cur_dir_path, $action)
             $message = get_lang('ConfirmYourChoice');
         }
     }
-
 
 	if ($display_output != '') {
 		echo '<div class="actions">';
@@ -164,7 +161,6 @@ function display_studentsdelete_form() {
         </label>
 		</div>
 </div>
-
 <?php
 }
 
@@ -231,7 +227,6 @@ function create_group_date_select($prefix = '') {
 	return $group_name;
 }
 
-
 function get_work_data_by_path($path) {
 	$path = Database::escape_string($path);
     $course_id 	= api_get_course_int_id();
@@ -258,6 +253,11 @@ function get_work_data_by_id($id) {
 	return $return;
 }
 
+/**
+ * @param int $user_id
+ * @param int $work_id
+ * @return int
+ */
 function get_work_count_by_student($user_id, $work_id) {
 	$user_id = intval($user_id);
 	$work_id = intval($work_id);
@@ -276,6 +276,10 @@ function get_work_count_by_student($user_id, $work_id) {
 	return $return;
 }
 
+/**
+ * @param int $id
+ * @return array
+ */
 function get_work_assignment_by_id($id) {
 	$id = intval($id);
     $course_id = api_get_course_int_id();
@@ -289,6 +293,12 @@ function get_work_assignment_by_id($id) {
 	return $return;
 }
 
+/**
+ * @param int $id
+ * @param array $my_folder_data
+ * @param string $add_in_where_query
+ * @return array
+ */
 function getWorkList($id, $my_folder_data, $add_in_where_query)
 {
     $work_table      = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -346,6 +356,10 @@ function getWorkList($id, $my_folder_data, $add_in_where_query)
     return $work_parents;
 }
 
+/**
+ * @param int $userId
+ * @return array
+ */
 function getWorkPerUser($userId)
 {
     $works = getWorkList(null, null, null);
@@ -599,9 +613,7 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 
                         $weight_input2[] = $form_folder->createElement('text', 'weight');
                         $form_folder -> addGroup($weight_input2, 'weight', get_lang('WeightInTheGradebook'), 'size="10"');
-
                         $form_folder -> addElement('html', '</div>');
-
                         $defaults['weight[weight]'] = $link_info['weight'];
 
                         if (!empty($link_info)) {
@@ -624,7 +636,6 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 
 					} else {
 						$homework['expires_on'] = api_get_local_time();
-
 						$expires_date_array = convert_date_to_array(api_get_local_time(), 'expires');
 						$defaults 			= array_merge($defaults, $expires_date_array);
 
@@ -1942,6 +1953,10 @@ function send_email_on_homework_creation($course_id) {
 	}
 }
 
+/**
+ * @param string $url
+ * @return bool
+ */
 function is_work_exist_by_url($url) {
 	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$url = Database::escape_string($url);
@@ -2356,8 +2371,8 @@ function getDocumentTemplateFromWork($workId, $courseInfo)
  * @param $workId
  * @param $courseInfo
  */
-function getAllDocumentsFromWorkToString($workId, $courseInfo) {
-
+function getAllDocumentsFromWorkToString($workId, $courseInfo)
+{
     $documents = getAllDocumentToWork($workId, $courseInfo['real_id']);
     if (!empty($documents)) {
         $docContent = '<ul class="nav nav-list well">';
@@ -2371,5 +2386,4 @@ function getAllDocumentsFromWorkToString($workId, $courseInfo) {
         $docContent .= '</ul><br />';
         echo $docContent;
     }
-
 }

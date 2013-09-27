@@ -142,7 +142,7 @@ require_once $libPath.'database.constants.inc.php';
 require_once $libPath.'events.lib.inc.php';
 
 // Load allowed tag definitions for kses and/or HTMLPurifier.
-//require_once $libPath.'formvalidator/Rule/allowed_tags.inc.php';
+require_once $libPath.'formvalidator/Rule/allowed_tags.inc.php';
 
 // Add the path to the pear packages to the include path
 ini_set('include_path', api_create_include_path_setting($includePath));

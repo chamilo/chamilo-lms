@@ -61,33 +61,24 @@ $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
     'http_cache.cache_dir' => $app['http_cache.cache_dir'].'/',
 ));*/
 
-// http://symfony.com/doc/master/reference/configuration/security.html
-
-class SecurityServiceProvider extends \Silex\Provider\SecurityServiceProvider
-{
-    public function addFakeRoute($method, $pattern, $name)
-    {
-        // Don't do anything otherwise the closures will be dumped and that leads to fatal errors.
-    }
-}
-
-$app->register(new SecurityServiceProvider, array(
+$app->register(new \Silex\Provider\SecurityServiceProvider, array(
     'security.firewalls' => array(
         'login' => array(
             'pattern' => '^/login$',
-            'anonymous' => true
+            'anonymous' => true,
+            'security' => false
         ),
         'secured' => array(
             'pattern' => '^/.*$',
             'form'    => array(
                 'login_path' => '/login',
-                'check_path' => '/admin/login_check',
+                'check_path' => '/secured/login_check',
                 'default_target_path' => '/userportal',
                 'username_parameter' => 'username',
                 'password_parameter' => 'password',
             ),
             'logout' => array(
-                'logout_path' => '/admin/logout',
+                'logout_path' => '/secured/logout',
                 'target' => '/'
             ),
             'users' => $app->share(function() use ($app) {
@@ -144,21 +135,16 @@ $app['security.role_hierarchy'] = array(
 
 // Role rules
 $app['security.access_rules'] = array(
-    //array('^/admin', 'ROLE_ADMIN', 'https'),
     array('^/admin/administrator', 'ROLE_ADMIN'),
-    //array('^/main/admin/extra_fields.php', 'ROLE_QUESTION_MANAGER'),
-    //array('^/main/admin/extra_field_options.php', 'ROLE_QUESTION_MANAGER'),
-    //array('^/main/admin/extra_field_workflow.php', 'ROLE_QUESTION_MANAGER'),
     array('^/main/admin/.*', 'ROLE_ADMIN'),
     array('^/admin/questionmanager', 'ROLE_QUESTION_MANAGER'),
     array('^/main/auth/inscription.php', 'IS_AUTHENTICATED_ANONYMOUSLY'),
     array('^/main/auth/lostPassword.php', 'IS_AUTHENTICATED_ANONYMOUSLY'),
-    array('^/main/.*', array('ROLE_STUDENT')),
     array('^/courses/.*/curriculum/category', 'ROLE_TEACHER'),
     array('^/courses/.*/curriculum/item', 'ROLE_TEACHER'),
     array('^/courses/.*/curriculum/user', 'ROLE_STUDENT'),
     array('^/courses/.*/curriculum', 'ROLE_STUDENT'),
-    //array('^.*$', 'ROLE_USER'),
+    //array('^/main/.*', array('ROLE_STUDENT')),
 );
 
 // Roles that have an admin toolbar
@@ -167,6 +153,28 @@ $app['allow_admin_toolbar'] = array(
     'ROLE_QUESTION_MANAGER',
     'ROLE_SESSION_MANAGER'
 );
+
+use SilexOpauth\OpauthExtension;
+
+$app['opauth'] = array(
+    'login' => '/auth/login',
+    'callback' => '/auth/callback',
+    'config' => array(
+        'security_salt' => 'LDFmiilYf8Fyw5W10rxx4W1KsVrieQCnpBzzpTBWA5vJidQKDx8pMJbmw28R1C4m',
+        'Strategy' => array(
+            'Facebook' => array(
+                'app_id' => 'APP_ID',
+                'app_secret' => 'APP_SECRET'
+            ),
+            'OpenID' => array(),
+            'Google' => array(
+                'client_id' => '789282956155.apps.googleusercontent.com',
+                'client_secret' => 'MKoR9EWis_JtwJj4GAL1mZkv'
+            )
+        )
+    )
+);
+$app->register(new OpauthExtension());
 
 /*
 $app['security.access_manager'] = $app->share(function($app) {
@@ -335,8 +343,8 @@ $app->register(
     new Silex\Provider\TwigServiceProvider(),
     array(
         'twig.path' => array(
-            api_get_path(SYS_CODE_PATH).'template', //template folder
-            api_get_path(SYS_PLUGIN_PATH) //plugin folder
+            $app['sys_root'].'main/template', //template folder
+            $app['sys_root'].'plugin' //plugin folder
         ),
         // twitter bootstrap form twig templates
         'twig.form.templates' => array('form_div_layout.html.twig', 'default/form/form_custom_template.tpl'),
@@ -492,7 +500,6 @@ if ($app['assetic.enabled']) {
             ));
 
             $am->get('styles')->setTargetPath($app['assetic.output.path_to_css']);
-
             $am->set('scripts', new Assetic\Asset\AssetCache(
                 new Assetic\Asset\GlobAsset($app['assetic.input.path_to_js']),
                 new Assetic\Cache\FilesystemCache($app['assetic.path_to_cache'])
@@ -523,12 +530,21 @@ class ChamiloServiceProvider implements ServiceProviderInterface
 {
     public function register(Application $app)
     {
+        // Database.
+        $app['database'] = $app->share(function () use ($app) {
+            $db = new Database($app['db'], $app['dbs']);
+            return $db;
+        });
+
+        $database = $app['database'];
+
         // Template class
         $app['template'] = $app->share(function () use ($app) {
-            $template = new Template($app);
+            $template = new Template($app, $app['database'], $app['security']);
             return $template;
         });
 
+        // Paths
         $app['paths'] = $app->share(function () use ($app) {
             return array(
                 //'root_web' => $app['root_web'],
@@ -557,12 +573,6 @@ class ChamiloServiceProvider implements ServiceProviderInterface
         $app['mail_generator'] = $app->share(function () use ($app) {
             $mailGenerator = new ChamiloLMS\Component\Mail\MailGenerator($app['twig'], $app['mailer']);
             return $mailGenerator;
-        });
-
-        // Database.
-        $app['database'] = $app->share(function () use ($app) {
-            $db = new Database($app['db'], $app['dbs']);
-            return $db;
         });
     }
 

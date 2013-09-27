@@ -44,6 +44,15 @@ class Database
      */
     public function __construct($db, $dbs)
     {
+        self::setDatabase($db, $dbs);
+    }
+
+    /**
+     * @param $db
+     * @param $dbs
+     */
+    public function setDatabase($db, $dbs)
+    {
         self::$db = $db;
 
         // Using read/write connections see the services.php file

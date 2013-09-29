@@ -150,7 +150,7 @@ if (api_get_multiple_access_url()) {
     $sql = "SELECT s.id, s.name  FROM $tbl_session s INNER JOIN $table_access_url_rel_session u ON s.id = u.session_id $where AND u.access_url_id = $access_url_id ORDER BY name";
 } else {
     $sql = "SELECT id, name  FROM $tbl_session $where ORDER BY name";
- } 
+} 
 $result=Database::query($sql);
 $rows_session = Database::store_result($result);
 ?>

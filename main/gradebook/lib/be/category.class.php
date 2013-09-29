@@ -163,7 +163,7 @@ class Category implements GradebookItem
 
     // CRUD FUNCTIONS
      public static function load_session_categories($id = null, $session_id = null) {
-          
+
         if ( isset($id) && (int)$id === 0 ) {
             $cats = array();
             $cats[] = Category::create_root_category();
@@ -184,7 +184,7 @@ class Category implements GradebookItem
              }
          }
      }
-                  
+
     /**
      * Retrieve categories and return them as an array of Category objects
      * @param int      category id
@@ -1285,7 +1285,7 @@ class Category implements GradebookItem
                 foreach ($subcats as $subcat) {
                     $subevals = $subcat->get_evaluations($stud_id, true, $course_code);
                     //$this->debugprint($subevals);
-                    $evals = array_merge($evals, $subevals); 
+                    $evals = array_merge($evals, $subevals);
                 }
             }
         }
@@ -1354,7 +1354,8 @@ class Category implements GradebookItem
      * @param string $name_mask search string
      * @return array category objects matching the search criterium
      */
-    public function find_category ($name_mask,$allcat) {
+    public function find_category ($name_mask,$allcat)
+    {
         $foundcats = array();
         foreach ($allcat as $search_cat) {
             if (!(strpos(strtolower($search_cat->get_name()), strtolower($name_mask)) === false)) {
@@ -1365,17 +1366,20 @@ class Category implements GradebookItem
     }
 
     /**
-       * This function, locks a category , only one who can unlock it is the platform administrator.
-       * @param int locked 1 or unlocked 0
-       * @return bool
-       *
-       * */
-      function lock($locked) {
-          $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-          $sql = "UPDATE $table SET locked = '".intval($locked)."' WHERE id='".intval($this->id)."'";
-          Database::query($sql);
-      }
+    * This function, locks a category , only one who can unlock it is the platform administrator.
+    * @param int locked 1 or unlocked 0
+    * @return bool
+    *
+    * */
+    function lock($locked) {
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $sql = "UPDATE $table SET locked = '".intval($locked)."' WHERE id='".intval($this->id)."'";
+        Database::query($sql);
+    }
 
+    /**
+     * @param $locked
+     */
     function lock_all_items($locked) {
         if (api_get_setting('gradebook_locking_enabled') == 'true') {
             $this->lock($locked);
@@ -1403,16 +1407,18 @@ class Category implements GradebookItem
         }
     }
 
+    /**
+     * @param int $category_id
+     * @param int $user_id
+     * @return bool|string
+     */
     static function register_user_certificate($category_id, $user_id) {
         // generating the total score for a course
         $cats_course     = Category :: load($category_id, null, null, null, null, null, false);
 
         $alleval_course  = $cats_course[0]->get_evaluations($user_id, true);
         $alllink_course  = $cats_course[0]->get_links($user_id, true);
-
         $evals_links = array_merge($alleval_course, $alllink_course);
-
-        $item_total = 0;
 
         //@todo move these in a function
         $sum_categories_weight_array = array();
@@ -1469,7 +1475,7 @@ class Category implements GradebookItem
                 $url  = api_get_path(WEB_PATH) .'certificates/index.php?id='.$my_certificate['id'];
                 $certificates = Display::url(Display::return_icon('certificate.png', get_lang('Certificates'), array(), 32), $url, array('target'=>'_blank'));
                 $html = '<div class="actions" align="right">';
-                $html .= Display::url($url, $url, array('target'=>'_blank'));
+                //$html .= Display::url($url, $url, array('target'=>'_blank'));
                 $html .= $certificates;
                 $html .= '</div>';
                 return $html;

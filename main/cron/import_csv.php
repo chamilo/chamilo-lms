@@ -702,3 +702,15 @@ $import->setDumpValues($dump);
 // Do not moves the files to treated
 $import->test = true;
 $import->run();
+
+/*
+
+$command = "sudo find ".api_get_path(SYS_COURSE_PATH)." -type d -exec chmod 777 {} \; ";
+echo "Executing: ".$command.PHP_EOL;
+system($command);
+
+$command = "sudo find ".api_get_path(SYS_CODE_PATH)."upload/users  -type d -exec chmod 777 {} \;";
+echo "Executing: ".$command.PHP_EOL;
+system($command);
+
+*/

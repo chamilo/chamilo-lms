@@ -147,13 +147,19 @@ $social_right_content = '<div class="span9">'.UserManager::get_search_form($quer
 if ($query != '') {
 
     $itemPerPage = 9;
-    $page = isset($_GET['groups_page_nr']) ? intval($_GET['groups_page_nr']) : 1;
-    $total = UserManager::get_all_user_tags($_GET['q'], 0, 0, $itemPerPage, true);
+    $page = isset($_GET['users_page_nr']) ? intval($_GET['users_page_nr']) : 1;
+    $totalUsers = UserManager::get_all_user_tags($_GET['q'], 0, 0, $itemPerPage, true);
 
     $from = intval(($page - 1) * $itemPerPage);
     // Get users from tags
     $users  = UserManager::get_all_user_tags($_GET['q'], 0, $from, $itemPerPage);
-    $groups = GroupPortalManager::get_all_group_tags($_GET['q']);
+
+    $pageGroup = isset($_GET['groups_page_nr']) ? intval($_GET['groups_page_nr']) : 1;
+    // Groups
+    $fromGroups = intval(($pageGroup - 1) * $itemPerPage);
+
+    $totalGroups = GroupPortalManager::get_all_group_tags($_GET['q'], 0, $itemPerPage, true);
+    $groups = GroupPortalManager::get_all_group_tags($_GET['q'], $fromGroups, $itemPerPage);
 
     if (empty($users) && empty($groups)) {
         $social_right_content .= get_lang('SorryNoResults');
@@ -169,7 +175,8 @@ if ($query != '') {
             $relation_type = intval(SocialManager::get_relation_between_contacts(api_get_user_id(), $user['user_id']));
             $user_info     = api_get_user_info($user['user_id'], true);
             $url           = api_get_path(WEB_PATH).'main/social/profile.php?u='.$user['user_id'];
-            //Show send invitation icon if they are not friends yet
+
+            // Show send invitation icon if they are not friends yet
             if ($relation_type != 3 && $relation_type != 4 && $user['user_id'] != api_get_user_id()) {
                 $send_inv = '<a href="javascript:void(0);" onclick="javascript:send_invitation_to_user(\''.$user['user_id'].'\');"/>
                              <button class="btn btn-mini"><i class="icon-user"></i> '.get_lang('SendInvitation').'</button></a><br /><br />';
@@ -204,19 +211,19 @@ if ($query != '') {
             $results .= '<li class="span3">
                             <div class="">
                             <div class="row-fluid">
-                                    <div class="span12">
-                                        '.$user_info['complete_name'].'
+                                <div class="span12">
+                                    '.$user_info['complete_name'].'
+                                </div>
+                                <div class="span4">
+                                    <div class="media">
+                                    '.$img.'
                                     </div>
-                                    <div class="span4">
-                                        <div class="media">
-                                        '.$img.'
-                                        </div>
+                                </div>
+                                <div class="span5">
+                                    <div class="media">
+                                    '.$invitations.'
                                     </div>
-                                    <div class="span5">
-                                        <div class="media">
-                                        '.$invitations.'
-                                        </div>
-                                    </div>
+                                </div>
                                 </div>
                             </div>
                         </li>';
@@ -225,17 +232,34 @@ if ($query != '') {
         $social_right_content .= $results;
     }
 
+    $visibility = array(true, true, true, true, true);
+    $social_right_content .= Display::return_sortable_grid(
+        'users',
+        null,
+        null,
+        array('hide_navigation' => false, 'per_page' => $itemPerPage),
+        $query_vars,
+        false,
+        $visibility,
+        true,
+        array(),
+        $totalUsers
+    );
+
+
     $grid_groups = array();
     if (is_array($groups) && count($groups) > 0) {
         $social_right_content .= '<div class="span9">';
         $social_right_content .= Display::page_subheader(get_lang('Groups'));
+
+        $social_right_content .= '<ul class="thumbnails">';
         foreach ($groups as $group) {
             $group['name']         = Security::remove_XSS($group['name'], STUDENT, true);
             $group['description']  = Security::remove_XSS($group['description'], STUDENT, true);
             $id                    = $group['id'];
-            $url_open              = '<a href="groups.php?id='.$id.'" >';
+            $url_open              = '<a href="groups.php?id='.$id.'">';
             $url_close             = '</a>';
-            $name                  = cut($group['name'], 25, true);
+            $name                  = cut($group['name'], 60, true);
             $count_users_group     = count(GroupPortalManager::get_all_users_by_group($id));
             if ($count_users_group == 1) {
                 $count_users_group = $count_users_group.' '.get_lang('Member');
@@ -244,30 +268,34 @@ if ($query != '') {
             }
             $picture              = GroupPortalManager::get_picture_group($group['id'], $group['picture_uri'], 80);
             $tags                 = GroupPortalManager::get_group_tags($group['id']);
-            $group['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
+            $group['picture_uri'] = '<img src="'.$picture['file'].'" width="50" />';
 
 
-            $item_0  = Display::div($group['picture_uri'], array('class' => 'box_description_group_image'));
-            $members = Display::span($count_users_group, array('class' => 'box_description_group_member'));
-            $item_1  = Display::div(
-                Display::tag('h3', $url_open.$name.$url_close).$members,
-                array('class' => 'box_description_group_title')
-            );
+            $item_0  = Display::div($group['picture_uri']);
+            $members = Display::span($count_users_group);
+            $item_1  = Display::tag('h3', $url_open.$name.$url_close).$members;
 
-            $item_2 = '';
-            $item_3 = '';
-            if ($group['description'] != '') {
-                $item_3 = '<div class="box_description_group_content" >'.cut($group['description'], 100, true).'</div>';
-            } else {
-                $item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2"></span></div>';
-                $item_3 = '<div class="box_description_group_content" ></div>';
-            }
-            $item_4        = '<div class="box_description_group_tags">'.$tags.'</div>';
-            $item_5        = '<div class="box_description_group_actions" >'.$url_open.get_lang('SeeMore').$url_close.'</div>';
-            $grid_item_2   = $item_0.$item_1.$item_2.$item_3.$item_4.$item_5;
-            $grid_groups[] = array('', $grid_item_2);
+            $social_right_content .= '
+                <li class="span8">
+                    <div class="row-fluid">
+                        <div class="span1">
+                            <div class="media">
+                                '.$item_0.'
+                            </div>
+                        </div>
+                        <div class="span6">
+                            '.$item_1.'
+                            <p>'.$group['description'].'</p>
+                            <p>'.$tags.'</p>
+                            <p>'.$url_open.get_lang('SeeMore').$url_close.'</p>
+                        </div>
+                    </div>
+                </li>';
+
         }
+        $social_right_content .= '</ul></div></div>';
     }
+
     $visibility = array(true, true, true, true, true);
     $social_right_content .= Display::return_sortable_grid(
         'groups',
@@ -279,7 +307,7 @@ if ($query != '') {
         $visibility,
         true,
         array(),
-        $total
+        $totalGroups
     );
 }
 $social_right_content .= MessageManager::generate_message_form('send_message');

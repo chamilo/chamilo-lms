@@ -91,9 +91,9 @@ class ExerciseDistributionController extends CommonController
     }
 
     /**
-     * @Route("/{exerciseId}/distribution/{id}/toggle_activation")
-     * @Method({"GET"})
-     */
+    * @Route("/{exerciseId}/distribution/{id}/toggle_activation")
+    * @Method({"GET"})
+    */
     public function toggleActivationAction($exerciseId, $id)
     {
         $em = $this->getManager();
@@ -122,8 +122,24 @@ class ExerciseDistributionController extends CommonController
             $url = $this->createUrl('list_link');
             return $this->redirect($url);
         }
+    }
 
+    /**
+     * @Route("/{exerciseId}/distribution/stats")
+     * @Method({"GET"})
+     */
+    public function showStatsAction($exerciseId)
+    {
+        $template = $this->get('template');
+        $template->assign('exerciseId', $exerciseId);
+        $items = $this
+            ->getManager()
+            ->getRepository('Entity\TrackExercise')
+            ->getAverageScorePerForm($exerciseId, api_get_course_int_id(), api_get_session_id());
 
+        $template->assign('items', $items);
+        $response = $template->render_template($this->getTemplatePath().'stats.tpl');
+        return new Response($response, 200, array());
     }
 
     /**
@@ -136,7 +152,6 @@ class ExerciseDistributionController extends CommonController
         $builder->add('number_of_distributions', 'text');
         $builder->add('submit', 'submit');
         $form = $builder->getForm();
-
 
         $template = $this->get('template');
         $this->exerciseId = $exerciseId;

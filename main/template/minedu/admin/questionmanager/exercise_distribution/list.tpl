@@ -7,9 +7,14 @@
         <a href="{{ url('exercise_distribution.controller:addManyDistributionAction', {'exerciseId' : exerciseId }) }}">
             {{ 'Add' |trans }}
         </a>
+        <a href="{{ url('exercise_distribution.controller:showStatsAction', {'exerciseId' : exerciseId }) }}">
+            {{ 'Stats' |trans }}
+        </a>
+
     </div>
 
     <table class="table">
+
         <th>{{ 'Name' | trans }}</th>
         <th>{{ 'Selected distribution' | trans }}</th>
         <th>{{ 'Questions' | trans }}</th>
@@ -47,6 +52,9 @@
 
                     <a class="btn" href="{{ url('exercise_distribution.controller:toggleActivationAction',
                     { 'exerciseId' : exerciseId, id: item.id }) }}"> {{ 'Change activation' |trans }}</a>
+
+                    <a class="btn" href="{{ url('exercise_distribution.controller:showStatsAction',
+                    { 'exerciseId' : exerciseId, id: item.id }) }}"> {{ 'Stats' |trans }}</a>
 
                     <a class="btn btn-danger" href="{{ url('exercise_distribution.controller:deleteDistributionAction',
                     { 'exerciseId' : exerciseId, id: item.id }) }}"> {{ 'Delete' |trans }}</a>

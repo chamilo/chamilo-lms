@@ -8,8 +8,6 @@ use ChamiloLMS\Transaction\TransactionLogController;
 
 /**
  * Uses SSL signed JSON to wrap.
- *
- * @fixme Use Chamilo way to retrieve /tmp.
  */
 class SslSignedJsonWrapper extends JsonWrapper
 {
@@ -119,10 +117,10 @@ class SslSignedJsonWrapper extends JsonWrapper
         $headers = array();
         // openssl_pkcs7_sign() needs a file for input data and a file to write
         // the signed data, so create temporary files for it.
-        if (!$transactions_file = tempnam('/tmp', 'transactions_file')) {
+        if (!$transactions_file = $this->getTemporaryFile('transactions_file')) {
             throw new WrapException(self::format_log(sprintf('Unable to create correctly the temporary transactions file on "%s".', $transactions_file)));
         }
-        if (!$signed_transactions_file = tempnam('/tmp', 'signed_transactions_file')) {
+        if (!$signed_transactions_file = $this->getTemporaryFile('signed_transactions_file')) {
             throw new WrapException(self::format_log(sprintf('Unable to create correctly the temporary signed transactions file on "%s".', $signed_transactions_file)));
         }
         if (file_put_contents($transactions_file, $json_blob) === FALSE) {
@@ -153,16 +151,16 @@ class SslSignedJsonWrapper extends JsonWrapper
 
         // openssl_pkcs7_verify() needs some data as files, so create temporary
         // files for it.
-        if (!$signed_transactions_file = tempnam('/tmp', 'signed_transactions_file')) {
+        if (!$signed_transactions_file = $this->getTemporaryFile('signed_transactions_file')) {
             throw new UnwrapException(self::format_log(sprintf('Unable to create correctly the temporary signed transactions file on "%s".', $signed_transactions_file)));
         }
         if (file_put_contents($signed_transactions_file, $envelope_blob) === FALSE) {
             throw new UnwrapException(self::format_log(sprintf('Unable to write correctly the temporary signed transactions file on "%s".', $signed_transactions_file)));
         }
-        if (!$signer_certificates_file = tempnam('/tmp', 'signer_certificates_file')) {
+        if (!$signer_certificates_file = $this->getTemporaryFile('signer_certificates_file')) {
             throw new UnwrapException(self::format_log(sprintf('Unable to create correctly the temporary signer certificates file on "%s".', $signer_certificates_file)));
         }
-        if (!$unsigned_transactions_file = tempnam('/tmp', 'unsigned_transactions_file')) {
+        if (!$unsigned_transactions_file = $this->getTemporaryFile('unsigned_transactions_file')) {
             throw new UnwrapException(self::format_log(sprintf('Unable to create correctly the temporary unsigned transactions file on "%s".', $unsigned_transactions_file)));
         }
 
@@ -374,5 +372,30 @@ class SslSignedJsonWrapper extends JsonWrapper
             return false;
         }
         return $x509_certificate;
+    }
+
+    /**
+     * Retrieve a valid temporary file path.
+     *
+     * @param $name
+     *   The base name to use.
+     *
+     * @return
+     *   The filesystem path to the file or false on error.
+     *
+     * @todo In theory $app['chamilo.filesystem']->createFolders could help,
+     * but it anyway needs an absolute path, so not using it for now.
+     */
+    protected function getTemporaryFile($name) {
+      static $tmp_directory;
+      if (!isset($tmp_directory)) {
+          $tmp_directory = api_get_path(SYS_DATA_PATH) . 'transaction_tmp_files';
+          if (!is_dir($tmp_directory)) {
+              if (!mkdir($tmp_directory, api_get_permissions_for_new_directories())) {
+                  return false;
+              }
+          }
+      }
+      return tempnam($tmp_directory, $name);
     }
 }

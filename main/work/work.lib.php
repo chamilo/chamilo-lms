@@ -2387,3 +2387,12 @@ function getAllDocumentsFromWorkToString($workId, $courseInfo)
         echo $docContent;
     }
 }
+
+/**
+ * Returns fckeditor toolbar
+ * @return array
+ */
+function getWorkDescriptionToolbar()
+{
+    return array('ToolbarSet' => 'Work', 'Width' => '100%', 'Height' => '400');
+}

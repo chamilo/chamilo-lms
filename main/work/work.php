@@ -319,8 +319,7 @@ switch ($action) {
             $form->addElement('text', 'new_dir', get_lang('AssignmentName'));
             $form->addRule('new_dir', get_lang('ThisFieldIsRequired'), 'required');
 
-            //$form->addElement('html_editor', 'description', get_lang('Description'));
-            $form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'Work', 'Width' => '100%', 'Height' => '200'));
+            $form->add_html_editor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
 
             $form->addElement('advanced_settings', '<a href="javascript: void(0);" onclick="javascript: return plus();"><span id="plus">'.Display::return_icon('div_show.gif',get_lang('AdvancedParameters'), array('style' => 'vertical-align:center')).' '.get_lang('AdvancedParameters').'</span></a>');
 

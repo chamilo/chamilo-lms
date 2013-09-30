@@ -5455,6 +5455,45 @@ class Exercise
     {
         // Getting question list.
         $questionList = $this->selectQuestionList(true);
+
+        // Looking for distributions
+        $trackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+
+        $sessionId = api_get_session_id();
+        $result = Database::query("SELECT count(exe_id) as count FROM $trackExercises WHERE session_id = $sessionId");
+
+        if (Database::num_rows($result)) {
+            $result = Database::fetch_array($result);
+            $count = $result['count'];
+            global $app;
+            /** @var \Doctrine\manager $em */
+            $em = $app['orm.em'];
+
+            $params = array(
+                'exerciseId' => $this->id,
+                'sessionId' => $sessionId,
+                'cId' => $this->course_id
+            );
+
+            $quizDistributionRelSessions = $em->getRepository("Entity\CQuizDistributionRelSession")->findBy($params);
+            if ($quizDistributionRelSessions) {
+                $formToUse = $count % (count($quizDistributionRelSessions));
+                /** @var \Entity\CQuizDistributionRelSession  $quizDistributionRelSession */
+                if (isset($quizDistributionRelSessions[$formToUse])) {
+                    $quizDistributionRelSession = $quizDistributionRelSessions[$formToUse];
+
+                    $distribution = $quizDistributionRelSession->getDistribution();
+                    $dataTracking = $distribution->getDataTracking();
+                    if (!empty($dataTracking)) {
+                        $questionList = explode(',', $dataTracking);
+                        if (!empty($questionList)) {
+                            shuffle($questionList);
+                        }
+                    }
+                }
+            }
+        }
+
         $this->setMediaList($questionList);
 
         $this->questionList = $this->transformQuestionListWithMedias($questionList, false);

@@ -52,6 +52,20 @@ class CQuizDistributionRelSession
     private $quizDistributionId;
 
     /**
+     * @ORM\ManyToOne(targetEntity="CQuizDistribution")
+     * @ORM\JoinColumn(name="quiz_distribution_id", referencedColumnName="id")
+     */
+    private $distribution;
+
+    /**
+     * @return \Entity\CQuizDistribution
+     */
+    public function getDistribution()
+    {
+        return $this->distribution;
+    }
+
+    /**
      * Get id
      *
      * @return integer

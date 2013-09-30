@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use ChamiloLMS\Form\CQuizDistributionType;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Class DistributionController
@@ -28,12 +29,31 @@ class ExerciseDistributionController extends CommonController
      */
     public function indexAction($exerciseId)
     {
+        $template = $this->get('template');
+        $em = $this->getManager();
+        $courseId = api_get_course_int_id();
+
+        if (empty($courseId)) {
+            throw new \Exception('Could not get a valid course with the provided $course_id: '.$courseId.'.');
+        }
+
         $criteria = array('exerciseId' => $exerciseId);
         $items = $this->getRepository()->findBy($criteria);
 
-        $template = $this->get('template');
+        $distributionRelSessions = $em->getRepository('Entity\CQuizDistributionRelSession')->findBy($criteria);
+
+        $selectedExerciseDistributionIdList = array();
+        if ($distributionRelSessions) {
+            foreach ($distributionRelSessions as $distributionRelSession) {
+                $selectedExerciseDistributionIdList[] = $distributionRelSession->getQuizDistributionId();
+            }
+        }
+
+        $template->assign('selected_distribution_id_list', $selectedExerciseDistributionIdList);
         $template->assign('exerciseId', $exerciseId);
         $template->assign('items', $items);
+        $template->assign('exerciseUrl', api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq());
+
         $template->assign('links', $this->generateLinks());
         $response = $template->render_template($this->getTemplatePath().'list.tpl');
         return new Response($response, 200, array());
@@ -54,7 +74,7 @@ class ExerciseDistributionController extends CommonController
      * @Route("/{exerciseId}/distribution/{id}/toggle_visibility", requirements={"id" = "\d+"})
      * @Method({"GET"})
      */
-    public function toogleVisibilityAction($exerciseId, $id)
+    public function toggleVisibilityAction($exerciseId, $id)
     {
         $criteria = array('exerciseId' => $exerciseId, 'id' => $id);
         /** @var Entity\CQuizDistribution $distribution */
@@ -71,35 +91,87 @@ class ExerciseDistributionController extends CommonController
     }
 
     /**
-     * @Route("/{exerciseId}/distribution/{id}/apply")
+     * @Route("/{exerciseId}/distribution/{id}/toggle_activation")
      * @Method({"GET"})
      */
-    public function applyDistributionAction($exerciseId, $id)
+    public function toggleActivationAction($exerciseId, $id)
     {
         $em = $this->getManager();
-        $criteria = array('exerciseId' => $exerciseId);
+        $criteria = array('exerciseId' => $exerciseId, 'quizDistributionId' => $id);
         $distributionRelSession = $em->getRepository('Entity\CQuizDistributionRelSession')->findOneBy($criteria);
 
         if ($distributionRelSession) {
             $em->remove($distributionRelSession);
             $em->flush();
+
+            $this->get('session')->getFlashBag()->add('warning', "Distribution removed");
+            $url = $this->createUrl('list_link');
+            return $this->redirect($url);
+
+        } else {
+
+            $distributionRelSession = new Entity\CQuizDistributionRelSession();
+            $distributionRelSession->setCId(api_get_course_int_id());
+            $distributionRelSession->setSessionId(api_get_session_id());
+
+            $distributionRelSession->setQuizDistributionId($id);
+            $distributionRelSession->setExerciseId($exerciseId);
+            $em->persist($distributionRelSession);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('success', "Distribution applied");
+            $url = $this->createUrl('list_link');
+            return $this->redirect($url);
         }
 
-        $distributionRelSession = new Entity\CQuizDistributionRelSession();
-        /*$distributionRelSession->setCId($this->getCourse()->getId());
-        $distributionRelSession->setSessionId($this->getSession()->getId());*/
 
-        $distributionRelSession->setCId(api_get_course_int_id());
-        $distributionRelSession->setSessionId(api_get_session_id());
+    }
 
-        $distributionRelSession->setQuizDistributionId($id);
-        $distributionRelSession->setExerciseId($exerciseId);
-        $em->persist($distributionRelSession);
-        $em->flush();
+    /**
+     * @Route("/{exerciseId}/distribution/add-many")
+     * @Method({"GET"})
+     */
+    public function addManyDistributionAction($exerciseId)
+    {
+        $builder = $this->createFormBuilder();
+        $builder->add('number_of_distributions', 'text');
+        $builder->add('submit', 'submit');
+        $form = $builder->getForm();
 
-        $this->get('session')->getFlashBag()->add('success', "Distribution applied");
-        $url = $this->createUrl('list_link');
-        return $this->redirect($url);
+
+        $template = $this->get('template');
+        $this->exerciseId = $exerciseId;
+        $template->assign('exerciseId', $exerciseId);
+        $request = $this->getRequest();
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+
+            /** @var Entity\CQuizDistribution $distribution */
+            $data = $form->getData();
+            if ($data['number_of_distributions'] > 0) {
+                for ($i = 0; $i < $data['number_of_distributions']; $i++) {
+                    $distribution = new \Entity\CQuizDistribution();
+                    $distribution->setAuthorUserId($this->getUser()->getUserId());
+                    $distribution->setExerciseId($exerciseId);
+                    $counter = $i + 1;
+                    $distribution->setTitle($counter);
+                    $distribution->setActive(true);
+                    $distribution->setAuthorUserId($this->getUser()->getUserId());
+                    $this->getManager()->getRepository('Entity\CQuizDistribution')->addDistribution($distribution);
+                }
+            }
+
+            $this->get('session')->getFlashBag()->add('success', "Added");
+            $url = $this->createUrl('list_link');
+            return $this->redirect($url);
+        }
+
+        $template->assign('links', $this->generateLinks());
+        $template->assign('form', $form->createView());
+
+        $response = $template->render_template($this->getTemplatePath().'add_many.tpl');
+        return new Response($response, 200, array());
     }
 
     /**
@@ -109,11 +181,10 @@ class ExerciseDistributionController extends CommonController
     public function addDistributionAction($exerciseId)
     {
         $template = $this->get('template');
-        $em = $this->getManager();
         $this->exerciseId = $exerciseId;
         $template->assign('exerciseId', $exerciseId);
-
         $request = $this->getRequest();
+
         $distribution = $this->getDefaultEntity();
         $form = $this->createForm($this->getFormType(), $distribution);
 
@@ -121,99 +192,11 @@ class ExerciseDistributionController extends CommonController
 
         if ($form->isValid()) {
 
-            $exercise = new \Exercise();
-            $exercise->read($exerciseId);
-            $questionList = $exercise->getQuestionList();
-            $exercise->get_categories_in_exercise();
-
             /** @var Entity\CQuizDistribution $distribution */
             $distribution = $form->getData();
-
-            $distribution->setDataTracking(implode(',', $questionList));
             $distribution->setAuthorUserId($this->getUser()->getUserId());
 
-            $em->persist($distribution);
-            // Registering quiz distribution + quiz distribution questions
-            if ($distribution) {
-                foreach ($questionList as $questionId) {
-                    $distributionQuestion = new Entity\CQuizDistributionQuestions();
-
-                    $questionObj = \Question::read($questionId);
-                    $categories = $questionObj->get_categories_from_question();
-                    if (!empty($categories)) {
-                        $categoryId = current($categories);
-                        $distributionQuestion->setCategoryId($categoryId);
-                    }
-                    $distributionQuestion->setQuestionId($questionId);
-                    $distributionQuestion->setDistribution($distribution);
-                    $em->persist($distributionQuestion);
-                }
-            }
-
-            // Checking from all distributions
-            $em->flush();
-
-            $categoriesInExercise = $exercise->get_categories_in_exercise();
-
-            $questionsPerCategory = array();
-            foreach ($categoriesInExercise as $categoryInfo) {
-                $categoryId = $categoryInfo['category_id'];
-                $questions = \Testcategory::getQuestionsByCategory($categoryId);
-                $questionsPerCategory[$categoryId] = $questions;
-            }
-
-            $criteria = array('quizDistributionId' => $distribution->getId());
-            $currentDistributionQuestions = $this->getManager()->getRepository('Entity\CQuizDistributionQuestions')->findBy($criteria);
-
-            /** @var Entity\CQuizDistributionQuestions $question */
-            foreach ($currentDistributionQuestions as $question) {
-                $criteria = array('categoryId' => $question->getCategoryId(), 'questionId' => $question->getQuestionId());
-                $result = $this->getManager()->getRepository('Entity\CQuizDistributionQuestions')->findBy($criteria);
-
-                // doubles found !
-                if (count($result) > 1) {
-
-                    // Question list of this category
-                    $questionList = $questionsPerCategory[$question->getCategoryId()];
-
-                    // Checking if there are questions that are not added yet
-                    $qb = $this->getManager()->getRepository('Entity\CQuizDistributionQuestions')->createQueryBuilder('e');
-                    $qb->where('e.categoryId = :categoryId')
-                        ->andWhere($qb->expr()->notIn('e.questionId', $questionList))
-                        ->setParameters(array('categoryId' => $question->getCategoryId()));
-
-                    $result = $qb->getQuery()->getArrayResult();
-                    // Found some questions
-                    if (count($result) > 0) {
-                        shuffle($result);
-                        $selected = current($result);
-                    } else {
-                        // Nothing found take one question
-                        shuffle($questionList);
-                        $selected = current($questionList);
-                    }
-                    // $selected contains the new question id
-                    if (!empty($selected)) {
-                        //remove the old and create a new one
-                        $newQuestionDistribution = $question;
-                        $em->remove($question);
-                        $newQuestionDistribution->setQuestionId($selected);
-                        $em->persist($newQuestionDistribution);
-                        $em->flush();
-                    }
-                }
-            }
-
-            $currentDistributionQuestions = $this->getManager()->getRepository('Entity\CQuizDistributionQuestions')->findBy($criteria);
-            $questionList = array();
-            foreach($currentDistributionQuestions as $question) {
-                $questionList[] = $question->getQuestionId();
-            }
-
-            // Rebuild question list
-            $distribution->setDataTracking(implode(',', $questionList));
-            $em->persist($distribution);
-            $em->flush();
+            $this->getManager()->getRepository('Entity\CQuizDistribution')->addDistribution($distribution);
 
             $this->get('session')->getFlashBag()->add('success', "Added");
             $url = $this->createUrl('list_link');
@@ -235,7 +218,7 @@ class ExerciseDistributionController extends CommonController
      */
     public function editDistributionAction($exerciseId, $id)
     {
-        $repo = $this->getRepository();
+        /*$repo = $this->getRepository();
         $request = $this->getRequest();
         $item = $repo->findOneById($id);
 
@@ -265,7 +248,7 @@ class ExerciseDistributionController extends CommonController
             return new Response($response, 200, array());
         } else {
             return $this->createNotFoundException();
-        }
+        }*/
     }
 
     /**
@@ -287,10 +270,6 @@ class ExerciseDistributionController extends CommonController
             return $this->redirect($url);
         }
     }
-
-
-
-
 
     protected function getExtraParameters()
     {

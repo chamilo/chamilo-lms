@@ -142,7 +142,7 @@ class Exercise
         }
         /* Make sure that we have a valid $course_info. */
         if (!isset($course_info['real_id'])) {
-            throw new Exception('Could not get a valid $course_info with the provided $course_id: ' . $course_id . '.');
+            throw new Exception('Could not get a valid $course_info with the provided $course_id: '.$course_id.'.');
         }
         $this->course_id = $course_info['real_id'];
         $this->course = $course_info;
@@ -948,17 +948,6 @@ class Exercise
                         $categoryParentInfo['parent_id'] = null;
                         break;
                     }
-                    /*
-                    if (isset($path) && isset($path[$index])) {
-                        $categoryParentId = $path[$index]->getIid();
-
-                        $categoryParentInfo['id'] = $categoryParentId;
-                        $categoryParentInfo['iid'] = $categoryParentId;
-                        $categoryParentInfo['parent_path'] = null;
-                        $categoryParentInfo['title'] = $path[$index]->getTitle();
-                        $categoryParentInfo['name'] = $path[$index]->getTitle();
-                        $categoryParentInfo['parent_id'] = null;
-                    }*/
                 }
                 $cat['parent_info'] = $categoryParentInfo;
                 $newCategoryList[$categoryId] = array(
@@ -1190,6 +1179,7 @@ class Exercise
     {
         return $this->questionSelectionType;
     }
+
     /**
      * @param array $categories
      */
@@ -2156,11 +2146,6 @@ class Exercise
             $form->addElement('html', '</div>');
             $form->addElement('html', '</div>');
         }
-
-        // Category selection.
-        $cat = new Testcategory();
-        $cat_form = $cat->returnCategoryForm($this);
-        $form->addElement('html', $cat_form);
 
         // submit
         $text = isset($_GET['exerciseId']) ? get_lang('ModifyExercise') : get_lang('ProcedToQuestions');
@@ -5831,6 +5816,7 @@ class Exercise
     }
 
     /**
+     * Get categories added in the exercise--category matrix
      * @return bool
      */
     public function get_categories_in_exercise()
@@ -6830,7 +6816,7 @@ class Exercise
     }
 
     /**
-     * Returns an array of categories' details for the questions of the current
+     * Returns an array of categories details for the questions of the current
      * exercise.
      * @return array
      */

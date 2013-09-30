@@ -491,11 +491,10 @@ class Testcategory
 	 * @return array of category id (integer)
 	 * @author hubert.borderiou 07-04-2011, Julio Montoya
 	 */
-    public static function getListOfCategoriesIDForTest($exercise_id, $grouped_by_category = true)
+    public static function getListOfCategoriesIDForTest($exercise_id, $grouped_by_category = true, $courseId = null)
     {
 		// parcourir les questions d'un test, recup les categories uniques dans un tableau
-		$categories_in_exercise = array();
-        $exercise = new Exercise();
+        $exercise = new Exercise($courseId);
         $exercise->read($exercise_id, false);
         $categories_in_exercise = $exercise->getQuestionWithCategories();
         $categories = array();
@@ -506,21 +505,12 @@ class Testcategory
             }
         }
         return $categories;
-
-        /*
-		// the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ???
-        foreach ($question_list as $question_id) {
-            $category_list = Testcategory::getCategoryForQuestion($question_id);
-            if (!empty($category_list)) {
-                $categories_in_exercise = array_merge($categories_in_exercise, $category_list);
-            }
-        }
-        if (!empty($categories_in_exercise)) {
-            $categories_in_exercise = array_unique(array_filter($categories_in_exercise));
-        }
-        return $categories_in_exercise;*/
     }
 
+    /**
+     * @param Exercise $exercise_obj
+     * @return array
+     */
     public static function getListOfCategoriesIDForTestObject(Exercise $exercise_obj)
     {
         // parcourir les questions d'un test, recup les categories uniques dans un tableau
@@ -552,14 +542,13 @@ class Testcategory
 	 *
      * @author function rewrote by jmontoya
 	 */
-    public static function getListOfCategoriesNameForTest($exercise_id, $grouped_by_category = true)
+    public static function getListOfCategoriesNameForTest($exercise_id, $grouped_by_category = true, $courseId = null)
     {
         $result = array();
-        $categories = self::getListOfCategoriesIDForTest($exercise_id, $grouped_by_category);
+        $categories = self::getListOfCategoriesIDForTest($exercise_id, $grouped_by_category, $courseId);
 
         foreach ($categories as $catInfo) {
             $categoryId = $catInfo['iid'];
-            ///$cat = new Testcategory($cat_id);
             if (!empty($categoryId)) {
                 $result[$categoryId] = array(
                     'title' => $catInfo['title'],
@@ -780,9 +769,9 @@ class Testcategory
 	}
 
 	/**
-		* Display signs [+] and/or (>0) after question title if question has options
-		* scoreAlwaysPositive and/or uncheckedMayScore
-		*/
+    * Display signs [+] and/or (>0) after question title if question has options
+    * scoreAlwaysPositive and/or uncheckedMayScore
+    */
 	public function displayQuestionOption($in_objQuestion) {
 		if ($in_objQuestion->type == MULTIPLE_ANSWER && $in_objQuestion->scoreAlwaysPositive) {
 			echo "<span style='font-size:75%'> (>0)</span>";
@@ -793,7 +782,7 @@ class Testcategory
 	}
 
 	/**
-     * key of $array are the categopy id (0 for not in a category)
+     * key of $array are the category id (0 for not in a category)
 	 * value is the array of question id of this category
 	 * Sort question by Category
 	*/
@@ -819,7 +808,8 @@ class Testcategory
 		* return total score for test exe_id for all question in the category $in_cat_id for user
 		* If no question for this category, return ""
 	*/
-	public static function getCatScoreForExeidForUserid($in_cat_id, $in_exe_id, $in_user_id) {
+	public static function getCatScoreForExeidForUserid($in_cat_id, $in_exe_id, $in_user_id)
+    {
 		$tbl_track_attempt		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 		$tbl_question_rel_category = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         $in_cat_id = intval($in_cat_id);
@@ -959,7 +949,7 @@ class Testcategory
      * Returns a category summary report
      *
      * @param int exercise id
-     * @param array prefilled array with the category_id, score, and weight example: array(1 => array('score' => '10', 'total' => 20));
+     * @param array pre-filled array with the category_id, score, and weight example: array(1 => array('score' => '10', 'total' => 20));
      * @param bool $categoryMinusOne shows category - 1 see BT#6540
      * @return string
      */

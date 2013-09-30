@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * CQuizDistribution
  *
  * @ORM\Table(name="c_quiz_distribution")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Entity\Repository\CQuizDistributionRepository")
  */
 class CQuizDistribution
 {

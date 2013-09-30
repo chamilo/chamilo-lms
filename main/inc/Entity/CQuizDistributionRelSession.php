@@ -51,7 +51,6 @@ class CQuizDistributionRelSession
      */
     private $quizDistributionId;
 
-
     /**
      * Get id
      *

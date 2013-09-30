@@ -489,9 +489,7 @@ class GroupManager
         //$forum_id = get_forums_of_group($group_id);
         $group_id = Database::escape_string($group_id);
         $category = self::get_category_from_group($group_id);
-        if ($maximum_number_of_students > $category['max_student'] && $category['max_student'] != 0) {
-            $maximum_number_of_students = $category['max_student'];
-        }
+
         $course_id = api_get_course_int_id();
 
         $sql = "UPDATE ".$table_group."

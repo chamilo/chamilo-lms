@@ -100,6 +100,7 @@ class Exercise
     public $scoreTypeModel = 0;
     public $categoryMinusOne = true; // Shows the category -1: See BT#6540
     public $globalCategoryId = null;
+    public $distributionId = 0;
 
     /**
      * Constructor of the class
@@ -2850,9 +2851,10 @@ class Exercise
         }
         $questionList = array_map('intval', $questionList);
         $weight = Database::escape_string($weight);
-        $sql = "INSERT INTO $track_exercises ($sql_fields exe_exo_id, exe_user_id, c_id, status, session_id, data_tracking, start_date, orig_lp_id, orig_lp_item_id, exe_weighting)
-                VALUES($sql_fields_values '".$this->id."','".api_get_user_id()."','".api_get_course_int_id()."', 'incomplete','".api_get_session_id()."','".implode(',', $questionList)."', '".api_get_utc_datetime(
-        )."', '$safe_lp_id', '$safe_lp_item_id', '$weight')";
+        $sql = "INSERT INTO $track_exercises
+                ($sql_fields exe_exo_id, exe_user_id, c_id, status, session_id, data_tracking, start_date, orig_lp_id, orig_lp_item_id, exe_weighting, quiz_distribution_id)
+                VALUES
+                ( $sql_fields_values '".$this->id."','".api_get_user_id()."','".api_get_course_int_id()."', 'incomplete','".api_get_session_id()."','".implode(',', $questionList)."', '".api_get_utc_datetime()."', '$safe_lp_id', '$safe_lp_item_id', '$weight', '".$this->distributionId."')";
 
         Database::query($sql);
         $id = Database::insert_id();
@@ -5481,6 +5483,8 @@ class Exercise
                 /** @var \Entity\CQuizDistributionRelSession  $quizDistributionRelSession */
                 if (isset($quizDistributionRelSessions[$formToUse])) {
                     $quizDistributionRelSession = $quizDistributionRelSessions[$formToUse];
+
+                    $this->distributionId = $quizDistributionRelSession->getQuizDistributionId();
 
                     $distribution = $quizDistributionRelSession->getDistribution();
                     $dataTracking = $distribution->getDataTracking();

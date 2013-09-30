@@ -575,9 +575,16 @@ if (empty($exercise_stat_info)) {
             error_log('5.4. Setting the $expiredTime: '.$expiredTime[$current_expired_time_key]);
         }
     }
-    $exe_id = $objExercise->save_stat_track_exercise_info($clock_expired_time, $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $questionListUncompressed, $total_weight);
+    $exe_id = $objExercise->save_stat_track_exercise_info(
+        $clock_expired_time,
+        $learnpath_id,
+        $learnpath_item_id,
+        $learnpath_item_view_id,
+        $questionListUncompressed,
+        $total_weight
+    );
     $exercise_stat_info = $objExercise->getStatTrackExerciseInfo($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
-    if ($debug)  {
+    if ($debug) {
         error_log("5.5  Creating a new attempt exercise_stat_info[] exe_id : $exe_id");
     }
 } else {

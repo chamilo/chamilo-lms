@@ -84,5 +84,5 @@ CREATE TABLE c_quiz_distribution_rel_session (
 );
 
 --store the distribution ID that was assigned to this user (SUPER IMPORTANT TRACKING INFO, DO NOT MISS THIS)
-UPDATE TABLE track_e_exercices ADD COLUMN quiz_distribution_id int unsigned default null;
+ALTER TABLE track_e_exercices ADD COLUMN quiz_distribution_id int unsigned default null;
 

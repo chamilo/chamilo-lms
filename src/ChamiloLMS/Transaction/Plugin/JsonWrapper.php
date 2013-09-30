@@ -13,7 +13,7 @@ class JsonWrapper implements WrapperPluginInterface
     /**
      * {@inheritdoc}
      */
-    public function getMachineName()
+    public static function getMachineName()
     {
         return 'json';
     }

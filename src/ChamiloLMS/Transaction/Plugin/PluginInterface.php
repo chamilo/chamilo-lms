@@ -14,5 +14,5 @@ interface PluginInterface
      * @return string
      *   This plugin's machine name.
      */
-    public function getMachineName();
+    public static function getMachineName();
 }

@@ -16,7 +16,7 @@ class NoneSendPlugin implements SendPluginInterface
     /**
      * {@inheritdoc}
      */
-    public function getMachineName()
+    public static function getMachineName()
     {
         return 'none';
     }

@@ -24,7 +24,7 @@ class FilesystemReceivePlugin implements ReceivePluginInterface
     /**
      * {@inheritdoc}
      */
-    public function getMachineName()
+    public static function getMachineName()
     {
         return 'filesystem';
     }

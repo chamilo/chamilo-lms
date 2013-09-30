@@ -52,7 +52,7 @@ class SslSignedJsonWrapper extends JsonWrapper
     /**
      * {@inheritdoc}
      */
-    public function getMachineName()
+    public static function getMachineName()
     {
         return 'ssl_signed_json';
     }
@@ -340,7 +340,7 @@ class SslSignedJsonWrapper extends JsonWrapper
      *   The formated log message.
      */
     protected static function format_log($message) {
-        return sprintf('%s: %s', $this->getMachineName(), $message);
+        return sprintf('%s: %s', self::getMachineName(), $message);
     }
 
     /**

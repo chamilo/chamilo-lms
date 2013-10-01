@@ -13,6 +13,7 @@
             <th>{{ 'Username' | trans }}</th>
             <th>{{ 'Firstname' | trans }}</th>
             <th>{{ 'Lastname' | trans }}</th>
+            <th>{{ 'Roles' | trans }}</th>
         </tr>
     {% for user in users %}
         <tr>
@@ -24,6 +25,11 @@
             </td>
             <td>
                 {{ user.user.lastname }}
+            </td>
+            <td>
+                {% for role in  user.user.roles %}
+                    {{ role.name }}
+                {% endfor %}
             </td>
         </tr>
     {% endfor %}

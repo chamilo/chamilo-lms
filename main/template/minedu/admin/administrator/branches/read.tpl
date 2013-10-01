@@ -21,10 +21,14 @@
         {% endfor %}
     {% endif %}
     <hr />
+
+    <h4>{{ 'SubBranches' | trans }}</h4>
     <ul>
     {% for subitem in subitems %}
         <li>
-            <a href="{{ url(links.read_link, { id: subitem.id} ) }}">{{ subitem.branchName }}</a>
+            <a href="{{ url(links.read_link, { id: subitem.id} ) }}">
+                {{ subitem.branchName }}
+            </a>
         </li>
     {% endfor %}
     </ul>

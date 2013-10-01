@@ -134,15 +134,15 @@ class BranchDirectorController extends CommonController
         $request = $this->getRequest();
 
         $type = new DirectorJuryUserType();
-
         $user = new Entity\User();
         $form = $this->createForm($type, $user);
+
+        $jury = $this->getManager()->getRepository('Entity\Jury')->find($juryId);
 
         $form->handleRequest($request);
 
         if ($form->isValid()) {
 
-            $jury = $this->getManager()->getRepository('Entity\Jury')->find($juryId);
             $urlId = api_get_current_access_url_id();
             $portal = $this->getManager()->getRepository('Entity\AccessUrl')->find($urlId);
 
@@ -182,6 +182,7 @@ class BranchDirectorController extends CommonController
             return $this->redirect($url);
         }
 
+        $template->assign('jury', $jury);
         $template->assign('form', $form->createView());
         $template->assign('juryId', $juryId);
         $template->assign('branchId', $branchId);
@@ -201,9 +202,7 @@ class BranchDirectorController extends CommonController
             'juryId' => $juryId
         );
         $users = $this->getManager()->getRepository('Entity\JuryMembers')->findBy($criteria);
-
         $jury = $this->getManager()->getRepository('Entity\Jury')->find($juryId);
-
 
         $template->assign('users', $users);
         $template->assign('jury', $jury);

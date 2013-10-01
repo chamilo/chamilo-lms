@@ -320,9 +320,11 @@ class TransactionLogController
      * @param array $data
      *   See the plugin type constructor.
      *
-     * @return mixed
-     *   Either a WrapperPluginInterface, SendPluginInterface or
-     *   ReceivePluginInterface object.
+     * @throws Exception
+     *   Class not yet mapped.
+     *
+     * @return PluginInterface
+     *   The asked plugin instance.
      */
     public static function createPlugin($plugin_type, $plugin_name, $data = array())
     {

@@ -624,7 +624,6 @@ $app->before(
         }
 
         /** Translator component. */
-
         $app['translator.cache.enabled'] = false;
 
         $language = api_get_setting('platformLanguage');

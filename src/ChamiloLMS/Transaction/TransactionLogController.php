@@ -563,26 +563,22 @@ class TransactionLogController
 
         $errors = array();
         foreach ($blobs as $blob) {
-            if (!$wrapper_plugin_name = Envelope::identifyBlobType($blob)) {
-                $errors[] = 'Unable to identify the blob type for raw envelope blob.';
-                continue;
-            }
             try {
-                $wrapper_plugin = self::createPlugin('wrapper', $wrapper_plugin_name, $local_branch->getPluginData('wrapper'));
+                $blob_metadata = Envelope::identifyBlobMetadata($blob);
+                $origin_branch = $this->branchRepository->find($blob_metadata['origin_branch_id']);
+                $wrapper_plugin = self::createPlugin('wrapper', $blob_metadata['type'], $origin_branch->getPluginData('wrapper'));
+                $envelope_data = array('blob' => $blob, 'origin_branch_id' => $blob_metadata['origin_branch_id']);
+                $envelope = new Envelope($wrapper_plugin, $envelope_data);
             }
             catch (Exception $exception) {
-                $errors[] = sprintf('Unable to create wrapper plugin with machine name "%s": %s', $wrapper_plugin_name, $exception->getMessage());
-                continue;
-            }
-            if (!$envelope = self::makeEnvelopeFromBlob($blob, $wrapper_plugin)) {
-                $errors[] = sprintf('Unable to create an envelope from blob with wrapper plugin "%s".', $wrapper_plugin_name);
+                $errors[] = $exception->getMessage();
                 continue;
             }
             $envelopes[] = $envelope;
             self::queueReceivedEnvelope($envelope);
         }
         if (!empty($errors)) {
-            $log_entry['message'] = sprintf('Problems processing received blobs: %s', implode(', ', $errors));
+            $log_entry['message'] = sprintf('Problems processing received blobs: %s', implode(' || ', $errors));
             self::addImportLog($log_entry);
         }
 

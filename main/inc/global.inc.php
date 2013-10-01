@@ -624,12 +624,12 @@ $app->before(
         }
 
         /** Translator component. */
-        // Platform lang
+        $app['translator.cache.enabled'] = false;
 
         $language = api_get_setting('platformLanguage');
         $iso = api_get_language_isocode($language);
 
-        /** @var  Symfony\Component\Translation\Translator $translator */
+        /** @var Symfony\Component\Translation\Translator $translator */
         $translator = $app['translator'];
         $translator->setLocale($iso);
 
@@ -657,37 +657,30 @@ $app->before(
             $translator->setLocale($iso);
         }
 
-        $app['translator.cache.enabled'] = false;
-
         $app['translator'] = $app->share($app->extend('translator', function ($translator, $app) {
-
             $locale = $translator->getLocale();
 
             /** @var Symfony\Component\Translation\Translator $translator  */
             if ($app['translator.cache.enabled']) {
-
                 //$phpFileDumper = new Symfony\Component\Translation\Dumper\PhpFileDumper();
                 $dumper = new Symfony\Component\Translation\Dumper\MoFileDumper();
                 $catalogue = new Symfony\Component\Translation\MessageCatalogue($locale);
                 $catalogue->add(array('foo' => 'bar'));
                 $dumper->dump($catalogue, array('path' => $app['sys_temp_path']));
-
             } else {
                 $translator->addLoader('pofile', new PoFileLoader());
-
-                $filesToLoad = array(
-                    api_get_path(SYS_PATH).'main/locale/'.$locale.'.po',
-                    api_get_path(SYS_PATH).'main/locale/'.$locale.'.custom.po'
-                );
-
-                foreach ($filesToLoad as $file) {
-                    if (file_exists($file)) {
-                        $translator->addResource('pofile', $file, $locale);
-                    }
+                $file = $app['root_sys'].'main/locale/'.$locale.'.po';
+                if (file_exists($file)) {
+                    $translator->addResource('pofile', $file, $locale);
+                }
+                $customFile = $app['root_sys'].'main/locale/'.$locale.'.custom.po';
+                if (file_exists($customFile)) {
+                    $translator->addResource('pofile', $customFile, $locale);
                 }
 
+                // Validators
+                $file = $app['root_sys'].'vendor/symfony/validator/Symfony/Component/Validator/Resources/translations/validators.'.$locale.'.xlf';
                 $translator->addLoader('xlf', new Symfony\Component\Translation\Loader\XliffFileLoader());
-                $file = api_get_path(SYS_PATH).'vendor/symfony/validator/Symfony/Component/Validator/Resources/translations/validators.'.$locale.'.xlf';
                 if (file_exists($file)) {
                     $translator->addResource('xlf', $file, $locale, 'validators');
                 }
@@ -701,6 +694,7 @@ $app->before(
                 return $translator;
             }
         }));
+
 
         // Check if we are inside a Chamilo course tool
         $isCourseTool = (strpos($request->getPathInfo(), 'courses/') === false) ? false : true;
@@ -721,7 +715,6 @@ $app->before(
 
             $app['template']->assign('course_session', $session);
         }
-
     }
 );
 

@@ -290,16 +290,16 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
         $metadata->addPropertyConstraint('email', new Assert\Email());
 
         $metadata->addConstraint(new UniqueEntity(array(
-                'fields'  => 'username',
-                'message' => 'This value is already used.',
-            )));
+            'fields'  => 'username',
+            'message' => 'This value is already used.',
+        )));
 
         $metadata->addPropertyConstraint('username', new Assert\Length(array(
-                'min'        => 2,
-                'max'        => 50,
-                'minMessage' => 'This value is too short. It should have {{ limit }} character or more.',
-                'maxMessage' => 'This value is too long. It should have {{ limit }} character or less.',
-            )));
+            'min'        => 2,
+            'max'        => 50,
+            'minMessage' => 'This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.',
+            'maxMessage' => 'This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.',
+        )));
     }
 
     /**

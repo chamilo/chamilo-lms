@@ -187,7 +187,8 @@ $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 // Implements Symfony2 translator.
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'locale' => 'en',
-    'locale_fallback' => 'en'
+    'locale_fallback' => 'en',
+    'translator.domains' => array()
 ));
 
 // Validator provider.

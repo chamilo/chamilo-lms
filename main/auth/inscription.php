@@ -460,7 +460,6 @@ if ($form->validate()) {
     $event = new InteractiveLoginEvent($request, $token);
     $app['dispatcher']->dispatch("security.interactive_login", $event);
 
-
     $recipient_name = api_get_person_name($values['firstname'], $values['lastname']);
 
     $text_after_registration = '<p>'.get_lang('Dear', null, $_user['language']).' '.stripslashes(Security::remove_XSS($recipient_name)).',<br /><br />'.get_lang('PersonalSettings',null,$_user['language']).".</p>";

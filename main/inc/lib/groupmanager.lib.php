@@ -82,7 +82,7 @@ class GroupManager
      * @param string $course_code Default is current course
      * @return array An array with all information about the groups.
      */
-    public static function get_group_list ($category = null, $course_code = null)
+    public static function get_group_list($category = null, $course_code = null)
     {
         $my_user_id = api_get_user_id();
 
@@ -167,8 +167,6 @@ class GroupManager
                 $rs_session = Database::query($sql_session);
                 if (Database::num_rows($rs_session)>0) {
                     $thisGroup['session_name'] = Database::result($rs_session,0,0);
-                } else {
-                    //the session has probably been removed, so the group is now orphaned
                 }
             }
             $groups[] = $thisGroup;
@@ -541,7 +539,7 @@ class GroupManager
      * Get all categories
      * @param string $course_code The cours (default = current course)
      */
-    public static function get_categories ($course_code = null) {
+    public static function get_categories($course_code = null) {
         $course_info = api_get_course_info($course_code);
         $course_id     = $course_info['real_id'];
         $table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY);
@@ -558,7 +556,7 @@ class GroupManager
      * @param int $id The category id
      * @param string $course_code The course (default = current course)
      */
-    public static function get_category ($id, $course_code = null) {
+    public static function get_category($id, $course_code = null) {
         if (empty($id)) {
             return array();
         }
@@ -706,7 +704,7 @@ class GroupManager
         $maximum_number_of_students,
         $groups_per_user
     ) {
-        $table_group_category = Database :: get_course_table(TABLE_GROUP_CATEGORY);
+        $table_group_category = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $id = Database::escape_string($id);
 
         $course_id = api_get_course_int_id();

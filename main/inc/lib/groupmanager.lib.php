@@ -725,6 +725,31 @@ class GroupManager
                     max_student = ".Database::escape_string($maximum_number_of_students)."
                 WHERE c_id = $course_id AND id = $id";
         Database::query($sql);
+
+
+        // Updating all groups inside this category
+        $groups = self::get_group_list($id);
+
+        if (!empty($groups)) {
+            foreach ($groups as $group) {
+                GroupManager::set_group_properties(
+                    $group['id'],
+                    $group['name'],
+                    $group['description'],
+                    $maximum_number_of_students,
+                    $doc_state,
+                    $work_state,
+                    $calendar_state,
+                    $announcements_state,
+                    $forum_state,
+                    $wiki_state,
+                    $chat_state,
+                    $self_registration_allowed,
+                    $self_unregistration_allowed
+                );
+            }
+        }
+
     }
 
 
@@ -1564,11 +1589,12 @@ class GroupManager
      * given course.
      */
     public static function user_has_access($user_id, $group_id, $tool) {
-        //Admin have access everywhere
+        // Admin have access everywhere
         if (api_is_platform_admin()) {
             return true;
         }
-        //Course admin also have access to everything
+
+        // Course admin also have access to everything
         if (api_is_allowed_to_edit()) {
             return true;
         }
@@ -1599,26 +1625,27 @@ class GroupManager
                 return false;
         }
 
-        $user_is_in_group = self :: is_user_in_group($user_id, $group_id);
+        $user_is_in_group = self::is_user_in_group($user_id, $group_id);
 
-        //Check group properties
+        // Check group properties
         $group_info = self :: get_group_properties($group_id);
 
-        if (api_get_setting('allow_group_categories') == 'true') {
-            //Check group category if exists
+        /*if (api_get_setting('allow_group_categories') == 'true') {
+
+            // Check if group category exists
             $category_group_info = self::get_category_from_group($group_id);
 
             if (!empty($category_group_info)) {
-                //if exists check the category group status first
+                // If exists check the category group status first
                 if ($category_group_info[$state_key] == self::TOOL_NOT_AVAILABLE) {
                     return false;
                 } elseif($category_group_info[$state_key] == self::TOOL_PRIVATE && !$user_is_in_group) {
                     return false;
                 }
             }
-        }
+        }*/
 
-        //is_user_in_group() is more complete that  the  is_subscribed() function
+        // is_user_in_group() is more complete that the is_subscribed() function
 
         if ($group_info[$state_key] == self::TOOL_NOT_AVAILABLE) {
             return false;

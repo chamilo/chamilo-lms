@@ -197,7 +197,22 @@ if ($form->validate()) {
 	$self_unreg_allowed = isset($values['self_unreg_allowed']) ? $values['self_unreg_allowed'] : 0;
 	switch ($values['action']) {
 		case 'update_settings':
-			GroupManager :: update_category($values['id'], $values['title'], $values['description'], $values['doc_state'], $values['work_state'], $values['calendar_state'], $values['announcements_state'], $values['forum_state'], $values['wiki_state'], $values['chat_state'], $self_reg_allowed, $self_unreg_allowed, $max_member, $values['groups_per_user']);
+			GroupManager::update_category(
+                $values['id'],
+                $values['title'],
+                $values['description'],
+                $values['doc_state'],
+                $values['work_state'],
+                $values['calendar_state'],
+                $values['announcements_state'],
+                $values['forum_state'],
+                $values['wiki_state'],
+                $values['chat_state'],
+                $self_reg_allowed,
+                $self_unreg_allowed,
+                $max_member,
+                $values['groups_per_user']
+            );
 			$msg = urlencode(get_lang('GroupPropertiesModified'));
 			header('Location: group.php?action=show_msg&msg='.$msg.'&category='.$values['id']);
 			break;

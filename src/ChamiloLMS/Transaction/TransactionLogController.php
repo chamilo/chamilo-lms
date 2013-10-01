@@ -37,11 +37,15 @@ class TransactionLogController
      * A log entry created during transaction addition to the transaction log
      * table queue.
      */
-    const LOG_IMPORT_TO_QUEUE = 4;
+    const LOG_IMPORT_TO_TX_QUEUE = 4;
     /**
      * A log entry created during transaction import to the system.
      */
     const LOG_IMPORT_TO_SYSTEM = 5;
+    /**
+     * A log entry created during adition of blobs to blob queue table.
+     */
+    const LOG_IMPORT_TO_BLOB_QUEUE = 6;
 
     /**
      * A local place to store the branch transaction table name.
@@ -150,7 +154,7 @@ class TransactionLogController
             $transaction->save();
             $added_transactions[] = $transaction->id;
         }
-        $log_entry = array('log_type' => self::LOG_IMPORT_TO_QUEUE);
+        $log_entry = array('log_type' => self::LOG_IMPORT_TO_TX_QUEUE);
         $log_entry['message'] = sprintf('Imported transactions with ids: (%s).', implode(', ', $added_transactions));
         self::addImportLog($log_entry);
 

@@ -60,12 +60,8 @@ class BranchDirectorController extends CommonController
 
                     $juryList  .= $jury->getName() . ' '.$addUserLink.$viewUsers.'<br />';
                 }
-
-
                 return $row['branchName'].' <br />'.$juryList;
             }
-            //'representationField' => 'slug',
-            //'html' => true
         );
 
         // @todo add director filters
@@ -107,7 +103,6 @@ class BranchDirectorController extends CommonController
         $request = $this->getRequest();
 
         $template->assign('links', $this->generateLinks());
-        $repo = $this->getRepository();
 
         $item = $this->getEntity($id);
         $template->assign('item', $item);
@@ -149,6 +144,7 @@ class BranchDirectorController extends CommonController
 
             $jury = $this->getManager()->getRepository('Entity\Jury')->find($juryId);
 
+            // Creating user
             $factory = $this->get('security.encoder_factory');
             $encoder = $factory->getEncoder($user);
             $pass = $encoder->encodePassword($user->getPassword(), $user->getSalt());
@@ -174,8 +170,12 @@ class BranchDirectorController extends CommonController
             $em->persist($juryMember);
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', "User saved");
-            //return $this->redirect($url);
 
+            $url = $this->generateUrl(
+                'branch_director.controller:listUsersAction',
+                array('juryId' => $juryId, 'branchId' => $branchId)
+            );
+            return $this->redirect($url);
         }
 
         $template->assign('form', $form->createView());
@@ -190,9 +190,21 @@ class BranchDirectorController extends CommonController
     * @Route("branches/{branchId}/jury/{juryId}/list-user")
     * @Method({"GET"})
     */
-    public function listUsersAction()
+    public function listUsersAction($juryId)
     {
+        $template = $this->get('template');
+        $criteria = array(
+            'juryId' => $juryId
+        );
+        $users = $this->getManager()->getRepository('Entity\JuryMembers')->findBy($criteria);
 
+        $jury = $this->getManager()->getRepository('Entity\Jury')->find($juryId);
+
+
+        $template->assign('users', $users);
+        $template->assign('jury', $jury);
+        $response = $template->render_template($this->getTemplatePath().'list_users.tpl');
+        return new Response($response, 200, array());
     }
 
     protected function getControllerAlias()

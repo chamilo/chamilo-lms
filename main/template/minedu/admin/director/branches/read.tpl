@@ -16,6 +16,4 @@
     <form action="{{ url(links.update_link, {id : item.id}) }}" method = "post" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
     </form>
-
-
 {% endblock %}

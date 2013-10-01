@@ -4,7 +4,7 @@
         <ul>
             <li>
                 <a href="{{ url('branch_director.controller:indexAction') }}">
-                    Branches
+                    {{ 'Branches'  | get_lang }}
                 </a>
             </li>
         </ul>

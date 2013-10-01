@@ -75,5 +75,6 @@ ALTER TABLE branch_transaction_log
 CREATE TABLE received_envelopes (
   id int not null AUTO_INCREMENT,
   data TEXT not null COMMENT 'The envelope blob.',
+  status int not null default 1 COMMENT 'See Envelope::RECEIVED_*',
   PRIMARY KEY(id)
 );

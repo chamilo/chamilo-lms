@@ -282,6 +282,7 @@ class TransactionLogController
         $table = Database::get_main_table(TABLE_RECEIVED_ENVELOPES);
         $entry = array(
             'data' => $envelope->getBlob(),
+            'status' => Envelope::RECEIVED_TO_BE_IMPORTED,
         );
 
         return Database::insert($table, $entry);

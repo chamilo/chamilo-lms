@@ -21,6 +21,15 @@ class Envelope
      * Flag for state data member: envelope can behave as closed.
      */
     const STATE_CLOSED = 0x2;
+    /**
+     * Status for received_envelopes table: Queued to be imported.
+     */
+    const RECEIVED_TO_BE_IMPORTED = 1;
+    /**
+     * Status for received_envelopes table: already imported on the local
+     * system.
+     */
+    const RECEIVED_IMPORTED = 2;
 
     /**
      * The handled ChamiloLMS\Transaction\TransactionLog objects.

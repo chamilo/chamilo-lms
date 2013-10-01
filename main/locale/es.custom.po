@@ -38,7 +38,3 @@ msgstr "Marcar para revisar después"
 
 msgid "SelectAnAnswerToContinue"
 msgstr "Seleccione una respuesta antes de seguir"
-
-
-
-

@@ -291,14 +291,14 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
 
         $metadata->addConstraint(new UniqueEntity(array(
             'fields'  => 'username',
-            'message' => 'This username already exists.',
+            'message' => 'This value is already used.',
         )));
 
         $metadata->addPropertyConstraint('username', new Assert\Length(array(
             'min'        => 2,
             'max'        => 50,
-            'minMessage' => 'Your username must be at least {{ limit }} characters length',
-            'maxMessage' => 'Your username cannot be longer than {{ limit }} characters length',
+            'minMessage' => 'This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.',
+            'maxMessage' => 'This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.',
         )));
     }
 

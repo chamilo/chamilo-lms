@@ -917,7 +917,7 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 	$sorting_options = array();
 	$sorting_options['column'] = 1;
 
-	// Here we change the way how the colums are going to be sorted
+	// Here we change the way how the columns are going to be sorted
 	// in this case the the column of LastResent ( 4th element in $column_header) we will be order like the column RealDate
 	// because in the column RealDate we have the days in a correct format "2008-03-12 10:35:48"
 

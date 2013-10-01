@@ -172,7 +172,7 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 
 if (!empty($group_id)) {
-    $group_properties  = GroupManager :: get_group_properties($group_id);
+    $group_properties  = GroupManager::get_group_properties($group_id);
     $show_work = false;
 
     if (api_is_allowed_to_edit(false, true)) {

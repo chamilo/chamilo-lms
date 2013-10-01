@@ -28,6 +28,11 @@ class IndexController extends CommonController
         /** @var \Template $template */
         $template = $app['template'];
 
+        /*$user = $this->getManager()->getRepository('Entity\User')->find(1);
+        foreach($user->getPortals() as $portal) {
+            var_dump($portal->getUrl());
+        }*/
+
         /*
         $token = $app['security']->getToken();
         if (null !== $token) {

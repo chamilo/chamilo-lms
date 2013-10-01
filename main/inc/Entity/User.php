@@ -255,6 +255,15 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
     private $curriculumItems;
 
     /**
+     * @ORM\ManyToMany(targetEntity="AccessUrl")
+     * @ORM\JoinTable(name="access_url_rel_user",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="user_id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="access_url_id", referencedColumnName="id")}
+     *      )
+     */
+    private $portals;
+
+    /**
      *
      */
     public function __construct()
@@ -268,6 +277,7 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
         $this->isActive = true;
         $this->registrationDate = new \DateTime();
         $this->curriculumItems = new ArrayCollection();
+        $this->portals = new ArrayCollection();
     }
 
     public static function loadValidatorMetadata(ClassMetadata $metadata)
@@ -311,6 +321,22 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
         }
 
         return true;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getPortals()
+    {
+        return $this->portals;
+    }
+
+    /**
+     * @param $portal
+     */
+    public function setPortal($portal)
+    {
+        $this->portals->add($portal);
     }
 
     /**

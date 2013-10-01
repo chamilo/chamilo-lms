@@ -158,3 +158,4 @@ $_configuration['debug']             = false;
 $_configuration['platform_charset']  = 'utf-8';
 // Show a useful toolbar with memory used, loaded time, request, session, logs information.
 $_configuration['show_profiler']     = false;
+$_configuration['name_order_conventions'] = array();

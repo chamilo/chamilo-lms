@@ -574,8 +574,33 @@ class ChamiloServiceProvider implements ServiceProviderInterface
             $mailGenerator = new ChamiloLMS\Component\Mail\MailGenerator($app['twig'], $app['mailer']);
             return $mailGenerator;
         });
+
+
+        // Setting up name conventions
+        $conventions = require_once $app['sys_root'].'main/inc/lib/internationalization_database/name_order_conventions.php';
+        if (isset($configuration['name_order_conventions']) && !empty($configuration['name_order_conventions'])) {
+            $conventions = array_merge($conventions, $configuration['name_order_conventions']);
+        }
+        $search1 = array('FIRST_NAME', 'LAST_NAME', 'TITLE');
+        $replacement1 = array('%F', '%L', '%T');
+        $search2 = array('first_name', 'last_name', 'title');
+        $replacement2 = array('%f', '%l', '%t');
+        $keyConventions = array_keys($conventions);
+        foreach ($keyConventions as $key) {
+            $conventions[$key]['format'] = str_replace($search1, $replacement1, $conventions[$key]['format']);
+            $conventions[$key]['format'] = _api_validate_person_name_format(
+                _api_clean_person_name(
+                    str_replace('%', ' %', str_ireplace($search2, $replacement2, $conventions[$key]['format']))
+                )
+            );
+            $conventions[$key]['sort_by'] = strtolower($conventions[$key]['sort_by']) != 'last_name' ? true : false;
+        }
+        $app['name_order_conventions'] = $conventions;
     }
 
+    /**
+     * @param Application $app
+     */
     public function boot(Application $app)
     {
 

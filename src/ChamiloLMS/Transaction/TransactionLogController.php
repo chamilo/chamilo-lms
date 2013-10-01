@@ -392,56 +392,6 @@ class TransactionLogController
     }
 
     /**
-     * Generates an envelope from transactions.
-     *
-     * @param array $transactions
-     *   The list of TransactionLog objects to be included.
-     * @param WrapperPluginInterface $wrapper
-     *   The wrapper to use to create the envelope.
-     *
-     * @return mixed
-     *   The generated Envelope object or FALSE on error.
-     */
-    public static function makeEnvelopeFromTransactions($transactions, WrapperPluginInterface $wrapper)
-    {
-        try {
-            $data = array('transactions' => $transactions);
-            return new Envelope($wrapper, $data);
-        }
-        catch (Exception $exception) {
-            $log_entry = array('log_type' => self::LOG_ENVELOPE);
-            $log_entry['message'] = sprintf('Error creating an envelope from transactions: %s', $exception->getMessage());
-            self::addImportLog($log_entry);
-            return FALSE;
-        }
-    }
-
-    /**
-     * Generates an envelope from an envelope blob.
-     *
-     * @param string $blob
-     *   The envelop blob.
-     * @param WrapperPluginInterface $wrapper
-     *   The wrapper to use to create the envelope.
-     *
-     * @return mixed
-     *   The generated Envelope object or FALSE on error.
-     */
-    public static function makeEnvelopeFromBlob($blob, WrapperPluginInterface $wrapper)
-    {
-        try {
-            $data = array('blob' => $blob);
-            return new Envelope($wrapper, $data);
-        }
-        catch (Exception $exception) {
-            $log_entry = array('log_type' => self::LOG_ENVELOPE);
-            $log_entry['message'] = sprintf('Error creating an envelope from blob: %s', $exception->getMessage());
-            self::addImportLog($log_entry);
-            return FALSE;
-        }
-    }
-
-    /**
      * Exports a set of transactions.
      *
      * Adds extra information to the transaction objects to be used out of the

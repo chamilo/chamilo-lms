@@ -142,7 +142,7 @@ class TransactionLogController
      * @return array
      *   A set of transaction ids correctly added.
      */
-    public function importToLog($exported_transactions)
+    protected function importToLog($exported_transactions)
     {
         $added_transactions = array();
         foreach ($exported_transactions as $exported_transaction) {
@@ -160,6 +160,44 @@ class TransactionLogController
 
         return $added_transactions;
     }
+
+    /**
+     * Adds envelopes from queue to transactions table.
+     *
+     * @param integer $limit
+     *   The maximum allowed envelopes to process. 0 means unlimited.
+     */
+    public static function importPendingEnvelopes($limit = 0) {
+        $table = Database::get_main_table(TABLE_RECEIVED_ENVELOPES);
+        $log_entry = array('log_type' => self::LOG_IMPORT_TO_TX_QUEUE);
+        // Sadly limit clause is not supported by Database::select().
+        if ($limit == 0) {
+            $sql = sprintf('SELECT * FROM %s WHERE status = %d', $table, Envelope::RECEIVED_TO_BE_IMPORTED);
+        }
+        else {
+            $sql = sprintf('SELECT * FROM %s WHERE status = %d LIMIT %d', $table, Envelope::RECEIVED_TO_BE_IMPORTED, $limit);
+        }
+        $result = Database::query($sql);
+        while ($row = $result->fetch()) {
+            try {
+                $blob_metadata = Envelope::identifyBlobMetadata($row['data']);
+                $origin_branch = $this->branchRepository->find($blob_metadata['origin_branch_id']);
+                $wrapper_plugin = self::createPlugin('wrapper', $blob_metadata['type'], $origin_branch->getPluginData('wrapper'));
+                $envelope_data = array('blob' => $blob, 'origin_branch_id' => $blob_metadata['origin_branch_id']);
+                $envelope = new Envelope($wrapper_plugin, $envelope_data);
+                $envelope->unwrap();
+                $transactions = $envelope->getTransactions();
+                $this->importToLog($transactions);
+                Database::update($table, array('status' => Envelope::RECEIVED_IMPORTED), array('id = ?' => $row['id']));
+            }
+            catch (Exception $exception) {
+                $log_entry['message'] = sprintf('Problem processing queued blob with id "%d": %s', $row['id'], $exception->getMessage());
+                self::addImportLog($log_entry);
+                continue;
+            }
+        }
+    }
+
 
     /**
      * Imports the passed transactions to the current system.

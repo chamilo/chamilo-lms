@@ -508,17 +508,10 @@ switch ($action) {
             if ($path = get_work_path($item_id)) {
 
                 if (move($course_dir.'/'.$path, $base_work_dir . $move_to_path)) {
-                    //update db
+                    // Update db
                     update_work_url($item_id, 'work' . $move_to_path, $_REQUEST['move_to_id']);
-
                     api_item_property_update($_course, 'work', $_REQUEST['move_to_id'], 'FolderUpdated', $user_id);
 
-                    /*
-                    // update all the parents in the table item propery
-                    $list_id = get_parent_directories($move_to_path);
-                    for ($i = 0; $i < count($list_id); $i++) {
-                        api_item_property_update($_course, 'work', $list_id[$i], 'FolderUpdated', $user_id);
-                    }*/
                     Display :: display_confirmation_message(get_lang('DirMv'));
                 } else {
                     Display :: display_error_message(get_lang('Impossible'));
@@ -548,13 +541,6 @@ switch ($action) {
         if ($is_allowed_to_edit && $action == 'make_visible') {
             if (!empty($item_id)) {
                 if (isset($item_id) && $item_id == 'all') {
-                    //never happens
-                    /*
-                    $sql = "ALTER TABLE  " . $work_table . " CHANGE accepted accepted TINYINT(1) DEFAULT '1'";
-                    Database::query($sql);
-                    $sql = "UPDATE  " . $work_table . " SET accepted = 1";
-                    Database::query($sql);
-                    Display::display_confirmation_message(get_lang('AllFilesVisible'));*/
                 } else {
                     $sql = "UPDATE " . $work_table . "	SET accepted = 1 WHERE c_id = $course_id AND id = '" . $item_id . "'";
                     Database::query($sql);
@@ -569,13 +555,6 @@ switch ($action) {
             /*	MAKE INVISIBLE WORK COMMAND */
             if (!empty($item_id)) {
                 if (isset($item_id) && $item_id == 'all') {
-                    /*
-                    $sql = "ALTER TABLE " . $work_table . "
-                        CHANGE accepted accepted TINYINT(1) DEFAULT '0'";
-                    Database::query($sql);
-                    $sql = "UPDATE  " . $work_table . " SET accepted = 0";
-                    Database::query($sql);
-                    Display::display_confirmation_message(get_lang('AllFilesInvisible'));*/
                 } else {
                     $sql = "UPDATE  " . $work_table . " SET accepted = 0
                             WHERE c_id = $course_id AND id = '" . $item_id . "'";
@@ -740,11 +719,8 @@ switch ($action) {
             echo $table->toHtml();
             echo '</div>';
         } else {
-
-
             display_student_publications_list($work_id, $my_folder_data, $work_parents, $origin, $add_query, null);
         }
-
     break;
 }
 if ($origin != 'learnpath') {

@@ -467,9 +467,6 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 	$my_params      = $sort_params;
 	$origin         = Security::remove_XSS($origin);
 
-	// Getting the work data
-	//$my_folder_data = get_work_data_by_id($id);
-
     $qualification_exists = false;
     if (!empty($my_folder_data['qualification']) && intval($my_folder_data['qualification']) > 0) {
         $qualification_exists = true;
@@ -511,7 +508,6 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 
     $group_id = api_get_group_id();
 
-
 	if (is_array($work_parents)) {
 		foreach ($work_parents as $work_parent) {
 			$sql_select_directory = "SELECT
@@ -534,7 +530,7 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 			} else {
 				$sql_select_directory .= " work.post_group_id = '0' ";
 			}
-			$sql_select_directory .= "  AND  ".
+			$sql_select_directory .= " AND ".
 			                           "  work.c_id = $course_id AND ".
 			                           "  work.id  = ".$work_parent->id." AND ".
 			                           "  work.filetype = 'folder' AND ".
@@ -862,12 +858,10 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 
 				$work_title = !empty($work_data['title']) ? $work_data['title'] : basename($work_data['url']);
 
-				//Work name
-				//if (api_is_allowed_to_edit()) {
-                    if ($cant_files > 0 ) {
-                        $zip = '<a href="downloadfolder.inc.php?id='.$work_data['id'].'">'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), ICON_SIZE_SMALL).'</a>';
-                    }
-				//}
+				// Work name
+                if ($cant_files > 0 ) {
+                    $zip = '<a href="downloadfolder.inc.php?id='.$work_data['id'].'">'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), ICON_SIZE_SMALL).'</a>';
+                }
 
                 $link = 'work_list.php';
                 if (api_is_allowed_to_edit()) {

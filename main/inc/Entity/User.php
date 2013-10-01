@@ -280,9 +280,12 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
         $this->portals = new ArrayCollection();
     }
 
+    /**
+     * @param ClassMetadata $metadata
+     */
     public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
-        /*$metadata->addPropertyConstraint('firstname', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('firstname', new Assert\NotBlank());
         $metadata->addPropertyConstraint('lastname', new Assert\NotBlank());
         $metadata->addPropertyConstraint('email', new Assert\Email());
 
@@ -296,7 +299,7 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
             'max'        => 50,
             'minMessage' => 'Your username must be at least {{ limit }} characters length',
             'maxMessage' => 'Your username cannot be longer than {{ limit }} characters length',
-        )));*/
+        )));
     }
 
     /**

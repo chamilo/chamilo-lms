@@ -657,13 +657,6 @@ $app->before(
             $translator->setLocale($iso);
         }
 
-        $file = $request->get('file');
-        $section = null;
-        if (!empty($file)) {
-            $info = pathinfo($file);
-            $section = $info['dirname'];
-        }
-
         $app['translator.cache.enabled'] = false;
 
         $app['translator'] = $app->share($app->extend('translator', function ($translator, $app) {
@@ -694,8 +687,10 @@ $app->before(
                 }
 
                 $translator->addLoader('xlf', new Symfony\Component\Translation\Loader\XliffFileLoader());
-                $url = api_get_path(SYS_PATH).'vendor/symfony/src/Symfony/Bundle/FrameworkBundle/Resources/translations/validators.sr_Latn.xlf';
-                $translator->addResource('xlf', $url, 'sr_Latn', 'validators');
+                $file = api_get_path(SYS_PATH).'vendor/symfony/validator/Symfony/Component/Validator/Resources/translations/validators.'.$locale.'.xlf';
+                if (file_exists($file)) {
+                    $translator->addResource('xlf', $file, $locale, 'validators');
+                }
 
                 /*$translator->addLoader('mofile', new MoFileLoader());
                 $filePath = api_get_path(SYS_PATH).'main/locale/'.$locale.'.mo';

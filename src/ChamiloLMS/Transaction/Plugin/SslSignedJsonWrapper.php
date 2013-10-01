@@ -145,8 +145,10 @@ class SslSignedJsonWrapper extends JsonWrapper
     /**
      * {@inheritdoc}
      */
-    public function unwrap($envelope_blob)
+    public function unwrap($envelope_blob, $envelope_metadata)
     {
+        global $app;
+
         $this->prepare('unsign');
 
         // openssl_pkcs7_verify() needs some data as files, so create temporary
@@ -176,27 +178,43 @@ class SslSignedJsonWrapper extends JsonWrapper
         $sign_flags = self::getSignFlags();
         $sign_verification = openssl_pkcs7_verify($signed_transactions_file, $sign_flags, $signer_certificates_file, array($ca_certificate_file), $ca_certificate_file, $unsigned_transactions_file);
         if ($sign_verification === TRUE) {
-            $branch_id = $this->identifySignerBranch($signer_certificates_file);
-            // @fixme Figure out a way to pass this value somewhere: received blobs table?
+            $declared_origin_branch = $app['orm.em']->getRepository('Entity\BranchSync')->find($envelope_metadata['origin_branch_id']);
+
+            $wrapper_plugin_data = $declared_origin_branch->getPluginData('wrapper');
+            if (!isset($wrapper_plugin_data['certificate'])) {
+                throw new UnwrapException(self::format_log(sprintf('Failed to get the certificate filepath on declated branch with id "%d" during identification', $declared_origin_branch->getId())));
+            }
+            $certificate_file = $wrapper_plugin_data['certificate'];
+            try {
+                $declared_branch_is_valid = $this->verifySignerBranch($signer_certificates_file, $certificate_file);
+            }
+            catch (Exception $exception) {
+                throw new UnwrapException(self::format_log(sprintf('Problem veryfing signer branch: %s.', $exception->getMessage())));
+            }
+            if (!$declared_branch_is_valid) {
+                $message = sprintf('Declared branch with id "%d" is not the same than real signer branch. Possible attack attempt to inject transactions with other valid branch signature.', $branch->getId());
+                // Try to identify it.
+                if (!$branch_id = $this->identifySignerBranch($envelope_metadata['origin_branch_id'], $signer_certificates_file)) {
+                    $message .= sprintf(' Cannot retrieve any valid branch associated with the signer certificate file "%s". Altered data?', $signer_certificates_file);
+                }
+                else {
+                    $message .= sprintf(' Used branch to sign has id "%d".', $branch_id);
+                }
+                throw new UnwrapException(self::format_log($message));
+            }
             if (!$json_envelope_blob = file_get_contents($unsigned_transactions_file)) {
                 throw new UnwrapException(self::format_log(sprintf('Cannot get contents of temporary unsigned transactions file "%s".', $unsigned_transactions_file)));
             }
         } elseif ($sign_verification === FALSE) {
-            unlink($signed_transactions_file);
-            unlink($signer_certificates_file);
-            unlink($unsigned_transactions_file);
             throw new UnwrapException(self::format_log(sprintf('Signed file "%s" failed verification.', $signed_transactions_file)));
         } else { // -1
-            unlink($signed_transactions_file);
-            unlink($signer_certificates_file);
-            unlink($unsigned_transactions_file);
             throw new UnwrapException(self::format_log(sprintf('There was an error during the signature verification for signed file "%s".', $signed_transactions_file)));
         }
         unlink($signed_transactions_file);
         unlink($signer_certificates_file);
         unlink($unsigned_transactions_file);
 
-        return parent::unwrap($json_envelope_blob);
+        return parent::unwrap($json_envelope_blob, $envelope_metadata);
     }
 
     /**
@@ -252,9 +270,6 @@ class SslSignedJsonWrapper extends JsonWrapper
      *
      * @return mixed
      *   The branch ID corresponding to the signer or false if not found.
-     *
-     * @throws UnwrapException
-     *   When there was a problem during the unsigning process.
      */
     public function identifySignerBranch($signer_certificates_file) {
         global $app;

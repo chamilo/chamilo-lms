@@ -201,8 +201,6 @@ $app->register(new Silex\Provider\FormServiceProvider(), array(
 // URL generator provider
 //$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
-// Needed to use the "entity" option in symfony forms
-
 class ManagerRegistry extends AbstractManagerRegistry
 {
     protected $container;
@@ -233,12 +231,26 @@ class ManagerRegistry extends AbstractManagerRegistry
     }
 }
 
-$app['form.extensions'] = $app->share($app->extend('form.extensions', function ($extensions, $app) {
+// Setting up the Manager registry
+$app['manager_registry'] = $app->share(function() use ($app) {
     $managerRegistry = new ManagerRegistry(null, array('db'), array('orm.em'), null, null, $app['orm.proxies_namespace']);
     $managerRegistry->setContainer($app);
-    $extensions[] = new \Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension($managerRegistry);
+    return $managerRegistry;
+});
+
+// Needed to use the "entity" option in Symfony forms
+$app['form.extensions'] = $app->share($app->extend('form.extensions', function ($extensions, $app) {
+    $extensions[] = new \Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension($app['manager_registry']);
     return $extensions;
 }));
+
+// Needed to use the "UniqueEntity" validator
+$app['validator.validator_factory'] = $app->share(function ($app) {
+    $uniqueValidator = new Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntityValidator($app['manager_registry']);
+    $factory = new ChamiloLMS\Component\Validator\ConstraintValidatorFactory();
+    $factory->addInstance('doctrine.orm.validator.unique', $uniqueValidator);
+    return $factory;
+});
 
 // Setting Doctrine service provider (DBAL)
 if (isset($app['configuration']['main_database'])) {

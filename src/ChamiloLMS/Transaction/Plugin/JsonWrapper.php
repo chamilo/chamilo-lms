@@ -39,7 +39,7 @@ class JsonWrapper implements WrapperPluginInterface
     /**
      * {@inheritdoc}
      */
-    public function unwrap($envelope_blob)
+    public function unwrap($envelope_blob, $envelope_metadata)
     {
         $transactions = json_decode($envelope_blob);
         $json_error = json_last_error();

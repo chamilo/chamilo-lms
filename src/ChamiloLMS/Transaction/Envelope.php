@@ -208,6 +208,7 @@ class Envelope
             throw new UnwrapException('Trying to unwrap an evelope without a blob.');
         }
         try {
+            $blob_metadata = self::identifyBlobMetadata($this->blob);
             // Extract the plugin name before passing the blob to the plugin.
             $position = strpos($this->blob, ':');
             if ($position === FALSE) {
@@ -217,7 +218,7 @@ class Envelope
             if ($blob === FALSE) {
                 throw new UnwrapException('Invalid blob format passed: Empty content.');
             }
-            $this->transactions = $this->wrapperPlugin->unwrap($blob);
+            $this->transactions = $this->wrapperPlugin->unwrap($blob, $blob_metadata);
             $this->state |= self::STATE_OPEN;
         }
         catch (Exception $exception) {

@@ -29,6 +29,8 @@ interface WrapperPluginInterface extends PluginInterface
      *
      * @param string $envelope_blob
      *   The transactions wrapped with the corresponding wrap() method.
+     * @param array $envelope_metadata
+     *   The envelope metadata as returned by Envelope::identifyBlobMetadata().
      *
      * @return array
      *   A set of \ChamiloLMS\Transaction\TransactionLog objects retrieved from
@@ -37,5 +39,5 @@ interface WrapperPluginInterface extends PluginInterface
      * @throws UnwrapException
      *   When there is an error on the unwrapping process.
      */
-    public function unwrap($envelope_blob);
+    public function unwrap($envelope_blob, $envelope_metadata);
 }

@@ -104,9 +104,9 @@ abstract class BaseController extends FlintController
     abstract protected function getTemplatePath();
 
     /**
-    * Returns the controller alias
+     * Returns the controller alias
      * @example for QuestionScoreController: question_score_controller
-    */
+     */
     abstract protected function getControllerAlias();
 
     /**
@@ -141,6 +141,21 @@ abstract class BaseController extends FlintController
         if (!empty($session)) {
             $parameters['id_session'] = $session->getId();
         }
+
+        $extraParams = $this->getExtraParameters();
+
+        if (!empty($extraParams)) {
+            $request = $this->getRequest();
+            $dynamicParams = array();
+            foreach ($extraParams as $param) {
+                $value = $request->get($param);
+                if (!empty($value)) {
+                    $dynamicParams[$param] = $value;
+                }
+            }
+            $parameters = array_merge($parameters, $dynamicParams);
+        }
+
         if (isset($links) && is_array($links) && isset($links[$label])) {
             $url = $this->generateUrl($links[$label], $parameters);
             return $url;
@@ -148,7 +163,16 @@ abstract class BaseController extends FlintController
         return $url = $this->generateUrl($links['list_link']);
     }
 
-     /**
+    /**
+     * Add extra parameters when generating URLs
+     * @return array
+     */
+    protected function getExtraParameters()
+    {
+        return array();
+    }
+
+    /**
      * @see Symfony\Component\Routing\RouterInterface::generate()
      */
     public function generateUrl($name, array $parameters = array(), $reference = UrlGeneratorInterface::ABSOLUTE_PATH)
@@ -191,16 +215,14 @@ abstract class BaseController extends FlintController
         $request = $this->getRequest();
         $form = $this->createForm($this->getFormType(), $this->getDefaultEntity());
 
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
+        $form->handleRequest($request);
 
-            if ($form->isValid()) {
-                $item = $form->getData();
-                $this->createAction($item);
-                $this->get('session')->getFlashBag()->add('success', "Added");
-                $url = $this->createUrl('list_link');
-                return $this->redirect($url);
-            }
+        if ($form->isValid()) {
+            $item = $form->getData();
+            $this->createAction($item);
+            $this->get('session')->getFlashBag()->add('success', "Added");
+            $url = $this->createUrl('list_link');
+            return $this->redirect($url);
         }
 
         $template = $this->get('template');
@@ -237,15 +259,14 @@ abstract class BaseController extends FlintController
 
             $form = $this->createForm($this->getFormType(), $item);
 
-            if ($request->getMethod() == 'POST') {
-                $form->bind($this->getRequest());
-                if ($form->isValid()) {
-                    $data = $form->getData();
-                    $this->updateAction($data);
-                    $this->get('session')->getFlashBag()->add('success', "Updated");
-                    $url = $this->createUrl('list_link');
-                    return $this->redirect($url);
-                }
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $this->updateAction($data);
+                $this->get('session')->getFlashBag()->add('success', "Updated");
+                $url = $this->createUrl('list_link');
+                return $this->redirect($url);
             }
 
             $template = $this->get('template');

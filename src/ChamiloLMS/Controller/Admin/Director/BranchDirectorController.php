@@ -143,6 +143,8 @@ class BranchDirectorController extends CommonController
         if ($form->isValid()) {
 
             $jury = $this->getManager()->getRepository('Entity\Jury')->find($juryId);
+            $urlId = api_get_current_access_url_id();
+            $portal = $this->getManager()->getRepository('Entity\AccessUrl')->find($urlId);
 
             // Creating user
             $factory = $this->get('security.encoder_factory');
@@ -155,6 +157,8 @@ class BranchDirectorController extends CommonController
             $user->setCurriculumItems(null);
             $user->setChatcallText(' ');
             $user->setActive(true);
+
+            $user->setPortal($portal);
 
             $em = $this->getManager();
             $em->persist($user);

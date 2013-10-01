@@ -163,7 +163,11 @@ abstract class BaseController extends FlintController
         return $url = $this->generateUrl($links['list_link']);
     }
 
-    protected function addParameters()
+    /**
+     * Add extra parameters when generating URLs
+     * @return array
+     */
+    protected function getExtraParameters()
     {
         return array();
     }

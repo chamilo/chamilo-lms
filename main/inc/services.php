@@ -197,8 +197,6 @@ $app->register(new Silex\Provider\FormServiceProvider(), array(
 // URL generator provider
 //$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
-// Needed to use the "entity" option in symfony forms
-
 class ManagerRegistry extends AbstractManagerRegistry
 {
     protected $container;
@@ -229,12 +227,26 @@ class ManagerRegistry extends AbstractManagerRegistry
     }
 }
 
-$app['form.extensions'] = $app->share($app->extend('form.extensions', function ($extensions, $app) {
+// Setting up the Manager registry
+$app['manager_registry'] = $app->share(function() use ($app) {
     $managerRegistry = new ManagerRegistry(null, array('db'), array('orm.em'), null, null, $app['orm.proxies_namespace']);
     $managerRegistry->setContainer($app);
-    $extensions[] = new \Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension($managerRegistry);
+    return $managerRegistry;
+});
+
+// Needed to use the "entity" option in Symfony forms
+$app['form.extensions'] = $app->share($app->extend('form.extensions', function ($extensions, $app) {
+    $extensions[] = new \Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension($app['manager_registry']);
     return $extensions;
 }));
+
+// Needed to use the "UniqueEntity" validator
+$app['validator.validator_factory'] = $app->share(function ($app) {
+    $uniqueValidator = new Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntityValidator($app['manager_registry']);
+    $factory = new ChamiloLMS\Component\Validator\ConstraintValidatorFactory();
+    $factory->addInstance('doctrine.orm.validator.unique', $uniqueValidator);
+    return $factory;
+});
 
 // Setting Doctrine service provider (DBAL)
 if (isset($app['configuration']['main_database'])) {
@@ -570,8 +582,33 @@ class ChamiloServiceProvider implements ServiceProviderInterface
             $mailGenerator = new ChamiloLMS\Component\Mail\MailGenerator($app['twig'], $app['mailer']);
             return $mailGenerator;
         });
+
+
+        // Setting up name conventions
+        $conventions = require_once $app['sys_root'].'main/inc/lib/internationalization_database/name_order_conventions.php';
+        if (isset($configuration['name_order_conventions']) && !empty($configuration['name_order_conventions'])) {
+            $conventions = array_merge($conventions, $configuration['name_order_conventions']);
+        }
+        $search1 = array('FIRST_NAME', 'LAST_NAME', 'TITLE');
+        $replacement1 = array('%F', '%L', '%T');
+        $search2 = array('first_name', 'last_name', 'title');
+        $replacement2 = array('%f', '%l', '%t');
+        $keyConventions = array_keys($conventions);
+        foreach ($keyConventions as $key) {
+            $conventions[$key]['format'] = str_replace($search1, $replacement1, $conventions[$key]['format']);
+            $conventions[$key]['format'] = _api_validate_person_name_format(
+                _api_clean_person_name(
+                    str_replace('%', ' %', str_ireplace($search2, $replacement2, $conventions[$key]['format']))
+                )
+            );
+            $conventions[$key]['sort_by'] = strtolower($conventions[$key]['sort_by']) != 'last_name' ? true : false;
+        }
+        $app['name_order_conventions'] = $conventions;
     }
 
+    /**
+     * @param Application $app
+     */
     public function boot(Application $app)
     {
 

@@ -205,14 +205,24 @@ $app['template.hide_global_chat'] = true;
 $app['template.load_plugins'] = true;
 $app['configuration'] = $_configuration;
 
+// Inclusion of internationalization libraries
+require_once $libPath.'internationalization.lib.php';
+// Functions for internal use behind this API
+require_once $libPath.'internationalization_internal.lib.php';
+
 $_plugins = array();
 if ($alreadyInstalled) {
-
     /** Including service providers */
     require_once 'services.php';
 }
 
 $charset = 'UTF-8';
+
+// Preserving the value of the global variable $charset.
+$charset_initial_value = $charset;
+
+// Section (tabs in the main Chamilo menu)
+$app['this_section'] = SECTION_GLOBAL;
 
 // Manage Chamilo error messages
 $app->error(
@@ -262,17 +272,6 @@ $app->error(
     }
 );
 
-// Preserving the value of the global variable $charset.
-$charset_initial_value = $charset;
-
-// Section (tabs in the main Chamilo menu)
-$app['this_section'] = SECTION_GLOBAL;
-
-// Inclusion of internationalization libraries
-require_once $libPath.'internationalization.lib.php';
-// Functions for internal use behind this API
-require_once $libPath.'internationalization_internal.lib.php';
-
 // Checking if we have a valid language. If not we set it to the platform language.
 $cidReset = null;
 
@@ -285,7 +284,6 @@ if ($alreadyInstalled) {
     //api_set_internationalization_default_encoding($charset);
 
     // require $includePath.'/local.inc.php';
-
 
     /**	Loading languages and sublanguages **/
     // @todo improve the language loading
@@ -389,12 +387,6 @@ $language_files[] = 'trad4all';
 $language_files[] = 'notification';
 $language_files[] = 'accessibility';
 
-// @todo Added because userportal and index are loaded by a controller should be fixed when a $app['translator'] is configured
-$language_files[] = 'index';
-$language_files[] = 'courses';
-$language_files[] = 'course_home';
-$language_files[] = 'exercice';
-
 if (isset($language_file)) {
     if (!is_array($language_file)) {
         $language_files[] = $language_file;
@@ -443,9 +435,7 @@ if (is_array($language_files)) {
         }
     }
 }*/
-
 // End loading languages
-
 
 /** Silex Middlewares. */
 
@@ -473,13 +463,12 @@ $app->before(
         }
 
         // Check data folder
-
-        if (!is_writable(api_get_path(SYS_DATA_PATH))) {
+        if (!is_writable($app['sys_data_path'])) {
             $app->abort(500, "data folder must be writable.");
         }
 
         // Checks temp folder permissions.
-        if (!is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
+        if (!is_writable($app['sys_temp_path'])) {
             $app->abort(500, "data/temp folder must be writable.");
         }
 
@@ -488,7 +477,10 @@ $app->before(
             $app->abort(500, '$configuration array must be set in the configuration.php file.');
         }
 
-        if (!isset($app['configuration']['root_web'])) {
+        $configuration = $app['configuration'];
+
+        // Check if root_web exists
+        if (!isset($configuration['root_web'])) {
             $app->abort(500, '$configuration[root_web] must be set in the configuration.php file.');
         }
 
@@ -512,19 +504,18 @@ $app->before(
             $filesystem->copyFolders($app['temp.paths']->copyFolders);
         }
 
-
         // Check and modify the date of user in the track.e.online table
         Online::loginCheck(api_get_user_id());
-
 
         // Setting access_url id (multiple url feature)
 
         if (api_get_multiple_access_url()) {
             $_configuration = $app['configuration'];
             $_configuration['access_url'] = 1;
-
             $access_urls = api_get_access_urls();
-            $protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
+
+            //$protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
+            $protocol = $request->getScheme().'://';
             $request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
             $request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
 

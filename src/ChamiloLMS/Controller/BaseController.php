@@ -104,9 +104,9 @@ abstract class BaseController extends FlintController
     abstract protected function getTemplatePath();
 
     /**
-    * Returns the controller alias
+     * Returns the controller alias
      * @example for QuestionScoreController: question_score_controller
-    */
+     */
     abstract protected function getControllerAlias();
 
     /**
@@ -172,7 +172,7 @@ abstract class BaseController extends FlintController
         return array();
     }
 
-     /**
+    /**
      * @see Symfony\Component\Routing\RouterInterface::generate()
      */
     public function generateUrl($name, array $parameters = array(), $reference = UrlGeneratorInterface::ABSOLUTE_PATH)

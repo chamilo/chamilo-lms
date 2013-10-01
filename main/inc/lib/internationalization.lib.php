@@ -124,21 +124,16 @@ $_api_is_translated_call = false;
  */
 function get_lang($variable, $reserved = null, $language = null)
 {
-    // In order to use $app['translator']
     global $app;
-    if ($app['debug']) {
-        //return $variable;
-    }
-
     $translated = $app['translator']->trans($variable);
     if ($translated == $variable) {
+        // Check the langVariable for BC
         $translated = $app['translator']->trans("lang$variable");
         if ($translated == "lang$variable") {
             return $variable;
         }
     }
     return $translated;
-
 
     global $app;
     $language_interface = isset($app['language_interface']) ? $app['language_interface'] : api_get_language_interface();

@@ -2687,13 +2687,19 @@ class DocumentManager {
             $add_folder_filter = " AND docs.path LIKE '" . Database::escape_string($filter_by_folder) . "%'";
         }
 
+        // If we are in LP display hidden folder https://support.chamilo.org/issues/6679
+        $lp_visibility_condition = "";
+        if ($lp_id) {
+            $lp_visibility_condition = " OR filetype='folder'";
+        }
+
         $sql_doc = "SELECT last.visibility, docs.*
 					FROM  $tbl_item_prop AS last, $tbl_doc AS docs
     	            WHERE   docs.id = last.ref AND
                             docs.path LIKE '" . $path . $added_slash . "%' AND
                             docs.path NOT LIKE '%_DELETED_%' AND
                             last.tool = '" . TOOL_DOCUMENT . "' $condition_session AND
-                            last.visibility = '1' AND
+                            (last.visibility = '1' $lp_visibility_condition) AND
                             docs.c_id = {$course_info['real_id']} AND
                             last.c_id = {$course_info['real_id']}
                             $add_folder_filter
@@ -2760,6 +2766,7 @@ class DocumentManager {
                 } else {
                     eval('$resources_sorted' . $path_to_eval . '["' . $last_path . '"]["id"]=' . $resource['id'] . ';');
                     eval('$resources_sorted' . $path_to_eval . '["' . $last_path . '"]["title"]= "' . api_htmlentities($resource['title']) . '";');
+                    eval('$resources_sorted' . $path_to_eval . '["' . $last_path . '"]["visible"]= "'.$resource['visibility'].'";'); // for LP display hidden folder in grey
                 }
             }
         }
@@ -2808,6 +2815,7 @@ class DocumentManager {
         if (!$user_in_course) {
             $return = '';
         }
+
         return $return;
     }
 
@@ -2834,7 +2842,6 @@ class DocumentManager {
                 if (empty($title)) {
                     $title = $key;
                 }
-                //echo '<pre>'; print_r($resource);
                 if (isset($resource['id']) && is_int($resource['id'])) {
                     // It's a folder.
                     //hide some folders
@@ -2863,12 +2870,17 @@ class DocumentManager {
 
                     $onclick = '';
 
+                    // if in LP, hidden folder are displayed in grey
+                    $folder_class_hidden = "";
                     if ($lp_id) {
+                        if (isset($resource['visible']) && $resource['visible'] == 0) {
+                            $folder_class_hidden = "doc_folder_hidden"; // in base.css
+                        }
                         $onclick = 'onclick="javascript: testResources(\'res_' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')"';
                     }
 
                     $return .= '<ul class="lp_resource">';
-                    $return .= '<li class="doc_folder"  id="doc_id_' . $resource['id'] . '"  style="margin-left:' . ($num * 18) . 'px; ">';
+                    $return .= '<li class="doc_folder '.$folder_class_hidden.'" id="doc_id_' . $resource['id'] . '"  style="margin-left:' . ($num * 18) . 'px; ">';
 
                     if ($lp_id) {
                         $return .= '<img style="cursor: pointer;" src="' . $img_path . 'nolines_plus.gif" align="absmiddle" id="img_' . $resource['id'] . '"  ' . $onclick . ' >';

@@ -3238,7 +3238,8 @@ class DocumentManager {
             '/flash',
             '/audio',
             '/video',
-            '/shared_folder'
+            '/shared_folder',
+            '/learning_path'
         );
         return $system_folders;
     }

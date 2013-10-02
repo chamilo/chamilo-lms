@@ -8,11 +8,8 @@ $language_file = array('exercice', 'work', 'document', 'admin', 'gradebook');
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_STUDENTPUBLICATION;
 
-/*	Configuration settings */
-
 api_protect_course_script(true);
 
-// Including necessary files
 require_once 'work.lib.php';
 $this_section = SECTION_COURSES;
 
@@ -64,7 +61,6 @@ if (!empty($group_id)) {
 $interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
 $interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'work/work_list_others.php?'.api_get_cidreq().'&id='.$workId, 'name' =>  $my_folder_data['title']);
 
-
 Display :: display_header(null);
 
 echo '<div class="actions">';
@@ -80,46 +76,37 @@ $check_qualification = intval($my_folder_data['qualification']);
 
 if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) {
     $type = 'simple';
-    //$columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), get_lang('Title'), get_lang('Qualification'), get_lang('Date'),  get_lang('Status'), get_lang('Actions'));
-    $columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('Title'), get_lang('Qualification'), get_lang('Date'),  get_lang('Status'), get_lang('Actions'));
-    $column_model   = array (
+    $columns = array(
+        get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('Title'), get_lang('Qualification'), get_lang('Date'),  get_lang('Status'), get_lang('Actions')
+    );
+    $column_model   = array(
         array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false'),
         array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
-        //array('name'=>'username',       'index'=>'username',        'width'=>'30',   'align'=>'left', 'search' => 'true'),
         array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => 'true'),
-        //                array('name'=>'file',           'index'=>'file',            'width'=>'20',   'align'=>'left', 'search' => 'false'),
         array('name'=>'qualification',	'index'=>'qualification',	'width'=>'20',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'sent_date',           'index'=>'sent_date',            'width'=>'50',   'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
+        array('name'=>'sent_date',       'index'=>'sent_date',            'width'=>'50',   'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
         array('name'=>'qualificator_id','index'=>'qualificator_id', 'width'=>'30',   'align'=>'left', 'search' => 'true'),
         array('name'=>'actions',        'index'=>'actions',         'width'=>'40',   'align'=>'left', 'search' => 'false', 'sortable'=>'false')
     );
 } else {
     $type = 'complex';
-    //$columns  = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), get_lang('Title'), get_lang('Date'),  get_lang('Actions'));
-    $columns  = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('Title'), get_lang('Date'),  get_lang('Actions'));
+    $columns  = array(
+        get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('Title'), get_lang('Date'),  get_lang('Actions')
+    );
     $column_model   = array (
         array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false'),
         array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
-        //array('name'=>'username',       'index'=>'username',        'width'=>'30',   'align'=>'left', 'search' => 'true'),
         array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),
-        //                array('name'=>'file',           'index'=>'file',            'width'=>'20',   'align'=>'left', 'search' => 'false'),
-        //array('name'=>'qualification',	'index'=>'qualification',	'width'=>'20',   'align'=>'left', 'search' => 'true'),
         array('name'=>'sent_date',       'index'=>'sent_date',            'width'=>'50',   'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
-        //array('name'=>'qualificator_id','index'=>'qualificator_id', 'width'=>'30',   'align'=>'left', 'search' => 'true'),
         array('name'=>'actions',        'index'=>'actions',         'width'=>'40',   'align'=>'left', 'search' => 'false', 'sortable'=>'false')
     );
 }
 
 $extra_params = array();
-
-//Autowidth
 $extra_params['autowidth'] = 'true';
-
-//height auto
 $extra_params['height'] = 'auto';
-
 $extra_params['sortname'] = 'firstname';
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list_others&work_id='.$workId.'&type='.$type;
 ?>

@@ -66,16 +66,18 @@ if (!$is_author) {
     api_not_allowed(true);
 }
 
-// Student's can't edit work
+// Student's can't edit work only if he can delete his docs.
 if (!api_is_allowed_to_edit()) {
-    api_not_allowed(true);
+    if (api_get_course_setting('student_delete_own_publication') != 1) {
+        api_not_allowed(true);
+    }
 }
 
 if (!empty($my_folder_data)) {
     $homework = get_work_assignment_by_id($my_folder_data['id']);
 
     if ($homework['expires_on'] != '0000-00-00 00:00:00' || $homework['ends_on'] != '0000-00-00 00:00:00') {
-        $time_now		= time();
+        $time_now = time();
 
         if (!empty($homework['expires_on']) && $homework['expires_on'] != '0000-00-00 00:00:00') {
             $time_expires 	= api_strtotime($homework['expires_on'], 'UTC');
@@ -110,13 +112,19 @@ $form_title = get_lang('Edit');
 
 $interbreadcrumb[] = array('url' => '#', 'name'  => $form_title);
 
-$form = new FormValidator('form', 'POST', api_get_self()."?".api_get_cidreq()."&id=".$work_id."&gradebook=".Security::remove_XSS($_GET['gradebook'])."&origin=$origin", '', array('enctype' => "multipart/form-data"));
+$form = new FormValidator(
+    'form',
+    'POST',
+    api_get_self()."?".api_get_cidreq()."&id=".$work_id."&gradebook=".Security::remove_XSS($_GET['gradebook'])."&origin=$origin",
+    '',
+    array('enctype' => "multipart/form-data")
+);
 $form->addElement('header', $form_title);
 
 $show_progress_bar = false;
 
 if ($submitGroupWorkUrl) {
-    // For user comming from group space to publish his work
+    // For user coming from group space to publish his work
     $realUrl = str_replace($_configuration['root_sys'], api_get_path(WEB_PATH), str_replace("\\", '/', realpath($submitGroupWorkUrl)));
     $form->addElement('hidden', 'newWorkUrl', $submitGroupWorkUrl);
     $text_document = $form->addElement('text', 'document', get_lang('Document'));
@@ -129,7 +137,7 @@ if ($submitGroupWorkUrl) {
 $form->addElement('hidden', 'id', $work_id);
 $form->addElement('hidden', 'item_id', $item_id);
 $form->addElement('text', 'title', get_lang('Title'), array('id' => 'file_upload', 'class' => 'span4'));
-$form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'Work', 'Width' => '100%', 'Height' => '200'));
+$form->add_html_editor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
 
 $defaults['title'] 			= $work_item['title'];
 $defaults["description"] 	= $work_item['description'];
@@ -142,7 +150,7 @@ if ($is_allowed_to_edit && !empty($item_id)) {
     $row = Database::fetch_array($result);
     $qualification_over = $row['qualification'];
     if (!empty($qualification_over) && intval($qualification_over) > 0) {
-        $form->addElement('text', 'qualification', array(get_lang('Qualification'),  null, " / ".$qualification_over), 'size="10"');
+        $form->addElement('text', 'qualification', array(get_lang('Qualification'), null, " / ".$qualification_over), 'size="10"');
         $form->addElement('hidden', 'qualification_over', $qualification_over);
     }
 }
@@ -179,27 +187,28 @@ if ($form->validate()) {
                 $work_data = get_work_data_by_id($item_to_edit_id);
 
                 if (!empty($_POST['title'])) {
-                    $title 		 = isset($_POST['title']) ? $_POST['title'] : $work_data['title'];
+                    $title = isset($_POST['title']) ? $_POST['title'] : $work_data['title'];
                 }
                 $description = isset($_POST['description']) ? $_POST['description'] : $work_data['description'];
 
                 if ($is_allowed_to_edit && ($_POST['qualification'] !='' )) {
-                    $add_to_update = ', qualificator_id ='."'".api_get_user_id()."',";
+                    $add_to_update = ', qualificator_id ='."'".api_get_user_id()."', ";
                     $add_to_update .= ' qualification = '."'".Database::escape_string($_POST['qualification'])."',";
-                    $add_to_update .= ' date_of_qualification ='."'".api_get_utc_datetime()."'";
+                    $add_to_update .= ' date_of_qualification = '."'".api_get_utc_datetime()."'";
                 }
 
-                if ((int)$_POST['qualification'] > (int)$_POST['qualification_over']) {
+                if ($_POST['qualification'] > $_POST['qualification_over']) {
                     Display::display_error_message(get_lang('QualificationMustNotBeMoreThanQualificationOver'));
                 } else {
                     $sql = "UPDATE  " . $work_table . "
-                            SET	title       = '" . Database::escape_string($title) . "',
-                                description = '" . Database::escape_string($description) . "'
+                            SET	title = '".Database::escape_string($title)."',
+                                description = '".Database::escape_string($description)."'
                                 ".$add_to_update."
                             WHERE c_id = $course_id AND id = $item_to_edit_id";
                     Database::query($sql);
                 }
                 api_item_property_update($_course, 'work', $item_to_edit_id, 'DocumentUpdated', $user_id);
+
                 $succeed = true;
                 $error_message .= Display::return_message(get_lang('ItemUpdated'), false);
             } else {
@@ -210,14 +219,13 @@ if ($form->validate()) {
         }
         Security::clear_token();
     } else {
-        //Bad token or can't add works
+        // Bad token or can't add works
         $error_message = Display::return_message(get_lang('IsNotPosibleSaveTheDocument'), 'error');
     }
     $script = 'work_list.php';
     if ($is_allowed_to_edit) {
         $script = 'work_list_all.php';
     }
-
     header('Location: '.api_get_path(WEB_CODE_PATH).'work/'.$script.'?'.api_get_cidreq().'&id='.$work_id.'&error_message='.$error_message);
     exit;
 }

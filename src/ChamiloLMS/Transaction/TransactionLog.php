@@ -73,6 +73,14 @@ abstract class TransactionLog
      */
     public $branch_id;
     /**
+     * The related course id.
+     */
+    public $c_id;
+    /**
+     * The related session id.
+     */
+    public $session_id;
+    /**
      * The remote system branch transaction id.
      *
      * Use TransactionLog::TRANSACTION_LOCAL for local transactions.
@@ -118,6 +126,8 @@ abstract class TransactionLog
             'branch_id' => TransactionLog::BRANCH_LOCAL,
             'transaction_id' => TransactionLog::TRANSACTION_LOCAL,
             'item_id' => false,
+            'c_id' => 0,
+            'session_id' => 0,
             'dest_id' => null,
             'status_id' => TransactionLog::STATUS_LOCAL,
             'data' => array(),
@@ -148,7 +158,7 @@ abstract class TransactionLog
         $transaction_row = array();
         if (isset($this->id)) {
             $this->time_update = api_get_utc_datetime();
-            $fields = array('transaction_id', 'branch_id', 'action', 'item_id', 'dest_id', 'status_id', 'time_update');
+            $fields = array('transaction_id', 'branch_id', 'c_id', 'session_id', 'action', 'item_id', 'dest_id', 'status_id', 'time_update');
             $transaction_row = array();
             foreach ($fields as $field) {
                 if (isset($this->$field)) {
@@ -158,7 +168,7 @@ abstract class TransactionLog
             Database::update(self::$table, $transaction_row, array('id = ?' => $this->id));
         } else {
             $this->time_insert = $this->time_update = api_get_utc_datetime();
-            $fields = array('transaction_id', 'branch_id', 'action', 'item_id', 'dest_id', 'status_id', 'time_insert', 'time_update');
+            $fields = array('transaction_id', 'branch_id', 'c_id', 'session_id', 'action', 'item_id', 'dest_id', 'status_id', 'time_insert', 'time_update');
             foreach ($fields as $field) {
                 if (isset($this->$field)) {
                     $transaction_row[$field] = $this->$field;

@@ -6786,12 +6786,16 @@ class Exercise
                     $transaction_controller = new TransactionLogController();
                     $transaction = $transaction_controller->loadOne(array(
                         'action' => 'exercise_attempt',
+                        'c_id' => $exercise_stat_info['c_id'],
+                        'session_id' => $exercise_stat_info['session_id'],
                         'branch_id' => TransactionLog::BRANCH_LOCAL,
                         'item_id' => $exercise_stat_info['exe_id'],
                         )
                     );
                     if (!$transaction) {
                         $transaction_data = array(
+                            'c_id' => $exercise_stat_info['c_id'],
+                            'session_id' => $exercise_stat_info['session_id'],
                             'item_id' => $exercise_stat_info['exe_id'],
                         );
                         $transaction = $transaction_controller->createTransaction('exercise_attempt', $transaction_data);

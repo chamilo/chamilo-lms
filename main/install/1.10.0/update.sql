@@ -78,3 +78,8 @@ CREATE TABLE received_envelopes (
   status int not null default 1 COMMENT 'See Envelope::RECEIVED_*',
   PRIMARY KEY(id)
 );
+
+-- Include course and session ids on transactions.
+ALTER TABLE branch_transaction
+  ADD c_id int not null,
+  ADD session_id int not null;

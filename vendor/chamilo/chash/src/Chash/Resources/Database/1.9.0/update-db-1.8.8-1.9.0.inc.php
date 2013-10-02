@@ -1,22 +1,22 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-$update = function($_configuration, $mainConnection, $courseList, $dryRun, $output)
+$update = function($_configuration, $mainConnection, $courseList, $dryRun, $output, $upgrade)
 {
 
-    $portalSettings = $this->getPortalSettings();
+    $portalSettings = $upgrade->getPortalSettings();
 
     define('DB_COURSE_PREFIX', 'c_');
 
-    $databaseList = $this->generateDatabaseList($courseList);
+    $databaseList = $upgrade->generateDatabaseList($courseList);
     $courseDatabaseConnectionList = $databaseList['course']; // main  user stats course
 
     /** @var \Doctrine\DBAL\Connection $userConnection */
-    $userConnection = $this->getHelper($databaseList['user'][0]['database'])->getConnection();
+    $userConnection = $upgrade->getHelper($databaseList['user'][0]['database'])->getConnection();
     /** @var \Doctrine\DBAL\Connection $mainConnection */
-    $mainConnection = $this->getHelper($databaseList['main'][0]['database'])->getConnection();
+    $mainConnection = $upgrade->getHelper($databaseList['main'][0]['database'])->getConnection();
     /** @var \Doctrine\DBAL\Connection $statsConnection */
-    $statsConnection = $this->getHelper($databaseList['stats'][0]['database'])->getConnection();
+    $statsConnection = $upgrade->getHelper($databaseList['stats'][0]['database'])->getConnection();
 
     $mainConnection->beginTransaction();
 
@@ -192,18 +192,18 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
             $output->writeln($sql);
         }
 
-        $this->createCourseTables($output, $dryRun);
+        $upgrade->createCourseTables($output, $dryRun);
 
         if (!empty($courseList)) {
 
             $output->writeln("<comment>Moving old course tables to the new structure 1: single database</comment>");
 
-            $progress = $this->getHelperSet()->get('progress');
+            $progress = $upgrade->getHelperSet()->get('progress');
             $progress->start($output, count($courseList));
 
             foreach ($courseList as $row_course) {
 
-                $prefix = $this->getTablePrefix($_configuration, $row_course['db_name']);
+                $prefix = $upgrade->getTablePrefix($_configuration, $row_course['db_name']);
 
                 // Course tables to be migrated.
                 $table_list = array(
@@ -303,7 +303,7 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
                 foreach ($courseDatabaseConnectionList as $database) {
                     if ($database['database'] == '_chamilo_course_'.$row_course['db_name']) {
                         /** @var \Doctrine\DBAL\Connection $courseConnection */
-                        $courseConnection = $this->getHelper($database['database'])->getConnection();
+                        $courseConnection = $upgrade->getHelper($database['database'])->getConnection();
                     }
                 }
 
@@ -383,7 +383,7 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
             $work_table = "c_student_publication";
             $item_table = "c_item_property";
 
-            $sys_course_path = $this->getCourseSysPath();
+            $sys_course_path = $upgrade->getCourseSysPath();
 
             $today = time();
             $user_id = 1;

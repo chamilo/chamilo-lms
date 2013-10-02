@@ -10,7 +10,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-
+/**
+ * Class SetPermissionsAfterInstallCommand
+ * @package Chash\Command\Files
+ */
 class SetPermissionsAfterInstallCommand extends CommonChamiloDatabaseCommand
 {
     /**
@@ -34,24 +37,10 @@ class SetPermissionsAfterInstallCommand extends CommonChamiloDatabaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);
-        $this->writeCommandHeader($output, 'Setting permissions.');
+        $this->writeCommandHeader($output, 'Setting permissions ...');
 
         $linuxUser = $input->getOption('linux-user');
         $linuxGroup = $input->getOption('linux-group');
-
-
-        /*$dialog = $this->getHelperSet()->get('dialog');
-
-        if (!$dialog->askConfirmation(
-            $output,
-            '<question>Are you sure you want to clean your config files? (y/N)</question>',
-            false
-        )
-        ) {
-            return;
-        }*/
-
-        // $configuration = $this->getConfigurationArray();
 
         // All files
         $files = $this->getConfigurationHelper()->getSysFolders();
@@ -92,11 +81,11 @@ class SetPermissionsAfterInstallCommand extends CommonChamiloDatabaseCommand
         $fs = new Filesystem();
         try {
             if ($dryRun) {
-
-                $output->writeln("<comment>Files to be changed to permission ".decoct($permission)."</comment>");
+                $output->writeln("<comment>Modifying files permission to: ".decoct($permission)."</comment>");
                 $output->writeln("<comment>user: ".$user."</comment>");
                 $output->writeln("<comment>group: ".$group."</comment>");
                 if ($listFiles) {
+                    $output->writeln("<comment>Files: </comment>");
                     foreach ($files as $file) {
                         $output->writeln($file->getPathName());
                     }
@@ -104,19 +93,22 @@ class SetPermissionsAfterInstallCommand extends CommonChamiloDatabaseCommand
             } else {
 
                 if (!empty($permission)) {
-                    $output->writeln("<comment>Modifying files permission: ".decoct($permission)."</comment>");
+                    $output->writeln("<comment>Modifying files permission to: ".decoct($permission)."</comment>");
                 }
                 if (!empty($user)) {
-                    $output->writeln("<comment>user: ".$user."</comment>");
+                    $output->writeln("<comment>Modifying file user: ".$user."</comment>");
                 }
                 if (!empty($group)) {
-                    $output->writeln("<comment>group: ".$group."</comment>");
+                    $output->writeln("<comment>Modifying file group: ".$group."</comment>");
                 }
 
                 if ($listFiles) {
+                    $output->writeln("<comment>Files: </comment>");
                     foreach ($files as $file) {
                         $output->writeln($file->getPathName());
                     }
+                } else {
+                    $output->writeln("<comment>Skipping file list (too long)... </comment>");
                 }
 
                 if (!empty($permission)) {
@@ -130,9 +122,7 @@ class SetPermissionsAfterInstallCommand extends CommonChamiloDatabaseCommand
                 if (!empty($group)) {
                     $fs->chgrp($files, $group, true);
                 }
-
             }
-
         } catch (IOException $e) {
             echo "\n An error occurred while removing the directory: ".$e->getMessage()."\n ";
         }

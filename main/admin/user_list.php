@@ -400,11 +400,11 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 		$keyword = Database::escape_string(trim($_GET['keyword']));
 		$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%' OR concat(u.firstname,' ',u.lastname) LIKE '%".$keyword."%' OR concat(u.lastname,' ',u.firstname) LIKE '%".$keyword."%' OR u.username LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%' OR u.email LIKE '%".$keyword."%' )";
 	} elseif (isset ($_GET['keyword_firstname'])) {
-		$keyword_firstname = Database::escape_string($_GET['keyword_firstname']);
-		$keyword_lastname = Database::escape_string($_GET['keyword_lastname']);
-		$keyword_email = Database::escape_string($_GET['keyword_email']);
-		$keyword_officialcode = Database::escape_string($_GET['keyword_officialcode']);
-		$keyword_username = Database::escape_string($_GET['keyword_username']);
+		$keyword_firstname = Database::escape_sql_wildcards(Database::escape_string($_GET['keyword_firstname']));
+		$keyword_lastname = Database::escape_sql_wildcards(Database::escape_string($_GET['keyword_lastname']));
+		$keyword_email = Database::escape_sql_wildcards(Database::escape_string($_GET['keyword_email']));
+		$keyword_officialcode = Database::escape_sql_wildcards(Database::escape_string($_GET['keyword_officialcode']));
+		$keyword_username = Database::escape_sql_wildcards(Database::escape_string($_GET['keyword_username']));
 		$keyword_status = Database::escape_string($_GET['keyword_status']);
 
 		$query_admin_table = '';

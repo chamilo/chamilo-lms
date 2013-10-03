@@ -81,7 +81,7 @@ if (api_is_allowed_to_edit()) {
         // Do another filter
     } else {
         // Only teachers
-        $userCondition = " AND props.insert_user_id='".api_get_user_id();
+        $userCondition = " AND props.insert_user_id = ".api_get_user_id();
     }
 
     //for other users, we need to create a zipfile with only visible files and folders
@@ -95,7 +95,7 @@ if (api_is_allowed_to_edit()) {
                     work.accepted = 1 AND
                     work.active = 1 AND
                     work.parent_id = $work_id AND
-                    work.filetype='file' AND
+                    work.filetype = 'file' AND
                     props.visibility = '1' AND
                     work.post_group_id = $groupId
                     $userCondition

@@ -2779,7 +2779,7 @@ function register_course($params) {
         $expiration_date = api_get_utc_datetime($expiration_date);
     }
 
-    if ($visibility < 0 || $visibility > 3) {
+    if ($visibility < 0 || $visibility > 4) {
         $error_msg[] = 'visibility is invalid';
         $ok_to_register_course = false;
     }

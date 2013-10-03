@@ -4,8 +4,9 @@ if (PHP_SAPI !='cli') {
     die('Run this script through the command line or comment this line in the code');
 }
 
-//$_SERVER['SERVER_NAME'] = '';
-//$_SERVER['HTTP_HOST'] = '';
+if (file_exists('multiple_url_fix.php')) {
+    require 'multiple_url_fix.php';
+}
 
 require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'log.class.php';

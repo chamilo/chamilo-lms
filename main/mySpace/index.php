@@ -373,9 +373,14 @@ if (empty($session_id)) {
         $courses_from_session = SessionManager::get_course_list_by_session_id($session_id);
 
         $courses = array();
+
         foreach ($courses_from_session as $course_item) {
-            if (isset($courses_of_the_platform[$course_item['code']])) {
+            if (api_drh_can_access_all_session_content()) {
                 $courses[$course_item['code']] = $course_item['code'];
+            } else {
+                if (isset($courses_of_the_platform[$course_item['code']])) {
+                    $courses[$course_item['code']] = $course_item['code'];
+                }
             }
         }
 

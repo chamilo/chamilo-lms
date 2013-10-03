@@ -199,7 +199,8 @@ class CourseManager {
      * @param   string   Course code
      * @return int the status of the user in that course
      */
-    public static function get_user_in_course_status($user_id, $course_code) {
+    public static function get_user_in_course_status($user_id, $course_code)
+    {
         $result = Database::fetch_array(Database::query(
             "SELECT status FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
             WHERE course_code = '".Database::escape_string($course_code)."' AND user_id = ".Database::escape_string($user_id))
@@ -207,14 +208,19 @@ class CourseManager {
         return $result['status'];
     }
 
-    public static function get_tutor_in_course_status($user_id, $course_code) {
+    /**
+     * @param int $user_id
+     * @param string $course_code
+     * @return mixed
+     */
+    public static function get_tutor_in_course_status($user_id, $course_code)
+    {
         $result = Database::fetch_array(Database::query(
                 "SELECT tutor_id FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                 WHERE course_code = '".Database::escape_string($course_code)."' AND user_id = ".Database::escape_string($user_id))
         );
         return $result['tutor_id'];
     }
-
 
     /**
      * Unsubscribe one or more users from a course

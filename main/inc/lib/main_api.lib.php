@@ -6601,3 +6601,16 @@ function api_remove_tags_with_space($in_html, $in_double_quote_replace = true) {
     $out_res = strip_tags($out_res);
     return $out_res;
 }
+
+/**
+ * If true, the drh can access all content (courses, users) inside a session
+ * @return bool
+ */
+function api_drh_can_access_all_session_content()
+{
+    global $_configuration;
+    if (isset($_configuration['drh_can_access_all_session_content'])) {
+        return $_configuration['drh_can_access_all_session_content'];
+    }
+    return false;
+}

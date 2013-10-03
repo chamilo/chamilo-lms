@@ -25,6 +25,10 @@ if (!empty($course_info)) {
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
 
+// Starting the output buffering when we are exporting the information.
+$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+$session_id = intval($_REQUEST['id_session']);
+
 if ($from == 'myspace') {
     $from_myspace = true;
     $this_section = "session_my_space";
@@ -36,8 +40,27 @@ if ($from == 'myspace') {
 $is_allowedToTrack = api_is_platform_admin() || api_is_allowed_to_create_course() || api_is_session_admin() || api_is_drh() || api_is_course_tutor();
 
 if (!$is_allowedToTrack) {
-    api_not_allowed();
+    api_not_allowed(true);
     exit;
+}
+
+if (api_is_drh()) {
+    // Blocking course for drh
+
+    if (api_drh_can_access_all_session_content()) {
+        $sessions = SessionManager::get_sessions_followed_by_drh($user_id);
+        $sessionList = array_keys($sessions);
+        if (!in_array($session_id, $sessionList)) {
+            api_not_allowed();
+        }
+    } else {
+        $coursesFollowedList = CourseManager::get_courses_followed_by_drh(api_get_user_id());
+        $coursesFollowedList = array_keys($coursesFollowedList);
+        if (!in_array(api_get_course_id(), $coursesFollowedList)) {
+            api_not_allowed(true);
+            exit;
+        }
+    }
 }
 
 // Including additional libraries.
@@ -52,10 +75,6 @@ require_once api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'survey/survey.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
-
-// Starting the output buffering when we are exporting the information.
-$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
-$session_id = intval($_REQUEST['id_session']);
 
 if ($export_csv) {
     if (!empty($session_id)) {

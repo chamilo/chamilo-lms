@@ -2301,7 +2301,7 @@ class UserManager
         $personal_course_list = array();
         $courses = array();
 
-        // this query is very similar to the above query, but it will check the session_rel_course_user table if there are courses registered to our user or not
+        // This query is very similar to the above query, but it will check the session_rel_course_user table if there are courses registered to our user or not
         $personal_course_list_sql = "SELECT DISTINCT scu.course_code as code
                                     FROM $tbl_session_course_user as scu $join_access_url
                                     WHERE scu.id_user = $user_id AND scu.id_session = $session_id $where_access_url

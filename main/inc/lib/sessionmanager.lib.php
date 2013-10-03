@@ -1664,7 +1664,7 @@ class SessionManager
         return Database::select('*', $session_table, array('where'=>array('id_coach = ?'=>$user_id)));
     }
 
-   public static function get_user_status_in_course_session($user_id, $course_code, $session_id) {
+    public static function get_user_status_in_course_session($user_id, $course_code, $session_id) {
         $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_user                           = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT session_rcru.status
@@ -1903,6 +1903,10 @@ class SessionManager
         }
     }
 
+    /**
+     * @param $course_code
+     * @return array
+     */
     public static function get_session_by_course($course_code) {
         $table_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $table_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -1913,6 +1917,11 @@ class SessionManager
         return Database::store_result($result);
     }
 
+    /**
+     * @param int $user_id
+     * @param bool $ignore_visibility_for_admins
+     * @return array
+     */
     public static function get_sessions_by_user($user_id, $ignore_visibility_for_admins = false)
     {
        $session_categories = UserManager::get_sessions_by_category($user_id, false, $ignore_visibility_for_admins);

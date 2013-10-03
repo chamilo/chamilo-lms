@@ -706,7 +706,12 @@ if (isset($_configuration['import_csv_disable_dump']) && $_configuration['import
 }
 
 // Do not moves the files to treated
-$import->test = true;
+if (isset($_configuration['import_csv_test'])) {
+    $import->test = $_configuration['import_csv_test'];
+} else {
+    $import->test = true;
+}
+
 $import->run();
 
 if (isset($_configuration['import_csv_fix_permissions']) && $_configuration['import_csv_fix_permissions'] == true) {

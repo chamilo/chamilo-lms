@@ -181,6 +181,9 @@ $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
 $form->addElement('checkbox', 'subscribe', get_lang('Action'), get_lang('SubscribeUserIfNotAllreadySubscribed'));
 $form->addElement('checkbox', 'unsubscribe', '', get_lang('UnsubscribeUserIfSubscriptionIsNotInFile'));
 $form->addElement('style_submit_button', 'submit', get_lang('Import'), 'class="save"');
+
+$form->setDefaults(array('subscribe' => '1', 'unsubscribe' => 1));
+
 if ($form->validate()) {
     $users_courses = parse_csv_data($_FILES['import_file']['tmp_name']);
     $errors        = validate_data($users_courses);
@@ -202,11 +205,7 @@ if ($form->validate()) {
         }
         Security::clear_token();
         $tok = Security::get_token();
-        header(
-            'Location: user_list.php?action=show_message&message='.urlencode(
-                get_lang('FileImported')
-            ).'&warn='.urlencode($warn).'&sec_token='.$tok
-        );
+        header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('FileImported')).'&warn='.urlencode($warn).'&sec_token='.$tok);
         exit();
     }
 }

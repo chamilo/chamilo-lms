@@ -1541,11 +1541,20 @@ class SessionManager
 		$assigned_sessions_to_hrm = array();
 
 		if (api_is_multiple_url_enabled()) {
-           $sql = "SELECT * FROM $tbl_session s INNER JOIN $tbl_session_rel_user sru ON (sru.id_session = s.id) LEFT JOIN $tbl_session_rel_access_url a  ON (s.id = a.session_id)
-                   WHERE sru.id_user = '$hr_manager_id' AND sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' AND access_url_id = ".api_get_current_access_url_id()."";
+           $sql = "SELECT * FROM $tbl_session s
+                    INNER JOIN $tbl_session_rel_user sru ON (sru.id_session = s.id)
+                    LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
+                    WHERE
+                        sru.id_user = '$hr_manager_id' AND
+                        sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' AND
+                        access_url_id = ".api_get_current_access_url_id()."";
         } else {
             $sql = "SELECT * FROM $tbl_session s
-                     INNER JOIN $tbl_session_rel_user sru ON sru.id_session = s.id AND sru.id_user = '$hr_manager_id' AND sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' ";
+                     INNER JOIN $tbl_session_rel_user sru
+                     ON
+                        sru.id_session = s.id AND
+                        sru.id_user = '$hr_manager_id' AND
+                        sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' ";
         }
 		$rs_assigned_sessions = Database::query($sql);
 		if (Database::num_rows($rs_assigned_sessions) > 0) {

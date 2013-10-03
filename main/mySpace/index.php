@@ -20,7 +20,8 @@ require_once 'myspace.lib.php';
 
 // the section (for the tabs)
 $this_section = SECTION_TRACKING;
-unset($_SESSION['this_section']);//for hmtl editor repository
+//for HTML editor repository
+unset($_SESSION['this_section']);
 
 ob_start();
 
@@ -189,7 +190,7 @@ echo '</div>';
 
 if (empty($session_id)) {
 
-	//Getting courses followed by a coach (No session courses)
+	// Getting courses followed by a coach (No session courses)
 	$courses  = CourseManager::get_course_list_as_coach($user_id, false);
 
 	if (isset($courses[0])) {
@@ -202,10 +203,10 @@ if (empty($session_id)) {
 	// Sessions for the coach
 	$sessions = Tracking::get_sessions_coached_by_user($user_id);
 
-	//If is drh
+	// If is drh
 	if ($is_drh) {
 		$students = array_keys(UserManager::get_users_followed_by_drh($user_id, STUDENT));
-		$courses_of_the_platform = CourseManager :: get_courses_followed_by_drh($user_id);
+		$courses_of_the_platform = CourseManager::get_courses_followed_by_drh($user_id);
 
 		foreach ($courses_of_the_platform as $course) {
 			$courses[$course['code']] = $course['code'];
@@ -331,12 +332,10 @@ if (empty($session_id)) {
 							<td>'.get_lang('InactivesStudents').'</td>
 							<td align="right">'.$nb_inactive_students.'</td>
 						</tr>
-
 						<tr>
 							<td>'.get_lang('AverageTimeSpentOnThePlatform').'</td>
 							<td align="right">'.(is_null($avg_time_spent) ? '' : api_time_to_hms($avg_time_spent)).'</td>
 						</tr>
-
 						<tr>
 							<td>'.get_lang('AverageProgressInLearnpath').'</td>
 							<td align="right">'.(is_null($avg_total_progress) ? '' : round($avg_total_progress, 2).'%').'</td>

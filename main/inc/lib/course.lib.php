@@ -2782,7 +2782,8 @@ class CourseManager {
      * @param int         human resources manager id
      * @return array    courses
      */
-    public static function get_courses_followed_by_drh($user_id) {
+    public static function get_courses_followed_by_drh($user_id)
+    {
         // Database Table Definitions
         $tbl_course             =     Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_rel_user     =     Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -2793,10 +2794,21 @@ class CourseManager {
 
         if (api_get_multiple_access_url()) {
            $sql = "SELECT *, id as real_id FROM $tbl_course c
-                    INNER JOIN $tbl_course_rel_user cru ON (cru.course_code = c.code) LEFT JOIN $tbl_course_rel_access_url a  ON (a.course_code = c.code) WHERE cru.user_id = '$user_id' AND status = ".DRH." AND relation_type = '".COURSE_RELATION_TYPE_RRHH."' AND access_url_id = ".api_get_current_access_url_id()."";
+                        INNER JOIN $tbl_course_rel_user cru ON (cru.course_code = c.code)
+                        LEFT JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
+                    WHERE
+                        cru.user_id = '$user_id' AND
+                        status = ".DRH." AND
+                        relation_type = '".COURSE_RELATION_TYPE_RRHH."' AND
+                        access_url_id = ".api_get_current_access_url_id()."";
         } else {
             $sql = "SELECT *, id as real_id FROM $tbl_course c
-                    INNER JOIN $tbl_course_rel_user cru ON cru.course_code = c.code AND cru.user_id = '$user_id' AND status = ".DRH." AND relation_type = '".COURSE_RELATION_TYPE_RRHH."' ";
+                    INNER JOIN $tbl_course_rel_user cru
+                    ON
+                        cru.course_code = c.code AND
+                        cru.user_id = '$user_id' AND
+                        status = ".DRH." AND
+                        relation_type = '".COURSE_RELATION_TYPE_RRHH."' ";
         }
         $rs_assigned_courses = Database::query($sql);
         if (Database::num_rows($rs_assigned_courses) > 0) {
@@ -2811,12 +2823,15 @@ class CourseManager {
      * check if a course is special (autoregister)
      * @param string course code
      */
-    public static function is_special_course($course_code){
+    public static function is_special_course($course_code)
+    {
         $tbl_course_field_value        = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
         $tbl_course_field             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
         $is_special = false;
-        $sql = "SELECT course_code FROM $tbl_course_field_value tcfv INNER JOIN $tbl_course_field tcf ON " .
-                " tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 AND course_code='$course_code'";
+        $sql = "SELECT course_code
+                FROM $tbl_course_field_value tcfv
+                INNER JOIN $tbl_course_field tcf ON tcfv.field_id =  tcf.id
+                WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 AND course_code='$course_code'";
         $result = Database::query($sql);
         $num_rows = Database::num_rows($result);
         if ($num_rows > 0){

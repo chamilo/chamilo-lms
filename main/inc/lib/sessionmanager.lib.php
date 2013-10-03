@@ -1570,7 +1570,7 @@ class SessionManager
 	 * @param int session id
 	 * @return array list of courses
 	 */
-	public static function get_course_list_by_session_id ($session_id) {
+	public static function get_course_list_by_session_id($session_id) {
 		$tbl_course				= Database::get_main_table(TABLE_MAIN_COURSE);
 		$tbl_session_rel_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 

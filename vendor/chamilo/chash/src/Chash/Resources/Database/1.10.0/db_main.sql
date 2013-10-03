@@ -381,8 +381,8 @@ CREATE TABLE IF NOT EXISTS course_rel_user (
   legal_agreement INTEGER DEFAULT 0,
   PRIMARY KEY(id)
 );
-ALTER TABLE course_rel_user ADD INDEX (user_id);
-ALTER TABLE course_rel_user ADD INDEX (c_id, user_id);
+ALTER TABLE course_rel_user ADD INDEX course_rel_user_user_id (user_id);
+ALTER TABLE course_rel_user ADD INDEX course_rel_user_c_id_user_id (c_id, user_id);
 
 --
 -- Dumping data for table course_rel_user
@@ -958,6 +958,7 @@ VALUES
 ('session_page_enabled', NULL, 'radio', 'Session', 'true', 'SessionPageEnabledTitle', 'SessionPageEnabledComment', NULL, NULL, 1),
 ('settings_latest_update', NULL, NULL, NULL, '', '','', NULL, NULL, 0),
 ('user_name_order', NULL, 'textfield', 'Platform', '', 'UserNameOrderTitle', 'UserNameOrderComment', NULL, NULL, 1),
+('user_name_sort_by', NULL, 'textfield', 'Platform', '', 'UserNameSortByTitle', 'UserNameSortByComment', NULL, NULL, 1),
 ('allow_teachers_to_create_sessions', NULL,'radio','Session','false','AllowTeachersToCreateSessionsTitle','AllowTeachersToCreateSessionsComment', NULL, NULL, 0),
 ('use_virtual_keyboard', NULL, 'radio', 'Platform', 'false','ShowVirtualKeyboardTitle','ShowVirtualKeyboardComment', NULL, NULL, 1),
 ('disable_copy_paste', NULL, 'radio', 'Platform', 'false','DisableCopyPasteTitle','DisableCopyPasteComment', NULL, NULL, 1),
@@ -2849,8 +2850,8 @@ CREATE TABLE IF NOT EXISTS usergroup_rel_tag(
     PRIMARY KEY (id)
 );
 
-ALTER TABLE usergroup_rel_tag ADD INDEX ( usergroup_id );
-ALTER TABLE usergroup_rel_tag ADD INDEX ( tag_id );
+ALTER TABLE usergroup_rel_tag ADD INDEX usergroup_rel_tag_usergroup_id( usergroup_id );
+ALTER TABLE usergroup_rel_tag ADD INDEX usergroup_rel_tag_tag_id ( tag_id );
 
 DROP TABLE IF EXISTS usergroup_rel_usergroup;
 CREATE TABLE IF NOT EXISTS usergroup_rel_usergroup (
@@ -2861,9 +2862,9 @@ CREATE TABLE IF NOT EXISTS usergroup_rel_usergroup (
 	PRIMARY KEY (id)
 );
 
-ALTER TABLE usergroup_rel_usergroup ADD INDEX ( group_id );
-ALTER TABLE usergroup_rel_usergroup ADD INDEX ( subgroup_id );
-ALTER TABLE usergroup_rel_usergroup ADD INDEX ( relation_type );
+ALTER TABLE usergroup_rel_usergroup ADD INDEX usergroup_rel_usergroup_group_id (group_id );
+ALTER TABLE usergroup_rel_usergroup ADD INDEX usergroup_rel_usergroup_subgroup_id ( subgroup_id );
+ALTER TABLE usergroup_rel_usergroup ADD INDEX usergroup_rel_usergroup_relation_type ( relation_type );
 
 --
 -- Structure for Mail notifications
@@ -3142,50 +3143,6 @@ CREATE TABLE IF NOT EXISTS branch_transaction_data (
     data text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
 );
 
-
--- Stats database
-
-DROP TABLE IF EXISTS track_c_browsers;
-CREATE TABLE track_c_browsers (
-  id int NOT NULL auto_increment,
-  browser varchar(255) NOT NULL default '',
-  counter int NOT NULL default 0,
-  PRIMARY KEY  (id)
-);
-
-DROP TABLE IF EXISTS track_c_countries;
-CREATE TABLE track_c_countries (
-  id int NOT NULL auto_increment,
-  code varchar(40) NOT NULL default '',
-  country varchar(50) NOT NULL default '',
-  counter int NOT NULL default 0,
-  PRIMARY KEY  (id)
-);
-
-DROP TABLE IF EXISTS track_c_os;
-CREATE TABLE track_c_os (
-  id int NOT NULL auto_increment,
-  os varchar(255) NOT NULL default '',
-  counter int NOT NULL default 0,
-  PRIMARY KEY  (id)
-);
-
-DROP TABLE IF EXISTS track_c_providers;
-CREATE TABLE track_c_providers (
-  id int NOT NULL auto_increment,
-  provider varchar(255) NOT NULL default '',
-  counter int NOT NULL default 0,
-  PRIMARY KEY  (id)
-);
-
-DROP TABLE IF EXISTS track_c_referers;
-CREATE TABLE track_c_referers (
-  id int NOT NULL auto_increment,
-  referer varchar(255) NOT NULL default '',
-  counter int NOT NULL default 0,
-  PRIMARY KEY (id)
-);
-
 DROP TABLE IF EXISTS track_e_access;
 CREATE TABLE track_e_access (
   access_id int NOT NULL auto_increment,
@@ -3345,15 +3302,6 @@ CREATE TABLE track_e_online (
   access_url_id INT NOT NULL DEFAULT 1,
   PRIMARY KEY  (login_id),
   KEY login_user_id (login_user_id)
-);
-DROP TABLE IF EXISTS track_e_open;
-CREATE TABLE track_e_open (
-  open_id int NOT NULL auto_increment,
-  open_remote_host tinytext NOT NULL,
-  open_agent tinytext NOT NULL,
-  open_referer tinytext NOT NULL,
-  open_date datetime NOT NULL default '0000-00-00 00:00:00',
-  PRIMARY KEY  (open_id)
 );
 
 DROP TABLE IF EXISTS track_e_uploads;
@@ -3632,4 +3580,4 @@ CREATE TABLE curriculum_rel_user (
 
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.043' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.044' WHERE variable = 'chamilo_database_version';

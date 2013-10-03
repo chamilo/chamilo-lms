@@ -1,18 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-$update = function($_configuration, $mainConnection, $courseList, $dryRun, $output)
+$update = function($_configuration, $mainConnection, $courseList, $dryRun, $output, $upgrade)
 {
-    $portalSettings = $this->getPortalSettings();
-    $databaseList = $this->generateDatabaseList($courseList);
+    $portalSettings = $upgrade->getPortalSettings();
+    $databaseList = $upgrade->generateDatabaseList($courseList);
     $courseDatabaseConnectionList = $databaseList['course']; // main  user stats course
 
     /** @var \Doctrine\DBAL\Connection $userConnection */
-    $userConnection = $this->getHelper($databaseList['user'][0]['database'])->getConnection();
+    $userConnection = $upgrade->getHelper($databaseList['user'][0]['database'])->getConnection();
     /** @var \Doctrine\DBAL\Connection $mainConnection */
-    $mainConnection = $this->getHelper($databaseList['main'][0]['database'])->getConnection();
+    $mainConnection = $upgrade->getHelper($databaseList['main'][0]['database'])->getConnection();
     /** @var \Doctrine\DBAL\Connection $statsConnection */
-    $statsConnection = $this->getHelper($databaseList['stats'][0]['database'])->getConnection();
+    $statsConnection = $upgrade->getHelper($databaseList['stats'][0]['database'])->getConnection();
 
     $mainConnection->beginTransaction();
 
@@ -20,7 +20,7 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
         if (!empty($courseList)) {
             foreach ($courseList as $row_course) {
 
-                $prefix = $this->getTablePrefix($_configuration, $row_course['db_name']);
+                $prefix = $upgrade->getTablePrefix($_configuration, $row_course['db_name']);
 
                 $output->writeln('Updating course db: '.$row_course['db_name']);
 
@@ -32,7 +32,7 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
                 foreach ($courseDatabaseConnectionList as $database) {
                     if ($database['database'] == '_chamilo_course_'.$row_course['db_name']) {
                         /** @var \Doctrine\DBAL\Connection $courseConnection */
-                        $courseConnection = $this->getHelper($database['database'])->getConnection();
+                        $courseConnection = $upgrade->getHelper($database['database'])->getConnection();
                     }
                 }
 

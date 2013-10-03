@@ -1,8 +1,7 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
-$updateFiles = function($_configuration, $mainConnection, $courseList, $dryRun, $output)
+$updateFiles = function($_configuration, $mainConnection, $courseList, $dryRun, $output, $upgrade)
 {
-    $this->generateConfFiles($output);
+    $upgrade->generateConfFiles($output);
 };

@@ -9,6 +9,8 @@ use Doctrine\DBAL\Migrations\Tools\Console\Command\AbstractCommand;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Alchemy\Zippy\Zippy;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputInterface;
 
 class CommonCommand extends AbstractCommand
 {
@@ -22,16 +24,16 @@ class CommonCommand extends AbstractCommand
     private $migrationConfigurationFile;
 
     /**
-     * @param array $configuration
-     */
+    * @param array $configuration
+    */
     public function setConfigurationArray(array $configuration)
     {
         $this->configuration = $configuration;
     }
 
     /**
-     * @return array
-     */
+    * @return array
+    */
     public function getConfigurationArray()
     {
         return $this->configuration;
@@ -107,16 +109,16 @@ class CommonCommand extends AbstractCommand
         return $this->databaseSettings;
     }
 
-        /**
-     * @param array $databaseSettings
-     */
+    /**
+    * @param array $databaseSettings
+    */
     public function setExtraDatabaseSettings(array $databaseSettings)
     {
         $this->extraDatabaseSettings = $databaseSettings;
     }
 
     /**
-     * @return array
+     * @return mixed
      */
     public function getExtraDatabaseSettings()
     {
@@ -526,6 +528,9 @@ class CommonCommand extends AbstractCommand
         return $this->migrationConfigurationFile;
     }
 
+    /**
+     * @param string $file
+     */
     public function setMigrationConfigurationFile($file)
     {
         $this->migrationConfigurationFile = $file;
@@ -593,12 +598,11 @@ class CommonCommand extends AbstractCommand
         // Session lifetime
         $configuration['session_lifetime']         = 3600;
         // Activation for multi-url access
-        $_configuration['multiple_access_urls']   = false;
+        $configuration['multiple_access_urls']   = false;
         //Deny the elimination of users
         $configuration['deny_delete_users']        = false;
         //Prevent all admins from using the "login_as" feature
         $configuration['login_as_forbidden_globally'] = false;
-
 
         // Version settings
         $configuration['system_version']           = $version;
@@ -651,11 +655,13 @@ class CommonCommand extends AbstractCommand
 
     /**
      * Updates the configuration.yml file
-     * @param string $version
      *
+     * @param OutputInterface $output
+     * @param $dryRun
+     * @param $newValues
      * @return bool
      */
-    public function updateConfiguration($output, $dryRun, $newValues)
+    public function updateConfiguration(OutputInterface $output, $dryRun, $newValues)
     {
         $this->getConfigurationPath();
 
@@ -677,7 +683,6 @@ class CommonCommand extends AbstractCommand
             'user_personal_database',
             'scorm_database'
         );
-
 
         foreach ($_configuration as $key => $value) {
             if (in_array($key, $paramsToRemove)) {
@@ -882,7 +887,7 @@ class CommonCommand extends AbstractCommand
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @return int
      */
-    public function removeFiles($files, \Symfony\Component\Console\Output\OutputInterface $output)
+    public function removeFiles($files, OutputInterface $output)
     {
         $dryRun = $this->getConfigurationHelper()->getDryRun();
 
@@ -892,6 +897,7 @@ class CommonCommand extends AbstractCommand
         }
 
         $fs = new Filesystem();
+
         try {
             if ($dryRun) {
                 $output->writeln('<comment>Files to be removed (--dry-run is on).</comment>');
@@ -916,7 +922,7 @@ class CommonCommand extends AbstractCommand
      * @param array $params
      * @return array
      */
-    public function getParamsFromOptions(\Symfony\Component\Console\Input\InputInterface $input, array $params)
+    public function getParamsFromOptions(InputInterface $input, array $params)
     {
         $filledParams = array();
 
@@ -935,7 +941,7 @@ class CommonCommand extends AbstractCommand
      * @param string $defaultTempFolder
      * @return int|null|String
      */
-    public function getPackage(\Symfony\Component\Console\Output\OutputInterface $output, $version, $updateInstallation, $defaultTempFolder)
+    public function getPackage(OutputInterface $output, $version, $updateInstallation, $defaultTempFolder)
     {
         $fs = new Filesystem();
 
@@ -1078,11 +1084,11 @@ class CommonCommand extends AbstractCommand
     }
 
     /**
-     * @param $output
+     * @param OutputInterface $output
      * @param string $chamiloLocationPath
      * @param string $destinationPath
      */
-    public function copyPackageIntoSystem($output, $chamiloLocationPath, $destinationPath)
+    public function copyPackageIntoSystem(OutputInterface $output, $chamiloLocationPath, $destinationPath)
     {
         $fileSystem = new Filesystem();
 
@@ -1138,7 +1144,7 @@ class CommonCommand extends AbstractCommand
     /**
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    public function generateConfFiles(\Symfony\Component\Console\Output\OutputInterface $output)
+    public function generateConfFiles(OutputInterface $output)
     {
         $confDir = $this->getConfigurationPath();
         $fs = new Filesystem();
@@ -1159,13 +1165,14 @@ class CommonCommand extends AbstractCommand
      * Copy files from main/inc/conf to the new location config
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    public function copyConfigFilesToNewLocation(\Symfony\Component\Console\Output\OutputInterface $output)
+    public function copyConfigFilesToNewLocation(OutputInterface $output)
     {
         $output->writeln('<comment>Copy files to new location</comment>');
         // old config main/inc/conf
         $confDir = $this->getConfigurationPath();
 
         $configurationPath = $this->getConfigurationHelper()->convertOldConfigurationPathToNewPath($confDir);
+
         $fs = new Filesystem();
         $configList = $this->getConfigFiles();
         $configList[] = 'configuration.dist.php';
@@ -1175,25 +1182,33 @@ class CommonCommand extends AbstractCommand
                 continue;
             }
             $configFile = str_replace('dist.', '', $file);
-            $output->writeln("<comment> Moving file from: </comment>".$confDir.$configFile);
-            $output->writeln("<comment> to: </comment>".$configurationPath.$configFile);
-            if (!file_exists($configurationPath.$configFile)) {
-                $fs->copy($confDir.$configFile, $configurationPath.$configFile);
+
+            if (file_exists($confDir.$configFile)) {
+                $output->writeln("<comment> Moving file from: </comment>".$confDir.$configFile);
+                $output->writeln("<comment> to: </comment>".$configurationPath.$configFile);
+                if (!file_exists($configurationPath.$configFile)) {
+                    $fs->copy($confDir.$configFile, $configurationPath.$configFile);
+                }
+            } else {
+                $output->writeln("<comment> File not found: </comment>".$confDir.$configFile);
             }
         }
 
         $backupConfPath = str_replace('inc/conf', 'inc/conf_old', $confDir);
-        $output->writeln('<comment>Renaming conf folder: </comment>'.$confDir.' to '.$backupConfPath.'');
-
-        $fs->rename($confDir, $backupConfPath);
+        if ($confDir != $backupConfPath) {
+            $output->writeln('<comment>Renaming conf folder: </comment>'.$confDir.' to '.$backupConfPath.'');
+            $fs->rename($confDir, $backupConfPath);
+        } else {
+            $output->writeln('<comment>No need to rename the conf folder: </comment>'.$confDir.' = '.$backupConfPath.'');
+        }
         $this->setConfigurationPath($configurationPath);
     }
 
     /**
-     *
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param OutputInterface $output
+     * @param $path
      */
-    public function removeUnUsedFiles(\Symfony\Component\Console\Output\OutputInterface $output, $path)
+    public function removeUnUsedFiles(OutputInterface $output, $path)
     {
         $output->writeln('<comment>Removing unused files</comment>');
         $fs = new Filesystem();
@@ -1216,7 +1231,7 @@ class CommonCommand extends AbstractCommand
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param \Doctrine\DBAL\Connection $connection
      */
-    public function setPortalSettingsInChamilo(\Symfony\Component\Console\Output\OutputInterface $output, \Doctrine\DBAL\Connection $connection)
+    public function setPortalSettingsInChamilo(OutputInterface $output, \Doctrine\DBAL\Connection $connection)
     {
         $adminSettings = $this->getAdminSettings();
 
@@ -1241,14 +1256,13 @@ class CommonCommand extends AbstractCommand
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param \Doctrine\DBAL\Connection $connection
      */
-    public function setAdminSettingsInChamilo(\Symfony\Component\Console\Output\OutputInterface $output, \Doctrine\DBAL\Connection $connection)
+    public function setAdminSettingsInChamilo(OutputInterface $output, \Doctrine\DBAL\Connection $connection)
     {
         $settings = $this->getAdminSettings();
 
         $settings['password'] = $this->getEncryptedPassword($settings['password']);
 
         $connection->update('user', array('auth_source' => 'platform'), array('user_id' => '1'));
-
         $connection->update('user', array('username' => $settings['username']), array('user_id' => '1'));
         $connection->update('user', array('firstname' => $settings['firstname']), array('user_id' => '1'));
         $connection->update('user', array('lastname' => $settings['lastname']), array('user_id' => '1'));
@@ -1259,7 +1273,6 @@ class CommonCommand extends AbstractCommand
 
         // Already updated by the script
         //$connection->insert('admin', array('user_id' => 1));
-
         $connection->update('user', array('language' => $settings['language']), array('user_id' => '2'));
     }
 
@@ -1282,7 +1295,7 @@ class CommonCommand extends AbstractCommand
                 return $password;
             case 'md5':
             default:
-                return empty($salt) ? md5($password)  : md5($password.$salt);
+                return empty($salt) ? md5($password) : md5($password.$salt);
         }
     }
 }

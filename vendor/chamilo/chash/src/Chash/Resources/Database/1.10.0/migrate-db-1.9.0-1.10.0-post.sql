@@ -15,7 +15,6 @@
 
 -- ALTER TABLE session_rel_course DROP COLUMN course_code;
 -- ALTER TABLE session_rel_course_rel_user DROP COLUMN course_code;
-
 -- ALTER TABLE track_e_hotpotatoes DROP COLUMN course_code;
 -- ALTER TABLE track_e_exercices DROP COLUMN course_code;
 -- ALTER TABLE track_e_attempt DROP COLUMN course_code;
@@ -23,16 +22,21 @@
 -- ALTER TABLE track_e_course_access DROP COLUMN course_code;
 -- ALTER TABLE access_url_rel_course DROP COLUMN course_code;
 -- ALTER TABLE course_rel_user DROP COLUMN course_code;
-
 -- ALTER TABLE track_e_lastaccess DROP COLUMN access_cours_code;
 
-ALTER TABLE track_e_lastaccess DROP COLUMN access_cours_code;
-ALTER TABLE track_e_access    DROP COLUMN access_cours_code ;
-ALTER TABLE track_e_course_access DROP COLUMN  course_code;
-ALTER TABLE track_e_downloads DROP COLUMN  down_cours_id;
+DROP TABLE IF EXISTS track_c_referers;
+DROP TABLE IF EXISTS track_c_providers;
+DROP TABLE IF EXISTS track_c_os;
+DROP TABLE IF EXISTS track_c_countries;
+DROP TABLE IF EXISTS track_c_browsers;
+DROP TABLE IF EXISTS track_e_open;
 
-ALTER TABLE track_e_links DROP COLUMN  links_cours_id;
+--ALTER TABLE track_e_lastaccess DROP COLUMN access_cours_code;
+--ALTER TABLE track_e_access    DROP COLUMN access_cours_code ;
+--ALTER TABLE track_e_course_access DROP COLUMN course_code;
+--ALTER TABLE track_e_downloads DROP COLUMN  down_cours_id;
+--ALTER TABLE track_e_links DROP COLUMN links_cours_id;
 
-ALTER TABLE session DROP COLUMN date_start;
-ALTER TABLE session DROP COLUMN date_end;
+--ALTER TABLE session DROP COLUMN date_start;
+--ALTER TABLE session DROP COLUMN date_end;
 

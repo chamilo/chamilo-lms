@@ -24,11 +24,17 @@ class ConfigurationHelper extends Helper
 
     }
 
+    /**
+     * @return bool
+     */
     public function getDryRun()
     {
         return $this->dryRun;
     }
 
+    /**
+     * @param $dryRun
+     */
     public function setDryRun($dryRun)
     {
         $this->dryRun = $dryRun;
@@ -349,23 +355,36 @@ class ConfigurationHelper extends Helper
         return $finder;
     }
 
+    /**
+     * @return Finder
+     */
     public function getSysFolders()
     {
         $finder = new Finder();
         $sysPath = $this->getSysPath();
         $finder->directories()->in($sysPath);
+        // Skipping files
+        $finder->notPath('vendor');
+        $finder->notPath('tests');
         return $finder;
     }
 
+    /**
+     * @return Finder
+     */
     public function getSysFiles()
     {
         $finder = new Finder();
         $sysPath = $this->getSysPath();
         $finder->files()->in($sysPath);
+        $finder->notPath('vendor');
+        $finder->notPath('tests');
         return $finder;
     }
 
-
+    /**
+     * @return Finder
+     */
     public function getDataFolders()
     {
         $finder = new Finder();
@@ -377,6 +396,9 @@ class ConfigurationHelper extends Helper
 
     }
 
+    /**
+     * @return Finder
+     */
     public function getConfigFolders()
     {
         $finder = new Finder();
@@ -387,6 +409,9 @@ class ConfigurationHelper extends Helper
         return $finder;
     }
 
+    /**
+     * @return Finder
+     */
     public function getTempFolders()
     {
         $finder = new Finder();
@@ -402,6 +427,9 @@ class ConfigurationHelper extends Helper
         $this->sysPath = $sysPath;
     }
 
+    /**
+     * @return array
+     */
     public function getTempFolderList()
     {
         // Copied from the resources/prod.php file in Chamilo
@@ -458,6 +486,9 @@ class ConfigurationHelper extends Helper
         return $app['temp.paths']->folders;
     }
 
+    /**
+     * @return string
+     */
     public function getSysPath()
     {
         return $this->sysPath;
@@ -552,6 +583,4 @@ class ConfigurationHelper extends Helper
     {
         return 'configuration';
     }
-
-
 }

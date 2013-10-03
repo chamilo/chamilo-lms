@@ -432,7 +432,8 @@ class ImportCsv
 
                     if (isset($this->conditions['importStudents'])) {
                         if (isset($this->conditions['importStudents']['update']) && isset($this->conditions['importStudents']['update']['avoid'])) {
-                            // Blocking email update
+                            // Blocking email update -
+                            // 1. Condition
                             $avoidUsersWithEmail = $this->conditions['importStudents']['update']['avoid']['email'];
                             if ($userInfo['email'] != $row['email'] && in_array($row['email'], $avoidUsersWithEmail)) {
                                 $this->logger->addInfo("Students - User email is not updated : ".$row['username']." because the avoid conditions (email).");
@@ -440,8 +441,19 @@ class ImportCsv
                                 $email = $userInfo['email'];
                             }
 
+                            // 2. Condition
+                            if (!in_array($userInfo['email'], $avoidUsersWithEmail) && !in_array($row['email'], $avoidUsersWithEmail)) {
+                                $email = $userInfo['email'];
+                            }
+
+                            // 3. Condition
+                            if (in_array($userInfo['email'], $avoidUsersWithEmail) && !in_array($row['email'], $avoidUsersWithEmail)) {
+                                $email = $row['email'];
+                            }
+
                             // Blocking password update
                             $avoidUsersWithPassword = $this->conditions['importStudents']['update']['avoid']['password'];
+
                             if ($userInfo['password'] != api_get_encrypted_password($row['password']) && in_array($row['password'], $avoidUsersWithPassword)) {
                                 $this->logger->addInfo("Students - User password is not updated: ".$row['username']." because the avoid conditions (password).");
                                 $password = null;

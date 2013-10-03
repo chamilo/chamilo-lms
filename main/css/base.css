@@ -4259,6 +4259,10 @@ footer {
     float:left;
 }
 
+.doc_folder_hidden {
+    color : grey;
+}
+
 .doc_resource{
     margin: 5px;
     width: 100%;

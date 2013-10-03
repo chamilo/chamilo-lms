@@ -698,19 +698,22 @@ if (isset($argv[1]) && $argv[1] = '--dump') {
     $dump = true;
 }
 
-$import->setDumpValues($dump);
+if (isset($_configuration['import_csv_disable_dump']) && $_configuration['import_csv_disable_dump'] == true) {
+    $import->setDumpValues(false);
+} else {
+    $import->setDumpValues($dump);
+}
+
 // Do not moves the files to treated
 $import->test = true;
 $import->run();
 
-/*
+if (isset($_configuration['import_csv_fix_permissions']) && $_configuration['import_csv_fix_permissions'] == true) {
+    $command = "sudo find ".api_get_path(SYS_COURSE_PATH)." -type d -exec chmod 777 {} \; ";
+    echo "Executing: ".$command.PHP_EOL;
+    system($command);
 
-$command = "sudo find ".api_get_path(SYS_COURSE_PATH)." -type d -exec chmod 777 {} \; ";
-echo "Executing: ".$command.PHP_EOL;
-system($command);
-
-$command = "sudo find ".api_get_path(SYS_CODE_PATH)."upload/users  -type d -exec chmod 777 {} \;";
-echo "Executing: ".$command.PHP_EOL;
-system($command);
-
-*/
+    $command = "sudo find ".api_get_path(SYS_CODE_PATH)."upload/users  -type d -exec chmod 777 {} \;";
+    echo "Executing: ".$command.PHP_EOL;
+    system($command);
+}

@@ -2049,7 +2049,7 @@ class CourseRestorer
 
                     $result = Database::query($sql);
                     $cant = Database::num_rows($result);
-                    if ($cant > 0) {
+                    if ($cant > 0) {                    
                         $row = Database::fetch_assoc($result);
                         $expires_date = $row['expires_on'];
                         $end_date = $row['ends_on'];
@@ -2063,8 +2063,8 @@ class CourseRestorer
                                                     enable_qualification = '$enable_calification',
                                                     publication_id 			= '$last_id'";
                         Database::query($sql_add_homework);
-                        api_item_property_update($this->destination_course_info, 'work', $last_id,"DirectoryCreated", api_get_user_id());
                     }
+                    api_item_property_update($this->destination_course_info, 'work', $last_id,"DirectoryCreated", api_get_user_id());
                 }
             }
         }

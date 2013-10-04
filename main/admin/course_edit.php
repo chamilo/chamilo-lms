@@ -265,7 +265,7 @@ if ($form->validate()) {
 		}
 	}
 
-    CourseManager::updateTeachers($course_code, $teachers, $course['add_teachers_to_sessions']);
+    CourseManager::updateTeachers($course_code, $teachers, true, $course['add_teachers_to_sessions'], true);
 
 	$sql = "INSERT IGNORE INTO ".$course_user_table . " SET
 				course_code = '".Database::escape_string($course_code). "',

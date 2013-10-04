@@ -3999,7 +3999,7 @@ class CourseManager {
      * @param bool $editTeacherInSessions
      * @return bool
      */
-    public static function updateTeachers($course_code, $teachers, $deleteTeachersNotInList = true, $editTeacherInSessions = false)
+    public static function updateTeachers($course_code, $teachers, $deleteTeachersNotInList = true, $editTeacherInSessions = false, $deleteSessionTeacherNotInList = false)
     {
 
         if (empty($teachers)) {
@@ -4048,12 +4048,31 @@ class CourseManager {
         }
 
         if ($editTeacherInSessions) {
-            $alreadyAddedTeachers = CourseManager::get_teacher_list_from_course_code($course_code);
             $sessions = SessionManager::get_session_by_course($course_code);
+
+            $alreadyAddedTeachers = CourseManager::get_teacher_list_from_course_code($course_code);
+
             if (!empty($sessions)) {
                 foreach ($sessions as $session) {
-                    foreach ($alreadyAddedTeachers as $userId => $userInfo) {
-                        SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code);
+                    // Remove old and add new
+                    if ($deleteSessionTeacherNotInList) {
+                        $coachList = SessionManager::get_users_by_session($session['id'], 2);
+                        // Deleting old coaches
+                        if (!empty($coachList)) {
+                            foreach ($coachList as $coach) {
+                                SessionManager::set_coach_to_course_session($coach['user_id'], $session['id'], $course_code, true);
+                            }
+                        }
+
+                        // Adding new coaches
+                        foreach ($teachers as $userId) {
+                            SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code);
+                        }
+                    } else {
+                        // Add new
+                        foreach ($alreadyAddedTeachers as $userId => $userInfo) {
+                            SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code);
+                        }
                     }
                 }
             }

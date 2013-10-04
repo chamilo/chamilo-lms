@@ -101,16 +101,16 @@ switch ($action) {
                 $my_course_list = array();
             }
             $today = getdate();
-            $year = (!empty($_GET['year']) ? (int) $_GET['year'] : NULL);
-            if ($year == NULL) {
+            $year = (!empty($_GET['year']) ? (int) $_GET['year'] : null);
+            if ($year == null) {
                 $year = $today['year'];
             }
-            $month = (!empty($_GET['month']) ? (int) $_GET['month'] : NULL);
-            if ($month == NULL) {
+            $month = (!empty($_GET['month']) ? (int) $_GET['month'] : null);
+            if ($month == null) {
                 $month = $today['mon'];
             }
-            $day = (!empty($_GET['day']) ? (int) $_GET['day'] : NULL);
-            if ($day == NULL) {
+            $day = (!empty($_GET['day']) ? (int) $_GET['day'] : null);
+            if ($day == null) {
                 $day = $today['mday'];
             }
             $monthName = $MonthsLong[$month - 1];

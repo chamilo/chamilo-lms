@@ -1448,7 +1448,8 @@ class CourseManager {
      *    @param string $course_code
      *    @return array with user id
      */
-    public static function get_teacher_list_from_course_code($course_code) {
+    public static function get_teacher_list_from_course_code($course_code)
+    {
         $course_code = Database::escape_string($course_code);
         $teachers = array();
         $sql = "SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.email, u.username, u.status

@@ -270,7 +270,7 @@ if ($form->validate()) {
         CourseManager::updateTeachers($course_code, $teachers, false, true, false);
     } else {
         // Normal behaviour
-        CourseManager::updateTeachers($course_code, $teachers);
+        CourseManager::updateTeachers($course_code, $teachers, false, false);
     }
 
 	$sql = "INSERT IGNORE INTO ".$course_user_table . " SET

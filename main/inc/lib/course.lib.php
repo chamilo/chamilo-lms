@@ -4072,7 +4072,7 @@ class CourseManager {
                         }
                     } else {
                         // Add new teachers only
-                        foreach ($teachers as $userId => $userInfo) {
+                        foreach ($teachers as $userId) {
                             SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code);
                         }
                     }

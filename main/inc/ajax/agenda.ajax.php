@@ -75,11 +75,14 @@ switch ($action) {
         break;
     case 'get_events':
         $user_id = $_REQUEST['user_id'];
-        if (substr($user_id,0,1) == 'G') {
+        if (substr($user_id, 0, 1) == 'G') {
             $length = strlen($user_id);
-            $group_id = substr($user_id,2,$length-1);
+            $group_id = substr($user_id, 2, $length-1);
         }
-        $events = $agenda->get_events($_REQUEST['start'], $_REQUEST['end'], api_get_course_int_id(), $group_id , $user_id);
+        $start = isset($_REQUEST['start']) ? $_REQUEST['start'] : null;
+        $end = isset($_REQUEST['end']) ? $_REQUEST['end'] : null;
+
+        $events = $agenda->get_events($start, $end, api_get_course_int_id(), $group_id, $user_id);
         echo $events;
         break;
     case 'get_user_agenda':

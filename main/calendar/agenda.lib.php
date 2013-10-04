@@ -241,13 +241,15 @@ class Agenda
     /**
      *
      * Get agenda events
-     * @param	int		start tms
-     * @param	int		end tms
-     * @param	int		course id *integer* not the course code
-     * @param   int     user id
      *
+     * @param int $start
+     * @param int $end
+     * @param int $course_id
+     * @param int $group_id
+     * @param int $user_id
+     * @return string
      */
-    function get_events($start, $end, $course_id = null, $group_id = null, $user_id = 0)
+    public function get_events($start, $end, $course_id = null, $group_id = null, $user_id = 0)
     {
 
         switch ($this->type) {
@@ -261,13 +263,13 @@ class Agenda
                 break;
             case 'personal':
             default:
-                //Getting personal events
+                // Getting personal events
                 $this->get_personal_events($start, $end);
 
-                //Getting platform/admin events
+                // Getting platform/admin events
                 $this->get_platform_events($start, $end);
 
-                //Getting course events
+                // Getting course events
                 $my_course_list = array();
 
                 if (!api_is_anonymous()) {
@@ -417,12 +419,12 @@ class Agenda
     }
 
     /**
-     *
      * Gets personal events
-     * @param int 	start date tms
-     * @param int	end   date tms
+     * @param int $start
+     * @param int $end
+     * @return array
      */
-    function get_personal_events($start, $end)
+    public function get_personal_events($start, $end)
     {
         $start = intval($start);
         $end = intval($end);
@@ -431,7 +433,7 @@ class Agenda
         $user_id = api_get_user_id();
 
         $sql = "SELECT * FROM ".$this->tbl_personal_agenda."
-				   WHERE date >= '".$start."' AND (enddate <='".$end."' OR enddate IS NULL) AND user = $user_id";
+                WHERE date >= '".$start."' AND (enddate <='".$end."' OR enddate IS NULL) AND user = $user_id";
 
         $result = Database::query($sql);
         $my_events = array();
@@ -463,7 +465,16 @@ class Agenda
         return $my_events;
     }
 
-    function get_course_events($start, $end, $course_info, $group_id = 0, $session_id = 0, $user_id = 0)
+    /**
+     * @param $start
+     * @param $end
+     * @param $course_info
+     * @param int $group_id
+     * @param int $session_id
+     * @param int $user_id
+     * @return array
+     */
+    public function get_course_events($start, $end, $course_info, $group_id = 0, $session_id = 0, $user_id = 0)
     {
         $course_id = $course_info['real_id'];
         $user_id = intval($user_id);
@@ -492,11 +503,11 @@ class Agenda
         }
 
         $session_id = intval($session_id);
-       
+
         if (is_array($group_memberships) && count($group_memberships) > 0) {
             if (api_is_allowed_to_edit()) {
-                if (!empty($group_id)){
-                    $where_condition = "( ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) "; 
+                if (!empty($group_id)) {
+                    $where_condition = "( ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
                 } else {
                     if (!empty($user_id)) {
                         $where_condition = "( ip.to_user_id = $user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
@@ -543,11 +554,10 @@ class Agenda
         }
 
         $result = Database::query($sql);
-        $events = array();
         if (Database::num_rows($result)) {
             $events_added = array();
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                //to gather sent_tos
+                // to gather sent_tos
                 $sql = "SELECT to_user_id, to_group_id
                     FROM ".$tbl_property." ip
                     WHERE   ip.tool         = '".TOOL_CALENDAR_EVENT."' AND
@@ -566,18 +576,11 @@ class Agenda
                     }
                 }
 
-                //Only show events from the session
-                /* if (api_get_course_int_id()) {
-                  if ($row['session_id'] != api_get_session_id()) {
-                  continue;
-                  }
-                  } */
-
                 $event = array();
 
                 $event['id'] = 'course_'.$row['id'];
 
-                //To avoid doubles
+                // To avoid doubles
                 if (in_array($row['id'], $events_added)) {
                     continue;
                 }
@@ -676,6 +679,11 @@ class Agenda
         return $this->events;
     }
 
+    /**
+     * @param int $start tms
+     * @param int $end tms
+     * @return array
+     */
     function get_platform_events($start, $end)
     {
         $start = intval($start);

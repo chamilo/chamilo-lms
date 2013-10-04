@@ -4053,7 +4053,7 @@ class CourseManager {
                     foreach ($teachers as $userId) {
                         SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code);
                     }
-                    $teachersToDelete = array();
+                    /*$teachersToDelete = array();
                     if (!empty($alreadyAddedTeachers)) {
                         $teachersToDelete = array_diff(array_keys($alreadyAddedTeachers), $teachers);
                     }
@@ -4062,7 +4062,7 @@ class CourseManager {
                         foreach ($teachersToDelete as $userId) {
                             SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code, true);
                         }
-                    }
+                    }*/
                 }
             }
         }

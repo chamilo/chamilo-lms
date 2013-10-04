@@ -4071,8 +4071,8 @@ class CourseManager {
                             }
                         }
                     } else {
-                        // Add new
-                        foreach ($alreadyAddedTeachers as $userId => $userInfo) {
+                        // Add new teachers only
+                        foreach ($teachers as $userId => $userInfo) {
                             SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code);
                         }
                     }

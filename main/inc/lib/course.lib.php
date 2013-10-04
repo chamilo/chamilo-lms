@@ -4009,8 +4009,6 @@ class CourseManager {
             $teachers = array($teachers);
         }
 
-        $alreadyAddedTeachers = CourseManager::get_teacher_list_from_course_code($course_code);
-
         $course_user_table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
         if ($deleteTeachersNotInList) {
@@ -4050,21 +4048,12 @@ class CourseManager {
         }
 
         if ($editTeacherInSessions) {
+            $alreadyAddedTeachers = CourseManager::get_teacher_list_from_course_code($course_code);
             $sessions = SessionManager::get_session_by_course($course_code);
             if (!empty($sessions)) {
                 foreach ($sessions as $session) {
-                    foreach ($teachers as $userId) {
+                    foreach ($alreadyAddedTeachers as $userId => $userInfo) {
                         SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code);
-                    }
-                    $teachersToDelete = array();
-                    if (!empty($alreadyAddedTeachers)) {
-                        $teachersToDelete = array_diff(array_keys($alreadyAddedTeachers), $teachers);
-                    }
-
-                    if (!empty($teachersToDelete)) {
-                        foreach ($teachersToDelete as $userId) {
-                            SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code, true);
-                        }
                     }
                 }
             }

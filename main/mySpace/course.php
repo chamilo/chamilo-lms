@@ -24,19 +24,19 @@ api_block_anonymous_users();
 $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
 
 if (isset($_GET["id_session"]) && $_GET["id_session"] != "") {
-	$interbreadcrumb[] = array ("url" => "session.php", "name" => get_lang('Sessions'));
+    $interbreadcrumb[] = array("url" => "session.php", "name" => get_lang('Sessions'));
 }
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && isset($_GET["type"]) && $_GET["type"] == "coach") {
-	 $interbreadcrumb[] = array ("url" => "coaches.php", "name" => get_lang('Tutors'));
+    $interbreadcrumb[] = array("url" => "coaches.php", "name" => get_lang('Tutors'));
 }
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && isset($_GET["type"]) && $_GET["type"] == "student") {
-	 $interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang('Students'));
+    $interbreadcrumb[] = array("url" => "student.php", "name" => get_lang('Students'));
 }
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) {
-	 $interbreadcrumb[] = array ("url" => "teachers.php", "name" => get_lang('Teachers'));
+    $interbreadcrumb[] = array("url" => "teachers.php", "name" => get_lang('Teachers'));
 }
 
 function count_courses() {
@@ -118,11 +118,11 @@ $tbl_session_course_user 	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_U
 $tbl_user_course            = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
 if (isset($_GET['action'])) {
-	if ($_GET['action'] == 'show_message') {
-		Display :: display_normal_message(stripslashes($_GET['message']), false);
-	}
+    if ($_GET['action'] == 'show_message') {
+        Display :: display_normal_message(stripslashes($_GET['message']), false);
+    }
 
-	if ($_GET['action'] == 'error_message') {
+    if ($_GET['action'] == 'error_message') {
 		Display :: display_error_message(stripslashes($_GET['message']), false);
 	}
 }
@@ -147,7 +147,8 @@ if (api_drh_can_access_all_session_content()) {
 
 $nb_courses = count($a_courses);
 
-$table = new SortableTable('tracking_list_course', 'count_courses');
+$table = new SortableTable('tracking_list_course', 'count_courses', null, 50);
+
 $table->set_header(0, get_lang('CourseTitle'), false);
 $table->set_header(1, get_lang('NbStudents'), false);
 $table->set_header(2, get_lang('TimeSpentInTheCourse').Display :: return_icon('info3.gif', get_lang('TimeOfActiveByTraining'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
@@ -258,6 +259,6 @@ if (is_array($a_courses)) {
 		$table->addRow($table_row, 'align="right"');
 	}
 }
-$table -> display();
+$table->display();
 
 Display :: display_footer();

@@ -3999,7 +3999,7 @@ class CourseManager {
      * @param bool $editTeacherInSessions
      * @return bool
      */
-    public static function updateTeachers($course_code, $teachers, $editTeacherInSessions = false)
+    public static function updateTeachers($course_code, $teachers, $deleteTeachersNotInList = true, $editTeacherInSessions = false)
     {
 
         if (empty($teachers)) {
@@ -4013,16 +4013,19 @@ class CourseManager {
 
         $course_user_table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-        // Delete only teacher relations that doesn't match the selected teachers
-        $cond = null;
-        if (count($teachers)>0) {
-            foreach($teachers as $key) {
-                $cond.= " AND user_id <> '".$key."'";
-            }
-        }
+        if ($deleteTeachersNotInList) {
 
-        $sql = 'DELETE FROM '.$course_user_table.' WHERE course_code="'.Database::escape_string($course_code).'" AND status="1"'.$cond;
-        Database::query($sql);
+            // Delete only teacher relations that doesn't match the selected teachers
+            $cond = null;
+            if (count($teachers)>0) {
+                foreach($teachers as $key) {
+                    $cond.= " AND user_id <> '".$key."'";
+                }
+            }
+
+            $sql = 'DELETE FROM '.$course_user_table.' WHERE course_code="'.Database::escape_string($course_code).'" AND status="1"'.$cond;
+            Database::query($sql);
+        }
 
         if (count($teachers) > 0) {
             foreach ($teachers as $key) {
@@ -4053,7 +4056,7 @@ class CourseManager {
                     foreach ($teachers as $userId) {
                         SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code);
                     }
-                    /*$teachersToDelete = array();
+                    $teachersToDelete = array();
                     if (!empty($alreadyAddedTeachers)) {
                         $teachersToDelete = array_diff(array_keys($alreadyAddedTeachers), $teachers);
                     }
@@ -4062,7 +4065,7 @@ class CourseManager {
                         foreach ($teachersToDelete as $userId) {
                             SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code, true);
                         }
-                    }*/
+                    }
                 }
             }
         }

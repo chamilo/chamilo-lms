@@ -34,7 +34,7 @@ $(function() {
         } else {
             url = String(window.location)+temp;
             window.location.replace(url);
-        }    
+        }
     });
 });
 </script>';
@@ -1033,7 +1033,7 @@ function construct_to_select_form($group_list = null, $user_list = null, $filter
         }
         $result .= "</optgroup>";
     }
-    
+
     // adding the individual users to the select form
     if (!empty($user_list)) {
         $result .= '<optgroup label="'.get_lang('FilterByUser').'">';
@@ -1583,6 +1583,8 @@ function display_courseadmin_links($filter = 0)
     } else {
         $actions = "<a href='agenda_js.php?type=course&".api_get_cidreq()."'>".Display::return_icon('calendar.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";
     }
+
+    // $actions .= "<a href='agenda_list.php?type=course&".api_get_cidreq()."'>".Display::return_icon('list.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";
 
     $actions .= "<a href='agenda.php?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".api_get_group_id()."&action=add'>".Display::return_icon('new_event.png', get_lang('AgendaAdd'), '', ICON_SIZE_MEDIUM)."</a>";
     $actions .= "<a href='agenda.php?".api_get_cidreq()."&action=importical'>".Display::return_icon('import_calendar.png', get_lang('ICalFileImport'), '', ICON_SIZE_MEDIUM)."</a>";

@@ -712,7 +712,17 @@ if (!empty($exercise_list)) {
                             //Quiz not ready due to time limits 	700 	$attempt_text = get_lang('NotAttempted');
                             //@todo use the is_visible function
                             if ($row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00') {
-                                $attempt_text = sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
+                                $today = time();
+                                $start_time = api_strtotime($row['start_time'], 'UTC');
+                                $end_time = api_strtotime($row['end_time'], 'UTC');
+                                if ($today < $start_time) {
+                                    $attempt_text = sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
+                                } else {
+                                    if ($today > $end_time) {
+                                        $attempt_text = sprintf(get_lang('ExerciseWasActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
+                                    }
+                                }
+                                            
                             } else {
                                 //$attempt_text = get_lang('ExamNotAvailableAtThisTime');
                                 if ($row['start_time'] != '0000-00-00 00:00:00') {

@@ -550,9 +550,15 @@ class ImportCsv
                     $params = array(
                         'title' => $row['title'],
                     );
+
                     $result = CourseManager::update_attributes($courseInfo['real_id'], $params);
 
-                    CourseManager::updateTeachers($courseInfo['id'], $row['teachers'], false, true, false);
+                    $addTeacherToSession = isset($courseInfo['add_teachers_to_sessions_courses']) && !empty($courseInfo['add_teachers_to_sessions_courses']) ? true : false;
+                    if ($addTeacherToSession) {
+                        CourseManager::updateTeachers($courseInfo['id'], $row['teachers'], false, true, false);
+                    } else {
+                        CourseManager::updateTeachers($courseInfo['id'], $row['teachers']);
+                    }
 
                     if ($result) {
                         $this->logger->addInfo("Courses - Course updated ".$courseInfo['code']);

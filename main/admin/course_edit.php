@@ -23,8 +23,6 @@ $tool_name = get_lang('ModifyCourseInfo');
 $interbreadcrumb[] = array ("url" => 'index.php',       "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ("url" => "course_list.php", "name" => get_lang('CourseList'));
 
-/* Libraries */
-/* MAIN CODE */
 // Get all course categories
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
@@ -32,8 +30,8 @@ $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT * FROM $course_table WHERE code='".Database::escape_string($course_code)."'";
 $result = Database::query($sql);
 if (Database::num_rows($result) != 1) {
-	header('Location: course_list.php');
-	exit();
+    header('Location: course_list.php');
+    exit();
 }
 $course = Database::fetch_array($result,'ASSOC');
 
@@ -63,14 +61,14 @@ $teachers = array();
 $platform_teachers[0] = '-- '.get_lang('NoManager').' --';
 while ($obj = Database::fetch_object($res)) {
 
-    if (!array_key_exists($obj->user_id,$course_teachers)) {
+    if (!array_key_exists($obj->user_id, $course_teachers)) {
         $teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
     }
 
     if ($course['tutor_name'] == $course_teachers[$obj->user_id]) {
         $course['tutor_name'] = $obj->user_id;
     }
-    //We add in the array platform teachers
+    // We add in the array platform teachers
     $platform_teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
 }
 
@@ -78,8 +76,8 @@ while ($obj = Database::fetch_object($res)) {
 if (count($course_teachers) == 0) {
     $sql='SELECT tutor_name FROM '.$course_table.' WHERE code="'.$course_code.'"';
     $res = Database::query($sql);
-    $tutor_name=Database::result($res,0,0);
-    $course['tutor_name']=array_search($tutor_name,$platform_teachers);
+    $tutor_name = Database::result($res, 0, 0);
+    $course['tutor_name'] = array_search($tutor_name, $platform_teachers);
 }
 
 // Build the form
@@ -126,17 +124,19 @@ $form->addGroup($group,'group',get_lang('CourseTeachers'),'</td><td width="80" a
 		'<input class="arrowr" style="width:30px;height:30px;padding-right:12px" type="button" onclick="moveItem(document.getElementById(\'platform_teachers\'), document.getElementById(\'course_teachers\'))" ><br><br>' .
 		'<input class="arrowl" style="width:30px;height:30px;padding-left:13px" type="button" onclick="moveItem(document.getElementById(\'course_teachers\'), document.getElementById(\'platform_teachers\'))" ></td><td>');
 
-$form->addElement('checkbox', 'add_teachers_to_sessions', null, get_lang('TeachersWillBeAddedAsCoachInAllCourseSessions'));
+if (array_key_exists('add_teachers_to_sessions_courses', $course)) {
+    $form->addElement('checkbox', 'add_teachers_to_sessions_courses', null, get_lang('TeachersWillBeAddedAsCoachInAllCourseSessions'));
+}
 
 $categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories , array('style'=>'width:350px','id'=>'category_code_id', 'class'=>'chzn-select'));
 $categories_select->addOption('-', '');
 CourseManager::select_and_sort_categories($categories_select);
 
-$form->add_textfield('department_name', get_lang('CourseDepartment'), false,array ('size' => '60'));
+$form->add_textfield('department_name', get_lang('CourseDepartment'), false, array('size' => '60'));
 $form->applyFilter('department_name','html_filter');
 $form->applyFilter('department_name','trim');
 
-$form->add_textfield('department_url', get_lang('CourseDepartmentURL'),false, array ('size' => '60'));
+$form->add_textfield('department_url', get_lang('CourseDepartmentURL'), false, array('size' => '60'));
 $form->applyFilter('department_url','html_filter');
 $form->applyFilter('department_url','trim');
 
@@ -181,12 +181,11 @@ foreach ($list_course_extra_field as $extra_field) {
 $form->addElement('style_submit_button', 'button', get_lang('ModifyCourseInfo'),'onclick="valide()"; class="save"');
 
 // Set some default values
-//$course['disk_quota'] = round($course['disk_quota']/1024/1024, 1);
 $course['disk_quota'] = round(DocumentManager::get_course_quota($course_code) /1024/1024, 1);
 $course['title'] = api_html_entity_decode($course['title'], ENT_QUOTES, $charset);
 $course['real_code'] = $course['code'];
 
-$course['add_teachers_to_sessions'] = empty($course_teachers) ||  count($course_teachers) == 1 ? null : '1';
+$course['add_teachers_to_sessions_courses'] = isset($course['add_teachers_to_sessions_courses']) ? $course['add_teachers_to_sessions_courses'] : 0;
 
 $form->setDefaults($course);
 
@@ -258,14 +257,21 @@ if ($form->validate()) {
             WHERE code='".Database::escape_string($course_code)."'";
 	Database::query($sql);
 
-	//update the extra fields
+	// update the extra fields
 	if (count($extras) > 0) {
 		foreach ($extras as $key => $value) {
 			CourseManager::update_course_extra_field_value($course_code, $key, $value);
 		}
 	}
 
-    CourseManager::updateTeachers($course_code, $teachers, true, $course['add_teachers_to_sessions'], true);
+    $addTeacherToSessionCourses = isset($course['add_teachers_to_sessions_courses']) && !empty($course['add_teachers_to_sessions_courses']) ? 1 : 0;
+
+    if ($addTeacherToSessionCourses) {
+        CourseManager::updateTeachers($course_code, $teachers, false, true, false);
+    } else {
+        // Normal behaviour
+        CourseManager::updateTeachers($course_code, $teachers);
+    }
 
 	$sql = "INSERT IGNORE INTO ".$course_user_table . " SET
 				course_code = '".Database::escape_string($course_code). "',
@@ -278,6 +284,13 @@ if ($form->validate()) {
 	Database::query($sql);
 
 	$course_info = api_get_course_info($course_code);
+
+    if (array_key_exists('add_teachers_to_sessions_courses', $course_info)) {
+        $sql = "UPDATE $course_table SET add_teachers_to_sessions_courses = '$addTeacherToSessionCourses'
+                WHERE id = ".$course_info['real_id'];
+        Database::query($sql);
+    }
+
 	$course_id = $course_info['real_id'];
 	$forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE);
 

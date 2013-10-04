@@ -3999,9 +3999,14 @@ class CourseManager {
      * @param bool $editTeacherInSessions
      * @return bool
      */
-    public static function updateTeachers($course_code, $teachers, $deleteTeachersNotInList = true, $editTeacherInSessions = false, $deleteSessionTeacherNotInList = false)
+    public static function updateTeachers(
+        $course_code,
+        $teachers,
+        $deleteTeachersNotInList = true,
+        $editTeacherInSessions = false,
+        $deleteSessionTeacherNotInList = false
+    )
     {
-
         if (empty($teachers)) {
             return false;
         }

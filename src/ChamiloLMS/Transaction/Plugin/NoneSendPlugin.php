@@ -24,7 +24,7 @@ class NoneSendPlugin implements SendPluginInterface
     /**
      * {@inheritdoc}
      */
-    public function send(Envelope $envelope, BranchSync $branch)
+    public function send(Envelope $envelope)
     {
         // Do nothing.
     }

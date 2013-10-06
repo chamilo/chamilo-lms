@@ -419,6 +419,7 @@ class TransactionLogController
             ),
             'send' => array(
                 'none' => 'NoneSendPlugin',
+                'auth_https_post' => 'AuthHttpsPostSend',
             ),
             'receive' => array(
                 'none' => 'NoneReceivePlugin',
@@ -497,23 +498,22 @@ class TransactionLogController
     }
 
     /**
-     * Sends an envelope to a branch.
+     * Sends an envelope from local branch.
      *
      * It uses local configuration to figure out how to send it.
      *
      * @param Envelope $envelope
      *   The transactions envelope.
-     * @param BranchSync $branch
-     *   The destination branch where to send the envelope.
      *
      * @return boolean
      *   Either true on success or false on failure.
      */
-    public function sendEnvelope(Envelope $envelope, BranchSync $branch)
+    public function sendEnvelope(Envelope $envelope)
     {
         try {
-            $send_plugin = $this->createPlugin('send', $branch->getPluginSend(), $branch->getPluginData('send'));
-            $send_plugin->send($envelope, $branch);
+            $local_branch = $this->branchRepository->getLocalBranch();
+            $send_plugin = $this->createPlugin('send', $local_branch->getPluginSend(), $local_branch->getPluginData('send'));
+            $send_plugin->send($envelope);
             return TRUE;
         }
         catch (Exception $exception) {

@@ -12,15 +12,13 @@ use Entity\BranchSync;
 interface SendPluginInterface extends PluginInterface
 {
     /**
-     * Sends the transactions envelope to the destination system.
+     * Sends a transactions envelope.
      *
      * @param Envelope $envelope
      *   The transactions envelope.
-     * @param BranchSync $branch
-     *   The destination branch where to send the envelope.
      *
      * @throws SendException
      *   When there is an error on the sending process.
      */
-    public function send(Envelope $envelope, BranchSync $branch);
+    public function send(Envelope $envelope);
 }

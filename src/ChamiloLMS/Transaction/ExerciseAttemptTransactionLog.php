@@ -74,7 +74,8 @@ class ExerciseAttemptTransactionLog extends TransactionLog
      */
     public function import()
     {
-        if ($this->branch_id == TransactionLog::BRANCH_LOCAL) {
+        $local_branch = TransactionLog::getController()->getBranchRepository()->getLocalBranch();
+        if ($this->branch_id == $local_branch->getId()) {
             // Do not allow importing local transactions.
             throw new TransactionImportException('Cannot import a local transaction');
         }

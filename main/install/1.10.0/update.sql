@@ -83,3 +83,7 @@ CREATE TABLE received_envelopes (
 ALTER TABLE branch_transaction
   ADD c_id int not null,
   ADD session_id int not null;
+
+-- Adds new setting for the local branch id.
+INSERT INTO settings_current (variable, type, category, selected_value, title, comment, access_url_changeable) VALUES
+('local_branch_id', 'textfield', 'LogTransactions', 1, 'LogTransactionsDefaultBranch', 'LogTransactionsDefaultBranchComment', 1);

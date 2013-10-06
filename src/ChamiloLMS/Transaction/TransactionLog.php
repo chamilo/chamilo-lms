@@ -11,10 +11,6 @@ use Database;
 abstract class TransactionLog
 {
     /**
-     * Represents the local branch, as stored in branch_transaction.branch_id.
-     */
-    const BRANCH_LOCAL = 1;
-    /**
      * Represents the local transaction, as stored in
      * branch_transaction.transaction_id.
      *
@@ -68,8 +64,6 @@ abstract class TransactionLog
     public $id;
     /**
      * Branch id this transaction comes from.
-     *
-     * Use TransactionLog::BRANCH_LOCAL for local transactions.
      */
     public $branch_id;
     /**
@@ -123,7 +117,7 @@ abstract class TransactionLog
         // time_insert and time_update are handled manually.
         $fields = array(
             'id' => false,
-            'branch_id' => TransactionLog::BRANCH_LOCAL,
+            'branch_id' => self::getController()->getBranchRepository()->getLocalBranch(),
             'transaction_id' => TransactionLog::TRANSACTION_LOCAL,
             'item_id' => false,
             'c_id' => 0,
@@ -141,13 +135,15 @@ abstract class TransactionLog
         }
     }
 
-    public function getController()
+    public static function getController()
     {
-        if (empty($this->controller)) {
-            $this->controller = new TransactionLogController();
+        static $controller;
+
+        if (empty($controller)) {
+            $controller = new TransactionLogController();
         }
 
-        return $this->controller;
+        return $controller;
     }
 
     /**

@@ -272,7 +272,8 @@ class TransactionLogController
     {
         // Sadly multiple values are not supported by Database::select(), aka IN
         // operation.
-        $sql = sprintf('SELECT * FROM %s WHERE branch_id != %d AND status_id IN (%d, %d) LIMIT %d', $this->table, TransactionLog::BRANCH_LOCAL, TransactionLog::STATUS_TO_BE_EXECUTED, TransactionLog::STATUS_FAILED, $limit);
+        $local_branch = $this->branchRepository->getLocalBranch();
+        $sql = sprintf('SELECT * FROM %s WHERE branch_id != %d AND status_id IN (%d, %d) LIMIT %d', $this->table, $local_branch->getId(), TransactionLog::STATUS_TO_BE_EXECUTED, TransactionLog::STATUS_FAILED, $limit);
         $result = Database::query($sql);
         $transactions = array();
         while ($row = $result->fetch()) {
@@ -540,8 +541,7 @@ class TransactionLogController
         $log_entry = array('log_type' => self::LOG_RECEIVE);
 
         try {
-            // @fixme identify correctly local branch.
-            $local_branch = $this->branchRepository->find(TransactionLog::BRANCH_LOCAL);
+            $local_branch = $this->branchRepository->getLocalBranch();
             $receive_plugin = $this->createPlugin('receive', $local_branch->getPluginReceive(), $local_branch->getPluginData('receive'));
             $blobs = $receive_plugin->receive($limit);
         }
@@ -573,5 +573,13 @@ class TransactionLogController
         }
 
         return $envelopes;
+    }
+
+    /**
+     * Get branch controller.
+     */
+    public function getBranchRepository()
+    {
+        return $this->branchRepository;
     }
 }

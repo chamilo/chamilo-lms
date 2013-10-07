@@ -10,7 +10,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-
 class GenerateTempFileStructureCommand extends CommonChamiloDatabaseCommand
 {
     /**
@@ -37,7 +36,6 @@ class GenerateTempFileStructureCommand extends CommonChamiloDatabaseCommand
         // Data folders
         $files = $this->getConfigurationHelper()->getTempFolderList();
         $this->createFolders($output, $files, 0777);
-
     }
 
     /**

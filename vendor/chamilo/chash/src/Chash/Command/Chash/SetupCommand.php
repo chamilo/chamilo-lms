@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console;
 use Symfony\Component\Yaml\Dumper;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class StatusCommand
@@ -15,13 +16,15 @@ class SetupCommand extends AbstractCommand
 {
     public $migrationFile = null;
 
+    /**
+     *
+     */
     protected function configure()
     {
         $this
             ->setName('chash:setup')
             ->setDescription('Setups the migration.yml')
-            ->addOption('migration-yml-path', null, InputOption::VALUE_OPTIONAL, 'The path to the migration.yml file')
-            ->addOption('migration-class-path', null, InputOption::VALUE_OPTIONAL, 'The path to the migration class');
+            ->addOption('temp-folder', null, InputOption::VALUE_OPTIONAL, 'The temp folder.', '/tmp');
     }
 
     /**
@@ -34,41 +37,41 @@ class SetupCommand extends AbstractCommand
      */
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $path = $input->getOption('migration-yml-path');
+        $tempFolder = $input->getOption('temp-folder');
 
-        if (empty($path)) {
-            $srcPath = realpath(__DIR__.'/../../../').'/Chash/Migrations/';
-        } else {
-            $srcPath  = $path;
-        }
+        $fs = new Filesystem();
 
-        $migrationClassPath = $input->getOption('migration-class-path');
+        $migrationsFolder = $tempFolder.'/Migrations/';
 
-        if (empty($migrationClassPath)) {
-            $migrationClassPath =  $srcPath;
+        if (!$fs->exists($migrationsFolder)) {
+            $fs->mkdir($migrationsFolder);
         }
 
         $migrations = array(
             'name' => 'Chamilo Migrations',
             'migrations_namespace' => 'Chash\Migrations',
             'table_name' => 'chamilo_migration_versions',
-            'migrations_directory' => $migrationClassPath
+            'migrations_directory' => $migrationsFolder
         );
 
-        // does not work because it need a callable function yml_emit
-        /*$config = new \Zend\Config\Config($migrations, true);
-        $writer = new \Zend\Config\Writer\Yaml();
-        $writer->toFile($srcPath.'/Chash/Migrations/migrations.ypl', $config);*/
         $dumper = new Dumper();
         $yaml = $dumper->dump($migrations, 1);
-        $file = $srcPath.'/migrations.yml';
+        $file = $migrationsFolder.'migrations.yml';
         file_put_contents($file, $yaml);
+
+        $migrationPathSource = __DIR__.'/../../../Chash/Migrations/';
+
+        $fs->mirror($migrationPathSource, $migrationsFolder);
 
         // migrations_directory
         $output->writeln("<comment>Chash migrations.yml saved: $file</comment>");
         $this->migrationFile = $file;
     }
 
+    /**
+     * Gets the migration file path
+     * @return string
+     */
     public function getMigrationFile()
     {
         return $this->migrationFile;

@@ -134,7 +134,6 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
     $is_courseCoach  = false;
     $is_sessionAdmin = false;
 
-
     if ($courseReset) {
 
         if (isset($courseId) && $courseId && $courseId != -1) {

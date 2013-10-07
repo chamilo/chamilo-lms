@@ -415,7 +415,6 @@ class CourseHome
         $session_id 			= api_get_session_id();
         $course_id              = api_get_course_int_id();
         $condition_session 		= api_get_session_condition($session_id, true, true);
-        $studentView = isset($_SESSION['studentview']) ? $_SESSION['studentview'] : null;
 
         $studentView = isset($_SESSION['studentview']) ? $_SESSION['studentview'] : null;
 

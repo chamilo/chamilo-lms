@@ -1128,8 +1128,17 @@ class Testcategory
             $return .= '<th height="24">' . get_lang('Categories') . '</th>';
             $return .= '<th width="70" height="24">' . get_lang('Number') . '</th></tr>';
 
-            foreach($categories as $category) {
+            $orderedCategoryList = array();
+            foreach ($categories as $category) {
+                $orderedCategoryList[$category['iid']] = $category['parent_path'];
+            }
+
+            natsort($orderedCategoryList);
+
+            foreach ($orderedCategoryList as $categoryId => $path) {
+                $category = $categories[$categoryId];
                 $cat_id = $category['iid'];
+
                 $return .= '<tr>';
                 $return .= '<td>';
                 $return .= Display::div($category['parent_path']);

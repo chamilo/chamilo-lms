@@ -4,6 +4,9 @@ secured_login_check:
 secured_logout:
     pattern:   /secured/logout
 
+login:
+  pattern:   /secured/login_check
+
 logout:
     pattern:   /secured/logout
 home:

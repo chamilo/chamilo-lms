@@ -70,6 +70,9 @@ $update = function($_configuration, \Doctrine\DBAL\Connection $mainConnection, $
     $sql = "SELECT id, code FROM $course_table";
     $result = $mainConnection->executeQuery($sql);
     $rows = $result->fetchAll();
+
+    $courseSettingtable = "$dbNameForm.c_course_setting";
+
     foreach ($rows as $row) {
         $courseId = $row['id'];
         $courseCode = $row['code'];
@@ -96,6 +99,19 @@ $update = function($_configuration, \Doctrine\DBAL\Connection $mainConnection, $
         if ($result->rowCount() == 0) {
             $sql = "INSERT INTO $accessUrlRelCourseTable (access_url_id, course_code, c_id) VALUES ('1', '$courseCode', '$courseId')";
             $mainConnection->executeQuery($sql);
+        }
+
+        $sql = "SELECT c_id FROM $courseSettingtable WHERE c_id = $courseId WHERE variable = 'show_course_system_documents'";
+        $result = $mainConnection->executeQuery($sql);
+        if ($result->rowCount() == 0) {
+            $mainConnection->executeQuery($sql);
+            $data = array(
+                'variable' =>  'show_course_system_documents',
+                'c_id' => $courseId,
+                'category' => 'documents',
+                'value' => '0'
+            );
+            $mainConnection->insert($courseSettingtable, $data);
         }
     }
 

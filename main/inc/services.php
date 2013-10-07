@@ -130,7 +130,6 @@ $app['security.role_hierarchy'] = array(
         'ROLE_QUESTION_MANAGER',
         'ROLE_SESSION_MANAGER',
         'ROLE_TEACHER',
-        'ROLE_ALLOWED_TO_SWITCH',
         'ROLE_DIRECTOR',
         'ROLE_JURY_PRESIDENT'
     ),
@@ -173,6 +172,7 @@ $app['allow_admin_toolbar'] = array(
     'ROLE_ADMIN',
     'ROLE_QUESTION_MANAGER',
 	'ROLE_SESSION_MANAGER',
+	// Ministerio routes
     'ROLE_DIRECTOR',
     'ROLE_JURY_PRESIDENT',
     'ROLE_JURY_SUBSTITUTE',

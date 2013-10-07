@@ -839,7 +839,6 @@ if (is_null($current_question)) {
     }
 }
 
-
 if ($question_count != 0) {
 	if (($objExercise->type == ALL_ON_ONE_PAGE || $current_question > $question_count)) {
 	    if (api_is_allowed_to_session_edit()) {
@@ -1071,7 +1070,6 @@ if ($reminder == 2)  {
     }
 }
 
-
 // Changing next question button
 if ($objExercise->review_answers) {
 	$script_php = $urlMainExercise.'exercise_reminder.php';
@@ -1271,6 +1269,7 @@ if (!empty($error)) {
                             }
 
                             $("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('save.png', get_lang('Saved'), array(), ICON_SIZE_SMALL)).'");
+
                             if (redirect) {
                                 window.location = url;
                             }

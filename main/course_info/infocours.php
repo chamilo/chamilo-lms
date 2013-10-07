@@ -462,9 +462,9 @@ if ($form->validate() && is_settings_editable()) {
         visibility  		    = '".$update_values['visibility']."',
         subscribe  			    = '".$update_values['subscribe']."',
         unsubscribe  		    = '".$update_values['unsubscribe']."',
-        legal                   = '".$update_values['legal']."',
-        activate_legal          = '".$update_values['activate_legal']."',
-        registration_code 	    = '".$update_values['course_registration_password']."'
+        legal                   = '".$update_values['legal']."',".
+        (isset($update_values['activate_legal'])?" activate_legal          = '".$update_values['activate_legal']."',":'').
+        " registration_code 	    = '".$update_values['course_registration_password']."'
         WHERE code = '".$course_code."'";
 
     Database::query($sql);

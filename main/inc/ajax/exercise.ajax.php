@@ -80,15 +80,14 @@ switch ($action) {
         if (empty($category->id)) {
             echo 0;
         } else {
-            $courseId = api_get_course_int_id();
-            if (isset($courseId)) {
+            if (isset($course_id)) {
                 // Global
                 if ($category->c_id == 0) {
                     echo 1;
                     exit;
                 } else {
                     // Local
-                    if ($category->c_id == $courseId) {
+                    if ($category->c_id == $course_id) {
                         echo 1;
                         exit;
                     }
@@ -105,8 +104,6 @@ switch ($action) {
 
         $cat = new Testcategory(null, null, null, null, $type);
         $items = $cat->get_categories_by_keyword($_REQUEST['tag']);
-
-        $courseId = api_get_course_int_id();
 
         $em = $this->get('orm.em');
         $repo = $em->getRepository('Entity\CQuizCategory');
@@ -136,7 +133,7 @@ switch ($action) {
                     }
                     $item['title'] .= " [".get_lang('Global')."]";
                 } else {
-                    if (isset($courseId)) {
+                    if (isset($course_id)) {
                         if ($item['c_id'] != $item['c_id']) {
                             continue;
                         }

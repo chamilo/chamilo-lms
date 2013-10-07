@@ -38,9 +38,9 @@ Controllers
 -----------
 
 Flint tries to make Silex more like Symfony. And by using closures it is
-hard to seperate controllers in a logic way when you have more than a
+hard to separate controllers in a logical way when you have more than a
 couple of them. To make it better it is recommended to use classes and
-methods for controllers. The basics is `explained
+methods for controllers. The basics are `explained
 here <http://silex.sensiolabs.org/doc/usage.html#controllers-in-classes>`__
 but Flint takes it further and allows the application to be injected
 into a controller.
@@ -69,7 +69,7 @@ of ``$container``.
     }
 
 Another way is to use a base controller which have convenience methods
-for the most frequently used services. Theese methods can be seen in the
+for the most frequently used services. These methods can be seen in the
 source code if you look at the implementation for
 ``Flint\Controller\Controller``.
 
@@ -93,16 +93,16 @@ Routing
 -------
 
 Because Flint replaces the url matcher used in Symfony with the full
-router implementation a lot of new things is possible.
+router implementation a lot of new things are possible.
 
-Caching is one of thoose things. It makes your application faster as it
+Caching is one of those things. It makes your application faster as it
 does not need to register routes on every request. Together with loading
 your routes from a configuration file like Symfony it will also bring
 more structure to your application.
 
 To enable caching you just need to point the router to the directory you
 want to use and if it should cache or not. By default the ``debug``
-parameter will be used as to determaine if cache should be used or not.
+parameter will be used as to determine if cache should be used or not.
 
 .. code-block:: php
 
@@ -113,9 +113,24 @@ parameter will be used as to determaine if cache should be used or not.
         'cache_dir' => '/my/cache/directory/routing',
     );
 
+.. warning:: Migrating from Silex
+
+    If you are migrating from Silex, you must move all of your
+    anonymous controller callbacks into controller methods before you
+    try to enable caching for the router. Anonymous callbacks are
+    instances of the Closure class and so cannot be exported into
+    the cached PHP class.
+
+    For this reason, all controller service providers must use
+    named methods in controller classes, too.
+
+    ``UrlGeneratorServiceProvider`` conflicts with Flint's 
+    ``RoutingServiceProvider`` which provides a ``url_generator``
+    service.
+
 Before it is possible to use the full power of caching it is needed to
 use configuration files because Silex will always call add routes via
-its convenience methods ``get|post|delete|put``. Furtunately this is
+its convenience methods ``get|post|delete|put``. Fortunately this is
 baked right in.
 
 .. code-block:: php
@@ -154,7 +169,7 @@ Also it will make it easier to generate routes from inside your views.
 
 This is also possible with Silex but with a more verbose syntax. The
 syntax can be even more precise by using the twig functions that is
-available in the Twig bridge for Symfony. To enable thoose add the twig
+available in the Twig bridge for Symfony. To enable those add the twig
 bridge to your composer file.
 
 .. code-block:: json
@@ -175,7 +190,7 @@ Now it is possible to use the functions inside your Twig templates.
 Default Parameters
 ------------------
 
-The two contructor arguments ``$rootDir`` and ``$debug`` are also
+The two constructor arguments ``$rootDir`` and ``$debug`` are also
 registered on the application as parameters. This makes it easier for
 services to add paths for caching, logs or other directories.
 
@@ -195,7 +210,7 @@ matter the most. Such as having a custom error page instead of the one
 Silex provides by default. Also it can help a lost user navigate back.
 Flint makes this possible by using the exception handler from Symfony
 and a dedicated controller. Both the views and the controller can be
-overrriden.
+overridden.
 
 This will only work when debug is turned off.
 
@@ -222,7 +237,7 @@ set to ``Flint\\Controller\\ExceptionController::showAction``.
 
 To see what parameter the controller action takes look at the one
 provided by default. Normally it should not be overwritten as it already
-gives a lot of flexibilty with the template lookup.
+gives a lot of flexibility with the template lookup.
 
 
 Pimple Console
@@ -288,7 +303,7 @@ Configuration
 -------------
 
 Every application need to have some parameters configured based on environment or other parameters.
-Flint comes with a ``Configurator`` which reads ``json`` files and sets them as parmeters on your application.
+Flint comes with a ``Configurator`` which reads ``json`` files and sets them as parameters on your application.
 
 It is very easy to use:
 

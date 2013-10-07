@@ -2,8 +2,8 @@
 
 namespace Flint\Controller;
 
-use Symfony\Component\HttpKernel\Debug\ExceptionHandler;
-use Symfony\Component\HttpKernel\Exception\FlattenException;
+use Symfony\Component\Debug\ExceptionHandler;
+use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

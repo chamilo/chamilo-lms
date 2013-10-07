@@ -1,3 +1,10 @@
+1.5.0 / 2013-10-01
+==================
+
+ * Require 1.1 of Silex
+ * Use debug component for ExceptionController
+ * Yaml support for Configurations.
+
 1.4.0 / 2013-07-04
 ==================
 

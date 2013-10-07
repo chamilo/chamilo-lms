@@ -38,14 +38,14 @@ class PimpleAwareNormalizer extends \Flint\PimpleAware implements NormalizerInte
             return '%%';
         }
 
-        return $this->scarlarToString($this->pimple[$matches[1]]);
+        return $this->scalarToString($this->pimple[$matches[1]]);
     }
 
     /**
      * @param  mixed $value
      * @return mixed
      */
-    protected function scarlarToString($value)
+    protected function scalarToString($value)
     {
         switch (gettype($value)) {
             case 'resource':

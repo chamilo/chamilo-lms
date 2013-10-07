@@ -83,6 +83,6 @@ CREATE TABLE c_quiz_distribution_rel_session (
   quiz_distribution_id int unsigned not null -- one of the valid distributions for this turn
 );
 
---store the distribution ID that was assigned to this user (SUPER IMPORTANT TRACKING INFO, DO NOT MISS THIS)
+-- store the distribution ID that was assigned to this user (SUPER IMPORTANT TRACKING INFO, DO NOT MISS THIS)
 ALTER TABLE track_e_exercices ADD COLUMN quiz_distribution_id int unsigned default null;
 

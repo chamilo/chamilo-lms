@@ -512,12 +512,8 @@ if ($inATest) {
             ICON_SIZE_MEDIUM
         ).'</a>';
     } else {
-        echo '<a href="'.$urlMainExercise.'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon(
-            'settings.png',
-            get_lang('ModifyExercise'),
-            '',
-            ICON_SIZE_MEDIUM
-        ).'</a>';
+        echo '<a href="'.$urlMainExercise.'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
+            Display::return_icon('settings.png', get_lang('ModifyExercise'), '', ICON_SIZE_MEDIUM ).'</a>';
     }
 
     // @todo if you have 5000 questions this will slow down everything
@@ -534,27 +530,11 @@ if ($inATest) {
     echo '<span style="float:right">'.sprintf(get_lang('XQuestionsWithTotalScoreY'), $objExercise->selectNbrQuestions(), $maxScoreAllQuestions ).'</span>';*/
     echo '</div>';
 } else {
-    if (isset($_GET['newQuestion'])) {
-        // we are in create a new question from question pool not in a test
-        echo '<div class="actions">';
-        echo '<a href="'.$urlMainExercise.'admin.php?'.api_get_cidreq().'">.'.Display::return_icon(
-            'back.png',
-            get_lang('GoBackToQuestionList'),
-            '',
-            ICON_SIZE_MEDIUM
-        ).'</a>';
-        echo '</div>';
-    } else {
-        // If we are in question_poolbut not in an test, go back to question create in pool
-        echo '<div class="actions">';
-        echo '<a href="'.$urlMainExercise.'question_pool.php">'.Display::return_icon(
-            'back.png',
-            get_lang('GoBackToQuestionList'),
-            '',
-            ICON_SIZE_MEDIUM
-        ).'</a>';
-        echo '</div>';
-    }
+    // we are in create a new question from question pool not in a test
+    echo '<div class="actions">';
+    echo '<a href="'.$urlMainExercise.'admin.php?exerciseId='.$objExercise->id.'&'.api_get_cidreq().'">'.
+          Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'', ICON_SIZE_MEDIUM ).'</a>';
+    echo '</div>';
 }
 
 

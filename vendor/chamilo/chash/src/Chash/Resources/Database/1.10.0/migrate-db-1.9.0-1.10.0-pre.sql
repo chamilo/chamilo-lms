@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS course_field_options (id int NOT NULL auto_increment,
 CREATE TABLE IF NOT EXISTS c_quiz_order( iid bigint unsigned NOT NULL auto_increment, c_id int unsigned NOT NULL, session_id int unsigned NOT NULL, exercise_id int NOT NULL, exercise_order INT NOT NULL, PRIMARY KEY (iid));
 CREATE TABLE IF NOT EXISTS c_student_publication_rel_document (id  INT PRIMARY KEY NOT NULL AUTO_INCREMENT,    work_id INT NOT NULL,    document_id INT NOT NULL,    c_id INT NOT NULL);
 CREATE TABLE IF NOT EXISTS c_student_publication_rel_user (id  INT PRIMARY KEY NOT NULL AUTO_INCREMENT,    work_id INT NOT NULL,    user_id INT NOT NULL,    c_id INT NOT NULL);
+CREATE TABLE IF NOT EXISTS c_student_publication_comment (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,  work_id INT NOT NULL,  c_id INT NOT NULL,  comment text,  user_id int NOT NULL,  sent_at datetime NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE IF NOT EXISTS gradebook_evaluation_type(id INT unsigned PRIMARY KEY NOT NULL AUTO_INCREMENT, name varchar(255), external_id INT unsigned NOT NULL DEFAULT 0);
 CREATE TABLE IF NOT EXISTS question_field (id  int NOT NULL auto_increment, field_type int NOT NULL default 1, field_variable varchar(64) NOT NULL, field_display_text  varchar(64), field_default_value text, field_order int, field_visible tinyint default 0, field_changeable tinyint default 0, field_filter tinyint default 0, tms DATETIME NOT NULL default '0000-00-00 00:00:00', PRIMARY KEY(id));
 CREATE TABLE IF NOT EXISTS question_field_options(id int NOT NULL auto_increment, field_id int NOT NULL, option_value text, option_display_text varchar(255), option_order int, tms DATETIME NOT NULL default '0000-00-00 00:00:00', PRIMARY KEY (id));
@@ -41,6 +42,9 @@ CREATE TABLE IF NOT EXISTS branch_transaction (id bigint unsigned not null AUTO_
 
 -- ALTER TABLE c_lp_item ADD INDEX idx_c_lp_item_cid_lp_id (c_id, lp_id);
 -- ALTER TABLE c_lp_item_view ADD INDEX idx_c_lp_item_view_cid_lp_view_id_lp_item_id(c_id, lp_view_id, lp_item_id);
+
+ALTER TABLE c_student_publication ADD COLUMN filename varchar(255) DEFAULT NULL;
+ALTER TABLE course ADD COLUMN add_teachers_to_sessions_courses tinyint NOT NULL default 0;
 
 ALTER TABLE c_tool_intro MODIFY COLUMN intro_text MEDIUMTEXT NOT NULL;
 ALTER TABLE user MODIFY COLUMN hr_dept_id int unsigned default 0;
@@ -152,4 +156,4 @@ INSERT INTO branch_transaction_status VALUES (1, 'To be executed'), (2, 'Execute
 UPDATE course_field SET field_type = 3 WHERE field_variable = 'special_course';
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.044' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.047' WHERE variable = 'chamilo_database_version';

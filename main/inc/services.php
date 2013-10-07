@@ -23,6 +23,7 @@ $app->register(new Flint\Provider\RoutingServiceProvider(), array(
     'routing.resource' => $app['sys_config_path'].'routing.yml',
     'routing.options' => array(
         //'cache_dir' => $app['debug'] == true ? null : $app['sys_temp_path']
+        //'cache_dir' => $app['sys_temp_path']
     ),
 ));
 
@@ -61,7 +62,15 @@ $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
     'http_cache.cache_dir' => $app['http_cache.cache_dir'].'/',
 ));*/
 
-$app->register(new \Silex\Provider\SecurityServiceProvider, array(
+class SecurityServiceProvider extends \Silex\Provider\SecurityServiceProvider
+{
+    public function addFakeRoute($method, $pattern, $name)
+    {
+        // Dont do anything otherwise the closures will be dumped and that leads to fatal errors.
+    }
+}
+
+$app->register(new SecurityServiceProvider, array(
     'security.firewalls' => array(
         'login' => array(
             'pattern' => '^/login$',

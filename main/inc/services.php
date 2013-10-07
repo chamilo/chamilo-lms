@@ -155,24 +155,21 @@ $app['allow_admin_toolbar'] = array(
 
 use SilexOpauth\OpauthExtension;
 
-$app['opauth'] = array(
-    'login' => '/auth/login',
-    'callback' => '/auth/callback',
-    'config' => array(
-        'security_salt' => 'LDFmiilYf8Fyw5W10rxx4W1KsVrieQCnpBzzpTBWA5vJidQKDx8pMJbmw28R1C4m',
-        'Strategy' => array(
-            'Facebook' => array(
-                'app_id' => 'APP_ID',
-                'app_secret' => 'APP_SECRET'
-            ),
-            'OpenID' => array(),
-            'Google' => array(
-                'client_id' => '789282956155.apps.googleusercontent.com',
-                'client_secret' => 'MKoR9EWis_JtwJj4GAL1mZkv'
+$strategies = isset($_configuration['strategies']) ? $_configuration['strategies'] : null;
+
+if (!empty($strategies)) {
+    $app['opauth'] = array(
+        'login' => '/auth/login',
+        'callback' => '/auth/callback',
+        'config' => array(
+            'security_salt' => $_configuration['security_key'],
+            'Strategy' => array(
+                $strategies
             )
         )
-    )
-);
+    );
+}
+
 $app->register(new OpauthExtension());
 
 /*

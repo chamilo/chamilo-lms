@@ -3081,7 +3081,6 @@ function api_not_allowed($print_headers = false, $message = null) {
         // if the access is not authorized and there is some login information
         // but the cidReq is not found, assume we are missing course data and send the user
         // to the user_portal
-        //$tpl->display_one_col_template();
         $app['allowed'] = false;
         return false;
     }
@@ -3098,15 +3097,11 @@ function api_not_allowed($print_headers = false, $message = null) {
         }
 
         // If the user has no user ID, then his session has expired
-        $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
+        /*$action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
         $action = str_replace('&amp;', '&', $action);
+
         $form = new FormValidator('formLogin', 'post', $action, null, array('class'=>'form-stacked'));
-
-        //$form->addElement('text', 'login', get_lang('UserName'), array('size' => 17)); //old
-
         $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'span3 autocapitalize_off')); //new
-
-        //$form->addElement('password', 'password', get_lang('Password'), array('size' => 17)); //old
         $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password'), 'class' => 'span3')); //new
         $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn span3'));
 
@@ -3119,8 +3114,11 @@ function api_not_allowed($print_headers = false, $message = null) {
         $app['template']->assign('content', $content);
         $app['allowed'] = false;
 
+        return false;*/
+
+        //$login = $app['url_generator']->generate('login');
+        $app['allowed'] = false;
         return false;
-        //$app->abort(403);
     }
 
     if ($user_id != 0 && !api_is_anonymous()) {

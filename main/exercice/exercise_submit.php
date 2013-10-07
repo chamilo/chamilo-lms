@@ -1071,7 +1071,6 @@ if ($reminder == 2)  {
     }
 }
 
-
 // Changing next question button
 if ($objExercise->review_answers) {
 	$script_php = $urlMainExercise.'exercise_reminder.php';

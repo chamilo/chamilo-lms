@@ -60,12 +60,8 @@ class BranchDirectorController extends CommonController
 
                     $juryList  .= $jury->getName() . ' '.$addUserLink.$viewUsers.'<br />';
                 }
-
-
                 return $row['branchName'].' <br />'.$juryList;
             }
-            //'representationField' => 'slug',
-            //'html' => true
         );
 
         // @todo add director filters
@@ -82,6 +78,14 @@ class BranchDirectorController extends CommonController
             ->getQuery();
 
         $htmlTree = $repo->buildTree($query->getArrayResult(), $options);
+
+        if (empty($htmlTree)) {
+            $this->get('session')->getFlashBag()->add(
+                'warning',
+                $this->get('translator')->trans("You don't have any branches.")
+            );
+        }
+
         $this->get('template')->assign('tree', $htmlTree);
         $this->get('template')->assign('links', $this->generateLinks());
         $response = $this->get('template')->render_template($this->getTemplatePath().'list.tpl');
@@ -99,7 +103,6 @@ class BranchDirectorController extends CommonController
         $request = $this->getRequest();
 
         $template->assign('links', $this->generateLinks());
-        $repo = $this->getRepository();
 
         $item = $this->getEntity($id);
         $template->assign('item', $item);

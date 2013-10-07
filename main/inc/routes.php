@@ -655,7 +655,6 @@ if ($alreadyInstalled) {
     $app->mount('/admin/administrator/roles', new ChamiloLMS\Provider\ReflectionControllerProvider('role.controller'));
     $app->mount('/admin/administrator/question_scores', new ChamiloLMS\Provider\ReflectionControllerProvider('question_score.controller'));
     $app->mount('/admin/administrator/question_score_names', new ChamiloLMS\Provider\ReflectionControllerProvider('question_score_name.controller'));
-
     $app->mount('/courses/{course}/curriculum/category', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_category.controller'));
     $app->mount('/courses/{course}/curriculum/item', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_item.controller'));
     $app->mount('/courses/{course}/curriculum/user', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_user.controller'));

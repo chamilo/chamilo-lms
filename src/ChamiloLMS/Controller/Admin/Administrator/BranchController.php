@@ -151,8 +151,11 @@ class BranchController extends CommonController
     {
         $template = $this->get('template');
         $template->assign('links', $this->generateLinks());
+
+        /** @var \Entity\Repository\BranchSyncRepository $repo */
         $repo = $this->getRepository();
         $item = $this->getEntity($id);
+
         $children = $repo->children($item);
         $template->assign('item', $item);
         $template->assign('subitems', $children);

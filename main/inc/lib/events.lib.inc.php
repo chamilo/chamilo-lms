@@ -1205,14 +1205,16 @@ function get_all_exercise_results_by_user($user_id, $courseId, $session_id = 0)
  * @return  array   with the results
  *
  */
-function get_exercise_results_by_attempt($exe_id)
+function get_exercise_results_by_attempt($exe_id, $status = null)
 {
     $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $table_track_attempt_recording = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
     $exe_id = intval($exe_id);
 
-    $sql = "SELECT * FROM $table_track_exercises WHERE status = '' AND exe_id = $exe_id";
+    $status = Database::escape_string($status);
+
+    $sql = "SELECT * FROM $table_track_exercises WHERE status = '".$status."' AND exe_id = $exe_id";
 
     $res = Database::query($sql);
     $list = array();

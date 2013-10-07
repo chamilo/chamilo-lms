@@ -947,17 +947,6 @@ class Exercise
                         $categoryParentInfo['parent_id'] = null;
                         break;
                     }
-                    /*
-                    if (isset($path) && isset($path[$index])) {
-                        $categoryParentId = $path[$index]->getIid();
-
-                        $categoryParentInfo['id'] = $categoryParentId;
-                        $categoryParentInfo['iid'] = $categoryParentId;
-                        $categoryParentInfo['parent_path'] = null;
-                        $categoryParentInfo['title'] = $path[$index]->getTitle();
-                        $categoryParentInfo['name'] = $path[$index]->getTitle();
-                        $categoryParentInfo['parent_id'] = null;
-                    }*/
                 }
                 $cat['parent_info'] = $categoryParentInfo;
                 $newCategoryList[$categoryId] = array(
@@ -1189,6 +1178,7 @@ class Exercise
     {
         return $this->questionSelectionType;
     }
+
     /**
      * @param array $categories
      */
@@ -2903,8 +2893,6 @@ class Exercise
             if (api_is_allowed_to_session_edit()) {
                 if ($this->type == ALL_ON_ONE_PAGE || $nbrQuestions == $questionNum) {
                     if ($this->review_answers) {
-                        //$label = get_lang('ReviewQuestions');
-                        //$class = 'btn btn-success';
                         $label = get_lang('EndTest');
                         $class = 'btn btn-warning';
                     } else {
@@ -5644,6 +5632,10 @@ class Exercise
         return $html;
     }
 
+    /**
+     * @param string $url
+     * @return string
+     */
     public function returnWarningJs($url)
     {
         $condition = "
@@ -5654,7 +5646,6 @@ class Exercise
             } else {
                 saveNow(dialog.data('question_id'), dialog.data('url_extra'), dialog.data('redirect'));
             }
-
             $(this).dialog('close');
         ";
 
@@ -5691,7 +5682,10 @@ class Exercise
         </script>';
     }
 
-    function returnWarningHtml()
+    /**
+     * @return string
+     */
+    public function returnWarningHtml()
     {
         return  '<div id="dialog-confirm" title="'.get_lang('Exercise').'" style="display:none">
           <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
@@ -5803,6 +5797,7 @@ class Exercise
     }
 
     /**
+     * Get categories added in the exercise--category matrix
      * @return bool
      */
     public function get_categories_in_exercise()
@@ -6040,6 +6035,13 @@ class Exercise
         return $categoriesWithQuestion;
     }
 
+    /**
+     * @param array $questionList
+     * @param int $currentQuestion
+     * @param array $conditions
+     * @param string $link
+     * @return string
+     */
     public function progressExercisePaginationBar($questionList, $currentQuestion, $conditions, $link)
     {
         $mediaQuestions = $this->getMediaList();
@@ -6072,6 +6074,7 @@ class Exercise
                     true,
                     true
                 );
+
                 $counter += count($mediaQuestions[$questionId]) - 1 ;
                 $before = count($questionList);
                 $wasMedia = true;
@@ -6098,8 +6101,12 @@ class Exercise
      * @param string $link
      * @return string
      */
-    public function progressExercisePaginationBarWithCategories($categories, $current, $conditions = array(), $link = null)
-    {
+    public function progressExercisePaginationBarWithCategories(
+        $categories,
+        $current,
+        $conditions = array(),
+        $link = null
+    ) {
         $html = null;
         $counterNoMedias = 0;
         $nextValue = 0;
@@ -6131,12 +6138,6 @@ class Exercise
                 // The new categories list starts empty
                 $newCategoryList = array();
                 foreach ($categories as $category) {
-                    /*if ($this->categoryMinusOne) {
-                        $rootElement = $category['id'];
-                    } else {
-
-                    }*/
-
                     $rootElement = $category['root'];
 
                     if (isset($category['parent_info'])) {
@@ -6160,55 +6161,6 @@ class Exercise
                 // Now use the newly built categories list, with only parents
                 $categories = $newCategoryList;
             }
-            /*
-            $showCategoriesGrouped = true;
-            if (in_array(
-                $selectionType,
-                array(
-                    EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED,
-                    EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED
-                )
-            )) {
-                $showCategoriesGrouped = false;
-
-                if ($showCategoriesGrouped) {
-
-                } else {
-                    $globalQuestionList = array();
-                    // @todo test with medias
-                    foreach ($categories as $category) {
-                        // Check if in this category there questions added in a media
-                        $mediaQuestionId = $category['media_question'];
-                        $isMedia = false;
-                        $fixedValue = null;
-
-                        // Media exists!
-                        if ($mediaQuestionId != 999) {
-                            $isMedia = true;
-                            $fixedValue = $counterNoMedias;
-                        }
-                        $globalQuestionList = array_merge($globalQuestionList, $category['question_list']);
-                    }
-
-                    $html .= '<div class="row">';
-                    $html .= '<div class="span8">';
-
-                    $html .= Display::progressPaginationBar(
-                        $nextValue,
-                        $globalQuestionList,
-                        $current,
-                        $fixedValue,
-                        $conditions,
-                        $link,
-                        $isMedia,
-                        true
-                    );
-                    $html .= '</div>';
-                    $html .= '</div>';
-                    return $html;
-
-                }
-            }*/
 
             foreach ($categories as $category) {
                 $questionList = $category['question_list'];
@@ -6827,7 +6779,7 @@ class Exercise
     }
 
     /**
-     * Returns an array of categories' details for the questions of the current
+     * Returns an array of categories details for the questions of the current
      * exercise.
      * @return array
      */
@@ -7747,6 +7699,86 @@ class Exercise
             return $html;
         }
         return $nbrAnswers;
+    }
+
+    /**
+     * @param int $exeId
+     * @param array $exercise_stat_info
+     */
+    public static function getNextQuestionId($exeId, $exercise_stat_info, $remindList, $currentQuestion)
+    {
+        $result = get_exercise_results_by_attempt($exeId, 'incomplete');
+
+        if (isset($result[$exeId])) {
+            $result = $result[$exeId];
+        } else {
+            return null;
+        }
+
+        $data_tracking  = $exercise_stat_info['data_tracking'];
+        $data_tracking  = explode(',', $data_tracking);
+
+        // if this is the final question do nothing.
+        if ($currentQuestion == count($data_tracking)) {
+            return null;
+        }
+
+        $currentQuestion = $currentQuestion - 1;
+
+        if (!empty($result['question_list'])) {
+            $answeredQuestions = array();
+
+            foreach ($result['question_list'] as $question) {
+                if (!empty($question['answer'])) {
+                    $answeredQuestions[] = $question['question_id'];
+                }
+            }
+
+            // Checking answered questions
+
+            $counterAnsweredQuestions = 0;
+            foreach ($data_tracking as $questionId) {
+                if (!in_array($questionId, $answeredQuestions)) {
+                    if ($currentQuestion != $counterAnsweredQuestions) {
+                        break;
+                    }
+                }
+                $counterAnsweredQuestions++;
+            }
+
+            $counterRemindListQuestions = 0;
+            // Checking questions saved in the reminder list
+
+            if (!empty($remindList)) {
+                foreach ($data_tracking as $questionId) {
+                    if (in_array($questionId, $remindList)) {
+                        // Skip the current question
+                        if ($currentQuestion != $counterRemindListQuestions) {
+                            break;
+                        }
+                    }
+                    $counterRemindListQuestions++;
+                }
+
+                if ($counterRemindListQuestions < $currentQuestion) {
+                    return null;
+                }
+
+                if (!empty($counterRemindListQuestions)) {
+                    if ($counterRemindListQuestions > $counterAnsweredQuestions) {
+                        return $counterAnsweredQuestions;
+                    } else {
+                        return $counterRemindListQuestions;
+                    }
+                }
+            }
+
+            return $counterAnsweredQuestions;
+        }
+
+
+
+
     }
 
 }

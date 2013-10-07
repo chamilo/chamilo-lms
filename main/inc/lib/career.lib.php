@@ -164,7 +164,7 @@ class Career extends Model {
             $promo_list   = $promotion->get_all_promotions_by_career_id($id);    
             if (!empty($promo_list)) {
                 foreach($promo_list  as $item) {
-                    $pid = $promotion->copy($item['id'], $cid);
+                    $pid = $promotion->copy($item['id'], $cid, true);
                 }
             }
         }

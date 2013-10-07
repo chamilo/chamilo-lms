@@ -257,7 +257,7 @@ while ($row = Database :: fetch_array($rs)) {
 }
 
 // Get the list of sessions where the user is subscribed as student
-$sql = 'SELECT id_session, course_code FROM ' . Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . '
+$sql = 'SELECT id_session, course_code FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).'
         WHERE id_user=' . intval($user_info['user_id']);
 $rs = Database::query($sql);
 $tmp_sessions = array();
@@ -278,9 +278,8 @@ while ($row = Database :: fetch_array($rs)) {
 
 if (!empty($student_id)) {
     if (api_drh_can_access_all_session_content()) {
-        $sessions = SessionManager::get_sessions_followed_by_drh($user_id);
-        $sessionList = array_keys($sessions);
-        if (!in_array($session_id, $sessionList)) {
+        $users = SessionManager::getAllUsersFromCoursesFromAllSessionFromDrh(api_get_user_id());
+        if (!in_array($student_id, $users)) {
             api_not_allowed();
         }
     } else {

@@ -3364,6 +3364,7 @@ class UserManager
         if (!empty($user_status)) {
             $condition_status = ' AND u.status = '.$user_status;
         }
+
         if (api_get_multiple_access_url()) {
             $sql = "SELECT u.user_id, u.username, u.lastname, u.firstname, u.email FROM $tbl_user u
                     INNER JOIN $tbl_user_rel_user uru ON (uru.user_id = u.user_id) LEFT JOIN $tbl_user_rel_access_url a
@@ -3943,5 +3944,6 @@ EOF;
             Database::query($sql);
         }
     }
+
 
 }

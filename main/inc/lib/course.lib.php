@@ -1448,7 +1448,8 @@ class CourseManager {
      *    @param string $course_code
      *    @return array with user id
      */
-    public static function get_teacher_list_from_course_code($course_code) {
+    public static function get_teacher_list_from_course_code($course_code)
+    {
         $course_code = Database::escape_string($course_code);
         $teachers = array();
         $sql = "SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.email, u.username, u.status
@@ -3999,9 +4000,14 @@ class CourseManager {
      * @param bool $editTeacherInSessions
      * @return bool
      */
-    public static function updateTeachers($course_code, $teachers, $editTeacherInSessions = false)
+    public static function updateTeachers(
+        $course_code,
+        $teachers,
+        $deleteTeachersNotInList = true,
+        $editTeacherInSessions = false,
+        $deleteSessionTeacherNotInList = false
+    )
     {
-
         if (empty($teachers)) {
             return false;
         }
@@ -4009,20 +4015,23 @@ class CourseManager {
             $teachers = array($teachers);
         }
 
-        $alreadyAddedTeachers = CourseManager::get_teacher_list_from_course_code($course_code);
-
         $course_user_table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-        // Delete only teacher relations that doesn't match the selected teachers
-        $cond = null;
-        if (count($teachers)>0) {
-            foreach($teachers as $key) {
-                $cond.= " AND user_id <> '".$key."'";
-            }
-        }
+        $alreadyAddedTeachers = CourseManager::get_teacher_list_from_course_code($course_code);
 
-        $sql = 'DELETE FROM '.$course_user_table.' WHERE course_code="'.Database::escape_string($course_code).'" AND status="1"'.$cond;
-        Database::query($sql);
+        if ($deleteTeachersNotInList) {
+
+            // Delete only teacher relations that doesn't match the selected teachers
+            $cond = null;
+            if (count($teachers)>0) {
+                foreach($teachers as $key) {
+                    $cond.= " AND user_id <> '".$key."'";
+                }
+            }
+
+            $sql = 'DELETE FROM '.$course_user_table.' WHERE course_code="'.Database::escape_string($course_code).'" AND status="1"'.$cond;
+            Database::query($sql);
+        }
 
         if (count($teachers) > 0) {
             foreach ($teachers as $key) {
@@ -4048,19 +4057,29 @@ class CourseManager {
 
         if ($editTeacherInSessions) {
             $sessions = SessionManager::get_session_by_course($course_code);
+
             if (!empty($sessions)) {
                 foreach ($sessions as $session) {
-                    foreach ($teachers as $userId) {
-                        SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code);
-                    }
-                    $teachersToDelete = array();
-                    if (!empty($alreadyAddedTeachers)) {
-                        $teachersToDelete = array_diff(array_keys($alreadyAddedTeachers), $teachers);
-                    }
+                    // Remove old and add new
+                    if ($deleteSessionTeacherNotInList) {
+                        foreach ($teachers as $userId) {
+                            SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code);
+                        }
 
-                    if (!empty($teachersToDelete)) {
-                        foreach ($teachersToDelete as $userId) {
-                            SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code, true);
+                        $teachersToDelete = array();
+                        if (!empty($alreadyAddedTeachers)) {
+                            $teachersToDelete = array_diff(array_keys($alreadyAddedTeachers), $teachers);
+                        }
+
+                        if (!empty($teachersToDelete)) {
+                            foreach ($teachersToDelete as $userId) {
+                                SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code, true);
+                            }
+                        }
+                    } else {
+                        // Add new teachers only
+                        foreach ($teachers as $userId) {
+                            SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code);
                         }
                     }
                 }

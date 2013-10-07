@@ -109,22 +109,22 @@ if(!empty($_GET['view'])) {
 
 	var parentFolder = {};
 	var urls = {
-			'upload':'<?php echo CONFIG_URL_UPLOAD; ?>',
-			'preview':'<?php echo CONFIG_URL_PREVIEW; ?>',
-			'cut':'<?php echo CONFIG_URL_CUT; ?>',
-			'copy':'<?php echo CONFIG_URL_COPY; ?>',
-			'paste':'<?php echo CONFIG_URL_FILE_PASTE; ?>',
-			'delete':'<?php echo CONFIG_URL_DELETE; ?>',
-			'rename':'<?php echo CONFIG_URL_SAVE_NAME; ?>',
-			'thumbnail':'<?php echo CONFIG_URL_IMG_THUMBNAIL;  ?>',
-			'create_folder':'<?php echo CONFIG_URL_CREATE_FOLDER; ?>',
-			'text_editor':'<?php echo  CONFIG_URL_TEXT_EDITOR; ?>',
-			'image_editor':'<?php echo  CONFIG_URL_IMAGE_EDITOR; ?>',
-			'download':'<?php echo CONFIG_URL_DOWNLOAD; ?>',
-			'present':'<?php echo getCurrentUrl(); ?>',
-			'home':'<?php echo CONFIG_URL_HOME; ?>',
-			'view':'<?php echo CONFIG_URL_LIST_LISTING; ?>'
-		};
+        'upload':'<?php echo CONFIG_URL_UPLOAD; ?>',
+        'preview':'<?php echo CONFIG_URL_PREVIEW; ?>',
+        'cut':'<?php echo CONFIG_URL_CUT; ?>',
+        'copy':'<?php echo CONFIG_URL_COPY; ?>',
+        'paste':'<?php echo CONFIG_URL_FILE_PASTE; ?>',
+        'delete':'<?php echo CONFIG_URL_DELETE; ?>',
+        'rename':'<?php echo CONFIG_URL_SAVE_NAME; ?>',
+        'thumbnail':'<?php echo CONFIG_URL_IMG_THUMBNAIL;  ?>',
+        'create_folder':'<?php echo CONFIG_URL_CREATE_FOLDER; ?>',
+        'text_editor':'<?php echo  CONFIG_URL_TEXT_EDITOR; ?>',
+        'image_editor':'<?php echo  CONFIG_URL_IMAGE_EDITOR; ?>',
+        'download':'<?php echo CONFIG_URL_DOWNLOAD; ?>',
+        'present':'<?php echo getCurrentUrl(); ?>',
+        'home':'<?php echo CONFIG_URL_HOME; ?>',
+        'view':'<?php echo CONFIG_URL_LIST_LISTING; ?>'
+    };
 	var permits = {	'del':<?php echo (CONFIG_OPTIONS_DELETE?1:0); ?>,
 					'cut':<?php echo (CONFIG_OPTIONS_CUT?'1':'0'); ?>,
 					'copy':<?php echo (CONFIG_OPTIONS_COPY?1:0); ?>,
@@ -137,12 +137,12 @@ if(!empty($_GET['view'])) {
 	var warningDelete = '<?php echo WARNING_DELETE; ?>';
 	var newFile = {'num':1, 'label':'<?php echo FILE_LABEL_SELECT; ?>', 'upload':'<?php echo FILE_LBL_UPLOAD; ?>'};
 	var counts = {'new_file':1};
-	var thickbox = {'width':'<?php echo CONFIG_THICKBOX_MAX_WIDTH; ?>',
-					'height':'<?php echo CONFIG_THICKBOX_MAX_HEIGHT; ?>',
-					'next':'<img src="theme/default/images/next.png" title="<?php echo THICKBOX_NEXT; ?>" style="float:right;">',
-					'previous':'<img src="theme/default/images/prev.png" title="<?php echo THICKBOX_PREVIOUS; ?>" style="float:left">',
-					'close':'<img src="theme/default/images/flagno.png"title="<?php echo THICKBOX_CLOSE; ?>"><?php echo THICKBOX_CLOSE; ?>'
-
+	var thickbox = {
+        'width':'<?php echo CONFIG_THICKBOX_MAX_WIDTH; ?>',
+        'height':'<?php echo CONFIG_THICKBOX_MAX_HEIGHT; ?>',
+        'next':'<img src="theme/default/images/next.png" title="<?php echo THICKBOX_NEXT; ?>" style="float:right;">',
+        'previous':'<img src="theme/default/images/prev.png" title="<?php echo THICKBOX_PREVIOUS; ?>" style="float:left">',
+        'close':'<img src="theme/default/images/flagno.png"title="<?php echo THICKBOX_CLOSE; ?>"><?php echo THICKBOX_CLOSE; ?>'
 	};
 
 	var tb_pathToImage = "theme/<?php echo CONFIG_THEME_NAME; ?>/images/loadingAnimation.gif";

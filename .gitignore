@@ -1,21 +1,21 @@
 # Chamilo
 
-main/inc/conf
-main/lang/*
 config/auth.conf.php
 config/configuration.php
 config/events.conf.php
 config/mail.conf.php
 config/portfolio.conf.php
 config/profile.conf.php
+
 tests/unittests/db.conf.php
+tests/logs/*
 
-temp/*
-!temp/twig/PLACEHOLDER
+!data/
 data/*
+!data/temp/twig/PLACEHOLDER
+!data/default_course_document
+!data/default_platform_document
 !data/upload/users
-logs/*
-
 !data/courses/index.html
 
 # Logs and databases #

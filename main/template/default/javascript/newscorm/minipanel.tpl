@@ -1,10 +1,11 @@
 <script>
+/* For licensing terms, see /license.txt */
 /*
  Learning Path minipanel - Chamilo 1.8.8
  Adding mini panel to browse Learning Paths
  Requirements: JQuery 1.4.4, JQuery UI 1.8.7
  @author Alberto Torreblanca @albert1t0
- @author Julio Montoya Cleaning/fixing some code + script converted in a twig template
+ @author Julio Montoya Cleaning/fixing some code
  **/
 
 // Copy little progress bar in <tr></tr>
@@ -36,53 +37,50 @@ function toogle_minipanel() {
     // Hiding navigation left zone
     $('#learning_path_left_zone').hide(50);
     $('#learning_path_right_zone').css('margin-left','10px');
-    $('#hide_bar table').css('backgroundImage','url({{ _p.web_main }}img/hide2.png)').css('backgroundColor','#EEEEEE');
-
+    $('#hide_bar table').css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
 }
 
-var left_width = 292;  // (relative) hide_bar position
+var left_width_mini = 20;  // (relative) hide_bar position
 
 $(document).ready(function() {
+
+    var left_width = $('learning_path_left_zone').width();
 
    //Adding div to hide panel
     $('#learning_path_right_zone').before('<div id="hide_bar" style="float: left; width: 10px; height: 1000px;">' +
         '<table style="border: 0 none; width: 100%; height: 100%; cursor: pointer; background-color: #EEEEEE">' +
         '<tr><td></td></tr></table></div>');
-    $('#hide_bar table').css({backgroundImage: "url({{ _p.web_main }}img/hide0.png)", backgroundRepeat: "no-repeat", backgroundPosition: "center center"});
+    $('#hide_bar table').css({backgroundImage: "url(../img/hide0.png)", backgroundRepeat: "no-repeat", backgroundPosition: "center center"});
 
     //Adding effects to hide bar
     $('#hide_bar table').hover(function () {
     	if ($('#hide_bar').position().left >= left_width)
-    		$(this).css('backgroundImage','url({{ _p.web_main }}img/hide1.png)').css('backgroundColor','#888888');
-    	else if($('#hide_bar').position().left == 0)
-    		$(this).css('backgroundImage','url({{ _p.web_main }}img/hide3.png)').css('backgroundColor','#888888');
+    		$(this).css('backgroundImage','url(../img/hide1.png)').css('backgroundColor','#888888');
+    	else if($('#hide_bar').position().left <= left_width_mini)
+    		$(this).css('backgroundImage','url(../img/hide3.png)').css('backgroundColor','#888888');
         },function (){
             if($('#hide_bar').position().left >= left_width)
-              $(this).css('backgroundImage','url({{ _p.web_main }}img/hide0.png)').css('backgroundColor','#EEEEEE');
-            else if($('#hide_bar').position().left == 0)
-              $(this).css('backgroundImage','url({{ _p.web_main }}img/hide2.png)').css('backgroundColor','#EEEEEE');
+              $(this).css('backgroundImage','url(../img/hide0.png)').css('backgroundColor','#EEEEEE');
+            else if($('#hide_bar').position().left <= left_width_mini)
+              $(this).css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
         }
     );
 
     var original = $('#content_id').height();
 
-    // Adding funcionality
-    $( "#hide_bar" ).click(function() {
-        $('#hide_bar table').toggle(function() {
-            if ($('#hide_bar').position().left >= left_width) {
-                toogle_minipanel();
-            }
-        },
-        function(){
-            // Show navigation left zone
-            $('#learning_path_left_zone').show(50);
-            $('#learning_path_right_zone').css('marginLeft', left_width + 10 + 'px');
-            $('#hide_bar table').css('backgroundImage','url({{ _p.web_main }}img/hide0.png)').css('backgroundColor','#EEEEEE');
-            $('#learning_path_main  #control').remove();
-            $('#content_id').css({ height: original});
+    // Adding functionality
+
+    $('#hide_bar table').toggle(function(){
+        if ($('#hide_bar').position().left >= left_width) {
+            toogle_minipanel();
         }
-    );
+    },
+    function() {
+        // Show navigation left zone
+        $('#learning_path_left_zone').show(50);
+        $('#learning_path_right_zone').css('marginLeft', left_width + 10 + 'px');
+        $('#hide_bar table').css('backgroundImage','url(../img/hide0.png)').css('backgroundColor','#EEEEEE');
+        $('#learning_path_main  #control').remove();
+        $('#content_id').css({ height: original});
     });
 });
-
-</script>

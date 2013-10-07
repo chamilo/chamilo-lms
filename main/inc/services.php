@@ -170,6 +170,26 @@ $app['allow_admin_toolbar'] = array(
     'ROLE_JURY_MEMBER'
 );
 
+use SilexOpauth\OpauthExtension;
+
+$strategies = isset($_configuration['strategies']) ? $_configuration['strategies'] : null;
+
+if (!empty($strategies)) {
+    $app['opauth'] = array(
+        'login' => '/auth/login',
+        'callback' => '/auth/callback',
+        'config' => array(
+            'security_salt' => $_configuration['security_key'],
+            'Strategy' => array(
+                $strategies
+            )
+        )
+    );
+    $app->register(new OpauthExtension());
+}
+
+
+
 /*
 $app['security.access_manager'] = $app->share(function($app) {
     return new AccessDecisionManager($app['security.voters'], 'unanimous');

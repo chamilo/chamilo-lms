@@ -1581,6 +1581,7 @@ CREATE TABLE c_student_publication (
   id int(10) unsigned NOT NULL AUTO_INCREMENT,
   url varchar(255) DEFAULT NULL,
   title varchar(255) DEFAULT NULL,
+  filename varchar(255) DEFAULT NULL,
   description text,
   author varchar(255) DEFAULT NULL,
   active tinyint(4) DEFAULT NULL,
@@ -2030,4 +2031,14 @@ CREATE TABLE c_student_publication_rel_user (
     work_id INT NOT NULL,
     user_id INT NOT NULL,
     c_id INT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS c_student_publication_comment;
+CREATE TABLE c_student_publication_comment (
+  id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  work_id INT NOT NULL,
+  c_id INT NOT NULL,
+  comment text,
+  user_id int NOT NULL,
+  sent_at datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

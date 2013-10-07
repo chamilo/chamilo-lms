@@ -147,7 +147,7 @@ if (api_drh_can_access_all_session_content()) {
 
 $nb_courses = count($a_courses);
 
-$table = new SortableTable('tracking_list_course', 'count_courses', null, 50);
+$table = new SortableTable('tracking_list_course', 'count_courses', null, 1, 50);
 
 $table->set_header(0, get_lang('CourseTitle'), false);
 $table->set_header(1, get_lang('NbStudents'), false);

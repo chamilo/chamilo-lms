@@ -47,7 +47,7 @@ $user = api_get_user_info();
 header('Content-type: text/javascript');
 
 ?>var scorm_logs=<?php echo ((empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin()) )?'0':'3');?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
-var lms_logs=0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
+var lms_logs = 0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
 
 // API Object initialization (eases access later on)
 function APIobject() {
@@ -1109,10 +1109,20 @@ function log_in_log(message, priority) {
     if (ua.mozilla || ua.webkit) {
         // Colorize a little
         var color = "color: black";
-        if (priority == 3) { color = "color:blue"; }
-        elseif (priority == 2) { color = "color:green"; }
-        elseif (priority == 1) { color = "color:orange"; }
-        elseif (priority == 0) { color = "color:red;font-weight:bold"; }
+        switch (priority) {
+            case 0:
+                color = "color:red;font-weight:bold";
+                break;
+            case 1:
+                color = "color:orange";
+                break;
+            case 2:
+                color = "color:green";
+                break;
+            case 3:
+                color = "color:blue";
+            break;
+        }
         // Log in console with syntax colouring
         console.log("%c"+message, color);
     } else {

@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 $language_file = array('exercice', 'work', 'document', 'admin');
@@ -32,13 +31,29 @@ if (user_is_author($id) || $course_info['show_score'] == 0 && $work['active'] ==
     $interbreadcrumb[] = array('url' => '#','name' =>  $work['title']);
     if (
         ($course_info['show_score'] == 0 && $work['active'] == 1 && $work['accepted'] == 1) ||
-        api_is_allowed_to_edit() ||
-        (user_is_author($id))) {
+        api_is_allowed_to_edit() || user_is_author($id)
+    ) {
+
+        if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'send_comment') {
+            addWorkComment(api_get_user_id(), $work, $_POST);
+            $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&'.api_get_cidreq();
+            header('Location: '.$url);
+            exit;
+        }
         $tpl = new Template();
         $tpl->assign('work', $work);
+
+        $tpl->assign('work_comment_enabled', ALLOW_USER_COMMENTS);
+
+        $comments = getWorkComments($work);
+        $commentForm = getWorkCommentForm($work);
+        $tpl->assign('comments', $comments);
+        $tpl->assign('form', $commentForm);
+
         $template = $tpl->get_template('work/view.tpl');
         $content  = $tpl->fetch($template);
         $tpl->assign('content', $content);
+
         $tpl->display_one_col_template();
     } else {
         api_not_allowed(true);

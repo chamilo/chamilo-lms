@@ -98,7 +98,7 @@ class Template
         );
         $this->twig->addFilter('icon', new Twig_Filter_Function('Template::get_icon_path'));
         $this->twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
-
+        $this->twig->addFilter('api_get_local_time', new Twig_Filter_Function('api_get_local_time'));
 
         /*
           $lexer = new Twig_Lexer($this->twig, array(

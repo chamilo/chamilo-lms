@@ -168,9 +168,10 @@ if (!empty($strategies)) {
             )
         )
     );
+    $app->register(new OpauthExtension());
 }
 
-$app->register(new OpauthExtension());
+
 
 /*
 $app['security.access_manager'] = $app->share(function($app) {

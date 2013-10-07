@@ -43,7 +43,7 @@ var left_width_mini = 20;  // (relative) hide_bar position
 
 $(document).ready(function() {
 
-    left_width = $('learning_path_left_zone').width();
+    var left_width = $('learning_path_left_zone').width();
 
    //Adding div to hide panel
     $('#learning_path_right_zone').before('<div id="hide_bar" style="float: left; width: 10px; height: 1000px;">' +

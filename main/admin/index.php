@@ -106,7 +106,7 @@ if (api_is_platform_admin()) {
 
 	$items = array();
 	$items[] = array('url'=>'course_list.php', 	'label' => get_lang('CourseList'));
-    $items[] = array('url'=>'course_add.php', 	'label' => get_lang('AddCourse'));
+  $items[] = array('url'=>'course_add.php', 	'label' => get_lang('AddCourse'));
 	
   if (api_get_setting('course_validation') == 'true') {
         

@@ -48,7 +48,7 @@ $time_control = false;
 $clock_expired_time = ExerciseLib::get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
 
 if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
-	$time_control = true;
+    $time_control = true;
 }
 
 $urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
@@ -112,7 +112,7 @@ if (isset($exercise_stat_info['exe_id'])) {
 $label = get_lang('StartTest');
 
 if ($time_control && !empty($clock_expired_time) || !empty($attempt_list)) {
-	$label = get_lang('ContinueTest');
+    $label = get_lang('ContinueTest');
 }
 
 if (!empty($attempt_list)) {

@@ -699,7 +699,6 @@ if ($alreadyInstalled) {
     $app->mount(
         '/admin/question_manager/exercise_distribution',
         new ChamiloLMS\Provider\ReflectionControllerProvider('exercise_distribution.controller')
-    ) // sets the course and session
-    ;
+    );
 }
 

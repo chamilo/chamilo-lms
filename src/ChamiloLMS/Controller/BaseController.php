@@ -314,7 +314,6 @@ abstract class BaseController extends FlintController
         }
     }
 
-
     /**
      * Base "read" action.
      *

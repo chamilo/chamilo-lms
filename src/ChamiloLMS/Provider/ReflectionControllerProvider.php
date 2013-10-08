@@ -94,7 +94,6 @@ class ReflectionControllerProvider implements ControllerProviderInterface
                             $match->value($key, $value);
                         }
                     }
-
                     $match->bind($controllerName);
                 }
             }

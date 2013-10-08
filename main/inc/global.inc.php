@@ -695,7 +695,6 @@ $app->before(
             }
         }));
 
-
         // Check if we are inside a Chamilo course tool
 
         $isCourseTool = (strpos($request->getPathInfo(), 'courses/') === false) ? false : true;
@@ -704,7 +703,6 @@ $app->before(
             // @todo add a before in controller in order to load the courses and course_session object
             $isCourseTool = (strpos($request->getPathInfo(), 'question_manager/exercise_distribution/') === false) ? false : true;
         }
-
 
         // Setting course entity for controllers and templates
         if ($isCourseTool) {
@@ -795,7 +793,6 @@ if (isset($app['configuration']['language_measure_frequency']) && $app['configur
     require_once api_get_path(SYS_CODE_PATH).'/cron/lang/langstats.class.php';
     $langstats = new langstats();
 }
-
 
 /** Setting the is_admin key */
 $app['is_admin'] = false;

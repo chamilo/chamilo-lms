@@ -5460,9 +5460,12 @@ class Exercise
 
         // Looking for distributions
         $trackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-        if ($loadDistributions) {
-            $sessionId = api_get_session_id();
-            $result = Database::query("SELECT count(exe_id) as count FROM $trackExercises WHERE session_id = $sessionId");
+
+        $sessionId = api_get_session_id();
+
+        if (!empty($sessionId)) {
+            $sql = "SELECT count(exe_id) as count FROM $trackExercises WHERE session_id = $sessionId";
+            $result = Database::query($sql);
 
             if (Database::num_rows($result)) {
                 $result = Database::fetch_array($result);
@@ -5485,9 +5488,7 @@ class Exercise
                         $quizDistributionRelSession = $quizDistributionRelSessions[$formToUse];
 
                         $this->distributionId = $quizDistributionRelSession->getQuizDistributionId();
-
                         $distribution = $quizDistributionRelSession->getDistribution();
-
                         $dataTracking = array();
 
                         if ($distribution) {
@@ -6797,7 +6798,7 @@ class Exercise
                     $exercise_stat_info['exe_duration'],
                     '',
                     array()
-                );
+                );/*
 
                 $log_transactions_settings = TransactionLog::getTransactionSettings();
                 if (isset($log_transactions_settings['exercise_attempt'])) {
@@ -6819,7 +6820,7 @@ class Exercise
                         $transaction = $transaction_controller->createTransaction('exercise_attempt', $transaction_data);
                     }
                     $transaction->save();
-                }
+                }*/
             }
 
             // Send notification.

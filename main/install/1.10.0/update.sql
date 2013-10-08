@@ -86,3 +86,34 @@ CREATE TABLE c_quiz_distribution_rel_session (
 -- store the distribution ID that was assigned to this user (SUPER IMPORTANT TRACKING INFO, DO NOT MISS THIS)
 ALTER TABLE track_e_exercices ADD COLUMN quiz_distribution_id int unsigned default null;
 
+-- Fields re-structuring corresponding to plugin generalization.
+ALTER TABLE branch_sync
+  DROP ssl_pub_key,
+  ADD plugin_envelope varchar(250) null default null,
+  ADD plugin_send varchar(250) null default null,
+  ADD plugin_receive varchar(250) null default null,
+  ADD data TEXT null DEFAULT null COMMENT 'Serialized php array with extra information for the branch. Mainly used by its plugins.';
+
+-- Generalize a little more the transaction log table.
+ALTER TABLE branch_transaction_log
+  ADD log_type int not null after id,
+  CHANGE transaction_id transaction_id bigint unsigned null default null,
+  CHANGE import_time log_time datetime not null,
+  ADD INDEX (log_type);
+
+-- Adds a table to use as queue for received envelopes.
+CREATE TABLE received_envelopes (
+  id int not null AUTO_INCREMENT,
+  data TEXT not null COMMENT 'The envelope blob.',
+  status int not null default 1 COMMENT 'See Envelope::RECEIVED_*',
+  PRIMARY KEY(id)
+);
+
+-- Include course and session ids on transactions.
+ALTER TABLE branch_transaction
+  ADD c_id int not null,
+  ADD session_id int not null;
+
+-- Adds new setting for the local branch id.
+INSERT INTO settings_current (variable, type, category, selected_value, title, comment, access_url_changeable) VALUES
+('local_branch_id', 'textfield', 'LogTransactions', 1, 'LogTransactionsDefaultBranch', 'LogTransactionsDefaultBranchComment', 1);

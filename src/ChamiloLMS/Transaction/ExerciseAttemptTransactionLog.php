@@ -3,6 +3,9 @@
 
 namespace ChamiloLMS\Transaction;
 
+use Exercise;
+use Database;
+
 /**
  * Exercise tool attempt transaction.
  */
@@ -32,26 +35,37 @@ class ExerciseAttemptTransactionLog extends TransactionLog
             throw new TransactionExportException('Undefined item_id');
         }
         $attempt_id = $this->item_id;
-        $attempt = get_exercise_results_by_attempt($attempt_id);
-        if (empty($attempt)) {
-            throw new TransactionExportException(sprintf('There is no exercise attempt information associated with exe_id "%d" in the database.', $attempt_id));
+
+        // Get course id.
+        // @todo Maybe suggest to convert getStatTrackExerciseInfoByExeId into
+        // static to avoid this query. aka Exercise constructor needs a course
+        // id.
+        $attempts_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $rows = Database::select('c_id', $attempts_table, array('where' => array('exe_id = ?' => array($attempt_id))));
+        if (empty($rows[0]['c_id'])) {
+            throw new TransactionExportException(sprintf('Coud not find a valid course id associated with the exe_id "%d" in the database.', $attempt_id));
         }
-        $exercise = new Exercise();
+        $course_id = $rows[0]['c_id'];
+        // Get stat info.
+        $exercise = new Exercise($course_id);
         $exercise_stat_info = $exercise->getStatTrackExerciseInfoByExeId($attempt_id);
         if (empty($exercise_stat_info)) {
             throw new TransactionExportException(sprintf('There is no exercise stat information associated with exe_id "%d" in the database.', $attempt_id));
         }
-        // Exercise read expects course id set.
-        $exercise->course_id = $exercise_stat_info['c_id'];
+        // Exercise read() expects course id set.
+        $exercise->course_id = $course_id;
         if (!$exercise->read($exercise_stat_info['exe_exo_id'])) {
             throw new TransactionExportException(sprintf('The associated exercise id "%d" does not currently exist in the database.', $exercise_stat_info['exe_exo_id']));
         }
+        // Get attempt info.
+        $attempt = get_exercise_results_by_attempt($attempt_id);
+        if (empty($attempt)) {
+            throw new TransactionExportException(sprintf('There is no exercise attempt information associated with exe_id "%d" in the database.', $attempt_id));
+        }
+
         // Prepare the export.
         $this->data['stat_info'] = $exercise_stat_info;
         $this->data['attempt_info'] = $attempt;
-        $content = (array) $this;
-
-        return json_encode($content);
     }
 
     /**
@@ -60,7 +74,8 @@ class ExerciseAttemptTransactionLog extends TransactionLog
      */
     public function import()
     {
-        if ($this->branch_id == TransactionLog::BRANCH_LOCAL) {
+        $local_branch = TransactionLog::getController()->getBranchRepository()->getLocalBranch();
+        if ($this->branch_id == $local_branch->getId()) {
             // Do not allow importing local transactions.
             throw new TransactionImportException('Cannot import a local transaction');
         }
@@ -126,5 +141,8 @@ class ExerciseAttemptTransactionLog extends TransactionLog
             $nano = null;
             $attempt_answer_id = saveExerciseAttempt($attempt_answer_info['marks'], $attempt_answer_info['answer'], $question_id, $imported_exe_id, $attempt_answer_info['position'], $exercise_id, $nano, $user_id, $course_id, $stat_info['session_id'], $stat_info['orig_lp_id'], $stat_info['orig_lp_item_id']);
         }
+
+        // Finally return the associated id.
+        return $imported_exe_id;
     }
 }

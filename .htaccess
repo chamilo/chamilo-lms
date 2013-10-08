@@ -3,7 +3,7 @@
     Options +FollowSymLinks
 
     RewriteEngine On
-    RewriteBase /minedu-chamilo
+    RewriteBase /
 
     # Courses home
     RewriteCond %{QUERY_STRING} ^id_session=0

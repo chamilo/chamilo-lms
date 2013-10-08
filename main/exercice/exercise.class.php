@@ -5487,7 +5487,12 @@ class Exercise
                     $this->distributionId = $quizDistributionRelSession->getQuizDistributionId();
 
                     $distribution = $quizDistributionRelSession->getDistribution();
-                    $dataTracking = $distribution->getDataTracking();
+                    var_dump($distribution);exit;
+                    $dataTracking = array();
+
+                    if ($distribution) {
+                        $dataTracking = $distribution->getDataTracking();
+                    }
                     if (!empty($dataTracking)) {
                         $questionList = explode(',', $dataTracking);
                         if (!empty($questionList)) {

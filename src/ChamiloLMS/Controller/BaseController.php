@@ -50,6 +50,15 @@ abstract class BaseController extends FlintController
     }
 
     /**
+     * @return int
+     */
+    protected function getCourseId()
+    {
+        $course = $this->getCourse();
+        return isset($course) && !empty($course) ? $course->getId() : 0;
+    }
+
+    /**
      * @return \Entity\Session
      */
     protected function getSession()
@@ -58,6 +67,15 @@ abstract class BaseController extends FlintController
             return $this->app['course_session'];
         }
         return false;
+    }
+
+    /**
+     * @return int
+     */
+    protected function getSessionId()
+    {
+        $session = $this->getSession();
+        return isset($session) && !empty($session) ? $session->getId() : 0;
     }
 
     /**

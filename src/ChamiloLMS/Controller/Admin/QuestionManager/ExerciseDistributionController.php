@@ -31,10 +31,10 @@ class ExerciseDistributionController extends CommonController
     {
         $template = $this->get('template');
         $em = $this->getManager();
-        $courseId = api_get_course_int_id();
+        $course = $this->getCourse();
 
-        if (empty($courseId)) {
-            throw new \Exception('Could not get a valid course with the provided $course_id: '.$courseId.'.');
+        if (empty($course)) {
+            throw new \Exception('Could not get a valid course.');
         }
 
         $criteria = array('exerciseId' => $exerciseId);
@@ -97,24 +97,27 @@ class ExerciseDistributionController extends CommonController
     public function toggleActivationAction($exerciseId, $id)
     {
         $em = $this->getManager();
+        $distribution = $this->getRepository()->find($id);
+        if (!$distribution) {
+            return $this->createNotFoundException();
+        }
         $criteria = array('exerciseId' => $exerciseId, 'quizDistributionId' => $id);
         $distributionRelSession = $em->getRepository('Entity\CQuizDistributionRelSession')->findOneBy($criteria);
 
         if ($distributionRelSession) {
             $em->remove($distributionRelSession);
             $em->flush();
-
             $this->get('session')->getFlashBag()->add('warning', "Distribution removed");
             $url = $this->createUrl('list_link');
             return $this->redirect($url);
 
         } else {
+            $sessionId = $this->getSessionId();
 
             $distributionRelSession = new Entity\CQuizDistributionRelSession();
             $distributionRelSession->setCId(api_get_course_int_id());
-            $distributionRelSession->setSessionId(api_get_session_id());
-
-            $distributionRelSession->setQuizDistributionId($id);
+            $distributionRelSession->setSessionId($sessionId);
+            $distributionRelSession->setDistribution($distribution);
             $distributionRelSession->setExerciseId($exerciseId);
             $em->persist($distributionRelSession);
             $em->flush();
@@ -161,11 +164,10 @@ class ExerciseDistributionController extends CommonController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-
-            /** @var Entity\CQuizDistribution $distribution */
             $data = $form->getData();
             if ($data['number_of_distributions'] > 0) {
                 for ($i = 0; $i < $data['number_of_distributions']; $i++) {
+                    /** @var Entity\CQuizDistribution $distribution */
                     $distribution = new \Entity\CQuizDistribution();
                     $distribution->setAuthorUserId($this->getUser()->getUserId());
                     $distribution->setExerciseId($exerciseId);
@@ -173,7 +175,7 @@ class ExerciseDistributionController extends CommonController
                     $distribution->setTitle($counter);
                     $distribution->setActive(true);
                     $distribution->setAuthorUserId($this->getUser()->getUserId());
-                    $this->getManager()->getRepository('Entity\CQuizDistribution')->addDistribution($distribution);
+                    $this->getManager()->getRepository('Entity\CQuizDistribution')->addDistribution($distribution, $this->getCourse());
                 }
             }
 
@@ -211,7 +213,7 @@ class ExerciseDistributionController extends CommonController
             $distribution = $form->getData();
             $distribution->setAuthorUserId($this->getUser()->getUserId());
 
-            $this->getManager()->getRepository('Entity\CQuizDistribution')->addDistribution($distribution);
+            $this->getManager()->getRepository('Entity\CQuizDistribution')->addDistribution($distribution, $this->getCourse());
 
             $this->get('session')->getFlashBag()->add('success', "Added");
             $url = $this->createUrl('list_link');
@@ -286,11 +288,17 @@ class ExerciseDistributionController extends CommonController
         }
     }
 
+    /**
+     * @return array
+     */
     protected function getExtraParameters()
     {
-        return array('exerciseId');
+        return array('exerciseId', 'cidReq', 'id_session');
     }
 
+    /**
+     * @return string|void
+     */
     protected function getControllerAlias()
     {
         return 'exercise_distribution.controller';

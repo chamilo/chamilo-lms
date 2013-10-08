@@ -1,7 +1,7 @@
 {% extends app.template_style ~ "/layout/layout_1_col.tpl" %}
 {% block content %}
     <div class="actions">
-        <a href="{{ url('exercise_distribution.controller:indexAction', {'exerciseId' : exerciseId }) }}">
+        <a href="{{ url('exercise_distribution.controller:indexAction', {'exerciseId' : exerciseId , 'cidReq':course.code, 'id_session' : course_session.id }) }}">
             {{ 'Back' |trans }}
         </a>
     </div>

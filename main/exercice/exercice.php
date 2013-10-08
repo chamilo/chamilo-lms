@@ -701,7 +701,14 @@ if (!empty($exercise_list)) {
                     if ($app['security']->isGranted('ROLE_SESSION_MANAGER') && !empty($my_exercise_id)) {
                         $actions .= Display::url(
                             Display::return_icon('admin_star.png', get_lang('Distribution'), '', ICON_SIZE_SMALL),
-                            $app['url_generator']->generate('exercise_distribution.controller:indexAction', array('exerciseId' => $my_exercise_id))
+                            $app['url_generator']->generate(
+                                'exercise_distribution.controller:indexAction',
+                                array(
+                                    'exerciseId' => $my_exercise_id,
+                                    'cidReq' => api_get_course_id(),
+                                    'id_session' => api_get_session_id()
+                                )
+                            )
                         );
                     }
 

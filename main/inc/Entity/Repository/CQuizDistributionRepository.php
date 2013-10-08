@@ -15,10 +15,10 @@ class CQuizDistributionRepository extends EntityRepository
     /**
      * @param \Entity\CQuizDistribution $distribution
      */
-    public function addDistribution(\Entity\CQuizDistribution $distribution)
+    public function addDistribution(\Entity\CQuizDistribution $distribution, \Entity\Course $course)
     {
         $exerciseId = $distribution->getExerciseId();
-        $exercise = new \Exercise();
+        $exercise = new \Exercise($course->getId());
         $exercise->read($exerciseId);
         $questionList = $exercise->getQuestionList();
         $distribution->setDataTracking(implode(',', $questionList));
@@ -112,7 +112,7 @@ class CQuizDistributionRepository extends EntityRepository
                 // Doubles found
                 if (count($result) > 0) {
                     $questionListFromDistribution = $questionsPerCategoryInDistribution[$question->getCategoryId()];
-                    $questionListFromExercise = $questionsPerCategoryInExercise[$question->getCategoryId()];
+                    $questionListFromExercise = isset($questionsPerCategoryInExercise[$question->getCategoryId()]) ? $questionsPerCategoryInExercise[$question->getCategoryId()] : array();
 
                     $diff = array_diff($questionListFromExercise, $questionListFromDistribution);
 

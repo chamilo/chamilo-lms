@@ -4,6 +4,35 @@
 use Symfony\Component\HttpFoundation\Request;
 use \ChamiloSession as Session;
 
+
+$settingNewCourseConditions = function (Request $request) use ($cidReset, $app) {
+    // The course parameter is loaded
+    $course = $request->get('cidReq');
+
+    // Converting /courses/XXX/ to a Entity/Course object
+    /** @var Entity\Course $course */
+    $course = $app['orm.em']->getRepository('Entity\Course')->findOneByCode($course);
+    if ($course) {
+        $app['course'] = $course;
+        $app['template']->assign('course', $course);
+
+        Session::write('_real_cid', $course->getId());
+        Session::write('_cid', $course->getCode());
+        $courseInfo = api_get_course_info($course->getCode());
+        Session::write('_course', $courseInfo);
+    }
+
+    $sessionId = $request->get('id_session');
+    $session = $app['orm.em']->getRepository('Entity\Session')->findOneById($sessionId);
+
+    /** @var Entity\Session  $session*/
+    if ($session) {
+        $app['course_session'] = $session;
+        $app['template']->assign('course_session', $session);
+        Session::write('id_session', $session->getId());
+    }
+};
+
 /** Setting course session and group global values */
 $settingCourseConditions = function (Request $request) use ($cidReset, $app) {
 
@@ -43,6 +72,7 @@ $settingCourseConditions = function (Request $request) use ($cidReset, $app) {
         $app['monolog']->addDebug('End');
     */
 
+
     if ($courseReset) {
         if (!empty($cidReq) && $cidReq != -1) {
             $courseInfo = api_get_course_info($cidReq, true, true);
@@ -54,6 +84,7 @@ $settingCourseConditions = function (Request $request) use ($cidReset, $app) {
                 Session::write('_real_cid', $courseId);
                 Session::write('_cid', $courseCode);
                 Session::write('_course', $courseInfo);
+
 
             } else {
                 $app->abort(404, 'Course not available');
@@ -668,6 +699,10 @@ if ($alreadyInstalled) {
     $app->mount('/admin/jury_president', new ChamiloLMS\Provider\ReflectionControllerProvider('jury_president.controller'));
     $app->mount('/admin/jury_member', new ChamiloLMS\Provider\ReflectionControllerProvider('jury_member.controller'));
 
-    $app->mount('/admin/question_manager/exercise_distribution', new ChamiloLMS\Provider\ReflectionControllerProvider('exercise_distribution.controller'));
+    $app->mount(
+        '/admin/question_manager/exercise_distribution',
+        new ChamiloLMS\Provider\ReflectionControllerProvider('exercise_distribution.controller')
+    ) // sets the course and session
+    ->before($settingNewCourseConditions);
 }
 

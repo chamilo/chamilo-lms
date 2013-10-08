@@ -10,11 +10,11 @@
         <hr />
         <h4> {{ 'Users' | trans }} </h4>
 
-        <a class="btn" href="{{ url('branch.controller:addDirectorAction', { "id" : item.id }) }}"> Add users </a>
+        <a class="btn" href="{{ url('branch.controller:addDirectorAction', { "id" : item.id, 'cidReq':course.code, 'id_session' : course_session.id }) }}"> Add users </a>
         {% for branchUsers in item.getUsers %}
             <li>
                 {{ branchUsers.user.getCompleteName }} - {{ branchUsers.role.name }}
-                <a class="btn btn-danger" href="{{ url('branch.controller:removeDirectorAction', { 'id': item.id, 'userId':branchUsers.user.userId }) }}">
+                <a class="btn btn-danger" href="{{ url('branch.controller:removeDirectorAction', { 'id': item.id, 'userId':branchUsers.user.userId , 'cidReq':course.code, 'id_session' : course_session.id}) }}">
                     Remove
                 </a>
             </li>
@@ -24,7 +24,7 @@
     <ul>
     {% for subitem in subitems %}
         <li>
-            <a href="{{ url(links.read_link, { id: subitem.id} ) }}">{{ subitem.branchName }}</a>
+            <a href="{{ url(links.read_link, { id: subitem.id, 'cidReq':course.code, 'id_session' : course_session.id } ) }}">{{ subitem.branchName }}</a>
         </li>
     {% endfor %}
     </ul>

@@ -66,6 +66,14 @@ class CQuizDistributionRelSession
     }
 
     /**
+     * @param CQuizDistribution $distribution
+     */
+    public function setDistribution(\Entity\CQuizDistribution $distribution)
+    {
+        $this->distribution = $distribution;
+    }
+
+    /**
      * Get id
      *
      * @return integer

@@ -4,10 +4,10 @@
         <a href="{{ exerciseUrl }}">
             {{ 'Back' |trans }}
         </a>
-        <a href="{{ url('exercise_distribution.controller:addManyDistributionAction', {'exerciseId' : exerciseId }) }}">
+        <a href="{{ url('exercise_distribution.controller:addManyDistributionAction', {'exerciseId' : exerciseId, 'cidReq':course.code, 'id_session' : course_session.id }) }}">
             {{ 'Add' |trans }}
         </a>
-        <a href="{{ url('exercise_distribution.controller:showStatsAction', {'exerciseId' : exerciseId }) }}">
+        <a href="{{ url('exercise_distribution.controller:showStatsAction', {'exerciseId' : exerciseId, 'cidReq':course.code, 'id_session' : course_session.id }) }}">
             {{ 'Stats' |trans }}
         </a>
 
@@ -23,7 +23,12 @@
         {% for item in items %}
             <tr>
                 <td>
-                    <a href="{{ url('exercise_distribution.controller:readAction', { 'exerciseId' : exerciseId, 'id' : item.id }) }}">
+                    <a href="{{ url('exercise_distribution.controller:readAction', {
+                        'exerciseId' : exerciseId,
+                        'id' : item.id ,
+                        'cidReq':course.code,
+                        'id_session' : course_session.id
+                    }) }}">
                         {{ item.title }}
                     </a>
                 </td>
@@ -39,25 +44,53 @@
                 </td>
                 <td>
                     {% if item.active == 1 %}
-                        <a class="btn" href="{{ url('exercise_distribution.controller:toggleVisibilityAction',
-                        { 'exerciseId' : exerciseId, id: item.id }) }}">
+                        <a class="btn" href="{{ url('exercise_distribution.controller:toggleVisibilityAction',{
+                            'exerciseId' : exerciseId,
+                            'id' : item.id,
+                            'cidReq':course.code,
+                            'id_session' : course_session.id })
+                        }}">
                             <i class="icon-eye-open"></i>
                         </a>
                     {% else %}
-                        <a class="btn" href="{{ url('exercise_distribution.controller:toggleVisibilityAction',
-                        { 'exerciseId' : exerciseId, id: item.id }) }}">
-                            <i class="icon-eye-close"></i>
+                        <a class="btn" href="{{ url('exercise_distribution.controller:toggleVisibilityAction', {
+                            'exerciseId' : exerciseId,
+                            'id': item.id,
+                            'cidReq':course.code,
+                            'id_session' : course_session.id
+                            })
+                        }}">
+                        <i class="icon-eye-close"></i>
                         </a>
                     {% endif %}
 
-                    <a class="btn" href="{{ url('exercise_distribution.controller:toggleActivationAction',
-                    { 'exerciseId' : exerciseId, id: item.id }) }}"> {{ 'Change activation' |trans }}</a>
+                    <a class="btn" href="{{ url('exercise_distribution.controller:toggleActivationAction', {
+                        'exerciseId' : exerciseId,
+                        'id': item.id,
+                        'cidReq':course.code,
+                        'id_session' : course_session.id
+                    }) }}">
+                        {{ 'Change activation' |trans }}
+                    </a>
 
-                    <a class="btn" href="{{ url('exercise_distribution.controller:showStatsAction',
-                    { 'exerciseId' : exerciseId, id: item.id }) }}"> {{ 'Stats' |trans }}</a>
+                    <a class="btn" href="{{ url('exercise_distribution.controller:showStatsAction', {
+                        'exerciseId' : exerciseId,
+                        'id': item.id,
+                        'cidReq':course.code,
+                        'id_session': course_session.id
+                    })
+                    }}">
+                        {{ 'Stats' |trans }}
+                    </a>
 
-                    <a class="btn btn-danger" href="{{ url('exercise_distribution.controller:deleteDistributionAction',
-                    { 'exerciseId' : exerciseId, id: item.id }) }}"> {{ 'Delete' |trans }}</a>
+                    <a class="btn btn-danger" href="{{ url('exercise_distribution.controller:deleteDistributionAction', {
+                        'exerciseId' : exerciseId,
+                        'id': item.id,
+                        'cidReq': course.code,
+                        'id_session' : course_session.id
+                    }) }}">
+                        {{ 'Delete' |trans }}
+                    </a>
                 </td>
             </tr>
         {% endfor %}

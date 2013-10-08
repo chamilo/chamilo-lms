@@ -16,7 +16,11 @@ use \ChamiloSession as Session;
  */
 class ExerciseController extends CommonController
 {
-
+    /**
+     * @param Application $app
+     * @param $exerciseId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function dashboardAction(Application $app, $exerciseId)
     {
         $url = api_get_path(WEB_CODE_PATH).'exercice/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq();

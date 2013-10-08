@@ -106,10 +106,10 @@ if (api_is_platform_admin()) {
 
 	$items = array();
 	$items[] = array('url'=>'course_list.php', 	'label' => get_lang('CourseList'));
-
-	if (api_get_setting('course_validation') != 'true') {
-		$items[] = array('url'=>'course_add.php', 	'label' => get_lang('AddCourse'));
-	} else {
+    $items[] = array('url'=>'course_add.php', 	'label' => get_lang('AddCourse'));
+	
+    if (api_get_setting('course_validation') == 'true') {
+        
 		$items[] = array('url'=>'course_request_review.php', 	'label' => get_lang('ReviewCourseRequests'));
 		$items[] = array('url'=>'course_request_accepted.php', 	'label' => get_lang('AcceptedCourseRequests'));
 		$items[] = array('url'=>'course_request_rejected.php', 	'label' => get_lang('RejectedCourseRequests'));

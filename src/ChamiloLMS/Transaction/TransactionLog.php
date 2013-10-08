@@ -117,7 +117,7 @@ abstract class TransactionLog
         // time_insert and time_update are handled manually.
         $fields = array(
             'id' => false,
-            'branch_id' => self::getController()->getBranchRepository()->getLocalBranch(),
+            'branch_id' => self::getController()->getBranchRepository()->getLocalBranch()->getId(),
             'transaction_id' => TransactionLog::TRANSACTION_LOCAL,
             'item_id' => false,
             'c_id' => 0,

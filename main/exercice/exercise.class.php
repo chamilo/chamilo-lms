@@ -6788,7 +6788,7 @@ class Exercise
                         'action' => 'exercise_attempt',
                         'c_id' => $exercise_stat_info['c_id'],
                         'session_id' => $exercise_stat_info['session_id'],
-                        'branch_id' => TransactionLog::BRANCH_LOCAL,
+                        'branch_id' => $transaction_controller->getBranchRepository()->getLocalBranch()->getId(),
                         'item_id' => $exercise_stat_info['exe_id'],
                         )
                     );

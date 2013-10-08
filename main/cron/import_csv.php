@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 if (PHP_SAPI !='cli') {
     die('Run this script through the command line or comment this line in the code');
@@ -140,6 +141,9 @@ class ImportCsv
         }
     }
 
+    /**
+     * Prepares extra fields before the import
+     */
     private function prepareImport()
     {
         // Create user extra field: extra_external_user_id
@@ -154,7 +158,7 @@ class ImportCsv
     /**
      * @param string $file
      */
-    function moveFile($file)
+    private function moveFile($file)
     {
         $moved = str_replace('incoming', 'treated', $file);
 

@@ -21,48 +21,50 @@ require_once 'document.lib.php';
 class GroupManager
 {
     //- VIRTUAL_COURSE_CATEGORY: in this category groups are created based on the virtual  course of a course
-    CONST VIRTUAL_COURSE_CATEGORY = 1;
+    const VIRTUAL_COURSE_CATEGORY = 1;
 
     //DEFAULT_GROUP_CATEGORY: When group categories aren't available (platform-setting),  all groups are created in this 'dummy'-category
-    CONST DEFAULT_GROUP_CATEGORY = 2;
+    const DEFAULT_GROUP_CATEGORY = 2;
 
     /**
      * infinite
      */
-    CONST INFINITE  = 99999;
+    const INFINITE  = 99999;
     /**
      * No limit on the number of users in a group
      */
-    CONST MEMBER_PER_GROUP_NO_LIMIT = 0;
+    const MEMBER_PER_GROUP_NO_LIMIT = 0;
     /**
      * No limit on the number of groups per user
      */
-    CONST GROUP_PER_MEMBER_NO_LIMIT = 0;
+    const GROUP_PER_MEMBER_NO_LIMIT = 0;
     /**
      * The tools of a group can have 3 states
      * - not available
      * - public
      * - private
      */
-    CONST TOOL_NOT_AVAILABLE = 0;
-    CONST TOOL_PUBLIC = 1;
-    CONST TOOL_PRIVATE = 2;
+    const TOOL_NOT_AVAILABLE = 0;
+    const TOOL_PUBLIC = 1;
+    const TOOL_PRIVATE = 2;
     /**
      * Constants for the available group tools
      */
-    CONST GROUP_TOOL_FORUM = 0;
-    CONST GROUP_TOOL_DOCUMENTS = 1;
-    CONST GROUP_TOOL_CALENDAR = 2;
-    CONST GROUP_TOOL_ANNOUNCEMENT = 3;
-    CONST GROUP_TOOL_WORK = 4;
-    CONST GROUP_TOOL_WIKI = 5;
-    CONST GROUP_TOOL_CHAT = 6;
+    const GROUP_TOOL_FORUM = 0;
+    const GROUP_TOOL_DOCUMENTS = 1;
+    const GROUP_TOOL_CALENDAR = 2;
+    const GROUP_TOOL_ANNOUNCEMENT = 3;
+    const GROUP_TOOL_WORK = 4;
+    const GROUP_TOOL_WIKI = 5;
+    const GROUP_TOOL_CHAT = 6;
 
-    //GROUP FUNCTIONS
     private function __construct()
     {
     }
 
+    /**
+     * @return array
+     */
     public static function get_groups()
     {
         $table_group         = Database :: get_course_table(TABLE_GROUP);
@@ -80,7 +82,7 @@ class GroupManager
      * @param string $course_code Default is current course
      * @return array An array with all information about the groups.
      */
-    public static function get_group_list ($category = null, $course_code = null)
+    public static function get_group_list($category = null, $course_code = null)
     {
         $my_user_id = api_get_user_id();
 
@@ -100,7 +102,7 @@ class GroupManager
             }
         }
 
-        //COURSEMANAGER or STUDENT
+        // COURSEMANAGER or STUDENT
         if ($my_status_of_user_in_course == COURSEMANAGER || api_is_allowed_to_edit(null, true) || api_is_drh()) {
             $can_see_groups = 1;
             $sql = "SELECT g.id ,
@@ -165,8 +167,6 @@ class GroupManager
                 $rs_session = Database::query($sql_session);
                 if (Database::num_rows($rs_session)>0) {
                     $thisGroup['session_name'] = Database::result($rs_session,0,0);
-                } else {
-                    //the session has probably been removed, so the group is now orphaned
                 }
             }
             $groups[] = $thisGroup;
@@ -489,9 +489,7 @@ class GroupManager
         //$forum_id = get_forums_of_group($group_id);
         $group_id = Database::escape_string($group_id);
         $category = self::get_category_from_group($group_id);
-        if ($maximum_number_of_students > $category['max_student'] && $category['max_student'] != 0) {
-            $maximum_number_of_students = $category['max_student'];
-        }
+
         $course_id = api_get_course_int_id();
 
         $sql = "UPDATE ".$table_group."
@@ -541,7 +539,7 @@ class GroupManager
      * Get all categories
      * @param string $course_code The cours (default = current course)
      */
-    public static function get_categories ($course_code = null) {
+    public static function get_categories($course_code = null) {
         $course_info = api_get_course_info($course_code);
         $course_id     = $course_info['real_id'];
         $table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY);
@@ -558,7 +556,7 @@ class GroupManager
      * @param int $id The category id
      * @param string $course_code The course (default = current course)
      */
-    public static function get_category ($id, $course_code = null) {
+    public static function get_category($id, $course_code = null) {
         if (empty($id)) {
             return array();
         }
@@ -674,36 +672,84 @@ class GroupManager
 
     /**
      * Update group category
-     * @param int $id The id of the category
-     * @param string $title The title of the new category
-     * @param string $description The description of the new category
-     * @param bool $self_registration_allowed
-     * @param bool $self_unregistration_allowed
-     * @param int $max_number_of_students
-     * @param int $groups_per_user
+     *
+     * @param int $id
+     * @param string $title
+     * @param string $description
+     * @param $doc_state
+     * @param $work_state
+     * @param $calendar_state
+     * @param $announcements_state
+     * @param $forum_state
+     * @param $wiki_state
+     * @param $chat_state
+     * @param $self_registration_allowed
+     * @param $self_unregistration_allowed
+     * @param $maximum_number_of_students
+     * @param $groups_per_user
      */
-    public static function update_category ($id, $title, $description, $doc_state, $work_state, $calendar_state, $announcements_state, $forum_state, $wiki_state, $chat_state, $self_registration_allowed, $self_unregistration_allowed, $maximum_number_of_students, $groups_per_user) {
-        $table_group_category = Database :: get_course_table(TABLE_GROUP_CATEGORY);
+    public static function update_category(
+        $id,
+        $title,
+        $description,
+        $doc_state,
+        $work_state,
+        $calendar_state,
+        $announcements_state,
+        $forum_state,
+        $wiki_state,
+        $chat_state,
+        $self_registration_allowed,
+        $self_unregistration_allowed,
+        $maximum_number_of_students,
+        $groups_per_user
+    ) {
+        $table_group_category = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $id = Database::escape_string($id);
 
         $course_id = api_get_course_int_id();
 
-        $sql = "UPDATE ".$table_group_category."
-                SET title='".Database::escape_string($title)."',
-                description='".Database::escape_string($description)."',
-                doc_state = '".Database::escape_string($doc_state)."',
-                work_state = '".Database::escape_string($work_state)."',
-                calendar_state = '".Database::escape_string($calendar_state)."',
-                announcements_state = '".Database::escape_string($announcements_state)."',
-                forum_state = '".Database::escape_string($forum_state)."',
-                wiki_state = '".Database::escape_string($wiki_state)."',
-                chat_state = '".Database::escape_string($chat_state)."',
-                groups_per_user   = ".Database::escape_string($groups_per_user).",
-                self_reg_allowed = '".Database::escape_string($self_registration_allowed)."',
-                self_unreg_allowed = '".Database::escape_string($self_unregistration_allowed)."',
-                max_student = ".Database::escape_string($maximum_number_of_students)."
-                WHERE c_id = $course_id AND id=$id";
+        $sql = "UPDATE ".$table_group_category."SET
+                    title='".Database::escape_string($title)."',
+                    description='".Database::escape_string($description)."',
+                    doc_state = '".Database::escape_string($doc_state)."',
+                    work_state = '".Database::escape_string($work_state)."',
+                    calendar_state = '".Database::escape_string($calendar_state)."',
+                    announcements_state = '".Database::escape_string($announcements_state)."',
+                    forum_state = '".Database::escape_string($forum_state)."',
+                    wiki_state = '".Database::escape_string($wiki_state)."',
+                    chat_state = '".Database::escape_string($chat_state)."',
+                    groups_per_user   = ".Database::escape_string($groups_per_user).",
+                    self_reg_allowed = '".Database::escape_string($self_registration_allowed)."',
+                    self_unreg_allowed = '".Database::escape_string($self_unregistration_allowed)."',
+                    max_student = ".Database::escape_string($maximum_number_of_students)."
+                WHERE c_id = $course_id AND id = $id";
         Database::query($sql);
+
+
+        // Updating all groups inside this category
+        $groups = self::get_group_list($id);
+
+        if (!empty($groups)) {
+            foreach ($groups as $group) {
+                GroupManager::set_group_properties(
+                    $group['id'],
+                    $group['name'],
+                    $group['description'],
+                    $maximum_number_of_students,
+                    $doc_state,
+                    $work_state,
+                    $calendar_state,
+                    $announcements_state,
+                    $forum_state,
+                    $wiki_state,
+                    $chat_state,
+                    $self_registration_allowed,
+                    $self_unregistration_allowed
+                );
+            }
+        }
+
     }
 
 
@@ -711,7 +757,8 @@ class GroupManager
      * Returns the number of groups of the user with the greatest number of
      * subscribtions in the given category
      */
-    public static function get_current_max_groups_per_user ($category_id = null, $course_code = null) {
+    public static function get_current_max_groups_per_user($category_id = null, $course_code = null)
+    {
         $course_info = api_get_course_info ($course_code);
         $group_table = Database :: get_course_table(TABLE_GROUP);
         $group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
@@ -732,7 +779,8 @@ class GroupManager
      * @param int $id1 The id of the first category
      * @param int $id2 The id of the second category
      */
-    public static function swap_category_order ($id1, $id2) {
+    public static function swap_category_order($id1, $id2)
+    {
         $table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY);
         $id1 = Database::escape_string($id1);
         $id2 = Database::escape_string($id2);
@@ -1541,11 +1589,12 @@ class GroupManager
      * given course.
      */
     public static function user_has_access($user_id, $group_id, $tool) {
-        //Admin have access everywhere
+        // Admin have access everywhere
         if (api_is_platform_admin()) {
             return true;
         }
-        //Course admin also have access to everything
+
+        // Course admin also have access to everything
         if (api_is_allowed_to_edit()) {
             return true;
         }
@@ -1576,26 +1625,27 @@ class GroupManager
                 return false;
         }
 
-        $user_is_in_group = self :: is_user_in_group($user_id, $group_id);
+        $user_is_in_group = self::is_user_in_group($user_id, $group_id);
 
-        //Check group properties
+        // Check group properties
         $group_info = self :: get_group_properties($group_id);
 
-        if (api_get_setting('allow_group_categories') == 'true') {
-            //Check group category if exists
+        /*if (api_get_setting('allow_group_categories') == 'true') {
+
+            // Check if group category exists
             $category_group_info = self::get_category_from_group($group_id);
 
             if (!empty($category_group_info)) {
-                //if exists check the category group status first
+                // If exists check the category group status first
                 if ($category_group_info[$state_key] == self::TOOL_NOT_AVAILABLE) {
                     return false;
                 } elseif($category_group_info[$state_key] == self::TOOL_PRIVATE && !$user_is_in_group) {
                     return false;
                 }
             }
-        }
+        }*/
 
-        //is_user_in_group() is more complete that  the  is_subscribed() function
+        // is_user_in_group() is more complete that the is_subscribed() function
 
         if ($group_info[$state_key] == self::TOOL_NOT_AVAILABLE) {
             return false;

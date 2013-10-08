@@ -23,6 +23,13 @@ if (isset($_configuration['add_document_to_work'])) {
     define('ADD_DOCUMENT_TO_WORK', false);
 }
 
+$_configuration['work_user_comments'] = true;
+if (isset($_configuration['work_user_comments'])) {
+    define('ALLOW_USER_COMMENTS', $_configuration['work_user_comments']);
+} else {
+    define('ALLOW_USER_COMMENTS', false);
+}
+
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
  * @param	string	Current dir
@@ -467,9 +474,6 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 	$my_params      = $sort_params;
 	$origin         = Security::remove_XSS($origin);
 
-	// Getting the work data
-	//$my_folder_data = get_work_data_by_id($id);
-
     $qualification_exists = false;
     if (!empty($my_folder_data['qualification']) && intval($my_folder_data['qualification']) > 0) {
         $qualification_exists = true;
@@ -511,7 +515,6 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 
     $group_id = api_get_group_id();
 
-
 	if (is_array($work_parents)) {
 		foreach ($work_parents as $work_parent) {
 			$sql_select_directory = "SELECT
@@ -534,7 +537,7 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 			} else {
 				$sql_select_directory .= " work.post_group_id = '0' ";
 			}
-			$sql_select_directory .= "  AND  ".
+			$sql_select_directory .= " AND ".
 			                           "  work.c_id = $course_id AND ".
 			                           "  work.id  = ".$work_parent->id." AND ".
 			                           "  work.filetype = 'folder' AND ".
@@ -629,10 +632,10 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 						$there_is_a_expire_date = true;
 						$defaults['enableExpiryDate'] = true;
 
-						$form_folder -> addElement('checkbox', 'enableExpiryDate',null,get_lang('EnableExpiryDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option1\').style.display = \'block\';}else{document.getElementById(\'option1\').style.display = \'none\';}"');
-						$form_folder -> addElement('html', '<div id=\'option1\' style="display:block">');
-						$form_folder -> addGroup(create_group_date_select(), 'expires', get_lang('ExpiresAt'));
-						$form_folder -> addElement('html', '</div>');
+						$form_folder->addElement('checkbox', 'enableExpiryDate',null,get_lang('EnableExpiryDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option1\').style.display = \'block\';}else{document.getElementById(\'option1\').style.display = \'none\';}"');
+						$form_folder->addElement('html', '<div id=\'option1\' style="display:block">');
+						$form_folder->addGroup(create_group_date_select(), 'expires', get_lang('ExpiresAt'));
+						$form_folder->addElement('html', '</div>');
 
 					} else {
 						$homework['expires_on'] = api_get_local_time();
@@ -641,10 +644,10 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 
 						$there_is_a_expire_date = false;
 
-						$form_folder -> addElement('checkbox', 'enableExpiryDate',null,get_lang('EnableExpiryDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option1\').style.display = \'block\';}else{document.getElementById(\'option1\').style.display = \'none\';}"');
-						$form_folder -> addElement('html', '<div id=\'option1\' style="display:none">');
-						$form_folder -> addGroup(create_group_date_select(), 'expires', get_lang('ExpiresAt'));
-						$form_folder -> addElement('html', '</div>');
+						$form_folder->addElement('checkbox', 'enableExpiryDate',null,get_lang('EnableExpiryDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option1\').style.display = \'block\';}else{document.getElementById(\'option1\').style.display = \'none\';}"');
+						$form_folder->addElement('html', '<div id=\'option1\' style="display:none">');
+						$form_folder->addGroup(create_group_date_select(), 'expires', get_lang('ExpiresAt'));
+						$form_folder->addElement('html', '</div>');
 					}
 
 					if ($homework['ends_on'] != '0000-00-00 00:00:00') {
@@ -653,11 +656,11 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 
 						$defaults['enableEndDate'] = true;
 
-						$form_folder -> addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option2\').style.display = \'block\';}else{document.getElementById(\'option2\').style.display = \'none\';}"');
-						$form_folder -> addElement('html', '<div id=\'option2\' style="display:block">');
-						$form_folder -> addGroup(create_group_date_select(), 'ends', get_lang('EndsAt'));
-						$form_folder -> addElement('html', '</div>');
-						$form_folder -> addRule(array('expires', 'ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
+						$form_folder->addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option2\').style.display = \'block\';}else{document.getElementById(\'option2\').style.display = \'none\';}"');
+						$form_folder->addElement('html', '<div id=\'option2\' style="display:block">');
+						$form_folder->addGroup(create_group_date_select(), 'ends', get_lang('EndsAt'));
+						$form_folder->addElement('html', '</div>');
+						$form_folder->addRule(array('expires', 'ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
 
 					} else {
 						$homework['ends_on'] = api_get_local_time();
@@ -667,20 +670,20 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 
 						$there_is_a_end_date = false;
 
-						$form_folder -> addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option2\').style.display = \'block\';}else{document.getElementById(\'option2\').style.display = \'none\';}"');
-						$form_folder -> addElement('html', '<div id=\'option2\' style="display:none">');
-						$form_folder -> addGroup(create_group_date_select(), 'ends', get_lang('EndsAt'));
-						$form_folder -> addElement('html', '</div>');
-						$form_folder -> addRule(array('expires', 'ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
+						$form_folder->addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option2\').style.display = \'block\';}else{document.getElementById(\'option2\').style.display = \'none\';}"');
+						$form_folder->addElement('html', '<div id=\'option2\' style="display:none">');
+						$form_folder->addGroup(create_group_date_select(), 'ends', get_lang('EndsAt'));
+						$form_folder->addElement('html', '</div>');
+						$form_folder->addRule(array('expires', 'ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
 					}
 
 					if ($there_is_a_expire_date && $there_is_a_end_date) {
 						$form_folder -> addRule(array('expires', 'ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
 					}
 
-					$form_folder -> addElement('checkbox', 'allow_text_assignment', null, get_lang('AllowTextAssignments'));
-                    $form_folder -> addElement('html', '</div>');
-					$form_folder -> addElement('style_submit_button', 'submit', get_lang('ModifyDirectory'), 'class="save"');
+					$form_folder->addElement('checkbox', 'allow_text_assignment', null, get_lang('AllowTextAssignments'));
+                    $form_folder->addElement('html', '</div>');
+					$form_folder->addElement('style_submit_button', 'submit', get_lang('ModifyDirectory'), 'class="save"');
 
 					if ($there_is_a_end_date) {
 						$end_date_array = convert_date_to_array($homework['ends_on'], 'ends');
@@ -862,12 +865,10 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 
 				$work_title = !empty($work_data['title']) ? $work_data['title'] : basename($work_data['url']);
 
-				//Work name
-				//if (api_is_allowed_to_edit()) {
-                    if ($cant_files > 0 ) {
-                        $zip = '<a href="downloadfolder.inc.php?id='.$work_data['id'].'">'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), ICON_SIZE_SMALL).'</a>';
-                    }
-				//}
+				// Work name
+                if ($cant_files > 0 ) {
+                    $zip = '<a href="downloadfolder.inc.php?id='.$work_data['id'].'">'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), ICON_SIZE_SMALL).'</a>';
+                }
 
                 $link = 'work_list.php';
                 if (api_is_allowed_to_edit()) {
@@ -923,7 +924,7 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 	$sorting_options = array();
 	$sorting_options['column'] = 1;
 
-	// Here we change the way how the colums are going to be sorted
+	// Here we change the way how the columns are going to be sorted
 	// in this case the the column of LastResent ( 4th element in $column_header) we will be order like the column RealDate
 	// because in the column RealDate we have the days in a correct format "2008-03-12 10:35:48"
 
@@ -2386,4 +2387,93 @@ function getAllDocumentsFromWorkToString($workId, $courseInfo)
         $docContent .= '</ul><br />';
         echo $docContent;
     }
+}
+
+/**
+ * Returns fckeditor toolbar
+ * @return array
+ */
+function getWorkDescriptionToolbar()
+{
+    return array('ToolbarSet' => 'Work', 'Width' => '100%', 'Height' => '400');
+}
+
+/**
+ * @param array $work
+ * @return string
+ */
+function getWorkComments($work) {
+
+    if (ADD_DOCUMENT_TO_WORK == false) {
+        return array();
+    }
+
+    $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
+    $userTable= Database::get_main_table(TABLE_MAIN_USER);
+
+    $courseId = $work['c_id'];
+    $workId = $work['id'];
+
+    $sql = "SELECT c.*, u.firstname, u.lastname, u.username, u.picture_uri
+            FROM $commentTable c INNER JOIN $userTable u ON(u.user_id = c.user_id)
+            WHERE c_id = $courseId AND work_id = $workId
+            ORDER BY sent_at
+            ";
+    $result = Database::query($sql);
+    $comments = Database::store_result($result, 'ASSOC');
+    foreach ($comments as &$comment) {
+        $pictureInfo = UserManager::get_picture_user($comment['user_id'], $comment['picture_uri'], 24, USER_IMAGE_SIZE_SMALL);
+        $comment['picture'] = $pictureInfo['file'];
+    }
+    return $comments;
+}
+
+/**
+ * @param int $userId
+ * @param array $work
+ * @param array $data
+ * @return int
+ */
+function addWorkComment($userId, $work, $data)
+{
+    if (ADD_DOCUMENT_TO_WORK == false) {
+        return null;
+    }
+
+    $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
+
+    if (empty($data['comment'])) {
+        return null;
+    }
+
+    $params = array(
+        'work_id' => $work['id'],
+        'c_id' => $work['c_id'],
+        'user_id' => $userId,
+        'comment' => $data['comment'],
+        'sent_at' => api_get_utc_datetime()
+    );
+    return Database::insert($commentTable, $params);
+}
+
+/**
+ * @param array $work
+ * @return string
+ */
+function getWorkCommentForm($work)
+{
+    if (ADD_DOCUMENT_TO_WORK == false) {
+        return null;
+    }
+    $form = new FormValidator(
+        'work_comment',
+        'post',
+        api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&action=send_comment&'.api_get_cidreq()
+    );
+    $form->addElement('textarea', 'comment', get_lang('Comment'), array('class' => 'span5', 'rows' => '8'));
+    $form->addRule('comment', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addElement('hidden', 'id', $work['id']);
+    $form->addElement('button', 'button', get_lang('Send'));
+    return $form->return_form();
+
 }

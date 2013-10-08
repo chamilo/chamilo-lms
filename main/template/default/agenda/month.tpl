@@ -92,13 +92,14 @@ $(document).ready(function() {
 		header: {
 			left: 'today prev,next',
 			center: 'title',
-			right: 'month,agendaWeek,agendaDay'
+			right: 'month,agendaWeek,agendaDay, test'
 		},
         {% if use_google_calendar == 1 %}
             eventSources: [
-                '{{ google_calendar_url }}',  //if you want to add more just add URL in this array
+                // if you want to add more just add URL in this array
+                '{{ google_calendar_url }}',
                 {
-                    className: 'gcal-event'           // an option!
+                    className: 'gcal-event' // an option!
                 }
             ],
         {% endif %}

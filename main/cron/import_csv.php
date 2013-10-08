@@ -1,11 +1,13 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 if (PHP_SAPI !='cli') {
     die('Run this script through the command line or comment this line in the code');
 }
 
-//$_SERVER['SERVER_NAME'] = '';
-//$_SERVER['HTTP_HOST'] = '';
+if (file_exists('multiple_url_fix.php')) {
+    require 'multiple_url_fix.php';
+}
 
 require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'log.class.php';
@@ -139,6 +141,9 @@ class ImportCsv
         }
     }
 
+    /**
+     * Prepares extra fields before the import
+     */
     private function prepareImport()
     {
         // Create user extra field: extra_external_user_id
@@ -153,7 +158,7 @@ class ImportCsv
     /**
      * @param string $file
      */
-    function moveFile($file)
+    private function moveFile($file)
     {
         $moved = str_replace('incoming', 'treated', $file);
 
@@ -431,7 +436,8 @@ class ImportCsv
 
                     if (isset($this->conditions['importStudents'])) {
                         if (isset($this->conditions['importStudents']['update']) && isset($this->conditions['importStudents']['update']['avoid'])) {
-                            // Blocking email update
+                            // Blocking email update -
+                            // 1. Condition
                             $avoidUsersWithEmail = $this->conditions['importStudents']['update']['avoid']['email'];
                             if ($userInfo['email'] != $row['email'] && in_array($row['email'], $avoidUsersWithEmail)) {
                                 $this->logger->addInfo("Students - User email is not updated : ".$row['username']." because the avoid conditions (email).");
@@ -439,8 +445,19 @@ class ImportCsv
                                 $email = $userInfo['email'];
                             }
 
+                            // 2. Condition
+                            if (!in_array($userInfo['email'], $avoidUsersWithEmail) && !in_array($row['email'], $avoidUsersWithEmail)) {
+                                $email = $userInfo['email'];
+                            }
+
+                            // 3. Condition
+                            if (in_array($userInfo['email'], $avoidUsersWithEmail) && !in_array($row['email'], $avoidUsersWithEmail)) {
+                                $email = $row['email'];
+                            }
+
                             // Blocking password update
                             $avoidUsersWithPassword = $this->conditions['importStudents']['update']['avoid']['password'];
+
                             if ($userInfo['password'] != api_get_encrypted_password($row['password']) && in_array($row['password'], $avoidUsersWithPassword)) {
                                 $this->logger->addInfo("Students - User password is not updated: ".$row['username']." because the avoid conditions (password).");
                                 $password = null;
@@ -537,9 +554,15 @@ class ImportCsv
                     $params = array(
                         'title' => $row['title'],
                     );
+
                     $result = CourseManager::update_attributes($courseInfo['real_id'], $params);
 
-                    //CourseManager::updateTeachers($courseInfo['id'], $row['teachers']);
+                    $addTeacherToSession = isset($courseInfo['add_teachers_to_sessions_courses']) && !empty($courseInfo['add_teachers_to_sessions_courses']) ? true : false;
+                    if ($addTeacherToSession) {
+                        CourseManager::updateTeachers($courseInfo['id'], $row['teachers'], false, true, false);
+                    } else {
+                        CourseManager::updateTeachers($courseInfo['id'], $row['teachers'], false, false);
+                    }
 
                     if ($result) {
                         $this->logger->addInfo("Courses - Course updated ".$courseInfo['code']);
@@ -698,19 +721,27 @@ if (isset($argv[1]) && $argv[1] = '--dump') {
     $dump = true;
 }
 
-$import->setDumpValues($dump);
+if (isset($_configuration['import_csv_disable_dump']) && $_configuration['import_csv_disable_dump'] == true) {
+    $import->setDumpValues(false);
+} else {
+    $import->setDumpValues($dump);
+}
+
 // Do not moves the files to treated
-$import->test = true;
+if (isset($_configuration['import_csv_test'])) {
+    $import->test = $_configuration['import_csv_test'];
+} else {
+    $import->test = true;
+}
+
 $import->run();
 
-/*
+if (isset($_configuration['import_csv_fix_permissions']) && $_configuration['import_csv_fix_permissions'] == true) {
+    $command = "sudo find ".api_get_path(SYS_COURSE_PATH)." -type d -exec chmod 777 {} \; ";
+    echo "Executing: ".$command.PHP_EOL;
+    system($command);
 
-$command = "sudo find ".api_get_path(SYS_COURSE_PATH)." -type d -exec chmod 777 {} \; ";
-echo "Executing: ".$command.PHP_EOL;
-system($command);
-
-$command = "sudo find ".api_get_path(SYS_CODE_PATH)."upload/users  -type d -exec chmod 777 {} \;";
-echo "Executing: ".$command.PHP_EOL;
-system($command);
-
-*/
+    $command = "sudo find ".api_get_path(SYS_CODE_PATH)."upload/users  -type d -exec chmod 777 {} \;";
+    echo "Executing: ".$command.PHP_EOL;
+    system($command);
+}

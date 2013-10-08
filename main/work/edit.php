@@ -137,7 +137,7 @@ if ($submitGroupWorkUrl) {
 $form->addElement('hidden', 'id', $work_id);
 $form->addElement('hidden', 'item_id', $item_id);
 $form->addElement('text', 'title', get_lang('Title'), array('id' => 'file_upload', 'class' => 'span4'));
-$form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'Work', 'Width' => '100%', 'Height' => '200'));
+$form->add_html_editor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
 
 $defaults['title'] 			= $work_item['title'];
 $defaults["description"] 	= $work_item['description'];

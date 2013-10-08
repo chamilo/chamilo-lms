@@ -218,7 +218,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
         $group = array();
         $group[] = $form->createElement('radio', 'allow_anonymous', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'allow_anonymous', null, get_lang('No'), 0);
-        $form->addGroup($group, 'allow_anonymous_group', get_lang('AllowAnonymousPosts'), '&nbsp;');
+        $form->addGroup($group, 'allow_anonymous_group', get_lang('AllowAnonymousPosts'), ' ');
     }
 
     $form->addElement('advanced_settings', '<a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus">&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>', '');
@@ -227,7 +227,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
     $group = array();
     $group[] = $form->createElement('radio', 'students_can_edit', null, get_lang('Yes'), 1);
     $group[] = $form->createElement('radio', 'students_can_edit', null, get_lang('No'), 0);
-    $form->addGroup($group, 'students_can_edit_group', get_lang('StudentsCanEdit'), '&nbsp;');
+    $form->addGroup($group, 'students_can_edit_group', get_lang('StudentsCanEdit'), ' ');
 
     $group = array();
     $group[] = $form->createElement('radio', 'approval_direct', null, get_lang('Approval'), 1);
@@ -240,15 +240,15 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
     $group = array();
     $group[] = $form->createElement('radio', 'allow_new_threads', null, get_lang('Yes'), 1);
     $group[] = $form->createElement('radio', 'allow_new_threads', null, get_lang('No'), 0);
-    $form->addGroup($group, 'allow_new_threads_group', get_lang('AllowNewThreads'), '&nbsp;');
+    $form->addGroup($group, 'allow_new_threads_group', get_lang('AllowNewThreads'), ' ');
 
     $group = array();
     $group[] = $form->createElement('radio', 'default_view_type', null, get_lang('Flat'), 'flat');
     $group[] = $form->createElement('radio', 'default_view_type', null, get_lang('Threaded'), 'threaded');
     $group[] = $form->createElement('radio', 'default_view_type', null, get_lang('Nested'), 'nested');
-    $form->addGroup($group, 'default_view_type_group', get_lang('DefaultViewType'), '&nbsp;');
+    $form->addGroup($group, 'default_view_type_group', get_lang('DefaultViewType'), ' ');
 
-    // Dropdown list: Groups
+    // Drop down list: Groups
     $groups = GroupManager::get_group_list();
     $groups_titles[0] = get_lang('NotAGroupForum');
     foreach ($groups as $key => $value) {
@@ -260,7 +260,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
     $group = array();
     $group[] = $form->createElement('radio', 'public_private_group_forum', null, get_lang('Public'), 'public');
     $group[] = $form->createElement('radio', 'public_private_group_forum', null, get_lang('Private'), 'private');
-    $form->addGroup($group, 'public_private_group_forum_group', get_lang('PublicPrivateGroupForum'), '&nbsp;');
+    $form->addGroup($group, 'public_private_group_forum_group', get_lang('PublicPrivateGroupForum'), '');
 
     // Forum image
     $form->add_progress_bar();
@@ -2528,7 +2528,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
     $form->addElement('hidden', 'post_id', $current_post['post_id']);
     $form->addElement('hidden', 'thread_id', $current_thread['thread_id']);
     $form->addElement('hidden', 'id_attach', $id_attach);
-    
+
     if ($current_post['post_parent_id'] == 0) {
         $form->addElement('hidden', 'is_first_post_of_thread', '1');
     }

@@ -24,11 +24,11 @@ Display::display_header($tool_name);
 
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-if ( isset($_GET['action']) ) {
+if (isset($_GET['action'])) {
     switch ($_GET['action']) {
         case 'unsubscribe':
-            if (CourseManager::get_user_in_course_status($_GET['user_id'],$_GET['course_code']) == STUDENT) {
-                CourseManager::unsubscribe_user($_GET['user_id'],$_GET['course_code']);
+            if (CourseManager::get_user_in_course_status($_GET['user_id'], $_GET['course_code']) == STUDENT) {
+                CourseManager::unsubscribe_user($_GET['user_id'], $_GET['course_code']);
                 Display::display_normal_message(get_lang('UserUnsubscribed'));
             } else {
                 Display::display_error_message(get_lang('CannotUnsubscribeUserFromCourse'));
@@ -59,7 +59,7 @@ $sysdir = $sysdir_array['dir'];
 $webdir_array = UserManager::get_user_picture_path_by_id($user['user_id'],'web',false,true);
 $webdir = $webdir_array['dir'];
 $fullurl = $webdir.$webdir_array['file'];
-$system_image_path=$sysdir.$webdir_array['file'];
+$system_image_path = $sysdir.$webdir_array['file'];
 list($width, $height, $type, $attr) = @getimagesize($system_image_path);
 $resizing = (($height > 200) ? 'height="200"' : '');
 $height += 30;
@@ -93,6 +93,7 @@ if (count($sessions) > 0) {
     $header[] = array (get_lang('Status'), true);
     $header[] = array ('', false);
 
+
     foreach ($sessions as $session_item) {
 
         $data = array ();
@@ -101,20 +102,43 @@ if (count($sessions) > 0) {
 
         foreach ($session_item['courses'] as $my_course) {
             $course_info = api_get_course_info($my_course['code']);
-            $row = array ();
+            $row = array();
             $row[] = $my_course['code'];
             $row[] = $course_info['title'];
-            $row[] = $my_course['status'] == STUDENT ? get_lang('Student') : get_lang('Teacher');
+            $sessionStatus = SessionManager::get_user_status_in_session($user['user_id'], $my_course['code'], $id_session);
+            $status = null;
 
-            $tools = '<a href="course_information.php?code='.$course_info['code'].'&id_session='.$id_session.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
-                    '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>';
+            switch($sessionStatus) {
+                case STUDENT:
+                    $status = get_lang('Student');
+                    break;
+                case 2:
+                    $status = get_lang('CourseCoach');
+                    break;
+            }
+
+            $row[] = $status;
+
+            $tools = '<a href="course_information.php?code='.$course_info['code'].'&id_session='.$id_session.'">'.
+                      Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
+                    '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'?id_session='.$id_session.'">'.
+                      Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>';
 
             if ($my_course['status'] == STUDENT) {
-                $tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$course_info['code'].'&user_id='.$user['user_id'].'">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>';
+                $tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$course_info['code'].'&user_id='.$user['user_id'].'">'.
+                      Display::return_icon('delete.png', get_lang('Delete')).'</a>';
             }
             $row[] = $tools;
             $data[] = $row;
         }
+        if ($session_item['date_start'] == '0000-00-00') {
+            $session_item['date_start'] = null;
+        }
+
+        if ($session_item['date_end'] == '0000-00-00') {
+            $session_item['date_end'] = null;
+        }
+
         $dates = array_filter(array($session_item['date_start'], $session_item['date_end']));
         echo Display::page_subheader($session_item['session_name'], ' '.implode(' - ', $dates));
 
@@ -162,8 +186,7 @@ if (Database::num_rows($res) > 0) {
 /**
  * Show the URL in which this user is subscribed
  */
-global $_configuration;
-if ($_configuration['multiple_access_urls']) {
+if (api_is_multiple_url_enabled()) {
     $url_list= UrlManager::get_access_url_from_user($user['user_id']);
     if (count($url_list) > 0) {
         $header = array();

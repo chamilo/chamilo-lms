@@ -37,7 +37,8 @@ if (empty($course_info)) {
 $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
 if (!empty($course_info['real_id'])) {
-    $sql = 'SELECT * FROM '.$tbl_student_publication.' WHERE c_id = '.$course_info['real_id'].' AND id = "'.$id.'"';
+    $sql = 'SELECT * FROM '.$tbl_student_publication.'
+            WHERE c_id = '.$course_info['real_id'].' AND id = "'.$id.'"';
     $result = Database::query($sql);
     if ($result && Database::num_rows($result)) {
         $row = Database::fetch_array($result, 'ASSOC');
@@ -48,7 +49,7 @@ if (!empty($course_info['real_id'])) {
         allowOnlySubscribedUser(api_get_user_id(), $row['parent_id'], $course_info['real_id']);
 
         if (empty($item_info)) {
-            exit;
+            api_not_allowed();
         }
 
         /*
@@ -84,7 +85,14 @@ if (!empty($course_info['real_id'])) {
             //|| (!$doc_visible_for_all && $work_is_visible && $student_is_owner_of_work)
             || ($student_is_owner_of_work)
             || ($doc_visible_for_all && $work_is_visible)) {
-            $title = str_replace(' ', '_', $row['title']);
+
+            $title = $row['title'];
+
+            if (array_key_exists('filename', $row) && !empty($row['filename'])) {
+                $title = $row['filename'];
+            }
+
+            $title = str_replace(' ', '_', $title);
             event_download($title);
             if (Security::check_abs_path($full_file_name, api_get_path(SYS_COURSE_PATH).api_get_course_path().'/')) {
                 DocumentManager::file_send_for_download($full_file_name, true, $title);

@@ -2301,7 +2301,7 @@ class UserManager
         $personal_course_list = array();
         $courses = array();
 
-        // this query is very similar to the above query, but it will check the session_rel_course_user table if there are courses registered to our user or not
+        // This query is very similar to the above query, but it will check the session_rel_course_user table if there are courses registered to our user or not
         $personal_course_list_sql = "SELECT DISTINCT scu.course_code as code
                                     FROM $tbl_session_course_user as scu $join_access_url
                                     WHERE scu.id_user = $user_id AND scu.id_session = $session_id $where_access_url
@@ -3364,6 +3364,7 @@ class UserManager
         if (!empty($user_status)) {
             $condition_status = ' AND u.status = '.$user_status;
         }
+
         if (api_get_multiple_access_url()) {
             $sql = "SELECT u.user_id, u.username, u.lastname, u.firstname, u.email FROM $tbl_user u
                     INNER JOIN $tbl_user_rel_user uru ON (uru.user_id = u.user_id) LEFT JOIN $tbl_user_rel_access_url a
@@ -3943,5 +3944,6 @@ EOF;
             Database::query($sql);
         }
     }
+
 
 }

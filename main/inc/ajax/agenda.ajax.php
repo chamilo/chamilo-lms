@@ -75,11 +75,14 @@ switch ($action) {
         break;
     case 'get_events':
         $user_id = $_REQUEST['user_id'];
-        if (substr($user_id,0,1) == 'G') {
+        if (substr($user_id, 0, 1) == 'G') {
             $length = strlen($user_id);
-            $group_id = substr($user_id,2,$length-1);
+            $group_id = substr($user_id, 2, $length-1);
         }
-        $events = $agenda->get_events($_REQUEST['start'], $_REQUEST['end'], api_get_course_int_id(), $group_id , $user_id);
+        $start = isset($_REQUEST['start']) ? $_REQUEST['start'] : null;
+        $end = isset($_REQUEST['end']) ? $_REQUEST['end'] : null;
+
+        $events = $agenda->get_events($start, $end, api_get_course_int_id(), $group_id, $user_id);
         echo $events;
         break;
     case 'get_user_agenda':
@@ -98,16 +101,16 @@ switch ($action) {
                 $my_course_list = array();
             }
             $today = getdate();
-            $year = (!empty($_GET['year']) ? (int) $_GET['year'] : NULL);
-            if ($year == NULL) {
+            $year = (!empty($_GET['year']) ? (int) $_GET['year'] : null);
+            if ($year == null) {
                 $year = $today['year'];
             }
-            $month = (!empty($_GET['month']) ? (int) $_GET['month'] : NULL);
-            if ($month == NULL) {
+            $month = (!empty($_GET['month']) ? (int) $_GET['month'] : null);
+            if ($month == null) {
                 $month = $today['mon'];
             }
-            $day = (!empty($_GET['day']) ? (int) $_GET['day'] : NULL);
-            if ($day == NULL) {
+            $day = (!empty($_GET['day']) ? (int) $_GET['day'] : null);
+            if ($day == null) {
                 $day = $today['mday'];
             }
             $monthName = $MonthsLong[$month - 1];

@@ -175,6 +175,8 @@ define('LOG_PROMOTION_DELETE',                  'promotion_deleted');
 define('LOG_CAREER_CREATE',                     'career_created');
 define('LOG_CAREER_DELETE',                     'career_deleted');
 
+define('LOG_USER_PERSONAL_DOC_DELETED',         'user_doc_deleted');
+
 // event logs data types
 define('LOG_COURSE_CODE',                       'course_code');
 define('LOG_USER_ID',                           'user_id');
@@ -1424,10 +1426,12 @@ function api_format_course_array($course_data) {
 
     //Course password
     $_course['registration_code']     = !empty($course_data['registration_code']) ? sha1($course_data['registration_code']) : null;
-
     $_course['disk_quota']            = $course_data['disk_quota'];
-
     $_course['course_public_url']     = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/index.php';
+
+    if (array_key_exists('add_teachers_to_sessions_courses', $course_data)) {
+        $_course['add_teachers_to_sessions_courses'] = $course_data['add_teachers_to_sessions_courses'];
+    }
 
     if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png')) {
         $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png';
@@ -6600,4 +6604,17 @@ function api_remove_tags_with_space($in_html, $in_double_quote_replace = true) {
     $out_res = str_replace (">", "> ", $out_res);
     $out_res = strip_tags($out_res);
     return $out_res;
+}
+
+/**
+ * If true, the drh can access all content (courses, users) inside a session
+ * @return bool
+ */
+function api_drh_can_access_all_session_content()
+{
+    global $_configuration;
+    if (isset($_configuration['drh_can_access_all_session_content'])) {
+        return $_configuration['drh_can_access_all_session_content'];
+    }
+    return false;
 }

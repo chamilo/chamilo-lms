@@ -151,7 +151,7 @@ if ($submitGroupWorkUrl) {
 $form->addElement('hidden', 'id', $work_id);
 $form->addElement('hidden', 'contains_file', 0, array('id'=>'contains_file_id'));
 $form->addElement('text', 'title', get_lang('Title'), array('id' => 'file_upload', 'class' => 'span4'));
-$form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'Work', 'Width' => '100%', 'Height' => '200'));
+$form->add_html_editor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
 
 $form->addElement('hidden', 'active', 1);
 $form->addElement('hidden', 'accepted', 1);
@@ -194,6 +194,8 @@ if ($form->validate()) {
 
         // Check the token inserted into the form
 
+        $filename = null;
+
         if (isset($_POST['submitWork'])) {
             $url = null;
             $contains_file = 0;
@@ -205,13 +207,13 @@ if ($form->validate()) {
                 $updir = $currentCourseRepositorySys.'work/'; //directory path to upload
 
                 // Try to add an extension to the file if it has'nt one
-                $new_file_name = add_ext_on_mime(stripslashes($_FILES['file']['name']), $_FILES['file']['type']);
+                $filename = add_ext_on_mime(stripslashes($_FILES['file']['name']), $_FILES['file']['type']);
 
                 // Replace dangerous characters
-                $new_file_name = replace_dangerous_char($new_file_name, 'strict');
+                $filename = replace_dangerous_char($filename, 'strict');
 
                 // Transform any .php file in .phps fo security
-                $new_file_name = php2phps($new_file_name);
+                $filename = php2phps($filename);
 
                 $filesize = filesize($_FILES['file']['tmp_name']);
 
@@ -269,6 +271,11 @@ if ($form->validate()) {
 
                 Database::query($sql_add_publication);
                 $id = Database::insert_id();
+
+                if ($id && array_key_exists('filename', $my_folder_data) && !empty($filename)) {
+                    $sql = "UPDATE $work_table SET filename = '$filename' WHERE c_id = $course_id AND id = $id";
+                    Database::query($sql);
+                }
             }
 
             if ($id) {
@@ -328,7 +335,6 @@ if ($form->validate()) {
 }
 
 $htmlHeadXtra[] = to_javascript_work();
-
 Display :: display_header(null);
 
 if (!empty($work_id)) {

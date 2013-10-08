@@ -913,15 +913,14 @@ class IndexManager {
 			$session_categories = UserManager::get_sessions_by_category($user_id, false);
 		}
 
-
         $html = '';
 
-        //Showing history title
+        // Showing history title
 
 		if ($load_history) {
 			$html .= Display::page_subheader(get_lang('HistoryTrainingSession'));
 			if (empty($session_categories)) {
-				$html .=  get_lang('YouDoNotHaveAnySessionInItsHistory');
+				$html .= get_lang('YouDoNotHaveAnySessionInItsHistory');
 			}
 		}
 
@@ -961,9 +960,10 @@ class IndexManager {
                         $days_access_after_end  = $session['nb_days_access_after_end'];
                         $date_session_end = $session['date_end'];
                         $session_now = time();
-                        $html_courses_session = '';
                         $count_courses_session = 0;
 
+                        // Loop course content
+                        $html_courses_session = '';
                         foreach ($session['courses'] as $course) {
                             $is_coach_course = api_is_coach($session_id, $course['code']);
                             $allowed_time = 0;
@@ -982,11 +982,16 @@ class IndexManager {
                             if ($session_now > $allowed_time && $days_access_after_end >= $dif_time_after-1) {
                                 //read only and accesible
                                 if (api_get_setting('hide_courses_in_sessions') == 'false') {
-                                    $c = CourseManager :: get_logged_user_course_html($course, $session_id, 'session_course_item', true, $this->load_directories_preview);
+                                    $c = CourseManager::get_logged_user_course_html($course, $session_id, 'session_course_item', true, $this->load_directories_preview);
                                     $html_courses_session .= $c[1];
                                 }
                                 $count_courses_session++;
                             }
+                        }
+
+                        // No courses to show
+                        if (empty($html_courses_session)) {
+                            continue;
                         }
 
                         if ($count_courses_session > 0) {

@@ -433,6 +433,17 @@ class Database {
     }
 
     /**
+     * Escape MySQL wildchars _ and % in LIKE search
+     * @param string            The string to escape
+     * @return string           The escaped string
+     */
+    public static function escape_sql_wildcards($in_txt) {
+        $out_txt = api_preg_replace("/_/", "\_", $in_txt);
+        $out_txt = api_preg_replace("/%/", "\%", $out_txt);
+        return $out_txt;
+    }
+
+    /**
      * Escapes a string to insert into the database as text
      * @param string							The string to escape
      * @param resource $connection (optional)	The database server connection, for detailed description see the method query().

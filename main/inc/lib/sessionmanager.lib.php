@@ -1541,11 +1541,20 @@ class SessionManager
 		$assigned_sessions_to_hrm = array();
 
 		if (api_is_multiple_url_enabled()) {
-           $sql = "SELECT * FROM $tbl_session s INNER JOIN $tbl_session_rel_user sru ON (sru.id_session = s.id) LEFT JOIN $tbl_session_rel_access_url a  ON (s.id = a.session_id)
-                   WHERE sru.id_user = '$hr_manager_id' AND sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' AND access_url_id = ".api_get_current_access_url_id()."";
+           $sql = "SELECT * FROM $tbl_session s
+                    INNER JOIN $tbl_session_rel_user sru ON (sru.id_session = s.id)
+                    LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
+                    WHERE
+                        sru.id_user = '$hr_manager_id' AND
+                        sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' AND
+                        access_url_id = ".api_get_current_access_url_id()."";
         } else {
             $sql = "SELECT * FROM $tbl_session s
-                     INNER JOIN $tbl_session_rel_user sru ON sru.id_session = s.id AND sru.id_user = '$hr_manager_id' AND sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' ";
+                     INNER JOIN $tbl_session_rel_user sru
+                     ON
+                        sru.id_session = s.id AND
+                        sru.id_user = '$hr_manager_id' AND
+                        sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' ";
         }
 		$rs_assigned_sessions = Database::query($sql);
 		if (Database::num_rows($rs_assigned_sessions) > 0) {
@@ -1561,7 +1570,7 @@ class SessionManager
 	 * @param int session id
 	 * @return array list of courses
 	 */
-	public static function get_course_list_by_session_id ($session_id) {
+	public static function get_course_list_by_session_id($session_id) {
 		$tbl_course				= Database::get_main_table(TABLE_MAIN_COURSE);
 		$tbl_session_rel_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
@@ -1664,7 +1673,7 @@ class SessionManager
         return Database::select('*', $session_table, array('where'=>array('id_coach = ?'=>$user_id)));
     }
 
-   public static function get_user_status_in_course_session($user_id, $course_code, $session_id) {
+    public static function get_user_status_in_course_session($user_id, $course_code, $session_id) {
         $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_user                           = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT session_rcru.status
@@ -1775,7 +1784,7 @@ class SessionManager
             $consider_end = false;
         }
 
-        $sid = self::create_session($s['name'].' '.get_lang('Copy'),
+        $sid = self::create_session($s['name'].' '.get_lang('CopyLabelSuffix'),
              $s['year_start'], $s['month_start'], $s['day_start'],
              $s['year_end'],$s['month_end'],$s['day_end'],
              $s['nb_days_acess_before_beginning'],$s['nb_days_acess_after_end'],
@@ -1811,7 +1820,7 @@ class SessionManager
                     $params['skip_lp_dates'] = true;
 
                     foreach ($short_courses as $course_data) {
-                        $course_info = CourseManager::copy_course_simple($course_data['title'].' '.get_lang('Copy'), $course_data['course_code'], $id, $sid, $params);
+                        $course_info = CourseManager::copy_course_simple($course_data['title'].' '.get_lang('CopyLabelSuffix'), $course_data['course_code'], $id, $sid, $params);
                         if ($course_info) {
                             //By default new elements are invisible
                             if ($set_exercises_lp_invisible) {
@@ -1903,6 +1912,10 @@ class SessionManager
         }
     }
 
+    /**
+     * @param $course_code
+     * @return array
+     */
     public static function get_session_by_course($course_code) {
         $table_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $table_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -1913,6 +1926,11 @@ class SessionManager
         return Database::store_result($result);
     }
 
+    /**
+     * @param int $user_id
+     * @param bool $ignore_visibility_for_admins
+     * @return array
+     */
     public static function get_sessions_by_user($user_id, $ignore_visibility_for_admins = false)
     {
        $session_categories = UserManager::get_sessions_by_category($user_id, false, $ignore_visibility_for_admins);
@@ -1985,9 +2003,9 @@ class SessionManager
         }
 
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_user           = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $tbl_session_course         = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $tbl_session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tbl_session_course  = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         $sessions = array();
 
@@ -2218,6 +2236,7 @@ class SessionManager
                         if ($debug) {
                             $logger->addInfo("Sessions - Adding course '$course_code' to session #$session_id");
                         }
+
                         $course_counter++;
 
                         $pattern = "/\[(.*?)\]/";
@@ -2264,9 +2283,6 @@ class SessionManager
                                     $error_message .= get_lang('UserDoesNotExist').' : '.$course_coach.$eol;
                                 }
                             }
-
-
-
                         }
 
                         $users_in_course_counter = 0;
@@ -2292,7 +2308,7 @@ class SessionManager
                             }
                         }
 
-                        $sql = "UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE course_code='$course_code'";
+                        $sql = "UPDATE $tbl_session_course SET nbr_users = '$users_in_course_counter' WHERE course_code = '$course_code'";
                         Database::query($sql);
 
                         $course_info = CourseManager::get_course_information($course_code);
@@ -2301,7 +2317,7 @@ class SessionManager
                 }
                 $access_url_id = api_get_current_access_url_id();
                 UrlManager::add_session_to_url($session_id, $access_url_id);
-                $sql_update_users = "UPDATE $tbl_session SET nbr_users='$user_counter', nbr_courses='$course_counter' WHERE id='$session_id'";
+                $sql_update_users = "UPDATE $tbl_session SET nbr_users = '$user_counter', nbr_courses = '$course_counter' WHERE id = '$session_id'";
                 Database::query($sql_update_users);
             }
         }
@@ -2327,11 +2343,75 @@ class SessionManager
         $result = Database::query($sql);
 
         $coaches = array();
-        if (Database::num_rows($result) > 0){
+        if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_row($result)) {
                 $coaches[] = $row[0];
             }
         }
         return $coaches;
+    }
+
+    /**
+     * @param int $userId
+     * @return array
+     */
+    public static function getAllCoursesFromAllSessionFromDrh($userId)
+    {
+        $sessions = SessionManager::get_sessions_followed_by_drh($userId);
+        $coursesFromSession = array();
+        if (!empty($sessions)) {
+            foreach ($sessions as $session) {
+                $courseList = SessionManager::get_course_list_by_session_id($session['id']);
+                foreach ($courseList as $course) {
+                    $coursesFromSession[] = $course['code'];
+                }
+            }
+        }
+        return $coursesFromSession;
+    }
+
+    /**
+     * @param int $userId
+     * @return array
+     */
+    public static function getAllUsersFromCoursesFromAllSessionFromDrh($userId)
+    {
+        $sessions = SessionManager::get_sessions_followed_by_drh($userId);
+        $userList = array();
+        if (!empty($sessions)) {
+            foreach ($sessions as $session) {
+                $courseList = SessionManager::get_course_list_by_session_id($session['id']);
+                foreach ($courseList as $course) {
+                    $users = CourseManager::get_user_list_from_course_code($course['code'], $session['id']);
+                    foreach ($users as $user) {
+                        $userList[] = $user['user_id'];
+                    }
+                }
+            }
+        }
+        return $userList;
+    }
+
+    /**
+     * @param $sessionId
+     * @param $coachList
+     * @param $deleteCoachesNotInList
+     */
+    public static function updateCoaches($sessionId, $courseCode, $coachList, $deleteCoachesNotInList = false)
+    {
+        $currentCoaches = SessionManager::getCoachesByCourseSession($sessionId, $courseCode);
+
+        foreach ($coachList as $userId) {
+            SessionManager::set_coach_to_course_session($userId, $sessionId, $courseCode);
+        }
+
+        if ($deleteCoachesNotInList) {
+            $coachesToDelete = array_diff($currentCoaches, $coachList);
+            if (!empty($coachesToDelete)) {
+                foreach ($coachesToDelete as $userId) {
+                    SessionManager::set_coach_to_course_session($userId, $sessionId, $courseCode, true);
+                }
+            }
+        }
     }
 }

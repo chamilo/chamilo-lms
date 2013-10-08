@@ -199,7 +199,8 @@ class CourseManager {
      * @param   string   Course code
      * @return int the status of the user in that course
      */
-    public static function get_user_in_course_status($user_id, $course_code) {
+    public static function get_user_in_course_status($user_id, $course_code)
+    {
         $result = Database::fetch_array(Database::query(
             "SELECT status FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
             WHERE course_code = '".Database::escape_string($course_code)."' AND user_id = ".Database::escape_string($user_id))
@@ -207,14 +208,19 @@ class CourseManager {
         return $result['status'];
     }
 
-    public static function get_tutor_in_course_status($user_id, $course_code) {
+    /**
+     * @param int $user_id
+     * @param string $course_code
+     * @return mixed
+     */
+    public static function get_tutor_in_course_status($user_id, $course_code)
+    {
         $result = Database::fetch_array(Database::query(
                 "SELECT tutor_id FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                 WHERE course_code = '".Database::escape_string($course_code)."' AND user_id = ".Database::escape_string($user_id))
         );
         return $result['tutor_id'];
     }
-
 
     /**
      * Unsubscribe one or more users from a course
@@ -1442,7 +1448,8 @@ class CourseManager {
      *    @param string $course_code
      *    @return array with user id
      */
-    public static function get_teacher_list_from_course_code($course_code) {
+    public static function get_teacher_list_from_course_code($course_code)
+    {
         $course_code = Database::escape_string($course_code);
         $teachers = array();
         $sql = "SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.email, u.username, u.status
@@ -2782,7 +2789,8 @@ class CourseManager {
      * @param int         human resources manager id
      * @return array    courses
      */
-    public static function get_courses_followed_by_drh($user_id) {
+    public static function get_courses_followed_by_drh($user_id)
+    {
         // Database Table Definitions
         $tbl_course             =     Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_rel_user     =     Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -2793,10 +2801,21 @@ class CourseManager {
 
         if (api_get_multiple_access_url()) {
            $sql = "SELECT *, id as real_id FROM $tbl_course c
-                    INNER JOIN $tbl_course_rel_user cru ON (cru.course_code = c.code) LEFT JOIN $tbl_course_rel_access_url a  ON (a.course_code = c.code) WHERE cru.user_id = '$user_id' AND status = ".DRH." AND relation_type = '".COURSE_RELATION_TYPE_RRHH."' AND access_url_id = ".api_get_current_access_url_id()."";
+                        INNER JOIN $tbl_course_rel_user cru ON (cru.course_code = c.code)
+                        LEFT JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
+                    WHERE
+                        cru.user_id = '$user_id' AND
+                        status = ".DRH." AND
+                        relation_type = '".COURSE_RELATION_TYPE_RRHH."' AND
+                        access_url_id = ".api_get_current_access_url_id()."";
         } else {
             $sql = "SELECT *, id as real_id FROM $tbl_course c
-                    INNER JOIN $tbl_course_rel_user cru ON cru.course_code = c.code AND cru.user_id = '$user_id' AND status = ".DRH." AND relation_type = '".COURSE_RELATION_TYPE_RRHH."' ";
+                    INNER JOIN $tbl_course_rel_user cru
+                    ON
+                        cru.course_code = c.code AND
+                        cru.user_id = '$user_id' AND
+                        status = ".DRH." AND
+                        relation_type = '".COURSE_RELATION_TYPE_RRHH."' ";
         }
         $rs_assigned_courses = Database::query($sql);
         if (Database::num_rows($rs_assigned_courses) > 0) {
@@ -2811,12 +2830,15 @@ class CourseManager {
      * check if a course is special (autoregister)
      * @param string course code
      */
-    public static function is_special_course($course_code){
+    public static function is_special_course($course_code)
+    {
         $tbl_course_field_value        = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
         $tbl_course_field             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
         $is_special = false;
-        $sql = "SELECT course_code FROM $tbl_course_field_value tcfv INNER JOIN $tbl_course_field tcf ON " .
-                " tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 AND course_code='$course_code'";
+        $sql = "SELECT course_code
+                FROM $tbl_course_field_value tcfv
+                INNER JOIN $tbl_course_field tcf ON tcfv.field_id =  tcf.id
+                WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 AND course_code='$course_code'";
         $result = Database::query($sql);
         $num_rows = Database::num_rows($result);
         if ($num_rows > 0){
@@ -3978,9 +4000,14 @@ class CourseManager {
      * @param bool $editTeacherInSessions
      * @return bool
      */
-    public static function updateTeachers($course_code, $teachers, $editTeacherInSessions = false)
+    public static function updateTeachers(
+        $course_code,
+        $teachers,
+        $deleteTeachersNotInList = true,
+        $editTeacherInSessions = false,
+        $deleteSessionTeacherNotInList = false
+    )
     {
-
         if (empty($teachers)) {
             return false;
         }
@@ -3988,20 +4015,23 @@ class CourseManager {
             $teachers = array($teachers);
         }
 
-        $alreadyAddedTeachers = CourseManager::get_teacher_list_from_course_code($course_code);
-
         $course_user_table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-        // Delete only teacher relations that doesn't match the selected teachers
-        $cond = null;
-        if (count($teachers)>0) {
-            foreach($teachers as $key) {
-                $cond.= " AND user_id <> '".$key."'";
-            }
-        }
+        $alreadyAddedTeachers = CourseManager::get_teacher_list_from_course_code($course_code);
 
-        $sql = 'DELETE FROM '.$course_user_table.' WHERE course_code="'.Database::escape_string($course_code).'" AND status="1"'.$cond;
-        Database::query($sql);
+        if ($deleteTeachersNotInList) {
+
+            // Delete only teacher relations that doesn't match the selected teachers
+            $cond = null;
+            if (count($teachers)>0) {
+                foreach($teachers as $key) {
+                    $cond.= " AND user_id <> '".$key."'";
+                }
+            }
+
+            $sql = 'DELETE FROM '.$course_user_table.' WHERE course_code="'.Database::escape_string($course_code).'" AND status="1"'.$cond;
+            Database::query($sql);
+        }
 
         if (count($teachers) > 0) {
             foreach ($teachers as $key) {
@@ -4027,19 +4057,29 @@ class CourseManager {
 
         if ($editTeacherInSessions) {
             $sessions = SessionManager::get_session_by_course($course_code);
+
             if (!empty($sessions)) {
                 foreach ($sessions as $session) {
-                    foreach ($teachers as $userId) {
-                        SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code);
-                    }
-                    $teachersToDelete = array();
-                    if (!empty($alreadyAddedTeachers)) {
-                        $teachersToDelete = array_diff(array_keys($alreadyAddedTeachers), $teachers);
-                    }
+                    // Remove old and add new
+                    if ($deleteSessionTeacherNotInList) {
+                        foreach ($teachers as $userId) {
+                            SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code);
+                        }
 
-                    if (!empty($teachersToDelete)) {
-                        foreach ($teachersToDelete as $userId) {
-                            SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code, true);
+                        $teachersToDelete = array();
+                        if (!empty($alreadyAddedTeachers)) {
+                            $teachersToDelete = array_diff(array_keys($alreadyAddedTeachers), $teachers);
+                        }
+
+                        if (!empty($teachersToDelete)) {
+                            foreach ($teachersToDelete as $userId) {
+                                SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code, true);
+                            }
+                        }
+                    } else {
+                        // Add new teachers only
+                        foreach ($teachers as $userId) {
+                            SessionManager::set_coach_to_course_session($userId, $session['id'], $course_code);
                         }
                     }
                 }

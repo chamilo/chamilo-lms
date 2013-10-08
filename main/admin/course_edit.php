@@ -164,24 +164,9 @@ if (!empty($coursesInSession)) {
         );
 
         $renderer = $form->defaultRenderer();
-
-        $element_template = <<<EOT
-	<div class="control-group">
-		<label>
-			<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
-		</label>
-		<div class="controls">
-			<table cellpadding="0" cellspacing="0">
-				<tr>
-					<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	<td>{element}</td>
-				</tr>
-			</table>
-		</div>
-	</div>
-EOT;
-
         $renderer->setElementTemplate($element_template, $groupName);
-        $form->addGroup($group, $groupName, $session['name'].' - '.get_lang('Coaches'), '</td>
+        $sessionUrl = api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$sessionId;
+        $form->addGroup($group, $groupName, Display::url($session['name'], $sessionUrl, array('target' => '_blank')).' - '.get_lang('Coaches'), '</td>
             <td width="80" align="center">
                 <input class="arrowr" style="width:30px;height:30px;padding-right:12px" type="button" onclick="moveItem(document.getElementById(\''.$platformTeacherId.'\'), document.getElementById(\''.$coachId.'\'));">
                 <br><br>

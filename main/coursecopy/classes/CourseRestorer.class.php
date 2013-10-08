@@ -226,7 +226,7 @@ class CourseRestorer
 					}
 				}
 			}
-		}		
+		}
 	}
 
 	/**
@@ -1249,7 +1249,7 @@ class CourseRestorer
                         'expired_time' => (int)$quiz->expired_time,
                         'end_button' => (int)$quiz->end_button
                     );
-                  
+
                     if ($respect_base_content) {
                         $my_session_id = $quiz->session_id;
                         if (!empty($quiz->session_id)) {
@@ -1445,7 +1445,6 @@ class CourseRestorer
 
 					$sql = "INSERT INTO ".$table_ans." SET
                                 c_id = ".$this->destination_course_id." ,
-                                id = '". ($index + 1)."',
                                 question_id = '".$new_id."',
                                 answer = '".self::DBUTF8escapestring($answer['answer'])."',
                                 correct = '".$answer['correct']."',
@@ -1978,7 +1977,7 @@ class CourseRestorer
 	 * restore works
 	 * @todo fix this crappy function
 	 */
-	function restore_student_publication() 
+	function restore_student_publication()
     {
 		$work_assignment_table  = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
 		$work_table    			= Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -2131,7 +2130,7 @@ class CourseRestorer
 		}
 	}
 
-	function restore_wiki($session_id = 0) 
+	function restore_wiki($session_id = 0)
     {
 		if ($this->course->has_resources(RESOURCE_WIKI)) {
 			// wiki table of the target course

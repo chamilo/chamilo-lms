@@ -1171,6 +1171,10 @@ class Testcategory
         return $array;
     }
 
+    /**
+     * @param FormValidator $form
+     * @param string $action
+     */
     public function getForm(& $form, $action = 'new') {
 
         switch($action) {
@@ -1192,6 +1196,7 @@ class Testcategory
         $category_parent_list = array();
 
         $options = array(
+            '' => get_lang('SelectAnOption'),
             '1' => get_lang('Visible'),
             '0' => get_lang('Hidden')
         );
@@ -1214,6 +1219,7 @@ class Testcategory
         $defaults["category_description"] = $this->description;
         $defaults["parent_id"] = $this->parent_id;
         $defaults["visibility"] = $this->visibility;
+
         $form->setDefaults($defaults);
 
         // setting the rules

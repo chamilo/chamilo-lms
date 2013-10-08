@@ -72,14 +72,14 @@ class AuthHttpsPostSend implements SendPluginInterface
         }
 
         if (!$blob_file = $this->getTemporaryFile('blob_file')) {
-            throw new SendException('auth_https_post: Unable to create correctly the temporary blob file on "%s".', $blob_file);
+            throw new SendException(sprintf('auth_https_post: Unable to create correctly the temporary blob file on "%s".', $blob_file));
         }
         if (file_put_contents($blob_file, $blob) === false) {
-            throw new SendException('auth_https_post: Unable to write correctly the temporary blob file on "%s".', $blob_file);
+            throw new SendException(sprintf('auth_https_post: Unable to write correctly the temporary blob file on "%s".', $blob_file));
         }
 
         $curl_handle = curl_init();
-        $post_data = array('name' => '@' . $blob_file);
+        $post_data = array('file' => '@' . $blob_file);
 
         // @todo See if we need to manually add the CA certificate, or default
         // is enough.
@@ -90,19 +90,19 @@ class AuthHttpsPostSend implements SendPluginInterface
         curl_setopt($curl_handle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
         curl_setopt($curl_handle, CURLOPT_USERPWD, sprintf('%s:%s', $this->user, $this->password));
 
-        $response = curl_exec($ch);
+        $response = curl_exec($curl_handle);
         if ($response === false) {
             $message = curl_error($curl_handle);
             curl_close($curl_handle);
-            throw new SendException('auth_https_post: Unable to make the POST request correctly with file "%s"', $blob_file);
+            throw new SendException(sprintf('auth_https_post: Unable to make the POST request correctly with file "%s"', $blob_file));
         }
-        curl_close($curl_handle);
 
-        if ($response != 'OK') {
+        if ($response != '0') {
             $message = curl_error($curl_handle);
             curl_close($curl_handle);
-            throw new SendException('auth_https_post: File sent, error receiving the file "%s"', $blob_file);
+            throw new SendException(sprintf('auth_https_post: File sent, error code "%s" receiving the file "%s"', $response, $blob_file));
         }
+        curl_close($curl_handle);
         unlink($blob_file);
     }
 

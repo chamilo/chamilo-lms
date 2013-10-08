@@ -915,17 +915,21 @@ class Exercise
                 $categoryParentInfo = null;
 
                 if (!empty($cat['parent_id'])) {
+
                     if (!isset($parentsLoaded[$cat['parent_id']])) {
                         $categoryEntity = $em->find('Entity\CQuizCategory', $cat['parent_id']);
                         $parentsLoaded[$cat['parent_id']] = $categoryEntity;
                     } else {
                         $categoryEntity = $parentsLoaded[$cat['parent_id']];
                     }
+
                     $path = $repo->getPath($categoryEntity);
                     $index = 0;
+
                     if ($this->categoryMinusOne) {
                         //$index = 1;
                     }
+
                     /** @var Entity\CQuizCategory $categoryParent*/
 
                     foreach ($path as $categoryParent) {
@@ -6019,6 +6023,7 @@ class Exercise
         }
 
         $categoryList = Session::read('categoryList');
+        // Use session too boost performance the variable is deleted in exercise_result.php
         $categoryList = null;
 
         if (empty($categoryList)) {
@@ -6082,6 +6087,7 @@ class Exercise
                 $newMediaList[$questionId] = $mediaId;
             }
         }
+
         $categoryList = $this->categoryWithQuestionList;
         $categoriesWithQuestion = array();
 

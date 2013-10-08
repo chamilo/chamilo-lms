@@ -533,7 +533,7 @@ if ($inATest) {
     // we are in create a new question from question pool not in a test
     echo '<div class="actions">';
     echo '<a href="'.$urlMainExercise.'admin.php?exerciseId='.$objExercise->id.'&'.api_get_cidreq().'">'.
-          Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'', ICON_SIZE_MEDIUM ).'</a>';
+          Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '</div>';
 }
 

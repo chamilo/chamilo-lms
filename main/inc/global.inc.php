@@ -697,12 +697,22 @@ $app->before(
 
 
         // Check if we are inside a Chamilo course tool
+
         $isCourseTool = (strpos($request->getPathInfo(), 'courses/') === false) ? false : true;
+
+        if (!$isCourseTool) {
+            // @todo add a before in controller in order to load the courses and course_session object
+            $isCourseTool = (strpos($request->getPathInfo(), 'question_manager/exercise_distribution/') === false) ? false : true;
+        }
+
 
         // Setting course entity for controllers and templates
         if ($isCourseTool) {
             // The course parameter is loaded
             $course = $request->get('course');
+            if (empty($course)) {
+                $course = $request->get('cidReq');
+            }
 
             // Converting /courses/XXX/ to a Entity/Course object
             $course = $app['orm.em']->getRepository('Entity\Course')->findOneByCode($course);

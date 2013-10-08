@@ -202,7 +202,9 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                 $form = generate_settings_form($settings, $settings_by_access_list, $settings_to_avoid, $convert_byte_to_mega_list);
             }
         }
-        $pdf_export_watermark_path = $_FILES['pdf_export_watermark_path'];
+        if (isset($_FILES['pdf_export_watermark_path'])) {
+            $pdf_export_watermark_path = $_FILES['pdf_export_watermark_path'];
+        }
 
         if (isset($pdf_export_watermark_path) && !empty($pdf_export_watermark_path['name'])) {
             $pdf_export_watermark_path_result = PDF::upload_watermark(

@@ -19,6 +19,7 @@ class CQuizDistributionRepository extends EntityRepository
     {
         $exerciseId = $distribution->getExerciseId();
         $exercise = new \Exercise($course->getId());
+        $exercise->loadDistributions = true;
         $exercise->read($exerciseId);
         $questionList = $exercise->getQuestionList();
         $distribution->setDataTracking(implode(',', $questionList));

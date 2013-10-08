@@ -101,6 +101,7 @@ class Exercise
     public $categoryMinusOne = true; // Shows the category -1: See BT#6540
     public $globalCategoryId = null;
     public $distributionId = 0;
+    public $loadDistributions = false;
 
     /**
      * Constructor of the class
@@ -236,7 +237,7 @@ class Exercise
             $this->expired_time = $object->expired_time;
 
             if ($parseQuestionList) {
-                $this->setQuestionList();
+                $this->setQuestionList($this->loadDistributions);
             }
 
             //overload questions list with recorded questions list
@@ -2271,7 +2272,6 @@ class Exercise
         $this->setModelType($form->getSubmitValue('model_type'));
         $this->setQuestionSelectionType($form->getSubmitValue('question_selection_type'));
         $this->setHideQuestionTitle($form->getSubmitValue('hide_question_title'));
-        var_dump($values);
         $this->setScoreTypeModel($form->getSubmitValue('score_type_model'));
         $this->setGlobalCategoryId($form->getSubmitValue('global_category_id'));
 
@@ -5453,50 +5453,51 @@ class Exercise
     /**
      * Sets the question list when the exercise->read() is executed
      */
-    public function setQuestionList()
+    public function setQuestionList($loadDistributions = false)
     {
         // Getting question list.
         $questionList = $this->selectQuestionList(true);
 
         // Looking for distributions
         $trackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        if ($loadDistributions) {
+            $sessionId = api_get_session_id();
+            $result = Database::query("SELECT count(exe_id) as count FROM $trackExercises WHERE session_id = $sessionId");
 
-        $sessionId = api_get_session_id();
-        $result = Database::query("SELECT count(exe_id) as count FROM $trackExercises WHERE session_id = $sessionId");
+            if (Database::num_rows($result)) {
+                $result = Database::fetch_array($result);
+                $count = $result['count'];
+                global $app;
+                /** @var \Doctrine\manager $em */
+                $em = $app['orm.em'];
 
-        if (Database::num_rows($result)) {
-            $result = Database::fetch_array($result);
-            $count = $result['count'];
-            global $app;
-            /** @var \Doctrine\manager $em */
-            $em = $app['orm.em'];
+                $params = array(
+                    'exerciseId' => $this->id,
+                    'sessionId' => $sessionId,
+                    'cId' => $this->course_id
+                );
 
-            $params = array(
-                'exerciseId' => $this->id,
-                'sessionId' => $sessionId,
-                'cId' => $this->course_id
-            );
+                $quizDistributionRelSessions = $em->getRepository("Entity\CQuizDistributionRelSession")->findBy($params);
+                if ($quizDistributionRelSessions) {
+                    $formToUse = $count % (count($quizDistributionRelSessions));
+                    /** @var \Entity\CQuizDistributionRelSession  $quizDistributionRelSession */
+                    if (isset($quizDistributionRelSessions[$formToUse])) {
+                        $quizDistributionRelSession = $quizDistributionRelSessions[$formToUse];
 
-            $quizDistributionRelSessions = $em->getRepository("Entity\CQuizDistributionRelSession")->findBy($params);
-            if ($quizDistributionRelSessions) {
-                $formToUse = $count % (count($quizDistributionRelSessions));
-                /** @var \Entity\CQuizDistributionRelSession  $quizDistributionRelSession */
-                if (isset($quizDistributionRelSessions[$formToUse])) {
-                    $quizDistributionRelSession = $quizDistributionRelSessions[$formToUse];
+                        $this->distributionId = $quizDistributionRelSession->getQuizDistributionId();
 
-                    $this->distributionId = $quizDistributionRelSession->getQuizDistributionId();
+                        $distribution = $quizDistributionRelSession->getDistribution();
 
-                    $distribution = $quizDistributionRelSession->getDistribution();
-                    var_dump($distribution);exit;
-                    $dataTracking = array();
+                        $dataTracking = array();
 
-                    if ($distribution) {
-                        $dataTracking = $distribution->getDataTracking();
-                    }
-                    if (!empty($dataTracking)) {
-                        $questionList = explode(',', $dataTracking);
-                        if (!empty($questionList)) {
-                            shuffle($questionList);
+                        if ($distribution) {
+                            $dataTracking = $distribution->getDataTracking();
+                        }
+                        if (!empty($dataTracking)) {
+                            $questionList = explode(',', $dataTracking);
+                            if (!empty($questionList)) {
+                                shuffle($questionList);
+                            }
                         }
                     }
                 }

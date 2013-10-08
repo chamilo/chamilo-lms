@@ -52,6 +52,7 @@ class LegacyController extends CommonController
             $text_dir = api_get_text_direction();
             $is_platformAdmin = api_is_platform_admin();
             $_cid = api_get_course_id();
+            $is_courseTutor = api_is_course_tutor();
 
             // Loading file
             ob_start();

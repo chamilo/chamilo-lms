@@ -2003,9 +2003,9 @@ class SessionManager
         }
 
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_user           = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $tbl_session_course         = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $tbl_session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tbl_session_course  = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         $sessions = array();
 
@@ -2236,6 +2236,7 @@ class SessionManager
                         if ($debug) {
                             $logger->addInfo("Sessions - Adding course '$course_code' to session #$session_id");
                         }
+
                         $course_counter++;
 
                         $pattern = "/\[(.*?)\]/";
@@ -2282,9 +2283,6 @@ class SessionManager
                                     $error_message .= get_lang('UserDoesNotExist').' : '.$course_coach.$eol;
                                 }
                             }
-
-
-
                         }
 
                         $users_in_course_counter = 0;
@@ -2310,7 +2308,7 @@ class SessionManager
                             }
                         }
 
-                        $sql = "UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE course_code='$course_code'";
+                        $sql = "UPDATE $tbl_session_course SET nbr_users = '$users_in_course_counter' WHERE course_code = '$course_code'";
                         Database::query($sql);
 
                         $course_info = CourseManager::get_course_information($course_code);
@@ -2319,7 +2317,7 @@ class SessionManager
                 }
                 $access_url_id = api_get_current_access_url_id();
                 UrlManager::add_session_to_url($session_id, $access_url_id);
-                $sql_update_users = "UPDATE $tbl_session SET nbr_users='$user_counter', nbr_courses='$course_counter' WHERE id='$session_id'";
+                $sql_update_users = "UPDATE $tbl_session SET nbr_users = '$user_counter', nbr_courses = '$course_counter' WHERE id = '$session_id'";
                 Database::query($sql_update_users);
             }
         }
@@ -2392,5 +2390,28 @@ class SessionManager
             }
         }
         return $userList;
+    }
+
+    /**
+     * @param $sessionId
+     * @param $coachList
+     * @param $deleteCoachesNotInList
+     */
+    public static function updateCoaches($sessionId, $courseCode, $coachList, $deleteCoachesNotInList = false)
+    {
+        $currentCoaches = SessionManager::getCoachesByCourseSession($sessionId, $courseCode);
+
+        foreach ($coachList as $userId) {
+            SessionManager::set_coach_to_course_session($userId, $sessionId, $courseCode);
+        }
+
+        if ($deleteCoachesNotInList) {
+            $coachesToDelete = array_diff($currentCoaches, $coachList);
+            if (!empty($coachesToDelete)) {
+                foreach ($coachesToDelete as $userId) {
+                    SessionManager::set_coach_to_course_session($userId, $sessionId, $courseCode, true);
+                }
+            }
+        }
     }
 }

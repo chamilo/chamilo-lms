@@ -972,11 +972,11 @@ function api_valid_email($address) {
  */
 function api_protect_course_script($print_headers = false, $allow_session_admins = false, $allow_drh = false) {
     $is_allowed_in_course = Session::read('is_allowed_in_course');
-    $is_visible = false;
 
+    $is_visible = false;
     $course_info = api_get_course_info();
 
-    //If course is not set then is not allowed to enter in a course page
+    // If course is not set then is not allowed to enter in a course page
 
     if (empty($course_info)) {
         api_not_allowed($print_headers);
@@ -1004,6 +1004,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     			}
     			break;
     		case COURSE_VISIBILITY_OPEN_PLATFORM: // Open - access allowed for users registered on the platform - 2
+
     			if (api_get_user_id() && !api_is_anonymous()) {
     				$is_visible = true;
     			}
@@ -1018,8 +1019,9 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     	}
     }
 
-    //Check session visibility
+    // Check session visibility
     $session_id = api_get_session_id();
+
 
     if (!empty($session_id)) {
         //$is_allowed_in_course was set in local.inc.php

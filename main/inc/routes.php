@@ -3,8 +3,7 @@
 
 use Symfony\Component\HttpFoundation\Request;
 use \ChamiloSession as Session;
-
-
+/* can't mount */
 $settingNewCourseConditions = function (Request $request) use ($cidReset, $app) {
     // The course parameter is loaded
     $course = $request->get('cidReq');
@@ -45,33 +44,28 @@ $settingCourseConditions = function (Request $request) use ($cidReset, $app) {
     $tempSessionId = api_get_session_id();
 
     $courseReset = false;
+    $sessionReset = false;
+    $groupReset = false;
+
     if ((!empty($cidReq) && $tempCourseId != $cidReq) || empty($tempCourseId) || empty($tempCourseId) == -1) {
         $courseReset = true;
     }
 
     if (isset($cidReset) && $cidReset == 1) {
         $courseReset = true;
+        $sessionReset = true;
+        $groupReset = true;
     }
 
     Session::write('courseReset', $courseReset);
 
-    $groupReset = false;
     if ($tempGroupId != $groupId || empty($tempGroupId)) {
         $groupReset = true;
     }
 
-    $sessionReset = false;
     if ($tempSessionId != $sessionId || empty($tempSessionId)) {
         $sessionReset = true;
     }
-    /*
-        $app['monolog']->addDebug('Start');
-        $app['monolog']->addDebug($courseReset);
-        $app['monolog']->addDebug($cidReq);
-        $app['monolog']->addDebug($tempCourseId);
-        $app['monolog']->addDebug('End');
-    */
-
 
     if ($courseReset) {
         if (!empty($cidReq) && $cidReq != -1) {
@@ -85,7 +79,6 @@ $settingCourseConditions = function (Request $request) use ($cidReset, $app) {
                 Session::write('_cid', $courseCode);
                 Session::write('_course', $courseInfo);
 
-
             } else {
                 $app->abort(404, 'Course not available');
             }
@@ -93,6 +86,9 @@ $settingCourseConditions = function (Request $request) use ($cidReset, $app) {
             Session::erase('_real_cid');
             Session::erase('_cid');
             Session::erase('_course');
+            Session::erase('session_name');
+            Session::erase('id_session');
+            Session::erase('_gid');
         }
     }
 
@@ -153,7 +149,7 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
 
     //If I'm the admin platform i'm a teacher of the course
     $is_platformAdmin = api_is_platform_admin();
-    $courseReset      = Session::read('courseReset');
+    $courseReset = Session::read('courseReset');
 
     //$app['monolog']->addDebug($courseReset);
     //$app['monolog']->addDebug($courseId);
@@ -281,7 +277,7 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
                                     Session::write('_courseUser', $_courseUser);
                                     break;
                                 default:
-                                    // Unregister user
+                                    // Un-register user
                                     $_courseUser['role'] = '';
                                     $is_courseMember     = false;
                                     $is_courseTutor      = false;
@@ -292,7 +288,7 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
                                     break;
                             }
                         } else {
-                            //Unregister user
+                            // Un-register user
                             $is_courseMember = false;
                             $is_courseTutor  = false;
                             $is_courseAdmin  = false;
@@ -416,6 +412,7 @@ $removeCidReset = function (Request $request) use ($app) {
 
     // Deleting group info.
     Session::erase('_gid');
+
 };
 
 $removeCidResetDependingOfSection = function (Request $request) use ($app, $removeCidReset) {
@@ -703,6 +700,6 @@ if ($alreadyInstalled) {
         '/admin/question_manager/exercise_distribution',
         new ChamiloLMS\Provider\ReflectionControllerProvider('exercise_distribution.controller')
     ) // sets the course and session
-    ->before($settingNewCourseConditions);
+    ;
 }
 

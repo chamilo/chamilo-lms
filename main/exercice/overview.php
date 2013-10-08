@@ -14,7 +14,6 @@ use \ChamiloSession as Session;
 
 $language_file = 'exercice';
 require_once 'exercise.class.php';
-require_once '../inc/global.inc.php';
 
 $current_course_tool  = TOOL_QUIZ;
 

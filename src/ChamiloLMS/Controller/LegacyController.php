@@ -17,7 +17,6 @@ use \ChamiloSession as Session;
 class LegacyController extends CommonController
 {
     public $section;
-    public $language_files = array('courses', 'index', 'admin');
 
     /**
     * Handles default Chamilo scripts handled by Display::display_header() and display_footer()

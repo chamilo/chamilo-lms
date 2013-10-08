@@ -445,7 +445,8 @@ class TransactionLogController
      * @return array
      *   Two keys are provided:
      *   - 'success': A set of transaction ids correctly added.
-     *   - 'fail': A set of transaction ids that failed to be added.
+     *   - 'fail': A set of exception erros keyed by transaction id
+     *     corresponding to each failed transaction.
      */
     public function exportTransactions(&$transactions)
     {
@@ -459,9 +460,9 @@ class TransactionLogController
             try {
                 $transaction->export();
                 $exported_transactions[] = $transaction;
-                $exported_ids['success'][] = $transaction->id;
+                $exported_ids['success'][$transaction->id] = $transaction->id;
             } catch (Exception $export_exception) {
-                $exported_ids['fail'][] = $transaction->id;
+                $exported_ids['fail'][$transaction->id] = $export_exception->getMessage();
             }
         }
 

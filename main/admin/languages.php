@@ -131,24 +131,24 @@ $tbl_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
  */
 
 // we change the availability
-if ($_GET['action'] == 'makeunavailable') {
+if (isset($_GET['action']) && $_GET['action'] == 'makeunavailable') {
     if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
         SubLanguageManager::make_unavailable_language($_GET['id']);
     }
 }
-if ($_GET['action'] == 'makeavailable') {
+if (isset($_GET['action']) && $_GET['action'] == 'makeavailable') {
     if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
         SubLanguageManager::make_available_language($_GET['id']);
     }
 }
-if ($_GET['action'] == 'setplatformlanguage') {
+if (isset($_GET['action']) && $_GET['action'] == 'setplatformlanguage') {
     if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
         SubLanguageManager::set_platform_language($_GET['id']);
     }
 }
 
 
-if ($_POST['Submit']) {
+if (isset($_POST['Submit']) && $_POST['Submit']) {
     // changing the name
     $sql_update = "UPDATE $tbl_admin_languages SET original_name='{$_POST['txt_name']}' WHERE id='{$_POST['edit_id']}'";
     $result = Database::query($sql_update);
@@ -232,7 +232,7 @@ while ($row = Database::fetch_array($result_select)) {
     $row_td = array();
     $row_td[] = $row['id'];
     // the first column is the original name of the language OR a form containing the original name
-    if ($_GET['action'] == 'edit' and $row['id'] == $_GET['id']) {
+    if (isset($_GET['action']) and $_GET['action'] == 'edit' and $row['id'] == $_GET['id']) {
         if ($row['english_name'] == api_get_setting('platformLanguage')) {
             $checked = ' checked="checked" ';
         }
@@ -255,6 +255,9 @@ while ($row = Database::fetch_array($result_select)) {
         $setplatformlanguage = "<a href=\"javascript:if (confirm('" . addslashes(get_lang('AreYouSureYouWantToSetThisLanguageAsThePortalDefault')) . "')) { location.href='" . api_get_self() . "?action=setplatformlanguage&id=" . $row['id'] . "'; }\">" . Display::return_icon('languages_na.png', get_lang('SetLanguageAsDefault'), '', ICON_SIZE_SMALL) . "</a>";
     }
 
+    $allow_use_sub_language = '';
+    $allow_add_term_sub_language = '';
+    $allow_delete_sub_language = '';
     if (api_get_setting('allow_use_sub_language') == 'true') {
 
         $verified_if_is_sub_language = SubLanguageManager::check_if_language_is_sub_language($row['id']);
@@ -274,9 +277,6 @@ while ($row = Database::fetch_array($result_select)) {
             $allow_add_term_sub_language = "&nbsp;<a href='sub_language.php?action=registersublanguage&id=" . Security::remove_XSS($all_information_of_sub_language['parent_id']) . "&sub_language_id=" . Security::remove_XSS($row['id']) . "'>" . Display::return_icon('2rightarrow.gif', get_lang('AddWordForTheSubLanguage'), array('width' => ICON_SIZE_SMALL, 'height' => ICON_SIZE_SMALL)) . "</a>";
             $allow_delete_sub_language = "&nbsp;<a href='sub_language_add.php?action=deletesublanguage&id=" . Security::remove_XSS($all_information_of_sub_language['parent_id']) . "&sub_language_id=" . Security::remove_XSS($row['id']) . "'>" . Display::return_icon('delete.png', get_lang('DeleteSubLanguage'), array('width' => ICON_SIZE_SMALL, 'height' => ICON_SIZE_SMALL)) . "</a>";
         }
-    } else {
-        $allow_use_sub_language = '';
-        $allow_add_term_sub_language = '';
     }
 
     if ($row['english_name'] == $row_lang['selected_value']) {

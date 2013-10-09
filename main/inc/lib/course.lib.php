@@ -4016,7 +4016,6 @@ class CourseManager {
         }
 
         $course_user_table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
         $alreadyAddedTeachers = CourseManager::get_teacher_list_from_course_code($course_code);
 
         if ($deleteTeachersNotInList) {

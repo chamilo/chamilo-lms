@@ -785,7 +785,20 @@ class SessionManager
         }
 	}
 
-    function subscribe_users_to_session_course($user_list, $session_id, $course_code, $session_visibility = SESSION_VISIBLE_READ_ONLY ) {
+    /**
+     * @param array $user_list
+     * @param int $session_id
+     * @param string $course_code
+     * @param int $session_visibility
+     * @return bool
+     */
+    public static function subscribe_users_to_session_course(
+        $user_list,
+        $session_id,
+        $course_code,
+        $session_visibility = SESSION_VISIBLE_READ_ONLY
+    )
+    {
         $tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
@@ -798,24 +811,41 @@ class SessionManager
         $session_visibility = intval($session_visibility);
 
         $nbr_users = 0;
+        /*AND
+        visibility = $session_visibility*/
         foreach ($user_list as $enreg_user) {
-            //if (!in_array($enreg_user, $existingUsers)) {
-                $enreg_user = intval($enreg_user);
+            $enreg_user = intval($enreg_user);
+            $sql = "SELECT count(id_user) as count
+                    FROM $tbl_session_rel_course_rel_user
+                    WHERE id_session = $session_id AND
+                          course_code = '$course_code' and
+                          id_user = $enreg_user ";
+            $result = Database::query($sql);
+            $count = 0;
+
+            if (Database::num_rows($result) > 0) {
+                $row = Database::fetch_array($result, 'ASSOC');
+                $count = $row['count'];
+            }
+
+            if ($count == 0) {
                 $insert_sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user,visibility)
                                VALUES ('$session_id','$course_code','$enreg_user','$session_visibility')";
                 Database::query($insert_sql);
                 if (Database::affected_rows()) {
                     $nbr_users++;
                 }
-            //}
+            }
         }
 
         // count users in this session-course relation
-        $sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$session_id' AND course_code='$course_code' AND status<>2";
+        $sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user
+                WHERE id_session='$session_id' AND course_code='$course_code' AND status<>2";
         $rs = Database::query($sql);
         list($nbr_users) = Database::fetch_array($rs);
         // update the session-course relation to add the users total
-        $update_sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$session_id' AND course_code='$course_code'";
+        $update_sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users
+                       WHERE id_session='$session_id' AND course_code='$course_code'";
         Database::query($update_sql);
     }
 
@@ -2159,6 +2189,7 @@ class SessionManager
                         }
                     } else {
 
+                        // Updating the session.
                         $params = array(
                             'id_coach' =>  $coach_id,
                             'date_start' => $date_start,
@@ -2178,7 +2209,6 @@ class SessionManager
                         }
 
                         if (isset($sessionId) && !empty($sessionId)) {
-                            // The session already exists, update it then.
                             Database::update($tbl_session, $params, array('id = ?' => $sessionId));
                             $session_id = $sessionId;
                         } else {
@@ -2196,7 +2226,9 @@ class SessionManager
 
                         Database::query("DELETE FROM $tbl_session_user WHERE id_session='$session_id'");
                         Database::query("DELETE FROM $tbl_session_course WHERE id_session='$session_id'");
-                        Database::query("DELETE FROM $tbl_session_course_user WHERE id_session='$session_id'");
+
+                        // Delete session course user relation ships *only* for students
+                        Database::query("DELETE FROM $tbl_session_course_user WHERE id_session='$session_id' AND status <> 2");
                     }
                     $session_counter++;
                 }
@@ -2228,6 +2260,8 @@ class SessionManager
 
                     if (CourseManager::course_exists($course_code)) {
 
+                        $courseInfo = api_get_course_info($course_code);
+
                         // Adding the course to a session.
                         $sql_course = "INSERT IGNORE INTO $tbl_session_course
                                        SET course_code = '$course_code', id_session='$session_id'";
@@ -2250,66 +2284,79 @@ class SessionManager
                         $course_users   = explode(',', $course_users);
                         $course_coaches = explode(',', $course_coaches);
 
+                        // Checking if the flag is set TeachersWillBeAddedAsCoachInAllCourseSessions (course_edit.php)
+                        $addTeachersToSession = true;
+                        if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {
+                            $addTeachersToSession = $courseInfo['add_teachers_to_sessions_courses'];
+                        }
+
                         // Adding coaches to session course user
                         if (!empty($course_coaches)) {
-
                             $savedCoaches = array();
-                            // Adding course teachers as course session teachers
-                            $alreadyAddedTeachers = CourseManager::get_teacher_list_from_course_code($course_code);
+                            // only edit if add_teachers_to_sessions_courses is set.
+                            if ($addTeachersToSession) {
+                                // Adding course teachers as course session teachers
+                                $alreadyAddedTeachers = CourseManager::get_teacher_list_from_course_code($course_code);
 
-                            if (!empty($alreadyAddedTeachers)) {
-                                $teachersToAdd = array();
-                                foreach ($alreadyAddedTeachers as $user) {
-                                    $teachersToAdd[] = $user['username'];
-                                }
-                                $course_coaches = array_merge($course_coaches, $teachersToAdd);
-                            }
-
-                            foreach ($course_coaches as $course_coach) {
-                                $course_coach = trim($course_coach);
-                                $coach_id = UserManager::get_user_id_from_username($course_coach);
-                                if ($coach_id !== false) {
-                                    $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
-                                            id_user = '$coach_id',
-                                            course_code = '$course_code',
-                                            id_session = '$session_id',
-                                            status = 2 ";
-                                    Database::query($sql);
-                                    if ($debug) {
-                                        $logger->addInfo("Sessions - Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
+                                if (!empty($alreadyAddedTeachers)) {
+                                    $teachersToAdd = array();
+                                    foreach ($alreadyAddedTeachers as $user) {
+                                        $teachersToAdd[] = $user['username'];
                                     }
-                                    $savedCoaches[] = $coach_id;
-                                } else {
-                                    $error_message .= get_lang('UserDoesNotExist').' : '.$course_coach.$eol;
+                                    $course_coaches = array_merge($course_coaches, $teachersToAdd);
+                                }
+
+
+                                foreach ($course_coaches as $course_coach) {
+                                    $course_coach = trim($course_coach);
+                                    $coach_id = UserManager::get_user_id_from_username($course_coach);
+                                    if ($coach_id !== false) {
+                                        // Just insert new coaches
+                                        SessionManager::updateCoaches($session_id, $course_code, array($coach_id), false);
+                                        /*$sql = "INSERT IGNORE INTO $tbl_session_course_user SET
+                                                id_user = '$coach_id',
+                                                course_code = '$course_code',
+                                                id_session = '$session_id',
+                                                status = 2 ";
+                                        Database::query($sql);*/
+
+                                        if ($debug) {
+                                            $logger->addInfo("Sessions - Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
+                                        }
+                                        $savedCoaches[] = $coach_id;
+                                    } else {
+                                        $error_message .= get_lang('UserDoesNotExist').' : '.$course_coach.$eol;
+                                    }
                                 }
                             }
                         }
 
-                        $users_in_course_counter = 0;
+                        //$users_in_course_counter = 0;
 
-                        // Adding the relationship "Session - Course - User".
+                        // Adding Students, updating relationship "Session - Course - User".
 
                         foreach ($course_users as $user) {
                             $user = trim($user);
                             $user_id = UserManager::get_user_id_from_username($user);
 
                             if ($user_id !== false) {
-                                $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
+                                SessionManager::subscribe_users_to_session_course(array($user_id), $session_id, $course_code);
+                                /*$sql = "INSERT IGNORE INTO $tbl_session_course_user SET
                                         id_user='$user_id',
                                         course_code='$course_code',
                                         id_session = '$session_id'";
-                                Database::query($sql);
+                                Database::query($sql);*/
                                 if ($debug) {
                                     $logger->addInfo("Sessions - Adding student: user #$user_id ($user) to course: '$course_code' and session #$session_id");
                                 }
-                                $users_in_course_counter++;
+                                //$users_in_course_counter++;
                             } else {
                                 $error_message .= get_lang('UserDoesNotExist').': '.$user.$eol;
                             }
                         }
 
-                        $sql = "UPDATE $tbl_session_course SET nbr_users = '$users_in_course_counter' WHERE course_code = '$course_code'";
-                        Database::query($sql);
+                        /*$sql = "UPDATE $tbl_session_course SET nbr_users = '$users_in_course_counter' WHERE course_code = '$course_code'";
+                        Database::query($sql);*/
 
                         $course_info = CourseManager::get_course_information($course_code);
                         $inserted_in_course[$course_code] = $course_info['title'];
@@ -2393,20 +2440,28 @@ class SessionManager
     }
 
     /**
-     * @param $sessionId
-     * @param $coachList
-     * @param $deleteCoachesNotInList
+     * @param int $sessionId
+     * @param string $courseCode
+     * @param array $coachList
+     * @param bool $deleteCoachesNotInList
      */
     public static function updateCoaches($sessionId, $courseCode, $coachList, $deleteCoachesNotInList = false)
     {
         $currentCoaches = SessionManager::getCoachesByCourseSession($sessionId, $courseCode);
 
-        foreach ($coachList as $userId) {
-            SessionManager::set_coach_to_course_session($userId, $sessionId, $courseCode);
+        if (!empty($coachList)) {
+            foreach ($coachList as $userId) {
+                SessionManager::set_coach_to_course_session($userId, $sessionId, $courseCode);
+            }
         }
 
         if ($deleteCoachesNotInList) {
-            $coachesToDelete = array_diff($currentCoaches, $coachList);
+            if (!empty($coachList)) {
+                $coachesToDelete = array_diff($currentCoaches, $coachList);
+            } else {
+                $coachesToDelete = $currentCoaches;
+            }
+
             if (!empty($coachesToDelete)) {
                 foreach ($coachesToDelete as $userId) {
                     SessionManager::set_coach_to_course_session($userId, $sessionId, $courseCode, true);

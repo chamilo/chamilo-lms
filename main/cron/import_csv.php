@@ -528,8 +528,6 @@ class ImportCsv
             foreach ($data as $row) {
                 $row = $this->cleanCourseRow($row);
                 $courseCode = CourseManager::get_course_id_from_original_id($row['extra_'.$this->extraFieldIdNameList['course']], $this->extraFieldIdNameList['course']);
-
-                //$courseInfo = api_get_course_info($row['course_code']);
                 $courseInfo = api_get_course_info($courseCode);
                 if (empty($courseInfo)) {
                     // Create

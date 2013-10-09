@@ -1549,7 +1549,6 @@ class HTML_QuickForm extends HTML_Common
         foreach ($this->_rules as $target => $rules) {
             $submitValue = $this->getSubmitValue($target);
 
-
             foreach ($rules as $rule) {
                 if ((isset($rule['group']) && isset($this->_errors[$rule['group']])) ||
                      isset($this->_errors[$target])) {

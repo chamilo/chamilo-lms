@@ -2393,9 +2393,10 @@ class SessionManager
     }
 
     /**
-     * @param $sessionId
-     * @param $coachList
-     * @param $deleteCoachesNotInList
+     * @param int $sessionId
+     * @param string $courseCode
+     * @param array $coachList
+     * @param bool $deleteCoachesNotInList
      */
     public static function updateCoaches($sessionId, $courseCode, $coachList, $deleteCoachesNotInList = false)
     {

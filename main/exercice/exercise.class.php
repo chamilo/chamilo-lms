@@ -5485,6 +5485,7 @@ class Exercise
                 );
 
                 $quizDistributionRelSessions = $em->getRepository("Entity\CQuizDistributionRelSession")->findBy($params);
+
                 if ($quizDistributionRelSessions) {
                     $formToUse = $count % (count($quizDistributionRelSessions));
                     /** @var \Entity\CQuizDistributionRelSession  $quizDistributionRelSession */
@@ -6023,6 +6024,7 @@ class Exercise
         }
 
         $categoryList = Session::read('categoryList');
+
         // Use session too boost performance the variable is deleted in exercise_result.php
         $categoryList = null;
 
@@ -6258,6 +6260,7 @@ class Exercise
                         $categoryName  = $category['parent_info']['title'];
                     }
                 }
+
                 $html .= '<div class="">';
                 $html .= '<div class="exercise_progress_bars_cat">'.$categoryName.'</div>';
                 $html .= '<div class="exercise_progress_bars_cat_items">';
@@ -6792,6 +6795,7 @@ class Exercise
             $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
 
             if (api_is_allowed_to_session_edit()) {
+
                 update_event_exercise(
                     $exercise_stat_info['exe_id'],
                     $this->selectId(),
@@ -6806,6 +6810,7 @@ class Exercise
                     array()
                 );
 
+                /*
                 $log_transactions_settings = TransactionLog::getTransactionSettings();
                 if (isset($log_transactions_settings['exercise_attempt'])) {
                     $transaction_controller = new TransactionLogController();
@@ -6826,7 +6831,7 @@ class Exercise
                         $transaction = $transaction_controller->createTransaction('exercise_attempt', $transaction_data);
                     }
                     $transaction->save();
-                }
+                }*/
             }
 
             // Send notification.
@@ -7815,7 +7820,7 @@ class Exercise
         $data_tracking  = $exercise_stat_info['data_tracking'];
         $data_tracking  = explode(',', $data_tracking);
 
-        // if this is the final question do nothing.
+        // If this is the final question do nothing.
         if ($currentQuestion == count($data_tracking)) {
             return null;
         }
@@ -7831,8 +7836,12 @@ class Exercise
                 }
             }
 
-            // Checking answered questions
+            // Only use this feature if all questions were answered and there are contents in the $remindList
+            /*if (count($answeredQuestions) == count($result['question_list']) && empty($remindList)) {
+                return null;
+            }*/
 
+            // Checking answered questions
             $counterAnsweredQuestions = 0;
             foreach ($data_tracking as $questionId) {
                 if (!in_array($questionId, $answeredQuestions)) {
@@ -7857,13 +7866,32 @@ class Exercise
                     $counterRemindListQuestions++;
                 }
 
-                if ($counterRemindListQuestions < $currentQuestion) {
+                //var_dump($currentQuestion, $counterRemindListQuestions, $counterAnsweredQuestions);
+
+                // Which is near to the current question?
+                $diffReminder = $counterRemindListQuestions - $currentQuestion;
+
+                $diffAnswered = $counterAnsweredQuestions - $currentQuestion;
+
+
+
+                // if the reminder id is bigger thatn the answered and the reminder is smaller thatn the current question
+                if ($counterRemindListQuestions > $counterAnsweredQuestions && !empty($remindList) && $counterRemindListQuestions < $currentQuestion) {
                     return null;
                 }
 
-                if (!empty($counterRemindListQuestions)) {
-                    if ($counterRemindListQuestions > $counterAnsweredQuestions) {
-                        return $counterAnsweredQuestions;
+                if ($diffReminder > $diffAnswered) {
+
+                    return $counterAnsweredQuestions;
+                } else {
+
+                    if ($diffReminder < 0) {
+                        //var_dump($currentQuestion, $counterAnsweredQuestions);
+                        if ($currentQuestion > $counterAnsweredQuestions) {
+                            return null;
+                        } else {
+                            return $counterAnsweredQuestions;
+                        }
                     } else {
                         return $counterRemindListQuestions;
                     }

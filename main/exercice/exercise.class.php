@@ -7859,7 +7859,8 @@ class Exercise
                 foreach ($data_tracking as $questionId) {
                     if (in_array($questionId, $remindList)) {
                         // Skip the current question
-                        if ($currentQuestion != $counterRemindListQuestions) {
+                        if ($currentQuestion != $counterRemindListQuestions &&
+                            $counterRemindListQuestions > $currentQuestion) {
                             break;
                         }
                     }
@@ -7869,11 +7870,9 @@ class Exercise
                 //var_dump($currentQuestion, $counterRemindListQuestions, $counterAnsweredQuestions);
 
                 // Which is near to the current question?
+
                 $diffReminder = $counterRemindListQuestions - $currentQuestion;
-
                 $diffAnswered = $counterAnsweredQuestions - $currentQuestion;
-
-
 
                 // if the reminder id is bigger thatn the answered and the reminder is smaller thatn the current question
                 if ($counterRemindListQuestions > $counterAnsweredQuestions && !empty($remindList) && $counterRemindListQuestions < $currentQuestion) {
@@ -7882,11 +7881,25 @@ class Exercise
 
                 if ($diffReminder > $diffAnswered) {
 
-                    return $counterAnsweredQuestions;
+                    if ($diffAnswered < 0) {
+
+                        if (count($data_tracking) == $counterRemindListQuestions) {
+                            return null;
+                        }
+                        return $counterRemindListQuestions;
+/*
+                        return null;
+                        if ($currentQuestion > $counterAnsweredQuestions) {
+
+                        } else {
+                            return $counterRemindListQuestions;
+                        }*/
+                    } else {
+                        return $counterAnsweredQuestions;
+                    }
                 } else {
 
                     if ($diffReminder < 0) {
-                        //var_dump($currentQuestion, $counterAnsweredQuestions);
                         if ($currentQuestion > $counterAnsweredQuestions) {
                             return null;
                         } else {

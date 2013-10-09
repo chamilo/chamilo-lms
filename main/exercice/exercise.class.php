@@ -239,23 +239,8 @@ class Exercise
             if ($parseQuestionList) {
                 $this->setQuestionList($this->loadDistributions);
             }
-
-            //overload questions list with recorded questions list
-            //load questions only for exercises of type 'one question per page'
-            //this is needed only is there is no questions
-            /*
-            // @todo not sure were in the code this is used somebody mess with the exercise tool
-            // @todo don't know who add that config and why $_configuration['live_exercise_tracking']
-            global $_configuration, $questionList;
-            if ($this->type == ONE_PER_PAGE && $_SERVER['REQUEST_METHOD'] != 'POST' && defined('QUESTION_LIST_ALREADY_LOGGED') &&
-            isset($_configuration['live_exercise_tracking']) && $_configuration['live_exercise_tracking']) {
-            $this->questionList = $questionList;
-            } */
-
             return true;
         }
-
-        // exercise not found
         return false;
     }
 
@@ -5502,7 +5487,7 @@ class Exercise
                         if (!empty($dataTracking)) {
                             $questionList = explode(',', $dataTracking);
                             if (!empty($questionList)) {
-                                shuffle($questionList);
+                                //shuffle($questionList);
                             }
                         }
                     }

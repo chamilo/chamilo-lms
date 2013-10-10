@@ -3271,14 +3271,14 @@ class DocumentManager {
     }
 
     /**
-     * @param $courseCode
-     * @return string
+     * @param string $courseCode
+     * @return string 'visible' or 'invisible' string
      */
     public static function getDocumentDefaultVisibility($courseCode)
     {
         $setting = api_get_setting('tool_visible_by_default_at_creation');
 
-        $courseVisibility = 'visible';
+        $defaultVisibility = 'visible';
 
         if (isset($setting[TOOL_DOCUMENT])) {
             $portalDefaultVisibility =  'invisible';
@@ -3286,13 +3286,16 @@ class DocumentManager {
                 $portalDefaultVisibility = 'visible';
             }
 
-            $courseVisibility = $portalDefaultVisibility;
+            $defaultVisibility = $portalDefaultVisibility;
         }
 
         if (api_get_setting('documents_default_visibility_defined_in_course') == 'true') {
             $courseVisibility = api_get_course_setting('documents_default_visibility', $courseCode);
+            if (!empty($courseVisibility) && in_array($courseVisibility, array('visible', 'invisible'))) {
+                $defaultVisibility = $courseVisibility;
+            }
         }
-        return $courseVisibility;
+        return $defaultVisibility;
     }
 
 }

@@ -24,6 +24,7 @@ if (empty($lp_controller_touched)) {
     header('location: lp_controller.php?action=content&lp_id='.Security::remove_XSS($_REQUEST['lp_id']).'&item_id='.Security::remove_XSS($_REQUEST['item_id']));
     exit;
 }
+
 $_SESSION['oLP']->error = '';
 $lp_type = $_SESSION['oLP']->get_type();
 $lp_item_id = $_SESSION['oLP']->get_current_item_id();

@@ -4085,4 +4085,91 @@ class CourseManager {
             }
         }
     }
+
+    /**
+     * Course available settings variables see c_course_setting table
+     * @return array
+     */
+    public static function getCourseSettingVariables()
+    {
+        return array(
+            // Get allow_learning_path_theme from table
+            'allow_learning_path_theme',
+            // Get allow_open_chat_window from table
+            'allow_open_chat_window',
+            'allow_public_certificates',
+            // Get allow_user_edit_agenda from table
+            'allow_user_edit_agenda',
+            // Get allow_user_edit_announcement from table
+            'allow_user_edit_announcement',
+            // Get allow_user_image_forum from table
+            'allow_user_image_forum',
+            //Get allow show user list
+            'allow_user_view_user_list',
+            // Get course_theme from table
+            'course_theme',
+            //Get allow show user list
+            'display_info_advance_inside_homecourse',
+            'documents_default_visibility',
+            // Get send_mail_setting (work)from table
+            'email_alert_manager_on_new_doc',
+            // Get send_mail_setting (work)from table
+            'email_alert_manager_on_new_quiz',
+            // Get send_mail_setting (dropbox) from table
+            'email_alert_on_new_doc_dropbox',
+            'email_alert_students_on_new_homework',
+            // Get send_mail_setting (auth)from table
+            'email_alert_to_teacher_on_new_user_in_course',
+            'enable_lp_auto_launch',
+            'pdf_export_watermark_text'
+        );
+    }
+
+    /**
+     * @param string $variable
+     * @param string $value
+     * @param int $courseId
+     * @return bool
+     */
+    public static function saveCourseConfigurationSetting($variable, $value, $courseId)
+    {
+        $settingList = self::getCourseSettingVariables();
+        if (!in_array($variable, $settingList)) {
+            return false;
+        }
+
+        $courseSettingTable = Database::get_course_table(TABLE_COURSE_SETTING);
+
+        if (self::hasCourseSetting($variable, $courseId)) {
+            // Update
+            Database::update(
+                $courseSettingTable,
+                array('value' => $value),
+                array('variable = ? AND c_id = ?' => array($variable, $courseId))
+            );
+        } else {
+            // Create
+            Database::insert(
+                $courseSettingTable,
+                array('value' => $value, 'c_id' => $courseId, 'variable' => $variable)
+            );
+        }
+        return true;
+    }
+
+    /**
+     * Check if course setting exists
+     * @param string $variable
+     * @param int $courseId
+     * @return bool
+     */
+    public static function hasCourseSetting($variable, $courseId)
+    {
+        $courseSetting = Database::get_course_table(TABLE_COURSE_SETTING);
+        $courseId = intval($courseId);
+        $variable = Database::escape_string($variable);
+        $sql = "SELECT variable FROM $courseSetting WHERE c_id = $courseId AND variable = '$variable'";
+        $result = Database::query($sql);
+        return Database::num_rows($result) > 0;
+    }
 }

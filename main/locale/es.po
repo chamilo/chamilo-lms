@@ -13827,7 +13827,7 @@ msgid "langDeletePicture"
 msgstr "Eliminar la imagen"
 
 msgid "langQuestionDescription"
-msgstr "Texto, imagen, audio o video adicionales"
+msgstr "Enunciado de la pregunta"
 
 msgid "langGiveQuestion"
 msgstr "Por favor, escriba la pregunta"
@@ -20817,7 +20817,7 @@ msgid "Arrow"
 msgstr "Flecha"
 
 msgid "Question"
-msgstr "Pregunta"
+msgstr "Título/Código de pregunta"
 
 msgid "Idea"
 msgstr "Idea"
@@ -20952,3 +20952,10 @@ msgstr "Presidente de comité"
 
 msgid "Jury management"
 msgstr "Gestión de comité"
+
+msgid "FieldFilter"
+msgstr "Filtro de campo"
+
+msgid "EditExtraFieldOptions"
+msgstr "Editar las opciones adicionales del campo"
+

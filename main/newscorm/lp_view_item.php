@@ -23,7 +23,6 @@ require_once 'learnpath.class.php';
 require_once 'learnpathItem.class.php';
 require_once 'learnpath_functions.inc.php';
 require_once 'resourcelinker.inc.php';
-// Including the global initialization file.
 require_once '../inc/global.inc.php';
 
 api_protect_course_script();
@@ -34,19 +33,19 @@ if (isset($_GET['lp_item_id'])) {
     $lp_item_id  = intval($_GET['lp_item_id']);
     if (isset($_SESSION['lpobject'])) {
         $oLP = unserialize($_SESSION['lpobject']);
-    }   
-    if (is_object($oLP)) {
-       $src = $oLP->get_link('http', $lp_item_id);
     }
-    
+    if (is_object($oLP)) {
+        $src = $oLP->get_link('http', $lp_item_id);
+    }
+
     $url_info 		= parse_url($src);
     $real_url_info	= parse_url(api_get_path(WEB_PATH));
 
     // The host must be the same.
     if ($url_info['host'] == $real_url_info['host']) {
-    	$url = Security::remove_XSS($src);    
-    	header("Location: ".$url);
-    	exit;
+        $url = Security::remove_XSS($src);
+        header("Location: ".$url);
+        exit;
     } else {
         header("Location: blank.php?error=document_not_found");
         exit;
@@ -100,9 +99,9 @@ if (isset($_SESSION['gradebook'])) {
 
 if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array (
-            'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-            'name' => get_lang('ToolGradebook')
-        );
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'name' => get_lang('ToolGradebook')
+    );
 }
 
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
@@ -116,7 +115,7 @@ if (isset($_SESSION['oLP']) && is_object($_SESSION['oLP'])) {
 }
 
 if ($mode == 'fullpage') {
-    Display::display_header(get_lang('Item'),'Path');
+    Display::display_header(get_lang('Item'), 'Path');
 }
 
 $suredel = trim(get_lang('AreYouSureToDelete'));
@@ -159,7 +158,7 @@ if (is_object($_SESSION['oLP'])) {
             break;
         case 'preview_document':
             echo $_SESSION['oLP']->display_item($id, null, false);
-            break; 
+            break;
     }
-	
+
 }

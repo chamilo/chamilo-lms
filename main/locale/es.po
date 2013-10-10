@@ -20896,3 +20896,59 @@ msgstr "Trayectoria"
 msgid "SelectAnAnswerToContinue"
 msgstr "Seleccione una respuesta antes de seguir"
 
+msgid "ExportCourses"
+msgstr "Exportar lista de cursos a XML/CSV"
+
+msgid "ImportCourses"
+msgstr "Importar lista de cursos en XML/CSV"
+
+msgid "ImportUsersToACourse"
+msgstr "Importar lista de usuarios a un curso"
+
+msgid "GlobalAgenda"
+msgstr "Agenda global"
+
+msgid "ConfigureInscription"
+msgstr "Configurar página de registro"
+
+msgid "ListSessionCategory"
+msgstr "Lista de categorías de sesiones"
+
+msgid "CopyFromCourseInSessionToAnotherSession"
+msgstr "Copiar un curso de sesión a otra sesión"
+
+msgid "MoveUserStats"
+msgstr "Mover estadísticas de usuarios"
+
+msgid "CareersAndPromotions"
+msgstr "Carreras y promociones"
+
+msgid "ExerciseReport"
+msgstr "Reporte de exámenes"
+
+msgid "ManageSessionFields"
+msgstr "Gestionar campos de sesiones"
+
+msgid "Question score name"
+msgstr "Nombres de criterios de preguntas"
+
+msgid "Question names"
+msgstr "Nombres de preguntas"
+
+msgid "Branches"
+msgstr "Sedes"
+
+msgid "Jury management as admin"
+msgstr "Gestión de comités como admin"
+
+msgid "Jury members"
+msgstr "Miembros de comités"
+
+msgid "Check users"
+msgstr "Calificar postulantes"
+
+msgid "Jury president"
+msgstr "Presidente de comité"
+
+msgid "Jury management"
+msgstr "Gestión de comité"

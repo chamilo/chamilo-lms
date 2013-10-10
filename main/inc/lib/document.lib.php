@@ -3276,13 +3276,13 @@ class DocumentManager {
      */
     public static function getDocumentDefaultVisibility($courseCode)
     {
-        $setting = api_get_setting('tool_visible_by_default_at_creation');
+        $settings = api_get_setting('tool_visible_by_default_at_creation');
 
         $defaultVisibility = 'visible';
 
-        if (isset($setting[TOOL_DOCUMENT])) {
+        if (isset($settings['documents'])) {
             $portalDefaultVisibility =  'invisible';
-            if ($setting[TOOL_DOCUMENT] == 'true') {
+            if ($settings['documents'] == 'true') {
                 $portalDefaultVisibility = 'visible';
             }
 

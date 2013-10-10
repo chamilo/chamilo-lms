@@ -7,6 +7,7 @@
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
+
 require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -33,7 +34,9 @@ if (Database::num_rows($result) != 1) {
     header('Location: course_list.php');
     exit();
 }
-$course = Database::fetch_array($result,'ASSOC');
+$course = Database::fetch_array($result, 'ASSOC');
+
+$course_info = api_get_course_info($course_code);
 
 // Get course teachers
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -86,6 +89,7 @@ if (count($course_teachers) == 0) {
 
 // Build the form
 $form = new FormValidator('update_course');
+$form->addElement('header', get_lang('Course').'  #'.$course_info['real_id'].' '.$course_code);
 $form->addElement('hidden', 'code', $course_code);
 
 //title
@@ -343,11 +347,7 @@ if ($form->validate()) {
 
             }
         }
-
     }
-
-
-
 
 	$sql = "INSERT IGNORE INTO ".$course_user_table . " SET
 				course_code = '".Database::escape_string($course_code). "',
@@ -359,7 +359,6 @@ if ($form->validate()) {
 				user_course_cat='0'";
 	Database::query($sql);
 
-	$course_info = api_get_course_info($course_code);
 
     if (array_key_exists('add_teachers_to_sessions_courses', $course_info)) {
         $sql = "UPDATE $course_table SET add_teachers_to_sessions_courses = '$addTeacherToSessionCourses'
@@ -380,6 +379,11 @@ if ($form->validate()) {
 }
 
 Display::display_header($tool_name);
+
+echo '<div class="actions">';
+echo Display::url(Display::return_icon('back.png', get_lang('Back')), api_get_path(WEB_CODE_PATH).'admin/course_list.php');
+echo Display::url(Display::return_icon('course_home.png', get_lang('CourseHome')), $course_info['course_public_url'], array('target' => '_blank'));
+echo '</div>';
 
 echo "<script>
 function moveItem(origin , destination) {

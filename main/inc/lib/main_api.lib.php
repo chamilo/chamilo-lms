@@ -1204,15 +1204,15 @@ function api_get_user_info_from_username($username = '') {
 }
 
 /**
- * @TODO This function should be the real id (integer)
- * Returns the current course code (string)
+ * @return string
  */
 function api_get_course_id() {
     return isset($GLOBALS['_cid']) ? $GLOBALS['_cid'] : null;
 }
 
 /**
- * Returns the current course id (integer)
+ * Returns the current course id
+ * @return int
  */
 function api_get_real_course_id() {
     return isset($_SESSION['_real_cid']) ? intval($_SESSION['_real_cid']) : 0;
@@ -1220,11 +1220,11 @@ function api_get_real_course_id() {
 
 /**
  * Returns the current course id (integer)
+ * @return int
  */
 function api_get_course_int_id() {
     return isset($_SESSION['_real_cid']) ? intval($_SESSION['_real_cid']) : 0;
 }
-
 
 /**
  * Returns the current course directory
@@ -1234,7 +1234,8 @@ function api_get_course_int_id() {
  * @return string   The directory where the course is located inside the Chamilo "courses" directory
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-function api_get_course_path($course_code = null) {
+function api_get_course_path($course_code = null)
+{
     $info = !empty($course_code) ? api_get_course_info($course_code) : api_get_course_info();
     return $info['path'];
 }
@@ -1245,7 +1246,8 @@ function api_get_course_path($course_code = null) {
  * @param string    Optional: course code
  * @return mixed    The value of that setting in that table. Return -1 if not found.
  */
-function api_get_course_setting($setting_name, $course_code = null) {
+function api_get_course_setting($setting_name, $course_code = null)
+{
     $course_info = api_get_course_info($course_code);
 	$table 		 = Database::get_course_table(TABLE_COURSE_SETTING);
     $setting_name = Database::escape_string($setting_name);
@@ -6159,7 +6161,24 @@ function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
         if (empty($group_id)) {
             $group_id = api_get_group_id();
         }
-        api_item_property_update(api_get_course_info(), $original_tool_id, $item_id, $visibility, api_get_user_id(), $group_id, null, null, null, api_get_session_id());
+
+        // Read the portal and course default visibility
+        if ($tool_id == 'documents') {
+            $visibility = DocumentManager::getDocumentDefaultVisibility(api_get_course_id());
+        }
+
+        api_item_property_update(
+            api_get_course_info(),
+            $original_tool_id,
+            $item_id,
+            $visibility,
+            api_get_user_id(),
+            $group_id,
+            null,
+            null,
+            null,
+            api_get_session_id()
+        );
 
         //Fixes default visibility for tests
 

@@ -2391,6 +2391,8 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
     Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'enable_lp_auto_launch',0,'learning_path')");
     Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'pdf_export_watermark_text','','learning_path')");
     Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_public_certificates','','certificates')");
+    Database::query("INSERT INTO $TABLESETTING (c_id, variable, value) VALUES ($course_id, 'documents_default_visibility', 'visible')");
+
 
 
     /* Course homepage tools for platform admin only */

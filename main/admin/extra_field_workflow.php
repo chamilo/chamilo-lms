@@ -172,7 +172,7 @@ if ($form->validate()) {
     if (!empty($result)) {
         foreach ($result as $id => $items) {
             foreach ($items as $subItemId => $value) {
-                $extraFieldOptionRelFieldOption = $app['orm.em']->getRepository('Entity\ExtraFieldOptionRelFieldOption')->findOneBy(
+                $extraFieldOptionRelFieldOption = $app['orm.ems']['db_write']->getRepository('Entity\ExtraFieldOptionRelFieldOption')->findOneBy(
                     array(
                     'fieldId' => $field_id,
                     'fieldOptionId' => $subItemId,

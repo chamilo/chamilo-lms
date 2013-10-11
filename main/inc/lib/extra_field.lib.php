@@ -164,6 +164,9 @@ class ExtraField extends Model
         }
     }
 
+    /**
+     * @return int
+     */
     public function get_max_field_order()
     {
         $sql = "SELECT MAX(field_order) FROM {$this->table}";
@@ -178,21 +181,26 @@ class ExtraField extends Model
         return $order;
     }
 
+    /**
+     * @param string $handler
+     * @return array
+     */
     public static function get_extra_fields_by_handler($handler)
     {
-        $types                                   = array();
-        $types[self::FIELD_TYPE_TEXT]            = get_lang('FieldTypeText');
-        $types[self::FIELD_TYPE_TEXTAREA]        = get_lang('FieldTypeTextarea');
-        $types[self::FIELD_TYPE_RADIO]           = get_lang('FieldTypeRadio');
-        $types[self::FIELD_TYPE_SELECT]          = get_lang('FieldTypeSelect');
-        $types[self::FIELD_TYPE_SELECT_MULTIPLE] = get_lang('FieldTypeSelectMultiple');
-        $types[self::FIELD_TYPE_DATE]            = get_lang('FieldTypeDate');
-        $types[self::FIELD_TYPE_DATETIME]        = get_lang('FieldTypeDatetime');
-        $types[self::FIELD_TYPE_DOUBLE_SELECT]   = get_lang('FieldTypeDoubleSelect');
-        $types[self::FIELD_TYPE_DIVIDER]         = get_lang('FieldTypeDivider');
-        $types[self::FIELD_TYPE_TAG]             = get_lang('FieldTypeTag');
-        $types[self::FIELD_TYPE_TIMEZONE]        = get_lang('FieldTypeTimezone');
-        $types[self::FIELD_TYPE_SOCIAL_PROFILE]  = get_lang('FieldTypeSocialProfile');
+        $types = array(
+            self::FIELD_TYPE_TEXT            => get_lang('FieldTypeText'),
+            self::FIELD_TYPE_TEXTAREA        => get_lang('FieldTypeTextarea'),
+            self::FIELD_TYPE_RADIO           => get_lang('FieldTypeRadio'),
+            self::FIELD_TYPE_SELECT          => get_lang('FieldTypeSelect'),
+            self::FIELD_TYPE_SELECT_MULTIPLE => get_lang('FieldTypeSelectMultiple'),
+            self::FIELD_TYPE_DATE            => get_lang('FieldTypeDate'),
+            self::FIELD_TYPE_DATETIME        => get_lang('FieldTypeDatetime'),
+            self::FIELD_TYPE_DOUBLE_SELECT   => get_lang('FieldTypeDoubleSelect'),
+            self::FIELD_TYPE_DIVIDER        => get_lang('FieldTypeDivider'),
+            self::FIELD_TYPE_TAG            => get_lang('FieldTypeTag'),
+            self::FIELD_TYPE_TIMEZONE      => get_lang('FieldTypeTimezone'),
+            self::FIELD_TYPE_SOCIAL_PROFILE  => get_lang('FieldTypeSocialProfile')
+        );
 
         switch ($handler) {
             case 'course':
@@ -640,25 +648,31 @@ class ExtraField extends Model
                             $userToken = $token->getUser();
                             /** @var Entity\User $user */
                             $user = $app['orm.em']->getRepository('Entity\User')->find($userToken->getUserId());
-                            $role = current($user->getRoles());
-                            if (isset($role)) {
-                                //$defaultValueId = null;
+                            $roles = $user->getRoles();
+
+                            if (!empty($roles)) {
+
                                 if (empty($defaultValueId)) {
                                     throw new \Symfony\Component\Process\Exception\LogicException('You need to add a default value for the extra field: '.$field_details['field_variable']);
                                 }
 
-                                $fieldWorkFlow = $app['orm.em']->getRepository('Entity\ExtraFieldOptionRelFieldOption')
-                                ->findBy(
-                                    array(
-                                        'fieldId' => $field_details['id'],
-                                        'relatedFieldOptionId' => $defaultValueId,
-                                        'roleId' => $role->getId()
-                                    )
-                                );
+                                foreach ($roles as $role) {
+                                    $fieldWorkFlow = $app['orm.em']->getRepository('Entity\ExtraFieldOptionRelFieldOption')
+                                    ->findBy(
+                                        array(
+                                            'fieldId' => $field_details['id'],
+                                            'relatedFieldOptionId' => $defaultValueId,
+                                            'roleId' => $role->getId()
+                                        )
+                                    );
 
-                                foreach ($fieldWorkFlow as $item) {
-                                    $addOptions[] = $item->getFieldOptionId();
+                                    foreach ($fieldWorkFlow as $item) {
+                                        if (!in_array($item->getFieldOptionId(), $addOptions)) {
+                                            $addOptions[] = $item->getFieldOptionId();
+                                        }
+                                    }
                                 }
+
                             }
                         }
 

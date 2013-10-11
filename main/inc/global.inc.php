@@ -702,6 +702,7 @@ $app->before(
         if (!$isCourseTool) {
             // @todo add a before in controller in order to load the courses and course_session object
             $isCourseTool = (strpos($request->getPathInfo(), 'question_manager/exercise_distribution/') === false) ? false : true;
+            $isCourseTool = (strpos($request->getPathInfo(), 'question_manager/questions/') === false) ? false : true;
         }
 
         // Setting course entity for controllers and templates
@@ -712,8 +713,15 @@ $app->before(
                 $course = $request->get('cidReq');
             }
 
-            // Converting /courses/XXX/ to a Entity/Course object
-            $course = $app['orm.em']->getRepository('Entity\Course')->findOneByCode($course);
+            if (empty($course)) {
+                // Converting /courses/XXX/ to a Entity/Course object
+                $course = $app['orm.em']->getRepository('Entity\Course')->findOneByCode($course);
+            } else {
+                $courseId = $request->get('courseId');
+                // Converting /courses/XXX/ to a Entity/Course object
+                $course = $app['orm.em']->getRepository('Entity\Course')->find($courseId);
+            }
+
             $app['course'] = $course;
             $app['template']->assign('course', $course);
 

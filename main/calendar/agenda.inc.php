@@ -1549,11 +1549,7 @@ function change_visibility($tool, $id, $visibility)
     $TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $tool = Database::escape_string($tool);
     $id = Database::escape_string($id);
-    /*
-      $sql="SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='".TOOL_CALENDAR_EVENT."' AND ref='$id'";
-      $result=Database::query($sql) or die (Database::error());
-      $row=Database::fetch_array($result);
-     */
+
     if ($visibility == 0) {
         $sql_visibility = "UPDATE $TABLE_ITEM_PROPERTY SET visibility='0' WHERE tool='$tool' AND ref='$id'";
         api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id, "invisible", api_get_user_id());
@@ -1583,8 +1579,6 @@ function display_courseadmin_links($filter = 0)
     } else {
         $actions = "<a href='agenda_js.php?type=course&".api_get_cidreq()."'>".Display::return_icon('calendar.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";
     }
-
-    // $actions .= "<a href='agenda_list.php?type=course&".api_get_cidreq()."'>".Display::return_icon('list.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";
 
     $actions .= "<a href='agenda.php?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".api_get_group_id()."&action=add'>".Display::return_icon('new_event.png', get_lang('AgendaAdd'), '', ICON_SIZE_MEDIUM)."</a>";
     $actions .= "<a href='agenda.php?".api_get_cidreq()."&action=importical'>".Display::return_icon('import_calendar.png', get_lang('ICalFileImport'), '', ICON_SIZE_MEDIUM)."</a>";

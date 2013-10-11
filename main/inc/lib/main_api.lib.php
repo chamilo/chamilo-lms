@@ -3134,7 +3134,6 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
     // Update if possible
     $set_type = '';
 
-
     switch ($lastedit_type) {
         case 'delete' : // delete = make item only visible for the platform admin.
             $visibility = '2';

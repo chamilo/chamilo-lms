@@ -464,9 +464,9 @@ class ExtraField extends Model
      * @param array $extra_data
      * @param string $form_name
      * @param bool $admin_permissions
-     * @param null $user_id
-     * @param string $type
+     * @param int $user_id
      * @param null $extra
+     * @param int $itemId
      * @return array
      */
     public function set_extra_fields_in_form(
@@ -628,26 +628,34 @@ class ExtraField extends Model
                             $get_lang_variables = true;
                         }
 
-                        // Get extra field workflow
-                        $userInfo = api_get_user_info();
-
+                        global $app;
+                        $optionsExists = $app['orm.em']->
+                            getRepository('Entity\ExtraFieldOptionRelFieldOption')->
+                            findOneBy(array('fieldId' => $field_details['id']));
                         $addOptions = array();
 
-                        global $app;
-                        $optionsExists = $app['orm.em']->getRepository('Entity\ExtraFieldOptionRelFieldOption')->
-                            findOneBy(array('fieldId' => $field_details['id']));
-
                         if ($optionsExists) {
-                            if (isset($userInfo['status']) && !empty($userInfo['status'])) {
+                            $token = $app['security']->getToken();
+                            /** @var Entity\User $userToken */
+                            $userToken = $token->getUser();
+                            /** @var Entity\User $user */
+                            $user = $app['orm.em']->getRepository('Entity\User')->find($userToken->getUserId());
+                            $role = current($user->getRoles());
+                            if (isset($role)) {
+                                //$defaultValueId = null;
+                                if (empty($defaultValueId)) {
+                                    throw new \Symfony\Component\Process\Exception\LogicException('You need to add a default value for the extra field: '.$field_details['field_variable']);
+                                }
 
                                 $fieldWorkFlow = $app['orm.em']->getRepository('Entity\ExtraFieldOptionRelFieldOption')
                                 ->findBy(
                                     array(
                                         'fieldId' => $field_details['id'],
                                         'relatedFieldOptionId' => $defaultValueId,
-                                        'roleId' => $userInfo['status']
+                                        'roleId' => $role->getId()
                                     )
                                 );
+
                                 foreach ($fieldWorkFlow as $item) {
                                     $addOptions[] = $item->getFieldOptionId();
                                 }

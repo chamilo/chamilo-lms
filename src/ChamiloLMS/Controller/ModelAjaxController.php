@@ -65,8 +65,6 @@ class ModelAjaxController
     {
         $request = $app['request'];
 
-        $language_file = array('admin', 'exercice', 'gradebook', 'tracking');
-
         // 1. Setting variables needed by jqgrid
 
         $action = $request->get('a');
@@ -89,7 +87,8 @@ class ModelAjaxController
             $sord = 'desc';
         }
 
-        if (!in_array($action,
+        if (!in_array(
+            $action,
             array(
                 'get_exercise_results',
                 'get_hotpotatoes_exercise_results',
@@ -190,7 +189,6 @@ class ModelAjaxController
             case 'get_questions':
                 $categoryId = $request->get('categoryId');
                 $exerciseId = $request->get('exerciseId');
-                //$courseId = null; //$request->get('courseId');
                 $courseId = $request->get('courseId');
 
                 // Question manager can view all questions
@@ -210,6 +208,7 @@ class ModelAjaxController
                     ),
                     true
                 );
+
                 break;
             case 'get_user_list_plugin_widescale':
                 $count = \UserManager::get_user_data(null, null, null, null, true);

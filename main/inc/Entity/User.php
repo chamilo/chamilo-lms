@@ -408,6 +408,15 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
     }
 
     /**
+     *
+     * @return ArrayCollection
+     */
+    public function getRolesObj()
+    {
+        return $this->roles;
+    }
+
+    /**
      * This function is needed in order to pass roles to the security component
      * @inheritDoc
      */
@@ -463,15 +472,6 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
             $this->password,
             $this->isActive
         ) = \unserialize($serialized);
-    }
-
-    /**
-     *
-     * @return ArrayCollection
-     */
-    public function getRolesObj()
-    {
-        return $this->roles;
     }
 
     /**

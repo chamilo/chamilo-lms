@@ -2263,32 +2263,34 @@ abstract class Question
             $copyIcon = Display::return_icon('copy.png', get_lang('Copy'), array(), ICON_SIZE_SMALL);
             $reuseIcon = Display::return_icon('view_more_stats.gif', get_lang('InsertALinkToThisQuestionInTheExercise'), array(), ICON_SIZE_SMALL);
             $editIcon = Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL);
-            //$deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL);
-            //var_dump($exerciseId);
+
             // Including actions
             foreach ($questions as &$question) {
                 $type = self::get_question_type($question['type']);
                 $question['type'] = get_lang($type[1]);
                 $question['question_question_type'] = get_lang($type[1]);
+
                 if (empty($exerciseId)) {
                     // View.
-                    $actions = Display::url(
+                    /*$actions = Display::url(
                         $previewIcon,
                         $app['url_generator']->generate(
                             'admin_questions_show',
                             array(
-                                'id' => $question['iid']
+                                'id' => $question['iid'],
+                                'courseId' => $question['c_id'],
                             )
                         )
-                    );
+                    );*/
 
                     // Edit.
-                    $actions .= Display::url(
+                    $actions = Display::url(
                         $editIcon,
                         $app['url_generator']->generate(
                             'admin_questions_edit',
                             array(
-                                'id' => $question['iid']
+                                'id' => $question['iid'],
+                                'courseId' => $question['c_id']
                             )
                         )
                     );

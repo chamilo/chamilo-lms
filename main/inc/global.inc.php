@@ -713,7 +713,7 @@ $app->before(
                 $course = $request->get('cidReq');
             }
 
-            if (empty($course)) {
+            if (!empty($course)) {
                 // Converting /courses/XXX/ to a Entity/Course object
                 $course = $app['orm.em']->getRepository('Entity\Course')->findOneByCode($course);
             } else {

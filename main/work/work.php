@@ -324,7 +324,7 @@ switch ($action) {
             // QualificationOfAssignment
             $form->addElement('text', 'qualification_value', get_lang('QualificationNumeric'));
 
-            if (Gradebook::is_active()) {
+            if ((api_get_session_id() != 0 && Gradebook::is_active()) || api_get_session_id() == 0) {   
                 $form->addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'), array('id' =>'make_calification_id', 'onclick' => "javascript: if(this.checked){document.getElementById('option1').style.display='block';}else{document.getElementById('option1').style.display='none';}"));
             } else {
                 // QualificationOfAssignment

@@ -206,7 +206,7 @@ class Statistics {
         		$row['default_date'] = '-';
         	}
             if (!empty($row[4])) { //user ID
-                $row[3] = Display::url($row[3],api_get_path(WEB_CODE_PATH).'admin/user_information?user_id='.$row[5], array('title' => get_lang('UserInfo')));
+                $row[3] = Display::url($row[3],api_get_path(WEB_CODE_PATH).'admin/user_information?user_id='.$row[4], array('title' => get_lang('UserInfo')));
 
                 $row[4] = TrackingUserLog::get_ip_from_user_event($row[4],$row[5],true);
                 if (empty($row[4])) {

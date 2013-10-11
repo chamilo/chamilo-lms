@@ -285,11 +285,18 @@ function get_work_count_by_student($user_id, $work_id) {
 
 /**
  * @param int $id
+ * @param int $course_id
  * @return array
  */
-function get_work_assignment_by_id($id) {
+function get_work_assignment_by_id($id, $course_id = null)
+{
+    if (empty($courseId)) {
+        $course_id = api_get_course_int_id();
+    } else {
+        $course_id = intval($course_id);
+    }
 	$id = intval($id);
-    $course_id = api_get_course_int_id();
+
 	$table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
 	$sql = "SELECT * FROM  $table WHERE c_id = $course_id AND publication_id = $id";
 	$result = Database::query($sql);
@@ -2475,5 +2482,284 @@ function getWorkCommentForm($work)
     $form->addElement('hidden', 'id', $work['id']);
     $form->addElement('button', 'button', get_lang('Send'));
     return $form->return_form();
+}
 
+/**
+ * @param array $homework result of get_work_assignment_by_id()
+ * @return string
+ */
+function getWorkWarningMessage($homework) {
+    $message = null;
+    if (!empty($homework)) {
+
+        if ($homework['expires_on'] != '0000-00-00 00:00:00' || $homework['ends_on'] != '0000-00-00 00:00:00') {
+            $time_now = time();
+
+            if (!empty($homework['expires_on']) && $homework['expires_on'] != '0000-00-00 00:00:00') {
+                $time_expires 	= api_strtotime($homework['expires_on'], 'UTC');
+                $difference 	= $time_expires - $time_now;
+                if ($difference < 0) {
+                    $has_expired = true;
+                }
+            }
+
+            if (empty($homework['expires_on']) || $homework['expires_on'] == '0000-00-00 00:00:00') {
+                $has_expired = false;
+            }
+
+            if (!empty($homework['ends_on']) && $homework['ends_on'] != '0000-00-00 00:00:00') {
+                $time_ends 		= api_strtotime($homework['ends_on'], 'UTC');
+                $difference2 	= $time_ends - $time_now;
+                if ($difference2 < 0) {
+                    $has_ended = true;
+                }
+            }
+
+            $ends_on 	= api_convert_and_format_date($homework['ends_on']);
+            $expires_on = api_convert_and_format_date($homework['expires_on']);
+        }
+
+        if ($has_ended) {
+            $message = Display::return_message(get_lang('EndDateAlreadyPassed').' '.$ends_on, 'error');
+        } elseif ($has_expired) {
+            $message = Display::return_message(get_lang('ExpiryDateAlreadyPassed').' '.$expires_on, 'warning');
+        } else {
+            if ($has_expired) {
+                $message = Display::return_message(get_lang('ExpiryDateToSendWorkIs').' '.$expires_on);
+            }
+        }
+    }
+    return $message;
+}
+
+/**
+ * @param FormValidator $form
+ */
+function setWorkUploadForm($form)
+{
+
+    $form->addElement('header', get_lang('UploadADocument'));
+    $form->addElement('hidden', 'contains_file', 0, array('id'=>'contains_file_id'));
+    $form->addElement('hidden', 'active', 1);
+    $form->addElement('hidden', 'accepted', 1);
+
+    $form->addElement('file', 'file', get_lang('UploadADocument'), 'size="40" onchange="updateDocumentTitle(this.value)"');
+    $form->addElement('text', 'title', get_lang('Title'), array('id' => 'file_upload', 'class' => 'span4'));
+    $form->add_html_editor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
+    $form->addElement('style_submit_button', 'submitWork', get_lang('Send'), array('class'=> 'upload', 'value' => "submitWork"));
+    $form->add_real_progress_bar('uploadWork', 'file');
+}
+
+/**
+ * @param array $my_folder_data
+ * @param array $_course
+ * @return array
+ */
+function uploadWork($my_folder_data, $_course) {
+
+    if (empty($_FILES['file']['size'])) {
+        return array('error' => Display :: return_message(get_lang('UplUploadFailedSizeIsZero'), 'error'));
+    }
+
+    $currentCourseRepositorySys = api_get_path(SYS_COURSE_PATH).$_course['path'] . '/';
+    $updir = $currentCourseRepositorySys.'work/'; //directory path to upload
+
+    // Try to add an extension to the file if it has'nt one
+    $filename = add_ext_on_mime(stripslashes($_FILES['file']['name']), $_FILES['file']['type']);
+
+    // Replace dangerous characters
+    $filename = replace_dangerous_char($filename, 'strict');
+
+    // Transform any .php file in .phps fo security
+    $filename = php2phps($filename);
+    $filesize = filesize($_FILES['file']['tmp_name']);
+
+    if (empty($filesize)) {
+        return array('error' => Display :: return_message(get_lang('UplUploadFailedSizeIsZero'), 'error'));
+    } elseif (!filter_extension($new_file_name)) {
+        return array('error' => Display :: return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error'));
+    }
+
+    $documents_total_space = DocumentManager::documents_total_space($_course['real_id']);
+    $course_max_space = DocumentManager::get_course_quota($_course['code']);
+    $total_size = $filesize + $documents_total_space;
+
+    if ($total_size > $course_max_space) {
+        return array('error' => Display :: return_message(get_lang('NoSpace'), 'error'));
+    }
+
+    // Compose a unique file name to avoid any conflict
+    $new_file_name = api_get_unique_id();
+    $curdirpath = basename($my_folder_data['url']);
+
+    // If we come from the group tools the groupid will be saved in $work_table
+    $result = move_uploaded_file($_FILES['file']['tmp_name'], $updir.$curdirpath.'/'.$new_file_name);
+    $url = null;
+    if ($result) {
+        $url = 'work/'.$curdirpath.'/'.$new_file_name;
+    }
+
+    return array(
+        'url' => $url,
+        'filename' => $filename,
+        'error' => null
+    );
+}
+
+/**
+ * @param int $workId
+ * @param array $courseInfo
+ * @param int $session_id
+ */
+function sendAlertToTeacher($workId, $courseInfo, $session_id) {
+    $workData = get_work_assignment_by_id($workId, $courseInfo['real_id']);
+    //last value is to check this is not "just" an edit
+    //YW Tis part serve to send a e-mail to the tutors when a new file is sent
+    $send = api_get_course_setting('email_alert_manager_on_new_doc');
+
+    if ($send > 0) {
+        // Lets predefine some variables. Be sure to change the from address!
+        if (empty($id_session)) {
+            //Teachers
+            $user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), null, null, null, COURSEMANAGER);
+        } else {
+            //Coaches
+            $user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), $session_id, null, null, 2);
+        }
+
+        $subject = "[" . api_get_setting('siteName') . "] ".get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$courseInfo['name']."  ";
+
+        foreach ($user_list as $user_data) {
+            $to_user_id = $user_data['user_id'];
+            $user_info = api_get_user_info($to_user_id);
+            $message = get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$courseInfo['name']."\n";
+            $message .= get_lang('UserName')." : ".api_get_person_name($user_info['firstname'], $user_info['lastname'])."\n";
+            $message .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";
+            $message .= get_lang('WorkName')." : ".$workData['title']."\n\n".get_lang('DownloadLink')."\n";
+            $url = api_get_path(WEB_CODE_PATH)."work/work.php?cidReq=".$courseInfo['code']."&id_session=".$session_id."&id=".$workData['id'];
+            $message .= $url;
+
+            MessageManager::send_message_simple($to_user_id, $subject, $message);
+        }
+    }
+}
+
+/**
+ * @author Sebastien Piraux <piraux_seb@hotmail.com>
+ * @author Julio Montoya
+ * @desc Record information for upload event
+ * @param int $docId
+ * @param int $userId
+ * @param string $courseCode
+ * @param int $sessionId
+ * @return int
+ */
+function event_upload($docId, $userId, $courseCode, $sessionId) {
+    $TABLETRACK_UPLOADS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
+
+    $reallyNow = api_get_utc_datetime();
+    $userId = intval($userId);
+    $docId = intval($docId);
+    $sessionId = intval($sessionId);
+    $courseCode = Database::escape_string($courseCode);
+
+    $sql = "INSERT INTO ".$TABLETRACK_UPLOADS."
+        		( upload_user_id,
+        		  upload_cours_id,
+        		  upload_work_id,
+        		  upload_date,
+        		  upload_session_id
+        		)
+        		VALUES (
+        		 ".$userId.",
+        		 '".$courseCode."',
+        		 '".$docId."',
+        		 '".$reallyNow."',
+        		 '".$sessionId."'
+        		)";
+    Database::query($sql);
+    return 1;
+}
+
+/**
+ * @param array $my_folder_data
+ * @param array $values
+ * @param array $course_info
+ * @param int $session_id
+ * @return null|string
+ */
+/**
+ * @param array $workInfo
+ * @param array $values
+ * @param array $course_info
+ * @param int $session_id
+ * @param int $group_id
+ * @param int $user_id
+ * @return string
+ */
+function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, $userId)
+{
+    $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+
+    $courseId = $courseInfo['real_id'];
+    $groupId = intval($groupId);
+    $sessionId = intval($sessionId);
+
+    $title  = $values['title'];
+    $description = $values['description'];
+    $contains_file = isset($values['contains_file']) && !empty($values['contains_file']) ? $values['contains_file']: 0;
+
+    $saveWork = true;
+    $message = null;
+    $filename = null;
+
+    if ($values['contains_file']) {
+        $result = uploadWork($workInfo, $courseInfo);
+        if (isset($result['error'])) {
+            $message = $result['error'];
+            $saveWork = false;
+        }
+        $filename = isset($result['filename']) ? $result['filename'] : null;
+        if (empty($title)) {
+            $title = isset($result['title']) && !empty($result['title']) ? $result['title'] : get_lang('Untitled');
+        }
+        $url = $result['url'];
+    }
+
+    if (empty($title)) {
+        $title = get_lang('Untitled');
+    }
+
+    if ($saveWork) {
+        $active = '1';
+        $sql = "INSERT INTO ".$work_table." SET
+                   c_id 		= $courseId ,
+                   url         	= '".$url . "',
+                   title       	= '".Database::escape_string($title)."',
+                   description	= '".Database::escape_string($description)."',
+                   contains_file = '".$contains_file."',
+                   active		= '" . $active."',
+                   accepted		= '1',
+                   post_group_id = '".$groupId."',
+                   sent_date	=  '".api_get_utc_datetime()."',
+                   parent_id 	=  '".$workInfo['id']."' ,
+                   session_id	= '".$sessionId."',
+                   user_id 		= '".$userId."'";
+
+        Database::query($sql);
+        $id = Database::insert_id();
+        if ($id) {
+            if (array_key_exists('filename', $workInfo) && !empty($filename)) {
+                $sql = "UPDATE $work_table SET filename = '$filename' WHERE c_id = $courseId AND id = $id";
+                Database::query($sql);
+            }
+            api_item_property_update($courseInfo, 'work', $id, 'DocumentAdded', $userId, $groupId);
+            sendAlertToTeacher($id, $courseInfo, $sessionId);
+            event_upload($id, $userId, $courseInfo['code'], $sessionId) ;
+            $message = Display::return_message(get_lang('DocAdd'));
+        }
+    } else {
+        $message = Display::return_message(get_lang('IsNotPosibleSaveTheDocument'), 'error');
+    }
+    return $message;
 }

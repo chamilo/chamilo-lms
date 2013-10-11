@@ -12,7 +12,7 @@ $language_file = array('agenda', 'group', 'announcements');
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
 
-//Calendar type
+// Calendar type
 $type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin')) ? $_REQUEST['type'] : 'personal';
 
 if ($type == 'personal') {
@@ -145,7 +145,9 @@ if (api_is_allowed_to_edit(false, true) OR
         $actions = display_courseadmin_links($filter);
     }
 } else {
-    $actions = "<a href='agenda_list.php?type=course&".api_get_cidreq()."'>".Display::return_icon('week.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";
+    if ($type == 'course') {
+        $actions = "<a href='agenda_list.php?type=course&".api_get_cidreq()."'>".Display::return_icon('week.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";
+    }
 }
 
 $tpl->assign('actions', $actions);

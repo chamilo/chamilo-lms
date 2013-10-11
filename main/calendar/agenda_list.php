@@ -24,6 +24,9 @@ $events = $agenda->get_events(null, null, api_get_course_int_id(), api_get_group
 $url = api_get_path(WEB_CODE_PATH).'calendar/agenda_list.php?'.api_get_cidreq();
 $tpl->assign('url', $url);
 $tpl->assign('agenda_events', $events);
+$actions = '<a href="'.api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=course&'.api_get_cidreq().'">'.
+            Display::return_icon('calendar.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";
+$tpl->assign('actions', $actions);
 $tpl->assign('is_allowed_to_edit', api_is_allowed_to_edit());
 
 if (api_is_allowed_to_edit()) {

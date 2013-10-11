@@ -20959,3 +20959,9 @@ msgstr "Filtro de campo"
 msgid "EditExtraFieldOptions"
 msgstr "Editar las opciones adicionales del campo"
 
+msgid "QuestionCategories"
+msgstr "Categorías de preguntas"
+
+msgid "GlobalQuestionCategories"
+msgstr "Categorías globales"
+

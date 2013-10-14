@@ -53,33 +53,25 @@ $token = Security::get_token();
 
 $student_can_edit_in_session = api_is_allowed_to_session_edit(false, true);
 
-//  @todo add an option to allow/block multiple attempts.
-/*
-if (!empty($workInfo) && !empty($workInfo['qualification'])) {
-    $count =  get_work_count_by_student($user_id, $work_id);
-    if ($count >= 1) {
-        Display::display_header();
-        if (api_get_course_setting('student_delete_own_publication') == '1') {
-            Display::display_warning_message(get_lang('CantUploadDeleteYourPaperFirst'));
-        } else {
-            Display::display_warning_message(get_lang('YouAlreadySentAPaperYouCantUpload'));
-        }
-        Display::display_footer();
-        exit;
-    }
-}*/
-
 $homework = get_work_assignment_by_id($workInfo['id']);
 $validationStatus = getWorkDateValidationStatus($homework);
 
 $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
 $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$work_id, 'name' =>  $workInfo['title']);
-$interbreadcrumb[] = array('url' => '#', 'name'  => get_lang('UploadADocument'));
+$interbreadcrumb[] = array('url' => '#', 'name'  => get_lang('UploadFromTemplate'));
 
 $form = new FormValidator('form', 'POST', api_get_self()."?".api_get_cidreq()."&id=".$work_id, '', array('enctype' => "multipart/form-data"));
-setWorkUploadForm($form);
+setWorkUploadForm($form, false);
 $form->addElement('hidden', 'id', $work_id);
 $form->addElement('hidden', 'sec_token', $token);
+
+$documentTemplateData = getDocumentTemplateFromWork($work_id, $course_info);
+if (!empty($documentTemplateData)) {
+    $defaults['title'] = $userInfo['complete_name'].'_'.$documentTemplateData['title'].'_'.substr(api_get_utc_datetime(), 0, 10);
+    $defaults['description'] = $documentTemplateData['file_content'];
+}
+
+$form->setDefaults($defaults);
 
 $error_message = null;
 

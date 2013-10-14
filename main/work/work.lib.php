@@ -2376,24 +2376,25 @@ function getDocumentTemplateFromWork($workId, $courseInfo)
 }
 
 /**
- * @param $workId
- * @param $courseInfo
+ * @param int $workId
+ * @param array $courseInfo
  */
 function getAllDocumentsFromWorkToString($workId, $courseInfo)
 {
     $documents = getAllDocumentToWork($workId, $courseInfo['real_id']);
+    $content = null;
     if (!empty($documents)) {
-        $docContent = '<ul class="nav nav-list well">';
-        $docContent .= '<li class="nav-header">'.get_lang('Documents').'</li>';
+        $content .= '<ul class="nav nav-list well">';
+        $content .= '<li class="nav-header">'.get_lang('Documents').'</li>';
         foreach ($documents as $doc) {
             $docData = DocumentManager::get_document_data_by_id($doc['document_id'], $courseInfo['code']);
             if ($docData) {
-                $docContent .= '<li><a target="_blank" href="'.$docData['url'].'">'.$docData['title'].'</a></li>';
+                $content .= '<li><a target="_blank" href="'.$docData['url'].'">'.$docData['title'].'</a></li>';
             }
         }
-        $docContent .= '</ul><br />';
-        echo $docContent;
+        $content .= '</ul><br />';
     }
+    return $content;
 }
 
 /**
@@ -2488,8 +2489,11 @@ function getWorkCommentForm($work)
  * @param array $homework result of get_work_assignment_by_id()
  * @return string
  */
-function getWorkWarningMessage($homework) {
+function getWorkDateValidationStatus($homework) {
     $message = null;
+    $has_expired = false;
+    $has_ended = false;
+
     if (!empty($homework)) {
 
         if ($homework['expires_on'] != '0000-00-00 00:00:00' || $homework['ends_on'] != '0000-00-00 00:00:00') {
@@ -2529,25 +2533,32 @@ function getWorkWarningMessage($homework) {
             }
         }
     }
-    return $message;
+
+    return array(
+        'message' => $message,
+        'has_ended' => $has_ended,
+        'has_expired' => $has_expired
+    );
 }
 
 /**
  * @param FormValidator $form
+ * @param bool $uploadFile
  */
-function setWorkUploadForm($form)
+function setWorkUploadForm($form, $uploadFile = true)
 {
-
     $form->addElement('header', get_lang('UploadADocument'));
     $form->addElement('hidden', 'contains_file', 0, array('id'=>'contains_file_id'));
     $form->addElement('hidden', 'active', 1);
     $form->addElement('hidden', 'accepted', 1);
-
-    $form->addElement('file', 'file', get_lang('UploadADocument'), 'size="40" onchange="updateDocumentTitle(this.value)"');
+    if ($uploadFile) {
+        $form->addElement('file', 'file', get_lang('UploadADocument'), 'size="40" onchange="updateDocumentTitle(this.value)"');
+        $form->add_real_progress_bar('uploadWork', 'file');
+    }
     $form->addElement('text', 'title', get_lang('Title'), array('id' => 'file_upload', 'class' => 'span4'));
     $form->add_html_editor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
     $form->addElement('style_submit_button', 'submitWork', get_lang('Send'), array('class'=> 'upload', 'value' => "submitWork"));
-    $form->add_real_progress_bar('uploadWork', 'file');
+
 }
 
 /**
@@ -2682,20 +2693,13 @@ function event_upload($docId, $userId, $courseCode, $sessionId) {
 }
 
 /**
- * @param array $my_folder_data
- * @param array $values
- * @param array $course_info
- * @param int $session_id
- * @return null|string
- */
-/**
  * @param array $workInfo
  * @param array $values
- * @param array $course_info
- * @param int $session_id
- * @param int $group_id
- * @param int $user_id
- * @return string
+ * @param array $courseInfo
+ * @param int $sessionId
+ * @param int $groupId
+ * @param int $userId
+ * @return null|string
  */
 function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, $userId)
 {

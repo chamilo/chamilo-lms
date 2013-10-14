@@ -710,7 +710,7 @@ class Attendance
 		$color_bar = '';
 
 		if ($faults_porcent > 25  ) {
-			$color_bar = '#F11';
+			$color_bar = '#f28989';
 		} else if ($faults_porcent > 10) {
 			$color_bar = '#F90';
 		}

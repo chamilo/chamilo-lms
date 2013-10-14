@@ -14,16 +14,21 @@
 /**
  * Code
  */
-class DocumentManager {
-
-    private function __construct() {
+class DocumentManager
+{
+    /**
+     *
+     */
+    private function __construct()
+    {
 
     }
 
     /**
      * @return the document folder quota for the current course, in bytes, or the default quota
      */
-    public static function get_course_quota($course_code = null) {
+    public static function get_course_quota($course_code = null)
+    {
         if (empty($course_code)) {
             $course_info = api_get_course_info();
         } else {
@@ -497,7 +502,7 @@ class DocumentManager {
 
         // Condition for the session
         $current_session_id = api_get_session_id();
-        $condition_session = " AND (id_session = '$current_session_id' OR id_session = '0')";
+        $condition_session = " AND (id_session = '$current_session_id' OR (id_session = '0') )";
 
         // Condition for search (get ALL folders and documents)
 
@@ -3302,6 +3307,36 @@ class DocumentManager {
             }
         }
         return $defaultVisibility;
+    }
+
+    /**
+     * @param array $courseInfo
+     * @param int $id doc id
+     * @param string $visibility visible/invisible
+     * @param int $userId
+     */
+    public static function updateVisibilityFromAllSessions($courseInfo, $id, $visibility, $userId)
+    {
+        $sessionList = SessionManager::get_session_by_course($courseInfo['code']);
+
+        if (!empty($sessionList)) {
+            foreach ($sessionList as $session) {
+                $sessionId = $session['id'];
+                api_item_property_update(
+                    $courseInfo,
+                    TOOL_DOCUMENT,
+                    $id,
+                    $visibility,
+                    $userId,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $sessionId
+                );
+            }
+        }
+
     }
 
 }

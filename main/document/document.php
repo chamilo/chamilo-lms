@@ -710,6 +710,10 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
                             null,
                             $session_id
                         )) {
+                            // Update visibility of the document in all sessions
+                            if (empty($session_id)) {
+                                DocumentManager::updateVisibilityFromAllSessions($_course, $documentId, $visibilityCommand, api_get_user_id());
+                            }
                             Display::display_confirmation_message(get_lang('VisibilityChanged').': '.$data['path']);
                         } else {
                             Display::display_error_message(get_lang('ViModProb'));
@@ -729,13 +733,16 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
                             null,
                             $session_id
                         )) {
+                            // Update visibility of the document in all sessions
+                            if (empty($session_id)) {
+                                DocumentManager::updateVisibilityFromAllSessions($_course, $documentId, $visibilityCommand, api_get_user_id());
+                            }
                             Display::display_confirmation_message(get_lang('VisibilityChanged').': '.$data['path']);
                         } else {
                             Display::display_error_message(get_lang('ViModProb'));
                         }
                         break;
                     case 'delete':
-
                         foreach ($files as $path) {
                             if (!$is_allowed_to_edit) {
                                 if (DocumentManager::check_readonly($_course, api_get_user_id(), $path)) {
@@ -783,9 +790,6 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 
                 if ($created_dir) {
                     Display::display_confirmation_message('<span title="'.$created_dir.'">'.get_lang('DirCr').'</span>', false);
-                    // Uncomment if you want to enter the created dir
-                    //$curdirpath = $created_dir;
-                    //$curdirpathurl = urlencode($curdirpath);
                 } else {
                     Display::display_error_message(get_lang('CannotCreateDir'));
                 }
@@ -828,6 +832,11 @@ if ($is_allowed_to_edit) {
         // Update item_property to change visibility
         if (api_item_property_update($_course, TOOL_DOCUMENT, $update_id, $visibility_command, api_get_user_id(), null, null, null, null, $session_id)) {
             Display::display_confirmation_message(get_lang('VisibilityChanged')); //don't use ViMod because firt is load ViMdod (Gradebook). VisibilityChanged (trad4all)
+
+            if (empty($session_id)) {
+                DocumentManager::updateVisibilityFromAllSessions($_course, $update_id, $visibility_command, api_get_user_id());
+            }
+
         } else {
             Display::display_error_message(get_lang('ViModProb'));
         }

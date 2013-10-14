@@ -1127,7 +1127,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
                 $count++;
             }
 
-            // Validacion when belongs to a session
+            // Validation when belongs to a session
             $session_img = api_get_session_image($document_data['session_id'], $_user['status']);
 
             // Document title with link

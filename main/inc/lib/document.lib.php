@@ -465,7 +465,14 @@ class DocumentManager {
      * @param boolean $can_see_invisible
      * @return array with all document data
      */
-    public static function get_all_document_data($_course, $path = '/', $to_group_id = 0, $to_user_id = NULL, $can_see_invisible = false, $search = false) {
+    public static function get_all_document_data(
+        $_course,
+        $path = '/',
+        $to_group_id = 0,
+        $to_user_id = NULL,
+        $can_see_invisible = false,
+        $search = false
+    ) {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 
@@ -477,22 +484,22 @@ class DocumentManager {
             $to_value = $to_group_id;
         }
 
-        //escape underscores in the path so they don't act as a wildcard
+        // Escape underscores in the path so they don't act as a wildcard
         $path = Database::escape_string(str_replace('_', '\_', $path));
         $to_user_id = Database::escape_string($to_user_id);
         $to_value = Database::escape_string($to_value);
 
         $visibility_bit = ' <> 2';
 
-        //the given path will not end with a slash, unless it's the root '/'
-        //so no root -> add slash
+        // The given path will not end with a slash, unless it's the root '/'
+        // so no root -> add slash
         $added_slash = ($path == '/') ? '' : '/';
 
-        //condition for the session
+        // Condition for the session
         $current_session_id = api_get_session_id();
         $condition_session = " AND (id_session = '$current_session_id' OR id_session = '0')";
 
-        //condition for search (get ALL folders and documents)
+        // Condition for search (get ALL folders and documents)
 
         $sql = "SELECT  docs.id,
                         docs.filetype,
@@ -506,13 +513,13 @@ class DocumentManager {
                         last.lastedit_date,
                         last.visibility,
                         last.insert_user_id
-                    FROM  " . $TABLE_ITEMPROPERTY . "  AS last INNER JOIN " . $TABLE_DOCUMENT . "  AS docs
-                        ON (docs.id = last.ref AND last.tool = '" . TOOL_DOCUMENT . "' AND docs.c_id = {$_course['real_id']} AND last.c_id = {$_course['real_id']})
+                    FROM $TABLE_ITEMPROPERTY AS last INNER JOIN $TABLE_DOCUMENT AS docs
+                        ON (docs.id = last.ref AND last.tool = '".TOOL_DOCUMENT."' AND docs.c_id = {$_course['real_id']} AND last.c_id = {$_course['real_id']})
                     WHERE
                         docs.path LIKE '" . $path . $added_slash . "%' AND
                         docs.path NOT LIKE '" . $path . $added_slash . "%/%' AND
-                        " . $to_field . " = " . $to_value . " AND
-                        last.visibility" . $visibility_bit . $condition_session;
+                        ".$to_field." = ".$to_value." AND
+                        last.visibility ".$visibility_bit.$condition_session;
         $result = Database::query($sql);
 
         $doc_list = array();
@@ -523,7 +530,7 @@ class DocumentManager {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
 
                 if (api_is_coach()) {
-                    //Looking for course items that are invisible to hide it in the session
+                    // Looking for course items that are invisible to hide it in the session
                     if (in_array($row['id'], array_keys($doc_list))) {
                         if ($doc_list[$row['id']]['item_property_session_id'] == 0 && $doc_list[$row['id']]['session_id'] == 0) {
                             if ($doc_list[$row['id']]['visibility'] == 0) {
@@ -539,9 +546,8 @@ class DocumentManager {
                     $doc_list[] = $row;
                 }
 
-
                 if ($row['filetype'] == 'file' && pathinfo($row['path'], PATHINFO_EXTENSION) == 'html') {
-                    //Templates management
+                    // Templates management
                     $table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
                     $sql_is_template = "SELECT id FROM $table_template
                                         WHERE course_code = '" . $_course['code'] . "'
@@ -560,7 +566,7 @@ class DocumentManager {
                 $ids_to_remove = array();
                 $my_repeat_ids = $temp = array();
 
-                //Selecting repetead ids
+                // Selecting repetead ids
                 foreach ($doc_list as $row) {
                     if (in_array($row['id'], array_keys($temp))) {
                         $my_repeat_ids[] = $row['id'];
@@ -568,7 +574,7 @@ class DocumentManager {
                     $temp[$row['id']] = $row;
                 }
                 //@todo use the DocumentManager::is_visible function
-                //Checking disponibility in a session
+                // Checking disponibility in a session
                 foreach ($my_repeat_ids as $id) {
                     foreach ($doc_list as $row) {
                         if ($id == $row['id']) {
@@ -597,7 +603,7 @@ class DocumentManager {
                     }
                 }
 
-                //Checking parents visibility
+                // Checking parents visibility
                 $final_document_data = array();
                 foreach ($document_data as $row) {
                     $is_visible = DocumentManager::check_visibility_tree($row['id'], $_course['code'], $current_session_id, api_get_user_id());

@@ -6637,3 +6637,21 @@ function api_drh_can_access_all_session_content()
     }
     return false;
 }
+
+/**
+ * @param string $tool
+ * @param string $setting
+ * @param mixed $defaultValue
+ */
+function api_get_default_tool_setting($tool, $setting, $defaultValue)
+{
+    global $_configuration;
+    if (isset($_configuration[$tool]) &&
+        isset($_configuration[$tool]['default_settings']) &&
+        isset($_configuration[$tool]['default_settings'][$setting])
+    ) {
+        return $_configuration[$tool]['default_settings'][$setting];
+    }
+    return $defaultValue;
+
+}

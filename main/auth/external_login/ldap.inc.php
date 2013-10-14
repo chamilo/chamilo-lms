@@ -1,6 +1,6 @@
 <?php
 
-// External login module : LDAP 
+// External login module : LDAP
 /**
  * This files is included by newUser.ldap.php and login.ldap.php
  * It implements the functions nedded by both files
@@ -307,15 +307,16 @@ function extldap_add_user_by_array($data, $update_if_exists = true)
     $password        = $data[$passwordKey][0];
 
     // Structure
-    $structure       = $data['edupersonprimaryorgunitdn'][0];
+  /*  $structure       = $data['edupersonprimaryorgunitdn'][0];
     $array_structure = explode(",", $structure);
     $array_val       = explode("=", $array_structure[0]);
     $etape           = $array_val[1];
     $array_val       = explode("=", $array_structure[1]);
     $annee           = $array_val[1];
-
+*/
     // To ease management, we add the step-year (etape-annee) code
-    $official_code = $etape."-".$annee;
+    //$official_code = $etape."-".$annee;
+    $official_code = api_convert_encoding($data[$extldap_user_correspondance['official_code']][0], api_get_system_encoding(), 'UTF-8');
     $auth_source   = 'ldap';
 
     // No expiration date for students (recover from LDAP's shadow expiry)

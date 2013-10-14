@@ -52,7 +52,7 @@ if (isset($_configuration['allow_strength_pass_checker']) && $_configuration['al
 $htmlHeadXtra[] = '
 <script>
 $("#status_select").ready(function() {
-    if ($(this).attr("value") == '.STUDENT.') {
+    if ($(this).attr("value") != '.STUDENT.') {
         $("#id_platform_admin").hide();
     }
 });

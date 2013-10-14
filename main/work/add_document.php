@@ -73,7 +73,15 @@ if (empty($docId)) {
         echo '</div>';
     }
 
-    $document_tree = DocumentManager::get_document_preview($courseInfo, null, null, 0, false, '/', api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId);
+    $document_tree = DocumentManager::get_document_preview(
+        $courseInfo,
+        null,
+        null,
+        0,
+        false,
+        '/',
+        api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId.'&'.api_get_cidreq()
+    );
     echo Display::page_subheader(get_lang('Documents'));
     echo $document_tree;
     echo '<hr /><div class="clear"></div>';

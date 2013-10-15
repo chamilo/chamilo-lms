@@ -209,6 +209,7 @@ class SessionManager
         $where .= $conditions['where'];
         $inject_where = $conditions['inject_where'];
         $inject_extra_fields = $conditions['inject_extra_fields'];
+
         $order = $conditions['order'];
         $limit = $conditions['limit'];
 
@@ -251,9 +252,7 @@ class SessionManager
             }
 
             foreach ($sessions as $session) {
-
                 $session_id = $session['id'];
-
                 $session['name'] = Display::url($session['name'], "resume_session.php?id_session=".$session['id']);
 
                 if (isset($session['session_active']) && $session['session_active'] == 1) {
@@ -308,71 +307,14 @@ class SessionManager
     }
 
     /**
-     * Gets the number of rows in the session table filtered through the given
-     * array of parameters
-     * @param array Array of options/filters/keys
-     * @return integer The number of rows, or false on wrong param
-     * @assert ('a') === false
-     */
-    static function get_count_admin_complete($options = array()) {
-        if (!is_array($options)) {
-            return false;
-        }
-        $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_category   = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $tbl_user               = Database::get_main_table(TABLE_MAIN_USER);
-
-        $where = 'WHERE 1 = 1 ';
-        $user_id = api_get_user_id();
-
-        if (api_is_session_admin() && api_get_setting('allow_session_admins_to_see_all_sessions') == 'false') {
-            $where.=" WHERE s.session_admin_id = $user_id ";
-        }
-
-        if (!empty($options['where'])) {
-            if (!empty($options['extra'])) {
-                $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);
-                $options['where'] = str_replace('AND', 'OR', $options['where']);
-
-                foreach ($options['extra'] as $extra) {
-                    $options['where'] = str_replace($extra['field'], 'fv.field_id = '.$extra['id'].' AND fvo.option_value', $options['where']);
-                }
-            }
-            $where .= ' AND '.$options['where'];
-        }
-
-        $query_rows = "SELECT count(*) as total_rows
-                       FROM $tbl_session s
-                       LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
-                       INNER JOIN $tbl_user u ON s.id_coach = u.user_id $where ";
-
-        if (api_is_multiple_url_enabled()) {
-            $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-            $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1) {
-                $where.= " AND ar.access_url_id = $access_url_id ";
-
-                $query_rows = "SELECT count(*) as total_rows
-                               FROM $tbl_session s
-                               LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
-                               INNER JOIN $tbl_user u ON s.id_coach = u.user_id
-                               INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id $where ";
-            }
-        }
-        $result_rows = Database::query($query_rows);
-        $recorset = Database::fetch_array($result_rows);
-        $num = $recorset['total_rows'];
-        return $num;
-    }
-
-    /**
      * Gets the admin session list callback of the session/session_list.php
      * page with all user/details in the right fomat
-     * @param array order and limit keys
+     * @param array
      * @result array Array of rows results
      * @asset ('a') === false
      */
-    public static function get_sessions_admin_complete($options = array()) {
+    public static function get_sessions_admin_complete($options = array())
+    {
         if (!is_array($options)) {
             return false;
         }
@@ -387,8 +329,10 @@ class SessionManager
         $where = 'WHERE 1 = 1 ';
         $user_id = api_get_user_id();
 
-        if (api_is_session_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false') {
-            $where.=" AND s.session_admin_id = $user_id ";
+        if (!api_is_platform_admin()) {
+            if (api_is_session_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false') {
+                $where.=" AND s.session_admin_id = $user_id ";
+            }
         }
 
         $coach_name = " CONCAT(u.lastname , ' ', u.firstname) as coach_name ";
@@ -397,9 +341,7 @@ class SessionManager
         }
 
         $today = api_get_utc_datetime();
-
         $inject_extra_fields = null;
-
         $extra_fields = array();
         $extra_fields_info = array();
 
@@ -438,11 +380,12 @@ class SessionManager
         $select = "
                 SELECT * FROM (
                     SELECT DISTINCT
-                        IF (
+                         IF (
                             (s.access_start_date <= '$today' AND '$today' < s.access_end_date) OR
                             (s.access_start_date  = '0000-00-00 00:00:00' AND s.access_end_date  = '0000-00-00 00:00:00' ) OR
-                            (s.access_start_date <= '$today' AND '0000-00-00 00:00:00' = s.access_end_date) OR
-                            ('$today' < s.access_end_date AND '0000-00-00 00:00:00' = s.access_start_date)
+                            (s.access_start_date  IS NULL AND s.access_end_date IS NULL) OR
+                            (s.access_start_date <= '$today' AND ('0000-00-00 00:00:00' = s.access_end_date OR s.access_end_date IS NULL )) OR
+                            ('$today' < s.access_end_date AND ('0000-00-00 00:00:00' = s.access_start_date OR s.access_start_date IS NULL) )
                         , 1, 0) as session_active,
                 s.name,
                 s.nbr_courses,
@@ -476,7 +419,7 @@ class SessionManager
         }
         $query = "$select FROM $tbl_session s
                     LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id)
-                    INNER JOIN $tbl_session_field_options fvo ON (fv.field_id = fvo.field_id)
+                    LEFT JOIN $tbl_session_field_options fvo ON (fv.field_id = fvo.field_id)
                     LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id)
                     LEFT JOIN $tbl_course c ON (src.c_id = c.id)
                     LEFT JOIN $tbl_session_category sc ON (s.session_category_id = sc.id)
@@ -491,6 +434,7 @@ class SessionManager
                 $query = "$select
                     FROM $tbl_session s
                     LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id)
+                    LEFT JOIN $tbl_session_field_options fvo ON (fv.field_id = fvo.field_id)
                     LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id)
                     LEFT JOIN $tbl_course c ON (src.c_id = c.id)
                     LEFT JOIN $tbl_session_category sc ON (s.session_category_id = sc.id)
@@ -507,7 +451,7 @@ class SessionManager
         }
 
         //error_log($query);
-        // echo $query;
+        //echo $query;
 
         $result = Database::query($query);
         $formatted_sessions = array();
@@ -575,6 +519,70 @@ class SessionManager
 
         return $formatted_sessions;
     }
+
+    /**
+     * Gets the number of rows in the session table filtered through the given
+     * array of parameters
+     * @param array Array of options/filters/keys
+     * @return integer The number of rows, or false on wrong param
+     * @assert ('a') === false
+     */
+    static function get_count_admin_complete($options = array())
+    {
+        if (!is_array($options)) {
+            return false;
+        }
+        $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tbl_session_category   = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+        $tbl_user               = Database::get_main_table(TABLE_MAIN_USER);
+
+        $where = 'WHERE 1 = 1 ';
+        $user_id = api_get_user_id();
+
+        if (api_is_session_admin() && api_get_setting('allow_session_admins_to_see_all_sessions') == 'false') {
+            $where.=" WHERE s.session_admin_id = $user_id ";
+        }
+
+        if (!empty($options['where'])) {
+            if (!empty($options['extra'])) {
+                $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);
+                $options['where'] = str_replace('AND', 'OR', $options['where']);
+
+                foreach ($options['extra'] as $extra) {
+                    $options['where'] = str_replace($extra['field'], 'fv.field_id = '.$extra['id'].' AND fvo.option_value', $options['where']);
+                }
+            }
+            $where .= ' AND '.$options['where'];
+        }
+
+        $query_rows = "SELECT count(*) as total_rows
+                       FROM $tbl_session s
+                       LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
+                       INNER JOIN $tbl_user u ON s.id_coach = u.user_id $where ";
+
+        if (api_is_multiple_url_enabled()) {
+            $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+            $access_url_id = api_get_current_access_url_id();
+            if ($access_url_id != -1) {
+                $where.= " AND ar.access_url_id = $access_url_id ";
+
+                $query_rows = "SELECT count(*) as total_rows
+                               FROM $tbl_session s
+                               LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
+                               INNER JOIN $tbl_user u ON s.id_coach = u.user_id
+                               INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id $where ";
+            }
+        }
+        $result = Database::query($query_rows);
+        $num = 0;
+        if (Database::num_rows($result)) {
+            $rows = Database::fetch_array($result);
+            $num = $rows['total_rows'];
+        }
+        return $num;
+    }
+
+
 
     /**
      *
@@ -2873,21 +2881,7 @@ class SessionManager
                     array('name'=>'name',                'index'=>'name',          'width'=>'200',  'align'=>'left', 'search' => 'true', 'searchoptions' => array('sopt' => $operators)),
                     array('name'=>'display_start_date',  'index'=>'display_start_date', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('dataInit' => 'date_pick_today', 'sopt' => $date_operators)),
                     array('name'=>'display_end_date',    'index'=>'display_end_date', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('dataInit' => 'date_pick_one_month', 'sopt' => $date_operators)),
-         //           array('name'=>'category_name',       'index'=>'category_name', 'hidden' => 'true', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true', 'sopt' => $operators)),
-                    //array('name'=>'access_start_date',     'index'=>'access_start_date',    'width'=>'60',   'align'=>'left', 'search' => 'true',  'searchoptions' => array('searchhidden' =>'true')),
-                    //array('name'=>'access_end_date',       'index'=>'access_end_date',      'width'=>'60',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true')),
-                    //array('name'=>'coach_name',           'index'=>'coach_name',     'width'=>'70',   'align'=>'left', 'search' => 'false', 'searchoptions' => array('sopt' => $operators)),
-                    //array('name'=>'session_active',       'index'=>'session_active', 'width'=>'25',   'align'=>'left', 'search' => 'true', 'stype'=>'select',
-                          //for the bottom bar
-                    //      'searchoptions' => array(
-                    //                        'defaultValue'  => '1',
-                    //                        'value'         => '1:'.get_lang('Active').';0:'.get_lang('Inactive')),
-                          //for the top bar
-                          //'editoptions' => array('value' => '" ":'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive'))
-                    //),
-                    //array('name'=>'course_code',    'index'=>'course_code',    'width'=>'40', 'hidden' => 'true', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true','sopt' => $operators)),
                     array('name'=>'visibility',     'index'=>'visibility',      'width'=>'40',   'align'=>'left', 'search' => 'false'),
-                    //array('name'=>'course_title',    'index'=>'course_title',   'width'=>'50',   'hidden' => 'true', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true','sopt' => $operators)),
                 );
                 break;
             case 'complete':
@@ -2895,7 +2889,6 @@ class SessionManager
                     get_lang('Name'),
                     get_lang('SessionDisplayStartDate'),
                     get_lang('SessionDisplayEndDate'),
-                    //get_lang('SessionCategoryName'),
                     get_lang('Coach'),
                     get_lang('Status'),
                     get_lang('Visibility'),
@@ -2905,19 +2898,15 @@ class SessionManager
                     array('name'=>'name',                'index'=>'name',          'width'=>'200',  'align'=>'left', 'search' => 'true', 'searchoptions' => array('sopt' => $operators)),
                     array('name'=>'display_start_date',  'index'=>'display_start_date', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('dataInit' => 'date_pick_today', 'sopt' => $date_operators)),
                     array('name'=>'display_end_date',    'index'=>'display_end_date', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('dataInit' => 'date_pick_one_month', 'sopt' => $date_operators)),
-         //           array('name'=>'category_name',       'index'=>'category_name', 'hidden' => 'true', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true', 'sopt' => $operators)),
-                    //array('name'=>'access_start_date',     'index'=>'access_start_date',    'width'=>'60',   'align'=>'left', 'search' => 'true',  'searchoptions' => array('searchhidden' =>'true')),
-                    //array('name'=>'access_end_date',       'index'=>'access_end_date',      'width'=>'60',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true')),
                     array('name'=>'coach_name',           'index'=>'coach_name',     'width'=>'70',   'align'=>'left', 'search' => 'false', 'searchoptions' => array('sopt' => $operators)),
                     array('name'=>'session_active',       'index'=>'session_active', 'width'=>'25',   'align'=>'left', 'search' => 'true', 'stype'=>'select',
-                          //for the bottom bar
-                          'searchoptions' => array(
-                                            'defaultValue'  => '1',
-                                            'value'         => '1:'.get_lang('Active').';0:'.get_lang('Inactive')),
-                          //for the top bar
-                          'editoptions' => array('value' => '" ":'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive'))
+                        //for the bottom bar
+                        'searchoptions' => array(
+                            'defaultValue'  => '1',
+                            'value'         => '1:'.get_lang('Active').';0:'.get_lang('Inactive')),
+                        //for the top bar
+                        'editoptions' => array('value' => '" ":'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive'))
                     ),
-                    //array('name'=>'course_code',    'index'=>'course_code',    'width'=>'40', 'hidden' => 'true', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true','sopt' => $operators)),
                     array('name'=>'visibility',     'index'=>'visibility',      'width'=>'40',   'align'=>'left', 'search' => 'false'),
                     array('name'=>'course_title',    'index'=>'course_title',   'width'=>'50',   'hidden' => 'true', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true','sopt' => $operators)),
                 );
@@ -2944,6 +2933,10 @@ class SessionManager
         return $return_array;
     }
 
+    /**
+     * @param int $categoryId
+     * @return array
+     */
     static function getSessionsByCategory($categoryId)
     {
         $categoryId = intval($categoryId);

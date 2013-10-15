@@ -1440,9 +1440,9 @@ EOF;
 
         if (!empty($options['where'])) {
             if (!empty($options['extra'])) {
-                //Removing double 1=1
+                // Removing double 1=1
                 $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);
-                //Always OR
+                // Always OR
                 $counter = 1;
                 foreach ($extra_fields as $extra_info) {
                     $extra_field_info = $extra_info['extra_field_info'];

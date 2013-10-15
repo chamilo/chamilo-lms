@@ -145,7 +145,7 @@ $app->match('/', function() use($app) {
             'choices'   => $languages,
             'required'  => true,
         ))
-        ->add('continue', 'submit')
+        ->add('continue', 'submit', array('attr' => array('class' => 'btn')))
         ->getForm();
 
      if ('POST' == $request->getMethod()) {
@@ -161,7 +161,7 @@ $app->match('/', function() use($app) {
 $app->match('/requirements', function() use($app) {
     $request = $app['request'];
     $form = $app['form.factory']->createBuilder('form')
-        ->add('continue', 'submit')
+        ->add('continue', 'submit', array('attr' => array('class' => 'btn')))
         ->getForm();
 
     $req = display_requirements($app, 'new');
@@ -192,7 +192,7 @@ $app->match('/check-database', function() use($app) {
         $builder->add($key, $value['type'], $value['attributes']);
     }
 
-    $builder->add('check', 'submit');
+    $builder->add('check', 'submit', array('attr' => array('class' => 'btn')));
     $form = $builder->getForm();
 
     if ('POST' == $request->getMethod()) {
@@ -266,7 +266,7 @@ $app->match('/portal-settings', function() use($app) {
         $builder->add($key, $value['type'], $value['attributes']);
     }
 
-    $builder->add('continue', 'submit');
+    $builder->add('continue', 'submit', array('attr' => array('class' => 'btn')));
     $form = $builder->getForm();
 
     if ('POST' == $request->getMethod()) {
@@ -295,7 +295,7 @@ $app->match('/admin-settings', function() use($app) {
     foreach ($data as $key => $value) {
         $builder->add($key, $value['type'], $value['attributes']);
     }
-    $builder->add('continue', 'submit');
+    $builder->add('continue', 'submit', array('attr' => array('class' => 'btn')));
 
     $form = $builder->getForm();
 
@@ -325,7 +325,7 @@ $app->match('/resume', function() use($app) {
     if (!empty($portalSettings) && !empty($databaseSettings) && !empty($adminSettings)) {
 
         $form = $app['form.factory']->createBuilder('form', $data)
-            ->add('install', 'submit', array('label' => 'Install'))
+            ->add('install', 'submit', array('label' => 'Install', 'attr' => array('class' => 'btn btn-success')))
             ->getForm();
 
         if ('POST' == $request->getMethod()) {

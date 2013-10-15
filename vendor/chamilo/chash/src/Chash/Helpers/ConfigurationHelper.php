@@ -335,26 +335,6 @@ class ConfigurationHelper extends Helper
         return $finder;
     }
 
-     /**
-     * @return array
-     */
-    public function getTempFiles()
-    {
-        $finder = new Finder();
-        $sysPath = $this->getSysPath();
-
-        if (is_dir($sysPath.'temp')) {
-            $finder->files()->in($sysPath.'temp');
-            $finder->directories()->in($sysPath.'temp');
-        }
-
-        if (is_dir($sysPath.'archive')) {
-            $finder->files()->in($sysPath.'archive');
-            $finder->directories()->in($sysPath.'archive');
-        }
-        return $finder;
-    }
-
     /**
      * @return Finder
      */
@@ -392,8 +372,8 @@ class ConfigurationHelper extends Helper
         $finder->directories()->in($sysPath);
         $finder->path('courses');
         $finder->path('data/courses');
-        return $finder;
 
+        return $finder;
     }
 
     /**

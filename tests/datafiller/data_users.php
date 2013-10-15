@@ -56,6 +56,18 @@ $users[] = array(
 );
 
 $users[] = array(
+    'username' => 'coach',
+    'pass' => 'coach',
+    'firstname' => 'coach',
+    'lastname' => 'coach',
+    'status' => 1,
+    'auth_source' => 'platform',
+    'email' => 'coach@example.com',
+    'creator_id' => 1,
+    'active' => 1
+);
+
+$users[] = array(
     'username' => 'agarcia',
     'pass' => 'agarcia',
     'firstname' => 'Alan',

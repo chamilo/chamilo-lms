@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
-require '../../../global.inc.php';
+// Fixes error that shows the header and footer.
+$app['default_layout'] = $app['template_style'].'/layout/blank.tpl';
 ?>
 var day;
 var month;

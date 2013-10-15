@@ -88,7 +88,7 @@ class ScoreDisplayForm extends FormValidator
 				<p><!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->
                 
                 <label class="control-label">{label}</label>
-				<div class="controls"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	<br /><b>'.get_lang('And').'</b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{element} % =';
+				<div class="controls"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	<br/>&nbsp<b>'.get_lang('And').'</b>&nbsp&nbsp&nbsp&nbsp&nbsp{element}&nbsp%&nbsp&nbsp=';
 
 				$elementTemplateTwoLabel2 =
 				'<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->&nbsp{element}
@@ -107,7 +107,7 @@ class ScoreDisplayForm extends FormValidator
 					'size' => 40,
 					'maxlength' => 40,
 					'id' => 'txtb-'.$counter,
-                    'class' => 'span3',
+                    'class' => 'span',
 				));
 				$renderer->setElementTemplate($elementTemplateTwoLabel,'endscore[' . $counter . ']');
 				$renderer->setElementTemplate($elementTemplateTwoLabel2,'displaytext[' . $counter . ']');

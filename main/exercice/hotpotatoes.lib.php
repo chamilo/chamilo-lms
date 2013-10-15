@@ -18,6 +18,7 @@ $dbTable = Database::get_course_table(TABLE_DOCUMENT); // TODO: This is a global
  * @return  boolean     Always true so far
  */
 function hotpotatoes_init($base_work_dir) {
+    //global $_course, $_user;
     $document_path = $base_work_dir.'/';
     if (!is_dir($document_path)) {
         if (is_file($document_path)) {
@@ -72,11 +73,11 @@ function GetQuizName($fname, $fpath) {
  * Added conditional to the table if is empty.
  */
 function GetComment($path, $course_code = '') {
-    global $dbTable;
+    $dbTable = Database::get_course_table(TABLE_DOCUMENT);
     $course_info = api_get_course_info($course_code);
     $path = Database::escape_string($path);
     if (!empty($course_info) && !empty($path)) {
-        $query = "SELECT comment FROM $dbTable WHERE c_id = {$course_info['real_id']} AND path='$path'";
+        $query = "SELECT comment FROM $dbTable WHERE c_id = {$course_info['real_id']}";
         $result = Database::query($query);
         while ($row = Database::fetch_array($result)) {
             return $row[0];
@@ -131,7 +132,7 @@ function ReadFileCont($full_file_path) {
  */
 function WriteFileCont($full_file_path, $content) {
     // Check if this is not an attack, trying to get into other directories or something like that.
-    $_course = api_get_course_info();
+    global $_course;
     if (Security::check_abs_path(dirname($full_file_path).'/', api_get_path(SYS_COURSE_PATH).$_course['path'].'/')) {
         // Check if this is not an attack, trying to upload a php file or something like that.
         if (basename($full_file_path) != Security::filter_filename(basename($full_file_path))) { return false; }

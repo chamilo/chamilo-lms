@@ -17,19 +17,24 @@ api_protect_course_script(true);
 require_once 'work.lib.php';
 
 $work_data = get_work_data_by_id($work_id);
+$groupId = api_get_group_id();
 if (empty($work_data)) {
     exit;
 }
 
 //prevent some stuff
 if (empty($path)) {
-	$path = '/';
+    $path = '/';
 }
 
 if (empty($_course) || empty($_course['path'])) {
     api_not_allowed();
 }
+
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
+
+//zip library for creation of the zipfile
+require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
 
 //Creating a ZIP file
 $temp_zip_file = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
@@ -49,19 +54,38 @@ $course_id = api_get_course_int_id();
 
 if (api_is_allowed_to_edit()) {
     //Search for all files that are not deleted => visibility != 2
-    $sql = "SELECT url, title, description, insert_user_id, insert_date, contains_file
+    $sql = "SELECT DISTINCT url, title, description, insert_user_id, insert_date, contains_file
             FROM $tbl_student_publication AS work INNER JOIN $prop_table AS props
-                ON (props.c_id = $course_id AND
+                ON (
+                    props.c_id = $course_id AND
                     work.c_id = $course_id AND
-                    work.id = props.ref)
+                    work.id = props.ref
+                  )
  			WHERE   props.tool='work' AND
  			        work.parent_id = $work_id AND
  			        work.filetype = 'file' AND
- 			        props.visibility<>'2' ";
+ 			        props.visibility<>'2' AND
+ 			        work.active = 1 AND
+ 			        work.post_group_id = $groupId
+            ";
 
 } else {
+    $courseInfo = api_get_course_info();
+
+    allowOnlySubscribedUser(api_get_user_id(), $work_id, $courseInfo['real_id']);
+
+    $userCondition = null;
+
+    // All users
+    if ($courseInfo['show_score'] == 0) {
+        // Do another filter
+    } else {
+        // Only teachers
+        $userCondition = " AND props.insert_user_id = ".api_get_user_id();
+    }
+
     //for other users, we need to create a zipfile with only visible files and folders
-    $sql = "SELECT url, title, description, insert_user_id, insert_date, contains_file
+    $sql = "SELECT DISTINCT url, title, description, insert_user_id, insert_date, contains_file
             FROM $tbl_student_publication AS work INNER JOIN $prop_table AS props
                 ON (props.c_id = $course_id AND
                     work.c_id = $course_id AND
@@ -69,13 +93,14 @@ if (api_is_allowed_to_edit()) {
            WHERE
                     props.tool='work' AND
                     work.accepted = 1 AND
+                    work.active = 1 AND
                     work.parent_id = $work_id AND
-                    work.filetype='file' AND
+                    work.filetype = 'file' AND
                     props.visibility = '1' AND
-                    props.insert_user_id='".api_get_user_id()."'
+                    work.post_group_id = $groupId
+                    $userCondition
             ";
 }
-
 $query = Database::query($sql);
 
 //add tem to the zip file
@@ -101,7 +126,6 @@ while ($not_deleted_file = Database::fetch_assoc($query)) {
         @unlink($work_temp);
     }
 }
-
 
 if (!empty($files)) {
     //logging

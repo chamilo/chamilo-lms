@@ -67,8 +67,6 @@ class CQuizRelQuestion
      */
     //private $question;
 
-
-
     /**
      * Set cId
      *

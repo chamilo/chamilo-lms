@@ -38,8 +38,10 @@ class QuestionManagerController
         $extraJS[]      = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
         $app['extraJS'] = $extraJS;
 
+        $courseId = $app['request']->get('courseId');
+
         // Setting exercise obj.
-        $exercise                      = new \Exercise();
+        $exercise = new \Exercise($courseId);
         $exercise->edit_exercise_in_lp = true;
 
         // Setting question obj.
@@ -50,10 +52,11 @@ class QuestionManagerController
         $question->setDefaultValues = true;
 
         // Generating edit URL.
-        $url = $app['url_generator']->generate('admin_questions_edit', array('id' => $id));
+        $url = $app['url_generator']->generate('admin_questions_edit', array('id' => $id, 'courseId' => $courseId));
 
         // Creating a new form
         $form = new \FormValidator('edit_question', 'post', $url);
+        $form->add_hidden('course_id', $courseId);
 
         $extraFields = new \ExtraField('question');
         $extraFields->addElements($form, $id);
@@ -74,10 +77,13 @@ class QuestionManagerController
             $params['question_id'] = $id;
             $field_value->save_field_values($params);
             $app['template']->assign('message', \Display::return_message(get_lang('ItemUpdated'), 'success'));
-            $url = $app['url_generator']->generate('admin_questions_edit', array('id' => $id));
+            $url = $app['url_generator']->generate('admin_questions_edit', array('id' => $id, 'courseId' => $courseId));
 
             return $app->redirect($url);
         }
+
+        $questionHTML = $exercise->showQuestion($question, false, null, null, false, true, false, true, $exercise->feedback_type, true);
+        $app['template']->assign('question_preview', $questionHTML);
 
         $response = $app['template']->render_template('admin/questionmanager/edit_question.tpl');
 
@@ -223,26 +229,6 @@ class QuestionManagerController
 
         $categoryId = $app['request']->get('categoryId');
         $subtree    = null;
-
-        if (isset($categoryId)) {
-            //$repo->getChildrenQueryBuilder();
-
-            // Insert node.
-            /*
-            $options = array(
-                'decorate' => true,
-                'rootOpen' => '<ul class="nav nav-list">',
-                'rootClose' => '</ul>',
-                'childOpen' => '<li>',
-                'childClose' => '</li>'
-            );
-            $node = $repo->find($categoryId);
-
-            $qb = $repo->getChildrenQueryBuilder($node, true, 'title', 'ASC', true);
-            $query = $qb->getQuery();
-            $subtree = $repo->buildTree($query->getArrayResult(), $options);
-            var_dump($subtree);*/
-        }
 
         $options = array(
             'decorate'      => true,

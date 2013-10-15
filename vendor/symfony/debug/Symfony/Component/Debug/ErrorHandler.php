@@ -58,7 +58,7 @@ class ErrorHandler
      * @param integer $level The level at which the conversion to Exception is done (null to use the error_reporting() value and 0 to disable)
      * @param Boolean $displayErrors Display errors (for dev environment) or just log they (production usage)
      *
-     * @return The registered error handler
+     * @return ErrorHandler The registered error handler
      */
     public static function register($level = null, $displayErrors = true)
     {
@@ -104,6 +104,7 @@ class ErrorHandler
                     $stack = array_map(
                         function ($row) {
                             unset($row['args']);
+
                             return $row;
                         },
                         array_slice(debug_backtrace(false), 0, 10)
@@ -119,6 +120,11 @@ class ErrorHandler
         }
 
         if ($this->displayErrors && error_reporting() & $level && $this->level & $level) {
+            // make sure the ContextErrorException class is loaded (https://bugs.php.net/bug.php?id=65322)
+            if (!class_exists('Symfony\Component\Debug\Exception\ContextErrorException')) {
+                require __DIR__.'/Exception/ContextErrorException.php';
+            }
+
             throw new ContextErrorException(sprintf('%s: %s in %s line %d', isset($this->levels[$level]) ? $this->levels[$level] : $level, $message, $file, $line), 0, $level, $file, $line, $context);
         }
 
@@ -131,7 +137,7 @@ class ErrorHandler
             return;
         }
 
-        unset($this->reservedMemory);
+        $this->reservedMemory = '';
         $type = $error['type'];
         if (0 === $this->level || !in_array($type, array(E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE))) {
             return;

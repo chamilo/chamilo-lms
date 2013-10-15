@@ -119,7 +119,7 @@ $form->addElement('textarea','description',get_lang('Description'));
 
 //the first url with id = 1 will be always active
 if (isset($_GET['url_id']) && $_GET['url_id'] != 1) {
-    $form->addElement('checkbox','active',get_lang('Active'));
+    $form->addElement('checkbox','active', null, get_lang('Active'));
 }
 
 //$form->addRule('checkbox', get_lang('ThisFieldIsRequired'), 'required');
@@ -141,8 +141,9 @@ if (isset($_GET['url_id'])) {
     $submit_name = get_lang('AddUrl');
 }
 
-if (!$_configuration['multiple_access_urls']) {
+if (!api_is_multiple_url_enabled()) {
     header('Location: index.php');
+    exit;
 }
 
 $tool_name = get_lang('AddUrl');

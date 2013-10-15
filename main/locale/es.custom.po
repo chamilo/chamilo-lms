@@ -1,0 +1,40 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+
+msgid "IfYouContinueYourAnswerWillBeSavedAnyChangeWillBeNotAllowed"
+msgstr "Si continua, las respuestas serán guardadas y ningun cambio posterior será permitido."
+
+msgid "NoIWantToTurnBack"
+msgstr "No, deseo regresar al examen."
+
+msgid "YesImSure"
+msgstr "Si, estoy seguro."
+
+msgid "BadCredentials"
+msgstr "Los datos suministrados son incorrectos"
+
+msgid "Bad credentials"
+msgstr "Los datos suministrados son incorrectos"
+
+msgid "NextQuestion"
+msgstr "Siguiente pregunta"
+
+msgid "ToReviewXYZ"
+msgstr "%s por revisar (%s)"
+
+msgid "ToReviewZ"
+msgstr "(%s) Por revisar"
+
+msgid "ReviewQuestionLater"
+msgstr "Marcar para revisar después"
+
+msgid "SelectAnAnswerToContinue"
+msgstr "Seleccione una respuesta antes de seguir"

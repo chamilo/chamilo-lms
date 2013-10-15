@@ -157,7 +157,7 @@ class CGroupInfo
 
     /**
      *
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getItems()
     {

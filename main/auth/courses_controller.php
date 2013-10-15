@@ -11,6 +11,7 @@
  */
 class CoursesController
 {
+
     private $toolname;
     private $view;
     private $model;
@@ -18,7 +19,7 @@ class CoursesController
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct() {		
         $this->toolname = 'auth';
         $actived_theme_path = api_get_template();
         $this->view = new View($this->toolname, $actived_theme_path);
@@ -34,7 +35,7 @@ class CoursesController
     public function courses_list($action, $message = '') {
         $data = array();
         $user_id = api_get_user_id();
-
+        
         $data['user_courses']             = $this->model->get_courses_of_user($user_id);
         $data['user_course_categories']   = $this->model->get_user_course_categories();
         $data['courses_in_category']      = $this->model->get_courses_in_category();
@@ -60,7 +61,7 @@ class CoursesController
      * @param string    error message(optional)
      */
     public function categories_list($action, $message='', $error='') {
-        $data = array();
+        $data = array();            
         $data['user_course_categories'] = $this->model->get_user_course_categories();
         $data['action'] = $action;
         $data['message'] = $message;
@@ -81,24 +82,23 @@ class CoursesController
      */
     public function courses_categories($action, $category_code = null, $message = '', $error = '', $content = null) {
         $data = array();
-        $browse_course_categories = $this->model->browse_course_categories();
-
+        $browse_course_categories = $this->model->browse_course_categories();        
+        
         if ($action == 'display_random_courses') {
             $data['browse_courses_in_category'] = $this->model->browse_courses_in_category(null, 10);
-
         } else {
             if (!isset($category_code)) {
                 $category_code = $browse_course_categories[0][1]['code']; // by default first category
-            }
+            }            
             $data['browse_courses_in_category'] = $this->model->browse_courses_in_category($category_code);
         }
-
+        
         $data['browse_course_categories'] = $browse_course_categories;
         $data['code'] = Security::remove_XSS($category_code);
 
         // getting all the courses to which the user is subscribed to
         $curr_user_id = api_get_user_id();
-        $user_courses = $this->model->get_courses_of_user($curr_user_id);
+        $user_courses = $this->model->get_courses_of_user($curr_user_id);            
         $user_coursecodes = array();
 
         // we need only the course codes as these will be used to match against the courses of the category
@@ -107,14 +107,14 @@ class CoursesController
                 $user_coursecodes[] = $value['code'];
             }
         }
-
+        
         if (api_is_drh()) {
             $courses = CourseManager::get_courses_followed_by_drh(api_get_user_id());
             foreach ($courses as $course) {
                 $user_coursecodes[] = $course['code'];
-            }
+            }            
         }
-
+        
         $data['user_coursecodes'] = $user_coursecodes;
         $data['action']           = $action;
         $data['message']          = $message;
@@ -168,18 +168,26 @@ class CoursesController
     }
 
     /**
-     *
+     * Auto user subcription to a course
      */
     public function subscribe_user($course_code, $search_term, $category_code) {
+        $data = array();
+        $courseInfo = api_get_course_info($course_code);
+        // The course must be open in order to access the auto subscription
+        if (in_array($courseInfo['visibility'], array(COURSE_VISIBILITY_CLOSED, COURSE_VISIBILITY_REGISTERED, COURSE_VISIBILITY_HIDDEN))) {
+            $error = get_lang('SubscribingNotAllowed');
+            //$message = get_lang('SubscribingNotAllowed');
+        } else {
         $result = $this->model->subscribe_user($course_code);
         if (!$result) {
             $error = get_lang('CourseRegistrationCodeIncorrect');
         } else {
-            //Redirect directly to the course after subscription
-            $message = $result['message'];
-            $content = $result['content'];
+                //Redirect directly to the course after subscription
+                $message = $result['message'];
+                $content = $result['content'];
+            }
         }
-
+        
         if (!empty($search_term)) {
             $this->search_courses($search_term, $message, $error);
         } else {
@@ -205,7 +213,7 @@ class CoursesController
     /**
      * Change course category
      * render to listing view
-     * @param int Course id
+     * @param string    Course code
      * @param int    Category id
      */
     public function change_course_category($courseId, $category_id) {

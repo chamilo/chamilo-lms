@@ -44,6 +44,15 @@ class Database
      */
     public function __construct($db, $dbs)
     {
+        self::setDatabase($db, $dbs);
+    }
+
+    /**
+     * @param $db
+     * @param $dbs
+     */
+    public function setDatabase($db, $dbs)
+    {
         self::$db = $db;
 
         // Using read/write connections see the services.php file
@@ -326,66 +335,6 @@ class Database
         );*/
         //var_dump($query);
         return $connection->executeQuery($query);
-
-        /*
-        //@todo remove this before the stable release
-
-        //Check if the table contains a c_ (means a course id)
-        if (api_get_setting('server_type') === 'test' && strpos($query, 'c_')) {
-            //Check if the table contains inner joins
-            if (
-                strpos($query, 'assoc_handle') === false &&
-                strpos($query, 'olpc_peru_filter') === false &&
-                strpos($query, 'allow_public_certificates') === false &&
-                strpos($query, 'DROP TABLE IF EXISTS') === false &&
-                strpos($query, 'thematic_advance') === false &&
-                strpos($query, 'thematic_plan') === false &&
-                strpos($query, 'track_c_countries') === false &&
-                strpos($query, 'track_c_os') === false &&
-                strpos($query, 'track_c_providers') === false &&
-                strpos($query, 'track_c_referers') === false &&
-                strpos($query, 'track_c_browsers') === false &&
-                strpos($query, 'settings_current') === false &&
-                strpos($query, 'branch_sync') === false &&
-                strpos($query, 'branch_transaction_log') === false &&
-                strpos($query, 'branch_transaction') === false &&
-                strpos($query, 'branch_transaction_status') === false &&
-                strpos($query, 'dokeos_classic_2D') === false &&
-                strpos($query, 'cosmic_campus') === false &&
-                strpos($query, 'static_') === false &&
-                strpos($query, 'public_admin') === false &&
-                strpos($query, 'chamilo_electric_blue') === false &&
-                strpos($query, 'wcag_anysurfer_public_pages') === false &&
-                strpos($query, 'specific_field') === false &&
-                strpos($query, 'down_doc_path') === false &&
-                strpos($query, 'INNER JOIN') === false &&
-                strpos($query, 'inner join') === false &&
-                strpos($query, 'left join') === false &&
-                strpos($query, 'LEFT JOIN') === false &&
-                strpos($query, 'insert') === false &&
-                strpos($query, 'INSERT') === false &&
-                strpos($query, 'ALTER') === false &&
-                strpos($query, 'alter') === false &&
-                strpos($query, 'c_id') === false &&
-                strpos($query, 'c_quiz_question_rel_category') === false &&
-                strpos($query, 'c_quiz_category') === false &&
-                strpos($query, 'c_quiz_rel_question') === false &&
-                strpos($query, 'c_quiz_answer') === false &&
-                strpos($query, 'c_quiz_question') === false &&
-                strpos($query, 'c_quiz_rel_question') === false &&
-                strpos($query, 'create table') === false &&
-                strpos($query, 'CREATE TABLE') === false &&
-                strpos($query, 'AUTO_INCREMENT') === false
-            ) {
-                //@todo remove this
-                echo '<pre>';
-                $message = '<h4>Dev message: please add the c_id field in this query or report this error in support.chamilo.org </h4>';
-                $message .= $query;
-                echo $message;
-                echo '</pre>';
-            }
-        }
-        */
     }
 
     public static function customOptionToDoctrineOption($option)
@@ -619,6 +568,10 @@ class Database
         return $return_value;
     }
 
+    /**
+     * @param array $conditions
+     * @return string
+     */
     public static function parse_where_conditions($conditions)
     {
         return self::parse_conditions(array('where' => $conditions));
@@ -647,7 +600,6 @@ class Database
         //@todo should return affected_rows for
         return $affected_rows;
     }
-
 
     /**
      * Experimental useful database update
@@ -692,12 +644,6 @@ class Database
         return false;
     }
 
-
-    /*
-        Query methods
-        These methods execute a query and return the result(s).
-    */
-
     /**
      * Counts the number of rows in a table
      * @param string $table The table of which the rows should be counted
@@ -734,7 +680,6 @@ class Database
 
         return $result;
     }
-
 
     /**
      * Returns a list of databases created on the server. The list may contain all of the

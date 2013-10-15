@@ -9,9 +9,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\NoResultException;
 use Silex\Application;
+use Flint\Controller\Controller as FlintController;
 
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -21,9 +23,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  *
  * @abstract
  */
-abstract class BaseController
+abstract class BaseController extends FlintController
 {
     protected $app;
+    protected $pimple;
 
     /**
      * @param Application $app
@@ -31,13 +34,71 @@ abstract class BaseController
     public function __construct(Application $app)
     {
         $this->app = $app;
+        // In order to use the Flint Controller.
+        $this->pimple = $app;
+    }
+
+    /**
+     * @return \Entity\Course
+     */
+    protected function getCourse()
+    {
+        if (isset($this->app['course']) && !empty($this->app['course'])) {
+            return $this->app['course'];
+        }
+        return false;
+    }
+
+    /**
+     * @return int
+     */
+    protected function getCourseId()
+    {
+        $course = $this->getCourse();
+        return isset($course) && !empty($course) ? $course->getId() : 0;
+    }
+
+    /**
+     * @return \Entity\Session
+     */
+    protected function getSession()
+    {
+        if (isset($this->app['course_session']) && !empty($this->app['course_session'])) {
+            return $this->app['course_session'];
+        }
+        return false;
+    }
+
+    /**
+     * @return int
+     */
+    protected function getSessionId()
+    {
+        $session = $this->getSession();
+        return isset($session) && !empty($session) ? $session->getId() : 0;
+    }
+
+    /**
+     * @return \Template
+     */
+    protected function getTemplate()
+    {
+        return $this->app['template'];
+    }
+
+    /**
+     * @return \Entity\User
+     */
+    public function getUser()
+    {
+        return parent::getUser();
     }
 
     /**
      * This method should return the entity's repository.
      *
      * @abstract
-     * @return EntityRepository
+     * @return \Doctrine\ORM\EntityRepository
      */
     abstract protected function getRepository();
 
@@ -61,9 +122,9 @@ abstract class BaseController
     abstract protected function getTemplatePath();
 
     /**
-    * Returns the controller alias
+     * Returns the controller alias
      * @example for QuestionScoreController: question_score_controller
-    */
+     */
     abstract protected function getControllerAlias();
 
     /**
@@ -73,36 +134,11 @@ abstract class BaseController
     abstract protected function generateLinks();
 
     /**
-     *
-     * @return Request
+     * @return \Doctrine\ORM\EntityManager
      */
-    protected function getRequest()
-    {
-        return $this->get('request');
-    }
-
-    protected function redirect($redirect)
-    {
-        return $this->app->redirect($redirect);
-    }
-
-    protected function createNotFoundException($message = 'Not Found', \Exception $previous = null)
-    {
-        return $this->app->abort(404, $message);
-    }
-
-    /**
-     * @param string $item
-     * @return mixed
-     */
-    protected function get($item)
-    {
-        return $this->app[$item];
-    }
-
     protected function getManager()
     {
-        return $this->app['orm.em'];
+        return $this->get('orm.em');
     }
 
     /**
@@ -111,16 +147,65 @@ abstract class BaseController
      * @param array
      * @return mixed
      */
-    protected function createUrl($label, $params = array())
+    protected function createUrl($label, $parameters = array())
     {
         $links = $this->generateLinks();
+        $course = $this->getCourse();
+
+        if (!empty($course)) {
+            $parameters['course'] = $course->getCode();
+        }
+        $session = $this->getSession();
+        if (!empty($session)) {
+            $parameters['id_session'] = $session->getId();
+        }
+
+        $extraParams = $this->getExtraParameters();
+
+        if (!empty($extraParams)) {
+            $request = $this->getRequest();
+            $dynamicParams = array();
+            foreach ($extraParams as $param) {
+                $value = $request->get($param);
+                if (!empty($value)) {
+                    $dynamicParams[$param] = $value;
+                }
+            }
+            $parameters = array_merge($parameters, $dynamicParams);
+        }
+
         if (isset($links) && is_array($links) && isset($links[$label])) {
-            $url = $this->get('url_generator')->generate($links[$label], $params);
+            $url = $this->generateUrl($links[$label], $parameters);
             return $url;
         }
-        return $url = $this->get('url_generator')->generate($links['list_link']);
+        return $url = $this->generateUrl($links['list_link']);
     }
 
+    /**
+     * Add extra parameters when generating URLs
+     * @return array
+     */
+    protected function getExtraParameters()
+    {
+        return array();
+    }
+
+    /**
+     * @see Symfony\Component\Routing\RouterInterface::generate()
+     */
+    public function generateUrl($name, array $parameters = array(), $reference = UrlGeneratorInterface::ABSOLUTE_PATH)
+    {
+        $course = $this->getCourse();
+        if (!empty($course)) {
+            $parameters['course'] = $course->getCode();
+        }
+        $session = $this->getSession();
+        if (!empty($session)) {
+            $parameters['id_session'] = $session->getId();
+        }
+
+        return parent::generateUrl($name, $parameters, $reference);
+    }
 
     // CRUD default actions
 
@@ -146,17 +231,16 @@ abstract class BaseController
     public function addAction()
     {
         $request = $this->getRequest();
-        $form = $this->get('form.factory')->create($this->getFormType());
+        $form = $this->createForm($this->getFormType(), $this->getDefaultEntity());
 
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $item = $form->getData();
-                $this->createAction($item);
-                $this->get('session')->getFlashBag()->add('success', "Added");
-                $url = $this->createUrl('list_link');
-                return $this->redirect($url);
-            }
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $item = $form->getData();
+            $this->createAction($item);
+            $this->get('session')->getFlashBag()->add('success', "Added");
+            $url = $this->createUrl('list_link');
+            return $this->redirect($url);
         }
 
         $template = $this->get('template');
@@ -168,7 +252,7 @@ abstract class BaseController
 
     /**
      *
-     * @Route("/{id}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+     * @Route("/{id}", requirements={"id" = "\d+"})
      * @Method({"GET"})
      */
     public function readAction($id)
@@ -180,7 +264,7 @@ abstract class BaseController
 
     /**
      *
-     * @Route("/{id}/edit", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+     * @Route("/{id}/edit", requirements={"id" = "\d+"})
      * @Method({"GET"})
      */
     public function editAction($id)
@@ -190,18 +274,17 @@ abstract class BaseController
         $item = $repo->findOneById($id);
 
         if ($item) {
-            $form = $this->get('form.factory')->create($this->getFormType(), $item);
 
-            if ($request->getMethod() == 'POST') {
-                $form->bind($this->getRequest());
+            $form = $this->createForm($this->getFormType(), $item);
 
-                if ($form->isValid()) {
-                    $data = $form->getData();
-                    $this->updateAction($data);
-                    $this->get('session')->getFlashBag()->add('success', "Updated");
-                    $url = $this->createUrl('list_link');
-                    return $this->redirect($url);
-                }
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $this->updateAction($data);
+                $this->get('session')->getFlashBag()->add('success', "Updated");
+                $url = $this->createUrl('list_link');
+                return $this->redirect($url);
             }
 
             $template = $this->get('template');
@@ -217,7 +300,7 @@ abstract class BaseController
 
     /**
      *
-     * @Route("/{id/delete}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+     * @Route("/{id}/delete", requirements={"id" = "\d+"})
      * @Method({"GET"})
      */
     public function deleteAction($id)
@@ -230,7 +313,6 @@ abstract class BaseController
             return $this->redirect($url);
         }
     }
-
 
     /**
      * Base "read" action.
@@ -281,9 +363,8 @@ abstract class BaseController
      */
     protected function getList($format = 'json')
     {
-        $list = $this->getRepository()
-            ->createQueryBuilder('e')
-            ->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        $qb = $this->getRepository()->createQueryBuilder('e');
+        $list = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
         switch ($format) {
             case 'json':
@@ -292,6 +373,25 @@ abstract class BaseController
             default:
                 return $list;
                 break;
+        }
+    }
+
+    /**
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @param string
+     */
+    protected function setCourseParameters(\Doctrine\ORM\QueryBuilder & $qb, $prefix)
+    {
+        $course = $this->getCourse();
+        if ($course) {
+            $qb->andWhere($prefix.'.cId = :id');
+            $qb->setParameter('id', $course->getId());
+
+            $session = $this->getSession();
+            if (!empty($session)) {
+                $qb->andWhere($prefix.'.sessionId = :session_id');
+                $qb->setParameter('session_id', $session->getId());
+            }
         }
     }
 
@@ -402,7 +502,6 @@ abstract class BaseController
         return new JsonResponse($this->getEntityForJson($object->getId()));
     }
 
-
     /**
      * Returns an entity from its ID, or FALSE in case of error.
      *
@@ -432,7 +531,8 @@ abstract class BaseController
             return $this->getRepository()->createQueryBuilder('e')
                 ->where('e.id = :id')
                 ->setParameter('id', $id)
-                ->getQuery()->getSingleResult(Query::HYDRATE_ARRAY);
+                ->getQuery()
+                ->getSingleResult(Query::HYDRATE_ARRAY);
         } catch (NoResultException $ex) {
             return false;
         }
@@ -481,5 +581,10 @@ abstract class BaseController
         }
 
         return $entity;
+    }
+
+    protected function getDefaultEntity()
+    {
+        return null;
     }
 }

@@ -49,8 +49,10 @@ class FreeAnswer extends Question
             }
         }
 
-        // Setting the save button here and not in the question class.php.
-        $form->addElement('style_submit_button', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
+        if ($form->isFrozen() == false) {
+            // Setting the save button here and not in the question class.php.
+            $form->addElement('style_submit_button', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
+        }
     }
 
     /**
@@ -63,14 +65,17 @@ class FreeAnswer extends Question
         $this->save();
     }
 
-    function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false)
+    /**
+     * {@inheritdoc}
+     */
+    function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false, $hideTitle = 0)
     {
         if (!empty($score['comments']) || $score['score'] > 0) {
             $score['revised'] = true;
         } else {
             $score['revised'] = false;
         }
-        $header = parent::return_header($feedback_type, $counter, $score, $show_media);
+        $header = parent::return_header($feedback_type, $counter, $score, $show_media, $hideTitle);
         $header .= '<table class="'.$this->question_table_class.'" >
         <tr>
 		<th>'.get_lang("Answer").'</th>

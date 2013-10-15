@@ -4,11 +4,11 @@
 /**
  * This is a bootstrap file that loads all Chamilo dependencies including:
  *
- * - Chamilo settings in main/inc/configuration.php or main/inc/configuration.yml
- * - mysql database (Using Doctrine DBAL/ORM or the Classic way: Database::query())
+ * - Chamilo settings config/configuration.yml or config/configuration.php (in this order, using what if finds first)
+ * - Database (Using Doctrine DBAL/ORM)
  * - Templates (Using Twig)
- * - Loading language files (No Symfony component)
- * - Loading mail settings (SwiftMailer smtp/sendmail/mail)
+ * - Loading language files (Using Symfony component)
+ * - Loading mail settings (Using SwiftMailer smtp/sendmail/mail)
  * - Debug (Using Monolog)
  *
  * ALL Chamilo scripts must include this file in order to have the $app container
@@ -17,15 +17,6 @@
  * @package chamilo.include
  *
  */
-
-// Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
-// @todo not sure if we need this
-// api_request_uri();
-// This is for compatibility with MAC computers.
-//ini_set('auto_detect_line_endings', '1');
-
-// Composer auto loader.
-require_once __DIR__.'../../../vendor/autoload.php';
 
 use Silex\Application;
 use \ChamiloSession as Session;
@@ -54,6 +45,8 @@ $configurationYMLFile = $includePath.'/../../config/configuration.yml';
 $configurationFileAppPath = $includePath.'/../../config/configuration.php';
 
 $alreadyInstalled = false;
+$_configuration = array();
+
 if (file_exists($configurationFilePath) || file_exists($configurationYMLFile)  || file_exists($configurationFileAppPath)) {
     if (file_exists($configurationFilePath)) {
         require_once $configurationFilePath;
@@ -64,8 +57,6 @@ if (file_exists($configurationFilePath) || file_exists($configurationYMLFile)  |
         require_once $configurationFileAppPath;
     }
     $alreadyInstalled = true;
-} else {
-    $_configuration = array();
 }
 
 // Overwriting $_configuration
@@ -87,7 +78,8 @@ $app['root_sys'] = isset($_configuration['root_sys']) ? $_configuration['root_sy
 $app['sys_root'] = $app['root_sys'];
 $app['sys_data_path'] = isset($_configuration['sys_data_path']) ? $_configuration['sys_data_path'] : $app['root_sys'].'data/';
 $app['sys_config_path'] = isset($_configuration['sys_config_path']) ? $_configuration['sys_config_path'] : $app['root_sys'].'config/';
-$app['sys_temp_path'] = isset($_configuration['sys_temp_path']) ? $_configuration['sys_temp_path'] : $app['root_sys'].'temp/';
+$app['sys_course_path'] = isset($_configuration['sys_course_path']) ? $_configuration['sys_course_path'] : $app['sys_data_path'].'/courses/';
+$app['sys_temp_path'] = isset($_configuration['sys_temp_path']) ? $_configuration['sys_temp_path'] : $app['sys_data_path'].'temp/';
 $app['sys_log_path'] = isset($_configuration['sys_log_path']) ? $_configuration['sys_log_path'] : $app['root_sys'].'logs/';
 
 /** Loading config files (mail, auth, profile) */
@@ -124,7 +116,7 @@ if ($alreadyInstalled) {
     }*/
 
     // For backward compatibility.
-    $_configuration['dokeos_version'] = $_configuration['system_version'];
+    $_configuration['dokeos_version'] = isset($_configuration['system_version']) ? $_configuration['system_version'] : null;
     //$_configuration['dokeos_stable'] = $_configuration['system_stable'];
     $userPasswordCrypted = (!empty($_configuration['password_encryption']) ? $_configuration['password_encryption'] : 'sha1');
 }
@@ -142,7 +134,6 @@ if (isset($urlInfo['path'])) {
 }
 
 $libPath = $includePath.'/lib/';
-$langPath = api_get_path(SYS_LANG_PATH);
 
 // Database constants
 require_once $libPath.'database.constants.inc.php';
@@ -153,15 +144,8 @@ require_once $libPath.'events.lib.inc.php';
 // Load allowed tag definitions for kses and/or HTMLPurifier.
 require_once $libPath.'formvalidator/Rule/allowed_tags.inc.php';
 
-// Ensure that _configuration is in the global scope before loading
-// api.lib.php. This is particularly helpful for unit tests
-// @todo do not use $GLOBALS
-/*if (!isset($GLOBALS['_configuration'])) {
-    $GLOBALS['_configuration'] = $_configuration;
-}*/
-
 // Add the path to the pear packages to the include path
-ini_set('include_path', api_create_include_path_setting());
+ini_set('include_path', api_create_include_path_setting($includePath));
 
 $app['configuration_file'] = $configurationFilePath;
 $app['configuration_yml_file'] = $configurationYMLFile;
@@ -175,7 +159,10 @@ $app['debug'] = isset($_configuration['debug']) ? $_configuration['debug'] : fal
 $app['show_profiler'] = isset($_configuration['show_profiler']) ? $_configuration['show_profiler'] : false;
 
 // Enables assetic in order to load 1 compressed stylesheet or split files
+//$app['assetic.enabled'] = $app['debug'];
+// Hardcoded to false by default. Implementation is not finished yet.
 $app['assetic.enabled'] = false;
+
 // Dumps assets
 $app['assetic.auto_dump_assets'] = false;
 
@@ -216,66 +203,26 @@ $app['template.show_footer'] = true;
 $app['template.show_learnpath'] = false;
 $app['template.hide_global_chat'] = true;
 $app['template.load_plugins'] = true;
-
 $app['configuration'] = $_configuration;
 
+// Inclusion of internationalization libraries
+require_once $libPath.'internationalization.lib.php';
+// Functions for internal use behind this API
+require_once $libPath.'internationalization_internal.lib.php';
 
 $_plugins = array();
 if ($alreadyInstalled) {
-
     /** Including service providers */
     require_once 'services.php';
-
-    // Setting the static database class
-    $database = $app['database'];
-
-    // Retrieving all the chamilo config settings for multiple URLs feature
-    $_configuration['access_url'] = 1;
-
-    if (api_get_multiple_access_url()) {
-        $access_urls = api_get_access_urls();
-        $protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
-        $request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
-        $request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
-
-        foreach ($access_urls as & $details) {
-            if ($request_url1 == $details['url'] or $request_url2 == $details['url']) {
-                $_configuration['access_url'] = $details['id'];
-            }
-        }
-        Session::write('url_id', $_configuration['access_url']);
-        Session::write('url_info', api_get_current_access_url_info($_configuration['access_url']));
-    } else {
-        Session::write('url_id', 1);
-    }
-
-    $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
-    $settings_latest_update = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
-
-    $_setting = Session::read('_setting');
-    if (empty($_setting)) {
-        api_set_settings_and_plugins();
-    } else {
-        if (isset($_setting['settings_latest_update']) && $_setting['settings_latest_update'] != $settings_latest_update) {
-            api_set_settings_and_plugins();
-        }
-    }
-
-    $_setting = Session::read('_setting');
-    $_plugins = Session::read('_plugins');
-
-    // Default template style
-    $templateStyle = api_get_setting('template');
-    $templateStyle = isset($templateStyle) && !empty($templateStyle) ? $templateStyle : 'default';
-    $app['template_style'] = $templateStyle;
-
-    // Default layout
-    $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
-
-    $app['plugins'] = $_plugins;
 }
 
 $charset = 'UTF-8';
+
+// Preserving the value of the global variable $charset.
+$charset_initial_value = $charset;
+
+// Section (tabs in the main Chamilo menu)
+$app['this_section'] = SECTION_GLOBAL;
 
 // Manage Chamilo error messages
 $app->error(
@@ -283,6 +230,7 @@ $app->error(
         if ($app['debug']) {
             //return;
         }
+        $message = null;
         if (isset($code)) {
             switch ($code) {
                 case 401:
@@ -297,36 +245,37 @@ $app->error(
             }
         } else {
             $code = null;
-            $message = null;
         }
+
+        Session::setSession($app['session']);
+
         //$code = ($e instanceof HttpException) ? $e->getStatusCode() : 500;
-        $app['twig']->addGlobal('error_code', $code);
-        $app['twig']->addGlobal('error_message', $message);
+        // It seems that error() is executed first than the before() middleware
+        // @ŧodo check this one
+        $templateStyle = api_get_setting('template');
 
-        $response = $app['template']->render_layout('error.tpl');
+        $templateStyle = isset($templateStyle) && !empty($templateStyle) ? $templateStyle : 'default';
 
+        if (!is_dir($app['sys_root'].'main/template/'.$templateStyle)) {
+            $templateStyle = 'default';
+        }
+
+        $app['template_style'] = $templateStyle;
+
+        // Default layout.
+        $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
+        /** @var Template $template */
+        $template = $app['template'];
+        $template->assign('error', array('code' => $code, 'message' => $message));
+        $response = $template->render_layout('error.tpl');
         return new Response($response);
     }
 );
-
-// Preserving the value of the global variable $charset.
-$charset_initial_value = $charset;
-
-// Section (tabs in the main chamilo menu)
-$app['this_section'] = SECTION_GLOBAL;
-
-// Inclusion of internationalization libraries
-require_once $libPath.'internationalization.lib.php';
-// Functions for internal use behind this API
-require_once $libPath.'internationalization_internal.lib.php';
 
 // Checking if we have a valid language. If not we set it to the platform language.
 $cidReset = null;
 
 if ($alreadyInstalled) {
-    // Setting languages
-    $app['api_get_languages'] = api_get_languages();
-    $app['language_interface'] = $language_interface = api_get_language_interface();
 
     // Initialization of the internationalization library.
     //api_initialize_internationalization();
@@ -335,9 +284,6 @@ if ($alreadyInstalled) {
     //api_set_internationalization_default_encoding($charset);
 
     // require $includePath.'/local.inc.php';
-
-    // reconfigure template now we know the user
-    $app['template.hide_global_chat'] = !api_is_global_chat_enabled();
 
     /**	Loading languages and sublanguages **/
     // @todo improve the language loading
@@ -440,13 +386,6 @@ $language_files = array();
 $language_files[] = 'trad4all';
 $language_files[] = 'notification';
 $language_files[] = 'accessibility';
-$language_files[] = 'minedu';
-
-// @todo Added because userportal and index are loaded by a controller should be fixed when a $app['translator'] is configured
-$language_files[] = 'index';
-$language_files[] = 'courses';
-$language_files[] = 'course_home';
-$language_files[] = 'exercice';
 
 if (isset($language_file)) {
     if (!is_array($language_file)) {
@@ -496,27 +435,12 @@ if (is_array($language_files)) {
         }
     }
 }*/
-
 // End loading languages
-
-// Specification for usernames:
-// 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
-// 2. Empty username is formally valid, but it is reserved for the anonymous user.
-// 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
-// @todo this should be configured somewhere else usermanager.class.php? a users.yml setting?
-
-$default_username_length = 40;
-if (api_get_setting('login_is_email') == 'true') {
-    $default_username_length = 100;
-}
-
-@define('USERNAME_MAX_LENGTH', $default_username_length);
 
 /** Silex Middlewares. */
 
 /** A "before" middleware allows you to tweak the Request before the controller is executed. */
 
-// Handling po files (gettext)
 use Symfony\Component\Translation\Loader\PoFileLoader;
 use Symfony\Component\Translation\Loader\MoFileLoader;
 use Symfony\Component\Finder\Finder;
@@ -524,32 +448,58 @@ use Symfony\Component\Finder\Finder;
 $app->before(
 
     function () use ($app) {
+         /** @var Request $request */
+        $request = $app['request'];
+
+        // Checking configuration file. If does not exists redirect to the install folder.
         if (!file_exists($app['configuration_file']) && !file_exists($app['configuration_yml_file'])) {
-            return new RedirectResponse(api_get_path(WEB_CODE_PATH).'install');
-            $app->abort(500, "Configuration file was not found");
+            $url = str_replace('web', 'main/install', $request->getBasePath());
+            return new RedirectResponse($url);
         }
 
-        //Check the PHP version
+        // Check the PHP version.
         if (api_check_php_version() == false) {
-            $app->abort(500, "Incorrect PHP version");
+            $app->abort(500, "Incorrect PHP version.");
         }
 
-        if (!is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
-            $app->abort(500, "temp folder must be writable");
+        // Check data folder
+        if (!is_writable($app['sys_data_path'])) {
+            $app->abort(500, "data folder must be writable.");
         }
 
-        // Loop in the folder array and create temp folders.
+        // Checks temp folder permissions.
+        if (!is_writable($app['sys_temp_path'])) {
+            $app->abort(500, "data/temp folder must be writable.");
+        }
+
+        // Checking that configuration is loaded
+        if (!isset($app['configuration'])) {
+            $app->abort(500, '$configuration array must be set in the configuration.php file.');
+        }
+
+        $configuration = $app['configuration'];
+
+        // Check if root_web exists
+        if (!isset($configuration['root_web'])) {
+            $app->abort(500, '$configuration[root_web] must be set in the configuration.php file.');
+        }
+
+        // Starting the session for more info see: http://silex.sensiolabs.org/doc/providers/session.html
+        $request->getSession()->start();
+
+        // Setting session obj
+        Session::setSession($app['session']);
+        UserManager::setEntityManager($app['orm.em']);
+
         /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem $filesystem */
         $filesystem = $app['chamilo.filesystem'];
 
-        /** @var Request $request */
-        $request = $app['request'];
-
-        // Creates temp folders for every request
         if ($app['debug']) {
+            // Creates data/temp folders for every request if debug is on.
             $filesystem->createFolders($app['temp.paths']->folders);
         }
 
+        // If Assetic is enabled copy folders from theme inside "web/"
         if ($app['assetic.auto_dump_assets']) {
             $filesystem->copyFolders($app['temp.paths']->copyFolders);
         }
@@ -557,32 +507,113 @@ $app->before(
         // Check and modify the date of user in the track.e.online table
         Online::loginCheck(api_get_user_id());
 
-        $request->getSession()->start();
+        // Setting access_url id (multiple url feature)
 
-        //var_dump($app['security']->isGranted('IS_AUTHENTICATED_FULLY'));
+        if (api_get_multiple_access_url()) {
+            $_configuration = $app['configuration'];
+            $_configuration['access_url'] = 1;
+            $access_urls = api_get_access_urls();
+
+            //$protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
+            $protocol = $request->getScheme().'://';
+            $request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
+            $request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
+
+            foreach ($access_urls as & $details) {
+                if ($request_url1 == $details['url'] or $request_url2 == $details['url']) {
+                    $_configuration['access_url'] = $details['id'];
+                }
+            }
+            Session::write('url_id', $_configuration['access_url']);
+            Session::write('url_info', api_get_current_access_url_info($_configuration['access_url']));
+        } else {
+            Session::write('url_id', 1);
+        }
+
+        // Loading portal settings from DB.
+        $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
+        $settings_latest_update = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
+
+        $_setting = Session::read('_setting');
+
+        if (empty($_setting)) {
+            api_set_settings_and_plugins();
+        } else {
+            if (isset($_setting['settings_latest_update']) && $_setting['settings_latest_update'] != $settings_latest_update) {
+                api_set_settings_and_plugins();
+            }
+        }
+
+        $app['plugins'] = Session::read('_plugins');
+
+        // Default template style.
+        $templateStyle = api_get_setting('template');
+        $templateStyle = isset($templateStyle) && !empty($templateStyle) ? $templateStyle : 'default';
+        if (!is_dir($app['sys_root'].'main/template/'.$templateStyle)) {
+            $templateStyle = 'default';
+        }
+        $app['template_style'] = $templateStyle;
+
+        // Default layout.
+        $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
+
+        // Setting languages.
+        $app['api_get_languages'] = api_get_languages();
+        $app['language_interface'] = $language_interface = api_get_language_interface();
+
+        // Reconfigure template now that we know the user.
+        $app['template.hide_global_chat'] = !api_is_global_chat_enabled();
+
+        /** Setting the course quota */
+        // Default quota for the course documents folder
+        $default_quota = api_get_setting('default_document_quotum');
+        // Just in case the setting is not correctly set
+        if (empty($default_quota)) {
+            $default_quota = 100000000;
+        }
+
+        define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
+
+        // Specification for usernames:
+        // 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
+        // 2. Empty username is formally valid, but it is reserved for the anonymous user.
+        // 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
+
+        $default_username_length = 40;
+        if (api_get_setting('login_is_email') == 'true') {
+            $default_username_length = 100;
+        }
+
+        define('USERNAME_MAX_LENGTH', $default_username_length);
 
         $user = null;
 
-        if ($app['security']->isGranted('IS_AUTHENTICATED_FULLY')) {
+        /** Security component. */
+        /** @var Symfony\Component\Security\Core\SecurityContext $security */
+        $security = $app['security'];
+        if ($security->isGranted('IS_AUTHENTICATED_FULLY')) {
 
-            $token = $app['security']->getToken();
+            // Checking token in order to get the current user.
+            $token = $security->getToken();
             if (null !== $token) {
                 /** @var Entity\User $user */
                 $user = $token->getUser();
             }
 
-            // For backward compatibility
+            // For backward compatibility.
             $userInfo = api_get_user_info($user->getUserId());
             $userInfo['is_anonymous'] = false;
 
             Session::write('_user', $userInfo);
             $app['current_user'] = $userInfo;
 
-            if ($app['security']->isGranted('ROLE_ADMIN')) {
+            // Setting admin permissions.
+            if ($security->isGranted('ROLE_ADMIN')) {
                 Session::write('is_platformAdmin', true);
             }
 
-            if ($app['security']->isGranted('ROLE_TEACHER')) {
+            // Setting teachers permissions.
+            if ($security->isGranted('ROLE_TEACHER')) {
                 Session::write('is_allowedCreateCourse', true);
             }
 
@@ -592,148 +623,114 @@ $app->before(
             Session::erase('is_allowedCreateCourse');
         }
 
-        // Platform lang
+        /** Translator component. */
+        $app['translator.cache.enabled'] = false;
 
         $language = api_get_setting('platformLanguage');
         $iso = api_get_language_isocode($language);
-        $app['translator']->setLocale($iso);
+
+        /** @var Symfony\Component\Translation\Translator $translator */
+        $translator = $app['translator'];
+        $translator->setLocale($iso);
 
         // From the login page
         $language = $request->get('language');
 
         if (!empty($language)) {
             $iso = api_get_language_isocode($language);
-            $app['translator']->setLocale($iso);
+            $translator->setLocale($iso);
         }
 
         // From the user
-        if ($user) {
-            $language = $user->getLanguage();
+        if ($user && $userInfo) {
+            // @todo check why this does not works
+            //$language = $user->getLanguage();
+            $language = $userInfo['language'];
             $iso = api_get_language_isocode($language);
-            $app['translator']->setLocale($iso);
+            $translator->setLocale($iso);
         }
 
         // From the course
         $courseInfo = api_get_course_info();
         if ($courseInfo && !empty($courseInfo)) {
             $iso = api_get_language_isocode($courseInfo['language']);
-            $app['translator']->setLocale($iso);
+            $translator->setLocale($iso);
         }
 
-        $file = $request->get('file');
-        $section = null;
-        if (!empty($file)) {
-            $info = pathinfo($file);
-            $section = $info['dirname'];
-        }
-
-        // Default langs
-        $languageFiles = array(
-            'trad4all',
-            'notification',
-            'accessibility'
-        );
-
-
-        $languageFilesToAdd = array();
-        /* Loading translations depending of the "section" folder after main
-          for example the section is exercice here: web/main/exercice/result.php
-        */
-        if (!empty($section)) {
-            switch($section) {
-                case 'admin':
-                    $languageFilesToAdd = array('admin');
-                    break;
-                case 'document':
-                    $languageFilesToAdd = array('document');
-                    break;
-                case 'dashboard':
-                    $languageFilesToAdd = array ('index', 'tracking', 'userInfo', 'admin', 'gradebook');
-                    break;
-                case 'mySpace':
-                    $languageFilesToAdd = array('registration', 'index', 'tracking', 'admin');
-                    break;
-                case 'course_info':
-                case 'course_home':
-                case 'course_description':
-                case 'create_course':
-                    $languageFilesToAdd = array('create_course', 'registration', 'admin', 'exercice', 'course_description', 'course_info');
-                    break;
-                case 'coursecopy':
-                    $languageFilesToAdd = array('exercice', 'coursebackup', 'admin');
-                    break;
-                case 'group':
-                    $languageFilesToAdd = array('group');
-                    break;
-                case 'newscorm':
-                    $languageFilesToAdd = array('course_home', 'scormdocument','document','scorm','learnpath','resourcelinker','registration','exercice');
-                    break;
-                case 'link':
-                    $languageFilesToAdd = array('link', 'admin');
-                    break;
-                case 'session':
-                    $languageFilesToAdd = array('admin', 'registration');
-                    break;
-                case 'user':
-                    $languageFilesToAdd = array('registration', 'admin', 'userInfo', 'registration');
-                    break;
-                case 'social':
-                    $languageFilesToAdd = array('userInfo');
-                    break;
-                case 'exercice':
-                    $languageFilesToAdd = array('exercice');
-                    break;
-            }
-        } else {
-
-            $controllerName = $request->get('_controller');
-
-            // Work around to load languages:
-            switch($controllerName) {
-                case 'index.controller:indexAction':
-                case 'userPortal.controller::indexAction':
-                    $languageFilesToAdd = array('courses', 'index', 'admin');
-                    break;
-            }
-        }
-
-        $languageFiles = array_merge($languageFiles, $languageFilesToAdd);
-
-        $app['translator.cache.enabled'] = false;
-
-        $app['translator'] = $app->share($app->extend('translator', function($translator, $app) use ($languageFiles) {
-
+        $app['translator'] = $app->share($app->extend('translator', function ($translator, $app) {
             $locale = $translator->getLocale();
-
-            // Creating regex to parse sections (admin, exercice, etc)
-            $languageFilesToString = '/'.implode('|', $languageFiles).'/';
 
             /** @var Symfony\Component\Translation\Translator $translator  */
             if ($app['translator.cache.enabled']) {
-
                 //$phpFileDumper = new Symfony\Component\Translation\Dumper\PhpFileDumper();
                 $dumper = new Symfony\Component\Translation\Dumper\MoFileDumper();
                 $catalogue = new Symfony\Component\Translation\MessageCatalogue($locale);
                 $catalogue->add(array('foo' => 'bar'));
                 $dumper->dump($catalogue, array('path' => $app['sys_temp_path']));
-
             } else {
                 $translator->addLoader('pofile', new PoFileLoader());
-
-                $finder = new Finder();
-                $files = $finder->files()
-                    ->path($languageFilesToString)
-                    ->name('en.po')
-                    ->name($locale.'.po')
-                    ->in(api_get_path(SYS_PATH).'main/locale');
-
-                foreach ($files as $entry) {
-                    $code = $entry->getBasename('.po');
-                    $translator->addResource('pofile', $entry->getPathname(), $code);
+                $file = $app['root_sys'].'main/locale/'.$locale.'.po';
+                if (file_exists($file)) {
+                    $translator->addResource('pofile', $file, $locale);
                 }
+                $customFile = $app['root_sys'].'main/locale/'.$locale.'.custom.po';
+                if (file_exists($customFile)) {
+                    $translator->addResource('pofile', $customFile, $locale);
+                }
+
+                // Validators
+                $file = $app['root_sys'].'vendor/symfony/validator/Symfony/Component/Validator/Resources/translations/validators.'.$locale.'.xlf';
+                $translator->addLoader('xlf', new Symfony\Component\Translation\Loader\XliffFileLoader());
+                if (file_exists($file)) {
+                    $translator->addResource('xlf', $file, $locale, 'validators');
+                }
+
+                /*$translator->addLoader('mofile', new MoFileLoader());
+                $filePath = api_get_path(SYS_PATH).'main/locale/'.$locale.'.mo';
+                if (!file_exists($filePath)) {
+                    $filePath = api_get_path(SYS_PATH).'main/locale/en.mo';
+                }
+                $translator->addResource('mofile', $filePath, $locale);*/
                 return $translator;
             }
         }));
+
+        // Check if we are inside a Chamilo course tool
+
+        $isCourseTool = (strpos($request->getPathInfo(), 'courses/') === false) ? false : true;
+
+        if (!$isCourseTool) {
+            // @todo add a before in controller in order to load the courses and course_session object
+            $isCourseTool = (strpos($request->getPathInfo(), 'question_manager/exercise_distribution/') === false) ? false : true;
+            $isCourseTool = (strpos($request->getPathInfo(), 'question_manager/questions/') === false) ? false : true;
+        }
+
+        // Setting course entity for controllers and templates
+        if ($isCourseTool) {
+            // The course parameter is loaded
+            $course = $request->get('course');
+            if (empty($course)) {
+                $course = $request->get('cidReq');
+            }
+
+            if (!empty($course)) {
+                // Converting /courses/XXX/ to a Entity/Course object
+                $course = $app['orm.em']->getRepository('Entity\Course')->findOneByCode($course);
+            } else {
+                $courseId = $request->get('courseId');
+                // Converting /courses/XXX/ to a Entity/Course object
+                $course = $app['orm.em']->getRepository('Entity\Course')->find($courseId);
+            }
+
+            $app['course'] = $course;
+            $app['template']->assign('course', $course);
+
+            $sessionId = $request->get('id_session');
+            $session = $app['orm.em']->getRepository('Entity\Session')->findOneById($sessionId);
+            $app['course_session'] = $session;
+
+            $app['template']->assign('course_session', $session);
+        }
     }
 );
 
@@ -761,10 +758,9 @@ $charset = $charset_initial_value;
 // For determing text direction correspondent to the current language we use now information from the internationalization library.
 $text_dir = api_get_text_direction();
 
-// Update of the logout_date field in the table track_e_login (needed for the calculation of the total connection time)
-
 /** "Login as user" custom script */
 // @todo move this code in a controller
+/*
 if (!isset($_SESSION['login_as']) && isset($_user)) {
     // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
 
@@ -791,11 +787,8 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
         $now = api_get_utc_datetime();
         $s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date = '$now' WHERE login_id = $i_id_last_connection";
         Database::query($s_sql_update_logout_date);
-    } else {
-        // it isn't, we should create a fresh entry
-        event_login();
     }
-}
+}*/
 
 // Add language_measure_frequency to your main/inc/conf/configuration.php in
 // order to generate language variables frequency measurements (you can then
@@ -808,18 +801,6 @@ if (isset($app['configuration']['language_measure_frequency']) && $app['configur
     require_once api_get_path(SYS_CODE_PATH).'/cron/lang/langstats.class.php';
     $langstats = new langstats();
 }
-
-/** Setting the course quota */
-// @todo move this somewhere else
-
-// Default quota for the course documents folder
-$default_quota = api_get_setting('default_document_quotum');
-// Just in case the setting is not correctly set
-if (empty($default_quota)) {
-    $default_quota = 100000000;
-}
-
-@define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
 
 /** Setting the is_admin key */
 $app['is_admin'] = false;
@@ -855,7 +836,6 @@ if (isset($app['configuration']['main_database']) && isset($app['db.event_manage
     $app['dbs.event_manager']['db_read']->addEventSubscriber($sluggableListener);
     $app['dbs.event_manager']['db_write']->addEventSubscriber($sluggableListener);
 
-
     $sortableListener = new Gedmo\Sortable\SortableListener();
     // $app['db.event_manager']->addEventSubscriber($sortableListener);
     $app['dbs.event_manager']['db_read']->addEventSubscriber($sortableListener);
@@ -868,18 +848,15 @@ if (isset($app['configuration']['main_database']) && isset($app['db.event_manage
     $app['dbs.event_manager']['db_write']->addEventSubscriber($treeListener);
 
     $loggableListener = new \Gedmo\Loggable\LoggableListener();
-    $userInfo = api_get_user_info();
+    if (PHP_SAPI != 'cli') {
+        //$userInfo = api_get_user_info();
 
-    if (isset($userInfo) && !empty($userInfo['username'])) {
-        $loggableListener->setUsername($userInfo['username']);
+        if (isset($userInfo) && !empty($userInfo['username'])) {
+            //$loggableListener->setUsername($userInfo['username']);
+        }
     }
-    //$app['db.event_manager']->addEventSubscriber($loggableListener);
     $app['dbs.event_manager']['db_read']->addEventSubscriber($loggableListener);
     $app['dbs.event_manager']['db_write']->addEventSubscriber($loggableListener);
 }
 
-// Fixes uses of $_course in the scripts.
-$_course = api_get_course_info();
-$_cid = api_get_course_id();
 return $app;
-

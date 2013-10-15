@@ -124,21 +124,16 @@ $_api_is_translated_call = false;
  */
 function get_lang($variable, $reserved = null, $language = null)
 {
-    // In order to use $app['translator']
     global $app;
-    if ($app['debug']) {
-        //return $variable;
-    }
-
     $translated = $app['translator']->trans($variable);
     if ($translated == $variable) {
+        // Check the langVariable for BC
         $translated = $app['translator']->trans("lang$variable");
         if ($translated == "lang$variable") {
             return $variable;
         }
     }
     return $translated;
-
 
     global $app;
     $language_interface = isset($app['language_interface']) ? $app['language_interface'] : api_get_language_interface();
@@ -1096,16 +1091,9 @@ function api_get_person_name($first_name, $last_name, $title = null, $format = n
             switch ($format) {
                 case PERSON_NAME_COMMON_CONVENTION:
                     $valid[$format][$language] = _api_get_person_name_convention($language, 'format');
-
-                    $username_order_from_database = api_get_setting('user_name_order');
-                    if (isset($username_order_from_database) && !empty($username_order_from_database)) {
-                        if (strpos($username_order_from_database, '%t') == false || strpos(
-                            $username_order_from_database,
-                            '%l'
-                        ) == false || strpos($username_order_from_database, '%f') == false
-                        ) {
-                            $valid[$format][$language] = $username_order_from_database;
-                        }
+                    $usernameOrderFromDatabase = api_get_setting('user_name_order');
+                    if (isset($usernameOrderFromDatabase) && !empty($usernameOrderFromDatabase)) {
+                        $valid[$format][$language] = $usernameOrderFromDatabase;
                     }
                     break;
                 case PERSON_NAME_WESTERN_ORDER:
@@ -1182,6 +1170,11 @@ function api_is_western_name_order($format = null, $language = null)
  */
 function api_sort_by_first_name($language = null)
 {
+    $userNameSortBy = api_get_setting('user_name_sort_by');
+    if (!empty($userNameSortBy) && in_array($userNameSortBy, array('firstname', 'lastname'))) {
+        return $userNameSortBy == 'firstname' ? true : false;
+    }
+
     static $sort_by_first_name = array();
 
     $language_is_supported = api_is_language_supported($language);

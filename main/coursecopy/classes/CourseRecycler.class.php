@@ -56,6 +56,7 @@ class CourseRecycler
         $this->recycle_glossary();
         $this->recycle_thematic();
         $this->recycle_attendance();
+        $this->recycle_work();
 
         foreach ($this->course->resources as $type => $resources) {
             foreach ($resources as $id => $resource) {
@@ -311,7 +312,7 @@ class CourseRecycler
             $table_qui 	   = Database :: get_course_table(TABLE_QUIZ_TEST);
             $table_rel 	   = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $table_qui_que_opt = Database :: get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-            $table_qui_que_cat = Database :: get_course_table(TABLE_QUIZ_CATEGORY);
+            $table_qui_que_cat = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
             $table_qui_que_rel_cat = Database :: get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 
             $ids = array_keys($this->course->resources[RESOURCE_QUIZ]);
@@ -321,7 +322,7 @@ class CourseRecycler
             // This value is set in CourseBuilder::quiz_build_questions()
             $delete_orphan_questions = in_array(-1, $ids);
             $ids = implode(',', $ids);
-
+            
             if (!empty($ids)) {
                 // Deletion of the tests first. Questions in these tests are
                 //   not deleted and become orphan at this point
@@ -333,21 +334,7 @@ class CourseRecycler
 
             // Identifying again and deletion of the orphan questions, if it was desired.
             if ($delete_orphan_questions) {
-
-                /*$sql = 'SELECT questions.id '.
-                       ' FROM '.$table_qui_que.' as questions '.
-                       ' LEFT JOIN '.$table_rel.' as quizz_questions '.
-                       '   ON questions.id=quizz_questions.question_id '.
-                       ' LEFT JOIN '.$table_qui.' as exercices '.
-                       '   ON exercice_id=exercices.id '.
-                       ' WHERE '.
-                       '   questions.c_id = '.$this->course_id.' AND '.
-                       '   quizz_questions.c_id = '.$this->course_id.' AND '.
-                       '   exercices.c_id = '.$this->course_id.' AND '.
-                       '   quizz_questions.exercice_id IS NULL OR '.
-                       '   exercices.active = -1';
-                       // active = -1 means "deleted" test.
-                */
+               
 
                 //@todo fix query in order to use iid
                 $sql = " (
@@ -370,9 +357,8 @@ class CourseRecycler
                     SELECT q.iid FROM $table_qui_que q
                     INNER JOIN $table_rel r
                     ON (q.c_id = r.c_id AND q.iid = r.question_id)
-                    WHERE r.c_id = ".$this->course_id." AND r.exercice_id = '-1' OR r.exercice_id = '0'
+                    WHERE r.c_id = ".$this->course_id." AND (r.exercice_id = '-1' OR r.exercice_id = '0')
                 )";
-
                 $db_result = Database::query($sql);
                 if (Database::num_rows($db_result) > 0) {
                     $orphan_ids = array();
@@ -405,7 +391,8 @@ class CourseRecycler
     /**
      * Recycle surveys - removes everything
      */
-    function recycle_surveys() {
+    function recycle_surveys() 
+    {
         if ($this->course->has_resources(RESOURCE_SURVEY)) {
             $table_survey = Database :: get_course_table(TABLE_SURVEY);
             $table_survey_q = Database :: get_course_table(TABLE_SURVEY_QUESTION);
@@ -428,7 +415,8 @@ class CourseRecycler
     /**
      * Recycle learnpaths
      */
-    function recycle_learnpaths() {
+    function recycle_learnpaths() 
+    {
         if ($this->course->has_resources(RESOURCE_LEARNPATH)) {
             $table_main = Database :: get_course_table(TABLE_LP_MAIN);
             $table_item = Database :: get_course_table(TABLE_LP_ITEM);
@@ -527,7 +515,8 @@ class CourseRecycler
     /**
     * Recycle Attendances
     */
-    function recycle_attendance($session_id = 0) {
+    function recycle_attendance($session_id = 0) 
+    {
         if ($this->course->has_resources(RESOURCE_ATTENDANCE)) {
             $table_attendance          = Database :: get_course_table(TABLE_ATTENDANCE);
             $table_attendance_calendar = Database :: get_course_table(TABLE_ATTENDANCE_CALENDAR);
@@ -542,6 +531,32 @@ class CourseRecycler
                     $cond = array('id = ? AND c_id = ?'=>array($last_id, $this->course_id));
                     Database::delete($table_attendance, $cond);
                     api_item_property_update($this->course_info, TOOL_ATTENDANCE, $last_id,'AttendanceDeleted', api_get_user_id());
+                }
+            }
+        }
+    }
+
+    /**
+     * Recycle Works
+     */
+    function recycle_work($session_id = 0) 
+    {
+        if ($this->course->has_resources(RESOURCE_WORK)) {
+            $table_work          = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+            $table_work_assignment = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+
+            $resources = $this->course->resources;
+            foreach ($resources[RESOURCE_WORK] as $last_id => $obj) {
+                if (is_numeric($last_id)) {
+                    $cond = array('publication_id = ? AND c_id = ? '=>array($last_id, $this->course_id));
+                    Database::delete($table_work_assignment, $cond);
+                    // The following also deletes student tasks
+                    $cond = array('parent_id = ? AND c_id = ?'=>array($last_id, $this->course_id));
+                    Database::delete($table_work, $cond);
+                    // Finally, delete the main task registry
+                    $cond = array('id = ? AND c_id = ?'=>array($last_id, $this->course_id));
+                    Database::delete($table_work, $cond);
+                    api_item_property_update($this->course_info, TOOL_STUDENTPUBLICATION, $last_id,'StudentPublicationDeleted', api_get_user_id());
                 }
             }
         }

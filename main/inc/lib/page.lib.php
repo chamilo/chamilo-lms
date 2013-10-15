@@ -58,7 +58,9 @@ class PageController
                                     <img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'"></a>';
             }
         }
-        $this->show_right_block(null, null, 'user_image_block', array('content' => $profile_content));
+        if (!empty($profile_content)) {
+            $this->show_right_block(null, null, 'user_image_block', array('content' => $profile_content));
+        }
     }
 
     /**
@@ -70,19 +72,13 @@ class PageController
      */
     public function return_course_block($filter = null)
     {
-        $show_create_link = false;
         $show_course_link = false;
+        $display_add_course_link = false;
 
-        if ((api_get_setting('allow_users_to_create_courses') == 'false' && !api_is_platform_admin()) || api_is_student(
-        )
+        if ((api_get_setting('allow_users_to_create_courses') == 'true' && api_is_allowed_to_create_course() ||
+            api_is_platform_admin())
         ) {
-            $display_add_course_link = false;
-        } else {
             $display_add_course_link = true;
-        }
-
-        if ($display_add_course_link) {
-            $show_create_link = true;
         }
 
         if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create_course()) {
@@ -93,10 +89,10 @@ class PageController
             }
         }
 
-        // My account section
+        // My account section.
         $my_account_content = array();
 
-        if ($show_create_link) {
+        if ($display_add_course_link) {
             $my_account_content[] = array(
                 'href'  => api_get_path(WEB_CODE_PATH).'create_course/add_course.php',
                 'title' => api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang(
@@ -105,14 +101,14 @@ class PageController
             );
         }
 
-        //Sort courses
-        $url                  = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
+        // Sort courses.
+        $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
         $my_account_content[] = array(
             'href'  => $url,
             'title' => get_lang('SortMyCourses')
         );
 
-        //Course management
+        // Course management.
         if ($show_course_link) {
             if (!api_is_drh()) {
                 $my_account_content[] = array(
@@ -132,12 +128,13 @@ class PageController
                     );
                 }
             } else {
-                $my_account_content .= array(
+                $my_account_content[] = array(
                     'href'  => api_get_path(WEB_CODE_PATH).'dashboard/index.php',
                     'title' => get_lang('Dashboard')
                 );
             }
         }
+
         $this->show_right_block(get_lang('Courses'), $my_account_content, 'course_block');
     }
 
@@ -397,7 +394,7 @@ class PageController
     {
         // Including the page for the news
         $html          = null;
-        $home          = api_get_path(SYS_PATH).api_get_home_path();
+        $home          = api_get_path(SYS_DATA_PATH).api_get_home_path();
         $home_top_temp = null;
 
         if (!empty($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/', $_GET['include'])) {
@@ -951,16 +948,15 @@ class PageController
     }
 
     /**
-     * The most important function here, prints the session and course list (user_portal.php)
-     *
-     * @param int User id
-     * @param string filter
-     * @param int page
-     * @return string HTML list of sessions and courses
-     * @assert () === false
-     *
-     */
-
+    * The most important function here, prints the session and course list (user_portal.php)
+    *
+    * @param int User id
+    * @param string filter
+    * @param int page
+    * @return string HTML list of sessions and courses
+    * @assert () === false
+    *
+    */
     public function returnCourses($user_id, $filter, $page)
     {
         if (empty($user_id)) {
@@ -1171,6 +1167,12 @@ class PageController
         return $sessions_with_category;
     }
 
+    /**
+     * @param int $user_id
+     * @param string $filter current|history
+     * @param int $page
+     * @return bool|null|string
+     */
     public function returnSessions($user_id, $filter, $page)
     {
         if (empty($user_id)) {
@@ -1190,12 +1192,6 @@ class PageController
                     )
                 )
             );
-
-            //$menu->setUri($app['request']->getRequestUri());
-            /*
-            $menu->setChildrenAttributes(array(
-                'currentClass' => 'active'
-            ));*/
 
             $current = $menu->addChild(
                 get_lang('Current'),
@@ -1233,7 +1229,7 @@ class PageController
         $start = ($page - 1) * $this->maxPerPage;
 
         if ($loadHistory) {
-            //Load sessions in category in *history*
+            // Load sessions in category in *history*.
             $nbResults          = (int)UserManager::get_sessions_by_category(
                 $user_id,
                 true,
@@ -1253,8 +1249,8 @@ class PageController
                 'no_category'
             );
         } else {
-            //Load sessions in category
-            $nbResults          = (int)UserManager::get_sessions_by_category(
+            // Load sessions in category.
+            $nbResults = (int)UserManager::get_sessions_by_category(
                 $user_id,
                 false,
                 true,
@@ -1263,6 +1259,7 @@ class PageController
                 null,
                 'no_category'
             );
+
             $session_categories = UserManager::get_sessions_by_category(
                 $user_id,
                 false,
@@ -1275,8 +1272,8 @@ class PageController
         }
 
         $html = null;
-        //Showing history title
 
+        // Showing history title
         if ($loadHistory) {
             // $html .= Display::page_subheader(get_lang('HistoryTrainingSession'));
             if (empty($session_categories)) {

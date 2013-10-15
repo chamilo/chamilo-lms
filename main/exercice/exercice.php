@@ -645,7 +645,7 @@ if (!empty($exercise_list)) {
                         $actions .='<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$my_exercise_id.'">'.Display :: return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
 
                         //Export
-                        $actions .= Display::url(Display::return_icon('cd.gif', get_lang('CopyExercise')), '', array('onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;", 'href' => 'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$my_exercise_id));
+                        $actions .= Display::url(Display::return_icon('cd.gif', get_lang('CopyExercise')), '', array('onclick' => "javascript:if(!confirm('".addslashes(get_lang('AreYouSureToCopy'))." ".addslashes($row['title'])."?"."')) return false;", 'href' => 'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$my_exercise_id));
 
                         if ($autolaunch_setting_on) {
                             $icon = Display::return_icon('launch.png', get_lang('AutoLaunch'));
@@ -680,13 +680,13 @@ if (!empty($exercise_list)) {
                         // not session
                         $actions = Display::return_icon('edit_na.png', get_lang('ExerciseEditionNotAvailableInSession'));
                         $actions .='<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$my_exercise_id.'">'.Display :: return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
-                        $actions .= Display::url(Display::return_icon('cd.gif', get_lang('CopyExercise')), '', array('onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;", 'href' => 'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$my_exercise_id));
+                        $actions .= Display::url(Display::return_icon('cd.gif', get_lang('CopyExercise')), '', array('onclick' => "javascript:if(!confirm('".addslashes(get_lang('AreYouSureToCopy'))." ".addslashes($row['title'])."?"."')) return false;", 'href' => 'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$my_exercise_id));
                     }
 
                     //Delete
                     if ($session_id == $row['session_id']) {
                         if ($locked == false) {
-                            $actions .= Display::url(Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL), '', array('onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDelete'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;", 'href' => 'exercice.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$my_exercise_id));
+                            $actions .= Display::url(Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL), '', array('onclick' => "javascript:if(!confirm('".addslashes(get_lang('AreYouSureToDelete'))." ".addslashes($row['title'])."?"."')) return false;", 'href' => 'exercice.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$my_exercise_id));
                         } else {
                             $actions .= Display::return_icon('delete_na.png', get_lang('ResourceLockedByGradebook'), '', ICON_SIZE_SMALL);
                         }
@@ -696,6 +696,20 @@ if (!empty($exercise_list)) {
                             // questions does not slow down everything
                             $actions .=  Display::url(Display::return_icon('settings.png',get_lang('EditSettings'),'',ICON_SIZE_SMALL), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);
                         }*/
+                    }
+
+                    if ($app['security']->isGranted('ROLE_SESSION_MANAGER') && !empty($my_exercise_id)) {
+                        $actions .= Display::url(
+                            Display::return_icon('admin_star.png', get_lang('Distribution'), '', ICON_SIZE_SMALL),
+                            $app['url_generator']->generate(
+                                'exercise_distribution.controller:indexAction',
+                                array(
+                                    'exerciseId' => $my_exercise_id,
+                                    'cidReq' => api_get_course_id(),
+                                    'id_session' => api_get_session_id()
+                                )
+                            )
+                        );
                     }
 
                     // Number of questions

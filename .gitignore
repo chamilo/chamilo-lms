@@ -1,6 +1,5 @@
 # Chamilo
 
-main/inc/conf
 config/auth.conf.php
 config/configuration.php
 config/events.conf.php
@@ -8,30 +7,39 @@ config/mail.conf.php
 config/portfolio.conf.php
 config/profile.conf.php
 
-temp/*
-!temp/twig/PLACEHOLDER
-data/*
-!data/upload/users
-logs/*
+tests/unittests/db.conf.php
+tests/logs/*
 
+!data/
+data/*
+!data/temp/twig/PLACEHOLDER
+!data/default_course_document
+!data/default_platform_document
+!data/upload/users
 !data/courses/index.html
 
 # Logs and databases #
 *.log
 
 # IDE settings
-
 .idea
-.idea/*
-.idea/dictionaries/*
-.idea/cssxfire.xml
 
 *.orig
 nbproject/*
 vendor/.git
+.*.swp
 
-#Doctrine entities generation tests
+vendor/ezyang/htmlpurifier/docs/*
+vendor/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema/Filter/ExtractStyleBlocks.txt
+vendor/ezyang/htmlpurifier/smoketests/*
+vendor/realityking/pchart/Sample/*
+vendor/realityking/pchart/Example*
+
+# Doctrine entities generation tests
 
 tests/doctrine_console/generated
 tests/doctrine_console/mapping
 tests/doctrine_console/Proxies
+
+# OS stuff
+.DS_Store

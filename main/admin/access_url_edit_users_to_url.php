@@ -5,15 +5,7 @@
 *	@author Julio Montoya <gugli100@gmail.com>
 */
 
-
-// name of the language file that needs to be included
-$language_file='admin';
-
-// resetting the course id
-$cidReset = true;
-
-require_once '../inc/global.inc.php';
-require_once '../inc/lib/xajax/xajax.inc.php';
+require_once __DIR__.'/../inc/lib/xajax/xajax.inc.php';
 $xajax = new xajax();
 
 $xajax -> registerFunction (array('search_users', 'Accessurledituserstourl', 'search_users'));
@@ -29,7 +21,6 @@ if (!api_get_multiple_access_url()) {
 	exit;
 }
 
-
 // Database Table Definitions
 $tbl_user				 = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_access_url_rel_user = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -41,12 +32,12 @@ $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAd
 $interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
 
 $add_type = 'multiple';
-if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
+if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
 $access_url_id=1;
-if(isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id']!=''){
+if (isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id']!=''){
 	$access_url_id = Security::remove_XSS($_REQUEST['access_url_id']);
 }
 
@@ -97,9 +88,11 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 	if (!is_array($UserList)) {
 		$UserList=array();
 	}
+
 	if ($form_sent == 1) {
-		if ($access_url_id==0) {
+		if ($access_url_id == 0) {
 			header('Location: access_url_edit_users_to_url.php?action=show_message&message='.get_lang('SelectURL'));
+            exit;
 		} elseif (is_array($UserList)) {
 			$result     = UrlManager::update_urls_rel_user($UserList, $access_url_id);
             $url_info   = UrlManager::get_url_data_from_id($access_url_id);
@@ -111,7 +104,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
                 $message .=  '<h4>'.get_lang('UsersAdded').':</h4>';
                 $i = 1;
                 $user_added_list = array();
-                foreach($result['users_added'] as $user) {
+                foreach ($result['users_added'] as $user) {
                     $user_info = api_get_user_info($user);
                     if (!empty($user_info)) {
                         $user_added_list[] = $i.'. '.api_get_person_name($user_info['firstname'], $user_info['lastname']);
@@ -186,7 +179,6 @@ if ($ajax_search) {
 	}
 }
 
-
 if ($add_type == 'multiple') {
 	$link_add_type_unique = '<a href="'.api_get_self().'?add_type=unique&access_url_id='.$access_url_id.'">'.get_lang('SessionAddTypeUnique').'</a>';
 	$link_add_type_multiple = get_lang('SessionAddTypeMultiple');
@@ -241,8 +233,8 @@ if (!empty($errorMsg)) {
     <td>
     <h3>
     <?php
-            $total_users = count($nosessionUsersList) +  count($sessionUsersList);
-            echo get_lang('TotalAvailableUsers').' '.$total_users;
+        $total_users = count($nosessionUsersList) +  count($sessionUsersList);
+        echo get_lang('TotalAvailableUsers').' '.$total_users;
     ?>
     </h3>
     </td>
@@ -304,7 +296,6 @@ if (!empty($errorMsg)) {
 foreach ($sessionUsersList as $enreg) {
 ?>
 	<option value="<?php echo $enreg['user_id']; ?>"><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
-
 <?php
 }
 unset($sessionUsersList);
@@ -331,11 +322,6 @@ function valide(){
 	var options = document.getElementById('destination_users').options;
 	for (i = 0 ; i<options.length ; i++)
 		options[i].selected = true;
-	/*
-	var options = document.getElementById('destination_classes').options;
-	for (i = 0 ; i<options.length ; i++)
-		options[i].selected = true;
-		*/
 	document.forms.formulaire.submit();
 }
 

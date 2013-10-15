@@ -35,14 +35,25 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
+        /** @var \Entity\User $user */
+        $user = $token->getUser();
+        $userId = $user->getUserId();
+
+        $session = $request->getSession();
+        \ChamiloSession::setSession($session);
+
+        event_login($user);
+
+        // Setting last login datetime
+        $session->set('user_last_login_datetime', api_get_utc_datetime());
+
         $response = null;
-        //$session = $request->getSession();
         /* Possible values: index.php, user_portal.php, main/auth/courses.php */
         $pageAfterLogin = api_get_setting('page_after_login');
 
+        $url = null;
         if ($this->security->isGranted('ROLE_STUDENT') && !empty($pageAfterLogin)) {
-            $url = null;
-            switch($pageAfterLogin) {
+            switch ($pageAfterLogin) {
                 case 'index.php':
                     $url = $this->router->generate('index');
                     break;
@@ -53,9 +64,47 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                     $url = api_get_path(WEB_PUBLIC_PATH).$pageAfterLogin;
                     break;
             }
-            if (!empty($url)) {
-                $response = new RedirectResponse($url);
+        }
+
+        // Redirecting to a course or a session
+
+        if (api_get_setting('go_to_course_after_login') == 'true') {
+
+            // Get the courses list
+            $personal_course_list = \UserManager::get_personal_session_course_list($userId);
+
+            $my_session_list = array();
+            $count_of_courses_no_sessions = 0;
+            $count_of_courses_with_sessions = 0;
+
+            foreach ($personal_course_list as $course) {
+                if (!empty($course['session_id'])) {
+                    $my_session_list[$course['session_id']] = true;
+                    $count_of_courses_with_sessions++;
+                } else {
+                    $count_of_courses_no_sessions++;
+                }
             }
+
+            $count_of_sessions = count($my_session_list);
+
+            if ($count_of_sessions == 1 && $count_of_courses_no_sessions == 0) {
+                $key = array_keys($personal_course_list);
+                $data = $personal_course_list[$key[0]];
+                $course_info = $data['course_info'];
+                $id_session = isset($data['session_id']) ? $data['session_id'] : 0;
+                $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?id_session='.$id_session;
+            }
+
+            if ($count_of_sessions == 0 && $count_of_courses_no_sessions == 1) {
+                $key = array_keys($personal_course_list);
+                $course_info = $personal_course_list[$key[0]]['course_info'];
+                $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?id_session=0';
+            }
+        }
+
+        if (!empty($url)) {
+            $response = new RedirectResponse($url);
         }
 
         // Redirect the user to where they were before the login process begun.

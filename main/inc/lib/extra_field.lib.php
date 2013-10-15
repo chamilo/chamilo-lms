@@ -107,9 +107,7 @@ class ExtraField extends Model
         }
         $this->pageUrl  = 'extra_fields.php?type='.$this->type;
         // Example QuestionFields
-        // @todo error while installing
-        // $this->pageName = get_lang(ucwords($this->type).'Fields');
-        $this->pageName = ucwords($this->type).'Fields';
+        $this->pageName = get_lang(ucwords($this->type).'Fields');
     }
 
     static function getValidExtraFieldTypes()
@@ -166,6 +164,9 @@ class ExtraField extends Model
         }
     }
 
+    /**
+     * @return int
+     */
     public function get_max_field_order()
     {
         $sql = "SELECT MAX(field_order) FROM {$this->table}";
@@ -180,21 +181,26 @@ class ExtraField extends Model
         return $order;
     }
 
+    /**
+     * @param string $handler
+     * @return array
+     */
     public static function get_extra_fields_by_handler($handler)
     {
-        $types                                   = array();
-        $types[self::FIELD_TYPE_TEXT]            = get_lang('FieldTypeText');
-        $types[self::FIELD_TYPE_TEXTAREA]        = get_lang('FieldTypeTextarea');
-        $types[self::FIELD_TYPE_RADIO]           = get_lang('FieldTypeRadio');
-        $types[self::FIELD_TYPE_SELECT]          = get_lang('FieldTypeSelect');
-        $types[self::FIELD_TYPE_SELECT_MULTIPLE] = get_lang('FieldTypeSelectMultiple');
-        $types[self::FIELD_TYPE_DATE]            = get_lang('FieldTypeDate');
-        $types[self::FIELD_TYPE_DATETIME]        = get_lang('FieldTypeDatetime');
-        $types[self::FIELD_TYPE_DOUBLE_SELECT]   = get_lang('FieldTypeDoubleSelect');
-        $types[self::FIELD_TYPE_DIVIDER]         = get_lang('FieldTypeDivider');
-        $types[self::FIELD_TYPE_TAG]             = get_lang('FieldTypeTag');
-        $types[self::FIELD_TYPE_TIMEZONE]        = get_lang('FieldTypeTimezone');
-        $types[self::FIELD_TYPE_SOCIAL_PROFILE]  = get_lang('FieldTypeSocialProfile');
+        $types = array(
+            self::FIELD_TYPE_TEXT            => get_lang('FieldTypeText'),
+            self::FIELD_TYPE_TEXTAREA        => get_lang('FieldTypeTextarea'),
+            self::FIELD_TYPE_RADIO           => get_lang('FieldTypeRadio'),
+            self::FIELD_TYPE_SELECT          => get_lang('FieldTypeSelect'),
+            self::FIELD_TYPE_SELECT_MULTIPLE => get_lang('FieldTypeSelectMultiple'),
+            self::FIELD_TYPE_DATE            => get_lang('FieldTypeDate'),
+            self::FIELD_TYPE_DATETIME        => get_lang('FieldTypeDatetime'),
+            self::FIELD_TYPE_DOUBLE_SELECT   => get_lang('FieldTypeDoubleSelect'),
+            self::FIELD_TYPE_DIVIDER        => get_lang('FieldTypeDivider'),
+            self::FIELD_TYPE_TAG            => get_lang('FieldTypeTag'),
+            self::FIELD_TYPE_TIMEZONE      => get_lang('FieldTypeTimezone'),
+            self::FIELD_TYPE_SOCIAL_PROFILE  => get_lang('FieldTypeSocialProfile')
+        );
 
         switch ($handler) {
             case 'course':
@@ -395,7 +401,11 @@ class ExtraField extends Model
         return $string;
     }
 
-    function clean_parameters($params)
+    /**
+     * @param array $params
+     * @return array
+     */
+    public function clean_parameters($params)
     {
         if (!isset($params['field_variable']) || empty($params['field_variable'])) {
             $params['field_variable'] = trim(strtolower(str_replace(" ", "_", $params['field_display_text'])));
@@ -409,10 +419,15 @@ class ExtraField extends Model
         return $params;
     }
 
+    /**
+     * @param array $params
+     * @param bool $show_query
+     * @return bool
+     */
     public function save($params, $show_query = false)
     {
         $session_field_info = self::get_handler_field_info_by_field_variable($params['field_variable']);
-        $params             = self::clean_parameters($params);
+        $params = self::clean_parameters($params);
         if ($session_field_info) {
             return $session_field_info['id'];
         } else {
@@ -457,9 +472,9 @@ class ExtraField extends Model
      * @param array $extra_data
      * @param string $form_name
      * @param bool $admin_permissions
-     * @param null $user_id
-     * @param string $type
+     * @param int $user_id
      * @param null $extra
+     * @param int $itemId
      * @return array
      */
     public function set_extra_fields_in_form(
@@ -621,29 +636,43 @@ class ExtraField extends Model
                             $get_lang_variables = true;
                         }
 
-                        // Get extra field workflow
-                        $userInfo = api_get_user_info();
-
+                        global $app;
+                        $optionsExists = $app['orm.em']->
+                            getRepository('Entity\ExtraFieldOptionRelFieldOption')->
+                            findOneBy(array('fieldId' => $field_details['id']));
                         $addOptions = array();
 
-                        global $app;
-                        $optionsExists = $app['orm.em']->getRepository('Entity\ExtraFieldOptionRelFieldOption')->
-                            findOneBy(array('fieldId' => $field_details['id']));
-
                         if ($optionsExists) {
-                            if (isset($userInfo['status']) && !empty($userInfo['status'])) {
+                            $token = $app['security']->getToken();
+                            /** @var Entity\User $userToken */
+                            $userToken = $token->getUser();
+                            /** @var Entity\User $user */
+                            $user = $app['orm.em']->getRepository('Entity\User')->find($userToken->getUserId());
+                            $roles = $user->getRoles();
 
-                                $fieldWorkFlow = $app['orm.em']->getRepository('Entity\ExtraFieldOptionRelFieldOption')
-                                ->findBy(
-                                    array(
-                                        'fieldId' => $field_details['id'],
-                                        'relatedFieldOptionId' => $defaultValueId,
-                                        'roleId' => $userInfo['status']
-                                    )
-                                );
-                                foreach ($fieldWorkFlow as $item) {
-                                    $addOptions[] = $item->getFieldOptionId();
+                            if (!empty($roles)) {
+
+                                if (empty($defaultValueId)) {
+                                    throw new \Symfony\Component\Process\Exception\LogicException('You need to add a default value for the extra field: '.$field_details['field_variable']);
                                 }
+
+                                foreach ($roles as $role) {
+                                    $fieldWorkFlow = $app['orm.em']->getRepository('Entity\ExtraFieldOptionRelFieldOption')
+                                    ->findBy(
+                                        array(
+                                            'fieldId' => $field_details['id'],
+                                            'relatedFieldOptionId' => $defaultValueId,
+                                            'roleId' => $role->getId()
+                                        )
+                                    );
+
+                                    foreach ($fieldWorkFlow as $item) {
+                                        if (!in_array($item->getFieldOptionId(), $addOptions)) {
+                                            $addOptions[] = $item->getFieldOptionId();
+                                        }
+                                    }
+                                }
+
                             }
                         }
 
@@ -652,8 +681,10 @@ class ExtraField extends Model
                             $options[''] = get_lang('SelectAnOption');
                         }
 
+                        $optionList = array();
                         if (!empty($field_details['options'])) {
                             foreach ($field_details['options'] as $option_details) {
+                                $optionList[$option_details['id']] = $option_details;
                                 if ($get_lang_variables) {
                                     $options[$option_details['option_value']] = get_lang($option_details['option_display_text']);
                                 } else {
@@ -673,6 +704,26 @@ class ExtraField extends Model
                                         // Normal behaviour
                                         $options[$option_details['option_value']] = $option_details['option_display_text'];
                                     }
+                                }
+                            }
+
+                            if (isset($optionList[$defaultValueId])) {
+
+                                if (isset($optionList[$defaultValueId]['option_value']) && $optionList[$defaultValueId]['option_value'] == 'aprobada') {
+                                    if (api_is_question_manager() == false) {
+                                        $form->freeze();
+                                    }
+                                }
+                            }
+
+                            // Setting priority message
+                            if (isset($optionList[$defaultValueId]) && isset($optionList[$defaultValueId]['priority'])) {
+
+                                if (!empty($optionList[$defaultValueId]['priority'])) {
+                                    $priorityId = $optionList[$defaultValueId]['priority'];
+                                    $option = new ExtraFieldOption($this->type);
+                                    $messageType = $option->getPriorityMessageType($priorityId);
+                                    $form->addElement('label', null, Display::return_message($optionList[$defaultValueId]['priority_message'], $messageType));
                                 }
                             }
                         }
@@ -1093,6 +1144,11 @@ EOF;
 
     }
 
+    /**
+     * @param string $url
+     * @param string $action
+     * @return FormValidator
+     */
     public function return_form($url, $action)
     {
         $form = new FormValidator($this->type.'_field', 'post', $url);
@@ -1132,6 +1188,7 @@ EOF;
             get_lang('FieldPossibleValues'),
             array('id' => 'field_options', 'class' => 'span6')
         );
+
         if ($action == 'edit') {
             if (in_array(
                 $defaults['field_type'],

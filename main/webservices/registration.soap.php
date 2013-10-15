@@ -5484,6 +5484,86 @@ function WSUpdateUserApiKey($params)
     return $apikey;
 }
 
+/** WSListSessions **/
+
+$server->wsdl->addComplexType(
+    'session',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'id' => array ('name' => 'id'  , 'type' => 'xsd:int'),
+        'title' => array ('name' => 'title', 'type' => 'xsd:string'),
+        'url' => array ('name' => 'url', 'type' => 'xsd:string'),
+        'date_start' => array ('name' => 'date_start', 'type' => 'xsd:string'),
+        'date_end' => array ('name' => 'date_end', 'type' => 'xsd:string'),
+    )
+);
+
+$server->wsdl->addComplexType(
+    'sessions',
+    'complexType',
+    'array',
+    '',
+    'SOAP-ENC:Array',
+    array(),
+    array(
+        array('ref'=>'SOAP:ENC:arrayType',
+            'wsdl:arrayType'=>'tns:session[]')
+    ),
+    'tns:session'
+);
+
+// Register the method to expose
+$server->register('WSListSessions',         // method name
+    array('secret_key' => 'xsd:string',
+        'date_start' => 'xsd:string',
+        'date_end' => 'xsd:string'),      // input parameters
+    array('return' => 'tns:sessions'),             // output parameters
+    'urn:WSRegistration',                         // namespace
+    'urn:WSRegistration#WSListSessions',      // soapaction
+    'rpc',                                      // style
+    'encoded',                                  // use
+    'This service returns a list of sessions'    // documentation
+);
+
+
+/**
+ * Get a list of sessions (id, title, url, date_start, date_end) and
+ * return to caller. Date start can be set to ask only for the sessions
+ * starting at or after this date. Date end can be set to ask only for the
+ * sessions ending before or at this date.
+ * Function registered as service. Returns strings in UTF-8.
+ * @param array List of parameters (security key, date_start and date_end)
+ * @return array Sessions list (id=>[title=>'title',url='http://...',date_start=>'...',date_end=>''])
+ */
+function WSListSessions($params) {
+    if(!WSHelperVerifyKey($params)) {
+        return return_error(WS_ERROR_SECRET_KEY);
+    }
+    $sql_params = array();
+    // Dates should be provided in YYYY-MM-DD format, UTC
+    if (!empty($params['date_start'])) {
+        $sql_params['date_start >='] = $params['date_start'];
+    }
+    if (!empty($params['date_end'])) {
+        $sql_params['date_end <='] = $params['date_end'];
+    }
+    $sessions_list = SessionManager::get_sessions_list($sql_params);
+    $return_list = array();
+    foreach ($sessions_list as $session) {
+        $return_list[] = array(
+            'id' => $session['id'],
+            'title' => $session['name'],
+            'url' => api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session['id'], // something like http://my.chamilo.net/main/session/index.php?session_id=5
+            'date_start' => $session['date_start'],
+            'date_end' => $session['date_end'],
+        );
+    }
+    return $return_list;
+}
+
 // Use the request to (try to) invoke the service
 $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
 $server->service($HTTP_RAW_POST_DATA);

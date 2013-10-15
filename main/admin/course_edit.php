@@ -46,9 +46,9 @@ if (api_is_multiple_url_enabled()) {
 	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 	$sql = "SELECT u.user_id,lastname,firstname FROM $table_user as u
 			INNER JOIN $access_url_rel_user_table url_rel_user
-			ON (u.user_id=url_rel_user.user_id) WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status=1".$order_clause;
+			ON (u.user_id=url_rel_user.user_id) WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status = 1 or status = 2 ".$order_clause;
 } else {
-	$sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status='1'".$order_clause;
+	$sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status = 1 or status = 2 ".$order_clause;
 }
 
 $res = Database::query($sql);
@@ -87,6 +87,10 @@ $form->applyFilter('title','trim');
 
 // Code
 $element = $form->addElement('text', 'real_code', array(get_lang('CourseCode'), get_lang('ThisValueCantBeChanged')));
+$element->freeze();
+
+// Id
+$element = $form->addElement('text', 'real_id', 'id');
 $element->freeze();
 
 // visual code
@@ -149,6 +153,7 @@ $group[]= $form->createElement('radio', 'visibility', get_lang("CourseAccess"), 
 $group[]= $form->createElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
 $group[]= $form->createElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
 $group[]= $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
+$group[]= $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityHidden'), COURSE_VISIBILITY_HIDDEN);
 $form->addGroup($group,'', get_lang('CourseAccess'), '<br />');
 
 $group = array();

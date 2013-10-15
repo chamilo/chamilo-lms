@@ -167,9 +167,6 @@ function & _api_compare_n_grams(&$n_grams, $encoding, $max_delta = LANGUAGE_DETE
     return $result;
 }
 
-
-
-
 /**
  * Appendix to "Name order conventions"
  */
@@ -181,25 +178,10 @@ function & _api_compare_n_grams(&$n_grams, $encoding, $max_delta = LANGUAGE_DETE
  * @return mixed			Depending of the requested type, the returned result may be string or boolean; null is returned on error;
  */
 function _api_get_person_name_convention($language, $type) {
-    static $conventions;
+    global $app;
+    $conventions = $app['name_order_conventions'];
     $language = api_purify_language_id($language);
-    if (!isset($conventions)) {
-        $file = dirname(__FILE__).'/internationalization_database/name_order_conventions.php';
-        if (file_exists($file)) {
-            $conventions = include ($file);
-        } else {
-            $conventions = array('english' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'));
-        }
-        $search1 = array('FIRST_NAME', 'LAST_NAME', 'TITLE');
-        $replacement1 = array('%F', '%L', '%T');
-        $search2 = array('first_name', 'last_name', 'title');
-        $replacement2 = array('%f', '%l', '%t');
-        foreach (array_keys($conventions) as $key) {
-            $conventions[$key]['format'] = str_replace($search1, $replacement1, $conventions[$key]['format']);
-            $conventions[$key]['format'] = _api_validate_person_name_format(_api_clean_person_name(str_replace('%', ' %', str_ireplace($search2, $replacement2, $conventions[$key]['format']))));
-            $conventions[$key]['sort_by'] = strtolower($conventions[$key]['sort_by']) != 'last_name' ? true : false;
-        }
-    }
+
     switch ($type) {
         case 'format':
             return is_string($conventions[$language]['format']) ? $conventions[$language]['format'] : '%t %f %l';

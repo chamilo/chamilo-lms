@@ -37,9 +37,16 @@ class SoftDeleteableFilter extends SQLFilter
             return '';
         }
 
-        $column = $targetEntity->columnNames[$config['fieldName']];
+        $conn = $this->getEntityManager()->getConnection();
+        $platform = $conn->getDatabasePlatform();
+        $column = $targetEntity->getQuotedColumnName($config['fieldName'], $platform);
 
-        return $targetTableAlias.'.'.$column.' IS NULL';
+        $addCondSql = $platform->getIsNullExpression($targetTableAlias.'.'.$column);
+        if (isset($config['timeAware']) && $config['timeAware']) {
+            $now = $conn->quote(date('Y-m-d H:i:s')); // should use UTC in database and PHP
+            $addCondSql = "({$addCondSql} OR {$targetTableAlias}.{$column} > {$now})";
+        }
+        return $addCondSql;
     }
 
     public function disableForEntity($class)

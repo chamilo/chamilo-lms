@@ -1,7 +1,5 @@
 {
-	"name": "natxet/CssMin",
-	"version": "0.0.3",
-	"type": "library",
+	"name": "natxet/cssmin",
 	"description": "Minifying CSS",
 	"keywords": ["css","minify"],
 	"homepage": "http://code.google.com/p/cssmin/",
@@ -13,20 +11,10 @@
 			"homepage": "https://profiles.google.com/joe.scylla"
 		}
 	],
-	"repositories": {
-		"Github": {
-			"vcs": {
-				"url": "git://github.com/natxet/CssMin.git"
-			}
-		}
-	},
 	"require": {
 		"php": ">=5.0"
 	},
 	"autoload": {
-		"psr-0": {
-			"CssMin": "src/"
-		}
+		"classmap": ["src/"]
 	}
 }
-

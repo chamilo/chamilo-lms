@@ -202,7 +202,9 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                 $form = generate_settings_form($settings, $settings_by_access_list, $settings_to_avoid, $convert_byte_to_mega_list);
             }
         }
-        $pdf_export_watermark_path = $_FILES['pdf_export_watermark_path'];
+        if (isset($_FILES['pdf_export_watermark_path'])) {
+            $pdf_export_watermark_path = $_FILES['pdf_export_watermark_path'];
+        }
 
         if (isset($pdf_export_watermark_path) && !empty($pdf_export_watermark_path['name'])) {
             $pdf_export_watermark_path_result = PDF::upload_watermark(
@@ -212,9 +214,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
             if ($pdf_export_watermark_path_result) {
                 $message['confirmation'][] = get_lang('UplUploadSucceeded');
             } else {
-                $message['warning'][] = get_lang('UplUnableToSaveFile').' '.get_lang('Folder').': '.api_get_path(
-                    SYS_CODE_PATH
-                ).'default_course_document/images';
+                $message['warning'][] = get_lang('UplUnableToSaveFile').' '.get_lang('Folder').': '.api_get_path(SYS_DEFAULT_COURSE_DOCUMENT_PATH).'/images';
             }
             unset($update_values['pdf_export_watermark_path']);
         }
@@ -229,26 +229,6 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         if (isset($values['allow_social_tool']) && $values['allow_social_tool'] == 'true') {
             $values['allow_message_tool'] = 'true';
         }
-
-
-        // The first step is to set all the variables that have type=checkbox of the category
-        // to false as the checkbox that is unchecked is not in the $_POST data and can
-        // therefore not be set to false.
-        // This, however, also means that if the process breaks on the third of five checkboxes, the others
-        // will be set to false.
-
-        //$r = api_set_settings_category($my_category, 'false', $_configuration['access_url'], array('checkbox', 'radio'));
-
-        //This is a more accurate way of updating to false the checkboxes and radios the settings
-
-        /*
-        foreach ($values as $key => $value) {
-            if (in_array($key, $settings_to_avoid)) { continue; }
-            if ($key == 'search_field' or $key == 'submit_fixed_in_bottom') { continue; }
-            $key = Database::escape_string($key);
-            $sql = "UPDATE $table_settings_current SET selected_value = 'false' WHERE variable = '".$key."' AND access_url = ".intval($url_id)."  AND type IN ('checkbox', 'radio') ";
-            $res = Database::query($sql);
-        }*/
 
         foreach ($settings as $item) {
             $key = $item['variable'];

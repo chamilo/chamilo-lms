@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+/** Composer autoload */
+require_once __DIR__.'/../vendor/autoload.php';
+
 /**
  * Classic global.inc.php file now returns a Application object
  * Make sure you read the documentation/installation_guide.html to learn how
@@ -31,4 +34,3 @@ $app = require_once '../main/inc/global.inc.php';
 
 /** @var \Silex\Application $app */
 $app->run();
-//$app['http_cache']->run();

@@ -4,6 +4,7 @@ namespace Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\NoResultException;
 
 /**
  * JuryRepository
@@ -15,7 +16,7 @@ class JuryRepository extends EntityRepository
      * Get all users that are registered in the course. No matter the status
      *
      * @param \Entity\Course $course
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return \Entity\Jury
      */
     public function getJuryByPresidentId($userId)
     {
@@ -44,13 +45,99 @@ class JuryRepository extends EntityRepository
 
         $qb->where($wherePart);
         $q = $qb->getQuery();
-        return $q->getSingleResult();
-        //return $qb;
+
+        try {
+            return $q->getSingleResult();
+        } catch (NoResultException $e) {
+            return false;
+        }
     }
 
-    public function getExerciseAttemptsByJury($juryId)
+    /**
+     *
+     * @param $userId
+     * @return \Entity\Jury
+     */
+    public function getJuryByUserId($userId)
     {
+        $qb = $this->createQueryBuilder('a');
 
+        //Selecting user info
+        $qb->select('DISTINCT u');
+
+        // Loading EntityUser
+        $qb->from('Entity\Jury', 'u');
+
+        // Selecting members
+        $qb->innerJoin('u.members', 'c');
+
+        // Inner join with the table c_quiz_question_rel_category.
+        $qb->innerJoin('c.role', 'r');
+
+        //@todo check app settings
+        //$qb->add('orderBy', 'u.lastname ASC');
+
+        $wherePart = $qb->expr()->andx();
+
+        //Get user
+        $wherePart->add($qb->expr()->eq('c.userId', $userId));
+
+        $qb->where($wherePart);
+        $q = $qb->getQuery();
+
+        try {
+            return $q->getSingleResult();
+        } catch (NoResultException $e) {
+            return false;
+        }
     }
 
+    /**
+     * @param int $juryId
+     * @param array skip this roles
+     *
+     * @return bool|mixed
+     */
+    public function getStudentsByJury($juryId, $skipRoles = array())
+    {
+        $qb = $this->createQueryBuilder('a');
+
+        //Selecting user info
+        $qb->select('DISTINCT u');
+
+        // Loading EntityUser
+        $qb->from('Entity\Jury', 'u');
+
+        // Selecting members
+        $qb->innerJoin('u.members', 'c');
+
+        // Inner join with the table c_quiz_question_rel_category.
+        $qb->innerJoin('c.role', 'r');
+
+        $qb->innerJoin('c.students', 's');
+
+        //@todo check app settings
+        //$qb->add('orderBy', 'u.lastname ASC');
+
+        $wherePart = $qb->expr()->andx();
+
+        // Get jury
+        $wherePart->add($qb->expr()->eq('u.id', $juryId));
+
+        if (!empty($skipRoles)) {
+            foreach ($skipRoles as $role) {
+                $wherePart->add($qb->expr()->neq('r.role', $qb->expr()->literal($role)));
+            }
+        }
+
+        $qb->where($wherePart);
+
+        $q = $qb->getQuery();
+
+        try {
+            return $q->getSingleResult();
+        } catch (NoResultException $e) {
+            return false;
+        }
+    }
 }

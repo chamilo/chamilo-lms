@@ -8,7 +8,7 @@ class LearningPathDocuments extends Basic
     public function getConfig()
     {
         $config['toolbarGroups'] = array(
-            array('name' => 'document',  'groups' =>array('mode', 'document', 'doctools')),
+            array('name' => 'document',  'groups' =>array('document', 'doctools')),
             array('name' => 'clipboard',    'groups' =>array('clipboard', 'undo', )),
             array('name' => 'editing',    'groups' =>array('clipboard', 'undo', )),
             array('name' => 'forms',    'groups' =>array('clipboard', 'undo', )),
@@ -21,10 +21,11 @@ class LearningPathDocuments extends Basic
             array('name' => 'styles'),
             array('name' => 'colors'),
             array('name' => 'tools'),
+            array('name' => 'others'),
             array('name' => 'others')
         );
 
-        $config['fullPage'] = 'true';
+        $config['fullPage'] = true;
 
         return $config;
     }

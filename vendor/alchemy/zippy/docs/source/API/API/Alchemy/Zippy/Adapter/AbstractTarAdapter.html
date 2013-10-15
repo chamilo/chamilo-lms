@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="robots" content="index, follow, all" />
+        <title>Alchemy\Zippy\Adapter\AbstractTarAdapter | Zippy API</title>
+                    <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
+                            </head>
+        <body id="class">
+            <div class="header">
+        <ul>
+            <li><a href="../../../classes.html">Classes</a></li>
+                            <li><a href="../../../namespaces.html">Namespaces</a></li>
+                        <li><a href="../../../interfaces.html">Interfaces</a></li>
+            <li><a href="../../../doc-index.html">Index</a></li>
+            
+        </ul>
+
+        <div id="title">Zippy API</div>
+
+            <div class="type">Class</div>
+    <h1><a href="../../../Alchemy/Zippy/Adapter.html">Alchemy\Zippy\Adapter</a>\AbstractTarAdapter</h1>
+    </div>
+        <div class="content">
+                <p>abstract class    <strong>AbstractTarAdapter</strong>        extends <a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a></p>
+
+    
+    
+    
+            <h2>Methods</h2>
+
+            <table>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method___construct">__construct</a>(<a href="../../../Alchemy/Zippy/Parser/ParserInterface.html"><abbr title="Alchemy\Zippy\Parser\ParserInterface">ParserInterface</abbr></a> $parser, <a href="../../../Alchemy/Zippy/ProcessBuilder/ProcessBuilderFactoryInterface.html"><abbr title="Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface">ProcessBuilderFactoryInterface</abbr></a> $inflator, <a href="../../../Alchemy/Zippy/ProcessBuilder/ProcessBuilderFactoryInterface.html"><abbr title="Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface">ProcessBuilderFactoryInterface</abbr></a> $deflator = null)
+                    <p>Constructor</p>
+                </td>
+                <td><small>from&nbsp;<a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html#method___construct"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <a href="../../../Alchemy/Zippy/Parser/ParserInterface.html"><abbr title="Alchemy\Zippy\Parser\ParserInterface">ParserInterface</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_getParser">getParser</a>()
+                    <p>Gets the output parser</p>
+                </td>
+                <td><small>from&nbsp;<a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html#method_getParser"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_setParser">setParser</a>(<a href="../../../Alchemy/Zippy/Parser/ParserInterface.html"><abbr title="Alchemy\Zippy\Parser\ParserInterface">ParserInterface</abbr></a> $parser)
+                    <p>Sets the parser</p>
+                </td>
+                <td><small>from&nbsp;<a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html#method_setParser"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <a href="../../../Alchemy/Zippy/ProcessBuilder/ProcessBuilderFactoryInterface.html"><abbr title="Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface">ProcessBuilderFactoryInterface</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_getDeflator">getDeflator</a>()
+                    <p>Returns the deflator process builder</p>
+                </td>
+                <td><small>from&nbsp;<a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html#method_getDeflator"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <a href="../../../Alchemy/Zippy/ProcessBuilder/ProcessBuilderFactoryInterface.html"><abbr title="Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface">ProcessBuilderFactoryInterface</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_getInflator">getInflator</a>()
+                    <p>Returns the inflator process builder</p>
+                </td>
+                <td><small>from&nbsp;<a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html#method_getInflator"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_setDeflator">setDeflator</a>(<a href="../../../Alchemy/Zippy/ProcessBuilder/ProcessBuilderFactoryInterface.html"><abbr title="Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface">ProcessBuilderFactoryInterface</abbr></a> $processBuilder)
+                    <p>Sets the deflator process builder</p>
+                </td>
+                <td><small>from&nbsp;<a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html#method_setDeflator"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_setInflator">setInflator</a>(<a href="../../../Alchemy/Zippy/ProcessBuilder/ProcessBuilderFactoryInterface.html"><abbr title="Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface">ProcessBuilderFactoryInterface</abbr></a> $processBuilder)
+                    <p>Sets the inflator process builder</p>
+                </td>
+                <td><small>from&nbsp;<a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html#method_setInflator"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    static&nbsp;<a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_newInstance">newInstance</a>($inflatorBinaryName = null, $deflatorBinaryName = null)
+                    <p>Returns a new instance of the invoked adapter</p>
+                </td>
+                <td><small>from&nbsp;<a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html#method_newInstance"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_create">create</a>($path, $files = null, $recursive = true)
+                    <p></p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_listMembers">listMembers</a>($path)
+                    <p></p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_add">add</a>($path, $files, $recursive = true)
+                    <p></p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_remove">remove</a>($path, $files)
+                    <p></p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_extractMembers">extractMembers</a>($path, $members, $to = null)
+                    <p></p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_extract">extract</a>($path, $to = null)
+                    <p></p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_isSupported">isSupported</a>()
+                    <p></p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    String
+                </td>
+                <td class="last">
+                    <a href="#method_getInflatorVersion">getInflatorVersion</a>()
+                    <p>Returns the inflator binary version</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    String
+                </td>
+                <td class="last">
+                    <a href="#method_getDeflatorVersion">getDeflatorVersion</a>()
+                    <p>Returns the deflator binary version</p>
+                </td>
+                <td></td>
+            </tr>
+            </table>
+
+
+        <h2>Details</h2>
+
+                        <h3 id="method___construct">
+        <div class="location">in <a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html#method___construct"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a> at line 55</div>
+        <code>            public            
+    <strong>__construct</strong>(<a href="../../../Alchemy/Zippy/Parser/ParserInterface.html"><abbr title="Alchemy\Zippy\Parser\ParserInterface">ParserInterface</abbr></a> $parser, <a href="../../../Alchemy/Zippy/ProcessBuilder/ProcessBuilderFactoryInterface.html"><abbr title="Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface">ProcessBuilderFactoryInterface</abbr></a> $inflator, <a href="../../../Alchemy/Zippy/ProcessBuilder/ProcessBuilderFactoryInterface.html"><abbr title="Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface">ProcessBuilderFactoryInterface</abbr></a> $deflator = null)</code>
+    </h3>
+    <div class="details">
+        <p>Constructor</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="../../../Alchemy/Zippy/Parser/ParserInterface.html"><abbr title="Alchemy\Zippy\Parser\ParserInterface">ParserInterface</abbr></a></td>
+                <td>$parser</td>
+                <td>An output parser</td>
+            </tr>
+                    <tr>
+                <td><a href="../../../Alchemy/Zippy/ProcessBuilder/ProcessBuilderFactoryInterface.html"><abbr title="Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface">ProcessBuilderFactoryInterface</abbr></a></td>
+                <td>$inflator</td>
+                <td>A process builder factory for the inflator binary</td>
+            </tr>
+                    <tr>
+                <td><a href="../../../Alchemy/Zippy/ProcessBuilder/ProcessBuilderFactoryInterface.html"><abbr title="Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface">ProcessBuilderFactoryInterface</abbr></a></td>
+                <td>$deflator</td>
+                <td>A process builder factory for the deflator binary</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_getParser">
+        <div class="location">in <a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html#method_getParser"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a> at line 65</div>
+        <code>            public            <a href="../../../Alchemy/Zippy/Parser/ParserInterface.html"><abbr title="Alchemy\Zippy\Parser\ParserInterface">ParserInterface</abbr></a>
+    <strong>getParser</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Gets the output parser</p>
+        <p></p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="../../../Alchemy/Zippy/Parser/ParserInterface.html"><abbr title="Alchemy\Zippy\Parser\ParserInterface">ParserInterface</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_setParser">
+        <div class="location">in <a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html#method_setParser"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a> at line 73</div>
+        <code>            public            <a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a>
+    <strong>setParser</strong>(<a href="../../../Alchemy/Zippy/Parser/ParserInterface.html"><abbr title="Alchemy\Zippy\Parser\ParserInterface">ParserInterface</abbr></a> $parser)</code>
+    </h3>
+    <div class="details">
+        <p>Sets the parser</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="../../../Alchemy/Zippy/Parser/ParserInterface.html"><abbr title="Alchemy\Zippy\Parser\ParserInterface">ParserInterface</abbr></a></td>
+                <td>$parser</td>
+                <td>The parser to use</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_getDeflator">
+        <div class="location">in <a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html#method_getDeflator"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a> at line 83</div>
+        <code>            public            <a href="../../../Alchemy/Zippy/ProcessBuilder/ProcessBuilderFactoryInterface.html"><abbr title="Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface">ProcessBuilderFactoryInterface</abbr></a>
+    <strong>getDeflator</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Returns the deflator process builder</p>
+        <p></p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="../../../Alchemy/Zippy/ProcessBuilder/ProcessBuilderFactoryInterface.html"><abbr title="Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface">ProcessBuilderFactoryInterface</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_getInflator">
+        <div class="location">in <a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html#method_getInflator"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a> at line 91</div>
+        <code>            public            <a href="../../../Alchemy/Zippy/ProcessBuilder/ProcessBuilderFactoryInterface.html"><abbr title="Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface">ProcessBuilderFactoryInterface</abbr></a>
+    <strong>getInflator</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Returns the inflator process builder</p>
+        <p></p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="../../../Alchemy/Zippy/ProcessBuilder/ProcessBuilderFactoryInterface.html"><abbr title="Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface">ProcessBuilderFactoryInterface</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_setDeflator">
+        <div class="location">in <a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html#method_setDeflator"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a> at line 99</div>
+        <code>            public            <a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a>
+    <strong>setDeflator</strong>(<a href="../../../Alchemy/Zippy/ProcessBuilder/ProcessBuilderFactoryInterface.html"><abbr title="Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface">ProcessBuilderFactoryInterface</abbr></a> $processBuilder)</code>
+    </h3>
+    <div class="details">
+        <p>Sets the deflator process builder</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="../../../Alchemy/Zippy/ProcessBuilder/ProcessBuilderFactoryInterface.html"><abbr title="Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface">ProcessBuilderFactoryInterface</abbr></a></td>
+                <td>$processBuilder</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_setInflator">
+        <div class="location">in <a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html#method_setInflator"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a> at line 106</div>
+        <code>            public            <a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a>
+    <strong>setInflator</strong>(<a href="../../../Alchemy/Zippy/ProcessBuilder/ProcessBuilderFactoryInterface.html"><abbr title="Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface">ProcessBuilderFactoryInterface</abbr></a> $processBuilder)</code>
+    </h3>
+    <div class="details">
+        <p>Sets the inflator process builder</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="../../../Alchemy/Zippy/ProcessBuilder/ProcessBuilderFactoryInterface.html"><abbr title="Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface">ProcessBuilderFactoryInterface</abbr></a></td>
+                <td>$processBuilder</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_newInstance">
+        <div class="location">in <a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html#method_newInstance"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a> at line 123</div>
+        <code>        static    public            <a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a>
+    <strong>newInstance</strong>($inflatorBinaryName = null, $deflatorBinaryName = null)</code>
+    </h3>
+    <div class="details">
+        <p>Returns a new instance of the invoked adapter</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td></td>
+                <td>$inflatorBinaryName</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td></td>
+                <td>$deflatorBinaryName</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="../../../Alchemy/Zippy/Adapter/AbstractBinaryAdapter.html"><abbr title="Alchemy\Zippy\Adapter\AbstractBinaryAdapter">AbstractBinaryAdapter</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/RuntimeException"><abbr title="RuntimeException">RuntimeException</abbr></a></td>
+                <td>In case object could not be instanciated</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+                <h3 id="method_create">
+        <div class="location">at line 24</div>
+        <code>            public            
+    <strong>create</strong>($path, $files = null, $recursive = true)</code>
+    </h3>
+    <div class="details">
+        <p></p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td></td>
+                <td>$path</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td></td>
+                <td>$files</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td></td>
+                <td>$recursive</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_listMembers">
+        <div class="location">at line 32</div>
+        <code>            public            
+    <strong>listMembers</strong>($path)</code>
+    </h3>
+    <div class="details">
+        <p></p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td></td>
+                <td>$path</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_add">
+        <div class="location">at line 40</div>
+        <code>            public            
+    <strong>add</strong>($path, $files, $recursive = true)</code>
+    </h3>
+    <div class="details">
+        <p></p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td></td>
+                <td>$path</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td></td>
+                <td>$files</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td></td>
+                <td>$recursive</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_remove">
+        <div class="location">at line 48</div>
+        <code>            public            
+    <strong>remove</strong>($path, $files)</code>
+    </h3>
+    <div class="details">
+        <p></p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td></td>
+                <td>$path</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td></td>
+                <td>$files</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_extractMembers">
+        <div class="location">at line 56</div>
+        <code>            public            
+    <strong>extractMembers</strong>($path, $members, $to = null)</code>
+    </h3>
+    <div class="details">
+        <p></p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td></td>
+                <td>$path</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td></td>
+                <td>$members</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td></td>
+                <td>$to</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_extract">
+        <div class="location">at line 64</div>
+        <code>            public            
+    <strong>extract</strong>($path, $to = null)</code>
+    </h3>
+    <div class="details">
+        <p></p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td></td>
+                <td>$path</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td></td>
+                <td>$to</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_isSupported">
+        <div class="location">at line 72</div>
+        <code>            public            
+    <strong>isSupported</strong>()</code>
+    </h3>
+    <div class="details">
+        <p></p>
+        <p></p>
+        <div class="tags">
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_getInflatorVersion">
+        <div class="location">at line 92</div>
+        <code>            public            String
+    <strong>getInflatorVersion</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Returns the inflator binary version</p>
+        <p></p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>String</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_getDeflatorVersion">
+        <div class="location">at line 115</div>
+        <code>            public            String
+    <strong>getDeflatorVersion</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Returns the deflator binary version</p>
+        <p></p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>String</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+    
+            </div>
+            <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/" target="_top">Sami, the API Documentation Generator</a>.
+    </div>
+    </body>
+</html>

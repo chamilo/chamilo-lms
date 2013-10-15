@@ -7,7 +7,7 @@
 /**
  * Init
  */
-require_once (api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php');
+require_once dirname(__FILE__).'/xajax/xajax.inc.php';
 /**
  * AddManySessionToCategoryFunctions class
  */
@@ -17,12 +17,11 @@ class AddManySessionToCategoryFunctions {
      * @param string A search string
      * @param string A search box type (single or anything else)
      * @return string XajaxResponse
-     * @assert () !== ''
      * @assert ('abc','single') !== ''
      */
-    function search_courses($needle,$type) {
+    function search_courses($needle, $type) {
 
-		global $tbl_course, $tbl_session, $id_session;
+		global $tbl_session;
 		$xajax_response = new XajaxResponse();
 		$return = '';
 		if(!empty($needle) && !empty($type)) {

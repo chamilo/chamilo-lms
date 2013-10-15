@@ -21,10 +21,11 @@ class IntroductionTool extends Basic
             array('name' => 'styles'),
             array('name' => 'colors'),
             array('name' => 'tools'),
-            array('name' => 'others')
+            array('name' => 'others'),
+            array('name' => 'mode')
         );
 
-        $config['fullPage'] = 'true';
+        $config['fullPage'] = true;
         //$config['height'] = '200';
 
         return $config;

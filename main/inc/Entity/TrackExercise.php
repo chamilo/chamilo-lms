@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * TrackExercise
  *
  * @ORM\Table(name="track_e_exercices")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Entity\Repository\TrackExerciseRepository")
  */
 class TrackExercise
 {
@@ -155,6 +155,13 @@ class TrackExercise
     private $juryId;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="quiz_distribution_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $quizDistributionId;
+
+    /**
      * @ORM\ManyToOne(targetEntity="CQuiz")
      * @ORM\JoinColumn(name="exe_exo_id", referencedColumnName="iid")
      */
@@ -176,6 +183,20 @@ class TrackExercise
      * @ORM\OneToMany(targetEntity="TrackExerciseAttemptJury", mappedBy="attempt")
      **/
     private $juryAttempts;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="CQuizDistribution")
+     * @ORM\JoinColumn(name="quiz_distribution_id", referencedColumnName="id")
+     */
+    private $distribution;
+
+    /**
+     * @return \Entity\CQuizDistribution
+     */
+    public function getDistribution()
+    {
+        return $this->distribution;
+    }
 
     public function getAttempt()
     {
@@ -668,5 +689,27 @@ class TrackExercise
         $this->juryMembers = $juryMembers;
 
         return $this;
+    }
+
+    /**
+     * Set quizDistributionId
+     *
+     * @param integer $quizDistributionId
+     */
+    public function setQuizDistributionId($quizDistributionId)
+    {
+        $this->quizDistributionId = $quizDistributionId;
+
+        return $this;
+    }
+
+    /**
+     * Get quizDistributionId
+     *
+     * @return integer
+     */
+    public function getQuizDistributionId()
+    {
+        return $this->quizDistributionId;
     }
 }

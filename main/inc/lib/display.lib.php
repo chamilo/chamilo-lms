@@ -1883,8 +1883,17 @@ class Display
 
      * @return string
      */
-    public static function progressPaginationBar($nextValue, $list, $current, $fixedValue = null, $conditions = array(), $link = null, $isMedia = false, $addHeaders = true)
-    {
+    public static function progressPaginationBar(
+        $nextValue,
+        $list,
+        $current,
+        $fixedValue = null,
+        $conditions = array(),
+        $link = null,
+        $isMedia = false,
+        $addHeaders = true,
+        $linkAttributes = array()
+    ) {
         if ($addHeaders) {
             $pagination_size = 'pagination-mini';
             $html = '<div class="exercise_pagination pagination '.$pagination_size.'"><ul>';
@@ -1908,7 +1917,19 @@ class Display
                     $isCurrent = $current == ($localCounter + $nextValue + 1) ? true : false;
                 }
             }
-            $html .= self::parsePaginationItem($itemId, $isCurrent, $conditions, $link, $nextValue, $isMedia, $localCounter, $fixedValue);
+
+            $html .= self::parsePaginationItem(
+                $itemId,
+                $isCurrent,
+                $conditions,
+                $link,
+                $nextValue,
+                $isMedia,
+                $localCounter,
+                $fixedValue,
+                $linkAttributes
+            );
+
             $localCounter++;
         }
 
@@ -1930,7 +1951,16 @@ class Display
      * @param int $fixedValue
      * @return string
      */
-    static function parsePaginationItem($itemId, $isCurrent, $conditions, $link, $nextValue = 0, $isMedia = false, $localCounter = null, $fixedValue = null)
+    static function parsePaginationItem(
+        $itemId,
+        $isCurrent,
+        $conditions,
+        $link,
+        $nextValue = 0,
+        $isMedia = false,
+        $localCounter = null,
+        $fixedValue = null,
+        $linkAttributes = array())
     {
         $defaultClass = "before";
         $class = $defaultClass;
@@ -1983,7 +2013,9 @@ class Display
             $link_to_show = $link.$fixedValue.'#questionanchor'.$itemId;
         }
 
-        return  '<li class = "'.$class.'"><a href="'.$link_to_show.'">'.$label.' </a></li>';
+        $link = Display::url($label.' ', $link_to_show, $linkAttributes);
+
+        return  '<li class = "'.$class.'">'.$link.'</li>';
     }
 
 

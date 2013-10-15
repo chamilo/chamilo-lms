@@ -61,7 +61,7 @@ if (!function_exists('gzopen') && function_exists('gzopen64')) {
   //define( 'PCLZIP_SEPARATOR', ' ' );
   // Recommanded values for smart separation of filenames.
   if (!defined('PCLZIP_SEPARATOR')) {
-    define( 'PCLZIP_SEPARATOR', ',' );
+    define( 'PCLZIP_SEPARATOR', '|' );
   }
 
   // ----- Error configuration

@@ -11,6 +11,8 @@
 
 namespace Symfony\Component\Console\Event;
 
+use Symfony\Component\Console\Command\Command;
+
 /**
  * Allows to do things before the command is executed.
  *

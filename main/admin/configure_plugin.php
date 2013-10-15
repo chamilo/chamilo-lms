@@ -55,7 +55,7 @@ if (isset($form)) {
                                     array('Plugins', $access_url_id, $plugin_name, 'setting', "status")));
         foreach ($values as $key => $value) {
             $key = Database::escape_string($plugin_name.'_'.$key);
-            api_add_setting($value, $key, $plugin_name, 'setting', 'Plugins', $plugin_name, null, null, null, $_configuration['access_url'], 1);
+            api_add_setting($value, $key, $plugin_name, 'setting', 'Plugins', $plugin_name, null, null, null, api_get_current_access_url_id(), 1);
 
         }
         $message = Display::return_message(get_lang('Updated'), 'success');

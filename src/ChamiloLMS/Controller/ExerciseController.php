@@ -16,7 +16,11 @@ use \ChamiloSession as Session;
  */
 class ExerciseController extends CommonController
 {
-
+    /**
+     * @param Application $app
+     * @param $exerciseId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function dashboardAction(Application $app, $exerciseId)
     {
         $url = api_get_path(WEB_CODE_PATH).'exercice/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq();
@@ -34,7 +38,8 @@ class ExerciseController extends CommonController
         $question = \Question::read($questionId);
 
         if ($question) {
-            $question->updateTitle($question->selectTitle().' - '.get_lang('Copy'));
+            $newQuestionTitle = $question->selectTitle().' - '.get_lang('Copy');
+            $question->updateTitle($newQuestionTitle);
             //Duplicating the source question, in the current course
             $courseInfo = api_get_course_info();
             $newId = $question->duplicate($courseInfo);
@@ -47,14 +52,16 @@ class ExerciseController extends CommonController
             $newAnswer->read();
             //Duplicating the Answers in the current course
             $newAnswer->duplicate($newId);
-            $params = array(
+            /*$params = array(
                 'cidReq' => api_get_course_id(),
                 'id_session' => api_get_session_id(),
                 'id' => $newId,
                 'exerciseId' => $exerciseId
             );
-            $url = $app['url_generator']->generate('exercise_question_show', $params);
-            return $app->redirect($url);
+            $url = $app['url_generator']->generate('exercise_question_pool', $params);
+            return $app->redirect($url);*/
+            $response = \Display::return_message(get_lang('QuestionCopied').": ".$newQuestionTitle);
+            return new Response($response, 200, array());
         }
     }
 
@@ -78,14 +85,16 @@ class ExerciseController extends CommonController
             // adds the question ID represented by $recup into the list of questions for the current exercise
             $objExercise->addToList($exerciseId);
             Session::write('objExercise', $objExercise);
-            $params = array(
+            /*$params = array(
                 'cidReq' => api_get_course_id(),
                 'id_session' => api_get_session_id(),
                 'id' => $questionId,
                 'exerciseId' => $exerciseId
             );
-            $url = $app['url_generator']->generate('exercise_question_show', $params);
-            return $app->redirect($url);
+            $url = $app['url_generator']->generate('exercise_question_pool', $params);
+            return $app->redirect($url);*/
+            $response = \Display::return_message(get_lang('QuestionReused').": ".$question->question);
+            return new Response($response, 200, array());
         }
     }
 
@@ -224,7 +233,7 @@ class ExerciseController extends CommonController
 
         $question = \Question::read($id, null, $exercise);
 
-        $questionHTML = \ExerciseLib::showQuestion($question, false, null, null, false, true, false, true, $exercise->feedback_type, true);
+        $questionHTML = $exercise->showQuestion($question, false, null, null, false, true, false, true, $exercise->feedback_type, true);
         $app['template']->assign('question_preview', $questionHTML);
         $app['template']->assign('question', $question);
         $response = $app['template']->render_template('exercise/question/show_question.tpl');

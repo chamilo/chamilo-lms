@@ -15,13 +15,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 
-if ($type == 'question') {
-    if (!(api_is_platform_admin() || api_is_question_manager())) {
-        api_not_allowed(true);
-    }
-} else {
-    api_protect_admin_script();
-}
+api_protect_admin_script();
 
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -86,7 +80,7 @@ $extra_params['height'] = 'auto';
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
          return \'<a href="?action=edit&'.$params.'&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
-         '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&'.$params.'&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
+         '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(get_lang("ConfirmYourChoice"))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&'.$params.'&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
          '\';
  }';
 $htmlHeadXtra[]='

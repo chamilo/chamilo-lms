@@ -36,7 +36,7 @@ class JuryController extends CommonController
 
     /**
     *
-    * @Route("/{id}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Route("/{id}", requirements={"id" = "\d+"})
     * @Method({"GET"})
     */
     public function readAction($id)
@@ -62,7 +62,7 @@ class JuryController extends CommonController
 
     /**
     *
-    * @Route("/{id}/edit", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Route("/{id}/edit", requirements={"id" = "\d+"})
     * @Method({"GET"})
     */
     public function editAction($id)
@@ -71,7 +71,7 @@ class JuryController extends CommonController
     }
 
     /**
-    * @Route("/{id}/delete", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Route("/{id}/delete", requirements={"id" = "\d+"})
     * @Method({"GET"})
     */
     public function deleteAction($id)
@@ -80,7 +80,7 @@ class JuryController extends CommonController
     }
 
      /**
-    * @Route("/{id}/remove-member", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+    * @Route("/{id}/remove-member", requirements={"id" = "\d+"})
     * @Method({"GET"})
     */
     public function removeMemberAction($id)
@@ -105,9 +105,17 @@ class JuryController extends CommonController
     {
         $request = $this->getRequest();
         $keyword = $request->get('tag');
-        $repo = $this->get('orm.em')->getRepository('Entity\User');
 
-        $entities = $repo->searchUserByKeyword($keyword);
+        $role = $request->get('role');
+        /** @var Entity\Repository\UserRepository $repo */
+        $repo = $this->getManager()->getRepository('Entity\User');
+
+        if (empty($role)) {
+            $entities = $repo->searchUserByKeyword($keyword);
+        } else {
+            $entities = $repo->searchUserByKeywordAndRole($keyword, $role);
+        }
+
         $data = array();
         if ($entities) {
             /** @var \Entity\User $entity */
@@ -127,16 +135,16 @@ class JuryController extends CommonController
     */
     public function addMembersAction(Application $app, $id)
     {
-        $extraJS[]      = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
-        $extraJS[]      = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
+        $extraJS = array(
+            '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />',
+            '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript"></script>'
+        );
         $app['extraJS'] = $extraJS;
 
         $juryUserType = new JuryMembersType();
         $juryMember =  new Entity\JuryMembers();
         $juryMember->setJuryId($id);
-
-        $form = $this->get('form.factory')->create($juryUserType, $juryMember);
-
+        $form = $this->createForm($juryUserType, $juryMember);
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             $form->bind($request);

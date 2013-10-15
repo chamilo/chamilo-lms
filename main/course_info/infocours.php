@@ -136,7 +136,7 @@ $form->addElement('html', $image_html);
 
 
 $form->add_textfield('title', get_lang('Title'), true, array('class' => 'span6'));
-//$form->applyFilter('title', 'html_filter');
+$form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
 //$form->add_textfield('tutor_name', get_lang('Professors'), true, array ('size' => '60'));
@@ -156,9 +156,11 @@ $form->addElement('select', 'category_code', get_lang('Fac'), $categories, array
 $form->addElement('select_language', 'course_language', array(get_lang('Ln'), get_lang('TipLang')));
 
 $form->add_textfield('department_name', get_lang('Department'), false, array('class' => 'span5'));
+$form->applyFilter('department_name', 'html_filter');
 $form->applyFilter('department_name', 'trim');
 
 $form->add_textfield('department_url', get_lang('DepartmentUrl'), false, array('class' => 'span5'));
+$form->applyFilter('department_url', 'html_filter');
 //$form->addRule('tutor_name', get_lang('ThisFieldIsRequired'), 'required');
 
 // Picture
@@ -195,6 +197,10 @@ $group[]= $form->createElement('radio', 'visibility', get_lang("CourseAccess"), 
 $group[]= $form->createElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
 $group[]= $form->createElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
 $group[]= $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
+// The "hidden" visibility is only available to portal admins
+if (api_is_platform_admin()) {
+    $group[]= $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityHidden'), COURSE_VISIBILITY_HIDDEN);
+}
 $form->addGroup($group, '', array(get_lang("CourseAccess"), get_lang("CourseAccessConfigTip")), '');
 
 $url = api_get_path(WEB_CODE_PATH)."auth/inscription.php?c=$course_code&e=1";
@@ -456,9 +462,9 @@ if ($form->validate() && is_settings_editable()) {
         visibility  		    = '".$update_values['visibility']."',
         subscribe  			    = '".$update_values['subscribe']."',
         unsubscribe  		    = '".$update_values['unsubscribe']."',
-        legal                   = '".$update_values['legal']."',
-        activate_legal          = '".$update_values['activate_legal']."',
-        registration_code 	    = '".$update_values['course_registration_password']."'
+        legal                   = '".$update_values['legal']."',".
+        (isset($update_values['activate_legal'])?" activate_legal          = '".$update_values['activate_legal']."',":'').
+        " registration_code 	    = '".$update_values['course_registration_password']."'
         WHERE code = '".$course_code."'";
 
     Database::query($sql);

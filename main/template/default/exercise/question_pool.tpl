@@ -114,8 +114,11 @@
         searchDialog.addClass("ui-jqgrid ui-widget ui-widget-content ui-corner-all");
         searchDialog.css({position:"relative", "z-index":"auto", "float":"left"})
         var gbox = $("#gbox_"+grid[0].id);
+
         gbox.before(searchDialog);
         gbox.css({clear:"left"});
+
+        $("#searchmodfbox_questions").after('<div id="result" style="float: left;position: relative; width: 100%;"></div>');
 
         //Select first elements by default
         $('.input-elm').each(function(){
@@ -130,10 +133,29 @@
             });
         });
     });
+
+    function ajaxAction(obj) {
+        var url = $(obj).attr('data-url');
+        $.ajax({
+            beforeSend: function(obj) {
+                $("#result").html("<img src=\'{{ _p.web_img }}loadingAnimation.gif\' />");
+            },
+            type: "POST",
+            url: url,
+            success: function(data) {
+                $("#result").html(data);
+            }
+        });
+        event.preventDefault();
+        return false;
+    }
+
+
 </script>
 
 <div class="questions">
     {{ grid }}
 </div>
+
 
 {% endblock %}

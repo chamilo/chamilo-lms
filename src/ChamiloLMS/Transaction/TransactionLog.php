@@ -11,10 +11,6 @@ use Database;
 abstract class TransactionLog
 {
     /**
-     * Represents the local branch, as stored in branch_transaction.branch_id.
-     */
-    const BRANCH_LOCAL = 1;
-    /**
      * Represents the local transaction, as stored in
      * branch_transaction.transaction_id.
      *
@@ -68,10 +64,16 @@ abstract class TransactionLog
     public $id;
     /**
      * Branch id this transaction comes from.
-     *
-     * Use TransactionLog::BRANCH_LOCAL for local transactions.
      */
     public $branch_id;
+    /**
+     * The related course id.
+     */
+    public $c_id;
+    /**
+     * The related session id.
+     */
+    public $session_id;
     /**
      * The remote system branch transaction id.
      *
@@ -102,8 +104,8 @@ abstract class TransactionLog
      *
      * @param array $data
      *   An array with some values to initialize the object. One of the
-     *   following: id, branch_id, transaction_id, item_id, orig_id, dest_id,
-     *   info, status_id, data.
+     *   following: id, branch_id, transaction_id, item_id, dest_id, status_id,
+     *   data.
      */
     public function __construct($data)
     {
@@ -115,17 +117,14 @@ abstract class TransactionLog
         // time_insert and time_update are handled manually.
         $fields = array(
             'id' => false,
-            'branch_id' => TransactionLog::BRANCH_LOCAL,
+            'branch_id' => self::getController()->getBranchRepository()->getLocalBranch()->getId(),
             'transaction_id' => TransactionLog::TRANSACTION_LOCAL,
             'item_id' => false,
+            'c_id' => 0,
+            'session_id' => 0,
+            'dest_id' => null,
             'status_id' => TransactionLog::STATUS_LOCAL,
             'data' => array(),
-            // @todo The following fields are legacy fields from initial
-            // migration implementation and probably need to be removed from
-            // the object and the table soon.
-            'orig_id' => null,
-            'dest_id' => null,
-            'info' => null,
         );
         foreach ($fields as $field => $default_value) {
             if (isset($data[$field])) {
@@ -136,13 +135,15 @@ abstract class TransactionLog
         }
     }
 
-    public function getController()
+    public static function getController()
     {
-        if (empty($this->controller)) {
-            $this->controller = new TransactionLogController();
+        static $controller;
+
+        if (empty($controller)) {
+            $controller = new TransactionLogController();
         }
 
-        return $this->controller;
+        return $controller;
     }
 
     /**
@@ -153,7 +154,7 @@ abstract class TransactionLog
         $transaction_row = array();
         if (isset($this->id)) {
             $this->time_update = api_get_utc_datetime();
-            $fields = array('transaction_id', 'branch_id', 'action', 'item_id', 'orig_id', 'dest_id', 'info', 'status_id', 'time_update');
+            $fields = array('transaction_id', 'branch_id', 'c_id', 'session_id', 'action', 'item_id', 'dest_id', 'status_id', 'time_update');
             $transaction_row = array();
             foreach ($fields as $field) {
                 if (isset($this->$field)) {
@@ -163,7 +164,7 @@ abstract class TransactionLog
             Database::update(self::$table, $transaction_row, array('id = ?' => $this->id));
         } else {
             $this->time_insert = $this->time_update = api_get_utc_datetime();
-            $fields = array('transaction_id', 'branch_id', 'action', 'item_id', 'orig_id', 'dest_id', 'info', 'status_id', 'time_insert', 'time_update');
+            $fields = array('transaction_id', 'branch_id', 'c_id', 'session_id', 'action', 'item_id', 'dest_id', 'status_id', 'time_insert', 'time_update');
             foreach ($fields as $field) {
                 if (isset($this->$field)) {
                     $transaction_row[$field] = $this->$field;
@@ -274,6 +275,10 @@ abstract class TransactionLog
      * @trows TransactionImportException
      *   If any step for re-creating the element fails, an exception should be
      *   raised.
+     *
+     * @return string
+     *   The item id corresponding to the imported information in the
+     *   destination system.
      */
     abstract public function import();
 
@@ -288,10 +293,25 @@ abstract class TransactionLog
      * @trows TransactionExportException
      *   If any step for exporting the element fails, an exception should be
      *   raised.
+     */
+    abstract public function export();
+
+    /**
+     * Export the transaction thorugh export() and then convert it to JSON.
+     *
+     * @trows TransactionExportException
+     *   If any step for exporting the element fails, an exception should be
+     *   raised.
      *
      * @return string
      *   JSON string representing this transaction as expected by corresponding
      *   import().
      */
-    abstract public function export();
+    public function exportJson()
+    {
+        $this->export();
+        $content = (array) $this;
+
+        return json_encode($content);
+    }
 }

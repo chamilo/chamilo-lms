@@ -182,27 +182,29 @@ class MultipleAnswer extends Question
         $form->add_multiple_required_rule($boxes_names, get_lang('ChooseAtLeastOneCheckbox'), 'multiple_required');
         $navigator_info = api_get_navigator();
 
-        if ($obj_ex->edit_exercise_in_lp == true) {
-            //ie6 fix
-            if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
-                $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="btn minus"');
-                $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn plus"');
-                $form->addElement('submit', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
-            } else {
-                // setting the save button here and not in the question class.php
-                $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'), 'class="btn minus"');
-                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn plus"');
-                $form->addElement(
-                    'style_submit_button',
-                    'submitQuestion',
-                    $this->submitText,
-                    'class="'.$this->submitClass.'"'
-                );
+        if ($form->isFrozen() == false) {
+            if ($obj_ex->edit_exercise_in_lp == true) {
+                //ie6 fix
+                if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
+                    $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="btn minus"');
+                    $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn plus"');
+                    $form->addElement('submit', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
+                } else {
+                    // setting the save button here and not in the question class.php
+                    $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'), 'class="btn minus"');
+                    $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn plus"');
+                    $form->addElement(
+                        'style_submit_button',
+                        'submitQuestion',
+                        $this->submitText,
+                        'class="'.$this->submitClass.'"'
+                    );
+                }
             }
+            $renderer->setElementTemplate('{element}&nbsp;', 'lessAnswers');
+            $renderer->setElementTemplate('{element}&nbsp;', 'submitQuestion');
+            $renderer->setElementTemplate('{element}&nbsp;', 'moreAnswers');
         }
-        $renderer->setElementTemplate('{element}&nbsp;', 'lessAnswers');
-        $renderer->setElementTemplate('{element}&nbsp;', 'submitQuestion');
-        $renderer->setElementTemplate('{element}&nbsp;', 'moreAnswers');
         $form->addElement('html', '</div></div>');
 
         $defaults['correct'] = $correct;
@@ -255,15 +257,11 @@ class MultipleAnswer extends Question
     }
 
     /**
-     * @param int $feedback_type
-     * @param int $counter
-     * @param string $score
-     * @param bool $show_media
-     * @return string
+     * {@inheritdoc}
      */
-    public function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false)
+    public function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false, $hideTitle = 0)
     {
-        $header = parent::return_header($feedback_type, $counter, $score, $show_media);
+        $header = parent::return_header($feedback_type, $counter, $score, $show_media, $hideTitle);
         $header .= '<table class="'.$this->question_table_class.'">
 			<tr>
 				<th>'.get_lang("Choice").'</th>

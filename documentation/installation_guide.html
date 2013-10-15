@@ -23,17 +23,17 @@
             <ul class="nav">
                 <li><a href="index.html">Home</a></li>
                 <li ><a href="readme.html">About</a></li>
-                <li ><a href="license.html">License</a></li>            
-                <li><a href="credits.html">Credits</a></li>            
-                <li><a href="dependencies.html">Dependencies</a></li>            
+                <li ><a href="license.html">License</a></li>
+                <li><a href="credits.html">Credits</a></li>
+                <li><a href="dependencies.html">Dependencies</a></li>
                 <li><a href="changelog.html">Changelog</a></li>
-            </ul>        
+            </ul>
             </div><!--/.nav-collapse -->
         </div>
     </div>
-</div>    
+</div>
 
-<div class="container">    
+<div class="container">
 <h1>Chamilo - Installation Guide</h1>
 
 <p>Thank you for downloading Chamilo</p>
@@ -73,7 +73,7 @@ optimal flexibility, remote control and scalability. <br />
 
 <br />
 
-Chamilo is mainly a LMS running from <span style="font-weight: bold;">Apache (1.3, 2.0 or 2.2)</span>, with a <span style="font-weight: bold;">MySQL 5.1 (or MariaDB)</span> database backend and <span style="font-weight: bold;">PHP 5.3 (or 5.4)</span> (the so called <span style="font-weight: bold;">AMP</span> trilogy). <br />
+Chamilo is mainly a LMS running from <span style="font-weight: bold;">Apache (1.3, 2.0 or 2.2)</span>, with a <span style="font-weight: bold;">MySQL 5.1 (or MariaDB)</span> database backend and <span style="font-weight: bold;">PHP 5.3.3 (or 5.4)</span> (the so called <span style="font-weight: bold;">AMP</span> trilogy). <br />
 
 
 <br />
@@ -102,13 +102,14 @@ For instance, on an Ubuntu server,&nbsp;use apt-get from the Shell or Synaptic f
 
 <h3><span style="font-weight: bold;">MySQL or MariaDB database server</span></h3>
 
-You will need a login and password allowing to manage and create 
+You will need a login and password allowing to manage and create
 a database. Usually, the default configuration on local computers is to allow you to connect as root with an empty password. It is highly recommended to change the password and define a user with access to only a specific database. Please refer to the MySQL or MariaDB documentation in order to do this.<br />
-<span class="muted">Note that this has been greatly simplified since version 1.9, as it 
+<span class="muted">Note that this has been greatly simplified since version 1.9, as it
 previously required to choose between multiple databases and a deprecated single-database mode.</span><br />
 
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="2._Installation_of_Chamilo_LMS"></a><span style="font-weight: bold;">2. Installation of Chamilo LMS</span></h2>
+
 <h3>Configuring your web server to allow .htaccess overrides</h3>
 Starting from 1.10, Chamilo LMS allows friendly URLs if using Apache. As it is based on .htaccess and rewrites, you will be required to <b>AllowOverride All</b> (and possibly enable the ModRewrite extension for Apache). This means that, inside your Apache configuration (or your VirtualHost configuration), you will need to have a block similar to this (the directory given is the same as in the <i>DocumentRoot</i> directive):
 <pre>
@@ -140,7 +141,7 @@ On the RewriteBase line, where it normally says "/", change it to whatever subdi
   <li>Process through the web installation process. You can safely accept all default values. Consider changing the admin password to remember it.</li>
 </ol>
 <br />
-Only the following directories need to be readable, writeable and executable by your web server. 
+Only the following directories need to be readable, writeable and executable by your web server.
 <span class="muted">This usually requires no specific action on Windows servers, but will require a "chmod" under Linux/UNIX and Mac. See instructions below.</span>
 <br />Replace [chamilo] with the directory where your Chamilo installation is located:
 <ul>
@@ -155,15 +156,15 @@ Optionally, you can do the same to the following directories if you want to enab
   <li>[chamilo]/main/css/</li>
   <li>[chamilo]/main/lang/</li>
 </ul>
-Since Chamilo 1.8.8, you can also enable full-text indexing features which 
-require the php5-xapian PHP's extension module to be installed. If you do use 
+Since Chamilo 1.8.8, you can also enable full-text indexing features which
+require the php5-xapian PHP's extension module to be installed. If you do use
 it, you will need to allow your system to write into the searchdb directory:
 <ul>
   <li>[chamilo]/data/searchdb</li>
-</ul> 
-If you find a tests/ directory at the root of your package, please delete it. 
-This is a development directory (automated tests) that has not been checked for security issues, 
-an it should *never* be accessible to final users on a production server. 
+</ul>
+If you find a tests/ directory at the root of your package, please delete it.
+This is a development directory (automated tests) that has not been checked for security issues,
+an it should *never* be accessible to final users on a production server.
 
 <p>On Linux, Mac OS X and BSD operating systems you can use the <em>chmod
 0775</em> command to this end (although we recommend you seek advice from an
@@ -188,7 +189,7 @@ folders (right-clicking on them).</p>
 Do not edit the home_*.html files directly. Instead,
 choose "Configure the homepage" in the Chamilo administration section.</p>
 
-<p><span style="font-weight: bold;">Windows</span> : with all-in-one packages 
+<p><span style="font-weight: bold;">Windows</span> : with all-in-one packages
 like XAMPP, you can easily install Chamilo. In this case (and unless you use it
 in production), the login and password for MySQL will probably remain empty.</p>
 
@@ -200,28 +201,28 @@ in production), the login and password for MySQL will probably remain empty.</p>
 <ul>
 
   <li><strong>Protect your configuration directory: </strong>
-make sure no one (but you) can overwrite it. You can find the config directory in 
+make sure no one (but you) can overwrite it. You can find the config directory in
 <em>[chamilo]</em>/config
 Make it read-only (Windows: right-click the file to edit its
 permissions. Linux/UNIX/MacOsX: use the ""chmod 0555" command). The config
-file is created by your web server (Apache + PHP, usually) so you may 
+file is created by your web server (Apache + PHP, usually) so you may
 need to be a privileged user to change its permissions afterwards.</li>
 
   <li><strong>Protect your installation folder: </strong>
 if the <em>[chamilo]</em>/main/install
 folder is still accessible, someone could install over your existing
 version (you could lose your data that way). Move the folder somewhere
-out of the web directories so it is no longer accessible, rename it, 
-delete it completely or edit its permissions so no one can read or 
+out of the web directories so it is no longer accessible, rename it,
+delete it completely or edit its permissions so no one can read or
 execute it.</li>
 
   <li><strong>For better security: </strong>
 making the files world-writeable will help you install, and it solves many
 issues for people without much sysadmin experience. Be aware though that it is more
-secure to create a distinct user owning all the Chamilo files and folders, 
-and only give read access to the web server to all files, and write access 
-only to the directories previously mentioned. This way, these files need 
-only be readable and writeable by the Apache process owner, not by the 
+secure to create a distinct user owning all the Chamilo files and folders,
+and only give read access to the web server to all files, and write access
+only to the directories previously mentioned. This way, these files need
+only be readable and writeable by the Apache process owner, not by the
 entire world. It would also be adviseable to make all writeable directories
 refuse the interpretation of PHP files (except for the root of the courses
 directories). Don't hesitate to hire an experienced administrator to do that, you'd be happy not to lose
@@ -264,10 +265,12 @@ And optionally (for more features) the following PHP modules:
 </ul>
 
 To get the best out of Chamilo, you need to finetune your PHP settings. Consider : <br />
+
 <ul>
-  <li>Editing php.ini file (on Windows can be located at 
-  <span style="font-weight: bold;">C:\xampp\php\php.ini</span>, 
-  on Ubuntu : 
+
+  <li>Editing php.ini file (on Windows can be located at
+  <span style="font-weight: bold;">C:\xampp\php\php.ini</span>,
+  on Ubuntu :
   <span style="font-weight: bold;">/etc/php5/apache2/php.ini</span></li>
   <li>search the word "_max" and increase the two values (post_max_size and upload_max_filesize) to optimise the server</li>
   <li>we recommend the following values : </li>
@@ -294,12 +297,12 @@ On any recent Debian/Ubuntu, just copying those lines into a new .ini file insta
 
 <p>
 Past Chamilo releases required register_globals to be set to On. This is
-no longer necessary, and should preferably be set to Off. 
+no longer necessary, and should preferably be set to Off.
 <span class="muted">It is considered a bad choice in terms of security to set register_globals to On.</a></p>
 
-<p><strong>Note:</strong> if using PHP 5.3 or higher, you also need to set 
+<p><strong>Note:</strong> if using PHP 5.3.3 or higher, you also need to set
 your <em>date.timezone</em> setting to whatever your server's timezone is.
-For example, if your server is in the 'America/New_York' timezone, set this 
+For example, if your server is in the 'America/New_York' timezone, set this
 in your PHP .ini file:</p>
 
 <div class="code">
@@ -337,7 +340,7 @@ date.timezone = 'America/New_York'
 
 
 <hr />
-<h2><a name="3._Upgrade_from_a_previous_version_of"></a>3. Upgrade from a 
+<h2><a name="3._Upgrade_from_a_previous_version_of"></a>3. Upgrade from a
 previous version of Chamilo LMS (1.*) or Dok€os (&lt;2.0)</h2>
 Before upgrading, we <b>heavily</b> recommend you do a full backup of the previous
 Chamilo or Dok€os directories and databases. If you are unsure how to achieve this
@@ -350,9 +353,9 @@ GNU/GPLv3 and we cannot be held responsible for what would happen to your data
 without professional supervision). This is why we *really* recommend you take
 a full backup of your system before you upgrade.</em>
 <br />
-<div class="muted"> NOTE: This version of Chamilo can only be used to upgrade from 
-smaller versions of Chamilo or Dok€os. For example, you cannot use the normal 
-upgrade scripts from Chamilo 1.9 to upgrade from Dok€os 2.0. If you need this, 
+<div class="muted"> NOTE: This version of Chamilo can only be used to upgrade from
+smaller versions of Chamilo or Dok€os. For example, you cannot use the normal
+upgrade scripts from Chamilo 1.9 to upgrade from Dok€os 2.0. If you need this,
 please contact one of the Chamilo Association's official providers <providers@chamilo.org>)</div>
 
 <p></p>
@@ -391,12 +394,12 @@ As this is only a minor version change from previous 1.9.* versions of Chamilo, 
   <li> point your browser on your portal URL + main/install/</li>
   <li> choose your language and click&nbsp;<span style="font-style: italic;">Upgrade from 1.8.x</span></li>
 </ul>
-A bunch of Chamilo administrators have reported minor issues with the migration between versions considerably apart (like from Dok€os to Chamilo). 
+A bunch of Chamilo administrators have reported minor issues with the migration between versions considerably apart (like from Dok€os to Chamilo).
 This might include loosing some assignments or forum posts. To avoid any ugly effect on your users, we recommend you first establish a checklist
-of all the content that is critical to you, and that you keep a working copy of your previous site on the side. This way, it will be easier to 
+of all the content that is critical to you, and that you keep a working copy of your previous site on the side. This way, it will be easier to
 manage the transition by letting your users get access to their contents from the previous site and making it easier for you to compare the two.
 If you are experiencing difficulties, consider asking for help from a PHP developer or hiring an <a href="http://www.chamilo.org/en/providers" target="_blank">official Chamilo provider</a>. They will make sure
-you get the best our of your Chamilo migration. 
+you get the best our of your Chamilo migration.
 <br />
 
 <span class="muted">* Styles and images are located in the main/css or main/img
@@ -566,7 +569,7 @@ Newer distributions also allow downloading rpms for additional packages.</p>
 
 <h3><b>Activating LDAP in Chamilo</b></h3>
 
-<p class="muted">Note: The LDAP mechanism has been changed in 1.9. As a result, some of the following information might not be correct. Please check 
+<p class="muted">Note: The LDAP mechanism has been changed in 1.9. As a result, some of the following information might not be correct. Please check
 the configuration settings inside Chamilo to learn the details.</p>
 
 <p>
@@ -696,8 +699,8 @@ Here is an example:
 		&nbsp;&nbsp;Allow from all<br />
 		&lt;/Directory&gt;<br />
 		</div>
-		
-		
+
+
 		<p>Adding a symbolic link can be done, under Windows, by creating a
 		  shortcut to the mimetex.exe file from the cgi-bin directory, or under
 		  Linux by issuing the following command:</p>
@@ -709,22 +712,22 @@ Here is an example:
 
     </li>
 
-	
+
 	<li>5. Make sure that the file mimetex.cgi (or mimetex.exe) has right to be executed by the web-server process. For example, on a Ubuntu Linux system you may write a command like the following:
 	    <div class="code">
 	        sudo chmod a+x mimetex.cgi
 	    </div>
 	</li>
 	<li>6. Make sure that the file mimetex.cgi (or mimetex.exe) has been uploaded in <b>BINARY</b> format.
-	
-	       This is another common problem; the fix is just to re-upload the file in ASCII format. 
+
+	       This is another common problem; the fix is just to re-upload the file in ASCII format.
 	       You'll need to consult your FTP program's documentation to figure out how to switch modes.
-           BINARY mode is used for non-text items, such as executables (*.exe), zip files (*.zip), image files (*.jpg, *.gif) and the like. 
+           BINARY mode is used for non-text items, such as executables (*.exe), zip files (*.zip), image files (*.jpg, *.gif) and the like.
            ASCII mode needs to be used for text only documents, which includes *.txt, *.cgi, *.pl *.css, *.html, etc.
            <br />
-           You can also try to re upload the mimetex file using the "Upload file" in the "Filemanager" tool in CPanel/Plesk 
+           You can also try to re upload the mimetex file using the "Upload file" in the "Filemanager" tool in CPanel/Plesk
     </li>
-    
+
 </ul>
 
 <p>As a result of this procedure, a new button becomes available in your Chamilo online editor, that gives you possibility
@@ -795,11 +798,11 @@ sudo apt-get install php5-xapian
 sudo /etc/init.d/apache2 restart
 </pre>
 
-Then go to your administration page -&gt; Configuration settings -&gt; Search 
-and enable the search tool. Follow the recommendations on the page to get the 
-complete indexing suite installed. Once you're done, all documents you import 
+Then go to your administration page -&gt; Configuration settings -&gt; Search
+and enable the search tool. Follow the recommendations on the page to get the
+complete indexing suite installed. Once you're done, all documents you import
 into your Chamilo portal in a recognized format will be indexed and searchable.
-Chamilo Administrators training (which you can ask any <a href="http://www.chamilo.org/en/providers">Chamilo's Official 
+Chamilo Administrators training (which you can ask any <a href="http://www.chamilo.org/en/providers">Chamilo's Official
 Provider</a> for) include a full review of the full-text search feature.
 </p>
 
@@ -819,23 +822,23 @@ Then go to your administration page -&gt; <i>Chamilo Rapid</i> and set the host 
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="12._Setting_cron_up"></a>Setting chronological tasks</h2>
 <p>
-Since Chamilo 1.8.8, a few tasks need to be executed regularly in order to get 
-the best out of your server resources. One of such tasks (and the only one 
-around at the time of Chamilo 1.8.8) is the sending of internal messaging 
+Since Chamilo 1.8.8, a few tasks need to be executed regularly in order to get
+the best out of your server resources. One of such tasks (and the only one
+around at the time of Chamilo 1.8.8) is the sending of internal messaging
 notifications by e-mail, i.e. when you receive an e-mail from another person or
 from a group inside the internal messaging system of Chamilo, if all e-mails are
-sent immediately, then you might not have the chance to receive them at your 
-pace, once a day or even once a week. For cases like this you, as a Chamilo 
+sent immediately, then you might not have the chance to receive them at your
+pace, once a day or even once a week. For cases like this you, as a Chamilo
 administrator, should setup a cron process on the server to check the queue of
 e-mails and send is timely.</p>
 <p>
 Setting up a cron task is easy and there are several ways to do it. We recommend
-you have a look at the <a href="http://drupal.org/cron">Drupal documentation 
+you have a look at the <a href="http://drupal.org/cron">Drupal documentation
 for setting up cron</a> and define your own cron process as:
 <pre>
 35 * * * * wget -O - -q -t 1 http://campus.example.com/main/cron/run.php
 </pre>
-Make sure you have a look into run.php as maybe you want to change a few 
+Make sure you have a look into run.php as maybe you want to change a few
 settings there.
 </p>
 

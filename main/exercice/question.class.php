@@ -39,7 +39,8 @@ abstract class Question
     public static $explanationLangVar = '';
     public $question_table_class = 'table table-striped';
     public $editionMode = 'normal';
-    public $exercise; // exercise obj
+    /** @var  Exercise $exercise */
+    public $exercise;
     public $setDefaultValues = false;
     public $submitClass;
     public $submitText;
@@ -129,14 +130,14 @@ abstract class Question
     }
 
     /**
-     * Reads question informations from the data base
+     * Reads question information from the database
      *
      * @author Olivier Brouckaert
      * @param int $id - question ID
      * @param int $course_id
      * @param Exercise
      *
-     * @return boolean - true if question exists, otherwise false
+     * @return Question
      */
     public static function read($id, $course_id = null, Exercise $exercise = null)
     {
@@ -473,7 +474,7 @@ abstract class Question
                         WHERE question_id=$question_id AND c_id=".api_get_course_int_id();
                 Database::query($sql);
             } else {
-                $sql = "INSERT INTO $TBL_QUESTION_REL_CATEGORY VALUES (".api_get_course_int_id().", $question_id, $category_id)";
+                $sql = "INSERT INTO $TBL_QUESTION_REL_CATEGORY (c_id, question_id, category_id) VALUES (".api_get_course_int_id().", $question_id, $category_id)";
                 Database::query($sql);
             }
         }
@@ -1386,10 +1387,11 @@ abstract class Question
 
             $(function() {
                 $("#category_id").fcbkcomplete({
-                    json_url: "'.$url.'&a=search_category_parent&type=all&",
-                    maxitems: "'.$maxCategories.'" ,
+                    json_url: "'.$url.'&a=search_category_parent&type=all&filter_by_global='.$this->exercise->getGlobalCategoryId().'",
+                    maxitems: "'.$maxCategories.'",
                     addontab: false,
-                    input_min_size: 1,
+                    delay: 200,
+                    input_min_size: 3,
                     cache: false,
                     complete_text:"'.get_lang('StartToType').'",
                     firstselected: false,
@@ -1628,7 +1630,6 @@ abstract class Question
      */
     abstract public function processAnswersCreation($form);
 
-
     /**
      * Displays the menu of question types
      * @param Exercise $objExercise
@@ -1644,6 +1645,7 @@ abstract class Question
         if (!isset($feedback_type)) {
             $feedback_type = 0;
         }
+
         if ($feedback_type == 1) {
             //2. but if it is a feedback DIRECT we only show the UNIQUE_ANSWER type that is currently available
             $question_type_custom_list = array(
@@ -1774,14 +1776,15 @@ abstract class Question
      *
      * @param int $feedback_type
      * @param int $counter
-     * @param type $score
+     * @param array $score
      * @param bool $show_media
+     * @param int $hideTitle
      *
      * @return string
      */
-    public function return_header($feedback_type = null, $counter = null, $score = null, $show_media)
+    public function return_header($feedbackType = null, $counter = null, $score = null, $show_media = false, $hideTitle = 0)
     {
-        $counterLabel = '';
+        $counterLabel = null;
         if (!empty($counter)) {
             $counterLabel = $counter;
         }
@@ -1803,14 +1806,17 @@ abstract class Question
             }
         }
 
-        $question_title = $this->question;
 
         $header = null;
         // Display question category, if any
         if ($show_media) {
             $header .= $this->show_media_content();
         }
-        $header .= Display::page_subheader2($counterLabel.". ".$question_title);
+        if ($hideTitle == 1) {
+            $header .= Display::page_subheader2($counterLabel);
+        } else {
+            $header .= Display::page_subheader2($counterLabel.". ".$this->question);
+        }
         $header .= Display::div(
             '<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div><h4>'.$score['result'].' </h4>',
             array('class' => 'ribbon')
@@ -2257,29 +2263,34 @@ abstract class Question
             $copyIcon = Display::return_icon('copy.png', get_lang('Copy'), array(), ICON_SIZE_SMALL);
             $reuseIcon = Display::return_icon('view_more_stats.gif', get_lang('InsertALinkToThisQuestionInTheExercise'), array(), ICON_SIZE_SMALL);
             $editIcon = Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL);
-            //$deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL);
-            //var_dump($exerciseId);
+
             // Including actions
             foreach ($questions as &$question) {
+                $type = self::get_question_type($question['type']);
+                $question['type'] = get_lang($type[1]);
+                $question['question_question_type'] = get_lang($type[1]);
+
                 if (empty($exerciseId)) {
                     // View.
-                    $actions = Display::url(
+                    /*$actions = Display::url(
                         $previewIcon,
                         $app['url_generator']->generate(
                             'admin_questions_show',
                             array(
-                                'id' => $question['iid']
+                                'id' => $question['iid'],
+                                'courseId' => $question['c_id'],
                             )
                         )
-                    );
+                    );*/
 
                     // Edit.
-                    $actions .= Display::url(
+                    $actions = Display::url(
                         $editIcon,
                         $app['url_generator']->generate(
                             'admin_questions_edit',
                             array(
-                                'id' => $question['iid']
+                                'id' => $question['iid'],
+                                'courseId' => $question['c_id']
                             )
                         )
                     );
@@ -2306,13 +2317,17 @@ abstract class Question
                         // Copy.
                         $actions .= Display::url(
                             $copyIcon,
-                            $app['url_generator']->generate(
+                            'javascript:void(0);',
+                            array(
+                                'onclick' => 'ajaxAction(this);',
+                                'data-url' => $app['url_generator']->generate(
                                 'exercise_copy_question',
                                 array(
                                     'cidReq' => api_get_course_id(),
                                     'id_session' => api_get_session_id(),
                                     'questionId' => $question['iid'],
                                     'exerciseId' => $exerciseId
+                                    )
                                 )
                             )
                         );
@@ -2320,7 +2335,10 @@ abstract class Question
                          // Reuse.
                         $actions .= Display::url(
                             $reuseIcon,
-                            $app['url_generator']->generate(
+                            'javascript:void(0);',
+                            array(
+                                'onclick' => 'ajaxAction(this);',
+                                'data-url' => $app['url_generator']->generate(
                                 'exercise_reuse_question',
                                 array(
                                     'cidReq' => api_get_course_id(),
@@ -2328,6 +2346,7 @@ abstract class Question
                                     'questionId' => $question['iid'],
                                     'exerciseId' => $exerciseId
                                 )
+                                ),
                             )
                         );
                     }

@@ -3,6 +3,34 @@
 
 use Symfony\Component\HttpFoundation\Request;
 use \ChamiloSession as Session;
+/* can't mount */
+$settingNewCourseConditions = function (Request $request) use ($cidReset, $app) {
+    // The course parameter is loaded
+    $course = $request->get('cidReq');
+
+    // Converting /courses/XXX/ to a Entity/Course object
+    /** @var Entity\Course $course */
+    $course = $app['orm.em']->getRepository('Entity\Course')->findOneByCode($course);
+    if ($course) {
+        $app['course'] = $course;
+        $app['template']->assign('course', $course);
+
+        Session::write('_real_cid', $course->getId());
+        Session::write('_cid', $course->getCode());
+        $courseInfo = api_get_course_info($course->getCode());
+        Session::write('_course', $courseInfo);
+    }
+
+    $sessionId = $request->get('id_session');
+    $session = $app['orm.em']->getRepository('Entity\Session')->findOneById($sessionId);
+
+    /** @var Entity\Session  $session*/
+    if ($session) {
+        $app['course_session'] = $session;
+        $app['template']->assign('course_session', $session);
+        Session::write('id_session', $session->getId());
+    }
+};
 
 /** Setting course session and group global values */
 $settingCourseConditions = function (Request $request) use ($cidReset, $app) {
@@ -16,32 +44,28 @@ $settingCourseConditions = function (Request $request) use ($cidReset, $app) {
     $tempSessionId = api_get_session_id();
 
     $courseReset = false;
+    $sessionReset = false;
+    $groupReset = false;
+
     if ((!empty($cidReq) && $tempCourseId != $cidReq) || empty($tempCourseId) || empty($tempCourseId) == -1) {
         $courseReset = true;
     }
 
     if (isset($cidReset) && $cidReset == 1) {
         $courseReset = true;
+        $sessionReset = true;
+        $groupReset = true;
     }
 
     Session::write('courseReset', $courseReset);
 
-    $groupReset = false;
     if ($tempGroupId != $groupId || empty($tempGroupId)) {
         $groupReset = true;
     }
 
-    $sessionReset = false;
     if ($tempSessionId != $sessionId || empty($tempSessionId)) {
         $sessionReset = true;
     }
-    /*
-        $app['monolog']->addDebug('Start');
-        $app['monolog']->addDebug($courseReset);
-        $app['monolog']->addDebug($cidReq);
-        $app['monolog']->addDebug($tempCourseId);
-        $app['monolog']->addDebug('End');
-    */
 
     if ($courseReset) {
         if (!empty($cidReq) && $cidReq != -1) {
@@ -62,6 +86,9 @@ $settingCourseConditions = function (Request $request) use ($cidReset, $app) {
             Session::erase('_real_cid');
             Session::erase('_cid');
             Session::erase('_course');
+            Session::erase('session_name');
+            Session::erase('id_session');
+            Session::erase('_gid');
         }
     }
 
@@ -122,7 +149,7 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
 
     //If I'm the admin platform i'm a teacher of the course
     $is_platformAdmin = api_is_platform_admin();
-    $courseReset      = Session::read('courseReset');
+    $courseReset = Session::read('courseReset');
 
     //$app['monolog']->addDebug($courseReset);
     //$app['monolog']->addDebug($courseId);
@@ -181,7 +208,7 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
             }
 
             //We are in a session course? Check session permissions
-            if (!empty($session_id)) {
+            if (!empty($sessionId)) {
                 //I'm not the teacher of the course
                 if ($is_courseAdmin == false) {
                     // this user has no status related to this course
@@ -250,7 +277,7 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
                                     Session::write('_courseUser', $_courseUser);
                                     break;
                                 default:
-                                    // Unregister user
+                                    // Un-register user
                                     $_courseUser['role'] = '';
                                     $is_courseMember     = false;
                                     $is_courseTutor      = false;
@@ -261,7 +288,7 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
                                     break;
                             }
                         } else {
-                            //Unregister user
+                            // Un-register user
                             $is_courseMember = false;
                             $is_courseTutor  = false;
                             $is_courseAdmin  = false;
@@ -280,13 +307,13 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
         // Checking the course access
         $is_allowed_in_course = false;
 
-        if (isset($_course)) {
-            switch ($_course['visibility']) {
+        if (isset($courseInfo)) {
+            switch ($courseInfo['visibility']) {
                 case COURSE_VISIBILITY_OPEN_WORLD: //3
                     $is_allowed_in_course = true;
                     break;
                 case COURSE_VISIBILITY_OPEN_PLATFORM: //2
-                    if (isset($user_id) && !api_is_anonymous($user_id)) {
+                    if (isset($userId) && !api_is_anonymous($userId)) {
                         $is_allowed_in_course = true;
                     }
                     break;
@@ -339,22 +366,12 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
         Session::write('is_courseCoach', $is_courseCoach);
         Session::write('is_allowed_in_course', $is_allowed_in_course);
         Session::write('is_sessionAdmin', $is_sessionAdmin);
-
-    } else {
-        // continue with the previous values
-        /*
-        $_courseUser          = Session::read('_courseUser');
-        $is_courseAdmin       = Session::read('is_courseAdmin');
-        $is_courseTutor       = Session::read('is_courseTutor');
-        $is_courseCoach       = Session::read('is_courseCoach');
-        $is_courseMember      = Session::read('is_courseMember');
-        $is_allowed_in_course = Session::read('is_allowed_in_course');*/
     }
 };
 
 /**
  * Deletes the exam_password user extra field *only* to students
- * @todo improve the login hook system
+ * @todo move to the login hook system
  * @param Request $request
  */
 $afterLogin = function (Request $request) use ($app) {
@@ -372,6 +389,7 @@ $afterLogin = function (Request $request) use ($app) {
 };
 
 $removeCidReset = function (Request $request) use ($app) {
+    // Deleting course info.
     Session::erase('_cid');
     Session::erase('_real_cid');
     Session::erase('_course');
@@ -394,6 +412,7 @@ $removeCidReset = function (Request $request) use ($app) {
 
     // Deleting group info.
     Session::erase('_gid');
+
 };
 
 $removeCidResetDependingOfSection = function (Request $request) use ($app, $removeCidReset) {
@@ -433,6 +452,7 @@ $app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexActi
 /** main files */
 $app->match('/main/{file}', 'legacy.controller:classicAction', 'GET|POST')
     ->before($removeCidResetDependingOfSection)
+    ->before($settingCourseConditions)
     ->before(
         function() use ($app) {
             // Do not load breadcrumbs
@@ -441,18 +461,10 @@ $app->match('/main/{file}', 'legacy.controller:classicAction', 'GET|POST')
     ->assert('file', '.+')
     ->assert('type', '.+');
 
-/** Logout already implemented by the the security service provider */
-
-/* $app->get('/logout', 'index.controller:logoutAction')
-    ->bind('logout')
-    ->after($cleanCourseSession);*/
-
 /** Login form */
 $app->match('/login', 'index.controller:loginAction', 'GET|POST')
     ->bind('login');
 
-/*$app->match('/admin/login-check', 'index.controller:checkLoginAction', 'GET|POST')
-->bind('login_check');*/
 
 /** Course home instead of courses/MATHS the new URL is web/courses/MATHS  */
 $app->match('/courses/{cidReq}/{id_session}/', 'course_home.controller:indexAction', 'GET|POST')
@@ -524,6 +536,11 @@ $app->get('/data/default_platform_document/{file}', 'index.controller:getDefault
     ->assert('file', '.+')
     ->assert('type', '.+');
 
+/** Data default_platform_document files */
+$app->get('/data/default_course_document/{file}', 'index.controller:getDefaultCourseDocumentAction')
+    ->assert('file', '.+')
+    ->assert('type', '.+');
+
 /** User files */
 $app->match('/data/upload/users/{file}', 'index.controller:getUserFile', 'GET|POST')
     ->assert('file', '.+');
@@ -541,7 +558,7 @@ $app->get('/admin/dashboard', 'index.controller:dashboardAction')
 
 /** Question manager - admin */
 
-$app->get('/admin/questionmanager/', 'question_manager.controller:questionManagerIndexAction')
+$app->get('/admin/questionmanager', 'question_manager.controller:questionManagerIndexAction')
     ->assert('type', '.+')
     ->bind('admin_questionmanager');
 
@@ -656,25 +673,22 @@ $app->match('/admin/administrator/', 'admin.controller:indexAction', 'GET')
     ->assert('type', '.+')
     ->bind('admin_administrator');
 
-
-
 $app->match('/ajax', 'model_ajax.controller:indexAction', 'GET')
     ->assert('type', '.+')
     ->bind('model_ajax');
 
-
-// Roles
-// @todo improve route creation. Use mount() to write less
-
 if ($alreadyInstalled) {
-    // Takes a some time to load @todo improve this calls
+    $app->mount('/admin/', new ChamiloLMS\Provider\ReflectionControllerProvider('admin.controller'));
+    $app->mount('/admin/administrator/upgrade', new ChamiloLMS\Provider\ReflectionControllerProvider('upgrade.controller'));
     $app->mount('/admin/administrator/roles', new ChamiloLMS\Provider\ReflectionControllerProvider('role.controller'));
     $app->mount('/admin/administrator/question_scores', new ChamiloLMS\Provider\ReflectionControllerProvider('question_score.controller'));
     $app->mount('/admin/administrator/question_score_names', new ChamiloLMS\Provider\ReflectionControllerProvider('question_score_name.controller'));
-
+    $app->mount('/courses/{course}/curriculum/category', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_category.controller'));
+    $app->mount('/courses/{course}/curriculum/item', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_item.controller'));
+    $app->mount('/courses/{course}/curriculum/user', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_user.controller'));
+    $app->mount('/courses/{course}/curriculum', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum.controller'));
 
     // Ministerio routes:
-
     $app->mount('/admin/administrator/branches', new ChamiloLMS\Provider\ReflectionControllerProvider('branch.controller'));
     $app->mount('/admin/administrator/juries', new ChamiloLMS\Provider\ReflectionControllerProvider('jury.controller'));
 
@@ -682,6 +696,9 @@ if ($alreadyInstalled) {
     $app->mount('/admin/jury_president', new ChamiloLMS\Provider\ReflectionControllerProvider('jury_president.controller'));
     $app->mount('/admin/jury_member', new ChamiloLMS\Provider\ReflectionControllerProvider('jury_member.controller'));
 
+    $app->mount(
+        '/admin/question_manager/exercise_distribution',
+        new ChamiloLMS\Provider\ReflectionControllerProvider('exercise_distribution.controller')
+    );
 }
-
 

@@ -7,8 +7,8 @@
  */
 
 /**
+ * Announcements handler class
  * @author jmontoya
- *
  */
 class AnnouncementManager
 {
@@ -279,6 +279,11 @@ class AnnouncementManager
         }
     }
 
+    /**
+     * Get last announcement order in the list (by max display_order)
+     * @return int 0 or the integer display_order of the last announcement
+     * @assert () === 0 
+     */
     public static function get_last_announcement_order()
     {
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
@@ -294,7 +299,52 @@ class AnnouncementManager
 
         return $order;
     }
-
+    /**
+     * Get last announcement in a course by id (not iid)
+     * @param int Course ID (will get from context if none provided)
+     * @return int 0 or the integer id last announcement inserted
+     * @assert () === 0 
+     */
+    public static function get_last_announcement_id($course_id=null)
+    {
+        $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
+        if (empty($course_id)) {
+            $course_id = api_get_course_int_id();
+        } else {
+            $course_id = filter_var($course_id, FILTER_SANITIZE_NUMBER_INT);
+        }
+        $sql_max = "SELECT MAX(id) FROM $tbl_announcement WHERE c_id = $course_id";
+        $res_max = Database::query($sql_max);
+        $id = 0;
+        if (Database::num_rows($res_max)) {
+            $row_max = Database::fetch_array($res_max);
+            $id = $row_max[0];
+        }
+        return $id;
+    }
+    /**
+     * Get last announcement attachment in a course by id (not iid)
+     * @param int Course ID (will get from context if none provided)
+     * @return int 0 or the integer id last announcement attachment inserted
+     * @assert () === 0 
+     */
+    public static function get_last_announcement_attachment_id($course_id=null)
+    {
+        $tbl_announcement_att = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT); 
+        if (empty($course_id)) {
+            $course_id = api_get_course_int_id();
+        } else {
+            $course_id = filter_var($course_id, FILTER_SANITIZE_NUMBER_INT);
+        }
+        $sql_max = "SELECT MAX(id) FROM $tbl_announcement_att WHERE c_id = $course_id";
+        $res_max = Database::query($sql_max);
+        $id = 0;
+        if (Database::num_rows($res_max)) {
+            $row_max = Database::fetch_array($res_max);
+            $id = $row_max[0];
+        }
+        return $id;
+    }
     /**
      * Store an announcement in the database (including its attached file if any)
      * @param string    Announcement title (pure text)
@@ -329,21 +379,23 @@ class AnnouncementManager
         $course_id = api_get_course_int_id();
 
         $order = self::get_last_announcement_order();
+        $aid = self::get_last_announcement_id($course_id)+1;
 
         // store in the table announcement
         $sql = "INSERT INTO $tbl_announcement SET
-				c_id 			= '$course_id',
-				content 		= '$newContent',
-				title 			= '$emailTitle',
+                c_id 			= '$course_id',
+                id                      = $aid,
+                content 		= '$newContent',
+                title 			= '$emailTitle',
                 end_date        = '$end_date',
-				display_order 	= '$order',
-				session_id		= ".api_get_session_id();
+                display_order 	= '$order',
+                session_id		= ".api_get_session_id();
         $result = Database::query($sql);
         if ($result === false) {
             return false;
         } else {
             //Store the attach file
-            $last_id = Database::insert_id();
+            $last_id = $aid;
             if (!empty($file)) {
                 self::add_announcement_attachment_file($last_id, $file_comment, $_FILES['user_upload']);
             }
@@ -397,9 +449,8 @@ class AnnouncementManager
     }
 
     /*
-      STORE ANNOUNCEMENT  GROUP ITEM
+     * STORE ANNOUNCEMENT  GROUP ITEM
      */
-
     public static function add_group_announcement(
         $emailTitle,
         $newContent,
@@ -419,10 +470,12 @@ class AnnouncementManager
 
         $now = api_get_utc_datetime();
         $course_id = api_get_course_int_id();
+        $aid = self::get_last_announcement_id($course_id)+1;
 
         // store in the table announcement
         $sql = "INSERT INTO $tbl_announcement SET
                 c_id 			= '$course_id',
+                id			= $aid,
                 content 		= '$newContent',
                 title 			= '$emailTitle',
                 end_date 		= '$now',
@@ -435,7 +488,7 @@ class AnnouncementManager
         }
 
         //store the attach file
-        $last_id = Database::insert_id();
+        $last_id = $aid;
 
         if (!empty($file)) {
             self::add_announcement_attachment_file($last_id, $file_comment, $file);
@@ -1140,8 +1193,7 @@ class AnnouncementManager
      */
     public static function sent_to($tool, $id)
     {
-        global $tbl_item_property;
-
+        $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tool = Database::escape_string($tool);
         $id = intval($id);
 
@@ -1235,9 +1287,10 @@ class AnnouncementManager
                 $safe_file_comment = Database::escape_string($file_comment);
                 $safe_file_name = Database::escape_string($file_name);
                 $safe_new_file_name = Database::escape_string($new_file_name);
+                $aid = self::get_last_announcement_attachment_id($course_id)+1;
                 // Storing the attachments if any
-                $sql = "INSERT INTO $tbl_announcement_attachment (c_id, filename, comment, path, announcement_id, size) VALUES
-                        ($course_id, '$safe_file_name', '$file_comment', '$safe_new_file_name' , '$announcement_id', '".intval(
+                $sql = "INSERT INTO $tbl_announcement_attachment (c_id, id, filename, comment, path, announcement_id, size) VALUES
+                        ($course_id, $aid, '$safe_file_name', '$file_comment', '$safe_new_file_name' , '$announcement_id', '".intval(
                     $file['size']
                 )."' )";
                 Database::query($sql);

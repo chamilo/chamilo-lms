@@ -206,13 +206,36 @@ final class Image implements ImageInterface
     /**
      * {@inheritdoc}
      */
-    public function resize(BoxInterface $size)
+    public function resize(BoxInterface $size, $filter = ImageInterface::FILTER_UNDEFINED)
     {
+        static $supportedFilters = array(
+            ImageInterface::FILTER_UNDEFINED => \Imagick::FILTER_UNDEFINED,
+            ImageInterface::FILTER_BESSEL    => \Imagick::FILTER_BESSEL,
+            ImageInterface::FILTER_BLACKMAN  => \Imagick::FILTER_BLACKMAN,
+            ImageInterface::FILTER_BOX       => \Imagick::FILTER_BOX,
+            ImageInterface::FILTER_CATROM    => \Imagick::FILTER_CATROM,
+            ImageInterface::FILTER_CUBIC     => \Imagick::FILTER_CUBIC,
+            ImageInterface::FILTER_GAUSSIAN  => \Imagick::FILTER_GAUSSIAN,
+            ImageInterface::FILTER_HANNING   => \Imagick::FILTER_HANNING,
+            ImageInterface::FILTER_HAMMING   => \Imagick::FILTER_HAMMING,
+            ImageInterface::FILTER_HERMITE   => \Imagick::FILTER_HERMITE,
+            ImageInterface::FILTER_LANCZOS   => \Imagick::FILTER_LANCZOS,
+            ImageInterface::FILTER_MITCHELL  => \Imagick::FILTER_MITCHELL,
+            ImageInterface::FILTER_POINT     => \Imagick::FILTER_POINT,
+            ImageInterface::FILTER_QUADRATIC => \Imagick::FILTER_QUADRATIC,
+            ImageInterface::FILTER_SINC      => \Imagick::FILTER_SINC,
+            ImageInterface::FILTER_TRIANGLE  => \Imagick::FILTER_TRIANGLE
+        );
+
+        if (!array_key_exists($filter, $supportedFilters)) {
+            throw new InvalidArgumentException('Unsupported filter type');
+        }
+
         try {
             $this->imagick->resizeImage(
                 $size->getWidth(),
                 $size->getHeight(),
-                \Imagick::FILTER_UNDEFINED,
+                $supportedFilters[$filter],
                 1
             );
         } catch (\ImagickException $e) {
@@ -361,41 +384,41 @@ final class Image implements ImageInterface
             throw new InvalidArgumentException('Invalid mode specified');
         }
 
-        $width     = $size->getWidth();
-        $height    = $size->getHeight();
-
-        $ratios = array(
-            $width / $this->getSize()->getWidth(),
-            $height / $this->getSize()->getHeight()
-        );
-
-        if ($mode === ImageInterface::THUMBNAIL_INSET) {
-            $ratio = min($ratios);
-        } else {
-            $ratio = max($ratios);
-        }
-        
+        $imageSize = $this->getSize();
         $thumbnail = $this->copy();
-        
-        if ($ratio < 1) {
-            try {
-                if ($mode === ImageInterface::THUMBNAIL_INSET) {
-                    $thumbnail->imagick->thumbnailImage(
-                        $width,
-                        $height,
-                        true
-                    );
-                } elseif ($mode === ImageInterface::THUMBNAIL_OUTBOUND) {
-                    $thumbnail->imagick->cropThumbnailImage(
-                        $width,
-                        $height
-                    );
-                }
-            } catch (\ImagickException $e) {
-                throw new RuntimeException(
-                    'Thumbnail operation failed', $e->getCode(), $e
+
+        // if target width is larger than image width
+        // AND target height is longer than image height
+        if ($size->contains($imageSize)) {
+            return $thumbnail;
+        }
+
+        // if target width is larger than image width
+        // OR target height is longer than image height
+        if (!$imageSize->contains($size)) {
+            $size = new Box(
+                min($imageSize->getWidth(), $size->getWidth()),
+                min($imageSize->getHeight(), $size->getHeight())
+            );
+        }
+
+        try {
+            if ($mode === ImageInterface::THUMBNAIL_INSET) {
+                $thumbnail->imagick->thumbnailImage(
+                    $size->getWidth(),
+                    $size->getHeight(),
+                    true
+                );
+            } elseif ($mode === ImageInterface::THUMBNAIL_OUTBOUND) {
+                $thumbnail->imagick->cropThumbnailImage(
+                    $size->getWidth(),
+                    $size->getHeight()
                 );
             }
+        } catch (\ImagickException $e) {
+            throw new RuntimeException(
+                'Thumbnail operation failed', $e->getCode(), $e
+            );
         }
 
         return $thumbnail;

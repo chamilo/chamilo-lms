@@ -1,0 +1,15 @@
+language: php
+
+php:
+  - 5.3.3
+  - 5.3
+  - 5.4
+  - 5.5
+
+before_script: 
+    - echo '' > ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
+    - composer install --dev --prefer-source
+    - git config --global user.name travis-ci
+    - git config --global user.email travis@example.com
+
+script: ./vendor/bin/phpunit -c tests/complete.phpunit.xml

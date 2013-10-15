@@ -18,10 +18,10 @@
  */
 class CourseManager
 {
-    CONST MAX_COURSE_LENGTH_CODE = 40;
+    const MAX_COURSE_LENGTH_CODE = 40;
 
     //This constant is used to show separate user names in the course list (userportal), footer, etc
-    CONST USER_SEPARATOR = ' |';
+    const USER_SEPARATOR = ' |';
 
     public $columns = array();
 
@@ -425,7 +425,7 @@ class CourseManager
 
         // Unsubscribe user from all blogs in the course.
         Database::query("DELETE FROM ".Database::get_course_table(TABLE_BLOGS_REL_USER)." WHERE c_id = $courseId AND  user_id IN (".$user_ids.")");
-        Database::query("DELETE FROM ".Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER)."WHERE c_id = $courseId AND  user_id IN (".$user_ids.")");
+        Database::query("DELETE FROM ".Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER)." WHERE c_id = $courseId AND  user_id IN (".$user_ids.")");
 
         //Deleting users in forum_notification and mailqueue course tables
         $sql_delete_forum_notification = "DELETE FROM  ".Database::get_course_table(TABLE_FORUM_NOTIFICATION)." WHERE c_id = $courseId AND user_id IN (".$user_ids.")";
@@ -1103,12 +1103,17 @@ class CourseManager
                 if (isset($user['role'])) {
                     $user_info['role'] = $user['role'];
                 }
+
                 if (isset($user['tutor_id'])) {
                     $user_info['tutor_id'] = $user['tutor_id'];
                 }
+
                 if (!empty($session_id)) {
                     $user_info['status_session'] = $user['status_session'];
                 }
+
+                $user_info['complete_name'] = api_get_person_name($user_info['firstname'], $user_info['lastname']);
+
                 if ($add_reports) {
                     $course_code = $user['code'];
                     if ($resumed_report) {
@@ -1146,7 +1151,7 @@ class CourseManager
                         $users[$row_key]['count_users_registered'] = $registered_users_with_extra_field;
                         $users[$row_key]['average_hours_per_user'] = $users[$row_key]['training_hours'] / $users[$row_key]['count_users'];
 
-                        $category = Category :: load (null, null, $course_code);
+                        $category = Category::load (null, null, $course_code);
                         if (!isset($users[$row_key]['count_certificates'])) {
                             $users[$row_key]['count_certificates'] = 0;
                         }
@@ -2887,6 +2892,15 @@ class CourseManager
         return $html;
     }
 
+    /**
+     * @param int $user_id
+     * @param $filter
+     * @param bool $load_dirs
+     * @param int $getCount
+     * @param int $start
+     * @param null $maxPerPage
+     * @return null|string
+     */
     static function displayCourses($user_id, $filter, $load_dirs, $getCount, $start = null, $maxPerPage = null)
     {
 
@@ -3978,7 +3992,6 @@ class CourseManager
      */
     static function prepare_course_repository($course_repository, $course_code)
     {
-
         $perm = api_get_permissions_for_new_directories();
         $perm_file = api_get_permissions_for_new_files();
         $htmlpage = "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\">\n    <title>Not authorized</title>\n  </head>\n  <body>\n  </body>\n</html>";
@@ -4162,22 +4175,25 @@ class CourseManager
         return $tables;
     }
 
-    static function browse_folders($path, $files, $media) {
+    static function browse_folders($path, $files, $media)
+    {
+        $defaultCourseDocumentPath = api_get_path(SYS_DEFAULT_COURSE_DOCUMENT_PATH);
         if ($media == 'images') {
-            $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/';
+            $code_path = $defaultCourseDocumentPath.'images/';
         }
         if ($media == 'audio') {
-            $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/audio/';
+            $code_path = $defaultCourseDocumentPath.'audio/';
         }
         if ($media == 'flash') {
-            $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/flash/';
+            $code_path = $defaultCourseDocumentPath.'flash/';
         }
         if ($media == 'video') {
-            $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/video/';
+            $code_path = $defaultCourseDocumentPath.'video/';
         }
         if ($media == 'certificates') {
-            $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/certificates/';
+            $code_path = $defaultCourseDocumentPath.'certificates/';
         }
+
         if (is_dir($path)) {
             $handle = opendir($path);
             while (false !== ($file = readdir($handle))) {
@@ -4189,6 +4205,7 @@ class CourseManager
                 }
             }
         }
+
         return $files;
     }
 
@@ -4279,6 +4296,7 @@ class CourseManager
         Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_NOTEBOOK."','notebook/index.php','notebook.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'notebook'))."','0','squaregrey.gif','NO','_self','interaction','0')");
         Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_ATTENDANCE."','attendance/index.php','attendance.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'attendances'))."','0','squaregrey.gif','NO','_self','authoring','0')");
         Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_COURSE_PROGRESS."','course_progress/index.php','course_progress.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'course_progress'))."','0','squaregrey.gif','NO','_self','authoring','0')");
+        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_CURRICULUM."','curriculum','cv.png','".Text::string2binary(api_get_setting('course_create_active_tools', 'curriculum'))."','0','squaregrey.gif','NO','_self','authoring','0')");
 
         if (api_get_setting('service_visio', 'active') == 'true') {
             $mycheck = api_get_setting('service_visio', 'visio_host');
@@ -4395,7 +4413,7 @@ class CourseManager
                 'certificates',
             );
 
-            $default_course_path = api_get_path(SYS_CODE_PATH).'default_course_document/';
+            $default_course_path = api_get_path(SYS_DEFAULT_COURSE_DOCUMENT_PATH);
 
             $default_document_array = array();
             foreach ($folders_to_copy_from_default_course as $folder) {
@@ -4429,7 +4447,7 @@ class CourseManager
                     }
 
                     $course_documents_folder = $sys_course_path.$course_repository."/document/$media_type/";
-                    $default_course_path = api_get_path(SYS_CODE_PATH).'default_course_document'.$path_documents;
+                    $default_course_path = api_get_path(SYS_DEFAULT_COURSE_DOCUMENT_PATH).$path_documents;
 
                     //echo 'try '.$course_documents_folder; echo '<br />';
 
@@ -4560,7 +4578,7 @@ class CourseManager
 
             $html = Database::escape_string('<table width="100%" border="0" cellpadding="0" cellspacing="0">
                                                 <tr><td width="110" valign="top" align="left">
-                                                <img src="'.api_get_path(WEB_CODE_PATH).'default_course_document/images/mr_dokeos/thinking.jpg"></td><td valign="top" align="left">'.get_lang('Antique').'
+                                                <img src="'.api_get_path(WEB_DEFAULT_COURSE_DOCUMENT_PATH).'images/mr_dokeos/thinking.jpg"></td><td valign="top" align="left">'.get_lang('Antique').'
                                             </td></tr></table>');
 
             // Insert exercise
@@ -4667,6 +4685,7 @@ class CourseManager
         } else {
             $visibility         = $params['visibility'];
         }
+
         $subscribe          = isset($params['subscribe']) ? intval($params['subscribe']) : ($visibility == COURSE_VISIBILITY_OPEN_PLATFORM ? 1 : 0);
         $unsubscribe        = isset($params['unsubscribe']) ? intval($params['unsubscribe']) : 0;
         $expiration_date    = isset($params['expiration_date']) ? $params['expiration_date'] : null;
@@ -4766,6 +4785,7 @@ class CourseManager
                             user_course_cat = '0'";
                     Database::query($sql);
                 }
+
                 if (!empty($teachers)) {
                     if (!is_array($teachers)) {
                         $teachers = array($teachers);
@@ -4914,6 +4934,52 @@ class CourseManager
             }
         }
         return $settings;
+    }
+
+
+    function updateTeachers($course_code, $teachers)
+    {
+        if (empty($teachers)) {
+            return false;
+        }
+        if (!is_array($teachers)) {
+            $teachers = array($teachers);
+        }
+
+        $course_user_table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
+        // Delete only teacher relations that doesn't match the selected teachers
+        $cond = null;
+        if (count($teachers)>0) {
+            foreach($teachers as $key) {
+                $cond.= " AND user_id <> '".$key."'";
+            }
+        }
+        $sql = 'DELETE FROM '.$course_user_table.' WHERE course_code="'.Database::escape_string($course_code).'" AND status="1"'.$cond;
+        Database::query($sql);
+
+        if (count($teachers) > 0) {
+            foreach ($teachers as $key) {
+
+                //We check if the teacher is already subscribed in this course
+                $sql_select_teacher = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$key.'" AND course_code = "'.$course_code.'" ';
+                $result = Database::query($sql_select_teacher);
+
+                if (Database::num_rows($result) == 1) {
+                    $sql = 'UPDATE '.$course_user_table.' SET status = "1" WHERE course_code = "'.$course_code.'" AND user_id = "'.$key.'"  ';
+                } else {
+                    $sql = "INSERT INTO ".$course_user_table . " SET
+                        course_code = '".Database::escape_string($course_code). "',
+                        user_id = '".$key . "',
+                        status = '1',
+                        role = '',
+                        tutor_id='0',
+                        sort='0',
+                        user_course_cat='0'";
+                }
+                Database::query($sql);
+            }
+        }
     }
 
 } //end class CourseManager

@@ -7,12 +7,33 @@
  * @package chamilo.services
  */
 
-// Monolog.
+// Needed to use the "entity" option in symfony forms
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
 use FranMoreno\Silex\Provider\PagerfantaServiceProvider;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManager;
+
+// Flint
+$app->register(new Flint\Provider\ConfigServiceProvider());
+$app['root_dir'] = $app['root_sys'];
+
+$app->register(new Flint\Provider\RoutingServiceProvider(), array(
+    'routing.resource' => $app['sys_config_path'].'routing.yml',
+    'routing.options' => array(
+        //'cache_dir' => $app['debug'] == true ? null : $app['sys_temp_path']
+        //'cache_dir' => $app['sys_temp_path']
+    ),
+));
+
+use Knp\Provider\ConsoleServiceProvider;
+
+$app->register(new ConsoleServiceProvider(), array(
+    'console.name'              => 'Chamilo',
+    'console.version'           => '1.0.0',
+    'console.project_directory' => __DIR__.'/..'
+));
 
 // Monolog.
 if (is_writable($app['sys_temp_path'])) {
@@ -41,41 +62,43 @@ $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
     'http_cache.cache_dir' => $app['http_cache.cache_dir'].'/',
 ));*/
 
-// http://symfony.com/doc/master/reference/configuration/security.html
+class SecurityServiceProvider extends \Silex\Provider\SecurityServiceProvider
+{
+    public function addFakeRoute($method, $pattern, $name)
+    {
+        // Dont do anything otherwise the closures will be dumped and that leads to fatal errors.
+    }
+}
 
-$app->register(new Silex\Provider\SecurityServiceProvider(), array(
+$app->register(new SecurityServiceProvider, array(
     'security.firewalls' => array(
         'login' => array(
             'pattern' => '^/login$',
             'anonymous' => true
         ),
-        'admin' => array(
-            //'http' => true,
+        'secured' => array(
             'pattern' => '^/.*$',
             'form'    => array(
                 'login_path' => '/login',
-                'check_path' => '/admin/login_check',
+                'check_path' => '/secured/login_check',
                 'default_target_path' => '/userportal',
                 'username_parameter' => 'username',
                 'password_parameter' => 'password',
             ),
             'logout' => array(
-                'logout_path' => '/admin/logout',
+                'logout_path' => '/secured/logout',
                 'target' => '/'
             ),
             'users' => $app->share(function() use ($app) {
                 return $app['orm.em']->getRepository('Entity\User');
             }),
+            'switch_user' => true,
             'anonymous' => true
-        ),/*
-        'classic' => array(
-            'pattern' => '^/.*$'
-        )*/
+        )
     )
 ));
 
 // Registering Password encoder.
-// @todo test with the "none" encrypt method.
 $app['security.encoder.digest'] = $app->share(function($app) {
     // use the sha1 algorithm
     // don't base64 encode the password
@@ -84,42 +107,99 @@ $app['security.encoder.digest'] = $app->share(function($app) {
 });
 
 // What to do when login success?
-$app['security.authentication.success_handler.admin'] = $app->share(function($app) {
+$app['security.authentication.success_handler.secured'] = $app->share(function($app) {
     return new ChamiloLMS\Component\Auth\LoginSuccessHandler($app['url_generator'], $app['security']);
 });
 
 // What to do when logout?
-$app['security.authentication.logout_handler.admin'] = $app->share(function($app) {
+$app['security.authentication.logout_handler.secured'] = $app->share(function($app) {
     return new ChamiloLMS\Component\Auth\LogoutSuccessHandler($app['url_generator'], $app['security']);
+});
+
+// What to do when switch user?
+$app['security.authentication_listener.switch_user.secured'] = $app->share(function($app) {
+    return new ChamiloLMS\Component\Auth\LoginListener();
 });
 
 // Role hierarchy
 $app['security.role_hierarchy'] = array(
-    'ROLE_ADMIN' => array('ROLE_QUESTION_MANAGER', 'ROLE_TEACHER', 'ROLE_ALLOWED_TO_SWITCH'),
-    'ROLE_TEACHER' => array('ROLE_STUDENT'),
+    // the admin that belongs to the portal #1 can affect all portals
+    'ROLE_GLOBAL_ADMIN' => array('ROLE_ADMIN', 'ROLE_ALLOWED_TO_SWITCH'),
+    // the default admin
+    'ROLE_ADMIN' => array(
+        'ROLE_QUESTION_MANAGER',
+        'ROLE_SESSION_MANAGER',
+        'ROLE_TEACHER',
+        'ROLE_DIRECTOR',
+        'ROLE_JURY_PRESIDENT'
+    ),
     'ROLE_RRHH' => array('ROLE_TEACHER'),
-    'ROLE_QUESTION_MANAGER' => array('ROLE_QUESTION_MANAGER'),
+    'ROLE_TEACHER' => array('ROLE_STUDENT'),
+    'ROLE_QUESTION_MANAGER' => array('ROLE_STUDENT', 'ROLE_QUESTION_MANAGER'),
+    'ROLE_SESSION_MANAGER' => array('ROLE_STUDENT', 'ROLE_SESSION_MANAGER', 'ROLE_ALLOWED_TO_SWITCH'),
     'ROLE_STUDENT' => array('ROLE_STUDENT'),
     'ROLE_ANONYMOUS' => array('ROLE_ANONYMOUS'),
+
+    // Ministerio
     'ROLE_JURY_PRESIDENT' => array('ROLE_JURY_PRESIDENT', 'ROLE_JURY_MEMBER', 'ROLE_JURY_SUBSTITUTE'),
     'ROLE_JURY_SUBSTITUTE' => array('ROLE_JURY_SUBSTITUTE', 'ROLE_JURY_MEMBER'),
-    'ROLE_JURY_MEMBER' => array('ROLE_JURY_MEMBER')
+    'ROLE_JURY_MEMBER' => array('ROLE_JURY_MEMBER', 'ROLE_STUDENT'),
+    'ROLE_DIRECTOR' => array('ROLE_DIRECTOR')
 );
 
 // Role rules
 $app['security.access_rules'] = array(
-    //array('^/admin', 'ROLE_ADMIN', 'https'),
-    array('^/admin/administrator', array('ROLE_ADMIN')),
+    array('^/admin/administrator', 'ROLE_ADMIN'),
     array('^/main/admin/.*', 'ROLE_ADMIN'),
     array('^/admin/questionmanager', 'ROLE_QUESTION_MANAGER'),
-    array('^/main/.*', array('ROLE_STUDENT')),
+    array('^/main/auth/inscription.php', 'IS_AUTHENTICATED_ANONYMOUSLY'),
+    array('^/main/auth/lostPassword.php', 'IS_AUTHENTICATED_ANONYMOUSLY'),
+    array('^/courses/.*/curriculum/category', 'ROLE_TEACHER'),
+    array('^/courses/.*/curriculum/item', 'ROLE_TEACHER'),
+    array('^/courses/.*/curriculum/user', 'ROLE_STUDENT'),
+    array('^/courses/.*/curriculum', 'ROLE_STUDENT'),
+
+    // Ministerio routes
+
     array('^/admin/director', 'ROLE_DIRECTOR'),
     array('^/admin/jury_president', 'ROLE_JURY_PRESIDENT'),
     array('^/admin/jury_member', 'ROLE_JURY_MEMBER') //? jury subsitute??
     //array('^.*$', 'ROLE_USER'),
 );
 
-/**
+// Roles that have an admin toolbar
+$app['allow_admin_toolbar'] = array(
+    'ROLE_ADMIN',
+    'ROLE_QUESTION_MANAGER',
+	'ROLE_SESSION_MANAGER',
+	// Ministerio routes
+    'ROLE_DIRECTOR',
+    'ROLE_JURY_PRESIDENT',
+    'ROLE_JURY_SUBSTITUTE',
+    'ROLE_JURY_MEMBER'
+);
+
+use SilexOpauth\OpauthExtension;
+
+$strategies = isset($_configuration['strategies']) ? $_configuration['strategies'] : null;
+
+if (!empty($strategies)) {
+    $app['opauth'] = array(
+        'login' => '/auth/login',
+        'callback' => '/auth/callback',
+        'config' => array(
+            'security_salt' => $_configuration['security_key'],
+            'Strategy' => array(
+                $strategies
+            )
+        )
+    );
+    $app->register(new OpauthExtension());
+}
+
+
+
+/*
 $app['security.access_manager'] = $app->share(function($app) {
     return new AccessDecisionManager($app['security.voters'], 'unanimous');
 });*/
@@ -127,22 +207,23 @@ $app['security.access_manager'] = $app->share(function($app) {
 // Setting Controllers as services provider.
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
-// Validator provider.
-$app->register(new Silex\Provider\ValidatorServiceProvider());
-
 // Implements Symfony2 translator.
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'locale' => 'en',
-    'locale_fallback' => 'en'
+    'locale_fallback' => 'en',
+    'translator.domains' => array()
 ));
 
+// Validator provider.
+$app->register(new Silex\Provider\ValidatorServiceProvider());
+
 // Form provider
-$app->register(new Silex\Provider\FormServiceProvider());
+$app->register(new Silex\Provider\FormServiceProvider(), array(
+    'form.secret' => sha1(__DIR__)
+));
 
 // URL generator provider
-$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
-
-// Needed to use the "entity" option in symfony forms
+//$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
 class ManagerRegistry extends AbstractManagerRegistry
 {
@@ -158,6 +239,11 @@ class ManagerRegistry extends AbstractManagerRegistry
         unset($this->container[$name]);
     }
 
+    /**
+     * @param string $alias
+     * @return string|void
+     * @throws BadMethodCallException
+     */
     public function getAliasNamespace($alias)
     {
         throw new \BadMethodCallException('Namespace aliases not supported.');
@@ -169,22 +255,49 @@ class ManagerRegistry extends AbstractManagerRegistry
     }
 }
 
-$app['form.extensions'] = $app->share($app->extend('form.extensions', function ($extensions, $app) {
+// Setting up the Manager registry
+$app['manager_registry'] = $app->share(function() use ($app) {
     $managerRegistry = new ManagerRegistry(null, array('db'), array('orm.em'), null, null, $app['orm.proxies_namespace']);
     $managerRegistry->setContainer($app);
-    $extensions[] = new \Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension($managerRegistry);
+    return $managerRegistry;
+});
+
+// Needed to use the "entity" option in Symfony forms
+$app['form.extensions'] = $app->share($app->extend('form.extensions', function ($extensions, $app) {
+    $extensions[] = new \Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension($app['manager_registry']);
     return $extensions;
 }));
+
+// Needed to use the "UniqueEntity" validator
+$app['validator.validator_factory'] = $app->share(function ($app) {
+    $uniqueValidator = new Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntityValidator($app['manager_registry']);
+    $factory = new ChamiloLMS\Component\Validator\ConstraintValidatorFactory();
+    $factory->addInstance('doctrine.orm.validator.unique', $uniqueValidator);
+    return $factory;
+});
 
 // Setting Doctrine service provider (DBAL)
 if (isset($app['configuration']['main_database'])) {
 
     /* The database connection can be overwritten if you set $_configuration['db.options']
        in configuration.php like this : */
+    $dbPort = isset($app['configuration']['db_port']) ? $app['configuration']['db_port'] : 3306;
+    $dbDriver = isset($app['configuration']['db_driver']) ? $app['configuration']['db_driver'] : 'pdo_mysql';
+    $host = $app['configuration']['db_host'];
+
+    // Accepts that db_host can have a port part like: localhost:6666;
+
+    $hostParts = explode(':', $app['configuration']['db_host']);
+    if (isset($hostParts[1]) && !empty($hostParts[1])) {
+        $dbPort = $hostParts[1];
+        $host = str_replace(':'.$dbPort, '', $app['configuration']['db_host']);
+    }
+
     $defaultDatabaseOptions = array(
         'db_read' => array(
-            'driver' => 'pdo_mysql',
-            'host' => $app['configuration']['db_host'],
+            'driver' => $dbDriver,
+            'host' => $host,
+            'port' => $dbPort,
             'dbname' => $app['configuration']['main_database'],
             'user' => $app['configuration']['db_user'],
             'password' => $app['configuration']['db_password'],
@@ -192,8 +305,9 @@ if (isset($app['configuration']['main_database'])) {
             //'priority' => '1'
         ),
         'db_write' => array(
-            'driver' => 'pdo_mysql',
-            'host' => $app['configuration']['db_host'],
+            'driver' => $dbDriver,
+            'host' => $host,
+            'port' => $dbPort,
             'dbname' => $app['configuration']['main_database'],
             'user' => $app['configuration']['db_user'],
             'password' => $app['configuration']['db_password'],
@@ -265,8 +379,8 @@ $app->register(
     new Silex\Provider\TwigServiceProvider(),
     array(
         'twig.path' => array(
-            api_get_path(SYS_CODE_PATH).'template', //template folder
-            api_get_path(SYS_PLUGIN_PATH) //plugin folder
+            $app['sys_root'].'main/template', //template folder
+            $app['sys_root'].'plugin' //plugin folder
         ),
         // twitter bootstrap form twig templates
         'twig.form.templates' => array('form_div_layout.html.twig', 'default/form/form_custom_template.tpl'),
@@ -315,7 +429,7 @@ if (is_writable($app['sys_temp_path'])) {
         $app->mount('/_profiler', $p);
 
         // PHP errors for cool kids
-        $app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
+        //$app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
     }
 }
 
@@ -355,12 +469,13 @@ $app['dbal_logger'] = $app->share(function() {
 });
 
 if ($app['debug']) {
-    /*$logger = $app['dbal_logger'];
+    /*$logger = new Doctrine\DBAL\Logging\DebugStack();
     $app['db.config']->setSQLLogger($logger);
     $app->after(function() use ($app, $logger) {
         // Log all queries as DEBUG.
+        $app['monolog']->addDebug('---- Doctrine SQL queries ----');
         foreach ($logger->queries as $query) {
-            $app['monolog']->debug(
+            $app['monolog']->addDebug(
                 $query['sql'],
                 array(
                     'params' => $query['params'],
@@ -369,6 +484,7 @@ if ($app['debug']) {
                 )
             );
         }
+        $app['monolog']->addDebug('---- End Doctrine SQL queries ----');
     });*/
 }
 
@@ -420,7 +536,6 @@ if ($app['assetic.enabled']) {
             ));
 
             $am->get('styles')->setTargetPath($app['assetic.output.path_to_css']);
-
             $am->set('scripts', new Assetic\Asset\AssetCache(
                 new Assetic\Asset\GlobAsset($app['assetic.input.path_to_js']),
                 new Assetic\Cache\FilesystemCache($app['assetic.path_to_cache'])
@@ -451,12 +566,21 @@ class ChamiloServiceProvider implements ServiceProviderInterface
 {
     public function register(Application $app)
     {
+        // Database.
+        $app['database'] = $app->share(function () use ($app) {
+            $db = new Database($app['db'], $app['dbs']);
+            return $db;
+        });
+
+        $database = $app['database'];
+
         // Template class
         $app['template'] = $app->share(function () use ($app) {
-            $template = new Template($app);
+            $template = new Template($app, $app['database'], $app['security']);
             return $template;
         });
 
+        // Paths
         $app['paths'] = $app->share(function () use ($app) {
             return array(
                 //'root_web' => $app['root_web'],
@@ -487,13 +611,32 @@ class ChamiloServiceProvider implements ServiceProviderInterface
             return $mailGenerator;
         });
 
-        // Database.
-        $app['database'] = $app->share(function () use ($app) {
-            $db = new Database($app['db'], $app['dbs']);
-            return $db;
-        });
+
+        // Setting up name conventions
+        $conventions = require_once $app['sys_root'].'main/inc/lib/internationalization_database/name_order_conventions.php';
+        if (isset($configuration['name_order_conventions']) && !empty($configuration['name_order_conventions'])) {
+            $conventions = array_merge($conventions, $configuration['name_order_conventions']);
+        }
+        $search1 = array('FIRST_NAME', 'LAST_NAME', 'TITLE');
+        $replacement1 = array('%F', '%L', '%T');
+        $search2 = array('first_name', 'last_name', 'title');
+        $replacement2 = array('%f', '%l', '%t');
+        $keyConventions = array_keys($conventions);
+        foreach ($keyConventions as $key) {
+            $conventions[$key]['format'] = str_replace($search1, $replacement1, $conventions[$key]['format']);
+            $conventions[$key]['format'] = _api_validate_person_name_format(
+                _api_clean_person_name(
+                    str_replace('%', ' %', str_ireplace($search2, $replacement2, $conventions[$key]['format']))
+                )
+            );
+            $conventions[$key]['sort_by'] = strtolower($conventions[$key]['sort_by']) != 'last_name' ? true : false;
+        }
+        $app['name_order_conventions'] = $conventions;
     }
 
+    /**
+     * @param Application $app
+     */
     public function boot(Application $app)
     {
 
@@ -591,7 +734,7 @@ $app['exercise_manager.controller'] = $app->share(
 
 $app['admin.controller'] = $app->share(
     function () use ($app) {
-        return new ChamiloLMS\Controller\Admin\AdministratorController($app);
+        return new ChamiloLMS\Controller\Admin\AdminController($app);
     }
 );
 $app['role.controller'] = $app->share(
@@ -618,6 +761,40 @@ $app['model_ajax.controller'] = $app->share(
     }
 );
 
+// Curriculum tool
+
+$app['curriculum.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumController($app);
+    }
+);
+
+$app['curriculum_category.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumCategoryController($app);
+    }
+);
+
+$app['curriculum_item.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumItemController($app);
+    }
+);
+
+$app['curriculum_user.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumUserController($app);
+    }
+);
+
+$app['upgrade.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\Administrator\UpgradeController($app);
+    }
+);
+
+
+
 // Ministerio
 
 $app['branch.controller'] = $app->share(
@@ -631,7 +808,6 @@ $app['branch_director.controller'] = $app->share(
         return new ChamiloLMS\Controller\Admin\Director\BranchDirectorController($app);
     }
 );
-
 
 $app['jury.controller'] = $app->share(
     function () use ($app) {
@@ -651,4 +827,8 @@ $app['jury_member.controller'] = $app->share(
     }
 );
 
-
+$app['exercise_distribution.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\QuestionManager\ExerciseDistributionController($app);
+    }
+);

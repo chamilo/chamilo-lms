@@ -33,6 +33,9 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
      */
     public function onLogoutSuccess(Request $request)
     {
+        $session = $request->getSession();
+        \ChamiloSession::setSession($session);
+        
         // Chamilo logout
         $userId = api_get_user_id();
         \Online::logout($userId, false);

@@ -32,20 +32,20 @@ $app['temp.paths']->folders[] = $app['htmlpurifier.serializer'] = $app['temp.pat
 
 // PCLZIP temp dir.
 define('PCLZIP_TEMPORARY_DIR', $app['temp.path'].'pclzip');
-$app['temp.paths']->folders[] = PCLZIP_TEMPORARY_DIR;
+$app['temp.paths']->folders[] = $app['temp.path'].'pclzip';
 
 // MPDF temp libs.
 define("_MPDF_TEMP_PATH", $app['temp.path'].'mpdf');
 define("_JPGRAPH_PATH", $app['temp.path'].'mpdf');
 define("_MPDF_TTFONTDATAPATH", $app['temp.path'].'mpdf');
 
-$app['temp.paths']->folders[] = _MPDF_TEMP_PATH;
+$app['temp.paths']->folders[] = $app['temp.path'].'mpdf';
 
 // QR code.
 define('QR_CACHE_DIR', $app['temp.path'].'qr');
 define('QR_LOG_DIR', $app['temp.path'].'qr');
 
-$app['temp.paths']->folders[] = QR_CACHE_DIR;
+$app['temp.paths']->folders[] = $app['temp.path'].'qr';
 
 // Chamilo Temp class @todo fix this
 $app['temp.paths']->folders[] = $app['temp.path'].'temp';

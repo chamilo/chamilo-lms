@@ -58,7 +58,7 @@ if (!empty($exercise_id)) {
 //Only users can see their own results
 if (!$is_allowedToEdit) {
     if ($student_id != $current_user_id) {
-    	api_not_allowed($show_headers);
+        api_not_allowed($show_headers);
     }
 }
 
@@ -66,9 +66,9 @@ if ($show_headers) {
 	$interbreadcrumb[] = array("url" => "exercice.php","name" => get_lang('Exercices'));
 	$interbreadcrumb[] = array("url" => "#","name" => get_lang('Result'));
 	$this_section = SECTION_COURSES;
-	Display::display_header();
+    Display::display_header();
 } else {
-	Display::display_reduced_header();
+    Display::display_reduced_header();
 }
 
 $objExercise->displayQuestionListByAttempt($id, false);

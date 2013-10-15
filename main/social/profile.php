@@ -85,7 +85,7 @@ function send_message_to_user(user_id) {
         modal:true,
         height:350,
         buttons: {
-            "'.  addslashes(get_lang('Sent')).'": function() {
+            "'.  addslashes(get_lang('Send')).'": function() {
                 var bValid = true;
                 bValid = bValid && checkLength( subject, "subject", 1, 255 );
                 bValid = bValid && checkLength( content, "content", 1, 255 );

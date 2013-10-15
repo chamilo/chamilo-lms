@@ -5,7 +5,16 @@ namespace Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
+use Symfony\Component\Validator\Constraints\DateTime;
+use ChamiloLMS\Component\Auth;
 
 /**
  * User
@@ -13,7 +22,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="Entity\Repository\UserRepository")
  */
-class User implements AdvancedUserInterface, \Serializable
+class User implements AdvancedUserInterface, \Serializable , EquatableInterface
 {
     /**
      * @var integer
@@ -69,7 +78,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @var boolean
      *
-     * @ORM\Column(name="status", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="status", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $status;
 
@@ -232,12 +241,27 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $roles;
 
-     /**
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $salt;
 
     private $isActive;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="CurriculumItemRelUser")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id", nullable=true)
+     */
+    private $curriculumItems;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="AccessUrl")
+     * @ORM\JoinTable(name="access_url_rel_user",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="user_id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="access_url_id", referencedColumnName="id")}
+     *      )
+     */
+    private $portals;
 
     /**
      *
@@ -248,15 +272,99 @@ class User implements AdvancedUserInterface, \Serializable
         $this->items = new ArrayCollection();
         $this->classes = new ArrayCollection();
         $this->roles = new ArrayCollection();
+        $this->curriculumItems = new ArrayCollection();
         $this->salt = sha1(uniqid(null, true));
         $this->isActive = true;
+        $this->registrationDate = new \DateTime();
+        $this->curriculumItems = new ArrayCollection();
+        $this->portals = new ArrayCollection();
     }
 
+    /**
+     * @param ClassMetadata $metadata
+     */
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint('firstname', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('lastname', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('email', new Assert\Email());
+
+        $metadata->addConstraint(new UniqueEntity(array(
+            'fields'  => 'username',
+            'message' => 'This value is already used.',
+        )));
+
+        $metadata->addPropertyConstraint('username', new Assert\Length(array(
+            'min'        => 2,
+            'max'        => 50,
+            'minMessage' => 'This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.',
+            'maxMessage' => 'This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.',
+        )));
+    }
+
+    /**
+    * @inheritDoc
+    */
+    public function isEqualTo(UserInterface $user)
+    {
+        if (!$user instanceof User) {
+            return false;
+        }
+
+        if ($this->password !== $user->getPassword()) {
+            return false;
+        }
+
+        if ($this->getSalt() !== $user->getSalt()) {
+            return false;
+        }
+
+        if ($this->username !== $user->getUsername()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getPortals()
+    {
+        return $this->portals;
+    }
+
+    /**
+     * @param $portal
+     */
+    public function setPortal($portal)
+    {
+        $this->portals->add($portal);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCurriculumItems()
+    {
+        return $this->curriculumItems;
+    }
+
+    /**
+     * @param $items
+     */
+    public function setCurriculumItems($items)
+    {
+        $this->curriculumItems = $items;
+    }
+
+    /**
+     * @return bool
+     */
     public function getIsActive()
     {
         return $this->active == 1;
     }
-
 
     /**
      * @inheritDoc
@@ -264,6 +372,8 @@ class User implements AdvancedUserInterface, \Serializable
     public function isAccountNonExpired()
     {
         return true;
+        /*$now = new \DateTime();
+        return $this->getExpirationDate() < $now;*/
     }
 
     /**
@@ -298,11 +408,34 @@ class User implements AdvancedUserInterface, \Serializable
     }
 
     /**
+     *
+     * @return ArrayCollection
+     */
+    public function getRolesObj()
+    {
+        return $this->roles;
+    }
+
+    /**
+     * This function is needed in order to pass roles to the security component
      * @inheritDoc
      */
     public function getRoles()
     {
-        return $this->roles->toArray();
+        $roles = $this->roles->toArray();
+        //$roles[] = new Auth\Role($this);
+        return $roles;
+    }
+
+    /**
+     * @param $role
+     * @return $this
+     */
+    public function setRoles($role)
+    {
+        $this->roles->add($role);
+
+        return $this;
     }
 
     /**
@@ -314,14 +447,16 @@ class User implements AdvancedUserInterface, \Serializable
         /*
          * ! Don't serialize $roles field !
          */
-        return \serialize(array(
-            $this->userId,
-            $this->username,
-            $this->email,
-            $this->salt,
-            $this->password,
-            $this->isActive
-        ));
+        return \serialize(
+            array(
+                $this->userId,
+                $this->username,
+                $this->email,
+                $this->salt,
+                $this->password,
+                $this->isActive
+            )
+        );
     }
 
     /**
@@ -338,17 +473,6 @@ class User implements AdvancedUserInterface, \Serializable
             $this->isActive
         ) = \unserialize($serialized);
     }
-
-    /**
-     *
-     * @return ArrayCollection
-     */
-    public function getRolesObj()
-    {
-        return $this->roles;
-    }
-
-
 
     /**
      * Set salt
@@ -406,7 +530,6 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function getCompleteName()
     {
-        //return $this->lastname .', '. $this->firstname .' ('. $this->email .')';
         return $this->lastname .', '. $this->firstname;
     }
 
@@ -436,7 +559,6 @@ class User implements AdvancedUserInterface, \Serializable
     {
         return $this->userId;
     }
-
 
     /**
      * Set lastname

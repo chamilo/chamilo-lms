@@ -135,19 +135,11 @@ define('TABLE_STATISTIC_TRACK_E_DEFAULT',           'track_e_default');
 define('TABLE_STATISTIC_TRACK_E_UPLOADS',           'track_e_uploads');
 define('TABLE_STATISTIC_TRACK_E_HOTSPOT',           'track_e_hotspot');
 define('TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY',     'track_e_item_property');
-define('TABLE_STATISTIC_TRACK_E_OPEN',              'track_e_open');
-
 define('TABLE_STATISTIC_TRACK_FILTERED_TERMS',      'track_filtered_terms');
-define('TABLE_STATISTIC_TRACK_C_BROWSERS',          'track_c_browsers');
-define('TABLE_STATISTIC_TRACK_C_COUNTRIES',         'track_c_countries');
-define('TABLE_STATISTIC_TRACK_C_OS',                'track_c_os');
-define('TABLE_STATISTIC_TRACK_C_PROVIDERS',         'track_c_providers');
-define('TABLE_STATISTIC_TRACK_C_REFERERS',          'track_c_referers');
 
 //Course catalog stats see #4191
 define('TABLE_STATISTIC_TRACK_COURSE_RANKING',      'track_course_ranking');
 define('TABLE_MAIN_USER_REL_COURSE_VOTE',           'user_rel_course_vote');
-
 
 // SCORM database tables this is used only during the migration from 1.6 to 1.8 see update-db-scorm-1.6.x-1.8.0.inc
 define('TABLE_SCORM_MAIN', 'scorm_main');
@@ -360,3 +352,4 @@ define('TABLE_BRANCH_TRANSACTION',           'branch_transaction');
 define('TABLE_BRANCH_TRANSACTION_STATUS',    'branch_transaction_status');
 define('TABLE_BRANCH_TRANSACTION_DATA',      'branch_transaction_data');
 define('TABLE_BRANCH_TRANSACTION_LOG',       'branch_transaction_log');
+define('TABLE_RECEIVED_ENVELOPES',           'received_envelopes');

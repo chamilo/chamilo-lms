@@ -136,7 +136,7 @@ function modify_filter($code) {
         '<a href="../tracking/courseLog.php?cidReq='.$code.'">'.Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;'.
         '<a href="course_edit.php?course_code='.$code.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;'.
         '<a href="../coursecopy/backup.php?cidReq='.$code.'">'.Display::return_icon('backup.gif', get_lang('CreateBackup')).'</a>&nbsp;'.
-        '<a href="course_list.php?delete_course='.$code.'"  onclick="javascript: if (!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
+        '<a href="course_list.php?delete_course='.$code.'"  onclick="javascript: if (!confirm('."'".addslashes(get_lang('ConfirmYourChoice'))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
 }
 
 /**
@@ -156,6 +156,9 @@ function get_course_visibility_icon($v) {
             break;
         case 3:
             return Display::return_icon('bullet_blue.gif', get_lang('OpenToTheWorld'), array('style' => $style));
+            break;
+        case 4:
+            return Display::return_icon('bullet_grey.gif', get_lang('CourseVisibilityHidden'), array('style' => $style));
             break;
         default:
             return '';
@@ -201,6 +204,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $form->addElement('radio', 'keyword_visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
     $form->addElement('radio', 'keyword_visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
     $form->addElement('radio', 'keyword_visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
+    $form->addElement('radio', 'keyword_visibility', null, get_lang('CourseVisibilityHidden'), COURSE_VISIBILITY_HIDDEN);
     $form->addElement('radio', 'keyword_visibility', null, get_lang('All'), '%');
     $form->addElement('radio', 'keyword_subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
     $form->addElement('radio', 'keyword_subscribe', null, get_lang('Denied'), 0);

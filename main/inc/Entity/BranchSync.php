@@ -3,6 +3,7 @@ namespace Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * BranchSync
@@ -121,13 +122,6 @@ class BranchSync
      */
     private $lastSyncType;
 
-     /**
-     * @var string
-     *
-     * @ORM\Column(name="ssl_pub_key", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
-     */
-    private $sslPubKey;
-
     /**
      * @var string
      *
@@ -183,6 +177,66 @@ class BranchSync
      */
     private $children;
 
+    /**
+     * @ORM\OneToMany(targetEntity="BranchUsers", mappedBy="branch")
+     */
+    private $users;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Jury", mappedBy="branch")
+     **/
+    private $juries;
+
+    /**
+     * Machine name for the envelope plugin to use.
+     *
+     * @var string
+     *
+     * @ORM\Column(name="plugin_envelope", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $pluginEnvelope;
+
+    /**
+     * Machine name for the send plugin to use.
+     *
+     * @var string
+     *
+     * @ORM\Column(name="plugin_send", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $pluginSend;
+
+    /**
+     * Machine name for the receive plugin to use.
+     *
+     * @var string
+     *
+     * @ORM\Column(name="plugin_receive", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $pluginReceive;
+
+    /**
+     * Extra information about the branch.
+     *
+     * For now, mainly used by plugins to store extra information for them to be
+     * instanciated.
+     * An example status:
+     * <code>
+     * array(
+     *     'plugins' => array(
+     *         'receive' => array(
+     *             'origin' => '/path/to/dir1',
+     *             'processed' => '/path/to/dir2',
+     *         ),
+     *     ),
+     * );
+     * </code>
+     *
+     * @var array
+     *
+     * @ORM\Column(type="array", nullable=true, unique=false)
+     */
+    private $data;
+
 
     /**
      *
@@ -192,6 +246,21 @@ class BranchSync
         // $this->lastSyncTransDate = new \DateTime();
     }
 
+    /**
+    * @return ArrayCollection
+    */
+    public function getJuries()
+    {
+        return $this->juries;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
 
     /**
      * Get id
@@ -492,33 +561,10 @@ class BranchSync
         return $this;
     }
 
-    /**
-     * Set sslPubKey
-     *
-     * @param string $sslPubKey
-     * @return BranchSync
-     */
-    public function setSslPubKey($sslPubKey)
-    {
-        $this->sslPubKey = $sslPubKey;
-
-        return $this;
-    }
-
-    /**
-     * Get sslPubKey
-     *
-     * @return string
-     */
-    public function getSslPubKey()
-    {
-        return $this->sslPubKey;
-    }
-
      /**
-     * Set sslPubKey
+     * Set branchType.
      *
-     * @param string $sslPubKey
+     * @param string $branchType
      * @return BranchSync
      */
     public function setBranchType($branchType)
@@ -529,7 +575,7 @@ class BranchSync
     }
 
     /**
-     * Get sslPubKey
+     * Get branchType.
      *
      * @return string
      */
@@ -700,5 +746,120 @@ class BranchSync
     public function getParent()
     {
         return $this->parent;
+    }
+
+    /**
+     * Set pluginEnvelope.
+     *
+     * @param string $pluginEnvelope
+     *
+     * @return BranchSync
+     */
+    public function setPluginEnvelope($pluginEnvelope)
+    {
+        $this->pluginEnvelope = $pluginEnvelope;
+
+        return $this;
+    }
+
+    /**
+     * Get pluginEnvelope.
+     *
+     * @return string
+     */
+    public function getPluginEnvelope()
+    {
+        return $this->pluginEnvelope;
+    }
+
+    /**
+     * Set pluginSend.
+     *
+     * @param string $pluginSend
+     *
+     * @return BranchSync
+     */
+    public function setPluginSend($pluginSend)
+    {
+        $this->pluginSend = $pluginSend;
+
+        return $this;
+    }
+
+    /**
+     * Get pluginSend.
+     *
+     * @return string
+     */
+    public function getPluginSend()
+    {
+        return $this->pluginSend;
+    }
+
+    /**
+     * Set pluginReceive.
+     *
+     * @param string $pluginReceive
+     *
+     * @return BranchSync
+     */
+    public function setPluginReceive($pluginReceive)
+    {
+        $this->pluginReceive = $pluginReceive;
+
+        return $this;
+    }
+
+    /**
+     * Get pluginReceive.
+     *
+     * @return string
+     */
+    public function getPluginReceive()
+    {
+        return $this->pluginReceive;
+    }
+
+    /**
+     * Set data.
+     *
+     * @param array $data
+     *
+     * @return BranchSync
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
+    /**
+     * Get data.
+     *
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * Get plugin data.
+     *
+     * Helper to retrieve plugin information.
+     *
+     * @param string $plugin_type
+     *   The plugin type to search information for.
+     *
+     * @return array
+     *   The information or empty array.
+     */
+    public function getPluginData($plugin_type)
+    {
+        if (isset($this->data['plugins'][$plugin_type])) {
+            return $this->data['plugins'][$plugin_type];
+        }
+        return array();
     }
 }

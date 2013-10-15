@@ -1,4 +1,4 @@
-{#  Actions  #}
+{# Actions  #}
 {% if actions != '' %}
     <div class="actions">
         {{ actions }}
@@ -9,14 +9,21 @@
     {{ knp_menu_render('actions_menu', { 'currentClass': 'active'}) }}
 {% endif %}
 
-{#  Page header #}
+{# Page header #}
 {% if header != '' %}
     <div class="page-header">
         <h1>{{ header }}</h1>
     </div>
 {% endif %}
 
-{#  Show messages #}
+{# Check if security exists #}
+{% if app.security.token and is_granted('ROLE_PREVIOUS_ADMIN') %}
+    <div class="alert">
+        <a href="{{ path('index', {'_switch_user': '_exit'}) }}">{{ 'Exit impersonation' | trans }}</a>
+    </div>
+{% endif %}
+
+{# Show messages #}
 {% if message != '' %}
     <section id="messages">
         {{ message}}
@@ -25,7 +32,7 @@
 
 {% include app.template_style ~ "/layout/messages.tpl" %}
 
-{#  Welcome to course block  #}
+{# Welcome to course block  #}
 {% if welcome_to_course_block %}
     <section id="welcome_to_course">
         {% include app.template_style ~ "/layout/welcome_to_course.tpl" %}

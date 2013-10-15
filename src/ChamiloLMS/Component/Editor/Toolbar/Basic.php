@@ -41,7 +41,7 @@ class Basic
         );*/
 
         $config['toolbarGroups'] = array(
-            array('name' => 'document',  'groups' =>array('mode', 'document', 'doctools')),
+            array('name' => 'document',  'groups' =>array('document', 'doctools')),
             array('name' => 'clipboard',    'groups' =>array('clipboard', 'undo', )),
             array('name' => 'editing',    'groups' =>array('clipboard', 'undo', )),
             //array('name' => 'forms',    'groups' =>array('clipboard', 'undo', )),
@@ -55,7 +55,8 @@ class Basic
             array('name' => 'colors'),
             array('name' => 'tools'),
             array('name' => 'others'),
-            array('name' => 'allMedias')
+            array('name' => 'allMedias'),
+            array('name' => 'mode')
 
         );
 
@@ -71,8 +72,25 @@ class Basic
         filebrowserImageUploadUrl
         filebrowserUploadUrl*/
 
+        //$config['extraPlugins'] = 'oembed,video,wordcount';
         $config['extraPlugins'] = 'oembed,video';
+        //$config['oembed_maxWidth'] = '560';
+        //$config['oembed_maxHeight'] = '315';
 
+        $config['allowedContent'] = true;
+
+        /*$config['wordcount'] = array(
+            // Whether or not you want to show the Word Count
+            'showWordCount' => true,
+            // Whether or not you want to show the Char Count
+            'showCharCount' => true,
+            // Option to limit the characters in the Editor
+            'charLimit' => 'unlimited',
+            // Option to limit the words in the Editor
+            'wordLimit' => 'unlimited'
+        );*/
+
+        //$config['skins'] = 'moono';
 
         if (isset($this->config)) {
             $this->config = array_merge($config, $this->config);
@@ -80,9 +98,16 @@ class Basic
             $this->config = $config;
         }
 
+
         //$config['width'] = '100';
         //$config['height'] = '200';
         return $this->config;
     }
+
+    public function setLanguage($language)
+    {
+        $this->config['language'] = $language;
+    }
+
 }
 

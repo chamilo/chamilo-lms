@@ -12,7 +12,7 @@ class QuestionScoreNameType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('name', 'text');
-        $builder->add('description', 'text');
+        $builder->add('description', 'textarea');
         $builder->add('score', 'text');
         $builder->add('questionScore', 'entity', array(
             'class' => 'Entity\QuestionScore',

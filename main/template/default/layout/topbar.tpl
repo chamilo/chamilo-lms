@@ -7,6 +7,7 @@
             {% else %}
                 <div id="main" class="container">
             {% endif %}
+
                 <a class="brand" href="{{ _p.web }}">
                     {{ "siteName" | get_setting }}
                 </a>

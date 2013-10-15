@@ -28,6 +28,11 @@ class IndexController extends CommonController
         /** @var \Template $template */
         $template = $app['template'];
 
+        /*$user = $this->getManager()->getRepository('Entity\User')->find(1);
+        foreach($user->getPortals() as $portal) {
+            var_dump($portal->getUrl());
+        }*/
+
         /*
         $token = $app['security']->getToken();
         if (null !== $token) {
@@ -75,7 +80,7 @@ class IndexController extends CommonController
         echo $formatter->format(time());*/
 
         //@todo improve this JS includes should be added using twig
-        $app['extraJS'] = array(
+        $extra = array(
             api_get_jquery_libraries_js(array('bxslider')),
             '<script>
             $(document).ready(function(){
@@ -90,34 +95,16 @@ class IndexController extends CommonController
             </script>'
         );
 
+        if (api_get_setting('use_virtual_keyboard') == 'true') {
+            $extra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/keyboard/keyboard.css');
+            $extra[] = api_get_js('keyboard/jquery.keyboard.js');
+        }
+
+        $app['extraJS'] = $extra;
+
         $app['this_section'] = SECTION_CAMPUS;
         $request = $app['request'];
 
-        /*
-        $sql = 'SELECT * from user WHERE user_id = 1';
-        var_dump($sql);
-        $result = \Database::query($sql);
-        var_dump(\Database::fetch_object($result));*/
-
-        // Testing translation using translator
-        //echo $app['translator']->trans('Wiki Search Results');
-        //echo $app['translator']->trans('Profile');
-
-        //$token = $app['security']->getToken();
-
-        //$article = $app['orm.em']->getRepository('Entity\Course');
-        //$courses_query = $app['orm.em']->createQuery('SELECT a FROM Entity\Course a');
-        //$a = new Course();
-        //$article = $app['orm.em']->getRepository('Course');
-        //var_dump($article);
-        //$courses_query = $app['orm.em']->createQuery('SELECT a FROM Entity\Course a');
-        /*
-          $paginator = new Doctrine\ORM\Tools\Pagination\Paginator($courses_query, $fetchJoinCollection = true);
-          $c = count($paginator);
-          foreach ($paginator as $course) {
-          echo $course->getCode() . "\n";
-          }
-          exit; */
         if (api_get_setting('allow_terms_conditions') == 'true') {
             unset($_SESSION['term_and_condition']);
         }
@@ -131,9 +118,11 @@ class IndexController extends CommonController
                 \CustomPages::display(\CustomPages::INDEX_UNLOGGED);
             }
         }
+        /** @var \PageController $pageController */
+        $pageController = $app['page_controller'];
 
         if (api_get_setting('display_categories_on_homepage') == 'true') {
-            $template->assign('course_category_block', $app['page_controller']->return_courses_in_categories());
+            $template->assign('course_category_block', $pageController->return_courses_in_categories());
         }
 
         // @todo Custom Facebook connection lib could be replaced with opauth
@@ -145,13 +134,13 @@ class IndexController extends CommonController
         $this->setLoginForm($app);
 
         if (!api_is_anonymous()) {
-            $app['page_controller']->return_profile_block();
-            $app['page_controller']->return_user_image_block();
+            $pageController->return_profile_block();
+            $pageController->return_user_image_block();
 
             if (api_is_platform_admin()) {
-                $app['page_controller']->return_course_block();
+                $pageController->return_course_block();
             } else {
-                $app['page_controller']->return_teacher_link();
+                $pageController->return_teacher_link();
             }
         }
 
@@ -162,24 +151,24 @@ class IndexController extends CommonController
         // When loading a chamilo page do not include the hot courses and news
         if (!isset($_REQUEST['include'])) {
             if (api_get_setting('show_hot_courses') == 'true') {
-                $hotCourses = $app['page_controller']->return_hot_courses();
+                $hotCourses = $pageController->return_hot_courses();
             }
-            $announcementsBlock = $app['page_controller']->return_announcements();
+            $announcementsBlock = $pageController->return_announcements();
         }
 
         $template->assign('hot_courses', $hotCourses);
         $template->assign('announcements_block', $announcementsBlock);
 
         // Homepage
-        $template->assign('home_page_block', $app['page_controller']->returnHomePage());
+        $template->assign('home_page_block', $pageController->returnHomePage());
 
         // Navigation links
-        $app['page_controller']->returnNavigationLinks($template->getNavigationLinks());
-        $app['page_controller']->return_notice();
-        $app['page_controller']->return_help();
+        $pageController->returnNavigationLinks($template->getNavigationLinks());
+        $pageController->return_notice();
+        $pageController->return_help();
 
         if (api_is_platform_admin() || api_is_drh()) {
-            $app['page_controller']->return_skills_links();
+            $pageController->return_skills_links();
         }
 
         $response = $template->render_layout('layout_2_col.tpl');
@@ -196,49 +185,14 @@ class IndexController extends CommonController
     {
         $request = $app['request'];
         $app['template']->assign('error', $app['security.last_error']($request));
+        $extra = array();
+        if (api_get_setting('use_virtual_keyboard') == 'true') {
+            $extra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/keyboard/keyboard.css');
+            $extra[] = api_get_js('keyboard/jquery.keyboard.js');
+        }
+        $app['extraJS'] = $extra;
         $response = $app['template']->render_template('auth/login.tpl');
         return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
-        //return new Response($response, 200, array());
-    }
-
-    /**
-     *
-     * @todo This piece of code should probably move to local.inc.php where the actual login procedure is handled.
-     * @todo Check if this code is used. I think this code is never executed because after clicking the submit button
-     *       the code does the stuff in local.inc.php and then redirects to index.php or user_portal.php depending
-     *       on api_get_setting('page_after_login').
-     * @deprecated seems not to be used
-     */
-    function check_last_login()
-    {
-        if (!empty($_POST['submitAuth'])) {
-            // The user has been already authenticated, we are now to find the last login of the user.
-            if (!empty($this->user_id)) {
-                $track_login_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-                $sql_last_login = "SELECT login_date
-                                    FROM $track_login_table
-                                    WHERE login_user_id = '".$this->user_id."'
-                                    ORDER BY login_date DESC LIMIT 1";
-                $result_last_login = Database::query($sql_last_login);
-                if (!$result_last_login) {
-                    if (Database::num_rows($result_last_login) > 0) {
-                        $user_last_login_datetime = Database::fetch_array($result_last_login);
-                        $user_last_login_datetime = $user_last_login_datetime[0];
-                        Session::write('user_last_login_datetime', $user_last_login_datetime);
-                    }
-                }
-                Database::free_result($result_last_login);
-
-                if (api_is_platform_admin()) {
-                    // Decode all open event informations and fill the track_c_* tables
-                    include api_get_path(LIBRARY_PATH).'stats.lib.inc.php';
-                    decodeOpenInfos();
-                }
-            }
-        } else {
-            // Only if login form was not sent because if the form is sent the user was already on the page.
-            event_open();
-        }
     }
 
     /**
@@ -287,8 +241,7 @@ class IndexController extends CommonController
           ->getForm();
           return $app['template']->assign('form', $form->createView());
          */
-
-        $form = new \FormValidator('formLogin', 'POST', $app['url_generator']->generate('admin_login_check'), null, array('class' => 'form-vertical'));
+        $form = new \FormValidator('formLogin', 'POST', $app['url_generator']->generate('secured_login_check'), null, array('class' => 'form-vertical'));
         $form->addElement(
             'text',
             'username',
@@ -298,30 +251,36 @@ class IndexController extends CommonController
                 'autofocus' => 'autofocus'
             )
         );
-        $form->addElement('password', 'password', get_lang('Pass'), array('class' => 'input-medium '));
+        $form->addElement(
+            'password',
+            'password',
+            get_lang('Pass'),
+            array(
+                'class' => 'input-medium virtualkey'
+            )
+        );
         $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));
         $html = $form->return_form();
-        /*if (api_get_setting('openid_authentication') == 'true') {
-            include_once 'main/auth/openid/login.php';
-            $html .= '<div>'.openid_form().'</div>';
-        }*/
+
         /** Verify if settings is active to set keyboard. Included extra class in form input elements */
 
         if (api_get_setting('use_virtual_keyboard') == 'true') {
-            $html .= "<script> $(function(){ $('.virtualkey').keyboard(
-                     {
-                       layout:'custom',
-                       customLayout: {
-                         'default': [
-                           '1 2 3 4 5 6 7 8 9 0 {bksp}',
-                           'q w e r t y u i o p',
-                           'a s d f g h j k l',
-                           'z x c v b n m',
-                           '{cancel} {accept}'
-                         ]
-                       }
-                     }
-                     );}); </script>";
+            $html .= "<script>
+                $(function(){
+                    $('.virtualkey').keyboard({
+                        layout:'custom',
+                        customLayout: {
+                        'default': [
+                            '1 2 3 4 5 6 7 8 9 0 {bksp}',
+                            'q w e r t y u i o p',
+                            'a s d f g h j k l',
+                            'z x c v b n m',
+                            '{cancel} {accept}'
+                        ]
+                        }
+                    });
+                });
+            </script>";
         }
         return $html;
     }
@@ -394,6 +353,22 @@ class IndexController extends CommonController
         }
     }
 
+     /**
+     * Gets a document from the data/default_platform_document/* folder
+     * @param Application $app
+     * @param string $file
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
+     */
+    public function getDefaultCourseDocumentAction(Application $app, $file)
+    {
+        try {
+            $file = $app['chamilo.filesystem']->get('default_course_document/'.$file);
+            return $app->sendFile($file->getPathname());
+        } catch (\InvalidArgumentException $e) {
+            return $app->abort(404, 'File not found');
+        }
+    }
+
     /**
      * @param Application $app
      * @param $groupId
@@ -424,7 +399,6 @@ class IndexController extends CommonController
             return $app->abort(404, 'File not found');
         }
     }
-
 
     /**
      * Reacts on a failed login.

@@ -20,6 +20,7 @@ $purification_option_for_usernames = false;
 
 function validate_data($users) {
 	global $defined_auth_sources;
+    global $time;
 	$errors = array();
 	$usernames = array();
 
@@ -83,6 +84,7 @@ function validate_data($users) {
  */
 function complete_missing_data($user) {
 	global $purification_option_for_usernames;
+    global $time;
 	// 1. Create a username if necessary.
 	if (UserManager::is_username_empty($user['UserName'])) {
 		$user['UserName'] = UserManager::create_unique_username($user['FirstName'], $user['LastName']);
@@ -117,15 +119,16 @@ function save_data($users) {
 		$inserted_in_course = array();
 	}
 	$send_mail = $_POST['sendMail'] ? 1 : 0;
+    $t0 = time();
 	if (is_array($users)) {
-		foreach ($users as $index => $user)	{
+        foreach ($users as $index => $user)	{
 			$user = complete_missing_data($user);
 			$user['Status'] = api_status_key($user['Status']);
-            $user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], $user['language'], $user['PhoneNumber'], '', $user['AuthSource'], null, 1, 0, null, null, $send_mail);
-			if (!is_array($user['Courses']) && !empty($user['Courses'])) {
+            $user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], (isset($user['OfficialCode'])?$user['OfficialCode']:null), (isset($user['language'])?$user['language']:null), (isset($user['PhoneNumber'])?$user['PhoneNumber']:null), '', $user['AuthSource'], null, 1, 0, null, null, $send_mail, true);
+			if (!empty($user['Courses']) && !is_array($user['Courses'])) {
 				$user['Courses'] = array($user['Courses']);
 			}
-			if (is_array($user['Courses'])) {
+			if (isset($user['Courses']) && is_array($user['Courses'])) {
 				foreach ($user['Courses'] as $index => $course) {
 					if (CourseManager :: course_exists($course)) {
 						CourseManager :: subscribe_user($user_id, $course,$user['Status']);
@@ -155,15 +158,19 @@ function save_data($users) {
 			global $extra_fields;
 
 			// We are sure that the extra field exists.
-			foreach($extra_fields as $extras) {
-				if (isset($user[$extras[1]])) {
-					$key 	= $extras[1];
-					$value 	= $user[$extras[1]];
-					UserManager::update_extra_field_value($user_id, $key,$value);
-				}
-			}
+            if (isset($extra_fields) && is_array($extra_fields)) {
+                foreach($extra_fields as $extras) {
+                    if (isset($user[$extras[1]])) {
+                        $key 	= $extras[1];
+                        $value 	= $user[$extras[1]];
+                        UserManager::update_extra_field_value($user_id, $key,$value);
+                    }
+                }
+            }
 		}
 	}
+    $t1 = time()-$t0;
+    error_log('Total import took '.$t1.'s');
 }
 
 /**
@@ -172,6 +179,8 @@ function save_data($users) {
  * @return array All userinformation read from the file
  */
 function parse_csv_data($file) {
+    global $time;
+    $time = time();
 	$users = Import :: csv_to_array($file);
 	foreach ($users as $index => $user) {
 		if (isset ($user['Courses'])) {
@@ -255,7 +264,7 @@ api_protect_admin_script(true);
 
 
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
-if (is_array($extAuthSource)) {
+if (isset($extAuthSource) && is_array($extAuthSource)) {
 	$defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
 }
 
@@ -267,7 +276,7 @@ $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 $user_id_error = array();
 $error_message = '';
 
-if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
+if (!empty($_POST['formSent']) AND $_FILES['import_file']['size'] !== 0) {
 	$file_type = $_POST['file_type'];
 	Security::clear_token();
 	$tok = Security::get_token();
@@ -345,15 +354,15 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	}
 
 	// if the warning message is too long then we display the warning message trough a session
-	if (api_strlen($warning_message) > 150) {
-		$_SESSION['session_message_import_users'] = $warning_message;
+	if (isset($warning_message) && api_strlen($warning_message) > 150) {
+		$_SESSION['session_message_import_users'] = (isset($warning_message)?$warning_message:'');
 		$warning_message = 'session_message';
 	}
 
     if ($error_kind_file) {
 		$error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
 	} else {
-		header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=show_message&warn='.urlencode($warning_message).'&message='.urlencode($see_message_import).'&sec_token='.$tok);
+		header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=show_message&warn='.(isset($warning_message)?urlencode($warning_message):'').'&message='.urlencode($see_message_import).'&sec_token='.$tok);
 		exit;
 	}
 

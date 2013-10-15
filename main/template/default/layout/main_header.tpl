@@ -43,11 +43,11 @@
         {% include app.template_style ~ "/layout/topbar.tpl" %}
 
         {% block main_div_container %}
-        {% if app.full_width == 1 %}
-            <div id="main" class="container-fluid">
-        {% else %}
-            <div id="main" class="container">
-        {% endif %}
+            {% if app.full_width == 1 %}
+                <div id="main" class="container-fluid">
+            {% else %}
+                <div id="main" class="container">
+            {% endif %}
         {% endblock main_div_container %}
             <header>
                 <div class="row">
@@ -117,6 +117,7 @@
             {% else %}
                 <div id="top_main_content" class="row">
             {% endif %}
+
             {# course navigation links/shortcuts need to be activated by the admin #}
             {% include app.template_style ~ "/layout/course_navigation.tpl" %}
 {% endif %}

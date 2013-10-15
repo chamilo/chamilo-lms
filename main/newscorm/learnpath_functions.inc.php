@@ -1418,7 +1418,7 @@ function export_exercise($item_id)
         echo $s = "<tr bgcolor='#e6e6e6'><td valign='top' colspan='2'>".get_lang('Question')." ";
         // Call the showQuestion(). This basically displays the question in a table.
         $question_obj = Question::read($questionId);
-        $test .= ExerciseLib::showQuestion($question_obj, false, 'export', $i);
+        $test .= $objExercise->showQuestion($question_obj, false, 'export', $i);
 
     } // end foreach()
 
@@ -1454,18 +1454,6 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
     include_once $libp.'answer.class.php';
 
     $langLasting = ''; //avoid code parser warning
-    include_once $libp.'lang/english/announcements.inc.php'; //this line is here only for $langPubl in announcements
-    include_once $libp.'lang/'.$language_interface.'/announcements.inc.php'; //this line is here only for $langPubl in announcements
-    include_once $libp.'lang/english/agenda.inc.php'; //this line is here only for $langLasting
-    include_once $libp.'lang/'.$language_interface.'/agenda.inc.php'; //this line is here only for $langLasting
-    include_once $libp.'lang/english/course_description.inc.php'; //this line is here only for $langThisCourseDescriptionIsEmpty
-    include_once $libp.'lang/'.$language_interface.'/course_description.inc.php'; //				 -||-
-    include_once $libp.'lang/english/resourcelinker.inc.php';
-    include_once $libp.'lang/'.$language_interface.'/resourcelinker.inc.php';
-    include_once $libp.'lang/english/learnpath.inc.php';
-    include_once $libp.'lang/'.$language_interface.'/learnpath.inc.php';
-    include_once $libp.'lang/english/exercice.inc.php';
-    include_once $libp.'lang/'.$language_interface.'/exercice.inc.php';
 
     include_once '../resourcelinker/resourcelinker.inc.php';
 
@@ -2098,7 +2086,7 @@ function createimsmanifest($circle1_files, $learnpath_id)
     $header = '<?xml version="1.0" encoding="'.api_get_system_encoding(
     ).'"?>'."\n<manifest identifier='".$LPnamesafe."' version='1.1'\n xmlns='http://www.imsproject.org/xsd/imscp_rootv1p1p2'\n xmlns:adlcp='http://www.adlnet.org/xsd/adlcp_rootv1p2'\n xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'\n xsi:schemaLocation='http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd\n http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 imsmd_rootv1p2p1.xsd\n http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd'>\n";
 
-    $org .= xmltagwrite('metadata', 'open');
+    $org = xmltagwrite('metadata', 'open');
     $org .= '  '.xmltagwrite('schema', 'full', 'ADL SCORM');
     $org .= '  '.xmltagwrite('schemaversion', 'full', '1.2');
     $org .= xmltagwrite('metadata', 'close');

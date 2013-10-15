@@ -1,0 +1,22 @@
+secured_login_check:
+    pattern:   /secured/login_check
+
+secured_logout:
+    pattern:   /secured/logout
+
+login:
+  pattern:   /secured/login_check
+
+logout:
+    pattern:   /secured/logout
+home:
+    path:      /home
+    defaults:  { _controller: index.controller:indexAction, culture: en }
+
+homepage:
+    path:      /homepage
+    defaults:  { _controller: index.controller:indexAction, culture: en }
+
+example:
+    resource: "src/ChamiloLMS/Resources/config/route_example.yml"
+    prefix:   /example-route

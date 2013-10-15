@@ -269,9 +269,10 @@ class Attendance
         $weight_calification =	floatval($this->attendance_weight);
 
 		$value_calification  = 0;
-
+                $aid = $this->get_last_attendance_id($course_id)+1;
 		$sql = "INSERT INTO $tbl_attendance SET
 					c_id =  $course_id,
+                                        id = $aid,
 					name ='".Database::escape_string($this->name)."',
 					description = '".Database::escape_string($this->description)."',
 					attendance_qualify_title = '$title_gradebook',
@@ -282,14 +283,14 @@ class Attendance
 		$last_id = 0;
 		if (!empty($affected_rows)) {
 			// save inside item property table
-			$last_id = Database::insert_id();
+			$last_id = $aid;
 			api_item_property_update($course_info, TOOL_ATTENDANCE, $last_id, "AttendanceAdded", $user_id);
 		}
 		// add link to gradebook
 		if ($link_to_gradebook && !empty($this->category_id)) {
 			$description = '';
 			$link_info = is_resource_in_course_gradebook($course_code, 7, $last_id, $session_id);
-            $link_id = $link_info['id'];
+			$link_id = $link_info['id'];
 			if (!$link_info) {
 				add_resource_to_course_gradebook($this->category_id, $course_code, 7, $last_id, $title_gradebook,$weight_calification,$value_calification,$description,1,$session_id);
 			} else {
@@ -719,8 +720,10 @@ class Attendance
 					Database::query($sql);
 				} else {
 					// insert new result
+                                        $aid = $this->get_last_attendance_result_id($course_id)+1;
 					$sql = "INSERT INTO $tbl_attendance_result SET
 								c_id            = $course_id ,
+								id            = $aid ,
 								user_id			= '$uid',
 								attendance_id 	= '$attendance_id',
 								score			= '$count_presences'";
@@ -762,8 +765,9 @@ class Attendance
         }
 
         // save data
-        $ins = "INSERT INTO $tbl_attendance_sheet_log(c_id, attendance_id, lastedit_date, lastedit_type, lastedit_user_id, calendar_date_value)
-                VALUES ($course_id, $attendance_id, '$lastedit_date', '$lastedit_type', $lastedit_user_id, '$calendar_date_value')";
+        $aid = $this->get_last_attendance_sheet_log_id($course_id)+1;
+        $ins = "INSERT INTO $tbl_attendance_sheet_log(c_id, id, attendance_id, lastedit_date, lastedit_type, lastedit_user_id, calendar_date_value)
+                VALUES ($course_id, $aid, $attendance_id, '$lastedit_date', '$lastedit_type', $lastedit_user_id, '$calendar_date_value')";
         $result = Database::query($ins);
         return Database::affected_rows($result);
    }
@@ -1217,12 +1221,14 @@ class Attendance
         $calendar_info = $this->get_attendance_calendar_data_by_date($attendance_id, $this->date_time);
 
 		if ($calendar_info == false) {
+                        $aid = $this->get_last_attendance_calendar_id($course_id)+1;
 			$sql = "INSERT INTO $tbl_attendance_calendar SET
 					c_id			= $course_id,
+                                        id			= $aid,
 					date_time		= '".Database::escape_string($this->date_time)."',
 					attendance_id 	= '$attendance_id'";
 			$result = Database::query($sql);
-            $cal_id = Database::insert_id();
+			$cal_id = $aid;
 			$affected_rows = Database::affected_rows($result);
 		}
 
@@ -1507,5 +1513,93 @@ class Attendance
             return Display::url($label, '', $extra_attributes);
         }
         return null;
+    }
+    /**
+     * Gets the last attendance ID for this course (helper for auto_increment substitution)
+     * @param int Course ID (if not provided, will be guessed from context)
+     * @result int 0 if none, the max "id" value for this course, if found
+     */
+    function get_last_attendance_id($course_id=null) 
+    {
+        $tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
+        if (empty($course_id)) {
+            $course_id = api_get_course_int_id();
+        } else {
+            $course_id = filter_var($course_id, FILTER_SANITIZE_NUMBER_INT);
+        }
+        $id = 0;
+        $sql = "SELECT max(id) FROM $tbl_attendance WHERE c_id = $course_id";
+        $res = Database::query($sql);
+        if ($res === false or Database::num_rows($res)===0) {
+            return $id;
+        } //else
+        $row = Database::fetch_row($res);
+        return $row[0];        
+    }
+    /**
+     * Gets the last attendance result ID for this course (helper for auto_increment substitution)
+     * @param int Course ID (if not provided, will be guessed from context)
+     * @result int 0 if none, the max "id" value for this course, if found
+     */
+    function get_last_attendance_result_id($course_id=null) 
+    {
+        $tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE_RESULT);
+        if (empty($course_id)) {
+            $course_id = api_get_course_int_id();
+        } else {
+            $course_id = filter_var($course_id, FILTER_SANITIZE_NUMBER_INT);
+        }
+        $id = 0;
+        $sql = "SELECT max(id) FROM $tbl_attendance WHERE c_id = $course_id";
+        $res = Database::query($sql);
+        if ($res === false or Database::num_rows($res)===0) {
+            return $id;
+        } //else
+        $row = Database::fetch_row($res);
+        return $row[0];        
+    }
+    /**
+     * Gets the last attendance sheet log ID for this course (helper for auto_increment substitution)
+     * @param int Course ID (if not provided, will be guessed from context)
+     * @result int 0 if none, the max "id" value for this course, if found
+     */
+    function get_last_attendance_sheet_log_id($course_id=null) 
+    {
+        $tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE_SHEET_LOG);
+        if (empty($course_id)) {
+            $course_id = api_get_course_int_id();
+        } else {
+            $course_id = filter_var($course_id, FILTER_SANITIZE_NUMBER_INT);
+        }
+        $id = 0;
+        $sql = "SELECT max(id) FROM $tbl_attendance WHERE c_id = $course_id";
+        $res = Database::query($sql);
+        if ($res === false or Database::num_rows($res)===0) {
+            return $id;
+        } //else
+        $row = Database::fetch_row($res);
+        return $row[0];        
+    }
+    /**
+     * Gets the last attendance calendar ID for this course (helper for auto_increment substitution)
+     * @param int Course ID (if not provided, will be guessed from context)
+     * @result int 0 if none, the max "id" value for this course, if found
+     */
+    function get_last_attendance_calendar_id($course_id=null) 
+    {
+        $tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE_CALENDAR);
+        if (empty($course_id)) {
+            $course_id = api_get_course_int_id();
+        } else {
+            $course_id = filter_var($course_id, FILTER_SANITIZE_NUMBER_INT);
+        }
+        $id = 0;
+        $sql = "SELECT max(id) FROM $tbl_attendance WHERE c_id = $course_id";
+        $res = Database::query($sql);
+        if ($res === false or Database::num_rows($res)===0) {
+            return $id;
+        } //else
+        $row = Database::fetch_row($res);
+        return $row[0];        
     }
 }

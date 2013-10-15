@@ -2677,8 +2677,7 @@ class learnpath
                 // It's a simple string item from which the ID can be found in the refs list,
                 // so we can transform it directly to an ID for export.
                 return $this->items[$this->refs_list[$prereq]]->ref;
-            } else {
-                if (isset($this->refs_list['ITEM_'.$prereq])) {
+            } else if (isset($this->refs_list['ITEM_'.$prereq])) {
                     return $this->items[$this->refs_list['ITEM_'.$prereq]]->ref;
                 } else {
                     // The last case, if it's a complex form, then find all the IDs (SCORM strings)
@@ -2714,23 +2713,15 @@ class learnpath
                     foreach ($ids as $id) {
                         $id = trim($id);
                         if (isset ($this->refs_list[$id])) {
-                            $prereq = preg_replace(
-                                '/[^a-zA-Z_0-9]('.$id.')[^a-zA-Z_0-9]/',
-                                'ITEM_'.$this->refs_list[$id],
-                                $prereq
-                            );
+                        $prereq = preg_replace('/[^a-zA-Z_0-9](' . $id . ')[^a-zA-Z_0-9]/', 'ITEM_' . $this->refs_list[$id], $prereq);
                         }
                     }
-                    error_log(
-                        'New LP - In learnpath::get_scorm_prereq_string(): returning modified string: '.$prereq,
-                        0
-                    );
+                    error_log('New LP - In learnpath::get_scorm_prereq_string(): returning modified string: ' . $prereq, 0);
 
                     return $prereq;
                 }
             }
         }
-    }
 
     /**
      * Returns the XML DOM document's node
@@ -3388,6 +3379,10 @@ class learnpath
                             if (is_youtube_link($file)) {
                                 $src = get_youtube_video_id($file);
                                 $file = 'embed.php?type=youtube&src='.$src;
+                            }
+                            if (isVimeoLink($file)) {
+                                $src  = getVimeoLinkId($file);
+                                $file = 'embed.php?type=vimeo&src='.$src;
                             }
                         } else {
                             // check how much attempts of a exercise exits in lp
@@ -4079,15 +4074,19 @@ class learnpath
      * @param    integer    Learnpath ID
      * @param    string    New visibility
      */
-    public function toggle_visibility($lp_id, $set_visibility = 1)
+    public function toggle_visibility($lp_id, $set_visibility = 1, $course_id = null)
     {
         //if ($this->debug > 0) { error_log('New LP - In learnpath::toggle_visibility()', 0); }
         $action = 'visible';
         if ($set_visibility != 1) {
             $action = 'invisible';
         }
-
-        return api_item_property_update(api_get_course_info(), TOOL_LEARNPATH, $lp_id, $action, api_get_user_id());
+        if (!empty($course_id)) {
+            $course = api_get_course_info_by_id($course_id);
+        } else {
+            $course = api_get_course_info();
+        }
+        return api_item_property_update($course, TOOL_LEARNPATH, $lp_id, $action, api_get_user_id());
     }
 
     /**
@@ -10470,25 +10469,47 @@ EOD;
         $lp_id = $this->get_id();
 
         if (!empty($this->items)) {
-            $old_id = null;
-            $old_max = 0;
-            $old_type = null;
+            $previous_item_id = null;
+            $previous_item_max = 0;
+            $previous_item_type = null;
+            $last_item_not_chapter = null;
+            $last_item_not_chapter_type = null;
+            $last_item_not_chapter_max = null;
             foreach ($this->items as $item) {
-                if (!empty($old_id)) {
-                    if (!in_array($old_type, array('dokeos_chapter', 'chapter'))) {
-                        $current_item_id = $item->get_id();
-                        if ($old_type == 'quiz') {
-                            $sql = "UPDATE $tbl_lp_item SET mastery_score = '$old_max' WHERE c_id = ".$course_id." AND lp_id = '$lp_id' AND id = '$old_id'";
+                // if there was a previous item... (otherwise jump to set it)
+                if (!empty($previous_item_id)) {
+                    $current_item_id = $item->get_id(); //save current id
+                    if (!in_array($item->get_type(), array('dokeos_chapter', 'chapter'))) {
+                        // Current item is not a folder, so it qualifies to get a prerequisites
+                        if ($last_item_not_chapter_type == 'quiz') {
+                            // if previous is quiz, mark its max score as default score to be achieved
+                            $sql = "UPDATE $tbl_lp_item SET mastery_score = '$last_item_not_chapter_max' WHERE c_id = ".$course_id." AND lp_id = '$lp_id' AND id = '$last_item_not_chapter'";
                             Database::query($sql);
                         }
 
-                        $sql = "UPDATE $tbl_lp_item SET prerequisite = '$old_id' WHERE c_id = ".$course_id." AND lp_id = '$lp_id' AND id = '$current_item_id'";
+                        // now simply update the prerequisite to set it to the last non-chapter item
+                        $sql = "UPDATE $tbl_lp_item SET prerequisite = '$last_item_not_chapter' WHERE c_id = ".$course_id." AND lp_id = '$lp_id' AND id = '$current_item_id'";
                         Database::query($sql);
+                        // record item as 'non-chapter' reference
+                        $last_item_not_chapter = $item->get_id();
+                        $last_item_not_chapter_type = $item->get_type();
+                        $last_item_not_chapter_max = $item->get_max();
                     }
+                } else {
+                    if (!in_array($item->get_type(), array('dokeos_chapter', 'chapter'))) {
+                        // Current item is not a folder (but it is the first item) so record as last "non-chapter" item
+                        $last_item_not_chapter = $item->get_id();
+                        $last_item_not_chapter_type = $item->get_type();
+                        $last_item_not_chapter_max = $item->get_max();
                 }
                 $old_id = $item->get_id();
                 $old_max = $item->get_max();
                 $old_type = $item->get_type();
+            }
+                // Saving the item as "previous item" for the next loop
+                $previous_item_id = $item->get_id();
+                $previous_item_max = $item->get_max();
+                $previous_item_type = $item->get_type();
             }
         }
     }

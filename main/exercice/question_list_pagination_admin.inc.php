@@ -35,7 +35,17 @@ $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_question_list&exerciseI
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
 //$columns = array(get_lang('Questions'), get_lang('Type'), get_lang('Category'), get_lang('Difficulty'), get_lang('Score'), get_lang('Actions'));
-$columns = array(get_lang('Questions'), get_lang('Type'), get_lang('Category'), get_lang('Score'), get_lang('Actions'));
+$columns = array(get_lang('Questions'), get_lang('Type'), get_lang('Category'), get_lang('Score'));
+
+// Adding filtered question extra fields
+$extraField = new ExtraField('question');
+$extraFields = $extraField->get_all(array('field_filter = ?' => 1));
+if (!empty($extraFields)) {
+    foreach ($extraFields as $field) {
+        $columns[] = $field['field_display_text'];
+    }
+}
+$columns[] = get_lang('Actions');
 
 //Column config
 $column_model = array(
@@ -67,15 +77,29 @@ $column_model = array(
         'width'    => '50',
         'align'    => 'left',
         'sortable' => 'false'
-    ),
-    array(
-        'name'      => 'actions',
-        'index'     => 'actions',
-        'width'     => '50',
-        'align'     => 'left',
-        'formatter' => 'action_formatter',
-        'sortable'  => 'false'
     )
+);
+
+if (!empty($extraFields)) {
+    foreach ($extraFields as $field) {
+        $column_model[] =
+    array(
+            'name'     => $field['field_variable'],
+            'index'    => $field['field_variable'],
+            'width'    => '100',
+            'align'    => 'left',
+            'sortable' => 'false'
+        );
+    }
+}
+
+$column_model[] = array(
+    'name'      => 'actions',
+    'index'     => 'actions',
+    'width'     => '50',
+    'align'     => 'left',
+    'formatter' => 'action_formatter',
+    'sortable'  => 'false'
 );
 
 
@@ -89,12 +113,12 @@ $courseCode = api_get_course_id();
 
 $delete_link = null;
 if ($objExercise->edit_exercise_in_lp == true) {
-    $delete_link = '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;" href="?exerciseId='.$exerciseId.'&cidReq='.$courseCode.'&sec_token='.$token.'&deleteQuestion=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
+    $delete_link = '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(get_lang("ConfirmYourChoice"))."\'".')) return false;" href="?exerciseId='.$exerciseId.'&cidReq='.$courseCode.'&sec_token='.$token.'&deleteQuestion=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
 }
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
     return \'<a href="?exerciseId='.$exerciseId.'&myid=1&cidReq='.$courseCode.'&editQuestion=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;" href="?cidReq='.$courseCode.'&sec_token='.$token.'&clone_question=\'+options.rowId+\'">'.Display::return_icon('cd.gif', get_lang('Copy'), '',ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(get_lang("ConfirmYourChoice"))."\'".')) return false;" href="?cidReq='.$courseCode.'&sec_token='.$token.'&clone_question=\'+options.rowId+\'">'.Display::return_icon('cd.gif', get_lang('Copy'), '',ICON_SIZE_SMALL).'</a>'.
     $delete_link.'\';
 }';
 ?>

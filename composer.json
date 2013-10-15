@@ -38,8 +38,8 @@
         }
     ],
     "require": {
-        "php": ">=5.3.2",
-        "silex/silex": "~1.0",
+        "php": ">=5.3.3",
+        "silex/silex": "1.*",
         "symfony/console"  : "~2.3",
         "symfony/twig-bridge": "~2.3",
         "symfony/doctrine-bridge": "2.3.*@dev",
@@ -49,6 +49,8 @@
         "symfony/validator": "~2.3",
         "symfony/translation": "~2.3",
         "symfony/dependency-injection": "~2.3",
+        "symfony/filesystem": "~2.3",
+        "symfony/finder": "2.3.*@dev",
         "monolog/monolog" : ">=1.0.0",
         "symfony/config": "~2.3",
         "symfony/yaml": "~2.3",
@@ -58,28 +60,34 @@
         "dflydev/doctrine-orm-service-provider": "1.0.*@dev",
         "doctrine/migrations": "dev-master",
         "gedmo/doctrine-extensions": "2.3.*@dev",
-        "chamilo/chash": "dev-master",
         "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
         "pagerfanta/pagerfanta": "dev-master",
-        "franmomu/silex-pagerfanta-provider": "2.3.*@dev",
+        "franmomu/silex-pagerfanta-provider": "1.0.*@dev",
         "igorw/config-service-provider": "1.2.*@dev",
         "mpdf/mpdf": "v5.6.1",
         "ezyang/htmlpurifier": "v4.5.0",
         "realityking/pchart": "dev-master",
-        "imagine/imagine": "dev-develop",
+        "imagine/imagine": "v0.5.0",
         "grom/silex-service-provider": "dev-master",
         "knplabs/knp-menu": "2.0.*@dev",
         "knplabs/knp-snappy": "dev-master",
         "knplabs/console-service-provider": "dev-master",
-        "knplabs/gaufrette": "0.2.*@dev",
         "jmontoyaa/phpqrcode": "dev-master",
-        "bt51/gaufrette-serviceprovider": "dev-master",
         "neutron/silex-filesystem-provider": "dev-master",
-        "jbroadway/urlify": "dev-master",
-        "sensio/framework-extra-bundle": "2.3.*@dev"
+        "jbroadway/urlify": "1.0.0-stable",
+        "sensio/framework-extra-bundle": "2.3.*@dev",
+        "chamilo/chash": "dev-master",
+        "composer/composer": "1.0.0-alpha7",
+        "flint/flint" : "dev-master",
+        "icehero/silex-opauth": "dev-master",
+        "opauth/openid": "0.1.0",
+        "opauth/facebook": "0.2.1",
+        "opauth/google": "0.2.2"
     },
     "require-dev": {
-        "symfony/browser-kit": "2.3.*@dev",
+        "knplabs/gaufrette": "0.2.*@dev",
+        "bt51/gaufrette-serviceprovider": "dev-master",
+        "symfony/browser-kit": "~2.3",
         "symfony/web-profiler-bundle": "~2.3",
         "silex/web-profiler": "1.0.x-dev",
         "natxet/CssMin": "dev-master",
@@ -90,6 +98,5 @@
     "scripts": {
         "post-install-cmd": "ChamiloLMS\\Composer\\Tasks::postInstall",
         "post-update-cmd": "ChamiloLMS\\Composer\\Tasks::postUpdate"
-    },
-    "minimum-stability": "stable"
+    }
 }

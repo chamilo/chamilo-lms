@@ -13,74 +13,54 @@
  */
 
 /**
- * @author Sebastien Piraux <piraux_seb@hotmail.com>
- * @desc Record information for open event (when homepage is opened)
+ * @author Sebastien Piraux <piraux_seb@hotmail.com> old code
+ * @author Julio Montoya 2013
+ * @desc Record information for login event when an user identifies himself with username & password
  */
-function event_open()
+function event_login(\Entity\User $user)
 {
-    global $_configuration;
-    $TABLETRACK_OPEN = Database::get_main_table(TABLE_STATISTIC_TRACK_E_OPEN);
+    $userId =  $user->getUserId();
 
-    // @getHostByAddr($_SERVER['REMOTE_ADDR']) : will provide host and country information
-    // $_SERVER['HTTP_USER_AGENT'] :  will provide browser and os information
-    // $_SERVER['HTTP_REFERER'] : provide information about refering url
-    if (isset($_SERVER['HTTP_REFERER'])) {
-        $referer = Database::escape_string($_SERVER['HTTP_REFERER']);
-    } else {
-        $referer = '';
-    }
-    // record informations only if user comes from another site
-    //if(!eregi($_configuration['root_web'],$referer))
-    $pos = strpos($referer, $_configuration['root_web']);
-    if ($pos === false && $referer != '') {
-        $ip = api_get_real_ip();
-        $remhost = @ getHostByAddr($ip);
-        if ($remhost == $ip) {
-            $remhost = "Unknown"; // don't change this
-        }
-        $reallyNow = api_get_utc_datetime();
-        $sql = "INSERT INTO ".$TABLETRACK_OPEN."
-        		(open_remote_host,
-        		 open_agent,
-        		 open_referer,
-        		 open_date)
-        		VALUES
-        		('".$remhost."',
-        		 '".Database::escape_string($_SERVER['HTTP_USER_AGENT'])."', '".Database::escape_string($referer)."', '$reallyNow')";
-        Database::query($sql);
-    }
-    return 1;
-}
-
-/**
- * @author Sebastien Piraux <piraux_seb@hotmail.com>
- * @desc Record information for login event
- * (when an user identifies himself with username & password)
- */
-function event_login()
-{
     $TABLETRACK_LOGIN = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-    $_user = api_get_user_info();
 
     $reallyNow = api_get_utc_datetime();
+
     $sql = "INSERT INTO ".$TABLETRACK_LOGIN." (login_user_id, login_ip, login_date, logout_date) VALUES
-                ('".api_get_user_id()."',
+                ('".$userId."',
         		'".Database::escape_string(api_get_real_ip())."',
         		'".$reallyNow."',
         		'".$reallyNow."'
         		)";
     Database::query($sql);
 
+    $roles = $user->getRolesObj();
+
     // auto subscribe
-    $user_status = $_user['status'] == SESSIONADMIN ? 'sessionadmin' :
-    $_user['status'] == COURSEMANAGER ? 'teacher' :
-    $_user['status'] == DRH ? 'DRH' : 'student';
-    $autoSubscribe = api_get_setting($user_status.'_autosubscribe');
-    if ($autoSubscribe) {
-        $autoSubscribe = explode('|', $autoSubscribe);
-        foreach ($autoSubscribe as $code) {
-            if (CourseManager::course_exists($code)) {
-                CourseManager::subscribe_user($_user['user_id'], $code);
+
+    /** @var \Entity\Role $role  */
+    foreach ($roles as $role) {
+        $role = $role->getRole();
+        $userStatusParsed = 'student';
+
+        switch ($role) {
+            case 'ROLE_SESSION_MANAGER':
+                $userStatusParsed = 'sessionadmin';
+                break;
+            case 'ROLE_TEACHER':
+                $userStatusParsed = 'teacher';
+                break;
+            case 'ROLE_RRHH':
+                $userStatusParsed = 'DRH';
+                break;
+        }
+
+        $autoSubscribe = api_get_setting($userStatusParsed.'_autosubscribe');
+        if ($autoSubscribe) {
+            $autoSubscribe = explode('|', $autoSubscribe);
+            foreach ($autoSubscribe as $code) {
+                if (CourseManager::course_exists($code)) {
+                    CourseManager::subscribe_user($userId, $code);
+                }
             }
         }
     }
@@ -432,6 +412,7 @@ function createEventExercise($exo_id)
  * @param	integer Exercise attempt ID a.k.a exe_id (from track_e_exercise)
  * @param	integer	Position
  * @param	integer Exercise ID (from c_quiz)
+ * @param	bool update results?
  * @param	string  Filename (for audio answers - using nanogong)
  * @param	integer User ID The user who's going to get this score. Default value of null means "get from context".
  * @param	integer	Course ID (from the "id" column of course table). Default value of null means "get from context".
@@ -447,6 +428,7 @@ function saveQuestionAttempt(
     $exe_id,
     $position,
     $exercise_id = 0,
+    $updateResults = false,
     $nano = null,
     $user_id = null,
     $course_id = null,
@@ -456,8 +438,8 @@ function saveQuestionAttempt(
 ) {
     global $debug;
 
-    $score = Database::escape_string($score);
-    $answer = Database::escape_string($answer);
+    //$score = Database::escape_string($score);
+    // $answer = Database::escape_string($answer);
     $question_id = Database::escape_string($question_id);
     $exe_id = Database::escape_string($exe_id);
     $position = Database::escape_string($position);
@@ -539,21 +521,26 @@ function saveQuestionAttempt(
             if ($debug) {
                 error_log("Attempt already exist: exe_id: $exe_id - user_id:$user_id - question_id:$question_id");
             }
-            //The attempt already exist do not update use  update_event_exercise() instead
-            return false;
+            if ($updateResults == false) {
+                //The attempt already exist do not update use  update_event_exercise() instead
+                return false;
+            }
         } else {
             $attempt['exe_id'] = $exe_id;
         }
 
         if ($debug) {
+            error_log("updateResults : $updateResults");
             error_log("Saving question attempt: ");
             error_log($sql);
         }
 
+        $recording_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+
+        if ($updateResults == false) {
         $attempt_id = Database::insert($TBL_TRACK_ATTEMPT, $attempt);
 
         if (defined('ENABLED_LIVE_EXERCISE_TRACKING')) {
-            $recording_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
             if ($debug) {
                 error_log("Saving e attempt recording ");
             }
@@ -566,7 +553,27 @@ function saveQuestionAttempt(
                 'session_id' => $session_id,
             );
             Database::insert($recording_table, $attempt_recording);
+            }
+        } else {
+            Database::update($TBL_TRACK_ATTEMPT, $attempt,
+                array('exe_id = ? AND question_id = ? AND user_id = ? ' => array($exe_id, $question_id, $user_id)));
 
+            if (defined('ENABLED_LIVE_EXERCISE_TRACKING')) {
+
+                 $attempt_recording = array(
+                    'exe_id' => $exe_id,
+                    'question_id' => $question_id,
+                    'marks' => $score,
+                    'insert_date' => $now,
+                    'author' => '',
+                    'session_id' => $session_id,
+                );
+
+                Database::update($recording_table, $attempt_recording,
+                    array('exe_id = ? AND question_id = ? AND session_id = ? ' => array($exe_id, $question_id, $session_id))
+                );
+            }
+            $attempt_id = $exe_id;
         }
         return $attempt_id;
     } else {
@@ -581,28 +588,47 @@ function saveQuestionAttempt(
  * @param	int		Answer ID
  * @param	int		Whether this answer is correct (1) or not (0)
  * @param	string	Coordinates of this point (e.g. 123;324)
+ * @param	bool update results?
  * @return	boolean	Result of the insert query
  * @uses Course code and user_id from global scope $_cid and $_user
  */
-function saveExerciseAttemptHotspot($exe_id, $question_id, $answer_id, $correct, $coords, $exerciseId = 0)
+function saveExerciseAttemptHotspot($exe_id, $question_id, $answer_id, $correct, $coords, $updateResults = false, $exerciseId = 0)
 {
     global $safe_lp_id, $safe_lp_item_id;
 
-    //Validation in case of fraud  with actived control time
-    if (!ExerciseLib::exercise_time_control_is_valid($exerciseId, $safe_lp_id, $safe_lp_item_id)) {
-        $correct = 0;
+    if ($updateResults == false) {
+        // Validation in case of fraud with activated control time
+        if (!ExerciseLib::exercise_time_control_is_valid($exerciseId, $safe_lp_id, $safe_lp_item_id)) {
+            $correct = 0;
+        }
     }
-
     $tbl_track_e_hotspot = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-    $sql = "INSERT INTO $tbl_track_e_hotspot (hotspot_user_id, c_id, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate)".
-        " VALUES ('".api_get_user_id()."',".
-        " '".api_get_course_int_id()."', ".
-        " '".Database :: escape_string($exe_id)."', ".
-        " '".Database :: escape_string($question_id)."',".
-        " '".Database :: escape_string($answer_id)."',".
-        " '".Database :: escape_string($correct)."',".
-        " '".Database :: escape_string($coords)."')";
-    return $result = Database::query($sql);
+    if ($updateResults) {
+        $params = array(
+            'hotspot_correct' => $correct,
+            'hotspot_coordinate' => $coords
+        );
+        Database::update($tbl_track_e_hotspot, $params,
+            array('hotspot_user_id = ? AND hotspot_exe_id = ? AND hotspot_question_id = ? AND hotspot_answer_id = ? ' => array(
+                api_get_user_id(),
+                $exe_id,
+                $question_id,
+                $answer_id,
+                $answer_id
+
+            )));
+
+    } else {
+        $sql = "INSERT INTO $tbl_track_e_hotspot (hotspot_user_id, c_id, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate)".
+            " VALUES ('".api_get_user_id()."',".
+            " '".api_get_course_int_id()."', ".
+            " '".Database :: escape_string($exe_id)."', ".
+            " '".Database :: escape_string($question_id)."',".
+            " '".Database :: escape_string($answer_id)."',".
+            " '".Database :: escape_string($correct)."',".
+            " '".Database :: escape_string($coords)."')";
+        return $result = Database::query($sql);
+    }
 }
 
 /**
@@ -1179,14 +1205,16 @@ function get_all_exercise_results_by_user($user_id, $courseId, $session_id = 0)
  * @return  array   with the results
  *
  */
-function get_exercise_results_by_attempt($exe_id)
+function get_exercise_results_by_attempt($exe_id, $status = null)
 {
     $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $table_track_attempt_recording = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
     $exe_id = intval($exe_id);
 
-    $sql = "SELECT * FROM $table_track_exercises WHERE status = '' AND exe_id = $exe_id";
+    $status = Database::escape_string($status);
+
+    $sql = "SELECT * FROM $table_track_exercises WHERE status = '".$status."' AND exe_id = $exe_id";
 
     $res = Database::query($sql);
     $list = array();

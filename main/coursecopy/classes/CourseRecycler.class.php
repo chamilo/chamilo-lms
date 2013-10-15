@@ -362,13 +362,16 @@ class CourseRecycler
                     while ($obj = Database::fetch_object($db_result)) {
                         $orphan_ids[] = $obj->id;
                     }
-                    $orphan_ids = implode(',', $orphan_ids);
-                    $sql = "DELETE FROM ".$table_rel." WHERE c_id = ".$this->course_id." AND question_id IN(".$orphan_ids.")";
-                    Database::query($sql);
-                    $sql = "DELETE FROM ".$table_qui_ans." WHERE c_id = ".$this->course_id." AND question_id IN(".$orphan_ids.")";
-                    Database::query($sql);
-                    $sql = "DELETE FROM ".$table_qui_que." WHERE c_id = ".$this->course_id." AND id IN(".$orphan_ids.")";
-                    Database::query($sql);
+                    if (!empty($orphan_ids)) {
+                        $orphan_ids = implode(',', $orphan_ids);
+
+                        $sql = "DELETE FROM ".$table_rel." WHERE c_id = ".$this->course_id." AND question_id IN(".$orphan_ids.")";
+                        Database::query($sql);
+                        $sql = "DELETE FROM ".$table_qui_ans." WHERE c_id = ".$this->course_id." AND question_id IN(".$orphan_ids.")";
+                        Database::query($sql);
+                        $sql = "DELETE FROM ".$table_qui_que." WHERE c_id = ".$this->course_id." AND id IN(".$orphan_ids.")";
+                        Database::query($sql);
+                    }
                 }
                 // Also delete questions categories and options
                 $sql = "DELETE FROM $table_qui_que_rel_cat WHERE c_id = ".$this->course_id;

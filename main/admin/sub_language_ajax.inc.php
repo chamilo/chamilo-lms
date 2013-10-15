@@ -40,7 +40,7 @@ if (isset($new_language) && isset($language_variable) && isset($file_id)) {
     }
     $variables_with_problems = '';
     if (!empty($result_array)) {
-        foreach($result_array as $key =>$result) {
+        foreach ($result_array as $key => $result) {
             if ($result == false) {
                 $variables_with_problems .=$key.' <br />';
             }

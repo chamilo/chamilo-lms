@@ -18,7 +18,7 @@ api_protect_admin_script(true);
 
 // setting breadcrumbs
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
+$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'session/session_list.php', 'name' => get_lang('SessionList'));
 
 // Database Table Definitions
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);

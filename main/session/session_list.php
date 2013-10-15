@@ -265,8 +265,9 @@ echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.Display::return_icon('new_session.png',get_lang('AddSession'),'',ICON_SIZE_MEDIUM).'</a>';
 if (api_is_platform_admin()) {
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_many_session_to_category.php">'.Display::return_icon('session_to_category.png',get_lang('AddSessionsInCategories'),'',ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_list.php">'.Display::return_icon('folder.png',get_lang('ListSessionCategory'),'',ICON_SIZE_MEDIUM).'</a>';
 }
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_list.php">'.Display::return_icon('folder.png',get_lang('ListSessionCategory'),'',ICON_SIZE_MEDIUM).'</a>';
+
 if ($list_type == 'complete') {
     echo '<a href="'.api_get_self().'?list_type=simple">'.Display::return_icon('view_remove.png',get_lang('Simple'),'',ICON_SIZE_MEDIUM).'</a>';
 } else {

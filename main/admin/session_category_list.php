@@ -8,11 +8,6 @@
  * Code
  */
 
-$language_file = 'admin';
-$cidReset = true;
-
-require_once '../inc/global.inc.php';
-
 api_protect_admin_script(true);
 
 // setting the section (for the tabs)
@@ -111,7 +106,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
 
     <div class="actions">
         <?php
-        echo '<div style="float:right;">
+        echo '<div>
 			<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_add.php">'.Display::return_icon('new_folder.png', get_lang('AddSessionCategory'), '', ICON_SIZE_MEDIUM).'</a>
 			<a href="'.api_get_path(WEB_CODE_PATH).'session/session_list.php">'.Display::return_icon('session.png', get_lang('ListSession'), '', ICON_SIZE_MEDIUM).'</a>
 	 	  </div>';
@@ -195,28 +190,23 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
             ?>
         </table>
         <br />
-
         <div align="left">
-
             <?php
             if ($num > $limit) {
                 if ($page) {
                     ?>
-                    <a href="<?php echo api_get_self(); ?>?page=<?php echo $page - 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo Security::remove_XSS($_REQUEST['order']); ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>"><?php echo get_lang('Previous'); ?></a>
+                    <a href="<?php echo api_get_self(); ?>?page=<?php echo $page - 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo Security::remove_XSS($_REQUEST['order']); ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>">
+                        <?php echo get_lang('Previous'); ?></a>
                 <?php
             } else {
                 echo get_lang('Previous');
             }
             ?>
-
                 |
-
                 <?php
-                if ($nbr_results > $limit) {
-                    ?>
-
-                    <a href="<?php echo api_get_self(); ?>?page=<?php echo $page + 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo Security::remove_XSS($_REQUEST['order']); ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>"><?php echo get_lang('Next'); ?></a>
-
+                if ($nbr_results > $limit) { ?>
+                    <a href="<?php echo api_get_self(); ?>?page=<?php echo $page + 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo Security::remove_XSS($_REQUEST['order']); ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>">
+                        <?php echo get_lang('Next'); ?></a>
                     <?php
                 } else {
                     echo get_lang('Next');
@@ -236,4 +226,3 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     </table>
 
 <?php }
-Display::display_footer();

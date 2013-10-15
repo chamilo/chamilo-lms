@@ -4,12 +4,6 @@
  * Implements the edition of course-session settings
  * @package chamilo.admin
  */
-// name of the language file that needs to be included
-$language_file='admin';
-$cidReset=true;
-
-require_once '../inc/global.inc.php';
-
 $id_session = intval($_GET['id_session']);
 SessionManager::protect_session_edit($id_session);
 
@@ -30,24 +24,26 @@ $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_C
 $course_info=api_get_course_info($_REQUEST['course_code']);
 $tool_name = $course_info['name'];
 
-$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('Sessions'));
-$interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang("SessionList"));
-$interbreadcrumb[]=array('url' => "resume_session.php?id_session=".$id_session,"name" => get_lang('SessionOverview'));
-$interbreadcrumb[]=array('url' => "session_course_list.php?id_session=$id_session","name" => api_htmlentities($session_name,ENT_QUOTES,$charset));
 
-$result = Database::query("SELECT s.name, c.title FROM $tbl_session_course sc,$tbl_session s,$tbl_course c
+$sql = "SELECT s.name, c.title FROM $tbl_session_course sc,$tbl_session s,$tbl_course c
                            WHERE sc.id_session=s.id AND
                                 sc.c_id = c.id AND
                                 sc.id_session='$id_session' AND
-                                sc.c_id='".$courseId."'");
+                                sc.c_id='".$courseId."'";
+$result = Database::query($sql);
 
 if (!list($session_name,$course_title)=Database::fetch_row($result)) {
 	header('Location: session_course_list.php?id_session='.$id_session);
 	exit();
 }
 
+$interbreadcrumb[]= array('url' => 'index.php',"name" => get_lang('Sessions'));
+$interbreadcrumb[]= array('url' => "session_list.php","name" => get_lang("SessionList"));
+$interbreadcrumb[]= array('url' => "resume_session.php?id_session=".$id_session,"name" => get_lang('SessionOverview'));
+$interbreadcrumb[]= array('url' => "session_course_list.php?id_session=$id_session","name" => $session_name);
+$id_coach = null;
 $arr_infos = array();
-if ($_POST['formSent']) {
+if (isset($_POST['formSent']) && $_POST['formSent']) {
 	$formSent=1;
 
 	// get all tutor by course_code in the session
@@ -61,7 +57,7 @@ if ($_POST['formSent']) {
 		}
 	}
 
-	$id_coachs= $_POST['id_coach'];
+	$id_coachs = $_POST['id_coach'];
 
 	if (is_array($id_coachs) && count($id_coachs) > 0) {
 
@@ -93,8 +89,8 @@ if ($_POST['formSent']) {
 }
 
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
-global $_configuration;
-if ($_configuration['multiple_access_urls']) {
+
+if (api_is_multiple_url_enabled()) {
     $tbl_access_rel_user= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $access_url_id = api_get_current_access_url_id();
     $sql="SELECT u.user_id,lastname,firstname,username FROM $tbl_user u LEFT JOIN $tbl_access_rel_user  a ON(u.user_id= a.user_id)
@@ -138,7 +134,9 @@ if(!empty($errorMsg)) {
 <?php
 foreach($coaches as $enreg) {
 ?>
-<option value="<?php echo $enreg['user_id']; ?>" <?php if((!$sent && (is_array($arr_infos) && in_array($enreg['user_id'],$arr_infos))) || ($sent && $enreg['user_id'] == $id_coach)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
+<option value="<?php echo $enreg['user_id']; ?>" <?php if (((is_array($arr_infos) && in_array($enreg['user_id'],$arr_infos))) || ($enreg['user_id'] == $id_coach)) echo 'selected="selected"'; ?>>
+    <?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?>
+</option>
 <?php
 }
 unset($coaches);
@@ -153,4 +151,3 @@ unset($coaches);
 </table>
 </form>
 <?php
-Display::display_footer();

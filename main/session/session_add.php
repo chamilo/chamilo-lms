@@ -292,4 +292,3 @@ echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_list.php">'.
 echo '</div>';
 
 $form->display();
-Display::display_footer();

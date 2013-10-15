@@ -35,6 +35,7 @@ class SessionManager
         if (Database::num_rows($r) != 1) { return array(); }
         return Database::fetch_array($r,'ASSOC');
     }
+
     /**
      * Creates a session
      * @param array Fields to use in the creation of the session
@@ -144,6 +145,7 @@ class SessionManager
         }
         return $session_id;
     }
+
     /**
      * Updates a session with the given array of field values
      * @param array An array of fields values
@@ -164,6 +166,7 @@ class SessionManager
             $session_field_value->save_field_values($params);
         }
     }
+
     /**
      * Checks whether a session already exists with the given name (used in
      * add() to avoid homonym sessions)
@@ -175,6 +178,7 @@ class SessionManager
         $result = Database::fetch_array(Database::query("SELECT COUNT(*) as count FROM ".Database::get_main_table(TABLE_MAIN_SESSION)." WHERE name = '$session_name' "));
         return $result['count'] > 0;
     }
+
     /**
      * Gets the admin session list callback of the session/session_list.php page
      * @param array order and limit keys
@@ -360,6 +364,7 @@ class SessionManager
         $num = $recorset['total_rows'];
         return $num;
     }
+
     /**
      * Gets the admin session list callback of the session/session_list.php
      * page with all user/details in the right fomat
@@ -570,6 +575,7 @@ class SessionManager
 
         return $formatted_sessions;
     }
+
     /**
      *
      */
@@ -588,6 +594,7 @@ class SessionManager
         }
         return $array1;
     }
+
     /**
      * Converts all dates sent through the param array (given form) to correct
      * dates with timezones
@@ -1111,15 +1118,13 @@ class SessionManager
         }
     }
 
-
-
-  /**
-  * Creates a new extra field for a given session
-  * @param    string    Field's internal variable name
-  * @param    int        Field's type
-  * @param    string    Field's language var name
-  * @return int     new extra field id
-  */
+    /**
+    * Creates a new extra field for a given session
+    * @param    string    Field's internal variable name
+    * @param    int        Field's type
+    * @param    string    Field's language var name
+    * @return int     new extra field id
+    */
     public static function create_session_extra_field ($fieldvarname, $fieldtype, $fieldtitle) {
         // database table definition
         $params = array('field_variable' => $fieldvarname,
@@ -1138,10 +1143,10 @@ class SessionManager
      * @param    string    Field value
      * @return    boolean    true if field updated, false otherwise
      */
-    public static function update_session_extra_field_value ($session_id, $fname, $fvalue = null) {
+    public static function update_session_extra_field_value($session_id, $fname, $fvalue = null) {
 
-        $session_field_value = new SessionFieldValue();
-        $session_field_value->update($params);
+        /*$session_field_value = new SessionFieldValue();
+        $session_field_value->update($params);*/
 
         $t_sf         = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
         $t_sfv         = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);

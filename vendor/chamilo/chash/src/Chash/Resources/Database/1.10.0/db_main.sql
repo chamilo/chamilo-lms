@@ -594,7 +594,7 @@ CREATE TABLE IF NOT EXISTS session_field (
 
 DROP TABLE IF EXISTS session_field_options;
 CREATE TABLE IF NOT EXISTS session_field_options(
-    id	int NOT NULL auto_increment,
+    id int unsigned NOT NULL auto_increment,
     field_id int NOT NULL,
     option_value text,
     option_display_text varchar(255),
@@ -607,7 +607,7 @@ CREATE TABLE IF NOT EXISTS session_field_options(
 
 DROP TABLE IF EXISTS session_field_values;
 CREATE TABLE IF NOT EXISTS session_field_values(
-    id bigint NOT NULL auto_increment,
+    id bigint unsigned NOT NULL auto_increment,
     session_id int NOT NULL,
     field_id int NOT NULL,
     field_value text,

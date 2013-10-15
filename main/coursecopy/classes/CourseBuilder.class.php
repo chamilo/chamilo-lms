@@ -491,8 +491,9 @@ class CourseBuilder
         // Building a fictional test for collecting orphan questions.
         $build_orphan_questions = !empty($_POST['recycle_option']); // When a course is emptied this option should be activated (true).
 
-        //1st union gets the orphan questions from deleted exercises
-        //2nd union gets the orphan questions from question that were deleted in a exercise.
+        // 1st union gets the orphan questions from deleted exercises
+        // 2nd union gets the orphan questions from question that were deleted in a exercise.
+
         $sql = " (
                     SELECT question_id, q.* FROM $table_que q INNER JOIN $table_rel r
                     ON (q.c_id = r.c_id AND q.id = r.question_id)
@@ -521,8 +522,13 @@ class CourseBuilder
             $build_orphan_questions = true;
             $orphanQuestionIds = array();
             while ($obj = Database::fetch_object($db_result)) {
-                //Avoid adding the same question twice
-                $obj->id = $obj->question_id;
+
+                // Orphan questions
+                if (!empty($obj->question_id)) {
+                    $obj->id = $obj->question_id;
+                }
+
+                // Avoid adding the same question twice
                 if (!isset($this->course->resources[$obj->id])) {
                     $question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture,$obj->level, $obj->extra);
                     $sql = "SELECT * FROM $table_ans WHERE c_id = $course_id AND question_id = ".$obj->id;

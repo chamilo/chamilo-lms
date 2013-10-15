@@ -7,6 +7,7 @@ set_time_limit(0);
 if (PHP_SAPI != 'cli') {
     die("Cannot be called by any other method than the command line.");
 }
+require_once __DIR__.'/vendor/autoload.php';
 
 $app = require_once dirname(__FILE__).'/main/inc/global.inc.php';
 
@@ -77,14 +78,13 @@ $cli->addCommands(
 
         // Chash commands.
         new Chash\Command\Database\RunSQLCommand(),
-        new Chash\Command\Database\DumpCommand(),
-        new Chash\Command\Database\RestoreCommand(),
+        //new Chash\Command\Database\DumpCommand(),
+        //new Chash\Command\Database\RestoreCommand(),
         new Chash\Command\Database\SQLCountCommand(),
         new Chash\Command\Database\FullBackupCommand(),
-        new Chash\Command\Database\DropDatabaseCommand(),
+        //new Chash\Command\Database\DropDatabaseCommand(),
 
         new Chash\Command\Files\CleanTempFolderCommand(),
-        new Chash\Command\Files\CleanConfigFilesCommand(),
 
         new Chash\Command\Translation\ExportLanguageCommand(),
         new Chash\Command\Translation\ImportLanguageCommand()

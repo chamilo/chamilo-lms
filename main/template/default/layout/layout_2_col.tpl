@@ -27,6 +27,7 @@
             {#  User Profile links #}
             {% include app.template_style ~ "/index/profile_block.tpl" %}
 
+            {#  Social links #}
             {% include app.template_style ~ "/index/profile_social_block.tpl" %}
 
             {#  Course block - admin #}
@@ -34,6 +35,9 @@
 
             {#  Course block - teacher #}
             {% include app.template_style ~ "/index/teacher_block.tpl" %}
+
+            {#  Session block #}
+            {% include app.template_style ~ "/index/session_block.tpl" %}
 
             {#  Notice  #}
             {% include app.template_style ~ "/index/notice_block.tpl" %}

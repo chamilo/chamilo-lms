@@ -31,8 +31,8 @@ $htmlHeadXtra = api_get_datetime_picker_js($htmlHeadXtra);
 $id = null;
 $url_action = api_get_self();
 if (isset($_GET['id'])) {
-   $id = intval($_GET['id']);
-   $url_action = '?id='.$id;
+    $id = intval($_GET['id']);
+    $url_action = '?id='.$id;
 }
 
 $add_coach = null;
@@ -267,7 +267,7 @@ if ($form->validate()) {
     if (isset($params['id'])) {
         SessionManager::update($params);
         header('Location: resume_session.php?id_session='.$params['id']);
-		exit;
+        exit;
     } else {
         $session_id = SessionManager::add($params);
         if ($session_id) {
@@ -286,7 +286,9 @@ function check_session_name($name) {
 Display::display_header($tool_name);
 
 echo '<div class="actions">';
-echo '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_list.php">'.
+        Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).
+     '</a>';
 echo '</div>';
 
 $form->display();

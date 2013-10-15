@@ -35,7 +35,7 @@ class PageController
      * @uses PageController::show_right_block() to include the image in a larger user block
      * @assert (-1) === false
      */
-    public function return_user_image_block($user_id = null)
+    public function setUserImageBlock($user_id = null)
     {
         if (empty($user_id)) {
             $user_id = api_get_user_id();
@@ -70,7 +70,7 @@ class PageController
      * @return string HTML <div> with links
      * @assert () != ''
      */
-    public function return_course_block($filter = null)
+    public function setCourseBlock($filter = null)
     {
         $show_course_link = false;
         $display_add_course_link = false;
@@ -139,12 +139,38 @@ class PageController
     }
 
     /**
+     *
+     */
+    public function setSessionBlock()
+    {
+        $showSessionBlock = false;
+
+        if (api_is_platform_admin()) {
+            $showSessionBlock = true;
+        }
+
+        if (api_get_setting('allow_teachers_to_create_sessions') == 'true' && api_is_allowed_to_create_course()) {
+            $showSessionBlock = true;
+        }
+
+        if ($showSessionBlock) {
+            $content = array(
+                array(
+                    'href'  => api_get_path(WEB_CODE_PATH).'session/session_add.php',
+                    'title' => get_lang('AddSession')
+                )
+            );
+            $this->show_right_block(get_lang('Sessions'), $content, 'session_block');
+        }
+    }
+
+    /**
      * Returns the profile block, showing links to the messaging and social
      * network tools. The user ID is taken from the active session
      * @return string HTML <div> block
      * @assert () != ''
      */
-    public function return_profile_block()
+    public function setProfileBlock()
     {
         if (api_get_setting('allow_message_tool') == 'true') {
             if (api_get_setting('allow_social_tool') == 'true') {
@@ -156,9 +182,9 @@ class PageController
     }
 
     /**
-     * Get the section course section
+     * Get the course - session menu
      */
-    public function getSectionCourseBlock()
+    public function setCourseSessionMenu()
     {
         $app                   = $this->app;
         $courseURL             = $app['url_generator']->generate('userportal', array('type' => 'courses'));

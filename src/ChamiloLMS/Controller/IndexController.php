@@ -134,11 +134,11 @@ class IndexController extends CommonController
         $this->setLoginForm($app);
 
         if (!api_is_anonymous()) {
-            $pageController->return_profile_block();
-            $pageController->return_user_image_block();
+            $pageController->setProfileBlock();
+            $pageController->setUserImageBlock();
 
             if (api_is_platform_admin()) {
-                $pageController->return_course_block();
+                $pageController->setCourseBlock();
             } else {
                 $pageController->return_teacher_link();
             }

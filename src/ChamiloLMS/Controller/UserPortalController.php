@@ -71,10 +71,12 @@ class UserPortalController extends CommonController
         };
         $app['knp_menu.menus'] = array('main' => 'my_main_menu');*/
         $app['template']->assign('content', $items);
-        $pageController->getSectionCourseBlock();
-        $pageController->return_profile_block();
-        $pageController->return_user_image_block();
-        $pageController->return_course_block($filter);
+        $pageController->setCourseSessionMenu();
+
+        $pageController->setProfileBlock();
+        $pageController->setUserImageBlock();
+        $pageController->setCourseBlock($filter);
+        $pageController->setSessionBlock();
         $pageController->return_reservation_block();
         $pageController->returnNavigationLinks($app['template']->getNavigationLinks());
 

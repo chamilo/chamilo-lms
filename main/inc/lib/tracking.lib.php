@@ -3735,12 +3735,14 @@ class TrackingCourseLog
         if (empty($session_id)) {
             $survey_user_list = array();
             $survey_list = survey_manager::get_surveys($course_code, $session_id);
-            $total_surveys = count($survey_list);
-            foreach ($survey_list as $survey) {
-                $user_list = survey_manager::get_people_who_filled_survey($survey['survey_id'], false, $courseInfo['real_id']);
+            if (!empty($survey_list)) {
+                $total_surveys = count($survey_list);
+                foreach ($survey_list as $survey) {
+                    $user_list = survey_manager::get_people_who_filled_survey($survey['survey_id'], false, $courseInfo['real_id']);
 
-                foreach ($user_list as $user_id) {
-                    isset($survey_user_list[$user_id]) ? $survey_user_list[$user_id]++ : $survey_user_list[$user_id] = 1;
+                    foreach ($user_list as $user_id) {
+                        isset($survey_user_list[$user_id]) ? $survey_user_list[$user_id]++ : $survey_user_list[$user_id] = 1;
+                    }
                 }
             }
         }

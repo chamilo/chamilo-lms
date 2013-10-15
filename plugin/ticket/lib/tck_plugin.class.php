@@ -15,7 +15,7 @@ class TicketPlugin extends Plugin
     function install() {
     	
     	// Create database tables
-    	require_once api_get_path(SYS_PLUGIN_PATH).'ticket/database.php';
+    	require_once api_get_path(SYS_PLUGIN_PATH).PLUGIN_NAME.'/database.php';
     	
     	// Create link tab
     	$homep = api_get_path(SYS_PATH).'home/'; //homep for Home Path

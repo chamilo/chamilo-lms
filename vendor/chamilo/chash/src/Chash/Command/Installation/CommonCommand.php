@@ -883,11 +883,11 @@ class CommonCommand extends AbstractCommand
     }
 
     /**
-     * @param $files
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Symfony\Component\Finder\Finder $files
+     * @param OutputInterface $output
      * @return int
      */
-    public function removeFiles($files, OutputInterface $output)
+    public function removeFiles(\Symfony\Component\Finder\Finder $files, OutputInterface $output)
     {
         $dryRun = $this->getConfigurationHelper()->getDryRun();
 
@@ -897,7 +897,6 @@ class CommonCommand extends AbstractCommand
         }
 
         $fs = new Filesystem();
-
         try {
             if ($dryRun) {
                 $output->writeln('<comment>Files to be removed (--dry-run is on).</comment>');

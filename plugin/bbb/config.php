@@ -3,7 +3,7 @@
 
 /* bbb parameters that will be registered in the course settings */
 
-require_once '../../main/inc/global.inc.php';
+use \ChamiloSession as Session;
 require_once 'lib/bbb.lib.php';
 require_once 'lib/bbb_api.php';
 require_once 'lib/bbb_plugin.class.php';

@@ -38,3 +38,28 @@ msgstr "Marcar para revisar después"
 
 msgid "SelectAnAnswerToContinue"
 msgstr "Seleccione una respuesta antes de seguir"
+
+msgid "Add"
+msgstr "Agregar"
+
+msgid "Edit"
+msgstr "Editar"
+
+msgid "Add children"
+msgstr "Agregar sub categorías"
+
+msgid "Max score"
+msgstr "Puntuación máxima"
+
+msgid "Min chars"
+msgstr "Mínima cantidad de caracteres"
+
+msgid "Parent"
+msgstr "Padre"
+
+msgid "List"
+msgstr "Lista"
+
+
+
+

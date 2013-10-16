@@ -67,7 +67,7 @@ unset($_SESSION['temp_audio_nanogong']);
 
 $htmlHeadXtra[] = '<script>
 function startApplet() {
-    appletsource = "<applet code=\"com.hammurapi.jcapture.JCaptureApplet.class\" archive=\"../inc/lib/jcapture/lib/jcapture.jar\" width=\"0\" height=\"0\">";
+    appletsource = "<applet code=\"com.hammurapi.jcapture.JCaptureApplet.class\" archive=\"jcapture/lib/jcapture.jar\" width=\"0\" height=\"0\">";
     appletsource += "<param name=\"outputDir\" value=\"'.$base_work_dir.'\">";
     appletsource += "</applet>";
     document.getElementById("appletplace").innerHTML=appletsource;
@@ -1084,7 +1084,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
     }
     
     echo '<a href="#" style="margin-top:-5px;" id="jcapture">';
-    echo Display::display_icon('capture.png', get_lang('UplUploadDocument'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo Display::display_icon('capture.png', get_lang('CatchScreenCasts'), '', ICON_SIZE_MEDIUM).'</a>';
 
     // Create directory
     if (!$is_certificate_mode) {
@@ -1094,8 +1094,6 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         <?php
     }
 }
-
-echo $lib_path;
 
 $table_footer = '';
 $total_size = 0;

@@ -67,7 +67,7 @@ unset($_SESSION['temp_audio_nanogong']);
 
 $htmlHeadXtra[] = '<script>
 function startApplet() {
-    appletsource = "<applet code=\"com.hammurapi.jcapture.JCaptureApplet.class\" archive=\"jcapture/lib/jcapture.jar\" width=\"0\" height=\"0\">";
+    appletsource = "<applet code=\"com.hammurapi.jcapture.JCaptureApplet.class\" archive=\"jcapture\lib\jcapture.jar\" width=\"0\" height=\"0\">";
     appletsource += "<param name=\"outputDir\" value=\"'.$base_work_dir.'\">";
     appletsource += "</applet>";
     document.getElementById("appletplace").innerHTML=appletsource;

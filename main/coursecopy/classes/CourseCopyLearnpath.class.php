@@ -109,7 +109,7 @@ class CourseCopyLearnpath extends Resource {
 	 */
 	function CourseCopyLearnpath($id,$type,$name, $path,$ref,$description,$content_local,$default_encoding,$default_view_mode,$prevent_reinit,$force_commit,
 	                             $content_maker, $display_order,$js_lib,$content_license,$debug, $visibility, $author, $preview_image,
-	                             $use_max_score, $autolunch, $created_on, $modified_on, $publicated_on, $expired_on, $session_id, $items) {
+	                             $use_max_score, $autolunch, $created_on, $modified_on, $publicated_on, $expired_on, $session_id, $subscribe_users, $items) {
 		parent::Resource($id,RESOURCE_LEARNPATH);
 		$this->lp_type = $type;
 		$this->name = $name;
@@ -138,6 +138,7 @@ class CourseCopyLearnpath extends Resource {
 		
 		$this->author= $author;
 		$this->preview_image= $preview_image;
+        $this->subscribe_users = $subscribe_users;
 		
 		$this->items = $items;
 	}

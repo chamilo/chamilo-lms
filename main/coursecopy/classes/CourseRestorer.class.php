@@ -1829,6 +1829,7 @@ class CourseRestorer
         				"modified_on        = '".self::DBUTF8escapestring($lp->modified_on)."', " .
         				"publicated_on      = '".self::DBUTF8escapestring($lp->publicated_on)."', " .
 				        "expired_on         = '".self::DBUTF8escapestring($lp->expired_on)."', " .
+                        "subscribe_users    = '".self::DBUTF8escapestring($lp->subscribe_users)."', " .
 						"debug              = '".self::DBUTF8escapestring($lp->debug)."' $condition_session ";
 
 				Database::query($sql);

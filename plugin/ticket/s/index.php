@@ -1,4 +1,4 @@
 <?php
-require_once '../../../main/inc/global.inc.php';
-header('location:'.api_get_path(WEB_PATH).'main/support/myticket.php?message=success');
+require_once '../config.php';
+header('location:'.api_get_path(WEB_PLUGIN_PATH).PLUGIN_NAME.'/s/myticket.php?message=success');
 ?>

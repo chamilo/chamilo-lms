@@ -31,9 +31,9 @@ class TicketPlugin extends Plugin
 			$lang = api_get_setting('platformLanguage');
 		}
 		$link_url = api_get_path(WEB_PLUGIN_PATH).'ticket/s/myticket.php';
-		
+
 		$home_menu = '<li class="show_menu"><a href="'.$link_url.'" target="_self"><span>Ticket</span></a></li>';
-		
+
     	// Write
 		if (file_exists($homep.$menuf.'_'.$lang.$ext)) {
 			if (is_writable($homep.$menuf.'_'.$lang.$ext)) {
@@ -56,7 +56,7 @@ class TicketPlugin extends Plugin
 			fputs($fp, $home_menu);
 			fclose($fp);
 		}
-		
+
     }
 
     function uninstall() {

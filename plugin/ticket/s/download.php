@@ -1,5 +1,7 @@
 <?php
-require_once '../../../main/inc/global.inc.php';
+require_once '../config.php';
+$plugin = TicketPlugin::create();
+
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
@@ -11,8 +13,8 @@ if(!isset($_GET['file']) || ! isset($_GET['title']) || !isset($_GET['ticket_id']
 }
 if(!api_is_platform_admin()){	
 	$ticket_id = $_GET['ticket_id'];
-	$table_support_messages = Database::get_main_table(TABLE_SUPPORT_MESSAGES);
-	$table_support_tickets = Database::get_main_table(TABLE_SUPPORT_TICKETS);
+	$table_support_messages = Database::get_main_table(TABLE_SUPPORT_MESSAGE);
+	$table_support_tickets = Database::get_main_table(TABLE_SUPPORT_TICKET);
 	$table_support_message_attachments = Database::get_main_table(TABLE_SUPPORT_MESSAGE_ATTACHMENTS);
 	$sql ="SELECT DISTINCT  ticket.request_user FROM  $table_support_tickets ticket, $table_support_messages message,  $table_support_message_attachments attch 
 			WHERE ticket.ticket_id = message.ticket_id  AND attch.message_id = message.message_id  AND ticket.ticket_id = $ticket_id";
@@ -36,6 +38,5 @@ $full_file_name = $path_message_attach.$file_url;
 if (Security::check_abs_path($full_file_name, $path_message_attach)) {
 	DocumentManager::file_send_for_download($full_file_name,TRUE, $title);
 }
-exit;
 
- ?>
+exit;

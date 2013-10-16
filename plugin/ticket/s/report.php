@@ -2,19 +2,17 @@
 /* 		INIT SECTION	*/
 $language_file= array('messages','userInfo', 'admin','trad4all');
 $cidReset	= true;
-require_once '../../../main/inc/global.inc.php';
-require_once 'ticket.class.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
+require_once '../config.php';
+$plugin = TicketPlugin::create();
 
 api_block_anonymous_users();
-
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
 if(!api_is_allowed_to_edit()){
 	api_not_allowed();
 }
-$nameTools = api_xml_http_response_encode(get_lang('Soporte Virtual'));
+//$nameTools = api_xml_http_response_encode(get_lang('Soporte Virtual'));
 $this_section = 'Reportes';
 unset($_SESSION['this_section']);
 

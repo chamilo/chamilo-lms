@@ -1,7 +1,9 @@
 <?php
-require_once '../../../main/inc/global.inc.php';
+require_once '../config.php';
+$plugin = TicketPlugin::create();
+
 require_once 'tutor_report.lib.php';
-include_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
+
 $htmlHeadXtra[] = '
 	<script type="text/javascript">
 $(document).ready(function (){

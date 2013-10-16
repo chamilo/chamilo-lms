@@ -1,18 +1,13 @@
 <?php
-/*   INIT SECTION   */
+/*    INIT SECTION   */
 $language_file = array('messages','userInfo', 'admin');
 $cidReset = true;
-require_once '../config.php';//require_once '../../../main/inc/global.inc.php';
+require_once '../config.php';
 $plugin = TicketPlugin::create();
-require_once 'ticket.class.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 api_block_anonymous_users();
-
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
-
-//$nameTools = api_xml_http_response_encode(get_lang('Soporte Virtual'));
 
 $htmlHeadXtra[]='
 <script>
@@ -131,7 +126,6 @@ div.divTicket {
 	margin-left: 15%;
 	
 }
-
 </style>';
 $types = TicketManager::get_all_tickets_categories();
 $htmlHeadXtra[] = '<script language="javascript">
@@ -162,6 +156,8 @@ function show_form_send_ticket(){
 	echo '<form enctype="multipart/form-data" action="'.api_get_self().'" method="post" name="send_ticket" id="send_ticket"
  	onsubmit="return validate()" style="width:100%">';
 	echo '<input name="user_id_request" id="user_id_request" type="hidden" value="">';
+	
+	// Category
 	$select_types = '<div class="row">
 	<div class="label2">'.get_lang('Category').': </div>
        <div class="formw2">';
@@ -173,62 +169,110 @@ function show_form_send_ticket(){
 	$select_types .= "</select>";
 	$select_types .= '</div></div>';
 	echo $select_types;
+	
+	// Course
 	$courses_list = CourseManager::get_courses_list_by_user_id($user_id,false,true);
 	 $select_course = '<div id="user_request" >
 	 </div>';
 	echo $select_course;
-	//select status
-	$select_status = '<div class="row"  >
-	<div class="label2"  >'.get_lang('Status').': </div>
-	<div class="formw2">';
-	$select_status .= '<select style="width: 95%; " name = "status_id" id="status_id" value="PND">';
-	$status = TicketManager::get_all_tickets_status();
-	foreach ($status as $stat) {
-		if($stat['status_id']=='PND'){
-			$select_status .=  "<option value = '".$stat['status_id']."' selected >".$stat['name']."</option>";
+	
+	// Status
+	$status = array();
+	$status[NEWTCK] = $plugin->get_lang('StsNew');
+	$status[PENDING] = $plugin->get_lang('StsPending');
+	$status[UNCONFIRMED] = $plugin->get_lang('StsUnconfirmed');
+	$status[CLOSE] = $plugin->get_lang('StsClose');
+	$status[REENVIADO] = $plugin->get_lang('StsReenviado');
+	$select_status = '
+	<div class="row"  >
+		<div class="label2"  >'.get_lang('Status').': </div>
+		<div class="formw2">
+			<select style="width: 95%; " name = "status_id" id="status_id">';
+	//$status = TicketManager::get_all_tickets_status();
+	foreach ($status as $sts_key => $sts_name) {
+		if($sts_key=='PND'){
+			$select_status .=  "<option value = '".$sts_key."' selected >".$sts_name."</option>";
 		}else{
-			$select_status.= "<option value = '".$stat['status_id']."'>".$stat['name']."</option>";
+			$select_status.= "<option value = '".$sts_key."'>".$sts_name."</option>";
 		}
 	}
-	$select_status .= "</select>";
-	$select_status .= '</div></div>';
-	echo $select_status;
-	echo '<div class="row">
-	<div class="label2">'.$plugin->get_lang('Source').':</div>
-       <div class="formw2">
-			<select style="width: 95%; " name="source_id" id="source_id" >
-			<option value="MAI">'.get_lang('Email').'</option>
-			<option value="TEL">'.get_lang('Phone').'</option>
-			<option value="PRE">'.$plugin->get_lang('Presential').'</option>
+	$select_status .= '
 			</select>
 		</div>
 	</div>';
+	echo $select_status;
+	
+	// Source
+	$source = array();
+	$source[SRC_EMAIL] = $plugin->get_lang('SrcEmail');
+	$source[SRC_PHONE] = $plugin->get_lang('SrcPhone');
+	$source[SRC_PRESC] = $plugin->get_lang('SrcPresential');
+	$select_source = '
+	<div class="row">
+	<div class="label2">'.$plugin->get_lang('Source').':</div>
+       <div class="formw2">
+			<select style="width: 95%; " name="source_id" id="source_id" >';
+	foreach ($source as $src_key => $src_name) {
+		$select_source.= "<option value = '".$src_key."'>".$src_name."</option>";
+	}
+	$select_source .='
+			</select>
+		</div>
+	</div>';
+	echo $select_source;
+	
+	// Subject
 	echo '<div class="row" ><div class ="label2">'.get_lang('Subject').':</div>
        		<div class="formw2"><input type = "text" id ="subject" name="subject" value="" required ="" style="width:94%"/></div>
 		  </div>';
+	
+	// Email
 	echo '<div class="row" id="divEmail" ><div class ="label2">'.$plugin->get_lang('PersonalEmail').':</div>
        		<div class="formw2"><input type = "email" id ="personal_email" name="personal_email" value=""  style="width:94%"/></div>
 		  </div>';
 	echo '<input name="project_id" id="project_id" type="hidden" value="">';
 	echo '<input name="other_area" id="other_area" type="hidden" value="">';
 	echo '<input name="email" id="email" type="hidden" value="">';
+	
+	// Message
 	echo '<div class="row">
 		<div class="label2">'.get_lang('Message').'</div>
 		<div class="formw2">
 			<input type="hidden" id="content" name="content" value="" style="display:none">
-		<input type="hidden" id="content___Config" value="ToolbarSet=Messages&amp;Width=95%25&amp;Height=250&amp;ToolbarSets={ %22Messages%22: [  [ %22Bold%22,%22Italic%22,%22-%22,%22InsertOrderedList%22,%22InsertUnorderedList%22,%22Link%22,%22RemoveLink%22 ] ], %22MessagesMaximized%22: [  ] }&amp;LoadPlugin=[%22customizations%22]&amp;EditorAreaStyles=body { background: #ffffff; }&amp;ToolbarStartExpanded=false&amp;CustomConfigurationsPath=/main/inc/lib/fckeditor/myconfig.js&amp;EditorAreaCSS=/main/css/chamilo/default.css&amp;ToolbarComboPreviewCSS=/main/css/chamilo/default.css&amp;DefaultLanguage=es&amp;ContentLangDirection=ltr&amp;AdvancedFileManager=true&amp;BaseHref='.api_get_path(WEB_PATH).'main/Support/&amp;&amp;UserIsCourseAdmin=true&amp;UserIsPlatformAdmin=true" style="display:none">
+		<input type="hidden" id="content___Config" value="ToolbarSet=Messages&amp;Width=95%25&amp;Height=250&amp;ToolbarSets={ %22Messages%22: [  [ %22Bold%22,%22Italic%22,%22-%22,%22InsertOrderedList%22,%22InsertUnorderedList%22,%22Link%22,%22RemoveLink%22 ] ], %22MessagesMaximized%22: [  ] }&amp;LoadPlugin=[%22customizations%22]&amp;EditorAreaStyles=body { background: #ffffff; }&amp;ToolbarStartExpanded=false&amp;CustomConfigurationsPath=/main/inc/lib/fckeditor/myconfig.js&amp;EditorAreaCSS=/main/css/chamilo/default.css&amp;ToolbarComboPreviewCSS=/main/css/chamilo/default.css&amp;DefaultLanguage=es&amp;ContentLangDirection=ltr&amp;AdvancedFileManager=true&amp;BaseHref='.api_get_path(WEB_PLUGIN_PATH).PLUGIN_NAME.'/s/&amp;&amp;UserIsCourseAdmin=true&amp;UserIsPlatformAdmin=true" style="display:none">
 		<iframe id="content___Frame" src="/main/inc/lib/fckeditor/editor/fckeditor.html?InstanceName=content&amp;Toolbar=Messages" width="95%" height="250" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; background-color: transparent; background-image: none; width: 95%; height: 250px;">
 		</iframe>
 		</div>
 	</div>';
+	
+	// Phone
 	echo '<div class="row" ><div class ="label2">'.get_lang('Phone').' ('.$plugin->get_lang('Optional').'):</div>
        		<div class="formw2"><input type = "text" id ="phone" name="phone" value="" onkeyup="valid(this,'."'allowspace'".')" onblur="valid(this,'."'allowspace'".')" style="width:94%"/></div>
 		  </div>';
-	echo '<div class="row">
-			<div class="label2"><p></p></div>
-			<div class="formw2">
-				<input type="checkbox" name="priority_id" />'.$plugin->get_lang('PriorityHigh').'<br/></div>
-		</div>';
+	
+	// Priority
+	$select_priority = '<div class="row"  >
+	<div class="label2"  >'.$plugin->get_lang('Priority').': </div>
+	<div class="formw2">';
+	
+	$priority = array();
+	$priority[NORMAL] = $plugin->get_lang('PriorityNormal');
+	$priority[HIGH] = $plugin->get_lang('PriorityHigh');
+	$priority[LOW] = $plugin->get_lang('PriorityLow');
+	
+	$select_priority .= '<select style="width: 85px; " name = "priority_id" id="priority_id">';
+	foreach ($priority as $prty_key => $prty_name) {
+		if($sts_key== NORMAL){
+			$select_priority .=  "<option value = '".$prty_key."' selected >".$prty_name."</option>";
+		}else{
+			$select_priority.= "<option value = '".$prty_key."'>".$prty_name."</option>";
+		}
+	}
+	$select_priority .= "</select>";
+	$select_priority .= '</div></div>';
+	echo $select_priority;
+	
+	// Input file attach
 	echo '<div class="row">
 		<div class="label2">'.get_lang('FilesAttachment').'</div>
 		<div class="formw2">
@@ -254,26 +298,23 @@ function show_form_send_ticket(){
 	echo '</form></div>';
 }
 function save_ticket(){
-	$category_id	=	$_POST['category_id'];
-	$content		=	$_POST['content'];
+	global $plugin;
+	$category_id	= $_POST['category_id'];
+	$content		= $_POST['content'];
 	if ($_POST['phone']!="")	$content.=	'<p style="color:red">&nbsp;'.get_lang('Phone').': '.$_POST['phone'].'</p>';
-	$course_id		=	$_POST['course_id'];
-	$project_id		=	$_POST['project_id'];
-	$subject		=	$_POST['subject'];
-	$other_area		=	(int)$_POST['other_area'];
-	$email			=	$_POST['email'];
+	$course_id		= $_POST['course_id'];
+	$project_id		= $_POST['project_id'];
+	$subject		= $_POST['subject'];
+	$other_area		= (int)$_POST['other_area'];
+	$email			= $_POST['email'];
 	$personal_email	= $_POST['personal_email'];
-	$source 		=	$_POST['source_id'];
-	$user_id		=	$_POST['user_id_request'];
-	$priority = 'NRM';
-	
-	if (isset($_POST['priority_id'])){
-		$priority = 'ALT';
-	}
+	$source 		= $_POST['source_id'];
+	$user_id		= $_POST['user_id_request'];
+	$priority       = $_POST['priority_id'];
 	$status			= $_POST['status_id'];
 	$file_attachments =	$_FILES;
 	if(TicketManager::insert_new_ticket($category_id, $course_id, $project_id, $other_area, $email, $subject, $content,$personal_email, $file_attachments,$source,$priority,$status,$user_id,api_get_user_id())){
-		header('location:'.api_get_path(WEB_PATH).'main/support/myticket.php?message=success');
+		header('location:'.api_get_path(WEB_PLUGIN_PATH).PLUGIN_NAME.'/s/myticket.php?message=success');
 	}else{
 		Display::display_header(get_lang('ComposeMessage'));
 		Display::display_error_message($plugin->get_lang('ErrorRegisterMessage'));
@@ -371,7 +412,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
   <span style="float: right;">&nbsp;</span>
   <form id="search_simple" name="search_simple" method="get" action="'.api_get_self().'" class="form-search">
     <fieldset>
-    <span><label for="keyword">'.get_lang('langSeachAUser').': &nbsp;</label><input type="text" name="keyword" size="25"></span>
+    <span><label for="keyword">'.get_lang('langSearchAUser').': &nbsp;</label><input type="text" name="keyword" size="25"></span>
     <span><button type="submit" name="submit" class="btn btn">'.get_lang('Search').'</button></span>
     <div class="clear"></div>
     </fieldset>

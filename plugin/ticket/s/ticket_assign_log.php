@@ -1,7 +1,8 @@
 <?php
 $language_file = array ('registration');
-require_once '../../../main/inc/global.inc.php';
-require_once 'ticket.class.php';
+require_once '../config.php';
+$plugin = TicketPlugin::create();
+
 $ticket_id = intval($_POST['ticket_id']);
 $history = TicketManager::get_assign_log($ticket_id);
 ?>

@@ -1,5 +1,6 @@
 <?php
-require_once '../../../main/inc/global.inc.php';
+require_once '../config.php';
+$plugin = TicketPlugin::create();
 
 api_protect_course_script();
 if (!api_is_allowed_to_edit()){

@@ -54,25 +54,46 @@ if (isset($_SESSION['temp_audio_nanogong']) && !empty($_SESSION['temp_audio_nano
 if (isset($_SESSION['temp_realpath_image']) && !empty($_SESSION['temp_realpath_image']) && is_file($_SESSION['temp_realpath_image'])) {
     unlink($_SESSION['temp_realpath_image']);
 }
-
+$course_info = api_get_course_info();
+$course_dir = $course_info['path'].'/document';
+$sys_course_path = api_get_path(SYS_COURSE_PATH);
+$base_work_dir = $sys_course_path.$course_dir;
+$http_www = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document';
+$document_path = $base_work_dir;
 //Removing sessions
 unset($_SESSION['draw_dir']);
 unset($_SESSION['paint_dir']);
 unset($_SESSION['temp_audio_nanogong']);
 
+$htmlHeadXtra[] = '<script>
+function startApplet() {
+    appletsource = "<applet code=\"com.hammurapi.jcapture.JCaptureApplet.class\" archive=\"../inc/lib/jcapture/lib/jcapture.jar\" width=\"0\" height=\"0\">";
+    appletsource += "<param name=\"outputDir\" value=\"'.$base_work_dir.'\">";
+    appletsource += "</applet>";
+    document.getElementById("appletplace").innerHTML=appletsource;
+}
+$(function() {
+    $("#jcapture").click(function(){
+        startApplet();
+    });
+});
+</script>';
+
 // Create directory certificates
 DocumentManager::create_directory_certificate_in_course(api_get_course_id());
 
-$course_info = api_get_course_info();
+
 
 if (empty($course_info)) {
     api_not_allowed(true);
 }
 
-$course_dir = $course_info['path'].'/document';
-$sys_course_path = api_get_path(SYS_COURSE_PATH);
-$base_work_dir = $sys_course_path.$course_dir;
-$http_www = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document';
+
+
+?>
+
+<div id="appletplace"></div>
+<?php
 
 $dbl_click_id = 0; // Used for avoiding double-click
 
@@ -1061,6 +1082,10 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         echo '<a href="upload.php?'.api_get_cidreq().'&id='.$current_folder_id.'">';
         echo Display::display_icon('upload_file.png', get_lang('UplUploadDocument'), '', ICON_SIZE_MEDIUM).'</a>';
     }
+    
+    echo '<a href="#" style="margin-top:-5px;" id="jcapture">';
+    echo Display::display_icon('capture.png', get_lang('UplUploadDocument'), '', ICON_SIZE_MEDIUM).'</a>';
+
     // Create directory
     if (!$is_certificate_mode) {
         ?>
@@ -1069,6 +1094,8 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         <?php
     }
 }
+
+echo $lib_path;
 
 $table_footer = '';
 $total_size = 0;

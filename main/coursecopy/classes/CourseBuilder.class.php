@@ -835,6 +835,7 @@ class CourseBuilder
                                 $obj->publicated_on,
                                 $obj->expired_on,
                                 $obj->session_id,
+                                $obj->subscribe_users,
                                 $items);
             $this->course->add_resource($lp);
         }

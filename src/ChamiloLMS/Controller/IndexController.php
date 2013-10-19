@@ -15,9 +15,6 @@ use Symfony\Component\Finder\Finder;
  */
 class IndexController extends CommonController
 {
-    public $section;
-    public $languageFiles = array('courses', 'index', 'admin');
-
     /**
      * @param \Silex\Application $app
      *

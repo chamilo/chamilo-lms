@@ -71,8 +71,9 @@ class om_integration {
         $urlWsdl = CONFIG_OMSERVER_BASE_URL . "/services/UserService?wsdl";
 	$omServices = new SoapClient( $urlWsdl );
         //Verifying if there is already an active session
+        if(empty($_SESSION['sessOpenMeeting'])){
         $gsFun = $omServices->getSession($objGetSession);
-        $objloginUser->SID = $this->sessionId = $gsFun->return->session_id;
+        $_SESSION['sessOpenMeeting'] = $objloginUser->SID = $this->sessionId = $gsFun->return->session_id;
         $objloginUser->username = CONFIG_OMUSER_SALT;
         $objloginUser->userpass = CONFIG_OMPASS_SALT;
         
@@ -82,6 +83,10 @@ class om_integration {
          return true;
        else 
          return false;
+       }else{
+         $this->sessionId = $_SESSION['sessOpenMeeting'];
+         return true;  
+       }
       }catch( SoapFault $e){
           echo "<h1>Warning</h1>
                 <p>We have detected some problems </br>
@@ -98,32 +103,32 @@ class om_integration {
       try{    
         $objAddRoom = new addRoomWithModerationAndExternalType();
         $roomtypes_id = $isModerated = ( $this->is_teacher() ) ? 1 : 2 ;
+        $params['c_id'] = api_get_course_int_id();
         $course_name = 'COURSE_ID_' . $params['c_id'] .'_NAME_' . $params['meeting_name'];
         $urlWsdl = CONFIG_OMSERVER_BASE_URL . "/services/RoomService?wsdl";
         
         $objAddRoom->SID = $this->sessionId;
         $objAddRoom->name = $course_name;
         $objAddRoom->roomtypes_id = $roomtypes_id;
-        $objAddRoom->comment = 'Curso: ' . $params['meeting_name'] . ' </br>Plugin for Chamilo';
+        $objAddRoom->comment = 'Curso: ' . $params['meeting_name'] . ' Plugin for Chamilo';
         $objAddRoom->numberOfPartizipants = 40;
         $objAddRoom->ispublic = true;
         $objAddRoom->appointment = false;
         $objAddRoom->isDemoRoom = false;
         $objAddRoom->demoTime = false;
         $objAddRoom->isModeratedRoom = $isModerated;
-        $objAddRoom->externalRoomType = 'chamilo';
+        $objAddRoom->externalRoomType = true;
         
         $omServices = new SoapClient( $urlWsdl );
         $adFun = $omServices->addRoomWithModerationAndExternalType( $objAddRoom );
         
         if( $adFun->return > -1 ){
-            $params['id'] = $adFun->return;
+            $meetingId = $params['id'] = $adFun->return;
             $params['status'] = '1';
             $params['meeting_name'] = $course_name;
-            $params['c_id'] = api_get_course_int_id();
             $params['created_at'] = date('l jS \of F Y h:i:s A');
-            
-            $meetingId = Database::insert($this->table, $params);
+        
+            Database::insert($this->table, $params);
             
             $this->join_meeting($meetingId);
         }else{
@@ -149,7 +154,6 @@ class om_integration {
     function join_meeting($meetingid) {
         
         if (empty($meetingid)) { return false; }
-        $pass = $this->get_user_meeting_password();
         $meeting_data = Database::select('*', $this->table, array('where' => array('id = ? AND status = 1 ' => $meetingid)), 'first');
         if (empty($meeting_data)) {
             if ($this->debug) error_log("meeting does not exist: $meetingid ");
@@ -162,9 +166,20 @@ class om_integration {
        $urlWithoutProtocol = str_replace("http://",  CONFIG_OMSERVER_BASE_URL);
        $imgWithoutProtocol = str_replace("http://", $_SESSION['_user']['avatar'] );
 
-      $iframe = CONFIG_OMSERVER_BASE_URL . "?" .
-                "secureHash=" . $returnVal ;
-    
+      $iframe = CONFIG_OMSERVER_BASE_URL . "/?" .
+                "secureHash=" . $returnVal /*.
+		'&username=FRAGOTE' .
+                '&firstname=DD' .
+		'&lastname=DDDD' .
+		'&profilePictureUrl=X' .
+		'&email=xxx' .
+		'&externalUserId=fragote' .
+		'&room_id=38' .
+                '&scopeRoomId=38' .
+		'&becomeModeratorAsInt=1' .
+		'&showAudioVideoTestAsInt=0' .
+		'&allowRecording=1'*/;
+       
        printf("<iframe src='%s' width='%s' height = '%s' />", $iframe, "100%", 640);
 
     }
@@ -245,7 +260,7 @@ class om_integration {
 	$profilePictureUrl = $_SESSION['_user']['avatar'];
         $email = $_SESSION['_user']['mail'];
         $userId = $_SESSION['_user']['user_id'];
-        $systemType = 'chamilo';
+        $systemType = 'Chamilo';
         $room_id = $params['room_id'];
         $becomeModerator = ( $this->is_teacher() ? 1 : 0 );
         $allowRecording = 1; //Provisional
@@ -266,7 +281,7 @@ class om_integration {
         $objRec->becomeModeratorAsInt = $becomeModerator;
         $objRec->showAudioVideoTestAsInt = 1;
         $objRec->allowRecording = $allowRecording;
-        
+
         $rcFn = $omServices->setUserObjectAndGenerateRoomHashByURLAndRecFlag( $objRec );
 
         return $rcFn->return;
@@ -298,7 +313,7 @@ class om_integration {
                 continue;
             }
             $objCurUs = $omServices->getRoomWithCurrentUsersById($objCurrentUsers);
-            }catch( SoapFaul $e ){
+            }catch( SoapFault $e ){
                 echo $e->faultstring;
                 exit;
             }

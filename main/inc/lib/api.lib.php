@@ -1972,6 +1972,13 @@ function api_get_session_info($session_id, $add_extra_values = false) {
     return $data;
 }
 
+/**
+ * @param array $session_info
+ * @param string $course_code
+ * @param bool $ignore_visibility_for_admins
+ * @param bool $check_coach_dates
+ * @return bool
+ */
 function api_get_session_date_validation($session_info, $course_code, $ignore_visibility_for_admins = true, $check_coach_dates = true)
 {
     if (api_is_platform_admin()) {
@@ -3932,7 +3939,7 @@ function api_is_plugin_installed($plugin_list, $plugin_name) {
  * Transforms a number of seconds in hh:mm:ss format
  * @author Julian Prud'homme
  * @param integer the number of seconds
- * @return string the formated time
+ * @return string the formatted time
  */
 function api_time_to_hms($seconds) {
 
@@ -6181,7 +6188,10 @@ function api_check_ip_in_range($ip,$range) {
     return false;
 }
 
-
+/**
+ * @param $course_visibility
+ * @return bool
+ */
 function api_check_user_access_to_legal($course_visibility) {
     $course_visibility_list = array(COURSE_VISIBILITY_OPEN_WORLD, COURSE_VISIBILITY_OPEN_PLATFORM);
     return in_array($course_visibility, $course_visibility_list) || api_is_drh();
@@ -6192,7 +6202,7 @@ function api_check_user_access_to_legal($course_visibility) {
  *
  * @return bool
  */
-function api_is_global_chat_enabled(){
+function api_is_global_chat_enabled() {
     $global_chat_is_enabled = !api_is_anonymous() && api_get_setting('allow_global_chat') == 'true' && api_get_setting('allow_social_tool') == 'true';
     return $global_chat_is_enabled;
 }

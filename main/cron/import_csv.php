@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 if (PHP_SAPI!='cli') {
     die('Run this script through the command line or comment this line in the code');
@@ -32,7 +33,6 @@ class ImportCsv
                         $this->$method($path.$fileInfo['basename']);
                     } else {
                         echo "Error - This file can't be processed.";
-                        exit;
                     }
                 }
             }
@@ -42,7 +42,7 @@ class ImportCsv
     /**
      * @param string $file
      */
-    function moveFile($file)
+    private function moveFile($file)
     {
         $moved = str_replace('incoming', 'treated', $file);
         // $result = rename($file, $moved);
@@ -58,7 +58,7 @@ class ImportCsv
      * File to import
      * @param string $file
      */
-    function importTeachers($file)
+    private function importTeachers($file)
     {
         $data = Import::csv_to_array($file);
         $this->logger->addInfo("-- Import Teachers --");
@@ -151,7 +151,7 @@ class ImportCsv
     /**
      * @param string $file
      */
-    function importStudents($file)
+    private function importStudents($file)
     {
         $data = Import::csv_to_array($file);
         $this->logger->addInfo("-- Import Students --");
@@ -251,7 +251,7 @@ class ImportCsv
     /**
      * @param string $file
      */
-    function importCourses($file)
+    private function importCourses($file)
     {
         $data = Import::csv_to_array($file);
         $this->logger->addInfo("Reading file: $file");
@@ -310,7 +310,7 @@ class ImportCsv
     /**
      * @param string $file
      */
-    function importSessions($file)
+    private function importSessions($file)
     {
         $result = SessionManager::importCSV($file, true, 1, $this->logger);
 
@@ -320,6 +320,18 @@ class ImportCsv
         $this->logger->addInfo("Sessions - Sessions parsed: ".$result['session_counter']);
         $this->moveFile($file);
     }
+
+    /**
+     * @param string $file
+     */
+    private function unsubscribeUsers($file)
+    {
+        $data = Import::csv_to_array($file);
+        $this->logger->addInfo("-- Unsubscribe Users --");
+        $this->logger->addInfo("Reading file: $file");
+
+    }
+
 }
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;

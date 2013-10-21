@@ -250,23 +250,24 @@ if (api_is_allowed_to_edit(null, true)) {
 					case 'pdf' :                        
                         $description = '<table class="data_table_no_border">';  
                         if (api_get_session_id()) {                     
-                            $description .= '<tr><td>'.get_lang('Session').': </td><td class="highlight">'.api_get_session_name(api_get_session_id()).'</td>';
+                            $description .= '<tr><td>'.get_lang('Session').': </td><td class="highlight">'.api_get_session_name(api_get_session_id()).'</td><tr/>';
                         }
-                        $description .= '<tr><td>'.get_lang('Course').': </td><td class="highlight">'.$course_info['name'].'</td>';
-                       
+
+                        $description .= '<tr><td>'.get_lang('Course').':ss </td><td class="highlight">sd'.$course_info['name'].'</td><tr/>';
+
                         $teachers = CourseManager::get_teacher_list_from_course_code($course_info['code']);
                         
                         //If I'm a teacher in this course show just my name
                         if (isset($teachers[$user_id])) {    
                             if (!empty($teachers)) {
                                 $teacher_info = $teachers[$user_id];
-                                $description .= '<tr><td>'.get_lang('Teacher').': </td><td class="highlight">'.api_get_person_name($teacher_info['firstname'], $teacher_info['lastname']).'</td>';                           
+                                $description .= '<tr><td>'.get_lang('Teacher').': </td><td class="highlight">'.api_get_person_name($teacher_info['firstname'], $teacher_info['lastname']).'</td><tr/>';
                             }
                         } else {
                             //If not show all teachers
                             $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code']);    
                             if (!empty($teachers)) {
-                                $description .= '<tr><td>'.get_lang('Teachers').': </td><td class="highlight">'.$teachers.'</td>';                           
+                                $description .= '<tr><td>'.get_lang('Teachers').': </td><td class="highlight">'.$teachers.'</td><tr/>';
                             }
                         }
                         
@@ -276,18 +277,18 @@ if (api_is_allowed_to_edit(null, true)) {
 
                             if (isset($coaches) && isset($coaches[$user_id])) {  
                                 $user_info = api_get_user_info($user_id);                                
-                                $description .= '<tr><td>'.get_lang('Coach').': </td><td class="highlight">'.$user_info['complete_name'].'</td>';                                                      
+                                $description .= '<tr><td>'.get_lang('Coach').': </td><td class="highlight">'.$user_info['complete_name'].'</td><tr/>';
                             } else {
                                //If not show everything
                                $teachers = CourseManager::get_coach_list_from_course_code_to_string($course_info['code'], $session_id);    
                                if (!empty($teachers)) {
-                                   $description .= '<tr><td>'.get_lang('Coachs').': </td><td class="highlight">'.$coaches.'</td>';                           
+                                   $description .= '<tr><td>'.get_lang('Coachs').': </td><td class="highlight">'.$coaches.'</td><tr/>';
                                }
                            }
                         }
 
-                        $description .= '<tr><td>'.get_lang('Date').': </td><td class="highlight">'.api_convert_and_format_date(time(), DATE_TIME_FORMAT_LONG).'</td>';
-                        $description .= '</table>';   
+                        $description .= '<tr><td>'.get_lang('Date').': </td><td class="highlight">'.api_convert_and_format_date(time(), DATE_TIME_FORMAT_LONG).'</td><tr/>';
+                        $description .= '</table>';
                                                
                         $header_attributes = array(
                             array('style' => 'width:10px'),
@@ -300,7 +301,6 @@ if (api_is_allowed_to_edit(null, true)) {
                             'add_signatures' => false,
                             'filename' => get_lang('UserList'),
                             'pdf_title' => get_lang('StudentList'),
-                            'pdf_description' => $description,
                             'header_attributes' => $header_attributes                            
                         );
                         Export::export_table_pdf($a_users, $params);

@@ -301,7 +301,7 @@ class CourseManager {
         if (!empty($session_id)) {
             // Delete in table session_rel_course_rel_user
             $sql = "DELETE FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
-                    WHERE id_session ='".$session_id."' AND course_code = '".Database::escape_string($_SESSION['_course']['id'])."' AND id_user IN ($user_ids)";
+                    WHERE id_session ='".$session_id."' AND course_code = '".Database::escape_string($course_info['code'])."' AND id_user IN ($user_ids)";
             Database::query($sql);
 
             foreach ($user_id as $uid) {

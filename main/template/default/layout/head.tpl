@@ -21,20 +21,18 @@
 {% raw %}
 if ((navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.userAgent.toLowerCase().indexOf('opera') == -1 )) {
     window.attachEvent( 'onunload', function() {
-            window['__flash__removeCallback'] = function ( instance, name ) {
-                try {
-                    if ( instance ) {
-                        instance[name] = null ;
-                    }
-                } catch ( flashEx ) {
+        window['__flash__removeCallback'] = function ( instance, name ) {
+            try {
+                if ( instance ) {
+                    instance[name] = null ;
                 }
-            } ;
+            } catch ( flashEx ) {
+            }
+        } ;
     });
 }
 {% endraw %}
 //]]>
-
-
 
 function setCheckbox(value, table_id) {
     checkboxes = $("#"+table_id+" input:checkbox");
@@ -141,7 +139,7 @@ $(document).scroll(function() {
         }
     }
 
-    //Admin -> Settings toolbar
+    // Admin -> Settings toolbar.
     if ($('body').width() > 959) {
         if ($('.new_actions').length) {
             if (!$('.new_actions').attr('data-top')) {
@@ -165,7 +163,7 @@ $(document).scroll(function() {
         }
     }
 
-    //Bottom actions
+    // Bottom actions.
     if ($('.bottom_actions').length) {
         if (!$('.bottom_actions').attr('data-top')) {
             // If already fixed, then do nothing
@@ -200,27 +198,28 @@ $(function() {
 
     check_brand();
 
-    //Removes the yellow input in Chrome
+    // Removes the yellow input in Chrome
     if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
         $(window).load(function(){
             $('input:-webkit-autofill').each(function(){
                 var text = $(this).val();
                 var name = $(this).attr('name');
                 $(this).after(this.outerHTML).remove();
+                //var has_string = $(name).find(":contains('[')");
                 $('input[name=' + name + ']').val(text);
             });
         });
     }
 
-    //Fixes buttons to the new btn class
+    // Fixes buttons to the new btn class.
     if (!$('#button').hasClass('btn')) {
         $("button").addClass('btn');
     }
 
-    //Dropdown effect
+    // Dropdown effect.
     $('.dropdown-toggle').dropdown();
 
-    //Responsive effect
+    // Responsive effect.
     $(".collapse").collapse();
 
     $(".accordion_jquery").accordion({
@@ -230,7 +229,7 @@ $(function() {
         header: ".accordion-heading"
     });
 
-    //Global popup
+    // Global popup
     $('.ajax').on('click', function() {
         var url     = this.href;
         var dialog  = $("#dialog");
@@ -259,16 +258,17 @@ $(function() {
 
         // load remote content
         dialog.load(
-                        url,
-                        {},
-                        function(responseText, textStatus, XMLHttpRequest) {
-                                dialog.dialog({
-                                        modal       : true,
-                                        width       : width_value,
-                                        height      : height_value,
-                                        resizable   : resizable_value
-                                });
-        });
+            url,
+            {},
+            function(responseText, textStatus, XMLHttpRequest) {
+                dialog.dialog({
+                    modal       : true,
+                    width       : width_value,
+                    height      : height_value,
+                    resizable   : resizable_value
+                });
+            }
+        );
         //prevent the browser to follow the link
         return false;
     });

@@ -56,6 +56,7 @@ class CourseRecycler
         $this->recycle_glossary();
         $this->recycle_thematic();
         $this->recycle_attendance();
+        $this->recycle_work();
 
         foreach ($this->course->resources as $type => $resources) {
             foreach ($resources as $id => $resource) {
@@ -303,7 +304,8 @@ class CourseRecycler
     /**
      * Recycle quizzes - doesn't remove the questions and their answers, as they might still be used later
      */
-    function recycle_quizzes() {
+    function recycle_quizzes()
+    {
         if ($this->course->has_resources(RESOURCE_QUIZ)) {
             $table_qui_que = Database :: get_course_table(TABLE_QUIZ_QUESTION);
             $table_qui_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
@@ -319,7 +321,7 @@ class CourseRecycler
             // This value is set in CourseBuilder::quiz_build_questions()
             $delete_orphan_questions = in_array(-1, $ids);
             $ids = implode(',', $ids);
-            
+
             if (!empty($ids)) {
                 // Deletion of the tests first. Questions in these tests are
                 //   not deleted and become orphan at this point
@@ -331,32 +333,45 @@ class CourseRecycler
 
             // Identifying again and deletion of the orphan questions, if it was desired.
             if ($delete_orphan_questions) {
-                $sql = 'SELECT questions.id '.
-                       ' FROM '.$table_qui_que.' as questions '.
-                       ' LEFT JOIN '.$table_rel.' as quizz_questions '.
-                       '   ON questions.id=quizz_questions.question_id '.
-                       ' LEFT JOIN '.$table_qui.' as exercices '.
-                       '   ON exercice_id=exercices.id '.
-                       ' WHERE '.
-                       '   questions.c_id = '.$this->course_id.' AND '.
-                       '   quizz_questions.c_id = '.$this->course_id.' AND '.
-                       '   exercices.c_id = '.$this->course_id.' AND '.
-                       '   quizz_questions.exercice_id IS NULL OR '.
-                       '   exercices.active = -1';
-                       // active = -1 means "deleted" test.
+
+                $sql = " (
+                        SELECT q.id, ex.c_id FROM $table_qui_que q
+                        INNER JOIN $table_rel r
+                        ON (q.c_id = r.c_id AND q.id = r.question_id)
+                        INNER JOIN $table_qui ex
+                        ON (ex.id = r.exercice_id AND ex.c_id = r.c_id)
+                        WHERE ex.c_id = ".$this->course_id." AND (ex.active = '-1' OR ex.id = '-1')
+                    )
+                    UNION
+                    (
+                        SELECT q.id, r.c_id FROM $table_qui_que q
+                        LEFT OUTER JOIN $table_rel r
+                        ON (q.c_id = r.c_id AND q.id = r.question_id)
+                        WHERE q.c_id = ".$this->course_id." AND r.question_id is null
+                    )
+                    UNION
+                    (
+                        SELECT q.id, r.c_id FROM $table_qui_que q
+                        INNER JOIN $table_rel r
+                        ON (q.c_id = r.c_id AND q.id = r.question_id)
+                        WHERE r.c_id = ".$this->course_id." AND (r.exercice_id = '-1' OR r.exercice_id = '0')
+                    )";
                 $db_result = Database::query($sql);
                 if (Database::num_rows($db_result) > 0) {
                     $orphan_ids = array();
                     while ($obj = Database::fetch_object($db_result)) {
                         $orphan_ids[] = $obj->id;
                     }
-                    $orphan_ids = implode(',', $orphan_ids);
-                    $sql = "DELETE FROM ".$table_rel." WHERE c_id = ".$this->course_id." AND question_id IN(".$orphan_ids.")";
-                    Database::query($sql);
-                    $sql = "DELETE FROM ".$table_qui_ans." WHERE c_id = ".$this->course_id." AND question_id IN(".$orphan_ids.")";
-                    Database::query($sql);
-                    $sql = "DELETE FROM ".$table_qui_que." WHERE c_id = ".$this->course_id." AND id IN(".$orphan_ids.")";
-                    Database::query($sql);
+                    if (!empty($orphan_ids)) {
+                        $orphan_ids = implode(',', $orphan_ids);
+
+                        $sql = "DELETE FROM ".$table_rel." WHERE c_id = ".$this->course_id." AND question_id IN(".$orphan_ids.")";
+                        Database::query($sql);
+                        $sql = "DELETE FROM ".$table_qui_ans." WHERE c_id = ".$this->course_id." AND question_id IN(".$orphan_ids.")";
+                        Database::query($sql);
+                        $sql = "DELETE FROM ".$table_qui_que." WHERE c_id = ".$this->course_id." AND id IN(".$orphan_ids.")";
+                        Database::query($sql);
+                    }
                 }
                 // Also delete questions categories and options
                 $sql = "DELETE FROM $table_qui_que_rel_cat WHERE c_id = ".$this->course_id;
@@ -513,6 +528,30 @@ class CourseRecycler
                     $cond = array('id = ? AND c_id = ?'=>array($last_id, $this->course_id));
                     Database::delete($table_attendance, $cond);
                     api_item_property_update($this->course_info, TOOL_ATTENDANCE, $last_id,'AttendanceDeleted', api_get_user_id());
+                }
+            }
+        }
+    }
+    /**
+     * Recycle Works
+     */
+    function recycle_work($session_id = 0) {
+        if ($this->course->has_resources(RESOURCE_WORK)) {
+            $table_work          = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+            $table_work_assignment = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+
+            $resources = $this->course->resources;
+            foreach ($resources[RESOURCE_WORK] as $last_id => $obj) {
+                if (is_numeric($last_id)) {
+                    $cond = array('publication_id = ? AND c_id = ? '=>array($last_id, $this->course_id));
+                    Database::delete($table_work_assignment, $cond);
+                    // The following also deletes student tasks
+                    $cond = array('parent_id = ? AND c_id = ?'=>array($last_id, $this->course_id));
+                    Database::delete($table_work, $cond);
+                    // Finally, delete the main task registry
+                    $cond = array('id = ? AND c_id = ?'=>array($last_id, $this->course_id));
+                    Database::delete($table_work, $cond);
+                    api_item_property_update($this->course_info, TOOL_STUDENTPUBLICATION, $last_id,'StudentPublicationDeleted', api_get_user_id());
                 }
             }
         }

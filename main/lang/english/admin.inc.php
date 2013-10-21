@@ -2,6 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CourseVisibilityHidden = "Hidden - Completely hidden to all users except the administrators";
+$ApplyAllLanguages = "Apply this change to all available languages";
+$CareerUpdated = "Career updated successfully";
 $CasMainActivateComment = "Enabling CAS authentication will allow users to authenticate with their CAS credentials.<br/>Go to <a href='settings.php?category=CAS'>Plugin</a> to add a configurable 'CAS Login' button for your Chamilo campus.";
 $UsersRegisteredInAnyGroup = "Users registered in any group";
 $ShowHotCoursesComment = "The hot courses list will be added in the index page";
@@ -1075,6 +1078,7 @@ $EditTabs = "Edit Tabs";
 $YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill = "Your gradebook first needs a certificate in order to be linked to a skill";
 $PlatformUnsubscribeTitle = "Allow unsubscription from platform";
 $PlatformUnsubscribeComment = "By enabling this option, you allow any user to definitively remove his own account and all data related to it from the platform. This is quite a radical action, but it is necessary for portals opened to the public where users can auto-register. An additional entry will appear in the user profile to unsubscribe after confirmation.";
+$PromotionUpdated = "Promotion updated successfully";
 $BabyOrange = "Baby Orange";
 $BlueLagoon = "Blue lagoon";
 $CoolBlue = "Cool blue";

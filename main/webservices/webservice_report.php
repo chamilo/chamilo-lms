@@ -129,26 +129,28 @@ class WSReport extends WS {
         }
         require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
         $lp = new learnpath($course_code, $learnpath_id, $user_id);
-        $items = $lp->items[$learnpath_id];
         $return = array(
           'progress_bar_mode' => $lp->progress_bar_mode,
           'progress_db' => $lp->progress_db,
         );
         return $return;
     }
-    
+
     /**
-     * Gets score obtained in the given learning path by the given user,
-     * assuming there is only one item (SCO) in the learning path
+     * Gets the highest element seen (lesson_location) in the given learning
+     * path by the given user. If the user saw the learning path several times,
+     * the last time (lp_view) is assumed. If there are several items in the lp,
+     * the last item seen (lp_view.last_item) is considered as the relevant one
+     * to get the lesson_location from.
      *
      * @param string User id field name
      * @param string User id value
      * @param string Course id field name
      * @param string Course id value
      * @param string Learnpath ID
-     * @return double   Generally between 0 and 100
+     * @return string The last item's lesson_location value
      */
-    public function GetLearnpathScoreSingleItem($secret_key, $user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id) {
+    public function GetLearnpathHighestLessonLocation($secret_key, $user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id) {
         $user_id = $this->getUserId($user_id_field_name, $user_id_value);
         if($user_id instanceof WSError) {
             return $user_id;
@@ -161,11 +163,42 @@ class WSReport extends WS {
         }
         require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
         $lp = new learnpath($course_code, $learnpath_id, $user_id);
+        $item = $lp->last_item_seen;
+        $return = $lp->items[$item]->get_lesson_location();
+        return $return;
+    }
+    
+    /**
+     * Gets score obtained in the given learning path by the given user,
+     * assuming there is only one item (SCO) in the learning path
+     *
+     * @param string User id field name
+     * @param string User id value
+     * @param string Course id field name
+     * @param string Course id value
+     * @param int Learnpath ID
+     * @param int Learnpath *ITEM* ID
+     * @return double   Generally between 0 and 100
+     */
+    public function GetLearnpathScoreSingleItem($secret_key, $user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id, $learnpath_item_id) {
+        $user_id = $this->getUserId($user_id_field_name, $user_id_value);
+        if($user_id instanceof WSError) {
+            return $user_id;
+        }
+        $course_id = $this->getCourseId($course_id_field_name, $course_id_value);
+        if($course_id instanceof WSError) {
+            return $course_id;
+        } else {
+            $course_code = CourseManager::get_course_code_from_course_id($course_id);
+        }
+        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
+        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php';
+        $lp = new learnpath($course_code, $learnpath_id, $user_id);
         $return = array(
-          'min_score' => $lp->items[$learnpath_id]->min_score,
-          'max_score' => $lp->items[$learnpath_id]->max_score,
-          'mastery_score' => $lp->items[$learnpath_id]->mastery_score,
-          'current_score' => $lp->items[$learnpath_id]->current_score,
+          'min_score' => $lp->items[$learnpath_item_id]->min_score,
+          'max_score' => $lp->items[$learnpath_item_id]->max_score,
+          'mastery_score' => $lp->items[$learnpath_item_id]->mastery_score,
+          'current_score' => $lp->items[$learnpath_item_id]->current_score,
         );
         return $return;
     }
@@ -178,10 +211,11 @@ class WSReport extends WS {
      * @param string User id value
      * @param string Course id field name (use chamilo_course_id if none)
      * @param string Course id value
-     * @param string Learnpath ID
+     * @param int Learnpath ID
+     * @param int Learnpath *ITEM* ID
      * @return string "not attempted", "passed", "completed", "failed", "incomplete"
      */
-    public function GetLearnpathStatusSingleItem($secret_key, $user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id) {
+    public function GetLearnpathStatusSingleItem($secret_key, $user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id, $learnpath_item_id) {
         $verifKey = $this->verifyKey($secret_key);
         if($verifKey instanceof WSError) {
             $this->handleError($verifKey);
@@ -197,8 +231,9 @@ class WSReport extends WS {
                 $course_code = CourseManager::get_course_code_from_course_id($course_id);
             }            
             require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
+            require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php';
             $lp = new learnpath($course_code, $learnpath_id, $user_id);
-            return $lp->items[$learnpath_id]->status;
+            return $lp->items[$learnpath_item_id]->status;
         }
     }
 

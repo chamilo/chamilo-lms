@@ -218,7 +218,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
         $group = array();
         $group[] = $form->createElement('radio', 'allow_anonymous', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'allow_anonymous', null, get_lang('No'), 0);
-        $form->addGroup($group, 'allow_anonymous_group', get_lang('AllowAnonymousPosts'), '&nbsp;');
+        $form->addGroup($group, 'allow_anonymous_group', get_lang('AllowAnonymousPosts'), ' ');
     }
 
     $form->addElement('advanced_settings', '<a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus">&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>', '');
@@ -227,7 +227,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
     $group = array();
     $group[] = $form->createElement('radio', 'students_can_edit', null, get_lang('Yes'), 1);
     $group[] = $form->createElement('radio', 'students_can_edit', null, get_lang('No'), 0);
-    $form->addGroup($group, 'students_can_edit_group', get_lang('StudentsCanEdit'), '&nbsp;');
+    $form->addGroup($group, 'students_can_edit_group', get_lang('StudentsCanEdit'), ' ');
 
     $group = array();
     $group[] = $form->createElement('radio', 'approval_direct', null, get_lang('Approval'), 1);
@@ -240,15 +240,15 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
     $group = array();
     $group[] = $form->createElement('radio', 'allow_new_threads', null, get_lang('Yes'), 1);
     $group[] = $form->createElement('radio', 'allow_new_threads', null, get_lang('No'), 0);
-    $form->addGroup($group, 'allow_new_threads_group', get_lang('AllowNewThreads'), '&nbsp;');
+    $form->addGroup($group, 'allow_new_threads_group', get_lang('AllowNewThreads'), ' ');
 
     $group = array();
     $group[] = $form->createElement('radio', 'default_view_type', null, get_lang('Flat'), 'flat');
     $group[] = $form->createElement('radio', 'default_view_type', null, get_lang('Threaded'), 'threaded');
     $group[] = $form->createElement('radio', 'default_view_type', null, get_lang('Nested'), 'nested');
-    $form->addGroup($group, 'default_view_type_group', get_lang('DefaultViewType'), '&nbsp;');
+    $form->addGroup($group, 'default_view_type_group', get_lang('DefaultViewType'), ' ');
 
-    // Dropdown list: Groups
+    // Drop down list: Groups
     $groups = GroupManager::get_group_list();
     $groups_titles[0] = get_lang('NotAGroupForum');
     foreach ($groups as $key => $value) {
@@ -260,7 +260,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
     $group = array();
     $group[] = $form->createElement('radio', 'public_private_group_forum', null, get_lang('Public'), 'public');
     $group[] = $form->createElement('radio', 'public_private_group_forum', null, get_lang('Private'), 'private');
-    $form->addGroup($group, 'public_private_group_forum_group', get_lang('PublicPrivateGroupForum'), '&nbsp;');
+    $form->addGroup($group, 'public_private_group_forum_group', get_lang('PublicPrivateGroupForum'), '');
 
     // Forum image
     $form->add_progress_bar();
@@ -298,13 +298,15 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
     $form->addRule('forum_title', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('forum_category', get_lang('ThisFieldIsRequired'), 'required');
 
+    $defaultSettingAllowNewThreads = api_get_default_tool_setting('forum', 'allow_new_threads', 0);
+
     // Settings the defaults
     if (empty($inputvalues) || !is_array($inputvalues)) {
         $defaults['allow_anonymous_group']['allow_anonymous'] = 0;
         $defaults['students_can_edit_group']['students_can_edit'] = 0;
         $defaults['approval_direct_group']['approval_direct'] = 0;
         $defaults['allow_attachments_group']['allow_attachments'] = 1;
-        $defaults['allow_new_threads_group']['allow_new_threads'] = 0;
+        $defaults['allow_new_threads_group']['allow_new_threads'] = $defaultSettingAllowNewThreads;
         $defaults['default_view_type_group']['default_view_type'] = api_get_setting('default_forum_view');
         $defaults['public_private_group_forum_group']['public_private_group_forum'] = 'public';
         if (isset($_GET['forumcategory'])) {
@@ -319,7 +321,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
         $defaults['students_can_edit_group']['students_can_edit'] = isset($inputvalues['allow_edit']) ? $inputvalues['allow_edit'] : null;
         $defaults['approval_direct_group']['approval_direct'] = isset($inputvalues['approval_direct_post']) ? $inputvalues['approval_direct_post'] : null;
         $defaults['allow_attachments_group']['allow_attachments'] = isset($inputvalues['allow_attachments']) ? $inputvalues['allow_attachments'] : null;
-        $defaults['allow_new_threads_group']['allow_new_threads'] = isset($inputvalues['allow_new_threads']) ? $inputvalues['allow_new_threads'] : null;
+        $defaults['allow_new_threads_group']['allow_new_threads'] = isset($inputvalues['allow_new_threads']) ? $inputvalues['allow_new_threads'] : $defaultSettingAllowNewThreads;
         $defaults['default_view_type_group']['default_view_type'] = isset($inputvalues['default_view']) ? $inputvalues['default_view'] : null;
         $defaults['public_private_group_forum_group']['public_private_group_forum'] = isset($inputvalues['forum_group_public_private']) ? $inputvalues['forum_group_public_private'] : null;
         $defaults['group_forum'] = isset($inputvalues['forum_of_group']) ? $inputvalues['forum_of_group'] : null;
@@ -1705,8 +1707,8 @@ function get_thread_users_qualify($thread_id)
                   AND user.user_id = session_rel_user_rel_course.id_user
                   AND session_rel_user_rel_course.status<>'2'
                   AND session_rel_user_rel_course.id_user NOT IN ($user_to_avoid)
-                  AND qualify.thread_id = '".Database::escape_string($thread_id)."
-                  AND thread_id = '".Database::escape_string($thread_id)."'
+                  AND qualify.thread_id = '".Database::escape_string($thread_id)."'
+                  AND post.thread_id = '".Database::escape_string($thread_id)."'
                   AND id_session = '".api_get_session_id()."'
                   AND course_code = '".$course_code."' AND
                   qualify.c_id = $course_id AND
@@ -2528,7 +2530,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
     $form->addElement('hidden', 'post_id', $current_post['post_id']);
     $form->addElement('hidden', 'thread_id', $current_thread['thread_id']);
     $form->addElement('hidden', 'id_attach', $id_attach);
-    
+
     if ($current_post['post_parent_id'] == 0) {
         $form->addElement('hidden', 'is_first_post_of_thread', '1');
     }

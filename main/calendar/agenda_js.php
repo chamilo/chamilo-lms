@@ -12,7 +12,7 @@ $language_file = array('agenda', 'group', 'announcements');
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
 
-//Calendar type
+// Calendar type
 $type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin')) ? $_REQUEST['type'] : 'personal';
 
 if ($type == 'personal') {
@@ -38,7 +38,6 @@ if (api_is_platform_admin() && $type == 'admin') {
     $type = 'admin';
 }
 
-//if (api_get_course_id() != -1 && $type == 'course') {
 if (isset($_REQUEST['cidReq']) && !empty($_REQUEST['cidReq'])) {
     $type = 'course';
 }
@@ -108,12 +107,14 @@ $tpl->assign('month_names', json_encode($months));
 $tpl->assign('month_names_short', json_encode($months_short));
 $tpl->assign('day_names', json_encode($days));
 $tpl->assign('day_names_short', json_encode($day_short));
-$tpl->assign('button_text', json_encode(array(
-    'today' => get_lang('Today'),
-    'month' => get_lang('Month'),
-    'week' => get_lang('Week'),
-    'day' => get_lang('Day')
-)));
+$tpl->assign('button_text',
+    json_encode(array(
+        'today' => get_lang('Today'),
+        'month' => get_lang('Month'),
+        'week' => get_lang('Week'),
+        'day' => get_lang('Day')
+    ))
+);
 
 //see http://docs.jquery.com/UI/Datepicker/$.datepicker.formatDate
 
@@ -133,15 +134,23 @@ $tpl->assign('export_ical_confidential_icon', Display::return_icon($export_icon_
 
 $actions = null;
 
-if (api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false, true) OR $is_group_tutor) {
+if (api_is_allowed_to_edit(false, true) OR
+    (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false, true) OR
+    $is_group_tutor
+) {
     if ($type == 'course') {
         if (isset($_GET['user_id'])) {
             $filter = $_GET['user_id'];
         }
         $actions = display_courseadmin_links($filter);
     }
-    $tpl->assign('actions', $actions);
+} else {
+    if ($type == 'course') {
+        $actions = "<a href='agenda_list.php?type=course&".api_get_cidreq()."'>".Display::return_icon('week.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";
+    }
 }
+
+$tpl->assign('actions', $actions);
 
 //Calendar Type : course, admin, personal
 $tpl->assign('type', $type);
@@ -152,6 +161,16 @@ if ($type == 'course' && !empty($group_id)) {
     $type_event_class = 'group_event';
     $type_label = get_lang('GroupCalendar');
 }
+
+$defaultView = api_get_setting('default_calendar_view');
+
+if (empty($defaultView)) {
+    $defaultView = 'month';
+}
+
+/* month, basicWeek,agendaWeek,agendaDay */
+
+$tpl->assign('default_view', $defaultView);
 
 if ($type == 'course' && !empty($session_id)) {
     $type_event_class = 'session_event';
@@ -194,10 +213,10 @@ if ((api_is_allowed_to_edit() || $is_group_tutor) && $course_code != '-1' && $ty
     $tpl->assign('visible_to', $select);
 }
 
-//Loading Agenda template
+// Loading Agenda template
 $content = $tpl->fetch('default/agenda/month.tpl');
 
 $tpl->assign('content', $content);
 
-//Loading main Chamilo 1 col template
+// Loading main Chamilo 1 col template
 $tpl->display_one_col_template();

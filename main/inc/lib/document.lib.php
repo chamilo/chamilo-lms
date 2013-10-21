@@ -14,16 +14,21 @@
 /**
  * Code
  */
-class DocumentManager {
-
-    private function __construct() {
+class DocumentManager
+{
+    /**
+     *
+     */
+    private function __construct()
+    {
 
     }
 
     /**
      * @return the document folder quota for the current course, in bytes, or the default quota
      */
-    public static function get_course_quota($course_code = null) {
+    public static function get_course_quota($course_code = null)
+    {
         if (empty($course_code)) {
             $course_info = api_get_course_info();
         } else {
@@ -53,7 +58,8 @@ class DocumentManager {
      * 	@author Bert Vanderkimpen
      *
      */
-    public static function file_get_mime_type($filename) {
+    public static function file_get_mime_type($filename)
+    {
         // All MIME types in an array (from 1.6, this is the authorative source)
         // Please, keep this alphabetical if you add something to this list!
         $mime_types = array(
@@ -87,6 +93,7 @@ class DocumentManager {
             'dotx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
             'dvi' => 'application/x-dvi',
             'dwg' => 'application/vnd.dwg',
+            'dwf' => 'application/vnd.dwf',
             'dxf' => 'application/vnd.dxf',
             'dxr' => 'application/x-director',
             'eps' => 'application/postscript',
@@ -302,10 +309,12 @@ class DocumentManager {
      * @param string $name
      * @return false if file doesn't exist, true if stream succeeded
      */
-    public static function file_send_for_download($full_file_name, $forced = false, $name = '') {
+    public static function file_send_for_download($full_file_name, $forced = false, $name = '')
+    {
         if (!is_file($full_file_name)) {
             return false;
         }
+
         $filename = ($name == '') ? basename($full_file_name) : replace_dangerous_char($name);
         $len = filesize($full_file_name);
 
@@ -335,6 +344,7 @@ class DocumentManager {
             //no forced download, just let the browser decide what to do according to the mimetype
 
             $content_type = self::file_get_mime_type($filename);
+
             header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
             header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
             // Commented to avoid double caching declaration when playing with IE and HTTPS
@@ -352,6 +362,10 @@ class DocumentManager {
                     if (!empty($encoding)) {
                         $content_type .= '; charset=' . $encoding;
                     }
+                    break;
+                case 'application/vnd.dwg':
+                case 'application/vnd.dwf':
+                    header('Content-type: application/octet-stream');
                     break;
             }
             header('Content-type: ' . $content_type);
@@ -456,7 +470,14 @@ class DocumentManager {
      * @param boolean $can_see_invisible
      * @return array with all document data
      */
-    public static function get_all_document_data($_course, $path = '/', $to_group_id = 0, $to_user_id = NULL, $can_see_invisible = false, $search = false) {
+    public static function get_all_document_data(
+        $_course,
+        $path = '/',
+        $to_group_id = 0,
+        $to_user_id = NULL,
+        $can_see_invisible = false,
+        $search = false
+    ) {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 
@@ -468,22 +489,22 @@ class DocumentManager {
             $to_value = $to_group_id;
         }
 
-        //escape underscores in the path so they don't act as a wildcard
+        // Escape underscores in the path so they don't act as a wildcard
         $path = Database::escape_string(str_replace('_', '\_', $path));
         $to_user_id = Database::escape_string($to_user_id);
         $to_value = Database::escape_string($to_value);
 
         $visibility_bit = ' <> 2';
 
-        //the given path will not end with a slash, unless it's the root '/'
-        //so no root -> add slash
+        // The given path will not end with a slash, unless it's the root '/'
+        // so no root -> add slash
         $added_slash = ($path == '/') ? '' : '/';
 
-        //condition for the session
+        // Condition for the session
         $current_session_id = api_get_session_id();
-        $condition_session = " AND (id_session = '$current_session_id' OR id_session = '0')";
+        $condition_session = " AND (id_session = '$current_session_id' OR (id_session = '0') )";
 
-        //condition for search (get ALL folders and documents)
+        // Condition for search (get ALL folders and documents)
 
         $sql = "SELECT  docs.id,
                         docs.filetype,
@@ -497,13 +518,13 @@ class DocumentManager {
                         last.lastedit_date,
                         last.visibility,
                         last.insert_user_id
-                    FROM  " . $TABLE_ITEMPROPERTY . "  AS last INNER JOIN " . $TABLE_DOCUMENT . "  AS docs
-                        ON (docs.id = last.ref AND last.tool = '" . TOOL_DOCUMENT . "' AND docs.c_id = {$_course['real_id']} AND last.c_id = {$_course['real_id']})
+                    FROM $TABLE_ITEMPROPERTY AS last INNER JOIN $TABLE_DOCUMENT AS docs
+                        ON (docs.id = last.ref AND last.tool = '".TOOL_DOCUMENT."' AND docs.c_id = {$_course['real_id']} AND last.c_id = {$_course['real_id']})
                     WHERE
                         docs.path LIKE '" . $path . $added_slash . "%' AND
                         docs.path NOT LIKE '" . $path . $added_slash . "%/%' AND
-                        " . $to_field . " = " . $to_value . " AND
-                        last.visibility" . $visibility_bit . $condition_session;
+                        ".$to_field." = ".$to_value." AND
+                        last.visibility ".$visibility_bit.$condition_session;
         $result = Database::query($sql);
 
         $doc_list = array();
@@ -512,8 +533,9 @@ class DocumentManager {
 
         if ($result !== false && Database::num_rows($result) != 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
+
                 if (api_is_coach()) {
-                    //Looking for course items that are invisible to hide it in the session
+                    // Looking for course items that are invisible to hide it in the session
                     if (in_array($row['id'], array_keys($doc_list))) {
                         if ($doc_list[$row['id']]['item_property_session_id'] == 0 && $doc_list[$row['id']]['session_id'] == 0) {
                             if ($doc_list[$row['id']]['visibility'] == 0) {
@@ -529,9 +551,8 @@ class DocumentManager {
                     $doc_list[] = $row;
                 }
 
-
                 if ($row['filetype'] == 'file' && pathinfo($row['path'], PATHINFO_EXTENSION) == 'html') {
-                    //Templates management
+                    // Templates management
                     $table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
                     $sql_is_template = "SELECT id FROM $table_template
                                         WHERE course_code = '" . $_course['code'] . "'
@@ -544,12 +565,13 @@ class DocumentManager {
                 $document_data[$row['id']] = $row;
             }
 
-            //Only for the student we filter the results see BT#1652
+            // Only for the student we filter the results see BT#1652
+
             if (!api_is_coach() && !$is_allowed_to_edit) {
                 $ids_to_remove = array();
                 $my_repeat_ids = $temp = array();
 
-                //Selecting repetead ids
+                // Selecting repetead ids
                 foreach ($doc_list as $row) {
                     if (in_array($row['id'], array_keys($temp))) {
                         $my_repeat_ids[] = $row['id'];
@@ -557,7 +579,7 @@ class DocumentManager {
                     $temp[$row['id']] = $row;
                 }
                 //@todo use the DocumentManager::is_visible function
-                //Checking disponibility in a session
+                // Checking disponibility in a session
                 foreach ($my_repeat_ids as $id) {
                     foreach ($doc_list as $row) {
                         if ($id == $row['id']) {
@@ -570,7 +592,6 @@ class DocumentManager {
                         }
                     }
                 }
-
                 foreach ($doc_list as $key => $row) {
                     if (in_array($row['visibility'], array('0', '2')) && !in_array($row['id'], $my_repeat_ids)) {
                         $ids_to_remove[] = $row['id'];
@@ -587,7 +608,7 @@ class DocumentManager {
                     }
                 }
 
-                //Checking parents visibility
+                // Checking parents visibility
                 $final_document_data = array();
                 foreach ($document_data as $row) {
                     $is_visible = DocumentManager::check_visibility_tree($row['id'], $_course['code'], $current_session_id, api_get_user_id());
@@ -1018,12 +1039,13 @@ class DocumentManager {
     /**
      * Gets the document data with a given id
      *
-     * @param array $_course
-     * @param string $path
-     * @todo load parent_id
-     * @return int id of document / false if no doc found
+     * @param int id
+     * @param string course code
+     * @param bool load parents?
+     * @return array document content
      */
-    public static function get_document_data_by_id($id, $course_code, $load_parents = false) {
+    public static function get_document_data_by_id($id, $course_code, $load_parents = false)
+    {
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
 
@@ -1046,14 +1068,10 @@ class DocumentManager {
             $row['url'] = api_get_path(WEB_CODE_PATH) . 'document/showinframes.php?cidReq=' . $course_code . '&id=' . $id;
             $row['document_url'] = api_get_path(WEB_CODE_PATH) . 'document/document.php?cidReq=' . $course_code . '&id=' . $id;
             $row['absolute_path'] = api_get_path(SYS_COURSE_PATH) . $course_info['path'] . '/document' . $row['path'];
-
             $row['absolute_path_from_document'] = '/document' . $row['path'];
 
             $pathinfo = pathinfo($row['path']);
-
             $row['absolute_parent_path'] = api_get_path(SYS_COURSE_PATH) . $course_info['path'] . '/document' . $pathinfo['dirname'] . '/';
-
-
             $row['direct_url'] = $www . $path;
 
             if (dirname($row['path']) == '.') {
@@ -1081,12 +1099,6 @@ class DocumentManager {
                     if (!empty($parent_id)) {
                         $sub_document_data = self::get_document_data_by_id($parent_id, $course_code, false);
                         //@todo add visibility here
-
-                        /* $sub_visibility    = self::is_visible_by_id($parent_id, $course_info, api_get_session_id(), api_get_user_id());
-                          if ($visibility && $sub_visibility == false) {
-                          $visibility = false;
-                          }
-                         */
                         $parents[] = $sub_document_data;
                     }
                 }
@@ -2208,6 +2220,10 @@ class DocumentManager {
         return $return;
     }
 
+    /**
+     * @param int $document_id
+     * @param string $course_code
+     */
     public static function export_to_pdf($document_id, $course_code) {
         require_once api_get_path(LIBRARY_PATH) . 'pdf.lib.php';
         $course_data = api_get_course_info($course_code);
@@ -2220,17 +2236,26 @@ class DocumentManager {
     /**
      * Uploads a document
      *
-     * @param array     the $_FILES variable
-     * @param string    $path
-     * @param string    title
-     * @param string    comment
-     * @param int       unzip or not the file
-     * @param int       if_exists overwrite, rename or warn if exists (default)
-     * @param bool      index document (search xapian module)
-     * @param bool      print html messages
-     * @return unknown_type
+     * @param array $files the $_FILES variable
+     * @param string $path
+     * @param string $title
+     * @param string $comment
+     * @param int $unzip unzip or not the file
+     * @param int $if_exists if_exists overwrite, rename or warn if exists (default)
+     * @param bool $index_document index document (search xapian module)
+     * @param bool $show_output print html messages
+     * @return array|bool
      */
-    public static function upload_document($files, $path, $title = null, $comment = null, $unzip = 0, $if_exists = null, $index_document = false, $show_output = false) {
+    public static function upload_document(
+        $files,
+        $path,
+        $title = null,
+        $comment = null,
+        $unzip = 0,
+        $if_exists = null,
+        $index_document = false,
+        $show_output = false
+    ) {
         require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
 
         $course_info = api_get_course_info();
@@ -2240,9 +2265,21 @@ class DocumentManager {
 
         if (isset($files['file'])) {
             $upload_ok = process_uploaded_file($files['file'], $show_output);
+
             if ($upload_ok) {
                 // File got on the server without problems, now process it
-                $new_path = handle_uploaded_document($course_info, $files['file'], $base_work_dir, $path, api_get_user_id(), api_get_group_id(), null, $unzip, $if_exists, $show_output);
+                $new_path = handle_uploaded_document(
+                    $course_info,
+                    $files['file'],
+                    $base_work_dir,
+                    $path,
+                    api_get_user_id(),
+                    api_get_group_id(),
+                    null,
+                    $unzip,
+                    $if_exists,
+                    $show_output
+                );
 
                 if ($new_path) {
                     $docid = DocumentManager::get_document_id($course_info, $new_path);
@@ -2273,12 +2310,6 @@ class DocumentManager {
                         Display::display_confirmation_message(get_lang('UplUploadSucceeded') . '<br />', false);
                     }
 
-                    /* // Check for missing images in html files
-                      $missing_files = check_for_missing_files($base_work_dir.$new_path);
-                      if ($missing_files && $show_output) {
-                      // Show a form to upload the missing files
-                      Display::display_normal_message(build_missing_files_form($missing_files, $path, $files['file']['name']), false);
-                      } */
                     if ($index_document) {
                         self::index_document($docid, $course_info['code'], null, $_POST['language'], $_REQUEST, $if_exists);
                     }
@@ -2675,13 +2706,19 @@ class DocumentManager {
             $add_folder_filter = " AND docs.path LIKE '" . Database::escape_string($filter_by_folder) . "%'";
         }
 
+        // If we are in LP display hidden folder https://support.chamilo.org/issues/6679
+        $lp_visibility_condition = "";
+        if ($lp_id) {
+            $lp_visibility_condition = " OR filetype='folder'";
+        }
+
         $sql_doc = "SELECT last.visibility, docs.*
 					FROM  $tbl_item_prop AS last, $tbl_doc AS docs
     	            WHERE   docs.id = last.ref AND
                             docs.path LIKE '" . $path . $added_slash . "%' AND
                             docs.path NOT LIKE '%_DELETED_%' AND
                             last.tool = '" . TOOL_DOCUMENT . "' $condition_session AND
-                            last.visibility = '1' AND
+                            (last.visibility = '1' $lp_visibility_condition) AND
                             docs.c_id = {$course_info['real_id']} AND
                             last.c_id = {$course_info['real_id']}
                             $add_folder_filter
@@ -2748,6 +2785,7 @@ class DocumentManager {
                 } else {
                     eval('$resources_sorted' . $path_to_eval . '["' . $last_path . '"]["id"]=' . $resource['id'] . ';');
                     eval('$resources_sorted' . $path_to_eval . '["' . $last_path . '"]["title"]= "' . api_htmlentities($resource['title']) . '";');
+                    eval('$resources_sorted' . $path_to_eval . '["' . $last_path . '"]["visible"]= "'.$resource['visibility'].'";'); // for LP display hidden folder in grey
                 }
             }
         }
@@ -2796,6 +2834,7 @@ class DocumentManager {
         if (!$user_in_course) {
             $return = '';
         }
+
         return $return;
     }
 
@@ -2822,7 +2861,6 @@ class DocumentManager {
                 if (empty($title)) {
                     $title = $key;
                 }
-                //echo '<pre>'; print_r($resource);
                 if (isset($resource['id']) && is_int($resource['id'])) {
                     // It's a folder.
                     //hide some folders
@@ -2851,12 +2889,17 @@ class DocumentManager {
 
                     $onclick = '';
 
+                    // if in LP, hidden folder are displayed in grey
+                    $folder_class_hidden = "";
                     if ($lp_id) {
+                        if (isset($resource['visible']) && $resource['visible'] == 0) {
+                            $folder_class_hidden = "doc_folder_hidden"; // in base.css
+                        }
                         $onclick = 'onclick="javascript: testResources(\'res_' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')"';
                     }
 
                     $return .= '<ul class="lp_resource">';
-                    $return .= '<li class="doc_folder"  id="doc_id_' . $resource['id'] . '"  style="margin-left:' . ($num * 18) . 'px; ">';
+                    $return .= '<li class="doc_folder '.$folder_class_hidden.'" id="doc_id_' . $resource['id'] . '"  style="margin-left:' . ($num * 18) . 'px; ">';
 
                     if ($lp_id) {
                         $return .= '<img style="cursor: pointer;" src="' . $img_path . 'nolines_plus.gif" align="absmiddle" id="img_' . $resource['id'] . '"  ' . $onclick . ' >';
@@ -2932,6 +2975,13 @@ class DocumentManager {
         return $return;
     }
 
+    /**
+     * @param int $doc_id
+     * @param string $course_code
+     * @param int $session_id
+     * @param int $user_id
+     * @return bool
+     */
     public static function check_visibility_tree($doc_id, $course_code, $session_id, $user_id) {
         $document_data = self::get_document_data_by_id($doc_id, $course_code);
 
@@ -3156,10 +3206,18 @@ class DocumentManager {
         return true;
     }
 
+    /**
+     * @return array
+     */
     public static function get_web_odf_extension_list() {
         return array('ods', 'odt');
     }
 
+    /**
+     * @param $path
+     * @param bool $is_certificate_mode
+     * @return bool
+     */
     public static function is_folder_to_avoid($path, $is_certificate_mode = false) {
         $folders_to_avoid = array(
             '/HotPotatoes_files',
@@ -3206,6 +3264,9 @@ class DocumentManager {
         return in_array($path, $folders_to_avoid);
     }
 
+    /**
+     * @return array
+     */
     static function get_system_folders() {
         $system_folders = array(
             '/certificates',
@@ -3214,9 +3275,68 @@ class DocumentManager {
             '/flash',
             '/audio',
             '/video',
-            '/shared_folder'
+            '/shared_folder',
+            '/learning_path'
         );
         return $system_folders;
+    }
+
+    /**
+     * @param string $courseCode
+     * @return string 'visible' or 'invisible' string
+     */
+    public static function getDocumentDefaultVisibility($courseCode)
+    {
+        $settings = api_get_setting('tool_visible_by_default_at_creation');
+
+        $defaultVisibility = 'visible';
+
+        if (isset($settings['documents'])) {
+            $portalDefaultVisibility =  'invisible';
+            if ($settings['documents'] == 'true') {
+                $portalDefaultVisibility = 'visible';
+            }
+
+            $defaultVisibility = $portalDefaultVisibility;
+        }
+
+        if (api_get_setting('documents_default_visibility_defined_in_course') == 'true') {
+            $courseVisibility = api_get_course_setting('documents_default_visibility', $courseCode);
+            if (!empty($courseVisibility) && in_array($courseVisibility, array('visible', 'invisible'))) {
+                $defaultVisibility = $courseVisibility;
+            }
+        }
+        return $defaultVisibility;
+    }
+
+    /**
+     * @param array $courseInfo
+     * @param int $id doc id
+     * @param string $visibility visible/invisible
+     * @param int $userId
+     */
+    public static function updateVisibilityFromAllSessions($courseInfo, $id, $visibility, $userId)
+    {
+        $sessionList = SessionManager::get_session_by_course($courseInfo['code']);
+
+        if (!empty($sessionList)) {
+            foreach ($sessionList as $session) {
+                $sessionId = $session['id'];
+                api_item_property_update(
+                    $courseInfo,
+                    TOOL_DOCUMENT,
+                    $id,
+                    $visibility,
+                    $userId,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $sessionId
+                );
+            }
+        }
+
     }
 
 }

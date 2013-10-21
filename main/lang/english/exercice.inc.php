@@ -2,6 +2,48 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ExerciseWasActivatedFromXToY = "Exercise was activated from %s to %s";
+$SelectAnAnswerToContinue = "Select an answer to continue";
+$IfYouContinueYourAnswerWillBeSavedAnyChangeWillBeNotAllowed = "If you continue your answers will be saved, any change will be not allowed later. Are you sure you want to continue?";
+$YesImSure = "Yes, I'm sure!";
+$NoIWantToTurnBack = "No, I want to continue the exercise.";
+$QuestionReused = "Question added in the exercise";
+$QuestionCopied = "Question copied to the exercise";
+$ZeroMeansNoQuestionWillBeSelectedMinusOneMeansThatAllQuestionsWillBeSelected = "-1 = All questions will be selected.
+ 0 = No questions will be selected.";
+$EmailNotificationTemplateDescription = "You can customize the email sent to users when they finished the exercise. You can use tags like these:
+
+1. {{ student.username }}
+2. {{ student.firstname }}
+3. {{ student.lastname }}
+4. {{ student.official_code }}
+5. {{ exercise.title }}
+6. {{ exercise.start_time }}
+7. {{ exercise.end_time }}
+8. {{ course.title }}
+9. {{ course.code }}";
+$EmailNotificationTemplate = "Email notification template";
+$ExerciseEndButtonDisconnect = "Logout";
+$ExerciseEndButtonExerciseHome = "Exercise list.";
+$ExerciseEndButtonCourseHome = "Course home";
+$ExerciseEndButton = "Exercise end button";
+$HideQuestionTitle = "Hide question title";
+$QuestionSelection = "Question selection type";
+$OrderedCategoriesByParentWithQuestionsRandom = "Ordered categories by parent with random questions";
+$OrderedCategoriesByParentWithQuestionsOrdered = "Ordered categories by parent with questions ordered";
+$RandomCategoriesWithRandomQuestionsNoQuestionGrouped = "Random categories with random questions (questions not grouped)";
+$RandomCategoriesWithQuestionsOrderedNoQuestionGrouped = "Random categories with questions ordered (questions not grouped)";
+$RandomCategoriesWithRandomQuestions = "Random categories with random questions";
+$OrderedCategoriesAlphabeticallyWithRandomQuestions = "Ordered categories alphabetically with random questions";
+$RandomCategoriesWithQuestionsOrdered = "Random categories with questions ordered";
+$OrderedCategoriesAlphabeticallyWithQuestionsOrdered = "Ordered categories alphabetically with questions ordered";
+$UsingCategories = "Using categories";
+$OrderedByUser = "Ordered by user";
+$ToReview = "To be reviewed";
+$Unanswered = "Unanswered";
+$Answered = "Answered";
+$CurrentQuestion = "Current question";
+$MediaQuestions = "Shareable enunciates";
 $AddedToLPCannotBeAccessed = "This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.";
 $langExercice = "Test";
 $langActivate = "Show";
@@ -351,6 +393,7 @@ $AreYouSureToDeleteResults = "Are you sure to delete results";
 $ExerciseCopied = "Exercise copied";
 $AreYouSureToCopy = "Are you sure to copy";
 $EditingExerciseCauseProblemsInLP = "Editing exercise cause problems in Learning Path";
+$ExerciseWithFeedbackWithoutCorrectionComment = "Note: This test has been setup to hide the expected answers.";
 $SessionIsReadOnly = "The session is read only";
 $EnableTimerControl = "Enable time control";
 $ExerciseTotalDurationInMinutes = "Total duration in minutes of the test";

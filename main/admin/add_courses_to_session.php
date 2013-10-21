@@ -81,7 +81,6 @@ function remove_item(origin)
 }
 </script>';
 
-
 $formSent=0;
 $errorMsg=$firstLetterCourse=$firstLetterSession='';
 $CourseList=$SessionList=array();
@@ -89,13 +88,12 @@ $courses=$sessions=array();
 $noPHP_SELF=true;
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
-
 	$formSent              = $_POST['formSent'];
 	$firstLetterCourse     = $_POST['firstLetterCourse'];
 	$firstLetterSession    = $_POST['firstLetterSession'];
 	$CourseList            = $_POST['SessionCoursesList'];
 	if (!is_array($CourseList)) {
-		$CourseList=array();
+		$CourseList = array();
 	}
 	$nbr_courses=0;
 
@@ -141,10 +139,9 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 			}
 			Database::query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'");
 		}
-
 	}
 
-	foreach($existingCourses as $existingCourse) {
+	foreach ($existingCourses as $existingCourse) {
 		if(!in_array($existingCourse['course_code'], $CourseList)) {
 		    $course_info = api_get_course_info($existingCourse['course_code']);
             CourseManager::remove_course_ranking($course_info['real_id'], $id_session);
@@ -156,20 +153,17 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 	$nbr_courses=count($CourseList);
 	Database::query("UPDATE $tbl_session SET nbr_courses=$nbr_courses WHERE id='$id_session'");
 
-	if(isset($_GET['add']))
+	if (isset($_GET['add']))
 		header('Location: add_users_to_session.php?id_session='.$id_session.'&add=true');
 	else
 		header('Location: resume_session.php?id_session='.$id_session);
-		//header('Location: '.$_GET['page'].'?id_session='.$id_session);
+    exit;
 }
 
-// display the dokeos header
+// display the header
 Display::display_header($tool_name);
 
-// display the tool title
-// api_display_tool_title($tool_name);
-
-if($add_type == 'multiple') {
+if ($add_type == 'multiple') {
 	$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
 	$link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').' ';
 } else {
@@ -177,16 +171,11 @@ if($add_type == 'multiple') {
 	$link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
 
-
 // the form header
 $session_info = SessionManager::fetch($id_session);
 echo '<div class="actions">';
 echo $link_add_type_unique.$link_add_type_multiple;
 echo '</div>';
-
-/*$sql = 'SELECT COUNT(1) FROM '.$tbl_course;
-$rs = Database::query($sql);
-$count_courses = Database::result($rs, 0, 0);*/
 
 $ajax_search = $add_type == 'unique' ? true : false;
 $nosessionCourses = $sessionCourses = array();
@@ -215,14 +204,14 @@ if ($ajax_search) {
 		}
 	}
 
-	$result=Database::query($sql);
-	$Courses=Database::store_result($result);
+	$result = Database::query($sql);
+	$Courses = Database::store_result($result);
 
-	foreach($Courses as $course) {
+	foreach ($Courses as $course) {
 		$sessionCourses[$course['code']] = $course ;
 	}
 } else {
-	$sql="SELECT code, title, visual_code, id_session
+	$sql = "SELECT code, title, visual_code, id_session
 			FROM $tbl_course course
 			LEFT JOIN $tbl_session_rel_course session_rel_course
 				ON course.code = session_rel_course.course_code
@@ -243,9 +232,8 @@ if ($ajax_search) {
 				ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
 		}
 	}
-
-	$result=Database::query($sql);
-	$Courses=Database::store_result($result);
+	$result = Database::query($sql);
+	$Courses = Database::store_result($result);
 	foreach($Courses as $course) {
 		if ($course['id_session'] == $id_session) {
 			$sessionCourses[$course['code']] = $course ;
@@ -293,14 +281,12 @@ if(!empty($errorMsg))
   <td width="45%" align="center">
 
 <?php
-if(!($add_type == 'multiple')){
+if (!($add_type == 'multiple')) {
 	?>
 	<input type="text" id="course_to_add" onkeyup="xajax_search_courses(this.value,'single')" />
 	<div id="ajax_list_courses_single"></div>
 	<?php
-}
-else
-{
+} else {
 	?>
 	<div id="ajax_list_courses_multiple">
 	<select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" style="width:360px;"> <?php
@@ -352,16 +338,12 @@ foreach($sessionCourses as $enreg)
 }
 unset($sessionCourses);
 ?>
-
   </select></td>
 </tr>
 </table>
-
 </form>
 <script type="text/javascript">
-<!--
-function moveItem(origin , destination){
-
+function moveItem(origin , destination) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
 			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
@@ -371,14 +353,10 @@ function moveItem(origin , destination){
 	}
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
-
-
 }
 
 function sortOptions(options) {
-
 	newOptions = new Array();
-
 	for (i = 0 ; i<options.length ; i++) {
 		newOptions[i] = options[i];
 	}
@@ -389,7 +367,6 @@ function sortOptions(options) {
 	for(i = 0 ; i < newOptions.length ; i++){
 		options[i] = newOptions[i];
 	}
-
 }
 
 function mysort(a, b){
@@ -409,10 +386,6 @@ function valide(){
 
 	document.forms.formulaire.submit();
 }
--->
-
 </script>
 <?php
-/*		FOOTER 	*/
 Display::display_footer();
-?>

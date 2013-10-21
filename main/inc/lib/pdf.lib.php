@@ -395,7 +395,7 @@ if($complete_style === false) { error_log(__FUNCTION__.' with no style'); }
             $course_info = api_get_course_info($course_code);
             $store_path  = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.api_get_current_access_url_id().'_pdf_watermark.png';   // course path            
         } else {
-            $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/'.api_get_current_access_url_id().'_pdf_watermark.png';   // course path              
+            $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png';   // course path              
         }        
         if (file_exists($store_path)) {
             @unlink($store_path);

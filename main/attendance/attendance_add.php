@@ -35,7 +35,7 @@ $form->add_html_editor('description', get_lang('Description'), false, false, arr
 // Adavanced Parameters
 
 $advanced = '<a href="javascript://" class = "advanced_parameters" ><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedParameters').'</span></a>';
-if (Gradebook::is_active()) {  
+if ((api_get_session_id() != 0 && Gradebook::is_active()) || api_get_session_id() == 0) {   
     $form -> addElement('advanced_settings',$advanced);
 
     $form->addElement('html','<div id="id_qualify" style="display:none">');

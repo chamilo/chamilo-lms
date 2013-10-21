@@ -18,7 +18,7 @@ class AnnouncementManager {
     }
 
     public static function get_tags() {
-        return array('((user_name))', '((teacher_name))', '((teacher_email))', '((course_title))', '((course_link))');
+        return array('((user_name))', '((user_firstname))', '((user_lastname))', '((teacher_name))', '((teacher_email))', '((course_title))', '((course_link))');
     }
 
     public static function parse_content($content, $course_code) {
@@ -36,7 +36,9 @@ class AnnouncementManager {
         }
         $course_link = api_get_course_url();
 
-        $data['username'] = $reader_info['username'];
+        $data['user_name'] = $reader_info['username'];
+        $data['user_firstname'] = $reader_info['firstname'];
+        $data['user_lastname'] = $reader_info['lastname'];
         $data['teacher_name'] = $teacher_name;
         $data['teacher_email'] = $teacher_email;
         $data['course_title'] = $course_info['name'];

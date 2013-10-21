@@ -1312,13 +1312,13 @@ class Tracking {
      * @param    int        Coach id
      * @return    array    Sessions list
      */
-    public static function get_sessions_coached_by_user($coach_id) {
+    public static function get_sessions_coached_by_user($coach_id)
+    {
         // table definition
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
         $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-        // protect datas
         $coach_id = intval($coach_id);
 
         // session where we are general coach
@@ -1326,7 +1326,6 @@ class Tracking {
                     FROM ' . $tbl_session . '
                     WHERE id_coach=' . $coach_id;
 
-        global $_configuration;
         if (api_is_multiple_url_enabled()) {
             $tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
@@ -1350,7 +1349,6 @@ class Tracking {
                         ON session.id = session_course_user.id_session
                         AND session_course_user.id_user=' . $coach_id.' AND session_course_user.status=2';
 
-        global $_configuration;
         if (api_is_multiple_url_enabled()) {
             $tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
@@ -1381,12 +1379,10 @@ class Tracking {
                     $time_end = mktime(0, 0, 0, $date_end[1], $date_end[2], $date_end[0]);
                     if ($time_start < time() && time() < $time_end) {
                         $session['status'] = get_lang('SessionActive');
-                    }
-                    else{
+                    } else {
                         if (time() < $time_start) {
                             $session['status'] = get_lang('SessionFuture');
-                        }
-                        else{
+                        } else {
                             if (time() > $time_end) {
                                 $session['status'] = get_lang('SessionPast');
                             }
@@ -1395,8 +1391,8 @@ class Tracking {
                 }
             }
         }
-        return $a_sessions;
 
+        return $a_sessions;
     }
 
     /**

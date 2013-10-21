@@ -78,7 +78,6 @@ $langUserHasPermissionNot = "Käyttäjällä ei ole oikeuksia";
 $langUserHasPermission = "Käyttäjällä on oikeus";
 $langLegend = "Selitys";
 $langUserHasPermissionByRoleGroup = "Käyttäjä ryhmällä on oikeus";
-$EditPost = "Muokkaa tehtävää";
 $AddBlog = "Luo uusi projekti";
 $EditBlog = "Muokkaa projektia";
 $DeleteBlog = "Poista tämä projekti";

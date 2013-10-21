@@ -2,10 +2,12 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ViewModeImpress = "Obecny tryb widoku: Impress";
 $NewForumCreated = "Nowe forum zostało dodane";
 $NewThreadCreated = "Nowy wątek został utworzony";
 $HideAttemptView = "Ukryj widok próby";
 $ExtendAttemptView = "Rozszerz widok próby";
+$LearnPathAddedTitle = "Witamy w autorskim narzędziu tworzenia kursów Chamilo!";
 $BuildComment = "Dodaj przedmioty nauczania i czynności do kursu";
 $BasicOverviewComment = "Dodaj komentarze audio i uporządkuj przedmioty nauczania w spisie treści";
 $DisplayComment = "Obserwuj kurs z punktu widzenia studenta";
@@ -156,6 +158,7 @@ $langNoItemsInLp = "Brak przedmiotów nauczania w kursie. Kliknij \"Buduj\", aby
 $FirstPosition = "Pierwsza pozycja";
 $NewQuiz = "Nowy Test";
 $CreateTheForum = "Utwórz forum do kursu";
+$AddLpIntro = "Witamy w autorskim programie Chamilo Course. Utwórz swoje kursy krok po kroku. Spis treści pojawi się po lewej stronie.";
 $AddLpToStart = "Aby rozpocząć, należy podać tytuł kursu";
 $CreateTheLink = "Dodaj link do kursu";
 $MoveCurrentLink = "Przenieś bieżący link";
@@ -174,9 +177,17 @@ $NewExercise = "Nowy test";
 $CreateANewLink = "Utwórz nowy link";
 $CreateANewForum = "Utwórz nowe forum";
 $LinkAdd = "Dodaj link";
+$WoogieConversionPowerPoint = "Woogie: konwersja słowa";
+$WelcomeWoogieSubtitle = "MS Word na konwerter kursu";
+$WelcomeWoogieConverter = "Witamy w  Woogie Rapid Learning
+- Wybierz plik .doc, .sxw, .odt
+- Wyślij je do Woogie. To będzie przekonwertowane do kursu SCORM
+- Wtedy będziesz mógł dodawać komentarze audio na każdej stronie i wstawiać quizy oraz inne działania pomiędzy stronami";
 $WoogieError = "Błąd podczas konwersji dokumentu programu Word. Sprawdź, czy istnieją specjalne znaki w nazwie dokumentu ..";
 $WordConvert = "Konwersja plików Word";
 $Order = "Uporządkuj";
+$InteractionID = "Interakcje ID";
+$TimeFinished = "Czas (zakończył się ...)";
 $CorrectAnswers = "Prawidłowe odpowiedzi";
 $StudentResponse = "Odpowiedzi studenta";
 $LatencyTimeSpent = "Czas spędzony";
@@ -192,6 +203,12 @@ $OogieUnknownError = "Konwersja nie powiodła się z nieznanych przyczyn. Skonta
 $OogieBadExtension = "Prześlij tylko prezentacje. Pliki muszą mieć rozszerzenie .ppt lub .odp";
 $WoogieBadExtension = "Prześlij tylko dokumenty tekstowe. Pliki muszą mieć rozszerzenie .doc, .docx lub .odt";
 $ShowAudioRecorder = "Pokaż rejestrator dźwięku";
+$SearchFeatureNotEnabledComment = "Funkcja wyszukiwania pełnego tekstu nie jest włączona w Chamilo. Proszę skontaktować się z administratorem Chamilo.";
+$SearchFeatureSearchExplanation = "Aby przeszukać bazę danych kursów, użyj następujących składni:
+<i>term tag:tag_name -exclude +include \"exact phrase\"</i>
+Na przykład:
+ <i> car tag:truck -ferrari +ford \"high consumption\".</i>
+Spowoduje to wyświetlenie wszystkich wyników dla słowa \"samochód\", oznaczone jako \"ciężarówki\", wyłączając \"ferrari\", ale zawierając słowa\"ford\" i wyrażenie \"wysoka konsumpcja\".";
 $ViewLearningPath = "Widok kursu";
 $SearchFeatureDocumentTagsIfIndexing = "Tagi do dodania do dokumentu, jeśli indeksowanie";
 $ReturnToLearningPaths = "Powrót do ścieżek edukacyjnych";

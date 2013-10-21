@@ -582,7 +582,6 @@ class learnpath {
                                SET ref = " . $new_item_id . "
                                WHERE c_id = $course_id AND id = " . $new_item_id;
             Database::query($sql_update_ref);
-
         }
 
         // Upload audio.
@@ -1995,15 +1994,16 @@ class learnpath {
      * Returns the HTML necessary to print a mediaplayer block inside a page
      * @return string	The mediaplayer HTML
      */
-    public function get_mediaplayer($autostart='true') {
+    public function get_mediaplayer($autostart = 'true')
+    {
         $course_id = api_get_course_int_id();
         global $_course;
         $tbl_lp_item 		= Database :: get_course_table(TABLE_LP_ITEM);
         $tbl_lp_item_view 	= Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 
         // Getting all the information about the item.
-        $sql = "SELECT * FROM " . $tbl_lp_item . " as lp INNER  JOIN " . $tbl_lp_item_view . " as lp_view on lp.id = lp_view.lp_item_id " .
-                "WHERE  lp.id = '" . $_SESSION['oLP']->current . "' AND
+        $sql = "SELECT * FROM ".$tbl_lp_item." as lp INNER  JOIN ".$tbl_lp_item_view." as lp_view on lp.id = lp_view.lp_item_id ".
+                "WHERE  lp.id = '".$_SESSION['oLP']->current."' AND
                         lp.c_id = $course_id AND
                         lp_view.c_id = $course_id";
         $result = Database::query($sql);
@@ -2031,19 +2031,26 @@ class learnpath {
                 $autostart_audio = 'true';
             }
 
+            $courseInfo = api_get_course_info();
+
+            $audio = $row['audio'];
+
+            $file = '../../courses/'.$courseInfo['path'].'/document/audio/'.$audio;
+            if (!file_exists($file)) {
+                $lpPathInfo = $_SESSION['oLP']->generate_lp_folder(api_get_course_info());
+                $file = '../../courses/'.$_course['path'].'/document'.$lpPathInfo['dir'].$audio;
+            }
+
+            $player = Display::getMediaPlayer($file, array('id' => 'lp_audio_media_player', 'autoplay' => $autostart_audio, 'width' => '100%'));
+
             // The mp3 player.
             $output  = '<div id="container">';
-            $output .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
-            $output .= '<script type="text/javascript">
-                            var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
-                            s1.addParam("allowscriptaccess","always");
-                                s1.addParam("flashvars","file=' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document/audio/' . $row['audio'] . '&autostart=' . $autostart_audio.'");
-                            s1.write("container");
-						</script>
-                        </div>';
+            $output .= $player;
+            $output .= '</div>';
         }
         return $output;
     }
+
 
     /**
      * This function checks if the learnpath is visible for student after the progress of its prerequisite is completed, and considering time availability
@@ -2822,7 +2829,7 @@ class learnpath {
             // The anchor will let us center the TOC on the currently viewed item &^D
             if ($item['type'] != 'dokeos_module' && $item['type'] != 'dokeos_chapter') {
                 $html .= '<div class="' . $style_item . '" style="padding-left: ' . ($item['level'] * 1.5) . 'em; padding-right:' . ($item['level'] / 2) . 'em"             title="' . $item['description'] . '" >';
-                $html .= '<a name="atoc_' . $item['id'] . '" />';
+                $html .= '<a name="atoc_' . $item['id'] . '" ></a>';
             } else {
                 $html .= '<div class="' . $style_item . '" style="padding-left: ' . ($item['level'] * 2) . 'em; padding-right:' . ($item['level'] * 1.5) . 'em"             title="' . $item['description'] . '" >';
             }
@@ -2931,7 +2938,8 @@ class learnpath {
      * @param	integer	Learnpath item ID
      * @return	string	Link to the lp_item resource
      */
-    public function get_link($type = 'http', $item_id = null, $provided_toc = false) {
+    public function get_link($type = 'http', $item_id = null, $provided_toc = false)
+    {
         $course_id = $this->get_course_int_id();
 
         if ($this->debug > 0) {
@@ -3017,8 +3025,12 @@ class learnpath {
                                 $src  = get_youtube_video_id($file);
                                 $file = 'embed.php?type=youtube&src='.$src;
                             }
+                            if (isVimeoLink($file)) {
+                                $src  = getVimeoLinkId($file);
+                                $file = 'embed.php?type=vimeo&src='.$src;
+                            }
                         } else {
-                            // check how much attempts of a exercise exits in lp
+                            // Check how much attempts of a exercise exits in lp
                             $lp_item_id = $this->get_current_item_id();
                             $lp_view_id = $this->get_view_id();
 
@@ -4909,143 +4921,7 @@ class learnpath {
     }
 
     public function return_new_tree($update_audio = 'false', $drop_element_here = false) {
-        $ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php';
-        echo '<script>
-        var newOrderData= "";
-        function processChildren(parentId) {
-            //Loop through the children of the UL element defined by the parentId
-            var ulParentID= "UL_" + parentId;
-            $("#" + ulParentID).children().each(function () {
-
-                /*Only process elements with an id attribute (in order to skip the blank,
-                    unmovable <li> elements.*/
-
-                if ($(this).attr("id")) {
-                    /*Build a string of data with the childs ID and parent ID,
-                        using the "|" as a delimiter between the two IDs and the "^"
-                        as a record delimiter (these delimiters were chosen in case the data
-                        involved includes more common delimiters like commas within the content)
-                    */
-                    newOrderData= newOrderData + $(this).attr("id") + "|" + parentId + "^";
-
-                    //Determine if this child is a containter
-                    if ($(this).is(".container")) {
-                        //Process the child elements of the container
-                        processChildren($(this).attr("id"));
-                    }
-                }
-            });  //end of children loop
-        } //end of processChildren function
-
-        $(function() {
-
-            $(".item_data").live("mouseover", function(event) {
-                $(".button_actions", this).show();
-            });
-
-            $(".item_data").live("mouseout", function() {
-                $(".button_actions",this).hide();
-            });
-
-            $(".button_actions").hide();
-
-            $( ".lp_resource" ).sortable({
-                items: ".lp_resource_element ",
-                handle: ".moved", //only the class "moved"
-                cursor: "move",
-                connectWith: "#lp_item_list",
-                placeholder: "ui-state-highlight", //defines the yellow highlight
-
-                start: function(event, ui) {
-                    $(ui.item).css("width", "160px");
-                    $(ui.item).find(".item_data").attr("style", "");
-
-                },
-                stop: function(event, ui) {
-                    $(ui.item).css("width", "100%");
-                },
-            });
-
-            $("#lp_item_list").sortable({
-                items: "li",
-                handle: ".moved", //only the class "moved"
-                cursor: "move",
-                placeholder: "ui-state-highlight", //defines the yellow highlight
-
-                update: function(event, ui) {
-
-                    //Walk through the direct descendants of the lp_item_list <ul>
-                    $("#lp_item_list").children().each(function () {
-
-                        /*Only process elements with an id attribute (in order to skip the blank,
-                        unmovable <li> elements.*/
-
-                        if ($(this).attr("id")) {
-                                /*Build a string of data with the child s ID and parent ID,
-                                using the "|" as a delimiter between the two IDs and the "^"
-                                as a record delimiter (these delimiters were chosen in case the data
-                                involved includes more common delimiters like commas within the content)
-                                */
-                                newOrderData= newOrderData + $(this).attr("id") + "|" + "0" + "^";
-
-                                //Determine if this child is a containter
-                                if ($(this).is(".li_container")) {
-                                    //Process the child elements of the container
-                                    processChildren($(this).attr("id"));
-                                }
-                            }
-                    }); //end of lp_item_list children loop
-
-                    var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
-                    $.post("'.$ajax_url.'", order, function(reponse){
-                        $("#message").html(reponse);
-                    });
-                },
-                receive: function(event, ui) {
-
-                    var id = $(ui.item).attr("data_id");
-                    var type = $(ui.item).attr("data_type");
-                    var title = $(ui.item).attr("title");
-
-                    if (ui.item.parent()[0]) {
-                        var parent_id = $(ui.item.parent()[0]).attr("id");
-                        var previous_id = $(ui.item.prev()).attr("id");
-
-                        if (parent_id) {
-                            parent_id = parent_id.split("_")[1];
-                            var params = {
-                                    "a": "add_lp_item",
-                                    "id": id,
-                                    "parent_id": parent_id,
-                                    "previous_id": previous_id,
-                                    "type": type,
-                                    "title" : title
-                                };
-                            $.ajax({
-                                type: "GET",
-                                url: "'.$ajax_url.'",
-                                data: params,
-                                async: false,
-                                success: function(data) {
-                                    if (data == -1) {
-                                    } else {
-
-                                        $(".normal-message").hide();
-                                        $(ui.item).attr("id", data);
-                                        $(ui.item).addClass("lp_resource_element_new");
-                                        $(ui.item).find(".item_data").attr("style", "");
-                                        $(ui.item).addClass("record li_container");
-                                        $(ui.item).removeClass("lp_resource_element");
-                                        $(ui.item).removeClass("doc_resource");
-                                    }
-                                }
-                            });
-                        }
-                    }//
-                }//end receive
-            });
-        });
-        </script>';
+        $return = '';
 
         $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 
@@ -5243,7 +5119,7 @@ class learnpath {
             }
         }
 
-        $return = '<div class="lp_tree well">';
+        $return .= '<div class="lp_tree well">';
 
         $return .= '<ul id="lp_item_list">';
         $return .='<h4>'.$this->name.'</h4><br>';
@@ -5300,7 +5176,8 @@ class learnpath {
      * This function builds the action menu
      * @return void
      */
-    public function build_action_menu() {
+    public function build_action_menu($returnContent = false)
+    {
         $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 
         $gradebook = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
@@ -5330,6 +5207,10 @@ class learnpath {
         );
         $return .= Display::group_button(get_lang('PrerequisitesOptions'), $buttons);
         $return .= '</div>';
+
+        if ($returnContent) {
+            return $return;
+        }
         echo $return;
     }
 
@@ -7876,6 +7757,15 @@ class learnpath {
             //$return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . ' />';
 
             if ($arrLP[$i]['item_type'] == TOOL_QUIZ) {
+                // lets update max_score Quiz information depending of the Quiz Advanced properties
+                require_once api_get_path(LIBRARY_PATH)."lp_item.lib.php";
+                $tmp_obj_lp_item = new LpItem($course_id, $arrLP[$i]['id']);
+                $tmp_obj_exercice = new Exercise();
+                $tmp_obj_exercice->read($tmp_obj_lp_item->path);
+                $tmp_obj_lp_item->max_score = $tmp_obj_exercice->get_max_score();
+                $tmp_obj_lp_item->update_in_bdd();
+                $arrLP[$i]['max_score'] = $tmp_obj_lp_item->max_score;
+
                 $return .= '<td class="exercise" style="border:1px solid #ccc;">';
                 $return .= '<center><input size="4" maxlength="3" name="min_' . $arrLP[$i]['id'] . '" type="text" value="' . (($arrLP[$i]['id'] == $preq_id) ? $preq_mastery : 0) . '" /></center>';
                 $return .= '</td>';

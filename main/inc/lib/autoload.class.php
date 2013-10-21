@@ -685,6 +685,20 @@ class Autoload
         $result['HTML_QuickForm_text'] = '/main/inc/lib/pear/HTML/QuickForm/text.php';
         $result['HTML_QuickForm_textarea'] = '/main/inc/lib/pear/HTML/QuickForm/textarea.php';
         $result['HTML_QuickForm_xbutton'] = '/main/inc/lib/pear/HTML/QuickForm/xbutton.php';
+
+        $result['Text_CAPTCHA_Driver_Equation'] = '/main/inc/lib/pear/Text/CAPTCHA/Driver/Equation.php';
+        $result['Text_CAPTCHA_Driver_Figlet'] = '/main/inc/lib/pear/Text/CAPTCHA/Driver/Figlet.php';
+        $result['Text_CAPTCHA_Driver_Image'] = '/main/inc/lib/pear/Text/CAPTCHA/Driver/Image.php';
+        $result['Text_CAPTCHA_Driver_Numeral'] = '/main/inc/lib/pear/Text/CAPTCHA/Driver/Numeral.php';
+        $result['Text_CAPTCHA_Driver'] = '/main/inc/lib/pear/Text/CAPTCHA/Driver.php';
+        $result['Text_CAPTCHA_Exception'] = '/main/inc/lib/pear/Text/CAPTCHA/Exception.php';
+        $result['Text_CAPTCHA'] = '/main/inc/lib/pear/Text/CAPTCHA.php';
+
+        $result['HTML_QuickForm_CAPTCHA'] = '/main/inc/lib/pear/HTML/QuickForm/CAPTCHA.php';
+        $result['HTML_QuickForm_CAPTCHA_Image'] = '/main/inc/lib/pear/HTML/QuickForm/CAPTCHA/Image.php';
+        $result['HTML_QuickForm_CAPTCHA_Word'] = '/main/inc/lib/pear/HTML/QuickForm/CAPTCHA/Word.php';
+
+
         $result['HTML_Table'] = '/main/inc/lib/pear/HTML/Table.php';
         $result['HTML_Table_Storage'] = '/main/inc/lib/pear/HTML/Table/Storage.php';
         $result['Header'] = '/main/inc/lib/system/web/header.class.php';

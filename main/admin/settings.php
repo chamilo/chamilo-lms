@@ -238,6 +238,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         $keys = array();
 
         foreach ($values as $key => $value) {
+            if (strcmp($key,'MAX_FILE_SIZE')===0) { continue; }
             if (in_array($key, $settings_to_avoid)) { continue; }
             // Avoid form elements which have nothing to do with settings
             if ($key == 'search_field' or $key == 'submit_fixed_in_bottom') { continue; }

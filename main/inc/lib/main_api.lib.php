@@ -64,7 +64,8 @@ define('COURSE_VISIBILITY_REGISTERED', 1);
 define('COURSE_VISIBILITY_OPEN_PLATFORM', 2);
 /** Open for the whole world */
 define('COURSE_VISIBILITY_OPEN_WORLD', 3);
-
+/** Invisible to all except admin */
+define('COURSE_VISIBILITY_HIDDEN', 4);
 
 // SESSION VISIBILITY CONSTANTS
 define('SESSION_VISIBLE_READ_ONLY', 1);
@@ -155,6 +156,8 @@ define('LOG_USER_DELETE',                       'user_deleted');
 define('LOG_USER_CREATE',                       'user_created');
 define('LOG_USER_ENABLE',                       'user_enable');
 define('LOG_USER_DISABLE',                      'user_disable');
+define('LOG_USER_FIELD_CREATE',			'user_field_created');
+define('LOG_USER_FIELD_DELETE',			'user_field_deleted');
 define('LOG_SESSION_CREATE',                    'session_created');
 define('LOG_SESSION_DELETE',                    'session_deleted');
 define('LOG_SESSION_CATEGORY_CREATE',           'session_category_created');
@@ -172,10 +175,13 @@ define('LOG_PROMOTION_DELETE',                  'promotion_deleted');
 define('LOG_CAREER_CREATE',                     'career_created');
 define('LOG_CAREER_DELETE',                     'career_deleted');
 
+define('LOG_USER_PERSONAL_DOC_DELETED',         'user_doc_deleted');
+
 // event logs data types
 define('LOG_COURSE_CODE',                       'course_code');
 define('LOG_USER_ID',                           'user_id');
 define('LOG_USER_OBJECT',                       'user_object');
+define('LOG_USER_FIELD_VARIABLE',		'user_field_variable');
 define('LOG_SESSION_ID',                        'session_id');
 define('LOG_SESSION_CATEGORY_ID',               'session_category_id');
 define('LOG_CONFIGURATION_SETTINGS_CATEGORY',   'settings_category');
@@ -294,6 +300,7 @@ define('LINK_FORUM_THREAD',			5);
 //define('LINK_WORK',6);
 define('LINK_ATTENDANCE',			7);
 define('LINK_SURVEY',				8);
+define('LINK_HOTPOTATOES',			9);
 
 //From display.lib.php
 
@@ -883,6 +890,11 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     		case COURSE_VISIBILITY_OPEN_WORLD: //Open - access allowed for the whole world - 3
     			$is_visible = true;
     			break;
+            case COURSE_VISIBILITY_HIDDEN: //Completely closed: the course is only accessible to the teachers. - 0
+                if (api_is_platform_admin()) {
+                    $is_visible = true;
+                }
+                break;
     	}
         //If pasword is set and user is not registered to the course then the course is not visible
         if ($is_allowed_in_course == false & isset($course_info['registration_code']) && !empty($course_info['registration_code'])) {
@@ -1192,15 +1204,15 @@ function api_get_user_info_from_username($username = '') {
 }
 
 /**
- * @TODO This function should be the real id (integer)
- * Returns the current course code (string)
+ * @return string
  */
 function api_get_course_id() {
     return isset($GLOBALS['_cid']) ? $GLOBALS['_cid'] : null;
 }
 
 /**
- * Returns the current course id (integer)
+ * Returns the current course id
+ * @return int
  */
 function api_get_real_course_id() {
     return isset($_SESSION['_real_cid']) ? intval($_SESSION['_real_cid']) : 0;
@@ -1208,11 +1220,11 @@ function api_get_real_course_id() {
 
 /**
  * Returns the current course id (integer)
+ * @return int
  */
 function api_get_course_int_id() {
     return isset($_SESSION['_real_cid']) ? intval($_SESSION['_real_cid']) : 0;
 }
-
 
 /**
  * Returns the current course directory
@@ -1222,7 +1234,8 @@ function api_get_course_int_id() {
  * @return string   The directory where the course is located inside the Chamilo "courses" directory
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-function api_get_course_path($course_code = null) {
+function api_get_course_path($course_code = null)
+{
     $info = !empty($course_code) ? api_get_course_info($course_code) : api_get_course_info();
     return $info['path'];
 }
@@ -1233,7 +1246,8 @@ function api_get_course_path($course_code = null) {
  * @param string    Optional: course code
  * @return mixed    The value of that setting in that table. Return -1 if not found.
  */
-function api_get_course_setting($setting_name, $course_code = null) {
+function api_get_course_setting($setting_name, $course_code = null)
+{
     $course_info = api_get_course_info($course_code);
 	$table 		 = Database::get_course_table(TABLE_COURSE_SETTING);
     $setting_name = Database::escape_string($setting_name);
@@ -1414,10 +1428,12 @@ function api_format_course_array($course_data) {
 
     //Course password
     $_course['registration_code']     = !empty($course_data['registration_code']) ? sha1($course_data['registration_code']) : null;
-
     $_course['disk_quota']            = $course_data['disk_quota'];
-
     $_course['course_public_url']     = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/index.php';
+
+    if (array_key_exists('add_teachers_to_sessions_courses', $course_data)) {
+        $_course['add_teachers_to_sessions_courses'] = $course_data['add_teachers_to_sessions_courses'];
+    }
 
     if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png')) {
         $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png';
@@ -1905,7 +1921,8 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
         $session_id = intval($session_id);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        $sql = "SELECT visibility, date_start, date_end, nb_days_access_after_end, nb_days_access_before_beginning FROM $tbl_session
+        $sql = "SELECT visibility, date_start, date_end, nb_days_access_after_end, nb_days_access_before_beginning
+                FROM $tbl_session
                 WHERE id = $session_id ";
 
         $result = Database::query($sql);
@@ -2352,6 +2369,11 @@ function api_is_coach($session_id = 0, $course_code = null) {
         $session_id = intval($session_id);
     } else {
         $session_id = api_get_session_id();
+    }
+
+    // The student preview was on
+    if (isset($_SESSION['studentview']) && $_SESSION['studentview'] == "studentview") {
+        return false;
     }
 
     if (!empty($course_code)) {
@@ -3111,7 +3133,6 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 
     // Update if possible
     $set_type = '';
-
 
     switch ($lastedit_type) {
         case 'delete' : // delete = make item only visible for the platform admin.
@@ -4820,6 +4841,8 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
         case COURSE_VISIBILITY_REGISTERED:
         case COURSE_VISIBILITY_CLOSED:
             return $is_platformAdmin || $is_courseMember || $is_courseAdmin;
+        case COURSE_VISIBILITY_HIDDEN:
+            return $is_platformAdmin;
     }
     return false;
 }
@@ -4881,8 +4904,8 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
 
 function replace_dangerous_char($filename, $strict = 'loose') {
     // Safe replacements for some non-letter characters.
-    static $search  = array("\0", ' ', "\t", "\n", "\r", "\x0B", '/', "\\", '"', "'", '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#', '+', '&', '%');
-    static $replace = array('',   '_', '_',  '_',  '_',  '_',    '-', '-',  '-', '_', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
+    static $search  = array(',', "\0", ' ', "\t", "\n", "\r", "\x0B", '/', "\\", '"', "'", '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#', '+', '&', '%');
+    static $replace = array('_', '',   '_', '_',  '_',  '_',  '_',    '-', '-',  '-', '_', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
 
     // Encoding detection.
     $encoding = api_detect_encoding($filename);
@@ -6138,7 +6161,24 @@ function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
         if (empty($group_id)) {
             $group_id = api_get_group_id();
         }
-        api_item_property_update(api_get_course_info(), $original_tool_id, $item_id, $visibility, api_get_user_id(), $group_id, null, null, null, api_get_session_id());
+
+        // Read the portal and course default visibility
+        if ($tool_id == 'documents') {
+            $visibility = DocumentManager::getDocumentDefaultVisibility(api_get_course_id());
+        }
+
+        api_item_property_update(
+            api_get_course_info(),
+            $original_tool_id,
+            $item_id,
+            $visibility,
+            api_get_user_id(),
+            $group_id,
+            null,
+            null,
+            null,
+            api_get_session_id()
+        );
 
         //Fixes default visibility for tests
 
@@ -6450,4 +6490,168 @@ function api_get_user_info_from_official_code($official_code = '') {
         return _api_format_user($result_array);
     }
     return false;
+}
+
+/**
+ *
+ * @param string $inputId the jquery id example: #password
+ * @return string
+ */
+function api_get_password_checker_js($usernameInputId, $passwordInputid)
+{
+    global $_configuration;
+    $useStrengthPassChecker = isset($_configuration['allow_strength_pass_checker']) ? $_configuration['allow_strength_pass_checker'] : false;
+
+    if ($useStrengthPassChecker == false) {
+        return null;
+    }
+
+    $verdicts = array(get_lang('PasswordWeak'), get_lang('PasswordNormal'), get_lang('PasswordMedium'), get_lang('PasswordStrong'), get_lang('PasswordVeryStrong'));
+    $js = api_get_js('strength/strength.js');
+    $js .=  "<script>
+
+    var verdicts = ['".implode("','", $verdicts)."'];
+    var errorMessages = {
+        password_to_short : '".get_lang('PasswordIsTooShort')."',
+        same_as_username : '".get_lang('YourPasswordCannotBeTheSameAsYourUsername')."',
+    };
+
+    $(document).ready(function() {
+        var options = {
+            verdicts: verdicts,
+            onLoad : function () {
+                //$('#messages').text('Start typing password');
+            },
+            onKeyUp: function (evt) {
+                $(evt.target).pwstrength('outputErrorList');
+            },
+            errorMessages : errorMessages,
+            viewports: {
+                progress: '#password_progress',
+                //verdict: undefined,
+                //errors: undefined
+            },
+            usernameField: '$usernameInputId'
+        };
+        $('".$passwordInputid."').pwstrength(options);
+    });
+    </script>";
+    return $js;
+}
+
+/**
+ * Gets an array with "easy" passwords
+ * @return array
+ */
+function api_get_easy_password_list()
+{
+    $passwordList = array('123', '1234', '123456', 'admin', 'user', 'student', 'teacher');
+    $file = api_get_path(CONFIGURATION_PATH).'easy_password_list.php';
+    if (file_exists($file)) {
+        $passwordList = require_once $file;
+    }
+    return $passwordList;
+}
+
+/**
+ *
+* create an user extra field called 'captcha_blocked_until_date'
+ */
+function api_block_account_captcha($username)
+{
+    $userInfo = api_get_user_info_from_username($username);
+    if (empty($userInfo)) {
+        return false;
+    }
+    global $_configuration;
+    $minutesToBlock = isset($_configuration['captcha_time_to_block']) ? $_configuration['captcha_time_to_block'] : 10;
+    $time = time() + $minutesToBlock*60;
+    Usermanager::update_extra_field_value($userInfo['user_id'], 'captcha_blocked_until_date', api_get_utc_datetime($time));
+}
+
+function api_clean_account_captcha($username)
+{
+    $userInfo = api_get_user_info_from_username($username);
+    if (empty($userInfo)) {
+        return false;
+    }
+    Session::erase('loginFailedCount');
+    Usermanager::update_extra_field_value($userInfo['user_id'], 'captcha_blocked_until_date', null);
+}
+
+function api_get_user_blocked_by_captcha($username)
+{
+    $userInfo = api_get_user_info_from_username($username);
+    if (empty($userInfo)) {
+        return false;
+    }
+    $data = UserManager::get_extra_user_data_by_field($userInfo['user_id'], 'captcha_blocked_until_date');
+    if (isset($data)) {
+        return $data['captcha_blocked_until_date'];
+    }
+    return false;
+}
+
+
+/**
+ * Remove tags from HTML anf return the $in_number_char first non-HTML char
+ * Postfix the text with "..." if it has been truncated.
+ * @return string
+ * @author hubert borderiou
+ */
+function api_get_short_text_from_html($in_html, $in_number_char) {
+    $out_res = api_remove_tags_with_space($in_html, false);
+    $postfix = "...";
+    if (strlen($out_res) > $in_number_char) {
+        $out_res = substr($out_res, 0, $in_number_char).$postfix;
+    }
+    return $out_res;
+}
+
+/**
+ * Replace tags with a space in a text.
+ * If $in_double_quote_replace, replace " with '' (for HTML attribute purpose, for exemple)
+ * @return string
+ * @author hubert borderiou
+ */
+function api_remove_tags_with_space($in_html, $in_double_quote_replace = true) {
+    $out_res = $in_html;
+    if ($in_double_quote_replace) {
+        $out_res = str_replace('"', "''", $out_res);
+    }
+    // avoid text stuck together when tags are removed, adding a space after >
+    $out_res = str_replace (">", "> ", $out_res);
+    $out_res = strip_tags($out_res);
+    return $out_res;
+}
+
+/**
+ * If true, the drh can access all content (courses, users) inside a session
+ * @return bool
+ */
+function api_drh_can_access_all_session_content()
+{
+    global $_configuration;
+    if (isset($_configuration['drh_can_access_all_session_content'])) {
+        return $_configuration['drh_can_access_all_session_content'];
+    }
+    return false;
+}
+
+/**
+ * @param string $tool
+ * @param string $setting
+ * @param mixed $defaultValue
+ */
+function api_get_default_tool_setting($tool, $setting, $defaultValue)
+{
+    global $_configuration;
+    if (isset($_configuration[$tool]) &&
+        isset($_configuration[$tool]['default_settings']) &&
+        isset($_configuration[$tool]['default_settings'][$setting])
+    ) {
+        return $_configuration[$tool]['default_settings'][$setting];
+    }
+    return $defaultValue;
+
 }

@@ -237,15 +237,69 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 WHERE username = '".Database::escape_string($login)."'";
         $result = Database::query($sql);
 
+        $captchaValidated = true;
+        $allowCaptcha = isset($_configuration['allow_captcha']) ? $_configuration['allow_captcha'] : false;
+
         if (Database::num_rows($result) > 0) {
             $uData = Database::fetch_array($result);
+
+            if ($allowCaptcha) {
+
+                // Checking captcha
+                if (isset($_POST['captcha'])) {
+                    // Check captcha
+                    $captchaText = $_POST['captcha'];
+                    /** @var Text_CAPTCHA $obj */
+                    $obj = isset($_SESSION['userportal.lib']) ? $_SESSION['userportal.lib'] : null;
+                    if ($obj) {
+                        $obj->getPhrase();
+                        if ($obj->getPhrase() != $captchaText) {
+                            $captchaValidated = false;
+                        } else {
+                            $captchaValidated = true;
+                        }
+                    }
+                    if (isset($_SESSION['captcha_question'])) {
+                        $captcha_question = $_SESSION['captcha_question'];
+                        $captcha_question->destroy();
+                    }
+                }
+
+                // Redirect to login page
+                if ($captchaValidated == false) {
+                    $loginFailed = true;
+                    Session::erase('_uid');
+                    Session::write('loginFailed', '1');
+
+                    header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=wrong_captcha');
+                    exit;
+                }
+
+                // Check if account is blocked by captcha user extra field see function api_block_account_captcha()
+                $blockedUntilDate = api_get_user_blocked_by_captcha($login);
+
+                if (isset($blockedUntilDate) && !empty($blockedUntilDate)) {
+                    if (time() > api_strtotime($blockedUntilDate, 'UTC')) {
+                        api_clean_account_captcha($login);
+
+                    } else {
+                        $loginFailed = true;
+                        Session::erase('_uid');
+                        Session::write('loginFailed', '1');
+
+                        header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=blocked_by_captcha');
+                        exit;
+                    }
+                }
+            }
+
 
             if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE || $uData['auth_source'] == CAS_AUTH_SOURCE) {
                 //The authentification of this user is managed by Chamilo itself
                 $password = api_get_encrypted_password(trim(stripslashes($password)));
 
                 // Check the user's password
-                if (($password == $uData['password']  OR $cas_login) AND (trim($login) == $uData['username'])) {
+                if (($password == $uData['password'] OR $cas_login) AND (trim($login) == $uData['username'])) {
                     $update_type = UserManager::get_extra_user_data_by_field($uData['user_id'], 'update_type');
                     $update_type= $update_type['update_type'];
                     if (!empty($extAuthSource[$update_type]['updateUser']) && file_exists($extAuthSource[$update_type]['updateUser'])) {
@@ -279,11 +333,12 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
                                             $_user['user_id'] = $uData['user_id'];
                                             $_user['status']  = $uData['status'];
-                                            Session::write('_user',$_user);
+                                            Session::write('_user', $_user);
                                             event_login();
                                             $logging_in = true;
                                         } else {
                                             $loginFailed = true;
+                                            Session::write('loginFailed', '1');
                                             Session::erase('_uid');
                                             header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
                                             exit;
@@ -291,6 +346,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                     } else {
                                         $loginFailed = true;
                                         Session::erase('_uid');
+                                        Session::write('loginFailed', '1');
                                         header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
                                         exit;
                                     }
@@ -311,6 +367,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         } else {
                                             $loginFailed = true;
                                             Session::erase('_uid');
+                                            Session::write('loginFailed', '1');
                                             header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
                                             exit;
                                         }
@@ -329,12 +386,14 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                         } else {
                             $loginFailed = true;
                             Session::erase('_uid');
+                            Session::write('loginFailed', '1');
                             header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_expired');
                             exit;
                         }
                     } else {
                         $loginFailed = true;
                         Session::erase('_uid');
+                        Session::write('loginFailed', '1');
                         header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
                         exit;
                     }
@@ -342,6 +401,25 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     // login failed: username or password incorrect
                     $loginFailed = true;
                     Session::erase('_uid');
+                    Session::write('loginFailed', '1');
+
+                    if ($allowCaptcha) {
+
+                        if (isset($_SESSION['loginFailedCount'])) {
+                            $_SESSION['loginFailedCount']++;
+                        } else {
+                            $_SESSION['loginFailedCount'] = 1;
+                        }
+
+                        $numberMistakesToBlockAccount = isset($_configuration['captcha_number_mistakes_to_block_account']) ? $_configuration['captcha_number_mistakes_to_block_account'] : 10;
+
+                        if (isset($_SESSION['loginFailedCount'])) {
+                            if ($_SESSION['loginFailedCount'] >= $numberMistakesToBlockAccount) {
+                                api_block_account_captcha($login);
+                            }
+                        }
+                    }
+
                     header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');
                     exit;
                 }
@@ -399,7 +477,9 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 }
             } //end if is_array($extAuthSource)
             if ($loginFailed) { //If we are here username given is wrong
+                Session::write('loginFailed', '1');
                 header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');
+                exit;
             }
         } //end else login failed
     } elseif (api_get_setting('sso_authentication') === 'true' && !in_array('webservices', explode('/', $_SERVER['REQUEST_URI']))) {
@@ -423,7 +503,12 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             }
         } elseif(!$logout) {
             // Handle cookie comming from Master Server
-            if (!isset($_GET['sso_referer']) && !isset($_GET['loginFailed']) && isset($_GET['sso_cookie'])) {
+            //  Use this first line if you want users to still see the
+            //  homepage without connecting
+            //if (!isset($_GET['sso_referer']) && !isset($_GET['loginFailed']) && isset($_GET['sso_cookie'])) {
+            //  Use this second line if you want all users to be redirected
+            //  unless they are connected (removed req on sso_cookie)
+            if (!isset($_GET['sso_referer']) && !isset($_GET['loginFailed'])) {
                 // Redirect to master server
                 $osso->ask_master();
             } elseif (isset($_GET['sso_cookie'])) {
@@ -460,6 +545,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     //Request comes from unknown source
                     $loginFailed = true;
                     Session::erase('_uid');
+                    Session::write('loginFailed', '1');
                     header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=unrecognize_sso_origin');
                     exit;
                 }
@@ -506,12 +592,14 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                 } else {
                                     $loginFailed = true;
                                     Session::erase('_uid');
+                                    Session::write('loginFailed', '1');
                                     header('Location: index.php?loginFailed=1&error=account_expired');
                                     exit;
                                 }
                             } else {
                                 $loginFailed = true;
                                 Session::erase('_uid');
+                                Session::write('loginFailed', '1');
                                 header('Location: index.php?loginFailed=1&error=account_inactive');
                                 exit;
                             }
@@ -524,6 +612,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     } else {
                         //Redirect to the subscription form
                         header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php?username='.$res['openid.sreg.nickname'].'&email='.$res['openid.sreg.email'].'&openid='.$res['openid.identity'].'&openid_msg=idnotfound');
+                        Session::write('loginFailed', '1');
+                        exit;
                         //$loginFailed = true;
                     }
                 } else {
@@ -576,7 +666,12 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
     $is_allowedCreateCourse = false;
 
     if (isset($_user['user_id']) && $_user['user_id'] && ! api_is_anonymous()) {
-    // a uid is given (log in succeeded)
+        // a uid is given (log in succeeded)
+
+        $_SESSION['loginFailed'] = false;
+        unset($_SESSION['loginFailedCount']);
+        unset($_SESSION['loginToBlock']);
+
         $user_table     = Database::get_main_table(TABLE_MAIN_USER);
         $admin_table    = Database::get_main_table(TABLE_MAIN_ADMIN);
         $track_e_login  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
@@ -838,7 +933,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset))
         }
 
         //Checking if the user filled the course legal agreement
-        if ($_course['activate_legal'] == 1 && !api_is_platform_admin()) {
+        if ($_course['activate_legal'] == 1 && !api_is_platform_admin() && !api_is_anonymous()) {
             $user_is_subscribed = CourseManager::is_user_accepted_legal($user_id, $_course['id'], $session_id) || $user_pass_open_course;
             if (!$user_is_subscribed) {
                 $url = api_get_path(WEB_CODE_PATH).'course_info/legal.php?course_code='.$_course['code'].'&session_id='.$session_id;
@@ -1018,6 +1113,10 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset))
                     $is_allowed_in_course = true;
                 }
                 break;
+            case COURSE_VISIBILITY_HIDDEN: //4
+                if ($is_platformAdmin) {
+                    $is_allowed_in_course = true;
+                }
         }
     }
 

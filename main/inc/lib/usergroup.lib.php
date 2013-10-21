@@ -18,6 +18,9 @@ class UserGroup extends Model
 {
     var $columns = array('id', 'name', 'description');
 
+    /**
+     *
+     */
     public function __construct()
     {
         $this->table = Database::get_main_table(TABLE_USERGROUP);
@@ -27,18 +30,29 @@ class UserGroup extends Model
         $this->table_course = Database::get_main_table(TABLE_MAIN_COURSE);
     }
 
+    /**
+     * @return mixed
+     */
     public function get_count()
     {
         $row = Database::select('count(*) as count', $this->table, array(), 'first');
         return $row['count'];
     }
 
+    /**
+     * @param int $course_id
+     * @return mixed
+     */
     public function get_usergroup_by_course_with_data_count($course_id)
     {
         $row = Database::select('count(*) as count', $this->usergroup_rel_course_table, array('where' => array('course_id = ?' => $course_id)), 'first');
         return $row['count'];
     }
 
+    /**
+     * @param string $name
+     * @return mixed
+     */
     public function get_id_by_name($name)
     {
         $row = Database::select('id', $this->table, array('where' => array('name = ?' => $name)), 'first');
@@ -63,6 +77,9 @@ class UserGroup extends Model
         echo Display::grid_html('usergroups');
     }
 
+    /**
+     *
+     */
     function display_teacher_view()
     {
         // action links
@@ -86,6 +103,10 @@ class UserGroup extends Model
         return $array;
     }
 
+    /**
+     * @param array $options
+     * @return array
+     */
     public function get_usergroup_in_course($options = array())
     {
         $sql = "SELECT u.* FROM {$this->usergroup_rel_course_table} usergroup
@@ -101,6 +122,10 @@ class UserGroup extends Model
         return $array;
     }
 
+    /**
+     * @param array $options
+     * @return array|bool
+     */
     public function get_usergroup_not_in_course($options = array())
     {
         $course_id = null;
@@ -123,6 +148,10 @@ class UserGroup extends Model
         return $array;
     }
 
+    /**
+     * @param int $course_id
+     * @return array
+     */
     public function get_usergroup_by_course($course_id)
     {
         $options = array('where' => array('course_id = ?' => $course_id));
@@ -136,6 +165,11 @@ class UserGroup extends Model
         return $array;
     }
 
+    /**
+     * @param int $usergroup_id
+     * @param int $course_id
+     * @return bool
+     */
     public function usergroup_was_added_in_course($usergroup_id, $course_id)
     {
         $results = Database::select('usergroup_id', $this->usergroup_rel_course_table, array('where' => array('course_id = ? AND usergroup_id = ?' => array($course_id, $usergroup_id))));
@@ -226,7 +260,7 @@ class UserGroup extends Model
             }
         }
 
-        //Deleting items
+        // Deleting items
         if (!empty($delete_items)) {
             foreach ($delete_items as $session_id) {
                 if (!empty($user_list)) {
@@ -238,7 +272,7 @@ class UserGroup extends Model
             }
         }
 
-        //Addding new relationships
+        // Addding new relationships
         if (!empty($new_items)) {
             foreach ($new_items as $session_id) {
                 $params = array('session_id' => $session_id, 'usergroup_id' => $usergroup_id);
@@ -297,6 +331,10 @@ class UserGroup extends Model
         }
     }
 
+    /**
+     * @param int $usergroup_id
+     * @param bool $delete_items
+     */
     function unsubscribe_courses_from_usergroup($usergroup_id, $delete_items)
     {
         //Deleting items
@@ -344,17 +382,17 @@ class UserGroup extends Model
             }
         }
 
-        //Deleting items
+        // Deleting items
         if (!empty($delete_items) && $delete_users_not_present_in_list) {
             foreach ($delete_items as $user_id) {
-                //Removing courses
+                // Removing courses
                 if (!empty($course_list)) {
                     foreach ($course_list as $course_id) {
                         $course_info = api_get_course_info_by_id($course_id);
                         CourseManager::unsubscribe_user($user_id, $course_info['code']);
                     }
                 }
-                //Removing sessions
+                // Removing sessions
                 if (!empty($session_list)) {
                     foreach ($session_list as $session_id) {
                         SessionManager::unsubscribe_user_from_session($session_id, $user_id);
@@ -364,7 +402,7 @@ class UserGroup extends Model
             }
         }
 
-        //Addding new relationships
+        // Adding new relationships
         if (!empty($new_items)) {
             //Adding sessions
             if (!empty($session_list)) {
@@ -374,7 +412,7 @@ class UserGroup extends Model
             }
 
             foreach ($new_items as $user_id) {
-                //Adding courses
+                // Adding courses
                 if (!empty($course_list)) {
                     foreach ($course_list as $course_id) {
                         $course_info = api_get_course_info_by_id($course_id);
@@ -387,11 +425,14 @@ class UserGroup extends Model
         }
     }
 
-    function usergroup_exists($name)
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function usergroup_exists($name)
     {
         $sql = "SELECT * FROM $this->table WHERE name='".Database::escape_string($name)."'";
         $res = Database::query($sql);
         return Database::num_rows($res) != 0;
     }
-
 }

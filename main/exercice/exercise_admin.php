@@ -120,7 +120,9 @@ $htmlHeadXtra[] = '<script>
 		}
 
 		function check_feedback() {
-			document.getElementById(\'result_disabled_0\').checked = true;
+		    if (document.getElementById(\'result_disabled_1\').checked == true) {
+		        document.getElementById(\'result_disabled_0\').checked = true;
+		    }
 		}
 
 		function check_direct_feedback() {

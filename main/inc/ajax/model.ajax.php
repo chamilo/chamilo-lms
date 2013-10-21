@@ -31,15 +31,20 @@ if (!in_array($sord, array('asc','desc'))) {
     $sord = 'desc';
 }
 
-if (!in_array($action, array(
+if (!in_array(
+    $action,
+    array(
         'get_exercise_results',
         'get_hotpotatoes_exercise_results',
         'get_work_user_list',
+        'get_work_user_list_others',
+        'get_work_user_list_all',
         'get_timelines',
         'get_user_skill_ranking',
-        'get_usergroups_teacher'))
-    ) {
-	api_protect_admin_script(true);
+        'get_usergroups_teacher'
+    )
+)) {
+    api_protect_admin_script(true);
 }
 
 //Search features
@@ -63,7 +68,8 @@ $ops = array (
 
 //@todo move this in the display_class or somewhere else
 
-function get_where_clause($col, $oper, $val) {
+function get_where_clause($col, $oper, $val)
+{
     global $ops;
     if (empty($col)){
         return '';
@@ -126,17 +132,33 @@ switch ($action) {
         $course_id = api_get_course_int_id();
         $count = Question::get_count_course_medias($course_id);
         break;
-	case 'get_user_skill_ranking':
-    	$skill = new Skill();
-	    $count = $skill->get_user_list_skill_ranking_count();
-	    break;
-    case 'get_work_user_list':
+    case 'get_user_skill_ranking':
+        $skill = new Skill();
+        $count = $skill->get_user_list_skill_ranking_count();
+        break;
+    case 'get_work_user_list_all':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $work_id = $_REQUEST['work_id'];
         $count = get_count_work($work_id);
         break;
-	case 'get_exercise_results':
-		require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
+    case 'get_work_user_list_others':
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+        $work_id = $_REQUEST['work_id'];
+        $count = get_count_work($work_id, api_get_user_id());
+        break;
+    case 'get_work_user_list':
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+        $work_id = $_REQUEST['work_id'];
+        $courseInfo = api_get_course_info();
+        // All
+        if ($courseInfo['show_score'] == '0') {
+            $count = get_count_work($work_id, null, api_get_user_id());
+        } else {
+            $count = get_count_work($work_id, api_get_user_id());
+        }
+        break;
+    case 'get_exercise_results':
+        require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
         $exercise_id = $_REQUEST['exerciseId'];
 
         if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
@@ -147,15 +169,15 @@ switch ($action) {
                 $where_condition .= " AND te.exe_user_id  = '$filter_user'";
             }
         }
-		$count = get_count_exam_results($exercise_id, $where_condition);
-		break;
-	case 'get_hotpotatoes_exercise_results':
-		require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
+        $count = get_count_exam_results($exercise_id, $where_condition);
+        break;
+    case 'get_hotpotatoes_exercise_results':
+        require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
         $hotpot_path = $_REQUEST['path'];
-		$count = get_count_exam_hotpotatoes_results($hotpot_path);
-		break;
+        $count = get_count_exam_hotpotatoes_results($hotpot_path);
+        break;
     case 'get_sessions':
-        $count = SessionManager::get_count_admin();
+        $count = SessionManager::get_count_admin($where_condition);
         break;
     /*case 'get_extra_fields':
         $type = $_REQUEST['type'];
@@ -294,12 +316,34 @@ switch ($action) {
 	        }
 	    }
     	break;
+    case 'get_work_user_list_all':
+        if (isset($_GET['type'])  && $_GET['type'] == 'simple') {
+            //$columns = array('type', 'firstname', 'lastname',  'username', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions');
+            $columns = array('type', 'firstname', 'lastname', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions');
+        } else {
+            //$columns = array('type', 'firstname', 'lastname',  'username', 'title', 'sent_date', 'actions');
+            $columns = array('type', 'firstname', 'lastname', 'title', 'sent_date', 'actions');
+        }
+        $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);
+        break;
+    case 'get_work_user_list_others':
+        if (isset($_GET['type'])  && $_GET['type'] == 'simple') {
+            $columns = array('type', 'firstname', 'lastname',  'title', 'qualification', 'sent_date', 'qualificator_id', 'actions');
+        } else {
+            $columns = array('type', 'firstname', 'lastname',  'title', 'sent_date', 'actions');
+        }
+        $where_condition .= " AND u.user_id <> ".api_get_user_id();
+        $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);
+        break;
     case 'get_work_user_list':
         if (isset($_GET['type'])  && $_GET['type'] == 'simple') {
-            $columns = array('type', 'firstname', 'lastname',  'username', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions');
+            //$columns = array('type', 'firstname', 'lastname',  'username', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions');
+            $columns = array('type', 'firstname', 'lastname', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions');
         } else {
-            $columns = array('type', 'firstname', 'lastname',  'username', 'title', 'sent_date', 'actions');
+            //$columns = array('type', 'firstname', 'lastname',  'username', 'title', 'sent_date', 'actions');
+            $columns = array('type', 'firstname', 'lastname', 'title', 'sent_date', 'actions');
         }
+        $where_condition .= " AND u.user_id = ".api_get_user_id();
         $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);
         break;
 	case 'get_exercise_results':
@@ -540,24 +584,27 @@ switch ($action) {
         exit;
 }
 
-$allowed_actions = array('get_careers',
-                         'get_promotions',
-                         'get_usergroups',
-                         'get_usergroups_teacher',
-                         'get_gradebooks',
-                         'get_sessions',
-                         'get_exercise_results',
-                         'get_hotpotatoes_exercise_results',
-                         'get_work_user_list',
-                         'get_timelines',
-                         'get_grade_models',
-                         'get_event_email_template',
-                         'get_user_skill_ranking',
-                         //'get_extra_fields',
-                         //'get_extra_field_options',
-                         //'get_course_exercise_medias',
-                         'get_user_course_report',
-                         'get_user_course_report_resumed'
+$allowed_actions = array(
+    'get_careers',
+    'get_promotions',
+    'get_usergroups',
+    'get_usergroups_teacher',
+    'get_gradebooks',
+    'get_sessions',
+    'get_exercise_results',
+    'get_hotpotatoes_exercise_results',
+    'get_work_user_list',
+    'get_work_user_list_others',
+    'get_work_user_list_all',
+    'get_timelines',
+    'get_grade_models',
+    'get_event_email_template',
+    'get_user_skill_ranking',
+    //'get_extra_fields',
+    //'get_extra_field_options',
+    //'get_course_exercise_medias',
+    'get_user_course_report',
+    'get_user_course_report_resumed'
 );
 
 //5. Creating an obj to return a json

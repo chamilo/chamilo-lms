@@ -272,7 +272,22 @@ if ($form->validate()) {
 	}
 	$self_registration_allowed   = isset($values['self_registration_allowed']) ? 1 : 0;
 	$self_unregistration_allowed = isset($values['self_unregistration_allowed']) ? 1 : 0;
-	GroupManager :: set_group_properties($current_group['id'], strip_tags($values['name']), strip_tags($values['description']), $max_member, $values['doc_state'], $values['work_state'], $values['calendar_state'], $values['announcements_state'], $values['forum_state'], $values['wiki_state'], $values['chat_state'], $self_registration_allowed, $self_unregistration_allowed);
+
+	GroupManager::set_group_properties(
+        $current_group['id'],
+        strip_tags($values['name']),
+        strip_tags($values['description']),
+        $max_member,
+        $values['doc_state'],
+        $values['work_state'],
+        $values['calendar_state'],
+        $values['announcements_state'],
+        $values['forum_state'],
+        $values['wiki_state'],
+        $values['chat_state'],
+        $self_registration_allowed,
+        $self_unregistration_allowed
+    );
 
 	// Storing the tutors (we first remove all the tutors and then add only those who were selected)
 	GroupManager :: unsubscribe_all_tutors($current_group['id']);

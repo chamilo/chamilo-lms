@@ -165,6 +165,10 @@ define('TABLE_TOOL_INTRO',                      'tool_intro');
 define('TABLE_SCORMDOC',                        'scormdocument');
 define('TABLE_STUDENT_PUBLICATION',             'student_publication');
 define('TABLE_STUDENT_PUBLICATION_ASSIGNMENT',  'student_publication_assignment');
+define('TABLE_STUDENT_PUBLICATION_REL_DOCUMENT', 'student_publication_rel_document');
+define('TABLE_STUDENT_PUBLICATION_REL_USER', 'student_publication_rel_user');
+
+define('TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT', 'student_publication_comment');
 
 // Course forum tables
 define('TABLE_FORUM_CATEGORY',              'forum_category');

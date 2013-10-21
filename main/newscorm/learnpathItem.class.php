@@ -11,7 +11,8 @@
  * lp_item defines items belonging to a learnpath. Each item has a name, a score, a use time and additional
  * information that enables tracking a user's progress in a learning path
  */
-class learnpathItem {
+class learnpathItem
+{
 	public $attempt_id; // Also called "objectives" SCORM-wise.
 	public $audio; // The path to an audio file (stored in document/audio/).
 	public $children = array(); // Contains the ids of children items.
@@ -1844,7 +1845,8 @@ class learnpathItem {
 	 * @return  void
 	 * @todo //todo insert into lp_item_view if lp_view not exists
 	 */
-	public function set_lp_view($lp_view_id, $course_id = null) {
+	public function set_lp_view($lp_view_id, $course_id = null)
+    {
 	    if (empty($course_id)) {
 	        $course_id = api_get_course_int_id();
 	    } else {
@@ -1935,7 +1937,8 @@ class learnpathItem {
 	 * @param	float	Score
 	 * @return	boolean	True on success, false otherwise
 	 */
-	public function set_score($score) {
+	public function set_score($score)
+    {
         //$possible_status = array('not attempted','incomplete','completed','passed','failed','browsed');
         $debug = self::debug;
    		if ($debug > 0) { error_log('learnpathItem::set_score('.$score.')', 0); }
@@ -1944,7 +1947,7 @@ class learnpathItem {
    			$master = $this->get_mastery_score();
    			$current_status = $this->get_status(false);
 
-            //Fixes bug when SCORM doesn't send a mastery score even if they sent a score!
+            // Fixes bug when SCORM doesn't send a mastery score even if they sent a score!
             if ($master == -1) {
                 $master = $this->max_score;
             }
@@ -1989,7 +1992,8 @@ class learnpathItem {
 	 * @param	string	Status - must be one of the values defined in $this->possible_status
 	 * @return	boolean	True on success, false on error
 	 */
-	public function set_status($status) {
+	public function set_status($status)
+    {
    		if (self::debug > 0) { error_log('learnpathItem::set_status('.$status.')', 0); }
 	 	$found = false;
 	 	foreach ($this->possible_status  as $possible) {

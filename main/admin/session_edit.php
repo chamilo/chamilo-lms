@@ -16,8 +16,6 @@ require_once '../inc/global.inc.php';
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-
-
 $formSent = 0;
 
 // Database Table Definitions
@@ -28,31 +26,26 @@ $id = intval($_GET['id']);
 
 SessionManager::protect_session_edit($id);
 
-$sql = "SELECT name,date_start,date_end,id_coach, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility
-        FROM $tbl_session WHERE id = $id";
-$result = Database::query($sql);
+$infos = SessionManager::fetch($id);
 
-if (!$infos = Database::fetch_array($result)) {
-    header('Location: session_list.php');
-    exit();
-}
-
-$id_coach   = $infos['id_coach'];
-
-
-
+$id_coach = $infos['id_coach'];
 $tool_name = get_lang('EditSession');
 
 $interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => "session_list.php","name" => get_lang('SessionList'));
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id,"name" => get_lang('SessionOverview'));
 
-list($year_start,$month_start,$day_start)   = explode('-',$infos['date_start']);
-list($year_end,$month_end,$day_end)         = explode('-',$infos['date_end']);
+list($year_start,$month_start,$day_start)   = explode('-', $infos['date_start']);
+list($year_end,$month_end,$day_end)         = explode('-', $infos['date_end']);
+
+$showDescriptionChecked = null;
+if (isset($infos['show_description']) && !empty($infos['show_description'])) {
+    $showDescriptionChecked = 'checked';
+}
 
 $end_year_disabled = $end_month_disabled = $end_day_disabled = '';
 
-if ($_POST['formSent']) {
+if (isset($_POST['formSent']) && $_POST['formSent']) {
 	$formSent = 1;
 
 	$name                  = $_POST['name'];
@@ -69,6 +62,9 @@ if ($_POST['formSent']) {
 	$id_session_category   = $_POST['session_category'];
 	$id_visibility         = $_POST['session_visibility'];
 
+    $description = isset($_POST['description']) ? $_POST['description'] : null;
+    $showDescription = isset($_POST['show_description']) ? 1 : 0;
+
     $end_limit              = $_POST['end_limit'];
     $start_limit            = $_POST['start_limit'];
 
@@ -78,7 +74,27 @@ if ($_POST['formSent']) {
         $nolimit = null;
     }
 
-	$return = SessionManager::edit_session($id,$name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit, $id_coach, $id_session_category,$id_visibility,$start_limit,$end_limit);
+	$return = SessionManager::edit_session(
+        $id,
+        $name,
+        $year_start,
+        $month_start,
+        $day_start,
+        $year_end,
+        $month_end,
+        $day_end,
+        $nb_days_acess_before,
+        $nb_days_acess_after,
+        $nolimit,
+        $id_coach,
+        $id_session_category,
+        $id_visibility,
+        $start_limit,
+        $end_limit,
+        $description,
+        $showDescription
+    );
+
 	if ($return == strval(intval($return))) {
 		header('Location: resume_session.php?id_session='.$return);
 		exit();
@@ -104,11 +120,8 @@ $thisYear   = date('Y');
 // display the header
 Display::display_header($tool_name);
 
-// display the tool title
-// api_display_tool_title($tool_name);
-
 if (!empty($return)) {
-	Display::display_error_message($return,false);
+    Display::display_error_message($return,false);
 }
 ?>
 
@@ -183,8 +196,8 @@ if (!empty($return)) {
                 ;" id="options">
 
             <input type="text" name="nb_days_access_before" value="<?php if($formSent) echo api_htmlentities($nb_days_access_before,ENT_QUOTES,$charset); else echo api_htmlentities($infos['nb_days_access_before_beginning'],ENT_QUOTES,$charset); ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysBefore') ?>
-                <br />
-                <br />
+            <br />
+            <br />
             <input type="text" name="nb_days_access_after" value="<?php if($formSent) echo api_htmlentities($nb_days_access_after,ENT_QUOTES,$charset); else echo api_htmlentities($infos['nb_days_access_after_end'],ENT_QUOTES,$charset); ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysAfter') ?>
 
             </div>
@@ -344,6 +357,26 @@ if (!empty($return)) {
     </div>
   </div>
 
+    <?php if (array_key_exists('show_description', $infos)) { ?>
+
+        <div class="control-group">
+            <div class="controls">
+                <?php echo get_lang('Description') ?> <br />
+                <textarea name="description"><?php  echo $infos['description']; ?></textarea>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="controls">
+                <label>
+                <input id="show_description" type="checkbox" name="show_description" <?php echo $showDescriptionChecked ?> />
+                <?php echo get_lang('ShowDescription') ?>
+                </label>
+            </div>
+        </div>
+
+    <?php } ?>
+
     <div class="control-group">
         <div class="controls">
             <button class="save" type="submit" value="<?php echo get_lang('ModifyThisSession') ?>"><?php echo get_lang('ModifyThisSession') ?></button>
@@ -379,8 +412,6 @@ function setDisable(select){
 
     var start_div = document.getElementById('start_date');
     start_div.style.display = 'none';
-
-
 }
 
 function disable_endtime(select) {

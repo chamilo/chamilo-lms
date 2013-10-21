@@ -360,6 +360,7 @@ function build_document_icon_tag($type, $path) {
     $basename = basename($path);
     $current_session_id = api_get_session_id();
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+    $user_image = false;
     if ($type == 'file') {
         $icon = choose_image($basename);
 
@@ -384,7 +385,9 @@ function build_document_icon_tag($type, $path) {
             if ($image_path['file'] == 'unknown.jpg') {
                 $icon = $image_path['file'];
             } else {
-                $icon = '../upload/users/' . substr($basename, 8) . '/' . $image_path['file'];
+                //$icon = '../upload/users/' . substr($basename, 8) . '/' . $image_path['file'];
+                $user_image = true;
+                $icon = $image_path['dir'] . $image_path['file'];
             }
 
             $basename = get_lang('UserFolder') . ' ' . api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
@@ -450,7 +453,9 @@ function build_document_icon_tag($type, $path) {
             }
         }
     }
-
+    if ($user_image) {
+        return Display::img($icon, $basename, array());
+    }
     return Display::return_icon($icon, $basename, array());
 }
 

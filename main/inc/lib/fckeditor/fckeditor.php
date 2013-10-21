@@ -39,8 +39,7 @@ function FCKeditor_IsCompatibleBrowser()
 {
     if ( isset( $_SERVER ) ) {
         $sAgent = $_SERVER['HTTP_USER_AGENT'] ;
-    }
-    else {
+    } else {
         global $HTTP_SERVER_VARS ;
         if ( isset( $HTTP_SERVER_VARS ) ) {
             $sAgent = $HTTP_SERVER_VARS['HTTP_USER_AGENT'] ;
@@ -64,7 +63,8 @@ function FCKeditor_IsCompatibleBrowser()
           return true;
         }
         $iVersion = (int)$iVersion;
-        return ($iVersion >= 20030210) ;
+        //return ($iVersion >= 20030210) ;
+        return true;
     }
     else if ( strpos($sAgent, 'Opera/') !== false )
     {

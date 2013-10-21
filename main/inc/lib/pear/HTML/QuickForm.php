@@ -39,35 +39,34 @@ require_once 'HTML/Common.php';
  * @global array $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES']
  */
 $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] =
-        array(
-            'group'             =>array('HTML/QuickForm/group.php','HTML_QuickForm_group'),
-            'hidden'            =>array('HTML/QuickForm/hidden.php','HTML_QuickForm_hidden'),
-            'reset'             =>array('HTML/QuickForm/reset.php','HTML_QuickForm_reset'),
-            'checkbox'          =>array('HTML/QuickForm/checkbox.php','HTML_QuickForm_checkbox'),
-            'file'              =>array('HTML/QuickForm/file.php','HTML_QuickForm_file'),
-            'image'             =>array('HTML/QuickForm/image.php','HTML_QuickForm_image'),
-            'password'          =>array('HTML/QuickForm/password.php','HTML_QuickForm_password'),
-            'radio'             =>array('HTML/QuickForm/radio.php','HTML_QuickForm_radio'),
-            'button'            =>array('HTML/QuickForm/button.php','HTML_QuickForm_button'),
-            'submit'            =>array('HTML/QuickForm/submit.php','HTML_QuickForm_submit'),
-            'select'            =>array('HTML/QuickForm/select.php','HTML_QuickForm_select'),
-            'hiddenselect'      =>array('HTML/QuickForm/hiddenselect.php','HTML_QuickForm_hiddenselect'),
-            'text'              =>array('HTML/QuickForm/text.php','HTML_QuickForm_text'),
-            'textarea'          =>array('HTML/QuickForm/textarea.php','HTML_QuickForm_textarea'),
-            'link'              =>array('HTML/QuickForm/link.php','HTML_QuickForm_link'),
-            'advcheckbox'       =>array('HTML/QuickForm/advcheckbox.php','HTML_QuickForm_advcheckbox'),
-            'date'              =>array('HTML/QuickForm/date.php','HTML_QuickForm_date'),
-            'static'            =>array('HTML/QuickForm/static.php','HTML_QuickForm_static'),
-            'header'            =>array('HTML/QuickForm/header.php', 'HTML_QuickForm_header'),
-            'html'              =>array('HTML/QuickForm/html.php', 'HTML_QuickForm_html'),
-            'hierselect'        =>array('HTML/QuickForm/hierselect.php', 'HTML_QuickForm_hierselect'),
-            'autocomplete'      =>array('HTML/QuickForm/autocomplete.php', 'HTML_QuickForm_autocomplete'),
-            'xbutton'           =>array('HTML/QuickForm/xbutton.php','HTML_QuickForm_xbutton'),
-            'advanced_settings' =>array('HTML/QuickForm/advanced_settings.php','HTML_QuickForm_advanced_settings'),
-            'label'             =>array('HTML/QuickForm/label.php','HTML_QuickForm_label'),
-            'email'             =>array('HTML/QuickForm/email.php','HTML_QuickForm_email'),
-            
-        );
+array(
+    'group'             => array('HTML/QuickForm/group.php','HTML_QuickForm_group'),
+    'hidden'            => array('HTML/QuickForm/hidden.php','HTML_QuickForm_hidden'),
+    'reset'             => array('HTML/QuickForm/reset.php','HTML_QuickForm_reset'),
+    'checkbox'          => array('HTML/QuickForm/checkbox.php','HTML_QuickForm_checkbox'),
+    'file'              => array('HTML/QuickForm/file.php','HTML_QuickForm_file'),
+    'image'             => array('HTML/QuickForm/image.php','HTML_QuickForm_image'),
+    'password'          => array('HTML/QuickForm/password.php','HTML_QuickForm_password'),
+    'radio'             => array('HTML/QuickForm/radio.php','HTML_QuickForm_radio'),
+    'button'            => array('HTML/QuickForm/button.php','HTML_QuickForm_button'),
+    'submit'            => array('HTML/QuickForm/submit.php','HTML_QuickForm_submit'),
+    'select'            => array('HTML/QuickForm/select.php','HTML_QuickForm_select'),
+    'hiddenselect'      => array('HTML/QuickForm/hiddenselect.php','HTML_QuickForm_hiddenselect'),
+    'text'              => array('HTML/QuickForm/text.php','HTML_QuickForm_text'),
+    'textarea'          => array('HTML/QuickForm/textarea.php','HTML_QuickForm_textarea'),
+    'link'              => array('HTML/QuickForm/link.php','HTML_QuickForm_link'),
+    'advcheckbox'       => array('HTML/QuickForm/advcheckbox.php','HTML_QuickForm_advcheckbox'),
+    'date'              => array('HTML/QuickForm/date.php','HTML_QuickForm_date'),
+    'static'            => array('HTML/QuickForm/static.php','HTML_QuickForm_static'),
+    'header'            => array('HTML/QuickForm/header.php', 'HTML_QuickForm_header'),
+    'html'              => array('HTML/QuickForm/html.php', 'HTML_QuickForm_html'),
+    'hierselect'        => array('HTML/QuickForm/hierselect.php', 'HTML_QuickForm_hierselect'),
+    'autocomplete'      => array('HTML/QuickForm/autocomplete.php', 'HTML_QuickForm_autocomplete'),
+    'xbutton'           => array('HTML/QuickForm/xbutton.php','HTML_QuickForm_xbutton'),
+    'advanced_settings' => array('HTML/QuickForm/advanced_settings.php','HTML_QuickForm_advanced_settings'),
+    'label'             => array('HTML/QuickForm/label.php','HTML_QuickForm_label'),
+    'email'             => array('HTML/QuickForm/email.php','HTML_QuickForm_email')
+);
 
 /**
  * Validation rules known to HTML_QuickForm
@@ -92,7 +91,8 @@ $GLOBALS['_HTML_QuickForm_registered_rules'] = array(
     //'compare'       => array('html_quickform_rule_compare',  'HTML/QuickForm/Rule/Compare.php')
     'compare'       => array('html_quickform_rule_compare',  'HTML/QuickForm/Rule/Compare.php'),
     'comparedate'   => array('html_quickform_rule_comparedate',  'HTML/QuickForm/Rule/CompareDate.php'),
-    'errordate'  	=> array('html_quickform_rule_date',  'HTML/QuickForm/Rule/Date.php')
+    'errordate'  	=> array('html_quickform_rule_date',  'HTML/QuickForm/Rule/Date.php'),
+    'captcha'  	    => array('HTML_QuickForm_Rule_CAPTCHA',  'HTML/QuickForm/Rule/CAPTCHA.php')
     //
 );
 
@@ -327,7 +327,7 @@ class HTML_QuickForm extends HTML_Common
             unset($this->_submitValues['_qf__' . $formName]);
             $this->addElement('hidden', '_qf__' . $formName, null);
         }
-        
+
         if (preg_match('/^([0-9]+)([a-zA-Z]*)$/', ini_get('upload_max_filesize'), $matches)) {
             // see http://www.php.net/manual/en/faq.using.php#faq.using.shorthandbytes
             switch (strtoupper($matches['2'])) {
@@ -344,10 +344,10 @@ class HTML_QuickForm extends HTML_Common
                     $this->_maxFileSize = $matches['1'];
             }
         }
-        
+
         $course_id = api_get_course_int_id();
         //If I'm in a course replace the default max filesize with the course limits
-        if (!empty($course_id)) {            
+        if (!empty($course_id)) {
             $free_course_quota = DocumentManager::get_course_quota() - DocumentManager::documents_total_space();
             if (empty($this->_maxFileSize) || $free_course_quota <= $this->_maxFileSize) {
                 $this->_maxFileSize = intval($free_course_quota);
@@ -618,11 +618,12 @@ class HTML_QuickForm extends HTML_Common
         }
         $className = $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'][$type][1];
         $includeFile = $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'][$type][0];
-        include_once($includeFile);
+
+        include_once $includeFile;
         // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
         //$elementObject =& new $className();
         $elementObject = new $className();
-        
+
         for ($i = 0; $i < 5; $i++) {
             if (!isset($args[$i])) {
                 $args[$i] = null;
@@ -1733,7 +1734,7 @@ class HTML_QuickForm extends HTML_Common
             // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
             //$GLOBALS['_HTML_QuickForm_default_renderer'] =& new HTML_QuickForm_Renderer_Default();
             $GLOBALS['_HTML_QuickForm_default_renderer'] = new HTML_QuickForm_Renderer_Default();
-        }        
+        }
         return $GLOBALS['_HTML_QuickForm_default_renderer'];
     } // end func defaultRenderer
 
@@ -1750,11 +1751,11 @@ class HTML_QuickForm extends HTML_Common
      * @since     1.0
      * @access   public
      */
-    function toHtml ($in_data = null) {         
+    function toHtml ($in_data = null) {
         if (!is_null($in_data)) {
             $this->addElement('html', $in_data);
         }
-        $renderer =& $this->defaultRenderer();             
+        $renderer =& $this->defaultRenderer();
         $this->accept($renderer);
         return $renderer->toHtml();
     } // end func toHtml

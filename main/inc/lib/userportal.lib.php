@@ -332,6 +332,12 @@ class IndexManager {
 				case 'access_url_inactive':
 					$message = get_lang('AccountURLInactive');
 					break;
+                case 'wrong_captcha':
+                    $message = get_lang('TheTextYouEnteredDoesNotMatchThePicture');
+                    break;
+                case 'blocked_by_captcha':
+                    $message = get_lang('AccountBlockedByCaptcha');
+                    break;
                 case 'unrecognize_sso_origin':
                     //$message = get_lang('SSOError');
                     break;
@@ -491,7 +497,7 @@ class IndexManager {
 
 			foreach ($course_list as $course) {
 				// $setting_show_also_closed_courses
-
+                if ($course['visibility'] == COURSE_VISIBILITY_HIDDEN) { continue; }
 				if (!$setting_show_also_closed_courses) {
 					// If we do not show the closed courses
 					// we only show the courses that are open to the world (to everybody)
@@ -526,15 +532,17 @@ class IndexManager {
 					$courses_list_string .= "<li>";
 					if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
                         || ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
-                        || ($user_identified && key_exists($course['code'], $courses_of_user) && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
+                        || ($user_identified && key_exists($course['code'], $courses_of_user)
+                            && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
                         || $courses_of_user[$course['code']]['status'] == '1'
                         || api_is_platform_admin()) {
                             $courses_list_string .= '<a href="'.$web_course_path.$course['directory'].'/">';
                         }
-                        $courses_list_string .= $course['title'];
+                    $courses_list_string .= $course['title'];
                     if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
 						|| ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
-						|| ($user_identified && key_exists($course['code'], $courses_of_user) && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
+						|| ($user_identified && key_exists($course['code'], $courses_of_user)
+                            && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
 	                        || $courses_of_user[$course['code']]['status'] == '1'
 						|| api_is_platform_admin()) {
                         $courses_list_string .= '</a><br />';
@@ -638,15 +646,59 @@ class IndexManager {
 	 * Adds a form to let users login
 	 * @version 1.1
 	 */
-	function display_login_form() {
+	function display_login_form()
+    {
 		$form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-vertical'));
-        // 'placeholder'=>get_lang('UserName')
-        //'autocomplete'=>"off",
-
 		$form->addElement('text', 'login', get_lang('UserName'), array('class' => 'span2 autocapitalize_off', 'autofocus' => 'autofocus'));
 		$form->addElement('password', 'password', get_lang('Pass'), array('class' => 'span2'));
+        global $_configuration;
+
+        // Captcha
+        $allowCaptcha = isset($_configuration['allow_captcha']) ? $_configuration['allow_captcha'] : false;
+
+        if ($allowCaptcha) {
+
+            $useCaptcha = isset($_SESSION['loginFailed']) ? $_SESSION['loginFailed'] : null;
+
+            if ($useCaptcha) {
+
+                $ajax = api_get_path(WEB_AJAX_PATH).'form.ajax.php?a=get_captcha';
+
+                $options = array(
+                    'width'        => 250,
+                    'height'       => 90,
+                    'callback'     => $ajax.'&var='.basename(__FILE__, '.php'),
+                    'sessionVar'   => basename(__FILE__, '.php'),
+                    'imageOptions' => array(
+                        'font_size' => 20,
+                        'font_path' => api_get_path(LIBRARY_PATH).'pchart/fonts/',
+                        'font_file' => 'tahoma.ttf',
+                        //'output' => 'gif'
+                    )
+                );
+
+                // Minimum options using all defaults (including defaults for Image_Text):
+                //$options = array('callback' => 'qfcaptcha_image.php');
+
+                $captcha_question =  $form->addElement('CAPTCHA_Image', 'captcha_question', '', $options);
+                $form->addElement('static', null, null, get_lang('ClickOnTheImageForANewOne'));
+
+                $form->addElement('text', 'captcha', get_lang('EnterTheLettersYouSee'));
+                $form->addRule('captcha', get_lang('EnterTheCharactersYouReadInTheImage'), 'required', null, 'client');
+
+                $form->addRule('captcha', 'What you entered didn\'t match the picture', 'CAPTCHA', $captcha_question);
+            }
+        }
+
 		$form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));
+
 		$html = $form->return_form();
+        // The validation is located in the local.inc
+        /*if ($form->validate()) {
+            // Prevent re-use of the same CAPTCHA phrase
+            $captcha_question->destroy();
+        }*/
+
 		if (api_get_setting('openid_authentication') == 'true') {
 			include_once 'main/auth/openid/login.php';
 			$html .= '<div>'.openid_form().'</div>';
@@ -821,17 +873,17 @@ class IndexManager {
         $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
         $my_account_content .= '<li>'.Display::url(get_lang('SortMyCourses'), $url, array('class' => 'sort course')).'</li>';
 
-        //Course management
+        // Session history
+        if (isset($_GET['history']) && intval($_GET['history']) == 1) {
+            $my_account_content .= '<li><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
+        } else {
+            $my_account_content .= '<li><a href="user_portal.php?history=1"  class="history course">'.get_lang('HistoryTrainingSessions').'</a></li>';
+        }
+
+        // Course catalog
 		if ($show_course_link) {
 			if (!api_is_drh()) {
 				$my_account_content .= '<li><a href="main/auth/courses.php" class="list course">'.get_lang('CourseCatalog').'</a></li>';
-
-                if (isset($_GET['history']) && intval($_GET['history']) == 1) {
-                    $my_account_content .= '<li><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
-                } else {
-                    $my_account_content .= '<li><a href="user_portal.php?history=1"  class="history course">'.get_lang('HistoryTrainingSessions').'</a></li>';
-                }
-
 			} else {
 				$my_account_content .= '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
 			}
@@ -861,15 +913,14 @@ class IndexManager {
 			$session_categories = UserManager::get_sessions_by_category($user_id, false);
 		}
 
-
         $html = '';
 
-        //Showing history title
+        // Showing history title
 
 		if ($load_history) {
 			$html .= Display::page_subheader(get_lang('HistoryTrainingSession'));
 			if (empty($session_categories)) {
-				$html .=  get_lang('YouDoNotHaveAnySessionInItsHistory');
+				$html .= get_lang('YouDoNotHaveAnySessionInItsHistory');
 			}
 		}
 
@@ -909,9 +960,10 @@ class IndexManager {
                         $days_access_after_end  = $session['nb_days_access_after_end'];
                         $date_session_end = $session['date_end'];
                         $session_now = time();
-                        $html_courses_session = '';
                         $count_courses_session = 0;
 
+                        // Loop course content
+                        $html_courses_session = '';
                         foreach ($session['courses'] as $course) {
                             $is_coach_course = api_is_coach($session_id, $course['code']);
                             $allowed_time = 0;
@@ -930,11 +982,16 @@ class IndexManager {
                             if ($session_now > $allowed_time && $days_access_after_end >= $dif_time_after-1) {
                                 //read only and accesible
                                 if (api_get_setting('hide_courses_in_sessions') == 'false') {
-                                    $c = CourseManager :: get_logged_user_course_html($course, $session_id, 'session_course_item', true, $this->load_directories_preview);
+                                    $c = CourseManager::get_logged_user_course_html($course, $session_id, 'session_course_item', true, $this->load_directories_preview);
                                     $html_courses_session .= $c[1];
                                 }
                                 $count_courses_session++;
                             }
+                        }
+
+                        // No courses to show
+                        if (empty($html_courses_session)) {
+                            continue;
                         }
 
                         if ($count_courses_session > 0) {
@@ -964,8 +1021,10 @@ class IndexManager {
                             }
 
                             if (api_get_setting('hide_courses_in_sessions') == 'false') {
-                            //	$params['extra'] .=  $html_courses_session;
+                                // $params['extra'] .=  $html_courses_session;
                             }
+
+                            $params['description'] =  isset($session_box['description']) ? $session_box['description'] : null;
                             $sessions_with_no_category .= CourseManager::course_item_parent(CourseManager::course_item_html($params, true), $html_courses_session);
                         }
                     }
@@ -1033,12 +1092,12 @@ class IndexManager {
                             }
 
                             $params['title'] .=  $session_link;
-
                             $params['subtitle'] =  (!empty($session_box['coach']) ? $session_box['coach'].' | ' : '').$session_box['dates'];
 
                             if (api_is_platform_admin()) {
                                 $params['right_actions'] .=  '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session_id.'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'), ICON_SIZE_SMALL).'</a>';
                             }
+
                             $html_sessions .= CourseManager::course_item_html($params, true).$html_courses_session;
                         }
                     }
@@ -1070,6 +1129,7 @@ class IndexManager {
                                 $params['subtitle'] = get_lang('Until').' '.$session_category_end_date;
                             }
                         }
+
                         $sessions_with_category .= CourseManager::course_item_parent(CourseManager::course_item_html($params, true), $html_sessions);
                     }
 

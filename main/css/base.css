@@ -27,8 +27,6 @@ legend {
 #header_right {
     text-align: right;
     float: right;
-    
-
 }
 
 #header_right #notifications {
@@ -38,7 +36,6 @@ legend {
 #header_right #notifications li {
     width:60px;
     text-align: right;
-
 }
 
 header #logo {
@@ -175,9 +172,8 @@ header #logo {
 #main .nav .dropdown {
   width:150px;
   text-align: right;
-   
-} 
- 
+}
+
 #main .nav .dropdown:nth-child(n) {
   width:auto;
 }
@@ -198,7 +194,7 @@ header {
 .breadcrumb li img {
   width: 0%;
  }
- 
+
  .breadcrumb li img:nth-child(n) {
   width: auto;
  }
@@ -409,6 +405,10 @@ footer #footer_left {
     padding: 5px;
 }
 
+footer #footer_right {
+    float: right;
+}
+
 #footer_right #admin_name, #footer_right #software_name{
     text-align:right;
 }
@@ -434,7 +434,7 @@ footer #footer_left {
     vertical-align:middle;
 }
 .actions .actions-pagination {
-  float:right; 
+  float:right;
   margin-top:2px;
 }
 .actions .actions-pagination * {
@@ -581,6 +581,8 @@ a.tag {
 }
 #course_category li,
 #hot_courses h5,
+.course_item h5,
+.categories-course-description h5,
 .course-box h5 {
     font-size: 12px;
     overflow-y : auto;
@@ -898,17 +900,14 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 
 .rounded_div_agenda {
     background: none repeat scroll 0 0 #FFFFFF;
-
     -webkit-border-radius: 6px;
     -opera-border-radius: 6px;
     -moz-border-radius: 6px;
     border-radius: 6px;
-
     -webkit-box-shadow: 0 2px 5px #C8C8C8;
     -opera-box-shadow: 0 2px 5px #C8C8C8;
     -moz-box-shadow: 0 2px 5px #C8C8C8;
     box-shadow: 0 2px 5px #C8C8C8;
-
     float: left;
     height: auto;
     margin: 2px 4px 15px;
@@ -944,17 +943,13 @@ a.personal_agenda:hover, a.personal_agenda:hover {
     height: 100px;
 }
 
-
 /* -------------- DOCUMENT --------------*/
-
 #document_quota {
     margin:15px;
     font-weight:bold;
     color:#006633;
     text-align:center;
 }
-
-
 
 /* Message and Social  */
 
@@ -1048,11 +1043,9 @@ a.personal_agenda:hover, a.personal_agenda:hover {
     width:600px;
     background-color: #fff;
     background-repeat: repeat-x;
-
     margin: 8px;
     padding:5px;
 }
-
 
 .group_discussions_replies  {
     background-color: #E9F4FA;
@@ -1330,8 +1323,6 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 .attendance-calendar-table td {
     height:66px;
 }
-
-
 
 /**********************************************
  *  MESSAGE TOOL                           *
@@ -2597,7 +2588,11 @@ div.admin_section h4 {
 
 .question_options input {
     /* margin-right:10px; */
+}
 
+.question_options input[type="text"] {
+    padding:0px;
+    margin:2px 2px 2px 0px;
 }
 
 .question_description {
@@ -2906,13 +2901,7 @@ div.admin_section h4 {
     font-size:11px;
 }
 
-
 /* Forms */
-
-
-/*****************************************************
- *  FORM STYLES                                      *
- *****************************************************/
 div.row div.form_header {
     white-space: nowrap;
     padding: 2px;
@@ -2921,16 +2910,6 @@ div.row div.form_header {
     border: 1px solid #E5EDF9;
     font-size:20px;
 }
-
-/*
-[dir=ltr] div.row div.label, [dir=ltl] div.row div.formw {
-    float: left;
-    text-align: right;
-}
-[dir=rtl] div.row div.label, [dir=rtr] div.row div.formw {
-    float: right;
-    text-align: left;
-}*/
 
 span.form_required {
     color: #f00;
@@ -2948,9 +2927,7 @@ form .row {
 form .formw .freeze {
     display: block;
     padding-top: 8px;
-
 }
-
 
 .course_activity_home {
     width:100%;
@@ -3210,11 +3187,9 @@ form .formw .freeze {
     position:relative;
 }
 
-
 .done_window {
     background-color: #73982C;
 }
-
 
 .first_window {
     border: 1px solid red;
@@ -3229,7 +3204,6 @@ form .formw .freeze {
 .third_window {
     border: 1px solid blue;
     cursor:pointer;
-
 }
 
 ._jsPlumb_endpoint {
@@ -3372,9 +3346,6 @@ div#no-data-view div.controls {
     padding-top: 1px;
 }
 
-
-
-
 /* styles for the star rater */
 .star-rating{
     list-style:none;
@@ -3469,7 +3440,6 @@ a:active{
     border: 0px;
 }
 
-
 .offline_user {
     display: block;
     height: 20px;
@@ -3522,7 +3492,6 @@ a:active{
     display: inline-block;
     margin-right: 4px;
 }
-
 
 #online_grid_container .thumbnail .caption {
     text-align:center;
@@ -3691,28 +3660,9 @@ a:active{
 }
 
 .td_actions {
-    /*
-    background:#F9F9F9;
-    border:1px solid #eee;
-    margin-bottom: 5px;
-    padding:2px;
-    vertical-align:middle;
-    */
     width: 250px;
 }
 
-/*
- This is set in the template
-.td_actions a {
-    float:left;
-    width:100%;
-}
-*/
-
-
-/*****************************************************
- *  THE NEW FORUM                        *
- *****************************************************/
 /* **** FORUM CATEGORY **** */
 .forum_category {
     background-color: #0066CC;
@@ -3801,8 +3751,6 @@ a.forum_group_link {
     border-right: 1px solid #aaa;
     background-color: #F7F7F7;
 }
-
-
 
 .forum_message_left_2_be_approved {
     width: 150px;
@@ -4048,8 +3996,6 @@ footer {
     background-image: linear-gradient(top, #F5F5F5 0%, #EEEEEE 100%); /* W3C */
 }
 
-
-
 /* Default LP left column values */
 
 #learning_path_breadcrumb_zone {
@@ -4247,6 +4193,10 @@ footer {
     margin-top:5px;
     width: 100%;
     float:left;
+}
+
+.doc_folder_hidden {
+    color : grey;
 }
 
 .doc_resource{
@@ -4453,7 +4403,6 @@ i.icon-collapse{
 i.icon-expand{
     background-image:  url('../img/div_hide.gif');
 }
-
 
 .announcement {
     /*    background: none repeat scroll 0 0 #F2F2F2;*/
@@ -4693,10 +4642,7 @@ i.size-32.icon-new-note{
     position: absolute
 }
 
-
-/*
-data table
-*/
+/* Data table */
 
 .dataTables_wrapper{
     clear: both;
@@ -4759,7 +4705,6 @@ data table
     background-attachment: scroll;
     background-position: right center;
 }
-
 
 #course_category_well {
     padding: 9px 0;
@@ -4874,3 +4819,13 @@ i.size-32.icon-new-work{
   background-color: #e6e6e6;
 }
 
+.password-verdict {
+    padding-left:5px;
+}
+#password_progress {
+    width: 220px;
+}
+
+.jqgrid_whitespace {
+    white-space: normal !important;
+}

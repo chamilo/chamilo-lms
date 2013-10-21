@@ -120,12 +120,21 @@ foreach ($helpers as $name => $helper) {
     $helperSet->set($helper, $name);
 }
 
+
 $blockInstallation = function() use($app) {
+
     if (file_exists($app['root_sys'].'config/configuration.php') ||
         file_exists($app['root_sys'].'config/configuration.yml')
     ) {
         return $app->abort(500, "A Chamilo installation was found. You can't reinstall.");
     }
+
+
+    $defaultTimeZone = ini_get('date.timezone');
+    if (empty($defaultTimeZone)) {
+        $app->abort(500, "Please set your 'date.timezone' setting in your php.ini file");
+    }
+
 };
 
 // Controllers

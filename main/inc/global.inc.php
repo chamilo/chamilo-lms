@@ -248,6 +248,12 @@ $app->error(
             $code = null;
         }
 
+        if ($e instanceof PDOException) {
+            $message = "There's an error with the database.";
+
+            return $message;
+        }
+
         Session::setSession($app['session']);
 
         //$code = ($e instanceof HttpException) ? $e->getStatusCode() : 500;
@@ -269,6 +275,7 @@ $app->error(
         $template = $app['template'];
         $template->assign('error', array('code' => $code, 'message' => $message));
         $response = $template->render_layout('error.tpl');
+
         return new Response($response);
     }
 );
@@ -533,12 +540,12 @@ $app->before(
         // Check if we are inside a Chamilo course tool
         $isCourseTool = (strpos($request->getPathInfo(), 'courses/') === false) ? false : true;
 
-        // Setting course entity for controllers and templates
+        // Setting course entity for controllers and templates.
         if ($isCourseTool) {
-            // The course parameter is loaded
+            // The course parameter is loaded.
             $course = $request->get('course');
 
-            // Converting /courses/XXX/ to a Entity/Course object
+            // Converting /courses/XXX/ to a Entity/Course object.
             $course = $app['orm.em']->getRepository('Entity\Course')->findOneByCode($course);
             $app['course'] = $course;
             $app['template']->assign('course', $course);
@@ -575,51 +582,6 @@ $charset = $charset_initial_value;
 // The global variable $text_dir has been defined in the language file trad4all.inc.php.
 // For determing text direction correspondent to the current language we use now information from the internationalization library.
 $text_dir = api_get_text_direction();
-
-/** "Login as user" custom script */
-// @todo move this code in a controller
-/*
-if (!isset($_SESSION['login_as']) && isset($_user)) {
-    // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
-
-    $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-    $sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login
-                            WHERE login_user_id = '".api_get_user_id()."'
-                            ORDER BY login_date DESC LIMIT 0,1";
-
-    $q_last_connection = Database::query($sql_last_connection);
-
-    if (Database::num_rows($q_last_connection) > 0) {
-        $i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
-
-        // is the latest logout_date still relevant?
-        $sql_logout_date = "SELECT logout_date FROM $tbl_track_login WHERE login_id = $i_id_last_connection";
-        $q_logout_date = Database::query($sql_logout_date);
-        $res_logout_date = api_convert_sql_date(Database::result($q_logout_date, 0, 'logout_date'));
-
-        if ($res_logout_date < time() - $app['configuration']['session_lifetime']) {
-            // now that it's created, we can get its ID and carry on
-            $q_last_connection = Database::query($sql_last_connection);
-            $i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
-        }
-        $now = api_get_utc_datetime();
-        $s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date = '$now' WHERE login_id = $i_id_last_connection";
-        Database::query($s_sql_update_logout_date);
-    }
-}*/
-
-// Add language_measure_frequency to your main/inc/conf/configuration.php in
-// order to generate language variables frequency measurements (you can then
-// see them through main/cron/lang/langstats.php)
-// The langstat object will then be used in the get_lang() function.
-// This block can be removed to speed things up a bit as it should only ever
-// be used in development versions.
-// @todo create a service provider to load this
-if (isset($app['configuration']['language_measure_frequency']) && $app['configuration']['language_measure_frequency'] == 1) {
-    require_once api_get_path(SYS_CODE_PATH).'/cron/lang/langstats.class.php';
-    $langstats = new langstats();
-}
-
 
 /** Setting the is_admin key */
 $app['is_admin'] = false;

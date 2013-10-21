@@ -30,14 +30,20 @@ class Template
     public $loadBreadcrumb = true;
     /** @var  Symfony\Component\Security\Core\SecurityContext */
     private $security;
+    /** @var  Symfony\Component\Translation\Translator */
+    private $translator;
 
     /**
      * @param Application $app
+     * @param $database
+     * @param $security
+     * @param $translator
      */
-    public function __construct(Application $app, $database, $security)
+    public function __construct(Application $app, $database, $security, $translator)
     {
         $this->app = &$app;
         $this->security = $security;
+        $this->translator = $translator;
 
         $this->app['classic_layout'] = true;
         $this->navigation_array = $this->returnNavigationArray();
@@ -551,7 +557,7 @@ class Template
         $this->assign('offline_button', Display::return_icon('offline.png'));
 
         // Get language iso-code for this page - ignore errors
-        $this->assign('document_language', api_get_language_isocode());
+        $this->assign('document_language', $this->translator->getLocale());
 
         $course_title = isset($_course['name']) ? $_course['name'] : null;
 

@@ -559,7 +559,7 @@ class ChamiloServiceProvider implements ServiceProviderInterface
 
         // Template class
         $app['template'] = $app->share(function () use ($app) {
-            $template = new Template($app, $app['database'], $app['security']);
+            $template = new Template($app, $app['database'], $app['security'], $app['translator']);
             return $template;
         });
 

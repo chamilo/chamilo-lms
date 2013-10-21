@@ -17,7 +17,7 @@
     {% if pdf_session_info %}
     <tr>
         <td>
-          <strong>{{ "Session" | get_lang }}:</strong> {{ session_info.title }}
+          <strong>{{ "Session" | get_lang }}:</strong> {{ pdf_session_info.name }}
         </td>
     </tr>
     {% endif %}

@@ -1,4 +1,5 @@
 <?php
+
 /** For licensing terms, see /license.txt */
 
 /**
@@ -275,168 +276,6 @@ $app->error(
 // Checking if we have a valid language. If not we set it to the platform language.
 $cidReset = null;
 
-if ($alreadyInstalled) {
-
-    // Initialization of the internationalization library.
-    //api_initialize_internationalization();
-
-    // Initialization of the default encoding that will be used by the multibyte string routines in the internationalization library.
-    //api_set_internationalization_default_encoding($charset);
-
-    // require $includePath.'/local.inc.php';
-
-    /**	Loading languages and sublanguages **/
-    // @todo improve the language loading
-
-    // if we use the javascript version (without go button) we receive a get
-    // if we use the non-javascript version (with the go button) we receive a post
-
-    // Include all files (first english and then current interface language)
-    //$app['this_script'] = isset($this_script) ? $this_script : null;
-
-    // Sometimes the variable $language_interface is changed
-    // temporarily for achieving translation in different language.
-    // We need to save the genuine value of this variable and
-    // to use it within the function get_lang(...).
-    //$language_interface_initial_value = $language_interface;
-
-    //$this_script = $app['this_script'];
-
-    /* This will only work if we are in the page to edit a sub_language */
-    /*
-    if (isset($this_script) && $this_script == 'sub_language') {
-        require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
-        // getting the arrays of files i.e notification, trad4all, etc
-        $language_files_to_load = SubLanguageManager:: get_lang_folder_files_list(
-            api_get_path(SYS_LANG_PATH).'english',
-            true
-        );
-        //getting parent info
-        $languageId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
-        $parent_language = SubLanguageManager::get_all_information_of_language($languageId);
-
-        $subLanguageId = isset($_REQUEST['sub_language_id']) ? $_REQUEST['sub_language_id'] : null;
-
-        //getting sub language info
-        $sub_language = SubLanguageManager::get_all_information_of_language($subLanguageId);
-
-        $english_language_array = $parent_language_array = $sub_language_array = array();
-
-        if (!empty($language_files_to_load)) {
-            foreach ($language_files_to_load as $language_file_item) {
-                $lang_list_pre = array_keys($GLOBALS);
-                //loading english
-                $path = $langPath.'english/'.$language_file_item.'.inc.php';
-                if (file_exists($path)) {
-                    include $path;
-                }
-
-                $lang_list_post = array_keys($GLOBALS);
-                $lang_list_result = array_diff($lang_list_post, $lang_list_pre);
-                unset($lang_list_pre);
-
-                //  english language array
-                $english_language_array[$language_file_item] = compact($lang_list_result);
-
-                //cleaning the variables
-                foreach ($lang_list_result as $item) {
-                    unset(${$item});
-                }
-                $parent_file = $langPath.$parent_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
-
-                if (file_exists($parent_file) && is_file($parent_file)) {
-                    include_once $parent_file;
-                }
-                //  parent language array
-                $parent_language_array[$language_file_item] = compact($lang_list_result);
-
-                //cleaning the variables
-                foreach ($lang_list_result as $item) {
-                    unset(${$item});
-                }
-                if (!empty($sub_language)) {
-                    $sub_file = $langPath.$sub_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
-                    if (file_exists($sub_file) && is_file($sub_file)) {
-                        include $sub_file;
-                    }
-                }
-
-                //  sub language array
-                $sub_language_array[$language_file_item] = compact($lang_list_result);
-
-                //cleaning the variables
-                foreach ($lang_list_result as $item) {
-                    unset(${$item});
-                }
-            }
-        }
-    }*/
-} else {
-    $app['language_interface'] = $language_interface = $language_interface_initial_value = 'english';
-}
-
-/**
- * Include all necessary language files
- * - trad4all
- * - notification
- * - custom tool language files
- */
-/*
-$language_files = array();
-$language_files[] = 'trad4all';
-$language_files[] = 'notification';
-$language_files[] = 'accessibility';
-
-if (isset($language_file)) {
-    if (!is_array($language_file)) {
-        $language_files[] = $language_file;
-    } else {
-        $language_files = array_merge($language_files, $language_file);
-    }
-}
-
-if (isset($app['languages_file'])) {
-    $language_files = array_merge($language_files, $app['languages_file']);
-}
-
-// if a set of language files has been properly defined
-if (is_array($language_files)) {
-    // if the sub-language feature is on
-    if (api_get_setting('allow_use_sub_language') == 'true') {
-        require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
-        $parent_path = SubLanguageManager::get_parent_language_path($language_interface);
-        foreach ($language_files as $index => $language_file) {
-            // include English
-            include $langPath.'english/'.$language_file.'.inc.php';
-            // prepare string for current language and its parent
-            $lang_file = $langPath.$language_interface.'/'.$language_file.'.inc.php';
-            $parent_lang_file = $langPath.$parent_path.'/'.$language_file.'.inc.php';
-            // load the parent language file first
-            if (file_exists($parent_lang_file)) {
-                include $parent_lang_file;
-            }
-            // overwrite the parent language translations if there is a child
-            if (file_exists($lang_file)) {
-                include $lang_file;
-            }
-        }
-    } else {
-        // if the sub-languages feature is not on, then just load the
-        // set language interface
-        foreach ($language_files as $index => $language_file) {
-            // include English
-            include $langPath.'english/'.$language_file.'.inc.php';
-            // prepare string for current language
-            $langFile = $langPath.$language_interface.'/'.$language_file.'.inc.php';
-
-            if (file_exists($langFile)) {
-                include $langFile;
-            }
-        }
-    }
-}*/
-// End loading languages
-
 /** Silex Middlewares. */
 
 /** A "before" middleware allows you to tweak the Request before the controller is executed. */
@@ -455,11 +294,6 @@ $app->before(
         if (!file_exists($app['configuration_file']) && !file_exists($app['configuration_yml_file'])) {
             $url = str_replace('web', 'main/install', $request->getBasePath());
             return new RedirectResponse($url);
-        }
-
-        // Check the PHP version.
-        if (api_check_php_version() == false) {
-            $app->abort(500, "Incorrect PHP version.");
         }
 
         // Check data folder

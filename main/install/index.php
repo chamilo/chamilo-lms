@@ -135,6 +135,11 @@ $blockInstallation = function() use($app) {
         $app->abort(500, "Please set your 'date.timezone' setting in your php.ini file");
     }
 
+    // Check the PHP version.
+    if (api_check_php_version() == false) {
+        $app->abort(500, "Incorrect PHP version.");
+    }
+
 };
 
 // Controllers

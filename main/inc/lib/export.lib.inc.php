@@ -181,8 +181,13 @@ class Export {
         $pdf = new PDF($params['format'], $params['orientation'], $params); 
         $pdf->html_to_pdf_with_template($table_html);
     }
-    
-    public static function export_html_to_pdf($html, $params = array()) {        
+
+    /**
+     * @param string $html
+     * @param array $params
+     */
+    public static function export_html_to_pdf($html, $params = array())
+    {
         $params['format'] = isset($params['format']) ? $params['format'] : 'A4';
         $params['orientation'] = isset($params['orientation']) ? $params['orientation'] : 'P';
         

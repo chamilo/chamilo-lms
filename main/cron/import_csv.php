@@ -650,6 +650,9 @@ class ImportCsv
         }
     }
 
+    /**
+     *  Dump database tables
+     */
     private function dumpDatabaseTables()
     {
         echo 'Dumping tables'.PHP_EOL;

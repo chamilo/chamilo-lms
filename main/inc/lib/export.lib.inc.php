@@ -172,7 +172,8 @@ class Export {
      * 
      * @param array table in array format to be read with the HTML_table class 
      */
-    public static function export_table_pdf($data, $params = array()) {        
+    public static function export_table_pdf($data, $params = array())
+    {
         $table_html = self::convert_array_to_html($data, $params);          
         $params['format'] = isset($params['format']) ? $params['format'] : 'A4';
         $params['orientation'] = isset($params['orientation']) ? $params['orientation'] : 'P';
@@ -188,8 +189,14 @@ class Export {
         $pdf = new PDF($params['format'], $params['orientation'], $params); 
         $pdf->html_to_pdf_with_template($html);        
     }
-    
-    public static function convert_array_to_html($data, $params = array()) {        
+
+    /**
+     * @param array $data
+     * @param array $params
+     * @return string
+     */
+    public static function convert_array_to_html($data, $params = array())
+    {
         $headers = $data[0];
         unset($data[0]); 
        

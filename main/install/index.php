@@ -129,7 +129,6 @@ $blockInstallation = function() use($app) {
         return $app->abort(500, "A Chamilo installation was found. You can't reinstall.");
     }
 
-
     $defaultTimeZone = ini_get('date.timezone');
     if (empty($defaultTimeZone)) {
         $app->abort(500, "Please set your 'date.timezone' setting in your php.ini file");
@@ -140,6 +139,13 @@ $blockInstallation = function() use($app) {
         $app->abort(500, "Incorrect PHP version.");
     }
 
+    if (api_check_php_version() == false) {
+        $app->abort(500, "Incorrect PHP version.");
+    }
+    // @todo move this in the req page
+    if (extension_loaded('json') == false) {
+        $app->abort(500, "php5-json extension must be installed.");
+    }
 };
 
 // Controllers

@@ -94,12 +94,11 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 			}
 		}
 
-		//if (count($students) > 0) {		//
-			echo '<span style="float:right">';
-			echo Display::url(Display::return_icon('printer.png', get_lang('Print'), array(), 32), 'javascript: void(0);', array('onclick'=>'javascript: window.print();'));
-			echo Display::url(Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), 32), api_get_self().'?export=csv');
-			echo '</span>';
-		//}
+        echo '<span style="float:right">';
+        echo Display::url(Display::return_icon('printer.png', get_lang('Print'), array(), 32), 'javascript: void(0);', array('onclick'=>'javascript: window.print();'));
+        echo Display::url(Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), 32), api_get_self().'?export=csv');
+        echo '</span>';
+
 		echo '</div>';
 	} else {
 		echo '<div class="actions"><div style="float:right;">
@@ -149,7 +148,7 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 				$students = array_keys(UserManager::get_users_followed_by_drh(api_get_user_id() , STUDENT));
 			}
 
-			$courses_of_the_platform = CourseManager :: get_real_course_list();
+			$courses_of_the_platform = CourseManager::get_real_course_list();
 			foreach ($courses_of_the_platform as $course) {
 				$courses[$course['code']] = $course['code'];
 			}
@@ -272,10 +271,7 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
                     $detailsLink = Display::return_icon('2rightarrow_na.gif', get_lang('Details'));
                 }
             }
-
             $row[] = $detailsLink;
-
-
             $all_datas[] = $row;
 		}
 

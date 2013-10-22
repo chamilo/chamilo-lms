@@ -20,7 +20,7 @@ require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
 
 if (api_get_setting('allow_registration') === 'false') {
-    api_not_allowed(true);
+    api_not_allowed(true,get_lang('RegistrationDisabled'));
 }
 
 if (!empty($_SESSION['user_language_choice'])) {
@@ -258,7 +258,7 @@ if (!CustomPages::enabled()) {
 
     // Forbidden to self-register
     if (api_get_setting('allow_registration') == 'false') {
-        api_not_allowed(true);
+        api_not_allowed(true,get_lang('RegistrationDisabled'));
     }
 
     if (api_get_setting('allow_registration') == 'approval') {

@@ -40,7 +40,7 @@ class ExportLanguagesCommand extends Command
         $tempPath = $app['paths']['sys_root'].'main/locale';
         $l = scandir($app['paths']['sys_root'].'main/lang');
         foreach ($l as $item) {
-            if (substr(0,1,$item) == '.') { continue; }
+            if (substr($item,0,1) == '.') { continue; }
             $languageList[] = $item;
         }
         */
@@ -105,15 +105,17 @@ class ExportLanguagesCommand extends Command
                     foreach ($po as $line) {
                         $pos = strpos($line, '=');
                         if ($pos) {
+                            // Get the variable name (part before the = sign, without $)
                             $variable = (substr($line, 1, $pos-1));
                             $variable = trim($variable);
 
-                            require $filename;
-                            if (isset($$variable)) {
-                                $my_variable_in_english = $$variable;
+                            //require $filename;
+                            //if (isset($$variable)) {
+                            //    $my_variable_in_english = $$variable;
+                            if (file_exists($toLanguagePath.'/'.$file)) {
                                 require $toLanguagePath.'/'.$file;
                                 /** Fixes a notice due to array in the lang files */
-                                if (strpos($variable, 'langNameOfLang') === false) {
+                                if (strpos($variable, 'langNameOfLang') === false && isset($$variable)) {
                                     // \r\n change tries to avoid CRLF issue
                                     // related to https://bugs.php.net/bug.php?id=52671
                                     $translations[] = array(

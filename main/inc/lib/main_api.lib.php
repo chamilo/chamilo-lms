@@ -6675,6 +6675,9 @@ function api_can_login_as($loginAsUserId, $userId = null)
     if (empty($userId)) {
         $userId = api_get_user_id();
     }
+    if ($loginAsUserId == $userId) {
+        return false;
+    }
 
     if (empty($loginAsUserId)) {
         return false;
@@ -6697,7 +6700,7 @@ function api_can_login_as($loginAsUserId, $userId = null)
     $isDrh = function() use($loginAsUserId) {
         if (api_is_drh()) {
             if (api_drh_can_access_all_session_content()) {
-                $users = SessionManager::getAllUsersFromCoursesFromAllSessionFromDrh(api_get_user_id());
+                $users = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh_all', api_get_user_id());
                 if (in_array($loginAsUserId, $users)) {
                     return true;
                 }

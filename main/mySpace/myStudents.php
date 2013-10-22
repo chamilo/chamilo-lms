@@ -282,8 +282,12 @@ while ($row = Database :: fetch_array($rs)) {
 if (api_is_drh() && !api_is_platform_admin()) {
     if (!empty($student_id)) {
         if (api_drh_can_access_all_session_content()) {
-            $users = SessionManager::getAllUsersFromCoursesFromAllSessionFromDrh(api_get_user_id());
-            if (!in_array($student_id, $users)) {
+            $users = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh_all', api_get_user_id());
+            $userList = array();
+            foreach ($users as $user) {
+                $userList[] = $user['user_id'];
+            }
+            if (!in_array($student_id, $userList)) {
                 api_not_allowed(true);
             }
         } else {

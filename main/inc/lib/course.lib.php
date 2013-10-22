@@ -666,8 +666,7 @@ class CourseManager {
     }
 
     public static function get_user_list_from_courses_as_coach($user_id, $include_sessions = true) {
-        $courses_as_admin = $students_in_courses = array();
-
+        $students_in_courses = array();
         $sessions = CourseManager::get_course_list_as_coach($user_id, true);
 
         if (!empty($sessions)) {

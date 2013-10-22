@@ -2399,25 +2399,115 @@ class SessionManager
     }
 
     /**
+     * @param string $status
      * @param int $userId
-     * @return array
+     * @param bool $getCount
+     * @param int  $from
+     * @param int  $numberItems
+     * @param int $column
+     * @param string $direction
+     * @return array|int
      */
-    public static function getAllUsersFromCoursesFromAllSessionFromDrh($userId)
-    {
-        $sessions = SessionManager::get_sessions_followed_by_drh($userId);
-        $userList = array();
-        if (!empty($sessions)) {
-            foreach ($sessions as $session) {
-                $courseList = SessionManager::get_course_list_by_session_id($session['id']);
-                foreach ($courseList as $course) {
-                    $users = CourseManager::get_user_list_from_course_code($course['code'], $session['id']);
-                    foreach ($users as $user) {
-                        $userList[] = $user['user_id'];
-                    }
-                }
-            }
+    public static function getAllUsersFromCoursesFromAllSessionFromStatus(
+        $status,
+        $userId,
+        $getCount = false,
+        $from = null,
+        $numberItems = null,
+        $column = 1,
+        $direction = 'asc',
+        $keyword = null
+    ) {
+        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+
+        $direction = in_array(strtolower($direction),array('asc', 'desc')) ? $direction : 'asc';
+        $column = Database::escape_string($column);
+        $userId = intval($userId);
+
+        $limitCondition = null;
+
+        if (isset($from) && isset($numberItems)) {
+            $from = intval($from);
+            $numberItems = intval($numberItems);
+            $limitCondition = "LIMIT $from, $numberItems";
         }
-        return $userList;
+
+        $urlId = api_get_current_access_url_id();
+
+        $statusConditions = null;
+        switch ($status) {
+                // Classic DRH
+            case 'drh':
+                $studentList = UserManager::get_users_followed_by_drh($userId, STUDENT);
+                $studentListId = array();
+                foreach($studentList as $student) {
+                    $studentListId[] = $student['user_id'];
+                }
+                $statusConditions = " AND u.user_id IN ('".implode("','", $studentListId)."')  ";
+                break;
+                // Show all by DRH
+            case 'drh_all':
+                $sessions = SessionManager::get_sessions_followed_by_drh($userId);
+
+                $sessionIdList = array();
+                foreach ($sessions as $session) {
+                    $sessionIdList[] = $session['id'];
+                }
+                if (empty($sessionIdList)) {
+                    return array();
+                }
+                $statusConditions = " AND s.id IN ('".implode("','", $sessionIdList)."') ";
+                break;
+            case 'session_admin';
+                $statusConditions = " AND s.id_coach = $userId";
+                break;
+            case 'admin':
+                break;
+        }
+
+        $select = "SELECT DISTINCT u.*";
+        if ($getCount) {
+            $select = "SELECT count(DISTINCT u.user_id) as count ";
+        }
+
+        $sql = "$select
+                FROM $tbl_session s
+                    INNER JOIN $tbl_session_rel_course_rel_user su ON (s.id = su.id_session)
+                    INNER JOIN $tbl_user u ON (u.user_id = su.id_user AND s.id = id_session)
+                    INNER JOIN $tbl_session_rel_access_url url ON (url.session_id = s.id)
+                WHERE access_url_id = $urlId
+                      $statusConditions ";
+
+        if (!empty($keyword)) {
+            $keyword = Database::escape_string($keyword);
+            $sql .= " AND (
+                        u.username LIKE '%$keyword%' OR
+                        u.firstname LIKE '%$keyword%' OR
+                        u.lastname LIKE '%$keyword%' OR
+                        u.official_code LIKE '%$keyword%' OR
+                        u.email LIKE '%$keyword%'
+                    )";
+        }
+
+        if ($getCount) {
+            $result = Database::query($sql);
+            $count = 0;
+            if (Database::num_rows($result)) {
+                $rows = Database::fetch_array($result);
+                $count = $rows['count'];
+            }
+            return $count;
+        }
+
+        $sql .= "ORDER BY $column $direction
+                $limitCondition";
+
+        $result = Database::query($sql);
+        $result = Database::store_result($result);
+        return $result ;
     }
 
     /**

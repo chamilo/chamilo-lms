@@ -3345,7 +3345,7 @@ class UserManager
     }
 
     /**
-     * get users folloewd by human resource manager
+     * get users followed by human resource manager
      * @param int          hr_dept id
      * @param int        user status (optional)
      * @return array     users
@@ -3365,23 +3365,14 @@ class UserManager
             $condition_status = ' AND u.status = '.$user_status;
         }
 
-        if (api_get_multiple_access_url()) {
-            $sql = "SELECT u.user_id, u.username, u.lastname, u.firstname, u.email FROM $tbl_user u
-                    INNER JOIN $tbl_user_rel_user uru ON (uru.user_id = u.user_id) LEFT JOIN $tbl_user_rel_access_url a
-                    ON (a.user_id = u.user_id)
-                    WHERE   friend_user_id = '$hr_dept_id' AND
-                            relation_type = '".USER_RELATION_TYPE_RRHH."'
-                            $condition_status AND
-                            access_url_id = ".api_get_current_access_url_id()."
-                    ";
-        } else {
-            $sql = "SELECT u.user_id, u.username, u.lastname, u.firstname, u.email FROM $tbl_user u
-                    INNER JOIN $tbl_user_rel_user uru
-                    ON  uru.user_id = u.user_id AND
-                        friend_user_id = '$hr_dept_id' AND
+        $sql = "SELECT u.user_id, u.username, u.lastname, u.firstname, u.email FROM $tbl_user u
+                    INNER JOIN $tbl_user_rel_user uru ON (uru.user_id = u.user_id)
+                    LEFT JOIN $tbl_user_rel_access_url a ON (a.user_id = u.user_id)
+                WHERE   friend_user_id = '$hr_dept_id' AND
                         relation_type = '".USER_RELATION_TYPE_RRHH."'
-                        $condition_status ";
-        }
+                        $condition_status AND
+                        access_url_id = ".api_get_current_access_url_id()."
+                ";
 
         if (api_is_western_name_order()) {
             $sql .= " ORDER BY u.firstname, u.lastname ";

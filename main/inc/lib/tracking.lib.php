@@ -1316,7 +1316,6 @@ class Tracking {
     {
         // table definition
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
         $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         $coach_id = intval($coach_id);
@@ -1401,11 +1400,9 @@ class Tracking {
      * @return    array    Courses list
      */
     public static function get_courses_list_from_session($session_id) {
-        //protect datas
         $session_id = intval($session_id);
 
         // table definition
-        $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 
         $sql = 'SELECT DISTINCT course_code
@@ -1488,7 +1485,6 @@ class Tracking {
 
             $course_id	 = $a_course['real_id'];
 
-            $condition_user = "";
             if (is_array($student_id)) {
                 $condition_user = " AND ip.insert_user_id IN (".implode(',',$student_id).") ";
             } else {

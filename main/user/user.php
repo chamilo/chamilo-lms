@@ -90,7 +90,7 @@ if (api_is_allowed_to_edit(null, true)) {
 				$data = array();
 				$a_users = array();
 
-				if ($_configuration['multiple_access_urls']) {
+				if (api_is_multiple_url_enabled()) {
 					$current_access_url_id = api_get_current_access_url_id();
 				}
 
@@ -122,6 +122,7 @@ if (api_is_allowed_to_edit(null, true)) {
                 }
 
                 if ($_GET['type'] == 'pdf') {
+                    $select_email_condition = ' user.email, ';
                     if ($is_western_name_order) {
                         $a_users[0] = array('#', get_lang('UserPicture'), get_lang('OfficialCode'), get_lang('FirstName').', '.get_lang('LastName'), get_lang('Email'), get_lang('Phone'));
                     } else {

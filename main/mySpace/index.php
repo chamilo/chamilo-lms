@@ -461,7 +461,12 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
 
 		$all_data = array();
 		foreach ($sessions as $session) {
-			$count_courses_in_session = count(Tracking::get_courses_followed_by_coach($user_id, $session['id']));
+            if (api_drh_can_access_all_session_content()) {
+                $count_courses_in_session = count(SessionManager::get_course_list_by_session_id($session['id']));
+            } else {
+                $count_courses_in_session = count(Tracking::get_courses_followed_by_coach($user_id, $session['id']));
+            }
+
             $count_users_in_session = count(SessionManager::get_users_by_session($session['id'], 0));
 			$row = array();
 			$row[] = $session['name'];

@@ -99,18 +99,20 @@ class ExportLanguagesCommand extends Command
                             $variable = trim($variable);
 
                             require $filename;
-                            $my_variable_in_english = $$variable;
-                            require $toLanguagePath.'/'.$file;
-                            $my_variable = $$variable;
-                            /** This fixes a notice due an array in the lang files */
-                            if (strpos($variable, 'langNameOfLang') === false) {
-
-                                $translations[] = array(
-                                    'msgid'  => $variable,
-                                    'msgstr' => $my_variable
-                                );
-                            } else {
-                                continue;
+                            if (isset($$variable)) {
+                                $my_variable_in_english = $$variable;
+                                require $toLanguagePath.'/'.$file;
+                                /** Fixes a notice due to array in the lang files */
+                                if (strpos($variable, 'langNameOfLang') === false) {
+                                    // \r\n change tries to avoid CRLF issue
+                                    // related to https://bugs.php.net/bug.php?id=52671
+                                    $translations[] = array(
+                                        'msgid'  => $variable,
+                                        'msgstr' => preg_replace("/\r\n/",'\n',$$variable)
+                                    );
+                                } else {
+                                    continue;
+                                }
                             }
                         }
                     }

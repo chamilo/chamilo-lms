@@ -5490,7 +5490,14 @@ function api_is_global_platform_admin($user_id = null) {
     return false;
 }
 
-function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null, $allow_session_admin = false) {
+/**
+ * @param int $admin_id_to_check
+ * @param int  $my_user_id
+ * @param bool $allow_session_admin
+ * @return bool
+ */
+function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null, $allow_session_admin = false)
+{
     if (empty($my_user_id)) {
         $my_user_id = api_get_user_id();
     }
@@ -5499,10 +5506,10 @@ function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null,
     $user_is_global_admin   = api_is_global_platform_admin($admin_id_to_check);
 
     if ($iam_a_global_admin) {
-        //global admin can edit everything
+        // Global admin can edit everything
         return true;
     } else {
-        //If i'm a simple admin
+        // If i'm a simple admin
         $is_platform_admin = api_is_platform_admin_by_id($my_user_id);
 
         if ($allow_session_admin) {
@@ -6654,4 +6661,54 @@ function api_get_default_tool_setting($tool, $setting, $defaultValue)
     }
     return $defaultValue;
 
+}
+
+/**
+ * Checks if user can login as another user
+ *
+ * @param int $loginAsUserId the user id to log in
+ * @param int $userId my user id
+ * @return bool
+ */
+function api_can_login_as($loginAsUserId, $userId = null)
+{
+    if (empty($userId)) {
+        $userId = api_get_user_id();
+    }
+
+    if (empty($loginAsUserId)) {
+        return false;
+    }
+
+    if ($loginAsUserId != strval(intval($loginAsUserId))) {
+        return false;
+    }
+    // Check if the user to login is an admin
+
+    if (api_is_platform_admin_by_id($loginAsUserId)) {
+        // Only super admins can login to admin accounts
+        if (!api_global_admin_can_edit_admin($loginAsUserId)) {
+            return false;
+        }
+    }
+
+    $user_info = api_get_user_info($userId);
+
+    $isDrh = function() use($loginAsUserId) {
+        if (api_is_drh()) {
+            if (api_drh_can_access_all_session_content()) {
+                $users = SessionManager::getAllUsersFromCoursesFromAllSessionFromDrh(api_get_user_id());
+                if (in_array($loginAsUserId, $users)) {
+                    return true;
+                }
+            } else {
+                if (api_is_drh() && UserManager::is_user_followed_by_drh($loginAsUserId, api_get_user_id())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
+    return (api_is_platform_admin() OR (api_is_session_admin() && $user_info['status'] == 5) OR $isDrh());
 }

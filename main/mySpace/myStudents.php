@@ -180,8 +180,10 @@ if (empty($session_id)) {
 
 $student_id = intval($_GET['student']);
 
+$token = Security::get_token();
+
 // Action behaviour
-$check= Security::check_token('get');
+$check = Security::check_token('get');
 
 if ($check) {
 	switch ($_GET['action']) {
@@ -202,6 +204,7 @@ if ($check) {
 	}
 	Security::clear_token();
 }
+
 
 // user info
 $user_info = api_get_user_info($student_id);
@@ -280,11 +283,11 @@ if (!empty($student_id)) {
     if (api_drh_can_access_all_session_content()) {
         $users = SessionManager::getAllUsersFromCoursesFromAllSessionFromDrh(api_get_user_id());
         if (!in_array($student_id, $users)) {
-            api_not_allowed();
+            api_not_allowed(true);
         }
     } else {
         if (api_is_drh() && !UserManager::is_user_followed_by_drh($student_id, api_get_user_id())) {
-            api_not_allowed();
+            api_not_allowed(true);
         }
     }
 }
@@ -312,6 +315,11 @@ if (!empty($student_id)) {
 	if (!empty($student_id) && !empty ($_GET['course'])) { //only show link to connection details if course and student were defined in the URL
 		echo '<a href="access_details.php?student=' . $student_id . '&course=' . Security :: remove_XSS($_GET['course']) . '&amp;origin=' . Security :: remove_XSS($_GET['origin']) . '&amp;cidReq='.Security::remove_XSS($_GET['course']).'&amp;id_session='.$session_id.'">' . Display :: return_icon('statistics.png', get_lang('AccessDetails'),'',ICON_SIZE_MEDIUM).'</a>';
 	}
+    if (api_can_login_as($student_id)) {
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$student_id.'&amp;sec_token='.$token.'">'.
+            Display::return_icon('login_as.png', get_lang('LoginAs'), null, ICON_SIZE_MEDIUM).'</a>&nbsp;&nbsp;';
+    }
+
 	echo '</div>';
 
 	// is the user online ?
@@ -708,7 +716,6 @@ if (empty($_GET['details'])) {
     	$sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp WHERE c_id = {$info_course['real_id']}  ORDER BY lp.display_order";
     }
     $rs_lp = Database::query($sql_lp);
-    $token = Security::get_token();
 
     if (Database :: num_rows($rs_lp) > 0) {
     ?>

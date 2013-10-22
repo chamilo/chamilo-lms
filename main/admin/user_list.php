@@ -15,6 +15,8 @@ global $_configuration;
 
 $current_access_url_id = api_get_current_access_url_id();
 
+$action = isset($_REQUEST["action"]) ? $_REQUEST["action"] : null;
+
 // Blocks the possibility to delete a user
 $delete_user_available = true;
 if (isset($_configuration['deny_delete_users']) &&  $_configuration['deny_delete_users']) {
@@ -102,13 +104,13 @@ function clear_session_list (div_session) {
 }
 
 function display_advanced_search_form () {
-        if ($("#advanced_search_form").css("display") == "none") {
-                $("#advanced_search_form").css("display","block");
-                $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
-        } else {
-                $("#advanced_search_form").css("display","none");
-                $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
-        }
+    if ($("#advanced_search_form").css("display") == "none") {
+            $("#advanced_search_form").css("display","block");
+            $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
+    } else {
+            $("#advanced_search_form").css("display","none");
+            $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
+    }
 }
 
 $(document).ready(function() {
@@ -125,7 +127,6 @@ $(document).ready(function() {
         }
     }
 
-
     $(".agenda_opener").live("click", function() {
         var url = this.href;
         var dialog = $("#dialog");
@@ -135,12 +136,12 @@ $(document).ready(function() {
         }
         // load remote content
         dialog.load(
-                url,
-                {},
-                function(responseText, textStatus, XMLHttpRequest) {
-                    dialog.dialog({width:720, height:550, modal:true});
-                }
-            );
+            url,
+            {},
+            function(responseText, textStatus, XMLHttpRequest) {
+                dialog.dialog({width:720, height:550, modal:true});
+            }
+        );
         //prevent the browser to follow the link
         return false;
     });
@@ -155,6 +156,17 @@ function load_calendar(user_id, month, year) {
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
+if ($action == 'login_as') {
+    $check = Security::check_token('get');
+
+    if (isset($_GET['user_id']) && api_can_login_as($_GET['user_id']) && $check) {
+        login_user($_GET['user_id']);
+    } else {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
+}
+
 api_protect_admin_script(true);
 
 /**
@@ -168,21 +180,17 @@ api_protect_admin_script(true);
 */
 function login_user($user_id) {
     $user_id = intval($user_id);
+    $user_info = api_get_user_info($user_id);
 
-    if (empty($user_id)) {
-        return false;
-    }
-    if ($user_id != strval(intval($user_id))) {
-    	return false;
-    }
+    // Check if the user is allowed to 'login_as'
+    $can_login_as = api_can_login_as($user_id);
 
-    //Only superadmins can login to admin accounts
-    if (!api_global_admin_can_edit_admin($user_id)) {
+    if (!$can_login_as) {
         return false;
     }
 
     //Load $_user to be sure we clean it before logging in
-	global $uidReset, $loginFailed, $_configuration, $_user;
+	global $uidReset, $loginFailed, $_user;
 
 	$main_user_table      = Database::get_main_table(TABLE_MAIN_USER);
 	$main_admin_table     = Database::get_main_table(TABLE_MAIN_ADMIN);
@@ -190,11 +198,6 @@ function login_user($user_id) {
 
 	unset($_user['user_id']); // uid not in session ? prevent any hacking
 
-    $user_info = api_get_user_info($user_id);
-
-    // check if the user is allowed to 'login_as'
-    $can_login_as = (api_is_platform_admin() OR (api_is_session_admin() && $user_info['status'] == 5 ));
-    if (!$can_login_as) { return false; }
 
 	$firstname  = $user_info['firstname'];
 	$lastname   = $user_info['lastname'];
@@ -261,7 +264,6 @@ function login_user($user_id) {
 			$_SESSION['login_as']               = true; // will be useful later to know if the user is actually an admin or not (example reporting)s
 
 			$target_url = api_get_path(WEB_PATH)."user_portal.php";
-			//$message .= "<br/>Login successful. Go to <a href=\"$target_url\">$target_url</a>";
 			$message .= '<br />'.sprintf(get_lang('LoginSuccessfulGoToX'),'<a href="'.$target_url.'">'.$target_url.'</a>');
 			Display :: display_header(get_lang('UserList'));
 			Display :: display_normal_message($message,false);
@@ -561,16 +563,15 @@ function modify_filter($user_id, $url_params, $row) {
     if (api_is_platform_admin() || (api_is_session_admin() && $current_user_status_label == $statusname[STUDENT])) {
     	if (!$user_is_anonymous) {
             if (api_global_admin_can_edit_admin($user_id)) {
-                $result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
+                $result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.png', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
             } else {
-                $result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';
+                $result .= Display::return_icon('login_as_na.png', get_lang('LoginAs')).'&nbsp;&nbsp;';
             }
-            //$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
     	} else {
-    		$result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';
+    		$result .= Display::return_icon('login_as_na.png', get_lang('LoginAs')).'&nbsp;&nbsp;';
     	}
     } else {
-    	$result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';
+    	$result .= Display::return_icon('login_as_na.png', get_lang('LoginAs')).'&nbsp;&nbsp;';
     }
 
 	if ($current_user_status_label != $statusname[STUDENT]) {
@@ -588,13 +589,11 @@ function modify_filter($user_id, $url_params, $row) {
 		}
 	}
 
-
 	if ($is_admin) {
 		$result .= Display::return_icon('admin_star.png', get_lang('IsAdministrator'),array('width'=> ICON_SIZE_SMALL, 'heigth'=> ICON_SIZE_SMALL));
 	} else {
 		$result .= Display::return_icon('admin_star_na.png', get_lang('IsNotAdministrator'));
 	}
-
 
 	// actions for assigning sessions, courses or users
 	if (api_is_session_admin()) {
@@ -673,8 +672,6 @@ function status_filter($status) {
 	return $statusname[$status];
 }
 
-$action = isset($_REQUEST["action"]) ? $_REQUEST["action"] : null;
-
 if (isset($_GET['keyword']) || isset($_GET['keyword_firstname'])) {
     $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
     $interbreadcrumb[] = array ("url" => 'user_list.php', "name" => get_lang('UserList'));
@@ -687,7 +684,7 @@ if (isset($_GET['keyword']) || isset($_GET['keyword_firstname'])) {
 $message = '';
 
 if (!empty($action)) {
-	$check = Security::check_token('get');
+    $check = Security::check_token('get');
 	if ($check) {
 		switch ($action) {
             case 'add_user_to_my_url':
@@ -697,12 +694,6 @@ if (!empty($action)) {
                     $user_info = api_get_user_info($user_id);
                     $message = get_lang('UserAdded').' '.$user_info['firstname'].' '.$user_info['lastname'].' ('.$user_info['username'].')';
                     $message  = Display::return_message($message, 'confirmation');
-                }
-                break;
-            case 'login_as':
-                $login_as_user_id = $_GET["user_id"];
-                if (isset ($login_as_user_id)) {
-                    login_user($login_as_user_id);
                 }
                 break;
 			case 'show_message' :

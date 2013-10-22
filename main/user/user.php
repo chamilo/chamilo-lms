@@ -122,18 +122,10 @@ if (api_is_allowed_to_edit(null, true)) {
                 }
 
                 if ($_GET['type'] == 'pdf') {
-                    if (api_get_setting('show_email_addresses') == 'true') {
-                        if ($is_western_name_order) {
-                            $a_users[0] = array('#', get_lang('UserPicture'), get_lang('OfficialCode'), get_lang('FirstName').', '.get_lang('LastName'), get_lang('Email'), get_lang('Phone'));
-                        } else {
-                            $a_users[0] = array('#', get_lang('UserPicture'), get_lang('OfficialCode'), get_lang('LastName').', '.get_lang('FirstName'), get_lang('Email'), get_lang('Phone'));
-                        }
+                    if ($is_western_name_order) {
+                        $a_users[0] = array('#', get_lang('UserPicture'), get_lang('OfficialCode'), get_lang('FirstName').', '.get_lang('LastName'), get_lang('Email'), get_lang('Phone'));
                     } else {
-                        if ($is_western_name_order) {
-                            $a_users[0] = array('#', get_lang('UserPicture'), get_lang('OfficialCode'), get_lang('FirstName').', '.get_lang('LastName'), get_lang('Phone'));
-                        } else {
-                            $a_users[0] = array('#', get_lang('UserPicture'), get_lang('OfficialCode'), get_lang('LastName').', '.get_lang('FirstName'), get_lang('Phone'));
-                        }
+                        $a_users[0] = array('#', get_lang('UserPicture'), get_lang('OfficialCode'), get_lang('LastName').', '.get_lang('FirstName'), get_lang('Email'), get_lang('Phone'));
                     }
                 }
 
@@ -188,18 +180,10 @@ if (api_is_allowed_to_edit(null, true)) {
                         if ($_GET['type'] == 'pdf') {
                             $user_info = api_get_user_info($user['user_id']);
                             $user_image = Display::img($user_info['avatar'], null, array('width' => $user_image_pdf_size.'px'));
-                            if (api_get_setting('show_email_addresses') == 'true') {
-                                if ($is_western_name_order) {
-                                    $user_pdf = array($counter, $user_image, $user['official_code'], $user['firstname'].', '.$user['lastname'], $user['email'], $user['phone']);
-                                } else {
-                                    $user_pdf = array($counter, $user_image, $user['official_code'], $user['lastname'].', '.$user['firstname'], $user['email'], $user['phone']);
-                                }
+                            if ($is_western_name_order) {
+                                $user_pdf = array($counter, $user_image, $user['official_code'], $user['firstname'].', '.$user['lastname'], $user['email'], $user['phone']);
                             } else {
-                                if ($is_western_name_order) {
-                                    $user_pdf = array($counter, $user_image, $user['official_code'], $user['firstname'].', '.$user['lastname'], $user['phone']);
-                                } else {
-                                    $user_pdf = array($counter, $user_image, $user['official_code'], $user['lastname'].', '.$user['firstname'], $user['phone']);
-                                }
+                                $user_pdf = array($counter, $user_image, $user['official_code'], $user['lastname'].', '.$user['firstname'], $user['email'], $user['phone']);
                             }
 
                             $a_users[] = $user_pdf;
@@ -256,18 +240,11 @@ if (api_is_allowed_to_edit(null, true)) {
                         if ($_GET['type'] == 'pdf') {
                             $user_info = api_get_user_info($user['user_id']);
                             $user_image = Display::img($user_info['avatar'], null, array('width' => $user_image_pdf_size.'px'));
-                            if (api_get_setting('show_email_addresses') == 'true') {
-                                if ($is_western_name_order) {
-                                    $user_pdf = array($counter, $user_image, $user['official_code'], $user['firstname'].', '.$user['lastname'], $user['email'], $user['phone']);
-                                } else {
-                                    $user_pdf = array($counter, $user_image, $user['official_code'], $user['lastname'].', '.$user['firstname'], $user['email'], $user['phone']);
-                                }
+
+                            if ($is_western_name_order) {
+                                $user_pdf = array($counter, $user_image, $user['official_code'], $user['firstname'].', '.$user['lastname'], $user['email'], $user['phone']);
                             } else {
-                                if ($is_western_name_order) {
-                                    $user_pdf = array($counter, $user_image, $user['official_code'], $user['firstname'].', '.$user['lastname'], $user['phone']);
-                                } else {
-                                    $user_pdf = array($counter, $user_image, $user['official_code'], $user['lastname'].', '.$user['firstname'], $user['phone']);
-                                }
+                                $user_pdf = array($counter, $user_image, $user['official_code'], $user['lastname'].', '.$user['firstname'], $user['email'], $user['phone']);
                             }
 
                             $a_users[] = $user_pdf;

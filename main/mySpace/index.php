@@ -341,7 +341,13 @@ if (empty($session_id)) {
 			$csv_content[] = array(get_lang('AverageAssignments', ''), $nb_assignments);
 			$csv_content[] = array();
 		} else {
-			// html part
+
+            $form = new FormValidator('search_user', 'get', api_get_path(WEB_CODE_PATH).'mySpace/student.php');
+            $form->addElement('text', 'keyword', get_lang('User'));
+            $form->addElement('button', 'submit', get_lang('Search'));
+            $form->display();
+
+            // html part
 			echo '<div class="report_section">
 					<table class="table table-bordered">
                         <tr>
@@ -373,7 +379,9 @@ if (empty($session_id)) {
 							<td align="right">'.(is_null($nb_assignments) ? '' : round($nb_assignments, 2)).'</td>
 						</tr>
 					</table>
-					<a class="btn" href="student.php">'.get_lang('SeeStudentList').'</a>
+					<a class="btn" href="student.php">
+					'.get_lang('SeeStudentList').'
+					</a>
 				 </div><br />';
 		}
 	} else {

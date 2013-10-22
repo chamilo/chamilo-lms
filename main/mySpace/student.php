@@ -210,7 +210,7 @@ if ($export_csv) {
 }
 
 $sort_by_first_name = api_sort_by_first_name();
-$actions = null;
+$actions .= '<div class="actions">';
 
 if (api_is_drh()) {
     $menu_items = array();
@@ -220,32 +220,19 @@ if (api_is_drh()) {
     $menu_items[] = Display::url(Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_MEDIUM), 'course.php');
     $menu_items[] = Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM), 'session.php');
 
-    $actions .= '<div class="actions">';
     $nb_menu_items = count($menu_items);
     if ($nb_menu_items > 1) {
         foreach ($menu_items as $key => $item) {
             $actions .= $item;
         }
     }
-
-    $actions .= '<span style="float:right">';
-    $actions .= Display::url(
-                        Display::return_icon('printer.png', get_lang('Print'), array(), ICON_SIZE_MEDIUM), 'javascript: void(0);', array('onclick'=>'javascript: window.print();'));
-    $actions .= Display::url(
-                        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), ICON_SIZE_MEDIUM), api_get_self().'?export=csv&keyword='.$keyword);
-    $actions .= '</span>';
-
-    $actions .= '</div>';
-} else {
-    $actions .= '<div class="actions">
-            <div style="float:right;">
-                <a href="javascript: void(0);" onclick="javascript: window.print();">
-                    <img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
-                <a href="'.api_get_self().'?export=csv&keyword='.$keyword.'">
-                    <img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
-            </div>
-            </div>';
 }
+
+$actions .= '<span style="float:right">';
+$actions .= Display::url(Display::return_icon('printer.png', get_lang('Print'), array(), ICON_SIZE_MEDIUM), 'javascript: void(0);', array('onclick'=>'javascript: window.print();'));
+$actions .= Display::url(Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), ICON_SIZE_MEDIUM), api_get_self().'?export=csv&keyword='.$keyword);
+$actions .= '</span>';
+$actions .= '</div>';
 
 $table = new SortableTable(
     'tracking_student',
@@ -290,7 +277,7 @@ if ($export_csv) {
     }
 }
 
-$form = new FormValidator('search_user', 'get', api_get_self());
+$form = new FormValidator('search_user', 'get', api_get_path(WEB_CODE_PATH).'mySpace/student.php');
 $form->addElement('text', 'keyword', get_lang('User'));
 $form->addElement('button', 'submit', get_lang('Search'));
 $form->setDefaults($params);

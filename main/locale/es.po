@@ -359,17 +359,13 @@ msgid "ReservationMadeTitle"
 msgstr "Su reserva de #ITEM# ha sido registrada"
 
 msgid "ReservationMadeMessage"
-msgstr "Estimado, Estimada,
-
-Su reserva de #ITEM# de #START# a #END# ha sido registrada."
+msgstr "Estimado, Estimada, <br />Su reserva de #ITEM# de #START# a #END# ha sido registrada."
 
 msgid "ReservationDeleteTitle"
 msgstr "Un periodo de reserva para #NAME# ha sido eliminado"
 
 msgid "ReservationDeleteMessage"
-msgstr "Estimada, Estimado,
-
-El periodo de reserva de #NAME# de #START# a #END# ha sido eliminado."
+msgstr "Estimada, Estimado, <br /> El periodo de reserva de #NAME# de #START# a #END# ha sido eliminado."
 
 msgid "OutPeriod"
 msgstr "Fuera de periodo"
@@ -504,14 +500,10 @@ msgid "ReservationDenied"
 msgstr "Su reserva #ITEM# ha sido negada"
 
 msgid "ReservationForItemAccepted"
-msgstr "Estimado/a Señor(a), 
-
-Su reserva para #ITEM# de #BEGIN hasta #END ha sido aceptado."
+msgstr "Estimado/a Señor(a),<br />Su reserva para #ITEM# de #BEGIN hasta #END ha sido aceptado."
 
 msgid "ReservationForItemDenied"
-msgstr "Estado/a Señor(a), 
-
- su reservación para #ITEM# de #BEGIN hasta #END ha sido rechazada."
+msgstr "Estado/a Señor(a),<br /> su reservación para #ITEM# de #BEGIN hasta #END ha sido rechazada."
 
 msgid "ReservationCancelled"
 msgstr "Reservación cancelada #NAME# no está disponible temporalmente"
@@ -520,15 +512,10 @@ msgid "ReservationActive"
 msgstr "Reservación nuevamente activada, #NAME# esta habilitada otra vez"
 
 msgid "ReservationUnavailable"
-msgstr "Estimado/a Señor(a),
-
-#NAME# no esta disponible temporalmente, por lo que su reservación de  #BEGIN# hasta #END# ha sido cancelada.
-Usted recibirá un correo electrónico cuando este disponible nuevamente, disculpenos por los inconvenientes."
+msgstr "Estimado/a Señor(a),<br />#NAME# no esta disponible temporalmente, por lo que su reservación de  #BEGIN# hasta #END# ha sido cancelada.<br />Usted recibirá un correo electrónico cuando este disponible nuevamente, disculpenos por los inconvenientes."
 
 msgid "ReservationAvailable"
-msgstr "Estimado/a Señor(a), 
-
-Queremos informarle que #NAME# está disponible otra vez por lo que su reserva de #BEGIN# hasta #END# está de nuevamente activa."
+msgstr "Estimado/a Señor(a),<br />Queremos informarle que #NAME# está disponible otra vez por lo que su reserva de #BEGIN# hasta #END# está de nuevamente activa."
 
 msgid "Resources"
 msgstr "Recursos"
@@ -922,17 +909,7 @@ msgid "ScoringUpdated"
 msgstr "Puntuación actualizada"
 
 msgid "CertificateWCertifiesStudentXFinishedCourseYWithGradeZ"
-msgstr "%s certifica que
-
- %s 
-
-ha realizado el curso 
-
- '%s' 
-
-con la calificación de 
-
- '%s'"
+msgstr "%s certifica que<br /> %s<br />ha realizado el curso<br /> '%s'<br />con la calificación de<br /> '%s'"
 
 msgid "CertificateMinScore"
 msgstr "Puntuación mínima de certificación"
@@ -2063,8 +2040,7 @@ msgid "GoAheadAndBrowseOurCourseCatalogXOnceRegisteredYouWillSeeTheCourseHereX"
 msgstr "Adelante, pulsa %s para acceder al catálogo de cursos e inscribirte en un curso que te interese. Una vez inscrito/a, el curso aparecerá en esta pantalla en lugar de este mensaje."
 
 msgid "HelloXAsYouCanSeeYourCourseListIsEmpty"
-msgstr "Hola %s, te damos la bienvenida,<br />
-Como puedes ver, tu lista de cursos todavía está vacía. Esto es porque todavía no estás inscrito/a en ningún curso."
+msgstr "Hola %s, te damos la bienvenida,<br />Como puedes ver, tu lista de cursos todavía está vacía. Esto es porque todavía no estás inscrito/a en ningún curso."
 
 msgid "PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses"
 msgstr "Permitanos un poco de tiempo para suscribirse a uno de nuestros cursos. Si considera que nos olvidamos de Ud., póngase en contacto con los administradores del portal. Puede encontrar sus datos de contacto en el pie de página."
@@ -2606,8 +2582,7 @@ msgid "ButtonPublishAnnouncement"
 msgstr "Enviar anuncio"
 
 msgid "YourAccountIsActiveYouCanLoginAndCheckYourCourses"
-msgstr "Estimado usuario <br><br>
-Usted no esta activo en la plataforma, por favor inicie sesión nuevamente y revise sus cursos"
+msgstr "Estimado usuario <br /><br />Usted no esta activo en la plataforma, por favor inicie sesión nuevamente y revise sus cursos"
 
 msgid "AddAsAnnouncement"
 msgstr "Agregar como un anuncio"
@@ -3635,8 +3610,7 @@ msgid "BlocksHaveBeenUpdatedSuccessfully"
 msgstr "Los bloques han sido actualizados"
 
 msgid "AttendanceSheetDescription"
-msgstr "Las listas de asistencia permiten registrar las faltas de asistencia de los estudiantes. En caso de ausencia de un estudiante, el profesor deberá registrarlo manualmente en la casilla correspondiente.
-Es posible crear más de una lista de asistencia por cada curso; así por ejemplo, podrá registrar separadamente la asistencia a las clases teóricas y prácticas."
+msgstr "Las listas de asistencia permiten registrar las faltas de asistencia de los estudiantes. En caso de ausencia de un estudiante, el profesor deberá registrarlo manualmente en la casilla correspondiente.<br />Es posible crear más de una lista de asistencia por cada curso; así por ejemplo, podrá registrar separadamente la asistencia a las clases teóricas y prácticas."
 
 msgid "AttendanceSheetReport"
 msgstr "Informe de hojas de asistencia"
@@ -5693,8 +5667,7 @@ msgid "CreateFolder"
 msgstr "Crear la carpeta"
 
 msgid "HelpDefaultDirDocuments"
-msgstr "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO:
-Esta carpeta contiene los archivos suministrados por defecto. Puede eliminar o añadir otros archivos. Al hacerlo tenga en cuenta que si un archivo está oculto cuando es insertado en un documento web, los estudiantes tampoco podrán verlo en el documento. Cuando inserte un archivo en un documento web hágalo visible previamente. Las carpetas pueden seguir ocultas."
+msgstr "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO: <br /> Esta carpeta contiene los archivos suministrados por defecto. Puede eliminar o añadir otros archivos. Al hacerlo tenga en cuenta que si un archivo está oculto cuando es insertado en un documento web, los estudiantes tampoco podrán verlo en el documento. Cuando inserte un archivo en un documento web hágalo visible previamente. Las carpetas pueden seguir ocultas."
 
 msgid "HelpSharedFolder"
 msgstr "Esta carpeta contiene los archivos que los estudiantes (y Ud.) envían a un curso a través del editor, salvo los que se envían desde la herramienta grupos. Por defecto serán visibles por cualquier profesor, pero estarán ocultos para otros estudiantes salvo que accedan a ellos mediante un acceso directo. Si hace visible la carpeta de un estudiante otros estudiantes podrán ver todo lo que contenga."
@@ -5715,8 +5688,7 @@ msgid "CertificateName"
 msgstr "Nombre del certificado"
 
 msgid "HelpFolderLearningPaths"
-msgstr "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO:
-Esta carpeta contiene los documentos que se crean desde la herramienta Lecciones. Aquí puede editar los HTML que se hayan creado al realizar una importación desde la herramienta Lecciones, por ejemplo desde Chamilo Rapid. Se recomienda mantener invisible esta carpeta a los alumnos."
+msgstr "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO:<br />Esta carpeta contiene los documentos que se crean desde la herramienta Lecciones. Aquí puede editar los HTML que se hayan creado al realizar una importación desde la herramienta Lecciones, por ejemplo desde Chamilo Rapid. Se recomienda mantener invisible esta carpeta a los alumnos."
 
 msgid "CopyToMyFiles"
 msgstr "Copiar en mi área personal de archivos"
@@ -5755,24 +5727,13 @@ msgid "UserFolder"
 msgstr "Carpeta del usuario"
 
 msgid "HelpUsersFolder"
-msgstr "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO:
-La carpeta de los usuarios contiene una carpeta de cada usuario que haya accedido a ella a través de la herramienta documentos, o bien que haya enviado algún fichero al curso a través del editor, salvo desde la herramienta grupos. Si ninguna de las dos circuntancias se ha producido la carpeta del usuario no estará creada. En el caso de los grupos, los archivos que se envíen a través del editor se depositarán en la carpeta de cada grupo, la cual sólo será accesible por los alumnos desde la herramienta grupos.
-
-La carpeta de los usuarios y las carpetas que contiene de cada uno de ellos, se mantendrán por ocultas por defecto, si bien cada alumno podrá ver el contenido de la suya cuando acceda a inspeccionar los archivos del servidor a través del editor. No obstante, si un alumno conoce la dirección de un archivo de la carpeta de otro alumno podrá visualizarlo.
-
-Si se hace visible la carpeta de los usuarios y la carpeta de uno o más alumnos, el resto de los alumnos podrán ver todo su contenido. En este caso, el alumno propietario de la carpeta también podrá desde la herramienta documentos (sólo dentro de su carpeta): crear y editar documentos web, convertir un documento web en una plantilla para uso personal, crear y editar dibujos SVG y PNG, grabar archivos de audio en formato WAV, convertir texto en audio en formato MP3, realizar capturas a través de su webcam, enviar documentos, crear carpetas, mover carpetas y archivos, borrar carpetas y archivos, y descargar copias de seguridad de su carpeta.
-
-Por otra parte, la herramienta documentos se sincroniza con el gestor de archivos del editor web, así que los cambios en la gestión de los documentos realizados en una u otra afectarán a ambas. 
-
-Así pues, la carpeta de usuario no sólo es un lugar para depositar los archivos, sino que se convierte en un completo gestor de los documentos que los estudiantes utilizan durante el curso. Además, recuerde que cualquier usuario podrá copiar un archivo, que sea visible, de cualquier carpeta de la herramienta documentos (sea o no la suya) a su portafolios o área personal de documentos de la red social, donde estará disponible para que lo pueda usar en otros cursos."
+msgstr "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO: <br />La carpeta de los usuarios contiene una carpeta de cada usuario que haya accedido a ella a través de la herramienta documentos, o bien que haya enviado algún fichero al curso a través del editor, salvo desde la herramienta grupos. Si ninguna de las dos circuntancias se ha producido la carpeta del usuario no estará creada. En el caso de los grupos, los archivos que se envíen a través del editor se depositarán en la carpeta de cada grupo, la cual sólo será accesible por los alumnos desde la herramienta grupos.<br /><br />La carpeta de los usuarios y las carpetas que contiene de cada uno de ellos, se mantendrán por ocultas por defecto, si bien cada alumno podrá ver el contenido de la suya cuando acceda a inspeccionar los archivos del servidor a través del editor. No obstante, si un alumno conoce la dirección de un archivo de la carpeta de otro alumno podrá visualizarlo.<br /><br />Si se hace visible la carpeta de los usuarios y la carpeta de uno o más alumnos, el resto de los alumnos podrán ver todo su contenido. En este caso, el alumno propietario de la carpeta también podrá desde la herramienta documentos (sólo dentro de su carpeta): crear y editar documentos web, convertir un documento web en una plantilla para uso personal, crear y editar dibujos SVG y PNG, grabar archivos de audio en formato WAV, convertir texto en audio en formato MP3, realizar capturas a través de su webcam, enviar documentos, crear carpetas, mover carpetas y archivos, borrar carpetas y archivos, y descargar copias de seguridad de su carpeta.<br /><br />Por otra parte, la herramienta documentos se sincroniza con el gestor de archivos del editor web, así que los cambios en la gestión de los documentos realizados en una u otra afectarán a ambas.<br />Así pues, la carpeta de usuario no sólo es un lugar para depositar los archivos, sino que se convierte en un completo gestor de los documentos que los estudiantes utilizan durante el curso. Además, recuerde que cualquier usuario podrá copiar un archivo, que sea visible, de cualquier carpeta de la herramienta documentos (sea o no la suya) a su portafolios o área personal de documentos de la red social, donde estará disponible para que lo pueda usar en otros cursos."
 
 msgid "HelpFolderChat"
-msgstr "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO:
-Esta carpeta contiene todas las sesiones que se han realizado en el chat. Aunque muchas veces las sesiones en el chat pueden ser triviales, en otras pueden ser dignas de ser tratadas como un documento más de trabajo. Para ello, sin cambiar la visibilidad de esta carpeta, haga visible el archivo y enlácelo donde considere oportuno. No se recomienda hacer visible esta carpeta."
+msgstr "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO:<br />Esta carpeta contiene todas las sesiones que se han realizado en el chat. Aunque muchas veces las sesiones en el chat pueden ser triviales, en otras pueden ser dignas de ser tratadas como un documento más de trabajo. Para ello, sin cambiar la visibilidad de esta carpeta, haga visible el archivo y enlácelo donde considere oportuno. No se recomienda hacer visible esta carpeta."
 
 msgid "HelpFolderCertificates"
-msgstr "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO:
-Esta carpeta contiene los distintos modelos de certificados que se han creado para la herramienta Evaluaciones. No se recomienda hacer visible esta carpeta."
+msgstr "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO:<br />Esta carpeta contiene los distintos modelos de certificados que se han creado para la herramienta Evaluaciones. No se recomienda hacer visible esta carpeta."
 
 msgid "DestinationDirectory"
 msgstr "Carpeta de destino"
@@ -7978,17 +7939,7 @@ msgid "0"
 msgstr ""
 
 msgid "EmailNotificationTemplateDescription"
-msgstr "Puede modificar el correo enviado a los usuarios al terminar el ejercicio. Puede usar los siguientes términos: 
-
-{{ student.username }}
-{{ student.firstname }} 
-{{ student.lastname }}
-{{ student.official_code }} 
-{{ exercise.title }} 
-{{ exercise.start_time }}
-{{ exercise.end_time }}
-{{ course.title }}
-{{ course.code }}"
+msgstr "Puede modificar el correo enviado a los usuarios al terminar el ejercicio. Puede usar los siguientes términos:<br />{{ student.username }}<br />{{ student.firstname }}<br />{{ student.lastname }}<br />{{ student.official_code }}<br />{{ exercise.title }}<br />{{ exercise.start_time }}<br />{{ exercise.end_time }}<br />{{ course.title }}<br />{{ course.code }}"
 
 msgid "EmailNotificationTemplate"
 msgstr "Plantilla del correo electrónico enviado al usuario al terminar el ejercicio."
@@ -12234,8 +12185,7 @@ msgid "LoginEnter"
 msgstr "Entrar"
 
 msgid "AttendanceSheetDescription"
-msgstr "Las listas de asistencia permiten registrar las faltas de asistencia de los estudiantes. En caso de ausencia de un estudiante, el profesor deberá registrarlo manualmente en la casilla correspondiente.
-Es posible crear más de una lista de asistencia por cada curso; así por ejemplo, podrá registrar separadamente la asistencia a las clases teóricas y prácticas."
+msgstr "Las listas de asistencia permiten registrar las faltas de asistencia de los estudiantes. En caso de ausencia de un estudiante, el profesor deberá registrarlo manualmente en la casilla correspondiente.<br />Es posible crear más de una lista de asistencia por cada curso; así por ejemplo, podrá registrar separadamente la asistencia a las clases teóricas y prácticas."
 
 msgid "ThereAreNoRegisteredLearnersInsidetheCourse"
 msgstr "No hay estudiantes inscritos en este curso"
@@ -12766,15 +12716,7 @@ msgid "UserInactivedSinceX"
 msgstr "Usuario inactivo desde %s"
 
 msgid "ContactInformationDescription"
-msgstr "Estimado usuario,
-
-está a punto de instalar una de las mejores plataformas e-learning de código abierto que existen en el mercado. Al igual de muchos otros proyectos de código abierto, Chamilo está respaldado por una amplia comunidad de profesores, estudiantes, desarrolladores y creadores de contenido.
-
-Si sabemos algo más de quien va a gestionar este sistema e-learning, podremos dar a conocer a otros que nuestro software lo utiliza y a usted podremos informarle sobre eventos que pueden ser de su interés.
-
-Cumplimentar este formulario, implica la aceptación de que la asociación Chamilo o sus miembros puedan enviarle información por correo electrónico sobre eventos importantes o actualizaciones en el software Chamilo. Esto ayudará a crecer a la comunidad como una entidad organizada, donde el flujo de información, se haga con respeto permanente a su tiempo y su privacidad.
-
-De cualquier forma, tenga en cuenta que no tiene la obligación de rellenar este formulario. Si desea permanecer en el anonimato, perderemos la oportunidad de ofrecerle todos los privilegios de ser un administrador de portal registrado, pero respetaremos su decisión. Basta con dejar vacío este formulario y hacer clic en \"Siguiente\" para seguir instalando Chamilo."
+msgstr "Estimado usuario,<br />está a punto de instalar una de las mejores plataformas e-learning de código abierto que existen en el mercado. Al igual de muchos otros proyectos de código abierto, Chamilo está respaldado por una amplia comunidad de profesores, estudiantes, desarrolladores y creadores de contenido.<br />Si sabemos algo más de quien va a gestionar este sistema e-learning, podremos dar a conocer a otros que nuestro software lo utiliza y a usted podremos informarle sobre eventos que pueden ser de su interés.<br /><br />Cumplimentar este formulario, implica la aceptación de que la asociación Chamilo o sus miembros puedan enviarle información por correo electrónico sobre eventos importantes o actualizaciones en el software Chamilo. Esto ayudará a crecer a la comunidad como una entidad organizada, donde el flujo de información, se haga con respeto permanente a su tiempo y su privacidad.<br /><br />De cualquier forma, tenga en cuenta que no tiene la obligación de rellenar este formulario. Si desea permanecer en el anonimato, perderemos la oportunidad de ofrecerle todos los privilegios de ser un administrador de portal registrado, pero respetaremos su decisión. Basta con dejar vacío este formulario y hacer clic en \"Siguiente\" para seguir instalando Chamilo."
 
 msgid "CompanyActivity"
 msgstr "Sector"
@@ -13365,16 +13307,13 @@ msgid "AllAttempts"
 msgstr "Todos los intentos"
 
 msgid "NoCookies"
-msgstr "Las cookies no están activadas en su navegador.
-Chamilo utiliza \"cookies\" para almacenar sus datos de conexión, por lo que no le será posible entrar si las cookies no están habilitadas. Por favor, cambie la configuración de su navegador y recargue esta página."
+msgstr "Las cookies no están activadas en su navegador.<br />Chamilo utiliza \"cookies\" para almacenar sus datos de conexión, por lo que no le será posible entrar si las cookies no están habilitadas. Por favor, cambie la configuración de su navegador y recargue esta página."
 
 msgid "NoJavascript"
-msgstr "Su navegador no tiene activado JavaScript.
-Chamilo se sirve de JavaScript para proporcionar un interfaz más dinámico. Es probable que muchas prestaciones sigan funcionando pero otras no lo harán, especialmente las relacionadas con la usabilidad. Le recomendamos que cambie la configuración de su navegador y recargue esta página."
+msgstr "Su navegador no tiene activado JavaScript.<br />Chamilo se sirve de JavaScript para proporcionar un interfaz más dinámico. Es probable que muchas prestaciones sigan funcionando pero otras no lo harán, especialmente las relacionadas con la usabilidad. Le recomendamos que cambie la configuración de su navegador y recargue esta página."
 
 msgid "NoFlash"
-msgstr "Su navegador no tiene activado el soporte de Flash.
-Chamilo sólo se apoya en Flash para algunas de sus funciones por lo que su ausencia no le impedirá continuar. Pero si quiere beneficiarse del conjunto de las herramientas de Chamilo, le recomendamos que instale-active el plugin de Flash y reinicialice su navegador."
+msgstr "Su navegador no tiene activado el soporte de Flash.<br />Chamilo sólo se apoya en Flash para algunas de sus funciones por lo que su ausencia no le impedirá continuar. Pero si quiere beneficiarse del conjunto de las herramientas de Chamilo, le recomendamos que instale-active el plugin de Flash y reinicialice su navegador."
 
 msgid "Attempt"
 msgstr "Intento"
@@ -13611,8 +13550,7 @@ msgid "ThingsToDo"
 msgstr "Actividades por realizar"
 
 msgid "WamiFlashDialog"
-msgstr "Se mostrará un cuadro de diálogo en el que se le pedirá permiso para poder acceder al micrófono, responda afirmativamente y cierre el cuadro de diálogo (si no desea que vuelva a aparecer, antes de cerrar marque la opción
-recordar)"
+msgstr "Se mostrará un cuadro de diálogo en el que se le pedirá permiso para poder acceder al micrófono, responda afirmativamente y cierre el cuadro de diálogo (si no desea que vuelva a aparecer, antes de cerrar marque la opción recordar)"
 
 msgid "WamiStartRecorder"
 msgstr "Inicie la grabación pulsando el micrófono y deténgala pulsándolo de nuevo. Cada vez que haga esto se generará un archivo."
@@ -15376,8 +15314,7 @@ msgid "ConfigExercise"
 msgstr "Configurar la herramienta Ejercicios"
 
 msgid "CourseSettingsRegisterDirectLink"
-msgstr "Si su curso es público o abierto, puede usar el enlace directo abajo para invitar a nuevos usuarios, de tal manera que estén enviados directamente en este curso al finalizar el formulario de registro al portal. Si desea, puede añadir el parámetro e=1 a este enlace, remplazando \"1\" por el ID del ejercicio, para mandar los usuarios directamente a un ejercicio o examen. El ID del ejercicio se puede obtener en la URL del ejercicio cuando le de clic para entrar al mismo.<br />
-%s"
+msgstr "Si su curso es público o abierto, puede usar el enlace directo abajo para invitar a nuevos usuarios, de tal manera que estén enviados directamente en este curso al finalizar el formulario de registro al portal. Si desea, puede añadir el parámetro e=1 a este enlace, remplazando \"1\" por el ID del ejercicio, para mandar los usuarios directamente a un ejercicio o examen. El ID del ejercicio se puede obtener en la URL del ejercicio cuando le de clic para entrar al mismo.<br />%s"
 
 msgid "DirectLink"
 msgstr "Enlace directo"
@@ -16319,9 +16256,7 @@ msgid "CourseRequestAcceptedEmailSubject"
 msgstr "%s La petición del curso %s ha sido aprobada"
 
 msgid "CourseRequestAcceptedEmailText"
-msgstr "Su solicitud del curso %s ha sido aprobada. Un nuevo curso %s ha sido creado y Usted ha quedado inscrito en él como profesor.
-
-Podrá acceder al curso creado desde: %s"
+msgstr "Su solicitud del curso %s ha sido aprobada. Un nuevo curso %s ha sido creado y Usted ha quedado inscrito en él como profesor. <br />Podrá acceder al curso creado desde: %s"
 
 msgid "CourseRequestRejectedEmailSubject"
 msgstr "%s La solicitud del curso %s ha sido rechazada"
@@ -17671,8 +17606,7 @@ msgid "langAddress"
 msgstr "La dirección de"
 
 msgid "langSettings"
-msgstr "con los siguientes parámetros:
-Nombre de usuario:"
+msgstr "con los siguientes parámetros:<br />Nombre de usuario:"
 
 msgid "langYouAreReg"
 msgstr "Ha sido inscrito en"
@@ -18034,19 +17968,7 @@ msgid "EnableIframeInclusionTitle"
 msgstr "Permitir iframes en el editor HTML"
 
 msgid "MailTemplateRegistrationMessage"
-msgstr "Estimado ((firstname)) ((lastname)),
-
-Ha sido registrado en ((sitename)) con la siguiente configuración:
-
-Nombre de usuario : ((username))
-Contraseña : ((password))
-
-La dirección de ((sitename)) es : ((url))
-
-Si tiene alguna dificultad, contacte con nosotros.
-
-Atentamente:
-((admin_name)) ((admin_surname))."
+msgstr "Estimado ((firstname)) ((lastname)),<br />Ha sido registrado en ((sitename)) con la siguiente configuración:<br />Nombre de usuario : ((username))<br />Contraseña : ((password))<br />La dirección de ((sitename)) es : ((url))<br />Si tiene alguna dificultad, contacte con nosotros.<br />Atentamente:<br />((admin_name)) ((admin_surname))."
 
 msgid "MailTemplateRegistrationTitle"
 msgstr "Nuevo usuario en ((sitename))"
@@ -21460,8 +21382,7 @@ msgid "UseUsersTimezoneTitle"
 msgstr "Utilizar las zonas horarias de los usuarios"
 
 msgid "UseUsersTimezoneComment"
-msgstr "Activar la selección por los usuarios de su zona horaria. El campo de zona horaria debe seleccionarse como visible y modificable antes de que los usuarios elijan su cuenta. 
-Una vez configurada los usuarios podrán verla."
+msgstr "Activar la selección por los usuarios de su zona horaria. El campo de zona horaria debe seleccionarse como visible y modificable antes de que los usuarios elijan su cuenta. Una vez configurada los usuarios podrán verla."
 
 msgid "FieldTypeTimezone"
 msgstr "Zona horaria"
@@ -22079,10 +22000,7 @@ msgid "BigBlueButtonEnableTitle"
 msgstr "Herramienta de videoconferencia BigBlueButton"
 
 msgid "BigBlueButtonEnableComment"
-msgstr "Seleccione si desea habilitar la herramienta de videoconferencia BigBlueButton. Una vez activada, se mostrará como una herramienta en la página principal todos los curso. Los profesores podrán lanzar una videoconferencia en cualquier momento, pero los estudiantes sólo podrán unirse a una ya lanzada.
-Si no dispone de un servidor BigBlueButton, pruebe a 
-<a href=\"http://bigbluebutton.org/\" target=\"_blank\">configurar uno</a> o pida ayuda a los <a href=\"http://www.chamilo.org/en/providers\" target=\"_blank\">proveedores oficiales de Chamilo</a>.
-BigBlueButton es libre, pero su instalación requiere ciertas habilidades técnicas que no todo el mundo posee. Puede instalarlo por su cuenta o buscar ayuda profesional con el consiguiente costo. En la lógica del software libre, nosotros le ofrecemos las herramientas para hacer más fácil su trabajo y le recomendamos profesionales (los proveedores oficiales de Chamilo) que serán capaces de ayudarle."
+msgstr "Seleccione si desea habilitar la herramienta de videoconferencia BigBlueButton. Una vez activada, se mostrará como una herramienta en la página principal todos los curso. Los profesores podrán lanzar una videoconferencia en cualquier momento, pero los estudiantes sólo podrán unirse a una ya lanzada.<br />Si no dispone de un servidor BigBlueButton, pruebe a<a href=\"http://bigbluebutton.org/\" target=\"_blank\">configurar uno</a> o pida ayuda a los <a href=\"http://www.chamilo.org/en/providers\" target=\"_blank\">proveedores oficiales de Chamilo</a>.<br />BigBlueButton es libre, pero su instalación requiere ciertas habilidades técnicas que no todo el mundo posee. Puede instalarlo por su cuenta o buscar ayuda profesional con el consiguiente costo. En la lógica del software libre, nosotros le ofrecemos las herramientas para hacer más fácil su trabajo y le recomendamos profesionales (los proveedores oficiales de Chamilo) que serán capaces de ayudarle."
 
 msgid "BigBlueButtonHostTitle"
 msgstr "Servidor BigBlueButton"
@@ -22112,8 +22030,7 @@ msgid "ShowUsersFoldersTitle"
 msgstr "Mostrar las carpetas de los usuarios en la herramienta documentos"
 
 msgid "ShowUsersFoldersComment"
-msgstr "
-Esta opción le permitirá mostrar u ocultar a los profesores las carpetas que el sistema genera para cada usuario que visita la herramienta documentos o envía un archivo a través del editor web. Si muestra estas carpetas a los profesores, éstos podrán hacerlas visibles o no a los estudiantes y permitirán a cada estudiante tener un lugar específico en el curso donde, no sólo almacenar documentos, sino donde también podrán crear y modificar páginas web y poder exportarlas a pdf, realizar dibujos, realizar plantillas web personales, enviar archivos, así como crear, mover y eliminar subdirectorios y archivos, y sacar copias de seguridad de sus carpetas. Cada usuario del curso dispondrá de un completo gestor de documentos. Además, recuerde que cualquier usuario podrá copiar un archivo, que sea visible, de cualquier carpeta de la herramienta documentos (sea o no la suya) a su portafolios o área personal de documentos de la red social, donde estará disponible para que lo pueda usar en otros cursos."
+msgstr "Esta opción le permitirá mostrar u ocultar a los profesores las carpetas que el sistema genera para cada usuario que visita la herramienta documentos o envía un archivo a través del editor web. Si muestra estas carpetas a los profesores, éstos podrán hacerlas visibles o no a los estudiantes y permitirán a cada estudiante tener un lugar específico en el curso donde, no sólo almacenar documentos, sino donde también podrán crear y modificar páginas web y poder exportarlas a pdf, realizar dibujos, realizar plantillas web personales, enviar archivos, así como crear, mover y eliminar subdirectorios y archivos, y sacar copias de seguridad de sus carpetas. Cada usuario del curso dispondrá de un completo gestor de documentos. Además, recuerde que cualquier usuario podrá copiar un archivo, que sea visible, de cualquier carpeta de la herramienta documentos (sea o no la suya) a su portafolios o área personal de documentos de la red social, donde estará disponible para que lo pueda usar en otros cursos."
 
 msgid "ShowDefaultFoldersTitle"
 msgstr "Mostrar en la herramienta documentos las carpetas que contienen los recursos multimedia suministrados por defecto."
@@ -22155,9 +22072,7 @@ msgid "MoveUserStats"
 msgstr "Mover los resultados de los usuarios desde/hacia una sesión de formación"
 
 msgid "CompareUserResultsBetweenCoursesAndCoursesInASession"
-msgstr "Esta herramienta avanzada le permite mejorar manualmente el seguimiento de los resultados de los usuarios cuando cambia de un modelo de cursos a un modelo de sesiones de formación. En una mayoría de casos, no necesitará usarla.<br />
-En esta pantalla, puede comparar los resultados que los usuarios tienen en el contexto de un curso y en el contexto del mismo curso dentro de una sesión de formación.<br />
-Una vez que decidida cuál es el mejor contexto para el seguimiento (resultados de ejercicios y seguimiento de lecciones), podrá moverlo de un curso a una sesión."
+msgstr "Esta herramienta avanzada le permite mejorar manualmente el seguimiento de los resultados de los usuarios cuando cambia de un modelo de cursos a un modelo de sesiones de formación. En una mayoría de casos, no necesitará usarla.<br />En esta pantalla, puede comparar los resultados que los usuarios tienen en el contexto de un curso y en el contexto del mismo curso dentro de una sesión de formación.<br />Una vez que decidida cuál es el mejor contexto para el seguimiento (resultados de ejercicios y seguimiento de lecciones), podrá moverlo de un curso a una sesión."
 
 msgid "PDFExportWatermarkEnableTitle"
 msgstr "Marcas de agua en las exportaciones a PDF"
@@ -22319,9 +22234,7 @@ msgid "SearchEnabledTitle"
 msgstr "Búsqueda a texto completo"
 
 msgid "SearchEnabledComment"
-msgstr "Esta funcionalidad permite la indexación de la mayoría de los documentos subidos a su portal, con lo que permite la búsqueda para los usuarios.<br />
-Esta funcionalidad no indexa los documentos que ya fueron subidos, por lo que es importante (si se quiere) activarla al comienzo de su implementación.<br />
-Una vez activada, una caja de búsqueda aparecerá en la lista de cursos de cada usuario. Buscar un término específico suministra una lista de documentos, ejercicios o temas de foro correspondientes, filtrados dependiendo de su disponibilidad para el usuario."
+msgstr "Esta funcionalidad permite la indexación de la mayoría de los documentos subidos a su portal, con lo que permite la búsqueda para los usuarios.<br />Esta funcionalidad no indexa los documentos que ya fueron subidos, por lo que es importante (si se quiere) activarla al comienzo de su implementación.<br />Una vez activada, una caja de búsqueda aparecerá en la lista de cursos de cada usuario. Buscar un término específico suministra una lista de documentos, ejercicios o temas de foro correspondientes, filtrados dependiendo de su disponibilidad para el usuario."
 
 msgid "SpecificSearchFieldsAvailable"
 msgstr "Campos de búsqueda personalizados disponibles"
@@ -22792,29 +22705,7 @@ msgid "ShibbolethMainActivateTitle"
 msgstr "<h3>Autenticación Shibboleth</h3>"
 
 msgid "ShibbolethMainActivateComment"
-msgstr "En primer lugar, tiene que configurar Shibboleth para su servidor web.
-
-Para configurarlo en Chamilo:
-
-editar el archivo  <strong> main/auth/shibboleth/config/aai.class.php</strong>
-
-Modificar valores de $result con el nombre de los atributos de Shibboleth
-
-    $result->unique_id = 'mail';
-    $result->firstname = 'cn';
-    $result->lastname = 'uid';
-    $result->email = 'mail';
-    $result->language = '-';
-    $result->gender = '-';
-    $result->address = '-';
-    $result->staff_category = '-';
-    $result->home_organization_type = '-';
-    $result->home_organization = '-';
-    $result->affiliation = '-';
-    $result->persistent_id = '-';
-    ...
-
-Ir a Plug-in para añadir el botón 'Shibboleth Login' en su campus de Chamilo."
+msgstr "En primer lugar, tiene que configurar Shibboleth para su servidor web.<br />Para configurarlo en Chamilo:<br /><br /> editar el archivo  <strong> main/auth/shibboleth/config/aai.class.php</strong><br />Modificar valores de $result con el nombre de los atributos de Shibboleth<br />    $result->unique_id = 'mail';<br />   $result->firstname = 'cn';<br /><br />    $result->lastname = 'uid';<br />    $result->email = 'mail';    <br />$result->language = '-';    $result->gender = '-';<br />  $result->address = '-';<br />   $result->staff_category = '-';<br />    $result->home_organization_type = '-';<br />    $result->home_organization = '-';<br />    $result->affiliation = '-';<br />    $result->persistent_id = '-';<br />    ...<br /><br />Ir a Plug-in para añadir el botón 'Shibboleth Login' en su campus de Chamilo."
 
 msgid "LdapDescriptionTitle"
 msgstr "<h3>Autentificacion LDAP</h3>"
@@ -22823,13 +22714,7 @@ msgid "FacebookMainActivateTitle"
 msgstr "Autenticación con Facebook"
 
 msgid "FacebookMainActivateComment"
-msgstr "En primer lugar, se tiene que crear una aplicación de Facebook (ver https://developers.facebook.com/apps) con una cuenta de Facebook. En los parámetros de aplicaciones de Facebook, el valor de dirección URL del sitio debe tener \"una acción = fbconnect\" un parámetro GET (http://mychamilo.com/?action=fbconnect, por ejemplo).
-
-Entonces, editar el archivo <strong> main/auth/external_login/facebook.conf.php </strong>
-
-e ingresar en \"appId\" y \"secret\" los valores de $facebook_config.
-
-Ir a Plug-in para añadir un botón configurable \"Facebook Login\" para el campus de Chamilo."
+msgstr "En primer lugar, se tiene que crear una aplicación de Facebook (ver https://developers.facebook.com/apps) con una cuenta de Facebook. En los parámetros de aplicaciones de Facebook, el valor de dirección URL del sitio debe tener \"una acción = fbconnect\" un parámetro GET (http://mychamilo.com/?action=fbconnect, por ejemplo).<br />Entonces, editar el archivo <strong> main/auth/external_login/facebook.conf.php </strong><br />e ingresar en \"appId\" y \"secret\" los valores de $facebook_config.<br />Ir a Plug-in para añadir un botón configurable \"Facebook Login\" para el campus de Chamilo."
 
 msgid "LanguagePriority1Title"
 msgstr "Prioridad del idioma 1"

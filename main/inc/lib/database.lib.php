@@ -335,6 +335,7 @@ class Database
         );*/
         //var_dump($query);
         return $connection->executeQuery($query);
+
     }
 
     public static function customOptionToDoctrineOption($option)

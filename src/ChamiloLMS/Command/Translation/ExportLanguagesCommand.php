@@ -33,7 +33,17 @@ class ExportLanguagesCommand extends Command
      */
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $languageList = array('english', 'spanish', 'french');
+        $languageList = array('english','spanish','french');
+        /** @var \Silex\Application $app */
+        /*
+        $app = $this->getApplication()->getSilexApplication();
+        $tempPath = $app['paths']['sys_root'].'main/locale';
+        $l = scandir($app['paths']['sys_root'].'main/lang');
+        foreach ($l as $item) {
+            if (substr(0,1,$item) == '.') { continue; }
+            $languageList[] = $item;
+        }
+        */
         foreach ($languageList as $lang) {
             $output->writeln("<info>Generating lang po files for: $lang</info>");
             $this->convertLanguageToGettext($lang, $output);
@@ -108,7 +118,7 @@ class ExportLanguagesCommand extends Command
                                     // related to https://bugs.php.net/bug.php?id=52671
                                     $translations[] = array(
                                         'msgid'  => $variable,
-                                        'msgstr' => preg_replace("/\r\n/",'\n',$$variable)
+                                        'msgstr' => $$variable
                                     );
                                 } else {
                                     continue;
@@ -129,6 +139,7 @@ class ExportLanguagesCommand extends Command
                         $translated = $item['msgstr'];
                         $translated = addslashes($translated);
                         $translated = str_replace(array("\\'"), "'", $translated);
+                        $translated = str_replace(array("\n"), '\n', $translated);
                         $line .= 'msgstr "'.$translated.'"'."\n\n";
                         fwrite($fp, $line);
                     }

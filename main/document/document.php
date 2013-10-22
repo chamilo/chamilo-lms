@@ -54,25 +54,46 @@ if (isset($_SESSION['temp_audio_nanogong']) && !empty($_SESSION['temp_audio_nano
 if (isset($_SESSION['temp_realpath_image']) && !empty($_SESSION['temp_realpath_image']) && is_file($_SESSION['temp_realpath_image'])) {
     unlink($_SESSION['temp_realpath_image']);
 }
-
+$course_info = api_get_course_info();
+$course_dir = $course_info['path'].'/document';
+$sys_course_path = api_get_path(SYS_COURSE_PATH);
+$base_work_dir = $sys_course_path.$course_dir;
+$http_www = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document';
+$document_path = $base_work_dir;
 //Removing sessions
 unset($_SESSION['draw_dir']);
 unset($_SESSION['paint_dir']);
 unset($_SESSION['temp_audio_nanogong']);
 
+$htmlHeadXtra[] = '<script>
+function startApplet() {
+    appletsource = "<applet code=\"com.hammurapi.jcapture.JCaptureApplet.class\" archive=\"jcapture/lib/jcapture.jar\" width=\"0\" height=\"0\">";
+    appletsource += "<param name=\"outputDir\" value=\"'.$base_work_dir.'\">";
+    appletsource += "</applet>";
+    document.getElementById("appletplace").innerHTML=appletsource;
+}
+$(function() {
+    $("#jcapture").click(function(){
+        startApplet();
+    });
+});
+</script>';
+
 // Create directory certificates
 DocumentManager::create_directory_certificate_in_course(api_get_course_id());
 
-$course_info = api_get_course_info();
+
 
 if (empty($course_info)) {
     api_not_allowed(true);
 }
 
-$course_dir = $course_info['path'].'/document';
-$sys_course_path = api_get_path(SYS_COURSE_PATH);
-$base_work_dir = $sys_course_path.$course_dir;
-$http_www = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document';
+
+
+?>
+
+<div id="appletplace"></div>
+<?php
 
 $dbl_click_id = 0; // Used for avoiding double-click
 
@@ -710,6 +731,10 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
                             null,
                             $session_id
                         )) {
+                            // Update visibility of the document in all sessions
+                            if (empty($session_id)) {
+                                DocumentManager::updateVisibilityFromAllSessions($_course, $documentId, $visibilityCommand, api_get_user_id());
+                            }
                             Display::display_confirmation_message(get_lang('VisibilityChanged').': '.$data['path']);
                         } else {
                             Display::display_error_message(get_lang('ViModProb'));
@@ -729,13 +754,16 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
                             null,
                             $session_id
                         )) {
+                            // Update visibility of the document in all sessions
+                            if (empty($session_id)) {
+                                DocumentManager::updateVisibilityFromAllSessions($_course, $documentId, $visibilityCommand, api_get_user_id());
+                            }
                             Display::display_confirmation_message(get_lang('VisibilityChanged').': '.$data['path']);
                         } else {
                             Display::display_error_message(get_lang('ViModProb'));
                         }
                         break;
                     case 'delete':
-
                         foreach ($files as $path) {
                             if (!$is_allowed_to_edit) {
                                 if (DocumentManager::check_readonly($_course, api_get_user_id(), $path)) {
@@ -783,9 +811,6 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 
                 if ($created_dir) {
                     Display::display_confirmation_message('<span title="'.$created_dir.'">'.get_lang('DirCr').'</span>', false);
-                    // Uncomment if you want to enter the created dir
-                    //$curdirpath = $created_dir;
-                    //$curdirpathurl = urlencode($curdirpath);
                 } else {
                     Display::display_error_message(get_lang('CannotCreateDir'));
                 }
@@ -828,6 +853,11 @@ if ($is_allowed_to_edit) {
         // Update item_property to change visibility
         if (api_item_property_update($_course, TOOL_DOCUMENT, $update_id, $visibility_command, api_get_user_id(), null, null, null, null, $session_id)) {
             Display::display_confirmation_message(get_lang('VisibilityChanged')); //don't use ViMod because firt is load ViMdod (Gradebook). VisibilityChanged (trad4all)
+
+            if (empty($session_id)) {
+                DocumentManager::updateVisibilityFromAllSessions($_course, $update_id, $visibility_command, api_get_user_id());
+            }
+
         } else {
             Display::display_error_message(get_lang('ViModProb'));
         }
@@ -937,8 +967,6 @@ if (api_get_group_id() != 0) {
     $folders = DocumentManager::get_all_document_folders($_course, api_get_group_id(), $is_allowed_to_edit || $group_member_with_upload_rights);
 }
 
-
-//$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit || $group_member_with_upload_rights);
 if ($folders === false) {
     $folders = array();
 }
@@ -1054,6 +1082,10 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         echo '<a href="upload.php?'.api_get_cidreq().'&id='.$current_folder_id.'">';
         echo Display::display_icon('upload_file.png', get_lang('UplUploadDocument'), '', ICON_SIZE_MEDIUM).'</a>';
     }
+    
+    echo '<a href="#" style="margin-top:-5px;" id="jcapture">';
+    echo Display::display_icon('capture.png', get_lang('CatchScreenCasts'), '', ICON_SIZE_MEDIUM).'</a>';
+
     // Create directory
     if (!$is_certificate_mode) {
         ?>
@@ -1127,7 +1159,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
                 $count++;
             }
 
-            // Validacion when belongs to a session
+            // Validation when belongs to a session
             $session_img = api_get_session_image($document_data['session_id'], $_user['status']);
 
             // Document title with link

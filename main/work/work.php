@@ -249,7 +249,7 @@ if ($origin == 'learnpath') {
 
 /*	Display links to upload form and tool options */
 
-if (!in_array($action, array('add','create_dir'))) {
+if (!in_array($action, array('add', 'create_dir'))) {
     $token = Security::get_token();
 }
 
@@ -314,25 +314,20 @@ switch ($action) {
             $form->addElement('header', get_lang('CreateAssignment').$token);
             $form->addElement('hidden', 'action', 'add');
             $form->addElement('hidden', 'curdirpath', Security :: remove_XSS($curdirpath));
-            // $form->addElement('hidden', 'sec_token', $token);
-
             $form->addElement('text', 'new_dir', get_lang('AssignmentName'));
             $form->addRule('new_dir', get_lang('ThisFieldIsRequired'), 'required');
-
             $form->add_html_editor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
-
-            $form->addElement('advanced_settings', '<a href="javascript: void(0);" onclick="javascript: return plus();"><span id="plus">'.Display::return_icon('div_show.gif',get_lang('AdvancedParameters'), array('style' => 'vertical-align:center')).' '.get_lang('AdvancedParameters').'</span></a>');
-
+            $form->addElement('advanced_settings', '<a href="javascript: void(0);" onclick="javascript: return plus();">
+                <span id="plus">'.Display::return_icon('div_show.gif',get_lang('AdvancedParameters'), array('style' => 'vertical-align:center')).' '.get_lang('AdvancedParameters').'</span></a>');
             $form->addElement('html', '<div id="options" style="display: none;">');
 
-            //QualificationOfAssignment
+            // QualificationOfAssignment
             $form->addElement('text', 'qualification_value', get_lang('QualificationNumeric'));
 
-            if (Gradebook::is_active()) {
+            if ((api_get_session_id() != 0 && Gradebook::is_active()) || api_get_session_id() == 0) {   
                 $form->addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'), array('id' =>'make_calification_id', 'onclick' => "javascript: if(this.checked){document.getElementById('option1').style.display='block';}else{document.getElementById('option1').style.display='none';}"));
             } else {
-                //QualificationOfAssignment
-                //$form->addElement('hidden', 'qualification_value',0);
+                // QualificationOfAssignment
                 $form->addElement('hidden', 'make_calification', false);
             }
 
@@ -347,7 +342,7 @@ switch ($action) {
             $form->addElement('checkbox', 'type1', null, get_lang('EnableExpiryDate'), array('id' =>'make_calification_id', 'onclick' => "javascript: if(this.checked){document.getElementById('option2').style.display='block';}else{document.getElementById('option2').style.display='none';}"));
 
             $form->addElement('html', '<div id="option2" style="display: none;">');
-            $form->addElement('advanced_settings',draw_date_picker('expires'));
+            $form->addElement('advanced_settings', draw_date_picker('expires'));
             $form->addElement('html', '</div>');
 
             $form->addElement('checkbox', 'type2', null, get_lang('EnableEndDate'), array('id' =>'make_calification_id', 'onclick' => "javascript: if(this.checked){document.getElementById('option3').style.display='block';}else{document.getElementById('option3').style.display='none';}"));

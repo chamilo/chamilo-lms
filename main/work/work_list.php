@@ -8,8 +8,6 @@ $language_file = array('exercice', 'work', 'document', 'admin', 'gradebook');
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_STUDENTPUBLICATION;
 
-/*	Configuration settings */
-
 api_protect_course_script(true);
 
 // Including necessary files
@@ -60,12 +58,17 @@ $interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'work/work.php?
 $interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$workId, 'name' =>  $my_folder_data['title']);
 
 Display :: display_header(null);
+$documentsAddedInWork = getAllDocumentsFromWorkToString($workId, $courseInfo);
 
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';
 if (api_is_allowed_to_session_edit(false, true) && !empty($workId)) {
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId.'&origin='.$origin.'&gradebook='.$gradebook.'">';
-    echo Display::return_icon('upload_file.png', get_lang('UploadADocument'),'',ICON_SIZE_MEDIUM).'</a>';
+    echo Display::return_icon('upload_file.png', get_lang('UploadADocument'), '', ICON_SIZE_MEDIUM).'</a>';
+    if (!empty($documentsAddedInWork)) {
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/upload_from_template.php?'.api_get_cidreq().'&id='.$workId.'&origin='.$origin.'&gradebook='.$gradebook.'">';
+    }
+    echo Display::return_icon('import_html.png', get_lang('UploadFromTemplate'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 echo '</div>';
 
@@ -78,7 +81,7 @@ if (!empty($my_folder_data['description'])) {
     echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description']).'</p></div></p>';
 }
 
-echo getAllDocumentsFromWorkToString($workId, $courseInfo);
+echo $documentsAddedInWork;
 
 $check_qualification = intval($my_folder_data['qualification']);
 

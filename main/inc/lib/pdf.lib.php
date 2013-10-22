@@ -22,7 +22,8 @@ class PDF {
      * @param   string  format A4 A4-L see  http://mpdf1.com/manual/index.php?tid=184&searchstring=format
      * @param   string  orientation "P" = Portrait "L" = Landscape
      */
-    public function __construct($page_format ='A4', $orientation = 'P', $params = array()) {
+    public function __construct($page_format ='A4', $orientation = 'P', $params = array())
+    {
         /* More info @ http://mpdf1.com/manual/index.php?tid=184&searchstring=mPDF
          * mPDF ([ string $mode [, mixed $format [, float $default_font_size [, string $default_font [, float $margin_left , float $margin_right , float $margin_top , float $margin_bottom , float $margin_header , float $margin_footer [, string $orientation ]]]]]])
          */         
@@ -39,6 +40,8 @@ class PDF {
         
         $this->params['filename'] = isset($params['filename']) ? $params['filename'] : api_get_local_time();
         $this->params['pdf_title'] = isset($params['pdf_title']) ? $params['pdf_title'] : get_lang('Untitled');
+        $this->params['course_info'] = isset($params['course_info']) ? $params['course_info'] : api_get_course_info();
+        $this->params['session_info'] = isset($params['session_info']) ? $params['session_info'] : api_get_session_info(api_get_session_id());
         $this->params['course_code'] = isset($params['course_code']) ? $params['course_code'] : api_get_course_id();
         $this->params['add_signatures'] = isset($params['add_signatures']) ? $params['add_signatures'] : false;        
         
@@ -49,7 +52,8 @@ class PDF {
      * @param string the HTML content
      * @uses export/table_pdf.tpl
      */
-    function html_to_pdf_with_template($content)  {
+    function html_to_pdf_with_template($content)
+    {
         Display :: display_no_header();
         
         //Assignments
@@ -68,18 +72,15 @@ class PDF {
 
         Display::$global_template->assign('organization', $organization);
 
-        //Showing only the current teacher/admin instead the all teacherlist name see BT#4080
+        //Showing only the current teacher/admin instead the all teacher list name see BT#4080
         //$teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_code);
 
-        $user_info = api_get_user_info();    
-                
+        $user_info = api_get_user_info();
         $teacher_list = $user_info['complete_name'];
-        $session_name = api_get_session_name(api_get_session_id());
-        if (!empty($session_name)) {        
-            Display::$global_template->assign('pdf_session', $session_name);
-        }
 
         Display::$global_template->assign('pdf_course', $this->params['course_code']);
+        Display::$global_template->assign('pdf_course_info', $this->params['course_info']);
+        Display::$global_template->assign('pdf_session_info', $this->params['session_info']);
         Display::$global_template->assign('pdf_date', api_format_date(api_get_utc_datetime(), DATE_TIME_FORMAT_LONG));
         Display::$global_template->assign('pdf_teachers', $teacher_list);        
         Display::$global_template->assign('pdf_title', $this->params['pdf_title']);

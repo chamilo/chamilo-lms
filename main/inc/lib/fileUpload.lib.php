@@ -176,15 +176,28 @@ function process_uploaded_file($uploaded_file, $show_output = true) {
  * @param boolean Optional output parameter. So far only use for unzip_uploaded_document function. If no output wanted on success, set to false.
  * @return path of the saved file
  */
-function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upload_path, $user_id, $to_group_id = 0, $to_user_id = null, $unzip = 0, $what_if_file_exists = '', $output = true) {
-	if (!$user_id) die('Not a valid user.');
+function handle_uploaded_document(
+    $_course,
+    $uploaded_file,
+    $base_work_dir,
+    $upload_path,
+    $user_id,
+    $to_group_id = 0,
+    $to_user_id = null,
+    $unzip = 0,
+    $what_if_file_exists = '',
+    $output = true
+) {
+	if (!$user_id) {
+        die('Not a valid user.');
+    }
 	// Strip slashes
 	$uploaded_file['name'] = stripslashes($uploaded_file['name']);
 	// Add extension to files without one (if possible)
 	$uploaded_file['name'] = add_ext_on_mime($uploaded_file['name'], $uploaded_file['type']);
 	$current_session_id    = api_get_session_id();
 
-    //Just in case process_uploaded_file is not called
+    // Just in case process_uploaded_file is not called
     $max_filled_space = DocumentManager::get_course_quota();
 
 	// Check if there is enough space to save the file
@@ -211,22 +224,18 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 		// No "dangerous" files
 		$clean_name = disable_dangerous_file($clean_name);
 
+        // Checking file extension
 		if (!filter_extension($clean_name)) {
 		    if ($output) {
                 Display::display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
 		    }
 			return false;
 		} else {
-			// Extension is good
-			//echo '<br />clean name = '.$clean_name;
-			//echo '<br />upload_path = '.$upload_path;
 			// If the upload path differs from / (= root) it will need a slash at the end
 			if ($upload_path != '/') {
 				$upload_path = $upload_path.'/';
 			}
-			//echo '<br />upload_path = '.$upload_path;
 			$file_path = $upload_path.$clean_name;
-			//echo '<br />file path = '.$file_path;
 			// Full path to where we want to store the file with trailing slash
 			$where_to_save = $base_work_dir.$upload_path;
 			// At least if the directory doesn't exist, tell so
@@ -236,10 +245,9 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 				}
 				return false;
 			}
-			//echo '<br />where to save = '.$where_to_save;
 			// Full path of the destination
 			$store_path = $where_to_save.$clean_name;
-			//echo '<br />store path = '.$store_path;
+
 			// Name of the document without the extension (for the title)
 			$document_name = get_document_title($uploaded_file['name']);
 			// Size of the uploaded file (in bytes)
@@ -260,13 +268,13 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 							$document_id = DocumentManager::get_document_id($_course, $file_path);
 
 							if (is_numeric($document_id)) {
-								// Update filesize
+								// Update file size
 								update_existing_document($_course, $document_id, $uploaded_file['size']);
 
 								// Update document item_property
 								api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
 
-                                //Redo visibility
+                                // Redo visibility
                                 api_set_default_visibility(TOOL_DOCUMENT, $document_id);
 							}
 							// If the file is in a folder, we need to update all parent folders
@@ -274,7 +282,7 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 							// Display success message with extra info to user
 							if ($output) {
 								Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br />'.$file_path .' '. get_lang('UplFileOverwritten'), false);
-							}
+        					}
 							return $file_path;
 						} else {
 							// Put the document data in the database
@@ -282,6 +290,9 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 							if ($document_id) {
 								// Put the document in item_property update
 								api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
+
+                                // Redo visibility
+                                api_set_default_visibility(TOOL_DOCUMENT, $document_id);
 							}
 							// If the file is in a folder, we need to update all parent folders
 							item_property_update_on_folder($_course, $upload_path, $user_id);
@@ -314,6 +325,9 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 						if ($document_id) {
 							// Update document item_property
 							api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
+
+                            // Redo visibility
+                            api_set_default_visibility(TOOL_DOCUMENT, $document_id);
 						}
 						// If the file is in a folder, we need to update all parent folders
 						item_property_update_on_folder($_course, $upload_path, $user_id);
@@ -347,6 +361,8 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 							if ($document_id) {
 								// Update document item_property
 								api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
+                                // Redo visibility
+                                api_set_default_visibility(TOOL_DOCUMENT, $document_id);
 							}
 							// If the file is in a folder, we need to update all parent folders
 							item_property_update_on_folder($_course,$upload_path,$user_id);

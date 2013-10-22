@@ -2938,7 +2938,8 @@ class learnpath {
      * @param	integer	Learnpath item ID
      * @return	string	Link to the lp_item resource
      */
-    public function get_link($type = 'http', $item_id = null, $provided_toc = false) {
+    public function get_link($type = 'http', $item_id = null, $provided_toc = false)
+    {
         $course_id = $this->get_course_int_id();
 
         if ($this->debug > 0) {
@@ -3029,7 +3030,7 @@ class learnpath {
                                 $file = 'embed.php?type=vimeo&src='.$src;
                             }
                         } else {
-                            // check how much attempts of a exercise exits in lp
+                            // Check how much attempts of a exercise exits in lp
                             $lp_item_id = $this->get_current_item_id();
                             $lp_view_id = $this->get_view_id();
 

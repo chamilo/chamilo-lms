@@ -95,7 +95,9 @@ class ImportCsv
                 if ($fileInfo['extension'] == 'csv') {
                     // teachers_yyyymmdd.csv, courses_yyyymmdd.csv, students_yyyymmdd.csv and sessions_yyyymmdd.csv
                     $parts = explode('_', $fileInfo['filename']);
-                    $method = 'import'.ucwords($parts[1]);
+                    $preMethod = ucwords($parts[1]);
+                    $preMethod = str_replace('-static', 'Static', $preMethod);
+                    $method = 'import'.$preMethod;
 
                     if (method_exists($this, $method)) {
                          $fileToProcess[$parts[1]][] = array(
@@ -105,6 +107,8 @@ class ImportCsv
                         //$this->$method($path.$fileInfo['basename']);
                     } else {
                         echo "Error - This file '$file' can't be processed.".PHP_EOL;
+                        echo "Trying to call $method".PHP_EOL;
+
                         echo "The file have to has this format:".PHP_EOL;
                         echo "prefix_students_ddmmyyyy.csv, prefix_teachers_ddmmyyyy.csv, prefix_courses_ddmmyyyy.csv, prefix_sessions_ddmmyyyy.csv ".PHP_EOL;
                         exit;
@@ -117,7 +121,7 @@ class ImportCsv
                 exit;
             }
 
-            $sections = array('students', 'teachers', 'courses', 'sessions');
+            $sections = array('students', 'teachers', 'courses', 'sessions', 'unsubscribe-static');
 
             $this->prepareImport();
 
@@ -138,6 +142,8 @@ class ImportCsv
 
                 }
             }
+
+
         }
     }
 
@@ -602,6 +608,51 @@ class ImportCsv
         $this->moveFile($file);
     }
 
+    /**
+     * @param string $file
+     */
+    private function importUnsubscribeStatic($file)
+    {
+        $data = Import::csv_to_array($file);
+
+        //$language = $this->defaultLanguage;
+
+        if (!empty($data)) {
+            $this->logger->addInfo(count($data)." records found.");
+            foreach ($data as $row) {
+                $chamiloUsername = $row['UserName'];
+                $chamiloCourseCode = $row['CourseCode'];
+                $systemSessionId= $row['SessionID'];
+
+                $sessionId = SessionManager::get_session_id_from_original_id($systemSessionId, $this->extraFieldIdNameList['session']);
+
+                if (empty($sessionId)) {
+                    $this->logger->addError('Session does not exists: '.$systemSessionId);
+                    continue;
+                }
+
+                $courseInfo = api_get_course_info($chamiloCourseCode);
+                if (empty($courseInfo)) {
+                    $this->logger->addError('Course does not exists: '.$courseInfo);
+                    continue;
+                }
+
+                $userId = Usermanager::get_user_id_from_username($chamiloUsername);
+
+                if (empty($userId)) {
+                    $this->logger->addError('User does not exists: '.$chamiloUsername);
+                    continue;
+                }
+
+                CourseManager::unsubscribe_user($userId, $courseInfo['code'], $sessionId);
+                $this->logger->addError("User '$chamiloUsername' was removed from session: #$sessionId, Course: ".$courseInfo['code']);
+            }
+        }
+    }
+
+    /**
+     *  Dump database tables
+     */
     private function dumpDatabaseTables()
     {
         echo 'Dumping tables'.PHP_EOL;

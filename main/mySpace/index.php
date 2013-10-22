@@ -126,24 +126,24 @@ global $_configuration;
 if ($is_platform_admin) {
 	if ($view == 'admin') {
 		$title = get_lang('CoachList');
-		$menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('TeacherInterface'), array(), 32), api_get_self().'?view=teacher');
-		$menu_items[] = Display::url(Display::return_icon('star_na.png', get_lang('AdminInterface'), array(), 32), api_get_self().'?view=admin');
-        $menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), 32), api_get_path(WEB_CODE_PATH).'tracking/exams.php');
-        $menu_items[] = Display::url(Display::return_icon('statistics.png', get_lang('CurrentCoursesReport'), array(), 32), api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php');
+		$menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('TeacherInterface'), array(), ICON_SIZE_MEDIUM), api_get_self().'?view=teacher');
+		$menu_items[] = Display::url(Display::return_icon('star_na.png', get_lang('AdminInterface'), array(), ICON_SIZE_MEDIUM), api_get_self().'?view=admin');
+        $menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'tracking/exams.php');
+        $menu_items[] = Display::url(Display::return_icon('statistics.png', get_lang('CurrentCoursesReport'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php');
 	} else {
-		$menu_items[] = Display::return_icon('teacher_na.png', get_lang('TeacherInterface'), array(), 32);
-		$menu_items[] = Display::url(Display::return_icon('star.png', get_lang('AdminInterface'), array(), 32), api_get_self().'?view=admin');
-        $menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), 32), api_get_path(WEB_CODE_PATH).'tracking/exams.php');
-        $menu_items[] = Display::url(Display::return_icon('statistics.png', get_lang('CurrentCoursesReport'), array(), 32), api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php');
+		$menu_items[] = Display::return_icon('teacher_na.png', get_lang('TeacherInterface'), array(), ICON_SIZE_MEDIUM);
+		$menu_items[] = Display::url(Display::return_icon('star.png', get_lang('AdminInterface'), array(), ICON_SIZE_MEDIUM), api_get_self().'?view=admin');
+        $menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'tracking/exams.php');
+        $menu_items[] = Display::url(Display::return_icon('statistics.png', get_lang('CurrentCoursesReport'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php');
 	}
 }
 
 if ($is_drh) {
 	$view = 'drh';
-	$menu_items[] = Display::return_icon('user_na.png', get_lang('Students'), array(), 32);
-	$menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('Trainers'), array(), 32), 'teachers.php');
-	$menu_items[] = Display::url(Display::return_icon('course.png', get_lang('Courses'), array(), 32), 'course.php');
-	$menu_items[] = Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), 32), 'session.php');
+	$menu_items[] = Display::url(Display::return_icon('user_na.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM), '#');
+	$menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('Trainers'), array(), ICON_SIZE_MEDIUM), 'teachers.php');
+	$menu_items[] = Display::url(Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_MEDIUM), 'course.php');
+	$menu_items[] = Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM), 'session.php');
 }
 
 echo '<div id="actions" class="actions">';
@@ -154,7 +154,8 @@ if ($display == 'useroverview' || $display == 'sessionoverview' || $display == '
     echo Display::return_icon("export_csv.png", get_lang('ExportAsCSV'),array(), 32);
     echo '</a>';
 }
-echo '<a href="javascript: void(0);" onclick="javascript: window.print()">'.Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="javascript: void(0);" onclick="javascript: window.print()">'.
+      Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</span>';
 
 if (!empty($session_id)) {
@@ -163,14 +164,16 @@ if (!empty($session_id)) {
         if (api_get_setting('add_users_by_coach') == 'true') {
 	        if ($is_coach) {
 		        echo "<div align=\"right\">";
-                echo '<a href="user_import.php?id_session='.$session_id.'&action=export&amp;type=xml">'.Display::return_icon('excel.gif', get_lang('ImportUserList')).'&nbsp;'.get_lang('ImportUserList').'</a>';
+                echo '<a href="user_import.php?id_session='.$session_id.'&action=export&amp;type=xml">'.
+                        Display::return_icon('excel.gif', get_lang('ImportUserList')).'&nbsp;'.get_lang('ImportUserList').'</a>';
                 echo "</div><br />";
 	        }
 	    }
 
     } else {
         echo "<div align=\"right\">";
-        echo '<a href="user_import.php?id_session='.$session_id.'&action=export&amp;type=xml">'.Display::return_icon('excel.gif', get_lang('ImportUserList')).'&nbsp;'.get_lang('ImportUserList').'</a>';
+        echo '<a href="user_import.php?id_session='.$session_id.'&action=export&amp;type=xml">'.
+                Display::return_icon('excel.gif', get_lang('ImportUserList')).'&nbsp;'.get_lang('ImportUserList').'</a>';
         echo "</div><br />";
     }
 } else {
@@ -458,7 +461,12 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
 
 		$all_data = array();
 		foreach ($sessions as $session) {
-			$count_courses_in_session = count(Tracking::get_courses_followed_by_coach($user_id, $session['id']));
+            if (api_drh_can_access_all_session_content()) {
+                $count_courses_in_session = count(SessionManager::get_course_list_by_session_id($session['id']));
+            } else {
+                $count_courses_in_session = count(Tracking::get_courses_followed_by_coach($user_id, $session['id']));
+            }
+
             $count_users_in_session = count(SessionManager::get_users_by_session($session['id'], 0));
 			$row = array();
 			$row[] = $session['name'];

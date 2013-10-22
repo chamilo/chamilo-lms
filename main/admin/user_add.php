@@ -51,6 +51,11 @@ if (isset($_configuration['allow_strength_pass_checker']) && $_configuration['al
 
 $htmlHeadXtra[] = '
 <script>
+$("#status_select").ready(function() {
+    if ($(this).attr("value") != '.STUDENT.') {
+        $("#id_platform_admin").hide();
+    }
+});
 function enable_expiration_date() { //v2.0
 	document.user_add.radio_expiration_date[0].checked=false;
 	document.user_add.radio_expiration_date[1].checked=true;

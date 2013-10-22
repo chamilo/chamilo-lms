@@ -73,7 +73,15 @@ if (empty($docId)) {
         echo '</div>';
     }
 
-    $document_tree = DocumentManager::get_document_preview($courseInfo, null, null, 0, false, '/', api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId);
+    $document_tree = DocumentManager::get_document_preview(
+        $courseInfo,
+        null,
+        null,
+        0,
+        false,
+        '/',
+        api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId.'&'.api_get_cidreq()
+    );
     echo Display::page_subheader(get_lang('Documents'));
     echo $document_tree;
     echo '<hr /><div class="clear"></div>';
@@ -126,6 +134,8 @@ CREATE TABLE IF NOT EXISTS c_student_publication_rel_user (
     c_id INT NOT NULL
 );
 
+
+CREATE TABLE IF NOT EXISTS c_student_publication_comment (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,  work_id INT NOT NULL,  c_id INT NOT NULL,  comment text,  user_id int NOT NULL,  sent_at datetime NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 */

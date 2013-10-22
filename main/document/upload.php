@@ -127,25 +127,25 @@ if (api_get_group_id()) {
 	// Get group info
 	$group_properties = GroupManager::get_group_properties(api_get_group_id());
 
-	if ($is_allowed_to_edit || GroupManager::is_user_in_group($_user['user_id'], api_get_group_id())) { // Only courseadmin or group members allowed
-		$to_group_id = api_get_group_id();
-		$req_gid = '&amp;gidReq='.api_get_group_id();
-		$interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.api_get_group_id(), 'name' => get_lang('GroupSpace'));
-	} else {
-		api_not_allowed(true);
-	}
+    if ($is_allowed_to_edit || GroupManager::is_user_in_group($_user['user_id'], api_get_group_id())) { // Only courseadmin or group members allowed
+        $to_group_id = api_get_group_id();
+        $req_gid = '&amp;gidReq='.api_get_group_id();
+        $interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.api_get_group_id(), 'name' => get_lang('GroupSpace'));
+    } else {
+        api_not_allowed(true);
+    }
 } elseif ($is_allowed_to_edit || is_my_shared_folder(api_get_user_id(), $path, api_get_session_id())) {
 
     // Admin for "regular" upload, no group documents. And check if is my shared folder
-	$to_group_id = 0;
-	$req_gid = '';
+    $to_group_id = 0;
+    $req_gid = '';
 } else { // No course admin and no group member...
 	api_not_allowed(true);
 }
 
 // Group docs can only be uploaded in the group directory
 if ($to_group_id != 0 && $path == '/') {
-	$path = $group_properties['directory'];
+    $path = $group_properties['directory'];
 }
 
 // I'm in the certification module?
@@ -153,7 +153,7 @@ $is_certificate_mode = false;
 $is_certificate_array = explode('/', $path);
 array_shift($is_certificate_array);
 if ($is_certificate_array[0] == 'certificates') {
-	$is_certificate_mode = true;
+    $is_certificate_mode = true;
 }
 
 // Title of the tool
@@ -161,9 +161,9 @@ if ($to_group_id != 0) { // Add group name after for group documents
 	$add_group_to_title = ' ('.$group_properties['name'].')';
 }
 if (isset($_REQUEST['certificate'])) {
-	$nameTools = get_lang('UploadCertificate').$add_group_to_title;
+    $nameTools = get_lang('UploadCertificate').$add_group_to_title;
 } else {
-	$nameTools = get_lang('UplUploadDocument').$add_group_to_title;
+    $nameTools = get_lang('UplUploadDocument').$add_group_to_title;
 }
 
 // Breadcrumbs
@@ -175,11 +175,11 @@ if ($is_certificate_mode) {
 
 // Interbreadcrumb for the current directory root path
 if (empty($document_data['parents'])) {
-	$interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
+    $interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
 } else {
-	foreach($document_data['parents'] as $document_sub_data) {
-		$interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
-	}
+    foreach ($document_data['parents'] as $document_sub_data) {
+        $interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
+    }
 }
 
 $this_section = SECTION_COURSES;
@@ -198,16 +198,14 @@ if (!empty($_FILES)) {
 echo '<div class="actions">';
 // Link back to the documents overview
 if ($is_certificate_mode) {
-	echo '<a href="document.php?id='.$document_id.'&selectcat=' . $selectcat.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+	echo '<a href="document.php?id='.$document_id.'&selectcat=' . $selectcat.'">'.
+            Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 } else {
-	echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+	echo '<a href="document.php?id='.$document_id.'">'.
+            Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 }
 
 // Link to create a folder
-/*
-if (!isset($_GET['createdir']) && !is_my_shared_folder($_user['user_id'], $path, api_get_session_id()) && !$is_certificate_mode) {
-	echo '<a href="'.api_get_self().'?path='.$path.'&amp;createdir=1">'.Display::return_icon('new_folder.png', get_lang('CreateDir'),'',ICON_SIZE_MEDIUM).'</a>';
-}*/
 echo '</div>';
 
 // Form to select directory
@@ -215,10 +213,6 @@ $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is
 if (!$is_certificate_mode) {
 	echo build_directory_selector($folders, $document_id, (isset($group_properties['directory']) ? $group_properties['directory'] : array()));
 }
-
-/*$params = Uri::course_params();
-$params['id'] = Request::get('id');
-$action = Uri::here($params, false);*/
 
 $action = api_get_self().'?'.api_get_cidreq().'&id='.$document_id;
 
@@ -237,8 +231,8 @@ $form->addElement('textarea', 'comment', get_lang('Comment'), 'wrap="virtual" st
 
 $advanced = '<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>';
 // Advanced parameters
-$form -> addElement('advanced_settings', $advanced);
-$form -> addElement('html', '<div id="options" style="display:none">');
+$form->addElement('advanced_settings', $advanced);
+$form->addElement('html', '<div id="options" style="display:none">');
 
 // Check box options
 $form->addElement('checkbox', 'unzip', get_lang('Options'), get_lang('Uncompress'), 'onclick="javascript: check_unzip();" value="1"');
@@ -263,7 +257,7 @@ $form->addElement('radio', 'if_exists', '', get_lang('UplOverwriteLong'), 'overw
 $form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename');
 
 // Close the java script and avoid the footer up
-$form -> addElement('html', '</div>');
+$form->addElement('html', '</div>');
 
 // Button upload document
 $form->addElement('style_submit_button', 'submitDocument', get_lang('SendDocument'), 'class="upload"');

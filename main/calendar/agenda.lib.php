@@ -9,6 +9,9 @@ class Agenda
     public $events = array();
     public $type = 'personal'; // personal, admin or course
 
+    /**
+     *
+     */
     public function __construct()
     {
         //Table definitions
@@ -556,22 +559,23 @@ class Agenda
 
                     GROUP BY id";
         } else {
+            $visibilityCondition = "ip.visibility='1' AND";
             if (api_is_allowed_to_edit()) {
                 if ($user_id == 0) {
                     $where_condition = "";
                 } else {
                     $where_condition = "( ip.to_user_id=".$user_id. ") AND ";
                 }
+                $visibilityCondition = " (ip.visibility IN ('1', '0')) AND ";
             } else {
                 $where_condition = "( ip.to_user_id=$user_id OR ip.to_group_id='0') AND ";
             }
-
             $sql = "SELECT DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref, to_user_id
                     FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
                     WHERE   agenda.id = ip.ref AND
                             ip.tool='".TOOL_CALENDAR_EVENT."' AND
                             $where_condition
-                            ip.visibility='1' AND
+                            $visibilityCondition
                             agenda.c_id = $course_id AND
                             ip.c_id = $course_id AND
                             agenda.session_id = $session_id AND
@@ -659,13 +663,12 @@ class Agenda
                 }
 
                 $event['sent_to'] = '';
-                //$event['type']    = $this->type;
                 $event['type'] = 'course';
                 if ($row['session_id'] != 0) {
                     $event['type'] = 'session';
                 }
 
-                //Event Sent to a group?
+                // Event Sent to a group?
                 if (isset($row['to_group_id']) && !empty($row['to_group_id'])) {
                     $sent_to = array();
                     if (!empty($group_to_array)) {
@@ -685,7 +688,7 @@ class Agenda
                     if (!empty($user_to_array)) {
                         foreach ($user_to_array as $item) {
                             $user_info = api_get_user_info($item);
-                            // add username as tooltip for $event['sent_to'] - ref #4226
+                            // Add username as tooltip for $event['sent_to'] - ref #4226
                             $username = api_htmlentities(sprintf(get_lang('LoginX'), $user_info['username']), ENT_QUOTES);
                             $sent_to[] = "<span title='".$username."'>".$user_info['complete_name']."</span>";
                         }
@@ -701,6 +704,8 @@ class Agenda
                 }
 
                 $event['description'] = $row['content'];
+                $event['visibility'] = $row['visibility'];
+                $event['real_id'] = $row['id'];
                 $event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;
 
                 $this->events[] = $event;
@@ -764,7 +769,9 @@ class Agenda
 
     /**
      * Format needed for the Fullcalendar js lib
-     *  @param string UTC time
+     *
+     * @param string $utc_time
+     * @return bool|string
      */
     function format_event_date($utc_time)
     {
@@ -968,6 +975,10 @@ class Agenda
         $form->display();
     }
 
+    /**
+     * @param FormValidator $form
+     * @param $to_already_selected
+     */
     static function show_to_form($form, $to_already_selected)
     {
         $order = 'lastname';
@@ -978,5 +989,27 @@ class Agenda
         $group_list = CourseManager::get_group_list_of_course(api_get_course_id(), api_get_session_id());
 
         self::construct_not_selected_select_form_validator($form, $group_list, $user_list, $to_already_selected);
+    }
+
+    /**
+     * @param int $id
+     * @param int $visibility 0= invisible, 1 visible
+     * @param array $courseInfo
+     * @param int $userId
+     */
+    public static function changeVisibility($id, $visibility, $courseInfo, $userId = null)
+    {
+        $id = Database::escape_string($id);
+        if (empty($userId)) {
+            $userId = api_get_user_id();
+        } else {
+            $userId = intval($userId);
+        }
+
+        if ($visibility == 0) {
+            api_item_property_update($courseInfo, TOOL_CALENDAR_EVENT, $id, "invisible", $userId);
+        } else {
+            api_item_property_update($courseInfo, TOOL_CALENDAR_EVENT, $id, "visible", $userId);
+        }
     }
 }

@@ -7,6 +7,7 @@
 {# "UpdatedBy"|get_lang|format(comment.username) #}
 
 {% if work_comment_enabled %}
+    <hr>
     <h4>
         {{ 'Comments' | get_lang }}
     </h4>

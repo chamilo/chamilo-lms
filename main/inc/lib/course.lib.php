@@ -297,12 +297,12 @@ class CourseManager {
         $sql_delete_mail_queue = "DELETE FROM ".Database::get_course_table(TABLE_FORUM_MAIL_QUEUE)." WHERE c_id = $course_id AND user_id IN (".$user_ids.")";
         Database::query($sql_delete_mail_queue);
 
-
         // Unsubscribe user from the course.
         if (!empty($session_id)) {
             // Delete in table session_rel_course_rel_user
-            Database::query("DELETE FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
-                    WHERE id_session ='".$session_id."' AND course_code = '".Database::escape_string($_SESSION['_course']['id'])."' AND id_user IN ($user_ids)");
+            $sql = "DELETE FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
+                    WHERE id_session ='".$session_id."' AND course_code = '".Database::escape_string($course_info['code'])."' AND id_user IN ($user_ids)";
+            Database::query($sql);
 
             foreach ($user_id as $uid) {
                 // check if a user is register in the session with other course
@@ -316,20 +316,26 @@ class CourseManager {
             }
 
             // Update the table session
-            $row = Database::fetch_array(Database::query("SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
-                    WHERE id_session = '".$session_id."' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."  "));
-            $count = $row[0]; // number of users by session
-            $result = Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION)." SET nbr_users = '$count'
-                    WHERE id = '".$session_id."'");
+            $sql = "SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
+                    WHERE id_session = '".$session_id."' AND relation_type<>".SESSION_RELATION_TYPE_RRHH;
+            $row = Database::fetch_array(Database::query($sql));
+            $count = $row[0];
+            // number of users by session
+            $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION)." SET nbr_users = '$count'
+                    WHERE id = '".$session_id."'";
+            Database::query($sql);
 
             // Update the table session_rel_course
-            $row = Database::fetch_array(@Database::query("SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE id_session = '$session_id' AND course_code = '$course_code' AND status<>2" ));
-            $count = $row[0]; // number of users by session and course
-            $result = @Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)." SET nbr_users = '$count' WHERE id_session = '$session_id' AND course_code = '$course_code' ");
+            $sql = "SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE id_session = '$session_id' AND course_code = '$course_code' AND status<>2";
+            $row = Database::fetch_array(@Database::query($sql));
+            $count = $row[0];
+            // number of users by session and course
+            Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)." SET nbr_users = '$count' WHERE id_session = '$session_id' AND course_code = '$course_code'");
 
         } else {
-            Database::query("DELETE FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                    WHERE user_id IN (".$user_ids.") AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_code = '".$course_code."'");
+            $sql = "DELETE FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
+                    WHERE user_id IN (".$user_ids.") AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_code = '".$course_code."'";
+            Database::query($sql);
 
             // add event to system log
             $user_id = api_get_user_id();
@@ -4084,5 +4090,92 @@ class CourseManager {
                 }
             }
         }
+    }
+
+    /**
+     * Course available settings variables see c_course_setting table
+     * @return array
+     */
+    public static function getCourseSettingVariables()
+    {
+        return array(
+            // Get allow_learning_path_theme from table
+            'allow_learning_path_theme',
+            // Get allow_open_chat_window from table
+            'allow_open_chat_window',
+            'allow_public_certificates',
+            // Get allow_user_edit_agenda from table
+            'allow_user_edit_agenda',
+            // Get allow_user_edit_announcement from table
+            'allow_user_edit_announcement',
+            // Get allow_user_image_forum from table
+            'allow_user_image_forum',
+            //Get allow show user list
+            'allow_user_view_user_list',
+            // Get course_theme from table
+            'course_theme',
+            //Get allow show user list
+            'display_info_advance_inside_homecourse',
+            'documents_default_visibility',
+            // Get send_mail_setting (work)from table
+            'email_alert_manager_on_new_doc',
+            // Get send_mail_setting (work)from table
+            'email_alert_manager_on_new_quiz',
+            // Get send_mail_setting (dropbox) from table
+            'email_alert_on_new_doc_dropbox',
+            'email_alert_students_on_new_homework',
+            // Get send_mail_setting (auth)from table
+            'email_alert_to_teacher_on_new_user_in_course',
+            'enable_lp_auto_launch',
+            'pdf_export_watermark_text'
+        );
+    }
+
+    /**
+     * @param string $variable
+     * @param string $value
+     * @param int $courseId
+     * @return bool
+     */
+    public static function saveCourseConfigurationSetting($variable, $value, $courseId)
+    {
+        $settingList = self::getCourseSettingVariables();
+        if (!in_array($variable, $settingList)) {
+            return false;
+        }
+
+        $courseSettingTable = Database::get_course_table(TABLE_COURSE_SETTING);
+
+        if (self::hasCourseSetting($variable, $courseId)) {
+            // Update
+            Database::update(
+                $courseSettingTable,
+                array('value' => $value),
+                array('variable = ? AND c_id = ?' => array($variable, $courseId))
+            );
+        } else {
+            // Create
+            Database::insert(
+                $courseSettingTable,
+                array('value' => $value, 'c_id' => $courseId, 'variable' => $variable)
+            );
+        }
+        return true;
+    }
+
+    /**
+     * Check if course setting exists
+     * @param string $variable
+     * @param int $courseId
+     * @return bool
+     */
+    public static function hasCourseSetting($variable, $courseId)
+    {
+        $courseSetting = Database::get_course_table(TABLE_COURSE_SETTING);
+        $courseId = intval($courseId);
+        $variable = Database::escape_string($variable);
+        $sql = "SELECT variable FROM $courseSetting WHERE c_id = $courseId AND variable = '$variable'";
+        $result = Database::query($sql);
+        return Database::num_rows($result) > 0;
     }
 }

@@ -50,7 +50,7 @@ class Security {
 
         $true_path = str_replace("\\", '/', realpath($abs_path));
         $checker_path = str_replace("\\", '/', realpath($checker_path));
-        
+
         $found = strpos($true_path.'/', $checker_path);
 
         if ($found === 0) {
@@ -103,7 +103,8 @@ class Security {
      * @param   string  Unfiltered filename
      * @param   string  Filtered filename
      */
-    public static function filter_filename($filename) {
+    public static function filter_filename($filename)
+    {
         require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
         return disable_dangerous_file($filename);
     }
@@ -114,7 +115,8 @@ class Security {
      * @param	string	The array in which to get the token ('get' or 'post')
      * @return	bool	True if it's the right token, false otherwise
      */
-    public static function check_token($request_type = 'post') {
+    public static function check_token($request_type = 'post')
+    {
         switch ($request_type) {
             case 'request':
                 if (isset($_SESSION['sec_token']) && isset($_REQUEST['sec_token']) && $_SESSION['sec_token'] === $_REQUEST['sec_token']) {

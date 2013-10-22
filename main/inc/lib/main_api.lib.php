@@ -1204,15 +1204,15 @@ function api_get_user_info_from_username($username = '') {
 }
 
 /**
- * @TODO This function should be the real id (integer)
- * Returns the current course code (string)
+ * @return string
  */
 function api_get_course_id() {
     return isset($GLOBALS['_cid']) ? $GLOBALS['_cid'] : null;
 }
 
 /**
- * Returns the current course id (integer)
+ * Returns the current course id
+ * @return int
  */
 function api_get_real_course_id() {
     return isset($_SESSION['_real_cid']) ? intval($_SESSION['_real_cid']) : 0;
@@ -1220,11 +1220,11 @@ function api_get_real_course_id() {
 
 /**
  * Returns the current course id (integer)
+ * @return int
  */
 function api_get_course_int_id() {
     return isset($_SESSION['_real_cid']) ? intval($_SESSION['_real_cid']) : 0;
 }
-
 
 /**
  * Returns the current course directory
@@ -1234,7 +1234,8 @@ function api_get_course_int_id() {
  * @return string   The directory where the course is located inside the Chamilo "courses" directory
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-function api_get_course_path($course_code = null) {
+function api_get_course_path($course_code = null)
+{
     $info = !empty($course_code) ? api_get_course_info($course_code) : api_get_course_info();
     return $info['path'];
 }
@@ -1245,7 +1246,8 @@ function api_get_course_path($course_code = null) {
  * @param string    Optional: course code
  * @return mixed    The value of that setting in that table. Return -1 if not found.
  */
-function api_get_course_setting($setting_name, $course_code = null) {
+function api_get_course_setting($setting_name, $course_code = null)
+{
     $course_info = api_get_course_info($course_code);
 	$table 		 = Database::get_course_table(TABLE_COURSE_SETTING);
     $setting_name = Database::escape_string($setting_name);
@@ -1919,7 +1921,8 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
         $session_id = intval($session_id);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        $sql = "SELECT visibility, date_start, date_end, nb_days_access_after_end, nb_days_access_before_beginning FROM $tbl_session
+        $sql = "SELECT visibility, date_start, date_end, nb_days_access_after_end, nb_days_access_before_beginning
+                FROM $tbl_session
                 WHERE id = $session_id ";
 
         $result = Database::query($sql);
@@ -3130,7 +3133,6 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 
     // Update if possible
     $set_type = '';
-
 
     switch ($lastedit_type) {
         case 'delete' : // delete = make item only visible for the platform admin.
@@ -4902,8 +4904,8 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
 
 function replace_dangerous_char($filename, $strict = 'loose') {
     // Safe replacements for some non-letter characters.
-    static $search  = array("\0", ' ', "\t", "\n", "\r", "\x0B", '/', "\\", '"', "'", '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#', '+', '&', '%');
-    static $replace = array('',   '_', '_',  '_',  '_',  '_',    '-', '-',  '-', '_', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
+    static $search  = array(',', "\0", ' ', "\t", "\n", "\r", "\x0B", '/', "\\", '"', "'", '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#', '+', '&', '%');
+    static $replace = array('_', '',   '_', '_',  '_',  '_',  '_',    '-', '-',  '-', '_', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
 
     // Encoding detection.
     $encoding = api_detect_encoding($filename);
@@ -5488,7 +5490,14 @@ function api_is_global_platform_admin($user_id = null) {
     return false;
 }
 
-function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null, $allow_session_admin = false) {
+/**
+ * @param int $admin_id_to_check
+ * @param int  $my_user_id
+ * @param bool $allow_session_admin
+ * @return bool
+ */
+function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null, $allow_session_admin = false)
+{
     if (empty($my_user_id)) {
         $my_user_id = api_get_user_id();
     }
@@ -5497,10 +5506,10 @@ function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null,
     $user_is_global_admin   = api_is_global_platform_admin($admin_id_to_check);
 
     if ($iam_a_global_admin) {
-        //global admin can edit everything
+        // Global admin can edit everything
         return true;
     } else {
-        //If i'm a simple admin
+        // If i'm a simple admin
         $is_platform_admin = api_is_platform_admin_by_id($my_user_id);
 
         if ($allow_session_admin) {
@@ -6159,7 +6168,24 @@ function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
         if (empty($group_id)) {
             $group_id = api_get_group_id();
         }
-        api_item_property_update(api_get_course_info(), $original_tool_id, $item_id, $visibility, api_get_user_id(), $group_id, null, null, null, api_get_session_id());
+
+        // Read the portal and course default visibility
+        if ($tool_id == 'documents') {
+            $visibility = DocumentManager::getDocumentDefaultVisibility(api_get_course_id());
+        }
+
+        api_item_property_update(
+            api_get_course_info(),
+            $original_tool_id,
+            $item_id,
+            $visibility,
+            api_get_user_id(),
+            $group_id,
+            null,
+            null,
+            null,
+            api_get_session_id()
+        );
 
         //Fixes default visibility for tests
 
@@ -6617,4 +6643,72 @@ function api_drh_can_access_all_session_content()
         return $_configuration['drh_can_access_all_session_content'];
     }
     return false;
+}
+
+/**
+ * @param string $tool
+ * @param string $setting
+ * @param mixed $defaultValue
+ */
+function api_get_default_tool_setting($tool, $setting, $defaultValue)
+{
+    global $_configuration;
+    if (isset($_configuration[$tool]) &&
+        isset($_configuration[$tool]['default_settings']) &&
+        isset($_configuration[$tool]['default_settings'][$setting])
+    ) {
+        return $_configuration[$tool]['default_settings'][$setting];
+    }
+    return $defaultValue;
+
+}
+
+/**
+ * Checks if user can login as another user
+ *
+ * @param int $loginAsUserId the user id to log in
+ * @param int $userId my user id
+ * @return bool
+ */
+function api_can_login_as($loginAsUserId, $userId = null)
+{
+    if (empty($userId)) {
+        $userId = api_get_user_id();
+    }
+
+    if (empty($loginAsUserId)) {
+        return false;
+    }
+
+    if ($loginAsUserId != strval(intval($loginAsUserId))) {
+        return false;
+    }
+    // Check if the user to login is an admin
+
+    if (api_is_platform_admin_by_id($loginAsUserId)) {
+        // Only super admins can login to admin accounts
+        if (!api_global_admin_can_edit_admin($loginAsUserId)) {
+            return false;
+        }
+    }
+
+    $user_info = api_get_user_info($userId);
+
+    $isDrh = function() use($loginAsUserId) {
+        if (api_is_drh()) {
+            if (api_drh_can_access_all_session_content()) {
+                $users = SessionManager::getAllUsersFromCoursesFromAllSessionFromDrh(api_get_user_id());
+                if (in_array($loginAsUserId, $users)) {
+                    return true;
+                }
+            } else {
+                if (api_is_drh() && UserManager::is_user_followed_by_drh($loginAsUserId, api_get_user_id())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
+    return (api_is_platform_admin() OR (api_is_session_admin() && $user_info['status'] == 5) OR $isDrh());
 }

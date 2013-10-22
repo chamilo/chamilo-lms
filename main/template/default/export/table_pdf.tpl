@@ -2,7 +2,7 @@
 
 <h2 align="center"> {{ pdf_title }} </h2>
 
-{% if pdf_description != null %}
+{% if pdf_description  %}
     {{ pdf_description }}
     <br /><br />
 {% endif %}
@@ -12,24 +12,28 @@
         <td>
          <strong>{{ "Teacher" | get_lang }}:</strong> {{ pdf_teachers }}
         </td>
-    </tr>    
-    {% if pdf_session != null %}
+    </tr>
+
+    {% if pdf_session_info %}
     <tr>
         <td>
-          <strong>{{ "Session" | get_lang }}:</strong> {{ pdf_session }}
+          <strong>{{ "Session" | get_lang }}:</strong> {{ pdf_session_info.name }}
         </td>
     </tr>
-    {% endif %}    
+    {% endif %}
+
+    {% if pdf_course_info %}
     <tr>
         <td>
-         <strong>{{ "Course" | get_lang }}:</strong> {{ pdf_course }}
+         <strong>{{ "Course" | get_lang }}:</strong>  {{ pdf_course_info.title }} ({{ pdf_course_info.code }})
          
          {% if pdf_course_category %}         
             <strong>{{ "Category" | get_lang }}:</strong> {{ pdf_course_category }}
          {% endif %}
          
         </td>
-    </tr>    
+    </tr>
+    {% endif %}
     <tr>
         <td>
          <strong>{{ "Date" | get_lang }}:</strong> {{ pdf_date }}

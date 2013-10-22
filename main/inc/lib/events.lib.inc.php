@@ -239,42 +239,6 @@ function event_download($doc_url) {
 }
 
 /**
- * @param doc_id id of document (id in mainDb.document table)
- * @author Sebastien Piraux <piraux_seb@hotmail.com>
- * @desc Record information for upload event
- * used in the works tool to record informations when
- * an user upload 1 work
- */
-function event_upload($doc_id) {
-    global $_user;
-    global $_cid;
-    global $TABLETRACK_UPLOADS;
-
-    $reallyNow = api_get_utc_datetime();
-    if (isset($_user['user_id']) && $_user['user_id']!='') {
-        $user_id = "'".$_user['user_id']."'";
-    } else {
-        $user_id = "0"; // anonymous
-    }
-    $sql = "INSERT INTO ".$TABLETRACK_UPLOADS."
-        		( upload_user_id,
-        		  upload_cours_id,
-        		  upload_work_id,
-        		  upload_date,
-        		  upload_session_id
-        		)
-        		VALUES (
-        		 ".$user_id.",
-        		 '".$_cid."',
-        		 '".$doc_id."',
-        		 '".$reallyNow."',
-        		 '".api_get_session_id()."'
-        		)";
-    $res = Database::query($sql);
-    return 1;
-}
-
-/**
  * @param link_id (id in coursDb liens table)
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @desc Record information for link event (when an user click on an added link)

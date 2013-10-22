@@ -9,24 +9,43 @@
         <th>
             {{ 'Title' | get_lang }}
         </th>
+        {% if is_allowed_to_edit %}
+            <th>
+                {{ 'Actions' | get_lang }}
+            </th>
+        {% endif %}
     </tr>
     {% for event in agenda_events %}
         <tr>
-            <td>
-                {{ event.start }}
+            <td style="width:20%">
+                {{ event.start |date("m/d/Y h:i:s") }}
             </td>
-            <td>
+            <td style="width:20%">
                 {% if event.allDay %}
                     {{ 'AllDay' | get_lang }}
                 {% else %}
-                    {{ event.start }} - {{ event.end }}
+                    {{ event.end |date("m/d/Y h:i:s") }}
                 {% endif %}
             </td>
-            <td>
+            <td style="width:50%">
                 {{ event.title }}
                 <p>{{ event.description}}</p>
-                {{ event.className }}
+
             </td>
+
+            {% if is_allowed_to_edit %}
+                <td>
+                    {% if event.visibility == 1 %}
+                        <a class="btn" href="{{ url }}&action=change_visibility&visibility=0&id={{ event.real_id }}">
+                            <img title="{{ 'Invisible' }}" src="{{'visible.png'|icon(32)}} ">
+                        </a>
+                    {% else %}
+                        <a class="btn" href="{{ url }}&action=change_visibility&visibility=1&id={{ event.real_id }}">
+                            <img title="{{ 'Visible' }}" src="{{'invisible.png'|icon(32)}} ">
+                        </a>
+                    {% endif %}
+                </td>
+            {% endif %}
 
         </tr>
     {% endfor %}

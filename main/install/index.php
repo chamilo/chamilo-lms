@@ -120,7 +120,6 @@ foreach ($helpers as $name => $helper) {
     $helperSet->set($helper, $name);
 }
 
-
 $blockInstallation = function() use($app) {
 
     if (file_exists($app['root_sys'].'config/configuration.php') ||
@@ -186,14 +185,29 @@ $app->match('/requirements', function() use($app) {
 
     $req = display_requirements($app, 'new');
 
+    if (phpversion() < REQUIRED_PHP_VERSION) {
+        $phpError = '<strong><font color="red">'.translate('PHPVersionError').'</font></strong>';
+    } else {
+        $phpError = '<strong><font color="green">'.translate('PHPVersionOK').' '.phpversion().'</font></strong>';
+    }
+
+
     if ('POST' == $request->getMethod()) {
          $url = $app['url_generator']->generate('check-database');
          return $app->redirect($url);
     }
+
+    $reqs = drawRequeriments($app['translator']);
+
     return $app['twig']->render(
         'requirements.tpl',
         array(
             'form' => $form->createView(),
+            'required_php_version' => REQUIRED_PHP_VERSION,
+            'required_php_version_validation' => phpversion() < REQUIRED_PHP_VERSION,
+            'php_version' => phpversion(),
+            'reqs' => $reqs,
+            'php_error' => $phpError,
             'requirements' => $req
         )
     );

@@ -905,144 +905,74 @@ function translate($variable) {
     global $app;
     return $app['translator']->trans($variable);
 }
-/**
- * This function displays the requirements for installing Chamilo.
- *
- * @param string $installType
- * @param boolean $badUpdatePath
- * @param string The updatePath given (if given)
- * @param array $update_from_version_8 The different subversions from version 1.8
- * @param array $update_from_version_6 The different subversions from version 1.6
- *
- * @author Julio Montoya
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- */
+
+function getRequirements() {
+    return
+        array(
+            'required' => array(
+                'session' => array('url' => 'http://php.net/manual/en/book.session.php'),
+                'mysql' => array('url' => 'http://php.net/manual/en/book.mysql.php'),
+                'zlib' => array('url' => 'http://php.net/manual/en/book.zlib.php'),
+                'pcre' => array('url' => 'http://php.net/manual/en/book.pcre.php'),
+                'xml' => array('url' => 'http://php.net/manual/en/book.xml.php'),
+                'mbstring' => array('url' => 'http://php.net/manual/en/book.mbstring.php'),
+                'iconv' => array('url' => 'http://php.net/manual/en/book.iconv.php'),
+                'intl' => array('url' => 'http://php.net/manual/en/book.intl.php'),
+                'gd' => array('url' => 'http://php.net/manual/en/book.image.php'),
+                'json' => array('url' => 'http://php.net/manual/en/book.json.php'),
+
+
+            ),
+            'optional' =>  array(
+                'imagick' => array('url' => 'http://php.net/manual/en/book.imagick.php'),
+                'ldap' => array('url' => 'http://php.net/manual/en/book.ldap.php'),
+                'xapian' => array('url' => 'http://php.net/manual/en/book.xapian.php'),
+                'curl' => array('url' => 'http://php.net/manual/en/book.curl.php'),
+
+            )
+        );
+}
+
+function drawRequeriments($translator) {
+    $requeriments = getRequirements();
+    $html = null;
+
+    foreach ($requeriments['required'] as $extension => $req) {
+        $html .= '<tr>
+                    <td>
+                        <a href="'.$req['url'].'">'.$extension.'</a>
+                    </td>
+                    <td>
+                        '.check_extension(
+                            $extension,
+                            $translator->translate('Yes'),
+                            $translator->translate('No')
+                        ).'
+                    </td>
+                  </tr>';
+    }
+
+    foreach ($requeriments['optional'] as $extension => $req) {
+        $html .= '<tr>
+                    <td>
+                        <a href="'.$req['url'].'">'.$extension.'</a>
+                    </td>
+                    <td>
+                        '.check_extension(
+                            $extension,
+                            $translator->translate('Yes'),
+                            $translator->translate('No'),
+                            true
+                        ).'
+                    </td>
+                  </tr>';
+    }
+    return $html;
+}
+
 function display_requirements($app, $installType)
 {
-    $html = null;
-    $html .= '<div class="RequirementText">';
-    $html .= '<strong>'.translate('ReadThoroughly').'</strong><br />';
-    $html .= translate('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">'.translate('ReadTheInstallGuide').'</a>.<br />';
-
-    if ($installType == 'update') {
-        $html .= translate('IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog').'<br />';
-    }
-    $html .= '</div>';
-
-    //  SERVER REQUIREMENTS
-    $html .= '<div class="RequirementHeading"><h3>'.translate('ServerRequirements').'</h3>';
-    $html .= '<div class="RequirementText">'.translate('ServerRequirementsInfo').'</div>';
-    $html .= '<div class="RequirementContent">';
-    $html .= '<table class="table">
-            <tr>
-                <td class="requirements-item">'.translate('PHPVersion').' >= '.REQUIRED_PHP_VERSION.'</td>
-                <td class="requirements-value">';
-    if (phpversion() < REQUIRED_PHP_VERSION) {
-        $html .= '<strong><font color="red">'.translate('PHPVersionError').'</font></strong>';
-    } else {
-        $html .= '<strong><font color="green">'.translate('PHPVersionOK').' '.phpversion().'</font></strong>';
-    }
-
-    $html .= '</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.session.php" target="_blank">Session</a> '.translate('support').'</td>
-            <td class="requirements-value">'.check_extension('session',translate('Yes'), translate('ExtensionSessionsNotAvailable')).'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.mysql.php" target="_blank">MySQL</a> '.translate('support').'</td>
-                <td class="requirements-value">'.check_extension('mysql', translate('Yes'), translate('ExtensionMySQLNotAvailable') ).'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.zlib.php" target="_blank">Zlib</a> '.translate('support').'</td>
-                <td class="requirements-value">'.check_extension('zlib', translate('Yes'), translate('ExtensionZlibNotAvailable')    ).'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.pcre.php" target="_blank">Perl-compatible regular expressions</a> '.translate(
-        'support'
-    ).'</td>
-                <td class="requirements-value">'.check_extension(
-        'pcre',
-        translate('Yes'),
-        translate('ExtensionPCRENotAvailable')
-    ).'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.xml.php" target="_blank">XML</a> '.translate(
-        'support'
-    ).'</td>
-                <td class="requirements-value">'.check_extension('xml', translate('Yes'), translate('No')).'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.mbstring.php" target="_blank">Multibyte string</a> '.translate(
-        'support'
-    ).' ('.translate('Optional').')</td>
-                <td class="requirements-value">'.check_extension(
-        'mbstring',
-        translate('Yes'),
-        translate('ExtensionMBStringNotAvailable'),
-        true
-    ).'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.iconv.php" target="_blank">Iconv</a> '.translate(
-        'support'
-    ).' ('.translate('Optional').')</td>
-                <td class="requirements-value">'.check_extension('iconv', translate('Yes'), translate('No'), true).'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.intl.php" target="_blank">Internationalization</a> '.translate(
-        'support'
-    ).' ('.translate('Optional').')</td>
-                <td class="requirements-value">'.check_extension('intl', translate('Yes'), translate('No'), true).'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.image.php" target="_blank">GD</a> '.translate(
-        'support'
-    ).'</td>
-                <td class="requirements-value">'.check_extension(
-        'gd',
-        translate('Yes'),
-        translate('ExtensionGDNotAvailable')
-    ).'</td>
-            </tr>
-             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/fr/book.imagick.php" target="_blank">ImageMagick</a> '.translate(
-        'support'
-    ).' ('.translate('Optional').')</td>
-                <td class="requirements-value">'.check_extension('imagick', translate('Yes'), translate('No'), true).'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.json.php" target="_blank">JSON</a> '.translate('support').'</td>
-                <td class="requirements-value">'.check_extension('json', translate('Yes'), translate('No')).'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.ldap.php" target="_blank">LDAP</a> '.translate(
-        'support'
-    ).' ('.translate('Optional').')</td>
-                <td class="requirements-value">'.check_extension(
-        'ldap',
-        translate('Yes'),
-        translate('ExtensionLDAPNotAvailable'),
-        true
-    ).'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://xapian.org/" target="_blank">Xapian</a> '.translate(
-        'support'
-    ).' ('.translate('Optional').')</td>
-                <td class="requirements-value">'.check_extension('xapian', translate('Yes'), translate('No'), true).'</td>
-            </tr>
-
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.curl.php" target="_blank">cURL</a> '.translate(
-        'support'
-    ).' ('.translate('Optional').')</td>
-                <td class="requirements-value">'.check_extension('curl', translate('Yes'), translate('No'), true).'</td>
-            </tr>
-          </table>';
-    $html .= '  </div>';
-    $html .= '</div>';
+    $html  = null;
 
     // RECOMMENDED SETTINGS
     // Note: these are the settings for Joomla, does this also apply for Chamilo?
@@ -1104,25 +1034,17 @@ function display_requirements($app, $installType)
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.upload-max-filesize">Maximum upload file size</a></td>
                 <td class="requirements-recommended">'.Display::label('>= '.REQUIRED_MIN_UPLOAD_MAX_FILESIZE.'M','success').'</td>
-                <td class="requirements-value">'.compare_setting_values(
-        ini_get('upload_max_filesize'),
-        REQUIRED_MIN_UPLOAD_MAX_FILESIZE
-    ).'</td>
+                <td class="requirements-value">'.compare_setting_values(ini_get('upload_max_filesize'),       REQUIRED_MIN_UPLOAD_MAX_FILESIZE    ).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.post-max-size">Maximum post size</a></td>
                 <td class="requirements-recommended">'.Display::label('>= '.REQUIRED_MIN_POST_MAX_SIZE.'M', 'success').'</td>
-                <td class="requirements-value">'.compare_setting_values(
-        ini_get('post_max_size'),
-        REQUIRED_MIN_POST_MAX_SIZE
-    ).'</td>
+                <td class="requirements-value">'.compare_setting_values(ini_get('post_max_size'),        REQUIRED_MIN_POST_MAX_SIZE    ).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://www.php.net/manual/en/ini.core.php#ini.memory-limit">Memory Limit</a></td>
                 <td class="requirements-recommended">'.Display::label('>= '.REQUIRED_MIN_MEMORY_LIMIT.'M', 'success').'</td>
-                <td class="requirements-value">'.compare_setting_values(
-        ini_get('memory_limit'),
-        REQUIRED_MIN_MEMORY_LIMIT
+                <td class="requirements-value">'.compare_setting_values(        ini_get('memory_limit'), REQUIRED_MIN_MEMORY_LIMIT
     ).'</td>
             </tr>
           </table>';

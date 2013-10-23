@@ -42,7 +42,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'editnote') {
     $interbreadcrumb[] = array('url' => api_get_self(), 'name' => get_lang('Group'));
 }
 
-//jqgrid will use this URL to do the selects
+// jqgrid will use this URL to do the selects
 
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups';
 
@@ -101,7 +101,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
 
     // Initiate the object
     $form = new FormValidator('note', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
-    // Settting the form elements
+    // Setting the form elements
     $form->addElement('header', get_lang('Add'));
     $form->addElement('text', 'name', get_lang('name'), array('size' => '70', 'id' => 'name'));
     //$form->applyFilter('note_title', 'html_filter');
@@ -136,7 +136,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     // Action handling: Editing a note
     // Initialize the object
     $form = new FormValidator('career', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.Security::remove_XSS($_GET['id']));
-    // Settting the form elements
+    // Setting the form elements
     $form->addElement('header', '', get_lang('Modify'));
     $form->addElement('hidden', 'id',intval($_GET['id']));
     $form->addElement('text', 'name', get_lang('Name'), array('size' => '70'));
@@ -147,10 +147,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     $defaults = $usergroup->get($_GET['id']);
     $form->setDefaults($defaults);
 
-    // Setting the rules
+    // Setting the rules.
     $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
-    // The validation or display
+    // The validation or display.
     if ($form->validate()) {
         $check = Security::check_token('post');
         if ($check) {

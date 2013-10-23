@@ -16,10 +16,10 @@ require_once 'model.lib.php';
  */
 class UserGroup extends Model
 {
-    var $columns = array('id', 'name', 'description');
+    public $columns = array('id', 'name', 'description');
 
     /**
-     *
+     * Set ups DB tables
      */
     public function __construct()
     {
@@ -41,6 +41,7 @@ class UserGroup extends Model
 
     /**
      * @param int $course_id
+     *
      * @return mixed
      */
     public function get_usergroup_by_course_with_data_count($course_id)
@@ -51,6 +52,7 @@ class UserGroup extends Model
 
     /**
      * @param string $name
+     *
      * @return mixed
      */
     public function get_id_by_name($name)
@@ -272,7 +274,7 @@ class UserGroup extends Model
             }
         }
 
-        // Addding new relationships
+        // Adding new relationships
         if (!empty($new_items)) {
             foreach ($new_items as $session_id) {
                 $params = array('session_id' => $session_id, 'usergroup_id' => $usergroup_id);
@@ -353,7 +355,7 @@ class UserGroup extends Model
     }
 
     /**
-     * Subscribes users to a group
+     * Subscribe users to a group
      * @param   int     usergroup id
      * @param   array   list of user ids
      */
@@ -398,7 +400,10 @@ class UserGroup extends Model
                         SessionManager::unsubscribe_user_from_session($session_id, $user_id);
                     }
                 }
-                Database::delete($this->usergroup_rel_user_table, array('usergroup_id = ? AND user_id = ?' => array($usergroup_id, $user_id)));
+                Database::delete(
+                    $this->usergroup_rel_user_table,
+                    array('usergroup_id = ? AND user_id = ?' => array($usergroup_id, $user_id))
+                );
             }
         }
 

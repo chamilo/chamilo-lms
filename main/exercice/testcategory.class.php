@@ -353,12 +353,13 @@ class Testcategory
 		return $tabres;
 	}
 
-	/**
-	 Return the testcategory id for question with question_id = $in_questionid
-	 In this version, a question has only 1 testcategory.
-	 Return the testcategory id, 0 if none
+    /**
+     * Return an array with categories for the question
+     * @param int $question_id
+     * @param int  $courseId
+     * @return array
      * @assert () === false
-	 */
+     */
     public static function getCategoryForQuestion($question_id, $courseId = null)
     {
 		$result = array();
@@ -378,6 +379,11 @@ class Testcategory
 		return $result;
 	}
 
+    /**
+     * @param int $question_id
+     * @param int $courseId
+     * @return array
+     */
     public static function getCategoryForQuestionWithCategoryData($question_id, $courseId = null) {
 		$result = array();	// result
 		if (empty($courseId)) {

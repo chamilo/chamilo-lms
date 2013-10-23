@@ -17,16 +17,16 @@ api_protect_admin_script(true);
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
 // setting breadcrumbs
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 $action = $_GET['action'];
 if ($action == 'add') {
-    $interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('Classes'));
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Add'));
+    $interbreadcrumb[] = array('url' => 'usergroups.php','name' => get_lang('Classes'));
+    $interbreadcrumb[] = array('url' => '#','name' => get_lang('Add'));
 } elseif ($action == 'edit') {
-    $interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('Classes'));
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Edit'));
+    $interbreadcrumb[] = array('url' => 'usergroups.php','name' => get_lang('Classes'));
+    $interbreadcrumb[] = array('url' => '#','name' => get_lang('Edit'));
 } else {
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Classes'));
+    $interbreadcrumb[] = array('url' => '#','name' => get_lang('Classes'));
 }
 
 // The header.
@@ -35,29 +35,31 @@ Display::display_header($tool_name);
 // Tool name
 if (isset($_GET['action']) && $_GET['action'] == 'add') {
     $tool = 'Add';
-    $interbreadcrumb[] = array ('url' => api_get_self(), 'name' => get_lang('Group'));
+    $interbreadcrumb[] = array('url' => api_get_self(), 'name' => get_lang('Group'));
 }
 if (isset($_GET['action']) && $_GET['action'] == 'editnote') {
     $tool = 'Modify';
-    $interbreadcrumb[] = array ('url' => api_get_self(), 'name' => get_lang('Group'));
+    $interbreadcrumb[] = array('url' => api_get_self(), 'name' => get_lang('Group'));
 }
 
 //jqgrid will use this URL to do the selects
 
-$url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups';
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns        = array(get_lang('Name'), get_lang('Users'), get_lang('Courses'), get_lang('Sessions'), get_lang('Actions'));
+$columns = array(
+    get_lang('Name'), get_lang('Users'), get_lang('Courses'), get_lang('Sessions'), get_lang('Actions')
+);
 
 //Column config
 $column_model   = array(
-						array('name'=>'name',           'index'=>'name',        'width'=>'35',   'align'=>'left'),
-                        //array('name'=>'description',    'index'=>'description', 'width'=>'500',  'align'=>'left'),
-                        array('name'=>'users',    		'index'=>'users', 		'width'=>'15',  'align'=>'left'),
-                        array('name'=>'courses',    	'index'=>'courses', 	'width'=>'15',  'align'=>'left'),
-                        array('name'=>'sessions',    	'index'=>'sessions', 	'width'=>'15',  'align'=>'left'),
-                        array('name'=>'actions',        'index'=>'actions',     'width'=>'20',  'align'=>'left','sortable'=>'false','formatter'=>'action_formatter'),
-                       );
+    array('name'=>'name',           'index'=>'name',        'width'=>'35',   'align'=>'left'),
+    array('name'=>'users',    		'index'=>'users', 		'width'=>'15',  'align'=>'left'),
+    array('name'=>'courses',    	'index'=>'courses', 	'width'=>'15',  'align'=>'left'),
+    array('name'=>'sessions',    	'index'=>'sessions', 	'width'=>'15',  'align'=>'left'),
+    array('name'=>'actions',        'index'=>'actions',     'width'=>'20',  'align'=>'left','sortable'=>'false','formatter'=>'action_formatter'),
+);
+
 //Autowidth
 $extra_params['autowidth'] = 'true';
 //height auto
@@ -65,19 +67,20 @@ $extra_params['height'] = 'auto';
 
 //With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
-                    return \''
-                    .' <a href="add_users_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/user_to_class.png" title="'.get_lang('SubscribeUsersToClass').'"></a>'
-                    .' <a href="add_courses_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/course_to_class.png" title="'.get_lang('SubscribeClassToCourses').'"></a>'
-                    .' <a href="add_sessions_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/sessions_to_class.png" title="'.get_lang('SubscribeClassToSessions').'"></a>'
-                    .' <a href="?action=edit&id=\'+options.rowId+\'"><img width="20px" src="../img/edit.png" title="'.get_lang('Edit').'" ></a>'
-                    .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.png"></a>\';
-                 }';
+    return \''
+    .' <a href="add_users_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/user_to_class.png" title="'.get_lang('SubscribeUsersToClass').'"></a>'
+    .' <a href="add_courses_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/course_to_class.png" title="'.get_lang('SubscribeClassToCourses').'"></a>'
+    .' <a href="add_sessions_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/sessions_to_class.png" title="'.get_lang('SubscribeClassToSessions').'"></a>'
+    .' <a href="?action=edit&id=\'+options.rowId+\'"><img width="20px" src="../img/edit.png" title="'.get_lang('Edit').'" ></a>'
+    .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.png"></a>\';
+}';
+
 ?>
 <script>
 $(function() {
 <?php
     // grid definition see the $usergroup>display() function
-    echo Display::grid_js('usergroups',  $url,$columns,$column_model,$extra_params, array(), $action_links,true);
+    echo Display::grid_js('usergroups',  $url,$columns, $column_model, $extra_params, array(), $action_links, true);
 ?>
 });
 </script>
@@ -129,8 +132,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         $form->setConstants(array('sec_token' => $token));
         $form->display();
     }
-}// Action handling: Editing a note
-elseif (isset($_GET['action']) && $_GET['action'] == 'edit' && is_numeric($_GET['id'])) {
+} elseif (isset($_GET['action']) && $_GET['action'] == 'edit' && is_numeric($_GET['id'])) {
+    // Action handling: Editing a note
     // Initialize the object
     $form = new FormValidator('career', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.Security::remove_XSS($_GET['id']));
     // Settting the form elements
@@ -169,6 +172,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'edit' && is_numeric($_GET[
         $form->display();
     }
 }
+
 // Action handling: deleting a note
 elseif (isset($_GET['action']) && $_GET['action'] == 'delete' && is_numeric($_GET['id'])) {
     $res = $usergroup->delete(Security::remove_XSS($_GET['id']));

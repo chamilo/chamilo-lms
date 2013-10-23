@@ -33,7 +33,17 @@ class ExportLanguagesCommand extends Command
      */
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $languageList = array('english', 'spanish', 'french');
+        $languageList = array('english','spanish','french');
+        /** @var \Silex\Application $app */
+        /*
+        $app = $this->getApplication()->getSilexApplication();
+        $tempPath = $app['paths']['sys_root'].'main/locale';
+        $l = scandir($app['paths']['sys_root'].'main/lang');
+        foreach ($l as $item) {
+            if (substr($item,0,1) == '.') { continue; }
+            $languageList[] = $item;
+        }
+        */
         foreach ($languageList as $lang) {
             $output->writeln("<info>Generating lang po files for: $lang</info>");
             $this->convertLanguageToGettext($lang, $output);
@@ -95,22 +105,26 @@ class ExportLanguagesCommand extends Command
                     foreach ($po as $line) {
                         $pos = strpos($line, '=');
                         if ($pos) {
+                            // Get the variable name (part before the = sign, without $)
                             $variable = (substr($line, 1, $pos-1));
                             $variable = trim($variable);
 
-                            require $filename;
-                            $my_variable_in_english = $$variable;
-                            require $toLanguagePath.'/'.$file;
-                            $my_variable = $$variable;
-                            /** This fixes a notice due an array in the lang files */
-                            if (strpos($variable, 'langNameOfLang') === false) {
-
-                                $translations[] = array(
-                                    'msgid'  => $variable,
-                                    'msgstr' => $my_variable
-                                );
-                            } else {
-                                continue;
+                            //require $filename;
+                            //if (isset($$variable)) {
+                            //    $my_variable_in_english = $$variable;
+                            if (file_exists($toLanguagePath.'/'.$file)) {
+                                require $toLanguagePath.'/'.$file;
+                                /** Fixes a notice due to array in the lang files */
+                                if (strpos($variable, 'langNameOfLang') === false && isset($$variable)) {
+                                    // \r\n change tries to avoid CRLF issue
+                                    // related to https://bugs.php.net/bug.php?id=52671
+                                    $translations[] = array(
+                                        'msgid'  => $variable,
+                                        'msgstr' => $$variable
+                                    );
+                                } else {
+                                    continue;
+                                }
                             }
                         }
                     }
@@ -127,6 +141,7 @@ class ExportLanguagesCommand extends Command
                         $translated = $item['msgstr'];
                         $translated = addslashes($translated);
                         $translated = str_replace(array("\\'"), "'", $translated);
+                        $translated = str_replace(array("\n"), '\n', $translated);
                         $line .= 'msgstr "'.$translated.'"'."\n\n";
                         fwrite($fp, $line);
                     }

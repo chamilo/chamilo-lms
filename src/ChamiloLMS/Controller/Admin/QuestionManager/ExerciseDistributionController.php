@@ -34,7 +34,7 @@ class ExerciseDistributionController extends CommonController
         $course = $this->getCourse();
 
         if (empty($course)) {
-            throw new \Exception('Could not get a valid course.');
+          //  throw new \Exception('Could not get a valid course.');
         }
 
         $criteria = array('exerciseId' => $exerciseId);

@@ -695,13 +695,17 @@ $app->before(
             }
         }));
 
-        // Check if we are inside a Chamilo course tool
+        // Check if we are inside a Chamilo course tool (or we need to set the $this->getCourse() in the controllers)
 
         $isCourseTool = (strpos($request->getPathInfo(), 'courses/') === false) ? false : true;
 
         if (!$isCourseTool) {
             // @todo add a before in controller in order to load the courses and course_session object
             $isCourseTool = (strpos($request->getPathInfo(), 'question_manager/exercise_distribution/') === false) ? false : true;
+        }
+
+        if (!$isCourseTool) {
+            // @todo add a before in controller in order to load the courses and course_session object
             $isCourseTool = (strpos($request->getPathInfo(), 'question_manager/questions/') === false) ? false : true;
         }
 

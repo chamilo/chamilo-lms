@@ -1270,7 +1270,7 @@ abstract class Question
      */
     public function get_categories_from_question()
     {
-        return Testcategory::getCategoryForQuestion($this->id);
+        return Testcategory::getCategoryForQuestion($this->id, $this->c_id);
     }
 
     /**
@@ -1281,6 +1281,7 @@ abstract class Question
     {
         $question   = Question::read($questionId, $courseId);
         $categories = $this->get_categories_from_question();
+
         if (!empty($categories)) {
             $question->saveCategories($categories);
         }

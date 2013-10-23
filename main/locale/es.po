@@ -1,6 +1,14 @@
 msgid ""
 msgstr ""
-"Content-Type: text/plain; charset=utf-8 \n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Julio Montoya <gugli100@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
 
 msgid "ResourceAdded"
 msgstr "Recurso agregado"
@@ -163,8 +171,6 @@ msgstr "Foro: responder"
 
 msgid "AgendaSortChronologicallyDown"
 msgstr "Ordenar eventos (recientes / antiguos)"
-
-
 
 msgid "ReservationPeriodToSmall"
 msgstr "El periodo de reserva es demasiado corto."
@@ -441,9 +447,6 @@ msgstr "Recurso agregado"
 
 msgid "ResourceEdited"
 msgstr "Recurso editado"
-
-msgid "ResourceDeleted"
-msgstr "El recurso fue eliminado"
 
 msgid "AddNewResource"
 msgstr "Agregar nuevo recurso"
@@ -730,8 +733,6 @@ msgstr "El rol de plataforma no es editable?"
 msgid "UserPermissions"
 msgstr "Permisos de usuario"
 
-
-
 msgid "ClearContent"
 msgstr "<p><b>Profesorado</b></p><p>Chamilo es un Sistema de Gestión del Aprendizaje y del Conocimiento. Permite a los profesores organizar materiales de aprendizaje, lecciones y administrar la interacción con sus estudiantes. Todo mediante un simple navegador web.</p><p>Para utilizar Chamilo como profesor, necesita un nombre de usuario y una contraseña. Dependiendo de la configuración del portal, Ud. puede registrarse por si mismo (menú de la derecha) o desde la administracón central de la plataforma.</p><p> En el caso de que esté habilitada la opción de que los propios usuarios puedan registrarse, tenga en cuenta que el nombre de usuario y la contraseña no podrán contener espacios o acentos y que no es lo mismo escribir en mayúscula o en minúscula. Escriba su nombre de usuario y contraseña, cree el curso (arriba a la derecha) o use un curso ya creado por el administrador de la plataforma.</p><p>Para añadir una persona que pueda administrar junto con Ud. el curso:<ol><li>Si no está todavía registrado en el sistema, regístrelo y seleccione 'Profesor' como estatus.</li><li>Si ya está registrado, deje la inscripción del curso temporalmente abierta y pida que se inscriban en él. Después proporcione derechos de profesor a la persona en cuestión.</li></ol></p><p>Cada herramienta de Chamilo tiene una ayuda contextual representada por un ícono en forma de salvavidas. Si necesita más información, consulte la página: <a href=\"http://www.chamilo.com/documentation.php\">Documentación de chamilo</a> y descargue el manual del profesor.</p><p><b>Estudiantes</b></p>Este portal le permite recibir formación y participar en cursos, capacitaciones, talleres colaborativos, etc. Ha sido diseñado para favorecer escenarios de aprendizaje activos: basados en proyectos, problemas, estudio de casos, investigación colaborativa, etc. Sus profesores han construído unas áreas de aprendizaje que pueden  tomar la forma de simples carpetas de documentos o de sofisticadas secuencias de actividades de aprendizaje, que podrán ser realizadas de forma autónoma o en grupo.</p><p>El proceso de registro puede variar de una organización a otra. En algunos casos, se permite que los propios usuarios puedan registrarse, en otros deberán solicitar al administrador de la plataforma el nombre de usuario y la contraseña. Para solicitar la inscripción en un curso puede hacerlo a través de dos vías:<ol><li>Si ya está registrado en la plataforma, el profesor lo inscribirá (opción recomendada) o Ud. mismo, tras entrar, podrá hacerlo siempre que esta posibilidad esté habilitada.</li><li>Si no está registrado deberá solicitar este registro al administrador de la plataforma o en el caso de que los propios usuarios puedan registrarse, realizarlo y luego proceder a la inscripción en el curso en cuestión. </li></ol></p><p>La lista de cursos en los que esté inscrito estará disponible en un menú una vez que haya entrado como usuario registrado.Cada vez que vuelva a la plataforma, necesitará introducir su nombre de usuario y contraseña. Estos le fueron enviados por correo electrónico a la dirección que indicó al registrarse.</p>"
 
@@ -761,8 +762,6 @@ msgstr "Ir al menú"
 
 msgid "WCAGGoContent"
 msgstr "Ir al contenido"
-
-
 
 msgid "ModifyEvaluation"
 msgstr "Guardar"
@@ -1475,8 +1474,6 @@ msgstr "El certificado solicitado existe pero no es público, por lo que para po
 msgid "ConfirmToUnlockElement"
 msgstr "Confirme el desbloqueo del elemento"
 
-
-
 msgid "MyTasks"
 msgstr "Mis tareas"
 
@@ -1774,8 +1771,6 @@ msgstr "Artículos del blog"
 msgid "BlogComments"
 msgstr "Comentarios de los artículos"
 
-
-
 msgid "langTool"
 msgstr "Metadatos del documento"
 
@@ -1817,8 +1812,6 @@ msgstr "Palabras clave del curso (negrita = sin usar)"
 
 msgid "langTotalMDEs"
 msgstr "Total de entradas de metadatos (MD) de enlaces"
-
-
 
 msgid "langInvalidId"
 msgstr "Acceso denegado - nombre de usuario o contraseña incorrectos."
@@ -2048,8 +2041,6 @@ msgstr "Permitanos un poco de tiempo para suscribirse a uno de nuestros cursos. 
 msgid "Profile"
 msgstr "Perfil"
 
-
-
 msgid "langHFor"
 msgstr "Ayuda: Foros"
 
@@ -2197,8 +2188,6 @@ msgstr "Ayuda Blogs"
 msgid "BlogsContent"
 msgstr "<p>Blogs (abreviatura de Web Logs = Bitácoras Web) se usan aquí como una herramienta que permite a los estudiantes contribuir a la historia del curso, haciendo informes de lo que va ocurriendo y de cómo esto les afecta a ellos o al curso.</p><p> Recomendamos usar los blogs en un entorno semicontrolado donde se asigna a determinados usuarios que presenten un informe diario o semanal de la actividad.</p><p>También se ha añadido a la herramienta blogs una utilidad de tareas, esto permite asignar una tarea a determinados usuarios del blog (por ejemplo: Realizar un informe sobre la visita del lunes al Museo de Cencias Naturales).</ p><p>Cada nuevo contenido en esta herramienta se denomina artículo. Para crear un artículo sólo hay que pulsar el enlace que invita a hacerlo en el menú. Para editarlo (si Vd. es el autor) o añadir un comentario a un artículo, sólo habrá que hacer clic sobre el título del mismo.</p>"
 
-
-
 msgid "nameTools"
 msgstr "variable de idioma obsoleta"
 
@@ -2297,8 +2286,6 @@ msgstr "El nuevo fichero manifest no puede ser abierto (ej., vacío, demasiado g
 
 msgid "langUploadMff"
 msgstr "Reemplazar el fichero manifest"
-
-
 
 msgid "MessageEmptyMessageOrSubject"
 msgstr "Por favor, escriba el título y el texto de su mensaje"
@@ -2416,8 +2403,6 @@ msgstr "Los mensajes seleccionados han sido marcados como no leídos"
 
 msgid "SelectedMessagesRead"
 msgstr "Los mensajes seleccionados han sido marcados como leídos"
-
-
 
 msgid "Announcement"
 msgstr "Anuncios"
@@ -2590,12 +2575,8 @@ msgstr "Agregar como un anuncio"
 msgid "AnnouncementForGroup"
 msgstr "Anuncios para un grupo"
 
-
-
 msgid "langScormBuilder"
 msgstr "Constructor de lecciones en formato SCORM"
-
-
 
 msgid "NewNote"
 msgstr "Nueva nota"
@@ -2686,8 +2667,6 @@ msgstr "Notas ordenadas por fecha de creación (antiguas - recientes)"
 
 msgid "NotesSortedByCreationDateDESC"
 msgstr "Notas ordenadas por fecha de creación (recientes - antiguas)"
-
-
 
 msgid "langOnlineConference"
 msgstr "Conferencia en línea"
@@ -2862,8 +2841,6 @@ msgstr "Pausa"
 
 msgid "Stop"
 msgstr "Detener"
-
-
 
 msgid "AssignSessionsTo"
 msgstr "Asignar sesiones a"
@@ -3852,8 +3829,6 @@ msgstr "Usuarios seguidos"
 msgid "Timeline"
 msgstr "Línea del tiempo"
 
-
-
 msgid "HandedOutDate"
 msgstr "Fecha de recepción"
 
@@ -4151,8 +4126,6 @@ msgstr "Ya envió una tarea, no puede subir otra."
 msgid "CantUploadDeleteYourPaperFirst"
 msgstr "No puede subir esta tarea. Por favor elimine la tarea anterior primero."
 
-
-
 msgid "langNewGroupCreate"
 msgstr "Crear grupos"
 
@@ -4437,8 +4410,6 @@ msgstr "No hay datos disponibles"
 
 msgid "AllGroups"
 msgstr "Todos los grupos"
-
-
 
 msgid "langLineNumber"
 msgstr "Número de líneas"
@@ -5037,8 +5008,6 @@ msgstr "Si desea darse de baja completamente en el Campus y que toda su informac
 msgid "UnsubscribeFromPlatformConfirm"
 msgstr "Sí, quiero suprimir completamente esta cuenta. Ningún dato quedará en el servidor y no podré acceder de nuevo, salvo que cree una cuenta completamente nueva."
 
-
-
 msgid "MoveTo"
 msgstr "Mover a"
 
@@ -5164,9 +5133,6 @@ msgstr "Crear tabla de contenidos"
 
 msgid "langEditTOC"
 msgstr "Editar la tabla de contenidos"
-
-msgid "langChapter"
-msgstr "Capítulo"
 
 msgid "langDocumentList"
 msgstr "Lista de todos los documentos"
@@ -5831,8 +5797,6 @@ msgstr "Antes de activar la grabación es necesario dar un nombre al archivo."
 msgid "SelectAnAudioFileFromDocuments"
 msgstr "Seleccionar un archivo de audio desde los documentos"
 
-
-
 msgid "lang_new_item"
 msgstr "nuevo evento añadido"
 
@@ -5928,8 +5892,6 @@ msgstr "Nota eliminada"
 
 msgid "LearnpathUpdated"
 msgstr "Lección actualizada"
-
-
 
 msgid "AgendaAdd"
 msgstr "Añadir un nuevo evento"
@@ -6174,8 +6136,6 @@ msgstr "Deshabilitar fecha final"
 msgid "AllEvents"
 msgstr "Todos los eventos"
 
-
-
 msgid "langMdCallingTool"
 msgstr "Documentos"
 
@@ -6304,8 +6264,6 @@ msgstr ":text/plain;iso-8859-1:texto/plano;iso-8859-1,, text/plain;utf-8:texto/p
 
 msgid "langLngResTypes"
 msgstr ":exercise:ejercicio,,      simulation:simulación,,      questionnaire:cuestionario,,      diagram:diagrama,,      figure:figura,,      graph:gráfico,,      index:índice,,      slide:diapositiva,,      table:tabla,,      narrative text:texto narrativo,,      exam:examen,,      experiment:experiencia,,      problem statement:problema,,      self assessment:autoevaluación,,      lecture:presentación"
-
-
 
 msgid "Camera"
 msgstr "Cámara"
@@ -6625,8 +6583,6 @@ msgstr "Medio"
 msgid "ThickStroke"
 msgstr "Grueso"
 
-
-
 msgid "LinkMoved"
 msgstr "El enlace ha sido movido"
 
@@ -6783,8 +6739,6 @@ msgstr "Parte superior"
 msgid "LinkTarget"
 msgstr "Destino enlace"
 
-
-
 msgid "langCourseProgram"
 msgstr "Descripción del curso"
 
@@ -6838,8 +6792,6 @@ msgstr "Descripción actualizada"
 
 msgid "CourseDescriptions"
 msgstr "Descripción del curso"
-
-
 
 msgid "AlreadyRegisteredToCourse"
 msgstr "Ya se encuentra registrado en el curso"
@@ -7096,8 +7048,6 @@ msgstr "Su inscripción en el curso %s se ha completado."
 msgid "ThereAreNoCoursesInThisCategory"
 msgstr "No existen cursos en la categoría actual"
 
-
-
 msgid "TermAddNew"
 msgstr "Añadir un término"
 
@@ -7193,8 +7143,6 @@ msgstr "Término actualizado"
 
 msgid "DeleteAllGlossaryTerms"
 msgstr "Eliminar todos los términos"
-
-
 
 msgid "DateTimezoneSettingNotSet"
 msgstr "We have detected that your PHP installation does not define the date.timezone setting. This is a requirement of Chamilo. Please make sure it is configured by checking your php.ini configuration, otherwise you will run into problems. We warned you!"
@@ -7595,8 +7543,6 @@ msgstr "Actualizar el proceso de ejecución"
 msgid "PleaseWaitThisCouldTakeAWhile"
 msgstr "Por favor espere. Esto podría tomar un tiempo..."
 
-
-
 msgid "langTooBig"
 msgstr "No ha seleccionado el archivo a enviar o es demasiado grande"
 
@@ -7617,8 +7563,6 @@ msgstr "Añadir un enlace"
 
 msgid "langEditLink"
 msgstr "Editar un enlace de la página principal del curso"
-
-
 
 msgid "langChapter"
 msgstr "Capítulo"
@@ -7755,15 +7699,11 @@ msgstr "Descomprimir el archivo (.zip) en el servidor"
 msgid "ExportShort"
 msgstr "Exportación SCORM"
 
-
-
 msgid "langMyAgenda"
 msgstr "Mi agenda"
 
 msgid "langToday"
 msgstr "Hoy"
-
-
 
 msgid "langSelectOptionForBackup"
 msgstr "Por favor, seleccione una opción de copia de seguridad"
@@ -7909,8 +7849,6 @@ msgstr "Si su lección tiene archivos de audio incluidos, debería seleccionarlo
 msgid "DontForgetToSelectTheMediaFilesIfYourResourceNeedIt"
 msgstr "No olvide seleccionar los archivos multimedia si su recurso los necesita"
 
-
-
 msgid "ExerciseWasActivatedFromXToY"
 msgstr "El ejercicio estuvo disponible desde %s hasta %s"
 
@@ -7934,9 +7872,6 @@ msgstr "Pregunta copiada a la prueba"
 
 msgid "ZeroMeansNoQuestionWillBeSelectedMinusOneMeansThatAllQuestionsWillBeSelected"
 msgstr "-1 = Todas las preguntas serán seleccionadas. 0 = Ninguna pregunta será seleccionada."
-
-msgid "0"
-msgstr ""
 
 msgid "EmailNotificationTemplateDescription"
 msgstr "Puede modificar el correo enviado a los usuarios al terminar el ejercicio. Puede usar los siguientes términos:<br />{{ student.username }}<br />{{ student.firstname }}<br />{{ student.lastname }}<br />{{ student.official_code }}<br />{{ exercise.title }}<br />{{ exercise.start_time }}<br />{{ exercise.end_time }}<br />{{ course.title }}<br />{{ course.code }}"
@@ -9549,8 +9484,6 @@ msgstr "Todas"
 msgid "ProblemsRecordingUploadYourOwnAudioFile"
 msgstr "Tiene problemas para grabar? Mande su propio fichero audio."
 
-
-
 msgid "Height"
 msgstr "Alto"
 
@@ -9604,8 +9537,6 @@ msgstr "Presentación redimensionada automáticamente"
 
 msgid "ResizingAutoComment"
 msgstr "La presentación se redimensionará automáticamente al tamaño de su pantalla. Esta es la opción que siempre se cargará por defecto cada vez que entre en la plataforma."
-
-
 
 msgid "CasDirectCourseAccess"
 msgstr "Enter course with CAS authentication"
@@ -13819,8 +13750,6 @@ msgstr "Mostrar columna"
 msgid "LegalAgreementAccepted"
 msgstr "Condiciones legales aceptadas"
 
-
-
 msgid "WikiSearchResults"
 msgstr "Resultados de la búsqueda en el Wiki"
 
@@ -14514,8 +14443,6 @@ msgstr "Número de páginas protegidas"
 msgid "WhoAndWhere"
 msgstr "Quien y donde"
 
-
-
 msgid "ForumDeleted"
 msgstr "Foro eliminado"
 
@@ -14957,8 +14884,6 @@ msgstr "Ud. será notificado"
 msgid "ForumCategories"
 msgstr "Categorías de foro"
 
-
-
 msgid "ModifInfo"
 msgstr "Configuración del curso"
 
@@ -15361,8 +15286,6 @@ msgstr "Acuerdo legal para este curso"
 msgid "AcceptLegal"
 msgstr "Aceptar los términos legales"
 
-
-
 msgid "select"
 msgstr "Seleccionar"
 
@@ -15422,8 +15345,6 @@ msgstr "Cerrar delimitación"
 
 msgid "oar"
 msgstr "Zona de riesgo"
-
-
 
 msgid "langActivate"
 msgstr "Activar"
@@ -15514,8 +15435,6 @@ msgstr "La configuración para el despliegue automático de Lecciones está acti
 
 msgid "ToolSearch"
 msgstr "Búsqueda"
-
-
 
 msgid "langScormVersion"
 msgstr "versión"
@@ -15685,8 +15604,6 @@ msgstr "El paquete que está cargando no parece estar en formato SCORM. Por favo
 msgid "HideTocFrame"
 msgstr "Esconder zona de tabla de contenidos"
 
-
-
 msgid "langMdCallingTool"
 msgstr "Documentos"
 
@@ -15813,8 +15730,6 @@ msgstr "¡ - los nombres de categoría duplicados serán retirados de la lista !
 msgid "langSLC"
 msgstr "Trabajar con la categoría de enlace nombrada"
 
-
-
 msgid "langExplanation"
 msgstr "Una vez que haya pulsado el botón \"Crear curso\" se creará el sitio web del curso, en el que dispondrá de múltiples herramientas que podrá configurar para dar al curso su aspecto definitivo: Test o Ejercicios, Proyectos o Blogs, Wikis, Tareas, Creador y visualizador de Lecciones en formato SCORM, Encuestas y mucho más. Su identificación como creador de este sitio automáticamente lo convierte en profesor del curso, lo cual le permitirá modificarlo según sus necesidades."
 
@@ -15841,8 +15756,6 @@ msgstr "La página ha sido añadida"
 
 msgid "Choose"
 msgstr "Seleccione"
-
-
 
 msgid "langProfessors"
 msgstr "Profesores"
@@ -16288,8 +16201,6 @@ msgstr "La solicitud del curso %s no ha sido actualizada debido a un error inter
 msgid "CourseRequestUpdated"
 msgstr "La solicitud del curso %s ha sido actualizada."
 
-
-
 msgid "Upload"
 msgstr "Enviar"
 
@@ -16592,8 +16503,6 @@ msgstr "Grupo no válido detectado"
 
 msgid "OverviewOfFilesInThisZip"
 msgstr "Listado de archivos en este Zip"
-
-
 
 msgid "AudioFile"
 msgstr "Archivo de audio"
@@ -17381,8 +17290,6 @@ msgstr "Términos para la búsqueda"
 msgid "PrerequisiteDeletedError"
 msgstr "Error: el elemento definido como prerequisito ha sido eliminado."
 
-
-
 msgid "langShouldBeCSVFormat"
 msgstr "El archivo debe estar formato CSV. No añada espacios. La estructura debe ser exactamente :"
 
@@ -17937,8 +17844,6 @@ msgstr "Inmediatamente"
 
 msgid "Daily"
 msgstr "A diario"
-
-
 
 msgid "CourseVisibilityHidden"
 msgstr "Invisible - Totalmente invisible para todos los usuarios a parte de los administradores"
@@ -22958,8 +22863,6 @@ msgstr "%d bases de datos antiguas eliminadas"
 
 msgid "ExtensionShouldBeLoaded"
 msgstr "Esta extensión debería ser cargada."
-
-
 
 msgid "PublishSurvey"
 msgstr "Publicar encuesta"

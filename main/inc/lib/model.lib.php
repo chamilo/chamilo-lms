@@ -137,7 +137,8 @@ class Model {
 	 * @return bool
 	 *
 	 */
-	public function save($params, $show_query = false) {
+	public function save($params, $show_query = false)
+    {
         $params = $this->clean_parameters($params);
 
         if ($this->is_course_model) {

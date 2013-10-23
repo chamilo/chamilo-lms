@@ -19,7 +19,6 @@
     <div class="RequirementText">{{ 'ServerRequirementsInfo' | trans }}</div>
 
     <table class="table">
-
         <tr>
             <td>{{ 'PHPVersion' | trans }} >=  {{ required_php_version }} </td>
             <td>
@@ -31,13 +30,13 @@
             </td>
         </tr>
 
-
+        {% autoescape false %}
+            {# reqs #}
+        {% endautoescape %}
     </table>
 
-
-
     {% autoescape false %}
-        {{ requirements }}
+    {{ requirements }}
     {% endautoescape %}
 
     <form action="#" method="post">

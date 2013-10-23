@@ -910,7 +910,7 @@ function getRequirements() {
     return
         array(
             'required' => array(
-                'session' => array('url' => 'http://php.net/manual/en/book.session.php'),
+                //'session' => array('url' => 'http://php.net/manual/en/book.session.php', 'recommend' => Display::label('OFF', 'success')),
                 'mysql' => array('url' => 'http://php.net/manual/en/book.mysql.php'),
                 'zlib' => array('url' => 'http://php.net/manual/en/book.zlib.php'),
                 'pcre' => array('url' => 'http://php.net/manual/en/book.pcre.php'),
@@ -919,21 +919,23 @@ function getRequirements() {
                 'iconv' => array('url' => 'http://php.net/manual/en/book.iconv.php'),
                 'intl' => array('url' => 'http://php.net/manual/en/book.intl.php'),
                 'gd' => array('url' => 'http://php.net/manual/en/book.image.php'),
-                'json' => array('url' => 'http://php.net/manual/en/book.json.php'),
-
-
+                'json' => array('url' => 'http://php.net/manual/en/book.json.php')
             ),
             'optional' =>  array(
                 'imagick' => array('url' => 'http://php.net/manual/en/book.imagick.php'),
                 'ldap' => array('url' => 'http://php.net/manual/en/book.ldap.php'),
                 'xapian' => array('url' => 'http://php.net/manual/en/book.xapian.php'),
-                'curl' => array('url' => 'http://php.net/manual/en/book.curl.php'),
-
+                'curl' => array('url' => 'http://php.net/manual/en/book.curl.php')
             )
         );
 }
 
-function drawRequeriments($translator) {
+/**
+ * @param Symfony\Component\Translation\Translator $translator
+ * @return null|string
+ */
+function drawRequirements($translator)
+{
     $requeriments = getRequirements();
     $html = null;
 
@@ -945,8 +947,8 @@ function drawRequeriments($translator) {
                     <td>
                         '.check_extension(
                             $extension,
-                            $translator->translate('Yes'),
-                            $translator->translate('No')
+                            $translator->trans('Yes'),
+                            $translator->trans('No')
                         ).'
                     </td>
                   </tr>';
@@ -960,8 +962,8 @@ function drawRequeriments($translator) {
                     <td>
                         '.check_extension(
                             $extension,
-                            $translator->translate('Yes'),
-                            $translator->translate('No'),
+                            $translator->trans('Yes'),
+                            $translator->trans('No'),
                             true
                         ).'
                     </td>

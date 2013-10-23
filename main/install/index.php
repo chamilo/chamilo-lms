@@ -197,7 +197,7 @@ $app->match('/requirements', function() use($app) {
          return $app->redirect($url);
     }
 
-    $reqs = drawRequeriments($app['translator']);
+    $reqs = drawRequirements($app['translator']);
 
     return $app['twig']->render(
         'requirements.tpl',

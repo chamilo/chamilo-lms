@@ -649,13 +649,13 @@ class Answer
             $course_info = $course_info;
         }
 
-        $TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
+        $TBL_REPONSES = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
-        if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE || self::getQuestionType(
-        ) == MULTIPLE_ANSWER_TRUE_FALSE
+        if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE ||
+            self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE
         ) {
 
-            //Selecting origin options
+            // Selecting origin options
             $origin_options = Question::readQuestionOption($this->selectQuestionId(), $this->course['real_id']);
 
             if (!empty($origin_options)) {
@@ -677,7 +677,7 @@ class Answer
 
         // if at least one answer
         if ($this->nbrAnswers) {
-            // inserts new answers into data base
+            // Insert new answers into database.
 
             $c_id = $course_info['real_id'];
             $correct_answers = array();
@@ -692,8 +692,6 @@ class Answer
 
                 $answer = Database::escape_string($this->answer[$i]);
                 $correct = Database::escape_string($this->correct[$i]);
-
-
 
                 if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE || self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE) {
                     $correct = $fixed_list[intval($correct)];

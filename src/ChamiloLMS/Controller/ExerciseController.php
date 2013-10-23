@@ -40,7 +40,7 @@ class ExerciseController extends CommonController
         if ($question) {
             $newQuestionTitle = $question->selectTitle().' - '.get_lang('Copy');
             $question->updateTitle($newQuestionTitle);
-            //Duplicating the source question, in the current course
+            // Duplicating the source question, in the current course
             $courseInfo = api_get_course_info();
             $newId = $question->duplicate($courseInfo);
             // Reading new question
@@ -50,7 +50,7 @@ class ExerciseController extends CommonController
             // Reading Answers obj of the current course
             $newAnswer = new \Answer($questionId);
             $newAnswer->read();
-            //Duplicating the Answers in the current course
+            // Duplicating the Answers in the current course
             $newAnswer->duplicate($newId);
             /*$params = array(
                 'cidReq' => api_get_course_id(),

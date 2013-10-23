@@ -1212,7 +1212,7 @@ abstract class Question
         $question    = $this->question;
         $description = $this->description;
 
-        //Using the same method used in the course copy to transform URLs
+        // Using the same method used in the course copy to transform URLs
 
         if ($this->course['id'] != $course_info['id']) {
             $description = DocumentManager::replace_urls_inside_content_html_from_copy_course(
@@ -1229,11 +1229,11 @@ abstract class Question
 
         $course_id = $course_info['real_id'];
 
-        //Read the source options
+        // Read the source options
         $options = self::readQuestionOption($this->id, $this->course['real_id']);
 
-        //Inserting in the new course db / or the same course db
-        $params          = array(
+        // Inserting in the new course db / or the same course db
+        $params = array(
             'c_id'        => $course_id,
             'question'    => $question,
             'description' => $description,
@@ -1255,6 +1255,7 @@ abstract class Question
                 Database::insert($TBL_QUESTION_OPTIONS, $item);
             }
         }
+
         $this->duplicate_category_question($new_question_id, $course_id);
 
         // Duplicates the picture of the hotspot
@@ -1263,20 +1264,31 @@ abstract class Question
         return $new_question_id;
     }
 
+    /**
+     * Get categories from question
+     * @return array
+     */
     public function get_categories_from_question()
     {
         return Testcategory::getCategoryForQuestion($this->id);
     }
 
-    public function duplicate_category_question($question_id, $course_id)
+    /**
+     * @param int $questionId
+     * @param int $courseId
+     */
+    public function duplicate_category_question($questionId, $courseId)
     {
-        $question   = Question::read($question_id, $course_id);
+        $question   = Question::read($questionId, $courseId);
         $categories = $this->get_categories_from_question();
         if (!empty($categories)) {
             $question->saveCategories($categories);
         }
     }
 
+    /**
+     * @return array|string
+     */
     public function get_question_type_name()
     {
         $key = self::$questionTypes[$this->type];
@@ -1284,6 +1296,10 @@ abstract class Question
         return get_lang($key[1]);
     }
 
+    /**
+     * @param string $type
+     * @return null
+     */
     public static function get_question_type($type)
     {
         if ($type == ORAL_EXPRESSION && api_get_setting('enable_nanogong') != 'true') {
@@ -1293,6 +1309,9 @@ abstract class Question
         return self::$questionTypes[$type];
     }
 
+    /**
+     * @return array
+     */
     public static function get_question_type_list()
     {
         if (api_get_setting('enable_nanogong') != 'true') {

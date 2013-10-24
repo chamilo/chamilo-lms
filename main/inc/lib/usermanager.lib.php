@@ -2107,7 +2107,6 @@ class UserManager
         $result = Database::query($sql);
 
         if (Database::num_rows($result) > 0) {
-            $count = 0;
             while ($row = Database::fetch_array($result)) {
                 $categories[$row['session_category_id']]['session_category']['id'] = $row['session_category_id'];
                 $categories[$row['session_category_id']]['session_category']['name'] = $row['session_category_name'];

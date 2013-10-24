@@ -8,6 +8,9 @@ if (PHP_SAPI != 'cli') {
     die("Cannot be called by any other method than the command line.");
 }
 
+/** Composer autoload */
+require_once __DIR__.'/vendor/autoload.php';
+
 $app = require_once dirname(__FILE__).'/main/inc/global.inc.php';
 
 use Knp\Provider\ConsoleServiceProvider;

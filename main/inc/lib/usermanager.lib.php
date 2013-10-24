@@ -2201,6 +2201,27 @@ class UserManager
             }
         }
 
+        $coachCourseConditions = null;
+
+        // Getting sessions that are related to a coach in the session_rel_course_rel_user table
+
+        if (api_is_allowed_to_create_course()) {
+            $sessionListFromCourseCoach = array();
+            $sql =" SELECT DISTINCT id_session FROM $tbl_session_course_user
+                    WHERE id_user = $user_id AND status = 2 ";
+            $result = Database::query($sql);
+            if (Database::num_rows($result)) {
+                $result = Database::store_result($result);
+                foreach ($result as $session) {
+                    $sessionListFromCourseCoach[]= $session['id_session'];
+                }
+            }
+            if (!empty($sessionListFromCourseCoach)) {
+                $condition = implode("','", $sessionListFromCourseCoach);
+                $coachCourseConditions = " OR ( id IN ('$condition'))";
+            }
+        }
+
         // Get the list of sessions where the user is subscribed
         $sessions_sql = "SELECT DISTINCT id, name, date_start, date_end
                         FROM $tbl_session_user, $tbl_session
@@ -2211,6 +2232,7 @@ class UserManager
                         ) OR (
                             id_coach = $user_id
                         )
+                        $coachCourseConditions
                         ORDER BY date_start, date_end, name";
 
         $result = Database::query($sessions_sql);
@@ -2228,16 +2250,16 @@ class UserManager
 
                 $id_session = $enreg['id'];
                 $personal_course_list_sql = "SELECT DISTINCT
-                                            course.code code,
-                                            course.title i,
-                                            ".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." t,
-                                            email, course.course_language l,
-                                            1 sort,
-                                            category_code user_course_cat,
-                                            date_start,
-                                            date_end,
-                                            session.id as id_session,
-                                            session.name as session_name
+                        course.code code,
+                        course.title i,
+                        ".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." t,
+                        email, course.course_language l,
+                        1 sort,
+                        category_code user_course_cat,
+                        date_start,
+                        date_end,
+                        session.id as id_session,
+                        session.name as session_name
                     FROM $tbl_session_course_user as session_course_user
                         INNER JOIN $tbl_course AS course
                             ON course.code = session_course_user.course_code
@@ -2247,7 +2269,7 @@ class UserManager
                             ON user.user_id = session_course_user.id_user OR session.id_coach = user.user_id
                     WHERE
                         session_course_user.id_session = $id_session AND (
-                            (session_course_user.id_user=$user_id AND session_course_user.status = 2)
+                            (session_course_user.id_user = $user_id AND session_course_user.status = 2)
                             OR session.id_coach = $user_id
                         )
                     ORDER BY i";
@@ -2271,24 +2293,24 @@ class UserManager
             /* This query is very similar to the above query,
                but it will check the session_rel_course_user table if there are courses registered to our user or not */
             $personal_course_list_sql = "SELECT DISTINCT
-                                            course.code code,
-                                            course.title i, CONCAT(user.lastname,' ',user.firstname) t,
-                                            email,
-                                            course.course_language l,
-                                            1 sort,
-                                            category_code user_course_cat,
-                                            date_start,
-                                            date_end,
-                                            session.id as id_session,
-                                            session.name as session_name,
-                                            IF((session_course_user.id_user = 3 AND session_course_user.status=2),'2', '5')
-                                        FROM $tbl_session_course_user as session_course_user
-                                            INNER JOIN $tbl_course AS course
-                                            ON course.code = session_course_user.course_code AND session_course_user.id_session = $session_id
-                                            INNER JOIN $tbl_session as session ON session_course_user.id_session = session.id
-                                            LEFT JOIN $tbl_user as user ON user.user_id = session_course_user.id_user
-                                        WHERE session_course_user.id_user = $user_id
-                                        ORDER BY i";
+                course.code code,
+                course.title i, CONCAT(user.lastname,' ',user.firstname) t,
+                email,
+                course.course_language l,
+                1 sort,
+                category_code user_course_cat,
+                date_start,
+                date_end,
+                session.id as id_session,
+                session.name as session_name,
+                IF((session_course_user.id_user = 3 AND session_course_user.status=2),'2', '5')
+            FROM $tbl_session_course_user as session_course_user
+                INNER JOIN $tbl_course AS course
+                ON course.code = session_course_user.course_code AND session_course_user.id_session = $session_id
+                INNER JOIN $tbl_session as session ON session_course_user.id_session = session.id
+                LEFT JOIN $tbl_user as user ON user.user_id = session_course_user.id_user
+            WHERE session_course_user.id_user = $user_id
+            ORDER BY i";
 
             $course_list_sql_result = Database::query($personal_course_list_sql);
 
@@ -2306,6 +2328,7 @@ class UserManager
     /**
      * Gives a list of courses for the given user in the given session
      * @param integer $user_id
+     * @param integer $session_id
      * @return array  list of statuses (session_id-course_code => status)
      */
     public static function get_courses_list_by_session($user_id, $session_id)

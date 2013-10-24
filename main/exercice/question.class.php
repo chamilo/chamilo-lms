@@ -73,7 +73,7 @@ abstract class Question
      *
      * @author - Olivier Brouckaert
      */
-    public function Question()
+    public function Question($course_code = null)
     {
         $this->id            = 0;
         $this->question      = '';
@@ -86,7 +86,7 @@ abstract class Question
         //with an special hotspot: final_overlap, final_missing, final_excess
         $this->extra         = '';
         $this->exerciseList  = array();
-        $this->course        = api_get_course_info();
+        $this->course        = api_get_course_info($course_code);
         $this->category_list = array();
         $this->parent_id     = 0;
         $this->editionMode   = 'normal';
@@ -165,7 +165,7 @@ abstract class Question
         // if the question has been found
         if ($object = Database::fetch_object($result)) {
 
-            $objQuestion = Question::getInstance($object->type);
+            $objQuestion = Question::getInstance($object->type, null, $course_info['code']);
             if (!empty($objQuestion)) {
 
                 $objQuestion->id            = $id;
@@ -1329,14 +1329,14 @@ abstract class Question
      * @param \Exercise
      * @return \Question an instance of a Question subclass (or of Questionc class by default)
      */
-    public static function getInstance($type, Exercise $exercise = null)
+    public static function getInstance($type, Exercise $exercise = null, $course_code = null)
     {
         if (!is_null($type)) {
             list($file_name, $class_name) = self::get_question_type($type);
             if (!empty($file_name)) {
                 include_once $file_name;
                 if (class_exists($class_name)) {
-                    $obj = new $class_name();
+                    $obj = new $class_name($course_code);
                     $obj->exercise = $exercise;
                     return $obj;
                 } else {

@@ -25,9 +25,9 @@ class MultipleAnswerTrueFalse extends Question
     /**
      * Constructor
      */
-    public function MultipleAnswerTrueFalse()
+    public function MultipleAnswerTrueFalse($course_code = null)
     {
-        parent::question();
+        parent::question($course_code);
         $this->type      = MULTIPLE_ANSWER_TRUE_FALSE;
         $this->isContent = $this->getIsContent();
         $this->options   = array(1 => get_lang('True'), 2 => get_lang('False'), 3 => get_lang('DoubtScore'));

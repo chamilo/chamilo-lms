@@ -24,9 +24,9 @@ class FreeAnswer extends Question
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct($course_code =  null)
     {
-        parent::question();
+        parent::question($course_code);
         $this->type      = FREE_ANSWER;
         $this->isContent = $this->getIsContent();
     }

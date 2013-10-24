@@ -5323,12 +5323,12 @@ class Exercise
      *  </code>
      * @return array
      */
-    private function setMediaList($questionList)
+    private function setMediaList($questionList, $course_id)
     {
         $mediaList= array();
         if (!empty($questionList)) {
             foreach ($questionList as $questionId) {
-                $objQuestionTmp = Question::read($questionId);
+                $objQuestionTmp = Question::read($questionId, $course_id);
 
                 // If a media question exists
                 if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {
@@ -5495,7 +5495,7 @@ class Exercise
             }
         }
 
-        $this->setMediaList($questionList);
+        $this->setMediaList($questionList, $this->course_id);
 
         $this->questionList = $this->transformQuestionListWithMedias($questionList, false);
         $this->questionListUncompressed = $this->transformQuestionListWithMedias($questionList, true);

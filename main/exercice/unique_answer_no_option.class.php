@@ -30,9 +30,9 @@ class UniqueAnswerNoOption extends Question
 	/**
 	 * Constructor
 	 */
-	function UniqueAnswerNoOption(){
+	function UniqueAnswerNoOption($course_code = null){
 		//this is highly important
-		parent::question();
+		parent::question($course_code);
 		$this -> type = UNIQUE_ANSWER_NO_OPTION;
 		$this -> isContent = $this-> getIsContent();
 	}

@@ -58,7 +58,7 @@ if ($_POST['form_sent']) {
 	}
 
 	if ($form_sent == 1) {
-		if ( count($users) == 0 || count($url_list) == 0) {
+		if (count($users) == 0 || count($url_list) == 0) {
 			Display :: display_error_message(get_lang('AtLeastOneUserAndOneURL'));
 		} else {
 			UrlManager::add_users_to_urls($users,$url_list);

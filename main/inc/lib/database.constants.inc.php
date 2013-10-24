@@ -82,6 +82,7 @@ define('TABLE_MAIN_ACCESS_URL', 'access_url');
 define('TABLE_MAIN_ACCESS_URL_REL_USER',    'access_url_rel_user');
 define('TABLE_MAIN_ACCESS_URL_REL_COURSE',  'access_url_rel_course');
 define('TABLE_MAIN_ACCESS_URL_REL_SESSION', 'access_url_rel_session');
+define('TABLE_MAIN_ACCESS_URL_REL_USERGROUP', 'access_url_rel_usergroup');
 
 // Global calendar
 define('TABLE_MAIN_SYSTEM_CALENDAR', 'sys_calendar');

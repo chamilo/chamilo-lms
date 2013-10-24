@@ -613,12 +613,12 @@ class ImportCsv
      */
     private function importUnsubscribeStatic($file)
     {
-        $data = Import::csv_to_array($file);
+        $data = Import::csv_reader($file);
 
         if (!empty($data)) {
             $this->logger->addInfo(count($data)." records found.");
             foreach ($data as $row) {
-                $chamiloUsername = $row['UserName'];
+                $chamiloUserName = $row['UserName'];
                 $chamiloCourseCode = $row['CourseCode'];
                 //$systemSessionId= $row['SessionID'];
                 $chamiloSessionId= $row['SessionID'];
@@ -637,15 +637,15 @@ class ImportCsv
                     continue;
                 }
 
-                $userId = Usermanager::get_user_id_from_username($chamiloUsername);
+                $userId = Usermanager::get_user_id_from_username($chamiloUserName);
 
                 if (empty($userId)) {
-                    $this->logger->addError('User does not exists: '.$chamiloUsername);
+                    $this->logger->addError('User does not exists: '.$chamiloUserName);
                     continue;
                 }
 
                 CourseManager::unsubscribe_user($userId, $courseInfo['code'], $chamiloSessionId);
-                $this->logger->addError("User '$chamiloUsername' was removed from session: #$chamiloSessionId, Course: ".$courseInfo['code']);
+                $this->logger->addError("User '$chamiloUserName' was removed from session: #$chamiloSessionId, Course: ".$courseInfo['code']);
             }
         }
     }

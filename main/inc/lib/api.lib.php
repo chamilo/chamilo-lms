@@ -2158,6 +2158,16 @@ function api_get_session_condition($session_id, $and = true, $with_base_content 
  * @author Bart Mollet
  */
 function api_get_setting($variable, $key = null) {
+    if (PHP_SAPI == 'cli') {
+        // Do not use session on CLI.
+        // @todo Support key.
+        $variable_data = api_get_settings_params_simple(array("variable = '?'" => $variable));
+        if (isset($variable_data['selected_value'])) {
+            return $variable_data['selected_value'];
+        }
+        return '';
+    }
+
     $_setting = Session::read('_setting');
     if ($variable == 'header_extra_content') {
         $filename = api_get_path(SYS_PATH).api_get_home_path().'header_extra_content.txt';

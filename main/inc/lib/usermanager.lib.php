@@ -2119,14 +2119,14 @@ class UserManager
                 // Checking session visibility
                 $visibility = api_get_session_visibility($session_id, null, $ignore_visibility_for_admins);
                 
-                 switch ($visibility) {
+                switch ($visibility) {
                     case SESSION_VISIBLE_READ_ONLY:
                     case SESSION_VISIBLE:
                     case SESSION_AVAILABLE:
-                       break;
+                        break;
                     case SESSION_INVISIBLE:
-                       continue(2);
-               } 
+                        continue(2);
+                } 
 
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['session_name'] = $row['name'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['session_id'] = $row['id'];

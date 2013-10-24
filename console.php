@@ -76,6 +76,7 @@ $cli->addCommands(
         // Chamilo commands.
 
         new ChamiloLMS\Command\Template\AsseticDumpCommand(),
+        new ChamiloLMS\Command\Transaction\SendCommand(),
         new ChamiloLMS\Command\Translation\ExportLanguagesCommand(),
 
         // Chash commands.

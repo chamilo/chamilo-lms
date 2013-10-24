@@ -2129,8 +2129,8 @@ class UserManager
 
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['session_name'] = $row['name'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['session_id'] = $row['id'];
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['date_start'] = '0000-00-00';
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['date_end'] = '0000-00-00';
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['date_start'] = $row['date_start'];
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['date_end'] = $row['date_end'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['nb_days_access_before_beginning'] = $row['nb_days_access_before_beginning'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['nb_days_access_after_end'] = $row['nb_days_access_after_end'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['courses'] = UserManager::get_courses_list_by_session($user_id, $row['id']);

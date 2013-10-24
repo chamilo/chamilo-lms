@@ -2406,6 +2406,7 @@ class SessionManager
      * @param int  $numberItems
      * @param int $column
      * @param string $direction
+     * @param string $keyword
      * @return array|int
      */
     public static function getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -2451,7 +2452,6 @@ class SessionManager
                 // Show all by DRH
             case 'drh_all':
                 $sessions = SessionManager::get_sessions_followed_by_drh($userId);
-
                 $sessionIdList = array();
                 foreach ($sessions as $session) {
                     $sessionIdList[] = $session['id'];
@@ -2465,6 +2465,9 @@ class SessionManager
                 $statusConditions = " AND s.id_coach = $userId";
                 break;
             case 'admin':
+                break;
+            case 'course_coach':
+                //$statusConditions = " AND s.id_coach = $userId";
                 break;
         }
 

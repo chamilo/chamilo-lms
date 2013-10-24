@@ -583,8 +583,8 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
             $q_last_connection = Database::query($sql_last_connection);
             $i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
         }
-
-        $s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
+        $now = api_get_utc_datetime(time());
+        $s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date='$now' WHERE login_id='$i_id_last_connection'";
         Database::query($s_sql_update_logout_date);
     }
 }

@@ -113,7 +113,7 @@ function setSearchSelect(columnName) {
         {
             searchoptions: {
                 dataInit:function(el) {
-                    $("option[value='1']",el).attr("selected", "selected");
+                    $("option[value='2']",el).attr("selected", "selected");
                     setTimeout(function() {
                         $(el).trigger('change');
                     }, 1000);

@@ -516,8 +516,28 @@ class UserManager
      * @return boolean true if the user information was updated
      * @assert (false, false, false, false, false, false, false, false, false, false, false, false, false) === false
      */
-    public static function update_user($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, $creator_id = null, $hr_dept_id = 0, $extra = null, $language = 'english', $encrypt_method = '', $send_email = false, $reset_password = 0)
-    {
+    public static function update_user(
+        $user_id,
+        $firstname,
+        $lastname,
+        $username,
+        $password = null,
+        $auth_source = null,
+        $email,
+        $status,
+        $official_code,
+        $phone,
+        $picture_uri,
+        $expiration_date,
+        $active,
+        $creator_id = null,
+        $hr_dept_id = 0,
+        $extra = null,
+        $language = 'english',
+        $encrypt_method = '',
+        $send_email = false,
+        $reset_password = 0
+    ) {
         global $_configuration;
         $original_password = $password;
 
@@ -594,13 +614,12 @@ class UserManager
         $sql .= " WHERE user_id='$user_id'";
         $return = Database::query($sql);
         if ($change_active == 1 && $return) {
-           $user_info = api_get_user_info($user_id);
-           if ($active == 1) {
+            if ($active == 1) {
                 $event_title = LOG_USER_ENABLE;
-           } else {
+            } else {
                 $event_title = LOG_USER_DISABLE;
-           }
-           event_system($event_title, LOG_USER_ID, $user_id);
+            }
+            event_system($event_title, LOG_USER_ID, $user_id);
         }
         if (is_array($extra) && count($extra) > 0) {
             $res = true;
@@ -3953,9 +3972,13 @@ EOF;
         $types[self::USER_FIELD_TYPE_TAG] = get_lang('FieldTypeTag');
         $types[self::USER_FIELD_TYPE_TIMEZONE] = get_lang('FieldTypeTimezone');
         $types[self::USER_FIELD_TYPE_SOCIAL_PROFILE] = get_lang('FieldTypeSocialProfile');
+
         return $types;
     }
 
+    /**
+     * @param int $user_id
+     */
     static function add_user_as_admin($user_id)
     {
         $table_admin = Database :: get_main_table(TABLE_MAIN_ADMIN);
@@ -3967,7 +3990,10 @@ EOF;
         }
     }
 
-    static function remove_user_admin($user_id)
+    /**
+     * @param int $user_id
+     */
+    public static function remove_user_admin($user_id)
     {
         $table_admin = Database :: get_main_table(TABLE_MAIN_ADMIN);
         $user_id = intval($user_id);
@@ -3977,7 +4003,11 @@ EOF;
         }
     }
 
-    static function update_all_user_languages($from, $to)
+    /**
+     * @param string $from
+     * @param string $to
+     */
+    public static function update_all_user_languages($from, $to)
     {
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $from = Database::escape_string($from);
@@ -3988,6 +4018,4 @@ EOF;
             Database::query($sql);
         }
     }
-
-
 }

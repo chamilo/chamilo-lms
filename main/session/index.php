@@ -20,7 +20,8 @@ require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
 
-api_block_anonymous_users(); // Only users who are logged in can proceed.
+// Only users who are logged in can proceed.
+api_block_anonymous_users();
 
 $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -35,7 +36,7 @@ $course_id  = isset($_GET['course_id'])  ? intval($_GET['course_id']) : null;
 $_SESSION['id_session'] = $session_id;
 
 // Clear the exercise session just in case
-if (isset ($_SESSION['objExercise'])) {
+if (isset($_SESSION['objExercise'])) {
     Session::erase('objExercise');
 }
 
@@ -166,7 +167,7 @@ if (!empty($course_list)) {
     }
 }
 
-//If the requested session does not exist in my list we stop the script
+// If the requested session does not exist in my list we stop the script
 if (!api_is_platform_admin()) {
     if (!in_array($session_id, $my_session_list)) {
         api_not_allowed(true);

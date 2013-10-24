@@ -148,8 +148,8 @@ class Exercise
         }
         $this->course_id = $course_info['real_id'];
         $this->course = $course_info;
-        $this->fastEdition = api_get_course_setting('allow_fast_exercise_edition') == 1 ? true : false;
-        $this->emailAlert = api_get_course_setting('email_alert_manager_on_new_quiz') == 1 ? true : false;
+        $this->fastEdition = api_get_course_setting('allow_fast_exercise_edition', $course_info['code']) == 1 ? true : false;
+        $this->emailAlert = api_get_course_setting('email_alert_manager_on_new_quiz', $course_info['code']) == 1 ? true : false;
         $this->hideQuestionTitle = 0;
     }
 

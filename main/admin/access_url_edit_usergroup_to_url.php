@@ -113,7 +113,7 @@ Display::display_header($tool_name);
 
 echo '<div class="actions">';
 echo Display::url(
-    Display::return_icon('view_more_stats.gif', get_lang('AddUserToURL'), ''),
+    Display::return_icon('view_more_stats.gif', get_lang('AddUserGroupToURL'), ''),
     api_get_path(WEB_CODE_PATH).'admin/access_url_add_usergroup_to_url.php'
 );
 echo '</div>';

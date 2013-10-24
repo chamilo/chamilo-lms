@@ -1128,6 +1128,10 @@ function api_is_self_registration_allowed() {
  * @return integer the id of the current user, 0 if is empty
  */
 function api_get_user_id() {
+    if (PHP_SAPI == 'cli') {
+      // Do not try to call session on CLI.
+      return 0;
+    }
     $userInfo = Session::read('_user');
     if ($userInfo && isset($userInfo['user_id'])) {
         return $userInfo['user_id'];

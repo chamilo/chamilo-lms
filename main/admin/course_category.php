@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * 	@package chamilo.admin
- * 	@todo use formvalidator for the form
  */
 /**
  * Code
@@ -123,7 +122,6 @@ if ($action == 'add' || $action == 'edit') {
         echo Display::page_subheader($parentInfo['name']);
     }
     echo listCategories($category);
-
 }
 
 Display::display_footer();

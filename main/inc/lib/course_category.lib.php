@@ -13,6 +13,10 @@ function isMultipleUrlSupport()
     return false;
 }
 
+/**
+ * @param string $category
+ * @return array
+ */
 function getCategory($category)
 {
     global $tbl_category;
@@ -26,17 +30,33 @@ function getCategory($category)
 }
 
 /**
- * @param $category
+ * @param string $category
  * @return array
  */
 function getCategories($category)
 {
     global $tbl_category, $tbl_course;
     $category = Database::escape_string($category);
-    $sql = "SELECT t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count,COUNT(DISTINCT t3.code) AS nbr_courses
-			 	FROM $tbl_category t1 LEFT JOIN $tbl_category t2 ON t1.code=t2.parent_id LEFT JOIN $tbl_course t3 ON t3.category_code=t1.code
-				WHERE t1.parent_id " . (empty($category) ? "IS NULL" : "='$category'") . "
-				GROUP BY t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count ORDER BY t1.tree_pos";
+    $conditions = null;
+    if (isMultipleUrlSupport()) {
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
+        $conditions = " INNER JOIN $table a ON (t1.id = a.course_category_id)";
+    }
+    $sql = "SELECT
+                t1.name,
+                t1.code,
+                t1.parent_id,
+                t1.tree_pos,
+                t1.children_count,
+                COUNT(DISTINCT t3.code) AS nbr_courses
+			 	FROM $tbl_category t1
+			 	$conditions
+			 	LEFT JOIN $tbl_category t2 ON t1.code=t2.parent_id
+			 	LEFT JOIN $tbl_course t3 ON t3.category_code=t1.code
+				WHERE
+				    t1.parent_id " . (empty($category) ? "IS NULL" : "='$category'") . "
+				GROUP BY t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count
+				ORDER BY t1.tree_pos";
     $result = Database::query($sql);
     return Database::store_result($result);
 }
@@ -66,6 +86,13 @@ function deleteNode($node)
     }
 }
 
+/**
+ * @param string $code
+ * @param string $name
+ * @param string $canHaveCourses
+ * @param int $parent_id
+ * @return bool
+ */
 function addNode($code, $name, $canHaveCourses, $parent_id)
 {
     global $tbl_category;
@@ -86,8 +113,14 @@ function addNode($code, $name, $canHaveCourses, $parent_id)
     $sql = "INSERT INTO $tbl_category(name,code,parent_id,tree_pos,children_count,auth_course_child)
             VALUES('$name','$code'," . (empty($parent_id) ? "NULL" : "'$parent_id'") . ",'$tree_pos','0','$canHaveCourses')";
     Database::query($sql);
+    $categoryId = Database::insert_id();
+
     updateFils($parent_id);
-    return true;
+
+    if (isMultipleUrlSupport()) {
+        addToUrl($categoryId);
+    }
+    return $categoryId;
 }
 
 function editNode($code, $name, $canHaveCourses, $old_code)
@@ -190,10 +223,10 @@ function listCategories($categorySource)
         foreach ($categories as $category) {
 
             $editUrl = $mainUrl.'&id='.$category['code'].'&action=edit';
-            $deleteUrl = $mainUrl.'&id='.$category['code'].'&action=delete';
             $moveUrl  = $mainUrl.'&id='.$category['code'].'&action=moveUp&tree_pos='.$category['tree_pos'];
+            $deleteUrl = $mainUrl.'&id='.$category['code'].'&action=delete';
 
-            $actions = Display::url($editIcon, $editUrl).Display::url($deleteIcon, $deleteUrl).Display::url($moveIcon, $moveUrl);
+            $actions = Display::url($editIcon, $editUrl).Display::url($moveIcon, $moveUrl).Display::url($deleteIcon, $deleteUrl);
             $url = api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.$category['code'];
             $title = Display::url(
                 Display::return_icon('folder_document.gif', get_lang('OpenNode'), null, ICON_SIZE_SMALL).' '.$category['name'],
@@ -203,7 +236,6 @@ function listCategories($categorySource)
                 $title,
                 $category['children_count'],
                 $category['nbr_courses'],
-
                 $actions
             );
             $column = 0;
@@ -218,3 +250,25 @@ function listCategories($categorySource)
         return Display::return_message(get_lang("NoCategories"), 'warning');
     }
 }
+
+function getCategoriesToDisplayInHomePage()
+{
+    global $tbl_category;
+    $sql = "SELECT name FROM $tbl_category WHERE parent_id IS NULL ORDER BY tree_pos";
+    return Database::store_result(Database::query($sql));
+}
+
+/**
+ * @param int $id
+ * @return bool
+ */
+function addToUrl($id)
+{
+    if (!isMultipleUrlSupport()) {
+        return false;
+    }
+    UrlManager::addCourseCategoryListToUrl(array($id), array(api_get_current_access_url_id()));
+}
+/**
+ * CREATE TABLE IF NOT EXISTS access_url_rel_course_category (access_url_id int unsigned NOT NULL, course_category_id int unsigned NOT NULL, PRIMARY KEY (access_url_id, course_category_id));
+ */

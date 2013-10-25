@@ -11,16 +11,16 @@
  */
 class UrlManager
 {
-	/**
-	  * Creates a new url access
-	  *
-	  * @author Julio Montoya <gugli100@gmail.com>,
-	  *
-	  * @param	string	The URL of the site
- 	  * @param	string  The description of the site
- 	  * @param	int		is active or not
-	  * @return boolean if success
-	  */
+    /**
+    * Creates a new url access
+    *
+    * @author Julio Montoya <gugli100@gmail.com>,
+    *
+    * @param	string	The URL of the site
+    * @param	string  The description of the site
+    * @param	int		is active or not
+    * @return boolean if success
+    */
 	public static function add($url, $description, $active)
 	{
 		$tms = time();
@@ -407,7 +407,7 @@ class UrlManager
 		if (is_array($course_list) && is_array($url_list)){
 			foreach ($url_list as $url_id) {
 				foreach ($course_list as $course_code) {
-					$count = UrlManager::relation_url_course_exist($course_code,$url_id);
+					$count = self::relation_url_course_exist($course_code,$url_id);
 					if ($count==0) {
 						$sql = "INSERT INTO $table_url_rel_course
 		               			SET course_code = '".Database::escape_string($course_code)."', access_url_id = ".Database::escape_string($url_id);
@@ -436,7 +436,7 @@ class UrlManager
         if (is_array($userGroupList) && is_array($urlList)) {
             foreach ($urlList as $urlId) {
                 foreach ($userGroupList as $userGroupId) {
-                    $count = UrlManager::relation_url_usergroup_exist($userGroupId, $urlId);
+                    $count = self::relation_url_usergroup_exist($userGroupId, $urlId);
                     if ($count == 0) {
                         $result = self::addUserGroupToUrl($userGroupId, $urlId);
                         if ($result) {
@@ -451,6 +451,71 @@ class UrlManager
 
         return 	$resultArray;
     }
+
+    /**
+     * Add a group of user group into a group of URLs
+     * @author Julio Montoya
+     * @param  array of course ids
+     * @param  array of url_ids
+     * @return array
+     **/
+    public static function addCourseCategoryListToUrl($courseCategoryList, $urlList)
+    {
+        $resultArray = array();
+        if (is_array($courseCategoryList) && is_array($urlList)) {
+            foreach ($urlList as $urlId) {
+                foreach ($courseCategoryList as $categoryCourseId) {
+                    $count = self::relationUrlCourseCategoryExist($categoryCourseId, $urlId);
+                    if ($count == 0) {
+                        $result = self::addCourseCategoryToUrl($categoryCourseId, $urlId);
+                        if ($result) {
+                            $resultArray[$urlId][$categoryCourseId] = 1;
+                        } else {
+                            $resultArray[$urlId][$categoryCourseId] = 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        return 	$resultArray;
+    }
+
+    /**
+     * Checks the relationship between an URL and a UserGr
+     * oup (return the num_rows)
+     * @author Julio Montoya
+     * @param int $categoryCourseId
+     * @param int $urlId
+     * @return boolean true if success
+     * */
+    public static function relationUrlCourseCategoryExist($categoryCourseId, $urlId)
+    {
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
+        $sql= "SELECT course_category_id FROM $table
+		       WHERE access_url_id = ".Database::escape_string($urlId)." AND
+		             course_category_id = ".Database::escape_string($categoryCourseId);
+        $result = Database::query($sql);
+        $num = Database::num_rows($result);
+        return $num;
+    }
+
+    /**
+     * @param int $categoryCourseId
+     * @param int $urlId
+     * @return int
+     */
+    public static function addCourseCategoryToUrl($categoryCourseId, $urlId)
+    {
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
+        $sql = "INSERT INTO $table
+                SET
+                course_category_id = '".intval($categoryCourseId)."',
+                access_url_id = ".intval($urlId);
+        Database::query($sql);
+        return Database::insert_id();
+    }
+
 
     /**
      * @param int $userGroupId
@@ -778,7 +843,7 @@ class UrlManager
 
 		// Deleting old users
 		foreach($existing_sessions as $existing_session) {
-			if(!in_array($existing_session, $session_list)) {
+			if (!in_array($existing_session, $session_list)) {
 				if (!empty($existing_session) && !empty($access_url_id)) {
 					UrlManager::delete_url_rel_session($existing_session,$access_url_id);
 				}

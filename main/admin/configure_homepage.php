@@ -19,11 +19,11 @@ api_protect_admin_script();
 
 require_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
 
 global $_configuration;
 
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
-$tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
 $tool_name = get_lang('ConfigureHomePage');
 $_languages = api_get_languages();
 
@@ -198,7 +198,7 @@ if (!empty($action)) {
                       $fp = fopen($homep.$topf.'_'.$lang_name.$ext, 'w');
                       fputs($fp, $home_top);
                       fclose($fp);
-    
+
                   }
               }
           }
@@ -234,7 +234,7 @@ if (!empty($action)) {
                       }
                   }
                }
-                            
+
 						} else {
 							fputs($fp, '');
               if ($_POST['all_langs']) {
@@ -460,9 +460,9 @@ if (!empty($action)) {
                         $fp = fopen($homep.$menuf.'_'.$lang_name.$ext, 'w');
                         fputs($fp, $home_menu);
                         fclose($fp);
-    
+
                     }
-                }  
+                }
              }
           }
 				}
@@ -687,7 +687,7 @@ if (!empty($action)) {
 	}// end of "else" in if($_POST['formSent']) condition
 } else {
 	//if $action is empty, then prepare a list of the course categories to display (?)
-	$Categories = Database::store_result(Database::query("SELECT name FROM $tbl_category WHERE parent_id IS NULL ORDER BY tree_pos"));
+	$Categories = getCategoriesToDisplayInHomePage();
 }
 
 // Display section
@@ -896,7 +896,7 @@ switch ($action) {
 			</tr>
 			<tr>
 			<?php
-            
+
 			$access_url_id = 1;
 			// we only show the category options for the main chamilo installation
 			if (api_is_multiple_url_enabled()) {

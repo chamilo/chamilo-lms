@@ -66,6 +66,7 @@ $tbl_course_user       = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_course            = Database :: get_main_table(TABLE_MAIN_COURSE);
 
 // Get all course categories
+
 $sql = "SELECT code,name FROM ".$table_course_category."
         WHERE auth_course_child ='TRUE'  OR code = '".Database::escape_string($_course['categoryCode'])."'
         ORDER BY tree_pos";

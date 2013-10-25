@@ -28,8 +28,8 @@ function plusItem(item) {
     document.getElementById("min-"+(item-1)).style.display = "none";
     document.getElementById("min-"+(item)).style.display = "inline";
     document.getElementById("plus-"+(item+1)).style.display = "inline";
-    document.getElementById("txta-"+(item)).value = "100";
-    document.getElementById("txta-"+(item-1)).value = "";
+    //document.getElementById("txta-"+(item)).value = "100";
+    //document.getElementById("txta-"+(item-1)).value = "";
 }
 
 function minItem(item) {
@@ -70,8 +70,8 @@ if ($scoreform->validate()) {
     $displaytext=isset($values['displaytext']) ? $values['displaytext'] : null;
     for ($counter= 1; $ranges_ok && $counter <= 20; $counter++) {
         $setting= array ();
-        $setting['score']= $endscore[$counter];
-        $setting['display']= $displaytext[$counter];
+        $setting['score'] = $endscore[$counter];
+        $setting['display'] = $displaytext[$counter];
         if (!empty($setting['score'])) {
             foreach ($scoringdisplay as $passed_entry) {
                 if ($passed_entry['score'] == $setting['score']) {

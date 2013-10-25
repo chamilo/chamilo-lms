@@ -70,7 +70,7 @@ class SendCommand extends Command
         $transactions = $tc->load($this->getSelectConditions($input));
         if (empty($transactions)) {
             $output->writeln('No transactions to be exported');
-            return;
+            return 1;
         }
 
         // Export.
@@ -79,7 +79,7 @@ class SendCommand extends Command
             $fail_data = print_r($export_result['fail'], 1);
             $output->writeln('Failed exporting some transactions:');
             $output->writeln("$fail_data");
-            return;
+            return 2;
         }
 
         // Create an evelope and wrap it.
@@ -91,14 +91,14 @@ class SendCommand extends Command
         }
         catch (Exception $e) {
             $output->writeln(sprintf('Failed wrapping the envelope: %s.', $e->getMessage()));
-            return;
+            return 3;
         }
 
         // Finally send it.
         $success = $tc->sendEnvelope($envelope);
         if ($success !== TRUE) {
             $output->writeln('There was a problem while sending the envelope.');
-            return;
+            return 4;
         }
         $output->writeln('Envelope sent!');
     }

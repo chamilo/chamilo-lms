@@ -101,7 +101,7 @@ foreach ($session_list as $session) {
     $sessionList[$session['id']] = $session['name'];
 }
 
-$courseList = CourseManager::get_courses_list();
+$courseList = CourseManager::get_courses_list(0, 0, 'title');
 $courseOptions = array();
 foreach ($courseList as $course) {
     $courseOptions[$course['id']] = $course['title'];

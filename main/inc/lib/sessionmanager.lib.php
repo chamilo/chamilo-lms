@@ -1347,7 +1347,7 @@ class SessionManager
 
 	/**
      * Get a list of sessions of which the given conditions match with an = 'cond'
-	 * @param  array $conditions a list of condition (exemple : array('status =' =>STUDENT) or array('s.name LIKE' => "%$needle%")
+	 * @param  array $conditions a list of condition (example : array('status =' =>STUDENT) or array('s.name LIKE' => "%$needle%")
 	 * @param  array $order_by a list of fields on which sort
 	 * @return array An array with all sessions of the platform.
 	 * @todo   optional course code parameter, optional sorting parameters...
@@ -2379,6 +2379,29 @@ class SessionManager
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_row($result)) {
                 $coaches[] = $row[0];
+            }
+        }
+        return $coaches;
+    }
+
+    /**
+     * Get all coaches added in the session - course relationship
+     * @param int $sessionId
+     * @return array
+     */
+    public static function getCoachesBySession($sessionId)
+    {
+        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $sessionId = intval($sessionId);
+
+        $sql = "SELECT DISTINCT id_user FROM $tbl_session_rel_course_rel_user
+                WHERE id_session = '$sessionId' AND status = 2";
+        $result = Database::query($sql);
+
+        $coaches = array();
+        if (Database::num_rows($result) > 0) {
+            while ($row = Database::fetch_array($result)) {
+                $coaches[] = $row['id_user'];
             }
         }
         return $coaches;

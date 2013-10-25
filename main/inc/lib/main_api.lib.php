@@ -2909,7 +2909,7 @@ function api_not_allowed($print_headers = false, $message = null) {
     $origin = isset($_GET['origin']) ? $_GET['origin'] : '';
 
     $msg = null;
-    
+
     if (isset($message)) {
         $msg = $message;
     } else {
@@ -2977,7 +2977,7 @@ function api_not_allowed($print_headers = false, $message = null) {
     // Check if the cookies are enabled. If are enabled and if no course ID was included in the requested URL, then the user has either lost his session or is anonymous, so redirect to homepage
 	if( !isset($_COOKIE['TestCookie']) && empty($_COOKIE['TestCookie']) ) {
 		$msg = Display::return_message(get_lang('NoCookies').'<br /><br /><a href="'.$home_url.'">'.get_lang('BackTo').' '.get_lang('CampusHomepage').'</a><br />', 'error', false);
-	} elseif ($message == null){ 
+	} elseif ($message == null){
 		$msg = Display::return_message(get_lang('NotAllowed').'<br /><br /><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br />', 'error', false);
 	} else {
 	    $msg = Display::return_message($message.'&nbsp;<a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br />', 'error', false);
@@ -6704,7 +6704,11 @@ function api_can_login_as($loginAsUserId, $userId = null)
         if (api_is_drh()) {
             if (api_drh_can_access_all_session_content()) {
                 $users = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh_all', api_get_user_id());
-                if (in_array($loginAsUserId, $users)) {
+                $userList = array();
+                foreach ($users as $user) {
+                    $userList[] = $user['user_id'];
+                }
+                if (in_array($loginAsUserId, $userList)) {
                     return true;
                 }
             } else {

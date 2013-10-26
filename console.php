@@ -77,6 +77,7 @@ $cli->addCommands(
 
         new ChamiloLMS\Command\Template\AsseticDumpCommand(),
         new ChamiloLMS\Command\Transaction\ImportToSystemCommand(),
+        new ChamiloLMS\Command\Transaction\ReceiveCommand(),
         new ChamiloLMS\Command\Transaction\SendCommand(),
         new ChamiloLMS\Command\Transaction\MineduSendCommand(),
         new ChamiloLMS\Command\Translation\ExportLanguagesCommand(),

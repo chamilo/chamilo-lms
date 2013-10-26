@@ -19,7 +19,7 @@ class MineduSendCommand extends Command
     {
         $this
             ->setName('minedu:send')
-            ->setDescription('Send mineduSelects a subset of transactions, wraps and send them using local branch configuration.')
+            ->setDescription('Sends data using tx:send, using custom minedu logic to convert turn numbers into a course/session pair.')
             ->addArgument('turn', InputArgument::REQUIRED, 'The turn to be used.');
     }
 

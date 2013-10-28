@@ -83,6 +83,8 @@ function addNode($code, $name, $canHaveCourses, $parent_id)
     $parent_id = Database::escape_string($parent_id);
     $canHaveCourses = Database::escape_string($canHaveCourses);
 
+    $code = generate_course_code($code);
+
     $result = Database::query("SELECT 1 FROM $tbl_category WHERE code='$code'");
     if (Database::num_rows($result)) {
         return false;
@@ -91,9 +93,9 @@ function addNode($code, $name, $canHaveCourses, $parent_id)
     $result = Database::query("SELECT MAX(tree_pos) AS maxTreePos FROM $tbl_category");
     $row = Database::fetch_array($result);
     $tree_pos = $row['maxTreePos'] + 1;
-    $code = generate_course_code($code);
+
     $sql = "INSERT INTO $tbl_category(name,code,parent_id,tree_pos,children_count,auth_course_child)
-            VALUES('$name','$code'," . (empty($parent_id) ? "NULL" : "'$parent_id'") . ",'$tree_pos','0','$canHaveCourses')";
+            VALUES('$name','$code'," .(empty($parent_id) ? "NULL" : "'$parent_id'") . ",'$tree_pos','0','$canHaveCourses')";
     Database::query($sql);
     $categoryId = Database::insert_id();
 

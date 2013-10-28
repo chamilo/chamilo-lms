@@ -32,8 +32,8 @@ class UserGroup extends Model
 
         $this->table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         global $_configuration;
-        if (isset($_configuration['enable_multiple_support_for_classes'])) {
-            $this->useMultipleUrl = $_configuration['enable_multiple_support_for_classes'];
+        if (isset($_configuration['enable_multiple_url_support_for_classes'])) {
+            $this->useMultipleUrl = $_configuration['enable_multiple_url_support_for_classes'];
         }
     }
 

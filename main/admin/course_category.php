@@ -25,9 +25,6 @@ if (!empty($categoryId)) {
 }
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
-$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
-
 $errorMsg = '';
 if (!empty($action)) {
     if ($action == 'delete') {
@@ -100,7 +97,7 @@ if ($action == 'add' || $action == 'edit') {
         $form->addElement('button', 'submit', $text);
         $form->display();
     } elseif (api_get_multiple_access_url() && api_get_current_access_url_id() != 1) {
-       Display::display_warning_message(get_lang('CourseCategoriesAreGlobal'));
+        Display::display_warning_message(get_lang('CourseCategoriesAreGlobal'));
     }
 } else {
     echo '<div class="actions">';
@@ -112,10 +109,13 @@ if ($action == 'add' || $action == 'edit') {
             api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.$parentCode
         );
     }
-    echo Display::url(
-        Display::return_icon('new_folder.png', get_lang("AddACategory"), '', ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH).'admin/course_category.php?action=add&category='.$category
-    );
+
+    if (empty($parentInfo) || $parentInfo['auth_cat_child'] == 'FALSE') {
+        echo Display::url(
+            Display::return_icon('new_folder.png', get_lang("AddACategory"), '', ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'admin/course_category.php?action=add&category='.$category
+        );
+    }
 
     echo '</div>';
     if (!empty($parentInfo)) {

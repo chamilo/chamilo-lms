@@ -407,23 +407,37 @@ class IndexManager {
 			}
 		}
 		$sqlGetSubCatList = "
-	                SELECT t1.name,t1.code,t1.parent_id,t1.children_count,COUNT(DISTINCT t3.code) AS nbCourse
+	                SELECT  t1.name,
+	                        t1.code,
+	                        t1.parent_id,
+	                        t1.children_count,COUNT(DISTINCT t3.code) AS nbCourse
 	                FROM $main_category_table t1
 	                LEFT JOIN $main_category_table t2 ON t1.code=t2.parent_id
 	                LEFT JOIN $main_course_table t3 ON (t3.category_code = t1.code $platform_visible_courses)
 	                WHERE t1.parent_id ". (empty ($category) ? "IS NULL" : "='$category'")."
 	                GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count ORDER BY t1.tree_pos, t1.name";
 
-
 		// Showing only the category of courses of the current access_url_id
 		if (api_is_multiple_url_enabled()) {
+            require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
+            $courseCategoryCondition = null;
+            if (isMultipleUrlSupport()) {
+                $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
+                $courseCategoryCondition = " INNER JOIN $table a ON (t1.id = a.course_category_id)";
+            }
+
 			$url_access_id = api_get_current_access_url_id();
 			if ($url_access_id != -1) {
 				$tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 				$sqlGetSubCatList = "
-	                SELECT t1.name,t1.code,t1.parent_id,t1.children_count,COUNT(DISTINCT t3.code) AS nbCourse
+	                SELECT t1.name,
+	                        t1.code,
+	                        t1.parent_id,
+	                        t1.children_count,
+	                        COUNT(DISTINCT t3.code) AS nbCourse
 	                FROM $main_category_table t1
-	                LEFT JOIN $main_category_table t2 ON t1.code=t2.parent_id
+	                $courseCategoryCondition
+	                LEFT JOIN $main_category_table t2 ON t1.code = t2.parent_id
 	                LEFT JOIN $main_course_table t3 ON (t3.category_code=t1.code $platform_visible_courses)
 	                INNER JOIN $tbl_url_rel_course as url_rel_course
 	                    ON (url_rel_course.course_code=t3.code)

@@ -28,6 +28,7 @@ $nameTools = get_lang('ModifInfo');
 require_once api_get_path(INCLUDE_PATH).'conf/course_info.conf.php';
 require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
+require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
 
 api_protect_course_script(true);
 api_block_anonymous_users();
@@ -59,18 +60,10 @@ if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
         $show_delete_watermark_text_message = true;
     }
 }
-$table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 $tbl_user              = Database :: get_main_table(TABLE_MAIN_USER);
 $tbl_admin             = Database :: get_main_table(TABLE_MAIN_ADMIN);
 $tbl_course_user       = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_course            = Database :: get_main_table(TABLE_MAIN_COURSE);
-
-// Get all course categories
-
-$sql = "SELECT code,name FROM ".$table_course_category."
-        WHERE auth_course_child ='TRUE'  OR code = '".Database::escape_string($_course['categoryCode'])."'
-        ORDER BY tree_pos";
-$res = Database::query($sql);
 
 $s_select_course_tutor_name = "SELECT tutor_name FROM $tbl_course WHERE code='$course_code'";
 $q_tutor = Database::query($s_select_course_tutor_name);
@@ -105,11 +98,7 @@ while ($a_titulars = Database::fetch_array($q_result_titulars)) {
     $a_profs[api_get_person_name($s_firstname, $s_lastname)] = api_get_person_name($s_lastname, $s_firstname).' ('.$s_username.')';
 }
 
-$categories[''] = '-';
-while ($cat = Database::fetch_array($res)) {
-    $categories[$cat['code']] = '('.$cat['code'].') '.$cat['name'];
-    ksort($categories);
-}
+$categories = getCategoriesCanBeAddedInCourse($_course['categoryCode']);
 
 $linebreak = '<div class="row"><div class="label"></div><div class="formw" style="border-bottom:1px dashed grey"></div></div>';
 

@@ -95,8 +95,6 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
 $promotion_data = $promotion->get($id);
 $session_list   = SessionManager::get_sessions_list(array(), array('name'));
-
-//api_display_tool_title($tool_name.' ('.$session_info['name'].')');
 $session_not_in_promotion = $session_in_promotion= array();
 
 if (!empty($session_list)) {
@@ -117,7 +115,7 @@ $ajax_search = $add_type == 'unique' ? true : false;
 
 // Checking for extra field with filter on
 
-function search_sessions($needle,$type)
+function search_sessions($needle, $type)
 {
     global $session_in_promotion;
     $xajax_response = new XajaxResponse();

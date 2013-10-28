@@ -4011,8 +4011,7 @@ class CourseManager {
         $deleteTeachersNotInList = true,
         $editTeacherInSessions = false,
         $deleteSessionTeacherNotInList = false
-    )
-    {
+    ) {
         if (empty($teachers)) {
             return false;
         }

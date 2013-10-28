@@ -43,7 +43,7 @@ CREATE TABLE track_attempt_jury(
     jury_user_id INT,
     question_score_name_id INT,
     PRIMARY KEY (id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+);
 
 
 ALTER TABLE track_e_exercices ADD COLUMN jury_score float(6,2);
@@ -55,13 +55,13 @@ RENAME TABLE branch_sync_log TO branch_transaction_log;
 UPDATE settings_current SET selected_value = 'minedu' WHERE variable = 'template';
 UPDATE settings_current SET selected_value = 'digedd' WHERE variable = 'stylesheets';
 
-DROP TABLE c_quiz_distribution;
+-- the list of questions id that the student will have to go through for this form, split by ","
+-- (as in track_e_exercices - this will avoid 60 more queries to the next table once the exam is taking place)
+
 CREATE TABLE c_quiz_distribution (
   id int unsigned not null primary key AUTO_INCREMENT,
   exercise_id int unsigned not null,
   title varchar(255) not null,
-  -- the list of questions id that the student will have to go through for this form, split by ","
-  -- (as in track_e_exercices - this will avoid 60 more queries to the next table once the exam is taking place)
   data_tracking text not null default '',
   active tinyint not null default 1,
   author_user_id int unsigned not null,
@@ -117,3 +117,10 @@ ALTER TABLE branch_transaction
 -- Adds new setting for the local branch id.
 INSERT INTO settings_current (variable, type, category, selected_value, title, comment, access_url_changeable) VALUES
 ('local_branch_id', 'textfield', 'LogTransactions', 1, 'LogTransactionsDefaultBranch', 'LogTransactionsDefaultBranchComment', 1);
+
+CREATE TABLE branch_rel_session (
+  id int unsigned not null PRIMARY KEY auto_increment,
+  branch_id int unsigned not null,
+  session_id int unsigned not null,
+  display_order tinyint unsigned not null
+);

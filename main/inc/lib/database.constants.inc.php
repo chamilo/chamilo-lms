@@ -347,6 +347,7 @@ define('TABLE_GRADE_MODEL',                  'grade_model');
 define('TABLE_GRADE_MODEL_COMPONENTS',       'grade_components');
 
 // Transaction related tables
+define('TABLE_BRANCH_REL_SESSION',           'branch_rel_session');
 define('TABLE_BRANCH_SYNC',                  'branch_sync');
 define('TABLE_BRANCH_TRANSACTION',           'branch_transaction');
 define('TABLE_BRANCH_TRANSACTION_STATUS',    'branch_transaction_status');

@@ -392,7 +392,6 @@ class IndexManager {
 			$course_list[] = $course_result;
 		}
 
-		$platform_visible_courses = '';
 		// $setting_show_also_closed_courses
 		if ($user_identified) {
 			if ($setting_show_also_closed_courses) {
@@ -411,13 +410,13 @@ class IndexManager {
 	                SELECT t1.name,t1.code,t1.parent_id,t1.children_count,COUNT(DISTINCT t3.code) AS nbCourse
 	                FROM $main_category_table t1
 	                LEFT JOIN $main_category_table t2 ON t1.code=t2.parent_id
-	                LEFT JOIN $main_course_table t3 ON (t3.category_code=t1.code $platform_visible_courses)
+	                LEFT JOIN $main_course_table t3 ON (t3.category_code = t1.code $platform_visible_courses)
 	                WHERE t1.parent_id ". (empty ($category) ? "IS NULL" : "='$category'")."
 	                GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count ORDER BY t1.tree_pos, t1.name";
 
 
 		// Showing only the category of courses of the current access_url_id
-		if ($_configuration['multiple_access_urls']) {
+		if (api_is_multiple_url_enabled()) {
 			$url_access_id = api_get_current_access_url_id();
 			if ($url_access_id != -1) {
 				$tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -439,62 +438,57 @@ class IndexManager {
 		    $htmlListCat = Display::page_header(get_lang('CatList'));
             $htmlListCat .= '<ul>';
             $htmlTitre = '';
-			  while ($catLine = Database::fetch_array($resCats)) {
-				    $category_has_open_courses = self::category_has_open_courses($catLine['code']);
-				    if ($category_has_open_courses) {
-						    // The category contains courses accessible to anonymous visitors.
-						    $htmlListCat .= '<li>';
-						    $htmlListCat .= '<a href="'.api_get_self().'?category='.$catLine['code'].'">'.$catLine['name'].'</a>';
-						    if (api_get_setting('show_number_of_courses') == 'true') {
-						        $htmlListCat .= ' ('.$catLine['nbCourse'].' '.get_lang('Courses').')';
-					      }
-				        $htmlListCat .= "</li>";
-					      $thereIsSubCat = true;
-				    } elseif ($catLine['children_count'] > 0) {
-					      // The category has children, subcategories.
-					      $htmlListCat .= '<li>';
-					      $htmlListCat .= '<a href="'.api_get_self().'?category='.$catLine['code'].'">'.$catLine['name'].'</a>';
-				        $htmlListCat .= "</li>";
-					      $thereIsSubCat = true;
-				    }
-				    /* End changed code to eliminate the (0 courses) after empty categories. */
-				    elseif (api_get_setting('show_empty_course_categories') == 'true') {
-      	        $htmlListCat .= '<li>';
-                $htmlListCat .= $catLine['name'];
+            while ($catLine = Database::fetch_array($resCats)) {
+                $category_has_open_courses = self::category_has_open_courses($catLine['code']);
+                if ($category_has_open_courses) {
+                    // The category contains courses accessible to anonymous visitors.
+                    $htmlListCat .= '<li>';
+                    $htmlListCat .= '<a href="'.api_get_self().'?category='.$catLine['code'].'">'.$catLine['name'].'</a>';
+                    if (api_get_setting('show_number_of_courses') == 'true') {
+                        $htmlListCat .= ' ('.$catLine['nbCourse'].' '.get_lang('Courses').')';
+                    }
+				    $htmlListCat .= "</li>";
+					$thereIsSubCat = true;
+                } elseif ($catLine['children_count'] > 0) {
+				    // The category has children, subcategories.
+					$htmlListCat .= '<li>';
+					$htmlListCat .= '<a href="'.api_get_self().'?category='.$catLine['code'].'">'.$catLine['name'].'</a>';
+				    $htmlListCat .= "</li>";
+					$thereIsSubCat = true;
+                } elseif (api_get_setting('show_empty_course_categories') == 'true') {
+                    /* End changed code to eliminate the (0 courses) after empty categories. */
+      	            $htmlListCat .= '<li>';
+                    $htmlListCat .= $catLine['name'];
 		            $htmlListCat .= "</li>";
-                $thereIsSubCat = true;
-            } // Else don't set thereIsSubCat to true to avoid printing things if not requested.
-            // TODO: deprecate this useless feature - this includes removing system variable
-            if (empty($htmlTitre)) {
-					      $htmlTitre = '<p>';
-					      if (api_get_setting('show_back_link_on_top_of_tree') == 'true') {
-				            $htmlTitre .= '<a href="'.api_get_self().'">&lt;&lt; '.get_lang('BackToHomePage').'</a>';
-				        }
-					      $htmlTitre .= "</p>";
+                    $thereIsSubCat = true;
+                } // Else don't set thereIsSubCat to true to avoid printing things if not requested.
+                // TODO: deprecate this useless feature - this includes removing system variable
+                if (empty($htmlTitre)) {
+                    $htmlTitre = '<p>';
+                    if (api_get_setting('show_back_link_on_top_of_tree') == 'true') {
+                        $htmlTitre .= '<a href="'.api_get_self().'">&lt;&lt; '.get_lang('BackToHomePage').'</a>';
+                    }
+                    $htmlTitre .= "</p>";
+                }
             }
-      }
 			$htmlListCat .= "</ul>";
 		}
 		$result .= $htmlTitre;
 		if ($thereIsSubCat) {
-        $result .=  $htmlListCat;
+            $result .=  $htmlListCat;
 		}
 		while ($categoryName = Database::fetch_array($resCats)) {
-        $result .= '<h3>' . $categoryName['name'] . "</h3>\n";
+            $result .= '<h3>' . $categoryName['name'] . "</h3>\n";
 		}
 		$numrows = Database::num_rows($sql_result_courses);
 		$courses_list_string = '';
 		$courses_shown = 0;
 		if ($numrows > 0) {
-
 			$courses_list_string .= Display::page_header(get_lang('CourseList'));
             $courses_list_string .= "<ul>";
-
 			if (api_get_user_id()) {
 				$courses_of_user = self::get_courses_of_user(api_get_user_id());
 			}
-
-
 			foreach ($course_list as $course) {
 				// $setting_show_also_closed_courses
                 if ($course['visibility'] == COURSE_VISIBILITY_HIDDEN) { continue; }

@@ -36,10 +36,13 @@ function getCategories($category)
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $category = Database::escape_string($category);
     $conditions = null;
+    $whereCondition = null;
     if (isMultipleUrlSupport()) {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
         $conditions = " INNER JOIN $table a ON (t1.id = a.course_category_id)";
+        $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
     }
+
     $sql = "SELECT
                 t1.name,
                 t1.code,
@@ -53,7 +56,12 @@ function getCategories($category)
 			 	LEFT JOIN $tbl_course t3 ON t3.category_code=t1.code
 				WHERE
 				    t1.parent_id " . (empty($category) ? "IS NULL" : "='$category'") . "
-				GROUP BY t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count
+				    $whereCondition
+				GROUP BY t1.name,
+                         t1.code,
+                         t1.parent_id,
+                         t1.tree_pos,
+                         t1.children_count
 				ORDER BY t1.tree_pos";
     $result = Database::query($sql);
     return Database::store_result($result);
@@ -315,16 +323,19 @@ function addToUrl($id)
 function getCategoriesCanBeAddedInCourse($categoryCode)
 {
     $conditions = null;
+    $whereCondition = null;
     if (isMultipleUrlSupport()) {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
         $conditions = " INNER JOIN $table a ON (c.id = a.course_category_id)";
+        $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
     }
 
     $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
     $sql = "SELECT code, name
             FROM $tbl_category c
             $conditions
-            WHERE auth_course_child = 'TRUE' OR code = '".Database::escape_string($categoryCode)."'
+            WHERE (auth_course_child = 'TRUE' OR code = '".Database::escape_string($categoryCode)."')
+                   $whereCondition
             ORDER BY tree_pos";
     $res = Database::query($sql);
 
@@ -343,13 +354,16 @@ function browseCourseCategories()
 {
     $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
     $conditions = null;
+    $whereCondition = null;
     if (isMultipleUrlSupport()) {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
         $conditions = " INNER JOIN $table a ON (c.id = a.course_category_id)";
+        $whereCondition = " WHERE a.access_url_id = ".api_get_current_access_url_id();
     }
 
     $sql = "SELECT c.* FROM $tbl_category c
             $conditions
+            $whereCondition
             ORDER BY tree_pos ASC";
     $result = Database::query($sql);
     $categories = array();
@@ -540,15 +554,18 @@ function setCategoriesInForm($form, $defaultCode = null, $parentCode = null , $p
 {
     $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
     $conditions = null;
+    $whereCondition = null;
     if (isMultipleUrlSupport()) {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
         $conditions = " INNER JOIN $table a ON (c.id = a.course_category_id)";
+        $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
     }
 
     $sql = "SELECT code, name, auth_course_child, auth_cat_child
             FROM ".$tbl_category." c
             $conditions
             WHERE parent_id ".(empty($parentCode) ? "IS NULL" : "='".Database::escape_string($parentCode)."'")."
+            $whereCondition
             ORDER BY name,  code";
     $res = Database::query($sql);
 

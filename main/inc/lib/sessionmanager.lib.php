@@ -2784,20 +2784,24 @@ class SessionManager
 
     static function get_coaches_by_keyword($tag) {
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+        $roleRelUser = Database::get_main_table(TABLE_ROLE_USER);
+        $role = Database::get_main_table(TABLE_ROLE);
 
         $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 
-        $select ="SELECT user.user_id, lastname, firstname, username ";
-        $sql = " $select FROM $tbl_user user WHERE status='1'";
+        $select = "SELECT user.user_id, lastname, firstname, username ";
+        $sql = " $select FROM $tbl_user user INNER JOIN $roleRelUser ru on (user.user_id = ru.user_id) INNER JOIN $role r on (r.id = ru.role_id)
+                 WHERE r.role in ('ROLE_ADMIN', 'ROLE_TEACHER') ";
 
         $tag = Database::escape_string($tag);
 
         $where_condition = array();
         if (!empty($tag)) {
             $condition = ' LIKE "%'.$tag.'%"';
-            $where_condition = array( "firstname $condition",
-                                      "lastname $condition",
-                                      "username $condition"
+            $where_condition = array(
+                "firstname $condition",
+                "lastname $condition",
+                "username $condition"
             );
             $where_condition = ' AND  ('.implode(' OR ',  $where_condition).') ';
         }

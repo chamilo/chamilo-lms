@@ -218,9 +218,9 @@ define('TABLE_PERMISSION_USER', 'permission_user');
 define('TABLE_PERMISSION_TASK', 'permission_task');
 define('TABLE_PERMISSION_GROUP', 'permission_group');
 // Role tables
-define('TABLE_ROLE', 'role');
+define('TABLE_ROLE', 'roles');
 define('TABLE_ROLE_PERMISSION', 'role_permissions');
-define('TABLE_ROLE_USER', 'role_user');
+define('TABLE_ROLE_USER', 'users_roles');
 define('TABLE_ROLE_GROUP', 'role_group');
 // Blog tables
 define('TABLE_BLOGS', 'blog');

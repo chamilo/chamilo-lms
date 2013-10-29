@@ -665,19 +665,27 @@ class Testcategory
      * A question has "n" categories
      * @param int exercise
      * @param array check question list
-     * @param string order by
+     * @param array
+     * @param int
      * @return array
 	 */
     static function getQuestionsByCat(
         $exerciseId,
         $check_in_question_list = array(),
-        $categoriesAddedInExercise = array()
+        $categoriesAddedInExercise = array(),
+        $courseId = null
     ) {
         $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         $categoryTable = Database::get_course_table(TABLE_QUIZ_CATEGORY);
         $exerciseId = intval($exerciseId);
+
+        if (empty($courseId)) {
+            $courseId = api_get_course_int_id();
+        } else {
+            $courseId = intval($courseId);
+        }
 
         $sql = "SELECT DISTINCT qrc.question_id, qrc.category_id
                 FROM $TBL_QUESTION_REL_CATEGORY qrc INNER JOIN $TBL_EXERCICE_QUESTION eq
@@ -687,7 +695,7 @@ class Testcategory
                 INNER JOIN $tableQuestion q
                 ON (q.iid = qrc.question_id )
                 WHERE   exercice_id = $exerciseId AND
-                        qrc.c_id = ".api_get_course_int_id()."
+                        qrc.c_id = ".$courseId."
                 ";
 
 		$res = Database::query($sql);
@@ -959,14 +967,16 @@ class Testcategory
      * @param bool $categoryMinusOne shows category - 1 see BT#6540
      * @return string
      */
-    public static function get_stats_table_by_attempt($exercise_id, $category_list = array(), $categoryMinusOne = false)
-    {
-        global $app;
+    public static function get_stats_table_by_attempt(
+        $exercise_id,
+        $courseId,
+        $category_list = array(),
+        $categoryMinusOne = false,
+        $returnArray = false
+    ) {
         if (empty($category_list)) {
             return null;
         }
-
-        $category_name_list = Testcategory::getListOfCategoriesNameForTest($exercise_id, false);
 
         $table = new HTML_Table(array('class' => 'data_table'));
         $table->setHeaderContents(0, 0, get_lang('Categories'));
@@ -975,6 +985,7 @@ class Testcategory
         $row = 1;
 
         $none_category = array();
+
         if (isset($category_list['none'])) {
             $none_category = $category_list['none'];
             unset($category_list['none']);
@@ -985,40 +996,15 @@ class Testcategory
             $total = $category_list['total'];
             unset($category_list['total']);
         }
-        $em = $app['orm.em'];
-        $repo = $em->getRepository('Entity\CQuizCategory');
-
-        $redefineCategoryList = array();
-
+        $content = array();
         if (!empty($category_list) && count($category_list) > 1) {
-            $globalCategoryScore = array();
 
-            foreach ($category_list as $category_id => $category_item) {
-                $cat = $em->find('Entity\CQuizCategory', $category_id);
-                $path = $repo->getPath($cat);
+            $globalCategoryScore = self::globalizeCategories($exercise_id, $courseId, $category_list, $categoryMinusOne);
 
-                $categoryName = $category_name_list[$category_id];
+            foreach ($globalCategoryScore as $category_id => $category_item) {
+                $category_item['category_id'] = $category_id;
+                $content[$row] = $category_item;
 
-                $index = 0;
-                if ($categoryMinusOne) {
-                    $index = 1;
-                }
-                if (isset($path[$index])) {
-                    $category_id = $path[$index]->getIid();
-                    $categoryName = $path[$index]->getTitle();
-                }
-                if (!isset($globalCategoryScore[$category_id])) {
-                    $globalCategoryScore[$category_id] = array();
-                    $globalCategoryScore[$category_id]['score'] = 0;
-                    $globalCategoryScore[$category_id]['total'] = 0;
-                    $globalCategoryScore[$category_id]['title'] = '';
-                }
-                $globalCategoryScore[$category_id]['score'] += $category_item['score'];
-                $globalCategoryScore[$category_id]['total'] += $category_item['total'];
-                $globalCategoryScore[$category_id]['title'] = $categoryName;
-            }
-
-            foreach ($globalCategoryScore as $category_item) {
                 $table->setCellContents($row, 0, $category_item['title']);
                 $table->setCellContents($row, 1, ExerciseLib::show_score($category_item['score'], $category_item['total'], false));
                 $table->setCellContents($row, 2, ExerciseLib::show_score($category_item['score'], $category_item['total'], true, false, true));
@@ -1029,10 +1015,10 @@ class Testcategory
                 }
                 $table->setRowAttributes($row, $class, true);
                 $row++;
-
             }
 
             if (!empty($none_category)) {
+                $content[$row] = $none_category;
                 $table->setCellContents($row, 0, get_lang('None'));
                 $table->setCellContents($row, 1, ExerciseLib::show_score($none_category['score'], $none_category['total'], false));
                 $table->setCellContents($row, 2, ExerciseLib::show_score($none_category['score'], $none_category['total'], true, false, true));
@@ -1040,16 +1026,85 @@ class Testcategory
             }
 
             if (!empty($total)) {
+                $total['title'] = 'Total';
+                $content[$row] = $total;
+
                 $table->setCellContents($row, 0, get_lang('Total'));
                 $table->setCellContents($row, 1, ExerciseLib::show_score($total['score'], $total['total'], false));
                 $table->setCellContents($row, 2, ExerciseLib::show_score($total['score'], $total['total'], true, false, true));
                 $table->setRowAttributes($row, 'class="row_total"', true);
             }
 
+            if ($returnArray) {
+                return $content;
+            }
             return $table->toHtml();
         }
 
         return null;
+    }
+
+    /**
+     * @param int $exercise_id
+     * @param int course id
+     * @param array $category_list
+     * @param $categoryMinusOne
+     * @return array
+     */
+    public static function globalizeCategories($exercise_id, $courseId, $category_list, $categoryMinusOne, $loadChildren = false)
+    {
+        global $app;
+
+        $category_name_list = Testcategory::getListOfCategoriesNameForTest($exercise_id, false, $courseId);
+
+        $em = $app['orm.em'];
+        /** @var  Gedmo\Tree\Entity\Repository\NestedTreeRepository $repo */
+        $repo = $em->getRepository('Entity\CQuizCategory');
+        $globalCategoryScore = array();
+
+        foreach ($category_list as $category_id => $category_item) {
+            /** @var Entity\CQuizCategory $cat */
+            $cat = $em->find('Entity\CQuizCategory', $category_id);
+            $path = $repo->getPath($cat);
+
+            if ($loadChildren) {
+                //$globalCategoryScore[$category_id]['children'] = $repo->getChildren($cat);
+                //$globalCategoryScore[$category_id]['children'] = $path;
+            }
+
+            $categoryName = $category_name_list[$category_id];
+            $index = 0;
+
+            if ($categoryMinusOne) {
+                $index = 1;
+            }
+
+            if (isset($path[$index])) {
+                $category_id = $path[$index]->getIid();
+                $categoryName = $path[$index]->getTitle();
+            }
+
+            if (!isset($globalCategoryScore[$category_id])) {
+                $globalCategoryScore[$category_id] = array();
+                $globalCategoryScore[$category_id]['score'] = 0;
+                $globalCategoryScore[$category_id]['total'] = 0;
+                $globalCategoryScore[$category_id]['title'] = '';
+            }
+
+            if (isset($category_item['score'])) {
+                $globalCategoryScore[$category_id]['score'] += $category_item['score'];
+            }
+
+            if (isset($category_item['total'])) {
+                $globalCategoryScore[$category_id]['total'] += $category_item['total'];
+            }
+
+            if (isset($categoryName)) {
+                $globalCategoryScore[$category_id]['title'] = $categoryName;
+            }
+        }
+
+        return $globalCategoryScore;
     }
 
     /**

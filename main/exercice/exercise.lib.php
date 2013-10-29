@@ -2276,9 +2276,9 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     }
 
     if (!empty($category_list) && ($show_results || $show_only_score) ) {
-        //Adding total
+        // Adding total
         $category_list['total'] = array('score' => $total_score, 'total' => $total_weight);
-        echo Testcategory::get_stats_table_by_attempt($objExercise->id, $category_list);
+        echo Testcategory::get_stats_table_by_attempt($objExercise->id, $objExercise->course_id, $category_list);
     }
 
     if ($show_all_but_expected_answer) {

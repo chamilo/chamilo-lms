@@ -34,4 +34,48 @@ class TrackExerciseRepository extends EntityRepository
             ->groupBy('e.quizDistributionId');
         return $qb->getQuery()->getArrayResult();
     }
+
+    public function getResults($exerciseId, $courseId, $sessionId, $distributionId)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.exeId, e.exeResult')
+            ->where('e.exeExoId = :exerciseId AND e.cId = :courseId AND e.sessionId = :sessionId AND e.status = :status')
+            ->andWhere('e.quizDistributionId = :distributionId')
+            ->setParameters(
+                array(
+                    'exerciseId' => $exerciseId,
+                    'courseId' => $courseId,
+                    'sessionId' => $sessionId,
+                    'status' => '',
+                    'distributionId' => $distributionId
+                )
+            );
+        $results = $qb->getQuery()->getArrayResult();
+        $results = \array_column($results, 'exeResult', 'exeId');
+        return $results;
+    }
+
+    /*public function getResultsPerGlobalCategory($exerciseId, $courseId, $sessionId, $distributionId, $globalCategory)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.exeId')
+            ->innerJoin('e.exercise', 'ex')
+            ->where('e.exeExoId = :exerciseId AND e.cId = :courseId AND e.sessionId = :sessionId AND e.status = :status')
+            ->andWhere('e.quizDistributionId = :distributionId')
+            ->setParameters(
+                array(
+                    'e.exerciseId' => $exerciseId,
+                    'e.courseId' => $courseId,
+                    'e.sessionId' => $sessionId,
+                    'e.status' => '',
+                    'e.distributionId' => $distributionId,
+                    'ex.globalCategoryId' => $globalCategory
+                )
+            );
+        $results = $qb->getQuery()->getArrayResult();
+        $results = \array_column($results, 'exeId');
+        return $results;
+    }*/
+
+
 }

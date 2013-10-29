@@ -833,6 +833,8 @@ class Exercise
         // Order/random categories
         $cat = new Testcategory();
 
+        $courseId = $this->course_id;
+
         // Setting category order.
 
         switch ($questionSelectionType) {
@@ -842,40 +844,40 @@ class Exercise
                 break;
             case EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED: // 3
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'title DESC', false, true);
-                $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise);
+                $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise, $courseId);
                 $question_list = $this->pickQuestionsPerCategory($categoriesAddedInExercise, $question_list, $questions_by_category, true, false);
                 break;
             case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED: // 4
             case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED: // 7
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], null, true, true);
-                $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise);
+                $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise, $courseId);
                 $question_list = $this->pickQuestionsPerCategory($categoriesAddedInExercise, $question_list, $questions_by_category, true, false);
                 break;
             case EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM: // 5
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'title DESC', false, true);
-                $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise);
+                $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise, $courseId);
                 $question_list = $this->pickQuestionsPerCategory($categoriesAddedInExercise, $question_list, $questions_by_category, true, true);
-                    break;
+                break;
             case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM: // 6
             case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED:
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], null, true, true);
-                $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise);
+                $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise, $courseId);
                 $question_list = $this->pickQuestionsPerCategory($categoriesAddedInExercise, $question_list, $questions_by_category, true, true);
-                    break;
+                break;
             case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED: // 7
-                    break;
+                break;
             case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED: // 8
-                    break;
+                break;
             case EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED: // 9
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'root ASC, lft ASC', false, true);
-                $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise);
+                $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise, $courseId);
                 $question_list = $this->pickQuestionsPerCategory($categoriesAddedInExercise, $question_list, $questions_by_category, true, false);
-                    break;
+                break;
             case EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM: // 10
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'root, lft ASC', false, true);
-                $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise);
+                $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise, $courseId);
                 $question_list = $this->pickQuestionsPerCategory($categoriesAddedInExercise, $question_list, $questions_by_category, true, true);
-                    break;
+                break;
         }
 
         $result['question_list'] = isset($question_list) ? $question_list : array();
@@ -963,7 +965,6 @@ class Exercise
         if ($from_db && !empty($this->id)) {
 
             $nbQuestions = $this->getQuestionCount();
-
             $questionSelectionType = $this->getQuestionSelectionType();
 
             switch ($questionSelectionType) {
@@ -6551,8 +6552,12 @@ class Exercise
      * @param bool return array with exercise result info
      * @param mixed
      */
-    public function displayQuestionListByAttempt($exe_id, $saveUserResult = false, $returnExerciseResult = false)
-    {
+    public function displayQuestionListByAttempt(
+        $exe_id,
+        $saveUserResult = false,
+        $returnExerciseResult = false,
+        $forceShowCategories = false
+    ) {
         global $origin, $debug;
 
         // Getting attempt info
@@ -6589,7 +6594,6 @@ class Exercise
         }
 
         if ($show_results || $show_only_score) {
-            $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
             // Shows exercise header.
             echo $this->show_exercise_result_header($user_info['complete_name'], api_convert_and_format_date($exercise_stat_info['start_date'], DATE_TIME_FORMAT_LONG), $exercise_stat_info['duration']);
         }
@@ -6762,10 +6766,22 @@ class Exercise
             }
         }
 
-        if (!empty($category_list) && ($show_results || $show_only_score)) {
-            //Adding total
-            $category_list['total'] = array('score' => $total_score, 'total' => $total_weight);
-            echo Testcategory::get_stats_table_by_attempt($this->id, $category_list, $this->categoryMinusOne);
+        if ($forceShowCategories) {
+            // Adding total
+            $category_list['total'] = array(
+                'score' => $total_score,
+                'total' => $total_weight
+            );
+            return Testcategory::get_stats_table_by_attempt($this->id, $this->course_id, $category_list, $this->categoryMinusOne, true);
+        }
+
+        if ((!empty($category_list) && ($show_results || $show_only_score))) {
+            // Adding total
+            $category_list['total'] = array(
+                'score' => $total_score,
+                'total' => $total_weight
+            );
+            echo Testcategory::get_stats_table_by_attempt($this->id, $this->course_id, $category_list, $this->categoryMinusOne);
         }
 
         echo $total_score_text;

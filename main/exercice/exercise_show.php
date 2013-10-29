@@ -176,7 +176,7 @@ $(function() {
                 $('#result_from_ajax').html('<?php echo addslashes(Display::return_message(get_lang('Saved'), 'success'))?>');
                 $('.question_row').hide();
                 $('#myform').hide();
-                $('#correct_again').hide();            
+                $('#correct_again').hide();
                 }
             }
         });
@@ -617,7 +617,6 @@ foreach ($questionList as $questionId) {
 
     $category_was_added_for_this_test = false;
 
-
     if (isset($objQuestionTmp->category_list) && !empty($objQuestionTmp->category_list)) {
         foreach ($objQuestionTmp->category_list as $category_id) {
 
@@ -724,7 +723,7 @@ if (!empty($category_list) && ($show_results || $show_only_total_score)) {
         'score' => $my_total_score_temp,
         'total' => $totalWeighting
     );
-    echo Testcategory::get_stats_table_by_attempt($objExercise->id, $category_list, $objExercise->categoryMinusOne);
+    echo Testcategory::get_stats_table_by_attempt($objExercise->id, $objExercise->course_id, $category_list, $objExercise->categoryMinusOne);
 }
 
 echo $total_score_text;

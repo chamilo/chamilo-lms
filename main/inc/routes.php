@@ -700,5 +700,12 @@ if ($alreadyInstalled) {
         '/admin/question_manager/exercise_distribution',
         new ChamiloLMS\Provider\ReflectionControllerProvider('exercise_distribution.controller')
     );
+
+    $app->mount(
+        '/admin/exercise_statistics/exercise_distribution',
+        new ChamiloLMS\Provider\ReflectionControllerProvider('exercise_statistics.controller')
+    );
+
+    $app->match('/resultados-pnc', 'index.controller:resultsAction', 'GET')->bind('resultsAction');
 }
 

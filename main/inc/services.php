@@ -131,7 +131,8 @@ $app['security.role_hierarchy'] = array(
         'ROLE_SESSION_MANAGER',
         'ROLE_TEACHER',
         'ROLE_DIRECTOR',
-        'ROLE_JURY_PRESIDENT'
+        'ROLE_JURY_PRESIDENT',
+        'ROLE_EXERCISE_STATISTICS'
     ),
     'ROLE_RRHH' => array('ROLE_TEACHER'),
     'ROLE_TEACHER' => array('ROLE_STUDENT'),
@@ -144,7 +145,8 @@ $app['security.role_hierarchy'] = array(
     'ROLE_JURY_PRESIDENT' => array('ROLE_JURY_PRESIDENT', 'ROLE_JURY_MEMBER', 'ROLE_JURY_SUBSTITUTE'),
     'ROLE_JURY_SUBSTITUTE' => array('ROLE_JURY_SUBSTITUTE', 'ROLE_JURY_MEMBER'),
     'ROLE_JURY_MEMBER' => array('ROLE_JURY_MEMBER', 'ROLE_STUDENT'),
-    'ROLE_DIRECTOR' => array('ROLE_DIRECTOR')
+    'ROLE_DIRECTOR' => array('ROLE_DIRECTOR'),
+    'ROLE_EXERCISE_STATISTICS' => array('ROLE_EXERCISE_STATISTICS')
 );
 
 // Role rules
@@ -830,5 +832,11 @@ $app['jury_member.controller'] = $app->share(
 $app['exercise_distribution.controller'] = $app->share(
     function () use ($app) {
         return new ChamiloLMS\Controller\Admin\QuestionManager\ExerciseDistributionController($app);
+    }
+);
+
+$app['exercise_statistics.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Admin\ExerciseStatistics\ExerciseStatisticsController($app);
     }
 );

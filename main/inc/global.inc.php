@@ -706,6 +706,11 @@ $app->before(
 
         if (!$isCourseTool) {
             // @todo add a before in controller in order to load the courses and course_session object
+            $isCourseTool = (strpos($request->getPathInfo(), 'exercise_statistics/exercise_distribution/') === false) ? false : true;
+        }
+
+        if (!$isCourseTool) {
+            // @todo add a before in controller in order to load the courses and course_session object
             $isCourseTool = (strpos($request->getPathInfo(), 'question_manager/questions/') === false) ? false : true;
         }
 

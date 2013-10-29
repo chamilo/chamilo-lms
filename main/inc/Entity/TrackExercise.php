@@ -3,6 +3,7 @@
 namespace Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * TrackExercise
@@ -189,6 +190,19 @@ class TrackExercise
      * @ORM\JoinColumn(name="quiz_distribution_id", referencedColumnName="id")
      */
     private $distribution;
+
+    /**
+     * @ORM\OneToMany(targetEntity="TrackAttempt", mappedBy="attempt")
+     **/
+    private $questionAttempts;
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getQuestionAttempts()
+    {
+        return $this->questionAttempts;
+    }
 
     /**
      * @return \Entity\CQuizDistribution

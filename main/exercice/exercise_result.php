@@ -72,8 +72,8 @@ if (empty($objExercise)) {
         exit;
     }
     } else {
-    api_not_allowed(true);
-}
+        api_not_allowed(true);
+    }
 }
 
 $gradebook = '';

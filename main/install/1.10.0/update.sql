@@ -2,6 +2,8 @@ INSERT INTO roles (name, role) VALUES('Jury president', 'ROLE_JURY_PRESIDENT');
 INSERT INTO roles (name, role) VALUES('Jury member', 'ROLE_JURY_MEMBER');
 INSERT INTO roles (name, role) VALUES('Jury substitute', 'ROLE_JURY_SUBSTITUTE');
 INSERT INTO roles (name, role) VALUES('Director', 'ROLE_DIRECTOR');
+INSERT INTO roles (name, role) VALUES('Exercise stats', 'ROLE_EXERCISE_STATISTICS');
+
 
 -- Add new configuration setting for action related transaction settings.
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('log_transactions','exercise_attempt','checkbox','LogTransactions','false','LogTransactionsForExerciseAttempts','LogTransactionsForExerciseAttemptsComment',NULL,'LogTransactionsForExerciseAttemptsText', 1);
@@ -123,4 +125,14 @@ CREATE TABLE branch_rel_session (
   branch_id int unsigned not null,
   session_id int unsigned not null,
   display_order tinyint unsigned not null
+);
+
+CREATE TABLE c_quiz_distribution_rel_session_rel_category (
+  id int unsigned not null primary key AUTO_INCREMENT,
+  session_id int unsigned, -- the session id
+  c_id int unsigned not null, -- the course id (in case more than one course per session)
+  exercise_id int unsigned not null, -- the quiz global id
+  quiz_distribution_id int unsigned not null, -- one of the valid distributions for this turn
+  category_id int unsigned not null,
+  modifier float(6,2) NOT NULL DEFAULT '0.00'
 );

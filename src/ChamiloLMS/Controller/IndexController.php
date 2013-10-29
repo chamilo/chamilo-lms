@@ -3,6 +3,7 @@
 
 namespace ChamiloLMS\Controller;
 
+use Entity\TrackExercise;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,9 +16,6 @@ use Symfony\Component\Finder\Finder;
  */
 class IndexController extends CommonController
 {
-    public $section;
-    public $languageFiles = array('courses', 'index', 'admin');
-
     /**
      * @param \Silex\Application $app
      *
@@ -449,6 +447,96 @@ class IndexController extends CommonController
         $response = $template->render_layout('layout_2_col.tpl');
 
         //return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
+        return new Response($response, 200, array());
+    }
+
+    public function resultsAction(Application $app)
+    {
+        $template = $this->getTemplate();
+
+        $builder = $this->createFormBuilder();
+        $builder->add('dni', 'text', array('label' => 'Introduzca DNI' ));
+        $builder->add('submit', 'submit', array('label' => 'Ver mis resultados' ));
+        $form = $builder->getForm();
+
+        $request = $this->getRequest();
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $data = $form->getData();
+            $userName = $data['dni'];
+            $userInfo = api_get_user_info_from_username($userName);
+
+            if (empty($userInfo)) {
+                $this->get('session')->getFlashBag()->add('warning', "Lo sentimos, Ud. no cuenta con una cuenta
+  en el sistema para la PNC, o ha ingresado
+  mal su DNI. Por favor, vuelva a intentarlo:");
+                $url = $app['url_generator']->generate('resultsAction');
+                return $this->redirect($url);
+            }
+
+            //@todo hardcoded course code
+            $courseCode = 'PNCDIR2013';
+            $exerciseId = 1;
+            $sessionId = 1;
+
+            $courseInfo = api_get_course_info($courseCode);
+            if (empty($courseInfo)) {
+                return $app->abort(500, 'Curso no disponible');
+            }
+
+            $criteria = array(
+                'exeExoId' => $exerciseId,
+                'cId' => $courseInfo['real_id'],
+                'sessionId' => $sessionId,
+                'exeUserId' => $userInfo['user_id']
+            );
+
+            /** @var \Entity\TrackExercise $attempt */
+            $attempt = $this->getManager()->getRepository('Entity\TrackExercise')->findOneBy($criteria);
+
+            if (empty($attempt) || empty($userInfo)) {
+                    $this->get('session')->getFlashBag()->add('warning', "Lo sentimos, Ud. no cuenta con una cuenta
+  en el sistema para la PNC, o ha ingresado
+  mal su DNI. Por favor, vuelva a intentarlo:");
+                    $url = $app['url_generator']->generate('resultsAction');
+                    return $this->redirect($url);
+            }
+
+            $exercise = new \Exercise($courseInfo['real_id']);
+            $exercise->read($exerciseId);
+
+            $categoryList = $exercise->displayQuestionListByAttempt($attempt->getExeId(), false, false, true);
+
+            $criteria = array(
+                'exerciseId' => $exerciseId,
+                'cId' => $courseInfo['real_id'],
+                'sessionId' => $sessionId,
+                'quizDistributionId' => $attempt->getDistribution()->getId()
+            );
+
+            $modifs = $this->getManager()->getRepository('Entity\CQuizDistributionRelSessionRelCategory')->findBy($criteria);
+
+            $addScore = array();
+            if (!empty($modifs)) {
+                /** @var \Entity\CQuizDistributionRelSessionRelCategory $modif */
+                foreach ($modifs as $modif) {
+                    $categoryId = $modif->getCategoryId();
+                    $addScore[$categoryId] = $modif->getModifier();
+                }
+            }
+
+            $template->assign('category_list', $categoryList);
+            $template->assign('add_score', $addScore);
+            $template->assign('dni', $userName);
+        } else {
+            $template->assign('form', $form->createView());
+        }
+
+
+        $response = $template->render_template('index/results.tpl');
+
         return new Response($response, 200, array());
     }
 }

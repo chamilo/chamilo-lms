@@ -712,6 +712,23 @@ if (!empty($exercise_list)) {
                         );
                     }
 
+                    if ($app['security']->isGranted('ROLE_EXERCISE_STATISTICS') && !empty($my_exercise_id)) {
+
+                        $actions .= Display::url(
+                            Display::return_icon('add.png', get_lang('Distribution'), '', ICON_SIZE_SMALL),
+                            $app['url_generator']->generate(
+                                'exercise_statistics.controller:indexAction',
+                                array(
+                                    'exerciseId' => $my_exercise_id,
+                                    'cidReq' => api_get_course_id(),
+                                    'id_session' => api_get_session_id()
+                                )
+                            )
+                        );
+
+
+                    }
+
                     // Number of questions
                     /*
                     $random_label = null;

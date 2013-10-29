@@ -82,6 +82,8 @@ class ExerciseController extends CommonController
 
             $objExercise = new \Exercise();
             $objExercise->read($exerciseId);
+
+
             // adds the question ID represented by $recup into the list of questions for the current exercise
             $objExercise->addToList($exerciseId);
             Session::write('objExercise', $objExercise);

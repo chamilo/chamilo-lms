@@ -71,7 +71,7 @@ class AuthHttpsPostSend implements SendPluginInterface
             throw new SendException('auth_https_post: Cannot retrieve blob from envelope.');
         }
 
-        if (!$blob_file = $this->getTemporaryFile('blob_file')) {
+        if (!$blob_file = $this->getTemporaryFileToSend('blob_file', $envelope)) {
             throw new SendException(sprintf('auth_https_post: Unable to create correctly the temporary blob file on "%s".', $blob_file));
         }
         if (file_put_contents($blob_file, $blob) === false) {
@@ -112,7 +112,7 @@ class AuthHttpsPostSend implements SendPluginInterface
      * @see SslSignedJsonWrapper.
      * @todo Unify on a common base plugin parent.
      */
-    protected function getTemporaryFile($name) {
+    protected function getTemporaryFileToSend($name, Envelope $envelope) {
       static $tmp_directory;
       if (!isset($tmp_directory)) {
           $tmp_directory = api_get_path(SYS_DATA_PATH) . 'transaction_tmp_files';

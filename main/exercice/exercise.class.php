@@ -148,8 +148,8 @@ class Exercise
         }
         $this->course_id = $course_info['real_id'];
         $this->course = $course_info;
-        $this->fastEdition = api_get_course_setting('allow_fast_exercise_edition') == 1 ? true : false;
-        $this->emailAlert = api_get_course_setting('email_alert_manager_on_new_quiz') == 1 ? true : false;
+        $this->fastEdition = api_get_course_setting('allow_fast_exercise_edition', $course_info['code']) == 1 ? true : false;
+        $this->emailAlert = api_get_course_setting('email_alert_manager_on_new_quiz', $course_info['code']) == 1 ? true : false;
         $this->hideQuestionTitle = 0;
     }
 
@@ -5324,12 +5324,12 @@ class Exercise
      *  </code>
      * @return array
      */
-    private function setMediaList($questionList)
+    private function setMediaList($questionList, $course_id)
     {
         $mediaList= array();
         if (!empty($questionList)) {
             foreach ($questionList as $questionId) {
-                $objQuestionTmp = Question::read($questionId);
+                $objQuestionTmp = Question::read($questionId, $course_id);
 
                 // If a media question exists
                 if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {
@@ -5496,7 +5496,7 @@ class Exercise
             }
         }
 
-        $this->setMediaList($questionList);
+        $this->setMediaList($questionList, $this->course_id);
 
         $this->questionList = $this->transformQuestionListWithMedias($questionList, false);
         $this->questionListUncompressed = $this->transformQuestionListWithMedias($questionList, true);

@@ -1128,6 +1128,10 @@ function api_is_self_registration_allowed() {
  * @return integer the id of the current user, 0 if is empty
  */
 function api_get_user_id() {
+    if (PHP_SAPI == 'cli') {
+      // Do not try to call session on CLI.
+      return 0;
+    }
     $userInfo = Session::read('_user');
     if ($userInfo && isset($userInfo['user_id'])) {
         return $userInfo['user_id'];
@@ -2154,6 +2158,16 @@ function api_get_session_condition($session_id, $and = true, $with_base_content 
  * @author Bart Mollet
  */
 function api_get_setting($variable, $key = null) {
+    if (PHP_SAPI == 'cli') {
+        // Do not use session on CLI.
+        // @todo Support key.
+        $variable_data = api_get_settings_params_simple(array("variable = '?'" => $variable));
+        if (isset($variable_data['selected_value'])) {
+            return $variable_data['selected_value'];
+        }
+        return '';
+    }
+
     $_setting = Session::read('_setting');
     if ($variable == 'header_extra_content') {
         $filename = api_get_path(SYS_PATH).api_get_home_path().'header_extra_content.txt';

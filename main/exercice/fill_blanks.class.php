@@ -30,9 +30,9 @@ class FillBlanks extends Question
     /**
      * Constructor
      */
-    public function FillBlanks()
+    public function FillBlanks($course_code = null)
     {
-        parent::question();
+        parent::question($course_code);
         $this->type      = FILL_IN_BLANKS;
         $this->isContent = $this->getIsContent();
     }

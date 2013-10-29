@@ -26,9 +26,9 @@ class MultipleAnswer extends Question
     /**
      * Constructor
      */
-    public function MultipleAnswer()
+    public function MultipleAnswer($course_code = null)
     {
-        parent::question();
+        parent::question($course_code);
         $this->type      = MULTIPLE_ANSWER;
         $this->isContent = $this->getIsContent();
     }

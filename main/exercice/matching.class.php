@@ -25,9 +25,9 @@ class Matching extends Question
     /**
      * Constructor
      */
-    function Matching()
+    function Matching($course_code = null)
     {
-        parent::question();
+        parent::question($course_code);
         $this->type      = MATCHING;
         $this->isContent = $this->getIsContent();
     }

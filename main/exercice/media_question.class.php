@@ -6,9 +6,9 @@ class MediaQuestion extends Question
 	static $typePicture = 'media-question.png';
 	static $explanationLangVar = 'MediaQuestion';
 
-    public function __construct()
+    public function __construct($course_code = null)
     {
-        parent::question();
+        parent::question($course_code);
 		$this->type = MEDIA_QUESTION;
     }
 

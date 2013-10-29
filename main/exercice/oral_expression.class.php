@@ -23,8 +23,8 @@ class OralExpression extends Question
 	/**
 	 * Constructor
 	 */
-	function OralExpression(){
-		parent::question();
+	function OralExpression($course_code = null){
+		parent::question($course_code);
 		$this -> type = ORAL_EXPRESSION;
 		$this -> isContent = $this-> getIsContent();
 	}

@@ -166,6 +166,10 @@ class TransactionLogController
      *
      * @param integer $limit
      *   The maximum allowed envelopes to process. 0 means unlimited.
+     *
+     * @return array
+     *   An array keyed by received envelope id containing an array transaction
+     *   ids added based on that received envelope.
      */
     public static function importPendingEnvelopes($limit = 0) {
         $table = Database::get_main_table(TABLE_RECEIVED_ENVELOPES);
@@ -177,6 +181,7 @@ class TransactionLogController
         else {
             $sql = sprintf('SELECT * FROM %s WHERE status = %d LIMIT %d', $table, Envelope::RECEIVED_TO_BE_IMPORTED, $limit);
         }
+        $added_transaction_ids_per_envelope = array();
         $result = Database::query($sql);
         while ($row = $result->fetch()) {
             try {
@@ -187,7 +192,8 @@ class TransactionLogController
                 $envelope = new Envelope($wrapper_plugin, $envelope_data);
                 $envelope->unwrap();
                 $transactions = $envelope->getTransactions();
-                $this->importToLog($transactions);
+                $added_transaction_ids = $this->importToLog($transactions);
+                $added_transaction_ids_per_envelope[$row['id']] = $added_transaction_ids;
                 Database::update($table, array('status' => Envelope::RECEIVED_IMPORTED), array('id = ?' => $row['id']));
             }
             catch (Exception $exception) {
@@ -196,6 +202,8 @@ class TransactionLogController
                 continue;
             }
         }
+
+        return $added_transaction_ids_per_envelope;
     }
 
 
@@ -420,6 +428,7 @@ class TransactionLogController
             'send' => array(
                 'none' => 'NoneSendPlugin',
                 'auth_https_post' => 'AuthHttpsPostSend',
+                'minedu_auth_https_post' => 'MineduAuthHttpsPostSend',
             ),
             'receive' => array(
                 'none' => 'NoneReceivePlugin',

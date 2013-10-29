@@ -6069,9 +6069,12 @@ class Exercise
     {
         $newMediaList = array();
         $mediaQuestions = $this->getMediaList();
-        foreach ($mediaQuestions as $mediaId => $questionMediaList) {
-            foreach ($questionMediaList as $questionId) {
-                $newMediaList[$questionId] = $mediaId;
+
+        if (!empty($mediaQuestions)) {
+            foreach ($mediaQuestions as $mediaId => $questionMediaList) {
+                foreach ($questionMediaList as $questionId) {
+                    $newMediaList[$questionId] = $mediaId;
+                }
             }
         }
 
@@ -6552,15 +6555,15 @@ class Exercise
     {
         global $origin, $debug;
 
-        //Getting attempt info
+        // Getting attempt info
         $exercise_stat_info = $this->getStatTrackExerciseInfoByExeId($exe_id);
 
-        //Getting question list
+        // Getting question list
         $question_list = array();
         if (!empty($exercise_stat_info['data_tracking'])) {
             $question_list = explode(',', $exercise_stat_info['data_tracking']);
         } else {
-            //Try getting the question list only if save result is off
+            // Try getting the question list only if save result is off
             if ($saveUserResult == false) {
                 $question_list = $this->selectQuestionList();
             }

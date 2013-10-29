@@ -28,6 +28,10 @@ class MineduSendCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        // This is just wrong, but was requested. Used to pass a session_id to
+        // be used on the MineduAuthHttpsPostSend plugin.
+        global $session_id;
+
         $turn = $input->getArgument('turn');
         $branch_rel_session_table = Database::get_main_table(TABLE_BRANCH_REL_SESSION);
         $results = Database::select('session_id', $branch_rel_session_table, array('where'=> array('display_order = ?' => array($turn))));
@@ -36,10 +40,11 @@ class MineduSendCommand extends Command
             return 100;
         }
         $row = array_shift($results);
+        $session_id = $row['session_id'];
         $command = $this->getApplication()->find('tx:send');
         $arguments = array(
             'command' => 'tx:send',
-            '--session'  => $row['session_id'],
+            '--session'  => $session_id,
         );
         $input = new ArrayInput($arguments);
         $return_code = $command->run($input, $output);

@@ -428,6 +428,7 @@ class TransactionLogController
             'send' => array(
                 'none' => 'NoneSendPlugin',
                 'auth_https_post' => 'AuthHttpsPostSend',
+                'minedu_auth_https_post' => 'MineduAuthHttpsPostSend',
             ),
             'receive' => array(
                 'none' => 'NoneReceivePlugin',

@@ -112,6 +112,7 @@ class ExerciseController extends CommonController
         //@todo improve this JS includes should be added using twig
         $extraJS[]      = api_get_jqgrid_js();
         $app['extraJS'] = $extraJS;
+        $breadcrumbs = array();
 
         // @todo this should be auto
 
@@ -157,7 +158,7 @@ class ExerciseController extends CommonController
             );
         }
 
-        $this->setBreadcrumb($app, $breadcrumbs);
+        $this->setBreadcrumb($breadcrumbs);
 
         $questionColumns = \Question::getQuestionColumns($cidReq);
 

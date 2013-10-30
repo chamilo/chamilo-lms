@@ -14,6 +14,8 @@ class TrackExerciseRepository extends EntityRepository
 {
     /**
      * @param int $exerciseId
+     * @param int $courseId
+     * @param  int $sessionId
      * @return array
      */
     public function getAverageScorePerForm($exerciseId, $courseId, $sessionId)
@@ -35,6 +37,13 @@ class TrackExerciseRepository extends EntityRepository
         return $qb->getQuery()->getArrayResult();
     }
 
+    /**
+     * @param int $exerciseId
+     * @param int $courseId
+     * @param int $sessionId
+     * @param int $distributionId
+     * @return array
+     */
     public function getResults($exerciseId, $courseId, $sessionId, $distributionId)
     {
         $qb = $this->createQueryBuilder('e');

@@ -794,7 +794,6 @@ class Exercise
                 if ($addAll) {
                     $numberOfQuestions = 999;
                 }
-
                 if (!empty($numberOfQuestions)) {
                     $elements = Testcategory::getNElementsFromArray($categoryQuestionList, $numberOfQuestions, $randomizeQuestions);
                 if (!empty($elements)) {
@@ -836,7 +835,6 @@ class Exercise
         $courseId = $this->course_id;
 
         // Setting category order.
-
         switch ($questionSelectionType) {
             case EX_Q_SELECTION_ORDERED: // 1
             case EX_Q_SELECTION_RANDOM:  // 2

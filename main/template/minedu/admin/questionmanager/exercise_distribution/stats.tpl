@@ -13,9 +13,8 @@
                 <td>
                     {{ item.title }}
                 </td>
-
                 <td>
-                    {{ item.average }}
+                    {{ item.average | number_format(3) }}
                 </td>
             </tr>
         {% endfor %}

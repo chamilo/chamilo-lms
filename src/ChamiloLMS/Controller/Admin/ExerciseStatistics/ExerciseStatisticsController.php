@@ -73,7 +73,7 @@ class ExerciseStatisticsController extends CommonController
             }
         }
 
-        if (empty($categories)) {
+        if (empty($categories) || empty($globalCategories)) {
             throw new \Exception('No categories in this exercise.');
         }
 

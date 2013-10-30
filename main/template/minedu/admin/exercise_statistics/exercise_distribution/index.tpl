@@ -70,7 +70,7 @@
             </td>
             {% for distribution in distributions %}
                 <td>
-                {{ distribution.distribution.title }} (# intentos {{ results[distribution.distribution.id].counter }} )
+                {{ distribution.distribution.id }} (# intentos {{ results[distribution.distribution.id].counter }} )
                 </td>
             {% endfor %}
         </tr>

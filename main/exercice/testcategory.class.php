@@ -413,8 +413,12 @@ class Testcategory
      * @param bool $categoryMinusOne shows category - 1 see BT#6540
      * @return string
      */
-    public static function getCategoryNamesForQuestion($question_id, $course_id = null, $display_into_labels = true, $categoryMinusOne = false)
-    {
+    public static function getCategoryNamesForQuestion(
+        $question_id,
+        $course_id = null,
+        $display_into_labels = true,
+        $categoryMinusOne = false
+    ) {
         if (empty($course_id) || $course_id == "") {
             $course_id = api_get_course_int_id();
         }

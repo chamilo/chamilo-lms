@@ -38,7 +38,13 @@ class ExerciseDistributionController extends CommonController
         }
 
         $criteria = array('exerciseId' => $exerciseId);
-        $items = $this->getRepository()->findBy($criteria);
+        $quizDistributionList = $this->getRepository()->findBy($criteria);
+
+        $criteria = array(
+            'exerciseId' => $exerciseId,
+            'cId' => $course->getId(),
+            'sessionId' => $this->getSessionId()
+        );
 
         $distributionRelSessions = $em->getRepository('Entity\CQuizDistributionRelSession')->findBy($criteria);
 
@@ -51,7 +57,8 @@ class ExerciseDistributionController extends CommonController
 
         $template->assign('selected_distribution_id_list', $selectedExerciseDistributionIdList);
         $template->assign('exerciseId', $exerciseId);
-        $template->assign('items', $items);
+
+        $template->assign('items', $quizDistributionList);
         $template->assign('exerciseUrl', api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq());
 
         $template->assign('links', $this->generateLinks());
@@ -76,7 +83,11 @@ class ExerciseDistributionController extends CommonController
      */
     public function toggleVisibilityAction($exerciseId, $id)
     {
-        $criteria = array('exerciseId' => $exerciseId, 'id' => $id);
+        $criteria = array(
+            'exerciseId' => $exerciseId,
+            'id' => $id
+        );
+
         /** @var Entity\CQuizDistribution $distribution */
         $distribution = $this->getRepository()->findOneBy($criteria);
 
@@ -98,10 +109,21 @@ class ExerciseDistributionController extends CommonController
     {
         $em = $this->getManager();
         $distribution = $this->getRepository()->find($id);
+
         if (!$distribution) {
             return $this->createNotFoundException();
         }
-        $criteria = array('exerciseId' => $exerciseId, 'quizDistributionId' => $id);
+
+        $sessionId = $this->getSessionId();
+        $courseId = $this->getCourseId();
+
+        $criteria = array(
+            'exerciseId' => $exerciseId,
+            'quizDistributionId' => $id,
+            'cId' => $courseId,
+            'sessionId' => $sessionId
+        );
+
         $distributionRelSession = $em->getRepository('Entity\CQuizDistributionRelSession')->findOneBy($criteria);
 
         if ($distributionRelSession) {
@@ -112,10 +134,8 @@ class ExerciseDistributionController extends CommonController
             return $this->redirect($url);
 
         } else {
-            $sessionId = $this->getSessionId();
-
             $distributionRelSession = new Entity\CQuizDistributionRelSession();
-            $distributionRelSession->setCId(api_get_course_int_id());
+            $distributionRelSession->setCId($courseId);
             $distributionRelSession->setSessionId($sessionId);
             $distributionRelSession->setDistribution($distribution);
             $distributionRelSession->setExerciseId($exerciseId);

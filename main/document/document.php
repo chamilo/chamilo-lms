@@ -1082,7 +1082,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         <?php Display::display_icon('new_folder.png', get_lang('CreateDir'), '', ICON_SIZE_MEDIUM); ?></a>
         <?php
     }
-    echo $plugin_jcapture;
+   
 }
 
 $table_footer = '';

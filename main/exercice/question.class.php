@@ -2700,6 +2700,7 @@ abstract class Question
         }
         return $result;
     }
+
     /**
      * Makes a question valid inside a global category in another course as well
      * This might be used in combination with the ExerciseController::reuseQuestionAction()
@@ -2710,9 +2711,9 @@ abstract class Question
      *
      * This might get deprecated if we start using c_id = 0 in the c_quiz_question_rel_category
      */
-    function enableGlobalCategoryInNewCourse($questionId, $courseIdDest) {
+    function enableGlobalCategoryInNewCourse($questionId, $courseIdDest)
+    {
         $questionRelCategoryTable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-        $categoryTable = Database::get_course_table(TABLE_QUIZ_CATEGORY);
         $questionId = intval($questionId);
         $courseIdDest = intval($courseIdDest);
         // First check whether the category is global: if it's not, we don't need to do anything
@@ -2732,10 +2733,10 @@ abstract class Question
                 }
             }
         }
-        $diff = array_diff($origCats,$destCats);
+        $diff = array_diff($origCats, $destCats);
         foreach ($diff as $cat) {
             $sql = "INSERT INTO $questionRelCategoryTable (c_id, question_id, category_id) VALUES ($courseIdDest, $questionId, $cat)";
             Database::query($sql);
         }
-  }
+    }
 }

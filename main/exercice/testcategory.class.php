@@ -1251,7 +1251,7 @@ class Testcategory
                 break;
         }
 
-         // settting the form elements
+         // setting the form elements
         $form->addElement('header', $header);
         $form->addElement('hidden', 'category_id');
         $form->addElement('text', 'category_name', get_lang('CategoryName'), array('class' => 'span6'));
@@ -1288,13 +1288,15 @@ class Testcategory
         // setting the rules
         $form->addRule('category_name', get_lang('ThisFieldIsRequired'), 'required');
     }
+
     /**
      * Checks whether a category is global or not
-     * @param Category ID
+     * @param int $categoryId
      * @return bool True if it is global, false otherwise
      * @assert (0) == false
      */
-    function isGlobal($categoryId) {
+    function isGlobal($categoryId)
+    {
         $categoryTable = Database::get_course_table(TABLE_QUIZ_CATEGORY);
         $sql = "SELECT parent_id, c_id FROM $categoryTable WHERE iid = $categoryId";
         $res = Database::query($sql);

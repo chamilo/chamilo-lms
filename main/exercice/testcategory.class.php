@@ -1286,4 +1286,21 @@ class Testcategory
         // setting the rules
         $form->addRule('category_name', get_lang('ThisFieldIsRequired'), 'required');
     }
+    /**
+     * Checks whether a category is global or not
+     * @param Category ID
+     * @return bool True if it is global, false otherwise
+     * @assert (0) == false
+     */
+    function isGlobal($categoryId) {
+        $categoryTable = Database::get_course_table(TABLE_QUIZ_CATEGORY);
+        $sql = "SELECT parent_id, c_id FROM $categoryTable WHERE iid = $categoryId";
+        $res = Database::query($sql);
+        if (Database::num_rows($res) < 1) {
+            return false;
+        }
+        $row = Database::fetch_assoc($res);
+        $global = ($row['c_id'] == 0 ? true : false);
+        return $global;
+    }
 }

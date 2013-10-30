@@ -85,7 +85,8 @@ class ExerciseController extends CommonController
 
 
             // adds the question ID represented by $recup into the list of questions for the current exercise
-            $objExercise->addToList($exerciseId);
+            $objExercise->addToList($questionId);
+            $question->enableGlobalCategoryInNewCourse($questionId, $objExercise->course_id);
             Session::write('objExercise', $objExercise);
             /*$params = array(
                 'cidReq' => api_get_course_id(),
@@ -112,6 +113,7 @@ class ExerciseController extends CommonController
         //@todo improve this JS includes should be added using twig
         $extraJS[]      = api_get_jqgrid_js();
         $app['extraJS'] = $extraJS;
+        $breadcrumbs = array();
 
         // @todo this should be auto
 
@@ -157,7 +159,7 @@ class ExerciseController extends CommonController
             );
         }
 
-        $this->setBreadcrumb($app, $breadcrumbs);
+        $this->setBreadcrumb($breadcrumbs);
 
         $questionColumns = \Question::getQuestionColumns($cidReq);
 

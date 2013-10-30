@@ -3035,6 +3035,7 @@ class CourseManager
             if (api_get_setting('display_coursecode_in_courselist') == 'true') {
                 $course_title .= ' ('.$course_info['visual_code'].') ';
             }
+            $teachers = null;
             if (api_get_setting('display_teacher_in_courselist') == 'true') {
                 $teachers = $course_info['teacher_list_formatted'];
             }

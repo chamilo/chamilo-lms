@@ -384,7 +384,8 @@ class Testcategory
      * @param int $courseId
      * @return array
      */
-    public static function getCategoryForQuestionWithCategoryData($question_id, $courseId = null) {
+    public static function getCategoryForQuestionWithCategoryData($question_id, $courseId = null)
+    {
 		$result = array();	// result
 		if (empty($courseId)) {
             $courseId = api_get_course_int_id();

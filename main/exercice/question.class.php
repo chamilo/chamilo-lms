@@ -179,7 +179,7 @@ abstract class Question
                 $objQuestion->extra         = $object->extra;
                 $objQuestion->course        = $course_info;
                 $objQuestion->parent_id     = $object->parent_id;
-                $objQuestion->category_list = Testcategory::getCategoryForQuestion($id);
+                $objQuestion->category_list = Testcategory::getCategoryForQuestion($id, $course_id);
                 $objQuestion->exercise      = $exercise;
                 $objQuestion->c_id          = $object->c_id;
 

@@ -23,7 +23,7 @@ $session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) :
 $course_code = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : api_get_course_id();
 
 switch ($action) {
-    case 'get_question_info';
+    case 'get_question_info':
         if (api_is_course_admin()) {
             $questionId = $_REQUEST['questionId'];
             $courseId = api_get_course_int_id();

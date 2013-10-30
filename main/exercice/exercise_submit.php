@@ -912,25 +912,27 @@ if (!empty ($gradebook) && $gradebook == 'view') {
 $interbreadcrumb[]= array ("url" => $urlMainExercise."exercice.php?gradebook=$gradebook",	"name" => get_lang('Exercices'));
 $interbreadcrumb[]= array ("url" => "#","name" => $objExercise->name);
 
-if ($origin != 'learnpath') { //so we are not in learnpath tool
+if ($origin != 'learnpath') {
+    //so we are not in learnpath tool
     Display :: display_header($nameTools, 'Exercises');
-    if (!api_is_allowed_to_session_edit()) {
-        $sessionId = api_get_session_id();
-        if (!empty($sessionId)) {
-            $session_visibility = api_get_session_visibility($sessionId);
-            switch ($session_visibility) {
-                case SESSION_VISIBLE_READ_ONLY:
-                    Display::display_warning_message(get_lang('SessionIsReadOnly'));
-                    break;
-                case SESSION_INVISIBLE:
-                    api_not_allowed(true);
-                    break;
-            }
-        }
-    }
 } else {
     Display::display_reduced_header();
     echo '<div style="height:10px">&nbsp;</div>';
+}
+
+if (!api_is_allowed_to_session_edit()) {
+    $sessionId = api_get_session_id();
+    if (!empty($sessionId)) {
+        $session_visibility = api_get_session_visibility($sessionId);
+        switch ($session_visibility) {
+            case SESSION_VISIBLE_READ_ONLY:
+                Display::display_warning_message(get_lang('SessionIsReadOnly'));
+                break;
+            case SESSION_INVISIBLE:
+                api_not_allowed(true);
+                break;
+        }
+    }
 }
 
 $show_quiz_edition = $objExercise->added_in_lp();

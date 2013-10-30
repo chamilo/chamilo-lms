@@ -1918,7 +1918,8 @@ class api_failure {
  * Gets the current Chamilo (not PHP/cookie) session ID
  * @return  int     O if no active session, the session ID otherwise
  */
-function api_get_session_id() {
+function api_get_session_id()
+{
     return empty($_SESSION['id_session']) ? 0 : intval($_SESSION['id_session']);
 }
 
@@ -1926,7 +1927,8 @@ function api_get_session_id() {
  * Gets the current Chamilo (not social network) group ID
  * @return  int     O if no active session, the session ID otherwise
  */
-function api_get_group_id() {
+function api_get_group_id()
+{
     return empty($_SESSION['_gid']) ? 0 : intval($_SESSION['_gid']);
 }
 
@@ -2898,7 +2900,6 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false)
 
             // Get the session visibility
             $session_visibility = api_get_session_visibility($session_id);  // if 5 the session is still available
-
             switch ($session_visibility) {
                 case SESSION_VISIBLE_READ_ONLY: // 1
                     return false;
@@ -5433,7 +5434,11 @@ function api_get_tools_lists($my_tool = null) {
     return in_array($my_tool, $tools_list) ? $my_tool : '';
 }
 
-function api_get_tool_urls() {
+/**
+ * @return array
+ */
+function api_get_tool_urls()
+{
     return array(
         TOOL_DOCUMENT => api_get_path(WEB_CODE_PATH).'document/document.php',
         TOOL_QUIZ => api_get_path(WEB_CODE_PATH).'exercice/exercice.php',
@@ -5441,7 +5446,6 @@ function api_get_tool_urls() {
         TOOL_CALENDAR_EVENT => api_get_path(WEB_CODE_PATH).'calendar/agenda.php',
         TOOL_STUDENTPUBLICATION => api_get_path(WEB_CODE_PATH).'work/work.php',
         TOOL_LEARNPATH => api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php'
-
     );
 }
 
@@ -5450,7 +5454,8 @@ function api_get_tool_urls() {
  * @param int user id
  * @return bool true if we pass false otherwise
  */
-function api_check_term_condition($user_id) {
+function api_check_term_condition($user_id)
+{
     if (api_get_setting('allow_terms_conditions') == 'true') {
         $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
         $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
@@ -5515,7 +5520,6 @@ function is_allowed_to_edit() {
     return api_is_allowed_to_edit();
 }
 
-
 /**
  * Function used to protect a "global" admin script.
  * The function blocks access when the user has no global platform admin rights.
@@ -5541,6 +5545,12 @@ function api_is_global_platform_admin($user_id = null) {
     return false;
 }
 
+/**
+ * @param int $admin_id_to_check
+ * @param int $my_user_id
+ * @param bool $allow_session_admin
+ * @return bool
+ */
 function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null, $allow_session_admin = false) {
     if (empty($my_user_id)) {
         $my_user_id = api_get_user_id();
@@ -5572,7 +5582,14 @@ function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null,
     }
 }
 
-function api_protect_super_admin($admin_id_to_check, $my_user_id = null, $allow_session_admin = false) {
+/**
+ * @param int $admin_id_to_check
+ * @param int $my_user_id
+ * @param bool $allow_session_admin
+ * @return bool
+ */
+function api_protect_super_admin($admin_id_to_check, $my_user_id = null, $allow_session_admin = false)
+{
     if (api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id, $allow_session_admin)) {
         return true;
     } else {
@@ -5587,7 +5604,8 @@ function api_protect_super_admin($admin_id_to_check, $my_user_id = null, $allow_
  *
  * @author Julio Montoya
  */
-function api_protect_global_admin_script() {
+function api_protect_global_admin_script()
+{
     if (!api_is_global_platform_admin()) {
         api_not_allowed();
         return false;
@@ -5596,7 +5614,7 @@ function api_protect_global_admin_script() {
 }
 
 /**
- * Get actived template
+ * Get active template
  * @param string    theme type (optional: default)
  * @param string    path absolute(abs) or relative(rel) (optional:rel)
  * @return string   actived template path
@@ -5625,11 +5643,12 @@ function api_get_template($path_type = 'rel') {
  * @param string $format
  *
  * @return bool, or return text array if $format=check_browser
+ * @todo use symfony2 components
  *
  * @author Juan Carlos Raña Trabado
  */
 
-function api_browser_support($format="") {
+function api_browser_support($format = "") {
     require_once api_get_path(LIBRARY_PATH).'browser/Browser.php';
     $browser = new Browser();
     //print_r($browser);
@@ -5764,7 +5783,8 @@ function api_browser_support($format="") {
  *
  * @author Juan Carlos Raña Trabado
  */
-function api_check_browscap() {
+function api_check_browscap()
+{
     $setting = ini_get('browscap');
     if ($setting) {
         $browser = get_browser($_SERVER['HTTP_USER_AGENT'], true);
@@ -5793,6 +5813,9 @@ function api_get_jqgrid_js() {
     return api_get_jquery_libraries_js(array('jqgrid'));
 }
 
+/**
+ * @return array
+ */
 function api_get_available_jquery_ui_languages() {
     //see http://jqueryui.com/demos/datepicker/#localization
     return array(
@@ -6050,6 +6073,7 @@ function api_block_course_item_locked_by_gradebook($item_id, $link_type, $course
         api_not_allowed(true, $message);
     }
 }
+
 /**
  * Checks the PHP version installed is enough to run Chamilo
  * @param string Include path (used to load the error page)
@@ -6133,7 +6157,8 @@ function api_user_is_login($user_id = null) {
  * @author Jorge Frisancho Jibaja <jrfdeft@gmail.com>, USIL - Some changes to allow the use of real IP using reverse proxy
  * @version CEV CHANGE 24APR2012
  */
-function api_get_real_ip(){
+function api_get_real_ip()
+{
     // Guess the IP if behind a reverse proxy
     global $debug;
     if (PHP_SAPI === 'cli' && !isset($_SERVER['REMOTE_ADDR'])) {

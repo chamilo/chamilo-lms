@@ -1912,7 +1912,6 @@ class api_failure {
     }
 }
 
-
 /* CONFIGURATION SETTINGS */
 
 /**
@@ -1931,13 +1930,13 @@ function api_get_group_id() {
     return empty($_SESSION['_gid']) ? 0 : intval($_SESSION['_gid']);
 }
 
-
 /**
  * Gets the current or given session name
  * @param   int     Session ID (optional)
  * @return  string  The session name, or null if unfound
  */
-function api_get_session_name($session_id) {
+function api_get_session_name($session_id)
+{
     if (empty($session_id)) {
         $session_id = api_get_session_id();
         if (empty($session_id)) { return null; }
@@ -1956,10 +1955,12 @@ function api_get_session_name($session_id) {
 
 /**
  * Gets the session info by id
- * @param int       Session ID
+ * @param int  $session_id
+ * @param bool $add_extra_values
  * @return array    information of the session
  */
-function api_get_session_info($session_id, $add_extra_values = false) {
+function api_get_session_info($session_id, $add_extra_values = false)
+{
     $data = array();
     if (!empty($session_id)) {
         $session_id = intval($session_id);
@@ -1978,6 +1979,13 @@ function api_get_session_info($session_id, $add_extra_values = false) {
     return $data;
 }
 
+/**
+ * @param array $session_info
+ * @param string $course_code
+ * @param bool $ignore_visibility_for_admins
+ * @param bool $check_coach_dates
+ * @return bool
+ */
 function api_get_session_date_validation($session_info, $course_code, $ignore_visibility_for_admins = true, $check_coach_dates = true)
 {
     if (api_is_platform_admin()) {
@@ -1993,8 +2001,7 @@ function api_get_session_date_validation($session_info, $course_code, $ignore_vi
     if ($session_info) {
 
         // I don't care the field visibility because there are not limit dates.
-        if (
-            (empty($session_info['access_start_date']) && empty($session_info['access_end_date'])) ||
+        if ((empty($session_info['access_start_date']) && empty($session_info['access_end_date'])) ||
             ($session_info['access_start_date'] == '0000-00-00 00:00:00' && $session_info['access_end_date'] == '0000-00-00 00:00:00')) {
             return true;
         } else {
@@ -2028,7 +2035,7 @@ function api_get_session_date_validation($session_info, $course_code, $ignore_vi
 
         if ($check_coach_dates) {
 
-            //2. If I'm a coach
+            // 2. If I'm a coach
             $is_coach = api_is_coach($session_id, $course_code);
 
             if ($is_coach) {
@@ -2044,7 +2051,7 @@ function api_get_session_date_validation($session_info, $course_code, $ignore_vi
                     }
                 }
 
-                //Test start date
+                // Test start date
                 if (isset($session_info['access_start_date']) && !empty($session_info['access_start_date']) && $session_info['access_start_date'] != '0000-00-00 00:00:00' &&
                     isset($session_info['coach_start_date']) && !empty($session_info['coach_start_date']) && $session_info['coach_start_date'] != '0000-00-00 00:00:00') {
                     $start_date_for_coach = api_strtotime($session_info['coach_start_date'], 'UTC');
@@ -2062,12 +2069,14 @@ function api_get_session_date_validation($session_info, $course_code, $ignore_vi
 
 /**
  * Gets the session visibility by session id
- * @param int       session id
+ *
+ * @param int    $session_id
+ * @param string $course_code
+ * @param bool $ignore_visibility_for_admins
  * @return int      0 = session still available, SESSION_VISIBLE_READ_ONLY = 1, SESSION_VISIBLE = 2, SESSION_INVISIBLE = 3
  */
 function api_get_session_visibility($session_id, $course_code = null, $ignore_visibility_for_admins = true)
 {
-
     if (api_is_platform_admin()) {
         if ($ignore_visibility_for_admins) {
             return SESSION_AVAILABLE;
@@ -2087,15 +2096,6 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
         if ($date_validation) {
             return SessionManager::DEFAULT_VISIBILITY; //visible
         } else {
-            /*
-            $is_coach = api_is_coach($session_id, $course_code);
-            if (!$is_coach) {
-                //Student - check the moved_to variable
-                $user_status = SessionManager::get_user_status_in_session($session_id, api_get_user_id());
-                if (isset($user_status['moved_to']) && $user_status['moved_to'] != 0) {
-                    return $visibility;
-                }
-            }*/
             return $visibility;
         }
     }
@@ -2109,7 +2109,8 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
  * @param int       User status id - if 5 (student), will return empty
  * @return string   Session icon
  */
-function api_get_session_image($session_id, $status_id) {
+function api_get_session_image($session_id, $status_id)
+{
     $session_id = (int)$session_id;
     $session_img = '';
     if ((int)$status_id != STUDENT) { //check whether is not a student
@@ -2133,8 +2134,7 @@ function api_get_session_condition($session_id, $and = true, $with_base_content 
     if (empty($session_field)) {
         $session_field = "session_id";
     }
-    //condition to show resources by session
-    $condition_session = '';
+    // Condition to show resources by session
     $condition_add = $and ? " AND " : " WHERE ";
 
     if ($with_base_content) {
@@ -2808,8 +2808,8 @@ function api_display_debug_info($debug_info) {
  * @return boolean, true: the user has the rights to edit, false: he does not
  */
 
-function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach = false, $check_student_view = true) {
-
+function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach = false, $check_student_view = true)
+{
     $my_session_id 				= api_get_session_id();
     $is_allowed_coach_to_edit 	= api_is_coach();
     $session_visibility 		= api_get_session_visibility($my_session_id);
@@ -2883,7 +2883,8 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
 * @param bool       Whether to check if the user has the coach role
 * @return boolean, true: the user has the rights to edit, false: he does not
 */
-function api_is_allowed_to_session_edit($tutor = false, $coach = false) {
+function api_is_allowed_to_session_edit($tutor = false, $coach = false)
+{
     if (api_is_allowed_to_edit($tutor, $coach)) {
         // If I'm a teacher, I will return true in order to not affect the normal behaviour of Chamilo tools.
         return true;

@@ -452,6 +452,14 @@ class IndexController extends CommonController
 
     public function resultsAction(Application $app)
     {
+        if (!isset($app['configuration']['allow_resultados_pnc'])) {
+            return $app->abort(500, 'Not allowed');
+        }
+
+        if (isset($app['configuration']['allow_resultados_pnc']) && $app['configuration']['allow_resultados_pnc'] == false) {
+            return $app->abort(500, 'Not allowed');
+        }
+
         $template = $this->getTemplate();
 
         $builder = $this->createFormBuilder();

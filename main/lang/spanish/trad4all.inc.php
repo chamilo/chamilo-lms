@@ -1468,4 +1468,13 @@ $DataTableSearch = "Buscar";
 $HideColumn = "Ocultar columna";
 $DisplayColumn = "Mostrar columna";
 $LegalAgreementAccepted = "Condiciones legales aceptadas";
+
+$ManageUserGroup = "Administrar clases";
+$EditUserGroupToURL = "Editar clases de una URL";
+$UserGroupListInPlatform = "Lista de clases en la plataforma.";
+$UserGroupListIn  = "Clases de ";
+$AddUserGroupToURL = "Agregar clases a una URL";
+$UserGroupList = "Lista de clases";
+$FirstLetter = "Primer letra";
+$AddUserGroupToThatURL = "Agregar clases a una URL";
 ?>

@@ -126,7 +126,7 @@ function display_default_visibility_form($uploadvisibledisabled) {
 		</label>
 		<div class="controls">
             <label class="radio" for="uploadvisibledisabled_1">
-                <input id="uploadvisibledisabled_1" class="checkbox" type="radio" name="uploadvisibledisabled" value="0"   <?php if ($uploadvisibledisabled == 0) echo 'checked'; ?> />
+                <input id="uploadvisibledisabled_1" class="checkbox" type="radio" name="uploadvisibledisabled" value="0" <?php if ($uploadvisibledisabled == 0) echo 'checked'; ?> />
 				<?php echo get_lang('NewVisible'); ?>
             </label>
         <label class="radio" for="uploadvisibledisabled_2">
@@ -2623,6 +2623,7 @@ function uploadWork($my_folder_data, $_course) {
  * @param int $session_id
  */
 function sendAlertToTeacher($workId, $courseInfo, $session_id) {
+    $id_session = api_get_session_id();
     $workData = get_work_assignment_by_id($workId, $courseInfo['real_id']);
     //last value is to check this is not "just" an edit
     //YW Tis part serve to send a e-mail to the tutors when a new file is sent

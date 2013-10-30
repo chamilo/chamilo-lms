@@ -841,7 +841,7 @@ function add_edit_template() {
     // Initialize the object.
     $form = new FormValidator('template', 'post', 'settings.php?category=Templates&action='.Security::remove_XSS($_GET['action']).'&id='.Security::remove_XSS($_GET['id']));
 
-    // Settting the form elements: the header.
+    // Setting the form elements: the header.
     if ($_GET['action'] == 'add') {
         $title = get_lang('AddTemplate');
     } else {
@@ -849,16 +849,16 @@ function add_edit_template() {
     }
     $form->addElement('header', '', $title);
 
-    // Settting the form elements: the title of the template.
+    // Setting the form elements: the title of the template.
     $form->add_textfield('title', get_lang('Title'), false);
 
-    // Settting the form elements: the content of the template (wysiwyg editor).
+    // Setting the form elements: the content of the template (wysiwyg editor).
     $form->addElement('html_editor', 'template_text', get_lang('Text'), null, array('ToolbarSet' => 'AdminTemplates', 'Width' => '100%', 'Height' => '400'));
 
-    // Settting the form elements: the form to upload an image to be used with the template.
+    // Setting the form elements: the form to upload an image to be used with the template.
     $form->addElement('file','template_image',get_lang('Image'),'');
 
-    // Settting the form elements: a little bit information about the template image.
+    // Setting the form elements: a little bit information about the template image.
     $form->addElement('static', 'file_comment', '', get_lang('TemplateImageComment100x70'));
 
     // Getting all the information of the template when editing a template.
@@ -887,7 +887,7 @@ function add_edit_template() {
         // Setting the information of the template that we are editing.
         $form->setDefaults($defaults);
     }
-    // Settting the form elements: the submit button.
+    // Setting the form elements: the submit button.
     $form->addElement('style_submit_button' , 'submit', get_lang('Ok') ,'class="save"');
 
     // Setting the rules: the required fields.

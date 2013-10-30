@@ -8,7 +8,7 @@
  * Init
  */
 $language_file= 'gradebook';
-//$cidReset= true;
+
 require_once '../inc/global.inc.php';
 require_once 'lib/be.inc.php';
 require_once 'lib/gradebook_functions.inc.php';
@@ -28,8 +28,8 @@ function plusItem(item) {
     document.getElementById("min-"+(item-1)).style.display = "none";
     document.getElementById("min-"+(item)).style.display = "inline";
     document.getElementById("plus-"+(item+1)).style.display = "inline";
-    document.getElementById("txta-"+(item)).value = "100";
-    document.getElementById("txta-"+(item-1)).value = "";
+    //document.getElementById("txta-"+(item)).value = "100";
+    //document.getElementById("txta-"+(item-1)).value = "";
 }
 
 function minItem(item) {
@@ -54,30 +54,24 @@ $displayscore= ScoreDisplay :: instance();
 $customdisplays = $displayscore->get_custom_score_display_settings();
 
 $nr_items = (count($customdisplays) != '0' )? count($customdisplays) : '1';
-
-//Insert defaults
-if (empty($customdisplays)) {
-    //$displayscore->insert_defaults($select_cat);    
-}
-
 $scoreform= new ScoreDisplayForm('scoring_system_form', api_get_self() . '?selectcat=' . $select_cat);
 if ($scoreform->validate()) {
-	$value_export='';
-	$value_export=$scoreform->exportValues();
-	$value_export=isset($value_export) ? $scoreform->exportValues(): '';
-	$values= $value_export;
+    $value_export = '';
+    $value_export = $scoreform->exportValues();
+    $value_export = isset($value_export) ? $scoreform->exportValues(): '';
+    $values = $value_export;
 
     // create new array of custom display settings
     // this loop also checks if all score ranges are unique
 
-	$scoringdisplay= array ();
-	$ranges_ok = true;
-	$endscore= isset($values['endscore']) ? $values['endscore'] : null;
-	$displaytext=isset($values['displaytext']) ? $values['displaytext'] : null;
-	for ($counter= 1; $ranges_ok && $counter <= 20; $counter++) {
+    $scoringdisplay= array ();
+    $ranges_ok = true;
+    $endscore= isset($values['endscore']) ? $values['endscore'] : null;
+    $displaytext=isset($values['displaytext']) ? $values['displaytext'] : null;
+    for ($counter= 1; $ranges_ok && $counter <= 20; $counter++) {
         $setting= array ();
-        $setting['score']= $endscore[$counter];
-        $setting['display']= $displaytext[$counter];
+        $setting['score'] = $endscore[$counter];
+        $setting['display'] = $displaytext[$counter];
         if (!empty($setting['score'])) {
             foreach ($scoringdisplay as $passed_entry) {
                 if ($passed_entry['score'] == $setting['score']) {
@@ -88,36 +82,35 @@ if ($scoreform->validate()) {
         }
     }
 
-	if (!$ranges_ok) {
-		header('Location: ' . api_get_self() . '?nouniqueranges=&selectcat=' . $select_cat);
-		exit;
-	}
+    if (!$ranges_ok) {
+        header('Location: ' . api_get_self() . '?nouniqueranges=&selectcat=' . $select_cat);
+        exit;
+    }
 
-	$scorecolpercent = 0;
-    
+    $scorecolpercent = 0;
+
     if ($displayscore->is_coloring_enabled()) {
         $scorecolpercent = $values['scorecolpercent'];
-	}
-    	    
-	if ($displayscore->is_custom() && !empty($scoringdisplay)) {
-		$displayscore->update_custom_score_display_settings($scoringdisplay, $scorecolpercent);
-	}
-	header('Location: ' . api_get_self() . '?scoringupdated=&selectcat=' . $select_cat);
-	exit;
+    }
+
+    if ($displayscore->is_custom() && !empty($scoringdisplay)) {
+        $displayscore->update_custom_score_display_settings($scoringdisplay, $scorecolpercent);
+    }
+    header('Location:'.api_get_self().'?scoringupdated=&selectcat='.$select_cat);
+    exit;
 }
 
 $this_section = SECTION_COURSES;
 Display :: display_header(get_lang('ScoreEdit'));
 
 if (((isset($_GET['isStudentView']) && $_GET['isStudentView']=='false') || (isset($_GET['selectcat']) && ($_SESSION['studentview']=='teacherview')))) {
-	if (isset ($_GET['scoringupdated'])) {
-		Display :: display_confirmation_message(get_lang('ScoringUpdated'),false);
-	}
+    if (isset ($_GET['scoringupdated'])) {
+        Display::display_confirmation_message(get_lang('ScoringUpdated'), false);
+    }
 
     if (isset ($_GET['nouniqueranges'])) {
-    	Display :: display_error_message(get_lang('NoUniqueScoreRanges'),false);
-    }    
+        Display::display_error_message(get_lang('NoUniqueScoreRanges'), false);
+    }
     $scoreform->display();
-    
 }
-Display :: display_footer();
+Display::display_footer();

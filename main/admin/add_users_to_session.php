@@ -15,7 +15,7 @@ require_once '../inc/global.inc.php';
 require_once '../inc/lib/xajax/xajax.inc.php';
 $xajax = new xajax();
 
-$xajax -> registerFunction ('search_users');
+$xajax->registerFunction ('search_users');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -40,7 +40,7 @@ $tool_name = get_lang('SubscribeUsersToSession');
 
 $add_type = 'unique';
 
-if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
+if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -51,12 +51,12 @@ $page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
 $extra_field_list= UserManager::get_extra_fields();
 $new_field_list = array();
 if (is_array($extra_field_list)) {
-	foreach ($extra_field_list as $extra_field) {
-		//if is enabled to filter and is a "<select>" field type
-		if ($extra_field[8]==1 && $extra_field[2]==4 ) {
-			$new_field_list[] = array('name'=> $extra_field[3], 'variable'=>$extra_field[1], 'data'=> $extra_field[9]);
-		}
-	}
+    foreach ($extra_field_list as $extra_field) {
+        //if is enabled to filter and is a "<select>" field type
+        if ($extra_field[8]==1 && $extra_field[2]==4 ) {
+            $new_field_list[] = array('name'=> $extra_field[3], 'variable'=>$extra_field[1], 'data'=> $extra_field[9]);
+        }
+    }
 }
 
 function search_users($needle, $type) {
@@ -154,7 +154,7 @@ function search_users($needle, $type) {
 		}
 
 		$rs = Database::query($sql);
-        $i=0;
+        $i = 0;
 		if ($type=='single') {
 			while ($user = Database :: fetch_array($rs)) {
 	            $i++;
@@ -228,9 +228,7 @@ function change_select(val) {
     $("#user_with_any_session_id").attr("checked", false);
     xajax_search_users(val,"multiple");
 }
-
 </script>';
-
 
 $form_sent=0;
 $errorMsg=$firstLetterUser=$firstLetterSession='';
@@ -535,7 +533,6 @@ if (!empty($errorMsg)) {
         } else {
             //@todo see that the call to "valide()" doesn't duplicate the onsubmit of the form (necessary to avoid delete on "enter" key pressed)
 			echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeUsersToSession').'</button>';
-
         }
 		?>
     </div>
@@ -558,7 +555,6 @@ if (!empty($errorMsg)) {
 </div>
 </form>
 <script>
-<!--
 function moveItem(origin , destination){
 
 	for(var i = 0 ; i<origin.options.length ; i++) {
@@ -570,11 +566,9 @@ function moveItem(origin , destination){
 	}
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
-
 }
 
 function sortOptions(options) {
-
 	newOptions = new Array();
 	for (i = 0 ; i<options.length ; i++)
 		newOptions[i] = options[i];
@@ -583,7 +577,6 @@ function sortOptions(options) {
 	options.length = 0;
 	for(i = 0 ; i < newOptions.length ; i++)
 		options[i] = newOptions[i];
-
 }
 
 function mysort(a, b){
@@ -603,11 +596,8 @@ function valide(){
 	document.forms.formulaire.submit();
 }
 
-
 function loadUsersInSelect(select){
-
 	var xhr_object = null;
-
 	if(window.XMLHttpRequest) // Firefox
 		xhr_object = new XMLHttpRequest();
 	else if(window.ActiveXObject) // Internet Explorer
@@ -617,10 +607,7 @@ function loadUsersInSelect(select){
 
 	//xhr_object.open("GET", "loadUsersInSelect.ajax.php?id_session=<?php echo $id_session ?>&letter="+select.options[select.selectedIndex].text, false);
 	xhr_object.open("POST", "loadUsersInSelect.ajax.php");
-
 	xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-
 	nosessionUsers = makepost(document.getElementById('origin_users'));
 	sessionUsers = makepost(document.getElementById('destination_users'));
 	nosessionClasses = makepost(document.getElementById('origin_classes'));
@@ -635,18 +622,14 @@ function loadUsersInSelect(select){
 	}
 }
 
-function makepost(select){
-
+function makepost(select) {
 	var options = select.options;
 	var ret = "";
 	for (i = 0 ; i<options.length ; i++)
 		ret = ret + options[i].value +'::'+options[i].text+";;";
-
 	return ret;
-
 }
--->
 </script>
 <?php
-/*		FOOTER */
+
 Display::display_footer();

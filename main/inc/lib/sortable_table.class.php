@@ -114,7 +114,15 @@ class SortableTable extends HTML_Table {
      * @param string $default_order_direction The default order direction;
      * either the constant 'ASC' or 'DESC'
      */
-    public function __construct($table_name = 'table', $get_total_number_function = null, $get_data_function = null, $default_column = 1, $default_items_per_page = 20, $default_order_direction = 'ASC', $table_id = null) {
+    public function __construct(
+        $table_name = 'table',
+        $get_total_number_function = null,
+        $get_data_function = null,
+        $default_column = 1,
+        $default_items_per_page = 20,
+        $default_order_direction = 'ASC',
+        $table_id = null
+    ) {
         if (empty($table_id)) {
             $table_id = $table_name.uniqid();
         }
@@ -135,7 +143,7 @@ class SortableTable extends HTML_Table {
         if (in_array(strtoupper($default_order_direction), array('ASC', 'DESC'))) {
             $this->direction = $default_order_direction;
         }
-        
+
         if (isset($_SESSION[$this->param_prefix.'direction'])) {
             $my_session_direction = $_SESSION[$this->param_prefix.'direction'];
             if (!in_array($my_session_direction, array('ASC', 'DESC'))) {

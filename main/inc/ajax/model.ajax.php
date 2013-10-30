@@ -493,23 +493,7 @@ switch ($action) {
         break;
     case 'get_usergroups':
         $columns = array('name', 'users', 'courses','sessions','actions');
-        $result     = Database::select('*', $obj->table, array('order'=>"name $sord", 'LIMIT'=> "$start , $limit"));
-        $new_result = array();
-        if (!empty($result)) {
-            foreach ($result as $group) {
-                $group['sessions']   = count($obj->get_sessions_by_usergroup($group['id']));
-                $group['courses']    = count($obj->get_courses_by_usergroup($group['id']));
-                $group['users']      = count($obj->get_users_by_usergroup($group['id']));
-                $new_result[]        = $group;
-            }
-            $result = $new_result;
-        }
-        $columns = array('name', 'users', 'courses','sessions');
-        if(!in_array($sidx, $columns)) {
-            $sidx = 'name';
-        }
-        //Multidimensional sort
-        msort($result, $sidx);
+        $result = $obj->getUsergroupsPagination($sidx, $sord, $start, $limit);
         break;
     case 'get_extra_fields':
         $obj = new ExtraField($type);

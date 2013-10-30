@@ -666,8 +666,7 @@ class CourseManager {
     }
 
     public static function get_user_list_from_courses_as_coach($user_id, $include_sessions = true) {
-        $courses_as_admin = $students_in_courses = array();
-
+        $students_in_courses = array();
         $sessions = CourseManager::get_course_list_as_coach($user_id, true);
 
         if (!empty($sessions)) {
@@ -2091,29 +2090,17 @@ class CourseManager {
     }
 
     /**
-     * create recursively all categories as option of the select passed in paramater.
+     * create recursively all categories as option of the select passed in parameter.
      *
-     * @param object $select_element the quickform select where the options will be added
-     * @param string $category_selected_code the option value to select by default (used mainly for edition of courses)
-     * @param string $parent_code the parent category of the categories added (default=null for root category)
+     * @param FormValidator $form
+     * @param string $defaultCode the option value to select by default (used mainly for edition of courses)
+     * @param string $parentCode the parent category of the categories added (default=null for root category)
      * @param string $padding the indent param (you shouldn't indicate something here)
      */
-    public static function select_and_sort_categories($select_element, $category_selected_code = '', $parent_code = null , $padding = '') {
-
-        $sql = "SELECT code, name, auth_course_child, auth_cat_child
-                FROM ".Database::get_main_table(TABLE_MAIN_CATEGORY)."
-                WHERE parent_id ".(is_null($parent_code) ? "IS NULL" : "='".Database::escape_string($parent_code)."'")."
-                ORDER BY code";
-        $res = Database::query($sql);
-
-        while ($cat = Database::fetch_array($res)) {
-            $params = $cat['auth_course_child'] == 'TRUE' ? '' : 'disabled';
-            $params .= ($cat['code'] == $category_selected_code) ? ' selected' : '';
-            $select_element->addOption($padding.'('.$cat['code'].') '.$cat['name'], $cat['code'], $params);
-            if ($cat['auth_cat_child']) {
-                self::select_and_sort_categories($select_element, $category_selected_code, $cat['code'], $padding.' - ');
-            }
-        }
+    public static function select_and_sort_categories($form, $defaultCode = null, $parentCode = null , $padding = null)
+    {
+        require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
+        setCategoriesInForm($form, $defaultCode, $parentCode , $padding);
     }
 
     /**
@@ -2633,10 +2620,11 @@ class CourseManager {
      * @param bool        If true is displayed if false is hidden
      * @return string     The course description in html
      */
-    public static function get_details_course_description_html($descriptions, $charset, $action_show = true) {
+    public static function get_details_course_description_html($descriptions, $charset, $action_show = true)
+    {
+        $data = null;
         if (isset($descriptions) && count($descriptions) > 0) {
-            $data = '';
-            foreach ($descriptions as $id => $description) {
+            foreach ($descriptions as $description) {
                 $data .= '<div class="sectiontitle">';
                 if (api_is_allowed_to_edit() && $action_show) {
                     //delete
@@ -3899,7 +3887,7 @@ class CourseManager {
 
     /**
      *
-     *
+     * @deprecated seems not to be used
      * @return ResultSet
      */
     static function list_inactive_courses($ceiling, $visibility_level = COURSE_VISIBILITY_REGISTERED) {
@@ -4012,8 +4000,7 @@ class CourseManager {
         $deleteTeachersNotInList = true,
         $editTeacherInSessions = false,
         $deleteSessionTeacherNotInList = false
-    )
-    {
+    ) {
         if (empty($teachers)) {
             return false;
         }

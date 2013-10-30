@@ -54,7 +54,7 @@ if (api_get_setting('add_users_by_coach') == 'true') {
         if (Database::result($rs, 0, 0) != $_user['user_id']) {
             api_not_allowed(true);
         } else {
-            $show_import_icon=true;
+            $show_import_icon = true;
         }
     }
 }
@@ -79,7 +79,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
             $courses  = CourseManager::get_course_list_of_user_as_course_admin($user_id);
         } else {
             $title = get_lang('YourCourseList');
-            $courses = CourseManager::get_courses_followed_by_drh($_user['user_id']);
+            $courses = CourseManager::get_courses_followed_by_drh(api_get_user_id());
         }
     } else {
         $session_name = api_get_session_name($id_session);
@@ -95,6 +95,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
         $menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('Trainers'), array(), ICON_SIZE_MEDIUM), 'teachers.php');
         $menu_items[] = Display::url(Display::return_icon('course_na.png', get_lang('Courses'), array(), ICON_SIZE_MEDIUM), '#');
         $menu_items[] = Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM), 'session.php');
+
         if (api_can_login_as($user_id)) {
             $link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.Security::get_existing_token().'">'.
                     Display::return_icon('login_as.png', get_lang('LoginAs'), null, ICON_SIZE_MEDIUM).'</a>&nbsp;&nbsp;';
@@ -145,9 +146,11 @@ if (!api_is_drh() && !api_is_session_admin() && !api_is_platform_admin()) {
     $a_courses = array_keys($courses);
 }
 
-if (api_drh_can_access_all_session_content()) {
-    if (!isset($_GET['user_id'])) {
-        $a_courses = $coursesFromSession;
+if (api_is_drh() && !api_is_platform_admin()) {
+    if (api_drh_can_access_all_session_content()) {
+        if (!isset($_GET['user_id'])) {
+            $a_courses = $coursesFromSession;
+        }
     }
 }
 

@@ -23,6 +23,16 @@ $session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) :
 $course_code = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : api_get_course_id();
 
 switch ($action) {
+    case 'get_question_info';
+        if (api_is_course_admin()) {
+            $questionId = $_REQUEST['questionId'];
+            $courseId = api_get_course_int_id();
+            $question = Question::read($questionId, $courseId);
+            $categoryToString = Testcategory::getCategoryNamesForQuestion($questionId, $courseId, true, false);
+            $question->category_list = $categoryToString;
+            echo json_encode($question);
+        }
+        break;
     case 'get_question':
         /** @var Exercise $objExercise */
         $objExercise = $_SESSION['objExercise'];

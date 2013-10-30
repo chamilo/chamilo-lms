@@ -1,5 +1,28 @@
 {% extends app.template_style ~ "/layout/layout_1_col.tpl" %}
 {% block content %}
+    <script>
+        $(function () {
+            $('#close_button').click(function(){
+                $('#question_info').hide();
+            });
+
+            $('.loadQuestion').click(function(){
+                var questionId = $(this).text();
+                $.ajax({
+                    dataType: "json",
+                    url: "{{ _p.web_ajax }}exercise.ajax.php?a=get_question_info",
+                    data: "questionId="+questionId+"",
+                    success: function(questionInfo) {
+                        $('#question_title').html(questionInfo.question);
+                        $('#question_category_list').html(questionInfo.category_list);
+                        $('#question_info').show();
+                    }
+                });
+
+            });
+        });
+    </script>
+
     <div class="actions">
         <a href="{{ exerciseUrl }}">
             {{ 'Back' |trans }}
@@ -10,8 +33,14 @@
         <a href="{{ url('exercise_distribution.controller:showStatsAction', {'exerciseId' : exerciseId, 'cidReq':course.code, 'id_session' : course_session.id }) }}">
             {{ 'Stats' |trans }}
         </a>
-
     </div>
+    <span id="question_info" style="display:none">
+        <div class="well">
+        <h3>  <span id="question_title"> </span></h3>
+        <span id="question_category_list"></span>
+        <span id="close_button" ><a href="#" class="btn">Cerrar</a></span>
+        </div>
+    </span>
 
     <table class="table">
 
@@ -40,7 +69,7 @@
                     {% endif %}
                 </td>
                 <td>
-                    {{ item.dataTracking |replace({',': ', '}) }}
+                    <a class="loadQuestion btn">{{ item.dataTracking |replace({',': '</a> <a class="loadQuestion btn">'}) }}</a>
                 </td>
                 <td>
                     {% if item.active == 1 %}

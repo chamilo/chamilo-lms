@@ -314,4 +314,21 @@ abstract class TransactionLog
 
         return json_encode($content);
     }
+
+    /**
+     * Retrieves the names of for the transaction possible status.
+     *
+     * @return array
+     *   A list containing the names keyed by status id.
+     */
+    public static function getStatusNames() {
+        // @todo Translate.
+        return array(
+            self::STATUS_LOCAL => 'Local transaction',
+            self::STATUS_TO_BE_EXECUTED => 'Pending to be executed',
+            self::STATUS_SUCCESSFUL => 'Successfully imported transactions',
+            self::STATUS_FAILED => 'Failed import transaction',
+            self::STATUS_ABANDONNED => 'Abandoned transaction',
+        );
+    }
 }

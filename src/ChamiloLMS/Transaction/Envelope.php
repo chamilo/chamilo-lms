@@ -246,4 +246,19 @@ class Envelope
             throw new WrapException(sprintf("Failed to prepare some transactions:\n%s", $error_messages));
         }
     }
+
+    /**
+     * Retrieves the names of for the received evelopes possible status.
+     *
+     * @return array
+     *   A list containing the names keyed by status id.
+     */
+    public static function getStatusNames() {
+        // @todo Translate.
+        return array(
+            self::RECEIVED_TO_BE_IMPORTED => 'Pending to import',
+            self::RECEIVED_IMPORTED => 'Imported',
+        );
+    }
+
 }

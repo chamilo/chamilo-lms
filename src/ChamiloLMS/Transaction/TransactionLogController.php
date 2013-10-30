@@ -9,6 +9,7 @@ use Entity\BranchSync;
 use ChamiloLMS\Transaction\Plugin\WrapperPluginInterface;
 use ChamiloLMS\Transaction\Plugin\SendPluginInterface;
 use ChamiloLMS\Transaction\Plugin\ReceivePluginInterface;
+use ChamiloLMS\Transaction\Envelope;
 // See comment at getTransactionClass().
 use ChamiloLMS\Transaction\ExerciseAttemptTransactionLog;
 
@@ -591,5 +592,59 @@ class TransactionLogController
     public function getBranchRepository()
     {
         return $this->branchRepository;
+    }
+
+    /**
+     * Retrieves the number of transactions per status.
+     *
+     * @return array
+     *   Number of transactions per status.
+     */
+    public function getTransactionCounterPerStatus() {
+        $transaction_log_status_names = TransactionLog::getStatusNames();
+        // Define the array manually to avoid invalid status to appear and
+        // provide a default 0 if there are not transactions with a given
+        // status.
+        $transaction_counters_per_status = array();
+        foreach ($transaction_log_status_names as $status_id => $name) {
+            $transaction_counters_per_status[$status_id] = 0;
+        }
+        // @todo is group by clause supported on Database::select()?
+        $sql = sprintf('SELECT status_id, COUNT(id) as counter FROM %s GROUP BY status_id', $this->table);
+        $result = Database::query($sql);
+        while ($row = $result->fetch()) {
+            // Only add results for know status ids.
+            if (isset($transaction_counters_per_status[$row['status_id']])) {
+                $transaction_counters_per_status[$row['status_id']] = $row['counter'];
+            }
+        }
+        return $transaction_counters_per_status;
+    }
+
+    /**
+     * Retrieves the number of received envelopes per status.
+     *
+     * @return array
+     *   Number of received envelopes per status.
+     */
+    public function getReceivedEnvelopesCounterPerStatus() {
+        $envelope_status_names = Envelope::getStatusNames();
+        // Define the array manually to avoid invalid status to appear and
+        // provide a default 0 if there are not transactions with a given
+        // status.
+        $envelope_counters_per_status = array();
+        foreach ($envelope_status_names as $status_id => $name) {
+            $envelope_counters_per_status[$status_id] = 0;
+        }
+        // @todo is group by clause supported on Database::select()?
+        $sql = sprintf('SELECT status, COUNT(id) as counter FROM %s GROUP BY status', Database::get_main_table(TABLE_RECEIVED_ENVELOPES));
+        $result = Database::query($sql);
+        while ($row = $result->fetch()) {
+            // Only add results for know status ids.
+            if (isset($envelope_counters_per_status[$row['status']])) {
+                $envelope_counters_per_status[$row['status']] = $row['counter'];
+            }
+        }
+        return $envelope_counters_per_status;
     }
 }

@@ -2700,4 +2700,42 @@ abstract class Question
         }
         return $result;
     }
+    /**
+     * Makes a question valid inside a global category in another course as well
+     * This might be used in combination with the ExerciseController::reuseQuestionAction()
+     * to make sure the "linked" question also has the global category
+     * Before this function, the only problematic bit was that copying a question
+     * didn't copy the reference to this question in the c_quiz_question_rel_category table,
+     * making the question itself in the new course appear without category
+     *
+     * This might get deprecated if we start using c_id = 0 in the c_quiz_question_rel_category
+     */
+    function enableGlobalCategoryInNewCourse($questionId, $courseIdDest) {
+        $questionRelCategoryTable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
+        $categoryTable = Database::get_course_table(TABLE_QUIZ_CATEGORY);
+        $questionId = intval($questionId);
+        $courseIdDest = intval($courseIdDest);
+        // First check whether the category is global: if it's not, we don't need to do anything
+        $sql = "SELECT iid, c_id, question_id, category_id FROM $questionRelCategoryTable WHERE question_id = $questionId";
+        $res = Database::query($sql);
+        if (Database::num_rows($res) < 1) {
+            return false;
+        }
+        $origCats = array();
+        $destCats = array();
+        while ($row = Database::fetch_assoc($res)) {
+            $g = Testcategory::isGlobal($row['category_id']);
+            if ($g) {
+                $origCats[] = $row['category_id'];
+                if ($row['c_id'] == $courseIdDest) {
+                    $destCats[] = $row['category_id'];
+                }
+            }
+        }
+        $diff = array_diff($origCats,$destCats);
+        foreach ($diff as $cat) {
+            $sql = "INSERT INTO $questionRelCategoryTable (c_id, question_id, category_id) VALUES ($courseIdDest, $questionId, $cat)";
+            Database::query($sql);
+        }
+  }
 }

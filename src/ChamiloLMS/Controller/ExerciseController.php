@@ -86,6 +86,7 @@ class ExerciseController extends CommonController
 
             // adds the question ID represented by $recup into the list of questions for the current exercise
             $objExercise->addToList($questionId);
+            $question->enableGlobalCategoryInNewCourse($questionId, $objExercise->course_id);
             Session::write('objExercise', $objExercise);
             /*$params = array(
                 'cidReq' => api_get_course_id(),

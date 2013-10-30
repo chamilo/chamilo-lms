@@ -96,6 +96,12 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                 $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?id_session='.$id_session;
             }
 
+            if (!$this->security->isGranted('ROLE_ADMIN')) {
+                if ($count_of_sessions == 0 && $count_of_courses_no_sessions == 0) {
+                    $request->getSession()->getFlashBag()->add('warning', "En este momento no tiene ningún proceso activo. Por favor vuelva a conectarse más tarde.");
+                }
+            }
+
             if ($count_of_sessions == 0 && $count_of_courses_no_sessions == 1) {
                 $key = array_keys($personal_course_list);
                 $course_info = $personal_course_list[$key[0]]['course_info'];

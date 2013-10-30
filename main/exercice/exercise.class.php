@@ -777,7 +777,7 @@ class Exercise
                     }
                 }
             }
-            }
+        }
 
         if (!empty($questions_by_category)) {
             $temp_question_list = array();
@@ -7914,13 +7914,7 @@ class Exercise
                     }
                 }
             }
-
             return $counterAnsweredQuestions;
         }
-
-
-
-
     }
-
 }

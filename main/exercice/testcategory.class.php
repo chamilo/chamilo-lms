@@ -463,7 +463,6 @@ class Testcategory
 		return false;
 	}
 
-
 	/**
      * @todo fix this
 	 Return the category name for question with question_id = $in_questionid
@@ -491,15 +490,15 @@ class Testcategory
 
 
 	/**
-	 * return the list of different categories ID for a test
+	 * Return the list of different categories ID for a test
 	 * @param int exercise id
      * @param bool group category
+     * @param int course id
 	 * @return array of category id (integer)
 	 * @author hubert.borderiou 07-04-2011, Julio Montoya
 	 */
     public static function getListOfCategoriesIDForTest($exercise_id, $grouped_by_category = true, $courseId = null)
     {
-		// parcourir les questions d'un test, recup les categories uniques dans un tableau
         $exercise = new Exercise($courseId);
         $exercise->read($exercise_id, false);
         $categories_in_exercise = $exercise->getQuestionWithCategories();
@@ -519,9 +518,7 @@ class Testcategory
      */
     public static function getListOfCategoriesIDForTestObject(Exercise $exercise_obj)
     {
-        // parcourir les questions d'un test, recup les categories uniques dans un tableau
         $categories_in_exercise = array();
-        // $question_list = $exercise_obj->getQuestionList();
         $question_list = $exercise_obj->getQuestionOrderedListByName();
 
         // the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ???
@@ -538,12 +535,11 @@ class Testcategory
 		return $categories_in_exercise;
 	}
 
-
-
     /**
-	 * Return the list of differents categories NAME for a test
+	 * Return the list of different categories NAME for a test
 	 * @param int exercise id
-     * @param bool
+     * @param bool $grouped_by_category
+     * @param int $courseId
 	 * @return array of string
 	 *
      * @author function rewrote by jmontoya
@@ -570,7 +566,8 @@ class Testcategory
      * @param Exercise $exercise_obj
      * @return array
      */
-    public static function getListOfCategoriesForTest(Exercise $exercise_obj) {
+    public static function getListOfCategoriesForTest(Exercise $exercise_obj)
+    {
         $result = array();
         $categories = self::getListOfCategoriesIDForTestObject($exercise_obj);
         foreach ($categories as $cat_id) {
@@ -584,12 +581,13 @@ class Testcategory
 	}
 
 	/**
-	 * return the number of differents categories for a test
+	 * Return the number of different categories for a test
 	 * input : test_id
 	 * return : integer
 	 * hubert.borderiou 07-04-2011
 	 */
-    public static function getNumberOfCategoriesForTest($exercise_id) {
+    public static function getNumberOfCategoriesForTest($exercise_id)
+    {
         return count(Testcategory::getListOfCategoriesIDForTest($exercise_id));
 	}
 
@@ -819,8 +817,8 @@ class Testcategory
 	}
 
 	/**
-		* return total score for test exe_id for all question in the category $in_cat_id for user
-		* If no question for this category, return ""
+    * Return total score for test exe_id for all question in the category $in_cat_id for user
+    * If no question for this category, return ""
 	*/
 	public static function getCatScoreForExeidForUserid($in_cat_id, $in_exe_id, $in_user_id)
     {
@@ -840,7 +838,6 @@ class Testcategory
 		}
 		return $totalcatscore;
 	}
-
 
     /**
      * return the number max of question in a category
@@ -963,8 +960,10 @@ class Testcategory
      * Returns a category summary report
      *
      * @param int exercise id
+     * @param int course id
      * @param array pre-filled array with the category_id, score, and weight example: array(1 => array('score' => '10', 'total' => 20));
      * @param bool $categoryMinusOne shows category - 1 see BT#6540
+     * @param bool $returnArray
      * @return string
      */
     public static function get_stats_table_by_attempt(
@@ -1049,6 +1048,7 @@ class Testcategory
      * @param int course id
      * @param array $category_list
      * @param $categoryMinusOne
+     * @param bool load children
      * @return array
      */
     public static function globalizeCategories($exercise_id, $courseId, $category_list, $categoryMinusOne, $loadChildren = false)
@@ -1110,7 +1110,8 @@ class Testcategory
     /**
      * @return array
      */
-    function get_all_categories() {
+    function get_all_categories()
+    {
         $table = Database::get_course_table(TABLE_QUIZ_CATEGORY);
         $sql = "SELECT * FROM $table ORDER BY title ASC";
         $res = Database::query($sql);
@@ -1124,6 +1125,7 @@ class Testcategory
      * @param int $exercise_id
      * @param int $course_id
      * @param string $order
+     * @param bool $excludeCategoryWithNoQuestions
      * @return array
      */
     public function getCategoryExerciseTree(

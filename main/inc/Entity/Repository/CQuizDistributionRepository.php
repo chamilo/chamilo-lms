@@ -14,6 +14,7 @@ class CQuizDistributionRepository extends EntityRepository
 {
     /**
      * @param \Entity\CQuizDistribution $distribution
+     * @param \Entity\Course $course
      */
     public function addDistribution(\Entity\CQuizDistribution $distribution, \Entity\Course $course)
     {

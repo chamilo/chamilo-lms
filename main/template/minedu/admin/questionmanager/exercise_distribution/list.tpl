@@ -10,15 +10,20 @@
                 var questionId = $(this).text();
                 $.ajax({
                     dataType: "json",
-                    url: "{{ _p.web_ajax }}exercise.ajax.php?a=get_question_info",
+                    url: "{{ _p.web_ajax }}exercise.ajax.php?a=get_question_info&cidReq={{ course.code }}",
                     data: "questionId="+questionId+"",
                     success: function(questionInfo) {
-                        $('#question_title').html(questionInfo.question);
-                        $('#question_category_list').html(questionInfo.category_list);
-                        $('#question_info').show();
+                        if (questionInfo == 0) {
+                            $('#question_title').html('Pregunta no encontrada');
+                            $('#question_category_list').html(' ');
+                            $('#question_info').show();
+                        } else {
+                            $('#question_title').html(questionInfo.question);
+                            $('#question_category_list').html(questionInfo.category_list);
+                            $('#question_info').show();
+                        }
                     }
                 });
-
             });
         });
     </script>
@@ -69,7 +74,9 @@
                     {% endif %}
                 </td>
                 <td>
-                    <a class="loadQuestion btn">{{ item.dataTracking |replace({',': '</a> <a class="loadQuestion btn">'}) }}</a>
+                    {% if item.dataTracking  %}
+                        <a class="loadQuestion btn">{{ item.dataTracking |replace({',': '</a> <a class="loadQuestion btn">'}) }}</a>
+                    {% endif %}
                 </td>
                 <td>
                     {% if item.active == 1 %}

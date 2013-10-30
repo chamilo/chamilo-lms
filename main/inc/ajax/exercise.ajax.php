@@ -28,9 +28,14 @@ switch ($action) {
             $questionId = $_REQUEST['questionId'];
             $courseId = api_get_course_int_id();
             $question = Question::read($questionId, $courseId);
-            $categoryToString = Testcategory::getCategoryNamesForQuestion($questionId, $courseId, true, false);
-            $question->category_list = $categoryToString;
-            echo json_encode($question);
+            if (!empty($question)) {
+
+                $categoryToString = Testcategory::getCategoryNamesForQuestion($questionId, $courseId, true, false);
+                $question->category_list = $categoryToString;
+                echo json_encode($question);
+            } else {
+                echo 0;
+            }
         }
         break;
     case 'get_question':

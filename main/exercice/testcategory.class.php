@@ -666,10 +666,10 @@ class Testcategory
      * Returns an array of question ids for each category
      * $categories[1][30] = 10, array with category id = 1 and question_id = 10
      * A question has "n" categories
-     * @param int exercise
-     * @param array check question list
-     * @param array
-     * @param int
+     * @param int $exerciseId
+     * @param array $check_in_question_list
+     * @param array $categoriesAddedInExercise
+     * @param int $courseId
      * @return array
 	 */
     static function getQuestionsByCat(
@@ -1130,7 +1130,9 @@ class Testcategory
      * @param int $exercise_id
      * @param int $course_id
      * @param string $order
+     * @param bool shuffle
      * @param bool $excludeCategoryWithNoQuestions
+     * @param bool $shuffleSubcategories
      * @return array
      */
     public function getCategoryExerciseTree(
@@ -1138,7 +1140,8 @@ class Testcategory
         $course_id,
         $order = null,
         $shuffle = false,
-        $excludeCategoryWithNoQuestions = true
+        $excludeCategoryWithNoQuestions = true,
+        $shuffleSubcategories = false
     ) {
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         $table_category = Database::get_course_table(TABLE_QUIZ_CATEGORY);
@@ -1149,7 +1152,6 @@ class Testcategory
             $sql .= "ORDER BY $order";
         }
         $categories = array();
-
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
              while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -1160,7 +1162,29 @@ class Testcategory
                 }
                 $categories[$row['category_id']] = $row;
             }
+        }
+
+        // Shuffle sub categories.
+        if ($shuffleSubcategories) {
+            $categoriesByParent = array();
+            foreach ($categories as $cat)  {
+                $categoriesByParent[$cat['parent_id']][] = $cat;
             }
+
+            if (!empty($categoriesByParent)) {
+                foreach ($categoriesByParent as &$categoryList) {
+                    ArrayClass::shuffle_assoc($categoryList);
+                }
+
+                $newCategoryList = array();
+                foreach ($categoriesByParent as $categoryListToOrder) {
+                    foreach ($categoryListToOrder as $categoryItem) {
+                        $newCategoryList[$categoryItem['iid']] = $categoryItem;
+                    }
+                }
+                $categories = $newCategoryList;
+            }
+        }
 
         if ($shuffle) {
             ArrayClass::shuffle_assoc($categories);
@@ -1311,5 +1335,23 @@ class Testcategory
         $row = Database::fetch_assoc($res);
         $global = ($row['c_id'] == 0 ? true : false);
         return $global;
+    }
+
+    /**
+     * @param array $questionList
+     * @param int $courseId
+     * @return array
+     */
+    public static function getCategoriesFromQuestionList($questionList, $courseId)
+    {
+        $categories = array();
+        foreach ($questionList as $questionId) {
+            $categoryList = self::getCategoryForQuestionWithCategoryData($questionId, $courseId);
+            foreach ($categoryList as $categoryData) {
+                $categoryData['name'] = $categoryData['title'];
+                $categories[$categoryData['iid']][] = $questionId;
+            }
+        }
+        return $categories;
     }
 }

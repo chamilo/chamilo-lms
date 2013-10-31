@@ -48,6 +48,7 @@ define('EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED', 8);
 
 define('EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED', 9);
 define('EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM', 10);
+define('EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_SUB_CAT_RANDOM_QUESTIONS_RANDOM', 11);
 $debug = false; //All exercise scripts should depend in this debug variable
 
 class Exercise
@@ -796,7 +797,7 @@ class Exercise
                 }
                 if (!empty($numberOfQuestions)) {
                     $elements = Testcategory::getNElementsFromArray($categoryQuestionList, $numberOfQuestions, $randomizeQuestions);
-                if (!empty($elements)) {
+                    if (!empty($elements)) {
                         $temp_question_list[$category_id] = $elements;
                         $categoryQuestionList = $elements;
                     }
@@ -872,7 +873,20 @@ class Exercise
                 $question_list = $this->pickQuestionsPerCategory($categoriesAddedInExercise, $question_list, $questions_by_category, true, false);
                 break;
             case EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM: // 10
-                $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'root, lft ASC', false, true);
+                // Added new parameter in order to randomize sub categories see BT#6943
+                /*
+                 @todo this should be false but because there's a new option called EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_SUB_CAT_RANDOM_QUESTIONS_RANDOM
+                 I'm leaving this with true because there could be a lot of exercise already set with this behaviour.
+                */
+                $subCategoryShuffle = true;
+                $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'root, lft ASC', false, true, $subCategoryShuffle);
+                $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise, $courseId);
+                $question_list = $this->pickQuestionsPerCategory($categoriesAddedInExercise, $question_list, $questions_by_category, true, true);
+                break;
+            case EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_SUB_CAT_RANDOM_QUESTIONS_RANDOM:
+                // Added new parameter in order to randomize sub categories see BT#6943
+                $subCategoryShuffle = true;
+                $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'root, lft ASC', false, true, $subCategoryShuffle);
                 $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise, $courseId);
                 $question_list = $this->pickQuestionsPerCategory($categoriesAddedInExercise, $question_list, $questions_by_category, true, true);
                 break;
@@ -882,21 +896,30 @@ class Exercise
         $result['category_with_questions_list'] = isset($questions_by_category) ? $questions_by_category : array();
 
         // Adding category info in the category list with question list:
-
         if (!empty($questions_by_category)) {
-            global $app;
-            $em = $app['orm.em'];
-            $repo = $em->getRepository('Entity\CQuizCategory');
+            $newCategoryList = $this->fillQuestionByCategoryArray($questions_by_category);
+            $result['category_with_questions_list'] = $newCategoryList;
+        }
+        return $result;
+    }
 
-            $newCategoryList = array();
+    /**
+     * @param array $questions_by_category
+     * @return array
+     */
+    function fillQuestionByCategoryArray($questions_by_category)
+    {
+        global $app;
+        $em = $app['orm.em'];
+        $repo = $em->getRepository('Entity\CQuizCategory');
 
+        $newCategoryList = array();
+        if (!empty($questions_by_category)) {
             foreach ($questions_by_category as $categoryId => $questionList) {
-
                 $cat = new Testcategory($categoryId);
                 $cat = (array)$cat;
                 $cat['iid'] = $cat['id'];
                 $cat['name'] = $cat['title'];
-
                 $categoryParentInfo = null;
 
                 if (!empty($cat['parent_id'])) {
@@ -946,9 +969,8 @@ class Exercise
                     'question_list' => $questionList
                 );
             }
-            $result['category_with_questions_list'] = $newCategoryList;
         }
-        return $result;
+        return $newCategoryList;
     }
 
     /**
@@ -1847,6 +1869,7 @@ class Exercise
                 */
                 EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED => get_lang('OrderedCategoriesByParentWithQuestionsOrdered'),
                 EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM => get_lang('OrderedCategoriesByParentWithQuestionsRandom'),
+                //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_SUB_CAT_RANDOM_QUESTIONS_RANDOM => get_lang('OrderedCategoriesByParentWithRandomSubCategoriesWithQuestionsRandom'),
             );
 
             $form->addElement(
@@ -5452,43 +5475,49 @@ class Exercise
         $sessionId = api_get_session_id();
 
         if (!empty($sessionId)) {
+            // Counting how many attempts from session are in the DB
             $sql = "SELECT count(exe_id) as count FROM $trackExercises WHERE session_id = $sessionId";
             $result = Database::query($sql);
 
+            $count = 0;
             if (Database::num_rows($result)) {
                 $result = Database::fetch_array($result);
                 $count = $result['count'];
-                global $app;
-                /** @var \Doctrine\manager $em */
-                $em = $app['orm.em'];
+            }
 
-                $params = array(
-                    'exerciseId' => $this->id,
-                    'sessionId' => $sessionId,
-                    'cId' => $this->course_id
-                );
+            global $app;
+            /** @var \Doctrine\manager $em */
+            $em = $app['orm.em'];
 
-                $quizDistributionRelSessions = $em->getRepository("Entity\CQuizDistributionRelSession")->findBy($params);
+            $params = array(
+                'exerciseId' => $this->id,
+                'sessionId' => $sessionId,
+                'cId' => $this->course_id
+            );
 
-                if ($quizDistributionRelSessions) {
-                    $formToUse = $count % (count($quizDistributionRelSessions));
-                    /** @var \Entity\CQuizDistributionRelSession  $quizDistributionRelSession */
-                    if (isset($quizDistributionRelSessions[$formToUse])) {
-                        $quizDistributionRelSession = $quizDistributionRelSessions[$formToUse];
+            // Searching for forms in this sessions
+            $quizDistributionRelSessions = $em->getRepository("Entity\CQuizDistributionRelSession")->findBy($params);
 
-                        $this->distributionId = $quizDistributionRelSession->getQuizDistributionId();
-                        $distribution = $quizDistributionRelSession->getDistribution();
-                        $dataTracking = array();
+            if (!empty($quizDistributionRelSessions)) {
+                // Getting a distribution depends of the count of attempts and count of distributions.
+                $formToUse = $count % (count($quizDistributionRelSessions));
 
-                        if ($distribution) {
-                            $dataTracking = $distribution->getDataTracking();
-                        }
-                        if (!empty($dataTracking)) {
-                            $questionList = explode(',', $dataTracking);
-                            if (!empty($questionList)) {
-                                //shuffle($questionList);
-                            }
-                        }
+                /** @var \Entity\CQuizDistributionRelSession $quizDistributionRelSession */
+                if (isset($quizDistributionRelSessions[$formToUse])) {
+                    $quizDistributionRelSession = $quizDistributionRelSessions[$formToUse];
+                    $this->distributionId = $quizDistributionRelSession->getQuizDistributionId();
+                    $distribution = $quizDistributionRelSession->getDistribution();
+                    $dataTracking = array();
+                    if (!empty($distribution)) {
+                        $dataTracking = $distribution->getDataTracking();
+                    }
+
+                    if (!empty($dataTracking)) {
+                        $questionList = explode(',', $dataTracking);
+                        /*$this->categoryWithQuestionList = TestCategory::getCategoriesFromQuestionList(
+                            $questionList,
+                            $this->course_id
+                        );*/
                     }
                 }
             }
@@ -6009,11 +6038,22 @@ class Exercise
 
         $categoryList = Session::read('categoryList');
 
-        // Use session too boost performance the variable is deleted in exercise_result.php
+        // @todo Use session too boost performance the variable is deleted in exercise_result.php
         $categoryList = null;
 
         if (empty($categoryList)) {
-            $categoryList = $this->getListOfCategoriesWithQuestionForTest();
+
+            // Old behaviour when sub categories are static.
+            //$categoryList = $this->getListOfCategoriesWithQuestionForTest();
+
+            // Generating category list from the question list, because subcategories can be randomized!
+            $questionByCategory = TestCategory::getCategoriesFromQuestionList(
+                $questionList,
+                $this->course_id
+            );
+            $categoryListFromQuestionList = $this->fillQuestionByCategoryArray($questionByCategory);
+            $categoryList = $this->getListOfCategoriesWithQuestionForTest($categoryListFromQuestionList);
+
             Session::write('categoryList', $categoryList);
         }
 
@@ -6044,8 +6084,8 @@ class Exercise
         }
 
         // Count the number of answered, unanswered and 'for review' questions - see BT#6523
-        $numa = count(array_flip(array_merge($exercise_result,$remindList)));
-        $numu = count($questionListFlatten)-$numa;
+        $numa = count(array_flip(array_merge($exercise_result, $remindList)));
+        $numu = count($questionListFlatten) - $numa;
         $numr = count($remindList);
         $html .= Display::label(sprintf(get_lang('AnsweredZ'),'a'), 'success').'<br />'.Display::label(sprintf(get_lang('UnansweredZ'),'b')).'<br />'.
                  $reviewAnswerLabel.$currentAnswerLabel.
@@ -6059,12 +6099,11 @@ class Exercise
         return $html;
     }
 
-
     /**
      * @param array media question array
      * @return array question list (flatten not grouped by Medias)
      */
-    public function getListOfCategoriesWithQuestionForTest()
+    public function getListOfCategoriesWithQuestionForTest($categoryList = null)
     {
         $newMediaList = array();
         $mediaQuestions = $this->getMediaList();
@@ -6077,7 +6116,10 @@ class Exercise
             }
         }
 
-        $categoryList = $this->categoryWithQuestionList;
+        if (empty($categoryList)) {
+            $categoryList = $this->categoryWithQuestionList;
+        }
+
         $categoriesWithQuestion = array();
 
         if (!empty($categoryList)) {
@@ -6187,7 +6229,8 @@ class Exercise
                 $selectionType,
                 array(
                     EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED,
-                    EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM
+                    EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM,
+                    EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_SUB_CAT_RANDOM_QUESTIONS_RANDOM
                 )
             )) {
                 $useRootAsCategoryTitle = true;

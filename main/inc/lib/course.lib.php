@@ -3992,6 +3992,7 @@ class CourseManager {
      * @param string $course_code
      * @param array $teachers
      * @param bool $editTeacherInSessions
+     * @param bool $deleteSessionTeacherNotInList
      * @return bool
      */
     public static function updateTeachers(
@@ -4026,21 +4027,20 @@ class CourseManager {
         }
 
         if (count($teachers) > 0) {
-            foreach ($teachers as $key) {
+            foreach ($teachers as $userId) {
                 // We check if the teacher is already subscribed in this course
-                $sql_select_teacher = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$key.'" AND course_code = "'.$course_code.'" ';
-                $result = Database::query($sql_select_teacher);
-
-                if (Database::num_rows($result) == 1) {
-                    $sql = 'UPDATE '.$course_user_table.' SET status = "1" WHERE course_code = "'.$course_code.'" AND user_id = "'.$key.'"  ';
+                $sql = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$userId.'" AND course_code = "'.$course_code.'" ';
+                $result = Database::query($sql);
+                if (Database::num_rows($result)) {
+                    $sql = 'UPDATE '.$course_user_table.' SET status = "1" WHERE course_code = "'.$course_code.'" AND user_id = "'.$userId.'"  ';
                 } else {
                     $sql = "INSERT INTO ".$course_user_table . " SET
                         course_code = '".Database::escape_string($course_code). "',
-                        user_id = '".$key . "',
+                        user_id = '".$userId."',
                         status = '1',
                         role = '',
-                        tutor_id='0',
-                        sort='0',
+                        tutor_id = '0',
+                        sort = '0',
                         user_course_cat='0'";
                 }
                 Database::query($sql);

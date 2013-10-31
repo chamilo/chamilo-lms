@@ -1463,4 +1463,8 @@ $DataTableSearch = "Search";
 $HideColumn = "Hide column";
 $DisplayColumn = "Show column";
 $LegalAgreementAccepted = "Legal agreement accepted";
+$AddingStudentsFromSessionXToSessionY = "Adding students from session <b>%s</b> to session <b>%s </b>";
+$EnrollTrainersFromExistingSessions = "Enroll trainers from existing sessions";
+$EnrollStudentsFromExistingSessions = "Enroll students from existing sessions";
+$CoachesSubscribedAsATeacherInCourseX = "Coaches will be subcribed as a teacher in the course %s";
 ?>

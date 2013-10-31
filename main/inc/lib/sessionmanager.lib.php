@@ -675,14 +675,18 @@ class SessionManager
     }
 
     /**
-    * Subscribes users (students)  to the given session and optionally (default) unsubscribes previous users
-    * @author Carlos Vargas from existing code
-    * @param	integer		Session ID
-    * @param	array		List of user IDs
-    * @param	bool		Whether to unsubscribe existing users (true, default) or not (false)
-    * @return	void		Nothing, or false on error
-    **/
-	public static function suscribe_users_to_session(
+     * Subscribes students to the given session and optionally (default) unsubscribes previous users
+     *
+     * @author Carlos Vargas from existing code
+     * @author Julio Montoya. Cleaning code.
+     * @param int $id_session
+     * @param array $user_list
+     * @param int $session_visibility
+     * @param bool $empty_users
+     * @param bool $send_email
+     * @return bool
+     */
+    public static function suscribe_users_to_session(
         $id_session,
         $user_list,
         $session_visibility = SESSION_VISIBLE_READ_ONLY,
@@ -1665,7 +1669,7 @@ class SessionManager
      * @param	int	filter by status coach = 2
      * @return  array a list with an user list
      */
-    public static function get_users_by_session($id, $with_status = null)
+    public static function get_users_by_session($id, $status = null)
     {
         if (empty($id)) {
             return array();
@@ -1679,9 +1683,9 @@ class SessionManager
                     ON $tbl_user.user_id = $tbl_session_rel_user.id_user
                     AND $tbl_session_rel_user.id_session = $id";
 
-        if (isset($with_status) && $with_status != '') {
-        	$with_status = intval($with_status);
-        	$sql .= " WHERE relation_type = $with_status ";
+        if (isset($status) && $status != '') {
+            $status = intval($status);
+        	$sql .= " WHERE relation_type = $status ";
         }
 
         $result = Database::query($sql);
@@ -2615,5 +2619,116 @@ class SessionManager
                 }
             }
         }
+    }
+
+    /**
+     * @param array $sessions
+     * @param array $sessionsDestination
+     * @return string
+     */
+    public static function copyStudentsFromSession($sessions, $sessionsDestination)
+    {
+        $messages = array();
+        if (!empty($sessions)) {
+            foreach ($sessions as $sessionId) {
+                $sessionInfo = self::fetch($sessionId);
+                $userList = self::get_users_by_session($sessionId, 0);
+                if (!empty($userList)) {
+                    $newUserList = array();
+                    $userToString = null;
+                    foreach ($userList as $userInfo) {
+                        $newUserList[] = $userInfo['user_id'];
+                        $userToString .= $userInfo['firstname'].' '.$userInfo['lastname'].'<br />';
+                    }
+
+                    if (!empty($sessionsDestination)) {
+                        foreach ($sessionsDestination  as $sessionDestinationId) {
+                            $sessionDestinationInfo = self::fetch($sessionDestinationId);
+                            $messages[] = Display::return_message(
+                                sprintf(get_lang('AddingStudentsFromSessionXToSessionY'), $sessionInfo['name'], $sessionDestinationInfo['name']),
+                                'info',
+                                false
+                            );
+                            if ($sessionId == $sessionDestinationId) {
+                                $messages[] = Display::return_message(get_lang('SkipSession'), 'warning', false);
+                                continue;
+                            }
+                            $messages[] = Display::return_message(get_lang('StudentList').'<br />'.$userToString, 'info', false);
+                            SessionManager::suscribe_users_to_session($sessionDestinationId, $newUserList, SESSION_VISIBLE_READ_ONLY, false);
+                        }
+                    } else {
+                        $messages[] = Display::return_message(get_lang('NoDestinationSessionProvided'), 'warning');
+                    }
+                } else {
+                    $messages[] = Display::return_message(get_lang('NoStudentsFoundForSession').' #'.$sessionInfo['name'], 'warning');
+                }
+            }
+        } else {
+            $messages[]= Display::return_message(get_lang('NoData'), 'warning');
+        }
+        return $messages;
+    }
+
+    /**
+     * @param array $sessions
+     * @param array $courses
+     */
+    public static function copyCoachesFromSessionToCourse($sessions, $courses)
+    {
+        $coachesPerSession = array();
+        foreach ($sessions as $sessionId) {
+            $coaches = self::getCoachesBySession($sessionId);
+            $coachesPerSession[$sessionId] = $coaches;
+        }
+
+        $result = array();
+
+        if (!empty($courses)) {
+            foreach ($courses as $courseId) {
+                $courseInfo = api_get_course_info_by_id($courseId);
+                foreach ($coachesPerSession as $sessionId => $coachList) {
+                    CourseManager::updateTeachers(
+                        $courseInfo['code'],
+                        $coachList,
+                        false,
+                        false,
+                        false
+                    );
+                    $result[$courseInfo['code']][$sessionId] = $coachList;
+                }
+            }
+        }
+        $sessionUrl = api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session=';
+
+        $htmlResult = null;
+
+        if (!empty($result)) {
+            foreach ($result as $courseCode => $data) {
+                $url = api_get_course_url($courseCode);
+                $htmlResult .= sprintf(get_lang('CoachesSubscribedAsATeacherInCourseX'), Display::url($courseCode, $url, array('target' => '_blank')));
+                foreach ($data as $sessionId => $coachList) {
+                    $sessionInfo = self::fetch($sessionId);
+                    $htmlResult .= '<br />';
+                    $htmlResult .= Display::url(
+                        get_lang('Session').': '.$sessionInfo['name'].' <br />',
+                        $sessionUrl.$sessionId,
+                        array('target' => '_blank')
+                    );
+                    $teacherList = array();
+                    foreach ($coachList as $coachId) {
+                        $userInfo = api_get_user_info($coachId);
+                        $teacherList[] = $userInfo['complete_name'];
+                    }
+                    if (!empty($teacherList)) {
+                        $htmlResult .= implode(', ', $teacherList);
+                    } else {
+                        $htmlResult .= get_lang('NothingToAdd');
+                    }
+                }
+                $htmlResult .= '<br />';
+            }
+            $htmlResult = Display::return_message($htmlResult, 'normal', false);
+        }
+        return $htmlResult;
     }
 }

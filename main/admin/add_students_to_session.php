@@ -26,7 +26,7 @@ $interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmi
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
 // Setting the name of the tool
-$tool_name = get_lang('EnrollTrainersFromExistingSessions');
+$tool_name = get_lang('SubscribeStudentsToSession');
 $add_type = 'multiple';
 if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!='') {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
@@ -41,10 +41,12 @@ $htmlResult = null;
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     if ($form_sent == 1) {
-        $sessions = $_POST['sessions'];
-        $courses = $_POST['courses'];
-
-        $htmlResult = SessionManager::copyCoachesFromSessionToCourse($sessions, $courses);
+        $sessionSourceList = $_POST['sessions'];
+        $sessionDestinationList = $_POST['sessions_destination'];
+        $result = SessionManager::copyStudentsFromSession($sessionSourceList, $sessionDestinationList);
+        foreach ($result as $message) {
+            $htmlResult .= $message;
+        }
     }
 }
 
@@ -52,12 +54,6 @@ $session_list = SessionManager::get_sessions_list(array(), array('name'));
 $sessionList = array();
 foreach ($session_list as $session) {
     $sessionList[$session['id']] = $session['name'];
-}
-
-$courseList = CourseManager::get_courses_list(0, 0, 'title');
-$courseOptions = array();
-foreach ($courseList as $course) {
-    $courseOptions[$course['id']] = $course['title'];
 }
 Display::display_header($tool_name);
 ?>
@@ -74,7 +70,7 @@ echo Display::input('hidden', 'form_sent', '1');
             </td>
             <td></td>
             <td align="center">
-                <b><?php echo get_lang('Courses') ?> :</b>
+                <b><?php echo get_lang('Sessions') ?> :</b>
             </td>
         </tr>
         <tr>
@@ -84,7 +80,7 @@ echo Display::input('hidden', 'form_sent', '1');
                      'sessions[]',
                      $sessionList,
                      '',
-                     array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'sessions', 'size'=>'15px'),
+                     array('style'=>'width:360px',  'id'=>'sessions', 'size'=>'15px'),
                      false
                  );
                 ?>
@@ -94,10 +90,10 @@ echo Display::input('hidden', 'form_sent', '1');
             <td align="center">
                 <?php
                 echo Display::select(
-                    'courses[]',
-                    $courseOptions,
+                    'sessions_destination[]',
+                    $sessionList,
                     '',
-                    array('style'=>'width:360px', 'id'=>'courses', 'size'=>'15px'),
+                    array('style'=>'width:360px', 'multiple'=>'multiple', 'id'=>'courses', 'size'=>'15px'),
                     false
                 );
                 ?>
@@ -108,7 +104,7 @@ echo Display::input('hidden', 'form_sent', '1');
                 <br />
                 <?php
                 echo '<button class="save" type="submit"" >'.
-                    get_lang('SubscribeTeachersToSession').'</button>';
+                    get_lang('SubscribeStudentsToSession').'</button>';
                 ?>
             </td>
         </tr>

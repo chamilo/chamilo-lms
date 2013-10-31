@@ -1477,4 +1477,8 @@ $AddUserGroupToURL = "Agregar clases a una URL";
 $UserGroupList = "Lista de clases";
 $FirstLetter = "Primer letra";
 $AddUserGroupToThatURL = "Agregar clases a una URL";
+$AddingStudentsFromSessionXToSessionY = "Adding students from session <b>%s</b> to session <b>%s </b>";
+$EnrollTrainersFromExistingSessions = "Enroll trainers from existing sessions";
+$EnrollStudentsFromExistingSessions = "Enroll students from existing sessions";
+$CoachesSubscribedAsATeacherInCourseX = "Coaches will be subcribed as a teacher in the course %s";
 ?>

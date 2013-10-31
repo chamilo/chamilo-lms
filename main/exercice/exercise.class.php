@@ -5452,46 +5452,51 @@ class Exercise
         $sessionId = api_get_session_id();
 
         if (!empty($sessionId)) {
+            // Counting how many attempts from session are in the DB
             $sql = "SELECT count(exe_id) as count FROM $trackExercises WHERE session_id = $sessionId";
             $result = Database::query($sql);
 
+            $count = 0;
             if (Database::num_rows($result)) {
                 $result = Database::fetch_array($result);
                 $count = $result['count'];
-                global $app;
-                /** @var \Doctrine\manager $em */
-                $em = $app['orm.em'];
+            }
 
-                $params = array(
-                    'exerciseId' => $this->id,
-                    'sessionId' => $sessionId,
-                    'cId' => $this->course_id
-                );
+            global $app;
+            /** @var \Doctrine\manager $em */
+            $em = $app['orm.em'];
 
-                $quizDistributionRelSessions = $em->getRepository("Entity\CQuizDistributionRelSession")->findBy($params);
+            $params = array(
+                'exerciseId' => $this->id,
+                'sessionId' => $sessionId,
+                'cId' => $this->course_id
+            );
 
-                if ($quizDistributionRelSessions) {
-                    $formToUse = $count % (count($quizDistributionRelSessions));
-                    /** @var \Entity\CQuizDistributionRelSession  $quizDistributionRelSession */
-                    if (isset($quizDistributionRelSessions[$formToUse])) {
-                        $quizDistributionRelSession = $quizDistributionRelSessions[$formToUse];
+            // Searching for forms in this sessions
+            $quizDistributionRelSessions = $em->getRepository("Entity\CQuizDistributionRelSession")->findBy($params);
 
-                        $this->distributionId = $quizDistributionRelSession->getQuizDistributionId();
-                        $distribution = $quizDistributionRelSession->getDistribution();
-                        $dataTracking = array();
+            if (!empty($quizDistributionRelSessions)) {
+                // Getting a form depeding of the count.
+                $formToUse = $count % (count($quizDistributionRelSessions));
 
-                        if ($distribution) {
-                            $dataTracking = $distribution->getDataTracking();
-                        }
-                        if (!empty($dataTracking)) {
-                            $questionList = explode(',', $dataTracking);
-                            if (!empty($questionList)) {
-                                //shuffle($questionList);
-                            }
+                /** @var \Entity\CQuizDistributionRelSession $quizDistributionRelSession */
+                if (isset($quizDistributionRelSessions[$formToUse])) {
+                    $quizDistributionRelSession = $quizDistributionRelSessions[$formToUse];
+                    $this->distributionId = $quizDistributionRelSession->getQuizDistributionId();
+                    $distribution = $quizDistributionRelSession->getDistribution();
+                    $dataTracking = array();
+                    if (!empty($distribution)) {
+                        $dataTracking = $distribution->getDataTracking();
+                    }
+                    if (!empty($dataTracking)) {
+                        $questionList = explode(',', $dataTracking);
+                        if (!empty($questionList)) {
+                            //shuffle($questionList);
                         }
                     }
                 }
             }
+
         }
 
         $this->setMediaList($questionList, $this->course_id);

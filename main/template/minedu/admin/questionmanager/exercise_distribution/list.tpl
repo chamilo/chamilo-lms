@@ -16,9 +16,11 @@
                         if (questionInfo == 0) {
                             $('#question_title').html('Pregunta no encontrada');
                             $('#question_category_list').html(' ');
+                            $('#question_description').html(' ');
                             $('#question_info').show();
                         } else {
                             $('#question_title').html(questionInfo.question);
+                            $('#question_description').html(questionInfo.description);
                             $('#question_category_list').html(questionInfo.category_list);
                             $('#question_info').show();
                         }
@@ -41,7 +43,8 @@
     </div>
     <span id="question_info" style="display:none">
         <div class="well">
-        <h3>  <span id="question_title"> </span></h3>
+        <h3><span id="question_title"></span></h3>
+        <span id="question_description"></span>
         <span id="question_category_list"></span>
         <span id="close_button" ><a href="#" class="btn">Cerrar</a></span>
         </div>

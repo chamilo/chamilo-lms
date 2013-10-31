@@ -83,6 +83,7 @@ $cli->addCommands(
         new ChamiloLMS\Command\Transaction\StatsCommand(),
         new ChamiloLMS\Command\Transaction\MineduSendCommand(),
         new ChamiloLMS\Command\Translation\ExportLanguagesCommand(),
+        new ChamiloLMS\Command\Modulation\ModulationSetupCommand(),
 
         // Chash commands.
         new Chash\Command\Database\RunSQLCommand(),

@@ -226,7 +226,7 @@ class ModulationSetupCommand extends Command
                     'coach_access_start_date' => api_get_utc_datetime('2013-11-01 07:00:00'),
                     'coach_access_end_date' => api_get_utc_datetime('2013-11-01 23:00:00')
                 );
-                $sessionId = $s->add($params, null, 1);
+                $sessionId = $s->add($params, null);
                 $s->add_courses_to_session($sessionId, array($courseId));
                 // assign specific forms to single exercise in DB
                 if ($i <= 4) {

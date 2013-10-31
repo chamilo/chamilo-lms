@@ -5476,7 +5476,7 @@ class Exercise
             $quizDistributionRelSessions = $em->getRepository("Entity\CQuizDistributionRelSession")->findBy($params);
 
             if (!empty($quizDistributionRelSessions)) {
-                // Getting a form depeding of the count.
+                // Getting a distribution depends of the count of attempts and count of distributions.
                 $formToUse = $count % (count($quizDistributionRelSessions));
 
                 /** @var \Entity\CQuizDistributionRelSession $quizDistributionRelSession */

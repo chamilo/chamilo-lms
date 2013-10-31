@@ -52,8 +52,8 @@ api_protect_course_script(true);
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 
 if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
-    $htmlHeadXtra[] = api_get_js('glossary.js'); //Glossary
-    $htmlHeadXtra[] = api_get_js('jquery.   highlight.js'); //highlight
+    $htmlHeadXtra[] = api_get_js('glossary.js'); // Glossary
+    $htmlHeadXtra[] = api_get_js('jquery.   highlight.js'); // highlight
 }
 // Matching question
 $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
@@ -317,7 +317,6 @@ $(function() {
 
 // General parameters passed via POST/GET
 
-
 // @todo check get and posts
 $learnpath_id 			= isset($_GET['learnpath_id']) ? intval($_GET['learnpath_id']) : 0;
 $learnpath_item_id 		= isset($_GET['learnpath_item_id']) ? intval($_GET['learnpath_item_id']) : 0;
@@ -372,7 +371,7 @@ if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSessi
     }
 }
 
-// $objExercise = new Exercise(); $objExercise->read($exerciseId);
+//$objExercise = new Exercise(); $objExercise->read($exerciseId);
 
 //2. Checking if $objExercise is set
 if (!isset($objExercise) && isset($exerciseInSession)) {
@@ -616,7 +615,6 @@ if ($debug) {
     error_log("6.1 params: $params");
 }
 
-
 if ($reminder == 2 && empty($my_remind_list)) {
     if ($debug) {
         error_log("6.2 calling the exercise_reminder.php ");
@@ -833,7 +831,6 @@ if (is_null($current_question)) {
         $current_question = $objExercise->getPositionInCompressedQuestionList($latestQuestionId);
     }
 } else {
-    //var_dump($current_question, count($questionList));exit;
     if ($current_question != count($questionList) || $endExercise) {
         $current_question++;
     }
@@ -1001,12 +998,12 @@ if ($limit_time_exists) {
             $message_warning = $permission_to_start ? get_lang('ReachedTimeLimit') : get_lang('ExerciseNoStartedYet');
             Display :: display_warning_message(sprintf($message_warning, $exercise_title, $objExercise->selectAttempts()));
             if ($origin != 'learnpath') {
-            	Display :: display_footer();
+            	Display::display_footer();
             }
             exit;
         } else {
             $message_warning = $permission_to_start ? get_lang('ReachedTimeLimitAdmin') : get_lang('ExerciseNoStartedAdmin');
-            Display :: display_warning_message(sprintf($message_warning, $exercise_title, $objExercise->selectAttempts()));
+            Display::display_warning_message(sprintf($message_warning, $exercise_title, $objExercise->selectAttempts()));
         }
     }
 }
@@ -1015,13 +1012,12 @@ if ($limit_time_exists) {
 global $_custom;
 if (isset($_custom['exercises_hidden_when_no_start_date']) && $_custom['exercises_hidden_when_no_start_date']) {
 	if (empty($objExercise->start_time) || $objExercise->start_time == '0000-00-00 00:00:00') {
-		Display :: display_warning_message(sprintf(get_lang('ExerciseNoStartedYet'), $exercise_title, $objExercise->selectAttempts()));
+		Display::display_warning_message(sprintf(get_lang('ExerciseNoStartedYet'), $exercise_title, $objExercise->selectAttempts()));
 		if ($origin != 'learnpath') {
-			Display :: display_footer();
+			Display::display_footer();
 		}
 	}
 }
-
 
 if (!empty($objExercise->description)) {
     echo '<br />';
@@ -1380,7 +1376,6 @@ if (!empty($error)) {
 }
 
 if ($origin != 'learnpath') {
-    //so we are not in learnpath tool
     echo '</div>'; //End glossary div
     Display :: display_footer();
 } else {

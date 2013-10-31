@@ -47,6 +47,10 @@ class ModulationStartTurnCommand extends Command
             $output->writeln("Turn $turn could not be found in database");
             return false;
         }
+        if (Database::num_rows($res) > 1) {
+            $output->writeln("Turn $turn was found several times. Not applying change");
+            return false;
+        }
         $row = Database::fetch_assoc($res);
         $sessionId = $row['session_id'];
         $params = array(

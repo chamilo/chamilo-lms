@@ -785,7 +785,6 @@ class Exercise
             $temp_question_list = array();
 
             foreach ($questions_by_category as $category_id => & $categoryQuestionList) {
-
                 if (isset($categoryCountArray) && !empty($categoryCountArray)) {
                     if (isset($categoryCountArray[$category_id])) {
                         $numberOfQuestions = $categoryCountArray[$category_id];
@@ -796,6 +795,7 @@ class Exercise
                 if ($addAll) {
                     $numberOfQuestions = 999;
                 }
+
                 if (!empty($numberOfQuestions)) {
                     $elements = Testcategory::getNElementsFromArray($categoryQuestionList, $numberOfQuestions, $randomizeQuestions);
                     if (!empty($elements)) {
@@ -806,25 +806,7 @@ class Exercise
             }
 
             if ($shuffleQuestionsNoTakingSubcategories) {
-                $questionsPerMainCategory = array();
-                foreach ($temp_question_list as $categoryId => $questionList) {
-                    $parentId = $categoriesAddedInExercise[$categoryId]['parent_id'];
-                    $cat = new Testcategory();
-                    $cat->getCategory($parentId);
-
-                    if (!isset($questionsPerMainCategory[$cat->parent_id])) {
-                        $questionsPerMainCategory[$cat->parent_id] = array();
-                    }
-                    $questionsPerMainCategory[$cat->parent_id] = array_merge($questionsPerMainCategory[$cat->parent_id], $questionList);
-                }
-                if (!empty($questionsPerMainCategory)) {
-                    $newQuestionList = array();
-                    foreach ($questionsPerMainCategory as $categoryId => $questionList) {
-                        shuffle($questionList);
-                        $newQuestionList[] = $questionList;
-                    }
-                    $temp_question_list = $newQuestionList;
-                }
+                $temp_question_list = self::shuffleQuestionListPerCategory($temp_question_list, $categoriesAddedInExercise);
             }
 
             if (!empty($temp_question_list)) {
@@ -836,6 +818,37 @@ class Exercise
         }
 
         return $question_list;
+    }
+
+    /**
+     * @param array $temp_question_list
+     * @param array $categoriesAddedInExercise
+     * @return array
+     */
+    private function shuffleQuestionListPerCategory($temp_question_list, $categoriesAddedInExercise)
+    {
+        $questionsPerMainCategory = array();
+        foreach ($temp_question_list as $categoryId => $questionList) {
+            $parentId = $categoriesAddedInExercise[$categoryId]['parent_id'];
+            $cat = new Testcategory();
+            $cat->getCategory($parentId);
+
+            if (!isset($questionsPerMainCategory[$cat->parent_id])) {
+                $questionsPerMainCategory[$cat->parent_id] = array();
+            }
+            $questionsPerMainCategory[$cat->parent_id] = array_merge($questionsPerMainCategory[$cat->parent_id], $questionList);
+        }
+
+        if (!empty($questionsPerMainCategory)) {
+            $newQuestionList = array();
+            foreach ($questionsPerMainCategory as $questionList) {
+                shuffle($questionList);
+                $newQuestionList[] = $questionList;
+            }
+            $temp_question_list = $newQuestionList;
+        }
+
+        return $temp_question_list;
     }
 
     /**
@@ -5494,12 +5507,11 @@ class Exercise
         $questionList = $this->selectQuestionList(true);
 
         // Looking for distributions
-        $trackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-
         $sessionId = api_get_session_id();
-
         if (!empty($sessionId)) {
+
             // Counting how many attempts from session are in the DB
+            $trackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
             $sql = "SELECT count(exe_id) as count FROM $trackExercises WHERE session_id = $sessionId";
             $result = Database::query($sql);
 
@@ -5519,15 +5531,16 @@ class Exercise
                 'cId' => $this->course_id
             );
 
-            // Searching for forms in this sessions
+            // Searching for forms in this session.
             $quizDistributionRelSessions = $em->getRepository("Entity\CQuizDistributionRelSession")->findBy($params);
 
             if (!empty($quizDistributionRelSessions)) {
-                // Getting a distribution depends of the count of attempts and count of distributions.
+                // Getting a distribution. It depends of the count of attempts and count of distributions.
                 $formToUse = $count % (count($quizDistributionRelSessions));
 
                 /** @var \Entity\CQuizDistributionRelSession $quizDistributionRelSession */
                 if (isset($quizDistributionRelSessions[$formToUse])) {
+                    // We found a distribution!
                     $quizDistributionRelSession = $quizDistributionRelSessions[$formToUse];
                     $this->distributionId = $quizDistributionRelSession->getQuizDistributionId();
                     $distribution = $quizDistributionRelSession->getDistribution();
@@ -5535,14 +5548,31 @@ class Exercise
                     if (!empty($distribution)) {
                         $dataTracking = $distribution->getDataTracking();
                     }
-
+                    // Form question list found!
                     if (!empty($dataTracking)) {
                         $questionList = explode(',', $dataTracking);
-                        /*$this->categoryWithQuestionList = TestCategory::getCategoriesFromQuestionList(
+
+                        // We make a little shuffle now.
+                        $questionByCategory = TestCategory::getCategoriesFromQuestionList(
                             $questionList,
-                            $this->course_id
-                        );*/
+                            $this->course_id,
+                            true
+                        );
+
+                        $cat = new Testcategory();
+                        $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
+                            $this->id,
+                            null,
+                            null,
+                            false,
+                            false,
+                            false
+                        );
+
+                        $questionList = self::shuffleQuestionListPerCategory($questionByCategory, $categoriesAddedInExercise);
+                        $questionList = ArrayClass::array_flatten($questionList);
                     }
+
                 }
             }
         }
@@ -6162,6 +6192,7 @@ class Exercise
                 }
             }
         }
+
         return $categoriesWithQuestion;
     }
 

@@ -29,7 +29,7 @@ class Testcategory
      * @param string $in_name
      * @param string $in_description
      * @param int $parent_id
-     * @param string $type Posible values: all, simple, global
+     * @param string $type possible values: all, simple, global
      * @param int $course_id
      * @param int visibility
      */

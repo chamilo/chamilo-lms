@@ -755,7 +755,8 @@ class Exercise
         $question_list,
         & $questions_by_category,
         $flatResult = true,
-        $randomizeQuestions = false
+        $randomizeQuestions = false,
+        $shuffleQuestionsNoTakingSubcategories = false
     ) {
 
         $addAll = true;
@@ -801,6 +802,28 @@ class Exercise
                         $temp_question_list[$category_id] = $elements;
                         $categoryQuestionList = $elements;
                     }
+                }
+            }
+
+            if ($shuffleQuestionsNoTakingSubcategories) {
+                $questionsPerMainCategory = array();
+                foreach ($temp_question_list as $categoryId => $questionList) {
+                    $parentId = $categoriesAddedInExercise[$categoryId]['parent_id'];
+                    $cat = new Testcategory();
+                    $cat->getCategory($parentId);
+
+                    if (!isset($questionsPerMainCategory[$cat->parent_id])) {
+                        $questionsPerMainCategory[$cat->parent_id] = array();
+                    }
+                    $questionsPerMainCategory[$cat->parent_id] = array_merge($questionsPerMainCategory[$cat->parent_id], $questionList);
+                }
+                if (!empty($questionsPerMainCategory)) {
+                    $newQuestionList = array();
+                    foreach ($questionsPerMainCategory as $categoryId => $questionList) {
+                        shuffle($questionList);
+                        $newQuestionList[] = $questionList;
+                    }
+                    $temp_question_list = $newQuestionList;
                 }
             }
 
@@ -875,15 +898,16 @@ class Exercise
             case EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM: // 10
                 // Added new parameter in order to randomize sub categories see BT#6943
                 /*
-                 @todo this should be false but because there's a new option called EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_SUB_CAT_RANDOM_QUESTIONS_RANDOM
+                 @todo this should be false but because there's a new option called
+                EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_SUB_CAT_RANDOM_QUESTIONS_RANDOM
                  I'm leaving this with true because there could be a lot of exercise already set with this behaviour.
                 */
                 $subCategoryShuffle = true;
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'root, lft ASC', false, true, $subCategoryShuffle);
                 $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list, $categoriesAddedInExercise, $courseId);
-                $question_list = $this->pickQuestionsPerCategory($categoriesAddedInExercise, $question_list, $questions_by_category, true, true);
+                $question_list = $this->pickQuestionsPerCategory($categoriesAddedInExercise, $question_list, $questions_by_category, true, true, true);
                 break;
-            case EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_SUB_CAT_RANDOM_QUESTIONS_RANDOM:
+            case EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_SUB_CAT_RANDOM_QUESTIONS_RANDOM://11
                 // Added new parameter in order to randomize sub categories see BT#6943
                 $subCategoryShuffle = true;
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree($this->id, $this->course['real_id'], 'root, lft ASC', false, true, $subCategoryShuffle);

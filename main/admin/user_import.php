@@ -66,9 +66,12 @@ function validate_data($users) {
         }
         // 4. Check classname
         if (!empty($user['ClassName'])) {
-            if (!ClassManager :: class_name_exists($user['ClassName'])) {
-                $user['error'] = get_lang('ClassNameNotAvailable');
-                $errors[] = $user;
+            $class_name = explode('|', trim($user['ClassName']));
+            foreach ($class_name as $class) {
+                if (!UserGroup :: usergroup_exists($class)) {
+                    $user['error'] = get_lang('ClassNameNotAvailable');
+                    $errors[] = $user;
+                }
             }
         }
         // 5. Check authentication source
@@ -152,9 +155,14 @@ function save_data($users) {
                 }
             }
             if (!empty($user['ClassName'])) {
-                $class_id = ClassManager :: get_class_id($user['ClassName']);
-                ClassManager :: add_user($user_id, $class_id);
+                $class_name = explode('|', trim($user['ClassName']));
+                foreach ($class_name as $class) {
+                    $class_id = UserGroup :: get_class_id($class);
+                    UserGroup :: add_user($user_id, $class_id);
+                }
+                
             }
+
 
             // Saving extra fields.
             global $extra_fields;

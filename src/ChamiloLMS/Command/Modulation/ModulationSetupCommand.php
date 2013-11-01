@@ -80,14 +80,21 @@ class ModulationSetupCommand extends Command
         // optional clean-up. Delete if necessary
         $sql2 = "DELETE FROM branch_sync where id > 1";
         Database::query($sql2);
-        $sql2 = "DELETE FROM session where id > 1";
+        $sql2 = "TRUNCATE session";
         Database::query($sql2);
-        $sql2 = "DELETE FROM session_rel_course where id_session > 1";
+        $sql2 = "TRUNCATE session_rel_course";
         Database::query($sql2);
-        $sql2 = "DELETE FROM session_rel_course_rel_user where id_session > 1";
+        $sql2 = "TRUNCATE session_rel_course_rel_user";
         Database::query($sql2);
-        $sql2 = "DELETE FROM session_rel_user where id_session > 1";
+        $sql2 = "TRUNCATE session_rel_user";
         Database::query($sql2);
+        $sql2 = "TRUNCATE c_quiz_distribution_rel_session";
+        Database::query($sql2);
+        $sql2 = "TRUNCATE access_url_rel_session";
+        Database::query($sql2);
+        $sql2 = "TRUNCATE branch_rel_session";
+        Database::query($sql2);
+
 
         // set some stable values
         $courseId = 1;
@@ -206,8 +213,9 @@ class ModulationSetupCommand extends Command
                 }
             }
         }
-        echo "Created all labs\n";
+        echo "Created all labs. Now proceeding to sessions creation...\n";
         // Now create sessions for all these
+        $sessionCount = 0;
         foreach ($level5Names as $name => $id) {
             // Create 8 sessions for each room, the first 4 of which are assigned two questions distributions
             for ($i = 1; $i <= 8; $i++) {
@@ -227,7 +235,10 @@ class ModulationSetupCommand extends Command
                     'coach_access_end_date' => api_get_utc_datetime('2013-11-01 23:00:00')
                 );
                 $sessionId = $s->add($params, null);
+                $sessionCount++;
                 $s->add_courses_to_session($sessionId, array($courseId));
+                $sql23 = "INSERT INTO branch_rel_session (branch_id, session_id, display_order) VALUES ($id, $sessionId, $i)";
+                $res23 = Database::query($sql23);
                 // assign specific forms to single exercise in DB
                 if ($i <= 4) {
                     $local_distribs = array($distribs[($i*2)-2],$distribs[($i*2)-1]); //if turn 1, use distribs 0 and 1, if turn 2, use 2 and 3
@@ -246,19 +257,21 @@ class ModulationSetupCommand extends Command
                 if ($i > 4) {
                     $j = $i - 4;
                 }
-                foreach ($level5DNIs[$name][$j] as $dni) {
-                    $u = UserManager::get_user_info($dni);
-                    if ($u === false) {
-                        echo "Could not find user $dni\n";
-                    } else {
-                        $uids[] = $u['user_id'];
+                if (is_array($level5DNIs[$name][$j])) {
+                    foreach ($level5DNIs[$name][$j] as $dni) {
+                        $u = UserManager::get_user_info($dni);
+                        if ($u === false) {
+                            echo "Could not find user $dni\n";
+                        } else {
+                            $uids[] = $u['user_id'];
+                        }
                     }
                 }
                 //print_r($uids);
                 $s->suscribe_users_to_session($sessionId, $uids);
             }
         }
-        echo count($level5Names)." locals inserted and configured in total\n";
+        echo count($level5Names)." locals inserted and configured in total ($sessionCount sessions)\n";
         $command = $this->getApplication()->find('modulation:setup');
 
         //$return_code = $command->run($input, $output);

@@ -84,6 +84,10 @@ $cli->addCommands(
         new ChamiloLMS\Command\Transaction\MineduSendCommand(),
         new ChamiloLMS\Command\Translation\ExportLanguagesCommand(),
         new ChamiloLMS\Command\Modulation\ModulationSetupCommand(),
+        new ChamiloLMS\Command\Modulation\ModulationStartTurnCommand(),
+        new ChamiloLMS\Command\Modulation\ModulationStopTurnCommand(),
+        new ChamiloLMS\Command\Modulation\ModulationIsolateKeyCommand(),
+        new ChamiloLMS\Command\Modulation\ModulationDuplicateInstallCommand(),
 
         // Chash commands.
         new Chash\Command\Database\RunSQLCommand(),

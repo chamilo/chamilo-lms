@@ -1133,6 +1133,7 @@ class Testcategory
      * @param bool shuffle
      * @param bool $excludeCategoryWithNoQuestions
      * @param bool $shuffleSubcategories
+     * @param array
      * @return array
      */
     public function getCategoryExerciseTree(
@@ -1141,27 +1142,33 @@ class Testcategory
         $order = null,
         $shuffle = false,
         $excludeCategoryWithNoQuestions = true,
-        $shuffleSubcategories = false
+        $shuffleSubcategories = false,
+        $categoryList = array()
     ) {
-        $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
-        $table_category = Database::get_course_table(TABLE_QUIZ_CATEGORY);
-        $sql = "SELECT * FROM $table qc INNER JOIN $table_category c ON (category_id = c.iid)
-                WHERE exercise_id = {$exercise_id} ";
 
-        if (!empty($order)) {
-            $sql .= "ORDER BY $order";
-        }
-        $categories = array();
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                if ($excludeCategoryWithNoQuestions) {
-                    if ($row['count_questions'] == 0) {
-                       continue;
-                    }
-                }
-                $categories[$row['category_id']] = $row;
+        if (empty($categoryList)) {
+            $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
+            $table_category = Database::get_course_table(TABLE_QUIZ_CATEGORY);
+            $sql = "SELECT * FROM $table qc INNER JOIN $table_category c ON (category_id = c.iid)
+                    WHERE exercise_id = {$exercise_id} ";
+
+            if (!empty($order)) {
+                $sql .= "ORDER BY $order";
             }
+            $categories = array();
+            $result = Database::query($sql);
+            if (Database::num_rows($result)) {
+                 while ($row = Database::fetch_array($result, 'ASSOC')) {
+                    if ($excludeCategoryWithNoQuestions) {
+                        if ($row['count_questions'] == 0) {
+                           continue;
+                        }
+                    }
+                    $categories[$row['category_id']] = $row;
+                }
+            }
+        } else {
+            $categories = $categoryList;
         }
 
         // Shuffle sub categories.
@@ -1348,7 +1355,6 @@ class Testcategory
         foreach ($questionList as $questionId) {
             $categoryList = self::getCategoryForQuestionWithCategoryData($questionId, $courseId);
             foreach ($categoryList as $categoryData) {
-                $categoryData['name'] = $categoryData['title'];
                 $categories[$categoryData['iid']][] = $questionId;
             }
         }

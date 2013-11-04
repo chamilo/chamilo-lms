@@ -10,45 +10,45 @@
 /**
  * Code
  */
-if(!class_exists('Answer')):
 /**
  * Answer class
 * @package chamilo.exercise
  */
-class Answer {
-	public $questionId;
+class Answer
+{
+    public $questionId;
 
-	// these are arrays
-	public $answer;
-	public $correct;
-	public $comment;
-	public $weighting;
-	public $position;
-	public $hotspot_coordinates;
-	public $hotspot_type;
-	public $destination;
-	// these arrays are used to save temporarily new answers
-	// then they are moved into the arrays above or deleted in the event of cancellation
-	public $new_answer;
-	public $new_correct;
-	public $new_comment;
-	public $new_weighting;
-	public $new_position;
-	public $new_hotspot_coordinates;
-	public $new_hotspot_type;
+    // these are arrays
+    public $answer;
+    public $correct;
+    public $comment;
+    public $weighting;
+    public $position;
+    public $hotspot_coordinates;
+    public $hotspot_type;
+    public $destination;
+    // these arrays are used to save temporarily new answers
+    // then they are moved into the arrays above or deleted in the event of cancellation
+    public $new_answer;
+    public $new_correct;
+    public $new_comment;
+    public $new_weighting;
+    public $new_position;
+    public $new_hotspot_coordinates;
+    public $new_hotspot_type;
 
-	public $nbrAnswers;
-	public $new_nbrAnswers;
-	public $new_destination; // id of the next question if feedback option is set to Directfeedback
+    public $nbrAnswers;
+    public $new_nbrAnswers;
+    public $new_destination; // id of the next question if feedback option is set to Directfeedback
     public $course; //Course information
 
-/**
-	 * constructor of the class
-	 *
-	 * @author 	Olivier Brouckaert
-	 * @param 	integer	Question ID that answers belong to
-	 */
-	function Answer($questionId, $course_id = null)
+    /**
+     * constructor of the class
+     *
+     * @author 	Olivier Brouckaert
+     * @param 	integer	Question ID that answers belong to
+     */
+    function Answer($questionId, $course_id = null)
     {
         $this->questionId			= intval($questionId);
         $this->answer				= array();
@@ -81,37 +81,37 @@ class Answer {
         }
     }
 
-	/**
-	 * Clears $new_* arrays
-	 *
-	 * @author - Olivier Brouckaert
-	 */
-	function cancel() {
-		$this->new_answer				= array();
-		$this->new_correct				= array();
-		$this->new_comment				= array();
-		$this->new_weighting			= array();
-		$this->new_position				= array();
-		$this->new_hotspot_coordinates	= array();
-		$this->new_hotspot_type			= array();
-		$this->new_nbrAnswers			= 0;
-		$this->new_destination			= array();
-	}
+    /**
+     * Clears $new_* arrays
+     *
+     * @author - Olivier Brouckaert
+     */
+    function cancel() {
+        $this->new_answer				= array();
+        $this->new_correct				= array();
+        $this->new_comment				= array();
+        $this->new_weighting			= array();
+        $this->new_position				= array();
+        $this->new_hotspot_coordinates	= array();
+        $this->new_hotspot_type			= array();
+        $this->new_nbrAnswers			= 0;
+        $this->new_destination			= array();
+    }
 
-	/**
-	 * Reads answer informations from the data base
-	 *
-	 * @author - Olivier Brouckaert
-	 */
-	function read() {
-		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
-		$questionId = $this->questionId;
+    /**
+     * Reads answer informations from the data base
+     *
+     * @author - Olivier Brouckaert
+     */
+    function read() {
+        $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $questionId = $this->questionId;
 
-		$sql="SELECT id, id_auto, answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination  FROM
-		      $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id ='".$questionId."' ORDER BY position";
+        $sql="SELECT id, id_auto, answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination  FROM
+              $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id ='".$questionId."' ORDER BY position";
 
-		$result = Database::query($sql);
-		$i=1;
+        $result = Database::query($sql);
+        $i=1;
 
 		// while a record is found
 		while ($object=Database::fetch_object($result)) {
@@ -129,13 +129,15 @@ class Answer {
 		}
 		$this->nbrAnswers=$i-1;
 	}
-	/**
-	 * reads answer informations from the data base ordered by parameter
-	 * @param	string	Field we want to order by
-	 * @param	string	DESC or ASC
-	 * @author 	Frederic Vauthier
-	 */
-	function readOrderedBy($field, $order='ASC') {
+
+    /**
+     * reads answer informations from the data base ordered by parameter
+     * @param	string	Field we want to order by
+     * @param	string	DESC or ASC
+     * @author 	Frederic Vauthier
+     */
+    function readOrderedBy($field, $order='ASC')
+    {
 		$field = Database::escape_string($field);
 		if (empty($field)) {
 			$field = 'position';
@@ -189,14 +191,14 @@ class Answer {
         $this->nbrAnswers = $i-1;
 	}
 
-
 	/**
 	 * returns the autoincrement id identificator
 	 *
 	 * @author - Juan Carlos Ra�a
 	 * @return - integer - answer num
 	 */
-	function selectAutoId($id) {
+	function selectAutoId($id)
+    {
 		return $this->autoId[$id];
 	}
 
@@ -206,7 +208,8 @@ class Answer {
 	 * @author - Olivier Brouckaert
 	 * @return - integer - number of answers
 	 */
-	function selectNbrAnswers() {
+	function selectNbrAnswers()
+    {
 		return $this->nbrAnswers;
 	}
 
@@ -216,7 +219,8 @@ class Answer {
 	 * @author - Olivier Brouckaert
 	 * @return - integer - the question ID
 	 */
-	function selectQuestionId() {
+	function selectQuestionId()
+    {
 		return $this->questionId;
 	}
 
@@ -230,7 +234,7 @@ class Answer {
 		return $this->destination[$id];
 	}
 
-/**
+    /**
 	 * returns the answer title
 	 *
 	 * @author - Olivier Brouckaert
@@ -258,13 +262,13 @@ class Answer {
 		return false;
 	}
 
-	/**
-	 * returns the answer title from an answer's position
-	 *
-	 * @author - Yannick Warnier
-	 * @param - integer $id - answer ID
-	 * @return - bool - answer title
-	 */
+    /**
+     * returns the answer title from an answer's position
+     *
+     * @author - Yannick Warnier
+     * @param - integer $id - answer ID
+     * @return - bool - answer title
+     */
 	function selectAnswerIdByPosition($pos) {
 		foreach ($this->position as $k => $v) {
 			if ($v != $pos) { continue; }
@@ -273,11 +277,11 @@ class Answer {
 		return false;
 	}
 
-	/**
-	 * Returns a list of answers
-	 * @author Yannick Warnier <ywarnier@beeznest.org>
-	 * @return array	List of answers where each answer is an array of (id, answer, comment, grade) and grade=weighting
-	 */
+    /**
+     * Returns a list of answers
+     * @author Yannick Warnier <ywarnier@beeznest.org>
+     * @return array	List of answers where each answer is an array of (id, answer, comment, grade) and grade=weighting
+     */
 	 function getAnswersList($decode = false)
      {
 	 	$list = array();
@@ -434,16 +438,21 @@ class Answer {
 		$this->new_destination[$id] = $destination;
 	}
 
-	/**
-	 * updates an answer
-	 *
-	 * @author Toon Keppens
-	 * @param	string	Answer title
-	 * @param	string	Answer comment
-	 * @param	integer	Answer weighting
-	 * @param	integer	Answer position
-	 */
-	function updateAnswers($answer,$comment, $correct, $weighting, $position, $destination, $hotspot_coordinates, $hotspot_type)
+    /**
+     * Updates an answer
+     *
+     * @author Toon Keppens
+     *
+     * @param string $answer
+     * @param string $comment
+     * @param string $correct
+     * @param string $weighting
+     * @param string $position
+     * @param string $destination
+     * @param string $hotspot_coordinates
+     * @param string $hotspot_type
+     */
+    function updateAnswers($answer, $comment, $correct, $weighting, $position, $destination, $hotspot_coordinates, $hotspot_type)
     {
 		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
 
@@ -608,4 +617,3 @@ class Answer {
 		}
 	}
 }
-endif;

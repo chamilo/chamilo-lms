@@ -170,7 +170,8 @@ if (!empty($files)) {
 
 /*	Extra function (only used here) */
 
-function my_pre_add_callback($p_event, &$p_header) {
+function my_pre_add_callback($p_event, &$p_header)
+{
     global $files;
     if (isset($files[basename($p_header['stored_filename'])])) {
         $p_header['stored_filename'] = $files[basename($p_header['stored_filename'])];
@@ -187,7 +188,8 @@ function my_pre_add_callback($p_event, &$p_header) {
  * @param array $arr2 second array
  * @return difference between the two arrays
  */
-function diff($arr1, $arr2) {
+function diff($arr1, $arr2)
+{
     $res = array();
     $r = 0;
     foreach ($arr1 as $av) {

@@ -532,7 +532,6 @@ if (!empty($exercise_list)) {
 
                 $locked = $exercise_obj->is_gradebook_locked;
 
-                //echo '<div  id="tabs-'.$i.'">';
                 $i++;
                 // Validation when belongs to a session
                 $session_img = api_get_session_image($row['session_id'], $_user['status']);
@@ -725,39 +724,7 @@ if (!empty($exercise_list)) {
                                 )
                             )
                         );
-
-
                     }
-
-                    // Number of questions
-                    /*
-                    $random_label = null;
-                    if ($row['random'] > 0 || $row['random'] == -1) {
-                        // if random == -1 means use random questions with all questions
-                        $random_number_of_question = $row['random'];
-                        if ($random_number_of_question == -1) {
-                            $random_number_of_question = $rowi;
-                        }
-
-                        if ($row['random_by_category'] > 0) {
-                            $nbQuestionsTotal = $exercise_obj->getNumberQuestionExerciseCategory();
-                            //$real_question_count = count($exercise_obj->selectQuestionList());
-                            $warning = null;
-                            if ($nbQuestionsTotal != $real_question_count) {
-                                $warning = Display::return_icon('warning.png', get_lang('CheckThatYouHaveEnoughQuestionsInYourCategories'));
-                            }
-                            $number_of_questions = $nbQuestionsTotal." ".$warning;
-                        } else {
-                            $random_label = ' ('.get_lang('Random').') ';
-                            $number_of_questions = $random_number_of_question.' '.$random_label;
-                            //Bug if we set a random value bigger than the real number of questions
-                            if ($random_number_of_question > $rowi) {
-                                $number_of_questions = $rowi.' '.$random_label;
-                            }
-                        }
-                    } else {
-                        $number_of_questions = $rowi;
-                    }*/
 
                     $number_of_questions = $exercise_obj->getQuestionCount();
                     if ($row['random'] > 0 && $row['random'] != -1) {

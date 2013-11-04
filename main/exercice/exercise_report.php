@@ -139,8 +139,9 @@ if (isset($origin) && $origin == 'learnpath') {
     }
 }
 
-//Deleting an attempt
-if (($is_allowedToEdit || $is_tutor || api_is_coach()) && isset($_GET['delete']) && $_GET['delete'] == 'delete' && !empty ($_GET['did']) && $locked == false
+// Deleting an attempt
+if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
+    isset($_GET['delete']) && $_GET['delete'] == 'delete' && !empty ($_GET['did']) && $locked == false
 ) {
     $exe_id = intval($_GET['did']);
     if (!empty($exe_id)) {
@@ -148,9 +149,7 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) && isset($_GET['delete'])
         Database::query($sql);
         $sql = 'DELETE FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.$exe_id;
         Database::query($sql);
-        header(
-            'Location: exercise_report.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&exerciseId='.$exercise_id
-        );
+        header('Location: exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exercise_id);
         exit;
     }
 }
@@ -171,7 +170,6 @@ if ($is_allowedToEdit || $is_tutor) {
 }
 
 Display :: display_header($nameTools);
-
 $actions = Display::div($actions, array('class' => 'actions'));
 
 $extra = '<script>
@@ -247,8 +245,7 @@ $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_results&exerci
 
 $action_links = '';
 
-//Generating group list
-
+// Generating group list
 $group_list = GroupManager::get_group_list();
 $group_parameters = array('group_all:'.get_lang('All'), 'group_none:'.get_lang('None'));
 
@@ -276,7 +273,7 @@ if ($is_allowedToEdit || $is_tutor) {
         get_lang('Actions')
     );
 
-//Column config
+    //Column config
     $column_model = array(
         array('name' => 'firstname', 'index' => 'firstname', 'width' => '50', 'align' => 'left', 'search' => 'true'),
         array(
@@ -357,7 +354,6 @@ $extra_params['height'] = 'auto';
 
 ?>
 <script>
-
     function setSearchSelect(columnName) {
         $("#results").jqGrid('setColProp', columnName, {
             searchoptions:{
@@ -424,7 +420,6 @@ $extra_params['height'] = 'auto';
         jQuery("#results").jqGrid('filterToolbar', options);
         var sgrid = $("#results")[0];
         sgrid.triggerToolbar();
-
         <?php } ?>
     });
 </script>

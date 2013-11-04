@@ -70,7 +70,7 @@ function update_resource_from_course_gradebook($link_id, $course_code, $weight) 
     $course_code = Database::escape_string($course_code);
     if (!empty($link_id)) {
         $link_id = intval($link_id);
-        $sql = 'UPDATE ' . Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK) . ' 
+        $sql = 'UPDATE ' . Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK) . '
                 SET weight = ' . "'" . Database::escape_string((float) $weight) . "'" . '
                 WHERE course_code = "' . $course_code . '" AND id = ' . $link_id;
         Database::query($sql);
@@ -90,7 +90,7 @@ function remove_resource_from_course_gradebook($link_id) {
     // TODO find the corresponding category (the first one for this course, ordered by ID)
     $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
     $sql = "DELETE FROM $l WHERE id = " . (int) $link_id;
-    $res = Database::query($sql);
+    Database::query($sql);
     return true;
 }
 
@@ -318,7 +318,7 @@ function build_edit_icons_link($link, $selectcat) {
         $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblelink=' . $link->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . ' ">' . Display::return_icon($visibility_icon . '.png', get_lang('Visible'), '', ICON_SIZE_SMALL) . '</a>';
         $modify_icons .= '&nbsp;<a href="gradebook_showlog_link.php?visiblelink=' . $link->get_id() . '&amp;selectcat=' . $selectcat . '&amp;cidReq=' . $link->get_course_code() . '">' . Display::return_icon('history.png', get_lang('GradebookQualifyLog'), '', ICON_SIZE_SMALL) . '</a>';
 
-        //If a work is added in a gradebook you can only delete the link in the work tool 
+        //If a work is added in a gradebook you can only delete the link in the work tool
 
         if ($is_locked && !api_is_platform_admin()) {
             $modify_icons .= '&nbsp;' . Display::return_icon('delete_na.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
@@ -337,24 +337,9 @@ function build_edit_icons_link($link, $selectcat) {
  * @param    int     Session ID (optional -  0 if not defined)
  * @return   int     false on error or link ID
  */
-function is_resource_in_course_gradebook($course_code, $resource_type, $resource_id, $session_id = 0) {
-    // TODO find the corresponding category (the first one for this course, ordered by ID)
-    $t = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+function is_resource_in_course_gradebook($course_code, $resource_type, $resource_id, $session_id = 0)
+{
     $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-    /* $sql = "SELECT * FROM $t WHERE course_code = '".Database::escape_string($course_code)."' ";
-      if (!empty($session_id)) {
-      $sql .= " AND session_id = ".(int)$session_id;
-      } else {
-      $sql .= " AND (session_id IS NULL OR session_id = 0) ";
-      }
-      $sql .= " ORDER BY id";
-      $res = Database::query($sql);
-      if (Database::num_rows($res)<1) {
-      return false;
-      }
-      $row = Database::fetch_array($res,'ASSOC');
-      $category = $row['id']; */
-
     $course_code = Database::escape_string($course_code);
     $sql = "SELECT * FROM $l l WHERE course_code = '$course_code' AND type = " . (int) $resource_type . " and ref_id = " . (int) $resource_id;
     $res = Database::query($sql);
@@ -370,7 +355,8 @@ function is_resource_in_course_gradebook($course_code, $resource_type, $resource
  * @param    int     Link/Resource ID
  * @return   bool    false on error, true on success
  */
-function get_resource_from_course_gradebook($link_id) {
+function get_resource_from_course_gradebook($link_id)
+{
     if (empty($link_id)) {
         return false;
     }
@@ -555,7 +541,7 @@ function get_certificate_by_user_id($cat_id, $user_id) {
 function get_list_users_certificates($cat_id = null) {
     $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
-    $sql = 'SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username 
+    $sql = 'SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username
     		FROM ' . $table_user . ' u INNER JOIN ' . $table_certificate . ' gc ON u.user_id=gc.user_id ';
     if (!is_null($cat_id) && $cat_id > 0) {
         $sql.=' WHERE cat_id=' . Database::escape_string($cat_id);
@@ -592,7 +578,7 @@ function get_list_gradebook_certificates_by_user_id($user_id, $cat_id = null) {
 }
 
 function get_user_certificate_content($user_id, $course_code, $is_preview = false, $hide_print_button = false) {
-    //generate document HTML    
+    //generate document HTML
     $content_html = DocumentManager::replace_user_info_into_html($user_id, $course_code, $is_preview);
 
     $new_content = explode('</head>', $content_html['content']);
@@ -672,7 +658,7 @@ function load_gradebook_select_in_tool($form) {
 
     create_default_course_gradebook();
 
-    //Cat list
+    // Cat list
     $all_categories = Category :: load(null, null, $course_code, null, null, $session_id, false);
     $select_gradebook = $form->addElement('select', 'category_id', get_lang('SelectGradebook'));
 
@@ -692,9 +678,6 @@ function load_gradebook_select_in_tool($form) {
                 } else {
                     $select_gradebook->addoption(get_lang('Select'), 0);
                 }
-                /* if ($this->evaluation_object->get_category_id() == $my_cat->get_id()) {
-                  $default_weight = $my_cat->get_weight();
-                  } */
             }
         }
     }
@@ -708,7 +691,7 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
     //Getting data
     $printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks, $params);
 
-    // HTML report creation first    
+    // HTML report creation first
     $course_code = trim($cat[0]->get_course_code());
 
     $displayscore = ScoreDisplay :: instance();

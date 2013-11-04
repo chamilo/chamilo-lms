@@ -9,21 +9,13 @@
  *
  *	@package chamilo.work
  */
-
-session_cache_limiter('public');
 require_once '../inc/global.inc.php';
 require_once 'work.lib.php';
 
 $current_course_tool  = TOOL_STUDENTPUBLICATION;
-
 $this_section = SECTION_COURSES;
 
-// IMPORTANT to avoid caching of documents
-header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
-header('Cache-Control: public');
-header('Pragma: no-cache');
-
-//protection
+// Course protection
 api_protect_course_script(true);
 
 $id = intval($_GET['id']);
@@ -81,10 +73,7 @@ if (!empty($course_info['real_id'])) {
         $is_editor = api_is_allowed_to_edit(true, true, true);
         $student_is_owner_of_work = user_is_author($row['id'], $row['user_id']);
 
-        if ($is_editor
-            //|| (!$doc_visible_for_all && $work_is_visible && $student_is_owner_of_work)
-            || ($student_is_owner_of_work)
-            || ($doc_visible_for_all && $work_is_visible)) {
+        if ($is_editor || ($student_is_owner_of_work) || ($doc_visible_for_all && $work_is_visible)) {
 
             $title = $row['title'];
 

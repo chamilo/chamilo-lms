@@ -621,7 +621,7 @@ class ImportCsv
                 $chamiloUserName = $row['UserName'];
                 $chamiloCourseCode = $row['CourseCode'];
                 //$systemSessionId= $row['SessionID'];
-                $chamiloSessionId= $row['SessionID'];
+                $chamiloSessionId = $row['SessionID'];
 
                 //$sessionId = SessionManager::get_session_id_from_original_id($systemSessionId, $this->extraFieldIdNameList['session']);
                 $sessionInfo = api_get_session_info($chamiloSessionId);

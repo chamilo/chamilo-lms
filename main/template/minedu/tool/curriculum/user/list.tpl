@@ -112,6 +112,7 @@ function saveAll() {
         <div id="list" class="trajectory">
             {% for subcategory in categories %}
                 {% if subcategory.lvl == 0 %}
+                {% elseif subcategory.lvl == 1 %}
                     <h3> {{ subcategory.title }}</h3>
                     <hr />
                 {% else %}

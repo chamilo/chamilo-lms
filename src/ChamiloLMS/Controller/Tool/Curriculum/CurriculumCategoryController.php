@@ -40,6 +40,7 @@ class CurriculumCategoryController extends CommonController
                 'name' => get_lang('Categories')
             )
         );
+
         $this->setBreadcrumb($breadcrumbs);
 
         $options = array(
@@ -55,7 +56,7 @@ class CurriculumCategoryController extends CommonController
                 $editLabel = $this->get('translator')->trans('Edit');
                 $deleteLabel = $this->get('translator')->trans('Delete');
 
-                if ($row['lvl'] <= 0) {
+                if ($row['lvl'] <= 1) {
                     $label = $this->get('translator')->trans('Add children');
                     $addChildren = '<a class="btn" href="'.$this->createUrl('add_from_parent_link', array('id' => $row['id'])).'">'.$label.'</a>';
                 } else {

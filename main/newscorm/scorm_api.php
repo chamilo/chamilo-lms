@@ -35,6 +35,7 @@ require_once 'learnpathItem.class.php';
 require_once 'scorm.class.php';
 
 $file   = (empty($_SESSION['file'])?'':$_SESSION['file']);
+/** @var Learnpath $oLP */
 $oLP    = unserialize($_SESSION['lpobject']);
 $oItem 	= $oLP->items[$oLP->current];
 
@@ -157,7 +158,7 @@ olms.launch_data = '<?php echo $oItem->get_launch_data();?>';
 olms.max_time_allowed = '<?php echo $oItem->get_max_time_allowed();?>';
 olms.interactions = new Array(<?php echo $oItem->get_interactions_js_array();?>);
 olms.item_objectives = new Array();
-olms.info_lms_item=new Array();
+olms.info_lms_item = new Array();
 
 // Chamilo internal variables (not SCORM)
 // olms.saved_lesson_status = 'not attempted';
@@ -181,6 +182,9 @@ olms.lms_item_credit = '<?php echo $oItem->get_credit();?>';
 olms.lms_item_lesson_mode = '<?php echo $oItem->get_lesson_mode();?>';
 olms.lms_item_launch_data = '<?php echo $oItem->get_launch_data();?>';
 olms.lms_item_core_exit = '<?php echo $oItem->get_core_exit();?>';
+olms.lms_course_id = '<?php echo $oLP->get_course_int_id(); ?>';
+olms.lms_course_code = '<?php echo $oLP->getCourseCode(); ?>';
+
 <?php echo $oLP->get_items_details_as_js('olms.lms_item_types');?>
 
 olms.asset_timer = 0;
@@ -1462,10 +1466,10 @@ function switch_item(current_item, next_item){
             break;
     }
 
-    var mysrc = 'lp_controller.php?action=content&lp_id='+olms.lms_lp_id+'&item_id='+next_item;
+    var mysrc = 'lp_controller.php?action=content&lp_id='+olms.lms_lp_id+'&item_id='+next_item+'&cidReq='+olms.lms_course_code;
     var cont_f = $("#content_id");
 
-    <?php if($oLP->mode == 'fullscreen'){ ?>
+    <?php if($oLP->mode == 'fullscreen') { ?>
     cont_f = window.open(''+mysrc,'content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
     cont_f.onload=function(){
         olms.info_lms_item[0]=olms.info_lms_item[1];

@@ -16,9 +16,9 @@
  */
 class SessionManager
 {
-	private function __construct()
+    private function __construct()
     {
-	}
+    }
 
     /**
     * Fetches a session from the database
@@ -27,7 +27,7 @@ class SessionManager
     */
     public static function fetch($id)
     {
-    	$t = Database::get_main_table(TABLE_MAIN_SESSION);
+        $t = Database::get_main_table(TABLE_MAIN_SESSION);
         if ($id != strval(intval($id))) {
             return array();
         }
@@ -60,7 +60,7 @@ class SessionManager
     * @todo use an array to replace all this parameters or use the model.lib.php ...
     * @return mixed       Session ID on success, error message otherwise
     **/
-	public static function create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after, $nolimit,$coach_username, $id_session_category,$id_visibility, $start_limit = true, $end_limit = true, $fix_name = false)
+    public static function create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after, $nolimit,$coach_username, $id_session_category,$id_visibility, $start_limit = true, $end_limit = true, $fix_name = false)
     {
 		global $_configuration;
 
@@ -888,7 +888,8 @@ class SessionManager
 	 * @param int User id
 	 * @return bool True in case of success, false in case of error
 	 */
-	public static function unsubscribe_user_from_session($session_id, $user_id) {
+	public static function unsubscribe_user_from_session($session_id, $user_id)
+    {
 		$session_id = (int)$session_id;
 		$user_id = (int)$user_id;
 
@@ -1710,7 +1711,7 @@ class SessionManager
                 WHERE id_coach = $user_id";
 
         if (api_is_multiple_url_enabled()) {
-            $tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+            $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $sql = 'SELECT DISTINCT session.*
@@ -2672,6 +2673,7 @@ class SessionManager
     /**
      * @param array $sessions
      * @param array $courses
+     * @return string
      */
     public static function copyCoachesFromSessionToCourse($sessions, $courses)
     {

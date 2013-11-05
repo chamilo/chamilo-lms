@@ -88,15 +88,15 @@ class Career extends Model
     }
 
     /**
-     * Returns a Form validator Obj
-     * @todo the form should be auto generated
-     * @param   string  url
-     * @param   string  action add, edit
-     * @return  obj     form validator obj
-     */
+    * Returns a Form validator Obj
+    * @todo the form should be auto generated
+    * @param   string  url
+    * @param   string  action add, edit
+    * @return  obj     form validator obj
+    */
     public function return_form($url, $action)
     {
-		$oFCKeditor = new FCKeditor('description') ;
+		$oFCKeditor = new FCKeditor('description');
 		$oFCKeditor->ToolbarSet = 'careers';
 		$oFCKeditor->Width		= '100%';
 		$oFCKeditor->Height		= '200';

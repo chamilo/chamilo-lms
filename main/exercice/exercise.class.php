@@ -5553,7 +5553,7 @@ class Exercise
                         $questionList = explode(',', $dataTracking);
 
                         // We make a little shuffle now.
-                        $questionByCategory = TestCategory::getCategoriesFromQuestionList(
+                        $questionByCategory = Testcategory::getCategoriesFromQuestionList(
                             $questionList,
                             $this->course_id,
                             true
@@ -6101,7 +6101,7 @@ class Exercise
             //$categoryList = $this->getListOfCategoriesWithQuestionForTest();
 
             // Generating category list from the question list, because subcategories can be randomized!
-            $questionByCategory = TestCategory::getCategoriesFromQuestionList(
+            $questionByCategory = Testcategory::getCategoriesFromQuestionList(
                 $questionList,
                 $this->course_id
             );

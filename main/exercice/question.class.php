@@ -2636,7 +2636,7 @@ abstract class Question
         $questionCategoryList = array();
         if (!empty($questions)) {
             foreach ($questions as $question) {
-                $categories = TestCategory::getCategoryForQuestionWithCategoryData($question['iid']);
+                $categories = Testcategory::getCategoryForQuestionWithCategoryData($question['iid']);
                 if (!empty($categories)) {
                     foreach ($categories as $category) {
                         $questionCategoryList[$question['iid']][] = $category['iid'];

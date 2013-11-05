@@ -781,29 +781,16 @@ class UserGroup extends Model
 	 * @param int $user_id The user id
 	 * @param int $class_id The class id
 	 */
-	function add_user($user_id, $class_id) {
-	    $table_class_user = Database :: get_main_table(TABLE_USERGROUP_REL_USER);
-        $user_id  = intval($user_id);
-        $class_id = intval($class_id);
-	    $sql = "INSERT INTO $table_class_user SET user_id = '".$user_id."', usergroup_id='".$class_id."'";
-	    Database::query($sql);
+	function add_user($user_id, $class_id)
+    {        
+	     $table_rel_user = Database::get_main_table(TABLE_USERGROUP_REL_USER);
+         $user_id  = intval($user_id);
+         $class_id = intval($class_id);
+	     $sql = "INSERT INTO $table_rel_user SET user_id = '".$user_id."', usergroup_id='".$class_id."'";
+	     Database::query($sql);
 		
 	}
     
-    /**
-	 * Get the class-id
-	 * @param string $name The class name
-	 * @return int the ID of the class
-	 */
-	function get_class_id($name)
-    {
-        $name = Database::escape_string($name);
-        $table_class = Database :: get_main_table(TABLE_USERGROUP);
-		    $sql = "SELECT * FROM $table_class WHERE name='".$name."'";
-		    $res = Database::query($sql);
-		    $obj = Database::fetch_object($res);
-		    return $obj->id;
-	}
-    
+       
 }
 /* CREATE TABLE IF NOT EXISTS access_url_rel_usergroup (access_url_id int unsigned NOT NULL, usergroup_id int unsigned NOT NULL, PRIMARY KEY (access_url_id, usergroup_id));*/

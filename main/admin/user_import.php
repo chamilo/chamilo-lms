@@ -17,6 +17,7 @@ require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
 require_once api_get_path(LIBRARY_PATH).'import.lib.php';
 
 // Set this option to true to enforce strict purification for usenames.
@@ -65,10 +66,11 @@ function validate_data($users) {
             $errors[] = $user;
         }
         // 4. Check classname
+        $usergroup = new UserGroup();
         if (!empty($user['ClassName'])) {
             $class_name = explode('|', trim($user['ClassName']));
             foreach ($class_name as $class) {
-                if (!UserGroup :: usergroup_exists($class)) {
+                if (!$usergroup -> usergroup_exists($class)) {
                     $user['error'] = get_lang('ClassNameNotAvailable');
                     $errors[] = $user;
                 }
@@ -154,11 +156,12 @@ function save_data($users) {
                     }
                 }
             }
+            $usergroup = new UserGroup();
             if (!empty($user['ClassName'])) {
                 $class_name = explode('|', trim($user['ClassName']));
                 foreach ($class_name as $class) {
-                    $class_id = UserGroup :: get_class_id($class);
-                    UserGroup :: add_user($user_id, $class_id);
+                    $class_id = $usergroup -> get_id_by_name($class);
+                    $usergroup -> add_user($user_id, $class_id);
                 }
                 
             }

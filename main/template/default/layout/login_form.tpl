@@ -1,22 +1,25 @@
-<div id="login_block" class="well sidebar-nav">
+{% if login_language_form %}
 
-	{{ login_language_form }}
+    <div id="login_block" class="well sidebar-nav">
 
-    {% if plugin_login_top is not null %}
-        <div id="plugin_login_top">
-            {{ plugin_login_top }}
-        </div>
-    {% endif %}
+        {{ login_language_form }}
 
-    {{login_failed}}
+        {% if plugin_login_top is not null %}
+            <div id="plugin_login_top">
+                {{ plugin_login_top }}
+            </div>
+        {% endif %}
 
-	{{login_form}}
+        {{ login_failed }}
 
-	{{login_options}}
+        {{ login_form }}
 
-    {% if plugin_login_bottom is not null %}
-        <div id="plugin_login_bottom">
-            {{ plugin_login_bottom }}
-        </div>
-    {% endif %}
-</div>
+        {{ login_options }}
+
+        {% if plugin_login_bottom is not null %}
+            <div id="plugin_login_bottom">
+                {{ plugin_login_bottom }}
+            </div>
+        {% endif %}
+    </div>
+{% endif %}

@@ -4,6 +4,8 @@
 class AppPlugin
 {
     public $plugin_regions = array(
+        'main_top',
+        'main_bottom',
         'login_top',
         'login_bottom',
         'menu_top',

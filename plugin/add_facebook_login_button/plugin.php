@@ -9,8 +9,6 @@
  * Plugin details (must be present)
  */
 
-
-
 //the plugin title
 $plugin_info['title']      = 'Add a button to login using FACEBOOK account';
 
@@ -23,7 +21,7 @@ $plugin_info['author']      = 'Hubert Borderiou';
 //the plugin configuration
 $form = new FormValidator('add_facebook_button_form');
 $form->addElement('text', 'facebook_button_url', 'Facebook connexion image URL', '');
-$form->addElement('style_submit_button', 'submit_button', get_lang('Save'));  
+$form->addElement('style_submit_button', 'submit_button', get_lang('Save'));
 //get default value for form
 $tab_default_add_facebook_login_button_facebook_button_url = api_get_setting('add_facebook_login_button_facebook_button_url');
 $defaults['facebook_button_url'] = $tab_default_add_facebook_login_button_facebook_button_url['add_facebook_login_button'];
@@ -31,5 +29,5 @@ $form->setDefaults($defaults);
 //display form
 $plugin_info['settings_form'] = $form;
 
-//set the smarty templates that are going to be used
+// Set the templates that are going to be used
 $plugin_info['templates']   = array('template.tpl');

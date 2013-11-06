@@ -20,14 +20,15 @@ $plugin_info['author']      = 'Julio Montoya';
 
 // The plugin configuration.
 $form = new FormValidator('form');
+$form->addElement('select', 'language', get_lang('Language'), api_get_languages_to_array());
 
 $form->addElement('header', 'Option 1');
-$form->addElement('textarea', 'option1', 'Description');
-$form->addElement('text', 'option1_url', 'Redirect to');
+$form->addElement('textarea', 'option1', get_lang('Description'));
+$form->addElement('text', 'option1_url', get_lang('RedirectTo'));
 
 $form->addElement('header', 'Option 2');
-$form->addElement('textarea', 'option2', 'Description');
-$form->addElement('text', 'option2_url', 'Redirect to');
+$form->addElement('textarea', 'option2', get_lang('Description'));
+$form->addElement('text', 'option2_url', get_lang('RedirectTo'));
 $form->addElement('button', 'submit_button', get_lang('Save'));
 
 // Get default value for form

@@ -3491,6 +3491,21 @@ function api_get_languages() {
 }
 
 /**
+ * Returns a list of all the languages that are made available by the admin.
+ * @return array
+ */
+function api_get_languages_to_array() {
+    $tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+    $sql = "SELECT * FROM $tbl_language WHERE available='1' ORDER BY original_name ASC";
+    $result = Database::query($sql);
+    $languages = array();
+    while ($row = Database::fetch_array($result)) {
+        $languages[$row['dokeos_folder']] = $row['original_name'];
+    }
+    return $languages;
+}
+
+/**
  * Returns the id (the database id) of a language
  * @param   string  language name (the corresponding name of the language-folder in the filesystem)
  * @return  int     id of the language

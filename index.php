@@ -137,11 +137,16 @@ if (api_get_setting('display_categories_on_homepage') == 'true') {
 if (api_is_facebook_auth_activated() && !api_get_user_id()) {
     facebook_connect();
 }
+
+// before login plugin conditions
 $showLoginForm = true;
 if (api_is_anonymous()) {
     if (!isset($_SESSION['before_login_accepted'])) {
         if (in_array('before_login', $controller->tpl->plugin->get_installed_plugins())) {
-            $showLoginForm = false;
+            $languageToActivate = api_get_plugin_setting('before_login', 'language');
+            if (api_get_interface_language() == $languageToActivate) {
+                $showLoginForm = false;
+            }
         }
     }
 }

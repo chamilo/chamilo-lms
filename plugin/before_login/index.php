@@ -7,13 +7,22 @@ if (api_is_anonymous()) {
 
     // Only available in the index.php page
     $loginAccepted = isset($_SESSION['before_login_accepted']) ? $_SESSION['before_login_accepted'] : null;
-    $currentPage = str_replace('index.php', '', $_SERVER['REQUEST_URI']);
-    //var_dump(api_get_path(REL_PATH), $currentPage);
+    $parsedUrl = parse_url($_SERVER['REQUEST_URI']);
+    $currentPage = str_replace('index.php', '', $parsedUrl['path']);
+
     if (api_get_path(REL_PATH) !== $currentPage) {
         return null;
     }
 
+    // Hide only if the before_login_accepted session was set to ON.
     if ($loginAccepted) {
+        return null;
+    }
+
+    // Only available for the selected language.
+    $languageToActivate = api_get_plugin_setting('before_login', 'language');
+
+    if (api_get_interface_language() != $languageToActivate) {
         return null;
     }
 

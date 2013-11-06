@@ -21,7 +21,7 @@ class IndexManager {
 		}
 	}
 
-	function set_login_form() {
+	function set_login_form($setLoginForm = true) {
 		global $loginFailed;
 
 		$login_form = '';
@@ -30,23 +30,27 @@ class IndexManager {
 
 			// Only display if the user isn't logged in.
 			$this->tpl->assign('login_language_form', api_display_language_form(true));
-			$this->tpl->assign('login_form',  self::display_login_form());
 
-			if ($loginFailed) {
-				$this->tpl->assign('login_failed',  self::handle_login_failed());
-			}
+            if ($setLoginForm) {
 
-			if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
-				$login_form .= '<ul class="nav nav-list">';
-				if (api_get_setting('allow_registration') != 'false') {
-					$login_form .= '<li><a href="main/auth/inscription.php">'.get_lang('Reg').'</a></li>';
-				}
-				if (api_get_setting('allow_lostpassword') == 'true') {
-					$login_form .= '<li><a href="main/auth/lostPassword.php">'.get_lang('LostPassword').'</a></li>';
-				}
-				$login_form .= '</ul>';
-			}
-			$this->tpl->assign('login_options',  $login_form);
+                $this->tpl->assign('login_form',  self::display_login_form());
+
+                if ($loginFailed) {
+                    $this->tpl->assign('login_failed',  self::handle_login_failed());
+                }
+
+                if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
+                    $login_form .= '<ul class="nav nav-list">';
+                    if (api_get_setting('allow_registration') != 'false') {
+                        $login_form .= '<li><a href="main/auth/inscription.php">'.get_lang('Reg').'</a></li>';
+                    }
+                    if (api_get_setting('allow_lostpassword') == 'true') {
+                        $login_form .= '<li><a href="main/auth/lostPassword.php">'.get_lang('LostPassword').'</a></li>';
+                    }
+                    $login_form .= '</ul>';
+                }
+                $this->tpl->assign('login_options',  $login_form);
+            }
 		}
 	}
 

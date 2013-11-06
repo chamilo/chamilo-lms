@@ -151,9 +151,8 @@ if (api_is_anonymous()) {
     }
 }
 
-if ($showLoginForm) {
-    $controller->set_login_form();
-}
+
+$controller->set_login_form($showLoginForm);
 
 //@todo move this inside the IndexManager
 if (!api_is_anonymous()) {

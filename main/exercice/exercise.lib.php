@@ -870,17 +870,17 @@ function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_co
     }
 
     $TBL_TRACK_HOTPOTATOES      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-    $TBL_GROUP_REL_USER         = Database :: get_course_table(TABLE_GROUP_USER);
-    $TBL_GROUP                  = Database :: get_course_table(TABLE_GROUP);
     $TBL_USER                   = Database :: get_main_table(TABLE_MAIN_USER);
 
-    $sql .= "SELECT * FROM $TBL_TRACK_HOTPOTATOES thp JOIN $TBL_USER u ON thp.exe_user_id = u.user_id WHERE thp.exe_cours_id = '$course_code' AND exe_name LIKE '$in_hotpot_path%'";
+    $sql = "SELECT * FROM $TBL_TRACK_HOTPOTATOES thp JOIN $TBL_USER u ON thp.exe_user_id = u.user_id WHERE thp.exe_cours_id = '$course_code' AND exe_name LIKE '$in_hotpot_path%'";
 
     // just count how many answers
     if ($in_get_count) {
         $res = Database::query($sql);
         return Database::num_rows($res);
     }
+
+    $in_column = Database::escape_string($in_column);
 
     // get a number of sorted results
     $sql .= " $where_condition ORDER BY $in_column $in_direction  LIMIT $in_from, $in_number_of_items";

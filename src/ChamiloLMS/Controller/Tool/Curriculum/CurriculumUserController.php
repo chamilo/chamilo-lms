@@ -181,9 +181,9 @@ class CurriculumUserController extends CommonController
 
                 /** @var Entity\CurriculumItemRelUser $curriculumItemRelUser */
                 foreach ($postedItem->getUserItems() as $curriculumItemRelUser) {
+
                     $curriculumItemRelUser->setUser($user);
 
-                    // $newItem = $this->getCurriculumItemRepository()->find($curriculumItemRelUser->getItemId());
                     $curriculumItemRelUser->setItem($newItem);
                     $curriculumItemRelUser->setOrderId(strval($counter));
                     $description = $curriculumItemRelUser->getDescription();
@@ -199,8 +199,6 @@ class CurriculumUserController extends CommonController
                         $hash = md5($curriculumItemRelUser->getDescription());
                         if (isset($alreadyAdded[$hash])) {
                             $parsed[] = $hash;
-                            // $this->get('monolog')->addInfo($curriculumItemRelUser->getDescription());
-                            // error_log("aaa ->".$curriculumItemRelUser->getDescription());
                             continue;
                         } else {
                             // No need to check because it's an update.
@@ -222,7 +220,6 @@ class CurriculumUserController extends CommonController
                         }
                     }
                 }
-
             }
         }
         $response = null;
@@ -254,7 +251,6 @@ class CurriculumUserController extends CommonController
                         'course' => $this->getCourse()->getCode()
                     )
                 )
-
             ),
             array(
                 'name' => get_lang('Results'),
@@ -269,6 +265,7 @@ class CurriculumUserController extends CommonController
                 'name' => get_lang('UserResults'),
             )
         );
+
         $this->setBreadcrumb($breadcrumbs);
 
         if (!api_is_allowed_to_edit()) {
@@ -285,13 +282,17 @@ class CurriculumUserController extends CommonController
             ->setParameter('userId', $userId)
             ->orderBy('node.root, node.lft, node.title', 'ASC');
         $this->setCourseParameters($qb, 'node');
+
         $query = $qb->getQuery();
 
         $categories = $query->getResult();
 
+        /** @var \Entity\CurriculumCategory $category */
+        $categoryCounter = array();
         foreach ($categories as $category) {
             /** @var \Entity\CurriculumItem $item */
             $score = 0;
+
             foreach ($category->getItems() as $item) {
 
                 $formType = new CurriculumItemRelUserCollectionType($item->getId());
@@ -301,10 +302,18 @@ class CurriculumUserController extends CommonController
                 foreach ($item->getUserItems() as $userItem) {
                     $score += $item->getScore();
                 }
+                $categoryCounter[$category->getParentId()][] = $item->getId();
                 $categoryScore[$item->getCategoryId()] = $score;
+
+                if (!isset($categoryScore[$category->getParentId()])) {
+                    $categoryScore[$category->getParentId()] = 0;
+                }
+                $categoryScore[$category->getParentId()] += $score;
             }
         }
+        var_dump($categoryScore);
 
+        $this->get('template')->assign('category_counter', $categoryCounter);
         $this->get('template')->assign('categories', $categories);
         $this->get('template')->assign('category_score', $categoryScore);
         $this->get('template')->assign('form_list', $formList);

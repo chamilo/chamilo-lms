@@ -297,7 +297,6 @@ class CurriculumCategoryController extends CommonController
                         'course' => $this->getCourse()->getCode()
                     )
                 )
-
             ),
             array(
                 'name' => get_lang('Results'),

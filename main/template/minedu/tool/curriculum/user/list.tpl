@@ -103,7 +103,11 @@ function saveAll() {
                    <a href="{{ url('curriculum_category.controller:indexAction', {'course' : course.code , 'id_session' : course_session.id}) }}">
                        {{ "Categories" | trans }}
                    </a>
+                   <a href="{{ url('curriculum_category.controller:resultsAction', { 'course' : course.code, 'id_session' : course_session.id }) }}">
+                       {{ "Results" | trans }}
+                   </a>
                </div>
+
         {%  endif  %}
 
         <h2>Trayectoria</h2>

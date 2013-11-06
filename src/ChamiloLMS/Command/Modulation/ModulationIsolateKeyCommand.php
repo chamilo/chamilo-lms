@@ -38,6 +38,9 @@ class ModulationIsolateKeyCommand extends Command
         global $session_id, $app;
         Session::setSession($app['session']);
         Session::write('_user', api_get_user_info(1));
+   
+        $destDir = '/var/opt/keys';
+        $certServ = 'http://debian4.beeznest.org/keys/';
 
         $branchId = intval($input->getArgument('key'));
         $sql = "SELECT session_id FROM branch_rel_session WHERE branch_id = $branchId ORDER BY display_order";
@@ -93,8 +96,21 @@ class ModulationIsolateKeyCommand extends Command
         $res3 = Database::query($sql3);
         $count = Database::fetch_row($res3);
 
-        $output->writeln("$count users remain");
-        $output->writeln('The database should now be isolated.');
+        //$output->writeln("$count users remain");
+        //$output->writeln('The database should now be isolated.');
+
+        // Make dir if not present. Assume the command succeeds as everything
+        // executes as root anyway
+        if (!is_dir($destDir)) {
+            @mkdir($destDir);
+        }
+        // Get the SSL certificate from the server, at
+        //  http://server/keys/24.p12
+        $cert = file_get_contents($certServ.$branchId.'.p12');
+        @file_put_contents($destDir.'/'.$branchId.'.p12',$cert);
+        $caPub = file_get_contents($certServ.'ca-cert.pem');
+        @file_put_contents($destDir.'/ca-cert.pem',$caPub);
+
         return true;
     }
 }

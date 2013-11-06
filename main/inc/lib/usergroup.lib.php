@@ -597,7 +597,8 @@ class UserGroup extends Model
      */
     public function getUsergroupsPagination($sidx, $sord, $start, $limit)
     {
-        $sord = intval($sord);
+        $sord = in_array(strtolower($sord), array('asc', 'desc')) ? $sord : 'desc';
+
         $start = intval($start);
         $limit = intval($limit);
         if ($this->useMultipleUrl) {
@@ -632,7 +633,7 @@ class UserGroup extends Model
         }
 
         // Multidimensional sort
-        msort($result, $sidx);
+        $result = msort($result, $sidx, $sord);
         return $result;
     }
 

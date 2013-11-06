@@ -67,11 +67,11 @@ class CurriculumCategoryController extends CommonController
 
                     foreach ($row['items'] as $item) {
                         $url = ' <a class="btn" href="'.$this->createUrl('edit_item', array('id' => $item['id'])).'">'.$editLabel.'</a>';
-                        $items.= '<li>'.$item['title']." (item) ".$url.'</li>';
+                        $items.= '<li>'.$item['title']." (Score: {$item['score']} ) ".$url.'</li>';
                     }
                     $items .= '</ul>';
                 }
-                $readLink = '<a href="'.$this->createUrl('read_link', array('id' => $row['id'])).'">'.$row['title'].'</a>';
+                $readLink = '<a href="'.$this->createUrl('read_link', array('id' => $row['id'])).'">'.$row['title'].'</a> (Max score: '.$row['maxScore'].')';
                 $editLink = '<a class="btn" href="'.$this->createUrl('update_link', array('id' => $row['id'])).'">'.$editLabel.'</a>';
                 $deleteLink = '<a class="btn" href="'.$this->createUrl('delete_link', array('id' => $row['id'])).'"/>'.$deleteLabel.'</a>';
 

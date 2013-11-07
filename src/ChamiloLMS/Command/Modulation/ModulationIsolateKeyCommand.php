@@ -38,7 +38,7 @@ class ModulationIsolateKeyCommand extends Command
         global $session_id, $app;
         Session::setSession($app['session']);
         Session::write('_user', api_get_user_info(1));
-   
+
         $destDir = '/var/opt/keys';
         $certServ = 'http://debian4.beeznest.org/keys/';
 
@@ -67,31 +67,31 @@ class ModulationIsolateKeyCommand extends Command
         // optional clean-up. Delete if necessary
         $sql2 = "DELETE FROM branch_sync where branch_id != $branchId";
         echo $sql2."\n";
-        //Database::query($sql2);
+        Database::query($sql2);
         $sql2 = "DELETE FROM session WHERE id NOT IN (".implode(', ',$sessions).")";
         echo $sql2."\n";
-        //Database::query($sql2);
+        Database::query($sql2);
         $sql2 = "DELETE FROM session_rel_course WHERE id_session NOT IN (".implode(', ',$sessions).")";
         echo $sql2."\n";
-        //Database::query($sql2);
+        Database::query($sql2);
         $sql2 = "DELETE FROM session_rel_course_rel_user WHERE id_session NOT IN (".implode(', ',$sessions).")";
         echo $sql2."\n";
-        //Database::query($sql2);
+        Database::query($sql2);
         $sql2 = "DELETE FROM session_rel_user WHERE id_session NOT IN (".implode(', ',$sessions).")";
         echo $sql2."\n";
-        //Database::query($sql2);
+        Database::query($sql2);
         $sql2 = "DELETE FROM c_quiz_distribution_rel_session WHERE session_id NOT IN (".implode(', ',$sessions).")";
         echo $sql2."\n";
-        //Database::query($sql2);
+        Database::query($sql2);
         $sql2 = "DELETE FROM access_url_rel_session WHERE session_id NOT IN (".implode(', ',$sessions).")";
         echo $sql2."\n";
-        //Database::query($sql2);
+        Database::query($sql2);
         $sql2 = "DELETE FROM branch_rel_session WHERE session_id NOT IN (".implode(', ',$sessions).")";
         echo $sql2."\n";
-        //Database::query($sql2);
+        Database::query($sql2);
         $sql2 = "DELETE FROM user WHERE user_id NOT IN (".implode(', ',$sessionUsers).") AND user_id > 1";
         echo $sql2."\n";
-        //Database::query($sql2);
+        Database::query($sql2);
         $sql3 = "SELECT count(*) FROM user";
         $res3 = Database::query($sql3);
         $count = Database::fetch_row($res3);
@@ -114,6 +114,7 @@ class ModulationIsolateKeyCommand extends Command
         $caPub = file_get_contents($certServ.'ca-cert.pem');
         @file_put_contents($destDir.'/ca-cert.pem',$caPub);
 
+        //@todo why?
         return true;
     }
 }

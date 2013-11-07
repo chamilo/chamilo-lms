@@ -95,6 +95,9 @@ class ModulationIsolateKeyCommand extends Command
         $sql3 = "SELECT count(*) FROM user";
         $res3 = Database::query($sql3);
         $count = Database::fetch_row($res3);
+        // Set the local branch accordindly.
+        $update_local_branch_sql = sprintf("UPDATE settings_current SET selected_value = %d WHERE variable = 'local_branch_id'", $branchId);
+        Database::query($update_local_branch_sql);
 
         //$output->writeln("$count users remain");
         //$output->writeln('The database should now be isolated.');

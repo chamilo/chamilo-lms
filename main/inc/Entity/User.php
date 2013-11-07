@@ -249,9 +249,8 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
     private $isActive;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CurriculumItemRelUser")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id", nullable=true)
-     */
+     * @ORM\OneToMany(targetEntity="CurriculumItemRelUser", mappedBy="user")
+     **/
     private $curriculumItems;
 
     /**
@@ -1158,5 +1157,20 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
     public function getHrDeptId()
     {
         return $this->hrDeptId;
+    }
+
+    /**
+     * @todo use SUM
+     * @return int
+     */
+    public function getCurriculumScore()
+    {
+        $items = $this->getCurriculumItems();
+        $score = 0;
+        /** @var \Entity\CurriculumItemRelUser $itemRelUser */
+        foreach ($items as $itemRelUser) {
+            $score += $itemRelUser->getItem()->getScore();
+        }
+        return $score ;
     }
 }

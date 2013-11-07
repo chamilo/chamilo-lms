@@ -2,15 +2,22 @@
 {% block content %}
     {{ 'Results' | trans }}
     <hr />
-    <ul>
-    {% for user in users %}
-        <li>
-            {{ user.complete_name }} - {{ user.score }}
-            <a class="btn" href="{{ url('curriculum_user.controller:getUserItemsAction',
-                { 'userId': user.user_id, 'course' : course.code, 'id_session' : course_session.id }) }}">
-                {{ 'Details' | trans }}
-            </a>
-        </li>
-    {% endfor %}
-    </ul>
+    {% if pagination != '' %}
+        <ul>
+            {% for user in pagination.currentPageResults %}
+                <li>
+                    {{ user.firstname }} - {{ user.lastname }} {{ user.score }}
+                    <a class="btn" href="{{ url('curriculum_user.controller:getUserItemsAction',
+                    { 'userId': user.userId, 'course' : course.code, 'id_session' : course_session.id }) }}">
+                        {{ 'Details' | trans }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        {% if pagerfanta.haveToPaginate %}
+            {{ pagerfanta(pagination, 'twitter_bootstrap', { 'proximity': 3 } ) }}
+        {% endif %}
+    {% endif %}
+
 {% endblock %}

@@ -11,6 +11,10 @@ use Entity;
 use ChamiloLMS\Form\CurriculumCategoryType;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Pagerfanta\Adapter\DoctrineORMAdapter;
+
+use Pagerfanta\View\TwitterBootstrapView;
+use Pagerfanta\Pagerfanta;
 
 /**
  * Class CurriculumController
@@ -26,6 +30,11 @@ class CurriculumCategoryController extends CommonController
      */
     public function indexAction()
     {
+        // @todo use something better
+        if (!api_is_allowed_to_edit(true, true, true)) {
+             $this->abort('405');
+        }
+
         $breadcrumbs = array(
             array(
                 'name' => get_lang('Curriculum'),
@@ -114,6 +123,10 @@ class CurriculumCategoryController extends CommonController
     */
     public function readCategoryAction($id)
     {
+        // @todo use something better
+        if (!api_is_allowed_to_edit(true, true, true)) {
+            $this->abort('405');
+        }
         return parent::readAction($id);
     }
 
@@ -123,6 +136,11 @@ class CurriculumCategoryController extends CommonController
     */
     public function addCategoryAction()
     {
+        // @todo use something better
+        if (!api_is_allowed_to_edit(true, true, true)) {
+            $this->abort('405');
+        }
+
         $breadcrumbs = array(
             array(
                 'name' => get_lang('Curriculum'),
@@ -163,6 +181,11 @@ class CurriculumCategoryController extends CommonController
     */
     public function addFromParentAction($id)
     {
+        // @todo use something better
+        if (!api_is_allowed_to_edit(true, true, true)) {
+            $this->abort('405');
+        }
+
         $breadcrumbs = array(
             array(
                 'name' => get_lang('Curriculum'),
@@ -233,6 +256,11 @@ class CurriculumCategoryController extends CommonController
     */
     public function editCategoryAction($id)
     {
+        // @todo use something better
+        if (!api_is_allowed_to_edit(true, true, true)) {
+            $this->abort('405');
+        }
+
          $breadcrumbs = array(
             array(
                 'name' => get_lang('Curriculum'),
@@ -269,6 +297,11 @@ class CurriculumCategoryController extends CommonController
     */
     public function deleteCategoryAction($id)
     {
+        // @todo use something better
+        if (!api_is_allowed_to_edit(true, true, true)) {
+            $this->abort('405');
+        }
+
         return parent::deleteAction($id);
     }
 
@@ -277,8 +310,13 @@ class CurriculumCategoryController extends CommonController
     * @Route("/results")
     * @Method({"GET"})
     */
-    public function resultsAction()
+    public function resultsAction($page = 1)
     {
+        // @todo use something better
+        if (!api_is_allowed_to_edit(true, true, true)) {
+            $this->abort('405');
+        }
+
         $breadcrumbs = array(
             array(
                 'name' => get_lang('Curriculum'),
@@ -302,10 +340,8 @@ class CurriculumCategoryController extends CommonController
                 'name' => get_lang('Results'),
             )
         );
+
         $this->setBreadcrumb($breadcrumbs);
-        if (!api_is_allowed_to_edit(true, true, true)) {
-            $this->abort('405');
-        }
 
         $session = $this->getSession();
         $sessionId = 0;
@@ -313,49 +349,48 @@ class CurriculumCategoryController extends CommonController
             $sessionId =  $this->getSession()->getId();
         }
 
-        // @todo move in a function
-        $users = \CourseManager::get_user_list_from_course_code(
-            $this->getCourse()->getCode(),
-            $sessionId,
-            null,
-            null,
-            STUDENT
-        );
-
-        $qb = $this->getManager()
+        /*$qb = $this->getManager()
             ->createQueryBuilder()
-            ->select('node.id, u.userId, SUM(i.score) as score')
+            ->select('u, u.userId, u.userId, i, SUM(i.score) as score, node')
             ->from('Entity\CurriculumCategory', 'node')
             ->innerJoin('node.course', 'c')
             ->innerJoin('node.items', 'i')
             ->innerJoin('i.userItems', 'u')
+            ->groupby('u.userId') ;*/
+        //, SUM(i.score) as score
+
+        $qb = $this->getManager()
+            ->createQueryBuilder()
+            ->select('u, u.firstname, u.lastname, u.userId, SUM(i.score) as score')
+            ->from('Entity\User', 'u')
+            ->innerJoin('u.curriculumItems', 'ci')
+            ->innerJoin('ci.item', 'i')
+            ->innerJoin('i.category', 'c')
+            ->where('c.cId = :courseId AND (c.sessionId = :sessionId or c.sessionId IS NULL) ')
+            ->setParameters(
+                array(
+                    'courseId' => $this->getCourse()->getId(),
+                    'sessionId' => $sessionId
+                )
+            )
             ->groupby('u.userId') ;
-        $this->setCourseParameters($qb, 'node');
-        $query = $qb->getQuery();
-        $userResults = $query->getResult();
 
-        $userResultsByUserId = array();
-        if (!empty($userResults)) {
-            foreach ($userResults as $item) {
-                $userResultsByUserId[$item['userId']] = $item['score'];
-            }
-        }
+        $maxPerPage = 10;
 
-        if (!empty($users)) {
-            foreach ($users as &$user) {
-                if (!empty($userResultsByUserId)) {
-                    if (isset($userResultsByUserId[$user['user_id']])) {
-                        $user['score'] = $userResultsByUserId[$user['user_id']];
-                    } else {
-                        $user['score'] = 0;
-                    }
-                }
-            }
-        }
+        $adapter = new DoctrineORMAdapter($qb);
+        $pagination = new Pagerfanta($adapter);
+        $pagination->setMaxPerPage($maxPerPage); // 10 by default
+        $pagination->setCurrentPage($page);
 
+        $page = 1;
+        $this->app['pagerfanta.view.router.name']   = 'curriculum_category.controller:resultsAction';
+        $this->app['pagerfanta.view.router.params'] = array(
+            'course'   => $this->getCourse()->getCode(),
+            'page'   => $page
+        );
+
+        $this->app['template']->assign('pagination', $pagination);
         $template = $this->getTemplate();
-        $template->assign('users', $users);
-
         $response = $template->render_template($this->getTemplatePath().'results.tpl');
         return new Response($response, 200, array());
     }

@@ -50,7 +50,7 @@ class CurriculumItemRelUser
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User"))
+     * @ORM\ManyToOne(targetEntity="User",  inversedBy="curriculumItems"))
      * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id", nullable=true)
      */
     private $user;
@@ -78,7 +78,7 @@ class CurriculumItemRelUser
     }
 
     /**
-     * @return mixed
+     * @return CurriculumItem
      */
     public function getItem()
     {

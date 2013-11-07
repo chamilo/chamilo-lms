@@ -327,8 +327,6 @@ class CurriculumUserController extends CommonController
             }
         }
 
-        var_dump($categoryScore);
-
         $this->get('template')->assign('category_counter', $categoryCounter);
         $this->get('template')->assign('categories', $categories);
         $this->get('template')->assign('userResultId', $userId);

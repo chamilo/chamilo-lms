@@ -13,8 +13,8 @@ class CurriculumItemRelUserRepository extends EntityRepository
 {
     /**
      * Get all users that are registered in the course. No matter the status
-     *
-     * @param \Entity\CurriculumItem $course
+     * @param \Entity\CurriculumItem $item
+     * @param \Entity\User $user
      * @return bool
      */
     public function isAllowToInsert(\Entity\CurriculumItem $item, \Entity\User $user)
@@ -33,6 +33,5 @@ class CurriculumItemRelUserRepository extends EntityRepository
             ->getQuery()
             ->getSingleScalarResult();
         return $count <= $max ? true : false;
-
     }
 }

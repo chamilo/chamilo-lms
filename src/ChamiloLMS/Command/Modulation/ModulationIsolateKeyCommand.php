@@ -96,8 +96,17 @@ class ModulationIsolateKeyCommand extends Command
         $res3 = Database::query($sql3);
         $count = Database::fetch_row($res3);
         // Set the local branch accordindly.
-        $update_local_branch_sql = sprintf("UPDATE settings_current SET selected_value = %d WHERE variable = 'local_branch_id'", $branchId);
-        Database::query($update_local_branch_sql);
+        // See if it's there before.
+        $local_branch_settings = api_get_settings_params_simple(array('variable = ?' => 'local_branch_id'));
+        if (empty($local_branch_settings['selected_value'])) {
+            $insert_local_branch_sql = sprintf("INSERT INTO settings_current (variable, type, category, selected_value, title, comment, access_url_changeable)
+                VALUES ('local_branch_id', 'textfield', 'LogTransactions', %d, 'LogTransactionsDefaultBranch', 'LogTransactionsDefaultBranchComment', 1)", $branchId);
+            Database::query($insert_local_branch_sql);
+        }
+        else {
+            $update_local_branch_sql = sprintf("UPDATE settings_current SET selected_value = %d WHERE variable = 'local_branch_id'", $branchId);
+            Database::query($update_local_branch_sql);
+        }
 
         //$output->writeln("$count users remain");
         //$output->writeln('The database should now be isolated.');

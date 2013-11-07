@@ -2240,6 +2240,9 @@ function api_is_allowed_to_create_course() {
  * @return boolean True if current user is a course administrator
  */
 function api_is_course_admin() {
+    if (api_is_platform_admin()) {
+        return true;
+    }
     return $_SESSION['is_courseAdmin'];
 }
 

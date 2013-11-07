@@ -16,7 +16,7 @@ class CourseSelectForm
 	 * @param array $hidden_fiels Hidden fields to add to the form.
 	 * @param boolean the document array will be serialize. This is used in the course_copy.php file
 	 */
-	static function display_form($course, $hidden_fields = null, $avoid_serialize=false)
+	static function display_form($course, $hidden_fields = null, $avoid_serialize = false)
     {
         global $charset;
 		$resource_titles[RESOURCE_EVENT]                = get_lang('Events');
@@ -141,6 +141,7 @@ class CourseSelectForm
 		}
         echo '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
 		echo '<script type="text/javascript">var myUpload = new upload(1000);</script>';
+
 		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="javascript: myUpload.start(\'dynamic_div\',\''.api_get_path(WEB_CODE_PATH).'img/progress_bar.gif\',\''.get_lang('PleaseStandBy', '').'\',\'upload_form\')">';
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
 
@@ -348,10 +349,13 @@ class CourseSelectForm
 	/**
 	 * Get the posted course
 	 * @param string who calls the function? It can be copy_course, create_backup, import_backup or recycle_course
+     * @param int
+     * @param string
 	 * @return course The course-object with all resources selected by the user
 	 * in the form given by display_form(...)
 	 */
-	static function get_posted_course($from = '', $session_id = 0, $course_code = '') {
+	static function get_posted_course($from = '', $session_id = 0, $course_code = '')
+    {
         $course = null;
 
         if (isset($_POST['course'])) {

@@ -310,7 +310,7 @@ class CurriculumCategoryController extends CommonController
     * @Route("/results")
     * @Method({"GET"})
     */
-    public function resultsAction($page = 1)
+    public function resultsAction()
     {
         // @todo use something better
         if (!api_is_allowed_to_edit(true, true, true)) {
@@ -375,14 +375,15 @@ class CurriculumCategoryController extends CommonController
             )
             ->groupby('u.userId') ;
 
-        $maxPerPage = 10;
+        $maxPerPage = 1;
+        $page = intval($this->getRequest()->get('page'));
+        $page = empty($page) ? 1 : $page;
 
         $adapter = new DoctrineORMAdapter($qb);
         $pagination = new Pagerfanta($adapter);
         $pagination->setMaxPerPage($maxPerPage); // 10 by default
         $pagination->setCurrentPage($page);
 
-        $page = 1;
         $this->app['pagerfanta.view.router.name']   = 'curriculum_category.controller:resultsAction';
         $this->app['pagerfanta.view.router.params'] = array(
             'course'   => $this->getCourse()->getCode(),

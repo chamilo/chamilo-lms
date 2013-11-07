@@ -70,7 +70,10 @@ $(function() {
                         <td colspan="3">
                         </td>
                         <td class="center_text" rowspan="{{ category_counter[subcategory.id] | length  + 3 }}">
-                            <h4>{{ category_score[subcategory.id]}} </h4>
+                            <h4>
+                                {# category_score[subcategory.id] #}
+                                {{ subcategory.maxScore }}
+                            </h4>
                         </td>
                         </tr>
                 {% else %}

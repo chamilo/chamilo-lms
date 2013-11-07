@@ -15,9 +15,8 @@
             {% endfor %}
         </ul>
 
-        {% if pagerfanta.haveToPaginate %}
-            {{ pagerfanta(pagination, 'twitter_bootstrap', { 'proximity': 3 } ) }}
-        {% endif %}
+        {{ pagerfanta(pagination, 'twitter_bootstrap', { 'proximity': 3 } ) }}
+
     {% endif %}
 
 {% endblock %}

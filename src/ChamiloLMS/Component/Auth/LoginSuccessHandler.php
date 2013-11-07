@@ -79,6 +79,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 
             foreach ($personal_course_list as $course) {
                 if (!empty($course['session_id'])) {
+                    if (api_get_session_visibility($course['session_id'],$course['id']) != SESSION_AVAILABLE) { continue; }
                     $my_session_list[$course['session_id']] = true;
                     $count_of_courses_with_sessions++;
                 } else {

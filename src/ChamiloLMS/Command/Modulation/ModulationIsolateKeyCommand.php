@@ -39,6 +39,9 @@ class ModulationIsolateKeyCommand extends Command
         Session::setSession($app['session']);
         Session::write('_user', api_get_user_info(1));
 
+        $destDir = '/var/opt/keys';
+        $certServ = 'http://debian4.beeznest.org/keys/';
+
         $branchId = intval($input->getArgument('key'));
         $sql = "SELECT session_id FROM branch_rel_session WHERE branch_id = $branchId ORDER BY display_order";
         $res = Database::query($sql);
@@ -64,37 +67,60 @@ class ModulationIsolateKeyCommand extends Command
         // optional clean-up. Delete if necessary
         $sql2 = "DELETE FROM branch_sync where branch_id != $branchId";
         echo $sql2."\n";
-        //Database::query($sql2);
+        Database::query($sql2);
         $sql2 = "DELETE FROM session WHERE id NOT IN (".implode(', ',$sessions).")";
         echo $sql2."\n";
-        //Database::query($sql2);
+        Database::query($sql2);
         $sql2 = "DELETE FROM session_rel_course WHERE id_session NOT IN (".implode(', ',$sessions).")";
         echo $sql2."\n";
-        //Database::query($sql2);
+        Database::query($sql2);
         $sql2 = "DELETE FROM session_rel_course_rel_user WHERE id_session NOT IN (".implode(', ',$sessions).")";
         echo $sql2."\n";
-        //Database::query($sql2);
+        Database::query($sql2);
         $sql2 = "DELETE FROM session_rel_user WHERE id_session NOT IN (".implode(', ',$sessions).")";
         echo $sql2."\n";
-        //Database::query($sql2);
+        Database::query($sql2);
         $sql2 = "DELETE FROM c_quiz_distribution_rel_session WHERE session_id NOT IN (".implode(', ',$sessions).")";
         echo $sql2."\n";
-        //Database::query($sql2);
+        Database::query($sql2);
         $sql2 = "DELETE FROM access_url_rel_session WHERE session_id NOT IN (".implode(', ',$sessions).")";
         echo $sql2."\n";
-        //Database::query($sql2);
+        Database::query($sql2);
         $sql2 = "DELETE FROM branch_rel_session WHERE session_id NOT IN (".implode(', ',$sessions).")";
         echo $sql2."\n";
-        //Database::query($sql2);
+        Database::query($sql2);
         $sql2 = "DELETE FROM user WHERE user_id NOT IN (".implode(', ',$sessionUsers).") AND user_id > 1";
         echo $sql2."\n";
-        //Database::query($sql2);
+        Database::query($sql2);
         $sql3 = "SELECT count(*) FROM user";
         $res3 = Database::query($sql3);
         $count = Database::fetch_row($res3);
+        // Set the local branch accordindly.
+        // See if it's there before.
+        $local_branch_settings = api_get_settings_params_simple(array('variable = ?' => 'local_branch_id'));
+        if (empty($local_branch_settings['selected_value'])) {
+            $insert_local_branch_sql = sprintf("INSERT INTO settings_current (variable, type, category, selected_value, title, comment, access_url_changeable)
+                VALUES ('local_branch_id', 'textfield', 'LogTransactions', %d, 'LogTransactionsDefaultBranch', 'LogTransactionsDefaultBranchComment', 1)", $branchId);
+            Database::query($insert_local_branch_sql);
+        }
+        else {
+            $update_local_branch_sql = sprintf("UPDATE settings_current SET selected_value = %d WHERE variable = 'local_branch_id'", $branchId);
+            Database::query($update_local_branch_sql);
+        }
 
-        $output->writeln("$count users remain");
-        $output->writeln('The database should now be isolated.');
-        return true;
+        //$output->writeln("$count users remain");
+        //$output->writeln('The database should now be isolated.');
+
+        // Make dir if not present. Assume the command succeeds as everything
+        // executes as root anyway
+        if (!is_dir($destDir)) {
+            @mkdir($destDir);
+        }
+        // Get the SSL certificate from the server, at
+        //  http://server/keys/24.p12
+        $cert = file_get_contents($certServ.$branchId.'.p12');
+        @file_put_contents($destDir.'/'.$branchId.'.p12',$cert);
+        $caPub = file_get_contents($certServ.'ca-cert.pem');
+        @file_put_contents($destDir.'/ca-cert.pem',$caPub);
     }
 }

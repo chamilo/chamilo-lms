@@ -41,7 +41,7 @@ if (api_is_anonymous()) {
     $form->addElement('html', $option1);
     $form->addElement('checkbox', 'left', null, get_lang('Yes'));
     $form->addElement('button', 'submit', get_lang('Confirm'), array('class' => 'btn btn-primary'));
-
+    $formHtml = $form->return_form();
     if ($form->validate()) {
         $result = $form->getSubmitValues();
         if (isset($result['left']) && $result['left']) {
@@ -62,6 +62,7 @@ if (api_is_anonymous()) {
         $form2->addElement('html', $option2);
         $form2->addElement('checkbox', 'right', null, get_lang('Yes'));
         $form2->addElement('button', 'submit', get_lang('Send'));
+        $formHtml2 = $form2->return_form();
 
         if ($form2->validate()) {
             $result = $form2->getSubmitValues();
@@ -74,6 +75,6 @@ if (api_is_anonymous()) {
 
     //$_template['option1'] = api_get_plugin_setting('before_login', 'option1');
     //$_template['option2'] = api_get_plugin_setting('before_login', 'option2');
-    $_template['form_option1'] = $form->return_form();
-    $_template['form_option2'] = $form2->return_form();
+    $_template['form_option1'] = $formHtml;
+    $_template['form_option2'] = $formHtml2;
 }

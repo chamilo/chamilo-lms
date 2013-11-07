@@ -1602,13 +1602,12 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
  * In each case, we query the corresponding table for information and build the link
  * with that information.
  * @author	Yannick Warnier <ywarnier@beeznest.org> - rebranding based on previous work (display_addedresource_link_in_learnpath())
- * @param	string	Course code
- * @param	integer	The learning path ID (in lp table)
- * @param	integer	The database ID for that item in the lp_item table
- * @param id          - that is the correspondent id in the mirror tool (like Agenda item 2)
- * @param id_in_path  - the unique index in the items table
+ * @param	int	Course code
+ * @param	int The learning path ID (in lp table)
+ * @param   int id_in_path  - the unique index in the items table
  */
-function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_path) {
+function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_path)
+{
     $tbl_lp_item 	= Database::get_course_table(TABLE_LP_ITEM);
 
     $course_info = api_get_course_info_by_id($course_id);
@@ -1746,7 +1745,8 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
  * @param string 	The tool type (using constants declared in main_api.lib.php)
  * @param integer 	The resource ID
  */
-function rl_get_resource_name($course_code, $learnpath_id, $id_in_path) {
+function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
+{
     $_course = Database::get_course_info($course_code);
     $course_id = $_course['real_id'];
     $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);

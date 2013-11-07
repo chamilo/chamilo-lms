@@ -2103,17 +2103,11 @@ $server->register('WSCreateCourse',                // method name
 );
 
 // Define the method WSCreateCourse
-function WSCreateCourse($params) {
-
-    global $_configuration;
-
+function WSCreateCourse($params)
+{
     if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
-
-    $t_cfv = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-    $table_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-    $table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
     $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 
     $courses_params = $params['courses'];
@@ -2317,7 +2311,6 @@ function WSCreateCourseByTitle($params) {
 
     $t_cfv                     = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
     $table_field             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-    $table_course_category     = Database::get_main_table(TABLE_MAIN_CATEGORY);
     $table_course             = Database::get_main_table(TABLE_MAIN_COURSE);
 
     $courses_params = $params['courses'];
@@ -2916,7 +2909,7 @@ function WSEditCourseDescription($params) {
         $res_check_id = Database::query($sql_check_id);
 
         if (Database::num_rows($res_check_id) > 0) {
-            $sql = "UPDATE $t_course_desc SET title='$course_desc_title', content = '$course_desc_content' 
+            $sql = "UPDATE $t_course_desc SET title='$course_desc_title', content = '$course_desc_content'
                     WHERE c_id = {$course_info['real_id']} AND id = '".$course_desc_id."'";
             Database::query($sql);
         } else {

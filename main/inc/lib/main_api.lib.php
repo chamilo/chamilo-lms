@@ -2097,7 +2097,8 @@ function api_get_coachs_from_course($session_id=0,$course_code='') {
  * @author René Haentjens
  * @author Bart Mollet
  */
-function api_get_setting($variable, $key = null) {
+function api_get_setting($variable, $key = null)
+{
     global $_setting;
     if ($variable == 'header_extra_content') {
         $filename = api_get_path(SYS_PATH).api_get_home_path().'header_extra_content.txt';
@@ -2126,6 +2127,21 @@ function api_get_setting($variable, $key = null) {
         }
     }
     return $value;
+}
+
+/**
+ * @param string $plugin
+ * @param string $variable
+ * @return string
+ */
+function api_get_plugin_setting($plugin, $variable)
+{
+    $variableName = $plugin.'_'.$variable;
+    $result = api_get_setting($variableName);
+    if (isset($result[$plugin])) {
+        return $result[$plugin];
+    }
+    return null;
 }
 
 /**
@@ -2912,7 +2928,7 @@ function api_not_allowed($print_headers = false, $message = null) {
     $origin = isset($_GET['origin']) ? $_GET['origin'] : '';
 
     $msg = null;
-    
+
     if (isset($message)) {
         $msg = $message;
     } else {
@@ -2980,7 +2996,7 @@ function api_not_allowed($print_headers = false, $message = null) {
     // Check if the cookies are enabled. If are enabled and if no course ID was included in the requested URL, then the user has either lost his session or is anonymous, so redirect to homepage
 	if( !isset($_COOKIE['TestCookie']) && empty($_COOKIE['TestCookie']) ) {
 		$msg = Display::return_message(get_lang('NoCookies').'<br /><br /><a href="'.$home_url.'">'.get_lang('BackTo').' '.get_lang('CampusHomepage').'</a><br />', 'error', false);
-	} elseif ($message == null){ 
+	} elseif ($message == null){
 		$msg = Display::return_message(get_lang('NotAllowed').'<br /><br /><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br />', 'error', false);
 	} else {
 	    $msg = Display::return_message($message.'&nbsp;<a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br />', 'error', false);
@@ -3475,6 +3491,21 @@ function api_get_languages() {
         $language_list['folder'][] = $row['dokeos_folder'];
     }
     return $language_list;
+}
+
+/**
+ * Returns a list of all the languages that are made available by the admin.
+ * @return array
+ */
+function api_get_languages_to_array() {
+    $tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+    $sql = "SELECT * FROM $tbl_language WHERE available='1' ORDER BY original_name ASC";
+    $result = Database::query($sql);
+    $languages = array();
+    while ($row = Database::fetch_array($result)) {
+        $languages[$row['dokeos_folder']] = $row['original_name'];
+    }
+    return $languages;
 }
 
 /**
@@ -4911,7 +4942,7 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
 function replace_dangerous_char($filename, $strict = 'loose') {
     // Safe replacements for some non-letter characters.
     static $search  = array(',', "\0", ' ', "\t", "\n", "\r", "\x0B", '/', "\\", '"', "'", '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#', '+', '&', '%');
-    static $replace = array('_', '',   '_', '_',  '_',  '_',  '_',    '-', '-',  '-', '_', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
+    static $replace = array('_', '',   '_', '_',  '_',  '_',  '_', '-', '-',  '-', '_', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
 
     // Encoding detection.
     $encoding = api_detect_encoding($filename);
@@ -6707,7 +6738,11 @@ function api_can_login_as($loginAsUserId, $userId = null)
         if (api_is_drh()) {
             if (api_drh_can_access_all_session_content()) {
                 $users = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh_all', api_get_user_id());
-                if (in_array($loginAsUserId, $users)) {
+                $userList = array();
+                foreach ($users as $user) {
+                    $userList[] = $user['user_id'];
+                }
+                if (in_array($loginAsUserId, $userList)) {
                     return true;
                 }
             } else {

@@ -317,12 +317,13 @@ class DocumentManager
 
         $filename = ($name == '') ? basename($full_file_name) : replace_dangerous_char($name);
         $len = filesize($full_file_name);
+        // Fixing error when file name contains a ","
+        $filename = str_replace(',', '', $filename);
 
         if ($forced) {
-            //force the browser to save the file instead of opening it
+            // Force the browser to save the file instead of opening it
 
             header('Content-type: application/octet-stream');
-            //header('Content-Type: application/force-download');
             header('Content-length: ' . $len);
             if (preg_match("/MSIE 5.5/", $_SERVER['HTTP_USER_AGENT'])) {
                 header('Content-Disposition: filename= ' . $filename);
@@ -337,8 +338,8 @@ class DocumentManager
             header('Content-Description: ' . $filename);
             header('Content-transfer-encoding: binary');
 
-            $fp = fopen($full_file_name, 'r');
-            fpassthru($fp);
+            $res = fopen($full_file_name, 'r');
+            fpassthru($res);
             return true;
         } else {
             //no forced download, just let the browser decide what to do according to the mimetype

@@ -50,15 +50,15 @@ while ($obj = Database::fetch_object($res)) {
 
 // Get all possible teachers without the course teachers
 if (api_is_multiple_url_enabled()) {
-	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+	$access_url_rel_user_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 	$sql = "SELECT u.user_id,lastname,firstname
 	        FROM $table_user as u
 			INNER JOIN $access_url_rel_user_table url_rel_user
 			ON (u.user_id=url_rel_user.user_id)
 			WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status=1".$order_clause;
 } else {
-	$sql = "SELECT user_id, lastname, firstname
-	        FROM $table_user WHERE status='1'".$order_clause;
+    $sql = "SELECT user_id, lastname, firstname
+            FROM $table_user WHERE status='1'".$order_clause;
 }
 
 $res = Database::query($sql);
@@ -108,7 +108,7 @@ $form->applyFilter('visual_code', 'strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
 
 $group = array(
-    $form->createElement('select', 'platform_teachers', '', $teachers,        ' id="platform_teachers" multiple=multiple size="4" style="width:300px;"'),
+    $form->createElement('select', 'platform_teachers', '', $teachers, ' id="platform_teachers" multiple=multiple size="4" style="width:300px;"'),
     $form->createElement('select', 'course_teachers', '',   $course_teachers, ' id="course_teachers" multiple=multiple size="4" style="width:300px;"')
 );
 
@@ -180,7 +180,13 @@ if (!empty($coursesInSession)) {
     }
 }
 
-$categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories, array('style'=>'width:350px','id'=>'category_code_id', 'class'=>'chzn-select'));
+$categories_select = $form->addElement(
+    'select',
+    'category_code',
+    get_lang('CourseFaculty'),
+    array(),
+    array('style'=>'width:350px','id'=>'category_code_id', 'class'=>'chzn-select')
+);
 $categories_select->addOption('-', '');
 CourseManager::select_and_sort_categories($categories_select);
 

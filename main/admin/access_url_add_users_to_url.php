@@ -1,6 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**	
+/**
 * This script allows platform admins to add users to urls.
 *	It displays a list of users and a list of courses;
 *	you can select multiple users and courses and then click on
@@ -17,13 +17,9 @@ $this_section=SECTION_PLATFORM_ADMIN;
 require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 api_protect_global_admin_script();
 if (!api_get_multiple_access_url()) {
-	header('Location: index.php');
-	exit;
+    header('Location: index.php');
+    exit;
 }
-
-/*
-	Global constants and variables
-*/
 
 $form_sent = 0;
 $first_letter_user = '';
@@ -41,12 +37,12 @@ $tool_name = get_lang('AddUsersToURL');
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
 
-/*		MAIN CODE	*/
-
 Display :: display_header($tool_name);
 
 echo '<div class="actions">';
-echo Display::url(Display::return_icon('edit.gif',get_lang('EditUsersToURL'),''), api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php">');
+echo Display::url(
+    Display::return_icon('edit.png', get_lang('EditUsersToURL'),''),
+    api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php');
 echo '</div>';
 
 api_display_tool_title($tool_name);
@@ -61,33 +57,26 @@ if ($_POST['form_sent']) {
 		$users[$key] = intval($value);
 	}
 
-	if ($form_sent == 1)
-	{
-		if ( count($users) == 0 || count($url_list) == 0) {
+	if ($form_sent == 1) {
+		if (count($users) == 0 || count($url_list) == 0) {
 			Display :: display_error_message(get_lang('AtLeastOneUserAndOneURL'));
-			//header('Location: access_urls.php?action=show_message&message='.get_lang('AtLeastOneUserAndOneURL'));
 		} else {
 			UrlManager::add_users_to_urls($users,$url_list);
 			Display :: display_confirmation_message(get_lang('UsersBelongURL'));
-			//header('Location: access_urls.php?action=show_message&message='.get_lang('UsersBelongURL'));
 		}
 	}
 }
 
-
-
 /*	Display GUI	*/
-
-
 if (empty($first_letter_user)) {
 	$sql = "SELECT count(*) as nb_users FROM $tbl_user";
 	$result = Database::query($sql);
 	$num_row = Database::fetch_array($result);
-	if($num_row['nb_users']>1000) {
-		//if there are too much users to gracefully handle with the HTML select list,
-	    // assign a default filter on users names
-		$first_letter_user = 'A';
-	}
+    if ($num_row['nb_users']>1000) {
+        //if there are too much users to gracefully handle with the HTML select list,
+        // assign a default filter on users names
+        $first_letter_user = 'A';
+    }
 	unset($result);
 }
 $first_letter_user = Database::escape_string($first_letter_user);
@@ -114,7 +103,7 @@ unset($result);
     <td width="40%" align="center">
      <b><?php echo get_lang('UserList'); ?></b>
      <br/><br/>
-     <?php echo get_lang('Select').' ' ; echo $target_name == 'firstname'? get_lang('FirstName') : get_lang('LastName'); ?> 
+     <?php echo get_lang('Select').' ' ; echo $target_name == 'firstname'? get_lang('FirstName') : get_lang('LastName'); ?>
      <select name="first_letter_user" onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();">
       <option value="">--</option>
       <?php
@@ -161,5 +150,5 @@ unset($result);
  </table>
 </form>
 <?php
-/*		FOOTER	*/
+
 Display :: display_footer();

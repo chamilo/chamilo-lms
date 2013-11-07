@@ -242,7 +242,7 @@ if (!empty($errorMsg)) {
 <tr>
     <td>
     <h3>
-    <?php 
+    <?php
         $total_users = count($nosessionUsersList) +  count($sessionUsersList);
         echo get_lang('TotalAvailableUsers').' '.$total_users;
     ?>
@@ -255,7 +255,6 @@ if (!empty($errorMsg)) {
   <td></td>
   <td align="center"><b><?php echo get_lang('UserListIn') . ' ' . $url_selected; ?> : <?php echo count($sessionUsersList); ?></b></td>
 </tr>
-
 <tr>
   <td align="center">
   <div id="content_source">
@@ -315,10 +314,8 @@ if (!empty($errorMsg)) {
 	</td>
 </tr>
 </table>
-
 </form>
-<script type="text/javascript">
-<!--
+<script>
 function moveItem(origin , destination) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
@@ -352,23 +349,14 @@ function mysort(a, b) {
 	return 0;
 }
 
-function valide(){
+function valide() {
 	var options = document.getElementById('destination_users').options;
 	for (i = 0 ; i<options.length ; i++)
 		options[i].selected = true;
-	/*
-	var options = document.getElementById('destination_classes').options;
-	for (i = 0 ; i<options.length ; i++)
-		options[i].selected = true;
-		*/
 	document.forms.formulaire.submit();
 }
-
-
-function loadUsersInSelect(select){
-
+function loadUsersInSelect(select) {
 	var xhr_object = null;
-
 	if(window.XMLHttpRequest) // Firefox
 		xhr_object = new XMLHttpRequest();
 	else if(window.ActiveXObject) // Internet Explorer
@@ -378,10 +366,7 @@ function loadUsersInSelect(select){
 
 	//xhr_object.open("GET", "loadUsersInSelect.ajax.php?id_session=<?php echo $id_session ?>&letter="+select.options[select.selectedIndex].text, false);
 	xhr_object.open("POST", "loadUsersInSelect.ajax.php");
-
 	xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-
 	nosessionUsers = makepost(document.getElementById('origin_users'));
 	sessionUsers = makepost(document.getElementById('destination_users'));
 	nosessionClasses = makepost(document.getElementById('origin_classes'));
@@ -401,11 +386,8 @@ function makepost(select){
 	var ret = "";
 	for (i = 0 ; i<options.length ; i++)
 		ret = ret + options[i].value +'::'+options[i].text+";;";
-
 	return ret;
-
 }
--->
 </script>
 <?php
 Display::display_footer();

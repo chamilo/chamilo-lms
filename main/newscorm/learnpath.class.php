@@ -13,7 +13,8 @@
  * @package chamilo.learnpath
  */
 
-class learnpath {
+class learnpath
+{
 
     public $attempt = 0; // The number for the current ID view.
     public $cc; // Course (code) this learnpath is located in. @todo change name for something more comprensible ...
@@ -76,27 +77,17 @@ class learnpath {
     public $course_int_id;
     public $course_info = array();
 
-    public function get_course_int_id() {
-        return isset($this->course_int_id) ? $this->course_int_id : api_get_course_int_id();
-    }
-
-    public function set_course_int_id($course_id) {
-        return $this->course_int_id = intval($course_id);
-    }
-
     /**
-     * Class constructor. Needs a database handler, a course code and a learnpath id from the database.
-     * Also builds the list of items into $this->items.
-     * @param	string		Course code
-     * @param	integer		Learnpath ID
-     * @param	integer		User ID
-     * @return	boolean		True on success, false on error
-     */
-    public function __construct($course, $lp_id, $user_id) {
+    * Class constructor. Needs a database handler, a course code and a learnpath id from the database.
+    * Also builds the list of items into $this->items.
+    * @param	string		Course code
+    * @param	integer		Learnpath ID
+    * @param	integer		User ID
+    * @return	boolean		True on success, false on error
+    */
+    public function __construct($course, $lp_id, $user_id)
+    {
         $this->encoding = api_get_system_encoding(); // Chamilo 1.8.8: We intend always to use the system encoding.
-        // Check course code.
-        $course_id = api_get_course_int_id();
-
         if ($this->debug > 0) { error_log('New LP - In learnpath::__construct('.$course.','.$lp_id.','.$user_id.')', 0); }
         if (empty($course)) {
             $this->error = 'Course code is empty';
@@ -108,7 +99,7 @@ class learnpath {
                 $this->course_info  = $course_info;
                 $course_id 	        = $course_info['real_id'];
             } else {
-                $this->error = 'Course code does not exist in database ('.$sql.')';
+                $this->error = 'Course code does not exist in database.';
                 return false;
             }
         }
@@ -380,8 +371,35 @@ class learnpath {
     }
 
     /**
-     * Function rewritten based on old_add_item() from Yannick Warnier. Due the fact that users can decide where the item should come, I had to overlook this function and
-     * I found it better to rewrite it. Old function is still available. Added also the possibility to add a description.
+     * @return string
+     */
+    public function getCourseCode()
+    {
+        return $this->cc;
+    }
+
+    /**
+     * @return int
+     */
+    public function get_course_int_id()
+    {
+        return isset($this->course_int_id) ? $this->course_int_id : api_get_course_int_id();
+    }
+
+    /**
+     * @param $course_id
+     * @return int
+     */
+    public function set_course_int_id($course_id)
+    {
+        return $this->course_int_id = intval($course_id);
+    }
+
+    /**
+     * Function rewritten based on old_add_item() from Yannick Warnier.
+     * Due the fact that users can decide where the item should come, I had to overlook this function and
+     * I found it better to rewrite it. Old function is still available.
+     * Added also the possibility to add a description.
      *
      * @param int $parent
      * @param int $previous
@@ -389,9 +407,12 @@ class learnpath {
      * @param int  resource ID (ref)
      * @param string $title
      * @param string $description
+     * @param int $prerequisites
+     * @param int $max_time_allowed
      * @return int
      */
-    public function add_item($parent, $previous, $type = 'dokeos_chapter', $id, $title, $description, $prerequisites = 0, $max_time_allowed = 0) {
+    public function add_item($parent, $previous, $type = 'dokeos_chapter', $id, $title, $description, $prerequisites = 0, $max_time_allowed = 0)
+    {
         $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::add_item(' . $parent . ',' . $previous . ',' . $type . ',' . $id . ',' . $title . ')', 0);
@@ -621,7 +642,8 @@ class learnpath {
      * @param	string	Zip file containing the learnpath or directory containing the learnpath
      * @return	integer	The new learnpath ID on success, 0 on failure
      */
-    public static function add_lp($course, $name, $description = '', $learnpath = 'guess', $origin = 'zip', $zipname = '', $publicated_on = '', $expired_on = '') {
+    public static function add_lp($course, $name, $description = '', $learnpath = 'guess', $origin = 'zip', $zipname = '', $publicated_on = '', $expired_on = '')
+    {
         global $charset;
         $course_id = api_get_course_int_id();
         $tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);

@@ -117,9 +117,11 @@ if (empty($docId)) {
     $form->display();
 }
 
-/*
- * DB changes needed
+/**
+ * DB changes needed for new features in work tool
  *
+ *
+ * 1. Create tables
 CREATE TABLE IF NOT EXISTS c_student_publication_rel_document (
     id  INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     work_id INT NOT NULL,
@@ -134,9 +136,10 @@ CREATE TABLE IF NOT EXISTS c_student_publication_rel_user (
     c_id INT NOT NULL
 );
 
-
 CREATE TABLE IF NOT EXISTS c_student_publication_comment (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,  work_id INT NOT NULL,  c_id INT NOT NULL,  comment text,  user_id int NOT NULL,  sent_at datetime NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+ * Update configuration.php:
+ *  $_configuration['add_document_to_work'] = true;
 
 */
 

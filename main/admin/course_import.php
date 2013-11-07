@@ -81,10 +81,9 @@ function validate_data($courses) {
 
         // 4. Check whether course category exists.
         if (isset($course['CourseCategory']) && strlen($course['CourseCategory']) != 0) {
-            $category_table = Database :: get_main_table(TABLE_MAIN_CATEGORY);
-            $sql = "SELECT * FROM $category_table WHERE code = '".Database::escape_string($course['CourseCategory'])."'";
-            $res = Database::query($sql);
-            if (Database::num_rows($res) == 0) {
+            require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
+            $categoryInfo = getCategory($course['CourseCategory']);
+            if (empty($categoryInfo)) {
                 //@todo this is so bad even all lang variables are wrong ...
                 $course['error'] = get_lang('UnkownCategoryCourseCode').' ('.$course['CourseCategory'].')';
                 $errors[] = $course;

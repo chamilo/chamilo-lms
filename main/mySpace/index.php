@@ -202,6 +202,11 @@ if (empty($session_id)) {
 
 	// Getting students from courses and courses in sessions (To show the total students that the user follows)
 	$students = CourseManager::get_user_list_from_courses_as_coach($user_id);
+    /*$studentList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh', api_get_user_id());
+    $students = array();
+    foreach ($studentList as $studentData) {
+        $students[] = $studentData['user_id'];
+    }*/
 
 	// Sessions for the coach
 	$sessions = Tracking::get_sessions_coached_by_user($user_id);
@@ -231,6 +236,8 @@ if (empty($session_id)) {
             $sessions = SessionManager::get_sessions_followed_by_drh($user_id);
         }
 	}
+
+    //var_dump(count($students));exit;
 
 	// Courses for the user
 	$count_courses = count($courses);

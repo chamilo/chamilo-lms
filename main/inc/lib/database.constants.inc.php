@@ -82,6 +82,8 @@ define('TABLE_MAIN_ACCESS_URL', 'access_url');
 define('TABLE_MAIN_ACCESS_URL_REL_USER',    'access_url_rel_user');
 define('TABLE_MAIN_ACCESS_URL_REL_COURSE',  'access_url_rel_course');
 define('TABLE_MAIN_ACCESS_URL_REL_SESSION', 'access_url_rel_session');
+define('TABLE_MAIN_ACCESS_URL_REL_USERGROUP', 'access_url_rel_usergroup');
+define('TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY', 'access_url_rel_course_category');
 
 // Global calendar
 define('TABLE_MAIN_SYSTEM_CALENDAR', 'sys_calendar');
@@ -141,7 +143,6 @@ define('TABLE_STATISTIC_TRACK_C_REFERERS',          'track_c_referers');
 //Course catalog stats see #4191
 define('TABLE_STATISTIC_TRACK_COURSE_RANKING',      'track_course_ranking');
 define('TABLE_MAIN_USER_REL_COURSE_VOTE',           'user_rel_course_vote');
-
 
 // SCORM database tables this is used only during the migration from 1.6 to 1.8 see update-db-scorm-1.6.x-1.8.0.inc
 define('TABLE_SCORM_MAIN', 'scorm_main');

@@ -289,32 +289,50 @@ class CurriculumUserController extends CommonController
 
         /** @var \Entity\CurriculumCategory $category */
         $categoryCounter = array();
+        $categoryScore = array();
+        $scorePerSubcategory = 0;
         foreach ($categories as $category) {
             /** @var \Entity\CurriculumItem $item */
-            $score = 0;
 
+            //$scorePerCategory = 0;
             foreach ($category->getItems() as $item) {
 
                 $formType = new CurriculumItemRelUserCollectionType($item->getId());
                 $form = $this->get('form.factory')->create($formType, $item, array('disabled' => true));
                 $formList[$item->getId()] = $form->createView();
-
+                $scorePerSubcategory = 0;
+                /**  @var \Entity\CurriculumItemRelUser $userItem  */
                 foreach ($item->getUserItems() as $userItem) {
-                    $score += $item->getScore();
+                    if ($userItem->getId()) {
+                        /**  @var \Entity\CurriculumItem $myItem  */
+                        $myItem = $userItem->getItem();
+                        if (!isset($categoryScore[$myItem->getCategoryId()])) {
+                            $categoryScore[$myItem->getCategoryId()] = 0;
+                        }
+                        $categoryScore[$myItem->getCategoryId()] += $myItem->getScore();
+                        if (!isset($categoryScore[$myItem->getCategory()->getParentId()])) {
+                            $categoryScore[$myItem->getCategory()->getParentId()] = 0;
+                        }
+                        $categoryScore[$myItem->getCategory()->getParentId()] += $myItem->getScore();
+                    }
                 }
-                $categoryCounter[$category->getParentId()][] = $item->getId();
-                $categoryScore[$item->getCategoryId()] = $score;
 
-                if (!isset($categoryScore[$category->getParentId()])) {
-                    $categoryScore[$category->getParentId()] = 0;
+                $categoryCounter[$category->getParentId()][] = $item->getId();
+
+                if (!isset($categoryScore[$item->getCategoryId()])) {
+                    //$categoryScore[$item->getCategoryId()] = 0;
+                } else {
+                    //$categoryScore[$item->getCategoryId()] = $scorePerSubcategory;
                 }
-                $categoryScore[$category->getParentId()] += $score;
             }
         }
+
         var_dump($categoryScore);
 
         $this->get('template')->assign('category_counter', $categoryCounter);
         $this->get('template')->assign('categories', $categories);
+        $this->get('template')->assign('userResultId', $userId);
+
         $this->get('template')->assign('category_score', $categoryScore);
         $this->get('template')->assign('form_list', $formList);
         $this->get('template')->assign('isAllowed', api_is_allowed_to_edit(true, true, true));

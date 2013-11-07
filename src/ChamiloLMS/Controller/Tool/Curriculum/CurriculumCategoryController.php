@@ -67,7 +67,7 @@ class CurriculumCategoryController extends CommonController
 
                     foreach ($row['items'] as $item) {
                         $url = ' <a class="btn" href="'.$this->createUrl('edit_item', array('id' => $item['id'])).'">'.$editLabel.'</a>';
-                        $items.= '<li>'.$item['title']." (Score: {$item['score']} ) ".$url.'</li>';
+                        $items.= '<li>'.$item['title']." (Score: {$item['score']}) ".$url.'</li>';
                     }
                     $items .= '</ul>';
                 }

@@ -37,7 +37,6 @@ $(function() {
     $(".items").each(function(index, value) {
         var itemId = $(this).attr('id');
         var lastInput = $(this).find("input:text").last();
-        console.log(lastInput.attr('id'));
         var addButton = $('<a class="btn-add btn btn-primary" data-target="'+itemId+'"><i class="icon-plus-sign icon-large"></i></a>');
         //lastInput.parent().append(addButton );
     });
@@ -83,8 +82,12 @@ function addTagFormDeleteLink($tagFormLi) {
 function save(itemId) {
     var form = $("#"+itemId).parent();
     var serializedForm = form.serialize();
-    $.post('{{ url('curriculum_user.controller:saveUserItemAction', {'course' : course.code }) }}', serializedForm);
-    return false;
+    $.ajax({
+        //async: false,
+        type: "POST",
+        url: '{{ url('curriculum_user.controller:saveUserItemAction', {'course' : course.code }) }}',
+        data: serializedForm
+    });
 }
 
 function saveAll() {
@@ -93,10 +96,25 @@ function saveAll() {
         var itemId = $(this).attr('id')
         save(itemId);
     });
+    $('#myModal').modal('show');
 }
 
 </script>
 <div class="row">
+
+    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel"></h3>
+        </div>
+        <div class="modal-body">
+            <p>Datos registrados.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        </div>
+    </div>
+
     <div class="span10">
         {%  if is_granted('ROLE_ADMIN')  %}
                <div class="actions">
@@ -107,7 +125,6 @@ function saveAll() {
                        {{ "Results" | trans }}
                    </a>
                </div>
-
         {%  endif  %}
 
         <h2>Trayectoria</h2>
@@ -156,7 +173,7 @@ function saveAll() {
 
     <div class="span2">
         <div id="saveQuestionBar" data-spy="affix" data-offset-top="500">
-            <a class="btn btn-success btn-large  btn-block" onclick="saveAll();">{{ 'Save all' | get_lang }}</a>
+            <a  data-loading-text="Cargando ..." class="btn btn-success btn-large  btn-block" onclick="saveAll();">{{ 'Save all' | get_lang }}</a>
         </div>
     </div>
 </div>

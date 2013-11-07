@@ -1,19 +1,4 @@
 {% extends app.template_style ~ "/layout/layout_1_col.tpl" %}
-
-{% macro widget_prototype(widget, remove_text) %}
-    {% if widget.get('prototype') %}
-        {% set form = widget.get('prototype') %}
-        {% set name = widget.get('prototype').get('description') %}
-    {% else %}
-        {% set form = widget %}
-        {% set name = widget.get('full_name') %}
-    {% endif %}
-
-    <div data-content="{{ name }}">
-        {{ form_widget(form) }}
-    </div>
-{% endmacro %}
-
 {% block content %}
 <script>
 $(function() {
@@ -63,19 +48,20 @@ $(function() {
             {% for subcategory in categories %}
                 {% if subcategory.lvl == 0 %}
                 {% elseif subcategory.lvl == 1 %}
+                    {% set rowSpanCounter = item_counter[subcategory.id] | length + category_counter[subcategory.id] + 1 %}
                     <tr>
-                        <td class="center_text"  rowspan="{{ category_counter[subcategory.id] | length  + 3 }}">
-                            <h3> {{ subcategory.title }} </h3>
+                        <td class="center_text" rowspan="{{ rowSpanCounter }}">
+                            <h3> {{ subcategory.title }}</h3>
                         </td>
                         <td colspan="3">
                         </td>
-                        <td class="center_text" rowspan="{{ category_counter[subcategory.id] | length  + 3 }}">
+                        <td class="center_text" rowspan="{{ rowSpanCounter }}">
                             <h4>
                                 {# category_score[subcategory.id] #}
                                 {{ subcategory.maxScore }}
                             </h4>
                         </td>
-                        </tr>
+                    </tr>
                 {% else %}
                     <tr>
                         <td class="no_border">
@@ -97,35 +83,19 @@ $(function() {
                     {% for item in subcategory.items %}
                         <tr>
                             <td>
-                            {# Items #}
-                            {{ item.title }}
-
-                            {% if 0 %}
-                                {{ form_start(form_list[item.id]) }}
-                                <div id="items_{{ item.id }}" class="items span8" data-max="{{ item.maxRepeat }}" data-prototype="{{ form_widget(form_list[item.id].userItems.vars.prototype)|e }}" >
-                                    {% for widget in form_list[item.id].userItems.children %}
-                                        {{ _self.widget_prototype(widget, 'Remove item') }}
-                                    {% endfor %}
-                                    <ul>
-                                    </ul>
-                                </div>
-                                {{ form_end(form_list[item.id]) }}
-                            {% endif %}
+                                {{ item.title }}
                             </td>
                             <td>
-                                {{ item.score }}
+                                {{ item_list[item.id] }}
                             </td>
                             <td>
                                 {{ item.maxRepeat }}
                             </td>
                         </tr>
                     {% endfor %}
-
-
                 {% endif %}
             {% endfor %}
             </table>
-
     </div>
 </div>
 {% endblock %}

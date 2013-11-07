@@ -288,19 +288,15 @@ class CurriculumUserController extends CommonController
         $categories = $query->getResult();
 
         /** @var \Entity\CurriculumCategory $category */
+        $itemCounter = array();
         $categoryCounter = array();
         $categoryScore = array();
-        $scorePerSubcategory = 0;
+        $itemList = array();
         foreach ($categories as $category) {
             /** @var \Entity\CurriculumItem $item */
 
             //$scorePerCategory = 0;
             foreach ($category->getItems() as $item) {
-
-                $formType = new CurriculumItemRelUserCollectionType($item->getId());
-                $form = $this->get('form.factory')->create($formType, $item, array('disabled' => true));
-                $formList[$item->getId()] = $form->createView();
-                $scorePerSubcategory = 0;
                 /**  @var \Entity\CurriculumItemRelUser $userItem  */
                 foreach ($item->getUserItems() as $userItem) {
                     if ($userItem->getId()) {
@@ -314,25 +310,29 @@ class CurriculumUserController extends CommonController
                             $categoryScore[$myItem->getCategory()->getParentId()] = 0;
                         }
                         $categoryScore[$myItem->getCategory()->getParentId()] += $myItem->getScore();
+
+                        if (!isset($itemList[$myItem->getId()])) {
+                            $itemList[$myItem->getId()] = 0;
+                        }
+                        $itemList[$myItem->getId()] += $myItem->getScore();
                     }
                 }
-
-                $categoryCounter[$category->getParentId()][] = $item->getId();
-
-                if (!isset($categoryScore[$item->getCategoryId()])) {
-                    //$categoryScore[$item->getCategoryId()] = 0;
-                } else {
-                    //$categoryScore[$item->getCategoryId()] = $scorePerSubcategory;
-                }
+                /** @var \Gedmo\Tree\Entity\Repository\NestedTreeRepository $repo */
+                $repo = $this->get('orm.em')->getRepository('Entity\CurriculumCategory');
+                $childCount = $repo->childCount($repo->find($category->getParentId()));
+                $categoryCounter[$category->getParentId()] = $childCount;
+                $itemCounter[$category->getParentId()][] = $item->getId();
             }
         }
 
+        $this->get('template')->assign('item_counter', $itemCounter);
         $this->get('template')->assign('category_counter', $categoryCounter);
+
         $this->get('template')->assign('categories', $categories);
         $this->get('template')->assign('userResultId', $userId);
 
         $this->get('template')->assign('category_score', $categoryScore);
-        $this->get('template')->assign('form_list', $formList);
+        $this->get('template')->assign('item_list', $itemList);
         $this->get('template')->assign('isAllowed', api_is_allowed_to_edit(true, true, true));
 
         $response = $this->get('template')->render_template($this->getTemplatePath().'get_user_items.tpl');

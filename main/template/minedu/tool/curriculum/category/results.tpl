@@ -3,17 +3,36 @@
     {{ 'Results' | trans }}
     <hr />
     {% if pagination != '' %}
-        <ul>
+        <table class="data_table">
+            <tr>
+                <th>
+                    {{ 'User' | trans }}
+                </th>
+                <th>
+                    {{ 'Score' | trans }}
+                </th>
+                <th>
+                    {{ 'Actions' | trans }}
+                </th>
+            </tr>
             {% for user in pagination.currentPageResults %}
-                <li>
-                    {{ user.firstname }} - {{ user.lastname }} {{ user.score }}
-                    <a class="btn" href="{{ url('curriculum_user.controller:getUserItemsAction',
-                    { 'userId': user.userId, 'course' : course.code, 'id_session' : course_session.id }) }}">
-                        {{ 'Details' | trans }}
-                    </a>
-                </li>
+                <tr>
+                    <td>
+                        {{ user.firstname }} {{ user.lastname }}
+                    </td>
+                    <td>
+                        <div class="label label-success"> {{ user.score }}</div>
+                    </td>
+
+                    <td>
+                        <a class="btn" href="{{ url('curriculum_user.controller:getUserItemsAction',
+                        { 'userId': user.userId, 'course' : course.code, 'id_session' : course_session.id }) }}">
+                            {{ 'Details' | trans }}
+                        </a>
+                    </td>
+                </tr>
             {% endfor %}
-        </ul>
+        </table>
 
         {{ pagerfanta(pagination, 'twitter_bootstrap', { 'proximity': 3 } ) }}
 

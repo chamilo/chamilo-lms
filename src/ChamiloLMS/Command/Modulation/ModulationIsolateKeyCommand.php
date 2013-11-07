@@ -113,8 +113,5 @@ class ModulationIsolateKeyCommand extends Command
         @file_put_contents($destDir.'/'.$branchId.'.p12',$cert);
         $caPub = file_get_contents($certServ.'ca-cert.pem');
         @file_put_contents($destDir.'/ca-cert.pem',$caPub);
-
-        //@todo why?
-        return true;
     }
 }

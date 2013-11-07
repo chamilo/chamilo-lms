@@ -6910,7 +6910,6 @@ class Exercise
                     array()
                 );
 
-                /*
                 $log_transactions_settings = TransactionLog::getTransactionSettings();
                 if (isset($log_transactions_settings['exercise_attempt'])) {
                     $transaction_controller = new TransactionLogController();
@@ -6931,7 +6930,7 @@ class Exercise
                         $transaction = $transaction_controller->createTransaction('exercise_attempt', $transaction_data);
                     }
                     $transaction->save();
-                }*/
+                }
             }
 
             // Send notification.

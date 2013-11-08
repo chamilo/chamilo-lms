@@ -111,7 +111,7 @@ function saveAll() {
             <p>Datos registrados.</p>
         </div>
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
         </div>
     </div>
 

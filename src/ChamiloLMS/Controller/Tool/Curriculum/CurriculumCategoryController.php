@@ -361,7 +361,7 @@ class CurriculumCategoryController extends CommonController
 
         $qb = $this->getManager()
             ->createQueryBuilder()
-            ->select('u, u.firstname, u.lastname, u.userId, SUM(i.score) as score')
+            ->select('u')
             ->from('Entity\User', 'u')
             ->innerJoin('u.curriculumItems', 'ci')
             ->innerJoin('ci.item', 'i')

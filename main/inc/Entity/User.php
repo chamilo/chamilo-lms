@@ -1166,11 +1166,36 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
     public function getCurriculumScore()
     {
         $items = $this->getCurriculumItems();
-        $score = 0;
+        $scorePerCategory = array();
+        $maxPerCategory = array();
+
         /** @var \Entity\CurriculumItemRelUser $itemRelUser */
         foreach ($items as $itemRelUser) {
-            $score += $itemRelUser->getItem()->getScore();
+
+            $parentId = $itemRelUser->getItem()->getCategory()->getParent()->getId();
+
+            if (!isset($scorePerCategory[$parentId])) {
+                $scorePerCategory[$parentId] = 0;
+            }
+
+            $scorePerCategory[$parentId] += $itemRelUser->getItem()->getScore();
+
+            if (!isset($scorePerCategory[$parentId])) {
+                $maxPerCategory[$parentId] = 0;
+            }
+
+            $maxPerCategory[$parentId] =
+                $itemRelUser->getItem()->getCategory()->getParent()->getMaxScore();
         }
-        return $score ;
+
+        $finalScore = 0;
+        foreach ($scorePerCategory as $categoryId => $scoreInCategory) {
+            if ($scoreInCategory >= $maxPerCategory[$categoryId]) {
+                $finalScore += $maxPerCategory[$categoryId];
+            } else {
+                $finalScore += $scoreInCategory;
+            }
+        }
+        return $finalScore;
     }
 }

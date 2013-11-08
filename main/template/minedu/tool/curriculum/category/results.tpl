@@ -18,10 +18,12 @@
             {% for user in pagination.currentPageResults %}
                 <tr>
                     <td>
-                        {{ user.firstname }} {{ user.lastname }}
+                        {{ user.completeName }}
                     </td>
                     <td>
-                        <div class="label label-success"> {{ user.score }}</div>
+                        <div class="label label-success">
+                            {{ user.getCurriculumScore }}
+                        </div>
                     </td>
 
                     <td>

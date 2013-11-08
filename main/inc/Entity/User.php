@@ -1170,9 +1170,15 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
         $maxPerCategory = array();
 
         /** @var \Entity\CurriculumItemRelUser $itemRelUser */
+        $mainParentList = array();
         foreach ($items as $itemRelUser) {
 
             $parentId = $itemRelUser->getItem()->getCategory()->getParent()->getId();
+
+            $mainParent = $itemRelUser->getItem()->getCategory()->getParent()->getParent();
+
+            $mainParentList[$mainParent->getId()]['maxScore'] = $mainParent->getMaxScore();
+            $mainParentList[$mainParent->getId()]['children'][] = $parentId;
 
             if (!isset($scorePerCategory[$parentId])) {
                 $scorePerCategory[$parentId] = 0;
@@ -1188,14 +1194,36 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
                 $itemRelUser->getItem()->getCategory()->getParent()->getMaxScore();
         }
 
-        $finalScore = 0;
+        $newScorePerCategory = array();
         foreach ($scorePerCategory as $categoryId => $scoreInCategory) {
             if ($scoreInCategory >= $maxPerCategory[$categoryId]) {
-                $finalScore += $maxPerCategory[$categoryId];
+                $score = $maxPerCategory[$categoryId];
             } else {
-                $finalScore += $scoreInCategory;
+                $score = $scoreInCategory;
+            }
+
+            if (!isset($newScorePerCategory[$categoryId])) {
+                $newScorePerCategory[$categoryId] = 0;
+            }
+            $newScorePerCategory[$categoryId] += $score;
+        }
+
+        $finalScore = 0;
+        foreach ($mainParentList as $mainCategory) {
+            $categoryList = $mainCategory['children'];
+            $maxScore = $mainCategory['maxScore'];
+
+            foreach ($newScorePerCategory as $categoryId => $score) {
+                if (in_array($categoryId, $categoryList)) {
+                    if ($score >= $maxScore) {
+                        $finalScore += $maxScore;
+                    } else {
+                        $finalScore += $score;
+                    }
+                }
             }
         }
+
         return $finalScore;
     }
 }

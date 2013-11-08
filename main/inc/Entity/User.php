@@ -1197,6 +1197,7 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
 
         $newScorePerCategory = array();
         foreach ($scorePerCategory as $categoryId => $scoreInCategory) {
+            $mainParentId = $parentList[$categoryId];
             if ($scoreInCategory >= $maxPerCategory[$categoryId]) {
                 $score = $maxPerCategory[$categoryId];
             } else {
@@ -1204,17 +1205,20 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
             }
 
             if (!isset($newScorePerCategory[$categoryId])) {
-                $newScorePerCategory[$categoryId] = 0;
+                $newScorePerCategory[$mainParentId][$categoryId] = 0;
             }
-            $newScorePerCategory[$categoryId] += $score;
+            $newScorePerCategory[$mainParentId][$categoryId] += $score;
         }
 
         $finalScore = 0;
-
-        foreach ($newScorePerCategory as $categoryId => $score) {
-            $mainParentId = $parentList[$categoryId];
+        foreach ($newScorePerCategory as $mainParentId => $scoreList) {
             $maxScore = $mainParentList[$mainParentId];
-            if ($score >= $maxScore) {
+            $subScore = 0;
+            foreach ($scoreList as $score) {
+                $subScore += $score;
+            }
+
+            if ($subScore >= $maxScore) {
                 $finalScore += $maxScore;
             } else {
                 $finalScore += $score;

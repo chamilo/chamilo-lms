@@ -108,7 +108,7 @@ function saveAll() {
             <h3 id="myModalLabel"></h3>
         </div>
         <div class="modal-body">
-            <p>Datos registrados.</p>
+            <p>Datos registrados. Si desea, puede seguir completando este formulario, o guardarlo y volver a completarlo en otra oportunidad, de momento que sea antes del plazo de fin de la fase de trayectoria. Para salir del sistema ahora, use el botón rojo en la barra de menú arriba a la derecha.</p>
         </div>
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>

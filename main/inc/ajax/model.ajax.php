@@ -36,6 +36,8 @@ if (!in_array(
     array(
         'get_exercise_results',
         'get_hotpotatoes_exercise_results',
+        'get_work_teacher',
+        'get_work_student',
         'get_work_user_list',
         'get_work_user_list_others',
         'get_work_user_list_all',
@@ -47,7 +49,7 @@ if (!in_array(
     api_protect_admin_script(true);
 }
 
-//Search features
+// Search features
 
 $ops = array (
     'eq' => '=',        //equal
@@ -137,6 +139,15 @@ switch ($action) {
     case 'get_user_skill_ranking':
         $skill = new Skill();
         $count = $skill->get_user_list_skill_ranking_count();
+        break;
+    case 'get_work_teacher':
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+        $count = getWorkListTeacher($start, $limit, $sidx, $sord, $where_condition, true);
+        break;
+    case 'get_work_student':
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+        $count = getWorkListStudent($start, $limit, $sidx, $sord, $where_condition, true);
+
         break;
     case 'get_work_user_list_all':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
@@ -295,17 +306,16 @@ switch ($action) {
         break;
 	case 'get_user_skill_ranking':
         $columns = array('photo', 'firstname', 'lastname', 'skills_acquired', 'currently_learning', 'rank');
-	    $result = $skill->get_user_list_skill_ranking($start, $limit, $sidx, $sord, $where_condition);
+        $result = $skill->get_user_list_skill_ranking($start, $limit, $sidx, $sord, $where_condition);
         $result = msort($result, 'skills_acquired', 'asc');
 
         $skills_in_course = array();
-	    if (!empty($result)) {
-    	    //$counter = 1;
-	        foreach ($result as &$item) {
+        if (!empty($result)) {
+            foreach ($result as &$item) {
                 $user_info = api_get_user_info($item['user_id']);
                 $personal_course_list = UserManager::get_personal_session_course_list($item['user_id']);
                 $count_skill_by_course = array();
-                foreach ($personal_course_list  as $course_item) {
+                foreach ($personal_course_list as $course_item) {
                     if (!isset($skills_in_course[$course_item['code']])) {
                         $count_skill_by_course[$course_item['code']] = $skill->get_count_skills_by_course($course_item['code']);
                         $skills_in_course[$course_item['code']] = $count_skill_by_course[$course_item['code']];
@@ -313,17 +323,23 @@ switch ($action) {
                         $count_skill_by_course[$course_item['code']] = $skills_in_course[$course_item['code']];
                     }
                 }
-	            $item['photo'] = Display::img($user_info['avatar_small']);
-	            $item['currently_learning'] = !empty($count_skill_by_course) ? array_sum($count_skill_by_course) : 0;
-	        }
-	    }
-    	break;
+                $item['photo'] = Display::img($user_info['avatar_small']);
+                $item['currently_learning'] = !empty($count_skill_by_course) ? array_sum($count_skill_by_course) : 0;
+            }
+        }
+        break;
+    case 'get_work_teacher':
+        $columns = array('type', 'title', 'expires_on', 'ends_on', 'actions');
+        $result = getWorkListTeacher($start, $limit, $sidx, $sord, $where_condition);
+        break;
+    case 'get_work_student':
+        $columns = array('type', 'title', 'expires_on', 'others', 'actions');
+        $result = getWorkListStudent($start, $limit, $sidx, $sord, $where_condition);
+        break;
     case 'get_work_user_list_all':
         if (isset($_GET['type'])  && $_GET['type'] == 'simple') {
-            //$columns = array('type', 'firstname', 'lastname',  'username', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions');
             $columns = array('type', 'firstname', 'lastname', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions');
         } else {
-            //$columns = array('type', 'firstname', 'lastname',  'username', 'title', 'sent_date', 'actions');
             $columns = array('type', 'firstname', 'lastname', 'title', 'sent_date', 'actions');
         }
         $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);
@@ -566,6 +582,8 @@ $allowed_actions = array(
     'get_sessions',
     'get_exercise_results',
     'get_hotpotatoes_exercise_results',
+    'get_work_teacher',
+    'get_work_student',
     'get_work_user_list',
     'get_work_user_list_others',
     'get_work_user_list_all',

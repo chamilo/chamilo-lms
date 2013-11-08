@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 $language_file = array('exercice', 'work', 'document', 'admin', 'gradebook');
 
 require_once '../inc/global.inc.php';
@@ -52,9 +50,7 @@ $token = Security::get_token();
 
 $student_can_edit_in_session = api_is_allowed_to_session_edit(false, true);
 $has_ended   = false;
-
 $is_author = false;
-
 $work_item = get_work_data_by_id($item_id);
 
 // Get the author ID for that document from the item_property table
@@ -142,7 +138,7 @@ $defaults["description"] 	= $work_item['description'];
 $defaults['qualification']  = $work_item['qualification'];
 
 if ($is_allowed_to_edit && !empty($item_id)) {
-    // Get qualification from parent_id that'll allow the validation qualification over
+    // Get qualification from parent_id that will allow the validation qualification over
     $sql = "SELECT qualification FROM $work_table WHERE c_id = $course_id AND id ='$work_id' ";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);

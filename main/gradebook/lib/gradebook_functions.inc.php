@@ -17,6 +17,7 @@ require_once 'gradebook_functions_users.inc.php';
 
 /**
  * Adds a resource to the unique gradebook of a given course
+ * @param   int
  * @param   string  Course code
  * @param   int     Resource type (use constants defined in linkfactory.class.php)
  * @param   int     Resource ID in the corresponding tool
@@ -24,12 +25,24 @@ require_once 'gradebook_functions_users.inc.php';
  * @param   int     Resource weight to set in the gradebook
  * @param   int     Resource max
  * @param   string  Resource description
- * @param   string  Date
  * @param   int     Visibility (0 hidden, 1 shown)
  * @param   int     Session ID (optional or 0 if not defined)
+ * @param   int
  * @return  boolean True on success, false on failure
  */
-function add_resource_to_course_gradebook($category_id, $course_code, $resource_type, $resource_id, $resource_name = '', $weight = 0, $max = 0, $resource_description = '', $visible = 0, $session_id = 0, $link_id = null) {
+function add_resource_to_course_gradebook(
+    $category_id,
+    $course_code,
+    $resource_type,
+    $resource_id,
+    $resource_name = '',
+    $weight = 0,
+    $max = 0,
+    $resource_description = '',
+    $visible = 0,
+    $session_id = 0,
+    $link_id = null
+) {
     $link = LinkFactory :: create($resource_type);
     $link->set_user_id(api_get_user_id());
     $link->set_course_code($course_code);
@@ -64,9 +77,12 @@ function add_resource_to_course_gradebook($category_id, $course_code, $resource_
 /**
  * Update a resource weight
  * @param    int     Link/Resource ID
+ * @param   string
+ * @param float
  * @return   bool    false on error, true on success
  */
-function update_resource_from_course_gradebook($link_id, $course_code, $weight) {
+function update_resource_from_course_gradebook($link_id, $course_code, $weight)
+{
     $course_code = Database::escape_string($course_code);
     if (!empty($link_id)) {
         $link_id = intval($link_id);
@@ -83,18 +99,21 @@ function update_resource_from_course_gradebook($link_id, $course_code, $weight) 
  * @param    int     Link/Resource ID
  * @return   bool    false on error, true on success
  */
-function remove_resource_from_course_gradebook($link_id) {
+function remove_resource_from_course_gradebook($link_id)
+{
     if (empty($link_id)) {
         return false;
     }
+
     // TODO find the corresponding category (the first one for this course, ordered by ID)
     $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-    $sql = "DELETE FROM $l WHERE id = " . (int) $link_id;
+    $sql = "DELETE FROM $l WHERE id = ".(int)$link_id;
     Database::query($sql);
     return true;
 }
 
-function block_students() {
+function block_students()
+{
     if (!api_is_allowed_to_edit()) {
         api_not_allowed();
     }
@@ -104,7 +123,8 @@ function block_students() {
  * Returns the course name from a given code
  * @param string $code
  */
-function get_course_name_from_code($code) {
+function get_course_name_from_code($code)
+{
     $tbl_main_categories = Database :: get_main_table(TABLE_MAIN_COURSE);
     $sql = 'SELECT title, code FROM ' . $tbl_main_categories . 'WHERE code = "' . Database::escape_string($code) . '"';
     $result = Database::query($sql);

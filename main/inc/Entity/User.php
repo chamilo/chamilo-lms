@@ -1171,14 +1171,15 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
 
         /** @var \Entity\CurriculumItemRelUser $itemRelUser */
         $mainParentList = array();
+        $parentList = array();
         foreach ($items as $itemRelUser) {
 
             $parentId = $itemRelUser->getItem()->getCategory()->getParent()->getId();
 
             $mainParent = $itemRelUser->getItem()->getCategory()->getParent()->getParent();
 
-            $mainParentList[$mainParent->getId()]['maxScore'] = $mainParent->getMaxScore();
-            $mainParentList[$mainParent->getId()]['children'][] = $parentId;
+            $mainParentList[$mainParent->getId()] = $mainParent->getMaxScore();
+            $parentList[$parentId] = $mainParent->getId();
 
             if (!isset($scorePerCategory[$parentId])) {
                 $scorePerCategory[$parentId] = 0;
@@ -1209,21 +1210,16 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
         }
 
         $finalScore = 0;
-        foreach ($mainParentList as $mainCategory) {
-            $categoryList = $mainCategory['children'];
-            $maxScore = $mainCategory['maxScore'];
 
-            foreach ($newScorePerCategory as $categoryId => $score) {
-                if (in_array($categoryId, $categoryList)) {
-                    if ($score >= $maxScore) {
-                        $finalScore += $maxScore;
-                    } else {
-                        $finalScore += $score;
-                    }
-                }
+        foreach ($newScorePerCategory as $categoryId => $score) {
+            $mainParentId = $parentList[$categoryId];
+            $maxScore = $mainParentList[$mainParentId];
+            if ($score >= $maxScore) {
+                $finalScore += $maxScore;
+            } else {
+                $finalScore += $score;
             }
         }
-
         return $finalScore;
     }
 }

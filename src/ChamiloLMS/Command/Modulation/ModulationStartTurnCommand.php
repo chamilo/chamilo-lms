@@ -41,7 +41,7 @@ class ModulationStartTurnCommand extends Command
         Session::write('_user', api_get_user_info(1));
 
         $turn = intval($input->getArgument('turn'));
-        $sql = "SELECT session_id FROM branch_rel_session WHERE session_id = 1505 AND display_order = $turn";
+        $sql = "SELECT session_id FROM branch_rel_session WHERE display_order = $turn";
         $res = Database::query($sql);
         if (Database::num_rows($res) < 1) {
             $output->writeln("Turn $turn could not be found in database");

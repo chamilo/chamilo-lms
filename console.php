@@ -89,6 +89,7 @@ $cli->addCommands(
         new ChamiloLMS\Command\Modulation\ModulationIsolateKeyCommand(),
         new ChamiloLMS\Command\Modulation\ModulationDuplicateInstallCommand(),
         new ChamiloLMS\Command\Modulation\ModulationUsersInExamCommand(),
+        new ChamiloLMS\Command\Modulation\ModulationImportBranchesCommand(),
 
         // Chash commands.
         new Chash\Command\Database\RunSQLCommand(),

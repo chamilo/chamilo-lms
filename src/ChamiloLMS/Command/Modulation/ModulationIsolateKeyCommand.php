@@ -65,7 +65,7 @@ class ModulationIsolateKeyCommand extends Command
          * Remove the data from all relevant sessions
          */
         // optional clean-up. Delete if necessary
-        $sql2 = "DELETE FROM branch_sync where branch_id != $branchId";
+        $sql2 = "DELETE FROM branch_sync where id != $branchId";
         echo $sql2."\n";
         Database::query($sql2);
         $sql2 = "DELETE FROM session WHERE id NOT IN (".implode(', ',$sessions).")";
@@ -89,7 +89,7 @@ class ModulationIsolateKeyCommand extends Command
         $sql2 = "DELETE FROM branch_rel_session WHERE session_id NOT IN (".implode(', ',$sessions).")";
         echo $sql2."\n";
         Database::query($sql2);
-        $sql2 = "DELETE FROM user WHERE user_id NOT IN (".implode(', ',$sessionUsers).") AND user_id > 1";
+        $sql2 = "DELETE FROM user WHERE user_id NOT IN (".implode(', ',$sessionUsers).")";
         echo $sql2."\n";
         Database::query($sql2);
         $sql3 = "SELECT count(*) FROM user";

@@ -50,6 +50,6 @@ class ModulationUsersInExamCommand extends Command
         $res = Database::query($query);
         $row = Database::fetch_row($res);
         $output->writeln($row[0]);
-        return true;
+        return 0;
     }
 }

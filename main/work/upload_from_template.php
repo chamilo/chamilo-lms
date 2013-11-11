@@ -19,6 +19,7 @@ require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 $this_section = SECTION_COURSES;
 
 $work_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
+$documentId = isset($_REQUEST['document_id']) ? intval($_REQUEST['document_id']) : null;
 
 $is_allowed_to_edit = api_is_allowed_to_edit();
 $course_id = api_get_course_int_id();
@@ -62,6 +63,7 @@ $interbreadcrumb[] = array('url' => '#', 'name'  => get_lang('UploadFromTemplate
 
 $form = new FormValidator('form', 'POST', api_get_self()."?".api_get_cidreq()."&id=".$work_id, '', array('enctype' => "multipart/form-data"));
 setWorkUploadForm($form, false);
+$form->addElement('hidden', 'document_id', $documentId);
 $form->addElement('hidden', 'id', $work_id);
 $form->addElement('hidden', 'sec_token', $token);
 

@@ -343,6 +343,7 @@ switch ($action) {
             $columns = array('type', 'firstname', 'lastname', 'title', 'sent_date', 'actions');
         }
         $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);
+
         break;
     case 'get_work_user_list_others':
         if (isset($_GET['type'])  && $_GET['type'] == 'simple') {
@@ -359,17 +360,25 @@ switch ($action) {
         } else {
             $columns = array('type', 'firstname', 'lastname', 'title', 'sent_date', 'actions');
         }
-        $where_condition .= " AND u.user_id = ".api_get_user_id();
+
         $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);
+        $documents = getAllDocumentToWork($work_id, api_get_course_int_id());
+
+        if (empty($documents)) {
+            $where_condition .= " AND u.user_id = ".api_get_user_id();
+            $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);
+        } else {
+            $result = get_work_user_list_from_documents($start, $limit, $sidx, $sord, $work_id, api_get_user_id(), $where_condition);
+        }
         break;
 	case 'get_exercise_results':
         $course = api_get_course_info();
-        //used inside get_exam_results_data()
-		$documentPath = api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document";
-		if ($is_allowedToEdit) {
-			$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score', 'status', 'lp', 'actions');
-		}
-		$result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);
+        // Used inside get_exam_results_data()
+        $documentPath = api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document";
+        if ($is_allowedToEdit) {
+            $columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score', 'status', 'lp', 'actions');
+        }
+        $result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);
 		break;
 	case 'get_hotpotatoes_exercise_results':
 		$course = api_get_course_info();
@@ -379,7 +388,13 @@ switch ($action) {
 		break;
     case 'get_sessions':
         $columns = array('name', 'nbr_courses', 'nbr_users', 'category_name', 'date_start','date_end', 'coach_name', 'session_active', 'visibility');
-        $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'limit'=> "$start , $limit"));
+        $result = SessionManager::get_sessions_admin(
+            array(
+                'where' => $where_condition,
+                'order' => "$sidx $sord",
+                'limit'=> "$start , $limit"
+            )
+        );
         break;
      case 'get_timelines':
         $columns = array('headline', 'actions');

@@ -181,9 +181,11 @@ $app['breadcrumb'] = array();
 // The script is allowed? This setting is modified when calling api_is_not_allowed()
 $app['allowed'] = true;
 
-$app->register(new Silex\Provider\SessionServiceProvider());
-
 // Session settings
+
+use Symfony\Component\HttpFoundation\Session\Storage\Handler;
+
+// Default options
 $app['session.storage.options'] = array(
     'name' => 'chamilo_session',
     //'cookie_lifetime' => 30, //Cookie lifetime
@@ -192,6 +194,47 @@ $app['session.storage.options'] = array(
     //'cookie_secure' => null, //Cookie secure (HTTPS)
     'cookie_httponly' => true //Whether the cookie is http only
 );
+
+// Registering the Session service provider
+$app->register(new Silex\Provider\SessionServiceProvider());
+
+// Session using memcached:
+if (isset($_configuration['session.memcached.settings'])) {
+    $memcachedSettings = $_configuration['session.memcached.settings'];
+    $app['session.storage.handler'] = $app->share(function () use ($app, $memcachedSettings) {
+        $memcached = new Memcached('chamilo_memcached');
+        $memcached->addServer($memcachedSettings['host'], $memcachedSettings['port']);
+        return new Handler\MemcachedSessionHandler($memcached, $memcachedSettings['options']);
+    });
+}
+
+use Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler;
+
+// Session using Doctrine a new table needed to be created, before using it:
+if (isset($_configuration['session.doctrine.settings'])) {
+    /*
+    CREATE TABLE `session_handler` (
+        `session_id` varchar(255) NOT NULL,
+        `session_value` text NOT NULL,
+        `session_time` int(11) NOT NULL,
+        PRIMARY KEY (`session_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;*/
+
+    $app['session.db_options'] = array(
+        'db_table'      => 'session_handler',
+        'db_id_col'     => 'session_id',
+        'db_data_col'   => 'session_value',
+        'db_time_col'   => 'session_time',
+    );
+
+    $app['session.storage.handler'] = $app->share(function () use ($app) {
+        return new PdoSessionHandler(
+            $app['db']->getWrappedConnection(),
+            $app['session.db_options'],
+            $app['session.storage.options']
+        );
+    });
+}
 
 // Loading chamilo settings
 /* @todo create a service provider to load plugins.

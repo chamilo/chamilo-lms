@@ -15,14 +15,21 @@
  * This function allows easy activating and inactivating of regions
  * @author Julio Montoya <gugli100@gmail.com> Beeznest 2012
  */
-function handle_regions() {
+function handle_regions()
+{
 
     if (isset($_POST['submit_plugins'])) {
         store_regions();
         // Add event to the system log.
         $user_id = api_get_user_id();
         $category = $_GET['category'];
-        event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
+        event_system(
+            LOG_CONFIGURATION_SETTINGS_CHANGE,
+            LOG_CONFIGURATION_SETTINGS_CATEGORY,
+            $category,
+            api_get_utc_datetime(),
+            $user_id
+        );
         Display :: display_confirmation_message(get_lang('SettingsStored'));
     }
 
@@ -30,11 +37,12 @@ function handle_regions() {
     $possible_plugins  = $plugin_obj->read_plugins_from_path();
     $installed_plugins = $plugin_obj->get_installed_plugins();
 
-    if (!empty($installed_plugins)) {
+    /*if (!empty($installed_plugins)) {
         $not_installed = array_diff($possible_plugins, $installed_plugins);
     } else {
         $not_installed = $possible_plugins;
-    }
+    }*/
+
     echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
     echo '<table class="data_table">';
     echo '<tr>';
@@ -54,7 +62,7 @@ function handle_regions() {
         $plugin_region_list[$plugin_item] = $plugin_item;
     }
 
-    //Removing course tool
+    // Removing course tool
     unset($plugin_region_list['course_tool_plugin']);
 
     foreach ($installed_plugins as $plugin) {
@@ -88,7 +96,8 @@ function handle_regions() {
     echo '<button class="save" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button></form>';
 }
 
-function handle_extensions() {
+function handle_extensions()
+{
     echo Display::page_subheader(get_lang('ConfigureExtensions'));
     echo '<a class="btn" href="configure_extensions.php?display=ppt2lp">'.get_lang('Ppt2lp').'</a>';
 
@@ -99,7 +108,8 @@ function handle_extensions() {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Julio Montoya <gugli100@gmail.com> Beeznest 2012
  */
-function handle_plugins() {
+function handle_plugins()
+{
     $plugin_obj = new AppPlugin();
 
      if (isset($_POST['submit_plugins'])) {
@@ -183,7 +193,8 @@ function handle_plugins() {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Julio Montoya <gugli100@gmail.com>, Chamilo
 */
-function handle_stylesheets() {
+function handle_stylesheets()
+{
     global $_configuration;
 
     // Current style.
@@ -287,10 +298,10 @@ function handle_stylesheets() {
                 }
             }
         }
-        @closedir($handle);
+        closedir($handle);
     }
 
-    //Sort styles in alphabetical order
+    // Sort styles in alphabetical order.
     asort($list_of_names);
     $select_list = array();
     foreach ($list_of_names as $style_dir=>$item) {
@@ -351,7 +362,8 @@ function handle_stylesheets() {
  * @version May 2008
  * @since Dokeos 1.8.5
  */
-function upload_stylesheet($values, $picture) {
+function upload_stylesheet($values, $picture)
+{
     $result = false;
     // Valid name for the stylesheet folder.
     $style_name = api_preg_replace('/[^A-Za-z0-9]/', '', $values['name_stylesheet']);
@@ -403,7 +415,8 @@ function upload_stylesheet($values, $picture) {
                     $extraction_path = api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/';
                     for ($i = 0; $i < $num_files; $i++) {
                         $entry = $zip->getNameIndex($i);
-                        if (substr($entry, -1) == '/') continue;
+                        if (substr($entry, -1) == '/')
+                            continue;
 
                         $pos_slash = strpos($entry, '/');
                         $entry_without_first_dir = substr($entry, $pos_slash + 1);
@@ -440,7 +453,11 @@ function upload_stylesheet($values, $picture) {
     return $result;
 }
 
-function store_regions() {
+/**
+ * Store plugin regions.
+ */
+function store_regions()
+{
      $plugin_obj = new AppPlugin();
 
     // Get a list of all current 'Plugins' settings
@@ -477,7 +494,8 @@ function store_regions() {
  * This function allows easy activating and inactivating of plugins
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-function store_plugins() {
+function store_plugins()
+{
     $plugin_obj = new AppPlugin();
 
     // Get a list of all current 'Plugins' settings
@@ -506,7 +524,8 @@ function store_plugins() {
  * This function allows the platform admin to choose which should be the default stylesheet
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-function store_stylesheets() {
+function store_stylesheets()
+{
     // Insert the stylesheet.
     $style = Database::escape_string($_POST['style']);
     if (is_style($style)) {
@@ -521,7 +540,8 @@ function store_stylesheets() {
  * @param string    Style
  * @return bool     True if this style is recognized, false otherwise
  */
-function is_style($style) {
+function is_style($style)
+{
     $dir = api_get_path(SYS_PATH).'main/css/';
     $dirs = scandir($dir);
     $style = str_replace(array('/', '\\'), array('', ''), $style); // Avoid slashes or backslashes.
@@ -536,7 +556,8 @@ function is_style($style) {
  * TODO: support for multiple site. aka $_configuration['access_url'] == 1
  * @author Marco Villegas <marvil07@gmail.com>
  */
-function handle_search() {
+function handle_search()
+{
     global $SettingsStored, $_configuration;
 
     require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
@@ -1281,7 +1302,7 @@ function generate_settings_form($settings, $settings_by_access_list) {
                 }
 
                 $form->addElement('file', 'pdf_export_watermark_path', get_lang('AddWaterMark'));
-                $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
+                $allowed_picture_types = array('jpg', 'jpeg', 'png', 'gif');
                 $form->addRule('pdf_export_watermark_path', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 
                 break;
@@ -1303,11 +1324,12 @@ function generate_settings_form($settings, $settings_by_access_list) {
 }
 
 /**
- * Searchs a platform setting in all categories except from the Plugins category
+ * Searches a platform setting in all categories except from the Plugins category
  * @param string $search
  * @return array
  */
-function search_setting($search) {
+function search_setting($search)
+{
     if (empty($search)) {
         return array();
     }

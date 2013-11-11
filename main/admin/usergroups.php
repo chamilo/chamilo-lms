@@ -57,7 +57,7 @@ $column_model   = array(
     array('name'=>'users',    		'index'=>'users', 		'width'=>'15',  'align'=>'left'),
     array('name'=>'courses',    	'index'=>'courses', 	'width'=>'15',  'align'=>'left'),
     array('name'=>'sessions',    	'index'=>'sessions', 	'width'=>'15',  'align'=>'left'),
-    array('name'=>'actions',        'index'=>'actions',     'width'=>'20',  'align'=>'left','sortable'=>'false','formatter'=>'action_formatter'),
+    array('name'=>'actions',        'index'=>'actions',     'width'=>'20',  'align'=>'left', 'sortable'=>'false','formatter'=>'action_formatter'),
 );
 
 //Autowidth

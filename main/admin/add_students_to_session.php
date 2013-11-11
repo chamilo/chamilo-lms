@@ -80,7 +80,7 @@ echo Display::input('hidden', 'form_sent', '1');
                      'sessions[]',
                      $sessionList,
                      '',
-                     array('style'=>'width:360px',  'id'=>'sessions', 'size'=>'15px'),
+                     array('style'=>'width:360px', 'multiple'=>'multiple', 'id'=>'sessions', 'size'=>'15px'),
                      false
                  );
                 ?>
@@ -93,7 +93,7 @@ echo Display::input('hidden', 'form_sent', '1');
                     'sessions_destination[]',
                     $sessionList,
                     '',
-                    array('style'=>'width:360px', 'multiple'=>'multiple', 'id'=>'courses', 'size'=>'15px'),
+                    array('style'=>'width:360px', 'id'=>'courses', 'size'=>'15px'),
                     false
                 );
                 ?>

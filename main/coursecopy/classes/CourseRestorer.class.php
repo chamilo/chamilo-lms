@@ -30,10 +30,10 @@ require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
-define('FILE_SKIP',             1);
-define('FILE_RENAME',           2);
-define('FILE_OVERWRITE',        3);
-define('UTF8_CONVERT', 		false); //false by default
+define('FILE_SKIP', 1);
+define('FILE_RENAME', 2);
+define('FILE_OVERWRITE', 3);
+define('UTF8_CONVERT', false); //false by default
 
 /**
  * Class to restore items from a course object to a Chamilo-course
@@ -43,16 +43,17 @@ define('UTF8_CONVERT', 		false); //false by default
  */
 class CourseRestorer
 {
-	/**
-	 * The course-object
-	 */
+    /**
+     * The course-object
+     */
+    /** @var Course */
     public $course;
     public $destination_course_info;
 
-	/**
-	 * What to do with files with same name (FILE_SKIP, FILE_RENAME or
-	 * FILE_OVERWRITE)
-	 */
+    /**
+     * What to do with files with same name (FILE_SKIP, FILE_RENAME or
+     * FILE_OVERWRITE)
+     */
     public $file_option;
     public $set_tools_invisible_by_default;
     public $skip_content;
@@ -91,26 +92,26 @@ class CourseRestorer
 	 */
     public function __construct($course)
     {
-		$this->course							= $course;
-		$course_info 							= api_get_course_info($this->course->code);
+        $this->course							= $course;
+        $course_info 							= api_get_course_info($this->course->code);
         if (!empty($course_info)) {
-		    $this->course_origin_id 				= $course_info['real_id'];
+            $this->course_origin_id 				= $course_info['real_id'];
         } else {
             $this->course_origin_id = null;
         }
-		$this->file_option 						= FILE_RENAME;
-		$this->set_tools_invisible_by_default 	= false;
-		$this->skip_content 					= array();
-	}
+        $this->file_option 						= FILE_RENAME;
+        $this->set_tools_invisible_by_default 	= false;
+        $this->skip_content 					= array();
+    }
 
-	/**
-	 * Set the file-option
-	 * @param constant $options What to do with files with same name (FILE_SKIP, FILE_RENAME or FILE_OVERWRITE)
-	 */
+    /**
+     * Set the file-option
+     * @param constant $options What to do with files with same name (FILE_SKIP, FILE_RENAME or FILE_OVERWRITE)
+     */
     function set_file_option($option)
     {
-		$this->file_option = $option;
-	}
+        $this->file_option = $option;
+    }
     function set_add_text_in_items($status)
     {
         $this->add_text_in_items = $status;
@@ -120,13 +121,13 @@ class CourseRestorer
         $this->tool_copy_settings = $array;
     }
 
-	/**
-	 * Restore a course.
-	 * @param 	string 	The code of the Chamilo-course in
-	 * @param	int		The session id
-	 * @param	bool	Course settings are going to be restore?
-
-	 */
+    /**
+     * Restore a course.
+     * @param 	string 	The code of the Chamilo-course in
+     * @param	int		The session id
+     * @param	bool	Course settings are going to be restore.
+     * @param bool $respect_base_content
+     */
     public function restore(
         $destination_course_code = '',
         $session_id = 0,
@@ -144,7 +145,7 @@ class CourseRestorer
 		}
 		$this->destination_course_id = $course_info['real_id'];
 
-        //Getting first teacher (for the forums)
+        // Getting first teacher (for the forums)
         $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['code']);
         $this->first_teacher_id = api_get_user_id();
 

@@ -26,16 +26,13 @@ require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
  *    CourseManager Class
  *    @package chamilo.library
  */
-class CourseManager {
-
-    CONST MAX_COURSE_LENGTH_CODE = 40;
-
-    //This constant is used to show separate user names in the course list (userportal), footer, etc
-    CONST USER_SEPARATOR = ' |';
-
-    CONST COURSE_FIELD_TYPE_CHECKBOX = 10;
-
-    var $columns = array();
+class CourseManager
+{
+    const MAX_COURSE_LENGTH_CODE = 40;
+    /** This constant is used to show separate user names in the course list (userportal), footer, etc */
+    const USER_SEPARATOR = ' |';
+    const COURSE_FIELD_TYPE_CHECKBOX = 10;
+    public $columns = array();
 
     /**
      * Creates a course
@@ -102,7 +99,7 @@ class CourseManager {
     }
 
     /**
-     * Returns all the information of a given coursecode
+     * Returns all the information of a given course code
      * @param string $course_code, the course code
      * @return an array with all the fields of the course table
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -225,13 +222,14 @@ class CourseManager {
     /**
      * Unsubscribe one or more users from a course
      *
-     * @param   mixed   user_id or an array with user ids
-     * @param   int     session id
+     * @param   int   user_id or an array with user ids
      * @param   string  course code
+     * @param   int     session id
      * @assert ('', '') === false
      *
      */
-    public static function unsubscribe_user($user_id, $course_code, $session_id = 0) {
+    public static function unsubscribe_user($user_id, $course_code, $session_id = 0)
+    {
 
         if (!is_array($user_id)) {
             $user_id = array($user_id);
@@ -239,20 +237,20 @@ class CourseManager {
         if (count($user_id) == 0) {
             return;
         }
-        $table_user = Database :: get_main_table(TABLE_MAIN_USER);
+        $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
         if (!empty($session_id)) {
             $session_id = intval($session_id);
         } else {
-            $session_id = intval($_SESSION['id_session']);
+            $session_id = api_get_session_id();
         }
 
         $user_list = array();
 
-        //Cleaning the $user_id variable
+        // Cleaning the $user_id variable
         if (is_array($user_id)) {
             $new_user_id_list = array();
-            foreach($user_id as $my_user_id) {
+            foreach ($user_id as $my_user_id) {
                 $new_user_id_list[]= intval($my_user_id);
             }
             $new_user_id_list = array_filter($new_user_id_list);
@@ -284,7 +282,6 @@ class CourseManager {
         $table_course_user_publication     = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
         $sql = "DELETE FROM $table_course_user_publication WHERE c_id = $course_id AND author = '".Database::escape_string($publication_name)."'";
         Database::query($sql);
-
 
         // Unsubscribe user from all blogs in the course.
         Database::query("DELETE FROM ".Database::get_course_table(TABLE_BLOGS_REL_USER)." WHERE c_id = $course_id AND  user_id IN (".$user_ids.")");
@@ -365,6 +362,7 @@ class CourseManager {
         }
 
         $course_code = Database::escape_string($course_code);
+
         if (empty ($user_id) || empty ($course_code)) {
             return false;
         }
@@ -396,7 +394,7 @@ class CourseManager {
 
             // Check whether the user has not already been stored in the session_rel_course_user table
             if (Database::num_rows(@Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
-                    WHERE course_code = '".$_SESSION['_course']['id']."'
+                    WHERE course_code = '".$course_code."'
                     AND id_session ='".$session_id."'
                     AND id_user = '".$user_id."'")) > 0) {
                 return false;
@@ -417,7 +415,7 @@ class CourseManager {
             // Add him/her in the table session_rel_course_rel_user
             @Database::query("INSERT INTO ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
                     SET id_session ='".$session_id."',
-                    course_code = '".$_SESSION['_course']['id']."',
+                    course_code = '".$course_code."',
                     id_user = '".$user_id."'");
 
             // Add him/her in the table session_rel_user
@@ -1029,13 +1027,13 @@ class CourseManager {
     }
 
     /**
-     *    Is the user subscribed in the real course or linked courses?
-     *
-     *    @param int the id of the user
-     *    @param array info about the course (comes from course table, see database lib)
-     *
-     *    @return true if the user is registered in the real course or linked courses, false otherwise
-     */
+    *    Is the user subscribed in the real course or linked courses?
+    *
+    *    @param int the id of the user
+    *    @param array info about the course (comes from course table, see database lib)
+    *
+    *    @return true if the user is registered in the real course or linked courses, false otherwise
+    */
     public static function is_user_subscribed_in_real_or_linked_course($user_id, $course_code, $session_id = '') {
 
         if ($user_id != strval(intval($user_id))) {
@@ -1045,13 +1043,16 @@ class CourseManager {
         $course_code = Database::escape_string($course_code);
 
         if ($session_id == '') {
-            $result = Database::fetch_array(Database::query("SELECT *
+            $result = Database::fetch_array(
+                Database::query("SELECT *
                     FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." course
                     LEFT JOIN ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." course_user
                     ON course.code = course_user.course_code
                     WHERE course_user.user_id = '$user_id' AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND ( course.code = '$course_code' OR target_course_code = '$course_code')"));
             return !empty($result);
         }
+
+        $session_id = intval($session_id);
 
         // From here we trust session id.
 
@@ -1060,7 +1061,7 @@ class CourseManager {
         // A user?
         if (Database::num_rows(Database::query("SELECT id_user
                     FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
-                    WHERE id_session='".$_SESSION['id_session']."'
+                    WHERE id_session='".$session_id."'
                     AND id_user='$user_id'"))) {
             return true;
         }
@@ -1068,7 +1069,7 @@ class CourseManager {
         // A course coach?
         if (Database::num_rows(Database::query("SELECT id_user
                     FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
-                    WHERE id_session='".$_SESSION['id_session']."'
+                    WHERE id_session='".$session_id."'
                     AND id_user = '$user_id' AND status = 2
                     AND course_code='$course_code'"))) {
             return true;
@@ -1077,7 +1078,7 @@ class CourseManager {
         // A session coach?
         if (Database::num_rows(Database::query("SELECT id_coach
                     FROM ".Database::get_main_table(TABLE_MAIN_SESSION)." AS session
-                    WHERE session.id='".$_SESSION['id_session']."'
+                    WHERE session.id='".$session_id."'
                     AND id_coach='$user_id'"))) {
             return true;
         }
@@ -1116,6 +1117,7 @@ class CourseManager {
         // if the $order_by does not contain 'ORDER BY' we have to check if it is a valid field that can be sorted on
         if (!strstr($order_by,'ORDER BY')) {
             //if (!empty($order_by) AND in_array($order_by, array('lastname', 'firstname', 'username', 'email', 'official_code'))) {
+            $order_by = Database::escape_string($order_by);
             if (!empty($order_by)) {
                 $order_by = 'ORDER BY '.$order_by;
             } else {
@@ -3886,7 +3888,6 @@ class CourseManager {
     }
 
     /**
-     *
      * @deprecated seems not to be used
      * @return ResultSet
      */
@@ -3991,6 +3992,7 @@ class CourseManager {
     /**
      * @param string $course_code
      * @param array $teachers
+     * @param bool $deleteTeachersNotInList
      * @param bool $editTeacherInSessions
      * @param bool $deleteSessionTeacherNotInList
      * @return bool

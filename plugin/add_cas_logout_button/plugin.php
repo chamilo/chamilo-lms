@@ -9,8 +9,6 @@
  * Plugin details (must be present)
  */
 
-
-
 //the plugin title
 $plugin_info['title']      = 'Add a button to logout from CAS';
 
@@ -25,7 +23,7 @@ $form = new FormValidator('add_cas_button_form');
 $form->addElement('text', 'cas_logout_label', 'CAS logout title', '');
 $form->addElement('text', 'cas_logout_comment', 'CAS logout description', '');
 $form->addElement('text', 'cas_logout_image_url', 'Logo URL if any (image, 50px height)');
-$form->addElement('style_submit_button', 'submit_button', get_lang('Save'));  
+$form->addElement('style_submit_button', 'submit_button', get_lang('Save'));
 //get default value for form
 $tab_default_add_cas_logout_button_cas_logout_label = api_get_setting('add_cas_logout_button_cas_logout_label');
 $tab_default_add_cas_logout_button_cas_logout_comment = api_get_setting('add_cas_logout_button_cas_logout_comment');
@@ -37,5 +35,5 @@ $form->setDefaults($defaults);
 //display form
 $plugin_info['settings_form'] = $form;
 
-//set the smarty templates that are going to be used
+// Set the templates that are going to be used
 $plugin_info['templates']   = array('template.tpl');

@@ -5,7 +5,7 @@ require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 
 class TestWork extends UnitTestCase {
 
-	 
+
 	/**
 	 * @param	string	Base work dir (.../work)
 	 * @param 	string $desiredDirName complete path of the desired name
@@ -20,8 +20,8 @@ class TestWork extends UnitTestCase {
 		$res=create_unexisting_work_directory($base_work_dir,$desired_dir_name);
 		$this->assertTrue(is_bool($res));
 	}
-	 
-	 
+
+
 	 /**
 	 * Builds the form thats enables the user to
 	 * select a directory to browse/upload in
@@ -68,17 +68,6 @@ class TestWork extends UnitTestCase {
 		$group=array();
 		$res=convert_date_to_array($date,$group);
 		$this->assertTrue(is_array($res));
-		//var_dump($res);
-	}
-
-	/**
-	 * @param string e.g converts "2008-10-06 12:45:00" to timestamp
-	 */
-
-	function testconvert_date_to_number() {
-		$default='2008-10-06 12:45:00';
-		$res=convert_date_to_number($default);
-		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
 
@@ -180,7 +169,7 @@ class TestWork extends UnitTestCase {
 		$origin='learnpath';
 		$add_in_where_query='';
 		ob_start();
-		$res=display_student_publications_list($work_dir,$sub_course_dir,$currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin,$add_in_where_query='');
+		$res=display_student_publications_list($work_dir,$sub_course_dir,$currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin);
 		$this->assertTrue(is_null($res));
 		ob_end_clean();
 		//var_dump($res);
@@ -386,7 +375,7 @@ class TestWork extends UnitTestCase {
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-	
+
 		/**
 	 * Delete a work-tool directory
 	 * @param	string	Base "work" directory for this course as /var/www/dokeos/courses/ABCD/work/

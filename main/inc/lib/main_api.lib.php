@@ -2097,7 +2097,8 @@ function api_get_coachs_from_course($session_id=0,$course_code='') {
  * @author René Haentjens
  * @author Bart Mollet
  */
-function api_get_setting($variable, $key = null) {
+function api_get_setting($variable, $key = null)
+{
     global $_setting;
     if ($variable == 'header_extra_content') {
         $filename = api_get_path(SYS_PATH).api_get_home_path().'header_extra_content.txt';
@@ -2126,6 +2127,21 @@ function api_get_setting($variable, $key = null) {
         }
     }
     return $value;
+}
+
+/**
+ * @param string $plugin
+ * @param string $variable
+ * @return string
+ */
+function api_get_plugin_setting($plugin, $variable)
+{
+    $variableName = $plugin.'_'.$variable;
+    $result = api_get_setting($variableName);
+    if (isset($result[$plugin])) {
+        return $result[$plugin];
+    }
+    return null;
 }
 
 /**
@@ -2240,6 +2256,9 @@ function api_is_allowed_to_create_course() {
  * @return boolean True if current user is a course administrator
  */
 function api_is_course_admin() {
+    if (api_is_platform_admin()) {
+        return true;
+    }
     return $_SESSION['is_courseAdmin'];
 }
 
@@ -3472,6 +3491,21 @@ function api_get_languages() {
         $language_list['folder'][] = $row['dokeos_folder'];
     }
     return $language_list;
+}
+
+/**
+ * Returns a list of all the languages that are made available by the admin.
+ * @return array
+ */
+function api_get_languages_to_array() {
+    $tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+    $sql = "SELECT * FROM $tbl_language WHERE available='1' ORDER BY original_name ASC";
+    $result = Database::query($sql);
+    $languages = array();
+    while ($row = Database::fetch_array($result)) {
+        $languages[$row['dokeos_folder']] = $row['original_name'];
+    }
+    return $languages;
 }
 
 /**

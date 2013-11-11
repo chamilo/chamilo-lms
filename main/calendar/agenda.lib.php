@@ -56,10 +56,19 @@ class Agenda
      * @param   string  content
      * @param   array   users to send array('everyone') or a list of user ids
      * @param   bool    add event as a *course* announcement
+     * @return int
      *
      */
-    public function add_event($start, $end, $all_day, $view, $title, $content, $users_to_send = array(), $add_as_announcement = false)
-    {
+    public function add_event(
+        $start,
+        $end,
+        $all_day,
+        $view,
+        $title,
+        $content,
+        $users_to_send = array(),
+        $add_as_announcement = false
+    ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
         $all_day = isset($all_day) && $all_day == 'true' ? 1 : 0;

@@ -1,11 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 $language_file = array('exercice', 'work', 'document', 'admin', 'gradebook');
 
 require_once '../inc/global.inc.php';
+
 // Including necessary files
 require_once 'work.lib.php';
 
@@ -38,7 +37,7 @@ $courseInfo = api_get_course_info();
 
 $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
 $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId, 'name' => $my_folder_data['title']);
-$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AddUser'));
+$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AddUsers'));
 
 $error_message = null;
 
@@ -74,28 +73,33 @@ if (!empty($items)) {
         $usersAdded[] = $myUserId;
         $userInfo = api_get_user_info($myUserId);
         $url = api_get_path(WEB_CODE_PATH).'work/add_user.php?action=delete&id='.$workId.'&user_id='.$myUserId;
-        $link = Display::url(get_lang('Delete'), $url);
-        echo $userInfo['complete_name'].' '.$link.'<br />';
+        $link = Display::url(get_lang('Delete'), $url, array('class' => 'btn btn-danger'));
+        echo $userInfo['complete_name_with_username'].' '.$link.'<br />';
     }
     echo '</div>';
 }
 
 $userList = CourseManager::get_user_list_from_course_code($courseInfo['code'], api_get_session_id(), null, null, STUDENT);
 
-echo Display::page_subheader(get_lang('UserToAdd'));
-if (!empty($userList)) {
+$userToAddList = array();
+foreach ($userList as $user) {
+    if (!in_array($user['user_id'], $usersAdded)) {
+        $userToAddList[] = $user;
+    }
+}
+
+if (!empty($userToAddList)) {
+    echo Display::page_subheader(get_lang('UsersToAdd'));
     echo '<div class="well">';
-    foreach ($userList as $user) {
-        if (in_array($user['user_id'], $usersAdded)) {
-            continue;
-        }
-        $userName = api_get_person_name($user['firstname'], $user['lastname']);
+    foreach ($userToAddList as $user) {
+        $userName = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') ';
         $url = api_get_path(WEB_CODE_PATH).'work/add_user.php?action=add&id='.$workId.'&user_id='.$user['user_id'];
-        $link = Display::url(get_lang('Add'), $url);
+        $link = Display::url(get_lang('Add'), $url, array('class' => 'btn btn-primary'));
         echo $userName.' '.$link.'<br />';
     }
     echo '</div>';
+} else {
+    Display::display_warning_message(get_lang('NoUsersToAdd'));
 }
-
 
 echo '<hr /><div class="clear"></div>';

@@ -828,13 +828,20 @@ class Display {
      * @return  string  html
      *
      */
-    public static function grid_html($div_id){
-        $table  = self::tag('table','',array('id'=>$div_id));
-        $table .= self::tag('div','',array('id'=>$div_id.'_pager'));
+    public static function grid_html($div_id)
+    {
+        $table  = self::tag('table','', array('id' => $div_id));
+        $table .= self::tag('div','', array('id' => $div_id.'_pager'));
         return $table;
     }
 
-    public static function form_row($label, $form_item) {
+    /**
+     * @param string $label
+     * @param string $form_item
+     * @return string
+     */
+    public static function form_row($label, $form_item)
+    {
         $label = self::span($label, array('class' =>'control-label'));
         $form_item = self::div($form_item, array('class' =>'controls'));
         return self::div($label.$form_item, array('class'=>'control-group'));
@@ -857,7 +864,16 @@ class Display {
      * @return  string  the js code
      *
      */
-    public static function grid_js($div_id, $url, $column_names, $column_model, $extra_params, $data = array(), $formatter = '', $width_fix = false) {
+    public static function grid_js(
+        $div_id,
+        $url,
+        $column_names,
+        $column_model,
+        $extra_params,
+        $data = array(),
+        $formatter = '',
+        $width_fix = false
+    ) {
         $obj = new stdClass();
 
         if (!empty($url)) {

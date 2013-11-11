@@ -36,6 +36,8 @@ if (!in_array(
     array(
         'get_exercise_results',
         'get_hotpotatoes_exercise_results',
+        'get_work_teacher',
+        'get_work_student',
         'get_work_user_list',
         'get_work_user_list_others',
         'get_work_user_list_all',
@@ -47,7 +49,7 @@ if (!in_array(
     api_protect_admin_script(true);
 }
 
-//Search features
+// Search features
 
 $ops = array (
     'eq' => '=',        //equal
@@ -116,7 +118,9 @@ if ($_REQUEST['_search'] == 'true') {
 
 // get index row - i.e. user click to sort $sord = $_GET['sord'];
 // get the direction
-if (!$sidx) $sidx = 1;
+if (!$sidx) {
+    $sidx = 1;
+}
 
 //2. Selecting the count FIRST
 //@todo rework this
@@ -135,6 +139,15 @@ switch ($action) {
     case 'get_user_skill_ranking':
         $skill = new Skill();
         $count = $skill->get_user_list_skill_ranking_count();
+        break;
+    case 'get_work_teacher':
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+        $count = getWorkListTeacher($start, $limit, $sidx, $sord, $where_condition, true);
+        break;
+    case 'get_work_student':
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+        $count = getWorkListStudent($start, $limit, $sidx, $sord, $where_condition, true);
+
         break;
     case 'get_work_user_list_all':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
@@ -246,7 +259,7 @@ if ($page > $total_pages) {
 }
 
 $start = $limit * $page - $limit;
-if ($start < 0 ) {
+if ($start < 0) {
 	$start = 0;
 }
 
@@ -293,17 +306,16 @@ switch ($action) {
         break;
 	case 'get_user_skill_ranking':
         $columns = array('photo', 'firstname', 'lastname', 'skills_acquired', 'currently_learning', 'rank');
-	    $result = $skill->get_user_list_skill_ranking($start, $limit, $sidx, $sord, $where_condition);
+        $result = $skill->get_user_list_skill_ranking($start, $limit, $sidx, $sord, $where_condition);
         $result = msort($result, 'skills_acquired', 'asc');
 
         $skills_in_course = array();
-	    if (!empty($result)) {
-    	    //$counter = 1;
-	        foreach ($result as &$item) {
+        if (!empty($result)) {
+            foreach ($result as &$item) {
                 $user_info = api_get_user_info($item['user_id']);
                 $personal_course_list = UserManager::get_personal_session_course_list($item['user_id']);
                 $count_skill_by_course = array();
-                foreach ($personal_course_list  as $course_item) {
+                foreach ($personal_course_list as $course_item) {
                     if (!isset($skills_in_course[$course_item['code']])) {
                         $count_skill_by_course[$course_item['code']] = $skill->get_count_skills_by_course($course_item['code']);
                         $skills_in_course[$course_item['code']] = $count_skill_by_course[$course_item['code']];
@@ -311,17 +323,23 @@ switch ($action) {
                         $count_skill_by_course[$course_item['code']] = $skills_in_course[$course_item['code']];
                     }
                 }
-	            $item['photo'] = Display::img($user_info['avatar_small']);
-	            $item['currently_learning'] = !empty($count_skill_by_course) ? array_sum($count_skill_by_course) : 0;
-	        }
-	    }
-    	break;
+                $item['photo'] = Display::img($user_info['avatar_small']);
+                $item['currently_learning'] = !empty($count_skill_by_course) ? array_sum($count_skill_by_course) : 0;
+            }
+        }
+        break;
+    case 'get_work_teacher':
+        $columns = array('type', 'title', 'expires_on', 'ends_on', 'actions');
+        $result = getWorkListTeacher($start, $limit, $sidx, $sord, $where_condition);
+        break;
+    case 'get_work_student':
+        $columns = array('type', 'title', 'expires_on', 'others', 'actions');
+        $result = getWorkListStudent($start, $limit, $sidx, $sord, $where_condition);
+        break;
     case 'get_work_user_list_all':
         if (isset($_GET['type'])  && $_GET['type'] == 'simple') {
-            //$columns = array('type', 'firstname', 'lastname',  'username', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions');
             $columns = array('type', 'firstname', 'lastname', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions');
         } else {
-            //$columns = array('type', 'firstname', 'lastname',  'username', 'title', 'sent_date', 'actions');
             $columns = array('type', 'firstname', 'lastname', 'title', 'sent_date', 'actions');
         }
         $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);
@@ -337,29 +355,24 @@ switch ($action) {
         break;
     case 'get_work_user_list':
         if (isset($_GET['type'])  && $_GET['type'] == 'simple') {
-            //$columns = array('type', 'firstname', 'lastname',  'username', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions');
             $columns = array('type', 'firstname', 'lastname', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions');
         } else {
-            //$columns = array('type', 'firstname', 'lastname',  'username', 'title', 'sent_date', 'actions');
             $columns = array('type', 'firstname', 'lastname', 'title', 'sent_date', 'actions');
         }
         $where_condition .= " AND u.user_id = ".api_get_user_id();
         $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);
         break;
 	case 'get_exercise_results':
-		$course = api_get_course_info();
+        $course = api_get_course_info();
         //used inside get_exam_results_data()
 		$documentPath = api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document";
 		if ($is_allowedToEdit) {
 			$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score', 'status', 'lp', 'actions');
-		} else {
-			//$columns = array('exe_duration', 'start_date', 'exe_date', 'score', 'status', 'actions');
 		}
 		$result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);
 		break;
 	case 'get_hotpotatoes_exercise_results':
 		$course = api_get_course_info();
-        //used inside get_exam_results_data()
 		$documentPath = api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document";
 		$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_date',  'score', 'actions');
 		$result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $where_condition); //get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);
@@ -370,7 +383,6 @@ switch ($action) {
         break;
      case 'get_timelines':
         $columns = array('headline', 'actions');
-        //$columns = array('headline', 'type', 'start_date', 'end_date', 'text', 'media', 'media_credit', 'media_caption', 'title_slide', 'parent_id');
 
         if(!in_array($sidx, $columns)) {
         	$sidx = 'headline';
@@ -407,8 +419,6 @@ switch ($action) {
             //Fixes bug when gradebook doesn't have names
             if (empty($item['name'])) {
                 $item['name'] = $item['course_code'];
-            } else {
-                //$item['name'] =  $item['name'].' ['.$item['course_code'].']';
             }
 
             $item['name'] = Display::url($item['name'], api_get_path(WEB_CODE_PATH).'gradebook/index.php?id_session=0&cidReq='.$item['course_code']);
@@ -451,7 +461,7 @@ switch ($action) {
         break;
     case 'get_careers':
         $columns = array('name', 'description', 'actions');
-        if(!in_array($sidx, $columns)) {
+        if (!in_array($sidx, $columns)) {
         	$sidx = 'name';
         }
         $result     = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
@@ -469,7 +479,13 @@ switch ($action) {
         if(!in_array($sidx, $columns)) {
             $sidx = 'name';
         }
-        $result     = Database::select('p.id,p.name, p.description, c.name as career, p.status', "$obj->table p LEFT JOIN ".Database::get_main_table(TABLE_CAREER)." c  ON c.id = p.career_id ", array('order' =>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
+
+        $result = Database::select(
+            'p.id,p.name, p.description, c.name as career, p.status',
+            "$obj->table p LEFT JOIN ".Database::get_main_table(TABLE_CAREER)." c  ON c.id = p.career_id ",
+            array('order' => "$sidx $sord", 'LIMIT'=> "$start , $limit")
+        );
+
         $new_result = array();
         foreach($result as $item) {
             if (!$item['status']) {
@@ -515,17 +531,6 @@ switch ($action) {
         $obj = new ExtraFieldOption($type);
         $columns = array('option_display_text', 'option_value', 'option_order');
         $result  = Database::select('*', $obj->table, array('where' => array("field_id = ? " => $field_id),'order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
-        /*$new_result = array();
-        if (!empty($result)) {
-            foreach ($result as $item) {
-                $item['field_type']         = $obj->get_field_type_by_id($item['field_type']);
-                $item['field_changeable']   = $item['field_changeable'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
-                $item['field_visible']      = $item['field_visible'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
-                $item['field_filter']       = $item['field_filter'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
-                $new_result[]        = $item;
-            }
-            $result = $new_result;
-        }*/
         break;
     case 'get_usergroups_teacher':
         $columns = array('name', 'users', 'actions');
@@ -562,7 +567,7 @@ switch ($action) {
             $sidx = 'name';
         }
         //Multidimensional sort
-        msort($result, $sidx);
+        $result = msort($result, $sidx, $sord);
         break;
     default:
         exit;
@@ -577,6 +582,8 @@ $allowed_actions = array(
     'get_sessions',
     'get_exercise_results',
     'get_hotpotatoes_exercise_results',
+    'get_work_teacher',
+    'get_work_student',
     'get_work_user_list',
     'get_work_user_list_others',
     'get_work_user_list_all',

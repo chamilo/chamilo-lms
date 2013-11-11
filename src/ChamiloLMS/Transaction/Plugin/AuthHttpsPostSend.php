@@ -36,6 +36,15 @@ class AuthHttpsPostSend implements SendPluginInterface
     protected $password;
 
     /**
+     * The path to the certificate authority certificate file to be used on the
+     * SSL conection. If not provided, it is assumed that the SSL certificate
+     * has been signed by a CA recognized as genuine.
+     *
+     * @var string
+     */
+    protected $cacert = null;
+
+    /**
      * {@inheritdoc}
      */
     public static function getMachineName()
@@ -48,7 +57,8 @@ class AuthHttpsPostSend implements SendPluginInterface
      *
      * @param array $data
      *   An array containing the values of the three required data members
-     *   using the data member name as key.
+     *   using the data member name as key, and optionally cacert to be used on
+     *   the data member with the same name.
      *
      * @throws SendException
      *   When there is an error while instanciating the plugin.
@@ -59,6 +69,9 @@ class AuthHttpsPostSend implements SendPluginInterface
                 throw new SendException(sprintf('auth_https_post: Cannot instanciate the plugin with data array: "%s".', print_r($data, 1)));
             }
             $this->$data_member_name = $data[$data_member_name];
+        }
+        if (isset($data['cacert'])) {
+            $this->cacert = $data['cacert'];
         }
     }
 
@@ -81,14 +94,17 @@ class AuthHttpsPostSend implements SendPluginInterface
         $curl_handle = curl_init();
         $post_data = array('file' => '@' . $blob_file);
 
-        // @todo See if we need to manually add the CA certificate, or default
-        // is enough.
         curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl_handle, CURLOPT_URL, $this->uri);
         curl_setopt($curl_handle, CURLOPT_POST, 1);
         curl_setopt($curl_handle, CURLOPT_POSTFIELDS, $post_data);
         curl_setopt($curl_handle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
         curl_setopt($curl_handle, CURLOPT_USERPWD, sprintf('%s:%s', $this->user, $this->password));
+        curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, true);
+
+        if (is_readable($this->cacert)) {
+            curl_setopt($curl_handle, CURLOPT_CAINFO, $this->cacert);
+        }
 
         $response = curl_exec($curl_handle);
         if ($response === false) {

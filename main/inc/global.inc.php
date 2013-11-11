@@ -202,7 +202,7 @@ $app->register(new Silex\Provider\SessionServiceProvider());
 if (isset($_configuration['session.memcached.settings'])) {
     $memcachedSettings = $_configuration['session.memcached.settings'];
     $app['session.storage.handler'] = $app->share(function () use ($app, $memcachedSettings) {
-        $memcached = new Memcached('chamilo_memcached');
+        $memcached = new Memcached($memcachedSettings['persistent_id']);
         $memcached->addServer($memcachedSettings['host'], $memcachedSettings['port']);
         return new Handler\MemcachedSessionHandler($memcached, $memcachedSettings['options']);
     });

@@ -1,10 +1,13 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 /**
  * ChamiloSession class definition
-  */
+ * @todo just the Session from the Symfony2 component
+ */
 class ChamiloSession
 {
+    /** @var Symfony\Component\HttpFoundation\Session\Session */
     public static $session;
 
     /**
@@ -59,15 +62,15 @@ class ChamiloSession
     }
 
     /**
-     *
-     */
+    *
+    */
     public static function clear()
     {
         self::$session->clear();
     }
 
     /**
-     *
+     * Invalidate the session.
      */
     public static function destroy()
     {

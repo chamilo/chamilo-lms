@@ -66,19 +66,19 @@ $exercicePath = substr($exercicePath, 0, strpos($exercicePath, $exfile));
 $exercicePath = $exercicePath."exercice.php";
 
 // Clear the exercise session
-if (isset ($_SESSION['objExercise'])) {
+if (isset($_SESSION['objExercise'])) {
     Session::erase('objExercise');
 }
-if (isset ($_SESSION['objQuestion'])) {
+if (isset($_SESSION['objQuestion'])) {
     Session::erase('objQuestion');
 }
-if (isset ($_SESSION['objAnswer'])) {
+if (isset($_SESSION['objAnswer'])) {
     Session::erase('objAnswer');
 }
-if (isset ($_SESSION['questionList'])) {
+if (isset($_SESSION['questionList'])) {
     Session::erase('questionList');
 }
-if (isset ($_SESSION['exerciseResult'])) {
+if (isset($_SESSION['exerciseResult'])) {
     Session::erase('exerciseResult');
 }
 

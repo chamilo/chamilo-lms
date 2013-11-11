@@ -66,8 +66,9 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId)) {
     echo Display::return_icon('upload_file.png', get_lang('UploadADocument'), '', ICON_SIZE_MEDIUM).'</a>';
     if (!empty($documentsAddedInWork)) {
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/upload_from_template.php?'.api_get_cidreq().'&id='.$workId.'&origin='.$origin.'&gradebook='.$gradebook.'">';
+        echo Display::return_icon('import_html.png', get_lang('UploadFromTemplate'), '', ICON_SIZE_MEDIUM).'</a>';
     }
-    echo Display::return_icon('import_html.png', get_lang('UploadFromTemplate'), '', ICON_SIZE_MEDIUM).'</a>';
+
 }
 echo '</div>';
 

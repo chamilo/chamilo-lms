@@ -4,7 +4,12 @@
 $language_file = array('exercice', 'work', 'document', 'admin', 'gradebook');
 
 require_once '../inc/global.inc.php';
+$lib_path = api_get_path(LIBRARY_PATH);
+
+/* Libraries */
+require_once $lib_path.'fileManage.lib.php';
 require_once 'work.lib.php';
+
 
 // Section (for the tabs)
 $this_section = SECTION_COURSES;
@@ -93,12 +98,7 @@ $display_edit_form = true;
 if ($form->validate()) {
     $params = $form->exportValues();
     $workId = $params['work_id'];
-
-    $dir_name = replace_dangerous_char($params['dir_name']);
-    $dir_name = disable_dangerous_file($dir_name);
-
     $edit_check = false;
-
     $workData = get_work_data_by_id($workId);
 
     if (!empty($workData)) {
@@ -108,11 +108,8 @@ if ($form->validate()) {
     }
 
     if ($edit_check) {
-
         updatePublicationAssignment($workId, $params, $courseInfo, $group_id);
-        updateDirName($workData, $dir_name, $params['dir_name'], $courseInfo);
-
-        $dir = $dir_name;
+        updateDirName($workData, $params['new_dir']);
 
         Display::display_confirmation_message(get_lang('FolderEdited'));
     } else {

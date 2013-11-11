@@ -137,20 +137,20 @@ function two_digits($number)
  */
 function convert_date_to_array($date, $group)
 {
-	$parts = explode(' ', $date);
-	$date_parts = explode('-', $parts[0]);
-	$date_parts_tmp = array();
-	foreach ($date_parts as $item) {
-		$date_parts_tmp[] = intval($item);
-	}
+    $parts = explode(' ', $date);
+    $date_parts = explode('-', $parts[0]);
+    $date_parts_tmp = array();
+    foreach ($date_parts as $item) {
+        $date_parts_tmp[] = intval($item);
+    }
 
-	$time_parts = explode(':', $parts[1]);
-	$time_parts_tmp = array();
-	foreach ($time_parts as $item) {
-		$time_parts_tmp[] = intval($item);
-	}
-	list($data[$group]['year'], $data[$group]['month'], $data[$group]['day']) = $date_parts_tmp;
-	list($data[$group]['hour'], $data[$group]['minute']) = $time_parts_tmp;
+    $time_parts = explode(':', $parts[1]);
+    $time_parts_tmp = array();
+    foreach ($time_parts as $item) {
+        $time_parts_tmp[] = intval($item);
+    }
+    list($data[$group]['year'], $data[$group]['month'], $data[$group]['day']) = $date_parts_tmp;
+    list($data[$group]['hour'], $data[$group]['minute']) = $time_parts_tmp;
 	return $data;
 }
 
@@ -402,7 +402,7 @@ function getUniqueStudentAttempts($workId, $groupId, $course_id, $sessionId, $us
 
 /**
  * Display the list of student publications, taking into account the user status
- *
+ * @deprecated
  * @param $id
  * @param $my_folder_data
  * @param $work_parents
@@ -686,9 +686,9 @@ function showStudentWorkGrid()
 {
     $courseInfo = api_get_course_info();
     $columnModel = array(
-        array('name'=>'type', 'index'=>'type',        'width'=>'80',   'align'=>'left'),
-        array('name'=>'title', 'index'=>'title',        'width'=>'80',   'align'=>'left'),
-        array('name'=>'expires_on', 'index'=>'handed_out_date_limit', 'width'=>'500',  'align'=>'left','sortable'=>'false')
+        array('name'=>'type', 'index'=>'type', 'width'=>'30',   'align'=>'left', 'sortable'=>'false'),
+        array('name'=>'title', 'index'=>'title', 'width'=>'80',   'align'=>'left'),
+        array('name'=>'expires_on', 'index'=>'expires_on', 'width'=>'500',  'align'=>'left', 'sortable'=>'false')
     );
 
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_student&'.api_get_cidreq();
@@ -701,19 +701,26 @@ function showStudentWorkGrid()
 
     if ($courseInfo['show_score'] == 0) {
         $columnModel[] = array(
-            'name'=>'others',
-            'index'=>'others',
-            'width'=>'80',
-            'align'=>'left'
+            'name' => 'others',
+            'index' => 'others',
+            'width' => '80',
+            'align' => 'left',
+            'sortable' => 'false'
         );
         $columns[] = get_lang('Others');
     }
 
+    $params = array(
+        'autowidth' => 'true',
+        'height' => 'auto'
+    );
+
     $html = '<script>
     $(function() {
-        '.Display::grid_js('workList', $url, $columns, $columnModel, array(), array(), array(), true).'
+        '.Display::grid_js('workList', $url, $columns, $columnModel, $params, array(), array(), true).'
     });
     </script>';
+
     $html .= Display::grid_html('workList');
     return $html;
 }
@@ -752,9 +759,10 @@ function showTeacherWorkGrid()
         get_lang('Actions')
     );
 
-
     $params = array(
-        'multiselect' => true
+        'multiselect' => true,
+        'autowidth' => 'true',
+        'height' => 'auto'
     );
 
     $html = '<script>
@@ -770,50 +778,10 @@ function showTeacherWorkGrid()
             { reloadAfterSubmit:false, url: "'.$deleteUrl.'" }, // del options
             { width:500 } // search options
         );
-
-
-
     });
     </script>';
     $html .= Display::grid_html('workList');
     return $html;
-}
-
-/**
- * Returns a list of subdirectories found in the given directory.
- *
- * The list return starts from the given base directory.
- * If you require the subdirs of /var/www/ (or /var/www), you will get 'abc/', 'def/', but not '/var/www/abc/'...
- * @param	string	Base dir
- * @param	integer	0 if we only want dirs from this level, 1 if we want to recurse into subdirs
- * @return	strings_array	The list of subdirs in 'abc/' form, -1 on error, and 0 if none found
- * @todo	Add a session check to see if subdirs_list doesn't exist yet (cached copy)
- */
-function get_subdirs_list($basedir = '', $recurse = 0)
-{
-	//echo "Looking for subdirs of $basedir";
-	if (empty($basedir) or !is_dir($basedir)) {
-		return -1;
-	}
-	if (substr($basedir, -1, 1) != '/') {
-		$basedir = $basedir.'/';
-	}
-	$dirs_list = array();
-	$dh = opendir($basedir);
-	while ($entry = readdir($dh)) {
-		$entry = replace_dangerous_char($entry);
-		$entry = disable_dangerous_file($entry);
-		if (is_dir($basedir.$entry) && $entry != '..' && $entry != '.') {
-			$dirs_list[] = $entry;
-			if ($recurse == 1) {
-				foreach (get_subdirs_list($basedir.$entry) as $subdir) {
-					$dirs_list[] = $entry.'/'.$subdir;
-				}
-			}
-		}
-	}
-	closedir($dh);
-	return $dirs_list;
 }
 
 /**
@@ -1105,44 +1073,47 @@ function updateWorkUrl($id, $new_path, $parent_id)
 
 /**
  * Update the url of a dir in the student_publication table
- * @param	string old path
- * @param	string new path
+ * @param   array work original data
+ * @param   string new path
+ * @return bool
  */
-function updateDirName($work_data, $new_name, $title, $courseInfo)
+function updateDirName($work_data, $newPath)
 {
-	$course_id = api_get_course_int_id();
-	$work_id = intval($work_data['id']);
-    $path  = $work_data['url'];
+	$course_id = $work_data['c_id'];
+    $courseInfo = api_get_course_info_by_id($course_id);
 
-    if ($work_data['title'] == $title) {
+	$work_id = intval($work_data['id']);
+    $oldPath = $work_data['url'];
+    $path  = $work_data['url'];
+    $originalNewPath = Database::escape_string($newPath);
+    $newPath = Database::escape_string($newPath);
+    $newPath = replace_dangerous_char($newPath);
+    $newPath = disable_dangerous_file($newPath);
+
+    if ($oldPath == '/'.$newPath) {
         return true;
     }
-    $title = Database::escape_string($title);
 
-	if (!empty($new_name)) {
-
+	if (!empty($newPath)) {
         $base_work_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work';
-
-		$new_name = Security::remove_XSS($new_name);
-		$new_name = replace_dangerous_char($new_name);
-		$new_name = disable_dangerous_file($new_name);
-		my_rename($base_work_dir.'/'.$path, $new_name);
+		my_rename($base_work_dir.$oldPath, $newPath);
 		$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
 		//update all the files in the other directories according with the next query
 		$sql = "SELECT id, url FROM $table WHERE c_id = $course_id AND parent_id = $work_id";
-		$rs = Database::query($sql);
+		$result = Database::query($sql);
         $work_len = strlen('work/'.$path);
 
-		while ($work = Database :: fetch_array($rs)) {
+		while ($work = Database :: fetch_array($result)) {
 			$new_dir = $work['url'];
 			$name_with_directory = substr($new_dir, $work_len, strlen($new_dir));
-            $name = Database::escape_string('work/'.$new_name.'/'.$name_with_directory);
-			$sql = 'UPDATE '.$table.' SET url= "'.$name.'" WHERE c_id = '.$course_id.' AND id= '.$work['id'];
+            $name = Database::escape_string('work/'.$newPath.'/'.$name_with_directory);
+			$sql = 'UPDATE '.$table.' SET url= "'.$name.'" WHERE c_id = '.$course_id.' AND id = '.$work['id'];
 			Database::query($sql);
 		}
 
-        $sql = "UPDATE $table SET url= '/".$new_name."' , title = '".$title."' WHERE c_id = $course_id AND id = $work_id";
+        $sql = "UPDATE $table SET url= '/".$newPath."', title = '".$originalNewPath."'
+                WHERE c_id = $course_id AND id = $work_id";
         Database::query($sql);
 	}
 }
@@ -1824,11 +1795,11 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                         }
                     } else {
                         if ($qualification_exists) {
-                            $action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Modify').'"  >'.
+                            $action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Edit').'"  >'.
                             Display::return_icon('rate_work.png', get_lang('CorrectAndRate'),array(), ICON_SIZE_SMALL).'</a>';
                         } else {
                             $action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'&gradebook='.Security::remove_XSS($_GET['gradebook']).'" title="'.get_lang('Modify').'">'.
-                            Display::return_icon('edit.png', get_lang('Comment'),array(), ICON_SIZE_SMALL).'</a>';
+                            Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
                         }
                     }
 
@@ -2919,7 +2890,6 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $group_id)
     }
 
     $qualification = isset($params['qualification']) && !empty($params['qualification']) ? 1 : 0;
-
     $expiryDate = (isset($params['enableExpiryDate']) && $params['enableExpiryDate'] == 1) ? api_get_utc_datetime(get_date_from_select('expires', $params)) : '0000-00-00 00:00:00';
     $endDate = ((isset($params['enableEndDate']) && $params['enableEndDate']==1) ? api_get_utc_datetime(get_date_from_select('ends', $params)) : '0000-00-00 00:00:00');
 
@@ -2975,7 +2945,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $group_id)
         if (isset($params['make_calification']) && $params['make_calification'] == 1) {
             if (empty($linkId)) {
                 add_resource_to_course_gradebook(
-                    $_POST['category_id'],
+                    $params['category_id'],
                     $courseInfo['code'],
                     LINK_STUDENTPUBLICATION,
                     $workId,
@@ -2990,7 +2960,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $group_id)
                 update_resource_from_course_gradebook($linkId, $courseInfo['code'], $params['weight']);
             }
         } else {
-            // Delete everything of the gradebook
+            // Delete everything of the gradebook for this $linkId
             remove_resource_from_course_gradebook($linkId);
         }
     }
@@ -3083,7 +3053,7 @@ function getFormWork($form, $defaults = array())
         ' '.get_lang('AdvancedParameters').'</span></a>'
     );
 
-    if (!empty($defaults) && isset($defaults['qualification'])) {
+    if (!empty($defaults) && (isset($defaults['enableEndDate']) || isset($defaults['enableExpiryDate']))) {
         $form->addElement('html', '<div id="options" style="display: block;">');
     } else {
         $form->addElement('html', '<div id="options" style="display: none;">');
@@ -3137,7 +3107,6 @@ function getFormWork($form, $defaults = array())
         $expires_date_array = convert_date_to_array(api_get_local_time(), 'ends');
         $defaults = array_merge($defaults, $expires_date_array);
     }
-
 
     $form->addGroup(create_group_date_select($form), 'expires', get_lang('ExpiresAt'));
     $form->addElement('html', '</div>');

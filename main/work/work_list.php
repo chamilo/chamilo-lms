@@ -98,7 +98,6 @@ $check_qualification = intval($my_folder_data['qualification']);
 if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) {
     $type = 'simple';
 
-
     $columns = array(
         get_lang('Type'),
         get_lang('FirstName'),
@@ -111,14 +110,14 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
     );
 
     $column_model   = array (
-        array('name'=>'type', 'index'=>'file', 'width'=>'12',   'align'=>'left', 'search' => 'false'),
+        array('name'=>'type', 'index'=>'file', 'width'=>'5',   'align'=>'left', 'search' => 'false'),
         array('name'=>'firstname', 'index'=>'firstname', 'width'=>'35', 'align'=>'left', 'search' => 'true'),
         array('name'=>'lastname', 'index'=>'lastname', 'width'=>'35', 'align'=>'left', 'search' => 'true'),
         array('name'=>'title', 'index'=>'title', 'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => 'true'),
-        array('name'=>'qualification',	'index'=>'qualification', 'width'=>'20',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'20',   'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
-        array('name'=>'qualificator_id','index'=>'qualificator_id', 'width'=>'30',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'actions', 'index'=>'actions', 'width'=>'40', 'align'=>'left', 'search' => 'false', 'sortable'=>'false')
+        array('name'=>'qualification',	'index'=>'qualification', 'width'=>'10',   'align'=>'left', 'search' => 'true'),
+        array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'30',   'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
+        array('name'=>'qualificator_id', 'index'=>'qualificator_id', 'width'=>'20', 'align'=>'left', 'search' => 'true'),
+        array('name'=>'actions', 'index'=>'actions', 'width'=>'20', 'align'=>'left', 'search' => 'false', 'sortable'=>'false')
     );
 } else {
     $type = 'complex';
@@ -133,7 +132,7 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
     );
 
     $column_model   = array (
-        array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false'),
+        array('name'=>'type',           'index'=>'file',            'width'=>'5',   'align'=>'left', 'search' => 'false'),
         array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'title',          'index'=>'title',           'width'=>'60',   'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),

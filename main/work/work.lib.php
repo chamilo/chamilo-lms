@@ -1671,8 +1671,8 @@ function get_work_user_list_from_documents(
     if ($getCount) {
         $select = " SELECT count() as count  ";
     } else {
-        $select1 = " SELECT DISTINCT u.firstname, u.lastname, u.user_id, w.title, w.document_id document_id, w.id";
-        $select2 = " SELECT DISTINCT u.firstname, u.lastname, u.user_id, d.title, d.id document_id, 0";
+        $select1 = " SELECT DISTINCT u.firstname, u.lastname, u.user_id, w.title, w.document_id document_id, w.id, qualification, qualificator_id";
+        $select2 = " SELECT DISTINCT u.firstname, u.lastname, u.user_id, d.title, d.id document_id, 0, 0, 0";
     }
 
     $documentTable = Database::get_course_table(TABLE_DOCUMENT);
@@ -1734,6 +1734,13 @@ function get_work_user_list_from_documents(
 
     $currentUserId = api_get_user_id();
 
+    $work_data = get_work_data_by_id($workId);
+
+    $qualificationExists = false;
+    if (!empty($work_data['qualification']) && intval($work_data['qualification']) > 0) {
+        $qualificationExists = true;
+    }
+
     if ($getCount) {
         $result = Database::fetch_array($result);
         return $result['count'];
@@ -1756,6 +1763,8 @@ function get_work_user_list_from_documents(
             $documentId = $row['document_id'];
             $itemId = $row['id'];
 
+            $addLinkShowed = false;
+
             if (empty($documentId)) {
                 $url = $urlEdit.'&item_id='.$row['id'].'&id='.$workId;
                 $editLink = Display::url($editIcon, $url);
@@ -1767,6 +1776,7 @@ function get_work_user_list_from_documents(
                 if (empty($documentToWork)) {
                     $url = $urlAdd.'&document_id='.$documentId.'&id='.$workId;
                     $editLink = Display::url($addIcon, $url);
+                    $addLinkShowed = true;
                 } else {
 
                     $row['title'] = $documentToWork['title'];
@@ -1794,12 +1804,30 @@ function get_work_user_list_from_documents(
 
             $row['type'] = build_document_icon_tag('file', $row['file']);
 
+            if ($qualificationExists) {
+                if (empty($row['qualificator_id'])) {
+                    $status = Display::label(get_lang('NotRevised'), 'warning');
+                } else {
+                    $status = Display::label(get_lang('Revised'), 'success');
+                }
+                $row['qualificator_id'] = $status;
+            }
+
+            if (!empty($row['qualification'])) {
+                $row['qualification'] = Display::label($row['qualification'], 'info');
+            }
+
             if (!empty($row['sent_date'])) {
                 $row['sent_date'] = api_get_local_time($row['sent_date']);
             }
 
             if ($userId == $currentUserId) {
                 $row['actions'] = $viewLink.$editLink.$deleteLink;
+            }
+
+            if ($addLinkShowed) {
+                $row['qualification'] = '';
+                $row['qualificator_id'] = '';
             }
 
             $workList[] = $row;

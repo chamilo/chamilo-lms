@@ -489,10 +489,6 @@ switch ($action) {
             $item['language_id'] = $language_info['english_name'];
             $item['actions'] = Display::url(Display::return_icon('edit.png', get_lang('Edit')), api_get_path(WEB_CODE_PATH).'admin/event_type.php?action=edit&event_type_name='.$item['event_type_name']);
             $item['actions'] .= Display::url(Display::return_icon('delete.png', get_lang('Delete')), api_get_path(WEB_CODE_PATH).'admin/event_controller.php?action=delete&id='.$item['id']);
-
-            /*if (!$item['status']) {
-                $item['name'] = '<font style="color:#AAA">'.$item['subject'].'</font>';
-            }*/
             $new_result[] = $item;
         }
         $result = $new_result;
@@ -514,7 +510,7 @@ switch ($action) {
         break;
     case 'get_promotions':
         $columns = array('name', 'career', 'description', 'actions');
-        if(!in_array($sidx, $columns)) {
+        if (!in_array($sidx, $columns)) {
             $sidx = 'name';
         }
 

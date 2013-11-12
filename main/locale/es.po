@@ -4889,7 +4889,7 @@ msgid "NoExercises"
 msgstr "No hay ejercicios disponibles"
 
 msgid "NotAllowedClickBack"
-msgstr "Lo sentimos, no le está permitido acceder a esta página o su conexión ha caducado. Para volver a la página anterior pulse el enlace inferior o haga clic en el botón \"Atrás\" de su navegador."
+msgstr "Lo sentimos, no le está permitido acceder a esta sección. Para volver a la página anterior, haga clic en el botón \"Atrás\" de su navegador."
 
 msgid "Exercise"
 msgstr "Ejercicios"

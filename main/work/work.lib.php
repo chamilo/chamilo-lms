@@ -1671,36 +1671,55 @@ function get_work_user_list_from_documents(
     if ($getCount) {
         $select = " SELECT count() as count  ";
     } else {
-        $select = " SELECT DISTINCT u.firstname, u.lastname, u.user_id, d.title, d.id as document_id";
+        $select1 = " SELECT DISTINCT u.firstname, u.lastname, u.user_id, w.title, w.document_id document_id, w.id";
+        $select2 = " SELECT DISTINCT u.firstname, u.lastname, u.user_id, d.title, d.id document_id, 0";
     }
 
-    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
     $documentTable = Database::get_course_table(TABLE_DOCUMENT);
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $workRelDocument = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
 
     $userTable = Database::get_main_table(TABLE_MAIN_USER);
-    $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-    $courseRelUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
     $courseId = api_get_course_int_id();
     $sessionId = api_get_session_id();
 
     $userCondition  = null;
-    if (!empty($studentId )) {
-        $studentId = intval($studentId);
-        $userCondition = "AND cu.user_id = $studentId ";
+    if (empty($studentId)) {
+        $studentId = api_get_user_id();
     }
+    $studentId = intval($studentId);
+    $userCondition = " AND u.user_id = $studentId ";
+    $sessionCondition = " AND w.session_id = $sessionId ";
 
-    $sql = " $select FROM $userTable u
-            INNER JOIN $courseRelUserTable as cu ON (cu.user_id = u.user_id)
-            INNER JOIN $courseTable c ON (c.code = cu.course_code)
-            LEFT JOIN $table w_rel_doc ON (w_rel_doc.c_id = c.id)
-            INNER JOIN $documentTable d ON (d.id = w_rel_doc.document_id AND d.c_id = w_rel_doc.c_id)
-            LEFT JOIN $workTable w ON (w_rel_doc.c_id = w.c_id AND w.filetype = 'file' )
-            WHERE
-                d.c_id = $courseId
-                $userCondition
-                $whereCondition";
+    $sql = "    (
+                    $select1 FROM $userTable u
+                    INNER JOIN $workTable w ON (u.user_id = w.user_id AND w.active = 1 AND w.filetype = 'file')
+                    WHERE
+                        w.c_id = $courseId
+                        $userCondition
+                        $sessionCondition
+                        $whereCondition
+
+                ) UNION (
+                    $select2 FROM $workTable w
+                    INNER JOIN $workRelDocument w_rel ON (w_rel.work_id = w.id AND w.active = 1)
+                    INNER JOIN $documentTable d ON (w_rel.document_id = d.id AND d.c_id = w.c_id)
+                    INNER JOIN $userTable u ON (u.user_id = $studentId)
+                    WHERE
+                        w.c_id = $courseId
+                        $sessionCondition AND
+                        d.id NOT IN
+                            (SELECT w.document_id id FROM $workTable w
+                            WHERE
+                                user_id = $studentId AND
+                                c_id = $courseId AND
+                                filetype = 'file' AND
+                                active = 1
+                                $sessionCondition
+                            )
+                )
+            ";
 
     $start = intval($start);
     $limit = intval($limit);
@@ -1710,6 +1729,7 @@ function get_work_user_list_from_documents(
 
     $sql .= " ORDER BY $column $direction";
     $sql .= " LIMIT $start, $limit";
+
     $result = Database::query($sql);
 
     $currentUserId = api_get_user_id();
@@ -1719,41 +1739,75 @@ function get_work_user_list_from_documents(
         return $result['count'];
     } else {
         $workList = array();
+
         $urlAdd = api_get_path(WEB_CODE_PATH).'work/upload_from_template.php?'.api_get_cidreq();
         $urlEdit = api_get_path(WEB_CODE_PATH).'work/edit.php?'.api_get_cidreq();
+        $urlDelete = api_get_path(WEB_CODE_PATH).'work/work_list.php?action=delete&'.api_get_cidreq();
+        $urlView = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq();
+
         $editIcon = Display::return_icon('edit.png', get_lang('Edit'));
         $addIcon = Display::return_icon('add.png', get_lang('Add'));
+        $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'));
+        $viewIcon = Display::return_icon('default.png', get_lang('View'));
+
+        $allowEdition = api_get_course_setting('student_delete_own_publication');
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $userId = $row['user_id'];
             $documentId = $row['document_id'];
+            $itemId = $row['id'];
 
-            $documentToWork = getDocumentToWorkPerUser($documentId, $workId, $courseId, $sessionId, $userId);
-
-             if (empty($documentToWork)) {
-                $url = $urlAdd.'&document_id='.$documentId.'&id='.$workId;
-                $link = Display::url($addIcon, $url);
+            if (empty($documentId)) {
+                $url = $urlEdit.'&item_id='.$row['id'].'&id='.$workId;
+                $editLink = Display::url($editIcon, $url);
+                if ($allowEdition == false) {
+                    $editLink = null;
+                }
             } else {
-                $row['title'] = $documentToWork['title'];
-                $row['sent_date'] = $documentToWork['sent_date'];
-                $newWorkId = $documentToWork['id'];
-                $url = $urlEdit.'&id='.$newWorkId;
-                $link = Display::url($editIcon, $url);
+                $documentToWork = getDocumentToWorkPerUser($documentId, $workId, $courseId, $sessionId, $userId);
+                if (empty($documentToWork)) {
+                    $url = $urlAdd.'&document_id='.$documentId.'&id='.$workId;
+                    $editLink = Display::url($addIcon, $url);
+                } else {
+
+                    $row['title'] = $documentToWork['title'];
+                    $row['sent_date'] = $documentToWork['sent_date'];
+                    $newWorkId = $documentToWork['id'];
+                    $url = $urlEdit.'&item_id='.$newWorkId.'&id='.$workId;
+                    $editLink = Display::url($editIcon, $url);
+
+                    if ($allowEdition == false) {
+                        $editLink = null;
+                    }
+                }
             }
+
+            if ($allowEdition && !empty($itemId)) {
+                $deleteLink  = Display::url($deleteIcon, $urlDelete.'&item_id='.$itemId.'&id='.$workId);
+            } else {
+                $deleteLink = null;
+            }
+
+            $viewLink = null;
+            if (!empty($itemId)) {
+                $viewLink = Display::url($viewIcon, $urlView.'&id='.$itemId);
+            }
+
+            $row['type'] = build_document_icon_tag('file', $row['file']);
 
             if (!empty($row['sent_date'])) {
                 $row['sent_date'] = api_get_local_time($row['sent_date']);
             }
 
             if ($userId == $currentUserId) {
-                $row['actions'] = $link;
+                $row['actions'] = $viewLink.$editLink.$deleteLink;
             }
+
             $workList[] = $row;
         }
     }
     return $workList;
 
     $session_id     = api_get_session_id();
-
     $group_id       = api_get_group_id();
     $course_info    = api_get_course_info(api_get_course_id());
 
@@ -2389,18 +2443,17 @@ function user_is_author($item_id, $user_id = null)
         $user_id = api_get_user_id();
     }
 
-    $is_author 			= false;
-    $item_to_edit_data 	= api_get_item_property_info(api_get_course_int_id(), 'work', $item_id, api_get_session_id());
+    $is_author = false;
+    $data = api_get_item_property_info(api_get_course_int_id(), 'work', $item_id, api_get_session_id());
     $is_allowed_to_edit = api_is_allowed_to_edit();
 
     if ($is_allowed_to_edit) {
         $is_author = true;
     } else {
-        if ($item_to_edit_data['insert_user_id'] == $user_id) {
+        if ($data['insert_user_id'] == $user_id) {
             $is_author = true;
         }
     }
-
     if (!$is_author) {
         //api_not_allowed();
         return false;
@@ -2564,12 +2617,14 @@ function getDocumentToWork($documentId, $workId, $courseId)
  * @param int $documentId
  * @param int $workId
  * @param int $courseId
+ * @param int $sessionId
  * @param int $userId
+ * @param int $active
  * @return array
  */
 function getDocumentToWorkPerUser($documentId, $workId, $courseId, $sessionId, $userId, $active = 1)
 {
-    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
+    $workRel = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
     $work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
     $documentId = intval($documentId);
@@ -2579,7 +2634,7 @@ function getDocumentToWorkPerUser($documentId, $workId, $courseId, $sessionId, $
     $sessionId = intval($sessionId);
     $active = intval($active);
 
-    $sql = "SELECT w.* FROM $work w INNER JOIN $table rel ON (w.parent_id = rel.work_id)
+    $sql = "SELECT w.* FROM $work w INNER JOIN $workRel rel ON (w.parent_id = rel.work_id)
             WHERE
                 w.document_id = $documentId AND
                 w.parent_id = $workId AND
@@ -2737,13 +2792,17 @@ function allowOnlySubscribedUser($userId, $workId, $courseId)
 /**
  * @param int $workId
  * @param array $courseInfo
+ * @param int $documentId
  * @return array
  */
-function getDocumentTemplateFromWork($workId, $courseInfo)
+function getDocumentTemplateFromWork($workId, $courseInfo, $documentId)
 {
     $documents = getAllDocumentToWork($workId, $courseInfo['real_id']);
     if (!empty($documents)) {
         foreach ($documents as $doc) {
+            if ($documentId != $doc['document_id']) {
+                continue;
+            }
             $docData = DocumentManager::get_document_data_by_id($doc['document_id'], $courseInfo['code']);
             $fileInfo = pathinfo($docData['path']);
             if ($fileInfo['extension'] == 'html') {
@@ -3201,7 +3260,7 @@ function addDir($params, $user_id, $courseInfo, $group_id, $session_id)
                 filetype            = 'folder',
                 post_group_id       = '".$group_id."',
                 sent_date           = '".$today."',
-                qualification       = '".(($params['qualification']!='') ? Database::escape_string($params['qualification']) : '') ."',
+                qualification       = '".(($params['qualification'] != '') ? Database::escape_string($params['qualification']) : '') ."',
                 parent_id           = '',
                 qualificator_id     = '',
                 date_of_qualification	= '0000-00-00 00:00:00',
@@ -3217,7 +3276,6 @@ function addDir($params, $user_id, $courseInfo, $group_id, $session_id)
         $id = Database::insert_id();
 
         if ($id) {
-
             // Folder created
             api_item_property_update($courseInfo, 'work', $id, 'DirectoryCreated', $user_id, $group_id);
             updatePublicationAssignment($id, $params, $courseInfo, $group_id);
@@ -3251,6 +3309,27 @@ function agendaExistsForWork($workId, $courseInfo)
         }
     }
     return 0;
+}
+
+/**
+ * @param int $workId
+ * @param array $params
+ * @param array $courseInfo
+ */
+function updateWork($workId, $params, $courseInfo)
+{
+    $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $filteredParams = array(
+        'description' => $params['description'],
+        'qualification' => $params['qualification'],
+        'weight' => $params['weight'],
+        'allow_text_assignment' => $params['allow_text_assignment'],
+    );
+    Database::update(
+        $workTable,
+        $filteredParams,
+        array('id = ? AND c_id = ?' => array($workId, $courseInfo['real_id']))
+    );
 }
 
 /**
@@ -3381,8 +3460,6 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $group_id)
     }
 }
 
-
-
 /**
  * @param int $item_id
  * @param array course info
@@ -3407,16 +3484,15 @@ function deleteWorkItem($item_id, $courseInfo)
     if (($is_allowed_to_edit && $locked == false) ||
         ($locked == false AND $is_author && api_get_course_setting('student_delete_own_publication') == 1 && $work_data['qualificator_id'] == 0)) {
         //we found the current user is the author
-        $queryString1 	= "SELECT url, contains_file FROM ".$work_table." WHERE c_id = $course_id AND id = $item_id";
-        $result1 		= Database::query($queryString1);
-        $row 			= Database::fetch_array($result1);
+        $sql = "SELECT url, contains_file FROM ".$work_table." WHERE c_id = $course_id AND id = $item_id";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
 
-
-        if (Database::num_rows($result1) > 0) {
-            $queryString2 	= "UPDATE $work_table SET active = 2 WHERE c_id = $course_id AND id = $item_id";
-            $queryString3 	= "DELETE FROM $TSTDPUBASG WHERE c_id = $course_id AND publication_id = $item_id";
-            Database::query($queryString2);
-            Database::query($queryString3);
+        if (Database::num_rows($result) > 0) {
+            $sql = "UPDATE $work_table SET active = 2 WHERE c_id = $course_id AND id = $item_id";
+            Database::query($sql);
+            $sql = "DELETE FROM $TSTDPUBASG WHERE c_id = $course_id AND publication_id = $item_id";
+            Database::query($sql);
 
             api_item_property_update($courseInfo, 'work', $item_id, 'DocumentDeleted', api_get_user_id());
             $work = $row['url'];
@@ -3441,7 +3517,6 @@ function deleteWorkItem($item_id, $courseInfo)
             }
         }
     }
-
     return $file_deleted;
 }
 

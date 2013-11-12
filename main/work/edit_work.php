@@ -108,6 +108,7 @@ if ($form->validate()) {
     }
 
     if ($edit_check) {
+        updateWork($workId, $params, $courseInfo);
         updatePublicationAssignment($workId, $params, $courseInfo, $group_id);
         updateDirName($workData, $params['new_dir']);
 

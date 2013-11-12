@@ -67,7 +67,8 @@ $form->addElement('hidden', 'document_id', $documentId);
 $form->addElement('hidden', 'id', $work_id);
 $form->addElement('hidden', 'sec_token', $token);
 
-$documentTemplateData = getDocumentTemplateFromWork($work_id, $course_info);
+$documentTemplateData = getDocumentTemplateFromWork($work_id, $course_info, $documentId);
+
 if (!empty($documentTemplateData)) {
     $defaults['title'] = $userInfo['complete_name'].'_'.$documentTemplateData['title'].'_'.substr(api_get_utc_datetime(), 0, 10);
     $defaults['description'] = $documentTemplateData['file_content'];

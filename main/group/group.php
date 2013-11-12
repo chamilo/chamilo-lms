@@ -180,10 +180,6 @@ if (api_is_allowed_to_edit(false, true)) {
 }
 
 $group_cats = GroupManager::get_categories(api_get_course_id());
-
-if (api_get_setting('allow_group_categories') == 'true' && count($group_cats) > 1) {
-	echo ' <a href="?'.api_get_cidreq().'&show_all=1">'.Display::return_icon('group.png',get_lang('ShowAll'),'',ICON_SIZE_MEDIUM).'</a>';
-}
 echo '</div>';
 
 /*

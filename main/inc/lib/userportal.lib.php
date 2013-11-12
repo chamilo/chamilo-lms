@@ -782,7 +782,9 @@ class IndexManager {
         return $html;
     }
 
-	function return_profile_block() {
+	function return_profile_block()
+    {
+        global $_configuration;
 		$user_id = api_get_user_id();
 
 		if (empty($user_id)) {
@@ -818,6 +820,10 @@ class IndexManager {
 				$total_invitations = Display::badge($total_invitations);
 				$profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.get_lang('PendingInvitations').$total_invitations.'</a></li>';
 			}
+
+            if (isset($_configuration['allow_my_files_link_in_homepage']) && $_configuration['allow_my_files_link_in_homepage']) {
+                $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.get_lang('MyFiles').'</a></li>';
+            }
         }
         $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></li>';
         $profile_content .= '</ul>';

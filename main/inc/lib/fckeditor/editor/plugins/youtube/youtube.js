@@ -17,7 +17,7 @@ var REG_AUTH = new RegExp( "document\.cookie|Microsoft\.XMLHTTP", "i" ) ;
 // TEXTAREA
 var REG_NEWLINE = new RegExp( "\x0d|\x0a", "i" ) ;
 
-var YoutubeSite = 'http://www.youtube.com/v/' ;
+var YoutubeSite = '//www.youtube.com/v/' ;
 var HighQualityString = '%26hl=en%26fs=1%26rel=0%26ap=%2526fmt=18' ;
 var LowQualityString = '%26hl=en%26fs=1%26rel=0' ;
 
@@ -211,6 +211,7 @@ function GetOriginalYoutubeUrl ( url )
 	}
 
 	url = url.replace( '/v/', '/watch?v=' ) ;
+	url = url.replace( /^\/\//, 'http://' ) ;
 
 	return url ;
 }

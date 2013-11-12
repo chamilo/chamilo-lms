@@ -182,9 +182,7 @@ if (api_is_allowed_to_edit(false, true)) {
 $group_cats = GroupManager::get_categories(api_get_course_id());
 echo '</div>';
 
-/*
- * List all categories
- */
+/*  List all categories */
 
 if (api_get_setting('allow_group_categories') == 'true') {
     foreach ($group_cats as $index => $category) {
@@ -205,17 +203,15 @@ if (api_get_setting('allow_group_categories') == 'true') {
         }
 
         echo Display::page_header($category['title'].' '. $label.' '.$actions);
-
         echo '<p style="margin: 0px;margin-left: 50px;">'.$category['description'].'</p><p/>';
-
         GroupManager ::process_groups($group_list, $category['id']);
     }
 } else {
-    $group_list = GroupManager :: get_group_list();
+    $group_list = GroupManager::get_group_list();
     GroupManager ::process_groups($group_list);
 }
 
 if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath') {
-	Display::display_footer();
+    Display::display_footer();
 }
 $_SESSION['_gid'] = 0;

@@ -1757,7 +1757,12 @@ class GroupManager
         return $complete_user_list;
     }
 
-    static function process_groups($group_list, $category_id = null) {
+    /**
+     * @param array $group_list
+     * @param int $category_id
+     */
+    static function process_groups($group_list, $category_id = null)
+    {
         global $origin, $charset;
         $category_id = intval($category_id);
 
@@ -1771,14 +1776,15 @@ class GroupManager
 
         foreach ($group_list as $this_group) {
 
-            // Validacion when belongs to a session
+            // Validation when belongs to a session
             $session_img = api_get_session_image($this_group['session_id'], $user_info['status']);
 
             // All the tutors of this group
             $tutorsids_of_group = self::get_subscribed_tutors($this_group['id'], true);
 
             // Create a new table-row
-            $row = array ();
+            $row = array();
+
             // Checkbox
             if (api_is_allowed_to_edit(false,true) && count($group_list) > 1) {
                 $row[] = $this_group['id'];
@@ -1794,9 +1800,11 @@ class GroupManager
                     self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_ANNOUNCEMENT) ||
                     self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_WORK) ||
                     self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_WIKI))
-                    && !(api_is_course_coach() && intval($this_group['session_id']) != $session_id)) {
+                    && !(api_is_course_coach() && intval($this_group['session_id']) != $session_id)
+            ) {
 
-                $group_name = '<a href="group_space.php?cidReq='.api_get_course_id().'&amp;origin='.$orig.'&amp;gidReq='.$this_group['id'].'">'.Security::remove_XSS($this_group['name']).'</a> ';
+                $group_name = '<a href="group_space.php?cidReq='.api_get_course_id().'&amp;origin='.$orig.'&amp;gidReq='.$this_group['id'].'">'.
+                    Security::remove_XSS($this_group['name']).'</a> ';
                 if (!empty($user_id) && !empty($this_group['id_tutor']) && $user_id == $this_group['id_tutor']) {
                     $group_name .= Display::label(get_lang('OneMyGroups'), 'success');
                 } elseif ($this_group['is_member']) {
@@ -1830,6 +1838,7 @@ class GroupManager
                     }
                 }
             }
+
             $tutor_info = api_substr($tutor_info, 0, api_strlen($tutor_info) - 2);
             $row[] = $tutor_info;
 
@@ -1852,7 +1861,8 @@ class GroupManager
 
             // Edit-links
             if (api_is_allowed_to_edit(false, true)  && !(api_is_course_coach() && intval($this_group['session_id']) != $session_id)) {
-                $edit_actions = '<a href="group_edit.php?'.api_get_cidreq(true, false).'&gidReq='.$this_group['id'].'"  title="'.get_lang('Edit').'">'.Display::return_icon('edit.png', get_lang('EditGroup'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
+                $edit_actions = '<a href="group_edit.php?'.api_get_cidreq(true, false).'&gidReq='.$this_group['id'].'"  title="'.get_lang('Edit').'">'.
+                    Display::return_icon('edit.png', get_lang('EditGroup'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
                 $edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&amp;action=empty_one&amp;id='.$this_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('EmptyGroup').'">'.
                     Display::return_icon('clean.png',get_lang('EmptyGroup'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
                 $edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&amp;action=fill_one&amp;id='.$this_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('FillGroup').'">'.
@@ -1867,14 +1877,8 @@ class GroupManager
             $group_data[] = $row;
         } // end loop
 
-        if (isset($_GET['show_all'])) {
-            $paging_options = array('per_page' => count($group_data));
-        } else {
-            $paging_options = array ();
-        }
 
         $table = new SortableTableFromArrayConfig($group_data, 1, 20, 'group_category_'.$category_id);
-        //$my_cat = isset($_GET['category']) ? Security::remove_XSS($_GET['category']) : null;
         $table->set_additional_parameters(array('category' => $category_id));
         $column = 0;
         if (api_is_allowed_to_edit(false, true) and count($group_list) > 1) {

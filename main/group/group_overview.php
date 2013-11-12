@@ -19,7 +19,7 @@
 // Name of the language file that needs to be included
 $language_file = 'group';
 
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool  = TOOL_GROUP;
 
@@ -36,7 +36,9 @@ include_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
         case 'export':
+
             $groups = GroupManager::get_group_list();
+
             $data = array();
             foreach ($groups as $index => $group) {
                 $users = GroupManager::get_users($group['id']);

@@ -41,8 +41,7 @@ switch ($action) {
         break;
     case 'get_question':
         /** @var Exercise $objExercise */
-        $objExercise = $_SESSION['objExercise'];
-
+        $objExercise = Session::read('objExercise');
         $questionId = $_REQUEST['questionId'];
         $attemptList = isset($_REQUEST['attemptList']) ? $_REQUEST['attemptList'] : null;
         $remindList = isset($_REQUEST['remindList']) ? $_REQUEST['remindList'] : null;
@@ -321,14 +320,14 @@ switch ($action) {
                 Database::update(
                     $TBL_QUESTIONS,
                     array('question_order' => $counter),
-                    array('question_id = ? AND c_id = ? AND exercice_id = ? '=> array(intval($new_order_id), $course_id, $exercise_id)));
+                    array('question_id = ? AND c_id = ? AND exercice_id = ? ' => array(intval($new_order_id), $course_id, $exercise_id)));
                 $counter++;
             }
             Display::display_confirmation_message(get_lang('Saved'));
         }
         break;
     case 'add_question_to_reminder':
-        $objExercise  = $_SESSION['objExercise'];
+        $objExercise  = Session::read('objExercise');
         if (empty($objExercise)) {
             echo 0;
             exit;
@@ -341,51 +340,59 @@ switch ($action) {
         $course_id = $course_info['real_id'];
         //Use have permissions?
         if (api_is_allowed_to_session_edit()) {
+            // Exercise information.
+            /** @var \Exercise $objExercise */
+            $objExercise = Session::read('objExercise');
+            if (empty($objExercise)) {
+                if ($debug) {
+                    error_log('objExercise is empty');
+                }
+                echo 'error';
+                exit;
+            }
+
+            $question_list = Session::read('question_list_uncompressed');
+
+            // If exercise or question is not set then exit.
+            if (empty($question_list)) {
+                echo 'error';
+                if ($debug) {
+                    error_log('question_list is empty');
+                }
+            }
 
             // "all" or "simple" strings means that there's one or all questions exercise type
-            $type                   = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
+            $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 
             // Questions choices
-            $choice                 = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
+            $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
 
             // Hotspot coordinates from all questions
-            $hot_spot_coordinates   = isset($_REQUEST['hotspot']) ? $_REQUEST['hotspot'] : null;
+            $hot_spot_coordinates = isset($_REQUEST['hotspot']) ? $_REQUEST['hotspot'] : null;
 
             // There is a reminder?
-            $remind_list            = isset($_REQUEST['remind_list']) && !empty($_REQUEST['remind_list'])? array_keys($_REQUEST['remind_list']) : null;
+            $remind_list = isset($_REQUEST['remind_list']) && !empty($_REQUEST['remind_list'])? array_keys($_REQUEST['remind_list']) : null;
 
             // Needed in manage_answer
-            $learnpath_id           = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : 0;
-            $learnpath_item_id      = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
+            $learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : 0;
+            $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
 
             // Attempt id
             $exe_id = $_REQUEST['exe_id'];
 
             if ($debug) {
-                error_log("exe_id = $exe_id ");
+                error_log("exe_id = $exe_id");
                 error_log("type = $type ");
                 error_log("choice = ".print_r($choice, 1)." ");
                 error_log("hot_spot_coordinates = ".print_r($hot_spot_coordinates, 1));
                 error_log("remind_list = ".print_r($remind_list, 1));
             }
 
-            // Exercise information.
-            /** @var \Exercise $objExercise */
-            $objExercise             = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;
-
             // Question info.
-            $question_id             = isset($_REQUEST['question_id']) ? intval($_REQUEST['question_id']) : null;
-            $question_list           = Session::read('question_list_uncompressed');
-
-            // If exercise or question is not set then exit.
-            if (empty($question_list) || empty($objExercise)) {
-                echo 'error';
-                exit;
-            }
+            $question_id = isset($_REQUEST['question_id']) ? intval($_REQUEST['question_id']) : null;
 
             // Getting information of the current exercise.
             $exercise_stat_info = $objExercise->getStatTrackExerciseInfoByExeId($exe_id);
-
             $exercise_id = $exercise_stat_info['exe_exo_id'];
 
             $attempt_list = array();
@@ -441,9 +448,10 @@ switch ($action) {
             if (empty($exe_id)) {
                 // Fires an error.
                 echo 'error';
+                error_log('exe_id empty');
                 exit;
             } else {
-                $_SESSION['exe_id'] = $exe_id;
+                Session::write('exe_id', $exe_id);
             }
 
             // Getting the total weight if the request is simple
@@ -466,11 +474,9 @@ switch ($action) {
             }
 
             foreach ($question_list as $my_question_id) {
-
                 if ($type == 'simple' && $question_id != $my_question_id) {
                     continue;
                 }
-
 
                 $my_choice = isset($choice[$my_question_id]) ? $choice[$my_question_id] : null;
 
@@ -539,13 +545,14 @@ switch ($action) {
                     if (isset($attempt_list[$my_question_id]) && isset($attempt_list[$my_question_id]['marks'])) {
                         $total_score -= $attempt_list[$my_question_id]['marks'];
                     }
-            	}
+                }
 
             	// We're inside *one* question. Go through each possible answer for this question
                 if ($debug) {
                     error_log("Calling objExercise->manageAnswers to save the question");
                 }
-            	$result = $objExercise->manageAnswers(
+
+                $result = $objExercise->manageAnswers(
                     $exe_id,
                     $my_question_id,
                     $my_choice,
@@ -611,10 +618,15 @@ switch ($action) {
                 );
 
                  // Destruction of the Question object
-            	unset($objQuestionTmp);
-                if ($debug) error_log(" -- end question -- ");
+                unset($objQuestionTmp);
+                if ($debug) {
+                    error_log(" -- end question -- ");
+                }
             }
-            if ($debug) error_log(" ------ end ajax call ------- ");
+
+            if ($debug) {
+                error_log(" ------ end ajax call ------- ");
+            }
         }
 
         if ($objExercise->type == ONE_PER_PAGE) {
@@ -668,8 +680,8 @@ switch ($action) {
             $commentIds = array();
             $marks = array();
             $comments = array();
-
             $result = array();
+
             $values = explode(',', $_POST['vals']);
             if (empty($values)) {
                 echo 0;
@@ -756,7 +768,6 @@ switch ($action) {
         }
         break;
     case 'save_modificator':
-
         $params = array(
             'exerciseId' => $_REQUEST['exerciseId'],
             'sessionId' => $_REQUEST['sessionId'],
@@ -783,9 +794,7 @@ switch ($action) {
 
         $app['orm.em']->persist($quizDistributionRelSessionRelCategory);
         $app['orm.em']->flush();
-
         echo 1;
-
         break;
     default:
         echo '';

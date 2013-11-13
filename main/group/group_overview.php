@@ -35,12 +35,90 @@ include_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
-        case 'export':
+        case 'export_all':
+            $data = array();
 
+            $data[] = array(
+                'category',
+                'group',
+                'description',
+                'announcements_state',
+                'calendar_state',
+                'chat_state',
+                'doc_state',
+                'forum_state',
+                'work_state',
+                'wiki_state',
+                'max_student',
+                'self_reg_allowed',
+                'self_unreg_allowed',
+                'groups_per_user'
+            );
+
+            $groupCategories = array();
+            $categories = GroupManager::get_categories();
+
+            foreach ($categories as $categoryInfo) {
+                $data[] = array(
+                    $categoryInfo['title'],
+                    null,
+                    $categoryInfo['description'],
+                    $categoryInfo['announcements_state'],
+                    $categoryInfo['calendar_state'],
+                    $categoryInfo['chat_state'],
+                    $categoryInfo['doc_state'],
+                    $categoryInfo['forum_state'],
+                    $categoryInfo['work_state'],
+                    $categoryInfo['wiki_state'],
+                    $categoryInfo['max_student'],
+                    $categoryInfo['self_reg_allowed'],
+                    $categoryInfo['self_unreg_allowed'],
+                    $categoryInfo['groups_per_user']
+                );
+            }
+
+            $groups = GroupManager::get_group_list();
+
+            foreach ($groups as $index => $groupInfo) {
+                $categoryTitle = null;
+                $categoryInfo = GroupManager::get_category($groupInfo['category_id']);
+                $groupSettings = GroupManager::get_group_properties($groupInfo['id']);
+                if (!empty($categoryInfo)) {
+                    $categoryTitle = $categoryInfo['title'];
+                }
+
+                $data[] = array(
+                    $categoryTitle,
+                    $groupSettings['name'],
+                    $groupSettings['description'],
+                    $groupSettings['announcements_state'],
+                    $groupSettings['calendar_state'],
+                    $groupSettings['chat_state'],
+                    $groupSettings['doc_state'],
+                    $groupSettings['forum_state'],
+                    $groupSettings['work_state'],
+                    $groupSettings['wiki_state'],
+                    $groupSettings['maximum_number_of_students'],
+                    $groupSettings['self_registration_allowed'],
+                    $groupSettings['self_unregistration_allowed'],
+                );
+            }
+
+            Export::export_table_csv($data);
+            exit;
+
+            break;
+        case 'export':
+            $groupId = isset($_GET['id']) ? intval($_GET['id']) : null;
             $groups = GroupManager::get_group_list();
 
             $data = array();
             foreach ($groups as $index => $group) {
+                if (!empty($groupId)) {
+                    if ($group['id'] != $groupId) {
+                        continue;
+                    }
+                }
                 $users = GroupManager::get_users($group['id']);
                 foreach ($users as $index => $user) {
                     $row = array();

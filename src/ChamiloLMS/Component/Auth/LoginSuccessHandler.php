@@ -52,6 +52,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $pageAfterLogin = api_get_setting('page_after_login');
 
         $url = null;
+
         if ($this->security->isGranted('ROLE_STUDENT') && !empty($pageAfterLogin)) {
             switch ($pageAfterLogin) {
                 case 'index.php':
@@ -93,13 +94,16 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                 $key = array_keys($personal_course_list);
                 $data = $personal_course_list[$key[0]];
                 $course_info = $data['course_info'];
-                $id_session = isset($data['session_id']) ? $data['session_id'] : 0;
-                $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?id_session='.$id_session;
+                $sessionId = isset($data['session_id']) ? $data['session_id'] : 0;
+                $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?id_session='.$sessionId;
             }
 
             if (!$this->security->isGranted('ROLE_ADMIN')) {
                 if ($count_of_sessions == 0 && $count_of_courses_no_sessions == 0) {
-                    $request->getSession()->getFlashBag()->add('warning', "En este momento no tiene ningún proceso activo. Por favor vuelva a conectarse más tarde.");
+                    $request->getSession()->getFlashBag()->add(
+                        'warning',
+                        "En este momento no tiene ningún proceso activo. Por favor vuelva a conectarse más tarde."
+                    );
                 }
             }
 

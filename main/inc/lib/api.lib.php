@@ -970,7 +970,8 @@ function api_valid_email($address) {
  * @todo replace global variable
  * @author Roan Embrechts
  */
-function api_protect_course_script($print_headers = false, $allow_session_admins = false, $allow_drh = false) {
+function api_protect_course_script($print_headers = false, $allow_session_admins = false, $allow_drh = false)
+{
     $is_allowed_in_course = Session::read('is_allowed_in_course');
 
     $is_visible = false;
@@ -1372,20 +1373,24 @@ function api_get_user_info_from_username($username = '') {
  * Returns the current course code (string)
  */
 function api_get_course_id() {
+    return Session::read('_cid');
     return isset($_SESSION['_cid']) ? $_SESSION['_cid'] : null;
 }
 
 /**
  * Returns the current course id (integer)
  */
-function api_get_real_course_id() {
-    return isset($_SESSION['_real_cid']) ? intval($_SESSION['_real_cid']) : 0;
+function api_get_real_course_id()
+{
+    return api_get_course_int_id();
 }
 
 /**
  * Returns the current course id (integer)
  */
-function api_get_course_int_id() {
+function api_get_course_int_id()
+{
+    return Session::read('_real_cid', 0);
     return isset($_SESSION['_real_cid']) ? intval($_SESSION['_real_cid']) : 0;
 }
 
@@ -1892,7 +1897,8 @@ class api_failure {
      * @global array  $api_failureList
      * @return bolean false to stay consistent with the main script
      */
-    static function set_failure($failure_type) {
+    static function set_failure($failure_type)
+    {
         global $api_failureList;
         $api_failureList[] = $failure_type;
         return false;
@@ -1920,6 +1926,7 @@ class api_failure {
  */
 function api_get_session_id()
 {
+    return Session::read('id_session', 0);
     return empty($_SESSION['id_session']) ? 0 : intval($_SESSION['id_session']);
 }
 
@@ -1929,6 +1936,7 @@ function api_get_session_id()
  */
 function api_get_group_id()
 {
+    return Session::read('_gid', 0);
     return empty($_SESSION['_gid']) ? 0 : intval($_SESSION['_gid']);
 }
 
@@ -2401,6 +2409,7 @@ function api_is_allowed_to_create_course() {
     if (api_is_platform_admin()) {
         return true;
     }
+    return Session::read('is_allowedCreateCourse', false);
     return isset($_SESSION['is_allowedCreateCourse']) ? $_SESSION['is_allowedCreateCourse'] : false;
 }
 
@@ -2412,6 +2421,7 @@ function api_is_course_admin() {
     if (api_is_platform_admin()) {
         return true;
     }
+    return Session::read('is_courseAdmin', false);
     return isset($_SESSION['is_courseAdmin']) ? $_SESSION['is_courseAdmin'] : false;
 }
 
@@ -2420,6 +2430,7 @@ function api_is_course_admin() {
  * @return bool     True if current user is a course coach
  */
 function api_is_course_coach() {
+    return Session::read('is_courseCoach', null);
     return isset($_SESSION['is_courseCoach']) ? $_SESSION['is_courseCoach'] : null;
 }
 
@@ -2428,6 +2439,7 @@ function api_is_course_coach() {
  * @return bool     True if current user is a course tutor
  */
 function api_is_course_tutor() {
+    return Session::read('is_courseTutor', null);
     return isset($_SESSION['is_courseTutor']) ? $_SESSION['is_courseTutor'] : null;
 }
 
@@ -2929,7 +2941,6 @@ function api_is_allowed($tool, $action, $task_id = 0) {
     if (api_is_course_admin()) {
         return true;
     }
-    //if (!$_SESSION['total_permissions'][$_course['code']] and $_course)
     if (is_array($_course) and count($_course) > 0) {
         require_once api_get_path(SYS_CODE_PATH).'permissions/permissions_functions.inc.php';
 
@@ -5021,7 +5032,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
  */
 function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
     if (is_null($session_id)) {
-        $session_id = intval($_SESSION['id_session']);
+        $session_id = api_get_session_id();
     }
 
     // Get information to build query depending of the tool.

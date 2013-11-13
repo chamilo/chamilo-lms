@@ -14,6 +14,7 @@ api_protect_course_script(true);
 
 $action = $_REQUEST['a'];
 $course_id = api_get_course_int_id();
+$debug = false;
 
 if ($debug) {
     error_log("$action ajax call");

@@ -26,8 +26,9 @@ class ChamiloSession
     public static function read($variable, $default = null)
     {
         $result = self::$session->get($variable);
-        // check if the value exists in the $_SESSION array
-        if (empty($result)) {
+
+        // Check if the value exists in the $_SESSION array, to keep BC.
+        if (!isset($result)) {
             return isset($_SESSION[$variable]) ? $_SESSION[$variable] : $default;
         } else {
             return $result;
@@ -50,7 +51,6 @@ class ChamiloSession
      */
     public static function erase($variable)
     {
-        $variable = (string) $variable;
         self::$session->remove($variable);
 
         if (isset($GLOBALS[$variable])) {

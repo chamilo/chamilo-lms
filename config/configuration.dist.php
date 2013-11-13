@@ -127,8 +127,6 @@ $_configuration['cdn'] = array(
 /**
  * Session settings
  */
-// You may have to restart your web server if you change this.
-$_configuration['session_stored_in_db'] = false;
 // Session lifetime
 $_configuration['session_lifetime'] = SESSION_LIFETIME;
 

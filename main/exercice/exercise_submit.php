@@ -134,7 +134,6 @@ $(function() {
     });
 
     function recycleItem( $item, droppedOn) {
-        //console.log("recycleItem");
         $item.fadeOut(function() {
         $item
           .find( "a.ui-icon-refresh" )

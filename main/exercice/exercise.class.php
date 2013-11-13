@@ -109,6 +109,7 @@ class Exercise
      *
      * @author - Olivier Brouckaert
      * @param int $course_id
+     * @throws Exception
      */
     public function Exercise($course_id = null)
     {
@@ -378,10 +379,11 @@ class Exercise
     }
 
     /**
-     * @author Hubert borderiou 30-11-11
-     * @return void modify object to update the switch display_category_name
-     * $in_txt is an integer 0 or 1
-     */
+    * @author Hubert borderiou 30-11-11
+    * @param string
+    * @return void modify object to update the switch display_category_name
+    * $in_txt is an integer 0 or 1
+    */
     public function updateDisplayCategoryName($text)
     {
         $this->display_category_name = $text;
@@ -398,6 +400,7 @@ class Exercise
 
     /**
      * @author Hubert borderiou 28-11-11
+     * @param string
      * @return string html text : update the text to display ay the end of the test.
      */
     public function updateTextWhenFinished($text)
@@ -531,21 +534,33 @@ class Exercise
         $this->hideQuestionTitle = intval($value);
     }
 
+    /**
+     * @return int
+     */
     public function getScoreTypeModel()
     {
         return $this->scoreTypeModel;
     }
 
+    /**
+     * @param int $value
+     */
     public function setScoreTypeModel($value)
     {
         $this->scoreTypeModel = intval($value);
     }
 
+    /**
+     * @return int
+     */
     public function getGlobalCategoryId()
     {
         return $this->globalCategoryId;
     }
 
+    /**
+     * @param $value
+     */
     public function setGlobalCategoryId($value)
     {
         if (is_array($value) && isset($value[0])) {
@@ -2898,12 +2913,12 @@ class Exercise
             $sql_fields_values = "";
         }
         $questionList = array_map('intval', $questionList);
+
         $weight = Database::escape_string($weight);
         $sql = "INSERT INTO $track_exercises
                 ($sql_fields exe_exo_id, exe_user_id, c_id, status, session_id, data_tracking, start_date, orig_lp_id, orig_lp_item_id, exe_weighting, quiz_distribution_id)
                 VALUES
                 ( $sql_fields_values '".$this->id."','".api_get_user_id()."','".api_get_course_int_id()."', 'incomplete','".api_get_session_id()."','".implode(',', $questionList)."', '".api_get_utc_datetime()."', '$safe_lp_id', '$safe_lp_item_id', '$weight', '".$this->distributionId."')";
-
         Database::query($sql);
         $id = Database::insert_id();
 
@@ -5572,7 +5587,6 @@ class Exercise
                         $questionList = self::shuffleQuestionListPerCategory($questionByCategory, $categoriesAddedInExercise);
                         $questionList = ArrayClass::array_flatten($questionList);
                     }
-
                 }
             }
         }
@@ -7938,7 +7952,6 @@ class Exercise
                 }
             }
 
-
             // Only use this feature if all questions were answered and there are contents in the $remindList
             /*if (count($answeredQuestions) == count($result['question_list']) && empty($remindList)) {
                 return null;
@@ -7957,51 +7970,46 @@ class Exercise
 
             $counterRemindListQuestions = 0;
             // Checking questions saved in the reminder list
-
+            //var_dump($currentQuestion);
+            //var_dump($data_tracking, $remindList);
             if (!empty($remindList)) {
                 foreach ($data_tracking as $questionId) {
                     if (in_array($questionId, $remindList)) {
                         // Skip the current question
+
                         if ($currentQuestion != $counterRemindListQuestions &&
-                            $counterRemindListQuestions > $currentQuestion) {
+                            $counterRemindListQuestions > $currentQuestion
+                        ) {
                             break;
                         }
                     }
                     $counterRemindListQuestions++;
                 }
-
-                //var_dump($currentQuestion, $counterRemindListQuestions, $counterAnsweredQuestions);
+                //var_dump($counterRemindListQuestions);
 
                 // Which is near to the current question?
 
                 $diffReminder = $counterRemindListQuestions - $currentQuestion;
                 $diffAnswered = $counterAnsweredQuestions - $currentQuestion;
+                // 1 -- 4
+                //var_dump($diffReminder, $diffAnswered);
 
-                // if the reminder id is bigger thatn the answered and the reminder is smaller thatn the current question
+                // if the reminder id is bigger than the answered and the reminder is smaller than the current question
+
                 if ($counterRemindListQuestions > $counterAnsweredQuestions && !empty($remindList) && $counterRemindListQuestions < $currentQuestion) {
                     return null;
                 }
 
                 if ($diffReminder > $diffAnswered) {
-
                     if ($diffAnswered < 0) {
-
                         if (count($data_tracking) == $counterRemindListQuestions) {
                             return null;
                         }
                         return $counterRemindListQuestions;
-/*
-                        return null;
-                        if ($currentQuestion > $counterAnsweredQuestions) {
-
-                        } else {
-                            return $counterRemindListQuestions;
-                        }*/
                     } else {
                         return $counterAnsweredQuestions;
                     }
                 } else {
-
                     if ($diffReminder < 0) {
                         if ($currentQuestion > $counterAnsweredQuestions) {
                             return null;
@@ -8017,6 +8025,7 @@ class Exercise
                     $counterAnsweredQuestions = $currentQuestion + 1;
                 }
             }
+
             return $counterAnsweredQuestions;
         }
     }

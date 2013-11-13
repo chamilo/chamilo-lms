@@ -78,6 +78,9 @@ if (isset($_SESSION['objAnswer'])) {
 if (isset($_SESSION['questionList'])) {
     Session::erase('questionList');
 }
+if (isset($_SESSION['question_list_uncompressed'])) {
+    Session::erase('question_list_uncompressed');
+}
 if (isset($_SESSION['exerciseResult'])) {
     Session::erase('exerciseResult');
 }

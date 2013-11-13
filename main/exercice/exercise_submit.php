@@ -353,6 +353,7 @@ if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSessi
         error_log('1. Setting the $objExercise variable');
     }
     Session::erase('questionList');
+    Session::erase('question_list_uncompressed');
 
     // if the specified exercise doesn't exist or is disabled
     if (!$objExercise->read($exerciseId) || (!$objExercise->selectStatus() && !$is_allowedToEdit && ($origin != 'learnpath'))) {
@@ -525,7 +526,7 @@ if (!isset($questionListInSession)) {
     // Media questions.
     $media_is_activated = $objExercise->mediaIsActivated();
 
-    //Getting order from random
+    // Getting order from random
     if ($media_is_activated == false && $objExercise->isRandom() && isset($exercise_stat_info) && !empty($exercise_stat_info['data_tracking'])) {
         $questionList = explode(',', $exercise_stat_info['data_tracking']);
     }
@@ -539,10 +540,19 @@ if (!isset($questionListInSession)) {
     }
 }
 
-// Fix in order to get the correct question list.
-$questionListUncompressed = $objExercise->getQuestionListWithMediasUncompressed();
 
-Session::write('question_list_uncompressed', $questionListUncompressed);
+$questionListUncompressedInSession = Session::read('question_list_uncompressed');
+if (!isset($questionListUncompressedInSession)) {
+
+    // Fix in order to get the correct question list.
+    $questionListUncompressed = $objExercise->getQuestionListWithMediasUncompressed();
+    Session::write('question_list_uncompressed', $questionListUncompressed);
+} else {
+    $questionListUncompressed = $questionListUncompressedInSession;
+}
+/*
+var_dump($questionList);
+var_dump($questionListUncompressed);*/
 
 $clock_expired_time = null;
 
@@ -1085,7 +1095,6 @@ if ($objExercise->review_answers) {
 	$script_php = $urlMainExercise.'exercise_result.php';
 }
 
-
 if (!empty($error)) {
     Display :: display_error_message($error, false);
 } else {
@@ -1130,6 +1139,7 @@ if (!empty($error)) {
 
     if ($objExercise->review_answers) {
         $customCurrentQuestion = $objExercise->getNextQuestionId($exeId, $exercise_stat_info, $my_remind_list, $current_question);
+        //var_dump($customCurrentQuestion);
         if (!empty($customCurrentQuestion)) {
             $currentQuestionJsVariable = $customCurrentQuestion;
         }

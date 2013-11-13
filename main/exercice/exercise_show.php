@@ -797,9 +797,11 @@ if ($origin != 'learnpath') {
 	}
 }
 
-//destroying the session
-Session::erase('questionList');
-unset ($questionList);
+// Destroying the session
 
+unset($questionList);
+unset($exerciseResult);
+
+Session::erase('questionList');
+Session::erase('question_list_uncompressed');
 Session::erase('exerciseResult');
-unset ($exerciseResult);

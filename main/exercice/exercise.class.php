@@ -7905,6 +7905,9 @@ class Exercise
     /**
      * @param int $exeId
      * @param array $exercise_stat_info
+     * @param array $remindList
+     * @param int $currentQuestion
+     * @return int
      */
     public static function getNextQuestionId($exeId, $exercise_stat_info, $remindList, $currentQuestion)
     {
@@ -7934,6 +7937,7 @@ class Exercise
                     $answeredQuestions[] = $question['question_id'];
                 }
             }
+
 
             // Only use this feature if all questions were answered and there are contents in the $remindList
             /*if (count($answeredQuestions) == count($result['question_list']) && empty($remindList)) {
@@ -8007,6 +8011,10 @@ class Exercise
                     } else {
                         return $counterRemindListQuestions;
                     }
+                }
+            } else {
+                if ($currentQuestion > $counterAnsweredQuestions) {
+                    $counterAnsweredQuestions = $currentQuestion + 1;
                 }
             }
             return $counterAnsweredQuestions;

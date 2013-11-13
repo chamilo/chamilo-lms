@@ -96,8 +96,8 @@ $settingCourseConditions = function (Request $request) use ($cidReset, $app) {
 
     if (!empty($courseCode) && $courseCode != -1) {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $time       = api_get_utc_datetime();
-        $sql        = "UPDATE $tbl_course SET last_visit= '$time' WHERE code='$courseCode'";
+        $time = api_get_utc_datetime();
+        $sql = "UPDATE $tbl_course SET last_visit= '$time' WHERE code='$courseCode'";
         Database::query($sql);
     }
 
@@ -122,6 +122,7 @@ $settingCourseConditions = function (Request $request) use ($cidReset, $app) {
         }
     }
 
+    // @todo fix login_as
     if (!isset($_SESSION['login_as'])) {
         $userId = api_get_user_id();
 
@@ -162,7 +163,6 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
     $is_sessionAdmin = false;
 
     if ($courseReset) {
-
         if (isset($courseId) && $courseId && $courseId != -1) {
 
             $courseInfo = api_get_course_info();
@@ -191,8 +191,11 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
 
             //Check if user is subscribed in a course
             $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-            $sql               = "SELECT * FROM $course_user_table WHERE user_id  = '".$userId."' AND
-                                  relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND c_id = ".api_get_course_int_id();
+            $sql = "SELECT * FROM $course_user_table
+                    WHERE
+                        user_id  = '".$userId."' AND
+                        relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
+                        c_id = ".$courseId;
 
             $result = Database::query($sql);
 
@@ -303,26 +306,24 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
                 }
             }
         }
-
         // Checking the course access
         $is_allowed_in_course = false;
-
         if (isset($courseInfo)) {
             switch ($courseInfo['visibility']) {
-                case COURSE_VISIBILITY_OPEN_WORLD: //3
+                case COURSE_VISIBILITY_OPEN_WORLD: // 3
                     $is_allowed_in_course = true;
                     break;
-                case COURSE_VISIBILITY_OPEN_PLATFORM: //2
+                case COURSE_VISIBILITY_OPEN_PLATFORM: // 2
                     if (isset($userId) && !api_is_anonymous($userId)) {
                         $is_allowed_in_course = true;
                     }
                     break;
-                case COURSE_VISIBILITY_REGISTERED: //1
+                case COURSE_VISIBILITY_REGISTERED: // 1
                     if ($is_platformAdmin || $is_courseMember) {
                         $is_allowed_in_course = true;
                     }
                     break;
-                case COURSE_VISIBILITY_CLOSED: //0
+                case COURSE_VISIBILITY_CLOSED: // 0
                     if ($is_platformAdmin || $is_courseAdmin) {
                         $is_allowed_in_course = true;
                     }
@@ -417,10 +418,10 @@ $removeCidReset = function (Request $request) use ($app) {
 
 $removeCidResetDependingOfSection = function (Request $request) use ($app, $removeCidReset) {
     $file = $request->get('file');
+
     if (!empty($file)) {
         $info = pathinfo($file);
         $section = $info['dirname'];
-
         if ($section == 'admin') {
             $removeCidReset($request);
         }

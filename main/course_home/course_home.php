@@ -51,19 +51,19 @@ $this_section = SECTION_COURSES;
 
 /*	Constants */
 
-define('TOOL_PUBLIC',                   'Public');
-define('TOOL_PUBLIC_BUT_HIDDEN',        'PublicButHide');
-define('TOOL_COURSE_ADMIN',             'courseAdmin');
-define('TOOL_PLATFORM_ADMIN',           'platformAdmin');
-define('TOOL_AUTHORING',                'toolauthoring');
-define('TOOL_INTERACTION',              'toolinteraction');
-define('TOOL_COURSE_PLUGIN',            'toolcourseplugin'); //all plugins that can be enabled in courses
-define('TOOL_ADMIN',                    'tooladmin');
-define('TOOL_ADMIN_PLATFORM',           'tooladminplatform');
-define('TOOL_STUDENT_VIEW',              'toolstudentview');
-define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
+define('TOOL_PUBLIC', 'Public');
+define('TOOL_PUBLIC_BUT_HIDDEN', 'PublicButHide');
+define('TOOL_COURSE_ADMIN', 'courseAdmin');
+define('TOOL_PLATFORM_ADMIN', 'platformAdmin');
+define('TOOL_AUTHORING', 'toolauthoring');
+define('TOOL_INTERACTION', 'toolinteraction');
+define('TOOL_COURSE_PLUGIN', 'toolcourseplugin'); //all plugins that can be enabled in courses
+define('TOOL_ADMIN', 'tooladmin');
+define('TOOL_ADMIN_PLATFORM', 'tooladminplatform');
+define('TOOL_STUDENT_VIEW', 'toolstudentview');
+define('TOOL_ADMIN_VISIBLE', 'tooladminvisible');
 
-$user_id 		= api_get_user_id();
+$user_id = api_get_user_id();
 $show_message = '';
 
 //Deleting group session
@@ -107,6 +107,7 @@ $auto_launch = api_get_course_setting('enable_exercise_auto_launch');
 
 if (!empty($auto_launch)) {
     $session_id = api_get_session_id();
+
      //Exercise list
     if ($auto_launch == 2) {
         if (api_is_platform_admin() || api_is_allowed_to_edit()) {
@@ -116,7 +117,8 @@ if (!empty($auto_launch)) {
             if (!isset($_SESSION[$session_key])) {
                 //redirecting to the Exercise
                 $url = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&id_session='.$session_id;
-                $_SESSION[$session_key] = true;
+                Session::write($session_key, true);
+                //$_SESSION[$session_key] = true;
                 header("Location: $url");
                 exit;
             }
@@ -150,7 +152,8 @@ if (!empty($auto_launch)) {
                         //redirecting to the LP
                         $url = api_get_path(WEB_CODE_PATH).'exercice/overview.php?'.api_get_cidreq().'&exerciseId='.$data['iid'];
 
-                        $_SESSION[$session_key] = true;
+                        //$_SESSION[$session_key] = true;
+                        Session::write($session_key, true);
                         header("Location: $url");
                         exit;
                     }
@@ -174,7 +177,8 @@ if (!empty($auto_launch)) {
             if (!isset($_SESSION[$session_key])) {
                 //redirecting to the LP
                 $url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq().'&id_session='.$session_id;
-                $_SESSION[$session_key] = true;
+                //$_SESSION[$session_key] = true;
+                Session::write($session_key, true);
                 header("Location: $url");
                 exit;
             }
@@ -208,7 +212,8 @@ if (!empty($auto_launch)) {
                         //redirecting to the LP
                         $url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['id'];
 
-                        $_SESSION[$session_key] = true;
+                        //$_SESSION[$session_key] = true;
+                        Session::write($session_key, true);
                         header("Location: $url");
                         exit;
                     }
@@ -243,13 +248,13 @@ if ($show_autolaunch_exercise_warning) {
     $show_message .= Display::return_message(get_lang('TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise'),'warning');
 }
 if (api_get_setting('homepage_view') == 'activity' || api_get_setting('homepage_view') == 'activity_big') {
-	require 'activity.php';
+    require 'activity.php';
 } elseif (api_get_setting('homepage_view') == '2column') {
-	require '2column.php';
+    require '2column.php';
 } elseif (api_get_setting('homepage_view') == '3column') {
-	require '3column.php';
+    require '3column.php';
 } elseif (api_get_setting('homepage_view') == 'vertical_activity') {
-	require 'vertical_activity.php';
+    require 'vertical_activity.php';
 }
 $content = '<div id="course_tools">'.$content.'</div>';
 Session::erase('_gid');

@@ -959,13 +959,88 @@ class Exercise
      * @param array $questions_by_category
      * @return array
      */
+    function fillQuestionByCategoryArrayPerQuestion($questions_by_category)
+    {
+        global $app;
+        $em = $app['orm.em'];
+        $repo = $em->getRepository('Entity\CQuizCategory');
+        $newCategoryList = array();
+
+        if (!empty($questions_by_category)) {
+            foreach ($questions_by_category as $categoryInfo) {
+
+                $categoryId = $categoryInfo['categoryId'];
+                $questionList = array($categoryInfo['questionId']);
+
+                $cat = new Testcategory($categoryId);
+                $cat = (array)$cat;
+                $cat['iid'] = $cat['id'];
+                $cat['name'] = $cat['title'];
+                $categoryParentInfo = null;
+
+                if (!empty($cat['parent_id'])) {
+
+                    if (!isset($parentsLoaded[$cat['parent_id']])) {
+                        $categoryEntity = $em->find('Entity\CQuizCategory', $cat['parent_id']);
+                        $parentsLoaded[$cat['parent_id']] = $categoryEntity;
+                    } else {
+                        $categoryEntity = $parentsLoaded[$cat['parent_id']];
+                    }
+
+                    $path = $repo->getPath($categoryEntity);
+
+                    /*$index = 0;
+                    if ($this->categoryMinusOne) {
+                        $index = 1;
+                    }*/
+
+                    /** @var Entity\CQuizCategory $categoryParent*/
+
+                    foreach ($path as $categoryParent) {
+                        $visibility = $categoryParent->getVisibility();
+
+                        if ($visibility == 0) {
+                            $categoryParentId = $categoryId;
+                            $categoryTitle = $cat['title'];
+                            if (count($path) > 1) {
+                                continue;
+                            }
+                        } else {
+                            $categoryParentId = $categoryParent->getIid();
+                            $categoryTitle = $categoryParent->getTitle();
+                        }
+
+                        $categoryParentInfo['id'] = $categoryParentId;
+                        $categoryParentInfo['iid'] = $categoryParentId;
+                        $categoryParentInfo['parent_path'] = null;
+                        $categoryParentInfo['title'] = $categoryTitle;
+                        $categoryParentInfo['name'] = $categoryTitle;
+                        $categoryParentInfo['parent_id'] = null;
+                        break;
+                    }
+                }
+                $cat['parent_info'] = $categoryParentInfo;
+                //$newCategoryList[$categoryId] = array(
+                $newCategoryList[] = array(
+                    'category' => $cat,
+                    'question_list' => $questionList
+                );
+            }
+        }
+        return $newCategoryList;
+    }
+
+    /**
+     * @param array $questions_by_category
+     * @return array
+     */
     function fillQuestionByCategoryArray($questions_by_category)
     {
         global $app;
         $em = $app['orm.em'];
         $repo = $em->getRepository('Entity\CQuizCategory');
-
         $newCategoryList = array();
+
         if (!empty($questions_by_category)) {
             foreach ($questions_by_category as $categoryId => $questionList) {
                 $cat = new Testcategory($categoryId);
@@ -984,11 +1059,11 @@ class Exercise
                     }
 
                     $path = $repo->getPath($categoryEntity);
-                    $index = 0;
 
+                    /*$index = 0;
                     if ($this->categoryMinusOne) {
-                        //$index = 1;
-                    }
+                        $index = 1;
+                    }*/
 
                     /** @var Entity\CQuizCategory $categoryParent*/
 
@@ -5570,8 +5645,7 @@ class Exercise
                         // We make a little shuffle now.
                         $questionByCategory = Testcategory::getCategoriesFromQuestionList(
                             $questionList,
-                            $this->course_id,
-                            true
+                            $this->course_id
                         );
 
                         $cat = new Testcategory();
@@ -6112,14 +6186,24 @@ class Exercise
         if (empty($categoryList)) {
 
             // Old behaviour when sub categories are static.
-            //$categoryList = $this->getListOfCategoriesWithQuestionForTest();
+            // $categoryList = $this->getListOfCategoriesWithQuestionForTest();
 
             // Generating category list from the question list, because subcategories can be randomized!
+
             $questionByCategory = Testcategory::getCategoriesFromQuestionList(
                 $questionList,
-                $this->course_id
+                $this->course_id,
+                true
             );
-            $categoryListFromQuestionList = $this->fillQuestionByCategoryArray($questionByCategory);
+
+            // @todo fix before adding to chamilo 1.10
+            // special hotfix for minedu - this is needed because we use distributions!!
+            if ($this->getQuestionSelectionType() == EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM) {
+                $categoryListFromQuestionList = $this->fillQuestionByCategoryArrayPerQuestion($questionByCategory);
+            } else {
+                $categoryListFromQuestionList = $this->fillQuestionByCategoryArray($questionByCategory);
+            }
+
             $categoryList = $this->getListOfCategoriesWithQuestionForTest($categoryListFromQuestionList);
 
             Session::write('categoryList', $categoryList);
@@ -6287,7 +6371,6 @@ class Exercise
         $nextValue = 0;
         $wasMedia = false;
         $before = 0;
-
         if (!empty($categories)) {
             $selectionType = $this->getQuestionSelectionType();
             $useRootAsCategoryTitle = false;
@@ -6369,6 +6452,7 @@ class Exercise
                         $nextValue = $nextValue - $before + 1;
                     }
                 }
+
                 $html .= Display::progressPaginationBar(
                     $nextValue,
                     $questionList,

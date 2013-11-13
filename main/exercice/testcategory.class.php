@@ -1349,13 +1349,20 @@ class Testcategory
      * @param int $courseId
      * @return array
      */
-    public static function getCategoriesFromQuestionList($questionList, $courseId)
+    public static function getCategoriesFromQuestionList($questionList, $courseId, $multipleCategoriesAllowed = false)
     {
         $categories = array();
         foreach ($questionList as $questionId) {
             $categoryList = self::getCategoryForQuestionWithCategoryData($questionId, $courseId);
             foreach ($categoryList as $categoryData) {
-                $categories[$categoryData['iid']][] = $questionId;
+                if ($multipleCategoriesAllowed) {
+                    $categories[] = array(
+                        'categoryId' => $categoryData['iid'],
+                        'questionId' => $questionId
+                    );
+                } else {
+                    $categories[$categoryData['iid']][] = $questionId;
+                }
             }
         }
         return $categories;

@@ -32,7 +32,7 @@ $interbreadcrumb[] = array ('url' => 'group_space.php?'.api_get_cidReq(), 'name'
 
 $is_group_member = GroupManager :: is_tutor_of_group(api_get_user_id(), $group_id);
 
-if (!api_is_allowed_to_edit(false,true) && !$is_group_member) {
+if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
 	api_not_allowed(true);
 }
 
@@ -48,7 +48,6 @@ function search_members_keyword($firstname, $lastname, $username, $official_code
 		return false;
 	}
 }
-
 
 /**
  * function to sort users after getting the list in the db. Necessary because there are 2 or 3 queries. Called by usort()

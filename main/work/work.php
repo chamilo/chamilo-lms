@@ -210,10 +210,7 @@ switch ($action) {
                 $form->display();
             }
         }
-    case 'make_visible':
-    case 'delete':
     case 'delete_dir':
-    case 'make_invisible':
     case 'move':
     case 'move_to':
     case 'list':
@@ -251,28 +248,6 @@ switch ($action) {
             }
         }
 
-        /*	Visible */
-        if ($is_allowed_to_edit && $action == 'make_visible') {
-            if (!empty($item_id)) {
-                if (isset($item_id) && $item_id == 'all') {
-                } else {
-                    makeVisible($item_id, $course_info);
-                    Display::display_confirmation_message(get_lang('FileVisible'));
-                }
-            }
-        }
-
-        if ($is_allowed_to_edit && $action == 'make_invisible') {
-
-            /*	Invisible */
-            if (!empty($item_id)) {
-                if (isset($item_id) && $item_id == 'all') {
-                } else {
-                    makeInvisible($item_id, $course_info);
-                    Display::display_confirmation_message(get_lang('FileInvisible'));
-                }
-            }
-        }
 
         /*	Delete dir */
 
@@ -282,16 +257,6 @@ switch ($action) {
 
             if ($result) {
                 Display::display_confirmation_message(get_lang('DirDeleted') . ': '.$work_to_delete['title']);
-            }
-        }
-
-        /*	Delete document */
-        if ($action == 'delete' && $item_id) {
-            $file_deleted = deleteWorkItem($item_id, $_course);
-            if (!$file_deleted) {
-                Display::display_error_message(get_lang('YouAreNotAllowedToDeleteThisDocument'));
-            } else {
-                Display::display_confirmation_message(get_lang('TheDocumentHasBeenDeleted'));
             }
         }
 

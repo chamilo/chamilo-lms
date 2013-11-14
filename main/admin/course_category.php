@@ -63,7 +63,11 @@ $interbreadcrumb[] = array('url' => 'index.php', "name" => get_lang('PlatformAdm
 Display::display_header($tool_name);
 
 if ($action == 'add' || $action == 'edit') {
-    if ((api_get_multiple_access_url() && api_get_current_access_url_id() == 1) || !api_get_multiple_access_url()) {
+    if ((api_get_multiple_access_url() && api_get_current_access_url_id() == 1) ||
+        !api_get_multiple_access_url() ||
+        (isset($_configuration['enable_multiple_url_support_for_course_category']) &&
+         $_configuration['enable_multiple_url_support_for_course_category'])
+    ) {
         echo '<div class="actions">';
         echo Display::url(
             Display::return_icon('folder_up.png', get_lang("Back"), '', ICON_SIZE_MEDIUM),

@@ -26,41 +26,44 @@ $interbreadcrumb[] = array('url' => 'group.php', 'name' => get_lang('Groups'));
 
 Display::display_header($nameTools, 'Group');
 
-$form = new FormValidator('import', api_get_self());
+$form = new FormValidator('import', 'post', api_get_self().'?'.api_get_cidreq());
 $form->addElement('header', get_lang('ImportGroups'));
 $form->addElement('file', 'file', get_lang('File'));
+$form->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
 $form->addElement('checkbox', 'delete_not_in_file', null, get_lang('DeleteItemsNotInFile'));
 $form->addElement('button', 'submit', get_lang('Import'));
 
 if ($form->validate()) {
-    $groupData = Import::csv_reader($_FILES['file']['tmp_name']);
-    $deleteNotInArray = $form->getSubmitValue('delete_not_in_file') == 1 ? true : false;
+    if (isset($_FILES['file']['tmp_name']) && !empty($_FILES['file']['tmp_name'])) {
+        $groupData = Import::csv_reader($_FILES['file']['tmp_name']);
+        $deleteNotInArray = $form->getSubmitValue('delete_not_in_file') == 1 ? true : false;
 
-    $result = GroupManager::importCategoriesAndGroupsFromArray($groupData, $deleteNotInArray);
-    if (!empty($result)) {
-        $html = null;
-        foreach ($result as $status => $data) {
+        $result = GroupManager::importCategoriesAndGroupsFromArray($groupData, $deleteNotInArray);
+        if (!empty($result)) {
+            $html = null;
+            foreach ($result as $status => $data) {
 
-            if (empty($data['category']) && empty($data['group'])) {
-                continue;
-            }
+                if (empty($data['category']) && empty($data['group'])) {
+                    continue;
+                }
 
-            $html .= " <h3>".get_lang(ucfirst($status)).' </h3>';
-            if (!empty($data['category'])) {
-                $html .= "<h4> ".get_lang('Categories').':</h4>';
-                foreach ($data['category'] as $category) {
-                    $html .= "<div>".$category['category']."</div>";
+                $html .= " <h3>".get_lang(ucfirst($status)).' </h3>';
+                if (!empty($data['category'])) {
+                    $html .= "<h4> ".get_lang('Categories').':</h4>';
+                    foreach ($data['category'] as $category) {
+                        $html .= "<div>".$category['category']."</div>";
+                    }
+                }
+
+                if (!empty($data['group'])) {
+                    $html .= "<h4> ".get_lang('Groups').':</h4>';
+                    foreach ($data['group'] as $group) {
+                        $html .= "<div>".$group['group']."</div>";
+                    }
                 }
             }
-
-            if (!empty($data['group'])) {
-                $html .= "<h4> ".get_lang('Groups').':</h4>';
-                foreach ($data['group'] as $group) {
-                    $html .= "<div>".$group['group']."</div>";
-                }
-            }
+            echo $html;
         }
-        echo $html;
     }
 }
 $form->display();

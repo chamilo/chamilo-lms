@@ -3106,12 +3106,16 @@ class Tracking {
         return $html;
     }
 }
+
 /**
+ * @todo move into a proper file
  * @package chamilo.tracking
  */
-class TrackingCourseLog {
+class TrackingCourseLog
+{
 
-    function count_item_resources() {
+    function count_item_resources()
+    {
     	global $session_id;
         $course_id = api_get_course_int_id();
 
@@ -3132,7 +3136,8 @@ class TrackingCourseLog {
     	return $obj->total_number_of_items;
     }
 
-    function get_item_resources_data($from, $number_of_items, $column, $direction) {
+    function get_item_resources_data($from, $number_of_items, $column, $direction)
+    {
     	global $dateTimeFormatLong, $session_id;
         $course_id = api_get_course_int_id();
 
@@ -3541,9 +3546,14 @@ class TrackingCourseLog {
 
     /**
      * Get data for users list in sortable with pagination
+     * @param $from
+     * @param $number_of_items
+     * @param $column
+     * @param $direction
      * @return array
      */
-    static function get_user_data($from, $number_of_items, $column, $direction) {
+    static function get_user_data($from, $number_of_items, $column, $direction)
+    {
     	global $user_ids, $course_code, $additional_user_profile_info, $export_csv, $is_western_name_order, $csv_content, $session_id, $_configuration;
 
     	$course_code        = Database::escape_string($course_code);
@@ -3649,7 +3659,6 @@ class TrackingCourseLog {
 
             $total_user_exercise = Tracking::get_exercise_student_average_best_attempt($total_exercises, $user['user_id'], $course_code, $session_id);
             $user['exercise_average_best_attempt']  = $total_user_exercise;
-
 
     		if (is_numeric($avg_student_score)) {
     			$user['student_score']  = $avg_student_score.'%';

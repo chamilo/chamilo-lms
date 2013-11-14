@@ -29,15 +29,22 @@ Display::display_header($nameTools, 'Group');
 $form = new FormValidator('import', api_get_self());
 $form->addElement('header', get_lang('ImportGroups'));
 $form->addElement('file', 'file', get_lang('File'));
+$form->addElement('checkbox', 'delete_not_in_file', null, get_lang('DeleteItemsNotInFile'));
 $form->addElement('button', 'submit', get_lang('Import'));
 
 if ($form->validate()) {
     $groupData = Import::csv_reader($_FILES['file']['tmp_name']);
-    $result = GroupManager::importCategoriesAndGroupsFromArray($groupData);
+    $deleteNotInArray = $form->getSubmitValue('delete_not_in_file') == 1 ? true : false;
+
+    $result = GroupManager::importCategoriesAndGroupsFromArray($groupData, $deleteNotInArray);
     if (!empty($result)) {
         $html = null;
-
         foreach ($result as $status => $data) {
+
+            if (empty($data['category']) && empty($data['group'])) {
+                continue;
+            }
+
             $html .= " <h3>".get_lang(ucfirst($status)).' </h3>';
             if (!empty($data['category'])) {
                 $html .= "<h4> ".get_lang('Categories').':</h4>';

@@ -2006,21 +2006,27 @@ class GroupManager
     /**
      *
      * @param array $groupData
+     * @param bool $deleteNotInArray
      * @return array
      */
-    public static function importCategoriesAndGroupsFromArray($groupData)
+    public static function importCategoriesAndGroupsFromArray($groupData, $deleteNotInArray = false)
     {
         $result = array();
+        $elementsFound = array(
+            'categories' => array(),
+            'groups' => array()
+        );
+
         foreach ($groupData as $data) {
             $isCategory = empty($data['group']) ? true : false;
 
             if ($isCategory) {
-                $categoryTitle = $data['category'];
-                $categoryInfo = self::getCategoryByTitle($categoryTitle);
+                $categoryInfo = self::getCategoryByTitle($data['category']);
+                $categoryId = $categoryInfo['id'];
                 if (!empty($categoryInfo)) {
                     // Update
                     self::update_category(
-                        $categoryInfo['id'],
+                        $categoryId,
                         $data['category'],
                         $data['description'],
                         $data['doc_state'],
@@ -2035,7 +2041,7 @@ class GroupManager
                         $data['max_student'],
                         $data['groups_per_user']
                     );
-                    $data['category_id'] = $categoryInfo['id'];
+                    $data['category_id'] = $categoryId;
                     $result['updated']['category'][] = $data;
                 } else {
                     // Add
@@ -2060,15 +2066,18 @@ class GroupManager
                         $result['added']['category'][] = $data;
                     }
                 }
+                $elementsFound['categories'][] = $categoryId;
             } else {
 
                 $groupInfo = self::getGroupByName($data['group']);
+
                 if (empty($groupInfo)) {
                     $categoryInfo = self::getCategoryByTitle($data['category']);
                     $categoryId = null;
                     if (!empty($categoryInfo)) {
                         $categoryId = $categoryInfo['id'];
                     }
+
                     // Add
                     $groupId = self::create_group(
                         $data['group'],
@@ -2098,9 +2107,9 @@ class GroupManager
                     }
                 } else {
                     // Update
-
+                    $groupId = $groupInfo['id'];
                     self::set_group_properties(
-                        $groupInfo['id'],
+                        $groupId,
                         $data['group'],
                         $data['description'],
                         $data['max_students'],
@@ -2115,12 +2124,33 @@ class GroupManager
                         $data['self_unreg_allowed']
                     );
 
-                    $data['group_id'] = $groupInfo['id'];
+                    $data['group_id'] = $groupId;
                     $result['updated']['group'][] = $data;
                 }
+                $elementsFound['groups'][] = $groupId;
             }
         }
 
+        if ($deleteNotInArray) {
+            // Check categories
+            $categories = GroupManager::get_categories();
+            foreach ($categories as $category) {
+                if (!in_array($category['id'], $elementsFound['categories'])) {
+                    GroupManager::delete_category($category['id']);
+                    $category['category'] = $category['title'];
+                    $result['deleted']['category'][] = $category;
+                }
+            }
+
+            $groups = GroupManager::get_groups();
+            foreach ($groups as $group) {
+                if (!in_array($group['id'], $elementsFound['groups'])) {
+                    GroupManager::delete_groups(array($group['id']));
+                    $group['group'] = $group['name'];
+                    $result['deleted']['group'][] = $group;
+                }
+            }
+        }
         return $result;
     }
 }

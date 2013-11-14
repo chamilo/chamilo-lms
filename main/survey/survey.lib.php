@@ -4443,7 +4443,7 @@ class SurveyUtil {
 				 FROM $table_survey survey
                     LEFT JOIN $table_survey_question survey_question
                     ON (survey.survey_id = survey_question.survey_id AND survey_question.c_id = $course_id)
-                    INNER JOIN $table_user user
+                    LEFT JOIN $table_user user
                     ON (survey.author = user.user_id)
 				 WHERE survey.c_id = $course_id
 				 $search_restriction

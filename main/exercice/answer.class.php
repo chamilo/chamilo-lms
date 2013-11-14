@@ -510,30 +510,6 @@ class Answer
     }
 
     /**
-     * Updates an answer
-     *
-     * @author Toon Keppens
-     * @param    string    Answer title
-     * @param    string    Answer comment
-     * @param    integer    Answer weighting
-     * @param    integer    Answer position
-     */
-    public function updateAnswers($answer, $comment, $weighting, $position, $destination)
-    {
-        $TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
-
-        $questionId = $this->questionId;
-        $sql = "UPDATE $TBL_REPONSES SET
-                answer = '".Database::escape_string($answer)."',
-				comment = '".Database::escape_string($comment)."',
-				ponderation = '".Database::escape_string($weighting)."',
-				position = '".Database::escape_string($position)."',
-				destination = '".Database::escape_string($destination)."'
-				WHERE iid = '".Database::escape_string($position)."' AND question_id = '".Database::escape_string($questionId)."'";
-        Database::query($sql);
-    }
-
-    /**
      * Records answers into the data base
      *
      * @author - Olivier Brouckaert
@@ -542,7 +518,7 @@ class Answer
     {
         $table_quiz_answer = Database :: get_course_table(TABLE_QUIZ_ANSWER);
         $questionId = intval($this->questionId);
-        $c_id = $this->course['real_id'];
+        //$c_id = $this->course['real_id'];
         $answersAlreadyCreated = array_keys($this->answer);
 
         // @todo don't do this!
@@ -560,29 +536,29 @@ class Answer
                 $update = $answersAlreadyCreated[$i-1];
             }
 
-            $answer = Database::escape_string($this->new_answer[$i]);
-            $correct = Database::escape_string($this->new_correct[$i]);
-            $comment = Database::escape_string($this->new_comment[$i]);
-            $weighting = Database::escape_string($this->new_weighting[$i]);
-            $position = Database::escape_string($this->new_position[$i]);
-            $hotspot_coordinates = Database::escape_string($this->new_hotspot_coordinates[$i]);
-            $hotspot_type = Database::escape_string($this->new_hotspot_type[$i]);
-            $destination = Database::escape_string($this->new_destination[$i]);
-
             if ($update) {
                 $params = array(
-                    'answer' =>  $answer,
-                    'correct' => $correct,
-                    'comment' => $comment,
-                    'ponderation' => $weighting,
-                    'position' => $position,
-                    'hotspot_coordinates' => $hotspot_coordinates,
-                    'hotspot_type' => $hotspot_type,
-                    'destination' => $destination
+                    'answer' =>  $this->new_answer[$i],
+                    'correct' => $this->new_correct[$i],
+                    'comment' => $this->new_comment[$i],
+                    'ponderation' => $this->new_weighting[$i],
+                    'position' => $this->new_position[$i],
+                    'hotspot_coordinates' => $this->new_hotspot_coordinates[$i],
+                    'hotspot_type' => $this->new_hotspot_type[$i],
+                    'destination' => $this->new_destination[$i]
                 );
                 Database::update($table_quiz_answer, $params, array('iid = ? '=> array($update)));
                 $latest_insert_id = $update;
             } else {
+                $answer = Database::escape_string($this->new_answer[$i]);
+                $correct = Database::escape_string($this->new_correct[$i]);
+                $comment = Database::escape_string($this->new_comment[$i]);
+                $weighting = Database::escape_string($this->new_weighting[$i]);
+                $position = Database::escape_string($this->new_position[$i]);
+                $hotspot_coordinates = Database::escape_string($this->new_hotspot_coordinates[$i]);
+                $hotspot_type = Database::escape_string($this->new_hotspot_type[$i]);
+                $destination = Database::escape_string($this->new_destination[$i]);
+
                 // No need to add the c_id because the answers are unique per question
                 $sql = "INSERT INTO $table_quiz_answer (question_id, answer, correct, comment, ponderation, position, hotspot_coordinates, hotspot_type, destination) VALUES ";
                 $sql.= "('$questionId','$answer','$correct','$comment','$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination')";
@@ -597,7 +573,6 @@ class Answer
         if (!empty($latest_insert_id)) {
             $idsToDelete = implode("','", $real_correct_ids);
             if (!empty($idsToDelete) && !empty($questionId)) {
-                //$sql = "DELETE FROM $table_quiz_answer WHERE c_id = $c_id AND question_id = $questionId AND iid NOT IN ('$idsToDelete')";
                 $sql = "DELETE FROM $table_quiz_answer WHERE question_id = $questionId AND iid NOT IN ('$idsToDelete')";
                 Database::query($sql);
             }

@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 // Name of the language file that needs to be included
 $language_file = 'group';
@@ -9,6 +10,10 @@ $current_course_tool  = TOOL_GROUP;
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
+
+if (!api_is_allowed_to_edit(false, true)) {
+    api_not_allowed(true);
+}
 
 $nameTools = get_lang('Import');
 
@@ -29,13 +34,11 @@ $form->addElement('button', 'submit', get_lang('Import'));
 if ($form->validate()) {
     $groupData = Import::csv_reader($_FILES['file']['tmp_name']);
     $result = GroupManager::importCategoriesAndGroupsFromArray($groupData);
-    //var_dump($result);
     if (!empty($result)) {
         $html = null;
 
         foreach ($result as $status => $data) {
             $html .= " <h3>".get_lang(ucfirst($status)).' </h3>';
-
             if (!empty($data['category'])) {
                 $html .= "<h4> ".get_lang('Categories').':</h4>';
                 foreach ($data['category'] as $category) {

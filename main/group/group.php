@@ -164,7 +164,7 @@ if (api_is_allowed_to_edit(false, true)) {
         Display::return_icon('new_group.png', get_lang('NewGroupCreate'),'',ICON_SIZE_MEDIUM).'</a>';
     if (CourseManager::count_rows_course_table(Database::get_course_table(TABLE_GROUP), api_get_session_id(), api_get_course_int_id()) > 0) {
         echo '<a href="group_overview.php?'.api_get_cidreq().'">'.
-            Display::return_icon('group_summary.png', get_lang('GroupOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('group_summary.png', get_lang('GroupOverview'), '', ICON_SIZE_MEDIUM).'</a>';
     }
     if (api_get_setting('allow_group_categories') == 'true') {
         echo '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.
@@ -202,12 +202,15 @@ if (api_get_setting('allow_group_categories') == 'true') {
         if (api_is_allowed_to_edit(false, true)) {
             $actions .= '<a href="group_category.php?'.api_get_cidreq().'&id='.$category['id'].'" title="'.get_lang('Edit').'">'.
                 Display::return_icon('edit.png', get_lang('EditGroup'),'',ICON_SIZE_SMALL).'</a>';
-            $actions .= '<a href="group.php?'.api_get_cidreq().'&action=delete_category&amp;id='.$category['id'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
+            $actions .= '<a href="group.php?'.api_get_cidreq().'&action=delete_category&amp;id='.$category['id'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'">'.
+                Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
             if ($index != 0) {
-                $actions .=  ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&amp;id1='.$category['id'].'&amp;id2='.$group_cats[$index -1]['id'].'">'.Display::return_icon('up.png','&nbsp;','',ICON_SIZE_SMALL).'</a>';
+                $actions .=  ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&amp;id1='.$category['id'].'&amp;id2='.$group_cats[$index -1]['id'].'">'.
+                    Display::return_icon('up.png','&nbsp;','',ICON_SIZE_SMALL).'</a>';
             }
             if ($index != count($group_cats) - 1) {
-                $actions .= ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&amp;id1='.$category['id'].'&amp;id2='.$group_cats[$index +1]['id'].'">'.Display::return_icon('down.png','&nbsp;','',ICON_SIZE_SMALL).'</a>';
+                $actions .= ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&amp;id1='.$category['id'].'&amp;id2='.$group_cats[$index +1]['id'].'">'.
+                    Display::return_icon('down.png','&nbsp;','',ICON_SIZE_SMALL).'</a>';
             }
         }
 

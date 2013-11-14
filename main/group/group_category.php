@@ -193,7 +193,7 @@ $form->addElement('style_submit_button', 'submit', get_lang('PropModify'), 'clas
 // If form validates -> save data
 if ($form->validate()) {
     $values = $form->exportValues();
-	if ($values['max_member_no_limit'] == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
+    if ($values['max_member_no_limit'] == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
 		$max_member = GroupManager::MEMBER_PER_GROUP_NO_LIMIT;
 	} else {
 		$max_member = $values['max_member'];

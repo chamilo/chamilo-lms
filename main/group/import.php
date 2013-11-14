@@ -55,7 +55,6 @@ if ($form->validate()) {
         }
         echo $html;
     }
-
 }
 $form->display();
 

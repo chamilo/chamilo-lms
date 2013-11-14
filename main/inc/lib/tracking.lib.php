@@ -3636,19 +3636,14 @@ class TrackingCourseLog
 
     	while ($user = Database::fetch_array($res, 'ASSOC')) {
     		$user['official_code']  = $user['col0'];
-    		if ($is_western_name_order) {
-    			$user['lastname']       = $user['col2'];
-    			$user['firstname']      = $user['col1'];
-    		} else {
-    			$user['lastname']       = $user['col1'];
-    			$user['firstname']      = $user['col2'];
-    		}
-    		$user['username']           = $user['col3'];
-    		$user['time']                = api_time_to_hms(Tracking::get_time_spent_on_the_course($user['user_id'], $course_code, $session_id));
+            $user['lastname']       = $user['col1'];
+            $user['firstname']      = $user['col2'];
+    		$user['username']        = $user['col3'];
+    		$user['time'] = api_time_to_hms(Tracking::get_time_spent_on_the_course($user['user_id'], $course_code, $session_id));
 
-    		$avg_student_score           = Tracking::get_avg_student_score($user['user_id'], $course_code, array(), $session_id);
+    		$avg_student_score = Tracking::get_avg_student_score($user['user_id'], $course_code, array(), $session_id);
 
-    		$avg_student_progress        = Tracking::get_avg_student_progress($user['user_id'], $course_code, array(), $session_id);
+    		$avg_student_progress = Tracking::get_avg_student_progress($user['user_id'], $course_code, array(), $session_id);
     		if (empty($avg_student_progress)) {
     			$avg_student_progress=0;
     		}

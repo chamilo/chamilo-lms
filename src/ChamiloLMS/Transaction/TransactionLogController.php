@@ -188,7 +188,7 @@ class TransactionLogController
             try {
                 $blob_metadata = Envelope::identifyBlobMetadata($row['data']);
                 $origin_branch = $this->branchRepository->find($blob_metadata['origin_branch_id']);
-                $wrapper_plugin = self::createPlugin('wrapper', $blob_metadata['type'], $origin_branch->getPluginData('wrapper'));
+                $wrapper_plugin = self::createPlugin('wrapper', $blob_metadata['blob_type'], $origin_branch->getPluginData('wrapper'));
                 $envelope_data = array('blob' => $blob, 'origin_branch_id' => $blob_metadata['origin_branch_id']);
                 $envelope = new Envelope($wrapper_plugin, $envelope_data);
                 $envelope->unwrap();
@@ -567,7 +567,7 @@ class TransactionLogController
             try {
                 $blob_metadata = Envelope::identifyBlobMetadata($blob);
                 $origin_branch = $this->branchRepository->find($blob_metadata['origin_branch_id']);
-                $wrapper_plugin = self::createPlugin('wrapper', $blob_metadata['type'], $origin_branch->getPluginData('wrapper'));
+                $wrapper_plugin = self::createPlugin('wrapper', $blob_metadata['blob_type'], $origin_branch->getPluginData('wrapper'));
                 $envelope_data = array('blob' => $blob, 'origin_branch_id' => $blob_metadata['origin_branch_id']);
                 $envelope = new Envelope($wrapper_plugin, $envelope_data);
             }

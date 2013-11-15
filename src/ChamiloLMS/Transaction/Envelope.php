@@ -160,7 +160,7 @@ class Envelope
      *
      * @return array
      *   An array with the metadata. Contains the following keys:
-     *   - 'type': The wrapper plugin machine name.
+     *   - 'blob_type': The wrapper plugin machine name.
      *   - 'origin_branch_id': The branch where the blob was generated.
      */
     public static function identifyBlobMetadata($blob) {

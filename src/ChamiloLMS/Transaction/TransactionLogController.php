@@ -189,7 +189,7 @@ class TransactionLogController
                 $blob_metadata = Envelope::identifyBlobMetadata($row['data']);
                 $origin_branch = $this->branchRepository->find($blob_metadata['origin_branch_id']);
                 $wrapper_plugin = self::createPlugin('wrapper', $blob_metadata['blob_type'], $origin_branch->getPluginData('wrapper'));
-                $envelope_data = array('blob' => $blob, 'origin_branch_id' => $blob_metadata['origin_branch_id']);
+                $envelope_data = array('blob' => $row['data'], 'origin_branch_id' => $blob_metadata['origin_branch_id']);
                 $envelope = new Envelope($wrapper_plugin, $envelope_data);
                 $envelope->unwrap();
                 $transactions = $envelope->getTransactions();

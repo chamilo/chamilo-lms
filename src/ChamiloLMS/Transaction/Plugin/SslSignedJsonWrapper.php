@@ -192,7 +192,7 @@ class SslSignedJsonWrapper extends JsonWrapper
                 throw new UnwrapException(self::format_log(sprintf('Problem veryfing signer branch: %s.', $exception->getMessage())));
             }
             if (!$declared_branch_is_valid) {
-                $message = sprintf('Declared branch with id "%d" is not the same than real signer branch. Possible attack attempt to inject transactions with other valid branch signature.', $branch->getId());
+                $message = sprintf('Declared branch with id "%d" is not the same than real signer branch. Possible attack attempt to inject transactions with other valid branch signature.', $declared_origin_branch->getId());
                 // Try to identify it.
                 if (!$branch_id = $this->identifySignerBranch($envelope_metadata['origin_branch_id'], $signer_certificates_file)) {
                     $message .= sprintf(' Cannot retrieve any valid branch associated with the signer certificate file "%s". Altered data?', $signer_certificates_file);

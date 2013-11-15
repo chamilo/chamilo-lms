@@ -172,7 +172,7 @@ class TransactionLogController
      *   An array keyed by received envelope id containing an array transaction
      *   ids added based on that received envelope.
      */
-    public static function importPendingEnvelopes($limit = 0) {
+    public function importPendingEnvelopes($limit = 0) {
         $table = Database::get_main_table(TABLE_RECEIVED_ENVELOPES);
         $log_entry = array('log_type' => self::LOG_IMPORT_TO_TX_QUEUE);
         // Sadly limit clause is not supported by Database::select().
@@ -188,8 +188,8 @@ class TransactionLogController
             try {
                 $blob_metadata = Envelope::identifyBlobMetadata($row['data']);
                 $origin_branch = $this->branchRepository->find($blob_metadata['origin_branch_id']);
-                $wrapper_plugin = self::createPlugin('wrapper', $blob_metadata['type'], $origin_branch->getPluginData('wrapper'));
-                $envelope_data = array('blob' => $blob, 'origin_branch_id' => $blob_metadata['origin_branch_id']);
+                $wrapper_plugin = self::createPlugin('wrapper', $blob_metadata['blob_type'], $origin_branch->getPluginData('wrapper'));
+                $envelope_data = array('blob' => $row['data'], 'origin_branch_id' => $blob_metadata['origin_branch_id']);
                 $envelope = new Envelope($wrapper_plugin, $envelope_data);
                 $envelope->unwrap();
                 $transactions = $envelope->getTransactions();
@@ -567,7 +567,10 @@ class TransactionLogController
             try {
                 $blob_metadata = Envelope::identifyBlobMetadata($blob);
                 $origin_branch = $this->branchRepository->find($blob_metadata['origin_branch_id']);
-                $wrapper_plugin = self::createPlugin('wrapper', $blob_metadata['type'], $origin_branch->getPluginData('wrapper'));
+                if (!$origin_branch) {
+                    throw new Exception(sprintf('Cannot find a local branch with id %s', $blob_metadata['origin_branch_id']));
+                }
+                $wrapper_plugin = self::createPlugin('wrapper', $blob_metadata['blob_type'], $origin_branch->getPluginData('wrapper'));
                 $envelope_data = array('blob' => $blob, 'origin_branch_id' => $blob_metadata['origin_branch_id']);
                 $envelope = new Envelope($wrapper_plugin, $envelope_data);
             }

@@ -172,7 +172,7 @@ class TransactionLogController
      *   An array keyed by received envelope id containing an array transaction
      *   ids added based on that received envelope.
      */
-    public static function importPendingEnvelopes($limit = 0) {
+    public function importPendingEnvelopes($limit = 0) {
         $table = Database::get_main_table(TABLE_RECEIVED_ENVELOPES);
         $log_entry = array('log_type' => self::LOG_IMPORT_TO_TX_QUEUE);
         // Sadly limit clause is not supported by Database::select().

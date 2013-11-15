@@ -2343,14 +2343,14 @@ class GroupManager
                     '.Display::return_icon('settings.png').' '.get_lang('Settings').'
                     </a>
                 </li>
-                <li class="'.$activeTutor.'">
-                    <a href="'.sprintf($url, 'tutor_settings.php').'">
-                    '.Display::return_icon('user.png').' '.get_lang('GroupTutors').'
-                    </a>
-                </li>
                 <li class="'.$activeMember.'">
                     <a href="'.sprintf($url, 'member_settings.php').'">
-                    '.Display::return_icon('teacher.png').' '.get_lang('GroupMembers').'
+                    '.Display::return_icon('user.png').' '.get_lang('GroupMembers').'
+                    </a>
+                </li>
+                <li class="'.$activeTutor.'">
+                    <a href="'.sprintf($url, 'tutor_settings.php').'">
+                    '.Display::return_icon('teacher.png').' '.get_lang('GroupTutors').'
                     </a>
                 </li>
         </ul>';

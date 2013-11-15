@@ -594,7 +594,9 @@ class SocialManager extends UserManager
             $html .= '<div class="well social-background-content">';
             $html .= Display::url('<img src='.$big['file'].' class="social-groups-image" /> </a><br /><br />', api_get_path(WEB_PATH).'main/social/groups.php?id='.$group_id);
             if (GroupPortalManager::is_group_admin($group_id, api_get_user_id())) {
-                $html .= '<div id="edit_image" class="hidden_message" style="display:none"><a href="'.api_get_path(WEB_PATH).'main/social/group_edit.php?id='.$group_id.'">'.get_lang('EditGroup').'</a></div>';
+                $html .= '<div id="edit_image" class="hidden_message" style="display:none">
+                            <a href="'.api_get_path(WEB_PATH).'main/social/group_edit.php?id='.$group_id.'">'.
+                    get_lang('EditGroup').'</a></div>';
             }
             $html .= '</div>';
             $html .= '</div>';

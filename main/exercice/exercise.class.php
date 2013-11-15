@@ -103,6 +103,7 @@ class Exercise
     public $globalCategoryId = null;
     public $distributionId = 0;
     public $loadDistributions = false;
+    public $trackExercise = array();
 
     /**
      * Constructor of the class
@@ -237,6 +238,9 @@ class Exercise
 
             // Control time
             $this->expired_time = $object->expired_time;
+
+            // 5. Getting user exercise info (if the user took the exam before) - generating exe_id
+            $this->trackExercise = $this->getStatTrackExerciseInfo();
 
             if ($parseQuestionList) {
                 $this->setQuestionList($this->loadDistributions);
@@ -5600,66 +5604,73 @@ class Exercise
         $sessionId = api_get_session_id();
         if (!empty($sessionId)) {
 
-            // Counting how many attempts from session are in the DB
-            $trackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-            $sql = "SELECT count(exe_id) as count FROM $trackExercises WHERE session_id = $sessionId";
-            $result = Database::query($sql);
+            $dataExists = !empty($this->trackExercise) && isset($this->trackExercise['data_tracking']) && !empty($this->trackExercise['data_tracking']) ? true : false;
 
-            $count = 0;
-            if (Database::num_rows($result)) {
-                $result = Database::fetch_array($result);
-                $count = $result['count'];
-            }
+            if ($dataExists) {
+                $questionList = explode(',', $this->trackExercise['data_tracking']);
+            } else {
 
-            global $app;
-            /** @var \Doctrine\manager $em */
-            $em = $app['orm.em'];
+                // Counting how many attempts from session are in the DB
+                $trackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+                $sql = "SELECT count(exe_id) as count FROM $trackExercises WHERE session_id = $sessionId";
+                $result = Database::query($sql);
 
-            $params = array(
-                'exerciseId' => $this->id,
-                'sessionId' => $sessionId,
-                'cId' => $this->course_id
-            );
+                $count = 0;
+                if (Database::num_rows($result)) {
+                    $result = Database::fetch_array($result);
+                    $count = $result['count'];
+                }
 
-            // Searching for forms in this session.
-            $quizDistributionRelSessions = $em->getRepository("Entity\CQuizDistributionRelSession")->findBy($params);
+                global $app;
+                /** @var \Doctrine\manager $em */
+                $em = $app['orm.em'];
 
-            if (!empty($quizDistributionRelSessions)) {
-                // Getting a distribution. It depends of the count of attempts and count of distributions.
-                $formToUse = $count % (count($quizDistributionRelSessions));
+                $params = array(
+                    'exerciseId' => $this->id,
+                    'sessionId' => $sessionId,
+                    'cId' => $this->course_id
+                );
 
-                /** @var \Entity\CQuizDistributionRelSession $quizDistributionRelSession */
-                if (isset($quizDistributionRelSessions[$formToUse])) {
-                    // We found a distribution!
-                    $quizDistributionRelSession = $quizDistributionRelSessions[$formToUse];
-                    $this->distributionId = $quizDistributionRelSession->getQuizDistributionId();
-                    $distribution = $quizDistributionRelSession->getDistribution();
-                    $dataTracking = array();
-                    if (!empty($distribution)) {
-                        $dataTracking = $distribution->getDataTracking();
-                    }
-                    // Form question list found!
-                    if (!empty($dataTracking)) {
-                        $questionList = explode(',', $dataTracking);
+                // Searching for forms in this session.
+                $quizDistributionRelSessions = $em->getRepository("Entity\CQuizDistributionRelSession")->findBy($params);
 
-                        // We make a little shuffle now.
-                        $questionByCategory = Testcategory::getCategoriesFromQuestionList(
-                            $questionList,
-                            $this->course_id
-                        );
+                if (!empty($quizDistributionRelSessions)) {
+                    // Getting a distribution. It depends of the count of attempts and count of distributions.
+                    $formToUse = $count % (count($quizDistributionRelSessions));
 
-                        $cat = new Testcategory();
-                        $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
-                            $this->id,
-                            null,
-                            null,
-                            false,
-                            false,
-                            false
-                        );
+                    /** @var \Entity\CQuizDistributionRelSession $quizDistributionRelSession */
+                    if (isset($quizDistributionRelSessions[$formToUse])) {
+                        // We found a distribution!
+                        $quizDistributionRelSession = $quizDistributionRelSessions[$formToUse];
+                        $this->distributionId = $quizDistributionRelSession->getQuizDistributionId();
+                        $distribution = $quizDistributionRelSession->getDistribution();
+                        $dataTracking = array();
+                        if (!empty($distribution)) {
+                            $dataTracking = $distribution->getDataTracking();
+                        }
+                        // Form question list found!
+                        if (!empty($dataTracking)) {
+                            $questionList = explode(',', $dataTracking);
 
-                        $questionList = self::shuffleQuestionListPerCategory($questionByCategory, $categoriesAddedInExercise);
-                        $questionList = ArrayClass::array_flatten($questionList);
+                            // We make a little shuffle now.
+                            $questionByCategory = Testcategory::getCategoriesFromQuestionList(
+                                $questionList,
+                                $this->course_id
+                            );
+
+                            $cat = new Testcategory();
+                            $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
+                                $this->id,
+                                null,
+                                null,
+                                false,
+                                false,
+                                false
+                            );
+
+                            $questionList = self::shuffleQuestionListPerCategory($questionByCategory, $categoriesAddedInExercise);
+                            $questionList = ArrayClass::array_flatten($questionList);
+                        }
                     }
                 }
             }

@@ -349,6 +349,7 @@ if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSessi
     // Construction of Exercise
     /** @var \Exercise $objExercise */
     $objExercise = new Exercise();
+
     if ($debug) {
         error_log('1. Setting the $objExercise variable');
     }
@@ -514,8 +515,12 @@ if ($objExercise->selectAttempts() > 0) {
     }
 }
 
-// 5. Getting user exercise info (if the user took the exam before) - generating exe_id
-$exercise_stat_info = $objExercise->getStatTrackExerciseInfo($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
+if (empty($objExercise->trackExercise)) {
+    // 5. Getting user exercise info (if the user took the exam before) - generating exe_id
+    $exercise_stat_info = $objExercise->getStatTrackExerciseInfo($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
+} else {
+    $exercise_stat_info = $objExercise->trackExercise;
+}
 
 //if (1) {
 $questionListInSession = Session::read('questionList');
@@ -528,6 +533,7 @@ if (!isset($questionListInSession)) {
 
     // Getting order from random
     if ($media_is_activated == false && $objExercise->isRandom() && isset($exercise_stat_info) && !empty($exercise_stat_info['data_tracking'])) {
+    //if ($media_is_activated == false && isset($exercise_stat_info) && !empty($exercise_stat_info['data_tracking'])) {
         $questionList = explode(',', $exercise_stat_info['data_tracking']);
     }
     Session::write('questionList', $questionList);

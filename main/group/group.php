@@ -188,6 +188,8 @@ if (api_is_allowed_to_edit(false, true)) {
 
     echo '<a href="../user/user.php?'.api_get_cidreq().'">'.
         Display::return_icon('user.png', get_lang('GoTo').' '.get_lang('Users'), '', ICON_SIZE_MEDIUM).'</a>';
+
+    echo GroupManager::getSearchForm();
 }
 
 $group_cats = GroupManager::get_categories(api_get_course_id());

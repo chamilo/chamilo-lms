@@ -2414,6 +2414,18 @@ class GroupManager
         }
 
         return $content;
+    }
 
+    /**
+     * Returns the search form
+     * @return string
+     */
+    public static function getSearchForm()
+    {
+        $url = api_get_path(WEB_CODE_PATH).'group/group_overview.php?'.api_get_cidreq();
+        $form = new FormValidator('search_groups', 'get', $url, null, array('class' => 'form-search'));
+        $form->addElement('text', 'keyword');
+        $form->addElement('button', 'submit', get_lang('Search'));
+        return $form->toHtml();
     }
 }

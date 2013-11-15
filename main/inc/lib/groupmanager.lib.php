@@ -2355,4 +2355,65 @@ class GroupManager
                 </li>
         </ul>';
     }
+
+    /**
+     * @param int $courseId
+     * @param string $keyword
+     * @return string
+     */
+    public static function getOverview($courseId, $keyword = null)
+    {
+        $content = null;
+        $categories = GroupManager::get_categories();
+        if (!empty($categories)) {
+
+            foreach ($categories as $category) {
+                if (api_get_setting('allow_group_categories') == 'true') {
+                    $content .= '<h2>'.$category['title'].'</h2>';
+                }
+                if (!empty($keyword)) {
+                    $groups = GroupManager::getGroupListFilterByName($keyword, $category['id'], $courseId);
+                } else {
+                    $groups = GroupManager::get_group_list($category['id']);
+                }
+
+                $content .= '<ul>';
+                if (!empty($groups)) {
+                    foreach ($groups as $group) {
+                        $content .= '<li>';
+                        $content .= Display::tag('h3', Security::remove_XSS($group['name']));
+
+                        $users = GroupManager::getTutors($group['id']);
+                        if (!empty($users)) {
+                            $content .= '<ul>';
+                            $content .= "<li>".Display::tag('h4', get_lang('Tutors'))."</li><ul>";
+                            foreach ($users as $user) {
+                                $user_info = api_get_user_info($user['user_id']);
+                                $content .= '<li title="'.$user_info['username'].'">'.$user_info['complete_name_with_username'].'</li>';
+                            }
+                            $content .= '</ul>';
+                            $content .= '</ul>';
+                        }
+
+                        $users = GroupManager::getStudents($group['id']);
+                        if (!empty($users)) {
+                            $content .= '<ul>';
+                            $content .= "<li>".Display::tag('h4', get_lang('Students'))."</li><ul>";
+                            foreach ($users as $user) {
+                                $user_info = api_get_user_info($user['user_id']);
+                                $content .= '<li title="'.$user_info['username'].'">'.$user_info['complete_name_with_username'].'</li>';
+                            }
+                            $content .= '</ul>';
+                            $content .= '</ul>';
+                        }
+                        $content .= '</li>';
+                    }
+                }
+                $content .= '</ul>';
+            }
+        }
+
+        return $content;
+
+    }
 }

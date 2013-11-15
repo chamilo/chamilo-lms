@@ -183,6 +183,8 @@ if (api_is_allowed_to_edit(false, true)) {
     echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.
         Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a>';
 
+    echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export_pdf">'.
+        Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
 
     echo '<a href="../user/user.php?'.api_get_cidreq().'">'.
         Display::return_icon('user.png', get_lang('GoTo').' '.get_lang('Users'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -220,7 +222,7 @@ if (api_get_setting('allow_group_categories') == 'true') {
     }
 } else {
     $group_list = GroupManager::get_group_list();
-    GroupManager ::process_groups($group_list);
+    GroupManager::process_groups($group_list);
 }
 
 if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath') {

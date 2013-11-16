@@ -218,7 +218,11 @@ class Envelope
             if ($blob === FALSE) {
                 throw new UnwrapException('Invalid blob format passed: Empty content.');
             }
-            $this->transactions = $this->wrapperPlugin->unwrap($blob, $blob_metadata);
+            $transactions = $this->wrapperPlugin->unwrap($blob, $blob_metadata);
+            foreach ($transactions as $transaction) {
+                // @fixme Decouple!
+                $this->transactions[] = TransactionLogController::createTransaction($transaction->action, (array)$transaction);
+            }
             $this->state |= self::STATE_OPEN;
         }
         catch (Exception $exception) {

@@ -515,12 +515,14 @@ if ($objExercise->selectAttempts() > 0) {
     }
 }
 
+$exercise_stat_info = $objExercise->getStatTrackExerciseInfo($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
+/*
 if (empty($objExercise->trackExercise)) {
     // 5. Getting user exercise info (if the user took the exam before) - generating exe_id
-    $exercise_stat_info = $objExercise->getStatTrackExerciseInfo($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
+
 } else {
     $exercise_stat_info = $objExercise->trackExercise;
-}
+}*/
 
 //if (1) {
 $questionListInSession = Session::read('questionList');

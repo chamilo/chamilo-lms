@@ -751,6 +751,7 @@ switch ($action) {
         echo 0;
         break;
     case 'get_modificator':
+        set_time_limit(0);
         $sessions = SessionManager::get_session_by_course($_REQUEST['cId']);
         if (empty($sessions)) {
             echo '0.00';
@@ -776,6 +777,7 @@ switch ($action) {
         }
         break;
     case 'save_modificator':
+        set_time_limit(0);
         // Save to all sessions from this course:
         $sessions = SessionManager::get_session_by_course($_REQUEST['cId']);
 

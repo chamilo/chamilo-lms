@@ -67,10 +67,13 @@
     <table class="table">
         <tr>
             <td>
+                Categorias / Formas id
             </td>
-            {% for distribution in distributions %}
+            {% for distributionId in distributions %}
                 <td>
-                {{ distribution.distribution.id }} (# intentos {{ results[distribution.distribution.id].counter }} )
+                    #{{ distributionId }}
+                    <br />
+                    {{ results[distributionId].counter  }} intentos
                 </td>
             {% endfor %}
         </tr>
@@ -80,13 +83,16 @@
                 <td>
                     {{ category.title }}
                 </td>
-                {% for distribution in distributions %}
+                {% for distributionId in distributions %}
                     <td>
-                        {% if results[distribution.distribution.id] and results[distribution.distribution.id][category.id] %}
-                            {% set average = results[distribution.distribution.id][category.id].result / results[distribution.distribution.id].counter %}
-                            {{ average|number_format(2) }} ({{ results[distribution.distribution.id][category.id].result }})
+                        {% if results[distributionId] and results[distributionId][category.id] %}
+                            {% set average = results[distributionId][category.id].result / results[distributionId].counter %}
 
-                            {% set id = distribution.distribution.id ~  "_" ~ category.id %}
+                            Promedio: {{ average|number_format(2) }}
+                            <br>
+                            Resultado: {{ results[distributionId][category.id].result }}
+
+                            {% set id = distributionId ~  "_" ~ category.id %}
 
                             <a id="button_{{ id }}" class="btn edit">+</a>
 
@@ -128,9 +134,9 @@
             <td>
                 Total
             </td>
-            {% for distribution in distributions %}
+            {% for distributionId in distributions %}
                 <td>
-                    {{ results[distribution.distribution.id].total }}
+                    {{ results[distributionId].total }}
                 </td>
             {% endfor %}
         </tr>

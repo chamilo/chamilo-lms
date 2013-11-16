@@ -710,7 +710,7 @@ class Exercise
      * Gets the question list ordered by the question_order setting (drag and drop)
      * @return array
      */
-    private function getQuestionOrderedList()
+    public function getQuestionOrderedList()
     {
         $questionList = array();
 

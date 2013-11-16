@@ -1068,8 +1068,15 @@ class Testcategory
         $globalCategoryScore = array();
 
         foreach ($category_list as $category_id => $category_item) {
+
             /** @var Entity\CQuizCategory $cat */
+
             $cat = $em->find('Entity\CQuizCategory', $category_id);
+
+            if (empty($cat)) {
+                continue;
+            }
+
             $path = $repo->getPath($cat);
 
             if ($loadChildren) {
@@ -1078,6 +1085,7 @@ class Testcategory
             }
 
             $categoryName = $category_name_list[$category_id];
+            //$categoryName = $category_item['name'];
             $index = 0;
 
             if ($categoryMinusOne) {

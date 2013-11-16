@@ -751,9 +751,17 @@ switch ($action) {
         echo 0;
         break;
     case 'get_modificator':
+        $sessions = SessionManager::get_session_by_course($_REQUEST['cId']);
+        if (empty($sessions)) {
+            echo '0.00';
+        } else {
+            $sessionInfo = current($sessions);
+            $sessionId = $sessionInfo['id'];
+        }
+
         $params = array(
             'exerciseId' => $_REQUEST['exerciseId'],
-            'sessionId' => $_REQUEST['sessionId'],
+            'sessionId' => $sessionId,
             'cId' => $_REQUEST['cId'],
             'quizDistributionId' => $_REQUEST['distributionId'],
             'categoryId' => $_REQUEST['categoryId']
@@ -768,32 +776,39 @@ switch ($action) {
         }
         break;
     case 'save_modificator':
-        $params = array(
-            'exerciseId' => $_REQUEST['exerciseId'],
-            'sessionId' => $_REQUEST['sessionId'],
-            'cId' => $_REQUEST['cId'],
-            'quizDistributionId' => $_REQUEST['distributionId'],
-            'categoryId' => $_REQUEST['categoryId']
-        );
+        // Save to all sessions from this course:
+        $sessions = SessionManager::get_session_by_course($_REQUEST['cId']);
 
-        $quizDistributionRelSessionRelCategory = $app['orm.em']->getRepository('Entity\CQuizDistributionRelSessionRelCategory')->findOneBy($params);
-        if (empty($quizDistributionRelSessionRelCategory)) {
-            $quizDistributionRelSessionRelCategory = new Entity\CQuizDistributionRelSessionRelCategory();
-            $quizDistributionRelSessionRelCategory->setExerciseId($_REQUEST['exerciseId']);
-            $quizDistributionRelSessionRelCategory->setSessionId($_REQUEST['sessionId']);
-            $quizDistributionRelSessionRelCategory->setCId($_REQUEST['cId']);
-            $quizDistributionRelSessionRelCategory->setQuizDistributionId($_REQUEST['distributionId']);
-            $quizDistributionRelSessionRelCategory->setCategoryId($_REQUEST['categoryId']);
+        foreach ($sessions as $session) {
+            $sessionId = $session['id'];
+
+            $params = array(
+                'exerciseId' => $_REQUEST['exerciseId'],
+                'sessionId' => $sessionId,
+                'cId' => $_REQUEST['cId'],
+                'quizDistributionId' => $_REQUEST['distributionId'],
+                'categoryId' => $_REQUEST['categoryId']
+            );
+
+            $quizDistributionRelSessionRelCategory = $app['orm.em']->getRepository('Entity\CQuizDistributionRelSessionRelCategory')->findOneBy($params);
+            if (empty($quizDistributionRelSessionRelCategory)) {
+                $quizDistributionRelSessionRelCategory = new Entity\CQuizDistributionRelSessionRelCategory();
+                $quizDistributionRelSessionRelCategory->setExerciseId($_REQUEST['exerciseId']);
+                $quizDistributionRelSessionRelCategory->setSessionId($sessionId);
+                $quizDistributionRelSessionRelCategory->setCId($_REQUEST['cId']);
+                $quizDistributionRelSessionRelCategory->setQuizDistributionId($_REQUEST['distributionId']);
+                $quizDistributionRelSessionRelCategory->setCategoryId($_REQUEST['categoryId']);
+            }
+
+            $quizDistributionRelSessionRelCategory->setModifier($_REQUEST['value']);
+
+            event_system('update_modificator', 'modifier', $_REQUEST['value']);
+            event_system('update_modificator', 'exerciseId', $_REQUEST['exerciseId']);
+            event_system('update_modificator', 'distributionId', $_REQUEST['distributionId']);
+
+            $app['orm.em']->persist($quizDistributionRelSessionRelCategory);
+            $app['orm.em']->flush();
         }
-
-        $quizDistributionRelSessionRelCategory->setModifier($_REQUEST['value']);
-
-        event_system('update_modificator', 'modifier', $_REQUEST['value']);
-        event_system('update_modificator', 'exerciseId', $_REQUEST['exerciseId']);
-        event_system('update_modificator', 'distributionId', $_REQUEST['distributionId']);
-
-        $app['orm.em']->persist($quizDistributionRelSessionRelCategory);
-        $app['orm.em']->flush();
         echo 1;
         break;
     default:

@@ -13,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use ChamiloLMS\Form\CQuizDistributionType;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Tests\ValidationVisitorTest;
 
 /**
  * Class ExerciseStatisticsController
@@ -29,6 +30,10 @@ class ExerciseStatisticsController extends CommonController
      */
     public function indexAction($exerciseId)
     {
+        if (!api_is_platform_admin()) {
+            return $this->abort(500);
+        }
+
         set_time_limit(0);
 
         $template = $this->get('template');
@@ -45,11 +50,24 @@ class ExerciseStatisticsController extends CommonController
         $repo = $em->getRepository('Entity\CQuizCategory');
 
         // Getting categories
+        //$questionList = $exercise->getQuestionList();
+        $questionList = $exercise->getQuestionOrderedList();
+
+        // Getting categories
         $categories = $exercise->getListOfCategoriesWithQuestionForTest();
 
+        $cat = new \Testcategory();
+        $categoriesAddedInExercise = $cat->getCategoryExerciseTree($exerciseId, $courseId, 'root, lft ASC', false, true, false);
+        $categories = \Testcategory::getQuestionsByCat($exerciseId, $questionList, $categoriesAddedInExercise, $courseId);
+        $categories = $exercise->fillQuestionByCategoryArray($categories);
+
+        $categories = $exercise->getListOfCategoriesWithQuestionForTest($categories);
+
         $globalCategories = \Testcategory::globalizeCategories($exerciseId, $courseId, $categories, true, true);
+
         $categoryList = array();
         $categoryListInverse = array();
+
         foreach ($globalCategories as $categoryId => & $data) {
             $data['id'] = $categoryId;
             $cat = $em->find('Entity\CQuizCategory', $categoryId);
@@ -73,6 +91,7 @@ class ExerciseStatisticsController extends CommonController
             }
         }
 
+
         if (empty($categories) || empty($globalCategories)) {
             throw new \Exception('No categories in this exercise.');
         }
@@ -82,13 +101,15 @@ class ExerciseStatisticsController extends CommonController
         foreach ($categories as $categoryData) {
             foreach ($categoryData['question_list'] as $questionId) {
                 //$questionListWithCategory[$questionId] = $categoryData['id'];
-                $questionListWithCategory[$questionId] = $categoryListInverse[$categoryData['id']];
+                if (isset($categoryListInverse[$categoryData['id']])) {
+                    $questionListWithCategory[$questionId] = $categoryListInverse[$categoryData['id']];
+                }
             }
         }
 
         $params = array(
             'exerciseId' => $exerciseId,
-            'sessionId' => $sessionId,
+            //'sessionId' => $sessionId,
             'cId' => $course->getId()
         );
 
@@ -101,21 +122,24 @@ class ExerciseStatisticsController extends CommonController
 
         // Getting results per distribution
         $attemptsPerDistribution = array();
+        /** @var Entity\CQuizDistributionRelSession $distribution */
+        $distributionIdList = array();
         foreach ($quizDistributionRelSessions as $distribution) {
-            $attemptsPerDistribution[$distribution->getQuizDistributionId()] = $em->getRepository("Entity\TrackExercise")->getResults(
+            $attemptsPerDistribution[$distribution->getQuizDistributionId()] = $em->getRepository("Entity\TrackExercise")->getResultsWithNoSession(
                 $exerciseId,
                 $courseId,
-                $sessionId,
+                //$sessionId,
                 $distribution->getQuizDistributionId()
             );
         }
+
+        $distributionIdList = array_keys($attemptsPerDistribution);
 
         if (empty($attemptsPerDistribution)) {
             throw new \Exception('Not enough data. TrackExercise has not quizDistributionId');
         }
 
-        foreach ($quizDistributionRelSessions as $distribution) {
-            $distributionId = $distribution->getQuizDistributionId();
+        foreach ($distributionIdList as $distributionId) {
             $attemptList = $attemptsPerDistribution[$distributionId];
             $exeIdList = array_keys($attemptList);
             $markPerQuestions = $em->getRepository("Entity\TrackAttempt")->getResults(
@@ -125,6 +149,9 @@ class ExerciseStatisticsController extends CommonController
             $total = 0;
             if (!empty($markPerQuestions)) {
                 foreach ($markPerQuestions as $questionId => $marks) {
+                    /*if (!isset($questionListWithCategory[$questionId])) {
+                        continue;
+                    }*/
                     $categoryId = $questionListWithCategory[$questionId];
                     if (!isset($finalResults[$distributionId][$categoryId])) {
                         $finalResults[$distributionId][$categoryId]['result'] = 0;
@@ -145,10 +172,8 @@ class ExerciseStatisticsController extends CommonController
         $template->assign('total', $total);
         $template->assign('cId', $this->getCourseId());
         $template->assign('exerciseId', $exerciseId);
-
         $template->assign('sessionId', $this->getSessionId());
-
-        $template->assign('distributions', $quizDistributionRelSessions);
+        $template->assign('distributions', $distributionIdList);
         $response = $template->render_template($this->getTemplatePath().'index.tpl');
         return new Response($response, 200, array());
     }

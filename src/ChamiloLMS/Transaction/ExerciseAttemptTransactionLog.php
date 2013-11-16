@@ -85,40 +85,40 @@ class ExerciseAttemptTransactionLog extends TransactionLog
             throw new TransactionImportException('Undefined item_id');
         }
         $attempt_id = $this->item_id;
-        if (empty($this->data['stat_info'])) {
+        if (empty($this->data->stat_info)) {
             throw new TransactionImportException('Undefined exercise stat information.');
         }
-        $stat_info = $this->data['stat_info'];
-        if (empty($this->data['attempt_info'])) {
+        $stat_info = $this->data->stat_info;
+        if (empty($this->data->attempt_info)) {
             throw new TransactionImportException('Undefined exercise attempt information.');
         }
-        $attempt_info = $this->data['attempt_info'];
+        $attempt_info = (array)$this->data->attempt_info;
         // By pass one level which does not provide useful information.
         $attempt_info = array_shift($attempt_info);
 
         // Review consistency of provided information.
-        if (empty($stat_info['c_id'])) {
+        if (empty($stat_info->c_id)) {
             throw new TransactionImportException('Undefined course id on stat information.');
         }
-        $course_id = $stat_info['c_id'];
+        $course_id = $stat_info->c_id;
         $course_info = api_get_course_info_by_id($course_id);
         if (empty($course_info)) {
             throw new TransactionImportException(sprintf('The included course id "%d" does not currently exist in the database.', $course_id));
         }
-        if (empty($stat_info['exe_exo_id'])) {
+        if (empty($stat_info->exe_exo_id)) {
             throw new TransactionImportException('Undefined exercise id on stat information.');
         }
-        $exercise_id = $stat_info['exe_exo_id'];
+        $exercise_id = $stat_info->exe_exo_id;
         $exercise = new Exercise($course_id);
         // Exercise read expects course id set.
         $exercise->course_id = $course_id;
-        if (!$exercise->read($exercise_id)) {
+        if (!$exercise->read($exercise_id, true, $stat_info->session_id)) {
             throw new TransactionImportException(sprintf('The included exercise id "%d" on course with id "%d" does not currently exist in the database.', $exercise_id, $course_id));
         }
-        if (empty($stat_info['exe_user_id'])) {
+        if (empty($stat_info->exe_user_id)) {
             throw new TransactionImportException('Undefined user id on stat information.');
         }
-        $user_id = $stat_info['exe_user_id'];
+        $user_id = $stat_info->exe_user_id;
         $user_info = api_get_user_info($user_id);
         if (!$user_info) {
             throw new TransactionImportException(sprintf('The included user id "%d" does not currently exist in the database.', $user_id));
@@ -129,17 +129,17 @@ class ExerciseAttemptTransactionLog extends TransactionLog
         // Process the attempt results.
         // First, create the exercise attempt to obtain an id in the
         // destination system.
-        $question_list = explode(',', $stat_info['data_tracking']);
-        $imported_exe_id = $exercise->save_stat_track_exercise_info($stat_info['expired_time_control'], $stat_info['orig_lp_id'], $stat_info['orig_lp_item_id'], 0, $question_list, $stat_info['exe_weighting']);
+        $question_list = explode(',', $stat_info->data_tracking);
+        $imported_exe_id = $exercise->save_stat_track_exercise_info($stat_info->expired_time_control, $stat_info->orig_lp_id, $stat_info->orig_lp_item_id, 0, $question_list, $stat_info->exe_weighting, $stat_info->session_id);
         if (!$imported_exe_id) {
             throw new TransactionImportException(sprintf('Could not create exercise stat information correctly on course with id "%d" for exercise_id "%d"', $course_id, $exercise_id));
         }
         // Then, process the results.
-        foreach ($attempt_info['question_list'] as $question_id => $attempt_answer_info) {
-            // Use saveExerciseAttempt($score, $answer, $question_id, $exe_id, $position, $exercise_id = 0, $nano = null, $user_id = null, $course_id = null, $session_id = null, $learnpath_id = null, $learnpath_item_id = null)
+        foreach ($attempt_info->question_list as $question_id => $attempt_answer_info) {
+            // Use saveQuestionAttempt($score, $answer, $question_id, $exe_id, $position, $exercise_id = 0, $updateResults = false, $nano = null, $user_id = null, $course_id = null, $session_id = null, $learnpath_id = null, $learnpath_item_id = null)
             // @fixme What nano means and there to retrieve it?
             $nano = null;
-            $attempt_answer_id = saveExerciseAttempt($attempt_answer_info['marks'], $attempt_answer_info['answer'], $question_id, $imported_exe_id, $attempt_answer_info['position'], $exercise_id, $nano, $user_id, $course_id, $stat_info['session_id'], $stat_info['orig_lp_id'], $stat_info['orig_lp_item_id']);
+            $attempt_answer_id = saveQuestionAttempt($attempt_answer_info->marks, $attempt_answer_info->answer, $question_id, $imported_exe_id, $attempt_answer_info->position, $exercise_id, false, $nano, $user_id, $course_id, $stat_info->session_id, $stat_info->orig_lp_id, $stat_info->orig_lp_item_id);
         }
 
         // Finally return the associated id.

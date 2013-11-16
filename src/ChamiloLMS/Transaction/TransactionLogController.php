@@ -147,6 +147,8 @@ class TransactionLogController
     {
         $added_transactions = array();
         foreach ($exported_transactions as $exported_transaction) {
+            // Make sure it's an array.
+            $exported_transaction = (array) $exported_transaction;
             // Set the right id in the new system.
             $exported_transaction['transaction_id'] = $exported_transaction['id'];
             unset($exported_transaction['id']);

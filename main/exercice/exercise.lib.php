@@ -789,8 +789,10 @@ function get_exercise_track_exercise_info($exe_id) {
 /**
  * Validates the time control key
  */
-function exercise_time_control_is_valid($exercise_id, $lp_id = 0 , $lp_item_id = 0) {
-    $course_id = api_get_course_int_id();
+function exercise_time_control_is_valid($exercise_id, $lp_id = 0 , $lp_item_id = 0, $course_id = null) {
+    if (!$course_id) {
+        $course_id = api_get_course_int_id();
+    }
     $exercise_id = intval($exercise_id);
     $TBL_EXERCICES =  Database::get_course_table(TABLE_QUIZ_TEST);
     $sql 	= "SELECT expired_time FROM $TBL_EXERCICES WHERE c_id = $course_id AND id = $exercise_id";

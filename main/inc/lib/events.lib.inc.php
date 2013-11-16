@@ -493,7 +493,7 @@ function saveQuestionAttempt(
     }
 
     //Validation in case of fraud with active control time
-    if (!ExerciseLib::exercise_time_control_is_valid($exercise_id, $learnpath_id, $learnpath_item_id)) {
+    if (!ExerciseLib::exercise_time_control_is_valid($exercise_id, $learnpath_id, $learnpath_item_id, $course_id, $session_id)) {
         if ($debug) {
             error_log("exercise_time_control_is_valid is false");
         }

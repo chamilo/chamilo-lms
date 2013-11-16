@@ -48,16 +48,21 @@ class ExerciseLib
     /**
      * Validates the time control key
      */
-    public static function exercise_time_control_is_valid($exercise_id, $lp_id = 0, $lp_item_id = 0)
+    public static function exercise_time_control_is_valid($exercise_id, $lp_id = 0, $lp_item_id = 0, $course_id = null, $session_id = null)
     {
-        $course_id = api_get_course_int_id();
+        if (!$course_id) {
+            $course_id = api_get_course_int_id();
+        }
+        if (!$session_id) {
+            $session_id = api_get_session_id();
+        }
         $exercise_id = intval($exercise_id);
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
         $sql = "SELECT expired_time FROM $TBL_EXERCICES WHERE c_id = $course_id AND iid = $exercise_id";
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
         if (!empty($row['expired_time'])) {
-            $current_expired_time_key = ExerciseLib::get_time_control_key($exercise_id, $lp_id, $lp_item_id);
+            $current_expired_time_key = ExerciseLib::get_time_control_key($exercise_id, $lp_id, $lp_item_id, $course_id, $session_id);
             if (isset($_SESSION['expired_time'][$current_expired_time_key])) {
                 $current_time = time();
                 $expired_time = api_strtotime($_SESSION['expired_time'][$current_expired_time_key], 'UTC');
@@ -88,12 +93,18 @@ class ExerciseLib
     /**
       Generates the time control key
      */
-    public static function get_time_control_key($exercise_id, $lp_id = 0, $lp_item_id = 0)
+    public static function get_time_control_key($exercise_id, $lp_id = 0, $lp_item_id = 0, $course_id = null, $session_id = null)
     {
         $exercise_id = intval($exercise_id);
         $lp_id = intval($lp_id);
         $lp_item_id = intval($lp_item_id);
-        return api_get_course_int_id().'_'.api_get_session_id().'_'.$exercise_id.'_'.api_get_user_id().'_'.$lp_id.'_'.$lp_item_id;
+        if (!$course_id) {
+            $course_id = api_get_course_int_id();
+        }
+        if (!$session_id) {
+            $session_id = api_get_session_id();
+        }
+        return $course_id.'_'.$session_id.'_'.$exercise_id.'_'.api_get_user_id().'_'.$lp_id.'_'.$lp_item_id;
     }
 
     /**

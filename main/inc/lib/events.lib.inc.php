@@ -285,7 +285,20 @@ function event_link($link_id)
  * @author Julio Montoya Armas <gugli100@gmail.com> Reworked 2010
  * @desc Record result of user when an exercice was done
  */
-function update_event_exercise($exeid, $exo_id, $score, $weight, $session_id, $learnpath_id = 0, $learnpath_item_id = 0, $learnpath_item_view_id = 0, $duration = 0, $status = '', $remind_list = array() , $end_date = null) {
+function update_event_exercise(
+    $exeid,
+    $exo_id,
+    $score,
+    $weight,
+    $session_id,
+    $learnpath_id = 0,
+    $learnpath_item_id = 0,
+    $learnpath_item_view_id = 0,
+    $duration = 0,
+    $status = '',
+    $remind_list = array() ,
+    $end_date = null
+) {
     global $debug;
     $TABLETRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 
@@ -313,7 +326,6 @@ function update_event_exercise($exeid, $exo_id, $score, $weight, $session_id, $l
         } else {
             $remind_list = '';
         }
-
         if (empty($end_date)) {
             $end_date = api_get_utc_datetime();
         }

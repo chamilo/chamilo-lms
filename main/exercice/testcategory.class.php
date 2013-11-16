@@ -36,7 +36,7 @@ class Testcategory
     public function Testcategory($in_id = 0, $in_name = '', $in_description = "", $parent_id = 0, $type = 'simple', $course_id = null, $visibility = 1)
     {
         if ($in_id != 0 && $in_name == "") {
-            $tmpobj = new Testcategory();
+            $tmpobj = new Testcategory(0, '', '', 0, 'simple', $course_id);
             $tmpobj->getCategory($in_id);
             $this->id = $tmpobj->id;
             $this->name = $tmpobj->name;
@@ -44,12 +44,13 @@ class Testcategory
             $this->description = $tmpobj->description;
             $this->parent_id = $tmpobj->parent_id;
             $this->parent_path = $this->name;
-            $this->c_id = $tmpobj->c_id;
+            $this->c_id = isset($course_id) ? $course_id : $tmpobj->c_id;
             $this->root = $tmpobj->root;
             $this->visibility = $tmpobj->visibility;
 
             if (!empty($tmpobj->parent_id)) {
-                $category = new Testcategory($tmpobj->parent_id);
+                // Default values and the course_id passed.
+                $category = new Testcategory($tmpobj->parent_id, '', '', 0, 'simple', $course_id);
                 $this->parent_path = $category->parent_path.' > '.$this->name;
             }
         } else {

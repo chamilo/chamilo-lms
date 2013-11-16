@@ -163,9 +163,10 @@ class Exercise
      * @todo use Doctrine to manage read/writes
      * @param int $id - exercise ID
      * @param bool parse exercise question list
+     * @param int $chamilo_session_id - chamilo session ID
      * @return boolean - true if exercise exists, otherwise false
      */
-    public function read($id, $parseQuestionList = true)
+    public function read($id, $parseQuestionList = true, $chamilo_session_id = null)
     {
         if (empty($this->course_id)) {
             return false;
@@ -243,7 +244,7 @@ class Exercise
             $this->trackExercise = $this->getStatTrackExerciseInfo();
 
             if ($parseQuestionList) {
-                $this->setQuestionList($this->loadDistributions);
+                $this->setQuestionList($this->loadDistributions, $chamilo_session_id);
             }
             return true;
         }
@@ -849,7 +850,8 @@ class Exercise
         $questionsPerMainCategory = array();
         foreach ($temp_question_list as $categoryId => $questionList) {
             $parentId = $categoriesAddedInExercise[$categoryId]['parent_id'];
-            $cat = new Testcategory();
+            // Default values and the course_id passed.
+            $cat = new Testcategory(0, '', '', 0, 'simple', $this->course_id);
             $cat->getCategory($parentId);
 
             if (!isset($questionsPerMainCategory[$cat->parent_id])) {
@@ -885,8 +887,8 @@ class Exercise
             'category_with_questions_list' => array()
         );
 
-        // Order/random categories
-        $cat = new Testcategory();
+        // Order/random categories. Default values and the course_id passed.
+        $cat = new Testcategory(0, '', '', 0, 'simple', $this->course_id);
 
         $courseId = $this->course_id;
 
@@ -1047,7 +1049,8 @@ class Exercise
 
         if (!empty($questions_by_category)) {
             foreach ($questions_by_category as $categoryId => $questionList) {
-                $cat = new Testcategory($categoryId);
+                // Default values and the course_id passed.
+                $cat = new Testcategory($categoryId, '', '', 0, 'simple', $this->course_id);
                 $cat = (array)$cat;
                 $cat['iid'] = $cat['id'];
                 $cat['name'] = $cat['title'];
@@ -2968,7 +2971,8 @@ class Exercise
         $safe_lp_item_id = 0,
         $safe_lp_item_view_id = 0,
         $questionList = array(),
-        $weight = 0
+        $weight = 0,
+        $chamilo_session_id = null
     ) {
         $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $safe_lp_id = intval($safe_lp_id);
@@ -2994,10 +2998,13 @@ class Exercise
         $questionList = array_map('intval', $questionList);
 
         $weight = Database::escape_string($weight);
+        if (!$chamilo_session_id) {
+            $chamilo_session_id = api_get_session_id();
+        }
         $sql = "INSERT INTO $track_exercises
                 ($sql_fields exe_exo_id, exe_user_id, c_id, status, session_id, data_tracking, start_date, orig_lp_id, orig_lp_item_id, exe_weighting, quiz_distribution_id)
                 VALUES
-                ( $sql_fields_values '".$this->id."','".api_get_user_id()."','".api_get_course_int_id()."', 'incomplete','".api_get_session_id()."','".implode(',', $questionList)."', '".api_get_utc_datetime()."', '$safe_lp_id', '$safe_lp_item_id', '$weight', '".$this->distributionId."')";
+                ( $sql_fields_values '".$this->id."','".api_get_user_id()."','".$this->course_id."', 'incomplete','".$chamilo_session_id."','".implode(',', $questionList)."', '".api_get_utc_datetime()."', '$safe_lp_id', '$safe_lp_item_id', '$weight', '".$this->distributionId."')";
         Database::query($sql);
         $id = Database::insert_id();
 
@@ -5595,13 +5602,15 @@ class Exercise
     /**
      * Sets the question list when the exercise->read() is executed
      */
-    public function setQuestionList($loadDistributions = false)
+    public function setQuestionList($loadDistributions = false, $sessionId = null)
     {
         // Getting question list.
         $questionList = $this->selectQuestionList(true);
 
         // Looking for distributions
-        $sessionId = api_get_session_id();
+        if (!$sessionId) {
+            $sessionId = api_get_session_id();
+        }
         if (!empty($sessionId)) {
 
             $dataExists = !empty($this->trackExercise) && isset($this->trackExercise['data_tracking']) && !empty($this->trackExercise['data_tracking']) ? true : false;

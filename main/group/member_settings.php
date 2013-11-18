@@ -16,7 +16,7 @@
 // Name of the language file that needs to be included
 $language_file = 'group';
 
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool  = TOOL_GROUP;
 
@@ -24,7 +24,7 @@ $current_course_tool  = TOOL_GROUP;
 api_protect_course_script(true);
 
 $group_id = api_get_group_id();
-$current_group = GroupManager :: get_group_properties($group_id);
+$current_group = GroupManager::get_group_properties($group_id);
 
 $nameTools = get_lang('EditGroup');
 $interbreadcrumb[] = array ('url' => 'group.php', 'name' => get_lang('Groups'));
@@ -88,28 +88,15 @@ function sort_users($user_a, $user_b)
 }
 
 /**
- * Function to check the given max number of members per group
- */
-function check_max_number_of_members($value)
-{
-    $max_member_no_limit = $value['max_member_no_limit'];
-    if ($max_member_no_limit == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
-        return true;
-    }
-    $max_member = $value['max_member'];
-    return is_numeric($max_member);
-}
-
-/**
  * Function to check if the number of selected group members is valid
  */
 function check_group_members($value)
 {
-    if ($value['max_member_no_limit'] == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
+    if ($value['max_student'] == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
         return true;
     }
-    if (isset($value['max_member']) && isset($value['group_members']) && $value['max_member'] < count($value['group_members'])) {
-        return array ('group_members' => get_lang('GroupTooMuchMembers'));
+    if (isset($value['max_student']) && isset($value['group_members']) && $value['max_student'] < count($value['group_members'])) {
+        return array('group_members' => get_lang('GroupTooMuchMembers'));
     }
     return true;
 }
@@ -127,10 +114,10 @@ $(document).ready( function() {
 // Build form
 $form = new FormValidator('group_edit', 'post', api_get_self().'?'.api_get_cidreq());
 $form->addElement('hidden', 'action');
-$form->addElement('hidden', 'referer');
+$form->addElement('hidden', 'max_student', $current_group['max_student']);
 
-$complete_user_list = GroupManager :: fill_groups_list($current_group['id']);
 
+$complete_user_list = GroupManager::fill_groups_list($current_group['id']);
 usort($complete_user_list, 'sort_users');
 
 $possible_users = array();

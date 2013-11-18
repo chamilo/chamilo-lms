@@ -39,22 +39,24 @@ if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
 // Build form
 $form = new FormValidator('group_edit', 'post', api_get_self().'?'.api_get_cidreq());
 $form->addElement('hidden', 'action');
-$form->addElement('hidden', 'referer');
 
 // Group name
-$form->add_textfield('name', get_lang('GroupName'));
+$form->addElement('text', 'name', get_lang('GroupName'));
 
 // Description
 $form->addElement('textarea', 'description', get_lang('Description'), array ('class' => 'span6', 'rows' => 6));
 
 // Members per group
-$form->addElement('radio', 'max_member_no_limit', get_lang('GroupLimit'), get_lang('NoLimit'), GroupManager::MEMBER_PER_GROUP_NO_LIMIT);
-$group = array();
-$group[] = $form->createElement('radio', 'max_member_no_limit', null, get_lang('MaximumOfParticipants'), 1, array('id' => 'max_member_selected'));
-$group[] = $form->createElement('text', 'max_member', null, array('class' => 'span1', 'id' => 'max_member'));
-$group[] = $form->createElement('static', null, null, get_lang('GroupPlacesThis'));
-$form->addGroup($group, 'max_member_group', null, '', false);
+$group = array(
+    $form->createElement('radio', 'max_member_no_limit', get_lang('GroupLimit'), get_lang('NoLimit'), GroupManager::MEMBER_PER_GROUP_NO_LIMIT),
+    $form->createElement('radio', 'max_member_no_limit', null, get_lang('MaximumOfParticipants'), 1, array('id' => 'max_member_selected')),
+    $form->createElement('text', 'max_member', null, array('class' => 'span1', 'id' => 'max_member')),
+    $form->createElement('static', null, null, ' '.get_lang('GroupPlacesThis'))
+);
+$form->addGroup($group, 'max_member_group', get_lang('GroupLimit'), '', false);
 $form->addRule('max_member_group', get_lang('InvalidMaxNumberOfMembers'), 'callback', 'check_max_number_of_members');
+
+$form->addElement('html', '<div class="span6">');
 
 // Self registration
 $group = array(
@@ -83,6 +85,9 @@ $group[] = $form->createElement('radio', 'calendar_state', get_lang('GroupCalend
 $group[] = $form->createElement('radio', 'calendar_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC);
 $group[] = $form->createElement('radio', 'calendar_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE);
 $form->addGroup($group, '', Display::return_icon('agenda.png', get_lang('GroupCalendar') , array(), ICON_SIZE_SMALL).' '.get_lang('GroupCalendar'), '', false);
+
+$form->addElement('html', '</div>');
+$form->addElement('html', '<div class="span6">');
 
 // Announcements settings
 $group = array();
@@ -114,8 +119,12 @@ $group = array(
 );
 $form->addGroup($group, '', Display::return_icon('chat.png', get_lang('Chat'), array(), ICON_SIZE_SMALL).' '.get_lang('Chat'), '', false);
 
-// submit button
+$form->addElement('html', '</div>');
+
+$form->addElement('html', '<div class="span12">');
+// Submit button
 $form->addElement('style_submit_button', 'submit', get_lang('SaveSettings'), 'class="save"');
+$form->addElement('html', '</div>');
 
 if ($form->validate()) {
     $values = $form->exportValues();
@@ -178,6 +187,8 @@ if (isset($_GET['show_message_sucess'])) {
 
 $form->setDefaults($defaults);
 echo GroupManager::getSettingBar('settings');
+echo '<div class="row">';
 $form->display();
+echo '</div>';
 
 Display :: display_footer();

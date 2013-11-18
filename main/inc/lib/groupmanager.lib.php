@@ -454,6 +454,7 @@ class GroupManager
         $result['tutor_id']                     = isset($db_object->tutor_id)?$db_object->tutor_id:null;
         $result['description']                    = $db_object->description;
         $result['maximum_number_of_students']     = $db_object->max_student;
+        $result['max_student']     = $db_object->max_student;
         $result['doc_state']                     = $db_object->doc_state;
         $result['work_state']                     = $db_object->work_state;
         $result['calendar_state']                 = $db_object->calendar_state;
@@ -1148,7 +1149,6 @@ class GroupManager
             foreach ($group_available_place as $group_id => $place) {
                 foreach ($userToken as $user_id => $places) {
                     if (self :: can_user_subscribe($user_id, $group_id)) {
-
                         self :: subscribe_users($user_id, $group_id);
                         $group_available_place[$group_id]--;
                         //$userToken[$user_id]--;
@@ -1848,7 +1848,8 @@ class GroupManager
     /**
      * Get all groups where a specific user is subscribed
      */
-    public static function get_user_group_name ($user_id) {
+    public static function get_user_group_name($user_id)
+    {
         $table_group_user   = Database::get_course_table(TABLE_GROUP_USER);
         $table_group        = Database::get_course_table(TABLE_GROUP);
         $user_id            = intval($user_id);
@@ -1868,7 +1869,7 @@ class GroupManager
 
     /**
      *
-     * see : fill_groups
+     * See : fill_groups
      *       Fill the groups with students.
      *
      * note : optimize fill_groups_list <--> fill_groups
@@ -1881,43 +1882,52 @@ class GroupManager
         $group_ids = array_map('intval', $group_ids);
 
         if (api_is_course_coach()) {
-            for($i=0 ; $i<count($group_ids) ; $i++) {
-                if(!api_is_element_in_the_session(TOOL_GROUP,$group_ids[$i])) {
-                    array_splice($group_ids,$i,1);
+            for ($i=0 ; $i<count($group_ids) ; $i++) {
+                if (!api_is_element_in_the_session(TOOL_GROUP,$group_ids[$i])) {
+                    array_splice($group_ids, $i, 1);
                     $i--;
                 }
             }
-            if (count($group_ids)==0){
-                return false;}
+            if (count($group_ids)==0) {
+                return false;
+            }
         }
 
         global $_course;
+
+        $session_id = api_get_session_id();
+        $course_id = api_get_course_int_id();
+
         $category = self::get_category_from_group($group_ids[0]);
         $groups_per_user = $category['groups_per_user'];
         $group_table = Database :: get_course_table(TABLE_GROUP);
         $group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
-        $session_id = api_get_session_id();
+
+
         $complete_user_list = CourseManager :: get_real_and_linked_user_list($_course['sysCode'], true, $session_id);
         $number_groups_per_user = ($groups_per_user == self::GROUP_PER_MEMBER_NO_LIMIT ? self::INFINITE : $groups_per_user);
-        $course_id = api_get_course_int_id();
+
         /*
          * Retrieve all the groups where enrollment is still allowed
          * (reverse) ordered by the number of place available
          */
-        $sql = "SELECT g.id gid, g.max_student - count(ug.user_id) nbPlaces, g.max_student
+        $sql = "SELECT g.id gid, count(ug.user_id) count_users, g.max_student
                 FROM ".$group_table." g
                 LEFT JOIN  ".$group_user_table." ug
                 ON    g.id = ug.group_id
                 WHERE   g.c_id = $course_id AND
                         ug.c_id = $course_id AND
                         g.id IN (".implode(',', $group_ids).")
-                GROUP BY (g.id)
-                HAVING (nbPlaces > 0 OR g.max_student = ".self::MEMBER_PER_GROUP_NO_LIMIT.")
-                ORDER BY nbPlaces DESC";
+                GROUP BY (g.id)";
 
         $sql_result = Database::query($sql);
-        $group_available_place = array ();
+        $group_available_place = array();
         while ($group = Database::fetch_array($sql_result, 'ASSOC')) {
+            if (!empty($group['max_student'])) {
+                $places = intval($group['max_student'] - $group['count_users']);
+            } else {
+                $places = self::MEMBER_PER_GROUP_NO_LIMIT;
+            }
             $group_available_place[$group['gid']] = $group['nbPlaces'];
         }
 
@@ -1933,11 +1943,11 @@ class GroupManager
             $complete_user_list[$i]['number_groups_left'] = $number_groups_per_user - $number_of_groups;
         }
         //first sort by user_id to filter out duplicates
-        $complete_user_list = TableSort :: sort_table($complete_user_list, 'user_id');
-        $complete_user_list = self :: filter_duplicates($complete_user_list, 'user_id');
+        $complete_user_list = TableSort::sort_table($complete_user_list, 'user_id');
+        $complete_user_list = self::filter_duplicates($complete_user_list, 'user_id');
         //$complete_user_list = self :: filter_only_students($complete_user_list);
         //now sort by # of group left
-        $complete_user_list = TableSort :: sort_table($complete_user_list, 'number_groups_left', SORT_DESC);
+        $complete_user_list = TableSort::sort_table($complete_user_list, 'number_groups_left', SORT_DESC);
         return $complete_user_list;
     }
 

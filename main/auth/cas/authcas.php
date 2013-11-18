@@ -163,7 +163,7 @@ function cas_is_authenticated()
  * Logs out the user of the cas
  * The user MUST be logged in with cas to use this function
  *
- * @param $uinfo array user info
+ * @param $uinfo array user info (not needed)
  * @param $location string redirect url
  *
  * @see online_logout()
@@ -181,7 +181,7 @@ function cas_logout($uinfo=null, $location=null)
     if (!isset($location))
         $location = api_get_path(WEB_PATH);
 
-    phpCAS::logoutWithRedirectService(api_get_path(WEB_PATH));
+    phpCAS::logoutWithRedirectService($location);
 }
 
 ?>

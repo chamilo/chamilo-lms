@@ -1,5 +1,5 @@
 <?php
-
+/* For licensing terms, see /license.txt */
 namespace ChamiloLMS\Component\Editor\Toolbar;
 
 class Message extends Basic
@@ -8,13 +8,9 @@ class Message extends Basic
     public function getConfig()
     {
         $config['toolbarGroups'] = array(
-//            array('name' => 'document',  'groups' =>array('mode', 'document', 'doctools')),
-//            array('name' => 'clipboard',    'groups' =>array('clipboard', 'undo', )),
-            //array('name' => 'editing',    'groups' =>array('clipboard', 'undo', )),
-            //array('name' => 'forms',    'groups' =>array('clipboard', 'undo', )),
             '/',
-            array('name' => 'basicstyles',    'groups' =>array('basicstyles', 'cleanup', )),
-            array('name' => 'paragraph',    'groups' =>array('list', 'indent', 'blocks', 'align' )),
+            array('name' => 'basicstyles',  'groups' =>array('basicstyles', 'cleanup')),
+            array('name' => 'paragraph',    'groups' =>array('list', 'indent', 'blocks', 'align')),
             array('name' => 'links'),
             array('name' => 'insert'),
             '/',

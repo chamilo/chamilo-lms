@@ -1,5 +1,5 @@
 <?php
-
+/* For licensing terms, see /license.txt */
 namespace ChamiloLMS\Component\Editor\Toolbar;
 
 class TestProposedAnswer
@@ -7,7 +7,6 @@ class TestProposedAnswer
 
     public function getConfig()
     {
-
         $config['toolbarGroups'] = array(
             //array('name' => 'document'),
             array('name' => 'clipboard',    'groups' =>array('clipboard', 'undo', )),

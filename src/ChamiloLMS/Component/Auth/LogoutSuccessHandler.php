@@ -1,5 +1,5 @@
 <?php
-
+/* For licensing terms, see /license.txt */
 namespace ChamiloLMS\Component\Auth;
 
 use Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface;
@@ -35,7 +35,7 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
     {
         $session = $request->getSession();
         \ChamiloSession::setSession($session);
-        
+
         // Chamilo logout
         $userId = api_get_user_id();
         \Online::logout($userId, false);

@@ -1,5 +1,5 @@
 <?php
-
+/* For licensing terms, see /license.txt */
 namespace ChamiloLMS\Component\Editor;
 
 /**
@@ -19,8 +19,10 @@ class Connector
      * Simple function to demonstrate how to control file access using "accessControl" callback.
      * This method will disable accessing files/folders starting from  '.' (dot)
      *
-     * @param  string  $attr  attribute name (read|write|locked|hidden)
-     * @param  string  $path  file path relative to volume root directory started with directory separator
+     * @param string $attr  attribute name (read|write|locked|hidden)
+     * @param string $path  file path relative to volume root directory started with directory separator
+     * @param string $data
+     * @param string $volume
      * @return bool|null
      **/
     public function access($attr, $path, $data, $volume) {
@@ -42,8 +44,7 @@ class Connector
     function logger($cmd, $result, $args, $elfinder)
     {
         // do something here
-        //echo $cmd;
-
+        // echo $cmd;
         $courseInfo = api_get_course_info();
 
         /*error_log($cmd);
@@ -66,7 +67,6 @@ class Connector
                     foreach ($result['added'] as $file) {
                         $name = $file['name'];
                         $webalized = \URLify::filter($file['name'], 80);
-                        //error_log($webalized);
                         if (strcmp($name, $webalized) != 0) {
                             $arg = array('target' => $file['hash'], 'name' => $webalized);
                             $elfinder->exec('rename', $arg);
@@ -83,16 +83,6 @@ class Connector
                             $root = $volume->root();
                             //var/www/chamilogits/data/courses/NEWONE/document
                             $realPathRoot = $elfinder->realpath($root);
-                            /*
-                            $defaultPath = $volume->defaultPath();
-                            error_log($defaultPath);
-                            $driverId= $volume->driverId();
-                            error_log($root);
-                            error_log($driverId);*/
-
-                            //error_log(print_r($info, 1));
-                            //error_log($realPathRoot);
-                            //error_log($realPath);
                             // Removing course path
                             $realPath = str_replace($realPathRoot, '', $realPath);
                             \FileManager::add_document($courseInfo, $realPath, 'file', intval($file['size']), $file['name']);
@@ -105,23 +95,6 @@ class Connector
                     foreach ($result['removed'] as $file) {
                         $realFilePath = $file['realpath'];
                         $filePath = str_replace($courseInfo['course_sys_data'].'document', '', $realFilePath);
-                        /*error_log($filePath);
-                        error_log($courseInfo['course_sys_data'].'document');*/
-
-                        /*
-                        $info = $elfinder->exec('file', array('target' => $file['phash']));
-                        error_log(print_r($info,1));
-
-                        $volume = $info['volume'];
-                        $root = $volume->root();
-                        //var/www/chamilogits/data/courses/NEWONE/document
-                        $realPathRoot = $elfinder->realpath($root);
-                        error_log($realPathRoot);
-
-                        $realPath = $file['realpath'];
-                        $realPath = str_replace($realPathRoot, '', $realPath);
-                        error_log($realPath);
-                        error_log($realPathRoot);*/
                         \DocumentManager::delete_document($courseInfo, $filePath, $courseInfo['course_sys_data'].'document');
                     }
                 }
@@ -187,9 +160,7 @@ class Connector
                 'locked' => false
             )
         );
-
         /*
-
         var defaultCommands = [
             'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook',
             'download', 'rm', 'duplicate', 'rename', 'mkdir', 'mkfile', 'upload', 'copy',

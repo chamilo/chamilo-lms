@@ -1,5 +1,5 @@
 <?php
-
+/* For licensing terms, see /license.txt */
 namespace ChamiloLMS\Command\Template;
 
 use Symfony\Component\Console\Input\ArrayInput;

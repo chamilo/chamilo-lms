@@ -208,7 +208,11 @@ class SslSignedJsonWrapper extends JsonWrapper
         } elseif ($sign_verification === FALSE) {
             throw new UnwrapException(self::format_log(sprintf('Signed file "%s" failed verification.', $signed_transactions_file)));
         } else { // -1
-            throw new UnwrapException(self::format_log(sprintf('There was an error during the signature verification for signed file "%s".', $signed_transactions_file)));
+            $ssl_error_message = '';
+            while ($ssl_error_message = openssl_error_string()) {
+                $ssl_error_message .=  "\n";
+            }
+            throw new UnwrapException(self::format_log(sprintf('There was an error during the signature verification for signed file "%s": %s', $signed_transactions_file, $ssl_error_message)));
         }
         unlink($signed_transactions_file);
         unlink($signer_certificates_file);

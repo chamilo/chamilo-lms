@@ -5,69 +5,72 @@
 * Plugin for: http://ckeditor.com/license (GPL/LGPL/MPL: http://ckeditor.com/license)
 */
 
-(function () {
+(function() {
     CKEDITOR.plugins.add('oembed', {
-        requires: ['dialog'],
-        lang: ['de', 'en', 'fr', 'nl', 'pl', 'ru'],
-        afterInit: function (editor) {
-            
-            var dataProcessor = editor.dataProcessor,
-				dataFilter = dataProcessor && dataProcessor.dataFilter;
-            
+        icons: 'oembed',
+        hidpi: true,
+        requires: 'widget,dialog',
+        lang: ['de', 'en', 'fr', 'nl', 'pl', 'pt-br', 'ru'],
+        afterInit: function(editor) {
+
+            /*var dataProcessor = editor.dataProcessor,
+                dataFilter = dataProcessor && dataProcessor.dataFilter;
+
             if (editor.config.oembed_ShowIframePreview) {
-                if (dataFilter._.elements.iframe) {
-                    delete dataFilter._.elements.iframe;
+                if (dataFilter.elementsRules.iframe) {
+                    delete dataFilter.elementsRules.iframe;
                 }
                 return;
-			}
+            }
 
-            if (dataFilter && dataFilter._.elements.iframe == 'undefined') {
-				dataFilter.addRules({
-					elements: {
-						iframe: function (element) {
-							return editor.createFakeParserElement(element, 'cke_iframe', 'iframe', true);
-						}
-					}
-				});
-			}
-		},
+            if (dataFilter && !dataFilter.elementsRules.iframe) {
+
+                dataFilter.addRules({
+                    elements: {
+                        iframe: function(element) {
+                            return editor.createFakeParserElement(element, 'cke_iframe', 'iframe', true);
+                        }
+                    }
+                });
+            }*/
+        },
         init: function(editor) {
-		    if (editor.config.oembed_ShowIframePreview == null || editor.config.oembed_ShowIframePreview == 'undefined') {
-		        editor.config.oembed_ShowIframePreview = false;
-		    }
+            if (editor.config.oembed_ShowIframePreview == null || editor.config.oembed_ShowIframePreview == 'undefined') {
+                editor.config.oembed_ShowIframePreview = false;
+            }
 
-		    if (!editor.plugins.iframe && !editor.config.oembed_ShowIframePreview) {
-		        CKEDITOR.addCss('img.cke_iframe' +
-		            '{' +
-		            'background-image: url(' + CKEDITOR.getUrl(CKEDITOR.plugins.getPath('oembed') + 'images/placeholder.png') + ');' +
-		            'background-position: center center;' +
-		            'background-repeat: no-repeat;' +
-		            'border: 1px solid #a9a9a9;' +
-		            'width: 80px;' +
-		            'height: 80px;' +
-		            '}'
-		        );
-		    }
+            if (!editor.plugins.iframe && !editor.config.oembed_ShowIframePreview) {
+                CKEDITOR.addCss('img.cke_iframe' +
+                    '{' +
+                    'background-image: url(' + CKEDITOR.getUrl(CKEDITOR.plugins.getPath('oembed') + 'images/placeholder.png') + ');' +
+                    'background-position: center center;' +
+                    'background-repeat: no-repeat;' +
+                    'border: 1px solid #a9a9a9;' +
+                    'width: 80px;' +
+                    'height: 80px;' +
+                    '}'
+                );
+            }
 
-		    // Load jquery?
+            // Load jquery?
             loadjQueryLibaries();
 
             CKEDITOR.tools.extend(CKEDITOR.editor.prototype, {
-                oEmbed: function (url, maxWidth, maxHeight, responsiveResize) {
+                oEmbed: function(url, maxWidth, maxHeight, responsiveResize) {
 
                     if (url.length < 1 || url.indexOf('http') < 0) {
                         alert(editor.lang.oembed.invalidUrl);
                         return false;
                     }
 
-                    if (typeof (jQuery.fn.oembed) === 'undefined') {
-                        CKEDITOR.scriptLoader.load(CKEDITOR.getUrl(CKEDITOR.plugins.getPath('oembed') + 'libs/jquery.oembed.min.js'), function () {
+                    if (typeof(jQuery.fn.oembed) === 'undefined') {
+                        CKEDITOR.scriptLoader.load(CKEDITOR.getUrl(CKEDITOR.plugins.getPath('oembed') + 'libs/jquery.oembed.min.js'), function() {
                             embed();
                         });
                     } else {
                         embed();
                     }
-                    
+
                     function embed() {
                         if (maxWidth == null || maxWidth == 'undefined') {
                             maxWidth = null;
@@ -83,19 +86,27 @@
 
                         embedCode(url, editor, false, maxWidth, maxHeight, responsiveResize);
                     }
-                    
+
                     return true;
                 }
             });
 
-            editor.addCommand('oembed', new CKEDITOR.dialogCommand('oembed'));
-            editor.ui.addButton('oembed', {
-                label: editor.lang.oembed.button,
-                command: 'oembed',
-                icon: this.path + 'images/icon.png'
+
+            editor.widgets.add('oembed', {
+                mask: true,
+                dialog: 'oembed',
+                button: editor.lang.oembed.button,
+                allowedContent: 'div(!' + (editor.config.oembed_WrapperClass != null ? editor.config.oembed_WrapperClass : "embeddedContent") + ');div iframe[*]',
+                template:
+                    '<div class="' + (editor.config.oembed_WrapperClass != null ? editor.config.oembed_WrapperClass : "embeddedContent") +  '">' +
+                        '</div>',
+
+                upcast: function(element) {
+                    return element.name == 'div' && element.hasClass(editor.config.oembed_WrapperClass != null ? editor.config.oembed_WrapperClass : "embeddedContent");
+                },
             });
 
-            var resizeTypeChanged = function () {
+            var resizeTypeChanged = function() {
                 var dialog = this.getDialog(),
                     resizetype = this.getValue(),
                     maxSizeBox = dialog.getContentElement('general', 'maxSizeBox').getElement(),
@@ -103,96 +114,101 @@
 
                 if (resizetype == 'noresize') {
                     maxSizeBox.hide();
-                    
+
                     sizeBox.hide();
                 } else if (resizetype == "custom") {
                     maxSizeBox.hide();
-                    
+
                     sizeBox.show();
                 } else {
                     maxSizeBox.show();
-                    
+
                     sizeBox.hide();
                 }
 
             };
-            
-            String.prototype.beginsWith = function (string) {
+
+            String.prototype.beginsWith = function(string) {
                 return (this.indexOf(string) === 0);
             };
-            
+
             function loadjQueryLibaries() {
-                if (typeof (jQuery) === 'undefined') {
-                    CKEDITOR.scriptLoader.load('http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js', function () {
-                        if (typeof (jQuery.fn.oembed) === 'undefined') {
+                if (typeof(jQuery) === 'undefined') {
+                    CKEDITOR.scriptLoader.load('http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js', function() {
+                        if (typeof(jQuery.fn.oembed) === 'undefined') {
                             CKEDITOR.scriptLoader.load(
                                 CKEDITOR.getUrl(CKEDITOR.plugins.getPath('oembed') + 'libs/jquery.oembed.min.js')
                             );
                         }
                     });
 
-                } else if (typeof (jQuery.fn.oembed) === 'undefined') {
+                } else if (typeof(jQuery.fn.oembed) === 'undefined') {
                     CKEDITOR.scriptLoader.load(CKEDITOR.getUrl(CKEDITOR.plugins.getPath('oembed') + 'libs/jquery.oembed.min.js'));
                 }
             }
-            
-            function embedCode(url, instance, closeDialog, maxWidth, maxHeight, responsiveResize) {
-                jQuery('body').oembed(url, {
-                    onEmbed: function (e) {
-                        var divWrapper = new CKEDITOR.dom.element('div'),
-                            codeElement,
-                            codeIframe;
-						
-						if (typeof e.code === 'string') {
-                            if (editor.config.oembed_WrapperClass != null) {
-                                divWrapper.addClass(editor.config.oembed_WrapperClass);
-                            }
 
+            function embedCode(url, instance, closeDialog, maxWidth, maxHeight, responsiveResize, widget) {
+                jQuery('body').oembed(url, {
+                    onEmbed: function(e) {
+                        var codeElement,
+                            codeIframe,
+                            elementAdded = false;
+
+                        if (typeof e.code === 'string') {
                             codeElement = CKEDITOR.dom.element.createFromHtml(e.code);
 
-                            if (codeElement.$.tagName == "IFRAME" && editor.config.oembed_ShowIframePreview === false) {
-								codeIframe = editor.createFakeElement(codeElement, 'cke_iframe', 'iframe', true);
-                                codeIframe.appendTo(divWrapper);
+                            if (widget.element.$.firstChild) {
+                                widget.element.$.removeChild(widget.element.$.firstChild);
+                            }
+
+                            /*if (codeElement.$.tagName == "IFRAME" && editor.config.oembed_ShowIframePreview === false) {
+                                codeIframe = editor.createFakeElement(codeElement, 'cke_iframe', 'iframe', true);
+
+                                widget.element.appendHtml(codeIframe.$.outerHTML);
                             } else {
-                                codeElement.appendTo(divWrapper);
-                            }
+                                widget.element.appendHtml(e.code);
+                            }*/
+                            
+                            widget.element.appendHtml(e.code);
 
-                            instance.insertElement(divWrapper);
-
-                            if (closeDialog) {
-                                CKEDITOR.dialog.getCurrent().hide();
-                            }
+                            elementAdded = true;
                         } else if (typeof e.code[0].outerHTML === 'string') {
 
-                            if (editor.config.oembed_WrapperClass != null) {
-                                divWrapper.addClass(editor.config.oembed_WrapperClass);
-                            }
-
                             codeElement = CKEDITOR.dom.element.createFromHtml(e.code[0].outerHTML);
-							
-							if (codeElement.$.tagName == "IFRAME" && editor.config.oembed_ShowIframePreview === false) {
+
+                            if (widget.element.$.firstChild) {
+                                widget.element.$.removeChild(widget.element.$.firstChild);
+                            }
+
+                            /*if (codeElement.$.tagName == "IFRAME" && editor.config.oembed_ShowIframePreview === false) {
                                 codeIframe = editor.createFakeElement(codeElement, 'cke_iframe', 'iframe', true);
-                                codeIframe.appendTo(divWrapper);
+
+                                widget.element.appendHtml(codeIframe.$.outerHTML);
+
                             } else {
-                                codeElement.appendTo(divWrapper);
-                            }
-
-                            instance.insertElement(divWrapper);
-
-                            if (closeDialog) {
-                                CKEDITOR.dialog.getCurrent().hide();
-                            }
+                                widget.element.appendHtml(e.code[0].outerHTML);
+                            }*/
+                            
+                            widget.element.appendHtml(e.code[0].outerHTML);
+                            
+                            elementAdded = true;
                         } else {
                             alert(editor.lang.oembed.noEmbedCode);
                         }
+                        
+                        if (elementAdded) {
+                            if (closeDialog) {
+                                CKEDITOR.dialog.getCurrent().hide();
+                            }
+                        }
                     },
-                    onError: function (externalUrl) {
+                    onError: function(externalUrl) {
                         if (externalUrl.indexOf("vimeo.com") > 0) {
                             alert(editor.lang.oembed.noVimeo);
                         } else {
                             alert(editor.lang.oembed.Error);
                         }
-                                
+
                     },
                     maxHeight: maxHeight,
                     maxWidth: maxWidth,
@@ -201,12 +217,12 @@
                 });
             }
 
-            CKEDITOR.dialog.add('oembed', function (editor) {
+            CKEDITOR.dialog.add('oembed', function(editor) {
                 return {
                     title: editor.lang.oembed.title,
                     minWidth: CKEDITOR.env.ie && CKEDITOR.env.quirks ? 568 : 550,
                     minHeight: 155,
-                    onShow: function () {
+                    onShow: function() {
                         var resizetype = this.getContentElement('general', 'resizeType').getValue(),
                             maxSizeBox = this.getContentElement('general', 'maxSizeBox').getElement(),
                             sizeBox = this.getContentElement('general', 'sizeBox').getElement();
@@ -224,66 +240,8 @@
                             sizeBox.hide();
                         }
                     },
-                    onOk: function () {
-                        var inputCode = this.getValueOf('general', 'embedCode'),
-                            resizetype = this.getContentElement('general', 'resizeType').
-                                getValue(),
-                            maxWidth = null,
-                            maxHeight = null,
-                            responsiveResize = false,
-                            editorInstance = this.getParentEditor(),
-                            closeDialog = this.getContentElement('general', 'autoCloseDialog').
-                                getValue();
-                        
-                        if (inputCode.length < 1 || inputCode.indexOf('http') < 0) {
-                            alert(editor.lang.oembed.invalidUrl);
-                            return false;
-                        }
 
-                        if (resizetype == "noresize") {
-                            responsiveResize = false;
-                        } else {
-                            if (resizetype == "responsive") {
-                                maxWidth = this.getContentElement('general', 'maxWidth').
-                                    getInputElement().
-                                    getValue();
-                                maxHeight = this.getContentElement('general', 'maxHeight').
-                                    getInputElement().
-                                    getValue();
-
-                                responsiveResize = true;
-                            } else if (resizetype == "custom") {
-                                maxWidth = this.getContentElement('general', 'width').
-                                    getInputElement().
-                                    getValue();
-                                maxHeight = this.getContentElement('general', 'height').
-                                    getInputElement().
-                                    getValue();
-
-                                responsiveResize = false;
-                            }
-                        }
-
-                        // support for multiple urls
-                        if (inputCode.indexOf(";") > 0) {
-                            var urls = inputCode.split(";");
-                            for (var i = 0; i < urls.length; i++) {
-                                var url = urls[i];
-
-                                if (url.length > 1 && url.beginsWith('http')) {
-                                    embedCode(url, editorInstance, false, maxWidth, maxHeight, responsiveResize);
-                                }
-                                // close after last
-                                if (i == urls.length -1) {
-                                    CKEDITOR.dialog.getCurrent().hide();
-                                }
-                            }
-                        } else {
-                            // single url
-                            embedCode(inputCode, editorInstance, closeDialog, maxWidth, maxHeight, responsiveResize);
-                        }
-                        
-                        return false;
+                    onOk: function() {
                     },
                     contents: [{
                         label: editor.lang.common.generalTab,
@@ -295,11 +253,77 @@
                             }, {
                                 type: 'text',
                                 id: 'embedCode',
-                                focus: function () {
+                                focus: function() {
                                     this.getElement().focus();
                                 },
                                 label: editor.lang.oembed.url,
-                                title: editor.lang.oembed.pasteUrl
+                                title: editor.lang.oembed.pasteUrl,
+                                setup: function(widget) {
+                                    if (widget.data.oembed) {
+                                        this.setValue(widget.data.oembed);
+                                    }
+                                },
+                                commit: function(widget) {
+
+                                    var inputCode = CKEDITOR.dialog.getCurrent().getValueOf('general', 'embedCode'),
+                                        resizetype = CKEDITOR.dialog.getCurrent().getContentElement('general', 'resizeType').
+                                            getValue(),
+                                        maxWidth = null,
+                                        maxHeight = null,
+                                        responsiveResize = false,
+                                        editorInstance = CKEDITOR.dialog.getCurrent().getParentEditor(),
+                                        closeDialog = CKEDITOR.dialog.getCurrent().getContentElement('general', 'autoCloseDialog').
+                                            getValue();
+
+                                    if (inputCode.length < 1 || inputCode.indexOf('http') < 0) {
+                                        alert(editor.lang.oembed.invalidUrl);
+                                        return false;
+                                    }
+
+                                    if (resizetype == "noresize") {
+                                        responsiveResize = false;
+                                    } else {
+                                        if (resizetype == "responsive") {
+                                            maxWidth = this.getContentElement('general', 'maxWidth').
+                                                getInputElement().
+                                                getValue();
+                                            maxHeight = this.getContentElement('general', 'maxHeight').
+                                                getInputElement().
+                                                getValue();
+
+                                            responsiveResize = true;
+                                        } else if (resizetype == "custom") {
+                                            maxWidth = this.getContentElement('general', 'width').
+                                                getInputElement().
+                                                getValue();
+                                            maxHeight = this.getContentElement('general', 'height').
+                                                getInputElement().
+                                                getValue();
+
+                                            responsiveResize = false;
+                                        }
+                                    }
+
+                                    // support for multiple urls
+                                    if (inputCode.indexOf(";") > 0) {
+                                        var urls = inputCode.split(";");
+                                        for (var i = 0; i < urls.length; i++) {
+                                            var url = urls[i];
+
+                                            if (url.length > 1 && url.beginsWith('http')) {
+                                                embedCode(url, editorInstance, false, maxWidth, maxHeight, responsiveResize, widget);
+                                            }
+                                            // close after last
+                                            if (i == urls.length - 1) {
+                                                CKEDITOR.dialog.getCurrent().hide();
+                                            }
+                                        }
+                                    } else {
+                                        // single url
+                                        embedCode(inputCode, editorInstance, closeDialog, maxWidth, maxHeight, responsiveResize, widget);
+                                    }
+                                    widget.setData('oembed', this.getValue());
+                                }
                             }, {
                                 type: 'hbox',
                                 widths: ['50%', '50%'],
@@ -320,9 +344,9 @@
                                         widths: ['120px', '120px'],
                                         style: 'float:left;position:absolute;left:58%;width:200px',
                                         children: [{
-                                            type: 'text',
-                                            width:'100px',
-                                            id: 'maxWidth',
+                                                type: 'text',
+                                                width: '100px',
+                                                id: 'maxWidth',
                                                 'default': editor.config.oembed_maxWidth != null ? editor.config.oembed_maxWidth : '560',
                                                 label: editor.lang.oembed.maxWidth,
                                                 title: editor.lang.oembed.maxWidthTitle
@@ -367,7 +391,6 @@
             });
         }//
     });
-    
-}
 
+}
 )();

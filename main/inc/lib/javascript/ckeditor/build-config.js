@@ -48,8 +48,8 @@ var CKBUILDER_CONFIG = {
 		'font' : 1,
 		'forms' : 1,
 		'format' : 1,
-		'htmlwriter' : 1,
 		'horizontalrule' : 1,
+		'htmlwriter' : 1,
 		'iframe' : 1,
 		'wysiwygarea' : 1,
 		'image' : 1,
@@ -57,6 +57,7 @@ var CKBUILDER_CONFIG = {
 		'indentlist' : 1,
 		'smiley' : 1,
 		'justify' : 1,
+		'language' : 1,
 		'link' : 1,
 		'list' : 1,
 		'liststyle' : 1,
@@ -161,6 +162,6 @@ var CKBUILDER_CONFIG = {
 		'ug' : 1,
 		'uk' : 1,
 		'vi' : 1,
-		'cy' : 1,
+		'cy' : 1
 	}
 };

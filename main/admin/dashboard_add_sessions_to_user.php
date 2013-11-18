@@ -11,7 +11,6 @@ $language_file='admin';
 // resetting the course id
 $cidReset = true;
 
-// including some necessary dokeos files
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
 global $_configuration;
@@ -52,8 +51,8 @@ if (UserManager::is_admin($user_id)) {
 }
 
 $add_type = 'multiple';
-if(isset($_GET['add_type']) && $_GET['add_type']!=''){
-	$add_type = Security::remove_XSS($_REQUEST['add_type']);
+if (isset($_GET['add_type']) && $_GET['add_type']!=''){
+    $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
 if (!api_is_platform_admin() && !api_is_session_admin()) {
@@ -61,40 +60,40 @@ if (!api_is_platform_admin() && !api_is_session_admin()) {
 }
 
 function search_sessions($needle,$type) {
-	global $_configuration, $tbl_session_rel_access_url, $tbl_session, $user_id;
+    global $_configuration, $tbl_session_rel_access_url, $tbl_session, $user_id;
 
-	$xajax_response = new XajaxResponse();
-	$return = '';
-	if(!empty($needle) && !empty($type)) {
-		// xajax send utf8 datas... datas in db can be non-utf8 datas
-		$charset = api_get_system_encoding();
-		$needle = api_convert_encoding($needle, $charset, 'utf-8');
-		$assigned_sessions_to_hrm = SessionManager::get_sessions_followed_by_drh($user_id);
-		$assigned_sessions_id = array_keys($assigned_sessions_to_hrm);
+    $xajax_response = new XajaxResponse();
+    $return = '';
+    if(!empty($needle) && !empty($type)) {
+        // xajax send utf8 datas... datas in db can be non-utf8 datas
+        $charset = api_get_system_encoding();
+        $needle = api_convert_encoding($needle, $charset, 'utf-8');
+        $assigned_sessions_to_hrm = SessionManager::get_sessions_followed_by_drh($user_id);
+        $assigned_sessions_id = array_keys($assigned_sessions_to_hrm);
 
-		$without_assigned_sessions = '';
-		if (count($assigned_sessions_id) > 0) {
-			$without_assigned_sessions = " AND s.id NOT IN(".implode(',',$assigned_sessions_id).")";
-		}
+        $without_assigned_sessions = '';
+        if (count($assigned_sessions_id) > 0) {
+            $without_assigned_sessions = " AND s.id NOT IN(".implode(',',$assigned_sessions_id).")";
+        }
 
-		if ($_configuration['multiple_access_urls']) {
-			$sql 	= " SELECT s.id, s.name FROM $tbl_session s LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
-						WHERE  s.name LIKE '$needle%' $without_assigned_sessions AND access_url_id = ".api_get_current_access_url_id()."";
-		} else {
-			$sql = "SELECT s.id, s.name FROM $tbl_session s
-				WHERE  s.name LIKE '$needle%' $without_assigned_sessions ";
-		}
+        if ($_configuration['multiple_access_urls']) {
+            $sql 	= " SELECT s.id, s.name FROM $tbl_session s LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
+                        WHERE  s.name LIKE '$needle%' $without_assigned_sessions AND access_url_id = ".api_get_current_access_url_id()."";
+        } else {
+            $sql = "SELECT s.id, s.name FROM $tbl_session s
+                    WHERE  s.name LIKE '$needle%' $without_assigned_sessions ";
+        }
 
-		$rs	= Database::query($sql);
+        $rs	= Database::query($sql);
 
-		$return .= '<select id="origin" name="NoAssignedSessionsList[]" multiple="multiple" size="20" style="width:340px;">';
-		while($session = Database :: fetch_array($rs)) {
-			$return .= '<option value="'.$session['id'].'" title="'.htmlspecialchars($session['name'],ENT_QUOTES).'">'.$session['name'].'</option>';
-		}
-		$return .= '</select>';
-		$xajax_response->addAssign('ajax_list_sessions_multiple','innerHTML',api_utf8_encode($return));
-	}
-	return $xajax_response;
+        $return .= '<select id="origin" name="NoAssignedSessionsList[]" multiple="multiple" size="20" style="width:340px;">';
+        while($session = Database :: fetch_array($rs)) {
+            $return .= '<option value="'.$session['id'].'" title="'.htmlspecialchars($session['name'],ENT_QUOTES).'">'.$session['name'].'</option>';
+        }
+        $return .= '</select>';
+        $xajax_response->addAssign('ajax_list_sessions_multiple','innerHTML',api_utf8_encode($return));
+    }
+    return $xajax_response;
 }
 
 $xajax->processRequests();
@@ -157,7 +156,7 @@ $UserList = array();
 $msg = '';
 if (intval($_POST['formSent']) == 1) {
 	$sessions_list = $_POST['SessionsList'];
-	$affected_rows = SessionManager::suscribe_sessions_to_hr_manager($user_id,$sessions_list);
+	$affected_rows = SessionManager::suscribe_sessions_to_hr_manager($user_id, $sessions_list);
 	if ($affected_rows)	{
 		$msg = get_lang('AssignedSessionsHaveBeenUpdatedSuccessfully');
 	}
@@ -192,11 +191,11 @@ if (isset($_POST['firstLetterSession'])) {
 
 if ($_configuration['multiple_access_urls']) {
 	$sql 	= " SELECT s.id, s.name FROM $tbl_session s LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
-				WHERE  s.name LIKE '$needle%' $without_assigned_sessions AND access_url_id = ".api_get_current_access_url_id()." 
+				WHERE  s.name LIKE '$needle%' $without_assigned_sessions AND access_url_id = ".api_get_current_access_url_id()."
                 ORDER BY s.name";
 } else {
 	$sql 	= " SELECT s.id, s.name FROM $tbl_session s
-				WHERE  s.name LIKE '$needle%' $without_assigned_sessions 
+				WHERE  s.name LIKE '$needle%' $without_assigned_sessions
                 ORDER BY s.name
                 ";
 }
@@ -289,7 +288,6 @@ if(!empty($msg)) {
   </select></td>
 </tr>
 </table>
-
 </form>
 
 <?php

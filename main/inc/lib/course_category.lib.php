@@ -11,6 +11,22 @@ function isMultipleUrlSupport()
 }
 
 /**
+ * @param int $categoryId
+ * @return array
+ */
+function getCategoryById($categoryId)
+{
+    $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
+    $categoryId = Database::escape_string($categoryId);
+    $sql = "SELECT * FROM $tbl_category WHERE id = '$categoryId'";
+    $result = Database::query($sql);
+    if (Database::num_rows($result)) {
+        return Database::fetch_array($result, 'ASSOC');
+    }
+    return array();
+}
+
+/**
  * @param string $category
  * @return array
  */
@@ -236,6 +252,24 @@ function compterFils($pere, $cpt)
         $cpt = compterFils($row['code'], $cpt);
     }
     return ($cpt + 1);
+}
+
+/**
+ * @param string $categoryCode
+ * @return array
+ */
+function getChildren($categoryCode)
+{
+    $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
+    $categoryCode = Database::escape_string($categoryCode);
+    $result = Database::query("SELECT code, id FROM $tbl_category WHERE parent_id = '$categoryCode'");
+    $children = array();
+    while ($row = Database::fetch_array($result, 'ASSOC')) {
+        $children[] = $row;
+        $subChildren = getChildren($row['code']);
+        $children = array_merge($children, $subChildren);
+    }
+    return $children;
 }
 
 /**
@@ -582,6 +616,27 @@ function setCategoriesInForm($form, $defaultCode = null, $parentCode = null , $p
         }
     }
 }
+
+/**
+ * @param array $list
+ * @return array
+ */
+function getCourseCategoryNotInList($list)
+{
+    $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+    if (empty($list)) {
+        return array();
+    }
+
+    $list = array_map('intval', $list);
+    $listToString = implode("','", $list);
+
+    $sql = "SELECT * FROM $table WHERE id NOT IN ('$listToString') AND (parent_id IS NULL) ";
+    $result = Database::query($sql);
+    return Database::store_result($result, 'ASSOC');
+}
+
+
 
 /**
  CREATE TABLE IF NOT EXISTS access_url_rel_course_category (access_url_id int unsigned NOT NULL, course_category_id int unsigned NOT NULL, PRIMARY KEY (access_url_id, course_category_id));

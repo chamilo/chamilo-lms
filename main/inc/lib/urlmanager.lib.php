@@ -265,6 +265,37 @@ class UrlManager
     }
 
     /**
+     * Gets the inner join of access_url and the usergroup table
+     *
+     * @author Julio Montoya
+     * @param int  access url id
+     * @return array   Database::store_result of the result
+     **/
+
+    public static function getUrlRelCourseCategory($access_url_id = null)
+    {
+
+        $table_url_rel = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
+        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $where = " WHERE 1=1 ";
+        if (!empty($access_url_id)) {
+            $where .= " AND $table_url_rel.access_url_id = ".intval($access_url_id);
+        }
+        $where .= " AND (parent_id IS NULL) ";
+
+        $sql = "SELECT id, name, access_url_id
+            FROM $table u
+            INNER JOIN $table_url_rel
+            ON $table_url_rel.course_category_id = u.id
+            $where
+            ORDER BY name";
+
+        $result = Database::query($sql);
+        $courses = Database::store_result($result, 'ASSOC');
+        return $courses;
+    }
+
+    /**
      * Sets the status of an URL 1 or 0
      * @author Julio Montoya
      * @param string lock || unlock
@@ -501,22 +532,6 @@ class UrlManager
     }
 
     /**
-     * @param int $categoryCourseId
-     * @param int $urlId
-     * @return int
-     */
-    public static function addCourseCategoryToUrl($categoryCourseId, $urlId)
-    {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-        $sql = "INSERT INTO $table SET
-                course_category_id = '".intval($categoryCourseId)."',
-                access_url_id = ".intval($urlId);
-        Database::query($sql);
-        return Database::insert_id();
-    }
-
-
-    /**
      * @param int $userGroupId
      * @param int $urlId
      * @return int
@@ -529,6 +544,23 @@ class UrlManager
                 usergroup_id = '".intval($userGroupId)."',
                 access_url_id = ".intval($urlId);
         Database::query($sql);
+        return Database::insert_id();
+    }
+
+    /**
+     * @param int $id
+     * @param int $urlId
+     * @return int
+     */
+    public static function addCourseCategoryToUrl($id, $urlId)
+    {
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
+        $sql = "INSERT INTO $table
+                SET
+                course_category_id = '".intval($id)."',
+                access_url_id = ".intval($urlId);
+        Database::query($sql);
+
         return Database::insert_id();
     }
 
@@ -680,6 +712,24 @@ class UrlManager
         return $result;
     }
 
+    /**
+     * Deletes an url and $userGroup relationship
+     * @author Julio Montoya
+     * @param  int $userGroupId
+     * @param  int $urlId
+     * @return boolean true if success
+     * */
+    public static function deleteUrlRelCourseCategory($userGroupId, $urlId)
+    {
+        $table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
+        $sql= "DELETE FROM $table
+               WHERE course_category_id = '".intval($userGroupId)."' AND
+                     access_url_id=".intval($urlId)."  ";
+        $result = Database::query($sql);
+        return $result;
+    }
+
+
 
     /**
     * Deletes an url and session relationship
@@ -814,6 +864,56 @@ class UrlManager
     }
 
     /**
+     * Updates the access_url_rel_course_category table with a given list
+     * @author Julio Montoya
+     * @param array course category list
+     * @param int access_url_id
+     **/
+    public static function updateUrlRelCourseCategory($list, $urlId)
+    {
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
+
+        $sql = "SELECT course_category_id FROM $table WHERE access_url_id = ".intval($urlId);
+        $result = Database::query($sql);
+        $existingItems = array();
+
+        while ($row = Database::fetch_array($result)){
+            $existingItems[] = $row['course_category_id'];
+        }
+
+        // Adding
+        foreach ($list as $id) {
+            if (!in_array($id, $existingItems)) {
+                UrlManager::addCourseCategoryToUrl($id, $urlId);
+                $categoryInfo = getCategoryById($id);
+                $children = getChildren($categoryInfo['code']);
+                if (!empty($children)) {
+                    foreach ($children as $category) {
+                        UrlManager::addCourseCategoryToUrl($category['id'], $urlId);
+                    }
+                }
+            }
+        }
+
+        // Deleting old items
+        foreach ($existingItems as $id) {
+            if (!in_array($id, $list)) {
+                UrlManager::deleteUrlRelCourseCategory($id, $urlId);
+                $categoryInfo = getCategoryById($id);
+
+                $children = getChildren($categoryInfo['code']);
+                if (!empty($children)) {
+                    foreach ($children as $category) {
+                        UrlManager::deleteUrlRelCourseCategory($category['id'], $urlId);
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    /**
      * Updates the access_url_rel_session table with a given user list
      * @author Julio Montoya
      * @param array user list
@@ -894,4 +994,42 @@ class UrlManager
         $access_url_id = Database::result($result, 0, 0);
         return $access_url_id;
     }
+
+    /**
+     *
+     * @param string $needle
+     * @return XajaxResponse
+     */
+    public static function searchCourseCategoryAjax($needle)
+    {
+        $response = new XajaxResponse();
+        $return = '';
+
+        if (!empty($needle)) {
+            // xajax send utf8 datas... datas in db can be non-utf8 datas
+            $charset = api_get_system_encoding();
+            $needle = api_convert_encoding($needle, $charset, 'utf-8');
+            $needle = Database::escape_string($needle);
+            // search courses where username or firstname or lastname begins likes $needle
+            $sql = 'SELECT id, name FROM '.Database::get_main_table(TABLE_MAIN_CATEGORY).' u
+                    WHERE name LIKE "'.$needle.'%" AND (parent_id IS NULL or parent_id = 0)
+                    ORDER BY name
+                    LIMIT 11';
+            $result = Database::query($sql);
+            $i = 0;
+            while ($data = Database::fetch_array($result)) {
+                $i++;
+                if ($i <= 10) {
+                    $return .= '<a
+                    href="javascript: void(0);"
+                    onclick="javascript: add_user_to_url(\''.addslashes($data['id']).'\',\''.addslashes($data['name']).' \')">'.$data['name'].' </a><br />';
+                } else {
+                    $return .= '...<br />';
+                }
+            }
+        }
+        $response->addAssign('ajax_list_courses', 'innerHTML', api_utf8_encode($return));
+        return $response;
+    }
+
 }

@@ -6,7 +6,6 @@ use ChamiloSession as Session;
 $language_file = array('exercice', 'work', 'document', 'admin', 'gradebook');
 
 require_once '../inc/global.inc.php';
-// Including necessary files
 require_once 'work.lib.php';
 
 if (ADD_DOCUMENT_TO_WORK == false) {
@@ -18,6 +17,7 @@ $current_course_tool  = TOOL_STUDENTPUBLICATION;
 $workId = isset($_GET['id']) ? intval($_GET['id']) : null;
 $docId = isset($_GET['document_id']) ? intval($_GET['document_id']) : null;
 $action = isset($_GET['action']) ? $_GET['action'] : null;
+$message = isset($_GET['message']) ? Security::remove_XSS($_GET['message']) : null;
 
 if (empty($workId)) {
     api_not_allowed(true);
@@ -56,6 +56,7 @@ switch ($action) {
 if (empty($docId)) {
 
     Display :: display_header(null);
+    echo $message;
     $documents = getAllDocumentToWork($workId, api_get_course_int_id());
     if (!empty($documents)) {
         echo Display::page_subheader(get_lang('DocumentsAdded'));
@@ -86,7 +87,6 @@ if (empty($docId)) {
     echo $document_tree;
     echo '<hr /><div class="clear"></div>';
 } else {
-    $message = null;
 
     $documentInfo = DocumentManager::get_document_data_by_id($docId, $courseInfo['code']);
     $url = api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId.'&document_id='.$docId.'&'.api_get_cidreq();
@@ -105,12 +105,14 @@ if (empty($docId)) {
 
         if (empty($data)) {
             addDocumentToWork($docId, $workId, api_get_course_int_id());
-            $url = api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId.'&'.api_get_cidreq();
-            header('Location: '.$url);
-            exit;
+            $message = Display::return_message(get_lang('Added'), 'success');
         } else {
             $message = Display::return_message(get_lang('DocumentAlreadyAdded'), 'warning');
         }
+
+        $url = api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId.'&'.api_get_cidreq().'&message='.$message;
+        header('Location: '.$url);
+        exit;
     }
 
     Display::display_header(null);

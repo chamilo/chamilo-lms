@@ -29,7 +29,10 @@ $errorMsg = '';
 if (!empty($action)) {
     if ($action == 'delete') {
         if (api_get_multiple_access_url()) {
-            if (api_get_current_access_url_id() == 1) {
+            if (api_get_current_access_url_id() == 1 ||
+                (isset($_configuration['enable_multiple_url_support_for_course_category']) &&
+                $_configuration['enable_multiple_url_support_for_course_category'])
+            ) {
                 deleteNode($_GET['id']);
                 header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
                 exit();
@@ -87,8 +90,12 @@ if ($action == 'add' || $action == 'edit') {
         $form->addElement('text', 'name', get_lang("CategoryName"));
         $form->addRule('name', get_lang('PleaseEnterCategoryInfo'), 'required');
         $form->addRule('code', get_lang('PleaseEnterCategoryInfo'), 'required');
-        $form->addElement('radio', 'auth_course_child', get_lang("AllowCoursesInCategory"), get_lang('Yes'), 'TRUE');
-        $form->addElement('radio', 'auth_course_child', null, get_lang('No'), 'FALSE');
+        $group = array(
+            $form->createElement('radio', 'auth_course_child', get_lang("AllowCoursesInCategory"), get_lang('Yes'), 'TRUE'),
+            $form->createElement('radio', 'auth_course_child', null, get_lang('No'), 'FALSE')
+        );
+        $form->addGroup($group, null, get_lang("AllowCoursesInCategory"));
+
         if (!empty($categoryInfo)) {
             $class = "save";
             $text = get_lang('CategoryMod');
@@ -114,7 +121,7 @@ if ($action == 'add' || $action == 'edit') {
         );
     }
 
-    if (empty($parentInfo) || $parentInfo['auth_cat_child'] == 'FALSE') {
+    if (empty($parentInfo) || $parentInfo['auth_cat_child'] == 'TRUE') {
         echo Display::url(
             Display::return_icon('new_folder.png', get_lang("AddACategory"), '', ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'admin/course_category.php?action=add&category='.$category
@@ -123,7 +130,7 @@ if ($action == 'add' || $action == 'edit') {
 
     echo '</div>';
     if (!empty($parentInfo)) {
-        echo Display::page_subheader($parentInfo['name']);
+        echo Display::page_subheader($parentInfo['name'].' ('.$parentInfo['code'].')');
     }
     echo listCategories($category);
 }

@@ -1540,9 +1540,8 @@ class SessionManager
     * Subscribes sessions to human resource manager (Dashboard feature)
     * @param	int 		Human Resource Manager id
     * @param	array 		Sessions id
-    * @param	int			Relation type
     **/
-	public static function suscribe_sessions_to_hr_manager($hr_manager_id,$sessions_list)
+	public static function suscribe_sessions_to_hr_manager($hr_manager_id, $sessions_list)
     {
         // Database Table Definitions
         $tbl_session_rel_user           =   Database::get_main_table(TABLE_MAIN_SESSION_USER);
@@ -1553,24 +1552,36 @@ class SessionManager
 
         // Deleting assigned sessions to hrm_id
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT id_session FROM $tbl_session_rel_user s INNER JOIN $tbl_session_rel_access_url a ON (a.session_id = s.id_session) WHERE id_user = $hr_manager_id AND relation_type=".SESSION_RELATION_TYPE_RRHH." AND access_url_id = ".api_get_current_access_url_id()."";
+            $sql = "SELECT id_session
+                    FROM $tbl_session_rel_user s
+                    INNER JOIN $tbl_session_rel_access_url a ON (a.session_id = s.id_session)
+                    WHERE
+                        id_user = $hr_manager_id AND
+                        relation_type=".SESSION_RELATION_TYPE_RRHH." AND
+                        access_url_id = ".api_get_current_access_url_id()."";
         } else {
-            $sql = "SELECT id_session FROM $tbl_session_rel_user s WHERE id_user = $hr_manager_id AND relation_type=".SESSION_RELATION_TYPE_RRHH."";
+            $sql = "SELECT id_session FROM $tbl_session_rel_user s
+                    WHERE id_user = $hr_manager_id AND relation_type=".SESSION_RELATION_TYPE_RRHH."";
         }
         $result = Database::query($sql);
 
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result))   {
-                 $sql = "DELETE FROM $tbl_session_rel_user WHERE id_session = {$row['id_session']} AND id_user = $hr_manager_id AND relation_type=".SESSION_RELATION_TYPE_RRHH." ";
+                 $sql = "DELETE FROM $tbl_session_rel_user
+                        WHERE
+                            id_session = {$row['id_session']} AND
+                            id_user = $hr_manager_id AND
+                            relation_type=".SESSION_RELATION_TYPE_RRHH." ";
                  Database::query($sql);
             }
         }
 
-		// inserting new sessions list
+		// Inserting new sessions list
 		if (is_array($sessions_list)) {
 			foreach ($sessions_list as $session_id) {
 				$session_id = intval($session_id);
-				$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user, relation_type) VALUES($session_id, $hr_manager_id, '".SESSION_RELATION_TYPE_RRHH."')";
+				$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user, relation_type) VALUES
+				               ($session_id, $hr_manager_id, '".SESSION_RELATION_TYPE_RRHH."')";
 				Database::query($insert_sql);
 				$affected_rows = Database::affected_rows();
 			}
@@ -2060,8 +2071,7 @@ class SessionManager
         $daysCoachAccessAfterBeginning = null,
         $sessionVisibility = 1,
         $fieldsToAvoidUpdate = array()
-    )
-    {
+    ) {
         $content = file($file);
 
         $error_message = null;
@@ -2280,11 +2290,16 @@ class SessionManager
                             }
                         }
 
-                        Database::query("DELETE FROM $tbl_session_user WHERE id_session='$session_id'");
-                        Database::query("DELETE FROM $tbl_session_course WHERE id_session='$session_id'");
+                        $sql = "DELETE FROM $tbl_session_user
+                                WHERE id_session = '$session_id' AND relation_type <> ".SESSION_RELATION_TYPE_RRHH;
+                        Database::query($sql);
+
+                        $sql = "DELETE FROM $tbl_session_course WHERE id_session = '$session_id'";
+                        Database::query($sql);
 
                         // Delete session course user relation ships *only* for students
-                        Database::query("DELETE FROM $tbl_session_course_user WHERE id_session='$session_id' AND status <> 2");
+                        $sql = "DELETE FROM $tbl_session_course_user WHERE id_session = '$session_id' AND status <> 2";
+                        Database::query($sql);
                     }
                     $session_counter++;
                 }

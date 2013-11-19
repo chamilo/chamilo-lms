@@ -8,7 +8,9 @@
  */
 define('_MPDF_PATH', api_get_path(LIBRARY_PATH).'mpdf/');
 require_once _MPDF_PATH.'mpdf.php';
-
+/**
+ * Class PDF
+ */
 class PDF
 {
     public $pdf;
@@ -121,13 +123,13 @@ class PDF
 
         if (is_array($html_file_array)) {
             if (count($html_file_array) == 0) {
-            return false;
+                return false;
             }
         } else {
             if (!file_exists($html_file_array)) {
                 return false;
             }
-            //Converting the string into an array
+            // Converting the string into an array
             $html_file_array = array($html_file_array);
         }
 
@@ -137,13 +139,13 @@ class PDF
             $course_data = api_get_course_info();
         }
 
-        //clean styles and javascript document
+        // Clean styles and javascript document
         $clean_search = array (
             '@<script[^>]*?>.*?</script>@si',
             '@<style[^>]*?>.*?</style>@si'
             );
 
-        //Formatting the pdf
+        // Formatting the pdf
         self::format_pdf($course_data, $complete_style);
 
         $counter = 1;
@@ -168,7 +170,7 @@ class PDF
             }
 
             if (empty($file) && !empty($html_title)) {
-            	//this is a chapter, print title & skip the rest
+                //this is a chapter, print title & skip the rest
                 if ($print_title) {
                     $this->pdf->WriteHTML('<html><body><h3>'.$html_title.'</h3></body></html>'.$page_break, 2);
                 }
@@ -177,7 +179,7 @@ class PDF
 
             if (!file_exists($file)) {
                 //the file doesn't exist, skip
-            	continue;
+                continue;
             }
 
             //it's not a chapter but the file exists, print its title
@@ -243,9 +245,10 @@ class PDF
                 }
 
                 api_set_encoding_html($document_html, 'UTF-8'); // The library mPDF expects UTF-8 encoded input data.
-                $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8');  // TODO: Maybe it is better idea the title to be passed through
-                                                                                // $_GET[] too, as it is done with file name.
-                                                                         // At the moment the title is retrieved from the html document itself.
+                // TODO: Maybe it is better idea the title to be passed through
+                $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8');
+                // $_GET[] too, as it is done with file name.
+                // At the moment the title is retrieved from the html document itself.
                 //echo $document_html;exit;
                 if (empty($title)) {
                     $title = $filename; // Here file name is expected to contain ASCII symbols only.
@@ -264,9 +267,9 @@ class PDF
             $output_file = 'pdf_'.date('Y-m-d-his').'.pdf';
         } else {
             $pdf_name = replace_dangerous_char($pdf_name);
-        	$output_file = $pdf_name.'.pdf';
+            $output_file = $pdf_name.'.pdf';
         }
-        $result = $this->pdf->Output($output_file, 'D');       /// F to save the pdf in a file
+        $this->pdf->Output($output_file, 'D');       /// F to save the pdf in a file
         exit;
     }
 
@@ -280,7 +283,6 @@ class PDF
      */
     public function content_to_pdf($document_html, $css = '', $pdf_name = '', $course_code = null)
     {
-
         if (empty($document_html)) {
             return false;
         }
@@ -291,7 +293,7 @@ class PDF
             '@<style[^>]*?>.*?</style>@siU'
             );
 
-        //Formatting the pdf
+        // Formatting the pdf
        	$course_data = api_get_course_info($course_code);
 
         self::format_pdf($course_data);
@@ -347,8 +349,8 @@ class PDF
 
         api_set_encoding_html($document_html, 'UTF-8'); // The library mPDF expects UTF-8 encoded input data.
         $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8');  // TODO: Maybe it is better idea the title to be passed through
-                                                                        // $_GET[] too, as it is done with file name.
-                                                                        // At the moment the title is retrieved from the html document itself.
+        // $_GET[] too, as it is done with file name.
+        // At the moment the title is retrieved from the html document itself.
 
         if (!empty($css)) {
             $this->pdf->WriteHTML($css, 1);
@@ -361,7 +363,7 @@ class PDF
             $pdf_name = replace_dangerous_char($pdf_name);
             $output_file = $pdf_name.'.pdf';
         }
-        $result = $this->pdf->Output($output_file, 'D'); // F to save the pdf in a file
+        $this->pdf->Output($output_file, 'D'); // F to save the pdf in a file
         exit;
     }
 
@@ -396,15 +398,18 @@ class PDF
     {
         if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
             $course_info = api_get_course_info($course_code);
-            $store_path  = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.api_get_current_access_url_id().'_pdf_watermark.png';   // course path
+            // course path
+            $store_path  = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.api_get_current_access_url_id().'_pdf_watermark.png';
+
         } else {
-            $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png';   // course path
+            // course path
+            $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png';
         }
         if (file_exists($store_path)) {
-            @unlink($store_path);
+            unlink($store_path);
             return true;
         }
-    	return false;
+        return false;
     }
 
     /**
@@ -454,7 +459,8 @@ class PDF
     /**
      *
      */
-    public function set_footer() {
+    public function set_footer()
+    {
         $this->pdf->defaultfooterfontsize = 12;   // in pts
         $this->pdf->defaultfooterfontstyle = B;   // blank, B, I, or BI
         $this->pdf->defaultfooterline = 1;        // 1 to include line below header/above footer
@@ -489,11 +495,10 @@ class PDF
     }
 
     /**
-     * @param $course_data
+     * @param array $course_data
      */
     public function set_header($course_data)
     {
-
         $this->pdf->defaultheaderfontsize   = 10;   // in pts
         $this->pdf->defaultheaderfontstyle  = BI;   // blank, B, I, or BI
         $this->pdf->defaultheaderline       = 1;    // 1 to include line below header/above footer
@@ -503,7 +508,6 @@ class PDF
             $teachers = '';
             if (!empty($teacher_list)) {
                 foreach ($teacher_list as $teacher) {
-                    //$teachers[]= api_get_person_name($teacher['firstname'], $teacher['lastname']);
                     $teachers[]= $teacher['firstname'].' '.$teacher['lastname'];
                 }
                 if (count($teachers) > 1) {
@@ -512,7 +516,7 @@ class PDF
                     $teachers = get_lang('Teacher').': '.implode('', $teachers);
                 }
 
-                //do not show the teacher list see BT#4080 only the current teacher name
+                // Do not show the teacher list see BT#4080 only the current teacher name
                 $user_info = api_get_user_info();
                 $teachers = $user_info['complete_name'];
             }
@@ -521,35 +525,73 @@ class PDF
             $center_content  = '';
             $right_content   = $teachers;
 
-            $header = array (
-              'odd' => array (
-                'L' => array (
-                  'content' => $left_content,  'font-size' => 10,'font-style' => 'B','font-family' => 'serif','color'=>'#000000'),
-                'C' => array (
-                  'content' => $center_content,'font-size' => 10,'font-style' => 'B','font-family' => 'serif','color'=>'#000000'),
-                'R' => array (
-                  'content' => $right_content, 'font-size' => 10,'font-style' => 'B','font-family' => 'serif','color'=>'#000000'),
-                'line' => 1,
-              ),
-             'even' => array (
-                'L' => array (
-                  'content' => $left_content,  'font-size' => 10,'font-style' => 'B','font-family' => 'serif','color'=>'#000000'),
-                'C' => array (
-                  'content' => $center_content,'font-size' => 10,'font-style' => 'B','font-family' => 'serif','color'=>'#000000'),
-                'R' => array (
-                  'content' => $right_content, 'font-size' => 10,'font-style' => 'B','font-family' => 'serif','color'=>'#000000'),
-                'line' => 1,
-              ),
+            $header = array(
+                'odd' => array(
+                    'L' => array(
+                        'content' => $left_content,
+                        'font-size' => 10,
+                        'font-style' => 'B',
+                        'font-family' => 'serif',
+                        'color'=>'#000000'
+                    ),
+                    'C' => array(
+                        'content' => $center_content,
+                        'font-size' => 10,
+                        'font-style' => 'B',
+                        'font-family' => 'serif',
+                        'color'=>'#000000'
+                    ),
+                    'R' => array(
+                        'content' => $right_content,
+                        'font-size' => 10,
+                        'font-style' => 'B',
+                        'font-family' => 'serif',
+                        'color'=>'#000000'
+                    ),
+                    'line' => 1,
+                ),
+                'even' => array(
+                    'L' => array(
+                        'content' => $left_content,
+                        'font-size' => 10,
+                        'font-style' => 'B',
+                        'font-family' => 'serif',
+                        'color'=>'#000000'
+                    ),
+                    'C' => array(
+                        'content' => $center_content,
+                        'font-size' => 10,
+                        'font-style' => 'B',
+                        'font-family' => 'serif',
+                        'color'=>'#000000'
+                    ),
+                    'R' => array(
+                        'content' => $right_content,
+                        'font-size' => 10,
+                        'font-style' => 'B',
+                        'font-family' => 'serif',
+                        'color'=>'#000000'
+                    ),
+                    'line' => 1,
+                ),
             );
             $this->pdf->SetHeader($header);// ('{DATE j-m-Y}|{PAGENO}/{nb}|'.$title);
         }
     }
 
-    public function set_custom_header($header) {
+    /**
+     * @param string $header html content
+     */
+    public function set_custom_header($header)
+    {
         $this->custom_header = $header;
     }
 
-    public function set_custom_footer($footer) {
+    /**
+     * @param string $footer html content
+     */
+    public function set_custom_footer($footer)
+    {
         $this->custom_footer = $footer;
     }
 
@@ -565,7 +607,7 @@ class PDF
             error_log('Asked with no decoration');
         }
         $course_code = null;
-        if (!empty( $course_data)) {
+        if (!empty($course_data)) {
             $course_code = $course_data['code'];
         }
 
@@ -576,7 +618,8 @@ class PDF
         */
         $this->pdf->directionality      = api_get_text_direction(); // TODO: To be read from the html document.
         $this->pdf->useOnlyCoreFonts    = true;
-        $this->pdf->mirrorMargins       = 1;            // Use different Odd/Even headers and footers and mirror margins
+        // Use different Odd/Even headers and footers and mirror margins
+        $this->pdf->mirrorMargins       = 1;
 
         // Add decoration only if not stated otherwise
         if ($complete) {

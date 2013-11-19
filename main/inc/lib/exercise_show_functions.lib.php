@@ -15,7 +15,8 @@
  * Class
  * @package chamilo.library
  */
-class ExerciseShowFunctions {
+class ExerciseShowFunctions
+{
 
 	/**
 	 * Shows the answer to a fill-in-the-blanks question, as HTML
@@ -57,7 +58,8 @@ class ExerciseShowFunctions {
 	 * @param int       Question ID
 	 * @return void
 	 */
-	static function display_free_answer($feedback_type, $answer, $exe_id, $questionId, $questionScore = null) {
+	static function display_free_answer($feedback_type, $answer, $exe_id, $questionId, $questionScore = null)
+    {
         $comments = get_comments($exe_id, $questionId);
 
         if (!empty($answer)) {
@@ -76,7 +78,8 @@ class ExerciseShowFunctions {
         }
 	}
 
-	static function display_oral_expression_answer($feedback_type, $answer, $id, $questionId, $nano = null) {
+	static function display_oral_expression_answer($feedback_type, $answer, $id, $questionId, $nano = null)
+    {
 		if (isset($nano)) {
 			echo $nano->show_audio_file();
 		}
@@ -162,9 +165,9 @@ class ExerciseShowFunctions {
 			<td valign="top" align="left" >
 				<?php
                 if ($studentChoice) {
-                    echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
+                    echo '<span style="font-weight: bold; color: #008000;">'.nl2br($answerComment).'</span>';
                 } else {
-                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
+                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br($answerComment).'</span>';
                 }
 
 				?>
@@ -221,18 +224,18 @@ class ExerciseShowFunctions {
             if ($studentChoice) {
 				if ($answerCorrect) {
                     $color = 'green';
-					//echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
+					//echo '<span style="font-weight: bold; color: #008000;">'.nl2br($answerComment).'</span>';
 				} else {
                     $color = 'black';
-                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
+                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br($answerComment).'</span>';
 				}
-                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br(make_clickable($answerComment)).'</span>';
+                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
 
 			} else {
 				if ($answerCorrect) {
-					//echo '<span style="font-weight: bold; color: #000;">'.nl2br(make_clickable($answerComment)).'</span>';
+					//echo '<span style="font-weight: bold; color: #000;">'.nl2br($answerComment).'</span>';
 				} else {
-                    //echo '<span style="font-weight: normal; color: #000;">'.nl2br(make_clickable($answerComment)).'</span>';
+                    //echo '<span style="font-weight: normal; color: #000;">'.nl2br($answerComment).'</span>';
 				}
 			}
 			?>
@@ -311,7 +314,7 @@ class ExerciseShowFunctions {
                 if ($studentChoice == $answerCorrect) {
                     $color = "green";
                 }
-                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br(make_clickable($answerComment)).'</span>';
+                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
             }
             ?>
         </td>
@@ -389,15 +392,15 @@ class ExerciseShowFunctions {
                 if ($studentChoice == $answerCorrect) {
                     $color = "green";
                 }
-                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br(make_clickable($answerComment)).'</span>';
+                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
             }
             if ($studentChoice == 2 || $studentChoice == '') {
-            	//echo '<span style="font-weight: bold; color: #000;">'.nl2br(make_clickable($answerComment)).'</span>';
+            	//echo '<span style="font-weight: bold; color: #000;">'.nl2br($answerComment).'</span>';
             } else {
 				if ($studentChoice == $answerCorrect) {
-	            	//echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
+	            	//echo '<span style="font-weight: bold; color: #008000;">'.nl2br($answerComment).'</span>';
 				} else {
-                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
+                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br($answerComment).'</span>';
 				}
             }
             ?>

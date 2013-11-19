@@ -3574,7 +3574,7 @@ class TrackingCourseLog
 
     	if (!empty($_GET['user_keyword'])) {
     		$keyword = trim(Database::escape_string($_GET['user_keyword']));
-    		$condition_user .=  " AND  (user.firstname LIKE '%".$keyword."%' OR user.lastname LIKE '%".$keyword."%'  OR user.username LIKE '%".$keyword."%'  OR user.email LIKE '%".$keyword."%' ) ";
+    		$condition_user .=  " AND (user.firstname LIKE '%".$keyword."%' OR user.lastname LIKE '%".$keyword."%'  OR user.username LIKE '%".$keyword."%'  OR user.email LIKE '%".$keyword."%' ) ";
     	}
 
     	if (api_is_multiple_url_enabled()) {
@@ -3638,7 +3638,7 @@ class TrackingCourseLog
     		$user['official_code']  = $user['col0'];
             $user['lastname']       = $user['col1'];
             $user['firstname']      = $user['col2'];
-    		$user['username']        = $user['col3'];
+    		$user['username']       = $user['col3'];
     		$user['time'] = api_time_to_hms(Tracking::get_time_spent_on_the_course($user['user_id'], $course_code, $session_id));
 
     		$avg_student_score = Tracking::get_avg_student_score($user['user_id'], $course_code, array(), $session_id);

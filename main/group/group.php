@@ -142,10 +142,7 @@ if (api_is_allowed_to_edit(false, true)) {
                 GroupManager :: delete_groups($my_get_id);
                 Display :: display_confirmation_message(get_lang('GroupDel'));
                 break;
-            case 'empty_one':
-                GroupManager :: unsubscribe_all_users($my_get_id);
-                Display :: display_confirmation_message(get_lang('GroupEmptied'));
-                break;
+
             case 'fill_one':
                 GroupManager :: fill_groups($my_get_id);
                 Display :: display_confirmation_message(get_lang('GroupFilledGroups'));
@@ -161,11 +158,8 @@ if (api_is_allowed_to_edit(false, true)) {
 echo '<div class="actions">';
 if (api_is_allowed_to_edit(false, true)) {
     echo '<a href="group_creation.php?'.api_get_cidreq().'">'.
-        Display::return_icon('new_group.png', get_lang('NewGroupCreate'),'',ICON_SIZE_MEDIUM).'</a>';
-    if (CourseManager::count_rows_course_table(Database::get_course_table(TABLE_GROUP), api_get_session_id(), api_get_course_int_id()) > 0) {
-        echo '<a href="group_overview.php?'.api_get_cidreq().'">'.
-            Display::return_icon('group_summary.png', get_lang('GroupOverview'), '', ICON_SIZE_MEDIUM).'</a>';
-    }
+        Display::return_icon('new_group.png', get_lang('NewGroupCreate'), '', ICON_SIZE_MEDIUM).'</a>';
+
     if (api_get_setting('allow_group_categories') == 'true') {
         echo '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.
             Display::return_icon('new_folder.png', get_lang('AddCategory'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -183,9 +177,16 @@ if (api_is_allowed_to_edit(false, true)) {
     echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.
         Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a>';
 
+    echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export_pdf">'.
+        Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+
+    echo '<a href="group_overview.php?'.api_get_cidreq().'">'.
+        Display::return_icon('group_summary.png', get_lang('GroupOverview'), '', ICON_SIZE_MEDIUM).'</a>';
 
     echo '<a href="../user/user.php?'.api_get_cidreq().'">'.
         Display::return_icon('user.png', get_lang('GoTo').' '.get_lang('Users'), '', ICON_SIZE_MEDIUM).'</a>';
+
+    echo GroupManager::getSearchForm();
 }
 
 $group_cats = GroupManager::get_categories(api_get_course_id());
@@ -220,7 +221,7 @@ if (api_get_setting('allow_group_categories') == 'true') {
     }
 } else {
     $group_list = GroupManager::get_group_list();
-    GroupManager ::process_groups($group_list);
+    GroupManager::process_groups($group_list);
 }
 
 if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath') {

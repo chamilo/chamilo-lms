@@ -13,12 +13,11 @@ $cidReset = true;
 
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
+require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
 require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
 
 $xajax = new xajax();
-$xajax->registerFunction(array('searchUserGroupAjax', 'UserGroup', 'searchUserGroupAjax'));
-$userGroup = new UserGroup();
+$xajax->registerFunction(array('searchCourseCategoryAjax', 'UrlManager', 'searchCourseCategoryAjax'));
 
 // Setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -30,7 +29,7 @@ if (!api_get_multiple_access_url()) {
     exit;
 }
 
-// setting breadcrumbs
+// Setting breadcrumbs
 $tool_name = get_lang('EditUserGroupToURL');
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
@@ -82,22 +81,22 @@ function remove_item(origin) {
 
 $form_sent=0;
 $errorMsg='';
-$UserList=$SessionList=array();
-$users=$sessions=array();
+$UserList=$SessionList = array();
+$users=$sessions = array();
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
-    $course_list = $_POST['course_list'];
+    $list = $_POST['course_list'];
 
-    if (!is_array($course_list)) {
-        $course_list = array();
+    if (!is_array($list)) {
+        $list = array();
     }
 
     if ($form_sent == 1) {
         if ($access_url_id == 0) {
             header('Location: access_url_edit_users_to_url.php?action=show_message&message='.get_lang('SelectURL'));
-        } elseif (is_array($course_list)) {
-            UrlManager::update_urls_rel_usergroup($course_list, $access_url_id);
+        } elseif (is_array($list)) {
+            UrlManager::updateUrlRelCourseCategory($list, $access_url_id);
             header('Location: access_urls.php?action=show_message&message='.get_lang('Updated'));
         }
         exit;
@@ -105,13 +104,6 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 }
 
 Display::display_header($tool_name);
-
-echo '<div class="actions">';
-echo Display::url(
-    Display::return_icon('view_more_stats.gif', get_lang('AddUserGroupToURL'), ''),
-    api_get_path(WEB_CODE_PATH).'admin/access_url_add_usergroup_to_url.php'
-);
-echo '</div>';
 
 api_display_tool_title($tool_name);
 
@@ -123,19 +115,19 @@ $noUserGroupList = $userGroupList = array();
 $ajax_search = $add_type == 'unique' ? true : false;
 
 if ($ajax_search) {
-    $userGroups = UrlManager::get_url_rel_usergroup_data($access_url_id);
+    $userGroups = UrlManager::getUrlRelCourseCategory($access_url_id);
     foreach ($userGroups as $item) {
         $userGroupList[$item['id']] = $item;
     }
 } else {
-	$userGroups = UrlManager::get_url_rel_usergroup_data();
+    $userGroups = UrlManager::getUrlRelCourseCategory();
 
     foreach ($userGroups as $item) {
         if ($item['access_url_id'] == $access_url_id) {
             $userGroupList[$item['id']] = $item ;
         }
     }
-    $noUserGroupList = $userGroup->getUserGroupNotInList(array_keys($userGroupList));
+    $noUserGroupList = getCourseCategoryNotInList(array_keys($userGroupList));
 }
 
 if ($add_type == 'multiple') {
@@ -156,7 +148,7 @@ $url_list = UrlManager::get_url_data();
     name="formulaire"
     method="post"
     action="<?php echo api_get_self(); ?>"
-    style="margin:0px;" <?php if ($ajax_search){ echo ' onsubmit="valide();"'; } ?>
+    style="margin:0px;" <?php if ($ajax_search) { echo ' onsubmit="valide();"'; } ?>
 >
 <?php echo get_lang('SelectUrl').' : '; ?>
 <select name="access_url_id" onchange="javascript:send();">
@@ -192,17 +184,17 @@ if (!empty($errorMsg)) {
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <!-- Users -->
 <tr>
-  <td align="center"><b><?php echo get_lang('UserGroupListInPlatform') ?> :</b>
+  <td align="center"><b><?php echo get_lang('CourseCategoryInPlatform') ?> :</b>
   </td>
   <td></td>
-  <td align="center"><b><?php echo get_lang('UserGroupListIn').' '.$url_selected; ?></b></td>
+  <td align="center"><b><?php echo get_lang('CourseCategoryListIn').' '.$url_selected; ?></b></td>
 </tr>
 
 <tr>
   <td align="center">
   <div id="content_source">
     <?php if ($ajax_search) { ?>
-		<input type="text" id="course_to_add" onkeyup="xajax_searchUserGroupAjax(this.value,document.formulaire.access_url_id.options[document.formulaire.access_url_id.selectedIndex].value)" />
+		<input type="text" id="course_to_add" onkeyup="xajax_searchCourseCategoryAjax(this.value,document.formulaire.access_url_id.options[document.formulaire.access_url_id.selectedIndex].value)" />
 		<div id="ajax_list_courses"></div>
     <?php } else { ?>
 	  <select id="origin_users" name="no_course_list[]" multiple="multiple" size="15" style="width:380px;">
@@ -256,9 +248,9 @@ foreach($userGroupList as $item) {
 		<br />
 		<?php
 		if(isset($_GET['add']))
-			echo '<button class="save" onclick="valide()" >'.get_lang('AddUserGroupToURL').'</button>';
+			echo '<button class="save" onclick="valide()" >'.get_lang('Add').'</button>';
 		else
-			echo '<button class="save" onclick="valide()" >'.get_lang('EditUserGroupToURL').'</button>';
+			echo '<button class="save" onclick="valide()" >'.get_lang('Edit').'</button>';
 		?>
 	</td>
 </tr>
@@ -318,7 +310,6 @@ function loadUsersInSelect(select){
 	else  // XMLHttpRequest non supporté par le navigateur
 	alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
 
-	//xhr_object.open("GET", "loadUsersInSelect.ajax.php?id_session=<?php echo $id_session ?>&letter="+select.options[select.selectedIndex].text, false);
 	xhr_object.open("POST", "loadUsersInSelect.ajax.php");
 	xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 	nosessionUsers = makepost(document.getElementById('origin_users'));

@@ -139,11 +139,8 @@ class ImportCsv
 
                         $this->$method($file);
                     }
-
                 }
             }
-
-
         }
     }
 
@@ -154,7 +151,6 @@ class ImportCsv
     {
         // Create user extra field: extra_external_user_id
         UserManager::create_extra_field($this->extraFieldIdNameList['user'], 1, 'External user id', null);
-
         // Create course extra field: extra_external_course_id
         CourseManager::create_course_extra_field($this->extraFieldIdNameList['course'], 1, 'External course id');
         // Create session extra field extra_external_session_id
@@ -205,7 +201,6 @@ class ImportCsv
             $row['extra_'.$this->extraFieldIdNameList['user']] = $row['TeacherID'];
         }
 
-        //$row['lastname'] =  Status
         return $row;
     }
 
@@ -323,7 +318,7 @@ class ImportCsv
                         $row['lastname'],  // <<-- changed
                         $userInfo['username'],
                         null, //$password = null,
-                        $auth_source = null,
+                        PLATFORM_AUTH_SOURCE,
                         $userInfo['email'],
                         COURSEMANAGER,
                         $userInfo['official_code'],
@@ -378,8 +373,10 @@ class ImportCsv
             $this->logger->addInfo(count($data)." records found.");
             foreach ($data as $row) {
                 $row = $this->cleanUserRow($row);
-                //$userInfo = api_get_user_info_from_username($row['username']);
-                $user_id = UserManager::get_user_id_from_original_id($row['extra_'.$this->extraFieldIdNameList['user']], $this->extraFieldIdNameList['user']);
+                $user_id = UserManager::get_user_id_from_original_id(
+                    $row['extra_'.$this->extraFieldIdNameList['user']],
+                    $this->extraFieldIdNameList['user']
+                );
 
                 $userInfo = array();
                 $userInfoByOfficialCode = null;
@@ -481,7 +478,7 @@ class ImportCsv
                         $row['lastname'],  // <<-- changed
                         $row['username'],  // <<-- changed
                         $password, //$password = null,
-                        $auth_source = null,
+                        PLATFORM_AUTH_SOURCE,
                         $email,
                         STUDENT,
                         $userInfo['official_code'],
@@ -543,7 +540,7 @@ class ImportCsv
                     $params['wanted_code']          = $row['course_code'];
                     $params['course_category']      = $row['course_category'];
                     $params['course_language']      = $row['language'];
-                    $params['teachers'] = $row['teachers'];
+                    $params['teachers']             = $row['teachers'];
 
                     $courseInfo = CourseManager::create_course($params);
 
@@ -620,10 +617,8 @@ class ImportCsv
             foreach ($data as $row) {
                 $chamiloUserName = $row['UserName'];
                 $chamiloCourseCode = $row['CourseCode'];
-                //$systemSessionId= $row['SessionID'];
                 $chamiloSessionId = $row['SessionID'];
 
-                //$sessionId = SessionManager::get_session_id_from_original_id($systemSessionId, $this->extraFieldIdNameList['session']);
                 $sessionInfo = api_get_session_info($chamiloSessionId);
 
                 if (empty($sessionInfo)) {

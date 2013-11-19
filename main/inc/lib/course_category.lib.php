@@ -11,6 +11,22 @@ function isMultipleUrlSupport()
 }
 
 /**
+ * @param int $categoryId
+ * @return array
+ */
+function getCategoryById($categoryId)
+{
+    $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
+    $categoryId = Database::escape_string($categoryId);
+    $sql = "SELECT * FROM $tbl_category WHERE id = '$categoryId'";
+    $result = Database::query($sql);
+    if (Database::num_rows($result)) {
+        return Database::fetch_array($result, 'ASSOC');
+    }
+    return array();
+}
+
+/**
  * @param string $category
  * @return array
  */
@@ -94,7 +110,7 @@ function addNode($code, $name, $canHaveCourses, $parent_id)
     $row = Database::fetch_array($result);
     $tree_pos = $row['maxTreePos'] + 1;
 
-    $sql = "INSERT INTO $tbl_category(name,code,parent_id,tree_pos,children_count,auth_course_child)
+    $sql = "INSERT INTO $tbl_category(name, code, parent_id, tree_pos, children_count, auth_course_child)
             VALUES('$name','$code'," .(empty($parent_id) ? "NULL" : "'$parent_id'") . ",'$tree_pos','0','$canHaveCourses')";
     Database::query($sql);
     $categoryId = Database::insert_id();
@@ -134,7 +150,7 @@ function deleteNode($node)
 
     $node = Database::escape_string($node);
 
-    $result = Database::query("SELECT parent_id,tree_pos FROM $tbl_category WHERE code='$node'");
+    $result = Database::query("SELECT parent_id, tree_pos FROM $tbl_category WHERE code='$node'");
 
     if ($row = Database::fetch_array($result)) {
         if (!empty($row['parent_id'])) {
@@ -171,19 +187,18 @@ function editNode($code, $name, $canHaveCourses, $old_code)
     $old_code = Database::escape_string($old_code);
     $canHaveCourses = Database::escape_string($canHaveCourses);
 
-    if ($code != $old_code) {
-        $sql = "SELECT 1 FROM $tbl_category WHERE code='$code'";
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            return false;
-        }
-    }
-
     $code = generate_course_code($code);
+    // Updating category
     $sql = "UPDATE $tbl_category SET name='$name', code='$code', auth_course_child = '$canHaveCourses'
-            WHERE code='$old_code'";
+            WHERE code = '$old_code'";
     Database::query($sql);
 
+    // Updating children
+    $sql = "UPDATE $tbl_category SET parent_id = '$code'
+            WHERE parent_id = '$old_code'";
+    Database::query($sql);
+
+    // Updating course category
     $sql = "UPDATE $tbl_course SET category_code = '$code' WHERE category_code = '$old_code' ";
     Database::query($sql);
     return true;
@@ -236,6 +251,24 @@ function compterFils($pere, $cpt)
         $cpt = compterFils($row['code'], $cpt);
     }
     return ($cpt + 1);
+}
+
+/**
+ * @param string $categoryCode
+ * @return array
+ */
+function getChildren($categoryCode)
+{
+    $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
+    $categoryCode = Database::escape_string($categoryCode);
+    $result = Database::query("SELECT code, id FROM $tbl_category WHERE parent_id = '$categoryCode'");
+    $children = array();
+    while ($row = Database::fetch_array($result, 'ASSOC')) {
+        $children[] = $row;
+        $subChildren = getChildren($row['code']);
+        $children = array_merge($children, $subChildren);
+    }
+    return $children;
 }
 
 /**
@@ -582,6 +615,27 @@ function setCategoriesInForm($form, $defaultCode = null, $parentCode = null , $p
         }
     }
 }
+
+/**
+ * @param array $list
+ * @return array
+ */
+function getCourseCategoryNotInList($list)
+{
+    $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+    if (empty($list)) {
+        return array();
+    }
+
+    $list = array_map('intval', $list);
+    $listToString = implode("','", $list);
+
+    $sql = "SELECT * FROM $table WHERE id NOT IN ('$listToString') AND (parent_id IS NULL) ";
+    $result = Database::query($sql);
+    return Database::store_result($result, 'ASSOC');
+}
+
+
 
 /**
  CREATE TABLE IF NOT EXISTS access_url_rel_course_category (access_url_id int unsigned NOT NULL, course_category_id int unsigned NOT NULL, PRIMARY KEY (access_url_id, course_category_id));

@@ -17,7 +17,7 @@
  */
 
 // Name of the language file that needs to be included
-$language_file = 'group';
+$language_file = array('group', 'admin');
 
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
@@ -28,6 +28,7 @@ api_protect_course_script(true);
 
 $nameTools = get_lang('GroupOverview');
 $courseId = api_get_course_int_id();
+$courseInfo = api_get_course_info();
 
 /*	Libraries */
 include_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
@@ -41,6 +42,15 @@ if (isset($_GET['action'])) {
             $data = GroupManager::exportCategoriesAndGroupsToArray();
             Export::export_table_csv($data);
             exit;
+            break;
+        case 'export_pdf':
+            $content = GroupManager::getOverview($courseId, $keyword);
+            $pdf = new PDF();
+            $extra = '<div style="text-align:center"><h2>'.get_lang('GroupList').'</h2></div>';
+            $extra .= '<strong>'.get_lang('Course').': </strong>'.$courseInfo['title'].' ('.$courseInfo['code'].')';
+
+            $content = $extra.$content;
+            $pdf->content_to_pdf($content, null, null, api_get_course_id());
             break;
         case 'export':
             $groupId = isset($_GET['id']) ? intval($_GET['id']) : null;
@@ -70,8 +80,10 @@ if (isset($_GET['action'])) {
                     exit;
                     break;
                 case 'xls':
-                    Export::export_table_xls($data);
-                    exit;
+                    if (!empty($data)) {
+                        Export::export_table_xls($data);
+                        exit;
+                    }
                     break;
             }
             break;
@@ -79,6 +91,7 @@ if (isset($_GET['action'])) {
 }
 
 /*	Header */
+
 
 $interbreadcrumb[] = array('url' => 'group.php', 'name' => get_lang('Groups'));
 if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath') {
@@ -90,6 +103,8 @@ if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath') {
         api_not_allowed(true);
     } else {
         Display::display_header($nameTools, 'Group');
+        // Tool introduction
+        Display::display_introduction_section(TOOL_GROUP);
     }
 } else {
 ?> <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CSS_PATH); ?>default.css" /> <?php
@@ -99,8 +114,7 @@ if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath') {
 echo '<div class="actions">';
     echo '<a href="group_creation.php?'.api_get_cidreq().'">'.
         Display::return_icon('new_group.png', get_lang('NewGroupCreate'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo '<a href="group.php?'.api_get_cidreq().'">'.
-        Display::return_icon('group.png', get_lang('Groups'),'',ICON_SIZE_MEDIUM).'</a>';
+
     if (api_get_setting('allow_group_categories') == 'true') {
         echo '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.
             Display::return_icon('new_folder.png', get_lang('AddCategory'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -115,59 +129,22 @@ echo '<div class="actions">';
         Display::return_icon('export_csv.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
 
     echo '<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.
-        Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    $form = new FormValidator('search_groups', 'get', null, null, array('class' => 'form-search'));
-    $form->addElement('text', 'keyword');
-    $form->addElement('button', 'submit', get_lang('Search'));
-    $form->display();
+   echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export_pdf">'.
+        Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+
+    echo '<a href="group.php?'.api_get_cidreq().'">'.
+        Display::return_icon('group.png', get_lang('Groups'),'',ICON_SIZE_MEDIUM).'</a>';
+
+
+    echo '<a href="../user/user.php?'.api_get_cidreq().'">'.
+    Display::return_icon('user.png', get_lang('GoTo').' '.get_lang('Users'), '', ICON_SIZE_MEDIUM).'</a>';
+
+    echo GroupManager::getSearchForm();
 echo '</div>';
 
-$categories = GroupManager::get_categories();
-
-foreach ($categories as $category) {
-    if (api_get_setting('allow_group_categories') == 'true') {
-        echo '<h2>'.$category['title'].'</h2>';
-    }
-    if (!empty($keyword)) {
-        $groups = GroupManager::getGroupListFilterByName($keyword, $category['id'], $courseId);
-    } else {
-        $groups = GroupManager::get_group_list($category['id']);
-    }
-
-    echo '<ul>';
-    if (!empty($groups)) {
-        foreach ($groups as $group) {
-            echo '<li>';
-            echo Display::tag('h3', Security::remove_XSS($group['name']));
-
-            $users = GroupManager::getTutors($group['id']);
-            if (!empty($users)) {
-                echo '<ul>';
-                echo Display::tag('h4', get_lang('Tutors'));
-                foreach ($users as $user) {
-                    $user_info = api_get_user_info($user['user_id']);
-                    //$username = api_htmlentities(sprintf(get_lang('LoginX'), $user_info['username']), ENT_QUOTES);
-                    echo '<li title="'.$user_info['username'].'">'.$user_info['complete_name_with_username'].'</li>';
-                }
-                echo '</ul>';
-            }
-
-            $users = GroupManager::getStudents($group['id']);
-            if (!empty($users)) {
-                echo '<ul>';
-                echo Display::tag('h4', get_lang('Students'));
-                foreach ($users as $user) {
-                    $user_info = api_get_user_info($user['user_id']);
-                    echo '<li title="'.$user_info['username'].'">'.$user_info['complete_name_with_username'].'</li>';
-                }
-                echo '</ul>';
-            }
-            echo '</li>';
-        }
-    }
-    echo '</ul>';
-}
+echo GroupManager::getOverview($courseId, $keyword);
 
 if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath') {
     Display::display_footer();

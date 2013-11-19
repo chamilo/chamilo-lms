@@ -30,7 +30,7 @@ $nameTools = get_lang('EditGroup');
 $interbreadcrumb[] = array ('url' => 'group.php', 'name' => get_lang('Groups'));
 $interbreadcrumb[] = array ('url' => 'group_space.php?'.api_get_cidReq(), 'name' => $current_group['name']);
 
-$is_group_member = GroupManager :: is_tutor_of_group(api_get_user_id(), $group_id);
+$is_group_member = GroupManager::is_tutor_of_group(api_get_user_id(), $group_id);
 
 if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
     api_not_allowed(true);
@@ -115,11 +115,8 @@ $(document).ready( function() {
 $form = new FormValidator('group_edit', 'post', api_get_self().'?'.api_get_cidreq());
 $form->addElement('hidden', 'action');
 $form->addElement('hidden', 'max_student', $current_group['max_student']);
-
-
 $complete_user_list = GroupManager::fill_groups_list($current_group['id']);
 usort($complete_user_list, 'sort_users');
-
 $possible_users = array();
 foreach ($complete_user_list as $index => $user) {
     $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
@@ -159,6 +156,9 @@ $group_members_element->setButtonAttributes('add', array('class' => 'btn arrowr'
 $group_members_element->setButtonAttributes('remove', array('class' => 'btn arrowl'));
 $form->addFormRule('check_group_members');
 
+/*$url = '<a class="btn btn-danger" href="'.api_get_self().'?'.api_get_cidreq(true, false).'&action=empty&amp;id='.$group_id.'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('EmptyGroup').'">'.
+    get_lang('EmptyGroup').'</a>&nbsp;';
+$form->addElement('label', null, $url);*/
 // submit button
 $form->addElement('style_submit_button', 'submit', get_lang('SaveSettings'), 'class="save"');
 
@@ -180,6 +180,18 @@ if ($form->validate()) {
     }
     exit;
 }
+
+$action = isset($_GET['action']) ? $_GET['action'] : null;
+switch ($action) {
+    case 'empty':
+        if (api_is_allowed_to_edit(false, true)) {
+            GroupManager :: unsubscribe_all_users($group_id);
+            Display :: display_confirmation_message(get_lang('GroupEmptied'));
+        }
+        break;
+
+}
+
 
 $defaults = $current_group;
 $defaults['group_members'] = $selected_users;
@@ -204,6 +216,7 @@ if (isset($_GET['show_message_sucess'])) {
 
 $form->setDefaults($defaults);
 echo GroupManager::getSettingBar('member');
+
 $form->display();
 
 Display :: display_footer();

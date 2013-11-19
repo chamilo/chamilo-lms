@@ -142,10 +142,7 @@ if (api_is_allowed_to_edit(false, true)) {
                 GroupManager :: delete_groups($my_get_id);
                 Display :: display_confirmation_message(get_lang('GroupDel'));
                 break;
-            case 'empty_one':
-                GroupManager :: unsubscribe_all_users($my_get_id);
-                Display :: display_confirmation_message(get_lang('GroupEmptied'));
-                break;
+
             case 'fill_one':
                 GroupManager :: fill_groups($my_get_id);
                 Display :: display_confirmation_message(get_lang('GroupFilledGroups'));
@@ -161,7 +158,7 @@ if (api_is_allowed_to_edit(false, true)) {
 echo '<div class="actions">';
 if (api_is_allowed_to_edit(false, true)) {
     echo '<a href="group_creation.php?'.api_get_cidreq().'">'.
-        Display::return_icon('new_group.png', get_lang('NewGroupCreate'),'',ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('new_group.png', get_lang('NewGroupCreate'), '', ICON_SIZE_MEDIUM).'</a>';
 
     if (api_get_setting('allow_group_categories') == 'true') {
         echo '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.

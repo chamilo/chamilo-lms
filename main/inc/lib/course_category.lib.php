@@ -150,7 +150,7 @@ function deleteNode($node)
 
     $node = Database::escape_string($node);
 
-    $result = Database::query("SELECT parent_id,tree_pos FROM $tbl_category WHERE code='$node'");
+    $result = Database::query("SELECT parent_id, tree_pos FROM $tbl_category WHERE code='$node'");
 
     if ($row = Database::fetch_array($result)) {
         if (!empty($row['parent_id'])) {
@@ -187,19 +187,18 @@ function editNode($code, $name, $canHaveCourses, $old_code)
     $old_code = Database::escape_string($old_code);
     $canHaveCourses = Database::escape_string($canHaveCourses);
 
-    if ($code != $old_code) {
-        $sql = "SELECT 1 FROM $tbl_category WHERE code='$code'";
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            return false;
-        }
-    }
-
     $code = generate_course_code($code);
+    // Updating category
     $sql = "UPDATE $tbl_category SET name='$name', code='$code', auth_course_child = '$canHaveCourses'
-            WHERE code='$old_code'";
+            WHERE code = '$old_code'";
     Database::query($sql);
 
+    // Updating children
+    $sql = "UPDATE $tbl_category SET parent_id = '$code'
+            WHERE parent_id = '$old_code'";
+    Database::query($sql);
+
+    // Updating course category
     $sql = "UPDATE $tbl_course SET category_code = '$code' WHERE category_code = '$old_code' ";
     Database::query($sql);
     return true;

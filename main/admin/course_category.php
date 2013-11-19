@@ -29,7 +29,10 @@ $errorMsg = '';
 if (!empty($action)) {
     if ($action == 'delete') {
         if (api_get_multiple_access_url()) {
-            if (api_get_current_access_url_id() == 1) {
+            if (api_get_current_access_url_id() == 1 ||
+                (isset($_configuration['enable_multiple_url_support_for_course_category']) &&
+                $_configuration['enable_multiple_url_support_for_course_category'])
+            ) {
                 deleteNode($_GET['id']);
                 header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
                 exit();

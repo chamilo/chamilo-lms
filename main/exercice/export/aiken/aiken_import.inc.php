@@ -205,20 +205,18 @@ $question_index = 0;
 foreach($data as $linea => $info) {
 	//$preg = preg_match('/^[A-Z](\)|\.)\s(.*)/g', $linea, $matches);
 	#$preg = preg_match('/(^ANSWER:\sq([A-Z])\s?)|(.*))/i', $info, $matches);
-//error_log($linea . '----');
 	if (preg_match('/^([A-Z])(\)|\.)\s(.*)/', $info)) {
-		$question_info['option'][] = $info;
+		$questions[$question_index]['option'][] = $info;
 	} elseif (preg_match('/^ANSWER:\s([A-Z])\s?/', $info)) {
-		$question_info['answer'] = $info;
+		$questions[$question_index]['answer'] = $info;
 	} elseif (preg_match('/^TEXTO_CORRECTA:\s([A-Z])\s?/', $info)) {
-		$question_info['answer_explanation'] = $info;
+		$questions[$question_index]['answer_explanation'] = $info;
 	} elseif (preg_match('/^ETIQUETAS:\s([A-Z])\s?/', $info)) {
-		$question_info['answer_tags'] = explode(',', $info);
+		$questions[$question_index]['answer_tags'] = explode(',', $info);
 	} elseif (preg_match('/^\n/',$info)) {
-		$question_index =  $question_index++;
-		//$questions[] = $question_info;
+		$question_index++;
 	} else {
-		$question_info['title'] = $info;
+		$questions[$question_index]['title'] = $info;
 	}
 
 	

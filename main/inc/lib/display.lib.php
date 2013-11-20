@@ -1073,9 +1073,9 @@ class Display
 
     public static function form_row($label, $form_item)
     {
-        $label     = self::span($label, array('class' => 'control-label'));
-        $form_item = self::div($form_item, array('class' => 'controls'));
-        return self::div($label.$form_item, array('class' => 'control-group'));
+        $label     = self::span($label, array('class' => 'col-sm-2 control-label'));
+        $form_item = self::div($form_item, array('class' => 'col-sm-10'));
+        return self::div($label.$form_item, array('class' => 'form-group'));
     }
 
     /**

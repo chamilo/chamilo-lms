@@ -83,13 +83,13 @@ $suredel = trim(get_lang('AreYouSureToDelete'));
 
 echo $_SESSION['oLP']->build_action_menu();
 
-echo '<div class="row-fluid" style="overflow:hidden">';
-echo '<div id="lp_sidebar" class="span4">';
+echo '<div class="row" style="overflow:hidden">';
+echo '<div id="lp_sidebar" class="col-md-4">';
 echo $_SESSION['oLP']->return_new_tree(null, true);
 // Show the template list.
 echo '</div>';
 
-echo '<div id="doc_form" class="span8">';
+echo '<div id="doc_form" class="col-md-8">';
 
 $lp_item = new learnpathItem($lp_item_id);
 $form = new FormValidator('add_audio', 'post', api_get_self().'?action=add_audio&id='.$lp_item_id, null, array('enctype' => 'multipart/form-data'));

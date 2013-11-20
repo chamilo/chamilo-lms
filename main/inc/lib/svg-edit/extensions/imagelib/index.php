@@ -51,7 +51,7 @@ $style .='</style>';
 
 ?>
 <!doctype html>
-<?php echo api_get_js('jquery.min.js'); ?>
+<?php echo api_get_js('jquery.js'); ?>
 <?php echo $style ?>
 <body>
 <?php

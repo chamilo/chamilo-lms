@@ -245,8 +245,8 @@ $(document).ready(function() {
 
 echo $_SESSION['oLP']->build_action_menu();
 
-echo '<div class="row-fluid" style="overflow:hidden">';
-echo '<div id="lp_sidebar" class="span4">';
+echo '<div class="row" style="overflow:hidden">';
+echo '<div id="lp_sidebar" class="col-md-4">';
 
 echo $_SESSION['oLP']->return_new_tree(null, true);
 
@@ -265,7 +265,7 @@ if ($action == 'add_item' && $type == 'document' && !isset($_GET['file'])) {
     echo '<div id="hide_bar_template"></div>';
 }
 
-echo '<div id="doc_form" class="span8">';
+echo '<div id="doc_form" class="col-md-8">';
 
 //@todo use session flash messages
 if (in_array($message, array('ItemUpdated'))) {

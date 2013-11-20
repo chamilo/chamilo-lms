@@ -9,6 +9,7 @@
 <meta name="Generator" content="{{ _s.software_name }} {{ _s.system_version|slice(0,1) }}" />
 {#  Use the latest engine in ie8/ie9 or use google chrome engine if available  #}
 {#  Improve usability in portal devices #}
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{ title_string }}</title>
 {{ css_file_to_string }}
@@ -17,22 +18,6 @@
 {{ extra_headers }}
 {% block header_end %}{% endblock header_end %}
 <script>
-// This is a patch for the "__flash__removeCallback" bug, see FS#4378.
-{% raw %}
-if ((navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.userAgent.toLowerCase().indexOf('opera') == -1 )) {
-    window.attachEvent( 'onunload', function() {
-        window['__flash__removeCallback'] = function ( instance, name ) {
-            try {
-                if ( instance ) {
-                    instance[name] = null ;
-                }
-            } catch ( flashEx ) {
-            }
-        } ;
-    });
-}
-{% endraw %}
-
 function setCheckbox(value, table_id) {
     checkboxes = $("#"+table_id+" input:checkbox");
     $.each(checkboxes, function(index, checkbox) {
@@ -91,7 +76,7 @@ function check_brand() {
 }
 
 $(window).resize(function() {
-    check_brand();
+    //check_brand();
 });
 
 $(document).scroll(function() {
@@ -220,7 +205,7 @@ $(function() {
     $('.dropdown-toggle').dropdown();
 
     // Responsive effect.
-    $(".collapse").collapse();
+    //$(".collapse").collapse();
 
     $(".accordion_jquery").accordion({
         autoHeight: false,

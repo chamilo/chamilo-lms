@@ -84,3 +84,4 @@ $(document).ready(function() {
         $('#content_id').css({ height: original});
     });
 });
+</script>

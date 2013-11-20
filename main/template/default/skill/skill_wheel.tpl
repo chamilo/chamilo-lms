@@ -431,8 +431,8 @@ $(document).ready(function() {
 });
 </script>
 
-<div class="container-fluid">
-    <div class="row-fluid">
+<div class="container">
+    <div class="row">
 
         <div class="span3">
             <div class="well sidebar-nav-skill-wheel">

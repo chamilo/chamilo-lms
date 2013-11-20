@@ -5578,11 +5578,11 @@ class learnpath
 
         $(function() {
 
-            $(".item_data").live("mouseover", function(event) {
+            $(".item_data").on("mouseover", function(event) {
                 $(".button_actions", this).show();
             });
 
-            $(".item_data").live("mouseout", function() {
+            $(".item_data").on("mouseout", function() {
                 $(".button_actions",this).hide();
             });
 

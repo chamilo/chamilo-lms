@@ -91,6 +91,27 @@ class HTML_QuickForm_element extends HTML_Common
      */
     function HTML_QuickForm_element($elementName=null, $elementLabel=null, $attributes=null)
     {
+        $array = array(
+            'text',
+            'textarea',
+            'select',
+            'static',
+            'password',
+            //'radio',
+            //'checkbox',
+            'group'
+        );
+        if (in_array($this->getType(), $array)) {
+            if (empty($attributes)) {
+                $attributes = array('class' => 'form-control ');
+            } else {
+                if (is_array($attributes)) {
+                    $defaultClass = isset($attributes['class']) ? $attributes['class'] : null;
+                    $attributes['class'] = 'form-control '.$defaultClass;
+                }
+            }
+        }
+
         HTML_Common::HTML_Common($attributes);
         if (isset($elementName)) {
             $this->setName($elementName);
@@ -499,4 +520,3 @@ class HTML_QuickForm_element extends HTML_Common
 
     // }}}
 } // end class HTML_QuickForm_element
-?>

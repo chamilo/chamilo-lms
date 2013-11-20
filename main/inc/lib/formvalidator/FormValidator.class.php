@@ -147,10 +147,9 @@ class FormValidator extends HTML_QuickForm
 
         //Form template
         $form_template = '<form{attributes}>
-<fieldset>
+
 	{content}
-	<div class="clear"></div>
-</fieldset>
+
 {hidden}
 </form>';
         $renderer->setFormTemplate($form_template);
@@ -164,12 +163,13 @@ class FormValidator extends HTML_QuickForm
             $renderer->setElementTemplate($element_template);
         } else {
             $element_template = '
-            <div class="control-group {error_class}">
-                <label class="control-label">
+            <div class="form-group {error_class}">
+                <label class="col-sm-2 control-label">
                     <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                     {label}
                 </label>
-                <div class="controls">
+
+                <div class="col-sm-10">
                     {element}
 
                     <!-- BEGIN label_3 -->
@@ -177,13 +177,17 @@ class FormValidator extends HTML_QuickForm
                     <!-- END label_3 -->
 
                     <!-- BEGIN label_2 -->
-                        <p class="help-block">{label_2}</p>
+                        <span class="help-block">{label_2}</span>
                     <!-- END label_2 -->
 
                     <!-- BEGIN error -->
-                        <span class="help-inline">{error}</span>
+                        <span class=" col-sm-2 help-block">{error}</span>
                     <!-- END error -->
                 </div>
+
+
+
+
             </div>';
             $renderer->setElementTemplate($element_template);
 
@@ -215,13 +219,13 @@ class FormValidator extends HTML_QuickForm
         }
 
         //Set Header template
-        $renderer->setHeaderTemplate('<legend>{header}</legend>');
+        $renderer->setHeaderTemplate('<h2>{header}</h2>');
 
         //Set required field template
         HTML_QuickForm::setRequiredNote('<span class="form_required">*</span> <small>' . get_lang('ThisFieldIsRequired') . '</small>');
         $required_note_template = <<<EOT
-	<div class="control-group">
-		<div class="controls">{requiredNote}</div>
+	<div class="form-group">
+		<div class="col-sm-2">{requiredNote}</div>
 	</div>
 EOT;
         $renderer->setRequiredNoteTemplate($required_note_template);
@@ -538,6 +542,29 @@ EOT;
             $return_value .= '<div id="dynamic_div" style="display:block; margin-left:40%; margin-top:10px; height:50px;"></div>';
         }
         return $return_value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDoubleMultipleSelectTemplate()
+    {
+        return '
+            <div class="form-group">
+                <label class="col-sm-2 control-label">
+                    <!-- BEGIN required -->
+                    <span class="form_required">*</span> <!-- END required -->{label}
+                </label>
+                <div class="col-sm-10">
+                    <table cellpadding="0" cellspacing="0">
+                        <tr>
+                            <!-- BEGIN error -->
+                            <span class="form_error">{error}</span>
+                            <br /><!-- END error -->	<td>{element}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>';
     }
 }
 

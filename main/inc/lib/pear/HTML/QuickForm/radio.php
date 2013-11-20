@@ -129,7 +129,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
             $label = $this->_text;
         } else {
             ///$label = '<label for="' . $this->getAttribute('id') . '">' . $this->_text . '</label>';
-            $label = '<label class="radio">' .HTML_QuickForm_input::toHtml().$this->_text . '</label>';
+            $label = '<div class="radio"><label>' .HTML_QuickForm_input::toHtml().$this->_text.'</label></div>';
             return  $label;
         }
         return HTML_QuickForm_input::toHtml() . $label;

@@ -9,7 +9,7 @@
 
 {# Plugin bottom  #}
 {% if plugin_content_bottom is not null %}
-    <div id="plugin_content_bottom" class="span12">
+    <div id="plugin_content_bottom" class="col-md-12">
         {{ plugin_content_bottom}}
     </div>
 {% endif %}
@@ -17,7 +17,6 @@
 {% if show_footer == true %}
         </div> <!-- end of #row" -->
     </div> <!-- end of #main" -->
-    <div class="push"></div>
 </div> <!-- end of #wrapper section -->
 {% endif %}
 

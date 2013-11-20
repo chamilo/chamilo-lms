@@ -24,7 +24,7 @@ if(!isset($_SESSION['draw_dir'])){
 <link rel="stylesheet" href="jgraduate/css/jgraduate.css" type="text/css"/>
 <link rel="stylesheet" href="svg-editor.css" type="text/css"/>
 <link rel="stylesheet" href="spinbtn/JQuerySpinBtn.css" type="text/css"/>
-<?php echo api_get_js('jquery.min.js'); ?>
+<?php echo api_get_js('jquery.js'); ?>
 <!--Chamilo TODO: compress sgv-editor.js and change all calls by release version -->
 <script type="text/javascript" src="js-hotkeys/jquery.hotkeys.min.js"></script>
 <script type="text/javascript" src="jquerybbq/jquery.bbq.min.js"></script>
@@ -101,7 +101,7 @@ if(!isset($_SESSION['draw_dir'])){
 			<div id="layer_down" class="layer_button"  title="Move Layer Down"></div>
 			<div id="layer_moreopts" class="layer_button"  title="More Options"></div>
 		</fieldset>
-		
+
 		<table id="layerlist">
 			<tr class="layer">
 				<td class="layervis"></td>
@@ -122,40 +122,40 @@ if(!isset($_SESSION['draw_dir'])){
 		<div id="logo"></div>
 		<div class="dropdown"></div>
 	</div>
-		
-	<div id="main_menu"> 
-	
+
+	<div id="main_menu">
+
 		<!-- File-like buttons: New, Save, Source -->
 		<ul>
 			<li id="tool_clear">
 				<div></div>
 				New Image (N)
 			</li>
-			
+
 			<li id="tool_open" style="display:none;">
 				<div id="fileinputs">
 					<div></div>
 				</div>
 				Open Image
 			</li>
-			
+
 			<li id="tool_import" style="display:none;">
 				<div id="fileinputs_import">
 					<div></div>
 				</div>
 				Import SVG
 			</li>
-			
+
 			<li id="tool_save">
 				<div></div>
 				Save Image (S)
 			</li>
-			
+
 			<li id="tool_export">
 				<div></div>
 				Export as PNG
 			</li>
-			
+
 			<li id="tool_docprops">
 				<div></div>
 				Document Properties (D)
@@ -179,7 +179,7 @@ if(!isset($_SESSION['draw_dir'])){
 
 
 <div id="tools_top" class="tools_panel">
-	
+
 	<div id="editor_panel">
 		<div class="push_button" id="tool_source" title="Edit Source [U]"></div>
 		<div class="tool_button" id="tool_wireframe" title="Wireframe Mode [F]"></div>
@@ -191,7 +191,7 @@ if(!isset($_SESSION['draw_dir'])){
 		<div class="push_button tool_button_disabled" id="tool_undo" title="Undo [Z]"></div>
 		<div class="push_button tool_button_disabled" id="tool_redo" title="Redo [Y]"></div>
 	</div>
-	
+
 	<!-- Buttons when a single element is selected -->
 	<div id="selected_panel">
 		<div class="toolset">
@@ -215,7 +215,7 @@ if(!isset($_SESSION['draw_dir'])){
 			<span id="angleLabel" class="icon_label"></span>
 			<input id="angle" size="2" value="0" type="text"/>
 		</label>
-		
+
 		<div class="toolset" id="tool_blur" title="Change gaussian blur value">
 			<label>
 				<span id="blurLabel" class="icon_label"></span>
@@ -228,11 +228,11 @@ if(!isset($_SESSION['draw_dir'])){
 				</ul>
 			</div>
 		</div>
-		
+
 		<div class="dropdown toolset" id="tool_position" title="Align Element to Page">
 				<div id="cur_position" class="icon_label"></div>
 				<button></button>
-		</div>		
+		</div>
 
 		<div id="xy_panel" class="toolset">
 			<label>
@@ -243,7 +243,7 @@ if(!isset($_SESSION['draw_dir'])){
 			</label>
 		</div>
 	</div>
-	
+
 	<!-- Buttons when multiple elements are selected -->
 	<div id="multiselected_panel">
 		<div class="tool_sep"></div>
@@ -258,7 +258,7 @@ if(!isset($_SESSION['draw_dir'])){
 		<div class="push_button" id="tool_aligntop" title="Align Top"></div>
 		<div class="push_button" id="tool_alignmiddle" title="Align Middle"></div>
 		<div class="push_button" id="tool_alignbottom" title="Align Bottom"></div>
-		<label id="tool_align_relative"> 
+		<label id="tool_align_relative">
 			<span id="relativeToLabel">relative to:</span>
 			<select id="align_relative_to" title="Align relative to ...">
 			<option id="selected_objects" value="selected">selected objects</option>
@@ -367,7 +367,7 @@ if(!isset($_SESSION['draw_dir'])){
 			<div class="tool_button" id="tool_bold" title="Bold Text [B]"><span></span>B</div>
 			<div class="tool_button" id="tool_italic" title="Italic Text [I]"><span></span>i</div>
 		</div>
-		
+
 		<div class="toolset" id="tool_font_family">
 			<label>
 				<!-- Font family -->
@@ -389,7 +389,7 @@ if(!isset($_SESSION['draw_dir'])){
 			<span id="font_sizeLabel" class="icon_label"></span>
 			<input id="font_size" size="3" value="0" type="text"/>
 		</label>
-		
+
 		<!-- Not visible, but still used -->
 		<input id="text" type="text" size="35"/>
 	</div>
@@ -405,11 +405,11 @@ if(!isset($_SESSION['draw_dir'])){
 			<input id="g_title" data-attr="title" size="10" type="text"/>
 		</label>
 	</div>
-	
+
 	<div id="use_panel">
 		<div class="push_button" id="tool_unlink_use" title="Break link to reference element (make unique)"></div>
 	</div>
-	
+
 	<div id="g_panel">
 		<div class="push_button" id="tool_ungroup" title="Ungroup Elements [G]"></div>
 	</div>
@@ -419,9 +419,9 @@ if(!isset($_SESSION['draw_dir'])){
 		<label id="tool_link_url" title="Set link URL (leave empty to remove)">
 			<span id="linkLabel" class="icon_label"></span>
 			<input id="link_url" type="text" size="35"/>
-		</label>	
+		</label>
 	</div>
-	
+
 	<div id="path_node_panel">
 		<div class="tool_sep"></div>
 		<div class="tool_button push_button_pressed" id="tool_node_link" title="Link Control Points"></div>
@@ -432,7 +432,7 @@ if(!isset($_SESSION['draw_dir'])){
 		<label id="tool_node_y">y:
 			<input id="path_node_y" class="attr_changer" title="Change node's y coordinate" size="3" data-attr="y"/>
 		</label>
-		
+
 		<select id="seg_type" title="Change Segment type">
 			<option id="straight_segments" selected="selected" value="4">Straight</option>
 			<option id="curve_segments" value="6">Curve</option>
@@ -444,7 +444,7 @@ if(!isset($_SESSION['draw_dir'])){
 	</div>
 </div> <!-- tools_top -->
 	<div id="cur_context_panel">
-		
+
 	</div>
 
 
@@ -462,7 +462,7 @@ if(!isset($_SESSION['draw_dir'])){
 	<div class="tool_button" id="tool_text" title="Text Tool"></div>
 	<div class="tool_button" id="tool_image" title="Image Tool"></div>
 	<div class="tool_button" id="tool_zoom" title="Zoom Tool [Ctrl+Up/Down]"></div>
-	
+
 	<div style="display: none">
 		<div id="tool_rect" title="Rectangle"></div>
 		<div id="tool_square" title="Square"></div>
@@ -509,7 +509,7 @@ if(!isset($_SESSION['draw_dir'])){
 					<div id="fill_color" class="color_block"></div>
 				</div>
 			</div>
-		
+
 			<div class="color_tool" id="tool_stroke">
 				<div class="color_block">
 					<label class="icon_label" title="Change stroke color"></label>
@@ -518,11 +518,11 @@ if(!isset($_SESSION['draw_dir'])){
 					<div id="stroke_bg"></div>
 					<div id="stroke_color" class="color_block" title="Change stroke color"></div>
 				</div>
-				
+
 				<label>
 					<input id="stroke_width" title="Change stroke width by 1, shift-click to change by 0.1" size="2" value="5" type="text" data-attr="Stroke Width"/>
 				</label>
-				
+
 				<label class="stroke_tool">
 					<select id="stroke_style" title="Change stroke dash style">
 						<option selected="selected" value="none">&mdash;</option>
@@ -531,7 +531,7 @@ if(!isset($_SESSION['draw_dir'])){
 						<option value="5,2,2,2">- .</option>
 						<option value="5,2,2,2,2,2">- ..</option>
 					</select>
-				</label>	
+				</label>
 
  				<div class="stroke_tool dropdown" id="stroke_linejoin">
  					<div>
@@ -539,21 +539,21 @@ if(!isset($_SESSION['draw_dir'])){
 						<button></button>
 					</div>
  				</div>
- 				
+
  				<div class="stroke_tool dropdown" id="stroke_linecap">
  					<div>
 						<div id="cur_linecap" title="Linecap: Butt"></div>
 						<button></button>
 					</div>
  				</div>
-			
+
 				<div id="toggle_stroke_tools" title="Show/hide more stroke tools">
 					&gt;&gt;
 				</div>
-				
+
 			</div>
 		</div>
-	
+
 		<div class="toolset" id="tool_opacity" title="Change selected item opacity">
 			<label>
 				<span id="group_opacityLabel" class="icon_label"></span>
@@ -586,13 +586,13 @@ if(!isset($_SESSION['draw_dir'])){
 		<li class="tool_button" id="linejoin_round" title="Linejoin: Round"></li>
 		<li class="tool_button" id="linejoin_bevel" title="Linejoin: Bevel"></li>
 	</ul>
-	
+
 	<ul id="linecap_opts">
 		<li class="tool_button current" id="linecap_butt" title="Linecap: Butt"></li>
 		<li class="tool_button" id="linecap_square" title="Linecap: Square"></li>
 		<li class="tool_button" id="linecap_round" title="Linecap: Round"></li>
 	</ul>
-	
+
 	<ul id="position_opts" class="optcols3">
 		<li class="push_button" id="tool_posleft" title="Align Left"></li>
 		<li class="push_button" id="tool_poscenter" title="Align Center"></li>
@@ -641,15 +641,15 @@ if(!isset($_SESSION['draw_dir'])){
 			<label>
 				<span id="svginfo_title">Title:</span>
 				<input type="text" id="canvas_title"/>
-			</label>			
-	
+			</label>
+
 			<fieldset id="change_resolution">
 				<legend id="svginfo_dim">Canvas Dimensions</legend>
 
 				<label><span id="svginfo_width">width:</span> <input type="text" id="canvas_width" size="6"/></label>
-					
+
 				<label><span id="svginfo_height">height:</span> <input type="text" id="canvas_height" size="6"/></label>
-				
+
 				<label>
 					<select id="resolution">
 						<option id="selectedPredefined" selected="selected">Select predefined:</option>
@@ -667,7 +667,7 @@ if(!isset($_SESSION['draw_dir'])){
 				<legend id="includedImages">Included Images</legend>
 				<label><input type="radio" name="image_opt" value="embed" checked="checked"/> <span id="image_opt_embed">Embed data (local files)</span> </label>
 				<label><input type="radio" name="image_opt" value="ref"/> <span id="image_opt_ref">Use file reference</span> </label>
-			</fieldset>			
+			</fieldset>
 		</fieldset>
 
 	</div>
@@ -726,7 +726,7 @@ if(!isset($_SESSION['draw_dir'])){
 				<label><span id="svginfo_bg_url">URL:</span> <input type="text" id="canvas_bg_url"/></label>
 				<p id="svginfo_bg_note">Note: Background will not be saved with image.</p>
 			</fieldset>
-			
+
 			<fieldset id="change_grid">
 				<legend id="svginfo_grid_settings">Grid</legend>
 				<label><span id="svginfo_snap_onoff">Snapping on/off</span><input type="checkbox" value="snapping_on" id="grid_snapping_on"></label>
@@ -750,7 +750,7 @@ if(!isset($_SESSION['draw_dir'])){
 					</select>
 				</label>
 				<!-- Should this be an export option instead? -->
-<!-- 
+<!--
 				<span id="svginfo_unit_system">Unit System:</span>
 				<label>
 					<input type="radio" name="unit_system" value="single" checked="checked"/>
@@ -759,12 +759,12 @@ if(!isset($_SESSION['draw_dir'])){
 				</label>
 				<label>
 					<input type="radio" name="unit_system" value="multi"/>
-					<span id="svginfo_multi_units">Multiple CSS units</span> 
+					<span id="svginfo_multi_units">Multiple CSS units</span>
 					<small id="svginfo_single_type_unit_sub">Attributes can be given different CSS units, which may lead to inconsistant results among viewers.</small>
 				</label>
  -->
 			</fieldset>
-	
+
 		</fieldset>
 
 	</div>

@@ -5,12 +5,12 @@
 
     {#  Plugin top  #}
     {% if plugin_content_top %}
-        <div id="plugin_content_top" class="span12">
+        <div id="plugin_content_top" class="col-md-12">
             {{ plugin_content_top}}
         </div>
     {% endif %}
     {% if app.template.show_header == true %}
-        <div class="span12">
+        <div class="col-md-12">
     {% endif %}
 
         {% include app.template_style ~ "/layout/page_body.tpl" %}
@@ -31,7 +31,7 @@
 
     {#  Plugin bottom  #}
     {% if plugin_content_bottom %}
-        <div id="plugin_content_bottom" class="span12">
+        <div id="plugin_content_bottom" class="col-md-12">
             {{ plugin_content_bottom }}
         </div>
     {% endif %}

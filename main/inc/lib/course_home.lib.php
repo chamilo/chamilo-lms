@@ -582,7 +582,7 @@ class CourseHome
      */
     public static function show_tools_category($all_tools_list, $rows = false)
     {
-        $rowDiv =  '<div class="row-fluid">';
+        $rowDiv =  '<div class="row">';
         $theme = api_get_setting('homepage_view');
         if ($theme == 'vertical_activity') {
             //ordering by get_lang name
@@ -796,7 +796,7 @@ class CourseHome
                             $html .=  $rowDiv;
                         }
 
-                        $html .=  '<div class="span4 course-tool">';
+                        $html .=  '<div class="col-md-4 course-tool">';
                         $image = (substr($item['tool']['image'], 0, strpos($item['tool']['image'], '.'))).'.png';
 
                         $original_image = Display::return_icon($image, $item['name'], array('id'=>'toolimage_'.$item['tool']['id']), ICON_SIZE_BIG, false);
@@ -837,7 +837,7 @@ class CourseHome
                             $html .=  $rowDiv;
                         }
 
-                        $html .=  '<div class="span6 course-tool">';
+                        $html .=  '<div class="col-md-6 course-tool">';
                         $content =  $item['extra'];
                         $content .=  $item['visibility'];
                         $content .=  $item['icon'];

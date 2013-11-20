@@ -238,25 +238,29 @@ class IndexController extends CommonController
           ->getForm();
           return $app['template']->assign('form', $form->createView());
          */
-        $form = new \FormValidator('formLogin', 'POST', $app['url_generator']->generate('secured_login_check'), null, array('class' => 'form-vertical'));
+        $form = new \FormValidator('formLogin', 'POST', $app['url_generator']->generate('secured_login_check'), null);
+        $renderer =& $form->defaultRenderer();
+        $renderer->setElementTemplate('<span>{element}</span>');
         $form->addElement(
             'text',
             'username',
-            get_lang('UserName'),
+            null,
             array(
                 'class' => 'input-medium autocapitalize_off virtualkey',
+                'placeholder' => get_lang('UserName'),
                 'autofocus' => 'autofocus'
             )
         );
         $form->addElement(
             'password',
             'password',
-            get_lang('Pass'),
+            null,
             array(
+                'placeholder' => get_lang('Pass'),
                 'class' => 'input-medium virtualkey'
             )
         );
-        $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));
+        $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn btn-primary btn-block'));
         $html = $form->return_form();
 
         /** Verify if settings is active to set keyboard. Included extra class in form input elements */

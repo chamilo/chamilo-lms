@@ -19,9 +19,8 @@
     <div id="wrapper">
 
         {# Bug and help notifications #}
-
+        {% if 0 %}
         <ul id="navigation" class="notification-panel">
-
             {% if ("enable_help_link" | get_setting) == 'true' %}
                 <li class="help">
                     <a href="{{ _p.web_img }}help/help.php?open={{ help_content }}&height=400&width=600" class="ajax" title="{{ "help"|get_lang }}">
@@ -38,20 +37,23 @@
             </li>
             {% endif %}
         </ul>
+        {% endif %}
 
         {# topbar #}
         {% include app.template_style ~ "/layout/topbar.tpl" %}
+        {% set classMain = '' %}
+        {% if show_toolbar == 1 %}
+            {% set classMain = 'with-toolbar' %}
+        {% endif %}
 
         {% block main_div_container %}
-            {% if app.full_width == 1 %}
-                <div id="main" class="container-fluid">
-            {% else %}
-                <div id="main" class="container">
-            {% endif %}
+
+            <div id="main" class="container {{ classMain }}">
         {% endblock main_div_container %}
+
             <header>
                 <div class="row">
-                    <div id="header_left" class="span4">
+                    <div id="header_left" class="col-md-4">
                         {# logo #}
 
                         <div id="logo">
@@ -68,7 +70,7 @@
                         {% endif %}
                     </div>
 
-                    <div id="header_center" class="span3">
+                    <div id="header_center" class="col-md-3">
                         {# plugin_header center #}
                         {% if plugin_header_center is not null %}
                             <div id="plugin_header_center">
@@ -77,7 +79,7 @@
                         {% endif %}
                         &nbsp;
                     </div>
-                    <div id="header_right" class="span5">
+                    <div id="header_right" class="col-md-5">
                         <ul id="notifications" class="nav nav-pills pull-right">
                             {{ notification_menu }}
                         </ul>
@@ -94,7 +96,7 @@
 
                 {% if plugin_header_main %}
                     <div class="row">
-                        <div class="span12">
+                        <div class="col-md-12">
                             <div id="plugin_header_main">
                                 {{ plugin_header_main }}
                             </div>
@@ -112,12 +114,8 @@
                     {{ breadcrumb }}
                 {% endif %}
             </header>
-            {% if app.full_width == 1 %}
-                <div id="top_main_content" class="row-fluid">
-            {% else %}
-                <div id="top_main_content" class="row">
-            {% endif %}
 
+            <div id="top_main_content" class="row">
             {# course navigation links/shortcuts need to be activated by the admin #}
             {% include app.template_style ~ "/layout/course_navigation.tpl" %}
 {% endif %}

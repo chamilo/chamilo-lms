@@ -29,8 +29,9 @@
                 {{ error|trans }}
             </div>
         {% endif %}
-        <input class="input-block-level virtualkey" type="text" name="username" placeholder="{{ 'Username' | get_lang }}"/>
-        <input class="input-block-level virtualkey" type="password" name="password" placeholder="{{ 'Password' | get_lang }}" />
-        <button class="btn btn-large btn-primary" type="submit">{{ 'LoginEnter' | get_lang }}</button>
+
+        <input class="form-control virtualkey" type="text" name="username" placeholder="{{ 'Username' | get_lang }}"/>
+        <input class="form-control virtualkey" type="password" name="password" placeholder="{{ 'Password' | get_lang }}" />
+        <button class="btn btn-lg btn-primary btn-block" type="submit">{{ 'LoginEnter' | get_lang }}</button>
     </form>
 {% endblock %}

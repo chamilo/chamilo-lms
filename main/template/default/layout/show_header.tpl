@@ -6,11 +6,11 @@
 
 {% if app.template.show_header == true %}
     {% if plugin_content_top is not null %}
-        <div id="plugin_content_top" class="span12">
+        <div id="plugin_content_top" class="col-md-12">
             {{ plugin_content_top }}
         </div>
     {% endif %}
-    <div class="span12">
+    <div class="col-md-12">
         {% include app.template_style ~ "/layout/page_body.tpl" %}
         {% block main_content_section_block %}<section id="main_content">{% endblock main_content_section_block %}
 {% endif %}

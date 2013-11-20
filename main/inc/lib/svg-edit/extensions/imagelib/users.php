@@ -35,7 +35,7 @@ $style .='</style>';
 
 ?>
 <!doctype html>
-<?php echo api_get_js('jquery.min.js'); ?>
+<?php echo api_get_js('jquery.js'); ?>
 <?php echo $style ?>
 
 <body>
@@ -49,7 +49,7 @@ if (!empty($png_svg_files)) {
 	echo '<ul>';
 	foreach($png_svg_files as $filename) {
 		$image=$user_disk_path.$filename;
-		
+
 		if (strpos($filename, "svg")){
 			$new_sizes['width'] = 60;
 			$new_sizes['height'] = 60;
@@ -57,10 +57,10 @@ if (!empty($png_svg_files)) {
 		else {
 			$new_sizes = api_resize_image($image, 60, 60);
 		}
-		
+
 			echo '<li style="display:inline; padding:8px;"><a href="'.$user_web_path.$filename.'" alt "'.$filename.'" title="'.$filename.'"><img src="'.$user_web_path.$filename.'" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
 	}
-	echo '</ul>';	
+	echo '</ul>';
 } else {
 	Display::display_warning_message(get_lang('NoSVGImages'));
 }
@@ -69,8 +69,8 @@ if (!empty($png_svg_files)) {
 <script>
 $('a').click(function() {
 	var href = this.href;
-	
-	// Convert Non-SVG images to data URL first 
+
+	// Convert Non-SVG images to data URL first
 	// (this could also have been done server-side by the library)
 	if(this.href.indexOf('.svg') === -1) {
 
@@ -79,7 +79,7 @@ $('a').click(function() {
 			id: href
 		});
 		window.top.postMessage(meta_str, "*");
-	
+
 		var img = new Image();
 		img.onload = function() {
 			var canvas = document.createElement("canvas");
@@ -110,7 +110,7 @@ $('a').click(function() {
 			data = '|' + href + '|' + data;
 			// This is where the magic happens!
 			window.top.postMessage(data, "*");
-			
+
 		}, 'html'); // 'html' is necessary to keep returned data as a string
 	}
 	return false;

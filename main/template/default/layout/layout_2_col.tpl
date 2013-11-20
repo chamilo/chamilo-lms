@@ -4,7 +4,7 @@
 	{# Main content #}
 
 	{#  Left column  #}
-	<div class="span3 menu-column">
+	<div class="col-md-3 menu-column">
         {% block left_column %}
 
             {% if plugin_menu_top %}
@@ -70,7 +70,7 @@
             {% endif %}
         {% endblock %}
 	</div>
-	<div class="span9 content-column">
+	<div class="col-md-9 content-column">
         {% block right_column %}
 
             {#  Plugin bottom  #}
@@ -84,7 +84,7 @@
             {% if home_page_block %}
                 <section id="homepage">
                     <div class="row">
-                        <div class="span9">
+                        <div class="col-md-9">
                         {{ home_page_block }}
                         </div>
                     </div>
@@ -115,7 +115,7 @@
             {% if course_category_block %}
                 <section id="course_category">
                     <div class="row">
-                        <div class="span9">
+                        <div class="col-md-9">
                         {{ course_category_block }}
                         </div>
                     </div>

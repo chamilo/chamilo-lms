@@ -376,29 +376,34 @@ class Template
         if ($this->app['assetic.enabled']) {
             $css[] = api_get_path(WEB_PUBLIC_PATH).'css/'.$this->theme.'/style.css';
         } else {
+            // Bootstrap
+            $css[] = api_get_cdn_path(api_get_path(WEB_LIBRARY_PATH).'javascript/bootstrap/css/bootstrap.css');
+
+            //$css[] = api_get_cdn_path(api_get_path(WEB_LIBRARY_PATH).'javascript/bootstrap/css/bootstrap-theme.css');
+
             // Base CSS.
             $css[] = api_get_cdn_path($cssPath.'base.css');
 
             // Default theme CSS.
             $css[] = api_get_cdn_path($cssPath.$this->theme.'/default.css');
-            $css[] = api_get_cdn_path($cssPath.'bootstrap-responsive.css');
-            $css[] = api_get_cdn_path($cssPath.'responsive.css');
+            //$css[] = api_get_cdn_path($cssPath.'bootstrap-responsive.css');
+            //$css[] = api_get_cdn_path($cssPath.'responsive.css');
 
             // Extra CSS files.
             if ($this->show_learnpath) {
-                $css[] = $cssPath.$this->theme.'/learnpath.css';
-                $css[] = $cssPath.$this->theme.'/scorm.css';
+                //$css[] = $cssPath.$this->theme.'/learnpath.css';
+                //$css[] = $cssPath.$this->theme.'/scorm.css';
             }
 
             if (api_is_global_chat_enabled()) {
                 $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
             }
 
-            $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/'.$this->jquery_ui_theme.'/jquery-ui-custom.css';
-            $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/default.css';
+            $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/css/'.$this->jquery_ui_theme.'/jquery-ui-custom.css';
+            //$css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/default.css';
         }
 
-        $css[] = api_get_cdn_path($cssPath.'font_awesome/css/font-awesome.css');
+        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/font-awesome/css/font-awesome.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
 
@@ -477,14 +482,14 @@ class Template
             //JS files
             $js_files = array(
                 $jsFolder.'modernizr.js',
-                $jsFolder.'jquery.min.js',
+                $jsFolder.'jquery.js',
                 $jsFolder.'chosen/chosen.jquery.min.js',
-                $jsFolder.'jquery-ui/'.$this->jquery_ui_theme.'/jquery-ui-custom.min.js',
+                $jsFolder.'jquery-ui/js/jquery-ui.custom.js',
                 //$jsFolder.'jquery-ui/jquery.ui.touch-punch.js',
                 $jsFolder.'thickbox.js',
                 $jsFolder.'ckeditor/ckeditor.js',
                 //$jsFolder.'tinymce/tinymce.min.js',
-                $jsFolder.'bootstrap/bootstrap.js',
+                $jsFolder.'bootstrap/js/bootstrap.js',
             );
         }
 
@@ -920,6 +925,16 @@ class Template
     {
         $this->addJsFiles();
         return $this->app['twig']->render($this->app['template_style'].'/'.$template, $elements);
+    }
+
+    /**
+     * @param string $template
+     * @param array $elements
+     * @return mixed
+     */
+    public function renderTemplate($template, $elements = array())
+    {
+        return $this->render_template($template, $elements);
     }
 
     /**
@@ -1427,8 +1442,6 @@ class Template
             $final_navigation_count = count($final_navigation);
 
             if (!empty($final_navigation)) {
-                // $home_link.= '<span class="divider">/</span>';
-
                 if (!empty($home_link)) {
                     $lis .= Display::tag('li', $home_link);
                 }
@@ -1437,7 +1450,7 @@ class Template
                     $bread_check = trim(strip_tags($bread));
                     if (!empty($bread_check)) {
                         if ($final_navigation_count - 1 > $i) {
-                            $bread .= '<span class="divider">/</span>';
+                            //$bread .= '<span class="divider">/</span>';
                         }
                         $lis .= Display::tag('li', $bread);
                         $i++;

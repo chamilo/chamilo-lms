@@ -2,8 +2,6 @@
  * Common CSS for all themes
 */
 
-@import url('bootstrap.css');
-
 /* some changes to the bootstrap.css */
 
 /* when doing a var_dump*/
@@ -13,7 +11,7 @@ pre {
 
 /* chzn-select fix */
 select {
-    width: auto;
+    /* width: auto; */
 }
 
 .invisible {
@@ -32,141 +30,11 @@ legend {
     padding: 40px 0px 0px 0px;
 }
 
+header {
+}
+
 header #logo {
     padding: 0px 0px 15px 0px;
-}
-
-.subnav .brand {
-    display: none;
-}
-
-.subnav .navbar-inner {
-    box-shadow: none;
-}
-
-.subnav .dropdown-menu li a {
-    color: #333;
-}
-
-.subnav li a {
-    margin: 0px;
-}
-
-.subnav {
-}
-
-.subnav .btn-navbar {
-    background: #efefef;
-}
-
-.subnav .btn-navbar .icon-bar {
-    background-color: #888;
-}
-
-.subnav-fixed {
-    position: fixed;
-    top: 0px;
-    left: 0;
-    right: 0;
-    z-index: 1030;
-    border-color: #d5d5d5;
-    border-width: 0 0 1px; /* drop the border on the fixed edges */
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
-    border-radius: 0;
-    /*-webkit-box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
-        -moz-box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
-            box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
-    */
-}
-
-.subnav {
-    margin-bottom: 0px;
-}
-
-/* Subnav */
-.subnav .navbar-inner {
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-
-    /* default subnav color */
-    background-color: #eeeeee; /* Old browsers */
-    background-repeat: repeat-x; /* Repeat the gradient */
-    background-image: -moz-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%); /* FF3.6+ */
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f5f5f5), color-stop(100%, #eeeeee)); /* Chrome,Safari4+ */
-    background-image: -webkit-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%); /* Chrome 10+,Safari 5.1+ */
-    background-image: -ms-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%); /* IE10+ */
-    background-image: -o-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%); /* Opera 11.10+ */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#f5f5f5', endColorstr = '#eeeeee', GradientType = 0); /* IE6-9 */
-    background-image: linear-gradient(top, #f5f5f5 0%, #eeeeee 100%); /* W3C */
-    border: 1px solid #e5e5e5;
-    margin-bottom: 0px;
-    padding-left: 4px;
-    padding-right: 4px;
-
-    /* end default subnav background colors */
-}
-
-/* fixing gray border next the logout button */
-.subnav .nav-tabs .open .dropdown-toggle, .subnav .nav-pills .open .dropdown-toggle, .nav > .open.active > a:hover {
-    border-color: transparent;
-}
-
-.subnav .nav > li > a {
-    margin: 0;
-    border-left: 1px solid #f5f5f5;
-    border-right: 1px solid #e5e5e5;
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
-    border-radius: 0;
-}
-
-.subnav .nav > #current > a,
-.subnav .nav > #current > a:hover {
-    padding-left: 13px;
-    color: #777;
-    background-color: #e9e9e9;
-    border-right-color: #ddd;
-    border-left: 0;
-    -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, .05);
-    -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, .05);
-    box-shadow: inset 0 3px 5px rgba(0, 0, 0, .05);
-}
-
-.subnav .nav > #current > a .caret,
-.subnav .nav > #current > a:hover .caret {
-    border-top-color: #777;
-}
-
-.subnav .nav > li:last-child > a {
-    border-right: 0;
-}
-
-.subnav .dropdown-menu {
-    -webkit-border-radius: 0 0 4px 4px;
-    -moz-border-radius: 0 0 4px 4px;
-    border-radius: 0 0 4px 4px;
-}
-
-.subnav .nav > li:first-child > a,
-.subnav .nav > li:first-child > a:hover {
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
-    border-radius: 0;
-}
-
-.subnav .nav > li > a:hover {
-    text-decoration: none;
-    color: #aaa;
-}
-
-.subnav .nav > li a {
-    text-shadow: none;
-}
-
-header {
-    margin-bottom: 11px;
 }
 
 .breadcrumb {
@@ -179,7 +47,7 @@ header {
 }
 /* To fix the increase/decrease buttons */
 label, input, button, select, textarea, p {
-    font-size: inherit;
+    /* font-size: inherit; */
 }
 
 .badge-group {
@@ -280,7 +148,7 @@ form .formw input {
 
 .nav-list > .active > a,
 .nav-list > .active > a:hover {
-    background-color: #999999;
+    background-color: #eeeed6;
 }
 
 .sidebar-nav {
@@ -323,51 +191,36 @@ form .formw input {
     width: 110px;
 }
 
-html, body {
-    margin: 0;
-    padding: 0;
-}
-
-/* the sticky effect */
-html {
-    height: 100%;
-}
-
-body {
-    /* hack ignored by non-IE to enable ie to support :hover on button */
-    behavior: url("/main/css/csshover3.htc");
-    margin: 0;
-    padding: 0;
-    background-color: #fff;
-    height: 100%; /* stick */
-}
-
 /* Sticky footer*/
+
+html,
+body {
+    height: 100%;
+    /* The html and body elements cannot have any padding or margin. */
+}
+
+/* Wrapper for page content to push down footer */
 #wrapper {
     min-height: 100%;
-    height: auto !important;
-    height: 100%;
-    margin: 0 auto -9em; /* Do not change this value */
+    height: auto;
+    /* Negative indent footer by its height */
+    margin: 0 auto -60px;
+    /* Pad bottom by footer height */
+    padding: 0 0 60px;
 }
 
-#topbar {
-    z-index: 9000; /* bug when using full area fckeditor */
-}
-
+/* Set the fixed height of the footer here */
 footer {
-    margin-top: 17px;
-    padding-top: 17px;
-    height: 9em;
-    width: 100%;
-}
-
-/* Sticky footer*/
-.push {
-    height: 9em; /* Very important */
+    height: 150px;
+    background-color: #f5f5f5;
 }
 
 footer .container .row {
-    padding-top: 50px;
+    padding-top:50px;
+}
+
+.with-toolbar {
+    margin-top: 80px;
 }
 
 #footer_right #admin_name, #footer_right #software_name {
@@ -387,12 +240,14 @@ footer .container .row {
 }
 
 .actions {
-    background: #efefef;
-    border: 1px solid #ccc;
-    margin-bottom: 11px;
-    height: 32px;
-    padding: 2px 2px 2px 14px;
-    vertical-align: middle;
+    min-height: 20px;
+    padding: 8px 15px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    height: 50px;
 }
 
 .actions .actions-pagination {
@@ -3548,17 +3403,14 @@ form .formw .freeze {
     z-index: 200;
 }
 
-#language_list {
-    width: 80px !important;
-    min-width: 140px !important;
-}
+
 
 /*****************************************************
  *  LOGIN AND LANGUAGE FORM                          *
  *****************************************************/
 
 #lang_form {
-    text-align: left;
+    /* text-align: left; */
 }
 
 .form_login {
@@ -5288,30 +5140,42 @@ i.size-32.icon-new-work {
     margin-left:120px;
 }
 
+
 .form-signin {
-    max-width: 300px;
-    padding: 19px 29px 29px;
-    margin: 0 auto 20px;
-    background-color: #fff;
-    border: 1px solid #e5e5e5;
-    -webkit-border-radius: 5px;
-       -moz-border-radius: 5px;
-            border-radius: 5px;
-    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-       -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-            box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
 }
 .form-signin .form-signin-heading,
 .form-signin .checkbox {
     margin-bottom: 10px;
 }
-.form-signin input[type="text"],
-.form-signin input[type="password"] {
+.form-signin .checkbox {
+    font-weight: normal;
+}
+.form-signin .form-control {
+    position: relative;
     font-size: 16px;
     height: auto;
-    margin-bottom: 15px;
-    padding: 7px 9px;
+    padding: 10px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
+.form-signin .form-control:focus {
+    z-index: 2;
+}
+.form-signin input[type="text"] {
+    margin-bottom: -1px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
 
 .question_no_title {
     text-align: center;

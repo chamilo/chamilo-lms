@@ -1,7 +1,8 @@
-<footer{% block footer_open_attributes %}{% endblock footer_open_attributes %}> <!-- start of #footer section -->
+<footer{% block footer_open_attributes %}{% endblock footer_open_attributes %}>
+    <!-- start of #footer section -->
     <div class="container">
         <div class="row">
-            <div id="footer_left" class="span4">
+            <div id="footer_left" class="col-md-4">
                 {% if session_teachers is not null %}
                     <div id="session_teachers">
                         {{ session_teachers }}
@@ -23,7 +24,7 @@
                  &nbsp;
             </div>
 
-            <div id="footer_center" class="span4">
+            <div id="footer_center" class="col-md-4">
                 {#   Plugins for footer section  #}
                 {% if plugin_footer_center is not null %}
                     <div id="plugin_footer_center">
@@ -33,7 +34,7 @@
                  &nbsp;
             </div>
 
-            <div id="footer_right" class="span4">
+            <div id="footer_right" class="col-md-4">
                 {% if administrator_name is not null %}
                     <div id="admin_name">
                         {{ administrator_name }}

@@ -50,13 +50,11 @@ class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
 
     function toHtml()
     {
-        return '<div class="control-group">
-                    <label class="control-label"></label>
-                    <div class="controls">
-                    '.HTML_QuickForm_static::toHtml().'
-                        </div>
-                 </div>
-
-                ';
+        return '<div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-10">
+                        '.HTML_QuickForm_static::toHtml().'
+                    </div>
+                 </div>';
     }
 }

@@ -2543,13 +2543,9 @@ class CourseManager
      * Builds the course block in user_portal.php
      * @todo use Twig
      */
-    public static function course_item_html($params, $is_sub_content = false) {
-        global $app;
-        if ($app['full_width']) {
-            $rowDiv = '<div class="row-fluid">';
-        } else {
-            $rowDiv = '<div class="row">';
-        }
+    public static function course_item_html($params, $is_sub_content = false)
+    {
+        $rowDiv = '<div class="row">';
         $html = '';
         $class = "well course-box";
         if ($is_sub_content) {
@@ -2560,9 +2556,9 @@ class CourseManager
         }
         $html .= '<div class="'.$class.'">';
             $html .= $rowDiv;
-            $html .= '<div class="span7">';
+            $html .= '<div class="col-md-7">';
                 $html .= $rowDiv;
-                    $html .= '<div class="span1 course-box-thumbnail-box">';
+                    $html .= '<div class="col-md-2 course-box-thumbnail-box">';
                     if (!empty($params['link'])) {
                         $html .= '<a class="thumbnail" href="'.$params['link'].'">';
                         $html .= $params['icon'];
@@ -2582,7 +2578,7 @@ class CourseManager
                         $param_class .= ' course-box-text';
                     }
 
-                    $html .= '<div class="span6 '.$param_class.'">';
+                    $html .= '<div class="col-md-5 '.$param_class.'">';
                         $html .='<h3>'.$params['title'].$notifications.'</h3> ';
 
                         if (!empty($params['subtitle'])) {
@@ -2597,16 +2593,16 @@ class CourseManager
 
                     $html .= '</div>';
                 $html .= '</div>';
-
             $html .= '</div>';
             $params['right_actions'] = isset($params['right_actions']) ? $params['right_actions'] : null;
-            $html .= '<div class="span1 pull-right course-box-actions">'.$params['right_actions'].'</div>';
+            $html .= '<div class="col-md-1 pull-right course-box-actions">'.$params['right_actions'].'</div>';
         $html .= '</div>';
         $html .= '</div>';
         return $html;
     }
 
-    public static function course_item_parent($main_content, $sub_content, $sub_sub_content = null) {
+    public static function course_item_parent($main_content, $sub_content, $sub_sub_content = null)
+    {
         return '<div class="well">'.$main_content.$sub_content.$sub_sub_content.'</div>';
     }
 
@@ -2619,7 +2615,8 @@ class CourseManager
      * @param bool      Whether to show the document quick-loader or not
      * @return void
      */
-    public static function displaySpecialCourses($user_id, $filter, $load_dirs, $getCount, $start = null, $maxPerPage = null) {
+    public static function displaySpecialCourses($user_id, $filter, $load_dirs, $getCount, $start = null, $maxPerPage = null)
+    {
         $user_id = intval($user_id);
         $tbl_course                 = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_user            = Database::get_main_table(TABLE_MAIN_COURSE_USER);

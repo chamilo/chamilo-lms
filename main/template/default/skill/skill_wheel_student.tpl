@@ -257,7 +257,7 @@ $(document).ready(function() {
 });
 </script>
 
-<div class="container-fluid">
+<div class="container">
     <div class="row-fluid">
 
         <div class="span3">

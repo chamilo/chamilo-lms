@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" href="{{ app.request.basepath }}/../css/bootstrap.css">
-    <script type="text/javascript" src="{{ app.request.basepath }}/../inc/lib/javascript/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/../inc/lib/javascript/jquery.js"></script>
     <script type="text/javascript" src="{{ app.request.basepath }}/../inc/lib/javascript/bootstrap/bootstrap.js"></script>
 </head>
 

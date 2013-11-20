@@ -78,7 +78,6 @@ $my_style = $platform_theme;
 
 //$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/lp_minipanel/jquery.lp_minipanel.js" type="text/javascript"></script>';
 $htmlHeadXtra[] = $app['template']->fetch('default/javascript/newscorm/minipanel.tpl');
-
 $htmlHeadXtra[] = '<script>
 $(document).ready(function(){
 	$("div#log_content_cleaner").bind("click", function() {
@@ -493,13 +492,13 @@ if ($show_audioplayer) {
                     { load:[
                         {type:"script", id:"_fr1", src:"<?php echo api_get_path(
                             WEB_LIBRARY_PATH
-                        ); ?>javascript/jquery.min.js"},
+                        ); ?>javascript/jquery.js"},
                         {type:"script", id:"_fr4", src:"<?php echo api_get_path(
                             WEB_LIBRARY_PATH
-                        ); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
+                        ); ?>javascript/jquery-ui/js/jquery-ui.custom.js"},
                         {type:"stylesheet", id:"_fr5", src:"<?php echo api_get_path(
                             WEB_LIBRARY_PATH
-                        ); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
+                        ); ?>javascript/jquery-ui/css/smoothness/jquery-ui.custom.min.css"},
                         {type:"script", id:"_fr2", src:"<?php echo api_get_path(
                             WEB_LIBRARY_PATH
                         ); ?>javascript/jquery.highlight.js"}
@@ -515,13 +514,13 @@ if ($show_audioplayer) {
                     { load:[
                         {type:"script", id:"_fr1", src:"<?php echo api_get_path(
                             WEB_LIBRARY_PATH
-                        ); ?>javascript/jquery.min.js"},
+                        ); ?>javascript/jquery.js"},
                         {type:"script", id:"_fr4", src:"<?php echo api_get_path(
                             WEB_LIBRARY_PATH
-                        ); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
+                        ); ?>javascript/jquery-ui/js/jquery-ui.custom.js"},
                         {type:"stylesheet", id:"_fr5", src:"<?php echo api_get_path(
                             WEB_LIBRARY_PATH
-                        ); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
+                        ); ?>javascript/jquery-ui/css/smoothness/jquery-ui-custom.css"},
                         {type:"script", id:"_fr2", src:"<?php echo api_get_path(
                             WEB_LIBRARY_PATH
                         ); ?>javascript/jquery.highlight.js"}

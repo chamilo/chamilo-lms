@@ -2,7 +2,7 @@
 {% if app.template.show_header == true %}
 
     {% if show_course_shortcut is not null %}
-        <div class="span12">
+        <div class="col-md-12">
             {{ show_course_shortcut }}
         </div>
     {% endif %}

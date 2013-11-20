@@ -86,9 +86,9 @@ if ($app['assetic.enabled']) {
 
     $app['assetic.input.path_to_js'] = array(
         api_get_path(LIBRARY_PATH).'javascript/modernizr.js',
-        api_get_path(LIBRARY_PATH).'javascript/jquery.min.js',
+        api_get_path(LIBRARY_PATH).'javascript/jquery.js',
         //api_get_path(LIBRARY_PATH).'javascript/chosen/chosen.jquery.min.js',
-        api_get_path(LIBRARY_PATH).'javascript/jquery-ui/'.$app['jquery_ui_theme'].'/jquery-ui-custom.min.js',
+        api_get_path(LIBRARY_PATH).'javascript/jquery-ui/css/'.$app['jquery_ui_theme'].'/jquery-ui-custom.min.js',
         //api_get_path(LIBRARY_PATH).'javascript/thickbox.js',
         api_get_path(LIBRARY_PATH).'javascript/bootstrap/bootstrap.js',
         //api_get_path(LIBRARY_PATH).'javascript/bxslider/jquery.bxSlider.min.js',

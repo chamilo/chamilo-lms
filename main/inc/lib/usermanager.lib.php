@@ -224,7 +224,7 @@ class UserManager
     public static function can_delete_user($user_id)
     {
         global $_configuration;
-        if (isset($_configuration['delete_users']) && $_configuration['delete_users'] == false) {
+        if (isset($_configuration['deny_delete_users']) && $_configuration['deny_delete_users'] == true) {
             return false;
         }
         $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);

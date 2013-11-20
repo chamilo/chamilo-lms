@@ -64,7 +64,7 @@ $(document).ready(function() {
 	/* Live conditions */
 
     // User name header toogle
-	$('#chatboxtitlemain').live('click', function() {
+	$('#chatboxtitlemain').on('click', function() {
         if (user_status == 1) {
             stopChatHeartBeat();
             $('.user_status_main').html(offline_button);
@@ -79,7 +79,7 @@ $(document).ready(function() {
 	});
 
 	// User name header toogle
-	$('.chatboxtitle').live('click', function(){
+	$('.chatboxtitle').on('click', function(){
 		chatbox = $(this).parents(".chatbox");
 		var chat_id = chatbox.attr('id');
 		chat_id = chat_id.split('_')[1];
@@ -87,13 +87,13 @@ $(document).ready(function() {
 	});
 
 	//Minimize button
-	$('.chatboxhead .togglelink').live('click', function(){
+	$('.chatboxhead .togglelink').on('click', function(){
 		var chat_id =  $(this).attr('rel');
 		toggleChatBoxGrowth(chat_id);
 	});
 
 	//Close button
-	$('.chatboxhead .closelink').live('click', function(){
+	$('.chatboxhead .closelink').on('click', function(){
 		var chat_id =  $(this).attr('rel');
 		closeChatBox(chat_id);
 	});

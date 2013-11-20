@@ -209,16 +209,15 @@ foreach($data as $linea => $info) {
 		$questions[$question_index]['option'][] = $info;
 	} elseif (preg_match('/^ANSWER:\s([A-Z])\s?/', $info)) {
 		$questions[$question_index]['answer'] = $info;
-	} elseif (preg_match('/^TEXTO_CORRECTA:\s([A-Z])\s?/', $info)) {
+	} elseif (preg_match('/^ANSWER_EXPLANATION:\s([A-Z])\s?/', $info)) {
 		$questions[$question_index]['answer_explanation'] = $info;
-	} elseif (preg_match('/^ETIQUETAS:\s([A-Z])\s?/', $info)) {
+	} elseif (preg_match('/^TAGS:\s([A-Z])\s?/', $info)) {
 		$questions[$question_index]['answer_tags'] = explode(',', $info);
 	} elseif (preg_match('/^\n/',$info)) {
 		$question_index++;
 	} else {
 		$questions[$question_index]['title'] = $info;
 	}
-
 	
 }
 

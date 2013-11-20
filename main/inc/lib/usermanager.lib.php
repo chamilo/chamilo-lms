@@ -250,7 +250,7 @@ class UserManager
      * super-admins. Other roles should only be able to disable a user,
      * which removes access to the platform but doesn't delete anything.
      * @param int The ID of th user to be deleted
-     * @return boolean true if user is succesfully deleted, false otherwise
+     * @return boolean true if user is successfully deleted, false otherwise
      * @assert (null) === false
      * @assert ('abc') === false
      */

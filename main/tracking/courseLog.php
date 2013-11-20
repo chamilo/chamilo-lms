@@ -250,10 +250,14 @@ if (count($a_students) > 0) {
     $course_name = get_lang('Course').' '.$course_info['name'];
 
     if ($session_id) {
-        echo Display::page_subheader(Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.api_get_session_name($session_id).' '.
-             Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_name);
+        echo Display::page_subheader(
+            Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.api_get_session_name($session_id).' '.
+            Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_name
+        );
     } else {
-        echo Display::page_subheader(Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_info['name']);
+        echo Display::page_subheader(
+            Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_info['name']
+        );
     }
 
     $extra_field_select = TrackingCourseLog::display_additional_profile_fields();
@@ -263,7 +267,7 @@ if (count($a_students) > 0) {
     }
     $form->display();
 
-    //PERSON_NAME_DATA_EXPORT is buggy
+    // PERSON_NAME_DATA_EXPORT is buggy
     $is_western_name_order = api_is_western_name_order();
 
     if ($export_csv) {
@@ -277,7 +281,11 @@ if (count($a_students) > 0) {
 
     $user_ids = array_keys($a_students);
 
-    $table = new SortableTable('users_tracking', array('TrackingCourseLog', 'get_number_of_users'), array('TrackingCourseLog', 'get_user_data'), (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
+    $table = new SortableTable(
+        'users_tracking',
+        array('TrackingCourseLog', 'get_number_of_users'),
+        array('TrackingCourseLog', 'get_user_data'),
+        (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
 
     $parameters['cidReq'] 		= Security::remove_XSS($_GET['cidReq']);
     $parameters['id_session'] 	= $session_id;
@@ -324,7 +332,7 @@ if (count($a_students) > 0) {
         $tab_table_header[] = get_lang('FirstLogin');
         $table->set_header(13, get_lang('LatestLogin'), false);
         $tab_table_header[] = get_lang('LatestLogin');
-        if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
+        if (isset($_GET['additional_profile_field']) and is_numeric($_GET['additional_profile_field'])) {
             $table->set_header(14, $extra_info['field_display_text'], false);
             $tab_table_header[] = $extra_info['field_display_text'];
             $table->set_header(15, get_lang('Details'), false);
@@ -340,7 +348,7 @@ if (count($a_students) > 0) {
         $table->set_header(12, get_lang('LatestLogin'), false);
         $tab_table_header[] = get_lang('LatestLogin');
 
-        if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
+        if (isset($_GET['additional_profile_field']) and is_numeric($_GET['additional_profile_field'])) {
             $table->set_header(13, $extra_info['field_display_text'], false);
             $tab_table_header[] = $extra_info['field_display_text'];
             $table->set_header(14, get_lang('Details'), false);

@@ -6,7 +6,6 @@ use ChamiloSession as Session;
 $language_file = array('exercice', 'work', 'document', 'admin', 'gradebook');
 
 require_once '../inc/global.inc.php';
-// Including necessary files
 require_once 'work.lib.php';
 
 if (ADD_DOCUMENT_TO_WORK == false) {
@@ -18,6 +17,7 @@ $current_course_tool  = TOOL_STUDENTPUBLICATION;
 $workId = isset($_GET['id']) ? intval($_GET['id']) : null;
 $docId = isset($_GET['document_id']) ? intval($_GET['document_id']) : null;
 $action = isset($_GET['action']) ? $_GET['action'] : null;
+$message = isset($_GET['message']) ? Security::remove_XSS($_GET['message']) : null;
 
 if (empty($workId)) {
     api_not_allowed(true);
@@ -46,7 +46,7 @@ switch ($action) {
     case 'delete':
         if (!empty($workId) && !empty($docId)) {
             deleteDocumentToWork($docId, $workId, api_get_course_int_id());
-            $url = api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId;
+            $url = api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId.'&'.api_get_cidreq();
             header('Location: '.$url);
             exit;
         }
@@ -56,6 +56,7 @@ switch ($action) {
 if (empty($docId)) {
 
     Display :: display_header(null);
+    echo $message;
     $documents = getAllDocumentToWork($workId, api_get_course_int_id());
     if (!empty($documents)) {
         echo Display::page_subheader(get_lang('DocumentsAdded'));
@@ -64,7 +65,7 @@ if (empty($docId)) {
             $documentId = $doc['document_id'];
             $docData = DocumentManager::get_document_data_by_id($documentId, $courseInfo['code']);
             if ($docData) {
-                $url = api_get_path(WEB_CODE_PATH).'work/add_document.php?action=delete&id='.$workId.'&document_id='.$documentId;
+                $url = api_get_path(WEB_CODE_PATH).'work/add_document.php?action=delete&id='.$workId.'&document_id='.$documentId.'&'.api_get_cidreq();
                 $link = Display::url(get_lang('Delete'), $url);
                 echo $docData['title'].' '.$link.'<br />';
             }
@@ -86,10 +87,10 @@ if (empty($docId)) {
     echo $document_tree;
     echo '<hr /><div class="clear"></div>';
 } else {
-    $message = null;
 
     $documentInfo = DocumentManager::get_document_data_by_id($docId, $courseInfo['code']);
-    $form = new FormValidator('add_doc', 'post', api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId.'&document_id='.$docId);
+    $url = api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId.'&document_id='.$docId.'&'.api_get_cidreq();
+    $form = new FormValidator('add_doc', 'post', $url);
     $form->addElement('header', get_lang('AddDocument'));
     $form->addElement('hidden', 'add_doc', '1');
     $form->addElement('hidden', 'id', $workId);
@@ -104,15 +105,17 @@ if (empty($docId)) {
 
         if (empty($data)) {
             addDocumentToWork($docId, $workId, api_get_course_int_id());
-            $url = api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId;
-            header('Location: '.$url);
-            exit;
+            $message = Display::return_message(get_lang('Added'), 'success');
         } else {
             $message = Display::return_message(get_lang('DocumentAlreadyAdded'), 'warning');
         }
+
+        $url = api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId.'&'.api_get_cidreq().'&message='.$message;
+        header('Location: '.$url);
+        exit;
     }
 
-    Display :: display_header(null);
+    Display::display_header(null);
     echo $message;
     $form->display();
 }
@@ -122,6 +125,7 @@ if (empty($docId)) {
  *
  *
  * 1. Create tables
+ *
 CREATE TABLE IF NOT EXISTS c_student_publication_rel_document (
     id  INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     work_id INT NOT NULL,
@@ -138,9 +142,12 @@ CREATE TABLE IF NOT EXISTS c_student_publication_rel_user (
 
 CREATE TABLE IF NOT EXISTS c_student_publication_comment (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,  work_id INT NOT NULL,  c_id INT NOT NULL,  comment text,  user_id int NOT NULL,  sent_at datetime NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+ALTER TABLE c_student_publication ADD COLUMN document_id int DEFAULT 0;
+ *
  * Update configuration.php:
  *  $_configuration['add_document_to_work'] = true;
 
+ *
 */
 
 

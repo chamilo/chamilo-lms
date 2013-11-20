@@ -3106,12 +3106,16 @@ class Tracking {
         return $html;
     }
 }
+
 /**
+ * @todo move into a proper file
  * @package chamilo.tracking
  */
-class TrackingCourseLog {
+class TrackingCourseLog
+{
 
-    function count_item_resources() {
+    function count_item_resources()
+    {
     	global $session_id;
         $course_id = api_get_course_int_id();
 
@@ -3132,7 +3136,8 @@ class TrackingCourseLog {
     	return $obj->total_number_of_items;
     }
 
-    function get_item_resources_data($from, $number_of_items, $column, $direction) {
+    function get_item_resources_data($from, $number_of_items, $column, $direction)
+    {
     	global $dateTimeFormatLong, $session_id;
         $course_id = api_get_course_int_id();
 
@@ -3541,9 +3546,14 @@ class TrackingCourseLog {
 
     /**
      * Get data for users list in sortable with pagination
+     * @param $from
+     * @param $number_of_items
+     * @param $column
+     * @param $direction
      * @return array
      */
-    static function get_user_data($from, $number_of_items, $column, $direction) {
+    static function get_user_data($from, $number_of_items, $column, $direction)
+    {
     	global $user_ids, $course_code, $additional_user_profile_info, $export_csv, $is_western_name_order, $csv_content, $session_id, $_configuration;
 
     	$course_code        = Database::escape_string($course_code);
@@ -3564,7 +3574,7 @@ class TrackingCourseLog {
 
     	if (!empty($_GET['user_keyword'])) {
     		$keyword = trim(Database::escape_string($_GET['user_keyword']));
-    		$condition_user .=  " AND  (user.firstname LIKE '%".$keyword."%' OR user.lastname LIKE '%".$keyword."%'  OR user.username LIKE '%".$keyword."%'  OR user.email LIKE '%".$keyword."%' ) ";
+    		$condition_user .=  " AND (user.firstname LIKE '%".$keyword."%' OR user.lastname LIKE '%".$keyword."%'  OR user.username LIKE '%".$keyword."%'  OR user.email LIKE '%".$keyword."%' ) ";
     	}
 
     	if (api_is_multiple_url_enabled()) {
@@ -3626,19 +3636,14 @@ class TrackingCourseLog {
 
     	while ($user = Database::fetch_array($res, 'ASSOC')) {
     		$user['official_code']  = $user['col0'];
-    		if ($is_western_name_order) {
-    			$user['lastname']       = $user['col2'];
-    			$user['firstname']      = $user['col1'];
-    		} else {
-    			$user['lastname']       = $user['col1'];
-    			$user['firstname']      = $user['col2'];
-    		}
-    		$user['username']           = $user['col3'];
-    		$user['time']                = api_time_to_hms(Tracking::get_time_spent_on_the_course($user['user_id'], $course_code, $session_id));
+            $user['lastname']       = $user['col1'];
+            $user['firstname']      = $user['col2'];
+    		$user['username']       = $user['col3'];
+    		$user['time'] = api_time_to_hms(Tracking::get_time_spent_on_the_course($user['user_id'], $course_code, $session_id));
 
-    		$avg_student_score           = Tracking::get_avg_student_score($user['user_id'], $course_code, array(), $session_id);
+    		$avg_student_score = Tracking::get_avg_student_score($user['user_id'], $course_code, array(), $session_id);
 
-    		$avg_student_progress        = Tracking::get_avg_student_progress($user['user_id'], $course_code, array(), $session_id);
+    		$avg_student_progress = Tracking::get_avg_student_progress($user['user_id'], $course_code, array(), $session_id);
     		if (empty($avg_student_progress)) {
     			$avg_student_progress=0;
     		}
@@ -3649,7 +3654,6 @@ class TrackingCourseLog {
 
             $total_user_exercise = Tracking::get_exercise_student_average_best_attempt($total_exercises, $user['user_id'], $course_code, $session_id);
             $user['exercise_average_best_attempt']  = $total_user_exercise;
-
 
     		if (is_numeric($avg_student_score)) {
     			$user['student_score']  = $avg_student_score.'%';
@@ -3684,11 +3688,11 @@ class TrackingCourseLog {
 
             $user_row[]= $user['official_code']; //0
             if ($is_western_name_order) {
-                $user_row[]= $user['lastname'];
                 $user_row[]= $user['firstname'];
+                $user_row[]= $user['lastname'];
             } else {
-                $user_row[]= $user['firstname'];
                 $user_row[]= $user['lastname'];
+                $user_row[]= $user['firstname'];
             }
             $user_row[]= $user['username'];
             $user_row[]= $user['time'];

@@ -9,7 +9,7 @@ use \ChamiloSession as Session;
 
 define('CHAMILO_HOMEPAGE', true);
 
-$language_file = array('courses', 'index');
+$language_file = array('courses', 'index', 'userInfo');
 
 /* Flag forcing the 'current course' reset, as we're not inside a course anymore. */
 // Maybe we should change this into an api function? an example: CourseManager::unset();
@@ -151,7 +151,6 @@ if (api_is_anonymous()) {
     }
 }
 
-
 $controller->set_login_form($showLoginForm);
 
 //@todo move this inside the IndexManager
@@ -181,9 +180,7 @@ if (!isset($_REQUEST['include'])) {
 $controller->tpl->assign('hot_courses', $hot_courses);
 $controller->tpl->assign('announcements_block', $announcements_block);
 $controller->tpl->assign('home_page_block', $controller->return_home_page());
-
 $controller->tpl->assign('navigation_course_links', $controller->return_navigation_links());
-
 $controller->tpl->assign('notice_block', $controller->return_notice());
 $controller->tpl->assign('main_navigation_block', $controller->return_navigation_links());
 $controller->tpl->assign('help_block', $controller->return_help());

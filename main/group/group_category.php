@@ -22,34 +22,38 @@ if (!api_is_allowed_to_edit(false,true) || !(isset ($_GET['id']) || isset ($_POS
 /**
  * Function to check the given max number of members per group
  */
-function check_max_number_of_members($value) {
-	$max_member_no_limit = $value['max_member_no_limit'];
-	if ($max_member_no_limit == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
-		return true;
-	}
-	$max_member = $value['max_member'];
-	return is_numeric($max_member);
+function check_max_number_of_members($value)
+{
+    $max_member_no_limit = $value['max_member_no_limit'];
+    if ($max_member_no_limit == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
+        return true;
+    }
+    $max_member = $value['max_member'];
+    return is_numeric($max_member);
 }
 
 /**
  * Function to check the number of groups per user
  */
-function check_groups_per_user($value) {
-	$groups_per_user = $value['groups_per_user'];
-	if (isset ($_POST['id']) && intval($groups_per_user) != GroupManager::GROUP_PER_MEMBER_NO_LIMIT && GroupManager::get_current_max_groups_per_user($_POST['id']) > intval($groups_per_user)) {
-		return false;
-	}
-	return true;
+function check_groups_per_user($value)
+{
+    $groups_per_user = $value['groups_per_user'];
+    if (isset($_POST['id']) &&
+        intval($groups_per_user) != GroupManager::GROUP_PER_MEMBER_NO_LIMIT &&
+        GroupManager::get_current_max_groups_per_user($_POST['id']) > intval($groups_per_user)) {
+        return false;
+    }
+    return true;
 }
 
 if (api_get_setting('allow_group_categories') == 'true') {
-	if (isset ($_GET['id'])) {
-		$category = GroupManager :: get_category($_GET['id']);
-		$nameTools = get_lang('EditGroupCategory').': '.$category['title'];
-	} else {
-		$nameTools = get_lang('AddCategory');
-		// Default values for new category
-		$category = array(
+    if (isset ($_GET['id'])) {
+        $category = GroupManager::get_category($_GET['id']);
+        $nameTools = get_lang('EditGroupCategory').': '.$category['title'];
+    } else {
+        $nameTools = get_lang('AddCategory');
+        // Default values for new category
+        $category = array(
             'groups_per_user' => 1,
             'doc_state' => GroupManager::TOOL_PRIVATE,
             'work_state' => GroupManager::TOOL_PRIVATE,
@@ -58,11 +62,12 @@ if (api_get_setting('allow_group_categories') == 'true') {
             'calendar_state' => GroupManager::TOOL_PRIVATE,
             'announcements_state'=> GroupManager::TOOL_PRIVATE,
             'forum_state' => GroupManager::TOOL_PRIVATE,
-            'max_student' => 0);
-	}
+            'max_student' => 0
+        );
+    }
 } else {
-	$category = GroupManager :: get_category($_GET['id']);
-	$nameTools = get_lang('PropModify');
+    $category = GroupManager::get_category($_GET['id']);
+    $nameTools = get_lang('PropModify');
 }
 
 $htmlHeadXtra[] = '<script>
@@ -87,8 +92,8 @@ if (isset ($_GET['id'])) {
 } else {
     // Checks if the field was created in the table Category. It creates it if is neccesary
     $table_category = Database :: get_course_table(TABLE_GROUP_CATEGORY);
-	if (!Database::query("SELECT wiki_state FROM $table_category WHERE c_id = $course_id")) {
-    	Database::query("ALTER TABLE $table_category ADD wiki_state tinyint(3) UNSIGNED NOT NULL default '1' WHERE c_id = $course_id");
+    if (!Database::query("SELECT wiki_state FROM $table_category WHERE c_id = $course_id")) {
+        Database::query("ALTER TABLE $table_category ADD wiki_state tinyint(3) UNSIGNED NOT NULL default '1' WHERE c_id = $course_id");
     }
 	// Create a new category
 	$action = 'add_category';
@@ -115,7 +120,7 @@ $group = array ();
 $group[] = $form->createElement('static', null, null, get_lang('QtyOfUserCanSubscribe_PartBeforeNumber'));
 $possible_values = array ();
 for ($i = 1; $i <= 10; $i ++) {
-	$possible_values[$i] = $i;
+    $possible_values[$i] = $i;
 }
 $possible_values[GroupManager::GROUP_PER_MEMBER_NO_LIMIT] = get_lang('All');
 $group[] = $form->createElement('select', 'groups_per_user', null, $possible_values);
@@ -187,8 +192,8 @@ $form->addElement('style_submit_button', 'submit', get_lang('PropModify'), 'clas
 
 // If form validates -> save data
 if ($form->validate()) {
-	$values = $form->exportValues();
-	if ($values['max_member_no_limit'] == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
+    $values = $form->exportValues();
+    if ($values['max_member_no_limit'] == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
 		$max_member = GroupManager::MEMBER_PER_GROUP_NO_LIMIT;
 	} else {
 		$max_member = $values['max_member'];

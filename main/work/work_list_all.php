@@ -15,6 +15,7 @@ require_once 'work.lib.php';
 $this_section = SECTION_COURSES;
 
 $workId = isset($_GET['id']) ? intval($_GET['id']) : null;
+$is_allowed_to_edit = api_is_allowed_to_edit();
 
 if (empty($workId)) {
     api_not_allowed(true);
@@ -61,6 +62,43 @@ $interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'work/work_list
 $error_message = null;
 
 Display :: display_header(null);
+
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
+$item_id = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
+
+/*	Delete document */
+if ($action == 'delete' && $item_id) {
+    $file_deleted = deleteWorkItem($item_id, $_course);
+    if (!$file_deleted) {
+        Display::display_error_message(get_lang('YouAreNotAllowedToDeleteThisDocument'));
+    } else {
+        Display::display_confirmation_message(get_lang('TheDocumentHasBeenDeleted'));
+    }
+}
+
+/*	Visible */
+if ($is_allowed_to_edit && $action == 'make_visible') {
+    if (!empty($item_id)) {
+        if (isset($item_id) && $item_id == 'all') {
+        } else {
+            makeVisible($item_id, $courseInfo);
+            Display::display_confirmation_message(get_lang('FileVisible'));
+        }
+    }
+}
+
+if ($is_allowed_to_edit && $action == 'make_invisible') {
+
+    /*	Invisible */
+    if (!empty($item_id)) {
+        if (isset($item_id) && $item_id == 'all') {
+        } else {
+            makeInvisible($item_id, $courseInfo);
+            Display::display_confirmation_message(get_lang('FileInvisible'));
+        }
+    }
+}
+
 $documentsAddedInWork = getAllDocumentsFromWorkToString($workId, $courseInfo);
 
 echo '<div class="actions">';
@@ -68,12 +106,6 @@ echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'
 if (api_is_allowed_to_session_edit(false, true) && !empty($workId)) {
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId.'&origin='.$origin.'&gradebook='.$gradebook.'">';
     echo Display::return_icon('upload_file.png', get_lang('UploadADocument'), '', ICON_SIZE_MEDIUM).'</a>';
-
-    if (!empty($documentsAddedInWork)) {
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/upload_from_template.php?'.api_get_cidreq().'&id='.$workId.'&origin='.$origin.'&gradebook='.$gradebook.'">';
-        echo Display::return_icon('import_html.png', get_lang('UploadFromTemplate'), '', ICON_SIZE_MEDIUM).'</a>';
-    }
-
     if (ADD_DOCUMENT_TO_WORK) {
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_document.php?'.api_get_cidreq().'&id='.$workId.'">';
         echo Display::return_icon('new_document.png', get_lang('AddDocument'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -107,7 +139,17 @@ $check_qualification = intval($my_folder_data['qualification']);
 
 if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) {
     $type = 'simple';
-    $columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('Title'), get_lang('Qualification'), get_lang('Date'),  get_lang('Status'), get_lang('Actions'));
+
+    $columns = array(
+        get_lang('Type'),
+        get_lang('FirstName'),
+        get_lang('LastName'),
+        get_lang('Title'),
+        get_lang('Qualification'),
+        get_lang('Date'),
+        get_lang('Status'),
+        get_lang('Actions')
+    );
     $column_model   = array (
         array('name'=>'type',           'index'=>'file',            'width'=>'10',   'align'=>'left', 'search' => 'false'),
         array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
@@ -120,23 +162,32 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
     );
 } else {
     $type = 'complex';
-    $columns  = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('Title'), get_lang('Date'),  get_lang('Actions'));
+
+    $columns = array(
+        get_lang('Type'),
+        get_lang('FirstName'),
+        get_lang('LastName'),
+        get_lang('Title'),
+        get_lang('Date'),
+        get_lang('Actions')
+    );
+
     $column_model   = array (
         array('name'=>'type',           'index'=>'file',            'width'=>'10',   'align'=>'left', 'search' => 'false'),
         array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),
-        array('name'=>'sent_date',       'index'=>'sent_date',      'width'=>'45',   'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
+        array('name'=>'sent_date',      'index'=>'sent_date',      'width'=>'45',   'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
         array('name'=>'actions',        'index'=>'actions',         'width'=>'50',   'align'=>'left', 'search' => 'false', 'sortable'=>'false', 'wrap_cell' => 'true')
     );
 }
 
 $extra_params = array();
 
-//Auto-width
+// Auto-width
 $extra_params['autowidth'] = 'true';
 
-//height auto
+// height auto
 $extra_params['height'] = 'auto';
 $extra_params['sortname'] = 'firstname';
 

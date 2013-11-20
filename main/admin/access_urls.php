@@ -25,6 +25,7 @@ Display :: display_header($tool_name);
 
 require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
+require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
 
 $my_user_url_list = api_get_access_url_from_user(api_get_user_id());
 $current_access_url_id = api_get_current_access_url_id();
@@ -108,10 +109,22 @@ echo Display::url(Display::return_icon('new_link.png',  get_lang('AddUrl'), arra
 echo Display::url(Display::return_icon('user.png',      get_lang('ManageUsers'), array(), ICON_SIZE_MEDIUM),     api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php');
 echo Display::url(Display::return_icon('course.png',    get_lang('ManageCourses'), array(), ICON_SIZE_MEDIUM),   api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php');
 //echo Display::url(Display::return_icon('session.png',   get_lang('ManageSessions'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'admin/access_url_edit_sessions_to_url.php');
+
 $userGroup = new Usergroup();
 if ($userGroup->getUseMultipleUrl()) {
-    echo Display::url(Display::return_icon('class.png',   get_lang('ManageUserGroup'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'admin/access_url_edit_usergroup_to_url.php');
+    echo Display::url(
+        Display::return_icon('class.png', get_lang('ManageUserGroup'), array(), ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'admin/access_url_edit_usergroup_to_url.php'
+    );
 }
+
+if (isMultipleUrlSupport()) {
+    echo Display::url(
+        Display::return_icon('folder.png', get_lang('ManageCourseCategories'), array(), ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'admin/access_url_edit_course_category_to_url.php'
+    );
+}
+
 echo '</div>';
 
 //$table = new SortableTable('urls', 'url_count_mask', 'get_url_data_mask',2);

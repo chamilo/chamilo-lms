@@ -6,6 +6,7 @@ use Silex\Application;
 use Knp\Menu\Matcher\Matcher;
 use ChamiloLMS\Controller\BaseController;
 
+
 /**
  * @package ChamiloLMS.CommonController
  * @author Julio Montoya <gugli100@gmail.com>

@@ -17,7 +17,16 @@ switch ($action) {
             if ($_SESSION['oLP']) {
                 //Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
-                echo $_SESSION['oLP']->add_item($_REQUEST['parent_id'], $_REQUEST['previous_id'], $_REQUEST['type'], $_REQUEST['id'], $_REQUEST['title'], null);
+                $parentId = isset($_REQUEST['parent_id']) ? $_REQUEST['parent_id'] : null;
+                $previousId = isset($_REQUEST['previous_id']) ? $_REQUEST['previous_id'] : null;
+                echo $_SESSION['oLP']->add_item(
+                    $parentId,
+                    $previousId,
+                    $_REQUEST['type'],
+                    $_REQUEST['id'],
+                    $_REQUEST['title'],
+                    null
+                );
             }
         }
         break;
@@ -27,7 +36,7 @@ switch ($action) {
             $sections	= explode('^', $new_order);
             $new_array = array();
             $i = 0;
-            
+
             foreach ($sections as $items) {
                 if (!empty($items)) {
                     list($id, $parent_id) = explode('|', $items);

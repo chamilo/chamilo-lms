@@ -1269,7 +1269,6 @@ function api_format_user($user, $add_password = false) {
     $avatar_sys_path    = api_get_path(SYS_CODE_PATH).'img/unknown.jpg';
 	$dir                = 'upload/users/'.$user_id.'/';
 
-	//if (!empty($picture_filename) && api_is_anonymous() ) {  //Why you have to be anonymous?
     if (!empty($picture_filename)) {
 		if (api_get_setting('split_users_upload_directory') === 'true') {
 			$dir = 'upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';

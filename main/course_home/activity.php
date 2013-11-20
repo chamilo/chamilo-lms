@@ -114,13 +114,11 @@ if ($session_id == 0 && api_is_course_admin() && api_is_allowed_to_edit(null, tr
 	}
 }
 
-function return_block($title, $content) {
-    global $app;
-    $rowDiv = '<div class="row">';
-    if ($app['full_width']) {
-        $rowDiv = '<div class="row-fluid">';
-    }
-    $html = $rowDiv.'<div class="span12">
-                <div class="page-header"><h3>'.$title.'</h3></div></div></div>'.$rowDiv.$content.'</div>';
+function return_block($title, $content)
+{
+    $html = '<div class="page-header">
+                <h3>'.$title.'</h3>
+            </div>
+            '.$content.'</div>';
     return $html;
 }

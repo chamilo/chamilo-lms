@@ -110,26 +110,17 @@ $group=array();
 $group[] = $form->createElement('select', 'platform_teachers', '', $teachers,        ' id="platform_teachers" multiple=multiple size="4" style="width:300px;"');
 $group[] = $form->createElement('select', 'course_teachers', '',   $course_teachers, ' id="course_teachers" multiple=multiple size="4" style="width:300px;"');
 
-$element_template = <<<EOT
-	<div class="control-group">
-		<label>
-			<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
-		</label>
-		<div class="controls">
-			<table cellpadding="0" cellspacing="0">
-				<tr>
-					<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	<td>{element}</td>
-				</tr>
-			</table>
-		</div>
-	</div>
-EOT;
-
+$multiSelectTemplate = $form->getDoubleMultipleSelectTemplate();
 $renderer = $form->defaultRenderer();
-$renderer -> setElementTemplate($element_template, 'group');
-$form -> addGroup($group,'group',get_lang('CourseTeachers'),'</td><td width="80" align="center">'.
-		'<input class="arrowr" style="width:30px;height:30px;padding-right:12px" type="button" onclick="moveItem(document.getElementById(\'platform_teachers\'), document.getElementById(\'course_teachers\'))" ><br><br>' .
-		'<input class="arrowl" style="width:30px;height:30px;padding-left:13px" type="button" onclick="moveItem(document.getElementById(\'course_teachers\'), document.getElementById(\'platform_teachers\'))" ></td><td>');
+$renderer->setElementTemplate($multiSelectTemplate, 'group');
+$form->addGroup(
+    $group,
+    'group',
+    get_lang('CourseTeachers'),
+    '</td><td width="80" align="center">'.
+    '<input class="arrowr" style="width:30px;height:30px;padding-right:12px" type="button" onclick="moveItem(document.getElementById(\'platform_teachers\'), document.getElementById(\'course_teachers\'))" ><br><br>' .
+	'<input class="arrowl" style="width:30px;height:30px;padding-left:13px" type="button" onclick="moveItem(document.getElementById(\'course_teachers\'), document.getElementById(\'platform_teachers\'))" ></td><td>'
+);
 
 
 $categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), array() , array('style'=>'width:350px','id'=>'category_code_id', 'class'=>'chzn-select'));
@@ -143,7 +134,6 @@ $form->applyFilter('department_name','trim');
 $form->add_textfield( 'department_url', get_lang('CourseDepartmentURL'),false, array ('size' => '60'));
 $form->applyFilter('department_url','html_filter');
 $form->applyFilter('department_url','trim');
-
 
 $form->addElement('select_language', 'course_language', get_lang('CourseLanguage'));
 $form->applyFilter('select_language','html_filter');
@@ -235,8 +225,7 @@ function valide() {
 	document.update_course.submit();
 }
 </script>";
-//api_display_tool_title($tool_name);
 // Display the form
 $form->display();
-/* FOOTER */
+
 Display :: display_footer();

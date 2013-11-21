@@ -29,9 +29,9 @@ class HTML_QuickForm_label extends HTML_QuickForm_static
      * @access public
      * @return void
      */
-    function HTML_QuickForm_label($label = null, $text = null)
+    function HTML_QuickForm_label($label = null, $text = null, $attributes = null)
     {
-        $this->HTML_QuickForm_static(null, $label, $text);
+        $this->HTML_QuickForm_static(null, $label, $text, $attributes);
         $this->_type = 'html';
     }
 
@@ -52,7 +52,12 @@ class HTML_QuickForm_label extends HTML_QuickForm_static
 
     function toHtml()
     {
-        return '<div class="form-group">
+        $id = $this->getAttribute('id');
+        $idCondition = null;
+        if (!empty($id)) {
+            $idCondition = 'id="'.$id.'"';
+        }
+        return '<div class="form-group" '.$idCondition.' >
                     <label class="col-sm-2 control-label">'.$this->getLabel().'</label>
                     <div class="col-sm-10">
                         '.HTML_QuickForm_static::toHtml().'

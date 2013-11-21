@@ -35,9 +35,8 @@ require_once 'HTML/QuickForm/element.php';
  * @version     Release: 3.2.11
  * @since       2.7
  */
-class HTML_QuickForm_static extends HTML_QuickForm_element {
-
-    // {{{ properties
+class HTML_QuickForm_static extends HTML_QuickForm_element
+{
 
     /**
      * Display text
@@ -45,9 +44,6 @@ class HTML_QuickForm_static extends HTML_QuickForm_element {
      * @access    private
      */
     var $_text = null;
-
-    // }}}
-    // {{{ constructor
 
     /**
      * Class constructor
@@ -57,16 +53,13 @@ class HTML_QuickForm_static extends HTML_QuickForm_element {
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_static($elementName=null, $elementLabel=null, $text=null)
+    function HTML_QuickForm_static($elementName = null, $elementLabel = null, $text = null, $attributes = null)
     {
-        HTML_QuickForm_element::HTML_QuickForm_element($elementName, $elementLabel);
+        HTML_QuickForm_element::HTML_QuickForm_element($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = false;
         $this->_type = 'static';
         $this->_text = $text;
     } //end constructor
-
-    // }}}
-    // {{{ setName()
 
     /**
      * Sets the element name
@@ -80,9 +73,6 @@ class HTML_QuickForm_static extends HTML_QuickForm_element {
         $this->updateAttributes(array('name'=>$name));
     } //end func setName
 
-    // }}}
-    // {{{ getName()
-
     /**
      * Returns the element name
      *
@@ -94,8 +84,6 @@ class HTML_QuickForm_static extends HTML_QuickForm_element {
         return $this->getAttribute('name');
     } //end func getName
 
-    // }}}
-    // {{{ setText()
 
     /**
      * Sets the text
@@ -109,9 +97,6 @@ class HTML_QuickForm_static extends HTML_QuickForm_element {
         $this->_text = $text;
     } // end func setText
 
-    // }}}
-    // {{{ setValue()
-
     /**
      * Sets the text (uses the standard setValue call to emulate a form element.
      *
@@ -124,9 +109,6 @@ class HTML_QuickForm_static extends HTML_QuickForm_element {
         $this->setText($text);
     } // end func setValue
 
-    // }}}
-    // {{{ toHtml()
-
     /**
      * Returns the static text element in HTML
      *
@@ -138,9 +120,6 @@ class HTML_QuickForm_static extends HTML_QuickForm_element {
         return $this->_getTabs() . $this->_text;
     } //end func toHtml
 
-    // }}}
-    // {{{ getFrozenHtml()
-
     /**
      * Returns the value of field without HTML tags
      *
@@ -151,9 +130,6 @@ class HTML_QuickForm_static extends HTML_QuickForm_element {
     {
         return $this->toHtml();
     } //end func getFrozenHtml
-
-    // }}}
-    // {{{ onQuickFormEvent()
 
     /**
      * Called by HTML_QuickForm whenever form event is made on this element
@@ -183,10 +159,7 @@ class HTML_QuickForm_static extends HTML_QuickForm_element {
                 parent::onQuickFormEvent($event, $arg, $caller);
         }
         return true;
-    } // end func onQuickFormEvent
-
-    // }}}
-    // {{{ exportValue()
+    }
 
    /**
     * We override this here because we don't want any values from static elements
@@ -195,7 +168,4 @@ class HTML_QuickForm_static extends HTML_QuickForm_element {
     {
         return null;
     }
-
-    // }}}
-} //end class HTML_QuickForm_static
-?>
+}

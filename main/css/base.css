@@ -45,10 +45,6 @@ header #logo {
     text-shadow:none;
     font-size: 13px;
 }
-/* To fix the increase/decrease buttons */
-label, input, button, select, textarea, p {
-    /* font-size: inherit; */
-}
 
 .badge-group {
     width: 200px;
@@ -123,11 +119,6 @@ form .formw input {
     float: left;
 }
 
-.formw input[type="checkbox"], .formw input[type="radio"] {
-    margin-right: 5px;
-    margin-top: 2px;
-}
-
 #accept_licence, #checkbox {
     margin-right: 5px;
     margin-top: -1px;
@@ -146,6 +137,10 @@ form .formw input {
     padding: 3px 15px;
 }
 
+#login_block #formLogin {
+
+}
+
 .nav-list > .active > a,
 .nav-list > .active > a:hover {
     background-color: #eeeed6;
@@ -160,7 +155,6 @@ form .formw input {
 }
 
 .well_border {
-    /* border: 1px solid rgba(0, 0, 0, 0.05);*/
     border: 1px solid #E1E1E0;
     border-radius: 4px 4px 4px 4px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
@@ -235,10 +229,6 @@ footer .container .row {
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
-#topbar_push {
-    height: 55px;
-}
-
 .actions {
     min-height: 20px;
     padding: 8px 15px;
@@ -260,22 +250,16 @@ footer .container .row {
   margin:0;
   padding:0;
 }
+
 .actions .actions-pagination img {
   margin:6px;
   padding:0;
-}
-.actions form {
-    margin-bottom: 0px;
 }
 
 .actions a img {
     padding: 0px;
     margin: 0px;
     float: left;
-}
-
-.actions fieldset {
-    margin-top: 0px;
 }
 
 .muted {
@@ -298,20 +282,6 @@ footer .container .row {
 
 .actions .btn-toolbar {
     margin: 0px;
-}
-
-.actions span {
-    margin-right: 10px;
-    vertical-align: middle;
-}
-
-.actions form {
-    margin-right: 10px;
-    vertical-align: middle;
-}
-
-.actions fieldset {
-    margin-top: 0px;
 }
 
 #friend-container .thumbnail {
@@ -434,8 +404,6 @@ a.tag {
     border-radius: 10px;
     background-color: #F9F9F9;
     padding: 5px 10px 10px 16px;
-    /* height:40px; */
-    /*background-color:#f9f9f9; border:1px solid #dddddd; padding:5px 10px 5px 10px; margin-top: 10px; */
 }
 
 /*****************************************************
@@ -5138,6 +5106,23 @@ i.size-32.icon-new-work {
 
 .activity_content {
     margin-left:120px;
+}
+
+.form-signin-block {
+    padding: 15px;
+    margin: 0 auto;
+}
+
+.form-signin-block input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.form-signin-block input[type="text"] {
+    margin-bottom: -1px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
 

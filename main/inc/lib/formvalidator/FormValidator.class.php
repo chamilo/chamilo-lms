@@ -109,6 +109,11 @@ class FormValidator extends HTML_QuickForm
             $attributes['class'] = 'form-horizontal';
         }
 
+        if ($attributes['class'] == 'form-search') {
+            $attributes['class']  = 'form-inline';
+        }
+
+
         parent::__construct($form_name, $method, $action, $target, $attributes, $track_submit);
 
         // Load some custom elements and rules
@@ -136,10 +141,6 @@ class FormValidator extends HTML_QuickForm
         $this->registerRule('url', null, 'HTML_QuickForm_Rule_Url', $dir . 'Rule/Url.php');
         $this->registerRule('compare_fields', null, 'HTML_QuickForm_Compare_Fields', $dir . 'Rule/CompareFields.php');
         $this->registerRule('compare_datetime_text', null, 'HTML_QuickForm_Rule_CompareDateTimeText', $dir . 'Rule/CompareDateTimeText.php');
-
-        $this->registerRule('CAPTCHA', 'rule', 'HTML_QuickForm_Rule_CAPTCHA', 'HTML/QuickForm/Rule/CAPTCHA.php');
-
-
         $this->registerRule('CAPTCHA', 'rule', 'HTML_QuickForm_Rule_CAPTCHA', 'HTML/QuickForm/Rule/CAPTCHA.php');
 
         // Modify the default templates
@@ -147,9 +148,9 @@ class FormValidator extends HTML_QuickForm
 
         //Form template
         $form_template = '<form{attributes}>
-
+<fieldset>
 	{content}
-
+</fieldset>
 {hidden}
 </form>';
         $renderer->setFormTemplate($form_template);
@@ -162,33 +163,11 @@ class FormValidator extends HTML_QuickForm
             $element_template = ' {label}  {element} ';
             $renderer->setElementTemplate($element_template);
         } else {
-            $element_template = '
-            <div class="form-group {error_class}">
-                <label class="col-sm-2 control-label">
-                    <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
-                    {label}
-                </label>
-
-                <div class="col-sm-10">
-                    {element}
-
-                    <!-- BEGIN label_3 -->
-                        {label_3}
-                    <!-- END label_3 -->
-
-                    <!-- BEGIN label_2 -->
-                        <span class="help-block">{label_2}</span>
-                    <!-- END label_2 -->
-
-                    <!-- BEGIN error -->
-                        <span class=" col-sm-2 help-block">{error}</span>
-                    <!-- END error -->
-                </div>
-
-
-
-
-            </div>';
+            if ($attributes['class'] == 'form-inline') {
+                $element_template = $this->getDefaultInlineElementTemplate();
+            } else {
+                $element_template = $this->getDefaultElementTemplate();
+            }
             $renderer->setElementTemplate($element_template);
 
             //Display a gray div in the buttons
@@ -198,24 +177,10 @@ class FormValidator extends HTML_QuickForm
             //Display a gray div in the buttons + makes the button available when scrolling
             $button_element_template_in_bottom = '<div class="form-actions bottom_actions">{label} {element}</div>';
             $renderer->setElementTemplate($button_element_template_in_bottom, 'submit_fixed_in_bottom');
-
-            //When you want to group buttons use something like this
-            /* $group = array();
-              $group[] = $form->createElement('button', 'mark_all', get_lang('MarkAll'));
-              $group[] = $form->createElement('button', 'unmark_all', get_lang('UnmarkAll'));
-              $form->addGroup($group, 'buttons_in_action');
-             */
             $renderer->setElementTemplate($button_element_template_simple, 'buttons_in_action');
 
             $button_element_template_simple_right = '<div class="form-actions"> <div class="pull-right">{label} {element}</div></div>';
             $renderer->setElementTemplate($button_element_template_simple_right, 'buttons_in_action_right');
-
-            /*
-              $renderer->setElementTemplate($button_element_template, 'submit_button');
-              $renderer->setElementTemplate($button_element_template, 'submit');
-              $renderer->setElementTemplate($button_element_template, 'button');
-             *
-             */
         }
 
         //Set Header template
@@ -231,8 +196,64 @@ EOT;
         $renderer->setRequiredNoteTemplate($required_note_template);
     }
 
+    function getDefaultElementTemplate()
+    {
+        return '
+            <div class="form-group {error_class}">
+                <label class="col-sm-2 control-label">
+                    <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                    {label}
+                </label>
+
+                <div class="col-sm-10">
+                    {element}
+
+                    <!-- BEGIN label_3 -->
+                        {label_3}
+                    <!-- END label_3 -->
+
+                    <!-- BEGIN label_2 -->
+                        <span class="help-block">
+                            {label_2}
+                        </span>
+                    <!-- END label_2 -->
+
+                    <!-- BEGIN error -->
+                        <span class=" col-sm-2 help-block">{error}</span>
+                    <!-- END error -->
+                </div>
+            </div>';
+    }
+
+    function getDefaultInlineElementTemplate()
+    {
+        return '
+            <div class="form-group {error_class}">
+                <label class="sr-only">
+                    <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                    {label}
+                </label>
+                {element}
+
+                <!-- BEGIN label_3 -->
+                    {label_3}
+                <!-- END label_3 -->
+
+                <!-- BEGIN label_2 -->
+                    <span class="help-block">
+                        {label_2}
+                    </span>
+                <!-- END label_2 -->
+
+                <!-- BEGIN error -->
+                    <span class=" col-sm-2 help-block">{error}</span>
+                <!-- END error -->
+
+            </div>';
+    }
+
     /**
-     * Adds a textfield to the form.
+     * Adds a text field to the form.
      * A trim-filter is attached to the field.
      * @param string $label						The label for the form-element
      * @param string $name						The element name

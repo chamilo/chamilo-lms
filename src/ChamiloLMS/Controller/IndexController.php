@@ -238,9 +238,16 @@ class IndexController extends CommonController
           ->getForm();
           return $app['template']->assign('form', $form->createView());
          */
-        $form = new \FormValidator('formLogin', 'POST', $app['url_generator']->generate('secured_login_check'), null);
+        $form = new \FormValidator(
+            'formLogin',
+            'POST',
+            $app['url_generator']->generate('secured_login_check'),
+            null,
+            array('class'=> 'form-signin-block')
+        );
+
         $renderer =& $form->defaultRenderer();
-        $renderer->setElementTemplate('<span>{element}</span>');
+        $renderer->setElementTemplate('{element}');
         $form->addElement(
             'text',
             'username',

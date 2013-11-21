@@ -2556,7 +2556,7 @@ class CourseManager
         }
         $html .= '<div class="'.$class.'">';
             $html .= $rowDiv;
-            $html .= '<div class="col-md-7">';
+            $html .= '<div class="col-md-11">';
                 $html .= $rowDiv;
                     $html .= '<div class="col-md-2 course-box-thumbnail-box">';
                     if (!empty($params['link'])) {
@@ -2578,7 +2578,7 @@ class CourseManager
                         $param_class .= ' course-box-text';
                     }
 
-                    $html .= '<div class="col-md-5 '.$param_class.'">';
+                    $html .= '<div class="col-md-10 '.$param_class.'">';
                         $html .='<h3>'.$params['title'].$notifications.'</h3> ';
 
                         if (!empty($params['subtitle'])) {

@@ -897,8 +897,13 @@ $table->set_column_filter(7, 'status_filter');
 $table->set_column_filter(8, 'active_filter');
 $table->set_column_filter(10, 'modify_filter');
 
-if (api_is_platform_admin())
-	$table->set_form_actions(array ('delete' => get_lang('DeleteFromPlatform')));
+// Only show empty actions bar if delete users has been blocked
+if (api_is_platform_admin() && !(isset($_configuration['deny_delete_users']) && $_configuration['deny_delete_users'])) {
+        $table->set_form_actions(array ('delete' => get_lang('DeleteFromPlatform')));
+} else {
+        $table->set_form_actions(array ('none' => get_lang('NoActionAvailable')));
+}
+
 
 $table_result = $table->return_table();
 

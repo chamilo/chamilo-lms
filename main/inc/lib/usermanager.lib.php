@@ -235,7 +235,7 @@ class UserManager
     public static function can_delete_user($user_id)
     {
         global $_configuration;
-        if (isset($_configuration['delete_users']) && $_configuration['delete_users'] == false) {
+        if (isset($_configuration['deny_delete_users']) && $_configuration['deny_delete_users'] == true) {
             return false;
         }
         $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -261,7 +261,7 @@ class UserManager
      * super-admins. Other roles should only be able to disable a user,
      * which removes access to the platform but doesn't delete anything.
      * @param int The ID of th user to be deleted
-     * @return boolean true if user is succesfully deleted, false otherwise
+     * @return boolean true if user is successfully deleted, false otherwise
      * @assert (null) === false
      * @assert ('abc') === false
      */

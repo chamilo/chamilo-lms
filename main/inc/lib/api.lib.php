@@ -92,6 +92,7 @@ define('TOOL_LINK', 'link');
 define('TOOL_COURSE_DESCRIPTION', 'course_description');
 define('TOOL_SEARCH', 'search');
 define('TOOL_LEARNPATH', 'learnpath');
+define('TOOL_AGENDA', 'agenda');
 define('TOOL_ANNOUNCEMENT', 'announcement');
 define('TOOL_FORUM', 'forum');
 define('TOOL_FORUM_CATEGORY','forum_category');
@@ -5013,8 +5014,8 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
  * @return boolean true if the element is in the session, false else
  */
 function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
-    if (is_null($session_id)) {
-        $session_id = intval($_SESSION['id_session']);
+    if (empty($session_id)) {
+        $session_id = api_get_session_id();
     }
 
     // Get information to build query depending of the tool.
@@ -5033,7 +5034,7 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
             break;
         case TOOL_GROUP :
             $table_tool = Database::get_course_table(TABLE_GROUP);
-            $key_field = 'id';
+            $key_field = 'iid';
             break;
         default: return false;
     }
@@ -5042,7 +5043,8 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
     $sql = "SELECT session_id FROM $table_tool WHERE c_id = $course_id AND $key_field =  ".intval($element_id);
     $rs = Database::query($sql);
     if ($element_session_id = Database::result($rs, 0, 0)) {
-        if ($element_session_id == intval($session_id)) { // The element belongs to the session.
+        // The element belongs to the session.
+        if ($element_session_id == intval($session_id) && !empty($session_id)) {
             return true;
         }
     }

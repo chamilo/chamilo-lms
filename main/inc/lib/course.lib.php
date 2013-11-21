@@ -243,7 +243,7 @@ class CourseManager
     /**
      * Unsubscribe one or more users from a course
      *
-     * @param   int   user_id or an array with user ids
+     * @param   mixed   user_id or an array with user ids
      * @param   string  course code
      * @param   int     session id
      * @assert ('', '') === false
@@ -251,13 +251,13 @@ class CourseManager
      */
     public static function unsubscribe_user($user_id, $course_code, $session_id = 0)
     {
-
         if (!is_array($user_id)) {
             $user_id = array($user_id);
         }
         if (count($user_id) == 0) {
             return;
         }
+
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
         if (!empty($session_id)) {
@@ -291,8 +291,8 @@ class CourseManager
         Database::query("DELETE FROM ".Database::get_course_table(TABLE_GROUP_TUTOR)." WHERE c_id = $course_id AND user_id IN (".$user_ids.")");
 
         // Erase user student publications (works) in the course - by André Boivin
-        //@todo field student_publication.author should be the user id
 
+        /*
         $sqlu = "SELECT * FROM $table_user WHERE user_id IN (".$user_ids.")";
         $resu = Database::query($sqlu);
         $username = Database::fetch_array($resu,'ASSOC');
@@ -300,9 +300,26 @@ class CourseManager
         $userlastname = $username['lastname'];
         $publication_name = $userfirstname.' '.$userlastname ;
 
-        $table_course_user_publication     = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+        $table_course_user_publication = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
         $sql = "DELETE FROM $table_course_user_publication WHERE c_id = $course_id AND author = '".Database::escape_string($publication_name)."'";
-        Database::query($sql);
+        Database::query($sql);*/
+
+        foreach ($user_ids as $userId) {
+            // Getting all work from user
+            $workList = getWorkPerUser($userId);
+            if (!empty($workList)) {
+                foreach ($workList as $work) {
+                    $work = $work['work'];
+                    // Getting user results
+                    if (!empty($work->user_results)) {
+                        foreach ($work->user_results as $workSent) {
+                            deleteWorkItem($workSent['id'], $course_info);
+                        }
+                    }
+                }
+            }
+        }
+
 
         // Unsubscribe user from all blogs in the course.
         Database::query("DELETE FROM ".Database::get_course_table(TABLE_BLOGS_REL_USER)." WHERE c_id = $course_id AND  user_id IN (".$user_ids.")");

@@ -203,7 +203,7 @@ class Display
                 }
             }
 
-            $introduction_section .= '<div class="row"><div class="span12">';
+            $introduction_section .= '<div id="introduction_block" class="row"><div class="col-md-12">';
             $introduction_section .=  $thematic_description_html;
 
             if (!empty($intro_content)) {
@@ -214,9 +214,8 @@ class Display
             if ($intro_dispCommand) {
                 if (empty($intro_content)) {
                     // Displays "Add intro" commands
-                    $introduction_section .=  '<div id="courseintro_empty">';
+                    $introduction_section .=  '<div id="introduction_block_action" class="col-md-2 col-md-offset-10">';
 
-                    //$url = $app['url_generator']->generate('introduction_edit', array('tool' => $moduleId));
                     $url = api_get_path(WEB_PUBLIC_PATH).'introduction/edit/'.$tool;
                     $introduction_section .=  "<a href=\"".$url."?".api_get_cidreq()."\">";
                     $introduction_section .=  Display::return_icon('introduction_add.gif', get_lang('AddIntro')).' ';
@@ -226,7 +225,7 @@ class Display
 
                 } else {
                     // Displays "edit intro && delete intro" commands
-                    $introduction_section .=  '<div id="courseintro_empty">';
+                    $introduction_section .=  '<div id="introduction_block_action" class="col-md-2 col-md-offset-10">';
                     //$url = $app['url_generator']->generate('introduction_edit', array('tool' => $moduleId));
                     $url = api_get_path(WEB_PUBLIC_PATH).'introduction/edit/'.$tool;
 

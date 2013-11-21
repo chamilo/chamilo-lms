@@ -256,7 +256,6 @@ if (isset($document_id) && empty($action)) {
     if ($document_data) {
         $parent_id = $document_data['parent_id'];
 
-        //$visibility = DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id(), api_get_user_id());
         $visibility = DocumentManager::check_visibility_tree($document_id, api_get_course_id(), api_get_session_id(), api_get_user_id());
 
         if (!empty($document_data['filetype']) && $document_data['filetype'] == 'file') {
@@ -1049,17 +1048,7 @@ if ($folders === false) {
 }
 
 echo '<div class="actions">';
-if (!$is_certificate_mode) {
-    /* BUILD SEARCH FORM */
-    echo '<span style="display:inline-block;">';
-    $form = new FormValidator('search_document', 'get', '', '', null, false);
-    $renderer = & $form->defaultRenderer();
-    $renderer->setElementTemplate('<span>{element}</span> ');
-    $form->add_textfield('keyword', '', false, array('class' => 'span2'));
-    $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
-    $form->display();
-    echo '</span>';
-}
+
 
 /* GO TO PARENT DIRECTORY */
 if ($curdirpath != '/' && $curdirpath != $group_properties['directory'] && !$is_certificate_mode) {
@@ -1094,7 +1083,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
             if (api_browser_support('svg')) {
                 ?>
                 <a href="create_draw.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id; ?>">
-                <?php Display::display_icon('new_draw.png', get_lang('Draw'), '', ICON_SIZE_MEDIUM); ?></a>&nbsp;
+                <?php Display::display_icon('new_draw.png', get_lang('Draw'), '', ICON_SIZE_MEDIUM); ?></a>
                 <?php
             } else {
                 Display::display_icon('new_draw_na.png', get_lang('BrowserDontSupportsSVG'), '', ICON_SIZE_MEDIUM);
@@ -1152,6 +1141,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         <?php Display::display_icon('new_certificate.png', get_lang('CreateCertificate'), '', ICON_SIZE_MEDIUM); ?></a>
         <?php
     }
+
     // File upload link
     if ($is_certificate_mode) {
         echo '<a href="upload.php?'.api_get_cidreq().'&id='.$current_folder_id.'">';
@@ -1165,6 +1155,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         echo '<a href="upload.php?'.api_get_cidreq().'&id='.$current_folder_id.'">';
         echo Display::display_icon('upload_file.png', get_lang('UplUploadDocument'), '', ICON_SIZE_MEDIUM).'</a>';
     }
+
     // Create directory
     if (!$is_certificate_mode) {
         ?>
@@ -1340,6 +1331,14 @@ if ($image_present && !isset($_GET['keyword'])) {
 
 if (api_is_allowed_to_edit(null, true)) {
     echo '<a href="document_quota.php?'.api_get_cidreq().'">'.Display::return_icon('percentage.png', get_lang('DocumentQuota'), '', ICON_SIZE_MEDIUM).'</a>';
+}
+
+if (!$is_certificate_mode) {
+    /* Search form */
+    $form = new FormValidator('search_document', 'get', '', '', array('class' => 'form-inline'), false);
+    $form->add_textfield('keyword', '', false, array('class' => 'span2'));
+    $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
+    $form->display();
 }
 
 echo '</div>'; //end actions

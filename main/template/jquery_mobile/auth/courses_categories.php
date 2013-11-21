@@ -10,7 +10,7 @@ $stok = Security::get_token();
 ?>
 <script>
     $(document).ready( function() {
-        $('.star-rating li a').live('click', function(event) {
+        $('.star-rating li a').on('click', function(event) {
         var id = $(this).parents('ul').attr('id');
         $('#vote_label2_' + id).html("<?php echo get_lang('Loading'); ?>");
             $.ajax({

@@ -63,8 +63,25 @@ class UserManager
      * @assert ('Sam','Gamegie',5,'sam@example.com','jo','jo') > 1
      * @assert ('Pippin','Took',null,null,'jo','jo') === false
      */
-    public static function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language = '', $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1, $hr_dept_id = 0, $extra = null, $encrypt_method = '', $send_mail = false)
-    {
+    public static function create_user(
+        $firstName,
+        $lastName,
+        $status,
+        $email,
+        $loginName,
+        $password,
+        $official_code = '',
+        $language = '',
+        $phone = '',
+        $picture_uri = '',
+        $auth_source = PLATFORM_AUTH_SOURCE,
+        $expiration_date = '0000-00-00 00:00:00',
+        $active = 1,
+        $hr_dept_id = 0,
+        $extra = null,
+        $encrypt_method = '',
+        $send_mail = false
+    ) {
         global $_user, $_configuration;
         $original_password = $password;
         $access_url_id = 1;
@@ -163,7 +180,6 @@ class UserManager
             if (!empty($email) && $send_mail) {
                 $recipient_name = api_get_person_name($firstName, $lastName, null, PERSON_NAME_EMAIL_ADDRESS);
                 $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
-
                 $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
                 $email_admin = api_get_setting('emailAdministrator');
 
@@ -185,17 +201,12 @@ class UserManager
                     $values["prior_lang"] = null;
                     EventsDispatcher::events('user_registration', $values);
                 } else {
-                    @api_mail_html($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
+                    api_mail_html($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
                 }
                 /* ENDS MANAGE EVENT WITH MAIL */
             }
-
-
-            // Add event to system log
-            $user_id_manager = api_get_user_id();
             event_system(LOG_USER_CREATE, LOG_USER_ID, $return);
         } else {
-            $return = false;
             return api_set_failure('error inserting in Database');
         }
 
@@ -2136,7 +2147,7 @@ class UserManager
 
                 // Checking session visibility
                 $visibility = api_get_session_visibility($session_id, null, $ignore_visibility_for_admins);
-                
+
                 switch ($visibility) {
                     case SESSION_VISIBLE_READ_ONLY:
                     case SESSION_VISIBLE:
@@ -2144,7 +2155,7 @@ class UserManager
                         break;
                     case SESSION_INVISIBLE:
                         continue(2);
-                } 
+                }
 
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['session_name'] = $row['name'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['session_id'] = $row['id'];
@@ -2153,12 +2164,12 @@ class UserManager
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['nb_days_access_before_beginning'] = $row['nb_days_access_before_beginning'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['nb_days_access_after_end'] = $row['nb_days_access_after_end'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['courses'] = UserManager::get_courses_list_by_session($user_id, $row['id']);
-                
+
             }
         }
-        
+
         return $categories;
-        
+
     }
 
     /**

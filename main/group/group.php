@@ -19,6 +19,9 @@
 $language_file = 'group';
 
 require_once '../inc/global.inc.php';
+
+$is_allowed_in_course = api_is_allowed_to_edit(false, true);
+
 $this_section = SECTION_COURSES;
 $current_course_tool  = TOOL_GROUP;
 
@@ -27,12 +30,12 @@ api_protect_course_script(true);
 
 $htmlHeadXtra[] = '<script>
 $(document).ready( function() {
-	for (i=0;i<$(".actions").length;i++) {
+	for (i=0; i<$(".actions").length; i++) {
 		if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
 			$(".actions:eq("+i+")").hide();
 		}
 	}
- } );
+});
  </script>';
 $nameTools = get_lang('GroupManagement');
 $course_id = api_get_course_int_id();

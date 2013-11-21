@@ -185,7 +185,7 @@ class GroupManager
      */
     public static function create_group($name, $category_id, $tutor, $places)
     {
-        global $_course;
+        $_course = api_get_course_info();
         $table_group = Database :: get_course_table(TABLE_GROUP);
 
         $session_id = api_get_session_id();

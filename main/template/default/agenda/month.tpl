@@ -449,90 +449,13 @@ $(document).ready(function() {
 
 <div id="simple-dialog-form" style="display:none;">
     <div style="width:500px">
-        <form name="form-simple" class="form-vertical" >
-            <div class="control-group">
-                <label class="control-label"><b>{{"Date"|get_lang}}</b></label>
-                <div class="controls">
-                    <span id="simple_start_date"></span><span id="simple_end_date"></span>
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label"><b>{{"Title"|get_lang}}</b></label>
-                <div class="controls">
-                    <div id="simple_title"></div>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label"><b>{{"Description"|get_lang}}</b></label>
-                <div class="controls">
-                    <div id="simple_content"></div>
-                </div>
-            </div>
-        </form>
+         {{ form_simple }}
     </div>
 </div>
 
 <div id="dialog-form" style="display:none;">
 	<div style="width:500px">
-	<form class="form-horizontal" id="add_event_form" name="form">
-
-        {% if visible_to is not null %}
-    	    <div id="visible_to_input" class="control-group">
-                <label class="control-label">{{ "To"|get_lang }}</label>
-                <div class="controls">
-                    {{ visible_to }}
-                </div>
-            </div>
-        {% endif %}
-         <div id="visible_to_read_only" class="control-group" style="display:none">
-                <label class="control-label">{{ "To"|get_lang }}</label>
-                <div class="controls">
-                    <div id="visible_to_read_only_users"></div>
-                </div>
-         </div>
-		<div class="control-group">
-            <label class="control-label">{{ "Agenda"|get_lang }}</label>
-			<div class="controls">
-				<div id="color_calendar"></div>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label" for="end_date">{{"Date"|get_lang}}</label>
-			<div class="controls">
-				<span id="start_date"></span><span id="end_date"></span>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label" for="title">{{ "Title"|get_lang }}</label>
-			<div class="controls">
-				<input type="text" name="title" id="title" size="40" />
-                <span id="title_edit"></span>
-			</div>
-		</div>
-
-		<div class="control-group">
-			<label class="control-label" for="content">{{ "Description"|get_lang }}</label>
-			<div class="controls">
-				<textarea name="content" id="content" class="span3" rows="5"></textarea>
-                <span id="content_edit"></span>
-			</div>
-		</div>
-
-        {% if type == 'course' %}
-		<div id="add_as_announcement_div">
-    		 <div class="control-group">
-                <label></label>
-                <div class="controls">
-                    <label class="checkbox inline" for="add_as_annonuncement">
-                        {{ "AddAsAnnouncement"|get_lang }} ({{ "SendEmail" | get_lang }})
-                        <input type="checkbox" name="add_as_annonuncement" id="add_as_annonuncement" />
-                    </label>
-                </div>
-            </div>
-        </div>
-		{% endif %}
-	</form>
+    {{ form_add }}
 	</div>
 </div>
 <div id="loading" style="margin-left:150px;position:absolute;display:none">{{ "Loading"|get_lang }}...</div>

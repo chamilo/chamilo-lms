@@ -94,11 +94,10 @@ if ($_POST['form_sent']) {
         exit;
     }
 }
-$data               = $usergroup->get($id);
-$course_list_in     = $usergroup->get_courses_by_usergroup($id);
-$course_list        = CourseManager::get_courses_list(0, 0, 'title');
+$data = $usergroup->get($id);
+$course_list_in = $usergroup->get_courses_by_usergroup($id);
+$course_list = CourseManager::get_courses_list(0, 0, 'title', 'asc', -1, null, api_get_current_access_url_id());
 
-//api_display_tool_title($tool_name.' ('.$session_info['name'].')');
 $elements_not_in = $elements_in= array();
 
 if (!empty($course_list)) {

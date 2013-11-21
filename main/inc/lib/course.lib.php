@@ -130,10 +130,25 @@ class CourseManager
      * @param    string    The direction of the order (ASC or DESC). Optional, defaults to ASC.
      * @param    string    The visibility of the course, or all by default.
      * @param    string    If defined, only return results for which the course *title* begins with this string
+     * @return array
      */
-    public static function get_courses_list($from = 0, $howmany = 0, $orderby = 1, $orderdirection = 'ASC', $visibility = -1, $startwith = '') {
+    public static function get_courses_list(
+        $from = 0,
+        $howmany = 0,
+        $orderby = 1,
+        $orderdirection = 'ASC',
+        $visibility = -1,
+        $startwith = '',
+        $urlId = null
+    ) {
 
-        $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." ";
+        $sql = "SELECT course.* FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." course ";
+
+        if (!empty($urlId)) {
+            $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+            $sql .= " INNER JOIN $table url ON (url.course_code = course.code) ";
+        }
+
         if (!empty($startwith)) {
             $sql .= "WHERE title LIKE '".Database::escape_string($startwith)."%' ";
             if ($visibility !== -1 && $visibility == strval(intval($visibility))) {
@@ -145,6 +160,12 @@ class CourseManager
                 $sql .= " AND visibility = $visibility ";
             }
         }
+
+        if (!empty($urlId)) {
+            $urlId = intval($urlId);
+            $sql .= " AND access_url_id= $urlId";
+        }
+
         if (!empty($orderby)) {
             $sql .= " ORDER BY ".Database::escape_string($orderby)." ";
         } else {

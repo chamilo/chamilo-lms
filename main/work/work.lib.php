@@ -287,16 +287,20 @@ function getWorkList($id, $my_folder_data, $add_in_where_query)
     $session_id         = api_get_session_id();
     $condition_session  = api_get_session_condition($session_id);
     $group_id           = api_get_group_id();
-
-    $link_info = is_resource_in_course_gradebook(api_get_course_id(), 3 , $id, api_get_session_id());
-    $work_in_gradebook_link_id = $link_info['id'];
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-    if ($work_in_gradebook_link_id) {
-        if ($is_allowed_to_edit)
-            if (intval($my_folder_data['qualification']) == 0) {
-                Display::display_warning_message(get_lang('MaxWeightNeedToBeProvided'));
+    $linkInfo = is_resource_in_course_gradebook(api_get_course_id(), 3 , $id, api_get_session_id());
+
+    if ($linkInfo) {
+        $workInGradeBookLinkId = $linkInfo['id'];
+
+        if ($workInGradeBookLinkId) {
+            if ($is_allowed_to_edit) {
+                if (intval($my_folder_data['qualification']) == 0) {
+                    Display::display_warning_message(get_lang('MaxWeightNeedToBeProvided'));
+                }
             }
+        }
     }
 
     $contains_file_query = '';
@@ -304,15 +308,16 @@ function getWorkList($id, $my_folder_data, $add_in_where_query)
     // Get list from database
     if ($is_allowed_to_edit) {
         $active_condition = ' active IN (0, 1)';
-        $sql_get_publications_list = "SELECT *  FROM  $work_table
+        $sql = "SELECT *  FROM  $work_table
                 WHERE c_id = $course_id $add_in_where_query $condition_session AND $active_condition AND (parent_id = 0) $contains_file_query ";
         if (!empty($group_id)) {
-            $sql_get_publications_list .= " AND post_group_id = '".$group_id."' ";
+            $sql .= " AND post_group_id = '".$group_id."' ";
         }
-        $sql_get_publications_list .= " ORDER BY sent_date DESC";
+        $sql .= " ORDER BY sent_date DESC";
     } else {
         if (!empty($group_id)) {
-            $group_query = " WHERE c_id = $course_id AND post_group_id = '".$group_id."' "; // set to select only messages posted by the user's group
+            // set to select only messages posted by the user's group
+            $group_query = " WHERE c_id = $course_id AND post_group_id = '".$group_id."' ";
             $subdirs_query = "AND parent_id = 0";
         } else {
             $group_query = " WHERE c_id = $course_id AND  post_group_id = '0' ";
@@ -320,12 +325,14 @@ function getWorkList($id, $my_folder_data, $add_in_where_query)
         }
         //@todo how we can active or not an assignment?
         $active_condition = ' AND active IN (1,0)';
-        $sql_get_publications_list = "SELECT * FROM  $work_table $group_query $subdirs_query $add_in_where_query $active_condition $condition_session ORDER BY title";
+        $sql = "SELECT * FROM  $work_table
+                $group_query $subdirs_query $add_in_where_query $active_condition $condition_session
+                ORDER BY title";
     }
 
     $work_parents = array();
 
-    $sql_result = Database::query($sql_get_publications_list);
+    $sql_result = Database::query($sql);
     if (Database::num_rows($sql_result)) {
         while ($work = Database::fetch_object($sql_result)) {
             if ($work->parent_id == 0) {
@@ -333,6 +340,7 @@ function getWorkList($id, $my_folder_data, $add_in_where_query)
             }
         }
     }
+
     return $work_parents;
 }
 

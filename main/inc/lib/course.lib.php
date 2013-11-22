@@ -293,6 +293,7 @@ class CourseManager
         // Erase user student publications (works) in the course - by André Boivin
 
         if (!empty($user_list)) {
+            require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
             foreach ($user_list as $userId) {
                 // Getting all work from user
                 $workList = getWorkPerUser($userId);

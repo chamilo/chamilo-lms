@@ -68,9 +68,9 @@ function validate_data($users) {
         // 4. Check classname
         $usergroup = new UserGroup();
         if (!empty($user['ClassName'])) {
-            $class_name = explode('|', trim($user['ClassName']));
-            foreach ($class_name as $class) {
-                if (!$usergroup -> usergroup_exists($class)) {
+            $className = explode('|', trim($user['ClassName']));
+            foreach ($className as $class) {
+                if (!$usergroup->usergroup_exists($class)) {
                     $user['error'] = get_lang('ClassNameNotAvailable');
                     $errors[] = $user;
                 }
@@ -158,10 +158,10 @@ function save_data($users) {
             }
             $usergroup = new UserGroup();
             if (!empty($user['ClassName'])) {
-                $class_name = explode('|', trim($user['ClassName']));
-                foreach ($class_name as $class) {
-                    $class_id = $usergroup -> get_id_by_name($class);
-                    $usergroup -> add_user($user_id, $class_id);
+                $className = explode('|', trim($user['ClassName']));
+                foreach ($className as $class) {
+                    $classId = $usergroup->get_id_by_name($class);
+                    $usergroup->add_user($user_id, $classId);
                 }
                 
             }

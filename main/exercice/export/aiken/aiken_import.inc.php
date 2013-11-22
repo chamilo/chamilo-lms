@@ -1,5 +1,4 @@
 <?php
-error_log(__LINE__);
 /**
  * @copyright (c) 2001-2006 Universite catholique de Louvain (UCL)
  *
@@ -9,6 +8,7 @@ error_log(__LINE__);
  *
  * @author claro team <cvs@claroline.net>
  * @author Guillaume Lederer <guillaume@claroline.net>
+ * @author César Perales <cesar.perales@gmail.com> Parse function for Aiken format
  */
 /**
  * Security check
@@ -61,7 +61,6 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath) {
  */
 
 function import_exercise($file) {
-	error_log(__LINE__);
 	global $exercise_info;
 	global $element_pile;
 	global $non_HTML_tag_to_avoid;
@@ -99,7 +98,6 @@ function import_exercise($file) {
 		Display :: display_error_message(get_lang('You must upload a zip file'));
 		return false;
 	}
-error_log(__LINE__);
 
 	// find the different manifests for each question and parse them.
 	$exerciseHandle = opendir($baseWorkDir);
@@ -124,7 +122,7 @@ error_log(__LINE__);
 		} // else ignore file
 	}
 	if (!$file_found) {
-		Display :: display_error_message(get_lang('No XML file found in the zip'));        
+		Display :: display_error_message(get_lang('No TXT file found in the zip'));        
 		return false;
 	}
     if ($result == false ) {        
@@ -143,7 +141,7 @@ error_log(__LINE__);
 		//For each question found...
 		foreach ($exercise_info['question'] as $key => $question_array) {
 			//2.create question
-			$question = new AikenQuestion();
+			$question = new Aiken2Question();
 			$question->type = $question_array['type'];
 			$question->setAnswer();
 			$question->updateTitle($question_array['title']); // question ...
@@ -155,133 +153,68 @@ error_log(__LINE__);
 			$answer = new Answer($last_question_id);
 			$answer->new_nbrAnswers = count($question_array['answer']);
 			foreach ($question_array['answer'] as $key => $answers) {
-				$split = explode('_', $key);
-				$i = $split[1];
-				$answer->new_answer[$i] = $answers['value']; // answer ...
-				$answer->new_comment[$i] = $answers['feedback']; // comment ...
-				$answer->new_position[$i] = $i; // position ...
+				$key++; 				
+				$answer->new_answer[$key] = $answers['value']; // answer ...
+				$answer->new_comment[$key] = $answers['feedback']; // comment ...
+				$answer->new_position[$key] = $key; // position ...
 				// correct answers ...
 				if (in_array($key, $question_array['correct_answers'])) {
-					$answer->new_correct[$i] = 1;
+					$answer->new_correct[$key] = 1;
 				} else {
-					$answer->new_correct[$i] = 0;
+					$answer->new_correct[$key] = 0;
 				}
-				$answer->new_weighting[$i] = $question_array['weighting'][$key];
+				error_log($question_array['weighting']);
+				$answer->new_weighting[$key] = $question_array['weighting'][$key - 1];
 			}
 			$answer->save();
 		}
 		// delete the temp dir where the exercise was unzipped
 		my_delete($baseWorkDir . $uploadPath);
 		$operation = true;
-	}    
+	}
 	return $operation;
 }
 
 function parse_file($exercisePath, $file, $questionFile) {
 	global $exercise_info;
-	global $element_pile;
-	global $non_HTML_tag_to_avoid;
-	global $record_item_body;
 	global $questionTempDir;
 
 	$questionTempDir = $exercisePath . '/' . $file . '/';
 	$questionFilePath = $questionTempDir . $questionFile;
 
-	if (!($fp = @ fopen($questionFilePath, 'r'))) {
-		Display :: display_error_message(get_lang('Error opening question\'s TXT file'));
-		return false;
-	} else {
-		$data = fread($fp, filesize($questionFilePath));
+
+	$data = file($questionFilePath);
+
+	$question_index = 0;
+	$correct_answer = '';
+	$answers_array = array();
+	foreach ($data as $linea => $info) {
+		$exercise_info['question'][$question_index]['type'] = 'MCUA';
+		if (preg_match('/^([A-Z])(\)|\.)\s(.*)/', $info, $matches)) {
+			//adding one of the posible answers
+			$exercise_info['question'][$question_index]['answer'][]['value'] = $matches[3];
+			$answers_array[] = $matches[1];
+		} elseif (preg_match('/^ANSWER:\s?([A-Z])\s?/', $info, $matches)) {
+			//the correct answers
+			$correct_answer_index = array_search($matches[1], $answers_array);
+			$exercise_info['question'][$question_index]['correct_answers'][] = $correct_answer_index + 1;
+			//weight for correct answer
+			$exercise_info['question'][$question_index]['weighting'][$correct_answer_index] = 1;
+		} elseif (preg_match('/^ANSWER_EXPLANATION:\s?(.*)\s?/', $info, $matches)) {  
+			//Comment of correct answer
+			$exercise_info['question'][$question_index]['answer'][$correct_answer_index]['feedback'] = $matches[1];
+		} elseif (preg_match('/^TAGS:\s?([A-Z])\s?/', $info, $matches)) { 
+		 	//TAGS for chamilo >= 1.10
+			$exercise_info['question'][$question_index]['answer_tags'] = explode(',', $matches[1]);
+		} elseif (preg_match('/^\n/',$info)) {
+			//moving to next question
+			$question_index++;
+			//emptying answers array when moving to next question
+			$answers_array = array();
+		} else {
+			//Question itself
+			$exercise_info['question'][$question_index]['title'] = $info;
+		}
 	}
-/*while(!feof($fp)) {
-	$data = fread($fp, filesize($questionFilePath));
-	error_log(print_r($data,1));
-
-}*/
-error_log('test');
-$data = file($questionFilePath);
-
-$question_index = 0;
-foreach($data as $linea => $info) {
-	//$preg = preg_match('/^[A-Z](\)|\.)\s(.*)/g', $linea, $matches);
-	#$preg = preg_match('/(^ANSWER:\sq([A-Z])\s?)|(.*))/i', $info, $matches);
-	if (preg_match('/^([A-Z])(\)|\.)\s(.*)/', $info)) {
-		$questions[$question_index]['option'][] = $info;
-	} elseif (preg_match('/^ANSWER:\s([A-Z])\s?/', $info)) {
-		$questions[$question_index]['answer'] = $info;
-	} elseif (preg_match('/^ANSWER_EXPLANATION:\s([A-Z])\s?/', $info)) {
-		$questions[$question_index]['answer_explanation'] = $info;
-	} elseif (preg_match('/^TAGS:\s([A-Z])\s?/', $info)) {
-		$questions[$question_index]['answer_tags'] = explode(',', $info);
-	} elseif (preg_match('/^\n/',$info)) {
-		$question_index++;
-	} else {
-		$questions[$question_index]['title'] = $info;
-	}
-	
-}
-
-error_log(print_r($questions,1));
-/*
-	//used global variable start values declaration :
-
-	$record_item_body = false;
-	$non_HTML_tag_to_avoid = array (
-		"SIMPLECHOICE",
-		"CHOICEINTERACTION",
-		"INLINECHOICEINTERACTION",
-		"INLINECHOICE",
-		"SIMPLEMATCHSET",
-		"SIMPLEASSOCIABLECHOICE",
-		"TEXTENTRYINTERACTION",
-		"FEEDBACKINLINE",
-		"MATCHINTERACTION",
-		"ITEMBODY",
-		"BR",
-		"IMG"
-	);
-
-	//this array to detect tag not supported by claroline import in the xml file to warn the user.
-
-	$non_supported_content_in_question = array (
-		"GAPMATCHINTERACTION",
-		"EXTENDEDTEXTINTERACTION",
-		"HOTTEXTINTERACTION",
-		"HOTSPOTINTERACTION",
-		"SELECTPOINTINTERACTION",
-		"GRAPHICORDERINTERACTION",
-		"GRAPHICASSOCIATIONINTERACTION",
-		"GRAPHICGAPMATCHINTERACTION",
-		"POSITIONOBJECTINTERACTION",
-		"SLIDERINTERACTION",
-		"DRAWINGINTERACTION",
-		"UPLOADINTERACTION",
-		"RESPONSECONDITION",
-		"RESPONSEIF"
-	);
-	$question_format_supported = true;
-
-	$xml_parser = xml_parser_create();
-	xml_parser_set_option($xml_parser, XML_OPTION_SKIP_WHITE, false);
-	xml_set_element_handler($xml_parser, 'startElement', 'endElement');
-	xml_set_character_data_handler($xml_parser, 'elementData');
-
-	if (!xml_parse($xml_parser, $data, feof($fp))) {
-		// if reading of the xml file in not successfull :
-		// set errorFound, set error msg, break while statement
-		Display :: display_error_message(get_lang('Error reading XML file'));
-		return false;
-	}
-
-	//close file
-	fclose($fp);
-	if (!$question_format_supported) {
-		Display :: display_error_message(get_lang('Unknown question format in file %file', array (
-			'%file' => $questionFile
-		)));
-		return false;
-	}
-	*/
-
 	return true;
 }

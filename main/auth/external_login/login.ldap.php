@@ -4,7 +4,7 @@
 /**
  *
  * This file is included in main/inc/local.inc.php at user login if the user have 'external_ldap' in
- * his auth_source field insted of platform
+ * his auth_source field instead of platform
  *
  * Variables that can be used :
  *    - $login : string containing the username posted by the user
@@ -18,14 +18,14 @@
  *
  * If login succeeds, we have 2 choices :
  *    1.  - set $loginFailed to false,
- *        - set $_SESSION['_user']['user_id'] with the dokeos user_id
+ *        - set $_SESSION['_user']['user_id'] with the Chamilo user_id
  *        - set $uidReset to true
- *        - upgrade user info in dokeos database if needeed
+ *        - upgrade user info in chamilo database if needed
  *        - let the script local.inc.php continue
  *
- *    2.  - set $_SESSION['_user']['user_id'] with the dokeos user_id
+ *    2.  - set $_SESSION['_user']['user_id'] with the Chamilo user_id
  *        - set $_SESSION['_user']['uidReset'] to true
- *        - upgrade user info in dokeos database if needeed
+ *        - upgrade user info in chamilo database if needed
  *        - redirect to any page and let local.inc.php do the magic
  *
  * If login fails we have to redirect to index.php with the right message

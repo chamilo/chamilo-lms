@@ -37,9 +37,12 @@
 
 use \ChamiloSession as Session;
 
+// Configure the web service URL here. e.g. http://190.1.1.19:8051/login.asmx?WSDL
+$wsUrl = '';
+
 require_once dirname(__FILE__) . '/functions.inc.php';
 //error_log('Entering login.ws.php');
-$isValid = loginWSAuthenticate($login, $password);
+$isValid = loginWSAuthenticate($login, $password, $wsUrl);
 if ($isValid !== 0) {
     //error_log('ws_authenticate worked');
     $chamiloUser = UserManager::get_user_info($login);
@@ -67,15 +70,15 @@ if ($isValid !== 0) {
  * @param $username
  * @param $password
  */
-function loginWSAuthenticate($username, $password) {
-    if (empty($username) or empty($password)) {
+function loginWSAuthenticate($username, $password, $wsUrl) {
+    if (empty($username) or empty($password) or empty($wsUrl)) {
         return false;
     }
-    $client = new SoapClient("http://190.12.77.7:8051/ServiceAD.asmx?WSDL");
+    $client = new SoapClient($wsUrl);
     if (!$client) {
         return false;
     }
-    $something =  $client->validaUsuarioAD(array($username, $password, 1));
+    $something =  $client->validaUsuarioAD(array($username, $password, 'chamilo'));
     error_log(print_r($something,1));
     return $something->validaUsuarioADResult;
 }

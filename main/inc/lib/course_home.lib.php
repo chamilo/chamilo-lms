@@ -796,7 +796,7 @@ class CourseHome
                             $html .=  $rowDiv;
                         }
 
-                        $html .=  '<div class="col-md-4 course-tool">';
+                        $html .=  '<div class="col-xs-4 col-md-4 course-tool">';
                         $image = (substr($item['tool']['image'], 0, strpos($item['tool']['image'], '.'))).'.png';
 
                         $original_image = Display::return_icon($image, $item['name'], array('id'=>'toolimage_'.$item['tool']['id']), ICON_SIZE_BIG, false);

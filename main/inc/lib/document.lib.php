@@ -840,6 +840,12 @@ class DocumentManager
         return $result['filetype'] == 'folder';
     }
 
+    /**
+     * @param int $document_id
+     * @param array $course_info
+     * @param int $session_id
+     * @param bool $remove_content_from_db
+     */
     public static function delete_document_from_db($document_id, $course_info = array(), $session_id = 0, $remove_content_from_db = false)
     {
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
@@ -855,7 +861,7 @@ class DocumentManager
             $session_id = api_get_session_id();
         }
 
-        //Soft DB delete
+        // Soft DB delete
         api_item_property_update($course_info, TOOL_DOCUMENT, $document_id, 'delete', $user_id, null, null, null, null, $session_id);
         self::delete_document_from_search_engine($course_info['code'], $document_id);
         self::unset_document_as_template($document_id, $course_info['code'], $user_id);
@@ -921,8 +927,8 @@ class DocumentManager
 
         if ($document_id) {
             self::delete_document_from_db($document_id);
-            //checking
-            //$file_exists_in_db = self::get_document_data_by_id($document_id, $_course['code']);
+            // Checking
+            // $file_exists_in_db = self::get_document_data_by_id($document_id, $_course['code']);
             $file_deleted_from_db = true;
         }
 
@@ -930,38 +936,37 @@ class DocumentManager
 
             if (api_get_setting('permanently_remove_deleted_files') == 'true') {
                 //Deleted files are *really* deleted
-                $what_to_delete_sql = "SELECT id FROM " . $TABLE_DOCUMENT . " WHERE c_id = $course_id AND path='" . $path . "' OR path LIKE BINARY '" . $path . "/%'";
-                //get all id's of documents that are deleted
-                $what_to_delete_result = Database::query($what_to_delete_sql);
+                $sql = "SELECT id FROM $TABLE_DOCUMENT
+                        WHERE c_id = $course_id AND path='".$path."' OR path LIKE BINARY '".$path."/%'";
+                // Get all id's of documents that are deleted
+                $result = Database::query($sql);
 
-                if ($what_to_delete_result && Database::num_rows($what_to_delete_result) != 0) {
-                    //delete all item_property entries
-                    while ($row = Database::fetch_array($what_to_delete_result)) {
-                        //query to delete from item_property table (hard way)
+                if ($result && Database::num_rows($result) != 0) {
+                    // Delete all item_property entries
+                    while ($row = Database::fetch_array($result)) {
+                        // Query to delete from item_property table (hard way)
                         self::delete_document_from_db($row['id'], $_course, $current_session_id, true);
                     }
-                    //delete documents, do it like this so metadata get's deleted too
-                    //update_db_info('delete', $path);
-                    //throw it away
+                    // Delete documents, do it like this so metadata gets deleted too
                     my_delete($base_work_dir . $path);
                     $file_deleted_from_disk = true;
                 }
             } else {
-                //Set visibility to 2 and rename file/folder to xxx_DELETED_#id (soft delete)
+                // Set visibility to 2 and rename file/folder to xxx_DELETED_#id (soft delete)
 
                 if (is_file($base_work_dir . $path) || is_dir($base_work_dir . $path)) {
-                    if (rename($base_work_dir . $path, $base_work_dir . $new_path)) {
+                    if (rename($base_work_dir . $path, $base_work_dir.$new_path)) {
 
-                        $sql = "UPDATE $TABLE_DOCUMENT set path='" . $new_path . "' WHERE c_id = $course_id AND id='" . $document_id . "'";
+                        $sql = "UPDATE $TABLE_DOCUMENT set path='".$new_path."' WHERE c_id = $course_id AND id='".$document_id."'";
                         Database::query($sql);
 
-                        $sql = "SELECT id, path FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND path LIKE BINARY '" . $path . "/%'";
+                        $sql = "SELECT id, path FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND path LIKE BINARY '".$path."/%'";
                         $result = Database::query($sql);
                         if ($result && Database::num_rows($result) > 0) {
                             while ($deleted_items = Database::fetch_array($result, 'ASSOC')) {
                                 self::delete_document_from_db($deleted_items['id']);
 
-                                //Change path of subfolders and documents in database
+                                // Change path of subfolders and documents in database.
                                 $old_item_path = $deleted_items['path'];
                                 $new_item_path = $new_path . substr($old_item_path, strlen($path));
 
@@ -971,16 +976,17 @@ class DocumentManager
                         }
                         $file_renamed_from_disk = true;
                     } else {
-                        //Couldn't rename - file permissions problem?
-                        error_log(__FILE__ . ' ' . __LINE__ . ': Error renaming ' . $base_work_dir . $path . ' to ' . $base_work_dir . $new_path . '. This is probably due to file permissions', 0);
+                        // Couldn't rename - file permissions problem?
+                        error_log(__FILE__ . ' ' . __LINE__ . ': Error renaming '.$base_work_dir.$path.' to '.$base_work_dir.$new_path.'. This is probably due to file permissions', 0);
                     }
                 }
             }
         }
 
-        //Checking inconsistency
+        // Checking inconsistency
         if ($file_deleted_from_db && $file_deleted_from_disk ||
-                $file_deleted_from_db && $file_renamed_from_disk) {
+            $file_deleted_from_db && $file_renamed_from_disk
+        ) {
             return true;
         } else {
             //Something went wrong
@@ -988,7 +994,7 @@ class DocumentManager
             // This means it has been removed externally. To prevent a
             // blocking error from happening, we drop the related items from the
             // item_property and the document table.
-            error_log(__FILE__ . ' ' . __LINE__ . ': System inconsistency detected. The file or directory ' . $base_work_dir . $path . ' seems to have been removed from the filesystem independently from the web platform. To restore consistency, the elements using the same path will be removed from the database', 0);
+            error_log(__FILE__.' '.__LINE__.': System inconsistency detected. The file or directory '.$base_work_dir.$path.' seems to have been removed from the filesystem independently from the web platform. To restore consistency, the elements using the same path will be removed from the database', 0);
             return false;
         }
     }

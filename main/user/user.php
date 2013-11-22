@@ -419,14 +419,14 @@ function get_number_of_users() {
 		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], 0);
 	}
 	foreach ($a_course_users as $user_id => $o_course_user) {
-		if ((isset($_GET['keyword']) && search_keyword($o_course_user['firstname'], $o_course_user['lastname'], $o_course_user['username'], $o_course_user['official_code'], $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {
+		if ((isset($_GET['keyword']) && searchUserKeyword($o_course_user['firstname'], $o_course_user['lastname'], $o_course_user['username'], $o_course_user['official_code'], $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {
 			$counter++;
 		}
 	}
 	return $counter;
 }
 
-function search_keyword($firstname, $lastname, $username, $official_code, $keyword) {
+function searchUserKeyword($firstname, $lastname, $username, $official_code, $keyword) {
 	if (api_strripos($firstname, $keyword) !== false || api_strripos($lastname, $keyword) !== false || api_strripos($username, $keyword) !== false || api_strripos($official_code, $keyword) !== false) {
 		return true;
 	} else {
@@ -491,7 +491,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
     $a_course_users = CourseManager :: get_user_list_from_course_code($course_code, $session_id, $limit, $order_by);
 
 	foreach ($a_course_users as $user_id => $o_course_user) {
-		if ((isset($_GET['keyword']) && search_keyword($o_course_user['firstname'], $o_course_user['lastname'], $o_course_user['username'], $o_course_user['official_code'], $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {
+		if ((isset($_GET['keyword']) && searchUserKeyword($o_course_user['firstname'], $o_course_user['lastname'], $o_course_user['username'], $o_course_user['official_code'], $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {
 
 			$groups_name = GroupManager :: get_user_group_name($user_id);
 			$temp = array();

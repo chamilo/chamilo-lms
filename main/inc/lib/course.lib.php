@@ -254,11 +254,10 @@ class CourseManager
         if (!is_array($user_id)) {
             $user_id = array($user_id);
         }
+
         if (count($user_id) == 0) {
             return;
         }
-
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
         if (!empty($session_id)) {
             $session_id = intval($session_id);
@@ -282,77 +281,76 @@ class CourseManager
             $user_list[] = $user_id;
         }
 
-
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
 
         // Unsubscribe user from all groups in the course.
-        Database::query("DELETE FROM ".Database::get_course_table(TABLE_GROUP_USER)."  WHERE c_id = $course_id AND user_id IN (".$user_ids.")");
-        Database::query("DELETE FROM ".Database::get_course_table(TABLE_GROUP_TUTOR)." WHERE c_id = $course_id AND user_id IN (".$user_ids.")");
+        $sql = "DELETE FROM ".Database::get_course_table(TABLE_GROUP_USER)."  WHERE c_id = $course_id AND user_id IN (".$user_ids.")";
+        Database::query($sql);
+        $sql = "DELETE FROM ".Database::get_course_table(TABLE_GROUP_TUTOR)." WHERE c_id = $course_id AND user_id IN (".$user_ids.")";
+        Database::query($sql);
 
         // Erase user student publications (works) in the course - by André Boivin
 
-        /*
-        $sqlu = "SELECT * FROM $table_user WHERE user_id IN (".$user_ids.")";
-        $resu = Database::query($sqlu);
-        $username = Database::fetch_array($resu,'ASSOC');
-        $userfirstname = $username['firstname'];
-        $userlastname = $username['lastname'];
-        $publication_name = $userfirstname.' '.$userlastname ;
-
-        $table_course_user_publication = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
-        $sql = "DELETE FROM $table_course_user_publication WHERE c_id = $course_id AND author = '".Database::escape_string($publication_name)."'";
-        Database::query($sql);*/
-
-        foreach ($user_ids as $userId) {
-            // Getting all work from user
-            $workList = getWorkPerUser($userId);
-            if (!empty($workList)) {
-                foreach ($workList as $work) {
-                    $work = $work['work'];
-                    // Getting user results
-                    if (!empty($work->user_results)) {
-                        foreach ($work->user_results as $workSent) {
-                            deleteWorkItem($workSent['id'], $course_info);
+        if (!empty($user_list)) {
+            require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+            foreach ($user_list as $userId) {
+                // Getting all work from user
+                $workList = getWorkPerUser($userId);
+                if (!empty($workList)) {
+                    foreach ($workList as $work) {
+                        $work = $work['work'];
+                        // Getting user results
+                        if (!empty($work->user_results)) {
+                            foreach ($work->user_results as $workSent) {
+                                deleteWorkItem($workSent['id'], $course_info);
+                            }
                         }
                     }
                 }
             }
         }
 
-
         // Unsubscribe user from all blogs in the course.
         Database::query("DELETE FROM ".Database::get_course_table(TABLE_BLOGS_REL_USER)." WHERE c_id = $course_id AND  user_id IN (".$user_ids.")");
         Database::query("DELETE FROM ".Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER)." WHERE c_id = $course_id AND  user_id IN (".$user_ids.")");
 
-        //Deleting users in forum_notification and mailqueue course tables
-        $sql_delete_forum_notification = "DELETE FROM  ".Database::get_course_table(TABLE_FORUM_NOTIFICATION)." WHERE c_id = $course_id AND user_id IN (".$user_ids.")";
-        Database::query($sql_delete_forum_notification);
+        // Deleting users in forum_notification and mailqueue course tables
+        $sql = "DELETE FROM  ".Database::get_course_table(TABLE_FORUM_NOTIFICATION)."
+                WHERE c_id = $course_id AND user_id IN (".$user_ids.")";
+        Database::query($sql);
 
-        $sql_delete_mail_queue = "DELETE FROM ".Database::get_course_table(TABLE_FORUM_MAIL_QUEUE)." WHERE c_id = $course_id AND user_id IN (".$user_ids.")";
-        Database::query($sql_delete_mail_queue);
+        $sql = "DELETE FROM ".Database::get_course_table(TABLE_FORUM_MAIL_QUEUE)."
+                WHERE c_id = $course_id AND user_id IN (".$user_ids.")";
+        Database::query($sql);
 
         // Unsubscribe user from the course.
         if (!empty($session_id)) {
+
             // Delete in table session_rel_course_rel_user
             $sql = "DELETE FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
-                    WHERE id_session ='".$session_id."' AND course_code = '".Database::escape_string($course_info['code'])."' AND id_user IN ($user_ids)";
+                    WHERE   id_session ='".$session_id."' AND
+                            course_code = '".Database::escape_string($course_info['code'])."' AND
+                            id_user IN ($user_ids)";
             Database::query($sql);
 
-            foreach ($user_id as $uid) {
+            foreach ($user_list as $uid) {
                 // check if a user is register in the session with other course
-                $sql = "SELECT id_user FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE id_session='$session_id' AND id_user='$uid'";
+                $sql = "SELECT id_user FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
+                        WHERE id_session='$session_id' AND id_user='$uid'";
                 $rs = Database::query($sql);
+
                 if (Database::num_rows($rs) == 0) {
                     // Delete in table session_rel_user
-                    Database::query("DELETE FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
-                                     WHERE id_session ='".$session_id."' AND id_user='$uid' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."");
+                    $sql = "DELETE FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
+                            WHERE id_session ='".$session_id."' AND id_user='$uid' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
+                    Database::query($sql);
                 }
             }
 
             // Update the table session
             $sql = "SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
-                    WHERE id_session = '".$session_id."' AND relation_type<>".SESSION_RELATION_TYPE_RRHH;
+                    WHERE id_session = '".$session_id."' AND relation_type <> ".SESSION_RELATION_TYPE_RRHH;
             $row = Database::fetch_array(Database::query($sql));
             $count = $row[0];
             // number of users by session
@@ -361,24 +359,32 @@ class CourseManager
             Database::query($sql);
 
             // Update the table session_rel_course
-            $sql = "SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE id_session = '$session_id' AND course_code = '$course_code' AND status<>2";
+            $sql = "SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
+                    WHERE id_session = '$session_id' AND course_code = '$course_code' AND status<>2";
             $row = Database::fetch_array(@Database::query($sql));
             $count = $row[0];
+
             // number of users by session and course
-            Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)." SET nbr_users = '$count' WHERE id_session = '$session_id' AND course_code = '$course_code'");
+            $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)."
+                    SET nbr_users = '$count'
+                    WHERE id_session = '$session_id' AND course_code = '$course_code'";
+            Database::query($sql);
 
         } else {
             $sql = "DELETE FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                    WHERE user_id IN (".$user_ids.") AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_code = '".$course_code."'";
+                    WHERE
+                        user_id IN (".$user_ids.") AND
+                        relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
+                        course_code = '".$course_code."'";
             Database::query($sql);
 
             // add event to system log
             $user_id = api_get_user_id();
             event_system(LOG_UNSUBSCRIBE_USER_FROM_COURSE, LOG_COURSE_CODE, $course_code, api_get_utc_datetime(), $user_id);
 
-            foreach ($user_list as $user_id_to_delete) {
-                $user_info = api_get_user_info($user_id_to_delete);
-                event_system(LOG_UNSUBSCRIBE_USER_FROM_COURSE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id);
+            foreach ($user_list as $userId) {
+                $userInfo = api_get_user_info($userId);
+                event_system(LOG_UNSUBSCRIBE_USER_FROM_COURSE, LOG_USER_OBJECT, $userInfo, api_get_utc_datetime(), $user_id);
             }
         }
     }

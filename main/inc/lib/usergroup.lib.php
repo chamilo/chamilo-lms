@@ -787,7 +787,7 @@ class UserGroup extends Model
         $userId  = intval($userId);
         $classId = intval($classId);
         $sql = "INSERT INTO $table_rel_user SET user_id = '".$userId."', usergroup_id='".$classId."'";
-	    Database::query($sql);
+	      Database::query($sql);
     }
     
        

@@ -114,26 +114,45 @@ function complete_missing_data($user) {
  * @return  void
  * @uses global variable $inserted_in_course, which returns the list of courses the user was inserted in
  */
-function save_data($users) {
+function save_data($users)
+{
     global $inserted_in_course;
     // Not all scripts declare the $inserted_in_course array (although they should).
     if (!isset($inserted_in_course)) {
         $inserted_in_course = array();
     }
     require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-    $send_mail = $_POST['sendMail'] ? 1 : 0;
+    $send_mail = $_POST['sendMail'] ? true : false;
     if (is_array($users)) {
         foreach ($users as $user) {
             $user = complete_missing_data($user);
             $user['Status'] = api_status_key($user['Status']);
-            $user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], $user['language'], $user['PhoneNumber'], '', $user['AuthSource'], null, 1, 0, null, null, $send_mail);
+            $user_id = UserManager :: create_user(
+                $user['FirstName'],
+                $user['LastName'],
+                $user['Status'],
+                $user['Email'],
+                $user['UserName'],
+                $user['Password'],
+                $user['OfficialCode'],
+                $user['language'],
+                $user['PhoneNumber'],
+                '',
+                $user['AuthSource'],
+                null,
+                1,
+                0,
+                null,
+                null,
+                $send_mail
+            );
             if (!is_array($user['Courses']) && !empty($user['Courses'])) {
                 $user['Courses'] = array($user['Courses']);
             }
             if (is_array($user['Courses'])) {
-                foreach ($user['Courses'] as $index => $course) {
-                    if (CourseManager :: course_exists($course)) {
-                        CourseManager :: subscribe_user($user_id, $course,$user['Status']);
+                foreach ($user['Courses'] as $course) {
+                    if (CourseManager::course_exists($course)) {
+                        CourseManager::subscribe_user($user_id, $course, $user['Status']);
                         $course_info = CourseManager::get_course_information($course);
                         $inserted_in_course[$course] = $course_info['title'];
                     }
@@ -144,13 +163,14 @@ function save_data($users) {
                             if ($vcourse['code'] == $course) {
                                 // Ignore, this has already been inserted.
                             } else {
-                                CourseManager :: subscribe_user($user_id, $vcourse['code'],$user['Status']);
+                                CourseManager :: subscribe_user($user_id, $vcourse['code'], $user['Status']);
                                 $inserted_in_course[$vcourse['code']] = $vcourse['title'];
                             }
                         }
                     }
                 }
             }
+
             if (!empty($user['ClassName'])) {
                 $class_id = ClassManager :: get_class_id($user['ClassName']);
                 ClassManager :: add_user($user_id, $class_id);
@@ -160,11 +180,11 @@ function save_data($users) {
             global $extra_fields;
 
             // We are sure that the extra field exists.
-            foreach($extra_fields as $extras) {
+            foreach ($extra_fields as $extras) {
                 if (isset($user[$extras[1]])) {
                     $key 	= $extras[1];
                     $value 	= $user[$extras[1]];
-                    UserManager::update_extra_field_value($user_id, $key,$value);
+                    UserManager::update_extra_field_value($user_id, $key, $value);
                 }
             }
         }

@@ -361,8 +361,10 @@ function is_resource_in_course_gradebook($course_code, $resource_type, $resource
 {
     $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
     $course_code = Database::escape_string($course_code);
-    $sql = "SELECT * FROM $l l WHERE course_code = '$course_code' AND type = " . (int) $resource_type . " and ref_id = " . (int) $resource_id;
+    $sql = "SELECT * FROM $l l
+            WHERE course_code = '$course_code' AND type = ".(int)$resource_type . " AND ref_id = " . (int)$resource_id;
     $res = Database::query($sql);
+
     if (Database::num_rows($res) < 1) {
         return false;
     }

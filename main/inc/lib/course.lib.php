@@ -130,10 +130,25 @@ class CourseManager
      * @param    string    The direction of the order (ASC or DESC). Optional, defaults to ASC.
      * @param    string    The visibility of the course, or all by default.
      * @param    string    If defined, only return results for which the course *title* begins with this string
+     * @return array
      */
-    public static function get_courses_list($from = 0, $howmany = 0, $orderby = 1, $orderdirection = 'ASC', $visibility = -1, $startwith = '') {
+    public static function get_courses_list(
+        $from = 0,
+        $howmany = 0,
+        $orderby = 1,
+        $orderdirection = 'ASC',
+        $visibility = -1,
+        $startwith = '',
+        $urlId = null
+    ) {
 
-        $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." ";
+        $sql = "SELECT course.* FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." course ";
+
+        if (!empty($urlId)) {
+            $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+            $sql .= " INNER JOIN $table url ON (url.course_code = course.code) ";
+        }
+
         if (!empty($startwith)) {
             $sql .= "WHERE title LIKE '".Database::escape_string($startwith)."%' ";
             if ($visibility !== -1 && $visibility == strval(intval($visibility))) {
@@ -145,6 +160,12 @@ class CourseManager
                 $sql .= " AND visibility = $visibility ";
             }
         }
+
+        if (!empty($urlId)) {
+            $urlId = intval($urlId);
+            $sql .= " AND access_url_id= $urlId";
+        }
+
         if (!empty($orderby)) {
             $sql .= " ORDER BY ".Database::escape_string($orderby)." ";
         } else {
@@ -222,7 +243,7 @@ class CourseManager
     /**
      * Unsubscribe one or more users from a course
      *
-     * @param   int   user_id or an array with user ids
+     * @param   mixed   user_id or an array with user ids
      * @param   string  course code
      * @param   int     session id
      * @assert ('', '') === false
@@ -230,13 +251,13 @@ class CourseManager
      */
     public static function unsubscribe_user($user_id, $course_code, $session_id = 0)
     {
-
         if (!is_array($user_id)) {
             $user_id = array($user_id);
         }
         if (count($user_id) == 0) {
             return;
         }
+
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
         if (!empty($session_id)) {
@@ -270,8 +291,8 @@ class CourseManager
         Database::query("DELETE FROM ".Database::get_course_table(TABLE_GROUP_TUTOR)." WHERE c_id = $course_id AND user_id IN (".$user_ids.")");
 
         // Erase user student publications (works) in the course - by André Boivin
-        //@todo field student_publication.author should be the user id
 
+        /*
         $sqlu = "SELECT * FROM $table_user WHERE user_id IN (".$user_ids.")";
         $resu = Database::query($sqlu);
         $username = Database::fetch_array($resu,'ASSOC');
@@ -279,9 +300,26 @@ class CourseManager
         $userlastname = $username['lastname'];
         $publication_name = $userfirstname.' '.$userlastname ;
 
-        $table_course_user_publication     = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+        $table_course_user_publication = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
         $sql = "DELETE FROM $table_course_user_publication WHERE c_id = $course_id AND author = '".Database::escape_string($publication_name)."'";
-        Database::query($sql);
+        Database::query($sql);*/
+
+        foreach ($user_ids as $userId) {
+            // Getting all work from user
+            $workList = getWorkPerUser($userId);
+            if (!empty($workList)) {
+                foreach ($workList as $work) {
+                    $work = $work['work'];
+                    // Getting user results
+                    if (!empty($work->user_results)) {
+                        foreach ($work->user_results as $workSent) {
+                            deleteWorkItem($workSent['id'], $course_info);
+                        }
+                    }
+                }
+            }
+        }
+
 
         // Unsubscribe user from all blogs in the course.
         Database::query("DELETE FROM ".Database::get_course_table(TABLE_BLOGS_REL_USER)." WHERE c_id = $course_id AND  user_id IN (".$user_ids.")");

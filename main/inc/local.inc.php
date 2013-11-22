@@ -521,7 +521,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     $protocol = api_get_setting('sso_authentication_protocol');
                     // sso_authentication_domain can list
                     // several, comma-separated, domains
-                    $master_urls = split(',',api_get_setting('sso_authentication_domain'));
+                    $master_urls = preg_split('/,/',api_get_setting('sso_authentication_domain'));
                     if (!empty($master_urls)) {
                         $master_auth_uri = api_get_setting('sso_authentication_auth_uri');
                         foreach ($master_urls as $mu) {

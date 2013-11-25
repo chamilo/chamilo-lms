@@ -2142,6 +2142,7 @@ class CourseManager
      * @param string $defaultCode the option value to select by default (used mainly for edition of courses)
      * @param string $parentCode the parent category of the categories added (default=null for root category)
      * @param string $padding the indent param (you shouldn't indicate something here)
+     * @deprecated use the select_ajax solution see admin/course_edit.php
      */
     public static function select_and_sort_categories($element, $defaultCode = null, $parentCode = null , $padding = null)
     {

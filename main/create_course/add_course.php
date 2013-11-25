@@ -23,6 +23,7 @@ $cidReset = true;
 
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
 
 // Section for the tabs.
 $this_section = SECTION_COURSES;
@@ -92,11 +93,18 @@ $advanced = '<a href="javascript://" onclick=" return advanced_parameters()"><sp
 $form -> addElement('advanced_settings',$advanced);
 $form -> addElement('html','<div id="options" style="display:none">');
 
-// Course category.
-$categories_select = $form->addElement('select', 'category_code', array(get_lang('Fac'), get_lang('TargetFac')), array(), array('id'=> 'category_code','class'=>'chzn-select', 'style'=>'width:350px'));
-$form->applyFilter('category_code', 'html_filter');
-$categories_select->addOption('-', '');
-CourseManager::select_and_sort_categories($categories_select);
+// Category category.
+$url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
+
+$form->addElement(
+    'select_ajax',
+    'category_code',
+    get_lang('CourseFaculty'),
+    null,
+    array(
+        'url' => $url
+    )
+);
 
 // Course code
 $form->add_textfield('wanted_code', array(get_lang('Code'), get_lang('OnlyLettersAndNumbers')), '', array('class' => 'span3', 'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE));

@@ -47,12 +47,11 @@ class HTML_QuickForm_Select_Ajax extends HTML_QuickForm_select
         $dataCondition = null;
         $tags = null;
         if (!empty($defaultValues)) {
-
             $result = json_encode($defaultValues);
             $result = str_replace('"id"', 'id', $result);
             $result = str_replace('"text"', 'text', $result);
             $dataCondition = '$("#'.$this->getAttribute('name').'").select2("data", '.$result.')';
-            $tags = ',tags : function() { return '.$result.'} ';
+            $tags = ', tags : function() { return '.$result.'} ';
         }
 
         $html .= '<script>
@@ -87,7 +86,7 @@ class HTML_QuickForm_Select_Ajax extends HTML_QuickForm_select
                 });
 
         </script>';
-        $html .= '<input id="'.$this->getAttribute('name').'" name = "'.$this->getAttribute('name').'" />';
+        $html .= '<input id="'.$this->getAttribute('name').'" name="'.$this->getAttribute('name').'" />';
         return $html;
     }
 }

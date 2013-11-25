@@ -18,6 +18,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 require_once '../gradebook/lib/be/gradebookitem.class.php';
 require_once '../gradebook/lib/be/category.class.php';
+require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
 
 /**
  * Get the number of courses which will be displayed
@@ -186,9 +187,20 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $form->addElement('header', $tool_name);
     $form->add_textfield('keyword_code', get_lang('CourseCode'), false);
     $form->add_textfield('keyword_title', get_lang('Title'), false);
-    $categories = array();
-    $categories_select = $form->addElement('select', 'keyword_category', get_lang('CourseFaculty'), $categories);
-    CourseManager::select_and_sort_categories($categories_select);
+
+    // Category code
+    $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
+
+    $form->addElement(
+        'select_ajax',
+        'keyword_category',
+        get_lang('CourseFaculty'),
+        null,
+        array(
+            'url' => $url
+        )
+    );
+
     $el = $form->addElement('select_language', 'keyword_language', get_lang('CourseLanguage'));
     $el->addOption(get_lang('All'), '%');
     $form->addElement('radio', 'keyword_visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);

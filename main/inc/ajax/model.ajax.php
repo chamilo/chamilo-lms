@@ -73,12 +73,18 @@ $ops = array (
 function get_where_clause($col, $oper, $val)
 {
     global $ops;
-    if (empty($col)){
+    if (empty($col)) {
         return '';
     }
-    if ($oper == 'bw' || $oper == 'bn') $val .= '%';
-    if ($oper == 'ew' || $oper == 'en' ) $val = '%'.$val;
-    if ($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') $val = '%'.$val.'%';
+    if ($oper == 'bw' || $oper == 'bn') {
+        $val .= '%';
+    }
+    if ($oper == 'ew' || $oper == 'en') {
+        $val = '%'.$val;
+    }
+    if ($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') {
+        $val = '%'.$val.'%';
+    }
     $val = Database::escape_string($val);
     return " $col {$ops[$oper]} '$val' ";
 }
@@ -104,8 +110,8 @@ if ($_REQUEST['_search'] == 'true') {
     if (!empty($filters)) {
         $where_condition .= ' AND ( ';
         $counter = 0;
-        foreach ($filters->rules as $key=>$rule) {
-            $where_condition .= get_where_clause($rule->field,$rule->op, $rule->data);
+        foreach ($filters->rules as $key => $rule) {
+            $where_condition .= get_where_clause($rule->field, $rule->op, $rule->data);
 
             if ($counter < count($filters->rules) -1) {
                 $where_condition .= $filters->groupOp;
@@ -261,7 +267,7 @@ if ($page > $total_pages) {
 
 $start = $limit * $page - $limit;
 if ($start < 0) {
-	$start = 0;
+    $start = 0;
 }
 
 //4. Deleting an element if the user wants to
@@ -269,7 +275,7 @@ if (isset($_REQUEST['oper']) && $_REQUEST['oper'] == 'del') {
     $obj->delete($_REQUEST['id']);
 }
 
-$is_allowedToEdit = api_is_allowed_to_edit(null,true) || api_is_allowed_to_edit(true) || api_is_drh();
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit(true) || api_is_drh();
 
 //5. Querying the DB for the elements
 $columns = array();
@@ -280,8 +286,12 @@ switch ($action) {
         $result = Question::get_course_medias($course_id, $start, $limit, $sidx, $sord, $where_condition);
         break;
     case 'get_user_course_report_resumed':
-        $columns = array('extra_ruc', 'training_hours', 'count_users', 'count_users_registered', 'average_hours_per_user', 'count_certificates');
-        $column_names = array(get_lang('Company'), get_lang('TrainingHoursAccumulated'), get_lang('CountOfSubscriptions'), get_lang('CountOfUsers'), get_lang('AverageHoursPerStudent'), get_lang('CountCertificates'));
+        $columns = array(
+            'extra_ruc', 'training_hours', 'count_users', 'count_users_registered', 'average_hours_per_user', 'count_certificates'
+        );
+        $column_names = array(
+            get_lang('Company'), get_lang('TrainingHoursAccumulated'), get_lang('CountOfSubscriptions'), get_lang('CountOfUsers'), get_lang('AverageHoursPerStudent'), get_lang('CountCertificates')
+        );
         $result = CourseManager::get_user_list_from_course_code(null, null, "LIMIT $start, $limit", " $sidx $sord", null, null, true, true, 'ruc');
         $new_result = array();
         if (!empty($result)) {
@@ -295,7 +305,9 @@ switch ($action) {
         break;
     case 'get_user_course_report':
         $columns = array('course', 'user', 'time', 'certificate', 'progress_100', 'progress');
-        $column_names = array(get_lang('Course'), get_lang('User'), get_lang('ManHours'), get_lang('CertificateGenerated'), get_lang('Approved'), get_lang('CourseAdvance'));
+        $column_names = array(
+            get_lang('Course'), get_lang('User'), get_lang('ManHours'), get_lang('CertificateGenerated'), get_lang('Approved'), get_lang('CourseAdvance')
+        );
         $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
         if (!empty($extra_fields)) {
             foreach($extra_fields as $extra) {
@@ -346,7 +358,6 @@ switch ($action) {
             $columns = array('type', 'firstname', 'lastname', 'title', 'sent_date', 'actions');
         }
         $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);
-
         break;
     case 'get_work_user_list_others':
         if (isset($_GET['type'])  && $_GET['type'] == 'simple') {
@@ -386,7 +397,7 @@ switch ($action) {
             );
         }
         break;
-	case 'get_exercise_results':
+    case 'get_exercise_results':
         $course = api_get_course_info();
         // Used inside get_exam_results_data()
         $documentPath = api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document";
@@ -415,11 +426,11 @@ switch ($action) {
             )
         );
         break;
-     case 'get_timelines':
+    case 'get_timelines':
         $columns = array('headline', 'actions');
 
         if (!in_array($sidx, $columns)) {
-        	$sidx = 'headline';
+            $sidx = 'headline';
         }
         $course_id = api_get_course_int_id();
         $result = Database::select(
@@ -448,7 +459,7 @@ switch ($action) {
         }
         $result     = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
         $new_result = array();
-        foreach($result as $item) {
+        foreach ($result as $item) {
             if ($item['parent_id'] != 0) {
                 continue;
             }
@@ -479,8 +490,8 @@ switch ($action) {
         break;
     case 'get_event_email_template':
         $columns = array('subject', 'event_type_name', 'language_id', 'activated', 'actions');
-        if(!in_array($sidx, $columns)) {
-        	$sidx = 'subject';
+        if (!in_array($sidx, $columns)) {
+            $sidx = 'subject';
         }
         $result     = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
         $new_result = array();
@@ -496,7 +507,7 @@ switch ($action) {
     case 'get_careers':
         $columns = array('name', 'description', 'actions');
         if (!in_array($sidx, $columns)) {
-        	$sidx = 'name';
+            $sidx = 'name';
         }
         $result     = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
         $new_result = array();
@@ -521,7 +532,7 @@ switch ($action) {
         );
 
         $new_result = array();
-        foreach($result as $item) {
+        foreach ($result as $item) {
             if (!$item['status']) {
                 $item['name'] = '<font style="color:#AAA">'.$item['name'].'</font>';
             }
@@ -536,7 +547,7 @@ switch ($action) {
         }
         $result     = Database::select('*', "$obj->table ", array('order' =>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
         $new_result = array();
-        foreach($result as $item) {
+        foreach ($result as $item) {
             $new_result[] = $item;
         }
         $result = $new_result;
@@ -689,7 +700,6 @@ if (in_array($action, $allowed_actions)) {
             $i++;
         }
     }
-
     echo json_encode($response);
 }
 exit;

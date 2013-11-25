@@ -163,3 +163,5 @@ $_configuration['deny_delete_users'] = false;
 // Version settings
 $_configuration['system_version']    = '{NEW_VERSION}';
 $_configuration['system_stable']     = NEW_VERSION_STABLE;
+$_configuration['hide_home_top_when_connected'] = true;
+$_configuration['hide_global_announcements_when_not_connected'] = true;

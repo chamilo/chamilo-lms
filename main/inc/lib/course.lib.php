@@ -2138,15 +2138,16 @@ class CourseManager
     /**
      * create recursively all categories as option of the select passed in parameter.
      *
-     * @param FormValidator $form
+     * @param HTML_QuickForm_Element $element
      * @param string $defaultCode the option value to select by default (used mainly for edition of courses)
      * @param string $parentCode the parent category of the categories added (default=null for root category)
      * @param string $padding the indent param (you shouldn't indicate something here)
+     * @deprecated use the select_ajax solution see admin/course_edit.php
      */
-    public static function select_and_sort_categories($form, $defaultCode = null, $parentCode = null , $padding = null)
+    public static function select_and_sort_categories($element, $defaultCode = null, $parentCode = null , $padding = null)
     {
         require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
-        setCategoriesInForm($form, $defaultCode, $parentCode , $padding);
+        setCategoriesInForm($element, $defaultCode, $parentCode , $padding);
     }
 
     /**
@@ -4211,4 +4212,5 @@ class CourseManager
         $result = Database::query($sql);
         return Database::num_rows($result) > 0;
     }
+
 }

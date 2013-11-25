@@ -14,6 +14,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
 
 $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
 $course_user_table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -180,15 +181,16 @@ if (!empty($coursesInSession)) {
     }
 }
 
-$categories_select = $form->addElement(
-    'select',
-    'category_code',
-    get_lang('CourseFaculty'),
-    array(),
-    array('style'=>'width:350px','id'=>'category_code_id', 'class'=>'chzn-select')
-);
-$categories_select->addOption('-', '');
-CourseManager::select_and_sort_categories($categories_select);
+// Category code
+$url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
+$categoryList = array();
+if (!empty($course['category_code'])) {
+    $data = getCategory($course['category_code']);
+    $categoryList[] = array('id' => $data['code'], 'text' => $data['name']);
+}
+
+$form->addElement('select_ajax', 'category_code', get_lang('CourseFaculty'), null, array('url' => $url, 'defaults' => $categoryList));
+
 
 $form->add_textfield('department_name', get_lang('CourseDepartment'), false, array('size' => '60'));
 $form->applyFilter('department_name', 'html_filter');

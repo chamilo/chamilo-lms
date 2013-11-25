@@ -2071,8 +2071,8 @@ class SessionManager
      * @param bool $updatesession options:
      *  true: if the session exists it will be updated.
      *  false: if session exists a new session will be created adding a counter session1, session2, etc
-     * @param int $user_id
-     * @param $logger
+     * @param int $defaultUserId
+     * @param mixed $logger
      * @param array $extraFields convert a file row to an extra field. Example in CSV file there's a SessionID then it will
      * converted to extra_external_session_id if you set this: array('SessionId' => 'extra_external_session_id')
      * @param string $extraFieldId
@@ -2084,7 +2084,7 @@ class SessionManager
      */
     static function importCSV(
         $file,
-        $updatesession,
+        $updateSession,
         $defaultUserId = null,
         $logger = null,
         $extraFields = array(),
@@ -2183,9 +2183,9 @@ class SessionManager
                     $coach_id = $defaultUserId;
                 }
 
-                if (!$updatesession) {
+                if (!$updateSession) {
                     // Always create a session.
-                    $unique_name = false; // This MUST be initializead.
+                    $unique_name = false;
                     $i = 0;
                     // Change session name, verify that session doesn't exist.
                     $suffix = null;
@@ -2347,7 +2347,7 @@ class SessionManager
                 }
 
                 $courses = explode('|', $enreg['Courses']);
-
+                $courseList = array();
                 foreach ($courses as $course) {
                     $course_code = api_strtoupper(api_substr($course, 0, api_strpos($course, '[')));
 
@@ -2383,6 +2383,7 @@ class SessionManager
                         }
 
                         // Adding coaches to session course user
+
                         if (!empty($course_coaches)) {
                             $savedCoaches = array();
                             // only edit if add_teachers_to_sessions_courses is set.
@@ -2414,8 +2415,28 @@ class SessionManager
                                     }
                                 }
                             }
-                        }
 
+                            // Checking one more time see BT#6449#note-149
+                            $coaches = SessionManager::getCoachesByCourseSession($session_id, $course_code);
+                            if (empty($coaches)) {
+
+                                foreach ($course_coaches as $course_coach) {
+                                    $course_coach = trim($course_coach);
+                                    $coach_id = UserManager::get_user_id_from_username($course_coach);
+                                    if ($coach_id !== false) {
+                                        // Just insert new coaches
+                                        SessionManager::updateCoaches($session_id, $course_code, array($coach_id), false);
+
+                                        if ($debug) {
+                                            $logger->addInfo("Sessions - Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
+                                        }
+                                        $savedCoaches[] = $coach_id;
+                                    } else {
+                                        $error_message .= get_lang('UserDoesNotExist').' : '.$course_coach.$eol;
+                                    }
+                                }
+                            }
+                        }
 
                         // Adding Students, updating relationship "Session - Course - User".
                         foreach ($course_users as $user) {
@@ -2556,7 +2577,7 @@ class SessionManager
 
         $statusConditions = null;
         switch ($status) {
-                // Classic DRH
+            // Classic DRH
             case 'drh':
                 $studentList = UserManager::get_users_followed_by_drh($userId, STUDENT);
                 $studentListId = array();

@@ -81,7 +81,14 @@ function loginWSAuthenticate($username, $password, $wsUrl) {
     // Change to base64 to avoid communication alteration
     $passCrypted = base64_encode($cipheredPass);
     // The call to the webservice will change depending on your definition
-    $client->validateUser($username, $passCrypted, 'chamilo');
+    try {
+        $client->validateUser($username, $passCrypted, 'chamilo');
+    } catch (SoapFault $fault) {
+        if ($fault->faultstring != 'Could not connect to host') {
+            throw fault;
+        }
+        return 0;
+    }
     return $client->validateUserResult;
 }
 

@@ -580,12 +580,12 @@ function browseCoursesInCategory($category_code, $random_value = null)
 /**
  * create recursively all categories as option of the select passed in parameter.
  *
- * @param FormValidator $form
+ * @param HTML_QuickForm_Element $element
  * @param string $defaultCode the option value to select by default (used mainly for edition of courses)
  * @param string $parentCode the parent category of the categories added (default=null for root category)
  * @param string $padding the indent param (you shouldn't indicate something here)
  */
-function setCategoriesInForm($form, $defaultCode = null, $parentCode = null , $padding = null)
+function setCategoriesInForm($element, $defaultCode = null, $parentCode = null, $padding = null)
 {
     $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
     $conditions = null;
@@ -609,9 +609,9 @@ function setCategoriesInForm($form, $defaultCode = null, $parentCode = null , $p
         $params .= ($cat['code'] == $defaultCode) ? ' selected' : '';
         $option = $padding.' '.$cat['name'].' ('.$cat['code'].')';
 
-        $form->addOption($option, $cat['code'], $params);
+        $element->addOption($option, $cat['code'], $params);
         if ($cat['auth_cat_child'] == 'TRUE') {
-            setCategoriesInForm($form, $defaultCode, $cat['code'], $padding.' - ');
+            setCategoriesInForm($element, $defaultCode, $cat['code'], $padding.' - ');
         }
     }
 }
@@ -635,7 +635,54 @@ function getCourseCategoryNotInList($list)
     return Database::store_result($result, 'ASSOC');
 }
 
+/**
+ * @param $keyword
+ * @return array|null
+ */
+function searchCategoryByKeyword($keyword)
+{
+    if (empty($keyword)) {
+        return null;
+    }
 
+    $tableCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
+    $conditions = null;
+    $whereCondition = null;
+    if (isMultipleUrlSupport()) {
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
+        $conditions = " INNER JOIN $table a ON (c.id = a.course_category_id)";
+        $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
+    }
+
+    $sql = "SELECT c.*, c.name as text FROM $tableCategory c $conditions
+            WHERE c.code LIKE '%$keyword%' AND name LIKE '%$keyword%' AND auth_course_child = 'TRUE' $whereCondition ";
+    $result = Database::query($sql);
+    return Database::store_result($result, 'ASSOC');
+}
+
+function searchCategoryById($list)
+{
+    if (empty($list)) {
+        return array();
+    } else {
+        $list = array_map('intval', $list);
+        $list = implode("','", $list);
+    }
+
+    $tableCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
+    $conditions = null;
+    $whereCondition = null;
+    if (isMultipleUrlSupport()) {
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
+        $conditions = " INNER JOIN $table a ON (c.id = a.course_category_id)";
+        $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
+    }
+
+    $sql = "SELECT c.*, c.name as text FROM $tableCategory c $conditions
+            WHERE c.id IN $list $whereCondition";
+    $result = Database::query($sql);
+    return Database::store_result($result, 'ASSOC');
+}
 
 /**
  CREATE TABLE IF NOT EXISTS access_url_rel_course_category (access_url_id int unsigned NOT NULL, course_category_id int unsigned NOT NULL, PRIMARY KEY (access_url_id, course_category_id));

@@ -17,13 +17,13 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
 
 $tool_name = get_lang('AddCourse');
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
 
 /* MAIN CODE */
-
 global $_configuration;
 
 // Get all possible teachers.
@@ -41,7 +41,7 @@ if ($_configuration['multiple_access_urls']) {
 $res = Database::query($sql);
 $teachers = array();
 //$teachers[0] = '-- '.get_lang('NoManager').' --';
-while($obj = Database::fetch_object($res)) {
+while ($obj = Database::fetch_object($res)) {
     $teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
 }
 
@@ -61,17 +61,22 @@ $form->applyFilter('visual_code', 'api_strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
 $form->addRule('visual_code', get_lang('Max'), 'maxlength', CourseManager::MAX_COURSE_LENGTH_CODE);
 
-//$form->addElement('select', 'tutor_id', get_lang('CourseTitular'), $teachers, array('style' => 'width:350px', 'class'=>'chzn-select', 'id'=>'tutor_id'));
-//$form->applyFilter('tutor_id', 'html_filter');
-
 $form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, ' id="course_teachers" class="chzn-select"  style="width:350px" multiple="multiple" ');
 $form->applyFilter('course_teachers', 'html_filter');
 
-$categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories, array('style' => 'width:350px', 'class'=>'chzn-select', 'id'=>'category_code'));
-$categories_select->addOption('-','');
-$form->applyFilter('category_code', 'html_filter');
-//This function fills the category_code select ...
-CourseManager::select_and_sort_categories($categories_select);
+// Category code
+$url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
+
+$form->addElement(
+    'select_ajax',
+    'category_code',
+    get_lang('CourseFaculty'),
+    null,
+    array(
+        'url' => $url
+    //    'formatResult' => 'function(item) { return item.name + "'" +item.code; }'
+    )
+);
 
 // Course department
 $form->add_textfield('department_name', get_lang('CourseDepartment'), false, array ('size' => '60'));
@@ -128,8 +133,6 @@ if (isset($default_course_visibility)) {
 }
 $values['subscribe']        = 1;
 $values['unsubscribe']      = 0;
-reset($teachers);
-//$values['course_teachers'] = key($teachers);
 
 $form->setDefaults($values);
 

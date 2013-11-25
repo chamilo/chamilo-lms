@@ -23,7 +23,7 @@ class SessionManager
     /**
     * Fetches a session from the database
     * @param   int     Session ID
-    * @return  array   Session details (id, id_coach, name, nbr_courses, nbr_users, nbr_classes, date_start, date_end, nb_days_access_before_beginning,nb_days_access_after_end, session_admin_id)
+    * @return  array   Session details
     */
     public static function fetch($id)
     {
@@ -57,11 +57,28 @@ class SessionManager
     * @param  integer     Visibility after end date (0 = read-only, 1 = invisible, 2 = accessible)
     * @param  string      Start limit = true if the start date has to be considered
     * @param  string      End limit = true if the end date has to be considered
+    * @param  string $fix_name
     * @todo use an array to replace all this parameters or use the model.lib.php ...
     * @return mixed       Session ID on success, error message otherwise
     **/
-    public static function create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after, $nolimit,$coach_username, $id_session_category,$id_visibility, $start_limit = true, $end_limit = true, $fix_name = false)
-    {
+    public static function create_session(
+        $sname,
+        $syear_start,
+        $smonth_start,
+        $sday_start,
+        $syear_end,
+        $smonth_end,
+        $sday_end,
+        $snb_days_acess_before,
+        $snb_days_acess_after,
+        $nolimit,
+        $coach_username,
+        $id_session_category,
+        $id_visibility,
+        $start_limit = true,
+        $end_limit = true,
+        $fix_name = false
+    ) {
 		global $_configuration;
 
 		//Check portal limits
@@ -76,19 +93,19 @@ class SessionManager
             }
         }
 
-		$name                 = Database::escape_string(trim($sname));
-		$year_start           = intval($syear_start);
-		$month_start          = intval($smonth_start);
-		$day_start            = intval($sday_start);
-		$year_end             = intval($syear_end);
-		$month_end            = intval($smonth_end);
-		$day_end              = intval($sday_end);
-		$nb_days_acess_before = intval($snb_days_acess_before);
-		$nb_days_acess_after  = intval($snb_days_acess_after);
-		$id_session_category  = intval($id_session_category);
-		$id_visibility        = intval($id_visibility);
-		$tbl_user		      = Database::get_main_table(TABLE_MAIN_USER);
-		$tbl_session	      = Database::get_main_table(TABLE_MAIN_SESSION);
+        $name                 = Database::escape_string(trim($sname));
+        $year_start           = intval($syear_start);
+        $month_start          = intval($smonth_start);
+        $day_start            = intval($sday_start);
+        $year_end             = intval($syear_end);
+        $month_end            = intval($smonth_end);
+        $day_end              = intval($sday_end);
+        $nb_days_acess_before = intval($snb_days_acess_before);
+        $nb_days_acess_after  = intval($snb_days_acess_after);
+        $id_session_category  = intval($id_session_category);
+        $id_visibility        = intval($id_visibility);
+        $tbl_user		      = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_session	      = Database::get_main_table(TABLE_MAIN_SESSION);
 
 		if (is_int($coach_username)) {
 			$id_coach = $coach_username;
@@ -200,7 +217,7 @@ class SessionManager
         $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_category   = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
         $tbl_user               = Database::get_main_table(TABLE_MAIN_USER);
-        $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $tbl_session_rel_user 	= Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
         $where = 'WHERE 1=1 ';
@@ -492,6 +509,11 @@ class SessionManager
 	 * @param 	integer		nolimit
 	 * @param 	integer		id_coach
 	 * @param 	integer		id_session_category
+     * @param   int $id_visibility
+     * @param bool
+     * @param bool
+     * @param string $description
+     * @param int  $showDescription
 	 * @return $id;
 	 * The parameter id is a primary key
 	**/
@@ -514,8 +536,7 @@ class SessionManager
         $end_limit = true,
         $description = null,
         $showDescription = null
-    )
-    {
+    ) {
 		$name = trim(stripslashes($name));
 		$year_start=intval($year_start);
 		$month_start=intval($month_start);
@@ -929,8 +950,9 @@ class SessionManager
      * @param	bool	Whether to unsubscribe existing users (true, default) or not (false)
      * @return	void	Nothing, or false on error
      **/
-     public static function add_courses_to_session ($id_session, $course_list, $empty_courses = true) {
-     	// security checks
+     public static function add_courses_to_session($id_session, $course_list, $empty_courses = true)
+     {
+     	// Security checks
      	if ($id_session!= strval(intval($id_session))) {
             return false;
         }
@@ -1070,15 +1092,15 @@ class SessionManager
 				$order = $row[0]+1;
 			}
 
-			$sql = "INSERT INTO $t_sf
-						                SET field_type = '$fieldtype',
-						                field_variable = '$fieldvarname',
-						                field_display_text = '$fieldtitle',
-						                field_order = '$order',
-						                tms = FROM_UNIXTIME($time)";
-			$result = Database::query($sql);
+			$sql = "INSERT INTO $t_sf SET
+                    field_type = '$fieldtype',
+                    field_variable = '$fieldvarname',
+                    field_display_text = '$fieldtitle',
+                    field_order = '$order',
+                    tms = FROM_UNIXTIME($time)";
+			Database::query($sql);
 
-			$field_id=Database::insert_id();
+			$field_id = Database::insert_id();
 		}
 		return $field_id;
 	}
@@ -1325,7 +1347,7 @@ class SessionManager
         Database::query($sql);
 
 		$sql = "SELECT id FROM $tbl_session WHERE session_category_id IN (".$id_checked.")";
-		$result = @Database::query($sql);
+		$result = Database::query($sql);
 		while ($rows = Database::fetch_array($result)) {
 			$session_id = $rows['id'];
 			if ($delete_session) {
@@ -1337,8 +1359,7 @@ class SessionManager
 			}
 		}
 		$sql = "DELETE FROM $tbl_session_category WHERE id IN (".$id_checked.")";
-		$rs = Database::query($sql);
-		$result = Database::affected_rows();
+		Database::query($sql);
 
 		// Add event to system log
 		$user_id = api_get_user_id();
@@ -1540,6 +1561,7 @@ class SessionManager
     * Subscribes sessions to human resource manager (Dashboard feature)
     * @param	int 		Human Resource Manager id
     * @param	array 		Sessions id
+    * @return int
     **/
 	public static function suscribe_sessions_to_hr_manager($hr_manager_id, $sessions_list)
     {
@@ -2047,17 +2069,17 @@ class SessionManager
     /**
      * @param string $file
      * @param bool $updatesession options:
-     * true: if the session exists it will be updated
-     * false: if session exists a new session will be created adding a counter session1, session2, etc
+     *  true: if the session exists it will be updated.
+     *  false: if session exists a new session will be created adding a counter session1, session2, etc
      * @param int $user_id
      * @param $logger
-     * @param array convert a file row to an extra field. Example in CSV file there's a SessionID then it will
+     * @param array $extraFields convert a file row to an extra field. Example in CSV file there's a SessionID then it will
      * converted to extra_external_session_id if you set this: array('SessionId' => 'extra_external_session_id')
-     * @param array extra fields
-     * @param string extra field id
+     * @param string $extraFieldId
      * @param int $daysCoachAccessBeforeBeginning
      * @param int $daysCoachAccessAfterBeginning
      * @param int $sessionVisibility
+     * @param array $fieldsToAvoidUpdate
      * @return array
      */
     static function importCSV(
@@ -2238,7 +2260,6 @@ class SessionManager
 
                         // We get the last insert id.
                         $my_session_result = SessionManager::get_session_by_name($enreg['SessionName']);
-
                         $session_id = $my_session_result['id'];
 
                         if ($debug) {
@@ -2257,7 +2278,7 @@ class SessionManager
 
                         // Updating the session.
                         $params = array(
-                            'id_coach' =>  $coach_id,
+                            'id_coach' => $coach_id,
                             'date_start' => $date_start,
                             'date_end' => $date_end,
                             'visibility' => $visibility,
@@ -2290,6 +2311,7 @@ class SessionManager
                             }
                         }
 
+                        // Delete session-user relation only for students
                         $sql = "DELETE FROM $tbl_session_user
                                 WHERE id_session = '$session_id' AND relation_type <> ".SESSION_RELATION_TYPE_RRHH;
                         Database::query($sql);
@@ -2297,7 +2319,7 @@ class SessionManager
                         $sql = "DELETE FROM $tbl_session_course WHERE id_session = '$session_id'";
                         Database::query($sql);
 
-                        // Delete session course user relation ships *only* for students
+                        // Delete session-course-user relation ships *only* for students
                         $sql = "DELETE FROM $tbl_session_course_user WHERE id_session = '$session_id' AND status <> 2";
                         Database::query($sql);
                     }
@@ -2306,7 +2328,7 @@ class SessionManager
 
                 $users = explode('|', $enreg['Users']);
 
-                // Adding the relationship "Session - User".
+                // Adding the relationship "Session - User" for students
                 if (is_array($users)) {
                     foreach ($users as $user) {
                         $user_id = UserManager::get_user_id_from_username($user);
@@ -2393,6 +2415,7 @@ class SessionManager
                                 }
                             }
                         }
+
 
                         // Adding Students, updating relationship "Session - Course - User".
                         foreach ($course_users as $user) {

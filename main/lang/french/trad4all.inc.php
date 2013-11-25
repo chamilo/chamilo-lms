@@ -1433,4 +1433,5 @@ $DataTableSearch = "Recherche";
 $HideColumn = "Cacher la colonne";
 $DisplayColumn = "Montrer la colonne";
 $LegalAgreementAccepted = "Conditions légales acceptées";
+$SelectAnOption = "Sélectionner une option";
 ?>

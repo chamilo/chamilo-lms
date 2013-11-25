@@ -16,8 +16,8 @@ require_once dirname(__FILE__) . '/functions.inc.php';
 // call the login checker (defined below)
 $isValid = loginWSAuthenticate($login, $password, $wsUrl);
 
-// if the authentication was successfull, proceed
-if ($isValid !== 0) {
+// if the authentication was successful, proceed
+if ($isValid === 1) {
     //error_log('WS authentication worked');
     $chamiloUser = UserManager::get_user_info($login);
     $loginFailed = false;
@@ -82,14 +82,18 @@ function loginWSAuthenticate($username, $password, $wsUrl) {
     $passCrypted = base64_encode($cipheredPass);
     // The call to the webservice will change depending on your definition
     try {
-        $client->validateUser($username, $passCrypted, 'chamilo');
+        $response = $client->validateUser(array('user' => $username, 'pass' => $passCrypted, 'system' => 'chamilo'));
     } catch (SoapFault $fault) {
+        error_log('Caught something');
         if ($fault->faultstring != 'Could not connect to host') {
-            throw fault;
+            error_log('Not a connection problem');
+            throw $fault;
+        } else {
+            error_log('Could not connect to WS host');
         }
         return 0;
     }
-    return $client->validateUserResult;
+    return $response->validateUserResult;
 }
 
 

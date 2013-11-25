@@ -26,8 +26,9 @@ class HTML_QuickForm_Select_Ajax extends HTML_QuickForm_select
         $html = api_get_js('select2/select2.js');
 
         $iso = api_get_language_isocode(api_get_interface_language());
-        if (file_exists(api_get_path(LIBRARY_PATH).'javascript/select2/select2_locale_'.$iso.'.js')) {
-            $html .= api_get_js('select2/select2_locale_es.js');
+        $localeFile = 'select2_locale_'.$iso.'.js';
+        if (file_exists(api_get_path(LIBRARY_PATH).'javascript/select2/'.$localeFile)) {
+            $html .= api_get_js('select2/'.$localeFile);
         }
         $html .= api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/select2/select2.css');
 

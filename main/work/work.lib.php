@@ -2112,7 +2112,6 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
         if ($is_allowed_to_edit) {
             $extra_conditions .= ' AND work.active IN (0, 1) ';
         } else {
-
             if (isset($course_info['show_score']) &&  $course_info['show_score'] == 1) {
                 $extra_conditions .= " AND (u.user_id = ".api_get_user_id()." AND work.active IN (0, 1) OR work.active = 1) ";
             } else {
@@ -3823,4 +3822,3 @@ function getWorkUserList($course_code, $session_id)
     }
     return $userList;
 }
-

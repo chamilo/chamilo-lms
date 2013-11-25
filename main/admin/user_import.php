@@ -161,7 +161,7 @@ function save_data($users) {
                 $className = explode('|', trim($user['ClassName']));
                 foreach ($className as $class) {
                     $classId = $usergroup->get_id_by_name($class);
-                    $usergroup->add_user($user_id, $classId);
+                    $usergroup->addUser($user_id, $classId);
                 }
                 
             }

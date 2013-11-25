@@ -781,7 +781,7 @@ class UserGroup extends Model
 	 * @param int $user_id The user id
 	 * @param int $class_id The class id
 	 */
-	public function add_user($userId, $classId)
+	public function addUser($userId, $classId)
   {   
       $table_rel_user = Database::get_main_table(TABLE_USERGROUP_REL_USER);
       $userId  = intval($userId);

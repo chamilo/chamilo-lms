@@ -216,5 +216,9 @@ function parse_file($exercisePath, $file, $questionFile) {
 			$exercise_info['question'][$question_index]['title'] = $info;
 		}
 	}
+	$total_questions = count($exercise_info['question']);
+	foreach  ($exercise_info['question'] as $key => $question) {
+		$exercise_info['question'][$key]['weighting'][current(array_keys($exercise_info['question'][$key]['weighting']))] = 20 / $total_questions;
+	}
 	return true;
 }

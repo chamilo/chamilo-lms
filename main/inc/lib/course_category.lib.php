@@ -654,8 +654,10 @@ function searchCategoryByKeyword($keyword)
         $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
     }
 
+    $keyword = Database::escape_string($keyword);
+
     $sql = "SELECT c.*, c.name as text FROM $tableCategory c $conditions
-            WHERE c.code LIKE '%$keyword%' AND name LIKE '%$keyword%' AND auth_course_child = 'TRUE' $whereCondition ";
+            WHERE (BINARY c.code LIKE '%$keyword%' or BINARY name LIKE '%$keyword%') AND auth_course_child = 'TRUE' $whereCondition ";
     $result = Database::query($sql);
     return Database::store_result($result, 'ASSOC');
 }

@@ -34,10 +34,18 @@ require_once 'survey.lib.php';
 if (!empty($_user)) {
     $interbreadcrumb[] = array('url' => 'survey_list.php?cidReq='.Security::remove_XSS($_GET['course']), 'name' => get_lang('SurveyList'));
 }
-if (($_GET['invitationcode'] == 'auto' && isset($_GET['scode'])) && ((!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)))) {
-    // anonymous users not allowed
-    api_not_allowed();
-}
+
+// Database table definitions
+$table_survey = Database :: get_course_table(TABLE_SURVEY);
+$table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
+$table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
+$table_survey_question_option = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+$table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
+
+$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+
+// We initialize test as private (not anonymous):
+$isAnonymous = false;
 
 // getting all the course information
 if (isset($_GET['course'])) {
@@ -51,19 +59,24 @@ if (empty($course_info)) {
 }
 
 $course_id = $course_info['real_id'];
+$scode = isset($_GET['scode'])?Database::escape_string($_GET['scode']):''; 
+
+if ($scode != "") {
+	// Firstly we check if this survey is ready for anonymous use:
+	$sqlAnonymous = "SELECT anonymous FROM $table_survey WHERE c_id = $course_id AND code ='".$scode."'";
+	$resultAnonymous = Database::query($sqlAnonymous);
+	$rowAnonymous = Database::fetch_array($resultAnonymous, 'ASSOC');
+	// If is anonymous and is not allowed to take the survey to anonymous users, forbid access:
+	if (!isset($rowAnonymous['anonymous']) || ($rowAnonymous['anonymous'] == 0 && api_is_anonymous($_user['user_id'], true)) || count($rowAnonymous) == 0) {
+	    api_not_allowed();
+	} 
+	// If is anonymous and it is allowed to take the survey as anonymous, mark survey as anonymous:
+	else if (api_is_anonymous($_user['user_id'], true))	$isAnonymous = true;
+	
+} 
 
 // Header
 Display :: display_header(get_lang('ToolSurvey'));
-
-// Database table definitions
-$table_survey = Database :: get_course_table(TABLE_SURVEY);
-$table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
-$table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
-$table_survey_question_option = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-$table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
-
-$table_user = Database :: get_main_table(TABLE_MAIN_USER);
-
 
 // First we check if the needed parameters are present
 if ((!isset($_GET['course']) || !isset($_GET['invitationcode'])) && !isset($_GET['user_id'])) {
@@ -77,9 +90,14 @@ $invitationcode = $_GET['invitationcode'];
 // Start auto-invitation feature FS#3403 (all-users-can-do-the-survey-URL handling)
 if ($invitationcode == 'auto' && isset($_GET['scode'])) {
     $userid = $_user['user_id'];
-
-    $scode = Database::escape_string($_GET['scode']); // Survey_code of the survey
-    $autoInvitationcode = "auto-$userid-$scode"; // New invitation code from userid
+    $scode = Database::escape_string($_GET['scode']); 	// Survey_code of the survey
+	if ($isAnonymous) {
+	    $autoInvitationcode = "auto-ANONY_".md5(time())."-$scode";
+    } else {
+        // New invitation code from userid
+        $autoInvitationcode = "auto-$userid-$scode"; 				
+    }
+	
     // The survey code must exist in this course, or the URL is invalid
     $sql = "SELECT * FROM $table_survey WHERE c_id = $course_id AND code ='".$scode."'";
     $result = Database::query($sql);
@@ -120,6 +138,8 @@ if ($survey_invitation['answered'] == 1 && !isset($_GET['user_id'])) {
     exit;
 }
 
+
+
 // Checking if there is another survey with this code.
 // If this is the case there will be a language choice
 $sql = "SELECT * FROM $table_survey WHERE c_id = $course_id AND code='".Database::escape_string($survey_invitation['survey_code'])."'";
@@ -159,9 +179,7 @@ if (count($_POST) > 0) {
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $types[$row['question_id']] = $row['type'];
         }
-        if ($survey_data['anonymous'] == 0) {
-            $survey_invitation['user'] = api_get_user_id();
-        }
+
         // Looping through all the post values
         foreach ($_POST as $key => & $value) {
             // If the post value key contains the string 'question' then it is an answer on a question
@@ -221,9 +239,7 @@ if (count($_POST) > 0) {
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $types[$row['question_id']] = $row['type'];
         }
-        if ($survey_data['anonymous'] == 0) {
-            $survey_invitation['user'] = api_get_user_id();
-        }
+
         // Looping through all the post values
         foreach ($_POST as $key => & $value) {
             // If the post value key contains the string 'question' then it is an answer to a question

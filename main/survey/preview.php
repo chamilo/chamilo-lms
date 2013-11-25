@@ -19,7 +19,7 @@ require '../inc/global.inc.php';
 require_once 'survey.lib.php';
 
 $this_section = SECTION_COURSES;
-
+api_protect_admin_script();
 // Database table definitions
 $table_survey 					= Database :: get_course_table(TABLE_SURVEY);
 $table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);

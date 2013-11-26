@@ -2448,7 +2448,7 @@ function draw_date_picker($prefix, $default = '')
 }
 
 /**
- * @param $prefix
+ * @param string $prefix
  * @param array of values
  * @return string
  *
@@ -2464,7 +2464,7 @@ function get_date_from_select($prefix, $array = array())
 }
 
 /**
- * Check if a user is the author of the item
+ * Check if a user is the author of a work document.
  * @param int $itemId
  * @param int $userId
  * @param int $courseId
@@ -2487,6 +2487,7 @@ function user_is_author($itemId, $userId = null, $courseId = null, $sessionId = 
     if ($is_allowed_to_edit) {
         $isAuthor = true;
     } else {
+
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         }
@@ -2499,15 +2500,16 @@ function user_is_author($itemId, $userId = null, $courseId = null, $sessionId = 
             $isAuthor = true;
         }
 
-        /*$workData = get_work_data_by_id($itemId);
+        $workData = get_work_data_by_id($itemId);
         if ($workData['user_id'] == $userId) {
             $isAuthor = true;
-        }*/
+        }
     }
 
     if (!$isAuthor) {
         return false;
     }
+
     return $isAuthor;
 }
 

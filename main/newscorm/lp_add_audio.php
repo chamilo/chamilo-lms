@@ -16,7 +16,6 @@ api_protect_course_script();
 require_once 'learnpath_functions.inc.php';
 require_once 'resourcelinker.inc.php';
 
-
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 $isStudentView  = (int) $_REQUEST['isStudentView'];
@@ -81,11 +80,7 @@ if (empty($lp_item_id)) {
 $lp_item = new learnpathItem($lp_item_id);
 $tpl = new Template($tool_name);
 $form = new FormValidator('add_audio', 'post', api_get_self().'?action=add_audio&id='.$lp_item_id, null, array('enctype' => 'multipart/form-data'));
-
-
-
 $suredel = trim(get_lang('AreYouSureToDelete'));
-
 
 $file = null;
 $lpPathInfo = $_SESSION['oLP']->generate_lp_folder(api_get_course_info());
@@ -105,7 +100,6 @@ $page .= $_SESSION['oLP']->return_new_tree(null, true);
 $page .= '</div>';
 
 $page .= '<div id="doc_form" class="span8">';
-
 
 $form->addElement('header', get_lang('RecordYourVoice'));
 
@@ -131,17 +125,21 @@ if (!empty($file)) {
 $form->addElement('button', 'submit', get_lang('Edit'));
 
 $course_info = api_get_course_info();
-$document_tree = DocumentManager::get_document_preview($course_info, null, null, 0, false, '/audio', 'lp_controller.php?action=add_audio&id='.$lp_item_id);
+$document_tree = DocumentManager::get_document_preview(
+    $course_info,
+    null,
+    null,
+    0,
+    false,
+    '/audio',
+    'lp_controller.php?action=add_audio&id='.$lp_item_id
+);
 
 $page .= $form->return_form();
-
 $page .= '<legend>'.get_lang('SelectAnAudioFileFromDocuments').'</legend>';
 $page .= $document_tree;
-
 $page .= '</div>';
-
 $page .= '</div>';
-
 
 $tpl->assign('content', $page);
 $content = $tpl->fetch('default/learnpath/lp_upload_audio.tpl');

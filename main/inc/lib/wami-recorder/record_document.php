@@ -39,7 +39,6 @@ if (empty($content)) {
     exit;
 }
 
-//security extension
 $ext = explode('.', $waminame);
 $ext = strtolower($ext[sizeof($ext) - 1]);
 

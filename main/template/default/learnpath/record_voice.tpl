@@ -1,5 +1,4 @@
 <script type="text/javascript" src="{{ _p.web_lib }}javascript/rtc/RecordRTC.js"></script>
-
 <script type="text/javascript" src="{{ _p.web_lib }}swfobject/swfobject.js"></script>
 <script type="text/javascript" src="{{ _p.web_lib }}wami-recorder/recorder.js"></script>
 <script type="text/javascript" src="{{ _p.web_lib }}wami-recorder/gui.js"></script>
@@ -42,7 +41,7 @@ function setupGUI() {
         buttonUrl : "{{ _p.web_lib }}wami-recorder/buttons.png",
         buttonNoUrl: "{{ _p.web_img }}blank.gif",
         onRecordStart : function() {
-            //console.log('Record starts');
+
             $('#start-recording').show();
         },
         onRecordFinish: function() {
@@ -54,14 +53,14 @@ function setupGUI() {
         singleButton : true
     });
 
-    gui.setPlayEnabled(false);
+    gui.setPlayEnabled(true);
 }
 </script>
 <script>
 
     $(document).ready(function() {
         var isChrome =  navigator.webkitGetUserMedia;
-        //isChrome = false;
+        isChrome = false;
         if (isChrome) {
             $('#rtc').show();
             $('#wami').hide();

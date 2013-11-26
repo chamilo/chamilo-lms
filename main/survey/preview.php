@@ -28,7 +28,26 @@ $table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 
 $course_id = api_get_course_int_id();
+<<<<<<< 6829.new
 
+=======
+$userId = api_get_user_id();
+$surveyId = Security::remove_XSS($_GET['survey_id']);
+$userInvited = 0;
+
+//query to ask if logged user is allowed to see the preview (if he is invited of he is a teacher)
+$sql = "SELECT survey_invitation.user FROM $table_survey_invitation survey_invitation LEFT JOIN $table_survey survey
+       ON survey_invitation.survey_code = survey.code WHERE survey_invitation.c_id = $course_id AND survey.survey_id = $surveyId AND survey_invitation.user = $userId";
+$result = Database::query($sql);
+if (Database::num_rows($result) > 0) {
+    $userInvited = 1;    
+}
+if($userInvited == 0) {
+    if(!api_is_allowed_to_edit()) {    
+        api_not_allowed();
+    }                
+}
+>>>>>>> local
 // We exit here if ther is no valid $_GET parameter
 if (!isset($_GET['survey_id']) || !is_numeric($_GET['survey_id'])){
 	Display :: display_header(get_lang('SurveyPreview'));

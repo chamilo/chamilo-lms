@@ -91,8 +91,8 @@ $invitationcode = $_GET['invitationcode'];
 if ($invitationcode == 'auto' && isset($_GET['scode'])) {
     $userid = $_user['user_id'];
     $surveyCode = Database::escape_string($_GET['scode']); 	// Survey_code of the survey
-	if ($isAnonymous) {
-	    $autoInvitationcode = "auto-ANONY_".md5(time())."-$surveyCode";
+	  if ($isAnonymous) {
+	      $autoInvitationcode = "auto-ANONY_".md5(time())."-$surveyCode";
     } else {
         // New invitation code from userid
         $autoInvitationcode = "auto-$userid-$surveyCode"; 				

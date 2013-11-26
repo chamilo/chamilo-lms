@@ -36,12 +36,11 @@ function setupGUI() {
     var uniq = 'rec_' + (new Date()).getTime() + ".wav";
     var gui = new Wami.GUI({
         id : "wami-recorder",
+        singleButton : true,
         recordUrl : "{{ _p.web_lib }}wami-recorder/record_document.php?lp_item_id={{ lp_item_id }}&waminame="+uniq+"&wamidir={{ lp_dir }}&wamiuserid={{ _u.user_id }}",
-        //playUrl : "https://wami-recorder.appspot.com/audio",
         buttonUrl : "{{ _p.web_lib }}wami-recorder/buttons.png",
         buttonNoUrl: "{{ _p.web_img }}blank.gif",
         onRecordStart : function() {
-
             $('#start-recording').show();
         },
         onRecordFinish: function() {
@@ -49,8 +48,7 @@ function setupGUI() {
             window.location.reload();
         },
         onError : function() {
-        },
-        singleButton : true
+        }
     });
 
     gui.setPlayEnabled(true);
@@ -69,6 +67,7 @@ function setupGUI() {
             $('#wami').show();
 
             var recordWami = $('#record-wami');
+
             recordWami.on('click', function() {
                 setupRecorder();
                 return false;

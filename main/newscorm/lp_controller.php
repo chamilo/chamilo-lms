@@ -443,14 +443,18 @@ switch ($action) {
             if (isset($_REQUEST['id'])) {
                 $lp_item_obj = new learnpathItem($_REQUEST['id']);
 
-                //Remove audio
-                if (isset($_POST['delete_file']) && $_POST['delete_file'] == 1) {
-                     $lp_item_obj->remove_audio();
+                // Remove audio
+                if (isset($_GET['delete_file']) && $_GET['delete_file'] == 1) {
+                    $lp_item_obj->remove_audio();
+
+                    $url = api_get_self().'?action=add_audio&lp_id='.intval($_SESSION['oLP']->lp_id).'&id='.$lp_item_obj->get_id().'&'.api_get_cidreq();
+                    header('Location: '.$url);
+                    exit;
                 }
 
-                //Upload audio
+                // Upload audio
                 if (isset($_FILES['file']) && !empty($_FILES['file'])) {
-                    //Updating the lp.modified_on
+                    // Updating the lp.modified_on
                     $_SESSION['oLP']->set_modified_on();
                     $lp_item_obj->add_audio();
                 }

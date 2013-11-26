@@ -96,6 +96,7 @@ $page = $_SESSION['oLP']->build_action_menu(true);
 $page .= '<div class="row-fluid" style="overflow:hidden">';
 $page .= '<div id="lp_sidebar" class="span4">';
 $page .= $_SESSION['oLP']->return_new_tree(null, true);
+
 // Show the template list.
 $page .= '</div>';
 
@@ -113,7 +114,8 @@ $form->addElement('header', get_lang('UplUpload'));
 $form->addElement('html', $lp_item->get_title());
 $form->addElement('file', 'file', get_lang('AudioFile'), 'style="width: 250px"');
 if (!empty($file)) {
-    $form->addElement('checkbox', 'delete_file', null, get_lang('RemoveAudio'));
+    $url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?lp_id='.$_SESSION['oLP']->get_id().'&action=add_audio&id='.$lp_item_id.'&delete_file=1&'.api_get_cidreq();
+    $form->addElement('label', null, Display::url(get_lang('RemoveAudio'), $url, array('class' => 'btn btn-danger')));
 }
 
 $form->addElement('hidden', 'id', $lp_item_id);

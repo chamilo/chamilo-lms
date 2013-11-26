@@ -59,19 +59,19 @@ if (empty($course_info)) {
 }
 
 $course_id = $course_info['real_id'];
-$scode = isset($_GET['scode'])?Database::escape_string($_GET['scode']):''; 
+$surveyCode = isset($_GET['scode']) ? Database::escape_string($_GET['scode']) : ''; 
 
-if ($scode != "") {
-	// Firstly we check if this survey is ready for anonymous use:
-	$sqlAnonymous = "SELECT anonymous FROM $table_survey WHERE c_id = $course_id AND code ='".$scode."'";
-	$resultAnonymous = Database::query($sqlAnonymous);
-	$rowAnonymous = Database::fetch_array($resultAnonymous, 'ASSOC');
-	// If is anonymous and is not allowed to take the survey to anonymous users, forbid access:
-	if (!isset($rowAnonymous['anonymous']) || ($rowAnonymous['anonymous'] == 0 && api_is_anonymous($_user['user_id'], true)) || count($rowAnonymous) == 0) {
-	    api_not_allowed();
-	} 
-	// If is anonymous and it is allowed to take the survey as anonymous, mark survey as anonymous:
-	else if (api_is_anonymous($_user['user_id'], true))	$isAnonymous = true;
+if ($surveyCode != "") {
+    // Firstly we check if this survey is ready for anonymous use:
+    $sqlAnonymous = "SELECT anonymous FROM $table_survey WHERE c_id = $course_id AND code ='".$surveyCode."'";
+    $resultAnonymous = Database::query($sqlAnonymous);
+    $rowAnonymous = Database::fetch_array($resultAnonymous, 'ASSOC');
+    // If is anonymous and is not allowed to take the survey to anonymous users, forbid access:
+    if (!isset($rowAnonymous['anonymous']) || ($rowAnonymous['anonymous'] == 0 && api_is_anonymous($_user['user_id'], true)) || count($rowAnonymous) == 0) {
+        api_not_allowed();
+} 
+// If is anonymous and it is allowed to take the survey as anonymous, mark survey as anonymous:
+else if (api_is_anonymous($_user['user_id'], true))	$isAnonymous = true;
 	
 } 
 
@@ -90,16 +90,16 @@ $invitationcode = $_GET['invitationcode'];
 // Start auto-invitation feature FS#3403 (all-users-can-do-the-survey-URL handling)
 if ($invitationcode == 'auto' && isset($_GET['scode'])) {
     $userid = $_user['user_id'];
-    $scode = Database::escape_string($_GET['scode']); 	// Survey_code of the survey
+    $surveyCode = Database::escape_string($_GET['scode']); 	// Survey_code of the survey
 	if ($isAnonymous) {
-	    $autoInvitationcode = "auto-ANONY_".md5(time())."-$scode";
+	    $autoInvitationcode = "auto-ANONY_".md5(time())."-$surveyCode";
     } else {
         // New invitation code from userid
-        $autoInvitationcode = "auto-$userid-$scode"; 				
+        $autoInvitationcode = "auto-$userid-$surveyCode"; 				
     }
 	
     // The survey code must exist in this course, or the URL is invalid
-    $sql = "SELECT * FROM $table_survey WHERE c_id = $course_id AND code ='".$scode."'";
+    $sql = "SELECT * FROM $table_survey WHERE c_id = $course_id AND code = '".$surveyCode."'";
     $result = Database::query($sql);
     if (Database :: num_rows($result) > 0) { // Ok
         // Check availability
@@ -111,7 +111,7 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])) {
         $result = Database::query($sql);
         if (Database :: num_rows($result) == 0) { // Ok
             $sql = "INSERT INTO $table_survey_invitation (c_id, survey_code,user, invitation_code, invitation_date) ";
-            $sql .= " VALUES ($course_id, \"$scode\", \"$userid\", \"$autoInvitationcode\", now())";
+            $sql .= " VALUES ($course_id, \"$surveyCode\", \"$userid\", \"$autoInvitationcode\", now())";
             Database::query($sql);
         }
         // From here we use the new invitationcode auto-userid-surveycode string

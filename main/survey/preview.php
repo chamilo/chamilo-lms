@@ -19,18 +19,16 @@ require '../inc/global.inc.php';
 require_once 'survey.lib.php';
 
 $this_section = SECTION_COURSES;
-api_protect_admin_script();
+
 // Database table definitions
 $table_survey 					= Database :: get_course_table(TABLE_SURVEY);
 $table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 $table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 $table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
+$table_survey_invitation        = Database :: get_course_table(TABLE_SURVEY_INVITATION);
 
 $course_id = api_get_course_int_id();
-<<<<<<< 6829.new
-
-=======
 $userId = api_get_user_id();
 $surveyId = Security::remove_XSS($_GET['survey_id']);
 $userInvited = 0;
@@ -47,7 +45,6 @@ if($userInvited == 0) {
         api_not_allowed();
     }                
 }
->>>>>>> local
 // We exit here if ther is no valid $_GET parameter
 if (!isset($_GET['survey_id']) || !is_numeric($_GET['survey_id'])){
 	Display :: display_header(get_lang('SurveyPreview'));

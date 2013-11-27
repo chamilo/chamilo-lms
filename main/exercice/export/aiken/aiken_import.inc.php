@@ -120,7 +120,7 @@ function import_exercise($file) {
         } // else ignore file
     }
     if (!$file_found) {
-        Display :: display_error_message(get_lang('No TXT file found in the zip'));        
+        Display :: display_error_message(get_lang('No TXT file found in the zip'));
         return false;
     }
     if ($result == false ) {        
@@ -216,7 +216,6 @@ function parse_file($exercisePath, $file, $questionFile) {
         } elseif (preg_match('/^ANSWER:\s?([A-Z])\s?/', $info, $matches)) {
             //the correct answers
             $correct_answer_index = array_search($matches[1], $answers_array);
-            //error_log('Correct answer is '.$correct_answer_index);
             $exercise_info['question'][$question_index]['correct_answers'][] = $correct_answer_index + 1;
             //weight for correct answer
             $exercise_info['question'][$question_index]['weighting'][$correct_answer_index] = 1;

@@ -1,14 +1,11 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
- * @copyright (c) 2001-2006 Universite catholique de Louvain (UCL)
- *
- * @license http://www.gnu.org/copyleft/gpl.html (GPL) GENERAL PUBLIC LICENSE
- *
- * @package chamilo.exercise
- *
+ * Library for the import of Aiken format
  * @author claro team <cvs@claroline.net>
  * @author Guillaume Lederer <guillaume@claroline.net>
  * @author César Perales <cesar.perales@gmail.com> Parse function for Aiken format
+ * @package chamilo.exercise
  */
 /**
  * Security check
@@ -17,9 +14,12 @@ if (count(get_included_files()) == 1)
     die('---');
 
 /**
- * function to create a temporary directory (SAME AS IN MODULE ADMIN)
+ * Creates a temporary directory
+ * @param $dir
+ * @param string $prefix
+ * @param int $mode
+ * @return string
  */
-
 function tempdir($dir, $prefix = 'tmp', $mode = 0777) {
     if (substr($dir, -1) != '/')
         $dir .= '/';
@@ -32,9 +32,11 @@ function tempdir($dir, $prefix = 'tmp', $mode = 0777) {
 }
 
 /**
- * @return the path of the temporary directory where the exercise was uploaded and unzipped
+ * Gets the uploaded file (from $_FILES) and unzip it to the given directory
+ * @param string The directory where to do the work
+ * @param string The path of the temporary directory where the exercise was uploaded and unzipped
+ * @return bool True on success, false on failure
  */
-
 function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath) {
     global $_course, $_user;
     //Check if the file is valid (not to big and exists)
@@ -53,11 +55,9 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath) {
     }
 }
 /**
- * main function to import an exercise,
- *
+ * Main function to import the Aiken exercise
  * @return an array as a backlog of what was really imported, and error or debug messages to display
  */
-
 function import_exercise($file) {
     global $exercise_info;
     global $element_pile;
@@ -151,8 +151,10 @@ function import_exercise($file) {
             //3.create answer
             $answer = new Answer($last_question_id);
             $answer->new_nbrAnswers = count($question_array['answer']);
+            //error_log('Scanning answers');
+            $max_score = 0;
             foreach ($question_array['answer'] as $key => $answers) {
-                $key++;                 
+                $key++;
                 $answer->new_answer[$key] = $answers['value']; // answer ...
                 $answer->new_comment[$key] = $answers['feedback']; // comment ...
                 $answer->new_position[$key] = $key; // position ...
@@ -162,10 +164,13 @@ function import_exercise($file) {
                 } else {
                     $answer->new_correct[$key] = 0;
                 }
-                error_log($question_array['weighting']);
                 $answer->new_weighting[$key] = $question_array['weighting'][$key - 1];
+                $max_score += $question_array['weighting'][$key - 1];
             }
             $answer->save();
+            // Now that we know the question score, set it!
+            $question->updateWeighting($max_score);
+            $question->save();
         }
         // delete the temp dir where the exercise was unzipped
         my_delete($baseWorkDir . $uploadPath);
@@ -211,6 +216,7 @@ function parse_file($exercisePath, $file, $questionFile) {
         } elseif (preg_match('/^ANSWER:\s?([A-Z])\s?/', $info, $matches)) {
             //the correct answers
             $correct_answer_index = array_search($matches[1], $answers_array);
+            //error_log('Correct answer is '.$correct_answer_index);
             $exercise_info['question'][$question_index]['correct_answers'][] = $correct_answer_index + 1;
             //weight for correct answer
             $exercise_info['question'][$question_index]['weighting'][$correct_answer_index] = 1;

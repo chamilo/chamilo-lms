@@ -155,9 +155,7 @@ function import_exercise($file) {
             //3.create answer
             $answer = new Answer($last_question_id);
             $answer->new_nbrAnswers = count($question_array['answer']);
-            //error_log('Scanning answers');
             $max_score = 0;
-            error_log(print_r($question_array['feedback'],1));
             foreach ($question_array['answer'] as $key => $answers) {
                 $key++;
                 $answer->new_answer[$key] = $answers['value']; // answer ...
@@ -221,7 +219,6 @@ function parse_file($exercisePath, $file, $questionFile) {
             $info = utf8_encode($info);
         }
         $exercise_info['question'][$question_index]['type'] = 'MCUA';
-        $exercise_info['question'][$question_index]['feedback'] = '';
         if (preg_match('/^([A-Z])(\)|\.)\s(.*)/', $info, $matches)) {
             //adding one of the posible answers
             $exercise_info['question'][$question_index]['answer'][]['value'] = $matches[3];
@@ -237,7 +234,6 @@ function parse_file($exercisePath, $file, $questionFile) {
             $correct_answer_index = array_search($matches[1], $answers_array);
             //$exercise_info['question'][$question_index]['answer'][$correct_answer_index]['feedback'] = $matches[1];
             $exercise_info['question'][$question_index]['feedback'] = $matches[1];
-            error_log('Storing feedback: '.$matches[1]);
         } elseif (preg_match('/^TAGS:\s?([A-Z])\s?/', $info, $matches)) {
              //TAGS for chamilo >= 1.10
             $exercise_info['question'][$question_index]['answer_tags'] = explode(',', $matches[1]);
@@ -249,7 +245,7 @@ function parse_file($exercisePath, $file, $questionFile) {
             $new_question = true;
         } else {
             //Question itself (use a 40-chars long description)
-            $exercise_info['question'][$question_index]['title'] = substr($info,0,40).'...';
+            $exercise_info['question'][$question_index]['title'] = trim(substr($info,0,40)).'...';
             $exercise_info['question'][$question_index]['description'] = $info;
         }
     }

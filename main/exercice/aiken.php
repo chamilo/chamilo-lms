@@ -66,7 +66,7 @@ function aiken_import_file($array_file) {
     require_once $lib_path.'fileUpload.lib.php';
     require_once $lib_path.'fileManage.lib.php';
     $process = process_uploaded_file($array_file);
-    if (preg_match('/\.zip$/i', $array_file['name'])) {
+    if (preg_match('/\.(zip|txt)$/i', $array_file['name'])) {
         // if it's a zip, allow zip upload
         $unzip = 1;
     }

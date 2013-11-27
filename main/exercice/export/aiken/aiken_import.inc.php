@@ -43,12 +43,14 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath) {
     if (!isset ($_FILES['userFile']) || !is_uploaded_file($_FILES['userFile']['tmp_name'])) {
         // upload failed
         return false;
-    }    
+    }
     if (preg_match('/.zip$/i', $_FILES['userFile']['name']) && handle_uploaded_document($_course, $_FILES['userFile'], $baseWorkDir, $uploadPath, $_user['user_id'], 0, null, 1)) {
         if (!function_exists('gzopen')) {            
             return false;
         }
         // upload successful
+        return true;
+    } elseif (preg_match('/.txt/i', $_FILES['userFile']['name']) && handle_uploaded_document($_course, $_FILES['userFile'], $baseWorkDir, $uploadPath, $_user['user_id'], 0, null, 0)) {
         return true;
     } else {
         return false;
@@ -77,7 +79,7 @@ function import_exercise($file) {
 
     // set some default values for the new exercise
     $exercise_info = array ();
-    $exercise_info['name'] = preg_replace('/.zip$/i', '', $file);
+    $exercise_info['name'] = preg_replace('/.(zip|txt)$/i', '', $file);
     $exercise_info['question'] = array();
     $element_pile = array ();
 
@@ -86,15 +88,17 @@ function import_exercise($file) {
     //$module_info = array (); //array to store the info we need
 
     // if file is not a .zip, then we cancel all
-    if (!preg_match('/.zip$/i', $file)) {
-        Display :: display_error_message(get_lang('You must upload a zip file'));
+    if (!preg_match('/.(zip|txt)$/i', $file)) {
+        Display :: display_error_message(get_lang('YouMustUploadAZipOrTxtFile'));
         return false;
     }
 
     // unzip the uploaded file in a tmp directory
-    if (!get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)) {
-        Display :: display_error_message(get_lang('You must upload a zip file'));
-        return false;
+    if (preg_match('/.(zip|txt)$/i', $file)) {
+        if (!get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)) {
+            Display :: display_error_message(get_lang('ThereWasAProblemWithYourFile'));
+            return false;
+        }
     }
 
     // find the different manifests for each question and parse them.
@@ -120,7 +124,7 @@ function import_exercise($file) {
         } // else ignore file
     }
     if (!$file_found) {
-        Display :: display_error_message(get_lang('No TXT file found in the zip'));
+        Display :: display_error_message(get_lang('NoTxtFileFoundInTheZip'));
         return false;
     }
     if ($result == false ) {        
@@ -153,14 +157,16 @@ function import_exercise($file) {
             $answer->new_nbrAnswers = count($question_array['answer']);
             //error_log('Scanning answers');
             $max_score = 0;
+            error_log(print_r($question_array['feedback'],1));
             foreach ($question_array['answer'] as $key => $answers) {
                 $key++;
                 $answer->new_answer[$key] = $answers['value']; // answer ...
-                $answer->new_comment[$key] = $answers['feedback']; // comment ...
+                //$answer->new_comment[$key] = $answers['feedback']; // comment ...
                 $answer->new_position[$key] = $key; // position ...
                 // correct answers ...
                 if (in_array($key, $question_array['correct_answers'])) {
                     $answer->new_correct[$key] = 1;
+                    $answer->new_comment[$key] = $question_array['feedback'];
                 } else {
                     $answer->new_correct[$key] = 0;
                 }
@@ -209,6 +215,7 @@ function parse_file($exercisePath, $file, $questionFile) {
             $info = utf8_encode($info);
         }
         $exercise_info['question'][$question_index]['type'] = 'MCUA';
+        $exercise_info['question'][$question_index]['feedback'] = '';
         if (preg_match('/^([A-Z])(\)|\.)\s(.*)/', $info, $matches)) {
             //adding one of the posible answers
             $exercise_info['question'][$question_index]['answer'][]['value'] = $matches[3];
@@ -222,7 +229,9 @@ function parse_file($exercisePath, $file, $questionFile) {
         } elseif (preg_match('/^ANSWER_EXPLANATION:\s?(.*)/', $info, $matches)) {
             //Comment of correct answer
             $correct_answer_index = array_search($matches[1], $answers_array);
-            $exercise_info['question'][$question_index]['answer'][$correct_answer_index]['feedback'] = $matches[1];
+            //$exercise_info['question'][$question_index]['answer'][$correct_answer_index]['feedback'] = $matches[1];
+            $exercise_info['question'][$question_index]['feedback'] = $matches[1];
+            error_log('Storing feedback: '.$matches[1]);
         } elseif (preg_match('/^TAGS:\s?([A-Z])\s?/', $info, $matches)) { 
              //TAGS for chamilo >= 1.10
             $exercise_info['question'][$question_index]['answer_tags'] = explode(',', $matches[1]);

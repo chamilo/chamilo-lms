@@ -626,7 +626,9 @@ if (!empty($action)) {
 					$home_menu = @file($homep.$mtloggedin.'_'.$lang.$ext);
 				} elseif (is_file($homep.$mtloggedin.$lang.$ext) && is_readable($homep.$mtloggedin.$lang.$ext)) {
 					$home_menu = @file($homep.$mtloggedin.$lang.$ext);
-				} else {
+				} elseif (touch($homep.$mtloggedin.'_'.$lang.$ext)) {
+                    $home_menu = @file($homep.$mtloggedin.'_'.$lang.$ext);
+                } else {
 					$errorMsg = get_lang('HomePageFilesNotReadable');
 				}
 				if (empty($home_menu)) {
@@ -799,7 +801,7 @@ switch ($action) {
     		$default['link_name'] = $link_name;
     	}
 		$default['link_url'] = empty($link_url) ? 'http://' : api_htmlentities($link_url, ENT_QUOTES);
-		$form->addElement('text', 'link_url', array(get_lang('LinkURL'), get_lang('Optional')), array('size' => '30', 'maxlength' => '100', 'style' => 'width: 350px;'));
+		$form->addElement('text', 'link_url', array(get_lang('LinkURL'), get_lang('Optional').'<br />'.get_lang('GlobalLinkUseDoubleColumnPrivateToShowPrivately')), array('size' => '30', 'maxlength' => '100', 'style' => 'width: 350px;'));
 
         $options = array('-1' => get_lang('FirstPlace'));
 

@@ -25,7 +25,7 @@ function home_tabs($file_logged_in)
 	$file = file($file_logged_in);
 	foreach ($file as $line) {
 		//not logged user only sees public links 
-		if (!preg_match('/\?private/',$line)) {
+		if (!preg_match('/::private/',$line)) {
 			$data_logged_out[] = $line;
 		}
 		//logged user only sees all links 
@@ -188,7 +188,7 @@ if (!empty($_GET['link'])) {
 
 // Start analysing requested actions
 if (!empty($action)) {
-    if ($_POST['formSent']) {
+	if (!empty($_POST['formSent'])) {
 		// Variables used are $homep for home path, $menuf for menu file, $newsf
 		// for news file, $topf for top file, $noticef for noticefile,
 		// $ext for '.html'
@@ -463,7 +463,7 @@ if (!empty($action)) {
 							fputs($fp, $home_menu);
 							home_tabs($homep.$menuf.'_'.$lang.$ext);
 							fclose($fp);
-                            if ($_POST['all_langs']) {
+                            if (!empty($_POST['all_langs']) {
                                 foreach ($_languages['name'] as $key => $value) {
                                     $lang_name = $_languages['folder'][$key];
                                     if (file_exists($homep.$menuf.'_'.$lang_name.$ext)) {
@@ -622,10 +622,10 @@ if (!empty($action)) {
 			case 'insert_tabs':
 				// This request is the preparation for the addition of an item in home_menu
 				$home_menu = '';
-				if (is_file($homep.$menutabs.'_'.$lang.$ext) && is_readable($homep.$menutabs.'_'.$lang.$ext)) {
-					$home_menu = @file($homep.$menutabs.'_'.$lang.$ext);
-				} elseif (is_file($homep.$menutabs.$lang.$ext) && is_readable($homep.$menutabs.$lang.$ext)) {
-					$home_menu = @file($homep.$menutabs.$lang.$ext);
+				if (is_file($homep.$mtloggedin.'_'.$lang.$ext) && is_readable($homep.$mtloggedin.'_'.$lang.$ext)) {
+					$home_menu = @file($homep.$mtloggedin.'_'.$lang.$ext);
+				} elseif (is_file($homep.$mtloggedin.$lang.$ext) && is_readable($homep.$mtloggedin.$lang.$ext)) {
+					$home_menu = @file($homep.$mtloggedin.$lang.$ext);
 				} else {
 					$errorMsg = get_lang('HomePageFilesNotReadable');
 				}
@@ -792,11 +792,12 @@ switch ($action) {
 		$form->addElement('header', '', $tool_name);
 		$form->addElement('hidden', 'formSent', '1');
 		$form->addElement('hidden', 'link_index', ($action == 'edit_link' || $action == 'edit_tabs') ? $link_index : '0');
-		$form->addElement('hidden', 'filename', ($action == 'edit_link' || $action == 'edit_tabs') ? $filename : '');
+		$form->addElement('hidden', 'filename', ($action == 'edit_link' || $action == 'edit_tabs') ? (!empty($filename) ? $filename : '') : '');
 
 		$form->addElement('text', 'link_name', get_lang('LinkName'), array('size' => '30', 'maxlength' => '50'));
-        $default['link_name'] = $link_name;
-
+		if (!empty($link_name)) { 
+    		$default['link_name'] = $link_name;
+    	}
 		$default['link_url'] = empty($link_url) ? 'http://' : api_htmlentities($link_url, ENT_QUOTES);
 		$form->addElement('text', 'link_url', array(get_lang('LinkURL'), get_lang('Optional')), array('size' => '30', 'maxlength' => '100', 'style' => 'width: 350px;'));
 
@@ -810,7 +811,8 @@ switch ($action) {
 				foreach ($home_menu as $key => $enreg) {
 					if (strlen($enreg = trim(strip_tags($enreg))) > 0) {
                         $options[$key] = get_lang('After').' &quot;'.$enreg.'&quot;';
-                        $selected = $formSent && $insert_where == $key ? $key : '';
+                        $formSentCheck = (!empty($_POST['formSent']) ? true : false);
+                        $selected = $formSentCheck && $insert_where == $key ? $key : '';
 					}
 				}
 			}
@@ -825,7 +827,7 @@ switch ($action) {
             $default['add_in_tab'] = $add_in_tab;
         }
 
-		if ($target_blank) $target_blank_checkbox->setChecked(true);
+		if (!empty($target_blank)) { $target_blank_checkbox->setChecked(true); }
 
 		if ($action == 'edit_link' && (empty($link_url) || $link_url == 'http://' || $link_url == 'https://')) {
 			if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
@@ -839,9 +841,9 @@ switch ($action) {
             if (in_array($action, array('edit_tabs','insert_tabs'))) {
                 if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
                     $form->addElement('html', get_lang('Content').' ('.get_lang('Optional').')');
-                    $form->addElement('html', WCAG_Rendering::create_xhtml(isset($_POST['link_html'])?$_POST['link_html']:$link_html));
+                    $form->addElement('html', WCAG_Rendering::create_xhtml(isset($_POST['link_html'])?$_POST['link_html']:(!empty($link_html) ? $link_html : '')));
                 } else {
-                    $default['link_html'] = isset($_POST['link_html']) ? $_POST['link_html'] : $link_html;
+                    $default['link_html'] = isset($_POST['link_html']) ? $_POST['link_html'] : (!empty($link_html) ? $link_html : '');
                     $form->add_html_editor('link_html', get_lang('Content'), false, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
                 }
             }

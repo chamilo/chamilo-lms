@@ -390,8 +390,10 @@ function return_menu() {
     if (api_get_user_id() && !api_is_anonymous()) {
         if (is_file($homep.$mtloggedin.'_'.$lang.$ext) && is_readable($homep.$mtloggedin.'_'.$lang.$ext)) {
             $home_top = @(string)file_get_contents($homep.$mtloggedin.'_'.$lang.$ext);
+            $home_top = str_replace('::private', '', $home_top);
         } elseif (is_file($homep.$mtloggedin.$lang.$ext) && is_readable($homep.$mtloggedin.$lang.$ext)) {
             $home_top = @(string)file_get_contents($homep.$mtloggedin.$lang.$ext);
+            $home_top = str_replace('::private', '', $home_top);
         } else {
             //$errorMsg = get_lang('HomePageFilesNotReadable');
         }

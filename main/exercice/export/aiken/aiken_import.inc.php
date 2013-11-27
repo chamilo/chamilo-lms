@@ -217,7 +217,6 @@ function parse_file($exercisePath, $file, $questionFile) {
         } elseif (preg_match('/^ANSWER_EXPLANATION:\s?(.*)/', $info, $matches)) {
             //Comment of correct answer
             $correct_answer_index = array_search($matches[1], $answers_array);
-            error_log($matches[1]);
             $exercise_info['question'][$question_index]['answer'][$correct_answer_index]['feedback'] = $matches[1];
         } elseif (preg_match('/^TAGS:\s?([A-Z])\s?/', $info, $matches)) { 
              //TAGS for chamilo >= 1.10
@@ -237,8 +236,5 @@ function parse_file($exercisePath, $file, $questionFile) {
     foreach  ($exercise_info['question'] as $key => $question) {
         $exercise_info['question'][$key]['weighting'][current(array_keys($exercise_info['question'][$key]['weighting']))] = 20 / $total_questions;
     }
-    echo '<pre>';
-    print_r($exercise_info);
-    echo '</pre>';
     return true;
 }

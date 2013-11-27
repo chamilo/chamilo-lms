@@ -5,6 +5,42 @@
  * @package chamilo.admin
  */
 /**
+ * Creates menu tabs for logged and anonymous users
+ *
+ * This function copies the file containing private a public tabs (home_tabs_logged_in_$language.html)
+ * in to the public tab template (home_tabs_$language.html) but without the private tabs.
+ * Private tabs are the ones including "?private" string in the end of the url, ex: http://google.com/?private
+ *
+ * @param  string Name of the file been updated by the administration, ex: home_tabs_logged_in_($language).html
+ */
+function home_tabs($file_logged_in) 
+{
+	$file_logged_out = str_replace('_logged_in','', $file_logged_in);
+
+	//variables initialization
+	$data_logged_out = array();
+	$data_logged_in  = array();
+
+	//we read the file with all links
+	$file = file($file_logged_in);
+	foreach ($file as $line) {
+		//not logged user only sees public links 
+		if (!preg_match('/\?private/',$line)) {
+			$data_logged_out[] = $line;
+		}
+		//logged user only sees all links 
+		$data_logged_in[] = $line;
+	}
+	//tabs file for logged out users
+	$fp = fopen($file_logged_out, 'w');
+	fputs($fp, implode("\n", $data_logged_out));
+	fclose($fp);
+	//tabs file for logged in users
+	$fp = fopen($file_logged_in, 'w');
+	fputs($fp, implode("\n", $data_logged_in));
+	fclose($fp);
+}
+/**
  * Code
  */
 $language_file = array('index','admin', 'accessibility');
@@ -107,14 +143,15 @@ if (api_is_multiple_url_enabled()) {
 	$homep = api_get_path(SYS_PATH).'home/'; //homep for Home Path
 }
 
-$menuf	 = 'home_menu'; //menuf for Menu File
-$newsf	 = 'home_news'; //newsf for News File
-$topf 	 = 'home_top'; //topf for Top File
-$noticef = 'home_notice'; //noticef for Notice File
-$menutabs= 'home_tabs'; //menutabs for tabs Menu
+$menuf	   = 'home_menu'; //menuf for Menu File
+$newsf	   = 'home_news'; //newsf for News File
+$topf 	   = 'home_top'; //topf for Top File
+$noticef   = 'home_notice'; //noticef for Notice File
+$menutabs  = 'home_tabs'; //menutabs for tabs Menu
+$mtloggedin= 'home_tabs_logged_in'; //menutabs for tabs Menu
 $ext 	 = '.html'; //ext for HTML Extension - when used frequently, variables are
 				// faster than hardcoded strings
-$homef = array($menuf, $newsf, $topf, $noticef, $menutabs);
+$homef = array($menuf, $newsf, $topf, $noticef, $menutabs, $mtloggedin);
 
 // If language-specific file does not exist, create it by copying default file
 foreach ($homef as $my_file) {
@@ -328,7 +365,7 @@ if (!empty($action)) {
 				} elseif (!empty($link_url) && !strstr($link_url, '://')) {
 					$link_url='http://'.$link_url;
 				}
-				$menuf = ($action == 'insert_tabs' || $action == 'edit_tabs')? $menutabs : $menuf;
+				$menuf = ($action == 'insert_tabs' || $action == 'edit_tabs')? $mtloggedin : $menuf;
 				if (!is_writable($homep.$menuf.'_'.$lang.$ext)) {
 					$errorMsg = get_lang('HomePageFilesNotWritable');
 				} elseif (empty($link_name)) {
@@ -375,8 +412,10 @@ if (!empty($action)) {
                         if ($fp) {
                             if (empty($link_html)) {
                                 fputs($fp, get_lang('MyTextHere'));
+                                home_tabs($homep.$filename);
                             } else {
                             	fputs($fp, $link_html);
+                            	home_tabs($homep.$filename);
                             }
                             fclose($fp);
                         }
@@ -387,6 +426,7 @@ if (!empty($action)) {
 						  $fp = @fopen($homep.$filename, 'w');
 						  if ($fp) {
 							 fputs($fp, $link_html);
+							 home_tabs($homep.$filename);
 							 fclose($fp);
 						  }
 					}
@@ -421,6 +461,7 @@ if (!empty($action)) {
 						if (is_writable($homep.$menuf.'_'.$lang.$ext)) {
 							$fp = fopen($homep.$menuf.'_'.$lang.$ext, 'w');
 							fputs($fp, $home_menu);
+							home_tabs($homep.$menuf.'_'.$lang.$ext);
 							fclose($fp);
                             if ($_POST['all_langs']) {
                                 foreach ($_languages['name'] as $key => $value) {
@@ -429,6 +470,7 @@ if (!empty($action)) {
                                         if (is_writable($homep.$menuf.'_'.$lang_name.$ext)) {
                                             $fp = fopen($homep.$menuf.'_'.$lang_name.$ext, 'w');
                                             fputs($fp, $home_menu);
+                                            home_tabs($homep.$menuf.'_'.$lang_name.$ext);
                                             fclose($fp);
                                         }
                                     }
@@ -438,6 +480,7 @@ if (!empty($action)) {
 								if (is_writable($homep.$menuf.$ext)) {
 									$fpo = fopen($homep.$menuf.$ext, 'w');
 									fputs($fpo, $home_menu);
+									home_tabs($homep.$menuf.$ext);
 									fclose($fpo);
 								}
 							}
@@ -448,6 +491,7 @@ if (!empty($action)) {
 						//File does not exist
 						$fp = fopen($homep.$menuf.'_'.$lang.$ext, 'w');
 						fputs($fp, $home_menu);
+						home_tabs($homep.$menuf.'_'.$lang.$ext);
 						fclose($fp);
                         if ($_POST['all_langs']) {
                             foreach ($_languages['name'] as $key => $value) {
@@ -455,6 +499,7 @@ if (!empty($action)) {
                                 if (file_exists($homep.$menuf.'_'.$lang_name.$ext)) {
                                     $fp = fopen($homep.$menuf.'_'.$lang_name.$ext, 'w');
                                     fputs($fp, $home_menu);
+                                    home_tabs($homep.$menuf.'_'.$lang_name.$ext);
                                     fclose($fp);
                                 }
                             }
@@ -481,7 +526,7 @@ if (!empty($action)) {
 				// A link is deleted by getting the file into an array, removing the
 				// link and re-writing the array to the file
 				$link_index = intval($_GET['link_index']);
-				$menuf = ($action == 'delete_tabs')? $menutabs : $menuf;
+				$menuf = ($action == 'delete_tabs')? $mtloggedin : $menuf;
 				$home_menu = @file($homep.$menuf.'_'.$lang.$ext);
 				if (empty($home_menu)) {
 					$home_menu = array();
@@ -498,11 +543,13 @@ if (!empty($action)) {
 
 				$fp = fopen($homep.$menuf.'_'.$lang.$ext, 'w');
 				fputs($fp, $home_menu);
+				home_tabs($homep.$menuf.'_'.$lang.$ext);
 				fclose($fp);
 				if (file_exists($homep.$menuf.$ext)) {
 					if (is_writable($homep.$menuf.$ext)) {
 						$fpo = fopen($homep.$menuf.$ext,'w');
 						fputs($fpo, $home_menu);
+						home_tabs($homep.$menuf.$ext);
 						fclose($fpo);
 					}
 				}
@@ -554,7 +601,7 @@ if (!empty($action)) {
 			case 'insert_link':
 				// This request is the preparation for the addition of an item in home_menu
 				$home_menu = '';
-				$menuf = ($action == 'edit_tabs')? $menutabs : $menuf;
+				$menuf = ($action == 'edit_tabs')? $mtloggedin : $menuf;
 				if (is_file($homep.$menuf.'_'.$lang.$ext) && is_readable($homep.$menuf.'_'.$lang.$ext)) {
 					$home_menu = @file($homep.$menuf.'_'.$lang.$ext);
 				} elseif(is_file($homep.$menuf.$lang.$ext) && is_readable($homep.$menuf.$lang.$ext)) {
@@ -596,7 +643,7 @@ if (!empty($action)) {
 			case 'edit_link':
 				// This request is the preparation for the edition of the links array
 				$home_menu = '';
-				$menuf = ($action == 'edit_tabs')? $menutabs : $menuf;
+				$menuf = ($action == 'edit_tabs')? $mtloggedin : $menuf;
 				if (is_file($homep.$menuf.'_'.$lang.$ext) && is_readable($homep.$menuf.'_'.$lang.$ext)) {
 					$home_menu = @file($homep.$menuf.'_'.$lang.$ext);
 				} elseif(is_file($homep.$menuf.$lang.$ext) && is_readable($homep.$menuf.$lang.$ext)) {
@@ -947,10 +994,10 @@ switch ($action) {
 			// Add new page
 
 			$home_menu = '';
-            if (file_exists($homep.$menutabs.'_'.$lang.$ext)) {
-                $home_menu = @file($homep.$menutabs.'_'.$lang.$ext);
+            if (file_exists($homep.$mtloggedin.'_'.$lang.$ext)) {
+                $home_menu = @file($homep.$mtloggedin.'_'.$lang.$ext);
             } else {
-                $home_menu = @file($homep.$menutabs.$ext);
+                $home_menu = @file($homep.$mtloggedin.$ext);
             }
             if (empty($home_menu)) {
                 $home_menu = array();

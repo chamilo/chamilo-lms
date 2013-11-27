@@ -463,7 +463,7 @@ if (!empty($action)) {
 							fputs($fp, $home_menu);
 							home_tabs($homep.$menuf.'_'.$lang.$ext);
 							fclose($fp);
-                            if (!empty($_POST['all_langs']) {
+                            if (!empty($_POST['all_langs'])) {
                                 foreach ($_languages['name'] as $key => $value) {
                                     $lang_name = $_languages['folder'][$key];
                                     if (file_exists($homep.$menuf.'_'.$lang_name.$ext)) {

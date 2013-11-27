@@ -2,7 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$lang_already_enrolled = "u prihlásený";
+$AlreadyRegisteredToCourse = "Už ste sa zaregistrovali v kurze";
+$lang_already_enrolled = "už ste prihlásený";
 $lang_my_personnal_course_list = "Zoznam mojích kurzov";
 $lang_course_enrollment = "Kurzy používateľa";
 $lang_course_not_available = "Tento kurz nie je dostupný alebo neexistuje.";
@@ -26,10 +27,13 @@ $lang_back_to_course_selection = "Späť na výber kurzov";
 $lang_up = "Späť na nadradenú kategóriu";
 $langCatList = "Kategórie";
 $langCourseList = "Zoznam kurzov";
-$Subscribe = "Zápis do kurzu";
+$Subscribe = "Zapísať sa do kurzu";
 $AlreadySubscribed = "Už zapísaný do kurzu";
+$CodeMandatory = "Povinný kód";
+$CourseCategoryMandatory = "Povinná kategória kurzu";
+$TeacherMandatory = "Povinný učiteľ";
 $CourseCategoryStored = "Kategória kurzov bola vytvorená";
-$langWithoutTimeLimits = "Bezčasového limitu";
+$langWithoutTimeLimits = "Bez časového limitu";
 $lang_back_to_main_category_list = "Späť na zoznam hlavných kategórii";
 $langAdded = "Pridaná";
 $langDeleted = "Zmazaná";
@@ -45,7 +49,7 @@ $langSubCat = "podkategórie";
 $langUnsubscribeNotAllowed = "Zrušiť Vašu účast v kurze môže len lektor.";
 $langCourseAdminUnsubscribeNotAllowed = "Ste administrátor tohto kurzu.";
 $CourseManagement = "Správa kurzov";
-$SortMyCourses = "Zotrieď moje kurzy";
+$SortMyCourses = "Roztriediť moje kurzy";
 $SubscribeToCourse = "Zápis do kurzov";
 $UnsubscribeFromCourse = "Zrušenie účasti v kurzoch";
 $CreateCourseCategory = "Vytvor kategóriu kurzov";
@@ -70,4 +74,17 @@ $SubmitRegistrationCode = "Odoslať registračný kód";
 $CourseCategoryDeleted = "Kategória kurzu bola zmazaná";
 $CategorySortingDone = "Usporiadanie kategórie hotové";
 $CourseCategoryEditStored = "Kategória aktualizovaná";
+$buttonCreateCourseCategory = "Uložiť kurzy kategórii";
+$buttonSaveCategory = "Uložiť kategóriu";
+$buttonChangeCategory = "Zmeniť kategóriu";
+$SessionName = "Názov relácie";
+$SessionCategory = "Kategórie relácií";
+$Expand = "Rozbaliť";
+$Collapse = "Zbaliť";
+$CourseDetails = "Popis kurzu";
+$GroupPendingInvitations = "Skupina nevybavených pozvánok";
+$Compose = "Napísať správu";
+$EmptyHeaderLine = "V hlavičke vybraného súboru je prázdny riadok";
+$EnrollToCourseXSuccessful = "Boli ste zaregistrovaný v kurze: %s";
+$ThereAreNoCoursesInThisCategory = "Žiadny kurz v tejto kategórii";
 ?>

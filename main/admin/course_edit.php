@@ -186,7 +186,7 @@ $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
 $categoryList = array();
 if (!empty($course['category_code'])) {
     $data = getCategory($course['category_code']);
-    $categoryList[] = array('id' => $course['category_code'], 'text' => $data['name']);
+    $categoryList[] = array('id' => $data['code'], 'text' => $data['name']);
 }
 
 $form->addElement('select_ajax', 'category_code', get_lang('CourseFaculty'), null, array('url' => $url, 'defaults' => $categoryList));

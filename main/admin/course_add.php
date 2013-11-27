@@ -40,14 +40,13 @@ if ($_configuration['multiple_access_urls']) {
 
 $res = Database::query($sql);
 $teachers = array();
-//$teachers[0] = '-- '.get_lang('NoManager').' --';
 while ($obj = Database::fetch_object($res)) {
     $teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
 }
 
 // Build the form.
 $form = new FormValidator('update_course');
-$form->addElement('header', '', $tool_name);
+$form->addElement('header', $tool_name);
 
 // Title
 $form->add_textfield('title', get_lang('Title'), true, array ('class' => 'span6'));
@@ -161,7 +160,5 @@ if ($form->validate()) {
 $content = $form->return_form();
 
 $tpl = new Template($tool_name);
-$tpl->assign('actions', $actions);
-$tpl->assign('message', $message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

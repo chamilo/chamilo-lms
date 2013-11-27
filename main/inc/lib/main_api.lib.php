@@ -3051,8 +3051,11 @@ function api_get_datetime($time = null) {
  * @param int       The session ID (optional)
  * @return int      -1 on error, 0 if invisible, 1 if visible
  */
-function api_get_item_visibility($_course, $tool, $id, $session=0) {
-    if (!is_array($_course) || count($_course) == 0 || empty($tool) || empty($id)) { return -1; }
+function api_get_item_visibility($_course, $tool, $id, $session=0)
+{
+    if (!is_array($_course) || count($_course) == 0 || empty($tool) || empty($id)) {
+        return -1;
+    }
     $tool = Database::escape_string($tool);
     $id = Database::escape_string($id);
     $session = (int) $session;
@@ -3089,7 +3092,18 @@ function api_get_item_visibility($_course, $tool, $id, $session=0) {
  * @version January 2005
  * @desc update the item_properties table (if entry not exists, insert) of the course
  */
-function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $user_id, $to_group_id = 0, $to_user_id = null, $start_visible = 0, $end_visible = 0, $session_id = 0) {
+function api_item_property_update(
+    $_course,
+    $tool,
+    $item_id,
+    $lastedit_type,
+    $user_id,
+    $to_group_id = 0,
+    $to_user_id = null,
+    $start_visible = 0,
+    $end_visible = 0,
+    $session_id = 0
+) {
 
     // Definition of variables.
     $tool           = Database::escape_string($tool);
@@ -3257,14 +3271,14 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
  * @param string    tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
  * @param int       id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
  */
-function api_get_item_property_by_tool($tool, $course_code, $session_id = null) {
+function api_get_item_property_by_tool($tool, $course_code, $session_id = null)
+{
 
     $course_info    = api_get_course_info($course_code);
     $tool           = Database::escape_string($tool);
 
     // Definition of tables.
     $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-    $session_condition = '';
     $session_id = intval($session_id);
     $session_condition = ' AND id_session = '.$session_id;
     $course_id	 = $course_info['real_id'];
@@ -6526,7 +6540,8 @@ function api_get_bytes_memory_limit($mem){
  * @return $user_info (array): user_id, lastname, firstname, username, email, ...
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-function api_get_user_info_from_official_code($official_code = '') {
+function api_get_user_info_from_official_code($official_code = '')
+{
     if (empty($official_code)) { return false; }
     $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE official_code ='".Database::escape_string($official_code)."'";
     $result = Database::query($sql);
@@ -6644,7 +6659,8 @@ function api_get_user_blocked_by_captcha($username)
  * @return string
  * @author hubert borderiou
  */
-function api_get_short_text_from_html($in_html, $in_number_char) {
+function api_get_short_text_from_html($in_html, $in_number_char)
+{
     $out_res = api_remove_tags_with_space($in_html, false);
     $postfix = "...";
     if (strlen($out_res) > $in_number_char) {

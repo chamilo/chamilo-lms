@@ -64,6 +64,7 @@ $ShowConfirmationBeforeClearingWhiteboard = "Pred zmazaním tabule žiadaj potvr
 $UserInfo = "informácie o používateľovi";
 $ClearDrawArea = "Vyčistiť priestor na kreslenie";
 $Undo = "Späť";
+$Redo = "Prerobiť";
 $SelectAnObject = "Vybrať predmet";
 $Text = "Text";
 $Paint = "Kreslenie";

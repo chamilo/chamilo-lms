@@ -43,6 +43,15 @@ $langAll_Link_Deleted = "Odkaz bol zmazaný";
 $langOnHomepage = "Zobraziť tento odkaz na domovskej stránke";
 $langShowLinkOnHomepage = "Zobraziť tento odkaz ako ikonu na domovskej str�nke kurzu";
 $General = "spoločné menu";
+$SearchFeatureDoIndexLink = "Názov Index odkazu a popis?";
 $langSaveLink = "Uložiť odkaz";
 $langSaveCategory = "Uložiť kategóriu";
+$BackToLinksOverview = "Späť na prehľad odkazov";
+$AddTargetOfLinkOnHomepage = "Zvoľte \"cieľ\", ktorý zobrazuje odkaz na domovskú stránku kurzu";
+$Url = "URL";
+$LinkOpenSelf = "Otvoriť self";
+$LinkOpenBlank = "Otvoriť blank";
+$LinkOpenParent = "Otvoriť parent";
+$LinkOpenTop = "Otvoriť top";
+$LinkTarget = "Cieľ odkazu";
 ?>

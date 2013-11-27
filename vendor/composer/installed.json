@@ -325,24 +325,116 @@
         ]
     },
     {
+        "name": "symfony/filesystem",
+        "version": "v2.3.7",
+        "version_normalized": "2.3.7.0",
+        "target-dir": "Symfony/Component/Filesystem",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Filesystem.git",
+            "reference": "2b8995042086c5552c94d33b5553c492e9cfc00e"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/Filesystem/zipball/2b8995042086c5552c94d33b5553c492e9cfc00e",
+            "reference": "2b8995042086c5552c94d33b5553c492e9cfc00e",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2013-09-19 09:45:20",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.3-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Filesystem\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Filesystem Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "neutron/temporary-filesystem",
+        "version": "2.1.1",
+        "version_normalized": "2.1.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/romainneutron/Temporary-Filesystem.git",
+            "reference": "6b21fa99fd452efea16b9a7adb7304ccfff854d0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/romainneutron/Temporary-Filesystem/zipball/6b21fa99fd452efea16b9a7adb7304ccfff854d0",
+            "reference": "6b21fa99fd452efea16b9a7adb7304ccfff854d0",
+            "shasum": ""
+        },
+        "require": {
+            "symfony/filesystem": "~2.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "~3.7"
+        },
+        "time": "2013-10-10 10:58:09",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Neutron": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Romain Neutron",
+                "email": "imprec@gmail.com",
+                "homepage": "http://www.lickmychip.com/"
+            }
+        ],
+        "description": "Symfony filesystem extension to handle temporary files"
+    },
+    {
         "name": "php-ffmpeg/php-ffmpeg",
         "version": "0.3.x-dev",
         "version_normalized": "0.3.9999999.9999999-dev",
         "source": {
             "type": "git",
             "url": "https://github.com/alchemy-fr/PHP-FFmpeg.git",
-            "reference": "9fcb485d497872e674cb14eb3df1386dbda9169b"
+            "reference": "185fb5c33da594db7ffbf3f89d48e9841bc666a0"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/alchemy-fr/PHP-FFmpeg/zipball/9fcb485d497872e674cb14eb3df1386dbda9169b",
-            "reference": "9fcb485d497872e674cb14eb3df1386dbda9169b",
+            "url": "https://api.github.com/repos/alchemy-fr/PHP-FFmpeg/zipball/185fb5c33da594db7ffbf3f89d48e9841bc666a0",
+            "reference": "185fb5c33da594db7ffbf3f89d48e9841bc666a0",
             "shasum": ""
         },
         "require": {
             "alchemy/binary-driver": "~1.5",
             "doctrine/cache": "~1.0",
             "evenement/evenement": "~1.0",
+            "neutron/temporary-filesystem": "~2.1, >=2.1.1",
             "php": ">=5.3.3"
         },
         "require-dev": {
@@ -353,7 +445,7 @@
         "suggest": {
             "php-ffmpeg/extras": "A compilation of common audio & video drivers for PHP-FFMpeg"
         },
-        "time": "2013-08-08 10:15:15",
+        "time": "2013-10-21 12:13:46",
         "type": "library",
         "extra": {
             "branch-alias": {

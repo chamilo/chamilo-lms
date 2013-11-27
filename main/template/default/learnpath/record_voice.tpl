@@ -1,5 +1,4 @@
 <script type="text/javascript" src="{{ _p.web_lib }}javascript/rtc/RecordRTC.js"></script>
-
 <script type="text/javascript" src="{{ _p.web_lib }}swfobject/swfobject.js"></script>
 <script type="text/javascript" src="{{ _p.web_lib }}wami-recorder/recorder.js"></script>
 <script type="text/javascript" src="{{ _p.web_lib }}wami-recorder/gui.js"></script>
@@ -37,12 +36,11 @@ function setupGUI() {
     var uniq = 'rec_' + (new Date()).getTime() + ".wav";
     var gui = new Wami.GUI({
         id : "wami-recorder",
+        singleButton : true,
         recordUrl : "{{ _p.web_lib }}wami-recorder/record_document.php?lp_item_id={{ lp_item_id }}&waminame="+uniq+"&wamidir={{ lp_dir }}&wamiuserid={{ _u.user_id }}",
-        //playUrl : "https://wami-recorder.appspot.com/audio",
         buttonUrl : "{{ _p.web_lib }}wami-recorder/buttons.png",
         buttonNoUrl: "{{ _p.web_img }}blank.gif",
         onRecordStart : function() {
-            //console.log('Record starts');
             $('#start-recording').show();
         },
         onRecordFinish: function() {
@@ -50,18 +48,17 @@ function setupGUI() {
             window.location.reload();
         },
         onError : function() {
-        },
-        singleButton : true
+        }
     });
 
-    gui.setPlayEnabled(false);
+    gui.setPlayEnabled(true);
 }
 </script>
 <script>
 
     $(document).ready(function() {
         var isChrome =  navigator.webkitGetUserMedia;
-        //isChrome = false;
+        isChrome = false;
         if (isChrome) {
             $('#rtc').show();
             $('#wami').hide();
@@ -70,6 +67,7 @@ function setupGUI() {
             $('#wami').show();
 
             var recordWami = $('#record-wami');
+
             recordWami.on('click', function() {
                 setupRecorder();
                 return false;

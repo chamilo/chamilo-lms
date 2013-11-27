@@ -2112,7 +2112,6 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
         if ($is_allowed_to_edit) {
             $extra_conditions .= ' AND work.active IN (0, 1) ';
         } else {
-
             if (isset($course_info['show_score']) &&  $course_info['show_score'] == 1) {
                 $extra_conditions .= " AND (u.user_id = ".api_get_user_id()." AND work.active IN (0, 1) OR work.active = 1) ";
             } else {
@@ -2449,7 +2448,7 @@ function draw_date_picker($prefix, $default = '')
 }
 
 /**
- * @param $prefix
+ * @param string $prefix
  * @param array of values
  * @return string
  *
@@ -2465,36 +2464,53 @@ function get_date_from_select($prefix, $array = array())
 }
 
 /**
- * Check if a user is the author of the item
- * @param int $item_id
- * @param int  $user_id
+ * Check if a user is the author of a work document.
+ * @param int $itemId
+ * @param int $userId
+ * @param int $courseId
+ * @param int $sessionId
  * @return bool
  */
-function user_is_author($item_id, $user_id = null)
+function user_is_author($itemId, $userId = null, $courseId = null, $sessionId = null)
 {
-    if (empty($item_id)) {
+    if (empty($itemId)) {
         return false;
     }
-    if (empty($user_id)) {
-        $user_id = api_get_user_id();
+
+    if (empty($userId)) {
+        $userId = api_get_user_id();
     }
 
-    $is_author = false;
-    $data = api_get_item_property_info(api_get_course_int_id(), 'work', $item_id, api_get_session_id());
+    $isAuthor = false;
     $is_allowed_to_edit = api_is_allowed_to_edit();
 
     if ($is_allowed_to_edit) {
-        $is_author = true;
+        $isAuthor = true;
     } else {
-        if ($data['insert_user_id'] == $user_id) {
-            $is_author = true;
+
+        if (empty($courseId)) {
+            $courseId = api_get_course_int_id();
+        }
+        if (empty($sessionId)) {
+            $sessionId = api_get_session_id();
+        }
+
+        $data = api_get_item_property_info($courseId, 'work', $itemId, $sessionId);
+        if ($data['insert_user_id'] == $userId) {
+            $isAuthor = true;
+        }
+
+        $workData = get_work_data_by_id($itemId);
+        if ($workData['user_id'] == $userId) {
+            $isAuthor = true;
         }
     }
-    if (!$is_author) {
-        //api_not_allowed();
+
+    if (!$isAuthor) {
         return false;
     }
-    return $is_author;
+
+    return $isAuthor;
 }
 
 /**
@@ -3823,4 +3839,3 @@ function getWorkUserList($course_code, $session_id)
     }
     return $userList;
 }
-

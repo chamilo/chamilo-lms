@@ -916,7 +916,7 @@ class DocumentManager
 
         //first, delete the actual document...
         $document_id = self :: get_document_id($_course, $path);
-        $document_exists_in_disk = file_exists($base_work_dir . $path);
+        $document_exists_in_disk = file_exists($base_work_dir.$path);
 
         $new_path = $path . '_DELETED_' . $document_id;
         $current_session_id = api_get_session_id();

@@ -48,4 +48,6 @@ $DocumentsWillBeAddedToo = "Dokumenty budú tiež pridané";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Ak chcete exportovať učebnú osnovu obsahujúcu test, musíte sa presvedčiť, že príslušné testy sú zahrnuté v exporte. To znamená, že ich musíte označiť v zozname testov.";
 $ArchivesDirectoryNotWriteableContactAdmin = "Archívny katalóg používaný týmto nástrojom nie je možné prepísať. Kontaktujte prosím svojho administrátora platformy.";
 $DestinationCourse = "Cieľový kurz";
+$IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments = "Ak vaše učebné osnovy obsahujú zvukové súbory, mali by ste si ich vybrať z dokumentov";
+$DontForgetToSelectTheMediaFilesIfYourResourceNeedIt = "Nezabudnite vybrať multimediálne súbory, ak to potrebuje váš zdroj";
 ?>

@@ -2,6 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$PublishSurvey = "Publikovať prieskum";
+$CompareQuestions = "Porovnať otázky";
+$InformationUpdated = "Informácie aktualizované";
 $SurveyTitle = "Názov prieskumu";
 $SurveyIntroduction = "Úvod do prieskumu";
 $CreateNewSurvey = "Vytvoriť prieskum";
@@ -170,6 +173,7 @@ $SelectType = "Vybrať typ";
 $Conditional = "Podmienečný";
 $ParentSurvey = "Zdrojový prieskum";
 $OneQuestionPerPage = "Jedna otázka na stranu";
+$ActivateShuffle = "Zapnúť náhodný režim";
 $ShowFormProfile = "Ukázať formulár profilu";
 $PersonalityQuestion = "Upraviť otázku";
 $YouNeedToCreateGroups = "Musíte vytvoriť skupiny";
@@ -190,4 +194,24 @@ $NoLogOfDuration = "Žiadny záznam trvania";
 $AutoInviteLink = "Používatelia, ktorí neboli pozvaní môžu na vstup do prieskumu použiť tento odkaz:";
 $CompleteTheSurveysQuestions = "Dokončiť otázky prieskumu";
 $SurveysDeleted = "Prieskumy zmazané";
+$RemindUnanswered = "Pripomenúť iba používateľov, ktorí neodpovedali";
+$ModifySurvey = "Upraviť prieskum";
+$CreateQuestionSurvey = "Vytvoriť otázku";
+$ModifyQuestionSurvey = "Upraviť otázku";
+$BackToSurvey = "Späť do prieskumu";
+$UpdateInformation = "Informácie o aktualizácií";
+$PleaseFillSurvey = "Prosím, vyplňte prieskum";
+$ReportingOverview = "Hlásenie prehľadu";
+$ThereAreNotQuestionsForthisSurvey = "Nie sú otázky pre tento prieskum";
+$GenerateSurveyAccessLinkExplanation = "Skopírovaním nižšie uvedeného odkazu a vloženie ho do e-mailu alebo na webové stránky, umožníte anonymnej osobe vstup a zodpovedanie tohto prieskumu. Môžete si vyskúšať túto funkciu kliknutím na vyššie uvedený odkaz a odpovedať na prieskum. To je obzvlášť užitočné, ak chcete, aby vám niekto odpovedal na fóre a neviete, ich e-mailové adresy.";
+$GenerateSurveyAccessLink = "Vytvoriť odkaz na prístup k prieskumu";
+$Multipleresponse = "Viac odpovedí";
+$ErrorSurveyTypeUnknown = "Neznámy typ prieskumu";
+$SurveyUndetermined = "Nedefinovaný prieskum";
+$QuestionComment = "Otázka komentár";
+$UnknowQuestion = "Neznáma otázka";
+$Lastname = "Priezvisko";
+$Firstname = "Krstné meno";
+$DeleteSurveyGroup = "Zmazať prieskum skupiny";
+$ErrorOccurred = "Došlo k chybe.";
 ?>

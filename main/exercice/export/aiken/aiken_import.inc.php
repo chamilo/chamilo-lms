@@ -44,13 +44,11 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath) {
 	}	
 	if (preg_match('/.zip$/i', $_FILES['userFile']['name']) && handle_uploaded_document($_course, $_FILES['userFile'], $baseWorkDir, $uploadPath, $_user['user_id'], 0, null, 1)) {
 		if (!function_exists('gzopen')) {			
-			//claro_delete_file($uploadPath);
 			return false;
 		}
-		// upload successfull
+		// upload successful
 		return true;
 	} else {
-		//claro_delete_file($uploadPath);
 		return false;
 	}
 }
@@ -144,8 +142,9 @@ function import_exercise($file) {
 			$question = new Aiken2Question();
 			$question->type = $question_array['type'];
 			$question->setAnswer();
-			$question->updateTitle($question_array['title']); // question ...
-			$type = $question->selectType();
+			$question->updateTitle($question_array['title']); // question (short)...
+            $question->updateDescription($question_array['description']); // question (long)...
+            $type = $question->selectType();
 			$question->type = constant($type); // type ...
 			$question->save($last_exercise_id); // save computed grade
 			$last_question_id = $question->selectId();
@@ -188,8 +187,12 @@ function parse_file($exercisePath, $file, $questionFile) {
 	$question_index = 0;
 	$correct_answer = '';
 	$answers_array = array();
-	foreach ($data as $linea => $info) {
-		$exercise_info['question'][$question_index]['type'] = 'MCUA';
+	foreach ($data as $line => $info) {
+        //make sure it is transformed from iso-8859-1 to utf-8 if in that form
+        if (!mb_check_encoding($info,'utf-8') && mb_check_encoding($info,'iso-8859-1')) {
+            $info = utf8_encode($info);
+        }
+        $exercise_info['question'][$question_index]['type'] = 'MCUA';
 		if (preg_match('/^([A-Z])(\)|\.)\s(.*)/', $info, $matches)) {
 			//adding one of the posible answers
 			$exercise_info['question'][$question_index]['answer'][]['value'] = $matches[3];
@@ -200,20 +203,23 @@ function parse_file($exercisePath, $file, $questionFile) {
 			$exercise_info['question'][$question_index]['correct_answers'][] = $correct_answer_index + 1;
 			//weight for correct answer
 			$exercise_info['question'][$question_index]['weighting'][$correct_answer_index] = 1;
-		} elseif (preg_match('/^ANSWER_EXPLANATION:\s?(.*)\s?/', $info, $matches)) {  
+		} elseif (preg_match('/^ANSWER_EXPLANATION:\s?(.*)/', $info, $matches)) {
 			//Comment of correct answer
+            $correct_answer_index = array_search($matches[1], $answers_array);
+            error_log($matches[1]);
 			$exercise_info['question'][$question_index]['answer'][$correct_answer_index]['feedback'] = $matches[1];
 		} elseif (preg_match('/^TAGS:\s?([A-Z])\s?/', $info, $matches)) { 
 		 	//TAGS for chamilo >= 1.10
 			$exercise_info['question'][$question_index]['answer_tags'] = explode(',', $matches[1]);
-		} elseif (preg_match('/^\n/',$info)) {
-			//moving to next question
+		} elseif (preg_match('/^(\r)?\n/',$info)) {
+			//moving to next question (tolerate \r\n or just \n)
 			$question_index++;
 			//emptying answers array when moving to next question
 			$answers_array = array();
 		} else {
-			//Question itself
-			$exercise_info['question'][$question_index]['title'] = $info;
+			//Question itself (use a 40-chars long description)
+			$exercise_info['question'][$question_index]['title'] = substr($info,0,40).'...';
+            $exercise_info['question'][$question_index]['description'] = $info;
 		}
 	}
 	$total_questions = count($exercise_info['question']);

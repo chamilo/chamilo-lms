@@ -101,7 +101,7 @@ function import_exercise($file) {
         }
     }
 
-    // find the different manifests for each question and parse them.
+    // find the different manifests for each question and parse them
     $exerciseHandle = opendir($baseWorkDir);
     //$question_number = 0;
     $file_found = false;
@@ -209,7 +209,13 @@ function parse_file($exercisePath, $file, $questionFile) {
     $question_index = 0;
     $correct_answer = '';
     $answers_array = array();
+    $new_question = true;
     foreach ($data as $line => $info) {
+        if ($question_index > 0 && $new_question == true && preg_match('/^(\r)?\n/',$info)) {
+            // double empty line
+            continue;
+        }
+        $new_question = false;
         //make sure it is transformed from iso-8859-1 to utf-8 if in that form
         if (!mb_check_encoding($info,'utf-8') && mb_check_encoding($info,'iso-8859-1')) {
             $info = utf8_encode($info);
@@ -232,7 +238,7 @@ function parse_file($exercisePath, $file, $questionFile) {
             //$exercise_info['question'][$question_index]['answer'][$correct_answer_index]['feedback'] = $matches[1];
             $exercise_info['question'][$question_index]['feedback'] = $matches[1];
             error_log('Storing feedback: '.$matches[1]);
-        } elseif (preg_match('/^TAGS:\s?([A-Z])\s?/', $info, $matches)) { 
+        } elseif (preg_match('/^TAGS:\s?([A-Z])\s?/', $info, $matches)) {
              //TAGS for chamilo >= 1.10
             $exercise_info['question'][$question_index]['answer_tags'] = explode(',', $matches[1]);
         } elseif (preg_match('/^(\r)?\n/',$info)) {
@@ -240,6 +246,7 @@ function parse_file($exercisePath, $file, $questionFile) {
             $question_index++;
             //emptying answers array when moving to next question
             $answers_array = array();
+            $new_question = true;
         } else {
             //Question itself (use a 40-chars long description)
             $exercise_info['question'][$question_index]['title'] = substr($info,0,40).'...';

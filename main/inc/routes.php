@@ -483,14 +483,6 @@ $app->get('/data/courses/{courseCode}/scorm/{file}', 'index.controller:getScormD
 /** Certificates */
 $app->match('/certificates/{id}', 'certificate.controller:indexAction', 'GET');
 
-/** Username */
-$app->match('/user/{username}', 'user.controller:indexAction', 'GET');
-
-/** Who is online */
-/*$app->match('/users/online', 'user.controller:onlineAction', 'GET');
-$app->match('/users/online-in-course', 'user.controller:onlineInCourseAction', 'GET');
-$app->match('/users/online-in-session', 'user.controller:onlineInSessionAction', 'GET');*/
-
 /** Portal news */
 $app->match('/news/{id}', 'news.controller:indexAction', 'GET')
     ->bind('portal_news');
@@ -655,6 +647,11 @@ if ($alreadyInstalled) {
     $app->mount('/admin/administrator/roles', new ChamiloLMS\Provider\ReflectionControllerProvider('role.controller'));
     $app->mount('/admin/administrator/question_scores', new ChamiloLMS\Provider\ReflectionControllerProvider('question_score.controller'));
     $app->mount('/admin/administrator/question_score_names', new ChamiloLMS\Provider\ReflectionControllerProvider('question_score_name.controller'));
+
+    $app->mount('/user/', new ChamiloLMS\Provider\ReflectionControllerProvider('profile.controller'));
+
+    $app->mount('/', new ChamiloLMS\Provider\ReflectionControllerProvider('user.controller'));
+
     $app->mount('/courses/{course}/curriculum/category', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_category.controller'));
     $app->mount('/courses/{course}/curriculum/item', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_item.controller'));
     $app->mount('/courses/{course}/curriculum/user', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_user.controller'));

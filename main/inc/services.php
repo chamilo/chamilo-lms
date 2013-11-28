@@ -629,6 +629,7 @@ class ChamiloServiceProvider implements ServiceProviderInterface
 // Registering Chamilo service provider.
 $app->register(new ChamiloServiceProvider(), array());
 
+
 // Controller as services definitions.
 $app['pages.controller'] = $app->share(
     function () use ($app) {
@@ -685,9 +686,15 @@ $app['certificate.controller'] = $app->share(
     }
 );
 
+$app['profile.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\User\ProfileController($app);
+    }
+);
+
 $app['user.controller'] = $app->share(
     function () use ($app) {
-        return new ChamiloLMS\Controller\UserController();
+        return new ChamiloLMS\Controller\User\UserController($app);
     }
 );
 
@@ -720,6 +727,7 @@ $app['admin.controller'] = $app->share(
         return new ChamiloLMS\Controller\Admin\AdminController($app);
     }
 );
+
 $app['role.controller'] = $app->share(
     function () use ($app) {
         return new ChamiloLMS\Controller\Admin\Administrator\RoleController($app);

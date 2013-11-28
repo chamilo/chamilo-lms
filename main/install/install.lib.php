@@ -901,17 +901,20 @@ function display_language_selection()
 <?php
 }
 
-function translate($variable) {
+function translate($variable)
+{
     global $app;
     return $app['translator']->trans($variable);
 }
 
-function getRequirements() {
+function getRequirements()
+{
     return
         array(
             'required' => array(
                 //'session' => array('url' => 'http://php.net/manual/en/book.session.php', 'recommend' => Display::label('OFF', 'success')),
                 'mysql' => array('url' => 'http://php.net/manual/en/book.mysql.php'),
+                'curl' => array('url' => 'http://php.net/manual/fr/book.curl.php'),
                 'zlib' => array('url' => 'http://php.net/manual/en/book.zlib.php'),
                 'pcre' => array('url' => 'http://php.net/manual/en/book.pcre.php'),
                 'xml' => array('url' => 'http://php.net/manual/en/book.xml.php'),
@@ -924,10 +927,109 @@ function getRequirements() {
             'optional' =>  array(
                 'imagick' => array('url' => 'http://php.net/manual/en/book.imagick.php'),
                 'ldap' => array('url' => 'http://php.net/manual/en/book.ldap.php'),
-                'xapian' => array('url' => 'http://php.net/manual/en/book.xapian.php'),
-                'curl' => array('url' => 'http://php.net/manual/en/book.curl.php')
+                'xapian' => array('url' => 'http://php.net/manual/en/book.xapian.php')
             )
         );
+}
+
+/**
+ * @param Symfony\Component\Translation\Translator $translator
+ * @return array
+ */
+function getOptions($translator)
+{
+    return array(
+        array(
+            'name' => 'Safe Mode',
+            'url' => 'http://php.net/manual/features.safe-mode.php',
+            'recommended' => Display::label('OFF', 'success'),
+            'current' => check_php_setting('safe_mode', 'OFF'),
+        ),
+        array(
+            'name' => 'Display Errors',
+            'url' => 'http://php.net/manual/ref.errorfunc.php#ini.display-errors',
+            'recommended' => Display::label('ON', 'success'),
+            'current' => check_php_setting('display_errors', 'OFF'),
+        ),
+        array(
+            'name' => 'File Uploads',
+            'url' => 'http://php.net/manual/ini.core.php#ini.file-uploads',
+            'recommended' => Display::label('OFF', 'success'),
+            'current' => check_php_setting('file_uploads', 'ON'),
+        ),
+        array(
+            'name' => 'Magic Quotes GPC',
+            'url' => 'http://php.net/manual/ref.info.php#ini.magic-quotes-gpc',
+            'recommended' => Display::label('OFF', 'success'),
+            'current' => check_php_setting('magic_quotes_gpc', 'OFF'),
+        ),
+        array(
+            'name' => 'Magic Quotes Runtime',
+            'url' => 'http://php.net/manual/ref.info.php#ini.magic-quotes-runtime',
+            'recommended' => Display::label('OFF', 'success'),
+            'current' => check_php_setting('magic_quotes_runtime', 'OFF'),
+        ),
+        array(
+            'name' => 'Register Globals',
+            'url' => 'http://php.net/manual/security.globals.php',
+            'recommended' => Display::label('OFF', 'success'),
+            'current' => check_php_setting('register_globals', 'OFF'),
+        ),
+        array(
+            'name' => 'Session auto start',
+            'url' => 'http://php.net/manual/ref.session.php#ini.session.auto-start',
+            'recommended' => Display::label('OFF', 'success'),
+            'current' => check_php_setting('auto_start', 'OFF'),
+        ),
+        array(
+            'name' => 'Short Open Tag',
+            'url' => 'http://php.net/manual/ini.core.php#ini.short-open-tag',
+            'recommended' => Display::label('OFF', 'success'),
+            'current' => check_php_setting('short_open_tag', 'OFF'),
+        ),
+        array(
+            'name' => 'Cookie HTTP Only',
+            'url' => 'http://www.php.net/manual/en/session.configuration.php#ini.session.cookie-httponly',
+            'recommended' => Display::label('ON', 'success'),
+            'current' => check_php_setting('session.cookie_httponly', 'ON'),
+        ),
+        array(
+            'name' => 'Maximum upload file size',
+            'url' => 'http://php.net/manual/ini.core.php#ini.upload-max-filesize',
+            'recommended' => Display::label('>= '.REQUIRED_MIN_UPLOAD_MAX_FILESIZE.'M', 'success'),
+            'current' => compare_setting_values(ini_get('upload_max_filesize'), REQUIRED_MIN_UPLOAD_MAX_FILESIZE),
+        ),
+        array(
+            'name' => 'Maximum post size',
+            'url' => 'http://php.net/manual/ini.core.php#ini.post-max-size',
+            'recommended' => Display::label('>= '.REQUIRED_MIN_POST_MAX_SIZE.'M', 'success'),
+            'current' => compare_setting_values(ini_get('post_max_size'), REQUIRED_MIN_POST_MAX_SIZE),
+        ),
+        array(
+            'name' => 'Memory Limit',
+            'url' => 'http://www.php.net/manual/en/ini.core.php#ini.memory-limit',
+            'recommended' => Display::label('>= '.REQUIRED_MIN_MEMORY_LIMIT.'M', 'success'),
+            'current' => compare_setting_values(ini_get('memory_limit'), REQUIRED_MIN_MEMORY_LIMIT),
+        )
+    );
+}
+
+/**
+ * Check if current system is allowed to install
+ * @return bool
+ */
+function checkRequiredSettings()
+{
+    $requirements = getRequirements();
+    $requiredSettings = $requirements['required'];
+
+    foreach ($requiredSettings as $extension => $options) {
+        if (!extension_loaded($extension)) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 /**
@@ -936,126 +1038,86 @@ function getRequirements() {
  */
 function drawRequirements($translator)
 {
-    $requeriments = getRequirements();
+    $requirements = getRequirements();
     $html = null;
+    $html .= '<tr>
+                <td>
+                    '.$translator->trans('Required').'
+                </td>
+                <td>
+                </td>
+              </tr>';
 
-    foreach ($requeriments['required'] as $extension => $req) {
+    foreach ($requirements['required'] as $extension => $req) {
+        $checkExtension = check_extension(
+            $extension,
+            $translator->trans('Yes'),
+            $translator->trans('No')
+        );
         $html .= '<tr>
                     <td>
                         <a href="'.$req['url'].'">'.$extension.'</a>
                     </td>
                     <td>
-                        '.check_extension(
-                            $extension,
-                            $translator->trans('Yes'),
-                            $translator->trans('No')
-                        ).'
+                        '.$checkExtension.'
                     </td>
                   </tr>';
     }
 
-    foreach ($requeriments['optional'] as $extension => $req) {
+    $html .= '<tr>
+                <td>
+                    '.$translator->trans('Optional').'
+                </td>
+                <td>
+                </td>
+              </tr>';
+
+    foreach ($requirements['optional'] as $extension => $req) {
+
+        $checkExtension = check_extension(
+            $extension,
+            $translator->trans('Yes'),
+            $translator->trans('No')
+        );
+
         $html .= '<tr>
                     <td>
                         <a href="'.$req['url'].'">'.$extension.'</a>
                     </td>
                     <td>
-                        '.check_extension(
-                            $extension,
-                            $translator->trans('Yes'),
-                            $translator->trans('No'),
-                            true
-                        ).'
+                        '.$checkExtension.'
+                    </td>
+                  </tr>';
+    }
+
+    return $html;
+}
+
+function drawOptions($translator)
+{
+    $options = getOptions($translator);
+    $html = null;
+    foreach ($options as $option) {
+        $html .= '<tr>
+                    <td>
+                        <a href="'.$option['url'].'">'.$option['name'].'</a>
+                    </td>
+                    <td>
+                        '.$option['recommended'].'
+                    </td>
+                    <td>
+                        '.$option['current'].'
                     </td>
                   </tr>';
     }
     return $html;
 }
 
-function display_requirements($app, $installType)
+function drawPermissionsSettings($app)
 {
     $html  = null;
 
-    // RECOMMENDED SETTINGS
-    // Note: these are the settings for Joomla, does this also apply for Chamilo?
-    // Note: also add upload_max_filesize here so that large uploads are possible
-    $html .= '<div class="RequirementHeading"><h3>'.translate('RecommendedSettings').'</h3>';
-    $html .= '<div class="RequirementText">'.translate('RecommendedSettingsInfo').'</div>';
-    $html .= '<div class="RequirementContent">';
-    $html .= '<table class="table">
-            <tr>
-                <th>'.translate('Setting').'</th>
-                <th>'.translate('Recommended').'</th>
-                <th>'.translate('Actual').'</th>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/features.safe-mode.php">Safe Mode</a></td>
-                <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.check_php_setting('safe_mode', 'OFF').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/ref.errorfunc.php#ini.display-errors">Display Errors</a></td>
-                <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.check_php_setting('display_errors', 'OFF').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.file-uploads">File Uploads</a></td>
-                <td class="requirements-recommended">'.Display::label('ON', 'success').'</td>
-                <td class="requirements-value">'.check_php_setting('file_uploads', 'ON').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/ref.info.php#ini.magic-quotes-gpc">Magic Quotes GPC</a></td>
-                <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.check_php_setting('magic_quotes_gpc', 'OFF').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/ref.info.php#ini.magic-quotes-runtime">Magic Quotes Runtime</a></td>
-                <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.check_php_setting('magic_quotes_runtime', 'OFF').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/security.globals.php">Register Globals</a></td>
-                <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.check_php_setting('register_globals', 'OFF').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/ref.session.php#ini.session.auto-start">Session auto start</a></td>
-                <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.check_php_setting('session.auto_start', 'OFF').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.short-open-tag">Short Open Tag</a></td>
-                <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.check_php_setting('short_open_tag', 'OFF').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://www.php.net/manual/en/session.configuration.php#ini.session.cookie-httponly">Cookie HTTP Only</a></td>
-                <td class="requirements-recommended">'.Display::label('ON', 'success').'</td>
-                <td class="requirements-value">'.check_php_setting('session.cookie_httponly', 'ON').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.upload-max-filesize">Maximum upload file size</a></td>
-                <td class="requirements-recommended">'.Display::label('>= '.REQUIRED_MIN_UPLOAD_MAX_FILESIZE.'M','success').'</td>
-                <td class="requirements-value">'.compare_setting_values(ini_get('upload_max_filesize'),       REQUIRED_MIN_UPLOAD_MAX_FILESIZE    ).'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.post-max-size">Maximum post size</a></td>
-                <td class="requirements-recommended">'.Display::label('>= '.REQUIRED_MIN_POST_MAX_SIZE.'M', 'success').'</td>
-                <td class="requirements-value">'.compare_setting_values(ini_get('post_max_size'),        REQUIRED_MIN_POST_MAX_SIZE    ).'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://www.php.net/manual/en/ini.core.php#ini.memory-limit">Memory Limit</a></td>
-                <td class="requirements-recommended">'.Display::label('>= '.REQUIRED_MIN_MEMORY_LIMIT.'M', 'success').'</td>
-                <td class="requirements-value">'.compare_setting_values(        ini_get('memory_limit'), REQUIRED_MIN_MEMORY_LIMIT
-    ).'</td>
-            </tr>
-          </table>';
-    $html .= '  </div>';
-    $html .= '</div>';
-
     // DIRECTORY AND FILE PERMISSIONS
-    $html .= '<div class="RequirementHeading"><h3>'.translate('DirectoryAndFilePermissions').'</h3>';
-    $html .= '<div class="RequirementText">'.translate('DirectoryAndFilePermissionsInfo').'</div>';
     $html .= '<div class="RequirementContent">';
 
     $course_attempt_name = '__XxTestxX__';
@@ -1229,37 +1291,7 @@ function display_requirements($app, $installType)
         $html .= translate('WarningExistingDokeosInstallationDetected');
         $html .= '</center></h4></div>';
     }
-
-    /*
-    // And now display the choice buttons (go back or install)
-    ?>
-    <p align="center" style="padding-top:15px">
-    <button type="submit" name="step1" class="back" onclick="javascript: window.location='index.php'; return false;"
-            value="&lt; <?php echo translate('Previous'); ?>"><?php echo translate('Previous'); ?></button>
-    <button type="submit" name="step2_install" class="add"value="<?php echo translate("NewInstallation"); ?>" <?php if ($error) {
-        echo 'disabled="disabled"';
-    } ?> ><?php echo translate('NewInstallation'); ?></button>
-    <input type="hidden" name="is_executable" id="is_executable" value="-"/>
-    <?php
-    // Real code
-    echo '<button type="submit" class="save" name="step2_update_8" value="Upgrade from Dokeos 1.8.x"';
-    if ($error) {
-        echo ' disabled="disabled"';
-    }
-    // Temporary code for alpha version, disabling upgrade
-    //echo '<input type="submit" name="step2_update" value="Upgrading is not possible in this beta version"';
-    //echo ' disabled="disabled"';
-    //end temp code
-    echo ' >'.translate('UpgradeFromDokeos18x').'</button>';
-    echo ' <button type="submit" class="save" name="step2_update_6" value="Upgrade from Dokeos 1.6.x"';
-    if ($error) {
-        echo ' disabled="disabled"';
-    }
-    echo ' >'.translate('UpgradeFromDokeos16x').'</button>';
-    echo '</p>';*/
-
     return $html;
-
 }
 
 /**

@@ -178,12 +178,21 @@ $app->match('/', function() use($app) {
 ->before($blockInstallation);
 
 $app->match('/requirements', function() use($app) {
-    $request = $app['request'];
-    $form = $app['form.factory']->createBuilder('form')
-        ->add('continue', 'submit', array('attr' => array('class' => 'btn')))
-        ->getForm();
 
-    $req = display_requirements($app, 'new');
+    $allowedToContinue = checkRequiredSettings();
+
+    $request = $app['request'];
+    $builder = $app['form.factory']->createBuilder('form');
+    if ($allowedToContinue) {
+        $builder->add('continue', 'submit', array('attr' => array('class' => 'btn-default')));
+    } else {
+        $message = $app['translator']->trans("You need to check your server settings.");
+        $app['session']->getFlashBag()->add('error', $message);
+    }
+
+    $form = $builder->getForm();
+
+    //$req = display_requirements($app, 'new');
 
     if (phpversion() < REQUIRED_PHP_VERSION) {
         $phpError = '<strong><font color="red">'.translate('PHPVersionError').'</font></strong>';
@@ -191,13 +200,14 @@ $app->match('/requirements', function() use($app) {
         $phpError = '<strong><font color="green">'.translate('PHPVersionOK').' '.phpversion().'</font></strong>';
     }
 
-
     if ('POST' == $request->getMethod()) {
          $url = $app['url_generator']->generate('check-database');
          return $app->redirect($url);
     }
 
-    $reqs = drawRequirements($app['translator']);
+    $requirements = drawRequirements($app['translator']);
+    $options = drawOptions($app['translator']);
+    $permissions = drawPermissionsSettings($app);
 
     return $app['twig']->render(
         'requirements.tpl',
@@ -206,11 +216,14 @@ $app->match('/requirements', function() use($app) {
             'required_php_version' => REQUIRED_PHP_VERSION,
             'required_php_version_validation' => phpversion() < REQUIRED_PHP_VERSION,
             'php_version' => phpversion(),
-            'reqs' => $reqs,
+            'requirements' => $requirements,
+            'options' => $options,
+            'permissions' => $permissions,
             'php_error' => $phpError,
-            'requirements' => $req
+            'allow_to_continue' => $allowedToContinue
         )
     );
+
 })->bind('requirements');
 
 $app->match('/check-database', function() use($app) {

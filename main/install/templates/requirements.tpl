@@ -12,11 +12,7 @@
         {{ 'ReadTheInstallGuide' | trans }}
     </a>
 
-    <div class="RequirementHeading">
-        <h3> {{ 'ServerRequirements' | trans }}</h3>
-    </div>
-
-    <div class="RequirementText">{{ 'ServerRequirementsInfo' | trans }}</div>
+    <h3> {{ 'ServerRequirements' | trans }}</h3>
 
     <table class="table">
         <tr>
@@ -31,18 +27,32 @@
         </tr>
 
         {% autoescape false %}
-            {# reqs #}
+        {{ requirements }}
         {% endautoescape %}
     </table>
 
+
+    <h3> {{ 'PHPSettings' | trans }}</h3>
+
+    <table class="table">
+        <tr>
+            <td>{{ 'Name' | trans }}</td>
+            <td>{{ 'Recommended' | trans }}</td>
+            <td>{{ 'Current' | trans }}</td>
+        </tr>
+
+        {% autoescape false %}
+        {{ options }}
+        {% endautoescape %}
+    </table>
+
+    <h3> {{ 'DirectoryAndFilePermissions' | trans }}</h3>
+
     {% autoescape false %}
-    {{ requirements }}
+    {{ permissions }}
     {% endautoescape %}
 
     <form action="#" method="post">
         {{ form_widget(form) }}
     </form>
-
-
 {% endblock %}
-

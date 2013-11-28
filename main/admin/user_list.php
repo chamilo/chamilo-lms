@@ -125,8 +125,7 @@ $(document).ready(function() {
         }
     }
 
-
-    $(".agenda_opener").live("click", function() {
+    $(".agenda_opener").on("click", function() {
         var url = this.href;
         var dialog = $("#dialog");
 

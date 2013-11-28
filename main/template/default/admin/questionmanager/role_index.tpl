@@ -1,4 +1,4 @@
-<div class="span6">
+<div class="col-md-6">
     <div class="well_border">
         <h4>{{ 'Questions'  | get_lang }}</h4>
         <ul>

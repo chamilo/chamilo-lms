@@ -26,7 +26,7 @@ require_once 'answer.class.php';
 require_once '../inc/global.inc.php';
 $urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
 
-if (empty($origin) ) {
+if (empty($origin)) {
     $origin = isset($_REQUEST['origin']) ? $_REQUEST['origin'] : null;
 }
 
@@ -176,7 +176,7 @@ $(function() {
                 $('#result_from_ajax').html('<?php echo addslashes(Display::return_message(get_lang('Saved'), 'success'))?>');
                 $('.question_row').hide();
                 $('#myform').hide();
-                $('#correct_again').hide();            
+                $('#correct_again').hide();
                 }
             }
         });

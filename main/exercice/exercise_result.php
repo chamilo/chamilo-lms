@@ -68,12 +68,12 @@ if (empty($objExercise)) {
         if ($exercise_stat_info['status'] == 'incomplete') {
             $objExercise->read($exercise_stat_info['exe_exo_id']);
         } else {
-        header("Location: overview.php?exerciseId=".$exercise_stat_info['exe_exo_id']);
-        exit;
-    }
+            header("Location: overview.php?exerciseId=".$exercise_stat_info['exe_exo_id']);
+            exit;
+        }
     } else {
-    api_not_allowed(true);
-}
+        api_not_allowed(true);
+    }
 }
 
 $gradebook = '';

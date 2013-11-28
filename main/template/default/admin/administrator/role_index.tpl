@@ -1,5 +1,5 @@
 {% for block_item in blocks %}
-    <div id="tabs-{{ loop.index }}" class="span6">
+    <div id="tabs-{{ loop.index }}" class="col-md-6">
         <div class="well_border {{ block_item.class }}">
             <h4>{{ block_item.icon }} {{ block_item.label }}</h4>
             <div style="list-style-type:none">
@@ -26,7 +26,7 @@
     </div>
 {% endfor %}
 
-<div class="span6">
+<div class="col-md-6">
     <div class="well_border">
         <ul>
             <li>

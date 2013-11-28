@@ -37,7 +37,6 @@ $app['template.show_footer'] = false;
 $app['template.show_header'] = false;
 $app['default_layout'] = 'default/layout/blank.tpl';
 
-
 $file   = (empty($_SESSION['file'])?'':$_SESSION['file']);
 $oLP    = unserialize($_SESSION['lpobject']);
 $oItem 	= $oLP->items[$oLP->current];

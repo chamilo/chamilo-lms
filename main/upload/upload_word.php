@@ -45,7 +45,7 @@ if (isset($_POST['convert'])) {
     if (isset($_FILES['user_file'])) {
         $allowed_extensions = array('doc', 'docx', 'odt', 'txt', 'sxw', 'rtf');
         if (in_array(strtolower(pathinfo($_FILES['user_file']['name'], PATHINFO_EXTENSION)), $allowed_extensions)) {
-            require('../newscorm/lp_upload.php');
+            require_once api_get_path(SYS_CODE_PATH).'newscorm/lp_upload.php';
             if (isset($o_doc) && $first_item_id != 0) {
                 // Search-related section
                 if (api_get_setting('search_enabled') == 'true') {

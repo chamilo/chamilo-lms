@@ -38,7 +38,7 @@ $nameTools = get_lang("FileUpload");
 $interbreadcrumb[] = array("url" => "../newscorm/lp_controller.php?action=list", "name" => get_lang("ToolLearnpath"));
 Display::display_header($nameTools, "Path");
 
-require_once '../newscorm/content_makers.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'newscorm/content_makers.inc.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
 echo '<div class="actions">';
@@ -54,8 +54,9 @@ $form->addElement('file', 'user_file', get_lang('FileToUpload'));
 $form->add_real_progress_bar('uploadScorm', 'user_file');
 $form->addRule('user_file', get_lang('ThisFieldIsRequired'), 'required');
 
-unset($content_origins[0]);
-unset($content_origins[1]);
+/*unset($content_origins[0]);
+unset($content_origins[1]);*/
+
 
 if (api_get_setting('search_enabled') == 'true') {
     $form->addElement('checkbox', 'index_document', '', get_lang('SearchFeatureDoIndexDocument'));
@@ -89,6 +90,3 @@ $defaults = array('index_document' => 'checked="checked"', 'use_max_score' => 1)
 $form->setDefaults($defaults);
 Display::display_normal_message(Display::tag('strong', get_lang('SupportedScormContentMakers')).': '.implode(', ', $content_origins), false);
 $form->display();
-
-// footer
-Display::display_footer();

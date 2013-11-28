@@ -18,6 +18,10 @@ $language_file[] = 'learnpath';
 
 require_once '../inc/global.inc.php';
 
+$app['template.show_footer'] = false;
+$app['template.show_header'] = false;
+$app['default_layout'] = 'default/layout/blank.tpl';
+
 /**
  * Get one item's details
  * @param   integer LP ID

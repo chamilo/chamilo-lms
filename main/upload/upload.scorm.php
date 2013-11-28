@@ -12,7 +12,7 @@
  */
 $language_file = 'scorm';
 $cwdir = getcwd();
-require_once '../newscorm/lp_upload.php';
+require_once api_get_path(SYS_CODE_PATH).'newscorm/lp_upload.php';
 
 //reinit current working directory as many functions in upload change it
 chdir($cwdir);

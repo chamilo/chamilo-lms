@@ -23,6 +23,10 @@ $language_file[] = 'learnpath';
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
 
+$app['template.show_footer'] = false;
+$app['template.show_header'] = false;
+$app['default_layout'] = 'default/layout/blank.tpl';
+
 require_once 'learnpath.class.php';
 require_once 'scorm.class.php';
 require_once 'aicc.class.php';

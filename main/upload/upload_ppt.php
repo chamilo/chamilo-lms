@@ -28,7 +28,7 @@ if (isset($_POST['convert'])) {
     if (isset($_FILES['user_file'])) {
         $allowed_extensions = array('odp', 'sxi', 'ppt', 'pps', 'sxd', 'pptx');
         if (in_array(strtolower(pathinfo($_FILES['user_file']['name'], PATHINFO_EXTENSION)), $allowed_extensions)) {
-            require('../newscorm/lp_upload.php');
+            require_once api_get_path(SYS_CODE_PATH).'newscorm/lp_upload.php';
             if (isset($o_ppt) && $first_item_id != 0) {
                 if (api_get_setting('search_enabled') == 'true') {
                     require_once(api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php');

@@ -31,6 +31,10 @@ $language_file[] = 'learnpath';
 
 require_once '../inc/global.inc.php';
 
+$app['template.show_footer'] = false;
+$app['template.show_header'] = false;
+$app['default_layout'] = 'default/layout/blank.tpl';
+
 /**
  * Writes an item's new values into the database and returns the operation result
  * @param   integer Learnpath ID

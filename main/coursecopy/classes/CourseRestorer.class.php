@@ -89,6 +89,7 @@ class CourseRestorer
 
 	/**
 	 * Create a new CourseRestorer
+     * @param   array   Course object as returned by other coursebuilder classes (see copy_course.php)
 	 */
     public function __construct($course)
     {
@@ -106,9 +107,9 @@ class CourseRestorer
 
     /**
      * Set the file-option
-     * @param constant $options What to do with files with same name (FILE_SKIP, FILE_RENAME or FILE_OVERWRITE)
+     * @param constant $options What to do with files with same name (FILE_SKIP, FILE_RENAME or FILE_OVERWRITE). Default is to skip the copy of files that already exist
      */
-    function set_file_option($option)
+    function set_file_option($option = FILE_SKIP)
     {
         $this->file_option = $option;
     }

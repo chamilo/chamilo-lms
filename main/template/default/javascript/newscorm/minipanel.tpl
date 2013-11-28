@@ -37,7 +37,7 @@ function toogle_minipanel() {
     // Hiding navigation left zone
     $('#learning_path_left_zone').hide(50);
     $('#learning_path_right_zone').css('margin-left','10px');
-    $('#hide_bar table').css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
+    $('#hide_bar table').css('backgroundImage','url({{ _p.web_img }}hide2.png)').css('backgroundColor','#EEEEEE');
 }
 
 var left_width_mini = 20;  // (relative) hide_bar position
@@ -47,22 +47,29 @@ $(document).ready(function() {
     var left_width = $('learning_path_left_zone').width();
 
    //Adding div to hide panel
-    $('#learning_path_right_zone').before('<div id="hide_bar" style="float: left; width: 10px; height: 1000px;">' +
+    $('#learning_path_right_zone').before(
+        '<div id="hide_bar" class="col-md-1" style="float: left; width: 10px; height: 1000px;">' +
         '<table style="border: 0 none; width: 100%; height: 100%; cursor: pointer; background-color: #EEEEEE">' +
-        '<tr><td></td></tr></table></div>');
-    $('#hide_bar table').css({backgroundImage: "url(../img/hide0.png)", backgroundRepeat: "no-repeat", backgroundPosition: "center center"});
+        '<tr><td></td></tr></table></div>'
+    );
+
+    $('#hide_bar table').css({
+        backgroundImage: "url('{{ _p.web_img }}hide0.png')",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center center"
+    });
 
     //Adding effects to hide bar
     $('#hide_bar table').hover(function () {
     	if ($('#hide_bar').position().left >= left_width)
-    		$(this).css('backgroundImage','url(../img/hide1.png)').css('backgroundColor','#888888');
+    		$(this).css('backgroundImage','url({{ _p.web_img }}hide1.png)').css('backgroundColor','#888888');
     	else if($('#hide_bar').position().left <= left_width_mini)
-    		$(this).css('backgroundImage','url(../img/hide3.png)').css('backgroundColor','#888888');
+    		$(this).css('backgroundImage','url({{ _p.web_img }}hide3.png)').css('backgroundColor','#888888');
         },function (){
             if($('#hide_bar').position().left >= left_width)
-              $(this).css('backgroundImage','url(../img/hide0.png)').css('backgroundColor','#EEEEEE');
+              $(this).css('backgroundImage','url({{ _p.web_img }}hide0.png)').css('backgroundColor','#EEEEEE');
             else if($('#hide_bar').position().left <= left_width_mini)
-              $(this).css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
+              $(this).css('backgroundImage','url({{ _p.web_img }}hide2.png)').css('backgroundColor','#EEEEEE');
         }
     );
 
@@ -79,7 +86,7 @@ $(document).ready(function() {
         // Show navigation left zone
         $('#learning_path_left_zone').show(50);
         $('#learning_path_right_zone').css('marginLeft', left_width + 10 + 'px');
-        $('#hide_bar table').css('backgroundImage','url(../img/hide0.png)').css('backgroundColor','#EEEEEE');
+        $('#hide_bar table').css('backgroundImage', 'url({{ _p.web_img }}hide0.png)').css('backgroundColor','#EEEEEE');
         $('#learning_path_main  #control').remove();
         $('#content_id').css({ height: original});
     });

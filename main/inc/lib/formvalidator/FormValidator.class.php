@@ -109,15 +109,16 @@ class FormValidator extends HTML_QuickForm
         $attributes = null,
         $track_submit = true
     ) {
-        //Default form class
+        // Default form class
         if (is_array($attributes) && !isset($attributes['class']) || empty($attributes)) {
             $attributes['class'] = 'form-horizontal';
         }
 
-        if ($attributes['class'] == 'form-search') {
-            $attributes['class']  = 'form-inline';
+        if (is_array($attributes) && isset($attributes['class'])) {
+            if ($attributes['class'] == 'form-search') {
+                $attributes['class']  = 'form-inline';
+            }
         }
-
 
         parent::__construct($form_name, $method, $action, $target, $attributes, $track_submit);
 
@@ -131,7 +132,6 @@ class FormValidator extends HTML_QuickForm
         $this->registerElementType('select_theme', $dir . 'Element/select_theme.php', 'HTML_QuickForm_Select_Theme');
         $this->registerElementType('style_submit_button', $dir . 'Element/style_submit_button.php', 'HTML_QuickForm_stylesubmitbutton');
         $this->registerElementType('button', $dir . 'Element/style_submit_button.php', 'HTML_QuickForm_stylesubmitbutton');
-
         $this->registerElementType('captcha', 'HTML/QuickForm/CAPTCHA.php', 'HTML_QuickForm_CAPTCHA');
         $this->registerElementType('CAPTCHA_Image', 'HTML/QuickForm/CAPTCHA/Image.php', 'HTML_QuickForm_CAPTCHA_Image');
 
@@ -154,7 +154,7 @@ class FormValidator extends HTML_QuickForm
         // Form template
         $renderer->setFormTemplate($this->getFormTemplate());
 
-        //Element template
+        // Element template
         if (isset($attributes['class']) && $attributes['class'] == 'well form-inline') {
             $element_template = ' {label}  {element} ';
             $renderer->setElementTemplate($element_template);
@@ -163,7 +163,7 @@ class FormValidator extends HTML_QuickForm
             $renderer->setElementTemplate($element_template);
         } else {
 
-            if ($attributes['class'] == 'form-inline') {
+            if (is_array($attributes) && isset($attributes['class']) && $attributes['class'] == 'form-inline') {
                 $element_template = $this->getDefaultInlineElementTemplate();
             } else {
                 $element_template = $this->getDefaultElementTemplate();

@@ -195,7 +195,7 @@ if (!empty($errorMsg)) {
   <td align="center"><b><?php echo get_lang('UserGroupListInPlatform') ?> :</b>
   </td>
   <td></td>
-  <td align="center"><b><?php echo get_lang('UserGroupListIn').' '.$url_selected; ?></b></td>
+  <td align="center"><b><?php printf(get_lang('UserGroupListInX'),$url_selected); ?></b></td>
 </tr>
 
 <tr>

@@ -1,15 +1,6 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-// +----------------------------------------------------------------------+
-// | PHP version 4.0                                                      |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2003 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | Copy of the existing rule "required" to check if at least one element|
-// | has been filled. Then $value can be an array						  |
-// +----------------------------------------------------------------------+
-// | Authors: Eric Marguin <e.marguin@elixir-interactive.com>             |
-// +----------------------------------------------------------------------+
+
+/* For licensing terms, see /license.txt */
 
 require_once('HTML/QuickForm/Rule.php');
 
@@ -46,4 +37,3 @@ class HTML_QuickForm_Rule_MultipleRequired extends HTML_QuickForm_Rule
     } // end func getValidationScript
 
 } // end class HTML_QuickForm_Rule_MultipleRequired
-?>

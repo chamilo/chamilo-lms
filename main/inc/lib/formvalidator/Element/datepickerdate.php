@@ -1,6 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-require_once ('HTML/QuickForm/date.php');
+require_once 'HTML/QuickForm/date.php';
 /**
  * Form element to select a date and hour (with popup datepicker)
  */
@@ -9,7 +9,8 @@ class HTML_QuickForm_datepickerdate extends HTML_QuickForm_date
 	/**
 	 * Constructor
 	 */
-	function HTML_QuickForm_datepickerdate($elementName = null, $elementLabel = null, $attributes = null) {
+	function HTML_QuickForm_datepickerdate($elementName = null, $elementLabel = null, $attributes = null)
+    {
 		global $myMinYear, $myMaxYear;
 		$js_form_name = $attributes['form_name'];
 		unset($attributes['form_name']);

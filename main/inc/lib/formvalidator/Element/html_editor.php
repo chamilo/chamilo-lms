@@ -20,11 +20,17 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
      */
     public $richEditorStatus = true;
 
+    /**
+     * @return bool
+     */
     public function getRichEditorStatus()
     {
         return $this->richEditorStatus;
     }
 
+    /**
+     * @param $status
+     */
     public function setRichEditorStatus($status)
     {
         $this->richEditorStatus = (bool)$status;
@@ -37,7 +43,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
      * @param   string  Attributes for the textarea
      * @param array $editor_config	Optional configuration settings for the online editor.
      */
-    function HTML_QuickForm_html_editor($elementName = null, $elementLabel = null, $attributes = null, $config = null)
+    public function HTML_QuickForm_html_editor($elementName = null, $elementLabel = null, $attributes = null, $config = null)
     {
         if (empty($elementName)) {
             return false;
@@ -50,11 +56,9 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
         $this->_persistantFreeze = true;
         $this->_type = 'html_editor';
         $this->fullPage = false;
-
         $name = $this->getAttribute('name');
 
         global $app;
-        //$this->fck_editor = new FCKeditor($name);
         $this->fck_editor = new ChamiloLMS\Component\Editor\Editor($name, $app['translator']);
 
         $this->fck_editor->ToolbarSet = $fck_attribute['ToolbarSet'];
@@ -89,7 +93,8 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
      * @access public
      * @return boolean
      */
-    function browserSupported() {
+    function browserSupported()
+    {
         return FCKeditor :: IsCompatible();
     }
 
@@ -97,7 +102,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
      * Return the HTML editor in HTML
      * @return string
      */
-    function toHtml()
+    public function toHtml()
     {
         if ($this->getRichEditorStatus() == false) {
             //Fix rows and cols
@@ -125,7 +130,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
      * Returns the htmlarea content in HTML
      * @return string
      */
-    function getFrozenHtml()
+    public function getFrozenHtml()
     {
         return $this->getValue();
     }
@@ -133,7 +138,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
     /**
      * Build this element using FCKeditor
      */
-    function build_FCKeditor()
+    public function build_FCKeditor()
     {
         if (!FCKeditor :: IsCompatible()) {
             return parent::toHTML();

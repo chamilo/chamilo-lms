@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 /**
  * Abstract base class for QuickForm validation rules
@@ -15,7 +16,7 @@ class HTML_QuickForm_Rule_Url extends HTML_QuickForm_Rule
     /**
      * Validates url
      *
-     * @param string $url    
+     * @param string $url
      * @return boolean  Returns true if valid, false otherwise.
      */
     function validate($url)

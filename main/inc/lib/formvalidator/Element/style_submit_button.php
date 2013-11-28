@@ -1,10 +1,7 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * HTML class for a submit type element
  *
- * PHP versions 4 and 5
  *
  * LICENSE: This source file is subject to version 3.01 of the PHP license
  * that is available through the world-wide-web at the following URI:
@@ -39,8 +36,6 @@ require_once 'style_button.php';
  */
 class HTML_QuickForm_stylesubmitbutton extends HTML_QuickForm_stylebutton
 {
-    // {{{ constructor
-
     /**
      * Class constructor
      *
@@ -51,20 +46,21 @@ class HTML_QuickForm_stylesubmitbutton extends HTML_QuickForm_stylebutton
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_stylesubmitbutton($elementName = null, $value = null, $attributes = null, $img = null) {
+    public function HTML_QuickForm_stylesubmitbutton($elementName = null, $value = null, $attributes = null, $img = null)
+    {
         if (empty($attributes)) {
             $attributes = array();
         }
-        
+
         if (!isset($attributes['class'])) {
             if (is_array($attributes)) {
                 $attributes['class'] = 'btn btn-primary';
-            }            
+            }
         }
         HTML_QuickForm_stylebutton::HTML_QuickForm_stylebutton($elementName, null, $attributes, $value, $img);
         $this->setValue($value);
         $this->setType('submit');
-    } //end constructor
+    }
 
     /**
      * Freeze the element so that only its value is returned
@@ -72,19 +68,17 @@ class HTML_QuickForm_stylesubmitbutton extends HTML_QuickForm_stylebutton
      * @access    public
      * @return    void
      */
-    function freeze() {
+    public function freeze()
+    {
         return false;
-    } //end func freeze
-
-    // }}}
-    // {{{ exportValue()
+    }
 
    /**
     * Only return the value if it is found within $submitValues (i.e. if
     * this particular submit button was clicked)
     */
-    function exportValue(&$submitValues, $assoc = false) {
+    public function exportValue(&$submitValues, $assoc = false)
+    {
         return $this->_prepareValue($this->_findValue($submitValues), $assoc);
     }
-    // }}}
-} //end class HTML_QuickForm_submit
+}

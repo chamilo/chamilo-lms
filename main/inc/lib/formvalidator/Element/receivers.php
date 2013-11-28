@@ -1,26 +1,6 @@
 <?php
-// $Id: receivers.php 7727 2006-02-09 13:37:04Z turboke $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
+/* For licensing terms, see /license.txt */
 
-	Copyright (c) 2004-2005 Dokeos S.A.
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
 require_once 'HTML/QuickForm/group.php';
 require_once 'HTML/QuickForm/radio.php';
 require_once 'HTML/QuickForm/advmultiselect.php';
@@ -59,6 +39,7 @@ class HTML_QuickForm_receivers extends HTML_QuickForm_group
 		$this->_appendName = true;
 		$this->_type = 'receivers';
 	}
+
 	/**
 	 * Create the form elements to build this element group
 	 */
@@ -70,6 +51,7 @@ class HTML_QuickForm_receivers extends HTML_QuickForm_group
 		$this->_elements[] = new HTML_QuickForm_advmultiselect('to', '', $this->receivers);
 		$this->_elements[2]->setSelected($this->receivers_selected);
 	}
+
 	/**
 	 * HTML representation
 	 */
@@ -85,6 +67,7 @@ class HTML_QuickForm_receivers extends HTML_QuickForm_group
 		$js = $this->getElementJS();
 		return $renderer->toHtml().$js;
 	}
+
 	/**
 	 * Get the necessary javascript
 	 */
@@ -105,6 +88,7 @@ class HTML_QuickForm_receivers extends HTML_QuickForm_group
 					</script>\n";
 		return $js;
 	}
+
 	/**
 	 * accept renderer
 	 */
@@ -113,4 +97,3 @@ class HTML_QuickForm_receivers extends HTML_QuickForm_group
 		$renderer->renderElement($this, $required, $error);
 	}
 }
-?>

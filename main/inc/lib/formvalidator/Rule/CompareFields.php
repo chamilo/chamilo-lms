@@ -1,12 +1,13 @@
 <?php
+/* For licensing terms, see /license.txt */
 require_once 'HTML/QuickForm/Rule.php';
 /**
  * QuickForm rule to check a date
  */
-class HTML_QuickForm_Compare_Fields extends HTML_QuickForm_Rule_Compare 
+class HTML_QuickForm_Compare_Fields extends HTML_QuickForm_Rule_Compare
 {
 	/**
-	 * Function to check an array of fields 	 
+	 * Function to check an array of fields
 	 * @param   array of field names
      * @param   string operator ==, >=, etc
      * @param   string the value to compare
@@ -20,9 +21,9 @@ class HTML_QuickForm_Compare_Fields extends HTML_QuickForm_Rule_Compare
            }
            $params = explode('@', $operator_and_max_value);
            $operator    = $params[0];
-           $max_value   = $params[1];                      
+           $max_value   = $params[1];
            return parent::validate(array($final_value, $max_value), $operator);
         }
-        return false;        
+        return false;
 	}
 }

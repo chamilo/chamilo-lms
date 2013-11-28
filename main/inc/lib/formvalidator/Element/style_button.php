@@ -1,4 +1,6 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
  * Base class for <input /> form elements
  *
@@ -59,8 +61,9 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
         $strAttr = '';
         if (is_array($attributes)) {
             foreach ($attributes as $key => $value) {
-            	if ($key != 'value')
+            	if ($key != 'value') {
                     $strAttr .= ' ' . $key . '="' . htmlspecialchars($value) . '"';
+                }
             }
         }
         return $strAttr;

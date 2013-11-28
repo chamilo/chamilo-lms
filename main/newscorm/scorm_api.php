@@ -46,12 +46,20 @@ if (!is_object($oItem)) {
     exit;
 }
 
+$imagePath = api_get_path(WEB_IMG_PATH);
+
 $autocomplete_when_80pct = 0;
 $user = api_get_user_info();
 header('Content-type: text/javascript');
 
 ?>var scorm_logs = <?php echo ((empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin()) )?'0':'3');?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
 var lms_logs = 0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
+
+var notAttemptedImage = '<?php echo $imagePath ?>notattempted.gif';
+var incompleteImage = '<?php echo $imagePath ?>incomplete.png';
+var completedImage = '<?php echo $imagePath ?>completed.png';
+var deleteImage = '<?php echo $imagePath ?>delete.png';
+var notAttemptedImage = '<?php echo $imagePath ?>notattempted.gif';
 
 // API Object initialization (eases access later on)
 function APIobject() {
@@ -1159,38 +1167,38 @@ function update_toc(update_action, update_id, change_ids) {
                 myelem.attr('class',"scorm_item_highlight");
                 break;
             case 'not attempted':
-                if( myelemimg.attr('src') != '../img/notattempted.gif') {
-                    myelemimg.attr('src','../img/notattempted.gif');
+                if( myelemimg.attr('src') != notAttemptedImage) {
+                    myelemimg.attr('src', notAttemptedImage);
                     myelemimg.attr('alt','n');
                 }
                 break;
             case 'incomplete':
-                if( myelemimg.attr('src') != '../img/incomplete.png') {
-                    myelemimg.attr('src','../img/incomplete.png');
+                if( myelemimg.attr('src') != incompleteImage) {
+                    myelemimg.attr('src', incompleteImage);
                     myelemimg.attr('alt','i');
                 }
                 break;
             case 'completed':
-                if( myelemimg.attr('src') != '../img/completed.png') {
-                    myelemimg.attr('src','../img/completed.png');
+                if( myelemimg.attr('src') != completedImage) {
+                    myelemimg.attr('src', completedImage);
                     myelemimg.attr('alt','c');
                 }
                 break;
             case 'failed':
-                if( myelemimg.attr('src') != '../img/delete.png') {
-                    myelemimg.attr('src','../img/delete.png');
+                if( myelemimg.attr('src') != deleteImage) {
+                    myelemimg.attr('src', deleteImage);
                     myelemimg.attr('alt','f');
                 }
                 break;
             case 'passed':
-                if( myelemimg.attr('src') != '../img/completed.png' && myelemimg.attr('alt') != 'passed') {
-                    myelemimg.attr('src','../img/completed.png');
+                if( myelemimg.attr('src') != completedImage && myelemimg.attr('alt') != 'passed') {
+                    myelemimg.attr('src', completedImage);
                     myelemimg.attr('alt','p');
                 }
                 break;
             case 'browsed':
-                if( myelemimg.attr('src') != '../img/completed.png' && myelemimg.attr('alt') != 'browsed') {
-                    myelemimg.attr('src','../img/completed.png');
+                if( myelemimg.attr('src') != completedImage && myelemimg.attr('alt') != 'browsed') {
+                    myelemimg.attr('src', completedImage);
                     myelemimg.attr('alt','b');
                 }
                 break;

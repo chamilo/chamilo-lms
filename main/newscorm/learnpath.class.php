@@ -2440,8 +2440,13 @@ class learnpath
         $text = $percentage.$text_add;
         //@todo use Display::display_progress();
         $output = '<div class="progress progress-striped">
-                        <div id="progress_bar_value" class="bar" style="width: '.$text.';"></div>
-                    </div>
+                <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="'.$text.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$text.'%">
+                    <span class="sr-only">'.$text.'% Complete</span>
+                </div>
+                </div>
+
+
+
                     <div class="progresstext" id="progress_text">'.$text.'</div>';
 
         return $output;
@@ -3197,7 +3202,6 @@ class learnpath
             $title = Security::remove_XSS($title);
             if ($item['type'] != 'dokeos_chapter' && $item['type'] != 'dir' && $item['type'] != 'dokeos_module') {
                 $url = $this->get_link('http', $item['id'], $toc_list);
-
                 $html .= '<a href="" onClick="switch_item('.$mycurrentitemid.','.$item['id'].');'.'return false;" >'.stripslashes(
                     $title
                 ).'</a>';
@@ -3210,16 +3214,12 @@ class learnpath
             if ($item['type'] == 'quiz') {
                 if ($item['status'] == 'completed') {
                     $html .= "&nbsp;".Display::return_icon($icon_name[$item['status']], substr($item['status'], 0, 1), array('id' => "toc_img_".$item['id'], 'width' => '14'));
-                    //$html .= "&nbsp;<img id='toc_img_".$item['id']."' src='".$icon_name[$item['status']]."' alt='".substr($item['status'],0,1)."' width='14' />";
-
                 } else {
                     $html .= "&nbsp;".Display::return_icon($icon_name['not attempted'], substr('not attempted', 0, 1), array('id' => "toc_img_".$item['id'], 'width' => '14'));
-//                    $html .= "&nbsp;<img id='toc_img_".$item['id']."' src='".$icon_name['not attempted']."' alt='".substr('not attempted', 0, 1)."' width='14' />";
                 }
             } else {
                 if ($item['type'] != 'dokeos_chapter' && $item['type'] != 'dokeos_module' && $item['type'] != 'dir') {
                     $html .= "&nbsp;".Display::return_icon($icon_name[$item['status']], substr($item['status'], 0, 1), array('id' => "toc_img_".$item['id'], 'width' => '14'));
-                    //$html .= "&nbsp;<img id='toc_img_".$item['id']."' src='".$icon_name[$item['status']]."' alt='".substr($item['status'], 0, 1)."' width='14' />";
                 }
             }
 

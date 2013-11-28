@@ -211,7 +211,6 @@ function GetOriginalYoutubeUrl ( url )
 	}
 
 	url = url.replace( '/v/', '/watch?v=' ) ;
-	url = url.replace( /^\/\//, 'http://' ) ;
 
 	return url ;
 }

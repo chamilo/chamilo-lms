@@ -50,17 +50,12 @@ class CurriculumItemRelUser
     private $description;
 
     /**
-     * @ORM\OneToMany(targetEntity="User", mappedBy="curriculumItems")
-     */
-    //private $user;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="User"))
+     * @ORM\ManyToOne(targetEntity="User",  inversedBy="curriculumItems"))
      * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id", nullable=true)
      */
     private $user;
 
-     /**
+    /**
      * @ORM\ManyToOne(targetEntity="CurriculumItem")
      * @ORM\JoinColumn(name="item_id", referencedColumnName="id", nullable=true)
      */
@@ -75,7 +70,15 @@ class CurriculumItemRelUser
     }
 
     /**
-     * @return mixed
+     * @param User $user
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @return CurriculumItem
      */
     public function getItem()
     {
@@ -88,14 +91,6 @@ class CurriculumItemRelUser
     public function setItem(CurriculumItem $item)
     {
         $this->item = $item;
-    }
-
-    /**
-     * @param User $user
-     */
-    public function setUser(User $user)
-    {
-        $this->user = $user;
     }
 
     /**

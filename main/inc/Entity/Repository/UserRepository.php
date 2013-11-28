@@ -23,21 +23,21 @@ class UserRepository extends EntityRepository implements UserProviderInterface
     {
         $qb = $this->createQueryBuilder('a');
 
-        //Selecting user info
+        // Selecting user info
         $qb->select('DISTINCT b');
 
         $qb->from('Entity\User', 'b');
 
-        //Selecting courses for users
+        // Selecting courses for users
         //$qb->innerJoin('u.courses', 'c');
 
         //@todo check app settings
         $qb->add('orderBy', 'b.firstname ASC');
         $qb->where('b.firstname LIKE :keyword OR b.lastname LIKE :keyword ');
         $qb->setParameter('keyword', "%$keyword%");
-        $q = $qb->getQuery();
+        $query = $qb->getQuery();
 
-        return $q->execute();
+        return $query->execute();
     }
 
     /**
@@ -47,7 +47,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
      */
     public function loadUserByUsername($username)
     {
-        $q = $this
+        $query = $this
             ->createQueryBuilder('u')
             ->where('u.username = :username OR u.email = :email')
             ->setParameter('username', $username)
@@ -55,7 +55,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
             ->getQuery();
 
         try {
-            $user = $q->getSingleResult();
+            $user = $query->getSingleResult();
         } catch (NoResultException $e) {
             throw new UsernameNotFoundException(
                 sprintf('Unable to find an active admin User identified by "%s".', $username),

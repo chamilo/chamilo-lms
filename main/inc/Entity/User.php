@@ -22,7 +22,7 @@ use ChamiloLMS\Component\Auth;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="Entity\Repository\UserRepository")
  */
-class User implements AdvancedUserInterface, \Serializable , EquatableInterface
+class User implements AdvancedUserInterface, \Serializable, EquatableInterface
 {
     /**
      * @var integer
@@ -249,9 +249,8 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
     private $isActive;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CurriculumItemRelUser")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id", nullable=true)
-     */
+     * @ORM\OneToMany(targetEntity="CurriculumItemRelUser", mappedBy="user")
+     **/
     private $curriculumItems;
 
     /**
@@ -276,7 +275,6 @@ class User implements AdvancedUserInterface, \Serializable , EquatableInterface
         $this->salt = sha1(uniqid(null, true));
         $this->isActive = true;
         $this->registrationDate = new \DateTime();
-        $this->curriculumItems = new ArrayCollection();
         $this->portals = new ArrayCollection();
     }
 

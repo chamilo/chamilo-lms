@@ -90,7 +90,7 @@ elseif (isset($_POST['number_of_groups'])) {
         $number_of_groups = intval($_POST['number_of_groups']);
         if ($number_of_groups > 1) {
     ?>
-    <script type="text/javascript">
+    <script>
     var number_of_groups = <?php echo $number_of_groups; ?>;
     function switch_state(key) {
         for( i=1; i<number_of_groups; i++) {
@@ -216,11 +216,9 @@ EOT;
 
 	if (count($categories) > 1 || isset($categories[0]) && $categories[0]['id'] != GroupManager::VIRTUAL_COURSE_CATEGORY) {
 		$create_groups_form = new FormValidator('create_groups', 'post', api_get_self().'?'.api_get_cidreq());
-		$create_groups_form->addElement('header', '', $nameTools);
+		$create_groups_form->addElement('header', $nameTools);
 		$group_el = array();
-		//$group_el[] = $create_groups_form->createElement('static', null, null, get_lang('Create'));
 		$group_el[] = $create_groups_form->createElement('text', 'number_of_groups', array(get_lang('Create'), '1'));
-		//$group_el[] = $create_groups_form->createElement('static', null, null, get_lang('NewGroups'));
 		$group_el[] = $create_groups_form->createElement('style_submit_button', 'submit', get_lang('ProceedToCreateGroup'), 'class="save"');
 		$create_groups_form->addGroup($group_el, 'create_groups', get_lang('NumberOfGroupsToCreate'), ' ', false);
 		$defaults = array();

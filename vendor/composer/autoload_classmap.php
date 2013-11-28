@@ -330,7 +330,6 @@ return array(
     'HTML_QuickForm_select' => $baseDir . '/main/inc/lib/pear/HTML/QuickForm/select.php',
     'HTML_QuickForm_static' => $baseDir . '/main/inc/lib/pear/HTML/QuickForm/static.php',
     'HTML_QuickForm_stylebutton' => $baseDir . '/main/inc/lib/formvalidator/Element/style_button.php',
-    'HTML_QuickForm_styleresetbutton' => $baseDir . '/main/inc/lib/formvalidator/Element/style_reset_button.php',
     'HTML_QuickForm_stylesubmitbutton' => $baseDir . '/main/inc/lib/formvalidator/Element/style_submit_button.php',
     'HTML_QuickForm_submit' => $baseDir . '/main/inc/lib/pear/HTML/QuickForm/submit.php',
     'HTML_QuickForm_text' => $baseDir . '/main/inc/lib/pear/HTML/QuickForm/text.php',

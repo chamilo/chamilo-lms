@@ -131,7 +131,6 @@ class FormValidator extends HTML_QuickForm
         $this->registerElementType('select_language', $dir . 'Element/select_language.php', 'HTML_QuickForm_Select_Language');
         $this->registerElementType('select_theme', $dir . 'Element/select_theme.php', 'HTML_QuickForm_Select_Theme');
         $this->registerElementType('style_submit_button', $dir . 'Element/style_submit_button.php', 'HTML_QuickForm_stylesubmitbutton');
-        $this->registerElementType('style_reset_button', $dir . 'Element/style_reset_button.php', 'HTML_QuickForm_styleresetbutton');
         $this->registerElementType('button', $dir . 'Element/style_submit_button.php', 'HTML_QuickForm_stylesubmitbutton');
 
         $this->registerElementType('captcha', 'HTML/QuickForm/CAPTCHA.php', 'HTML_QuickForm_CAPTCHA');
@@ -150,16 +149,11 @@ class FormValidator extends HTML_QuickForm
         $this->registerRule('CAPTCHA', 'rule', 'HTML_QuickForm_Rule_CAPTCHA', 'HTML/QuickForm/Rule/CAPTCHA.php');
 
         // Modify the default templates
+        /** @var  HTML_QuickForm_Renderer_Default $renderer */
         $renderer = & $this->defaultRenderer();
 
-        //Form template
-        $form_template = '<form{attributes}>
-<fieldset>
-	{content}
-</fieldset>
-{hidden}
-</form>';
-        $renderer->setFormTemplate($form_template);
+        // Form template
+        $renderer->setFormTemplate($this->getFormTemplate());
 
         //Element template
         if (isset($attributes['class']) && $attributes['class'] == 'well form-inline') {
@@ -169,11 +163,14 @@ class FormValidator extends HTML_QuickForm
             $element_template = ' {label}  {element} ';
             $renderer->setElementTemplate($element_template);
         } else {
+
             if ($attributes['class'] == 'form-inline') {
                 $element_template = $this->getDefaultInlineElementTemplate();
             } else {
                 $element_template = $this->getDefaultElementTemplate();
             }
+            //$renderer->setGroupElementTemplate($this->getGroupTemplate());
+
             $renderer->setElementTemplate($element_template);
 
             //Display a gray div in the buttons
@@ -202,7 +199,21 @@ EOT;
         $renderer->setRequiredNoteTemplate($required_note_template);
     }
 
-    function getDefaultElementTemplate()
+    /**
+     * @return string
+     */
+    private function getFormTemplate()
+    {
+        return '<form{attributes}>
+                <fieldset>{content}</fieldset>
+                {hidden}
+                </form>';
+    }
+
+    /**
+     * @return string
+     */
+    private function getDefaultElementTemplate()
     {
         return '
             <div class="form-group {error_class}">
@@ -231,7 +242,10 @@ EOT;
             </div>';
     }
 
-    function getDefaultInlineElementTemplate()
+    /**
+     * @return string
+     */
+    private function getDefaultInlineElementTemplate()
     {
         return '
             <div class="form-group {error_class}">
@@ -376,8 +390,6 @@ EOT;
             $el = $this->getElement($name);
             $el->fullPage = true;
         }
-        // Add rule to check not-allowed HTML
-        //$this->addRule($name, get_lang('SomeHTMLNotAllowed'), 'html', $html_type);
     }
 
     /**

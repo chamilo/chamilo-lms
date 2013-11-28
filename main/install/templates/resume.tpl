@@ -1,8 +1,8 @@
 {% extends 'layout.tpl' %}
 
 {% block content %}
-    Resume
-    <h3> Database settings </h3>
+    <h3> {{ 'Resume' | trans }} </h3>
+    <h3> {{ 'Database settings' | trans }} </h3>
     <table class="table table-striped">
     {% for key, value in database_settings %}
         <tr>
@@ -12,7 +12,7 @@
     {% endfor %}
     </table>
 
-    <h3> Portal settings </h3>
+    <h3> {{ 'Portal settings' | trans }} </h3>
     <table class="table table-striped">
     {% for key, value in portal_settings %}
         <tr>
@@ -22,7 +22,7 @@
     {% endfor %}
     </table>
 
-    <h3> Admin settings </h3>
+    <h3> {{ 'Admin settings' | trans }} </h3>
     <table class="table table-striped">
     {% for key, value in admin_settings %}
         <tr>

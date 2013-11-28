@@ -12,6 +12,7 @@
     <div class="container">
         <div id="main" class="container">
             <h2>Chamilo Installation</h2>
+
             {% set alertTypeAvaillable = [ 'info', 'success', 'warning', 'error'] %}
             {% for alert in alertTypeAvaillable %}
                 {% for message in app.session.getFlashBag.get(alert) %}

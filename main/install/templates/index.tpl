@@ -1,11 +1,10 @@
 {% extends 'layout.tpl' %}
 
 {% block content %}
-Welcome!
-
-<form action="#" method="post">
-    {{ form_widget(form) }}
-</form>
+    <h3> {{ 'Welcome !' | trans }} </h3>
+    <form action="#" method="post">
+        {{ form_widget(form) }}
+    </form>
 
 {% endblock %}
 

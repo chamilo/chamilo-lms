@@ -1,9 +1,9 @@
 {% extends 'layout.tpl' %}
 
 {% block content %}
-    Checking DB
-<form action="#" method="post">
-    {{ form_widget(form) }}
-</form>
+    <h3> {{ 'Database settings' | trans }} </h3>
+    <form action="#" method="post">
+        {{ form_widget(form) }}
+    </form>
 {% endblock %}
 

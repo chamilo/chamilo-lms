@@ -1,6 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Base class for <input /> form elements
  *
@@ -37,7 +35,6 @@ require_once 'HTML/QuickForm/element.php';
  */
 class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
 {
-    // {{{ constructor
     /**
      * Class constructor
      *
@@ -48,48 +45,32 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_stylebutton($elementName=null, $elementLabel=null, $attributes=null) {
+    public function HTML_QuickForm_stylebutton($elementName = null, $elementLabel = null, $attributes = null)
+    {
         $this->HTML_QuickForm_element($elementName, $elementLabel, $attributes);
+    }
 
-    } //end constructor
-
-    // }}}
-    // {{{ setType()
-
-    /**
-     * Sets the element type
-     *
-     * @param     string    $type   Element type
-     * @since     1.0
-     * @access    public
-     * @return    void
-     */
-
-
-    /* Returns an HTML formatted attribute string
+    /** Returns an HTML formatted attribute string
      * @param    array   $attributes
      * @return   string
      * @access   private
      */
-    function _getAttrString($attributes) {
+    public function _getAttrString($attributes) {
         $strAttr = '';
         if (is_array($attributes)) {
             foreach ($attributes as $key => $value) {
-            	if ($key != 'value') $strAttr .= ' ' . $key . '="' . htmlspecialchars($value) . '"';
+            	if ($key != 'value')
+                    $strAttr .= ' ' . $key . '="' . htmlspecialchars($value) . '"';
             }
         }
         return $strAttr;
-    } // end func _getAttrString
+    }
 
-
-    function setType($type)
+    public function setType($type)
     {
         $this->_type = $type;
         $this->updateAttributes(array('type'=>$type));
-    } // end func setType
-
-    // }}}
-    // {{{ setName()
+    }
 
     /**
      * Sets the input field name
@@ -99,13 +80,10 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
      * @access    public
      * @return    void
      */
-    function setName($name)
+    public function setName($name)
     {
         $this->updateAttributes(array('name'=>$name));
-    } //end func setName
-
-    // }}}
-    // {{{ getName()
+    }
 
     /**
      * Returns the element name
@@ -114,13 +92,10 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
      * @access    public
      * @return    string
      */
-    function getName()
+    public function getName()
     {
         return $this->getAttribute('name');
-    } //end func getName
-
-    // }}}
-    // {{{ setValue()
+    }
 
     /**
      * Sets the value of the form element
@@ -130,13 +105,10 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
      * @access    public
      * @return    void
      */
-    function setValue($value)
+    public function setValue($value)
     {
         $this->updateAttributes(array('value'=>$value));
-    } // end func setValue
-
-    // }}}
-    // {{{ getValue()
+    }
 
     /**
      * Returns the value of the form element
@@ -145,14 +117,11 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
      * @access    public
      * @return    string
      */
-    function getValue()
+    public function getValue()
     {
         //return $this->getAttribute('value');
-	    return $this->_attributes['value'];
-    } // end func getValue
-
-    // }}}
-    // {{{ toHtml()
+        return $this->_attributes['value'];
+    }
 
     /**
      * Returns the input field in HTML
@@ -161,21 +130,29 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
      * @access    public
      * @return    string
      */
-    function toHtml() {
+    public function toHtml()
+    {
         if ($this->_flagFrozen) {
             return $this->getFrozenHtml();
         } else {
-            //Adding the btn class            
+            // Adding the btn class
             if (isset($this->_attributes['class'])) {
                 $this->_attributes['class'] = 'btn '.$this->_attributes['class'];
             }
-            //var_dump($this->getName());                        
-            return $this->_getTabs().'<button ' . $this->_getAttrString($this->_attributes) . ' >'.$this->getValue() .'</button>';
-        }
-    } //end func toHtml
+            $addIcon = null;
 
-    // }}}
-    // {{{ onQuickFormEvent()
+            if (strpos($this->_attributes['class'], 'save')) {
+                $this->_attributes['class'] = 'btn btn-primary';
+                $addIcon = '<i class="fa fa-check fa-lg"></i> ';
+            }
+            if (strpos($this->_attributes['class'], 'add')) {
+                $this->_attributes['class'] = 'btn btn-primary';
+                $addIcon = '<i class="fa fa-plus"></i></i> ';
+            }
+            return $this->_getTabs().
+                    '<button '.$this->_getAttrString($this->_attributes).' >'.$addIcon.$this->getValue() .'</button>';
+        }
+    }
 
     /**
      * Called by HTML_QuickForm whenever form event is made on this element
@@ -188,7 +165,7 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
      * @return    void
      * @throws
      */
-    function onQuickFormEvent($event, $arg, &$caller)
+    public function onQuickFormEvent($event, $arg, &$caller)
     {
         // do not use submit values for button-type elements
         $type = $this->getType();
@@ -205,15 +182,15 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
             }
         }
         return true;
-    } // end func onQuickFormEvent
+    }
 
-    // }}}
-    // {{{ exportValue()
-
-   /**
-    * We don't need values from button-type elements (except submit) and files
-    */
-    function exportValue(&$submitValues, $assoc = false)
+    /**
+     * We don't need values from button-type elements (except submit) and files
+     * @param $submitValues
+     * @param bool $assoc
+     * @return mixed|null
+     */
+    public function exportValue(&$submitValues, $assoc = false)
     {
         $type = $this->getType();
         if ('reset' == $type || 'button' == $type) {
@@ -222,4 +199,4 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
             return parent::exportValue($submitValues, $assoc);
         }
     }
-} // end class HTML_QuickForm_element
+}

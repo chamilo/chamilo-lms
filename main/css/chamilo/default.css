@@ -153,61 +153,57 @@ footer {
 
 /*including "login" image*/
 button.login {
-    background-image:url(images/bg-button.gif);
+    /* background-image:url(images/bg-button.gif); */
 }
-
-button.login:hover {
-}
-
-/*including "save" image*/
+/* including "save" image*/
 button.save {
-    background-image:url(images/button_accept.gif);
+    /* background-image:url(images/button_accept.gif); */
 }
 /*including "add" image*/
 button.add {
-    background-image:url(images/button_add.gif);
+    /* background-image:url(images/button_add.gif); */
 }
 /*including "cancel" image*/
 button.cancel {
-    background-image:url(images/button_delete.gif);
+    /* background-image:url(images/button_delete.gif); */
 }
 /*including "search" image*/
 button.search {
-    background-image:url(images/bg-button.gif);
+    /* background-image:url(images/bg-button.gif); */
 }
 /*including "plus" image*/
 button.plus {
-    background-image:url(images/button_plus.gif);
+    /* background-image:url(images/button_plus.gif); */
 }
 /*including "minus" image*/
 button.minus {
-    background-image:url(images/button_minus.gif);
+    /* background-image:url(images/button_minus.gif); */
 }
 /*including "next" image*/
 button.next {
-    background-image:url(images/button_next.gif) !important;
+    /* background-image:url(images/button_next.gif) !important; */
 }
 /*including "back" image*/
 button.back {
-    background-image:url(images/button_back.gif);
+    /* background-image:url(images/button_back.gif); */
 }
 /*including "refresh" image*/
 button.refresh {
-    background-image:url(images/button_refresh.gif);
+    /* background-image:url(images/button_refresh.gif); */
 }
 /*including "upload" image*/
 button.upload {
-    background-image:url(images/button_upload.gif);
+    /* background-image:url(images/button_upload.gif); */
 }
 
 button.arrowr, input.arrowr {
-	background-image:url(images/2rightarrow.gif);
+	/* background-image:url(images/2rightarrow.gif); */
 }
 button.arrowl, input.arrowl {
-    background-image:url(images/2leftarrow.gif);
+    /* background-image:url(images/2leftarrow.gif); */
 }
 .refresh {
-    background-image:url(images/refresh.png);
+    /* background-image:url(images/refresh.png); */
 }
 
 .portal {

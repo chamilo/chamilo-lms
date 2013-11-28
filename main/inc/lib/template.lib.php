@@ -386,8 +386,6 @@ class Template
 
             // Default theme CSS.
             $css[] = api_get_cdn_path($cssPath.$this->theme.'/default.css');
-            //$css[] = api_get_cdn_path($cssPath.'bootstrap-responsive.css');
-            //$css[] = api_get_cdn_path($cssPath.'responsive.css');
 
             // Extra CSS files.
             if ($this->show_learnpath) {

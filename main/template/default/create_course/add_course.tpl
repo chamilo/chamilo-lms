@@ -9,7 +9,7 @@
 <br />
 
 <div id="course_thing_to_do" class="row">
-    <div class="span3">
+    <div class="col-md-3">
         <div class="thumbnail">
             <img src="{{ _p.web_img }}icons/64/home.png"/>
             <div class="caption">
@@ -21,7 +21,7 @@
     </div>
 
     {% if ("allow_user_course_subscription_by_course_admin" | get_setting) == 'true' or _u.is_admin == 1 %}
-    <div class="span3">
+    <div class="col-md-3">
         <div class="thumbnail">
         <img src="{{ _p.web_img }}icons/64/user.png"/>
             <div class="caption">
@@ -33,7 +33,7 @@
     </div>
     {% endif %}
 
-    <div class="span3">
+    <div class="col-md-3">
         <div class="thumbnail">
         <img src="{{ _p.web_img }}icons/64/info.png"/>
             <div class="caption">
@@ -43,7 +43,7 @@
             </div>
         </div>
     </div>
-    <div class="span3">
+    <div class="col-md-3">
         <div class="thumbnail">
         <img src="{{ _p.web_img }}icons/64/reference.png"/>
             <div class="caption">

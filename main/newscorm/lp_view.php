@@ -43,7 +43,7 @@ if (!api_is_allowed_to_edit(null, true, true, false) && !learnpath::is_lp_visibl
     api_not_allowed(true);
 }
 
-//Checking visibility (eye icon)
+// Checking visibility (eye icon)
 $visibility = api_get_item_visibility(
     api_get_course_info(),
     TOOL_LEARNPATH,
@@ -337,26 +337,28 @@ if (Database::num_rows($res_media) > 0) {
     }
 }
 
-echo '<div id="learning_path_main" style="width:100%;height:100%;">';
+echo '<div id="learning_path_main">';
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
 if ($is_allowed_to_edit) {
-    echo '<div id="learning_path_breadcrumb_zone">';
-    global $interbreadcrumb;
-    $interbreadcrumb[] = array(
-        'url' => 'lp_controller.php?action=list&isStudentView=false',
-        'name' => get_lang('LearningPaths')
-    );
-    $interbreadcrumb[] = array(
-        'url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false",
-        'name' => $_SESSION['oLP']->get_name()
-    );
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Preview'));
-    //$interbreadcrumb[] = array('type' => 'right', 'url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false", 'name' => get_lang('Edit'), 'class' => 'btn btn-mini btn-warning');
-
-    echo $app['template']->returnBreadcrumb($interbreadcrumb, null, null);
+    echo '<div class="row">';
+        echo '<div id="learning_path_breadcrumb_zone" class="col-md-12">';
+        global $interbreadcrumb;
+        $interbreadcrumb[] = array(
+            'url' => 'lp_controller.php?action=list&isStudentView=false',
+            'name' => get_lang('LearningPaths')
+        );
+        $interbreadcrumb[] = array(
+            'url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false",
+            'name' => $_SESSION['oLP']->get_name()
+        );
+        $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Preview'));
+        echo $app['template']->returnBreadcrumb($interbreadcrumb, null, null);
+        echo '</div>';
     echo '</div>';
 }
-echo '<div id="learning_path_left_zone" style="'.$display_none.'"> ';
+echo '<div class="row">';
+
+echo '<div id="learning_path_left_zone" class="col-md-2" style="'.$display_none.'"> ';
 echo '<div id="header">
             <table>
                 <tr>
@@ -373,7 +375,6 @@ if ($is_allowed_to_edit) {
     echo '<a class="link no-border" href="lp_controller.php?action=return_to_course_homepage&'.api_get_cidreq(
     ).'" target="_self" onclick="javascript: window.parent.API.save_asset();">';
 }
-
 echo get_lang('CourseHomepageLink').'
                         </a>
                     </td>
@@ -438,7 +439,7 @@ if ($show_audioplayer) {
 <!-- end left zone -->
 
 <!-- right zone -->
-<div id="learning_path_right_zone" style="margin-left:<?php echo $margin_left;?>;height:100%">
+<div id="learning_path_right_zone" class="col-md-9" style="margin-left:<?php echo $margin_left;?>;height:100%">
     <?php
     // hub 26-05-2010 Fullscreen or not fullscreen
     $height = '100%';
@@ -451,6 +452,8 @@ if ($show_audioplayer) {
 </div>
 <!-- end right Zone -->
 </div>
+</div>
+
 
 <script>
     // Resize right and left pane to full height (HUB 20-05-2010).

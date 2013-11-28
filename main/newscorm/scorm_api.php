@@ -29,10 +29,14 @@
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 
-require_once '../inc/global.inc.php';
 require_once 'learnpath.class.php';
 require_once 'learnpathItem.class.php';
 require_once 'scorm.class.php';
+
+$app['template.show_footer'] = false;
+$app['template.show_header'] = false;
+$app['default_layout'] = 'default/layout/blank.tpl';
+
 
 $file   = (empty($_SESSION['file'])?'':$_SESSION['file']);
 $oLP    = unserialize($_SESSION['lpobject']);

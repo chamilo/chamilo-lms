@@ -422,7 +422,7 @@ function dir_total_space($dir_path) {
 	$save_dir = getcwd();
 	chdir($dir_path) ;
 	$handle = opendir($dir_path);
-
+    $sumSize = 0;
 	while ($element = readdir($handle)) {
 		if ( $element == '.' || $element == '..') {
 			continue; // Skip the current and parent directories
@@ -615,6 +615,7 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
 
 		$zip_content_array = $zip_file->listContent();
 		$ok_scorm = false;
+        $realFileSize = 0;
 		foreach ($zip_content_array as & $this_content) {
 			if (preg_match('~.(php.*|phtml)$~i', $this_content['filename'])) {
 				return api_failure::set_failure('php_file_in_zip_file');
@@ -728,6 +729,7 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 
 	$zip_content_array = (array)$zip_file->listContent();
 
+    $real_filesize = 0;
 	foreach($zip_content_array as & $this_content) {
 		$real_filesize += $this_content['size'];
 	}
@@ -944,6 +946,7 @@ function item_property_update_on_folder($_course, $path, $user_id) {
 
 	$exploded_path = explode('/', $path);
 	$course_id = api_get_course_int_id();
+    $newpath = '';
 	foreach ($exploded_path as $key => & $value) {
 		// We don't want a slash before our first slash
 		if ($key != 0) {
@@ -1170,7 +1173,7 @@ function replace_img_path_in_html_file($original_img_path, $new_img_path, $html_
 
 	$fp = fopen($html_file, 'r');
 	$buffer = fread($fp, filesize($html_file));
-
+    $new_html_content = '';
 
 	// Fix the image tags
 
@@ -1453,7 +1456,7 @@ function build_missing_files_form($missing_files, $upload_path, $file_name) {
 	$added_slash = ($upload_path == '/') ? '' : '/';
 	$folder_id      = DocumentManager::get_document_id(api_get_course_info(), $upload_path);
 	// Build the form
-	$form .= "<p><strong>".get_lang('MissingImagesDetected')."</strong></p>"
+	$form = "<p><strong>".get_lang('MissingImagesDetected')."</strong></p>"
 		."<form method=\"post\" action=\"".api_get_self()."\" enctype=\"multipart/form-data\">"
 		// Related_file is the path to the file that has missing images
 		."<input type=\"hidden\" name=\"related_file\" value=\"".$upload_path.$added_slash.$file_name."\" />"

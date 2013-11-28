@@ -160,7 +160,7 @@ class ImportCsv
                         $method = $fileInfo['method'];
                         $file = $fileInfo['file'];
                         echo 'Static file: '.$file.PHP_EOL;
-                        $this->logger->addInfo("Reading file: $file");
+                        $this->logger->addInfo("Reading static file: $file");
                         $this->$method($file, true);
                     }
                 }
@@ -673,6 +673,7 @@ class ImportCsv
             $this->logger->addError($result['error_message']);
         }
         $this->logger->addInfo("Sessions - Sessions parsed: ".$result['session_counter']);
+
         if ($moveFile) {
             $this->moveFile($file);
         }

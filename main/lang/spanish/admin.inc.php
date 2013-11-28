@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$GlobalLinkUseDoubleColumnPrivateToShowPrivately = "Use ::private pegado al fin del enlace si quiere mostrarlo solo a los usuarios identificados";
 $CourseVisibilityHidden = "Invisible - Totalmente invisible para todos los usuarios a parte de los administradores";
 $ApplyAllLanguages = "Aplicar cambio a todos los lenguajes habilitados";
 $CareerUpdated = "Carrera actualizada satisfactoriamente";

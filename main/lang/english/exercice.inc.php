@@ -2,6 +2,10 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ThereWasAProblemWithYourFile = "There was an unknown issue with your file. Please review its format and try again.";
+$YouMustUploadAZipOrTxtFile = "You must upload a .txt or .zip file";
+$NoTxtFileFoundInTheZip = "No .txt file found in zip";
+$ImportAikenQuiz = "Import Aiken quiz";
 $ExerciseWasActivatedFromXToY = "Exercise was activated from %s to %s";
 $SelectAnAnswerToContinue = "Select an answer to continue";
 $IfYouContinueYourAnswerWillBeSavedAnyChangeWillBeNotAllowed = "If you continue your answers will be saved, any change will be not allowed later. Are you sure you want to continue?";

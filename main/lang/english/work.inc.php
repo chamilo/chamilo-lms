@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$FolderDoesntExistsInFileSystem = "Target folder doesn't exist on the server.";
 $HandedOutDate = "Time of reception";
 $HandedOut = "Handed out";
 $HandOutDateLimit = "Deadline";

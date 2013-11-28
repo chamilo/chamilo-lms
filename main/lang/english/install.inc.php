@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$DateTimezoneSettingNotSet = "We have detected that your PHP installation does not define the date.timezone setting. This is a requirement of Chamilo. Please make sure it is configured by checking your php.ini configuration, otherwise you will run into problems. We warned you!";
 $langStatDB = "Tracking DB.";
 $langEnableTracking = "Enable Tracking";
 $langInstituteShortName = "Your company short name";

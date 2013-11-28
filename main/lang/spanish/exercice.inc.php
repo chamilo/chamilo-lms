@@ -2,6 +2,10 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ThereWasAProblemWithYourFile = "Hubo un error desconocido en su archivo. Por favor revise su formato e intente nuevamente.";
+$YouMustUploadAZipOrTxtFile = "Tiene que subir un archivo .txt o .zip";
+$NoTxtFileFoundInTheZip = "No se encontró ningun archivo .txt en el zip";
+$ImportAikenQuiz = "Importar quiz en formato Aiken";
 $ExerciseWasActivatedFromXToY = "El ejercicio estuvo disponible desde %s hasta %s";
 $SelectAnAnswerToContinue = "Tiene que seleccionar una respuesta para poder continuar";
 $IfYouContinueYourAnswerWillBeSavedAnyChangeWillBeNotAllowed = "Si continua, sus respuestas serán guardadas, y no podrá más modificarlas. Está seguro que desea terminar?";

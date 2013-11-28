@@ -134,16 +134,18 @@ function mysort(a, b) {
     return 0;
 }
 
-$("form").on("click", '.advanced_parameters', function() {
+$("form").on("click", ' .advanced_parameters', function() {
     var id = $(this).attr('id') + '_options';
     var button = $(this);
     $("#"+id).toggle(function() {
-        button.toggleClass('disabled');
+        button.toggleClass('active');
     });
 });
 
 /** Makes row highlighting possible */
 $(document).ready( function() {
+    $('.advanced_parameters').addClass('btn-default');
+    //$('.btn').addClass('btn-default');
 
     // Chosen select.
     $(".chzn-select").chosen({

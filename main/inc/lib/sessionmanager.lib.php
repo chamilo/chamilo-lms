@@ -258,6 +258,15 @@ class SessionManager
             $where_condition = "1 = 1";
         }
 
+        $courseCondition = null;
+        if (strpos($where_condition, 'c.id')) {
+            $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+            $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+            $courseCondition = " INNER JOIN $table course_rel_session ON (s.id = course_rel_session.id_session)
+                                 INNER JOIN $tableCourse c ON (course_rel_session.course_code = c.code)
+                                ";
+        }
+
         $sql = "SELECT count(id) as total_rows FROM (
                 SELECT
                  IF (
@@ -274,6 +283,7 @@ class SessionManager
                 FROM $tbl_session s
                     LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
                     INNER JOIN $tbl_user u ON s.id_coach = u.user_id
+                    $courseCondition
                     $extraJoin
                 $where AND $where_condition  ) as session_table";
 
@@ -299,6 +309,7 @@ class SessionManager
                     LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
                     INNER JOIN $tbl_user u ON s.id_coach = u.user_id
                     INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
+                    $courseCondition
                     $extraJoin
                  $where AND $where_condition) as session_table";
             }
@@ -362,6 +373,15 @@ class SessionManager
         $today = api_strtotime($today, 'UTC');
         $today = date('Y-m-d', $today);
 
+        $courseCondition = null;
+        if (strpos($options['where'], 'c.id')) {
+            $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+            $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+            $courseCondition = " INNER JOIN $table course_rel_session ON (s.id = course_rel_session.id_session)
+                                 INNER JOIN $tableCourse c ON (course_rel_session.course_code = c.code)
+                                ";
+        }
+
 		$select = "SELECT * FROM (SELECT
                 IF (
 					(s.date_start <= '$today' AND '$today' < s.date_end) OR
@@ -374,7 +394,7 @@ class SessionManager
 				as session_active,
 				s.name,
                 nbr_courses,
-                nbr_users,
+                s.nbr_users,
                 s.date_start,
                 s.date_end,
                 $coach_name,
@@ -400,6 +420,7 @@ class SessionManager
 		$query = "$select FROM $tbl_session s
 				LEFT JOIN $tbl_session_category sc ON s.session_category_id = sc.id
 				LEFT JOIN $tbl_user u ON s.id_coach = u.user_id
+				$courseCondition
 				$extraJoin
                 $where $order $limit";
 
@@ -411,6 +432,7 @@ class SessionManager
                                LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
                                INNER JOIN $tbl_user u ON s.id_coach = u.user_id
                                INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id AND ar.access_url_id = $access_url_id
+                               $courseCondition
                                $extraJoin
 				 $where $order $limit";
 			}

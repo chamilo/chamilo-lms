@@ -330,15 +330,17 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
         });
     });
     </script>';
-    $actions .= $sessionFilter->return_form();
-
-    $actions .= '<div style="float: right; ">';
+    $actions .= '<div class="pull-right">';
     $actions .= '<a href="course_add.php">'.Display::return_icon('new_course.png', get_lang('AddCourse'),'',ICON_SIZE_MEDIUM).'</a> ';
-
     if (api_get_setting('course_validation') == 'true') {
         $actions .= '<a href="course_request_review.php">'.Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests'),'',ICON_SIZE_MEDIUM).'</a>';
     }
     $actions .= '</div>';
+
+    $actions .= '<div class="pull-right">';
+    $actions .= $sessionFilter->return_form();
+    $actions .= '</div>';
+
     $actions .= $form->return_form();
 
     if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {

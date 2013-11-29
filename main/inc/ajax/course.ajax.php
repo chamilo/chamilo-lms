@@ -12,7 +12,6 @@ $user_id = api_get_user_id();
 
 switch ($action) {
     case 'add_course_vote':
-
         $course_id = intval($_REQUEST['course_id']);
         $star      = intval($_REQUEST['star']);
 
@@ -51,7 +50,31 @@ switch ($action) {
             } else {
                 echo json_encode(array());
             }
+        }
+        break;
+    case 'search_course':
+        if (api_is_platform_admin()) {
+            $courseList = Coursemanager::get_courses_list(
+                0,
+                10,
+                1, //$orderby = 1,
+                'ASC',
+                -1,
+                $_REQUEST['q']
+            );
+            $results = array();
+            foreach ($courseList as $courseInfo) {
+                $results[] = array('id' => $courseInfo['id'], 'text' => $courseInfo['title']);
+            }
 
+            if (!empty($results)) {
+                /*foreach ($results as &$item) {
+                    $item['id'] = $item['code'];
+                }*/
+                echo json_encode($results);
+            } else {
+                echo json_encode(array());
+            }
         }
         break;
     default:

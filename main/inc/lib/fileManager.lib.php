@@ -1060,7 +1060,7 @@ class FileManager
 
                     // Rename the file if it exists
                     case 'rename':
-                        $new_name = unique_name($where_to_save, $clean_name);
+                        $new_name = self::unique_name($where_to_save, $clean_name);
                         $store_path = $where_to_save.$new_name;
                         $new_file_path = $upload_path.$new_name;
 

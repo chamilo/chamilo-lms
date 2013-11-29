@@ -7,7 +7,7 @@
 /**
  * Code
  */
-$language_file = 'admin';
+$language_file = array('admin', 'courses');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';

@@ -2810,4 +2810,91 @@ class SessionManager
         }
         return $htmlResult;
     }
+
+    public static function getCourseToolToByManaged()
+    {
+        return array(
+            'courseDescription',
+            'courseIntroduction'
+        );
+    }
+
+
+    /**
+     * @param $sessionId
+     * @param $courseId
+     */
+    public static function installCourse($sessionId, $courseId)
+    {
+        $toolList = self::getCourseToolToByManaged();
+
+        foreach($toolList as $tool) {
+            $method = 'add'.$tool;
+            if (method_exists(get_class(), $method)) {
+                self::$method($sessionId, $courseId);
+            }
+        }
+    }
+
+    /**
+     * @param $sessionId
+     * @param $courseId
+     */
+    public static function unInstallCourse($sessionId, $courseId)
+    {
+        $toolList = self::getCourseToolToByManaged();
+
+        foreach($toolList as $tool) {
+            $method = 'remove'.$tool;
+            if (method_exists(get_class(), $method)) {
+                self::$method($sessionId, $courseId);
+            }
+        }
+    }
+
+    public static function addCourseIntroduction($sessionId, $courseId)
+    {
+        // @todo create a tool intro lib
+        $sessionId = intval($sessionId);
+        $courseId = intval($courseId);
+
+        $TBL_INTRODUCTION = Database::get_course_table(TABLE_TOOL_INTRO);
+        $sql = "SELECT * FROM $TBL_INTRODUCTION WHERE c_id = $courseId";
+        $result = Database::query($sql);
+        $result = Database::store_result($result, 'ASSOC');
+
+        if (!empty($result)) {
+            foreach ($result as $result) {
+                // @todo check if relation exits.
+                $result['session_id'] = $sessionId;
+                Database::insert($TBL_INTRODUCTION, $result);
+            }
+        }
+    }
+
+    public static function removeCourseIntroduction($sessionId, $courseId)
+    {
+        $sessionId = intval($sessionId);
+        $courseId = intval($courseId);
+        $TBL_INTRODUCTION = Database::get_course_table(TABLE_TOOL_INTRO);
+        $sql = "DELETE FROM $TBL_INTRODUCTION WHERE c_id = $courseId AND session_id = $sessionId";
+        Database::query($sql);
+    }
+
+
+    public static function addCourseDescription($sessionId, $courseId)
+    {
+        /*$description = new CourseDescription();
+        $descriptions = $description->get_descriptions($courseId);
+        foreach ($descriptions as $description) {
+        }*/
+    }
+
+    public static function removeCourseDescription($sessionId, $courseId)
+    {
+
+    }
+
+
+
 }

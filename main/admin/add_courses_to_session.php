@@ -137,16 +137,18 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 					$nbr_users++;
 				}
 			}
+            SessionManager::installCourse($id_session, $course_info['real_id']);
 			Database::query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'");
 		}
 	}
 
 	foreach ($existingCourses as $existingCourse) {
-		if(!in_array($existingCourse['course_code'], $CourseList)) {
+		if (!in_array($existingCourse['course_code'], $CourseList)) {
 		    $course_info = api_get_course_info($existingCourse['course_code']);
             CourseManager::remove_course_ranking($course_info['real_id'], $id_session);
 			Database::query("DELETE FROM $tbl_session_rel_course WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
 			Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
+            SessionManager::unInstallCourse($id_session, $course_info['real_id']);
 
 		}
 	}

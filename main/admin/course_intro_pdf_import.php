@@ -13,7 +13,7 @@ $cidReset = true;
 require '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
-// temporary configuration of in which folder to upload the file in each course. Should default to '/'
+// temporary configuration of in which folder to upload the file in each course. Should default to '', and start with a '/' and end without it, if defined
 $subDir = '';
 
 //require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
@@ -117,7 +117,7 @@ function import_pdfs($file, $subDir = '/') {
         if (count($course) > 0) {
             // Build file info because handle_uploaded_document() needs it (name, type, size, tmp_name)
             $fileSize = filesize($baseDir.$uploadPath.$file);
-            $docId = add_document($course, $subDir.'/'.$file, 'file', $fileSize, $parts[1]);
+            $docId = add_document($course, $subDir.'/'.$file, 'file', $fileSize, $parts[1].' '.substr($parts[2],0,-4));
             if ($docId > 0) {
                 if (is_file($baseDir.$uploadPath.$file)) {
                     error_log($baseDir.$uploadPath.$file.' exists');

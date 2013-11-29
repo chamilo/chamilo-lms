@@ -324,6 +324,8 @@ if ($_POST['formSent']) {
                                             course_code = '$course_code',
                                             id_session='$session_id'";
                                     $rs_course = Database::query($sql_course);
+                                    $course_info = api_get_course_info($course['code']);
+                                    SessionManager::installCourse($id_session, $course_info['real_id']);
                                 }
 
                                 $course_coaches = explode(',', $node_course->Coach);
@@ -387,6 +389,8 @@ if ($_POST['formSent']) {
                                                 course_code = '".$vcourse['code']."',
                                                 id_session='$session_id'";
                                         $rs_course = Database::query($sql_course);
+                                        $course_info = api_get_course_info($course['code']);
+                                        SessionManager::installCourse($id_session, $course_info['real_id']);
 
                                         $course_coaches = explode(",",$node_course->Coach);
 

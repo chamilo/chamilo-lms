@@ -20,6 +20,8 @@ require_once '../gradebook/lib/be/gradebookitem.class.php';
 require_once '../gradebook/lib/be/category.class.php';
 require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
 
+$sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
+
 /**
  * Get the number of courses which will be displayed
  */
@@ -58,6 +60,11 @@ function get_number_of_courses() {
 
 /**
  * Get course data to display
+ * @param int $from
+ * @param int $number_of_items
+ * @param int $column
+ * @param string $direction
+ * @return array
  */
 function get_course_data($from, $number_of_items, $column, $direction) {
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -115,10 +122,17 @@ function get_course_data($from, $number_of_items, $column, $direction) {
     }
     return $courses;
 }
+
 /**
  * Get course data to display filtered by session name
+ * @param int $from
+ * @param int $number_of_items
+ * @param int $column
+ * @param string $direction
+ * @return array
  */
-function get_course_data_by_session($from, $number_of_items, $column, $direction) {
+function get_course_data_by_session($from, $number_of_items, $column, $direction)
+{
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
     $session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -138,14 +152,14 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
             INNER JOIN $session_rel_course r ON c.code = r.course_code
             INNER JOIN $session s ON r.id_session = s.id
             ";
-    if (isset($_GET['session'])) {
-        $session = Database::escape_string(trim($_GET['session']));
-        $sql.= " WHERE s.name LIKE '%" . $session . "%'";
+
+    if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
+        $sessionId = intval($_GET['session_id']);
+        $sql.= " WHERE s.id = ".$sessionId;
     }
 
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from,$number_of_items";
-
     $res = Database::query($sql);
     $courses = array ();
     while ($course = Database::fetch_array($res)) {
@@ -162,7 +176,8 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
 /**
  * Filter to display the edit-buttons
  */
-function modify_filter($code) {
+function modify_filter($code)
+{
 	$icourse = api_get_course_info($code);
         return
         '<a href="course_information.php?code='.$code.'">'.Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>&nbsp;'.
@@ -203,7 +218,7 @@ function get_course_visibility_icon($v) {
 if (isset ($_POST['action'])) {
     switch ($_POST['action']) {
         // Delete selected courses
-        case 'delete_courses' :
+        case 'delete_courses':
             $course_codes = $_POST['course'];
             if (count($course_codes) > 0) {
                 foreach ($course_codes as $course_code) {
@@ -258,7 +273,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $form->addElement('radio', 'keyword_unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
     $form->addElement('radio', 'keyword_unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
     $form->addElement('radio', 'keyword_unsubscribe', null, get_lang('All'), '%');
-    $form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'),'class="btn"');
+    $form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'), 'class="btn"');
     $defaults['keyword_language'] = '%';
     $defaults['keyword_visibility'] = '%';
     $defaults['keyword_subscribe'] = '%';
@@ -295,33 +310,27 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'), 'class="btn"');
     $form->addElement('static', 'search_advanced_link', null, '<a href="course_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
 
-    //Create a filter by session
-    /*$sessionFilter = new FormValidator('course_filter', 'get', '', '', array('class'=> 'form-search'), false);
+    // Create a filter by session
+    $sessionFilter = new FormValidator('course_filter', 'get', '', '', array('class'=> 'form-search'), false);
     $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_session';
-    $sessionFilter->addElement('select_ajax', 'session_name', get_lang('SearchCourseBySession'), null, array('url' => $url));
-
-    $actions = '
-    <script type="text/javascript">
-    <!--
-    function jumpMenu(targ,selObj,restore){ // v3.0
-        eval(targ+".location=\'"+selObj.options[selObj.selectedIndex].value+"\'");
-        if (restore) selObj.selectedIndex=0;
+    $sessionList = array();
+    if (!empty($sessionId)) {
+        $sessionList = array();
+        $sessionInfo = SessionManager::fetch($sessionId);
+        $sessionList[] = array('id' => $sessionInfo['id'], 'text' => $sessionInfo['name']);
     }
+    $sessionFilter->addElement('select_ajax', 'session_name', get_lang('SearchCourseBySession'), null, array('url' => $url, 'defaults' => $sessionList));
+    $courseListUrl = api_get_self();
+    $actions = '
+    <script>
     $(function() {
-        //alert($);
-        //jumpMenu(\'parent\',this,0)
-        $(\'ul.select2-results .select2-result-label\').on(\'click\',function(){
-            console.log($(\'ul.select2-results li\'));
-        });
-        //console.log($(\'#s2id_session_name\'));
-        $(\'.select2-chosen\').on(\'change\',function(){
-            console.log(\'test\');
+        $("#session_name").on("change", function() {
+           var sessionId = $(this).val();
+           window.location = "'.$courseListUrl.'?session_id="+sessionId;
         });
     });
-    //-->
-    </script>';*/
-    //$actions .= $sessionFilter->return_form();
-
+    </script>';
+    $actions .= $sessionFilter->return_form();
 
     $actions .= '<div style="float: right; ">';
     $actions .= '<a href="course_add.php">'.Display::return_icon('new_course.png', get_lang('AddCourse'),'',ICON_SIZE_MEDIUM).'</a> ';
@@ -332,7 +341,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $actions .= '</div>';
     $actions .= $form->return_form();
 
-    if (isset ($_GET['search']) && $_GET['search'] == 'session') {
+    if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
         // Create a sortable table with the course data filtered by session
         $table = new SortableTable('courses', 'get_number_of_courses', 'get_course_data_by_session', 2);
     } else {

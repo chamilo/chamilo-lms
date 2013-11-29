@@ -31,7 +31,7 @@ switch ($action) {
             if (!empty($results)) {
                 foreach ($results as $item) {
                     $item2 = array();
-                    foreach ($item as $id => $internal ){
+                    foreach ($item as $id => $internal) {
                         if ($id == 'id') {
                             $item2[$id] = $internal;
                         }

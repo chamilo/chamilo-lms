@@ -30,7 +30,7 @@ $table_survey_invitation        = Database :: get_course_table(TABLE_SURVEY_INVI
 
 $course_id = api_get_course_int_id();
 $userId = api_get_user_id();
-$surveyId = Security::remove_XSS($_GET['survey_id']);
+$surveyId = Database::escape_string($_GET['survey_id']);
 $userInvited = 0;
 
 //query to ask if logged user is allowed to see the preview (if he is invited of he is a teacher)

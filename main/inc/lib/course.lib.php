@@ -1534,6 +1534,13 @@ class CourseManager
         return $teachers;
     }
 
+    /**
+     * Returns a string list of teachers assigned to the given course
+     * @param string Course code
+     * @param string Separator between teachers names
+     * @param bool Whether to add a link to the teacher's profile
+     * @return string List of teachers teaching the course
+     */
     public static function get_teacher_list_from_course_code_to_string($course_code, $separator = self::USER_SEPARATOR, $add_link_to_profile = false) {
         $teacher_list = self::get_teacher_list_from_course_code($course_code);
         $teacher_string = '';
@@ -1759,7 +1766,7 @@ class CourseManager
     /**
      * This function creates a virtual course.
      * It assumes all parameters have been checked and are not empty.
-     * It checks wether a course with the $wanted_course_code already exists.
+     * It checks whether a course with the $wanted_course_code already exists.
      *
      * Users of this library should consider this function private,
      * please call attempt_create_virtual_course instead of this one.
@@ -1818,7 +1825,7 @@ class CourseManager
      * This function deletes a whole course-area from the platform. When the
      * given course is a virtual course, the database and directory will not be
      * deleted.
-     * When the given course is a real course, also all virtual courses refering
+     * When the given course is a real course, also all virtual courses referring
      * to the given course will be deleted.
      * Considering the fact that we remove all traces of the course in the main
      * database, it makes sense to remove all tracking as well (if stats databases exist)

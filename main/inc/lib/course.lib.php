@@ -1766,7 +1766,7 @@ class CourseManager
     /**
      * This function creates a virtual course.
      * It assumes all parameters have been checked and are not empty.
-     * It checks whether a course with the $wanted_course_code already exists.
+     * It checks wether a course with the $wanted_course_code already exists.
      *
      * Users of this library should consider this function private,
      * please call attempt_create_virtual_course instead of this one.
@@ -1825,7 +1825,7 @@ class CourseManager
      * This function deletes a whole course-area from the platform. When the
      * given course is a virtual course, the database and directory will not be
      * deleted.
-     * When the given course is a real course, also all virtual courses referring
+     * When the given course is a real course, also all virtual courses refering
      * to the given course will be deleted.
      * Considering the fact that we remove all traces of the course in the main
      * database, it makes sense to remove all tracking as well (if stats databases exist)
@@ -3362,6 +3362,11 @@ class CourseManager
 
         if (!$nosession) {
             global $now, $date_start, $date_end;
+        }
+        if (empty($date_start) or empty($date_end)) {
+            $sess = SessionManager::get_sessions_list(array('s.id = ' => $course_info['id_session']));
+            $date_start = $sess[$course_info['id_session']]['date_start'];
+            $date_end = $sess[$course_info['id_session']]['date_end'];
         }
 
         // Table definitions

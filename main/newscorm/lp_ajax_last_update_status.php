@@ -129,7 +129,8 @@ function last_update_status($lp_id, $user_id, $view_id, $item_id) {
 }
 error_log(__LINE__);
 echo last_update_status(
-            $_REQUEST['lid'],
-            $_REQUEST['uid'],
-            $_REQUEST['vid'],
-            $_REQUEST['iid']);
+    $_REQUEST['lid'],
+    $_REQUEST['uid'],
+    $_REQUEST['vid'],
+    $_REQUEST['iid']
+);

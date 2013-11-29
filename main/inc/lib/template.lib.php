@@ -331,12 +331,19 @@ class Template
         $_p = array(
             'web' => api_get_path(WEB_PATH),
             'web_course' => api_get_path(WEB_COURSE_PATH),
+            'web_course_path' => api_get_path(WEB_COURSE_PATH),
+            'web_code_path' => api_get_path(WEB_CODE_PATH),
             'web_main' => api_get_path(WEB_CODE_PATH),
             'web_css' => api_get_path(WEB_CSS_PATH),
+            'web_css_path' => api_get_path(WEB_CSS_PATH),
             'web_ajax' => api_get_path(WEB_AJAX_PATH),
+            'web_ajax_path' => api_get_path(WEB_AJAX_PATH),
             'web_img' => api_get_path(WEB_IMG_PATH),
+            'web_img_path' => api_get_path(WEB_IMG_PATH),
             'web_plugin' => api_get_path(WEB_PLUGIN_PATH),
+            'web_plugin_path' => api_get_path(WEB_PLUGIN_PATH),
             'web_lib' => api_get_path(WEB_LIBRARY_PATH),
+            'web_library_path' => api_get_path(WEB_LIBRARY_PATH),
             'public_web' => api_get_path(WEB_PUBLIC_PATH)
         );
 

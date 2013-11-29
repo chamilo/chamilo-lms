@@ -3959,11 +3959,11 @@ footer {
 /* Default LP left column values */
 
 #learning_path_left_zone {
-    float: left;
+    /*float: left;
     width: 280px;
     height: 100%;
     padding-left: 8px;
-    padding-right: 4px;
+    padding-right: 4px;*/
 }
 
 #learning_path_left_zone #header {
@@ -4004,15 +4004,12 @@ footer {
 
 #learning_path_toc {
     font-size: 9pt;
-    margin: 0;
 }
 
 #scorm_title {
-    background: none repeat scroll 0 0 #EEEEEE;
     color: #444444;
     font-size: 16px;
     font-weight: bold;
-    padding: 1px 5px 3px 8px;
 }
 
 .progresstext {
@@ -4037,6 +4034,26 @@ footer {
 .inner_lp_toc .scorm_item a.chapter_module {
     font-weight: normal;
     margin-right: 10px;
+}
+
+
+.list-group-item > .badge_lp {
+    float: right;
+}
+
+.badge_lp {
+    /* background-color: #999999; */
+    border-radius: 10px;
+    color: #FFFFFF;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1;
+    min-width: 10px;
+    padding: 3px 7px;
+    text-align: center;
+    vertical-align: baseline;
+    white-space: nowrap;
 }
 
 .inner_lp_toc .scorm_item_highlight {

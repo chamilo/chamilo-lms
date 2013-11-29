@@ -119,14 +119,14 @@ function import_pdfs($file, $subDir = '/') {
             $fileSize = filesize($baseDir.$uploadPath.$file);
             $docId = add_document($course, $subDir.'/'.$file, 'file', $fileSize, $parts[1].' '.substr($parts[2],0,-4));
             if ($docId > 0) {
-                if (is_file($baseDir.$uploadPath.$file)) {
-                    error_log($baseDir.$uploadPath.$file.' exists');
+                if (!is_file($baseDir.$uploadPath.$file)) {
+                    error_log($baseDir.$uploadPath.$file.' does not exists in '.__FILE__);
                 }
                 if (is_file(api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$subDir.'/'.$file)) {
-                    error_log(api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$subDir.'/'.$file.' exists');
+                    error_log(api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$subDir.'/'.$file.' exists at destination in '.__FILE__);
                 }
                 if (!is_writeable(api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$subDir)) {
-                    error_log('Destination '.api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$subDir.' is NOT writeable');
+                    error_log('Destination '.api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$subDir.' is NOT writeable in '.__FILE__);
                 }
                 // Place each file in its folder in each course
                 $move = rename($baseDir.$uploadPath.$file, api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$subDir.'/'.$file);

@@ -480,7 +480,7 @@ class Request
 
         $request = array('g' => $_GET, 'p' => $_POST, 'c' => $_COOKIE);
 
-        $requestOrder = ini_get('request_order') ?: ini_get('variable_order');
+        $requestOrder = ini_get('request_order') ?: ini_get('variables_order');
         $requestOrder = preg_replace('#[^cgp]#', '', strtolower($requestOrder)) ?: 'gp';
 
         $_REQUEST = array();
@@ -732,9 +732,9 @@ class Request
     /**
      * Returns the client IP addresses.
      *
-     * The least trusted IP address is first, and the most trusted one last.
-     * The "real" client IP address is the first one, but this is also the
-     * least trusted one.
+     * In the returned array the most trusted IP address is first, and the
+     * least trusted one last. The "real" client IP address is the last one,
+     * but this is also the least trusted one. Trusted proxies are stripped.
      *
      * Use this method carefully; you should use getClientIp() instead.
      *
@@ -755,19 +755,19 @@ class Request
         }
 
         $clientIps = array_map('trim', explode(',', $this->headers->get(self::$trustedHeaders[self::HEADER_CLIENT_IP])));
-        $clientIps[] = $ip;
+        $clientIps[] = $ip; // Complete the IP chain with the IP the request actually came from
 
         $trustedProxies = !self::$trustedProxies ? array($ip) : self::$trustedProxies;
-        $ip = $clientIps[0];
+        $ip = $clientIps[0]; // Fallback to this when the client IP falls into the range of trusted proxies
 
+        // Eliminate all IPs from the forwarded IP chain which are trusted proxies
         foreach ($clientIps as $key => $clientIp) {
             if (IpUtils::checkIp($clientIp, $trustedProxies)) {
                 unset($clientIps[$key]);
-
-                continue;
             }
         }
 
+        // Now the IP chain contains only untrusted proxies and the client IP
         return $clientIps ? array_reverse($clientIps) : array($ip);
     }
 
@@ -1084,7 +1084,7 @@ class Request
     public function isSecure()
     {
         if (self::$trustedProxies && self::$trustedHeaders[self::HEADER_CLIENT_PROTO] && $proto = $this->headers->get(self::$trustedHeaders[self::HEADER_CLIENT_PROTO])) {
-            return in_array(strtolower($proto), array('https', 'on', '1'));
+            return in_array(strtolower(current(explode(',', $proto))), array('https', 'on', 'ssl', '1'));
         }
 
         return 'on' == strtolower($this->server->get('HTTPS')) || 1 == $this->server->get('HTTPS');

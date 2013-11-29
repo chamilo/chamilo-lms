@@ -94,3 +94,8 @@ config data, and also make sure it ends with `.php`:
 You can use multiple config files, e. g. one for a whole application and a
 specific one for a task by calling `$app->register()` several times, each time
 passing another instance of `Igorw\Silex\ConfigServiceProvider`.
+
+### Register order
+
+Make sure you register ConfigServiceProvider last with your application. If you do not do this,
+the default values of other Providers will override your configuration.

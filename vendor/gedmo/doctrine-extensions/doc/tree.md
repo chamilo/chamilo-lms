@@ -53,7 +53,7 @@ Update **2011-02-08**
 
 Update **2011-02-02**
 
-- Refactored the Tree to the ability on supporting diferent tree models
+- Refactored the Tree to the ability on supporting different tree models
 - Changed the repository location in order to support future updates
 
 **Note:**
@@ -204,9 +204,9 @@ in the corresponding section).
 - **@Gedmo\Mapping\Annotation\TreeLeft** it will use this field to store tree **left** value
 - **@Gedmo\Mapping\Annotation\TreeRight** it will use this field to store tree **right** value
 - **@Gedmo\Mapping\Annotation\TreeParent** this will identify this column as the relation to **parent node**
-- **@Gedmo\Mapping\Annotation\TreeLevel** it will use this field to store tree**level**
-- **@Gedmo\Mapping\Annotation\TreeRoot** it will use this field to store tree**root** id value
-- **@Gedmo\Mapping\Annotation\TreePath** (Materialized Path only) it will use this field to store the "path". It has an
+- **@Gedmo\Mapping\Annotation\TreeLevel** it will use this field to store tree **level**
+- **@Gedmo\Mapping\Annotation\TreeRoot** it will use this field to store tree **root** id value
+- **@Gedmo\Mapping\Annotation\TreePath** (Materialized Path only) it will use this field to store the **path**. It has an
 optional parameter "separator" to define the separator used in the path
 - **@Gedmo\Mapping\Annotation\TreePathSource** (Materialized Path only) it will use this field as the source to
  construct the "path"
@@ -313,7 +313,7 @@ Entity\Category:
 
         <one-to-many field="children" target-entity="NestedTree" mapped-by="parent">
             <order-by>
-                <order-by-field name="lft" direction="ASC" />
+                <order-by-field name="left" direction="ASC" />
             </order-by>
         </one-to-many>
 
@@ -394,10 +394,10 @@ $repo->recover();
 $em->flush(); // important: flush recovered nodes
 // if tree has errors it will try to fix all tree nodes
 
-UNSAFE: be sure to backup before runing this method when necessary, if you can use $em->remove($node);
+UNSAFE: be sure to backup before running this method when necessary, if you can use $em->remove($node);
 // which would cascade to children
 // single node removal
-$vegies = $repo->findOneByTitle('Vegitables');
+$vegies = $repo->findOneByTitle('Vegetables');
 $repo->removeFromTree($vegies);
 $em->clear(); // clear cached nodes
 // it will remove this node from tree and reparent all children
@@ -427,7 +427,7 @@ $carrots->setTitle('Carrots');
 $treeRepository
     ->persistAsFirstChild($food)
     ->persistAsFirstChildOf($fruits, $food)
-    ->persistAsLastChildOf($vegitables, $food)
+    ->persistAsLastChildOf($vegetables, $food)
     ->persistAsNextSiblingOf($carrots, $fruits);
 
 $em->flush();
@@ -441,7 +441,7 @@ Tree example:
 
 ```
 /Food
-    /Vegitables
+    /Vegetables
         /Onions
         /Carrots
         /Cabbages
@@ -463,7 +463,7 @@ Tree after moving the Carrots up:
 
 ```
 /Food
-    /Vegitables
+    /Vegetables
         /Carrots <- moved up
         /Onions
         /Cabbages
@@ -485,7 +485,7 @@ Tree after moving the Carrots down as last child:
 
 ```
 /Food
-    /Vegitables
+    /Vegetables
         /Onions
         /Cabbages
         /Potatoes
@@ -516,7 +516,7 @@ class CategoryRepository extends NestedTreeRepository
  * @Gedmo\Tree(type="nested")
  * @Entity(repositoryClass="Entity\Repository\CategoryRepository")
  */
-class Category implements Node
+class Category
 {
     //...
 }
@@ -827,7 +827,7 @@ modifications on the tree could occur. Look at the MongoDB example of schema def
 - **TreePathSource** field can only be of types: id, integer, smallint, bigint, string, int, float (I include here all the
 variations of the field types, including the ORM and ODM for MongoDB ones).
 - **TreeLockTime** must be of type "date" (used only in MongoDB for now).
-- **TreePathHash** allows you to define a field that is automatically filled with the md5 hash of the path. This field could be neccessary if you want to set a unique constraint on the database table.
+- **TreePathHash** allows you to define a field that is automatically filled with the md5 hash of the path. This field could be necessary if you want to set a unique constraint on the database table.
 
 ### ORM Entity example (Annotations)
 

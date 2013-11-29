@@ -1,7 +1,0 @@
-{
-    "name": "my-vend/my-app",
-    "license": "MIT",
-    "replace": {
-        "my-vend/other-app": "1.*"
-    }
-}

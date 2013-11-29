@@ -11,6 +11,8 @@ Installation
     cd chash
     composer install
 
+Note: If you don't have Composer installed, check http://getcomposer.org/download/
+
 Usage
 ====================
 
@@ -44,6 +46,8 @@ Building the chash.phar file
 
 In order to generate the executable chash.phar file. You have to set first this php setting (in your cli php configuration file).
 
+For example in Ubuntu /etc/php5/cli/php.ini
+
     phar.readonly = Off
 
 You need to download the third parties libraries via composer:
@@ -55,13 +59,13 @@ If you don't have composer installed on your computer, you can just do the follo
     curl -sS https://getcomposer.org/installer | php
     php5 composer.phar update --no-dev --prefer-dist
 
-Then you can call the php createPhar.php file. A new chash.phar file will be created.
-
 Remember to add execution permissions to the phar file.
 
 You need to have curl (in order to download packages)
 
     apt-get install php5-curl
+
+Then you can call the php createPhar.php file. A new chash.phar file will be created.
 
 Example:
 

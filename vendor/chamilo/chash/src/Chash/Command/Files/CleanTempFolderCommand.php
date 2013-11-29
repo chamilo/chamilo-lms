@@ -10,10 +10,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Clean the archives directory, leaving only index.html, twig and Serializer
- * @return bool True on success, false on error
+ * Class CleanTempFolderCommand
+ * @package Chash\Command\Files
  */
-
 class CleanTempFolderCommand extends CommonChamiloDatabaseCommand
 {
     /**

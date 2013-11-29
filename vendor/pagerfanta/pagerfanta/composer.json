@@ -14,11 +14,12 @@
         "php": ">=5.3.0"
     },
     "require-dev": {
-        "doctrine/orm": "2.*",
-        "mandango/mandango": "*",
-        "doctrine/mongodb-odm": "*",
+        "phpunit/phpunit": "3.7.*",
+        "doctrine/orm": "2.3.*",
+        "mandango/mandango": "1.0.*@dev",
+        "doctrine/mongodb-odm": "1.0.*@dev",
         "propel/propel1": "~1.6",
-        "solarium/solarium": "dev-develop"
+        "solarium/solarium": "3.1.*"
     },
     "minimum-stability": "dev",
     "suggest": {

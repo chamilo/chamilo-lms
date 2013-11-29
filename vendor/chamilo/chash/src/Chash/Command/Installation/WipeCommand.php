@@ -9,7 +9,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console;
 
 /**
- * Class MigrationCommand
+ * Class WipeCommand
+ * @package Chash\Command\Installation
  */
 class WipeCommand extends CommonCommand
 {
@@ -20,7 +21,6 @@ class WipeCommand extends CommonCommand
             ->setDescription('Prepares a portal for a new installation')
             ->addArgument('path', InputArgument::OPTIONAL, 'The path to the Chamilo folder');
     }
-
 
     /**
      * Executes a command via CLI
@@ -102,10 +102,5 @@ class WipeCommand extends CommonCommand
         );
         $input = new ArrayInput($arguments);
         $command->run($input, $output);
-
-
-
-
     }
 }
-

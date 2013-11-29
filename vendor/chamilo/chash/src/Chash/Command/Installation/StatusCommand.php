@@ -9,6 +9,7 @@ use Symfony\Component\Console;
 
 /**
  * Class StatusCommand
+ * @package Chash\Command\Installation
  */
 class StatusCommand extends CommonCommand
 {

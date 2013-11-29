@@ -11,6 +11,7 @@ use Symfony\Component\Yaml\Parser;
 
 /**
  * Class UpgradeCommand
+ * @package Chash\Command\Installation
  */
 class UpgradeCommand extends CommonCommand
 {
@@ -57,6 +58,7 @@ class UpgradeCommand extends CommonCommand
      */
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
+        $startTime = time();
         if (PHP_SAPI != 'cli') {
             $this->commandLine = false;
         }
@@ -352,6 +354,9 @@ class UpgradeCommand extends CommonCommand
         $this->updateConfiguration($output, $dryRun, $newParams);
 
         $output->writeln("<comment>Hurrah!!! You just finish to migrate. Too check the current status of your platform. Run </comment><info>chamilo:status</info>");
+        $endTime = time();
+        $totalTimeInSeconds = round(($endTime - $startTime)/60, 2);
+        $output->writeln("<comment>The script took $totalTimeInSeconds minutes.</comment>");
     }
 
     /**
@@ -607,7 +612,7 @@ class UpgradeCommand extends CommonCommand
                 $this->setQueryList($sqlList, $section, $type);
             }
         } else {
-            $output->writeln(sprintf("File does not exists: '<info>%s</info>'... ", $sqlFilePath));
+            $output->writeln(sprintf("File doesn't exist: '<info>%s</info>'... ", $sqlFilePath));
         }
     }
 

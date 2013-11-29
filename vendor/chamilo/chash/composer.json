@@ -23,7 +23,7 @@
         "doctrine/migrations": "dev-master",
         "zendframework/zend-config": "2.2.*@dev",
         "zendframework/zend-stdlib": "2.2.*@dev",
-        "alchemy/zippy": "0.1.*@dev"
+        "alchemy/zippy": "~0.1"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*"

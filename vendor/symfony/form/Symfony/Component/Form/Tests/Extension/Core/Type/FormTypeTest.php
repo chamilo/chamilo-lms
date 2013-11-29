@@ -546,6 +546,18 @@ class FormTypeTest extends BaseTypeTest
         $this->assertSame('default', $form->getData());
     }
 
+    public function testDataOptionSupersedesSetDataCallsIfNull()
+    {
+        $form = $this->factory->create('form', null, array(
+            'data' => null,
+            'compound' => false,
+        ));
+
+        $form->setData('foobar');
+
+        $this->assertNull($form->getData());
+    }
+
     public function testNormDataIsPassedToView()
     {
         $view = $this->factory->createBuilder('form')
@@ -569,6 +581,20 @@ class FormTypeTest extends BaseTypeTest
             ->createView();
 
         $this->assertSame('0', $view->vars['label']);
+    }
+
+    public function testCanGetErrorsWhenButtonInForm()
+    {
+        $builder = $this->factory->createBuilder('form', null, array(
+            'data_class' => 'Symfony\Component\Form\Tests\Fixtures\Author',
+            'required' => false,
+        ));
+        $builder->add('foo', 'text');
+        $builder->add('submit', 'submit');
+        $form = $builder->getForm();
+
+        //This method should not throw a Fatal Error Exception.
+        $form->getErrorsAsString();
     }
 
     protected function getTestedType()

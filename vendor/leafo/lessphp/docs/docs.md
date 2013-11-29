@@ -900,7 +900,7 @@ function that let's you unquote any value. It is called `e`.
   See [String Unquoting](#string_unquoting)
 
 * `floor(number)` -- returns the floor of a numerical input
-* `round(number)` -- returns the rounded value of numerical input
+* `round(number, [precision])` -- returns the rounded value of numerical input with optional precision
 
 * `lighten(color, percent)` -- lightens `color` by `percent` and returns it
 * `darken(color, percent)` -- darkens `color` by `percent` and returns it
@@ -1271,7 +1271,7 @@ In this example, `@import "colors";` will look for either
     ```
 
 `addImportDir` will append a single path to the import search path instead of
-overwritting the whole thing.
+overwriting the whole thing.
 
     ```php
     $less->addImportDir("public/stylesheets");

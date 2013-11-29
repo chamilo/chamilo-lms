@@ -1,3 +1,9 @@
+1.6.0 / YYYY-MM-DD
+==================
+
+ * `YamlFileLoader` now normalizes its contents before parsing.
+
+
 1.5.0 / 2013-10-01
 ==================
 

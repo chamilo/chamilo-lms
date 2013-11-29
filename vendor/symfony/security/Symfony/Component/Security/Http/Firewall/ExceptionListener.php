@@ -76,6 +76,10 @@ class ExceptionListener
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
+        // we need to remove ourselves as the exception listener can be
+        // different depending on the Request
+        $event->getDispatcher()->removeListener(KernelEvents::EXCEPTION, array($this, 'onKernelException'));
+
         $exception = $event->getException();
         $request = $event->getRequest();
 
@@ -157,6 +161,13 @@ class ExceptionListener
         $event->setResponse($response);
     }
 
+    /**
+     * @param Request                 $request
+     * @param AuthenticationException $authException
+     *
+     * @return Response
+     * @throws AuthenticationException
+     */
     private function startAuthentication(Request $request, AuthenticationException $authException)
     {
         if (null === $this->authenticationEntryPoint) {
@@ -177,6 +188,9 @@ class ExceptionListener
         return $this->authenticationEntryPoint->start($request, $authException);
     }
 
+    /**
+     * @param Request $request
+     */
     protected function setTargetPath(Request $request)
     {
         // session isn't required when using http basic authentication mechanism for example

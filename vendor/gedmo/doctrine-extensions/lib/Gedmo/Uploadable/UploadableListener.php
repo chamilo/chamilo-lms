@@ -4,11 +4,9 @@ namespace Gedmo\Uploadable;
 
 use Doctrine\Common\Persistence\ObjectManager,
     Doctrine\Common\Persistence\Mapping\ClassMetadata,
-    Doctrine\ORM\UnitOfWork,
     Gedmo\Mapping\MappedEventSubscriber,
     Doctrine\Common\EventArgs,
     Gedmo\Mapping\Event\AdapterInterface,
-    Gedmo\Exception\UploadableDirectoryNotFoundException,
     Gedmo\Exception\UploadablePartialException,
     Gedmo\Exception\UploadableCantWriteException,
     Gedmo\Exception\UploadableExtensionException,
@@ -24,10 +22,8 @@ use Doctrine\Common\Persistence\ObjectManager,
     Gedmo\Exception\UploadableCouldntGuessMimeTypeException,
     Gedmo\Uploadable\Mapping\Validator,
     Gedmo\Uploadable\FileInfo\FileInfoInterface,
-    Gedmo\Uploadable\FileInfo\FileInfoArray,
     Gedmo\Uploadable\MimeType\MimeTypeGuesser,
     Gedmo\Uploadable\MimeType\MimeTypeGuesserInterface,
-    Gedmo\Uploadable\MimeType\MimeTypesExtensionsMap,
     Doctrine\Common\NotifyPropertyChanged,
     Gedmo\Uploadable\Events,
     Gedmo\Uploadable\Event\UploadablePreFileProcessEventArgs,
@@ -56,7 +52,7 @@ class UploadableListener extends MappedEventSubscriber
     /**
      * Mime type guesser
      *
-     * @var Gedmo\Uploadable\MimeType\MimeTypeGuesserInterface
+     * @var \Gedmo\Uploadable\MimeType\MimeTypeGuesserInterface
      */
     private $mimeTypeGuesser;
 
@@ -132,9 +128,13 @@ class UploadableListener extends MappedEventSubscriber
             // this will mark the entity as dirty, and the "onFlush" event will be fired, even if there's
             // no other change in the entity's fields apart from the file itself.
             if ($uow->isInIdentityMap($entity)) {
-                $path = $this->getFilePath($meta, $config, $entity);
-
-                $uow->propertyChanged($entity, $config['filePathField'], $path, $path);
+                if ($config['filePathField']) {
+                    $path = $this->getFilePath($meta, $config, $entity);
+                    $uow->propertyChanged($entity, $config['filePathField'], $path, $path);
+                } else {
+                    $fileName = $this->getFileName($meta, $config, $entity);
+                    $uow->propertyChanged($entity, $config['fileNameField'], $fileName, $fileName);
+                }
                 $uow->scheduleForUpdate($entity);
             }
         }
@@ -275,8 +275,10 @@ class UploadableListener extends MappedEventSubscriber
             }
         }
 
-        $filePathField = $refl->getProperty($config['filePathField']);
-        $filePathField->setAccessible(true);
+        if ($config['filePathField']) {
+            $filePathField = $refl->getProperty($config['filePathField']);
+            $filePathField->setAccessible(true);
+        }
 
         $path = $config['path'];
 
@@ -291,14 +293,19 @@ class UploadableListener extends MappedEventSubscriber
             } else {
                 $msg = 'You have to define the path to save files either in the listener, or in the class "%s"';
 
-                throw new UploadableNoPathDefinedException(sprintf($msg,
-                    $meta->name
-                ));
+                throw new UploadableNoPathDefinedException(
+                    sprintf($msg, $meta->name)
+                );
             }
         }
 
         Validator::validatePath($path);
         $path = rtrim($path, '\/');
+
+        if ($config['fileNameField']) {
+            $fileNameField = $refl->getProperty($config['fileNameField']);
+            $fileNameField->setAccessible(true);
+        }
 
         if ($config['fileMimeTypeField']) {
             $fileMimeTypeField = $refl->getProperty($config['fileMimeTypeField']);
@@ -312,7 +319,11 @@ class UploadableListener extends MappedEventSubscriber
 
         if ($action === self::ACTION_UPDATE) {
             // First we add the original file to the pendingFileRemovals array
-            $this->pendingFileRemovals[] = $this->getFilePath($meta, $config, $object);
+            if ($config['filePathField']) {
+                $this->pendingFileRemovals[] = $this->getFilePath($meta, $config, $object);
+            } else {
+                $this->pendingFileRemovals[] = $this->getFileName($meta, $config, $object);
+            }
         }
 
         // We generate the filename based on configuration
@@ -340,8 +351,6 @@ class UploadableListener extends MappedEventSubscriber
         // We override the mime type with the guessed one
         $info['fileMimeType'] = $mime;
 
-        $filePathField->setValue($object, $info['filePath']);
-
         if ($config['callback'] !== '') {
             $callbackMethod = $refl->getMethod($config['callback']);
             $callbackMethod->setAccessible(true);
@@ -349,9 +358,19 @@ class UploadableListener extends MappedEventSubscriber
             $callbackMethod->invokeArgs($object, array($info));
         }
 
-        $changes = array(
-            $config['filePathField'] => array($filePathField->getValue($object), $info['filePath'])
-        );
+        $changes = array();
+
+        if ($config['filePathField']) {
+            $changes[$config['filePathField']] = array($filePathField->getValue($object), $info['filePath']);
+
+            $this->updateField($object, $uow, $ea, $meta, $config['filePathField'], $info['filePath']);
+        }
+
+        if ($config['fileNameField']) {
+            $changes[$config['fileNameField']] = array($fileNameField->getValue($object), $info['fileName']);
+
+            $this->updateField($object, $uow, $ea, $meta, $config['fileNameField'], $info['fileName']);
+        }
 
         if ($config['fileMimeTypeField']) {
             $changes[$config['fileMimeTypeField']] = array($fileMimeTypeField->getValue($object), $info['fileMimeType']);
@@ -364,8 +383,6 @@ class UploadableListener extends MappedEventSubscriber
 
             $this->updateField($object, $uow, $ea, $meta, $config['fileSizeField'], $info['fileSize']);
         }
-
-        $this->updateField($object, $uow, $ea, $meta, $config['filePathField'], $info['filePath']);
 
         $ea->recomputeSingleObjectChangeSet($uow, $meta, $object);
 
@@ -384,6 +401,23 @@ class UploadableListener extends MappedEventSubscriber
     }
 
     /**
+     * Returns value of the entity's property
+     *
+     * @param \Doctrine\Common\Persistence\Mapping\ClassMetadata $meta
+     * @param $object
+     * @return mixed
+     */
+    protected function getPropertyValueFromObject(ClassMetadata $meta, $propertyName, $object)
+    {
+        $refl = $meta->getReflectionClass();
+        $filePathField = $refl->getProperty($propertyName);
+        $filePathField->setAccessible(true);
+        $filePath = $filePathField->getValue($object);
+
+        return $filePath;
+    }
+
+    /**
      * Returns the path of the entity's file
      *
      * @param \Doctrine\Common\Persistence\Mapping\ClassMetadata $meta
@@ -393,12 +427,20 @@ class UploadableListener extends MappedEventSubscriber
      */
     public function getFilePath(ClassMetadata $meta, array $config, $object)
     {
-        $refl = $meta->getReflectionClass();
-        $filePathField = $refl->getProperty($config['filePathField']);
-        $filePathField->setAccessible(true);
-        $filePath = $filePathField->getValue($object);
+        return $this->getPropertyValueFromObject($meta, $config['filePathField'], $object);
+    }
 
-        return $filePath;
+    /**
+     * Returns the name of the entity's file
+     *
+     * @param \Doctrine\Common\Persistence\Mapping\ClassMetadata $meta
+     * @param array $config
+     * @param $object
+     * @return mixed
+     */
+    public function getFileName(ClassMetadata $meta, array $config, $object)
+    {
+        return $this->getPropertyValueFromObject($meta, $config['fileNameField'], $object);
     }
 
     /**
@@ -696,7 +738,16 @@ class UploadableListener extends MappedEventSubscriber
         return $this->mimeTypeGuesser;
     }
 
-    protected function updateField($object, $uow, AdapterInterface $ea, $meta, $field, $value, $notifyPropertyChanged = true)
+    /**
+     * @param $object
+     * @param $uow
+     * @param AdapterInterface $ea
+     * @param ClassMetadata $meta
+     * @param String $field
+     * @param mixed $value
+     * @param bool $notifyPropertyChanged
+     */
+    protected function updateField($object, $uow, AdapterInterface $ea, ClassMetadata $meta, $field, $value, $notifyPropertyChanged = true)
     {
         $property = $meta->getReflectionProperty($field);
         $oldValue = $property->getValue($object);

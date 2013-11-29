@@ -24,9 +24,17 @@ use Silex\Application;
 use Neutron\Silex\Provider\FilesystemServiceProvider;
 
 $app = new Application();
+// Register the filesystem
 $app->register(new FilesystemServiceProvider());
 
+// Just use it as any Silex service
+if (!$app['filesystem']->exists('any-absolute-or-relative-path...')) {
+	throw new \Namespace\PathNotFoundCustomException();
+}
 ```
+
+###Informations
+Read more informations about the [Symfony2 Filesystem Component](http://symfony.com/doc/current/components/filesystem.html)
 
 ##License
 

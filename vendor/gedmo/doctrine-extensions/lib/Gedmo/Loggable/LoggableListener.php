@@ -128,8 +128,6 @@ class LoggableListener extends MappedEventSubscriber
         $uow = $om->getUnitOfWork();
         if ($this->pendingLogEntryInserts && array_key_exists($oid, $this->pendingLogEntryInserts)) {
             $wrapped = AbstractWrapper::wrap($object, $om);
-            $meta = $wrapped->getMetadata();
-            $config = $this->getConfiguration($om, $meta->name);
 
             $logEntry = $this->pendingLogEntryInserts[$oid];
             $logEntryMeta = $om->getClassMetadata(get_class($logEntry));
@@ -230,12 +228,12 @@ class LoggableListener extends MappedEventSubscriber
             $logEntry->setLoggedAt();
 
             // check for the availability of the primary key
-            $objectId = $wrapped->getIdentifier();
-            if (!$objectId && $action === self::ACTION_CREATE) {
-                $this->pendingLogEntryInserts[spl_object_hash($object)] = $logEntry;
-            }
             $uow = $om->getUnitOfWork();
-            $logEntry->setObjectId($objectId);
+            if ($action === self::ACTION_CREATE && $ea->isPostInsertGenerator($meta)) {
+                $this->pendingLogEntryInserts[spl_object_hash($object)] = $logEntry;
+            } else {
+                $logEntry->setObjectId($wrapped->getIdentifier());
+            }
             $newValues = array();
             if ($action !== self::ACTION_REMOVE && isset($config['versioned'])) {
                 foreach ($ea->getObjectChangeSet($uow, $object) as $field => $changes) {
@@ -258,11 +256,11 @@ class LoggableListener extends MappedEventSubscriber
                 }
                 $logEntry->setData($newValues);
             }
-            
+
             if($action === self::ACTION_UPDATE && 0 === count($newValues)) {
                 return;
             }
-            
+
             $version = 1;
             if ($action !== self::ACTION_CREATE) {
                 $version = $ea->getNewVersion($logEntryMeta, $object);

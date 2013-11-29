@@ -1,7 +1,7 @@
 Flint
 =====
 
-[![Build Status](https://travis-ci.org/henrikbjorn/Flint.png?branch=master)](https://travis-ci.org/henrikbjorn/Flint)
+[![Build Status](https://travis-ci.org/flint/flint.png?branch=master)](https://travis-ci.org/flint/flint)
 
 Flint is a microframework build on top of Silex. It brings the full Router, conventions and structure to Silex.
 

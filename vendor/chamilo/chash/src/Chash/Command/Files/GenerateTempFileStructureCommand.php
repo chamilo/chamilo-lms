@@ -9,7 +9,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
-
+/**
+ * Class GenerateTempFileStructureCommand
+ * @package Chash\Command\Files
+ */
 class GenerateTempFileStructureCommand extends CommonChamiloDatabaseCommand
 {
     /**
@@ -39,8 +42,9 @@ class GenerateTempFileStructureCommand extends CommonChamiloDatabaseCommand
     }
 
     /**
-     * @param $files
      * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param array $files
+     * @param $permission
      * @return int
      */
     public function createFolders(\Symfony\Component\Console\Output\OutputInterface $output, $files, $permission)

@@ -43,6 +43,7 @@ abstract class SolariumAdapterTest extends \PHPUnit_Framework_TestCase
     public function testGetNbResults()
     {
         $query = $this->createQueryMock();
+        $endPoint = null;
 
         $result = $this->createResultMock();
         $result
@@ -54,7 +55,7 @@ abstract class SolariumAdapterTest extends \PHPUnit_Framework_TestCase
         $client
             ->expects($this->once())
             ->method('select')
-            ->with($query)
+            ->with($query, $endPoint)
             ->will($this->returnValue($result));
 
         $adapter = new SolariumAdapter($client, $query);
@@ -92,13 +93,14 @@ abstract class SolariumAdapterTest extends \PHPUnit_Framework_TestCase
             ->with(200)
             ->will($this->returnValue($query));
 
+        $endPoint = null;
         $result = $this->createResultMock();
 
         $client = $this->createClientMock();
         $client
             ->expects($this->once())
             ->method('select')
-            ->with($query)
+            ->with($query, $endPoint)
             ->will($this->returnValue($result));
 
         $adapter = new SolariumAdapter($client, $query);
@@ -122,16 +124,84 @@ abstract class SolariumAdapterTest extends \PHPUnit_Framework_TestCase
         $adapter->getSlice(1, 200);
     }
 
-    public function testGetResultSet()
+    public function testGetNbResultCanUseAGetSliceCachedResultSet()
     {
-        $query = $this->createQueryMock();
+        $query = $this->createQueryStub();
+
         $client = $this->createClientMock();
         $client
-            ->expects($this->atLeastOnce())
+            ->expects($this->exactly(1))
             ->method('select')
             ->will($this->returnValue($this->createResultMock()));
 
         $adapter = new SolariumAdapter($client, $query);
+
+        $adapter->getSlice(1, 200);
+        $adapter->getNbResults();
+    }
+
+    public function testSameGetSliceUseACachedResultSet()
+    {
+        $query = $this->createQueryStub();
+
+        $client = $this->createClientMock();
+        $client
+            ->expects($this->exactly(1))
+            ->method('select')
+            ->will($this->returnValue($this->createResultMock()));
+
+        $adapter = new SolariumAdapter($client, $query);
+
+        $adapter->getSlice(1, 200);
+        $adapter->getSlice(1, 200);
+    }
+
+    public function testDifferentGetSliceCannotUseACachedResultSet()
+    {
+        $query = $this->createQueryStub();
+
+        $client = $this->createClientMock();
+        $client
+            ->expects($this->exactly(2))
+            ->method('select')
+            ->will($this->returnValue($this->createResultMock()));
+
+        $adapter = new SolariumAdapter($client, $query);
+
+        $adapter->getSlice(1, 200);
+        $adapter->getSlice(2, 200);
+    }
+
+    public function testGetResultSet()
+    {
+        $query = $this->createQueryMock();
+        $endPoint = null;
+
+        $this->doTestGetResultSet($query, $endPoint);
+    }
+
+    public function testGetResultSetCanUseAnEndPoint()
+    {
+        $query = $this->createQueryMock();
+        $endPoint = 'ups';
+
+        $this->doTestGetResultSet($query, $endPoint);
+    }
+
+    private function doTestGetResultSet($query, $endPoint)
+    {
+        $client = $this->createClientMock();
+        $client
+            ->expects($this->atLeastOnce())
+            ->method('select')
+            ->with($query, $endPoint)
+            ->will($this->returnValue($this->createResultMock()));
+
+        $adapter = new SolariumAdapter($client, $query);
+        if ($endPoint !== null) {
+            $adapter->setEndPoint($endPoint);
+        }
+
         $this->assertInstanceOf($this->getResultClass(), $adapter->getResultSet());
     }
 

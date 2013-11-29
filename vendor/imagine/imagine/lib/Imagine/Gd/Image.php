@@ -11,13 +11,18 @@
 
 namespace Imagine\Gd;
 
+use Imagine\Image\AbstractImage;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Box;
 use Imagine\Image\BoxInterface;
-use Imagine\Image\Color;
+use Imagine\Image\Palette\Color\ColorInterface;
 use Imagine\Image\Fill\FillInterface;
 use Imagine\Image\Point;
 use Imagine\Image\PointInterface;
+use Imagine\Image\Palette\PaletteInterface;
+use Imagine\Image\Palette\Color\RGB as RGBColor;
+use Imagine\Image\ProfileInterface;
+use Imagine\Image\Palette\RGB;
 use Imagine\Exception\InvalidArgumentException;
 use Imagine\Exception\OutOfBoundsException;
 use Imagine\Exception\RuntimeException;
@@ -25,7 +30,7 @@ use Imagine\Exception\RuntimeException;
 /**
  * Image implementation using the GD library
  */
-final class Image implements ImageInterface
+final class Image extends AbstractImage
 {
     /**
      * @var resource
@@ -34,14 +39,30 @@ final class Image implements ImageInterface
     private $layers;
 
     /**
+     *
+     * @var PaletteInterface
+     */
+    private $palette;
+
+    /**
+     * Path to original source file
+     *
+     * @var null|string
+     */
+    private $path;
+
+    /**
      * Constructs a new Image instance using the result of
      * imagecreatetruecolor()
      *
-     * @param resource $resource
+     * @param resource         $resource
+     * @param PaletteInterface $palette
      */
-    public function __construct($resource)
+    public function __construct($resource, PaletteInterface $palette, $path = null)
     {
+        $this->palette = $palette;
         $this->resource = $resource;
+        $this->path = $path;
     }
 
     /**
@@ -78,7 +99,7 @@ final class Image implements ImageInterface
             throw new RuntimeException('Image copy operation failed');
         }
 
-        return new Image($copy);
+        return new Image($copy, $this->palette);
     }
 
     /**
@@ -181,9 +202,9 @@ final class Image implements ImageInterface
     /**
      * {@inheritdoc}
      */
-    final public function rotate($angle, Color $background = null)
+    final public function rotate($angle, ColorInterface $background = null)
     {
-        $color = $background ? $background : new Color('fff');
+        $color = $background ? $background : $this->palette->color('fff');
 
         $resource = imagerotate($this->resource, -1 * $angle, $this->getColor($color));
 
@@ -201,11 +222,23 @@ final class Image implements ImageInterface
     /**
      * {@inheritdoc}
      */
-    final public function save($path, array $options = array())
+    final public function save($path = null, array $options = array())
     {
-        $format = isset($options['format'])
-            ? $options['format']
-            : pathinfo($path, \PATHINFO_EXTENSION);
+        $path = null === $path ? $this->path : $path;
+
+        if (null === $path) {
+            throw new RuntimeException(
+                'You can omit save path only if image has been open from a file'
+            );
+        }
+
+        if (isset($options['format'])) {
+            $format = $options['format'];
+        } elseif ('' !== $extension = pathinfo($path, \PATHINFO_EXTENSION)) {
+            $format = $extension;
+        } else {
+            $format = pathinfo($this->path, \PATHINFO_EXTENSION);
+        }
 
         $this->saveOrOutput($format, $options, $path);
 
@@ -306,63 +339,6 @@ final class Image implements ImageInterface
     /**
      * {@inheritdoc}
      */
-    public function thumbnail(BoxInterface $size, $mode = ImageInterface::THUMBNAIL_INSET)
-    {
-        if ($mode !== ImageInterface::THUMBNAIL_INSET &&
-            $mode !== ImageInterface::THUMBNAIL_OUTBOUND) {
-            throw new InvalidArgumentException('Invalid mode specified');
-        }
-
-        $ratios = array(
-            $size->getWidth() / imagesx($this->resource),
-            $size->getHeight() / imagesy($this->resource)
-        );
-
-        $imageSize = $this->getSize();
-        $thumbnail = $this->copy();
-
-        // if target width is larger than image width
-        // AND target height is longer than image height
-        if ($size->contains($imageSize)) {
-            return $thumbnail;
-        }
-
-        if ($mode === ImageInterface::THUMBNAIL_INSET) {
-            $ratio = min($ratios);
-        } else {
-            $ratio = max($ratios);
-        }
-
-        if ($mode === ImageInterface::THUMBNAIL_OUTBOUND) {
-            if (!$imageSize->contains($size)) {
-                $size = new Box(
-                    min($imageSize->getWidth(), $size->getWidth()),
-                    min($imageSize->getHeight(), $size->getHeight())
-                );
-            } else {
-                $imageSize = $thumbnail->getSize()->scale($ratio);
-                $thumbnail->resize($imageSize);
-            }
-            $thumbnail->crop(new Point(
-                max(0, round(($imageSize->getWidth() - $size->getWidth()) / 2)),
-                max(0, round(($imageSize->getHeight() - $size->getHeight()) / 2))
-            ), $size);
-        } else {
-            if (!$imageSize->contains($size)) {
-                $imageSize = $imageSize->scale($ratio);
-                $thumbnail->resize($imageSize);
-            } else {
-                $imageSize = $thumbnail->getSize()->scale($ratio);
-                $thumbnail->resize($imageSize);
-            }
-        }
-
-        return $thumbnail;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function draw()
     {
         return new Drawer($this->resource);
@@ -409,6 +385,7 @@ final class Image implements ImageInterface
                 $position  = new Point($x, $y);
                 $color     = $this->getColorAt($position);
                 $maskColor = $mask->getColorAt($position);
+
                 $round     = (int) round(max($color->getAlpha(), (100 - $color->getAlpha()) * $maskColor->getRed() / 255));
 
                 if (false === imagesetpixel(
@@ -491,7 +468,7 @@ final class Image implements ImageInterface
         $index = imagecolorat($this->resource, $point->getX(), $point->getY());
         $info  = imagecolorsforindex($this->resource, $index);
 
-        return new Color(array(
+        return $this->palette->color(array(
                 $info['red'],
                 $info['green'],
                 $info['blue'],
@@ -506,7 +483,7 @@ final class Image implements ImageInterface
     public function layers()
     {
         if (null === $this->layers) {
-            $this->layers = new Layers($this, $this->resource);
+            $this->layers = new Layers($this, $this->palette, $this->resource);
         }
 
         return $this->layers;
@@ -529,6 +506,36 @@ final class Image implements ImageInterface
         }
 
         imageinterlace($this->resource, $supportedInterlaceSchemes[$scheme]);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function palette()
+    {
+        return $this->palette;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function profile(ProfileInterface $profile)
+    {
+        throw new RuntimeException('GD driver does not support color profiles');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function usePalette(PaletteInterface $palette)
+    {
+        if (!$palette instanceof RGB) {
+            throw new RuntimeException('GD driver only supports RGB palette');
+        }
+
+        $this->palette = $palette;
 
         return $this;
     }
@@ -636,8 +643,14 @@ final class Image implements ImageInterface
      *
      * @throws RuntimeException
      */
-    private function getColor(Color $color)
+    private function getColor(ColorInterface $color)
     {
+        if (!$color instanceof RGBColor) {
+            throw new InvalidArgumentException(
+                'GD driver only supports RGB colors'
+            );
+        }
+
         $index = imagecolorallocatealpha(
             $this->resource, $color->getRed(), $color->getGreen(),
             $color->getBlue(), round(127 * $color->getAlpha() / 100)

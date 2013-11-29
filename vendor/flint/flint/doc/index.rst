@@ -92,7 +92,7 @@ source code if you look at the implementation for
 Routing
 -------
 
-Because Flint replaces the url matcher used in Symfony with the full
+Because Flint replaces the url matcher used in Silex with the full
 router implementation a lot of new things are possible.
 
 Caching is one of those things. It makes your application faster as it
@@ -275,7 +275,7 @@ Application
 ~~~~~~~~~~~
 
 .. warning::
-    
+
     This is deprecated and it is adviced to use ``Flint\Console\PimpleHelper`` instead.
 
 ``Flint\Console\Application`` is an extension of the base console
@@ -292,7 +292,6 @@ application shipped with Symfony. It gives access to Pimple in commands.
 
     class MyCommand extends \Symfony\Component\Console\Command\Command
     {
-
         protected function execute(InputInterface $input, OutputInterface $output)
         {
             $pimple = $this->getApplication()->getPimple();
@@ -304,8 +303,6 @@ Configuration
 
 Every application need to have some parameters configured based on environment or other parameters.
 Flint comes with a ``Configurator`` which reads ``json`` files and sets them as parameters on your application.
-
-It is very easy to use:
 
 .. code-block:: php
 
@@ -319,12 +316,9 @@ It is very easy to use:
     // Or use the service directly
     $app['configurator']->configure($app, 'app/config/prod.json');
 
-The Configurator will replace placeholders marked with ``%my_parameter%`` with the corresponding parameter in your
-application which in this instance would be ``$app['my_parameter']``. It will also replace placeholders marked as
-``#my_env#`` with environment variables.
+.. note::
 
-It is possible to inherit from a config file by using a special key ``@import`` and set its value to another file. The
-loaded parameters from ``@import`` will have the lowest priority when merging the two files.
+    For more information about how configuration loading works read the `Tacker documentation <http://tacker.rtfd.org>`__.
 
 .. warning::
 

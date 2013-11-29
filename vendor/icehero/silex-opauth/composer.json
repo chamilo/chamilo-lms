@@ -18,6 +18,11 @@
             "name": "Florin Popa",
             "email": "pp.flrn@gmail.com",
             "homepage": "http://florinpopa.net"
+        },
+        {
+            "name": "Rafal Lindemann",
+            "email": "rl@stamina.pl",
+            "homepage": "http://stamina.pl"
         }
     ],
     "autoload": {

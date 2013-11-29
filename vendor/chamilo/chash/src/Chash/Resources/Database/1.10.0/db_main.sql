@@ -489,13 +489,11 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS php_session;
 CREATE TABLE IF NOT EXISTS php_session (
-  session_id varchar(32) NOT NULL default '',
-  session_name varchar(10) NOT NULL default '',
-  session_time int NOT NULL default '0',
-  session_start int NOT NULL default '0',
-  session_value mediumtext NOT NULL,
+  session_id varchar(255) NOT NULL,
+  session_value LONGTEXT NOT NULL,
+  session_time int NOT NULL,
   PRIMARY KEY (session_id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table session
@@ -1649,6 +1647,20 @@ CREATE TABLE IF NOT EXISTS access_url_rel_session (
   access_url_id int unsigned NOT NULL,
   session_id int unsigned NOT NULL,
   PRIMARY KEY (access_url_id, session_id)
+);
+
+DROP TABLE IF EXISTS access_url_rel_usergroup;
+CREATE TABLE IF NOT EXISTS access_url_rel_usergroup (
+  access_url_id int unsigned NOT NULL,
+  usergroup_id int unsigned NOT NULL,
+  PRIMARY KEY (access_url_id, usergroup_id)
+);
+
+DROP TABLE IF EXISTS access_url_rel_course_category;
+CREATE TABLE IF NOT EXISTS access_url_rel_course_category (
+  access_url_id int unsigned NOT NULL,
+  course_category_id int unsigned NOT NULL,
+  PRIMARY KEY (access_url_id, course_category_id)
 );
 
 --
@@ -3584,4 +3596,4 @@ CREATE TABLE curriculum_rel_user (
 
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.049' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.052' WHERE variable = 'chamilo_database_version';

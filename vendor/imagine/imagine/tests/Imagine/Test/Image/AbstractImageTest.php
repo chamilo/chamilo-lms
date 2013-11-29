@@ -14,13 +14,173 @@ namespace Imagine\Test\Image;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Point;
-use Imagine\Image\Color;
 use Imagine\Image\Fill\Gradient\Horizontal;
 use Imagine\Image\Point\Center;
 use Imagine\Test\ImagineTestCase;
+use Imagine\Image\Palette\RGB;
+use Imagine\Image\Profile;
 
 abstract class AbstractImageTest extends ImagineTestCase
 {
+    public function testPaletteIsRGBIfRGBImage()
+    {
+        $image = $this->getImagine()->open(__DIR__ . '/../../Fixtures/google.png');
+        $this->assertInstanceOf('Imagine\Image\Palette\RGB', $image->palette());
+    }
+
+    public function testPaletteIsCMYKIfCMYKImage()
+    {
+        $image = $this->getImagine()->open(__DIR__ . '/../../Fixtures/pixel-CMYK.jpg');
+        $this->assertInstanceOf('Imagine\Image\Palette\CMYK', $image->palette());
+    }
+
+    public function testPaletteIsGrayIfGrayImage()
+    {
+        $image = $this->getImagine()->open(__DIR__ . '/../../Fixtures/pixel-grayscale.jpg');
+        $this->assertInstanceOf('Imagine\Image\Palette\Grayscale', $image->palette());
+    }
+
+    public function testDefaultPaletteCreationIsRGB()
+    {
+        $image = $this->getImagine()->create(new Box(10, 10));
+        $this->assertInstanceOf('Imagine\Image\Palette\RGB', $image->palette());
+    }
+
+    /**
+     * @dataProvider providePalettes
+     */
+    public function testPaletteAssociatedIsRelatedToGivenColor($paletteClass, $input)
+    {
+        $palette = new $paletteClass();
+
+        $image = $this
+            ->getImagine()
+            ->create(new Box(10, 10), $palette->color($input));
+
+        $this->assertEquals($palette, $image->palette());
+    }
+
+    public function providePalettes()
+    {
+        return array(
+            array('Imagine\Image\Palette\RGB', array(255, 0, 0)),
+            array('Imagine\Image\Palette\CMYK', array(10, 0, 0, 0)),
+            array('Imagine\Image\Palette\Grayscale', array(25)),
+        );
+    }
+
+    /**
+     * @dataProvider provideFromAndToPalettes
+     */
+    public function testUsePalette($from, $to, $color)
+    {
+        $palette = new $from();
+
+        $image = $this
+            ->getImagine()
+            ->create(new Box(10, 10), $palette->color($color));
+
+        $targetPalette = new $to();
+
+        $image->usePalette($targetPalette);
+
+        $this->assertEquals($targetPalette, $image->palette());
+        $image->save(__DIR__ . '/tmp.jpg');
+
+        $image = $this->getImagine()->open(__DIR__ . '/tmp.jpg');
+
+        $this->assertInstanceOf($to, $image->palette());
+        unlink(__DIR__ . '/tmp.jpg');
+    }
+
+    public function testSaveWithoutFormatShouldSaveInOriginalFormat()
+    {
+        $tmpFile = __DIR__ . '/tmpfile';
+
+        $this
+            ->getImagine()
+            ->open(__DIR__ . '/../../Fixtures/large.jpg')
+            ->save($tmpFile);
+
+        $data = exif_read_data($tmpFile);
+        $this->assertEquals('image/jpeg', $data['MimeType']);
+        unlink($tmpFile);
+    }
+
+    public function testSaveWithoutPathFileFromImageLoadShouldBeOkay()
+    {
+        $source = __DIR__ . '/../../Fixtures/google.png';
+        $tmpFile = __DIR__ . '/../../Fixtures/google.tmp.png';
+
+        if (file_exists($tmpFile)) {
+            unlink($tmpFile);
+        }
+
+        copy($source, $tmpFile);
+
+        $this->assertEquals(md5_file($source), md5_file($tmpFile));
+
+        $this
+            ->getImagine()
+            ->open($tmpFile)
+            ->resize(new Box(20, 20))
+            ->save();
+
+        $this->assertNotEquals(md5_file($source), md5_file($tmpFile));
+        unlink($tmpFile);
+    }
+
+    public function testSaveWithoutPathFileFromImageCreationShouldFail()
+    {
+        $image = $this->getImagine()->create(new Box(20, 20));
+        $this->setExpectedException('Imagine\Exception\RuntimeException');
+        $image->save();
+    }
+
+    public function provideFromAndToPalettes()
+    {
+        return array(
+            array(
+                'Imagine\Image\Palette\RGB',
+                'Imagine\Image\Palette\CMYK',
+                array(10, 10, 10),
+            ),
+            array(
+                'Imagine\Image\Palette\RGB',
+                'Imagine\Image\Palette\Grayscale',
+                array(10, 10, 10),
+            ),
+            array(
+                'Imagine\Image\Palette\CMYK',
+                'Imagine\Image\Palette\RGB',
+                array(10, 10, 10, 0),
+            ),
+            array(
+                'Imagine\Image\Palette\CMYK',
+                'Imagine\Image\Palette\Grayscale',
+                array(10, 10, 10, 0),
+            ),
+            array(
+                'Imagine\Image\Palette\Grayscale',
+                'Imagine\Image\Palette\RGB',
+                array(10),
+            ),
+            array(
+                'Imagine\Image\Palette\Grayscale',
+                'Imagine\Image\Palette\CMYK',
+                array(10),
+            ),
+        );
+    }
+
+    public function testProfile()
+    {
+        $this
+            ->getImagine()
+            ->create(new Box(10, 10))
+            ->profile(Profile::fromPath(__DIR__ . '/../../../../lib/Imagine/resources/Adobe/RGB/VideoHD.icc'));
+    }
+
     public function testRotateWithNoBackgroundColor()
     {
         $factory = $this->getImagine();
@@ -99,6 +259,14 @@ abstract class AbstractImageTest extends ImagineTestCase
         $thumbnail = $image->thumbnail(new Box(20, 20));
 
         $this->assertNotSame($image, $thumbnail);
+    }
+
+    public function testThumbnailWithInvalidModeShouldThrowAnException()
+    {
+        $factory = $this->getImagine();
+        $image = $factory->open('tests/Imagine/Fixtures/google.png');
+        $this->setExpectedException('Imagine\Exception\InvalidArgumentException', 'Invalid mode specified');
+        $image->thumbnail(new Box(20, 20), "boumboum");
     }
 
     public function testResizeShouldReturnTheImage()
@@ -217,7 +385,10 @@ abstract class AbstractImageTest extends ImagineTestCase
     public function testCreateAndSaveEmptyImage()
     {
         $factory = $this->getImagine();
-        $image   = $factory->create(new Box(400, 300), new Color('000'));
+
+        $palette = new RGB();
+
+        $image   = $factory->create(new Box(400, 300), $palette->color('000'));
 
         $size  = $image->getSize();
 
@@ -230,18 +401,21 @@ abstract class AbstractImageTest extends ImagineTestCase
     public function testCreateTransparentGradient()
     {
         $factory = $this->getImagine();
+
+        $palette = new RGB();
+
         $size    = new Box(100, 50);
-        $image   = $factory->create($size, new Color('f00'));
+        $image   = $factory->create($size, $palette->color('f00'));
 
         $image->paste(
-                $factory->create($size, new Color('ff0'))
+                $factory->create($size, $palette->color('ff0'))
                     ->applyMask(
                         $factory->create($size)
                             ->fill(
                                 new Horizontal(
                                     $image->getSize()->getWidth(),
-                                    new Color('fff'),
-                                    new Color('000')
+                                    $palette->color('fff'),
+                                    $palette->color('000')
                                 )
                             )
                     ),
@@ -363,6 +537,29 @@ abstract class AbstractImageTest extends ImagineTestCase
             $this->assertInstanceOf('Imagine\\Image\\ImageInterface', $layer);
             $this->assertCount(1, $layer->layers());
         }
+    }
+
+    public function testChangeColorSpaceAndStripImage()
+    {
+        $color = $this
+            ->getImagine()
+            ->open('tests/Imagine/Fixtures/pixel-CMYK.jpg')
+            ->usePalette(new RGB())
+            ->strip()
+            ->getColorAt(new Point(0, 0));
+
+        $this->assertEquals('#0082a2', (string) $color);
+    }
+
+    public function testStripGBRImageHasGoodColors()
+    {
+        $color = $this
+            ->getImagine()
+            ->open('tests/Imagine/Fixtures/pixel-GBR.jpg')
+            ->strip()
+            ->getColorAt(new Point(0, 0));
+
+        $this->assertEquals('#d07560', (string) $color);
     }
 
     private function getMonoLayeredImage()

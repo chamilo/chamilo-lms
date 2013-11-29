@@ -140,6 +140,42 @@ class FormTypeCsrfExtensionTest extends TypeTestCase
         $this->assertEquals('token', $view['csrf']->vars['value']);
     }
 
+    public function testGenerateCsrfTokenUsesFormNameAsIntentionByDefault()
+    {
+        $this->csrfProvider->expects($this->once())
+            ->method('generateCsrfToken')
+            ->with('FORM_NAME')
+            ->will($this->returnValue('token'));
+
+        $view = $this->factory
+            ->createNamed('FORM_NAME', 'form', null, array(
+                'csrf_field_name' => 'csrf',
+                'csrf_provider' => $this->csrfProvider,
+                'compound' => true,
+            ))
+            ->createView();
+
+        $this->assertEquals('token', $view['csrf']->vars['value']);
+    }
+
+    public function testGenerateCsrfTokenUsesTypeClassAsIntentionIfEmptyFormName()
+    {
+        $this->csrfProvider->expects($this->once())
+            ->method('generateCsrfToken')
+            ->with('Symfony\Component\Form\Extension\Core\Type\FormType')
+            ->will($this->returnValue('token'));
+
+        $view = $this->factory
+            ->createNamed('', 'form', null, array(
+                'csrf_field_name' => 'csrf',
+                'csrf_provider' => $this->csrfProvider,
+                'compound' => true,
+            ))
+            ->createView();
+
+        $this->assertEquals('token', $view['csrf']->vars['value']);
+    }
+
     public function provideBoolean()
     {
         return array(
@@ -169,6 +205,99 @@ class FormTypeCsrfExtensionTest extends TypeTestCase
             ->getForm();
 
         $form->submit(array(
+            'child' => 'foobar',
+            'csrf' => 'token',
+        ));
+
+        // Remove token from data
+        $this->assertSame(array('child' => 'foobar'), $form->getData());
+
+        // Validate accordingly
+        $this->assertSame($valid, $form->isValid());
+    }
+
+    /**
+     * @dataProvider provideBoolean
+     */
+    public function testValidateTokenOnSubmitIfRootAndCompoundUsesFormNameAsIntentionByDefault($valid)
+    {
+        $this->csrfProvider->expects($this->once())
+            ->method('isCsrfTokenValid')
+            ->with('FORM_NAME', 'token')
+            ->will($this->returnValue($valid));
+
+        $form = $this->factory
+            ->createNamedBuilder('FORM_NAME', 'form', null, array(
+                'csrf_field_name' => 'csrf',
+                'csrf_provider' => $this->csrfProvider,
+                'compound' => true,
+            ))
+            ->add('child', 'text')
+            ->getForm();
+
+        $form->submit(array(
+            'child' => 'foobar',
+            'csrf' => 'token',
+        ));
+
+        // Remove token from data
+        $this->assertSame(array('child' => 'foobar'), $form->getData());
+
+        // Validate accordingly
+        $this->assertSame($valid, $form->isValid());
+    }
+
+    /**
+     * @dataProvider provideBoolean
+     */
+    public function testValidateTokenOnSubmitIfRootAndCompoundUsesTypeClassAsIntentionIfEmptyFormName($valid)
+    {
+        $this->csrfProvider->expects($this->once())
+            ->method('isCsrfTokenValid')
+            ->with('Symfony\Component\Form\Extension\Core\Type\FormType', 'token')
+            ->will($this->returnValue($valid));
+
+        $form = $this->factory
+            ->createNamedBuilder('', 'form', null, array(
+                'csrf_field_name' => 'csrf',
+                'csrf_provider' => $this->csrfProvider,
+                'compound' => true,
+            ))
+            ->add('child', 'text')
+            ->getForm();
+
+        $form->submit(array(
+            'child' => 'foobar',
+            'csrf' => 'token',
+        ));
+
+        // Remove token from data
+        $this->assertSame(array('child' => 'foobar'), $form->getData());
+
+        // Validate accordingly
+        $this->assertSame($valid, $form->isValid());
+    }
+
+    /**
+     * @dataProvider provideBoolean
+     */
+    public function testValidateTokenOnBindIfRootAndCompoundUsesTypeClassAsIntentionIfEmptyFormName($valid)
+    {
+        $this->csrfProvider->expects($this->once())
+            ->method('isCsrfTokenValid')
+            ->with('Symfony\Component\Form\Extension\Core\Type\FormType', 'token')
+            ->will($this->returnValue($valid));
+
+        $form = $this->factory
+            ->createNamedBuilder('', 'form', null, array(
+                'csrf_field_name' => 'csrf',
+                'csrf_provider' => $this->csrfProvider,
+                'compound' => true,
+            ))
+            ->add('child', 'text')
+            ->getForm();
+
+        $form->bind(array(
             'child' => 'foobar',
             'csrf' => 'token',
         ));

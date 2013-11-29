@@ -13,7 +13,7 @@ namespace Imagine\Imagick;
 
 use Imagine\Effects\EffectsInterface;
 use Imagine\Exception\RuntimeException;
-use Imagine\Image\Color;
+use Imagine\Image\Palette\Color\ColorInterface;
 
 /**
  * Effects implementation using the Imagick PHP extension
@@ -72,7 +72,7 @@ class Effects implements EffectsInterface
     /**
      * {@inheritdoc}
      */
-    public function colorize(Color $color)
+    public function colorize(ColorInterface $color)
     {
         try {
             $this->imagick->colorizeImage((string) $color, 1);
@@ -92,6 +92,20 @@ class Effects implements EffectsInterface
             $this->imagick->sharpenImage(2, 1);
         } catch (\ImagickException $e) {
             throw new RuntimeException('Failed to sharpen the image');
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function blur($sigma = 1)
+    {
+        try {
+            $this->imagick->gaussianBlurImage(0, $sigma);
+        } catch (\ImagickException $e) {
+            throw new RuntimeException('Failed to blur the image', $e->getCode(), $e);
         }
 
         return $this;

@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-$update = function($_configuration, $mainConnection, $courseList, $dryRun, $output, $upgrade)
-{
+$update = function ($_configuration, $mainConnection, $courseList, $dryRun, $output, $upgrade) {
 
+    $sysCoursePath = $upgrade->getCourseSysPath();
     $portalSettings = $upgrade->getPortalSettings();
 
     define('DB_COURSE_PREFIX', 'c_');
@@ -321,58 +321,73 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
                     $tableExists = $sm->tablesExist($old_table);
 
                     if ($tableExists) {
-                        $sql 	= "SELECT count(*) as count FROM $old_table";
+                        $sql = "SELECT count(*) as count FROM $old_table";
                         $result = $courseConnection->executeQuery($sql);
 
-                        $old_count = 0;
+                        $oldCount = 0;
                         if ($result) {
                             $row = $result->fetch();
-                            $old_count = $row['count'];
+                            $oldCount = $row['count'];
                         } else {
                             $output->writeln("Count(*) in table $old_table failed");
                         }
 
-                        $sql = "SELECT * FROM $old_table";
-                        $result = $courseConnection->executeQuery($sql);
-                        $rows = $result->fetchAll();
+                        if ($oldCount > 0) {
 
-                        $count = 0;
-                        foreach ($rows as $row) {
-                            $row['c_id'] = $course_id;
+                            $sql = "SELECT * FROM $old_table";
+                            $result = $courseConnection->executeQuery($sql);
+                            $rows = $result->fetchAll();
+
+                            $count = 0;
+                            foreach ($rows as $row) {
+                                $row['c_id'] = $course_id;
+
+                                if ($dryRun) {
+                                    $id = 1;
+                                } else {
+
+                                    // Fixing data
+                                    switch ($table) {
+                                        case 'forum_notification':
+                                            // Bug found in 1.8.7.1
+                                            if (empty($row['thread_id'])) {
+                                                $row['thread_id'] = 0;
+                                            }
+                                            if (empty($row['post_id'])) {
+                                                $row['post_id'] = 0;
+                                            }
+                                            break;
+                                    }
+                                    $mainConnection->insert($new_table, $row);
+                                    $id = $mainConnection->lastInsertId();
+                                }
+
+                                if (is_numeric($id)) {
+                                    $count++;
+                                } else {
+                                    $errors[$old_table][] = $row;
+                                }
+                            }
 
                             if ($dryRun) {
-                                $id = 1;
+                                // $output->writeln("$count/$oldCount rows to be inserted in $new_table");
                             } else {
-                                $mainConnection->insert($new_table, $row);
-                                $id = $mainConnection->lastInsertId();
+                                //$output->writeln("$count/$oldCount rows inserted in $new_table");
                             }
 
-                            if (is_numeric($id)) {
-                                $count++;
-                            } else {
-                                $errors[$old_table][] = $row;
+                            if ($oldCount != $count) {
+                                $output->writeln("<error>Count of new and old table doesn't match: $oldCount - $new_table</error>");
                             }
-                        }
-
-                        if ($dryRun) {
-                            $output->writeln("$count/$old_count rows to be inserted in $new_table");
-                        } else {
-                            $output->writeln("$count/$old_count rows inserted in $new_table");
-                        }
-
-                        if ($old_count != $count) {
-                            $output->writeln("<error>Count of new and old table doesn't match: $old_count - $new_table</error>");
-                            $output->writeln("<comment>Check the results:</comment>");
                         }
                     } else {
-                        $output->writeln("<comment>Seems that the table $old_table doesn't exists</comment>");
+                        $output->writeln("<comment>Seems that the table $old_table doesn't exist.</comment>");
                     }
                 }
                 $progress->advance();
             }
 
             $progress->finish();
-            $output->writeln("<comment>End course migration</comment>");
+            $output->writeln("<comment>End course migration.</comment>");
 
 
             /* Start work fix */
@@ -382,8 +397,6 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
 
             $work_table = "c_student_publication";
             $item_table = "c_item_property";
-
-            $sys_course_path = $upgrade->getCourseSysPath();
 
             $today = time();
             $user_id = 1;
@@ -398,7 +411,7 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
                     $result = $mainConnection->executeQuery($sql);
                     $work_list = $result->fetchAll();
 
-                    $course_dir 		= $sys_course_path.$course['directory'];
+                    $course_dir 		= $sysCoursePath.'/'.$course['directory'];
                     $base_work_dir 		= $course_dir.'/work';
 
                     //2. Looping if there are works with no parents
@@ -450,8 +463,11 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
                             if (!empty($work_dir_created[$work_key])) {
                                 $parent_id = $work_dir_created[$work_key];
                                 $new_url = "work/".$dir_name.'/'.basename($work['url']);
-                                $new_url = Database::escape_string($new_url);
-                                $sql = "UPDATE $work_table SET url = '$new_url', parent_id = $parent_id, contains_file = '1' WHERE id = {$work['id']} AND c_id = $courseId";
+                                $sql = "UPDATE $work_table SET
+                                            url = '$new_url',
+                                            parent_id = $parent_id,
+                                            contains_file = '1'
+                                        WHERE id = {$work['id']} AND c_id = $courseId";
                                 $mainConnection->executeQuery($sql);
                                 if (is_dir($final_dir)) {
                                     rename($course_dir.'/'.$work['url'], $course_dir.'/'.$new_url);
@@ -498,7 +514,7 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
 function check_work($mainConnection, $folder_id, $work_url, $work_table, $base_work_dir, $courseId)
 {
     $uniq_id = uniqid();
-    //Looking for subfolders
+    // Looking for subfolders
     $sql 	= "SELECT * FROM $work_table WHERE parent_id = $folder_id AND filetype ='folder' AND c_id = $courseId";
     $result = $mainConnection->executeQuery($sql);
     $rows = $result->fetchAll();
@@ -526,7 +542,6 @@ function check_work($mainConnection, $folder_id, $work_url, $work_table, $base_w
         if (!empty($rows)) {
             foreach ($rows as $row) {
                 $new_url = "work".$new_url.'/'.basename($row['url']);
-                $new_url = Database::escape_string($new_url);
                 $sql = "UPDATE $work_table
                         SET url = '$new_url', parent_id = $folder_id, contains_file = '1'
                         WHERE id = {$row['id']} AND c_id = $courseId";
@@ -535,7 +550,6 @@ function check_work($mainConnection, $folder_id, $work_url, $work_table, $base_w
         }
     }
 }
-
 
 function create_unexisting_work_directory($base_work_dir, $desired_dir_name, $portalSettings)
 {

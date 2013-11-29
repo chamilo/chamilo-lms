@@ -1,6 +1,24 @@
 Changelog
 =========
 
+1.1.2 (2013-10-30)
+------------------
+
+* Added missing "security.hide_user_not_found" support in SecurityServiceProvider
+* Fixed event listeners that are registered after the boot via the on() method
+
+1.0.2 (2013-10-30)
+------------------
+
+* Fixed SecurityServiceProvider to use null as a fake controller so that routes can be dumped
+
+1.1.1 (2013-10-11)
+------------------
+
+* Removed or replaced deprecated Symfony code
+* Updated code to take advantages of 2.3 new features
+* Only convert attributes on the request that actually exist.
+
 1.1.0 (2013-07-04)
 ------------------
 

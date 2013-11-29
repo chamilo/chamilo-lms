@@ -1,6 +1,16 @@
 # CHANGELOG
 
-### 0.5.0 (2013-xx-xx)
+### 0.6.0 (2013-xx-xx)
+
+  * BC break : Colors are now provided through the PaletteInterface. Any call
+    to previous Imagine\Image\Color constructor must be removed and use the
+    palette provided by Imagine\Image\ImageInterface::getPalette to create
+    colors.
+  * Add support for ICC profiles
+  * Add support for CMYK and grayscale colorspace images.
+  * Add filter argument to ImageInterface::thumbnail method.
+
+### 0.5.0 (2013-07-10)
 
   * Add `Layers::coalesce`.
   * Add filter option to `ImageInterface::resize`.

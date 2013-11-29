@@ -23,6 +23,7 @@ use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -41,7 +42,7 @@ use Silex\EventListener\StringToResponseListener;
  */
 class Application extends \Pimple implements HttpKernelInterface, TerminableInterface
 {
-    const VERSION = '1.1.0';
+    const VERSION = '1.1.2';
 
     const EARLY_EVENT = 512;
     const LATE_EVENT  = -512;
@@ -92,8 +93,8 @@ class Application extends \Pimple implements HttpKernelInterface, TerminableInte
             $urlMatcher = new LazyUrlMatcher(function () use ($app) {
                 return $app['url_matcher'];
             });
-            $dispatcher->addSubscriber(new RouterListener($urlMatcher, $app['request_context'], $app['logger']));
-            $dispatcher->addSubscriber(new LocaleListener($app, $urlMatcher));
+            $dispatcher->addSubscriber(new RouterListener($urlMatcher, $app['request_context'], $app['logger'], $app['request_stack']));
+            $dispatcher->addSubscriber(new LocaleListener($app, $urlMatcher, $app['request_stack']));
             if (isset($app['exception_handler'])) {
                 $dispatcher->addSubscriber($app['exception_handler']);
             }
@@ -110,7 +111,15 @@ class Application extends \Pimple implements HttpKernelInterface, TerminableInte
         });
 
         $this['kernel'] = $this->share(function () use ($app) {
-            return new HttpKernel($app['dispatcher'], $app['resolver']);
+            return new HttpKernel($app['dispatcher'], $app['resolver'], $app['request_stack']);
+        });
+
+        $this['request_stack'] = $this->share(function () use ($app) {
+            if (class_exists('Symfony\Component\HttpFoundation\RequestStack')) {
+                return new RequestStack();
+            }
+
+            return null;
         });
 
         $this['request_context'] = $this->share(function () use ($app) {
@@ -258,6 +267,11 @@ class Application extends \Pimple implements HttpKernelInterface, TerminableInte
      */
     public function on($eventName, $callback, $priority = 0)
     {
+        if ($this->booted) {
+            $this['dispatcher']->addListener($eventName, $callback, $priority);
+            return;
+        }
+
         $this['dispatcher'] = $this->share($this->extend('dispatcher', function ($dispatcher, $app) use ($callback, $priority, $eventName) {
             $dispatcher->addListener($eventName, $callback, $priority);
 
@@ -468,7 +482,7 @@ class Application extends \Pimple implements HttpKernelInterface, TerminableInte
     /**
      * Handles the request and delivers the response.
      *
-     * @param Request $request Request to process
+     * @param Request|null $request Request to process
      */
     public function run(Request $request = null)
     {

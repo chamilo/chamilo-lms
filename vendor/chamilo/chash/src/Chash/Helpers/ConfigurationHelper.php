@@ -372,7 +372,7 @@ class ConfigurationHelper extends Helper
         $finder->directories()->in($sysPath);
         $finder->path('courses');
         $finder->path('data/courses');
-
+        
         return $finder;
     }
 

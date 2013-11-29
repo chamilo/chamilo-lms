@@ -14,8 +14,7 @@ namespace Pagerfanta\Adapter\DoctrineORM;
 use Doctrine\ORM\Query\TreeWalkerAdapter,
     Doctrine\ORM\Query\AST\SelectStatement,
     Doctrine\ORM\Query\AST\SelectExpression,
-    Doctrine\ORM\Query\AST\PathExpression,
-    Doctrine\ORM\Query\AST\AggregateExpression;
+    Doctrine\ORM\Query\AST\PathExpression;
 
 /**
  * Replaces the selectClause of the AST with a SELECT DISTINCT root.id equivalent

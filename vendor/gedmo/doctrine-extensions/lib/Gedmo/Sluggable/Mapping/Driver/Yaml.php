@@ -9,7 +9,7 @@ use Gedmo\Mapping\Driver\File,
 /**
  * This is a yaml mapping driver for Sluggable
  * behavioral extension. Used for extraction of extended
- * metadata from yaml specificaly for Sluggable
+ * metadata from yaml specifically for Sluggable
  * extension.
  *
  * @author Gediminas Morkevicius <gediminas.morkevicius@gmail.com>
@@ -33,6 +33,7 @@ class Yaml extends File implements Driver
         'text',
         'integer',
         'int',
+        'datetime',
     );
 
     /**
@@ -79,6 +80,9 @@ class Yaml extends File implements Driver
                         $config['slugs'][$field]['slug'] = $field;
                         $config['slugs'][$field]['style'] = isset($slug['style']) ?
                             (string)$slug['style'] : 'default';
+
+                        $config['slugs'][$field]['dateFormat'] = isset($slug['dateFormat']) ?
+                            (bool)$slug['dateFormat'] : 'Y-m-d-H:i';
 
                         $config['slugs'][$field]['updatable'] = isset($slug['updatable']) ?
                             (bool)$slug['updatable'] : true;

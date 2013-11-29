@@ -20,12 +20,22 @@ class AwsS3 implements Adapter,
     protected $options;
     protected $bucketExists;
     protected $metadata = array();
+    protected $detectContentType;
 
-    public function __construct(S3Client $service, $bucket, array $options = array())
+    public function __construct(S3Client $service, $bucket, array $options = array(), $detectContentType = false)
     {
         $this->service = $service;
         $this->bucket = $bucket;
-        $this->options = array_replace(array('create' => false), $options);
+        $this->options = array_replace(
+            array(
+                'create' => false,
+                'directory' => '',
+                'acl' => 'private',
+            ),
+            $options
+        );
+
+        $this->detectContentType = $detectContentType;
     }
 
     /**
@@ -43,7 +53,7 @@ class AwsS3 implements Adapter,
     {
         return $this->service->getObjectUrl(
             $this->bucket,
-            $key,
+            $this->computePath($key),
             isset($options['expires']) ? $options['expires'] : null,
             $options
         );
@@ -54,6 +64,12 @@ class AwsS3 implements Adapter,
      */
     public function setMetadata($key, $metadata)
     {
+        // BC with AmazonS3 adapter
+        if (isset($metadata['contentType'])) {
+            $metadata['ContentType'] = $metadata['contentType'];
+            unset($metadata['contentType']);
+        }
+
         $this->metadata[$key] = $metadata;
     }
 
@@ -70,7 +86,7 @@ class AwsS3 implements Adapter,
      */
     public function read($key)
     {
-        $this->ensureBucketExists($key);
+        $this->ensureBucketExists();
         $options = $this->getOptions($key);
 
         try {
@@ -85,8 +101,8 @@ class AwsS3 implements Adapter,
      */
     public function rename($sourceKey, $targetKey)
     {
-        $this->ensureBucketExists($targetKey);
-        $options = $this->getOptions($targetKey, array('CopySource' => $sourceKey));
+        $this->ensureBucketExists();
+        $options = $this->getOptions($targetKey, array('CopySource' => $this->computePath($sourceKey)));
 
         try {
             $this->service->copyObject($options);
@@ -101,8 +117,19 @@ class AwsS3 implements Adapter,
      */
     public function write($key, $content)
     {
-        $this->ensureBucketExists($key);
+        $this->ensureBucketExists();
         $options = $this->getOptions($key, array('Body' => $content));
+
+        /**
+         * If the ContentType was not already set in the metadata, then we autodetect
+         * it to prevent everything being served up as binary/octet-stream.
+         */
+        if (!isset($options['ContentType']) && $this->detectContentType) {
+            $finfo = new \finfo(FILEINFO_MIME_TYPE);
+            $mimeType = $finfo->buffer($content);
+
+            $options['ContentType'] = $mimeType;
+        }
 
         try {
             $this->service->putObject($options);
@@ -117,7 +144,7 @@ class AwsS3 implements Adapter,
      */
     public function exists($key)
     {
-        return $this->service->doesObjectExist($this->bucket, $key);
+        return $this->service->doesObjectExist($this->bucket, $this->computePath($key));
     }
 
     /**
@@ -148,7 +175,9 @@ class AwsS3 implements Adapter,
     {
         $options = array('Bucket' => $this->bucket);
         if ((string) $prefix != '') {
-            $options['Prefix'] = $prefix;
+            $options['Prefix'] = $this->computePath($prefix);
+        } elseif (!empty($this->options['directory'])) {
+            $options['Prefix'] = $this->options['directory'];
         }
 
         $keys = array();
@@ -180,7 +209,7 @@ class AwsS3 implements Adapter,
     {
         $result = $this->service->listObjects(array(
             'Bucket'  => $this->bucket,
-            'Prefix'  => rtrim($key, '/') . '/',
+            'Prefix'  => rtrim($this->computePath($key), '/') . '/',
             'MaxKeys' => 1
         ));
 
@@ -196,7 +225,7 @@ class AwsS3 implements Adapter,
      * @throws \RuntimeException if the bucket does not exists or could not be
      *                          created
      */
-    private function ensureBucketExists()
+    protected function ensureBucketExists()
     {
         if ($this->bucketExists) {
             return true;
@@ -224,11 +253,27 @@ class AwsS3 implements Adapter,
         return true;
     }
 
-    private function getOptions($key, array $options = array())
+    protected function getOptions($key, array $options = array())
     {
+        $options['ACL'] = $this->options['acl'];
         $options['Bucket'] = $this->bucket;
-        $options['Key'] = $key;
+        $options['Key'] = $this->computePath($key);
 
-        return $options + $this->getMetadata($key);
+        /**
+         * Merge global options for adapter, which are set in the constructor, with metadata.
+         * Metadata will override global options.
+         */
+        $options = array_merge($this->options, $options, $this->getMetadata($key));
+
+        return $options;
+    }
+
+    protected function computePath($key)
+    {
+        if (empty($this->options['directory'])) {
+            return $key;
+        }
+
+        return sprintf('%s/%s', $this->options['directory'], $key);
     }
 }

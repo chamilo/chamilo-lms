@@ -10,7 +10,8 @@ use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Class StatusCommand
+ * Class SetupCommand
+ * @package Chash\Command\Chash
  */
 class SetupCommand extends AbstractCommand
 {

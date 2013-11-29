@@ -1,5 +1,0 @@
-@import: config.yml
-
-doctrine:
-  driver: pdo_pgsql
-  port: 8080

@@ -65,8 +65,12 @@ class SetPermissionsAfterInstallCommand extends CommonChamiloDatabaseCommand
     }
 
     /**
-     * @param $files
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param OutputInterface $output
+     * @param array $files
+     * @param $permission
+     * @param $user
+     * @param $group
+     * @param bool $listFiles
      * @return int
      */
     public function setPermissions(\Symfony\Component\Console\Output\OutputInterface $output, $files, $permission, $user, $group, $listFiles = true)

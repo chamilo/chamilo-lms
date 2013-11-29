@@ -282,4 +282,31 @@ class DoctrineOrmServiceProviderTest extends \PHPUnit_Framework_TestCase
 
         $app['orm.ems.config'];
     }
+
+    /**
+     * Test if namespace alias can be set through the mapping options
+     */
+    public function testMappingAlias()
+    {
+        $app = $this->createMockDefaultApp();
+
+        $doctrineOrmServiceProvider = new DoctrineOrmServiceProvider;
+        $doctrineOrmServiceProvider->register($app);
+
+        $alias = 'Foo';
+        $namespace = 'Foo\Entities';
+
+        $app['orm.em.options'] = array(
+            'mappings' => array(
+                array(
+                    'type' => 'annotation',
+                    'namespace' => $namespace,
+                    'path' => __DIR__.'/src/Foo/Entities',
+                    'alias' => $alias
+                )
+            ),
+        );
+
+        $this->assertEquals($namespace, $app['orm.em.config']->getEntityNameSpace($alias));
+    }
 }

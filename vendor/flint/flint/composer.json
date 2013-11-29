@@ -9,25 +9,24 @@
     }],
 
     "autoload" : {
-        "psr-0" : {
-            "Flint" : "src"
-        }
+        "psr-0" : { "Flint" : "src" }
     },
 
     "require" : {
-        "php"            : ">=5.3.3",
-        "silex/silex"    : "~1.1",
-        "twig/twig"      : "~1.10",
-        "symfony/config" : "~2.2"
+        "php"          : ">=5.3.3",
+        "flint/tacker" : "~0.3",
+        "silex/silex"  : "~1.1",
+        "twig/twig"    : "~1.10"
     },
 
     "require-dev" : {
-        "symfony/console" : "~2.2"
+        "symfony/console" : "~2.2",
+        "symfony/yaml" : "~2.2"
     },
 
     "extra" : {
         "branch-alias" : {
-            "dev-master" : "1.5.x-dev"
+            "dev-master" : "1.6.x-dev"
         }
     }
 }

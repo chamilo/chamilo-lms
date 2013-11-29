@@ -11,7 +11,7 @@ use Doctrine\Common\Persistence\ObjectManager;
  * The SluggableListener handles the generation of slugs
  * for documents and entities.
  *
- * This behavior can inpact the performance of your application
+ * This behavior can impact the performance of your application
  * since it does some additional calculations on persisted objects.
  *
  * @author Gediminas Morkevicius <gediminas.morkevicius@gmail.com>
@@ -284,7 +284,9 @@ class SluggableListener extends MappedEventSubscriber
                     if (isset($changeSet[$sluggableField]) || isset($changeSet[$slugField])) {
                         $needToChangeSlug = true;
                     }
-                    $slug .= $meta->getReflectionProperty($sluggableField)->getValue($object) . ' ';
+                    $value = $meta->getReflectionProperty($sluggableField)->getValue($object);
+                    $slug .= ($value instanceof \DateTime) ? $value->format($options['dateFormat']) : $value;
+                    $slug .= ' ';
                 }
             } else {
                 // slug was set manually
@@ -316,10 +318,15 @@ class SluggableListener extends MappedEventSubscriber
                     $this->transliterator,
                     array($slug, $options['separator'], $object)
                 );
+
                 // Step 2: urlization (replace spaces by '-' etc...)
                 if(!$urlized){
                     $slug = call_user_func($this->urlizer, $slug, $options['separator']);
                 }
+
+                // add suffix/prefix
+                $slug = $options['prefix'] . $slug . $options['suffix'];
+
                 // Step 3: stylize the slug
                 switch ($options['style']) {
                     case 'camel':
@@ -353,9 +360,6 @@ class SluggableListener extends MappedEventSubscriber
                 if (isset($mapping['length']) && strlen($slug) > $mapping['length']) {
                     $slug = substr($slug, 0, $mapping['length']);
                 }
-
-                // add suffix/prefix
-                $slug = $options['prefix'] . $slug . $options['suffix'];
 
                 if (isset($mapping['nullable']) && $mapping['nullable'] && !$slug) {
                     $slug = null;

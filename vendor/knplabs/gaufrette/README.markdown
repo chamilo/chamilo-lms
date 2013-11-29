@@ -25,6 +25,19 @@ solution.
 Try it!
 -------
 
+### Installation
+
+Development version:
+
+```bash
+php composer.phar require knplabs/gaufrette:0.2.*@dev
+```
+Stable version:
+
+```bash
+php composer.phar require knplabs/gaufrette:0.1.*
+```
+
 ### Setup your filesystem
 
 Following an example with the local filesystem adapter. To setup other adapters, look up the [testcases](https://github.com/KnpLabs/Gaufrette/tree/master/tests/Gaufrette/Functional/adapters).
@@ -36,7 +49,7 @@ use Gaufrette\Filesystem;
 use Gaufrette\Adapter\Local as LocalAdapter;
 
 $adapter = new LocalAdapter('/var/media');
-$filesystem = new Filesystem($adapter)
+$filesystem = new Filesystem($adapter);
 ```
 
 ### Use the filesystem
@@ -152,6 +165,28 @@ $connection = new OpenCloud\Rackspace(
          'apiKey' => '0900af093093788912388fc09dde090ffee09'
      ));
 
+```
+
+### LazyOpenCloud
+
+```php
+$factory = new Gaufrette\Adapter\OpenStackAuthenticationFactory(
+    $url,  // connection URL from cloud Vendor
+    $apikey, // password
+    $username, //username
+    $region, // region
+    $tenant) // tenant
+$adapter = new Gaufrette\Adapter\LazyOpenStackCloudFiles($factory, 'container-name');
+```
+
+### LazyOpenCloud on Rackspace
+```php
+$factory = new Gaufrette\Adapter\RackspaceAuthenticationFactory(
+    $url,  // connection URL from cloud Vendor
+    $apikey, // password
+    $username, //username
+    $region, // region
+    $tenant) // tenant
 ```
 
 Using AzureBlobStorage

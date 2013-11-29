@@ -59,6 +59,7 @@ class JsonParserTest extends PHPUnit_Framework_TestCase
             $parser->parse('{
     "foo":"bar",
 }');
+            $this->fail('Invalid trailing comma should be detected');
         } catch (ParsingException $e) {
             $this->assertContains('It appears you have an extra trailing comma', $e->getMessage());
         }
@@ -71,6 +72,7 @@ class JsonParserTest extends PHPUnit_Framework_TestCase
             $parser->parse('{
     "foo": \'bar\',
 }');
+            $this->fail('Invalid quotes for string should be detected');
         } catch (ParsingException $e) {
             $this->assertContains('Invalid string, it appears you used single quotes instead of double quotes', $e->getMessage());
         }
@@ -83,6 +85,7 @@ class JsonParserTest extends PHPUnit_Framework_TestCase
             $parser->parse('{
     "foo": "bar\z",
 }');
+            $this->fail('Invalid unescaped string should be detected');
         } catch (ParsingException $e) {
             $this->assertContains('Invalid string, it appears you have an unescaped backslash at: \z', $e->getMessage());
         }
@@ -93,6 +96,7 @@ class JsonParserTest extends PHPUnit_Framework_TestCase
         $parser = new JsonParser();
         try {
             $parser->parse('{"bar": "foo}');
+            $this->fail('Invalid unterminated string should be detected');
         } catch (ParsingException $e) {
             $this->assertContains('Invalid string, it appears you forgot to terminated the string, or attempted to write a multiline string which is invalid', $e->getMessage());
         }
@@ -104,6 +108,7 @@ class JsonParserTest extends PHPUnit_Framework_TestCase
         try {
             $parser->parse('{"bar": "foo
 bar"}');
+            $this->fail('Invalid multi-line string should be detected');
         } catch (ParsingException $e) {
             $this->assertContains('Invalid string, it appears you forgot to terminated the string, or attempted to write a multiline string which is invalid', $e->getMessage());
         }
@@ -166,5 +171,16 @@ bar"}');
                 $this->arrayHasKey('_empty_.1')
             )
         );
+    }
+
+    public function testFileWithBOM()
+    {
+        try {
+            $parser = new JsonParser();
+            $parser->parse(file_get_contents(dirname(__FILE__) .'/bom.json'));
+            $this->fail('BOM should be detected');
+        } catch (ParsingException $e) {
+            $this->assertContains('BOM detected', $e->getMessage());
+        }
     }
 }

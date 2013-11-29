@@ -64,7 +64,7 @@ on how to setup and use the extensions in most optimized way.
     * **filenameGenerator**: This option allows you to set a filename generator for the file. There are two already included
     by the extension: **SHA1**, which generates a sha1 filename for the file, and **ALPHANUMERIC**, which "normalizes"
     the filename, leaving only alphanumeric characters in the filename, and replacing anything else with a "-". You can
-    even create your own FileGenerator class (implementing the FileGeneratorInterface) and set this option with the
+    even create your own FilenameGenerator class (implementing the Gedmo\Uploadable\FilenameGenerator\FilenameGeneratorInterface) and set this option with the
     fully qualified class name. The other option available is "NONE" which, as you may guess, means no generation for the
     filename will occur. Default: "NONE".
     * **maxSize**: This option allows you to set a maximum size for the file in bytes. If file size exceeds the value
@@ -80,10 +80,12 @@ on how to setup and use the extensions in most optimized way.
     set this option, you can't set the **allowedTypes** option described next. By default, no validation of mime type
     occurs. If you want to use a custom mime type guesser, see [this](#custom-mime-type-guessers).
 2. **@Gedmo\Mapping\Annotation\UploadableFilePath**: This annotation is used to set which field will receive the path
- to the file. The field MUST be of type "string" and this annotation is REQUIRED.
-3. **@Gedmo\Mapping\Annotation\UploadableFileMimeType**: This is an optional annotation used to set which field will
+ to the file. The field MUST be of type "string". Either this one or UploadableFileName annotation is REQUIRED to be set.
+3. **@Gedmo\Mapping\Annotation\UploadableFileName**: This annotation is used to set which field will receive the name
+ of the file. The field MUST be of type "string". Either this one or UploadableFilePath annotation is REQUIRED to be set.
+4. **@Gedmo\Mapping\Annotation\UploadableFileMimeType**: This is an optional annotation used to set which field will
  receive the mime type of the file as its value. This field MUST be of type "string".
-4. **@Gedmo\Mapping\Annotation\UploadableFileSize**: This is an optional annotation used to set which field will
+5. **@Gedmo\Mapping\Annotation\UploadableFileSize**: This is an optional annotation used to set which field will
  receive the size in bytes of the file as its value. This field MUST be of type "decimal".
 
 ### Notes about setting the path where the files will be moved:
@@ -188,6 +190,12 @@ class File
     private $path;
 
     /**
+     * @ORM\Column(name="name", type="string")
+     * @Gedmo\UploadableFileName
+     */
+    private $name;
+
+    /**
      * @ORM\Column(name="mime_type", type="string")
      * @Gedmo\UploadableFileMimeType
      */
@@ -239,6 +247,10 @@ Entity\File:
       type: string
       gedmo:
         - uploadableFilePath
+    path:
+      type: string
+      gedmo:
+        - uploadableFileName
     mimeType:
       type: string
       gedmo:
@@ -271,6 +283,10 @@ Entity\File:
 
         <field name="size" column="size" type="decimal">
             <gedmo:uploadable-file-size />
+        </field>
+
+        <field name="name" column="path" type="string">
+            <gedmo:uploadable-file-name />
         </field>
 
         <field name="path" column="path" type="string">

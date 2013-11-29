@@ -5,15 +5,19 @@ which should store the slug
 
 Features:
 
-- Automatic predifined field transformation into slug
+- Automatic predefined field transformation into slug
 - ORM and ODM support using same listener
 - Slugs can be unique and styled, even with prefixes and/or suffixes
 - Can be nested with other behaviors
 - Annotation, Yaml and Xml mapping support for extensions
-- Multiple slugs, diferent slugs can link to same fields
+- Multiple slugs, different slugs can link to same fields
 
 [blog_reference]: http://gediminasm.org/article/sluggable-behavior-extension-for-doctrine-2 "Sluggable extension for Doctrine 2 makes automatic record field transformations into url friendly names"
 [blog_test]: http://gediminasm.org/test "Test extensions on this blog"
+
+Update **2013-10-26**
+
+- Datetime support with default dateFormat Y-m-d-H:i
 
 Update **2013-08-23**
 
@@ -38,7 +42,7 @@ Update **2012-02-26**
 
 Update **2011-09-11**
 
-- Refactored sluggable for doctrine2.2 by specifieng slug fields directly in slug annotation
+- Refactored sluggable for doctrine2.2 by specifying slug fields directly in slug annotation
 - Slug handler functionality, possibility to create custom ones or use built-in
 tree path handler or linked slug through single valued association
 - Updated documentation mapping examples for 2.1.x version or higher
@@ -401,7 +405,7 @@ class Article
 {
     // ...
     /**
-     * @Gedmo\Slug(fields={"title"}, style="camel", separator="_", updatable=false, unique=false)
+     * @Gedmo\Slug(fields={"title", "created"}, style="camel", separator="_", updatable=false, unique=false, dateFormat="d/m/Y H-i-s")
      * @Doctrine\ORM\Mapping\Column(length=128, unique=true)
      */
     private $slug;
@@ -409,10 +413,20 @@ class Article
 
     // ...
     /**
+     * @Doctrine\ORM\Mapping\Column(type="datetime", name="created_at")
+     */
+    private $createdAt;
+
+    // ...
+    /**
      * @Doctrine\ORM\Mapping\Column(length=128)
      */
     private $title;
     // ...
+    public function __construct()
+    {
+      $this->createdAt = new \DateTime;
+    }
 }
 ```
 

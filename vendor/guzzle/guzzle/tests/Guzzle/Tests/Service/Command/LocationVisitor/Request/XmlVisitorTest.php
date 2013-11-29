@@ -124,6 +124,24 @@ class XmlVisitorTest extends AbstractVisitorTestCase
                 array('Foo' => 'test', 'Baz' => array('Bar' => 'abc', 'Bam' => 'foo')),
                 '<Request><Foo>test</Foo><Baz Bar="abc"><Bam>foo</Bam></Baz></Request>'
             ),
+            // Check order doesn't matter
+            array(
+                array(
+                    'parameters' => array(
+                        'Foo' => array('location' => 'xml', 'type' => 'string'),
+                        'Baz' => array(
+                            'type'     => 'object',
+                            'location' => 'xml',
+                            'properties' => array(
+                                'Bar' => array('type' => 'string', 'data' => array('xmlAttribute' => true)),
+                                'Bam' => array()
+                            )
+                        )
+                    )
+                ),
+                array('Foo' => 'test', 'Baz' => array('Bam' => 'foo', 'Bar' => 'abc')),
+                '<Request><Foo>test</Foo><Baz Bar="abc"><Bam>foo</Bam></Baz></Request>'
+            ),
             // Add values with custom namespaces
             array(
                 array(
@@ -287,7 +305,7 @@ class XmlVisitorTest extends AbstractVisitorTestCase
         $command = $this->getMockBuilder('Guzzle\Service\Command\OperationCommand')
             ->setConstructorArgs(array($input, $operation))
             ->getMockForAbstractClass();
-        $command->setClient(new Client());
+        $command->setClient(new Client('http://www.test.com/some/path.php'));
         $request = $command->prepare();
         if (!empty($input)) {
             $this->assertEquals('application/xml', (string) $request->getHeader('Content-Type'));

@@ -13,6 +13,7 @@ use Symfony\Component\Yaml\Dumper;
 
 /**
  * Class InstallCommand
+ * @package Chash\Command\Installation
  */
 class InstallCommand extends CommonCommand
 {

@@ -13,6 +13,7 @@ use Alchemy\Zippy\Zippy;
 
 /**
  * Class SelfUpdateCommand
+ * @package Chash\Command\Chash
  */
 class SelfUpdateCommand extends AbstractCommand
 {

@@ -134,17 +134,12 @@ class RunTest extends TestCase
      */
     public function testRegisterHandler()
     {
-        $this->markTestSkipped("Need to test exception handler");
-
-        $run = $this->getRunInstance();
-        $run->register();
-
-        $handler = $this->getHandler();
-        $run->pushHandler($handler);
-
-        throw $this->getException();
-
-        $this->assertCount(2, $handler->exceptions);
+        // It is impossible to test the Run::register method using phpunit,
+        // as given how every test is always inside a giant try/catch block,
+        // any thrown exception will never hit a global exception handler.
+        // On the other hand, there is not much need in testing
+        // a call to a native PHP function.
+        $this->assertTrue(true);
     }
 
     /**
@@ -277,6 +272,33 @@ class RunTest extends TestCase
 
         // Reached the end without errors
         $this->assertTrue(true);
+    }
+
+    public function testErrorCatching()
+    {
+        $run = $this->getRunInstance();
+        $run->register();
+
+        $handler = $this->getHandler();
+        $run->pushHandler($handler);
+
+        $test = $this;
+        $handler
+            ->shouldReceive('handle')
+            ->andReturnUsing(function () use($test) {
+                $test->fail('$handler should not be called error should be caught');
+            })
+        ;
+
+        try {
+            trigger_error(E_USER_NOTICE, 'foo');
+            $this->fail('Should not continue after error thrown');
+        } catch (\ErrorException $e) {
+            // Do nothing
+            $this->assertTrue(true);
+            return;
+        }
+        $this->fail('Should not continue here, should have been caught.');
     }
 
     /**

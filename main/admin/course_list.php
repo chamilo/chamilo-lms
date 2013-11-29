@@ -295,6 +295,34 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'), 'class="btn"');
     $form->addElement('static', 'search_advanced_link', null, '<a href="course_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
 
+    //Create a filter by session
+    /*$sessionFilter = new FormValidator('course_filter', 'get', '', '', array('class'=> 'form-search'), false);
+    $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_session';
+    $sessionFilter->addElement('select_ajax', 'session_name', get_lang('SearchCourseBySession'), null, array('url' => $url));
+
+    $actions = '
+    <script type="text/javascript">
+    <!--
+    function jumpMenu(targ,selObj,restore){ // v3.0
+        eval(targ+".location=\'"+selObj.options[selObj.selectedIndex].value+"\'");
+        if (restore) selObj.selectedIndex=0;
+    }
+    $(function() {
+        //alert($);
+        //jumpMenu(\'parent\',this,0)
+        $(\'ul.select2-results .select2-result-label\').on(\'click\',function(){
+            console.log($(\'ul.select2-results li\'));
+        });
+        //console.log($(\'#s2id_session_name\'));
+        $(\'.select2-chosen\').on(\'change\',function(){
+            console.log(\'test\');
+        });
+    });
+    //-->
+    </script>';*/
+    //$actions .= $sessionFilter->return_form();
+
+
     $actions .= '<div style="float: right; ">';
     $actions .= '<a href="course_add.php">'.Display::return_icon('new_course.png', get_lang('AddCourse'),'',ICON_SIZE_MEDIUM).'</a> ';
 

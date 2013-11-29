@@ -115,7 +115,50 @@ function get_course_data($from, $number_of_items, $column, $direction) {
     }
     return $courses;
 }
+/**
+ * Get course data to display filtered by session name
+ */
+function get_course_data_by_session($from, $number_of_items, $column, $direction) {
+    $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+    $session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+    $session = Database::get_main_table(TABLE_MAIN_SESSION);
 
+    $sql = "SELECT  c.code AS col0,
+                    c.title AS col1,
+                    c.code AS col2,
+                    c.course_language AS col3,
+                    c.category_code AS col4,
+                    c.subscribe AS col5,
+                    c.unsubscribe AS col6,
+                    c.code AS col7,
+                    c.visibility AS col8,
+                    c.directory as col9,
+                    c.visual_code
+            FROM $course_table c
+            INNER JOIN $session_rel_course r ON c.code = r.course_code
+            INNER JOIN $session s ON r.id_session = s.id
+            ";
+    if (isset($_GET['session'])) {
+        $session = Database::escape_string(trim($_GET['session']));
+        $sql.= " WHERE s.name LIKE '%" . $session . "%'";
+    }
+
+    $sql .= " ORDER BY col$column $direction ";
+    $sql .= " LIMIT $from,$number_of_items";
+
+    $res = Database::query($sql);
+    $courses = array ();
+    while ($course = Database::fetch_array($res)) {
+        // Place colour icons in front of courses.
+        $show_visual_code = $course['visual_code'] != $course[2] ? Display::label($course['visual_code'], 'info') : null;
+        $course[1] = get_course_visibility_icon($course[8]).'<a href="'.api_get_path(WEB_COURSE_PATH).$course[9].'/index.php">'.$course[1].'</a> '.$show_visual_code;
+        $course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
+        $course[6] = $course[6] == UNSUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
+        $course_rem = array($course[0], $course[1], $course[2], $course[3], $course[4], $course[5], $course[6], $course[7]);
+        $courses[] = $course_rem;
+    }
+    return $courses;
+}
 /**
  * Filter to display the edit-buttons
  */
@@ -252,6 +295,34 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'), 'class="btn"');
     $form->addElement('static', 'search_advanced_link', null, '<a href="course_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
 
+    //Create a filter by session
+    /*$sessionFilter = new FormValidator('course_filter', 'get', '', '', array('class'=> 'form-search'), false);
+    $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_session';
+    $sessionFilter->addElement('select_ajax', 'session_name', get_lang('SearchCourseBySession'), null, array('url' => $url));
+
+    $actions = '
+    <script type="text/javascript">
+    <!--
+    function jumpMenu(targ,selObj,restore){ // v3.0
+        eval(targ+".location=\'"+selObj.options[selObj.selectedIndex].value+"\'");
+        if (restore) selObj.selectedIndex=0;
+    }
+    $(function() {
+        //alert($);
+        //jumpMenu(\'parent\',this,0)
+        $(\'ul.select2-results .select2-result-label\').on(\'click\',function(){
+            console.log($(\'ul.select2-results li\'));
+        });
+        //console.log($(\'#s2id_session_name\'));
+        $(\'.select2-chosen\').on(\'change\',function(){
+            console.log(\'test\');
+        });
+    });
+    //-->
+    </script>';*/
+    //$actions .= $sessionFilter->return_form();
+
+
     $actions .= '<div style="float: right; ">';
     $actions .= '<a href="course_add.php">'.Display::return_icon('new_course.png', get_lang('AddCourse'),'',ICON_SIZE_MEDIUM).'</a> ';
 
@@ -261,8 +332,14 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $actions .= '</div>';
     $actions .= $form->return_form();
 
-    // Create a sortable table with the course data
-    $table = new SortableTable('courses', 'get_number_of_courses', 'get_course_data', 2);
+    if (isset ($_GET['search']) && $_GET['search'] == 'session') {
+        // Create a sortable table with the course data filtered by session
+        $table = new SortableTable('courses', 'get_number_of_courses', 'get_course_data_by_session', 2);
+    } else {
+        // Create a sortable table with the course data
+        $table = new SortableTable('courses', 'get_number_of_courses', 'get_course_data', 2);
+    }
+
     $parameters=array();
 
     if (isset ($_GET['keyword'])) {

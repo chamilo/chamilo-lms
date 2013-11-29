@@ -777,7 +777,7 @@ function create_dir_form($current_dir_id) {
     $form->addElement('hidden', 'dir_id', intval($document_id));
     $form->addElement('hidden', 'id', intval($current_dir_id));
     $form->addElement('header', '', get_lang('CreateDir'));
-    $form->addElement('text', 'dirname', get_lang('NewDir'));
+    $form->addElement('text', 'dirname', get_lang('NewDir'), array('autofocus' => 'autofocus'));
     $form->addElement('style_submit_button', 'submit', get_lang('CreateFolder'), 'class="add"');
     $new_folder_text = $form->return_form();
     return $new_folder_text;

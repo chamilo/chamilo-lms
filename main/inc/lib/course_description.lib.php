@@ -17,6 +17,7 @@
 class CourseDescription
 {
 	private $id;
+    private $course_id;
 	private $title;
 	private $content;
     private $session_id;
@@ -190,8 +191,12 @@ class CourseDescription
      * first you must set description_type, title, content, progress and session_id properties with the object CourseDescription
      * @return  int  affected rows
      */
-	public function insert() {		
-		$course_id = api_get_course_int_id();
+	public function insert() {
+        if (empty($this->course_id)) {
+		    $course_id = api_get_course_int_id();
+        } else {
+            $course_id = $this->course_id;
+        }
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);		
 		$sql = "INSERT IGNORE INTO $tbl_course_description SET
 				c_id 				=  $course_id, 
@@ -420,6 +425,15 @@ class CourseDescription
 	public function set_id($id) {
 		$this->id = $id;
 	}
+
+    /**
+     * Set description's course id
+     * @param int Course ID
+     * @return void
+     */
+    public function set_course_id($id) {
+        $this->course_id = intval($id);
+    }
 
    	/**
 	 * Set description title

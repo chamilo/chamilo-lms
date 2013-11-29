@@ -91,6 +91,23 @@ class CourseManager
                             create_default_course_gradebook($course_info['code'], $params['gradebook_model_id']);
                         }
                     }
+                    // If parameter defined, copy the contents from a specific
+                    // template course into this new course
+                    if (!empty($_configuration['course_creation_use_template'])) {
+                        // Include the necessary libraries to generate a course copy
+                        require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+                        require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseBuilder.class.php';
+                        require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseRestorer.class.php';
+                        require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseSelectForm.class.php';
+                        // Call the course copy object
+                        $originCourse = api_get_course_info_by_id($_configuration['course_creation_use_template']);
+                        $originCourse['official_code'] = $originCourse['code'];
+                        $cb = new CourseBuilder(null, $originCourse);
+                        $course = $cb->build(null, $originCourse['code']);
+                        $cr = new CourseRestorer($course);
+                        $cr->set_file_option();
+                        $cr->restore($course_info['id']); //course_info[id] is the course.code value (I know...)
+                    }
                     return $course_info;
                 }
             }

@@ -63,8 +63,31 @@ switch ($action) {
                 $_REQUEST['q']
             );
             $results = array();
+
+            require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
+            $categories = browseCourseCategories();
+
             foreach ($courseList as $courseInfo) {
-                $results[] = array('id' => $courseInfo['id'], 'text' => $courseInfo['title']);
+                $title = $courseInfo['title'];
+
+                if (!empty($courseInfo['category_code'])) {
+                    $parents = getParents($courseInfo['category_code']);
+
+                    if (!empty($parents)) {
+                        $parents = array_reverse($parents);
+                        $categories = array();
+                        foreach ($parents as $category) {
+                            $categories[] = $category['code'];
+                        }
+                        $categoriesInString = implode(' > ', $categories).' > ';
+                        $title = $categoriesInString.$courseInfo['title'];
+                    }
+                }
+
+                $results[] = array(
+                    'id' => $courseInfo['id'],
+                    'text' => $title
+                );
             }
 
             if (!empty($results)) {

@@ -3733,7 +3733,7 @@ class CourseManager
 
         $result = Database::select('id, accesses, total_score, users', $table_course_ranking, array('where' => array('c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');
 
-        // Problem here every thime we load the courses/XXXX/index.php course home page we update the access
+        // Problem here every time we load the courses/XXXX/index.php course home page we update the access
 
         if (empty($result)) {
             if ($add_access) {

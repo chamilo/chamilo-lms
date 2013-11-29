@@ -54,9 +54,9 @@
                         {% endif %}
 
                     </div>
-                    <ul id="inner_lp_toc" class="list-group" style="overflow: auto;">
+                    <div id="inner_lp_toc" class="list-group" style="overflow: auto;">
                         {{ table_of_contents }}
-                    </ul>
+                    </div>
                 </div>
             </div>
         </div>

@@ -3167,8 +3167,11 @@ class learnpath
 
             $style_item = 'scorm_item';
 
+            $active = null;
+
             if ($item['id'] == $this->current) {
                 $scorm_color_background = 'scorm_item_highlight';
+                $active = ' active';
             } else {
                 if ($color_counter % 2 == 0) {
                     $scorm_color_background = 'scorm_item_1';
@@ -3180,7 +3183,11 @@ class learnpath
                 }
             }
 
-            $html .= '<li class="list-group-item">';
+            $onClick = null;
+            if ($item['type'] != 'dokeos_chapter' && $item['type'] != 'dir' && $item['type'] != 'dokeos_module') {
+                $onClick = 'onclick="switch_item('.$mycurrentitemid.','.$item['id'].');'.'return false;"';
+            }
+            $html .= '<a href="" '.$onClick.' class="list-group-item">';
 
             $imageStatus = null;
 
@@ -3205,7 +3212,7 @@ class learnpath
             // The anchor will let us center the TOC on the currently viewed item &^D
             if ($item['type'] != 'dokeos_module' && $item['type'] != 'dokeos_chapter') {
                 $html .= '<div class="'.$style_item.'" style="padding-left: '.($item['level'] * 1.5).'em; padding-right:'.($item['level'] / 2).'em"  title="'.$item['description'].'" >';
-                $html .= '<a name="atoc_'.$item['id'].'"></a>';
+                //$html .= '<a name="atoc_'.$item['id'].'"></a>';
             } else {
                 $html .= '<div class="'.$style_item.'" style="padding-left: '.($item['level'] * 2).'em; padding-right:'.($item['level'] * 1.5).'em"  title="'.$item['description'].'" >';
             }
@@ -3218,14 +3225,13 @@ class learnpath
 
             $title = Security::remove_XSS($title);
             if ($item['type'] != 'dokeos_chapter' && $item['type'] != 'dir' && $item['type'] != 'dokeos_module') {
-                $url = $this->get_link('http', $item['id'], $toc_list);
-                $html .= '<a href="" onclick="switch_item('.$mycurrentitemid.','.$item['id'].');'.'return false;" >'.stripslashes($title).'</a>';
+                //$html .= '<a href=""  >'.stripslashes($title).'</a>';
+                $html .= $title;
             } elseif ($item['type'] == 'dokeos_module' || $item['type'] == 'dokeos_chapter') {
                 $html .= Display::return_icon('lp_dokeos_module.png', $title).'&nbsp;'.$title;
             } elseif ($item['type'] == 'dir') {
-                $html .= stripslashes($title);
+                $html .= $title;
             }
-
 
             $html .= "</div>";
 
@@ -3233,7 +3239,7 @@ class learnpath
                 $html .= '</div>';
             }
 
-            $html .= '</li>';
+            $html .= '</a>';
 
             $color_counter++;
         }

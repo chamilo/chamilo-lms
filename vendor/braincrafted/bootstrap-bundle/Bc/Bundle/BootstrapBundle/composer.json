@@ -1,0 +1,38 @@
+{
+    "name":         "braincrafted/bootstrap-bundle",
+    "version":      "1.4.2",
+    "description":  "Twitter Bootstrap for Symfony2",
+    "keywords":     ["bootstrap"],
+    "type":         "symfony-bundle",
+    "license":      "MIT",
+    "authors":     [
+        {
+            "name":     "Florian Eckerstorfer",
+            "email":    "florian@eckerstorfer.co",
+            "homepage": "http://florianeckerstorfer.com"
+        }
+    ],
+    "require":      {
+        "php":              ">=5.3.3"
+    },
+    "require-dev": {
+        "knplabs/knp-menu":                     "dev-master",
+        "knplabs/knp-menu-bundle":              "dev-master",
+        "knplabs/knp-markdown-bundle":          "dev-master",
+        "knplabs/knp-paginator-bundle":         "dev-master",
+        "nikic/php-parser":                     "dev-master",
+        "instaclick/php-code-sniffer":          "dev-master",
+        "instaclick/symfony2-coding-standard":  "dev-master",
+        "phpmd/phpmd":                          "1.4.*"
+    },
+    "suggest":      {
+        "knplabs/knp-paginator-bundle": "BraincraftedBootstrapBundle styles the pagination provided by KnpPaginatorBundle.",
+        "knplabs/knp-menu":             "Required to use KnpMenuBundle.",
+        "knplabs/knp-menu-bundle":      "BraincraftedBootstrapBundle styles the menus provided by KnpMenuBundle.",
+        "twbs/bootstrap":            "Twitter Bootstrap provides the assets (images, CSS and JS)"
+    },
+    "autoload": {
+        "psr-0": { "Bc\\Bundle\\BootstrapBundle": "" }
+    },
+    "target-dir": "Bc/Bundle/BootstrapBundle"
+}

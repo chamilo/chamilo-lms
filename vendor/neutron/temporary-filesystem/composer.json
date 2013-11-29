@@ -1,0 +1,22 @@
+{
+    "name": "neutron/temporary-filesystem",
+    "description": "Symfony filesystem extension to handle temporary files",
+    "require": {
+        "symfony/filesystem" : "~2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit"    : "~3.7"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Romain Neutron",
+            "email": "imprec@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Neutron": "src"
+        }
+    }
+}

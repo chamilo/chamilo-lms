@@ -1,0 +1,77 @@
+{# Twitter Bootstrap Sliding pagination control implementation #}
+
+{% if style is not defined %}
+    {% set style = 'pagination' %}
+{% endif %}
+
+{% if prev_label is not defined %}
+    {% set prev_label = 'Previous' %}
+{% endif %}
+{% if next_label is not defined %}
+    {% set next_label = 'Next' %}
+{% endif %}
+{% if first_label is not defined %}
+    {% set first_label = 'First' %}
+{% endif %}
+{% if last_label is not defined %}
+    {% set last_label = 'Last' %}
+{% endif %}
+
+
+{% if pageCount > 1 %}
+    {% if style == 'pagination' %}
+        {% set orientation_class = '' %}
+        {% if alignment is defined %}
+            {% if alignment == 'center' %}
+                {% set orientation_class = ' pagination-centered' %}
+            {% elseif alignment == 'right' %}
+                {% set orientation_class = ' pagination-right' %}
+            {% endif %}
+        {% endif %}
+
+        <div class="pagination{{ orientation_class }}">
+            <ul>
+            {% if first is defined and current != first %}
+                <li><a href="{{ path(route, query|merge({(pageParameterName): first})) }}">{{ first_label|raw }}</a></li>
+            {% endif %}
+
+            {% if previous is defined %}
+                <li><a href="{{ path(route, query|merge({(pageParameterName): previous})) }}">{{ prev_label|raw }}</a></li>
+            {% endif %}
+
+            {% for page in pagesInRange %}
+                {% if page != current %}
+                    <li><a href="{{ path(route, query|merge({(pageParameterName): page})) }}">{{ page }}</a></li>
+                {% else %}
+                    <li class="active"><span>{{ page }}</span></li>
+                {% endif %}
+
+            {% endfor %}
+
+            {% if next is defined %}
+                <li><a href="{{ path(route, query|merge({(pageParameterName): next})) }}">{{ next_label|raw }}</a></li>
+            {% endif %}
+
+            {% if last is defined and current != last %}
+                <li><a href="{{ path(route, query|merge({(pageParameterName): last})) }}">{{ last_label|raw }}</a></li>
+            {% endif %}
+            </ul>
+        </div>
+    {% else %}
+        {% if aligned is not defined %}
+            {% set aligned = false %}
+        {% endif %}
+        <ul class="pager">
+            {% if previous is defined %}
+                <li{% if aligned %} class="previous"{% endif %}><a href="{{ path(route, query|merge({(pageParameterName): previous})) }}">{{ prev_label|raw }}</a></li>
+            {% else %}
+                <li class="disabled{% if aligned %} previous{% endif %}"><span>{{ prev_label|raw }}</span></li>
+            {% endif %}
+            {% if next is defined %}
+                <li{% if aligned %} class="next"{% endif %}><a href="{{ path(route, query|merge({(pageParameterName): next})) }}">{{ next_label|raw }}</a></li>
+            {% else %}
+                <li class="disabled{% if aligned %} next{% endif %}"><span>{{ next_label|raw }}</span></li>
+            {% endif %}
+        </ul>
+    {% endif %}
+{% endif %}

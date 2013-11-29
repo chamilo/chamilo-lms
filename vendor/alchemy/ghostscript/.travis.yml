@@ -1,0 +1,14 @@
+language: php
+
+before_script:
+  - sudo apt-get install -y ghostscript
+  - composer install --dev --prefer-source
+
+php:
+  - 5.3.3
+  - 5.3
+  - 5.4
+  - 5.5
+
+script:
+  - phpunit

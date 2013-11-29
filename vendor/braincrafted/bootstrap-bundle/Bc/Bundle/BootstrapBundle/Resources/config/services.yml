@@ -1,0 +1,15 @@
+parameters:
+
+services:
+    bc_bootstrap.twig.icon_extension:
+        class: Bc\Bundle\BootstrapBundle\Twig\BootstrapIconExtension
+        tags:
+            - { name: twig.extension }
+    bc_bootstrap.twig.label_extension:
+        class: Bc\Bundle\BootstrapBundle\Twig\BootstrapLabelExtension
+        tags:
+            - { name: twig.extension }
+    bc_bootstrap.twig.badge_extension:
+        class: Bc\Bundle\BootstrapBundle\Twig\BootstrapBadgeExtension
+        tags:
+            - { name: twig.extension }

@@ -1,0 +1,63 @@
+#------------------------------------------------------------------------------
+# File:         kml.fmt
+#
+# Description:  Example ExifTool print format file for generating a
+#               Google Earth KML file from a collection of geotagged images
+#
+# Usage:        exiftool -p kml.fmt FILE [...] > out.kml
+#
+# Revisions:    2010/02/05 - P. Harvey created
+#
+# Notes:     1) All input files must contain GPSLatitude and GPSLongitude.
+#            2) The -fileOrder option may be used to control the order of the
+#               generated placemarks.
+#------------------------------------------------------------------------------
+#[HEAD]<?xml version="1.0" encoding="UTF-8"?>
+#[HEAD]<kml xmlns="http://earth.google.com/kml/2.0">
+#[HEAD]  <Document>
+#[HEAD]    <name>My Photos</name>
+#[HEAD]    <open>1</open>
+#[HEAD]    <Style id="Photo">
+#[HEAD]      <geomScale>.75</geomScale>
+#[HEAD]      <IconStyle>
+#[HEAD]        <color>ffffffff</color>
+#[HEAD]        <Icon>
+#[HEAD]          <href>root://icons/palette-4.png</href>
+#[HEAD]          <x>192</x>
+#[HEAD]          <y>96</y>
+#[HEAD]          <w>32</w>
+#[HEAD]          <h>32</h>
+#[HEAD]        </Icon>
+#[HEAD]      </IconStyle>
+#[HEAD]    </Style>
+#[HEAD]    <Style id="View">
+#[HEAD]      <IconStyle>
+#[HEAD]        <color>ffffffff</color>
+#[HEAD]        <Icon>
+#[HEAD]          <href>root://icons/palette-3.png</href>
+#[HEAD]          <x>160</x>
+#[HEAD]          <y>128</y>
+#[HEAD]          <w>32</w>
+#[HEAD]          <h>32</h>
+#[HEAD]        </Icon>
+#[HEAD]      </IconStyle>
+#[HEAD]    </Style>
+#[HEAD]    <Folder>
+#[HEAD]      <name>Waypoints</name>
+#[HEAD]      <open>0</open>
+#[BODY]      <Placemark>
+#[BODY]        <description><![CDATA[<br/><table><tr><td>
+#[BODY]        <img src='$directory/$filename'
+#[BODY]          width='$imagewidth' height='$imageheight'>
+#[BODY]        </td></tr></table>]]></description>
+#[BODY]        <Snippet/>
+#[BODY]        <name>$filename</name>
+#[BODY]        <styleUrl>#Photo</styleUrl>
+#[BODY]        <Point>
+#[BODY]          <altitudeMode>clampedToGround</altitudeMode>
+#[BODY]          <coordinates>$gpslongitude#,$gpslatitude#,0</coordinates>
+#[BODY]        </Point>
+#[BODY]      </Placemark>
+#[TAIL]    </Folder>
+#[TAIL]  </Document>
+#[TAIL]</kml>

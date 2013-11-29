@@ -8,10 +8,6 @@
 * @package chamilo.library
 */
 /**
- * Code
- */
-
-/**
  * Class SessionManager
  */
 class SessionManager
@@ -41,7 +37,7 @@ class SessionManager
 
     /**
     * Create a session
-    * @author Carlos Vargas from existing code
+    * @author Carlos Vargas <carlos.vargas@beeznest.com>, from existing code
     * @param	string 		name
     * @param 	integer		Start year (yyyy)
     * @param 	integer		Start month (mm)

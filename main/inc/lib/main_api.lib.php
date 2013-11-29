@@ -1325,9 +1325,10 @@ function api_get_cidreq($add_session_id = true, $add_group_id = true) {
  *
  * Now if the course_code is given, the returned array gives info about that
  * particular course, not specially the current one.
- * @todo    Same behaviour as api_get_user_info so that api_get_course_id becomes absolete too.
+ * @param string Course code
+ * @todo    Same behaviour as api_get_user_info so that api_get_course_id becomes obsolete too.
  */
-function api_get_course_info($course_code = null) {
+function api_get_course_info($course_code = null, $strict = false) {
     if (!empty($course_code)) {
         $course_code        = Database::escape_string($course_code);
         $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);

@@ -611,8 +611,7 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
 	$zip_file = new PclZip($uploaded_file['tmp_name']);
 
 	// Check the zip content (real size and file extension)
-	if (file_exists($uploaded_file)) {
-
+	if (file_exists($uploaded_file['tmp_name'])) {
 		$zip_content_array = $zip_file->listContent();
 		$ok_scorm = false;
         $realFileSize = 0;
@@ -646,7 +645,7 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
 		}
 
 		// It happens on Linux that $upload_path sometimes doesn't start with '/'
-		if ($upload_path[0] != '/') {
+		if ($upload_path[0] != '/' && substr($base_work_dir,-1,1) != '/') {
 			$upload_path = '/'.$upload_path;
 		}
 
@@ -670,14 +669,13 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
 			// PHP method - slower...
 			$save_dir = getcwd();
 			chdir($base_work_dir.$upload_path);
-			$unzippingState = $zip_file->extract();
+            $unzippingState = $zip_file->extract();
 			for ($j=0; $j < count($unzippingState); $j++) {
 				$state = $unzippingState[$j];
 
 				// Fix relative links in html files
 				$extension = strrchr($state['stored_filename'], '.');
 			}
-
 			if ($dir = @opendir($base_work_dir.$upload_path)) {
 				while ($file = readdir($dir)) {
 					if ($file != '.' && $file != '..') {
@@ -692,7 +690,10 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
 				}
 
 				closedir($dir);
-			}
+			} else {
+                error_log('Could not create directory '.$base_work_dir.$upload_path.' to unzip files');
+
+            }
 			chdir($save_dir); // Back to previous dir position
 		}
 	}

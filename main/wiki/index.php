@@ -15,51 +15,45 @@ $language_file = 'wiki';
 // including the global initialization file
 require_once '../inc/global.inc.php';
 
+//error_reporting(-1);
+
 // section (for the tabs)
 $this_section = SECTION_COURSES;
 
 $current_course_tool  = TOOL_WIKI;
-
-// including additional library scripts
-
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-
 require_once 'wiki.inc.php';
-
 $course_id = api_get_course_int_id();
-
 // additional style information
 $htmlHeadXtra[] ='<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'wiki/css/default.css"/>';
 
 // javascript for advanced parameters menu
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 function advanced_parameters() {
-    if(document.getElementById(\'options\').style.display == \'none\') {
-                    document.getElementById(\'options\').style.display = \'block\';
-                    document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
+    if (document.getElementById(\'options\').style.display == \'none\') {
+        document.getElementById(\'options\').style.display = \'block\';
+        document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
     } else {
-                    document.getElementById(\'options\').style.display = \'none\';
-                    document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
+        document.getElementById(\'options\').style.display = \'none\';
+        document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
     }
 }
 function setFocus(){
     $("#search_title").focus();
-    }
-    $(document).ready(function () {
-      setFocus();
-    });
+}
+
+$(document).ready(function () {
+    setFocus();
+});
 
 </script>';
-
 
 // Database table definition
 $tbl_wiki           = Database::get_course_table(TABLE_WIKI);
 $tbl_wiki_discuss   = Database::get_course_table(TABLE_WIKI_DISCUSS);
 $tbl_wiki_mailcue   = Database::get_course_table(TABLE_WIKI_MAILCUE);
 $tbl_wiki_conf      = Database::get_course_table(TABLE_WIKI_CONF);
-/*
-Constants and variables
-*/
+/* Constants and variables */
 $tool_name = get_lang('ToolWiki');
 
 $MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang("MarchLong"), get_lang("AprilLong"), get_lang("MayLong"), get_lang("JuneLong"), get_lang("JulyLong"), get_lang("AugustLong"), get_lang("SeptemberLong"), get_lang("OctoberLong"), get_lang("NovemberLong"), get_lang("DecemberLong"));
@@ -76,29 +70,19 @@ api_block_anonymous_users();
 /* TRACKING */
 event_access_tool(TOOL_WIKI);
 
-/*
-HEADER & TITLE
-*/
+/* HEADER & TITLE */
 // If it is a group wiki then the breadcrumbs will be different.
 
-//Setting variable
-$_clean['group_id'] = 0;
+// Setting variable
+$groupId = api_get_group_id();
 
-if ($_SESSION['_gid'] OR $_GET['group_id']) {
-
-    if (isset($_SESSION['_gid'])) {
-        $_clean['group_id']=intval($_SESSION['_gid']);
-    }
-    if (isset($_GET['group_id'])) {
-        $_clean['group_id']=intval($_GET['group_id']);
-    }
-
-    $group_properties  = GroupManager :: get_group_properties($_clean['group_id']);
+if ($groupId) {
+    $group_properties  = GroupManager::get_group_properties($groupId);
     $interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
-    $interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_clean['group_id'], "name"=> get_lang('GroupSpace').' '.$group_properties['name']);
+    $interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$groupId, "name"=> get_lang('GroupSpace').' '.$group_properties['name']);
 
     $add_group_to_title = ' '.$group_properties['name'];
-    $groupfilter='group_id="'.$_clean['group_id'].'"';
+    $groupfilter='group_id="'.$groupId.'"';
 
     //ensure this tool in groups whe it's private or deactivated
     if 	($group_properties['wiki_state']==0) {
@@ -112,22 +96,18 @@ if ($_SESSION['_gid'] OR $_GET['group_id']) {
     $groupfilter='group_id=0';
 }
 
-
-if ($_POST['action']=='export_to_pdf' && isset($_POST['wiki_id']) && api_get_setting('students_export2pdf') == 'true') {
+if (isset($_POST['action']) && $_POST['action']=='export_to_pdf' && isset($_POST['wiki_id']) && api_get_setting('students_export2pdf') == 'true') {
     export_to_pdf($_POST['wiki_id'], api_get_course_id());
     exit;
 }
 
+$action = isset($_GET['action']) ? $_GET['action'] : null;
 
 Display::display_header($tool_name, 'Wiki');
 
 $is_allowed_to_edit = api_is_allowed_to_edit(false,true);
+/* INITIALISATION */
 
-//api_display_tool_title($tool_name.$add_group_to_title);
-
-/*
-INITIALISATION
-*/
 //the page we are dealing with
 if (!isset($_GET['title'])) {
     $page = 'index';
@@ -135,25 +115,17 @@ if (!isset($_GET['title'])) {
     $page = $_GET['title'];
 }
 
-// some titles are not allowed
-// $not_allowed_titles=array("Index", "RecentChanges","AllPages", "Categories"); //not used for now
-
-/*
-MAIN CODE
-*/
+/* MAIN CODE */
 
 // Tool introduction
 Display::display_introduction_section(TOOL_WIKI);
 
-/*
-              ACTIONS
-*/
+/* ACTIONS */
 
-
-//release of blocked pages to prevent concurrent editions
+// Release of blocked pages to prevent concurrent editions
 echo '<div style="overflow:hidden">';
 $sql = "SELECT * FROM $tbl_wiki WHERE c_id = $course_id AND is_editing != '0' ".$condition_session;
-$result=Database::query($sql);
+$result = Database::query($sql);
 while ($is_editing_block=Database::fetch_array($result)) {
     $max_edit_time	= 1200; // 20 minutes
     $timestamp_edit	= strtotime($is_editing_block['time_edit']);
@@ -166,7 +138,7 @@ while ($is_editing_block=Database::fetch_array($result)) {
         unset ( $_SESSION['_version'] );
     }
     //second checks if has exceeded the time that a page may be available or if a page was edited and saved by its author
-    if ($time_editing>$max_edit_time || ($is_editing_block['is_editing']==$_user['user_id'] && $_GET['action']!='edit')) {
+    if ($time_editing>$max_edit_time || ($is_editing_block['is_editing']==$_user['user_id'] && $action!='edit')) {
         $sql='UPDATE '.$tbl_wiki.' SET is_editing="0", time_edit="0000-00-00 00:00:00"
               WHERE c_id = '.$course_id.' AND is_editing="'.$is_editing_block['is_editing'].'" '.$condition_session;
         Database::query($sql);
@@ -175,20 +147,19 @@ while ($is_editing_block=Database::fetch_array($result)) {
 echo '</div>';
 // saving a change
 
-    if (isset($_POST['SaveWikiChange']) AND $_POST['title']<>'') {
-        if(empty($_POST['title'])) {
-            Display::display_error_message(get_lang("NoWikiPageTitle"));
-        } elseif(!double_post($_POST['wpost_id'])) {
-            //double post
-        } elseif ($_POST['version']!='' && $_SESSION['_version']!=0 && $_POST['version']!=$_SESSION['_version']) {
-            //prevent concurrent users and double version
-            Display::display_error_message(get_lang("EditedByAnotherUser"));
-        } else {
-            $return_message=save_wiki();
-            Display::display_confirmation_message($return_message, false);
-        }
+if (isset($_POST['SaveWikiChange']) AND $_POST['title']<>'') {
+    if(empty($_POST['title'])) {
+        Display::display_error_message(get_lang("NoWikiPageTitle"));
+    } elseif(!double_post($_POST['wpost_id'])) {
+        //double post
+    } elseif ($_POST['version']!='' && $_SESSION['_version']!=0 && $_POST['version']!=$_SESSION['_version']) {
+        //prevent concurrent users and double version
+        Display::display_error_message(get_lang("EditedByAnotherUser"));
+    } else {
+        $return_message=save_wiki();
+        Display::display_confirmation_message($return_message, false);
     }
-
+}
 
 //saving a new wiki entry
 echo '<div style="overflow:hidden">';
@@ -215,9 +186,8 @@ echo '<div style="overflow:hidden">';
     }
 echo '</div>';
 
-
 // check last version
-if ($_GET['view']) {
+if (isset($_GET['view']) && $_GET['view']) {
     $sql='SELECT * FROM '.$tbl_wiki.' WHERE c_id = '.$course_id.' AND id="'.Database::escape_string($_GET['view']).'"'; //current view
     $result=Database::query($sql);
     $current_row=Database::fetch_array($result);
@@ -226,14 +196,14 @@ if ($_GET['view']) {
     $result=Database::query($sql);
     $last_row=Database::fetch_array($result);
 
-    if ($_GET['view']<$last_row['id']) {
+    if ($_GET['view'] < $last_row['id']) {
        $message= '<center>'.get_lang('NoAreSeeingTheLastVersion').'<br /> '.get_lang("Version").' (<a href="index.php?cidReq='.$_course['id'].'&action=showpage&amp;title='.api_htmlentities(urlencode($current_row['reflink'])).'&group_id='.$current_row['group_id'].'&session_id='.$current_row['session_id'].'&view='.api_htmlentities($_GET['view']).'" title="'.get_lang('CurrentVersion').'">'.$current_row['version'].'</a> / <a href="index.php?cidReq='.$_course['id'].'&action=showpage&amp;title='.api_htmlentities(urlencode($last_row['reflink'])).'&group_id='.$last_row['group_id'].'&session_id='.$last_row['session_id'].'" title="'.get_lang('LastVersion').'">'.$last_row['version'].'</a>) <br />'.get_lang("ConvertToLastVersion").': <a href="index.php?cidReq='.$_course['id'].'&action=restorepage&amp;title='.api_htmlentities(urlencode($last_row['reflink'])).'&group_id='.$last_row['group_id'].'&session_id='.$last_row['session_id'].'&view='.api_htmlentities($_GET['view']).'">'.get_lang("Restore").'</a></center>';
        Display::display_warning_message($message,false);
     }
 
     ///restore page
 
-    if ($_GET['action']=='restorepage') {
+    if ($action=='restorepage') {
         //Only teachers and platform admin can edit the index page. Only teachers and platform admin can edit an assignment teacher
         if (($current_row['reflink']=='index' || $current_row['reflink']=='' || $current_row['assignment']==1) && (!api_is_allowed_to_edit(false,true) && intval($_GET['group_id'])==0)) {
             Display::display_normal_message(get_lang('OnlyEditPagesCourseManager'));
@@ -300,7 +270,7 @@ if ($_GET['view']) {
 }
 
 echo '<div style="overflow:hidden">';
-    if ($_GET['action']=='deletewiki') {
+    if ($action=='deletewiki') {
         if(api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
             if ($_GET['delete'] == 'yes') {
                 $return_message=delete_wiki();
@@ -310,11 +280,10 @@ echo '<div style="overflow:hidden">';
     }
 
 
-    if ($_GET['action']=='discuss' && $_POST['Submit']) {
+    if ($action =='discuss' && $_POST['Submit']) {
         Display::display_confirmation_message(get_lang('CommentAdded'));
     }
 echo '</div>';
-
 
 /* WIKI WRAPPER */
 
@@ -348,14 +317,14 @@ document.getElementById("menuwiki").style.border=b+"px solid #cccccc";
 
 echo '<div id="menuwiki" style="padding:2px;">';
 
-echo '&nbsp;<a href="index.php?cidReq='.$_course['id'].'&action=show&amp;title=index&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('show').'>'.Display::return_icon('wiki.png',get_lang('HomeWiki'),'',ICON_SIZE_MEDIUM).'</a>&nbsp;';
+echo '&nbsp;<a href="index.php?cidReq='.$_course['id'].'&action=show&amp;title=index&session_id='.$session_id.'&group_id='.$groupId.'"'.is_active_navigation_tab('show').'>'.Display::return_icon('wiki.png',get_lang('HomeWiki'),'',ICON_SIZE_MEDIUM).'</a>&nbsp;';
 
 echo '&nbsp;<a href="javascript:void(0)" onClick="menu_wiki()">'.Display::return_icon('menu.png',get_lang('Menu'),'',ICON_SIZE_SMALL).'</a>';
 ///menu home
 echo '<ul>';
 if ( api_is_allowed_to_session_edit(false,true) ) {
     //menu add page
-    echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=addnew&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('addnew').'>'.get_lang('AddNew').'</a> ';
+    echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=addnew&session_id='.$session_id.'&group_id='.$groupId.'"'.is_active_navigation_tab('addnew').'>'.get_lang('AddNew').'</a> ';
 }
 
 if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
@@ -372,11 +341,11 @@ if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
 echo '<a href="index.php?action=show&amp;actionpage='.$lock_unlock_addnew.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$protect_addnewpage.'</a></li>';
 
 ///menu find
-echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=searchpages&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('searchpages').'>'.get_lang('SearchPages').'</a></li>';
+echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=searchpages&session_id='.$session_id.'&group_id='.$groupId.'"'.is_active_navigation_tab('searchpages').'>'.get_lang('SearchPages').'</a></li>';
 ///menu all pages
-echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=allpages&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('allpages').'>'.get_lang('AllPages').'</a></li>';
+echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=allpages&session_id='.$session_id.'&group_id='.$groupId.'"'.is_active_navigation_tab('allpages').'>'.get_lang('AllPages').'</a></li>';
 ///menu recent changes
-echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=recentchanges&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('recentchanges').'>'.get_lang('RecentChanges').'</a></li>';
+echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=recentchanges&session_id='.$session_id.'&group_id='.$groupId.'"'.is_active_navigation_tab('recentchanges').'>'.get_lang('RecentChanges').'</a></li>';
 ///menu delete all wiki
 if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
         echo '<li><a href="index.php?action=deletewiki&amp;title='.api_htmlentities(urlencode($page)).'"'.is_active_navigation_tab('deletewiki').'>'.get_lang('DeleteWiki').'</a></li>';
@@ -392,24 +361,24 @@ echo '</div>';
 
 echo '<div id="mainwiki">';
 /** menuwiki (= actions of the page, not of the wiki tool) **/
-if (!in_array($_GET['action'], array('addnew', 'searchpages', 'allpages', 'recentchanges', 'deletewiki', 'more', 'mactiveusers', 'mvisited', 'mostchanged', 'orphaned', 'wanted'))) {
+if (!in_array($action , array('addnew', 'searchpages', 'allpages', 'recentchanges', 'deletewiki', 'more', 'mactiveusers', 'mvisited', 'mostchanged', 'orphaned', 'wanted'))) {
     echo '<div class="actions">';
 
     //menu show page
-    echo '&nbsp;&nbsp;<a href="index.php?cidReq='.$_course['id'].'&action=showpage&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('showpage').'>'.Display::return_icon('page.png',get_lang('ShowThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
+    echo '&nbsp;&nbsp;<a href="index.php?cidReq='.$_course['id'].'&action=showpage&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$groupId.'"'.is_active_navigation_tab('showpage').'>'.Display::return_icon('page.png',get_lang('ShowThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
 
     if (api_is_allowed_to_session_edit(false,true) ) {
         //menu edit page
-        echo '<a href="index.php?cidReq='.$_course['id'].'&action=edit&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('edit').'>'.Display::return_icon('edit.png',get_lang('EditThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="index.php?cidReq='.$_course['id'].'&action=edit&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$groupId.'"'.is_active_navigation_tab('edit').'>'.Display::return_icon('edit.png',get_lang('EditThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
 
         //menu discuss page
         echo '<a href="index.php?action=discuss&amp;title='.api_htmlentities(urlencode($page)).'"'.is_active_navigation_tab('discuss').'>'.Display::return_icon('discuss.png',get_lang('DiscussThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
      }
 
     //menu history
-    echo '<a href="index.php?cidReq='.$_course['id'].'&action=history&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('history').'>'.Display::return_icon('history.png',get_lang('ShowPageHistory'),'',ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="index.php?cidReq='.$_course['id'].'&action=history&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$groupId.'"'.is_active_navigation_tab('history').'>'.Display::return_icon('history.png',get_lang('ShowPageHistory'),'',ICON_SIZE_MEDIUM).'</a>';
     //menu linkspages
-    echo '<a href="index.php?action=links&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('links').'>'.Display::return_icon('what_link_here.png',get_lang('LinksPages'),'',ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="index.php?action=links&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$groupId.'"'.is_active_navigation_tab('links').'>'.Display::return_icon('what_link_here.png',get_lang('LinksPages'),'',ICON_SIZE_MEDIUM).'</a>';
 
     //menu delete wikipage
     if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
@@ -425,16 +394,15 @@ if (isset($_POST['SaveWikiNew'])) {
 }
 
 //More for export to course document area. See display_wiki_entry
-if ($_POST['export2DOC']) {
+if (isset($_POST['export2DOC']) && $_POST['export2DOC']) {
     $doc_id = $_POST['doc_id'];
     $export2doc = export2doc($doc_id);
     if ($export2doc) {
         Display::display_confirmation_message(get_lang('ThePageHasBeenExportedToDocArea'));
     }
-
 }
 
-if ($_GET['action']=='more') {
+if (isset($action ) =='more') {
 
     echo '<div class="actions">'.get_lang('More').'</div>';
 
@@ -443,28 +411,28 @@ if ($_GET['action']=='more') {
     echo '    <td>';
     echo '      <ul>';
     //Submenu Most active users
-    echo '        <li><a href="index.php?cidReq='.$_course['id'].'&action=mactiveusers&session_id='.$session_id.'&group_id='.$_clean['group_id'].'">'.get_lang('MostActiveUsers').'</a></li>';
+    echo '        <li><a href="index.php?cidReq='.$_course['id'].'&action=mactiveusers&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('MostActiveUsers').'</a></li>';
     //Submenu Most visited pages
-    echo '        <li><a href="index.php?cidReq='.$_course['id'].'&action=mvisited&session_id='.$session_id.'&group_id='.$_clean['group_id'].'">'.get_lang('MostVisitedPages').'</a></li>';
+    echo '        <li><a href="index.php?cidReq='.$_course['id'].'&action=mvisited&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('MostVisitedPages').'</a></li>';
     //Submenu Most changed pages
-    echo '        <li><a href="index.php?cidReq='.$_course['id'].'&action=mostchanged&session_id='.$session_id.'&group_id='.$_clean['group_id'].'">'.get_lang('MostChangedPages').'</a></li>';
+    echo '        <li><a href="index.php?cidReq='.$_course['id'].'&action=mostchanged&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('MostChangedPages').'</a></li>';
     echo '      </ul>';
     echo '    </td>';
     echo '    <td>';
     echo '      <ul>';
    //Submenu Orphaned pages
-    echo '        <li><a href="index.php?cidReq='.$_course['id'].'&action=orphaned&session_id='.$session_id.'&group_id='.$_clean['group_id'].'">'.get_lang('OrphanedPages').'</a></li>';
+    echo '        <li><a href="index.php?cidReq='.$_course['id'].'&action=orphaned&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('OrphanedPages').'</a></li>';
     //Submenu Wanted pages
-    echo '        <li><a href="index.php?cidReq='.$_course['id'].'&action=wanted&session_id='.$session_id.'&group_id='.$_clean['group_id'].'">'.get_lang('WantedPages').'</a></li>';
+    echo '        <li><a href="index.php?cidReq='.$_course['id'].'&action=wanted&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('WantedPages').'</a></li>';
 	//Submenu Most linked pages
-    echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=mostlinked&session_id='.$session_id.'&group_id='.$_clean['group_id'].'">'.get_lang('MostLinkedPages').'</a></li>';
+    echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=mostlinked&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('MostLinkedPages').'</a></li>';
     echo '</ul>';
 	echo '</td>';
 	echo '<td style="vertical-align:top">';
     echo '<ul>';
 	//Submenu Statistics
 	if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
-    	echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=statistics&session_id='.$session_id.'&group_id='.$_clean['group_id'].'">'.get_lang('Statistics').'</a></li>';
+    	echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=statistics&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('Statistics').'</a></li>';
 	}
     echo '      </ul>';
     echo'    </td>';
@@ -472,45 +440,45 @@ if ($_GET['action']=='more') {
     echo '</table>';
 
     //Submenu Dead end pages
-    //echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=deadend&session_id='.$session_id.'&group_id='.$_clean['group_id'].'">'.get_lang('DeadEndPages').'</a></li>';//TODO:
+    //echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=deadend&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('DeadEndPages').'</a></li>';//TODO:
 
     //Submenu Most new pages (not versions)
-    //echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=mnew&session_id='.$session_id.'&group_id='.$_clean['group_id'].'">'.get_lang('MostNewPages').'</a></li>';//TODO:
+    //echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=mnew&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('MostNewPages').'</a></li>';//TODO:
 
     //Submenu Most long pages
-    //echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=mnew&session_id='.$session_id.'&group_id='.$_clean['group_id'].'">'.get_lang('MostLongPages').'</a></li>';//TODO:
+    //echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=mnew&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('MostLongPages').'</a></li>';//TODO:
 
     //Submenu Protected pages
-    //echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=protected&session_id='.$session_id.'&group_id='.$_clean['group_id'].'">'.get_lang('ProtectedPages').'</a></li>';//TODO:
+    //echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=protected&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('ProtectedPages').'</a></li>';//TODO:
 
     //Submenu Hidden pages
-    //echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=hidden&session_id='.$session_id.'&group_id='.$_clean['group_id'].'">'.get_lang('HiddenPages').'</a></li>';//TODO:
+    //echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=hidden&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('HiddenPages').'</a></li>';//TODO:
 
     //Submenu Most discuss pages
-    //echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=mdiscuss&session_id='.$session_id.'&group_id='.$_clean['group_id'].'">'.get_lang('MostDiscussPages').'</a></li>';//TODO:
+    //echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=mdiscuss&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('MostDiscussPages').'</a></li>';//TODO:
 
     //Submenu Best scored pages
-    //echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=mscored&session_id='.$session_id.'&group_id='.$_clean['group_id'].'">'.get_lang('BestScoredPages').'</a></li>';//TODO:
+    //echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=mscored&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('BestScoredPages').'</a></li>';//TODO:
 
     //Submenu Pages with more progress
-    //echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=mprogress&session_id='.$session_id.'&group_id='.$_clean['group_id'].'">'.get_lang('MProgressPages').'</a></li>';//TODO:
+    //echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=mprogress&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('MProgressPages').'</a></li>';//TODO:
 
     //Submenu Most active users in discuss
-    //echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=mactiveusers&session_id='.$session_id.'&group_id='.$_clean['group_id'].'">'.get_lang('MostDiscussUsers').'</a></li>';//TODO:
+    //echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=mactiveusers&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('MostDiscussUsers').'</a></li>';//TODO:
 
     //Submenu Random page
-    //echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=mrandom&session_id='.$session_id.'&group_id='.$_clean['group_id'].'">'.get_lang('RandomPage').'</a></li>';//TODO:
+    //echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=mrandom&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('RandomPage').'</a></li>';//TODO:
 
 	//Submenu Task
-	//echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=datetasks&session_id='.$session_id.'&group_id='.$_clean['group_id'].'">'.get_lang('Task').'</a></li>';//TODO:task list order by start date or end date
+	//echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=datetasks&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('Task').'</a></li>';//TODO:task list order by start date or end date
 
 	//Submenu Who and Where
-	//echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=whoandwhere&session_id='.$session_id.'&group_id='.$_clean['group_id'].'">'.get_lang('WhoAndWhere').'</a></li>';//TODO:Who and where everyone is working now?
+	//echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=whoandwhere&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('WhoAndWhere').'</a></li>';//TODO:Who and where everyone is working now?
 }
 
 // Statistics Juan Carlos Raña Trabado
 
-if ($_GET['action']=='statistics' && (api_is_allowed_to_edit(false,true) || api_is_platform_admin())) {
+if ($action =='statistics' && (api_is_allowed_to_edit(false,true) || api_is_platform_admin())) {
 	echo '<div class="actions">'.get_lang('Statistics').'</div>';
 
 
@@ -998,7 +966,7 @@ echo '<br/>';
 
 // Most active users Juan Carlos Raña Trabado
 
-if ($_GET['action']=='mactiveusers') {
+if ($action =='mactiveusers') {
     echo '<div class="actions">'.get_lang('MostActiveUsers').'</div>';
 
     $sql='SELECT *, COUNT(*) AS NUM_EDIT FROM '.$tbl_wiki.'  WHERE  c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' GROUP BY user_id';
@@ -1026,7 +994,7 @@ if ($_GET['action']=='mactiveusers') {
         }
 
         $table = new SortableTableFromArrayConfig($rows,1,10,'MostActiveUsersA_table','','','DESC');
-        $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
+        $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($action),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
         $table->set_header(0,get_lang('Author'), true);
         $table->set_header(1,get_lang('Contributions'), true,array ('style' => 'width:30px;'));
         $table->display();
@@ -1035,7 +1003,7 @@ if ($_GET['action']=='mactiveusers') {
 
 // User contributions Juan Carlos Raña Trabado
 
-if ($_GET['action']=='usercontrib') {
+if ($action =='usercontrib') {
     $userinfo=Database::get_user_info_from_id($_GET['user_id']);
     $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
 
@@ -1050,7 +1018,7 @@ if ($_GET['action']=='usercontrib') {
         $sql='SELECT * FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' AND user_id="'.Database::escape_string($_GET['user_id']).'" AND visibility=1';
     }
 
-    $allpages=Database::query($sql);
+    $allpages = Database::query($sql);
 
     //show table
     if (Database::num_rows($allpages) > 0) {
@@ -1083,19 +1051,14 @@ if ($_GET['action']=='usercontrib') {
             $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&view='.$obj->id.'&session_id='.api_htmlentities(urlencode($_GET['$session_id'])).'&group_id='.api_htmlentities(urlencode($_GET['group_id'])).'">'.api_htmlentities($obj->title).'</a>';
             $row[] =Security::remove_XSS($obj->version);
             $row[] =Security::remove_XSS($obj->comment);
-            //$row[] = api_strlen($obj->comment)>30 ? Security::remove_XSS(api_substr($obj->comment,0,30)).'...' : Security::remove_XSS($obj->comment);
             $row[] =Security::remove_XSS($obj->progress).' %';
             $row[] =Security::remove_XSS($obj->score);
-            //if(api_is_allowed_to_edit() || api_is_platform_admin())
-            //{
-                //$row[] =Security::remove_XSS($obj->user_ip);
-            //}
             $rows[] = $row;
 
         }
 
         $table = new SortableTableFromArrayConfig($rows,2,10,'UsersContributions_table','','','ASC');
-        $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'user_id'=>Security::remove_XSS($_GET['user_id']),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
+        $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($action ),'user_id'=>Security::remove_XSS($_GET['user_id']),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
 
         $table->set_header(0,get_lang('Date'), true, array ('style' => 'width:200px;'));
         $table->set_header(1,get_lang('Type'), true, array ('style' => 'width:30px;'));
@@ -1104,18 +1067,13 @@ if ($_GET['action']=='usercontrib') {
         $table->set_header(4,get_lang('Comment'), true, array ('style' => 'width:200px;'));
         $table->set_header(5,get_lang('Progress'), true, array ('style' => 'width:30px;'));
         $table->set_header(6,get_lang('Rating'), true, array ('style' => 'width:30px;'));
-        //if(api_is_allowed_to_edit() || api_is_platform_admin())
-        //{
-            //$table->set_header(7,get_lang('IP'), true, array ('style' => 'width:30px;'));
-        //}
-
         $table->display();
     }
 }
 
-/////////////////////// Most changed pages /////////////////////// Juan Carlos Raña Trabado
+/* Most changed pages */
 
-if ($_GET['action']=='mostchanged') {
+if ($action =='mostchanged') {
     echo '<div class="actions">'.get_lang('MostChangedPages').'</div>';
 
 
@@ -1148,7 +1106,7 @@ if ($_GET['action']=='mostchanged') {
         }
 
         $table = new SortableTableFromArrayConfig($rows,2,10,'MostChangedPages_table','','','DESC');
-        $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
+        $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($action ),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
         $table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
         $table->set_header(1,get_lang('Title'), true);
         $table->set_header(2,get_lang('Changes'), true);
@@ -1156,9 +1114,9 @@ if ($_GET['action']=='mostchanged') {
     }
 }
 
-/////////////////////// Most visited pages /////////////////////// Juan Carlos Raña Trabado
+/* Most visited pages */
 
-if ($_GET['action']=='mvisited') {
+if ($action =='mvisited') {
     echo '<div class="actions">'.get_lang('MostVisitedPages').'</div>';
 
     if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) { //only by professors if page is hidden
@@ -1190,7 +1148,7 @@ if ($_GET['action']=='mvisited') {
         }
 
         $table = new SortableTableFromArrayConfig($rows,2,10,'MostVisitedPages_table','','','DESC');
-        $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
+        $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($action ),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
         $table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
         $table->set_header(1,get_lang('Title'), true);
         $table->set_header(2,get_lang('Visits'), true);
@@ -1198,9 +1156,9 @@ if ($_GET['action']=='mvisited') {
     }
 }
 
-/////////////////////// Wanted pages /////////////////////// Juan Carlos Raña Trabado
+/* Wanted pages */
 
-if ($_GET['action']=='wanted') {
+if ($action =='wanted') {
     echo '<div class="actions">'.get_lang('WantedPages').'</div>';
 
     $pages = array();
@@ -1222,7 +1180,7 @@ if ($_GET['action']=='wanted') {
     $sql = 'SELECT  *  FROM   '.$tbl_wiki.' s1
     		WHERE s1.c_id = '.$course_id.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.$condition_session.')';
 
-    $allpages=Database::query($sql);
+    $allpages = Database::query($sql);
 
     while ($row=Database::fetch_array($allpages)) {
 
@@ -1251,14 +1209,14 @@ if ($_GET['action']=='wanted') {
         }
 
         $table = new SortableTableFromArrayConfig($rows,0,10,'WantedPages_table','','','DESC');
-        $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
+        $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($action ),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
         $table->set_header(0,get_lang('Title'), true);
         $table->display();
 }
 
-/////////////////////// Orphaned pages /////////////////////// Juan Carlos Raña Trabado
+/* Orphaned pages */
 
-if ($_GET['action']=='orphaned') {
+if ($action =='orphaned') {
     echo '<div class="actions">'.get_lang('OrphanedPages').'</div>';
 
     $pages = array();
@@ -1326,7 +1284,7 @@ if ($_GET['action']=='orphaned') {
         }
 
         $table = new SortableTableFromArrayConfig($rows,1,10,'OrphanedPages_table','','','DESC');
-        $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
+        $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($action ),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
        $table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
 	   $table->set_header(1,get_lang('Title'), true);
        $table->display();
@@ -1334,7 +1292,7 @@ if ($_GET['action']=='orphaned') {
 
 /////////////////////// Most linked pages /////////////////////// Juan Carlos Raña Trabado
 
-if ($_GET['action']=='mostlinked') {
+if ($action =='mostlinked') {
     echo '<div class="actions">'.get_lang('MostLinkedPages').'</div>';
 	$pages = array();
     $refs = array();
@@ -1382,7 +1340,7 @@ if ($_GET['action']=='mostlinked') {
         }
 
         $table = new SortableTableFromArrayConfig($rows,0,10,'LinkedPages_table','','','DESC');
-        $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
+        $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($action ),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
         $table->set_header(0,get_lang('Title'), true);
         $table->display();
 
@@ -1390,7 +1348,7 @@ if ($_GET['action']=='mostlinked') {
 
 /////////////////////// delete current page /////////////////////// Juan Carlos Raña Trabado
 
-if ($_GET['action']=='delete') {
+if ($action =='delete') {
 
     if (!$_GET['title']) {
         Display::display_error_message(get_lang('MustSelectPage'));
@@ -1436,7 +1394,7 @@ if ($_GET['action']=='delete') {
 
 /////////////////////// delete all wiki /////////////////////// Juan Carlos Raña Trabado
 
-if ($_GET['action']=='deletewiki') {
+if ($action =='deletewiki') {
 
     echo '<div class="actions">'.get_lang('DeleteWiki').'</div>';
     echo '<div style="overflow:hidden">';
@@ -1459,7 +1417,7 @@ if ($_GET['action']=='deletewiki') {
 
 /////////////////////// search wiki pages ///////////////////////
 
-if ($_GET['action']=='searchpages') {
+if ($action =='searchpages') {
 
     echo '<div class="actions">'.get_lang('SearchPages').'</div>';
     echo '<div style="overflow:hidden">';
@@ -1474,7 +1432,7 @@ if ($_GET['action']=='searchpages') {
 	} else {
 
 		// initiate the object
-		$form = new FormValidator('wiki_search','post', api_get_self().'?cidReq='.api_htmlentities($_GET['cidReq']).'&action='.api_htmlentities($_GET['action']).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'&mode_table=yes1&search_term='.api_htmlentities($_GET['search_term']).'&search_content='.api_htmlentities($_GET['search_content']).'&all_vers='.api_htmlentities($_GET['all_vers']));
+		$form = new FormValidator('wiki_search','post', api_get_self().'?cidReq='.api_htmlentities($_GET['cidReq']).'&action='.api_htmlentities($action ).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'&mode_table=yes1&search_term='.api_htmlentities($_GET['search_term']).'&search_content='.api_htmlentities($_GET['search_content']).'&all_vers='.api_htmlentities($_GET['all_vers']));
 
 		// settting the form elements
 
@@ -1501,7 +1459,7 @@ if ($_GET['action']=='searchpages') {
 
 ///////////////////////  What links here. Show pages that have linked this page /////////////////////// Juan Carlos Raña Trabado
 
-if ($_GET['action']=='links') {
+if ($action =='links') {
 
     if (!$_GET['title']) {
         Display::display_error_message(get_lang("MustSelectPage"));
@@ -1586,7 +1544,7 @@ if ($_GET['action']=='links') {
             }
 
             $table = new SortableTableFromArrayConfig($rows,1,10,'AllPages_table','','','ASC');
-            $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
+            $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($action ),'group_id'=>Security::remove_XSS($_GET['group_id'])));
             $table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
             $table->set_header(1,get_lang('Title'), true);
             $table->set_header(2,get_lang('Author'), true);
@@ -1602,7 +1560,7 @@ if ($_GET['action']=='links') {
 
 // Display the form for adding a new wiki page
 echo '<div style="overflow:hidden">';
-if ($_GET['action']=='addnew') {
+if ($action =='addnew') {
     if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
         api_not_allowed();
     }
@@ -1631,14 +1589,14 @@ if ($_GET['action']=='addnew') {
 
 // Show home page
 
-if (!$_GET['action'] OR $_GET['action']=='show' AND !isset($_POST['SaveWikiNew'])) {
+if (!$action  OR $action =='show' AND !isset($_POST['SaveWikiNew'])) {
     display_wiki_entry($newtitle);
 }
 
 // Show current page
 
 
-if ($_GET['action']=='showpage' AND !isset($_POST['SaveWikiNew'])) {
+if ($action =='showpage' AND !isset($_POST['SaveWikiNew'])) {
     if ($_GET['title']) {
         display_wiki_entry($newtitle);
     } else {
@@ -1648,13 +1606,11 @@ if ($_GET['action']=='showpage' AND !isset($_POST['SaveWikiNew'])) {
 
 // Edit current page
 
-if ($_GET['action']=='edit') {
+if (isset($action ) && $action =='edit') {
 
     if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
         api_not_allowed();
     }
-
-    $_clean['group_id']=(int)$_SESSION['_gid'];
 
     $sql = 'SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.'
     		WHERE
@@ -1692,7 +1648,7 @@ if ($_GET['action']=='edit') {
         $PassEdit=false;
 
         //check if is a wiki group
-        if ($_clean['group_id']!=0) {
+        if ($groupId!=0) {
             //Only teacher, platform admin and group members can edit a wiki group
             if (api_is_allowed_to_edit(false,true) || api_is_platform_admin() || GroupManager :: is_user_in_group($_user['user_id'],intval($_GET['group_id']))) {
                 $PassEdit=true;
@@ -2029,14 +1985,12 @@ if ($_GET['action']=='edit') {
 
 // Page history
 
-if ($_GET['action']=='history' or $_POST['HistoryDifferences']) {
+if ($action =='history' or $_POST['HistoryDifferences']) {
     if (!$_GET['title']) {
         Display::display_error_message(get_lang("MustSelectPage"));
         exit;
     }
-
     echo '<div style="overflow:hidden">';
-    $_clean['group_id']=(int)$_SESSION['_gid'];
 
     //First, see the property visibility that is at the last register and therefore we should select descending order. But to give ownership to each record, this is no longer necessary except for the title. TODO: check this
 
@@ -2203,8 +2157,8 @@ if ($_GET['action']=='history' or $_POST['HistoryDifferences']) {
 
 // @todo rss feed
 
-if ($_GET['action']=='recentchanges') {
-    $_clean['group_id']=(int)$_SESSION['_gid'];
+if ($action =='recentchanges') {
+    $groupId=(int)$_SESSION['_gid'];
 
     if ( api_is_allowed_to_session_edit(false,true) ) {
         if (check_notify_all()==1) {
@@ -2278,7 +2232,7 @@ if ($_GET['action']=='recentchanges') {
         }
 
         $table = new SortableTableFromArrayConfig($rows,0,10,'RecentPages_table','','','DESC');
-        $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
+        $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($action ),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
         $table->set_header(0,get_lang('Date'), true, array ('style' => 'width:200px;'));
         $table->set_header(1,get_lang('Type'), true, array ('style' => 'width:30px;'));
         $table->set_header(2,get_lang('Title'), true);
@@ -2292,11 +2246,8 @@ if ($_GET['action']=='recentchanges') {
 
 // All pages
 
-
-if ($_GET['action']=='allpages') {
+if ($action  == 'allpages') {
     echo '<div class="actions">'.get_lang('AllPages').'</div>';
-
-    $_clean['group_id']=(int)$_SESSION['_gid'];
 
     if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) { //only by professors if page is hidden
         $sql = 'SELECT  *  FROM  '.$tbl_wiki.' s1
@@ -2359,7 +2310,7 @@ if ($_GET['action']=='allpages') {
         }
 
         $table = new SortableTableFromArrayConfig($rows,1,10,'AllPages_table','','','ASC');
-        $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
+        $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($action ),'group_id'=>Security::remove_XSS($_GET['group_id'])));
         $table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
         $table->set_header(1,get_lang('Title'), true);
         $table->set_header(2,get_lang('Author').' ('.get_lang('LastVersion').')', true);
@@ -2373,7 +2324,7 @@ if ($_GET['action']=='allpages') {
 
 // Discuss pages
 
-if ($_GET['action']=='discuss') {
+if ($action == 'discuss') {
     if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
         api_not_allowed();
     }
@@ -2661,7 +2612,4 @@ echo '</div>'; // echo "<div style="overflow:hidden">";
 echo "</div>"; // echo "<div id='mainwiki'>";
 echo "</div>"; // echo "<div id='wikiwrapper'>";
 
-/*
-FOOTER
-*/
 Display::display_footer();

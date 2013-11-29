@@ -57,6 +57,7 @@
         "symfony/locale": "~2.3",
         "symfony/monolog-bridge": "~2.3",
         "twig/twig": ">=1.8,<2.0-dev",
+        "braincrafted/bootstrap-bundle": "dev-master",
         "dflydev/doctrine-orm-service-provider": "1.0.*@dev",
         "doctrine/migrations": "dev-master",
         "gedmo/doctrine-extensions": "2.3.*@dev",
@@ -67,7 +68,7 @@
         "mpdf/mpdf": "v5.6.1",
         "ezyang/htmlpurifier": "v4.5.0",
         "realityking/pchart": "dev-master",
-        "imagine/imagine": "v0.5.0",
+        "imagine/imagine": "0.6.*@dev",
         "grom/silex-service-provider": "dev-master",
         "knplabs/knp-menu": "2.0.*@dev",
         "knplabs/knp-snappy": "dev-master",
@@ -78,11 +79,12 @@
         "sensio/framework-extra-bundle": "2.3.*@dev",
         "chamilo/chash": "dev-master",
         "composer/composer": "1.0.0-alpha7",
-        "flint/flint" : "dev-master",
+        "flint/flint": "1.6.0",
         "icehero/silex-opauth": "dev-master",
         "opauth/openid": "0.1.0",
         "opauth/facebook": "0.2.1",
-        "opauth/google": "0.2.2"
+        "opauth/google": "0.2.2",
+        "media-alchemyst/media-alchemyst": "0.3.6"
     },
     "require-dev": {
         "knplabs/gaufrette": "0.2.*@dev",

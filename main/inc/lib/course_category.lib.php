@@ -291,6 +291,22 @@ function getParents($categoryCode)
     }
     return $children;
 }
+function getParentsToString($categoryCode)
+{
+    $parents = getParents($categoryCode);
+
+    if (!empty($parents)) {
+        $parents = array_reverse($parents);
+        $categories = array();
+        foreach ($parents as $category) {
+            $categories[] = $category['code'];
+        }
+        $categoriesInString = implode(' > ', $categories).' > ';
+        return $categoriesInString;
+    }
+    return null;
+}
+
 /**
  * @param string $categorySource
  * @return string

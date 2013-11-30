@@ -46,6 +46,7 @@ function aiken_display_form($msg = '') {
     $form_validator->addElement('file', 'userFile', get_lang('DownloadFile'));
     $form_validator->addElement('style_submit_button', 'submit', get_lang('Send'), 'class="upload"');
     $form .= $form_validator->return_form();
+    $form .= '<blockquote>'.get_lang('ImportAikenQuizExplanation').'<br /><pre>'.get_lang('ImportAikenQuizExplanationExample').'</pre></blockquote>';
     echo $form;
 }
 
@@ -113,7 +114,7 @@ function aiken_import_exercise($file) {
     // unzip the uploaded file in a tmp directory
     if (preg_match('/.(zip|txt)$/i', $file)) {
         if (!get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)) {
-            Display :: display_error_message(get_lang('ThereWasAProblemWithYourFile'));
+            Display :: display_error_message(get_lang(''));
             return 'ThereWasAProblemWithYourFile';
         }
     }

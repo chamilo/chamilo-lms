@@ -41,7 +41,7 @@ $interbreadcrumb[]= array ("url"=>"exercice.php", "name"=> get_lang('Exercices')
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 
 // display header
-Display::display_header(get_lang('ImportAikeUplAnQuiz'), 'Exercises');
+Display::display_header(get_lang('ImportAikenQuiz'), 'Exercises');
 
 $msg = '';
 // import file

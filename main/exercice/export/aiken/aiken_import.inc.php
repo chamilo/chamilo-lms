@@ -40,7 +40,6 @@ function aiken_display_form($msg = '') {
     $form  = '<div class="actions">';
     $form .= '<a href="exercice.php?show=test">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
     $form .= '</div>';
-    error_log('Received message: '.$msg);
     $form .= $msg;
     $form_validator  = new FormValidator('aiken_upload', 'post',api_get_self()."?".api_get_cidreq(), null, array('enctype' => 'multipart/form-data') );
     $form_validator->addElement('header', $name_tools);

@@ -147,6 +147,7 @@ function import_pdfs($file, $subDir = '/') {
             }
         } else {
             error_log($parts[0].' is not a course, apparently');
+            $errors[] = array('Line' => 0, 'Code' => $parts[0], 'Title' => $parts[0].' - '.get_lang('CodeDoesNotExists'));
         }
     }
     return $errors;

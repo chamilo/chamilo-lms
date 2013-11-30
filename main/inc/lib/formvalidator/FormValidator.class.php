@@ -6,89 +6,6 @@
  */
 class FormValidator extends HTML_QuickForm
 {
-
-    /**
-     * Create a form validator based on an array of form data:
-     *
-     *         array(
-     *             'name' => 'zombie_report_parameters',    //optional
-     *             'method' => 'GET',                       //optional
-     *             'items' => array(
-     *                 array(
-     *                     'name' => 'ceiling',
-     *                     'label' => 'Ceiling',            //optional
-     *                     'type' => 'date',
-     *                     'default' => date()              //optional
-     *                 ),
-     *                 array(
-     *                     'name' => 'active_only',
-     *                     'label' => 'ActiveOnly',
-     *                     'type' => 'checkbox',
-     *                     'default' => true
-     *                 ),
-     *                 array(
-     *                     'name' => 'submit_button',
-     *                     'type' => 'style_submit_button',
-     *                     'value' => get_lang('Search'),
-     *                     'attributes' => array('class' => 'search')
-     *                 )
-     *             )
-     *         );
-     *
-     * @param array form_data
-     * @return FormValidator
-     */
-    public static function create($form_data)
-    {
-        if (empty($form_data)) {
-            return null;
-        }
-        $form_name = isset($form_data['name']) ? $form_data['name'] : 'form';
-        $form_method = isset($form_data['method']) ? $form_data['method'] : 'POST';
-        $form_action = isset($form_data['action']) ? $form_data['action'] : '';
-        $form_target = isset($form_data['target']) ? $form_data['target'] : '';
-        $form_attributes = isset($form_data['attributes']) ? $form_data['attributes'] : null;
-        $form_track_submit = isset($form_data['track_submit']) ? $form_data['track_submit'] : true;
-
-        $result = new FormValidator($form_name, $form_method, $form_action, $form_target, $form_attributes, $form_track_submit);
-
-        $defaults = array();
-        foreach ($form_data['items'] as $item) {
-            $name = $item['name'];
-            $type = isset($item['type']) ? $item['type'] : 'text';
-            $label = isset($item['label']) ? $item['label'] : '';
-            if ($type == 'wysiwyg') {
-                $element = $result->add_html_editor($name, $label);
-            } else {
-                $element = $result->addElement($type, $name, $label);
-            }
-            if (isset($item['attributes'])) {
-                $attributes = $item['attributes'];
-                $element->setAttributes($attributes);
-            }
-            if (isset($item['value'])) {
-                $value = $item['value'];
-                $element->setValue($value);
-            }
-            if (isset($item['default'])) {
-                $defaults[$name] = $item['default'];
-            }
-            if (isset($item['rules'])) {
-                $rules = $item['rules'];
-                foreach ($rules as $rule) {
-                    $message = $rule['message'];
-                    $type = $rule['type'];
-                    $format = isset($rule['format']) ? $rule['format'] : null;
-                    $validation = isset($rule['validation']) ? $rule['validation'] : 'server';
-                    $force = isset($rule['force']) ? $rule['force'] : false;
-                    $result->addRule($name, $message, $type, $format, $validation, $reset, $force);
-                }
-            }
-        }
-        $result->setDefaults($defaults);
-        return $result;
-    }
-
     public $with_progress_bar = false;
 
     /**
@@ -102,7 +19,7 @@ class FormValidator extends HTML_QuickForm
      * submitted by adding a special hidden field (default = true)
      */
     public function __construct(
-        $form_name,
+        $form_name = null,
         $method = 'post',
         $action = '',
         $target = '',
@@ -113,17 +30,21 @@ class FormValidator extends HTML_QuickForm
         if (is_array($attributes) && !isset($attributes['class']) || empty($attributes)) {
             $attributes['class'] = 'form-horizontal';
         }
-
+        // Fixing form search
         if (is_array($attributes) && isset($attributes['class'])) {
             if ($attributes['class'] == 'form-search') {
                 $attributes['class']  = 'form-inline';
             }
         }
+        // Allow form with no names
+        if (empty($form_name)) {
+            $form_name = uniqid();
+        }
 
         parent::__construct($form_name, $method, $action, $target, $attributes, $track_submit);
 
         // Load some custom elements and rules
-        $dir = api_get_path(LIBRARY_PATH) . 'formvalidator/';
+        $dir = api_get_path(LIBRARY_PATH).'formvalidator/';
         $this->registerElementType('html_editor', $dir . 'Element/html_editor.php', 'HTML_QuickForm_html_editor');
         $this->registerElementType('datepicker', $dir . 'Element/datepicker.php', 'HTML_QuickForm_datepicker');
         $this->registerElementType('datepickerdate', $dir . 'Element/datepickerdate.php', 'HTML_QuickForm_datepickerdate');
@@ -168,11 +89,10 @@ class FormValidator extends HTML_QuickForm
             } else {
                 $element_template = $this->getDefaultElementTemplate();
             }
-            //$renderer->setGroupElementTemplate($this->getGroupTemplate());
 
             $renderer->setElementTemplate($element_template);
 
-            //Display a gray div in the buttons
+            // Display a gray div in the buttons
             $button_element_template_simple = '<div class="form-actions">{label} {element}</div>';
             $renderer->setElementTemplate($button_element_template_simple, 'submit_in_actions');
 
@@ -185,7 +105,7 @@ class FormValidator extends HTML_QuickForm
             $renderer->setElementTemplate($button_element_template_simple_right, 'buttons_in_action_right');
         }
 
-        //Set Header template
+        // Set Header template
         $renderer->setHeaderTemplate('<h2>{header}</h2>');
 
         //Set required field template
@@ -347,20 +267,17 @@ EOT;
      * A trim-filter is attached to the field.
      * A HTML-filter is attached to the field (cleans HTML)
      * A rule is attached to check for unwanted HTML
+     * @param string $name
      * @param string $label						The label for the form-element
-     * @param string $name						The element name
      * @param boolean $required	(optional)		Is the form-element required (default=true)
      * @param boolean $full_page (optional)		When it is true, the editor loads completed html code for a full page.
-     * @param array $editor_config (optional)	Configuration settings for the online editor.
+     * @param array $config (optional)	Configuration settings for the online editor.
+     *
      */
     public function add_html_editor($name, $label, $required = true, $full_page = false, $config = null)
     {
         $this->addElement('html_editor', $name, $label, 'rows="15" cols="80"', $config);
         $this->applyFilter($name, 'trim');
-        $html_type = STUDENT_HTML;
-        if (!empty($_SESSION['status'])) {
-            $html_type = $_SESSION['status'] == COURSEMANAGER ? TEACHER_HTML : STUDENT_HTML;
-        }
 
         if (is_array($config)) {
             if (isset($config['FullPage'])) {
@@ -372,27 +289,18 @@ EOT;
             $config = array('FullPage' => (bool) $full_page);
         }
 
-        if ($full_page) {
-            $html_type = isset($_SESSION['status']) && $_SESSION['status'] == COURSEMANAGER ? TEACHER_HTML_FULLPAGE : STUDENT_HTML_FULLPAGE;
-            //First *filter* the HTML (markup, indenting, ...)
-            //$this->applyFilter($name,'html_filter_teacher_fullpage');
-        } else {
-            //First *filter* the HTML (markup, indenting, ...)
-            //$this->applyFilter($name,'html_filter_teacher');
-        }
-
         if ($required) {
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
         }
 
         if ($full_page) {
-            $el = $this->getElement($name);
-            $el->fullPage = true;
+            $element = $this->getElement($name);
+            $element->fullPage = true;
         }
     }
 
     /**
-     * Adds a datepicker element to the form
+     * Adds a date picker element to the form
      * A rule is added to check if the date is a valid one
      * @param string $label						The label for the form-element
      * @param string $name						The element name
@@ -405,7 +313,7 @@ EOT;
     }
 
     /**
-     * Adds a datepickerdate element to the form
+     * Adds a date picker date element to the form
      * A rule is added to check if the date is a valid one
      * @param string $label						The label for the form-element
      * @param string $name						The element name
@@ -429,17 +337,6 @@ EOT;
         $this->add_datepicker($name_1, $label_1);
         $this->add_datepicker($name_2, $label_2);
         $this->addRule(array($name_1, $name_2), get_lang('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte');
-    }
-
-    /**
-     * Adds a button to the form to add resources.
-     */
-    public function add_resource_button()
-    {
-        $group = array();
-        $group[] = $this->createElement('static', 'add_resource_img', null, '<img src="' . api_get_path(WEB_IMG_PATH) . 'attachment.gif" alt="' . get_lang('Attachment') . '"/>');
-        $group[] = $this->createElement('submit', 'add_resource', get_lang('Attachment'), 'class="link_alike"');
-        $this->addGroup($group);
     }
 
     /**
@@ -484,9 +381,7 @@ EOT;
         }
 
         $xajax_upload = new xajax(api_get_path(WEB_LIBRARY_PATH) . 'upload.xajax.php');
-
         $xajax_upload->registerFunction('updateProgress');
-
 
         // IMPORTANT : must be the first element of the form
         $el = $this->insertElementBefore(FormValidator::createElement('html', '<input type="hidden" name="UPLOAD_IDENTIFIER" value="' . $upload_id . '" />'), $element_after);
@@ -495,12 +390,12 @@ EOT;
 
         // Add div-element where the progress bar is to be displayed
         $this->addElement('html', '
-                		<div id="dynamic_div_container" style="display:none">
-                			<div id="dynamic_div_label">' . get_lang('UploadFile') . '</div>
-                			<div id="dynamic_div_frame" style="width:214px; height:12px; border:1px solid grey; background-image:url(' . api_get_path(WEB_IMG_PATH) . 'real_upload_frame.gif);">
-                				<div id="dynamic_div_filled" style="width:0%;height:100%;background-image:url(' . api_get_path(WEB_IMG_PATH) . 'real_upload_step.gif);background-repeat:repeat-x;background-position:center;"></div>
-                			</div>
-                		</div>');
+        <div id="dynamic_div_container" style="display:none">
+            <div id="dynamic_div_label">' . get_lang('UploadFile') . '</div>
+            <div id="dynamic_div_frame" style="width:214px; height:12px; border:1px solid grey; background-image:url(' . api_get_path(WEB_IMG_PATH) . 'real_upload_frame.gif);">
+                <div id="dynamic_div_filled" style="width:0%;height:100%;background-image:url(' . api_get_path(WEB_IMG_PATH) . 'real_upload_step.gif);background-repeat:repeat-x;background-position:center;"></div>
+            </div>
+        </div>');
 
         if ($wait_after_upload) {
             $this->addElement('html', '
@@ -533,7 +428,7 @@ EOT;
     /**
      * This function has been created for avoiding changes directly within QuickForm class.
      * When we use it, the element is threated as 'required' to be dealt during validation.
-     * @param array $element					The array of elements
+     * @param array $elements					The array of elements
      * @param string $message					The message displayed
      */
     public function add_multiple_required_rule($elements, $message)
@@ -604,40 +499,86 @@ EOT;
                 </div>
             </div>';
     }
-}
 
-// @todo remove this!
+    /**
+     * Create a form validator based on an array of form data:
+     *
+     *         array(
+     *             'name' => 'zombie_report_parameters',    //optional
+     *             'method' => 'GET',                       //optional
+     *             'items' => array(
+     *                 array(
+     *                     'name' => 'ceiling',
+     *                     'label' => 'Ceiling',            //optional
+     *                     'type' => 'date',
+     *                     'default' => date()              //optional
+     *                 ),
+     *                 array(
+     *                     'name' => 'active_only',
+     *                     'label' => 'ActiveOnly',
+     *                     'type' => 'checkbox',
+     *                     'default' => true
+     *                 ),
+     *                 array(
+     *                     'name' => 'submit_button',
+     *                     'type' => 'style_submit_button',
+     *                     'value' => get_lang('Search'),
+     *                     'attributes' => array('class' => 'search')
+     *                 )
+     *             )
+     *         );
+     *
+     * @param array form_data
+     * @return FormValidator
+     */
+    public static function create($form_data)
+    {
+        if (empty($form_data)) {
+            return null;
+        }
+        $form_name = isset($form_data['name']) ? $form_data['name'] : 'form';
+        $form_method = isset($form_data['method']) ? $form_data['method'] : 'POST';
+        $form_action = isset($form_data['action']) ? $form_data['action'] : '';
+        $form_target = isset($form_data['target']) ? $form_data['target'] : '';
+        $form_attributes = isset($form_data['attributes']) ? $form_data['attributes'] : null;
+        $form_track_submit = isset($form_data['track_submit']) ? $form_data['track_submit'] : true;
 
-/**
- * Cleans HTML text
- * @param string $html			HTML to clean
- * @param int $mode (optional)
- * @return string				The cleaned HTML
- */
-function html_filter($html, $mode = NO_HTML)
-{
-    require_once api_get_path(LIBRARY_PATH) . 'formvalidator/Rule/HTML.php';
-    $allowed_tags = HTML_QuickForm_Rule_HTML::get_allowed_tags($mode);
-    $cleaned_html = kses($html, $allowed_tags);
-    return $cleaned_html;
-}
+        $result = new FormValidator($form_name, $form_method, $form_action, $form_target, $form_attributes, $form_track_submit);
 
-function html_filter_teacher($html)
-{
-    return html_filter($html, TEACHER_HTML);
-}
-
-function html_filter_student($html)
-{
-    return html_filter($html, STUDENT_HTML);
-}
-
-function html_filter_teacher_fullpage($html)
-{
-    return html_filter($html, TEACHER_HTML_FULLPAGE);
-}
-
-function html_filter_student_fullpage($html)
-{
-    return html_filter($html, STUDENT_HTML_FULLPAGE);
+        $defaults = array();
+        foreach ($form_data['items'] as $item) {
+            $name = $item['name'];
+            $type = isset($item['type']) ? $item['type'] : 'text';
+            $label = isset($item['label']) ? $item['label'] : '';
+            if ($type == 'wysiwyg') {
+                $element = $result->add_html_editor($name, $label);
+            } else {
+                $element = $result->addElement($type, $name, $label);
+            }
+            if (isset($item['attributes'])) {
+                $attributes = $item['attributes'];
+                $element->setAttributes($attributes);
+            }
+            if (isset($item['value'])) {
+                $value = $item['value'];
+                $element->setValue($value);
+            }
+            if (isset($item['default'])) {
+                $defaults[$name] = $item['default'];
+            }
+            if (isset($item['rules'])) {
+                $rules = $item['rules'];
+                foreach ($rules as $rule) {
+                    $message = $rule['message'];
+                    $type = $rule['type'];
+                    $format = isset($rule['format']) ? $rule['format'] : null;
+                    $validation = isset($rule['validation']) ? $rule['validation'] : 'server';
+                    $force = isset($rule['force']) ? $rule['force'] : false;
+                    $result->addRule($name, $message, $type, $format, $validation, $reset, $force);
+                }
+            }
+        }
+        $result->setDefaults($defaults);
+        return $result;
+    }
 }

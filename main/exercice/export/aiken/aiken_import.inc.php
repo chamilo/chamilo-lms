@@ -33,13 +33,15 @@ function tempdir($dir, $prefix = 'tmp', $mode = 0777) {
 
 /**
  * This function displays the form for import of the zip file with qti2
- *
+ * @param   string  Report message to show in case of error
  */
-function aiken_display_form() {
+function aiken_display_form($msg = '') {
     $name_tools = get_lang('ImportAikenQuiz');
     $form  = '<div class="actions">';
     $form .= '<a href="exercice.php?show=test">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
     $form .= '</div>';
+    error_log('Received message: '.$msg);
+    $form .= $msg;
     $form_validator  = new FormValidator('aiken_upload', 'post',api_get_self()."?".api_get_cidreq(), null, array('enctype' => 'multipart/form-data') );
     $form_validator->addElement('header', $name_tools);
     $form_validator->addElement('file', 'userFile', get_lang('DownloadFile'));
@@ -61,13 +63,13 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath) {
         // upload failed
         return false;
     }
-    if (preg_match('/.zip$/i', $_FILES['userFile']['name']) && handle_uploaded_document($_course, $_FILES['userFile'], $baseWorkDir, $uploadPath, $_user['user_id'], 0, null, 1)) {
-        if (!function_exists('gzopen')) {            
+    if (preg_match('/.zip$/i', $_FILES['userFile']['name']) && handle_uploaded_document($_course, $_FILES['userFile'], $baseWorkDir, $uploadPath, $_user['user_id'], 0, null, 1, 'overwrite', false)) {
+        if (!function_exists('gzopen')) {
             return false;
         }
         // upload successful
         return true;
-    } elseif (preg_match('/.txt/i', $_FILES['userFile']['name']) && handle_uploaded_document($_course, $_FILES['userFile'], $baseWorkDir, $uploadPath, $_user['user_id'], 0, null, 0)) {
+    } elseif (preg_match('/.txt/i', $_FILES['userFile']['name']) && handle_uploaded_document($_course, $_FILES['userFile'], $baseWorkDir, $uploadPath, $_user['user_id'], 0, null, 0, 'overwrite', false)) {
         return true;
     } else {
         return false;
@@ -84,7 +86,6 @@ function aiken_import_exercise($file) {
     global $record_item_body;
     // used to specify the question directory where files could be found in relation in any question
     global $questionTempDir;
-
     $archive_path = api_get_path(SYS_ARCHIVE_PATH) . 'aiken';
     $baseWorkDir = $archive_path;
 
@@ -104,7 +105,7 @@ function aiken_import_exercise($file) {
     $element_pile = array (); //pile to known the depth in which we are
     //$module_info = array (); //array to store the info we need
 
-    // if file is not a .zip, then we cancel all
+   // if file is not a .zip, then we cancel all
     if (!preg_match('/.(zip|txt)$/i', $file)) {
         Display :: display_error_message(get_lang('YouMustUploadAZipOrTxtFile'));
         return 'YouMustUploadAZipOrTxtFile';
@@ -147,7 +148,6 @@ function aiken_import_exercise($file) {
     if ($result !== true ) {
         return $result;
     }
-
     //add exercise in tool
 
     //1.create exercise
@@ -285,4 +285,28 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile) 
         $exercise_info['question'][$key]['weighting'][current(array_keys($exercise_info['question'][$key]['weighting']))] = 20 / $total_questions;
     }
     return true;
+}
+
+/**
+ * This function will import the zip file with the respective qti2
+ * @param array $uploaded_file ($_FILES)
+ */
+function aiken_import_file($array_file) {
+
+    $unzip = 0;
+    $process = process_uploaded_file($array_file);
+    if (preg_match('/\.(zip|txt)$/i', $array_file['name'])) {
+        // if it's a zip, allow zip upload
+        $unzip = 1;
+    }
+
+    if ($process && $unzip == 1) {
+        $imported = aiken_import_exercise($array_file['name']);
+        if ($imported === true) {
+            header('Location: exercice.php?'.api_get_cidreq());
+        } else {
+            $msg = Display::return_message(get_lang($imported),'error');
+            return $msg;
+        }
+    }
 }

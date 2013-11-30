@@ -263,11 +263,11 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile) 
         } elseif (preg_match('/^(\r)?\n/',$info)) {
             //moving to next question (tolerate \r\n or just \n)
             if (empty($exercise_info['question'][$question_index]['correct_answers'])) {
-                error_log('Error in question index '.$question_index.': no correct answer defined');
+                error_log('Aiken: Error in question index '.$question_index.': no correct answer defined');
                 return 'ExerciseAikenErrorNoCorrectAnswerDefined';
             }
             if (empty($exercise_info['question'][$question_index]['answer'])) {
-                error_log('Error in question index '.$question_index.': no answer option given');
+                error_log('Aiken: Error in question index '.$question_index.': no answer option given');
                 return 'ExerciseAikenErrorNoAnswerOptionGiven';
             }
             $question_index++;

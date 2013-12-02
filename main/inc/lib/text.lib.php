@@ -9,7 +9,8 @@
  * @package chamilo.library
  */
 
-class Text {
+class Text
+{
 
     /**
      * This function strips all html-tags found in the input string and outputs a pure text.
@@ -17,7 +18,8 @@ class Text {
      * @param  string $string    The input string with html-tags to be converted to plain text.
      * @return string            The returned plain text as a result.
      */
-    static function api_html_to_text($string) {
+    static function api_html_to_text($string)
+    {
         // These purifications have been found experimentally, for nice looking output.
         $string = preg_replace('/<br[^>]*>/i', "\n", $string);
         $string = preg_replace('/<\/?(div|p|h[1-6]|table|ol|ul|blockquote)[^>]*>/i', "\n", $string);
@@ -39,7 +41,8 @@ class Text {
      * @param  string $string                The input html-formatted text.
      * @return string                        Returns the detected encoding.
      */
-    static function api_detect_encoding_html($string) {
+    static function api_detect_encoding_html($string)
+    {
         if (@preg_match('/<head.*(<meta[^>]*content=[^>]*>).*<\/head>/si', $string, $matches)) {
             if (@preg_match('/<meta[^>]*charset=(.*)["\';][^>]*>/si', $matches[1], $matches)) {
                 return api_refine_encoding_id(trim($matches[1]));
@@ -568,7 +571,12 @@ class Text {
         return $file_size;
     }
 
-    static function return_datetime_from_array($array) {
+    /**
+     * @param $array
+     * @return string
+     */
+    static function return_datetime_from_array($array)
+    {
         $year	 = '0000';
         $month = $day = $hours = $minutes = $seconds = '00';
         if (isset($array['Y']) && (isset($array['F']) || isset($array['M']))  && isset($array['d']) && isset($array['H']) && isset($array['i'])) {
@@ -586,5 +594,39 @@ class Text {
             $datetime = $year.'-'.$month.'-'.$day.' '.$hours.':'.$minutes.':'.$seconds;
         }
         return $datetime;
+    }
+
+
+    /**
+     * Converts 2008-10-06 12:45:00 to -> array('prefix' => array(year'=>2008, 'month'=>10, etc...)
+     * @param string
+     * @param string
+     * @param array
+     */
+    static function convert_date_to_array($date, $group)
+    {
+        $parts = explode(' ', $date);
+        $date_parts = explode('-', $parts[0]);
+        $date_parts_tmp = array();
+        foreach ($date_parts as $item) {
+            $date_parts_tmp[] = intval($item);
+        }
+        $time_parts = explode(':', $parts[1]);
+        $time_parts_tmp = array();
+        foreach ($time_parts as $item) {
+            $time_parts_tmp[] = intval($item);
+        }
+        list($data[$group]['year'], $data[$group]['month'], $data[$group]['day']) = $date_parts_tmp;
+        list($data[$group]['hour'], $data[$group]['minute']) = $time_parts_tmp;
+        return $data;
+    }
+
+    /**
+     * converts 1-9 to 01-09
+     */
+    static function two_digits($number)
+    {
+        $number = (int)$number;
+        return ($number < 10) ? '0'.$number : $number;
     }
 }

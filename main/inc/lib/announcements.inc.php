@@ -674,7 +674,6 @@ class AnnouncementManager
      */
     public static function get_all_annoucement_by_user_course($course_code, $user_id)
     {
-
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
 
@@ -719,195 +718,6 @@ class AnnouncementManager
         return false;
     }
 
-    /**
-     * this function shows the form for sending a message to a specific group or user.
-     */
-    /**
-     * @param FormValidator $form
-     * @param $to_already_selected
-     */
-    public static function show_to_form($form, $to_already_selected)
-    {
-        $user_list = self::get_course_users();
-        $group_list = self::get_course_groups();
-
-        $array = self::construct_not_selected_select_form($group_list, $user_list, $to_already_selected);
-
-        $result = array();
-        foreach ($array as $content) {
-            $result[$content['value']] = $content['content'];
-        }
-
-        $group = $form->addElement('advmultiselect', 'users', get_lang('Users'), $result);
-        $group->setButtonAttributes('add');
-        $group->setButtonAttributes('remove');
-    }
-
-    /**
-     * this function shows the form for sending a message to a specific group or user.
-     */
-    /**
-     * @param FormValidator $form
-     * @param int $group_id
-     * @param array $to
-     */
-    public static function show_to_form_group($form, $group_id, $to = array())
-    {
-        $group_users = GroupManager::get_subscribed_users($group_id);
-
-        $array = self::construct_not_selected_select_form(null, $group_users, $to);
-
-        $result = array();
-        foreach ($array as $content) {
-            $result[$content['value']] = $content['content'];
-        }
-
-        $group = $form->addElement('advmultiselect', 'users', get_lang('Users'), $result);
-        $group->setButtonAttributes('add');
-        $group->setButtonAttributes('remove');
-    }
-
-    /*
-      CONSTRUCT_NOT_SELECT_SELECT_FORM
-     */
-
-    /**
-     * this function shows the form for sending a message to a specific group or user.
-     */
-    public static function construct_not_selected_select_form(
-        $group_list = null,
-        $user_list = null,
-        $to_already_selected = array()
-    ) {
-        if (empty($to_already_selected)) {
-            $to_already_selected = array();
-        }
-
-        $result = array();
-        // adding the groups to the select form
-        if ($group_list) {
-            foreach ($group_list as $this_group) {
-                if (is_array($to_already_selected)) {
-                    if (!in_array(
-                        "GROUP:".$this_group['id'],
-                        $to_already_selected
-                    )
-                    ) { // $to_already_selected is the array containing the groups (and users) that are already selected
-                        $user_label = ($this_group['userNb'] > 0) ? get_lang('Users') : get_lang('LowerCaseUser');
-                        $user_disabled = ($this_group['userNb'] > 0) ? "" : "disabled=disabled";
-                        $result []= array(
-                            'disabled' => $user_disabled,
-                            'value' => "GROUP:".$this_group['id'],
-                            'content' => "G: ".$this_group['name']." - ".$this_group['userNb']." ".$user_label
-                        );
-                    }
-                }
-            }
-        }
-
-        // adding the individual users to the select form
-        if ($user_list) {
-            foreach ($user_list as $user) {
-                if (is_array($to_already_selected)) {
-                    if (!in_array(
-                        "USER:".$user['user_id'],
-                        $to_already_selected
-                    )
-                    ) { // $to_already_selected is the array containing the users (and groups) that are already selected
-
-                        $result[]= array(
-                            'value' => "USER:".$user['user_id'],
-                            'content' => api_get_person_name($user['firstname'], $user['lastname'])
-                        );
-                    }
-                }
-            }
-        }
-
-        return $result;
-    }
-
-    /*
-      CONSTRUCT_SELECTED_SELECT_FORM
-     */
-
-    /**
-     * this function shows the form for sending a message to a specific group or user.
-     */
-    public static function construct_selected_select_form($group_list = null, $user_list = null, $to_already_selected)
-    {
-        // we separate the $to_already_selected array (containing groups AND users into
-        // two separate arrays
-        $groupuser = array();
-        if (is_array($to_already_selected)) {
-            $groupuser = self::separate_users_groups($to_already_selected);
-        }
-        $groups_to_already_selected = $groupuser['groups'];
-        $users_to_already_selected = $groupuser['users'];
-
-        // we load all the groups and all the users into a reference array that we use to search the name of the group / user
-        $ref_array_groups = self::get_course_groups();
-        $ref_array_users = self::get_course_users();
-
-        // we construct the form of the already selected groups / users
-        echo '<select id="selectedform" name="selectedform[]" size="7" multiple class="span4">';
-        if (is_array($to_already_selected)) {
-            foreach ($to_already_selected as $groupuser) {
-                list($type, $id) = explode(":", $groupuser);
-                if ($type == "GROUP") {
-                    echo "<option value=\"".$groupuser."\">G: ".$ref_array_groups[$id]['name']."</option>";
-                } else {
-                    foreach ($ref_array_users as $key => $value) {
-                        if ($value['user_id'] == $id) {
-                            echo "<option value=\"".$groupuser."\" title='".sprintf(
-                                get_lang('LoginX'),
-                                $value['username']
-                            )."'>".api_get_person_name($value['firstname'], $value['lastname'])."</option>";
-                            break;
-                        }
-                    }
-                }
-            }
-        } else {
-            if ($to_already_selected == 'everyone') {
-                // adding the groups to the select form
-                if (is_array($ref_array_groups)) {
-                    foreach ($ref_array_groups as $this_group) {
-                        //api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
-                        if (!is_array($to_already_selected) || !in_array(
-                            "GROUP:".$this_group['id'],
-                            $to_already_selected
-                        )
-                        ) { // $to_already_selected is the array containing the groups (and users) that are already selected
-                            echo "<option value=\"GROUP:".$this_group['id']."\">",
-                            "G: ", $this_group['name'], " &ndash; ".$this_group['userNb']." ".get_lang('Users').
-                                "</option>";
-                        }
-                    }
-                }
-                // adding the individual users to the select form
-                foreach ($ref_array_users as $this_user) {
-                    if (!is_array($to_already_selected) || !in_array(
-                        "USER:".$this_user['user_id'],
-                        $to_already_selected
-                    )
-                    ) { // $to_already_selected is the array containing the users (and groups) that are already selected
-                        echo "<option value=\"USER:", $this_user['user_id'], "\"  title='".sprintf(
-                            get_lang('LoginX'),
-                            $user['username']
-                        )."'>",
-                        "", api_get_person_name($this_user['firstname'], $this_user['lastname']),
-                        "</option>";
-                    }
-                }
-            }
-        }
-        echo "</select>";
-    }
-
-    /*
-      DATA FUNCTIONS
-     */
 
     /**
      * Returns announcement info from its id
@@ -938,45 +748,6 @@ class AnnouncementManager
 
         return array();
     }
-
-    /**
-     * this function gets all the users of the course,
-     * including users from linked courses
-     * @todo deprecate this function, use CourseManager class
-     */
-    public static function get_course_users()
-    {
-        //this would return only the users from real courses:
-        $session_id = api_get_session_id();
-        if ($session_id != 0) {
-            $user_list = CourseManager::get_real_and_linked_user_list(api_get_course_id(), true, $session_id);
-        } else {
-            $user_list = CourseManager::get_real_and_linked_user_list(api_get_course_id(), false, 0);
-        }
-
-        return $user_list;
-    }
-
-    /**
-     * this function gets all the groups of the course,
-     * not including linked courses
-     */
-    public static function get_course_groups()
-    {
-        $session_id = api_get_session_id();
-        if ($session_id != 0) {
-            $new_group_list = CourseManager::get_group_list_of_course(api_get_course_id(), $session_id, 1);
-        } else {
-            $new_group_list = CourseManager::get_group_list_of_course(api_get_course_id(), 0, 1);
-        }
-
-        return $new_group_list;
-    }
-
-    /*
-     *
-      LOAD_EDIT_USERS
-     */
 
     /**
      * This tools loads all the users and all the groups who have received
@@ -1011,13 +782,8 @@ class AnnouncementManager
                 $to[] = "USER:".$to_user;
             }
         }
-
         return $to;
     }
-
-    /*
-      USER_GROUP_FILTER_JAVASCRIPT
-     */
 
     /**
      * returns the javascript for setting a filter

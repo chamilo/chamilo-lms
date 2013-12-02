@@ -1498,10 +1498,11 @@ class CourseManager
      * Get the list of groups from the course
      * @param   string  Course code
      * @param   int     Session ID (optional)
-     * @param   boolean get empty groups (optional)
+     * @param   int     get empty groups (optional)
      * @return  array   List of groups info
      */
-    public static function get_group_list_of_course($course_code, $session_id = 0, $in_get_empty_group = 0) {
+    public static function get_group_list_of_course($course_code, $session_id = 0, $in_get_empty_group = 0)
+    {
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
         $group_list = array();
@@ -1509,15 +1510,15 @@ class CourseManager
 
         if ($in_get_empty_group == 0) {
             // get only groups that are not empty
-            $sql = "SELECT DISTINCT g.id, g.name
+            $sql = "SELECT DISTINCT g.iid as id, g.name
                 FROM ".Database::get_course_table(TABLE_GROUP)." AS g
                 INNER JOIN ".Database::get_course_table(TABLE_GROUP_USER)." gu
-                ON (g.id = gu.group_id AND g.c_id = $course_id AND gu.c_id = $course_id)
+                ON (g.iid = gu.group_id AND g.c_id = $course_id AND gu.c_id = $course_id)
                 $session_condition
                 ORDER BY g.name";
         } else {
             // get all groups even if they are empty
-            $sql = "SELECT g.id, g.name
+            $sql = "SELECT g.iid as id, g.name
                     FROM ".Database::get_course_table(TABLE_GROUP)." AS g
                     $session_condition
                     AND c_id = $course_id";
@@ -1528,6 +1529,7 @@ class CourseManager
             $group_data['userNb'] = GroupManager::number_of_students($group_data['id'], $course_id);
             $group_list[$group_data['id']] = $group_data;
         }
+
         return $group_list;
     }
 
@@ -4979,4 +4981,144 @@ class CourseManager
         }
     }
 
-} //end class CourseManager
+    /**
+     * this function gets all the users of the course,
+     * including users from linked courses
+     */
+    public static function getCourseUsers()
+    {
+        //this would return only the users from real courses:
+        $session_id = api_get_session_id();
+        if ($session_id != 0) {
+            $user_list = self::get_real_and_linked_user_list(api_get_course_id(), true, $session_id);
+        } else {
+            $user_list = self::get_real_and_linked_user_list(api_get_course_id(), false, 0);
+        }
+
+        return $user_list;
+    }
+
+    /**
+     * this function gets all the groups of the course,
+     * not including linked courses
+     */
+    public static function getCourseGroups()
+    {
+        $session_id = api_get_session_id();
+        if ($session_id != 0) {
+            $new_group_list = self::get_group_list_of_course(api_get_course_id(), $session_id, 1);
+        } else {
+            $new_group_list = self::get_group_list_of_course(api_get_course_id(), 0, 1);
+        }
+
+        return $new_group_list;
+    }
+
+    /**
+     * this function shows the form for sending a message to a specific group or user.
+     */
+    /**
+     * @param FormValidator $form
+     * @param $to_already_selected
+     */
+    public static function addUserGroupMultiSelect(&$form, $to_already_selected)
+    {
+        $user_list = self::getCourseUsers();
+        $group_list = self::getCourseGroups();
+
+        $array = self::buildSelectOptions($group_list, $user_list, $to_already_selected);
+
+        $result = array();
+        foreach ($array as $content) {
+            $result[$content['value']] = $content['content'];
+        }
+
+        $group = $form->addElement('advmultiselect', 'users', get_lang('Users'), $result);
+        $group->setButtonAttributes('add');
+        $group->setButtonAttributes('remove');
+    }
+
+    /**
+     * this function shows the form for sending a message to a specific group or user.
+     */
+    /**
+     * @param FormValidator $form
+     * @param int $group_id
+     * @param array $to
+     */
+    public static function addGroupMultiSelect($form, $group_id, $to = array())
+    {
+        $group_users = GroupManager::get_subscribed_users($group_id);
+
+        $array = self::buildSelectOptions(null, $group_users, $to);
+
+        $result = array();
+        foreach ($array as $content) {
+            $result[$content['value']] = $content['content'];
+        }
+
+        $group = $form->addElement('advmultiselect', 'users', get_lang('Users'), $result);
+        $group->setButtonAttributes('add');
+        $group->setButtonAttributes('remove');
+    }
+
+
+    /**
+     * this function shows the form for sending a message to a specific group or user.
+     */
+    public static function buildSelectOptions(
+        $group_list = null,
+        $user_list = null,
+        $to_already_selected = array()
+    ) {
+        if (empty($to_already_selected)) {
+            $to_already_selected = array();
+        }
+
+        $result = array();
+        // adding the groups to the select form
+        if ($group_list) {
+            foreach ($group_list as $this_group) {
+                if (is_array($to_already_selected)) {
+                    if (!in_array(
+                        "GROUP:".$this_group['id'],
+                        $to_already_selected
+                    )
+                    ) { // $to_already_selected is the array containing the groups (and users) that are already selected
+                        $user_label = ($this_group['userNb'] > 0) ? get_lang('Users') : get_lang('LowerCaseUser');
+                        $user_disabled = ($this_group['userNb'] > 0) ? "" : "disabled=disabled";
+                        $result []= array(
+                            'disabled' => $user_disabled,
+                            'value' => "GROUP:".$this_group['id'],
+                            'content' => "G: ".$this_group['name']." - ".$this_group['userNb']." ".$user_label
+                        );
+                    }
+                }
+            }
+        }
+
+        // adding the individual users to the select form
+        if ($user_list) {
+            foreach ($user_list as $user) {
+                if (is_array($to_already_selected)) {
+                    if (!in_array(
+                        "USER:".$user['user_id'],
+                        $to_already_selected
+                    )
+                    ) { // $to_already_selected is the array containing the users (and groups) that are already selected
+
+                        $result[]= array(
+                            'value' => "USER:".$user['user_id'],
+                            'content' => api_get_person_name($user['firstname'], $user['lastname'])
+                        );
+                    }
+                }
+            }
+        }
+
+        return $result;
+    }
+
+
+
+}

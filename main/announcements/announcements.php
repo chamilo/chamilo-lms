@@ -550,7 +550,8 @@ if ($display_form) {
                 $content_to_modify = get_lang('YourAccountIsActiveYouCanLoginAndCheckYourCourses');
             }
         }
-        AnnouncementManager::show_to_form($form, array());
+
+        CourseManager::addUserGroupMultiSelect($form, array());
 
         if (!isset($announcement_to_modify)) {
             $announcement_to_modify = '';
@@ -561,10 +562,10 @@ if ($display_form) {
         if (!isset($announcement_to_modify)) {
             $announcement_to_modify = "";
         }
-        AnnouncementManager::show_to_form_group($form, $group_id, array());
+        CourseManager::addGroupMultiSelect($form, $group_id, array());
         $form->addElement('checkbox', 'email_ann', null, get_lang('EmailOption'));
-
     }
+
     if (isset($announcementInfo) && !empty($announcementInfo)) {
         $defaults = array(
             'emailTitle' => $title_to_modify,

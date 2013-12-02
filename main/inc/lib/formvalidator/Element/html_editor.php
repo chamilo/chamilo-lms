@@ -8,94 +8,48 @@ require_once 'HTML/QuickForm/textarea.php';
  */
 class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 {
-    /**
-     * Full page
-     */
-    var $fullPage;
-    var $fck_editor;
-
-    /**
-     * if true it show the fckeditor as usual if false it shows a textarea
-     * @var bool
-     */
-    public $richEditorStatus = true;
-
-    /**
-     * @return bool
-     */
-    public function getRichEditorStatus()
-    {
-        return $this->richEditorStatus;
-    }
-
-    /**
-     * @param $status
-     */
-    public function setRichEditorStatus($status)
-    {
-        $this->richEditorStatus = (bool)$status;
-    }
+    public $editor;
 
     /**
      * Class constructor
-     * @param   string  HTML editor name/id
-     * @param   string  HTML editor  label
-     * @param   string  Attributes for the textarea
-     * @param array $editor_config	Optional configuration settings for the online editor.
+     * @param string  HTML editor name/id
+     * @param string  HTML editor  label
+     * @param array  Attributes for the textarea
+     * @param array $config	Optional configuration settings for the online editor.
+     * @return bool
      */
-    public function HTML_QuickForm_html_editor($elementName = null, $elementLabel = null, $attributes = null, $config = null)
+    public function HTML_QuickForm_html_editor($name = null, $label = null, $attributes = null, $config = null)
     {
-        if (empty($elementName)) {
+        if (empty($name)) {
             return false;
         }
 
-        // The global variable $fck_attribute has been deprecated. It stays here for supporting old external code.
-        global $fck_attribute;
-
-        HTML_QuickForm_element :: HTML_QuickForm_element($elementName, $elementLabel, $attributes);
+        HTML_QuickForm_element :: HTML_QuickForm_element($name, $label, $attributes);
         $this->_persistantFreeze = true;
         $this->_type = 'html_editor';
-        $this->fullPage = false;
-        $name = $this->getAttribute('name');
 
-        global $app;
-        $this->fck_editor = new ChamiloLMS\Component\Editor\Editor($name, $app['translator']);
+        global $app, $fck_attribute;
+        $this->editor = new ChamiloLMS\Component\Editor\Editor($name, $app['translator']);
+        $this->editor->toolbarSet = $fck_attribute['ToolbarSet'];
+        //We get the optionals config parameters in $fck_attribute array
+        $this->editor->config = !empty($fck_attribute['Config']) ? $fck_attribute['Config'] : array();
 
-        $this->fck_editor->ToolbarSet = $fck_attribute['ToolbarSet'];
-        $this->fck_editor->Width = !empty($fck_attribute['Width']) ? $fck_attribute['Width'] : '990';
-        $this->fck_editor->Height = !empty($fck_attribute['Height']) ? $fck_attribute['Height'] : '400';
-        //We get the optionnals config parameters in $fck_attribute array
-        $this->fck_editor->Config = !empty($fck_attribute['Config']) ? $fck_attribute['Config'] : array();
+        $width = !empty($fck_attribute['Width']) ? $fck_attribute['Width'] : '990';
+        $this->editor->setConfigAttribute('width', $width);
+        $height = !empty($fck_attribute['Height']) ? $fck_attribute['Height'] : '400';
+        $this->editor->setConfigAttribute('height', $height);
+
+        if (isset($fck_attribute['FullPage'])) {
+            $fullPage = is_bool($config['FullPage']) ? $config['FullPage'] : ($config['FullPage'] === 'true');
+            $this->editor->setConfigAttribute('fullPage', $fullPage);
+        }
 
         // This is an alternative (a better) way to pass configuration data to the editor.
         if (is_array($config)) {
             foreach ($config as $key => $value) {
-                $this->fck_editor->Config[$key] = $config[$key];
-            }
-            if (isset($config['ToolbarSet'])) {
-                $this->fck_editor->ToolbarSet = $config['ToolbarSet'];
-            }
-            if (isset($config['Width'])) {
-                $this->fck_editor->Width = $config['Width'];
-            }
-            if (isset($config['Height'])) {
-                $this->fck_editor->Height = $config['Height'];
-            }
-            if (isset($config['FullPage'])) {
-                $this->fullPage = is_bool($config['FullPage']) ? $config['FullPage'] : ($config['FullPage'] === 'true');
+                $this->editor->setConfigAttribute($key, $value);
             }
         }
-    }
-
-    /**
-     * Check if the browser supports FCKeditor
-     *
-     * @access public
-     * @return boolean
-     */
-    function browserSupported()
-    {
-        return FCKeditor :: IsCompatible();
     }
 
     /**
@@ -104,30 +58,24 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
      */
     public function toHtml()
     {
-        if ($this->getRichEditorStatus() == false) {
-            //Fix rows and cols
-            //$this->_attributes['rows'] = 20;
-            //$this->_attributes['class'] = 20;
-            return parent::toHtml();
-        }
-
         $value = $this->getValue();
-        if ($this->fullPage) {
+        if ($this->editor->getConfigAttribute('fullPage')) {
             if (strlen(trim($value)) == 0) {
                 // TODO: To be considered whether here to be added DOCTYPE, language and character set declarations.
-                $value = '<html><head><title></title><style type="text/css" media="screen, projection">/*<![CDATA[*/body{font-family: arial, verdana, helvetica, sans-serif;font-size: 12px;}/*]]>*/</style></head><body></body></html>';
+                $value = '<html><head><title></title></head><body></body></html>';
                 $this->setValue($value);
             }
         }
-        if ($this->_flagFrozen) {
+
+        if ($this->isFrozen()) {
             return $this->getFrozenHtml();
         } else {
-            return $this->build_FCKeditor();
+            return $this->buildEditor();
         }
     }
 
     /**
-     * Returns the htmlarea content in HTML
+     * Returns the html area content in HTML
      * @return string
      */
     public function getFrozenHtml()
@@ -138,15 +86,10 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
     /**
      * Build this element using FCKeditor
      */
-    public function build_FCKeditor()
+    public function buildEditor()
     {
-        if (!FCKeditor :: IsCompatible()) {
-            return parent::toHTML();
-        }
-        $this->fck_editor->Value = $this->getValue();
-        $result = $this->fck_editor->CreateHtml();
-        //Add a link to open the allowed html tags window
-        //$result .= '<small><a href="#" onclick="MyWindow=window.open('."'".api_get_path(WEB_CODE_PATH)."help/allowed_html_tags.php?fullpage=". ($this->fullPage ? '1' : '0')."','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=500,height=600,left=200,top=20'".'); return false;">'.get_lang('AllowedHTMLTags').'</a></small>';
+        $this->editor->value = $this->getValue();
+        $result = $this->editor->createHtml();
         return $result;
     }
 }

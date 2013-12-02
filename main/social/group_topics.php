@@ -24,15 +24,15 @@ $usergroup = new UserGroup();
 //todo @this validation could be in a function in group_portal_manager
 if (empty($group_id)) {
 	api_not_allowed(true);
-
 } else {
 	$group_info = $usergroup->get($group_id);
 
-	if (empty($group_info)) {
-		api_not_allowed(true);
-	}
+    if (empty($group_info)) {
+        api_not_allowed(true);
+    }
 	$is_member = $usergroup->is_group_member($group_id);
-	if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED && !$is_member ) {
+
+	if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED && !$is_member) {
 		api_not_allowed(true);
 	}
 }
@@ -46,42 +46,43 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
         exit;
     }
 }
+
 $content = null;
 
 // save message group
 $currentToken = Security::getCurrentToken();
-if (isset($_POST['token']) && $_POST['token'] === $currentToken) {
 
-	if (isset($_POST['action'])) {
-		$title        = isset($_POST['title']) ? $_POST['title'] : null;
-		$content      = $_POST['content'];
-		$group_id     = intval($_POST['group_id']);
-		$parent_id    = intval($_POST['parent_id']);
+if (isset($_POST['action'])) {
+    $title        = isset($_POST['title']) ? $_POST['title'] : null;
+    $content      = $_POST['content'];
+    $group_id     = intval($_POST['group_id']);
+    $parent_id    = intval($_POST['parent_id']);
 
-		if ($_POST['action'] == 'reply_message_group') {
-			$title = Text::cut($content, 50);
-		}
-		if ($_POST['action'] == 'edit_message_group') {
-			$edit_message_id =  intval($_POST['message_id']);
-			$res = MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id, $edit_message_id, 0, $topic_id);
-		} else {
-			if ($_POST['action'] == 'add_message_group' && !$is_member) {
-				api_not_allowed();
-			}
-			$res = MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id, 0, $topic_id);
-		}
+    if ($_POST['action'] == 'reply_message_group') {
+        $title = Text::cut($content, 50);
+    }
 
-		// display error messages
-		if (!$res) {
-			$social_right_content .= Display::return_message(get_lang('Error'),'error');
-		}
-		$topic_id = isset($_GET['topic_id']) ? intval($_GET['topic_id']) : null;
-		if ($_POST['action'] == 'add_message_group') {
-			$topic_id = $res;
-		}
-		$message_id = $res;
-	}
+    if ($_POST['action'] == 'edit_message_group') {
+        $edit_message_id =  intval($_POST['message_id']);
+        $res = MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id, $edit_message_id, 0, $topic_id);
+    } else {
+        if ($_POST['action'] == 'add_message_group' && !$is_member) {
+            api_not_allowed();
+        }
+        $res = MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id, 0, $topic_id);
+    }
+
+    // display error messages
+    if (!$res) {
+        $social_right_content .= Display::return_message(get_lang('Error'),'error');
+    }
+    $topic_id = isset($_GET['topic_id']) ? intval($_GET['topic_id']) : null;
+    if ($_POST['action'] == 'add_message_group') {
+        $topic_id = $res;
+    }
+    $message_id = $res;
 }
+
 
 $htmlHeadXtra[] = '<script>
 
@@ -148,7 +149,7 @@ $(document).ready(function() {
 		})
 	}
 
-	$(\'.group_message_popup\').live(\'click\', function() {
+	$(\'.group_message_popup\').on(\'click\', function() {
 		var url     = this.href;
 	    var dialog  = $("#dialog");
 	    if ($("#dialog").length == 0) {
@@ -170,8 +171,6 @@ $(document).ready(function() {
 	            return false;
 	        });
         });
-
-
 </script>';
 
 $this_section = SECTION_SOCIAL;

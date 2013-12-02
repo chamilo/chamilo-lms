@@ -16,6 +16,10 @@
  */
 class MessageManager
 {
+    /**
+     * @param int $current_user_id
+     * @return array
+     */
     public static function get_online_user_list($current_user_id)
     {
         //@todo this is a bad idea to parse all users online
@@ -73,8 +77,6 @@ class MessageManager
     public static function get_number_of_messages($unread = false)
     {
         $table_message = Database::get_main_table(TABLE_MESSAGE);
-
-        $condition_msg_status = '';
         if ($unread) {
             $condition_msg_status = ' msg_status = '.MESSAGE_STATUS_UNREAD.' ';
         } else {
@@ -247,6 +249,7 @@ class MessageManager
             }
 
             // Save attachment file for inbox messages
+
             if (is_array($file_attachments)) {
                 $i = 0;
                 foreach ($file_attachments as $file_attach) {
@@ -495,7 +498,7 @@ class MessageManager
         } else {
             $new_file_name = uniqid('');
             $usergroup = new UserGroup();
-            $message_user_id = '';
+
             if (!empty($receiver_user_id)) {
                 $message_user_id = $receiver_user_id;
             } else {
@@ -514,11 +517,12 @@ class MessageManager
 
             // If this directory does not exist - we create it.
             if (!file_exists($path_message_attach)) {
-                @mkdir($path_message_attach, api_get_permissions_for_new_directories(), true);
+                mkdir($path_message_attach, api_get_permissions_for_new_directories(), true);
             }
+
             $new_path = $path_message_attach.$new_file_name;
             if (is_uploaded_file($file_attach['tmp_name'])) {
-                $result = @copy($file_attach['tmp_name'], $new_path);
+                copy($file_attach['tmp_name'], $new_path);
             }
             $safe_file_comment = Database::escape_string($file_comment);
             $safe_file_name = Database::escape_string($file_name);
@@ -526,7 +530,7 @@ class MessageManager
             // Storing the attachments if any
             $sql = "INSERT INTO $tbl_message_attach(filename,comment, path,message_id,size)
 				  VALUES ( '$safe_file_name', '$safe_file_comment', '$safe_new_file_name' , '$message_id', '".$file_attach['size']."' )";
-            $result = Database::query($sql);
+            Database::query($sql);
         }
     }
 
@@ -546,7 +550,6 @@ class MessageManager
 
         $sql = "SELECT * FROM $table_message_attach WHERE message_id = '$message_id'";
         $rs = Database::query($sql);
-        $new_paths = array();
         $usergroup = new UserGroup();
         while ($row = Database::fetch_array($rs)) {
             $path = $row['path'];
@@ -563,7 +566,7 @@ class MessageManager
             if (is_file($path_message_attach.$path)) {
                 if (rename($path_message_attach.$path, $path_message_attach.$new_path)) {
                     $sql_upd = "UPDATE $table_message_attach set path='$new_path' WHERE id ='$attach_id'";
-                    $rs_upd = Database::query($sql_upd);
+                    Database::query($sql_upd);
                 }
             }
         }

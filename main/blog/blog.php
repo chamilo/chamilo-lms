@@ -26,60 +26,50 @@ $current_course_tool  = TOOL_BLOGS;
 // notice for unauthorized people.
 api_protect_course_script(true);
 
-//session
-if(isset($_GET['id_session'])) {
-	$_SESSION['id_session'] = intval($_GET['id_session']);
-}
-
 $blog_table_attachment 	= Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 $nameTools  = get_lang('Blogs');
 $DaysShort  = api_get_week_days_short();
 $DaysLong   = api_get_week_days_long();
 $MonthsLong = api_get_months_long();
 
-$current_page = $_GET['action'];
+$current_page = isset($_GET['action']) ? $_GET['action'] : null;
 
-/*
-	PROCESSING
-*/
+/* PROCESSING */
 
-$safe_post_title            = Security::remove_XSS($_POST['post_title']);
-$safe_post_file_comment     = Security::remove_XSS($_POST['post_file_comment']);
-$safe_post_full_text        = Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['post_full_text'])), COURSEMANAGERLOWSECURITY);
-$safe_comment_text          = Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['comment_text'])), COURSEMANAGERLOWSECURITY);
-$safe_comment_title         = Security::remove_XSS($_POST['comment_title']);
-$safe_task_name             = Security::remove_XSS($_POST['task_name']);
-$safe_task_description      = Security::remove_XSS($_POST['task_description']);
+$safe_post_title            = isset($_POST['post_title']) ? Security::remove_XSS($_POST['post_title']) : null;
+$safe_post_file_comment     = isset($_POST['post_file_comment']) ? Security::remove_XSS($_POST['post_file_comment']) : null;
+$safe_post_full_text        = isset($_POST['post_full_text']) ? Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['post_full_text'])), COURSEMANAGERLOWSECURITY) : null;
+$safe_comment_text          = isset($_POST['comment_text']) ? Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['comment_text'])), COURSEMANAGERLOWSECURITY) : null;
+$safe_comment_title         = isset($_POST['comment_title']) ? Security::remove_XSS($_POST['comment_title']) : null;
+$safe_task_name             = isset($_POST['task_name']) ? Security::remove_XSS($_POST['task_name']) : null;
+$safe_task_description      = isset($_POST['task_description']) ? Security::remove_XSS($_POST['task_description']) : null;
 
 if (!empty($_POST['new_post_submit']) AND !empty($_POST['post_title'])) {
-	Blog :: create_post($safe_post_title, $safe_post_full_text, $safe_post_file_comment,$blog_id);
+	Blog::create_post($safe_post_title, $safe_post_full_text, $safe_post_file_comment,$blog_id);
 	$return_message = array('type' => 'confirmation', 'message' => get_lang('BlogAdded'));
 }
-if (!empty($_POST['edit_post_submit']))
-{
+
+if (!empty($_POST['edit_post_submit'])) {
 	$safe_post_title = Security::remove_XSS($_POST['post_title']);
 	Blog :: edit_post($_POST['post_id'], $safe_post_title, $safe_post_full_text, $blog_id);
 	$return_message = array('type' => 'confirmation', 'message' => get_lang('BlogEdited'));
 }
-if (!empty($_POST['new_comment_submit']))
-{
+
+if (!empty($_POST['new_comment_submit'])) {
 	Blog :: create_comment($safe_comment_title, $safe_comment_text, $safe_post_file_comment,$blog_id, (int)$_GET['post_id'], $_POST['comment_parent_id']);
 	$return_message = array('type' => 'confirmation', 'message' => get_lang('CommentAdded'));
 }
 
-if (!empty($_POST['new_task_submit']))
-{
-	Blog :: create_task($blog_id, $safe_task_name, $safe_task_description, $_POST['chkArticleDelete'], $_POST['chkArticleEdit'], $_POST['chkCommentsDelete'], $_POST['task_color']);
+if (!empty($_POST['new_task_submit'])){
+	Blog::create_task($blog_id, $safe_task_name, $safe_task_description, $_POST['chkArticleDelete'], $_POST['chkArticleEdit'], $_POST['chkCommentsDelete'], $_POST['task_color']);
 	$return_message = array('type' => 'confirmation', 'message' => get_lang('TaskCreated'));
 }
 
-if (isset($_POST['edit_task_submit']))
-{
+if (isset($_POST['edit_task_submit'])) {
 	Blog :: edit_task($_POST['blog_id'], $_POST['task_id'], $safe_task_name, $safe_task_description, $_POST['chkArticleDelete'], $_POST['chkArticleEdit'],$_POST['chkCommentsDelete'], $_POST['task_color']);
 	$return_message = array('type' => 'confirmation', 'message' => get_lang('TaskEdited'));
 }
-if (!empty($_POST['assign_task_submit']))
-{
+if (!empty($_POST['assign_task_submit'])) {
 	Blog :: assign_task($blog_id, $_POST['task_user_id'], $_POST['task_task_id'], $_POST['task_year']."-".$_POST['task_month']."-".$_POST['task_day']);
 	$return_message = array('type' => 'confirmation', 'message' => get_lang('TaskAssigned'));
 }
@@ -94,8 +84,7 @@ if (!empty($_POST['new_task_execution_submit']))
 	Blog :: create_comment($safe_comment_title, $safe_comment_text, $blog_id, (int)$_GET['post_id'], $_POST['comment_parent_id'], $_POST['task_id']);
 	$return_message = array('type' => 'confirmation', 'message' => get_lang('CommentCreated'));
 }
-if (!empty($_POST['register']))
-{
+if (!empty($_POST['register'])) {
 	if (is_array($_POST['user'])) {
 		foreach ($_POST['user'] as $index => $user_id)
 		{
@@ -103,8 +92,8 @@ if (!empty($_POST['register']))
 		}
 	}
 }
-if (!empty($_POST['unregister']))
-{
+
+if (!empty($_POST['unregister'])) {
 	if (is_array($_POST['user'])) {
 		foreach ($_POST['user'] as $index => $user_id)
 		{
@@ -112,35 +101,32 @@ if (!empty($_POST['unregister']))
 		}
 	}
 }
-if (!empty($_GET['register']))
-{
+
+if (!empty($_GET['register'])) {
 	Blog :: set_user_subscribed((int)$_GET['blog_id'], (int)$_GET['user_id']);
 	$return_message = array('type' => 'confirmation', 'message' => get_lang('UserRegistered'));
 	$flag = 1;
 }
-if (!empty($_GET['unregister']))
-{
+
+if (!empty($_GET['unregister'])) {
 	Blog :: set_user_unsubscribed((int)$_GET['blog_id'], (int)$_GET['user_id']);
 }
 
-if (isset($_GET['action']) && $_GET['action'] == 'manage_tasks')
-{
+if (isset($_GET['action']) && $_GET['action'] == 'manage_tasks') {
 	if (isset($_GET['do']) && $_GET['do'] == 'delete')
 	{
 		Blog :: delete_task($blog_id, (int)$_GET['task_id']);
 		$return_message = array('type' => 'confirmation', 'message' => get_lang('TaskDeleted'));
 	}
 
-	if (isset($_GET['do']) && $_GET['do'] == 'delete_assignment')
-	{
+	if (isset($_GET['do']) && $_GET['do'] == 'delete_assignment') {
 		Blog :: delete_assigned_task($blog_id, Database::escape_string((int)$_GET['task_id']), Database::escape_string((int)$_GET['user_id']));
 		$return_message = array('type' => 'confirmation', 'message' => get_lang('TaskAssignmentDeleted'));
 	}
 
 }
 
-if (isset($_GET['action']) && $_GET['action'] == 'view_post')
-{
+if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
 	$task_id = (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) ? $_GET['task_id'] : 0;
 
 	if (isset($_GET['do']) && $_GET['do'] == 'delete_comment')
@@ -196,9 +182,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post')
 */
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/calendar/tbl_change.js"></script>';
 
-// Set bredcrumb
-switch ($current_page)
-{
+switch ($current_page){
 	case 'new_post' :
 		$nameTools = get_lang('NewPost');
 		$interbreadcrumb[] = array ('url' => "blog.php?blog_id=$blog_id", "name" => Blog :: get_blog_title($blog_id));
@@ -235,14 +219,11 @@ switch ($current_page)
 }
 
 // feedback messages
-if (!empty($return_message))
-{
-	if ($return_message['type'] == 'confirmation')
-	{
+if (!empty($return_message)) {
+	if ($return_message['type'] == 'confirmation') {
 		Display::display_confirmation_message($return_message['message']);
 	}
-	if ($return_message['type'] == 'error')
-	{
+	if ($return_message['type'] == 'error') {
 		Display::display_error_message($return_message['message']);
 	}
 }
@@ -271,12 +252,12 @@ Display::display_introduction_section(TOOL_BLOG);
 	<td width="10%" style="float;left;" class="blog_left" valign="top">
 		<?php
 
-$month = (int)$_GET['month'] ? (int)$_GET['month'] : (int) date('m');
-$year = (int)$_GET['year'] ? (int)$_GET['year'] : date('Y');
-Blog :: display_minimonthcalendar($month, $year, $blog_id);
+$month = isset($_GET['month']) ? (int)$_GET['month'] : (int) date('m');
+$year = isset($_GET['year']) ? (int)$_GET['year'] : date('Y');
+
+Blog::display_minimonthcalendar($month, $year, $blog_id);
 ?>
 		<br />
-
 		<br />
 		<table width="100%">
 			<tr>
@@ -307,11 +288,11 @@ Blog :: display_minimonthcalendar($month, $year, $blog_id);
 	<td valign="top" class="blog_right">
 		<?php
 
-if ($error)
+if (isset($error)) {
 	Display :: display_error_message($message);
+}
 
-if ($flag == '1')
-{
+if (isset($flag) && $flag == '1') {
 	$current_page = "manage_tasks";
 	Blog :: display_assign_task_form($blog_id);
 }
@@ -353,21 +334,14 @@ switch ($current_page) {
 					Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
 				}
 			Blog :: display_form_new_post($blog_id);
-		}
-		else
-		{
-				if (isset ($_GET['filter']) && !empty ($_GET['filter']))
-				{
+		} else {
+				if (isset($_GET['filter']) && !empty($_GET['filter'])) {
 					Blog :: display_day_results($blog_id, Database::escape_string($_GET['filter']));
-				}
-				else
-				{
+				} else {
 					Blog :: display_blog_posts($blog_id);
 				}
 			}
-		}
-		else
-		{
+		} else {
 			api_not_allowed();
 		}
 		break;
@@ -377,22 +351,17 @@ switch ($current_page) {
 	case 'edit_post' :
 		$task_id = (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) ? $_GET['task_id'] : 0;
 
-		if (api_is_allowed('BLOG_'.$blog_id, 'article_edit', $task_id))
-		{
+		if (api_is_allowed('BLOG_'.$blog_id, 'article_edit', $task_id)) {
 			// we show the form if
 			// 1. no post data
 			// 2. there is post data and the required field is empty
-			if (!$_POST OR (!empty($_POST) AND empty($_POST['post_title'])))
-			{
+			if (!$_POST OR (!empty($_POST) AND empty($_POST['post_title']))) {
 				// if there is post data there is certainly an error in the form
-				if ($_POST)
-				{
+				if ($_POST) {
 					Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
 				}
                 Blog :: display_form_edit_post($blog_id, Database::escape_string((int)$_GET['post_id']));
-			}
-			else
-			{
+			} else {
 				if (isset ($_GET['filter']) && !empty ($_GET['filter']))
 				{
 					Blog :: display_day_results($blog_id, Database::escape_string($_GET['filter']));
@@ -402,30 +371,26 @@ switch ($current_page) {
 					Blog :: display_blog_posts($blog_id);
 				}
 			}
-		}
-		else
-		{
+		} else {
 			api_not_allowed();
 		}
 
 		break;
 	case 'manage_members' :
-		if (api_is_allowed('BLOG_'.$blog_id, 'member_management'))
-		{
+		if (api_is_allowed('BLOG_'.$blog_id, 'member_management')) {
 			Blog :: display_form_user_subscribe($blog_id);
 			echo '<br /><br />';
 			Blog :: display_form_user_unsubscribe($blog_id);
-		}
-		else
+		} else {
 			api_not_allowed();
+        }
 
 		break;
 	case 'manage_rights' :
 		Blog :: display_form_user_rights($blog_id);
 		break;
 	case 'manage_tasks' :
-		if (api_is_allowed('BLOG_'.$blog_id, 'task_management'))
-		{
+		if (api_is_allowed('BLOG_'.$blog_id, 'task_management')) {
 			if (isset($_GET['do']) && $_GET['do'] == 'add')
 			{
 				Blog :: display_new_task_form($blog_id);
@@ -463,12 +428,9 @@ switch ($current_page) {
 		break;
 	case '' :
 	default :
-		if (isset ($_GET['filter']) && !empty ($_GET['filter']))
-		{
+		if (isset ($_GET['filter']) && !empty ($_GET['filter'])) {
 			Blog :: display_day_results($blog_id, Database::escape_string($_GET['filter']));
-		}
-		else
-		{
+		} else {
 			Blog :: display_blog_posts($blog_id);
 		}
 }
@@ -477,5 +439,5 @@ switch ($current_page) {
 </tr>
 </table>
 <?php
-// Display the footer
+
 Display::display_footer();

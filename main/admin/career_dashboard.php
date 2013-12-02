@@ -27,9 +27,9 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => 'career_dashboard.php','name' => get_lang('CareersAndPromotions'));
 
-Display :: display_header($nameTools);
+Display :: display_header();
 
-$form = new FormValidator('filter_form','GET', api_get_self());
+$form = new FormValidator('filter_form', 'GET', api_get_self());
 
 $career = new Career();
 

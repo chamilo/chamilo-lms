@@ -285,7 +285,8 @@ class SystemAnnouncementManager
 	 * @return array An array with all available system announcements (as php
 	 * objects)
 	 */
-	public static function get_all_announcements() {
+	public static function get_all_announcements()
+    {
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$now = api_get_utc_datetime();
 		$sql = "SELECT *, IF( '$now'  >= date_start AND '$now' <= date_end, '1', '0') AS visible FROM $db_table";

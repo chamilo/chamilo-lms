@@ -25,25 +25,25 @@ $interbreadcrumb[] = array('url' => 'career_dashboard.php','name' => get_lang('C
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $check = Security::check_token('request');
-$token = Security::get_token();    
+$token = Security::get_token();
 
 if ($action == 'add') {
     $interbreadcrumb[]=array('url' => 'promotions.php','name' => get_lang('Promotions'));
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Add'));
 } elseif ($action == 'edit') {
-    $interbreadcrumb[]=array('url' => 'promotions.php','name' => get_lang('Promotions'));    
+    $interbreadcrumb[]=array('url' => 'promotions.php','name' => get_lang('Promotions'));
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Edit'));
 } else {
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Promotions'));
 }
 
 // The header.
-Display::display_header($tool_name);
+Display::display_header();
 
 // Tool name
 if (isset($_GET['action']) && $_GET['action'] == 'add') {
     $tool = 'Add';
-    $interbreadcrumb[] = array ('url' => api_get_self(), 'name' => get_lang('Promotion'));    
+    $interbreadcrumb[] = array ('url' => api_get_self(), 'name' => get_lang('Promotion'));
 }
 if (isset($_GET['action']) && $_GET['action'] == 'edit') {
     $tool = 'Modify';
@@ -58,7 +58,7 @@ $column_model   = array(
                         array('name'=>'career',         'index'=>'career',      'width'=>'100',  'align'=>'left'),
                         array('name'=>'description',    'index'=>'description', 'width'=>'500',  'align'=>'left','sortable'=>'false'),
                         array('name'=>'actions',        'index'=>'actions',     'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false'),
-                       );                        
+                       );
 $extra_params['autowidth'] = 'true'; //use the width of the parent
 //$extra_params['editurl'] = $url; //use the width of the parent
 
@@ -73,12 +73,12 @@ $action_links = 'function action_formatter (cellvalue, options, rowObject) {
 
 ?>
 <script>
-$(function() { 
-    <?php 
-         echo Display::grid_js('promotions',  $url,$columns,$column_model,$extra_params,array(), $action_links, true);       
+$(function() {
+    <?php
+         echo Display::grid_js('promotions',  $url,$columns,$column_model,$extra_params,array(), $action_links, true);
     ?>
 });
-</script>   
+</script>
 <?php
 $promotion = new Promotion();
 
@@ -99,55 +99,55 @@ switch ($action) {
         }
 
         $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']);
-        $form = $promotion->return_form($url, 'add');    
+        $form = $promotion->return_form($url, 'add');
 
         // The validation or display
-        if ($form->validate()) {            
+        if ($form->validate()) {
             if ($check) {
-                $values = $form->exportValues();       
-                $res    = $promotion->save($values);            
+                $values = $form->exportValues();
+                $res    = $promotion->save($values);
                 if ($res) {
                     Display::display_confirmation_message(get_lang('ItemAdded'));
                 }
-            }            
+            }
             $promotion->display();
         } else {
-            echo '<div class="actions">';        
+            echo '<div class="actions">';
             echo Display::url(Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM), api_get_self());
-            echo '</div>';            
+            echo '</div>';
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
             $form->display();
         }
         break;
     case 'edit':
-        //Editing 
-        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);    
+        //Editing
+        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
         $form = $promotion->return_form($url, 'edit');
 
         // The validation or display
-        if ($form->validate()) {            
+        if ($form->validate()) {
             if ($check) {
-                $values = $form->exportValues();                    
+                $values = $form->exportValues();
                 $res    = $promotion->update($values);
-                $promotion->update_all_sessions_status_by_promotion_id($values['id'], $values['status']);    
+                $promotion->update_all_sessions_status_by_promotion_id($values['id'], $values['status']);
                 if ($values['status']) {
                     Display::display_confirmation_message(sprintf(get_lang('PromotionXUnarchived'), $values['name']), false);
                 } else {
                     Display::display_confirmation_message(sprintf(get_lang('PromotionXArchived'), $values['name']), false);
                 }
-            }            
+            }
             $promotion->display();
         } else {
-            echo '<div class="actions">';        
+            echo '<div class="actions">';
             echo Display::url(Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM), api_get_self());
-            echo '</div>';            
+            echo '</div>';
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
             $form->display();
         }
         break;
-    case 'delete':        
+    case 'delete':
         if ($check) {
             // Action handling: deleting an obj
             $res = $promotion->delete($_GET['id']);
@@ -155,17 +155,17 @@ switch ($action) {
                 Display::display_confirmation_message(get_lang('ItemDeleted'));
             }
         }
-        $promotion->display();        
+        $promotion->display();
         break;
     case 'copy':
         if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
             api_not_allowed();
         }
         if ($check) {
-            $res = $promotion->copy($_GET['id'], null, true);    
+            $res = $promotion->copy($_GET['id'], null, true);
             if ($res) {
                 Display::display_confirmation_message(get_lang('ItemCopied').' - '.get_lang('ExerciseAndLPsAreInvisibleInTheNewCourse'));
-            }            
+            }
         }
         $promotion->display();
         break;

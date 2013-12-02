@@ -23,11 +23,18 @@ class GradeModel extends Model
         $this->table = Database::get_main_table(TABLE_GRADE_MODEL);
     }
 
+    /**
+     * @param array $where_conditions
+     * @return array
+     */
     public function get_all($where_conditions = array())
     {
         return Database::select('*', $this->table, array('where' => $where_conditions, 'order' => 'name ASC'));
     }
 
+    /**
+     * @return mixed
+     */
     public function get_count()
     {
         $row = Database::select('count(*) as count', $this->table, array(), 'first');
@@ -55,24 +62,15 @@ class GradeModel extends Model
 
     /**
      * Returns a Form validator Obj
-     * @todo the form should be auto generated
      * @param   string  url
      * @param   string  action add, edit
      * @return  obj     form validator obj
      */
     public function return_form($url, $action)
     {
-
-        $oFCKeditor             = new FCKeditor('description');
-        $oFCKeditor->ToolbarSet = 'grade_model';
-        $oFCKeditor->Width      = '100%';
-        $oFCKeditor->Height     = '200';
-        $oFCKeditor->Value      = '';
-        $oFCKeditor->CreateHtml();
-
         $form = new FormValidator('grades', 'post', $url);
 
-        // Settting the form elements
+        // Setting the form elements
         $header = get_lang('Add');
 
         if ($action == 'edit') {
@@ -223,6 +221,10 @@ class GradeModel extends Model
         return $form;
     }
 
+    /**
+     * @param $id
+     * @return array|null
+     */
     public function get_components($id)
     {
         $obj = new GradeModelComponents();
@@ -233,6 +235,11 @@ class GradeModel extends Model
         return null;
     }
 
+    /**
+     * @param $params
+     * @param bool $show_query
+     * @return bool
+     */
     public function save($params, $show_query = false)
     {
         $id = parent::save($params, $show_query);
@@ -250,6 +257,10 @@ class GradeModel extends Model
         return $id;
     }
 
+    /**
+     * @param array $params
+     * @return bool|void
+     */
     public function update($params)
     {
         parent::update($params);
@@ -268,6 +279,10 @@ class GradeModel extends Model
         //$params['components']
     }
 
+    /**
+     * @param int $id
+     * @return bool|void
+     */
     public function delete($id)
     {
         parent::delete($id);
@@ -308,10 +323,11 @@ class GradeModel extends Model
     }
 }
 
+//@todo move in another file
 class GradeModelComponents extends Model
 {
-    var $table;
-    var $columns = array(
+    public $table;
+    public $columns = array(
         'id',
         'title',
         'percentage',

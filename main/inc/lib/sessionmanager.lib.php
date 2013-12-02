@@ -1914,12 +1914,12 @@ class SessionManager
         return array();
     }
 
-    function get_all_sessions_by_promotion($id) {
+    static function get_all_sessions_by_promotion($id) {
         $t = Database::get_main_table(TABLE_MAIN_SESSION);
         return Database::select('*', $t, array('where'=>array('promotion_id = ?'=>$id)));
     }
 
-    function suscribe_sessions_to_promotion($promotion_id, $list) {
+    static function suscribe_sessions_to_promotion($promotion_id, $list) {
         $t = Database::get_main_table(TABLE_MAIN_SESSION);
         $params = array();
         $params['promotion_id'] = 0;
@@ -1939,7 +1939,8 @@ class SessionManager
     * @param    int     session id
     * @param    int     status
     */
-    public function set_session_status($session_id, $status) {
+    public static function set_session_status($session_id, $status)
+    {
         $t = Database::get_main_table(TABLE_MAIN_SESSION);
         $params['visibility'] = $status;
         Database::update($t, $params, array('id = ?'=>$session_id));
@@ -1963,7 +1964,7 @@ class SessionManager
      * @param $set_exercises_lp_invisible
      * @return int
      */
-    public function copy_session($id, $copy_courses = true, $copy_users = true, $create_new_courses = false, $set_exercises_lp_invisible = false) {
+    public static function copy_session($id, $copy_courses = true, $copy_users = true, $create_new_courses = false, $set_exercises_lp_invisible = false) {
         $id = intval($id);
         $params = self::fetch($id);
 
@@ -2944,6 +2945,5 @@ class SessionManager
         $sql = "select * FROM $tableSession WHERE session_category_id = $categoryId";
         $result = Database::query($sql);
         return Database::store_result($result);
-
     }
 }

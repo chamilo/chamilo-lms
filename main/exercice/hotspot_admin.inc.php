@@ -827,18 +827,7 @@ if ($modifyAnswers) {
                                     <td valign="top" align="left">
                                         <input type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo Security::remove_XSS($reponse[$i]); ?>" size="45" />
                                     </td>
-
-                                    <?php
-
-                                    $oFCKeditor = new FCKeditor("comment[$i]");
-                                    $content = $comment[$i];
-                                    $oFCKeditor->ToolbarSet = 'TestProposedAnswer';
-                                    $oFCKeditor->Config['ToolbarStartExpanded'] = 'false';
-                                    $oFCKeditor->Width = '100%';
-                                    $oFCKeditor->Height = '100';
-                                    $oFCKeditor->Value = $content;
-                                    $return = $oFCKeditor->CreateHtml();
-                                    ?>
+                                    <textarea name="<?php echo "comment[$i]"; ?>"><?php echo $content; ?></textarea>
                                     <td>&nbsp;</td>
                                     <td align="left" ><?php echo $return; ?></td>
                                         <?php

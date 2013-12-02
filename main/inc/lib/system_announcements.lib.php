@@ -6,25 +6,25 @@
 /**
  * Code
  */
-
-
 /**
-*	This is the system announcements library for Dokeos.
+*	This is the system announcements library.
 *
 *	@package chamilo.library
 */
-class SystemAnnouncementManager {
+class SystemAnnouncementManager
+{
 
-    CONST VISIBLE_GUEST   = 1;
-    CONST VISIBLE_STUDENT = 2;
-    CONST VISIBLE_TEACHER = 3;
+    const VISIBLE_GUEST   = 1;
+    const VISIBLE_STUDENT = 2;
+    const VISIBLE_TEACHER = 3;
 
 	/**
 	 * Displays all announcements
 	 * @param int $visible VISIBLE_GUEST, VISIBLE_STUDENT or VISIBLE_TEACHER
 	 * @param int $id The identifier of the announcement to display
 	 */
-	public static function display_announcements($visible, $id = -1) {
+	public static function display_announcements($visible, $id = -1)
+    {
 		$user_selected_language = api_get_interface_language();
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
         $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
@@ -110,7 +110,15 @@ class SystemAnnouncementManager {
 		return;
 	}
 
-	public static function display_all_announcements($visible, $id = -1, $start = 0,$user_id='') {
+    /**
+     * @param $visible
+     * @param $id
+     * @param int $start
+     * @param string $user_id
+     * @return string
+     */
+    public static function display_all_announcements($visible, $id = -1, $start = 0,$user_id='')
+    {
 		$user_selected_language = api_get_interface_language();
 		$start	= intval($start);
         $usergroup = new UserGroup();
@@ -205,7 +213,11 @@ class SystemAnnouncementManager {
 		return $content;
 	}
 
-	public static function display_arrow($user_id) {
+    /**
+     * @param int $user_id
+     * @return string
+     */
+    public static function display_arrow($user_id) {
 		$start = (int)$_GET['start'];
 		$nb_announcement = SystemAnnouncementManager :: count_nb_announcement($start,$user_id);
 		$next = ((int)$_GET['start']+19);
@@ -225,7 +237,13 @@ class SystemAnnouncementManager {
 		return $content;
 	}
 
-	public static function count_nb_announcement($start = 0, $user_id = '') {
+    /**
+     * @param int $start
+     * @param string $user_id
+     * @return int
+     */
+    public static function count_nb_announcement($start = 0, $user_id = '')
+    {
 		$start = intval($start);
 		$visibility = api_is_allowed_to_create_course() ? self::VISIBLE_TEACHER : self::VISIBLE_STUDENT;
 		$user_selected_language = api_get_interface_language();
@@ -300,13 +318,24 @@ class SystemAnnouncementManager {
 	 * @param int    Whether to send an e-mail to all users (1) or not (0)
 	 * @return mixed  insert_id on success, false on failure
 	 */
-	public static function add_announcement($title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0, $lang = null, $send_mail = 0, $add_to_calendar = false ) {
+	public static function add_announcement(
+        $title,
+        $content,
+        $date_start,
+        $date_end,
+        $visible_teacher = 0,
+        $visible_student = 0,
+        $visible_guest = 0,
+        $lang = null,
+        $send_mail = 0,
+        $add_to_calendar = false
+    ) {
 
 		$original_content = $content;
 		$a_dateS = explode(' ',$date_start);
 		$a_arraySD = explode('-',$a_dateS[0]);
 		$a_arraySH = explode(':',$a_dateS[1]);
-		$date_start_to_compare = array_merge($a_arraySD,$a_arraySH);
+		$date_start_to_compare = array_merge($a_arraySD, $a_arraySH);
 
 		$a_dateE = explode(' ',$date_end);
 		$a_arrayED = explode('-',$a_dateE[0]);
@@ -319,11 +348,13 @@ class SystemAnnouncementManager {
 			Display :: display_normal_message(get_lang('InvalidStartDate'));
 			return false;
 		}
+
 		if (($date_end_to_compare[1] || $date_end_to_compare[2] || $date_end_to_compare[0]) && !checkdate($date_end_to_compare[1], $date_end_to_compare[2], $date_end_to_compare[0])) {
 			Display :: display_normal_message(get_lang('InvalidEndDate'));
 			return false;
 		}
-		if( strlen(trim($title)) == 0) {
+
+		if (strlen(trim($title)) == 0) {
 			Display::display_normal_message(get_lang('InvalidTitle'));
 			return false;
 		}
@@ -358,8 +389,9 @@ class SystemAnnouncementManager {
 			return false;
 		}
 		if ($add_to_calendar) {
-		    require_once 'calendar.lib.php';
-		    $agenda_id = agenda_add_item($title, $original_content, $date_start, $date_end);
+            $agenda = new Agenda();
+            $agenda->setType('admin');
+            $agenda->add_event($date_start, $date_end, false, null, $title, $original_content);
 		}
 		return Database::insert_id();
 	}
@@ -368,7 +400,8 @@ class SystemAnnouncementManager {
    * @param int announcement id
    * @param array array of group id
    **/
-    public static function announcement_for_groups($announcement_id, $group_array){
+    public static function announcement_for_groups($announcement_id, $group_array)
+    {
         $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
         //first delete all group associations for this announcement
         $res = Database::query("DELETE FROM $tbl_announcement_group WHERE announcement_id = ".intval($announcement_id));
@@ -389,22 +422,24 @@ class SystemAnnouncementManager {
         }
         return true;
     }
-  /**
-   * Gets the groups of this announce
-   * @param int announcement id
-   * @return array array of group id
-   **/
-  public static function get_announcement_groups($announcement_id){
-    $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
-    $tbl_group = Database :: get_main_table(TABLE_USERGROUP);
-    //first delete all group associations for this announcement
 
-    $res = Database::query("SELECT g.id as group_id, g.name as group_name
-                            FROM $tbl_group g , $tbl_announcement_group ag
-                            WHERE announcement_id = ".intval($announcement_id)." AND ag.group_id = g.id");
-    $groups = Database::fetch_array($res);
-    return $groups;
-  }
+    /**
+    * Gets the groups of this announce
+    * @param int announcement id
+    * @return array array of group id
+    **/
+    public static function get_announcement_groups($announcement_id)
+    {
+        $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
+        $tbl_group = Database :: get_main_table(TABLE_USERGROUP);
+        //first delete all group associations for this announcement
+
+        $res = Database::query("SELECT g.id as group_id, g.name as group_name
+                                FROM $tbl_group g , $tbl_announcement_group ag
+                                WHERE announcement_id = ".intval($announcement_id)." AND ag.group_id = g.id");
+        $groups = Database::fetch_array($res);
+        return $groups;
+    }
 
 	/**
 	 * Updates an announcement to the database
@@ -470,7 +505,8 @@ class SystemAnnouncementManager {
 	 * @param 	int $id The identifier of the announcement that should be
 	 * @return	bool	True on success, false on failure
 	 */
-	public static function delete_announcement($id) {
+	public static function delete_announcement($id)
+    {
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$id = intval($id);
 		$sql = "DELETE FROM ".$db_table." WHERE id =".$id;
@@ -481,6 +517,7 @@ class SystemAnnouncementManager {
 		}
 		return true;
 	}
+
 	/**
 	 * Gets an announcement
 	 * @param 	int		$id The identifier of the announcement that should be
@@ -493,13 +530,15 @@ class SystemAnnouncementManager {
 		$announcement = Database::fetch_object(Database::query($sql));
 		return $announcement;
 	}
+
 	/**
 	 * Change the visibility of an announcement
 	 * @param 	int $announcement_id
 	 * @param 	int $user For who should the visibility be changed (possible values are VISIBLE_TEACHER, VISIBLE_STUDENT, VISIBLE_GUEST)
 	 * @return 	bool	True on success, false on failure
 	 */
-	public static function set_visibility($announcement_id, $user, $visible) {
+	public static function set_visibility($announcement_id, $user, $visible)
+    {
 		$db_table 			= Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$visible			= intval($visible);
 		$announcement_id 	= intval($announcement_id);
@@ -528,7 +567,8 @@ class SystemAnnouncementManager {
 	 * @param	string	Language (optional, considered for all languages if left empty)
      * @return  bool    True if the message was sent or there was no destination matching. False on database or e-mail sending error.
 	 */
-	public static function send_system_announcement_by_email($title, $content, $teacher, $student, $language = null) {
+	public static function send_system_announcement_by_email($title, $content, $teacher, $student, $language = null)
+    {
 		global $charset;
 
         if (api_is_multiple_url_enabled()) {
@@ -583,13 +623,13 @@ class SystemAnnouncementManager {
 		return $message_sent; //true if at least one e-mail was sent
 	}
 
-
 	/**
 	* Displays announcements as an slideshow
 	* @param int $visible VISIBLE_GUEST, VISIBLE_STUDENT or VISIBLE_TEACHER
 	* @param int $id The identifier of the announcement to display
 	*/
-	public static function display_announcements_slider($visible, $id = null) {
+	public static function display_announcements_slider($visible, $id = null)
+    {
 		$user_selected_language = Database::escape_string(api_get_interface_language());
 		$table                  = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 

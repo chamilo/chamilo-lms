@@ -9,6 +9,10 @@
 class Agenda
 {
     public $events = array();
+    /**
+     * personal, admin or course
+     * @var string
+     */
     public $type = 'personal';
 
     /**

@@ -343,10 +343,11 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         // Fix cas redirection loop
                                         // https://support.chamilo.org/issues/6124
                                         $location = api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive';
-                                        if ($cas_login)
+                                        if ($cas_login) {
                                             cas_logout(null, $location);
-                                        else
+                                        } else {
                                             header('Location: '.$location);
+                                        }
                                         exit;
                                     }
                                 } else { //Only admins of the "main" (first) Chamilo portal can login wherever they want

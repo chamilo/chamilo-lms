@@ -172,14 +172,14 @@ function cas_logout($uinfo=null, $location=null)
 {
     global $cas_auth_ver, $cas_auth_server, $cas_auth_port, $cas_auth_uri;
     global $PHPCAS_CLIENT;
-    if (!is_object($PHPCAS_CLIENT))
-    {
-        phpCAS::client($cas_auth_ver,$cas_auth_server,$cas_auth_port,$cas_auth_uri);
+    if (!is_object($PHPCAS_CLIENT)) {
+        phpCAS::client($cas_auth_ver, $cas_auth_server, $cas_auth_port, $cas_auth_uri);
         phpCAS::setNoCasServerValidation();
     }
 
-    if (!isset($location))
+    if (!isset($location)) {
         $location = api_get_path(WEB_PATH);
+    }
 
     phpCAS::logoutWithRedirectService($location);
 }

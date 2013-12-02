@@ -288,7 +288,7 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         $current_year = intval(api_get_local_time());
         $this->_options['minYear'] = $current_year - 9;
         $this->_options['maxYear'] = $current_year + 1;
-        //
+
         // set the options, do not bother setting bogus ones
         if (is_array($options)) {
             foreach ($options as $name => $value) {
@@ -319,7 +319,7 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         //    $sign = $this->_options['format']{$i};
         for ($i = 0, $length = api_strlen($this->_options['format']); $i < $length; $i++) {
             $sign = api_substr($this->_options['format'], $i, 1);
-        //
+
             if ($backslash) {
                 $backslash  = false;
                 $separator .= $sign;
@@ -423,9 +423,6 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         $this->_wrap[1] = $separator . ($backslash? '\\': '');
     }
 
-    // }}}
-    // {{{ _createOptionList()
-
    /**
     * Creates an option list containing the numbers from the start number to the end, inclusive
     *
@@ -461,9 +458,6 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         return strlen($trimmed)? $trimmed: '0';
     }
 
-    // }}}
-    // {{{ setValue()
-
     function setValue($value)
     {
         if (empty($value)) {
@@ -498,9 +492,6 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         parent::setValue($value);
     }
 
-    // }}}
-    // {{{ toHtml()
-
     function toHtml()
     {
         include_once('HTML/QuickForm/Renderer/Default.php');
@@ -531,7 +522,4 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
             return parent::onQuickFormEvent($event, $arg, $caller);
         }
     }
-
-    // }}}
 }
-?>

@@ -298,7 +298,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
         $this->_tableAttributes = $this->getAttribute('class');
         $attr = null;
         if (is_null($this->_tableAttributes)) {
-            $this->updateAttributes(array('class' => 'span4'));
+            $this->updateAttributes(array('class' => 'col-md-4'));
         } else {
             $attr = array('class' => $this->_tableAttributes);
             $this->_removeAttr('class', $this->_attributes);
@@ -565,15 +565,13 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
         if (isset($html) && is_string($html)) {
             // $this->_elementTemplate = $html;
         } else {
-            /*<!-- BEGIN label_2 --><tr><th>{label_2}</th><!-- END label_2 -->
-            <!-- BEGIN label_3 --><th>&nbsp;</th><th>{label_3}</th></tr><!-- END label_3 -->*/
 
             $this->_elementTemplate = '
             {javascript}
             <div class="advmultiselect row">
-                <div class="span4">{unselected}</div>
-                <div class="span1">{add} <br /><br />{remove}</div>
-                <div class="span4">{selected}</div>
+                <div class="col-md-5">{unselected}</div>
+                <div class="col-md-2">{add} <br /><br />{remove}</div>
+                <div class="col-md-5">{selected}</div>
             </div>
             ';
         }
@@ -903,7 +901,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
 
             // build the remove button with all its attributes
             $attributes = array(
-                'class' => 'btn btn-block ',
+                'class' => 'btn btn-default ',
                 'onclick' => $jsName.
                     "('{$selectId}', ".
                     "this.form.elements['".$selectNameFrom."'], ".
@@ -915,12 +913,12 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                 = array_merge($this->_removeButtonAttributes, $attributes);
             $attrStrRemove = $this->_getAttrString($this->_removeButtonAttributes);
             //$strHtmlRemove = "<input$attrStrRemove />". PHP_EOL;
-            $strHtmlRemove = "<button$attrStrRemove /><i class='icon-arrow-left icon-large'></i></button>".PHP_EOL;
+            $strHtmlRemove = "<button$attrStrRemove /><i class='fa fa-arrow-left fa2'></i></button>".PHP_EOL;
 
             // build the add button with all its attributes
             $attributes
                 = array(
-                'class' => 'btn btn-block ',
+                'class' => 'btn btn-default',
                 'onclick' => $jsName.
                     "('{$selectId}', ".
                     "this.form.elements['".$selectNameFrom."'], ".
@@ -931,7 +929,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             $this->_addButtonAttributes
                 = array_merge($this->_addButtonAttributes, $attributes);
             $attrStrAdd = $this->_getAttrString($this->_addButtonAttributes);
-            $strHtmlAdd = "<button$attrStrAdd /><i class='icon-arrow-right icon-large'></i></button>".PHP_EOL;
+            $strHtmlAdd = "<button$attrStrAdd /><i class='fa fa-arrow-right fa2'></i></button>".PHP_EOL;
 
             // build the select all button with all its attributes
             $attributes

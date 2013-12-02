@@ -15,17 +15,16 @@ $language_file = array('agenda', 'group');
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
 require_once '../inc/global.inc.php';
+
+// Functions for the agenda tool
+require 'agenda.inc.php';
+
 $current_course_tool = TOOL_CALENDAR_EVENT;
 
 $course_info = api_get_course_info();
 
 if (!empty($course_info)) {
     api_protect_course_script(true);
-}
-
-//session
-if (isset($_GET['id_session'])) {
-    $_SESSION['id_session'] = intval($_GET['id_session']);
 }
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
@@ -39,49 +38,6 @@ if (empty($action)) {
     exit;
 }
 
-/* 	Resource linker */
-$_SESSION['source_type'] = 'Agenda';
-require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
-
-if (!empty($addresources)) {
-    // When the "Add Resource" button is clicked we store all the form data into a session
-    $form_elements = array(
-        'day' => Security::remove_XSS($_POST['fday']),
-        'month' => Security::remove_XSS($_POST['fmonth']),
-        'year' => Security::remove_XSS($_POST['fyear']),
-        'hour' => Security::remove_XSS($_POST['fhour']),
-        'minutes' => Security::remove_XSS($_POST['fminute']),
-        'end_day' => Security::remove_XSS($_POST['end_fday']),
-        'end_month' => Security::remove_XSS($_POST['end_fmonth']),
-        'end_year' => Security::remove_XSS($_POST['end_fyear']),
-        'end_hours' => Security::remove_XSS($_POST['end_fhour']),
-        'end_minutes' => Security::remove_XSS($_POST['end_fminute']),
-        'title' => Security::remove_XSS(stripslashes($_POST['title'])),
-        'content' => Security::remove_XSS(stripslashes($_POST['content'])),
-        'id' => Security::remove_XSS($_POST['id']),
-        'action' => Security::remove_XSS($_POST['action']),
-        'to' => Security::remove_XSS($_POST['selectedform'])
-    );
-    $_SESSION['formelements'] = $form_elements;
-    // this is to correctly handle edits
-    if ($id) {
-        $action = "edit";
-    }
-    //print_r($form_elements);
-    header(
-        'Location: '.api_get_path(
-            WEB_CODE_PATH
-        )."resourcelinker/resourcelinker.php?source_id=1&action=$action&id=$id&originalresource=no"
-    );
-    exit;
-}
-
-if (!empty($_GET['view'])) {
-    $_SESSION['view'] = Security::remove_XSS($_GET['view']);
-}
-
-// Functions for the agenda tool
-require_once 'agenda.inc.php';
 /*
   TREATING THE PARAMETERS
   1. viewing month only or everything
@@ -89,8 +45,6 @@ require_once 'agenda.inc.php';
   3. showing or hiding the send-to-specific-groups-or-users form
   4. filter user or group
  */
-
-
 // 3. showing or hiding the send-to-specific-groups-or-users form
 $setting_allow_individual_calendar = true;
 if (empty($_POST['To']) and empty($_SESSION['allow_individual_calendar'])) {
@@ -234,52 +188,59 @@ if (!api_is_allowed_to_edit(null, true) && $event_type == 'course') {
 
 $course_info = api_get_course_info();
 
-if (api_is_allowed_to_edit(false, true) OR
-    (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() && api_is_allowed_to_session_edit(
-        false,
-        true
-    )) OR
-    GroupManager::user_has_access(
-        api_get_user_id(),
-        $group_id,
-        GroupManager::GROUP_TOOL_CALENDAR
-    ) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)
+if (api_is_allowed_to_edit(false, true) or
+    (
+        api_get_course_setting('allow_user_edit_agenda') &&
+        !api_is_anonymous() &&
+        api_is_allowed_to_session_edit(false, true)
+    ) or
+    GroupManager::user_has_access(api_get_user_id(), $group_id, GroupManager::GROUP_TOOL_CALENDAR) &&
+    GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)
 ) {
     switch ($action) {
         case 'add':
             if (isset($_POST['submit_event']) && $_POST['submit_event']) {
-                $event_start = (int)$_POST['fyear'].'-'.(int)$_POST['fmonth'].'-'.(int)$_POST['fday'].' '.(int)$_POST['fhour'].':'.(int)$_POST['fminute'].':00';
-                $event_stop = (int)$_POST['end_fyear'].'-'.(int)$_POST['end_fmonth'].'-'.(int)$_POST['end_fday'].' '.(int)$_POST['end_fhour'].':'.(int)$_POST['end_fminute'].':00';
-                $safe_title = Security::remove_XSS($_POST['title']);
-                $safe_file_comment = Security::remove_XSS($_POST['file_comment']);
 
-                if ($_POST['empty_end_date'] == 'on') {
-                    $event_stop = '0000-00-00 00:00:00';
-                }
-                $id = agenda_add_item(
-                    $course_info,
-                    $safe_title,
-                    $_POST['content'],
-                    $event_start,
-                    $event_stop,
-                    $_POST['selected_form'],
-                    false,
-                    $safe_file_comment
-                );
+                $startDate = Text::return_datetime_from_array($_POST['start_date']);
+                $endDate = Text::return_datetime_from_array($_POST['end_date']);
+                $repeatEndDay = Text::return_datetime_from_array($_POST['repeat_end_day']);
+
+                $fileComment = isset($_POST['file_comment']) ? $_POST['file_comment'] : null;
+                $fileAttachment = isset($_FILES['user_upload']) ? $_FILES['user_upload'] : null;
+                $agenda = new Agenda();
+                $agenda->setType('course');
+
+                $repeatSettings = array();
+
                 if (!empty($_POST['repeat'])) {
-                    $end_y = intval($_POST['repeat_end_year']);
-                    $end_m = intval($_POST['repeat_end_month']);
-                    $end_d = intval($_POST['repeat_end_day']);
-                    $end = mktime(23, 59, 59, $end_m, $end_d, $end_y);
+                    $repeatSettings = array(
+                        'repeat_type' => $_POST['repeat_type'],
+                        'repeat_end' => $repeatEndDay
+                    );
+                    /*
                     $res = agenda_add_repeat_item(
                         $course_info,
                         $id,
                         $_POST['repeat_type'],
-                        $end,
-                        $_POST['selected_form'],
+                        $repeatEndDay,
+                        $_POST['users'],
                         $safe_file_comment
-                    );
+                    );*/
                 }
+
+                $id = $agenda->add_event(
+                    $startDate,
+                    $endDate,
+                    null,
+                    null,
+                    $_POST['title'],
+                    $_POST['content'],
+                    $_POST['users'],
+                    false,
+                    null,
+                    array('comment' => $fileComment, 'file' => $fileAttachment),
+                    $repeatSettings
+                );
                 Display::display_confirmation_message(get_lang('AddSuccess'));
             } else {
                 show_add_form();

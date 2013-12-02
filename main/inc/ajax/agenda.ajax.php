@@ -9,7 +9,6 @@ if ($type == 'personal') {
     $cidReset = true; // fixes #5162
 }
 require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php';
 
 $action = isset($_GET['a']) ? $_GET['a'] : null;
 

@@ -582,3 +582,38 @@ EOT;
         return $result;
     }
 }
+// Used when applying filters
+
+/**
+ * Cleans HTML text
+ * @param string $html                        HTML to clean
+ * @param int $mode (optional)
+ * @return string                                The cleaned HTML
+ */
+function html_filter($html, $mode = NO_HTML)
+{
+    require_once api_get_path(LIBRARY_PATH) . 'formvalidator/Rule/HTML.php';
+    $allowed_tags = HTML_QuickForm_Rule_HTML::get_allowed_tags($mode);
+    $cleaned_html = kses($html, $allowed_tags);
+    return $cleaned_html;
+}
+
+function html_filter_teacher($html)
+{
+    return html_filter($html, TEACHER_HTML);
+}
+
+function html_filter_student($html)
+{
+    return html_filter($html, STUDENT_HTML);
+}
+
+function html_filter_teacher_fullpage($html)
+{
+    return html_filter($html, TEACHER_HTML_FULLPAGE);
+}
+
+function html_filter_student_fullpage($html)
+{
+    return html_filter($html, STUDENT_HTML_FULLPAGE);
+}

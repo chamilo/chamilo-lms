@@ -107,6 +107,7 @@ define('TOOL_QUIZ', 'quiz');
 define('TOOL_USER', 'user');
 define('TOOL_GROUP', 'group');
 define('TOOL_BLOGS', 'blog_management'); // Smartblogs (Kevin Van Den Haute :: kevin@develop-it.be)
+define('TOOL_BLOG', 'blog');
 define('TOOL_CHAT', 'chat');
 define('TOOL_CONFERENCE', 'conference');
 define('TOOL_STUDENTPUBLICATION', 'student_publication');
@@ -323,10 +324,6 @@ define('COURSE_REQUEST_REJECTED', 2);
 
 define('SHORTCUTS_HORIZONTAL', 0);
 define('SHORTCUTS_VERTICAL', 1);
-
-//Career
-define ('CAREER_STATUS_ACTIVE',  1);
-define ('CAREER_STATUS_INACTIVE',0);
 
 //Display
 define('MAX_LENGTH_BREADCRUMB', 100);

@@ -129,9 +129,9 @@ function toggle_sendto()
     }
 
     var selected = $('#selectedform');
-    var content = list_box_content(selected[0])
-    content = (content == '') ? lang.Everybody : content;
-    overview.text(content);
+    //var content = list_box_content(selected[0])
+    //content = (content == '') ? lang.Everybody : content;
+    //overview.text(content);
 }
 
 function list_box_content(box)

@@ -84,7 +84,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
     }
 
     /**
-     * Build this element using FCKeditor
+     * Build this element using an editor
      */
     public function buildEditor()
     {

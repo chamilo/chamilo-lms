@@ -8,7 +8,7 @@
  */
 require_once 'pear/HTML/Table.php';
 require_once 'pear/Pager/Pager.php';
-//require_once 'tablesort.lib.php'; moved to autoload table_sort.class.php
+
 /**
  * This class allows you to display a sortable data-table. It is possible to
  * split the data in several pages.
@@ -21,7 +21,8 @@ require_once 'pear/Pager/Pager.php';
  * - navigate through all data-pages
  * @package chamilo.library
  */
-class SortableTable extends HTML_Table {
+class SortableTable extends HTML_Table
+{
     /**
      * A name for this table
      */
@@ -229,14 +230,17 @@ class SortableTable extends HTML_Table {
         return $this->pager;
     }
 
-    public function display() {
+    public function display()
+    {
         echo $this->return_table();
     }
+
     /**
      * Displays the table, complete with navigation buttons to browse through
      * the data-pages.
      */
-    public function return_table() {
+    public function return_table()
+    {
         $empty_table = false;
         $content = $this->get_table_html();
 
@@ -294,17 +298,19 @@ class SortableTable extends HTML_Table {
 
                 $html .= '<div class="btn-toolbar">';
                 $html .= '<div class="btn-group">';
-                $html .= '<a class="btn" href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'.get_lang('SelectAll').'</a>';
-                $html .= '<a class="btn" href="?'.$params.'" onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'.get_lang('UnSelectAll').'</a> ';
+                $html .= '<a class="btn btn-default" href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'.get_lang('SelectAll').'</a>';
+                $html .= '<a class="btn btn-default" href="?'.$params.'" onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'.get_lang('UnSelectAll').'</a> ';
                 $html .= '</div>';
                 $html .= '<div class="btn-group">
-                                <button class="btn" onclick="javascript:return false;">'.get_lang('Actions').'</button>
-                                <button class="btn dropdown-toggle" data-toggle="dropdown">
-                                    <span class="caret"></span>
-                                </button>';
+                            <button class="btn btn-default" onclick="javascript:return false;">'.get_lang('Actions').'</button>
+                            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>';
                 $html .= '<ul class="dropdown-menu">';
                 foreach ($this->form_actions as $action => & $label) {
-                    $html .= '<li><a data-action ="'.$action.'" href="#" onclick="javascript:action_click(this, \''.$table_id.'\');">'.$label.'</a></li>';
+                    $html .= '<li>
+                        <a data-action ="'.$action.'" href="#" onclick="javascript:action_click(this, \''.$table_id.'\');">'.$label.'</a>
+                    </li>';
                 }
                 $html .= '</ul>';
                 $html .= '</div>';//btn-group
@@ -319,7 +325,7 @@ class SortableTable extends HTML_Table {
                 $html .= '<td style="text-align:right;">';
                 $html .= $nav;
                 $html .= '</td>';
-            }else{
+            } else {
                 $html .= '<td> ';
                 $html .= '</td>';
             }
@@ -574,13 +580,15 @@ class SortableTable extends HTML_Table {
      * Get the HTML-code with the navigational buttons to browse through the
      * data-pages.
      */
-    public function get_navigation_html () {
-        $pager          = $this->get_pager();
+    public function get_navigation_html()
+    {
+        $pager = $this->get_pager();
         $pager_links    = $pager->getLinks();
-
-        $nav            = $pager_links['first'].' '.$pager_links['back'];
-        $nav            .= ' '.$pager->getCurrentPageId().' / '.$pager->numPages().' ';
-        $nav            .= $pager_links['next'].' '.$pager_links['last'];
+        $nav = '<div class="btn-toolbar" role="toolbar">';
+        $nav .= $pager_links['first'].' '.$pager_links['back'];
+        $nav .= ' '.$pager->getCurrentPageId().' / '.$pager->numPages().' ';
+        $nav .= $pager_links['next'].' '.$pager_links['last'];
+        $nav .= '</div>';
         return $nav;
     }
 

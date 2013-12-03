@@ -144,6 +144,16 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
             }
             $addIcon = null;
 
+            if (strpos($this->_attributes['class'], 'minus')) {
+                $this->_attributes['class'] = 'btn btn-danger';
+                $addIcon = '<i class="fa fa-minus-circle fa-lg"></i> ';
+            }
+
+            if (strpos($this->_attributes['class'], 'plus')) {
+                $this->_attributes['class'] = 'btn btn-success';
+                $addIcon = '<i class="fa fa-plus-circle fa-lg"></i> ';
+            }
+
             if (strpos($this->_attributes['class'], 'save')) {
                 $this->_attributes['class'] = 'btn btn-primary';
                 $addIcon = '<i class="fa fa-check fa-lg"></i> ';

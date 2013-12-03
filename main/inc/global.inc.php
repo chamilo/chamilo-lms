@@ -256,11 +256,7 @@ $app->error(
 
         Session::setSession($app['session']);
 
-        //$code = ($e instanceof HttpException) ? $e->getStatusCode() : 500;
-        // It seems that error() is executed first than the before() middleware
-        // @ŧodo check this one
         $templateStyle = api_get_setting('template');
-
         $templateStyle = isset($templateStyle) && !empty($templateStyle) ? $templateStyle : 'default';
 
         if (!is_dir($app['sys_root'].'main/template/'.$templateStyle)) {
@@ -273,6 +269,10 @@ $app->error(
         $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
         /** @var Template $template */
         $template = $app['template'];
+
+        $template->setHeader($app['template.show_header']);
+        $template->setFooter($app['template.show_footer']);
+
         $template->assign('error', array('code' => $code, 'message' => $message));
         $response = $template->render_layout('error.tpl');
 

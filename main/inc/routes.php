@@ -2,7 +2,77 @@
 /* For licensing terms, see /license.txt */
 
 use Symfony\Component\HttpFoundation\Request;
+
 use \ChamiloSession as Session;
+
+// Check if users is logged in
+$userIsLoggedIn = function (Request $request) use ($app) {
+    $login = $app['url_generator']->generate('login');
+    $security = $app['security'];
+    if (!$security->isGranted('IS_AUTHENTICATED_FULLY')) {
+        return $app->redirect($login);
+    }
+};
+
+// Check if user can access a course.
+$checkLogin = function (Request $request) use ($app) {
+
+    if (api_is_platform_admin()) {
+        return null;
+    }
+    $isAllowedInCourse = Session::read('is_allowed_in_course');
+    $courseInfo = api_get_course_info();
+    $login = $app['url_generator']->generate('login');
+
+    if (empty($courseInfo)) {
+        return $app->redirect($login);
+    }
+
+    $isVisible = false;
+    if (isset($courseInfo) && isset($courseInfo['visibility'])) {
+        switch ($courseInfo['visibility']) {
+            default:
+            case COURSE_VISIBILITY_CLOSED: //Completely closed: the course is only accessible to the teachers. - 0
+                if (api_get_user_id() && !api_is_anonymous() && (api_is_allowed_to_edit())) {
+                    $isVisible = true;
+                }
+                break;
+            case COURSE_VISIBILITY_REGISTERED: //Private - access authorized to course members only - 1
+                if (api_get_user_id() && !api_is_anonymous() && $isAllowedInCourse) {
+                    $isVisible = true;
+                }
+                break;
+            case COURSE_VISIBILITY_OPEN_PLATFORM: // Open - access allowed for users registered on the platform - 2
+                if (api_get_user_id() && !api_is_anonymous()) {
+                    $isVisible = true;
+                }
+                break;
+            case COURSE_VISIBILITY_OPEN_WORLD: //Open - access allowed for the whole world - 3
+                $isVisible = true;
+                break;
+        }
+        //If password is set and user is not registered to the course then the course is not visible
+        if ($isAllowedInCourse == false & isset($courseInfo['registration_code']) && !empty($courseInfo['registration_code'])) {
+            $isVisible = false;
+        }
+    }
+
+    // Check session visibility
+    $sessionId = api_get_session_id();
+
+    if (!empty($sessionId)) {
+        //$is_allowed_in_course was set in local.inc.php
+        if (!$isAllowedInCourse) {
+            $isVisible = false;
+        }
+    }
+
+    if (!$isVisible) {
+        return $app->redirect($login);
+        /*$subRequest = Request::create($login, 'GET');
+        return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);*/
+    }
+};
 
 /** Setting course session and group global values */
 $settingCourseConditions = function (Request $request) use ($cidReset, $app) {
@@ -69,8 +139,8 @@ $settingCourseConditions = function (Request $request) use ($cidReset, $app) {
 
     if (!empty($courseCode) && $courseCode != -1) {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $time       = api_get_utc_datetime();
-        $sql        = "UPDATE $tbl_course SET last_visit= '$time' WHERE code='$courseCode'";
+        $time = api_get_utc_datetime();
+        $sql = "UPDATE $tbl_course SET last_visit= '$time' WHERE code='$courseCode'";
         Database::query($sql);
     }
 
@@ -105,6 +175,7 @@ $settingCourseConditions = function (Request $request) use ($cidReset, $app) {
     }
 };
 
+/** Only course admin has access. */
 $userCourseAdmin = function(Request $request) use ($app) {
     if (api_is_allowed_to_edit()) {
         return null;
@@ -113,7 +184,7 @@ $userCourseAdmin = function(Request $request) use ($app) {
     }
 };
 
-/** Checks user permissions inside a course teacher? coach? etc */
+/** Set user permissions inside a course teacher? coach? etc */
 $userPermissionsInsideACourse = function (Request $request) use ($app) {
 
     $courseId  = api_get_course_int_id();
@@ -123,9 +194,6 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
     //If I'm the admin platform i'm a teacher of the course
     $is_platformAdmin = api_is_platform_admin();
     $courseReset      = Session::read('courseReset');
-
-    //$app['monolog']->addDebug($courseReset);
-    //$app['monolog']->addDebug($courseId);
 
     // Course
     $is_courseMember = false;
@@ -361,6 +429,7 @@ $afterLogin = function (Request $request) use ($app) {
     }
 };
 
+/** Removes the cid reset and other session values */
 $removeCidReset = function (Request $request) use ($app) {
     // Deleting course info.
     Session::erase('_cid');
@@ -399,7 +468,7 @@ $removeCidResetDependingOfSection = function (Request $request) use ($app, $remo
     }
 };
 
-/** / and /index paths */
+/** "/" and "/index" paths */
 $app->match('/', 'index.controller:indexAction', 'GET')
     ->assert('type', '.+') //allowing slash "/"
     ->before($removeCidReset)
@@ -410,21 +479,24 @@ $app->match('/index', 'index.controller:indexAction', 'GET')
     ->after($afterLogin)
     ->bind('index');
 
-/** Userportal */
+/** User portal */
 $app->get('/userportal', 'userPortal.controller:indexAction')
+    ->before($userIsLoggedIn)
     ->before($removeCidReset);
 
 $app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexAction')
+    ->before($userIsLoggedIn)
     ->before($removeCidReset)
     ->value('type', 'courses') //default values
     ->value('filter', 'current')
     ->value('page', '1')
     ->bind('userportal');
 
-/** main files */
+/** Legacy wrapper */
 $app->match('/main/{file}', 'legacy.controller:classicAction', 'GET|POST')
     ->before($removeCidResetDependingOfSection)
     ->before($settingCourseConditions)
+    ->before($checkLogin)
     ->before(
         function() use ($app) {
             // Do not load breadcrumbs
@@ -437,19 +509,20 @@ $app->match('/main/{file}', 'legacy.controller:classicAction', 'GET|POST')
 $app->match('/login', 'index.controller:loginAction', 'GET|POST')
     ->bind('login');
 
-
 /** Course home instead of courses/MATHS the new URL is web/courses/MATHS  */
 $app->match('/courses/{cidReq}/{id_session}/', 'course_home.controller:indexAction', 'GET|POST')
     ->assert('id_session', '\d+')
     ->assert('type', '.+')
     ->before($settingCourseConditions)
     ->before($userPermissionsInsideACourse)
+    ->before($checkLogin)
     ->bind('course');
 
 $app->match('/courses/{cidReq}', 'course_home.controller:indexAction', 'GET|POST')
     ->assert('type', '.+')
     ->before($settingCourseConditions)
-    ->before($userPermissionsInsideACourse);
+    ->before($userPermissionsInsideACourse)
+    ->before($checkLogin);
 
 // @todo this is the same as above but with out slash (otherwise we will have an httpexception)
 $app->match('/courses/{cidReq}/', 'course_home.controller:indexAction', 'GET|POST')
@@ -515,13 +588,11 @@ $app->get('/data/upload/groups/{groupId}/{file}', 'index.controller:getGroupFile
     ->assert('type', '.+');
 
 /** Admin */
-
 $app->get('/admin/dashboard', 'index.controller:dashboardAction')
     ->assert('type', '.+')
     ->bind('admin_dashboard');
 
 /** Question manager - admin */
-
 $app->get('/admin/questionmanager', 'question_manager.controller:questionManagerIndexAction')
     ->assert('type', '.+')
     ->bind('admin_questionmanager');

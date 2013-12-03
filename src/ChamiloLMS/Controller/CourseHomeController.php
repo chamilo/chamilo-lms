@@ -102,11 +102,8 @@ class CourseHomeController
      */
     public function getFileAction(Application $app, $courseCode, $fileName)
     {
-        api_protect_course_script();
-
         $courseInfo = api_get_course_info($courseCode);
         $sessionId = $app['request']->get('id_session');
-        //$groupId = $app['request']->get('gidReq');
 
         $docId = \DocumentManager::get_document_id($courseInfo, "/".$fileName);
 

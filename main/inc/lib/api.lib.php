@@ -9,6 +9,9 @@
  */
 
 use \ChamiloSession as Session;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+
 
 /**
  * Constants declaration
@@ -968,68 +971,8 @@ function api_valid_email($address) {
  * @todo replace global variable
  * @author Roan Embrechts
  */
-function api_protect_course_script($print_headers = false, $allow_session_admins = false, $allow_drh = false) {
-    $is_allowed_in_course = Session::read('is_allowed_in_course');
-    $is_visible = false;
-
-    $course_info = api_get_course_info();
-
-    //If course is not set then is not allowed to enter in a course page
-
-    if (empty($course_info)) {
-        api_not_allowed($print_headers);
-    }
-
-    if (api_is_drh()) {
-        return true;
-    }
-
-    if (api_is_platform_admin($allow_session_admins)) {
-    	return true;
-    }
-
-    if (isset($course_info) && isset($course_info['visibility'])) {
-    	switch ($course_info['visibility']) {
-    		default:
-    		case COURSE_VISIBILITY_CLOSED: //Completely closed: the course is only accessible to the teachers. - 0
-    			if (api_get_user_id() && !api_is_anonymous() && (api_is_allowed_to_edit())) {
-    				$is_visible = true;
-    			}
-    			break;
-    		case COURSE_VISIBILITY_REGISTERED: //Private - access authorized to course members only - 1
-    			if (api_get_user_id() && !api_is_anonymous() && $is_allowed_in_course) {
-    				$is_visible = true;
-    			}
-    			break;
-    		case COURSE_VISIBILITY_OPEN_PLATFORM: // Open - access allowed for users registered on the platform - 2
-    			if (api_get_user_id() && !api_is_anonymous()) {
-    				$is_visible = true;
-    			}
-    			break;
-    		case COURSE_VISIBILITY_OPEN_WORLD: //Open - access allowed for the whole world - 3
-    			$is_visible = true;
-    			break;
-    	}
-        //If password is set and user is not registered to the course then the course is not visible
-        if ($is_allowed_in_course == false & isset($course_info['registration_code']) && !empty($course_info['registration_code'])) {
-            $is_visible = false;
-    	}
-    }
-
-    //Check session visibility
-    $session_id = api_get_session_id();
-
-    if (!empty($session_id)) {
-        //$is_allowed_in_course was set in local.inc.php
-        if (!$is_allowed_in_course) {
-            $is_visible = false;
-        }
-    }
-
-    if (!$is_visible) {
-        api_not_allowed($print_headers);
-        return false;
-    }
+function api_protect_course_script($print_headers = false, $allow_session_admins = false, $allow_drh = false)
+{
     return true;
 }
 
@@ -3011,146 +2954,21 @@ function api_is_anonymous($user_id = null, $db_check = false) {
     return isset($_user['is_anonymous']) && $_user['is_anonymous'] === true;
 }
 
-/*
- * Returns a not found page
- * @todo use templates to customize the not found page
- */
-function api_not_found($print_headers = false) {
-    global $app;
-    $origin = isset($_GET['origin']) ? $_GET['origin'] : '';
-    $show_headers = 0;
-    if ((!headers_sent() || $print_headers) && $origin != 'learnpath') {
-        $show_headers = 1;
-    }
-    $app['template.show_header'] = $show_headers;
-    $app['template.show_footer'] = $show_headers;
-
-    $tpl = $app['template'];
-    $msg = get_lang('NotFound');
-    $tpl->assign('content', $msg);
-    $tpl->display_one_col_template();
-}
-
 /**
- * Displays message "You are not allowed here..." and exits the entire script.
- * @param bool      Whether or not to print headers (default = false -> does not print them)
- *
- * @author Roan Embrechts
- * @author Yannick Warnier
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @version 1.0, February 2004
- * @version dokeos 1.8, August 2006
+ * @param bool $printHeaders
+ * @param string $message
  */
-function api_not_allowed($print_headers = false, $message = null) {
+function api_not_allowed($printHeaders = false, $message = null)
+{
     global $app;
-
-    if (api_get_setting('sso_authentication') === 'true') {
-        global $osso;
-        if ($osso) {
-            $osso->logout();
-        }
+    if (empty($message)) {
+        $message = 'Unauthorized';
     }
-
-    $home_url   = api_get_path(WEB_PATH);
-    $user_id    = api_get_user_id();
-    $course     = api_get_course_id();
-
-    global $this_section;
-
-    if (!isset($user_id)) {
-        //Why the CustomPages::enabled() need to be to set the request_uri
-        $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
+    if ($printHeaders == false) {
+        $app['template.show_footer'] = false;
+        $app['template.show_header'] = false;
     }
-
-    if (CustomPages::enabled() && !isset($user_id)) {
-        CustomPages::display(CustomPages::INDEX_UNLOGGED);
-    }
-
-    $origin = isset($_GET['origin']) ? $_GET['origin'] : '';
-
-    $msg = null;
-    if (isset($message)) {
-        $msg = $message;
-    } else {
-        $msg = Display::return_message(get_lang('NotAllowedClickBack'), 'error', false);
-    }
-
-    $msg = Display::div($msg, array('align'=>'center'));
-
-    $show_headers = 0;
-
-    if ($print_headers && $origin != 'learnpath') {
-        $show_headers = 1;
-    }
-
-    $app['template.show_header'] = $show_headers;
-    $app['template.show_footer'] = $show_headers;
-
-    $app['template']->assign('content', $msg);
-    $app['allowed'] = true;
-
-    if (($user_id!=0 && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {
-        // if the access is not authorized and there is some login information
-        // but the cidReq is not found, assume we are missing course data and send the user
-        // to the user_portal
-        //$tpl->display_one_col_template();
-        $app['allowed'] = false;
-        return false;
-    }
-
-    if (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE)) {
-
-        //only display form and return to the previous URL if there was a course ID included
-        if ($user_id != 0 && !api_is_anonymous()) {
-            //if there is a user ID, then the user is not allowed but the session is still there. Say so and exit
-            //$tpl->assign('content', $msg);
-            $app['template']->assign('content', $msg);
-            $app['allowed'] = false;
-            return false;
-        }
-
-        // If the user has no user ID, then his session has expired
-        $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
-        $action = str_replace('&amp;', '&', $action);
-        $form = new FormValidator('formLogin', 'post', $action, null, array('class'=>'form-stacked'));
-
-        //$form->addElement('text', 'login', get_lang('UserName'), array('size' => 17)); //old
-
-        $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'span3 autocapitalize_off')); //new
-
-        //$form->addElement('password', 'password', get_lang('Password'), array('size' => 17)); //old
-        $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password'), 'class' => 'span3')); //new
-        $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn span3'));
-
-        $content = Display::return_message(get_lang('NotAllowed').'<br />'.get_lang('PleaseLoginAgainFromFormBelow').'<br />', 'error', false);
-
-        $content .= '<div class="well_login">';
-        $content .= $form->return_form();
-        $content .='</div>';
-
-        $app['template']->assign('content', $content);
-        $app['allowed'] = false;
-
-        return false;
-        //$app->abort(403);
-    }
-
-    if ($user_id != 0 && !api_is_anonymous()) {
-        $app['allowed'] = false;
-        return false;
-    }
-    $msg = null;
-    // Check if the cookies are enabled. If are enabled and if no course ID was included in the requested URL, then the user has either lost his session or is anonymous, so redirect to homepage
-	if( !isset($_COOKIE['TestCookie']) && empty($_COOKIE['TestCookie']) ) {
-		$msg = Display::return_message(get_lang('NoCookies').'<br /><br /><a href="'.$home_url.'">'.get_lang('BackTo').' '.get_lang('CampusHomepage').'</a><br />', 'error', false);
-	} else {
-		$msg = Display::return_message(get_lang('NotAllowed').'<br /><br /><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br />', 'error', false);
-	}
-    $msg = Display::div($msg, array('align'=>'center'));
-    $app['template']->assign('content', $msg);
-    $app['allowed'] = false;
-    return false;
+    return $app->abort('401', $message);
 }
 
 

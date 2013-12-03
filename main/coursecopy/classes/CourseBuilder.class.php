@@ -975,19 +975,20 @@ class CourseBuilder
                 }
             }
             //$sql = 'SELECT * FROM '.$table_thematic_plan.' WHERE c_id = '.$course_id.' AND thematic_id = '.$row['id'];
+            if (count($thematic_plan_id_list) > 0) {
+                $sql = "SELECT tp.*
+                        FROM $table_thematic_plan tp
+                            INNER JOIN $table_thematic t ON (t.id=tp.thematic_id)
+                        WHERE   t.c_id = $course_id AND
+                                tp.c_id = $course_id AND
+                                thematic_id = {$row['id']}  AND
+                                 tp.id IN (".implode(', ', $thematic_plan_id_list).") ";
 
-            $sql = "SELECT tp.*
-                    FROM $table_thematic_plan tp
-                        INNER JOIN $table_thematic t ON (t.id=tp.thematic_id)
-                    WHERE   t.c_id = $course_id AND
-                            tp.c_id = $course_id AND
-                            thematic_id = {$row['id']}  AND
-                             tp.id IN (".implode(', ', $thematic_plan_id_list).") ";
 
-
-            $result = Database::query($sql);
-            while ($sub_row = Database::fetch_array($result,'ASSOC')) {
-                $thematic->add_thematic_plan($sub_row);
+                $result = Database::query($sql);
+                while ($sub_row = Database::fetch_array($result,'ASSOC')) {
+                    $thematic->add_thematic_plan($sub_row);
+                }
             }
             $this->course->add_resource($thematic);
         }

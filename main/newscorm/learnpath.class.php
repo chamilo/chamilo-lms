@@ -1862,6 +1862,10 @@ class learnpath
         $package_type = '';
         $at_root = false;
         $manifest = '';
+        $aicc_match_crs = 0;
+        $aicc_match_au = 0;
+        $aicc_match_des = 0;
+        $aicc_match_cst = 0;
 
         // The following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?).
         if (is_array($zipContentArray) && count($zipContentArray) > 0) {
@@ -1874,14 +1878,33 @@ class learnpath
                     $package_type = 'scorm';
                     break; // Exit the foreach loop.
                 }
-                elseif (preg_match('/aicc\//i', $thisContent['filename'])) {
-                    // If found an aicc directory... (!= false means it cannot be false (error) or 0 (no match)).
-                    $package_type = 'aicc';
+                elseif (preg_match('/aicc\//i', $thisContent['filename'])  || in_array(strtolower(pathinfo($thisContent['filename'], PATHINFO_EXTENSION)), array( 'crs','au','des','cst'))) {
+                    $ext = strtolower(pathinfo($thisContent['filename'], PATHINFO_EXTENSION));
+                    switch ($ext) {
+                        case 'crs':
+                            $aicc_match_crs = 1;
+                            break;
+                        case 'au':
+                            $aicc_match_au = 1;
+                            break;
+                        case 'des':
+                            $aicc_match_des = 1;
+                            break;
+                        case 'cst':
+                            $aicc_match_cst = 1;
+                            break;
+                        default:
+                            break;
+                    }
                     //break; // Don't exit the loop, because if we find an imsmanifest afterwards, we want it, not the AICC.
                 } else {
                     $package_type = '';
                 }
             }
+        }
+        if (empty($package_type) && 4 == ($aicc_match_crs + $aicc_match_au + $aicc_match_des + $aicc_match_cst)) {
+                // If found an aicc directory... (!= false means it cannot be false (error) or 0 (no match)).
+                $package_type = 'aicc';
         }
         return $package_type;
     }

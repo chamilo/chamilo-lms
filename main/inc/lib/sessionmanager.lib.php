@@ -2377,6 +2377,8 @@ class SessionManager
                         $sql_course = "INSERT IGNORE INTO $tbl_session_course
                                        SET course_code = '$course_code', id_session='$session_id'";
                         Database::query($sql_course);
+                        $course_info = api_get_course_info($course_code);
+                        SessionManager::installCourse($session_id, $course_info['real_id']);
 
                         if ($debug) {
                             $logger->addInfo("Sessions - Adding course '$course_code' to session #$session_id");
@@ -2748,8 +2750,9 @@ class SessionManager
     }
 
     /**
-     * @param array $sessions
-     * @param array $courses
+     * Assign coaches of a session(s) as teachers to a given course (or courses)
+     * @param array A list of session IDs
+     * @param array A list of course IDs
      * @return string
      */
     public static function copyCoachesFromSessionToCourse($sessions, $courses)
@@ -2811,7 +2814,12 @@ class SessionManager
         return $htmlResult;
     }
 
-    public static function getCourseToolToByManaged()
+    /**
+     * Get the list of course tools that have to be dealt with in case of
+     * registering any course to a session
+     * @return array The list of tools to be dealt with (literal names)
+     */
+    public static function getCourseToolToBeManaged()
     {
         return array(
             'courseDescription',
@@ -2821,12 +2829,14 @@ class SessionManager
 
 
     /**
-     * @param $sessionId
-     * @param $courseId
+     * Calls the methods bound to each tool when a course is registered into a session
+     * @param int Session ID
+     * @param int Course ID
+     * @return void
      */
     public static function installCourse($sessionId, $courseId)
     {
-        $toolList = self::getCourseToolToByManaged();
+        $toolList = self::getCourseToolToBeManaged();
 
         foreach($toolList as $tool) {
             $method = 'add'.$tool;
@@ -2837,12 +2847,14 @@ class SessionManager
     }
 
     /**
+     * Calls the methods bound to each tool when a course is unregistered from
+     * a session
      * @param $sessionId
      * @param $courseId
      */
     public static function unInstallCourse($sessionId, $courseId)
     {
-        $toolList = self::getCourseToolToByManaged();
+        $toolList = self::getCourseToolToBeManaged();
 
         foreach($toolList as $tool) {
             $method = 'remove'.$tool;

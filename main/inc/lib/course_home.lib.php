@@ -751,7 +751,7 @@ class CourseHome
                 $icon = Display::return_icon($tool['image'], $tool_name, array('class' => 'tool-icon', 'id' => 'toolimage_'.$tool['id']), ICON_SIZE_BIG, false);
 
                 // Validation when belongs to a session
-                $session_img = api_get_session_image($tool['session_id'], $_user['status']);
+                $session_img = api_get_session_image($tool['session_id'], (!empty($_user['status']) ? $_user['status'] : ''));
                 if ($studentview) {
                     $tool_link_params['href'] .= '&isStudentView=true';
                 }

@@ -179,13 +179,10 @@ if (!isset($_REQUEST['include'])) {
 
 global $_configuration;
 //hiding global announcements when user not connected
-if ($_configuration['hide_global_announcements_when_not_connected'] && isset($_user['user_id'])) {
-    $controller->tpl->assign('announcements_block', $announcements_block);    
+if (empty($_configuration['hide_global_announcements_when_not_connected']) || !empty($_user['user_id'])) {
+    $controller->tpl->assign('announcements_block', $announcements_block);
 }
-//hiding home top whe user not connected
-if ($_configuration['hide_home_top_when_connected'] && !isset($_user['user_id'])) {
-    $controller->tpl->assign('home_page_block', $controller->return_home_page());    
-}
+$controller->tpl->assign('home_page_block', $controller->return_home_page());
 $controller->tpl->assign('hot_courses', $hot_courses);
 $controller->tpl->assign('navigation_course_links', $controller->return_navigation_links());
 $controller->tpl->assign('notice_block', $controller->return_notice());

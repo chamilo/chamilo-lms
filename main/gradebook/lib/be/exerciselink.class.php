@@ -113,16 +113,17 @@ class ExerciseLink extends AbstractLink
                     $attribute['visibility'][] = $row['visibility'];
                     $attribute['comment'][] = $row['comment'];
                     $attribute['id'] = $row['id'];
-        		}
-                if (isset($attribute['path']) && is_array($attribute['path'])) {
-                    $hotpotatoes_exist = true;
-                    while (list($key, $path) = each($attribute['path'])) {
-                        $item = '';
-                        $title = GetQuizName($path, $documentPath);
-                        if ($title == '') {
-                            $title = basename($path);
+        		
+                    if (isset($attribute['path']) && is_array($attribute['path'])) {
+                        $hotpotatoes_exist = true;
+                        while (list($key, $path) = each($attribute['path'])) {
+                            $item = '';
+                            $title = GetQuizName($path, $documentPath);
+                            if ($title == '') {
+                                $title = basename($path);
+                            }
+                            $cats[] = array ($attribute['id'], $title.'(HP)');
                         }
-                        $cats[] = array ($attribute['id'], $title.'(HP)');
                     }
                 }
             }
@@ -316,7 +317,7 @@ class ExerciseLink extends AbstractLink
             if ($this->is_hp == 1) {
                 $ref_id = intval($this->get_ref_id());
                 $sql = "SELECT * FROM $tbl_exercise ex, $TBL_ITEM_PROPERTY ip 
-                        WHERE ip.ref = ex.id AND ip.c_id = $this->course_id AND ex.c_id = $this->course_id AND ip.tool = '".TOOL_DOCUMENT."' AND (ex.path LIKE '%htm%')AND (ex.path LIKE '%HotPotatoes_files%') AND ip.visibility = 1";    	       
+                        WHERE ip.ref = ex.id AND ip.c_id = $this->course_id AND ip.ref = $ref_id AND ex.c_id = $this->course_id AND ip.tool = '".TOOL_DOCUMENT."' AND (ex.path LIKE '%htm%')AND (ex.path LIKE '%HotPotatoes_files%') AND ip.visibility = 1";    	       
             } else {    	       
                 $sql = 'SELECT * FROM '.$tbl_exercise.' 
                         WHERE c_id = '.$this->course_id.' AND id = '.(int)$this->get_ref_id().' ';

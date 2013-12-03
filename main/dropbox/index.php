@@ -145,9 +145,9 @@ if (isset($_POST['submitWork'])) {
 	$check = Security::check_token();
 	if ($check) {
         $message = store_add_dropbox();
-        if (!empty($message)) {        
+        if (!empty($message)) {
             Display :: display_confirmation_message($message);
-        }		
+        }
 	}
 }
 
@@ -309,7 +309,7 @@ if ($action != 'add') {
 		}
 	}
 
-	if (!$_GET['view'] OR $_GET['view'] == 'sent' OR !$dropbox_cnf['sent_received_tabs']) {		
+	if (!$_GET['view'] OR $_GET['view'] == 'sent' OR !$dropbox_cnf['sent_received_tabs']) {
 		// This is for the categories
 		if (isset($_GET['view_sent_category']) AND $_GET['view_sent_category'] != '') {
 			$view_dropbox_category_sent = $_GET['view_sent_category'];
@@ -365,7 +365,7 @@ if ($action != 'add') {
 
 	/*	RECEIVED FILES */
 
-	if ($_GET['view'] == 'received' OR !$dropbox_cnf['sent_received_tabs']) {		
+	if ($_GET['view'] == 'received' OR !$dropbox_cnf['sent_received_tabs']) {
 		// This is for the categories
 		if (isset($_GET['view_received_category']) AND $_GET['view_received_category'] != '') {
 			$view_dropbox_category_received = $_GET['view_received_category'];
@@ -457,7 +457,7 @@ if ($action != 'add') {
 									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=movereceived&amp;move_id='.$dropbox_file->id.'&'.$sort_params.'">'.Display::return_icon('move.png', get_lang('Move'),'',ICON_SIZE_SMALL).'</a>
 									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=deletereceivedfile&amp;id='.$dropbox_file->id.'&'.$sort_params.'" onclick="javascript: return confirmation(\''.$dropbox_file->title.'\');">'.
                                     Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
-				
+
 				// This is a hack to have an additional row in a sortable table
 
 				if ($action == 'viewfeedback' AND isset($_GET['id']) and is_numeric($_GET['id']) AND $dropbox_file->id == $_GET['id']) {
@@ -516,7 +516,7 @@ if ($action != 'add') {
 
 	/*	SENT FILES */
 
-	if (!$_GET['view'] OR $_GET['view'] == 'sent' OR !$dropbox_cnf['sent_received_tabs']) {		
+	if (!$_GET['view'] OR $_GET['view'] == 'sent' OR !$dropbox_cnf['sent_received_tabs']) {
 		// This is for the categories
 		if (isset($_GET['view_sent_category']) AND $_GET['view_sent_category'] != '') {
 			$view_dropbox_category_sent = $_GET['view_sent_category'];
@@ -526,7 +526,7 @@ if ($action != 'add') {
 
 		// Object initialisation
 		$dropbox_person = new Dropbox_Person(api_get_user_id(), $is_courseAdmin, $is_courseTutor);
-        
+
 		// Constructing the array that contains the total number of feedback messages per document.
 		$number_feedback = get_total_number_feedback();
 
@@ -650,7 +650,6 @@ if ($action != 'add') {
 		}
 		Display::display_sortable_config_table('dropbox', $column_header, $dropbox_data_sent, $sorting_options, $paging_options, $additional_get_parameters, $column_show, $column_order, $selectlist);
 	}
-
 }
 
 Display::display_footer();

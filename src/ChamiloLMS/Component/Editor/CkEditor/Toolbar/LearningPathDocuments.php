@@ -1,10 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
-namespace ChamiloLMS\Component\Editor\Toolbar;
+namespace ChamiloLMS\Component\Editor\CkEditor\Toolbar;
 
+/**
+ * Class LearningPathDocuments
+ * @package ChamiloLMS\Component\Editor\CkEditor\Toolbar
+ */
 class LearningPathDocuments extends Basic
 {
-
     public function getConfig()
     {
         $config['toolbarGroups'] = array(
@@ -30,5 +33,3 @@ class LearningPathDocuments extends Basic
         return $config;
     }
 }
-
-

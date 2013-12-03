@@ -278,25 +278,13 @@ EOT;
     {
         $this->addElement('html_editor', $name, $label, 'rows="15" cols="80"', $config);
         $this->applyFilter($name, 'trim');
-
-        if (is_array($config)) {
-            if (isset($config['FullPage'])) {
-                $full_page = is_bool($config['FullPage']) ? $config['FullPage'] : ($config['FullPage'] === 'true');
-            } else {
-                $config['FullPage'] = $full_page;
-            }
-        } else {
-            $config = array('FullPage' => (bool) $full_page);
-        }
-
         if ($required) {
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
         }
 
-        if ($full_page) {
-            $element = $this->getElement($name);
-            $element->fullPage = true;
-        }
+        /** @var HTML_QuickForm_html_editor $element */
+        $element = $this->getElement($name);
+        $element->editor->processConfig($config);
     }
 
     /**

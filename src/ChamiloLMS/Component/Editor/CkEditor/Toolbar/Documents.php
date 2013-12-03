@@ -1,7 +1,11 @@
 <?php
 
-namespace ChamiloLMS\Component\Editor\Toolbar;
+namespace ChamiloLMS\Component\Editor\CkEditor\Toolbar;
 
+/**
+ * Class Documents
+ * @package ChamiloLMS\Component\Editor\CkEditor\Toolbar
+ */
 class Documents extends Basic
 {
 
@@ -31,5 +35,3 @@ class Documents extends Basic
         return $config;
     }
 }
-
-

@@ -3,7 +3,7 @@
 namespace ChamiloLMS\Component\Editor;
 
 /**
- * Class Connector
+ * Class elfinder Connector - editor + Chamilo repository
  * @package ChamiloLMS\Component\Editor
  */
 class Connector
@@ -25,7 +25,8 @@ class Connector
      * @param string $volume
      * @return bool|null
      **/
-    public function access($attr, $path, $data, $volume) {
+    public function access($attr, $path, $data, $volume)
+    {
         //error_log($path); error_log($attr);
     	return strpos(basename($path), '.') === 0       // if file/folder begins with '.' (dot)
     		? !($attr == 'read' || $attr == 'write')    // set read+write to false, other (locked+hidden) set to true

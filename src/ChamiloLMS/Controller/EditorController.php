@@ -21,15 +21,15 @@ class EditorController
      */
     public function filemanagerAction(Application $app)
     {
-        $response = $app['template']->render_template('javascript/elfinder.tpl');
+        $response = $app['template']->render_template($app['html_editor']->getTemplate());
 
         return new Response($response, 200, array());
     }
 
     /**
-     * @param Application $app
+     *
      */
-    public function connectorAction(Application $app)
+    public function connectorAction()
     {
         $chamiloConnector = new Connector();
         $opts = $chamiloConnector->getOperations();

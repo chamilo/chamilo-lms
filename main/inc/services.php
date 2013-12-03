@@ -14,6 +14,11 @@ use Silex\Application;
 use Silex\ServiceProviderInterface;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManager;
+use MediaAlchemyst\Alchemyst;
+use MediaAlchemyst\MediaAlchemystServiceProvider;
+use MediaVorus\MediaVorusServiceProvider;
+use FFMpeg\FFMpegServiceProvider;
+use PHPExiftool\PHPExiftoolServiceProvider;
 
 // Flint
 $app->register(new Flint\Provider\ConfigServiceProvider());
@@ -26,6 +31,40 @@ $app->register(new Flint\Provider\RoutingServiceProvider(), array(
         //'cache_dir' => $app['sys_temp_path']
     ),
 ));
+
+if (isset($app['configuration']['services']['media-alchemyst'])) {
+    $app->register(new MediaAlchemystServiceProvider());
+
+    $app->register(new PHPExiftoolServiceProvider());
+    $app->register(new FFMpegServiceProvider());
+
+    $app->register(new MediaVorusServiceProvider(), array(
+        'media-alchemyst.configuration' => array(
+            'ffmpeg.threads'               => 4,
+            'ffmpeg.ffmpeg.timeout'        => 3600,
+            'ffmpeg.ffprobe.timeout'       => 60,
+            'ffmpeg.ffmpeg.binaries'       => '/path/to/custom/ffmpeg',
+            'ffmpeg.ffprobe.binaries'      => '/path/to/custom/ffprobe',
+            'imagine.driver'               => 'imagick',
+            'gs.timeout'                   => 60,
+            'gs.binaries'                  => '/path/to/custom/gs',
+            'mp4box.timeout'               => 60,
+            'mp4box.binaries'              => '/path/to/custom/MP4Box',
+            'swftools.timeout'             => 60,
+            'swftools.pdf2swf.binaries'    => '/path/to/custom/pdf2swf',
+            'swftools.swfrender.binaries'  => '/path/to/custom/swfrender',
+            'swftools.swfextract.binaries' => '/path/to/custom/swfextract',
+            'unoconv.binaries'             => $app['configuration']['services']['media-alchemyst']['unoconv_path'],
+            'unoconv.timeout'              => 60,
+            //'exiftool.reader'              => '/path/to/custom/exiftool.reader',
+            //'exiftool.writer'              => '/path/to/custom/exiftool.writer'
+        ),
+        //'media-alchemyst.logger' => $logger,  // A PSR Logger
+    ));
+
+
+}
+
 
 use Knp\Provider\ConsoleServiceProvider;
 
@@ -387,10 +426,7 @@ $app['twig'] = $app->share(
         $twig->addFilter('var_dump', new Twig_Filter_Function('var_dump'));
         $twig->addFilter('return_message', new Twig_Filter_Function('Display::return_message_and_translate'));
         $twig->addFilter('display_page_header', new Twig_Filter_Function('Display::page_header_and_translate'));
-        $twig->addFilter(
-            'display_page_subheader',
-            new Twig_Filter_Function('Display::page_subheader_and_translate')
-        );
+        $twig->addFilter('display_page_subheader', new Twig_Filter_Function('Display::page_subheader_and_translate'));
         $twig->addFilter('icon', new Twig_Filter_Function('Template::get_icon_path'));
         $twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
 
@@ -784,3 +820,8 @@ $app['upgrade.controller'] = $app->share(
     }
 );
 
+$app['html_editor'] = $app->share(function($app) {
+    return new ChamiloLMS\Component\Editor\CkEditor\CkEditor($app['translator'], $app['url_generator']);
+    //return new ChamiloLMS\Component\Editor\TinyMce\TinyMce($app['translator'], $app['url_generator']);
+
+});

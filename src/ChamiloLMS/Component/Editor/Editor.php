@@ -2,6 +2,10 @@
 /* For licensing terms, see /license.txt */
 namespace ChamiloLMS\Component\Editor;
 
+/**
+ * Class Editor
+ * @package ChamiloLMS\Component\Editor
+ */
 class Editor
 {
     /**
@@ -34,13 +38,15 @@ class Editor
     /** @var \Symfony\Component\Translation\Translator */
     public $translator;
 
+    /** @var \Symfony\Component\Routing\Generator\UrlGenerator */
+    public $urlGenerator;
+
     /**
-     * @param string $name
      * @param \Symfony\Component\Translation\Translator $translator
+     * @param  \Symfony\Component\Routing\Generator\UrlGenerator $urlGenerator
      */
-    public function __construct($name, \Symfony\Component\Translation\Translator $translator)
+    public function __construct(\Symfony\Component\Translation\Translator $translator, $urlGenerator)
     {
-        $this->name = $name;
         $this->toolbarSet   = 'Basic';
         $this->value        = '';
         $this->config       = array();
@@ -48,6 +54,23 @@ class Editor
         $this->setConfigAttribute('height', '200');
         $this->setConfigAttribute('fullPage', false);
         $this->translator = $translator;
+        $this->urlGenerator = $urlGenerator;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 
     /**
@@ -57,10 +80,9 @@ class Editor
      */
     public function createHtml()
     {
-        $Html = '<textarea id="'.$this->name.'" name="'.$this->name.'" class="ckeditor" >'.$this->value.'</textarea>';
-        $Html .= $this->editorReplace();
-
-        return $Html;
+        $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'">'.$this->value.'</textarea>';
+        //$html .= $this->editorReplace();
+        return $html;
     }
 
     /**
@@ -68,7 +90,7 @@ class Editor
      */
     public function editorReplace()
     {
-        $toolbar  = new Toolbar\Basic($this->toolbarSet);
+        $toolbar  = new Toolbar($this->toolbarSet, $this->config);
         $toolbar->setLanguage($this->translator->getLocale());
         $config = $toolbar->getConfig();
         $javascript = $this->toJavascript($config);
@@ -81,7 +103,6 @@ class Editor
         return $html;
     }
 
-
     /**
      * Converts a PHP variable into its Javascript equivalent.
      * The code of this method has been "borrowed" from the function drupal_to_js() within the Drupal CMS.
@@ -90,7 +111,7 @@ class Editor
      * Note: This function is similar to json_encode(), in addition it produces HTML-safe strings, i.e. with <, > and & escaped.
      * @link http://drupal.org/
      */
-    private function toJavascript($var)
+    protected function toJavascript($var)
     {
         switch (gettype($var)) {
             case 'boolean':
@@ -166,5 +187,36 @@ class Editor
     public function getConfigAttribute($key)
     {
         return isset($this->config[$key]) ? $this->config[$key] : null;
+    }
+
+    /**
+     * @param array $config
+     */
+    public function processConfig($config)
+    {
+        if (is_array($config)) {
+            foreach ($config as $key => $value) {
+                switch($key) {
+                    case 'ToolbarSet':
+                        $this->toolbarSet = $value;
+                        break;
+                    case 'Config':
+                        $this->processConfig($value);
+                        break;
+                    case 'Width':
+                        $this->setConfigAttribute('width', $value);
+                        break;
+                    case 'Height':
+                        $this->setConfigAttribute('height', $value);
+                        break;
+                    case 'FullPage':
+                        $this->setConfigAttribute('fullPage', $value);
+                        break;
+                    default:
+                        $this->setConfigAttribute($key, $value);
+                        break;
+                }
+            }
+        }
     }
 }

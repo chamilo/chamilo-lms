@@ -1,22 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
-namespace ChamiloLMS\Component\Editor\Toolbar;
+namespace ChamiloLMS\Component\Editor\CkEditor\Toolbar;
 
-class Basic
+use ChamiloLMS\Component\Editor\Toolbar;
+
+/**
+ * Class Basic
+ * @package ChamiloLMS\Component\Editor\CkEditor\Toolbar
+ */
+class Basic extends Toolbar
 {
-    public $config;
-
-    public function __construct($toolbar = null)
-    {
-        if (!empty($toolbar)) {
-            if (class_exists(__NAMESPACE__."\\".$toolbar)) {
-                $class = __NAMESPACE__."\\".$toolbar;
-                $customToolbar = new $class;
-                $this->config = $customToolbar->getConfig();
-            }
-        }
-    }
-
     public function getConfig()
     {
 
@@ -98,16 +91,8 @@ class Basic
             $this->config = $config;
         }
 
-
         //$config['width'] = '100';
         //$config['height'] = '200';
         return $this->config;
     }
-
-    public function setLanguage($language)
-    {
-        $this->config['language'] = $language;
-    }
-
 }
-

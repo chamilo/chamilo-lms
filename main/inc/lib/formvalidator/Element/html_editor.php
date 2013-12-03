@@ -8,7 +8,9 @@ require_once 'HTML/QuickForm/textarea.php';
  */
 class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 {
+    /** @var \ChamiloLMS\Component\Editor\Editor */
     public $editor;
+
 
     /**
      * Class constructor
@@ -25,31 +27,17 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
         }
 
         HTML_QuickForm_element :: HTML_QuickForm_element($name, $label, $attributes);
+
         $this->_persistantFreeze = true;
         $this->_type = 'html_editor';
 
         global $app, $fck_attribute;
-        $this->editor = new ChamiloLMS\Component\Editor\Editor($name, $app['translator']);
-        $this->editor->toolbarSet = $fck_attribute['ToolbarSet'];
-        //We get the optionals config parameters in $fck_attribute array
-        $this->editor->config = !empty($fck_attribute['Config']) ? $fck_attribute['Config'] : array();
-
-        $width = !empty($fck_attribute['Width']) ? $fck_attribute['Width'] : '990';
-        $this->editor->setConfigAttribute('width', $width);
-        $height = !empty($fck_attribute['Height']) ? $fck_attribute['Height'] : '400';
-        $this->editor->setConfigAttribute('height', $height);
-
-        if (isset($fck_attribute['FullPage'])) {
-            $fullPage = is_bool($config['FullPage']) ? $config['FullPage'] : ($config['FullPage'] === 'true');
-            $this->editor->setConfigAttribute('fullPage', $fullPage);
-        }
-
-        // This is an alternative (a better) way to pass configuration data to the editor.
-        if (is_array($config)) {
-            foreach ($config as $key => $value) {
-                $this->editor->setConfigAttribute($key, $value);
-            }
-        }
+        /** @var ChamiloLMS\Component\Editor\Editor $editor */
+        $editor = $app['html_editor'];
+        $this->editor = $editor;
+        $this->editor->setName($name);
+        $this->editor->processConfig($fck_attribute);
+        $this->editor->processConfig($config);
     }
 
     /**
@@ -89,6 +77,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
     public function buildEditor()
     {
         $this->editor->value = $this->getValue();
+        $this->editor->setName($this->getName());
         $result = $this->editor->createHtml();
         return $result;
     }

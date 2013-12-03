@@ -1,8 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
-namespace ChamiloLMS\Component\Editor\Toolbar;
+namespace ChamiloLMS\Component\Editor\CkEditor\Toolbar;
 
-class UniqueAnswerImage extends Basic
+/**
+ * Class TestFreeAnswer
+ * @package ChamiloLMS\Component\Editor\CkEditor\Toolbar
+ */
+class TestFreeAnswer extends Basic
 {
     public function getConfig()
     {
@@ -20,11 +24,23 @@ class UniqueAnswerImage extends Basic
             array('name' => 'mode')
         );
 
-        $config['fullPage'] = true;
+        $config['fullPage'] = false;
+
+        $config['extraPlugins'] = 'wordcount';
+
+        $config['wordcount'] = array(
+            // Whether or not you want to show the Word Count
+            'showWordCount' => true,
+            // Whether or not you want to show the Char Count
+            'showCharCount' => true,
+            // Option to limit the characters in the Editor
+            'charLimit' => 'unlimited',
+            // Option to limit the words in the Editor
+            'wordLimit' => 'unlimited'
+        );
+
         //$config['height'] = '200';
 
         return $config;
     }
 }
-
-

@@ -1,15 +1,21 @@
 <?php
 /* For licensing terms, see /license.txt */
-namespace ChamiloLMS\Component\Editor\Toolbar;
+namespace ChamiloLMS\Component\Editor\CkEditor\Toolbar;
 
-class TestProposedAnswer
+/**
+ * Class TestQuestionDescription
+ * @package ChamiloLMS\Component\Editor\CkEditor\Toolbar
+ */
+class TestQuestionDescription
 {
-
     public function getConfig()
     {
         $config['toolbarGroups'] = array(
-            //array('name' => 'document'),
+            array('name' => 'document',  'groups' =>array('document', 'doctools')),
             array('name' => 'clipboard',    'groups' =>array('clipboard', 'undo', )),
+            array('name' => 'editing',    'groups' =>array('clipboard', 'undo', )),
+            //array('name' => 'forms',    'groups' =>array('clipboard', 'undo', )),
+            '/',
             array('name' => 'basicstyles',    'groups' =>array('basicstyles', 'cleanup', )),
             array('name' => 'paragraph',    'groups' =>array('list', 'indent', 'blocks', 'align' )),
             array('name' => 'links'),
@@ -17,14 +23,14 @@ class TestProposedAnswer
             '/',
             array('name' => 'styles'),
             array('name' => 'colors'),
+            array('name' => 'tools'),
+            array('name' => 'others'),
             array('name' => 'mode')
+            //array('name' => 'about')
         );
 
-        $config['toolbarCanCollapse'] = true;
-        $config['toolbarStartupExpanded'] = false;
         //$config['width'] = '100';
         //$config['height'] = '200';
         return $config;
     }
 }
-

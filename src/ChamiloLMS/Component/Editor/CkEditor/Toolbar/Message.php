@@ -1,10 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
-namespace ChamiloLMS\Component\Editor\Toolbar;
+namespace ChamiloLMS\Component\Editor\CkEditor\Toolbar;
 
+/**
+ * Class Message
+ * @package ChamiloLMS\Component\Editor\CkEditor\Toolbar
+ */
 class Message extends Basic
 {
-
     public function getConfig()
     {
         $config['toolbarGroups'] = array(
@@ -26,5 +29,3 @@ class Message extends Basic
         return $config;
     }
 }
-
-

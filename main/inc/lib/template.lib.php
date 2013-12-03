@@ -490,13 +490,13 @@ class Template
                 $jsFolder.'jquery.js',
                 $jsFolder.'chosen/chosen.jquery.min.js',
                 $jsFolder.'jquery-ui/js/jquery-ui.custom.js',
-                //$jsFolder.'jquery-ui/jquery.ui.touch-punch.js',
                 $jsFolder.'thickbox.js',
-                $jsFolder.'ckeditor/ckeditor.js',
-                //$jsFolder.'tinymce/tinymce.min.js',
+
                 $jsFolder.'bootstrap/js/bootstrap.js',
             );
         }
+
+        $this->app['html_editor']->getJavascriptToInclude($js_files);
 
         if (api_is_global_chat_enabled()) {
             //Do not include the global chat in LP

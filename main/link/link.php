@@ -33,7 +33,7 @@ require_once api_get_path(LIBRARY_PATH).'link.lib.php';
 $this_section = SECTION_COURSES;
 api_protect_course_script();
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
     $(document).ready( function() {
     	for (i=0;i<$(".actions").length;i++) {
     		if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
@@ -78,15 +78,15 @@ $session_id = api_get_session_id();
 $condition_session = api_get_session_condition($session_id, true, true);
 
 if (isset($_GET['action']) && $_GET['action'] == 'addlink') {
-	$nameTools = '';
-	$interbreadcrumb[] = array('url' => 'link.php', 'name' => get_lang('Links'));
-	$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AddLink'));
+    $nameTools = '';
+    $interbreadcrumb[] = array('url' => 'link.php', 'name' => get_lang('Links'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AddLink'));
 }
 
 if (isset($_GET['action']) && $_GET['action'] == 'addcategory') {
-	$nameTools = '';
-	$interbreadcrumb[] = array('url' => 'link.php', 'name' => get_lang('Links'));
-	$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AddCategory'));
+    $nameTools = '';
+    $interbreadcrumb[] = array('url' => 'link.php', 'name' => get_lang('Links'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AddCategory'));
 }
 
 if (isset($_GET['action']) && $_GET['action'] == 'editlink') {

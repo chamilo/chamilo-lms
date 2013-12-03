@@ -46,114 +46,13 @@ $(document).ready(function() {
     );
 });
 
-function InnerDialogLoaded() {
-	/*
-	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);
-	return B.ClickFrame();
-	*/
+function setFocus() {
+   $("#document_title").focus();
+}
 
-	var isIE  = (navigator.appVersion.indexOf(\'MSIE\') != -1) ? true : false ;
-	var EditorFrame = null ;
-
-	if ( !isIE ) {
-		EditorFrame = window.frames[0] ;
-	} else {
-		// For this dynamic page window.frames[0] enumerates frames in a different order in IE.
-		// We need a sure method to locate the frame that contains the online editor.
-		for ( var i = 0, n = window.frames.length ; i < n ; i++ ) {
-			if ( window.frames[i].location.toString().indexOf(\'InstanceName=content\') != -1 ) {
-				EditorFrame = window.frames[i] ;
-			}
-		}
-	}
-
-	if ( !EditorFrame ) {
-		return null ;
-	}
-
-	var B = new EditorFrame.FCKToolbarButton(\'Templates\', EditorFrame.FCKLang.Templates);
-	return B.ClickFrame();
-};
-
-	var temp=false;
-	var temp2=false;
-	var load_default_template = '.((isset($_POST['submit']) || empty($_SERVER['QUERY_STRING'])) ? 'false' : 'true').';
-
-	function FCKeditor_OnComplete( editorInstance ) {
-		editorInstance.Events.AttachEvent( \'OnSelectionChange\', check_for_title ) ;
-		document.getElementById(\'frmModel\').innerHTML = "<iframe style=\'height: 525px; width: 180px;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(
-    WEB_LIBRARY_PATH
-).'fckeditor/editor/fckdialogframe.html \'>";
-	}
-
-	function check_for_title() {
-		if (temp) {
-			// This functions shows that you can interact directly with the editor area
-			// DOM. In this way you have the freedom to do anything you want with it.
-
-			// Get the editor instance that we want to interact with.
-			var oEditor = FCKeditorAPI.GetInstance(\'content\') ;
-
-			// Get the Editor Area DOM (Document object).
-			var oDOM = oEditor.EditorDocument ;
-
-			var iLength ;
-			var contentText ;
-			var contentTextArray;
-			var bestandsnaamNieuw = "";
-			var bestandsnaamOud = "";
-
-			// The are two diffent ways to get the text (without HTML markups).
-			// It is browser specific.
-
-			if( document.all )		// If Internet Explorer.
-			{
-				contentText = oDOM.body.innerText ;
-			}
-			else					// If Gecko.
-			{
-				var r = oDOM.createRange() ;
-				r.selectNodeContents( oDOM.body ) ;
-				contentText = r.toString() ;
-			}
-
-			var index=contentText.indexOf("/*<![CDATA");
-			contentText=contentText.substr(0,index);
-
-			// Compose title if there is none
-			contentTextArray = contentText.split(\' \') ;
-			var x=0;
-			for(x=0; (x<5 && x<contentTextArray.length); x++)
-			{
-				if(x < 4)
-				{
-					bestandsnaamNieuw += contentTextArray[x] + \' \';
-				}
-				else
-				{
-					bestandsnaamNieuw += contentTextArray[x];
-				}
-			}
-		}
-		temp=true;
-	}
-
-	function trim(s) {
-        while(s.substring(0,1) == \' \') {
-            s = s.substring(1,s.length);
-        }
-        while(s.substring(s.length-1,s.length) == \' \') {
-            s = s.substring(0,s.length-1);
-        }
-        return s;
-	}
-	function setFocus() {
-	   $("#document_title").focus();
-    }
-
-	$(window).load(function () {
-        setFocus();
-    });
+$(window).load(function () {
+    setFocus();
+});
 </script>';
 
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';

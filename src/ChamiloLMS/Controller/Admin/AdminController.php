@@ -25,6 +25,7 @@ class AdminController extends CommonController
      * @param Application $app
      * @Route("/")
      * @Method({"GET"})
+     * @return Response
      */
     public function indexAction()
     {
@@ -66,8 +67,7 @@ class AdminController extends CommonController
         $adminUrl = api_get_path(WEB_CODE_PATH).'admin/';
 
         /* Users */
-
-        $blocks['users']['icon']  = \Display::return_icon('members.gif', get_lang('Users'), array(), ICON_SIZE_SMALL, false);
+        $blocks['users']['icon'] = \Display::return_icon('members.gif', get_lang('Users'), array(), ICON_SIZE_SMALL, false);
         $blocks['users']['label'] = api_ucfirst(get_lang('Users'));
 
         if (api_is_platform_admin()) {

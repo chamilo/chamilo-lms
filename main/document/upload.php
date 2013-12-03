@@ -213,13 +213,7 @@ $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is
 if (!$is_certificate_mode) {
 	echo build_directory_selector($folders, $document_id, (isset($group_properties['directory']) ? $group_properties['directory'] : array()));
 }
-
-/*$params = Uri::course_params();
-$params['id'] = Request::get('id');
-$action = Uri::here($params, false);*/
-
 $action = api_get_self().'?'.api_get_cidreq().'&id='.$document_id;
-
 $form = new FormValidator('upload', 'POST', $action.'#tabs-2', '', 'enctype="multipart/form-data"');
 $form->addElement('hidden', 'id', $document_id);
 $form->addElement('hidden', 'curdirpath', $path);

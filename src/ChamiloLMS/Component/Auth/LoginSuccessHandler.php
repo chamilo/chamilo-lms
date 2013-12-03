@@ -40,6 +40,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $userId = $user->getUserId();
 
         $session = $request->getSession();
+
         \ChamiloSession::setSession($session);
 
         event_login($user);

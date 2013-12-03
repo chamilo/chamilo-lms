@@ -62,40 +62,6 @@ $(document).ready(function() {
         }
     );
 });
-
-function InnerDialogLoaded() {
-	/*
-	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);
-	return B.ClickFrame();
-	*/
-	var isIE  = (navigator.appVersion.indexOf(\'MSIE\') != -1) ? true : false ;
-	var EditorFrame = null ;
-
-	if ( !isIE ) {
-		EditorFrame = window.frames[0] ;
-	} else {
-		// For this dynamic page window.frames[0] enumerates frames in a different order in IE.
-		// We need a sure method to locate the frame that contains the online editor.
-		for ( var i = 0, n = window.frames.length ; i < n ; i++ ) {
-			if ( window.frames[i].location.toString().indexOf(\'InstanceName=content\') != -1 ) {
-				EditorFrame = window.frames[i] ;
-			}
-		}
-	}
-
-	if ( !EditorFrame ) {
-		return null ;
-	}
-
-	var B = new EditorFrame.FCKToolbarButton(\'Templates\', EditorFrame.FCKLang.Templates);
-	return B.ClickFrame();
-};
-
-function FCKeditor_OnComplete( editorInstance) {
-	document.getElementById(\'frmModel\').innerHTML = "<iframe style=\'height: 525px; width: 180px;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(
-    WEB_LIBRARY_PATH
-).'fckeditor/editor/fckdialogframe.html \'>";
-}
 </script>';
 
 $_SESSION['whereami'] = 'document/create';
@@ -122,7 +88,7 @@ if (isset($_GET['id'])) {
     $dir_original = $dir;
 
     $doc = basename($file);
-    $my_cur_dir_path = Security::remove_XSS($_GET['curdirpath']);
+    $my_cur_dir_path = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
     $readonly = $document_data['readonly'];
 }
 
@@ -133,8 +99,8 @@ if (empty($document_data)) {
 $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
 
 //Call from
-$call_from_tool = Security::remove_XSS($_GET['origin']);
-$slide_id = Security::remove_XSS($_GET['origin_opt']);
+$call_from_tool = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : null;
+$slide_id = isset($_GET['origin_opt']) ? Security::remove_XSS($_GET['origin_opt']) : null;
 $file_name = $doc;
 
 $group_document = false;
@@ -183,15 +149,14 @@ $dbTable = Database::get_course_table(TABLE_DOCUMENT);
 $course_id = api_get_course_int_id();
 
 if (!empty($group_id)) {
-    $req_gid = '&amp;gidReq='.$group_id;
-    $interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace'));
+    $interbreadcrumb[] = array('url' => '../group/group_space.php?'.api_get_cidreq(), 'name' => get_lang('GroupSpace'));
     $group_document = true;
     $noPHP_SELF = true;
 }
 
 if (!$is_certificate_mode) {
     $interbreadcrumb[] = array(
-        "url" => "./document.php?curdirpath=".urlencode($my_cur_dir_path).$req_gid,
+        "url" => "./document.php?curdirpath=".urlencode($my_cur_dir_path).'&'.api_get_cidreq(),
         "name" => get_lang('Documents')
     );
 } else {
@@ -220,7 +185,7 @@ if (!$is_allowed_to_edit) {
 event_access_tool(TOOL_DOCUMENT);
 
 //TODO:check the below code and his functionality
-if (!is_allowed_to_edit()) {
+if (!api_is_allowed_to_edit()) {
     if (DocumentManager::check_readonly($course_info, $user_id, $file)) {
         api_not_allowed();
     }
@@ -250,7 +215,7 @@ if (isset($_POST['comment'])) {
 
 /*	WYSIWYG HTML EDITOR - Program Logic */
 if ($is_allowed_to_edit) {
-    if ($_POST['formSent'] == 1) {
+    if (isset($_POST['formSent']) && $_POST['formSent'] == 1) {
 
         $filename = stripslashes($_POST['filename']);
         $extension = $_POST['extension'];
@@ -470,7 +435,7 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin(
     $form->addElement('hidden', 'formSent');
     $defaults['formSent'] = 1;
 
-    $read_only_flag = $_POST['readonly'];
+    $read_only_flag = isset($_POST['readonly']) ? $_POST['readonly'] : null;
 
     // Desactivation of IE proprietary commenting tags inside the text before loading it on the online editor.
     // This fix has been proposed by Hubert Borderiou, see Bug #573, http://support.chamilo.org/issues/573
@@ -518,12 +483,12 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin(
 
     $defaults['filename'] = $filename;
     $defaults['extension'] = $extension;
-    $defaults['file_path'] = Security::remove_XSS($_GET['file']);
+    $defaults['file_path'] = isset($_GET['file']) ? Security::remove_XSS($_GET['file']) : null;
     $defaults['commentPath'] = $file;
     $defaults['renameTo'] = $file_name;
     $defaults['comment'] = $document_data['comment'];
-    $defaults['origin'] = Security::remove_XSS($_GET['origin']);
-    $defaults['origin_opt'] = Security::remove_XSS($_GET['origin_opt']);
+    $defaults['origin'] = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : null;
+    $defaults['origin_opt'] = isset($_GET['origin_opt']) ? Security::remove_XSS($_GET['origin_opt']) : null;
 
     $form->setDefaults($defaults);
 

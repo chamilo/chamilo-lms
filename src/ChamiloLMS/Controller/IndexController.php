@@ -169,8 +169,6 @@ class IndexController extends CommonController
         }
 
         $response = $template->render_layout('layout_2_col.tpl');
-
-        //return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
         return new Response($response, 200, array());
     }
 

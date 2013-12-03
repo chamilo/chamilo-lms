@@ -76,6 +76,7 @@ class CourseBuilder
         $this->course->path         = api_get_path(SYS_COURSE_PATH).$_course['path'].'/';
         $this->course->backup_path  = api_get_path(SYS_COURSE_PATH).$_course['path'];
         $this->course->encoding     = api_get_system_encoding(); //current platform encoding
+        // db_name is deprecated (only one database now)
         $this->course->db_name      = $_course['dbName'];
         $this->course->info         = $_course;
     }

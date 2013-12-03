@@ -208,7 +208,7 @@ class IndexManager {
 
 	/* Includes a created page */
 	function return_home_page() {
-
+        global $_configuration;
 		// Including the page for the news
 		$html = '';
 
@@ -216,6 +216,11 @@ class IndexManager {
 			$open = @(string)file_get_contents(api_get_path(SYS_PATH).$this->home.$_GET['include']);
 			$html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 		} else {
+            //hiding home top when user not connected
+            global $_user;
+            if ($_configuration['hide_home_top_when_connected'] && isset($_user['user_id'])) {
+                return $html;
+            }
 			if (!empty($_SESSION['user_language_choice'])) {
 				$user_selected_language = $_SESSION['user_language_choice'];
 			} elseif (!empty($_SESSION['_user']['language'])) {

@@ -2,6 +2,28 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$NumberOfGroupsToCreate = "Number of groups to create";
+$CoachesSubscribedAsATeacherInCourseX = "Coaches subscribed as teachers in course %s";
+$EnrollStudentsFromExistingSessions = "Enroll students from existing sessions";
+$EnrollTrainersFromExistingSessions = "Enroll trainers from existing sessions";
+$AddingStudentsFromSessionXToSessionY = "Adding students from session <b>%s</b> to session <b>%s</b>";
+$AddUserGroupToThatURL = "Add user group to this URL";
+$FirstLetter = "First letter";
+$UserGroupList = "User groups list";
+$AddUserGroupToURL = "Add group to URL";
+$UserGroupListInX = "Groups in %s";
+$UserGroupListInPlatform = "Platform groups list";
+$EditUserGroupToURL = "Edit groups for one URL";
+$ManageUserGroup = "Manage user groups";
+$RegistrationDisabled = "Sorry, you are trying to access the registration page for this portal, but registration is currently disabled. Please contact the administrator (see contact information in the footer). If you already have an account on this site.";
+$CasDirectCourseAccess = "Enter course with CAS authentication";
+$TeachersWillBeAddedAsCoachInAllCourseSessions = "Teachers will be added as a coach in all course sessions.";
+$YesImSure = "Yes, I'm sure";
+$NoIWantToTurnBack = "No, I want to return";
+$IfYouContinueYourAnswerWillBeSavedAnyChangeWillBeNotAllowed = "If you continue your answer will be saved. Any change will be not allowed.";
+$SpecialCourses = "Special courses";
+$Roles = "Roles";
+$ToolCurriculum = "Curriculum";
 $ToReviewXYZ = "%s to review (%s)";
 $UnansweredXYZ = "%s unanswered (%s)";
 $AnsweredXYZ = "%s answered (%s)+(%s)";
@@ -1463,8 +1485,4 @@ $DataTableSearch = "Search";
 $HideColumn = "Hide column";
 $DisplayColumn = "Show column";
 $LegalAgreementAccepted = "Legal agreement accepted";
-$AddingStudentsFromSessionXToSessionY = "Adding students from session <b>%s</b> to session <b>%s </b>";
-$EnrollTrainersFromExistingSessions = "Enroll trainers from existing sessions";
-$EnrollStudentsFromExistingSessions = "Enroll students from existing sessions";
-$CoachesSubscribedAsATeacherInCourseX = "Coaches will be subcribed as a teacher in the course %s";
 ?>

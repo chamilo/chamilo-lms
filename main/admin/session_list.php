@@ -7,7 +7,7 @@
 /**
  * Code
  */
-$language_file = 'admin';
+$language_file = array('admin', 'courses');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
@@ -45,8 +45,36 @@ if (!empty($error_message)) {
     Display::display_normal_message($error_message, false);
 }
 
-//jqgrid will use this URL to do the selects
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions';
+$sessionFilter = new FormValidator('course_filter', 'get', '', '', array('class'=> 'form-search'), false);
+$url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course';
+$courseList = array();
+$courseId = isset($_GET['course_id']) ? $_GET['course_id'] : null;
+if (!empty($courseId)) {
+    require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
+    $courseInfo = api_get_course_info_by_id($courseId);
+    $parents = getParentsToString($courseInfo['categoryCode']);
+    $courseList[] = array('id' => $courseInfo['id'], 'text' => $parents.$courseInfo['title']);
+}
+$sessionFilter->addElement('select_ajax', 'course_name', get_lang('SearchCourse'), null, array('url' => $url, 'defaults' => $courseList));
+$url = api_get_self();
+$actions = '
+<script>
+$(function() {
+    $("#course_name").on("change", function() {
+       var courseId = $(this).val();
+       console.log(courseId);
+       window.location = "'.$url.'?course_id="+courseId;
+    });
+});
+</script>';
+
+// jqgrid will use this URL to do the selects
+if (!empty($courseId)) {
+    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&course_id='.$courseId;
+} else {
+    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions';
+}
+
 
 if (isset($_REQUEST['keyword'])) {
     //Begin with see the searchOper param
@@ -170,14 +198,19 @@ $(function() {
     jQuery("#sessions").jqGrid('filterToolbar', options);
     var sgrid = $("#sessions")[0];
     sgrid.triggerToolbar();
-
 });
 </script>
 <div class="actions">
 <?php
+
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('new_session.png',get_lang('AddSession'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_many_session_to_category.php">'.Display::return_icon('session_to_category.png',get_lang('AddSessionsInCategories'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_list.php">'.Display::return_icon('folder.png',get_lang('ListSessionCategory'),'',ICON_SIZE_MEDIUM).'</a>';
+
+echo $actions;
+echo '<div class="pull-right">';
+echo $sessionFilter->return_form();
+echo '</div>';
 echo '</div>';
 echo Display::grid_html('sessions');
 Display::display_footer();

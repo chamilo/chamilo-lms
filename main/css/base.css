@@ -284,11 +284,18 @@ form .formw input {
 #top_main_content .span3 {
   float: left;
 }
+[dir=rtl] #top_main_content .span3 {
+  float: right;
+}
+
 #top_main_content .control-group .span3 {
   float: none;
 }
 #top_main_content .span9 {
   float: left;
+}
+[dir=rtl] #top_main_content .span9 {
+  float: right;
 }
 #top_main_content .span6 {
   width: 460px;
@@ -433,6 +440,16 @@ footer #footer_right {
     padding: 2px 2px 2px 14px;
     vertical-align:middle;
 }
+[dir=rtl] .actions {
+    background:#efefef;
+    border:1px solid #ccc;
+    margin-bottom: 11px;
+    height:32px;
+    padding: 2px 2px 2px 14px;
+    vertical-align:middle;
+    float: right;
+}
+
 .actions .actions-pagination {
   float:right;
   margin-top:2px;
@@ -502,6 +519,10 @@ footer #footer_right {
 
 #friend-container .thumbnail img {
     max-height: 100px;
+}
+
+[dir=rtl] #friends > .thumbnails > li {
+    float: right;
 }
 
 .show-grid [class*="span"] {

@@ -368,9 +368,10 @@ function return_menu() {
         $homep = api_get_path(SYS_PATH).'home/';
     }
 
-    $ext      = '.html';
-    $menutabs = 'home_tabs';
-    $home_top = '';
+    $ext        = '.html';
+    $menutabs   = 'home_tabs';
+    $mtloggedin = 'home_tabs_logged_in';
+    $home_top   = '';
 
     if (is_file($homep.$menutabs.'_'.$lang.$ext) && is_readable($homep.$menutabs.'_'.$lang.$ext)) {
         $home_top = @(string)file_get_contents($homep.$menutabs.'_'.$lang.$ext);
@@ -385,16 +386,40 @@ function return_menu() {
     $open = str_replace('{rel_path}',api_get_path(REL_PATH), $home_top);
     $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 
+    $open_mtloggedin = '';
+    if (api_get_user_id() && !api_is_anonymous()) {
+        if (is_file($homep.$mtloggedin.'_'.$lang.$ext) && is_readable($homep.$mtloggedin.'_'.$lang.$ext)) {
+            $home_top = @(string)file_get_contents($homep.$mtloggedin.'_'.$lang.$ext);
+            $home_top = str_replace('::private', '', $home_top);
+        } elseif (is_file($homep.$mtloggedin.$lang.$ext) && is_readable($homep.$mtloggedin.$lang.$ext)) {
+            $home_top = @(string)file_get_contents($homep.$mtloggedin.$lang.$ext);
+            $home_top = str_replace('::private', '', $home_top);
+        } else {
+            //$errorMsg = get_lang('HomePageFilesNotReadable');
+        }
+
+        $home_top = api_to_system_encoding($home_top, api_detect_encoding(strip_tags($home_top)));
+
+        $open_mtloggedin = str_replace('{rel_path}',api_get_path(REL_PATH), $home_top);
+        $open_mtloggedin = api_to_system_encoding($open_mtloggedin, api_detect_encoding(strip_tags($open_mtloggedin)));
+
+    }
+
     $lis = '';
 
-    if (!empty($open)) {
-        if (strpos($open, 'show_menu') === false) {
+    if (!empty($open) OR !empty($open_mtloggedin)) {
+        if (strpos($open.$open_mtloggedin, 'show_menu') === false) {
+
             if (api_is_anonymous()) {
                 $navigation[SECTION_CAMPUS]  = null;
             }
         } else {
             //$lis .= Display::tag('li', $open);
-            $lis .= $open;
+            if (api_get_user_id() && !api_is_anonymous()) {
+                $lis .= $open_mtloggedin;
+            } else {
+                $lis .= $open;    
+            }
         }
     }
 

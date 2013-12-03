@@ -46,6 +46,7 @@ class ImportCsv
 
     /**
      * @param Logger $logger
+     * @param array
      */
     public function __construct($logger, $conditions)
     {
@@ -56,7 +57,7 @@ class ImportCsv
     /**
      * @param bool $dump
      */
-    function setDumpValues($dump)
+    public function setDumpValues($dump)
     {
         $this->dumpValues = $dump;
     }
@@ -64,7 +65,7 @@ class ImportCsv
     /**
      * @return mixed
      */
-    function getDumpValues()
+    public function getDumpValues()
     {
         return $this->dumpValues;
     }
@@ -77,34 +78,43 @@ class ImportCsv
         $path = api_get_path(SYS_CODE_PATH).'cron/incoming/';
         if (!is_dir($path)) {
             echo "The folder! $path does not exits";
-            exit;
+            return 0;
         }
 
         if ($this->getDumpValues()) {
             $this->dumpDatabaseTables();
         }
 
-        echo "Starting with reading the files: ".PHP_EOL.PHP_EOL;
+        echo "Reading files: ".PHP_EOL.PHP_EOL;
 
         $files = scandir($path);
         $fileToProcess = array();
+        $fileToProcessStatic = array();
 
         if (!empty($files)) {
             foreach ($files as $file) {
                 $fileInfo = pathinfo($file);
                 if ($fileInfo['extension'] == 'csv') {
-                    // teachers_yyyymmdd.csv, courses_yyyymmdd.csv, students_yyyymmdd.csv and sessions_yyyymmdd.csv
+                    // Checking teachers_yyyymmdd.csv, courses_yyyymmdd.csv, students_yyyymmdd.csv and sessions_yyyymmdd.csv
                     $parts = explode('_', $fileInfo['filename']);
                     $preMethod = ucwords($parts[1]);
                     $preMethod = str_replace('-static', 'Static', $preMethod);
                     $method = 'import'.$preMethod;
 
+                    $isStatic = strpos($method, 'Static');
+
                     if (method_exists($this, $method)) {
-                         $fileToProcess[$parts[1]][] = array(
-                            'method' => $method,
-                            'file' => $path.$fileInfo['basename']
-                        );
-                        //$this->$method($path.$fileInfo['basename']);
+                        if ($method == 'importUnsubscribeStatic' || empty($isStatic)) {
+                            $fileToProcess[$parts[1]][] = array(
+                                'method' => $method,
+                                'file' => $path.$fileInfo['basename']
+                            );
+                        } else {
+                            $fileToProcessStatic[$parts[1]][] = array(
+                                'method' => $method,
+                                'file' => $path.$fileInfo['basename']
+                            );
+                        }
                     } else {
                         echo "Error - This file '$file' can't be processed.".PHP_EOL;
                         echo "Trying to call $method".PHP_EOL;
@@ -118,13 +128,12 @@ class ImportCsv
 
             if (empty($fileToProcess)) {
                 echo 'Error - no files to process.';
-                exit;
+                return 0;
             }
-
-            $sections = array('students', 'teachers', 'courses', 'sessions', 'unsubscribe-static');
 
             $this->prepareImport();
 
+            $sections = array('students', 'teachers', 'courses', 'sessions', 'unsubscribe-static');
             foreach ($sections as $section) {
                 $this->logger->addInfo("-- Import $section --");
 
@@ -134,10 +143,25 @@ class ImportCsv
                         $method = $fileInfo['method'];
                         $file = $fileInfo['file'];
 
-                        echo 'Reading file: '.$file.PHP_EOL;
+                        echo 'File: '.$file.PHP_EOL;
                         $this->logger->addInfo("Reading file: $file");
+                        $this->$method($file, true);
+                    }
+                }
+            }
 
-                        $this->$method($file);
+            $sections = array('students-static', 'teachers-static', 'courses-static', 'sessions-static');
+            foreach ($sections as $section) {
+                $this->logger->addInfo("-- Import static files $section --");
+
+                if (isset($fileToProcessStatic[$section]) && !empty($fileToProcessStatic[$section])) {
+                    $files = $fileToProcessStatic[$section];
+                    foreach ($files as $fileInfo) {
+                        $method = $fileInfo['method'];
+                        $file = $fileInfo['file'];
+                        echo 'Static file: '.$file.PHP_EOL;
+                        $this->logger->addInfo("Reading static file: $file");
+                        $this->$method($file, true);
                     }
                 }
             }
@@ -240,7 +264,17 @@ class ImportCsv
      * File to import
      * @param string $file
      */
-    private function importTeachers($file)
+    private function importTeachersStatic($file)
+    {
+        $this->importTeachers($file, false);
+    }
+
+    /**
+     * File to import
+     * @param string $file
+     * @param bool $moveFile
+     */
+    private function importTeachers($file, $moveFile = true)
     {
         $data = Import::csv_to_array($file);
 
@@ -348,13 +382,26 @@ class ImportCsv
                 }
             }
         }
-        $this->moveFile($file);
+
+        if ($moveFile) {
+            $this->moveFile($file);
+        }
     }
+
 
     /**
      * @param string $file
      */
-    private function importStudents($file)
+    private function importStudentsStatic($file)
+    {
+        $this->importStudents($file, false);
+    }
+
+    /**
+     * @param string $file
+     * @param bool $moveFile
+     */
+    private function importStudents($file, $moveFile = true)
     {
         $data = Import::csv_to_array($file);
 
@@ -513,13 +560,24 @@ class ImportCsv
             }
         }
 
-        $this->moveFile($file);
+        if ($moveFile) {
+            $this->moveFile($file);
+        }
     }
 
     /**
      * @param string $file
      */
-    private function importCourses($file)
+    private function importCoursesStatic($file)
+    {
+        $this->importCourses($file, false);
+    }
+
+    /**
+     * @param string $file
+     * @param bool $moveFile
+     */
+    private function importCourses($file, $moveFile = true)
     {
         $data = Import::csv_to_array($file);
 
@@ -573,13 +631,26 @@ class ImportCsv
                 }
             }
         }
-        $this->moveFile($file);
+
+        if ($moveFile) {
+            $this->moveFile($file);
+        }
     }
+
 
     /**
      * @param string $file
      */
-    private function importSessions($file)
+    private function importSessionsStatic($file)
+    {
+        $this->importSessions($file, false);
+    }
+
+    /**
+     * @param string $file
+     * @param bool $moveFile
+     */
+    private function importSessions($file, $moveFile = true)
     {
         $avoid =  null;
         if (isset($this->conditions['importSessions']) && isset($this->conditions['importSessions']['update'])) {
@@ -602,7 +673,10 @@ class ImportCsv
             $this->logger->addError($result['error_message']);
         }
         $this->logger->addInfo("Sessions - Sessions parsed: ".$result['session_counter']);
-        $this->moveFile($file);
+
+        if ($moveFile) {
+            $this->moveFile($file);
+        }
     }
 
     /**

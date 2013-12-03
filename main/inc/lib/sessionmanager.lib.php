@@ -8,10 +8,6 @@
 * @package chamilo.library
 */
 /**
- * Code
- */
-
-/**
  * Class SessionManager
  */
 class SessionManager
@@ -41,7 +37,7 @@ class SessionManager
 
     /**
     * Create a session
-    * @author Carlos Vargas from existing code
+    * @author Carlos Vargas <carlos.vargas@beeznest.com>, from existing code
     * @param	string 		name
     * @param 	integer		Start year (yyyy)
     * @param 	integer		Start month (mm)
@@ -258,6 +254,15 @@ class SessionManager
             $where_condition = "1 = 1";
         }
 
+        $courseCondition = null;
+        if (strpos($where_condition, 'c.id')) {
+            $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+            $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+            $courseCondition = " INNER JOIN $table course_rel_session ON (s.id = course_rel_session.id_session)
+                                 INNER JOIN $tableCourse c ON (course_rel_session.course_code = c.code)
+                                ";
+        }
+
         $sql = "SELECT count(id) as total_rows FROM (
                 SELECT
                  IF (
@@ -274,6 +279,7 @@ class SessionManager
                 FROM $tbl_session s
                     LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
                     INNER JOIN $tbl_user u ON s.id_coach = u.user_id
+                    $courseCondition
                     $extraJoin
                 $where AND $where_condition  ) as session_table";
 
@@ -299,6 +305,7 @@ class SessionManager
                     LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
                     INNER JOIN $tbl_user u ON s.id_coach = u.user_id
                     INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
+                    $courseCondition
                     $extraJoin
                  $where AND $where_condition) as session_table";
             }
@@ -362,6 +369,15 @@ class SessionManager
         $today = api_strtotime($today, 'UTC');
         $today = date('Y-m-d', $today);
 
+        $courseCondition = null;
+        if (strpos($options['where'], 'c.id')) {
+            $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+            $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+            $courseCondition = " INNER JOIN $table course_rel_session ON (s.id = course_rel_session.id_session)
+                                 INNER JOIN $tableCourse c ON (course_rel_session.course_code = c.code)
+                                ";
+        }
+
 		$select = "SELECT * FROM (SELECT
                 IF (
 					(s.date_start <= '$today' AND '$today' < s.date_end) OR
@@ -374,7 +390,7 @@ class SessionManager
 				as session_active,
 				s.name,
                 nbr_courses,
-                nbr_users,
+                s.nbr_users,
                 s.date_start,
                 s.date_end,
                 $coach_name,
@@ -400,6 +416,7 @@ class SessionManager
 		$query = "$select FROM $tbl_session s
 				LEFT JOIN $tbl_session_category sc ON s.session_category_id = sc.id
 				LEFT JOIN $tbl_user u ON s.id_coach = u.user_id
+				$courseCondition
 				$extraJoin
                 $where $order $limit";
 
@@ -411,6 +428,7 @@ class SessionManager
                                LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
                                INNER JOIN $tbl_user u ON s.id_coach = u.user_id
                                INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id AND ar.access_url_id = $access_url_id
+                               $courseCondition
                                $extraJoin
 				 $where $order $limit";
 			}
@@ -2359,6 +2377,8 @@ class SessionManager
                         $sql_course = "INSERT IGNORE INTO $tbl_session_course
                                        SET course_code = '$course_code', id_session='$session_id'";
                         Database::query($sql_course);
+                        $course_info = api_get_course_info($course_code);
+                        SessionManager::installCourse($session_id, $course_info['real_id']);
 
                         if ($debug) {
                             $logger->addInfo("Sessions - Adding course '$course_code' to session #$session_id");
@@ -2730,8 +2750,9 @@ class SessionManager
     }
 
     /**
-     * @param array $sessions
-     * @param array $courses
+     * Assign coaches of a session(s) as teachers to a given course (or courses)
+     * @param array A list of session IDs
+     * @param array A list of course IDs
      * @return string
      */
     public static function copyCoachesFromSessionToCourse($sessions, $courses)
@@ -2792,4 +2813,100 @@ class SessionManager
         }
         return $htmlResult;
     }
+
+    /**
+     * Get the list of course tools that have to be dealt with in case of
+     * registering any course to a session
+     * @return array The list of tools to be dealt with (literal names)
+     */
+    public static function getCourseToolToBeManaged()
+    {
+        return array(
+            'courseDescription',
+            'courseIntroduction'
+        );
+    }
+
+
+    /**
+     * Calls the methods bound to each tool when a course is registered into a session
+     * @param int Session ID
+     * @param int Course ID
+     * @return void
+     */
+    public static function installCourse($sessionId, $courseId)
+    {
+        $toolList = self::getCourseToolToBeManaged();
+
+        foreach($toolList as $tool) {
+            $method = 'add'.$tool;
+            if (method_exists(get_class(), $method)) {
+                self::$method($sessionId, $courseId);
+            }
+        }
+    }
+
+    /**
+     * Calls the methods bound to each tool when a course is unregistered from
+     * a session
+     * @param $sessionId
+     * @param $courseId
+     */
+    public static function unInstallCourse($sessionId, $courseId)
+    {
+        $toolList = self::getCourseToolToBeManaged();
+
+        foreach($toolList as $tool) {
+            $method = 'remove'.$tool;
+            if (method_exists(get_class(), $method)) {
+                self::$method($sessionId, $courseId);
+            }
+        }
+    }
+
+    public static function addCourseIntroduction($sessionId, $courseId)
+    {
+        // @todo create a tool intro lib
+        $sessionId = intval($sessionId);
+        $courseId = intval($courseId);
+
+        $TBL_INTRODUCTION = Database::get_course_table(TABLE_TOOL_INTRO);
+        $sql = "SELECT * FROM $TBL_INTRODUCTION WHERE c_id = $courseId";
+        $result = Database::query($sql);
+        $result = Database::store_result($result, 'ASSOC');
+
+        if (!empty($result)) {
+            foreach ($result as $result) {
+                // @todo check if relation exits.
+                $result['session_id'] = $sessionId;
+                Database::insert($TBL_INTRODUCTION, $result);
+            }
+        }
+    }
+
+    public static function removeCourseIntroduction($sessionId, $courseId)
+    {
+        $sessionId = intval($sessionId);
+        $courseId = intval($courseId);
+        $TBL_INTRODUCTION = Database::get_course_table(TABLE_TOOL_INTRO);
+        $sql = "DELETE FROM $TBL_INTRODUCTION WHERE c_id = $courseId AND session_id = $sessionId";
+        Database::query($sql);
+    }
+
+
+    public static function addCourseDescription($sessionId, $courseId)
+    {
+        /*$description = new CourseDescription();
+        $descriptions = $description->get_descriptions($courseId);
+        foreach ($descriptions as $description) {
+        }*/
+    }
+
+    public static function removeCourseDescription($sessionId, $courseId)
+    {
+
+    }
+
+
+
 }

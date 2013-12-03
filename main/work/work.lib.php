@@ -857,13 +857,15 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
     $course_id = api_get_course_int_id();
 	$move_file	= intval($move_file);
 	$tbl_work	= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$sql 		= "SELECT title FROM $tbl_work WHERE c_id = $course_id AND id ='".$move_file."'";
+	$sql 		= "SELECT title, url FROM $tbl_work WHERE c_id = $course_id AND id ='".$move_file."'";
 	$result 	= Database::query($sql);
-	$title 		= Database::fetch_row($result);
+	$row = Database::fetch_array($result, 'ASSOC');
+    $title = empty($row['title']) ? basename($row['url']) : $row['title'];
+
 	global $gradebook;
     //@todo use formvalidator please!
 	$form = '<form class="form-horizontal" name="move_to_form" action="'.api_get_self().'?'.api_get_cidreq().'&gradebook='.$gradebook.'&curdirpath='.Security::remove_XSS($curdirpath).'" method="POST">';
-	$form .= '<legend>'.get_lang('MoveFile').' - '.Security::remove_XSS($title[0]).'</legend>';
+	$form .= '<legend>'.get_lang('MoveFile').' - '.Security::remove_XSS($title).'</legend>';
 	$form .= '<input type="hidden" name="item_id" value="'.$move_file.'" />';
 	$form .= '<input type="hidden" name="action" value="move_to" />';
 	$form .= '<div class="control-group">
@@ -1581,6 +1583,9 @@ function getWorkListStudent($start, $limit, $column, $direction, $where_conditio
 
         $work['type'] = Display::return_icon('work.png');
         $work['expires_on'] = $work['expires_on']  == '0000-00-00 00:00:00' ? null : api_get_local_time($work['expires_on']);
+        if (empty($work['title'])) {
+            $work['title'] = basename($work['url']);
+        }
         $work['title'] = Display::url($work['title'], $url.'&id='.$work['id']);
         $work['others'] = Display::url(Display::return_icon('group.png', get_lang('Others')), $urlOthers.$work['id']);
         $works[] = $work;
@@ -1595,6 +1600,7 @@ function getWorkListStudent($start, $limit, $column, $direction, $where_conditio
  * @param string $column
  * @param string $direction
  * @param string $where_condition
+ * @param bool $getCount
  * @return array
  */
 function getWorkListTeacher($start, $limit, $column, $direction, $where_condition, $getCount = false)
@@ -1643,6 +1649,9 @@ function getWorkListTeacher($start, $limit, $column, $direction, $where_conditio
             $work['type'] = Display::return_icon('work.png');
             $work['expires_on'] = $work['expires_on']  == '0000-00-00 00:00:00' ? null : api_get_local_time($work['expires_on']);
             $work['ends_on'] = $work['ends_on']  == '0000-00-00 00:00:00' ? null : api_get_local_time($work['ends_on']);
+            if (empty($work['title'])) {
+                $work['title'] = basename($work['url']);
+            }
             $work['title'] = Display::url($work['title'], $url.'&id='.$work['id']);
             $works[] = $work;
         }
@@ -3775,7 +3784,8 @@ function generateMoveForm($item_id, $path, $courseInfo, $groupId, $sessionId)
                     $sessionCondition";
     $res = Database::query($sql);
     while ($folder = Database::fetch_array($res)) {
-        $folders[$folder['id']] = $folder['title'];
+        $title = empty($folder['title']) ? basename($folder['url']) : $folder['title'];
+        $folders[$folder['id']] = $title;
     }
     return build_work_move_to_selector($folders, $path, $item_id);
 }

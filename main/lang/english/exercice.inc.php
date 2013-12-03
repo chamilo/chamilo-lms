@@ -2,6 +2,26 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ImportAikenQuizExplanationExample = "This is the text for question 1
+A. Answer 1
+B. Answer 2
+C. Answer 3
+ANSWER: B
+
+This is the text for question 2
+A. Answer 1
+B. Answer 2
+C. Answer 3
+D. Answer 4
+ANSWER: D
+ANSWER_EXPLANATION: this is an optional feedback comment that will appear next to the correct answer.";
+$ImportAikenQuizExplanation = "The Aiken format comes in a simple text (.txt) file, with several question blocks, each separated by a blank line. The first line is the question, the answer lines are prefixed by a letter and a dot, and the correct answer comes next with the ANSWER: prefix. See example below.";
+$ExerciseAikenErrorNoAnswerOptionGiven = "The imported file has at least one question without any answer (or the answers do not include the required prefix letter). Please make sure each question has at least one answer and that it is prefixed by a letter and a dot or a parenthesis, like this: A. answer one";
+$ExerciseAikenErrorNoCorrectAnswerDefined = "The imported file includes at least one question without any correct answer defined. Please make sure all questions include the ANSWER: [Letter] line.";
+$ThereWasAProblemWithYourFile = "There was an unknown issue with your file. Please review its format and try again.";
+$YouMustUploadAZipOrTxtFile = "You must upload a .txt or .zip file";
+$NoTxtFileFoundInTheZip = "No .txt file found in zip";
+$ImportAikenQuiz = "Import Aiken quiz";
 $ExerciseWasActivatedFromXToY = "Exercise was activated from %s to %s";
 $SelectAnAnswerToContinue = "Select an answer to continue";
 $IfYouContinueYourAnswerWillBeSavedAnyChangeWillBeNotAllowed = "If you continue your answers will be saved, any change will be not allowed later. Are you sure you want to continue?";

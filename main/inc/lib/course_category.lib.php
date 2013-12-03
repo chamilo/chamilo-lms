@@ -271,6 +271,42 @@ function getChildren($categoryCode)
     return $children;
 }
 
+function getParents($categoryCode)
+{
+    if (empty($categoryCode)) {
+        return array();
+    }
+
+    $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
+    $categoryCode = Database::escape_string($categoryCode);
+    $sql = "SELECT code, parent_id FROM $tbl_category WHERE code = '$categoryCode'";
+
+    $result = Database::query($sql);
+    $children = array();
+    while ($row = Database::fetch_array($result, 'ASSOC')) {
+        $parent = getCategory($row['parent_id']);
+        $children[] = $row;
+        $subChildren = getParents($parent['code']);
+        $children = array_merge($children, $subChildren);
+    }
+    return $children;
+}
+function getParentsToString($categoryCode)
+{
+    $parents = getParents($categoryCode);
+
+    if (!empty($parents)) {
+        $parents = array_reverse($parents);
+        $categories = array();
+        foreach ($parents as $category) {
+            $categories[] = $category['code'];
+        }
+        $categoriesInString = implode(' > ', $categories).' > ';
+        return $categoriesInString;
+    }
+    return null;
+}
+
 /**
  * @param string $categorySource
  * @return string
@@ -390,12 +426,12 @@ function browseCourseCategories()
     $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
     $conditions = null;
     $whereCondition = null;
+
     if (isMultipleUrlSupport()) {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
         $conditions = " INNER JOIN $table a ON (c.id = a.course_category_id)";
         $whereCondition = " WHERE a.access_url_id = ".api_get_current_access_url_id();
     }
-
     $sql = "SELECT c.* FROM $tbl_category c
             $conditions
             $whereCondition

@@ -1072,7 +1072,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         echo Display::display_icon('upload_file.png', get_lang('UplUploadDocument'), '', ICON_SIZE_MEDIUM).'</a>';
     }
     
-    echo '<a href="#" style="margin-top:-5px;" id="jcapture">';
+    echo '<a href="#" id="jcapture">';
     echo Display::display_icon('capture.png', get_lang('CatchScreenCasts'), '', ICON_SIZE_MEDIUM).'</a>';
 
     // Create directory
@@ -1268,7 +1268,7 @@ if (count($row) == 12) {
 $default_column = $is_allowed_to_edit ? 2 : 1;
 $tablename = $is_allowed_to_edit ? 'teacher_table' : 'student_table';
 
-$table = new SortableTableFromArrayConfig($sortable_data, $default_column, 20, $tablename, $column_show, $column_order, 'ASC', true);
+$table = new SortableTableFromArrayConfig($sortable_data, $default_column, 20, $tablename, $column_show, $column_order, 'ASC');
 
 if (isset($_GET['keyword'])) {
     $query_vars['keyword'] = Security::remove_XSS($_GET['keyword']);

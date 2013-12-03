@@ -197,6 +197,10 @@ switch ($action) {
         $count = get_count_exam_hotpotatoes_results($hotpot_path);
         break;
     case 'get_sessions':
+        $courseId = isset($_GET['course_id']) && !empty($_GET['course_id']) ? intval($_GET['course_id']) : null;
+        if (!empty($courseId)) {
+            $where_condition .= " c.id = $courseId";
+        }
         $count = SessionManager::get_count_admin($where_condition);
         break;
     /*case 'get_extra_fields':
@@ -418,6 +422,7 @@ switch ($action) {
         $columns = array(
             'name', 'nbr_courses', 'nbr_users', 'category_name', 'date_start','date_end', 'coach_name', 'session_active', 'visibility'
         );
+
         $result = SessionManager::get_sessions_admin(
             array(
                 'where' => $where_condition,

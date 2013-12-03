@@ -37,9 +37,9 @@ class CourseManager
     /**
      * Creates a course
      * @param   array   with the columns in the main.course table
-     * @param   mixed   false if the course was not created, array with the course info
+     * @return   mixed   false if the course was not created, array with the course info
      */
-    static function create_course($params)
+    public static function create_course($params)
     {
         global $_configuration;
         // Check portal limits
@@ -91,6 +91,23 @@ class CourseManager
                             create_default_course_gradebook($course_info['code'], $params['gradebook_model_id']);
                         }
                     }
+                    // If parameter defined, copy the contents from a specific
+                    // template course into this new course
+                    if (!empty($_configuration['course_creation_use_template'])) {
+                        // Include the necessary libraries to generate a course copy
+                        require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+                        require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseBuilder.class.php';
+                        require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseRestorer.class.php';
+                        require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseSelectForm.class.php';
+                        // Call the course copy object
+                        $originCourse = api_get_course_info_by_id($_configuration['course_creation_use_template']);
+                        $originCourse['official_code'] = $originCourse['code'];
+                        $cb = new CourseBuilder(null, $originCourse);
+                        $course = $cb->build(null, $originCourse['code']);
+                        $cr = new CourseRestorer($course);
+                        $cr->set_file_option();
+                        $cr->restore($course_info['id']); //course_info[id] is the course.code value (I know...)
+                    }
                     return $course_info;
                 }
             }
@@ -105,7 +122,8 @@ class CourseManager
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @assert ('') === false
      */
-    public static function get_course_information($course_code) {
+    public static function get_course_information($course_code)
+    {
         return Database::fetch_array(Database::query(
             "SELECT *, id as real_id FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
             WHERE code='".Database::escape_string($course_code)."'"),'ASSOC'
@@ -636,6 +654,7 @@ class CourseManager
     /**
      * Lists all virtual courses
      * @return array   Course info (course code => details) of all virtual courses on the platform
+     * @deprecated virtual course feature is not supported
      */
     public static function get_virtual_course_list() {
         $sql_result = Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." WHERE target_course_code IS NOT NULL");
@@ -1515,6 +1534,13 @@ class CourseManager
         return $teachers;
     }
 
+    /**
+     * Returns a string list of teachers assigned to the given course
+     * @param string Course code
+     * @param string Separator between teachers names
+     * @param bool Whether to add a link to the teacher's profile
+     * @return string List of teachers teaching the course
+     */
     public static function get_teacher_list_from_course_code_to_string($course_code, $separator = self::USER_SEPARATOR, $add_link_to_profile = false) {
         $teacher_list = self::get_teacher_list_from_course_code($course_code);
         $teacher_string = '';
@@ -1649,6 +1675,7 @@ class CourseManager
      *    @param $real_course_code, the id (char) of the real course
      *
      *    @return array of course info arrays
+     *  @deprecated virtual course feature is not supported
      */
     public static function get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $course_code) {
         $result_array = array();
@@ -1723,6 +1750,7 @@ class CourseManager
      * @param  string  Course language
      * @param  string  Course category
      * @return bool    True on success, false on error
+     * @deprecated virtual course feature is not supported
      */
     public static function attempt_create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category) {
         //better: create parameter list, check the entire list, when false display errormessage
@@ -1751,6 +1779,7 @@ class CourseManager
      * @param  string  Course category
      * @return true if the course creation succeeded, false otherwise
      * @todo research: expiration date of a course
+     * @deprecated virtual course feature is not supported
      */
     public static function create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category) {
         global $firstExpirationDelay;
@@ -3334,6 +3363,11 @@ class CourseManager
         if (!$nosession) {
             global $now, $date_start, $date_end;
         }
+        if (empty($date_start) or empty($date_end)) {
+            $sess = SessionManager::get_sessions_list(array('s.id = ' => $course_info['id_session']));
+            $date_start = $sess[$course_info['id_session']]['date_start'];
+            $date_end = $sess[$course_info['id_session']]['date_end'];
+        }
 
         // Table definitions
         $main_user_table            = Database :: get_main_table(TABLE_MAIN_USER);
@@ -3711,7 +3745,7 @@ class CourseManager
 
         $result = Database::select('id, accesses, total_score, users', $table_course_ranking, array('where' => array('c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');
 
-        // Problem here every thime we load the courses/XXXX/index.php course home page we update the access
+        // Problem here every time we load the courses/XXXX/index.php course home page we update the access
 
         if (empty($result)) {
             if ($add_access) {

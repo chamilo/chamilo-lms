@@ -87,43 +87,6 @@ header #logo {
 #introduction_block_action {
     text-align: right;
 }
-/* button with image */
-button.add, button.save, button.cancel, button.refresh, button.upload, button.search, button.login, button.plus, button.minus, button.next, button.back {
-    /* padding-left: 30px;
-    background-position: 8px !important;
-    background-repeat: no-repeat;*/
-}
-
-/* button << */
-button.arrowl, button.arrowr, input.arrowl, input.arrowr {
-    /* margin: 0px 15px 0px 15px;
-    padding: 15px 18px;
-    background-position: 7px; */
-}
-
-/*including "arrowl" image*/
-button.arrowl, button.arrowr, input.arrowl, input.arrowr {
-    /* background-repeat: no-repeat; */
-}
-
-button.arrowl:hover, button.arrowr:hover, input.arrowl:hover, input.arrowr:hover {
-    /* background-position: 7px; */
-}
-
-/* Fixing old chamilo forms */
-
-/* fixes the * */
-span.form_required {
-    padding-right: 5px;
-}
-
-form .formw {
-    margin-left: 170px;
-}
-
-form .formw input {
-    float: left;
-}
 
 #accept_licence, #checkbox {
     margin-right: 5px;
@@ -4830,14 +4793,8 @@ i.size-32.icon-new-work {
 }
 
 .select_class_filter {
-    margin: 0px 0px 50px 10px;
+    /* margin: 0px 0px 50px 10px; */
 }
-
-
-.advmultiselect .span1 {
-    padding-top: 50px;
-}
-
 
 .drag_question {
     float: left;

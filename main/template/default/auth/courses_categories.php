@@ -5,6 +5,7 @@
 * View (MVC patter) for courses categories
 * @author Christian Fasanando <christian1827@gmail.com> - Beeznest
 * @package chamilo.auth
+ * @todo use twig
 */
 $stok = Security::get_token();
 ?>
@@ -30,7 +31,7 @@ $stok = Security::get_token();
 </script>
 
 <div class="row">
-    <div class="span3">
+    <div class="col-md-3">
         <div id="course_category_well" class="well">
             <ul class="nav nav-list">
                 <?php if (!isset($_GET['hidden_links']) || isset($_GET['hidden_links']) && intval($_GET['hidden_links']) != 1) { ?>
@@ -41,7 +42,7 @@ $stok = Security::get_token();
                         <div class="control-group">
                             <div class="controls">
                                 <div class="input-append">
-                                    <input class="span2" type="text" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term']))); ?>" />
+                                    <input class="col-md-2" type="text" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term']))); ?>" />
                                     <button class="btn" type="submit"><?php echo get_lang('Search'); ?></button>
                                 </div>
                             </div>
@@ -130,7 +131,7 @@ $stok = Security::get_token();
         </div>
     </div>
 
-    <div class="span9">
+    <div class="col-md-9">
         <?php
         if (!empty($message)) { Display::display_confirmation_message($message, false); }
         if (!empty($error)) { Display::display_error_message($error, false); }
@@ -170,7 +171,7 @@ $stok = Security::get_token();
                 $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&amp;course_id='.$course['real_id'], $pointInfo);
 
                 echo '<div class="well_border"><div class="row">';
-                    echo '<div class="span2">';
+                    echo '<div class="col-md-2">';
                         echo '<div class="thumbnail">';
                         if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
                             echo '<a class="ajax" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" rel="gb_page_center[778]">';
@@ -182,7 +183,7 @@ $stok = Security::get_token();
                         echo '</div>';//thumb
                     echo '</div>';
 
-                    echo '<div class="span4">';
+                    echo '<div class="col-md-8">';
                     $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['real_id']);
                     $teachers = '<h5>'.$teachers.'</h5>';
                     echo '<div class="categories-course-description"><h3>'.Text::cut($title, 60).'</h3>'.$teachers.$rating.'</div>';
@@ -220,7 +221,7 @@ $stok = Security::get_token();
                     echo '</div>';
                     echo '</p>';
                     echo '</div>';
-                    echo '<div class="span2">';
+                    echo '<div class="col-md-2">';
                         echo '<div class="course-block-popularity"><span>'.get_lang('ConnectionsLastMonth').'</span><div class="course-block-popularity-score">'.$count_connections.'</div></div>';
                     echo '</div>';
                 echo '</div></div>';

@@ -140,7 +140,7 @@ class SortableTable extends HTML_Table
         $this->column  = isset($_SESSION[$this->param_prefix.'column']) ? intval($_SESSION[$this->param_prefix.'column']) : $default_column;
         $this->column  = isset($_GET[$this->param_prefix.'column']) ? intval($_GET[$this->param_prefix.'column']) : $this->column;
 
-        //Default direction
+        // Default direction
 
         if (in_array(strtoupper($default_order_direction), array('ASC', 'DESC'))) {
             $this->direction = $default_order_direction;
@@ -294,8 +294,8 @@ class SortableTable extends HTML_Table
             $html .= '<tr>';
             $html .= '<td>';
 
+            // Actions in table
             if (count($this->form_actions) > 0) {
-
                 $html .= '<div class="btn-toolbar">';
                 $html .= '<div class="btn-group">';
                 $html .= '<a class="btn btn-default" href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'.get_lang('SelectAll').'</a>';
@@ -320,7 +320,7 @@ class SortableTable extends HTML_Table
             }
 
             $html .= '</td>';
-
+            // Pagination
             if ($this->get_total_number_of_items() > $this->default_items_per_page) {
                 $html .= '<td style="text-align:right;">';
                 $html .= $nav;

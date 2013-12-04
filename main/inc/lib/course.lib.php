@@ -3791,10 +3791,10 @@ class CourseManager
                 $my_course['extra_info']['go_to_course_button'] = Display::url(get_lang('GoToCourse'), api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php', array('class' => 'btn btn-primary'));
             }
 
-            //Description
+            // Description
             $my_course['extra_info']['description_button'] = '';
             if ($course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || in_array($course_info['real_id'], $my_course_code_list) ) {
-                $my_course['extra_info']['description_button'] = Display::url(get_lang('Description'), api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=show_course_information&amp;code='.$course_info['code'], array('class' => 'ajax btn'));
+                $my_course['extra_info']['description_button'] = Display::url(get_lang('Description'), api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=show_course_information&amp;code='.$course_info['code'], array('class' => 'ajax btn btn-default'));
             }
 
             $my_course['extra_info']['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course_info['real_id']);

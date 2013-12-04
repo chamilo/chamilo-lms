@@ -19,7 +19,8 @@ class CoursesController
     /**
      * Constructor
      */
-    public function __construct() {		
+    public function __construct()
+    {
         $this->toolname = 'auth';
         $actived_theme_path = api_get_template();
         $this->view = new View($this->toolname, $actived_theme_path);
@@ -32,17 +33,16 @@ class CoursesController
      * @param string   	action
      * @param string    confirmation message(optional)
      */
-    public function courses_list($action, $message = '') {
+    public function courses_list($action, $message = '')
+    {
         $data = array();
         $user_id = api_get_user_id();
-        
+
         $data['user_courses']             = $this->model->get_courses_of_user($user_id);
         $data['user_course_categories']   = $this->model->get_user_course_categories();
         $data['courses_in_category']      = $this->model->get_courses_in_category();
         $data['all_user_categories']      = $this->model->get_user_course_categories();
-
         $data['action'] = $action;
-
         $data['message'] = $message;
 
         // render to the view
@@ -60,8 +60,9 @@ class CoursesController
      * @param string    confirmation message(optional)
      * @param string    error message(optional)
      */
-    public function categories_list($action, $message='', $error='') {
-        $data = array();            
+    public function categories_list($action, $message='', $error='')
+    {
+        $data = array();
         $data['user_course_categories'] = $this->model->get_user_course_categories();
         $data['action'] = $action;
         $data['message'] = $message;
@@ -75,30 +76,45 @@ class CoursesController
     }
 
     /**
+     * @return FormValidator
+     */
+    private function getSearchForm()
+    {
+        $form = new FormValidator('form-search', 'post', api_get_self().'?action=subscribe&amp;hidden_links=0', null, array('class' => 'form-search'));
+
+        $form->addElement('hidden', 'search_course', '1');
+        $form->addElement('text', 'search_term');
+        $form->addElement('button', 'submit', get_lang('Search'));
+        return $form;
+    }
+
+    /**
      * It's used for listing courses with categories,
      * render to courses_categories view
      * @param string   	action
      * @param string    Category code (optional)
      */
-    public function courses_categories($action, $category_code = null, $message = '', $error = '', $content = null) {
+    public function courses_categories($action, $category_code = null, $message = '', $error = '', $content = null)
+    {
         $data = array();
-        $browse_course_categories = $this->model->browse_course_categories();        
-        
+        $browse_course_categories = $this->model->browse_course_categories();
+
         if ($action == 'display_random_courses') {
             $data['browse_courses_in_category'] = $this->model->browse_courses_in_category(null, 10);
         } else {
             if (!isset($category_code)) {
                 $category_code = $browse_course_categories[0][1]['code']; // by default first category
-            }            
+            }
             $data['browse_courses_in_category'] = $this->model->browse_courses_in_category($category_code);
         }
-        
+
+        $data['search_form'] = $this->getSearchForm();
         $data['browse_course_categories'] = $browse_course_categories;
         $data['code'] = Security::remove_XSS($category_code);
 
         // getting all the courses to which the user is subscribed to
         $curr_user_id = api_get_user_id();
-        $user_courses = $this->model->get_courses_of_user($curr_user_id);            
+        $user_courses = $this->model->get_courses_of_user($curr_user_id);
         $user_coursecodes = array();
 
         // we need only the course codes as these will be used to match against the courses of the category
@@ -107,14 +123,14 @@ class CoursesController
                 $user_coursecodes[] = $value['code'];
             }
         }
-        
+
         if (api_is_drh()) {
             $courses = CourseManager::get_courses_followed_by_drh(api_get_user_id());
             foreach ($courses as $course) {
                 $user_coursecodes[] = $course['code'];
-            }            
+            }
         }
-        
+
         $data['user_coursecodes'] = $user_coursecodes;
         $data['action']           = $action;
         $data['message']          = $message;
@@ -131,15 +147,16 @@ class CoursesController
     /**
      * Search courses
      */
-    public function search_courses($search_term, $message = '', $error = '') {
+    public function search_courses($search_term, $message = '', $error = '')
+    {
 
         $data = array();
-
         $browse_course_categories = $this->model->browse_course_categories();
 
         $data['browse_courses_in_category'] = $this->model->search_courses($search_term);
         $data['browse_course_categories']   = $browse_course_categories;
 
+        $data['search_form'] = $this->getSearchForm();
         $data['search_term'] = Security::remove_XSS($search_term); //filter before showing in template
 
         // getting all the courses to which the user is subscribed to
@@ -187,7 +204,7 @@ class CoursesController
                 $content = $result['content'];
             }
         }
-        
+
         if (!empty($search_term)) {
             $this->search_courses($search_term, $message, $error);
         } else {

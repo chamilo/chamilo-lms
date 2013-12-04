@@ -34,22 +34,11 @@ $stok = Security::get_token();
     <div class="col-md-3">
         <div id="course_category_well" class="well">
             <ul class="nav nav-list">
-                <?php if (!isset($_GET['hidden_links']) || isset($_GET['hidden_links']) && intval($_GET['hidden_links']) != 1) { ?>
-                <form class="form-search" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&amp;hidden_links=0">
-                    <fieldset>
-                        <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
-                        <input type="hidden" name="search_course" value="1" />
-                        <div class="control-group">
-                            <div class="controls">
-                                <div class="input-append">
-                                    <input class="col-md-2" type="text" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term']))); ?>" />
-                                    <button class="btn" type="submit"><?php echo get_lang('Search'); ?></button>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
-                <?php
+            <?php if (!isset($_GET['hidden_links']) || isset($_GET['hidden_links']) && intval($_GET['hidden_links']) != 1) {
+                $search_form->addElement('hidden', 'sec_token', $stok);
+                $term = isset($_POST['search_term']) ? Security::remove_XSS($_POST['search_term']) : null;
+                $search_form->setDefaults(array('search_term' => $term));
+                echo $search_form->return_form();
                 $hidden_links = 0;
             } else {
                 $hidden_links = 1;
@@ -60,7 +49,7 @@ $stok = Security::get_token();
              * it, as this can considerably slow down your system
              */
             if (!empty($browse_course_categories)) {
-                echo '<a class="btn" href="'.api_get_self().'?action=display_random_courses">'.get_lang('RandomPick').'</a><br /><br />';
+                echo '<a class="btn btn-default" href="'.api_get_self().'?action=display_random_courses">'.get_lang('RandomPick').'</a><br /><br />';
 
                 echo '<li class="nav-header">'.get_lang('CourseCategories').'</li>';
 
@@ -193,7 +182,7 @@ $stok = Security::get_token();
                     echo '<div class="btn-toolbar">';
 
                     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-                        echo '<a class="ajax btn" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" class="thickbox">'.get_lang('Description').'</a>';
+                        echo '<a class="ajax btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" class="thickbox">'.get_lang('Description').'</a>';
                     }
 
                     // Get access type for course button ("enter" or/and "register")

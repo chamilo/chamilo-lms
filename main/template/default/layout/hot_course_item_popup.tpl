@@ -8,7 +8,7 @@
                             <img src="{{ hot_course.extra_info.course_image }}" />
                         </div>
                     </div>
-                    <div class="col-md-2">
+                <div class="col-md-2">
                         <div class="categories-course-description">
                             <h3>{{ hot_course.extra_info.title}}</h3>
                             <h5>{{ hot_course.extra_info.teachers }}</h5>

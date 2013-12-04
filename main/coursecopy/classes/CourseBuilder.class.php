@@ -15,6 +15,7 @@ require_once 'Forum.class.php';
 require_once 'ForumCategory.class.php';
 require_once 'Quiz.class.php';
 require_once 'QuizQuestion.class.php';
+require_once 'CourseCopyTestCategory.php';
 require_once 'CourseCopyLearnpath.class.php';
 require_once 'Survey.class.php';
 require_once 'SurveyQuestion.class.php';
@@ -47,6 +48,7 @@ class CourseBuilder
         'forum_topics',
         'glossary',
         'quizzes',
+        'test_category',
         'learnpaths',
         'links',
         'surveys',
@@ -469,8 +471,11 @@ class CourseBuilder
 
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
-
-            $question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture, $obj->level, $obj->extra);
+            // find the question category
+            // @todo : need to be adapted for multi category questions in 1.10
+            $question_category_id = Testcategory::getCategoryForQuestion($obj->id, $course_id);
+            // build the backup ressource question object
+            $question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture, $obj->level, $obj->extra, $question_category_id);
             $sql = 'SELECT * FROM '.$table_ans.' WHERE c_id = '.$course_id.' AND question_id = '.$obj->id;
             $db_result2 = Database::query($sql);
 
@@ -531,7 +536,10 @@ class CourseBuilder
 
                 // Avoid adding the same question twice
                 if (!isset($this->course->resources[$obj->id])) {
-                    $question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture,$obj->level, $obj->extra);
+                    // find the question category
+                    // @todo : need to be adapted for multi category questions in 1.10
+                    $question_category_id = Testcategory::getCategoryForQuestion($obj->id, $course_id);
+                    $question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture,$obj->level, $obj->extra, $question_category_id);
                     $sql = "SELECT * FROM $table_ans WHERE c_id = $course_id AND question_id = ".$obj->id;
                     $db_result2 = Database::query($sql);
                     if (Database::num_rows($db_result2)) {
@@ -598,6 +606,25 @@ class CourseBuilder
                 }
                 $this->course->add_resource($question);
             }
+        }
+    }
+
+    /**
+     * Build the test category
+     * $session_id, $course_code, $with_base_content, $this->specific_id_list[$tool]
+     * @todo add course session
+     */
+    function build_test_category($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array())
+    {
+        $course_id = api_get_course_int_id();
+
+        // get all test category in course
+        $tab_test_categories_id = Testcategory::getCategoryListInfo("id", $course_id);
+        foreach ($tab_test_categories_id as $test_category_id)
+        {
+            $test_category = new Testcategory($test_category_id);
+            $copy_course_test_category = new CourseCopyTestcategory($test_category_id, $test_category->name, $test_category->description);
+            $this->course->add_resource($copy_course_test_category);
         }
     }
 

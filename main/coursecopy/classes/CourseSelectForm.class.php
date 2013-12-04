@@ -27,6 +27,7 @@ class CourseSelectForm
 		$resource_titles[RESOURCE_FORUM]                = get_lang('Forums');
         $resource_titles[RESOURCE_FORUMCATEGORY]        = get_lang('ForumCategory');
 		$resource_titles[RESOURCE_QUIZ] 				= get_lang('Tests');
+        $resource_titles[RESOURCE_TEST_CATEGORY] 		= get_lang('QuestionCategory');
 		$resource_titles[RESOURCE_LEARNPATH]            = get_lang('ToolLearnpath');
 		$resource_titles[RESOURCE_SCORM]                = 'SCORM';
 		$resource_titles[RESOURCE_TOOL_INTRO]           = get_lang('ToolIntro');

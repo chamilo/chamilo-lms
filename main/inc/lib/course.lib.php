@@ -3368,6 +3368,10 @@ class CourseManager
             $date_start = $sess[$course_info['id_session']]['date_start'];
             $date_end = $sess[$course_info['id_session']]['date_end'];
         }
+        if (empty($now)) {
+            // maybe use api_get_utcdate() here?
+            $now = date('Y-m-d h:i:s');
+        }
 
         // Table definitions
         $main_user_table            = Database :: get_main_table(TABLE_MAIN_USER);

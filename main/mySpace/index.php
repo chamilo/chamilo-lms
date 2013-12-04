@@ -158,7 +158,7 @@ echo '<a href="javascript: void(0);" onclick="javascript: window.print()">'.
       Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</span>';
 
-if (!empty($session_id)) {
+if (!empty($session_id) &&  $display != 'accessoverview') {
 	echo '<a href="index.php">'.Display::return_icon('back.png', get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
     if (!api_is_platform_admin()) {
         if (api_get_setting('add_users_by_coach') == 'true') {
@@ -182,7 +182,7 @@ if (!empty($session_id)) {
 
 // Actions menu
 $nb_menu_items = count($menu_items);
-if (empty($session_id)) {
+if (empty($session_id) || $display == 'accessoverview') {
 	if ($nb_menu_items > 1) {
     	foreach ($menu_items as $key => $item) {
 	    	echo $item;
@@ -193,6 +193,7 @@ if (empty($session_id)) {
     $sessionFilter = new FormValidator('course_filter', 'get', '', '', array('class'=> 'form-search'), false);
     $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_session';
     $sessionList = array();
+    $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
     if (!empty($sessionId)) {
         $sessionList = array();
         $sessionInfo = SessionManager::fetch($sessionId);

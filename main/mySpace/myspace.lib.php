@@ -326,11 +326,6 @@ class MySpace {
         $track_e_login          = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $track_e_course_access  = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
-        /*$access_url_id = api_get_current_access_url_id();
-        if ($_configuration['multiple_access_urls']) {
-            $condition_multi_url = ", $tbl_url_rel_user as url_user WHERE user.user_id=url_user.user_id AND access_url_id='$access_url_id'";
-        }*/
-
         global $export_csv;
         if ($export_csv) 
         {

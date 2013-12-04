@@ -60,6 +60,12 @@ class QuizQuestion extends Resource
     var $extra;
 
     /**
+     * @var int the question category if any, 0 by default
+     */
+
+    var $question_category;
+
+    /**
      * Create a new QuizQuestion
      * @param string $question
      * @param string $description
@@ -67,7 +73,7 @@ class QuizQuestion extends Resource
      * @param int $type
      * @param int $position
      */
-    function QuizQuestion($id, $question, $description, $ponderation, $type, $position, $picture, $level, $extra) {
+    function QuizQuestion($id, $question, $description, $ponderation, $type, $position, $picture, $level, $extra, $question_category = 0) {
         parent::Resource($id, RESOURCE_QUIZQUESTION);
         $this->question = $question;
         $this->description = $description;
@@ -78,6 +84,7 @@ class QuizQuestion extends Resource
         $this->level = $level;
         $this->answers = array();
         $this->extra = $extra;
+        $this->question_category = $question_category;
     }
 
     /**

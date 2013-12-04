@@ -49,6 +49,7 @@ class CourseRecycler
         $this->recycle_forums();
         $this->recycle_forum_categories();
         $this->recycle_quizzes();
+        $this->recycle_test_category();
         $this->recycle_surveys();
         $this->recycle_learnpaths();
         $this->recycle_cours_description();
@@ -362,16 +363,13 @@ class CourseRecycler
                     while ($obj = Database::fetch_object($db_result)) {
                         $orphan_ids[] = $obj->id;
                     }
-                    if (!empty($orphan_ids)) {
-                        $orphan_ids = implode(',', $orphan_ids);
-
-                        $sql = "DELETE FROM ".$table_rel." WHERE c_id = ".$this->course_id." AND question_id IN(".$orphan_ids.")";
-                        Database::query($sql);
-                        $sql = "DELETE FROM ".$table_qui_ans." WHERE c_id = ".$this->course_id." AND question_id IN(".$orphan_ids.")";
-                        Database::query($sql);
-                        $sql = "DELETE FROM ".$table_qui_que." WHERE c_id = ".$this->course_id." AND id IN(".$orphan_ids.")";
-                        Database::query($sql);
-                    }
+                    $orphan_ids = implode(',', $orphan_ids);
+                    $sql = "DELETE FROM ".$table_rel." WHERE c_id = ".$this->course_id." AND question_id IN(".$orphan_ids.")";
+                    Database::query($sql);
+                    $sql = "DELETE FROM ".$table_qui_ans." WHERE c_id = ".$this->course_id." AND question_id IN(".$orphan_ids.")";
+                    Database::query($sql);
+                    $sql = "DELETE FROM ".$table_qui_que." WHERE c_id = ".$this->course_id." AND id IN(".$orphan_ids.")";
+                    Database::query($sql);
                 }
                 // Also delete questions categories and options
                 $sql = "DELETE FROM $table_qui_que_rel_cat WHERE c_id = ".$this->course_id;
@@ -385,6 +383,17 @@ class CourseRecycler
             //  (active field) of "-1". Delete those, now.
             $sql = "DELETE FROM ".$table_qui." WHERE c_id = ".$this->course_id." AND active = -1";
             Database::query($sql);
+        }
+    }
+
+    /**
+     * Recycle tests categories
+     */
+    function recycle_test_category()
+    {
+        foreach ($this->course->resources[RESOURCE_TEST_CATEGORY] as $tab_test_cat) {
+            $obj_cat = new Testcategory($tab_test_cat->source_id);
+            $obj_cat->removeCategory();
         }
     }
 

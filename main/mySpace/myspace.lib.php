@@ -270,7 +270,154 @@ class MySpace {
 		$table->set_column_filter(4, array('MySpace','course_info_tracking_filter'));
 		$table->display();
 	}
+    /**
+     * Display a sortable table that contains an overview off all the access to a session
+     * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
+     * @version Chamilo 1.9.6
+     */
+    function display_tracking_access_overview() {
+        MySpace::display_user_overview_export_options();
 
+        $addparams = array('view' => 'admin', 'display' => 'useroverview');
+
+        $table = new SortableTable('tracking_access_overview', array('MySpace','get_number_of_tracking_access_overview'), array('MySpace','get_user_data_access_tracking_overview'), 0);
+        $table->additional_parameters = $addparams;
+
+        $table->set_header(0, get_lang('LoginDate'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
+        $table->set_header(1, get_lang('Username'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
+        if (api_is_western_name_order()) {
+            $table->set_header(2, get_lang('FirstName'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
+            $table->set_header(3, get_lang('LastName'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
+        } else {
+            $table->set_header(2, get_lang('LastName'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
+            $table->set_header(3, get_lang('FirstName'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
+        }
+        $table->set_header(4, get_lang('Clicks'), false, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
+        $table->set_header(5, get_lang('IP'), false, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
+        $table->set_header(6, get_lang('TimeLoggedIn'), false, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
+        $table->display();
+    }
+    /**
+     * get the numer of users on track_e_course_access
+     *
+     * @return integer
+     *
+     * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
+     * @version Chamilo 1.9.6
+     */
+    function get_number_of_tracking_access_overview() {
+        // database table definition
+        $track_e_course_access = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        return Database::count_rows($track_e_course_access);
+    }
+
+    /**
+     * Get the ip, total of clicks, login date and time logged in for all user, in one session
+     * @todo track_e_course_access table should have ip so we dont have to look for it in track_e_login
+     *
+     * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
+     * @version Chamilo 1.9.6
+     */
+    function get_user_data_access_tracking_overview($from, $number_of_items, $column, $direction) {
+        global $_configuration;
+        // database table definition
+        $user                   = Database :: get_main_table(TABLE_MAIN_USER);
+        $course                 = Database :: get_main_table(TABLE_MAIN_COURSE);
+        $track_e_login          = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $track_e_course_access  = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+
+        /*$access_url_id = api_get_current_access_url_id();
+        if ($_configuration['multiple_access_urls']) {
+            $condition_multi_url = ", $tbl_url_rel_user as url_user WHERE user.user_id=url_user.user_id AND access_url_id='$access_url_id'";
+        }*/
+
+        global $export_csv;
+        if ($export_csv) 
+        {
+            $is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
+        } else {
+            $is_western_name_order = api_is_western_name_order();
+        }
+        //TODO add course name
+        $sql = "SELECT 
+                a.login_course_date as col0,
+                u.username as col1, 
+                ".($is_western_name_order ? "
+                    u.firstname         AS col2,
+                    u.lastname      AS col3,
+                    " : "
+                    u.lastname      AS col2,
+                    u.firstname         AS col3,
+                ")."
+                 
+                a.logout_course_date,
+                c.title, 
+                c.code, 
+                u.user_id
+            FROM $track_e_course_access a
+            INNER JOIN $user u ON a.user_id = u.user_id
+            INNER JOIN $course c ON a.course_code = c.code";
+
+        if (isset($_GET['session_id']) && !empty($_GET['session_id'])) 
+        {
+            $sessionId = intval($_GET['session_id']);
+            $sql.= " WHERE a.session_id = ".$sessionId;
+        }
+
+        $sql .= " ORDER BY col$column $direction ";
+        $sql .= " LIMIT $from,$number_of_items";
+        $result = Database::query($sql);
+
+        $clicks = Tracking::get_total_clicks_by_session();  
+        $data = array ();
+        while ($user = Database::fetch_row($result)) 
+        {
+            $data[] = $user;
+        }
+
+        //TODO: Dont use numeric index
+        foreach ($data as $key => $info) 
+        {
+
+            #get start date
+            if (isset($return[$info[7]][0])) 
+            {
+                $start_date = (strtotime($info[0]) < strtotime($return[$info[7]][0])) ? $info[0] : $return[$info[7]][0];
+            } else 
+            {
+                $start_date = $info[0];
+            }
+            #get end date
+            if (isset($return[$info[7]][4])) 
+            {
+                $end_date = (strtotime($info[4]) > strtotime($return[$info[7]][4])) ? $info[4] : $return[$info[7]][4];
+            } else 
+            {
+                $end_date = $info[4];
+            }
+            #building array to display
+            $return[$info[7]] = array(
+                $start_date,
+                $info[1], 
+                $info[2], 
+                $info[3], 
+                $clicks[$info[7]],
+                'ip',
+                gmdate("H:i:s", strtotime($end_date) - strtotime($start_date)),  //TODO is not correct/precise, it counts the time not logged between two loggins
+             );
+        }
+        //Search for ip, we do less querys if we iterate the final array
+        foreach ($return as $key => $info) 
+        {
+
+            $sql = sprintf("SELECT login_ip FROM $track_e_login WHERE ('%s' BETWEEN login_date AND logout_date)", $info[0]); //TODO add select by user too
+            $result = Database::query($sql);
+            $ip = Database::fetch_row($result);
+            #add ip to final array
+            $return[$key][5] = $ip[0];
+        }   
+        return $return;
+    }
 	/**
 	 * Displays a form with all the additionally defined user fields of the profile
 	 * and give you the opportunity to include these in the CSV export

@@ -7,7 +7,7 @@
 /**
  * code
  */
-$language_file = array('registration', 'index', 'tracking');
+$language_file = array('registration', 'index', 'tracking', 'admin');
 
 // resetting the course id
 $cidReset = true;
@@ -189,6 +189,28 @@ if (empty($session_id)) {
 		}
 	}
 }
+// Create a filter by session
+    $sessionFilter = new FormValidator('course_filter', 'get', '', '', array('class'=> 'form-search'), false);
+    $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_session';
+    $sessionList = array();
+    if (!empty($sessionId)) {
+        $sessionList = array();
+        $sessionInfo = SessionManager::fetch($sessionId);
+        $sessionList[] = array('id' => $sessionInfo['id'], 'text' => $sessionInfo['name']);
+    }
+    $sessionFilter->addElement('select_ajax', 'session_name', get_lang('SearchCourseBySession'), null, array('url' => $url, 'defaults' => $sessionList));
+    $courseListUrl = api_get_self();
+    if ($is_platform_admin && $view == 'admin' && $display == 'accessoverview') {
+        echo '<div class="pull-right">';    
+        echo $sessionFilter->return_form();
+        echo '</div>';
+        echo '<script>$(function() {
+            $("#session_name").on("change", function() {
+               var sessionId = $(this).val();
+               window.location = "'.$courseListUrl.'?view=admin&display=accessoverview&session_id="+sessionId;
+            });
+            });</script>';
+    }
 echo '</div>';
 
 if (empty($session_id)) {
@@ -603,6 +625,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 		echo ' ( <a href="'.api_get_self().'?view=admin&amp;display=useroverview&amp;export=options">'.get_lang('ExportUserOverviewOptions').'</a> )';
 	}
 	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=sessionoverview">'.get_lang('DisplaySessionOverview').'</a>';
+	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=accessoverview">'.get_lang('DisplayAccessOverview').'</a>';
 	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=courseoverview">'.get_lang('DisplayCourseOverview').'</a>';
     echo ' | <a href="'.api_get_path(WEB_CODE_PATH).'tracking/question_course_report.php?view=admin">'.get_lang('LPQuestionListResults').'</a>';
     echo ' | <a href="'.api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin">'.get_lang('LPExerciseResultsBySession').'</a>';
@@ -613,6 +636,12 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 		MySpace::display_tracking_user_overview();
 	} else if($display == 'sessionoverview') {
 		MySpace::display_tracking_session_overview();
+	} else if($display == 'accessoverview') {
+        if (!empty(isset($_GET['session_id']))) {
+            MySpace::display_tracking_access_overview();
+        } else {
+            Display::display_warning_message(get_lang('ChooseSession'));
+        }
 	} else if($display == 'courseoverview') {
 		MySpace::display_tracking_course_overview();
 	} else {

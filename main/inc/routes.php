@@ -20,9 +20,18 @@ $checkLogin = function (Request $request) use ($app) {
     if (api_is_platform_admin()) {
         return null;
     }
+
     $isAllowedInCourse = Session::read('is_allowed_in_course');
+
+    $cidReq = $request->get('cidReq');
     $courseInfo = api_get_course_info();
     $login = $app['url_generator']->generate('login');
+
+    // We are in a main/xxx that does not require course validation.
+    // @todo move those calls in a proper controller
+    if (empty($cidReq) && empty($courseInfo)) {
+        return null;
+    }
 
     if (empty($courseInfo)) {
         return $app->redirect($login);

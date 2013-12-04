@@ -75,17 +75,17 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete_grading') {
     api_delete_setting_option($id);
 }
 
-$form_search = new FormValidator('search_settings', 'get', api_get_self(), null, array('class' => 'well form-inline'));
-$form_search->addElement('text', 'search_field');
+$form_search = new FormValidator('search_settings', 'get', api_get_self(), null, array('class' => 'form-search'));
+$form_search->addElement('text', 'keyword');
 $form_search->addElement('hidden', 'category', 'search_setting');
 $form_search->addElement(
     'style_submit_button',
     'submit_button',
     get_lang('Search'),
-    'value="submit_button", class="search"'
+    array('class' => 'search')
 );
 $form_search->setDefaults(
-    array('search_field' => (isset($_REQUEST['search_field']) ? $_REQUEST['search_field'] : null))
+    array('keyword' => (isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : null))
 );
 
 $form_search_html = $form_search->return_form();
@@ -135,8 +135,8 @@ function get_settings($category = null)
     }
 
     if (isset($category) && $category == 'search_setting') {
-        if (!empty($_REQUEST['search_field'])) {
-            $settings = search_setting($_REQUEST['search_field']);
+        if (!empty($_REQUEST['keyword'])) {
+            $settings = search_setting($_REQUEST['keyword']);
         }
     }
 
@@ -202,7 +202,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                 $form = generate_settings_form($settings, $settings_by_access_list, $settings_to_avoid, $convert_byte_to_mega_list);
             }
         }
-        $pdf_export_watermark_path = $_FILES['pdf_export_watermark_path'];
+        $pdf_export_watermark_path = isset($_FILES['pdf_export_watermark_path']) ? $_FILES['pdf_export_watermark_path'] : null;
 
         if (isset($pdf_export_watermark_path) && !empty($pdf_export_watermark_path['name'])) {
             $pdf_export_watermark_path_result = PDF::upload_watermark(
@@ -233,7 +233,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
             if (in_array($key, $settings_to_avoid)) {
                 continue;
             }
-            if ($key == 'search_field' or $key == 'submit_fixed_in_bottom') {
+            if ($key == 'keyword' or $key == 'submit_fixed_in_bottom') {
                 continue;
             }
             $key = Database::escape_string($key);
@@ -250,7 +250,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                 continue;
             }
             // Avoid form elements which have nothing to do with settings
-            if ($key == 'search_field' or $key == 'submit_fixed_in_bottom') {
+            if ($key == 'keyword' or $key == 'submit_fixed_in_bottom') {
                 continue;
             }
 
@@ -461,10 +461,8 @@ foreach ($resultcategories as $row) {
 }
 
 echo Display::actions($action_array);
-
 echo '<br />';
-
-echo $form_search_html;
+echo '<div class="well">'.$form_search_html."</div>";
 
 if ($watermark_deleted) {
     Display :: display_normal_message(get_lang('FileDeleted'));
@@ -547,8 +545,8 @@ if (!empty($_GET['category'])) {
             handle_templates();
             break;
         case 'search_setting':
-            search_setting($_REQUEST['search_field']);
-            if (isset($_REQUEST['search_field'])) {
+            search_setting($_REQUEST['keyword']);
+            if (isset($_REQUEST['keyword'])) {
                 $form->display();
             }
             break;

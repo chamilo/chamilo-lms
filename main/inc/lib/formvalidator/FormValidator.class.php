@@ -30,12 +30,16 @@ class FormValidator extends HTML_QuickForm
         if (is_array($attributes) && !isset($attributes['class']) || empty($attributes)) {
             $attributes['class'] = 'form-horizontal';
         }
+
         // Fixing form search
         if (is_array($attributes) && isset($attributes['class'])) {
+            //if (strpos($attributes['class'], 'form-search')) {
             if ($attributes['class'] == 'form-search') {
+            //    $attributes['class'] = str_replace('form-search', 'form-inline', $attributes['class']);
                 $attributes['class']  = 'form-inline';
             }
         }
+
         // Allow form with no names
         if (empty($form_name)) {
             $form_name = uniqid();

@@ -11,8 +11,6 @@
                 {% else %}
                     {% include app.template_style ~ "/admin/" ~ role ~ "/role_index.tpl" %}
                 {% endif %}
-
-
             {% endfor %}
         </div>
     </div>
@@ -20,7 +18,6 @@
     {% if is_granted('ROLE_ADMIN') %}
         <script>
         $(function() {
-            //$("#settings").tabs();
             $.ajax({
                 url:'{{ web_admin_ajax_url }}?a=version',
                 success:function(version){

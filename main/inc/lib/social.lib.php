@@ -105,9 +105,15 @@ class SocialManager extends UserManager {
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             if ($load_extra_info) {
-                $path = UserManager::get_user_picture_path_by_id($row['friend_user_id'],'web',false,true);
+                $path = UserManager::get_user_picture_path_by_id($row['friend_user_id'], 'web', false, true);
                 $my_user_info = api_get_user_info($row['friend_user_id']);
-                $list_ids_friends[] = array('friend_user_id'=>$row['friend_user_id'],'firstName'=>$my_user_info['firstName'] , 'lastName'=>$my_user_info['lastName'], 'username'=>$my_user_info['username'], 'image'=>$path['file']);
+                $list_ids_friends[] = array(
+                    'user_info' => $my_user_info,
+                    'friend_user_id'=>$row['friend_user_id'],
+                    'firstName'=>$my_user_info['firstName'] ,
+                    'lastName'=>$my_user_info['lastName'],
+                    'username'=>$my_user_info['username'],
+                    'image'=>$path['file']);
             } else {
                 $list_ids_friends[] = $row;
             }
@@ -225,13 +231,15 @@ class SocialManager extends UserManager {
      * @param int user id
      * @return array()
      */
-    public static function get_list_invitation_of_friends_by_user_id ($user_id) {
+    public static function get_list_invitation_of_friends_by_user_id ($user_id)
+    {
         $list_friend_invitation=array();
         $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
-        $sql = 'SELECT user_sender_id,send_date,title,content FROM '.$tbl_message.' WHERE user_receiver_id='.intval($user_id).' AND msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
+        $sql = 'SELECT user_sender_id,send_date,title,content FROM '.$tbl_message.'
+                WHERE user_receiver_id='.intval($user_id).' AND msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res,'ASSOC')) {
-            $list_friend_invitation[]=$row;
+            $list_friend_invitation[] = $row;
         }
         return $list_friend_invitation;
     }
@@ -522,10 +530,6 @@ class SocialManager extends UserManager {
             //Search users
             $active = $show=='search' ? 'active' : null;
             $html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.Display::return_icon('zoom.png',get_lang('Search'), array()).get_lang('Search').'</a></li>';
-
-            //My files
-            $active = $show=='myfiles' ? 'active' : null;
-            $html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.Display::return_icon('briefcase.png',get_lang('MyFiles'),array(), 16).get_lang('MyFiles').'</span></a></li>';
             $html .='</ul>
                   </div>';
         }
@@ -554,8 +558,6 @@ class SocialManager extends UserManager {
                           <li><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group_s.png', get_lang('SocialGroups'),array()).get_lang('SocialGroups').'</a></li>';
                 $active = $show=='search' ? 'active' : null;
                 $html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.Display::return_icon('zoom.png',get_lang('Search'),array()).get_lang('Search').'</a></li>';
-                $active = $show=='myfiles' ? 'active' : null;
-                $html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.Display::return_icon('briefcase.png',get_lang('MyFiles'),array(),16).get_lang('MyFiles').'</a></li>';
             }
 
             // My friend profile

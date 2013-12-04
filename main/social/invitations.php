@@ -116,21 +116,21 @@ if ($number_loop != 0) {
 
     foreach ($list_get_invitation as $invitation) {
         $sender_user_id = $invitation['user_sender_id'];
+        $userInfo = api_get_user_info($sender_user_id);
         $social_right_content .= '<div id="id_'.$sender_user_id.'" class="invitation_confirm span8">';
 
         $picture = UserManager::get_user_picture_path_by_id($sender_user_id, 'web', false, true);
         $friends_profile = SocialManager::get_picture_user($sender_user_id, $picture['file'], 92);
-        $user_info	= api_get_user_info($sender_user_id);
         $title 		= Security::remove_XSS($invitation['title'], STUDENT, true);
         $content 	= Security::remove_XSS($invitation['content'], STUDENT, true);
         $date		= api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);
 
         $social_right_content .= '<div class="span2">
-                        <a class="thumbnail" href="profile.php?u='.$sender_user_id.'">
+                        <a class="thumbnail" href="'.$userInfo['profile_url'].'">
                         <img src="'.$friends_profile['file'].'" /></a>
                 </div>
                 <div class="span3">
-                    <a href="profile.php?u='.$sender_user_id.'">'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</a> :
+                    <a href="'.$userInfo['profile_url'].'">'.$userInfo['complete_name'].'</a> :
                     '.$content.'
                     <div>
                     '.get_lang('DateSend').' : '.$date.'
@@ -150,23 +150,21 @@ if (count($list_get_invitation_sent) > 0) {
     $social_right_content .= '<div class="span8">'.Display::page_subheader(get_lang('InvitationSent')).'</div>';
     foreach ($list_get_invitation_sent as $invitation) {
         $sender_user_id = $invitation['user_receiver_id'];
-
         $social_right_content .= '<div id="id_'.$sender_user_id.'" class="invitation_confirm span8">';
-
-        $picture = UserManager::get_user_picture_path_by_id($sender_user_id,'web', false, true);
+        $picture = UserManager::get_user_picture_path_by_id($sender_user_id, 'web', false, true);
         $friends_profile = SocialManager::get_picture_user($sender_user_id, $picture['file'], 92);
-        $user_info	= api_get_user_info($sender_user_id);
+        $userInfo	= api_get_user_info($sender_user_id);
 
         $title		= Security::remove_XSS($invitation['title'], STUDENT, true);
         $content	= Security::remove_XSS($invitation['content'], STUDENT, true);
         $date		= api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);
         $social_right_content .= '
         <div class="span2">
-            <a class="thumbnail" href="profile.php?u='.$sender_user_id.'">
+            <a class="thumbnail" href="'.$userInfo['profile_url'].'">
             <img src="'.$friends_profile['file'].'"  /></a>
         </div>
         <div class="span3">
-            <a class="profile_link" href="profile.php?u='.$sender_user_id.'">'.$user_info['complete_name'].'</a>
+            <a class="profile_link" href="'.$userInfo['profile_url'].'">'.$userInfo['complete_name'].'</a>
             <div>'. $title.' : '.$content.'</div>
             <div>'. get_lang('DateSend').' : '.$date.'</div>
             </div>

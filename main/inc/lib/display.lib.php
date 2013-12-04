@@ -1782,7 +1782,8 @@ class Display
     {
         $html = null;
         if (!empty($items)) {
-            $html = '<div class="new_actions"><ul class="nav nav-pills">';
+            $html = '<div class="new_actions">
+                        <ul class="nav nav-pills">';
             foreach ($items as $value) {
                 $class = null;
                 if (isset($value['active']) && $value['active']) {

@@ -1118,7 +1118,7 @@ function api_format_user_from_obj($user)
 function api_format_user($user, $add_password = false) {
     $result = array();
 
-    //If user is anonymous we don't have anything to provide
+    // If user is anonymous we don't have anything to provide
     if (isset($user['is_anonymous']) && $user['is_anonymous']) {
         return $user;
     }
@@ -1137,11 +1137,12 @@ function api_format_user($user, $add_password = false) {
     $result['complete_name'] = api_get_person_name($firstname, $lastname);
 
     $result['complete_name_with_username'] = $result['complete_name'];
+
     if (!empty($user['username'])) {
         $result['complete_name_with_username'] 	= $result['complete_name'].' ('.$user['username'].')';
     }
-
-    $result['complete_name_login_as']= $result['complete_name'];
+    $result['complete_name_login_as'] = $result['complete_name'];
+    $result['profile_url'] = api_get_path(WEB_PUBLIC_PATH).'user/'.$user['username'];
 
     if (!empty($user['username'])) {
         //$result['complete_name_login_as'] = $result['complete_name'].' ('.sprintf(get_lang('LoginX'), $user['username']).')';

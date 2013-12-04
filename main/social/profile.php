@@ -11,7 +11,7 @@ $language_file = array('userInfo', 'index');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
-if (api_get_setting('allow_social_tool') !='true') {
+if (api_get_setting('allow_social_tool') != 'true') {
     $url = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.intval($_GET['u']);
     header('Location: '.$url);
     exit;
@@ -376,7 +376,7 @@ if ($show_full_profile) {
                 $friend_html.= '<img src="'.$friends_profile['file'].'"  id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'" />';
 
                 $friend_html.= '<div class="caption">';
-                $friend_html.= $status_icon.'<a href="profile.php?u='.$friend['friend_user_id'].'&amp;'.$link_shared.'">';
+                $friend_html.= $status_icon.'<a href="'.$user_info_friend['profile_url'].'">';
                 $friend_html.= $name_user;
                 $friend_html.= '</a></div>';
                 $friend_html.= '</div>';
@@ -605,7 +605,7 @@ if ($show_full_profile) {
 
                         $invitations .=  '<div style="padding-left:70px;">';
                             $user_invitation_info = api_get_user_info($user_invitation_id);
-                            $invitations .=  '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_invitation_id.'">'.api_get_person_name($user_invitation_info['firstname'], $user_invitation_info['lastname']).'</a>';
+                            $invitations .=  '<a href="'.$user_invitation_info['profile_url'].'">'.$user_invitation_info['complete_name'].'</a>';
                             $invitations .=  '<br />';
                             $invitations .=  Security::remove_XSS(Text::cut($pending_invitations[$i]['content'], 50), STUDENT, true);
                             $invitations .=  '<br />';

@@ -39,23 +39,23 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
 				$friend_html.= '<div style="float:left;width:80%">'.$number_friends.' '.get_lang('Friends').'</div>';
 			}
 
-				$friend_html.= '</div>'; // close div friend-header
+            $friend_html.= '</div>'; // close div friend-header
 
-			for ($k=0;$k<$number_friends;$k++) {
-				if (isset($friends[$k])) {
-					$friend = $friends[$k];
-					$name_user	= api_get_person_name($friend['firstName'], $friend['lastName']);
-					$friend_html.='<div id=div_'.$friend['friend_user_id'].' class="image_friend_network" ><span><center>';
-					// the height = 92 must be the sqme in the image_friend_network span style in default.css
-					$friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 92, USER_IMAGE_SIZE_MEDIUM , 'width="85" height="90" ');
+            for ($k=0;$k<$number_friends;$k++) {
+                if (isset($friends[$k])) {
+                    $friend = $friends[$k];
+                    $name_user	= api_get_person_name($friend['firstName'], $friend['lastName']);
+                    $friend_html.='<div id=div_'.$friend['friend_user_id'].' class="image_friend_network" ><span><center>';
+                    // the height = 92 must be the sqme in the image_friend_network span style in default.css
+                    $friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 92, USER_IMAGE_SIZE_MEDIUM , 'width="85" height="90" ');
 
-					$friend_html.='<a href="profile.php?u='.$friend['friend_user_id'].'&amp;'.$link_shared.'">';
-					$friend_html.='<img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'" />';
-					$friend_html.= '</center></span>';
-					$friend_html.= '<center class="friend">'.$name_user.'</a></center>';
-					$friend_html.= '</div>';
-				}
-			}
+                    $friend_html.='<a href="'.$friend['user_info']['profile_url'].'">';
+                    $friend_html.='<img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'" />';
+                    $friend_html.= '</center></span>';
+                    $friend_html.= '<center class="friend">'.$name_user.'</a></center>';
+                    $friend_html.= '</div>';
+                }
+            }
 			echo $friend_html;
 		echo '</div>';
 	} else {

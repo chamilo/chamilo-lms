@@ -277,7 +277,7 @@ if ($group_id != 0 ) {
                 $create_thread_link = '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="ajax btn" title="'.get_lang('ComposeMessage').'">'.get_lang('NewTopic').'</a>';
             }
         }
-        $members = $usergroup->get_users_by_group($group_id);
+        $members = $usergroup->get_users_by_group($group_id, true);
         $member_content = '';
 
         //Members
@@ -285,7 +285,7 @@ if ($group_id != 0 ) {
             if ($my_group_role == GROUP_USER_PERMISSION_ADMIN) {
                 $member_content .= Display::url(Display::return_icon('edit.gif', get_lang('EditMembersList')).' '.get_lang('EditMembersList'), 'group_members.php?id='.$group_id);
             }
-            foreach($members as $member) {
+            foreach ($members as $member) {
                 // if is a member
                 if (in_array($member['relation_type'] , array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER,GROUP_USER_PERMISSION_MODERATOR))) {
                     //add icons
@@ -300,13 +300,13 @@ if ($group_id != 0 ) {
                     $picture = UserManager::get_picture_user($member['user_id'], $image_path['file'], 60, USER_IMAGE_SIZE_MEDIUM);
 
                     $member_content .= '<div class="">';
-                    $member_name = Display::url(api_get_person_name(Text::cut($member['firstname'],15),Text::cut($member['lastname'],15)).'&nbsp;'.$icon, 'profile.php?u='.$member['user_id']);
+                    $member_name = Display::url(api_get_person_name(Text::cut($member['firstname'],15),Text::cut($member['lastname'],15)).'&nbsp;'.$icon, $member['user_info']['profile_url']);
                     $member_content .= Display::div('<img height="44" border="2" align="middle" vspace="10" class="social-groups-image" src="'.$picture['file'].'"/>&nbsp'.$member_name);
                     $member_content .= '</div>';
-
                 }
             }
         }
+
         if (!empty($create_thread_link)) {
             $create_thread_link =  Display::div($create_thread_link, array('style'=>'padding-top:2px;height:40px'));
         }

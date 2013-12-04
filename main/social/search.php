@@ -40,20 +40,20 @@ if ($query !='') {
         $social_right_content .= get_lang('SorryNoResults');
     }
 
-    $results = '<div id="online_grid_container"><div class="span9">';
+    $results = '<div id="online_grid_container"><div class="col-md-12">';
 
     if (is_array($users) && count($users)> 0) {
         $results .=  Display::page_subheader(get_lang('Users'));
         $results .= '<ul class="thumbnails">';
         foreach ($users as $user) {
             $user_info = api_get_user_info($user['user_id'], true);
-            $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$user['user_id'];
+            $url = $user_info['profile_url'];
 
             if (empty($user['picture_uri'])) {
                 $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg';
                 $img = '<img src="'.$picture['file'].'">';
             } else {
-                $picture = UserManager::get_picture_user($user['user_id'], $user['picture_uri'], 80, USER_IMAGE_SIZE_ORIGINAL );
+                $picture = UserManager::get_picture_user($user['user_id'], $user['picture_uri'], 80, USER_IMAGE_SIZE_ORIGINAL);
                 $img = '<img src="'.$picture['file'].'">';
             }
             if ($user_info['user_is_online']) {
@@ -63,7 +63,7 @@ if ($query !='') {
             }
             $user['tag'] = isset($user['tag']) ? $user['tag'] : null;
             $user_info['complete_name'] = Display::url($status_icon.$user_info['complete_name'], $url).'<br />'.$user['tag'];
-            $results .= '<li class="span3"><div class="thumbnail">'.$img.'<div class="caption">'.$user_info['complete_name'].$user['tag'].'</div</div></li>';
+            $results .= '<li class="col-md-3"><div class="thumbnail">'.$img.'<div class="caption">'.$user_info['complete_name'].$user['tag'].'</div</div></li>';
         }
         $results .='</ul></div></div>';
         $social_right_content .=  $results;
@@ -71,22 +71,22 @@ if ($query !='') {
 
     $grid_groups = array();
     if (is_array($groups) && count($groups)>0) {
-        $social_right_content .= '<div class="span9">';
+        $social_right_content .= '<div class="col-md-12">';
         $social_right_content .=  Display::page_subheader(get_lang('Groups'));
-        foreach($groups as $group) {
+        foreach ($groups as $group) {
             $group['name'] = Security::remove_XSS($group['name'], STUDENT, true);
             $$group['description'] = Security::remove_XSS($group['description'], STUDENT, true);
             $id = $group['id'];
             $url_open  = '<a href="groups.php?id='.$id.'" >';
             $url_close = '</a>';
-            $name = Text::cut($group['name'],25,true);
+            $name = Text::cut($group['name'], 25, true);
             $count_users_group = count($usergroup->get_all_users_by_group($id));
-            if ($count_users_group == 1 ) {
+            if ($count_users_group == 1) {
                 $count_users_group = $count_users_group.' '.get_lang('Member');
             } else {
                 $count_users_group = $count_users_group.' '.get_lang('Members');
             }
-            $picture = $usergroup->get_picture_group($group['id'], $group['picture'],80);
+            $picture = $usergroup->get_picture_group($group['id'], $group['picture'], 80);
             $tags = $usergroup->get_group_tags($group['id']);
             $group['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
 
@@ -114,11 +114,7 @@ if ($query !='') {
 
 $app['title'] = $tool_name;
 $tpl = $app['template'];
-
 $tpl->assign('social_left_content', $social_left_content);
-
 $tpl->assign('social_right_content', $social_right_content);
-
-
 $social_layout = $tpl->get_template('layout/social_layout.tpl');
 $tpl->display($social_layout);

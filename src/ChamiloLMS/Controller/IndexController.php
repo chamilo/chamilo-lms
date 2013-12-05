@@ -22,8 +22,7 @@ class IndexController extends CommonController
      */
     public function indexAction(Application $app)
     {
-        /** @var \Template $template */
-        $template = $app['template'];
+        $template = $this->getTemplate();
 
         /*$user = $this->getManager()->getRepository('Entity\User')->find(1);
         foreach($user->getPortals() as $portal) {
@@ -148,7 +147,7 @@ class IndexController extends CommonController
         // When loading a chamilo page do not include the hot courses and news
         if (!isset($_REQUEST['include'])) {
             if (api_get_setting('show_hot_courses') == 'true') {
-                $hotCourses = $pageController->return_hot_courses();
+                $hotCourses = $pageController->returnHotCourses();
             }
             $announcementsBlock = $pageController->return_announcements();
         }
@@ -161,14 +160,14 @@ class IndexController extends CommonController
 
         // Navigation links
         $pageController->returnNavigationLinks($template->getNavigationLinks());
-        $pageController->return_notice();
-        $pageController->return_help();
+        $pageController->returnNotice();
+        $pageController->returnHelp();
 
         if (api_is_platform_admin() || api_is_drh()) {
-            $pageController->return_skills_links();
+            $pageController->returnSkillsLinks();
         }
 
-        $response = $template->render_layout('layout_2_col.tpl');
+        $response = $template->renderLayout('layout_2_col.tpl');
         return new Response($response, 200, array());
     }
 
@@ -178,7 +177,7 @@ class IndexController extends CommonController
      */
     public function loginAction(Application $app)
     {
-        $request = $app['request'];
+        $request = $this->getRequest();
         $app['template']->assign('error', $app['security.last_error']($request));
         $extra = array();
         if (api_get_setting('use_virtual_keyboard') == 'true') {
@@ -447,12 +446,16 @@ class IndexController extends CommonController
         return \Display::return_message($message, 'error');
     }
 
+    /**
+     * @param Application $app
+     * @return Response
+     */
     function dashboardAction(Application $app)
     {
-        $template = $app['template'];
+        $template = $this->getTemplate();
 
         $template->assign('content', 'welcome!');
-        $response = $template->render_layout('layout_2_col.tpl');
+        $response = $template->renderLayout('layout_2_col.tpl');
 
         //return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
         return new Response($response, 200, array());

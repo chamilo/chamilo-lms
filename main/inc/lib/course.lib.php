@@ -3720,7 +3720,7 @@ class CourseManager
      * @param   int number of days
      * @param   int number of hottest courses
      */
-    public static function return_hot_courses($days = 30, $limit = 5)
+    public static function returnHotCourses($days = 30, $limit = 5)
     {
         $urlId = api_get_current_access_url_id();
         $limit  = intval($limit);

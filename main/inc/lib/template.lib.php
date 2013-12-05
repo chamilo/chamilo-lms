@@ -939,7 +939,7 @@ class Template
      */
     public function render_template($template, $elements = array())
     {
-        return $this->returnTemplate($template, $elements);
+        return $this->renderTemplate($template, $elements);
     }
 
     /**

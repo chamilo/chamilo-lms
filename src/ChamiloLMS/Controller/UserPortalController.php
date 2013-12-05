@@ -82,7 +82,7 @@ class UserPortalController extends CommonController
 
         $app['template']->assign('search_block', $pageController->return_search_block());
         $app['template']->assign('classes_block', $pageController->return_classes_block());
-        $pageController->return_skills_links();
+        $pageController->returnSkillsLinks();
 
         // Deleting the session_id.
         Session::erase('session_id');

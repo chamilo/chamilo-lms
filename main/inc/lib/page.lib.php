@@ -16,6 +16,9 @@ use Pagerfanta\Adapter\FixedAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\View\TwitterBootstrapView;
 
+/**
+ * Class PageController
+ */
 class PageController
 {
     public $maxPerPage = 5;
@@ -189,14 +192,14 @@ class PageController
         $app                   = $this->app;
         $courseURL             = $app['url_generator']->generate('userportal', array('type' => 'courses'));
         $sessionURL            = $app['url_generator']->generate('userportal', array('type' => 'sessions'));
-        $myCourseCategoriesURL = $app['url_generator']->generate('userportal', array('type' => 'mycoursecategories'));
+        $courseCategoriesURL   = $app['url_generator']->generate('userportal', array('type' => 'mycoursecategories'));
         $specialCoursesURL     = $app['url_generator']->generate('userportal', array('type' => 'specialcourses'));
         $sessionCategoriesURL  = $app['url_generator']->generate('userportal', array('type' => 'sessioncategories'));
 
         $params = array(
             array('href' => $courseURL, 'title' => get_lang('Courses')),
             array('href' => $specialCoursesURL, 'title' => get_lang('SpecialCourses')),
-            array('href' => $myCourseCategoriesURL, 'title' => get_lang('MyCourseCategories')),
+            array('href' => $courseCategoriesURL, 'title' => get_lang('MyCourseCategories')),
             array('href' => $sessionURL, 'title' => get_lang('Sessions')),
             array('href' => $sessionCategoriesURL, 'title' => get_lang('SessionsCategories')),
         );
@@ -206,13 +209,13 @@ class PageController
     /**
      * Returns a list of the most popular courses of the moment (also called
      * "hot courses").
-     * @uses CourseManager::return_hot_courses() in fact, the current method is only a bypass to this method
+     * @uses CourseManager::returnHotCourses() in fact, the current method is only a bypass to this method
      * @return string HTML <div> with the most popular courses
      * @assert () != ''
      */
-    public function return_hot_courses()
+    public function returnHotCourses()
     {
-        return CourseManager::return_hot_courses();
+        return CourseManager::returnHotCourses();
     }
 
     /**
@@ -221,7 +224,7 @@ class PageController
      * @return string HTML block
      * @assert () != ''
      */
-    public function return_help()
+    public function returnHelp()
     {
         $home                   = api_get_home_path();
         $user_selected_language = api_get_interface_language();
@@ -248,7 +251,7 @@ class PageController
      * @return string HTML <div> block
      * @assert () != ''
      */
-    public function return_skills_links()
+    public function returnSkillsLinks()
     {
         if (api_get_setting('allow_skills_tool') == 'true') {
             $content   = array();
@@ -273,7 +276,7 @@ class PageController
      * @return string HTML <div> block
      * @assert () != ''
      */
-    public function return_notice()
+    public function returnNotice()
     {
         $sys_path               = api_get_path(SYS_PATH);
         $user_selected_language = api_get_interface_language();

@@ -706,17 +706,20 @@ function handle_search()
  * Wrapper for the templates
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @author Julio Montoya.
  * @version August 2008
  * @since Dokeos 1.8.6
  */
-function handle_templates() {
-    if ($_GET['action'] != 'add') {
+function handle_templates()
+{
+    $action = isset($_GET['action']) ? $_GET['action'] : null;
+    if ($action != 'add') {
         echo '<div class="actions" style="margin-left: 1px;">';
         echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('new_template.png', get_lang('AddTemplate'),'',ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
     }
 
-    if ($_GET['action'] == 'add' || ($_GET['action'] == 'edit' && is_numeric($_GET['id']))) {
+    if ($action == 'add' || ($action == 'edit' && is_numeric($_GET['id']))) {
         add_edit_template();
 
         // Add event to the system log.
@@ -725,7 +728,7 @@ function handle_templates() {
         event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
 
     } else {
-        if ($_GET['action'] == 'delete' && is_numeric($_GET['id'])) {
+        if ($action == 'delete' && is_numeric($_GET['id'])) {
             delete_template($_GET['id']);
 
             // Add event to the system log

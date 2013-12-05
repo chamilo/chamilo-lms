@@ -12,10 +12,11 @@ $language_file = array('admin', 'gradebook', 'tracking');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
-api_protect_admin_script();
+if (!(api_is_platform_admin(false, true))) {
+    api_not_allowed();
+}
 
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('MySpace'));
-//$interbreadcrumb[] = array ("url" => 'user_list.php', "name" => get_lang('Report'));
 $tool_name = get_lang('Report');
 
 $this_section = SECTION_TRACKING;
@@ -36,12 +37,12 @@ $column_model = array(
     array('name'=>'user',           'index'=>'user',        'width'=>'100', 'align'=>'left','sortable'=>'false'),
     array('name'=>'time',           'index'=>'time',        'width'=>'50',  'align'=>'left','sortable'=>'false'),
     array('name'=>'certificate',    'index'=>'certificate', 'width'=>'50',  'align'=>'left','sortable'=>'false'),
-    array('name'=>'progress_100',          'index'=>'progress_100',       'width'=>'50',  'align'=>'left','sortable'=>'false'),
+    array('name'=>'progress_100',   'index'=>'progress_100',       'width'=>'50',  'align'=>'left','sortable'=>'false'),
     array('name'=>'progress',       'index'=>'progress',    'width'=>'50',  'align'=>'left','sortable'=>'false')
 );
 
 if (!empty($extra_fields)) {
-    foreach($extra_fields as $extra) {
+    foreach ($extra_fields as $extra) {
         $col = array(
             'name' => $extra['1'],
             'index'=> $extra['1'],
@@ -54,15 +55,14 @@ if (!empty($extra_fields)) {
     }
 }
 
-//Autowidth
+// Autowidth
 $extra_params['autowidth'] = 'true';
-//height auto
+// height auto
 $extra_params['height'] = 'auto';
 
 $htmlHeadXtra[] = '<script>
 $(function() {
-    '.Display::grid_js('user_course_report',  $url,$columns,$column_model,$extra_params, array(), null, true).'
-
+    '.Display::grid_js('user_course_report',  $url, $columns, $column_model, $extra_params, array(), null, true).'
     jQuery("#user_course_report").jqGrid("navGrid","#user_course_report_pager",{view:false, edit:false, add:false, del:false, search:false, excel:true});
     jQuery("#user_course_report").jqGrid("navButtonAdd","#user_course_report_pager",{
            caption:"",

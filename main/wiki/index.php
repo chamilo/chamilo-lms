@@ -163,27 +163,27 @@ if (isset($_POST['SaveWikiChange']) AND $_POST['title']<>'') {
 
 //saving a new wiki entry
 echo '<div style="overflow:hidden">';
-    if (isset($_POST['SaveWikiNew'])) {
-        if (empty($_POST['title'])) {
-            Display::display_error_message(get_lang("NoWikiPageTitle"));
-        } elseif (strtotime(get_date_from_select('startdate_assig')) > strtotime(get_date_from_select('enddate_assig'))) {
-            Display::display_error_message(get_lang("EndDateCannotBeBeforeTheStartDate"));
-        } elseif(!double_post($_POST['wpost_id'])) {
-            //double post
-        } else {
-           $_clean['assignment']=Database::escape_string($_POST['assignment']); // for mode assignment
-           if ($_clean['assignment']==1) {
-                  auto_add_page_users($_clean['assignment']);
-           } else {
-                $return_message=save_new_wiki();
-                if ($return_message==false) {
-                    Display::display_error_message(get_lang('NoWikiPageTitle'), false);
-                } else {
-                    Display::display_confirmation_message($return_message, false);
-                }
-           }
-        }
+if (isset($_POST['SaveWikiNew'])) {
+    if (empty($_POST['title'])) {
+        Display::display_error_message(get_lang("NoWikiPageTitle"));
+    } elseif (strtotime(get_date_from_select('startdate_assig')) > strtotime(get_date_from_select('enddate_assig'))) {
+        Display::display_error_message(get_lang("EndDateCannotBeBeforeTheStartDate"));
+    } elseif(!double_post($_POST['wpost_id'])) {
+        //double post
+    } else {
+       $_clean['assignment']=Database::escape_string($_POST['assignment']); // for mode assignment
+       if ($_clean['assignment']==1) {
+              auto_add_page_users($_clean['assignment']);
+       } else {
+            $return_message=save_new_wiki();
+            if ($return_message==false) {
+                Display::display_error_message(get_lang('NoWikiPageTitle'), false);
+            } else {
+                Display::display_confirmation_message($return_message, false);
+            }
+       }
     }
+}
 echo '</div>';
 
 // check last version
@@ -713,13 +713,11 @@ $allpages=Database::query($sql);
 $sql='SELECT * FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' GROUP BY addlock';//group by because mark 0 in all vers, then always is ok
     $allpages=Database::query($sql);
 while ($row=Database::fetch_array($allpages)) {
-		$wiki_add_lock=$row['addlock'];
- }
-if ($wiki_add_lock==1){
-
-	$status_add_new_pag=get_lang('Yes');
+    $wiki_add_lock=$row['addlock'];
 }
-else{
+if ($wiki_add_lock==1){
+	$status_add_new_pag=get_lang('Yes');
+} else {
 	$status_add_new_pag=get_lang('No');
 }
 
@@ -737,18 +735,18 @@ $allpages=Database::query($sql);
 $last_wiki_date='0000-00-00 00:00:00';
 $sql='SELECT * FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' ORDER BY dtime DESC LIMIT 1';
 $allpages=Database::query($sql);
-	while ($row=Database::fetch_array($allpages)) {
-		$last_wiki_date=$row['dtime'];
-	}
+while ($row=Database::fetch_array($allpages)) {
+    $last_wiki_date=$row['dtime'];
+}
 
 //Average score of all wiki pages. (If a page has not scored zero rated)
 
 $media_score =0;
 $sql="SELECT *, SUM(score) AS TOTAL_SCORE FROM ".$tbl_wiki." WHERE c_id = $course_id AND ".$groupfilter.$condition_session." GROUP BY reflink ";//group by because mark in all versions, then always is ok. Do not use "count" because using "group by", would give a wrong value
-	$allpages=Database::query($sql);
-	while ($row=Database::fetch_array($allpages)) {
-		$total_score=$total_score+$row['TOTAL_SCORE'];
-	}
+$allpages=Database::query($sql);
+while ($row=Database::fetch_array($allpages)) {
+    $total_score=$total_score+$row['TOTAL_SCORE'];
+}
 
 if (!empty($total_pages)) {
 	$media_score = $total_score/$total_pages;//put always this line alfter check num all pages
@@ -758,10 +756,9 @@ if (!empty($total_pages)) {
 
 $media_progress=0;
 $sql='SELECT  *, SUM(progress) AS TOTAL_PROGRESS FROM  '.$tbl_wiki.' s1 WHERE s1.c_id = '.$course_id.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';//As the value is only the latest version I can not use group by
-	$allpages=Database::query($sql);
-
-    while ($row=Database::fetch_array($allpages)) {
-	$total_progress			= $row['TOTAL_PROGRESS'];
+$allpages=Database::query($sql);
+while ($row=Database::fetch_array($allpages)) {
+    $total_progress			= $row['TOTAL_PROGRESS'];
 }
 
 if (!empty($total_pages)) {
@@ -778,21 +775,19 @@ while ($row=Database::fetch_array($allpages)) {
  }
 
 //Total of different IP addresses that have participated in the wiki
-
 $total_ip=0;
- $sql='SELECT * FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' GROUP BY user_ip';
-    $allpages=Database::query($sql);
+$sql='SELECT * FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' GROUP BY user_ip';
+$allpages=Database::query($sql);
 while ($row=Database::fetch_array($allpages)) {
-		$total_ip	= $total_ip+1;
- }
- ?>
+    $total_ip	= $total_ip+1;
+}
+?>
 <style>
 thead {background:#E2E2E2}
 tbody tr:hover {
-  background: #F9F9F9;
-  cursor:default;
-  }
-
+    background: #F9F9F9;
+    cursor:default;
+}
 </style>
 <?php
 
@@ -961,7 +956,6 @@ echo '<td>'.$total_tables.'</td>';
 echo '</tr>';
 echo '</table>';
 echo '<br/>';
-
 }
 
 // Most active users Juan Carlos Raña Trabado
@@ -1183,9 +1177,7 @@ if ($action =='wanted') {
     $allpages = Database::query($sql);
 
     while ($row=Database::fetch_array($allpages)) {
-
         $refs = explode(" ", trim($row["linksto"]));
-
 		// Find linksto into reflink. If not found ->page is wanted
 		foreach ($refs as $v) {
 
@@ -1199,19 +1191,19 @@ if ($action =='wanted') {
 	$wanted=array_unique($wanted);//make a unique list
 
 	//show table
-        foreach ($wanted as $wanted_show) {
+    foreach ($wanted as $wanted_show) {
 
-            $row = array ();
-			$wanted_show=Security::remove_XSS($wanted_show);
-            $row[] = '<a href="'.api_get_path(WEB_PATH).'main/wiki/index.php?cidReq=&action=addnew&title='.str_replace('_',' ',$wanted_show).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'" class="new_wiki_link">'.str_replace('_',' ',$wanted_show).'</a>';//meter un remove xss en lugar de htmlentities
+        $row = array ();
+        $wanted_show=Security::remove_XSS($wanted_show);
+        $row[] = '<a href="'.api_get_path(WEB_PATH).'main/wiki/index.php?cidReq=&action=addnew&title='.str_replace('_',' ',$wanted_show).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'" class="new_wiki_link">'.str_replace('_',' ',$wanted_show).'</a>';//meter un remove xss en lugar de htmlentities
 
-            $rows[] = $row;
-        }
+        $rows[] = $row;
+    }
 
-        $table = new SortableTableFromArrayConfig($rows,0,10,'WantedPages_table','','','DESC');
-        $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($action ),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
-        $table->set_header(0,get_lang('Title'), true);
-        $table->display();
+    $table = new SortableTableFromArrayConfig($rows,0,10,'WantedPages_table','','','DESC');
+    $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($action ),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
+    $table->set_header(0,get_lang('Title'), true);
+    $table->display();
 }
 
 /* Orphaned pages */
@@ -1290,7 +1282,7 @@ if ($action =='orphaned') {
        $table->display();
 }
 
-/////////////////////// Most linked pages /////////////////////// Juan Carlos Raña Trabado
+/* Most linked pages */
 
 if ($action =='mostlinked') {
     echo '<div class="actions">'.get_lang('MostLinkedPages').'</div>';
@@ -1329,24 +1321,21 @@ if ($action =='mostlinked') {
 	}
 
 	$linked=array_unique($linked);//make a unique list. TODO:delete this line and count how many for each page
-	//show table
-        foreach ($linked as $linked_show) {
+    //show table
+    foreach ($linked as $linked_show) {
+        $row = array ();
+        $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode(str_replace('_',' ',$linked_show))).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.str_replace('_',' ',$linked_show).'</a>';
+        $rows[] = $row;
+    }
 
-            $row = array ();
-
-			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode(str_replace('_',' ',$linked_show))).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.str_replace('_',' ',$linked_show).'</a>';
-
-            $rows[] = $row;
-        }
-
-        $table = new SortableTableFromArrayConfig($rows,0,10,'LinkedPages_table','','','DESC');
-        $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($action ),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
-        $table->set_header(0,get_lang('Title'), true);
-        $table->display();
+    $table = new SortableTableFromArrayConfig($rows,0,10,'LinkedPages_table','','','DESC');
+    $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($action ),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
+    $table->set_header(0,get_lang('Title'), true);
+    $table->display();
 
 }
 
-/////////////////////// delete current page /////////////////////// Juan Carlos Raña Trabado
+/* Deete current page */
 
 if ($action =='delete') {
 
@@ -1415,7 +1404,7 @@ if ($action =='deletewiki') {
     echo '</div>';
 }
 
-/////////////////////// search wiki pages ///////////////////////
+/* Search wiki pages */
 
 if ($action =='searchpages') {
 
@@ -1452,12 +1441,10 @@ if ($action =='searchpages') {
 			$form->display();
 		}
 	}
-
     echo '</div>';
 }
 
-
-///////////////////////  What links here. Show pages that have linked this page /////////////////////// Juan Carlos Raña Trabado
+/* What links here. Show pages that have linked this page */
 
 if ($action =='links') {
 
@@ -1554,10 +1541,7 @@ if ($action =='links') {
     }
 }
 
-
 // Adding a new page
-
-
 // Display the form for adding a new wiki page
 echo '<div style="overflow:hidden">';
 if ($action =='addnew') {
@@ -1583,19 +1567,14 @@ if ($action =='addnew') {
             Display::display_normal_message(get_lang('OnlyAddPagesGroupMembers'));
         }
     }
-
 }
 
-
 // Show home page
-
 if (!$action  OR $action =='show' AND !isset($_POST['SaveWikiNew'])) {
     display_wiki_entry($newtitle);
 }
 
 // Show current page
-
-
 if ($action =='showpage' AND !isset($_POST['SaveWikiNew'])) {
     if ($_GET['title']) {
         display_wiki_entry($newtitle);
@@ -1699,7 +1678,6 @@ if (isset($action ) && $action =='edit') {
                     }
                 }
 
-                //
                 if (!empty($row['max_version']) && $row['version']>=$row['max_version']) {
                     $message=get_lang('HasReachedMaxiNumVersions');
                     Display::display_warning_message($message);
@@ -1708,17 +1686,14 @@ if (isset($action ) && $action =='edit') {
                     }
                 }
 
-                //
                 if (!empty($row['max_text']) && $row['max_text']<=word_count($row['content'])) {
                     $message=get_lang('HasReachedMaxNumWords');
                     Display::display_warning_message($message);
                     if (!api_is_allowed_to_edit(false,true)) {
                         exit;
                     }
-
                 }
 
-                ////
                 if (!empty($row['task'])) {
                     //previous change 0 by text
                     if ($row['startdate_assig']=='0000-00-00 00:00:00') {
@@ -2145,13 +2120,11 @@ if ($action =='history' or $_POST['HistoryDifferences']) {
                 echo '</td>';
                 echo '</tr></table>';
                 echo '</div>';
-
             }
         }
     }
     echo '</div>';
 }
-
 
 // Recent changes
 
@@ -2174,8 +2147,6 @@ if ($action =='recentchanges') {
     echo '<div class="actions"><span style="float: right;">';
     echo '<a href="index.php?action=recentchanges&amp;actionpage='.$lock_unlock_notify_all.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$notify_all.'</a>';
     echo '</span>'.get_lang('RecentChanges').'</div>';
-
-
 
     if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) { //only by professors if page is hidden
         $sql = 'SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.'
@@ -2213,7 +2184,6 @@ if ($action =='recentchanges') {
             } else {
                 $icon_task='<img src="../img/px_transparent.gif" />';
             }
-
 
             $row = array ();
             $row[] = api_get_local_time($obj->dtime, null, date_default_timezone_get());

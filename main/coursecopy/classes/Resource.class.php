@@ -19,6 +19,7 @@ define('RESOURCE_FORUM', 'forum');
 define('RESOURCE_FORUMTOPIC', 'thread');
 define('RESOURCE_FORUMPOST', 'post');
 define('RESOURCE_QUIZ', 'quiz');
+define('RESOURCE_TEST_CATEGORY', 'test_category');
 define('RESOURCE_QUIZQUESTION', 'Exercise_Question');
 define('RESOURCE_TOOL_INTRO', 'Tool introduction');
 define('RESOURCE_LINKCATEGORY', 'Link_Category');
@@ -158,6 +159,8 @@ class Resource {
                 return TOOL_POST;
             case RESOURCE_QUIZ:
                 return TOOL_QUIZ;
+            case RESOURCE_TEST_CATEGORY:
+                return TOOL_TEST_CATEGORY;
             //case RESOURCE_QUIZQUESTION: //no corresponding global constant
             //	return TOOL_QUIZ_QUESTION;
             //case RESOURCE_TOOL_INTRO:

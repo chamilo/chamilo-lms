@@ -101,6 +101,7 @@ define('TOOL_THREAD', 'thread');
 define('TOOL_POST', 'post');
 define('TOOL_DROPBOX', 'dropbox');
 define('TOOL_QUIZ', 'quiz');
+define('TOOL_TEST_CATEGORY', 'test_category');
 define('TOOL_USER', 'user');
 define('TOOL_GROUP', 'group');
 define('TOOL_BLOGS', 'blog_management'); // Smartblogs (Kevin Van Den Haute :: kevin@develop-it.be)
@@ -922,13 +923,15 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
 
 /**
  * Function used to protect an admin script.
- * The function blocks access when the user has no platform admin rights.
- * This is only the first proposal, test and improve!
- *
- * @author Roan Embrechts
+ * 
+ * The function blocks access when the user has no platform admin rights with an error message printed on default output
+ * @param bool Whether to allow session admins as well
+ * @param bool Whether to allow HR directors as well
+ * @return bool True if user is allowed, false otherwise. The function also outputs an error message in case not allowed
+ * @author Roan Embrechts (original author)
  */
-function api_protect_admin_script($allow_sessions_admins = false) {
-    if (!api_is_platform_admin($allow_sessions_admins)) {
+function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = false) {
+    if (!api_is_platform_admin($allow_sessions_admins, $allow_drh)) {
         api_not_allowed(true);
         return false;
     }
@@ -2185,16 +2188,17 @@ function api_get_self() {
 /**
  * Checks whether current user is a platform administrator
  * @param boolean Whether session admins should be considered admins or not
+ * @param boolean Whether HR directors should be considered admins or not
  * @return boolean True if the user has platform admin rights,
  * false otherwise.
  * @see usermanager::is_admin(user_id) for a user-id specific function
  */
-function api_is_platform_admin($allow_sessions_admins = false) {
+function api_is_platform_admin($allow_sessions_admins = false, $allow_drh = false) {
     if ($_SESSION['is_platformAdmin']) {
         return true;
     }
     global $_user;
-    return $allow_sessions_admins && isset($_user['status']) && $_user['status'] == SESSIONADMIN;
+    return isset($_user['status']) && (($allow_sessions_admins && $_user['status'] == SESSIONADMIN) || ($allow_drh && $_user['status'] == DRH));
 }
 
 /**

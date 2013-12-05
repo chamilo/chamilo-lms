@@ -62,7 +62,13 @@ class Testcategory
 			$c_id = api_get_course_int_id();
 			$sql = "INSERT INTO $t_cattable VALUES ('$c_id', '', '$v_name', '$v_description')";
 			$res = Database::query($sql);
-			return true;
+//            $id_cat_added = Database::insert_id();
+            $new_id = Database::insert_id();
+            // add test_category in item_property table
+            $course_code = api_get_course_id();
+            $course_info = api_get_course_info($course_code);
+            api_item_property_update($course_info, TOOL_TEST_CATEGORY, $new_id, 'TestCategoryAdded', api_get_user_id());
+			return $new_id;
 		}
 		else {
 			return false;
@@ -70,25 +76,32 @@ class Testcategory
 	}
 
 	/**
-     * Removes the category with id=in_id from the database if no question use this category
-     * @todo I'm removing the $in_id parameter because it seems that you're using $this->id instead of $in_id after confirmation delete this
-     * jmontoya
+     * Removes the category from the database
+     * if there were question in this category, the link between question and category is removed
 	 */
-	//function removeCategory($in_id) {
     function removeCategory() {
 		$t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+        $tbl_question_rel_cat = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 		$v_id = Database::escape_string($this->id);
 		$sql = "DELETE FROM $t_cattable WHERE id=$v_id AND c_id=".api_get_course_int_id();
 		$res = Database::query($sql);
 		if (Database::affected_rows() <= 0) {
 			return false;
 		} else {
+            // remove link between question and category
+            $sql2 = "DELETE FROM $tbl_question_rel_cat WHERE category_id=$v_id AND c_id=".api_get_course_int_id();
+            Database::query($sql2);
+            // item_property update
+            $course_code = api_get_course_id();
+            $course_info = api_get_course_info($course_code);
+            api_item_property_update($course_info, TOOL_TEST_CATEGORY, $this->id, 'TestCategoryDeleted', api_get_user_id());
 			return true;
 		}
 	}
 
 
-	/** modify category name or description of category with id=in_id
+	/**
+     * modify category name or description of category with id=in_id
 	 */
 	//function modifyCategory($in_id, $in_name, $in_description) {
     function modifyCategory() {
@@ -102,16 +115,17 @@ class Testcategory
 			return false;
 		}
 		else {
+            // item_property update
+            $course_code = api_get_course_id();
+            $course_info = api_get_course_info($course_code);
+            api_item_property_update($course_info, TOOL_TEST_CATEGORY, $this->id, 'TestCategoryModified', api_get_user_id());
 			return true;
 		}
 	}
 
 	/**
      * Gets the number of question of category id=in_id
-     * @todo I'm removing the $in_id parameter because it seems that you're using $this->id instead of $in_id after confirmation delete this
-     * jmontoya
 	 */
-	//function getCategoryQuestionsNumber($in_id) {
 	function getCategoryQuestionsNumber() {
 		$t_reltable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 		$in_id = Database::escape_string($this->id);
@@ -215,7 +229,7 @@ class Testcategory
 	}
 
 	/**
-	 * return the list of differents categories ID for a test
+	 * return the list of differents categories ID for a test in the current course
 	 * input : test_id
 	 * return : array of category id (integer)
 	 * hubert.borderiou 07-04-2011
@@ -331,7 +345,6 @@ class Testcategory
 	 */
 	function getQuestionsByCat($in_exerciceId) {
 		$tabres = array();
-		$TBL_EXERCICE = Database::get_course_table(TABLE_QUIZ_TEST);
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         $in_exerciceId = intval($in_exerciceId);
@@ -512,5 +525,60 @@ class Testcategory
             return $table->toHtml();
         }
         return null;
+    }
+
+
+    /**
+     * Return true if a category already exists with the same name
+     * @param $in_name
+     */
+    public static function category_exists_with_title($in_name)
+    {
+        $tab_test_category = Testcategory::getCategoryListInfo("title");
+        foreach ($tab_test_category as $title)
+        {
+            if ($title == $in_name)
+            {
+                return true;
+}
+        }
+        return false;
+    }
+
+
+    /**
+     * Return the id of the test category with title = $in_title
+     * @param $in_title
+     * @param int $in_c_id
+     * @return int is id of test category
+     */
+    public static function get_category_id_for_title($in_title, $in_c_id = 0) {
+        $out_res = 0;
+        if ($in_c_id == 0) {
+            $in_c_id = api_get_course_int_id();
+        }
+        $tbl_cat = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+        $sql = "SELECT id FROM $tbl_cat WHERE c_id=$in_c_id AND title = '".Database::escape_string($in_title)."'";
+        $res = Database::query($sql);
+        if (Database::num_rows($res) > 0) {
+            $data = Database::fetch_array($res);
+            $out_res = $data['id'];
+        }
+        return $out_res;
+    }
+
+    /**
+     * Add a relation between question and category in table c_quiz_question_rel_category
+     * @param $in_category_id
+     * @param $in_question_id
+     */
+    public static function add_category_for_question_id($in_category_id, $in_question_id, $in_course_c_id) {
+        $tbl_reltable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
+        // if question doesn't have a category
+        // @todo change for 1.10 when a question can have several categories
+        if (Testcategory::getCategoryForQuestion($in_question_id, $in_course_c_id) == 0 && $in_question_id > 0 && $in_course_c_id > 0) {
+            $sql = "INSERT INTO $tbl_reltable VALUES (".intval($in_course_c_id).", ".intval($in_question_id).", ".intval($in_category_id).")";
+            $res = Database::query($sql);
+        }
     }
 }

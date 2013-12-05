@@ -1150,16 +1150,23 @@ class CourseManager
     }
 
     /**
-     *    Return user info array of all users registered in the specified real or virtual course
-     *    This only returns the users that are registered in this actual course, not linked courses.
-     *
-     * @param string    $course_code the code of the course
-     * @param boolean   $with_session determines if the course is used in a session or not
-     * @param integer   $session_id the id of the session
-     * @param string    $limit the LIMIT statement of the sql statement
-     * @param string    $order_by the field to order the users by. Valid values are 'lastname', 'firstname', 'username', 'email', 'official_code' OR a part of a SQL statement that starts with ORDER BY ...
-     * @param int       if using the session_id: 0 or 2 (student, coach), if using session_id = 0 STUDENT or COURSEMANAGER
-     * @return array
+     * Return user info array of all users registered in the specified real or virtual course
+     * This only returns the users that are registered in this actual course, not linked courses.
+     * @param null $course_code
+     * @param int $session_id
+     * @param null $limit
+     * @param null $order_by the field to order the users by.
+     * Valid values are 'lastname', 'firstname', 'username', 'email', 'official_code' OR a part of a SQL statement
+     * that starts with ORDER BY ...
+     * @param null $filter_by_status if using the session_id: 0 or 2 (student, coach),
+     * if using session_id = 0 STUDENT or COURSEMANAGER
+     * @param null $return_count
+     * @param bool $add_reports
+     * @param bool $resumed_report
+     * @param null $extra_field
+     * @param array $courseCodeList
+     * @param array $userList
+     * @return array|int
      */
     public static function get_user_list_from_course_code(
         $course_code = null,
@@ -1170,7 +1177,9 @@ class CourseManager
         $return_count = null,
         $add_reports = false,
         $resumed_report = false,
-        $extra_field = null
+        $extra_field = null,
+        $courseCodeList = array(),
+        $userIdList = array()
     ) {
         // variable initialisation
         $session_id     = intval($session_id);
@@ -1257,6 +1266,20 @@ class CourseManager
         if ($return_count && $resumed_report) {
             $sql .= ' AND field_id IS NOT NULL GROUP BY field_value ';
         }
+
+        if (!empty($courseCodeList)) {
+            $courseCodeList = array_map(array('Database', 'escape_string') , $courseCodeList);
+            $courseCodeList = implode('","', $courseCodeList);
+            $sql .= ' AND course.code IN ("'.$courseCodeList.'")';
+        }
+
+        if (!empty($userIdList)) {
+            $userIdList = array_map('intval', $userIdList);
+            $userIdList = implode('","', $userIdList);
+            $sql .= ' AND user.user_id IN ("'.$userIdList.'")';
+        }
+
+        //$userList = array()
 
         $sql .= ' '.$order_by.' '.$limit;
 
@@ -1374,12 +1397,35 @@ class CourseManager
                 //var_dump($counter);
             }
         }
-        //var_dump($users);
         return $users;
     }
 
-    static function get_count_user_list_from_course_code($resumed_report = false, $extra_field = null) {
-        return self::get_user_list_from_course_code(null, 0, null, null, null, true, false, $resumed_report, $extra_field);
+    /**
+     * @param bool $resumed_report
+     * @param string $extra_field
+     * @param array $courseCodeList
+     * @param array $userIdList
+     * @return array|int
+     */
+    static function get_count_user_list_from_course_code(
+        $resumed_report = false,
+        $extra_field = null,
+        $courseCodeList = array(),
+        $userIdList = array()
+    ) {
+        return self::get_user_list_from_course_code(
+            null,
+            0,
+            null,
+            null,
+            null,
+            true,
+            false,
+            $resumed_report,
+            $extra_field,
+            $courseCodeList,
+            $userIdList
+        );
     }
 
     /**
@@ -3367,6 +3413,10 @@ class CourseManager
             $sess = SessionManager::get_sessions_list(array('s.id = ' => $course_info['id_session']));
             $date_start = $sess[$course_info['id_session']]['date_start'];
             $date_end = $sess[$course_info['id_session']]['date_end'];
+        }
+        if (empty($now)) {
+            // maybe use api_get_utcdate() here?
+            $now = date('Y-m-d h:i:s');
         }
 
         // Table definitions

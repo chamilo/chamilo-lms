@@ -2031,6 +2031,50 @@ class Tracking {
         }
         return $data;
     }
+    /**
+     * Get total clicks by session
+     * @param    int        Session id (optional), if param $session_id is null(default) it'll return results including sessions, 0 = session is not filtered
+     * @return    array     data
+     * @todo    implement total click by $course_id 
+     */
+    public static function get_total_clicks_by_session($session_id = null) {
+        $tables = array(
+            TABLE_STATISTIC_TRACK_E_LASTACCESS => array('access_session_id','access_user_id'),
+            TABLE_STATISTIC_TRACK_E_ACCESS => array('access_session_id', 'access_user_id'),
+            #TABLE_STATISTIC_TRACK_E_LOGIN,
+            TABLE_STATISTIC_TRACK_E_DOWNLOADS => array('down_session_id', 'down_user_id'),
+            TABLE_STATISTIC_TRACK_E_LINKS => array('links_session_id', 'links_user_id'),
+            TABLE_STATISTIC_TRACK_E_ONLINE => array('session_id', 'login_user_id'),
+            #TABLE_STATISTIC_TRACK_E_HOTPOTATOES,
+            TABLE_STATISTIC_TRACK_E_COURSE_ACCESS => array('session_id', 'user_id'),
+            TABLE_STATISTIC_TRACK_E_EXERCICES => array('session_id', 'exe_user_id'),
+            TABLE_STATISTIC_TRACK_E_ATTEMPT => array('session_id', 'user_id'),
+            #TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING,
+            #TABLE_STATISTIC_TRACK_E_DEFAULT,
+            TABLE_STATISTIC_TRACK_E_UPLOADS => array('upload_session_id', 'upload_user_id'),
+            #TABLE_STATISTIC_TRACK_E_HOTSPOT,
+            #TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY,
+            #TABLE_STATISTIC_TRACK_E_OPEN,
+            );
+
+        if (isset($_GET['session_id']) && !empty($_GET['session_id'])) 
+        {
+            $sessionId = intval($_GET['session_id']);
+        }
+
+        foreach ($tables as $tableName => $fields) 
+        {
+            $sql = sprintf('SELECT %s as user, count(*) as total FROM %s WHERE %s = %s GROUP BY %s', $fields[1], $tableName, $fields[0], $sessionId, $fields[1]);
+            $rs = Database::query($sql);
+            if (Database::num_rows($rs) > 0) {
+                while ($row = Database::fetch_array($rs)) {
+                    $data[$row['user']] = (isset($data[$row['user']])) ?  $data[$row['user']] + $row[total]: $row['total'];
+                }
+            }
+        }
+
+        return $data;
+    }
 
     /**
      * get documents most downloaded by course

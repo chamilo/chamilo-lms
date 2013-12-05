@@ -575,15 +575,17 @@ $app->match('/learnpath/subscribe_users/{lpId}', 'learnpath.controller:indexActi
 
 /** Data document_templates files */
 $app->get('/data/document_templates/{file}', 'index.controller:getDocumentTemplateAction')
-    ->bind('data');
+    ->bind('get_document_template_action');
 
 /** Data default_platform_document files */
 $app->get('/data/default_platform_document/{file}', 'index.controller:getDefaultPlatformDocumentAction')
+    ->bind('get_default_platform_document_action')
     ->assert('file', '.+')
     ->assert('type', '.+');
 
 /** Data default_platform_document files */
 $app->get('/data/default_course_document/{file}', 'index.controller:getDefaultCourseDocumentAction')
+    ->bind('get_default_course_document_action')
     ->assert('file', '.+')
     ->assert('type', '.+');
 
@@ -638,15 +640,6 @@ $app->match('/admin/questionmanager/categories/new', 'question_manager.controlle
 
 $app->match('/admin/questionmanager/categories/{id}/delete', 'question_manager.controller:deleteCategoryAction', 'POST')
     ->bind('admin_category_delete');
-
-/** Editor */
-$app->match('/editor/filemanager', 'editor.controller:filemanagerAction', 'GET|POST')
-    ->assert('type', '.+')
-    ->bind('filemanager');
-
-$app->match('/editor/connector', 'editor.controller:connectorAction', 'GET|POST')
-    ->assert('type', '.+')
-    ->bind('editor_connector');
 
 /** Exercises */
 $app->match('courses/{cidReq}/{id_session}/exercise/question-pool', 'exercise_manager.controller:questionPoolAction', 'POST')
@@ -721,6 +714,17 @@ $app->match('/ajax', 'model_ajax.controller:indexAction', 'GET')
     ->assert('type', '.+')
     ->bind('model_ajax');
 
+
+/** Editor */
+$app->match('/editor/filemanager', 'editor.controller:filemanagerAction', 'GET|POST')
+    ->assert('type', '.+')
+    ->bind('filemanager');
+
+$app->match('/editor/connector', 'editor.controller:connectorAction', 'GET|POST')
+    ->assert('type', '.+')
+    ->bind('editor_connector');
+
+
 if ($alreadyInstalled) {
     $app->mount('/admin/', new ChamiloLMS\Provider\ReflectionControllerProvider('admin.controller'));
     $app->mount('/admin/administrator/upgrade', new ChamiloLMS\Provider\ReflectionControllerProvider('upgrade.controller'));
@@ -728,9 +732,10 @@ if ($alreadyInstalled) {
     $app->mount('/admin/administrator/question_scores', new ChamiloLMS\Provider\ReflectionControllerProvider('question_score.controller'));
     $app->mount('/admin/administrator/question_score_names', new ChamiloLMS\Provider\ReflectionControllerProvider('question_score_name.controller'));
 
+    $app->mount('/editor/', new ChamiloLMS\Provider\ReflectionControllerProvider('editor.controller'));
     $app->mount('/user/', new ChamiloLMS\Provider\ReflectionControllerProvider('profile.controller'));
 
-    $app->mount('/', new ChamiloLMS\Provider\ReflectionControllerProvider('user.controller'));
+    $app->mount('/user/', new ChamiloLMS\Provider\ReflectionControllerProvider('profile.controller'));
 
     $app->mount('/courses/{course}/curriculum/category', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_category.controller'));
     $app->mount('/courses/{course}/curriculum/item', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_item.controller'));

@@ -219,4 +219,20 @@ class Editor
             }
         }
     }
+
+    /**
+     * @return null
+     */
+    public function getTemplate()
+    {
+        return null;
+    }
+
+    /**
+     * @return null
+     */
+    public function formatTemplates($templates)
+    {
+        return null;
+    }
 }

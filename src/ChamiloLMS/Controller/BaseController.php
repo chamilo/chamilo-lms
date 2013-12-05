@@ -65,7 +65,15 @@ abstract class BaseController extends FlintController
      */
     protected function getTemplate()
     {
-        return $this->app['template'];
+        return $this->get('template');
+    }
+
+    /**
+     * @return \ChamiloLMS\Component\Editor\Editor
+     */
+    protected function getHtmlEditor()
+    {
+        return $this->get('html_editor');
     }
 
     /**

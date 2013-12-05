@@ -274,6 +274,7 @@ define('WEB_DATA_PATH', 'WEB_DATA_PATH');
 define('REL_DATA_PATH', 'REL_DATA_PATH');
 
 define('SYS_DEFAULT_COURSE_DOCUMENT_PATH', 'SYS_DEFAULT_COURSE_DOCUMENT_PATH');
+define('REL_DEFAULT_COURSE_DOCUMENT_PATH', 'REL_DEFAULT_COURSE_DOCUMENT_PATH');
 define('WEB_DEFAULT_COURSE_DOCUMENT_PATH', 'WEB_DEFAULT_COURSE_DOCUMENT_PATH');
 
 // Constants for requesting path conversion.
@@ -635,12 +636,16 @@ function api_get_path($path_type, $path = null) {
         $paths[WEB_COURSE_PATH]         = $root_web.$course_folder;
         $paths[WEB_DATA_COURSE_PATH]    = $paths[WEB_DATA_PATH].$course_folder;
 
-        $paths[WEB_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[WEB_DATA_PATH].'default_course_document/';
-
         $paths[REL_COURSE_PATH]         = $root_rel.$course_folder;
         $paths[REL_CODE_PATH]           = $root_rel.$code_folder;
         $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
         $paths[REL_DATA_PATH]           = $root_rel.'data/';
+
+
+        $paths[WEB_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[WEB_DATA_PATH].'default_course_document/';
+
+        $paths[REL_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[REL_DATA_PATH].'default_course_document/';
+
 
         $paths[SYS_CODE_PATH]           = $root_sys.$code_folder;
 

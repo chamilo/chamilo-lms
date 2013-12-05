@@ -742,7 +742,7 @@ $app['news.controller'] = $app->share(
 
 $app['editor.controller'] = $app->share(
     function () use ($app) {
-        return new ChamiloLMS\Controller\EditorController();
+        return new ChamiloLMS\Controller\EditorController($app);
     }
 );
 

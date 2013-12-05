@@ -22,7 +22,7 @@
         $().ready(function() {
             var funcNum = getUrlParam('CKEditorFuncNum');
             var elf = $('#elfinder').elfinder({
-                url : '{{ url('editor_connector') }}',  // connector URL (REQUIRED)
+                url : '{{ url('editor.controller:connectorAction') }}',  // connector URL (REQUIRED)
                 getFileCallback : function(file) {
                     window.opener.CKEDITOR.tools.callFunction(funcNum, file);
                     window.close();

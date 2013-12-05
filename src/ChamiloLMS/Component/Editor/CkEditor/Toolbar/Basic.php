@@ -56,6 +56,7 @@ class Basic extends Toolbar
 
         // http://docs.cksource.com/ckeditor_api/symbols/CKEDITOR.config.html
         $config['filebrowserBrowseUrl'] = api_get_path(WEB_PUBLIC_PATH).'editor/filemanager';
+        $config['templates_files'] = array(api_get_path(WEB_PUBLIC_PATH).'editor/templates');
 
         /*filebrowserFlashBrowseUrl
         filebrowserFlashUploadUrl

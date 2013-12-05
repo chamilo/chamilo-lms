@@ -528,7 +528,6 @@ class Template
             $js_file_to_string .= $this->fetch($this->app['template_style'].'/mail_editor/email_link.js.tpl');
         }
 
-
         if (!$disable_js_and_css_files) {
             $this->assign('js_file_to_string', $js_file_to_string);
 
@@ -901,7 +900,7 @@ class Template
      */
     public function getNavigationLinks()
     {
-        // Deleting the myprofile link.
+        // Deleting the my profile link.
         if (api_get_setting('allow_social_tool') == 'true') {
             unset($this->menu_navigation['myprofile']);
         }
@@ -912,7 +911,7 @@ class Template
      * @param string $layout
      * @return mixed
      */
-    public function render_layout($layout = null)
+    public function renderLayout($layout = null)
     {
         if (empty($layout)) {
             $layout = $this->app['default_layout'];
@@ -921,15 +920,26 @@ class Template
         return $this->app['twig']->render($this->app['template_style'].'/layout/'.$layout);
     }
 
+
+    /**
+     * @param string $layout
+     * @deprecated use renderLayout
+     * @return mixed
+     */
+    public function render_layout($layout = null)
+    {
+        return $this->renderLayout($layout);
+    }
+
     /**
      * @param string $template
      * @param array $elements
+     * @deprecated use renderTemplate
      * @return mixed
      */
     public function render_template($template, $elements = array())
     {
-        $this->addJsFiles();
-        return $this->app['twig']->render($this->app['template_style'].'/'.$template, $elements);
+        return $this->returnTemplate($template, $elements);
     }
 
     /**
@@ -939,7 +949,8 @@ class Template
      */
     public function renderTemplate($template, $elements = array())
     {
-        return $this->render_template($template, $elements);
+        $this->addJsFiles();
+        return $this->app['twig']->render($this->app['template_style'].'/'.$template, $elements);
     }
 
     /**

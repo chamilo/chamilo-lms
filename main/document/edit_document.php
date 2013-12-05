@@ -416,7 +416,7 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin(
 ) || $is_allowed_to_edit || GroupManager :: is_user_in_group(api_get_user_id(), api_get_group_id())
 ) {
     $action = api_get_self().'?id='.$document_data['id'];
-    $form = new FormValidator('formEdit', 'post', $action, null, array('class' => 'form-vertical'));
+    $form = new FormValidator('formEdit', 'post', $action, null, array('class' => 'form-horizontal'));
 
     // Form title
     $form->addElement('header', $nameTools);
@@ -453,20 +453,16 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin(
     }
 
     if (!$group_document && !is_my_shared_folder(api_get_user_id(), $my_cur_dir_path, $current_session_id)) {
-        $metadata_link = '<a href="../metadata/index.php?eid='.urlencode(
-            'Document.'.$document_data['id']
-        ).'">'.get_lang('AddMetadata').'</a>';
+        $metadata_link = '<a href="../metadata/index.php?eid='.urlencode('Document.'.$document_data['id']).'">'.get_lang('AddMetadata').'</a>';
 
-        //Updated on field
+        // Updated on field
         $last_edit_date = api_get_local_time($last_edit_date);
-        $display_date = date_to_str_ago($last_edit_date).' <span class="dropbox_date">'.api_format_date(
-            $last_edit_date
-        ).'</span>';
-        $form->addElement('static', null, get_lang('Metadata'), $metadata_link);
-        $form->addElement('static', null, get_lang('UpdatedOn'), $display_date);
+        $display_date = date_to_str_ago($last_edit_date).' <span class="dropbox_date">'.api_format_date($last_edit_date).'</span>';
+        $form->addElement('label', get_lang('Metadata'), $metadata_link);
+        $form->addElement('label', get_lang('UpdatedOn'), $display_date);
     }
 
-    $form->addElement('textarea', 'comment', get_lang('Comment'), 'rows="3" style="width:300px;"');
+    $form->addElement('textarea', 'comment', get_lang('Comment'));
 
     if ($owner_id == api_get_user_id() || api_is_platform_admin()) {
         $checked =& $form->addElement('checkbox', 'readonly', null, get_lang('ReadOnly'));
@@ -476,9 +472,9 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin(
     }
 
     if ($is_certificate_mode) {
-        $form->addElement('style_submit_button', 'submit', get_lang('SaveCertificate'), 'class="save"');
+        $form->addElement('style_submit_button', 'submit', get_lang('SaveCertificate'), array('class' => 'save'));
     } else {
-        $form->addElement('style_submit_button', 'submit', get_lang('SaveDocument'), 'class="save"');
+        $form->addElement('style_submit_button', 'submit', get_lang('SaveDocument'), array('class' => 'save'));
     }
 
     $defaults['filename'] = $filename;
@@ -510,15 +506,8 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin(
     if ($extension == 'svg' && !api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true') {
         Display::display_warning_message(get_lang('BrowserDontSupportsSVG'));
     }
-    echo '<div class="row-fluid" style="overflow:hidden">
-            <div id="template_col" class="span2" style="width:162px">
-                <div id="frmModel" style="overflow: visible;"></div>
-            </div>
-            <div id="hide_bar_template"></div>
-            <div id="doc_form" class="span9">
-                    '.$form->return_form().'
-            </div>
-          </div>';
+
+    echo $form->return_form();
 }
 
 Display::display_footer();

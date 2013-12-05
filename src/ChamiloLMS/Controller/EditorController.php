@@ -5,29 +5,46 @@ namespace ChamiloLMS\Controller;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use ChamiloLMS\Component\Editor\Connector;
+
+use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+//use ChamiloLMS\Controller\CommonController;
+
 
 /**
  * @package ChamiloLMS.Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class EditorController
+class EditorController extends CommonController
 {
     /**
-     * @param Application $app
-     * @return Response
+     * @Route("/filemanager")
+     * @Method({"GET"})
      */
-    public function filemanagerAction(Application $app)
+    public function fileManagerAction()
     {
-        $response = $app['template']->render_template($app['html_editor']->getTemplate());
+        $response = $this->getTemplate()->renderTemplate($this->getHtmlEditor()->getTemplate());
+        return new Response($response, 200, array());
+    }
+
+    /**
+     * @Route("/templates")
+     * @Method({"GET"})
+     */
+    public function getTemplatesAction()
+    {
+        $templates = $this->getManager()->getRepository('Entity\SystemTemplate')->findAll();
+        $templates = $this->getHtmlEditor()->formatTemplates($templates);
+        $this->getTemplate()->assign('templates', $templates);
+        $response = $this->getTemplate()->renderTemplate('javascript/editor/ckeditor/templates.tpl');
 
         return new Response($response, 200, array());
     }
 
     /**
-     *
+     * @Route("/connector")
+     * @Method({"GET"})
      */
     public function connectorAction()
     {
@@ -45,4 +62,5 @@ class EditorController
         $connector = new \elFinderConnector(new \elFinder($opts));
         $connector->run();
     }
+
 }

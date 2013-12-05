@@ -6651,8 +6651,8 @@ class learnpath
     /**
      * Displays a document by id
      *
-     * @param unknown_type $id
-     * @return unknown
+     * @param int $id
+     * @return string
      */
     public function display_document($id, $show_title = false, $iframe = true, $edit_link = false)
     {
@@ -6667,10 +6667,8 @@ class learnpath
 
         // TODO: Add a path filter.
         if ($iframe) {
-            $return .= '<iframe id="learnpath_preview_frame" frameborder="0" height="400" width="100%" scrolling="auto" src="'.api_get_path(
-                WEB_COURSE_PATH
-            ).$_course['path'].'/document'.str_replace('%2F', '/', urlencode($row_doc['path'])).'?'.api_get_cidreq(
-            ).'"></iframe>';
+            $url = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.str_replace('%2F', '/', urlencode($row_doc['path'])).'?'.api_get_cidreq();
+            $return .= '<iframe id="learnpath_preview_frame" frameborder="0" height="400" width="100%" scrolling="auto" src="'.$url.'"></iframe>';
         } else {
             $return .= file_get_contents(api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$row_doc['path']);
         }

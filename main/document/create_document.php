@@ -218,7 +218,7 @@ $select_cat = isset($_GET['selectcat']) ? intval($_GET['selectcat']) : null;
 // Create a new form
 $form = new FormValidator('create_document', 'post', api_get_self().'?'.api_get_cidreq().'&dir='.Security::remove_XSS(
     urlencode($dir)
-).'&selectcat='.$select_cat, null, array('class' => 'form-vertical'));
+).'&selectcat='.$select_cat, null, array('class' => 'form-horizontal'));
 
 // form title
 $form->addElement('header', $nameTools);
@@ -254,13 +254,13 @@ function document_exists($filename)
 
 // Add group to the form
 if ($is_certificate_mode) {
-    $form->addElement('text', 'title', get_lang('CertificateName'), 'class="span4" id="document_title"');
+    $form->addElement('text', 'title', get_lang('CertificateName'), array('id' => 'document_title'));
 } else {
-    $form->addElement('text', 'title', get_lang('Title'), 'class="span4" id="document_title"');
+    $form->addElement('text', 'title', get_lang('Title'), array('id' => 'document_title'));
 }
 
 // Show read-only box only in groups
-if (!empty($_SESSION['_gid'])) {
+if (!empty(api_get_group_id())) {
     $group[] = $form->createElement('checkbox', 'readonly', '', get_lang('ReadOnly'));
 }
 $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
@@ -642,15 +642,6 @@ if ($form->validate()) {
         $create_certificate = get_lang('CreateCertificateWithTags');
         Display::display_normal_message($create_certificate.': <br /><br/>'.$str_info, false);
     }
-    // HTML-editor
-    echo '<div class="row-fluid" style="overflow:hidden">
-            <div id="template_col" class="span2" style="width:162px">
-                <div id="frmModel" style="overflow: visible;"></div>
-            </div>
-            <div id="hide_bar_template"></div>
-            <div id="doc_form" class="span9">
-                    '.$form->return_form().'
-            </div>
-          </div>';
+    echo $form->return_form();
     Display :: display_footer();
 }

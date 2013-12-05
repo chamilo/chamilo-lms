@@ -155,34 +155,31 @@ class ExerciseLink extends AbstractLink
 	 */
     public function calc_score($stud_id = null) {
     	$tblStats = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-        $tblHp = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-        $tblDoc = Database::get_course_table(TABLE_DOCUMENT);
+      $tblHp = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+      $tblDoc = Database::get_course_table(TABLE_DOCUMENT);
                                         
     	//$tbl_stats_e_attempt_recording = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
         //the following query should be similar (in conditions) to the one used in exercice/exercice.php, look for note-query-exe-results marker
         $session_id = api_get_session_id();
-        if (!$this->is_hp) {
-    		$sql = "SELECT * FROM $tblStats
-                    WHERE   exe_exo_id      = ".intval($this->get_ref_id())." AND 
+      if (!$this->is_hp) {
+   	      $sql = "SELECT * FROM $tblStats
+                  WHERE   exe_exo_id      = ".intval($this->get_ref_id())." AND 
                             orig_lp_id      = 0 AND 
                             orig_lp_item_id = 0 AND 
                             status      <> 'incomplete' AND
-                            session_id = $session_id                            
-                    ";
+                            session_id = $session_id";
     
-    		if (isset($stud_id)) {
-        		$course_code_exe = $this->get_course_code();
-        		$sql .= " AND exe_cours_id = '$course_code_exe' AND 
-                          exe_user_id = '$stud_id' ";
-        	}
+    	  if (isset($stud_id)) {
+  		      $course_code_exe = $this->get_course_code();
+  		      $sql .= " AND exe_cours_id = '$course_code_exe' AND exe_user_id = '$stud_id' ";
+          }
     		$sql .= ' ORDER BY exe_id DESC';
         
-        } else {
-           $course_code_exe = $this->get_course_code();         
-           $sql = "SELECT * FROM $tblHp hp, $tblDoc doc 
+          } else {
+             $course_code_exe = $this->get_course_code();         
+             $sql = "SELECT * FROM $tblHp hp, $tblDoc doc 
                     WHERE   hp.exe_cours_id = '$course_code_exe' AND 
-                            hp.exe_user_id = '$stud_id'  AND hp.exe_name = doc.path AND doc.id = ".intval($this->get_ref_id())."                            
-                    ";
+                            hp.exe_user_id = '$stud_id'  AND hp.exe_name = doc.path AND doc.id = ".intval($this->get_ref_id())."";
        }
         
         $scores = Database::query($sql);

@@ -180,7 +180,7 @@ class ExerciseLink extends AbstractLink
              $sql = "SELECT * FROM $tblHp hp, $tblDoc doc 
                     WHERE   hp.exe_cours_id = '$course_code_exe' AND 
                             hp.exe_user_id = '$stud_id'  AND hp.exe_name = doc.path AND doc.id = ".intval($this->get_ref_id())."";
-       }
+     }
         
         $scores = Database::query($sql);
         

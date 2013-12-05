@@ -203,6 +203,9 @@ switch ($action) {
         }
         $count = SessionManager::get_count_admin($where_condition);
         break;
+    case 'get_session_lp_progress':
+        $count = SessionManager::get_count_session_lp_progress($_GET['session_id']);
+        break;
     /*case 'get_extra_fields':
         $type = $_REQUEST['type'];
         $obj = new ExtraField($type);
@@ -431,6 +434,23 @@ switch ($action) {
             )
         );
         break;
+    case 'get_session_lp_progress':
+        $columns = array(
+            'username', 'firstname', 'lastname', 'name', 'progress'
+        );
+        $sessionId = 0;
+        if (isset($_GET['session_id']) && !empty($_GET['session_id'])) 
+        {
+            $sessionId = intval($_GET['session_id']);
+        }
+        $result = SessionManager::get_session_lp_progress($sessionId,
+            array(
+                'where' => $where_condition,
+                'order' => "$sidx $sord",
+                'limit'=> "$start , $limit"
+            )
+        );
+        break;
     case 'get_timelines':
         $columns = array('headline', 'actions');
 
@@ -630,6 +650,7 @@ $allowed_actions = array(
     'get_usergroups_teacher',
     'get_gradebooks',
     'get_sessions',
+    'get_session_lp_progress',
     'get_exercise_results',
     'get_hotpotatoes_exercise_results',
     'get_work_teacher',

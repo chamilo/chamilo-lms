@@ -18,6 +18,7 @@ require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once 'myspace.lib.php';
 
+$htmlHeadXtra[] = api_get_jqgrid_js(); 
 // the section (for the tabs)
 $this_section = SECTION_TRACKING;
 //for HTML editor repository
@@ -158,7 +159,7 @@ echo '<a href="javascript: void(0);" onclick="javascript: window.print()">'.
       Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</span>';
 
-if (!empty($session_id) &&  $display != 'accessoverview') {
+if (!empty($session_id) && !in_array($display, array('accessoverview','progressoverview'))) {
 	echo '<a href="index.php">'.Display::return_icon('back.png', get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
     if (!api_is_platform_admin()) {
         if (api_get_setting('add_users_by_coach') == 'true') {
@@ -182,7 +183,7 @@ if (!empty($session_id) &&  $display != 'accessoverview') {
 
 // Actions menu
 $nb_menu_items = count($menu_items);
-if (empty($session_id) || $display == 'accessoverview') {
+if (empty($session_id) || in_array($display, array('accessoverview','progressoverview'))) {
 	if ($nb_menu_items > 1) {
     	foreach ($menu_items as $key => $item) {
 	    	echo $item;
@@ -201,17 +202,20 @@ if (empty($session_id) || $display == 'accessoverview') {
     }
     $sessionFilter->addElement('select_ajax', 'session_name', get_lang('SearchCourseBySession'), null, array('url' => $url, 'defaults' => $sessionList));
     $courseListUrl = api_get_self();
-    if ($is_platform_admin && $view == 'admin' && $display == 'accessoverview') {
+
+    #show filter by session
+    if ($is_platform_admin && $view == 'admin' && in_array($display, array('accessoverview','progressoverview'))) {
         echo '<div class="pull-right">';    
         echo $sessionFilter->return_form();
         echo '</div>';
         echo '<script>$(function() {
             $("#session_name").on("change", function() {
                var sessionId = $(this).val();
-               window.location = "'.$courseListUrl.'?view=admin&display=accessoverview&session_id="+sessionId;
+               window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId;
             });
             });</script>';
     }
+
 echo '</div>';
 
 if (empty($session_id)) {
@@ -627,6 +631,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 	}
 	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=sessionoverview">'.get_lang('DisplaySessionOverview').'</a>';
 	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=accessoverview">'.get_lang('DisplayAccessOverview').'</a>';
+    echo ' | <a href="'.api_get_self().'?view=admin&amp;display=progressoverview">'.get_lang('DisplayProgressOverview').'</a>';
 	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=courseoverview">'.get_lang('DisplayCourseOverview').'</a>';
     echo ' | <a href="'.api_get_path(WEB_CODE_PATH).'tracking/question_course_report.php?view=admin">'.get_lang('LPQuestionListResults').'</a>';
     echo ' | <a href="'.api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin">'.get_lang('LPExerciseResultsBySession').'</a>';
@@ -638,8 +643,14 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 	} else if($display == 'sessionoverview') {
 		MySpace::display_tracking_session_overview();
 	} else if($display == 'accessoverview') {
-        if (!empty(isset($_GET['session_id']))) {
+        if (!empty($_GET['session_id'])) {
             MySpace::display_tracking_access_overview();
+        } else {
+            Display::display_warning_message(get_lang('ChooseSession'));
+        }
+    } else if($display == 'progressoverview') {
+        if (!empty($_GET['session_id'])) {
+            echo MySpace::display_tracking_progress_overview($_GET['session_id']);
         } else {
             Display::display_warning_message(get_lang('ChooseSession'));
         }

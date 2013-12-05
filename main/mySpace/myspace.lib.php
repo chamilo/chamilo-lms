@@ -271,6 +271,33 @@ class MySpace {
 		$table->display();
 	}
     /**
+     * Display a sortable table that contains an overview off all the progress of the user in a session
+     * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
+     */
+    function display_tracking_progress_overview($sessionId = 0) {
+
+       //The order is important you need to check the the $column variable in the model.ajax.php file
+        $columns = array(get_lang('Username'), get_lang('FirstName'), get_lang('LastName'), get_lang('Name'), get_lang('Progress'));
+
+        //Column config
+        $column_model   = array(
+            array('name'=>'username',   'index'=>'username',  'width'=>'160',  'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
+            array('name'=>'firstname',  'index'=>'firstname',   'width'=>'100',   'align'=>'left', 'search' => 'true'),
+            array('name'=>'lastname',   'index'=>'lastname',    'width'=>'100',   'align'=>'left', 'search' => 'true'),
+            array('name'=>'name',       'index'=>'name',        'width'=>'100',   'align'=>'left', 'search' => 'true'),
+            array('name'=>'progress',   'index'=>'progress',    'width'=>'70',   'align'=>'left', 'search' => 'true'),
+            );
+        $action_links = '';
+        // jqgrid will use this URL to do the selects
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_lp_progress&session_id=' . intval($sessionId);
+        $table = Display::grid_js('lps', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+
+
+        $return = '<script>$(function() {'. $table . '});</script>';
+        $return .= Display::grid_html('lps');
+        return $return;
+    }
+    /**
      * Display a sortable table that contains an overview off all the access to a session
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      * @version Chamilo 1.9.6

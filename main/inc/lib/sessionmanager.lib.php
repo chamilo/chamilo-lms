@@ -475,10 +475,83 @@ class SessionManager
                 $formatted_sessions[] = $session;
 			}
 		}
-
 		return $formatted_sessions;
 	}
+    /**
+     *  Get total of records for progress of learning paths in the given session
+     *  @param int session id
+     *  @return int
+     */
+    public static function get_count_session_lp_progress($sessionId = 0) {
+        $tbl_lp         = Database::get_course_table(TABLE_LP_MAIN);
+        $tbl_lp_view    = Database::get_course_table(TABLE_LP_VIEW);
+        $tbl_user       = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_course     = Database::get_main_table(TABLE_MAIN_COURSE);
 
+        $sql =  "select  count(*) as total_rows
+                FROM $tbl_lp_view v
+                INNER JOIN $tbl_lp l ON l.id = v.lp_id
+                INNER JOIN $tbl_user u ON u.user_id = v.user_id
+                INNER JOIN $tbl_course c";
+        $sql .= ' WHERE v.session_id = ' . $sessionId;
+        $result_rows = Database::query($sql);
+        $row = Database::fetch_array($result_rows);
+        $num = $row['total_rows'];
+        return $num;
+    }
+    /**
+     * Gets the progress of learning paths in the given session
+     * @param int   session id
+     * @param array options order and limit keys
+     * @return array table with user name, lp name, progress
+     */
+    public static function get_session_lp_progress($sessionId = 0, $options)
+    {
+        $tbl_lp         = Database::get_course_table(TABLE_LP_MAIN);
+        $tbl_lp_view    = Database::get_course_table(TABLE_LP_VIEW);
+        $tbl_user       = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_course     = Database::get_main_table(TABLE_MAIN_COURSE);
+
+
+        $select = "select  u.username, u.firstname, u.lastname, l.name, v.progress  
+                FROM $tbl_lp_view v
+                INNER JOIN $tbl_lp l ON l.id = v.lp_id
+                INNER JOIN $tbl_user u ON u.user_id = v.user_id
+                INNER JOIN $tbl_course c 
+                ";
+
+        $where = ' WHERE 1=1 ';
+        if (!empty($options['where'])) {
+           $where .= ' AND '.$options['where'];
+        }
+
+        $where .= ' AND v.session_id = ' . $sessionId;
+
+        $order = null;
+        if (!empty($options['order'])) {
+            $order = " ORDER BY ".$options['order'];
+        }
+
+        $limit = null;
+        if (!empty($options['limit'])) {
+            $limit = " LIMIT ".$options['limit'];
+        }
+
+        $select .= $where.$order.$limit;
+        error_log($select);
+        $result = Database::query($select);
+        $formatted_sessions = array();
+        if (Database::num_rows($result) > 0) { 
+            while ($row = Database::fetch_assoc($result)) {
+                error_log(print_r($row,1));
+                $formatted_sessions[] = $row;
+            }
+            /*foreach ($lps as $lp) {
+                error_log(print_r($lp,1));
+            }*/
+        }
+        return $formatted_sessions;
+    }
     /**
      * Creates a new course code based in given code
      *

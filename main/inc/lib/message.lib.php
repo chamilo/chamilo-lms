@@ -875,9 +875,9 @@ class MessageManager
         $title = Security::remove_XSS($row['title'], STUDENT, true);
         $content = Security::remove_XSS($row['content'], STUDENT, true);
 
-        $from_user = UserManager::get_user_info_by_id($user_sender_id);
-        $name = api_get_person_name($from_user['firstname'], $from_user['lastname']);
-        $user_image = UserManager::get_picture_user($row['user_sender_id'], $from_user['picture_uri'], 80);
+        $userInfoSender = api_get_user_info($user_sender_id);
+        $name = $userInfoSender['complete_name'];
+        $user_image = UserManager::get_picture_user($row['user_sender_id'], $userInfoSender['picture_uri'], 80);
         $user_image = Display::img($user_image['file'], $name, array('title' => $name));
 
         $message_content = Display::page_subheader(str_replace("\\", "", $title));
@@ -889,15 +889,11 @@ class MessageManager
         if (api_get_setting('allow_social_tool') == 'true') {
             $userInfo = api_get_user_info($row['user_sender_id']);
             if ($source == 'outbox') {
-                $message_content .= get_lang('From').': <a href="'.api_get_path(
-                    WEB_PATH
-                ).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> '.api_strtolower(
+                $message_content .= get_lang('From').': <a href="'.$userInfoSender['profile_url'].'">'.$name.'</a> '.api_strtolower(
                     get_lang('To')
                 ).'&nbsp;<b>'.$userInfo['complete_name'].'</b>';
             } else {
-                $message_content .= get_lang('From').' <a href="'.api_get_path(
-                    WEB_PATH
-                ).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> '.api_strtolower(
+                $message_content .= get_lang('From').' <a href="'.$userInfoSender['profile_url'].'">'.$name.'</a> '.api_strtolower(
                     get_lang('To')
                 ).'&nbsp;<b>'.get_lang('Me').'</b>';
             }
@@ -1020,9 +1016,8 @@ class MessageManager
                 $html = '';
                 // topics
                 //$indent	= 0;
-                $user_sender_info = UserManager::get_user_info_by_id($topic['user_sender_id']);
-                //$files_attachments  = self::get_links_message_attachment_files($topic['id']);
-                $name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);
+                $userInfo = api_get_user_info($topic['user_sender_id']);
+                $name = $userInfo['complete_name'];
 
                 $html .= '<div class="row">';
 
@@ -1080,9 +1075,7 @@ class MessageManager
                 $image_repository = $image_path['dir'];
                 $existing_image = $image_path['file'];
 
-                $user_info = '<td valign="top"><a href="'.api_get_path(
-                    WEB_PATH
-                ).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a>';
+                $user_info = '<td valign="top"><a href="'.$userInfo['profile_url'].'">'.$name.'&nbsp;</a>';
                 $user_info .= '<div class="message-group-author"><img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="32" height="32" title="'.$name.'" /></div>';
                 $user_info .= '</td>';
 

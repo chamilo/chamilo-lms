@@ -701,7 +701,7 @@ class SocialManager extends UserManager {
                 //Anonymous users can't have access to the profile
                 if (!api_is_anonymous()) {
                     if (api_get_setting('allow_social_tool')=='true') {
-                        $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$uid.$course_url;
+                        $url = $user_info['profile_url'].$course_url;
                     } else {
                         $url = '?id='.$uid.$course_url;
                     }

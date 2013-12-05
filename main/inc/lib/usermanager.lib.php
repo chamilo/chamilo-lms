@@ -414,13 +414,19 @@ class UserManager
             return false;
         }
         $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-        if ($user_id != strval(intval($user_id))) return false;
-        if ($user_id === false) return false;
+        if ($user_id != strval(intval($user_id))) {
+            return false;
+        }
+        if ($user_id === false) {
+            return false;
+        }
+
         $user_info = api_get_user_info($user_id);
 
         if (empty($user_info)) {
             return false;
         }
+
         $sql = "SELECT * FROM $table_course_user WHERE status = '1' AND user_id = '".$user_id."'";
         $res = Database::query($sql);
         while ($course = Database::fetch_object($res)) {
@@ -445,7 +451,6 @@ class UserManager
      */
     public static function delete_user($user_id)
     {
-
         if ($user_id != strval(intval($user_id))) {
             return false;
         }
@@ -553,7 +558,7 @@ class UserManager
                 }
             }
 
-            //Delete user from friend lists
+            // Delete user from friend lists
             SocialManager::remove_user_rel_user($user_id, true);
         }
         survey_manager::delete_all_survey_invitations_by_user($user_id);
@@ -573,14 +578,15 @@ class UserManager
      * - UserManager :: delete_users(1, 2, 3); or
      * - UserManager :: delete_users(array(1, 2, 3));
      * @param array|int $ids
-     * @return boolean  True if at least one user was successfuly deleted. False otherwise.
+     * @return boolean  True if at least one user was successfully deleted. False otherwise.
      * @author Laurent Opprecht
      * @uses UserManager::delete_user() to actually delete each user
      * @assert (null) === false
      * @assert (-1) === false
      * @assert (array(-1)) === false
      */
-    static function delete_users($ids = array()) {
+    public static function delete_users($ids = array())
+    {
         if (empty($ids)) {
             return false;
         }
@@ -608,7 +614,8 @@ class UserManager
      * @assert (null) === false
      * @assert (array(-1)) === false
      */
-    static function deactivate_users($ids = array()) {
+    public static function deactivate_users($ids = array())
+    {
         if (empty($ids)) {
             return false;
         }
@@ -633,7 +640,8 @@ class UserManager
      * @assert (null) === false
      * @assert (array(-1)) === false
      */
-    static function activate_users($ids = array()) {
+    public static function activate_users($ids = array())
+    {
         if (empty($ids)) {
             return false;
         }
@@ -828,7 +836,8 @@ class UserManager
      * @assert (-1,0) === false
      * @assert (1,1) === true
      */
-    public static function change_active_state($user_id, $active, $send_email_if_activated = false) {
+    public static function change_active_state($user_id, $active, $send_email_if_activated = false)
+    {
         $user_id = intval($user_id);
         $active = intval($active);
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -867,7 +876,8 @@ class UserManager
      * @uses UserManager::change_active_state() to actually disable the user
      * @assert (0) === false
      */
-    public static function disable($user_id) {
+    public static function disable($user_id)
+    {
         self::change_active_state($user_id, 0);
     }
 
@@ -878,7 +888,8 @@ class UserManager
      * @uses UserManager::change_active_state() to actually disable the user
      * @assert (0) === false
      */
-    public static function enable($user_id) {
+    public static function enable($user_id)
+    {
         self::change_active_state($user_id, 1);
     }
 
@@ -891,10 +902,12 @@ class UserManager
      * @return int User id
      * @assert ('0','---') === 0
      */
-    public static function get_user_id_from_original_id($original_user_id_value, $original_user_id_name) {
+    public static function get_user_id_from_original_id($original_user_id_value, $original_user_id_name)
+    {
         $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
         $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-        $sql = "SELECT user_id    FROM $t_uf uf INNER JOIN $t_ufv ufv ON ufv.field_id=uf.id WHERE field_variable='$original_user_id_name' AND field_value='$original_user_id_value';";
+        $sql = "SELECT user_id    FROM $t_uf uf INNER JOIN $t_ufv ufv ON ufv.field_id=uf.id
+                WHERE field_variable='$original_user_id_name' AND field_value='$original_user_id_value';";
         $res = Database::query($sql);
         $row = Database::fetch_object($res);
         if ($row) {
@@ -931,7 +944,8 @@ class UserManager
      * @assert ('','') === false
      * @assert ('a','b') === 'ab'
      */
-    public static function create_username($firstname, $lastname, $language = null, $encoding = null) {
+    public static function create_username($firstname, $lastname, $language = null, $encoding = null)
+    {
         if (is_null($encoding)) {
             $encoding = api_get_system_encoding();
         }
@@ -968,7 +982,8 @@ class UserManager
      * Note: When the method is called several times with same parameters, its results look like the following sequence: ivan, ivan2, ivan3, ivan4, ...
      * @author Ivan Tcholakov, 2009
      */
-    public static function create_unique_username($firstname, $lastname = null, $language = null, $encoding = null) {
+    public static function create_unique_username($firstname, $lastname = null, $language = null, $encoding = null)
+    {
         if (is_null($lastname)) {
             // In this case the actual input parameter $firstname should contain ASCII-letters and digits only.
             // For making this method tolerant of mistakes, let us transliterate and purify the suggested input username anyway.
@@ -977,6 +992,7 @@ class UserManager
         } else {
             $username = self::create_username($firstname, $lastname, $language, $encoding);
         }
+
         if (!self::is_username_available($username)) {
             $i = 2;
             $temp_username = substr($username, 0, USERNAME_MAX_LENGTH - strlen((string)$i)).$i;
@@ -996,7 +1012,8 @@ class UserManager
      * @param string $encoding (optional)    The character encoding for the input names. If it is omitted, the platform character set will be used by default.
      * @return string                        The resulting purified username.
      */
-    public static function purify_username($username, $strict = false, $encoding = null) {
+    public static function purify_username($username, $strict = false, $encoding = null)
+    {
         if ($strict) {
             // 1. Conversion of unacceptable letters (latinian letters with accents for example) into ASCII letters in order they not to be totally removed.
             // 2. Applying the strict purifier.
@@ -1015,7 +1032,8 @@ class UserManager
      * @param int User id
      * @return bool True if user id was found, false otherwise
      */
-    public static function is_user_id_valid($user_id) {
+    public static function is_user_id_valid($user_id)
+    {
         $user_id = (int)$user_id;
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT user_id FROM $table_user WHERE user_id = '".$user_id."'";
@@ -1035,7 +1053,8 @@ class UserManager
      * @param string $encoding (optional)    The character encoding for the input names. If it is omitted, the platform character set will be used by default.
      * @return bool                            Returns TRUE if the username is valid, FALSE otherwise.
      */
-    public static function is_username_valid($username, $encoding = null) {
+    public static function is_username_valid($username, $encoding = null)
+    {
         return !empty($username) && $username == self::purify_username($username, true);
     }
 
@@ -1045,7 +1064,8 @@ class UserManager
      * @param string $username                The given username.
      * @return bool                            Returns TRUE if length of the username exceeds the limit, FALSE otherwise.
      */
-    public static function is_username_empty($username) {
+    public static function is_username_empty($username)
+    {
         return (strlen(self::purify_username($username, false)) == 0);
     }
 
@@ -1089,7 +1109,8 @@ class UserManager
     * @return array An array with all users of the platform.
     * @todo optional course code parameter, optional sorting parameters...
     */
-    public static function get_user_list($conditions = array(), $order_by = array(), $limit_from = false, $limit_to = false) {
+    public static function get_user_list($conditions = array(), $order_by = array(), $limit_from = false, $limit_to = false)
+    {
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
         $return_array = array();
         $sql_query = "SELECT * FROM $user_table";
@@ -1125,7 +1146,8 @@ class UserManager
     * @return array An array with all users of the platform.
     * @todo optional course code parameter, optional sorting parameters...
     */
-    public static function get_user_list_like($conditions = array(), $order_by = array(), $simple_like = false, $condition = 'AND') {
+    public static function get_user_list_like($conditions = array(), $order_by = array(), $simple_like = false, $condition = 'AND')
+    {
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
         $return_array = array();
         $sql_query = "SELECT * FROM $user_table";
@@ -1160,7 +1182,8 @@ class UserManager
      * @param     string     The username
      * @return array All user information as an associative array
      */
-    public static function get_user_info($username) {
+    public static function get_user_info($username)
+    {
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
         $username = Database::escape_string($username);
         $sql = "SELECT * FROM $user_table WHERE username='".$username."'";
@@ -1201,7 +1224,8 @@ class UserManager
      * @return    array     All user information as an associative array
      * @todo    Use api_get_user_info() instead
      */
-    public static function get_user_info_by_id($user_id, $user_fields = false) {
+    public static function get_user_info_by_id($user_id, $user_fields = false)
+    {
         $user_id = intval($user_id);
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT * FROM $user_table WHERE user_id=".$user_id;
@@ -1238,9 +1262,11 @@ class UserManager
      * the same directory.
      * @param    integer    User ID
      * @param    string    Type of path to return (can be 'none', 'system', 'rel', 'web')
-     * @param    bool    Whether we want to have the directory name returned 'as if' there was a file or not (in the case we want to know which directory to create - otherwise no file means no split subdir)
+     * @param    bool    Whether we want to have the directory name returned 'as if' there was a file or not
+     *          (in the case we want to know which directory to create - otherwise no file means no split sub dir)
      * @param    bool    If we want that the function returns the /main/img/unknown.jpg image set it at true
-     * @return    array     Array of 2 elements: 'dir' and 'file' which contain the dir and file as the name implies if image does not exist it will return the unknow image if anonymous parameter is true if not it returns an empty er's
+     * @return    array     Array of 2 elements: 'dir' and 'file' which contain the dir and file as the name implies if
+     * image does not exist it will return the unknow image if anonymous parameter is true if not it returns an empty
      */
     public static function get_user_picture_path_by_id($id, $type = 'none', $preview = false, $anonymous = false) {
 
@@ -1286,13 +1312,6 @@ class UserManager
             } else {
                 $dir = $base.'upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
             }
-
-            /* @todo check this validation
-            if (!empty($picture_filename) or $preview) {
-                $dir = $base.'upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
-            } else {
-                $dir = $base.'upload/users/'.$user_id.'/';
-            }*/
         } else {
             $dir = $base.'upload/users/'.$user_id.'/';
         }
@@ -1305,19 +1324,18 @@ class UserManager
         );
     }
 
-
     /**
-     * Creates new user pfotos in various sizes of a user, or deletes user pfotos.
+     * Creates new user photos in various sizes of a user, or deletes user picture.
      * Note: This method relies on configuration setting from main/inc/conf/profile.conf.php
-     * @param     int $user_id        The user internal identitfication number.
-     * @param     string $file        The common file name for the newly created pfotos.
+     * @param     int $user_id        The user internal identification number.
+     * @param     string $file        The common file name for the newly created picture.
      *                                 It will be checked and modified for compatibility with the file system.
      *                                 If full name is provided, path component is ignored.
      *                                 If an empty name is provided, then old user photos are deleted only,
      * @see     UserManager::delete_user_picture() as the prefered way for deletion.
-     * @param     string $source_file    The full system name of the image from which user photos will be created.
-     * @return     string/bool            Returns the resulting common file name of created images which usually should be stored in database.
-     * When deletion is recuested returns empty string. In case of internal error or negative validation returns FALSE.
+     * @param   string $source_file    The full system name of the image from which user photos will be created.
+     * @return  string/bool Returns the file name of the created images which usually should be stored in database.
+     * When deletion is requested returns empty string. In case of internal error or negative validation returns FALSE.
      */
     public static function update_user_picture($user_id, $file = null, $source_file = null) {
         if (empty($user_id)) {
@@ -1401,17 +1419,15 @@ class UserManager
     }
 
     /**
-     * Deletes user pfotos.
+     * Deletes user photos.
      * Note: This method relies on configuration setting from main/inc/conf/profile.conf.php
-     * @param int $user_id            The user internal identitfication number.
+     * @param int $user_id            The user internal identification number.
      * @return string/bool            Returns empty string on success, FALSE on error.
      */
     public static function delete_user_picture($user_id)
     {
         return self::update_user_picture($user_id);
     }
-
-    /* PRODUCTIONS FUNCTIONS */
 
     /**
      * Returns an XHTML formatted list of productions for a user, or FALSE if he
@@ -1427,7 +1443,8 @@ class UserManager
      * @param    $force    Optional parameter to force building after a removal request
      * @return    A string containing the XHTML code to dipslay the production list, or FALSE
      */
-    public static function build_production_list($user_id, $force = false, $showdelete = false) {
+    public static function build_production_list($user_id, $force = false, $showdelete = false)
+    {
 
         if (!$force && !empty($_POST['remove_production'])) {
             return true; // postpone reading from the filesystem
@@ -1448,7 +1465,8 @@ class UserManager
             foreach ($productions as $file) {
                 $production_list .= '<li><a href="'.$production_dir.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';
                 if ($showdelete) {
-                    $production_list .= '<input type="image" name="remove_production['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($file).'" onclick="javascript: return confirmation(\''.htmlentities($file).'\');" /></li>';
+                    $production_list .= '<input type="image" name="remove_production['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($file).'" onclick="javascript: return confirmation(\''.htmlentities($file).'\');" />
+                    </li>';
                 }
             }
             $production_list .= '</ul>';
@@ -1489,8 +1507,9 @@ class UserManager
     /**
      * Remove a user production.
      *
-     * @param    $user_id        User id
-     * @param    $production    The production to remove
+     * @param    int $user_id        User id
+     * @param    string $production    The production to remove
+     * @return bool
      */
     public static function remove_user_production($user_id, $production) {
         $production_path = self::get_user_picture_path_by_id($user_id, 'system', true);
@@ -1510,7 +1529,8 @@ class UserManager
      * @param    array    Database columns and their new value
      * @return    boolean    true if field updated, false otherwise
      */
-    public static function update_extra_field($fid, $columns)  {
+    public static function update_extra_field($fid, $columns)
+    {
         //TODO check that values added are values proposed for enumerated field types
         $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
         $fid = Database::escape_string($fid);
@@ -1536,7 +1556,8 @@ class UserManager
      * @param    string    Field value
      * @return    boolean    true if field updated, false otherwise
      */
-    public static function update_extra_field_value($user_id, $fname, $fvalue = '') {
+    public static function update_extra_field_value($user_id, $fname, $fvalue = '')
+    {
         //TODO check that values added are values proposed for enumerated field types
         $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
         $t_ufo = Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
@@ -1654,7 +1675,8 @@ class UserManager
      * @param    int        Optional. Whether we get all the fields with field_filter 1 or 0 or everything
      * @return    array    Extra fields details (e.g. $list[2]['type'], $list[4]['options'][2]['title']
      */
-    public static function get_extra_fields($from = 0, $number_of_items = 0, $column = 5, $direction = 'ASC', $all_visibility = true, $field_filter = null, $return_assoc = false) {
+    public static function get_extra_fields($from = 0, $number_of_items = 0, $column = 5, $direction = 'ASC', $all_visibility = true, $field_filter = null, $return_assoc = false)
+    {
         $fields = array();
         $t_uf  = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
         $t_ufo = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
@@ -1750,7 +1772,8 @@ class UserManager
      * @param string $fieldname the name of the field
      * @return array the list of options
      */
-    public static function get_extra_field_options($field_name) {
+    public static function get_extra_field_options($field_name)
+    {
         $t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
         $t_ufo = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
 
@@ -1768,7 +1791,8 @@ class UserManager
      * @param    boolean    Optional switch. true (default) returns all fields, false returns only visible fields
      * @return    integer    Number of fields
      */
-    public static function get_number_of_extra_fields($all_visibility = true) {
+    public static function get_number_of_extra_fields($all_visibility = true)
+    {
         $t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
         $sqlf = "SELECT * FROM $t_uf ";
         if (!$all_visibility) {
@@ -1788,7 +1812,8 @@ class UserManager
       * @param    string    Optional comma-separated list of options to provide for select and radio
       * @return int     new user id - if the new user creation succeeds, false otherwise
       */
-    public static function create_extra_field($fieldvarname, $fieldtype, $fieldtitle, $fielddefault, $fieldoptions = '') {
+    public static function create_extra_field($fieldvarname, $fieldtype, $fieldtitle, $fielddefault, $fieldoptions = '')
+    {
         // database table definition
         $table_field         = Database::get_main_table(TABLE_MAIN_USER_FIELD);
         $table_field_options= Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
@@ -1911,7 +1936,7 @@ class UserManager
                 field_default_value = '".Database::escape_string($fielddefault)."',
                 tms = '$time'
             WHERE id = '".Database::escape_string($fieldid)."'";
-        $result = Database::query($sql);
+        Database::query($sql);
 
         // we create an array with all the options (will be used later in the script)
         if ($fieldtype == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
@@ -1964,7 +1989,7 @@ class UserManager
         }
 
         // we store the new field options in the database
-        foreach ($list as $key => $option) {
+        foreach ($list as $option) {
             $sql = "SELECT MAX(option_order) FROM $table_field_options WHERE field_id = '".Database::escape_string($fieldid)."'";
             $res = Database::query($sql);
             $max = 1;
@@ -1974,7 +1999,7 @@ class UserManager
             }
             $sql = "INSERT INTO $table_field_options (field_id,option_value,option_display_text,option_order,tms)
                     VALUES ('".Database::escape_string($fieldid)."','".Database::escape_string($option)."','".Database::escape_string($option)."', $max, '$time')";
-            $result = Database::query($sql);
+            Database::query($sql);
         }
         return true;
     }
@@ -2183,6 +2208,10 @@ class UserManager
         return $return;
     }
 
+    /**
+     * @param string $field_type
+     * @return array
+     */
     public static function get_all_extra_field_by_type($field_type) {
         // database table definition
         $table_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);
@@ -2224,12 +2253,12 @@ class UserManager
         return $return;
     }
 
-    /** Get extra user data by value
+    /**
+     * Get extra user data by value
      * @param string the internal variable name of the field
      * @param string the internal value of the field
      * @return array with extra data info of a user i.e array('field_variable'=>'value');
      */
-
     public static function get_extra_user_data_by_value($field_variable, $field_value, $all_visibility = true) {
         //$extra_data = array();
         $table_user_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);
@@ -3064,15 +3093,15 @@ class UserManager
     }
 
     /**
-     * Gets the current user image
-     * @param string user id
-     * @param string picture user name
-     * @param string height
-     * @param string picture size it can be USER_IMAGE_SIZE_SMALL,  USER_IMAGE_SIZE_MEDIUM, USER_IMAGE_SIZE_BIG or  USER_IMAGE_SIZE_ORIGINAL
-     * @param string style css
-     * @return array with the file and the style of an image i.e $array['file'] $array['style']
-     */
-   public static function get_picture_user($user_id, $picture_file, $height, $size_picture = USER_IMAGE_SIZE_MEDIUM , $style = '') {
+    * Gets the current user image
+    * @param string user id
+    * @param string picture user name
+    * @param string height
+    * @param string picture size it can be USER_IMAGE_SIZE_SMALL,  USER_IMAGE_SIZE_MEDIUM, USER_IMAGE_SIZE_BIG or  USER_IMAGE_SIZE_ORIGINAL
+    * @param string style css
+    * @return array with the file and the style of an image i.e $array['file'] $array['style']
+    */
+    public static function get_picture_user($user_id, $picture_file, $height, $size_picture = USER_IMAGE_SIZE_MEDIUM , $style = '') {
         $picture = array();
         $picture['style'] = $style;
         if ($picture_file == 'unknown.jpg') {
@@ -3135,13 +3164,13 @@ class UserManager
     }
 
     /**
-     * @author Isaac flores <isaac.flores@dokeos.com>
-     * @param string The email administrator
-     * @param integer The user id
-     * @param string The message title
-     * @param string The content message
-     */
-     public static function send_message_in_outbox($email_administrator, $user_id, $title, $content) {
+    * @author Isaac flores <isaac.flores@dokeos.com>
+    * @param string The email administrator
+    * @param integer The user id
+    * @param string The message title
+    * @param string The content message
+    */
+    public static function send_message_in_outbox($email_administrator, $user_id, $title, $content) {
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $title = api_utf8_decode($title);
@@ -3161,7 +3190,7 @@ class UserManager
                     " VALUES (".
                      "'".(int)$user_id."', '".(int)($array_users_administrator[$i])."', '4', '".date('Y-m-d H:i:s')."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
                      ")";
-            $rs = Database::query($sql_insert_outbox);
+            Database::query($sql_insert_outbox);
         }
     }
 
@@ -3169,7 +3198,7 @@ class UserManager
      *
      * USER TAGS
      *
-     * Intructions to create a new user tag by Julio Montoya <gugli100@gmail.com>
+     * Instructions to create a new user tag by Julio Montoya <gugli100@gmail.com>
      *
      * 1. Create a new extra field in main/admin/user_fields.php with the "TAG" field type make it available and visible. Called it "books" for example.
      * 2. Go to profile main/auth/profile.php There you will see a special input (facebook style) that will show suggestions of tags.
@@ -3180,15 +3209,16 @@ class UserManager
      */
 
     /**
-     * Gets the tags of a specific field_id
-     *
-     * @param int field_id
-     * @param string how we are going to result value in array or in a string (json)
-     * @return mixed
-     * @since Nov 2009
-     * @version 1.8.6.2
-     */
-    public static function get_tags($tag, $field_id, $return_format  = 'json', $limit=10) {
+    * Gets the tags of a specific field_id
+    *
+    * @param int field_id
+    * @param string how we are going to result value in array or in a string (json)
+    * @return mixed
+    * @since Nov 2009
+    * @version 1.8.6.2
+    */
+    public static function get_tags($tag, $field_id, $return_format  = 'json', $limit=10)
+    {
         // database table definition
         $table_user_tag            = Database::get_main_table(TABLE_MAIN_TAG);
         $field_id    = intval($field_id);
@@ -3211,7 +3241,13 @@ class UserManager
         return $return;
     }
 
-    public static function get_top_tags($field_id, $limit=100) {
+    /**
+     * @param int $field_id
+     * @param int $limit
+     * @return array
+     */
+    public static function get_top_tags($field_id, $limit=100)
+    {
         // database table definition
         $table_user_tag            = Database::get_main_table(TABLE_MAIN_TAG);
         $table_user_tag_values    = Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
@@ -3231,11 +3267,11 @@ class UserManager
     }
 
     /**
-     * Get user's tags
-     * @param int field_id
-     * @param int user_id
-     * @return array
-     */
+    * Get user's tags
+    * @param int field_id
+    * @param int user_id
+    * @return array
+    */
     public static function get_user_tags($user_id,$field_id) {
         // database table definition
         $table_user_tag            = Database::get_main_table(TABLE_MAIN_TAG);
@@ -3255,7 +3291,6 @@ class UserManager
         }
         return $return;
     }
-
 
     /**
      * Get user's tags
@@ -3299,7 +3334,6 @@ class UserManager
         return $return;
     }
 
-
     /**
      * Get the tag id
      * @param int tag
@@ -3323,11 +3357,12 @@ class UserManager
 
     /**
      * Get the tag id
-     * @param int tag
-     * @param int field_id
+     * @param int $tag_id
+     * @param int $field_id
      * @return int 0 if fails otherwise the tag id
      */
-    public static function get_tag_id_from_id($tag_id, $field_id) {
+    public static function get_tag_id_from_id($tag_id, $field_id)
+    {
         $table_user_tag            = Database::get_main_table(TABLE_MAIN_TAG);
         $tag_id = intval($tag_id);
         $field_id = intval($field_id);
@@ -3341,7 +3376,6 @@ class UserManager
         }
     }
 
-
     /**
      * Adds a user-tag value
      * @param mixed tag
@@ -3349,7 +3383,8 @@ class UserManager
      * @param int field id of the tag
      * @return bool
      */
-    public static function add_tag($tag, $user_id, $field_id) {
+    public static function add_tag($tag, $user_id, $field_id)
+    {
         // database table definition
         $table_user_tag            = Database::get_main_table(TABLE_MAIN_TAG);
         $table_user_tag_values    = Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
@@ -3375,8 +3410,6 @@ class UserManager
                 $result = Database::query($sql);
                 $last_insert_id = Database::get_last_insert_id();
             }*/
-        } else {
-
         }
 
         //this is a new tag
@@ -3449,17 +3482,16 @@ class UserManager
     }
 
     /**
-     * Returns a list of all admninistrators
+     * Returns a list of all administrators
      * @author jmontoya
      * @return array
      */
      public static function get_all_administrators() {
-         $table_user = Database::get_main_table(TABLE_MAIN_USER);
-         $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
+        $table_user = Database::get_main_table(TABLE_MAIN_USER);
+        $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
         $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = api_get_current_access_url_id();
         if (api_get_multiple_access_url()) {
-            $access_url_id = api_get_current_access_url_id();
             $sql = "SELECT admin.user_id, username, firstname, lastname, email FROM $tbl_url_rel_user as url INNER JOIN $table_admin as admin
                                  ON (admin.user_id=url.user_id) INNER JOIN $table_user u ON (u.user_id=admin.user_id)
                                  WHERE access_url_id ='".$access_url_id."'";
@@ -3476,7 +3508,6 @@ class UserManager
         }
         return $return;
      }
-
 
     /**
      * Searchs an user (tags, firstname, lastname and email )

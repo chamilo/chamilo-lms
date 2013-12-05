@@ -635,7 +635,7 @@ class DisplayGradebook
         $info .= '<div class="thumbnail"><img ' . $img_attributes . '/></div>';
         $info .= '</div>';
         $info .= '<div class="span6">';
-		$info .= get_lang('Name') . ' :  <a target="_blank" href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u=' . $userid . '"> ' . api_get_person_name($user['firstname'], $user['lastname']) . '</a><br />';
+		$info .= get_lang('Name') . ' :  <a target="_blank" href="'.$user['profile_url'].'"> '.$user['complete_name']. '</a><br />';
 
 		if (api_get_setting('show_email_addresses') == 'true') {
             $info .= get_lang('Email') . ' : <a href="mailto:' . $user['email'] . '">' . $user['email'] . '</a><br />';

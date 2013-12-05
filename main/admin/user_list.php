@@ -12,13 +12,12 @@ $cidReset = true;
 
 global $_configuration;
 
-
 $current_access_url_id = api_get_current_access_url_id();
 
 // Blocks the possibility to delete a user
 $delete_user_available = true;
 if (isset($_configuration['deny_delete_users']) &&  $_configuration['deny_delete_users']) {
-	$delete_user_available = false;
+    $delete_user_available = false;
 }
 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=get_user_courses';
 $urlSession = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=get_user_sessions';
@@ -102,17 +101,16 @@ function clear_session_list (div_session) {
 }
 
 function display_advanced_search_form () {
-        if ($("#advanced_search_form").css("display") == "none") {
-                $("#advanced_search_form").css("display","block");
-                $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
-        } else {
-                $("#advanced_search_form").css("display","none");
-                $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
-        }
+    if ($("#advanced_search_form").css("display") == "none") {
+            $("#advanced_search_form").css("display","block");
+            $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
+    } else {
+            $("#advanced_search_form").css("display","none");
+            $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
+    }
 }
 
 $(document).ready(function() {
-
     var select_val = $("#input_select_extra_data").val();
     if ( document.getElementById(\'extra_data_text\')) {
 
@@ -160,7 +158,8 @@ api_protect_admin_script(true);
  * Get the total number of users on the platform
  * @see SortableTable#get_total_number_of_items()
  */
-function get_number_of_users() {
+function get_number_of_users()
+{
 	$total_rows = get_user_data(null, null, null, null, true);
     return $total_rows;
 }
@@ -171,6 +170,7 @@ function get_number_of_users() {
  * @param   int     Number of users to get
  * @param   int     Column to sort on
  * @param   string  Order (ASC,DESC)
+ * @param   bool
  * @see SortableTable#get_table_data($from)
  */
 function get_user_data($from, $number_of_items, $column, $direction, $get_count = false)
@@ -229,7 +229,6 @@ function get_user_data($from, $number_of_items, $column, $direction, $get_count 
 		$keyword_status = Database::escape_string($_GET['keyword_status']);
 
 		$query_admin_table = '';
-
         $and_conditions = array();
 
 		if ($keyword_status == SESSIONADMIN) {
@@ -316,13 +315,14 @@ function get_user_data($from, $number_of_items, $column, $direction, $get_count 
 	$users = array ();
     $t = time();
 	while ($user = Database::fetch_row($res)) {
+        $userInfo = api_get_user_info($user[0]);
 		$image_path 	= UserManager::get_user_picture_path_by_id($user[0], 'web', false, true);
 		$user_profile 	= UserManager::get_picture_user($user[0], $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
 		if (!api_is_anonymous()) {
-			$photo = '<center><a href="'.api_get_path(WEB_CODE_PATH).'?social/profile.php&u='.$user[0].'" title="'.get_lang('Info').'">
-                            <img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user[2],$user[3]).'" title="'.api_get_person_name($user[2], $user[3]).'" /></a></center>';
+			$photo = '<center><a href="'.$userInfo['profile_url'].'" title="'.get_lang('Info').'">
+                            <img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.$userInfo['complete_name'].'" title="'.$userInfo['complete_name'].'" /></a></center>';
 		} else {
-			$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user[2], $user[3]).'" title="'.api_get_person_name($user[2], $user[3]).'" /></center>';
+			$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.$userInfo['complete_name'].'" title="'.$userInfo['complete_name'].'" /></center>';
 		}
         if ($user[7] == 1 && $user[10] != '0000-00-00 00:00:00') {
             // check expiration date
@@ -333,7 +333,18 @@ function get_user_data($from, $number_of_items, $column, $direction, $get_count 
             }
         }
         // forget about the expiration date field
-        $users[] = array($user[0], $photo, $user[1],$user[2], $user[3], $user[4], $user[5], $user[6], $user[7], api_get_local_time($user[9]), $user[0]);
+        $users[] = array(
+            $user[0],
+            $photo,
+            $user[1],
+            Display::url($user[2], $userInfo['profile_url']),
+            Display::url($user[3], $userInfo['profile_url']),
+            $user[4],
+            $user[5],
+            $user[6],
+            $user[7],
+            api_get_local_time($user[9]),
+            $user[0]);
 	}
 	return $users;
 }
@@ -345,15 +356,6 @@ function get_user_data($from, $number_of_items, $column, $direction, $get_count 
 */
 function email_filter($email) {
 	return Display :: encrypted_mailto_link($email, $email);
-}
-
-/**
-* Returns a mailto-link
-* @param string $email An email-address
-* @return string HTML-code with a mailto-link
-*/
-function user_filter($name, $params, $row) {
-	return '<a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$row[0].'">'.$name.'</a>';
 }
 
 /**
@@ -769,8 +771,7 @@ $table->set_header(8, get_lang('Active'), true, 'width="15px"');
 $table->set_header(9, get_lang('RegistrationDate'), true, 'width="90px"');
 $table->set_header(10, get_lang('Action'), false, 'width="220px"');
 
-$table->set_column_filter(3, 'user_filter');
-$table->set_column_filter(4, 'user_filter');
+
 $table->set_column_filter(6, 'email_filter');
 $table->set_column_filter(7, 'status_filter');
 $table->set_column_filter(8, 'active_filter');

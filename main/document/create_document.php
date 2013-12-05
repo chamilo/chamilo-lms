@@ -60,6 +60,7 @@ require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 //I'm in the certification module?
 $is_certificate_mode = false;
 $_course = api_get_course_info();
+$groupId = api_get_group_id();
 
 if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
     $is_certificate_mode = true;
@@ -79,7 +80,7 @@ $course_id = api_get_course_int_id();
 $document_data = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true);
 if (empty($document_data)) {
     if (api_is_in_group()) {
-        $group_properties = GroupManager::get_group_properties(api_get_group_id());
+        $group_properties = GroupManager::get_group_properties($groupId);
         $document_id = DocumentManager::get_document_id(api_get_course_info(), $group_properties['directory']);
         $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
 
@@ -125,7 +126,7 @@ $doc_tree = explode('/', $dir);
 $count_dir = count($doc_tree) - 2; // "2" because at the begin and end there are 2 "/"
 
 if (api_is_in_group()) {
-    $group_properties = GroupManager::get_group_properties(api_get_group_id());
+    $group_properties = GroupManager::get_group_properties($groupId);
 
     // Level correction for group documents.
     if (!empty($group_properties['directory'])) {
@@ -170,18 +171,15 @@ if (!is_dir($filepath)) {
     $dir = '/';
 }
 
-$to_group_id = 0;
-
 if (!$is_certificate_mode) {
     $req_gid = null;
     if (api_is_in_group()) {
-        $req_gid = '&amp;gidReq='.api_get_group_id();
+        $req_gid = '&amp;gidReq='.$groupId;
         $interbreadcrumb[] = array(
-            "url" => "../group/group_space.php?gidReq=".api_get_group_id(),
+            "url" => "../group/group_space.php?gidReq=".$groupId,
             "name" => get_lang('GroupSpace')
         );
         $noPHP_SELF = true;
-        $to_group_id = api_get_group_id();
         $path = explode('/', $dir);
         if ('/'.$path[1] != $group_properties['directory']) {
             api_not_allowed(true);
@@ -260,7 +258,7 @@ if ($is_certificate_mode) {
 }
 
 // Show read-only box only in groups
-if (!empty(api_get_group_id())) {
+if (!empty($groupId)) {
     $group[] = $form->createElement('checkbox', 'readonly', '', get_lang('ReadOnly'));
 }
 $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
@@ -270,13 +268,13 @@ $current_session_id = api_get_session_id();
 $form->add_html_editor('content', '', false, false, $html_editor_config);
 
 // Comment-field
-$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
+$folders = DocumentManager::get_all_document_folders($_course, $groupId, $is_allowed_to_edit);
 
 // If we are not in the certificates creation, display a folder chooser for the
 // new document created
 
 if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $dir, $current_session_id)) {
-    $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
+    $folders = DocumentManager::get_all_document_folders($_course, $groupId, $is_allowed_to_edit);
 
     $parent_select = $form->addElement('select', 'curdirpath', array(null, get_lang('DestinationDirectory')));
 
@@ -535,7 +533,7 @@ if ($form->validate()) {
                 $document_id,
                 'DocumentAdded',
                 $_user['user_id'],
-                $to_group_id,
+                $groupId,
                 null,
                 null,
                 null,

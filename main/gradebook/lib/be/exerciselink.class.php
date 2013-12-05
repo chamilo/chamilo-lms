@@ -169,13 +169,13 @@ class ExerciseLink extends AbstractLink
                             status      <> 'incomplete' AND
                             session_id = $session_id";
     
-    	  if (isset($stud_id)) {
-  		      $course_code_exe = $this->get_course_code();
-  		      $sql .= " AND exe_cours_id = '$course_code_exe' AND exe_user_id = '$stud_id' ";
+    	    if (isset($stud_id)) {
+  		        $course_code_exe = $this->get_course_code();
+  		        $sql .= " AND exe_cours_id = '$course_code_exe' AND exe_user_id = '$stud_id' ";
           }
-    		$sql .= ' ORDER BY exe_id DESC';
+    		  $sql .= ' ORDER BY exe_id DESC';
         
-          } else {
+     } else {
              $course_code_exe = $this->get_course_code();         
              $sql = "SELECT * FROM $tblHp hp, $tblDoc doc 
                     WHERE   hp.exe_cours_id = '$course_code_exe' AND 

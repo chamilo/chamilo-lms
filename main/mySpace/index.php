@@ -18,7 +18,7 @@ require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once 'myspace.lib.php';
 
-$htmlHeadXtra[] = api_get_jqgrid_js(); 
+$htmlHeadXtra[] = api_get_jqgrid_js();
 // the section (for the tabs)
 $this_section = SECTION_TRACKING;
 //for HTML editor repository
@@ -145,6 +145,9 @@ if ($is_drh) {
 	$menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('Trainers'), array(), ICON_SIZE_MEDIUM), 'teachers.php');
 	$menu_items[] = Display::url(Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_MEDIUM), 'course.php');
 	$menu_items[] = Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM), 'session.php');
+
+    $menu_items[] = Display::url(Display::return_icon('empty_evaluation.png', get_lang('CompanyReports'), array(), ICON_SIZE_MEDIUM), 'company_reports.php');
+    $menu_items[] = Display::url(Display::return_icon('evaluation_rate.png', get_lang('CompanyReportResumed'), array(), ICON_SIZE_MEDIUM), 'company_reports_resumed.php');
 }
 
 echo '<div id="actions" class="actions">';
@@ -205,7 +208,7 @@ if (empty($session_id) || in_array($display, array('accessoverview','progressove
 
     #show filter by session
     if ($is_platform_admin && $view == 'admin' && in_array($display, array('accessoverview','progressoverview'))) {
-        echo '<div class="pull-right">';    
+        echo '<div class="pull-right">';
         echo $sessionFilter->return_form();
         echo '</div>';
         echo '<script>$(function() {

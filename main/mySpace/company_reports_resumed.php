@@ -11,7 +11,9 @@ $language_file = array('admin', 'gradebook', 'tracking');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
-api_protect_admin_script();
+if (!(api_is_platform_admin(false, true))) {
+    api_not_allowed();
+}
 
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('MySpace'));
 

@@ -43,7 +43,9 @@ if (!in_array(
         'get_work_user_list_all',
         'get_timelines',
         'get_user_skill_ranking',
-        'get_usergroups_teacher'
+        'get_usergroups_teacher',
+        'get_user_course_report_resumed',
+        'get_user_course_report'
     )
 )) {
     api_protect_admin_script(true);
@@ -132,11 +134,33 @@ if (!$sidx) {
 //@todo rework this
 
 switch ($action) {
-    case 'get_user_course_report_resumed':
-        $count = CourseManager::get_count_user_list_from_course_code(true, 'ruc');
-        break;
     case 'get_user_course_report':
-        $count = CourseManager::get_count_user_list_from_course_code(false);
+    case 'get_user_course_report_resumed':
+
+        if (!(api_is_platform_admin(false, true))) {
+            exit;
+        }
+        $courseCodeList = array();
+        $userIdList  = array();
+        if (api_is_drh()) {
+            $userList = UserManager::get_users_followed_by_drh(api_get_user_id());
+            if (!empty($userList)) {
+                $userIdList = array_keys($userList);
+            }
+            $courseList = CourseManager::get_courses_followed_by_drh(api_get_user_id());
+            if (!empty($courseList)) {
+                $courseCodeList = array_keys($courseList);
+            }
+
+            if (empty($userIdList) || empty($courseCodeList)) {
+                exit;
+            }
+        }
+        if ($action == 'get_user_course_report') {
+            $count = CourseManager::get_count_user_list_from_course_code(false, null, $courseCodeList, $userIdList);
+        } else {
+            $count = CourseManager::get_count_user_list_from_course_code(true, 'ruc', $courseCodeList, $userIdList);
+        }
         break;
     case 'get_course_exercise_medias':
         $course_id = api_get_course_int_id();
@@ -296,10 +320,29 @@ switch ($action) {
         $columns = array(
             'extra_ruc', 'training_hours', 'count_users', 'count_users_registered', 'average_hours_per_user', 'count_certificates'
         );
+
         $column_names = array(
-            get_lang('Company'), get_lang('TrainingHoursAccumulated'), get_lang('CountOfSubscriptions'), get_lang('CountOfUsers'), get_lang('AverageHoursPerStudent'), get_lang('CountCertificates')
+            get_lang('Company'),
+            get_lang('TrainingHoursAccumulated'),
+            get_lang('CountOfSubscriptions'),
+            get_lang('CountOfUsers'),
+            get_lang('AverageHoursPerStudent'),
+            get_lang('CountCertificates')
         );
-        $result = CourseManager::get_user_list_from_course_code(null, null, "LIMIT $start, $limit", " $sidx $sord", null, null, true, true, 'ruc');
+
+        $result = CourseManager::get_user_list_from_course_code(
+            null,
+            null,
+            "LIMIT $start, $limit",
+            " $sidx $sord",
+            null,
+            null,
+            true,
+            true,
+            'ruc',
+            $courseCodeList,
+            $userIdList
+        );
         $new_result = array();
         if (!empty($result)) {
             foreach ($result as $row) {
@@ -313,16 +356,34 @@ switch ($action) {
     case 'get_user_course_report':
         $columns = array('course', 'user', 'time', 'certificate', 'progress_100', 'progress');
         $column_names = array(
-            get_lang('Course'), get_lang('User'), get_lang('ManHours'), get_lang('CertificateGenerated'), get_lang('Approved'), get_lang('CourseAdvance')
+            get_lang('Course'),
+            get_lang('User'),
+            get_lang('ManHours'),
+            get_lang('CertificateGenerated'),
+            get_lang('Approved'),
+            get_lang('CourseAdvance')
         );
         $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
         if (!empty($extra_fields)) {
-            foreach($extra_fields as $extra) {
+            foreach ($extra_fields as $extra) {
                 $columns[] = $extra['1'];
                 $column_names[] = $extra['3'];
             }
         }
-        $result = CourseManager::get_user_list_from_course_code(null, null, "LIMIT $start, $limit", " $sidx $sord", null, null, true);
+
+        $result = CourseManager::get_user_list_from_course_code(
+            null,
+            null,
+            "LIMIT $start, $limit",
+            " $sidx $sord",
+            null,
+            null,
+            true,
+            false,
+            null,
+            $courseCodeList,
+            $userIdList
+        );
         break;
 	case 'get_user_skill_ranking':
         $columns = array('photo', 'firstname', 'lastname', 'skills_acquired', 'currently_learning', 'rank');
@@ -439,7 +500,7 @@ switch ($action) {
             'username', 'firstname', 'lastname', 'name', 'progress'
         );
         $sessionId = 0;
-        if (isset($_GET['session_id']) && !empty($_GET['session_id'])) 
+        if (isset($_GET['session_id']) && !empty($_GET['session_id']))
         {
             $sessionId = intval($_GET['session_id']);
         }

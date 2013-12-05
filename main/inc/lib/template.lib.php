@@ -1444,9 +1444,8 @@ class Template
         /* Part 4 . Show the teacher view/student view button at the right of the breadcrumb */
         $view_as_student_link = null;
         if ($user_id && isset($course_id)) {
-            if ((api_is_course_admin() || api_is_course_coach() || api_is_platform_admin()) && api_get_setting(
-                'student_view_enabled'
-            ) == 'true'
+            if ((api_is_course_admin() || api_is_course_coach() || api_is_platform_admin()) &&
+                api_get_setting('student_view_enabled') == 'true'
             ) {
                 $view_as_student_link = api_display_tool_view_option();
             }
@@ -1481,7 +1480,7 @@ class Template
             // View as student/teacher link
             if (!empty($view_as_student_link)) {
                 $lis .= Display::tag(
-                    'li',
+                    'div',
                     $view_as_student_link,
                     array('id' => 'view_as_link', 'class' => 'pull-right')
                 );

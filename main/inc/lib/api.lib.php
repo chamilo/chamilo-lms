@@ -2655,14 +2655,6 @@ function api_display_tool_view_option() {
         return '';
     }
 
-    /*// Uncomment to remove student view link from document view page
-    if (strpos($_SERVER['REQUEST_URI'], 'document/headerpage.php') !== false) {
-        $sourceurl = str_replace('document/headerpage.php', 'document/showinframes.php', $_SERVER['REQUEST_URI']);
-        //showinframes doesn't handle student view anyway...
-        //return '';
-        $is_framed = true;
-    }*/
-
     // Uncomment to remove student view link from document view page
     if (strpos($_SERVER['REQUEST_URI'], 'newscorm/lp_header.php') !== false) {
         if (empty($_GET['lp_id'])) {
@@ -2685,21 +2677,23 @@ function api_display_tool_view_option() {
         }
     }
 
+    $defaultClass = 'btn btn-default btn-xs';
+
     $output_string = '';
     if (!empty($_SESSION['studentview'])) {
         if ($_SESSION['studentview'] == 'studentview') {
             // We have to remove the isStudentView=true from the $sourceurl
             $sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
             $sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
-            $output_string .= '<a class="btn btn-mini btn-success" href="'.$sourceurl.'&isStudentView=false" target="_self">'.get_lang('CourseManagerview').'</a>';
+            $output_string .= '<a class=" btn btn-success" href="'.$sourceurl.'&isStudentView=false" target="_self">'.get_lang('CourseManagerview').'</a>';
         } elseif ($_SESSION['studentview'] == 'teacherview') {
             // Switching to teacherview
             $sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
             $sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
-            $output_string .= '<a class="btn btn-mini" href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('StudentView').'</a>';
+            $output_string .= '<a class="'.$defaultClass.'" href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('StudentView').'</a>';
         }
     } else {
-        $output_string .= '<a class="btn btn-mini" href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('StudentView').'</a>';
+        $output_string .= '<a class="'.$defaultClass.'" href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('StudentView').'</a>';
     }
     return $output_string;
 }

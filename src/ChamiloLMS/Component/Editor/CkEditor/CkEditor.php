@@ -3,7 +3,7 @@
 namespace ChamiloLMS\Component\Editor\CkEditor;
 
 use ChamiloLMS\Component\Editor\Editor;
-use ChamiloLMS\Component\Editor\Toolbar;
+use ChamiloLMS\Component\Editor\CkEditor\Toolbar;
 
 /**
  * Class CkEditor
@@ -47,7 +47,7 @@ class CkEditor extends Editor
      */
     public function editorReplace()
     {
-        $toolbar  = new Toolbar($this->toolbarSet, $this->config, 'CkEditor');
+        $toolbar  = new Toolbar\Basic($this->toolbarSet, $this->config, 'CkEditor');
         $toolbar->setLanguage($this->translator->getLocale());
         $config = $toolbar->getConfig();
         $javascript = $this->toJavascript($config);

@@ -2,15 +2,15 @@
 /* For licensing terms, see /license.txt */
 namespace ChamiloLMS\Component\Editor\TinyMce;
 
-use ChamiloLMS\Component\Editor;
+use ChamiloLMS\Component\Editor\Editor;
+use ChamiloLMS\Component\Editor\TinyMce\Toolbar;
 
 /**
  * Class TinyMce
  * @package ChamiloLMS\Component\Editor\TinyMce
  */
-class TinyMce extends Editor\Editor
+class TinyMce extends Editor
 {
-
     /**
      * @param array $files
      */
@@ -46,7 +46,7 @@ class TinyMce extends Editor\Editor
      */
     public function editorReplace()
     {
-        $toolbar  = new Toolbar($this->toolbarSet, $this->config, 'TinyMce');
+        $toolbar  = new Toolbar\Basic($this->toolbarSet, $this->config, 'TinyMce');
         $toolbar->setLanguage($this->translator->getLocale());
         $config = $toolbar->getConfig();
         $config['selector'] = "#".$this->name;

@@ -12,7 +12,6 @@ class Basic extends Toolbar
 {
     public function getConfig()
     {
-
         // Original from ckeditor
         /*
         $config['toolbarGroups'] = array(

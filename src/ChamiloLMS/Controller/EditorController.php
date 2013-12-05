@@ -24,7 +24,7 @@ class EditorController extends CommonController
      */
     public function fileManagerAction()
     {
-        $response = $this->getTemplate()->renderTemplate($this->getHtmlEditor()->getTemplate());
+        $response = $this->getTemplate()->renderTemplate($this->getHtmlEditor()->getEditorTemplate());
         return new Response($response, 200, array());
     }
 

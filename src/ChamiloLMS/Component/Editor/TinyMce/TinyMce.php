@@ -23,7 +23,7 @@ class TinyMce extends Editor
     /**
      * @return string
      */
-    public function getTemplate()
+    public function getEditorTemplate()
     {
         return 'javascript/editor/tinymce/elfinder.tpl';
     }

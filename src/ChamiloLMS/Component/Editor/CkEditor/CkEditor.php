@@ -16,7 +16,7 @@ class CkEditor extends Editor
     /**
      * @return string
      */
-    public function getTemplate()
+    public function getEditorTemplate()
     {
         return 'javascript/editor/ckeditor/elfinder.tpl';
     }

@@ -43,7 +43,9 @@ class ProfileController extends CommonController
         $userId = \UserManager::get_user_id_from_username($username);
         $userInfo = api_get_user_info($userId);
 
+        $editor = $this->getTemplate()->renderTemplate($this->getHtmlEditor()->getEditorTemplate());
         $this->getTemplate()->assign('user', $userInfo);
+        $this->getTemplate()->assign('editor', $editor);
         $response = $this->getTemplate()->renderTemplate($this->getTemplatePath().'files.tpl');
         return new Response($response, 200, array());
     }

@@ -223,7 +223,7 @@ class Editor
     /**
      * @return null
      */
-    public function getTemplate()
+    public function getEditorTemplate()
     {
         return null;
     }

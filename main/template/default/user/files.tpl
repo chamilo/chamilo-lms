@@ -5,13 +5,12 @@
         <img src="{{ user.avatar }}"/>
     </div>
 
-    <div class="well sidebar-nav">
-
-    </div>
 {% endblock %}
 
 {% block right_column %}
     <div class="well_border">
         <h3>{{ 'MyFiles' | trans }}</h3>
     </div>
+    {{ editor }}
+
 {% endblock %}

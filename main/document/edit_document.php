@@ -140,7 +140,7 @@ if ($is_certificate_mode) {
     $html_editor_config['BaseHref'] = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir;
 }
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder(api_get_user_id(), $dir, $current_session_id);
+$is_allowed_to_edit = api_is_allowed_to_edit(null, true) || GroupManager::groupMemberWithUploadRights() || is_my_shared_folder(api_get_user_id(), $dir, $current_session_id);
 $noPHP_SELF = true;
 
 /*	Other initialization code */

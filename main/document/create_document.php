@@ -192,7 +192,7 @@ if (!$is_certificate_mode) {
 } else {
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 }
-if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder(
+if (!($is_allowed_to_edit || GroupManager::groupMemberWithUploadRights() || is_my_shared_folder(
     $_user['user_id'],
     Security::remove_XSS($dir),
     api_get_session_id()

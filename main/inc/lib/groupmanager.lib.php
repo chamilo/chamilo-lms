@@ -2460,4 +2460,9 @@ class GroupManager
         $form->addElement('button', 'submit', get_lang('Search'));
         return $form->toHtml();
     }
+
+    public static function groupMemberWithUploadRights()
+    {
+        return isset($_SESSION['group_member_with_upload_rights']) ? $_SESSION['group_member_with_upload_rights'] : false;
+    }
 }

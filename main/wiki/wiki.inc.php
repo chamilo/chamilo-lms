@@ -230,7 +230,8 @@ function make_wiki_link_clickable($input) {
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
 * @return language string saying that the changes are stored
 **/
-function save_wiki() {
+function save_wiki()
+{
     global $charset, $tbl_wiki, $_course, $tbl_wiki_conf;
 
     // NOTE: visibility, visibility_disc and ratinglock_disc changes are not made here, but through the interce buttons
@@ -260,7 +261,8 @@ function save_wiki() {
     if(!empty($_POST['task'])) {
         $_clean['task']= Database::escape_string($_POST['task']);
     }
-    if(!empty($_POST['feedback1']) || !empty($_POST['feedback2']) || !empty($_POST['feedback3'])) {
+
+    if (!empty($_POST['feedback1']) || !empty($_POST['feedback2']) || !empty($_POST['feedback3'])) {
         $_clean['feedback1']=Database::escape_string($_POST['feedback1']);
         $_clean['feedback2']=Database::escape_string($_POST['feedback2']);
         $_clean['feedback3']=Database::escape_string($_POST['feedback3']);
@@ -269,13 +271,13 @@ function save_wiki() {
         $_clean['fprogress3']=Database::escape_string($_POST['fprogress3']);
     }
 
-    if(Security::remove_XSS($_POST['initstartdate']==1)) {
+    if (Security::remove_XSS($_POST['initstartdate']==1)) {
         $_clean['startdate_assig']=Database::escape_string(get_date_from_select('startdate_assig'));
     } else {
         $_clean['startdate_assig']=Database::escape_string($_POST['startdate_assig']);
     }
 
-    if(Security::remove_XSS($_POST['initenddate']==1)) {
+    if (Security::remove_XSS($_POST['initenddate']==1)) {
         $_clean['enddate_assig']=Database::escape_string(get_date_from_select('enddate_assig'));
     } else {
         $_clean['enddate_assig']=Database::escape_string($_POST['enddate_assig']);
@@ -283,7 +285,7 @@ function save_wiki() {
 
     $_clean['delayedsubmit']=Database::escape_string($_POST['delayedsubmit']);
 
-    if(!empty($_POST['max_text']) || !empty($_POST['max_version'])) {
+    if (!empty($_POST['max_text']) || !empty($_POST['max_version'])) {
         $_clean['max_text']	=Database::escape_string($_POST['max_text']);
         $_clean['max_version']=Database::escape_string($_POST['max_version']);
     }
@@ -349,17 +351,16 @@ function restore_wikipage($r_page_id, $r_reflink, $r_title, $r_content, $r_group
 **/
 function delete_wiki() {
     global $tbl_wiki, $tbl_wiki_conf, $tbl_wiki_discuss, $tbl_wiki_mailcue, $groupfilter, $condition_session;
-
     $course_id = api_get_course_int_id();
 
     //identify the first id by group = identify wiki
     $sql = 'SELECT * FROM '.$tbl_wiki.'  WHERE  c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' ORDER BY id DESC';
     $allpages = Database::query($sql);
-    while ($row=Database::fetch_array($allpages)) {
+    while ($row = Database::fetch_array($allpages)) {
         $id 		= $row['id'];
         $group_id	= $row['group_id'];
         $session_id = $row['session_id'];
-        $page_id	= $row['page_id'];
+        //$page_id	= $row['page_id'];
         Database::query('DELETE FROM '.$tbl_wiki_conf.' 	WHERE page_id="'.$id.'" AND c_id = '.$course_id);
         Database::query('DELETE FROM '.$tbl_wiki_discuss.'	WHERE publication_id="'.$id.'" AND c_id = '.$course_id);
     }
@@ -1230,7 +1231,7 @@ function check_notify_page($reflink) {
     $result=Database::query($sql);
     $row=Database::fetch_array($result);
 
-    $id=$row['id'];
+    $id = $row['id'];
 
     $sql='SELECT * FROM '.$tbl_wiki_mailcue.' WHERE c_id = '.$course_id.' AND id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="P"';
     $result=Database::query($sql);
@@ -2019,3 +2020,68 @@ function get_wiki_data($id)
     return $data;
 }
 
+/**
+ * Get wiki information
+ * @param   string     wiki id
+ * @param int $courseId
+ * @return  array   wiki data
+ */
+function getPageByTitle($title, $courseId = null)
+{
+    global $tbl_wiki;
+
+    if (empty($courseId)) {
+        $courseId = api_get_course_int_id();
+    } else {
+        $courseId = intval($courseId);
+    }
+
+    if (empty($title) || empty($courseId)) {
+        return array();
+    }
+
+    $title = Database::escape_string($title);
+    $sql = "SELECT * FROM $tbl_wiki  WHERE c_id = $courseId AND reflink = '$title'";
+    $result = Database::query($sql);
+    $data = array();
+    if (Database::num_rows($result)) {
+        $data = Database::fetch_array($result,'ASSOC');
+    }
+    return $data;
+}
+
+/**
+ * @param string $title
+ * @param int $courseId
+ * @param string
+ * @param string
+ * @return bool
+ */
+function deletePage($title, $courseId, $groupfilter = null, $condition_session = null)
+{
+    global $tbl_wiki, $tbl_wiki_mailcue, $tbl_wiki_discuss, $tbl_wiki_conf;
+
+    $pageInfo = getPageByTitle($title, $courseId);
+    if (!empty($pageInfo)) {
+        $pageId = $pageInfo['id'];
+        /*
+        $sql = 'DELETE '.$tbl_wiki_discuss.'
+             FROM '.$tbl_wiki.', '.$tbl_wiki_discuss.'
+             WHERE '.$tbl_wiki.'.c_id = '.$course_id.' AND '.$tbl_wiki_discuss.'.c_id = '.$course_id.' AND  '.$tbl_wiki.'.reflink="'.Database::escape_string($page).'" AND '.$tbl_wiki.'.'.$groupfilter.' AND '.$tbl_wiki.'.session_id='.$session_id.' AND '.$tbl_wiki_discuss.'.publication_id='.$tbl_wiki.'.id';
+        Database::query($sql);*/
+        $sql = "DELETE FROM $tbl_wiki_conf WHERE c_id = $courseId AND page_id = $pageId";
+        Database::query($sql);
+
+        $sql = 'DELETE FROM '.$tbl_wiki_discuss.' WHERE c_id = '.$courseId.' AND publication_id = '.$pageId;
+        Database::query($sql);
+
+        $sql='DELETE FROM  '.$tbl_wiki_mailcue.' WHERE c_id = '.$courseId.' AND id = '.$pageId.' AND '.$groupfilter.$condition_session.'';
+        Database::query($sql);
+
+        $sql = 'DELETE FROM '.$tbl_wiki.' WHERE c_id = '.$courseId.' AND id = '.$pageId.' AND '.$groupfilter.$condition_session.'';
+        Database::query($sql);
+        check_emailcue(0, 'E');
+        return true;
+    }
+    return false;
+}

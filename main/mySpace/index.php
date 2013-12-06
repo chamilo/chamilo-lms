@@ -162,7 +162,7 @@ echo '<a href="javascript: void(0);" onclick="javascript: window.print()">'.
       Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</span>';
 
-if (!empty($session_id) && !in_array($display, array('accessoverview','progressoverview'))) {
+if (!empty($session_id) && !in_array($display, array('accessoverview','lpprogressoverview'))) {
 	echo '<a href="index.php">'.Display::return_icon('back.png', get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
     if (!api_is_platform_admin()) {
         if (api_get_setting('add_users_by_coach') == 'true') {
@@ -186,7 +186,7 @@ if (!empty($session_id) && !in_array($display, array('accessoverview','progresso
 
 // Actions menu
 $nb_menu_items = count($menu_items);
-if (empty($session_id) || in_array($display, array('accessoverview','progressoverview'))) {
+if (empty($session_id) || in_array($display, array('accessoverview','lpprogressoverview'))) {
 	if ($nb_menu_items > 1) {
     	foreach ($menu_items as $key => $item) {
 	    	echo $item;
@@ -207,7 +207,7 @@ if (empty($session_id) || in_array($display, array('accessoverview','progressove
     $courseListUrl = api_get_self();
 
     #show filter by session
-    if ($is_platform_admin && $view == 'admin' && in_array($display, array('accessoverview','progressoverview'))) {
+    if ($is_platform_admin && $view == 'admin' && in_array($display, array('accessoverview','lpprogressoverview'))) {
         echo '<div class="pull-right">';
         echo $sessionFilter->return_form();
         echo '</div>';
@@ -634,7 +634,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 	}
 	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=sessionoverview">'.get_lang('DisplaySessionOverview').'</a>';
 	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=accessoverview">'.get_lang('DisplayAccessOverview').'</a>';
-    echo ' | <a href="'.api_get_self().'?view=admin&amp;display=progressoverview">'.get_lang('DisplayProgressOverview').'</a>';
+    echo ' | <a href="'.api_get_self().'?view=admin&amp;display=lpprogressoverview">'.get_lang('Displaylpprogressoverview').'</a>';
 	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=courseoverview">'.get_lang('DisplayCourseOverview').'</a>';
     echo ' | <a href="'.api_get_path(WEB_CODE_PATH).'tracking/question_course_report.php?view=admin">'.get_lang('LPQuestionListResults').'</a>';
     echo ' | <a href="'.api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin">'.get_lang('LPExerciseResultsBySession').'</a>';
@@ -651,9 +651,9 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         } else {
             Display::display_warning_message(get_lang('ChooseSession'));
         }
-    } else if($display == 'progressoverview') {
+    } else if($display == 'lpprogressoverview') {
         if (!empty($_GET['session_id'])) {
-            echo MySpace::display_tracking_progress_overview($_GET['session_id']);
+            echo MySpace::display_tracking_lp_progress_overview($_GET['session_id']);
         } else {
             Display::display_warning_message(get_lang('ChooseSession'));
         }

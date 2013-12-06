@@ -207,7 +207,7 @@ $form->addRule('phone', get_lang('EmailWrong'), 'email');*/
 
 //    PICTURE
 if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
-    $form->addElement('file', 'picture', ($user_data['picture_uri'] != '' ? get_lang('UpdateImage') : get_lang('AddImage')));
+    $form->addElement('file', 'picture', ($user_data['picture_uri'] != '' ? get_lang('UpdateImage') : get_lang('AddImage')), array('class' => 'picture-form'));
     $form->add_progress_bar();
     if (!empty($user_data['picture_uri'])) {
         $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));

@@ -538,12 +538,10 @@ class SessionManager
         }
 
         $select .= $where.$order.$limit;
-        error_log($select);
         $result = Database::query($select);
         $formatted_sessions = array();
         if (Database::num_rows($result) > 0) { 
             while ($row = Database::fetch_assoc($result)) {
-                error_log(print_r($row,1));
                 $formatted_sessions[] = $row;
             }
             /*foreach ($lps as $lp) {

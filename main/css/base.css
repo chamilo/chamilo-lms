@@ -2279,6 +2279,9 @@ div.admin_section h4 {
 .profile_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
 .profile_grid_element_1 { width:170px; float:left; text-align:left; margin-bottom:1px; }
 
+#profile .picture-form {
+    width: 350px;
+}
 
 /* pagination grid sortable */
 .sub_header {width:100%}

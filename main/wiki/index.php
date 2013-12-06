@@ -171,7 +171,7 @@ if (isset($_POST['SaveWikiChange']) AND $_POST['title']<>'') {
         //prevent concurrent users and double version
         Display::display_error_message(get_lang("EditedByAnotherUser"));
     } else {
-        $return_message=save_wiki();
+        $return_message = save_wiki();
         Display::display_confirmation_message($return_message, false);
     }
 }
@@ -266,15 +266,13 @@ if (isset($_GET['view']) && $_GET['view']) {
                         $max_edit_time=1200; // 20 minutes
                         $rest_time=$max_edit_time-$time_editing;
 
-                        $userinfo=Database::get_user_info_from_id($last_row['is_editing']);
+                        $userinfo = Database::get_user_info_from_id($last_row['is_editing']);
                         $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
 
-                        $is_being_edited= get_lang('ThisPageisBeginEditedBy').' <a href=../user/userInfo.php?uInfo='.
-                            $userinfo['user_id'].'>'.
+                        $is_being_edited= get_lang('ThisPageisBeginEditedBy').' <a href=../user/userInfo.php?uInfo='.$userinfo['user_id'].'>'.
                             Display::tag('span', api_get_person_name($userinfo['firstname'], $userinfo['lastname'], array('title'=>$username))).
-                            get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
+                            get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes');
                         Display::display_normal_message($is_being_edited, false);
-
                     } else {
                          Display::display_confirmation_message(restore_wikipage($current_row['page_id'], $current_row['reflink'], api_htmlentities($current_row['title']), api_htmlentities($current_row['content']), $current_row['group_id'], $current_row['assignment'], $current_row['progress'], $current_row['version'], $last_row['version'], $current_row['linksto']).': <a href="index.php?cidReq='.$_course['id'].'&action=showpage&amp;title='.api_htmlentities(urlencode($last_row['reflink'])).'&session_id='.$last_row['session_id'].'&group_id='.$last_row['group_id'].'">'.api_htmlentities($last_row['title']).'</a>',false);
                     }
@@ -285,16 +283,15 @@ if (isset($_GET['view']) && $_GET['view']) {
 }
 
 echo '<div style="overflow:hidden">';
-    if ($action=='deletewiki') {
-        if(api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
+
+    if ($action == 'deletewiki') {
+        if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
             if ($_GET['delete'] == 'yes') {
-                $return_message=delete_wiki();
+                $return_message = delete_wiki();
                 Display::display_confirmation_message($return_message);
             }
         }
     }
-
-
     if ($action =='discuss' && $_POST['Submit']) {
         Display::display_confirmation_message(get_lang('CommentAdded'));
     }
@@ -1347,7 +1344,7 @@ if ($action =='delete') {
     if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
         echo '<div id="wikititle">'.get_lang('DeletePageHistory').'</div>';
 
-        if ($page=="index") {
+        if ($page == "index") {
             Display::display_warning_message(get_lang('WarningDeleteMainPage'),false);
         }
 
@@ -1358,20 +1355,10 @@ if ($action =='delete') {
         }
 
         if ($_GET['delete'] == 'yes') {
-            $sql='DELETE '.$tbl_wiki_discuss.' FROM '.$tbl_wiki.', '.$tbl_wiki_discuss.'
-                WHERE '.$tbl_wiki.'.c_id = '.$course_id.' AND '.$tbl_wiki_discuss.'.c_id = '.$course_id.' AND  '.$tbl_wiki.'.reflink="'.Database::escape_string($page).'" AND '.$tbl_wiki.'.'.$groupfilter.' AND '.$tbl_wiki.'.session_id='.$session_id.' AND '.$tbl_wiki_discuss.'.publication_id='.$tbl_wiki.'.id';
-            Database::query($sql);
-
-            $sql='DELETE '.$tbl_wiki_mailcue.' FROM '.$tbl_wiki.', '.$tbl_wiki_mailcue.'
-            WHERE '.$tbl_wiki.'.c_id = '.$course_id.' AND '.$tbl_wiki_mailcue.'.c_id = '.$course_id.' AND  '.$tbl_wiki.'.reflink="'.Database::escape_string($page).'" AND '.$tbl_wiki.'.'.$groupfilter.' AND '.$tbl_wiki.'.session_id='.$session_id.' AND '.$tbl_wiki_mailcue.'.id='.$tbl_wiki.'.id';
-            Database::query($sql);
-
-            $sql='DELETE FROM '.$tbl_wiki.' WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session.'';
-            Database::query($sql);
-
-            check_emailcue(0, 'E');
-
-            Display::display_confirmation_message(get_lang('WikiPageDeleted'));
+            $result = deletePage($page, $course_id, $groupfilter, $condition_session);
+            if ($result) {
+                Display::display_confirmation_message(get_lang('WikiPageDeleted'));
+            }
         }
     } else {
         Display::display_normal_message(get_lang("OnlyAdminDeletePageWiki"));
@@ -2032,7 +2019,7 @@ if ($action =='history' or $_POST['HistoryDifferences']) {
                     Display::tag('span', api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])), array('title'=>$username)).
                     '</a>';
                 } else {
-                    echo get_lang('Anonymous').' ('.api_htmlentities($row[user_ip]).')';
+                    echo get_lang('Anonymous').' ('.api_htmlentities($row['user_ip']).')';
                 }
 
                 echo ' ( '.get_lang('Progress').': '.api_htmlentities($row['progress']).'%, ';

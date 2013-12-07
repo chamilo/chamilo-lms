@@ -90,15 +90,11 @@ class Dropbox_Work
 	 * @todo 	$author was originally a field but this has now been replaced by the first and lastname of the uploader (to prevent anonymous uploads)
 	 * 			As a consequence this parameter can be removed
 	 */
-	function _createNewWork($uploader_id, $title, $description, $author, $filename, $filesize) {
+	function _createNewWork($uploader_id, $title, $description, $author, $filename, $filesize)
+    {
 		global $_user, $dropbox_cnf;
-		// Do some sanity checks
-		settype($uploader_id, 'integer') or die(get_lang('GeneralError').' (code 201)'); //set $uploader_id to correct type
-		//if (! isCourseMember($uploader_id)) die(); //uploader must be coursemember to be able to upload
-			//-->this check is done when submitting data so it isn't checked here
-
 		// Fill in the properties
-		$this->uploader_id = $uploader_id;
+		$this->uploader_id = intval($uploader_id);
 		$this->uploaderName = getUserNameFromId($this->uploader_id);
 		$this->filename = $filename;
 		$this->filesize = $filesize;
@@ -106,11 +102,10 @@ class Dropbox_Work
 		$this->description = $description;
 		$this->author = api_get_person_name($_user['firstName'], $_user['lastName']);
 		$this->last_upload_date = api_get_utc_datetime();
-
 		$course_id = api_get_course_int_id();
 
 		// Check if object exists already. If it does, the old object is used
-		// with updated information (authors, descriptio, upload_date)
+		// with updated information (authors, description, upload_date)
 		$this->isOldWork = false;
 		$sql = "SELECT id, upload_date FROM ".$dropbox_cnf['tbl_file']."
 				WHERE c_id = $course_id AND filename = '".Database::escape_string($this->filename)."'";
@@ -130,7 +125,7 @@ class Dropbox_Work
 					author 				= '".Database::escape_string($this->author)."',
 					last_upload_date 	= '".Database::escape_string($this->last_upload_date)."'
 					WHERE c_id = $course_id AND id='".Database::escape_string($this->id)."'";
-			$result = Database::query($sql);
+			Database::query($sql);
 		} else {
 			$this->upload_date = $this->last_upload_date;
 			$sql = "INSERT INTO ".$dropbox_cnf['tbl_file']." (c_id, uploader_id, filename, filesize, title, description, author, upload_date, last_upload_date, session_id)
@@ -146,23 +141,30 @@ class Dropbox_Work
 						, ".intval($_SESSION['id_session'])."
 						)";
 
-        	$result = Database::query($sql);
+        	Database::query($sql);
 			$this->id = Database::insert_id(); // Get automatically inserted id
 		}
 
-		// Insert entries into person table
-		$sql = "INSERT INTO ".$dropbox_cnf['tbl_person']." (c_id, file_id, user_id)
-				VALUES ($course_id,
-						'".Database::escape_string($this->id)."'
-						, '".Database::escape_string($this->uploader_id)."'
-						)";
-        $result = Database::query($sql);	//if work already exists no error is generated
+        $sql = "SELECT count(file_id) as count FROM ".$dropbox_cnf['tbl_person']."
+				WHERE c_id = $course_id AND file_id = '".Database::escape_string($this->id)."' AND user_id = ".$this->uploader_id;
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+        if ($row['count'] == 0) {
+
+            // Insert entries into person table
+            $sql = "INSERT INTO ".$dropbox_cnf['tbl_person']." (c_id, file_id, user_id)
+                    VALUES ($course_id,
+                            '".Database::escape_string($this->id)."'
+                            , '".Database::escape_string($this->uploader_id)."'
+                            )";
+            Database::query($sql);
+        }
 	}
 
 	/**
 	 * private function creating existing object by retreiving info from db
 	 *
-	 * @param unknown_type $id
+	 * @param int $id
 	 */
 	function _createExistingWork($id)
     {
@@ -170,7 +172,6 @@ class Dropbox_Work
 		global $_user, $dropbox_cnf;
 
 		// Do some sanity checks
-		settype($id, 'integer') or die(get_lang('GeneralError').' (code 205)'); // Set $id to correct type
 		$id	= intval($id);
 
 		// Get the data from DB
@@ -577,8 +578,9 @@ class Dropbox_Person
 			   break;
 			}
 		}
+
 		if (!$found) {
-			if(!$this->deleteReceivedWorkFolder($id)) {
+			if (!$this->deleteReceivedWorkFolder($id)) {
 				die(get_lang('GeneralError').' (code 216)');
 			}
 		}

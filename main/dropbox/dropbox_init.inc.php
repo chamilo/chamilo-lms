@@ -275,5 +275,3 @@ if ($origin != 'learnpath') {
 	echo '<link rel="stylesheet" type="text/css" href="', api_get_path(WEB_CODE_PATH), 'css/default.css">';
 	echo $javascript;
 }
-
-// api_display_tool_title($nameTools);

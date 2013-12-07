@@ -56,26 +56,26 @@ class Dropbox_Work
     public $isOldWork;
     public $feedback_date, $feedback;
 
-	/**
-	 * Constructor calls private functions to create a new work or retreive an existing work from DB
-	 * depending on the number of parameters
-	 *
-	 * @param unknown_type $arg1
-	 * @param unknown_type $arg2
-	 * @param unknown_type $arg3
-	 * @param unknown_type $arg4
-	 * @param unknown_type $arg5
-	 * @param unknown_type $arg6
-	 * @return Dropbox_Work
-	 */
-	function Dropbox_Work($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null)
+    /**
+     * Constructor calls private functions to create a new work or retreive an existing work from DB
+     * depending on the number of parameters
+     *
+     * @param unknown_type $arg1
+     * @param unknown_type $arg2
+     * @param unknown_type $arg3
+     * @param unknown_type $arg4
+     * @param unknown_type $arg5
+     * @param unknown_type $arg6
+     * @return Dropbox_Work
+     */
+    function Dropbox_Work($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null)
     {
-		if (func_num_args() > 1)  {
-		    $this->_createNewWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6);
-		}  else  {
-			$this->_createExistingWork($arg1);
-		}
-	}
+        if (func_num_args() > 1) {
+            $this->_createNewWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6);
+        }  else  {
+            $this->_createExistingWork($arg1);
+        }
+    }
 
 	/**
 	 * private function creating a new work object
@@ -164,9 +164,9 @@ class Dropbox_Work
 	 *
 	 * @param unknown_type $id
 	 */
-	function _createExistingWork($id) {
+	function _createExistingWork($id)
+    {
 	    $course_id = api_get_course_int_id();
-
 		global $_user, $dropbox_cnf;
 
 		// Do some sanity checks
@@ -443,7 +443,8 @@ class Dropbox_Person
 	 * @param unknown_type $b
 	 * @return -1, 0 or 1 dependent of the result of the comparison.
 	 */
-	function _cmpWork($a, $b) {
+	function _cmpWork($a, $b)
+    {
 		$sort = $this->_orderBy;
 		$aval = $a->$sort;
 		$bval = $b->$sort;
@@ -466,7 +467,8 @@ class Dropbox_Person
 	 *
 	 * @param unknown_type $sort
 	 */
-	function orderSentWork($sort) {
+	function orderSentWork($sort)
+    {
 		switch($sort) {
 			case 'lastDate':
 				$this->_orderBy = 'last_upload_date';
@@ -561,7 +563,8 @@ class Dropbox_Person
 	 *
 	 * @param integer $id
 	 */
-	function deleteReceivedWork($id) {
+	function deleteReceivedWork($id)
+    {
 	    $course_id = api_get_course_int_id();
 		global $dropbox_cnf;
 		$id = intval($id);
@@ -588,7 +591,8 @@ class Dropbox_Person
 	/**
 	 * Deletes all the sent dropbox files of this person
 	 */
-	function deleteAllSentWork() {
+	function deleteAllSentWork()
+    {
 	    $course_id = api_get_course_int_id();
 		global $dropbox_cnf;
 		//delete entries in person table concerning sent works
@@ -604,7 +608,8 @@ class Dropbox_Person
 	 *
 	 * @param unknown_type $id
 	 */
-	function deleteSentWork($id) {
+	function deleteSentWork($id)
+    {
 	    $course_id = api_get_course_int_id();
 
 		global $dropbox_cnf;
@@ -636,7 +641,8 @@ class Dropbox_Person
 	 * @param unknown_type $id
 	 * @param unknown_type $text
 	 */
-	function updateFeedback($id, $text) {
+	function updateFeedback($id, $text)
+    {
 	    $course_id = api_get_course_int_id();
 
 		global $_course, $dropbox_cnf;
@@ -678,11 +684,12 @@ class Dropbox_Person
 	 * @param string $type
 	 * @param string $value
 	 */
-	function filter_received_work($type, $value) {
+	function filter_received_work($type, $value)
+    {
 		global $dropbox_cnf;
 
     	$new_received_work = array();
-		foreach ($this->receivedWork as $index => $work) {
+		foreach ($this->receivedWork as $work) {
 			switch ($type) {
 				case 'uploader_id':
 					if ($work->uploader_id == $value ||

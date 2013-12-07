@@ -140,14 +140,14 @@ function delete_category($action, $id, $user_id = null) {
 
 	// step 1: delete the category
 	$sql = "DELETE FROM ".$dropbox_cnf['tbl_category']." WHERE c_id = $course_id AND cat_id='".intval($id)."' AND $sentreceived='1'";
-	$result = Database::query($sql);
+	Database::query($sql);
 
 	// step 2: delete all the documents in this category
 	$sql = "SELECT * FROM ".$entries_table." WHERE c_id = $course_id AND cat_id='".intval($id)."'";
 	$result = Database::query($sql);
 
 	while($row = Database::fetch_array($result)) {
-		$dropboxfile = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
+		$dropboxfile = new Dropbox_Person($user_id, $is_courseAdmin, $is_courseTutor);
 		if ($action == 'deletereceivedcategory') {
 			$dropboxfile->deleteReceivedWork($row[$id_field]);
 		}

@@ -1702,6 +1702,50 @@ class SessionManager
 		return $affected_rows;
 	}
 
+    /**
+     * @param int $userId
+     * @param int $sessionId
+     * @return array
+     */
+    public static function getSessionFollowedByDrh($userId, $sessionId)
+    {
+        $tbl_session 			= 	Database::get_main_table(TABLE_MAIN_SESSION);
+        $tbl_session_rel_user 	= 	Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tbl_session_rel_access_url =   Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+
+        $userId = intval($userId);
+        $sessionId = intval($sessionId);
+
+        $select = " SELECT * ";
+        if (api_is_multiple_url_enabled()) {
+            $sql = " $select FROM $tbl_session s
+                    INNER JOIN $tbl_session_rel_user sru ON (sru.id_session = s.id)
+                    LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
+                    WHERE
+                        sru.id_user = '$userId' AND
+                        sru.id_session = '$sessionId' AND
+                        sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' AND
+                        access_url_id = ".api_get_current_access_url_id()."
+                        ";
+        } else {
+            $sql = "$select FROM $tbl_session s
+                     INNER JOIN $tbl_session_rel_user sru
+                     ON
+                        sru.id_session = s.id AND
+                        sru.id_user = '$userId' AND
+                        sru.id_session = '$sessionId' AND
+                        sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."'
+                        ";
+        }
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+            $row = Database::fetch_array($result, 'ASSOC');
+            $row['course_list'] = self::get_course_list_by_session_id($sessionId);
+            return $row;
+        }
+        return array();
+    }
+
 	/**
 	 * Get sessions followed by human resources manager
 	 * @param int		Human resources manager or Session admin id

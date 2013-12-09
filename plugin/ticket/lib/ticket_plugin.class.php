@@ -15,7 +15,7 @@ class TicketPlugin extends Plugin
     }
 
     protected function __construct() {
-        parent::__construct('1.0', 'Kenny Rodas Chavez', array('tool_enable' => 'boolean', 'host' =>'text', 'salt' => 'text'));
+        parent::__construct('1.0', 'Kenny Rodas Chavez', array('tool_enable' => 'boolean'));
     }
 
     function install() {

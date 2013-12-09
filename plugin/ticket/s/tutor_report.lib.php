@@ -131,7 +131,7 @@ function mostrarResultados($course_info,$numero_semanas, $pagina){
 	$html .= '<tr>
 			<th ></th>';
 	for ($i=(7*$pagina-6); $i <= $pagina*7;$i++){
-		$html .= '<th colspan="2">Semana '.$i.'<a href="asignar_tareas.php?id='.$ids[$i].'" class="ajax">'.Display::return_icon('edit.png', get_lang('Edit'),  array('width'=>'16','height'=>'16'), 22).'</a></th>';
+		$html .= '<th colspan="2">Semana '.$i.'<a href="assign_tickets.php?id='.$ids[$i].'" class="ajax">'.Display::return_icon('edit.png', get_lang('Edit'),  array('width'=>'16','height'=>'16'), 22).'</a></th>';
 	}
 	$html .=  '</tr>';
 	$html .= $fila;

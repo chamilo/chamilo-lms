@@ -51,7 +51,7 @@ function save() {
 		beforeSend: function(objeto) {
 		$("div#confirmacion").html("<img src=\'../../../main/inc/lib/javascript/indicator.gif\' />"); },
 		type: "POST",
-		url: "actualizar_reporte.php",
+		url: "update_report.php",
 		data: "work_id="+work_id+"&forum_id="+forum_id+"&rs_id="+rs_id,
 		success: function(datos) {
 			$("div#confirmacion").html(datos);

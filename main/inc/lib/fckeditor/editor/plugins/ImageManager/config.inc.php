@@ -36,6 +36,8 @@ api_block_anonymous_users();
 // Initialization of the repositories.
 require_once api_get_path(LIBRARY_PATH).'fckeditor/repository.php';
 
+$userId = api_get_user_id();
+
 // Choosing the repository to be used.
 if (api_is_in_course()) {
     if (!api_is_in_group()) {
@@ -46,13 +48,13 @@ if (api_is_in_course()) {
             $IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/';
         } else {
             // 1.2. Student
-            $current_session_id = api_get_session_id();
-            if ($current_session_id == 0) {
-                $IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
-                $IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
+            $sessionId = api_get_session_id();
+            if ($sessionId == 0) {
+                $IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.$userId.'/';
+                $IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.$userId.'/';
             } else {
-                $IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/document/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().'/';
-                $IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().'/';
+                $IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/document/shared_folder_session_'.$sessionId.'/sf_user_'.$userId.'/';
+                $IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/shared_folder_session_'.$sessionId.'/sf_user_'.$userId.'/';
             }
         }
 	} else {
@@ -67,9 +69,9 @@ if (api_is_in_course()) {
         $IMConfig['base_url'] = $_configuration['root_web'].'home/default_platform_document/';
     } else {
         // 4. The user is outside courses.
-        $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'system');
+        $my_path = UserManager::get_user_picture_path_by_id($userId, 'system');
         $IMConfig['base_dir'] = $my_path['dir'].'my_files/';
-        $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'web');
+        $my_path = UserManager::get_user_picture_path_by_id($userId, 'web');
         $IMConfig['base_url'] = $my_path['dir'].'my_files/';
     }
 }

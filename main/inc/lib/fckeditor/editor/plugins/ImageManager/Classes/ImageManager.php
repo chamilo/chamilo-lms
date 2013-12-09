@@ -576,24 +576,15 @@ class ImageManager
 				$chamiloFile = $file['name'];
 				$chamiloFileSize = $file['size'];
 				if(!empty($group_properties['directory'])) {
-					$chamiloFolder=$group_properties['directory'].$chamiloFolder;
+					$chamiloFolder = $group_properties['directory'].$chamiloFolder;
 				}
 
 				$doc_id = add_document($_course, $document_path,'file', $chamiloFileSize , $chamiloFile);
-				$current_session_id = api_get_session_id();
-				api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(),$to_group_id,null,null,null,$current_session_id);//get Dokeos
+				api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(),$to_group_id,null,null,null,api_get_session_id());
 			}
-
-			/*
-			if (!(api_is_platform_admin() || api_is_course_admin())) {
-				//setting invisible by default for the students
-				api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id());
-			}
-			*/
 		   $dimensionsIndex = isset($_REQUEST['uploadSize']) ? $_REQUEST['uploadSize'] : 0;
 		   // If maximum size is specified, constrain image to it.
-           if ($this->config['maxWidth'][$dimensionsIndex] > 0 && $this->config['maxHeight'][$dimensionsIndex] > 0)
-           {
+           if ($this->config['maxWidth'][$dimensionsIndex] > 0 && $this->config['maxHeight'][$dimensionsIndex] > 0) {
 			   $img = Image_Transform::factory(IMAGE_CLASS);
 			   $img->load($path . $result);
 
@@ -609,7 +600,7 @@ class ImageManager
            }
 	   }
 
-		//delete tmp files.
+		// Delete tmp files.
 		Files::delFile($file['tmp_name']);
 		return false;
 	}
@@ -782,13 +773,7 @@ class ImageManager
 			{
 				Return false;
 			}
-
 		}
-		/*
-		}
-		else
-			Return false;
-		*/
 	}
 
 	/**
@@ -820,9 +805,8 @@ class ImageManager
 					$base_dir = substr($path, 0, strpos($path,'/document/')+9); //
 					$new_dir  = substr($fullpath, strlen($base_dir),-1); //
 					$created_dir = create_unexisting_directory($_course, api_get_user_id(), api_get_session_id(), 0,0, $base_dir, $new_dir,$newDir);
-					$doc_id = DocumentManager::get_document_id($_course, $new_dir );
-					$current_session_id = api_get_session_id();
-					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(),null,null,null,null,$current_session_id);
+					$doc_id = DocumentManager::get_document_id($_course, $new_dir);
+					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(),null,null,null,null, api_get_session_id());
 				} else {
 				 	return Files::createFolder($fullpath);
 				}
@@ -891,5 +875,3 @@ class ImageManager
 		return $errors;
 	}
 }
-
-?>

@@ -1,13 +1,10 @@
 <?php
-/**
- * processing the uploaded files
- * @author Logan Cai (cailongqun [at] yahoo [dot] com [dot] cn)
- * @link www.phpletter.com
- * @since 22/May/2007
- *
- */
+/* For licensing terms, see /license.txt */
+
+require_once '../../../../../../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fckeditor/editor/plugins/ajaxfilemanager/inc/config.php';
+// @todo sleep??
 sleep(3);
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php";
 echo "{";
 $error = "";
 $info = "";

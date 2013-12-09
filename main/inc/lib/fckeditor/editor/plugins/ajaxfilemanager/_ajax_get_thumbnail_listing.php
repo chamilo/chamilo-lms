@@ -1,5 +1,10 @@
-<div id="content">
-    <?php
+<?php
+/* For licensing terms, see /license.txt */
+
+require_once '../../../../../../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fckeditor/editor/plugins/ajaxfilemanager/inc/config.php';
+
+echo '<div id="content">';
     $count = 1;
     $thumbnailBaseUrl = CONFIG_URL_IMG_THUMBNAIL;
 

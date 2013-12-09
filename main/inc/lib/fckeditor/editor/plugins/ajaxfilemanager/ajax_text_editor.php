@@ -1,44 +1,47 @@
 <?php
-		/**
-	 * Ajax image editor platform
-	 * @author Logan Cai (cailongqun [at] yahoo [dot] com [dot] cn)
-	 * @link www.phpletter.com
-	 * @since 22/May/2007
-	 *
-	 */
-	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");
-	if(CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_EDITABLE)
-	{
-		die(SYS_DISABLED);
-	}	
-		//$session->gc(); //disabled for Chamilo
-		$_GET['path'] = empty($_GET['path'])?CONFIG_SYS_ROOT_PATH . "ajax_image_editor_demo.jpg":$_GET['path'];
-		if(!empty($_GET['path']) && file_exists($_GET['path']) && is_file($_GET['path']) && isUnderRoot($_GET['path']))
-		{
-				$path = $_GET['path'];
-		}else 
-		{
-			die(TXT_FILE_NOT_FOUND);
-		}
-		if(file_exists(DIR_AJAX_EDIT_AREA . "reg_syntax" . DIRECTORY_SEPARATOR . getFileExt($path) . ".js"))
-		{
-			$syntax = getFileExt($path);			
-		}else 
-		{
-			switch (getFileExt($path))
-			{
-				case 'htm':
-					$syntax = 'html';
-					break;
-				default:
-					$syntax = 'basic';
-			}
-		}
-		if(array_search(getFileExt($path), getValidTextEditorExts())=== false)
-		{
-			die(TXT_DISALLOWED_EXT);	
-		}
-	?>
+/* For licensing terms, see /license.txt */
+/**
+* Ajax image editor platform
+* @author Logan Cai (cailongqun [at] yahoo [dot] com [dot] cn)
+* @link www.phpletter.com
+* @since 22/May/2007
+*
+*/
+require_once '../../../../../../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fckeditor/editor/plugins/ajaxfilemanager/inc/config.php';
+
+if(CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_EDITABLE) {
+    die(SYS_DISABLED);
+}
+
+//$session->gc(); //disabled for Chamilo
+$_GET['path'] = empty($_GET['path'])?CONFIG_SYS_ROOT_PATH . "ajax_image_editor_demo.jpg":$_GET['path'];
+if(!empty($_GET['path']) && file_exists($_GET['path']) && is_file($_GET['path']) && isUnderRoot($_GET['path']))
+{
+        $path = $_GET['path'];
+}else
+{
+    die(TXT_FILE_NOT_FOUND);
+}
+if(file_exists(DIR_AJAX_EDIT_AREA . "reg_syntax" . DIRECTORY_SEPARATOR . getFileExt($path) . ".js"))
+{
+    $syntax = getFileExt($path);
+}else
+{
+    switch (getFileExt($path))
+    {
+        case 'htm':
+            $syntax = 'html';
+            break;
+        default:
+            $syntax = 'basic';
+    }
+}
+if(array_search(getFileExt($path), getValidTextEditorExts())=== false)
+{
+    die(TXT_DISALLOWED_EXT);
+}
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -54,36 +57,36 @@
 -->
 <script type="text/javascript" src="jscripts/edit_area/edit_area_full.js"></script>
 <script type="text/javascript">
-				var warningExtNotSelected = '<?php echo TXT_EXT_NOT_SELECTED; ?>';
-				var urlGetFolderList = '<?php echo appendQueryString(CONFIG_URL_GET_FOLDER_LIST, makeQueryString(array('path'))); ?>';
-				var warningInvalidName = '<?php echo TXT_SAVE_AS_ERR_NAME_INVALID; ?>';
-				var waringFolderNotSelected = '<?php echo TXT_DEST_FOLDER_NOT_SELECTED; ?>';
-				var currentFolder = '<?php echo dirname($path); ?>';
-				var currentName = '<?php echo basename($path); ?>';
+        var warningExtNotSelected = '<?php echo TXT_EXT_NOT_SELECTED; ?>';
+        var urlGetFolderList = '<?php echo appendQueryString(CONFIG_URL_GET_FOLDER_LIST, makeQueryString(array('path'))); ?>';
+        var warningInvalidName = '<?php echo TXT_SAVE_AS_ERR_NAME_INVALID; ?>';
+        var waringFolderNotSelected = '<?php echo TXT_DEST_FOLDER_NOT_SELECTED; ?>';
+        var currentFolder = '<?php echo dirname($path); ?>';
+        var currentName = '<?php echo basename($path); ?>';
 
-		jQuery(document).ready(
-		function()
-		{
-				editAreaLoader.init({				
-				id: "content"	// id of the textarea to transform		
-				,start_highlight: false	// if start with highlight
-				,allow_resize: "both"
-				,gecko_spellcheck:true
-				,allow_toggle: true
-				,toolbar:"search, go_to_line, fullscreen, |, undo, redo, |, select_font,|, highlight, reset_highlight, |, save, save_as"
-				,save_callback:"save"
-				,save_as_callback:"save_as"
-				,language: "<?php echo (file_exists(DIR_AJAX_EDIT_AREA . 'langs' . DIRECTORY_SEPARATOR .CONFIG_LANG_INDEX . ".js")?CONFIG_LANG_INDEX:'en'); ?>"
-				,syntax: "<?php echo $syntax; ?>"	
-			});				
-				jQuery('#windowSaveAs').jqm();		
-				jQuery('#windowProcessing').jqm({modal:true});				
-		}
-	);		
+jQuery(document).ready(
+function()
+{
+        editAreaLoader.init({
+        id: "content"	// id of the textarea to transform
+        ,start_highlight: false	// if start with highlight
+        ,allow_resize: "both"
+        ,gecko_spellcheck:true
+        ,allow_toggle: true
+        ,toolbar:"search, go_to_line, fullscreen, |, undo, redo, |, select_font,|, highlight, reset_highlight, |, save, save_as"
+        ,save_callback:"save"
+        ,save_as_callback:"save_as"
+        ,language: "<?php echo (file_exists(DIR_AJAX_EDIT_AREA . 'langs' . DIRECTORY_SEPARATOR .CONFIG_LANG_INDEX . ".js")?CONFIG_LANG_INDEX:'en'); ?>"
+        ,syntax: "<?php echo $syntax; ?>"
+    });
+        jQuery('#windowSaveAs').jqm();
+        jQuery('#windowProcessing').jqm({modal:true});
+}
+);
 
-		
 
-			
+
+
 </script>
 
 <link href="theme/<?php echo CONFIG_THEME_NAME; ?>/css/ajaxtexteditor.css" type="text/css" rel="stylesheet" />
@@ -98,10 +101,10 @@
 <div id="windowProcessing" class="jqmWindow" style="display:none">
 	<form name="frmProcessing" id="frmProcessing" method="post" action="<?php echo appendQueryString(CONFIG_URL_SAVE_TEXT, makeQueryString(array('path')));?>">
 		<input type="hidden" name="folder" id="folder" value="<?php echo dirname($path); ?>" />
-		<input type="hidden" name="name" id="name" value="<?php echo basename($path); ?>" />	
+		<input type="hidden" name="name" id="name" value="<?php echo basename($path); ?>" />
 		<input type="hidden" name="save_as_request" id="save_as_request" value="0" />
-		<div style="display:none"><textarea name="text" id="text"></textarea></div> 
-	</form> 
+		<div style="display:none"><textarea name="text" id="text"></textarea></div>
+	</form>
 	<a href="#" class="jqmClose" id="windowSaveClose"><?php echo IMG_BTN_CANCEL; ?></a>
 	<p><img src="theme/<?php echo CONFIG_THEME_NAME; ?>/images/loading.gif" /></p>
 </div>
@@ -139,7 +142,7 @@
             </th>
             <td>
             	<select class="input" name="save_to" id="save_to">
-              	
+
               </select>
             </td>
           </tr>

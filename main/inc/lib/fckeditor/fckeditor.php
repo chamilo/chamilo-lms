@@ -162,12 +162,11 @@ class FCKeditor
      *
      * @return string
      */
-    public function CreateHtml() {
+    public function CreateHtml()
+    {
         // Adaptation for the Chamilo LMS
-
 		//@todo why the BasePath is relative ? we should use this constant WEB_PATH
         $this->BasePath = api_get_path(REL_PATH).'main/inc/lib/fckeditor/';
-        //$this->BasePath = api_get_path(WEB_PATH).'main/inc/lib/fckeditor/';
 
         $config = $this->get_custom_configuration();
         $this->read_configuration($config);
@@ -463,7 +462,14 @@ class FCKeditor
      * This method returns default configuration for document repository that is to be used by the editor.
      * @return array
      */
-    private function & get_repository_configuration() {
+    private function & get_repository_configuration()
+    {
+        // Disabling access for anonymous users.
+        $isAnonymous = api_is_anonymous();
+
+        if ($isAnonymous) {
+            return array();
+        }
 
         // Preliminary calculations for assembling required paths.
         $base_path = $this->BasePath;
@@ -479,6 +485,7 @@ class FCKeditor
         $script_path = api_get_path(WEB_PATH).$script_path;
 
         $use_advanced_filemanager = api_get_setting('advanced_filemanager') == 'true';
+
         // Let javascripts "know" which file manager has been chosen.
         $config['AdvancedFileManager'] = $use_advanced_filemanager;
 
@@ -493,15 +500,11 @@ class FCKeditor
                 } else {
                     // 1.2. Student
                     $current_session_id = api_get_session_id();
-                    if($current_session_id==0)
-                    {
-
+                    if($current_session_id==0) {
                         $config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
                         $config['CreateDocumentDir'] = $relative_path_prefix.'courses/'.api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
                         $config['BaseHref'] = $script_path;
-                    }
-                    else
-                    {
+                    } else {
                         $config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document//shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().'/';
                         $config['CreateDocumentDir'] = $relative_path_prefix.'courses/'.api_get_course_path().'/document/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().'/';
                         $config['BaseHref'] = $script_path;

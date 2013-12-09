@@ -35,14 +35,12 @@ $imageInfo = $editor->processImage($imageRelative);
 <script type="text/javascript" src="assets/wz_dragdrop.js"></script>
 <script type="text/javascript" src="assets/EditorContent.js"></script>
 <script type="text/javascript" src="assets/editorFrame.js"></script>
-
 <style>
-
-	/* for centering the image vertically in IE */
-	html, body
-	{
-		height: 100%;
-	}
+/* for centering the image vertically in IE */
+html, body
+{
+    height: 100%;
+}
 
 </style>
 

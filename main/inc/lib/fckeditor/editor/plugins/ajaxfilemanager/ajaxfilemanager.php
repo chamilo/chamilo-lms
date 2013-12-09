@@ -1,4 +1,6 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
 * file manager platform
 * @author Logan Cai (cailongqun [at] yahoo [dot] com [dot] cn)
@@ -10,10 +12,8 @@
 * @since 31/December/2008
 */
 
-include '../../../../../../inc/global.inc.php'; // Integrating with Chamilo
-api_block_anonymous_users();// from Chamilo
-
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php";
+require_once '../../../../../../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fckeditor/editor/plugins/ajaxfilemanager/inc/config.php';
 
 require_once CLASS_SESSION_ACTION;
 $sessionAction = new SessionAction();

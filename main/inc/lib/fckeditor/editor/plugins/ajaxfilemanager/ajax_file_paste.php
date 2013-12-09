@@ -1,6 +1,9 @@
 <?php
+/* For licensing terms, see /license.txt */
 
-include_once(dirname(__FILE__).DIRECTORY_SEPARATOR."inc".DIRECTORY_SEPARATOR."config.php");
+require_once '../../../../../../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fckeditor/editor/plugins/ajaxfilemanager/inc/config.php';
+
 $error = '';
 $fileMoved = array();
 $unmovedDocDueToSamePath = array();

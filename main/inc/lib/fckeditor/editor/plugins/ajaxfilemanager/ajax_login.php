@@ -1,18 +1,15 @@
 <?php
-	/**
-	 * access control login form
-	 * @author Logan Cai (cailongqun [at] yahoo [dot] com [dot] cn)
-	 * @link www.phpletter.com
-	 * @since 22/April/2007
-	 *
-	 */
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");
+/* For licensing terms, see /license.txt */
+
+require_once '../../../../../../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fckeditor/editor/plugins/ajaxfilemanager/inc/config.php';
+
 if(isset($_POST['username']))
 {
 	if($auth->login())
 	{
 		header('Location: ' . appendQueryString(CONFIG_URL_HOME, makeQueryString()));
-		exit;		
+		exit;
 	}
 }
 ?>
@@ -47,7 +44,7 @@ if(isset($_POST['username']))
 			            <tr>
 			            	<td>&nbsp;</td>
 			              <td><input type="submit" class="button" value="Login" /></td>
-			            </tr>			        
+			            </tr>
 			        </tfoot>
 			    </table>
 			</form>

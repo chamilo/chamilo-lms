@@ -1,3 +1,10 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+require_once '../../../../../../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fckeditor/editor/plugins/ajaxfilemanager/inc/config.php';
+?>
+
 <div id="content">
 <table class="tableList" id="tableList" cellpadding="0" cellspacing="0" border="0">
 <thead>
@@ -7,15 +14,15 @@
 		<th class="docName"><?php echo LBL_NAME; ?></th>
 		<th  width="70" class="fileColumns"><?php echo LBL_SIZE; ?></th>
 		<!-- hide while implementing this Chamilo -->
-		<!--<th class="fileColumns"><?php // echo LBL_MODIFIED; ?></th> -->						
+		<!--<th class="fileColumns"><?php // echo LBL_MODIFIED; ?></th> -->
 	</tr>
 </thead>
 <tbody id="fileList">
-	<?php 
+	<?php
 		$count = 1;
 		$css = "";
-		//list all documents (files and folders) under this current folder, 
-		//echo appendQueryString(appendQueryString(CONFIG_URL_FILEnIMAGE_MANAGER, "path=" . $file['path']), makeQueryString(array('path'))); 
+		//list all documents (files and folders) under this current folder,
+		//echo appendQueryString(appendQueryString(CONFIG_URL_FILEnIMAGE_MANAGER, "path=" . $file['path']), makeQueryString(array('path')));
 		foreach($fileList as $file) {
 			$css = ($css == "" || $css == "even"?"odd":"even");
 			$strDisabled = ($file['is_writable']?"":" disabled");
@@ -32,7 +39,7 @@
 			$certificates_chamilo='certificates';
 			//show group's directory only if I'm member. Or if I'm a teacher. TODO: check groups not necessary because the student dont have access to main folder documents (only to document/group or document/shared_folder). Teachers can access to all groups ?
 			$group_folder='_groupdocs';
-						
+
 
 			$show_doc_group=true;
 			if(ereg($group_folder, $file['path'])) {
@@ -45,19 +52,19 @@
 			///Second step: hiding as the case
 			//Juan Carlos Raña
 
-			if ((!ereg($deleted_by_chamilo_file, $file['name']) && 
-				 !ereg($deleted_by_chamilo_folder, $file['path'])) && 
-				 !ereg($css_folder_chamilo, $file['path']) && 
-				 !ereg($hotpotatoes_folder_chamilo, $file['path']) && 
-				 !ereg($chat_files_chamilo, $file['path']) && 
-				 !ereg($certificates_chamilo, $file['path']) && 
-				 $show_doc_group && $file['name'][0]!='.') {							
+			if ((!ereg($deleted_by_chamilo_file, $file['name']) &&
+				 !ereg($deleted_by_chamilo_folder, $file['path'])) &&
+				 !ereg($css_folder_chamilo, $file['path']) &&
+				 !ereg($hotpotatoes_folder_chamilo, $file['path']) &&
+				 !ereg($chat_files_chamilo, $file['path']) &&
+				 !ereg($certificates_chamilo, $file['path']) &&
+				 $show_doc_group && $file['name'][0]!='.') {
 				//hide Nanogong  tag
 				if (strpos($file['path'], '_chnano_')) {
 					$file['path']= substr_replace($file['path'], '.wav', -12);//into real file name
 					$file['name']= substr_replace($file['name'], '.wav', -12);//into web name
 				}
-				
+
 				if ($file['type'] == 'file') {
 					if(Security::remove_XSS($_GET['editor'])!='stand_alone') {
 						$path_chamilo_file='../'.$file['path'];// fix for makes a good show when pressed next on window preview, don't only one image
@@ -74,7 +81,7 @@
 					<td align="center" class="fileColumns" id="tdst<?php echo $count; ?>">&nbsp;
 						<a id="<?php echo $count; ?>" href="<?php echo $path_chamilo_file; // fix for Chamilo ?>" target="_blank">
 							<span class="<?php echo $file['cssClass']; ?>">&nbsp;</span></a>
-					</td>					
+					</td>
 					<td class="<?php echo $strClass; ?> docName"  id="tdnd<?php echo $count; ?>">
 						<a id="<?php echo $count; ?>" href="<?php echo $path_chamilo_file; //fix for Chamilo ?>" target="_blank">
 						<?php echo $file['name']; ?></a>
@@ -85,7 +92,7 @@
 					<!--<td class="docInfo" id="tdth<?php //echo $count; ?>"><?php //echo @date(DATE_TIME_FORMAT,$file['mtime']); ?></td> -->
 				</tr>
 				<?php
-				
+
 				} else {
 					?>
 					<tr class="<?php echo $css; ?>" id="row<?php echo $count; ?>" >
@@ -106,7 +113,7 @@
 						<td  lign="center" class="fileColumns" id="tdst<?php echo $count; ?>">&nbsp;
 							<a id="<?php echo $count; ?>" href="<?php echo $file['path']; ?>" <?php echo $file['cssClass'] == 'filePicture'?'rel="ajaxPhotos"':''; ?>  >
 								<span class="<?php echo ($file['type'] == 'folder '?$file['cssClass']:"unknownUser"); ?>">&nbsp;</span></a>
-						</td>											
+						</td>
 						<?php
 						} else {
 						?>
@@ -116,7 +123,7 @@
 							</td>
 						<?php
 						}
-						?>                                            
+						?>
 						<td class="<?php echo $strClass; ?> docName" id="tdnd<?php echo $count; ?>">
 							<a id="<?php echo $count; ?>" href="<?php echo "../".$file['path']; ?>" target="_blank"><?php echo $file['name']; ?></a>
 						</td>

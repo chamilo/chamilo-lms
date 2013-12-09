@@ -1,5 +1,11 @@
 <?php
-	/**
+/* For licensing terms, see /license.txt */
+
+require_once '../../../../../../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fckeditor/editor/plugins/ajaxfilemanager/inc/config.php';
+
+
+/**
 	 * cut file
 	 * @author Logan Cai (cailongqun [at] yahoo [dot] com [dot] cn)
 	 * @link www.phpletter.com
@@ -20,8 +26,8 @@
 	elseif(empty($_POST['currentFolderPath']) || !isUnderRoot($_POST['currentFolderPath']))
 	{
 		$error = ERR_FOLDER_PATH_NOT_ALLOWED;
-	}else 
-	{		
+	}else
+	{
 		require_once(CLASS_SESSION_ACTION);
 		$sessionAction = new SessionAction();
 		$sessionAction->setAction($_POST['action_value']);

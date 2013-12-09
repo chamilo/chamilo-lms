@@ -1,4 +1,8 @@
 <?php
+/* For licensing terms, see /license.txt */
+require_once '../../../../../../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fckeditor/editor/plugins/ajaxfilemanager/inc/config.php';
+
 	/**
 	 * ajax save name
 	 * @author Logan Cai (cailongqun [at] yahoo [dot] com [dot] cn)
@@ -14,7 +18,7 @@
 		$error = SYS_DISABLED;
 	}
 	elseif(isset($_POST['save_as_request']))
-	{		
+	{
 		if(!preg_match('/^[a-zA-Z0-9_\-.]+$/', $_POST['name']))
 		{
 			$error = TXT_SAVE_AS_ERR_NAME_INVALID;
@@ -27,56 +31,56 @@
 		}
 		else
 		{
-			
+
 			if(!empty($_POST['save_as_request']))
 			{//save as request
 				if(file_exists($path))
 				{
 					$error = TXT_FILE_EXIST;
-				}else 
+				}else
 				{
 					if(($fp = @fopen($path, 'w+')) !== false)
 					{
 						if(@fwrite($fp, $_POST['text']))
 						{
 							@fclose($fp);
-						}else 
+						}else
 						{
 							$error = TXT_CONTENT_WRITE_FAILED;
 						}
-					}else 
+					}else
 					{
 						$error = TXT_CREATE_FAILED;
-					}					
+					}
 				}
 
-				
-			}else 
+
+			}else
 			{
 				if(!file_exists($path))
 				{
 					$error = TXT_FILE_NOT_EXIST;
-				}else 
+				}else
 				{
 					if(($fp = @fopen($path, 'w')) !== false)
 					{
 						if(@fwrite($fp, $_POST['text']))
 						{
 							@fclose($fp);
-						}else 
+						}else
 						{
 							$error = TXT_CONTENT_UPDATE_FAILED;
 						}
-					}else 
+					}else
 					{
 						$error = TXT_FILE_OPEN_FAILED;
-					}						
+					}
 				}
 			}
-			
+
 		}
 
-	}else 
+	}else
 	{
 		$error = TXT_UNKNOWN_REQUEST;
 	}
@@ -84,5 +88,5 @@
 		echo "error:'" . $error . "',\n";
 		echo  "path:'" . $path . "'";
 		echo "}";
-	
+
 ?>

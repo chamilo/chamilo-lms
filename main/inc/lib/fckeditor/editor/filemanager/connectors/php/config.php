@@ -30,10 +30,13 @@ $language_file = array('create_course');
 // Loading the global initialization file, Chamilo LMS.
 require_once '../../../../../../global.inc.php';
 
+// Disabling access for anonymous users.
+api_block_anonymous_users();
+
 // Initialization of the repositories.
 require_once api_get_path(LIBRARY_PATH).'fckeditor/repository.php' ;
 
-global $Config ;
+global $Config;
 
 // SECURITY: You must explicitly enable this "connector". (Set it to "true").
 // WARNING: don't just set "$Config['Enabled'] = true ;", you must be sure that only
@@ -45,6 +48,7 @@ $Config['UserFilesPath'] = null;
 
 $userId = api_get_user_id();
 
+
 if (api_is_in_course()) {
     $coursePath = api_get_path(REL_COURSE_PATH).api_get_course_path();
     if (!api_is_in_group()) {
@@ -53,20 +57,20 @@ if (api_is_in_course()) {
             $Config['UserFilesPath'] = $coursePath.'/document/';
         } else {
             // 1.2. Student
-
             $current_session_id = api_get_session_id();
             if ($current_session_id == 0) {
                 $Config['UserFilesPath'] = $coursePath.'/document/shared_folder/sf_user_'.$userId.'/';
             } else {
                 $Config['UserFilesPath'] = $coursePath.'/document/shared_folder_session_'.$current_session_id.'/sf_user_'.$userId.'/';
             }
-
         }
     } else {
         $groupId = api_get_group_id();
         $groupInfo = GroupManager::get_group_properties($groupId);
-        // 2. Inside a course and inside a group.
-        $Config['UserFilesPath'] = $coursePath.'/document'.$groupInfo['directory'].'/';
+        if (!empty($groupInfo)) {
+            // 2. Inside a course and inside a group.
+            $Config['UserFilesPath'] = $coursePath.'/document'.$groupInfo['directory'].'/';
+        }
     }
 } else {
     if (api_is_platform_admin() && $_SESSION['this_section'] == 'platform_admin') {
@@ -75,16 +79,19 @@ if (api_is_in_course()) {
     } else {
         // 4. The user is outside courses.
         $my_path = UserManager::get_user_picture_path_by_id($userId, 'rel');
-
         $Config['UserFilesPath'] = $my_path['dir'].'my_files/';
     }
+}
+
+if (empty($Config['UserFilesPath'])) {
+    api_not_allowed(true);
 }
 
 // Fill the following value it you prefer to specify the absolute path for the
 // user files directory. Useful if you are using a virtual directory, symbolic
 // link or alias. Examples: 'C:\\MySite\\userfiles\\' or '/root/mysite/userfiles/'.
 // Attention: The above 'UserFilesPath' must point to the same directory.
-$Config['UserFilesAbsolutePath'] = rtrim(api_get_path(SYS_SERVER_ROOT_PATH), '/') . $Config['UserFilesPath'];
+$Config['UserFilesAbsolutePath'] = rtrim(api_get_path(SYS_SERVER_ROOT_PATH), '/').$Config['UserFilesPath'];
 
 // Due to security issues with Apache modules, it is recommended to leave the
 // following setting enabled.

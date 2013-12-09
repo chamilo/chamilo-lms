@@ -12,7 +12,7 @@
  */
 class SessionManager
 {
-    private function __construct()
+    public function __construct()
     {
     }
 
@@ -194,13 +194,15 @@ class SessionManager
 	}
 
     /**
-     * @param string $session_name
+     * @param string $name
      * @return bool
      */
-    function session_name_exists($session_name)
+    public static function session_name_exists($name)
     {
-	    $session_name = Database::escape_string($session_name);
-        $result = Database::fetch_array(Database::query("SELECT COUNT(*) as count FROM ".Database::get_main_table(TABLE_MAIN_SESSION)." WHERE name = '$session_name' "));
+        $name = Database::escape_string($name);
+        $sql = "SELECT COUNT(*) as count FROM ".Database::get_main_table(TABLE_MAIN_SESSION)."
+                WHERE name = '$name'";
+        $result = Database::fetch_array(Database::query($sql));
         return $result['count'] > 0;
 	}
 
@@ -208,7 +210,7 @@ class SessionManager
      * @param string $where_condition
      * @return mixed
      */
-    static function get_count_admin($where_condition = null)
+    public static function get_count_admin($where_condition = null)
     {
         $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_category   = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -513,11 +515,11 @@ class SessionManager
         $tbl_course     = Database::get_main_table(TABLE_MAIN_COURSE);
 
 
-        $select = "select  u.username, u.firstname, u.lastname, l.name, v.progress  
+        $select = "select  u.username, u.firstname, u.lastname, l.name, v.progress
                 FROM $tbl_lp_view v
                 INNER JOIN $tbl_lp l ON l.id = v.lp_id
                 INNER JOIN $tbl_user u ON u.user_id = v.user_id
-                INNER JOIN $tbl_course c 
+                INNER JOIN $tbl_course c
                 ";
 
         $where = ' WHERE 1=1 ';
@@ -540,7 +542,7 @@ class SessionManager
         $select .= $where.$order.$limit;
         $result = Database::query($select);
         $formatted_sessions = array();
-        if (Database::num_rows($result) > 0) { 
+        if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_assoc($result)) {
                 $formatted_sessions[] = $row;
             }
@@ -560,7 +562,7 @@ class SessionManager
      * </code>
      * @return string	wanted unused code
      */
-	function generate_nice_next_session_name($session_name)
+    public static function generate_nice_next_session_name($session_name)
     {
         $session_name_ok = !self::session_name_exists($session_name);
         if (!$session_name_ok) {
@@ -1913,7 +1915,7 @@ class SessionManager
      * @param int $id
      * @return array
      */
-    static function get_all_sessions_by_promotion($id)
+    public static function get_all_sessions_by_promotion($id)
     {
         $t = Database::get_main_table(TABLE_MAIN_SESSION);
         return Database::select('*', $t, array('where'=>array('promotion_id = ?'=>$id)));
@@ -1923,7 +1925,7 @@ class SessionManager
      * @param int $promotion_id
      * @param array $list
      */
-    static function suscribe_sessions_to_promotion($promotion_id, $list)
+    public static function suscribe_sessions_to_promotion($promotion_id, $list)
     {
         $t = Database::get_main_table(TABLE_MAIN_SESSION);
         $params = array();
@@ -1961,7 +1963,7 @@ class SessionManager
      * @return  int     The new session ID on success, 0 otherwise
      * @todo make sure the extra session fields are copied too
      */
-    public function copy_session($id, $copy_courses = true, $copy_users = true, $create_new_courses = false, $set_exercises_lp_invisible = false)
+    public static function copy_session($id, $copy_courses = true, $copy_users = true, $create_new_courses = false, $set_exercises_lp_invisible = false)
     {
         $id = intval($id);
         $s = self::fetch($id);
@@ -2977,7 +2979,4 @@ class SessionManager
     {
 
     }
-
-
-
 }

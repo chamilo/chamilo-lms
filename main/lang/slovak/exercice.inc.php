@@ -2,6 +2,14 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ImportAikenQuizExplanationExample = "Toto je text pre otázku 1 A. Odpoveď 1 B. Odpoveď 2 C. Odpoveď 3 ANSWER: B Toto je text pre otázku 2 A. Odpoveď 1 B. Odpoveď 2 C. Odpoveď 3 D. Odpoveď 4 ANSWER: D ANSWER_EXPLANATION: to je voliteľná komentár spätnej väzby, ktorý sa zobrazí vedľa správnej odpovede.";
+$ImportAikenQuizExplanation = "Formát Aiken je v jednoduchom textovom súbore (.txt), s niekoľkými blokmi otázok, z ktorých každý je oddelený prázdnym riadkom. Prvý riadok je otázka, riadky s odpoveďou je označený písmenom a bodkou, a správna odpoveď príde s ďalšou ODPOVEĎOU: predpona. Viď príklad nižšie.";
+$ExerciseAikenErrorNoAnswerOptionGiven = "Importovaný súbor má aspoň jednu otázku bez odpovede (alebo odpovede neobsahujú požadovanú predponu listu). Uistite sa, že každá otázka má aspoň jednu odpoveď, a že má predponu písmeno a bodkou alebo zátvorku, ako je tento: A. jednu odpoveď";
+$ExerciseAikenErrorNoCorrectAnswerDefined = "Importovaný súbor obsahuje aspoň jednu otázku bez akejkoľvek správnej definovanej odpovede. Uistite sa, že všetky otázky majú ODPOVEĎ: [Letter] riadok.";
+$ThereWasAProblemWithYourFile = "Bol tam neznámy problém so súborom. Prosím skontrolujte jeho formát a skúste to znova.";
+$YouMustUploadAZipOrTxtFile = "Musíte nahrať .txt alebo .zip súbor";
+$NoTxtFileFoundInTheZip = "Nenájdený žiadny .txt súbor v súbore zip";
+$ImportAikenQuiz = "Importovať Aiken test";
 $ExerciseWasActivatedFromXToY = "Cvičenie bolo aktivované od %s do %s";
 $SelectAnAnswerToContinue = "Vyberte odpoveď pre pokračovanie";
 $IfYouContinueYourAnswerWillBeSavedAnyChangeWillBeNotAllowed = "Ak budete pokračovať vaše odpovede budú uložené, akákoľvek zmena urobená neskôr nie je dovolená. Ste si istí, že chcete pokračovať?";
@@ -11,18 +19,10 @@ $QuestionReused = "Otázka pridaná do cvičenia";
 $QuestionCopied = "Otázka skopírovaná do cvičenia";
 $ZeroMeansNoQuestionWillBeSelectedMinusOneMeansThatAllQuestionsWillBeSelected = "-1 = Budú vybrané všetky otázky. 0 = Budú vybrané žiadne otázky.";
 $EmailNotificationTemplateDescription = "Môžete prispôsobiť e-mail, ktorý sa posiela používateľom pri dokončení cvičenia. Môžete použiť tieto značky:<br>
-1. {{ student.username }}<br>
-2. {{ student.firstname }}<br>
-3. {{ student.lastname }}<br>
-4. {{ student.official_code }}<br>
-5. {{ exercise.title }}<br>
-6. {{ exercise.start_time }}<br>
-7. {{ exercise.end_time }}<br>
-8. {{ course.title }}<br>
-9. {{ course.code }}";
+1. {{ student.username }} 2. {{ student.firstname }} 3. {{ student.lastname }} 4. {{ student.official_code }} 5. {{ exercise.title }} 6. {{ exercise.start_time }} 7. {{ exercise.end_time }} 8. {{ course.title }} 9. {{ course.code }}";
 $EmailNotificationTemplate = "Šablóna e-mailu upozornenia";
 $ExerciseEndButtonDisconnect = "Odhlásiť";
-$ExerciseEndButtonExerciseHome = "Zoznam cvičenia";
+$ExerciseEndButtonExerciseHome = "Zoznam cvičenia.";
 $ExerciseEndButtonCourseHome = "Domov kurzu";
 $ExerciseEndButton = "Domovská stránka kurzu";
 $HideQuestionTitle = "Skryť názov otázky";
@@ -45,7 +45,7 @@ $MediaQuestions = "Zdieľané vyhlásenia";
 $AddedToLPCannotBeAccessed = "Toto zadanie bolo zahrnuté do učebnej osnovy, nemôže byť zobrazené študentmi priamo tu. Ak chcete, aby rovnaké zadanie bolo k dispozícii prostredníctvom nástroja zadanie, prosím urobte kópiu aktuálneho zadania pomocou ikony kopírovania.";
 $langExercice = "Test";
 $langActivate = "Ukázať";
-$langDeactivate = "Schovaj";
+$langDeactivate = "Skryť";
 $langNoEx = "Momentálne tu nie je žiadny test";
 $langNewEx = "Nový test";
 $langQuestion = "Otázka";
@@ -87,9 +87,9 @@ $langUseTagForBlank = "použiť hranaté zátvorky [...] na definovanie jedného
 $langQuestionWeighting = "Váha";
 $langMoreAnswers = "+odp";
 $langLessAnswers = "-odp";
-$langMoreElements = "+elem";
-$langLessElements = "-elem";
-$langTypeTextBelow = "Prosím nižšie napíšte svoj text";
+$langMoreElements = "+prvok";
+$langLessElements = "-prvok";
+$langTypeTextBelow = "Prosím napíšte svoj text nižšie";
 $langDefaultTextInBlanks = "[Briti] žijú vo [Veľkej Británii].";
 $langDefaultMatchingOptA = "bohatý";
 $langDefaultMatchingOptB = "pekný";
@@ -148,7 +148,7 @@ $langIntroduction = "Úvod";
 $langTitleAssistant = "Pomocník pre tvorbu testov";
 $langQuesList = "zoznam otázok";
 $langSaveEx = "uložiť cvičenia";
-$langFinish = "Ukončiť";
+$langFinish = "Ukončiť test";
 $langCancel = "Zrušiť";
 $langQImage = "Otázka s obrázkom";
 $langAddQ = "Pridať otázku";
@@ -164,7 +164,7 @@ $langReplaced = "Vymenený";
 $langSuperior = "hodnota väčšia ako 20";
 $langRep20 = "Nahradiť 20";
 $langDefault = "Prednastavené hodnoty *";
-$langDefComment = "predchádzajúce hodnoty budú nahradené klikom na tlačidlo \"prednastavené hodnoty\"";
+$langDefComment = "predchádzajúce hodnoty budú nahradené kliknutím na tlačidlo \"prednastavené hodnoty\"";
 $langScoreGet = "čierne čísla = skóre";
 $langShowScor = "Zobraziť hodnotenie študentom:";
 $langStep1 = "Etapa 1";

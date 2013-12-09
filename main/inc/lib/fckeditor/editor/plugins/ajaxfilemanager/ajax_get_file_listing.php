@@ -8,10 +8,8 @@ if (!isset($manager)) {
     /**
      *  this is part of  script for processing file paste
      */
-    //$_GET = $_POST;
-    include_once dirname(__FILE__).DIRECTORY_SEPARATOR."inc".DIRECTORY_SEPARATOR."config.php";
     include_once CLASS_PAGINATION;
-    $pagination = new pagination(false);
+    $pagination    = new pagination(false);
     $search_folder = null;
     if (isset($_GET['search_folder'])) {
         $search_folder = str_replace("'", "", $_GET['search_folder']); //security fix for Chamilo by cfasanando
@@ -29,7 +27,7 @@ if (!isset($manager)) {
         $search->addSearchKeyword('recursive', @$_GET['search_recursively']);
         $search->addSearchKeyword('name', @$_GET['search_name']);
         $search->doSearch();
-        $fileList = $search->getFoundFiles();
+        $fileList   = $search->getFoundFiles();
         $folderInfo = $search->getRootFolderInfo();
     } else {
         include_once(CLASS_MANAGER);
@@ -40,7 +38,7 @@ if (!isset($manager)) {
         $manager = new manager();
         $manager->setSessionAction($sessionAction);
 
-        $fileList = $manager->getFileList();
+        $fileList   = $manager->getFileList();
         $folderInfo = $manager->getFolderInfo();
     }
     $pagination->setUrl(CONFIG_URL_FILEnIMAGE_MANAGER);
@@ -60,18 +58,20 @@ echo $pagination->getPaginationHTML();
 // Chamilo fix for count hidden folders
 $count_hideItem = 0;
 
-$deleted_by_Chamilo_file = ' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php
-$deleted_by_Chamilo_folder = '_DELETED_';
-$css_folder_Chamilo = 'css';
+$deleted_by_Chamilo_file    = ' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php
+$deleted_by_Chamilo_folder  = '_DELETED_';
+$css_folder_Chamilo         = 'css';
 $hotpotatoes_folder_Chamilo = 'HotPotatoes_files';
-$chat_files_Chamilo = 'chat_files';
-$certificates_Chamilo = 'certificates';
+$chat_files_Chamilo         = 'chat_files';
+$certificates_Chamilo       = 'certificates';
 
 //end previous fix for count hidden folders
 
 echo "<script>";
 
-echo "parentFolder = {path_base64:'".base64_encode(getParentFolderPath($folderInfo['path']))."', path:'".getParentFolderPath($folderInfo['path'])."'};";
+echo "parentFolder = {path_base64:'".base64_encode(
+        getParentFolderPath($folderInfo['path'])
+    )."', path:'".getParentFolderPath($folderInfo['path'])."'};";
 echo 'currentFolder ={';
 $count = 1;
 foreach ($folderInfo as $k => $v) {
@@ -86,23 +86,24 @@ $count = 1;
 
 foreach ($fileList as $file) {
     //show group's directory only if I'm member. Or if I'm a teacher. TODO: check groups not necessary because the student dont have access to main folder documents (only to document/group or document/shared_folder). Teachers can access to all groups ?
-    $group_folder = '_groupdocs';
+    $group_folder   = '_groupdocs';
     $hide_doc_group = false;
     if (preg_match("/$group_folder/", $file['path'])) {
         $hide_doc_group = true;
-        if ($is_user_in_group || ( $to_group_id != 0 && api_is_allowed_to_edit())) {
+        if ($is_user_in_group || ($to_group_id != 0 && api_is_allowed_to_edit())) {
             $hide_doc_group = false;
         }
     }
 
     if ((!preg_match("/$deleted_by_Chamilo_file/", $file['name']) ||
-        !preg_match("/$deleted_by_Chamilo_folder/", $file['path'])) ||
+            !preg_match("/$deleted_by_Chamilo_folder/", $file['path'])) ||
         preg_match("/$css_folder_Chamilo/", $file['path']) ||
         preg_match("/$hotpotatoes_folder_Chamilo/", $file['path']) ||
         preg_match("/$chat_files_Chamilo/", $file['path']) ||
         preg_match("/$certificates_Chamilo/", $file['path']) ||
         $hide_doc_group ||
-        $file['name'][0] == '.') { //Chamilo fix for hidden items.
+        $file['name'][0] == '.'
+    ) { //Chamilo fix for hidden items.
         $count_hideItem = $count_hideItem + 1;
     }
 
@@ -120,7 +121,11 @@ foreach ($fileList as $file) {
     echo (($j++ > 1) ? "," : '')."'url':'".getFileUrl($file['path'])."'";
     echo "}\n";
 }
-$fileList = array_slice($fileList, $pagination->getPageOffset(), $pagination->getLimit()); //Chamilo fix for hidden files added +$count_hideItem
+$fileList = array_slice(
+    $fileList,
+    $pagination->getPageOffset(),
+    $pagination->getLimit()
+); //Chamilo fix for hidden files added +$count_hideItem
 
 echo "};</script>";
 if (!empty($_GET['view'])) {

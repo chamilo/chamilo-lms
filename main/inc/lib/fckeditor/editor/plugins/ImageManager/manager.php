@@ -6,21 +6,13 @@
  * @package ImageManager
  */
 
-	require_once('config.inc.php');
-	require_once('Classes/ImageManager.php');
+require_once('config.inc.php');
+require_once('Classes/ImageManager.php');
 
-	$manager = new ImageManager($IMConfig);
-	$dirs = $manager->getDirs();
-	$var = explode('/',$_GET['base_url_alt']);
-	/*
-	// if the base_url_alt parameter there is a default_course_document we change the allow upload parameter
-	if (($var[count($var)-2] == 'default_course_document') && !api_is_platform_admin())
-	{
-		$IMConfig['allow_upload']=false;
-	}
-	*/
-	//clean injection string (XSS)
-	$base_url_alt = str_replace('"','',$_GET['base_url_alt']);
+$manager = new ImageManager($IMConfig);
+$dirs = $manager->getDirs();
+$var = explode('/',$_GET['base_url_alt']);
+$base_url_alt = str_replace('"','',$_GET['base_url_alt']);
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

@@ -11,9 +11,6 @@
  * @since 31/December/2008
  */
 
-//error_reporting(E_ALL);
-//error_reporting(E_ALL ^ E_NOTICE);
-
 //Access Control Setting
 /**
 * turn off => false
@@ -119,8 +116,6 @@ define('CONFIG_SYS_DEFAULT_PATH',	$PathChamiloAjaxFileManager);
 define('CONFIG_SYS_ROOT_PATH',		$PathChamiloAjaxFileManager);
 
 // end chamilo
-
-
 
 define('CONFIG_SYS_FOLDER_SHOWN_ON_TOP', true); //show your folders on the top of list if true or order by name
 define("CONFIG_SYS_DIR_SESSION_PATH", session_save_path()); // Hack by Juan Carlos Raña

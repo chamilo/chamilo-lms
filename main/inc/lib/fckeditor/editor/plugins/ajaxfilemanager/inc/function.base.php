@@ -10,17 +10,6 @@
 require_once dirname(__FILE__).DIRECTORY_SEPARATOR."config.php";
 
 /**
- * force to ensure existence of stripos
- */
-if (!function_exists("stripos")) {
-
-    function stripos($str, $needle, $offset = 0) {
-        return @strpos(strtolower($str), strtolower($needle), $offset);
-    }
-
-}
-
-/**
  * get the current Url but not the query string specified in $excls
  *
  * @param array $excls specify those unwanted query string

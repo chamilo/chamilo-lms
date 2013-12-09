@@ -28,14 +28,17 @@
 */
 $language_file = array('document');
 
-include '../../../../../../inc/global.inc.php';
+require_once '../../../../../../inc/global.inc.php';
+
+// Disabling access for anonymous users.
+api_block_anonymous_users();
 
 // Initialization of the repositories.
 require_once api_get_path(LIBRARY_PATH).'fckeditor/repository.php';
 
 // Choosing the repository to be used.
 if (api_is_in_course()) {
-	if (!api_is_in_group()) {
+    if (!api_is_in_group()) {
         // 1. We are inside a course and not in a group.
         if (api_is_allowed_to_edit()) {
             // 1.1. Teacher

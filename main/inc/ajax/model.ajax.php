@@ -509,38 +509,39 @@ switch ($action) {
         );
 
         $result = array();
-        foreach ($sessions as $session) {
-            if (api_drh_can_access_all_session_content()) {
-                $count_courses_in_session = count(SessionManager::get_course_list_by_session_id($session['id']));
-            } else {
-                $count_courses_in_session = count(Tracking::get_courses_followed_by_coach($user_id, $session['id']));
-            }
+        if (!empty($sessions)) {
+            foreach ($sessions as $session) {
+                if (api_drh_can_access_all_session_content()) {
+                    $count_courses_in_session = count(SessionManager::get_course_list_by_session_id($session['id']));
+                } else {
+                    $count_courses_in_session = count(Tracking::get_courses_followed_by_coach($user_id, $session['id']));
+                }
 
-            $count_users_in_session = count(SessionManager::get_users_by_session($session['id'], 0));
-            $session_date = array();
-            if (!empty($session['date_start']) && $session['date_start'] != '0000-00-00') {
-                $session_date[] = get_lang('From').' '.api_format_date($session['date_start'], DATE_FORMAT_SHORT);
-            }
+                $count_users_in_session = count(SessionManager::get_users_by_session($session['id'], 0));
+                $session_date = array();
+                if (!empty($session['date_start']) && $session['date_start'] != '0000-00-00') {
+                    $session_date[] = get_lang('From').' '.api_format_date($session['date_start'], DATE_FORMAT_SHORT);
+                }
 
-            if (!empty($session['date_end']) && $session['date_end'] != '0000-00-00') {
-                $session_date[] = get_lang('Until').' '.api_format_date($session['date_end'], DATE_FORMAT_SHORT);
-            }
+                if (!empty($session['date_end']) && $session['date_end'] != '0000-00-00') {
+                    $session_date[] = get_lang('Until').' '.api_format_date($session['date_end'], DATE_FORMAT_SHORT);
+                }
 
-            if (empty($session_date)) {
-                $session_date_string = '-';
-            } else {
-                $session_date_string = implode(' ', $session_date);
+                if (empty($session_date)) {
+                    $session_date_string = '-';
+                } else {
+                    $session_date_string = implode(' ', $session_date);
+                }
+                $sessionUrl = api_get_path(WEB_CODE_PATH).'mySpace/index.php?session_id='.$session['id'];
+                $result[] = array(
+                    'name' => $session['name'],
+                    'date' => $session_date_string,
+                    'course_per_session' => $count_courses_in_session,
+                    'student_per_session' => $count_users_in_session,
+                    'details' => Display::url(Display::return_icon('2rightarrow.gif'), $sessionUrl)
+                );
             }
-            $sessionUrl = api_get_path(WEB_CODE_PATH).'mySpace/index.php?session_id='.$session['id'];
-            $result[] = array(
-                'name' => $session['name'],
-                'date' => $session_date_string,
-                'course_per_session' => $count_courses_in_session,
-                'student_per_session' => $count_users_in_session,
-                'details' => Display::url(Display::return_icon('2rightarrow.gif'), $sessionUrl)
-            );
         }
-
         break;
     case 'get_sessions':
         $columns = array(

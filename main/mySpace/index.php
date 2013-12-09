@@ -422,15 +422,12 @@ if (empty($session_id)) {
         $nb_posts = null;
     }
 } else {
-	$courses = Tracking::get_courses_followed_by_coach($user_id, $session_id);
-
     // If is drh
 	if ($is_drh) {
         $courses_of_the_platform = CourseManager::get_courses_followed_by_drh($user_id);
         $courses_from_session = SessionManager::get_course_list_by_session_id($session_id);
 
         $courses = array();
-
         foreach ($courses_from_session as $course_item) {
             if (api_drh_can_access_all_session_content()) {
                 $courses[$course_item['code']] = $course_item['code'];
@@ -444,7 +441,9 @@ if (empty($session_id)) {
         if (empty($courses)) {
             Display::display_warning_message(get_lang('NoResults'));
         }
-	}
+	} else {
+        $courses = Tracking::get_courses_followed_by_coach($user_id, $session_id);
+    }
 
     //Courses for the user
     $count_courses = count($courses);

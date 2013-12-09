@@ -69,30 +69,27 @@ class TicketPlugin extends Plugin
         $t_options = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
         $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
 
-        //New settings
-
-        $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_tool_enable'";
-        Database::query($sql);
-        $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_salt'";
-        Database::query($sql);
-        $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_host'";
+        //Delete settings
+        $sql = "DELETE FROM $t_settings WHERE variable = 'ticket_tool_enable'";
         Database::query($sql);
 
-        //Old settings deleting just in case
-        $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_plugin'";
+        $sql = "DROP TABLE IF EXISTS ticket_ticket";
         Database::query($sql);
-        $sql = "DELETE FROM $t_options WHERE variable  = 'bbb_plugin'";
+        $sql = "DROP TABLE IF EXISTS ticket_status";
         Database::query($sql);
-        $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_plugin_host'";
+        $sql = "DROP TABLE IF EXISTS ticket_project";
         Database::query($sql);
-        $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_plugin_salt'";
+        $sql = "DROP TABLE IF EXISTS ticket_priority";
         Database::query($sql);
-
-        //hack to get rid of Database::query warning (please add c_id...)
-        $sql = "DELETE FROM $t_tool WHERE name = 'videoconference' AND c_id = c_id";
+        $sql = "DROP TABLE IF EXISTS ticket_message_attch";
         Database::query($sql);
-
-        $sql = "DROP TABLE IF EXISTS plugin_bbb_meeting";
+        $sql = "DROP TABLE IF EXISTS ticket_message";
+        Database::query($sql);
+        $sql = "DROP TABLE IF EXISTS ticket_category";
+        Database::query($sql);
+        $sql = "DROP TABLE IF EXISTS ticket_assigned_log";
+        Database::query($sql);
+        $sql = "DROP TABLE IF EXISTS ticket_ticket";
         Database::query($sql);
 
         //Deleting course settings

@@ -1,18 +1,23 @@
 <?php
-
-$table = Database::get_main_table('tck_assigned_log');
+/**
+ * Contains the SQL for the tickets management plugin database structure
+ */
+$table = Database::get_main_table('ticket_assigned_log');
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
+        iid int unsigned not null,
         ticket_id int UNSIGNED DEFAULT NULL,
         user_id int UNSIGNED DEFAULT NULL,
         assigned_date datetime DEFAULT NULL,
         sys_insert_user_id int UNSIGNED DEFAULT NULL,
-        KEY FK_ticket_assigned_log (ticket_id) )";
+        PRIMARY KEY PK_ticket_assigned_log (iid),
+        KEY FK_ticket_assigned_log (ticket_id))";
 Database::query($sql);
 
-$table = Database::get_main_table('tck_category');
+$table = Database::get_main_table('ticket_category');
 $sql = "CREATE TABLE ".$table." (
-        project_id char(3) NOT NULL,
+        iid int unsigned not null,
         category_id char(3) NOT NULL,
+        project_id char(3) NOT NULL,
         name varchar(100) NOT NULL,
         description varchar(255) NOT NULL,
         total_tickets int UNSIGNED NOT NULL DEFAULT '0',
@@ -21,13 +26,13 @@ $sql = "CREATE TABLE ".$table." (
         sys_insert_datetime datetime DEFAULT NULL,
         sys_lastedit_user_id int UNSIGNED DEFAULT NULL,
         sys_lastedit_datetime datetime DEFAULT NULL,
-        PRIMARY KEY (project_id,category_id) )";
+        PRIMARY KEY (iid))";
 Database::query($sql);
 
-$table = Database::get_main_table('tck_message');
+$table = Database::get_main_table('ticket_message');
 $sql = "CREATE TABLE ".$table." (
-        ticket_id int UNSIGNED NOT NULL,
         message_id int UNSIGNED NOT NULL,
+        ticket_id int UNSIGNED NOT NULL,
         subject varchar(150) DEFAULT NULL,
         message text NOT NULL,
         status char(3) NOT NULL,
@@ -36,16 +41,17 @@ $sql = "CREATE TABLE ".$table." (
         sys_insert_datetime datetime DEFAULT NULL,
         sys_lastedit_user_id int UNSIGNED DEFAULT NULL,
         sys_lastedit_datetime datetime DEFAULT NULL,
-        PRIMARY KEY (ticket_id,message_id),
+        PRIMARY KEY (message_id),
         KEY FK_tick_message (ticket_id) )";
 Database::query($sql);
 
 
-$table = Database::get_main_table('tck_message_attch');
+$table = Database::get_main_table('ticket_message_attch');
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
-        ticket_id int UNSIGNED NOT NULL,
-        message_id char(2) NOT NULL,
+        iid int unsigned not null,
         message_attch_id char(2) NOT NULL,
+        message_id char(2) NOT NULL,
+        ticket_id int UNSIGNED NOT NULL,
         path varchar(255) NOT NULL,
         filename varchar(255) NOT NULL,
         size varchar(25) DEFAULT NULL,
@@ -53,12 +59,13 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         sys_insert_datetime datetime DEFAULT NULL,
         sys_lastedit_user_id int UNSIGNED DEFAULT NULL,
         sys_lastedit_datetime datetime DEFAULT NULL,
-        PRIMARY KEY (ticket_id,message_id,message_attch_id),
-        KEY ticket_message_id_fk (message_id) ))";
+        PRIMARY KEY (iid),
+        KEY ticket_message_id_fk (message_id))";
 Database::query($sql);
 
-$table = Database::get_main_table('tck_priority');
+$table = Database::get_main_table('ticket_priority');
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
+        iid int unsigned not null,
         priority_id char(3) NOT NULL,
         priority varchar(20) DEFAULT NULL,
         priority_desc varchar(250) DEFAULT NULL,
@@ -68,11 +75,12 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         sys_insert_datetime datetime DEFAULT NULL,
         sys_lastedit_user_id int UNSIGNED DEFAULT NULL,
         sys_lastedit_datetime datetime DEFAULT NULL,
-        PRIMARY KEY (priority_id))";
+        PRIMARY KEY (iid))";
 Database::query($sql);
 
-$table = Database::get_main_table('tck_project');
+$table = Database::get_main_table('ticket_project');
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
+        iid int unsigned not null,
         project_id char(3) NOT NULL,
         name varchar(50) DEFAULT NULL,
         description varchar(250) DEFAULT NULL,
@@ -82,18 +90,19 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         sys_insert_datetime datetime DEFAULT NULL,
         sys_lastedit_user_id int UNSIGNED DEFAULT NULL,
         sys_lastedit_datetime datetime DEFAULT NULL,
-        PRIMARY KEY (project_id))";
+        PRIMARY KEY (iid))";
 Database::query($sql);
 
-$table = Database::get_main_table('tck_status');
+$table = Database::get_main_table('ticket_status');
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
+        iid int unsigned not null,
         status_id char(3) NOT NULL,
         name varchar(100) NOT NULL,
         description varchar(255) DEFAULT NULL,
-        PRIMARY KEY (status_id))";
+        PRIMARY KEY (iid))";
 Database::query($sql);
 
-$table = Database::get_main_table('tck_ticket');
+$table = Database::get_main_table('ticket_ticket');
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         ticket_id int UNSIGNED NOT NULL AUTO_INCREMENT,
         ticket_code char(12) DEFAULT NULL,
@@ -121,7 +130,7 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
 Database::query($sql);
 
 // Menu main tabs
-//$table = Database::get_main_table('tck_ticket');
+//$table = Database::get_main_table('ticket_ticket');
 //$sql = "INSERT INTO settings_current
 //(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)
 //VALUES

@@ -1,11 +1,11 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
- * This script initiates a videoconference session, calling the BigBlueButton 
- * API
- * @package chamilo.plugin.bigbluebutton
+ * This class defines the basis of the ticket management system plugin
+ * @package chamilo.plugin.ticket
  */
 /**
- * BigBlueButton-Chamilo connector class
+ * Ticket class
  */
 class Ticket {
 

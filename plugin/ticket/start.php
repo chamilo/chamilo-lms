@@ -1,12 +1,12 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
- * This script initiates a videoconference session, calling the BigBlueButton API
- * @package chamilo.plugin.bigbluebutton
+ * This script initiates a ticket management system session
+ * @package chamilo.plugin.ticket
  */
 /**
  * Initialization
  */
-
 $course_plugin = 'ticket'; //needed in order to load the plugin lang variables
 require_once dirname(__FILE__).'/config.php';
 $tool_name = get_lang('Ticket');

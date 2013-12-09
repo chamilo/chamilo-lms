@@ -22,7 +22,7 @@
  * Configuration file for the File Manager Connector for PHP.
  */
 
-// Modifications by Ivan Tcholakov, JUN-2009. 
+// Modifications by Ivan Tcholakov, JUN-2009.
 
 // Some language variables are needed.
 $language_file = array('create_course');
@@ -40,59 +40,62 @@ global $Config ;
 //		authenticated users can access this file or use some kind of session checking.
 $Config['Enabled'] = true ;
 
-
 // Path to user files relative to the document root.
-//$Config['UserFilesPath']
-if (api_is_in_course()) {
-	if (!api_is_in_group()) {
-		// 1. We are inside a course and not in a group.
-		if (api_is_allowed_to_edit()) {
-			$Config['UserFilesPath'] = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/';
-		} else {
-			// 1.2. Student	
-			$current_session_id = api_get_session_id();
-			if($current_session_id==0)
-			{
-				$Config['UserFilesPath'] = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
-			}
-			else
-			{
-				$Config['UserFilesPath'] = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().'/';		
-			}
-		}
-	} else {
-		// 2. Inside a course and inside a group.
-		global $group_properties;
-		$Config['UserFilesPath'] = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/';
-	}
-} else {
-	if (api_is_platform_admin() && $_SESSION['this_section'] == 'platform_admin') {
-		// 3. Platform administration activities.
-		$Config['UserFilesPath'] = api_get_path(REL_PATH).'home/default_platform_document/';
-	} else {
-		// 4. The user is outside courses.
-        $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'rel');
-		$Config['UserFilesPath'] = $my_path['dir'].'my_files/';
-	}
-}
+$Config['UserFilesPath'] = null;
 
+$userId = api_get_user_id();
+
+if (api_is_in_course()) {
+    $coursePath = api_get_path(REL_COURSE_PATH).api_get_course_path();
+    if (!api_is_in_group()) {
+        // 1. We are inside a course and not in a group.
+        if (api_is_allowed_to_edit()) {
+            $Config['UserFilesPath'] = $coursePath.'/document/';
+        } else {
+            // 1.2. Student
+
+            $current_session_id = api_get_session_id();
+            if ($current_session_id == 0) {
+                $Config['UserFilesPath'] = $coursePath.'/document/shared_folder/sf_user_'.$userId.'/';
+            } else {
+                $Config['UserFilesPath'] = $coursePath.'/document/shared_folder_session_'.$current_session_id.'/sf_user_'.$userId.'/';
+            }
+
+        }
+    } else {
+        $groupId = api_get_group_id();
+        $groupInfo = GroupManager::get_group_properties($groupId);
+        // 2. Inside a course and inside a group.
+        $Config['UserFilesPath'] = $coursePath.'/document'.$groupInfo['directory'].'/';
+    }
+} else {
+    if (api_is_platform_admin() && $_SESSION['this_section'] == 'platform_admin') {
+        // 3. Platform administration activities.
+        $Config['UserFilesPath'] = api_get_path(REL_PATH).'home/default_platform_document/';
+    } else {
+        // 4. The user is outside courses.
+        $my_path = UserManager::get_user_picture_path_by_id($userId, 'rel');
+
+        $Config['UserFilesPath'] = $my_path['dir'].'my_files/';
+    }
+}
 
 // Fill the following value it you prefer to specify the absolute path for the
 // user files directory. Useful if you are using a virtual directory, symbolic
 // link or alias. Examples: 'C:\\MySite\\userfiles\\' or '/root/mysite/userfiles/'.
 // Attention: The above 'UserFilesPath' must point to the same directory.
-$Config['UserFilesAbsolutePath'] = rtrim(api_get_path(SYS_SERVER_ROOT_PATH), '/') . $Config['UserFilesPath'] ;
+$Config['UserFilesAbsolutePath'] = rtrim(api_get_path(SYS_SERVER_ROOT_PATH), '/') . $Config['UserFilesPath'];
 
 // Due to security issues with Apache modules, it is recommended to leave the
 // following setting enabled.
-$Config['ForceSingleExtension'] = true ;
+$Config['ForceSingleExtension'] = true;
 
 // Perform additional checks for image files.
 // If set to true, validate image size (using getimagesize).
 $Config['SecureImageUploads'] = true;
 
 // What the user can do with this connector.
-$Config['ConfigAllowedCommands'] = array('QuickUpload', 'FileUpload', 'GetFolders', 'GetFoldersAndFiles', 'CreateFolder') ;
+$Config['ConfigAllowedCommands'] = array('QuickUpload', 'FileUpload', 'GetFolders', 'GetFoldersAndFiles', 'CreateFolder');
 
 // Allowed Resource Types.
 $Config['ConfigAllowedTypes'] = array('File', 'Audio', 'Images', 'Flash', 'Media', 'MP3', 'Video', 'Video/flv') ;
@@ -160,8 +163,7 @@ $Config['ChmodOnFolderCreate'] = $permissions_for_new_directories ;
 			$Config['QuickUploadAbsolutePath']['Image']	= $Config['UserFilesAbsolutePath'] ;
 		into:
 			$Config['QuickUploadPath']['Image']			= $Config['FileTypesPath']['Image'] ;
-			$Config['QuickUploadAbsolutePath']['Image'] 	= $Config['FileTypesAbsolutePath']['Image'] ;
-
+			$Config['QuickUploadAbsolutePath']['Image'] 	= $Config['FileTypesAbsolutePath']['Image'];
 */
 
 // Files
@@ -220,5 +222,3 @@ $Config['FileTypesPath']['Video/flv']			= $Config['UserFilesPath'] . 'video/flv/
 $Config['FileTypesAbsolutePath']['Video/flv']	= $Config['UserFilesAbsolutePath'] . 'video/flv/' ;
 $Config['QuickUploadPath']['Video/flv']			= $Config['UserFilesPath'] . 'video/flv/' ;
 $Config['QuickUploadAbsolutePath']['Video/flv']	= $Config['UserFilesAbsolutePath'] . 'video/flv/' ;
-
-?>

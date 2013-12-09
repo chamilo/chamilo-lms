@@ -371,6 +371,9 @@ if (empty($session_id)) {
             $csv_content[] = array();
         } else {
 
+            $countActiveUsers = SessionManager::getCountUserTracking(null, 1);
+            $countInactiveUsers = SessionManager::getCountUserTracking(null, 0);
+
             $form = new FormValidator('search_user', 'get', api_get_path(WEB_CODE_PATH).'mySpace/student.php');
             $form->addElement('text', 'keyword', get_lang('User'));
             $form->addElement('button', 'submit', get_lang('Search'));
@@ -379,6 +382,15 @@ if (empty($session_id)) {
             // html part
             echo '<div class="report_section">
                     <table class="table table-bordered">
+                        <tr>
+                            <td>'.Display::url(get_lang('ActiveUsers'), api_get_path(WEB_CODE_PATH).'mySpace/student.php?active=1').'</td>
+                            <td align="right">'.$countActiveUsers.'</td>
+                        </tr>
+                         <tr>
+                            <td>'.Display::url(get_lang('InactiveUsers'), api_get_path(WEB_CODE_PATH).'mySpace/student.php?active=0').'</td>
+                            <td align="right">'.$countInactiveUsers.'</td>
+                        </tr>
+
                         <tr>
                             <td>'.get_lang('AverageCoursePerStudent').'</td>
                             <td align="right">'.(is_null($avg_courses_per_student) ? '' : $avg_courses_per_student).'</td>
@@ -408,7 +420,7 @@ if (empty($session_id)) {
                             <td align="right">'.(is_null($nb_assignments) ? '' : round($nb_assignments, 2)).'</td>
                         </tr>
                     </table>
-                    <a class="btn" href="student.php">
+                    <a class="btn" href="'.api_get_path(WEB_CODE_PATH).'mySpace/student.php'.'">
                     '.get_lang('SeeStudentList').'
                     </a>
                  </div><br />';

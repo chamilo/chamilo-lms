@@ -2708,14 +2708,15 @@ class SessionManager
         $numberItems = null,
         $column = 1,
         $direction = 'asc',
-        $keyword = null
+        $keyword = null,
+        $active = null
     ) {
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
-        $direction = in_array(strtolower($direction),array('asc', 'desc')) ? $direction : 'asc';
+        $direction = in_array(strtolower($direction), array('asc', 'desc')) ? $direction : 'asc';
         $column = Database::escape_string($column);
         $userId = intval($userId);
 
@@ -2725,6 +2726,12 @@ class SessionManager
             $from = intval($from);
             $numberItems = intval($numberItems);
             $limitCondition = "LIMIT $from, $numberItems";
+        }
+
+        $activeCondition = null;
+        if (isset($active)) {
+            $active = intval($active);
+            $activeCondition = " AND active = $active";
         }
 
         $urlId = api_get_current_access_url_id();
@@ -2773,7 +2780,9 @@ class SessionManager
                     INNER JOIN $tbl_user u ON (u.user_id = su.id_user AND s.id = id_session)
                     INNER JOIN $tbl_session_rel_access_url url ON (url.session_id = s.id)
                 WHERE access_url_id = $urlId
-                      $statusConditions ";
+                      $statusConditions
+                      $activeCondition
+                ";
 
         if (!empty($keyword)) {
             $keyword = Database::escape_string($keyword);
@@ -2946,6 +2955,77 @@ class SessionManager
             $htmlResult = Display::return_message($htmlResult, 'normal', false);
         }
         return $htmlResult;
+    }
+
+    /**
+     * @param string $keyword
+     * @param int $active
+     * @return array|int
+     */
+    public static function getCountUserTracking($keyword = null, $active = null)
+    {
+        if (!isset($keyword)) {
+            $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
+        }
+
+        if (!isset($active)) {
+            $active = isset($_GET['active']) ? $_GET['active'] : null;
+        }
+
+        if (api_is_drh()) {
+            if (api_drh_can_access_all_session_content()) {
+                $count = self::getAllUsersFromCoursesFromAllSessionFromStatus(
+                    'drh_all',
+                    api_get_user_id(),
+                    true,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $keyword,
+                    $active
+                );
+            } else {
+                $count = self::getAllUsersFromCoursesFromAllSessionFromStatus(
+                    'drh',
+                    api_get_user_id(),
+                    true,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $keyword,
+                    $active
+                );
+            }
+        } else {
+            if (api_is_platform_admin()) {
+                $count = self::getAllUsersFromCoursesFromAllSessionFromStatus(
+                    'admin',
+                    api_get_user_id(),
+                    true,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $keyword,
+                    $active
+                );
+            } else {
+                $count = self::getAllUsersFromCoursesFromAllSessionFromStatus(
+                    'teacher',
+                    api_get_user_id(),
+                    true,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $keyword,
+                    $active
+                );
+            }
+        }
+        return $count;
     }
 
     /**

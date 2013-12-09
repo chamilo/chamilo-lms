@@ -1707,36 +1707,53 @@ class SessionManager
 	 * @param int		Human resources manager or Session admin id
 	 * @return array 	sessions
 	 */
-	public static function get_sessions_followed_by_drh($hr_manager_id)
+	public static function get_sessions_followed_by_drh($userId, $start = null, $limit = null, $getCount = false)
     {
 		// Database Table Definitions
 		$tbl_session 			= 	Database::get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_rel_user 	= 	Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session_rel_access_url =   Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
-		$hr_manager_id = intval($hr_manager_id);
+		$userId = intval($userId);
 		$assigned_sessions_to_hrm = array();
 
+        $select = " SELECT * ";
+        if ($getCount) {
+            $select = " SELECT count(s.id) as count ";
+        }
+
+         $limitCondition = null;
+        if (!empty($start) && !empty($limit)) {
+            $limitCondition = " LIMIT ".intval($start). ", ".intval($limit);
+        }
+
 		if (api_is_multiple_url_enabled()) {
-           $sql = "SELECT * FROM $tbl_session s
+           $sql = " $select FROM $tbl_session s
                     INNER JOIN $tbl_session_rel_user sru ON (sru.id_session = s.id)
                     LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
                     WHERE
-                        sru.id_user = '$hr_manager_id' AND
+                        sru.id_user = '$userId' AND
                         sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' AND
-                        access_url_id = ".api_get_current_access_url_id()."";
+                        access_url_id = ".api_get_current_access_url_id()."
+                        $limitCondition";
         } else {
-            $sql = "SELECT * FROM $tbl_session s
+            $sql = "$select FROM $tbl_session s
                      INNER JOIN $tbl_session_rel_user sru
                      ON
                         sru.id_session = s.id AND
-                        sru.id_user = '$hr_manager_id' AND
-                        sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' ";
+                        sru.id_user = '$userId' AND
+                        sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."'
+                        $limitCondition";
         }
-		$rs_assigned_sessions = Database::query($sql);
-		if (Database::num_rows($rs_assigned_sessions) > 0) {
-			while ($row_assigned_sessions = Database::fetch_array($rs_assigned_sessions))	{
-				$assigned_sessions_to_hrm[$row_assigned_sessions['id']] = $row_assigned_sessions;
+		$result = Database::query($sql);
+        if ($getCount) {
+            $row = Database::fetch_array($result);
+            return $row['count'];
+        }
+
+        if (Database::num_rows($result) > 0) {
+			while ($row = Database::fetch_array($result))	{
+				$assigned_sessions_to_hrm[$row['id']] = $row;
 			}
 		}
 		return $assigned_sessions_to_hrm;

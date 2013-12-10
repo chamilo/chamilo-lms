@@ -75,6 +75,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete_grading') {
     api_delete_setting_option($id);
 }
 
+$keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : null;
+
 $form_search = new FormValidator('search_settings', 'get', api_get_self(), null, array('class' => 'form-search'));
 $form_search->addElement('text', 'keyword');
 $form_search->addElement('hidden', 'category', 'search_setting');
@@ -84,8 +86,9 @@ $form_search->addElement(
     get_lang('Search'),
     array('class' => 'search')
 );
+
 $form_search->setDefaults(
-    array('keyword' => (isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : null))
+    array('keyword' => $keyword)
 );
 
 $form_search_html = $form_search->return_form();
@@ -93,14 +96,15 @@ $form_search_html = $form_search->return_form();
 $url_id = api_get_current_access_url_id();
 
 $settings = null;
+
 /**
  * @param string $category
+ * @param string $keyword
  * @return array
  */
-function get_settings($category = null)
+function get_settings($category = null, $keyword = null)
 {
     $url_id = api_get_current_access_url_id();
-
     $settings_by_access_list = array();
 
     if ($url_id == 1) {
@@ -135,8 +139,8 @@ function get_settings($category = null)
     }
 
     if (isset($category) && $category == 'search_setting') {
-        if (!empty($_REQUEST['keyword'])) {
-            $settings = search_setting($_REQUEST['keyword']);
+        if (!empty($keyword)) {
+            $settings = search_setting($keyword);
         }
     }
 
@@ -149,7 +153,7 @@ function get_settings($category = null)
 // Build the form.
 if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', 'stylesheets', 'Search'))) {
     $my_category = isset($_GET['category']) ? $_GET['category'] : null;
-    $settings_array = get_settings($my_category);
+    $settings_array = get_settings($my_category, $keyword);
 
     $settings = $settings_array['settings'];
     $settings_by_access_list = $settings_array['settings_by_access_list'];
@@ -545,8 +549,8 @@ if (!empty($_GET['category'])) {
             handle_templates();
             break;
         case 'search_setting':
-            search_setting($_REQUEST['keyword']);
-            if (isset($_REQUEST['keyword'])) {
+            search_setting($keyword);
+            if (!empty($keyword)) {
                 $form->display();
             }
             break;

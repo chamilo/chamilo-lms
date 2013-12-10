@@ -39,7 +39,7 @@ class AdminController extends CommonController
         if ($security->isGranted('ROLE_ADMIN')) {
             $this->loadAdminMenu();
         }
-        $response = $template->render_template('admin/index.tpl');
+        $response = $template->renderTemplate('admin/index.tpl');
         return new Response($response, 200, array());
     }
 
@@ -52,7 +52,7 @@ class AdminController extends CommonController
         $form = new \FormValidator('search-form', 'get', $url, null, array('class' => 'form-inline'));
         $form->addElement('text', 'keyword');
         $form->addElement('button', 'submit', get_lang('Search'));
-        return $form->return_form();
+        return $form;
     }
 
     /**
@@ -81,7 +81,7 @@ class AdminController extends CommonController
         $blocks['users']['label'] = api_ucfirst(get_lang('Users'));
 
         if (api_is_platform_admin()) {
-            $search_form = $this->getSearchForm($adminUrl.'user_list.php');
+            $search_form = $this->getSearchForm($adminUrl.'user_list.php')->return_form();
             $blocks['users']['search_form'] = $search_form;
             $items = array(
                 array('url'=>$adminUrl.'user_list.php', 	'label' => get_lang('UserList')),
@@ -109,7 +109,7 @@ class AdminController extends CommonController
             $blocks['courses']['icon']  = \Display::return_icon('course.gif', get_lang('Courses'), array(), ICON_SIZE_MEDIUM, false);
             $blocks['courses']['label'] = api_ucfirst(get_lang('Courses'));
 
-            $search_form = $this->getSearchForm($adminUrl.'course_list.php');
+            $search_form = $this->getSearchForm($adminUrl.'course_list.php')->return_form();
             $blocks['courses']['search_form'] = $search_form;
 
             $items = array();
@@ -145,13 +145,9 @@ class AdminController extends CommonController
             $blocks['platform']['icon']  = \Display::return_icon('platform.png', get_lang('Platform'), array(), ICON_SIZE_MEDIUM, false);
             $blocks['platform']['label'] = api_ucfirst(get_lang('Platform'));
 
-            $search_form = $this->getSearchForm($adminUrl.'settings.php');
-            /*
-            ' <form method="get" action="'.$adminUrl.'settings.php" class="form-search">
-                                    <input class="span3" type="text" name="search_field" value="" >
-                                    <input type="hidden" value="search_setting" name="category">
-                                    <button class="btn" type="submit">'.get_lang('Search').'</button>
-                                </form>';*/
+            $form = $this->getSearchForm($adminUrl.'settings.php');
+            $form->addElement('hidden', 'category', 'search_setting');
+            $search_form = $form->return_form();
             $blocks['platform']['search_form'] = $search_form;
 
             $items = array();
@@ -190,7 +186,7 @@ class AdminController extends CommonController
         /* Sessions */
         $blocks['sessions']['icon']  = \Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_SMALL, false);
         $blocks['sessions']['label'] = api_ucfirst(get_lang('Sessions'));
-        $search_form = $this->getSearchForm(api_get_path(WEB_CODE_PATH).'session/session_list.php');
+        $search_form = $this->getSearchForm(api_get_path(WEB_CODE_PATH).'session/session_list.php')->return_form();
         $blocks['sessions']['search_form'] = $search_form;
         $items = array();
         $items[] = array('url'=> api_get_path(WEB_CODE_PATH).'session/session_list.php', 'label' => get_lang('ListSession'));

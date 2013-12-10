@@ -2,6 +2,10 @@
 /* For licensing terms, see /license.txt */
 namespace ChamiloLMS\Component\Editor;
 
+use \Symfony\Component\Translation\Translator;
+use Symfony\Component\Routing\Router;
+use \Entity\Course;
+
 /**
  * Class Editor
  * @package ChamiloLMS\Component\Editor
@@ -35,26 +39,28 @@ class Editor
      */
     public $config;
 
-    /** @var \Symfony\Component\Translation\Translator */
+    /** @var Translator */
     public $translator;
 
-    /** @var \Symfony\Component\Routing\Generator\UrlGenerator */
+    /** @var Router */
     public $urlGenerator;
 
     /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param  \Symfony\Component\Routing\Generator\UrlGenerator $urlGenerator
+     * @param Translator $translator
+     * @param Router $urlGenerator
+     * @param Course $course
      */
-    public function __construct(\Symfony\Component\Translation\Translator $translator, $urlGenerator)
+    public function __construct(Translator $translator, Router $urlGenerator, $course)
     {
         $this->toolbarSet   = 'Basic';
         $this->value        = '';
-        $this->config       = array();
+        $this->config = array();
         $this->setConfigAttribute('width', '100%');
         $this->setConfigAttribute('height', '200');
         $this->setConfigAttribute('fullPage', false);
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
+        $this->course = $course;
     }
 
     /**
@@ -151,27 +157,6 @@ class Editor
     }
 
     /**
-     * This method determines editor's interface language and returns it as compatible with the editor langiage code.
-     * @return array
-     */
-    private function getEditorLanguage()
-    {
-        static $config;
-        if (!is_array($config)) {
-            $code_translation_table         = array('' => 'en', 'sr' => 'sr-latn', 'zh' => 'zh-cn', 'zh-tw' => 'zh');
-            $editor_lang                    = strtolower(str_replace('_', '-', api_get_language_isocode()));
-            $editor_lang                    = isset($code_translation_table[$editor_lang]) ? $code_translation_table[$editor_lang] : $editor_lang;
-            $editor_lang                    = file_exists(
-                api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js'
-            ) ? $editor_lang : 'en';
-            $config['DefaultLanguage']      = $editor_lang;
-            $config['ContentLangDirection'] = api_get_text_direction($editor_lang);
-        }
-
-        return $config;
-    }
-
-    /**
      * @param string $key
      * @param mixed $value
      */
@@ -226,6 +211,14 @@ class Editor
     public function getEditorTemplate()
     {
         return null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEditorStandAloneTemplate()
+    {
+        return 'javascript/editor/elfinder_standalone.tpl';
     }
 
     /**

@@ -3057,23 +3057,48 @@ function api_get_item_visibility($_course, $tool, $id, $session = 0, $user_id = 
  * Updates or adds item properties to the Item_propetry table
  * Tool and lastedit_type are language independant strings (langvars->get_lang!)
  *
- * @param $_course : array with course properties
- * @param $tool : tool id, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
- * @param $item_id : id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
- * @param $lastedit_type : add or update action (1) message to be translated (in trad4all) : e.g. DocumentAdded, DocumentUpdated;
- *                                              (2) "delete"; (3) "visible"; (4) "invisible";
- * @param $user_id : id of the editing/adding user
- * @param $to_group_id : id of the intended group ( 0 = for everybody), only relevant for $type (1)
- * @param $to_user_id : id of the intended user (always has priority over $to_group_id !), only relevant for $type (1)
+ * @param array|\Entity\Course $_course : array with course properties
+ * @param int $tool : tool id, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
+ * @param int $item_id : id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
+ * @param string $lastedit_type add or update action (1) message to be translated (in trad4all) : e.g. DocumentAdded, DocumentUpdated;
+* (2) "delete"; (3) "visible"; (4) "invisible";
+ * @param int $user_id : id of the editing/adding user
+ * @param int $to_group_id : id of the intended group ( 0 = for everybody), only relevant for $type (1)
+ * @param int $to_user_id : id of the intended user (always has priority over $to_group_id !), only relevant for $type (1)
  * @param string $start_visible 0000-00-00 00:00:00 format
  * @param string $end_visible 0000-00-00 00:00:00 format
+ * @param int $session_id
  * @return boolean False if update fails.
+ *
  * @author Toon Van Hoecke <Toon.VanHoecke@UGent.be>, Ghent University
  * @version January 2005
  *
  * @desc update the item_properties table (if entry not exists, insert) of the course
  */
-function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $user_id, $to_group_id = 0, $to_user_id = 0, $start_visible = 0, $end_visible = 0, $session_id = 0) {
+function api_item_property_update(
+    $_course,
+    $tool,
+    $item_id,
+    $lastedit_type,
+    $user_id,
+    $to_group_id = 0,
+    $to_user_id = 0,
+    $start_visible = 0,
+    $end_visible = 0,
+    $session_id = 0
+) {
+
+    if (is_array($_course)) {
+        $course_id	 = $_course['real_id'];
+    } else {
+        if ($_course instanceof \Entity\Course) {
+            $course_id = $_course->getId();
+        }
+    }
+
+    if (empty($course_id)) {
+        return false;
+    }
 
     // Definition of variables.
     $tool           = Database::escape_string($tool);
@@ -3109,7 +3134,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
         $condition_session = " AND id_session = '$session_id' ";
     }
 
-    $course_id	 = $_course['real_id'];
+
     $filter = " c_id = $course_id AND tool='$tool' AND ref='$item_id' $condition_session ";
 
     if ($item_id == '*') {
@@ -6019,8 +6044,8 @@ function api_check_user_access_to_legal($course_visibility) {
  * @return bool
  */
 function api_is_global_chat_enabled() {
-    $global_chat_is_enabled = !api_is_anonymous() && api_get_setting('allow_global_chat') == 'true' && api_get_setting('allow_social_tool') == 'true';
-    return $global_chat_is_enabled;
+    $enabled = !api_is_anonymous() && api_get_setting('allow_global_chat') == 'true' && api_get_setting('allow_social_tool') == 'true';
+    return $enabled;
 }
 
 /**
@@ -6029,13 +6054,14 @@ function api_is_global_chat_enabled() {
  * create a new quiz and call this function, if the quiz tool is
  * invisible/disabled at course creation, the quiz itself will be set to
  * invisible.
+ * @param array|\Entity\Course $course
  * @param int The ID of the item in its own table
  * @param string The string identifier of the tool
  * @param int The group ID, in case we want to specify it
  * @param int The integer course ID, in case we cannot get it from the context
  * @todo Fix tool_visible_by_default_at_creation labels
  */
-function api_set_default_visibility($courseInfo, $item_id, $tool_id, $group_id = null)
+function api_set_default_visibility($course, $item_id, $tool_id, $group_id = null)
 {
     $original_tool_id = $tool_id;
 
@@ -6063,6 +6089,14 @@ function api_set_default_visibility($courseInfo, $item_id, $tool_id, $group_id =
     }
     $setting = api_get_setting('tool_visible_by_default_at_creation');
 
+    if (is_array($course)) {
+        $courseId = $course['real_id'];
+    } else {
+        if ($course instanceof \Entity\Course) {
+            $courseId = $course->getId();
+        }
+    }
+
     if (isset($setting[$tool_id])) {
         $visibility = 'invisible';
         if ($setting[$tool_id] == 'true') {
@@ -6072,13 +6106,14 @@ function api_set_default_visibility($courseInfo, $item_id, $tool_id, $group_id =
         if (empty($group_id)) {
             $group_id = api_get_group_id();
         }
-        api_item_property_update($courseInfo, $original_tool_id, $item_id, $visibility, api_get_user_id(), $group_id, null, null, null, api_get_session_id());
 
-        //Fixes default visibility for tests
+        api_item_property_update($course, $original_tool_id, $item_id, $visibility, api_get_user_id(), $group_id, null, null, null, api_get_session_id());
+
+        // Fixes default visibility for tests
 
         switch ($original_tool_id) {
             case TOOL_QUIZ:
-                $objExerciseTmp = new Exercise($courseInfo['real_id']);
+                $objExerciseTmp = new Exercise($courseId);
                 $objExerciseTmp->read($item_id);
                 if ($visibility == 'visible') {
                     $objExerciseTmp->enable();

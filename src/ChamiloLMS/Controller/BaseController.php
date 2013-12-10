@@ -77,11 +77,31 @@ abstract class BaseController extends FlintController
     }
 
     /**
+     * @return \ChamiloLMS\Component\Editor\Connector
+     */
+    protected function getEditorConnector()
+    {
+        return $this->get('editor_connector');
+    }
+
+    /**
+     * @return \ChamiloLMS\Component\DataFilesystem\DataFilesystem
+     */
+    protected function getDataFileSystem()
+    {
+        return $this->get('chamilo.filesystem');
+    }
+
+    /**
      * @return \Entity\User
      */
     public function getUser()
     {
-        return parent::getUser();
+        $user = parent::getUser();
+        if (empty($user)) {
+            return $this->abort(404, 'Login required.');
+        }
+        return $user;
     }
 
     /**

@@ -238,7 +238,10 @@ $app->error(
                     $message = 'Unauthorized';
                     break;
                 case 404: // not found
-                    $message = 'The requested page could not be found.';
+                    $message = $e->getMessage();
+                    if (empty($message)) {
+                        $message = 'The requested page could not be found.';
+                    }
                     break;
                 default:
                     //$message = 'We are sorry, but something went terribly wrong.';
@@ -250,7 +253,9 @@ $app->error(
 
         if ($e instanceof PDOException) {
             $message = "There's an error with the database.";
-
+            if ($app['debug']) {
+                $message = $e->getMessage();
+            }
             return $message;
         }
 
@@ -274,7 +279,7 @@ $app->error(
         $template->setFooter($app['template.show_footer']);
 
         $template->assign('error', array('code' => $code, 'message' => $message));
-        $response = $template->render_layout('error.tpl');
+        $response = $template->renderLayout('error.tpl');
 
         return new Response($response);
     }
@@ -330,6 +335,7 @@ $app->before(
 
         // Setting session obj
         Session::setSession($app['session']);
+
         UserManager::setEntityManager($app['orm.em']);
 
         /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem $filesystem */
@@ -355,7 +361,6 @@ $app->before(
             $_configuration['access_url'] = 1;
             $access_urls = api_get_access_urls();
 
-            //$protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
             $protocol = $request->getScheme().'://';
             $request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
             $request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
@@ -372,15 +377,15 @@ $app->before(
         }
 
         // Loading portal settings from DB.
-        $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
-        $settings_latest_update = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
+        $settingsRefreshInfo = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
+        $settingsLatestUpdate = $settingsRefreshInfo ? $settingsRefreshInfo['selected_value'] : null;
 
-        $_setting = Session::read('_setting');
+        $settings = Session::read('_setting');
 
-        if (empty($_setting)) {
+        if (empty($settings)) {
             api_set_settings_and_plugins();
         } else {
-            if (isset($_setting['settings_latest_update']) && $_setting['settings_latest_update'] != $settings_latest_update) {
+            if (isset($settings['settings_latest_update']) && $settings['settings_latest_update'] != $settingsLatestUpdate) {
                 api_set_settings_and_plugins();
             }
         }
@@ -432,6 +437,7 @@ $app->before(
         /** Security component. */
         /** @var Symfony\Component\Security\Core\SecurityContext $security */
         $security = $app['security'];
+
         if ($security->isGranted('IS_AUTHENTICATED_FULLY')) {
 
             // Checking token in order to get the current user.
@@ -536,17 +542,30 @@ $app->before(
             }
         }));
 
-
         // Check if we are inside a Chamilo course tool
-        $isCourseTool = (strpos($request->getPathInfo(), 'courses/') === false) ? false : true;
+        /*$isCourseTool = (strpos($request->getPathInfo(), 'courses/') === false) ? false : true;
+
+        if (!$isCourseTool) {
+            // @todo add a before in controller in order to load the courses and course_session object
+            $isCourseTool = (strpos($request->getPathInfo(), 'editor/filemanager') === false) ? false : true;
+            var_dump($isCourseTool);
+            var_dump(api_get_course_id());exit;
+        }*/
 
         // Setting course entity for controllers and templates.
-        if ($isCourseTool) {
-            // The course parameter is loaded.
-            $course = $request->get('course');
+
+
+        // The course parameter is loaded.
+        $courseCode = $request->get('course');
+
+        if (empty($courseCode)) {
+            $courseCode = api_get_course_id();
+        }
+
+        if (!empty($courseCode)) {
 
             // Converting /courses/XXX/ to a Entity/Course object.
-            $course = $app['orm.em']->getRepository('Entity\Course')->findOneByCode($course);
+            $course = $app['orm.em']->getRepository('Entity\Course')->findOneByCode($courseCode);
             $app['course'] = $course;
             $app['template']->assign('course', $course);
 
@@ -555,6 +574,8 @@ $app->before(
             $app['course_session'] = $session;
 
             $app['template']->assign('course_session', $session);
+        } else {
+            $app['course'] = null;
         }
     }
 );

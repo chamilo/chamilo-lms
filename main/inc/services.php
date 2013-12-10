@@ -19,6 +19,7 @@ use MediaAlchemyst\MediaAlchemystServiceProvider;
 use MediaVorus\MediaVorusServiceProvider;
 use FFMpeg\FFMpegServiceProvider;
 use PHPExiftool\PHPExiftoolServiceProvider;
+use ChamiloLMS\Component\Editor\Connector;
 
 // Flint
 $app->register(new Flint\Provider\ConfigServiceProvider());
@@ -665,7 +666,6 @@ class ChamiloServiceProvider implements ServiceProviderInterface
 // Registering Chamilo service provider.
 $app->register(new ChamiloServiceProvider(), array());
 
-
 // Controller as services definitions.
 $app['pages.controller'] = $app->share(
     function () use ($app) {
@@ -821,7 +821,21 @@ $app['upgrade.controller'] = $app->share(
 );
 
 $app['html_editor'] = $app->share(function($app) {
-    return new ChamiloLMS\Component\Editor\CkEditor\CkEditor($app['translator'], $app['url_generator']);
+    return new ChamiloLMS\Component\Editor\CkEditor\CkEditor($app['translator'], $app['url_generator'], $app['course']);
     //return new ChamiloLMS\Component\Editor\TinyMce\TinyMce($app['translator'], $app['url_generator']);
-
 });
+
+$app['editor_connector'] = $app->share(function ($app) {
+    $token = $app['security']->getToken();
+    $user = $token->getUser();
+
+    return new Connector(
+        $app['paths'],
+        $app['url_generator'],
+        $app['translator'],
+        $app['security'],
+        $user,
+        $app['course']
+    );
+});
+

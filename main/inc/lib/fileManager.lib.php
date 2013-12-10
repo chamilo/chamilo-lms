@@ -1605,7 +1605,7 @@ class FileManager
      * @return id if inserted document
      */
     static function add_document(
-        $_course,
+        $course,
         $path,
         $filetype,
         $filesize,
@@ -1621,8 +1621,15 @@ class FileManager
         $path = Database::escape_string($path);
         $filetype = Database::escape_string($filetype);
         $filesize = intval($filesize);
-        $title = Database::escape_string(htmlspecialchars($title));
-        $c_id = $_course['real_id'];
+        $title = Database::escape_string($title);
+
+        if (is_array($course)) {
+            $c_id = $course['real_id'];
+        } else {
+            if ($course instanceof \Entity\Course) {
+                $c_id = $course->getId();
+            }
+        }
 
         $table_document = Database::get_course_table(TABLE_DOCUMENT);
         $sql = "INSERT INTO $table_document (c_id, path, filetype, size, title, comment, readonly, session_id)
@@ -1632,7 +1639,7 @@ class FileManager
             $document_id = Database::insert_id();
             if ($document_id) {
                 if ($save_visibility) {
-                    api_set_default_visibility($_course, $document_id, TOOL_DOCUMENT, $group_id);
+                    api_set_default_visibility($course, $document_id, TOOL_DOCUMENT, $group_id);
                 }
             }
 

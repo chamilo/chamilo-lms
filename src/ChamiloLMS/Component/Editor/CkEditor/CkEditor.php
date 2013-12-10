@@ -37,7 +37,9 @@ class CkEditor extends Editor
      */
     public function createHtml()
     {
-        $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor" >'.$this->value.'</textarea>';
+        $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor" >
+                 '.$this->value.'
+                 </textarea>';
         $html .= $this->editorReplace();
 
         return $html;
@@ -74,7 +76,6 @@ class CkEditor extends Editor
         $templateList = array();
 
         $search = array('{CSS}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}');
-        //$url = $this->urlGenerator->generate('get_document_template_action', array('file' => 'file'));
         $replace = array(
             '',
             api_get_path(REL_CODE_PATH).'img/',
@@ -87,7 +88,11 @@ class CkEditor extends Editor
             $image = $template->getImage();
             $image = !empty($image) ? $image : 'empty.gif';
 
-            $image = $this->urlGenerator->generate('get_document_template_action', array('file' => $image), UrlGenerator::ABSOLUTE_URL);
+            $image = $this->urlGenerator->generate(
+                'get_document_template_action',
+                array('file' => $image),
+                UrlGenerator::ABSOLUTE_URL
+            );
 
             $content = str_replace($search, $replace, $template->getContent());
 

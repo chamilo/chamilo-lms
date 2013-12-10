@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ProfileController extends CommonController
 {
-
     /**
      * @Route("/{username}")
      * @Method({"GET"})
@@ -40,14 +39,31 @@ class ProfileController extends CommonController
      */
     public function fileAction($username)
     {
+        if ($this->getUser()->getUsername() != $username) {
+            return $this->abort(401);
+        }
         $userId = \UserManager::get_user_id_from_username($username);
         $userInfo = api_get_user_info($userId);
 
-        $editor = $this->getTemplate()->renderTemplate($this->getHtmlEditor()->getEditorTemplate());
+        $this->getTemplate()->assign('driver_list', 'PersonalDriver');
+        $editor = $this->getTemplate()->renderTemplate($this->getHtmlEditor()->getEditorStandAloneTemplate());
+
         $this->getTemplate()->assign('user', $userInfo);
         $this->getTemplate()->assign('editor', $editor);
+
         $response = $this->getTemplate()->renderTemplate($this->getTemplatePath().'files.tpl');
         return new Response($response, 200, array());
+    }
+
+    /**
+     * Gets that rm.wav sound
+     * @Route("/{username}/sounds/{file}")
+     * @Method({"GET"})
+     */
+    public function getSoundAction()
+    {
+        $file = api_get_path(LIBRARY_PATH).'elfinder/rm.wav';
+        return $this->app->sendFile($file);
     }
 
     /**

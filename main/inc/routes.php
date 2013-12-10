@@ -555,12 +555,14 @@ $app->match('/introduction/delete/{tool}', 'introduction_tool.controller:deleteA
 /** Course documents */
 $app->get('/data/courses/{courseCode}/document/{file}', 'index.controller:getDocumentAction')
     ->assert('file', '.+')
-    ->assert('type', '.+');
+    ->assert('type', '.+')
+    ->bind('get_document');
 
 /** Scorm documents */
 $app->get('/data/courses/{courseCode}/scorm/{file}', 'index.controller:getScormDocumentAction')
     ->assert('file', '.+')
-    ->assert('type', '.+');
+    ->assert('type', '.+')
+    ->bind('get_scorm_document');
 
 /** Certificates */
 $app->match('/certificates/{id}', 'certificate.controller:indexAction', 'GET');
@@ -714,17 +716,6 @@ $app->match('/ajax', 'model_ajax.controller:indexAction', 'GET')
     ->assert('type', '.+')
     ->bind('model_ajax');
 
-
-/** Editor */
-$app->match('/editor/filemanager', 'editor.controller:filemanagerAction', 'GET|POST')
-    ->assert('type', '.+')
-    ->bind('filemanager');
-
-$app->match('/editor/connector', 'editor.controller:connectorAction', 'GET|POST')
-    ->assert('type', '.+')
-    ->bind('editor_connector');
-
-
 if ($alreadyInstalled) {
     $app->mount('/admin/', new ChamiloLMS\Provider\ReflectionControllerProvider('admin.controller'));
     $app->mount('/admin/administrator/upgrade', new ChamiloLMS\Provider\ReflectionControllerProvider('upgrade.controller'));
@@ -733,8 +724,6 @@ if ($alreadyInstalled) {
     $app->mount('/admin/administrator/question_score_names', new ChamiloLMS\Provider\ReflectionControllerProvider('question_score_name.controller'));
 
     $app->mount('/editor/', new ChamiloLMS\Provider\ReflectionControllerProvider('editor.controller'));
-    $app->mount('/user/', new ChamiloLMS\Provider\ReflectionControllerProvider('profile.controller'));
-
     $app->mount('/user/', new ChamiloLMS\Provider\ReflectionControllerProvider('profile.controller'));
 
     $app->mount('/courses/{course}/curriculum/category', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_category.controller'));

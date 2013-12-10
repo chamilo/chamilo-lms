@@ -118,6 +118,9 @@ class DataFilesystem
         }
     }
 
+    /**
+     * @return Finder
+     */
     public function getStyleSheetFolders()
     {
         $finder = new Finder();

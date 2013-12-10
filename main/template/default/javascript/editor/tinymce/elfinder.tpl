@@ -32,7 +32,7 @@
                 url : '{{ url('editor.controller:connectorAction') }}',  // connector URL (REQUIRED)
                 getFileCallback: function(file) { // editor callback
                     // actually file.url - doesnt work for me, but file does. (elfinder 2.0-rc1)
-                    FileBrowserDialogue.mySubmit(file); // pass selected file path to TinyMCE
+                    FileBrowserDialogue.mySubmit(file.url); // pass selected file path to TinyMCE
                 }
             }).elfinder('instance');
         });

@@ -37,7 +37,7 @@ class UserController extends CommonController
      */
     public function onlineAction(Application $app)
     {
-        $response = $app['template']->render_layout('layout_1_col.tpl');
+        $response = $app['template']->renderLayout('layout_1_col.tpl');
         return new Response($response, 200, array());
     }
 

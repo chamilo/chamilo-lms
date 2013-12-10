@@ -55,8 +55,8 @@ if (!empty($_GET['view'])) {
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" debug="true" xml:lang="<?php echo CONFIG_LANG_DEFAULT; ?>"
-      lang="<?php echo CONFIG_LANG_DEFAULT; ?>"><!--  hack fon lang default Chamilo -->
+<html xmlns="http://www.w3.org/1999/xhtml" debug="true" xml:lang="<?php echo CONFIG_LANG_DEFAULT; ?>" lang="<?php echo CONFIG_LANG_DEFAULT; ?>">
+<!--  hack fon lang default Chamilo -->
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Ajax File Manager</title>
@@ -89,7 +89,7 @@ if (!empty($_GET['view'])) {
         var paths = {'root': '<?php echo addTrailingSlash(backslashToSlash(CONFIG_SYS_ROOT_PATH)); ?>', 'root_title': '<?php echo LBL_FOLDER_ROOT; ?>'};
 
         <!-- Chamilo hack for breadcrumb into shared folders -->
-        var shared_folder = '<?php echo get_lang('UserFolders');?>';
+        var shared_folder = '<?php echo get_lang('UserFolders'); ?>';
 
         <?php
         $course_session = array();
@@ -97,18 +97,9 @@ if (!empty($_GET['view'])) {
             $course_session = explode('_', basename($currentPath));
             $course_session = strtolower($course_session[sizeof($course_session) - 1]);
         }
-
         ?>
-        <!--var shared_folder_session = '<?php //echo get_lang('UserFolders').' ('.api_get_session_name($course_session).')';?>'; --><
-        !--// problem does not refresh, does not synchronize with javascript -->
         var shared_folder_session = '<?php echo get_lang('UserFolders').'*';?>';
-        <?php
-
-        //$userinfo=Database::get_user_info_from_id(substr(basename($folderInfo['path']), 8));	// problem with $folderInfo['path'] does not refresh, sincronisation with javascript?>
-        <!--var shared_user_folder = '<?php //echo api_get_person_name($userinfo['firstname'], $userinfo['lastname']);?>'; --><
-        !--// problem does not refresh, does not synchronize with javascript -->
         var shared_user_folder = '<?php echo get_lang('User');?>';
-
         <!--end hack -->
 
         var parentFolder = {};
@@ -159,8 +150,7 @@ if (!empty($_GET['view'])) {
         var warningCopyPaste = '<?php echo WARNING_COPY_PASTE; ?>';
         var warningDel = '<?php echo WARNING_DELETE; ?>';
         var warningNotDocSelected = '<?php echo ERR_NOT_DOC_SELECTED; ?>';
-        //var noFileSelected = '
-        <?php //echo ERR_NOT_FILE_SELECTED; ?>';// Chamilo
+        //var noFileSelected = '<?php //echo ERR_NOT_FILE_SELECTED; ?>';// Chamilo
         var noFileSelected = '<?php echo TXT_EXT_NOT_SELECTED; ?>';// Chamilo
         var unselectAllText = '<?php echo TIP_UNSELECT_ALL; ?>';
         var selectAllText = '<?php echo TIP_SELECT_ALL; ?>';
@@ -224,11 +214,9 @@ if (!empty($_GET['view'])) {
     <?php
     }
     ?>
-    <link rel="stylesheet" type="text/css"
-          href="theme/<?php echo CONFIG_THEME_NAME; ?>/css/<?php echo CONFIG_EDITOR_NAME; ?>.css"/>
+    <link rel="stylesheet" type="text/css" href="theme/<?php echo CONFIG_THEME_NAME; ?>/css/<?php echo CONFIG_EDITOR_NAME; ?>.css"/>
     <link rel="stylesheet" type="text/css" href="theme/<?php echo CONFIG_THEME_NAME; ?>/css/jquery-calendar.css"/>
-    <link rel="stylesheet" href="theme/<?php echo CONFIG_THEME_NAME; ?>/css/thickbox.css" type="text/css"
-          media="screen"/>
+    <link rel="stylesheet" href="theme/<?php echo CONFIG_THEME_NAME; ?>/css/thickbox.css" type="text/css" media="screen"/>
     <!--[if IE 6]>
     <link href="theme/<?php echo CONFIG_THEME_NAME; ?>/css/ie6.css" type="text/css" rel="Stylesheet" media="screen">
     <![endif]-->
@@ -243,7 +231,6 @@ if (!empty($_GET['view'])) {
         <!-- hack for breadcrumb for Chamilo change <dd> by <dt> -->
     </dl>
     <br/>
-
     <div id="viewList">
         <label><?php echo LBL_BTN_VIEW_OPTIONS; ?></label>
         <?php
@@ -253,7 +240,8 @@ if (!empty($_GET['view'])) {
                    value="<?php echo $k; ?>" <?php echo($k == $view ? 'checked' : ''); ?>> <?php echo $v; ?> &nbsp;&nbsp;
         <?php
         }
-        ?></div>
+        ?>
+    </div>
     <ul id="actionHeader">
         <li><a href="#" id="actionRefresh"
                onclick="return windowRefresh();"><span><?php echo LBL_ACTION_REFRESH; ?></span></a></li>
@@ -293,17 +281,12 @@ if (!empty($_GET['view'])) {
             </li>
         <?php
         }
-        ?>
-
-        <?php
         if (CONFIG_OPTIONS_NEWFOLDER) {
             ?>
             <li><a id="actionNewFolder" href="#"
                    onclick="return newFolderWin(this);"><span><?php echo LBL_BTN_NEW_FOLDER; ?></span></a></li>
         <?php
         }
-        ?>
-        <?php
         if (CONFIG_OPTIONS_UPLOAD) {
             ?>
             <li><a id="actionUpload" href="#"
@@ -311,12 +294,6 @@ if (!empty($_GET['view'])) {
         <?php
         }
         ?>
-
-        <!--					<li><a href="#" id="actionClose" onclick="closeWindow('<?php echo IMG_WARING_WIN_CLOSE; ?>');"><?php echo IMG_BTN_CLOSE; ?></a></li>-->
-        <!--<li><a href="#" class="thickbox" id="actionInfo" onclick="return infoWin(this);"><span>Info</span></a></li> -->
-        <!-- thest functions will be added in the near future
-         <li ><a href="#" id="actionZip"><span>Zip</span></a><li>
-        <li ><a href="#" id="actionUnzip"><span>Unzip</span></a><li>-->
     </ul>
     <form action="" method="post" name="formAction" id="formAction">
         <input type="hidden" name="currentFolderPath" id="currentFolderPathVal" value=""/>
@@ -330,10 +307,8 @@ if (!empty($_GET['view'])) {
     if (CONFIG_LOAD_DOC_LATTER) {
         $currentPath = getCurrentFolderPath();
         ?>
-
         <script type="text/javascript">
             parentFolder = {'path_base64': '<?php echo base64_encode(getParentFolderPath($currentPath)); ?>', 'path': '<?php echo getParentFolderPath($currentPath); ?>'};
-
             currentFolder = {'friendly_path': '<?php echo transformFilePath($currentPath); ?>'};
             $(document).ready(
                 function () {
@@ -370,36 +345,34 @@ if (!empty($_GET['view'])) {
             </tr>
             <tr>
                 <th><?php echo LBL_FOLDER_CREATED; ?></th>
-                <td colspan="3" id="folderCtime"><?php echo(!empty($folderInfo['ctime']) ? date(
+                <td colspan="3" id="folderCtime">
+                    <?php echo(!empty($folderInfo['ctime']) ? date(
                         DATE_TIME_FORMAT,
                         $folderInfo['ctime']
-                    ) : '&nbsp;'); ?></td>
-
+                    ) : '&nbsp;'); ?>
+                </td>
             </tr>
             <tr>
                 <th><?php echo LBL_FOLDER_MODIFIED; ?></th>
                 <!-- comment these lines while integrating into Chamilo -->
                 <th><?php //echo LBL_FOLDER_MODIFIED; ?></th>
-                <!--	<td colspan="3" id="folderMtime"><?php //echo (!empty($folderInfo['mtime'])?date(DATE_TIME_FORMAT,$folderInfo['mtime']):'&nbsp;'); ?></td> -->
             </tr>
             <tr>
                 <th><?php echo LBL_FOLDER_SUDDIR; ?></th>
-                <td colspan="3"
-                    id="folderSubdir"><?php echo(isset($folderInfo['subdir']) ? $folderInfo['subdir'] : "&nbsp;"); ?></td>
-
+                <td colspan="3" id="folderSubdir">
+                    <?php echo(isset($folderInfo['subdir']) ? $folderInfo['subdir'] : "&nbsp;"); ?>
+                </td>
             </tr>
             <tr>
                 <th><?php echo LBL_FOLDER_FIELS; ?></th>
-                <td colspan="3"
-                    id="folderFile"><?php echo(isset($folderInfo['file']) ? $folderInfo['file'] : '&nbsp;'); ?></td>
+                <td colspan="3" id="folderFile">
+                    <?php echo(isset($folderInfo['file']) ? $folderInfo['file'] : '&nbsp;'); ?>
+                </td>
             </tr>
-
             <tr>
                 <!-- comment these lines while integrating into Chamilo -->
                 <th><?php // echo LBL_FOLDER_WRITABLE; ?></th>
-                <!--	<td id="folderWritable"><span class="<?php //echo (isset($folderInfo['is_readable'])?($folderInfo['is_readable']?'flagYes':'flagNo'):'&nbsp;'); ?>">&nbsp;</span></td> -->
                 <th><?php // echo LBL_FOLDER_READABLE; ?></th>
-                <!--<td  id="folderReadable"><span class="<?php //echo (isset($folderInfo['is_writable'])?($folderInfo['is_writable']?'flagYes':'flagNo'):'&nbsp;'); ?>">&nbsp;</span></td> -->
             </tr>
             </tbody>
         </table>
@@ -415,18 +388,15 @@ if (!empty($_GET['view'])) {
             <tr>
                 <th><?php echo LBL_FILE_CREATED; ?></th>
                 <td colspan="3" id="fileCtime"></td>
-
             </tr>
             <tr>
                 <!-- comment these lines while integrating into Chamilo -->
                 <th><?php //echo LBL_FILE_MODIFIED; ?></th>
                 <!--<td colspan="3" id="fileMtime"></td> -->
             </tr>
-
             <tr>
                 <th><?php echo LBL_FILE_SIZE; ?></th>
                 <td colspan="3" id="fileSize"></td>
-
             </tr>
             <tr>
                 <th><?php echo LBL_FILE_TYPE; ?></th>
@@ -439,7 +409,6 @@ if (!empty($_GET['view'])) {
                 <th><?php //echo LBL_FILE_READABLE; ?></th>
                 <!--<td id="fileReadable"><span class="flagNo">&nbsp;</span></td> -->
             </tr>
-
             </tbody>
         </table>
 
@@ -451,7 +420,6 @@ if (!empty($_GET['view'])) {
         </p>
     </fieldset>
 
-
     <fieldset class="boxSearch">
         <legend><?php echo LBL_SEARCH; ?></legend>
         <table cellpadding="0" cellspacing="0" class="tableSearch">
@@ -462,7 +430,6 @@ if (!empty($_GET['view'])) {
                     <b><?php //echo LBL_SEARCH_NAME; ?></b> <br/>
                     <input type="text" class="input inputSearch" name="search_name" id="search_name" size="18"/>
                 </td>
-
             </tr>
             <tr>
                 <td>
@@ -487,7 +454,6 @@ if (!empty($_GET['view'])) {
                     <select class="input inputSearchSelect" name="search_folder" id="search_folder">
                         <!-- Chamilo integrating, modify name class for disable by css -->
                         <?php
-
                         foreach (getFolderListing(CONFIG_SYS_ROOT_PATH) as $k => $v) {
                             if (hideFolderName($k)) {
                                 //show only those permitted by Chamilo
@@ -497,21 +463,16 @@ if (!empty($_GET['view'])) {
                                 ) == removeTrailingSlash(
                                     backslashToSlash(($v))
                                 ) ? ' selected="selected"' : ''); ?>><?php echo hideFolderName(shortenFileName($k, 30));
-                                    ?></option>
-
+                                    ?>
+                                </option>
                             <?php
                             }
                         }
-
                         ?>
                     </select>
                 <?php
                 }
                 ?></span>
-                    <!--  </td>
-                     </tr>
-                        <tr>
-                            <td> -->
                     <b><?php //echo LBL_SEARCH_MTIME; ?></b><br/>
                     <!--<input type="text" class="input inputMtime" name="search_mtime_from" id="search_mtime_from" value="<?php //echo (!empty($_GET['search_mtime_from'])?$_GET['search_mtime_from']:''); ?>" />  -->
                     <!--<span class="leftToRightArrow">&nbsp;</span> -->
@@ -531,7 +492,6 @@ if (!empty($_GET['view'])) {
                     <!--     	<input type="radio" name="search_recursively" value="1" id="search_recursively_1" class="radio" <?php //echo (empty($_GET['search_recursively'])?'checked="checked"':''); ?> /> <?php //echo LBL_RECURSIVELY_YES; ?> -->
                     <!--  	<input type="radio" name="search_recursively" value="0" id="search_recursively_0" class="radio" <?php //echo (!empty($_GET['search_recursively'])?'checked="checked"':''); ?> /> <?php //echo LBL_RECURSIVELY_NO; ?> -->
                 </td>
-
             </tr>
             </tbody>
         </table>
@@ -578,9 +538,7 @@ if (!empty($_GET['view'])) {
                                    onclick="return addMoreFile();">
                                     <label><?php echo FILE_LBL_MORE; ?></label><span class="addMore">&nbsp;</span></a>
                             </label>
-
                         </th>
-
                     </tr>
                     </thead>
                     <tbody id="fileUploadBody">
@@ -593,7 +551,6 @@ if (!empty($_GET['view'])) {
                                 <!-- Chamilo lang var added -->
                                 <span class="cancel">&nbsp;</span><span class="uploadProcessing" style="display:none">&nbsp;</span>
                             </a>
-
                         </td>
                     </tr>
                     </tbody>
@@ -605,8 +562,8 @@ if (!empty($_GET['view'])) {
 <div id="winNewFolder" style="display:none">
     <div class="jqmContainer">
         <div class="jqmHeader">
-            <a href="#" onclick="return tb_remove();"><img src="theme/default/images/flagno.png"
-                                                           title="<?php echo LBL_ACTION_CLOSE; ?>"><?php echo LBL_ACTION_CLOSE; ?>
+            <a href="#" onclick="return tb_remove();">
+                <img src="theme/default/images/flagno.png" title="<?php echo LBL_ACTION_CLOSE; ?>"><?php echo LBL_ACTION_CLOSE; ?>
             </a><!-- Add close image for Chamilo -->
         </div>
         <div class="jqmBody">
@@ -627,8 +584,10 @@ if (!empty($_GET['view'])) {
                     <tfoot>
                     <tr>
                         <th>&nbsp;</th>
-                        <td><input type="button" value="<?php echo FOLDER_LBL_CREATE; ?>" class="create_button"
-                                   onclick="return doCreateFolder();"/></td>
+                        <td>
+                            <input type="button" value="<?php echo FOLDER_LBL_CREATE; ?>" class="create_button"
+                                   onclick="return doCreateFolder();"/>
+                        </td>
                     </tr>
                     </tfoot>
                 </table>
@@ -639,8 +598,9 @@ if (!empty($_GET['view'])) {
 <div id="winPlay" style="display:none">
     <div class="jqmContainer">
         <div class="jqmHeader">
-            <a href="#" onclick="return closeWinPlay();"><img src="theme/default/images/flagno.png"
-                                                              title="<?php echo LBL_ACTION_CLOSE; ?>"><?php echo LBL_ACTION_CLOSE; ?>
+            <a href="#" onclick="return closeWinPlay();">
+                <img src="theme/default/images/flagno.png" title="<?php echo LBL_ACTION_CLOSE; ?>">
+                <?php echo LBL_ACTION_CLOSE; ?>
             </a><!-- Add close image for Chamilo -->
         </div>
         <div class="jqmBody">
@@ -651,8 +611,9 @@ if (!empty($_GET['view'])) {
 <div id="winRename" style="display:none">
     <div class="jqmContainer">
         <div class="jqmHeader">
-            <a href="#" onclick="return tb_remove();"><img src="theme/default/images/flagno.png"
-                                                           title="<?php echo LBL_ACTION_CLOSE; ?>"><?php echo LBL_ACTION_CLOSE; ?>
+            <a href="#" onclick="return tb_remove();">
+                <img src="theme/default/images/flagno.png" title="<?php echo LBL_ACTION_CLOSE; ?>">
+                <?php echo LBL_ACTION_CLOSE; ?>
             </a><!-- Add close image for Chamilo -->
         </div>
         <div class="jqmBody">
@@ -676,16 +637,15 @@ if (!empty($_GET['view'])) {
                     <tfoot>
                     <tr>
                         <th>&nbsp;</th>
-                        <td><input type="button" value="<?php echo RENAME_LBL_RENAME; ?>" class="create_button"
-                                   onclick="return doRename();"/></td>
+                        <td>
+                            <input type="button" value="<?php echo RENAME_LBL_RENAME; ?>" class="create_button" onclick="return doRename();"/>
+                        </td>
                     </tr>
                     </tfoot>
                 </table>
             </form>
         </div>
-
     </div>
-
 </div>
 <div id="winInfo" style="display:none">
     <div class="jqmContainer">

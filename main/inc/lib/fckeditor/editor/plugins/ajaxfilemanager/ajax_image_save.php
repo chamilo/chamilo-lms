@@ -168,6 +168,3 @@ if (isset($image) && is_object($image)) {
 echo $info;
 echo ",history:".(isset($history) && is_object($history) ? ($history->getNumRestorable()) : 0)."";
 echo "}";
-
-
-?>

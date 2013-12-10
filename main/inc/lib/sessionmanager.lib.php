@@ -544,11 +544,245 @@ class SessionManager
             while ($row = Database::fetch_assoc($result)) {
                 $formatted_sessions[] = $row;
             }
-            /*foreach ($lps as $lp) {
-                error_log(print_r($lp,1));
-            }*/
         }
         return $formatted_sessions;
+    }
+    /**
+     * Gets the progress of the given session
+     * @param int   session id
+     * @param array options order and limit keys
+     * @return array table with user name, lp name, progress
+     */
+    public static function get_session_progress($sessionId, $options)
+    {
+
+        //tables
+        $session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $user                   = Database::get_main_table(TABLE_MAIN_USER);
+        $workTable              = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+        $workTableAssignment    = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+        $forum                  = Database::get_course_table(TABLE_FORUM);
+        $forum_post             = Database::get_course_table(TABLE_FORUM_POST);
+        $tbl_course_lp          = Database::get_course_table(TABLE_LP_MAIN);
+        $wiki                   = Database::get_course_table(TABLE_WIKI);
+
+        $courses = SessionManager::get_course_list_by_session_id($sessionId);
+        //TODO let select course
+        $course = current($courses);
+        //TODO fix this
+        $course_info = array('real_id' => $course['id']);
+
+        //getting all the students of the course
+        //we are not using this because it only returns user ids
+        /*if (empty($sessionId)
+        {
+            // Registered students in a course outside session.
+            $users = CourseManager :: get_student_list_from_course_code($course_code);
+        } else {
+            // Registered students in session.
+            $users = CourseManager :: get_student_list_from_course_code($course_code, true, $sessionId);
+        }*/
+        $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code FROM $session_course_user s
+        INNER JOIN $user u ON u.user_id = s.id_user
+        WHERE course_code = '%s'
+        AND s.status <> 2 and id_session = %s";
+
+        $sql_query = sprintf($sql, $course['code'], $sessionId);
+
+        $rs = Database::query($sql_query);
+        while ($user = Database::fetch_array($rs))
+        {
+            $users[$user['user_id']] = $user;
+        }
+
+        /**
+         *  Lessons
+         */
+        $sql = "SELECT * FROM $tbl_course_lp
+        WHERE c_id = %s ";  //AND session_id = %s
+        $sql_query = sprintf($sql, $course_info['real_id']);
+        $result = Database::query($sql_query);
+        $lessons_total = 0;
+        while ($row = Database::fetch_array($result))
+        {
+            if (api_get_item_visibility(api_get_course_info($course['code']), 'learnpath', $row['id'], $sessionId))
+            {
+                $lessons_total++;
+            }
+        }
+
+        /**
+         *  Exercises
+         */
+        require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
+        $exercises = get_all_exercises($course_info, $sessionId);
+        $exercises_total = count($exercises);
+
+        /**
+         *  Assignments
+         */
+        //total
+        $sql = "SELECT count(w.id) as count
+        FROM $workTable w
+        LEFT JOIN  $workTableAssignment a ON (a.publication_id = w.id AND a.c_id = w.c_id)
+        WHERE w.c_id = %s
+        AND parent_id = 0
+        AND active IN (1, 0)
+        AND  session_id = %s";
+        $sql_query = sprintf($sql, $course_info['real_id'], $sessionId);
+        $result = Database::query($sql_query);
+        $row = Database::fetch_array($result);
+        $assignments_total = $row['count'];
+
+        /**
+         * Wiki
+         */
+        $sql = "SELECT count(distinct page_id)  as count FROM $wiki
+            WHERE c_id = %s and session_id = %s";
+        $sql_query = sprintf($sql, $course_info['real_id'], $sessionId);
+        $result = Database::query($sql_query);
+        $row = Database::fetch_array($result);
+        $wiki_total = $row['count'];
+
+        /**
+         * Surveys
+         */
+        $survey_user_list = array();
+        $survey_list = survey_manager::get_surveys($course['code'], $sessionId);
+
+        $surveys_total = count($survey_list);
+        $survey_data = array();
+        foreach ($survey_list as $survey)
+        {
+            $user_list = survey_manager::get_people_who_filled_survey($survey['survey_id'], false, $course_info['real_id']);
+            foreach ($user_list as $user_id)
+            {
+                isset($survey_user_list[$user_id]) ? $survey_user_list[$user_id]++ : $survey_user_list[$user_id] = 1;
+            }
+        }
+        /**
+         * Forums
+         */
+        //total
+        $sql = "SELECT count(*) as count
+        FROM $forum f
+        where f.c_id = %s and f.session_id = %s";
+        $sql_query = sprintf($sql, $course_info['real_id'], $sessionId);
+        $result = Database::query($sql_query);
+        $row = Database::fetch_array($result);
+        $forums_total = $row['count'];
+
+
+        //process table info
+        foreach ($users as $user)
+        {
+            //Course description
+            $sql = "SELECT count(*) as count
+            FROM track_e_access
+            WHERE access_tool = 'course_description'
+            AND access_cours_code = '%s'
+            AND access_session_id = %s
+            AND access_user_id = %s ";
+            $sql_query  = sprintf($sql, $course['code'], $sessionId, $user['user_id']);
+            $result     = Database::query($sql_query);
+            $row        = Database::fetch_array($result);
+            $course_description_progress = ($row['count'] > 0) ? 100 : 0;
+
+            //Lessons
+            //TODO: Lessons done and left is calculated by progress per item in lesson, maybe we should calculate it only per completed lesson?
+            $lessons_progress   = Tracking::get_avg_student_progress($user['user_id'], $course['code'], array(), $sessionId);
+            $lessons_done       = ($lessons_progress * $lessons_total) / 100;
+            $lessons_left       = $lessons_total - $lessons_done;
+
+            //Exercises
+            $exercises_progress     = str_replace('%', '', Tracking::get_exercise_student_progress($exercises, $user['user_id'], $course['code'], $sessionId));
+            $exercises_done         = ($exercises_progress * $exercises_total) / 100;
+            $exercises_left         = $exercises_total - $exercises_done;
+
+            //Assignments
+            $assignments_done       = Tracking::count_student_assignments($user['user_id'], $course['code'], $sessionId);
+            $assignments_left       = $assignments_total - $assignments_done;
+            $assignments_progress   =  round((( $assignments_done * 100 ) / $assignments_total ), 2);
+
+            //Wiki
+            $sql = "SELECT count(*) as count
+            FROM $wiki
+            where c_id = %s and session_id = %s and user_id = %s";
+            $sql_query  = sprintf($sql, $course_info['real_id'], $sessionId, $user['user_id']);
+            $result     = Database::query($sql_query);
+            $row        = Database::fetch_array($result);
+            $wiki_revisions =  $row['count'];
+
+            //Surveys
+            $surveys_done       = (isset($survey_user_list[$user['user_id']]) ? $survey_user_list[$user['user_id']] : 0);
+            $surveys_left       = $surveys_total - $surveys_done;
+            $surveys_progress   = round((( $surveys_done * 100 ) /  $surveys_total), 2);
+
+            //Forums
+            #$forums_done = Tracking::count_student_messages($user['user_id'], $course_code, $session_id);
+            $sql = "SELECT count(distinct f.forum_id) as count FROM $forum_post p
+            INNER JOIN $forum f ON f.forum_id = p.forum_id
+            WHERE p.poster_id = %s and f.session_id = %s and p.c_id = %s";
+            $sql_query  = sprintf($sql, $user['user_id'], $sessionId, $course_info['real_id']);
+            $result     = Database::query($sql_query);
+            $row        = Database::fetch_array($result);
+
+            $forums_done        = $row['count'];
+            $forums_left        = $forums_total - $forums_done;
+            $forums_progress    = round((( $forums_done * 100 ) /  $forums_total), 2);
+
+            //Overall Total
+            $overall_total =  ($course_description_progress + $exercises_progress + $forums_progress + $assignments_progress + $wiki_progress + $surveys_progress) / 6;
+
+            $table[] = array(
+                'lastname'  => $user[1],
+                'firstname' => $user[2],
+                'username'  => $user[3],
+                #'profile'   => '',
+                'total'     => round($overall_total,2) . '%',
+                'courses'   => $course_description_progress . '%',
+                'lessons'   => $lessons_progress . '%',
+                'exercises' => $exercises_progress . '%',
+                'forums'    => $forums_progress . '%',
+                'homeworks' => $assignments_progress . '%',
+                'wikis'     => $wiki_progress . '%',
+                'surveys'   => $surveys_progress . '%',
+                //course description
+                'course_description_progress' => $course_description_progress . '%',
+                //lessons
+                'lessons_total'      => $lessons_total,
+                'lessons_done'       => $lessons_done,
+                'lessons_left'       => $lessons_left,
+                'lessons_progress'   => $lessons_progress . '%',
+                //exercises
+                'exercises_total'       => $exercises_total,
+                'exercises_done'        => $exercises_done,
+                'exercises_left'        => $exercises_left,
+                'exercises_progress'    => $exercises_progress . '%',
+                //forums
+                'forums_total'      => $forums_total,
+                'forums_done'       => $forums_done,
+                'forums_left'       => $forums_left,
+                'forums_progress'   => $forums_progress . '%',
+                //assignments
+                'assignments_total'     => $assignments_total,
+                'assignments_done'      => $assignments_done,
+                'assignments_left'      => $assignments_left,
+                'assignments_progress'  => $assignments_progress . '%',
+                //wiki
+                'wiki_total'        => $wiki_total,
+                'wiki_revisions'    => $wiki_revisions,
+                'wiki_read'         => $wiki_read,
+                'wiki_unread'       => $wiki_unread,
+                'wiki_progress'     => $wiki_progress . '%',
+                //survey
+                'surveys_total'     => $surveys_total,
+                'surveys_done'      => $surveys_done,
+                'surveys_left'      => $surveys_left,
+                'surveys_progress'  => $surveys_progress . '%',
+                );
+        }
+        return $table;
     }
     /**
      * Creates a new course code based in given code

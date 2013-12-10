@@ -298,6 +298,120 @@ class MySpace {
         return $return;
     }
     /**
+     * Display a sortable table that contains an overview off all the progress of the user in a session
+     * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
+     */
+    function display_tracking_progress_overview($sessionId = 0) {
+
+       //The order is important you need to check the the $column variable in the model.ajax.php file
+        $columns = array(
+            get_lang('LastName'),
+            get_lang('FirstName'),
+            get_lang('Username'),
+            #get_lang('Profile'),
+            get_lang('Total'),
+            get_lang('CourseDescription'),
+            get_lang('Lessons'),
+            get_lang('Exercises'),
+            get_lang('Forums'),
+            get_lang('Homeworks'),
+            get_lang('Wikis'),
+            get_lang('Surveys'),
+            //course description
+            get_lang('CourseDescriptionProgress'),
+            //Exercises
+            get_lang('LessonsTotal'),
+            get_lang('LessonsDone'),
+            get_lang('LessonsLeft'),
+            get_lang('LessonsProgress'),
+            //Exercises
+            get_lang('ExercisesTotal'),
+            get_lang('ExercisesDone'),
+            get_lang('ExercisesLeft'),
+            get_lang('ExercisesProgress'),
+            //Forums
+            get_lang('ForumsTotal'),
+            get_lang('ForumsDone'),
+            get_lang('ForumsLeft'),
+            get_lang('ForumsProgress'),
+            //Assignments
+            get_lang('AssignmentsTotal'),
+            get_lang('AssignmentsDone'),
+            get_lang('AssignmentsLeft'),
+            get_lang('AssignmentsProgress'),
+            //Wiki
+            get_lang('WikiTotal'),
+            get_lang('WikiRevisions'),
+            get_lang('WikiRead'),
+            get_lang('WikiUnread'),
+            get_lang('WikiProgress'),
+            //Surveys
+            get_lang('SurveysTotal'),
+            get_lang('SurveysDone'),
+            get_lang('SurveysLeft'),
+            get_lang('SurveysProgress'),
+        );
+
+        //Column config
+        $column_model   = array(
+            array('name'=>'lastname',   'index'=>'lastname',    'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'firstname',  'index'=>'firstname',   'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'username',   'index'=>'username',    'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            #array('name'=>'profile',   'index'=>'username',    'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'total',      'index'=>'total',       'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'courses',    'index'=>'courses',     'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'lessons',    'index'=>'lessons',     'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'exercises',  'index'=>'exercises',   'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'forums',     'index'=>'forums',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'homeworks',  'index'=>'homeworks',   'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'wikis',      'index'=>'wikis',       'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'surveys',    'index'=>'surveys',     'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            //Course description
+            array('name'=>'course_description_progress',    'index'=>'course_description_progress',     'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            //Lessons
+            array('name'=>'lessons_total',    'index'=>'lessons_total',     'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'lessons_done',     'index'=>'lessons_done',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'lessons_left',     'index'=>'lessons_left',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'lessons_progress', 'index'=>'lessons_progress',  'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            //Exercises
+            array('name'=>'exercises_total',    'index'=>'exercises_total',     'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'exercises_done',     'index'=>'exercises_done',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'exercises_left',     'index'=>'exercises_left',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'exercises_progress', 'index'=>'exercises_progress',  'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            //Assignments
+            array('name'=>'forums_total',    'index'=>'forums_total',     'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'forums_done',     'index'=>'forums_done',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'forums_left',     'index'=>'forums_left',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'forums_progress', 'index'=>'forums_progress',  'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            //Assignments
+            array('name'=>'assigments_total',    'index'=>'assigments_total',     'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'assigments_done',     'index'=>'assigments_done',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'assigments_left',     'index'=>'assigments_left',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'assigments_progress', 'index'=>'assigments_progress',  'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            //Assignments
+            array('name'=>'wiki_total',         'index'=>'wiki_total',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'wiki_revisions',     'index'=>'wiki_revisions',  'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'wiki_read',          'index'=>'wiki_read',       'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'wiki_unread',        'index'=>'wiki_unread',     'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'wiki_progress',      'index'=>'wiki_progress',   'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            //Surveys
+            array('name'=>'surveys_total',    'index'=>'surveys_total',     'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'surveys_done',     'index'=>'surveys_done',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'surveys_left',     'index'=>'surveys_left',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'surveys_progress', 'index'=>'surveys_progress',  'width'=>'100',  'align'=>'left', 'search' => 'true'),
+        );
+
+        $action_links = '';
+        // jqgrid will use this URL to do the selects
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_progress&session_id=' . intval($sessionId);
+        $table = Display::grid_js('lps', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+
+
+        $return = '<script>$(function() {'. $table . '});</script>';
+        $return .= Display::grid_html('lps');
+        return $return;
+    }
+    /**
      * Display a sortable table that contains an overview off all the access to a session
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      * @version Chamilo 1.9.6

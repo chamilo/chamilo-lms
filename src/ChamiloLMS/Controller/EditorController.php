@@ -6,11 +6,11 @@ namespace ChamiloLMS\Controller;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 use ChamiloLMS\Component\Editor\Connector;
+use ChamiloLMS\Component\Editor\Finder;
 
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-//use ChamiloLMS\Controller\CommonController;
-
+use ChamiloLMS\Component\Editor\Driver\elFinderVolumePersonalDriver;
 
 /**
  * @package ChamiloLMS.Controller
@@ -19,11 +19,24 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 class EditorController extends CommonController
 {
     /**
+     * Gets that rm.wav sound
+     * @Route("/sounds/{file}")
+     * @Method({"GET"})
+     */
+    public function getSoundAction($file)
+    {
+        $file = api_get_path(LIBRARY_PATH).'elfinder/rm.wav';
+        return $this->app->sendFile($file);
+    }
+
+    /**
      * @Route("/filemanager")
      * @Method({"GET"})
      */
     public function fileManagerAction()
     {
+        $this->getTemplate()->assign('course', $this->getCourse());
+        $this->getTemplate()->assign('user', $this->getUser());
         $response = $this->getTemplate()->renderTemplate($this->getHtmlEditor()->getEditorTemplate());
         return new Response($response, 200, array());
     }
@@ -48,10 +61,14 @@ class EditorController extends CommonController
      */
     public function connectorAction()
     {
-        $chamiloConnector = new Connector();
-        $opts = $chamiloConnector->getOperations();
+        error_reporting(-1);
+        $connector = $this->getEditorConnector();
 
-        error_reporting(0);
+        $driverList = $this->getRequest()->get('driver_list');
+        if (!empty($driverList)) {
+            $connector->setDriverList(explode(',', $driverList));
+        }
+        $operations = $connector->getOperations();
 
         include_once api_get_path(LIBRARY_PATH).'elfinder/php/elFinderConnector.class.php';
         include_once api_get_path(LIBRARY_PATH).'elfinder/php/elFinder.class.php';
@@ -59,8 +76,8 @@ class EditorController extends CommonController
         include_once api_get_path(LIBRARY_PATH).'elfinder/php/elFinderVolumeLocalFileSystem.class.php';
 
         // Run elFinder
-        $connector = new \elFinderConnector(new \elFinder($opts));
-        $connector->run();
+        $finder = new Finder($operations);
+        $elFinderConnector = new \elFinderConnector($finder);
+        $elFinderConnector->run();
     }
-
 }

@@ -52,7 +52,7 @@ class IntroductionToolController
 
         $app['template']->assign('content', $form->return_form());
         $app['template']->assign('message', $message);
-        $response = $app['template']->render_layout('layout_1_col.tpl');
+        $response = $app['template']->renderLayout('layout_1_col.tpl');
         return new Response($response, 200, array());
     }
 
@@ -78,7 +78,7 @@ class IntroductionToolController
 
         $app['template']->assign('content', $form->return_form());
         $app['template']->assign('message', $message);
-        $response = $app['template']->render_layout('layout_1_col.tpl');
+        $response = $app['template']->renderLayout('layout_1_col.tpl');
         return new Response($response, 200, array());
     }
 

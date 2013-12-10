@@ -312,7 +312,7 @@ class CourseRecycler
             $table_qui 	   = Database :: get_course_table(TABLE_QUIZ_TEST);
             $table_rel 	   = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $table_qui_que_opt = Database :: get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-            $table_qui_que_cat = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+            $table_qui_que_cat = Database :: get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
             $table_qui_que_rel_cat = Database :: get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 
             $ids = array_keys($this->course->resources[RESOURCE_QUIZ]);
@@ -322,7 +322,7 @@ class CourseRecycler
             // This value is set in CourseBuilder::quiz_build_questions()
             $delete_orphan_questions = in_array(-1, $ids);
             $ids = implode(',', $ids);
-            
+
             if (!empty($ids)) {
                 // Deletion of the tests first. Questions in these tests are
                 //   not deleted and become orphan at this point
@@ -334,7 +334,7 @@ class CourseRecycler
 
             // Identifying again and deletion of the orphan questions, if it was desired.
             if ($delete_orphan_questions) {
-               
+
 
                 //@todo fix query in order to use iid
                 $sql = " (
@@ -391,7 +391,7 @@ class CourseRecycler
     /**
      * Recycle surveys - removes everything
      */
-    function recycle_surveys() 
+    function recycle_surveys()
     {
         if ($this->course->has_resources(RESOURCE_SURVEY)) {
             $table_survey = Database :: get_course_table(TABLE_SURVEY);
@@ -415,7 +415,7 @@ class CourseRecycler
     /**
      * Recycle learnpaths
      */
-    function recycle_learnpaths() 
+    function recycle_learnpaths()
     {
         if ($this->course->has_resources(RESOURCE_LEARNPATH)) {
             $table_main = Database :: get_course_table(TABLE_LP_MAIN);
@@ -515,7 +515,7 @@ class CourseRecycler
     /**
     * Recycle Attendances
     */
-    function recycle_attendance($session_id = 0) 
+    function recycle_attendance($session_id = 0)
     {
         if ($this->course->has_resources(RESOURCE_ATTENDANCE)) {
             $table_attendance          = Database :: get_course_table(TABLE_ATTENDANCE);
@@ -539,7 +539,7 @@ class CourseRecycler
     /**
      * Recycle Works
      */
-    function recycle_work($session_id = 0) 
+    function recycle_work($session_id = 0)
     {
         if ($this->course->has_resources(RESOURCE_WORK)) {
             $table_work          = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);

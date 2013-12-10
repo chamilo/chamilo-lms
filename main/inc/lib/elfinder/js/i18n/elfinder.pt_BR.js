@@ -1,13 +1,15 @@
 /**
  * Brazilian Portuguese translation
  * @author Leandro Carvalho <contato@leandrowebdev.net>
- * @version 2011-07-09
+ * @version 2013-01-22
  */
 if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object') {
 	elFinder.prototype.i18.pt_BR = {
 		translator : 'Leandro Carvalho &lt;contato@leandrowebdev.net&gt;',
 		language   : 'Português',
 		direction  : 'ltr',
+		dateFormat : 'd M Y H:i', // Mar 13, 2012 05:27 PM
+		fancyDateFormat : '$1 H:i', // will produce smth like: Today 12:25 PM
 		messages   : {
 
 			/********************************** errors **********************************/
@@ -65,6 +67,25 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'errArcType'           : 'Tipo de arquivo não suportado.',
 			'errNoArchive'         : 'Arquivo inválido ou é um tipo sem suporte.',
 			'errCmdNoSupport'      : 'Backend não suporta este comando.',
+			'errNotUTF8Content'    : 'Arquivo "$1" não está em UTF-8 e não pode ser editado.',  // added 9.11.2011
+			'errNetMount'          : 'Habilitar montagem "$1".', // added 17.04.2012
+			'errNetMountNoDriver'  : 'Protocolo não suportado.',     // added 17.04.2012
+			'errNetMountFailed'    : 'Monagem falhou.',         // added 17.04.2012
+			'errNetMountHostReq'   : 'Servidor requerido.', // added 18.04.2012
+			'errSessionExpires'    : 'Sua sessão expirou por inatividade',
+			'errCreatingTempDir'   : 'Não foi possível criar um diretório temporário: "$1"',
+			'errFtpDownloadFile'   : 'Não foi possível fazer o download do arquivo do FTP: "$1"',
+			'errFtpUploadFile'     : 'Não foi possível fazer o upload do arquivo para o FTP: "$1"',
+			'errFtpMkdir'          : 'Não foi possível criar um diretório remoto no FTP: "$1"',
+			'errArchiveExec'       : 'Erro no arquivamento: "$1"',
+			'errExtractExec'       : 'Erro na extração dos arquivos: "$1"',
+			'cmdsort'              : 'Ordenar',
+			'sortkind'             : 'por tipo',
+			'sortname'             : 'por nome',
+			'sortsize'             : 'por tamanho',
+			'sortdate'             : 'por data',
+			'sortFoldersFirst'     : 'Pastas primeiro',
+			'errUploadFile'        : 'Não foi possível fazer o upload "$1".',
 
 			/******************************* commands names ********************************/
 			'cmdarchive'   : 'Criar arquivo',
@@ -92,6 +113,9 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'cmdup'        : 'Ir para o diretório pai',
 			'cmdupload'    : 'Fazer upload de arquivo',
 			'cmdview'      : 'Vizualizar',
+			'cmdresize'    : 'Redimencionar & Rodar',
+			'cmdsort'      : 'Ordenar',
+			'cmdnetmount'  : 'Montar unidade de rede', // added 18.04.2012
 
 			/*********************************** buttons ***********************************/ 
 			'btnClose'  : 'Fechar',
@@ -100,6 +124,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'btnCancel' : 'Cancelar',
 			'btnNo'     : 'Não',
 			'btnYes'    : 'Sim',
+			'btnMount'  : 'Montar',  // added 18.04.2012
 
 			/******************************** notifications ********************************/
 			'ntfopen'     : 'Abrir Pasta',
@@ -110,15 +135,17 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'ntfrm'       : 'Deletar arquivos',
 			'ntfcopy'     : 'Copiar arquivos',
 			'ntfmove'     : 'Mover arquivos',
-			'ntfprepare'  : 'Preparar para copiar os arquivos',
+			'ntfprepare'  : 'Preparando para copiar',
 			'ntfrename'   : 'Renomear arquivos',
-			'ntfupload'   : 'Fazendo o upload dos arquivos',
+			'ntfupload'   : 'Subindo arquivos',
 			'ntfdownload' : 'Baixando os arquivos',
 			'ntfsave'     : 'Slvando os arquivos',
 			'ntfarchive'  : 'Criando os arquivos',
-			'ntfextract'  : 'Extraindo arquivos dos ficheiros',
+			'ntfextract'  : 'Extraindo arquivos',
 			'ntfsearch'   : 'Procurando arquivos',
-			'ntfsmth'     : 'Fazendo alguma coisa >_<',
+			'ntfsmth'     : 'Fazendo alguma coisa',
+			'ntfnetmount' : 'Montando unidade de rede', // added 18.04.2012
+
 
 			/************************************ dates **********************************/
 			'dateUnknown' : 'Desconhecido',
@@ -137,6 +164,13 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'Nov'         : 'Nov',
 			'Dec'         : 'Dez',
 
+			/******************************** sort variants ********************************/
+			'sortname'          : 'por nome', 
+			'sortkind'          : 'por tipo', 
+			'sortsize'          : 'por tam.',
+			'sortdate'          : 'por data',
+			'sortFoldersFirst'  : 'Pastas primeiro',
+			
 			/********************************** messages **********************************/
 			'confirmReq'      : 'Confirmação requerida',
 			'confirmRm'       : 'Você tem certeza que quer remover os arquivos?<br />Isto não pode ser desfeito!',
@@ -144,7 +178,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'apllyAll'        : 'Aplicar a todos',
 			'name'            : 'Nome',
 			'size'            : 'Tamanho',
-			'perms'           : 'Permições',
+			'perms'           : 'Permissões',
 			'modify'          : 'Modificado',
 			'kind'            : 'Tipo',
 			'read'            : 'Ler',
@@ -177,7 +211,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'help'            : 'Ajuda',
 			'webfm'           : 'Gerenciador de arquivos web',
 			'ver'             : 'Versão',
-			'protocol'        : 'Versão do protocolo',
+			'protocolver'     : 'Versão do protocolo',
 			'homepage'        : 'Home do projeto',
 			'docs'            : 'Documentação',
 			'github'          : 'Fork us on Github',
@@ -197,6 +231,23 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'selectForUpload' : 'Selecione arquivos para upload',
 			'moveFiles'       : 'Mover arquivos',
 			'copyFiles'       : 'Copiar arquivos',
+			'rmFromPlaces'    : 'Remover de Lugares',
+			'aspectRatio'     : 'Manter aspecto',
+			'scale'           : 'Tamanho',
+			'width'           : 'Largura',
+			'height'          : 'Altura',
+			'resize'          : 'Redimencionar',
+			'crop'            : 'Cortar',
+			'rotate'          : 'Rotacionar',
+			'rotate-cw'       : 'Girar 90 graus CW',
+			'rotate-ccw'      : 'Girar 90 graus CCW',
+			'degree'          : '°',
+			'netMountDialogTitle' : 'Montar Unidade de rede', // added 18.04.2012
+			'protocol'            : 'Protocolo', // added 18.04.2012
+			'host'                : 'Servidor', // added 18.04.2012
+			'port'                : 'Porta', // added 18.04.2012
+			'user'                : 'Usuário', // added 18.04.2012
+			'pass'                : 'Senha', // added 18.04.2012
 
 			/********************************** mimetypes **********************************/
 			'kindUnknown'     : 'Desconhecio',

@@ -765,11 +765,25 @@ class DocumentManager
      * @param int    $document_id in case you dont have the file path ,insert the id of the file here and leave $file in blank ''
      * @return boolean true/false
      * */
-    public static function check_readonly($_course, $user_id, $file, $document_id = '', $to_delete = false)
-    {
-        if (!(!empty($document_id) && is_numeric($document_id))) {
-            $document_id = self::get_document_id($_course, $file);
+    public static function check_readonly(
+        $_course,
+        $user_id,
+        $file,
+        $document_id = '',
+        $to_delete = false,
+        $sessionId = null
+    ) {
+
+        if (empty($sessionId)) {
+            $sessionId = api_get_session_id();
+        } else {
+            $sessionId = intval($sessionId);
         }
+
+        if (!(!empty($document_id) && is_numeric($document_id))) {
+            $document_id = self::get_document_id($_course, $file, $sessionId);
+        }
+
         $TABLE_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $course_id = $_course['real_id'];
@@ -778,12 +792,14 @@ class DocumentManager
             if (self::is_folder($_course, $document_id)) {
                 if (!empty($file)) {
                     $path = Database::escape_string($file);
-                    $what_to_check_sql = "SELECT td.id, readonly, tp.insert_user_id FROM " . $TABLE_DOCUMENT . " td , $TABLE_PROPERTY tp
+                    $what_to_check_sql = "SELECT td.id, readonly, tp.insert_user_id
+                                          FROM $TABLE_DOCUMENT td , $TABLE_PROPERTY tp
                                           WHERE td.c_id = $course_id AND
                                           		tp.c_id = $course_id AND
+                                                td.session_id = $sessionId AND
                     							tp.ref= td.id AND
                     							(path='" . $path . "' OR path LIKE BINARY '" . $path . "/%' ) ";
-                    //get all id's of documents that are deleted
+                    // Get all id's of documents that are deleted
                     $what_to_check_result = Database::query($what_to_check_sql);
 
                     if ($what_to_check_result && Database::num_rows($what_to_check_result) != 0) {
@@ -809,13 +825,14 @@ class DocumentManager
         }
 
         if (!empty($document_id)) {
-            $sql = "SELECT a.insert_user_id, b.readonly FROM $TABLE_PROPERTY a, $TABLE_DOCUMENT b
+            $sql = "SELECT a.insert_user_id, b.readonly
+                   FROM $TABLE_PROPERTY a, $TABLE_DOCUMENT b
                    WHERE
             			a.c_id = $course_id AND
                         b.c_id = $course_id AND
-            			a.ref = b.id and a.ref= $document_id LIMIT 1";
-            $resultans = Database::query($sql);
-            $doc_details = Database ::fetch_array($resultans, 'ASSOC');
+            			a.ref = b.id and a.ref = $document_id LIMIT 1";
+            $result = Database::query($sql);
+            $doc_details = Database ::fetch_array($result, 'ASSOC');
 
             if ($doc_details['readonly'] == 1) {
                 return !($doc_details['insert_user_id'] == $user_id || api_is_platform_admin());
@@ -846,32 +863,50 @@ class DocumentManager
      * @param int $session_id
      * @param bool $remove_content_from_db
      */
-    public static function delete_document_from_db($document_id, $course_info = array(), $session_id = 0, $remove_content_from_db = false)
-    {
+    public static function delete_document_from_db(
+        $document_id,
+        $course_info = array(),
+        $session_id = 0,
+        $remove_content_from_db = false
+    ) {
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
-        //Deleting from the DB
+        // Deleting from the DB
         $user_id = api_get_user_id();
+        $document_id = intval($document_id);
 
         if (empty($course_info)) {
             $course_info = api_get_course_info();
         }
+
         if (empty($session_id)) {
             $session_id = api_get_session_id();
         }
 
         // Soft DB delete
-        api_item_property_update($course_info, TOOL_DOCUMENT, $document_id, 'delete', $user_id, null, null, null, null, $session_id);
+        api_item_property_update(
+            $course_info,
+            TOOL_DOCUMENT,
+            $document_id,
+            'delete',
+            $user_id,
+            null,
+            null,
+            null,
+            null,
+            $session_id
+        );
         self::delete_document_from_search_engine($course_info['code'], $document_id);
         self::unset_document_as_template($document_id, $course_info['code'], $user_id);
 
         //Hard DB delete
         if ($remove_content_from_db) {
-            $sql = "DELETE FROM $TABLE_ITEMPROPERTY WHERE c_id = {$course_info['real_id']} AND ref = " . $document_id . " AND tool='" . TOOL_DOCUMENT . "'";
+            $sql = "DELETE FROM $TABLE_ITEMPROPERTY
+                    WHERE c_id = {$course_info['real_id']} AND ref = ".$document_id." AND tool='".TOOL_DOCUMENT."'";
             Database::query($sql);
 
-            $sql = "DELETE FROM " . $TABLE_DOCUMENT . " WHERE c_id = {$course_info['real_id']} AND id = " . $document_id;
+            $sql = "DELETE FROM $TABLE_DOCUMENT WHERE c_id = {$course_info['real_id']} AND id = ".$document_id;
             Database::query($sql);
 
             self::delete_document_metadata($document_id);
@@ -900,11 +935,11 @@ class DocumentManager
      *
      * @param array $_course
      * @param string $path, path stored in the database
-     * @param string ,$base_work_dir, path to the documents folder
+     * @param string $base_work_dir, path to the documents folder
      * @return boolean true/false
      * @todo now only files/folders in a folder get visibility 2, we should rename them too.
      */
-    public static function delete_document($_course, $path, $base_work_dir)
+    public static function delete_document($_course, $path, $base_work_dir, $sessionId = null)
     {
         $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
 
@@ -914,63 +949,89 @@ class DocumentManager
 
         $course_id = $_course['real_id'];
 
-        //first, delete the actual document...
-        $document_id = self :: get_document_id($_course, $path);
+        if (empty($course_id)) {
+            return false;
+        }
+
+        if (empty($sessionId)) {
+            $sessionId = api_get_session_id();
+        } else {
+            $sessionId = intval($sessionId);
+        }
+
+        // First, delete the actual document.
+        $document_id = self::get_document_id($_course, $path, $sessionId);
+
+        if (empty($document_id)) {
+            return false;
+        }
+
         $document_exists_in_disk = file_exists($base_work_dir.$path);
 
-        $new_path = $path . '_DELETED_' . $document_id;
-        $current_session_id = api_get_session_id();
+        $new_path = $path.'_DELETED_'.$document_id;
 
         $file_deleted_from_db = false;
         $file_deleted_from_disk = false;
         $file_renamed_from_disk = false;
 
         if ($document_id) {
-            self::delete_document_from_db($document_id);
+            self::delete_document_from_db($document_id, $_course, $sessionId);
             // Checking
             // $file_exists_in_db = self::get_document_data_by_id($document_id, $_course['code']);
             $file_deleted_from_db = true;
         }
 
         if ($document_exists_in_disk) {
-
             if (api_get_setting('permanently_remove_deleted_files') == 'true') {
-                //Deleted files are *really* deleted
+
+                // Deleted files are *really* deleted.
                 $sql = "SELECT id FROM $TABLE_DOCUMENT
-                        WHERE c_id = $course_id AND path='".$path."' OR path LIKE BINARY '".$path."/%'";
-                // Get all id's of documents that are deleted
+                        WHERE
+                            c_id = $course_id AND
+                            session_id = $sessionId AND
+                            (path = '".$path."' OR path LIKE BINARY '".$path."/%') ";
+                // Get all id's of documents that are deleted.
                 $result = Database::query($sql);
 
                 if ($result && Database::num_rows($result) != 0) {
                     // Delete all item_property entries
                     while ($row = Database::fetch_array($result)) {
                         // Query to delete from item_property table (hard way)
-                        self::delete_document_from_db($row['id'], $_course, $current_session_id, true);
+                        self::delete_document_from_db($row['id'], $_course, $sessionId, true);
                     }
-                    // Delete documents, do it like this so metadata gets deleted too
-                    my_delete($base_work_dir . $path);
-                    $file_deleted_from_disk = true;
                 }
+
+                // Delete documents, do it like this so metadata gets deleted too
+                my_delete($base_work_dir.$path);
+                $file_deleted_from_disk = true;
+
             } else {
                 // Set visibility to 2 and rename file/folder to xxx_DELETED_#id (soft delete)
 
-                if (is_file($base_work_dir . $path) || is_dir($base_work_dir . $path)) {
-                    if (rename($base_work_dir . $path, $base_work_dir.$new_path)) {
+                if (is_file($base_work_dir.$path) || is_dir($base_work_dir.$path)) {
+                    if (rename($base_work_dir.$path, $base_work_dir.$new_path)) {
 
-                        $sql = "UPDATE $TABLE_DOCUMENT set path='".$new_path."' WHERE c_id = $course_id AND id='".$document_id."'";
+                        $sql = "UPDATE $TABLE_DOCUMENT SET path='".$new_path."'
+                                WHERE c_id = $course_id AND session_id = $sessionId AND id = '".$document_id."'";
                         Database::query($sql);
 
-                        $sql = "SELECT id, path FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND path LIKE BINARY '".$path."/%'";
+                        $sql = "SELECT id, path FROM $TABLE_DOCUMENT
+                                WHERE
+                                    c_id = $course_id AND
+                                    session_id = $sessionId AND
+                                    (path = '".$path."' OR path LIKE BINARY '".$path."/%') ";
                         $result = Database::query($sql);
                         if ($result && Database::num_rows($result) > 0) {
                             while ($deleted_items = Database::fetch_array($result, 'ASSOC')) {
-                                self::delete_document_from_db($deleted_items['id']);
+                                self::delete_document_from_db($deleted_items['id'], $_course, $sessionId);
 
-                                // Change path of subfolders and documents in database.
+                                // Change path of sub folders and documents in database.
                                 $old_item_path = $deleted_items['path'];
-                                $new_item_path = $new_path . substr($old_item_path, strlen($path));
+                                $new_item_path = $new_path.substr($old_item_path, strlen($path));
 
-                                $sql = "UPDATE $TABLE_DOCUMENT set path = '" . $new_item_path . "' WHERE c_id = $course_id AND id = " . $deleted_items['id'];
+                                $sql = "UPDATE $TABLE_DOCUMENT
+                                        SET path = '".$new_item_path."'
+                                        WHERE c_id = $course_id AND session_id = $sessionId AND id = ".$deleted_items['id'];
                                 Database::query($sql);
                             }
                         }
@@ -1032,17 +1093,24 @@ class DocumentManager
     /**
      * Gets the id of a document with a given path
      *
-     * @param array $_course
+     * @param array $courseInfo
      * @param string $path
      * @return int id of document / false if no doc found
      */
-    public static function get_document_id($course_info, $path)
+    public static function get_document_id($courseInfo, $path, $sessionId = null)
     {
         $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
-        $course_id = $course_info['real_id'];
+        $course_id = $courseInfo['real_id'];
+        if (empty($sessionId)) {
+            $sessionId = api_get_session_id();
+        } else {
+            $sessionId = intval($sessionId);
+        }
         $path = Database::escape_string($path);
+
         if (!empty($course_id) && !empty($path)) {
-            $sql = "SELECT id FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND path LIKE BINARY '$path' LIMIT 1";
+            $sql = "SELECT id FROM $TABLE_DOCUMENT
+                    WHERE c_id = $course_id AND path LIKE BINARY '$path' AND session_id = $sessionId LIMIT 1";
             $result = Database::query($sql);
             if ($result && Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
@@ -1060,7 +1128,7 @@ class DocumentManager
      * @param bool load parents?
      * @return array document content
      */
-    public static function get_document_data_by_id($id, $course_code, $load_parents = false)
+    public static function get_document_data_by_id($id, $course_code, $load_parents = false, $session_id = null)
     {
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
@@ -1068,11 +1136,18 @@ class DocumentManager
         if (empty($course_info)) {
             return false;
         }
-        $www = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/document';
+
+        if (empty($session_id)) {
+            $session_id = intval($session_id);
+        } else {
+            $session_id = api_get_session_id();
+        }
+
+        $www = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document';
 
         $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
         $id = intval($id);
-        $sql = "SELECT * FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND id = $id ";
+        $sql = "SELECT * FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND session_id = $session_id AND id = $id ";
         $result = Database::query($sql);
         if ($result && Database::num_rows($result) == 1) {
             $row = Database::fetch_array($result, 'ASSOC');
@@ -1093,14 +1168,12 @@ class DocumentManager
             if (dirname($row['path']) == '.') {
                 $row['parent_id'] = '0';
             } else {
-                $row['parent_id'] = self::get_document_id($course_info, dirname($row['path']));
+                $row['parent_id'] = self::get_document_id($course_info, dirname($row['path']), $session_id);
             }
             $parents = array();
 
             //Use to generate parents (needed for the breadcrumb)
             //@todo sorry but this for is here because there's not a parent_id in the document table so we parsed the path!!
-
-            $visibility = true;
 
             if ($load_parents) {
                 $dir_array = explode('/', $row['path']);
@@ -1113,13 +1186,12 @@ class DocumentManager
                     $real_dir .= '/' . $dir_array[$i];
                     $parent_id = self::get_document_id($course_info, $real_dir);
                     if (!empty($parent_id)) {
-                        $sub_document_data = self::get_document_data_by_id($parent_id, $course_code, false);
+                        $sub_document_data = self::get_document_data_by_id($parent_id, $course_code, false, $session_id);
                         //@todo add visibility here
                         $parents[] = $sub_document_data;
                     }
                 }
             }
-            //$row['visibility_for_user'] = $visibility;
             $row['parents'] = $parents;
             return $row;
         }
@@ -1523,8 +1595,12 @@ class DocumentManager
      * @param int The document id of the default certificate
      * @return void()
      */
-    function remove_attach_certificate($course_id, $default_certificate_id)
+    public static function remove_attach_certificate($course_id, $default_certificate_id)
     {
+        if (empty($default_certificate_id)) {
+            return false;
+        }
+
         $default_certificate = self::get_default_certificate_id($course_id);
         if ((int) $default_certificate == (int) $default_certificate_id) {
             $tbl_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
@@ -1548,7 +1624,7 @@ class DocumentManager
      * @param string The course id
      * @return void()
      */
-    static function create_directory_certificate_in_course($course_id)
+    public static function create_directory_certificate_in_course($course_id)
     {
         $course_info = api_get_course_info($course_id);
         if (!empty($course_info)) {
@@ -1575,7 +1651,7 @@ class DocumentManager
      * @param string The course id
      * @return int The document id of the directory certificate
      */
-    static function get_document_id_of_directory_certificate()
+    public static function get_document_id_of_directory_certificate()
     {
         $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
         $course_id = api_get_course_int_id();
@@ -1590,7 +1666,7 @@ class DocumentManager
      * @param string path of directory
      * @return bool  true if is a certificate or false otherwise
      */
-    static function is_certificate_mode($dir)
+    public static function is_certificate_mode($dir)
     {
         // I'm in the certification module?
         $is_certificate_mode = false;
@@ -1615,7 +1691,7 @@ class DocumentManager
      * @return	array	List of file paths. An additional field containing 'local' or 'remote' helps determine
      * if the file should be copied into the zip or just linked
      */
-    static function get_resources_from_source_html($source_html, $is_file = false, $type = null, $recursivity = 1)
+    public static function get_resources_from_source_html($source_html, $is_file = false, $type = null, $recursivity = 1)
     {
         $max = 5;
         $attributes = array();
@@ -1900,7 +1976,7 @@ class DocumentManager
      * @return   array   An associative array of attributes
      * @author 	 Based on a function from the HTML_Common2 PEAR module     *
      */
-    static function parse_HTML_attributes($attrString, $wanted = array(), $explode_variables = array())
+    public static function parse_HTML_attributes($attrString, $wanted = array(), $explode_variables = array())
     {
         $attributes = array();
         $regs = array();

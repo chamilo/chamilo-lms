@@ -31,6 +31,7 @@ if (!in_array($sord, array('asc','desc'))) {
     $sord = 'desc';
 }
 
+// Actions allowed to other roles.
 if (!in_array(
     $action,
     array(
@@ -45,7 +46,8 @@ if (!in_array(
         'get_user_skill_ranking',
         'get_usergroups_teacher',
         'get_user_course_report_resumed',
-        'get_user_course_report'
+        'get_user_course_report',
+        'get_sessions_tracking'
     )
 )) {
     api_protect_admin_script(true);
@@ -219,6 +221,14 @@ switch ($action) {
         require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
         $hotpot_path = $_REQUEST['path'];
         $count = get_count_exam_hotpotatoes_results($hotpot_path);
+        break;
+    case 'get_sessions_tracking':
+        if (api_is_drh()) {
+            $count = SessionManager::get_sessions_followed_by_drh(api_get_user_id(), null, null, true);
+        } else {
+            // Sessions for the coach
+            $count = Tracking::get_sessions_coached_by_user(api_get_user_id(), null, null, true);
+        }
         break;
     case 'get_sessions':
         $courseId = isset($_GET['course_id']) && !empty($_GET['course_id']) ? intval($_GET['course_id']) : null;
@@ -489,6 +499,57 @@ switch ($action) {
 		$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_date',  'score', 'actions');
 		$result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $where_condition); //get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);
 		break;
+    case 'get_sessions_tracking':
+        if (api_is_drh()) {
+            $sessions = SessionManager::get_sessions_followed_by_drh(api_get_user_id(), $start, $limit);
+        } else {
+            // Sessions for the coach
+            $sessions = Tracking::get_sessions_coached_by_user(api_get_user_id(), $start, $limit);
+        }
+
+        $columns =  array(
+            'name',
+            'date',
+            'course_per_session',
+            'student_per_session',
+            'details'
+        );
+
+        $result = array();
+        if (!empty($sessions)) {
+            foreach ($sessions as $session) {
+                if (api_drh_can_access_all_session_content()) {
+                    $count_courses_in_session = count(SessionManager::get_course_list_by_session_id($session['id']));
+                } else {
+                    $count_courses_in_session = count(Tracking::get_courses_followed_by_coach($user_id, $session['id']));
+                }
+
+                $count_users_in_session = count(SessionManager::get_users_by_session($session['id'], 0));
+                $session_date = array();
+                if (!empty($session['date_start']) && $session['date_start'] != '0000-00-00') {
+                    $session_date[] = get_lang('From').' '.api_format_date($session['date_start'], DATE_FORMAT_SHORT);
+                }
+
+                if (!empty($session['date_end']) && $session['date_end'] != '0000-00-00') {
+                    $session_date[] = get_lang('Until').' '.api_format_date($session['date_end'], DATE_FORMAT_SHORT);
+                }
+
+                if (empty($session_date)) {
+                    $session_date_string = '-';
+                } else {
+                    $session_date_string = implode(' ', $session_date);
+                }
+                $sessionUrl = api_get_path(WEB_CODE_PATH).'mySpace/index.php?session_id='.$session['id'];
+                $result[] = array(
+                    'name' => $session['name'],
+                    'date' => $session_date_string,
+                    'course_per_session' => $count_courses_in_session,
+                    'student_per_session' => $count_users_in_session,
+                    'details' => Display::url(Display::return_icon('2rightarrow.gif'), $sessionUrl)
+                );
+            }
+        }
+        break;
     case 'get_sessions':
         $columns = array(
             'name', 'nbr_courses', 'nbr_users', 'category_name', 'date_start','date_end', 'coach_name', 'session_active', 'visibility'
@@ -779,6 +840,7 @@ $allowed_actions = array(
     'get_usergroups_teacher',
     'get_gradebooks',
     'get_sessions',
+    'get_sessions_tracking',
     'get_session_lp_progress',
     'get_session_progress',
     'get_exercise_results',

@@ -1179,7 +1179,8 @@ class CourseManager
         $resumed_report = false,
         $extra_field = null,
         $courseCodeList = array(),
-        $userIdList = array()
+        $userIdList = array(),
+        $filterByActive = null
     ) {
         // variable initialisation
         $session_id     = intval($session_id);
@@ -1279,7 +1280,10 @@ class CourseManager
             $sql .= ' AND user.user_id IN ("'.$userIdList.'")';
         }
 
-        //$userList = array()
+        if (isset($filterByActive)) {
+            $filterByActive = intval($filterByActive);
+            $sql .= ' AND user.active = '.$filterByActive;
+        }
 
         $sql .= ' '.$order_by.' '.$limit;
 

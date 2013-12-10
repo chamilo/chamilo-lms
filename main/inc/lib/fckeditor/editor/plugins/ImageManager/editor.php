@@ -20,7 +20,6 @@ if (isset($_GET['img'])) {
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $IMConfig['language']; ?>" lang="<?php echo $IMConfig['language']; ?>">
 <head>
 <title>Edit image</title>
@@ -92,7 +91,6 @@ if (isset($_GET['img'])) {
 <script type="text/javascript" src="assets/slider.js"></script>
 <script type="text/javascript" src="assets/popup.js"></script>
 <script type="text/javascript" src="assets/editor.js"></script>
-
 <style type="text/css" media="screen, projection">
 /*<![CDATA[*/
 body {

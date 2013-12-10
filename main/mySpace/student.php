@@ -24,68 +24,23 @@ $this_section = SECTION_TRACKING;
 $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) {
-	$interbreadcrumb[] = array ("url" => "teachers.php", "name" => get_lang('Teachers'));
+    $interbreadcrumb[] = array ("url" => "teachers.php", "name" => get_lang('Teachers'));
 }
 
 if (isset($_GET["user_id"]) && $_GET["user_id"]!="" && isset($_GET["type"]) && $_GET["type"] == "coach") {
- 	$interbreadcrumb[] = array ("url" => "coaches.php", "name" => get_lang('Tutors'));
+    $interbreadcrumb[] = array ("url" => "coaches.php", "name" => get_lang('Tutors'));
 }
 
-function get_count_users() {
-    global $keyword;
-    if (api_is_drh()) {
-        if (api_drh_can_access_all_session_content()) {
-            $count = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
-                'drh_all',
-                api_get_user_id(),
-                true,
-                null,
-                null,
-                null,
-                null,
-                $keyword
-            );
-        } else {
-            $count = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
-                'drh',
-                api_get_user_id(),
-                true,
-                null,
-                null,
-                null,
-                null,
-                $keyword
-            );
-        }
-    } else {
-        if (api_is_platform_admin()) {
-            $count = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
-                'admin',
-                api_get_user_id(),
-                true,
-                null,
-                null,
-                null,
-                null,
-                $keyword);
-        } else {
-            $count = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
-                'teacher',
-                api_get_user_id(),
-                true,
-                null,
-                null,
-                null,
-                null,
-                $keyword
-            );
-        }
-    }
-    return $count;
+function get_count_users($keyword = null, $active = null)
+{
+    return SessionManager::getCountUserTracking($keyword, $active);
 }
 
-function get_users($from, $number_of_items, $column, $direction) {
-    global $keyword;
+function get_users($from, $number_of_items, $column, $direction)
+{
+    $active = isset($_GET['active']) ? $_GET['active'] : null;
+    $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
+
     $is_western_name_order = api_is_western_name_order();
     $coach_id = api_get_user_id();
     $column = 'u.user_id';
@@ -100,7 +55,8 @@ function get_users($from, $number_of_items, $column, $direction) {
                 $number_of_items,
                 $column,
                 $direction,
-                $keyword
+                $keyword,
+                $active
             );
         } else {
             $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -111,7 +67,8 @@ function get_users($from, $number_of_items, $column, $direction) {
                 $number_of_items,
                 $column,
                 $direction,
-                $keyword
+                $keyword,
+                $active
             );
         }
     } else {
@@ -124,7 +81,8 @@ function get_users($from, $number_of_items, $column, $direction) {
                 $number_of_items,
                 $column,
                 $direction,
-                $keyword
+                $keyword,
+                $active
             );
         } else {
             $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -135,7 +93,8 @@ function get_users($from, $number_of_items, $column, $direction) {
                 $number_of_items,
                 $column,
                 $direction,
-                $keyword
+                $keyword,
+                $active
             );
         }
     }
@@ -144,7 +103,6 @@ function get_users($from, $number_of_items, $column, $direction) {
 
     foreach ($students as $student_data) {
         $student_id = $student_data['user_id'];
-
         if (isset($_GET['id_session'])) {
             $courses = Tracking :: get_course_list_in_session_from_student($student_id, $_GET['id_session']);
         }

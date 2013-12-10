@@ -1312,7 +1312,7 @@ class Tracking {
      * @param    int        Coach id
      * @return    array    Sessions list
      */
-    public static function get_sessions_coached_by_user($coach_id)
+    public static function get_sessions_coached_by_user($coach_id, $start = 0, $limit = 0, $getCount = false)
     {
         // table definition
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
@@ -1320,52 +1320,70 @@ class Tracking {
 
         $coach_id = intval($coach_id);
 
+        $select = " SELECT * FROM ";
+
+        if ($getCount) {
+            $select = " SELECT count(DISTINCT id) as count FROM ";
+        }
+
+        $limitCondition = null;
+        if (!empty($start) && !empty($limit)) {
+            $limitCondition = " LIMIT ".intval($start).", ".intval($limit);
+        }
+
         // session where we are general coach
-        $sql = 'SELECT DISTINCT id, name, date_start, date_end
-                    FROM ' . $tbl_session . '
-                    WHERE id_coach=' . $coach_id;
+        $sql = " $select
 
-        if (api_is_multiple_url_enabled()) {
-            $tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-            $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1){
-                $sql = 'SELECT DISTINCT id, name, date_start, date_end
-                    FROM ' . $tbl_session . ' session INNER JOIN '.$tbl_session_rel_access_url.' session_rel_url
-                    ON (session.id = session_rel_url.session_id)
-                    WHERE id_coach=' . $coach_id.' AND access_url_id = '.$access_url_id;
-            }
-        }
+                (SELECT DISTINCT id, name, date_start, date_end
+                    FROM $tbl_session
+                    WHERE id_coach = $coach_id
+                UNION
 
-        $rs = Database::query($sql);
-        while ($row = Database::fetch_array($rs)) {
-            $a_sessions[$row["id"]] = $row;
-        }
-
-        // session where we are coach of a course
-        $sql = 'SELECT DISTINCT session.id, session.name, session.date_start, session.date_end
-                    FROM ' . $tbl_session . ' as session
-                    INNER JOIN ' . $tbl_session_course_user . ' as session_course_user
+                SELECT DISTINCT session.id, session.name, session.date_start, session.date_end
+                    FROM $tbl_session as session
+                    INNER JOIN $tbl_session_course_user  as session_course_user
                         ON session.id = session_course_user.id_session
-                        AND session_course_user.id_user=' . $coach_id.' AND session_course_user.status=2';
+                        AND session_course_user.id_user= $coach_id AND session_course_user.status=2
+                )
+                as sessions $limitCondition
+                ";
 
         if (api_is_multiple_url_enabled()) {
             $tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1){
-                $sql = 'SELECT DISTINCT session.id, session.name, session.date_start, session.date_end
-                    FROM ' . $tbl_session . ' as session
-                    INNER JOIN ' . $tbl_session_course_user . ' as session_course_user
-                        ON session.id = session_course_user.id_session AND session_course_user.id_user=' . $coach_id.' AND session_course_user.status=2
-                    INNER JOIN '.$tbl_session_rel_access_url.' session_rel_url
-                    ON (session.id = session_rel_url.session_id)
-                    WHERE access_url_id = '.$access_url_id;
+                $sql = "
+                    $select
+                    (
+                        SELECT DISTINCT id, name, date_start, date_end
+                        FROM $tbl_session session INNER JOIN $tbl_session_rel_access_url session_rel_url
+                        ON (session.id = session_rel_url.session_id)
+                        WHERE id_coach = $coach_id AND access_url_id = $access_url_id
+
+                        UNION
+
+                        SELECT DISTINCT session.id, session.name, session.date_start, session.date_end
+                        FROM $tbl_session as session
+                        INNER JOIN $tbl_session_course_user as session_course_user
+                            ON session.id = session_course_user.id_session AND session_course_user.id_user= $coach_id AND session_course_user.status=2
+                        INNER JOIN $tbl_session_rel_access_url session_rel_url
+                        ON (session.id = session_rel_url.session_id)
+                        WHERE access_url_id = $access_url_id
+                    ) as sessions $limitCondition
+                    ";
             }
         }
 
         $rs = Database::query($sql);
+        if ($getCount) {
+            $row = Database::fetch_array($rs);
+            return $row['count'];
+        }
+
         while ($row = Database::fetch_array($rs)) {
             $a_sessions[$row["id"]] = $row;
         }
+
         if (is_array($a_sessions)) {
             foreach ($a_sessions as & $session) {
                 if ($session['date_start'] == '0000-00-00') {
@@ -2035,7 +2053,7 @@ class Tracking {
      * Get total clicks by session
      * @param    int        Session id (optional), if param $session_id is null(default) it'll return results including sessions, 0 = session is not filtered
      * @return    array     data
-     * @todo    implement total click by $course_id 
+     * @todo    implement total click by $course_id
      */
     public static function get_total_clicks_by_session($session_id = null) {
         $tables = array(
@@ -2057,12 +2075,12 @@ class Tracking {
             #TABLE_STATISTIC_TRACK_E_OPEN,
             );
 
-        if (isset($_GET['session_id']) && !empty($_GET['session_id'])) 
+        if (isset($_GET['session_id']) && !empty($_GET['session_id']))
         {
             $sessionId = intval($_GET['session_id']);
         }
 
-        foreach ($tables as $tableName => $fields) 
+        foreach ($tables as $tableName => $fields)
         {
             $sql = sprintf('SELECT %s as user, count(*) as total FROM %s WHERE %s = %s GROUP BY %s', $fields[1], $tableName, $fields[0], $sessionId, $fields[1]);
             $rs = Database::query($sql);

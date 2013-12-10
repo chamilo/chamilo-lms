@@ -37,37 +37,37 @@ if (isset($_GET['cat_id']) AND is_numeric($_GET['cat_id']) AND $_GET['action'] =
 	// in dropbox_person (which stores the link file-person)
 	// Therefore we have to create to separate sql statements to find which files are in the categorie (depending if we zip-download a sent category or a
 	// received category)
-    
+
 	if ($_GET['sent_received'] == 'sent') {
 		// here we also incorporate the person table to make sure that deleted sent documents are not included.
-		$sql = "SELECT DISTINCT file.id, file.filename, file.title 
-                FROM ".$dropbox_cnf['tbl_file']." file INNER JOIN ".$dropbox_cnf['tbl_person']." person 
+		$sql = "SELECT DISTINCT file.id, file.filename, file.title
+                FROM ".$dropbox_cnf['tbl_file']." file INNER JOIN ".$dropbox_cnf['tbl_person']." person
                 ON (person.file_id=file.id AND file.c_id = $course_id AND person.c_id = $course_id)
-				WHERE 
-                    file.uploader_id = $user_id AND 
-                    file.cat_id='".intval($_GET['cat_id'])."'  AND 
+				WHERE
+                    file.uploader_id = $user_id AND
+                    file.cat_id='".intval($_GET['cat_id'])."'  AND
                     person.user_id = $user_id";
 	}
-    
+
 	if ($_GET['sent_received'] == 'received') {
-		$sql = "SELECT DISTINCT file.id, file.filename, file.title 
+		$sql = "SELECT DISTINCT file.id, file.filename, file.title
                 FROM ".$dropbox_cnf['tbl_file']." file INNER JOIN ".$dropbox_cnf['tbl_person']." person
                 ON (person.file_id=file.id AND file.c_id = $course_id AND person.c_id = $course_id)
                 INNER JOIN ".$dropbox_cnf['tbl_post']." post
                 ON (post.file_id = file.id AND post.c_id = $course_id AND file.c_id = $course_id)
-				WHERE 
-                    post.cat_id = ".intval($_GET['cat_id'])." AND 
+				WHERE
+                    post.cat_id = ".intval($_GET['cat_id'])." AND
                     post.dest_user_id = $user_id" ;
-	}    
-    
+	}
+
 	$result = Database::query($sql);
 	while ($row = Database::fetch_array($result)) {
 		$files_to_download[] = $row['id'];
-	}    
+	}
 	if (!is_array($files_to_download) OR empty($files_to_download)) {
 		header('location: index.php?view='.Security::remove_XSS($_GET['sent_received']).'&error=ErrorNoFilesInFolder');
 		exit;
-	}    
+	}
 	zip_download($files_to_download);
 	exit;
 }
@@ -99,36 +99,36 @@ if (!$allowed_to_download) {
 	Display::display_error_message(get_lang('YouAreNotAllowedToDownloadThisFile'));
 	Display::display_footer();
 	exit;
-} else {    
-    /*      DOWNLOAD THE FILE */    
+} else {
+    /*      DOWNLOAD THE FILE */
     // the user is allowed to download the file
 	$_SESSION['_seen'][$_course['id']][TOOL_DROPBOX][] = intval($_GET['id']);
 
 	$work = new Dropbox_work($_GET['id']);
 	$path = dropbox_cnf('sysPath') . '/' . $work -> filename; //path to file as stored on server
-	
+
     if (!Security::check_abs_path($path, dropbox_cnf('sysPath').'/')) {
     	exit;
     }
-	$file = $work->title;	
+	$file = $work->title;
 	$mimetype = DocumentManager::file_get_mime_type(true);
 	$fileinfo = pathinfo($file);
 	$extension = $fileinfo['extension'];
-	
-	if (!empty($extension) && isset($mimetype[$extension]) && $_GET['action'] != 'download') {		
+
+	if (!empty($extension) && isset($mimetype[$extension]) && $_GET['action'] != 'download') {
 	    // give hint to browser about filetype
     	header( 'Content-type: ' . $mimetype[$extension] . "\n");
 	} else {
 		//no information about filetype: force a download dialog window in browser
 		header( "Content-type: application/octet-stream\n");
 	}
-	
+
 	/*if (!in_array(strtolower($extension), array('doc', 'xls', 'ppt', 'pps', 'sxw', 'sxc', 'sxi'))) {
 		header('Content-Disposition: inline; filename='.$file); // bugs with open office
 	} else {
 		header('Content-Disposition: attachment; filename='.$file);
 	}*/
-	
+
 	header('Content-Disposition: attachment; filename='.$file);
 
 	/**
@@ -153,10 +153,10 @@ if (!$allowed_to_download) {
 	    header("Cache-Control: no-store, no-cache, must-revalidate\n"); // HTTP/1.1
 	    header("Cache-Control: post-check=0, pre-check=0\n", false);
 	}*/
-	
+
 	header('Content-Description: '.trim(htmlentities($file)));
 	header('Content-transfer-encoding: binary');
-	
+
 	header("Content-Length: " . filesize($path)."\n" );
 
 	$fp = fopen( $path, 'rb');

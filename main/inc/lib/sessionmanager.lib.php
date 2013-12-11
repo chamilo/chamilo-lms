@@ -707,6 +707,7 @@ class SessionManager
             $assignments_progress   =  round((( $assignments_done * 100 ) / $assignments_total ), 2);
 
             //Wiki
+            //total revisions per user
             $sql = "SELECT count(*) as count
             FROM $wiki
             where c_id = %s and session_id = %s and user_id = %s";
@@ -714,6 +715,21 @@ class SessionManager
             $result     = Database::query($sql_query);
             $row        = Database::fetch_array($result);
             $wiki_revisions =  $row['count'];
+            //count visited wiki pages
+            $sql = "SELECT count(distinct default_value) as count
+            FROM `track_e_default`
+            WHERE default_user_id = %s
+            AND default_cours_code = '%s'
+            AND default_event_type = 'wiki_page_view'
+            AND default_value_type = 'wiki_page_id'
+            AND c_id = %s";
+            $sql_query  = sprintf($sql, $user['user_id'], $course['code'], $course_info['real_id']);
+            $result     = Database::query($sql_query);
+            $row        = Database::fetch_array($result);
+
+            $wiki_read          = $row['count'];
+            $wiki_unread        = $wiki_total - $wiki_read;
+            $wiki_progress      = round((( $wiki_read * 100 ) /  $wiki_total), 2);
 
             //Surveys
             $surveys_done       = (isset($survey_user_list[$user['user_id']]) ? $survey_user_list[$user['user_id']] : 0);

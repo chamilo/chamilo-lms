@@ -1198,23 +1198,24 @@ function check_number_feedback($key, $array) {
  *
  * @todo consider moving this function to a more appropriate place.
  */
-function get_last_tool_access($tool, $course_code='', $user_id='') {
-	global $_course, $_user;
-
+function get_last_tool_access($tool, $course_code = '', $user_id='')
+{
 	// The default values of the parameters
-	if ($course_code == '') {
-		$course_code = $_course['id'];
+	if (empty($course_code)) {
+        $course_code = api_get_course_id();
 	}
-	if ($user_id == '') {
-		$user_id = $_user['user_id'];
+	if (empty($user_id)) {
+		$user_id = api_get_user_id();
 	}
 
 	// the table where the last tool access is stored (=track_e_lastaccess)
-	$table_last_access = Database::get_statistic_table('track_e_lastaccess');
+	$table_last_access = Database::get_main_table('track_e_lastaccess');
 
-	$sql = "SELECT access_date FROM $table_last_access WHERE access_user_id='".Database::escape_string($user_id)."'
-				AND access_cours_code='".Database::escape_string($course_code)."'
-				AND access_tool='".Database::escape_string($tool)."'
+	$sql = "SELECT access_date FROM $table_last_access
+	        WHERE
+	            access_user_id='".Database::escape_string($user_id)."' AND
+	            access_cours_code='".Database::escape_string($course_code)."' AND
+	            access_tool='".Database::escape_string($tool)."'
 				ORDER BY access_date DESC
 				LIMIT 1";
 	$result = Database::query($sql);

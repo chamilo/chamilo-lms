@@ -68,9 +68,9 @@ require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 $user_id = api_get_user_id();
 $course_code = api_get_course_id();
-$course_info = Database::get_course_info($course_code);
-
+$course_info = api_get_course_info($course_code);
 $session_id = api_get_session_id();
+
 if (empty($session_id)) {
     $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code, false);
 } else {

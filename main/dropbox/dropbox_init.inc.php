@@ -54,11 +54,7 @@ require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 // protecting the script
 api_protect_course_script();
 
-
 /*	Libraries */
-
-// including the library for the sortable table
-//require_once api_get_path(LIBRARY_PATH).'tablesort.lib.php';moved to autoload
 
 // including the library for the dropbox
 require_once 'dropbox_class.inc.php';
@@ -67,7 +63,6 @@ require_once 'dropbox_class.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';  // we use a function build_document_icon_tag
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php'; // the function choose_image is used
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-
 
 /*	Virtual course support */
 
@@ -139,7 +134,6 @@ if (dropbox_cnf('allowOverwrite')) {
 		    $javascript .= ", ";
 		}
 		$javascript .= "'".$dropbox_person->sentWork[$i]->title."'";
-		//echo '***'.$dropbox_person->sentWork[$i]->title;
 	}
 	$javascript .= ");
 
@@ -188,9 +182,7 @@ if (dropbox_cnf('allowOverwrite')) {
 
 $javascript .= "
 	</script>";
-
 $htmlHeadXtra[] = $javascript;
-
 $htmlHeadXtra[] =
 "<script type=\"text/javascript\">
 function confirmation (name)
@@ -218,17 +210,17 @@ if (!$_GET['view'] OR $_GET['view'] == 'received') {
 }
 
 if (($_POST['action'] == 'download_received' || $_POST['action'] == 'download_sent') and !$_POST['store_feedback']) {
-	$checked_file_ids = $_POST['id'];
-	if (!is_array($checked_file_ids) || count($checked_file_ids) == 0) {
-		header ('location: index.php?view='.$_GET['view'].'&error=CheckAtLeastOneFile');
-	} else {
-		handle_multiple_actions();
-	}
-	exit;
+    $checked_file_ids = $_POST['id'];
+    if (!is_array($checked_file_ids) || count($checked_file_ids) == 0) {
+        header ('location: index.php?view='.$_GET['view'].'&error=CheckAtLeastOneFile');
+    } else {
+        handle_multiple_actions();
+    }
+    exit;
 }
 
 /*
- *         AUTHORISATION SECTION
+ * AUTHORISATION SECTION
  * Prevents access of all users that are not course members
  */
 

@@ -68,11 +68,11 @@ class Dropbox_Work
      * @param unknown_type $arg6
      * @return Dropbox_Work
      */
-    function Dropbox_Work($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null)
+    public function Dropbox_Work($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null)
     {
         if (func_num_args() > 1) {
             $this->_createNewWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6);
-        }  else  {
+        } else {
             $this->_createExistingWork($arg1);
         }
     }
@@ -80,17 +80,17 @@ class Dropbox_Work
 	/**
 	 * private function creating a new work object
 	 *
-	 * @param unknown_type $uploader_id
-	 * @param unknown_type $title
-	 * @param unknown_type $description
-	 * @param unknown_type $author
-	 * @param unknown_type $filename
-	 * @param unknown_type $filesize
+	 * @param int $uploader_id
+	 * @param string $title
+	 * @param string $description
+	 * @param string $author
+	 * @param string $filename
+	 * @param int $filesize
 	 *
 	 * @todo 	$author was originally a field but this has now been replaced by the first and lastname of the uploader (to prevent anonymous uploads)
 	 * 			As a consequence this parameter can be removed
 	 */
-	function _createNewWork($uploader_id, $title, $description, $author, $filename, $filesize)
+	public function _createNewWork($uploader_id, $title, $description, $author, $filename, $filesize)
     {
 		global $_user, $dropbox_cnf;
 		// Fill in the properties

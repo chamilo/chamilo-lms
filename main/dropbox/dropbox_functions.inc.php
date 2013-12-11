@@ -37,10 +37,9 @@ function handle_multiple_actions() {
 
 	// STEP 2: at least one file has to be selected. If not we return an error message
     $ids = Request::get('id', array());
-    if(count($ids)>0){
+    if (count($ids)>0) {
         $checked_file_ids = $_POST['id'];
-    }
-    else{
+    } else {
         foreach ($_POST as $key => $value) {
             if (strstr($value, $part.'_') AND $key != 'view_received_category' AND $key != 'view_sent_category') {
                 $checked_files = true;
@@ -107,7 +106,8 @@ function handle_multiple_actions() {
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
-function delete_category($action, $id, $user_id = null) {
+function delete_category($action, $id, $user_id = null)
+{
     $course_id = api_get_course_int_id();
 
 	global $dropbox_cnf;
@@ -160,11 +160,8 @@ function delete_category($action, $id, $user_id = null) {
 
 /**
 * Displays the form to move one individual file to a category
-*
-* @return html code of the form that appears in a message box.
-*
+*@ return html code of the form that appears in a message box.
 * @author Julio Montoya - function rewritten
-
 */
 function display_move_form($part, $id, $target = array(), $extra_params = array())
 {
@@ -180,7 +177,6 @@ function display_move_form($part, $id, $target = array(), $extra_params = array(
     $form->addElement('select', 'move_target', get_lang('MoveFileTo'), $options);
     $form->addElement('button', 'do_move', get_lang('MoveFile'));
     $form->display();
-
 }
 
 /**
@@ -241,7 +237,7 @@ function display_action_options($part, $categories, $current_category = 0)
 		if ($current_category != 0) {
 			echo '<option value="move_0">'.get_lang('Root').'</a>';
 		}
-		foreach ($categories as $key => $value) {
+		foreach ($categories as $value) {
 			if ($current_category != $value['cat_id']) {
 				echo '<option value="move_'.$value['cat_id'].'">'.$value['cat_name'].'</option>';
 			}
@@ -310,7 +306,8 @@ function get_dropbox_categories($filter = '')
  * @param int The category ID
  * @return array The details of this category
  */
-function get_dropbox_category($id) {
+function get_dropbox_category($id)
+{
     global $dropbox_cnf;
     $course_id = api_get_course_int_id();
     if (empty($id) or $id != intval($id)) { return array(); }

@@ -1,6 +1,96 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+
+/**
+ * @desc The dropbox is a personal (peer to peer) file exchange module that allows
+ * you to send documents to a certain (group of) users.
+ *
+ * @version 1.3
+ *
+ * @author Jan Bols <jan@ivpv.UGent.be>, main programmer, initial version
+ * @author René Haentjens <rene.haentjens@UGent.be>, several contributions
+ * @author Roan Embrechts, virtual course support
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University (see history version 1.3)
+ *
+ * @package chamilo.dropbox
+ *
+ * @todo complete refactoring. Currently there are about at least 3 sql queries needed for every individual dropbox document.
+ *			first we find all the documents that were sent (resp. received) by the user
+ *			then for every individual document the user(s)information who received (resp. sent) the document is searched
+ *			then for every individual document the feedback is retrieved
+ * @todo 	the implementation of the dropbox categories could (on the database level) have been done more elegantly by storing the category
+ *			in the dropbox_person table because this table stores the relationship between the files (sent OR received) and the users
+ */
+
+/**
+HISTORY
+Version 1.1
+------------
+- dropbox_init1.inc.php: changed include statements to require statements. This way if a file is not found, it stops the execution of a script instead of continuing with warnings.
+- dropbox_init1.inc.php: the include files "claro_init_global.inc.php" & "debug.lib.inc.php" are first checked for their existence before including them. If they don't exist, in the .../include dir, they get loaded from the .../inc dir. This change is necessary because the UCL changed the include dir to inc.
+- dropbox_init1.inc.php: the databasetable name in the variable $dropbox_cnf["introTbl"] is chnged from "introduction" to "tool_intro"
+- install.php: after submit, checks if the database uses accueil or tool_list as a tablename
+- index.php: removed the behaviour of only the teachers that are allowed to delete entries
+- index.php: added field "lastUploadDate" in table dropbox_file to store information about last update when resubmiting a file
+- dropbox.inc.php: added $lang["lastUpdated"]
+- index.php: entries in received list show when file was last updated if it is updated
+- index.php: entries in sent list show when file was last resent if it was resent
+- dropbox_submit.php: add a unique id to every uploaded file
+- index.php: add POST-variable to the upload form with overwrite data when user decides to overwrite the previous sent file with new file
+- dropbox_submit.php: add sanity checks on POST['overwrite'] data
+- index.php: remove title field in upload form
+- dropbox_submit.php: remove use of POST['title'] variable
+- dropbox_init1.inc.php: added $dropbox_cnf["version"] variable
+- dropbox_class.inc.php: add $this->lastUploadDate to Dropbox_work class
+- dropbox.inc.php: added $lang['emptyTable']
+- index.php: if the received or sent list is empty, a message is displayed
+- dropbox_download.php: the $file var is set equal to the title-field of the filetable. So not constructed anymore by substracting the username from the filename
+- index.php: add check to see if column lastUploadDate exists in filetable
+- index.php: moved javascripts from dropbox_init2.inc.php to index.php
+- index.php: when specifying an uploadfile in the form, a checkbox allowing the user to overwrite a previously sent file is shown when the specified file has the same name as a previously uploaded file of that user.
+- index.php: assign all the metadata (author, description, date, recipient, sender) of an entry in a list to the class="dropbox_detail" and add css to html-header
+- index.php: assign all dates of entries in list to the class="dropbox_date" and add CSS
+- index.php: assign all persons in entries of list to the class="dropbox_person" and add CSS
+- dropbox.inc.php: added $lang['dropbox_version'] to indicate the lates version. This must be equal to the $dropbox_cnf['version'] variable.
+- dropbox_init1.inc.php: if the newest lang file isn't loaded by claro_init_global.inc.php from the .../lang dir it will be loaded locally from the .../plugin/dropbox/ dir. This way an administrator must not install the dropbox.inc.php in the .../lang/english dir, but he can leave it in the local .../plugin/dropbox/ dir. However if you want to present multiple language translations of the file you must still put the file in the /lang/ dir, because there is no language management system inside the .../plugin/dropbox dir.
+- mime.inc.php: created this file. It contains an array $mimetype with all the mimetypes that are used by dropbox_download.php to give hinst to the browser during download about content
+- dropbox_download.php: remove https specific headers because they're not necessary
+- dropbox_download.php: use application/octet-stream as the default mime and inline as the default Content-Disposition
+- dropbox.inc.php: add lang vars for "order by" action
+- dropbox_class.inc.php: add methods orderSentWork, orderReceivedWork en _cmpWork and propery _orderBy to class Dropbox_person to take care of sorting
+- index.php: add selectionlist to headers of sent/received lists to select "order by" and add code to keep selected value in sessionvar.
+- index.php: moved part of a <a> hyperlink to previous line to remove the underlined space between symbol and title of a work entry in the sent/received list
+- index.php: add filesize info in sent/received lists
+- dropbox_submit.php: resubmit prevention only for GET action, because it gives some annoying behaviour in POST situation: white screen in IE6
+
+Version 1.2
+-----------
+- adapted entire dropbox tool so it can be used as a default tool in Dokeos 1.5
+- index.php: add event registration to log use of tool in stats tables
+- index.php: upload form checks for correct user selection and file specification before uploading the script
+- dropbox_init1.inc.php: added dropbox_cnf["allowOverwrite"] to allow or disallow overwriting of files
+- index.php: author name textbox is automatically filled in
+- mailing functionality (René Haentjens)
+- allowStudentToStudent and allowJustUpload options (id.)
+- help in separate window (id.)
+
+Version 1.3 (Patrick Cool)
+--------------------------
+- sortable table
+- categories
+- fixing a security hole
+- tabs (which can be disabled: see $dropbox_cnf['sent_received_tabs'])
+- same action on multiple documents ([zip]download, move, delete)
+- consistency with the docuements tool (open/download file, icons of documents, ...)
+- zip download of complete folder
+
+Version 1.4 (Yannick Warnier)
+-----------------------------
+- removed all self-built database tables names
+ */
+
+
 /**
  * First initialisation file with initialisation of variables and
  * without outputting anything to browser.
@@ -23,6 +113,7 @@
  				extended feedback
  * @package chamilo.dropbox
  */
+
 /**
  * Code
  */
@@ -69,6 +160,7 @@ $session_id = api_get_session_id();
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 $view = isset($_GET['view']) ? Security::remove_XSS($_GET['view']) : null;
+$postAction = isset($_POST['action']) ? $_POST['action'] : null;
 
 if (empty($session_id)) {
     $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code, false);
@@ -124,16 +216,20 @@ $javascript = "<script type=\"text/javascript\">
 	";
 
 if (dropbox_cnf('allowOverwrite')) {
+    //sentArray keeps list of all files still available in the sent files list
+    //of the user.
+    //This is used to show or hide the overwrite file-radio button of the upload form
+
 	$javascript .= "
-		var sentArray = new Array(";	//sentArray keeps list of all files still available in the sent files list
-										//of the user.
-										//This is used to show or hide the overwrite file-radio button of the upload form
-	for ($i = 0; $i < count($dropbox_person->sentWork); $i++) {
-		if ($i > 0) {
-		    $javascript .= ", ";
-		}
-		$javascript .= "'".$dropbox_person->sentWork[$i]->title."'";
-	}
+		var sentArray = new Array(";
+    if (isset($dropbox_person)) {
+        for ($i = 0; $i < count($dropbox_person->sentWork); $i++) {
+            if ($i > 0) {
+                $javascript .= ", ";
+            }
+            $javascript .= "'".$dropbox_person->sentWork[$i]->title."'";
+        }
+    }
 	$javascript .= ");
 
 		function checkfile(str)
@@ -208,7 +304,7 @@ if (!$view OR $view == 'received') {
 	header ('location: index.php?view='.$view.'&error=Error');
 }
 
-if (($_POST['action'] == 'download_received' || $_POST['action'] == 'download_sent') and !$_POST['store_feedback']) {
+if (($postAction == 'download_received' || $postAction == 'download_sent') and !$_POST['store_feedback']) {
     $checked_file_ids = $_POST['id'];
     if (!is_array($checked_file_ids) || count($checked_file_ids) == 0) {
         header ('location: index.php?view='.$view.'&error=CheckAtLeastOneFile');
@@ -260,9 +356,10 @@ if ($view == 'sent' OR empty($view)) {
 
 /*	HEADER & TITLE */
 
-if ($origin != 'learnpath') {
+if (isset($origin) && $origin == 'learnpath') {
+    // if we come from the learning path we have to include the stylesheet and the required javascripts manually.
+    echo '<link rel="stylesheet" type="text/css" href="', api_get_path(WEB_CODE_PATH), 'css/default.css">';
+    echo $javascript;
+} else {
     Display::display_header($nameTools, 'Dropbox');
-} else { // if we come from the learning path we have to include the stylesheet and the required javascripts manually.
-	echo '<link rel="stylesheet" type="text/css" href="', api_get_path(WEB_CODE_PATH), 'css/default.css">';
-	echo $javascript;
 }

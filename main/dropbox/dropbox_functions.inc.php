@@ -179,9 +179,13 @@ function delete_category($action, $id, $user_id = null)
 *@ return html code of the form that appears in a message box.
 * @author Julio Montoya - function rewritten
 */
-function display_move_form($part, $id, $target = array(), $extra_params = array())
+function display_move_form($part, $id, $target = array(), $extra_params = array(), $viewReceivedCategory, $viewSentCategory, $view)
 {
-    $form = new FormValidator('form1', 'post', api_get_self().'?view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&view='.Security::remove_XSS($_GET['view']).'&'.$extra_params);
+    $form = new FormValidator(
+        'form1',
+        'post',
+        api_get_self().'?view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&'.$extra_params
+    );
 	$form->addElement('header', get_lang('MoveFileTo'));
     $form->addElement('hidden', 'id', intval($id));
     $form->addElement('hidden', 'part', Security::remove_XSS($part));
@@ -471,7 +475,7 @@ function display_addcategory_form($category_name = '', $id = '', $action)
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
-function display_add_form($dropbox_unid)
+function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategory, $view)
 {
     $course_info = api_get_course_info();
     $_user = api_get_user_info();
@@ -479,53 +483,29 @@ function display_add_form($dropbox_unid)
     $is_courseTutor = api_is_course_tutor();
     $origin = isset($_GET['origin']) ? $_GET['origin'] : null;
 
-
     $token = Security::get_token();
 	$dropbox_person = new Dropbox_Person(api_get_user_id(), $is_courseAdmin, $is_courseTutor);
-	?>
-	<form method="post" action="index.php?view_received_category=<?php echo Security::remove_XSS($_GET['view_received_category']); ?>&view_sent_category=<?php echo Security::remove_XSS($_GET['view_sent_category']); ?>&view=<?php echo Security::remove_XSS($_GET['view']); ?>&<?php echo "origin=$origin"."&".api_get_cidreq(); ?>" enctype="multipart/form-data" onsubmit="javascript: return checkForm(this);">
-	<legend><?php echo get_lang('UploadNewFile'); ?></legend>
 
-	<div class="control-group">
-		<label>
-			<span class="form_required">*</span><?php echo get_lang('UploadFile'); ?>:
-		</label>
-		<div class="controls">
-				<input type="hidden" name="MAX_FILE_SIZE" value='<?php echo dropbox_cnf('maxFilesize'); ?>' />
-				<input type="file" name="file" size="20" <?php if (dropbox_cnf('allowOverwrite')) echo 'onChange="javascript: checkfile(this.value);"'; ?> />
-				<input type="hidden" name="dropbox_unid" value="<?php echo $dropbox_unid; ?>" />
-				<input type="hidden" name="sec_token" value="<?php echo $token; ?>" />
-				<?php
-				if ($origin == 'learnpath') {
-					echo '<input type="hidden" name="origin" value="learnpath" />';
-				}
-				?>
-		</div>
-	</div>
+    $form = new FormValidator(
+        'sent_form',
+        'post',
+        api_get_self().'?view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&'.api_get_cidreq(),
+        null,
+        array('enctype' => 'multipart/form-data', 'onsubmit' => 'javascript: return checkForm(this);')
+    );
 
-	<?php
+    $form->addElement('header', get_lang('UploadNewFile'));
+    $form->addElement('hidden', 'MAX_FILE_SIZE', dropbox_cnf('maxFilesize'));
+    $form->addElement('hidden', 'dropbox_unid', $dropbox_unid);
+    $form->addElement('hidden', 'sec_token', $token);
+    $form->addElement('hidden', 'origin', $origin);
+    $form->addElement('file', 'file', get_lang('UploadFile'), array('onChange' => 'javascript: checkfile(this.value);'));
+
 	if (dropbox_cnf('allowOverwrite')) {
-		?>
-		<div class="control-group">
-			<div class="controls">
-				<label class="checkbox">
-                    <input type="checkbox" name="cb_overwrite" id="cb_overwrite" value="true" />
-				<?php echo get_lang('OverwriteFile'); ?>
-				</label>
-			</div>
-		</div>
-		<?php
+        $form->addElement('checkbox', 'cb_overwrite',  null, get_lang('OverwriteFile'), array('id' => 'cb_overwrite'));
 	}
-	?>
 
-	<div class="control-group">
-		<label class="control-label">
-			<?php echo get_lang('SendTo'); ?>
-		</label>
-		<div class="controls">
-	<?php
-
-	//list of all users in this course and all virtual courses combined with it
+	// List of all users in this course and all virtual courses combined with it
 	if (api_get_session_id()) {
 		$complete_user_list_for_dropbox = array();
 		if (api_get_setting('dropbox_allow_student_to_student')=='true' || $_user['status'] != STUDENT) {
@@ -548,13 +528,13 @@ function display_add_form($dropbox_unid)
     	$complete_user_list_for_dropbox = TableSort::sort_table($complete_user_list_for_dropbox, 'lastcommafirst');
     }
 
-    echo '<select name="recipients[]" size="10" multiple class="span4">';
 	/*
 		Create the options inside the select box:
 		List all selected users their user id as value and a name string as display
 	*/
 
 	$current_user_id = '';
+    $options = array();
 	foreach ($complete_user_list_for_dropbox as $current_user) {
 		if (($dropbox_person -> isCourseTutor
 				|| $dropbox_person -> isCourseAdmin
@@ -567,9 +547,11 @@ function display_add_form($dropbox_unid)
 			}
 			$full_name = $current_user['lastcommafirst'];
 			$current_user_id = $current_user['user_id'];
-			echo '<option value="user_' . $current_user_id . '">' . $full_name . '</option>';
+            $options['user_' . $current_user_id] = $full_name;
+			//echo '<option value="user_' . $current_user_id . '">' . $full_name . '</option>';
 		}
 	}
+
 
 	/*
 	* Show groups
@@ -581,32 +563,22 @@ function display_add_form($dropbox_unid)
 		if (count($complete_group_list_for_dropbox) > 0) {
 			foreach ($complete_group_list_for_dropbox as $current_group) {
 				if ($current_group['number_of_members'] > 0) {
-					echo '<option value="group_'.$current_group['id'].'">G: '.$current_group['name'].' - '.$current_group['number_of_members'].' '.get_lang('Users').'</option>';
+					//echo '<option value="group_'.$current_group['id'].'">G: '.$current_group['name'].' - '.$current_group['number_of_members'].' '.get_lang('Users').'</option>';
+                    $options['group_'.$current_group['id']] = 'G: '.$current_group['name'].' - '.$current_group['number_of_members'].' '.get_lang('Users');
 				}
 			}
 		}
     }
 
-    if (($dropbox_person -> isCourseTutor || $dropbox_person -> isCourseAdmin) && dropbox_cnf('allowMailing')) {
-		// echo '<option value="mailing">'.get_lang('MailingInSelect').'</option>';
-	}
-
     if (dropbox_cnf('allowJustUpload')) {
     	//echo '<option value="upload">'.get_lang('JustUploadInSelect').'</option>';
-    	echo '<option value="user_'.$_user['user_id'].'">'.get_lang('JustUploadInSelect').'</option>';
+    	//echo '<option value="user_'.$_user['user_id'].'">'.get_lang('JustUploadInSelect').'</option>';
+        $options['user_'.$_user['user_id']] = get_lang('JustUploadInSelect');
     }
 
-	echo '</select>
-		</div>
-	</div>';
-	echo '
-		<div class="control-group">
-			<div class="controls">
-				<button type="Submit" class="upload" name="submitWork">'.get_lang('Upload', '').'</button>
-			</div>
-		</div>
-	';
-	echo '</form>';
+    $form->addElement('select', 'recipients', get_lang('SendTo'), $options, array('multiple' => 'multiple', 'size' => '10', 'class' => 'span4'));
+    $form->addElement('button', 'submitWork', get_lang('Upload'));
+    $form->display();
 }
 
 /**
@@ -766,6 +738,9 @@ function dropbox_cnf($variable)
     return $dropbox_cnf[$variable];
 }
 
+/**
+ * @return array|null|string
+ */
 function store_add_dropbox()
 {
     $_course = api_get_course_info();
@@ -855,7 +830,7 @@ function store_add_dropbox()
 	// set title
 	$dropbox_title = $dropbox_filename;
 	// set author
-	if ($_POST['authors'] == '') {
+	if (!isset($_POST['authors'])) {
 		$_POST['authors'] = getUserNameFromId($_user['user_id']);
 	}
 
@@ -909,7 +884,7 @@ function store_add_dropbox()
 		}
 	}
 
-	new Dropbox_SentWork( $_user['user_id'], $dropbox_title, $_POST['description'], strip_tags($_POST['authors']), $dropbox_filename, $dropbox_filesize, $new_work_recipients);
+	new Dropbox_SentWork($_user['user_id'], $dropbox_title, $_POST['description'], strip_tags($_POST['authors']), $dropbox_filename, $dropbox_filesize, $new_work_recipients);
 
 	Security::clear_token();
     return get_lang('FileUploadSucces');
@@ -1187,6 +1162,7 @@ function get_total_number_feedback($file_id = '') {
 	$sql = "SELECT COUNT(feedback_id) AS total, file_id FROM ".$dropbox_cnf['tbl_feedback']."
 			WHERE c_id = $course_id GROUP BY file_id";
 	$result = Database::query($sql);
+    $return = array();
 	while ($row=Database::fetch_array($result)) {
 		$return[$row['file_id']] = $row['total'];
 	}

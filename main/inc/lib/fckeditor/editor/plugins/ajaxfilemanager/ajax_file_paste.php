@@ -1,8 +1,11 @@
 <?php
+/* For licensing terms, see /license.txt */
 
-include_once(dirname(__FILE__).DIRECTORY_SEPARATOR."inc".DIRECTORY_SEPARATOR."config.php");
-$error = '';
-$fileMoved = array();
+require_once '../../../../../../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fckeditor/editor/plugins/ajaxfilemanager/inc/config.php';
+
+$error                   = '';
+$fileMoved               = array();
 $unmovedDocDueToSamePath = array();
 if (CONFIG_SYS_VIEW_ONLY || (!CONFIG_OPTIONS_CUT && !CONFIG_OPTIONS_COPY)) {
     $error = SYS_DISABLED;
@@ -48,9 +51,9 @@ if (CONFIG_SYS_VIEW_ONLY || (!CONFIG_OPTIONS_CUT && !CONFIG_OPTIONS_COPY)) {
                     if ($file->copyTo($doc, $_GET['current_folder_path'])) {
 
                         $finalPath = $destFolderPath.basename($doc);
-                        $objFile = new file($finalPath);
-                        $tem = $objFile->getFileInfo();
-                        $obj = new manager($finalPath, false);
+                        $objFile   = new file($finalPath);
+                        $tem       = $objFile->getFileInfo();
+                        $obj       = new manager($finalPath, false);
 
                         $fileType = $obj->getFileType($finalPath, (is_dir($finalPath) ? true : false));
 
@@ -68,13 +71,13 @@ if (CONFIG_SYS_VIEW_ONLY || (!CONFIG_OPTIONS_CUT && !CONFIG_OPTIONS_COPY)) {
                           } */
 
                         $tem['final_path'] = $finalPath;
-                        $tem['path'] = backslashToSlash($finalPath);
-                        $tem['type'] = (is_dir($finalPath) ? 'folder' : 'file');
-                        $tem['size'] = @transformFileSize($tem['size']);
-                        $tem['ctime'] = date(DATE_TIME_FORMAT, $tem['ctime']);
-                        $tem['mtime'] = date(DATE_TIME_FORMAT, $tem['mtime']);
-                        $tem['flag'] = 'noFlag';
-                        $tem['url'] = getFileUrl($doc);
+                        $tem['path']       = backslashToSlash($finalPath);
+                        $tem['type']       = (is_dir($finalPath) ? 'folder' : 'file');
+                        $tem['size']       = @transformFileSize($tem['size']);
+                        $tem['ctime']      = date(DATE_TIME_FORMAT, $tem['ctime']);
+                        $tem['mtime']      = date(DATE_TIME_FORMAT, $tem['mtime']);
+                        $tem['flag']       = 'noFlag';
+                        $tem['url']        = getFileUrl($doc);
 
                         /**
                          * Bridge to Chamilo documents tool
@@ -82,10 +85,15 @@ if (CONFIG_SYS_VIEW_ONLY || (!CONFIG_OPTIONS_CUT && !CONFIG_OPTIONS_COPY)) {
                          */
                         if (!empty($_course['path'])) {
 
-                            $mainPath = getParentFolderPath($folderInfo['path']); // from ajaxfilemanager sample ../../../../../../../courses/TEST/document/
-                            $fullPath = $tem['final_path']; // from ajaxfilemanager sample ../../../../../../../courses/TEST/document/icons/book_highlight.jpg
-                            $chamiloFolder = substr($fullPath, strlen($mainPath) - strlen($fullPath) - 1); // sample /icons/book_highlight.jpg or /icons
-                            $chamiloFile = $tem['name']; //get ajaxmanager
+                            $mainPath        = getParentFolderPath(
+                                $folderInfo['path']
+                            ); // from ajaxfilemanager sample ../../../../../../../courses/TEST/document/
+                            $fullPath        = $tem['final_path']; // from ajaxfilemanager sample ../../../../../../../courses/TEST/document/icons/book_highlight.jpg
+                            $chamiloFolder   = substr(
+                                $fullPath,
+                                strlen($mainPath) - strlen($fullPath) - 1
+                            ); // sample /icons/book_highlight.jpg or /icons
+                            $chamiloFile     = $tem['name']; //get ajaxmanager
                             $chamiloFileSize = filesize($fullPath); //get ajaxmanager
                             if (!empty($group_properties['directory'])) {
                                 $chamiloFolder = $group_properties['directory'].$chamiloFolder; //get Chamilo
@@ -95,25 +103,43 @@ if (CONFIG_SYS_VIEW_ONLY || (!CONFIG_OPTIONS_CUT && !CONFIG_OPTIONS_COPY)) {
                                 $full_old_path = $doc; // get from ajaxfilemanager sample ../../../../../../../courses/TEST/document/book_highlight.jpg or if you select a folder: ../../../../../../../courses/TEST/document/trainer/
                                 if (is_dir($full_old_path)) {
                                     //update first folder
-                                    $old_path = substr($full_old_path, strlen($mainPath) - strlen($full_old_path) - 1, -1);
+                                    $old_path = substr(
+                                        $full_old_path,
+                                        strlen($mainPath) - strlen($full_old_path) - 1,
+                                        -1
+                                    );
                                     if (!empty($group_properties['directory'])) {
                                         $old_path = $group_properties['directory'].$old_path; //get Chamilo
                                     }
                                     $new_path = $chamiloFolder; //sample /images
-                                    $dbTable = Database::get_course_table(TABLE_DOCUMENT); //Chamilo
+                                    $dbTable  = Database::get_course_table(TABLE_DOCUMENT); //Chamilo
                                     update_db_info('update', $old_path, $new_path); //Chamilo
-                                    $curdirpath = $new_path;
-                                    $doc_id = DocumentManager::get_document_id($_course, $curdirpath); //Chamilo
+                                    $curdirpath         = $new_path;
+                                    $doc_id             = DocumentManager::get_document_id(
+                                        $_course,
+                                        $curdirpath
+                                    ); //Chamilo
                                     $current_session_id = api_get_session_id();
-                                    api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderMoved', api_get_user_id(), $to_group_id, null, null, null, $current_session_id);
+                                    api_item_property_update(
+                                        $_course,
+                                        TOOL_DOCUMENT,
+                                        $doc_id,
+                                        'FolderMoved',
+                                        api_get_user_id(),
+                                        $to_group_id,
+                                        null,
+                                        null,
+                                        null,
+                                        $current_session_id
+                                    );
                                     // update database: inside subdirectories and files
-                                    $course_dir = $_course['path']."/document"; //get Chamilo
+                                    $course_dir      = $_course['path']."/document"; //get Chamilo
                                     $sys_course_path = api_get_path(SYS_COURSE_PATH); //get Chamilo
-                                    $base_work_dir = $sys_course_path.$course_dir; // sample c:/xampp/htdocs/chamilo/courses/TEST/document
-                                    $source_dir = $base_work_dir.$chamiloFolder;
+                                    $base_work_dir   = $sys_course_path.$course_dir; // sample c:/xampp/htdocs/chamilo/courses/TEST/document
+                                    $source_dir      = $base_work_dir.$chamiloFolder;
 
                                     //thanks to donovan
-                                    $path = '';
+                                    $path    = '';
                                     $stack[] = $source_dir;
                                     while ($stack) {
                                         $thisdir = array_pop($stack);
@@ -125,7 +151,7 @@ if (CONFIG_SYS_VIEW_ONLY || (!CONFIG_OPTIONS_CUT && !CONFIG_OPTIONS_COPY)) {
                                                     if (is_file($current_file)) {
                                                         $path[] = "{$thisdir}/{$dircont[$i]}";
                                                     } elseif (is_dir($current_file)) {
-                                                        $path[] = "{$thisdir}/{$dircont[$i]}";
+                                                        $path[]  = "{$thisdir}/{$dircont[$i]}";
                                                         $stack[] = $current_file;
                                                     }
                                                 }
@@ -140,36 +166,74 @@ if (CONFIG_SYS_VIEW_ONLY || (!CONFIG_OPTIONS_CUT && !CONFIG_OPTIONS_COPY)) {
                                         //Sample $item is C:/xampp/htdocs/chamilo/courses/TEST/document/books/book_highlight.jpg
                                         $file_orig = basename($item);
                                         if ($file_orig[0] != '.' && !in_array($invisibleFileNames)) {
-                                            $source_item = substr($item, (strlen($base_work_dir) - strlen($item))); // sample /books/book_highlight.jpg or /books
-                                            $target_item = $source_item;
+                                            $source_item   = substr(
+                                                $item,
+                                                (strlen($base_work_dir) - strlen($item))
+                                            ); // sample /books/book_highlight.jpg or /books
+                                            $target_item   = $source_item;
                                             $chamiloFolder = $target_item;
-                                            $chamiloFile = basename($target_item);
+                                            $chamiloFile   = basename($target_item);
                                             //
                                             if (is_dir($item)) {
-                                                $old_path = substr($full_old_path, strlen($mainPath) - strlen($full_old_path) - 1, -1);
+                                                $old_path = substr(
+                                                    $full_old_path,
+                                                    strlen($mainPath) - strlen($full_old_path) - 1,
+                                                    -1
+                                                );
                                                 if (!empty($group_properties['directory'])) {
                                                     $old_path = $group_properties['directory'].$old_path; //get Chamilo
                                                 }
                                                 $new_path = $chamiloFolder; //sample /images
-                                                $dbTable = Database::get_course_table(TABLE_DOCUMENT); //Chamilo
+                                                $dbTable  = Database::get_course_table(TABLE_DOCUMENT); //Chamilo
                                                 update_db_info('update', $old_path, $new_path); //Chamilo
-                                                $curdirpath = $new_path;
-                                                $doc_id = DocumentManager::get_document_id($_course, $curdirpath); //Chamilo
+                                                $curdirpath         = $new_path;
+                                                $doc_id             = DocumentManager::get_document_id(
+                                                    $_course,
+                                                    $curdirpath
+                                                ); //Chamilo
                                                 $current_session_id = api_get_session_id();
-                                                api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderMoved', api_get_user_id(), $to_group_id, null, null, null, $current_session_id);
+                                                api_item_property_update(
+                                                    $_course,
+                                                    TOOL_DOCUMENT,
+                                                    $doc_id,
+                                                    'FolderMoved',
+                                                    api_get_user_id(),
+                                                    $to_group_id,
+                                                    null,
+                                                    null,
+                                                    null,
+                                                    $current_session_id
+                                                );
                                             } elseif (is_file($item)) {
-                                                $old_path = substr($full_old_path, strlen($mainPath) - strlen($full_old_path) - 1);
+                                                $old_path = substr(
+                                                    $full_old_path,
+                                                    strlen($mainPath) - strlen($full_old_path) - 1
+                                                );
                                                 if (!empty($group_properties['directory'])) {
                                                     $old_path = $group_properties['directory'].$old_path; //get Chamilo
                                                 }
                                                 $new_path = $chamiloFolder; //sample /images/book_highlight.jpg
-                                                $dbTable = Database::get_course_table(TABLE_DOCUMENT); //Chamilo
+                                                $dbTable  = Database::get_course_table(TABLE_DOCUMENT); //Chamilo
                                                 update_db_info('update', $old_path, $new_path); //Chamilo
                                                 //update items
-                                                $curdirpath = $new_path;
-                                                $doc_id = DocumentManager::get_document_id($_course, $curdirpath); //Chamilo
+                                                $curdirpath         = $new_path;
+                                                $doc_id             = DocumentManager::get_document_id(
+                                                    $_course,
+                                                    $curdirpath
+                                                ); //Chamilo
                                                 $current_session_id = api_get_session_id();
-                                                api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentMoved', api_get_user_id(), $to_group_id, null, null, null, $current_session_id);
+                                                api_item_property_update(
+                                                    $_course,
+                                                    TOOL_DOCUMENT,
+                                                    $doc_id,
+                                                    'DocumentMoved',
+                                                    api_get_user_id(),
+                                                    $to_group_id,
+                                                    null,
+                                                    null,
+                                                    null,
+                                                    $current_session_id
+                                                );
                                             }
                                         }
                                     }
@@ -183,26 +247,54 @@ if (CONFIG_SYS_VIEW_ONLY || (!CONFIG_OPTIONS_CUT && !CONFIG_OPTIONS_COPY)) {
                                     $dbTable = Database::get_course_table(TABLE_DOCUMENT); //Chamilo
                                     update_db_info('update', $old_path, $new_path); //Chamilo
                                     //update items
-                                    $curdirpath = $new_path;
-                                    $doc_id = DocumentManager::get_document_id($_course, $curdirpath);
+                                    $curdirpath         = $new_path;
+                                    $doc_id             = DocumentManager::get_document_id($_course, $curdirpath);
                                     $current_session_id = api_get_session_id();
-                                    api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentMoved', api_get_user_id(), $to_group_id, null, null, null, $current_session_id);
+                                    api_item_property_update(
+                                        $_course,
+                                        TOOL_DOCUMENT,
+                                        $doc_id,
+                                        'DocumentMoved',
+                                        api_get_user_id(),
+                                        $to_group_id,
+                                        null,
+                                        null,
+                                        null,
+                                        $current_session_id
+                                    );
                                 }
                             } else {
                                 $current_session_id = api_get_session_id();
                                 if ($tem['type'] == "folder") {
                                     //add to database the first folder to target
-                                    $doc_id = add_document($_course, $chamiloFolder, 'folder', $chamiloFileSize, $chamiloFile); //get Chamilo
-                                    api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id(), $to_group_id, null, null, null, $current_session_id); //get Chamilo
+                                    $doc_id = add_document(
+                                        $_course,
+                                        $chamiloFolder,
+                                        'folder',
+                                        $chamiloFileSize,
+                                        $chamiloFile
+                                    ); //get Chamilo
+                                    api_item_property_update(
+                                        $_course,
+                                        TOOL_DOCUMENT,
+                                        $doc_id,
+                                        'FolderCreated',
+                                        api_get_user_id(),
+                                        $to_group_id,
+                                        null,
+                                        null,
+                                        null,
+                                        $current_session_id
+                                    ); //get Chamilo
                                     // add to database inside subdirectories and files
 
-                                    $course_dir = $_course['path']."/document"; //get Chamilo
+                                    $course_dir      = $_course['path']."/document"; //get Chamilo
                                     $sys_course_path = api_get_path(SYS_COURSE_PATH); //get Chamilo
-                                    $base_work_dir = $sys_course_path.$course_dir; // sample c:/xampp/htdocs/chamilo/courses/TEST/document
-                                    $source_dir = $base_work_dir.$chamiloFolder;
+                                    $base_work_dir   = $sys_course_path.$course_dir; // sample c:/xampp/htdocs/chamilo/courses/TEST/document
+                                    $source_dir      = $base_work_dir.$chamiloFolder;
 
                                     //thanks to donovan
-                                    $path = '';
+                                    $path    = '';
                                     $stack[] = $source_dir;
                                     while ($stack) {
                                         $thisdir = array_pop($stack);
@@ -214,7 +306,7 @@ if (CONFIG_SYS_VIEW_ONLY || (!CONFIG_OPTIONS_CUT && !CONFIG_OPTIONS_COPY)) {
                                                     if (is_file($current_file)) {
                                                         $path[] = "{$thisdir}/{$dircont[$i]}";
                                                     } elseif (is_dir($current_file)) {
-                                                        $path[] = "{$thisdir}/{$dircont[$i]}";
+                                                        $path[]  = "{$thisdir}/{$dircont[$i]}";
                                                         $stack[] = $current_file;
                                                     }
                                                 }
@@ -229,24 +321,78 @@ if (CONFIG_SYS_VIEW_ONLY || (!CONFIG_OPTIONS_CUT && !CONFIG_OPTIONS_COPY)) {
                                         //Sample $item is C:/xampp/htdocs/chamilo/courses/TEST/document/books/book_highlight.jpg
                                         $file_orig = basename($item);
                                         if ($file_orig[0] != '.' && !in_array($invisibleFileNames)) {
-                                            $source_item = substr($item, (strlen($base_work_dir) - strlen($item))); // sample /books/book_highlight.jpg or /books
-                                            $target_item = $source_item;
+                                            $source_item   = substr(
+                                                $item,
+                                                (strlen($base_work_dir) - strlen($item))
+                                            ); // sample /books/book_highlight.jpg or /books
+                                            $target_item   = $source_item;
                                             $chamiloFolder = $target_item;
-                                            $chamiloFile = basename($target_item);
+                                            $chamiloFile   = basename($target_item);
                                             //
                                             if (is_dir($item)) {
-                                                $doc_id = add_document($_course, $chamiloFolder, 'folder', $chamiloFileSize, $chamiloFile); //get Chamilo
-                                                api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id(), $to_group_id, null, null, null, $current_session_id); //get Chamilo
+                                                $doc_id = add_document(
+                                                    $_course,
+                                                    $chamiloFolder,
+                                                    'folder',
+                                                    $chamiloFileSize,
+                                                    $chamiloFile
+                                                ); //get Chamilo
+                                                api_item_property_update(
+                                                    $_course,
+                                                    TOOL_DOCUMENT,
+                                                    $doc_id,
+                                                    'FolderCreated',
+                                                    api_get_user_id(),
+                                                    $to_group_id,
+                                                    null,
+                                                    null,
+                                                    null,
+                                                    $current_session_id
+                                                ); //get Chamilo
                                             } elseif (is_file($item)) {
                                                 $chamiloFileSize = filesize($item);
-                                                $doc_id = add_document($_course, $chamiloFolder, 'file', $chamiloFileSize, $chamiloFile); //get Chamilo
-                                                api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(), $to_group_id, null, null, null, $current_session_id); //get Chamilo
+                                                $doc_id          = add_document(
+                                                    $_course,
+                                                    $chamiloFolder,
+                                                    'file',
+                                                    $chamiloFileSize,
+                                                    $chamiloFile
+                                                ); //get Chamilo
+                                                api_item_property_update(
+                                                    $_course,
+                                                    TOOL_DOCUMENT,
+                                                    $doc_id,
+                                                    'DocumentAdded',
+                                                    api_get_user_id(),
+                                                    $to_group_id,
+                                                    null,
+                                                    null,
+                                                    null,
+                                                    $current_session_id
+                                                ); //get Chamilo
                                             }
                                         }
                                     }
                                 } elseif ($tem['type'] == "file") {
-                                    $doc_id = add_document($_course, $chamiloFolder, 'file', $chamiloFileSize, $chamiloFile); //get Chamilo
-                                    api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(), $to_group_id, null, null, null, $current_session_id); //get Chamilo
+                                    $doc_id = add_document(
+                                        $_course,
+                                        $chamiloFolder,
+                                        'file',
+                                        $chamiloFileSize,
+                                        $chamiloFile
+                                    ); //get Chamilo
+                                    api_item_property_update(
+                                        $_course,
+                                        TOOL_DOCUMENT,
+                                        $doc_id,
+                                        'DocumentAdded',
+                                        api_get_user_id(),
+                                        $to_group_id,
+                                        null,
+                                        null,
+                                        null,
+                                        $current_session_id
+                                    ); //get Chamilo
                                 }
                             }
                         }
@@ -258,9 +404,8 @@ if (CONFIG_SYS_VIEW_ONLY || (!CONFIG_OPTIONS_CUT && !CONFIG_OPTIONS_COPY)) {
                         }
 
 
-
                         $fileMoved[sizeof($fileMoved)] = $tem;
-                        $tem = null;
+                        $tem                           = null;
                     }
                 } else {
                     $unmovedDocDueToSamePath[] = $doc;
@@ -290,4 +435,3 @@ foreach ($fileMoved as $i => $file) {
     echo "} ";
 }
 echo "} }";
-?>

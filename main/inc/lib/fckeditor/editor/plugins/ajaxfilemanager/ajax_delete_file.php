@@ -1,15 +1,9 @@
 <?php
-/**
- * delete selected files
- * @author Logan Cai (cailongqun [at] yahoo [dot] com [dot] cn)
- * @link www.phpletter.com
- * @since 22/April/2007
- *
- * Modify for Chamilo
- * @author Juan Carlos Ra�a
- * @since 19/March/2009
- */
-require_once dirname(__FILE__).DIRECTORY_SEPARATOR."inc".DIRECTORY_SEPARATOR."config.php";
+/* For licensing terms, see /license.txt */
+
+require_once '../../../../../../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fckeditor/editor/plugins/ajaxfilemanager/inc/config.php';
+
 $error = "";
 if (CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_DELETE) {
     $error = SYS_DISABLED;
@@ -59,7 +53,11 @@ if (CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_DELETE) {
                 }
             } else {
                 $file->delete(addTrailingSlash(backslashToSlash($_GET['delete']))); //deleted by ajaxfilemanager
-                event_system(LOG_USER_PERSONAL_DOC_DELETED, 'document_path', addTrailingSlash(backslashToSlash($_GET['delete'])));
+                event_system(
+                    LOG_USER_PERSONAL_DOC_DELETED,
+                    'document_path',
+                    addTrailingSlash(backslashToSlash($_GET['delete']))
+                );
             }
             //////end bridge to Chamilo
             $file->delete(addTrailingSlash(backslashToSlash($_GET['delete'])));
@@ -150,7 +148,11 @@ if (CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_DELETE) {
                         }
                     } else {
                         $file->delete(addTrailingSlash(backslashToSlash($doc))); //deleted by ajaxfilemanager
-                        event_system(LOG_USER_PERSONAL_DOC_DELETED, 'document_path', addTrailingSlash(backslashToSlash($doc)));
+                        event_system(
+                            LOG_USER_PERSONAL_DOC_DELETED,
+                            'document_path',
+                            addTrailingSlash(backslashToSlash($doc))
+                        );
                     }
                     //////end bridge to Chamilo
                 } elseif (is_file($doc)

@@ -1515,6 +1515,7 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
  * @param string $column
  * @param string $direction
  * @param string $where_condition
+ * @param bool $getCount
  * @return array
  */
 function getWorkListStudent($start, $limit, $column, $direction, $where_condition, $getCount = false)
@@ -1544,6 +1545,7 @@ function getWorkListStudent($start, $limit, $column, $direction, $where_conditio
         $group_query = " WHERE w.c_id = $course_id AND post_group_id = '0' ";
         $subdirs_query = "AND parent_id = 0";
     }
+
     $active_condition = ' AND active IN (1, 0)';
 
     if ($getCount) {
@@ -1578,6 +1580,7 @@ function getWorkListStudent($start, $limit, $column, $direction, $where_conditio
     while ($work = Database::fetch_array($result, 'ASSOC')) {
 
         $isSubscribed = userIsSubscribedToWork(api_get_user_id(), $work['id'], $course_id);
+
         if ($isSubscribed == false) {
             continue;
         }
@@ -1626,7 +1629,12 @@ function getWorkListTeacher($start, $limit, $column, $direction, $where_conditio
     // Get list from database
     if ($is_allowed_to_edit) {
         $active_condition = ' active IN (0, 1)';
-        $sql = "SELECT w.*, a.expires_on, expires_on, ends_on, enable_qualification
+        if ($getCount) {
+            $select = " SELECT count(w.id) as count";
+        } else {
+            $select = " SELECT w.*, a.expires_on, expires_on, ends_on, enable_qualification ";
+        }
+        $sql = " $select
                 FROM $workTable w
                 LEFT JOIN $workTableAssignment a ON (a.publication_id = w.id AND a.c_id = w.c_id)
                 WHERE w.c_id = $course_id
@@ -1635,6 +1643,7 @@ function getWorkListTeacher($start, $limit, $column, $direction, $where_conditio
                     (parent_id = 0) $where_condition ";
 
         $sql .= " AND post_group_id = '".$group_id."' ";
+
         $sql .= " ORDER BY $column $direction ";
         $sql .= " LIMIT $start, $limit";
 

@@ -531,7 +531,7 @@ class TestMainApi extends UnitTestCase {
 
 	function testString2Boolean(){
 		global $string;
-		$res=string_2_boolean($string);
+		$res=api_string_2_boolean($string);
 		$this->assertFalse($res);
 	}
 

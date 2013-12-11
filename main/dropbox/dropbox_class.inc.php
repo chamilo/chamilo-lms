@@ -68,11 +68,11 @@ class Dropbox_Work
      * @param unknown_type $arg6
      * @return Dropbox_Work
      */
-    function Dropbox_Work($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null)
+    public function Dropbox_Work($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null)
     {
         if (func_num_args() > 1) {
             $this->_createNewWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6);
-        }  else  {
+        } else {
             $this->_createExistingWork($arg1);
         }
     }
@@ -80,33 +80,35 @@ class Dropbox_Work
 	/**
 	 * private function creating a new work object
 	 *
-	 * @param unknown_type $uploader_id
-	 * @param unknown_type $title
-	 * @param unknown_type $description
-	 * @param unknown_type $author
-	 * @param unknown_type $filename
-	 * @param unknown_type $filesize
+	 * @param int $uploader_id
+	 * @param string $title
+	 * @param string $description
+	 * @param string $author
+	 * @param string $filename
+	 * @param int $filesize
 	 *
 	 * @todo 	$author was originally a field but this has now been replaced by the first and lastname of the uploader (to prevent anonymous uploads)
 	 * 			As a consequence this parameter can be removed
 	 */
-	function _createNewWork($uploader_id, $title, $description, $author, $filename, $filesize)
+	public function _createNewWork($uploader_id, $title, $description, $author, $filename, $filesize)
     {
-		global $_user, $dropbox_cnf;
-		// Fill in the properties
-		$this->uploader_id = intval($uploader_id);
-		$this->uploaderName = getUserNameFromId($this->uploader_id);
-		$this->filename = $filename;
-		$this->filesize = $filesize;
-		$this->title = $title;
-		$this->description = $description;
-		$this->author = api_get_person_name($_user['firstName'], $_user['lastName']);
-		$this->last_upload_date = api_get_utc_datetime();
-		$course_id = api_get_course_int_id();
+        $_user = api_get_user_info();
+        $dropbox_cnf = getDropboxConf();
 
-		// Check if object exists already. If it does, the old object is used
-		// with updated information (authors, description, upload_date)
-		$this->isOldWork = false;
+        // Fill in the properties
+        $this->uploader_id = intval($uploader_id);
+        $this->uploaderName = getUserNameFromId($this->uploader_id);
+        $this->filename = $filename;
+        $this->filesize = $filesize;
+        $this->title = $title;
+        $this->description = $description;
+        $this->author = api_get_person_name($_user['firstName'], $_user['lastName']);
+        $this->last_upload_date = api_get_utc_datetime();
+        $course_id = api_get_course_int_id();
+
+        // Check if object exists already. If it does, the old object is used
+        // with updated information (authors, description, upload_date)
+        $this->isOldWork = false;
 		$sql = "SELECT id, upload_date FROM ".$dropbox_cnf['tbl_file']."
 				WHERE c_id = $course_id AND filename = '".Database::escape_string($this->filename)."'";
         $result = Database::query($sql);
@@ -138,7 +140,7 @@ class Dropbox_Work
 						, '".Database::escape_string($this->author)."'
 						, '".Database::escape_string($this->upload_date)."'
 						, '".Database::escape_string($this->last_upload_date)."'
-						, ".intval($_SESSION['id_session'])."
+						, ".api_get_session_id()."
 						)";
 
         	Database::query($sql);
@@ -166,10 +168,12 @@ class Dropbox_Work
 	 *
 	 * @param int $id
 	 */
-	function _createExistingWork($id)
+	public function _createExistingWork($id)
     {
 	    $course_id = api_get_course_int_id();
-		global $_user, $dropbox_cnf;
+        $dropbox_cnf = getDropboxConf();
+
+        $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 		// Do some sanity checks
 		$id	= intval($id);
@@ -205,7 +209,7 @@ class Dropbox_Work
 		$this->category = $res['cat_id'];
 
 		// Getting the feedback on the work.
-		if ($_GET['action'] == 'viewfeedback' AND $this->id == $_GET['id']) {
+		if ($action == 'viewfeedback' AND $this->id == $_GET['id']) {
 			$feedback2 = array();
 			$sql_feedback = "SELECT * FROM ".$dropbox_cnf['tbl_feedback']." WHERE c_id = $course_id AND file_id='".$id."' ORDER BY feedback_id ASC";
 			$result = Database::query($sql_feedback);
@@ -247,17 +251,19 @@ class Dropbox_SentWork extends Dropbox_Work
 	/**
 	 * private function creating a new SentWork object
 	 *
-	 * @param unknown_type $uploader_id
-	 * @param unknown_type $title
-	 * @param unknown_type $description
-	 * @param unknown_type $author
-	 * @param unknown_type $filename
-	 * @param unknown_type $filesize
-	 * @param unknown_type $recipient_ids
+	 * @param int $uploader_id
+	 * @param string $title
+	 * @param string $description
+	 * @param string $author
+	 * @param string $filename
+	 * @param int $filesize
+	 * @param array $recipient_ids
 	 */
-	function _createNewSentWork($uploader_id, $title, $description, $author, $filename, $filesize, $recipient_ids)
+	public function _createNewSentWork($uploader_id, $title, $description, $author, $filename, $filesize, $recipient_ids)
     {
-			global $dropbox_cnf;
+        $dropbox_cnf = getDropboxConf();
+        $_course = api_get_course_info();
+
 		// Call constructor of Dropbox_Work object
 		$this->Dropbox_Work($uploader_id, $title, $description, $author, $filename, $filesize);
 
@@ -275,9 +281,11 @@ class Dropbox_SentWork extends Dropbox_Work
 			$justSubmit = true;
 			$recipient_ids = array($uploader_id);
 		}
+
 		if (! is_array($recipient_ids) || count($recipient_ids) == 0) {
 			die(get_lang('GeneralError').' (code 209)');
 		}
+
 		foreach ($recipient_ids as $rec) {
 			if (empty($rec)) die(get_lang('GeneralError').' (code 210)');
 			//if (!isCourseMember($rec)) die(); //cannot sent document to someone outside of course
@@ -314,7 +322,6 @@ class Dropbox_SentWork extends Dropbox_Work
             }
 
 			// Update item_property table for each recipient
-			global $_course, $dropbox_cnf;
 			if (($ownerid = $this->uploader_id) > $dropbox_cnf['mailingIdBase']) {
 			    $ownerid = getUserOwningThisMailing($ownerid);
 			}
@@ -332,8 +339,7 @@ class Dropbox_SentWork extends Dropbox_Work
 	 */
 	function _createExistingSentWork ($id)
     {
-		global $dropbox_cnf;
-
+        $dropbox_cnf = getDropboxConf();
         $id = intval($id);
 
 		$course_id = api_get_course_int_id();
@@ -533,7 +539,7 @@ class Dropbox_Person
 	 */
 	function deleteAllReceivedWork () {
 	    $course_id = api_get_course_int_id();
-		global $dropbox_cnf;
+        $dropbox_cnf = getDropboxConf();
 		// Delete entries in person table concerning received works
 		foreach ($this->receivedWork as $w) {
 			Database::query("DELETE FROM ".$dropbox_cnf['tbl_person']." WHERE c_id = $course_id AND user_id='".$this->userId."' AND file_id='".$w->id."'");
@@ -546,7 +552,7 @@ class Dropbox_Person
 	 */
 	function deleteReceivedWorkFolder($id)
     {
-		global $dropbox_cnf;
+        $dropbox_cnf = getDropboxConf();
         $course_id = api_get_course_int_id();
 
 		$id = intval($id);
@@ -567,7 +573,7 @@ class Dropbox_Person
 	function deleteReceivedWork($id)
     {
 	    $course_id = api_get_course_int_id();
-		global $dropbox_cnf;
+        $dropbox_cnf = getDropboxConf();
 		$id = intval($id);
 
 		// index check
@@ -596,7 +602,7 @@ class Dropbox_Person
 	function deleteAllSentWork()
     {
 	    $course_id = api_get_course_int_id();
-		global $dropbox_cnf;
+        $dropbox_cnf = getDropboxConf();
 		//delete entries in person table concerning sent works
 		foreach ($this->sentWork as $w) {
 			Database::query("DELETE FROM ".$dropbox_cnf['tbl_person']." WHERE c_id = $course_id AND user_id='".$this->userId."' AND file_id='".$w->id."'");
@@ -613,8 +619,8 @@ class Dropbox_Person
 	function deleteSentWork($id)
     {
 	    $course_id = api_get_course_int_id();
+        $dropbox_cnf = getDropboxConf();
 
-		global $dropbox_cnf;
 		$id = intval($id);
 
 		// index check
@@ -646,8 +652,9 @@ class Dropbox_Person
 	function updateFeedback($id, $text)
     {
 	    $course_id = api_get_course_int_id();
+        $_course = api_get_course_info();
+        $dropbox_cnf = getDropboxConf();
 
-		global $_course, $dropbox_cnf;
 		$id = intval($id);
 
 		// index check
@@ -688,8 +695,7 @@ class Dropbox_Person
 	 */
 	function filter_received_work($type, $value)
     {
-		global $dropbox_cnf;
-
+        $dropbox_cnf = getDropboxConf();
     	$new_received_work = array();
 		foreach ($this->receivedWork as $work) {
 			switch ($type) {

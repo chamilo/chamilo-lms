@@ -12,7 +12,7 @@
  */
 class SessionManager
 {
-    private function __construct()
+    public function __construct()
     {
     }
 
@@ -194,13 +194,15 @@ class SessionManager
 	}
 
     /**
-     * @param string $session_name
+     * @param string $name
      * @return bool
      */
-    function session_name_exists($session_name)
+    public static function session_name_exists($name)
     {
-	    $session_name = Database::escape_string($session_name);
-        $result = Database::fetch_array(Database::query("SELECT COUNT(*) as count FROM ".Database::get_main_table(TABLE_MAIN_SESSION)." WHERE name = '$session_name' "));
+        $name = Database::escape_string($name);
+        $sql = "SELECT COUNT(*) as count FROM ".Database::get_main_table(TABLE_MAIN_SESSION)."
+                WHERE name = '$name'";
+        $result = Database::fetch_array(Database::query($sql));
         return $result['count'] > 0;
 	}
 
@@ -208,7 +210,7 @@ class SessionManager
      * @param string $where_condition
      * @return mixed
      */
-    static function get_count_admin($where_condition = null)
+    public static function get_count_admin($where_condition = null)
     {
         $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_category   = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -513,11 +515,11 @@ class SessionManager
         $tbl_course     = Database::get_main_table(TABLE_MAIN_COURSE);
 
 
-        $select = "select  u.username, u.firstname, u.lastname, l.name, v.progress  
+        $select = "select  u.username, u.firstname, u.lastname, l.name, v.progress
                 FROM $tbl_lp_view v
                 INNER JOIN $tbl_lp l ON l.id = v.lp_id
                 INNER JOIN $tbl_user u ON u.user_id = v.user_id
-                INNER JOIN $tbl_course c 
+                INNER JOIN $tbl_course c
                 ";
 
         $where = ' WHERE 1=1 ';
@@ -540,15 +542,249 @@ class SessionManager
         $select .= $where.$order.$limit;
         $result = Database::query($select);
         $formatted_sessions = array();
-        if (Database::num_rows($result) > 0) { 
+        if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_assoc($result)) {
                 $formatted_sessions[] = $row;
             }
-            /*foreach ($lps as $lp) {
-                error_log(print_r($lp,1));
-            }*/
         }
         return $formatted_sessions;
+    }
+    /**
+     * Gets the progress of the given session
+     * @param int   session id
+     * @param array options order and limit keys
+     * @return array table with user name, lp name, progress
+     */
+    public static function get_session_progress($sessionId, $options)
+    {
+
+        //tables
+        $session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $user                   = Database::get_main_table(TABLE_MAIN_USER);
+        $workTable              = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+        $workTableAssignment    = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+        $forum                  = Database::get_course_table(TABLE_FORUM);
+        $forum_post             = Database::get_course_table(TABLE_FORUM_POST);
+        $tbl_course_lp          = Database::get_course_table(TABLE_LP_MAIN);
+        $wiki                   = Database::get_course_table(TABLE_WIKI);
+
+        $courses = SessionManager::get_course_list_by_session_id($sessionId);
+        //TODO let select course
+        $course = current($courses);
+        //TODO fix this
+        $course_info = array('real_id' => $course['id']);
+
+        //getting all the students of the course
+        //we are not using this because it only returns user ids
+        /*if (empty($sessionId)
+        {
+            // Registered students in a course outside session.
+            $users = CourseManager :: get_student_list_from_course_code($course_code);
+        } else {
+            // Registered students in session.
+            $users = CourseManager :: get_student_list_from_course_code($course_code, true, $sessionId);
+        }*/
+        $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code FROM $session_course_user s
+        INNER JOIN $user u ON u.user_id = s.id_user
+        WHERE course_code = '%s'
+        AND s.status <> 2 and id_session = %s";
+
+        $sql_query = sprintf($sql, $course['code'], $sessionId);
+
+        $rs = Database::query($sql_query);
+        while ($user = Database::fetch_array($rs))
+        {
+            $users[$user['user_id']] = $user;
+        }
+
+        /**
+         *  Lessons
+         */
+        $sql = "SELECT * FROM $tbl_course_lp
+        WHERE c_id = %s ";  //AND session_id = %s
+        $sql_query = sprintf($sql, $course_info['real_id']);
+        $result = Database::query($sql_query);
+        $lessons_total = 0;
+        while ($row = Database::fetch_array($result))
+        {
+            if (api_get_item_visibility(api_get_course_info($course['code']), 'learnpath', $row['id'], $sessionId))
+            {
+                $lessons_total++;
+            }
+        }
+
+        /**
+         *  Exercises
+         */
+        require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
+        $exercises = get_all_exercises($course_info, $sessionId);
+        $exercises_total = count($exercises);
+
+        /**
+         *  Assignments
+         */
+        //total
+        $sql = "SELECT count(w.id) as count
+        FROM $workTable w
+        LEFT JOIN  $workTableAssignment a ON (a.publication_id = w.id AND a.c_id = w.c_id)
+        WHERE w.c_id = %s
+        AND parent_id = 0
+        AND active IN (1, 0)
+        AND  session_id = %s";
+        $sql_query = sprintf($sql, $course_info['real_id'], $sessionId);
+        $result = Database::query($sql_query);
+        $row = Database::fetch_array($result);
+        $assignments_total = $row['count'];
+
+        /**
+         * Wiki
+         */
+        $sql = "SELECT count(distinct page_id)  as count FROM $wiki
+            WHERE c_id = %s and session_id = %s";
+        $sql_query = sprintf($sql, $course_info['real_id'], $sessionId);
+        $result = Database::query($sql_query);
+        $row = Database::fetch_array($result);
+        $wiki_total = $row['count'];
+
+        /**
+         * Surveys
+         */
+        $survey_user_list = array();
+        $survey_list = survey_manager::get_surveys($course['code'], $sessionId);
+
+        $surveys_total = count($survey_list);
+        $survey_data = array();
+        foreach ($survey_list as $survey)
+        {
+            $user_list = survey_manager::get_people_who_filled_survey($survey['survey_id'], false, $course_info['real_id']);
+            foreach ($user_list as $user_id)
+            {
+                isset($survey_user_list[$user_id]) ? $survey_user_list[$user_id]++ : $survey_user_list[$user_id] = 1;
+            }
+        }
+        /**
+         * Forums
+         */
+        //total
+        $sql = "SELECT count(*) as count
+        FROM $forum f
+        where f.c_id = %s and f.session_id = %s";
+        $sql_query = sprintf($sql, $course_info['real_id'], $sessionId);
+        $result = Database::query($sql_query);
+        $row = Database::fetch_array($result);
+        $forums_total = $row['count'];
+
+
+        //process table info
+        foreach ($users as $user)
+        {
+            //Course description
+            $sql = "SELECT count(*) as count
+            FROM track_e_access
+            WHERE access_tool = 'course_description'
+            AND access_cours_code = '%s'
+            AND access_session_id = %s
+            AND access_user_id = %s ";
+            $sql_query  = sprintf($sql, $course['code'], $sessionId, $user['user_id']);
+            $result     = Database::query($sql_query);
+            $row        = Database::fetch_array($result);
+            $course_description_progress = ($row['count'] > 0) ? 100 : 0;
+
+            //Lessons
+            //TODO: Lessons done and left is calculated by progress per item in lesson, maybe we should calculate it only per completed lesson?
+            $lessons_progress   = Tracking::get_avg_student_progress($user['user_id'], $course['code'], array(), $sessionId);
+            $lessons_done       = ($lessons_progress * $lessons_total) / 100;
+            $lessons_left       = $lessons_total - $lessons_done;
+
+            //Exercises
+            $exercises_progress     = str_replace('%', '', Tracking::get_exercise_student_progress($exercises, $user['user_id'], $course['code'], $sessionId));
+            $exercises_done         = ($exercises_progress * $exercises_total) / 100;
+            $exercises_left         = $exercises_total - $exercises_done;
+
+            //Assignments
+            $assignments_done       = Tracking::count_student_assignments($user['user_id'], $course['code'], $sessionId);
+            $assignments_left       = $assignments_total - $assignments_done;
+            $assignments_progress   =  round((( $assignments_done * 100 ) / $assignments_total ), 2);
+
+            //Wiki
+            $sql = "SELECT count(*) as count
+            FROM $wiki
+            where c_id = %s and session_id = %s and user_id = %s";
+            $sql_query  = sprintf($sql, $course_info['real_id'], $sessionId, $user['user_id']);
+            $result     = Database::query($sql_query);
+            $row        = Database::fetch_array($result);
+            $wiki_revisions =  $row['count'];
+
+            //Surveys
+            $surveys_done       = (isset($survey_user_list[$user['user_id']]) ? $survey_user_list[$user['user_id']] : 0);
+            $surveys_left       = $surveys_total - $surveys_done;
+            $surveys_progress   = round((( $surveys_done * 100 ) /  $surveys_total), 2);
+
+            //Forums
+            #$forums_done = Tracking::count_student_messages($user['user_id'], $course_code, $session_id);
+            $sql = "SELECT count(distinct f.forum_id) as count FROM $forum_post p
+            INNER JOIN $forum f ON f.forum_id = p.forum_id
+            WHERE p.poster_id = %s and f.session_id = %s and p.c_id = %s";
+            $sql_query  = sprintf($sql, $user['user_id'], $sessionId, $course_info['real_id']);
+            $result     = Database::query($sql_query);
+            $row        = Database::fetch_array($result);
+
+            $forums_done        = $row['count'];
+            $forums_left        = $forums_total - $forums_done;
+            $forums_progress    = round((( $forums_done * 100 ) /  $forums_total), 2);
+
+            //Overall Total
+            $overall_total =  ($course_description_progress + $exercises_progress + $forums_progress + $assignments_progress + $wiki_progress + $surveys_progress) / 6;
+
+            $table[] = array(
+                'lastname'  => $user[1],
+                'firstname' => $user[2],
+                'username'  => $user[3],
+                #'profile'   => '',
+                'total'     => round($overall_total,2) . '%',
+                'courses'   => $course_description_progress . '%',
+                'lessons'   => $lessons_progress . '%',
+                'exercises' => $exercises_progress . '%',
+                'forums'    => $forums_progress . '%',
+                'homeworks' => $assignments_progress . '%',
+                'wikis'     => $wiki_progress . '%',
+                'surveys'   => $surveys_progress . '%',
+                //course description
+                'course_description_progress' => $course_description_progress . '%',
+                //lessons
+                'lessons_total'      => $lessons_total,
+                'lessons_done'       => $lessons_done,
+                'lessons_left'       => $lessons_left,
+                'lessons_progress'   => $lessons_progress . '%',
+                //exercises
+                'exercises_total'       => $exercises_total,
+                'exercises_done'        => $exercises_done,
+                'exercises_left'        => $exercises_left,
+                'exercises_progress'    => $exercises_progress . '%',
+                //forums
+                'forums_total'      => $forums_total,
+                'forums_done'       => $forums_done,
+                'forums_left'       => $forums_left,
+                'forums_progress'   => $forums_progress . '%',
+                //assignments
+                'assignments_total'     => $assignments_total,
+                'assignments_done'      => $assignments_done,
+                'assignments_left'      => $assignments_left,
+                'assignments_progress'  => $assignments_progress . '%',
+                //wiki
+                'wiki_total'        => $wiki_total,
+                'wiki_revisions'    => $wiki_revisions,
+                'wiki_read'         => $wiki_read,
+                'wiki_unread'       => $wiki_unread,
+                'wiki_progress'     => $wiki_progress . '%',
+                //survey
+                'surveys_total'     => $surveys_total,
+                'surveys_done'      => $surveys_done,
+                'surveys_left'      => $surveys_left,
+                'surveys_progress'  => $surveys_progress . '%',
+                );
+        }
+        return $table;
     }
     /**
      * Creates a new course code based in given code
@@ -560,7 +796,7 @@ class SessionManager
      * </code>
      * @return string	wanted unused code
      */
-	function generate_nice_next_session_name($session_name)
+    public static function generate_nice_next_session_name($session_name)
     {
         $session_name_ok = !self::session_name_exists($session_name);
         if (!$session_name_ok) {
@@ -1700,41 +1936,102 @@ class SessionManager
 		return $affected_rows;
 	}
 
+    /**
+     * @param int $userId
+     * @param int $sessionId
+     * @return array
+     */
+    public static function getSessionFollowedByDrh($userId, $sessionId)
+    {
+        $tbl_session 			= 	Database::get_main_table(TABLE_MAIN_SESSION);
+        $tbl_session_rel_user 	= 	Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tbl_session_rel_access_url =   Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+
+        $userId = intval($userId);
+        $sessionId = intval($sessionId);
+
+        $select = " SELECT * ";
+        if (api_is_multiple_url_enabled()) {
+            $sql = " $select FROM $tbl_session s
+                    INNER JOIN $tbl_session_rel_user sru ON (sru.id_session = s.id)
+                    LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
+                    WHERE
+                        sru.id_user = '$userId' AND
+                        sru.id_session = '$sessionId' AND
+                        sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' AND
+                        access_url_id = ".api_get_current_access_url_id()."
+                        ";
+        } else {
+            $sql = "$select FROM $tbl_session s
+                     INNER JOIN $tbl_session_rel_user sru
+                     ON
+                        sru.id_session = s.id AND
+                        sru.id_user = '$userId' AND
+                        sru.id_session = '$sessionId' AND
+                        sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."'
+                        ";
+        }
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+            $row = Database::fetch_array($result, 'ASSOC');
+            $row['course_list'] = self::get_course_list_by_session_id($sessionId);
+            return $row;
+        }
+        return array();
+    }
+
 	/**
 	 * Get sessions followed by human resources manager
 	 * @param int		Human resources manager or Session admin id
 	 * @return array 	sessions
 	 */
-	public static function get_sessions_followed_by_drh($hr_manager_id)
+	public static function get_sessions_followed_by_drh($userId, $start = null, $limit = null, $getCount = false)
     {
 		// Database Table Definitions
 		$tbl_session 			= 	Database::get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_rel_user 	= 	Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session_rel_access_url =   Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
-		$hr_manager_id = intval($hr_manager_id);
+		$userId = intval($userId);
 		$assigned_sessions_to_hrm = array();
 
+        $select = " SELECT * ";
+        if ($getCount) {
+            $select = " SELECT count(s.id) as count ";
+        }
+
+         $limitCondition = null;
+        if (!empty($start) && !empty($limit)) {
+            $limitCondition = " LIMIT ".intval($start). ", ".intval($limit);
+        }
+
 		if (api_is_multiple_url_enabled()) {
-           $sql = "SELECT * FROM $tbl_session s
+           $sql = " $select FROM $tbl_session s
                     INNER JOIN $tbl_session_rel_user sru ON (sru.id_session = s.id)
                     LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
                     WHERE
-                        sru.id_user = '$hr_manager_id' AND
+                        sru.id_user = '$userId' AND
                         sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' AND
-                        access_url_id = ".api_get_current_access_url_id()."";
+                        access_url_id = ".api_get_current_access_url_id()."
+                        $limitCondition";
         } else {
-            $sql = "SELECT * FROM $tbl_session s
+            $sql = "$select FROM $tbl_session s
                      INNER JOIN $tbl_session_rel_user sru
                      ON
                         sru.id_session = s.id AND
-                        sru.id_user = '$hr_manager_id' AND
-                        sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' ";
+                        sru.id_user = '$userId' AND
+                        sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."'
+                        $limitCondition";
         }
-		$rs_assigned_sessions = Database::query($sql);
-		if (Database::num_rows($rs_assigned_sessions) > 0) {
-			while ($row_assigned_sessions = Database::fetch_array($rs_assigned_sessions))	{
-				$assigned_sessions_to_hrm[$row_assigned_sessions['id']] = $row_assigned_sessions;
+		$result = Database::query($sql);
+        if ($getCount) {
+            $row = Database::fetch_array($result);
+            return $row['count'];
+        }
+
+        if (Database::num_rows($result) > 0) {
+			while ($row = Database::fetch_array($result))	{
+				$assigned_sessions_to_hrm[$row['id']] = $row;
 			}
 		}
 		return $assigned_sessions_to_hrm;
@@ -1913,7 +2210,7 @@ class SessionManager
      * @param int $id
      * @return array
      */
-    static function get_all_sessions_by_promotion($id)
+    public static function get_all_sessions_by_promotion($id)
     {
         $t = Database::get_main_table(TABLE_MAIN_SESSION);
         return Database::select('*', $t, array('where'=>array('promotion_id = ?'=>$id)));
@@ -1923,7 +2220,7 @@ class SessionManager
      * @param int $promotion_id
      * @param array $list
      */
-    static function suscribe_sessions_to_promotion($promotion_id, $list)
+    public static function suscribe_sessions_to_promotion($promotion_id, $list)
     {
         $t = Database::get_main_table(TABLE_MAIN_SESSION);
         $params = array();
@@ -1961,7 +2258,7 @@ class SessionManager
      * @return  int     The new session ID on success, 0 otherwise
      * @todo make sure the extra session fields are copied too
      */
-    public function copy_session($id, $copy_courses = true, $copy_users = true, $create_new_courses = false, $set_exercises_lp_invisible = false)
+    public static function copy_session($id, $copy_courses = true, $copy_users = true, $create_new_courses = false, $set_exercises_lp_invisible = false)
     {
         $id = intval($id);
         $s = self::fetch($id);
@@ -2645,14 +2942,15 @@ class SessionManager
         $numberItems = null,
         $column = 1,
         $direction = 'asc',
-        $keyword = null
+        $keyword = null,
+        $active = null
     ) {
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
-        $direction = in_array(strtolower($direction),array('asc', 'desc')) ? $direction : 'asc';
+        $direction = in_array(strtolower($direction), array('asc', 'desc')) ? $direction : 'asc';
         $column = Database::escape_string($column);
         $userId = intval($userId);
 
@@ -2662,6 +2960,12 @@ class SessionManager
             $from = intval($from);
             $numberItems = intval($numberItems);
             $limitCondition = "LIMIT $from, $numberItems";
+        }
+
+        $activeCondition = null;
+        if (isset($active)) {
+            $active = intval($active);
+            $activeCondition = " AND active = $active";
         }
 
         $urlId = api_get_current_access_url_id();
@@ -2710,7 +3014,9 @@ class SessionManager
                     INNER JOIN $tbl_user u ON (u.user_id = su.id_user AND s.id = id_session)
                     INNER JOIN $tbl_session_rel_access_url url ON (url.session_id = s.id)
                 WHERE access_url_id = $urlId
-                      $statusConditions ";
+                      $statusConditions
+                      $activeCondition
+                ";
 
         if (!empty($keyword)) {
             $keyword = Database::escape_string($keyword);
@@ -2886,6 +3192,77 @@ class SessionManager
     }
 
     /**
+     * @param string $keyword
+     * @param int $active
+     * @return array|int
+     */
+    public static function getCountUserTracking($keyword = null, $active = null)
+    {
+        if (!isset($keyword)) {
+            $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
+        }
+
+        if (!isset($active)) {
+            $active = isset($_GET['active']) ? $_GET['active'] : null;
+        }
+
+        if (api_is_drh()) {
+            if (api_drh_can_access_all_session_content()) {
+                $count = self::getAllUsersFromCoursesFromAllSessionFromStatus(
+                    'drh_all',
+                    api_get_user_id(),
+                    true,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $keyword,
+                    $active
+                );
+            } else {
+                $count = self::getAllUsersFromCoursesFromAllSessionFromStatus(
+                    'drh',
+                    api_get_user_id(),
+                    true,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $keyword,
+                    $active
+                );
+            }
+        } else {
+            if (api_is_platform_admin()) {
+                $count = self::getAllUsersFromCoursesFromAllSessionFromStatus(
+                    'admin',
+                    api_get_user_id(),
+                    true,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $keyword,
+                    $active
+                );
+            } else {
+                $count = self::getAllUsersFromCoursesFromAllSessionFromStatus(
+                    'teacher',
+                    api_get_user_id(),
+                    true,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $keyword,
+                    $active
+                );
+            }
+        }
+        return $count;
+    }
+
+    /**
      * Get the list of course tools that have to be dealt with in case of
      * registering any course to a session
      * @return array The list of tools to be dealt with (literal names)
@@ -2977,7 +3354,4 @@ class SessionManager
     {
 
     }
-
-
-
 }

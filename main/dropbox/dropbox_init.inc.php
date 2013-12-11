@@ -32,18 +32,14 @@ use \ChamiloSession as Session;
 
 $language_file = array('dropbox', 'document');
 
-// This var disables the link in the breadcrumbs on top of the page
-//$noPHP_SELF = true;
-
 // including the basic Chamilo initialisation file
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
+$is_allowed_in_course = api_is_allowed_to_edit(false, true);
 $current_course_tool  = TOOL_DROPBOX;
 
 // the dropbox configuration parameters
-require_once 'dropbox_config.inc.php';
-
-// the dropbox sanity files (adds a new table and some new fields)
-//require_once 'dropbox_sanity.inc.php';
+$dropbox_cnf = require_once 'dropbox_config.inc.php';
+Session::write('dropbox_conf', $dropbox_cnf);
 
 // the dropbox file that contains additional functions
 require_once 'dropbox_functions.inc.php';
@@ -71,6 +67,9 @@ $course_code = api_get_course_id();
 $course_info = api_get_course_info($course_code);
 $session_id = api_get_session_id();
 
+$action = isset($_GET['action']) ? $_GET['action'] : null;
+$view = isset($_GET['view']) ? Security::remove_XSS($_GET['view']) : null;
+
 if (empty($session_id)) {
     $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code, false);
 } else {
@@ -83,7 +82,7 @@ if (empty($session_id)) {
 // off all the documents that have already been sent.
 // @todo consider moving the javascripts in a function that displays the javascripts
 // only when it is needed.
-if ($_GET['action'] == 'add') {
+if ($action == 'add') {
 	$dropbox_person = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
 }
 
@@ -201,18 +200,18 @@ $htmlHeadXtra[] = '<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="-1">';
 
 $checked_files = false;
-if (!$_GET['view'] OR $_GET['view'] == 'received') {
+if (!$view OR $view == 'received') {
 	$part = 'received';
-} elseif ($_GET['view'] = 'sent') {
+} elseif ($view = 'sent') {
 	$part = 'sent';
 } else {
-	header ('location: index.php?view='.$_GET['view'].'&error=Error');
+	header ('location: index.php?view='.$view.'&error=Error');
 }
 
 if (($_POST['action'] == 'download_received' || $_POST['action'] == 'download_sent') and !$_POST['store_feedback']) {
     $checked_file_ids = $_POST['id'];
     if (!is_array($checked_file_ids) || count($checked_file_ids) == 0) {
-        header ('location: index.php?view='.$_GET['view'].'&error=CheckAtLeastOneFile');
+        header ('location: index.php?view='.$view.'&error=CheckAtLeastOneFile');
     } else {
         handle_multiple_actions();
     }
@@ -235,25 +234,25 @@ if ((!$is_allowed_in_course || !$is_course_member) && !api_is_allowed_to_edit(nu
 
 /*	BREADCRUMBS */
 
-if ($_GET['view'] == 'received') {
+if ($view == 'received') {
 	$interbreadcrumb[] = array('url' => '../dropbox/index.php', 'name' => get_lang('Dropbox', ''));
 	$nameTools = get_lang('ReceivedFiles');
 
-	if ($_GET['action'] == 'addreceivedcategory') {
+	if ($action == 'addreceivedcategory') {
 		$interbreadcrumb[] = array('url' => '../dropbox/index.php?view=received', 'name' => get_lang('ReceivedFiles'));
 		$nameTools = get_lang('AddNewCategory');
 	}
 }
 
-if ($_GET['view'] == 'sent' OR empty($_GET['view'])) {
+if ($view == 'sent' OR empty($view)) {
 	$interbreadcrumb[] = array('url' => '../dropbox/index.php', 'name' => get_lang('Dropbox', ''));
 	$nameTools = get_lang('SentFiles');
 
-	if ($_GET['action'] == 'addsentcategory') {
+	if ($action == 'addsentcategory') {
 		$interbreadcrumb[] = array('url' => '../dropbox/index.php?view=sent', 'name' => get_lang('SentFiles'));
 		$nameTools = get_lang('AddNewCategory');
 	}
-	if ($_GET['action'] == 'add') {
+	if ($action == 'add') {
 		$interbreadcrumb[] = array ('url' => '../dropbox/index.php?view=sent', 'name' => get_lang('SentFiles'));
 		$nameTools = get_lang('UploadNewFile');
 	}

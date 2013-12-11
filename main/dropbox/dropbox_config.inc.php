@@ -6,7 +6,6 @@
  */
 $dropbox_cnf['tbl_user']        = Database::get_main_table(TABLE_MAIN_USER);
 $dropbox_cnf['tbl_course_user'] = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
 $dropbox_cnf['tbl_post'] 		= Database::get_course_table(TABLE_DROPBOX_POST);
 $dropbox_cnf['tbl_file'] 		= Database::get_course_table(TABLE_DROPBOX_FILE);
 $dropbox_cnf['tbl_person'] 		= Database::get_course_table(TABLE_DROPBOX_PERSON);
@@ -43,3 +42,5 @@ $dropbox_cnf['mailingWhereUSERID'] = 'username';
 $dropbox_cnf['mailingWhereLOGINNAME'] = 'username';
 $dropbox_cnf['mailingFileRegexp'] = '/^(.+)\.\w{1,4}$/';
 $dropbox_cnf['sent_received_tabs'] = true;
+
+return $dropbox_cnf;

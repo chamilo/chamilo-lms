@@ -98,7 +98,7 @@ require_once 'dropbox_init.inc.php';
 
 // get the last time the user accessed the tool
 if ($_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX] == '') {
-	$last_access = get_last_tool_access(TOOL_DROPBOX, $_course['code'], $_user['user_id']);
+	$last_access = get_last_tool_access(TOOL_DROPBOX);
 	$_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX] = $last_access;
 } else {
 	$last_access = $_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX];
@@ -138,7 +138,7 @@ if ($action == 'add') {
 	if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 		api_not_allowed();
 	}
-	display_add_form();
+	display_add_form($dropbox_unid);
 }
 
 if (isset($_POST['submitWork'])) {

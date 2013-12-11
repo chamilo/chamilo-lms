@@ -7,6 +7,7 @@
 * to one file 		-- Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @author Julio Montoya adding c_id support
 */
+use \ChamiloSession as Session;
 
 $this_section = SECTION_COURSES;
 
@@ -25,18 +26,21 @@ $(document).ready(function () {
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
-function handle_multiple_actions() {
-	global $_user, $is_courseAdmin, $is_courseTutor;
+function handle_multiple_actions()
+{
+    $_user = api_get_user_info();
+    $is_courseAdmin = api_is_course_admin();
+    $is_courseTutor = api_is_course_tutor();
 
-	// STEP 1: are we performing the actions on the received or on the sent files?
-	if ($_POST['action'] == 'delete_received' || $_POST['action'] == 'download_received') {
-		$part = 'received';
-	} elseif ($_POST['action'] == 'delete_sent' || $_POST['action'] == 'download_sent') {
-		$part = 'sent';
-	}
+    // STEP 1: are we performing the actions on the received or on the sent files?
+    if ($_POST['action'] == 'delete_received' || $_POST['action'] == 'download_received') {
+        $part = 'received';
+    } elseif ($_POST['action'] == 'delete_sent' || $_POST['action'] == 'download_sent') {
+        $part = 'sent';
+    }
 
-	// STEP 2: at least one file has to be selected. If not we return an error message
-    $ids = Request::get('id', array());
+    // STEP 2: at least one file has to be selected. If not we return an error message
+    $ids = issset($_GET['id']) ? $_GET['id'] : array();
     if (count($ids)>0) {
         $checked_file_ids = $_POST['id'];
     } else {
@@ -47,38 +51,38 @@ function handle_multiple_actions() {
             }
         }
     }
-	$checked_file_ids = $_POST['id'];
+    $checked_file_ids = $_POST['id'];
 
-	if (!is_array($checked_file_ids) || count($checked_file_ids) == 0) {
-		return get_lang('CheckAtLeastOneFile');
-	}
+    if (!is_array($checked_file_ids) || count($checked_file_ids) == 0) {
+        return get_lang('CheckAtLeastOneFile');
+    }
 
-	// STEP 3A: deleting
-	if ($_POST['action'] == 'delete_received' || $_POST['action'] == 'delete_sent') {
-		$dropboxfile = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
-		foreach ($checked_file_ids as $key => $value) {
-			if ($_GET['view'] == 'received') {
-				$dropboxfile->deleteReceivedWork($value);
-				$message = get_lang('ReceivedFileDeleted');
-			}
-			if ($_GET['view'] == 'sent' OR empty($_GET['view'])) {
-				$dropboxfile->deleteSentWork($value);
-				$message = get_lang('SentFileDeleted');
-			}
-		}
-		return $message;
-	}
+    // STEP 3A: deleting
+    if ($_POST['action'] == 'delete_received' || $_POST['action'] == 'delete_sent') {
+        $dropboxfile = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
+        foreach ($checked_file_ids as $key => $value) {
+            if ($_GET['view'] == 'received') {
+                $dropboxfile->deleteReceivedWork($value);
+                $message = get_lang('ReceivedFileDeleted');
+            }
+            if ($_GET['view'] == 'sent' OR empty($_GET['view'])) {
+                $dropboxfile->deleteSentWork($value);
+                $message = get_lang('SentFileDeleted');
+            }
+        }
+        return $message;
+    }
 
-	// STEP 3B: giving comment
-	if ($_POST['actions'] == 'comment') {
-		// This has not been implemented.
-		// The idea was that it would be possible to write the same feedback for the selected documents.
-	}
+    // STEP 3B: giving comment
+    if ($_POST['actions'] == 'comment') {
+        // This has not been implemented.
+        // The idea was that it would be possible to write the same feedback for the selected documents.
+    }
 
-	// STEP 3C: moving
-	if (strstr($_POST['action'], 'move_')) {
-        	// check move_received_n or move_sent_n command
-		if (strstr($_POST['action'], 'received')) {
+    // STEP 3C: moving
+    if (strstr($_POST['action'], 'move_')) {
+            // check move_received_n or move_sent_n command
+        if (strstr($_POST['action'], 'received')) {
               $part = 'received';
               $to_cat_id = str_replace('move_received_', '', $_POST['action']);
         } else {
@@ -86,16 +90,25 @@ function handle_multiple_actions() {
               $to_cat_id = str_replace('move_sent_', '', $_POST['action']);
         }
 
-		foreach ($checked_file_ids as $key => $value) {
-			store_move($value, $to_cat_id, $part);
-		}
-		return get_lang('FilesMoved');
+        foreach ($checked_file_ids as $key => $value) {
+            store_move($value, $to_cat_id, $part);
+        }
+        return get_lang('FilesMoved');
     }
 
-	// STEP 3D: downloading
-	if ($_POST['action'] == 'download_sent' || $_POST['action'] == 'download_received') {
-		zip_download($checked_file_ids);
-	}
+    // STEP 3D: downloading
+    if ($_POST['action'] == 'download_sent' || $_POST['action'] == 'download_received') {
+        zip_download($checked_file_ids);
+    }
+}
+
+/**
+ * Get conf settings
+ * @return array
+ */
+function getDropboxConf()
+{
+    return Session::read('dropbox_conf');
 }
 
 /**
@@ -109,16 +122,19 @@ function handle_multiple_actions() {
 function delete_category($action, $id, $user_id = null)
 {
     $course_id = api_get_course_int_id();
-
-	global $dropbox_cnf;
-	global $is_courseAdmin, $is_courseTutor;
+    $is_courseAdmin = api_is_course_admin();
+    $is_courseTutor = api_is_course_tutor();
+    $dropbox_cnf = getDropboxConf();
 
     if (empty($user_id)) {
         $user_id = api_get_user_id();
     }
 
     $cat = get_dropbox_category($id);
-    if (count($cat)==0) { return false; }
+    if (count($cat)==0) {
+        return false;
+    }
+
     if ($cat['user_id'] != $user_id && !api_is_platform_admin($user_id)) {
         return false;
     }
@@ -193,7 +209,8 @@ function display_move_form($part, $id, $target = array(), $extra_params = array(
 */
 function store_move($id, $target, $part)
 {
-	global $_user, $dropbox_cnf;
+    $_user = api_get_user_info();
+    $dropbox_cnf = getDropboxConf();
     $course_id = api_get_course_int_id();
 
 	if ((isset($id) AND $id != '') AND (isset($target) AND $target != '') AND (isset($part) AND $part != '')) {
@@ -281,9 +298,8 @@ function display_file_checkbox($id, $part) {
 function get_dropbox_categories($filter = '')
 {
     $course_id = api_get_course_int_id();
-	global $_user;
-	global $dropbox_cnf;
-
+    $_user = api_get_user_info();
+    $dropbox_cnf = getDropboxConf();
 	$return_array = array();
 
 	$session_id = api_get_session_id();
@@ -308,7 +324,7 @@ function get_dropbox_categories($filter = '')
  */
 function get_dropbox_category($id)
 {
-    global $dropbox_cnf;
+    $dropbox_cnf = getDropboxConf();
     $course_id = api_get_course_int_id();
     if (empty($id) or $id != intval($id)) { return array(); }
     $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE c_id = $course_id AND cat_id='".$id."'";
@@ -334,10 +350,11 @@ function get_dropbox_category($id)
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
-function store_addcategory() {
+function store_addcategory()
+{
     $course_id = api_get_course_int_id();
-	global $_user;
-	global $dropbox_cnf;
+    $_user = api_get_user_info();
+    $dropbox_cnf = getDropboxConf();
 
 	// check if the target is valid
 	if ($_POST['target'] == 'sent') {
@@ -390,8 +407,9 @@ function store_addcategory() {
  *
 * @version march 2006
 */
-function display_addcategory_form($category_name = '', $id = '', $action) {
-	global $dropbox_cnf;
+function display_addcategory_form($category_name = '', $id = '', $action)
+{
+    $dropbox_cnf = getDropboxConf();
     $course_id = api_get_course_int_id();
 	$title = get_lang('AddNewCategory');
 
@@ -428,7 +446,7 @@ function display_addcategory_form($category_name = '', $id = '', $action) {
 		$class = 'add';
 	}
 
-    $form = new FormValidator('add_new_category', 'post', api_get_self().'?view="'.Security::remove_XSS($_GET['view']));
+    $form = new FormValidator('add_new_category', 'post', api_get_self().'?view='.Security::remove_XSS($_GET['view']));
     $form->addElement('header', $title);
 
 	if (isset($id) AND $id != '') {
@@ -453,10 +471,16 @@ function display_addcategory_form($category_name = '', $id = '', $action) {
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
-function display_add_form() {
-	global $_user, $is_courseAdmin, $is_courseTutor, $course_info, $origin, $dropbox_unid;
+function display_add_form($dropbox_unid)
+{
+    $course_info = api_get_course_info();
+    $_user = api_get_user_info();
+    $is_courseAdmin = api_is_course_admin();
+    $is_courseTutor = api_is_course_tutor();
+    $origin = isset($_GET['origin']) ? $_GET['origin'] : null;
 
-	$token = Security::get_token();
+
+    $token = Security::get_token();
 	$dropbox_person = new Dropbox_Person(api_get_user_id(), $is_courseAdmin, $is_courseTutor);
 	?>
 	<form method="post" action="index.php?view_received_category=<?php echo Security::remove_XSS($_GET['view_received_category']); ?>&view_sent_category=<?php echo Security::remove_XSS($_GET['view_sent_category']); ?>&view=<?php echo Security::remove_XSS($_GET['view']); ?>&<?php echo "origin=$origin"."&".api_get_cidreq(); ?>" enctype="multipart/form-data" onsubmit="javascript: return checkForm(this);">
@@ -589,8 +613,9 @@ function display_add_form() {
 * returns username or false if user isn't registered anymore
 * @todo check if this function is still necessary. There might be a library function for this.
 */
-function getUserNameFromId($id) {
-	global $dropbox_cnf;
+function getUserNameFromId($id)
+{
+    $dropbox_cnf = getDropboxConf();
 
     $mailingId = $id - dropbox_cnf('mailingIdBase');
     if ($mailingId > 0) {
@@ -611,7 +636,8 @@ function getUserNameFromId($id) {
 * returns loginname or false if user isn't registered anymore
 * @todo check if this function is still necessary. There might be a library function for this.
 */
-function getLoginFromId($id) {
+function getLoginFromId($id)
+{
     $id = intval($id);
     $sql = "SELECT username
 			FROM " . dropbox_cnf('tbl_user') . "
@@ -624,12 +650,12 @@ function getLoginFromId($id) {
 
 /**
 * @return boolean indicating if user with user_id=$user_id is a course member
-* @todo eliminate global
 * @todo check if this function is still necessary. There might be a library function for this.
 */
-function isCourseMember($user_id) {
-    global $_course;
-	$course_code = $_course['sysCode'];
+function isCourseMember($user_id)
+{
+    $_course = api_get_course_info();
+	$course_code = $_course['code'];
 	$is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code, true);
 	return $is_course_member;
 }
@@ -638,7 +664,8 @@ function isCourseMember($user_id) {
 * Checks if there are files in the dropbox_file table that aren't used anymore in dropbox_person table.
 * If there are, all entries concerning the file are deleted from the db + the file is deleted from the server
 */
-function removeUnusedFiles() {
+function removeUnusedFiles()
+{
     $course_id = api_get_course_int_id();
 
     // select all files that aren't referenced anymore
@@ -676,8 +703,8 @@ function removeUnusedFiles() {
 function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
 {
     $course_id = api_get_course_int_id();
+    $dropbox_cnf = getDropboxConf();
 
-	global $dropbox_cnf;
     $mailingPseudoId = intval($mailingPseudoId);
     $sql = "SELECT f.uploader_id
 			FROM " . $dropbox_cnf['tbl_file'] . " f
@@ -702,7 +729,7 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
 function removeMoreIfMailing($file_id)
 {
     $course_id = api_get_course_int_id();
-	global $dropbox_cnf;
+    $dropbox_cnf = getDropboxConf();
     // when deleting a mailing zip-file (posted to mailingPseudoId):
     // 1. the detail window is no longer reachable, so
     //    for all content files, delete mailingPseudoId from person-table
@@ -735,22 +762,23 @@ function removeMoreIfMailing($file_id)
 */
 function dropbox_cnf($variable)
 {
-    return $GLOBALS['dropbox_cnf'][$variable];
+    $dropbox_cnf = getDropboxConf();
+    return $dropbox_cnf[$variable];
 }
 
-function store_add_dropbox() {
-	global $dropbox_cnf;
-	global $_user;
-	global $_course;
+function store_add_dropbox()
+{
+    $_course = api_get_course_info();
+    $_user = api_get_user_info();
+    $dropbox_cnf = getDropboxConf();
 
 	// Validating the form data
 
     // there are no recipients selected
 	if (!isset($_POST['recipients']) || count( $_POST['recipients']) <= 0) {
         return get_lang('YouMustSelectAtLeastOneDestinee');
-    }
-    // Check if all the recipients are valid
-    else {
+    } else {
+        // Check if all the recipients are valid
         $thisIsAMailing = false;
         $thisIsJustUpload = false;
 	    foreach ($_POST['recipients'] as $rec) {
@@ -781,7 +809,6 @@ function store_add_dropbox() {
 		$error = true;
 		return get_lang('NoFileSpecified');
 	}
-
 
 	// are we overwriting a previous file or sending a new one
 
@@ -927,7 +954,7 @@ function display_user_link_work($user_id, $name = '') {
 */
 function feedback($array) {
     $output = null;
-	foreach ($array as $key => $value) {
+	foreach ($array as $value) {
 		$output .= format_feedback($value);
 	}
 	$output .= feedback_form();
@@ -943,7 +970,8 @@ function feedback($array) {
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
-function format_feedback($feedback) {
+function format_feedback($feedback)
+{
 	$output = display_user_link_work($feedback['author_user_id']);
 	$output .= '&nbsp;&nbsp;'.api_convert_and_format_date($feedback['feedback_date'], DATE_TIME_FORMAT_LONG).'<br />';
 	$output .= '<div style="padding-top:6px">'.nl2br($feedback['feedback']).'</div><hr size="1" noshade/><br />';
@@ -957,7 +985,8 @@ function format_feedback($feedback) {
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
-function feedback_form() {
+function feedback_form()
+{
 	$return = get_lang('AddNewFeedback').'<br />';
 	$number_users_who_see_file = check_if_file_exist($_GET['id']);
 	if ($number_users_who_see_file) {
@@ -973,7 +1002,7 @@ function feedback_form() {
 }
 
 function user_can_download_file($id, $user_id) {
-    global $dropbox_cnf;
+    $dropbox_cnf = getDropboxConf();
     $course_id = api_get_course_int_id();
     $id = intval($id);
     $user_id = intval($user_id);
@@ -991,7 +1020,7 @@ function user_can_download_file($id, $user_id) {
 // we now check if the other users have not delete this document yet. If this is the case then it is useless to see the
 	// add feedback since the other users will never get to see the feedback.
 function check_if_file_exist($id) {
-    global $dropbox_cnf;
+    $dropbox_cnf = getDropboxConf();
     $id = intval($id);
     $course_id = api_get_course_int_id();
     $sql = "SELECT file_id FROM ".$dropbox_cnf['tbl_person']." WHERE c_id = $course_id AND file_id = ".$id;
@@ -1012,8 +1041,9 @@ function check_if_file_exist($id) {
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
-function store_feedback() {
-	global $dropbox_cnf;
+function store_feedback()
+{
+    $dropbox_cnf = getDropboxConf();
 	if (!is_numeric($_GET['id'])) {
 		return get_lang('FeedbackError');
 	}
@@ -1040,16 +1070,10 @@ function store_feedback() {
 * @version march 2006
 */
 function zip_download($array) {
-	global $_course;
-	global $dropbox_cnf;
-	global $files;
+	$_course = api_get_course_info();
+    $dropbox_cnf = getDropboxConf();
 
     $course_id = api_get_course_int_id();
-	$sys_course_path = api_get_path(SYS_COURSE_PATH);
-
-	// place to temporarily stash the zipfiles
-	$temp_zip_dir = api_get_path(SYS_COURSE_PATH);
-
 	$array = array_map('intval', $array);
 
 	// note: we also have to add the check if the user has received or sent this file.
@@ -1100,7 +1124,8 @@ function my_pre_add_callback($p_event, &$p_header) {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, March 2006
  * @author Ivan Tcholakov, 2010, code for html metadata has been added.
  */
-function generate_html_overview($files, $dont_show_columns = array(), $make_link = array()) {
+function generate_html_overview($files, $dont_show_columns = array(), $make_link = array())
+{
 	$return = '<!DOCTYPE html'."\n";
 	$return .= "\t".'PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"'."\n";
 	$return .= "\t".'"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n";
@@ -1113,7 +1138,7 @@ function generate_html_overview($files, $dont_show_columns = array(), $make_link
 	$return .= "<table border=\"1px\">\n";
 
 	$counter = 0;
-	foreach ($files as $key => $value) {
+	foreach ($files as $value) {
 
 		// Adding the header.
 		if ($counter == 0) {
@@ -1157,7 +1182,7 @@ function generate_html_overview($files, $dont_show_columns = array(), $make_link
 * @version march 2006
 */
 function get_total_number_feedback($file_id = '') {
-	global $dropbox_cnf;
+    $dropbox_cnf = getDropboxConf();
 	$course_id = api_get_course_int_id();
 	$sql = "SELECT COUNT(feedback_id) AS total, file_id FROM ".$dropbox_cnf['tbl_feedback']."
 			WHERE c_id = $course_id GROUP BY file_id";

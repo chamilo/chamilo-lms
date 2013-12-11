@@ -567,6 +567,7 @@ class SessionManager
         $forum_post             = Database::get_course_table(TABLE_FORUM_POST);
         $tbl_course_lp          = Database::get_course_table(TABLE_LP_MAIN);
         $wiki                   = Database::get_course_table(TABLE_WIKI);
+        $table_stats_default        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
 
         $courses = SessionManager::get_course_list_by_session_id($sessionId);
         //TODO let select course
@@ -717,7 +718,7 @@ class SessionManager
             $wiki_revisions =  $row['count'];
             //count visited wiki pages
             $sql = "SELECT count(distinct default_value) as count
-            FROM `track_e_default`
+            FROM $table_stats_default
             WHERE default_user_id = %s
             AND default_cours_code = '%s'
             AND default_event_type = 'wiki_page_view'

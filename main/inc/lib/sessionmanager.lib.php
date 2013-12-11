@@ -568,6 +568,7 @@ class SessionManager
         $tbl_course_lp          = Database::get_course_table(TABLE_LP_MAIN);
         $wiki                   = Database::get_course_table(TABLE_WIKI);
         $table_stats_default        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+        $table_stats_access        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 
         $courses = SessionManager::get_course_list_by_session_id($sessionId);
         //TODO let select course
@@ -681,7 +682,7 @@ class SessionManager
         {
             //Course description
             $sql = "SELECT count(*) as count
-            FROM track_e_access
+            FROM $table_stats_access
             WHERE access_tool = 'course_description'
             AND access_cours_code = '%s'
             AND access_session_id = %s

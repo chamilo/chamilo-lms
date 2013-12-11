@@ -509,45 +509,84 @@ class SessionManager
      */
     public static function get_session_lp_progress($sessionId = 0, $options)
     {
-        $tbl_lp         = Database::get_course_table(TABLE_LP_MAIN);
-        $tbl_lp_view    = Database::get_course_table(TABLE_LP_VIEW);
-        $tbl_user       = Database::get_main_table(TABLE_MAIN_USER);
-        $tbl_course     = Database::get_main_table(TABLE_MAIN_COURSE);
+        //tables
+        $session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $user                   = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_course_lp_view     = Database::get_course_table(TABLE_LP_VIEW);
 
+        $courses = SessionManager::get_course_list_by_session_id($sessionId);
+        //TODO let select course
+        $course = current($courses);
+        //TODO fix this
+        $course_info = array('real_id' => $course['id']);
 
-        $select = "select  u.username, u.firstname, u.lastname, l.name, v.progress
-                FROM $tbl_lp_view v
-                INNER JOIN $tbl_lp l ON l.id = v.lp_id
-                INNER JOIN $tbl_user u ON u.user_id = v.user_id
-                INNER JOIN $tbl_course c
-                ";
+        //getting all the students of the course
+        //we are not using this because it only returns user ids
+        /*if (empty($sessionId)
+        {
+            // Registered students in a course outside session.
+            $users = CourseManager :: get_student_list_from_course_code($course_code);
+        } else {
+            // Registered students in session.
+            $users = CourseManager :: get_student_list_from_course_code($course_code, true, $sessionId);
+        }*/
+        $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code FROM $session_course_user s
+        INNER JOIN $user u ON u.user_id = s.id_user
+        WHERE course_code = '%s'
+        AND s.status <> 2 and id_session = %s";
 
-        $where = ' WHERE 1=1 ';
-        if (!empty($options['where'])) {
-           $where .= ' AND '.$options['where'];
+        $sql_query = sprintf($sql, $course['code'], $sessionId);
+
+        $rs = Database::query($sql_query);
+        while ($user = Database::fetch_array($rs))
+        {
+            $users[$user['user_id']] = $user;
         }
 
-        $where .= ' AND v.session_id = ' . $sessionId;
+        //Get lessons
+        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
+        $lessons = LearnpathList::get_course_lessons($course['code'], $sessionId);
 
-        $order = null;
-        if (!empty($options['order'])) {
-            $order = " ORDER BY ".$options['order'];
-        }
+        $table = array();
+        foreach ($users as $user)
+        {
+            $data = array(
+                'lastname'  => $user[1],
+                'firstname' => $user[2],
+                'username'  => $user[3],
+            );
 
-        $limit = null;
-        if (!empty($options['limit'])) {
-            $limit = " LIMIT ".$options['limit'];
-        }
+            //Get lessons progress by user
+            $sql = "SELECT v.lp_id as id, v.progress
+            FROM  $tbl_course_lp_view v
+            WHERE v.session_id = %d 
+            AND v.c_id = %d
+            AND v.user_id = %d";
+            $sql_query = sprintf($sql, $sessionId, $course_info['real_id'], $user['user_id']);
+            $result = Database::query($sql_query);
 
-        $select .= $where.$order.$limit;
-        $result = Database::query($select);
-        $formatted_sessions = array();
-        if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_assoc($result)) {
-                $formatted_sessions[] = $row;
+
+            $user_lessons = array();
+            while ($row = Database::fetch_array($result))
+            {
+                $user_lessons[$row['id']] = $row;
             }
+
+            //Match course lessons with user progress
+            $progress = 0;
+            $count = 0;
+            foreach ($lessons as $lesson)
+            {
+                $data[$lesson['id']] = (!empty($user_lessons[$lesson['id']]['progress'])) ? $user_lessons[$lesson['id']]['progress'] : 0;
+                $progress += $data[$lesson['id']];
+                $count++;
+            }
+
+            $data['total'] = round($progress / $count, 2);
+
+            $table[] = $data;
         }
-        return $formatted_sessions;
+        return $table;
     }
     /**
      * Gets the progress of the given session

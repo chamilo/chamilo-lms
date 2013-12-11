@@ -276,17 +276,44 @@ class MySpace {
      */
     function display_tracking_lp_progress_overview($sessionId = 0) {
 
-       //The order is important you need to check the the $column variable in the model.ajax.php file
-        $columns = array(get_lang('Username'), get_lang('FirstName'), get_lang('LastName'), get_lang('Name'), get_lang('Progress'));
+        $courses = SessionManager::get_course_list_by_session_id($sessionId);
+        //TODO let select course
+        $course = current($courses); 
+        /**
+         * Column name
+         * The order is important you need to check the $column variable in the model.ajax.php file
+         */
+        $columns = array(
+            get_lang('Username'), 
+            get_lang('FirstName'), 
+            get_lang('LastName'), 
+        );
+        //add lessons of course
+        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
+        $lessons = LearnpathList::get_course_lessons($course['code'], $sessionId);
+        foreach ($lessons as $lesson_id => $lesson) 
+        {
+            $columns[] = $lesson['name'];
+        }
 
-        //Column config
+        $columns[] = get_lang('Total');
+
+        /**
+         * Column config
+         */
         $column_model   = array(
             array('name'=>'username',   'index'=>'username',  'width'=>'160',  'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
             array('name'=>'firstname',  'index'=>'firstname',   'width'=>'100',   'align'=>'left', 'search' => 'true'),
             array('name'=>'lastname',   'index'=>'lastname',    'width'=>'100',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'name',       'index'=>'name',        'width'=>'100',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'progress',   'index'=>'progress',    'width'=>'70',   'align'=>'left', 'search' => 'true'),
-            );
+        );
+        //get dinamic column names
+        foreach ($lessons as $lesson_id => $lesson) 
+        {
+            $column_model[] = array('name'=> $lesson['id'],   'index'=>$lesson['id'],    'width'=>'70',   'align'=>'left', 'search' => 'true');
+        }
+
+        $column_model[] = array('name'=>'total',   'index'=>'total',    'width'=>'70',   'align'=>'left', 'search' => 'true');
+
         $action_links = '';
         // jqgrid will use this URL to do the selects
         $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_lp_progress&session_id=' . intval($sessionId);

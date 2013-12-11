@@ -579,10 +579,11 @@ class SessionManager
             {
                 $data[$lesson['id']] = (!empty($user_lessons[$lesson['id']]['progress'])) ? $user_lessons[$lesson['id']]['progress'] : 0;
                 $progress += $data[$lesson['id']];
+                $data[$lesson['id']]  = $data[$lesson['id']] . '%';
                 $count++;
             }
 
-            $data['total'] = round($progress / $count, 2);
+            $data['total'] = round($progress / $count, 2) . '%';
 
             $table[] = $data;
         }

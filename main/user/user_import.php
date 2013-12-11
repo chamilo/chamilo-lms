@@ -84,7 +84,9 @@ if ($form->validate()) {
                     if (!empty($current_user_list)) {
                         $user_ids = array();
                         foreach ($current_user_list as $user) {
-                            $user_ids[]= $user['user_id'];
+                            if ($user['status'] <> 1) {
+                                $user_ids[]= $user['user_id'];
+                            }
                         }
                         CourseManager::unsubscribe_user($user_ids, $course_code, $session_id);
                     }

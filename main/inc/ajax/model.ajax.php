@@ -238,9 +238,9 @@ switch ($action) {
         $count = SessionManager::get_count_admin($where_condition);
         break;
     case 'get_session_lp_progress':
-        $count = SessionManager::get_count_session_lp_progress(intval($_GET['session_id']));
-        break;
     case 'get_session_progress':
+        #$count = SessionManager::get_count_session_lp_progress(intval($_GET['session_id']));
+        #break;
         $courses = SessionManager::get_course_list_by_session_id(intval($_GET['session_id']));
         //TODO let select course
         $course = current($courses);
@@ -564,14 +564,32 @@ switch ($action) {
         );
         break;
     case 'get_session_lp_progress':
-        $columns = array(
-            'username', 'firstname', 'lastname', 'name', 'progress'
-        );
         $sessionId = 0;
         if (isset($_GET['session_id']) && !empty($_GET['session_id']))
         {
             $sessionId = intval($_GET['session_id']);
+            $courses = SessionManager::get_course_list_by_session_id($sessionId);
+            //TODO let select course
+            $course = current($courses);
         }
+
+        /**
+         * Add lessons of course
+         * 
+         */
+        $columns = array(
+            'username',
+            'firstname',
+            'lastname',
+        );
+        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
+        $lessons = LearnpathList::get_course_lessons($course['code'], $sessionId);
+        foreach ($lessons as $lesson_id => $lesson) 
+        {
+            $columns[] = $lesson_id;
+        }
+        $columns[] = 'total';
+
         $result = SessionManager::get_session_lp_progress($sessionId,
             array(
                 'where' => $where_condition,

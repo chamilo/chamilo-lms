@@ -238,7 +238,14 @@ switch ($action) {
         $count = SessionManager::get_count_admin($where_condition);
         break;
     case 'get_session_lp_progress':
-        $count = SessionManager::get_count_session_lp_progress($_GET['session_id']);
+        $count = SessionManager::get_count_session_lp_progress(intval($_GET['session_id']));
+        break;
+    case 'get_session_progress':
+        $courses = SessionManager::get_course_list_by_session_id(intval($_GET['session_id']));
+        //TODO let select course
+        $course = current($courses);
+        $users = CourseManager::get_student_list_from_course_code($course['code'], true, intval($_GET['session_id']));
+        $count = count($users);
         break;
     /*case 'get_extra_fields':
         $type = $_REQUEST['type'];
@@ -573,6 +580,67 @@ switch ($action) {
             )
         );
         break;
+    case 'get_session_progress':
+        $columns = array(
+            'lastname',
+            'firstname',
+            'username',
+            #'profile',
+            'total',
+            'courses',
+            'lessons',
+            'exercises',
+            'forums',
+            'homeworks',
+            'wikis',
+            'surveys',
+            //course description
+            'course_description_progress',
+            //exercises
+            'lessons_total' ,
+            'lessons_done' ,
+            'lessons_left' ,
+            'lessons_progress',
+            //exercises
+            'exercises_total' ,
+            'exercises_done' ,
+            'exercises_left' ,
+            'exercises_progress' ,
+            //forums
+            'forums_total' ,
+            'forums_done' ,
+            'forums_left' ,
+            'forums_progress' ,
+            //assignments
+            'assignments_total' ,
+            'assignments_done' ,
+            'assignments_left' ,
+            'assignments_progress' ,
+            //Wiki
+            'wiki_total',
+            'wiki_revisions',
+            'wiki_read',
+            'wiki_unread',
+            'wiki_progress',
+            //surveys
+            'surveys_total' ,
+            'surveys_done' ,
+            'surveys_left' ,
+            'surveys_progress' ,
+            );
+        $sessionId = 0;
+        if (isset($_GET['session_id']) && !empty($_GET['session_id']))
+        {
+            $sessionId = intval($_GET['session_id']);
+        }
+        $result = SessionManager::get_session_progress($sessionId,
+            array(
+                'where' => $where_condition,
+                'order' => "$sidx $sord",
+                'limit'=> "$start , $limit"
+            )
+        );
+        break;
     case 'get_timelines':
         $columns = array('headline', 'actions');
 
@@ -774,6 +842,7 @@ $allowed_actions = array(
     'get_sessions',
     'get_sessions_tracking',
     'get_session_lp_progress',
+    'get_session_progress',
     'get_exercise_results',
     'get_hotpotatoes_exercise_results',
     'get_work_teacher',

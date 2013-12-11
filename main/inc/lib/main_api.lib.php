@@ -923,7 +923,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
 
 /**
  * Function used to protect an admin script.
- * 
+ *
  * The function blocks access when the user has no platform admin rights with an error message printed on default output
  * @param bool Whether to allow session admins as well
  * @param bool Whether to allow HR directors as well
@@ -3767,7 +3767,7 @@ function api_max_sort_value($user_course_category, $user_id) {
  * @return boolean true or false
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
-function string_2_boolean($string) {
+function api_string_2_boolean($string) {
     if ($string == 'true') {
         return true;
     }
@@ -3776,6 +3776,7 @@ function string_2_boolean($string) {
     }
     return false;
 }
+
 
 /**
  * Determines the number of plugins installed for a given location

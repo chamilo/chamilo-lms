@@ -2,11 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *  DEBUGGING VARS
- */
-$DEBUG = false; // TODO: Is this needed?
-
-/**
  *  DATABASE TABLE VARIABLES
  */
 $dropbox_cnf['tbl_user']        = Database::get_main_table(TABLE_MAIN_USER);
@@ -23,19 +18,22 @@ $dropbox_cnf['tbl_feedback'] 	= Database::get_course_table(TABLE_DROPBOX_FEEDBAC
  *  INITIALISE OTHER VARIABLES & CONSTANTS
  */
 $dropbox_cnf['courseId'] 				= $_cid;
-$dropbox_cnf['sysPath'] 				= api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/dropbox'; //path to dropbox subdir in course containing the uploaded files
+//path to dropbox subdir in course containing the uploaded files
+$dropbox_cnf['sysPath'] 				= api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/dropbox';
 $dropbox_cnf['webPath'] 				= api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/dropbox';
-$dropbox_cnf['maxFilesize'] 			= api_get_setting('dropbox_max_filesize'); //file size limit as imposed by the platform admin (see Chamilo Config Settings on the platform administration section)
-//$dropbox_cnf['version'] 				= '1.4';
-$dropbox_cnf['allowOverwrite'] 			= string_2_boolean(api_get_setting('dropbox_allow_overwrite'));
-$dropbox_cnf['allowJustUpload'] 		= string_2_boolean(api_get_setting('dropbox_allow_just_upload'));
-$dropbox_cnf['allowStudentToStudent'] 	= string_2_boolean(api_get_setting('dropbox_allow_student_to_student'));
-$dropbox_cnf['allowGroup'] 				= string_2_boolean(api_get_setting('dropbox_allow_group'));
+
+//file size limit as imposed by the platform admin (see Chamilo Config Settings on the platform administration section)
+$dropbox_cnf['maxFilesize'] 			= api_get_setting('dropbox_max_filesize');
+$dropbox_cnf['allowOverwrite'] 			= api_string_2_boolean(api_get_setting('dropbox_allow_overwrite'));
+$dropbox_cnf['allowJustUpload'] 		= api_string_2_boolean(api_get_setting('dropbox_allow_just_upload'));
+$dropbox_cnf['allowStudentToStudent'] 	= api_string_2_boolean(api_get_setting('dropbox_allow_student_to_student'));
+$dropbox_cnf['allowGroup'] 				= api_string_2_boolean(api_get_setting('dropbox_allow_group'));
 
 /**
- * INITIALISE MAILING VARIABLES
+ * MAILING VARIABLES
  */
-$dropbox_cnf['allowMailing'] = string_2_boolean(api_get_setting('dropbox_allow_mailing'));  // false = no mailing functionality
+// false = no mailing functionality
+$dropbox_cnf['allowMailing'] = api_string_2_boolean(api_get_setting('dropbox_allow_mailing'));
 $dropbox_cnf['mailingIdBase'] = 10000000;  // bigger than any user_id,
 // allowing enough space for pseudo_ids as uploader_id, dest_user_id, user_id:
 // mailing pseudo_id = dropbox_cnf('mailingIdBase') + mailing id

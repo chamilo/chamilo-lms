@@ -40,9 +40,9 @@ $intro_cmdAdd = empty($_GET['intro_cmdAdd']) ? '' : $_GET['intro_cmdAdd'];
 $courseId = api_get_course_id();
 
 if (!empty($courseId)) {
-	$form = new FormValidator('introduction_text', 'post', api_get_self().'?'.api_get_cidreq());
+    $form = new FormValidator('introduction_text', 'post', api_get_self().'?'.api_get_cidreq());
 } else {
-	$form = new FormValidator('introduction_text');
+    $form = new FormValidator('introduction_text');
 }
 
 $renderer =& $form->defaultRenderer();
@@ -55,29 +55,29 @@ $height = '300';
 // The global variable $fck_attribute has been deprecated. It stays here for supporting old external code.
 global $fck_attribute;
 if (is_array($fck_attribute)) {
-	if (isset($fck_attribute['ToolbarSet'])) {
-		$toolbar_set = $fck_attribute['ToolbarSet'];
-	}
-	if (isset($fck_attribute['Width'])) {
-		$toolbar_set = $fck_attribute['Width'];
-	}
-	if (isset($fck_attribute['Height'])) {
-		$toolbar_set = $fck_attribute['Height'];
-	}
+    if (isset($fck_attribute['ToolbarSet'])) {
+        $toolbar_set = $fck_attribute['ToolbarSet'];
+    }
+    if (isset($fck_attribute['Width'])) {
+        $toolbar_set = $fck_attribute['Width'];
+    }
+    if (isset($fck_attribute['Height'])) {
+        $toolbar_set = $fck_attribute['Height'];
+    }
 }
 
 if (is_array($editor_config)) {
-	if (!isset($editor_config['ToolbarSet'])) {
-		$editor_config['ToolbarSet'] = $toolbar_set;
-	}
-	if (!isset($editor_config['Width'])) {
-		$editor_config['Width'] = $width;
-	}
-	if (!isset($editor_config['Height'])) {
-		$editor_config['Height'] = $height;
-	}
+    if (!isset($editor_config['ToolbarSet'])) {
+        $editor_config['ToolbarSet'] = $toolbar_set;
+    }
+    if (!isset($editor_config['Width'])) {
+        $editor_config['Width'] = $width;
+    }
+    if (!isset($editor_config['Height'])) {
+        $editor_config['Height'] = $height;
+    }
 } else {
-	$editor_config = array('ToolbarSet' => $toolbar_set, 'Width' => $width, 'Height' => $height);
+    $editor_config = array('ToolbarSet' => $toolbar_set, 'Width' => $width, 'Height' => $height);
 }
 
 $form->add_html_editor('intro_content', null, null, false, $editor_config);
@@ -87,30 +87,30 @@ $form->addElement('style_submit_button', 'intro_cmdUpdate', get_lang('SaveIntroT
 $course_id = api_get_course_int_id();
 
 if ($intro_editAllowed) {
-	$moduleId = Database::escape_string($moduleId);
+    $moduleId = Database::escape_string($moduleId);
 
-	/* Replace command */
-	if ($intro_cmdUpdate) {
-		if ($form->validate()) {
-			$form_values = $form->exportValues();
-			$intro_content = Security::remove_XSS(stripslashes(api_html_entity_decode($form_values['intro_content'])), COURSEMANAGERLOWSECURITY);
-			if (!empty($intro_content)) {
-				$sql = "REPLACE $TBL_INTRODUCTION SET c_id = $course_id, id='$moduleId',intro_text='".Database::escape_string($intro_content)."', session_id='".intval($session_id)."'";
-				Database::query($sql);
-				$introduction_section .= Display::return_message(get_lang('IntroductionTextUpdated'),'confirmation', false);
-			} else {
-				$intro_cmdDel = true;	// got to the delete command
-			}
-		} else {
-			$intro_cmdEdit = true;
-		}
-	}
+    /* Replace command */
+    if ($intro_cmdUpdate) {
+        if ($form->validate()) {
+            $form_values = $form->exportValues();
+            $intro_content = Security::remove_XSS(stripslashes(api_html_entity_decode($form_values['intro_content'])), COURSEMANAGERLOWSECURITY);
+            if (!empty($intro_content)) {
+                $sql = "REPLACE $TBL_INTRODUCTION SET c_id = $course_id, id='$moduleId',intro_text='".Database::escape_string($intro_content)."', session_id='".intval($session_id)."'";
+                Database::query($sql);
+                $introduction_section .= Display::return_message(get_lang('IntroductionTextUpdated'),'confirmation', false);
+            } else {
+                $intro_cmdDel = true;	// got to the delete command
+            }
+        } else {
+            $intro_cmdEdit = true;
+        }
+    }
 
-	/* Delete Command */
-	if ($intro_cmdDel) {
-		Database::query("DELETE FROM $TBL_INTRODUCTION WHERE c_id = $course_id AND id='".$moduleId."' AND session_id='".intval($session_id)."'");
-		$introduction_section .= Display::return_message(get_lang('IntroductionTextDeleted'), 'confirmation');
-	}
+    /* Delete Command */
+    if ($intro_cmdDel) {
+        Database::query("DELETE FROM $TBL_INTRODUCTION WHERE c_id = $course_id AND id='".$moduleId."' AND session_id='".intval($session_id)."'");
+        $introduction_section .= Display::return_message(get_lang('IntroductionTextDeleted'), 'confirmation');
+    }
 }
 
 

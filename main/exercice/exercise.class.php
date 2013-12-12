@@ -1229,7 +1229,7 @@ class Exercise {
      */
     function processCreation($form, $type='') {
 
-        $this->updateTitle($form->getSubmitValue('exerciseTitle'));
+        $this->updateTitle(htmlentities($form->getSubmitValue('exerciseTitle')));
         $this->updateDescription($form->getSubmitValue('exerciseDescription'));
         $this->updateAttempts($form->getSubmitValue('exerciseAttempts'));
         $this->updateFeedbackType($form->getSubmitValue('exerciseFeedbackType'));

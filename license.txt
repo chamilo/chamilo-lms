@@ -11,7 +11,6 @@ Copyright (c) 2003-2007 Ghent University (UGent)
 Copyright (c) 2001-2004 Universite catholique de Louvain (UCL)
 Copyright (c) 2003-2008 Vrije Universiteit Brussel (VUB)
 Copyright (c) 2004-2008 Hoogeschool Gent (HoGent)
-Copyright (c) Logan Cai (cailongqun [at] yahoo [dot] com [dot] cn)
 
 For a full list of contributors detaining copyrights over parts of
 the Chamilo software, see "documentation/credits.html".

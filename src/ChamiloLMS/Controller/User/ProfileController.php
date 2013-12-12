@@ -34,6 +34,7 @@ class ProfileController extends CommonController
     }
 
     /**
+     * My files
      * @Route("/{username}/files")
      * @Method({"GET"})
      */
@@ -45,7 +46,7 @@ class ProfileController extends CommonController
         $userId = \UserManager::get_user_id_from_username($username);
         $userInfo = api_get_user_info($userId);
 
-        $this->getTemplate()->assign('driver_list', 'PersonalDriver');
+        $this->getTemplate()->assign('driver_list', 'PersonalDriver,DropBoxDriver');
         $editor = $this->getTemplate()->renderTemplate($this->getHtmlEditor()->getEditorStandAloneTemplate());
 
         $this->getTemplate()->assign('user', $userInfo);

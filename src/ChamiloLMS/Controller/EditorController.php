@@ -65,9 +65,11 @@ class EditorController extends CommonController
         $connector = $this->getEditorConnector();
 
         $driverList = $this->getRequest()->get('driver_list');
+
         if (!empty($driverList)) {
             $connector->setDriverList(explode(',', $driverList));
         }
+
         $operations = $connector->getOperations();
 
         include_once api_get_path(LIBRARY_PATH).'elfinder/php/elFinderConnector.class.php';

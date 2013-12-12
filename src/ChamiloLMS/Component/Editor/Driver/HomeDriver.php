@@ -33,9 +33,8 @@ class HomeDriver extends Driver
      */
     public function upload($fp, $dst, $name, $tmpname)
     {
-        // error_log(intval($this->connector->security->isGranted('ROLE_ADMIN')));
-        // can't use $this->connector->security
-        if (api_is_platform_admin()) {
+        $connector = $this->getConnectorFromPlugin();
+        if ($connector->security->isGranted('ROLE_ADMIN')) {
             return parent::upload($fp, $dst, $name, $tmpname);
         }
     }
@@ -45,7 +44,8 @@ class HomeDriver extends Driver
      */
     public function rm($hash)
     {
-        if (api_is_platform_admin()) {
+        $connector = $this->getConnectorFromPlugin();
+        if ($connector->security->isGranted('ROLE_ADMIN')) {
             return parent::rm($hash);
         }
     }

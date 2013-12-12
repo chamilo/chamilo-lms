@@ -52,7 +52,10 @@ class Driver extends \elFinderVolumeLocalFileSystem
         // for more options: https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
         return array(
             'plugin' => array(
-                'name' => $this->name
+                'chamilo' => array(
+                    'driverName' => $this->getName(),
+                    'connector' => $this->connector,
+                )
             ),
             'uploadOverwrite' => false, // Replace files on upload or give them new name if the same file was uploaded
             //'acceptedName' =>
@@ -157,22 +160,19 @@ class Driver extends \elFinderVolumeLocalFileSystem
     }
 
     /**
-     * @param array $file
-     * @param array $args
-     * @param Finder $elFinder
+     * @return array
      */
-    public function afterUpload($file, $args, $elFinder)
+    public function getAppPluginOptions()
     {
-
+        return $this->getOptionsPlugin('chamilo');
     }
 
     /**
-     * @param array $file
-     * @param array $args
-     * @param Finder $elFinder
+     * @return Connector
      */
-    public function afterRm($file, $args, $elFinder)
+    public function setConnectorFromPlugin()
     {
-
+        $options = $this->getAppPluginOptions();
+        $this->setConnector($options['connector']);
     }
 }

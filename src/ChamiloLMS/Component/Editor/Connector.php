@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 namespace ChamiloLMS\Component\Editor;
 
+use Doctrine\ORM\EntityManager;
 use \Entity\User;
 use \Entity\Course;
 
@@ -11,7 +12,7 @@ use ChamiloLMS\Component\Editor\Driver\Driver;
 use Symfony\Component\Security\Core\SecurityContext;
 
 /**
- * Class elfinder Connector - editor + Chamilo repository
+ * Class elFinder Connector - editor + Chamilo repository
  * @package ChamiloLMS\Component\Editor
  */
 class Connector
@@ -21,10 +22,6 @@ class Connector
 
     /** @var User */
     public $user;
-
-    public $drivers = array();
-
-    public $driverList = array();
 
     /** @var Translator */
     public $translator;
@@ -36,20 +33,27 @@ class Connector
 
     public $paths;
 
+    public $entityManager;
+
+    public $drivers = array();
+    public $driverList = array();
+
     public function __construct(
-        $paths,
+        EntityManager $entityManager,
+        array $paths,
         Router $urlGenerator,
         Translator $translator,
         SecurityContext $security,
-        User $user,
+        $user,
         $course = null
     ) {
+        $this->entityManager = $entityManager;
+        $this->paths = $paths;
+        $this->urlGenerator = $urlGenerator;
         $this->translator = $translator;
+        $this->security = $security;
         $this->user = $user;
         $this->course = $course;
-        $this->urlGenerator = $urlGenerator;
-        $this->paths = $paths;
-        $this->security = $security;
         $this->driverList = $this->getDefaultDriverList();
     }
 
@@ -186,6 +190,7 @@ class Connector
     {
         $cmd = ucfirst($cmd);
         $cmd = 'after'.$cmd;
+/*
         if (isset($args['target'])) {
             $driverName = $elFinder->getVolumeDriverNameByTarget($args['target']);
         }
@@ -196,7 +201,7 @@ class Connector
                 break;
             }
         }
-
+*/
         if (empty($driverName)) {
             return false;
         }
@@ -210,8 +215,8 @@ class Connector
         if (!empty($result['removed'])) {
             foreach ($result['removed'] as $file) {
                 /** @var Driver $driver */
-                $driver = $this->getDriver($driverName);
-                $driver->$cmd($file, $args, $elFinder);
+//                $driver = $this->getDriver($driverName);
+//                $driver->$cmd($file, $args, $elFinder);
                 // removed file contain additional field "realpath"
                 //$log .= "\tREMOVED: ".$file['realpath']."\n";
             }
@@ -219,8 +224,8 @@ class Connector
 
         if (!empty($result['added'])) {
             foreach ($result['added'] as $file) {
-                $driver = $this->getDriver($driverName);
-                $driver->$cmd($file, $args, $elFinder);
+//                $driver = $this->getDriver($driverName);
+//                $driver->$cmd($file, $args, $elFinder);
             }
         }
 

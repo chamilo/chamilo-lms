@@ -4,6 +4,7 @@ namespace ChamiloLMS\Component\Editor\Driver;
 
 /**
  * Class PersonalDriver
+ * @todo add more checks in upload/rm
  * @package ChamiloLMS\Component\Editor\Driver
  */
 class PersonalDriver extends Driver
@@ -15,23 +16,24 @@ class PersonalDriver extends Driver
      */
     public function getConfiguration()
     {
-        $userId = $this->connector->user->getUserId();
+        if ($this->connector->security->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $userId = $this->connector->user->getUserId();
+            if (!empty($userId)) {
 
-        if (!empty($userId)) {
+                // Adding user personal files
+                $dir = \UserManager::get_user_picture_path_by_id($userId, 'system');
+                $dirWeb = \UserManager::get_user_picture_path_by_id($userId, 'web');
 
-            // Adding user personal files
-            $dir = \UserManager::get_user_picture_path_by_id($userId, 'system');
-            $dirWeb = \UserManager::get_user_picture_path_by_id($userId, 'web');
-
-            $driver = array(
-                'driver' => 'PersonalDriver',
-                'alias' => $this->connector->translator->trans('MyFiles'),
-                'path'       => $dir['dir'].'my_files',
-                'startPath'  => '/',
-                'URL' => $dirWeb['dir'].'my_files',
-                'accessControl' => array($this, 'access'),
-            );
-            return $driver;
+                $driver = array(
+                    'driver' => 'PersonalDriver',
+                    'alias' => $this->connector->translator->trans('MyFiles'),
+                    'path'       => $dir['dir'].'my_files',
+                    'startPath'  => '/',
+                    'URL' => $dirWeb['dir'].'my_files',
+                    'accessControl' => array($this, 'access')
+                );
+                return $driver;
+            }
         }
     }
 
@@ -40,7 +42,10 @@ class PersonalDriver extends Driver
      */
     public function upload($fp, $dst, $name, $tmpname)
     {
-        return parent::upload($fp, $dst, $name, $tmpname);
+        $this->setConnectorFromPlugin();
+        if ($this->connector->security->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return parent::upload($fp, $dst, $name, $tmpname);
+        }
     }
 
     /**
@@ -48,6 +53,9 @@ class PersonalDriver extends Driver
      */
     public function rm($hash)
     {
-        return parent::rm($hash);
+        $this->setConnectorFromPlugin();
+        if ($this->connector->security->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return parent::rm($hash);
+        }
     }
 }

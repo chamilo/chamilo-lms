@@ -15,7 +15,7 @@ class CourseUserDriver extends CourseDriver
      */
     public function getConfiguration()
     {
-        if ($this->connector->course) {
+        if (!empty($this->connector->course)) {
             $userId = $this->connector->user->getUserId();
             $path = 'shared_folder/sf_user_'.$userId;
 

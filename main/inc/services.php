@@ -830,6 +830,7 @@ $app['editor_connector'] = $app->share(function ($app) {
     $user = $token->getUser();
 
     return new Connector(
+        $app['orm.em'],
         $app['paths'],
         $app['url_generator'],
         $app['translator'],

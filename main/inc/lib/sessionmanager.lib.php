@@ -504,7 +504,7 @@ class SessionManager
     /**
      *  Get the progress of a exercise
      *  @param int session id
-     *  @return array 
+     *  @return array
      */
     public static function get_exercise_progress($sessionId = 0, $options = array())
     {
@@ -515,7 +515,7 @@ class SessionManager
         $quiz_question          = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $table_stats_exercises  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $table_stats_attempt    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
- 
+
         $courses = SessionManager::get_course_list_by_session_id($sessionId);
         //TODO let select course
         $course = current($courses);
@@ -539,17 +539,17 @@ class SessionManager
             $order = " ORDER BY ".$options['order'];
         }
 
-        $sql = "SELECT 
-            s.name as session, 
-            CONCAT (q.c_id, q.id) as exercise_id, 
-            q.title as quiz_title, 
-            u.username, 
-            u.lastname, 
-            u.firstname, 
-            a.tms as time, 
-            qa.question_id, 
-            qq.question, 
-            qa.answer, 
+        $sql = "SELECT
+            s.name as session,
+            CONCAT (q.c_id, q.id) as exercise_id,
+            q.title as quiz_title,
+            u.username,
+            u.lastname,
+            u.firstname,
+            a.tms as time,
+            qa.question_id,
+            qq.question,
+            qa.answer,
             qa.correct
         FROM $table_stats_attempt a
         LEFT JOIN $quiz_answer qa ON a.answer = qa.id_auto
@@ -566,7 +566,7 @@ class SessionManager
         $rs = Database::query($sql_query);
         while ($row = Database::fetch_array($rs))
         {
-            $data[] = $row; 
+            $data[] = $row;
         }
         return $data;
     }
@@ -615,9 +615,9 @@ class SessionManager
         $order = null;
         if (!empty($options['order'])) {
             $order = " ORDER BY ".$options['order'];
-        }      
+        }
 
-        $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code 
+        $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code
         FROM $session_course_user s
         INNER JOIN $user u ON u.user_id = s.id_user
         $where $order $limit";
@@ -646,7 +646,7 @@ class SessionManager
             //Get lessons progress by user
             $sql = "SELECT v.lp_id as id, v.progress
             FROM  $tbl_course_lp_view v
-            WHERE v.session_id = %d 
+            WHERE v.session_id = %d
             AND v.c_id = %d
             AND v.user_id = %d";
             $sql_query = sprintf($sql, $sessionId, $course_info['real_id'], $user['user_id']);
@@ -728,9 +728,9 @@ class SessionManager
         $order = null;
         if (!empty($options['order'])) {
             $order = " ORDER BY ".$options['order'];
-        }      
-        
-        $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code 
+        }
+
+        $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code
         FROM $session_course_user s
         INNER JOIN $user u ON u.user_id = s.id_user
         $where $order $limit";
@@ -3437,15 +3437,15 @@ class SessionManager
         );
     }
 
-
     /**
      * Calls the methods bound to each tool when a course is registered into a session
-     * @param int Session ID
-     * @param int Course ID
+     * @param int $sessionId
+     * @param int $courseId
      * @return void
      */
     public static function installCourse($sessionId, $courseId)
     {
+        return true;
         $toolList = self::getCourseToolToBeManaged();
 
         foreach($toolList as $tool) {
@@ -3459,11 +3459,12 @@ class SessionManager
     /**
      * Calls the methods bound to each tool when a course is unregistered from
      * a session
-     * @param $sessionId
-     * @param $courseId
+     * @param int $sessionId
+     * @param int $courseId
      */
     public static function unInstallCourse($sessionId, $courseId)
     {
+        return true;
         $toolList = self::getCourseToolToBeManaged();
 
         foreach($toolList as $tool) {
@@ -3474,6 +3475,10 @@ class SessionManager
         }
     }
 
+    /**
+     * @param int $sessionId
+     * @param int $courseId
+     */
     public static function addCourseIntroduction($sessionId, $courseId)
     {
         // @todo create a tool intro lib

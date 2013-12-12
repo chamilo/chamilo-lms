@@ -41,13 +41,12 @@ class Security
     /**
      * Checks if the absolute path (directory) given is really under the
      * checker path (directory)
-     * @param    string    Absolute path to be checked (with trailing slash)
-     * @param    string    Checker path under which the path should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
-     * @return    bool    True if the path is under the checker, false otherwise
+     * @param   string  Absolute path to be checked (with trailing slash)
+     * @param   string  Checker path under which the path should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
+     * @return  bool    True if the path is under the checker, false otherwise
      */
     public static function check_abs_path($abs_path, $checker_path)
     {
-        global $_configuration;
         if (empty($checker_path)) {
             return false;
         } // The checker path must be set.
@@ -72,7 +71,7 @@ class Security
             if ($found === 0) {
                 return true;
             }*/
-            }
+        }
 
         return false;
     }
@@ -216,6 +215,10 @@ class Security
         return $token;
     }
 
+    /**
+     * Get current token
+     * @return null
+     */
     public static function getCurrentToken()
     {
         return isset($_SESSION['sec_token']) ? $_SESSION['sec_token'] : null;
@@ -370,12 +373,9 @@ class Security
             }
             */
             $text = $new_text;
-
         }
-
         return $text;
     }
-
 
     /**
      * This method provides specific protection (against XSS and other kinds of attacks) for static images (icons) used by the system.

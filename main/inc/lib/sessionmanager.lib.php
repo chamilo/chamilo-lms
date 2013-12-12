@@ -522,6 +522,23 @@ class SessionManager
         //TODO fix this
         $course_info = array('real_id' => $course['id']);
 
+        $where = " WHERE a.session_id = %d
+        AND a.course_code = '%s'";
+
+        $limit = null;
+        if (!empty($options['limit'])) {
+            $limit = " LIMIT ".$options['limit'];
+        }
+
+        if (!empty($options['where'])) {
+           $where .= ' AND '.$options['where'];
+        }
+
+        $order = null;
+        if (!empty($options['order'])) {
+            $order = " ORDER BY ".$options['order'];
+        }
+
         $sql = "SELECT 
             s.name as session, 
             CONCAT (q.c_id, q.id) as exercise_id, 
@@ -541,8 +558,8 @@ class SessionManager
         INNER JOIN $session s ON s.id = a.session_id
         INNER JOIN $quiz q ON q.id = e.exe_exo_id
         INNER JOIN $user u ON u.user_id = a.user_id
-        WHERE a.session_id = %d
-        AND a.course_code = '%s'";
+        $where $order $limit";
+
 
         $sql_query = sprintf($sql, $sessionId, $course['code']);
 
@@ -583,10 +600,27 @@ class SessionManager
             // Registered students in session.
             $users = CourseManager :: get_student_list_from_course_code($course_code, true, $sessionId);
         }*/
-        $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code FROM $session_course_user s
-        INNER JOIN $user u ON u.user_id = s.id_user
-        WHERE course_code = '%s'
+        $where = " WHERE course_code = '%s'
         AND s.status <> 2 and id_session = %s";
+
+        $limit = null;
+        if (!empty($options['limit'])) {
+            $limit = " LIMIT ".$options['limit'];
+        }
+
+        if (!empty($options['where'])) {
+           $where .= ' AND '.$options['where'];
+        }
+
+        $order = null;
+        if (!empty($options['order'])) {
+            $order = " ORDER BY ".$options['order'];
+        }      
+
+        $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code 
+        FROM $session_course_user s
+        INNER JOIN $user u ON u.user_id = s.id_user
+        $where $order $limit";
 
         $sql_query = sprintf($sql, $course['code'], $sessionId);
 
@@ -679,10 +713,27 @@ class SessionManager
             // Registered students in session.
             $users = CourseManager :: get_student_list_from_course_code($course_code, true, $sessionId);
         }*/
-        $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code FROM $session_course_user s
-        INNER JOIN $user u ON u.user_id = s.id_user
-        WHERE course_code = '%s'
+        $where = " WHERE course_code = '%s'
         AND s.status <> 2 and id_session = %s";
+
+        $limit = null;
+        if (!empty($options['limit'])) {
+            $limit = " LIMIT ".$options['limit'];
+        }
+
+        if (!empty($options['where'])) {
+           $where .= ' AND '.$options['where'];
+        }
+
+        $order = null;
+        if (!empty($options['order'])) {
+            $order = " ORDER BY ".$options['order'];
+        }      
+        
+        $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code 
+        FROM $session_course_user s
+        INNER JOIN $user u ON u.user_id = s.id_user
+        $where $order $limit";
 
         $sql_query = sprintf($sql, $course['code'], $sessionId);
 

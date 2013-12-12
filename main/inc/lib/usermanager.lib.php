@@ -2256,20 +2256,40 @@ class UserManager
         }
 
         // Get the list of sessions where the user is subscribed
+        // This is divided into two different queries
+        $sessions = array();
         $sessions_sql = "SELECT DISTINCT id, name, date_start, date_end
                         FROM $tbl_session_user, $tbl_session
                         WHERE (
                             id_session = id AND
                             id_user = $user_id AND
                             relation_type <> ".SESSION_RELATION_TYPE_RRHH."
-                        ) OR (
+                        )
+                        $coachCourseConditions
+                        ORDER BY date_start, date_end, name";
+
+        $result = Database::query($sessions_sql);
+        if (Database::num_rows($result)>0) {
+            while ($row = Database::fetch_assoc($result)) {
+                $sessions[$row['id']] = $row;
+            }
+        }
+        $sessions_sql = "SELECT DISTINCT id, name, date_start, date_end
+                        FROM $tbl_session_user, $tbl_session
+                        WHERE (
                             id_coach = $user_id
                         )
                         $coachCourseConditions
                         ORDER BY date_start, date_end, name";
 
         $result = Database::query($sessions_sql);
-        $sessions = Database::store_result($result, 'ASSOC');
+        if (Database::num_rows($result)>0) {
+            while ($row = Database::fetch_assoc($result)) {
+                if (empty($sessions[$row['id']])) {
+                    $sessions[$row['id']] = $row;
+                }
+            }
+        }
 
         if (api_is_allowed_to_create_course()) {
 
@@ -2423,7 +2443,7 @@ class UserManager
                 }
             }
         }
-
+        $course_list = array();
         if (api_is_drh()) {
             $session_list = SessionManager::get_sessions_followed_by_drh($user_id);
             $session_list = array_keys($session_list);
@@ -2439,13 +2459,11 @@ class UserManager
             //check if user is general coach for this session
             $s = api_get_session_info($session_id);
             if ($s['id_coach'] == $user_id) {
-                if (count($course_list)==0) {
-                    $course_list = SessionManager::get_course_list_by_session_id($session_id);
-                    if (!empty($course_list)) {
-                        foreach ($course_list as $course) {
-                            if (!in_array($course['code'],$courses)) {
-                                $personal_course_list[] = $course;
-                            }
+                $course_list = SessionManager::get_course_list_by_session_id($session_id);
+                if (!empty($course_list)) {
+                    foreach ($course_list as $course) {
+                        if (!in_array($course['code'],$courses)) {
+                            $personal_course_list[] = $course;
                         }
                     }
                 }

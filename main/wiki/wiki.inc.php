@@ -725,6 +725,11 @@ function display_wiki_entry($newtitle) {
     $row    = Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version
 
 
+    //log users access to wiki (page_id)
+    if (!empty($row['page_id']))
+    {
+        event_system(LOG_WIKI_ACCESS, LOG_WIKI_PAGE_ID, $row['page_id']);
+    }
 	//update visits
     if ($row['id']) {
         $sql='UPDATE '.$tbl_wiki.' SET hits=(hits+1) WHERE c_id = '.$course_id.' AND id='.$row['id'].'';

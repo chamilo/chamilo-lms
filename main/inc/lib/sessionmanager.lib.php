@@ -502,6 +502,75 @@ class SessionManager
         return $num;
     }
     /**
+     *  Get the progress of a exercise
+     *  @param int session id
+     *  @return array 
+     */
+    public static function get_exercise_progress($sessionId = 0, $options = array())
+    {
+        $session                = Database::get_main_table(TABLE_MAIN_SESSION);
+        $user                   = Database::get_main_table(TABLE_MAIN_USER);
+        $quiz                   = Database::get_course_table(TABLE_QUIZ_TEST);
+        $quiz_answer            = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $quiz_question          = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $table_stats_exercises  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $table_stats_attempt    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+ 
+        $courses = SessionManager::get_course_list_by_session_id($sessionId);
+        //TODO let select course
+        $course = current($courses);
+        //TODO fix this
+        $course_info = array('real_id' => $course['id']);
+
+        $where = " WHERE a.session_id = %d
+        AND a.course_code = '%s'";
+
+        $limit = null;
+        if (!empty($options['limit'])) {
+            $limit = " LIMIT ".$options['limit'];
+        }
+
+        if (!empty($options['where'])) {
+           $where .= ' AND '.$options['where'];
+        }
+
+        $order = null;
+        if (!empty($options['order'])) {
+            $order = " ORDER BY ".$options['order'];
+        }
+
+        $sql = "SELECT 
+            s.name as session, 
+            CONCAT (q.c_id, q.id) as exercise_id, 
+            q.title as quiz_title, 
+            u.username, 
+            u.lastname, 
+            u.firstname, 
+            a.tms as time, 
+            qa.question_id, 
+            qq.question, 
+            qa.answer, 
+            qa.correct
+        FROM $table_stats_attempt a
+        LEFT JOIN $quiz_answer qa ON a.answer = qa.id_auto
+        LEFT JOIN  $quiz_question qq ON qq.id = qa.question_id
+        INNER JOIN $table_stats_exercises e ON e.exe_id = a.exe_id
+        INNER JOIN $session s ON s.id = a.session_id
+        INNER JOIN $quiz q ON q.id = e.exe_exo_id
+        INNER JOIN $user u ON u.user_id = a.user_id
+        $where $order $limit";
+
+
+        $sql_query = sprintf($sql, $sessionId, $course['code']);
+
+        $rs = Database::query($sql_query);
+        while ($row = Database::fetch_array($rs))
+        {
+            $data[] = $row; 
+        }
+        return $data;
+    }
+    /**
      * Gets the progress of learning paths in the given session
      * @param int   session id
      * @param array options order and limit keys
@@ -520,6 +589,7 @@ class SessionManager
         //TODO fix this
         $course_info = array('real_id' => $course['id']);
 
+
         //getting all the students of the course
         //we are not using this because it only returns user ids
         /*if (empty($sessionId)
@@ -530,10 +600,27 @@ class SessionManager
             // Registered students in session.
             $users = CourseManager :: get_student_list_from_course_code($course_code, true, $sessionId);
         }*/
-        $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code FROM $session_course_user s
-        INNER JOIN $user u ON u.user_id = s.id_user
-        WHERE course_code = '%s'
+        $where = " WHERE course_code = '%s'
         AND s.status <> 2 and id_session = %s";
+
+        $limit = null;
+        if (!empty($options['limit'])) {
+            $limit = " LIMIT ".$options['limit'];
+        }
+
+        if (!empty($options['where'])) {
+           $where .= ' AND '.$options['where'];
+        }
+
+        $order = null;
+        if (!empty($options['order'])) {
+            $order = " ORDER BY ".$options['order'];
+        }      
+
+        $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code 
+        FROM $session_course_user s
+        INNER JOIN $user u ON u.user_id = s.id_user
+        $where $order $limit";
 
         $sql_query = sprintf($sql, $course['code'], $sessionId);
 
@@ -607,8 +694,8 @@ class SessionManager
         $forum_post             = Database::get_course_table(TABLE_FORUM_POST);
         $tbl_course_lp          = Database::get_course_table(TABLE_LP_MAIN);
         $wiki                   = Database::get_course_table(TABLE_WIKI);
-        $table_stats_default        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
-        $table_stats_access        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+        $table_stats_default    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+        $table_stats_access     = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 
         $courses = SessionManager::get_course_list_by_session_id($sessionId);
         //TODO let select course
@@ -626,10 +713,27 @@ class SessionManager
             // Registered students in session.
             $users = CourseManager :: get_student_list_from_course_code($course_code, true, $sessionId);
         }*/
-        $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code FROM $session_course_user s
-        INNER JOIN $user u ON u.user_id = s.id_user
-        WHERE course_code = '%s'
+        $where = " WHERE course_code = '%s'
         AND s.status <> 2 and id_session = %s";
+
+        $limit = null;
+        if (!empty($options['limit'])) {
+            $limit = " LIMIT ".$options['limit'];
+        }
+
+        if (!empty($options['where'])) {
+           $where .= ' AND '.$options['where'];
+        }
+
+        $order = null;
+        if (!empty($options['order'])) {
+            $order = " ORDER BY ".$options['order'];
+        }      
+        
+        $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code 
+        FROM $session_course_user s
+        INNER JOIN $user u ON u.user_id = s.id_user
+        $where $order $limit";
 
         $sql_query = sprintf($sql, $course['code'], $sessionId);
 

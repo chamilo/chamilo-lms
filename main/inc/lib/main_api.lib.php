@@ -6782,3 +6782,11 @@ function api_can_login_as($loginAsUserId, $userId = null)
 
     return (api_is_platform_admin() OR (api_is_session_admin() && $user_info['status'] == 5) OR $isDrh());
 }
+
+/**
+ * @return bool
+ */
+function api_is_allowed_in_course()
+{
+    return Session::read('is_allowed_in_course');
+}

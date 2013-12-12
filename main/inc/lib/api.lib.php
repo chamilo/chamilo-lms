@@ -2748,10 +2748,11 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
     $is_allowed_coach_to_edit 	= api_is_coach();
     $session_visibility 		= api_get_session_visibility($my_session_id);
 
-    //Admins can edit anything
+    // Admins can edit anything.
     if (api_is_platform_admin(false)) {
-        //The student preview was on
-        if ($check_student_view && isset($_SESSION['studentview']) && $_SESSION['studentview'] == "studentview") {
+        $studentView = Session::read('studentview');
+        // The student preview was on.
+        if ($check_student_view && $studentView == "studentview") {
             return false;
         } else {
             return true;
@@ -6918,4 +6919,13 @@ function api_http_request($ip, $port = 80, $uri = '/', $getdata = array(), $time
         $ret = substr($ret, strpos($ret, "\r\n\r\n") + 4);
     }
     return trim($ret);
+}
+
+/**
+ * @return bool
+ *
+ */
+function api_is_allowed_in_course()
+{
+    return Session::read('is_allowed_in_course');
 }

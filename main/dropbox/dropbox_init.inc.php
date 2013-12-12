@@ -125,7 +125,7 @@ $language_file = array('dropbox', 'document');
 
 // including the basic Chamilo initialisation file
 require_once '../inc/global.inc.php';
-$is_allowed_in_course = api_is_allowed_to_edit(false, true);
+$is_allowed_in_course = api_is_allowed_in_course();
 $is_courseTutor = api_is_course_tutor();
 $is_courseAdmin = api_is_course_admin();
 
@@ -166,9 +166,9 @@ $view = isset($_GET['view']) ? Security::remove_XSS($_GET['view']) : null;
 $postAction = isset($_POST['action']) ? $_POST['action'] : null;
 
 if (empty($session_id)) {
-    $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code, false);
+    $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_info['real_id'], false);
 } else {
-    $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code, true, $session_id);
+    $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_info['real_id'], true, $session_id);
 }
 
 /*	Object Initialisation */

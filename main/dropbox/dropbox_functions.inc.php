@@ -40,7 +40,7 @@ function handle_multiple_actions()
     }
 
     // STEP 2: at least one file has to be selected. If not we return an error message
-    $ids = issset($_GET['id']) ? $_GET['id'] : array();
+    $ids = isset($_GET['id']) ? $_GET['id'] : array();
     if (count($ids)>0) {
         $checked_file_ids = $_POST['id'];
     } else {

@@ -117,15 +117,31 @@ if ($intro_editAllowed) {
 /*	INTRODUCTION MICRO MODULE - DISPLAY SECTION */
 
 /* Retrieves the module introduction text, if exist */
-
+/* @todo use a lib to query the $TBL_INTRODUCTION table */
+// Getting course intro
+$intro_content = null;
 $sql = "SELECT intro_text FROM $TBL_INTRODUCTION
-        WHERE c_id = $course_id AND id='".Database::escape_string($moduleId)."' AND session_id = '".intval($session_id)."'";
+        WHERE c_id = $course_id AND id='".Database::escape_string($moduleId)."' AND session_id = 0";
 $intro_dbQuery = Database::query($sql);
 if (Database::num_rows($intro_dbQuery) > 0) {
-	$intro_dbResult = Database::fetch_array($intro_dbQuery);
-	$intro_content = $intro_dbResult['intro_text'];
-} else {
-	$intro_content = '';
+    $intro_dbResult = Database::fetch_array($intro_dbQuery);
+    $intro_content = $intro_dbResult['intro_text'];
+}
+
+// Getting session intro
+if (!empty($session_id)) {
+    $sql = "SELECT intro_text FROM $TBL_INTRODUCTION
+        WHERE c_id = $course_id AND id='".Database::escape_string($moduleId)."' AND session_id = '".intval($session_id)."'";
+    $intro_dbQuery = Database::query($sql);
+    $introSessionContent = null;
+    if (Database::num_rows($intro_dbQuery) > 0) {
+        $intro_dbResult = Database::fetch_array($intro_dbQuery);
+        $introSessionContent = $intro_dbResult['intro_text'];
+    }
+    // If the course session intro exists replace it.
+    if (!empty($introSessionContent)) {
+        $intro_content = $introSessionContent;
+    }
 }
 
 /* Determines the correct display */

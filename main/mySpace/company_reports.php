@@ -40,8 +40,8 @@ $columns = array(
 
 //Column config
 $column_model = array(
-    array('name'=>'course',         'index'=>'title',       'width'=>'180', 'align'=>'left'),
-    array('name'=>'user',           'index'=>'user',        'width'=>'100', 'align'=>'left','sortable'=>'false'),
+    array('name'=>'course',         'index'=>'title',       'width'=>'180', 'align'=>'left', 'wrap_cell' => 'true'),
+    array('name'=>'user',           'index'=>'user',        'width'=>'100', 'align'=>'left','sortable'=>'false', 'wrap_cell' => 'true'),
     array('name'=>'time',           'index'=>'time',        'width'=>'50',  'align'=>'left','sortable'=>'false'),
     array('name'=>'certificate',    'index'=>'certificate', 'width'=>'50',  'align'=>'left','sortable'=>'false'),
     array('name'=>'progress_100',   'index'=>'progress_100',       'width'=>'50',  'align'=>'left','sortable'=>'false'),
@@ -53,9 +53,9 @@ if (!empty($extra_fields)) {
         $col = array(
             'name' => $extra['1'],
             'index' => $extra['1'],
-            'width' =>'120',
+            'width' => '120',
             'sortable' =>'false',
-            'wrap_cell' => "true"
+            'wrap_cell' => 'true'
         );
         $column_model[] = $col;
 

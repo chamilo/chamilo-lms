@@ -161,7 +161,12 @@ switch ($action) {
         if ($action == 'get_user_course_report') {
             $count = CourseManager::get_count_user_list_from_course_code(false, null, $courseCodeList, $userIdList);
         } else {
-            $count = CourseManager::get_count_user_list_from_course_code(true, 'ruc', $courseCodeList, $userIdList);
+            $count = CourseManager::get_count_user_list_from_course_code(
+                true,
+                array('ruc'),
+                $courseCodeList,
+                $userIdList
+            );
         }
         break;
     case 'get_course_exercise_medias':
@@ -338,8 +343,6 @@ switch ($action) {
     case 'get_user_course_report_resumed':
         $columns = array(
             'extra_ruc',
-            'extra_razon_social',
-            'extra_sector_actividad',
             'training_hours',
             'count_users',
             'count_users_registered',
@@ -349,14 +352,24 @@ switch ($action) {
 
         $column_names = array(
             get_lang('Company'),
-            get_lang('BusinessName'),
-            get_lang('Activity'),
             get_lang('TrainingHoursAccumulated'),
             get_lang('CountOfSubscriptions'),
             get_lang('CountOfUsers'),
             get_lang('AverageHoursPerStudent'),
             get_lang('CountCertificates')
         );
+
+        $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
+
+        if (!empty($extra_fields)) {
+            foreach ($extra_fields as $extra) {
+                if ($extra['1'] == 'ruc') {
+                    continue;
+                }
+                $columns[] = $extra['1'];
+                $column_names[] = $extra['3'];
+            }
+        }
 
         $result = CourseManager::get_user_list_from_course_code(
             null,
@@ -367,7 +380,7 @@ switch ($action) {
             null,
             true,
             true,
-            array('ruc', 'razon_social', 'sector_actividad'),
+            array('ruc'),
             $courseCodeList,
             $userIdList
         );
@@ -414,6 +427,7 @@ switch ($action) {
             $courseCodeList,
             $userIdList
         );
+
         break;
 	case 'get_user_skill_ranking':
         $columns = array('photo', 'firstname', 'lastname', 'skills_acquired', 'currently_learning', 'rank');

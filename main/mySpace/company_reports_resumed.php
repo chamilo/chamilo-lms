@@ -30,8 +30,6 @@ $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
 // The order is important you need to check the the $column variable in the model.ajax.php file.
 $columns = array(
     get_lang('Company'),
-    get_lang('BusinessName'),
-    get_lang('Activity'),
     get_lang('TrainingHoursAccumulated'),
     get_lang('CountOfSubscriptions'),
     get_lang('CountOfUsers'),
@@ -41,15 +39,32 @@ $columns = array(
 
 // Column config.
 $column_model = array(
-    array('name' => 'extra_ruc', 'index' => 'extra_ruc', 'width' => '100', 'align' => 'left', 'sortable' => 'false', 'wrap_cell' => "true"),
-    array('name' => 'extra_razon_social', 'index' => 'extra_ruc', 'width' => '100', 'align' => 'left', 'sortable' => 'false', 'wrap_cell' => "true"),
-    array('name' => 'extra_sector_actividad', 'index' => 'extra_ruc', 'width' => '100', 'align' => 'left', 'sortable' => 'false', 'wrap_cell' => "true"),
+    array('name' => 'extra_ruc', 'index' => 'extra_ruc', 'width' => '100', 'align' => 'left', 'sortable' => 'false', 'wrap_cell' => 'true'),
     array('name' => 'training_hours', 'index' => 'training_hours', 'width' => '100', 'align' => 'left'),
     array('name' => 'count_users', 'index' => 'count_users', 'width' => '100', 'align' => 'left', 'sortable' => 'false'),
     array('name' => 'count_users_registered', 'index' => 'count_users_registered', 'width' => '100', 'align' => 'left', 'sortable' => 'false'),
     array('name' => 'average_hours_per_user', 'index' => 'average_hours_per_user', 'width' => '100', 'align' => 'left', 'sortable' => 'false'),
     array('name' => 'count_certificates', 'index' => 'count_certificates', 'width' => '100', 'align' => 'left', 'sortable' => 'false'),
 );
+
+if (!empty($extra_fields)) {
+    foreach ($extra_fields as $extra) {
+        if ($extra['1'] == 'ruc') {
+            continue;
+        }
+        $col = array(
+            'name' => $extra['1'],
+            'index' => $extra['1'],
+            'width' => '120',
+            'sortable' =>'false',
+            'wrap_cell' => 'true'
+        );
+        $column_model[] = $col;
+
+        $columns[] = $extra['3'];
+    }
+}
+
 
 // Autowidth.
 $extra_params['autowidth'] = 'true';

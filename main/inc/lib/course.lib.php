@@ -843,13 +843,13 @@ class CourseManager
 
     /**
      * Check if user is subscribed inside a course
-     * @param     int        User id
-     * @param    string    Course code, if this parameter is null, it'll check for all courses
-     * @param    bool    True for checking inside sessions too, by default is not checked
-     * @return     bool     true if the user is registered in the course, false otherwise
+     * @param   int User id
+     * @param   int course id
+     * @param   bool True for checking inside sessions too, by default is not checked
+     * @return  bool true if the user is registered in the course, false otherwise
      */
-    public static function is_user_subscribed_in_course($user_id, $courseId = null, $in_a_session = false, $session_id = null) {
-
+    public static function is_user_subscribed_in_course($user_id, $courseId = null, $in_a_session = false, $session_id = null)
+    {
         $user_id = intval($user_id);
 
         if (empty($session_id)) {

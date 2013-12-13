@@ -4,7 +4,7 @@ namespace Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections\Criteria;
-
+use \Entity\Course;
 /**
  * CourseRepository
  *
@@ -14,51 +14,51 @@ class CourseRepository extends EntityRepository
     /**
      * Get all users that are registered in the course. No matter the status
      *
-     * @param \Entity\Course $course
+     * @param Course $course
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getSubscribedUsers(\Entity\Course $course)
+    public function getSubscribedUsers(Course $course)
     {
-        $qb = $this->createQueryBuilder('a');
+        $queryBuilder = $this->createQueryBuilder('a');
 
-        //Selecting user info
-        $qb->select('DISTINCT u');
+        // Selecting user info.
+        $queryBuilder->select('DISTINCT u');
 
-        // Loading EntityUser
-        $qb->from('Entity\User', 'u');
+        // Loading EntityUser.
+        $queryBuilder->from('Entity\User', 'u');
 
-        //Selecting courses for users
-        $qb->innerJoin('u.courses', 'c');
+        // Selecting courses for users.
+        $queryBuilder->innerJoin('u.courses', 'c');
 
         //@todo check app settings
-        $qb->add('orderBy', 'u.lastname ASC');
+        $queryBuilder->add('orderBy', 'u.lastname ASC');
 
-        $wherePart = $qb->expr()->andx();
+        $wherePart = $queryBuilder->expr()->andx();
 
-        //Get only users subscribed to this course
-        $wherePart->add($qb->expr()->eq('c.cId', $course->getId()));
+        // Get only users subscribed to this course
+        $wherePart->add($queryBuilder->expr()->eq('c.cId', $course->getId()));
 
-        //$wherePart->add($qb->expr()->eq('c.status', $status));
+        // $wherePart->add($queryBuilder->expr()->eq('c.status', $status));
 
-        $qb->where($wherePart);
-        //$q = $qb->getQuery();
+        $queryBuilder->where($wherePart);
+        //$q = $queryBuilder->getQuery();
         //return $q->execute();
-        return $qb;
+        return $queryBuilder;
     }
 
     /**
      * Gets students subscribed in the course
      *
-     * @param \Entity\Course $course
+     * @param Course $course
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getSubscribedStudents(\Entity\Course $course)
+    public function getSubscribedStudents(Course $course)
     {
-        $qb = $this->getSubscribedUsers($course);
-        $wherePart = $qb->expr()->andx();
-        $wherePart->add($qb->expr()->eq('c.status', STUDENT));
-        return $qb;
+        $queryBuilder = $this->getSubscribedUsers($course);
+        $wherePart = $queryBuilder->expr()->andx();
+        $wherePart->add($queryBuilder->expr()->eq('c.status', STUDENT));
+        return $queryBuilder;
     }
 
     /**
@@ -67,26 +67,27 @@ class CourseRepository extends EntityRepository
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getSubscribedCoaches(\Entity\Course $course)
+    public function getSubscribedCoaches(Course $course)
     {
-        $qb = $this->getSubscribedUsers($course);
-        //Do something
-        return $qb;
+        $queryBuilder = $this->getSubscribedUsers($course);
+        return $queryBuilder;
     }
 
     /**
      *
      * Gets the teachers subscribed in the course
-     * @param \Entity\Course $course
+     * @param Course $course
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getSubscribedTeachers(\Entity\Course $course)
+    public function getSubscribedTeachers(Course $course)
     {
-        $qb = $this->getSubscribedUsers($course);
-        $wherePart = $qb->expr()->andx();
-        $wherePart->add($qb->expr()->eq('c.status', COURSEMANAGER));
+        $queryBuilder = $this->getSubscribedUsers($course);
+        $wherePart = $queryBuilder->expr()->andx();
+        $wherePart->add($queryBuilder->expr()->eq('c.status', COURSEMANAGER));
 
-        return $qb;
+        return $queryBuilder;
     }
+
+
 }

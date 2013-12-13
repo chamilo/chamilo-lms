@@ -9,6 +9,7 @@
  */
 $language_file = array('admin', 'gradebook', 'tracking');
 $cidReset = true;
+
 require_once '../inc/global.inc.php';
 
 if (!(api_is_platform_admin(false, true))) {
@@ -18,22 +19,31 @@ if (!(api_is_platform_admin(false, true))) {
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('MySpace'));
 
 $tool_name = get_lang('Report');
-
 $this_section = SECTION_TRACKING;
-
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
-//jqgrid will use this URL to do the selects
+// jqgrid will use this URL to do the selects
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_user_course_report_resumed';
 
 $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
 
-//The order is important you need to check the the $column variable in the model.ajax.php file
-$columns = array(get_lang('Company'), get_lang('TrainingHoursAccumulated'), get_lang('CountOfSubscriptions'), get_lang('CountOfUsers'), get_lang('AverageHoursPerStudent'), get_lang('CountCertificates'));
+// The order is important you need to check the the $column variable in the model.ajax.php file.
+$columns = array(
+    get_lang('Company'),
+    get_lang('BusinessName'),
+    get_lang('Activity'),
+    get_lang('TrainingHoursAccumulated'),
+    get_lang('CountOfSubscriptions'),
+    get_lang('CountOfUsers'),
+    get_lang('AverageHoursPerStudent'),
+    get_lang('CountCertificates')
+);
 
-//Column config
+// Column config.
 $column_model = array(
-    array('name' => 'extra_ruc', 'index' => 'extra_ruc', 'width' => '100', 'align' => 'left', 'sortable' => 'false'),
+    array('name' => 'extra_ruc', 'index' => 'extra_ruc', 'width' => '100', 'align' => 'left', 'sortable' => 'false', 'wrap_cell' => "true"),
+    array('name' => 'extra_razon_social', 'index' => 'extra_ruc', 'width' => '100', 'align' => 'left', 'sortable' => 'false', 'wrap_cell' => "true"),
+    array('name' => 'extra_sector_actividad', 'index' => 'extra_ruc', 'width' => '100', 'align' => 'left', 'sortable' => 'false', 'wrap_cell' => "true"),
     array('name' => 'training_hours', 'index' => 'training_hours', 'width' => '100', 'align' => 'left'),
     array('name' => 'count_users', 'index' => 'count_users', 'width' => '100', 'align' => 'left', 'sortable' => 'false'),
     array('name' => 'count_users_registered', 'index' => 'count_users_registered', 'width' => '100', 'align' => 'left', 'sortable' => 'false'),
@@ -41,7 +51,7 @@ $column_model = array(
     array('name' => 'count_certificates', 'index' => 'count_certificates', 'width' => '100', 'align' => 'left', 'sortable' => 'false'),
 );
 
-//Autowidth
+// Autowidth.
 $extra_params['autowidth'] = 'true';
 //height auto
 $extra_params['height'] = 'auto';

@@ -337,11 +337,20 @@ switch ($action) {
         break;
     case 'get_user_course_report_resumed':
         $columns = array(
-            'extra_ruc', 'training_hours', 'count_users', 'count_users_registered', 'average_hours_per_user', 'count_certificates'
+            'extra_ruc',
+            'extra_razon_social',
+            'extra_sector_actividad',
+            'training_hours',
+            'count_users',
+            'count_users_registered',
+            'average_hours_per_user',
+            'count_certificates'
         );
 
         $column_names = array(
             get_lang('Company'),
+            get_lang('BusinessName'),
+            get_lang('Activity'),
             get_lang('TrainingHoursAccumulated'),
             get_lang('CountOfSubscriptions'),
             get_lang('CountOfUsers'),
@@ -358,10 +367,11 @@ switch ($action) {
             null,
             true,
             true,
-            'ruc',
+            array('ruc', 'razon_social', 'sector_actividad'),
             $courseCodeList,
             $userIdList
         );
+
         $new_result = array();
         if (!empty($result)) {
             foreach ($result as $row) {
@@ -382,6 +392,7 @@ switch ($action) {
             get_lang('Approved'),
             get_lang('CourseAdvance')
         );
+
         $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
         if (!empty($extra_fields)) {
             foreach ($extra_fields as $extra) {
@@ -576,16 +587,16 @@ switch ($action) {
         }
 
         $columns = array(
-            'session', 
-            'exercise_id', 
-            'quiz_title', 
-            'username', 
-            'lastname', 
-            'firstname', 
-            'time', 
-            'question_id', 
-            'question', 
-            'answer', 
+            'session',
+            'exercise_id',
+            'quiz_title',
+            'username',
+            'lastname',
+            'firstname',
+            'time',
+            'question_id',
+            'question',
+            'answer',
             'correct'
         );
 
@@ -609,7 +620,7 @@ switch ($action) {
 
         /**
          * Add lessons of course
-         * 
+         *
          */
         $columns = array(
             'username',
@@ -618,7 +629,7 @@ switch ($action) {
         );
         require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
         $lessons = LearnpathList::get_course_lessons($course['code'], $sessionId);
-        foreach ($lessons as $lesson_id => $lesson) 
+        foreach ($lessons as $lesson_id => $lesson)
         {
             $columns[] = $lesson_id;
         }

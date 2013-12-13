@@ -1152,10 +1152,10 @@ class CourseManager
     /**
      * Return user info array of all users registered in the specified real or virtual course
      * This only returns the users that are registered in this actual course, not linked courses.
-     * @param null $course_code
+     * @param string $course_code
      * @param int $session_id
-     * @param null $limit
-     * @param null $order_by the field to order the users by.
+     * @param string $limit
+     * @param string $order_by the field to order the users by.
      * Valid values are 'lastname', 'firstname', 'username', 'email', 'official_code' OR a part of a SQL statement
      * that starts with ORDER BY ...
      * @param null $filter_by_status if using the session_id: 0 or 2 (student, coach),
@@ -1163,9 +1163,10 @@ class CourseManager
      * @param null $return_count
      * @param bool $add_reports
      * @param bool $resumed_report
-     * @param null $extra_field
+     * @param array $extra_field
      * @param array $courseCodeList
      * @param array $userList
+     * @param string $filterByActive
      * @return array|int
      */
     public static function get_user_list_from_course_code(
@@ -1177,7 +1178,7 @@ class CourseManager
         $return_count = null,
         $add_reports = false,
         $resumed_report = false,
-        $extra_field = null,
+        $extra_field = array(),
         $courseCodeList = array(),
         $userIdList = array(),
         $filterByActive = null
@@ -1253,8 +1254,11 @@ class CourseManager
         }
 
         if ($return_count && $resumed_report) {
-            $extra_field_info = UserManager::get_extra_field_information_by_name($extra_field);
-            $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES).' as ufv ON (user.user_id = ufv.user_id AND (field_id = '.$extra_field_info['id'].' OR field_id IS NULL ) )';
+            foreach ($extra_field as $extraField) {
+                $extraFieldInfo = UserManager::get_extra_field_information_by_name($extraField);
+                $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES).' as ufv
+                          ON (user.user_id = ufv.user_id AND (field_id = '.$extraFieldInfo['id'].' OR field_id IS NULL ) )';
+            }
         }
 
         $sql .= ' WHERE '.$filter_by_status_condition.' '.implode(' OR ', $where);

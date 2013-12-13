@@ -29,7 +29,14 @@ $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_user_course_report';
 $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns = array(get_lang('Course'), get_lang('User'), get_lang('ManHours'), get_lang('CertificateGenerated'), get_lang('Approved'), get_lang('CourseAdvance'));
+$columns = array(
+    get_lang('Course'),
+    get_lang('User'),
+    get_lang('ManHours'),
+    get_lang('CertificateGenerated'),
+    get_lang('Approved'),
+    get_lang('CourseAdvance')
+);
 
 //Column config
 $column_model = array(
@@ -45,9 +52,10 @@ if (!empty($extra_fields)) {
     foreach ($extra_fields as $extra) {
         $col = array(
             'name' => $extra['1'],
-            'index'=> $extra['1'],
-            'width'=>'120',
-            'sortable'=>'false'
+            'index' => $extra['1'],
+            'width' =>'120',
+            'sortable' =>'false',
+            'wrap_cell' => "true"
         );
         $column_model[] = $col;
 

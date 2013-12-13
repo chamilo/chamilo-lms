@@ -2482,6 +2482,7 @@ class UserManager
         if (empty($username)) {
             return false;
         }
+        $username = trim($username);
         $username = Database::escape_string($username);
         $t_user = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT user_id FROM $t_user WHERE username = '$username'";

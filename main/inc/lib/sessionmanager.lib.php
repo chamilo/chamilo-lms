@@ -2709,6 +2709,11 @@ class SessionManager
                 }
 
                 $session_name           = Database::escape_string($enreg['SessionName']);
+
+                if (empty($session_name)) {
+                    continue;
+                }
+
                 $date_start             = $enreg['DateStart'];
                 $date_end               = $enreg['DateEnd'];
                 $visibility             = isset($enreg['Visibility']) ? $enreg['Visibility'] : $sessionVisibility;
@@ -2877,10 +2882,12 @@ class SessionManager
                 $users = explode('|', $enreg['Users']);
 
                 // Adding the relationship "Session - User" for students
+                $userList = array();
                 if (is_array($users)) {
                     foreach ($users as $user) {
                         $user_id = UserManager::get_user_id_from_username($user);
                         if ($user_id !== false) {
+                            $userList[] = $user_id;
                             // Insert new users.
                             $sql = "INSERT IGNORE INTO $tbl_session_user SET
                                     id_user = '$user_id',
@@ -2895,9 +2902,10 @@ class SessionManager
                 }
 
                 $courses = explode('|', $enreg['Courses']);
-                $courseList = array();
+
                 foreach ($courses as $course) {
-                    $course_code = api_strtoupper(api_substr($course, 0, api_strpos($course, '[')));
+                    $courseArray = bracketsToArray($course);
+                    $course_code = $courseArray[0];
 
                     if (CourseManager::course_exists($course_code)) {
 
@@ -2915,13 +2923,9 @@ class SessionManager
                         }
 
                         $course_counter++;
-                        $pattern = "/\[(.*?)\]/";
-                        preg_match_all($pattern, $course, $matches);
 
-                        if (isset($matches[1])) {
-                            $course_coaches = $matches[1][0];
-                            $course_users   = $matches[1][1];
-                        }
+                        $course_coaches = isset($courseArray[1]) ? $courseArray[1] : array();
+                        $course_users   = isset($courseArray[2]) ? $courseArray[2] : array();
 
                         $course_users   = explode(',', $course_users);
                         $course_coaches = explode(',', $course_coaches);
@@ -2932,8 +2936,19 @@ class SessionManager
                             $addTeachersToSession = $courseInfo['add_teachers_to_sessions_courses'];
                         }
 
-                        // Adding coaches to session course user
+                        // If any coach/user provided for a course use the users array.
+                        if (empty($course_coaches) && empty($course_users)) {
+                            if (!empty($userList)) {
+                                SessionManager::subscribe_users_to_session_course($userList, $session_id, $course_code);
+                                if ($debug) {
+                                    $msg = "Sessions - Adding student list ".implode(', #', $userList)." to course: '$course_code' and session #$session_id";
+                                    error_log($msg);
+                                    $logger->addInfo($msg);
+                                }
+                            }
+                        }
 
+                        // Adding coaches to session course user
                         if (!empty($course_coaches)) {
                             $savedCoaches = array();
                             // only edit if add_teachers_to_sessions_courses is set.
@@ -2968,8 +2983,8 @@ class SessionManager
 
                             // Checking one more time see BT#6449#note-149
                             $coaches = SessionManager::getCoachesByCourseSession($session_id, $course_code);
-                            if (empty($coaches)) {
 
+                            if (empty($coaches)) {
                                 foreach ($course_coaches as $course_coach) {
                                     $course_coach = trim($course_coach);
                                     $coach_id = UserManager::get_user_id_from_username($course_coach);
@@ -2989,17 +3004,18 @@ class SessionManager
                         }
 
                         // Adding Students, updating relationship "Session - Course - User".
-                        foreach ($course_users as $user) {
-                            $user = trim($user);
-                            $user_id = UserManager::get_user_id_from_username($user);
+                        if (!empty($course_users)) {
+                            foreach ($course_users as $user) {
+                                $user_id = UserManager::get_user_id_from_username($user);
 
-                            if ($user_id !== false) {
-                                SessionManager::subscribe_users_to_session_course(array($user_id), $session_id, $course_code);
-                                if ($debug) {
-                                    $logger->addInfo("Sessions - Adding student: user #$user_id ($user) to course: '$course_code' and session #$session_id");
+                                if ($user_id !== false) {
+                                    SessionManager::subscribe_users_to_session_course(array($user_id), $session_id, $course_code);
+                                    if ($debug) {
+                                        $logger->addInfo("Sessions - Adding student: user #$user_id ($user) to course: '$course_code' and session #$session_id");
+                                    }
+                                } else {
+                                    $error_message .= get_lang('UserDoesNotExist').': '.$user.$eol;
                                 }
-                            } else {
-                                $error_message .= get_lang('UserDoesNotExist').': '.$user.$eol;
                             }
                         }
 
@@ -3013,11 +3029,11 @@ class SessionManager
                 Database::query($sql_update_users);
             }
         }
-
         return array(
             'error_message' => $error_message,
             'session_counter' =>  $session_counter
         );
+
     }
 
     /**

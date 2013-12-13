@@ -21,7 +21,6 @@ class HomeDriver extends Driver
                 'driver'     => 'HomeDriver',
                 'alias' => $this->connector->translator->trans('Portal'),
                 'path'       => $home,
-                'startPath'  => '/',
                 'URL' => api_get_path(WEB_DATA_PATH).'home',
                 'accessControl' => array($this, 'access'),
             );
@@ -33,8 +32,8 @@ class HomeDriver extends Driver
      */
     public function upload($fp, $dst, $name, $tmpname)
     {
-        $connector = $this->getConnectorFromPlugin();
-        if ($connector->security->isGranted('ROLE_ADMIN')) {
+        $this->setConnectorFromPlugin();
+        if ($this->connector->security->isGranted('ROLE_ADMIN')) {
             return parent::upload($fp, $dst, $name, $tmpname);
         }
     }
@@ -44,8 +43,8 @@ class HomeDriver extends Driver
      */
     public function rm($hash)
     {
-        $connector = $this->getConnectorFromPlugin();
-        if ($connector->security->isGranted('ROLE_ADMIN')) {
+        $this->setConnectorFromPlugin();
+        if ($this->connector->security->isGranted('ROLE_ADMIN')) {
             return parent::rm($hash);
         }
     }

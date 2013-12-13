@@ -26,7 +26,6 @@ require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 /*	DOWNLOAD A FOLDER */
 $course_id = api_get_course_int_id();
-
 $user_id = api_get_user_id();
 
 if (isset($_GET['cat_id']) AND is_numeric($_GET['cat_id']) AND $_GET['action'] == 'downloadcategory' AND isset($_GET['sent_received'])) {
@@ -67,6 +66,7 @@ if (isset($_GET['cat_id']) AND is_numeric($_GET['cat_id']) AND $_GET['action'] =
         header('location: index.php?view='.Security::remove_XSS($_GET['sent_received']).'&error=ErrorNoFilesInFolder');
         exit;
     }
+
     zip_download($files_to_download);
     exit;
 }
@@ -100,11 +100,12 @@ if (!$allowed_to_download) {
     $_SESSION['_seen'][$_course['id']][TOOL_DROPBOX][] = intval($_GET['id']);
 
     $work = new Dropbox_work($_GET['id']);
-    $path = dropbox_cnf('sysPath') . '/' . $work -> filename; //path to file as stored on server
+    $path = dropbox_cnf('sysPath').'/'.$work -> filename; //path to file as stored on server
 
     if (!Security::check_abs_path($path, dropbox_cnf('sysPath').'/')) {
         exit;
     }
+
     $file = $work->title;
     $mimetype = DocumentManager::file_get_mime_type(true);
     $fileinfo = pathinfo($file);

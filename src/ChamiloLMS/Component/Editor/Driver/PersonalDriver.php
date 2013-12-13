@@ -28,7 +28,6 @@ class PersonalDriver extends Driver
                     'driver' => 'PersonalDriver',
                     'alias' => $this->connector->translator->trans('MyFiles'),
                     'path'       => $dir['dir'].'my_files',
-                    'startPath'  => '/',
                     'URL' => $dirWeb['dir'].'my_files',
                     'accessControl' => array($this, 'access')
                 );

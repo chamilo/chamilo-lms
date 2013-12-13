@@ -19,12 +19,14 @@ class CourseUserDriver extends CourseDriver
             $userId = $this->connector->user->getUserId();
             $path = 'shared_folder/sf_user_'.$userId;
 
+            $translator = $this->connector->translator;
+            $alias = $this->connector->course->getCode().' '.$translator->trans('CourseUserDocument');
+
             if (!empty($userId)) {
                 return array(
-                    'driver'     => 'CourseUserDriver',
-                    'alias' => $this->connector->translator->trans('CourseUserDocument'),
-                    'path'       => $this->getCourseDocumentSysPath().$path,
-                    'startPath'  => '/',
+                    'driver' => 'CourseUserDriver',
+                    'alias' => $alias,
+                    'path' => $this->getCourseDocumentSysPath().$path,
                     //'alias' => $courseInfo['code'].' personal documents',
                     'URL' => $this->getCourseDocumentWebPath().$path,
                     'accessControl' => 'access'

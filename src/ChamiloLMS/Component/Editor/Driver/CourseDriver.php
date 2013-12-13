@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 namespace ChamiloLMS\Component\Editor\Driver;
 
-use ChamiloLMS\Component\Editor\Finder;
-
 /**
  * Class CourseDriver
  * @package ChamiloLMS\Component\Editor\Driver
@@ -18,14 +16,15 @@ class CourseDriver extends Driver
     public function getConfiguration()
     {
         if (!empty($this->connector->course)) {
+            $translator = $this->connector->translator;
+            $alias = $this->connector->course->getCode().' '.$translator->trans('Documents');
 
             return array(
                 'driver' => 'CourseDriver',
                 'path' => $this->getCourseDocumentSysPath(),
                 'URL' => $this->getCourseDocumentWebPath(),
-                'startPath'  => '/',
                 'accessControl' => array($this, 'access'),
-                'alias' => $this->connector->translator->trans('CourseDocument'),
+                'alias' => $alias,
                 'attributes' => array(
                     // Hide shared_folder
                     array(

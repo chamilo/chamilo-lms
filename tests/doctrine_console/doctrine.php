@@ -1,5 +1,7 @@
 <?php
+/* For licensing terms, see /license.txt */
 
+require_once dirname(__FILE__).'/../../vendor/autoload.php';
 require_once dirname(__FILE__).'/../../main/inc/global.inc.php';
 
 // Variable $helperSet is defined inside cli-config.php

@@ -8,6 +8,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Doctrine\ORM\NoResultException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use \Entity\User;
 
 /**
  * Class UserRepository
@@ -96,5 +97,36 @@ class UserRepository extends EntityRepository implements UserProviderInterface
     public function supportsClass($class)
     {
         return $this->getEntityName() === $class || is_subclass_of($class, $this->getEntityName());
+    }
+
+    /**
+     * Get course user relationship based in the course_rel_user table.
+     * @return array
+     */
+    public function getCourses(User $user)
+    {
+        $queryBuilder = $this->createQueryBuilder('user');
+
+        // Selecting course info.
+        $queryBuilder->select('c');
+
+        // Loading User.
+        //$qb->from('Entity\User', 'u');
+
+        // Selecting course
+        $queryBuilder->innerJoin('Entity\Course', 'c');
+
+        //@todo check app settings
+        //$qb->add('orderBy', 'u.lastname ASC');
+
+        $wherePart = $queryBuilder->expr()->andx();
+
+        // Get only users subscribed to this course
+        $wherePart->add($queryBuilder->expr()->eq('user.userId', $user->getUserId()));
+
+        $queryBuilder->where($wherePart);
+        $query = $queryBuilder->getQuery();
+
+        return $query->execute();
     }
 }

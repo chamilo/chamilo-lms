@@ -231,6 +231,17 @@ class User implements AdvancedUserInterface, \Serializable, EquatableInterface
     private $classes;
 
     /**
+     * @ORM\OneToMany(targetEntity="CDropboxPost", mappedBy="user")
+     **/
+    private $dropBoxReceivedFiles;
+
+    /**
+     * @ORM\OneToMany(targetEntity="CDropboxFile", mappedBy="userSent")
+     **/
+    private $dropBoxSentFiles;
+
+
+    /**
      * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="Role", inversedBy="users")
      * @ORM\JoinTable(
@@ -276,6 +287,30 @@ class User implements AdvancedUserInterface, \Serializable, EquatableInterface
         $this->isActive = true;
         $this->registrationDate = new \DateTime();
         $this->portals = new ArrayCollection();
+        $this->dropBoxSentFiles = new ArrayCollection();
+        $this->dropBoxReceivedFiles = new ArrayCollection();
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getDropBoxSentFiles()
+    {
+        return $this->dropBoxSentFiles;
+    }
+
+    public function getDropBoxReceivedFiles()
+    {
+        return $this->dropBoxReceivedFiles;
+    }
+
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCourses()
+    {
+        return $this->courses;
     }
 
     /**

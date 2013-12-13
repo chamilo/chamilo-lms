@@ -726,6 +726,10 @@ if ($alreadyInstalled) {
     $app->mount('/editor/', new ChamiloLMS\Provider\ReflectionControllerProvider('editor.controller'));
     $app->mount('/user/', new ChamiloLMS\Provider\ReflectionControllerProvider('profile.controller'));
 
+    $app->mount('/app/session_path', new ChamiloLMS\Provider\ReflectionControllerProvider('session_path.controller'));
+    $app->mount('/app/session_path/tree', new ChamiloLMS\Provider\ReflectionControllerProvider('session_tree.controller'));
+
+
     $app->mount('/courses/{course}/curriculum/category', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_category.controller'));
     $app->mount('/courses/{course}/curriculum/item', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_item.controller'));
     $app->mount('/courses/{course}/curriculum/user', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_user.controller'));

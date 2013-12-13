@@ -226,10 +226,10 @@ abstract class BaseController extends FlintController
     public function listingAction()
     {
         $items = $this->listAction('array');
-        $template = $this->get('template');
+        $template = $this->getTemplate();
         $template->assign('items', $items);
         $template->assign('links', $this->generateLinks());
-        $response = $template->render_template($this->getTemplatePath().'list.tpl');
+        $response = $template->renderTemplate($this->getTemplatePath().'list.tpl');
         return new Response($response, 200, array());
     }
 
@@ -253,10 +253,10 @@ abstract class BaseController extends FlintController
             return $this->redirect($url);
         }
 
-        $template = $this->get('template');
+        $template = $this->getTemplate();
         $template->assign('links', $this->generateLinks());
         $template->assign('form', $form->createView());
-        $response = $template->render_template($this->getTemplatePath().'add.tpl');
+        $response = $template->renderTemplate($this->getTemplatePath().'add.tpl');
         return new Response($response, 200, array());
     }
 
@@ -267,7 +267,7 @@ abstract class BaseController extends FlintController
      */
     public function readAction($id)
     {
-        $template = $this->get('template');
+        $template = $this->getTemplate();
         $template->assign('links', $this->generateLinks());
         return $this->readEntity($id);
     }
@@ -297,11 +297,11 @@ abstract class BaseController extends FlintController
                 return $this->redirect($url);
             }
 
-            $template = $this->get('template');
+            $template = $this->getTemplate();
             $template->assign('item', $item);
             $template->assign('form', $form->createView());
             $template->assign('links', $this->generateLinks());
-            $response = $template->render_template($this->getTemplatePath().'edit.tpl');
+            $response = $template->renderTemplate($this->getTemplatePath().'edit.tpl');
             return new Response($response, 200, array());
         } else {
             return $this->createNotFoundException();
@@ -309,7 +309,6 @@ abstract class BaseController extends FlintController
     }
 
     /**
-     *
      * @Route("/{id}/delete", requirements={"id" = "\d+"})
      * @Method({"GET"})
      */
@@ -323,7 +322,6 @@ abstract class BaseController extends FlintController
             return $this->redirect($url);
         }
     }
-
 
     /**
      * Base "read" action.
@@ -432,7 +430,7 @@ abstract class BaseController extends FlintController
 
     /**
      * Base "create" action.
-     *
+     * @param $object
      * @return JsonResponse|NotFoundHttpException
      */
     protected function createAction($object)
@@ -594,6 +592,9 @@ abstract class BaseController extends FlintController
         return $entity;
     }
 
+    /**
+     * @return null
+     */
     protected function getDefaultEntity()
     {
         return null;

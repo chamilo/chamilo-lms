@@ -814,6 +814,18 @@ $app['curriculum_user.controller'] = $app->share(
     }
 );
 
+$app['session_path.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\App\SessionPath\SessionPathController($app);
+    }
+);
+
+$app['session_tree.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\App\SessionPath\SessionTreeController($app);
+    }
+);
+
 $app['upgrade.controller'] = $app->share(
     function () use ($app) {
         return new ChamiloLMS\Controller\Admin\Administrator\UpgradeController($app);

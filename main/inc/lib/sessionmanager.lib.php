@@ -1406,24 +1406,31 @@ class SessionManager
 		$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-		$delete_sql = "DELETE FROM $tbl_session_rel_user WHERE id_session = '$session_id' AND id_user ='$user_id' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
+		$delete_sql = "DELETE FROM $tbl_session_rel_user
+		               WHERE    id_session = '$session_id' AND
+		                        id_user ='$user_id' AND
+		                        relation_type <> ".SESSION_RELATION_TYPE_RRHH."";
 		Database::query($delete_sql);
 		$return = Database::affected_rows();
 
 		// Update number of users
-		$update_sql = "UPDATE $tbl_session SET nbr_users= nbr_users - $return WHERE id='$session_id' ";
-		Database::query($update_sql);
+        $sql = "UPDATE $tbl_session SET nbr_users = nbr_users - $return WHERE id='$session_id' ";
+		Database::query($sql);
 
 		// Get the list of courses related to this session
 		$course_list = SessionManager::get_course_list_by_session_id($session_id);
-		if(!empty($course_list)) {
+		if (!empty($course_list)) {
 			foreach($course_list as $course) {
 				$course_code = $course['code'];
 				// Delete user from course
-				Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$session_id' AND course_code='$course_code' AND id_user='$user_id'");
-				if(Database::affected_rows()) {
+                $sql = "DELETE FROM $tbl_session_rel_course_rel_user
+                        WHERE id_session='$session_id' AND course_code='$course_code' AND id_user='$user_id'";
+				Database::query($sql);
+				if (Database::affected_rows()) {
 					// Update number of users in this relation
-					Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users - 1 WHERE id_session='$session_id' AND course_code='$course_code'");
+                    $sql = "UPDATE $tbl_session_rel_course SET nbr_users=nbr_users - 1
+                            WHERE id_session='$session_id' AND course_code='$course_code'";
+					Database::query($sql);
 				}
 			}
 		}
@@ -2640,7 +2647,8 @@ class SessionManager
         $daysCoachAccessBeforeBeginning = null,
         $daysCoachAccessAfterBeginning = null,
         $sessionVisibility = 1,
-        $fieldsToAvoidUpdate = array()
+        $fieldsToAvoidUpdate = array(),
+        $deleteUsersNotInList = false
     ) {
         $content = file($file);
 
@@ -2708,7 +2716,7 @@ class SessionManager
                     }
                 }
 
-                $session_name           = Database::escape_string($enreg['SessionName']);
+                $session_name = Database::escape_string($enreg['SessionName']);
 
                 if (empty($session_name)) {
                     continue;
@@ -2897,6 +2905,25 @@ class SessionManager
                                 $logger->addInfo("Sessions - Adding User #$user_id ($user) to session #$session_id");
                             }
                             $user_counter++;
+                        }
+                    }
+                }
+
+                if ($deleteUsersNotInList) {
+                    // Getting user in DB in order to compare to the new list.
+                    $usersListInDatabase = self::get_users_by_session($session_id, 0);
+
+                    if (!empty($usersListInDatabase)) {
+                        if (empty($userList)) {
+                            foreach ($usersListInDatabase as $userInfo) {
+                                self::unsubscribe_user_from_session($session_id, $userInfo['user_id']);
+                            }
+                        } else {
+                            foreach ($usersListInDatabase as $userInfo) {
+                                if (!in_array($userInfo['user_id'], $userList)) {
+                                    self::unsubscribe_user_from_session($session_id, $userInfo['user_id']);
+                                }
+                            }
                         }
                     }
                 }

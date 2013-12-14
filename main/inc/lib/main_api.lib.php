@@ -1156,6 +1156,9 @@ function _api_format_user($user, $add_password = false) {
         $result['password'] = $user['password'];
     }
 
+    $result['creator_id'] = $user['creator_id'];
+    $result['registration_date'] = $user['registration_date'];
+
     return $result;
 }
 

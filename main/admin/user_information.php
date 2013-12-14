@@ -92,6 +92,11 @@ echo '<a href="javascript: void(0);" onclick="'.$onclick.'" >'
 echo '<p>'.($user['status'] == 1 ? get_lang('Teacher') : get_lang('Student'))
     .'</p>';
 echo '<p>'.Display :: encrypted_mailto_link($user['mail'], $user['mail']).'</p>';
+// Show info about who created this user and when
+$creatorId = $user['creator_id'];
+$creatorInfo = api_get_user_info($creatorId);
+$registrationDate = $user['registration_date'];
+echo '<p>'.sprintf(get_lang('CreatedByXYOnZ'), 'user_information.php?user_id='.$creatorId, $creatorInfo['username'], api_get_utc_datetime($registrationDate)).'</p>';
 
 /**
  * Show the sessions and the courses in which this user is subscribed

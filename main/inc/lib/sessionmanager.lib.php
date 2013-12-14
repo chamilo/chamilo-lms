@@ -2355,9 +2355,13 @@ class SessionManager
      * @param $course_code
      * @param $session_id
      * @return int
+     * @assert (null,null,null) === false
      */
     public static function get_user_status_in_session($user_id, $course_code, $session_id)
     {
+        if (empty($user_id) or empty($course_code) or empty($session_id)) {
+            return false;
+        }
         $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_user                           = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT session_rcru.status

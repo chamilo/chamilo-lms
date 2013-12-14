@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$FolderDoesntExistsInFileSystem = "Le dossier de destination est introuvable sur le serveur.";
 $HandedOutDate = "Date de réception";
 $HandedOut = "Remis";
 $HandOutDateLimit = "Date limite de remise";
@@ -28,7 +29,7 @@ $langMustBeRegisteredUser = "Seuls les utilisateurs enregistrés de ce cours peu
 $langListDel = "Supprimer la liste";
 $langNameDir = "Nom du nouveau répertoire";
 $langFileExists = "Impossible d'effectuer cette opération.<br />Un fichier portant ce nom existe déjà.";
-$CreateDirectory = "Créer un répertoire";
+$CreateDirectory = "Enregistrer le travail";
 $langCurrentDir = "répertoire courant";
 $UploadADocument = "Envoyer un document";
 $EditToolOptions = "Éditer les options des travaux";
@@ -39,9 +40,9 @@ $ValidateChanges = "Valider les changements";
 $FolderUpdated = "Dosier mis à jour";
 $EndsAt = "Envoi impossible à partir du";
 $QualificationOfAssignment = "Évaluation de la tâche";
-$MakeQualifiable = "Activer l'évaluation";
+$MakeQualifiable = "Activer dans le cahier de notes";
 $QualificationNumberOver = "Évaluation sur...";
-$WeightInTheGradebook = "Pondération dans le rapport de compétences";
+$WeightInTheGradebook = "Pondération dans le cahier de notes";
 $DatesAvailables = "Dates disponibles";
 $ExpiresAt = "Expire le";
 $AddToCalendar = "Ajouter au calendrier";
@@ -62,7 +63,7 @@ $ExpiryDateAlreadyPassed = "La date d'expiration est déjà passée";
 $EndDateAlreadyPassed = "La date de fin est déjà passée";
 $MoveXTo = "Déplacer %s vers";
 $QualificationMustNotBeMoreThanQualificationOver = "La cote ne peut pas être supérieure à la qualification maximale";
-$ModifyDirectory = "Modifier le répertoire";
+$ModifyDirectory = "Modifier le travail";
 $DeleteAllFiles = "Supprimer tous les travaux";
 $BackToWorksList = "Retour à la liste de travaux";
 $EditMedia = "Éditer et coter le travail";

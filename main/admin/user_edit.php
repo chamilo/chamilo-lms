@@ -250,8 +250,11 @@ $group[] =$form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
 $group[] =$form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
 $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), '&nbsp;', false);
 
-// Registration Date
-$form->addElement('static', 'registration_date', get_lang('RegistrationDate'), $user_data['registration_date']);
+// Registration User and Date
+$creatorInfo = api_get_user_info($user_data['creator_id']);
+$date = sprintf(get_lang('CreatedByXYOnZ'), 'user_information.php?user_id='.$user_data['creator_id'], $creatorInfo['username'], $user_data['registration_date']);
+$form->addElement('html', '<div class="control-group"><label class="control-label">'.get_lang('RegistrationDate').'</label><div class="controls">'.$date.'</div></div>');
+
 
 if (!$user_data['platform_admin']) {
 	// Expiration Date

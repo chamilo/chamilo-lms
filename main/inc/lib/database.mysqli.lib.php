@@ -160,6 +160,7 @@ class MySQLIDatabase {
      * instead of directly using magic words in your tool code.
      *
      * @param string $short_table_name, the name of the table
+     * @return string The full name of the requested table from the main DB
      */
     public static function get_main_table($short_table_name)
     {
@@ -189,6 +190,7 @@ class MySQLIDatabase {
      * instead of directly using magic words in your tool code.
      *
      * @param string $short_table_name, the name of the table
+     * @return string The full name of the requested stats table
      */
     public static function get_statistic_table($short_table_name)
     {
@@ -219,8 +221,9 @@ class MySQLIDatabase {
     */
 
     /**
-     *	@return a list (array) of all courses.
-     * 	@todo shouldn't this be in the course.lib.php script?
+     * Returns a full list of the contents of the course table as a PHP table
+     * @return a list (array) of all courses.
+     * @todo shouldn't this be in the course.lib.php script?
      */
     public static function get_course_list()
     {
@@ -229,17 +232,19 @@ class MySQLIDatabase {
     }
 
     /**
-     *	Returns an array with all database fields for the specified course.
+     * Returns an array with all database fields for the specified course.
      *
-     *	@param the real (system) code of the course (ID from inside the main course table)
-     * 	@todo shouldn't this be in the course.lib.php script?
+     * @param string $course_code The real (system) code of the course (ID from inside the main course table)
+     * @return array Course info from the course table
+     * @todo shouldn't this be in the course.lib.php script?
      */
     public static function get_course_info($course_code)
     {
         $course_code = self::escape_string($course_code);
         $table = self::get_main_table(TABLE_MAIN_COURSE);
         $result = self::generate_abstract_course_field_names(
-            self::fetch_array(self::query("SELECT * FROM $table WHERE `code` = '$course_code'")));
+            self::fetch_array(self::query("SELECT * FROM $table WHERE code = '$course_code'"))
+        );
         return $result === false ? array('db_name' => '') : $result;
     }
 
@@ -487,11 +492,11 @@ class MySQLIDatabase {
 
     /**
      * Gets the next row of the result of the SQL query (as returned by Database::query) in an object form
-     * @param	resource	The result from a call to sql_query (e.g. Database::query)
-     * @param	string		Optional class name to instanciate
-     * @param	array		Optional array of parameters
-     * @return	object		Object of class StdClass or the required class, containing the query result row
-     * @author	Yannick Warnier <yannick.warnier@dokeos.com>
+     * @param mysqli $result The result from a call to sql_query (e.g. Database::query)
+     * @param string $class Optional class name to instantiate
+     * @param array $params Optional array of parameters
+     * @return resource Object of class StdClass or the required class, containing the query result row
+     * @author Yannick Warnier <yannick.warnier@dokeos.com>
      */
     public static function fetch_object($result, $class = null, $params = null)
     {
@@ -521,7 +526,7 @@ class MySQLIDatabase {
 
     /**
      * Returns the database client library version.
-     * @return strung		Returns a string that represents the client library version.
+     * @return string String that represents the client library version.
      */
     public function get_client_info()
     {
@@ -538,7 +543,9 @@ class MySQLIDatabase {
     public static function get_databases($pattern = '', $connection = null)
     {
         $result = array();
-        $query_result = Database::query(!empty($pattern) ? "SHOW DATABASES LIKE '".self::escape_string($pattern, $connection)."'" : "SHOW DATABASES", $connection);
+        $query_result = Database::query(!empty($pattern) ?
+                "SHOW DATABASES LIKE '".self::escape_string($pattern, $connection)."'" :
+                "SHOW DATABASES", $connection);
         while ($row = Database::fetch_row($query_result)) {
             $result[] = $row[0];
         }

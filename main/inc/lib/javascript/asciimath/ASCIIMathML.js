@@ -85,11 +85,10 @@ FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
 //var AMTcgiloc = "http://codecogs.izyba.com/gif.latex";
 //var AMTcgiloc = "http://codecogs.izyba.com/png.latex";
 //
-var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chs=1x0&chl=";
-//
+var AMTcgiloc = "//chart.apis.google.com/chart?cht=tx&chs=1x0&chl=";
+var AScgiloc = '//www.imathas.com/imathas/filter/graph/svgimg.php'; //path to CGI script
 
-var AScgiloc = 'http://www.imathas.com/imathas/filter/graph/svgimg.php'; //path to CGI script
-                        //for editor graphs IMG fallback
+//for editor graphs IMG fallback
 var mathcolor = "blue";        // change it to "" (to inherit) or another color
 // Modified by Ivan Tcholakov, 01-JUL-2010.
 //var mathfontsize = "1em";      // change to e.g. 1.2em for larger math

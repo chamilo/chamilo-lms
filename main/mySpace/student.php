@@ -34,7 +34,14 @@ if (isset($_GET["user_id"]) && $_GET["user_id"]!="" && isset($_GET["type"]) && $
 
 function get_count_users($keyword = null, $active = null)
 {
-    return SessionManager::getCountUserTracking($keyword, $active);
+    $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
+
+    $lastConnectionDate = null;
+    if (!empty($sleepingDays)) {
+        $lastConnectionDate = api_get_utc_datetime(strtotime($sleepingDays.' days ago'));
+    }
+
+    return SessionManager::getCountUserTracking($keyword, $active, $lastConnectionDate);
 }
 
 function get_users($from, $number_of_items, $column, $direction)

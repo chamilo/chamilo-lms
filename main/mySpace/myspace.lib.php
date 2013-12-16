@@ -317,11 +317,20 @@ class MySpace {
         $action_links = '';
         // jqgrid will use this URL to do the selects
         $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_lp_progress&session_id=' . intval($sessionId);
-        $table = Display::grid_js('lps', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+        $tableId = 'lpProgress';
+        $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 
-
-        $return = '<script>$(function() {'. $table . '});</script>';
-        $return .= Display::grid_html('lps');
+        $return = '<script>$(function() {'. $table . 
+            'jQuery("#'.$tableId.'").jqGrid("navGrid","#'.$tableId.'_pager",{view:false, edit:false, add:false, del:false, search:false, excel:true});
+                jQuery("#'.$tableId.'").jqGrid("navButtonAdd","#'.$tableId.'_pager",{
+                       caption:"",
+                       title:"' . get_lang('ExportExcel') . '",
+                       onClickButton : function () {
+                           jQuery("#'.$tableId.'").jqGrid("excelExport",{"url":"'.$url.'&export_format=xls"});
+                       }
+                });
+            });</script>';
+        $return .= Display::grid_html($tableId);
         return $return;
     }
     /**
@@ -372,11 +381,21 @@ class MySpace {
         $action_links = '';
         // jqgrid will use this URL to do the selects
         $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_progress&session_id=' . intval($sessionId);
-        $table = Display::grid_js('lps', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 
+        $tableId = 'exerciseProgressOverview';
+        $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 
-        $return = '<script>$(function() {'. $table . '});</script>';
-        $return .= Display::grid_html('lps');
+        $return = '<script>$(function() {'. $table . 
+            'jQuery("#'.$tableId.'").jqGrid("navGrid","#'.$tableId.'_pager",{view:false, edit:false, add:false, del:false, search:false, excel:true});
+                jQuery("#'.$tableId.'").jqGrid("navButtonAdd","#'.$tableId.'_pager",{
+                       caption:"",
+                       title:"' . get_lang('ExportExcel') . '",
+                       onClickButton : function () {
+                           jQuery("#'.$tableId.'").jqGrid("excelExport",{"url":"'.$url.'&export_format=xls"});
+                       }
+                });
+            });</script>';
+        $return .= Display::grid_html($tableId);
         return $return;
     }
     /**
@@ -486,11 +505,20 @@ class MySpace {
         $action_links = '';
         // jqgrid will use this URL to do the selects
         $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_progress&session_id=' . intval($sessionId);
-        $table = Display::grid_js('lps', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+        $tableId = 'progressOverview';
+        $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 
-
-        $return = '<script>$(function() {'. $table . '});</script>';
-        $return .= Display::grid_html('lps');
+        $return = '<script>$(function() {'. $table . 
+            'jQuery("#'.$tableId.'").jqGrid("navGrid","#'.$tableId.'_pager",{view:false, edit:false, add:false, del:false, search:false, excel:true});
+                jQuery("#'.$tableId.'").jqGrid("navButtonAdd","#'.$tableId.'_pager",{
+                       caption:"",
+                       title:"' . get_lang('ExportExcel') . '",
+                       onClickButton : function () {
+                           jQuery("#'.$tableId.'").jqGrid("excelExport",{"url":"'.$url.'&export_format=xls"});
+                       }
+                });
+            });</script>';
+        $return .= Display::grid_html($tableId);
         return $return;
     }
     /**

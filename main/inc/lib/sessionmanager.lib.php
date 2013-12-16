@@ -3141,6 +3141,8 @@ class SessionManager
      * @param int $column
      * @param string $direction
      * @param string $keyword
+     * @param string $active
+     * @param string $lastConnectionDate
      * @return array|int
      */
     public static function getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -3152,7 +3154,8 @@ class SessionManager
         $column = 1,
         $direction = 'asc',
         $keyword = null,
-        $active = null
+        $active = null,
+        $lastConnectionDate = null
     ) {
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -3213,6 +3216,7 @@ class SessionManager
         }
 
         $select = "SELECT DISTINCT u.*";
+
         if ($getCount) {
             $select = "SELECT count(DISTINCT u.user_id) as count ";
         }
@@ -3221,11 +3225,29 @@ class SessionManager
                 FROM $tbl_session s
                     INNER JOIN $tbl_session_rel_course_rel_user su ON (s.id = su.id_session)
                     INNER JOIN $tbl_user u ON (u.user_id = su.id_user AND s.id = id_session)
-                    INNER JOIN $tbl_session_rel_access_url url ON (url.session_id = s.id)
-                WHERE access_url_id = $urlId
+                    INNER JOIN $tbl_session_rel_access_url url ON (url.session_id = s.id)";
+
+        if (!empty($lastConnectionDate)) {
+            $loginTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+            $sql .= " INNER JOIN $loginTable l ON (l.login_user_id = u.user_id) ";
+        }
+
+        $where = " WHERE access_url_id = $urlId
                       $statusConditions
                       $activeCondition
-                ";
+                    ";
+
+        if (!empty($lastConnectionDate)) {
+            $lastConnectionDate = Database::escape_string($lastConnectionDate);
+            $where .=  " AND l.login_date = (
+                            SELECT MAX(a.login_date)
+                            FROM $loginTable as a
+                            WHERE a.login_user_id = u.user_id
+                         )";
+            $where .= " AND l.login_date <= '$lastConnectionDate' ";
+        }
+
+        $sql .= $where;
 
         if (!empty($keyword)) {
             $keyword = Database::escape_string($keyword);
@@ -3402,10 +3424,11 @@ class SessionManager
 
     /**
      * @param string $keyword
-     * @param int $active
+     * @param string $active
+     * @param string $lastConnectionDate
      * @return array|int
      */
-    public static function getCountUserTracking($keyword = null, $active = null)
+    public static function getCountUserTracking($keyword = null, $active = null, $lastConnectionDate = null)
     {
         if (!isset($keyword)) {
             $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
@@ -3426,7 +3449,8 @@ class SessionManager
                     null,
                     null,
                     $keyword,
-                    $active
+                    $active,
+                    $lastConnectionDate
                 );
             } else {
                 $count = self::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -3438,7 +3462,8 @@ class SessionManager
                     null,
                     null,
                     $keyword,
-                    $active
+                    $active,
+                    $lastConnectionDate
                 );
             }
         } else {
@@ -3452,7 +3477,8 @@ class SessionManager
                     null,
                     null,
                     $keyword,
-                    $active
+                    $active,
+                    $lastConnectionDate
                 );
             } else {
                 $count = self::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -3464,11 +3490,94 @@ class SessionManager
                     null,
                     null,
                     $keyword,
-                    $active
+                    $active,
+                    $lastConnectionDate
                 );
             }
         }
         return $count;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $active
+     * @param string $lastConnectionDate
+     * @param bool $getCount
+     */
+    public function getTeacherTracking($userId, $active = 1, $lastConnectionDate = null, $getCount = false)
+    {
+        $teacherResult = array();
+
+        if (api_is_drh() || api_is_platform_admin()) {
+            // Followed teachers by drh
+            if (api_drh_can_access_all_session_content()) {
+                $sessions = SessionManager::get_sessions_followed_by_drh($userId);
+                if (!empty($sessions)) {
+                    foreach ($sessions as $session) {
+                        $coursesFromSession = SessionManager::get_course_list_by_session_id($session['id']);
+                        foreach ($coursesFromSession as $course) {
+                            $teachers = CourseManager::get_teacher_list_from_course_code($course['code']);
+                            foreach ($teachers as $teacher) {
+                                if (isset($teacherResult[$teacher['user_id']])) {
+                                    continue;
+                                }
+                                $teacherResult[$teacher['user_id']] = $teacher;
+                            }
+                        }
+                    }
+                }
+            } else {
+                $teacherResult = UserManager::get_users_followed_by_drh($userId, COURSEMANAGER);
+            }
+        }
+
+        if (!empty($teacherResult)) {
+            $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+
+            $select = "SELECT DISTINCT u.* ";
+            if ($getCount) {
+                $select = "SELECT count(DISTINCT(u.user_id)) as count";
+            }
+
+            $sql = "$select FROM $tableUser u";
+
+            if (!empty($lastConnectionDate)) {
+                $tableLogin = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+                $sql .= " INNER JOIN $tableLogin l ON (l.login_user_id = u.user_id) ";
+            }
+            $active = intval($active);
+            $teacherListId = array();
+            foreach ($teacherResult as $userInfo) {
+                $teacherListId[] = $userInfo['user_id'];
+            }
+
+            $teacherListId = implode("','", $teacherListId);
+            $where = " WHERE u.active = $active  AND u.user_id IN ('$teacherListId') ";
+
+            if (!empty($lastConnectionDate)) {
+                $lastConnectionDate = Database::escape_string($lastConnectionDate);
+                $where .= " AND l.login_date = (
+                                SELECT MAX(a.login_date)
+                                FROM $tableLogin as a
+                                WHERE a.login_user_id = u.user_id
+                            ) AND ";
+                $where .= "  l.login_date <= '$lastConnectionDate' ";
+            }
+
+            $sql .= $where;
+            $result = Database::query($sql);
+            if (Database::num_rows($result)) {
+                if ($getCount) {
+                    $row = Database::fetch_array($result);
+                    return $row['count'];
+                } else {
+
+                    return Database::store_result($result, 'ASSOC');
+                }
+            }
+        }
+
+        return 0;
     }
 
     /**

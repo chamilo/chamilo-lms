@@ -374,6 +374,11 @@ if (empty($session_id)) {
             $countActiveUsers = SessionManager::getCountUserTracking(null, 1);
             $countInactiveUsers = SessionManager::getCountUserTracking(null, 0);
 
+            $lastConnectionDate = api_get_utc_datetime(strtotime('15 days ago'));
+
+            $countSleepingTeachers = SessionManager::getTeacherTracking(api_get_user_id(), 1, $lastConnectionDate, true);
+            $countSleepingStudents =SessionManager::getCountUserTracking(null, 1, $lastConnectionDate);
+
             $form = new FormValidator('search_user', 'get', api_get_path(WEB_CODE_PATH).'mySpace/student.php');
             $form->addElement('text', 'keyword', get_lang('User'));
             $form->addElement('button', 'submit', get_lang('Search'));
@@ -386,9 +391,19 @@ if (empty($session_id)) {
                             <td>'.Display::url(get_lang('ActiveUsers'), api_get_path(WEB_CODE_PATH).'mySpace/student.php?active=1').'</td>
                             <td align="right">'.$countActiveUsers.'</td>
                         </tr>
-                         <tr>
+
+                        <tr>
                             <td>'.Display::url(get_lang('InactiveUsers'), api_get_path(WEB_CODE_PATH).'mySpace/student.php?active=0').'</td>
                             <td align="right">'.$countInactiveUsers.'</td>
+                        </tr>
+
+                        <tr>
+                            <td>'.Display::url(get_lang('SleepingTeachers'), api_get_path(WEB_CODE_PATH).'mySpace/teachers.php?sleeping_days=15').'</td>
+                            <td align="right">'.$countSleepingTeachers.'</td>
+                        </tr>
+                        <tr>
+                            <td>'.Display::url(get_lang('SleepingStudents'), api_get_path(WEB_CODE_PATH).'mySpace/student.php?sleeping_days=15').'</td>
+                            <td align="right">'.$countSleepingStudents.'</td>
                         </tr>
 
                         <tr>

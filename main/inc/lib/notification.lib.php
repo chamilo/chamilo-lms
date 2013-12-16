@@ -140,7 +140,7 @@ class Notification extends Model
                 }
                 $user_info = api_get_user_info($user_id);
 
-                //Extra field was deleted or removed? Use the default status
+                // Extra field was deleted or removed? Use the default status.
                 if (empty($setting_info)) {
                     $user_setting = $default_status;
                 } else {
@@ -172,7 +172,7 @@ class Notification extends Model
                             }
                         }
                         $params['sent_at'] = api_get_utc_datetime();
-                    //Saving the notification to be sent some day
+                        // Saving the notification to be sent some day.
                     default:
                         $params['dest_user_id'] = $user_id;
                         $params['dest_mail'] = $user_info['mail'];
@@ -190,7 +190,7 @@ class Notification extends Model
      * Formats the content in order to add the welcome message, the notification preference, etc
      * @param   string 	the content
      * @param   array	result of api_get_user_info() or GroupPortalManager:get_group_data()
-     * @param   string
+     * @return string
      * */
     public function format_content($content, $sender_info)
     {

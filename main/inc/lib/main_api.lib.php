@@ -930,12 +930,13 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
  * The function blocks access when the user has no platform admin rights with an error message printed on default output
  * @param bool Whether to allow session admins as well
  * @param bool Whether to allow HR directors as well
+ * @param string An optional message (already passed through get_lang)
  * @return bool True if user is allowed, false otherwise. The function also outputs an error message in case not allowed
  * @author Roan Embrechts (original author)
  */
-function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = false) {
+function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = false, $message = null) {
     if (!api_is_platform_admin($allow_sessions_admins, $allow_drh)) {
-        api_not_allowed(true);
+        api_not_allowed(true, $message);
         return false;
     }
     return true;
@@ -1154,6 +1155,9 @@ function _api_format_user($user, $add_password = false) {
     if ($add_password) {
         $result['password'] = $user['password'];
     }
+
+    $result['creator_id'] = $user['creator_id'];
+    $result['registration_date'] = $user['registration_date'];
 
     return $result;
 }
@@ -2963,7 +2967,7 @@ function api_not_allowed($print_headers = false, $message = null) {
         exit;
     }
 
-    if (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE)) {
+    if (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE || $this_section == SECTION_PLATFORM_ADMIN)) {
 
         //only display form and return to the previous URL if there was a course ID included
         if ($user_id != 0 && !api_is_anonymous()) {

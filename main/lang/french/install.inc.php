@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$DateTimezoneSettingNotSet = "Votre installation de PHP ne définit pas le paramètre date.timezone. Ce paramètre est important pour l'installation de Chamilo.<br/>Avant de continuer nous vous conseillons vivement de vérifiez ce paramètre dans votre fichier php.ini.<br/>L'installation peut ne pas s'achever correctement le cas échéant.";
 $langStatDB = "Base pour le tracking.  Utile uniquement si vous séparez les bases centrale et tracking";
 $langEnableTracking = "Activer le Tracking";
 $langInstituteShortName = "Nom abrégé de l'organisation";

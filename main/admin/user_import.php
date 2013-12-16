@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * This tool allows platform admins to add users by uploading a CSV or XML file
- * @todo Add some langvars to DLTT
  * @package chamilo.admin
  */
 
@@ -22,7 +21,8 @@ require_once api_get_path(LIBRARY_PATH).'import.lib.php';
 // Set this option to true to enforce strict purification for usenames.
 $purification_option_for_usernames = false;
 
-function validate_data($users) {
+function validate_data($users)
+{
     global $defined_auth_sources;
     $errors = array();
     $usernames = array();
@@ -85,7 +85,8 @@ function validate_data($users) {
 /**
  * Add missing user-information (which isn't required, like password, username etc).
  */
-function complete_missing_data($user) {
+function complete_missing_data($user)
+{
     global $purification_option_for_usernames;
     // 1. Create a username if necessary.
     if (UserManager::is_username_empty($user['UserName'])) {
@@ -110,7 +111,7 @@ function complete_missing_data($user) {
 
 /**
  * Save the imported data
- * @param   array   List of users
+ * @param   array   $users List of users
  * @return  void
  * @uses global variable $inserted_in_course, which returns the list of courses the user was inserted in
  */
@@ -196,7 +197,8 @@ function save_data($users)
  * @param string $file Path to the CSV-file
  * @return array All userinformation read from the file
  */
-function parse_csv_data($file) {
+function parse_csv_data($file)
+{
     $users = Import :: csv_to_array($file);
     foreach ($users as $index => $user) {
         if (isset ($user['Courses'])) {
@@ -208,30 +210,36 @@ function parse_csv_data($file) {
 }
 /**
  * XML-parser: handle start of element
+ * @param   string  $parser Deprecated?
+ * @param   string  $data The data to be parsed
  */
-function element_start($parser, $data) {
+function element_start($parser, $data)
+{
     $data = api_utf8_decode($data);
     global $user;
     global $current_tag;
     switch ($data) {
-        case 'Contact' :
+        case 'Contact':
             $user = array ();
             break;
-        default :
+        default:
             $current_tag = $data;
     }
 }
 
 /**
  * XML-parser: handle end of element
+ * @param   string  $parser Deprecated?
+ * @param   string  $data   The data to be parsed
  */
-function element_end($parser, $data) {
+function element_end($parser, $data)
+{
     $data = api_utf8_decode($data);
     global $user;
     global $users;
     global $current_value;
     switch ($data) {
-        case 'Contact' :
+        case 'Contact':
             if ($user['Status'] == '5') {
                 $user['Status'] = STUDENT;
             }
@@ -240,7 +248,7 @@ function element_end($parser, $data) {
             }
             $users[] = $user;
             break;
-        default :
+        default:
             $user[$data] = $current_value;
             break;
     }
@@ -248,8 +256,12 @@ function element_end($parser, $data) {
 
 /**
  * XML-parser: handle character data
+ * @param   string  $parser Parser (deprecated?)
+ * @param   string  $data The data to be parsed
+ * @return  void
  */
-function character_data($parser, $data) {
+function character_data($parser, $data)
+{
     $data = trim(api_utf8_decode($data));
     global $current_value;
     $current_value = $data;
@@ -258,12 +270,10 @@ function character_data($parser, $data) {
 /**
  * Read the XML-file
  * @param string $file Path to the XML-file
- * @return array All userinformation read from the file
+ * @return array All user information read from the file
  */
-function parse_xml_data($file) {
-    global $current_tag;
-    global $current_value;
-    global $user;
+function parse_xml_data($file)
+{
     global $users;
     $users = array();
     $parser = xml_parser_create('UTF-8');
@@ -276,10 +286,11 @@ function parse_xml_data($file) {
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
-api_protect_admin_script(true);
+api_protect_admin_script(true, null, 'login');
 
 
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
+
 if (is_array($extAuthSource)) {
     $defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
 }
@@ -292,7 +303,7 @@ $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 $user_id_error = array();
 $error_message = '';
 
-if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
+if ($_POST['formSent'] and $_FILES['import_file']['size'] !== 0) {
     $file_type = $_POST['file_type'];
     Security::clear_token();
     $tok = Security::get_token();
@@ -354,7 +365,9 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
         $warning_message = '<ul>';
         foreach ($errors as $index => $error_user) {
             $warning_message .= '<li><b>'.$error_user['error'].'</b>: ';
-            $warning_message .= '<strong>'.$error_user['UserName'].'</strong>&nbsp;('.api_get_person_name($error_user['FirstName'], $error_user['LastName']).')';
+            $warning_message .=
+                '<strong>'.$error_user['UserName'].'</strong>&nbsp;('.
+                api_get_person_name($error_user['FirstName'], $error_user['LastName']).')';
             $warning_message .= '</li>';
         }
         $warning_message .= '</ul>';
@@ -384,8 +397,20 @@ $form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'formSent');
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
 $group = array();
-$group[] = $form->createElement('radio', 'file_type', '', 'CSV (<a href="example.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)', 'csv');
-$group[] = $form->createElement('radio', 'file_type', null, 'XML (<a href="example.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)', 'xml');
+$group[] = $form->createElement(
+    'radio',
+    'file_type',
+    '',
+    'CSV (<a href="example.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)',
+    'csv'
+    );
+$group[] = $form->createElement(
+    'radio',
+    'file_type',
+    null,
+    'XML (<a href="example.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)',
+    'xml'
+    );
 $form->addGroup($group, '', get_lang('FileType'), '<br/>');
 
 $group = array();
@@ -423,8 +448,8 @@ if ($count_fields > 0) {
 
     <blockquote>
 <pre>
-<b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;<font style="color:red;"><?php if (count($list) > 0) echo implode(';', $list).';'; ?></font>Courses;
-<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;<?php echo implode('/', $defined_auth_sources); ?>;xxx;xxx;user/teacher/drh;<font style="color:red;"><?php if (count($list_reponse) > 0) echo implode(';', $list_reponse).';'; ?></font>xxx1|xxx2|xxx3;<br />
+<b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;<span style="color:red;"><?php if (count($list) > 0) echo implode(';', $list).';'; ?></span>Courses;
+<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;<?php echo implode('/', $defined_auth_sources); ?>;xxx;xxx;user/teacher/drh;<span style="color:red;"><?php if (count($list_reponse) > 0) echo implode(';', $list_reponse).';'; ?></span>xxx1|xxx2|xxx3;<br />
 </pre>
     </blockquote>
 
@@ -443,7 +468,7 @@ if ($count_fields > 0) {
         <b>&lt;Email&gt;xxx&lt;/Email&gt;</b>
         &lt;OfficialCode&gt;xxx&lt;/OfficialCode&gt;
         &lt;PhoneNumber&gt;xxx&lt;/PhoneNumber&gt;
-        &lt;Status&gt;user/teacher/drh<?php if ($result_xml != '') { echo '<br /><font style="color:red;">', $result_xml; echo '</font>'; } ?>&lt;/Status&gt;
+        &lt;Status&gt;user/teacher/drh<?php if ($result_xml != '') { echo '<br /><span style="color:red;">', $result_xml; echo '</span>'; } ?>&lt;/Status&gt;
         &lt;Courses&gt;xxx1|xxx2|xxx3&lt;/Courses&gt;
         &lt;/Contact&gt;
 &lt;/Contacts&gt;

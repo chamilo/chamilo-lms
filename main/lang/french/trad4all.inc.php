@@ -2,6 +2,10 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CreatedByXYOnZ = "Créé(e) par <a href=\"%s\">%s</a>, le %s";
+$LoginWithExternalAccount = "S'authentifier avec un compte extérieur à l'établissement";
+$CasDirectCourseAccess = "Accèder au cours avec l'authentification CAS";
+$SelectAnOption = "Sélectionner une option";
 $YourPasswordCannotBeTheSameAsYourUsername = "Votre mot de passe ne peut être identique à votre nom d'utilisateur";
 $CheckEasyPasswords = "Vérifier mots de passe trop simples";
 $PasswordVeryStrong = "Très fort";
@@ -1433,5 +1437,4 @@ $DataTableSearch = "Recherche";
 $HideColumn = "Cacher la colonne";
 $DisplayColumn = "Montrer la colonne";
 $LegalAgreementAccepted = "Conditions légales acceptées";
-$SelectAnOption = "Sélectionner une option";
 ?>

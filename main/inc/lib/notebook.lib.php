@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 /**
@@ -8,10 +7,11 @@
  * 	@author Carlos Vargas <litox84@gmail.com>, move code of main/notebook up here
  * 	@package chamilo.library
  */
-class NotebookManager {
+class NotebookManager
+{
 
-    private function __construct() {
-        
+    private function __construct()
+    {
     }
 
     /**
@@ -22,7 +22,8 @@ class NotebookManager {
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
      * @version januari 2009, dokeos 1.8.6
      */
-    static function javascript_notebook() {
+    static function javascript_notebook()
+    {
         return "<script>
 				function confirmation (name)
 				{
@@ -44,7 +45,8 @@ class NotebookManager {
      * @version januari 2009, dokeos 1.8.6
      *
      */
-    static function save_note($values) {
+    static function save_note($values)
+    {
         if (!is_array($values) or empty($values['note_title'])) {
             return false;
         }
@@ -132,7 +134,8 @@ class NotebookManager {
         }
     }
 
-    static function delete_note($notebook_id) {
+    static function delete_note($notebook_id)
+    {
         if (empty($notebook_id) or $notebook_id != strval(intval($notebook_id))) {
             return false;
         }
@@ -152,7 +155,8 @@ class NotebookManager {
         return true;
     }
 
-    static function display_notes() {
+    static function display_notes()
+    {
 
         global $_user;
         if (!$_GET['direction']) {
@@ -165,7 +169,7 @@ class NotebookManager {
             $sort_direction = 'DESC';
             $link_sort_direction = 'ASC';
         }
-        
+
         // action links
         echo '<div class="actions">';
         if (!api_is_anonymous()) {
@@ -223,6 +227,6 @@ class NotebookManager {
             echo '<a href="' . api_get_self() . '?action=editnote&amp;notebook_id=' . $row['notebook_id'] . '">' . Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL) . '</a>';
             echo '<a href="' . api_get_self() . '?action=deletenote&amp;notebook_id=' . $row['notebook_id'] . '" onclick="return confirmation(\'' . $row['title'] . '\');">' . Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL) . '</a>';
             echo '</div>';
-        }        
+        }
     }
 }

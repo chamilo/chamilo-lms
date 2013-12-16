@@ -223,6 +223,15 @@ class MessageManager
         $edit_message_id = intval($edit_message_id);
         $topic_id = intval($topic_id);
 
+        if (!empty($receiver_user_id)) {
+            $receiverUserInfo = api_get_user_info($receiver_user_id);
+
+            // Disabling messages for inactive users.
+            if ($receiverUserInfo['active'] == 0) {
+                return false;
+            }
+        }
+
         if (empty($sender_id)) {
             $user_sender_id = api_get_user_id();
         } else {

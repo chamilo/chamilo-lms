@@ -124,11 +124,10 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId)) {
 }
 echo '</div>';
 
-if (empty($error_message)) {
-    $error_message = isset($_GET['error_message']) ? Security::remove_XSS($_GET['error_message']) : null;
-}
+$error_message = Session::read('error_message');
 if (!empty($error_message)) {
     echo $error_message;
+    Session::erase('error_message');
 }
 
 if (!empty($my_folder_data['description'])) {

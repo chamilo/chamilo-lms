@@ -93,7 +93,10 @@ if ($form->validate()) {
         if ($is_allowed_to_edit) {
             $script = 'work_list_all.php';
         }
-        header('Location: '.api_get_path(WEB_CODE_PATH).'work/'.$script.'?'.api_get_cidreq().'&id='.$work_id.'&error_message='.$error_message);
+        if (!empty($error_message)) {
+            Session::write('error_message', $error_message);
+        }
+        header('Location: '.api_get_path(WEB_CODE_PATH).'work/'.$script.'?'.api_get_cidreq().'&id='.$work_id);
         exit;
     } else {
         // Bad token or can't add works

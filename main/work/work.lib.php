@@ -1698,8 +1698,8 @@ function get_work_user_list_from_documents(
     if ($getCount) {
         $select = " SELECT count() as count  ";
     } else {
-        $select1 = " SELECT DISTINCT u.firstname, u.lastname, u.user_id, w.title, w.document_id document_id, w.id, qualification, qualificator_id";
-        $select2 = " SELECT DISTINCT u.firstname, u.lastname, u.user_id, d.title, d.id document_id, 0, 0, 0";
+        $select1 = " SELECT DISTINCT u.firstname, u.lastname, u.user_id, w.title, w.parent_id, w.document_id document_id, w.id, qualification, qualificator_id";
+        $select2 = " SELECT DISTINCT u.firstname, u.lastname, u.user_id, d.title, w.parent_id, d.id document_id, 0, 0, 0";
     }
 
     $documentTable = Database::get_course_table(TABLE_DOCUMENT);
@@ -1716,8 +1716,11 @@ function get_work_user_list_from_documents(
         $studentId = api_get_user_id();
     }
     $studentId = intval($studentId);
+    $workId = intval($workId);
+
     $userCondition = " AND u.user_id = $studentId ";
     $sessionCondition = " AND w.session_id = $sessionId ";
+    $workCondition = " AND w.parent_id = $workId";
 
     $sql = "    (
                     $select1 FROM $userTable u
@@ -1727,6 +1730,7 @@ function get_work_user_list_from_documents(
                         $userCondition
                         $sessionCondition
                         $whereCondition
+                        $workCondition
 
                 ) UNION (
                     $select2 FROM $workTable w
@@ -1744,6 +1748,7 @@ function get_work_user_list_from_documents(
                                 filetype = 'file' AND
                                 active = 1
                                 $sessionCondition
+                                $workCondition
                             )
                 )
             ";
@@ -1825,6 +1830,7 @@ function get_work_user_list_from_documents(
             }
 
             $viewLink = null;
+
             if (!empty($itemId)) {
                 $viewLink = Display::url($viewIcon, $urlView.'&id='.$itemId);
             }

@@ -6196,6 +6196,7 @@ function api_is_global_chat_enabled(){
 
 /**
  * @todo Fix tool_visible_by_default_at_creation labels
+ * @todo Add sessionId parameter to avoid using context
  */
 function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
     $original_tool_id = $tool_id;

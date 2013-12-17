@@ -286,7 +286,7 @@ function handle_uploaded_document(
 							return $file_path;
 						} else {
 							// Put the document data in the database
-							$document_id = add_document($_course, $file_path, 'file', $file_size, $document_name, null, 0, true);
+							$document_id = add_document($_course, $file_path, 'file', $file_size, $document_name, null, 0, true, null, $current_session_id);
 							if ($document_id) {
 								// Put the document in item_property update
 								api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
@@ -859,10 +859,13 @@ function filter_extension(&$filename) {
  * @param string $filetype
  * @param int $filesize
  * @param string $title
+ * @param int $session_id Session ID, if any
  * @return id if inserted document
  */
-function add_document($_course, $path, $filetype, $filesize, $title, $comment = null, $readonly = 0, $save_visibility = true, $group_id = null) {
-	$session_id    = api_get_session_id();
+function add_document($_course, $path, $filetype, $filesize, $title, $comment = null, $readonly = 0, $save_visibility = true, $group_id = null, $session_id = 0) {
+    if (empty($session_id)) {
+        $session_id    = api_get_session_id();
+    }
 	$readonly      = intval($readonly);
 	$comment       = Database::escape_string($comment);
 	$path          = Database::escape_string($path);

@@ -666,27 +666,28 @@ if (
 /* 	DELETE FILE OR DIRECTORY */
 //Only teacher and all users into their group
 if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)) {
-    if (isset($_GET['delete'])) {
+    if (isset($_GET['deleteid'])) {
         if (!$is_allowed_to_edit) {
             if (api_is_coach()) {
-                if (!DocumentManager::is_visible($_GET['delete'], $_course, $session_id)) {
+                if (!DocumentManager::is_visible_by_id($_GET['deleteid'], $_course, $session_id, api_get_user_id())) {
                     api_not_allowed();
                 }
             }
-            if (DocumentManager::check_readonly($_course, api_get_user_id(), $_GET['delete'], '', true)) {
+            if (DocumentManager::check_readonly($_course, api_get_user_id(), '', $_GET['deleteid'], true)) {
                 api_not_allowed();
             }
         }
 
-        $document_data = DocumentManager::get_document_id($_course, $_GET['delete']);
+        $document_data = intval($_GET['deleteid']);
+        $documentInfo = DocumentManager::get_document_data_by_id($_GET['deleteid'], $_course['code'], false, $session_id);
         // Check whether the document is in the database
         if (!empty($document_data)) {
-            if (DocumentManager::delete_document($_course, $_GET['delete'], $base_work_dir)) {
+            if (DocumentManager::delete_document($_course, null, $base_work_dir, api_get_session_id(), $_GET['deleteid'])) {
                 $certificateId = isset($_GET['delete_certificate_id']) ? $_GET['delete_certificate_id'] : null;
                 DocumentManager::remove_attach_certificate(api_get_course_id(), $certificateId);
                 Display::display_confirmation_message(get_lang('DocDeleted'));
             } else {
-                Display::display_error_message(get_lang('DocDeleteError'));
+                Display::display_warning_message(get_lang('DocDeleteError'));
             }
         } else {
             Display::display_warning_message(get_lang('FileNotFound'));

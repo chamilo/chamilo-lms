@@ -780,8 +780,10 @@ class DocumentManager
             $sessionId = intval($sessionId);
         }
 
-        if (!(!empty($document_id) && is_numeric($document_id))) {
+        if (empty($document_id) || !is_numeric($document_id)) {
             $document_id = self::get_document_id($_course, $file, $sessionId);
+        } else {
+            $document_id = intval($document_id);
         }
 
         $TABLE_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -936,15 +938,25 @@ class DocumentManager
      * @param array $_course
      * @param string $path, path stored in the database
      * @param string $base_work_dir, path to the documents folder
+     * @param int   $sessionId The ID of the session, if any
+     * @param int   $documentId The document id, if available
      * @return boolean true/false
      * @todo now only files/folders in a folder get visibility 2, we should rename them too.
      */
-    public static function delete_document($_course, $path, $base_work_dir, $sessionId = null)
+    public static function delete_document($_course, $path = null, $base_work_dir, $sessionId = null, $documentId = null)
     {
         $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
-
-        if (empty($path) || empty($base_work_dir)) {
-            return false;
+        // @todo We should be able to get rid of this later when using only documentId (check further usage)
+        if (empty ($documentId)) {
+            if (empty($path) || empty($base_work_dir)) {
+                return false;
+            }
+        } else {
+            if (empty($base_work_dir)) {
+                return false;
+            }
+            $docInfo = self::get_document_data_by_id($documentId, $_course['code'], false, $sessionId);
+            $path = $docInfo['path'];
         }
 
         $course_id = $_course['real_id'];
@@ -960,7 +972,11 @@ class DocumentManager
         }
 
         // First, delete the actual document.
-        $document_id = self::get_document_id($_course, $path, $sessionId);
+        if (empty($documentId)) {
+            $document_id = self::get_document_id($_course, $path, $sessionId);
+        } else {
+            $document_id = intval($documentId);
+        }
 
         if (empty($document_id)) {
             return false;
@@ -1045,6 +1061,7 @@ class DocumentManager
         }
 
         // Checking inconsistency
+        //error_log('Doc status: (1 del db :'.($file_deleted_from_db?'yes':'no').') - (2 del disk: '.($file_deleted_from_disk?'yes':'no').') - (3 ren disk: '.($file_renamed_from_disk?'yes':'no').')');
         if ($file_deleted_from_db && $file_deleted_from_disk ||
             $file_deleted_from_db && $file_renamed_from_disk
         ) {
@@ -1137,7 +1154,7 @@ class DocumentManager
             return false;
         }
 
-        if (empty($session_id)) {
+        if (!empty($session_id)) {
             $session_id = intval($session_id);
         } else {
             $session_id = api_get_session_id();

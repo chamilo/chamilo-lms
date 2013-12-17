@@ -1140,9 +1140,10 @@ class DocumentManager
     /**
      * Gets the document data with a given id
      *
-     * @param int id
-     * @param string course code
-     * @param bool load parents?
+     * @param int $id Document ID (id field in c_document table)
+     * @param string $course_code course code (c_id field in document table)
+     * @param bool $load_parents load parents?
+     * @param int $session_id The session ID, 0 if requires context *out of* session, and null to use global context
      * @return array document content
      */
     public static function get_document_data_by_id($id, $course_code, $load_parents = false, $session_id = null)
@@ -1154,7 +1155,7 @@ class DocumentManager
             return false;
         }
 
-        if (!empty($session_id)) {
+        if (isset($session_id)) {
             $session_id = intval($session_id);
         } else {
             $session_id = api_get_session_id();

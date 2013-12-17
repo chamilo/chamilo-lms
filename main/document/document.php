@@ -260,8 +260,12 @@ if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
 
 //If no actions we proceed to show the document (Hack in order to use document.php?id=X)
 if (isset($document_id) && empty($action)) {
-    $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), true);
-
+    // Get the document data from the ID
+    $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), true, $session_id);
+    if ($session_id != 0 && !$document_data) {
+        // If there is a session defined and asking for the document *from the session* didn't work, try it from the course (out of a session context)
+        $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), true, $session_id);
+    }
     //If the document is not a folder we show the document
     if ($document_data) {
         $parent_id = $document_data['parent_id'];
@@ -465,7 +469,7 @@ if ($is_certificate_mode) {
 }
 
 // Interbreadcrumb for the current directory root path
-
+error_log(print_r($document_data,1));
 if (empty($document_data['parents'])) {
     if (isset($_GET['createdir'])) {
         $interbreadcrumb[] = array('url' => $document_data['document_url'], 'name' => $document_data['title']);

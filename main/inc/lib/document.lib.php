@@ -1154,7 +1154,7 @@ class DocumentManager
             return false;
         }
 
-        if (empty($session_id)) {
+        if (!empty($session_id)) {
             $session_id = intval($session_id);
         } else {
             $session_id = api_get_session_id();

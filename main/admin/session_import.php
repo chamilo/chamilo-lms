@@ -534,7 +534,7 @@ $form->addElement('radio', 'file_type', array(null, '<a href="example_session.xm
 
 $form->addElement('checkbox', 'overwrite', null, get_lang('IfSessionExistsUpdate'));
 $form->addElement('checkbox', 'delete_users_not_in_list', null, get_lang('DeleteUsersNotInList'));
-$form->addElement('checkbox', 'update_course_coaches', null, get_lang('UpdateCourseCoach'));
+$form->addElement('checkbox', 'update_course_coaches', null, get_lang('CleanAndUpdateCourseCoaches'));
 $form->addElement('checkbox', 'sendMail', null, get_lang('SendMailToUsers'));
 $form->addElement('button', 'submit', get_lang('ImportSession'));
 

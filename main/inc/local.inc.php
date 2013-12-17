@@ -443,7 +443,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 /* >>>>>>>> External authentication modules <<<<<<<<< */
             } else { // no standard Chamilo login - try external authentification
                 //huh... nothing to do... we shouldn't get here
-                error_log('Chamilo Authentication file '. $extAuthSource[$uData['auth_source']]['login']. ' could not be found - this might prevent your system from doing the corresponding authentication process',0);
+                error_log('Chamilo Authentication file defined in $extAuthSource could not be found - this might prevent your system from doing the corresponding authentication process',0);
             }
         } else {
             // login failed, Database::num_rows($result) <= 0
@@ -920,6 +920,9 @@ $is_courseCoach     = false; //course coach
 //Course - User permissions
 $is_sessionAdmin    = false;
 $is_courseCoach     = false; //course coach
+$is_courseAdmin     = false;
+$is_courseTutor     = false;
+$is_courseMember    = false;
 
 if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset))
 {

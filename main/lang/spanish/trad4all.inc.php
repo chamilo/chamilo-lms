@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CreatedByXYOnZ = "Creado/a por <a href=\"%s\">%s</a> el %s";
 $NumberOfGroupsToCreate = "Cantidad de grupos a crear";
 $CoachesSubscribedAsATeacherInCourseX = "Tutores inscritos como profesores en curso %s";
 $EnrollStudentsFromExistingSessions = "Suscribir estudiantes de sesiones existentes";

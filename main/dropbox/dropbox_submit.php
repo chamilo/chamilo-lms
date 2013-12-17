@@ -95,55 +95,55 @@ if (isset($_POST['submitWork'])) {
             // Transform any .php file in .phps fo security
             $dropbox_filename = php2phps($dropbox_filename);
             if (!filter_extension($dropbox_filename)) {
-            	$error = true;
-            	$errormsg = get_lang('UplUnableToSaveFileFilteredExtension');
+                $error = true;
+                $errormsg = get_lang('UplUnableToSaveFileFilteredExtension');
             } else {
-	            // set title
-	            $dropbox_title = $dropbox_filename;
+                // set title
+                $dropbox_title = $dropbox_filename;
 
-	            // set author
-	            if ($_POST['authors'] == '') {
-	                $_POST['authors'] = getUserNameFromId($_user['user_id']);
-	            }
+                // set author
+                if ($_POST['authors'] == '') {
+                    $_POST['authors'] = getUserNameFromId($_user['user_id']);
+                }
 
-				if ($dropbox_overwrite) {
-					$dropbox_person = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
+                if ($dropbox_overwrite) {
+                    $dropbox_person = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
 
-					foreach ($dropbox_person->sentWork as $w) {
-						if ($w->title == $dropbox_filename) {
-						    if (($w->recipients[0]['id'] > dropbox_cnf('mailingIdBase')) xor $thisIsAMailing) {
-								$error = true;
-								$errormsg = get_lang('MailingNonMailingError');
-							}
-							if ( ($w->recipients[0]['id'] == $_user['user_id']) xor $thisIsJustUpload) {
-								$error = true;
-								$errormsg = get_lang('MailingJustUploadSelectNoOther');
-							}
-							$dropbox_filename = $w->filename;
-							$found = true;
-							break;
-						}
-					}
-				} else {
-					// rename file to login_filename_uniqueId format
-					$dropbox_filename = getLoginFromId( $_user['user_id']) . '_' . $dropbox_filename . '_'.uniqid('');
-				}
+                    foreach ($dropbox_person->sentWork as $w) {
+                        if ($w->title == $dropbox_filename) {
+                            if (($w->recipients[0]['id'] > dropbox_cnf('mailingIdBase')) xor $thisIsAMailing) {
+                                $error = true;
+                                $errormsg = get_lang('MailingNonMailingError');
+                            }
+                            if (($w->recipients[0]['id'] == $_user['user_id']) xor $thisIsJustUpload) {
+                                $error = true;
+                                $errormsg = get_lang('MailingJustUploadSelectNoOther');
+                            }
+                            $dropbox_filename = $w->filename;
+                            $found = true;
+                            break;
+                        }
+                    }
+                } else {
+                    // rename file to login_filename_uniqueId format
+                    $dropbox_filename = getLoginFromId( $_user['user_id']) . '_' . $dropbox_filename . '_'.uniqid('');
+                }
 
-				if (!is_dir(dropbox_cnf('sysPath'))) {
-					//The dropbox subdir doesn't exist yet so make it and create the .htaccess file
-	                mkdir(dropbox_cnf('sysPath'), api_get_permissions_for_new_directories()) or die(get_lang('ErrorCreatingDir').' (code 404)');
-					$fp = fopen(dropbox_cnf('sysPath').'/.htaccess', 'w') or die(get_lang('ErrorCreatingDir').' (code 405)');
-					fwrite($fp, "AuthName AllowLocalAccess
-	                             AuthType Basic
+                if (!is_dir(dropbox_cnf('sysPath'))) {
+                    //The dropbox subdir doesn't exist yet so make it and create the .htaccess file
+                    mkdir(dropbox_cnf('sysPath'), api_get_permissions_for_new_directories()) or die(get_lang('ErrorCreatingDir').' (code 404)');
+                    $fp = fopen(dropbox_cnf('sysPath').'/.htaccess', 'w') or die(get_lang('ErrorCreatingDir').' (code 405)');
+                    fwrite($fp, "AuthName AllowLocalAccess
+                                 AuthType Basic
 
-	                             order deny,allow
-	                             deny from all
+                                 order deny,allow
+                                 deny from all
 
-	                             php_flag zlib.output_compression off") or die(get_lang('ErrorCreatingDir').' (code 406)');
-	            }
+                                 php_flag zlib.output_compression off") or die(get_lang('ErrorCreatingDir').' (code 406)');
+                }
 
-				if ($error) {}
-				elseif ($thisIsAMailing) {
+				if ($error) {
+                } elseif ($thisIsAMailing) {
 				    if (preg_match(dropbox_cnf('mailingZipRegexp'), $dropbox_title)) {
 			            $newWorkRecipients = dropbox_cnf('mailingIdBase');
 					} else {
@@ -172,7 +172,7 @@ if (isset($_POST['submitWork'])) {
 				// After uploading the file, create the db entries
 
 	        	if (!$error) {
-		            @move_uploaded_file( $dropbox_filetmpname, dropbox_cnf('sysPath') . '/' . $dropbox_filename)
+		            @move_uploaded_file($dropbox_filetmpname, dropbox_cnf('sysPath') . '/' . $dropbox_filename)
 		            	or die(get_lang('UploadError').' (code 407)');
 		            new Dropbox_SentWork($_user['user_id'], $dropbox_title, $_POST['description'], strip_tags($_POST['authors']), $dropbox_filename, $dropbox_filesize, $newWorkRecipients);
 	        	}
@@ -180,62 +180,15 @@ if (isset($_POST['submitWork'])) {
         }
     } //end if(!$error)
 
-
     /**
      * SUBMIT FORM RESULTMESSAGE
      */
-
     if (!$error) {
 		$return_message = get_lang('FileUploadSucces');
     } else {
 		$return_message = $errormsg;
     }
 }
-
-function findRecipient($thisFile) {
-	// string result = error message, array result = [user_id, lastname, firstname, status]
-	global $nameParts, $preFix, $preLen, $postFix, $postLen;
-    if (preg_match(dropbox_cnf('mailingFileRegexp'), $thisFile, $matches)) {
-        $thisName = $matches[1];
-        if (api_substr($thisName, 0, $preLen) == $preFix) {
-            if ($postLen == 0 || api_substr($thisName, -$postLen) == $postFix) {
-	            $thisRecip = api_substr($thisName, $preLen, api_strlen($thisName) - $preLen - $postLen);
-	            if ($thisRecip) {
-	            	return getUser($thisRecip);
-	            }
-	            return ' <'.get_lang('MailingFileNoRecip', '').'>';
-            } else {
-	            return ' <'.get_lang('MailingFileNoPostfix', '').$postFix.'>';
-            }
-        } else {
-            return ' <'.get_lang('MailingFileNoPrefix', '').$preFix.'>';
-        }
-    } else {
-        return ' <'.get_lang('MailingFileFunny', '').'>';
-    }
-}
-
-function getUser($thisRecip) {
-	// string result = error message, array result = [user_id, lastname, firstname]
-
-	global $var, $sel;
-    if (isset($students)) {
-        unset($students);
-    }
-
-    $result = Database::query($sel . $thisRecip . "'");
-    while ( ($res = Database::fetch_array($result))) {$students[] = $res;}
-    Database::free_result($result);
-
-	if (count($students) == 1) {
-    	return($students[0]);
-	} elseif (count($students) > 1) {
-    	return ' <'.get_lang('MailingFileRecipDup', '').$var."= $thisRecip>";
-	} else {
-    	return ' <'.get_lang('MailingFileRecipNotFound', '').$var."= $thisRecip>";
-	}
-}
-
 
 /**
  * DELETE RECEIVED OR SENT FILES - EDIT FEEDBACK

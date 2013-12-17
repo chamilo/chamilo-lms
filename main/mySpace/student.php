@@ -16,6 +16,7 @@ require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
+$active = isset($_GET['active']) ? intval($_GET['active']) : null;
 
 api_block_anonymous_users();
 
@@ -24,68 +25,36 @@ $this_section = SECTION_TRACKING;
 $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) {
-	$interbreadcrumb[] = array ("url" => "teachers.php", "name" => get_lang('Teachers'));
+    $interbreadcrumb[] = array ("url" => "teachers.php", "name" => get_lang('Teachers'));
 }
 
 if (isset($_GET["user_id"]) && $_GET["user_id"]!="" && isset($_GET["type"]) && $_GET["type"] == "coach") {
- 	$interbreadcrumb[] = array ("url" => "coaches.php", "name" => get_lang('Tutors'));
+    $interbreadcrumb[] = array ("url" => "coaches.php", "name" => get_lang('Tutors'));
 }
 
-function get_count_users() {
-    global $keyword;
-    if (api_is_drh()) {
-        if (api_drh_can_access_all_session_content()) {
-            $count = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
-                'drh_all',
-                api_get_user_id(),
-                true,
-                null,
-                null,
-                null,
-                null,
-                $keyword
-            );
-        } else {
-            $count = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
-                'drh',
-                api_get_user_id(),
-                true,
-                null,
-                null,
-                null,
-                null,
-                $keyword
-            );
-        }
-    } else {
-        if (api_is_platform_admin()) {
-            $count = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
-                'admin',
-                api_get_user_id(),
-                true,
-                null,
-                null,
-                null,
-                null,
-                $keyword);
-        } else {
-            $count = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
-                'teacher',
-                api_get_user_id(),
-                true,
-                null,
-                null,
-                null,
-                null,
-                $keyword
-            );
-        }
+function get_count_users($keyword = null, $active = null)
+{
+    $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
+
+    $lastConnectionDate = null;
+    if (!empty($sleepingDays)) {
+        $lastConnectionDate = api_get_utc_datetime(strtotime($sleepingDays.' days ago'));
     }
-    return $count;
+
+    return SessionManager::getCountUserTracking($keyword, $active, $lastConnectionDate);
 }
 
-function get_users($from, $number_of_items, $column, $direction) {
-    global $keyword;
+function get_users($from, $number_of_items, $column, $direction)
+{
+    $active = isset($_GET['active']) ? $_GET['active'] : null;
+    $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
+    $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
+
+    $lastConnectionDate = null;
+    if (!empty($sleepingDays)) {
+        $lastConnectionDate = api_get_utc_datetime(strtotime($sleepingDays.' days ago'));
+    }
+
     $is_western_name_order = api_is_western_name_order();
     $coach_id = api_get_user_id();
     $column = 'u.user_id';
@@ -100,7 +69,9 @@ function get_users($from, $number_of_items, $column, $direction) {
                 $number_of_items,
                 $column,
                 $direction,
-                $keyword
+                $keyword,
+                $active,
+                $lastConnectionDate
             );
         } else {
             $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -111,7 +82,9 @@ function get_users($from, $number_of_items, $column, $direction) {
                 $number_of_items,
                 $column,
                 $direction,
-                $keyword
+                $keyword,
+                $active,
+                $lastConnectionDate
             );
         }
     } else {
@@ -124,7 +97,9 @@ function get_users($from, $number_of_items, $column, $direction) {
                 $number_of_items,
                 $column,
                 $direction,
-                $keyword
+                $keyword,
+                $active,
+                $lastConnectionDate
             );
         } else {
             $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -135,7 +110,9 @@ function get_users($from, $number_of_items, $column, $direction) {
                 $number_of_items,
                 $column,
                 $direction,
-                $keyword
+                $keyword,
+                $active,
+                $lastConnectionDate
             );
         }
     }
@@ -144,7 +121,6 @@ function get_users($from, $number_of_items, $column, $direction) {
 
     foreach ($students as $student_data) {
         $student_id = $student_data['user_id'];
-
         if (isset($_GET['id_session'])) {
             $courses = Tracking :: get_course_list_in_session_from_student($student_id, $_GET['id_session']);
         }
@@ -213,12 +189,13 @@ $sort_by_first_name = api_sort_by_first_name();
 $actions .= '<div class="actions">';
 
 if (api_is_drh()) {
-    $menu_items = array();
-    $menu_items[] = Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );
-    $menu_items[] = Display::url(Display::return_icon('user_na.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM), '#');
-    $menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('Trainers'), array(), ICON_SIZE_MEDIUM), 'teachers.php');
-    $menu_items[] = Display::url(Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_MEDIUM), 'course.php');
-    $menu_items[] = Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM), 'session.php');
+    $menu_items = array(
+        Display::url(Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH)."auth/my_progress.php" ),
+        Display::url(Display::return_icon('user_na.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM), '#'),
+        Display::url(Display::return_icon('teacher.png', get_lang('Trainers'), array(), ICON_SIZE_MEDIUM), 'teachers.php'),
+        Display::url(Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_MEDIUM), 'course.php'),
+        Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM), 'session.php')
+    );
 
     $nb_menu_items = count($menu_items);
     if ($nb_menu_items > 1) {
@@ -243,7 +220,8 @@ $table = new SortableTable(
 );
 
 $params = array(
-    'keyword' => isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null,
+    'keyword' => $keyword,
+    'active' => $active
 );
 $table->set_additional_parameters($params);
 
@@ -256,7 +234,7 @@ if ($is_western_name_order) {
 }
 
 $table->set_header(2, get_lang('FirstLogin'), false);
-$table->set_header(3, get_lang('LatestLogin'), false);
+$table->set_header(3, get_lang('LastConnexion'), false);
 $table->set_header(4, get_lang('Details'), false);
 
 if ($export_csv) {
@@ -265,14 +243,14 @@ if ($export_csv) {
             get_lang('FirstName', ''),
             get_lang('LastName', ''),
             get_lang('FirstLogin', ''),
-            get_lang('LatestLogin', '')
+            get_lang('LastConnexion', '')
         );
     } else {
         $csv_header[] = array (
             get_lang('LastName', ''),
             get_lang('FirstName', ''),
             get_lang('FirstLogin', ''),
-            get_lang('LatestLogin', '')
+            get_lang('LastConnexion', '')
         );
     }
 }
@@ -298,6 +276,14 @@ if ($export_csv) {
     echo $actions;
     $page_title = get_lang('Students');
     echo Display::page_subheader($page_title);
+    if (isset($active)) {
+        if ($active) {
+            $activeLabel = get_lang('ActiveUsers');
+        } else {
+            $activeLabel = get_lang('InactiveUsers');
+        }
+        echo Display::page_subheader2($activeLabel);
+    }
     $form->display();
     $table->display();
 }

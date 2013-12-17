@@ -158,7 +158,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
             $url = $www . $path;
         }
         //$path = str_replace('%2F', '/',$url_path).'?'.api_get_cidreq();
-        $path = str_replace('%2F', '/', $url_path); //yox view hack otherwise the image can't be well read 
+        $path = str_replace('%2F', '/', $url_path); //yox view hack otherwise the image can't be well read
         $url = $www . $path;
 
         // Disabled fragment of code, there is a special icon for opening in a new window.
@@ -225,7 +225,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
             $force_download_html = ($size == 0) ? '' : '<a href="' . $forcedownload_link . '" style="float:right"' . $prevent_multiple_click . '>' . Display::return_icon($forcedownload_icon, get_lang('Download'), array(), ICON_SIZE_SMALL) . '</a>';
         }
 
-        //Copy files to users myfiles        
+        //Copy files to users myfiles
         if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('users_copy_files') == 'true' && !api_is_anonymous()) {
             $copy_myfiles_link = ($filetype == 'file') ? api_get_self() . '?' . api_get_cidreq() . '&action=copytomyfiles&id=' . $document_data['id'] . $req_gid : api_get_self() . '?' . api_get_cidreq();
 
@@ -256,7 +256,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                 return '<span style="float:left" ' . $visibility_class . '>' . $title . '</span>' . $force_download_html . $send_to . $copy_to_myfiles . $open_in_new_window_link . $pdf_icon;
             } elseif (
                     //Show preview
-                    //preg_match('/html$/i', urldecode($url))  || 
+                    //preg_match('/html$/i', urldecode($url))  ||
                     //preg_match('/htm$/i',  urldecode($url))  ||
                     preg_match('/swf$/i', urldecode($url)) ||
                     preg_match('/png$/i', urldecode($url)) ||
@@ -269,7 +269,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
             ) {
                 //yox view
                 //$url = 'showinframesmin.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;
-                //Simpler version of showinframesmin.php with no headers 
+                //Simpler version of showinframesmin.php with no headers
                 $url = 'show_content.php?' . api_get_cidreq() . '&id=' . $document_data['id'] . $req_gid . '&width=700&height=500';
                 $class = 'ajax';
                 if ($visibility == false) {
@@ -278,7 +278,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                 return '<a href="' . $url . '" class="' . $class . '" title="' . $tooltip_title_alt . '" style="float:left">' . $title . '</a>' . $force_download_html . $send_to . $copy_to_myfiles . $open_in_new_window_link . $pdf_icon;
             } else {
                 $url = 'showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id'] . $req_gid;
-                //No plugin just the old and good showinframes.php page 			
+                //No plugin just the old and good showinframes.php page
                 return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" style="float:left" ' . $visibility_class . ' >' . $title . '</a>' . $force_download_html . $send_to . $copy_to_myfiles . $open_in_new_window_link . $pdf_icon;
             }
         } else {
@@ -297,7 +297,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                     return $sound_preview;
                 } elseif (
                     //Show preview
-                    //preg_match('/html$/i', urldecode($url))  || 
+                    //preg_match('/html$/i', urldecode($url))  ||
                     //preg_match('/htm$/i',  urldecode($url))  ||
                     preg_match('/swf$/i', urldecode($url)) ||
                     preg_match('/png$/i', urldecode($url)) ||
@@ -556,10 +556,10 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
                 }
             }
         }
-        
-        //Move button        
+
+        //Move button
         if ($is_certificate_mode || in_array($path, DocumentManager::get_system_folders())) {
-            $modify_icons .= '&nbsp;' . Display::return_icon('move_na.png', get_lang('Move'), array(), ICON_SIZE_SMALL) . '</a>';            
+            $modify_icons .= '&nbsp;' . Display::return_icon('move_na.png', get_lang('Move'), array(), ICON_SIZE_SMALL) . '</a>';
         } else {
             if (api_get_session_id()) {
                 if ($document_data['session_id'] == api_get_session_id()) {
@@ -571,7 +571,7 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
                 $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;id=' . $parent_id . '&amp;move=' . $document_id . $req_gid . '">' . Display::return_icon('move.png', get_lang('Move'), array(), ICON_SIZE_SMALL) . '</a>';
             }
         }
-        
+
         //Visibility button
         if ($is_certificate_mode) {
             $modify_icons .= '&nbsp;' . Display::return_icon($visibility_icon . '.png', get_lang('VisibilityCannotBeChanged'), array(), ICON_SIZE_SMALL) . '</a>';
@@ -585,8 +585,8 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
                 $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;id=' . $parent_id . '&amp;' . $visibility_command . '=' . $id . $req_gid . '&amp;' . $sort_params . '">' . Display::return_icon($visibility_icon . '.png', $tip_visibility, '', ICON_SIZE_SMALL) . '</a>';
             }
         }
-        
-        //Delete button    
+
+        //Delete button
         if (in_array($path, DocumentManager::get_system_folders())) {
             $modify_icons .= '&nbsp;' . Display::return_icon('delete_na.png', get_lang('ThisFolderCannotBeDeleted'), array(), ICON_SIZE_SMALL);
         } else {
@@ -683,7 +683,7 @@ function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = 
                 // 3. inside a subfolder of the folder you want to move
                 if (($curdirpath != $folder) && ($folder != $move_file) && (substr($folder, 0, strlen($move_file) + 1) != $move_file . '/')) {
                     $path_displayed = $folder;
-                    // If document title is used, we have to display titles instead of real paths...                    
+                    // If document title is used, we have to display titles instead of real paths...
                     $path_displayed = get_titles_of_path($folder);
 
                     if (empty($path_displayed)) {
@@ -696,7 +696,7 @@ function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = 
         }
     } else {
         foreach ($folders as $folder) {
-            if (($curdirpath != $folder) && ($folder != $move_file) && (substr($folder, 0, strlen($move_file) + 1) != $move_file . '/')) { // Cannot copy dir into his own subdir                
+            if (($curdirpath != $folder) && ($folder != $move_file) && (substr($folder, 0, strlen($move_file) + 1) != $move_file . '/')) { // Cannot copy dir into his own subdir
                 $path_displayed = get_titles_of_path($folder);
                 $display_folder = substr($path_displayed, strlen($group_dir));
                 $display_folder = ($display_folder == '') ? get_lang('Documents') : $display_folder;
@@ -737,7 +737,7 @@ function get_titles_of_path($path) {
             // If this path has soon been stored here we don't need a new query
             $path_displayed .= $tmp_folders_titles[$tmp_path];
         } else {
-            $sql = 'SELECT title FROM ' . Database::get_course_table(TABLE_DOCUMENT) . ' 
+            $sql = 'SELECT title FROM ' . Database::get_course_table(TABLE_DOCUMENT) . '
                     WHERE c_id = ' . $course_id . ' AND path LIKE BINARY "' . $tmp_path . '"';
             $rs = Database::query($sql);
             $tmp_title = '/' . Database::result($rs, 0, 0);
@@ -772,7 +772,7 @@ function display_user_link_document($user_id, $name) {
 function create_dir_form($current_dir_id) {
     global $document_id;
 
-    $form = new FormValidator('create_dir_form', 'post', '', '', null, false);
+    $form = new FormValidator('create_dir_form', 'post', api_get_self().'?'.api_get_cidreq(), '', null, false);
     $form->addElement('hidden', 'create_dir', 1);
     $form->addElement('hidden', 'dir_id', intval($document_id));
     $form->addElement('hidden', 'id', intval($current_dir_id));

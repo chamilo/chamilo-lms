@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 require_once 'dropbox_init.inc.php';
 
 $file_tbl = Database::get_course_table(TABLE_DROPBOX_FILE);
@@ -38,7 +39,6 @@ if (Database::num_rows($result)) {
         $sql = "SELECT * FROM $person_tbl WHERE c_id = $course_id AND user_id = $user_id AND file_id = {$file['id']}";
         $result_person = Database::query($sql);
         if (Database::num_rows($result_person) == 0 ) {
-
             $rows[] = array(
                     $file['filename'],
                     api_convert_and_format_date($file['upload_date']),

@@ -83,7 +83,7 @@ foreach ($workPerUser as $work) {
     $workExtraData = get_work_assignment_by_id($workId);
 
     foreach ($work->user_results as $userResult) {
-        $table->setCellContents($row, $column, $work->title.' ['.strip_tags($userResult['title']).']');
+        $table->setCellContents($row, $column, $work->title.' ['.trim(strip_tags($userResult['title'])).']');
         $table->setCellAttributes($row, $column, array('width' => '300px'));
         $column++;
         $table->setCellContents($row, $column, $userResult['sent_date']);

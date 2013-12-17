@@ -1546,8 +1546,8 @@ class GroupManager
      * Is the user part of this group? This can be a tutor or a normal member
      * you should use this function if the access to a tool or functionality is restricted to the people who are actually in the group
      * before you had to check if the user was 1. a member of the group OR 2. a tutor of the group. This function combines both
-     * @param $user_id the id of the user
-     * @param $group_id the id of the group
+     * @param int $user_id the id of the user
+     * @param int $group_id the id of the group
      * @return boolean true/false
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      */

@@ -29,12 +29,19 @@ $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_user_course_report';
 $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns = array(get_lang('Course'), get_lang('User'), get_lang('ManHours'), get_lang('CertificateGenerated'), get_lang('Approved'), get_lang('CourseAdvance'));
+$columns = array(
+    get_lang('Course'),
+    get_lang('User'),
+    get_lang('ManHours'),
+    get_lang('CertificateGenerated'),
+    get_lang('Approved'),
+    get_lang('CourseAdvance')
+);
 
 //Column config
 $column_model = array(
-    array('name'=>'course',         'index'=>'title',       'width'=>'180', 'align'=>'left'),
-    array('name'=>'user',           'index'=>'user',        'width'=>'100', 'align'=>'left','sortable'=>'false'),
+    array('name'=>'course',         'index'=>'title',       'width'=>'180', 'align'=>'left', 'wrap_cell' => 'true'),
+    array('name'=>'user',           'index'=>'user',        'width'=>'100', 'align'=>'left','sortable'=>'false', 'wrap_cell' => 'true'),
     array('name'=>'time',           'index'=>'time',        'width'=>'50',  'align'=>'left','sortable'=>'false'),
     array('name'=>'certificate',    'index'=>'certificate', 'width'=>'50',  'align'=>'left','sortable'=>'false'),
     array('name'=>'progress_100',   'index'=>'progress_100',       'width'=>'50',  'align'=>'left','sortable'=>'false'),
@@ -45,9 +52,10 @@ if (!empty($extra_fields)) {
     foreach ($extra_fields as $extra) {
         $col = array(
             'name' => $extra['1'],
-            'index'=> $extra['1'],
-            'width'=>'120',
-            'sortable'=>'false'
+            'index' => $extra['1'],
+            'width' => '120',
+            'sortable' =>'false',
+            'wrap_cell' => 'true'
         );
         $column_model[] = $col;
 

@@ -50,7 +50,7 @@ $PasswordNormal = "Normálne";
 $PasswordWeak = "Slabé";
 $PasswordIsTooShort = "Heslo je príliš krátke";
 $BadCredentials = "Zlé poverenia";
-$BreadcrumbNavigationDisplayComment = "Zobraziť alebo skryť maličkú navigáciu, tá sa objaví tesne pod hlavnou navigáciou v kartách. Dôrazne sa odporúča, aby sa táto navigácia zobrazovala používateľom, pretože to im umožňuje lokalizovať svoju aktuálnu polohu a ľahko ich to naviguje na predchádzajúce stránky.
+$BreadcrumbNavigationDisplayComment = "Zobraziť alebo skryť maličkú navigáciu, tá sa objaví tesne pod hlavnou navigáciou v kartách. Dôrazne sa odporúča, aby sa táto navigácia zobrazovala používateľom, pretože to im umožňuje lokalizovať svoju aktuálnu polohu a ľahko ich to naviguje na predchádzajúce stránky. 
 
 Niekedy, môže byť však potrebné to skryť (napr. v prípade skúšky), aby sa zabránilo používateľom použiť navigáciu na stránky, na ktorých by to nemalo byť vidieť.";
 $BreadcrumbNavigationDisplayTitle = "Maličká navigácia";

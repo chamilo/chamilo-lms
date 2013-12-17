@@ -46,7 +46,7 @@ if ($form->validate()) {
     if (isset($_FILES['import_file']['size']) && $_FILES['import_file']['size'] !== 0) {
 
         $unsubscribe_users = isset($_POST['unsubscribe_users']) ? true : false;
-
+        //@todo : csv_to_array deprecated
         $users  = Import::csv_to_array($_FILES['import_file']['tmp_name']);
 
         $invalid_users  = array();
@@ -84,7 +84,9 @@ if ($form->validate()) {
                     if (!empty($current_user_list)) {
                         $user_ids = array();
                         foreach ($current_user_list as $user) {
-                            $user_ids[]= $user['user_id'];
+                            if (!CourseManager::is_course_teacher($user['user_id'], $course_code)) {
+                                $user_ids[]= $user['user_id'];
+                            }
                         }
                         CourseManager::unsubscribe_user($user_ids, $course_code, $session_id);
                     }

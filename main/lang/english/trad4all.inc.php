@@ -2,6 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CreatedByXYOnZ = "Create by <a href=\"%s\">%s</a> on %s";
+$LoginWithExternalAccount = "Login without an institutional account";
 $NumberOfGroupsToCreate = "Number of groups to create";
 $CoachesSubscribedAsATeacherInCourseX = "Coaches subscribed as teachers in course %s";
 $EnrollStudentsFromExistingSessions = "Enroll students from existing sessions";

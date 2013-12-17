@@ -103,3 +103,4 @@ if (!empty($userToAddList)) {
 }
 
 echo '<hr /><div class="clear"></div>';
+Display::display_footer();

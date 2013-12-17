@@ -765,3 +765,21 @@ function return_datetime_from_array($array) {
     }
     return $datetime;
 }
+
+/**
+ * Converts an string CLEANYO[admin][amann,acostea]
+ * into an array:
+ *
+ * array(
+ *  CLEANYO
+ *  admin
+ *  amann,acostea
+ * )
+ *
+ * @param $array
+ * @return array
+ */
+function bracketsToArray($array)
+{
+    return preg_split('/[\[\]]+/', $array, -1, PREG_SPLIT_NO_EMPTY);
+}

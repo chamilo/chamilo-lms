@@ -9,30 +9,6 @@
 /**
  * Code
  */
-/*	GENERIC FUNCTIONS : FOR OLDER PHP VERSIONS */
-if ( ! function_exists('array_search') ) {
-    /**
-     * Searches haystack for needle and returns the key
-     * if it is found in the array, FALSE otherwise.
-     *
-     * Natively implemented in PHP since 4.0.5 version.
-     * This function is intended for previous version.
-     *
-     * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
-     * @param  - needle (mixed)
-     * @param  - haystack (array)
-     * @return - array key or FALSE
-     *
-     * @see    - http://www.php.net/array_search
-     */
-    function array_search($needle, $haystack)
-    {
-        while (list($key, $val) = each($haystack))
-            if ($val == $needle)
-                return $key;
-        return false;
-    }
-}
 
 /* FILE DISPLAY FUNCTIONS */
 /**
@@ -215,26 +191,26 @@ function get_total_folder_size($path, $can_see_invisible = false) {
     $table_itemproperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $table_document 	= Database::get_course_table(TABLE_DOCUMENT);
     $tool_document 		= TOOL_DOCUMENT;
-    
+
     $course_id 			= api_get_course_int_id();
     $session_id         = api_get_session_id();
     $session_condition  = api_get_session_condition($session_id, true, true, 'props.id_session');
 
     $visibility_rule = ' props.visibility ' . ($can_see_invisible ? '<> 2' : '= 1');
-    
+
     $sql = "SELECT SUM(table1.size) FROM (
                 SELECT size FROM $table_itemproperty AS props, $table_document AS docs
-                WHERE 	docs.c_id 	= $course_id AND                        
-                        docs.id 	= props.ref AND 
+                WHERE 	docs.c_id 	= $course_id AND
+                        docs.id 	= props.ref AND
                         docs.path LIKE '$path/%' AND
                         props.c_id 	= $course_id AND
-                        props.tool 	= '$tool_document' AND                            
-                        $visibility_rule  
-                        $session_condition 
+                        props.tool 	= '$tool_document' AND
+                        $visibility_rule
+                        $session_condition
                 GROUP BY ref
             ) as table1";
-    
-    $result = Database::query($sql);    
+
+    $result = Database::query($sql);
     if ($result && Database::num_rows($result) != 0) {
         $row = Database::fetch_row($result);
         return $row[0] == null ? 0 : $row[0];

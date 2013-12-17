@@ -49,7 +49,7 @@ if ($_POST['formSent']) {
         $form_sent = $_POST['formSent'];
         $file_type = $_POST['file_type'];
         $send_mail = $_POST['sendMail'] ? 1 : 0;
-        $isOverwrite = $_POST['overwrite'] ? 1 : 0;
+        $isOverwrite = $_POST['overwrite'] ? true: false;
         $deleteUsersNotInList = isset($_POST['delete_users_not_in_list']) ? true : false;
         $sessions = array();
 
@@ -443,7 +443,7 @@ if ($_POST['formSent']) {
                                 }
 
                             } else {
-                                // Tthe course does not exist.
+                                // The course does not exist.
                                 $error_message .= get_lang('CourseDoesNotExist').' : '.$course_code.'<br />';
                             }
                         }
@@ -459,6 +459,7 @@ if ($_POST['formSent']) {
             }
         } else {
             // CSV
+            $updateCourseCoaches = isset($_POST['update_course_coaches']) ? true : false;
             $result = SessionManager::importCSV(
                 $_FILES['import_file']['tmp_name'],
                 $isOverwrite,
@@ -470,9 +471,12 @@ if ($_POST['formSent']) {
                 null,
                 1,
                 array(),
-                $deleteUsersNotInList
+                $deleteUsersNotInList,
+                $updateCourseCoaches
             );
+            $sessionList = $result['session_list'];
             $error_message = $result['error_message'];
+
             $session_counter = $result['session_counter'];
         }
 
@@ -488,6 +492,9 @@ if ($_POST['formSent']) {
             $warn = substr($warn, 0, -1);
         }
         if ($session_counter == 1) {
+            if ($file_type == 'csv') {
+                $session_id = current($sessionList);
+            }
             header('Location: resume_session.php?id_session='.$session_id.'&warn='.urlencode($warn));
             exit;
         } else {
@@ -527,6 +534,7 @@ $form->addElement('radio', 'file_type', array(null, '<a href="example_session.xm
 
 $form->addElement('checkbox', 'overwrite', null, get_lang('IfSessionExistsUpdate'));
 $form->addElement('checkbox', 'delete_users_not_in_list', null, get_lang('DeleteUsersNotInList'));
+$form->addElement('checkbox', 'update_course_coaches', null, get_lang('UpdateCourseCoach'));
 $form->addElement('checkbox', 'sendMail', null, get_lang('SendMailToUsers'));
 $form->addElement('button', 'submit', get_lang('ImportSession'));
 

@@ -98,9 +98,16 @@ if (isset($exercise_stat_info['exe_id'])) {
 }
 
 //1. Check if this is a new attempt or a previous
+$countNotFinished = get_attempt_count_incomplete(api_get_user_id(), $objExercise->selectId(), $learnpath_id, $learnpath_item_id);
 $label = get_lang('StartTest');
 if ($time_control && !empty($clock_expired_time) || !empty($attempt_list)) {
 	$label = get_lang('ContinueTest');
+}
+
+if ($countNotFinished >= $objExercise->selectAttempts() && !api_is_allowed_to_edit()) {
+    $message = Display::display_warning_message(sprintf(get_lang('ReachedMaxAttempts'),$objExercise->selectTitle(),$objExercise->selectAttempts()).' '.get_lang('YouTriedToResolveThisExerciseEarlier'));
+} elseif ($countNotFinished >= $objExercise->selectAttempts() && api_is_allowed_to_edit()) {
+    $message = Display::display_warning_message(get_lang('ReachedMaxAttemptsAdmin'));
 }
 
 if (!empty($attempt_list)) {
@@ -239,7 +246,7 @@ if ($time_control) {
 
 $html .=  $message;
 
-if (!empty($exercise_url_button)) {
+if (!empty($exercise_url_button) && ($countNotFinished == 0 || api_is_allowed_to_edit())) {
     $html .=  Display::div(Display::div($exercise_url_button, array('class'=>'exercise_overview_options span12')), array('class'=>' row'));
 }
 

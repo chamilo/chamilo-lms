@@ -524,7 +524,7 @@ class MySpace {
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      * @version Chamilo 1.9.6
      */
-    function display_tracking_access_overview($sessionId = 0) {
+    function display_tracking_access_overview($sessionId = 0, $courseId = 0, $studentId = 0) {
         //The order is important you need to check the the $column variable in the model.ajax.php file
         $columns = array(
             get_lang('LoginDate'),
@@ -548,7 +548,7 @@ class MySpace {
 
         $action_links = '';
         // jqgrid will use this URL to do the selects
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_access_overview&session_id=' . $sessionId;
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_access_overview&session_id=' . $sessionId . '&course_id=' . $courseId . '&student_id=' . $studentId;
         $tableId = 'accessOverview';
         $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 
@@ -564,27 +564,6 @@ class MySpace {
             });</script>';
         $return .= Display::grid_html($tableId);
         return $return;
-
-        //$table = new SortableTable('tracking_access_overview', array('MySpace','get_number_of_tracking_access_overview'), array('MySpace','get_user_data_access_tracking_overview'), 0);
-
-        //accessoverview
-        //$addparams = array('view' => 'admin', 'display' => 'useroverview');
-        /*$table->additional_parameters = $addparams;
-        //MySpace::display_user_overview_export_options();    
-
-        $table->set_header(0, get_lang('LoginDate'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
-        $table->set_header(1, get_lang('Username'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
-        if (api_is_western_name_order()) {
-            $table->set_header(2, get_lang('FirstName'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
-            $table->set_header(3, get_lang('LastName'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
-        } else {
-            $table->set_header(2, get_lang('LastName'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
-            $table->set_header(3, get_lang('FirstName'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
-        }
-        $table->set_header(4, get_lang('Clicks'), false, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
-        $table->set_header(5, get_lang('IP'), false, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
-        $table->set_header(6, get_lang('TimeLoggedIn'), false, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
-        $table->display();*/
     }
     /**
      * get the numer of users on track_e_course_access

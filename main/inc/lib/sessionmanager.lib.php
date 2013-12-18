@@ -956,7 +956,7 @@ class SessionManager
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      * @version Chamilo 1.9.6
      */
-    function get_user_data_access_tracking_overview($sessionId, $options) {
+    function get_user_data_access_tracking_overview($sessionId, $courseId, $studentId = 0, $profile = 0, $options) {
         global $_configuration;
         // database table definition
         $user                   = Database :: get_main_table(TABLE_MAIN_USER);
@@ -971,6 +971,33 @@ class SessionManager
         } else {
             $is_western_name_order = api_is_western_name_order();
         }
+
+        if (isset($sessionId) && !empty($sessionId))
+        {
+            $where = sprintf(" WHERE a.session_id = %d", $sessionId);
+        }
+        if (isset($courseId) && !empty($courseId))
+        {
+            $where .= sprintf(" AND c.id = %d", $courseId) ;
+        }
+        if (isset($studentId) && !empty($studentId))
+        {
+            $where .= sprintf(" AND u.user_id = %d", $studentId);
+        }
+        $limit = null;
+        if (!empty($options['limit'])) {
+            $limit = " LIMIT ".$options['limit'];
+        }
+
+        if (!empty($options['where'])) {
+           $where .= ' AND '.$options['where'];
+        }
+
+        $order = null;
+        if (!empty($options['order'])) {
+            $order = " ORDER BY ".$options['order'];
+        }
+
         //TODO add course name
         $sql = "SELECT 
                 a.login_course_date ,
@@ -989,18 +1016,12 @@ class SessionManager
                 u.user_id
             FROM $track_e_course_access a
             INNER JOIN $user u ON a.user_id = u.user_id
-            INNER JOIN $course c ON a.course_code = c.code";
+            INNER JOIN $course c ON a.course_code = c.code
+            $where $order $limit";
+            error_log($sql);
+        $result = Database::query(sprintf($sql, $sessionId, $courseId));
 
-        if (isset($sessionId) && !empty($sessionId)) 
-        {
-            $sql.= " WHERE a.session_id = ".$sessionId;
-        }
-        //$sql .= " ORDER BY col$column $direction ";
-        //$sql .= " LIMIT $from,$number_of_items";
-        //$sql .= " LIMIT 5";
-        $result = Database::query($sql);
-
-        $clicks = Tracking::get_total_clicks_by_session();  
+        $clicks = Tracking::get_total_clicks_by_session();
         $data = array ();
         while ($user = Database::fetch_assoc($result)) 
         {
@@ -1010,32 +1031,15 @@ class SessionManager
         //foreach 
         foreach ($data as $key => $info) 
         {
-            //@TODO, calculating time logged in is not working anymore
-            #get start date
-            if (isset($return[$info['user_id']]['logindate'])) 
-            {
-                $start_date = (strtotime($info['login_course_date']) < strtotime($return[$info['user_id']]['logindate'])) ? $info['login_course_date'] : $return[$info['user_id']]['login_course_date'];
-            } else 
-            {
-                $start_date = $info['login_course_date'];
-            }
-            #get end date
-            if (isset($return[$info['user_id']]['logout_course_date'])) 
-            {
-                $end_date = (strtotime($info['logout_course_date']) > strtotime($return[$info['user_id']]['logindate'])) ? $info['logout_course_date'] : $return[$info['user_id']]['logout_course_date'];
-            } else 
-            {
-                $end_date = $info['logout_course_date'];
-            }
             #building array to display
-            $return[$info['user_id']] = array(
-                'logindate' => $start_date,
+            $return[] = array(
+                'logindate' => $info['login_course_date'],
                 'username' => $info['username'],
                 'firstname' => $info['firstname'],
                 'lastname' => $info['lastname'],
                 'clicks' => $clicks[$info['user_id']],
                 'ip' => '',
-                'timeLoggedIn' => gmdate("H:i:s", strtotime($end_date) - strtotime($start_date)),  //TODO is not correct/precise, it counts the time not logged between two loggins
+                'timeLoggedIn' => gmdate("H:i:s", strtotime($info['logout_course_date']) - strtotime($info['login_course_date'])), 
             );
         }
         //Search for ip, we do less querys if we iterate the final array

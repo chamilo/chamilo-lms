@@ -628,7 +628,8 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         });
         </script>';
         switch ($display) 
-        {
+        {   
+            case 'accessoverview':
             case 'lpprogressoverview':
                 $courseFilter = new FormValidator('course_filter', 'get', '', '', array('class'=> 'form-search'), false);
                 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course_by_session&session_id=' . $_GET['session_id'];
@@ -665,10 +666,17 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 	} else if($display == 'sessionoverview') {
 		MySpace::display_tracking_session_overview();
 	} else if($display == 'accessoverview') {
-        if (!empty($_GET['session_id'])) {
+        if (!empty($_GET['session_id'])) 
+        {
             if (!empty($_GET['course_id'])) 
             {
-                 echo MySpace::display_tracking_access_overview(intval($_GET['session_id']));;
+                if (!empty($_GET['student_id'])) 
+                {
+                    echo MySpace::display_tracking_access_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['student_id']));;
+                } else
+                {
+                    Display::display_warning_message(get_lang('ChooseStudent'));
+                }
             } else 
             {
                 Display::display_warning_message(get_lang('ChooseCourse'));

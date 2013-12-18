@@ -274,11 +274,9 @@ class MySpace {
      * Display a sortable table that contains an overview off all the progress of the user in a session
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
-    function display_tracking_lp_progress_overview($sessionId = 0) {
+    public function display_tracking_lp_progress_overview($sessionId = '', $courseId = '') {
 
-        $courses = SessionManager::get_course_list_by_session_id($sessionId);
-        //TODO let select course
-        $course = current($courses); 
+        $course = api_get_course_info_by_id($courseId); 
         /**
          * Column name
          * The order is important you need to check the $column variable in the model.ajax.php file
@@ -316,7 +314,7 @@ class MySpace {
 
         $action_links = '';
         // jqgrid will use this URL to do the selects
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_lp_progress&session_id=' . intval($sessionId);
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_lp_progress&session_id=' . intval($sessionId) . '&course_id=' . intval($courseId);
         $tableId = 'lpProgress';
         $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 
@@ -526,13 +524,53 @@ class MySpace {
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      * @version Chamilo 1.9.6
      */
-    function display_tracking_access_overview() {
-        MySpace::display_user_overview_export_options();
+    function display_tracking_access_overview($sessionId = 0) {
+        //The order is important you need to check the the $column variable in the model.ajax.php file
+        $columns = array(
+            get_lang('LoginDate'),
+            get_lang('Username'),
+            get_lang('Firstname'),
+            get_lang('Lastname'),
+            get_lang('Clicks'),
+            get_lang('IP'),
+            get_lang('TimeLoggedIn'),
+        );
 
-        $addparams = array('view' => 'admin', 'display' => 'useroverview');
+        $column_model   = array(
+            array('name'=>'logindate',      'index'=>'loginDate',       'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'username',       'index'=>'username',        'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'firstname',      'index'=>'firstname',       'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'lastname',       'index'=>'lastname',        'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'clicks',         'index'=>'clicks',          'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'ip',            'index'=>'ip',             'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'timeloggedin',   'index'=>'timeLoggedIn',    'width'=>'100',  'align'=>'left', 'search' => 'true'),
+        );
 
-        $table = new SortableTable('tracking_access_overview', array('MySpace','get_number_of_tracking_access_overview'), array('MySpace','get_user_data_access_tracking_overview'), 0);
-        $table->additional_parameters = $addparams;
+        $action_links = '';
+        // jqgrid will use this URL to do the selects
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_access_overview&session_id=' . $sessionId;
+        $tableId = 'accessOverview';
+        $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+
+        $return = '<script>$(function() {'. $table . 
+            'jQuery("#'.$tableId.'").jqGrid("navGrid","#'.$tableId.'_pager",{view:false, edit:false, add:false, del:false, search:false, excel:true});
+                jQuery("#'.$tableId.'").jqGrid("navButtonAdd","#'.$tableId.'_pager",{
+                       caption:"",
+                       title:"' . get_lang('ExportExcel') . '",
+                       onClickButton : function () {
+                           jQuery("#'.$tableId.'").jqGrid("excelExport",{"url":"'.$url.'&export_format=xls"});
+                       }
+                });
+            });</script>';
+        $return .= Display::grid_html($tableId);
+        return $return;
+
+        //$table = new SortableTable('tracking_access_overview', array('MySpace','get_number_of_tracking_access_overview'), array('MySpace','get_user_data_access_tracking_overview'), 0);
+
+        //accessoverview
+        //$addparams = array('view' => 'admin', 'display' => 'useroverview');
+        /*$table->additional_parameters = $addparams;
+        //MySpace::display_user_overview_export_options();    
 
         $table->set_header(0, get_lang('LoginDate'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
         $table->set_header(1, get_lang('Username'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
@@ -546,7 +584,7 @@ class MySpace {
         $table->set_header(4, get_lang('Clicks'), false, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
         $table->set_header(5, get_lang('IP'), false, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
         $table->set_header(6, get_lang('TimeLoggedIn'), false, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
-        $table->display();
+        $table->display();*/
     }
     /**
      * get the numer of users on track_e_course_access
@@ -556,114 +594,8 @@ class MySpace {
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      * @version Chamilo 1.9.6
      */
-    function get_number_of_tracking_access_overview() {
-        // database table definition
-        $track_e_course_access = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        return Database::count_rows($track_e_course_access);
-    }
 
-    /**
-     * Get the ip, total of clicks, login date and time logged in for all user, in one session
-     * @todo track_e_course_access table should have ip so we dont have to look for it in track_e_login
-     *
-     * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
-     * @version Chamilo 1.9.6
-     */
-    function get_user_data_access_tracking_overview($from, $number_of_items, $column, $direction) {
-        global $_configuration;
-        // database table definition
-        $user                   = Database :: get_main_table(TABLE_MAIN_USER);
-        $course                 = Database :: get_main_table(TABLE_MAIN_COURSE);
-        $track_e_login          = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-        $track_e_course_access  = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
-        global $export_csv;
-        if ($export_csv) 
-        {
-            $is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
-        } else {
-            $is_western_name_order = api_is_western_name_order();
-        }
-        //TODO add course name
-        $sql = "SELECT 
-                a.login_course_date as col0,
-                u.username as col1, 
-                ".($is_western_name_order ? "
-                    u.firstname         AS col2,
-                    u.lastname      AS col3,
-                    " : "
-                    u.lastname      AS col2,
-                    u.firstname         AS col3,
-                ")."
-                 
-                a.logout_course_date,
-                c.title, 
-                c.code, 
-                u.user_id
-            FROM $track_e_course_access a
-            INNER JOIN $user u ON a.user_id = u.user_id
-            INNER JOIN $course c ON a.course_code = c.code";
-
-        if (isset($_GET['session_id']) && !empty($_GET['session_id'])) 
-        {
-            $sessionId = intval($_GET['session_id']);
-            $sql.= " WHERE a.session_id = ".$sessionId;
-        }
-
-        $sql .= " ORDER BY col$column $direction ";
-        $sql .= " LIMIT $from,$number_of_items";
-        $result = Database::query($sql);
-
-        $clicks = Tracking::get_total_clicks_by_session();  
-        $data = array ();
-        while ($user = Database::fetch_row($result)) 
-        {
-            $data[] = $user;
-        }
-
-        //TODO: Dont use numeric index
-        foreach ($data as $key => $info) 
-        {
-
-            #get start date
-            if (isset($return[$info[7]][0])) 
-            {
-                $start_date = (strtotime($info[0]) < strtotime($return[$info[7]][0])) ? $info[0] : $return[$info[7]][0];
-            } else 
-            {
-                $start_date = $info[0];
-            }
-            #get end date
-            if (isset($return[$info[7]][4])) 
-            {
-                $end_date = (strtotime($info[4]) > strtotime($return[$info[7]][4])) ? $info[4] : $return[$info[7]][4];
-            } else 
-            {
-                $end_date = $info[4];
-            }
-            #building array to display
-            $return[$info[7]] = array(
-                $start_date,
-                $info[1], 
-                $info[2], 
-                $info[3], 
-                $clicks[$info[7]],
-                'ip',
-                gmdate("H:i:s", strtotime($end_date) - strtotime($start_date)),  //TODO is not correct/precise, it counts the time not logged between two loggins
-             );
-        }
-        //Search for ip, we do less querys if we iterate the final array
-        foreach ($return as $key => $info) 
-        {
-
-            $sql = sprintf("SELECT login_ip FROM $track_e_login WHERE ('%s' BETWEEN login_date AND logout_date)", $info[0]); //TODO add select by user too
-            $result = Database::query($sql);
-            $ip = Database::fetch_row($result);
-            #add ip to final array
-            $return[$key][5] = $ip[0];
-        }   
-        return $return;
-    }
 	/**
 	 * Displays a form with all the additionally defined user fields of the profile
 	 * and give you the opportunity to include these in the CSV export

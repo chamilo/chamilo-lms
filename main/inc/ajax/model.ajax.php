@@ -254,6 +254,11 @@ switch ($action) {
         $records = SessionManager::get_exercise_progress(intval($_GET['session_id']));
         $count = count($records);
         break;
+    case 'get_session_access_overview':
+        //@TODO replace this for a more efficient function (not retrieving the whole data)
+        $records = SessionManager::get_user_data_access_tracking_overview(intval($_GET['session_id']), $options);
+        $count = count($records);
+        break;
     /*case 'get_extra_fields':
         $type = $_REQUEST['type'];
         $obj = new ExtraField($type);
@@ -624,14 +629,12 @@ switch ($action) {
         break;
     case 'get_session_lp_progress':
         $sessionId = 0;
-        if (isset($_GET['session_id']) && !empty($_GET['session_id']))
+        if (!empty($_GET['session_id']) && !empty($_GET['course_id']))
         {
             $sessionId = intval($_GET['session_id']);
-            $courses = SessionManager::get_course_list_by_session_id($sessionId);
-            //TODO let select course
-            $course = current($courses);
+            $courseId = intval($_GET['course_id']);
+            $course = api_get_course_info_by_id($courseId); 
         }
-
         /**
          * Add lessons of course
          *
@@ -649,7 +652,7 @@ switch ($action) {
         }
         $columns[] = 'total';
 
-        $result = SessionManager::get_session_lp_progress($sessionId,
+        $result = SessionManager::get_session_lp_progress($sessionId, $courseId, 
             array(
                 'where' => $where_condition,
                 'order' => "$sidx $sord",
@@ -718,6 +721,29 @@ switch ($action) {
             )
         );
         break;
+    case 'get_session_access_overview':
+        $columns = array(
+            'logindate',
+            'username',
+            'lastname',
+            'firstname',
+            'clicks',
+            'ip',
+            'timeLoggedIn',
+        );
+        $sessionId = 0;
+        if (isset($_GET['session_id']) && !empty($_GET['session_id']))
+        {
+            $sessionId = intval($_GET['session_id']);
+        }
+        $result = SessionManager::get_user_data_access_tracking_overview(intval($sessionId),
+            array(
+                'where' => $where_condition,
+                'order' => "$sidx $sord",
+                'limit'=> "$start , $limit"
+            )
+        );
+        break;  
     case 'get_timelines':
         $columns = array('headline', 'actions');
 
@@ -917,6 +943,7 @@ $allowed_actions = array(
     'get_usergroups_teacher',
     'get_gradebooks',
     'get_sessions',
+    'get_session_access_overview',
     'get_sessions_tracking',
     'get_session_lp_progress',
     'get_session_progress',

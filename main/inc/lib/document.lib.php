@@ -505,26 +505,27 @@ class DocumentManager
 
         // Condition for search (get ALL folders and documents)
 
-        $sql = "SELECT  docs.id,
-                        docs.filetype,
-                        docs.path,
-                        docs.title,
-                        docs.comment,
-                        docs.size,
-                        docs.readonly,
-                        docs.session_id,
-                        last.id_session item_property_session_id,
-                        last.lastedit_date,
-                        last.visibility,
-                        last.insert_user_id
-                    FROM $TABLE_ITEMPROPERTY AS last INNER JOIN $TABLE_DOCUMENT AS docs
-                        ON (docs.id = last.ref AND last.tool = '".TOOL_DOCUMENT."' AND
-                        docs.c_id = {$_course['real_id']} AND last.c_id = {$_course['real_id']})
-                    WHERE
-                        docs.path LIKE '" . $path . $added_slash . "%' AND
-                        docs.path NOT LIKE '" . $path . $added_slash . "%/%' AND
-                        ".$to_field." = ".$to_value." AND
-                        last.visibility ".$visibility_bit.$condition_session;
+        $sql = "SELECT  docs.id, "
+                       ." docs.filetype, "
+                       ." docs.path, "
+                       ." docs.title, "
+                       ." docs.comment, "
+                       ." docs.size, "
+                       ." docs.readonly, "
+                       ." docs.session_id, "
+                       ." last.id_session item_property_session_id, "
+                       ." last.lastedit_date, "
+                       ." last.visibility, "
+                       ." last.insert_user_id "
+                   ." FROM $TABLE_ITEMPROPERTY AS last INNER JOIN $TABLE_DOCUMENT AS docs "
+                       ." ON (docs.id = last.ref AND last.tool = '".TOOL_DOCUMENT."' AND "
+                       ." docs.c_id = {$_course['real_id']} AND last.c_id = {$_course['real_id']}) "
+                   ." WHERE "
+                       ." docs.path LIKE '" . $path . $added_slash . "%' AND "
+                       ." docs.path NOT LIKE '" . $path . $added_slash . "%/%' AND "
+                       .$to_field." = ".$to_value." AND "
+                       ." last.visibility ".$visibility_bit.$condition_session;
+
         $result = Database::query($sql);
 
         $doc_list = array();
@@ -3165,7 +3166,10 @@ class DocumentManager
      */
     public static function check_visibility_tree($doc_id, $course_code, $session_id, $user_id)
     {
-        $document_data = self::get_document_data_by_id($doc_id, $course_code);
+        $document_data = self::get_document_data_by_id($doc_id, $course_code, null, $session_id);
+        if ($session_id != 0 && !$document_data) {
+            $document_data = self::get_document_data_by_id($doc_id, $course_code, null, 0);
+        }
 
         if (!empty($document_data)) {
             //if admin or course teacher, allow anyway

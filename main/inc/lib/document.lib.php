@@ -505,26 +505,27 @@ class DocumentManager
 
         // Condition for search (get ALL folders and documents)
 
-        $sql = "SELECT  docs.id,
-                        docs.filetype,
-                        docs.path,
-                        docs.title,
-                        docs.comment,
-                        docs.size,
-                        docs.readonly,
-                        docs.session_id,
-                        last.id_session item_property_session_id,
-                        last.lastedit_date,
-                        last.visibility,
-                        last.insert_user_id
-                    FROM $TABLE_ITEMPROPERTY AS last INNER JOIN $TABLE_DOCUMENT AS docs
-                        ON (docs.id = last.ref AND last.tool = '".TOOL_DOCUMENT."' AND
-                        docs.c_id = {$_course['real_id']} AND last.c_id = {$_course['real_id']})
-                    WHERE
-                        docs.path LIKE '" . $path . $added_slash . "%' AND
-                        docs.path NOT LIKE '" . $path . $added_slash . "%/%' AND
-                        ".$to_field." = ".$to_value." AND
-                        last.visibility ".$visibility_bit.$condition_session;
+        $sql = "SELECT  docs.id, "
+                       ." docs.filetype, "
+                       ." docs.path, "
+                       ." docs.title, "
+                       ." docs.comment, "
+                       ." docs.size, "
+                       ." docs.readonly, "
+                       ." docs.session_id, "
+                       ." last.id_session item_property_session_id, "
+                       ." last.lastedit_date, "
+                       ." last.visibility, "
+                       ." last.insert_user_id "
+                   ." FROM $TABLE_ITEMPROPERTY AS last INNER JOIN $TABLE_DOCUMENT AS docs "
+                       ." ON (docs.id = last.ref AND last.tool = '".TOOL_DOCUMENT."' AND "
+                       ." docs.c_id = {$_course['real_id']} AND last.c_id = {$_course['real_id']}) "
+                   ." WHERE "
+                       ." docs.path LIKE '" . $path . $added_slash . "%' AND "
+                       ." docs.path NOT LIKE '" . $path . $added_slash . "%/%' AND "
+                       .$to_field." = ".$to_value." AND "
+                       ." last.visibility ".$visibility_bit.$condition_session;
+
         $result = Database::query($sql);
 
         $doc_list = array();
@@ -1118,7 +1119,7 @@ class DocumentManager
     {
         $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
         $course_id = $courseInfo['real_id'];
-        if (empty($sessionId)) {
+        if (!isset($sessionId)) {
             $sessionId = api_get_session_id();
         } else {
             $sessionId = intval($sessionId);
@@ -1140,9 +1141,10 @@ class DocumentManager
     /**
      * Gets the document data with a given id
      *
-     * @param int id
-     * @param string course code
-     * @param bool load parents?
+     * @param int $id Document ID (id field in c_document table)
+     * @param string $course_code course code (c_id field in document table)
+     * @param bool $load_parents load parents?
+     * @param int $session_id The session ID, 0 if requires context *out of* session, and null to use global context
      * @return array document content
      */
     public static function get_document_data_by_id($id, $course_code, $load_parents = false, $session_id = null)
@@ -1154,7 +1156,7 @@ class DocumentManager
             return false;
         }
 
-        if (!empty($session_id)) {
+        if (isset($session_id)) {
             $session_id = intval($session_id);
         } else {
             $session_id = api_get_session_id();
@@ -1202,8 +1204,14 @@ class DocumentManager
                     //$sub_visibility = true;
                     $real_dir .= '/' . $dir_array[$i];
                     $parent_id = self::get_document_id($course_info, $real_dir);
+                    if ($session_id != 0 && empty($parent_id)) {
+                        $parent_id = self::get_document_id($course_info, $real_dir, 0);
+                    }
                     if (!empty($parent_id)) {
                         $sub_document_data = self::get_document_data_by_id($parent_id, $course_code, false, $session_id);
+                        if ($session_id != 0 and !$sub_document_data) {
+                            $sub_document_data = self::get_document_data_by_id($parent_id, $course_code, false, 0);
+                        }
                         //@todo add visibility here
                         $parents[] = $sub_document_data;
                     }
@@ -3164,7 +3172,10 @@ class DocumentManager
      */
     public static function check_visibility_tree($doc_id, $course_code, $session_id, $user_id)
     {
-        $document_data = self::get_document_data_by_id($doc_id, $course_code);
+        $document_data = self::get_document_data_by_id($doc_id, $course_code, null, $session_id);
+        if ($session_id != 0 && !$document_data) {
+            $document_data = self::get_document_data_by_id($doc_id, $course_code, null, 0);
+        }
 
         if (!empty($document_data)) {
             //if admin or course teacher, allow anyway

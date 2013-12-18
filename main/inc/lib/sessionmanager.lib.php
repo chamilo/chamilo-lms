@@ -2080,7 +2080,6 @@ class SessionManager
 	 */
 	public static function set_coach_to_course_session($user_id, $session_id = 0, $course_code = '', $nocoach = false)
     {
-
 		// Definition of variables
 		$user_id = intval($user_id);
 
@@ -2131,12 +2130,16 @@ class SessionManager
 				$sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user WHERE id_session = '$session_id' AND course_code = '$course_code' AND id_user = '$user_id'";
 				$rs_check = Database::query($sql);
 
-				//Then update or insert
+				// Then update or insert.
 				if (Database::num_rows($rs_check) > 0) {
-					$sql = "UPDATE $tbl_session_rel_course_rel_user SET status = 2 WHERE id_session = '$session_id' AND course_code = '$course_code' AND id_user = '$user_id' ";
+					$sql = "UPDATE $tbl_session_rel_course_rel_user SET status = 2
+					        WHERE id_session = '$session_id' AND course_code = '$course_code' AND id_user = '$user_id' ";
 					Database::query($sql);
-					if (Database::affected_rows() > 0) return true;
-					else return false;
+					if (Database::affected_rows() > 0) {
+                        return true;
+                    } else {
+                        return false;
+                    }
 				} else {
 					$sql = "INSERT INTO $tbl_session_rel_course_rel_user(id_session, course_code, id_user, status) VALUES('$session_id', '$course_code', '$user_id', 2)";
 					Database::query($sql);
@@ -2736,7 +2739,7 @@ class SessionManager
 
     /**
      * @param string $file
-     * @param bool $updatesession options:
+     * @param bool $updateSession options:
      *  true: if the session exists it will be updated.
      *  false: if session exists a new session will be created adding a counter session1, session2, etc
      * @param int $defaultUserId
@@ -2748,6 +2751,8 @@ class SessionManager
      * @param int $daysCoachAccessAfterBeginning
      * @param int $sessionVisibility
      * @param array $fieldsToAvoidUpdate
+     * @param bool $deleteUsersNotInList
+     * @param bool $updateCourseCoaches
      * @return array
      */
     static function importCSV(
@@ -2761,7 +2766,8 @@ class SessionManager
         $daysCoachAccessAfterBeginning = null,
         $sessionVisibility = 1,
         $fieldsToAvoidUpdate = array(),
-        $deleteUsersNotInList = false
+        $deleteUsersNotInList = false,
+        $updateCourseCoaches = false
     ) {
         $content = file($file);
 
@@ -2818,6 +2824,7 @@ class SessionManager
                 }
             }
 
+            $sessionList = array();
             // Looping the sessions.
             foreach ($sessions as $enreg) {
                 $user_counter = 0;
@@ -2879,17 +2886,17 @@ class SessionManager
                     }
 
                     // Creating the session.
-                    $sql_session = "INSERT IGNORE INTO $tbl_session SET
+                    $sql = "INSERT IGNORE INTO $tbl_session SET
                             name = '".$session_name."',
                             id_coach = '$coach_id',
                             date_start = '$date_start',
                             date_end = '$date_end',
                             visibility = '$visibility',
                             session_category_id = '$session_category_id',
-                            session_admin_id=".intval($defaultUserId).$extraParameters.$extraSessionParameters;
-                    Database::query($sql_session);
-                    $session_id = Database::insert_id();
+                            session_admin_id = ".intval($defaultUserId).$extraParameters.$extraSessionParameters;
+                    Database::query($sql);
 
+                    $session_id = Database::insert_id();
                     if ($debug) {
                         if ($session_id) {
                             foreach ($enreg as $key => $value) {
@@ -2906,10 +2913,8 @@ class SessionManager
                     $session_counter++;
                 } else {
                     $sessionId = null;
-
                     if (isset($extraFields) && !empty($extraFields)) {
                         $sessionId = self::get_session_id_from_original_id($enreg['extra_'.$extraFieldId], $extraFieldId);
-
                         if (empty($sessionId)) {
                             $my_session_result = false;
                         } else {
@@ -2936,16 +2941,39 @@ class SessionManager
                         $my_session_result = SessionManager::get_session_by_name($enreg['SessionName']);
                         $session_id = $my_session_result['id'];
 
-                        if ($debug) {
+                        if ($session_id) {
+
                             if ($session_id) {
                                 foreach ($enreg as $key => $value) {
                                     if (substr($key, 0, 6) == 'extra_') { //an extra field
                                         self::update_session_extra_field_value($session_id, substr($key, 6), $value);
                                     }
                                 }
-                                $logger->addInfo("Sessions - #$session_id created: $session_name");
+                                if ($debug) {
+                                    $logger->addInfo("Sessions - #$session_id created: $session_name");
+                                }
                             } else {
-                                $logger->addError("Sessions - Session NOT created: $session_name");
+                                if ($debug) {
+                                    $logger->addError("Sessions - Session NOT created: $session_name");
+                                }
+                            }
+
+                            // Delete session-user relation only for students
+                            $sql = "DELETE FROM $tbl_session_user
+                                    WHERE id_session = '$session_id' AND relation_type <> ".SESSION_RELATION_TYPE_RRHH;
+                            Database::query($sql);
+
+                            $sql = "DELETE FROM $tbl_session_course WHERE id_session = '$session_id'";
+                            Database::query($sql);
+
+                            // Delete session-course-user relationships students and coaches.
+                            if ($updateCourseCoaches) {
+                                $sql = "DELETE FROM $tbl_session_course_user WHERE id_session = '$session_id' AND status in ('0', '2')";
+                                Database::query($sql);
+                            } else {
+                                // Delete session-course-user relation ships *only* for students.
+                                $sql = "DELETE FROM $tbl_session_course_user WHERE id_session = '$session_id' AND status <> 2";
+                                Database::query($sql);
                             }
                         }
                     } else {
@@ -2979,26 +3007,37 @@ class SessionManager
                             list($session_id) = Database::fetch_array($row);
                         }
 
-                        foreach ($enreg as $key => $value) {
-                            if (substr($key, 0, 6) == 'extra_') { //an extra field
-                                self::update_session_extra_field_value($session_id, substr($key, 6), $value);
+                        if ($session_id) {
+
+                            foreach ($enreg as $key => $value) {
+                                if (substr($key, 0, 6) == 'extra_') { //an extra field
+                                    self::update_session_extra_field_value($session_id, substr($key, 6), $value);
+                                }
+                            }
+
+                            // Delete session-user relation only for students
+                            $sql = "DELETE FROM $tbl_session_user
+                                    WHERE id_session = '$session_id' AND relation_type <> ".SESSION_RELATION_TYPE_RRHH;
+                            Database::query($sql);
+
+                            $sql = "DELETE FROM $tbl_session_course WHERE id_session = '$session_id'";
+                            Database::query($sql);
+
+                            // Delete session-course-user relationships students and coaches.
+                            if ($updateCourseCoaches) {
+                                $sql = "DELETE FROM $tbl_session_course_user WHERE id_session = '$session_id' AND status in ('0', '2')";
+                                Database::query($sql);
+                            } else {
+                                // Delete session-course-user relation ships *only* for students.
+                                $sql = "DELETE FROM $tbl_session_course_user WHERE id_session = '$session_id' AND status <> 2";
+                                Database::query($sql);
                             }
                         }
-
-                        // Delete session-user relation only for students
-                        $sql = "DELETE FROM $tbl_session_user
-                                WHERE id_session = '$session_id' AND relation_type <> ".SESSION_RELATION_TYPE_RRHH;
-                        Database::query($sql);
-
-                        $sql = "DELETE FROM $tbl_session_course WHERE id_session = '$session_id'";
-                        Database::query($sql);
-
-                        // Delete session-course-user relation ships *only* for students
-                        $sql = "DELETE FROM $tbl_session_course_user WHERE id_session = '$session_id' AND status <> 2";
-                        Database::query($sql);
                     }
                     $session_counter++;
                 }
+
+                $sessionList[] = $session_id;
 
                 $users = explode('|', $enreg['Users']);
 
@@ -3076,24 +3115,23 @@ class SessionManager
                             $addTeachersToSession = $courseInfo['add_teachers_to_sessions_courses'];
                         }
 
-                        // If any coach/user provided for a course use the users array.
-                        if (empty($course_coaches) && empty($course_users)) {
+                        // If any user provided for a course, use the users array.
+                        if (empty($course_users)) {
                             if (!empty($userList)) {
                                 SessionManager::subscribe_users_to_session_course($userList, $session_id, $course_code);
                                 if ($debug) {
                                     $msg = "Sessions - Adding student list ".implode(', #', $userList)." to course: '$course_code' and session #$session_id";
-                                    error_log($msg);
                                     $logger->addInfo($msg);
                                 }
                             }
                         }
 
-                        // Adding coaches to session course user
+                        // Adding coaches to session course user.
                         if (!empty($course_coaches)) {
                             $savedCoaches = array();
                             // only edit if add_teachers_to_sessions_courses is set.
                             if ($addTeachersToSession) {
-                                // Adding course teachers as course session teachers
+                                // Adding course teachers as course session teachers.
                                 $alreadyAddedTeachers = CourseManager::get_teacher_list_from_course_code($course_code);
 
                                 if (!empty($alreadyAddedTeachers)) {
@@ -3105,7 +3143,6 @@ class SessionManager
                                 }
 
                                 foreach ($course_coaches as $course_coach) {
-                                    $course_coach = trim($course_coach);
                                     $coach_id = UserManager::get_user_id_from_username($course_coach);
                                     if ($coach_id !== false) {
                                         // Just insert new coaches
@@ -3171,7 +3208,8 @@ class SessionManager
         }
         return array(
             'error_message' => $error_message,
-            'session_counter' =>  $session_counter
+            'session_counter' =>  $session_counter,
+            'session_list' => $sessionList
         );
 
     }

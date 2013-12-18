@@ -20,7 +20,8 @@ require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
  * Class
  * @package chamilo.library
  */
-class Tracking {
+class Tracking
+{
 
     /**
      * Calculates the time spent on the platform by a user
@@ -3644,11 +3645,11 @@ class TrackingCourseLog
     		$url_condition = " AND user.user_id = url_users.user_id AND access_url_id='$access_url_id'";
     	}
 
-    	$sql = "SELECT user.user_id as user_id,
-                user.official_code  as col0,
-                user.lastname       as col1,
-                user.firstname      as col2,
-                user.username       as col3
+    	$sql = "SELECT  user.user_id as user_id,
+                        user.official_code  as col0,
+                        user.lastname       as col1,
+                        user.firstname      as col2,
+                        user.username       as col3
                 FROM $tbl_user as user $url_table
     	        $condition_user $url_condition";
 
@@ -3658,15 +3659,6 @@ class TrackingCourseLog
 
     	$column = intval($column);
 
-    	if ($is_western_name_order) {
-    		$original_column = $column;
-    		if ($original_column == 1) {
-    			$column = 2;
-    		}
-    		if ($original_column == 2) {
-    			$column = 1;
-    		}
-    	}
     	$from            = intval($from);
     	$number_of_items = intval($number_of_items);
 
@@ -3749,6 +3741,7 @@ class TrackingCourseLog
             $user_row = array();
 
             $user_row[]= $user['official_code']; //0
+
             if ($is_western_name_order) {
                 $user_row[]= $user['firstname'];
                 $user_row[]= $user['lastname'];

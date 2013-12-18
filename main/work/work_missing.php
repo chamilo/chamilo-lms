@@ -47,6 +47,10 @@ switch ($action) {
             } else {
                 $error_message = Display::return_message(get_lang('MessageHasBeenSent').' '.implode(', ', $mails_sent_to), 'success');
             }
+
+            if (!empty($error_message)) {
+                Session::write('error_message', $error_message);
+            }
             Security::clear_token();
         }
         break;
@@ -104,11 +108,10 @@ if (!empty($workId)) {
 echo $display_output;
 echo '</div>';
 
-if (empty($error_message)) {
-    $error_message = isset($_GET['error_message']) ? Security::remove_XSS($_GET['error_message']) : null;
-}
+$error_message = Session::read('error_message');
 if (!empty($error_message)) {
     echo $error_message;
+    Session::erase('error_message');
 }
 
 display_list_users_without_publication($workId);

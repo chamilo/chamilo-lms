@@ -6,20 +6,20 @@
  * This script allows the user to manage files and directories on a remote http server.
  *
  * The user can : - navigate through files and directories.
- *				 - upload a file
- *				 - delete, copy a file or a directory
- *				 - edit properties & content (name, comments, html content)
+ *                 - upload a file
+ *                 - delete, copy a file or a directory
+ *                 - edit properties & content (name, comments, html content)
  *
  * The script is organised in four sections.
  *
  * 1) Execute the command called by the user
- *				Note: somme commands of this section are organised in two steps.
- *				The script always begins with the second step,
- *				so it allows to return more easily to the first step.
+ *                Note: somme commands of this section are organised in two steps.
+ *                The script always begins with the second step,
+ *                so it allows to return more easily to the first step.
  *
- *				Note (March 2004) some editing functions (renaming, commenting)
- *				are moved to a separate page, edit_document.php. This is also
- *				where xml and other stuff should be added.
+ *                Note (March 2004) some editing functions (renaming, commenting)
+ *                are moved to a separate page, edit_document.php. This is also
+ *                where xml and other stuff should be added.
  *
  * 2) Define the directory to display
  *
@@ -50,29 +50,29 @@ $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'
 $htmlHeadXtra[] = '<script>
 
 function check_unzip() {
-	if(document.upload.unzip.checked){
-		document.upload.if_exists[0].disabled=true;
-		document.upload.if_exists[1].checked=true;
-		document.upload.if_exists[2].disabled=true;
-	} else {
-		document.upload.if_exists[0].checked=true;
-		document.upload.if_exists[0].disabled=false;
-		document.upload.if_exists[2].disabled=false;
-		}
-	}
+    if(document.upload.unzip.checked){
+        document.upload.if_exists[0].disabled=true;
+        document.upload.if_exists[1].checked=true;
+        document.upload.if_exists[2].disabled=true;
+    } else {
+        document.upload.if_exists[0].checked=true;
+        document.upload.if_exists[0].disabled=false;
+        document.upload.if_exists[2].disabled=false;
+        }
+    }
 
 function advanced_parameters() {
-	if(document.getElementById(\'options\').style.display == \'none\') {
-	document.getElementById(\'options\').style.display = \'block\';
-	document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
-	} else {
+    if(document.getElementById(\'options\').style.display == \'none\') {
+    document.getElementById(\'options\').style.display = \'block\';
+    document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+    } else {
         document.getElementById(\'options\').style.display = \'none\';
         document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
     }
 }
 
 function setFocus(){
-	$("#title_file").focus();
+    $("#title_file").focus();
 }
 </script>';
 
@@ -84,12 +84,12 @@ $(function () {
         uploadTable:   $('.files'),
         downloadTable: $('.files'),
         buildUploadRow: function (files, index) {
-			$('.files').show();
+            $('.files').show();
             return $('<tr><td>' + files[index].name + '<\/td>' +
-					'<td class=\"file_upload_progress\"><div><\/div><\/td>' +
+                    '<td class=\"file_upload_progress\"><div><\/div><\/td>' +
                     '<td class=\"file_upload_cancel\">' +
                     '<button class=\"ui-state-default ui-corner-all\" title=\"".get_lang('Cancel')."\">' + '<span class=\"ui-icon ui-icon-cancel\">".get_lang('Cancel')."<\/span>' +'<\/button>'+
-					'<\/td><\/tr>');
+                    '<\/td><\/tr>');
         },
         buildDownloadRow: function (file) {
             return $('<tr><td>' + file.name + '<\/td> <td> ' + file.size + ' <\/td>  <td>&nbsp;' + file.result + ' <\/td> <\/tr>');
@@ -106,10 +106,14 @@ $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $courseDir = $_course['path'].'/document';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$courseDir;
+$sessionId = api_get_session_id();
 
 $selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : null;
 
-$document_data  = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true);
+$document_data  = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true, $sessionId);
+if ($sessionId != 0 && !$document_data) {
+    $document_data  = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true, 0);
+}
 if (empty($document_data)) {
     $document_id  = $parent_id =  0;
     $path = '/';
@@ -122,10 +126,10 @@ $group_properties = array();
 // This needs cleaning!
 if (api_get_group_id()) {
     // If the group id is set, check if the user has the right to be here
-	// Needed for group related stuff
-	require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-	// Get group info
-	$group_properties = GroupManager::get_group_properties(api_get_group_id());
+    // Needed for group related stuff
+    require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
+    // Get group info
+    $group_properties = GroupManager::get_group_properties(api_get_group_id());
 
     if ($is_allowed_to_edit || GroupManager::is_user_in_group($_user['user_id'], api_get_group_id())) { // Only courseadmin or group members allowed
         $to_group_id = api_get_group_id();
@@ -140,7 +144,7 @@ if (api_get_group_id()) {
     $to_group_id = 0;
     $req_gid = '';
 } else { // No course admin and no group member...
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 // Group docs can only be uploaded in the group directory
@@ -158,7 +162,7 @@ if ($is_certificate_array[0] == 'certificates') {
 
 // Title of the tool
 if ($to_group_id != 0) { // Add group name after for group documents
-	$add_group_to_title = ' ('.$group_properties['name'].')';
+    $add_group_to_title = ' ('.$group_properties['name'].')';
 }
 if (isset($_REQUEST['certificate'])) {
     $nameTools = get_lang('UploadCertificate').$add_group_to_title;
@@ -168,9 +172,9 @@ if (isset($_REQUEST['certificate'])) {
 
 // Breadcrumbs
 if ($is_certificate_mode) {
-	$interbreadcrumb[] = array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
+    $interbreadcrumb[] = array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 } else {
-	$interbreadcrumb[] = array('url' => './document.php?id='.$document_id.$req_gid, 'name'=> get_lang('Documents'));
+    $interbreadcrumb[] = array('url' => './document.php?id='.$document_id.$req_gid, 'name'=> get_lang('Documents'));
 }
 
 // Interbreadcrumb for the current directory root path
@@ -187,7 +191,7 @@ $this_section = SECTION_COURSES;
 // Display the header
 Display::display_header($nameTools, 'Doc');
 
-/*	Here we do all the work */
+/*    Here we do all the work */
 
 // User has submitted a file
 if (!empty($_FILES)) {
@@ -198,10 +202,10 @@ if (!empty($_FILES)) {
 echo '<div class="actions">';
 // Link back to the documents overview
 if ($is_certificate_mode) {
-	echo '<a href="document.php?id='.$document_id.'&selectcat=' . $selectcat.'">'.
+    echo '<a href="document.php?id='.$document_id.'&selectcat=' . $selectcat.'">'.
             Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 } else {
-	echo '<a href="document.php?id='.$document_id.'">'.
+    echo '<a href="document.php?id='.$document_id.'">'.
             Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 }
 
@@ -211,7 +215,7 @@ echo '</div>';
 // Form to select directory
 $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
 if (!$is_certificate_mode) {
-	echo build_directory_selector($folders, $document_id, (isset($group_properties['directory']) ? $group_properties['directory'] : array()));
+    echo build_directory_selector($folders, $document_id, (isset($group_properties['directory']) ? $group_properties['directory'] : array()));
 }
 
 $action = api_get_self().'?'.api_get_cidreq().'&id='.$document_id;
@@ -238,18 +242,18 @@ $form->addElement('html', '<div id="options" style="display:none">');
 $form->addElement('checkbox', 'unzip', get_lang('Options'), get_lang('Uncompress'), 'onclick="javascript: check_unzip();" value="1"');
 
 if (api_get_setting('search_enabled') == 'true') {
-	//TODO: include language file
-	$supported_formats = get_lang('SupportedFormatsForIndex').': HTML, PDF, TXT, PDF, Postscript, MS Word, RTF, MS Power Point';
-	$form->addElement('checkbox', 'index_document', '', get_lang('SearchFeatureDoIndexDocument').'<div style="font-size: 80%" >'.$supported_formats.'</div>');
-	$form->addElement('html', '<br /><div class="sub-form">');
-	$form->addElement('html', '<div class="label">'.get_lang('SearchFeatureDocumentLanguage').'</div>');
-	$form->addElement('html', '<div>'.api_get_languages_combo(null,false).'</div>');
-	$form->addElement('html', '</div><div class="sub-form">');
-	$specific_fields = get_specific_field_list();
-	foreach ($specific_fields as $specific_field) {
-		$form->addElement('text', $specific_field['code'], $specific_field['name'].' : ');
-	}
-	$form->addElement('html', '</div>');
+    //TODO: include language file
+    $supported_formats = get_lang('SupportedFormatsForIndex').': HTML, PDF, TXT, PDF, Postscript, MS Word, RTF, MS Power Point';
+    $form->addElement('checkbox', 'index_document', '', get_lang('SearchFeatureDoIndexDocument').'<div style="font-size: 80%" >'.$supported_formats.'</div>');
+    $form->addElement('html', '<br /><div class="sub-form">');
+    $form->addElement('html', '<div class="label">'.get_lang('SearchFeatureDocumentLanguage').'</div>');
+    $form->addElement('html', '<div>'.api_get_languages_combo(null,false).'</div>');
+    $form->addElement('html', '</div><div class="sub-form">');
+    $specific_fields = get_specific_field_list();
+    foreach ($specific_fields as $specific_field) {
+        $form->addElement('text', $specific_field['code'], $specific_field['name'].' : ');
+    }
+    $form->addElement('html', '</div>');
 }
 
 $form->addElement('radio', 'if_exists', get_lang('UplWhatIfFileExists'), get_lang('UplDoNothing'), 'nothing');
@@ -274,27 +278,27 @@ $multiple_form =  get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadFi
 //Adding icon replace the  <div>'.get_lang('UploadFiles').'</div> with this:
 //<div style="width:50%;margin:0 auto;"> '.Display::div(Display::return_icon('folder_document.png', '', array(), 64), array('style'=>'float:left')).' '.get_lang('UploadFiles').'</div>
 $multiple_form .=  '
-	<center>
-	<form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">
-    	<input type="hidden" name="curdirpath" value="'.$path.'" />
-    	<input type="file" name="file" multiple>
-    	<button type="submit">Upload</button>
-    	'.get_lang('UploadFiles').'
-	</form>
-	</center>
-	<table style="display:none; width:50%" class="files data_table">
-		<tr>
-			<th>'.get_lang('FileName').'</th>
-			<th>'.get_lang('Size').'</th>
-			<th>'.get_lang('Status').'</th>
-		</tr>
-	</table>';
+    <center>
+    <form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="curdirpath" value="'.$path.'" />
+        <input type="file" name="file" multiple>
+        <button type="submit">Upload</button>
+        '.get_lang('UploadFiles').'
+    </form>
+    </center>
+    <table style="display:none; width:50%" class="files data_table">
+        <tr>
+            <th>'.get_lang('FileName').'</th>
+            <th>'.get_lang('Size').'</th>
+            <th>'.get_lang('Status').'</th>
+        </tr>
+    </table>';
 
 $nav_info = api_get_navigator();
 if ($nav_info ['name'] == 'Internet Explorer') {
-	echo $simple_form;
+    echo $simple_form;
 } else {
-	$headers = array(get_lang('Send') , get_lang('Send').' ('.get_lang('Simple').')');
-	echo Display::tabs($headers, array($multiple_form, $simple_form),'tabs');
+    $headers = array(get_lang('Send') , get_lang('Send').' ('.get_lang('Simple').')');
+    echo Display::tabs($headers, array($multiple_form, $simple_form),'tabs');
 }
 Display::display_footer();

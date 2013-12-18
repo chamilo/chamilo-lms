@@ -236,8 +236,8 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile) 
             $info = utf8_encode($info);
         }
         $exercise_info['question'][$question_index]['type'] = 'MCUA';
-        if (preg_match('/^([A-Z])(\)|\.)\s(.*)/', $info, $matches)) {
-            //adding one of the posible answers
+        if (preg_match('/^([A-Za-z])(\)|\.)\s(.*)/', $info, $matches)) {
+            //adding one of the possible answers
             $exercise_info['question'][$question_index]['answer'][]['value'] = $matches[3];
             $answers_array[] = $matches[1];
         } elseif (preg_match('/^ANSWER:\s?([A-Z])\s?/', $info, $matches)) {
@@ -275,7 +275,7 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile) 
             $answers_array = array();
             $new_question = true;
         } else {
-            //Question itself (use a 40-chars long description)
+            //Question itself (use a 40-chars long title and a larger description)
             $exercise_info['question'][$question_index]['title'] = trim(substr($info,0,40)).'...';
             $exercise_info['question'][$question_index]['description'] = $info;
         }

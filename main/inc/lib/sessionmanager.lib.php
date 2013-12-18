@@ -678,7 +678,7 @@ class SessionManager
      * @param array options order and limit keys
      * @return array table with user name, lp name, progress
      */
-    public static function get_session_progress($sessionId, $options)
+    public static function get_session_progress($sessionId, $courseId, $options)
     {
 
         //tables
@@ -693,11 +693,7 @@ class SessionManager
         $table_stats_default    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
         $table_stats_access     = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 
-        $courses = SessionManager::get_course_list_by_session_id($sessionId);
-        //TODO let select course
-        $course = current($courses);
-        //TODO fix this
-        $course_info = array('real_id' => $course['id']);
+        $course = api_get_course_info_by_id($courseId); 
 
         //getting all the students of the course
         //we are not using this because it only returns user ids
@@ -730,7 +726,6 @@ class SessionManager
         FROM $session_course_user s
         INNER JOIN $user u ON u.user_id = s.id_user
         $where $order $limit";
-
         $sql_query = sprintf($sql, $course['code'], $sessionId);
 
         $rs = Database::query($sql_query);
@@ -744,7 +739,7 @@ class SessionManager
          */
         $sql = "SELECT * FROM $tbl_course_lp
         WHERE c_id = %s ";  //AND session_id = %s
-        $sql_query = sprintf($sql, $course_info['real_id']);
+        $sql_query = sprintf($sql, $course['id']);
         $result = Database::query($sql_query);
         $lessons_total = 0;
         while ($row = Database::fetch_array($result))
@@ -773,7 +768,7 @@ class SessionManager
         AND parent_id = 0
         AND active IN (1, 0)
         AND  session_id = %s";
-        $sql_query = sprintf($sql, $course_info['real_id'], $sessionId);
+        $sql_query = sprintf($sql, $course['real_id'], $sessionId);
         $result = Database::query($sql_query);
         $row = Database::fetch_array($result);
         $assignments_total = $row['count'];
@@ -783,7 +778,7 @@ class SessionManager
          */
         $sql = "SELECT count(distinct page_id)  as count FROM $wiki
             WHERE c_id = %s and session_id = %s";
-        $sql_query = sprintf($sql, $course_info['real_id'], $sessionId);
+        $sql_query = sprintf($sql, $course['real_id'], $sessionId);
         $result = Database::query($sql_query);
         $row = Database::fetch_array($result);
         $wiki_total = $row['count'];
@@ -798,7 +793,7 @@ class SessionManager
         $survey_data = array();
         foreach ($survey_list as $survey)
         {
-            $user_list = survey_manager::get_people_who_filled_survey($survey['survey_id'], false, $course_info['real_id']);
+            $user_list = survey_manager::get_people_who_filled_survey($survey['survey_id'], false, $course['real_id']);
             foreach ($user_list as $user_id)
             {
                 isset($survey_user_list[$user_id]) ? $survey_user_list[$user_id]++ : $survey_user_list[$user_id] = 1;
@@ -811,7 +806,7 @@ class SessionManager
         $sql = "SELECT count(*) as count
         FROM $forum f
         where f.c_id = %s and f.session_id = %s";
-        $sql_query = sprintf($sql, $course_info['real_id'], $sessionId);
+        $sql_query = sprintf($sql, $course['real_id'], $sessionId);
         $result = Database::query($sql_query);
         $row = Database::fetch_array($result);
         $forums_total = $row['count'];
@@ -853,7 +848,7 @@ class SessionManager
             $sql = "SELECT count(*) as count
             FROM $wiki
             where c_id = %s and session_id = %s and user_id = %s";
-            $sql_query  = sprintf($sql, $course_info['real_id'], $sessionId, $user['user_id']);
+            $sql_query  = sprintf($sql, $course['real_id'], $sessionId, $user['user_id']);
             $result     = Database::query($sql_query);
             $row        = Database::fetch_array($result);
             $wiki_revisions =  $row['count'];
@@ -865,7 +860,7 @@ class SessionManager
             AND default_event_type = 'wiki_page_view'
             AND default_value_type = 'wiki_page_id'
             AND c_id = %s";
-            $sql_query  = sprintf($sql, $user['user_id'], $course['code'], $course_info['real_id']);
+            $sql_query  = sprintf($sql, $user['user_id'], $course['code'], $course['real_id']);
             $result     = Database::query($sql_query);
             $row        = Database::fetch_array($result);
 
@@ -883,7 +878,7 @@ class SessionManager
             $sql = "SELECT count(distinct f.forum_id) as count FROM $forum_post p
             INNER JOIN $forum f ON f.forum_id = p.forum_id
             WHERE p.poster_id = %s and f.session_id = %s and p.c_id = %s";
-            $sql_query  = sprintf($sql, $user['user_id'], $sessionId, $course_info['real_id']);
+            $sql_query  = sprintf($sql, $user['user_id'], $sessionId, $course['real_id']);
             $result     = Database::query($sql_query);
             $row        = Database::fetch_array($result);
 
@@ -1018,7 +1013,7 @@ class SessionManager
             INNER JOIN $user u ON a.user_id = u.user_id
             INNER JOIN $course c ON a.course_code = c.code
             $where $order $limit";
-            
+
         $result = Database::query(sprintf($sql, $sessionId, $courseId));
 
         $clicks = Tracking::get_total_clicks_by_session();

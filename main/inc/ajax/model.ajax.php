@@ -709,11 +709,12 @@ switch ($action) {
             'surveys_progress' ,
             );
         $sessionId = 0;
-        if (isset($_GET['session_id']) && !empty($_GET['session_id']))
+        if (!empty($_GET['course_id']) && !empty($_GET['session_id']))
         {
             $sessionId = intval($_GET['session_id']);
+            $courseId = intval($_GET['course_id']);
         }
-        $result = SessionManager::get_session_progress($sessionId,
+        $result = SessionManager::get_session_progress($sessionId, $courseId,
             array(
                 'where' => $where_condition,
                 'order' => "$sidx $sord",

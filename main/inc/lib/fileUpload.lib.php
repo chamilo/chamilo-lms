@@ -78,7 +78,7 @@ function get_document_title($name) {
 	// If they upload .htaccess...
 	$name = disable_dangerous_file($name);
 	$ext = substr(strrchr($name, '.'), 0);
-	return addslashes(substr($name, 0, strlen($name) - strlen(strstr($name, $ext))));
+	return substr($name, 0, strlen($name) - strlen(strstr($name, $ext)));
 }
 
 /**

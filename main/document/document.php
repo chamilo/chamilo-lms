@@ -159,7 +159,12 @@ if (Portfolio::controller()->accept()) {
 
 switch ($action) {
     case 'download':
-        $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
+        // Get the document data from the ID
+        $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), false, $session_id);
+        if ($session_id != 0 && !$document_data) {
+            // If there is a session defined and asking for the document *from the session* didn't work, try it from the course (out of a session context)
+            $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), false, 0);
+        }
         // Check whether the document is in the database
         if (empty($document_data)) {
             api_not_allowed();
@@ -178,7 +183,12 @@ switch ($action) {
         break;
     case 'downloadfolder':
         if (api_get_setting('students_download_folders') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin()) {
-            $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
+            // Get the document data from the ID
+            $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), false, $session_id);
+            if ($session_id != 0 && !$document_data) {
+                // If there is a session defined and asking for the document *from the session* didn't work, try it from the course (out of a session context)
+                $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), false, 0);
+            }
 
             //filter when I am into shared folder, I can donwload only my shared folder
             if (is_any_user_shared_folder($document_data['path'], $session_id)) {
@@ -188,6 +198,8 @@ switch ($action) {
             } else {
                 require 'downloadfolder.inc.php';
             }
+            // Launch event
+            event_download($document_data['url']);
             exit;
         }
         break;
@@ -199,7 +211,12 @@ switch ($action) {
     case 'copytomyfiles':
         // Copy a file to general my files user's
         if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('users_copy_files') == 'true' && api_get_user_id() != 0 && !api_is_anonymous()) {
-            $document_info = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);
+            // Get the document data from the ID
+            $document_info = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), true, $session_id);
+            if ($session_id != 0 && !$document_info) {
+                // If there is a session defined and asking for the document *from the session* didn't work, try it from the course (out of a session context)
+                $document_info = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), true, 0);
+            }
             $parent_id = $document_info['parent_id'];
             $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'system', true);
             $user_folder = $my_path['dir'].'my_files/';
@@ -264,7 +281,7 @@ if (isset($document_id) && empty($action)) {
     $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), true, $session_id);
     if ($session_id != 0 && !$document_data) {
         // If there is a session defined and asking for the document *from the session* didn't work, try it from the course (out of a session context)
-        $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), true, $session_id);
+        $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), true, 0);
     }
     //If the document is not a folder we show the document
     if ($document_data) {
@@ -517,7 +534,12 @@ if (!empty($docs_and_folders)) {
             $extension = strtolower($path_info['extension']);
             //@todo use a js loop to autogenerate this code
             if (in_array($extension, array('ogg', 'mp3', 'wav'))) {
-                $document_data = DocumentManager::get_document_data_by_id($file['id'], api_get_course_id());
+                // Get the document data from the ID
+                $document_data = DocumentManager::get_document_data_by_id($file['id'], api_get_course_id(), false, $session_id);
+                if ($session_id != 0 && !$document_data) {
+                    // If there is a session defined and asking for the document *from the session* didn't work, try it from the course (out of a session context)
+                    $document_data = DocumentManager::get_document_data_by_id($file['id'], api_get_course_id(), false, 0);
+                }
 
                 if ($extension == 'ogg') {
                     $extension = 'oga';
@@ -584,7 +606,8 @@ if (
                 api_not_allowed();
             }
         }
-        $document_to_move = DocumentManager::get_document_data_by_id($my_get_move, api_get_course_id());
+        // Get the document data from the ID
+        $document_to_move = DocumentManager::get_document_data_by_id($my_get_move, api_get_course_id(), false, $session_id);
         $move_path = $document_to_move['path'];
         if (!empty($document_to_move)) {
             $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit || $group_member_with_upload_rights);
@@ -623,7 +646,8 @@ if (
                 api_not_allowed();
             }
         }
-        $document_to_move = DocumentManager::get_document_data_by_id($_POST['move_file'], api_get_course_id());
+        // Get the document data from the ID
+        $document_to_move = DocumentManager::get_document_data_by_id($_POST['move_file'], api_get_course_id(), false, $session_id);
 
         // Security fix: make sure they can't move files that are not in the document table
         if (!empty($document_to_move)) {
@@ -792,7 +816,12 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
             Display::display_error_message(get_lang('CannotCreateDir'));
         } else {
             if (!empty($_POST['dir_id'])) {
-                $document_data = DocumentManager::get_document_data_by_id($_POST['dir_id'], api_get_course_id());
+                // Get the document data from the ID
+                $document_data = DocumentManager::get_document_data_by_id($_POST['dir_id'], api_get_course_id(), false, $session_id);
+                if ($session_id != 0 && !$document_data) {
+                    // If there is a session defined and asking for the document *from the session* didn't work, try it from the course (out of a session context)
+                    $document_data = DocumentManager::get_document_data_by_id($_POST['dir_id'], api_get_course_id(), false, 0);
+                }
                 $curdirpath = $document_data['path'];
             }
             $added_slash = ($curdirpath == '/') ? '' : '/';

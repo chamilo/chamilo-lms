@@ -106,10 +106,14 @@ $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $courseDir = $_course['path'].'/document';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$courseDir;
+$sessionId = api_get_session_id();
 
 $selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : null;
 
-$document_data  = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true);
+$document_data  = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true, $sessionId);
+if ($sessionId != 0 && !$document_data) {
+    $document_data  = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true, 0);
+}
 if (empty($document_data)) {
     $document_id  = $parent_id =  0;
     $path = '/';

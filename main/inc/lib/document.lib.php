@@ -1119,7 +1119,7 @@ class DocumentManager
     {
         $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
         $course_id = $courseInfo['real_id'];
-        if (empty($sessionId)) {
+        if (!isset($sessionId)) {
             $sessionId = api_get_session_id();
         } else {
             $sessionId = intval($sessionId);
@@ -1204,8 +1204,14 @@ class DocumentManager
                     //$sub_visibility = true;
                     $real_dir .= '/' . $dir_array[$i];
                     $parent_id = self::get_document_id($course_info, $real_dir);
+                    if ($session_id != 0 && empty($parent_id)) {
+                        $parent_id = self::get_document_id($course_info, $real_dir, 0);
+                    }
                     if (!empty($parent_id)) {
                         $sub_document_data = self::get_document_data_by_id($parent_id, $course_code, false, $session_id);
+                        if ($session_id != 0 and !$sub_document_data) {
+                            $sub_document_data = self::get_document_data_by_id($parent_id, $course_code, false, 0);
+                        }
                         //@todo add visibility here
                         $parents[] = $sub_document_data;
                     }

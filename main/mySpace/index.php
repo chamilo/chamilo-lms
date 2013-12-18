@@ -737,7 +737,13 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         }
     } else if($display == 'exerciseprogress') {
         if (!empty($_GET['session_id'])) {
-            echo MySpace::display_tracking_exercise_progress_overview(intval($_GET['session_id']));
+            if (!empty($_GET['course_id'])) 
+            {
+                echo MySpace::display_tracking_exercise_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']));
+            } else
+            {
+                Display::display_warning_message(get_lang('ChooseCourse'));
+            }
         } else {
             Display::display_warning_message(get_lang('ChooseSession'));
         }

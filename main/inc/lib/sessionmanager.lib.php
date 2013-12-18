@@ -506,7 +506,7 @@ class SessionManager
      *  @param int session id
      *  @return array
      */
-    public static function get_exercise_progress($sessionId = 0, $options = array())
+    public static function get_exercise_progress($sessionId = 0, $courseId = 0, $options = array())
     {
         $session                = Database::get_main_table(TABLE_MAIN_SESSION);
         $user                   = Database::get_main_table(TABLE_MAIN_USER);
@@ -516,11 +516,7 @@ class SessionManager
         $table_stats_exercises  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $table_stats_attempt    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-        $courses = SessionManager::get_course_list_by_session_id($sessionId);
-        //TODO let select course
-        $course = current($courses);
-        //TODO fix this
-        $course_info = array('real_id' => $course['id']);
+        $course = api_get_course_info_by_id($courseId); 
 
         $where = " WHERE a.session_id = %d
         AND a.course_code = '%s'";

@@ -251,7 +251,7 @@ switch ($action) {
         break;
     case 'get_exercise_progress':
         //@TODO replace this for a more efficient function (not retrieving the whole data)
-        $records = SessionManager::get_exercise_progress(intval($_GET['session_id']), intval($_GET['session_id']));
+        $records = SessionManager::get_exercise_progress(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['exercise_id']));
         $count = count($records);
         break;
     case 'get_session_access_overview':
@@ -597,10 +597,11 @@ switch ($action) {
         break;
     case 'get_exercise_progress':
         $sessionId = 0;
-        if (!empty($_GET['course_id']) && !empty($_GET['session_id']))
+        if (!empty($_GET['course_id']) && !empty($_GET['session_id']) && !empty($_GET['exercise_id']))
         {
-            $sessionId = intval($_GET['session_id']);
-            $courseId = intval($_GET['course_id']);
+            $sessionId  = intval($_GET['session_id']);
+            $courseId   = intval($_GET['course_id']);
+            $exerciseId = intval($_GET['exercise_id']);
         }
 
         $columns = array(
@@ -617,7 +618,7 @@ switch ($action) {
             'correct'
         );
 
-        $result = SessionManager::get_exercise_progress($sessionId, $courseId,
+        $result = SessionManager::get_exercise_progress($sessionId, $courseId, $exerciseId,
             array(
                 'where' => $where_condition,
                 'order' => "$sidx $sord",

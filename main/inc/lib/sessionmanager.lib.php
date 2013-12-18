@@ -506,7 +506,7 @@ class SessionManager
      *  @param int session id
      *  @return array
      */
-    public static function get_exercise_progress($sessionId = 0, $courseId = 0, $options = array())
+    public static function get_exercise_progress($sessionId = 0, $courseId = 0, $exerciseId = 0, $options = array())
     {
         $session                = Database::get_main_table(TABLE_MAIN_SESSION);
         $user                   = Database::get_main_table(TABLE_MAIN_USER);
@@ -519,7 +519,8 @@ class SessionManager
         $course = api_get_course_info_by_id($courseId); 
 
         $where = " WHERE a.session_id = %d
-        AND a.course_code = '%s'";
+        AND a.course_code = '%s' 
+        AND q.id = %d";
 
         $limit = null;
         if (!empty($options['limit'])) {
@@ -557,7 +558,7 @@ class SessionManager
         $where $order $limit";
 
 
-        $sql_query = sprintf($sql, $sessionId, $course['code']);
+        $sql_query = sprintf($sql, $sessionId, $course['code'], $exerciseId);
 
         $rs = Database::query($sql_query);
         while ($row = Database::fetch_array($rs))

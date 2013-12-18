@@ -1018,7 +1018,7 @@ class SessionManager
             INNER JOIN $user u ON a.user_id = u.user_id
             INNER JOIN $course c ON a.course_code = c.code
             $where $order $limit";
-            error_log($sql);
+            
         $result = Database::query(sprintf($sql, $sessionId, $courseId));
 
         $clicks = Tracking::get_total_clicks_by_session();

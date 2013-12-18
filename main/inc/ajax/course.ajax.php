@@ -116,6 +116,37 @@ switch ($action) {
             }
         }
         break;
+    case 'search_user_by_course':
+        if (api_is_platform_admin())
+        {
+            $user                   = Database :: get_main_table(TABLE_MAIN_USER);
+            $session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+            $course = api_get_course_info_by_id($_GET['course_id']);
+
+            $sql = "SELECT u.user_id as id, u.username, u.lastname, u.firstname 
+                    FROM $user u
+                    INNER JOIN $session_course_user r ON u.user_id = r.id_user
+                    WHERE id_session = %d AND course_code =  '%s'
+                    AND (u.firstname LIKE '%s' OR u.username LIKE '%s' OR u.lastname LIKE '%s')";
+            $needle = '%' . $_GET['q'] . '%';
+            $sql_query = sprintf($sql, $_GET['session_id'], $course['code'], $needle, $needle, $needle);
+
+            $result = Database::query($sql_query);
+            while ($user = Database::fetch_assoc($result)) 
+            {
+                $data[] = array('id' => $user['id'], 'text' => $user['username'] );
+
+            }
+            if (!empty($data)) 
+            {
+                echo json_encode($data);
+            } else
+            {
+                echo json_encode(array());
+            }
+        }
+        break;
     default:
         echo '';
 }

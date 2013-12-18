@@ -603,7 +603,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 	echo '<br /><br />';
 
     if ($is_platform_admin && $view == 'admin' && in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress'))) {
-    // Create a filter by session
+        //Session Filter
         $sessionFilter = new FormValidator('session_filter', 'get', '', '', array('class'=> 'form-search'), false);
         $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_session';
         $sessionList = array();
@@ -627,18 +627,17 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             });
         });
         </script>';
-        switch ($display) 
-        {   
-            case 'accessoverview':
-            case 'lpprogressoverview':
+        //Course filter
+        if (in_array($display, array('accessoverview', 'lpprogressoverview')))
+        {
                 $courseFilter = new FormValidator('course_filter', 'get', '', '', array('class'=> 'form-search'), false);
                 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course_by_session&session_id=' . $_GET['session_id'];
                 $courseList = array();
                 $courseId = isset($_GET['course_id']) ? $_GET['course_id'] : null;
                 if (!empty($courseId)) {
                     $courseList = array();
-                    $sessionInfo = api_get_course_info_by_id($courseId);
-                    $courseList[] = array('id' => $sessionInfo['id'], 'text' => $sessionInfo['name']);
+                    $courseInfo = api_get_course_info_by_id($courseId);
+                    $courseList[] = array('id' => $courseInfo['real_id'], 'text' => $courseInfo['name']);
                 }
                 $courseFilter->addElement('select_ajax', 'course_name', get_lang('SearchCourse'), null, array('url' => $url, 'defaults' => $courseList));
                 $courseListUrl = api_get_self();
@@ -655,9 +654,36 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                         });
                     });
                 </script>';
-                break;
-            default:
-                break;
+        }
+        //Student Filter
+        if (in_array($display, array('accessoverview')))
+        {
+                $studentFilter = new FormValidator('student_filter', 'get', '', '', array('class'=> 'form-search'), false);
+                $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_user_by_course&session_id=' . $_GET['session_id'] . '&course_id=' . $_GET['course_id'];
+                $studentList = array();
+                $studentId = isset($_GET['student_id']) ? $_GET['student_id'] : null;
+                if (!empty($studentId)) {
+                    $studentList = array();
+                    $studentInfo = UserManager::get_user_info_by_id($studentId);
+                    $studentList[] = array('id' => $studentInfo['id'], 'text' => $studentInfo['username']);
+                }
+                $studentFilter->addElement('select_ajax', 'student_name', get_lang('SearchStudent'), null, array('url' => $url, 'defaults' => $studentList));
+                $courseListUrl = api_get_self();
+
+                echo '<div class="">'; 
+                echo $studentFilter->return_form();
+                echo '</div>';
+
+                echo '<script>
+                $(function() {
+                    $("#student_name").on("change", function() {
+                        var sessionId = $("#session_name").val();
+                        var courseId = $("#course_name").val();
+                        var studentId  = $("#student_name").val();
+                        window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&student_id="+studentId;
+                        });
+                    });
+                </script>';
         }
     }
 
@@ -677,11 +703,12 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 {
                     Display::display_warning_message(get_lang('ChooseStudent'));
                 }
-            } else 
+            } else
             {
                 Display::display_warning_message(get_lang('ChooseCourse'));
             }
-        } else {
+        } else
+        {
             Display::display_warning_message(get_lang('ChooseSession'));
         }
     } else if($display == 'lpprogressoverview') {

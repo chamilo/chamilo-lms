@@ -486,7 +486,6 @@ if ($is_certificate_mode) {
 }
 
 // Interbreadcrumb for the current directory root path
-error_log(print_r($document_data,1));
 if (empty($document_data['parents'])) {
     if (isset($_GET['createdir'])) {
         $interbreadcrumb[] = array('url' => $document_data['document_url'], 'name' => $document_data['title']);

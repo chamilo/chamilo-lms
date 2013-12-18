@@ -90,6 +90,32 @@ switch ($action) {
             }
         }
         break;
+    case 'search_course_by_session':
+        if (api_is_platform_admin())
+        {
+            $results = SessionManager::get_course_list_by_session_id($_GET['session_id'], $_GET['q']);
+
+            //$results = SessionManager::get_sessions_list(array('s.name LIKE' => "%".$_REQUEST['q']."%"));
+            $results2 = array();
+            if (!empty($results)) {
+                foreach ($results as $item) {
+                    $item2 = array();
+                    foreach ($item as $id => $internal) {
+                        if ($id == 'id') {
+                            $item2[$id] = $internal;
+                        }
+                        if ($id == 'title') {
+                            $item2['text'] = $internal;
+                        }
+                    }
+                    $results2[] = $item2;
+                }
+                echo json_encode($results2);
+            } else {
+                echo json_encode(array());
+            }
+        }
+        break;
     default:
         echo '';
 }

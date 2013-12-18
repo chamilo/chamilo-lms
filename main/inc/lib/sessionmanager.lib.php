@@ -576,18 +576,14 @@ class SessionManager
      * @param array options order and limit keys
      * @return array table with user name, lp name, progress
      */
-    public static function get_session_lp_progress($sessionId = 0, $options)
+    public static function get_session_lp_progress($sessionId = 0, $courseId = 0, $options)
     {
         //tables
         $session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $user                   = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_course_lp_view     = Database::get_course_table(TABLE_LP_VIEW);
 
-        $courses = SessionManager::get_course_list_by_session_id($sessionId);
-        //TODO let select course
-        $course = current($courses);
-        //TODO fix this
-        $course_info = array('real_id' => $course['id']);
+        $course = api_get_course_info_by_id($courseId); 
 
 
         //getting all the students of the course
@@ -623,7 +619,7 @@ class SessionManager
         $where $order $limit";
 
         $sql_query = sprintf($sql, $course['code'], $sessionId);
-
+        
         $rs = Database::query($sql_query);
         while ($user = Database::fetch_array($rs))
         {
@@ -649,9 +645,9 @@ class SessionManager
             WHERE v.session_id = %d
             AND v.c_id = %d
             AND v.user_id = %d";
-            $sql_query = sprintf($sql, $sessionId, $course_info['real_id'], $user['user_id']);
-            $result = Database::query($sql_query);
+            $sql_query = sprintf($sql, $sessionId, $courseId, $user['user_id']);
 
+            $result = Database::query($sql_query);
 
             $user_lessons = array();
             while ($row = Database::fetch_array($result))
@@ -947,6 +943,115 @@ class SessionManager
                 );
         }
         return $table;
+    }
+    function get_number_of_tracking_access_overview() {
+        // database table definition
+        $track_e_course_access = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        return Database::count_rows($track_e_course_access);
+    }
+    /**
+     * Get the ip, total of clicks, login date and time logged in for all user, in one session
+     * @todo track_e_course_access table should have ip so we dont have to look for it in track_e_login
+     *
+     * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
+     * @version Chamilo 1.9.6
+     */
+    function get_user_data_access_tracking_overview($sessionId, $courseId, $studentId = 0, $profile = 0, $options) {
+        global $_configuration;
+        // database table definition
+        $user                   = Database :: get_main_table(TABLE_MAIN_USER);
+        $course                 = Database :: get_main_table(TABLE_MAIN_COURSE);
+        $track_e_login          = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $track_e_course_access  = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+
+        global $export_csv;
+        if ($export_csv) 
+        {
+            $is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
+        } else {
+            $is_western_name_order = api_is_western_name_order();
+        }
+
+        if (isset($sessionId) && !empty($sessionId))
+        {
+            $where = sprintf(" WHERE a.session_id = %d", $sessionId);
+        }
+        if (isset($courseId) && !empty($courseId))
+        {
+            $where .= sprintf(" AND c.id = %d", $courseId) ;
+        }
+        if (isset($studentId) && !empty($studentId))
+        {
+            $where .= sprintf(" AND u.user_id = %d", $studentId);
+        }
+        $limit = null;
+        if (!empty($options['limit'])) {
+            $limit = " LIMIT ".$options['limit'];
+        }
+
+        if (!empty($options['where'])) {
+           $where .= ' AND '.$options['where'];
+        }
+
+        $order = null;
+        if (!empty($options['order'])) {
+            $order = " ORDER BY ".$options['order'];
+        }
+
+        //TODO add course name
+        $sql = "SELECT 
+                a.login_course_date ,
+                u.username , 
+                ".($is_western_name_order ? "
+                    u.firstname,
+                    u.lastname,
+                    " : "
+                    u.lastname,
+                    u.firstname,
+                ")."
+                 
+                a.logout_course_date,
+                c.title, 
+                c.code, 
+                u.user_id
+            FROM $track_e_course_access a
+            INNER JOIN $user u ON a.user_id = u.user_id
+            INNER JOIN $course c ON a.course_code = c.code
+            $where $order $limit";
+            error_log($sql);
+        $result = Database::query(sprintf($sql, $sessionId, $courseId));
+
+        $clicks = Tracking::get_total_clicks_by_session();
+        $data = array ();
+        while ($user = Database::fetch_assoc($result)) 
+        {
+            $data[] = $user;
+        }
+
+        //foreach 
+        foreach ($data as $key => $info) 
+        {
+            #building array to display
+            $return[] = array(
+                'logindate' => $info['login_course_date'],
+                'username' => $info['username'],
+                'firstname' => $info['firstname'],
+                'lastname' => $info['lastname'],
+                'clicks' => $clicks[$info['user_id']],
+                'ip' => '',
+                'timeLoggedIn' => gmdate("H:i:s", strtotime($info['logout_course_date']) - strtotime($info['login_course_date'])), 
+            );
+        }
+        //Search for ip, we do less querys if we iterate the final array
+        foreach ($return as $key => $info) 
+        {
+            $sql = sprintf("SELECT login_ip FROM $track_e_login WHERE ('%s' BETWEEN login_date AND logout_date)", $info['logindate']); //TODO add select by user too
+            $result = Database::query($sql);
+            $ip = Database::fetch_assoc($result);
+            #add ip to final array
+            $return[$key]['ip'] = $ip['login_ip'];
+        }
+        return $return;
     }
     /**
      * Creates a new course code based in given code
@@ -2212,16 +2317,24 @@ class SessionManager
 	/**
 	 * Gets the list of courses by session filtered by access_url
 	 * @param int session id
+     * @param string course_name
 	 * @return array list of courses
 	 */
-	public static function get_course_list_by_session_id($session_id)
+	public static function get_course_list_by_session_id($session_id, $course_name = '')
     {
 		$tbl_course				= Database::get_main_table(TABLE_MAIN_COURSE);
 		$tbl_session_rel_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
 		// select the courses
 		$sql = "SELECT * FROM $tbl_course c INNER JOIN $tbl_session_rel_course src ON c.code = src.course_code
-		        WHERE src.id_session = '$session_id' ORDER BY title;";
+		        WHERE src.id_session = '$session_id'";
+        if (!empty($course_name)) 
+        {
+            $course_name = Database::escape_string($course_name);
+            $sql .= " AND c.title LIKE '%$course_name%' ";
+        }
+
+        $sql .= "ORDER BY title;";
 		$result 	= Database::query($sql);
 		$num_rows 	= Database::num_rows($result);
 		$courses = array();

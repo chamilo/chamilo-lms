@@ -243,7 +243,7 @@ if (is_array($a_courses)) {
         }
 
 		$table_row = array(
-            $course['title'],
+            '<a href="'.api_get_path(WEB_COURSE_PATH).$course['directory'].'/index.php?id_session='.$id_session.'">'.$course['title'].'</a>',
             $nb_students_in_course,
             is_null($avg_time_spent_in_course)?'-':$avg_time_spent_in_course,
             $tematic_advance_progress,

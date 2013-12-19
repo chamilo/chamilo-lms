@@ -521,10 +521,10 @@ class SessionManager
         $where = " WHERE a.session_id = %d
         AND a.course_code = '%s'
         AND q.id = %d";
-        
-        if ($answer != 2) 
+
+        if ($answer != 2)
         {
-            $where .= sprintf(' AND qa.correct = %d', $answer); 
+            $where .= sprintf(' AND qa.correct = %d', $answer);
         }
 
         $limit = null;
@@ -3332,7 +3332,7 @@ class SessionManager
         switch ($status) {
             // Classic DRH
             case 'drh':
-                $studentListSql = UserManager::get_users_followed_by_drh($userId, STUDENT, true);
+                $studentListSql = UserManager::get_users_followed_by_drh($userId, STUDENT, true, true);
                 $statusConditions = " AND u.user_id IN (".$studentListSql.") ";
                 break;
                 // Show all by DRH

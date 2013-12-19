@@ -3453,9 +3453,11 @@ class UserManager
      * get users followed by human resource manager
      * @param int          hr_dept id
      * @param int        user status (optional)
+     * @param bool $getOnlyUserId
+     * @param bool $getSql
      * @return array     users
      */
-    public static function get_users_followed_by_drh($hr_dept_id, $user_status = 0, $getSql = false)
+    public static function get_users_followed_by_drh($hr_dept_id, $user_status = 0, $getOnlyUserId = false, $getSql = false)
     {
         // Database Table Definitions
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -3468,8 +3470,11 @@ class UserManager
         if (!empty($user_status)) {
             $condition_status = ' AND u.status = '.$user_status;
         }
-
-        $sql = "SELECT u.user_id, u.username, u.lastname, u.firstname, u.email FROM $tbl_user u
+        $select = " SELECT u.user_id, u.username, u.lastname, u.firstname, u.email ";
+        if ($getOnlyUserId) {
+            $select = " SELECT u.user_id";
+        }
+        $sql = " $select FROM $tbl_user u
                     INNER JOIN $tbl_user_rel_user uru ON (uru.user_id = u.user_id)
                     LEFT JOIN $tbl_user_rel_access_url a ON (a.user_id = u.user_id)
                 WHERE   friend_user_id = '$hr_dept_id' AND

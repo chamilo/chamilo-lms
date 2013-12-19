@@ -147,6 +147,28 @@ switch ($action) {
             }
         }
         break;
+    case 'search_exercise_by_course':
+        if (api_is_platform_admin())
+        {
+
+            $course = api_get_course_info_by_id($_GET['course_id']);
+            require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
+            error_log($_GET['q']);
+            $exercises = get_all_exercises($course, intval($_GET['session_id']), false, $_GET['q']);
+
+            foreach ($exercises as $exercise)    
+            {
+                $data[] = array('id' => $exercise['id'], 'text' => $exercise['title'] );
+            }
+            if (!empty($data)) 
+            {
+                echo json_encode($data);
+            } else
+            {
+                echo json_encode(array());
+            }
+        }
+        break;
     default:
         echo '';
 }

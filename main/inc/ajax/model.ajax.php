@@ -200,6 +200,25 @@ switch ($action) {
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $work_id = $_REQUEST['work_id'];
         $courseInfo = api_get_course_info();
+
+        $documents = getAllDocumentToWork($work_id, api_get_course_int_id());
+
+        if (empty($documents)) {
+            $where_condition .= " AND u.user_id = ".api_get_user_id();
+            $count = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition, null, true);
+        } else {
+            $count = get_work_user_list_from_documents(
+                $start,
+                $limit,
+                $sidx,
+                $sord,
+                $work_id,
+                api_get_user_id(),
+                $where_condition,
+                true
+            );
+        }
+/*
         // All
         if ($courseInfo['show_score'] == '0') {
             $count = get_count_work($work_id, null, api_get_user_id());
@@ -207,6 +226,7 @@ switch ($action) {
             // Only my stuff
             $count = get_count_work($work_id, api_get_user_id());
         }
+*/
         break;
     case 'get_exercise_results':
         require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
@@ -491,7 +511,6 @@ switch ($action) {
             $columns = array('type', 'firstname', 'lastname', 'title', 'sent_date', 'actions');
         }
 
-        $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);
         $documents = getAllDocumentToWork($work_id, api_get_course_int_id());
 
         if (empty($documents)) {

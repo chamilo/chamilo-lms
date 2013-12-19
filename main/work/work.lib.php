@@ -1696,7 +1696,8 @@ function get_work_user_list_from_documents(
     }
 
     if ($getCount) {
-        $select = " SELECT count() as count  ";
+        $select1 = " SELECT count(u.user_id) as count ";
+        $select2 = " SELECT count(u.user_id) as count ";
     } else {
         $select1 = " SELECT DISTINCT u.firstname, u.lastname, u.user_id, w.title, w.parent_id, w.document_id document_id, w.id, qualification, qualificator_id";
         $select2 = " SELECT DISTINCT u.firstname, u.lastname, u.user_id, d.title, w.parent_id, d.id document_id, 0, 0, 0";
@@ -1705,13 +1706,11 @@ function get_work_user_list_from_documents(
     $documentTable = Database::get_course_table(TABLE_DOCUMENT);
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $workRelDocument = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
-
     $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
     $courseId = api_get_course_int_id();
     $sessionId = api_get_session_id();
 
-    $userCondition  = null;
     if (empty($studentId)) {
         $studentId = api_get_user_id();
     }
@@ -1720,7 +1719,8 @@ function get_work_user_list_from_documents(
 
     $userCondition = " AND u.user_id = $studentId ";
     $sessionCondition = " AND w.session_id = $sessionId ";
-    $workCondition = " AND w.parent_id = $workId";
+    $workCondition = " AND w_rel.work_id = $workId";
+    $workParentCondition  = " AND w.parent_id = $workId";
 
     $sql = "    (
                     $select1 FROM $userTable u
@@ -1730,7 +1730,7 @@ function get_work_user_list_from_documents(
                         $userCondition
                         $sessionCondition
                         $whereCondition
-                        $workCondition
+                        $workParentCondition
 
                 ) UNION (
                     $select2 FROM $workTable w
@@ -1739,6 +1739,7 @@ function get_work_user_list_from_documents(
                     INNER JOIN $userTable u ON (u.user_id = $studentId)
                     WHERE
                         w.c_id = $courseId
+                        $workCondition
                         $sessionCondition AND
                         d.id NOT IN
                             (SELECT w.document_id id FROM $workTable w
@@ -1748,7 +1749,7 @@ function get_work_user_list_from_documents(
                                 filetype = 'file' AND
                                 active = 1
                                 $sessionCondition
-                                $workCondition
+                                $workParentCondition
                             )
                 )
             ";
@@ -1765,7 +1766,6 @@ function get_work_user_list_from_documents(
     $result = Database::query($sql);
 
     $currentUserId = api_get_user_id();
-
     $work_data = get_work_data_by_id($workId);
 
     $qualificationExists = false;
@@ -2100,7 +2100,7 @@ function get_work_user_list_from_documents(
  * @param int $studentId
  * @return array
  */
-function get_work_user_list($start, $limit, $column, $direction, $work_id, $where_condition, $studentId = null)
+function get_work_user_list($start, $limit, $column, $direction, $work_id, $where_condition, $studentId = null, $getCount = false)
 {
     $work_table         = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $iprop_table        = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -2146,8 +2146,12 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
 
         $extra_conditions .= " AND parent_id  = ".$work_id."  ";
 
-        $select = 'DISTINCT u.user_id, work.id as id, title as title, description, url, sent_date, contains_file, has_properties, view_properties,
+        $select = 'SELECT DISTINCT u.user_id, work.id as id, title as title, description, url, sent_date, contains_file, has_properties, view_properties,
                     qualification, weight, allow_text_assignment, u.firstname, u.lastname, u.username, parent_id, accepted, qualificator_id';
+
+        if ($getCount) {
+            $select = "SELECT DISTINCT count(u.user_id) as count ";
+        }
 
         $user_condition = "INNER JOIN $user_table u  ON (work.user_id = u.user_id) ";
         $work_condition = "$iprop_table prop INNER JOIN $work_table work ON (prop.ref = work.id AND prop.c_id = $course_id AND work.c_id = $course_id ) ";
@@ -2158,15 +2162,19 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
             $where_condition.= " AND u.user_id = ".intval($studentId);
         }
 
-        $sql = "SELECT $select
+        $sql = " $select
                 FROM $work_condition  $user_condition
-                WHERE  $extra_conditions $where_condition $condition_session ";
-
+                WHERE $extra_conditions $where_condition $condition_session ";
         $sql .= " ORDER BY $column $direction ";
         $sql .= " LIMIT $start, $limit";
 
         $result = Database::query($sql);
         $works = array();
+
+        if ($getCount) {
+            $work = Database::fetch_array($result, 'ASSOC');
+            return $work['count'];
+        }
 
         while ($work = Database::fetch_array($result, 'ASSOC')) {
             $item_id = $work['id'];

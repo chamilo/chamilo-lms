@@ -673,8 +673,10 @@ class SessionManager
         return $table;
     }
     /**
-     * Gets the progress of learning paths in the given session
+     * Gets the survey answers
      * @param int   session id
+     * @param int   course id
+     * @param int   survey id
      * @param array options order and limit keys
      * @return array table with user name, lp name, progress
      */

@@ -153,12 +153,37 @@ switch ($action) {
 
             $course = api_get_course_info_by_id($_GET['course_id']);
             require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
-            error_log($_GET['q']);
             $exercises = get_all_exercises($course, intval($_GET['session_id']), false, $_GET['q']);
 
             foreach ($exercises as $exercise)    
             {
                 $data[] = array('id' => $exercise['id'], 'text' => $exercise['title'] );
+            }
+            if (!empty($data)) 
+            {
+                echo json_encode($data);
+            } else
+            {
+                echo json_encode(array());
+            }
+        }
+        break;
+    case 'search_survey_by_course':
+        if (api_is_platform_admin())
+        {
+            $survey     = Database :: get_course_table(TABLE_SURVEY);
+            
+            $sql = "SELECT survey_id as id, title
+            FROM $survey 
+            WHERE c_id = %d 
+            AND session_id = %d 
+            AND title LIKE '%s'";
+
+            $sql_query = sprintf($sql, intval($_GET['course_id']), intval($_GET['session_id']), '%' . $_GET['q'] .'%');
+            $result = Database::query($sql_query);
+            while ($survey = Database::fetch_assoc($result)) 
+            {
+                $data[] = array('id' => $survey['id'], 'text' => $survey['title'] );
             }
             if (!empty($data)) 
             {

@@ -716,6 +716,37 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                     });
                 </script>';*/
         }
+        if (in_array($display, array('surveyoverview')))
+        {
+            $surveyOverview = new FormValidator('survey_filter', 'get', '', '', array('class'=> 'form-search'), false);
+            $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_survey_by_course&session_id=' . $_GET['session_id'] . '&course_id=' . $_GET['course_id'] . '&survey_id=' . $_GET['survey_id'];
+            $surveyList = array();
+            $surveyId = isset($_GET['survey_id']) ? intval($_GET['survey_id']) : null;
+            $courseId = isset($_GET['course_id']) ? intval($_GET['course_id']) : null;
+            if (!empty($surveyId)) {
+                $course = api_get_course_info_by_id($courseId);
+                $surveyList = array();
+                $exerciseInfo = survey_manager::get_survey($surveyId, 0, $course['code']);
+                $surveyList[] = array('id' => $exerciseInfo['id'], 'text' => $exerciseInfo['title']);
+            }
+            $surveyOverview->addElement('select_ajax', 'survey_name', get_lang('SearchExercise'), null, array('url' => $url, 'defaults' => $surveyList));
+            $courseListUrl = api_get_self();
+
+            echo '<div class="">'; 
+            echo $surveyOverview ->return_form();
+            echo '</div>';
+
+            echo '<script>
+            $(function() {
+                $("#survey_name").on("change", function() {
+                    var sessionId = $("#session_name").val();
+                    var courseId = $("#course_name").val();
+                    var surveyId  = $("#survey_name").val();
+                    window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&survey_id="+surveyId;
+                });
+            });
+            </script>';
+        }
         if (in_array($display, array('exerciseprogress')))
         {
                 //exercise

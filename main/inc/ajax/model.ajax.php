@@ -280,7 +280,9 @@ switch ($action) {
         $count = count($records);
         break;
     case 'get_survey_overview':
-        $count = 10; //temp
+        //@TODO replace this for a more efficient function (not retrieving the whole data)
+        $records = SessionManager::get_survey_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['survey_id']), $options);
+        $count = count($records);
         break;
     /*case 'get_extra_fields':
         $type = $_REQUEST['type'];
@@ -706,7 +708,7 @@ switch ($action) {
         {
             $columns[] = $question_id;
         }
-        
+
         $result = SessionManager::get_survey_overview($sessionId, $courseId, $surveyId,
             array(
                 'where' => $where_condition,

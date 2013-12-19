@@ -21,7 +21,8 @@ $header_file = Security::remove_XSS($_GET['file']);
 $document_id = intval($_GET['id']);
 
 $course_info = api_get_course_info();
-$course_code = api_get_course_id(); 
+$course_code = api_get_course_id();
+$session_id = api_get_session_id();
 
 if (empty($course_info)) {
     api_not_allowed(true);
@@ -31,7 +32,10 @@ if (empty($course_info)) {
 if (!$document_id) {
     $document_id = DocumentManager::get_document_id($course_info, $header_file);
 }
-$document_data = DocumentManager::get_document_data_by_id($document_id, $course_code);
+$document_data = DocumentManager::get_document_data_by_id($document_id, $course_code, true, $session_id);
+if ($session_id != 0 and !$document_data) {
+    $document_data = DocumentManager::get_document_data_by_id($document_id, $course_code, true, 0);
+}
 
 if (empty($document_data)) {
     api_not_allowed(true);

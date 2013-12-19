@@ -200,6 +200,25 @@ switch ($action) {
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $work_id = $_REQUEST['work_id'];
         $courseInfo = api_get_course_info();
+
+        $documents = getAllDocumentToWork($work_id, api_get_course_int_id());
+
+        if (empty($documents)) {
+            $where_condition .= " AND u.user_id = ".api_get_user_id();
+            $count = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition, null, true);
+        } else {
+            $count = get_work_user_list_from_documents(
+                $start,
+                $limit,
+                $sidx,
+                $sord,
+                $work_id,
+                api_get_user_id(),
+                $where_condition,
+                true
+            );
+        }
+/*
         // All
         if ($courseInfo['show_score'] == '0') {
             $count = get_count_work($work_id, null, api_get_user_id());
@@ -207,6 +226,7 @@ switch ($action) {
             // Only my stuff
             $count = get_count_work($work_id, api_get_user_id());
         }
+*/
         break;
     case 'get_exercise_results':
         require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
@@ -245,7 +265,7 @@ switch ($action) {
     case 'get_session_lp_progress':
     case 'get_session_progress':
         //@TODO replace this for a more efficient function (not retrieving the whole data)
-        $course = api_get_course_info_by_id($courseId); 
+        $course = api_get_course_info_by_id($courseId);
         $users = CourseManager::get_student_list_from_course_code($course['code'], true, intval($_GET['session_id']));
         $count = count($users);
         break;
@@ -490,13 +510,12 @@ switch ($action) {
     case 'get_work_user_list':
         if (isset($_GET['type'])  && $_GET['type'] == 'simple') {
             $columns = array(
-                'type', 'firstname', 'lastname', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions'
+                'type', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions'
             );
         } else {
-            $columns = array('type', 'firstname', 'lastname', 'title', 'sent_date', 'actions');
+            $columns = array('type', 'title', 'sent_date', 'actions');
         }
 
-        $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);
         $documents = getAllDocumentToWork($work_id, api_get_course_int_id());
 
         if (empty($documents)) {
@@ -602,6 +621,7 @@ switch ($action) {
             $sessionId  = intval($_GET['session_id']);
             $courseId   = intval($_GET['course_id']);
             $exerciseId = intval($_GET['exercise_id']);
+            $answer = intval($_GET['answer']);
         }
 
         $columns = array(
@@ -618,7 +638,7 @@ switch ($action) {
             'correct'
         );
 
-        $result = SessionManager::get_exercise_progress($sessionId, $courseId, $exerciseId,
+        $result = SessionManager::get_exercise_progress($sessionId, $courseId, $exerciseId, $answer,
             array(
                 'where' => $where_condition,
                 'order' => "$sidx $sord",
@@ -632,7 +652,7 @@ switch ($action) {
         {
             $sessionId = intval($_GET['session_id']);
             $courseId = intval($_GET['course_id']);
-            $course = api_get_course_info_by_id($courseId); 
+            $course = api_get_course_info_by_id($courseId);
         }
         /**
          * Add lessons of course
@@ -651,7 +671,7 @@ switch ($action) {
         }
         $columns[] = 'total';
 
-        $result = SessionManager::get_session_lp_progress($sessionId, $courseId, 
+        $result = SessionManager::get_session_lp_progress($sessionId, $courseId,
             array(
                 'where' => $where_condition,
                 'order' => "$sidx $sord",
@@ -746,7 +766,7 @@ switch ($action) {
                 'limit'=> "$start , $limit"
             )
         );
-        break;  
+        break;
     case 'get_timelines':
         $columns = array('headline', 'actions');
 

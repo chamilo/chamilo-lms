@@ -243,6 +243,9 @@ function load_empty_template() {
                <meta charset="<?php echo api_get_system_encoding(); ?>" />
            </head>
            <body  dir="<?php echo api_get_text_direction(); ?>">
+               <p>
+                   <br/>
+               </p>
            </body>
            </html>
        ]]>

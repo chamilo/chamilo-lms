@@ -3453,9 +3453,11 @@ class UserManager
      * get users followed by human resource manager
      * @param int          hr_dept id
      * @param int        user status (optional)
+     * @param bool $getOnlyUserId
+     * @param bool $getSql
      * @return array     users
      */
-    public static function get_users_followed_by_drh($hr_dept_id, $user_status = 0)
+    public static function get_users_followed_by_drh($hr_dept_id, $user_status = 0, $getOnlyUserId = false, $getSql = false)
     {
         // Database Table Definitions
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -3463,14 +3465,16 @@ class UserManager
         $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
         $hr_dept_id = intval($hr_dept_id);
-        $assigned_users_to_hrm = array();
 
         $condition_status = '';
         if (!empty($user_status)) {
             $condition_status = ' AND u.status = '.$user_status;
         }
-
-        $sql = "SELECT u.user_id, u.username, u.lastname, u.firstname, u.email FROM $tbl_user u
+        $select = " SELECT u.user_id, u.username, u.lastname, u.firstname, u.email ";
+        if ($getOnlyUserId) {
+            $select = " SELECT u.user_id";
+        }
+        $sql = " $select FROM $tbl_user u
                     INNER JOIN $tbl_user_rel_user uru ON (uru.user_id = u.user_id)
                     LEFT JOIN $tbl_user_rel_access_url a ON (a.user_id = u.user_id)
                 WHERE   friend_user_id = '$hr_dept_id' AND
@@ -3479,6 +3483,10 @@ class UserManager
                         access_url_id = ".api_get_current_access_url_id()."
                 ";
 
+        if ($getSql) {
+            return $sql;
+        }
+
         if (api_is_western_name_order()) {
             $sql .= " ORDER BY u.firstname, u.lastname ";
         } else {
@@ -3486,6 +3494,7 @@ class UserManager
         }
 
         $rs_assigned_users = Database::query($sql);
+        $assigned_users_to_hrm = array();
         if (Database::num_rows($rs_assigned_users) > 0) {
             while ($row_assigned_users = Database::fetch_array($rs_assigned_users)) {
                 $assigned_users_to_hrm[$row_assigned_users['user_id']] = $row_assigned_users;

@@ -3330,7 +3330,7 @@ class SessionManager
             // Classic DRH
             case 'drh':
                 $studentListSql = UserManager::get_users_followed_by_drh($userId, STUDENT, true);
-                $statusConditions = " AND u.user_id IN ('".$studentListSql."') ";
+                $statusConditions = " AND u.user_id IN (".$studentListSql.") ";
                 break;
                 // Show all by DRH
             case 'drh_all':
@@ -3398,7 +3398,6 @@ class SessionManager
                         u.email LIKE '%$keyword%'
                     )";
         }
-
         if ($getCount) {
             $result = Database::query($sql);
             $count = 0;

@@ -21,7 +21,8 @@ class IndexManager {
 		}
 	}
 
-	function set_login_form($setLoginForm = true) {
+	function set_login_form($setLoginForm = true)
+    {
 		global $loginFailed;
 
 		$login_form = '';

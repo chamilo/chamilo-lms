@@ -516,15 +516,15 @@ class SessionManager
         $table_stats_exercises  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $table_stats_attempt    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-        $course = api_get_course_info_by_id($courseId); 
+        $course = api_get_course_info_by_id($courseId);
 
         $where = " WHERE a.session_id = %d
-        AND a.course_code = '%s' 
+        AND a.course_code = '%s'
         AND q.id = %d";
 
-        if ($answer != 2) 
+        if ($answer != 2)
         {
-            $where .= sprintf(' AND qa.correct = %d', $answer); 
+            $where .= sprintf(' AND qa.correct = %d', $answer);
         }
 
         $limit = null;
@@ -583,7 +583,7 @@ class SessionManager
         $user                   = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_course_lp_view     = Database::get_course_table(TABLE_LP_VIEW);
 
-        $course = api_get_course_info_by_id($courseId); 
+        $course = api_get_course_info_by_id($courseId);
 
 
         //getting all the students of the course
@@ -619,7 +619,7 @@ class SessionManager
         $where $order $limit";
 
         $sql_query = sprintf($sql, $course['code'], $sessionId);
-        
+
         $rs = Database::query($sql_query);
         while ($user = Database::fetch_array($rs))
         {
@@ -775,7 +775,7 @@ class SessionManager
         $table_stats_default    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
         $table_stats_access     = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 
-        $course = api_get_course_info_by_id($courseId); 
+        $course = api_get_course_info_by_id($courseId);
 
         //getting all the students of the course
         //we are not using this because it only returns user ids
@@ -1042,7 +1042,7 @@ class SessionManager
         $track_e_course_access  = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
         global $export_csv;
-        if ($export_csv) 
+        if ($export_csv)
         {
             $is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
         } else {
@@ -1076,9 +1076,9 @@ class SessionManager
         }
 
         //TODO add course name
-        $sql = "SELECT 
+        $sql = "SELECT
                 a.login_course_date ,
-                u.username , 
+                u.username ,
                 ".($is_western_name_order ? "
                     u.firstname,
                     u.lastname,
@@ -1086,10 +1086,10 @@ class SessionManager
                     u.lastname,
                     u.firstname,
                 ")."
-                 
+
                 a.logout_course_date,
-                c.title, 
-                c.code, 
+                c.title,
+                c.code,
                 u.user_id
             FROM $track_e_course_access a
             INNER JOIN $user u ON a.user_id = u.user_id
@@ -1100,13 +1100,13 @@ class SessionManager
 
         $clicks = Tracking::get_total_clicks_by_session();
         $data = array ();
-        while ($user = Database::fetch_assoc($result)) 
+        while ($user = Database::fetch_assoc($result))
         {
             $data[] = $user;
         }
 
-        //foreach 
-        foreach ($data as $key => $info) 
+        //foreach
+        foreach ($data as $key => $info)
         {
             #building array to display
             $return[] = array(
@@ -1116,11 +1116,11 @@ class SessionManager
                 'lastname' => $info['lastname'],
                 'clicks' => $clicks[$info['user_id']],
                 'ip' => '',
-                'timeLoggedIn' => gmdate("H:i:s", strtotime($info['logout_course_date']) - strtotime($info['login_course_date'])), 
+                'timeLoggedIn' => gmdate("H:i:s", strtotime($info['logout_course_date']) - strtotime($info['login_course_date'])),
             );
         }
         //Search for ip, we do less querys if we iterate the final array
-        foreach ($return as $key => $info) 
+        foreach ($return as $key => $info)
         {
             $sql = sprintf("SELECT login_ip FROM $track_e_login WHERE ('%s' BETWEEN login_date AND logout_date)", $info['logindate']); //TODO add select by user too
             $result = Database::query($sql);
@@ -2405,7 +2405,7 @@ class SessionManager
 		// select the courses
 		$sql = "SELECT * FROM $tbl_course c INNER JOIN $tbl_session_rel_course src ON c.code = src.course_code
 		        WHERE src.id_session = '$session_id'";
-        if (!empty($course_name)) 
+        if (!empty($course_name))
         {
             $course_name = Database::escape_string($course_name);
             $sql .= " AND c.title LIKE '%$course_name%' ";
@@ -3414,12 +3414,8 @@ class SessionManager
         switch ($status) {
             // Classic DRH
             case 'drh':
-                $studentList = UserManager::get_users_followed_by_drh($userId, STUDENT);
-                $studentListId = array();
-                foreach($studentList as $student) {
-                    $studentListId[] = $student['user_id'];
-                }
-                $statusConditions = " AND u.user_id IN ('".implode("','", $studentListId)."')  ";
+                $studentListSql = UserManager::get_users_followed_by_drh($userId, STUDENT, true, true);
+                $statusConditions = " AND u.user_id IN (".$studentListSql.") ";
                 break;
                 // Show all by DRH
             case 'drh_all':
@@ -3487,7 +3483,6 @@ class SessionManager
                         u.email LIKE '%$keyword%'
                     )";
         }
-
         if ($getCount) {
             $result = Database::query($sql);
             $count = 0;
@@ -3731,6 +3726,7 @@ class SessionManager
      * @param int $active
      * @param string $lastConnectionDate
      * @param bool $getCount
+     * @return array|int
      */
     public function getTeacherTracking($userId, $active = 1, $lastConnectionDate = null, $getCount = false)
     {
